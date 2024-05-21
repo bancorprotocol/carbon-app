@@ -306,11 +306,12 @@ interface ManageButtonProps extends MenuButtonProps {
 
 export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
   (props, ref) => {
-    const style = cn(buttonStyles({ variant: 'white' }), 'gap-8');
+    const style = cn(buttonStyles({ variant: 'white' }), 'max-md:p-8 gap-8');
+    const { aboveBreakpoint } = useBreakpoints();
     return (
       <button {...props} className={style} ref={ref}>
         <IconGear className="size-24" />
-        Manage
+        {aboveBreakpoint('md') && 'Manage'}
       </button>
     );
   }
