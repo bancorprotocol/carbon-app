@@ -33,7 +33,7 @@ interface Props {
 export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1 } = props;
   const { base, quote } = strategy;
-  const marketPrice = useMarketPrice({ base, quote });
+  const marketPrice = useMarketPrice({ base, quote })?.toString();
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
@@ -56,7 +56,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       quote.decimals,
       buyMin,
       sellMax,
-      marketPrice.toString(),
+      marketPrice || '0',
       spread.toString(),
       sellBudget
     );
@@ -75,7 +75,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       quote.decimals,
       buyMin,
       sellMax,
-      marketPrice.toString(),
+      marketPrice || '0',
       spread.toString(),
       buyBudget
     );
@@ -92,7 +92,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const prices = calculateOverlappingPrices(
       min,
       max,
-      marketPrice.toString(),
+      marketPrice || '0',
       spread.toString()
     );
 
@@ -129,7 +129,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   // Initialize order when market price is available
   useEffect(() => {
-    if (!quote || !base || marketPrice <= 0) return;
+    if (!quote || !base || !marketPrice) return;
     if (!mounted) return setMounted(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
@@ -177,7 +177,6 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           order1={order1}
           marketPrice={marketPrice}
           spread={spread}
-          marketPricePercentage={marketPricePercentage}
           setMin={setMin}
           setMax={setMax}
         />

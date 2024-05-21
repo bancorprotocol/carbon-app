@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { carbonEvents } from 'services/events';
 import { Link, useMatchRoute, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
-import { handleOnItemClick } from '../utils';
+import { handleOnItemClick } from 'components/core/menu/utils';
 import { menuItems } from 'components/core/menu';
 
 export const MainMenuLeft: FC = () => {

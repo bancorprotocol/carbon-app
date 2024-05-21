@@ -7,6 +7,7 @@ import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { unix } from 'libs/dayjs';
 import { NewTabLink } from 'libs/routing';
+import config from 'config';
 
 const StatusIcon = (status: NotificationStatus) => {
   switch (status) {
@@ -60,6 +61,7 @@ interface Props {
 
 export const TxNotification: FC<Props> = ({ notification, close }) => {
   const titleId = useId();
+  const blockExplorer = config.network.blockExplorer.name;
 
   return (
     <article aria-labelledby={titleId} className="flex gap-16">
@@ -78,7 +80,8 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
             to={getExplorerLink('tx', notification.txHash)}
             className="font-weight-500 flex items-center"
           >
-            View on Etherscan <IconLink className="ml-6 w-14" />
+            View on {blockExplorer}
+            <IconLink className="ml-6 w-14" />
           </NewTabLink>
         )}
       </div>

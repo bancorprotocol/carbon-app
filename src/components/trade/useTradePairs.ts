@@ -36,7 +36,7 @@ export const useTradePairs = () => {
   );
 
   const tradePairsPopular = useMemo(() => {
-    return popularPairs
+    return config.popularPairs
       .map(([base, quote]) => getTradePair(base, quote))
       .filter((p) => !!p) as TradePair[];
   }, [getTradePair]);
@@ -100,30 +100,3 @@ export const useTradePairs = () => {
     removeFavoritePair,
   };
 };
-
-const tokenAddress = config.addresses.tokens;
-const popularPairs: string[][] = [
-  [tokenAddress.ETH, tokenAddress.USDC],
-  [tokenAddress.ETH, tokenAddress.USDT],
-  [tokenAddress.ETH, tokenAddress.DAI],
-  [tokenAddress.ETH, tokenAddress.WBTC],
-  [tokenAddress.BNT, tokenAddress.USDC],
-  [tokenAddress.BNT, tokenAddress.USDT],
-  [tokenAddress.BNT, tokenAddress.DAI],
-  [tokenAddress.BNT, tokenAddress.ETH],
-  [tokenAddress.BNT, tokenAddress.WBTC],
-  [tokenAddress.WBTC, tokenAddress.USDC],
-  [tokenAddress.WBTC, tokenAddress.USDT],
-  [tokenAddress.WBTC, tokenAddress.DAI],
-  [tokenAddress.WBTC, tokenAddress.ETH],
-  [tokenAddress.USDT, tokenAddress.USDC],
-  [tokenAddress.USDC, tokenAddress.USDT],
-  [tokenAddress.USDT, tokenAddress.DAI],
-  [tokenAddress.USDC, tokenAddress.DAI],
-  [tokenAddress.DAI, tokenAddress.USDC],
-  [tokenAddress.DAI, tokenAddress.USDT],
-  [tokenAddress.SHIB, tokenAddress.USDT],
-  [tokenAddress.SHIB, tokenAddress.USDC],
-  [tokenAddress.SHIB, tokenAddress.DAI],
-  [tokenAddress.SHIB, tokenAddress.ETH],
-];

@@ -23,7 +23,7 @@ export const WarningMessageWithIcon: FC<WarningMessageWithIconProps> = ({
       aria-live="polite"
       className={`
         text-12 flex items-center gap-10
-        ${isError ? 'text-error' : 'text-warning'}
+        ${isError ? 'error-message text-error' : 'warning-message text-warning'}
         ${className}
       `}
     >

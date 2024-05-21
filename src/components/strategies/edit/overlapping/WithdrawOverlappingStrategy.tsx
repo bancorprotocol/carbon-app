@@ -10,7 +10,6 @@ import {
   isMinAboveMarket,
   isOverlappingBudgetTooSmall,
 } from '../../overlapping/utils';
-import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconAction } from 'assets/icons/action.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
@@ -42,13 +41,6 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
   const oldMarketPrice = geoMean(order0.marginalPrice, order1.marginalPrice)!;
 
   const spread = getRoundedSpread(strategy);
-  const min = order0.min;
-  const max = order1.max;
-  const { marketPricePercentage } = useMarketIndication({
-    base,
-    quote,
-    order: { min, max, price: '', isRange: true },
-  });
   const budgetTooSmall = isOverlappingBudgetTooSmall(order0, order1);
   const buyBudgetId = useId();
   const sellBudgetId = useId();
@@ -153,9 +145,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           quote={quote}
           order0={order0}
           order1={order1}
-          marketPrice={externalMarketPrice}
+          marketPrice={oldMarketPrice?.toNumber()}
           spread={spread}
-          marketPricePercentage={marketPricePercentage}
           disabled
         />
       </article>

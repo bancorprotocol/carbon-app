@@ -1,31 +1,48 @@
+import { TokenList } from 'libs/tokens';
+import { selectableConnectionType } from 'libs/web3/web3.constants';
+
 export interface AppConfig {
   mode: 'development' | 'production';
-  carbonApi: string;
   appUrl: string;
+  carbonApi: string;
+  selectableConnectionTypes: selectableConnectionType[];
   walletConnectProjectId: string;
-  sentryDNS?: string;
-  rpcUrl: string;
-  blockExplorer: string;
-  addresses: {
-    tokens: {
-      ETH: string;
-      WETH: string;
-      BNT: string;
-      ZERO: string;
-      USDT: string;
-      USDC: string;
-      DAI: string;
-      WBTC: string;
-      SHIB: string;
-      ENJ: string;
-      UNI: string;
-      LINK: string;
-      LDO: string;
-      APE: string;
-      GRT: string;
-      AAVE: string;
-      CRV: string;
+  isSimulatorEnabled: boolean;
+  sentryDSN?: string;
+  policiesLastUpdated?: string;
+  network: {
+    name: string;
+    logoUrl: string;
+    chainId: number;
+    rpcUrl: string;
+    blockExplorer: { name: string; url: string };
+    gasToken: {
+      name: string;
+      symbol: string;
+      decimals: number;
+      address: string;
+      logoURI: string;
     };
+  };
+  defaultTokenPair: [string, string];
+  popularPairs: [string, string][];
+  popularTokens: {
+    base: string[];
+    quote: string[];
+  };
+  tokenListOverride: {
+    name: string;
+    symbol: string;
+    decimals: number;
+    address: string;
+    logoURI: string;
+  }[];
+  tokenLists: {
+    uri: string;
+    parser?: (data: any) => TokenList;
+  }[];
+  addresses: {
+    tokens: { ZERO: string } & Record<symbol, string>;
     carbon: {
       carbonController: string;
       voucher: string;
@@ -34,5 +51,4 @@ export interface AppConfig {
       multicall: string;
     };
   };
-  tokenLists: string[];
 }

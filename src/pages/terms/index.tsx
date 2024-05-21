@@ -63,7 +63,7 @@ const content = [
           {' '}
           i. View information relating to different cryptographic assets
           commonly referred to as tokens, such as tokens created using the ERC20
-          standard on the Ethereum blockchain network (“Tokens”);
+          standard on {config.network.name} blockchain (“Tokens”);
         </p>
         <p>
           ii. View information from supported electronic wallets used to manage
@@ -238,12 +238,12 @@ const content = [
           Use of the Site and Content is not subject to or conditioned upon any
           payment or fee to the Foundation. By using this Site, you confirm that
           you are aware that transactions on public blockchains such as the
-          Ethereum blockchain are often subject to a fee (referred to as “Gas”
-          on Ethereum), which is typically paid in the native cryptocurrency of
-          the blockchain and transferred internally into the system. To
-          facilitate transactions on the blockchain you must have a sufficient
-          amount of the crypto asset required for any applicable blockchain
-          fees.
+          {' ' + config.network.name} blockchain are often subject to a fee
+          (referred to as “Gas” on {config.network.name}), which is typically
+          paid in the native cryptocurrency of the blockchain and transferred
+          internally into the system. To facilitate transactions on the
+          blockchain you must have a sufficient amount of the crypto asset
+          required for any applicable blockchain fees.
         </p>
         <br />
         <p>
@@ -602,18 +602,18 @@ const content = [
           with cryptographic systems and ecosystems; and represent and warrant
           that you have an understanding of the usage and intricacies of native
           cryptographic tokens. You understand that blockchain technologies
-          (such as Ethereum) and associated currencies or tokens are highly
-          volatile due to many factors including but not limited to adoption,
-          speculation, technology and security risks. You also acknowledge that
-          the cost of transacting on such technologies (where applicable) is
-          variable and may increase at any time causing impact to any activities
-          taking place on the relevant blockchain (such as Ethereum). You
-          acknowledge these risks and represent, warrant and agree that the
-          Foundation cannot be held liable for such fluctuations or increased
-          costs. The Foundation shall not be held liable for any losses or
-          damages resulting from the use of the Site, the Content or the
-          services of any third-party provider (including through any Third
-          Party Integrated Application).
+          (such as {config.network.name}) and associated currencies or tokens
+          are highly volatile due to many factors including but not limited to
+          adoption, speculation, technology and security risks. You also
+          acknowledge that the cost of transacting on such technologies (where
+          applicable) is variable and may increase at any time causing impact to
+          any activities taking place on the relevant blockchain (such as{' '}
+          {config.network.name}). You acknowledge these risks and represent,
+          warrant and agree that the Foundation cannot be held liable for such
+          fluctuations or increased costs. The Foundation shall not be held
+          liable for any losses or damages resulting from the use of the Site,
+          the Content or the services of any third-party provider (including
+          through any Third Party Integrated Application).
         </p>
         <br />
         <p>
@@ -1055,7 +1055,7 @@ export const TermsPage = () => {
   return (
     <Page title="Terms of Use">
       <>
-        <span>Last updated: 18 April, 2023</span>
+        <span>Last updated: {config.policiesLastUpdated}</span>
         <p>
           PLEASE READ THESE TERMS OF USE CAREFULLY. YOUR ACCEPTANCE MAY LIMIT OR
           WAIVE CERTAIN OF YOUR RIGHTS. IF YOU HAVE NOT REVIEWED THE TERMS OF

@@ -1,6 +1,6 @@
 import { useWeb3 } from 'libs/web3';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { PopulatedTransaction } from 'ethers';
 import { TradeActionBNStr, carbonSDK } from 'libs/sdk';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -106,7 +106,7 @@ export const useTradeAction = ({
           QueryKey.approval(
             user,
             source.address,
-            config.carbon.carbonController
+            config.addresses.carbon.carbonController
           )
         );
 
@@ -135,7 +135,7 @@ export const useTradeAction = ({
     () => [
       {
         ...source,
-        spender: config.carbon.carbonController,
+        spender: config.addresses.carbon.carbonController,
         amount: isTradeBySource ? sourceInput : calcMaxInput(sourceInput),
       },
     ],

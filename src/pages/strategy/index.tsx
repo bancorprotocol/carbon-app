@@ -95,7 +95,7 @@ export const StrategyPage = () => {
             </div>
           </div>
         </article>
-        <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 p-24 md:flex">
+        <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 md:flex">
           <h2 className="text-18 font-weight-500">Price graph</h2>
           <TradingviewChart base={base} quote={quote} />
         </article>

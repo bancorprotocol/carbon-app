@@ -4,6 +4,7 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 type Props = {
   base: Token;
@@ -33,9 +34,15 @@ export const LimitRangeSection: FC<Props> = ({
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
 
+  const warningMarketPriceUnknownMessage =
+    'Notice: price & slippage are unknown';
+
   const warningMarketPriceMessage = buy
     ? `Notice: you offer to buy ${base.symbol} above current market price`
     : `Notice: you offer to sell ${base.symbol} below current market price`;
+
+  const marketPrice = useMarketPrice({ base, quote });
+  const isMarketPriceUnknown = !marketPrice;
 
   const getWarnings = () => {
     let warnings = [];
@@ -43,6 +50,7 @@ export const LimitRangeSection: FC<Props> = ({
       warnings.push(overlappingOrdersPricesMessage);
     if (isOrderAboveOrBelowMarketPrice)
       warnings.push(warningMarketPriceMessage);
+    if (isMarketPriceUnknown) warnings.push(warningMarketPriceUnknownMessage);
     return warnings;
   };
 

@@ -22,6 +22,7 @@ import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
+import config from 'config';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -91,7 +92,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     +strategy.order1.startRate === 0 ||
     +strategy.order1.endRate === 0;
 
-  if (!isDisposable) {
+  if (!isDisposable && config.isSimulatorEnabled) {
     items.push({
       id: 'simulate',
       name: 'Simulate Strategy',
@@ -305,11 +306,12 @@ interface ManageButtonProps extends MenuButtonProps {
 
 export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
   (props, ref) => {
-    const style = cn(buttonStyles({ variant: 'white' }), 'gap-8');
+    const style = cn(buttonStyles({ variant: 'white' }), 'max-md:p-8 gap-8');
+    const { aboveBreakpoint } = useBreakpoints();
     return (
       <button {...props} className={style} ref={ref}>
         <IconGear className="size-24" />
-        Manage
+        {aboveBreakpoint('md') && 'Manage'}
       </button>
     );
   }
