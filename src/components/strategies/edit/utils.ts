@@ -1,6 +1,7 @@
 import { SafeDecimal } from 'libs/safedecimal';
 import { OrderCreate } from '../create/useOrder';
 import { Strategy } from 'libs/queries';
+import { getSpread, isOverlappingStrategy } from '../overlapping/utils';
 
 export const getDeposit = (initialBudget: string, newBudget: string) => {
   const value = new SafeDecimal(newBudget || '0').sub(initialBudget || '0');
@@ -33,5 +34,8 @@ export const strategyHasChanged = (
   if (order0.max !== strategy.order0.endRate) return true;
   if (order1.min !== strategy.order1.startRate) return true;
   if (order1.max !== strategy.order1.endRate) return true;
+  if (isOverlappingStrategy({ order0, order1 })) {
+    return getSpread({ order0, order1 }) !== getSpread(strategy);
+  }
   return false;
 };

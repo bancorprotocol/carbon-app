@@ -127,16 +127,19 @@ export const getStrategyTypeItem = (
     description:
       'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does',
     benefits: [
-      // TODO: uncomment when overlapping strategy edit price is ready
-      // {
-      //   summary: 'Adjustable',
-      //   details:
-      //     'Easily adjust prices without having to withdraw and redeposit funds, saving time and gas.',
-      // },
       {
         summary: 'No trading or gas fees on filled orders',
         details:
           'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
+      },
+      {
+        summary: 'Adjustable',
+        details:
+          ' Easily edit your price range and position size without having to withdraw and redeposit into a new position, saving you time, gas and a whole lotta headache.',
+      },
+      {
+        summary: 'Auto-compounding profits',
+        details: 'Your profits stay within your position, earning you more!',
       },
     ],
     svg: <IconOverlappingStrategy className="w-full" />,

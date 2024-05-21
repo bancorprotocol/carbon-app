@@ -188,7 +188,7 @@ export const CreateStrategyOrders = ({
             data-testid="approve-warnings"
           />
           {hasDistributionChanges
-            ? "I've approved the edits and distribution changes."
+            ? "I've approved the token deposit(s) and distribution."
             : "I've reviewed the warning(s) but choose to proceed."}
         </m.label>
       )}

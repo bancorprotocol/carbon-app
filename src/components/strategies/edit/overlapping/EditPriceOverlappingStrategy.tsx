@@ -5,6 +5,8 @@ import {
   getMaxBuyMin,
   getMinSellMax,
   getRoundedSpread,
+  isEditAboveMarket,
+  isEditBelowMarket,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
@@ -76,6 +78,19 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const withdrawBuyBudget = getWithdraw(initialBuyBudget, order0.budget);
   const depositSellBudget = getDeposit(initialSellBudget, order1.budget);
   const withdrawSellBudget = getWithdraw(initialSellBudget, order1.budget);
+
+  const belowMarket = isEditBelowMarket(
+    order0.min,
+    order1.max,
+    userMarketPrice,
+    spread
+  );
+  const aboveMarket = isEditAboveMarket(
+    order0.min,
+    order1.max,
+    userMarketPrice,
+    spread
+  );
 
   const calculateBuyBudget = (
     sellBudget: string,
@@ -172,13 +187,19 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     if (!anchor) return setAnchorError('Please select a token to proceed');
 
     if (isMinAboveMarket(buyOrder)) {
-      if (anchor !== 'sell') resetBudgets({ anchorValue: 'sell', min, max });
-      else calculateBuyBudget(sellBudget, min, max);
-      setAnchor('sell');
+      if (anchor !== 'sell') {
+        resetBudgets({ anchorValue: 'sell', min, max });
+        setAnchor(undefined);
+      } else {
+        calculateBuyBudget(sellBudget, min, max);
+      }
     } else if (isMaxBelowMarket(sellOrder)) {
-      if (anchor !== 'buy') resetBudgets({ anchorValue: 'buy', min, max });
-      else calculateSellBudget(buyBudget, min, max);
-      setAnchor('buy');
+      if (anchor !== 'buy') {
+        resetBudgets({ anchorValue: 'buy', min, max });
+        setAnchor(undefined);
+      } else {
+        calculateSellBudget(buyBudget, min, max);
+      }
     } else {
       if (anchor === 'buy') calculateSellBudget(buyBudget, min, max);
       if (anchor === 'sell') calculateBuyBudget(sellBudget, min, max);
@@ -273,18 +294,20 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   useEffect(() => {
     const error = (() => {
       const value = anchor === 'buy' ? order0.budget : order1.budget;
-      const amount = new SafeDecimal(value);
+      const budget = new SafeDecimal(value);
       if (action === 'deposit' && anchor === 'buy' && quoteBalance) {
-        if (amount.gt(quoteBalance)) return 'Insufficient balance';
+        const delta = budget.sub(initialBuyBudget);
+        if (delta.gt(quoteBalance)) return 'Insufficient balance';
       }
       if (action === 'deposit' && anchor === 'sell' && baseBalance) {
-        if (amount.gt(baseBalance)) return 'Insufficient balance';
+        const delta = budget.sub(initialSellBudget);
+        if (delta.gt(baseBalance)) return 'Insufficient balance';
       }
       if (action === 'withdraw' && anchor === 'buy' && quoteBalance) {
-        if (amount.gt(initialBuyBudget)) return 'Insufficient funds';
+        if (budget.lt(0)) return 'Insufficient funds';
       }
       if (action === 'withdraw' && anchor === 'sell' && baseBalance) {
-        if (amount.gt(initialSellBudget)) return 'Insufficient funds';
+        if (budget.lt(0)) return 'Insufficient funds';
       }
       return '';
     })();
@@ -412,8 +435,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
         anchor={anchor}
         setAnchor={setAnchorValue}
         anchorError={anchorError}
-        disableBuy={isMinAboveMarket(order0)}
-        disableSell={isMaxBelowMarket(order1)}
+        disableBuy={aboveMarket}
+        disableSell={belowMarket}
       />
       {anchor && (
         <OverlappingAction
