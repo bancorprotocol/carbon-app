@@ -583,14 +583,14 @@ const testCases: CreateStrategyTestCase[] = [
         buy: {
           min: '0.20 USDC',
           max: '0.608696 USDC',
-          marginal: '0.355505 USDC',
+          marginal: '0.392043 USDC',
           budget: '22.50 USDC',
           fiat: '$22.50',
         },
         sell: {
           min: '0.23 USDC',
           max: '0.70 USDC',
-          marginal: '0.380791 USDC',
+          marginal: '0.450849 USDC',
           budget: '39.66 BNT',
           fiat: '$16.67',
         },

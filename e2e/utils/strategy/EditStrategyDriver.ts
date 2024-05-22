@@ -80,12 +80,12 @@ export class EditStrategyDriver {
     }
 
     try {
-      await btn.click({ timeout: 1_000 });
-    } catch {
-      await waitFor(this.page, 'approve-warnings');
+      await waitFor(this.page, 'approve-warnings', 2_000);
       if (await this.page.isVisible('[data-testid=approve-warnings]')) {
         await this.page.getByTestId('approve-warnings').click();
       }
+      await btn.click();
+    } catch {
       await btn.click();
     }
   }
