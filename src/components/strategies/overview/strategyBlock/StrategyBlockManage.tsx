@@ -27,7 +27,6 @@ type itemsType = {
   id: StrategyEditOptionId;
   name: string;
   action?: () => void;
-  disabled?: boolean;
 };
 
 type separatorCounterType = number;
@@ -50,7 +49,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
   const isOverlapping = isOverlappingStrategy(strategy);
-  const isOwner = user && strategy.owner === user;
+  const isOwner = !!user && strategy.owner === user;
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -262,7 +261,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
             );
           }
 
-          const { name, id, action, disabled } = item;
+          const { name, id, action } = item;
 
           return (
             <ManageItem
@@ -271,8 +270,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
               setManage={setManage}
               action={action}
               id={id}
-              isExplorer={!isOwner}
-              disabled={disabled}
+              isOwner={isOwner}
             />
           );
         })}
@@ -324,10 +322,9 @@ const ManageItem: FC<{
   id: StrategyEditOptionId;
   setManage: (flag: boolean) => void;
   action?: () => void;
-  isExplorer?: boolean;
-  disabled?: boolean;
-}> = ({ title, id, setManage, action, isExplorer, disabled }) => {
-  const tooltipText = getTooltipTextByStrategyEditOptionsId(isExplorer)?.[id];
+  isOwner?: boolean;
+}> = ({ title, id, setManage, action, isOwner }) => {
+  const tooltipText = getTooltipTextByStrategyEditOptionsId(isOwner)?.[id];
   const { belowBreakpoint } = useBreakpoints();
 
   const Content = () => {
@@ -339,12 +336,7 @@ const ManageItem: FC<{
           action && action();
           setManage(false);
         }}
-        disabled={disabled}
-        className={cn('rounded-6 w-full p-12 text-left', {
-          'cursor-not-allowed': disabled,
-          'opacity-60': disabled,
-          'hover:bg-black': !disabled,
-        })}
+        className="rounded-6 w-full p-12 text-left"
         data-testid={`manage-strategy-${id}`}
       >
         {title}

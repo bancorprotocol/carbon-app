@@ -48,11 +48,11 @@ const tooltipTextByStrategyEditOptionsId = {
 };
 
 export const getTooltipTextByStrategyEditOptionsId = (
-  isExplorer: boolean | undefined
+  isOwner: boolean | undefined
 ) => {
   return {
     ...tooltipTextByStrategyEditOptionsId,
-    ...(isExplorer && {
+    ...(isOwner && {
       manageNotifications:
         'Get notified when someone trades against this strategy',
     }),
