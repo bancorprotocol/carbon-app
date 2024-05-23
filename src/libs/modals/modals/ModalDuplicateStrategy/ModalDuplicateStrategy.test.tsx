@@ -7,6 +7,7 @@ type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 const baseStrategy = {
   id: '',
   idDisplay: '',
+  owner: '',
   base: {
     address: '',
     decimals: 18,
