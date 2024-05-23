@@ -26,6 +26,8 @@ type InputRangeProps = {
   marketPricePercentages?: MarketPricePercentage;
   ignoreMarketPriceWarning?: boolean;
   isOrdersReversed?: boolean;
+  /** Used to change the warning logic in market price percent */
+  isOverlapping?: boolean;
 };
 
 export const InputRange: FC<InputRangeProps> = ({
@@ -44,6 +46,7 @@ export const InputRange: FC<InputRangeProps> = ({
   warnings,
   ignoreMarketPriceWarning,
   isOrdersReversed,
+  isOverlapping,
 }) => {
   const marketPrice = useUserMarketPrice({ base, quote });
   const inputMinId = useId();
@@ -110,7 +113,7 @@ export const InputRange: FC<InputRangeProps> = ({
             >
               <label htmlFor={inputMinId}>{minLabel}</label>
             </Tooltip>
-            {marketPrice !== 0 && (
+            {!!marketPrice && (
               <button
                 className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
                 type="button"
@@ -135,8 +138,9 @@ export const InputRange: FC<InputRangeProps> = ({
             onFocus={(e) => e.target.select()}
             onBlur={handleBlurMin}
             data-testid="input-min"
+            required
           />
-          {marketPrice !== 0 && (
+          {!!marketPrice && (
             <p className="flex flex-wrap items-center gap-4">
               <span className="text-12 break-all text-white/60">
                 {getFiatAsString(min)}
@@ -145,7 +149,7 @@ export const InputRange: FC<InputRangeProps> = ({
                 <MarketPriceIndication
                   marketPricePercentage={marketPricePercentages.min}
                   isRange
-                  buy={buy}
+                  buy={buy || isOverlapping === true}
                   ignoreMarketPriceWarning={ignoreMarketPriceWarning}
                 />
               )}
@@ -169,7 +173,7 @@ export const InputRange: FC<InputRangeProps> = ({
             >
               <label htmlFor={inputMaxId}>{maxLabel}</label>
             </Tooltip>
-            {marketPrice !== 0 && (
+            {!!marketPrice && (
               <button
                 className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
                 type="button"
@@ -194,8 +198,9 @@ export const InputRange: FC<InputRangeProps> = ({
             onFocus={(e) => e.target.select()}
             onBlur={handleBlurMax}
             data-testid="input-max"
+            required
           />
-          {marketPrice !== 0 && (
+          {!!marketPrice && (
             <div className="flex flex-wrap items-center gap-4">
               <p className="text-12 break-all text-white/60">
                 {getFiatAsString(max)}

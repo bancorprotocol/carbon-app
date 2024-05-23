@@ -14,7 +14,7 @@ import { waitForTenderlyRpc } from '../../../utils/tenderly';
 export const create = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
   const { base, quote } = testCase;
-  const { sell } = testCase.input.create;
+  const { buy, sell, spread } = testCase.input.create;
   const output = testCase.output.create;
 
   return test(`Create ${base}->${quote}`, async ({ page }) => {
@@ -29,12 +29,13 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await createForm.selectSetting('overlapping');
     await createForm.nextStep();
 
-    const overlappingForm = createForm.getOverlappingForm();
-    // Make so form has value before filling it
-    expect(overlappingForm.min()).toHaveValue(/\S+/);
-    expect(overlappingForm.max()).toHaveValue(/\S+/);
-    await createForm.fillOverlapping();
-    expect(overlappingForm.max()).toHaveValue(sell.max.toString());
+    const form = createForm.getOverlappingForm();
+    await form.max().fill(sell.max.toString());
+    await form.min().fill(buy.min.toString());
+    await form.spread().fill(spread.toString());
+    await expect(form.anchorRequired()).toBeVisible();
+    await form.anchor('sell').click();
+    await form.budget().fill(sell.budget.toString());
 
     const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit();
@@ -58,11 +59,13 @@ export const create = (testCase: CreateStrategyTestCase) => {
     const sellTooltip = await strategy.priceTooltip('sell', { isOverlapping });
     await expect(sellTooltip.minPrice()).toHaveText(output.sell.min);
     await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);
+    await expect(sellTooltip.marginalPrice()).toHaveText(output.sell.marginal);
     await sellTooltip.waitForDetached();
 
     const buyTooltip = await strategy.priceTooltip('buy', { isOverlapping });
     await expect(buyTooltip.minPrice()).toHaveText(output.buy.min);
     await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
+    await expect(buyTooltip.marginalPrice()).toHaveText(output.buy.marginal);
     await buyTooltip.waitForDetached();
 
     const notificationDriver = new NotificationDriver(page);

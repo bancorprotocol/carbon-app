@@ -1,8 +1,7 @@
-import { expect, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 import {
   assertDebugToken,
   assertDisposableTestCase,
-  assertOverlappingTestCase,
   assertRecurringTestCase,
   getRecurringSettings,
   screenshotPath,
@@ -40,11 +39,12 @@ export class CreateStrategyDriver {
     const form = this.getForm();
     return {
       locator: form,
-      min: () => form.getByLabel('Min Buy Price'),
-      max: () => form.getByLabel('Max Sell Price'),
-      budgetBase: () => form.getByTestId('input-budget-base'),
-      budgetQuote: () => form.getByTestId('input-budget-quote'),
+      min: () => form.getByTestId('input-min'),
+      max: () => form.getByTestId('input-max'),
       spread: () => form.getByTestId('spread-input'),
+      anchorRequired: () => form.getByTestId('require-anchor'),
+      anchor: (anchor: 'buy' | 'sell') => form.getByTestId(`anchor-${anchor}`),
+      budget: () => form.getByTestId('input-budget'),
     };
   }
 
@@ -89,17 +89,6 @@ export class CreateStrategyDriver {
     return { buyForm, sellForm };
   }
 
-  async fillOverlapping() {
-    assertOverlappingTestCase(this.testCase);
-    const { buy, sell, spread } = this.testCase.input.create;
-    const form = this.getOverlappingForm();
-    await form.max().fill(sell.max.toString());
-    await form.min().fill(buy.min.toString());
-    await form.spread().fill(spread.toString());
-    await form.budgetBase().fill(sell.budget.toString());
-    return form;
-  }
-
   async fillDisposable() {
     assertDisposableTestCase(this.testCase);
     const { direction, setting } = this.testCase;
@@ -114,20 +103,6 @@ export class CreateStrategyDriver {
 
   async submit() {
     const btn = this.page.getByText('Create Strategy');
-
-    const approveWarningsAndWait = async () => {
-      waitFor(this.page, 'approve-warnings');
-      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
-        this.page.getByTestId('approve-warnings').click();
-      }
-      await expect(btn).toBeEnabled();
-    };
-
-    // If the submit button is not enabled, try to approve warnings and retry
-    await expect(btn)
-      .toBeEnabled()
-      .catch(() => approveWarningsAndWait());
-
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
@@ -137,6 +112,14 @@ export class CreateStrategyDriver {
       await screenshot(form, path);
       await mainMenu.show();
     }
-    return btn.click();
+    try {
+      await waitFor(this.page, 'approve-warnings', 2_000);
+      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
+        await this.page.getByTestId('approve-warnings').click();
+      }
+      await btn.click();
+    } catch {
+      await btn.click({ timeout: 1_000 });
+    }
   }
 }

@@ -50,23 +50,25 @@ export class EditStrategyDriver {
     };
   }
 
+  getOverlappingForm() {
+    const form = this.page.getByTestId('edit-form');
+    return {
+      locator: form,
+      min: () => form.getByTestId('input-min'),
+      max: () => form.getByTestId('input-max'),
+      spread: () => form.getByTestId('spread-input'),
+      anchorRequired: () => form.getByTestId('require-anchor'),
+      anchor: (anchor: 'buy' | 'sell') => form.getByTestId(`anchor-${anchor}`),
+      budgetSummary: () => form.getByTestId(`budget-summary`),
+      action: (action: 'deposit' | 'withdraw') =>
+        form.getByTestId(`action-${action}`),
+      budget: () => form.getByTestId('input-budget'),
+    };
+  }
+
   async submit(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
     const btn = this.page.getByTestId('edit-submit');
 
-    const approveWarningsAndWait = async () => {
-      waitFor(this.page, 'approve-warnings');
-      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
-        this.page.getByTestId('approve-warnings').click();
-      }
-      await expect(btn).toBeEnabled();
-    };
-
-    // If the submit button is not enabled, try to approve warnings and retry
-    await expect(btn)
-      .toBeEnabled()
-      .catch(() => approveWarningsAndWait());
-
-    await expect(btn).toBeEnabled();
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
@@ -76,7 +78,16 @@ export class EditStrategyDriver {
       await screenshot(form, path);
       await mainMenu.show();
     }
-    return btn.click();
+
+    try {
+      await waitFor(this.page, 'approve-warnings', 2_000);
+      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
+        await this.page.getByTestId('approve-warnings').click();
+      }
+      await btn.click();
+    } catch {
+      await btn.click();
+    }
   }
 
   async fillBudget(direction: Direction, budget: string) {
@@ -112,7 +123,7 @@ export class EditStrategyDriver {
 
   async fillRecurringPrice(type: EditType) {
     assertRecurringTestCase(this.testCase);
-    const { buy, sell } = this.testCase.input.editPrice;
+    const { buy, sell } = this.testCase.input.editPrices;
     const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
     const sellForm = await this.fillPrice('sell', sellSetting, sell, type);
     const buyForm = await this.fillPrice('buy', buySetting, buy, type);
@@ -130,7 +141,7 @@ export class EditStrategyDriver {
   async fillDisposablePrice(type: EditType) {
     assertDisposableTestCase(this.testCase);
     const { direction, setting, input } = this.testCase;
-    return this.fillPrice(direction, setting, input.editPrice, type);
+    return this.fillPrice(direction, setting, input.editPrices, type);
   }
 
   async fillDisposableBudget(type: 'deposit' | 'withdraw') {

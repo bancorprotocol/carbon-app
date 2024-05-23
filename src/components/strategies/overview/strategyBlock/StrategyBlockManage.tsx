@@ -1,5 +1,4 @@
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
-import { SafeDecimal } from 'libs/safedecimal';
 import { FC, forwardRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
@@ -66,26 +65,20 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
   const items: (itemsType | separatorCounterType)[] = [];
 
-  if (
-    !isOverlapping ||
-    (isOverlapping &&
-      (new SafeDecimal(strategy.order0.balance).gt(0) ||
-        new SafeDecimal(strategy.order1.balance).gt(0)))
-  ) {
-    items.push({
-      id: 'duplicateStrategy',
-      name: 'Duplicate Strategy',
-      action: () => {
-        carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
-        if (!isOverlapping) {
-          openModal('duplicateStrategy', { strategy });
-        } else {
-          const search = getDuplicateStrategyParams(strategy);
-          navigate({ to: '/strategies/create', search });
-        }
-      },
-    });
-  }
+  items.push({
+    id: 'duplicateStrategy',
+    name: 'Duplicate Strategy',
+    action: () => {
+      carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
+      if (!isOverlapping) {
+        openModal('duplicateStrategy', { strategy });
+      } else {
+        const search = getDuplicateStrategyParams(strategy);
+        navigate({ to: '/strategies/create', search });
+      }
+    },
+  });
+
   const isDisposable =
     +strategy.order0.startRate === 0 ||
     +strategy.order0.endRate === 0 ||
@@ -146,45 +139,36 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   }
 
   if (!isExplorer) {
-    if (!isOverlapping) {
-      items.push({
-        id: 'editPrices',
-        name: 'Edit Prices',
-        action: () => {
-          carbonEvents.strategyEdit.strategyEditPricesClick({
-            origin: 'manage',
-            ...strategyEvent,
-          });
-          navigate({
-            to: '/strategies/edit/$strategyId',
-            params: { strategyId: strategy.id },
-            search: { type: 'editPrices' },
-          });
-        },
-      });
-    }
+    items.push({
+      id: 'editPrices',
+      name: 'Edit Prices',
+      action: () => {
+        carbonEvents.strategyEdit.strategyEditPricesClick({
+          origin: 'manage',
+          ...strategyEvent,
+        });
+        navigate({
+          to: '/strategies/edit/$strategyId',
+          params: { strategyId: strategy.id },
+          search: { type: 'editPrices' },
+        });
+      },
+    });
 
-    if (
-      !isOverlapping ||
-      (isOverlapping &&
-        (new SafeDecimal(strategy.order0.balance).gt(0) ||
-          new SafeDecimal(strategy.order1.balance).gt(0)))
-    ) {
-      // separator
-      items.push(0);
-      items.push({
-        id: 'depositFunds',
-        name: 'Deposit Funds',
-        action: () => {
-          carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
-          navigate({
-            to: '/strategies/edit/$strategyId',
-            params: { strategyId: strategy.id },
-            search: { type: 'deposit' },
-          });
-        },
-      });
-    }
+    // separator
+    items.push(0);
+    items.push({
+      id: 'depositFunds',
+      name: 'Deposit Funds',
+      action: () => {
+        carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
+        navigate({
+          to: '/strategies/edit/$strategyId',
+          params: { strategyId: strategy.id },
+          search: { type: 'deposit' },
+        });
+      },
+    });
 
     if (strategy.status !== 'noBudget') {
       items.push({
@@ -306,11 +290,12 @@ interface ManageButtonProps extends MenuButtonProps {
 
 export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
   (props, ref) => {
-    const style = cn(buttonStyles({ variant: 'white' }), 'gap-8');
+    const style = cn(buttonStyles({ variant: 'white' }), 'max-md:p-8 gap-8');
+    const { aboveBreakpoint } = useBreakpoints();
     return (
       <button {...props} className={style} ref={ref}>
         <IconGear className="size-24" />
-        Manage
+        {aboveBreakpoint('md') && 'Manage'}
       </button>
     );
   }

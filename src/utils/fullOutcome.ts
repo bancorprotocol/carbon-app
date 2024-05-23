@@ -26,7 +26,6 @@ export const geoMean = (min: string, max: string) => {
   const highRate = new SafeDecimal(max);
   if (lowRate.lte(0)) return;
   if (highRate.lte(0)) return;
-  if (lowRate.gt(highRate)) return;
   return lowRate.times(highRate).sqrt();
 };
 

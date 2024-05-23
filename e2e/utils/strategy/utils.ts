@@ -87,7 +87,7 @@ export const toDebugStrategy = (
   testCase: CreateStrategyTestCase
 ): CreateStrategyInput => {
   if (isRecurringTestCase(testCase)) return testCase.input.create;
-  if (isOverlappingTestCase(testCase)) return testCase.input.create;
+  if (isOverlappingTestCase(testCase)) return testCase.input.baseStrategy;
   // Disposable
   if (testCase.direction === 'buy') {
     return { buy: testCase.input.create, sell: emptyOrder() };
