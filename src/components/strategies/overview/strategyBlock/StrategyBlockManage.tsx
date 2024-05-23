@@ -16,13 +16,13 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
-import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import config from 'config';
+import { useWeb3 } from 'libs/web3';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -40,7 +40,8 @@ interface Props {
 }
 
 export const StrategyBlockManage: FC<Props> = (props) => {
-  const { strategy, isExplorer } = props;
+  const { user } = useWeb3();
+  const { strategy } = props;
   const [manage, setManage] = useState(false);
   const { strategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
@@ -49,9 +50,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const order1 = useOrder(strategy.order1);
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
-  const owner = useGetVoucherOwner(manage ? strategy.id : undefined);
-
   const isOverlapping = isOverlappingStrategy(strategy);
+  const isOwner = user && strategy.owner === user;
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -129,7 +129,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     });
   }
 
-  if (isExplorer) {
+  if (!isOwner && type === 'token-pair') {
     items.push({
       id: 'walletOwner',
       name: "View Owner's Strategies",
@@ -138,14 +138,13 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         explorerEvents.viewOwnersStrategiesClick(event);
         navigate({
           to: '/explore/$type/$slug',
-          params: { type: 'wallet', slug: owner.data ?? '' },
+          params: { type: 'wallet', slug: strategy.owner },
         });
       },
-      disabled: !owner.data,
     });
   }
 
-  if (!isExplorer) {
+  if (isOwner) {
     if (!isOverlapping) {
       items.push({
         id: 'editPrices',
@@ -255,7 +254,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           ...attr,
           onClick: (e) => {
             attr.onClick(e);
-            if (isExplorer) {
+            if (!user || user !== strategy.owner) {
               const baseEvent = { type, slug, strategies, sort, filter };
               explorerEvents.manageClick({ ...baseEvent, strategyEvent });
             } else {
@@ -288,7 +287,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
               setManage={setManage}
               action={action}
               id={id}
-              isExplorer={isExplorer}
+              isExplorer={!isOwner}
               disabled={disabled}
             />
           );

@@ -19,9 +19,10 @@ import {
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
-import { RoiRow } from 'utils/carbonApi';
+import { RoiRow, carbonApi } from 'utils/carbonApi';
 import { useGetRoi } from 'libs/queries/extApi/roi';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
+import { ServerActivity } from '../extApi/activity';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
@@ -42,6 +43,7 @@ export interface Strategy {
   status: StrategyStatus;
   encoded: EncodedStrategyBNStr;
   roi: SafeDecimal;
+  owner: string;
 }
 
 export interface StrategyWithFiat extends Strategy {
@@ -58,6 +60,7 @@ interface StrategiesHelperProps {
   importToken: (token: Token) => void;
   Token: (address: string) => { read: TokenContract };
   roiData: RoiRow[];
+  activities: ServerActivity[];
 }
 
 const buildStrategiesHelper = async ({
@@ -66,12 +69,18 @@ const buildStrategiesHelper = async ({
   importToken,
   Token,
   roiData,
+  activities,
 }: StrategiesHelperProps) => {
   const _getTknData = async (address: string) => {
     const data = await fetchTokenData(Token, address);
     importToken(data);
     return data;
   };
+
+  const owners = new Map<string, string>();
+  for (const activity of activities) {
+    owners.set(activity.strategy.id, activity.strategy.owner);
+  }
 
   const promises = strategies.map(async (s) => {
     const base = getTokenById(s.baseToken) || (await _getTknData(s.baseToken));
@@ -124,7 +133,7 @@ const buildStrategiesHelper = async ({
     };
 
     const roi = new SafeDecimal(roiData.find((r) => r.id === s.id)?.ROI || 0);
-
+    const owner = owners.get(s.id) ?? '';
     const strategy: Strategy = {
       id: s.id,
       idDisplay: getLowestBits(s.id),
@@ -135,6 +144,7 @@ const buildStrategiesHelper = async ({
       status,
       encoded: s.encoded,
       roi,
+      owner,
     };
 
     return strategy;
@@ -165,13 +175,17 @@ export const useGetUserStrategies = ({ user }: Props) => {
     async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
 
-      const strategies = await carbonSDK.getUserStrategies(address);
+      const [strategies, activities] = await Promise.all([
+        carbonSDK.getUserStrategies(address),
+        carbonApi.getActivity({ ownerId: address }),
+      ]);
       return buildStrategiesHelper({
         strategies,
         getTokenById,
         importToken,
         Token,
         roiData: roiQuery.data || [],
+        activities,
       });
     },
     {
@@ -195,13 +209,17 @@ export const useGetStrategy = (id: string) => {
   return useQuery<Strategy>(
     QueryKey.strategy(id),
     async () => {
-      const strategy = await carbonSDK.getStrategy(id);
+      const [strategy, activities] = await Promise.all([
+        carbonSDK.getStrategy(id),
+        carbonApi.getActivity({ strategyIds: id }),
+      ]);
       const strategies = await buildStrategiesHelper({
         strategies: [strategy],
         getTokenById,
         importToken,
         Token,
         roiData: roiQuery.data || [],
+        activities,
       });
       return strategies[0];
     },
@@ -229,13 +247,17 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
     QueryKey.strategiesByPair(token0, token1),
     async () => {
       if (!token0 || !token1) return [];
-      const strategies = await carbonSDK.getStrategiesByPair(token0, token1);
-      return await buildStrategiesHelper({
+      const [strategies, activities] = await Promise.all([
+        carbonSDK.getStrategiesByPair(token0, token1),
+        carbonApi.getActivity({ token0, token1 }),
+      ]);
+      return buildStrategiesHelper({
         strategies,
         getTokenById,
         importToken,
         Token,
         roiData: roiQuery.data || [],
+        activities,
       });
     },
     {
