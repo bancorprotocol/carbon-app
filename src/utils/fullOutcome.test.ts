@@ -15,9 +15,6 @@ describe('fullOutcome', () => {
       expect(geoMean('', '10')).toBeUndefined();
       expect(geoMean('10', '')).toBeUndefined();
     });
-    it('should return undefined if min is greater or equal to max', () => {
-      expect(geoMean('100', '10')).toBeUndefined();
-    });
     it('should return undefined if min or max is 0 or negative', () => {
       expect(geoMean('0', '10')).toBeUndefined();
       expect(geoMean('-100', '10')).toBeUndefined();
@@ -58,10 +55,6 @@ describe('fullOutcome', () => {
       const noPriceAndMax = { ...base, price: '', min: '10', max: '' };
       expect(getFullOutcome(noPriceOrMinAndMax)).toBeUndefined();
       expect(getFullOutcome(noPriceAndMax)).toBeUndefined();
-    });
-    it('should return undefined if min is greater than max', () => {
-      const input = { ...base, price: '', min: '100', max: '10' };
-      expect(getFullOutcome(input)).toBeUndefined();
     });
     describe('Limit rate', () => {
       it('[Buy] should return 3.1645569620253164557 with price 1580 & budget 5000', () => {

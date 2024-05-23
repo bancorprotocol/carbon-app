@@ -14,14 +14,14 @@ import { Token } from 'libs/tokens';
 import { getMaxBuyMin, getMinSellMax } from './utils';
 import { OrderCreate } from '../create/useOrder';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
-import styles from './OverlappingStrategyGraph.module.css';
 import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import styles from './OverlappingStrategyGraph.module.css';
 
 type Props = EnableProps | DisableProps;
 
 interface EnableProps {
-  marketPrice?: string;
+  marketPrice: number;
   base?: Token;
   quote?: Token;
   order0: OrderCreate;

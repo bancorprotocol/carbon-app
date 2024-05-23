@@ -17,7 +17,6 @@ import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { Link, StrategyCreateSearch } from 'libs/routing';
-import styles from './CreateStrategyTypeMenu.module.css';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 
 export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
@@ -148,7 +147,6 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             {benefits.map(({ summary, details }, i) => (
               <details
                 key={i}
-                className={styles.details}
                 /** @ts-ignore: name in details only work in chromium */
                 name={'accordion-' + id}
               >
@@ -158,7 +156,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 >
                   <IconCheck className="text-primary size-14" />
                   {summary}
-                  <IconChevron className={styles.chevron} />
+                  <IconChevron className="toggle h-14 w-14" />
                 </summary>
                 <p className="pl-22 text-10 md:text-12 text-white/60">
                   {details}

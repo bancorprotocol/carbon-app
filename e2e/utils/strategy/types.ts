@@ -51,7 +51,7 @@ export interface RecurringStrategyTestCase {
   quote: DebugTokens;
   input: {
     create: CreateStrategyInput;
-    editPrice: {
+    editPrices: {
       buy: MinMax;
       sell: MinMax;
     };
@@ -70,7 +70,7 @@ export interface RecurringStrategyTestCase {
       buy: OrderOutput;
       sell: OrderOutput;
     };
-    editPrice: {
+    editPrices: {
       buy: MinMax;
       sell: MinMax;
     };
@@ -103,23 +103,46 @@ export interface RecurringStrategyTestCase {
 /////////////////
 // OVERLAPPING //
 /////////////////
-
 export interface CreateOverlappingStrategyInput extends CreateStrategyInput {
   spread: string;
+}
+export interface EditPriceOverlappingStrategyInput {
+  min: string;
+  max: string;
+  spread: string;
+  anchor: 'buy' | 'sell';
+  action: 'deposit' | 'withdraw';
+  budget: string;
+}
+
+interface OverlappingOrderOutput {
+  min: string;
+  max: string;
+  marginal: string;
+  budget: string;
+  fiat: string;
+}
+interface OverlappingOutput {
+  totalFiat: string;
+  buy: OverlappingOrderOutput;
+  sell: OverlappingOrderOutput;
 }
 export interface OverlappingStrategyTestCase {
   type: 'overlapping';
   base: DebugTokens;
   quote: DebugTokens;
   input: {
+    baseStrategy: CreateStrategyInput;
     create: CreateOverlappingStrategyInput;
+    editPrices: EditPriceOverlappingStrategyInput;
+    withdraw: { anchor: 'buy' | 'sell'; budget: string };
+    deposit: { anchor: 'buy' | 'sell'; budget: string };
   };
   output: {
-    create: {
-      totalFiat: string;
-      buy: Omit<OrderOutput, 'outcomeValue' | 'outcomeQuote'>;
-      sell: Omit<OrderOutput, 'outcomeValue' | 'outcomeQuote'>;
-    };
+    create: OverlappingOutput;
+    editPrices: OverlappingOutput;
+    withdraw: { buy: string; sell: string };
+    deposit: { buy: string; sell: string };
   };
 }
 
@@ -141,13 +164,13 @@ export interface DisposableStrategyTestCase {
   quote: DebugTokens;
   input: {
     create: RangeOrder;
-    editPrice: MinMax;
+    editPrices: MinMax;
     deposit: string;
     withdraw: string;
   };
   output: {
     create: OrderOutput;
-    editPrice: MinMax;
+    editPrices: MinMax;
     deposit: string;
     withdraw: string;
   };

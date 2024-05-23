@@ -73,6 +73,14 @@ input[type='checkbox'] {
   input[type='number'] {
     -moz-appearance: textfield; /* Firefox */
   }
+
+  details .toggle {
+    transform: rotate(0);
+    transition: transform 0.2s ease-in-out;
+  }
+  details[open] .toggle {
+    transform: rotate(-180deg);
+  }
 }
 
 @layer components {

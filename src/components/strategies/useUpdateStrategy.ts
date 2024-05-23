@@ -12,6 +12,7 @@ import { useWeb3 } from 'libs/web3';
 import { useState } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { handleTxStatusAndRedirectToOverview } from './create/utils';
+import { isOverlappingStrategy } from './overlapping/utils';
 
 export const useUpdateStrategy = () => {
   const { user } = useWeb3();
@@ -116,8 +117,8 @@ export const useUpdateStrategy = () => {
 
   const changeRateStrategy = async (
     strategy: Strategy,
-    buyMarginalPrice?: MarginalPriceOptions,
-    sellMarginalPrice?: MarginalPriceOptions,
+    buyMarginalPrice?: MarginalPriceOptions | string,
+    sellMarginalPrice?: MarginalPriceOptions | string,
     successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
@@ -133,8 +134,10 @@ export const useUpdateStrategy = () => {
         fieldsToUpdate: {
           buyPriceLow: order0.startRate,
           buyPriceHigh: order0.endRate,
+          buyBudget: order0.balance,
           sellPriceLow: order1.startRate,
           sellPriceHigh: order1.endRate,
+          sellBudget: order1.balance,
         },
         buyMarginalPrice,
         sellMarginalPrice,
@@ -164,8 +167,8 @@ export const useUpdateStrategy = () => {
 
   const withdrawBudget = async (
     strategy: Strategy,
-    buyMarginalPrice?: MarginalPriceOptions,
-    sellMarginalPrice?: MarginalPriceOptions,
+    buyMarginalPrice?: MarginalPriceOptions | string,
+    sellMarginalPrice?: MarginalPriceOptions | string,
     successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
@@ -175,13 +178,20 @@ export const useUpdateStrategy = () => {
     }
 
     const fieldsToUpdate: StrategyUpdate = Object.assign({});
-
-    if (buyMarginalPrice) {
+    if (isOverlappingStrategy(strategy)) {
+      fieldsToUpdate.buyPriceLow = order0.startRate;
+      fieldsToUpdate.buyPriceHigh = order0.endRate;
       fieldsToUpdate.buyBudget = order0.balance;
-    }
-
-    if (sellMarginalPrice) {
+      fieldsToUpdate.sellPriceLow = order1.startRate;
+      fieldsToUpdate.sellPriceHigh = order1.endRate;
       fieldsToUpdate.sellBudget = order1.balance;
+    } else {
+      if (buyMarginalPrice) {
+        fieldsToUpdate.buyBudget = order0.balance;
+      }
+      if (sellMarginalPrice) {
+        fieldsToUpdate.sellBudget = order1.balance;
+      }
     }
 
     updateMutation.mutate(
@@ -217,8 +227,8 @@ export const useUpdateStrategy = () => {
 
   const depositBudget = async (
     strategy: Strategy,
-    buyMarginalPrice?: MarginalPriceOptions,
-    sellMarginalPrice?: MarginalPriceOptions,
+    buyMarginalPrice?: MarginalPriceOptions | string,
+    sellMarginalPrice?: MarginalPriceOptions | string,
     successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
@@ -229,12 +239,20 @@ export const useUpdateStrategy = () => {
 
     const fieldsToUpdate: StrategyUpdate = Object.assign({});
 
-    if (buyMarginalPrice) {
+    if (isOverlappingStrategy(strategy)) {
+      fieldsToUpdate.buyPriceLow = order0.startRate;
+      fieldsToUpdate.buyPriceHigh = order0.endRate;
       fieldsToUpdate.buyBudget = order0.balance;
-    }
-
-    if (sellMarginalPrice) {
+      fieldsToUpdate.sellPriceLow = order1.startRate;
+      fieldsToUpdate.sellPriceHigh = order1.endRate;
       fieldsToUpdate.sellBudget = order1.balance;
+    } else {
+      if (buyMarginalPrice) {
+        fieldsToUpdate.buyBudget = order0.balance;
+      }
+      if (sellMarginalPrice) {
+        fieldsToUpdate.sellBudget = order1.balance;
+      }
     }
 
     updateMutation.mutate(

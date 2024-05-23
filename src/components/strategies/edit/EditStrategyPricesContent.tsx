@@ -1,7 +1,7 @@
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Button } from 'components/common/button';
-import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
+import { useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Order, Strategy } from 'libs/queries';
 import { useRouter } from 'libs/routing';
@@ -16,7 +16,12 @@ import {
 } from 'components/strategies/utils';
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { EditPriceOverlappingStrategy } from 'components/strategies/edit/overlapping/EditPriceOverlappingStrategy';
-import { useStrategyWarning } from '../useWarning';
+import { cn } from 'utils/helpers';
+import { useEditStrategy } from '../create/useEditStrategy';
+import { useModal } from 'hooks/useModal';
+import { useWeb3 } from 'libs/web3';
+import { getDeposit, strategyBudgetChanges, strategyHasChanged } from './utils';
+import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -48,23 +53,14 @@ export const EditStrategyPricesContent = ({
       ? { ...strategy.order1, startRate: '', endRate: '' }
       : strategy.order1
   );
-  const [overlappingError, setOverlappingError] = useState('');
-  const isOrderValid = (order: OrderCreate): boolean => {
-    if (order.budgetError) return false;
-    if (!order.isRange) return !order.priceError;
-    if (order.rangeError) return false;
-    if (overlappingError) return false;
-    return +order.min > 0 && +order.max > 0 && +order.max > +order.min;
-  };
-  const isInvalid = !isOrderValid(order0) || !isOrderValid(order1);
-  const warnings = useStrategyWarning({
-    base,
-    quote,
-    order0,
-    order1,
-    isOverlapping,
-    invalidForm: isInvalid,
-  });
+
+  const { provider } = useWeb3();
+  const { approval } = useEditStrategy(
+    strategy,
+    getDeposit(strategy.order0.balance, order0.budget),
+    getDeposit(strategy.order1.balance, order1.budget)
+  );
+  const { openModal } = useModal();
 
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
@@ -79,8 +75,52 @@ export const EditStrategyPricesContent = ({
     order0,
     order1,
   });
-  const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
+
+  const hasChanged = strategyHasChanged(strategy, order0, order1);
+  const hasDistributionChanges =
+    isOverlapping && strategyBudgetChanges(strategy, order0, order1);
+
+  const isDisabled = (form: HTMLFormElement) => {
+    if (approval.isError) return true;
+    if (!hasChanged) return true;
+    if (!form.checkValidity()) return true;
+    if (form.querySelector('.error-message')) return true;
+    if (!form.querySelector('.warning-message')) return false;
+    const checkbox = form.querySelector<HTMLInputElement>('#approve-warnings');
+    return !!checkbox && !checkbox.checked;
+  };
+
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isDisabled(e.currentTarget)) return;
+    if (!+order0.budget && !+order1.budget) {
+      openModal('genericInfo', {
+        title: 'Empty Strategy Warning',
+        text: 'You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.',
+        variant: 'warning',
+        onConfirm: update,
+      });
+    } else if (approval.approvalRequired) {
+      openModal('txConfirm', {
+        approvalTokens: approval.tokens,
+        onConfirm: update,
+        buttonLabel: `Confirm Deposit`,
+        eventData: {
+          ...strategyEventData,
+          productType: 'strategy',
+          approvalTokens: approval.tokens,
+          buyToken: strategy.base,
+          sellToken: strategy.quote,
+          blockchainNetwork: provider?.network?.name || '',
+        },
+        context: 'depositStrategyFunds',
+      });
+    } else {
+      update();
+    }
+  };
+
+  const update = () => {
     const newOrder0 = {
       balance: order0.budget || strategy.order0.balance,
       startRate: (order0.isRange ? order0.min : order0.price) || '0',
@@ -95,39 +135,42 @@ export const EditStrategyPricesContent = ({
     };
 
     const getMarginalOption = (oldOrder: Order, newOrder: Order) => {
+      if (isOverlapping) return newOrder.marginalRate;
       if (oldOrder.startRate !== newOrder.startRate)
         return MarginalPriceOptions.reset;
       if (oldOrder.endRate !== newOrder.endRate)
         return MarginalPriceOptions.reset;
     };
 
-    type === 'renew'
-      ? renewStrategy(
-          {
-            ...strategy,
-            order0: newOrder0,
-            order1: newOrder1,
-          },
-          () =>
-            carbonEvents.strategyEdit.strategyRenew({
-              ...strategyEventData,
-              strategyId: strategy.id,
-            })
-        )
-      : changeRateStrategy(
-          {
-            ...strategy,
-            order0: newOrder0,
-            order1: newOrder1,
-          },
-          getMarginalOption(strategy.order0, newOrder0),
-          getMarginalOption(strategy.order1, newOrder1),
-          () =>
-            carbonEvents.strategyEdit.strategyEditPrices({
-              ...strategyEventData,
-              strategyId: strategy.id,
-            })
-        );
+    if (type === 'renew') {
+      renewStrategy(
+        {
+          ...strategy,
+          order0: newOrder0,
+          order1: newOrder1,
+        },
+        () =>
+          carbonEvents.strategyEdit.strategyRenew({
+            ...strategyEventData,
+            strategyId: strategy.id,
+          })
+      );
+    } else {
+      changeRateStrategy(
+        {
+          ...strategy,
+          order0: newOrder0,
+          order1: newOrder1,
+        },
+        getMarginalOption(strategy.order0, newOrder0),
+        getMarginalOption(strategy.order1, newOrder1),
+        () =>
+          carbonEvents.strategyEdit.strategyEditPrices({
+            ...strategyEventData,
+            strategyId: strategy.id,
+          })
+      );
+    }
   };
 
   const loadingChildren = useMemo(() => {
@@ -136,9 +179,9 @@ export const EditStrategyPricesContent = ({
 
   return (
     <form
-      onSubmit={(e) => handleOnActionClick(e)}
+      onSubmit={submit}
       onReset={() => history.back()}
-      className="font-weight-500 flex w-full flex-col items-center gap-20 md:w-[400px]"
+      className={cn('flex w-full flex-col gap-20 md:w-[400px]', style.form)}
       data-testid="edit-form"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -147,7 +190,6 @@ export const EditStrategyPricesContent = ({
           strategy={strategy}
           order0={order0}
           order1={order1}
-          setOverlappingError={setOverlappingError}
         />
       )}
       {!isOverlapping && (
@@ -156,7 +198,7 @@ export const EditStrategyPricesContent = ({
             base={strategy?.base}
             quote={strategy?.quote}
             order={order1}
-            balance={strategy.order1.balance}
+            initialBudget={strategy.order1.balance}
             type={type}
             isOrdersOverlap={isOrdersOverlap}
             isOrdersReversed={isOrdersReversed}
@@ -166,7 +208,7 @@ export const EditStrategyPricesContent = ({
             base={strategy?.base}
             quote={strategy?.quote}
             order={order0}
-            balance={strategy.order0.balance}
+            initialBudget={strategy.order0.balance}
             type={type}
             isOrdersOverlap={isOrdersOverlap}
             isOrdersReversed={isOrdersReversed}
@@ -174,21 +216,27 @@ export const EditStrategyPricesContent = ({
         </>
       )}
 
-      {warnings.formHasWarning && !isInvalid && (
-        <label className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60">
-          <input
-            type="checkbox"
-            value={warnings.approvedWarnings.toString()}
-            onChange={(e) => warnings.setApprovedWarnings(e.target.checked)}
-            data-testid="approve-warnings"
-          />
-          I've reviewed the warning(s) but choose to proceed.
-        </label>
-      )}
+      <label
+        htmlFor="approve-warnings"
+        className={cn(
+          style.approveWarnings,
+          'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+        )}
+      >
+        <input
+          id="approve-warnings"
+          type="checkbox"
+          name="approval"
+          data-testid="approve-warnings"
+        />
+        {hasDistributionChanges
+          ? "I've approved the edits and distribution changes."
+          : "I've reviewed the warning(s) but choose to proceed."}
+      </label>
 
       <Button
         type="submit"
-        disabled={isInvalid || warnings.shouldApproveWarnings}
+        disabled={!hasChanged}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"

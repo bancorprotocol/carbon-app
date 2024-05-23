@@ -11,7 +11,7 @@ type EditStrategyPricesBuySellBlockProps = {
   base: Token;
   quote: Token;
   order: OrderCreate;
-  balance?: string;
+  initialBudget: string;
   buy?: boolean;
   type: EditTypes;
   isOrdersOverlap: boolean;
@@ -23,23 +23,22 @@ export const EditStrategyPricesBuySellBlock: FC<
 > = ({
   base,
   quote,
-  balance,
   buy,
   order,
+  initialBudget,
   type,
   isOrdersOverlap,
   isOrdersReversed,
 }) => {
   const titleId = useId();
 
-  const isEmptyOrder = !Number(balance);
+  const isEmptyOrder = !Number(initialBudget);
 
   const headProps = { order, base, buy };
 
   const sectionProps = {
     base,
     quote,
-    balance,
     buy,
     order,
     isOrdersOverlap,
@@ -57,15 +56,16 @@ export const EditStrategyPricesBuySellBlock: FC<
 
   const budgetProps = {
     order,
+    initialBudget,
     base,
     quote,
-    balance,
+    max: type === 'withdraw' ? initialBudget : '',
     buy,
     type,
   };
 
   return (
-    <section
+    <article
       aria-labelledby={titleId}
       className={`rounded-6 bg-background-900 text-12 flex w-full flex-col gap-20 border-l-2 p-20 ${
         buy
@@ -90,6 +90,6 @@ export const EditStrategyPricesBuySellBlock: FC<
         base={base}
         quote={quote}
       />
-    </section>
+    </article>
   );
 };

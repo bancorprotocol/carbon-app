@@ -99,6 +99,7 @@ export const InputLimit: FC<InputLimitProps> = ({
               error && 'text-error'
             )}
             data-testid="input-price"
+            required
           />
           {!!marketPrice && (
             <button

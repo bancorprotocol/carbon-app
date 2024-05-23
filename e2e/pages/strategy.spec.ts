@@ -20,7 +20,7 @@ const testCases: CreateStrategyTestCase[] = [
     quote: 'DAI',
     input: {
       create: fromLimitOrder({ price: '1500', budget: '10' }),
-      editPrice: fromPrice('1600'),
+      editPrices: fromPrice('1600'),
       deposit: '5',
       withdraw: '5',
     },
@@ -33,7 +33,7 @@ const testCases: CreateStrategyTestCase[] = [
         budget: '10.00 DAI',
         fiat: '$10.00',
       },
-      editPrice: {
+      editPrices: {
         min: '1,600.00 DAI',
         max: '1,600.00 DAI',
       },
@@ -49,7 +49,7 @@ const testCases: CreateStrategyTestCase[] = [
     quote: 'DAI',
     input: {
       create: fromLimitOrder({ price: '1700', budget: '2' }),
-      editPrice: fromPrice('1800'),
+      editPrices: fromPrice('1800'),
       deposit: '1',
       withdraw: '1',
     },
@@ -62,7 +62,7 @@ const testCases: CreateStrategyTestCase[] = [
         budget: '2.00 ETH',
         fiat: '$3,334.42',
       },
-      editPrice: {
+      editPrices: {
         min: '1,800.00 DAI',
         max: '1,800.00 DAI',
       },
@@ -82,7 +82,7 @@ const testCases: CreateStrategyTestCase[] = [
         max: '1700',
         budget: '10',
       },
-      editPrice: {
+      editPrices: {
         min: '1600',
         max: '1800',
       },
@@ -98,7 +98,7 @@ const testCases: CreateStrategyTestCase[] = [
         budget: '10.00 DAI',
         fiat: '$10.00',
       },
-      editPrice: {
+      editPrices: {
         min: '1,600.00 DAI',
         max: '1,800.00 DAI',
       },
@@ -118,7 +118,7 @@ const testCases: CreateStrategyTestCase[] = [
         max: '1700',
         budget: '2',
       },
-      editPrice: {
+      editPrices: {
         min: '1600',
         max: '1800',
       },
@@ -134,7 +134,7 @@ const testCases: CreateStrategyTestCase[] = [
         budget: '2.00 ETH',
         fiat: '$3,334.42',
       },
-      editPrice: {
+      editPrices: {
         min: '1,600.00 DAI',
         max: '1,800.00 DAI',
       },
@@ -161,7 +161,7 @@ const testCases: CreateStrategyTestCase[] = [
           budget: '2',
         },
       },
-      editPrice: {
+      editPrices: {
         buy: {
           min: '1600',
           max: '1600',
@@ -215,7 +215,7 @@ const testCases: CreateStrategyTestCase[] = [
           fiat: '$3,334.42',
         },
       },
-      editPrice: {
+      editPrices: {
         buy: {
           min: '1,600.00 DAI',
           max: '1,600.00 DAI',
@@ -253,7 +253,7 @@ const testCases: CreateStrategyTestCase[] = [
           budget: '2',
         },
       },
-      editPrice: {
+      editPrices: {
         buy: {
           min: '1600',
           max: '1700',
@@ -307,7 +307,7 @@ const testCases: CreateStrategyTestCase[] = [
           fiat: '$3,334.42',
         },
       },
-      editPrice: {
+      editPrices: {
         buy: {
           min: '1,600.00 DAI',
           max: '1,700.00 DAI',
@@ -345,7 +345,7 @@ const testCases: CreateStrategyTestCase[] = [
           budget: '2',
         },
       },
-      editPrice: {
+      editPrices: {
         buy: {
           min: '1600',
           max: '1600',
@@ -399,7 +399,7 @@ const testCases: CreateStrategyTestCase[] = [
           fiat: '$3,334.42',
         },
       },
-      editPrice: {
+      editPrices: {
         buy: {
           min: '1,600.00 DAI',
           max: '1,600.00 DAI',
@@ -437,7 +437,7 @@ const testCases: CreateStrategyTestCase[] = [
           budget: '2',
         },
       },
-      editPrice: {
+      editPrices: {
         buy: {
           min: '1600',
           max: '1700',
@@ -491,7 +491,7 @@ const testCases: CreateStrategyTestCase[] = [
           fiat: '$3,334.42',
         },
       },
-      editPrice: {
+      editPrices: {
         buy: {
           min: '1,600.00 DAI',
           max: '1,700.00 DAI',
@@ -517,6 +517,19 @@ const testCases: CreateStrategyTestCase[] = [
     base: 'BNT',
     quote: 'USDC',
     input: {
+      baseStrategy: {
+        buy: {
+          min: '0.3',
+          max: '0.545455',
+          budget: '12.501572',
+        },
+        sell: {
+          min: '0.33',
+          max: '0.6',
+          budget: '30',
+        },
+        spread: '10',
+      },
       create: {
         buy: {
           min: '0.3',
@@ -530,6 +543,22 @@ const testCases: CreateStrategyTestCase[] = [
         },
         spread: '10', // Need a large spread for tooltip test
       },
+      editPrices: {
+        min: '0.2',
+        max: '0.7',
+        spread: '15',
+        anchor: 'buy',
+        action: 'deposit',
+        budget: '10',
+      },
+      withdraw: {
+        anchor: 'sell',
+        budget: '10',
+      },
+      deposit: {
+        anchor: 'sell',
+        budget: '10',
+      },
     },
     output: {
       create: {
@@ -537,16 +566,37 @@ const testCases: CreateStrategyTestCase[] = [
         buy: {
           min: '0.30 USDC',
           max: '0.545455 USDC',
+          marginal: '0.400854 USDC',
           budget: '12.50 USDC',
           fiat: '$12.50',
         },
         sell: {
           min: '0.33 USDC',
           max: '0.60 USDC',
+          marginal: '0.440939 USDC',
           budget: '30.00 BNT',
           fiat: '$12.61',
         },
       },
+      editPrices: {
+        totalFiat: '$39.17',
+        buy: {
+          min: '0.20 USDC',
+          max: '0.608696 USDC',
+          marginal: '0.392043 USDC',
+          budget: '22.50 USDC',
+          fiat: '$22.50',
+        },
+        sell: {
+          min: '0.23 USDC',
+          max: '0.70 USDC',
+          marginal: '0.450849 USDC',
+          budget: '39.66 BNT',
+          fiat: '$16.67',
+        },
+      },
+      withdraw: { buy: '8.33 USDC', sell: '20.00 BNT' },
+      deposit: { buy: '16.66 USDC', sell: '40.00 BNT' },
     },
   },
 ];

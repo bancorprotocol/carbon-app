@@ -1,4 +1,4 @@
-import { FC, useId } from 'react';
+import { FC, useId, useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
@@ -7,28 +7,47 @@ import { TokenInputField } from 'components/common/TokenInputField/TokenInputFie
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
-import { getUpdatedBudget } from 'utils/fullOutcome';
 import { useMarketIndication } from '../marketPriceIndication';
 import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
-export const EditStrategyBudgetBuySellBlock: FC<{
+interface Props {
   base: Token;
   quote: Token;
   order: OrderCreate;
-  balance?: string;
+  initialBudget: string;
   buy?: boolean;
   isBudgetOptional?: boolean;
   type: 'deposit' | 'withdraw';
-}> = ({ base, quote, balance, buy, order, isBudgetOptional, type }) => {
+}
+
+export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
+  const { base, quote, initialBudget, buy, order, isBudgetOptional, type } =
+    props;
   const inputId = useId();
   const titleId = useId();
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
+  const [delta, setDelta] = useState('');
   const tokenBalanceQuery = buy
     ? tokenQuoteBalanceQuery
     : tokenBaseBalanceQuery;
   const budgetToken = buy ? quote : base;
+
+  const setBudget = (value: string) => {
+    setDelta(value);
+    const amount =
+      type === 'deposit'
+        ? new SafeDecimal(initialBudget).add(value || '0')
+        : new SafeDecimal(initialBudget).sub(value || '0');
+    order.setBudget(amount.toString());
+  };
+
+  const tokenBalance = tokenBalanceQuery.data || 0;
+  const insufficientBalance =
+    type === 'withdraw'
+      ? new SafeDecimal(initialBudget || 0).lt(delta)
+      : new SafeDecimal(tokenBalance).lt(delta);
 
   const { isOrderAboveOrBelowMarketPrice } = useMarketIndication({
     base,
@@ -37,25 +56,16 @@ export const EditStrategyBudgetBuySellBlock: FC<{
     buy,
   });
 
-  const calculatedWalletBalance = new SafeDecimal(
-    tokenBalanceQuery.data || 0
-  ).minus(new SafeDecimal(order.budget || 0));
-
-  const insufficientBalance =
-    type === 'withdraw'
-      ? new SafeDecimal(balance || 0).lt(order.budget)
-      : calculatedWalletBalance.lt(0);
-
   const budgetProps = {
+    order,
     base,
     quote,
-    balance,
     buy,
     type,
   };
 
   return (
-    <section
+    <article
       aria-labelledby={titleId}
       className={`rounded-6 bg-background-900 flex flex-col gap-20 border-l-2 p-20 text-left ${
         buy
@@ -86,8 +96,8 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       <TokenInputField
         id={inputId}
         className="rounded-16 bg-black p-16"
-        value={order.budget}
-        setValue={order.setBudget}
+        value={delta}
+        setValue={setBudget}
         token={budgetToken}
         isBalanceLoading={tokenBalanceQuery.isLoading}
         isError={insufficientBalance}
@@ -104,22 +114,20 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         </WarningMessageWithIcon>
       )}
       <EditStrategyAllocatedBudget
-        order={order}
         {...budgetProps}
-        {...(type === 'withdraw' && {
-          showMaxCb: () => order.setBudget(balance || ''),
-        })}
+        initialBudget={initialBudget}
+        setMax={type === 'withdraw' ? setBudget : undefined}
       />
       <FullOutcome
         price={order.price}
         min={order.min}
         max={order.max}
-        budget={getUpdatedBudget(type, balance, order.budget)}
-        budgetUpdate={order.budget}
+        budget={order.budget}
+        budgetUpdate={delta}
         buy={buy}
         base={base}
         quote={quote}
       />
-    </section>
+    </article>
   );
 };
