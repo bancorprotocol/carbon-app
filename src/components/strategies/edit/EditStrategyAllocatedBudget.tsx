@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useMemo, useRef } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -14,49 +14,43 @@ const shouldDisplayDistributeByType: {
   [key in EditTypes]: boolean;
 } = {
   renew: false,
-  editPrices: true,
+  editPrices: false,
   deposit: true,
   withdraw: true,
 };
 
 interface Props {
   order: OrderCreate;
+  initialBudget: string;
   base: Token;
   quote: Token;
-  balance?: string;
   buy?: boolean;
-  showMaxCb?: () => void;
   type: EditTypes;
+  setMax?: (value: string) => void;
 }
 export const EditStrategyAllocatedBudget: FC<Props> = ({
   base,
   quote,
-  balance,
   order,
-  showMaxCb,
+  initialBudget,
   type,
   buy = false,
+  setMax,
 }) => {
   const firstTime = useRef(true);
-  const [showDistribute, setShowDistribute] = useState(false);
   const isDistributeToggleOn =
     order.marginalPriceOption === MarginalPriceOptions.reset ||
     !order.marginalPriceOption;
 
-  useEffect(() => {
-    if (
-      !firstTime.current &&
-      order.isRange &&
-      +order.budget > 0 &&
-      shouldDisplayDistributeByType[type]
-    ) {
-      setShowDistribute(true);
+  const showDistribute = useMemo(() => {
+    if (!shouldDisplayDistributeByType[type]) return false;
+    if (!order.isRange) return false;
+    if (!firstTime.current) {
+      firstTime.current = true;
+      return false;
     }
-    if (!order.isRange || +order.budget === 0) {
-      setShowDistribute(false);
-    }
-    firstTime.current = false;
-  }, [order.max, order.min, order.budget, order.isRange, type]);
+    return order.budget !== initialBudget;
+  }, [initialBudget, order.budget, order.isRange, type]);
 
   return (
     <>
@@ -79,13 +73,13 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
           </p>
           <div role="cell" className="flex flex-1 justify-end gap-8">
             <TooltipTokenAmount
-              amount={balance ?? ''}
+              amount={initialBudget ?? ''}
               token={buy ? quote : base}
             />
-            {showMaxCb && (
+            {!!setMax && (
               <button
                 type="button"
-                onClick={() => showMaxCb()}
+                onClick={() => setMax(initialBudget)}
                 className="font-weight-500 text-primary cursor-pointer"
               >
                 MAX
@@ -112,7 +106,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
           </div>
         )}
 
-        {showDistribute && type !== 'editPrices' && (
+        {showDistribute && (
           <div role="row" className="flex justify-between">
             <p role="columnheader" className="flex items-center">
               <span className="mr-5">Distribute Across Entire Range</span>

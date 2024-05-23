@@ -9,20 +9,24 @@ import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
   base: Token;
   quote: Token;
-  externalPrice?: number;
-  marketPrice: string;
-  setMarketPrice: (price: string) => void;
+  marketPrice?: number;
+  setMarketPrice: (price: number) => void;
+  className?: string;
 }
 export const OverlappingMarketPrice: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
   const Trigger = (attr: MenuButtonProps) => (
     <button
       {...attr}
-      className="text-12 font-weight-500 bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8"
+      className={cn(
+        'text-12 font-weight-500 bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8',
+        props.className
+      )}
       type="button"
     >
       <IconEdit className="size-16" />
@@ -52,12 +56,15 @@ interface FieldProps extends Props {
 }
 
 export const OverlappingInitMarketPriceField = (props: FieldProps) => {
-  const { base, quote, externalPrice, marketPrice } = props;
+  const { base, quote, marketPrice } = props;
   const checkboxId = useId();
-  const [localPrice, setLocalPrice] = useState(marketPrice);
+  const [localPrice, setLocalPrice] = useState(marketPrice?.toString());
   const [showApproval, setShowApproval] = useState(false);
-  const [approved, setApproved] = useState(localPrice === marketPrice);
+  const [approved, setApproved] = useState(
+    localPrice === marketPrice?.toString()
+  );
   const [error, setError] = useState('');
+  const externalPrice = useMarketPrice({ base, quote });
 
   const changePrice = (value: string) => {
     if (!+value) setError('Price must be greater than 0');
@@ -68,12 +75,12 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   };
 
   const setPrice = () => {
-    if (!Number(localPrice)) return;
-    props.setMarketPrice(localPrice);
+    if (!localPrice) return;
+    props.setMarketPrice(Number(localPrice));
     if (props.close) props.close();
   };
 
-  const disabled = !+localPrice || (showApproval && !approved);
+  const disabled = !localPrice || !+localPrice || (showApproval && !approved);
 
   return (
     <div className={cn(props.className, 'flex flex-col gap-20 p-16')}>
@@ -85,8 +92,8 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         value={localPrice}
         onChange={changePrice}
         token={quote}
-        error={error}
-        withoutWallet
+        errors={error}
+        action="deposit"
       />
       {!error && showApproval && (
         <WarningMessageWithIcon>

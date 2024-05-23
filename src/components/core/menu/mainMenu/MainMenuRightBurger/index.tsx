@@ -32,8 +32,8 @@ export const MainMenuRightBurger: FC<{
             attr.onClick(e);
           }}
         >
-          <span className="flex size-36 items-center justify-center">
-            <span className="relative inline-flex size-36 items-center justify-center rounded-full">
+          <span className="size-36 flex items-center justify-center">
+            <span className="size-36 relative inline-flex items-center justify-center rounded-full">
               <IconBurger className="h-14" />
             </span>
           </span>

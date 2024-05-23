@@ -69,7 +69,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
             key={title}
             className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-black/90 p-16"
           >
-            <div className="bg-primary/25 row-span-2 flex size-32 items-center justify-center self-center rounded-full">
+            <div className="bg-primary/25 size-32 row-span-2 flex items-center justify-center self-center rounded-full">
               <Icon className="text-primary size-16" />
             </div>
             <h3 className="text-14 font-weight-500">{title}</h3>

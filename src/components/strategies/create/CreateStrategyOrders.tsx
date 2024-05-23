@@ -1,4 +1,4 @@
-import { FormEvent, useMemo } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { m } from 'libs/motion';
 import { useWeb3 } from 'libs/web3';
 import { Button } from 'components/common/button';
@@ -7,20 +7,23 @@ import { items } from 'components/strategies/create/variants';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
-import { getStatusTextByTxStatus } from 'components/strategies/utils';
+import {
+  getStatusTextByTxStatus,
+  isValidOrder,
+} from 'components/strategies/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { CreateOverlappingStrategy } from 'components/strategies/create/overlapping/CreateOverlappingStrategy';
-import { useStrategyWarning } from 'components/strategies/useWarning';
-import useInitEffect from 'hooks/useInitEffect';
 import { carbonEvents } from 'services/events';
+import { CreateOverlapping } from './CreateOverlapping';
+import { useModal } from 'hooks/useModal';
+import useInitEffect from 'hooks/useInitEffect';
 
 export const CreateStrategyOrders = ({
   base,
   quote,
   order0,
   order1,
+  hasApprovalError,
   createStrategy,
-  isCTAdisabled,
   token0BalanceQuery,
   token1BalanceQuery,
   strategyDirection,
@@ -34,17 +37,12 @@ export const CreateStrategyOrders = ({
   spread,
   setSpread,
 }: UseStrategyCreateReturn) => {
+  const formRef = useRef<HTMLFormElement>(null);
   const { user } = useWeb3();
-  const warnings = useStrategyWarning({
-    base,
-    quote,
-    order0,
-    order1,
-    isOverlapping: strategySettings === 'overlapping',
-    invalidForm: isCTAdisabled,
-    isConnected: !!user,
-  });
-
+  const [approvedWarnings, setApprovedWarnings] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+  const [showWarningApproval, setShowWarningApproval] = useState(false);
+  const { openModal } = useModal();
   const strategyEventData = useStrategyEventData({
     base,
     quote,
@@ -64,6 +62,11 @@ export const CreateStrategyOrders = ({
     });
   }, [strategyDirection]);
 
+  const connectWallet = () => {
+    carbonEvents.strategy.strategyCreateClick(strategyEventData);
+    openModal('wallet', undefined);
+  };
+
   const onCreateStrategy = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!!e.currentTarget.querySelector('.error-message')) return;
@@ -71,12 +74,48 @@ export const CreateStrategyOrders = ({
     createStrategy();
   };
 
+  const isOverlapping = strategySettings === 'overlapping';
+  const loading = isAwaiting || isProcessing;
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
   }, [isAwaiting, isProcessing]);
+  const hasDistributionChanges =
+    isOverlapping && !!(+order0.budget || +order1.budget);
+
+  // TODO(#1204): cleanup this when separated into different pages
+  useEffect(() => {
+    if (!user) return setDisabled(false);
+    const form = formRef.current;
+    const valid =
+      form?.checkValidity() && !form.querySelector('.error-message');
+    const warnings = !!form?.querySelector('.warning-message');
+    setShowWarningApproval(
+      !!user && !!valid && (warnings || hasDistributionChanges)
+    );
+    let hasValidOrders = false;
+    if (strategyType === 'disposable') {
+      hasValidOrders = isValidOrder(order0) || isValidOrder(order1);
+    } else {
+      hasValidOrders = isValidOrder(order0) && isValidOrder(order1);
+    }
+    const hasError = !valid || hasApprovalError;
+    const needApproval = showWarningApproval && !approvedWarnings;
+    setDisabled(hasError || needApproval || !hasValidOrders);
+  }, [
+    approvedWarnings,
+    disabled,
+    order0,
+    order1,
+    showWarningApproval,
+    user,
+    hasApprovalError,
+    hasDistributionChanges,
+    strategyType,
+  ]);
 
   return (
     <form
+      ref={formRef}
       onSubmit={(e) => onCreateStrategy(e)}
       className="group flex flex-col gap-20 md:w-[440px]"
       data-testid="create-strategy-form"
@@ -107,19 +146,17 @@ export const CreateStrategyOrders = ({
         </p>
       </m.header>
 
-      {strategySettings === 'overlapping' && base && quote && (
-        <CreateOverlappingStrategy
+      {isOverlapping && base && quote && (
+        <CreateOverlapping
           base={base}
           quote={quote}
           order0={order0}
           order1={order1}
-          token0BalanceQuery={token0BalanceQuery}
-          token1BalanceQuery={token1BalanceQuery}
           spread={spread}
           setSpread={setSpread}
         />
       )}
-      {strategySettings !== 'overlapping' && (
+      {!isOverlapping && (
         <>
           {(strategyDirection === 'sell' || strategyType === 'recurring') && (
             <BuySellBlock
@@ -153,35 +190,48 @@ export const CreateStrategyOrders = ({
         </>
       )}
 
-      {warnings.formHasWarning && !isCTAdisabled && (
+      {showWarningApproval && (
         <m.label
           variants={items}
           className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60"
         >
           <input
             type="checkbox"
-            value={warnings.approvedWarnings.toString()}
-            onChange={(e) => warnings.setApprovedWarnings(e.target.checked)}
+            onChange={(e) => setApprovedWarnings(e.target.checked)}
             data-testid="approve-warnings"
           />
-          I've reviewed the warning(s) but choose to proceed.
+          {hasDistributionChanges
+            ? "I've approved the token deposit(s) and distribution."
+            : "I've reviewed the warning(s) but choose to proceed."}
         </m.label>
       )}
 
       <m.div variants={items} key="createStrategyCTA">
-        <Button
-          type="submit"
-          variant="success"
-          size="lg"
-          fullWidth
-          disabled={isCTAdisabled || warnings.shouldApproveWarnings}
-          loading={isProcessing || isAwaiting}
-          loadingChildren={loadingChildren}
-          // TODO: Remove in #1161
-          className="group-has-[.error-message]:cursor-not-allowed group-has-[.error-message]:opacity-40"
-        >
-          {user ? 'Create Strategy' : 'Connect Wallet'}
-        </Button>
+        {user ? (
+          <Button
+            type="submit"
+            variant="success"
+            size="lg"
+            fullWidth
+            disabled={disabled}
+            loading={loading}
+            loadingChildren={loadingChildren}
+          >
+            Create Strategy
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            variant="success"
+            size="lg"
+            fullWidth
+            loading={loading}
+            loadingChildren={loadingChildren}
+            onClick={connectWallet}
+          >
+            Connect Wallet
+          </Button>
+        )}
       </m.div>
     </form>
   );

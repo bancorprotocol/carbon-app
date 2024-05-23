@@ -1,0 +1,17 @@
+.select-token:focus-visible + label {
+  outline: solid 1px white;
+}
+.select-token:checked + label {
+  border: solid 1px white;
+}
+.select-token:disabled + label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.budget-mode:checked + label {
+  color: white;
+  background-color: #404040;
+}
+.budget-mode:focus-visible + label {
+  outline: solid 1px white;
+}

@@ -51,7 +51,7 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
             to={`/simulate/${label}`}
             search={{ baseToken, quoteToken }}
             className={cn(
-              'rounded-10 text-14 font-weight-500 flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white/60',
+              'rounded-10 text-14 font-weight-500 size-full flex flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white/60',
               'md:px-12',
               'focus-visible:outline focus-visible:outline-1'
             )}

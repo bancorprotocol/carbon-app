@@ -1,6 +1,5 @@
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
-import { SafeDecimal } from 'libs/safedecimal';
 import { Button } from 'components/common/button';
 import { Strategy } from 'libs/queries';
 import { useRouter } from 'libs/routing';
@@ -16,12 +15,11 @@ import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
-import {
-  isOverlappingBudgetTooSmall,
-  isOverlappingStrategy,
-} from '../overlapping/utils';
-import { DepositOverlappingStrategy } from './overlapping/DepositOverlappingStrategy';
-import { WithdrawOverlappingStrategy } from './overlapping/WithdrawOverlappingStrategy';
+import { isOverlappingStrategy } from '../overlapping/utils';
+import { EditBudgetOverlappingStrategy } from './overlapping/EditBudgetOverlappingStrategy';
+import { getDeposit, strategyHasChanged } from './utils';
+import { cn } from 'utils/helpers';
+import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -45,21 +43,24 @@ export const EditStrategyBudgetContent = ({
     updateMutation,
   } = useUpdateStrategy();
 
-  const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
-  const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
+  const order0: OrderCreate = useOrder(strategy.order0);
+  const order1: OrderCreate = useOrder(strategy.order1);
+  const buyBalance = strategy.order0.balance;
+  const sellBalance = strategy.order1.balance;
   const { provider } = useWeb3();
   const { getFiatValue: getFiatValueBase } = useFiatCurrency(strategy.base);
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(strategy.quote);
-  const buyBudgetUsd = getFiatValueQuote(
-    strategy.order0.balance,
-    true
-  ).toString();
-  const sellBudgetUsd = getFiatValueBase(
-    strategy.order1.balance,
-    true
-  ).toString();
+  const buyBudgetUsd = getFiatValueQuote(buyBalance, true).toString();
+  const sellBudgetUsd = getFiatValueBase(buyBalance, true).toString();
+
+  const { approval } = useEditStrategy(
+    strategy,
+    getDeposit(buyBalance, order0.budget),
+    getDeposit(sellBalance, order1.budget)
+  );
+
   const isAwaiting = updateMutation.isLoading;
-  const isLoading = isAwaiting || isProcessing;
+  const isLoading = isAwaiting || isProcessing || approval.isLoading;
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -68,29 +69,16 @@ export const EditStrategyBudgetContent = ({
     order1,
   });
 
-  const { approval } = useEditStrategy(strategy, order0, order1);
   const { openModal } = useModal();
-
-  const calculatedOrder0Budget = !!order0.budget
-    ? new SafeDecimal(strategy.order0.balance)?.[
-        type === 'withdraw' ? 'minus' : 'plus'
-      ](new SafeDecimal(order0.budget))
-    : new SafeDecimal(strategy.order0.balance);
-
-  const calculatedOrder1Budget = !!order1.budget
-    ? new SafeDecimal(strategy.order1.balance)?.[
-        type === 'withdraw' ? 'minus' : 'plus'
-      ](new SafeDecimal(order1.budget))
-    : new SafeDecimal(strategy.order1.balance);
 
   const handleEvents = () => {
     type === 'withdraw'
       ? carbonEvents.strategyEdit.strategyWithdraw({
           ...strategyEventData,
           strategyId: strategy.id,
-          buyBudget: strategy.order0.balance,
+          buyBudget: buyBalance,
           buyBudgetUsd,
-          sellBudget: strategy.order1.balance,
+          sellBudget: buyBalance,
           sellBudgetUsd,
           buyLowWithdrawalBudget: strategyEventData.buyBudget,
           buyLowWithdrawalBudgetUsd: strategyEventData.buyBudgetUsd,
@@ -100,9 +88,9 @@ export const EditStrategyBudgetContent = ({
       : carbonEvents.strategyEdit.strategyDeposit({
           ...strategyEventData,
           strategyId: strategy.id,
-          buyBudget: strategy.order0.balance,
+          buyBudget: buyBalance,
           buyBudgetUsd,
-          sellBudget: strategy.order1.balance,
+          sellBudget: buyBalance,
           sellBudgetUsd,
           buyLowDepositBudget: strategyEventData.buyBudget,
           buyLowDepositBudgetUsd: strategyEventData.buyBudgetUsd,
@@ -111,12 +99,23 @@ export const EditStrategyBudgetContent = ({
         });
   };
 
-  const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
+  const hasChanged = strategyHasChanged(strategy, order0, order1);
+
+  const isDisabled = (form: HTMLFormElement) => {
+    if (approval.isError) return true;
+    if (!hasChanged) return true;
+    if (!form.checkValidity()) return true;
+    if (form.querySelector('.error-message')) return true;
+    if (!form.querySelector('.warning-message')) return false;
+    const checkbox = form.querySelector<HTMLInputElement>('.approve-warnings');
+    return !!checkbox && !checkbox.checked;
+  };
+
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isDisabled(e.currentTarget)) return;
     if (type === 'withdraw') {
-      const withdrawAll =
-        (order0.budget || '0') === strategy.order0.balance &&
-        (order1.budget || '0') === strategy.order1.balance;
+      const withdrawAll = !+order0.budget && !+order1.budget;
       if (withdrawAll) {
         openWithdrawModal();
       } else {
@@ -144,10 +143,10 @@ export const EditStrategyBudgetContent = ({
     }
   };
 
-  const getMarginalOption = (order: OrderCreate) => {
-    if (!Number(order.budget) || !order.budget) return undefined;
+  const getMarginalOption = (order: OrderCreate, initialBudget: string) => {
+    if (isOverlapping) return order.marginalPrice;
+    if (order.budget === initialBudget) return undefined;
     if (order.marginalPriceOption) return order.marginalPriceOption;
-
     return MarginalPriceOptions.reset;
   };
 
@@ -167,37 +166,28 @@ export const EditStrategyBudgetContent = ({
   };
 
   const depositOrWithdrawFunds = () => {
-    const buyOption = getMarginalOption(order0);
-    const sellOption = getMarginalOption(order1);
+    const buyOption = getMarginalOption(order0, strategy.order0.balance);
+    const sellOption = getMarginalOption(order1, strategy.order1.balance);
 
     const updatedStrategy = {
       ...strategy,
       order0: {
-        balance: calculatedOrder0Budget.toString(),
+        balance: order0.budget,
         startRate: order0.price || order0.min,
         endRate: order0.max,
-        marginalRate: strategy.order0.marginalRate,
+        marginalRate: order0.marginalPrice,
       },
       order1: {
-        balance: calculatedOrder1Budget.toString(),
+        balance: order1.budget,
         startRate: order1.price || order1.min,
         endRate: order1.max,
-        marginalRate: strategy.order1.marginalRate,
+        marginalRate: order1.marginalPrice,
       },
     };
 
-    const action = type === 'withdraw' ? withdrawBudget : depositBudget;
-    void action(updatedStrategy, buyOption, sellOption, handleEvents);
+    const actionFn = type === 'withdraw' ? withdrawBudget : depositBudget;
+    void actionFn(updatedStrategy, buyOption, sellOption, handleEvents);
   };
-
-  const isOrdersBudgetValid = useMemo(() => {
-    if (order0.budgetError) return false;
-    if (order1.budgetError) return false;
-    if (isOverlapping && isOverlappingBudgetTooSmall(order0, order1)) {
-      return false;
-    }
-    return +order0.budget > 0 || +order1.budget > 0;
-  }, [order0, order1, isOverlapping]);
 
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
@@ -205,24 +195,18 @@ export const EditStrategyBudgetContent = ({
 
   return (
     <form
-      onSubmit={(e) => handleOnActionClick(e)}
+      onSubmit={submit}
       onReset={() => history.back()}
-      className="flex w-full flex-col gap-20 md:w-[400px]"
+      className={cn('flex w-full flex-col gap-20 md:w-[400px]', style.form)}
       data-testid="edit-form"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
-      {isOverlapping && type === 'deposit' && (
-        <DepositOverlappingStrategy
+      {isOverlapping && (
+        <EditBudgetOverlappingStrategy
           strategy={strategy}
           order0={order0}
           order1={order1}
-        />
-      )}
-      {isOverlapping && type === 'withdraw' && (
-        <WithdrawOverlappingStrategy
-          strategy={strategy}
-          order0={order0}
-          order1={order1}
+          action={type}
         />
       )}
       {!isOverlapping && (
@@ -231,8 +215,10 @@ export const EditStrategyBudgetContent = ({
             base={strategy?.base}
             quote={strategy?.quote}
             order={order1}
-            balance={strategy.order1.balance}
-            isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+            initialBudget={sellBalance}
+            isBudgetOptional={
+              order1.budget === sellBalance && order0.budget !== buyBalance
+            }
             type={type}
           />
           <EditStrategyBudgetBuySellBlock
@@ -240,15 +226,34 @@ export const EditStrategyBudgetContent = ({
             base={strategy?.base}
             quote={strategy?.quote}
             order={order0}
-            balance={strategy.order0.balance}
-            isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
+            initialBudget={buyBalance}
+            isBudgetOptional={
+              order0.budget === buyBalance && order1.budget !== sellBalance
+            }
             type={type}
           />
         </>
       )}
+
+      <label
+        htmlFor="approve-warnings"
+        className={cn(
+          style.approveWarnings,
+          'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+        )}
+      >
+        <input
+          id="approve-warnings"
+          type="checkbox"
+          name="approval"
+          data-testid="approve-warnings"
+        />
+        I've approved the edits and distribution changes.
+      </label>
+
       <Button
         type="submit"
-        disabled={!isOrdersBudgetValid}
+        disabled={!hasChanged}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"

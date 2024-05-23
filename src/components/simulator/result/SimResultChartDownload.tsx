@@ -40,7 +40,7 @@ export const SimResultChartDownload = ({
       <button
         className={cn(
           buttonStyles({ variant: 'black' }),
-          'border-background-900 flex size-40 items-center justify-center p-0'
+          'border-background-900 size-40 flex items-center justify-center p-0'
         )}
         onClick={() => {
           downloadCSV({ data, baseSymbol, quoteSymbol, simulationType });

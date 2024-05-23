@@ -109,7 +109,8 @@
     "pree2e": "yarn playwright install --with-deps chromium",
     "e2e": "playwright test",
     "lint": "eslint --ext .tsx,.ts .",
-    "pre-commit": "yarn lint-staged"
+    "pre-commit": "yarn lint-staged",
+    "e2e:report": "npx playwright show-report e2e/playwright-report"
   },
   "browserslist": {
     "production": [

@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { OrderCreate } from './useOrder';
 import { Strategy } from 'libs/queries';
 import { useApproval } from 'hooks/useApproval';
 import config from 'config';
@@ -8,8 +7,8 @@ const spenderAddress = config.addresses.carbon.carbonController;
 
 export const useEditStrategy = (
   strategy: Strategy,
-  order0: OrderCreate,
-  order1: OrderCreate
+  buyDeposit: string,
+  sellDeposit: string
 ) => {
   const { base, quote } = strategy;
 
@@ -20,7 +19,7 @@ export const useEditStrategy = (
             {
               ...base,
               spender: spenderAddress,
-              amount: order1.budget,
+              amount: sellDeposit,
             },
           ]
         : []),
@@ -29,12 +28,12 @@ export const useEditStrategy = (
             {
               ...quote,
               spender: spenderAddress,
-              amount: order0.budget,
+              amount: buyDeposit,
             },
           ]
         : []),
     ];
-  }, [order0.budget, order1.budget, base, quote]);
+  }, [buyDeposit, sellDeposit, base, quote]);
 
   const approval = useApproval(approvalTokens);
 

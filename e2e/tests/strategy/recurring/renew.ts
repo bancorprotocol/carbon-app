@@ -27,7 +27,7 @@ export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
     const strategyEdited = await myStrategies.getStrategy(1);
 
     // Check range
-    const { buy, sell } = testCase.output.editPrice;
+    const { buy, sell } = testCase.output.editPrices;
     const [buySetting, sellSetting] = getRecurringSettings(testCase);
 
     const buyTooltip = await strategyEdited.priceTooltip('buy');

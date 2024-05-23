@@ -2,6 +2,7 @@ import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import genericToken from 'assets/icons/generic_token.svg';
 import { cn } from 'utils/helpers';
+import { Token } from 'libs/tokens';
 
 export const useImager = (
   src: string = genericToken,
@@ -72,6 +73,18 @@ export const Imager = ({
       alt={alt}
       loading={lazy ? 'lazy' : 'eager'}
       decoding={lazy ? 'async' : 'auto'}
+    />
+  );
+};
+
+export const TokenLogo = ({ token, size }: { token: Token; size: number }) => {
+  return (
+    <LogoImager
+      width={size}
+      height={size}
+      src={token.logoURI}
+      alt={token.name ?? token.symbol}
+      title={token.symbol}
     />
   );
 };

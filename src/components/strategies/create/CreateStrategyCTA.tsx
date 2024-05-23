@@ -40,7 +40,7 @@ export const CreateStrategyCTAMobile = () => {
       <Button
         aria-label="Create Strategy"
         variant="success"
-        className="flex size-56 items-center justify-center rounded-full p-0"
+        className="size-56 flex items-center justify-center rounded-full p-0"
         onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
       >
         <IconPlus className="size-14" />
