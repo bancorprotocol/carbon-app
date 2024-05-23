@@ -24,6 +24,7 @@ import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { fromUnixUTC, toUnixUTC } from '../utils';
 import { startOfDay, sub } from 'date-fns';
+import { formatNumber } from 'utils/helpers';
 
 interface Props {
   state: StrategyInputValues | SimulatorInputOverlappingValues;
@@ -75,20 +76,20 @@ export const SimInputChart = ({
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
-      dispatch('buyMin', buy.min, false);
-      dispatch('buyMax', buy.max, false);
-      dispatch('sellMin', sell.min, false);
-      dispatch('sellMax', sell.max, false);
+      dispatch('buyMin', formatNumber(buy.min), false);
+      dispatch('buyMax', formatNumber(buy.max), false);
+      dispatch('sellMin', formatNumber(sell.min), false);
+      dispatch('sellMax', formatNumber(sell.max), false);
     },
     [dispatch]
   );
 
   const onPriceUpdatesEnd: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
-      dispatch('buyMin', buy.min);
-      dispatch('buyMax', buy.max);
-      dispatch('sellMin', sell.min);
-      dispatch('sellMax', sell.max);
+      dispatch('buyMin', formatNumber(buy.min));
+      dispatch('buyMax', formatNumber(buy.max));
+      dispatch('sellMin', formatNumber(sell.min));
+      dispatch('sellMax', formatNumber(sell.max));
     },
     [dispatch]
   );

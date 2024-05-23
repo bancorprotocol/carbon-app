@@ -26,7 +26,7 @@ export const SuggestionList: FC<Props> = (props) => {
             onMouseDown={(e) => e.preventDefault()} // prevent blur on click
             onClick={() => props.setOpen(false)}
             role="option"
-            className="px-30 aria-selected:bg-white/10 flex cursor-pointer items-center space-x-10  py-10 hover:bg-white/20"
+            className="px-30 flex cursor-pointer items-center space-x-10 py-10  hover:bg-white/20 aria-selected:bg-white/10"
             to="/explore/$type/$slug"
             params={params}
             search={{}}

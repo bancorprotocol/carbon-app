@@ -22,11 +22,11 @@ export const MainMenuRightNotifications: FC = () => {
         openModal('notifications', undefined);
       }}
     >
-      <span className="size-36 flex items-center justify-center">
+      <span className="flex size-36 items-center justify-center">
         {hasPendingTx && (
-          <span className="bg-error/30 size-full absolute inline-flex animate-ping rounded-full opacity-75"></span>
+          <span className="bg-error/30 absolute inline-flex size-full animate-ping rounded-full opacity-75"></span>
         )}
-        <span className="size-36 relative inline-flex items-center justify-center rounded-full">
+        <span className="relative inline-flex size-36 items-center justify-center rounded-full">
           <IconBell />
         </span>
       </span>

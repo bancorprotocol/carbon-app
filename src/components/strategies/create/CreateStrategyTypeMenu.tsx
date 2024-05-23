@@ -109,7 +109,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 aria-selected={selectedId === id}
                 onClick={() => selectSetting(to, search)}
                 className={cn(
-                  'rounded-10 text-14 size-full flex flex-col items-center justify-start gap-8 bg-black px-8 py-16 outline-white/60',
+                  'rounded-10 text-14 flex size-full flex-col items-center justify-start gap-8 bg-black px-8 py-16 outline-white/60',
                   'md:px-12',
                   'focus-visible:outline focus-visible:outline-1',
                   selectedId === id ? 'outline outline-1 outline-white' : ''

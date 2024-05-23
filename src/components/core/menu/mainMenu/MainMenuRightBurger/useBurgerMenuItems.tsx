@@ -117,7 +117,7 @@ export const useBurgerMenuItems = () => {
               <span>{currency}</span>
               <span className="flex items-center">
                 <IconV
-                  className={`size-12 invisible ${
+                  className={`invisible size-12 ${
                     isCurrencySelected ? '!visible' : ''
                   }`}
                 />
