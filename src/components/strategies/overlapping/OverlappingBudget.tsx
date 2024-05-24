@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
 import { BudgetInput, BudgetAction } from '../common/BudgetInput';
+import { useWeb3 } from 'libs/web3';
 
 interface Props {
   base: Token;
@@ -43,6 +44,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
     error,
     warning,
   } = props;
+  const { user } = useWeb3();
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
 
@@ -54,8 +56,11 @@ export const OverlappingBudget: FC<Props> = (props) => {
     }
   };
 
-  const disabled =
-    action === 'deposit' && (anchor === 'buy' ? !quoteBalance : !baseBalance);
+  const disabled = (() => {
+    if (!user) return false;
+    if (action !== 'deposit') return false;
+    return anchor === 'buy' ? !quoteBalance : !baseBalance;
+  })();
 
   return (
     <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
