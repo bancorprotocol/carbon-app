@@ -63,7 +63,8 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
     if (aboveMarket || belowMarket) {
       return 'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
     }
-    if (hasArbOpportunity(strategy, externalPrice)) {
+    if (hasArbOpportunity(order0.marginalPrice, spread, externalPrice)) {
+      if (!+delta) return;
       return 'Please note that the deposit might create an arb opportunity.';
     }
   })();

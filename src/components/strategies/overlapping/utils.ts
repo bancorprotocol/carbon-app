@@ -1,4 +1,3 @@
-import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { sanitizeNumber } from 'utils/helpers';
 
@@ -84,10 +83,13 @@ export function isOverlappingBudgetTooSmall(
   return true;
 }
 
-export function hasArbOpportunity(strategy: Strategy, marketPrice?: number) {
+export function hasArbOpportunity(
+  buyMarginal: string,
+  spread: number,
+  marketPrice?: number
+) {
   if (!marketPrice) return false;
-  const marginal = strategy.order0.marginalRate;
-  const spreadPPM = getSpread(strategy).div(100);
-  const calculatedPrice = spreadPPM.add(1).sqrt().times(marginal);
+  const spreadPPM = new SafeDecimal(spread).div(100);
+  const calculatedPrice = spreadPPM.add(1).sqrt().times(buyMarginal);
   return !calculatedPrice.eq(marketPrice);
 }

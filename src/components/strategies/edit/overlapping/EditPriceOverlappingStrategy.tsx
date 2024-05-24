@@ -131,8 +131,10 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   const budgetWarning = (() => {
     if (action !== 'deposit') return;
-    console.log({ userMarketPrice });
-    if (hasArbOpportunity(strategy, userMarketPrice)) {
+    if (hasArbOpportunity(order0.marginalPrice, spread, userMarketPrice)) {
+      const buyBudgetChanged = strategy.order0.balance !== order0.budget;
+      const sellBudgetChanged = strategy.order1.balance !== order1.budget;
+      if (!buyBudgetChanged && !sellBudgetChanged) return;
       return 'Please note that the deposit might create an arb opportunity.';
     }
   })();
