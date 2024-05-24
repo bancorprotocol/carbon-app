@@ -384,17 +384,17 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           </hgroup>
           <OverlappingBudgetDistribution
             token={base}
-            initialBudget={sellBudget || '0'}
+            initialBudget=""
             withdraw="0"
-            deposit="0"
+            deposit={sellBudget || '0'}
             balance="0"
             isSimulator
           />
           <OverlappingBudgetDistribution
             token={quote}
-            initialBudget={buyBudget || '0'}
+            initialBudget="0"
             withdraw="0"
-            deposit="0"
+            deposit={buyBudget || '0'}
             balance="0"
             buy
             isSimulator

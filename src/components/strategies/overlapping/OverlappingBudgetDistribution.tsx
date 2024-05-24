@@ -27,9 +27,9 @@ function getBudgetDistribution(
   if (isSimulator) {
     return {
       mode: 'deposit',
-      allocationPercent: initial ? 0.5 : 0,
+      allocationPercent: deposit ? 0.5 : 0,
       deltaPercent: 0,
-      balancePercent: initial ? 0.5 : 1,
+      balancePercent: deposit ? 0.5 : 1,
     };
   } else if (!total) {
     return {
@@ -71,6 +71,7 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
     isSimulator
   );
   const color = buy ? 'bg-buy' : 'bg-sell';
+  const allocated = isSimulator ? deposit : initialBudget;
   return (
     <div className="flex flex-col gap-4">
       <h4 className="text-14 font-weight-500">{buy ? 'Buy' : 'Sell'}</h4>
@@ -78,13 +79,15 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
         <label htmlFor={allocatedId}>
           Allocated:&nbsp;
           <span className="text-white">
-            {tokenAmount(initialBudget, token)}
+            {tokenAmount(allocated || '0', token)}
           </span>
         </label>
         {!isSimulator && (
           <label htmlFor={walletId}>
             Wallet:&nbsp;
-            <span className="text-white">{tokenAmount(balance, token)}</span>
+            <span className="text-white">
+              {tokenAmount(balance || '0', token)}
+            </span>
           </label>
         )}
       </div>
