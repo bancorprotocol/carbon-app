@@ -34,6 +34,7 @@ import {
   OverlappingMarketPrice,
 } from '../overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from '../UserMarketPrice';
+import { useWeb3 } from 'libs/web3';
 
 interface Props {
   base: Token;
@@ -55,6 +56,7 @@ const getInitialPrices = (marketPrice: string | number) => {
 
 export const CreateOverlapping: FC<Props> = (props) => {
   const { base, quote, order0, order1, spread, setSpread } = props;
+  const { user } = useWeb3();
   const externalPrice = useMarketPrice({ base, quote });
   const [marketPrice, setMarketPrice] = useState(externalPrice ?? 0);
   const baseBalance = useGetTokenBalance(base).data;
@@ -423,29 +425,35 @@ export const CreateOverlapping: FC<Props> = (props) => {
             withdraw="0"
             deposit={budgetError ? '0' : order1.budget}
             balance={baseBalance || '0'}
+            isSimulator={!user}
           />
-          <OverlappingBudgetDescription
-            token={base}
-            initialBudget="0"
-            withdraw="0"
-            deposit={budgetError ? '0' : order1.budget}
-            balance={baseBalance || '0'}
-          />
+          {!!user && (
+            <OverlappingBudgetDescription
+              token={base}
+              initialBudget="0"
+              withdraw="0"
+              deposit={budgetError ? '0' : order1.budget}
+              balance={baseBalance || '0'}
+            />
+          )}
           <OverlappingBudgetDistribution
             token={quote}
             initialBudget="0"
             withdraw="0"
             deposit={budgetError ? '0' : order0.budget}
             balance={quoteBalance || '0'}
+            isSimulator={!user}
             buy
           />
-          <OverlappingBudgetDescription
-            token={quote}
-            initialBudget="0"
-            withdraw="0"
-            deposit={budgetError ? '0' : order0.budget}
-            balance={quoteBalance || '0'}
-          />
+          {!!user && (
+            <OverlappingBudgetDescription
+              token={quote}
+              initialBudget="0"
+              withdraw="0"
+              deposit={budgetError ? '0' : order0.budget}
+              balance={quoteBalance || '0'}
+            />
+          )}
         </m.article>
       )}
     </UserMarketPrice>
