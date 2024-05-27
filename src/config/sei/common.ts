@@ -47,8 +47,8 @@ export const commonConfig: AppConfig = {
   addresses: {
     tokens: addresses,
     carbon: {
-      carbonController: '0x59f21012B2E9BA67ce6a7605E74F945D0D4C84EA',
-      voucher: '0xe4816658ad10bF215053C533cceAe3f59e1f1087',
+      carbonController: '0xe4816658ad10bF215053C533cceAe3f59e1f1087',
+      voucher: '0xA4682A2A5Fe02feFF8Bd200240A41AD0E6EaF8d5',
     },
     utils: {
       multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
