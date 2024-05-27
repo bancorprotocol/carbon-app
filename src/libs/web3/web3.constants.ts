@@ -3,7 +3,8 @@ import { lsService } from 'services/localeStorage';
 import config from 'config';
 
 const TENDERLY_RPC = lsService.getItem('tenderlyRpc');
-const CHAIN_RPC_URL = TENDERLY_RPC || config.network.rpcUrl;
+const CHAIN_RPC_URL = TENDERLY_RPC || config.network.rpc.url;
+const CHAIN_RPC_HEADERS = TENDERLY_RPC ? {} : config.network.rpc.headers || {};
 const CHAIN_ID = TENDERLY_RPC ? 1 : config.network.chainId;
 
 if (typeof CHAIN_RPC_URL === 'undefined') {
@@ -55,4 +56,9 @@ export const selectableConnectionTypes: selectableConnectionType[] =
 
 export const RPC_URLS: ChainIdMapTo<string> = {
   [SupportedChainId.MAINNET]: CHAIN_RPC_URL,
+};
+export const RPC_HEADERS: {
+  [chainId: string]: { [key in SupportedChainId]: string | number };
+} = {
+  [SupportedChainId.MAINNET]: CHAIN_RPC_HEADERS,
 };
