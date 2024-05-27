@@ -12,7 +12,7 @@ const addresses = {
 export const commonConfig: AppConfig = {
   mode: 'development',
   appUrl: 'https://sei.carbondefi.xyz',
-  carbonApi: '',
+  carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
   selectableConnectionTypes: ['injected', 'coinbaseWallet'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
