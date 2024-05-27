@@ -5,9 +5,7 @@ import { tokenListParser } from 'config/sei/utils';
 const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   ZERO: '0x0000000000000000000000000000000000000000',
-  USDC: '0xace5f7Ea93439Af39b46d2748fA1aC19951c8d7C',
-  WSEI: '0x027D2E627209f1cebA52ADc8A5aFE9318459b44B',
-  JLY: '0x9e7A8e558Ce582511f4104465a886b7bEfBC146b',
+  eSEI: '0xcba2aeEc821b0B119857a9aB39E09b034249681A',
 };
 
 export const commonConfig: AppConfig = {
@@ -34,15 +32,11 @@ export const commonConfig: AppConfig = {
         'https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/seitestnet2/images/sei.png',
     },
   },
-  defaultTokenPair: [addresses.SEI, addresses.USDC],
-  popularPairs: [
-    [addresses.SEI, addresses.USDC],
-    [addresses.SEI, addresses.WSEI],
-    [addresses.WSEI, addresses.USDC],
-  ],
+  defaultTokenPair: [addresses.SEI, addresses.eSEI],
+  popularPairs: [[addresses.SEI, addresses.eSEI]],
   popularTokens: {
-    base: [addresses.SEI, addresses.USDC, addresses.WSEI],
-    quote: [addresses.SEI, addresses.USDC, addresses.WSEI],
+    base: [addresses.SEI, addresses.eSEI],
+    quote: [addresses.SEI, addresses.eSEI],
   },
   addresses: {
     tokens: addresses,
@@ -56,24 +50,10 @@ export const commonConfig: AppConfig = {
   },
   tokenListOverride: [
     {
-      name: 'WSEI',
-      symbol: 'WSEI',
+      name: 'ESEI',
+      symbol: 'eSEI',
       decimals: 18,
-      address: addresses.WSEI,
-      logoURI: '',
-    },
-    {
-      name: 'USDC',
-      symbol: 'USDC',
-      decimals: 6,
-      address: addresses.USDC,
-      logoURI: '',
-    },
-    {
-      name: 'JLY',
-      symbol: 'JLY',
-      decimals: 18,
-      address: addresses.JLY,
+      address: addresses.eSEI,
       logoURI: '',
     },
   ],
