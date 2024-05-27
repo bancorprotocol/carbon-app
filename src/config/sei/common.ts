@@ -17,15 +17,14 @@ export const commonConfig: AppConfig = {
   selectableConnectionTypes: ['injected', 'coinbaseWallet'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
-  policiesLastUpdated: '21 May, 2024',
+  policiesLastUpdated: '27 May, 2024',
   network: {
-    name: 'Sei Devnet',
+    name: 'Sei Network',
     logoUrl: IconSeiLogo,
-    chainId: 713715,
+    chainId: 1329,
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
     rpcUrl:
-      import.meta.env.VITE_CHAIN_RPC_URL ||
-      'https://evm-rpc-arctic-1.sei-apis.com',
+      import.meta.env.VITE_CHAIN_RPC_URL || 'https://evm-rpc.sei-apis.com',
     gasToken: {
       name: 'SEI',
       symbol: 'SEI',
