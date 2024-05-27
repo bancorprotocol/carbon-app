@@ -5,7 +5,6 @@ import { tokenListParser } from 'config/sei/utils';
 const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   ZERO: '0x0000000000000000000000000000000000000000',
-  eSEI: '0xcba2aeEc821b0B119857a9aB39E09b034249681A',
   WSEI: '0xE30feDd158A2e3b13e9badaeABaFc5516e95e8C7',
 };
 
@@ -38,13 +37,10 @@ export const commonConfig: AppConfig = {
     },
   },
   defaultTokenPair: [addresses.SEI, addresses.WSEI],
-  popularPairs: [
-    [addresses.SEI, addresses.WSEI],
-    [addresses.SEI, addresses.eSEI],
-  ],
+  popularPairs: [[addresses.SEI, addresses.WSEI]],
   popularTokens: {
-    base: [addresses.SEI, addresses.WSEI, addresses.eSEI],
-    quote: [addresses.SEI, addresses.WSEI, addresses.eSEI],
+    base: [addresses.SEI, addresses.WSEI],
+    quote: [addresses.SEI, addresses.WSEI],
   },
   addresses: {
     tokens: addresses,
@@ -57,13 +53,6 @@ export const commonConfig: AppConfig = {
     },
   },
   tokenListOverride: [
-    {
-      name: 'ESEI',
-      symbol: 'eSEI',
-      decimals: 18,
-      address: addresses.eSEI,
-      logoURI: '',
-    },
     {
       name: 'WSEI',
       symbol: 'WSEI',
