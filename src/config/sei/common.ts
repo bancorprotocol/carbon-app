@@ -6,6 +6,7 @@ const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   ZERO: '0x0000000000000000000000000000000000000000',
   eSEI: '0xcba2aeEc821b0B119857a9aB39E09b034249681A',
+  WSEI: '0xE30feDd158A2e3b13e9badaeABaFc5516e95e8C7',
 };
 
 export const commonConfig: AppConfig = {
@@ -32,11 +33,14 @@ export const commonConfig: AppConfig = {
         'https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/seitestnet2/images/sei.png',
     },
   },
-  defaultTokenPair: [addresses.SEI, addresses.eSEI],
-  popularPairs: [[addresses.SEI, addresses.eSEI]],
+  defaultTokenPair: [addresses.SEI, addresses.WSEI],
+  popularPairs: [
+    [addresses.SEI, addresses.WSEI],
+    [addresses.SEI, addresses.eSEI],
+  ],
   popularTokens: {
-    base: [addresses.SEI, addresses.eSEI],
-    quote: [addresses.SEI, addresses.eSEI],
+    base: [addresses.SEI, addresses.WSEI, addresses.eSEI],
+    quote: [addresses.SEI, addresses.WSEI, addresses.eSEI],
   },
   addresses: {
     tokens: addresses,
@@ -55,6 +59,14 @@ export const commonConfig: AppConfig = {
       decimals: 18,
       address: addresses.eSEI,
       logoURI: '',
+    },
+    {
+      name: 'WSEI',
+      symbol: 'WSEI',
+      decimals: 18,
+      address: addresses.WSEI,
+      logoURI:
+        'https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/seitestnet2/images/sei.png',
     },
   ],
   tokenLists: [
