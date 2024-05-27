@@ -46,8 +46,7 @@ export type selectableConnectionType =
   | 'injected'
   | 'walletConnect'
   | 'coinbaseWallet'
-  | 'gnosisSafe'
-  | 'injected';
+  | 'gnosisSafe';
 
 export type ConnectionType = 'network' | selectableConnectionType;
 
