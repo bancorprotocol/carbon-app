@@ -38,6 +38,7 @@ import {
   OverlappingMarketPrice,
 } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
   strategy: Strategy;
@@ -322,10 +323,13 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   useEffect(() => {
     if (!userMarketPrice || externalPrice === userMarketPrice) {
       setUserMarketPrice(externalPrice);
-      if (touched) setMarketPrice(externalPrice);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [externalPrice]);
+
+  useEffect(() => {
+    if (touched || hasNoBudget(strategy)) setMarketPrice(userMarketPrice);
+  }, [userMarketPrice, touched, strategy]);
 
   useEffect(() => {
     const error = (() => {
@@ -424,6 +428,12 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           setMin={setMin}
           setMax={setMax}
         />
+        {hasNoBudget(strategy) && (
+          <WarningMessageWithIcon>
+            Since the strategy had no budget, it will use the current market
+            price to readjust the budget distribution around.
+          </WarningMessageWithIcon>
+        )}
       </article>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
         <header className="flex items-center gap-8">
