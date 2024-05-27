@@ -3,6 +3,7 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import {
   getRoundedSpread,
+  hasArbOpportunity,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
@@ -34,11 +35,6 @@ interface Props {
   action: BudgetAction;
 }
 
-const priceWarning = (hasWarning: boolean) => {
-  if (!hasWarning) return '';
-  return 'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
-};
-
 export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1, action } = props;
   const { base, quote } = strategy;
@@ -61,6 +57,17 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
 
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
+
+  const warning = (() => {
+    if (action !== 'deposit') return;
+    if (aboveMarket || belowMarket) {
+      return 'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
+    }
+    if (hasArbOpportunity(order0.marginalPrice, spread, externalPrice)) {
+      if (!+delta) return;
+      return 'Please note that the deposit might create an arb opportunity.';
+    }
+  })();
 
   useEffect(() => {
     if (marketPrice) return;
@@ -236,9 +243,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
           error={budgetError}
-          warning={priceWarning(
-            action === 'deposit' && (aboveMarket || belowMarket)
-          )}
+          warning={warning}
         />
       )}
       {anchor && (

@@ -82,3 +82,14 @@ export function isOverlappingBudgetTooSmall(
   if (!buyBudget && !sellBudget) return false;
   return true;
 }
+
+export function hasArbOpportunity(
+  buyMarginal: string,
+  spread: number,
+  marketPrice?: number
+) {
+  if (!marketPrice) return false;
+  const spreadPPM = new SafeDecimal(spread).div(100);
+  const calculatedPrice = spreadPPM.add(1).sqrt().times(buyMarginal);
+  return !calculatedPrice.eq(marketPrice);
+}

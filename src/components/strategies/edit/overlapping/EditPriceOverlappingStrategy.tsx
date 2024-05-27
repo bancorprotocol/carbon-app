@@ -5,6 +5,7 @@ import {
   getMaxBuyMin,
   getMinSellMax,
   getRoundedSpread,
+  hasArbOpportunity,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
@@ -128,6 +129,16 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     userMarketPrice,
     spread
   );
+
+  const budgetWarning = (() => {
+    if (action !== 'deposit') return;
+    if (hasArbOpportunity(order0.marginalPrice, spread, userMarketPrice)) {
+      const buyBudgetChanged = strategy.order0.balance !== order0.budget;
+      const sellBudgetChanged = strategy.order1.balance !== order1.budget;
+      if (!buyBudgetChanged && !sellBudgetChanged) return;
+      return 'Please note that the deposit might create an arb opportunity.';
+    }
+  })();
 
   const calculateBuyBudget = (
     sellBudget: string,
@@ -497,6 +508,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
           error={budgetError}
+          warning={budgetWarning}
         />
       )}
       {anchor && (
