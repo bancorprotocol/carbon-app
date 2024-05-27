@@ -428,7 +428,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           setMin={setMin}
           setMax={setMax}
         />
-        {hasNoBudget(strategy) && !touched && (
+        {hasNoBudget(strategy) && (
           <WarningMessageWithIcon>
             Since the strategy had no budget, it will use the current market
             price to readjust the budget distribution around.
