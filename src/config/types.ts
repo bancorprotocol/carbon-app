@@ -14,7 +14,10 @@ export interface AppConfig {
     name: string;
     logoUrl: string;
     chainId: number;
-    rpcUrl: string;
+    rpc: {
+      url: string;
+      headers?: { [key: string]: string | number };
+    };
     blockExplorer: { name: string; url: string };
     gasToken: {
       name: string;

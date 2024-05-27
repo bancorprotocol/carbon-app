@@ -40,7 +40,7 @@ export const getChainInfo = (): AddChainParameter => {
       decimals: config.network.gasToken.decimals,
     },
     iconUrls: [config.network.gasToken.logoURI],
-    rpcUrls: [config.network.rpcUrl],
+    rpcUrls: [config.network.rpc.url],
     blockExplorerUrls: [config.network.blockExplorer.url],
   };
 };

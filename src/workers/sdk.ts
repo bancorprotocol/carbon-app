@@ -36,7 +36,10 @@ let isInitializing = false;
 
 const init = async (
   chainId: number,
-  rpcUrl: string,
+  rpc: {
+    url: string;
+    headers?: { [key: string]: string | number };
+  },
   config: ContractsConfig,
   decimalsMap?: Map<string, number>,
   cachedData?: string
@@ -44,7 +47,10 @@ const init = async (
   if (isInitialized || isInitializing) return;
   isInitializing = true;
   const provider = new StaticJsonRpcProvider(
-    { url: rpcUrl, skipFetchSetup: true },
+    {
+      ...rpc,
+      skipFetchSetup: true,
+    },
     chainId
   );
   api = new ContractsApi(provider, config);

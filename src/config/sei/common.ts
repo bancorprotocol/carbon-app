@@ -5,9 +5,7 @@ import { tokenListParser } from 'config/sei/utils';
 const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   ZERO: '0x0000000000000000000000000000000000000000',
-  USDC: '0xace5f7Ea93439Af39b46d2748fA1aC19951c8d7C',
-  WSEI: '0x027D2E627209f1cebA52ADc8A5aFE9318459b44B',
-  JLY: '0x9e7A8e558Ce582511f4104465a886b7bEfBC146b',
+  WSEI: '0xE30feDd158A2e3b13e9badaeABaFc5516e95e8C7',
 };
 
 export const commonConfig: AppConfig = {
@@ -17,15 +15,18 @@ export const commonConfig: AppConfig = {
   selectableConnectionTypes: ['injected', 'coinbaseWallet'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
-  policiesLastUpdated: '21 May, 2024',
+  policiesLastUpdated: '27 May, 2024',
   network: {
-    name: 'Sei Devnet',
+    name: 'Sei Network',
     logoUrl: IconSeiLogo,
-    chainId: 713715,
+    chainId: 1329,
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
-    rpcUrl:
-      import.meta.env.VITE_CHAIN_RPC_URL ||
-      'https://evm-rpc-arctic-1.sei-apis.com',
+    rpc: {
+      url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://evm-rpc.sei-apis.com',
+      headers: {
+        'x-apikey': import.meta.env.VITE_CHAIN_RPC_KEY || '',
+      },
+    },
     gasToken: {
       name: 'SEI',
       symbol: 'SEI',
@@ -35,24 +36,20 @@ export const commonConfig: AppConfig = {
         'https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/seitestnet2/images/sei.png',
     },
   },
-  defaultTokenPair: [addresses.SEI, addresses.USDC],
-  popularPairs: [
-    [addresses.SEI, addresses.USDC],
-    [addresses.SEI, addresses.WSEI],
-    [addresses.WSEI, addresses.USDC],
-  ],
+  defaultTokenPair: [addresses.SEI, addresses.WSEI],
+  popularPairs: [[addresses.SEI, addresses.WSEI]],
   popularTokens: {
-    base: [addresses.SEI, addresses.USDC, addresses.WSEI],
-    quote: [addresses.SEI, addresses.USDC, addresses.WSEI],
+    base: [addresses.SEI, addresses.WSEI],
+    quote: [addresses.SEI, addresses.WSEI],
   },
   addresses: {
     tokens: addresses,
     carbon: {
-      carbonController: '0x59f21012B2E9BA67ce6a7605E74F945D0D4C84EA',
-      voucher: '0xe4816658ad10bF215053C533cceAe3f59e1f1087',
+      carbonController: '0xe4816658ad10bF215053C533cceAe3f59e1f1087',
+      voucher: '0xA4682A2A5Fe02feFF8Bd200240A41AD0E6EaF8d5',
     },
     utils: {
-      multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
+      multicall: '0xe033Bed7cae4114Af84Be1e9F1CA7DEa07Dfe1Cf',
     },
   },
   tokenListOverride: [
@@ -61,21 +58,8 @@ export const commonConfig: AppConfig = {
       symbol: 'WSEI',
       decimals: 18,
       address: addresses.WSEI,
-      logoURI: '',
-    },
-    {
-      name: 'USDC',
-      symbol: 'USDC',
-      decimals: 6,
-      address: addresses.USDC,
-      logoURI: '',
-    },
-    {
-      name: 'JLY',
-      symbol: 'JLY',
-      decimals: 18,
-      address: addresses.JLY,
-      logoURI: '',
+      logoURI:
+        'https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/seitestnet2/images/sei.png',
     },
   ],
   tokenLists: [
