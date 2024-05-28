@@ -23,6 +23,7 @@ import {
 } from 'hooks/useSimulatorOverlappingInput';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
+import { formatNumber } from 'utils/helpers';
 
 interface Props {
   state: SimulatorInputOverlappingValues;
@@ -57,8 +58,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       };
     } else {
       const prices = calculateOverlappingPrices(
-        state.buy.min,
-        state.sell.max,
+        formatNumber(state.buy.min),
+        formatNumber(state.sell.max),
         marketPrice.toString(),
         state.spread
       );
@@ -97,14 +98,16 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     if (!base || !quote || !anchor) return '';
     if (anchor === 'buy') return state.buy.budget;
     if (!state.sell.budget || belowMarket) return '';
+    if (!+formatNumber(state.buy.min)) return '';
+    if (!+formatNumber(state.sell.max)) return '';
     return calculateOverlappingBuyBudget(
       base.decimals,
       quote.decimals,
-      state.buy.min,
-      state.sell.max,
+      formatNumber(state.buy.min),
+      formatNumber(state.sell.max),
       marketPrice.toString(),
       state.spread,
-      state.sell.budget
+      formatNumber(state.sell.budget)
     );
   }, [
     anchor,
@@ -123,14 +126,16 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     if (!base || !quote || !anchor) return '';
     if (anchor === 'sell') return state.sell.budget;
     if (!state.buy.budget || aboveMarket) return '';
+    if (!+formatNumber(state.buy.min)) return '';
+    if (!+formatNumber(state.sell.max)) return '';
     return calculateOverlappingSellBudget(
       base.decimals,
       quote.decimals,
-      state.buy.min,
-      state.sell.max,
+      formatNumber(state.buy.min),
+      formatNumber(state.sell.max),
       marketPrice.toString(),
       state.spread,
-      state.buy.budget
+      formatNumber(state.buy.budget)
     );
   }, [
     anchor,
@@ -158,8 +163,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     if (!base || !quote) return;
     if (!isValidRange(min, max) || !isValidSpread(spread)) return;
     const prices = calculateOverlappingPrices(
-      min,
-      max,
+      formatNumber(min),
+      formatNumber(max),
       marketPrice.toString(),
       spreadValue
     );
@@ -214,8 +219,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const disabledAnchor = useMemo(() => {
     if (!buy.min || !sell.max || !marketPrice || !spread) return;
     const prices = calculateOverlappingPrices(
-      buy.min,
-      sell.max,
+      formatNumber(buy.min),
+      formatNumber(sell.max),
       marketPrice.toString(),
       spread.toString()
     );

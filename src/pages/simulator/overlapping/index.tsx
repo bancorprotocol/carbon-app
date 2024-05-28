@@ -8,7 +8,7 @@ import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
 import { defaultEnd, defaultStart } from 'pages/simulator/index';
 import { FormEvent, useEffect } from 'react';
-import { roundSearchParam } from 'utils/helpers';
+import { formatNumber, roundSearchParam } from 'utils/helpers';
 
 export const SimulatorInputOverlappingPage = () => {
   const searchState = simulatorInputOverlappingRoute.useSearch();
@@ -62,8 +62,8 @@ export const SimulatorInputOverlappingPage = () => {
     const end = state.end ?? defaultEnd();
 
     const { buyPriceMarginal, sellPriceMarginal } = calculateOverlappingPrices(
-      state.buy.min,
-      state.sell.max,
+      formatNumber(state.buy.min),
+      formatNumber(state.sell.max),
       data[0].open.toString(),
       state.spread
     );

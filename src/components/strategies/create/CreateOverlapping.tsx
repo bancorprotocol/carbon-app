@@ -35,6 +35,7 @@ import {
 } from '../overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from '../UserMarketPrice';
 import { useWeb3 } from 'libs/web3';
+import { formatNumber } from 'utils/helpers';
 
 interface Props {
   base: Token;
@@ -76,7 +77,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
     sellMax: string
   ) => {
     if (!base || !quote) return;
-    if (!sellBudget) return order0.setBudget('');
+    if (!+formatNumber(sellBudget)) return order0.setBudget('');
     try {
       const buyBudget = calculateOverlappingBuyBudget(
         base.decimals,
@@ -99,13 +100,13 @@ export const CreateOverlapping: FC<Props> = (props) => {
     sellMax: string
   ) => {
     if (!base || !quote) return;
-    if (!buyBudget) return order1.setBudget('');
+    if (!+formatNumber(buyBudget)) return order1.setBudget('');
     try {
       const sellBudget = calculateOverlappingSellBudget(
         base.decimals,
         quote.decimals,
-        buyMin,
-        sellMax,
+        formatNumber(buyMin),
+        formatNumber(sellMax),
         marketPrice.toString(),
         spread.toString(),
         buyBudget
@@ -124,8 +125,8 @@ export const CreateOverlapping: FC<Props> = (props) => {
     if (!base || !quote) return;
     if (!isValidRange(min, max) || !isValidSpread(spread)) return;
     const prices = calculateOverlappingPrices(
-      min,
-      max,
+      formatNumber(min),
+      formatNumber(max),
       marketPrice.toString(),
       spreadValue
     );

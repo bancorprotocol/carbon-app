@@ -20,7 +20,7 @@ import {
 } from 'components/strategies/overlapping/utils';
 import { ScaleLinear } from 'd3';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { prettifyNumber } from 'utils/helpers';
+import { formatNumber, prettifyNumber } from 'utils/helpers';
 
 type Props = Pick<
   D3ChartCandlesticksProps,
@@ -68,8 +68,8 @@ export const D3ChartOverlapping = (props: Props) => {
   const calcPrices = useCallback(
     (buyMin: string, sellMax: string) => {
       return calculateOverlappingPrices(
-        buyMin,
-        sellMax,
+        formatNumber(buyMin),
+        formatNumber(sellMax),
         marketPrice?.toString() ?? '0',
         spread.toString()
       );
