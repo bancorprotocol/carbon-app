@@ -46,7 +46,6 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
         </Link>
         <StrategyBlockManage
           strategy={strategy}
-          isExplorer={isExplorer}
           button={(attr) => <ManageButtonIcon {...attr} />}
         />
       </div>

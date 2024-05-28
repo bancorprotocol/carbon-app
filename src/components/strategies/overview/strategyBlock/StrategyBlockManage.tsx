@@ -22,6 +22,7 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import config from 'config';
+import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -34,12 +35,11 @@ type separatorCounterType = number;
 
 interface Props {
   strategy: Strategy;
-  isExplorer?: boolean;
   button: (props: ManageButtonProps) => JSX.Element;
 }
 
 export const StrategyBlockManage: FC<Props> = (props) => {
-  const { strategy, isExplorer } = props;
+  const { strategy } = props;
   const [manage, setManage] = useState(false);
   const { strategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
@@ -47,6 +47,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
+
+  const isOwn = useIsStrategyOwner(strategy.id);
 
   const owner = useGetVoucherOwner(manage ? strategy.id : undefined);
 
@@ -122,7 +124,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     });
   }
 
-  if (isExplorer) {
+  if (!isOwn && type !== 'wallet') {
     items.push({
       id: 'walletOwner',
       name: "View Owner's Strategies",
@@ -138,7 +140,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     });
   }
 
-  if (!isExplorer) {
+  if (isOwn) {
     items.push({
       id: 'editPrices',
       name: 'Edit Prices',
@@ -239,7 +241,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           ...attr,
           onClick: (e) => {
             attr.onClick(e);
-            if (isExplorer) {
+            if (!isOwn) {
               const baseEvent = { type, slug, strategies, sort, filter };
               explorerEvents.manageClick({ ...baseEvent, strategyEvent });
             } else {
@@ -272,7 +274,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
               setManage={setManage}
               action={action}
               id={id}
-              isExplorer={isExplorer}
+              isOwn={isOwn}
               disabled={disabled}
             />
           );
@@ -325,10 +327,10 @@ const ManageItem: FC<{
   id: StrategyEditOptionId;
   setManage: (flag: boolean) => void;
   action?: () => void;
-  isExplorer?: boolean;
+  isOwn?: boolean;
   disabled?: boolean;
-}> = ({ title, id, setManage, action, isExplorer, disabled }) => {
-  const tooltipText = getTooltipTextByStrategyEditOptionsId(isExplorer)?.[id];
+}> = ({ title, id, setManage, action, isOwn, disabled }) => {
+  const tooltipText = getTooltipTextByStrategyEditOptionsId(isOwn)?.[id];
   const { belowBreakpoint } = useBreakpoints();
 
   const Content = () => {
