@@ -198,11 +198,21 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const setMin = (min: string) => {
     setTouched(true);
     dispatch('buyMin', min);
+    if (!+formatNumber(min)) {
+      dispatch('buyPriceError', 'Min should be greater than 0');
+    } else {
+      dispatch('buyPriceError', '');
+    }
   };
 
   const setMax = (max: string) => {
     setTouched(true);
     dispatch('sellMax', max);
+    if (!+formatNumber(max)) {
+      dispatch('buyPriceError', 'Max should be greater than 0');
+    } else {
+      dispatch('buyPriceError', '');
+    }
   };
 
   const setBudget = (amount: string) => {
@@ -307,20 +317,18 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
             iconClassName="h-14 w-14 text-white/60"
           />
         </header>
-        {base && quote && (
-          <InputRange
-            minLabel="Min Buy Price"
-            maxLabel="Max Sell Price"
-            base={base}
-            quote={quote}
-            min={buy.min}
-            max={sell.max}
-            setMin={setMin}
-            setMax={setMax}
-            error={state.buy.priceError}
-            setRangeError={setRangeError}
-          />
-        )}
+        <InputRange
+          minLabel="Min Buy Price"
+          maxLabel="Max Sell Price"
+          base={base}
+          quote={quote}
+          min={buy.min}
+          max={sell.max}
+          setMin={setMin}
+          setMax={setMax}
+          error={state.buy.priceError}
+          setRangeError={setRangeError}
+        />
       </article>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
         <header className="mb-10 flex items-center gap-8 ">
