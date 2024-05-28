@@ -284,7 +284,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(buy.min), spread);
       if (Number(sell.max) < minSellMax) setMax(minSellMax.toString());
-    }, 1000);
+    }, 1500);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buy.min]);
@@ -295,7 +295,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(sell.max), spread);
       if (Number(buy.min) > maxBuyMin) setMin(maxBuyMin.toString());
-    }, 1000);
+    }, 1500);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sell.max]);
