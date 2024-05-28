@@ -1,7 +1,7 @@
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { FC, forwardRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
-import { Strategy, useGetUserStrategies } from 'libs/queries';
+import { Strategy } from 'libs/queries';
 import { useNavigate, useParams } from 'libs/routing';
 import { getDuplicateStrategyParams } from 'components/strategies/create/useDuplicateStrategy';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
@@ -22,7 +22,7 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import config from 'config';
-import { useWeb3 } from 'libs/web3';
+import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -48,10 +48,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const order1 = useOrder(strategy.order1);
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
-  const { user } = useWeb3();
-  const query = useGetUserStrategies({ user });
-
-  const isOwn = query.data?.some((s) => s.id === strategy.id);
+  const isOwn = useIsStrategyOwner(strategy.id);
 
   const owner = useGetVoucherOwner(manage ? strategy.id : undefined);
 
