@@ -69,7 +69,6 @@ export const StrategyPage = () => {
         </div>
         <StrategyBlockManage
           strategy={strategy}
-          isExplorer={true}
           button={(attr) => <ManageButton {...attr} />}
         />
       </header>
