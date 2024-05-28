@@ -98,8 +98,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     if (!base || !quote || !anchor) return '';
     if (anchor === 'buy') return state.buy.budget;
     if (!state.sell.budget || belowMarket) return '';
-    if (!+formatNumber(state.buy.min)) return '';
-    if (!+formatNumber(state.sell.max)) return '';
+    if (!+formatNumber(state.buy.min)) return state.buy.budget;
+    if (!+formatNumber(state.sell.max)) return state.buy.budget;
     return calculateOverlappingBuyBudget(
       base.decimals,
       quote.decimals,
@@ -126,8 +126,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     if (!base || !quote || !anchor) return '';
     if (anchor === 'sell') return state.sell.budget;
     if (!state.buy.budget || aboveMarket) return '';
-    if (!+formatNumber(state.buy.min)) return '';
-    if (!+formatNumber(state.sell.max)) return '';
+    if (!+formatNumber(state.buy.min)) return state.sell.budget;
+    if (!+formatNumber(state.sell.max)) return state.sell.budget;
     return calculateOverlappingSellBudget(
       base.decimals,
       quote.decimals,
@@ -270,7 +270,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
 
   // Update on buyMin changes
   useEffect(() => {
-    if (!buy.min) return;
+    if (!+formatNumber(buy.min)) return;
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(buy.min), spread);
       if (Number(sell.max) < minSellMax) setMax(minSellMax.toString());
@@ -281,7 +281,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
 
   // Update on sellMax changes
   useEffect(() => {
-    if (!sell.max) return;
+    if (!+formatNumber(sell.max)) return;
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(sell.max), spread);
       if (Number(buy.min) > maxBuyMin) setMin(maxBuyMin.toString());

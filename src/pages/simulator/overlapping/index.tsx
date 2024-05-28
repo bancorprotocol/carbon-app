@@ -25,7 +25,7 @@ export const SimulatorInputOverlappingPage = () => {
   });
 
   useEffect(() => {
-    if (searchState.sellMax) return;
+    if (searchState.sellMax || searchState.buyMin) return;
     dispatch('baseToken', searchState.baseToken);
     dispatch('quoteToken', searchState.quoteToken);
     dispatch('spread', '1');
@@ -44,6 +44,7 @@ export const SimulatorInputOverlappingPage = () => {
     searchState.baseToken,
     searchState.quoteToken,
     searchState.sellMax,
+    searchState.buyMin,
   ]);
 
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
