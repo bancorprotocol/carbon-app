@@ -5,6 +5,9 @@ import {
   injectedConnection,
   networkConnection,
   walletConnectConnection,
+  tailwindWalletConnection,
+  compassWalletConnection,
+  seifWalletConnection,
 } from 'libs/web3/web3.connectors';
 import { lsService } from 'services/localeStorage';
 import { UAParser } from 'ua-parser-js';
@@ -30,6 +33,19 @@ export interface AddChainParameter {
   iconUrls?: string[];
 }
 
+export function getSeifInjectedProvider() {
+  if (typeof window === 'undefined') return;
+  if (window.ethereum && (window as any).ethereum['__seif']) {
+    return window.ethereum;
+  }
+
+  if ((window as any)['__seif']) {
+    return (window as any)['__seif'];
+  }
+
+  return;
+}
+
 export const getChainInfo = (): AddChainParameter => {
   return {
     chainId: config.network.chainId,
@@ -51,6 +67,9 @@ const connections: Record<ConnectionType, Connection> = {
   walletConnect: walletConnectConnection,
   gnosisSafe: gnosisSafeConnection,
   network: networkConnection,
+  tailwindWallet: tailwindWalletConnection,
+  compassWallet: compassWalletConnection,
+  seifWallet: seifWalletConnection,
 };
 
 export const getConnection = (c: ConnectionType) => connections[c];

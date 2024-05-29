@@ -3,6 +3,9 @@ import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { ReactComponent as IconCoinbaseLogo } from 'assets/logos/coinbase.svg';
+import { ReactComponent as IconCompassWalletLogo } from 'assets/logos/compassWallet.svg';
+import { ReactComponent as IconTailwindWalletLogo } from 'assets/logos/coinbase.svg';
+import { ReactComponent as IconSeifWalletLogo } from 'assets/logos/seifWallet.svg';
 import { ReactComponent as IconGnosisLogo } from 'assets/logos/gnosis.svg';
 import { ReactComponent as IconImposterLogo } from 'assets/logos/imposter.svg';
 import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
@@ -39,6 +42,12 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
       return <IconCoinbaseLogo {...iconProps} />;
     case 'gnosisSafe':
       return <IconGnosisLogo {...iconProps} />;
+    case 'tailwindWallet':
+      return <IconTailwindWalletLogo {...iconProps} />;
+    case 'compassWallet':
+      return <IconCompassWalletLogo {...iconProps} />;
+    case 'seifWallet':
+      return <IconSeifWalletLogo {...iconProps} />;
     default:
       return <IconWallet {...iconProps} />;
   }

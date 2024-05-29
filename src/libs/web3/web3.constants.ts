@@ -47,7 +47,10 @@ export type selectableConnectionType =
   | 'injected'
   | 'walletConnect'
   | 'coinbaseWallet'
-  | 'gnosisSafe';
+  | 'gnosisSafe'
+  | 'tailwindWallet'
+  | 'compassWallet'
+  | 'seifWallet';
 
 export type ConnectionType = 'network' | selectableConnectionType;
 
