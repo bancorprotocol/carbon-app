@@ -10,6 +10,7 @@ import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-manageme
 import { useUserMarketPrice } from '../UserMarketPrice';
 import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 import { SafeDecimal } from 'libs/safedecimal';
+import { formatNumber } from 'utils/helpers';
 
 interface Props {
   base: Token;
@@ -41,8 +42,8 @@ export const OverlappingRange: FC<Props> = (props) => {
   useEffect(() => {
     if (!marketPrice) return;
     const prices = calculateOverlappingPrices(
-      order0.min || '0',
-      order1.max || '0',
+      formatNumber(order0.min || '0'),
+      formatNumber(order1.max || '0'),
       marketPrice.toString(),
       spread.toString()
     );
