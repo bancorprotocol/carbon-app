@@ -11,7 +11,7 @@ import { TailwindConnector } from '@tailwindzone/connect-web3-react';
 import iconMetaMask from 'assets/logos/metamask.svg';
 import iconWalletConnect from 'assets/logos/walletConnect.svg';
 import iconCoinbase from 'assets/logos/coinbase.svg';
-import iconTailwindWallet from 'assets/logos/coinbase.svg';
+import iconTailwindWallet from 'assets/logos/tailwindWallet.svg';
 import iconCompassWallet from 'assets/logos/compassWallet.svg';
 import iconSeifWallet from 'assets/logos/seifWallet.svg';
 import iconGnosis from 'assets/logos/gnosis.svg';

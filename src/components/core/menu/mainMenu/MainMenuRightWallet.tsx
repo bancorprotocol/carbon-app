@@ -4,7 +4,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { ReactComponent as IconCoinbaseLogo } from 'assets/logos/coinbase.svg';
 import { ReactComponent as IconCompassWalletLogo } from 'assets/logos/compassWallet.svg';
-import { ReactComponent as IconTailwindWalletLogo } from 'assets/logos/coinbase.svg';
+import { ReactComponent as IconTailwindWalletLogo } from 'assets/logos/tailwindWallet.svg';
 import { ReactComponent as IconSeifWalletLogo } from 'assets/logos/seifWallet.svg';
 import { ReactComponent as IconGnosisLogo } from 'assets/logos/gnosis.svg';
 import { ReactComponent as IconImposterLogo } from 'assets/logos/imposter.svg';
