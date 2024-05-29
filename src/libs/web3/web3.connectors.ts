@@ -2,11 +2,11 @@ import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { initializeConnector } from '@web3-react/core';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
 import { EIP1193 } from '@web3-react/eip1193';
-import { EMPTY, Empty } from '@web3-react/empty';
 import { MetaMask } from '@web3-react/metamask';
 import { WalletConnect } from '@web3-react/walletconnect-v2';
 import { Network } from '@web3-react/network';
 import { GnosisSafe } from '@web3-react/gnosis-safe';
+import { connect } from '@tailwindzone/connect';
 import { TailwindConnector } from '@tailwindzone/connect-web3-react';
 import iconMetaMask from 'assets/logos/metamask.svg';
 import iconWalletConnect from 'assets/logos/walletConnect.svg';
@@ -23,7 +23,8 @@ import {
   SupportedChainId,
 } from 'libs/web3/web3.constants';
 import { Connection } from 'libs/web3/web3.types';
-import { getInjectedProvider } from './web3.utils';
+import { getInjectedProvider } from 'libs/web3/web3.utils';
+import { NoConnector } from 'libs/web3/noconnector';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);
@@ -148,10 +149,19 @@ export const coinbaseWalletConnection: Connection = {
 // Tailwind WALLET CONNECTOR
 // ********************************** //
 
-const [web3TailwindWallet, web3TailwindWalletHooks] =
-  initializeConnector<TailwindConnector>(
-    (actions) => new TailwindConnector({ actions })
-  );
+const [web3TailwindWallet, web3TailwindWalletHooks] = (await connect())
+  ? initializeConnector<TailwindConnector>(
+      (actions) => new TailwindConnector({ actions })
+    )
+  : initializeConnector<NoConnector>(
+      (actions) =>
+        new NoConnector({
+          actions,
+          name: 'Tailwind Wallet',
+          url: 'https://www.tailwind.zone/',
+        })
+    );
+
 export const tailwindWalletConnection: Connection = {
   connector: web3TailwindWallet,
   hooks: web3TailwindWalletHooks,
@@ -175,7 +185,14 @@ export const [web3CompassWallet, web3CompassWalletHooks] = getInjectedProvider(
           provider: getInjectedProvider('compassEvm', 'isCompassWallet'),
         })
     )
-  : initializeConnector<Empty>(() => EMPTY);
+  : initializeConnector<NoConnector>(
+      (actions) =>
+        new NoConnector({
+          actions,
+          name: 'Compass Wallet',
+          url: 'https://compasswallet.io/',
+        })
+    );
 
 export const compassWalletConnection: Connection = {
   connector: web3CompassWallet,
@@ -200,7 +217,14 @@ export const [web3SeifWallet, web3SeifWalletHooks] = getInjectedProvider(
           provider: getInjectedProvider('__seif', '__seif'),
         })
     )
-  : initializeConnector<Empty>(() => EMPTY);
+  : initializeConnector<NoConnector>(
+      (actions) =>
+        new NoConnector({
+          actions,
+          name: 'Seif Wallet',
+          url: 'https://seif.passkeywallet.com/',
+        })
+    );
 
 export const seifWalletConnection: Connection = {
   connector: web3SeifWallet,
