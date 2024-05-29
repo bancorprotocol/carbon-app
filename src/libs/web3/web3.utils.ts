@@ -20,7 +20,9 @@ const { type } = parser.getDevice();
 export const isMobile = type === 'mobile' || type === 'tablet';
 
 /**
- * Get the inject wallet provider in window
+ * Get the injected wallet provider in window
+ * Returns window.ethereum if window.ethereum exists, window.ethereum[flag], is true and window.ethereum is not metamask
+ * Otherwise, returns window[walletObject]
  *
  * @param flag name of the flag in window.ethereum to check. If undefined, will not check this flag and default to walletObject
  * @param walletObject name of the object in window that the injected provider will populate
@@ -28,7 +30,12 @@ export const isMobile = type === 'mobile' || type === 'tablet';
  */
 export function getInjectedProvider(walletObject: string, flag?: string) {
   if (typeof window === 'undefined') return;
-  if (window.ethereum && flag && (window as any).ethereum[walletObject]) {
+  if (
+    window.ethereum &&
+    flag &&
+    (window as any).ethereum[flag] &&
+    !(window as any).ethereum?.isMetamask
+  ) {
     return window.ethereum;
   }
 

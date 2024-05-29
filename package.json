@@ -14,7 +14,6 @@
     "@playwright/test": "^1.43.1",
     "@sentry/react": "^7.48.0",
     "@sentry/vite-plugin": "^0.7.2",
-    "@tailwindzone/connect": "^2.4.2",
     "@tailwindzone/connect-web3-react": "^1.0.0",
     "@tanstack/react-query": "^4.14.5",
     "@tanstack/react-query-devtools": "^4.14.5",

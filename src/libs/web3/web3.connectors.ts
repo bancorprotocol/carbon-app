@@ -6,7 +6,6 @@ import { MetaMask } from '@web3-react/metamask';
 import { WalletConnect } from '@web3-react/walletconnect-v2';
 import { Network } from '@web3-react/network';
 import { GnosisSafe } from '@web3-react/gnosis-safe';
-import { connect } from '@tailwindzone/connect';
 import { TailwindConnector } from '@tailwindzone/connect-web3-react';
 import iconMetaMask from 'assets/logos/metamask.svg';
 import iconWalletConnect from 'assets/logos/walletConnect.svg';
@@ -149,18 +148,10 @@ export const coinbaseWalletConnection: Connection = {
 // Tailwind WALLET CONNECTOR
 // ********************************** //
 
-const [web3TailwindWallet, web3TailwindWalletHooks] = (await connect())
-  ? initializeConnector<TailwindConnector>(
-      (actions) => new TailwindConnector({ actions })
-    )
-  : initializeConnector<NoConnector>(
-      (actions) =>
-        new NoConnector({
-          actions,
-          name: 'Tailwind Wallet',
-          url: 'https://www.tailwind.zone/',
-        })
-    );
+const [web3TailwindWallet, web3TailwindWalletHooks] =
+  initializeConnector<TailwindConnector>(
+    (actions) => new TailwindConnector({ actions })
+  );
 
 export const tailwindWalletConnection: Connection = {
   connector: web3TailwindWallet,
