@@ -19,6 +19,26 @@ const { type } = parser.getDevice();
 
 export const isMobile = type === 'mobile' || type === 'tablet';
 
+/**
+ * Get the inject wallet provider in window
+ *
+ * @param flag name of the flag in window.ethereum to check. If undefined, will not check this flag and default to walletObject
+ * @param walletObject name of the object in window that the injected provider will populate
+ * @returns Injected provider in wallet or undefined if not present
+ */
+export function getInjectedProvider(walletObject: string, flag?: string) {
+  if (typeof window === 'undefined') return;
+  if (window.ethereum && flag && (window as any).ethereum[walletObject]) {
+    return window.ethereum;
+  }
+
+  if ((window as any)[walletObject]) {
+    return (window as any)[walletObject];
+  }
+
+  return;
+}
+
 // Interface to add new chain to injected wallets as per EIP-3085 (https://github.com/ethereum/EIPs/blob/master/EIPS/eip-3085.md)
 export interface AddChainParameter {
   chainId: number; // EIP-3085 specifies hex string but web3-react expects number
@@ -32,32 +52,6 @@ export interface AddChainParameter {
   blockExplorerUrls?: string[];
   iconUrls?: string[];
 }
-
-export function getSeifInjectedProvider() {
-  if (typeof window === 'undefined') return;
-  if (window.ethereum && (window as any).ethereum['__seif']) {
-    return window.ethereum;
-  }
-
-  if ((window as any)['__seif']) {
-    return (window as any)['__seif'];
-  }
-
-  return;
-}
-export function getCompassEvmInjectedProvider() {
-  if (typeof window === 'undefined') return;
-  if (window.ethereum && (window as any).ethereum['isCompassWallet']) {
-    return window.ethereum;
-  }
-
-  if ((window as any)['compassEvm']) {
-    return (window as any)['compassEvm'];
-  }
-
-  return;
-}
-
 export const getChainInfo = (): AddChainParameter => {
   return {
     chainId: config.network.chainId,
