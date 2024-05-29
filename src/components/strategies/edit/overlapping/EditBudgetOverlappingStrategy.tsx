@@ -25,7 +25,7 @@ import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMar
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-import { tokenAmount } from 'utils/helpers';
+import { formatNumber, tokenAmount } from 'utils/helpers';
 import { geoMean } from 'utils/fullOutcome';
 
 interface Props {
@@ -89,8 +89,8 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const setMarginalPrices = (price = marketPrice) => {
     if (!base || !quote) return;
     const prices = calculateOverlappingPrices(
-      order0.min,
-      order1.max,
+      formatNumber(order0.min),
+      formatNumber(order1.max),
       price.toString(),
       spread.toString()
     );

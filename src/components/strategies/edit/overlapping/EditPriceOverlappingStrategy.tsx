@@ -40,6 +40,7 @@ import {
 } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { formatNumber } from 'utils/helpers';
 
 interface Props {
   strategy: Strategy;
@@ -63,8 +64,8 @@ export function isEditAboveMarket(
 ) {
   if (!marketPrice) return false;
   const prices = calculateOverlappingPrices(
-    min || '0',
-    max || '0',
+    formatNumber(min || '0'),
+    formatNumber(max || '0'),
     marketPrice.toString(),
     spread.toString()
   );
@@ -81,8 +82,8 @@ export function isEditBelowMarket(
 ) {
   if (!marketPrice) return false;
   const prices = calculateOverlappingPrices(
-    min || '0',
-    max || '0',
+    formatNumber(min || '0'),
+    formatNumber(max || '0'),
     marketPrice.toString(),
     spread.toString()
   );
@@ -196,8 +197,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     if (!base || !quote || !marketPrice) return;
     if (!isValidRange(min, max) || !isValidSpread(spread)) return;
     const prices = calculateOverlappingPrices(
-      min,
-      max,
+      formatNumber(min || '0'),
+      formatNumber(max || '0'),
       marketPrice.toString(),
       spreadValue
     );
@@ -386,7 +387,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(order0.min), spread);
       if (Number(order1.max) < minSellMax) setMax(minSellMax.toString());
-    }, 1000);
+    }, 1500);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.min]);
@@ -397,7 +398,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
       if (Number(order0.min) > maxBuyMin) setMin(maxBuyMin.toString());
-    }, 1000);
+    }, 1500);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.max]);
