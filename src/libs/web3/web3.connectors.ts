@@ -59,9 +59,18 @@ export const networkConnection: Connection = {
 // INJECTED CONNECTOR
 // ********************************** //
 
-const [web3Injected, web3InjectedHooks] = initializeConnector<MetaMask>(
-  (actions) => new MetaMask({ actions, onError })
-);
+const [web3Injected, web3InjectedHooks] = getInjectedProvider('ethereum')
+  ? initializeConnector<MetaMask>(
+      (actions) => new MetaMask({ actions, onError })
+    )
+  : initializeConnector<NoConnector>(
+      (actions) =>
+        new NoConnector({
+          actions,
+          name: 'Metamask',
+          url: 'https://metamask.io/',
+        })
+    );
 export const injectedConnection: Connection = {
   connector: web3Injected,
   hooks: web3InjectedHooks,

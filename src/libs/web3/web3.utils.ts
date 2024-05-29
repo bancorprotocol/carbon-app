@@ -30,12 +30,7 @@ export const isMobile = type === 'mobile' || type === 'tablet';
  */
 export function getInjectedProvider(walletObject: string, flag?: string) {
   if (typeof window === 'undefined') return;
-  if (
-    window.ethereum &&
-    flag &&
-    (window as any).ethereum[flag] &&
-    !(window as any).ethereum?.isMetamask
-  ) {
+  if (window.ethereum && flag && (window as any).ethereum[flag]) {
     return window.ethereum;
   }
 
