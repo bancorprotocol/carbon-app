@@ -20,7 +20,6 @@ export class NoConnector extends Connector {
   name: string;
   url: string;
 
-  // eslint-disable-next-line no-this-before-super
   constructor({ actions, name, url }: NoConnectorArgs) {
     super(actions);
     this.name = name;
