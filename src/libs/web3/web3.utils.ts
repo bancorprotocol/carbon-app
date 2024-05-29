@@ -45,6 +45,18 @@ export function getSeifInjectedProvider() {
 
   return;
 }
+export function getCompassEvmInjectedProvider() {
+  if (typeof window === 'undefined') return;
+  if (window.ethereum && (window as any).ethereum['isCompassWallet']) {
+    return window.ethereum;
+  }
+
+  if ((window as any)['compassEvm']) {
+    return (window as any)['compassEvm'];
+  }
+
+  return;
+}
 
 export const getChainInfo = (): AddChainParameter => {
   return {

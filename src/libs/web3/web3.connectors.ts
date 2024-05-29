@@ -23,7 +23,10 @@ import {
   SupportedChainId,
 } from 'libs/web3/web3.constants';
 import { Connection } from 'libs/web3/web3.types';
-import { getSeifInjectedProvider } from './web3.utils';
+import {
+  getCompassEvmInjectedProvider,
+  getSeifInjectedProvider,
+} from './web3.utils';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);
@@ -164,15 +167,16 @@ export const tailwindWalletConnection: Connection = {
 // Compass WALLET CONNECTOR
 // ********************************** //
 
-export const [web3CompassWallet, web3CompassWalletHooks] = window.compassEvm
-  ? initializeConnector<EIP1193>(
-      (actions) =>
-        new EIP1193({
-          actions,
-          provider: window.compassEvm!,
-        })
-    )
-  : initializeConnector<Empty>(() => EMPTY);
+export const [web3CompassWallet, web3CompassWalletHooks] =
+  getCompassEvmInjectedProvider
+    ? initializeConnector<EIP1193>(
+        (actions) =>
+          new EIP1193({
+            actions,
+            provider: getCompassEvmInjectedProvider(),
+          })
+      )
+    : initializeConnector<Empty>(() => EMPTY);
 
 export const compassWalletConnection: Connection = {
   connector: web3CompassWallet,
