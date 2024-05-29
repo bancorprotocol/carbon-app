@@ -55,7 +55,7 @@ export const commonConfig: AppConfig = {
       voucher: '0xA4682A2A5Fe02feFF8Bd200240A41AD0E6EaF8d5',
     },
     utils: {
-      multicall: '0xe033Bed7cae4114Af84Be1e9F1CA7DEa07Dfe1Cf',
+      multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     },
   },
   tokenListOverride: [
