@@ -6,6 +6,9 @@ const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   ZERO: '0x0000000000000000000000000000000000000000',
   WSEI: '0xE30feDd158A2e3b13e9badaeABaFc5516e95e8C7',
+  S8N: '0xdD1358dF189aF9605dd9978e1c89eE4ec5B4E6Fe',
+  SUPERSEIZ: '0x3140E3ead4943A1e603CCaC577B50E9889AB27f3',
+  SENSEI: '0x34a8bB445004E47d1a65573A2c085cE6D134f815',
 };
 
 export const commonConfig: AppConfig = {
@@ -37,10 +40,30 @@ export const commonConfig: AppConfig = {
     },
   },
   defaultTokenPair: [addresses.SEI, addresses.WSEI],
-  popularPairs: [[addresses.SEI, addresses.WSEI]],
+  popularPairs: [
+    [addresses.SEI, addresses.WSEI],
+    [addresses.S8N, addresses.SEI],
+    [addresses.SENSEI, addresses.SEI],
+    [addresses.SUPERSEIZ, addresses.SEI],
+    [addresses.S8N, addresses.SUPERSEIZ],
+    [addresses.S8N, addresses.SENSEI],
+    [addresses.SENSEI, addresses.SUPERSEIZ],
+  ],
   popularTokens: {
-    base: [addresses.SEI, addresses.WSEI],
-    quote: [addresses.SEI, addresses.WSEI],
+    base: [
+      addresses.SEI,
+      addresses.WSEI,
+      addresses.S8N,
+      addresses.SUPERSEIZ,
+      addresses.SENSEI,
+    ],
+    quote: [
+      addresses.SEI,
+      addresses.WSEI,
+      addresses.S8N,
+      addresses.SUPERSEIZ,
+      addresses.SENSEI,
+    ],
   },
   addresses: {
     tokens: addresses,
