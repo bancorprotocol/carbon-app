@@ -104,7 +104,8 @@ export const useCarbonInit = () => {
           },
           contractsConfig,
           getTokenDecimalMap(),
-          cacheData
+          cacheData,
+          config.maxBlockAgeForCache
         ),
         carbonSDK.setOnChangeHandlers(
           Comlink.proxy(onPairDataChangedCallback),
