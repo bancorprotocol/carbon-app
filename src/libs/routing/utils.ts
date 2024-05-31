@@ -2,6 +2,7 @@ import { lsService } from 'services/localeStorage';
 import config from 'config';
 import { utils } from 'ethers';
 import * as v from 'valibot';
+import { formatNumber } from 'utils/helpers';
 
 function toValue(mix: string | undefined) {
   if (!mix) return '';
@@ -85,7 +86,7 @@ export const validLiteral = (array: string[]) => {
   return v.union(array.map((l) => v.literal(l)));
 };
 export const validNumber = v.string([
-  v.custom((value: string) => isNaN(Number(value)) === false),
+  v.custom((value: string) => isNaN(Number(formatNumber(value))) === false),
 ]);
 export const validAddress = v.string([
   v.custom((value: string) => {

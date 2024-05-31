@@ -56,7 +56,6 @@ export const CreateStrategyOrders = ({
     carbonEvents.strategy.strategyDirectionChange({
       baseToken: base,
       quoteToken: quote,
-      strategyDirection: strategyDirection,
       strategySettings,
       strategyType,
     });

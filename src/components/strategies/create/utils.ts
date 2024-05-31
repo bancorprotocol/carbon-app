@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { NavigateOptions } from 'libs/routing';
 
+// TODO: remove after everything is migrated
 export const createStrategyAction = async ({
   base,
   quote,
@@ -32,14 +33,12 @@ export const createStrategyAction = async ({
         min: order0.min,
         marginalPrice: order0.marginalPrice,
         max: order0.max,
-        price: order0.price,
       },
       order1: {
         budget: order1.budget,
         min: order1.min,
         marginalPrice: order1.marginalPrice,
         max: order1.max,
-        price: order1.price,
       },
     },
     {

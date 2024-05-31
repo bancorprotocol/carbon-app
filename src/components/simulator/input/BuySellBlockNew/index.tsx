@@ -118,7 +118,6 @@ export const BuySellBlock: FC<Props> = ({
       {warningMsg && <WarningMessageWithIcon message={warningMsg} />}
       {!ignoreMarketPriceWarning && (
         <FullOutcome
-          price=""
           min={order.min}
           max={order.max}
           budget={order.budget}

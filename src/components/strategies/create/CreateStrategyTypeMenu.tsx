@@ -1,54 +1,40 @@
-import {
-  FC,
-  KeyboardEvent,
-  SyntheticEvent,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
+import { FC, KeyboardEvent, SyntheticEvent, useRef } from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
 import { items as itemsVariant } from 'components/strategies/create/variants';
-import { UseStrategyCreateReturn } from 'components/strategies/create/index';
-import { getStrategyTypeItem } from 'components/strategies/create/useCreateStrategyTypeMenu';
+import {
+  StrategyTypeId,
+  strategyTypeItems,
+} from 'components/strategies/create/strategyTypeItems';
 import { ReactComponent as IconStar } from 'assets/icons/star-fill.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { Link, StrategyCreateSearch } from 'libs/routing';
+import { Link, useNavigate, useSearch } from 'libs/routing';
 import { buttonStyles } from 'components/common/button/buttonStyles';
+import { Token } from 'libs/tokens';
 
-export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
-  base,
-  quote,
-  order0,
-  order1,
-  strategyType,
-  selectedStrategySettings,
-  setSelectedStrategySettings,
-}) => {
+interface Props {
+  base: Token;
+  quote: Token;
+}
+
+export const CreateStrategyTypeMenu: FC<Props> = ({ base, quote }) => {
+  const navigate = useNavigate({ from: '/strategies/create' });
+  const { strategyTypeId } = useSearch({
+    from: '/strategies/create',
+  });
   const list = useRef<HTMLUListElement>(null);
-  const items = getStrategyTypeItem(base?.address!, quote?.address!);
+  const items = strategyTypeItems(base.address, quote.address);
   const { aboveBreakpoint } = useBreakpoints();
 
-  useEffect(() => {
-    if (selectedStrategySettings) return;
-    const { to, search } = items[0];
-    setSelectedStrategySettings({ to, search });
-  });
-
-  const selectedId = useMemo(() => {
-    if (!selectedStrategySettings) return;
-    const search = selectedStrategySettings.search;
-    const item = items.find((item) => {
-      return (
-        item.search.strategySettings === search.strategySettings &&
-        item.search.strategyDirection === search.strategyDirection
-      );
-    });
-    return item?.id;
-  }, [selectedStrategySettings, items]);
+  const selectedItem = (() => {
+    if (!strategyTypeId) return items[0];
+    const item = items.find(({ id }) => id === strategyTypeId);
+    return item ?? items[0];
+  })();
+  const selectedId = selectedItem.id;
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
@@ -65,9 +51,13 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     }
   };
 
-  const selectSetting = (to: string, search: StrategyCreateSearch) => {
-    setSelectedStrategySettings({ to, search });
+  const setItem = (strategyTypeId: StrategyTypeId) => {
     document.querySelectorAll('details').forEach((d) => (d.open = false));
+    navigate({
+      search: (s) => ({ ...s, strategyTypeId }),
+      replace: true,
+      resetScroll: false,
+    });
   };
 
   const toggleAccordion = (e: SyntheticEvent, id: string) => {
@@ -92,7 +82,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           role="tablist"
           className={`grid grid-cols-${items.length} gap-8`}
         >
-          {items.map(({ search, to, isRecommended, svg, id, label }) => (
+          {items.map(({ isRecommended, svg, id, label }) => (
             <li role="none" key={id} className="relative">
               {isRecommended && (
                 <span
@@ -106,20 +96,20 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 id={'tab-' + id}
                 role="tab"
                 aria-controls={'panel-' + id}
-                aria-selected={selectedId === id}
-                onClick={() => selectSetting(to, search)}
+                aria-selected={id === selectedId}
+                onClick={() => setItem(id)}
                 className={cn(
                   'rounded-10 text-14 flex size-full flex-col items-center justify-start gap-8 bg-black px-8 py-16 outline-white/60',
                   'md:px-12',
                   'focus-visible:outline focus-visible:outline-1',
-                  selectedId === id ? 'outline outline-1 outline-white' : ''
+                  id === selectedId ? 'outline outline-1 outline-white' : ''
                 )}
                 data-testid={id}
               >
                 {svg}
                 <span
                   className={`text-12 md:text-14 ${
-                    selectedId === id ? 'text-white' : 'text-white/40'
+                    id === selectedId ? 'text-white' : 'text-white/40'
                   }`}
                 >
                   {aboveBreakpoint('md') ? label : label.split(' ')[0]}
@@ -136,7 +126,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             key={id}
             className={cn(
               'flex flex-col gap-16',
-              selectedId === id ? '' : 'hidden'
+              id === selectedId ? '' : 'hidden'
             )}
           >
             <hgroup>
@@ -179,25 +169,20 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
       </m.div>
 
       <Link
-        {...selectedStrategySettings}
+        to={selectedItem.to}
         params={{}}
+        search={selectedItem.search}
         className={cn(
           buttonStyles({ variant: 'success', fullWidth: true, size: 'lg' }),
-          selectedStrategySettings
+          selectedItem
             ? ''
             : 'pointer-events-none cursor-not-allowed opacity-40'
         )}
         onClick={() => {
-          if (!selectedStrategySettings) return;
-          order0.resetFields();
-          order1.resetFields();
-          const search = selectedStrategySettings?.search;
           carbonEvents.strategy.newStrategyNextStepClick({
-            baseToken: base,
-            quoteToken: quote,
-            strategySettings: search?.strategySettings,
-            strategyDirection: search?.strategyDirection,
-            strategyType: strategyType,
+            base,
+            quote,
+            strategyTypeId: selectedItem.id,
           });
         }}
       >

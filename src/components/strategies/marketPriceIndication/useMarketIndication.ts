@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useUserMarketPrice } from '../UserMarketPrice';
+import { formatNumber } from 'utils/helpers';
 
 export type MarketPricePercentage = {
   min: SafeDecimal;
@@ -58,10 +59,10 @@ export const useMarketIndication = ({
 };
 
 export const marketPricePercent = (
-  price: string,
+  price?: string,
   marketPrice?: string | number
 ) => {
-  const value = new SafeDecimal(price || 0);
+  const value = new SafeDecimal(formatNumber(price ?? '') || 0);
   if (value.eq(0)) return value;
   if (!marketPrice) return new SafeDecimal(0);
   return new SafeDecimal(value).minus(marketPrice).div(marketPrice).times(100);

@@ -1,40 +1,24 @@
-import { useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
 import { useRouter } from 'libs/routing';
 import { items } from 'components/strategies/create/variants';
-import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
-import { cn } from 'utils/helpers';
+import { Dispatch, FC } from 'react';
 
-export const CreateStrategyHeader = ({
-  showGraph,
-  showOrders,
-  setShowGraph,
-  strategyDirection,
-}: UseStrategyCreateReturn) => {
+interface Props {
+  showGraph: boolean;
+  setShowGraph: Dispatch<boolean>;
+}
+
+export const CreateStrategyHeader: FC<Props> = (props) => {
+  const { showGraph, setShowGraph } = props;
   const { history } = useRouter();
-  const title = useMemo(() => {
-    if (!showOrders) {
-      return 'Create Strategy';
-    }
-    switch (strategyDirection) {
-      case undefined:
-        return 'Set Prices';
-      default:
-        return 'Set Price';
-    }
-  }, [showOrders, strategyDirection]);
-
   return (
     <m.header
       variants={items}
       key="createStrategyHeader"
-      className={cn(
-        'flex w-full items-center gap-16',
-        showGraph ? '' : 'md:w-[440px]'
-      )}
+      className="flex items-center gap-16"
     >
       <button
         onClick={() => history.back()}
@@ -42,8 +26,8 @@ export const CreateStrategyHeader = ({
       >
         <ForwardArrow className="size-18 rotate-180" />
       </button>
-      <h1 className="text-24 font-weight-500 flex-1">{title}</h1>
-      {!showGraph && showOrders && (
+      <h1 className="text-24 font-weight-500 flex-1">Set Prices</h1>
+      {!showGraph && (
         <button
           onClick={() => {
             carbonEvents.strategy.strategyChartOpen(undefined);

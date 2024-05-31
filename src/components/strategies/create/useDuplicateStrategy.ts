@@ -58,7 +58,7 @@ export const getDuplicateStrategyParams = (strategy: Strategy) => {
 
 export const useDuplicateStrategy = () => {
   const { getTokenById } = useTokens();
-  const search = useSearch({ from: '/strategies/create' });
+  const search: StrategyCreateSearch = useSearch({ strict: false });
 
   return {
     strategyType: search.strategyType,

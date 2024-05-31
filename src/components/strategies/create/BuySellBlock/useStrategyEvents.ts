@@ -10,7 +10,6 @@ import {
 } from 'services/events/types';
 import { sanitizeNumber } from 'utils/helpers';
 import { OrderCreate } from '../useOrder';
-import { useSearch } from 'libs/routing';
 
 export const useStrategyEvents = ({
   base,
@@ -28,7 +27,6 @@ export const useStrategyEvents = ({
   const budgetToken = buy ? quote : base;
   const { getFiatValue } = useFiatCurrency(budgetToken);
   const fiatValueUsd = getFiatValue(order.budget, true).toString();
-  const search = useSearch({ from: '/strategies/create' });
 
   const getStrategyEventData = (): (
     | StrategySellEventType
@@ -45,9 +43,8 @@ export const useStrategyEvents = ({
         buyTokenPrice: sanitizeNumber(order.price, 18),
         buyTokenPriceMin: sanitizeNumber(order.min, 18),
         buyTokenPriceMax: sanitizeNumber(order.max, 18),
-        strategyDirection: search?.strategyDirection,
-        strategySettings: search?.strategySettings,
-        strategyType: search?.strategyType,
+        strategySettings: undefined,
+        strategyType: undefined,
       };
     }
     return {
@@ -59,9 +56,8 @@ export const useStrategyEvents = ({
       sellTokenPrice: sanitizeNumber(order.price, 18),
       sellTokenPriceMin: sanitizeNumber(order.min, 18),
       sellTokenPriceMax: sanitizeNumber(order.max, 18),
-      strategyDirection: search?.strategyDirection,
-      strategySettings: search?.strategySettings,
-      strategyType: search?.strategyType,
+      strategySettings: undefined,
+      strategyType: undefined,
     };
   };
 

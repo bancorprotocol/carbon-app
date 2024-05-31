@@ -126,14 +126,12 @@ export const DebugCreateStrategy = () => {
         min: buyMin,
         marginalPrice: '',
         budget: buyBudget,
-        price: buyMax === buyMin ? buyMax : '',
       },
       order1: {
         max: sellMax,
         min: sellMin,
         marginalPrice: '',
         budget: sellBudget,
-        price: sellMax === sellMin ? sellMax : '',
       },
     };
     if (spread) {

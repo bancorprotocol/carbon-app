@@ -4,16 +4,30 @@ import { NULL_APPROVAL_CONTRACTS, UNLIMITED_WEI } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
 import { SafeDecimal } from 'libs/safedecimal';
 import { QueryKey } from 'libs/queries/queryKey';
-import config from 'config';
-import { useContract } from 'hooks/useContract';
+import { tokenRead, useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
 import { ContractTransaction } from 'ethers';
+import { Provider } from '@ethersproject/providers';
+import config from 'config';
 
 export type GetUserApprovalProps = Pick<
   Token,
   'address' | 'decimals' | 'symbol'
 > & {
   spender: string;
+};
+
+const spender = config.addresses.carbon.carbonController;
+export const getApproval = async (
+  token: Token,
+  user: string,
+  provider: Provider
+) => {
+  const isGasToken = token.address === config.network.gasToken.address;
+  const allowance = isGasToken
+    ? UNLIMITED_WEI
+    : await tokenRead(token.address, provider).allowance(user, spender);
+  return new SafeDecimal(shrinkToken(allowance.toString(), token.decimals));
 };
 
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {

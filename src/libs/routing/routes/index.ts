@@ -30,6 +30,9 @@ import {
   simulatorRootRoute,
 } from 'libs/routing/routes/sim';
 import {
+  createDisposableStrategyPage,
+  createOverlappingStrategyPage,
+  createRecurringStrategyPage,
   createStrategyPage,
   editStrategyPage,
 } from 'libs/routing/routes/strategyCreateEdit';
@@ -43,6 +46,9 @@ export const routeTree = rootRoute.addChildren([
   tradePage,
   strategyPage,
   createStrategyPage,
+  createDisposableStrategyPage,
+  createRecurringStrategyPage,
+  createOverlappingStrategyPage,
   editStrategyPage,
   oldExplorerLayout,
   explorerLayout.addChildren([

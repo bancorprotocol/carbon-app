@@ -37,7 +37,6 @@ export const useStrategyEventData = ({
     sellTokenPrice: sanitizeNumber(order1.price, 18),
     sellTokenPriceMin: sanitizeNumber(order1.min, 18),
     sellTokenPriceMax: sanitizeNumber(order1.max, 18),
-    strategyDirection: search?.strategyDirection,
     strategySettings: search?.strategySettings,
     strategyType: search?.strategyType,
   };

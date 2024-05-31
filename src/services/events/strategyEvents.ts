@@ -16,6 +16,10 @@ import {
   StrategySellEventType,
 } from './types';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { StrategyTypeId } from 'components/strategies/create/strategyTypeItems';
+import { CreateRecurringStrategySearch } from 'pages/strategies/create/recurring';
+import { CreateDisposableStrategySearch } from 'pages/strategies/create/disposable';
+import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
 
 export interface EventStrategySchema extends EventCategory {
   strategyErrorShow: {
@@ -129,14 +133,55 @@ export interface EventStrategySchema extends EventCategory {
     };
   };
   newStrategyNextStepClick: {
-    input: StrategyEventTypeBase;
-    gtmData: StrategyGTMEventTypeBase;
+    input: { base: Token; quote: Token; strategyTypeId: StrategyTypeId };
+    gtmData: {
+      strategy_base_token: string;
+      strategy_quote_token: string;
+      strategy_type: StrategyTypeId;
+      token_pair: string;
+    };
   };
   strategyDirectionChange: {
     input: StrategyEventTypeBase;
     gtmData: StrategyGTMEventTypeBase;
   };
 }
+
+export const createStrategyEvents = {
+  disposable: {
+    change: (search: CreateDisposableStrategySearch) => {
+      sendGTMEvent('strategy', 'createDisposableChange', search);
+    },
+    connectWallet: (search: CreateDisposableStrategySearch) => {
+      sendGTMEvent('strategy', 'createDisposableConnectWallet', search);
+    },
+    submit: (search: CreateDisposableStrategySearch) => {
+      sendGTMEvent('strategy', 'createDisposableSubmit', search);
+    },
+  },
+  recurring: {
+    change: (search: CreateRecurringStrategySearch) => {
+      sendGTMEvent('strategy', 'createRecurringChange', search);
+    },
+    connectWallet: (search: CreateRecurringStrategySearch) => {
+      sendGTMEvent('strategy', 'createRecurringConnectWallet', search);
+    },
+    submit: (search: CreateRecurringStrategySearch) => {
+      sendGTMEvent('strategy', 'createRecurringSubmit', search);
+    },
+  },
+  overlapping: {
+    change: (search: CreateOverlappingStrategySearch) => {
+      sendGTMEvent('strategy', 'createOverlappingChange', search);
+    },
+    connectWallet: (search: CreateOverlappingStrategySearch) => {
+      sendGTMEvent('strategy', 'createOverlappingConnectWallet', search);
+    },
+    submit: (search: CreateOverlappingStrategySearch) => {
+      sendGTMEvent('strategy', 'createOverlappingSubmit', search);
+    },
+  },
+};
 
 export const strategyEvents: CarbonEvents['strategy'] = {
   strategyErrorShow: ({ buy, message }) => {
@@ -249,31 +294,20 @@ export const strategyEvents: CarbonEvents['strategy'] = {
           strategy.sellMarketPricePercentage.max.toString(),
       });
   },
-  newStrategyNextStepClick: ({
-    baseToken,
-    quoteToken,
-    strategySettings,
-    strategyDirection,
-    strategyType,
-  }) => {
-    baseToken &&
-      quoteToken &&
-      strategySettings &&
-      strategyType &&
+  newStrategyNextStepClick: ({ base, quote, strategyTypeId }) => {
+    base &&
+      quote &&
       sendGTMEvent('strategy', 'newStrategyNextStepClick', {
-        strategy_base_token: baseToken.symbol || '',
-        strategy_quote_token: quoteToken.symbol || '',
-        strategy_settings: strategySettings,
-        strategy_direction: strategyDirection,
-        strategy_type: strategyType,
-        token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
+        strategy_base_token: base.symbol || '',
+        strategy_quote_token: quote.symbol || '',
+        strategy_type: strategyTypeId,
+        token_pair: `${base.symbol}/${quote.symbol}`,
       });
   },
   strategyDirectionChange: ({
     baseToken,
     quoteToken,
     strategySettings,
-    strategyDirection,
     strategyType,
   }) => {
     baseToken &&
@@ -284,7 +318,6 @@ export const strategyEvents: CarbonEvents['strategy'] = {
         strategy_base_token: baseToken.symbol || '',
         strategy_quote_token: quoteToken.symbol || '',
         strategy_settings: strategySettings,
-        strategy_direction: strategyDirection,
         strategy_type: strategyType,
         token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
       });
@@ -307,7 +340,6 @@ export const prepareGtmStrategyData = ({
   sellBudget,
   sellBudgetUsd,
   strategySettings,
-  strategyDirection,
   strategyType,
 }: StrategyEventType): StrategyGTMEventType | undefined => {
   if (!baseToken || !quoteToken) {
@@ -330,7 +362,6 @@ export const prepareGtmStrategyData = ({
     strategy_sell_high_order_type: sellOrderType,
     strategy_sell_high_budget: sellBudget,
     strategy_sell_high_budget_usd: sellBudgetUsd,
-    strategy_direction: strategyDirection,
     strategy_settings: strategySettings,
     strategy_type: strategyType,
   };
@@ -346,7 +377,6 @@ export const prepareGtmSellStrategyData = ({
   sellBudget,
   sellBudgetUsd,
   strategySettings,
-  strategyDirection,
   strategyType,
 }: StrategySellEventType & StrategyEventTypeBase):
   | (StrategySellGTMEventType & StrategyGTMEventTypeBase)
@@ -364,7 +394,6 @@ export const prepareGtmSellStrategyData = ({
     strategy_sell_high_order_type: sellOrderType,
     strategy_sell_high_budget: sellBudget,
     strategy_sell_high_budget_usd: sellBudgetUsd,
-    strategy_direction: strategyDirection,
     strategy_settings: strategySettings,
     strategy_type: strategyType,
   };
@@ -380,7 +409,6 @@ export const prepareGtmBuyStrategyData = ({
   buyBudget,
   buyBudgetUsd,
   strategySettings,
-  strategyDirection,
   strategyType,
 }: StrategyBuyEventType & StrategyEventTypeBase):
   | (StrategyBuyGTMEventType & StrategyGTMEventTypeBase)
@@ -399,7 +427,6 @@ export const prepareGtmBuyStrategyData = ({
     strategy_buy_low_order_type: buyOrderType,
     strategy_buy_low_budget: buyBudget,
     strategy_buy_low_budget_usd: buyBudgetUsd,
-    strategy_direction: strategyDirection,
     strategy_settings: strategySettings,
     strategy_type: strategyType,
   };

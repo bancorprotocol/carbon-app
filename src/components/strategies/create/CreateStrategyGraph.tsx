@@ -4,14 +4,15 @@ import { Button } from 'components/common/button';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { carbonEvents } from 'services/events';
-
 import { FC } from 'react';
-import { UseStrategyCreateReturn } from 'components/strategies/create';
+import { Token } from 'libs/tokens';
 
-type Props = Pick<
-  UseStrategyCreateReturn,
-  'base' | 'quote' | 'showGraph' | 'setShowGraph'
->;
+type Props = {
+  base: Token;
+  quote: Token;
+  showGraph: boolean;
+  setShowGraph: (value: boolean) => void;
+};
 export const CreateStrategyGraph: FC<Props> = ({
   base,
   quote,

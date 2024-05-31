@@ -54,7 +54,7 @@ export const useCreateStrategy = () => {
   const quote = templateStrategy.quote;
   const cache = useQueryClient();
   const navigate = useNavigate();
-  const search = useSearch({ from: '/strategies/create' });
+  const search: StrategyCreateSearch = useSearch({ strict: false });
   const {
     base: baseAddress,
     quote: quoteAddress,

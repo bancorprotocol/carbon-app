@@ -1,45 +1,43 @@
-import { FC, useId } from 'react';
+import { FC, ReactNode, useId } from 'react';
 import { Token } from 'libs/tokens';
-import { UseQueryResult } from 'libs/queries';
 import { m } from 'libs/motion';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { OrderCreate } from 'components/strategies/create/useOrder';
-import { StrategyDirection, StrategyType, useNavigate } from 'libs/routing';
-import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/LimitRangeSection';
+import { StrategyType } from 'libs/routing';
 import { LogoImager } from 'components/common/imager/Imager';
-import { TabsMenu } from 'components/common/tabs/TabsMenu';
-import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { FullOutcome } from 'components/strategies/FullOutcome';
-import { BuySellHeader } from 'components/strategies/create/BuySellBlock/Header';
+import { OrderHeader } from 'components/strategies/create/Order/Header';
 import { items } from 'components/strategies/create/variants';
-import { BudgetSection } from 'components/strategies/create/BuySellBlock/BudgetSection';
+import { InputBudget } from './InputBudget';
+import { Order } from './OrderContext';
+import { InputRange } from './InputRange';
+import { InputLimit } from './InputLimit';
 
 type Props = {
   base: Token;
   quote: Token;
-  tokenBalanceQuery: UseQueryResult<string>;
-  order: OrderCreate;
+  order: Order;
   buy?: boolean;
-  isBudgetOptional?: boolean;
+  optionalBudget?: boolean;
   strategyType?: StrategyType;
-  isOrdersOverlap: boolean;
-  isOrdersReversed: boolean;
+  setOrder: (order: Partial<Order>) => void;
+  settings?: ReactNode;
+  warning?: string;
+  error?: string;
 };
 
-export const BuySellBlock: FC<Props> = ({
+export const OrderFields: FC<Props> = ({
   base,
   quote,
-  tokenBalanceQuery,
   order,
-  isBudgetOptional,
+  optionalBudget,
   strategyType,
+  setOrder,
   buy = false,
-  isOrdersOverlap,
-  isOrdersReversed,
+  settings,
+  error,
+  warning,
 }) => {
   const titleId = useId();
-  const navigate = useNavigate();
-
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
   } ${base.symbol} at.`;
@@ -66,41 +64,15 @@ export const BuySellBlock: FC<Props> = ({
       </Tooltip>
     </>
   );
+  const setPrice = (price: string) => setOrder({ min: price, max: price });
+  const setMin = (min: string) => setOrder({ min });
+  const setMax = (max: string) => setOrder({ max });
+  const setBudget = (budget: string) => setOrder({ budget });
 
-  const changeStrategy = (direction: StrategyDirection) => {
-    order.resetFields();
-    navigate({
-      from: '/strategies/create',
-      search: (search) => ({
-        ...search,
-        strategyDirection: direction,
-      }),
-      replace: true,
-    });
-  };
-
-  const headerProps = { titleId, order, base, buy };
-  const limitRangeProps = {
-    base,
-    quote,
-    order,
-    buy,
-    inputTitle,
-    isOrdersOverlap,
-    isOrdersReversed,
-  };
-  const budgetProps = {
-    buy,
-    quote,
-    base,
-    strategyType,
-    order,
-    isBudgetOptional,
-    tokenBalanceQuery,
-  };
+  const headerProps = { titleId, order, base, buy, setOrder };
 
   return (
-    <m.section
+    <m.article
       variants={items}
       aria-labelledby={titleId}
       className={`rounded-10 bg-background-900 flex flex-col gap-20 border-l-2 p-20 ${
@@ -110,26 +82,8 @@ export const BuySellBlock: FC<Props> = ({
       }`}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
-      {strategyType === 'disposable' && (
-        <TabsMenu>
-          <TabsMenuButton
-            onClick={() => changeStrategy('buy')}
-            isActive={buy}
-            data-testid="tab-buy"
-          >
-            Buy
-          </TabsMenuButton>
-          <TabsMenuButton
-            onClick={() => changeStrategy('sell')}
-            isActive={!buy}
-            data-testid="tab-sell"
-          >
-            Sell
-          </TabsMenuButton>
-        </TabsMenu>
-      )}
-
-      <BuySellHeader {...headerProps}>
+      {settings}
+      <OrderHeader {...headerProps}>
         <h2 className="text-18 flex items-center gap-8" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
@@ -137,9 +91,44 @@ export const BuySellBlock: FC<Props> = ({
           <LogoImager alt="Token" src={base.logoURI} className="size-18" />
           <span>{base.symbol}</span>
         </h2>
-      </BuySellHeader>
-      <LimitRangeSection {...limitRangeProps} />
-      <BudgetSection {...budgetProps} />
+      </OrderHeader>
+      <fieldset className="flex flex-col gap-8">
+        <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
+          {inputTitle}
+        </legend>
+        {order.settings === 'range' ? (
+          <InputRange
+            base={base}
+            quote={quote}
+            min={order.min}
+            setMin={setMin}
+            max={order.max}
+            setMax={setMax}
+            buy={buy}
+            error={error}
+            warning={warning}
+          />
+        ) : (
+          <InputLimit
+            base={base}
+            quote={quote}
+            price={order.min}
+            setPrice={setPrice}
+            buy={buy}
+            error={error}
+            warning={warning}
+          />
+        )}
+      </fieldset>
+      <InputBudget
+        buy={buy}
+        quote={quote}
+        base={base}
+        strategyType={strategyType}
+        order={order}
+        setBudget={setBudget}
+        optional={!!optionalBudget}
+      />
       <FullOutcome
         min={order.min}
         max={order.max}
@@ -148,6 +137,6 @@ export const BuySellBlock: FC<Props> = ({
         base={base}
         quote={quote}
       />
-    </m.section>
+    </m.article>
   );
 };

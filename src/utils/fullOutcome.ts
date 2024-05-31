@@ -4,7 +4,7 @@ export interface FullOutcomeParams {
   budget: string;
   min: string;
   max: string;
-  price: string;
+  price?: string;
   buy?: boolean;
 }
 
@@ -34,8 +34,8 @@ export const getFullOutcome = ({
   budget,
   min,
   max,
-  price,
   buy,
+  price,
 }: FullOutcomeParams) => {
   if (!isStringNumber(budget)) return;
 
