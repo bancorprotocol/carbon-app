@@ -3,7 +3,7 @@ import { FC, forwardRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { useNavigate, useParams } from 'libs/routing';
-import { getDuplicateStrategyParams } from 'components/strategies/create/useDuplicateStrategy';
+import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
@@ -44,6 +44,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const { strategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
   const navigate = useNavigate();
+  const duplicate = useDuplicate();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
@@ -73,8 +74,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       if (!isOverlapping) {
         openModal('duplicateStrategy', { strategy });
       } else {
-        const search = getDuplicateStrategyParams(strategy);
-        navigate({ to: '/strategies/create', search });
+        duplicate(strategy);
       }
     },
   });
