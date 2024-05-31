@@ -4,7 +4,11 @@ import { WalletConnect } from '@web3-react/walletconnect-v2';
 import { Network } from '@web3-react/network';
 import { GnosisSafe } from '@web3-react/gnosis-safe';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
-import { RPC_URLS, SupportedChainId } from 'libs/web3/web3.constants';
+import {
+  RPC_HEADERS,
+  RPC_URLS,
+  SupportedChainId,
+} from 'libs/web3/web3.constants';
 import { Connection } from 'libs/web3/web3.types';
 import iconMetaMask from 'assets/logos/metamask.svg';
 import iconWalletConnect from 'assets/logos/walletConnect.svg';
@@ -30,6 +34,7 @@ const [web3Network, web3NetworkHooks] = initializeConnector<Network>(
         ...RPC_URLS,
         [SupportedChainId.MAINNET]: new StaticJsonRpcProvider({
           url: RPC_URLS[SupportedChainId.MAINNET],
+          headers: RPC_HEADERS[SupportedChainId.MAINNET],
           skipFetchSetup: true,
         }),
       },

@@ -9,7 +9,7 @@ import { lsService } from 'services/localeStorage';
 import { carbonSDK } from 'libs/sdk';
 import { useModal } from 'hooks/useModal';
 import { QueryKey } from 'libs/queries';
-import { RPC_URLS } from 'libs/web3';
+import { RPC_URLS, RPC_HEADERS } from 'libs/web3';
 import { SupportedChainId } from 'libs/web3/web3.constants';
 import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
 import { carbonApi } from 'utils/carbonApi';
@@ -98,7 +98,10 @@ export const useCarbonInit = () => {
       await Promise.all([
         carbonSDK.init(
           SupportedChainId.MAINNET,
-          RPC_URLS[SupportedChainId.MAINNET],
+          {
+            url: RPC_URLS[SupportedChainId.MAINNET],
+            headers: RPC_HEADERS[SupportedChainId.MAINNET],
+          },
           contractsConfig,
           getTokenDecimalMap(),
           cacheData

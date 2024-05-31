@@ -3,6 +3,7 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import {
   getRoundedSpread,
+  hasArbOpportunity,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
@@ -24,7 +25,7 @@ import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMar
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-import { tokenAmount } from 'utils/helpers';
+import { formatNumber, tokenAmount } from 'utils/helpers';
 import { geoMean } from 'utils/fullOutcome';
 
 interface Props {
@@ -33,11 +34,6 @@ interface Props {
   order1: OrderCreate;
   action: BudgetAction;
 }
-
-const priceWarning = (hasWarning: boolean) => {
-  if (!hasWarning) return '';
-  return 'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
-};
 
 export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1, action } = props;
@@ -62,6 +58,17 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
 
+  const warning = (() => {
+    if (action !== 'deposit') return;
+    if (aboveMarket || belowMarket) {
+      return 'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
+    }
+    if (hasArbOpportunity(order0.marginalPrice, spread, externalPrice)) {
+      if (!+delta) return;
+      return 'Please note that the deposit might create an arb opportunity.';
+    }
+  })();
+
   useEffect(() => {
     if (marketPrice) return;
     const price = geoMean(
@@ -82,8 +89,8 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const setMarginalPrices = (price = marketPrice) => {
     if (!base || !quote) return;
     const prices = calculateOverlappingPrices(
-      order0.min,
-      order1.max,
+      formatNumber(order0.min),
+      formatNumber(order1.max),
       price.toString(),
       spread.toString()
     );
@@ -236,9 +243,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
           error={budgetError}
-          warning={priceWarning(
-            action === 'deposit' && (aboveMarket || belowMarket)
-          )}
+          warning={warning}
         />
       )}
       {anchor && (

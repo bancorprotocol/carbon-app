@@ -8,7 +8,7 @@ import {
 } from 'libs/queries';
 import { FAUCET_TOKENS } from 'utils/tenderly';
 import config from 'config';
-import { wait } from 'utils/helpers';
+import { formatNumber, wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
 import { useWeb3 } from 'libs/web3';
 import { useQueryClient } from '@tanstack/react-query';
@@ -138,8 +138,8 @@ export const DebugCreateStrategy = () => {
       const price = await getMarketPrice(base, quote);
       if (!price) throw new Error('price is undefined');
       const params = calculateOverlappingPrices(
-        buyMin,
-        sellMax,
+        formatNumber(buyMin),
+        formatNumber(sellMax),
         price.toString(),
         spread
       );
