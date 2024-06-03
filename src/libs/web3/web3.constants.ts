@@ -43,7 +43,7 @@ export const getConnectionTypeFromLS = () => {
 };
 // [END]
 
-export type selectableConnectionType =
+export type SelectableConnectionType =
   | 'injected'
   | 'walletConnect'
   | 'coinbaseWallet'
@@ -52,9 +52,9 @@ export type selectableConnectionType =
   | 'compassWallet'
   | 'seifWallet';
 
-export type ConnectionType = 'network' | selectableConnectionType;
+export type ConnectionType = 'network' | SelectableConnectionType;
 
-export const selectedConnectionTypes: selectableConnectionType[] =
+export const selectedConnectionTypes: SelectableConnectionType[] =
   config.selectedConnectionTypes;
 
 export type SelectedConnectionTypes =
