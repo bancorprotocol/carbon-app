@@ -37,8 +37,7 @@ export const commonConfig: AppConfig = {
       symbol: 'SEI',
       decimals: 18,
       address: addresses.SEI,
-      logoURI:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/seitestnet2/images/sei.png',
+      logoURI: 'https://cdn.sei.io/assets/Sei_Symbol_Gradient.svg',
     },
   },
   defaultTokenPair: [addresses.SEI, addresses.WSEI],
@@ -89,8 +88,7 @@ export const commonConfig: AppConfig = {
       symbol: 'WSEI',
       decimals: 18,
       address: addresses.WSEI,
-      logoURI:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/seitestnet2/images/sei.png',
+      logoURI: 'https://cdn.sei.io/assets/Sei_Symbol_Gradient.svg',
     },
   ],
   tokenLists: [
