@@ -9,6 +9,8 @@ const addresses = {
   S8N: '0xdD1358dF189aF9605dd9978e1c89eE4ec5B4E6Fe',
   SUPERSEIZ: '0x3140E3ead4943A1e603CCaC577B50E9889AB27f3',
   SENSEI: '0x34a8bB445004E47d1a65573A2c085cE6D134f815',
+  USDC: '0x3894085Ef7Ff0f0aeDf52E2A2704928d1Ec074F1',
+  USDT: '0xB75D0B03c06A926e488e2659DF1A861F860bD3d1',
 };
 
 export const commonConfig: AppConfig = {
@@ -42,6 +44,8 @@ export const commonConfig: AppConfig = {
   defaultTokenPair: [addresses.SEI, addresses.WSEI],
   popularPairs: [
     [addresses.SEI, addresses.WSEI],
+    [addresses.SEI, addresses.USDC],
+    [addresses.SEI, addresses.USDT],
     [addresses.S8N, addresses.SEI],
     [addresses.SENSEI, addresses.SEI],
     [addresses.SUPERSEIZ, addresses.SEI],
@@ -53,6 +57,8 @@ export const commonConfig: AppConfig = {
     base: [
       addresses.SEI,
       addresses.WSEI,
+      addresses.USDT,
+      addresses.USDC,
       addresses.S8N,
       addresses.SUPERSEIZ,
       addresses.SENSEI,
@@ -60,6 +66,8 @@ export const commonConfig: AppConfig = {
     quote: [
       addresses.SEI,
       addresses.WSEI,
+      addresses.USDT,
+      addresses.USDC,
       addresses.S8N,
       addresses.SUPERSEIZ,
       addresses.SENSEI,
