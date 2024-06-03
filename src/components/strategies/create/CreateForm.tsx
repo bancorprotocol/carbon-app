@@ -4,7 +4,7 @@ import { createStrategyEvents } from 'services/events/strategyEvents';
 import { useSearch } from '@tanstack/react-router';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Button } from 'components/common/button';
-import { useCreateStrategy } from './useCreate';
+import { useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
 import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';

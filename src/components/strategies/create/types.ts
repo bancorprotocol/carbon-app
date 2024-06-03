@@ -3,11 +3,11 @@ import { QueryClient, UseMutationResult } from '@tanstack/react-query';
 import { TransactionResponse } from '@ethersproject/providers';
 import { CreateStrategyParams } from 'libs/queries';
 import { DispatchNotification } from 'libs/notifications/types';
-import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { StrategyEventType } from 'services/events/types';
 import { Dispatch, SetStateAction } from 'react';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { NavigateOptions, StrategySettings } from 'libs/routing';
+import { Token } from 'libs/tokens';
 
 export interface BaseOrder {
   min: string;
@@ -25,10 +25,9 @@ type BaseCreateOrder = Pick<
   'budget' | 'min' | 'max' | 'price' | 'marginalPrice'
 >;
 
-export type CreateStrategyActionProps = Pick<
-  UseStrategyCreateReturn,
-  'base' | 'quote'
-> & {
+export interface CreateStrategyActionProps {
+  base: Token;
+  quote: Token;
   order0: BaseCreateOrder;
   order1: BaseCreateOrder;
   user?: string;
@@ -46,4 +45,4 @@ export type CreateStrategyActionProps = Pick<
     buyMarketPricePercentage: MarketPricePercentage;
     sellMarketPricePercentage: MarketPricePercentage;
   };
-};
+}

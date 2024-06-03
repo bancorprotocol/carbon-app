@@ -1,10 +1,9 @@
-import { useSearch, StrategyCreateSearch, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { Order, Strategy } from 'libs/queries';
 import {
   getRoundedSpread,
   isOverlappingStrategy,
 } from 'components/strategies/overlapping/utils';
-import { useTokens } from 'hooks/useTokens';
 import { roundSearchParam } from 'utils/helpers';
 
 const isEmptyOrder = (order: Order) => {
@@ -62,30 +61,5 @@ export const useDuplicate = () => {
         },
       });
     }
-  };
-};
-
-export const useDuplicateStrategy = () => {
-  const { getTokenById } = useTokens();
-  const search: StrategyCreateSearch = useSearch({ strict: false });
-
-  return {
-    strategyType: search.strategyType,
-    strategySettings: search.strategySettings,
-    strategyDirection: search.strategyDirection,
-    base: getTokenById(search.base),
-    quote: getTokenById(search.quote),
-    order0: {
-      balance: search.buyBudget ?? '',
-      startRate: search.buyMin ?? '',
-      endRate: search.buyMax ?? '',
-      marginalRate: '',
-    },
-    order1: {
-      balance: search.sellBudget ?? '',
-      startRate: search.sellMin ?? '',
-      endRate: search.sellMax ?? '',
-      marginalRate: '',
-    },
   };
 };

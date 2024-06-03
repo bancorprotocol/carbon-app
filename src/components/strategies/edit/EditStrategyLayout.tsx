@@ -3,13 +3,14 @@ import { CreateStrategyGraph } from '../create/CreateStrategyGraph';
 import { EditStrategyBudgetContent } from './EditStrategyBudgetContent';
 import { EditStrategyPricesContent } from './EditStrategyPricesContent';
 import { Strategy } from 'libs/queries';
-import { UseStrategyCreateReturn } from '../create';
 import { TradingviewChart } from 'components/tradingviewChart';
 
-type EditStrategyLayoutProps = {
+interface EditStrategyLayoutProps {
   type: EditTypes;
   strategy: Strategy;
-} & Pick<UseStrategyCreateReturn, 'showGraph' | 'setShowGraph'>;
+  showGraph: boolean;
+  setShowGraph: (value: boolean) => void;
+}
 
 export const EditStrategyLayout = ({
   strategy,

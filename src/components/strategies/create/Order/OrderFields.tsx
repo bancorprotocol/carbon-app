@@ -12,7 +12,7 @@ import { InputRange } from './InputRange';
 import { InputLimit } from './InputLimit';
 import { OrderBlock } from 'components/strategies/create/types';
 
-type Props = {
+interface Props {
   base: Token;
   quote: Token;
   order: OrderBlock;
@@ -23,7 +23,7 @@ type Props = {
   settings?: ReactNode;
   warning?: string;
   error?: string;
-};
+}
 
 export const OrderFields: FC<Props> = ({
   base,

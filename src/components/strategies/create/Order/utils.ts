@@ -7,5 +7,3 @@ export const isZero = (value: string): value is '0' | '.' => {
   if (!value) return false;
   return !+formatNumber(value);
 };
-export const minAboveMax = (min: string, max: string) =>
-  min && max && +min >= +max;

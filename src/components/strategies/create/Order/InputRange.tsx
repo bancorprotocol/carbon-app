@@ -9,7 +9,7 @@ import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
-import { isZero, minAboveMax } from './utils';
+import { isZero } from 'components/strategies/create/Order/utils';
 
 type InputRangeProps = {
   min: string;
@@ -48,7 +48,9 @@ export const InputRange: FC<InputRangeProps> = ({
   const minError = isZero(min) && 'Min must be greater than 0';
   const maxError = isZero(max) && 'Max must be greater than 0';
   const rangeError =
-    minAboveMax(min, max) &&
+    min &&
+    max &&
+    +min >= +max &&
     'Maximum price must be higher than the minimum price';
 
   const hasMinError = !!(minError || error || rangeError);
