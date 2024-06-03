@@ -72,6 +72,7 @@ export const CreateForm: FC<FormProps> = (props) => {
   const search = useSearch({ strict: false }) as any;
 
   const { isProcessing, isAwaiting, createStrategy } = useCreateStrategy({
+    type,
     base,
     quote,
     order0,
