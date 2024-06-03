@@ -12,6 +12,7 @@ import { m } from 'libs/motion';
 import { items } from './variants';
 import { useWeb3 } from 'libs/web3';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { BaseOrder } from 'components/strategies/create/types';
 import style from 'components/strategies/common/form.module.css';
 
 const title = {
@@ -58,8 +59,8 @@ interface FormProps {
   type: keyof typeof title;
   base: Token;
   quote: Token;
-  order0: { min: string; max: string; marginalPrice?: string; budget: string };
-  order1: { min: string; max: string; marginalPrice?: string; budget: string };
+  order0: BaseOrder;
+  order1: BaseOrder;
   approvalText?: string;
   children: ReactNode;
 }

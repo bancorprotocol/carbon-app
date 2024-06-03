@@ -5,13 +5,13 @@ import { StrategyType } from 'libs/routing';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { SafeDecimal } from 'libs/safedecimal';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-import { Order } from './OrderContext';
 import { useGetTokenBalance } from 'libs/queries';
+import { BaseOrder } from 'components/strategies/create/types';
 
 interface Props {
   base: Token;
   quote: Token;
-  order: Order;
+  order: BaseOrder;
   setBudget: (budget: string) => void;
   strategyType?: StrategyType;
   optional?: boolean;

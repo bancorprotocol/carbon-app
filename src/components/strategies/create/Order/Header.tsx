@@ -2,14 +2,14 @@ import { FC, ReactNode } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { cn } from 'utils/helpers';
-import { Order } from './OrderContext';
+import { OrderBlock } from 'components/strategies/create/types';
 
 interface Props {
   children: ReactNode;
-  order: Order;
+  order: OrderBlock;
   base: Token;
   buy?: boolean;
-  setOrder: (value: Partial<Order>) => void;
+  setOrder: (value: Partial<OrderBlock>) => void;
 }
 
 export const OrderHeader: FC<Props> = (props) => {

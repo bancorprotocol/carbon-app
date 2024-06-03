@@ -8,18 +8,18 @@ import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/create/Order/Header';
 import { items } from 'components/strategies/create/variants';
 import { InputBudget } from './InputBudget';
-import { Order } from './OrderContext';
 import { InputRange } from './InputRange';
 import { InputLimit } from './InputLimit';
+import { OrderBlock } from 'components/strategies/create/types';
 
 type Props = {
   base: Token;
   quote: Token;
-  order: Order;
+  order: OrderBlock;
   buy?: boolean;
   optionalBudget?: boolean;
   strategyType?: StrategyType;
-  setOrder: (order: Partial<Order>) => void;
+  setOrder: (order: Partial<OrderBlock>) => void;
   settings?: ReactNode;
   warning?: string;
   error?: string;

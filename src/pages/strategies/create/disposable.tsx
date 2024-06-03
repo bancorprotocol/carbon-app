@@ -3,7 +3,6 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { OrderFields } from 'components/strategies/create/Order/OrderFields';
-import { Order } from 'components/strategies/create/Order/OrderContext';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { formatNumber } from 'utils/helpers';
@@ -11,6 +10,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
+import { OrderBlock } from 'components/strategies/create/types';
 
 export interface CreateDisposableStrategySearch {
   base: string;
@@ -22,10 +22,11 @@ export interface CreateDisposableStrategySearch {
   budget?: string;
 }
 
-const emptyOrder = () => ({
+const emptyOrder = (): OrderBlock => ({
   min: '0',
   max: '0',
   budget: '0',
+  marginalPrice: '',
   settings: 'limit' as const,
 });
 
@@ -38,10 +39,11 @@ export const CreateDisposableStrategyPage = () => {
   const marketPrice = useMarketPrice({ base, quote });
 
   const buy = search.direction !== 'sell';
-  const order: Order = {
+  const order: OrderBlock = {
     min: search.min ?? '',
     max: search.max ?? '',
     budget: search.budget ?? '',
+    marginalPrice: '',
     settings: search.settings ?? 'limit',
   };
 
@@ -60,7 +62,7 @@ export const CreateDisposableStrategyPage = () => {
   };
 
   const setOrder = useCallback(
-    (order: Partial<Order>) => {
+    (order: Partial<OrderBlock>) => {
       navigate({
         search: (previous) => ({ ...previous, ...order }),
         replace: true,

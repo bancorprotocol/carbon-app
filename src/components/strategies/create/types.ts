@@ -7,7 +7,18 @@ import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { StrategyEventType } from 'services/events/types';
 import { Dispatch, SetStateAction } from 'react';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { NavigateOptions } from 'libs/routing';
+import { NavigateOptions, StrategySettings } from 'libs/routing';
+
+export interface BaseOrder {
+  min: string;
+  max: string;
+  marginalPrice: string;
+  budget: string;
+}
+
+export interface OrderBlock extends BaseOrder {
+  settings: StrategySettings;
+}
 
 type BaseCreateOrder = Pick<
   OrderCreate,

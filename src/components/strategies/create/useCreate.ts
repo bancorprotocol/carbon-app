@@ -7,6 +7,7 @@ import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
+import { BaseOrder } from 'components/strategies/create/types';
 import { Token } from 'libs/tokens';
 import config from 'config';
 
@@ -17,8 +18,8 @@ export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 interface Props {
   base?: Token;
   quote?: Token;
-  order0: { min: string; max: string; marginalPrice?: string; budget: string };
-  order1: { min: string; max: string; marginalPrice?: string; budget: string };
+  order0: BaseOrder;
+  order1: BaseOrder;
 }
 
 export const useCreateStrategy = (props: Props) => {
