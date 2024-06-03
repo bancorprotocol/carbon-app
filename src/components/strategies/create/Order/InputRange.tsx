@@ -22,7 +22,7 @@ type InputRangeProps = {
   base: Token;
   buy?: boolean;
   error?: string;
-  warning?: string;
+  warnings?: (string | undefined)[];
   isOverlapping?: boolean;
 };
 
@@ -37,7 +37,7 @@ export const InputRange: FC<InputRangeProps> = ({
   base,
   error,
   buy = false,
-  warning,
+  warnings = [],
   isOverlapping,
 }) => {
   const marketPrice = useUserMarketPrice({ base, quote });
@@ -58,9 +58,11 @@ export const InputRange: FC<InputRangeProps> = ({
   const displayError = minError || maxError || error || rangeError;
 
   // Warnings
-  const noMarketPrice = !marketPrice && 'Notice: price & slippage are unknown';
-  const displayWarning = warning || noMarketPrice;
-  const showWarning = !displayError && displayWarning;
+  const noMarketPrice = !marketPrice
+    ? 'Notice: price & slippage are unknown'
+    : '';
+  const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
+  const showWarning = !displayError && displayWarnings.length;
 
   const marketPricePercentages = {
     min: marketPricePercent(min, marketPrice),
@@ -225,12 +227,13 @@ export const InputRange: FC<InputRangeProps> = ({
           htmlFor={`${inputMinId} ${inputMaxId}`}
         />
       )}
-      {showWarning && (
-        <WarningMessageWithIcon
-          message={displayWarning}
-          htmlFor={`${inputMinId} ${inputMaxId}`}
-        />
-      )}
+      {showWarning &&
+        displayWarnings.map((warning) => (
+          <WarningMessageWithIcon
+            message={warning}
+            htmlFor={`${inputMinId} ${inputMaxId}`}
+          />
+        ))}
     </>
   );
 };

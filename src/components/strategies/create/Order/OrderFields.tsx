@@ -21,7 +21,7 @@ interface Props {
   strategyType?: StrategyType;
   setOrder: (order: Partial<OrderBlock>) => void;
   settings?: ReactNode;
-  warning?: string;
+  warnings?: (string | undefined)[];
   error?: string;
 }
 
@@ -35,7 +35,7 @@ export const OrderFields: FC<Props> = ({
   buy = false,
   settings,
   error,
-  warning,
+  warnings,
 }) => {
   const titleId = useId();
   const tooltipText = `This section will define the order details in which you are willing to ${
@@ -106,7 +106,7 @@ export const OrderFields: FC<Props> = ({
             setMax={setMax}
             buy={buy}
             error={error}
-            warning={warning}
+            warnings={warnings}
           />
         ) : (
           <InputLimit
@@ -116,7 +116,7 @@ export const OrderFields: FC<Props> = ({
             setPrice={setPrice}
             buy={buy}
             error={error}
-            warning={warning}
+            warnings={warnings}
           />
         )}
       </fieldset>

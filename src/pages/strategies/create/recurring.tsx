@@ -134,7 +134,7 @@ export const CreateRecurringStrategyPage = () => {
           setOrder={setSellOrder}
           optionalBudget={+buyOrder.budget > 0}
           error={getError(search)}
-          warning={sellOutsideMarket || getWarning(search)}
+          warnings={[sellOutsideMarket, getWarning(search)]}
         />
         <OrderFields
           base={base!}
@@ -143,7 +143,7 @@ export const CreateRecurringStrategyPage = () => {
           setOrder={setBuyOrder}
           optionalBudget={+sellOrder.budget > 0}
           error={getError(search)}
-          warning={buyOutSideMarket || getWarning(search)}
+          warnings={[buyOutSideMarket, getWarning(search)]}
           buy
         />
       </CreateForm>

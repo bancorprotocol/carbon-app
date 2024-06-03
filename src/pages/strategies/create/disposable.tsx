@@ -101,7 +101,7 @@ export const CreateDisposableStrategyPage = () => {
           buy={buy}
           order={order}
           setOrder={setOrder}
-          warning={outSideMarket}
+          warnings={[outSideMarket]}
           settings={
             <TabsMenu>
               <TabsMenuButton

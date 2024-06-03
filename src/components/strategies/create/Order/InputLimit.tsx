@@ -18,7 +18,7 @@ type InputLimitProps = {
   base: Token;
   quote: Token;
   error?: string;
-  warning?: string;
+  warnings?: (string | undefined)[];
   buy?: boolean;
 };
 
@@ -29,7 +29,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   base,
   quote,
   error,
-  warning,
+  warnings = [],
   buy = false,
 }) => {
   const inputId = useId();
@@ -43,7 +43,9 @@ export const InputLimit: FC<InputLimitProps> = ({
   const displayError = priceError || error;
 
   // Warnings
-  const noMarketPrice = !marketPrice && 'Notice: price & slippage are unknown';
+  const noMarketPrice = !marketPrice
+    ? 'Notice: price & slippage are unknown'
+    : '';
   const outSideMarket = (() => {
     if (!marketPrice) return '';
     if (buy) {
@@ -56,8 +58,10 @@ export const InputLimit: FC<InputLimitProps> = ({
       }
     }
   })();
-  const displayWarning = warning || noMarketPrice || outSideMarket;
-  const showWarning = !displayError && displayWarning;
+  const displayWarnings = [...warnings, noMarketPrice, outSideMarket].filter(
+    (v) => !!v
+  );
+  const showWarning = !displayError && displayWarnings?.length;
 
   const changePrice = (e: ChangeEvent<HTMLInputElement>) => {
     setPrice(sanitizeNumber(e.target.value));
@@ -138,9 +142,10 @@ export const InputLimit: FC<InputLimitProps> = ({
           htmlFor={inputId}
         />
       )}
-      {showWarning && (
-        <WarningMessageWithIcon message={displayWarning} htmlFor={inputId} />
-      )}
+      {showWarning &&
+        displayWarnings.map((warning) => (
+          <WarningMessageWithIcon message={warning} htmlFor={inputId} />
+        ))}
     </>
   );
 };
