@@ -21,20 +21,11 @@ export const EditStrategyLayout = ({
 
   return (
     <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
-      <div
-        className={`flex flex-col ${
-          showGraph ? 'flex-1' : 'absolute right-20'
-        }`}
-      >
-        {showGraph && (
-          <CreateStrategyGraph
-            showGraph={showGraph}
-            setShowGraph={setShowGraph}
-          >
-            <TradingviewChart base={base} quote={quote} />
-          </CreateStrategyGraph>
-        )}
-      </div>
+      {showGraph && (
+        <CreateStrategyGraph setShowGraph={setShowGraph}>
+          <TradingviewChart base={base} quote={quote} />
+        </CreateStrategyGraph>
+      )}
       {type === 'deposit' || type === 'withdraw' ? (
         <EditStrategyBudgetContent {...{ strategy, type }} />
       ) : (

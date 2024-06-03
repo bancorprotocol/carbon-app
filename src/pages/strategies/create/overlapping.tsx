@@ -3,7 +3,7 @@ import { items } from 'components/strategies/create/variants';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { isValidRange } from 'components/strategies/utils';
-import { CreateNewOverlapping } from 'components/strategies/create/CreateNewOverlapping';
+import { CreateOverlapping } from 'components/strategies/create/CreateOverlapping';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
@@ -170,7 +170,7 @@ export const CreateOverlappingStrategyPage = () => {
             : "I've approved the token deposit(s) and distribution."
         }
       >
-        <CreateNewOverlapping
+        <CreateOverlapping
           base={base!}
           quote={quote!}
           marketPrice={marketPrice}

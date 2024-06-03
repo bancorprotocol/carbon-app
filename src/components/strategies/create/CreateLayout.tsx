@@ -3,10 +3,13 @@ import { AnimatePresence } from 'framer-motion';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { CreateStrategyGraph } from './CreateStrategyGraph';
-import { CreateStrategyHeader } from './CreateStrategyHeader';
-import { list } from './variants';
+import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
+import { items, list } from './variants';
 import { m } from 'libs/motion';
 import { Token } from 'libs/tokens';
+import { useRouter } from '@tanstack/react-router';
+import { ForwardArrow } from 'components/common/forwardArrow';
+import { carbonEvents } from 'services/events';
 
 interface Props {
   base?: Token;
@@ -18,6 +21,7 @@ interface Props {
 export const CreateLayout: FC<Props> = (props) => {
   const { base, quote, children } = props;
   const [showGraph, setShowGraph] = useState(true);
+  const { history } = useRouter();
 
   if (!base || !quote) {
     return <CarbonLogoLoading className="h-[100px] place-self-center" />;
@@ -35,17 +39,34 @@ export const CreateLayout: FC<Props> = (props) => {
         initial="hidden"
         animate="visible"
       >
-        <CreateStrategyHeader
-          showGraph={showGraph}
-          setShowGraph={setShowGraph}
-        />
+        <m.header
+          variants={items}
+          key="createStrategyHeader"
+          className="flex items-center gap-16"
+        >
+          <button
+            onClick={() => history.back()}
+            className="bg-background-800 grid size-40 place-items-center rounded-full"
+          >
+            <ForwardArrow className="size-18 rotate-180" />
+          </button>
+          <h1 className="text-24 font-weight-500 flex-1">Set Prices</h1>
+          {!showGraph && (
+            <button
+              onClick={() => {
+                carbonEvents.strategy.strategyChartOpen(undefined);
+                setShowGraph(true);
+              }}
+              className="bg-background-800 grid size-40 place-items-center rounded-full"
+            >
+              <IconCandles className="size-18" />
+            </button>
+          )}
+        </m.header>
 
         <div className="flex flex-col gap-20 md:flex-row-reverse md:justify-center">
           {showGraph && (
-            <CreateStrategyGraph
-              showGraph={showGraph}
-              setShowGraph={setShowGraph}
-            >
+            <CreateStrategyGraph setShowGraph={setShowGraph}>
               {graph}
             </CreateStrategyGraph>
           )}
