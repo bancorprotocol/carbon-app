@@ -105,16 +105,16 @@ export const CreateRecurringStrategyPage = () => {
   );
 
   // Warnings
-  const buyOutSideMarket = (() => {
-    if (!marketPrice || isNil(search.buyMax)) return;
-    if (new SafeDecimal(search.buyMax).gt(marketPrice)) {
-      return `Notice: you offer to buy ${base?.symbol} above current market price`;
-    }
-  })();
   const sellOutsideMarket = (() => {
     if (!marketPrice || isNil(search.sellMin)) return;
     if (new SafeDecimal(search.sellMin).lt(marketPrice)) {
       return `Notice: you offer to sell ${base?.symbol} below current market price`;
+    }
+  })();
+  const buyOutSideMarket = (() => {
+    if (!marketPrice || isNil(search.buyMax)) return;
+    if (new SafeDecimal(search.buyMax).gt(marketPrice)) {
+      return `Notice: you offer to buy ${base?.symbol} above current market price`;
     }
   })();
 
@@ -134,7 +134,7 @@ export const CreateRecurringStrategyPage = () => {
           setOrder={setSellOrder}
           optionalBudget={+buyOrder.budget > 0}
           error={getError(search)}
-          warning={buyOutSideMarket || getWarning(search)}
+          warning={sellOutsideMarket || getWarning(search)}
         />
         <OrderFields
           base={base!}
@@ -143,7 +143,7 @@ export const CreateRecurringStrategyPage = () => {
           setOrder={setBuyOrder}
           optionalBudget={+sellOrder.budget > 0}
           error={getError(search)}
-          warning={sellOutsideMarket || getWarning(search)}
+          warning={buyOutSideMarket || getWarning(search)}
           buy
         />
       </CreateForm>
