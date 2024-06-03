@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useCreateStrategyQuery } from 'libs/queries';
-import { useNavigate } from 'libs/routing';
+import { StrategyType, useNavigate } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
@@ -9,6 +9,10 @@ import { useNotifications } from 'hooks/useNotifications';
 import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
 import { BaseOrder } from 'components/strategies/create/types';
 import { Token } from 'libs/tokens';
+import { useStrategyEvent } from './useStrategyEventData';
+import { carbonEvents } from 'services/events';
+import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 import config from 'config';
 
 const spenderAddress = config.addresses.carbon.carbonController;
@@ -16,6 +20,7 @@ const spenderAddress = config.addresses.carbon.carbonController;
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 
 interface Props {
+  type: StrategyType;
   base?: Token;
   quote?: Token;
   order0: BaseOrder;
@@ -23,12 +28,13 @@ interface Props {
 }
 
 export const useCreateStrategy = (props: Props) => {
-  const { base, quote, order0, order1 } = props;
+  const { type, base, quote, order0, order1 } = props;
   const cache = useQueryClient();
   const navigate = useNavigate();
   const { user, provider } = useWeb3();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
+  const marketPrice = useMarketPrice({ base, quote });
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
@@ -53,6 +59,17 @@ export const useCreateStrategy = (props: Props) => {
     return arr;
   }, [base, quote, order0.budget, order1.budget]);
 
+  const strategyData = useStrategyEvent(type, base, quote, order0, order1);
+  const buyMarketPricePercentage = {
+    min: marketPricePercent(order0.min, marketPrice),
+    max: marketPricePercent(order0.max, marketPrice),
+    price: marketPricePercent('', marketPrice),
+  };
+  const sellMarketPricePercentage = {
+    min: marketPricePercent(order1.min, marketPrice),
+    max: marketPricePercent(order1.max, marketPrice),
+    price: marketPricePercent('', marketPrice),
+  };
   const approval = useApproval(approvalTokens);
   const mutation = useCreateStrategyQuery();
 
@@ -90,8 +107,11 @@ export const useCreateStrategy = (props: Props) => {
               queryKey: QueryKey.balance(user, quote.address),
             });
             navigate({ to: '/', search: {}, params: {} });
-            // TODO: add back
-            // carbonEvents.strategy.strategyCreate(strategyEventData);
+            carbonEvents.strategy.strategyCreate({
+              ...strategyData,
+              buyMarketPricePercentage,
+              sellMarketPricePercentage,
+            });
           },
           onError: (e: any) => {
             setIsProcessing(false);
@@ -125,7 +145,7 @@ export const useCreateStrategy = (props: Props) => {
         onConfirm,
         buttonLabel: 'Create Strategy',
         eventData: {
-          // ...strategyEventData, // TODO: add back
+          ...strategyData,
           productType: 'strategy',
           approvalTokens,
           buyToken: base,

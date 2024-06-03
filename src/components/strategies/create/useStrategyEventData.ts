@@ -3,8 +3,62 @@ import { Token } from 'libs/tokens';
 import { StrategyEventType } from 'services/events/types';
 import { sanitizeNumber } from 'utils/helpers';
 import { OrderCreate } from './useOrder';
-import { useSearch, StrategyCreateSearch } from 'libs/routing';
+import {
+  useSearch,
+  StrategyType,
+  StrategyDirection,
+  StrategySettings,
+} from 'libs/routing';
+import { BaseOrder } from './types';
 
+export const useStrategyEvent = (
+  type: StrategyType,
+  base: Token | undefined,
+  quote: Token | undefined,
+  order0: BaseOrder,
+  order1: BaseOrder
+) => {
+  const { getFiatValue: getFiatValueBase } = useFiatCurrency(base);
+  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(quote);
+  const lowBudgetUsd = getFiatValueQuote(order0?.budget, true).toString();
+  const highBudgetUsd = getFiatValueBase(order1?.budget, true).toString();
+  const buyIsLimit = order0.min === order0.max;
+  const sellIsLimit = order1.min === order1.max;
+
+  return {
+    buyOrderType: buyIsLimit ? 'limit' : 'range',
+    baseToken: base,
+    quoteToken: quote,
+    buyBudget: order0.budget,
+    buyBudgetUsd: lowBudgetUsd,
+    buyTokenPrice: buyIsLimit ? sanitizeNumber(order0.min, 18) : '',
+    buyTokenPriceMin: buyIsLimit ? '' : sanitizeNumber(order0.min, 18),
+    buyTokenPriceMax: buyIsLimit ? '' : sanitizeNumber(order0.max, 18),
+    sellOrderType: sellIsLimit ? 'limit' : 'range',
+    sellBudget: order1.budget,
+    sellBudgetUsd: highBudgetUsd,
+    sellTokenPrice: sellIsLimit ? sanitizeNumber(order1.min, 18) : '',
+    sellTokenPriceMin: sellIsLimit ? '' : sanitizeNumber(order1.min, 18),
+    sellTokenPriceMax: sellIsLimit ? '' : sanitizeNumber(order1.max, 18),
+    strategySettings: undefined,
+    strategyType: type,
+  };
+};
+
+// TODO: remove once migration is down
+interface StrategyCreateSearch {
+  base?: string;
+  quote?: string;
+  strategyType?: StrategyType;
+  strategyDirection?: StrategyDirection;
+  strategySettings?: StrategySettings;
+  buyMin?: string;
+  buyMax?: string;
+  buyBudget?: string;
+  sellMin?: string;
+  sellMax?: string;
+  sellBudget?: string;
+}
 export const useStrategyEventData = ({
   base,
   quote,

@@ -22,26 +22,9 @@ import {
   CreateOverlappingStrategySearch,
 } from 'pages/strategies/create/overlapping';
 
-export type StrategyType = 'recurring' | 'disposable';
+export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
 export type StrategyDirection = 'buy' | 'sell';
-
-export type LimitRange = 'limit' | 'range';
-export type StrategySettings = LimitRange | 'overlapping';
-
-// TODO: Remove when everything has been migrated
-export interface StrategyCreateSearch {
-  base?: string;
-  quote?: string;
-  strategyType?: StrategyType;
-  strategyDirection?: StrategyDirection;
-  strategySettings?: StrategySettings;
-  buyMin?: string;
-  buyMax?: string;
-  buyBudget?: string;
-  sellMin?: string;
-  sellMax?: string;
-  sellBudget?: string;
-}
+export type StrategySettings = 'limit' | 'range';
 
 export interface CreateSelectToken {
   base?: string;

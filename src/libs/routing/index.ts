@@ -7,7 +7,6 @@ export type {
   StrategyDirection,
   StrategySettings,
   StrategyType,
-  StrategyCreateSearch,
   EditTypes,
 } from 'libs/routing/routes/strategyCreateEdit';
 export { getLastVisitedPair } from 'libs/routing/utils';
