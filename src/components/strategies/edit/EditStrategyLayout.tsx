@@ -4,6 +4,7 @@ import { EditStrategyBudgetContent } from './EditStrategyBudgetContent';
 import { EditStrategyPricesContent } from './EditStrategyPricesContent';
 import { Strategy } from 'libs/queries';
 import { UseStrategyCreateReturn } from '../create';
+import { TradingviewChart } from 'components/tradingviewChart';
 
 type EditStrategyLayoutProps = {
   type: EditTypes;
@@ -26,7 +27,12 @@ export const EditStrategyLayout = ({
         }`}
       >
         {showGraph && (
-          <CreateStrategyGraph {...{ base, quote, showGraph, setShowGraph }} />
+          <CreateStrategyGraph
+            showGraph={showGraph}
+            setShowGraph={setShowGraph}
+          >
+            <TradingviewChart base={base} quote={quote} />
+          </CreateStrategyGraph>
         )}
       </div>
       {type === 'deposit' || type === 'withdraw' ? (

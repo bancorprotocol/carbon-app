@@ -89,6 +89,7 @@ export const useCreateStrategy = (props: Props) => {
               queryKey: QueryKey.balance(user, quote.address),
             });
             navigate({ to: '/', search: {}, params: {} });
+            // TODO: add back
             // carbonEvents.strategy.strategyCreate(strategyEventData);
           },
           onError: (e: any) => {
@@ -123,9 +124,9 @@ export const useCreateStrategy = (props: Props) => {
         onConfirm,
         buttonLabel: 'Create Strategy',
         eventData: {
-          // ...strategyEventData,
+          // ...strategyEventData, // TODO: add back
           productType: 'strategy',
-          approvalTokens: approval.tokens,
+          approvalTokens,
           buyToken: base,
           sellToken: quote,
           blockchainNetwork: provider?.network?.name || '',
@@ -133,7 +134,6 @@ export const useCreateStrategy = (props: Props) => {
         context: 'createStrategy',
       });
     }
-
     return onConfirm();
   };
 

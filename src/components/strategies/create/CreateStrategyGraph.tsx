@@ -1,23 +1,19 @@
 import { m } from 'libs/motion';
 import { items } from './variants';
 import { Button } from 'components/common/button';
-import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { carbonEvents } from 'services/events';
-import { FC } from 'react';
-import { Token } from 'libs/tokens';
+import { FC, ReactNode } from 'react';
 
 type Props = {
-  base: Token;
-  quote: Token;
   showGraph: boolean;
   setShowGraph: (value: boolean) => void;
+  children: ReactNode;
 };
 export const CreateStrategyGraph: FC<Props> = ({
-  base,
-  quote,
   showGraph,
   setShowGraph,
+  children,
 }) => {
   return (
     <div
@@ -45,7 +41,7 @@ export const CreateStrategyGraph: FC<Props> = ({
             </div>
           </Button>
         </div>
-        <TradingviewChart base={base} quote={quote} />
+        {children}
       </m.div>
     </div>
   );

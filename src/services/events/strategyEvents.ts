@@ -147,39 +147,23 @@ export interface EventStrategySchema extends EventCategory {
   };
 }
 
+type StrategyType = 'disposable' | 'recurring' | 'overlapping';
+type CreateStrategySearch =
+  | CreateDisposableStrategySearch
+  | CreateRecurringStrategySearch
+  | CreateOverlappingStrategySearch;
 export const createStrategyEvents = {
-  disposable: {
-    change: (search: CreateDisposableStrategySearch) => {
-      sendGTMEvent('strategy', 'createDisposableChange', search);
-    },
-    connectWallet: (search: CreateDisposableStrategySearch) => {
-      sendGTMEvent('strategy', 'createDisposableConnectWallet', search);
-    },
-    submit: (search: CreateDisposableStrategySearch) => {
-      sendGTMEvent('strategy', 'createDisposableSubmit', search);
-    },
+  change: (type: StrategyType, search: CreateStrategySearch) => {
+    sendGTMEvent('strategy', 'createStrategyChange', { type, ...search });
   },
-  recurring: {
-    change: (search: CreateRecurringStrategySearch) => {
-      sendGTMEvent('strategy', 'createRecurringChange', search);
-    },
-    connectWallet: (search: CreateRecurringStrategySearch) => {
-      sendGTMEvent('strategy', 'createRecurringConnectWallet', search);
-    },
-    submit: (search: CreateRecurringStrategySearch) => {
-      sendGTMEvent('strategy', 'createRecurringSubmit', search);
-    },
+  connectWallet: (type: StrategyType, search: CreateStrategySearch) => {
+    sendGTMEvent('strategy', 'createStrategyConnectWallet', {
+      type,
+      ...search,
+    });
   },
-  overlapping: {
-    change: (search: CreateOverlappingStrategySearch) => {
-      sendGTMEvent('strategy', 'createOverlappingChange', search);
-    },
-    connectWallet: (search: CreateOverlappingStrategySearch) => {
-      sendGTMEvent('strategy', 'createOverlappingConnectWallet', search);
-    },
-    submit: (search: CreateOverlappingStrategySearch) => {
-      sendGTMEvent('strategy', 'createOverlappingSubmit', search);
-    },
+  submit: (type: StrategyType, search: CreateStrategySearch) => {
+    sendGTMEvent('strategy', 'createStrategySubmit', { type, ...search });
   },
 };
 
