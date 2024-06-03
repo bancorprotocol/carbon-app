@@ -54,8 +54,12 @@ export type selectableConnectionType =
 
 export type ConnectionType = 'network' | selectableConnectionType;
 
-export const selectableConnectionTypes: selectableConnectionType[] =
-  config.selectableConnectionTypes;
+export const selectedConnectionTypes: selectableConnectionType[] =
+  config.selectedConnectionTypes;
+
+export type SelectedConnectionTypes =
+  | 'network'
+  | (typeof selectedConnectionTypes)[number];
 
 export const RPC_URLS: ChainIdMapTo<string> = {
   [SupportedChainId.MAINNET]: CHAIN_RPC_URL,

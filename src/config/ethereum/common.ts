@@ -25,7 +25,7 @@ export const commonConfig: AppConfig = {
   mode: 'development',
   appUrl: 'https://app.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/',
-  selectableConnectionTypes: [
+  selectedConnectionTypes: [
     'injected',
     'walletConnect',
     'coinbaseWallet',

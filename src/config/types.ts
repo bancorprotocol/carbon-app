@@ -5,7 +5,7 @@ export interface AppConfig {
   mode: 'development' | 'production';
   appUrl: string;
   carbonApi: string;
-  selectableConnectionTypes: selectableConnectionType[];
+  selectedConnectionTypes: selectableConnectionType[];
   walletConnectProjectId: string;
   isSimulatorEnabled: boolean;
   sentryDSN?: string;

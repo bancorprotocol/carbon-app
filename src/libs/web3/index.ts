@@ -1,7 +1,7 @@
 export {
   type ConnectionType,
   EnumConnectionType,
-  selectableConnectionTypes,
+  selectedConnectionTypes,
   IS_TENDERLY_FORK,
   RPC_URLS,
   RPC_HEADERS,
