@@ -1,8 +1,6 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { initializeConnector } from '@web3-react/core';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
-import { EIP1193 } from '@web3-react/eip1193';
-import { MetaMask } from '@web3-react/metamask';
 import { WalletConnect } from '@web3-react/walletconnect-v2';
 import { Network } from '@web3-react/network';
 import { GnosisSafe } from '@web3-react/gnosis-safe';
@@ -19,217 +17,207 @@ import config from 'config';
 import {
   RPC_HEADERS,
   RPC_URLS,
+  SelectedConnectionTypes,
   SupportedChainId,
 } from 'libs/web3/web3.constants';
 import { Connection } from 'libs/web3/web3.types';
-import { getInjectedProvider } from 'libs/web3/web3.utils';
-import { NoConnector } from 'libs/web3/noconnector';
+import { SafeEIP1193 } from './connectors/SafeEIP1193';
+import { injectedProviders } from 'libs/web3/web3.constants';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);
 };
 
-// ********************************** //
-// NETWORK CONNECTOR
-// ********************************** //
+// Takes a connector name and returns an initialized web3-react connector
+export function createConnection(
+  connector: SelectedConnectionTypes
+): Connection {
+  switch (connector) {
+    case 'network':
+      // ********************************** //
+      // NETWORK CONNECTOR
+      // ********************************** //
 
-const [web3Network, web3NetworkHooks] = initializeConnector<Network>(
-  (actions) =>
-    new Network({
-      actions,
-      urlMap: {
-        ...RPC_URLS,
-        [SupportedChainId.MAINNET]: new StaticJsonRpcProvider({
-          url: RPC_URLS[SupportedChainId.MAINNET],
-          headers: RPC_HEADERS[SupportedChainId.MAINNET],
-          skipFetchSetup: true,
-        }),
-      },
-      defaultChainId: SupportedChainId.MAINNET,
-    })
-);
-export const networkConnection: Connection = {
-  connector: web3Network,
-  hooks: web3NetworkHooks,
-  type: 'network',
-  name: 'Network',
-};
+      const [web3Network, web3NetworkHooks] = initializeConnector<Network>(
+        (actions) =>
+          new Network({
+            actions,
+            urlMap: {
+              ...RPC_URLS,
+              [SupportedChainId.MAINNET]: new StaticJsonRpcProvider({
+                url: RPC_URLS[SupportedChainId.MAINNET],
+                headers: RPC_HEADERS[SupportedChainId.MAINNET],
+                skipFetchSetup: true,
+              }),
+            },
+            defaultChainId: SupportedChainId.MAINNET,
+          })
+      );
+      return {
+        connector: web3Network,
+        hooks: web3NetworkHooks,
+        type: 'network',
+        name: 'Network',
+      };
+    case 'injected':
+      // ********************************** //
+      // METAMASK CONNECTOR
+      // ********************************** //
 
-// ********************************** //
-// INJECTED CONNECTOR
-// ********************************** //
+      const [web3MetaMask, web3MetaMaskHooks] =
+        initializeConnector<SafeEIP1193>(
+          (actions) =>
+            new SafeEIP1193({
+              actions,
+              injectedProvider: injectedProviders.metamask,
+              onError,
+            })
+        );
+      return {
+        connector: web3MetaMask,
+        hooks: web3MetaMaskHooks,
+        type: connector,
+        name: 'MetaMask',
+        logoUrl: iconMetaMask,
+      };
 
-const [web3Injected, web3InjectedHooks] = getInjectedProvider('ethereum')
-  ? initializeConnector<MetaMask>(
-      (actions) => new MetaMask({ actions, onError })
-    )
-  : initializeConnector<NoConnector>(
-      (actions) =>
-        new NoConnector({
-          actions,
-          name: 'Metamask',
-          url: 'https://metamask.io/',
-        })
-    );
-export const injectedConnection: Connection = {
-  connector: web3Injected,
-  hooks: web3InjectedHooks,
-  type: 'injected',
-  name: 'MetaMask',
-  logoUrl: iconMetaMask,
-};
+    case 'gnosisSafe':
+      // ********************************** //
+      // GNOSIS CONNECTOR
+      // ********************************** //
 
-// ********************************** //
-// GNOSIS CONNECTOR
-// ********************************** //
+      const [web3GnosisSafe, web3GnosisSafeHooks] =
+        initializeConnector<GnosisSafe>(
+          (actions) => new GnosisSafe({ actions })
+        );
+      return {
+        connector: web3GnosisSafe,
+        hooks: web3GnosisSafeHooks,
+        type: connector,
+        name: 'Gnosis Safe',
+        logoUrl: iconGnosis,
+      };
 
-const [web3GnosisSafe, web3GnosisSafeHooks] = initializeConnector<GnosisSafe>(
-  (actions) => new GnosisSafe({ actions })
-);
-export const gnosisSafeConnection: Connection = {
-  connector: web3GnosisSafe,
-  hooks: web3GnosisSafeHooks,
-  type: 'gnosisSafe',
-  name: 'Gnosis Safe',
-  logoUrl: iconGnosis,
-};
+    case 'walletConnect':
+      // ********************************** //
+      // WALLETCONNECT CONNECTOR
+      // ********************************** //
 
-// ********************************** //
-// WALLETCONNECT CONNECTOR
-// ********************************** //
+      const [web3WalletConnect, web3WalletConnectHooks] =
+        initializeConnector<WalletConnect>(
+          (actions) =>
+            new WalletConnect({
+              actions,
+              options: {
+                projectId: config.walletConnectProjectId,
+                rpc: RPC_URLS,
+                showQrModal: true,
+                chains: [SupportedChainId.MAINNET],
+                metadata: {
+                  name: 'Carbon',
+                  description:
+                    'Trade tokens or create automated onchain trading strategies',
+                  url: config.appUrl,
+                  icons: [`${config.appUrl}/logo512.png`],
+                },
+              },
+              onError,
+            })
+        );
+      return {
+        connector: web3WalletConnect,
+        hooks: web3WalletConnectHooks,
+        type: connector,
+        name: 'WalletConnect',
+        logoUrl: iconWalletConnect,
+      };
 
-const [web3WalletConnect, web3WalletConnectHooks] =
-  initializeConnector<WalletConnect>(
-    (actions) =>
-      new WalletConnect({
-        actions,
-        options: {
-          projectId: config.walletConnectProjectId,
-          rpc: RPC_URLS,
-          showQrModal: true,
-          chains: [SupportedChainId.MAINNET],
-          metadata: {
-            name: 'Carbon',
-            description:
-              'Trade tokens or create automated onchain trading strategies',
-            url: config.appUrl,
-            icons: [`${config.appUrl}/logo512.png`],
-          },
-        },
-        onError,
-      })
-  );
-export const walletConnectConnection: Connection = {
-  connector: web3WalletConnect,
-  hooks: web3WalletConnectHooks,
-  type: 'walletConnect',
-  name: 'WalletConnect',
-  logoUrl: iconWalletConnect,
-};
+    case 'coinbaseWallet':
+      // ********************************** //
+      // COINBASE WALLET CONNECTOR
+      // ********************************** //
 
-// ********************************** //
-// COINBASE WALLET CONNECTOR
-// ********************************** //
+      const [web3CoinbaseWallet, web3CoinbaseWalletHooks] =
+        initializeConnector<CoinbaseWallet>(
+          (actions) =>
+            new CoinbaseWallet({
+              actions,
+              options: {
+                url: RPC_URLS[SupportedChainId.MAINNET],
+                appName: 'Carbon',
+                appLogoUrl: carbonLogo,
+                reloadOnDisconnect: false,
+              },
+              onError,
+            })
+        );
+      return {
+        connector: web3CoinbaseWallet,
+        hooks: web3CoinbaseWalletHooks,
+        type: connector,
+        name: 'Coinbase Wallet',
+        logoUrl: iconCoinbase,
+      };
 
-const [web3CoinbaseWallet, web3CoinbaseWalletHooks] =
-  initializeConnector<CoinbaseWallet>(
-    (actions) =>
-      new CoinbaseWallet({
-        actions,
-        options: {
-          url: RPC_URLS[SupportedChainId.MAINNET],
-          appName: 'Carbon',
-          appLogoUrl: carbonLogo,
-          reloadOnDisconnect: false,
-        },
-        onError,
-      })
-  );
-export const coinbaseWalletConnection: Connection = {
-  connector: web3CoinbaseWallet,
-  hooks: web3CoinbaseWalletHooks,
-  type: 'coinbaseWallet',
-  name: 'Coinbase Wallet',
-  logoUrl: iconCoinbase,
-};
+    case 'tailwindWallet':
+      // ********************************** //
+      // Tailwind WALLET CONNECTOR
+      // ********************************** //
 
-// ********************************** //
-// Tailwind WALLET CONNECTOR
-// ********************************** //
+      const [web3TailwindWallet, web3TailwindWalletHooks] =
+        initializeConnector<TailwindConnector>(
+          (actions) => new TailwindConnector({ actions })
+        );
+      return {
+        connector: web3TailwindWallet,
+        hooks: web3TailwindWalletHooks,
+        type: connector,
+        name: 'Tailwind Wallet',
+        logoUrl: iconTailwindWallet,
+      };
 
-const [web3TailwindWallet, web3TailwindWalletHooks] =
-  initializeConnector<TailwindConnector>(
-    (actions) => new TailwindConnector({ actions })
-  );
+    case 'compassWallet':
+      // ********************************** //
+      // Compass WALLET CONNECTOR
+      // ********************************** //
 
-export const tailwindWalletConnection: Connection = {
-  connector: web3TailwindWallet,
-  hooks: web3TailwindWalletHooks,
-  type: 'tailwindWallet',
-  name: 'Tailwind Wallet',
-  logoUrl: iconTailwindWallet,
-};
+      const [web3CompassWallet, web3CompassWalletHooks] =
+        initializeConnector<SafeEIP1193>(
+          (actions) =>
+            new SafeEIP1193({
+              actions,
+              injectedProvider: injectedProviders.compassWallet,
+              onError,
+            })
+        );
+      return {
+        connector: web3CompassWallet,
+        hooks: web3CompassWalletHooks,
+        type: connector,
+        name: 'Compass Wallet',
+        logoUrl: iconCompassWallet,
+      };
 
-// ********************************** //
-// Compass WALLET CONNECTOR
-// ********************************** //
+    case 'seifWallet':
+      // ********************************** //
+      // Seif WALLET CONNECTOR
+      // ********************************** //
 
-export const [web3CompassWallet, web3CompassWalletHooks] = getInjectedProvider(
-  'compassEvm',
-  'isCompassWallet'
-)
-  ? initializeConnector<EIP1193>(
-      (actions) =>
-        new EIP1193({
-          actions,
-          provider: getInjectedProvider('compassEvm', 'isCompassWallet'),
-        })
-    )
-  : initializeConnector<NoConnector>(
-      (actions) =>
-        new NoConnector({
-          actions,
-          name: 'Compass Wallet',
-          url: 'https://compasswallet.io/',
-        })
-    );
-
-export const compassWalletConnection: Connection = {
-  connector: web3CompassWallet,
-  hooks: web3CompassWalletHooks,
-  type: 'compassWallet',
-  name: 'Compass Wallet',
-  logoUrl: iconCompassWallet,
-};
-
-// ********************************** //
-// Seif WALLET CONNECTOR
-// ********************************** //
-
-export const [web3SeifWallet, web3SeifWalletHooks] = getInjectedProvider(
-  '__seif',
-  '__seif'
-)
-  ? initializeConnector<EIP1193>(
-      (actions) =>
-        new EIP1193({
-          actions,
-          provider: getInjectedProvider('__seif', '__seif'),
-        })
-    )
-  : initializeConnector<NoConnector>(
-      (actions) =>
-        new NoConnector({
-          actions,
-          name: 'Seif Wallet',
-          url: 'https://seif.passkeywallet.com/',
-        })
-    );
-
-export const seifWalletConnection: Connection = {
-  connector: web3SeifWallet,
-  hooks: web3SeifWalletHooks,
-  type: 'seifWallet',
-  name: 'Seif Wallet',
-  logoUrl: iconSeifWallet,
-};
+      const [web3SeifWallet, web3SeifWalletHooks] =
+        initializeConnector<SafeEIP1193>(
+          (actions) =>
+            new SafeEIP1193({
+              actions,
+              injectedProvider: injectedProviders.seifWallet,
+              onError,
+            })
+        );
+      return {
+        connector: web3SeifWallet,
+        hooks: web3SeifWalletHooks,
+        type: connector,
+        name: 'Seif Wallet',
+        logoUrl: iconSeifWallet,
+      };
+  }
+}

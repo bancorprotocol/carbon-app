@@ -61,6 +61,16 @@ export type SelectedConnectionTypes =
   | 'network'
   | (typeof selectedConnectionTypes)[number];
 
+export const injectedProviders = {
+  metamask: { name: 'MetaMask', namespace: 'ethereum', flag: 'isMetaMask' },
+  compassWallet: {
+    name: 'Compass Wallet',
+    namespace: 'compassEvm',
+    flag: 'isCompassEvm',
+  },
+  seifWallet: { name: 'Seif Wallet', namespace: '__seif', flag: '__seif' },
+} as const;
+
 export const RPC_URLS: ChainIdMapTo<string> = {
   [SupportedChainId.MAINNET]: CHAIN_RPC_URL,
 };

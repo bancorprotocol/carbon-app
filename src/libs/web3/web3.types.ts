@@ -6,7 +6,11 @@ import {
   StaticJsonRpcProvider,
   Web3Provider,
 } from '@ethersproject/providers';
-import { ConnectionType, SupportedChainId } from 'libs/web3/web3.constants';
+import {
+  ConnectionType,
+  SupportedChainId,
+  injectedProviders,
+} from 'libs/web3/web3.constants';
 
 export interface Connection {
   connector: Connector;
@@ -42,3 +46,6 @@ export interface CarbonWeb3ProviderContext {
   isUncheckedSigner: boolean;
   setIsUncheckedSigner: (value: boolean) => void;
 }
+
+export type InjectedProvider =
+  (typeof injectedProviders)[keyof typeof injectedProviders];

@@ -1,14 +1,9 @@
-import { ConnectionType } from 'libs/web3/web3.constants';
 import {
-  coinbaseWalletConnection,
-  gnosisSafeConnection,
-  injectedConnection,
-  networkConnection,
-  walletConnectConnection,
-  tailwindWalletConnection,
-  compassWalletConnection,
-  seifWalletConnection,
-} from 'libs/web3/web3.connectors';
+  ConnectionType,
+  SelectedConnectionTypes,
+  selectedConnectionTypes,
+} from 'libs/web3/web3.constants';
+import { createConnection } from 'libs/web3/web3.connectors';
 import { lsService } from 'services/localeStorage';
 import { UAParser } from 'ua-parser-js';
 import { Connection } from './web3.types';
@@ -19,30 +14,8 @@ const { type } = parser.getDevice();
 
 export const isMobile = type === 'mobile' || type === 'tablet';
 
-/**
- * Get the injected wallet provider in window
- * Returns window.ethereum if window.ethereum exists, window.ethereum[flag], is true and window.ethereum is not metamask
- * Otherwise, returns window[walletObject]
- *
- * @param flag name of the flag in window.ethereum to check. If undefined, will not check this flag and default to walletObject
- * @param walletObject name of the object in window that the injected provider will populate
- * @returns Injected provider in wallet or undefined if not present
- */
-export function getInjectedProvider(walletObject: string, flag?: string) {
-  if (typeof window === 'undefined') return;
-  if (window.ethereum && flag && (window as any).ethereum[flag]) {
-    return window.ethereum;
-  }
-
-  if ((window as any)[walletObject]) {
-    return (window as any)[walletObject];
-  }
-
-  return;
-}
-
 // Interface to add new chain to injected wallets as per EIP-3085 (https://github.com/ethereum/EIPs/blob/master/EIPS/eip-3085.md)
-export interface AddChainParameter {
+interface AddChainParameter {
   chainId: number; // EIP-3085 specifies hex string but web3-react expects number
   chainName: string;
   nativeCurrency: {
@@ -69,24 +42,30 @@ export const getChainInfo = (): AddChainParameter => {
   };
 };
 
-const connections: Record<ConnectionType, Connection> = {
-  injected: injectedConnection,
-  coinbaseWallet: coinbaseWalletConnection,
-  walletConnect: walletConnectConnection,
-  gnosisSafe: gnosisSafeConnection,
-  network: networkConnection,
-  tailwindWallet: tailwindWalletConnection,
-  compassWallet: compassWalletConnection,
-  seifWallet: seifWalletConnection,
-};
+type Connections = Record<ConnectionType, Connection>;
 
-export const getConnection = (c: ConnectionType) => connections[c];
+const networkConnection = createConnection('network');
+
+const getConnections: [ConnectionType, Connection][] = [
+  ...selectedConnectionTypes.map(
+    (c) => [c, createConnection(c)] as [ConnectionType, Connection]
+  ),
+  ['network', networkConnection],
+];
+
+const connections: Connections = Object.fromEntries(
+  getConnections
+) as Connections;
+
+export const getConnection = (c: SelectedConnectionTypes) => connections[c];
 
 export const attemptToConnectWallet = async (
-  t: ConnectionType,
+  t: SelectedConnectionTypes,
   activate?: boolean
 ): Promise<{ success: boolean }> => {
-  const { connector: c, name } = getConnection(t);
+  const connection = getConnection(t);
+  if (!connection) return { success: false };
+  const { connector: c, name } = connection;
   try {
     if (activate) {
       await c.activate();
