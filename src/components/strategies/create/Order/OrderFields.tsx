@@ -18,7 +18,7 @@ interface Props {
   order: OrderBlock;
   buy?: boolean;
   optionalBudget?: boolean;
-  strategyType?: StrategyType;
+  type: StrategyType;
   setOrder: (order: Partial<OrderBlock>) => void;
   settings?: ReactNode;
   warnings?: (string | undefined)[];
@@ -30,7 +30,7 @@ export const OrderFields: FC<Props> = ({
   quote,
   order,
   optionalBudget,
-  strategyType,
+  type,
   setOrder,
   buy = false,
   settings,
@@ -124,7 +124,7 @@ export const OrderFields: FC<Props> = ({
         buy={buy}
         quote={quote}
         base={base}
-        strategyType={strategyType}
+        strategyType={type}
         order={order}
         setBudget={setBudget}
         optional={!!optionalBudget}

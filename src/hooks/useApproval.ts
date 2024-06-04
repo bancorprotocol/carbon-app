@@ -1,12 +1,10 @@
 import {
   GetUserApprovalProps,
-  getApproval,
   useGetUserApproval,
 } from 'libs/queries/chain/approval';
 import { useMemo } from 'react';
 import { sanitizeNumber } from 'utils/helpers';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
-import { Provider } from '@ethersproject/providers';
 
 export type ApprovalToken = GetUserApprovalProps & {
   amount: string;
@@ -17,30 +15,6 @@ export type ApprovalTokenResult = ApprovalToken & {
   approvalRequired: boolean;
   nullApprovalRequired: boolean;
   isNullApprovalToken: boolean;
-};
-
-export const checkApproval = (
-  user: string,
-  provider: Provider,
-  data: ApprovalToken[]
-) => {
-  const promises = data.map(async (token) => {
-    const allowance = await getApproval(token, user, provider);
-    const amount = sanitizeNumber(token.amount, token.decimals);
-    const isNullApprovalToken = NULL_APPROVAL_CONTRACTS.includes(
-      token.address.toLowerCase()
-    );
-    if (!allowance) return;
-    return {
-      ...token,
-      allowance: allowance.toString(),
-      approvalRequired: allowance.lt(amount),
-      isNullApprovalToken,
-      nullApprovalRequired:
-        isNullApprovalToken && allowance.gt(0) && allowance.lt(amount),
-    };
-  });
-  return Promise.all(promises);
 };
 
 export const useApproval = (data: ApprovalToken[]) => {

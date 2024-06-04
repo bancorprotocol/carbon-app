@@ -68,7 +68,6 @@ export const InputRange: FC<InputRangeProps> = ({
     max: marketPricePercent(max, marketPrice),
   };
 
-  // Handle errors
   useEffect(() => {
     if (!min || !max) return;
     if (displayError) {

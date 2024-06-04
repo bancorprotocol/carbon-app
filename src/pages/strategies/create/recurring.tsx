@@ -129,20 +129,22 @@ export const CreateRecurringStrategyPage = () => {
         order1={sellOrder}
       >
         <OrderFields
+          type="recurring"
           base={base!}
           quote={quote!}
           order={sellOrder}
           setOrder={setSellOrder}
-          optionalBudget={+buyOrder.budget > 0}
+          optionalBudget={+buyOrder.budget > 0 && !sellOrder.budget}
           error={getError(search)}
           warnings={[sellOutsideMarket, getWarning(search)]}
         />
         <OrderFields
+          type="recurring"
           base={base!}
           quote={quote!}
           order={buyOrder}
           setOrder={setBuyOrder}
-          optionalBudget={+sellOrder.budget > 0}
+          optionalBudget={+sellOrder.budget > 0 && !buyOrder.budget}
           error={getError(search)}
           warnings={[buyOutSideMarket, getWarning(search)]}
           buy

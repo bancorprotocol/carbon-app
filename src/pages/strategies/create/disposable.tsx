@@ -8,7 +8,7 @@ import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
-import { OrderBlock } from 'components/strategies/create/types';
+import { BaseOrder, OrderBlock } from 'components/strategies/create/types';
 import { outSideMarketWarning } from 'components/strategies/create/Order/utils';
 
 export interface CreateDisposableStrategySearch {
@@ -21,12 +21,11 @@ export interface CreateDisposableStrategySearch {
   budget?: string;
 }
 
-const emptyOrder = (): OrderBlock => ({
+const emptyOrder = (): BaseOrder => ({
   min: '0',
   max: '0',
   budget: '0',
   marginalPrice: '',
-  settings: 'limit' as const,
 });
 
 export const CreateDisposableStrategyPage = () => {
@@ -90,6 +89,7 @@ export const CreateDisposableStrategyPage = () => {
         order1={buy ? emptyOrder() : order}
       >
         <OrderFields
+          type="disposable"
           base={base!}
           quote={quote!}
           buy={buy}
