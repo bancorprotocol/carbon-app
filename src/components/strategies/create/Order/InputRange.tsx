@@ -62,8 +62,7 @@ export const InputRange: FC<InputRangeProps> = ({
     ? 'Notice: price & slippage are unknown'
     : '';
   const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
-  const showWarning = !displayError && displayWarnings.length;
-
+  const showWarning = !displayError && !!displayWarnings.length;
   const marketPricePercentages = {
     min: marketPricePercent(min, marketPrice),
     max: marketPricePercent(max, marketPrice),
@@ -220,7 +219,7 @@ export const InputRange: FC<InputRangeProps> = ({
           )}
         </div>
       </div>
-      {displayError && (
+      {!!displayError && (
         <WarningMessageWithIcon
           isError
           message={displayError}

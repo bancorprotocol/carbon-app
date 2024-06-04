@@ -5,10 +5,9 @@ import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { OrderFields } from 'components/strategies/create/Order/OrderFields';
 import { OrderBlock } from 'components/strategies/create/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { SafeDecimal } from 'libs/safedecimal';
-import { isNil } from 'lodash';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
+import { outSideMarketWarning } from 'components/strategies/create/Order/utils';
 
 export interface CreateRecurringStrategySearch {
   base: string;
@@ -105,18 +104,20 @@ export const CreateRecurringStrategyPage = () => {
   );
 
   // Warnings
-  const sellOutsideMarket = (() => {
-    if (!marketPrice || isNil(search.sellMin)) return;
-    if (new SafeDecimal(search.sellMin).lt(marketPrice)) {
-      return `Notice: you offer to sell ${base?.symbol} below current market price`;
-    }
-  })();
-  const buyOutSideMarket = (() => {
-    if (!marketPrice || isNil(search.buyMax)) return;
-    if (new SafeDecimal(search.buyMax).gt(marketPrice)) {
-      return `Notice: you offer to buy ${base?.symbol} above current market price`;
-    }
-  })();
+  const sellOutsideMarket = outSideMarketWarning({
+    base,
+    marketPrice,
+    min: search.sellMin,
+    max: search.sellMax,
+    buy: false,
+  });
+  const buyOutSideMarket = outSideMarketWarning({
+    base,
+    marketPrice,
+    min: search.buyMin,
+    max: search.buyMax,
+    buy: true,
+  });
 
   return (
     <CreateLayout base={base} quote={quote}>

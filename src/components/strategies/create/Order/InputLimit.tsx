@@ -9,7 +9,6 @@ import { marketPricePercent } from 'components/strategies/marketPriceIndication/
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { isZero } from './utils';
-import { SafeDecimal } from 'libs/safedecimal';
 
 type InputLimitProps = {
   id?: string;
@@ -46,22 +45,8 @@ export const InputLimit: FC<InputLimitProps> = ({
   const noMarketPrice = !marketPrice
     ? 'Notice: price & slippage are unknown'
     : '';
-  const outSideMarket = (() => {
-    if (!marketPrice) return '';
-    if (buy) {
-      if (new SafeDecimal(price).gt(marketPrice)) {
-        return `Notice: you offer to buy ${base.symbol} above current market price`;
-      }
-    } else {
-      if (new SafeDecimal(price).lt(marketPrice)) {
-        return `Notice: you offer to sell ${base.symbol} below current market price`;
-      }
-    }
-  })();
-  const displayWarnings = [...warnings, noMarketPrice, outSideMarket].filter(
-    (v) => !!v
-  );
-  const showWarning = !displayError && displayWarnings?.length;
+  const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
+  const showWarning = !displayError && !!displayWarnings?.length;
 
   const changePrice = (e: ChangeEvent<HTMLInputElement>) => {
     setPrice(sanitizeNumber(e.target.value));
@@ -126,7 +111,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             <span className="text-12 break-all text-white/60">
               {fiatAsString}
             </span>
-            {marketPercent && (
+            {!!marketPercent && (
               <MarketPriceIndication
                 marketPricePercentage={marketPercent}
                 buy={buy}
@@ -135,7 +120,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           </p>
         )}
       </div>
-      {displayError && (
+      {!!displayError && (
         <WarningMessageWithIcon
           isError
           message={displayError}

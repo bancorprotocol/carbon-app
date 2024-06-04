@@ -5,12 +5,11 @@ import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { OrderFields } from 'components/strategies/create/Order/OrderFields';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { SafeDecimal } from 'libs/safedecimal';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { OrderBlock } from 'components/strategies/create/types';
+import { outSideMarketWarning } from 'components/strategies/create/Order/utils';
 
 export interface CreateDisposableStrategySearch {
   base: string;
@@ -73,18 +72,13 @@ export const CreateDisposableStrategyPage = () => {
   );
 
   // Warnings
-  const outSideMarket = (() => {
-    if (!marketPrice || !search.min || !+formatNumber(search.min)) return;
-    if (buy) {
-      if (new SafeDecimal(search.min).gt(marketPrice)) {
-        return `Notice: you offer to buy ${base?.symbol} above current market price`;
-      }
-    } else {
-      if (new SafeDecimal(search.min).lt(marketPrice)) {
-        return `Notice: you offer to sell ${base?.symbol} below current market price`;
-      }
-    }
-  })();
+  const outSideMarket = outSideMarketWarning({
+    base,
+    marketPrice,
+    min: search.min,
+    max: search.max,
+    buy: search.direction !== 'sell',
+  });
 
   return (
     <CreateLayout base={base} quote={quote}>
