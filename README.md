@@ -161,6 +161,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `walletConnectProjectId`: The WalletConnect project ID If you wish to add walletConnect, make sure to add it to `selectableConnectionTypes` as well.
 - `selectableConnectionTypes`: List of available connection types to be used in the wallet selection modal.
 - `isSimulatorEnabled`: Flag to enable the simulation page.
+- `maxBlockAgeForCache`: When the app loads and the cached chain data is of a block older than this value (compared to current block), the SDK won't make attempt to get up to date by means of reading logs and instead will fetch all the strategies from the CarbonDefi contracts.
 - `network`
   - `name`: Network name.
   - `logoUrl`: Network logo URL.

@@ -10,6 +10,7 @@ export interface AppConfig {
   isSimulatorEnabled: boolean;
   sentryDSN?: string;
   policiesLastUpdated?: string;
+  maxBlockAgeForCache?: number;
   network: {
     name: string;
     logoUrl: string;
