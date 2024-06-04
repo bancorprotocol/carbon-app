@@ -8,7 +8,7 @@ import { MarketPriceIndication } from 'components/strategies/marketPriceIndicati
 import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { isZero } from './utils';
+import { isTouchedZero } from './utils';
 
 type InputLimitProps = {
   id?: string;
@@ -38,7 +38,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   const fiatAsString = getFiatAsString(price);
 
   // Errors
-  const priceError = isZero(price) && 'Price must be greater than 0';
+  const priceError = isTouchedZero(price) && 'Price must be greater than 0';
   const displayError = priceError || error;
 
   // Warnings

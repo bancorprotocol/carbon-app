@@ -7,7 +7,7 @@ import { CreateOverlapping } from 'components/strategies/create/CreateOverlappin
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
-import { isNil } from 'components/strategies/create/Order/utils';
+import { isZero } from 'components/strategies/create/Order/utils';
 import {
   isMaxBelowMarket,
   isMinAboveMarket,
@@ -87,7 +87,7 @@ const getOrders = (
       budget: '',
     },
   };
-  if (!anchor || isNil(budget)) return orders;
+  if (!anchor || isZero(budget)) return orders;
   if (anchor === 'buy') {
     if (isMinAboveMarket(orders.buy)) return orders;
     orders.buy.budget = budget;
@@ -165,7 +165,7 @@ export const CreateOverlappingStrategyPage = () => {
         order0={orders.buy}
         order1={orders.sell}
         approvalText={
-          isNil(search.budget)
+          isZero(search.budget)
             ? "I've reviewed the warning(s) but choose to proceed."
             : "I've approved the token deposit(s) and distribution."
         }

@@ -1,11 +1,15 @@
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { formatNumber } from 'utils/helpers';
-export const isNil = (value?: string): value is '' | '0' | '.' | undefined => {
+
+/** Check if a string value is zero-like value, null or undefined */
+export const isZero = (value?: string): value is '' | '0' | '.' | undefined => {
   if (!value) return true;
-  return isZero(value);
+  return !+formatNumber(value);
 };
-export const isZero = (value: string): value is '0' | '.' => {
+
+/** Check if a string value is zero-like value, but not empty string */
+export const isTouchedZero = (value: string): value is '0' | '.' => {
   if (!value) return false;
   return !+formatNumber(value);
 };
@@ -21,14 +25,14 @@ export const outSideMarketWarning = (params: OutsideMarketParams) => {
   const { base, min, max, marketPrice, buy } = params;
   if (!marketPrice) return;
   if (buy) {
-    const price = isNil(max) ? min : max;
-    if (isNil(price)) return;
+    const price = isZero(max) ? min : max;
+    if (isZero(price)) return;
     if (new SafeDecimal(price).gt(marketPrice)) {
       return `Notice: you offer to buy ${base?.symbol} above current market price`;
     }
   } else {
-    const price = isNil(min) ? max : min;
-    if (isNil(price)) return;
+    const price = isZero(min) ? max : min;
+    if (isZero(price)) return;
     if (new SafeDecimal(price).lt(marketPrice)) {
       return `Notice: you offer to sell ${base?.symbol} below current market price`;
     }
