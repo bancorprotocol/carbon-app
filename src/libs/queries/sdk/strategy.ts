@@ -286,11 +286,11 @@ export const useCreateStrategyQuery = () => {
         order0.min,
         order0.marginalPrice || order0.max,
         order0.max,
-        order0.budget ?? '0',
+        order0.budget || '0',
         order1.min,
         order1.marginalPrice || order1.min,
         order1.max,
-        order1.budget ?? '0'
+        order1.budget || '0'
       );
 
       return signer!.sendTransaction(unsignedTx);

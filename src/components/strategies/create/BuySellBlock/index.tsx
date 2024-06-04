@@ -141,6 +141,7 @@ export const BuySellBlock: FC<Props> = ({
       <LimitRangeSection {...limitRangeProps} />
       <BudgetSection {...budgetProps} />
       <FullOutcome
+        price={order.price}
         min={order.min}
         max={order.max}
         budget={order.budget}
