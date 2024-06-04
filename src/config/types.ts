@@ -1,11 +1,11 @@
 import { TokenList } from 'libs/tokens';
-import { selectableConnectionType } from 'libs/web3/web3.constants';
+import { SelectableConnectionType } from 'libs/wagmi/web3.constants';
 
 export interface AppConfig {
   mode: 'development' | 'production';
   appUrl: string;
   carbonApi: string;
-  selectedConnectionTypes: selectableConnectionType[];
+  selectedConnectionTypes: SelectableConnectionType[];
   walletConnectProjectId: string;
   isSimulatorEnabled: boolean;
   sentryDSN?: string;
@@ -16,7 +16,7 @@ export interface AppConfig {
     chainId: number;
     rpc: {
       url: string;
-      headers?: { [key: string]: string | number };
+      headers?: Record<string, string>;
     };
     blockExplorer: { name: string; url: string };
     gasToken: {
