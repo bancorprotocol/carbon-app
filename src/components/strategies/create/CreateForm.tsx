@@ -13,16 +13,17 @@ import { items } from './variants';
 import { useWeb3 } from 'libs/web3';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { BaseOrder } from 'components/strategies/create/types';
+import { StrategyType } from 'libs/routing';
 import style from 'components/strategies/common/form.module.css';
 
-const title = {
+const title: Record<StrategyType, string> = {
   disposable: 'Disposable',
   recurring: 'Recurring',
   overlapping: 'Overlapping',
 };
 
 interface HeaderProps {
-  type: keyof typeof title;
+  type: StrategyType;
   base: Token;
   quote: Token;
 }
@@ -56,7 +57,7 @@ export const CreateFormHeader = (props: HeaderProps) => {
 };
 
 interface FormProps {
-  type: keyof typeof title;
+  type: StrategyType;
   base: Token;
   quote: Token;
   order0: BaseOrder;

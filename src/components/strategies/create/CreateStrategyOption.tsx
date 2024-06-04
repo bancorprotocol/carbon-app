@@ -3,9 +3,9 @@ import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
 import { items as itemsVariant } from 'components/strategies/create/variants';
 import {
-  StrategyTypeId,
-  strategyTypeItems,
-} from 'components/strategies/create/strategyTypeItems';
+  StrategyOption,
+  strategyOptionItems,
+} from 'components/strategies/create/strategyOptionItems';
 import { ReactComponent as IconStar } from 'assets/icons/star-fill.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
@@ -20,18 +20,18 @@ interface Props {
   quote: Token;
 }
 
-export const CreateStrategyTypeMenu: FC<Props> = ({ base, quote }) => {
+export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
   const navigate = useNavigate({ from: '/strategies/create' });
-  const { strategyTypeId } = useSearch({
+  const { strategyOption } = useSearch({
     from: '/strategies/create',
   });
   const list = useRef<HTMLUListElement>(null);
-  const items = strategyTypeItems(base.address, quote.address);
+  const items = strategyOptionItems(base.address, quote.address);
   const { aboveBreakpoint } = useBreakpoints();
 
   const selectedItem = (() => {
-    if (!strategyTypeId) return items[0];
-    const item = items.find(({ id }) => id === strategyTypeId);
+    if (!strategyOption) return items[0];
+    const item = items.find(({ id }) => id === strategyOption);
     return item ?? items[0];
   })();
   const selectedId = selectedItem.id;
@@ -51,10 +51,10 @@ export const CreateStrategyTypeMenu: FC<Props> = ({ base, quote }) => {
     }
   };
 
-  const setItem = (strategyTypeId: StrategyTypeId) => {
+  const setItem = (strategyOption: StrategyOption) => {
     document.querySelectorAll('details').forEach((d) => (d.open = false));
     navigate({
-      search: (s) => ({ ...s, strategyTypeId }),
+      search: (s) => ({ ...s, strategyOption }),
       replace: true,
       resetScroll: false,
     });
@@ -182,7 +182,7 @@ export const CreateStrategyTypeMenu: FC<Props> = ({ base, quote }) => {
           carbonEvents.strategy.newStrategyNextStepClick({
             base,
             quote,
-            strategyTypeId: selectedItem.id,
+            strategyOption: selectedItem.id,
           });
         }}
       >

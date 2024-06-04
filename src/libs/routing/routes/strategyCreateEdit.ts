@@ -12,7 +12,7 @@ import {
   CreateDisposableStrategyPage,
   CreateDisposableStrategySearch,
 } from 'pages/strategies/create/disposable';
-import { StrategyTypeId } from 'components/strategies/create/strategyTypeItems';
+import { StrategyOption } from 'components/strategies/create/strategyOptionItems';
 import {
   CreateRecurringStrategyPage,
   CreateRecurringStrategySearch,
@@ -29,7 +29,7 @@ export type StrategySettings = 'limit' | 'range';
 export interface CreateSelectToken {
   base?: string;
   quote?: string;
-  strategyTypeId?: StrategyTypeId;
+  strategyOption?: StrategyOption;
 }
 
 export const createStrategyPage = new Route({
@@ -39,7 +39,7 @@ export const createStrategyPage = new Route({
   validateSearch: validateSearchParams<CreateSelectToken>({
     base: validAddress,
     quote: validAddress,
-    strategyTypeId: validLiteral([
+    strategyOption: validLiteral([
       'buy-limit',
       'range-order',
       'two-ranges',

@@ -5,13 +5,13 @@ import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
 import { Pathnames } from 'libs/routing';
 
-export type StrategyTypeId =
+export type StrategyOption =
   | 'buy-limit'
   | 'range-order'
   | 'two-ranges'
   | 'overlapping';
-export interface StrategyTypeItem {
-  id: StrategyTypeId;
+interface StrategyOptionItem {
+  id: StrategyOption;
   label: string;
   description: string;
   benefits: { summary: string; details: string }[];
@@ -21,10 +21,10 @@ export interface StrategyTypeItem {
   svg: ReactNode;
 }
 
-export const strategyTypeItems = (
+export const strategyOptionItems = (
   base: string,
   quote: string
-): StrategyTypeItem[] => [
+): StrategyOptionItem[] => [
   {
     label: 'Limit Order',
     description: 'A single disposable buy or sell order at a specific price',

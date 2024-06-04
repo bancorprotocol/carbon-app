@@ -16,10 +16,11 @@ import {
   StrategySellEventType,
 } from './types';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { StrategyTypeId } from 'components/strategies/create/strategyTypeItems';
+import { StrategyOption } from 'components/strategies/create/strategyOptionItems';
 import { CreateRecurringStrategySearch } from 'pages/strategies/create/recurring';
 import { CreateDisposableStrategySearch } from 'pages/strategies/create/disposable';
 import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
+import { StrategyType } from 'libs/routing';
 
 export interface EventStrategySchema extends EventCategory {
   strategyErrorShow: {
@@ -133,11 +134,11 @@ export interface EventStrategySchema extends EventCategory {
     };
   };
   newStrategyNextStepClick: {
-    input: { base: Token; quote: Token; strategyTypeId: StrategyTypeId };
+    input: { base: Token; quote: Token; strategyOption: StrategyOption };
     gtmData: {
       strategy_base_token: string;
       strategy_quote_token: string;
-      strategy_type: StrategyTypeId;
+      strategy_option: StrategyOption;
       token_pair: string;
     };
   };
@@ -147,7 +148,6 @@ export interface EventStrategySchema extends EventCategory {
   };
 }
 
-type StrategyType = 'disposable' | 'recurring' | 'overlapping';
 type CreateStrategySearch =
   | CreateDisposableStrategySearch
   | CreateRecurringStrategySearch
@@ -278,13 +278,13 @@ export const strategyEvents: CarbonEvents['strategy'] = {
           strategy.sellMarketPricePercentage.max.toString(),
       });
   },
-  newStrategyNextStepClick: ({ base, quote, strategyTypeId }) => {
+  newStrategyNextStepClick: ({ base, quote, strategyOption }) => {
     base &&
       quote &&
       sendGTMEvent('strategy', 'newStrategyNextStepClick', {
         strategy_base_token: base.symbol || '',
         strategy_quote_token: quote.symbol || '',
-        strategy_type: strategyTypeId,
+        strategy_option: strategyOption,
         token_pair: `${base.symbol}/${quote.symbol}`,
       });
   },
