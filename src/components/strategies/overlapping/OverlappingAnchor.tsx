@@ -3,8 +3,10 @@ import { cn } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-import style from './OverlappingBudget.module.css';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { m } from 'libs/motion';
+import style from './OverlappingBudget.module.css';
+import { items } from '../common/variants';
 
 interface Props {
   base: Token;
@@ -18,7 +20,10 @@ interface Props {
 export const OverlappingAnchor: FC<Props> = (props) => {
   const { base, quote, anchor, setAnchor, anchorError } = props;
   return (
-    <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+    <m.article
+      variants={items}
+      className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+    >
       <header className="flex items-center justify-between">
         <h2 className="text-18">Budget</h2>
         <Tooltip
@@ -80,6 +85,6 @@ export const OverlappingAnchor: FC<Props> = (props) => {
           data-testid="require-anchor"
         />
       )}
-    </article>
+    </m.article>
   );
 };

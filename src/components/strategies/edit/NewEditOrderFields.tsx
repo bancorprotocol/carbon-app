@@ -1,42 +1,40 @@
 import { FC, ReactNode, useId } from 'react';
-import { Token } from 'libs/tokens';
 import { m } from 'libs/motion';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { StrategyType } from 'libs/routing';
 import { LogoImager } from 'components/common/imager/Imager';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/create/Order/Header';
 import { items } from 'components/strategies/common/variants';
-import { InputBudget } from './InputBudget';
-import { InputRange } from './InputRange';
-import { InputLimit } from './InputLimit';
+import { InputRange } from 'components/strategies/create/Order/InputRange';
+import { InputLimit } from 'components/strategies/create/Order/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
+import { EditStrategyAllocatedBudget } from './NewEditStrategyAllocatedBudget';
+import { EditTypes } from 'libs/routing/routes/strategyEdit';
+import { useEditStrategyCtx } from './EditStrategyContext';
 
 interface Props {
-  base: Token;
-  quote: Token;
   order: OrderBlock;
   buy?: boolean;
-  optionalBudget?: boolean;
-  type: StrategyType;
+  type: EditTypes;
+  initialBudget: string;
   setOrder: (order: Partial<OrderBlock>) => void;
   settings?: ReactNode;
   warnings?: (string | undefined)[];
   error?: string;
 }
 
-export const OrderFields: FC<Props> = ({
-  base,
-  quote,
+export const EditStrategyOrderField: FC<Props> = ({
   order,
-  optionalBudget,
   type,
+  initialBudget,
   setOrder,
   buy = false,
   settings,
   error,
   warnings,
 }) => {
+  const { strategy } = useEditStrategyCtx();
+  const { base, quote } = strategy;
   const titleId = useId();
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
@@ -67,7 +65,8 @@ export const OrderFields: FC<Props> = ({
   const setPrice = (price: string) => setOrder({ min: price, max: price });
   const setMin = (min: string) => setOrder({ min });
   const setMax = (max: string) => setOrder({ max });
-  const setBudget = (budget: string) => setOrder({ budget });
+  const setMarginalPrice = (marginalPrice: string) =>
+    setOrder({ marginalPrice });
 
   const headerProps = { titleId, order, base, buy, setOrder };
 
@@ -120,14 +119,14 @@ export const OrderFields: FC<Props> = ({
           />
         )}
       </fieldset>
-      <InputBudget
-        buy={buy}
-        quote={quote}
+      <EditStrategyAllocatedBudget
+        type={type}
         base={base}
-        strategyType={type}
+        quote={quote}
         order={order}
-        setBudget={setBudget}
-        optional={!!optionalBudget}
+        initialBudget={initialBudget}
+        setMarginalPrice={setMarginalPrice}
+        buy={buy}
       />
       <FullOutcome
         min={order.min}

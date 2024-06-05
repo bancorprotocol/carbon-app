@@ -15,6 +15,3 @@
   display: none;
 }
 
-.form > header, .form > article, .form > button {
-  @apply animate-slideUp;
-}

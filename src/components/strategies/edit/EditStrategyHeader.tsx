@@ -3,6 +3,8 @@ import { useRouter, EditTypes } from 'libs/routing';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { cn } from 'utils/helpers';
+import { m } from 'libs/motion';
+import { items } from 'components/strategies/common/variants';
 
 type EditStrategyHeaderProps = {
   showGraph: boolean;
@@ -24,7 +26,8 @@ export const EditStrategyHeader = ({
   };
 
   return (
-    <header
+    <m.header
+      variants={items}
       className={cn(
         'flex w-full items-center gap-16',
         showGraph ? '' : 'md:w-[400px]'
@@ -50,6 +53,6 @@ export const EditStrategyHeader = ({
           <IconCandles className="size-18" />
         </button>
       )}
-    </header>
+    </m.header>
   );
 };

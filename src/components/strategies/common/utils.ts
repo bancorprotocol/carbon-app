@@ -1,6 +1,22 @@
+import { Order } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { formatNumber } from 'utils/helpers';
+import { BaseOrder } from './types';
+
+export const emptyOrder = (): BaseOrder => ({
+  min: '0',
+  max: '0',
+  budget: '0',
+  marginalPrice: '',
+});
+
+export const isEmptyOrder = (order: Order) => {
+  return !Number(order.startRate) && !Number(order.endRate);
+};
+export const isLimitOrder = (order: Order) => {
+  return order.startRate === order.endRate;
+};
 
 /** Check if a string value is zero-like value, null or undefined */
 export const isZero = (value?: string): value is '' | '0' | '.' | undefined => {

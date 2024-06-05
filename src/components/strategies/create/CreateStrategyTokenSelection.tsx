@@ -4,7 +4,7 @@ import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
-import { items } from './variants';
+import { items } from 'components/strategies/common/variants';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';

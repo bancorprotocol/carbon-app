@@ -9,7 +9,7 @@ interface Props {
   setShowGraph: (value: boolean) => void;
   children: ReactNode;
 }
-export const CreateStrategyGraph: FC<Props> = ({ setShowGraph, children }) => {
+export const StrategyGraph: FC<Props> = ({ setShowGraph, children }) => {
   return (
     <m.article
       variants={items}

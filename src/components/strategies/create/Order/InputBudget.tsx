@@ -6,7 +6,7 @@ import { TokenInputField } from 'components/common/TokenInputField/TokenInputFie
 import { SafeDecimal } from 'libs/safedecimal';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useGetTokenBalance } from 'libs/queries';
-import { BaseOrder } from 'components/strategies/create/types';
+import { BaseOrder } from 'components/strategies/common/types';
 
 interface Props {
   base: Token;

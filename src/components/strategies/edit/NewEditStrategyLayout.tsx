@@ -1,31 +1,35 @@
 import { FC, ReactNode, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { m } from 'libs/motion';
-import { Token } from 'libs/tokens';
 import { useRouter } from '@tanstack/react-router';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import { carbonEvents } from 'services/events';
+import { useEditStrategyCtx } from './EditStrategyContext';
+import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { StrategyGraph } from 'components/strategies/common/StrategyGraph';
 import { items, list } from 'components/strategies/common/variants';
 
 interface Props {
-  base?: Token;
-  quote?: Token;
+  type: EditTypes;
   graph?: ReactNode;
   children: ReactNode;
 }
 
-export const CreateLayout: FC<Props> = (props) => {
-  const { base, quote, children } = props;
+const titleByType: Record<EditTypes, string> = {
+  renew: 'Renew Strategy',
+  editPrices: 'Edit Prices',
+  deposit: 'Deposit Budgets',
+  withdraw: 'Withdraw Budgets',
+};
+
+export const EditStrategyLayout: FC<Props> = (props) => {
+  const { type, children } = props;
+  const { strategy } = useEditStrategyCtx();
+  const { base, quote } = strategy;
   const [showGraph, setShowGraph] = useState(true);
   const { history } = useRouter();
-
-  if (!base || !quote) {
-    return <CarbonLogoLoading className="h-[100px] place-self-center" />;
-  }
 
   const graph = props.graph ?? <TradingviewChart base={base} quote={quote} />;
 
@@ -50,7 +54,9 @@ export const CreateLayout: FC<Props> = (props) => {
           >
             <ForwardArrow className="size-18 rotate-180" />
           </button>
-          <h1 className="text-24 font-weight-500 flex-1">Set Prices</h1>
+          <h1 className="text-24 font-weight-500 flex-1">
+            {titleByType[type]}
+          </h1>
           {!showGraph && (
             <button
               onClick={() => {

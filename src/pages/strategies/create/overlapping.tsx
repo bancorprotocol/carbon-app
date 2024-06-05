@@ -1,5 +1,5 @@
 import { m } from 'libs/motion';
-import { items } from 'components/strategies/create/variants';
+import { items } from 'components/strategies/common/variants';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { isValidRange } from 'components/strategies/utils';
@@ -7,7 +7,7 @@ import { CreateOverlapping } from 'components/strategies/create/CreateOverlappin
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
-import { isZero } from 'components/strategies/create/Order/utils';
+import { isZero } from 'components/strategies/common/utils';
 import {
   isMaxBelowMarket,
   isMinAboveMarket,

@@ -6,7 +6,9 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useGetTokenBalance } from 'libs/queries';
 import { cn } from 'utils/helpers';
 import { BudgetInput, BudgetAction } from '../common/BudgetInput';
+import { m } from 'libs/motion';
 import style from './OverlappingBudget.module.css';
+import { items } from '../common/variants';
 
 interface Props {
   base: Token;
@@ -17,7 +19,7 @@ interface Props {
   setBudget: (value: string) => void;
   resetBudgets: (anchor: 'buy' | 'sell') => void;
   anchor: 'buy' | 'sell';
-  action: BudgetAction;
+  action?: BudgetAction;
   setAction: (action: BudgetAction) => void;
   error: string;
   warning?: string;
@@ -29,7 +31,7 @@ export const OverlappingAction: FC<Props> = (props) => {
     quote,
     buyBudget,
     sellBudget,
-    action,
+    action = 'deposit',
     setAction,
     anchor,
     budgetValue,
@@ -50,7 +52,10 @@ export const OverlappingAction: FC<Props> = (props) => {
   };
 
   return (
-    <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+    <m.article
+      variants={items}
+      className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+    >
       <details onToggle={() => resetBudgets(anchor)}>
         <summary
           className="flex cursor-pointer items-center gap-8"
@@ -116,6 +121,6 @@ export const OverlappingAction: FC<Props> = (props) => {
           />
         </div>
       </details>
-    </article>
+    </m.article>
   );
 };

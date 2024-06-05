@@ -21,8 +21,13 @@ import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
-import config from 'config';
 import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
+import {
+  toDisposablePriceSearch,
+  toOverlappingPriceSearch,
+  toRecurringPriceSearch,
+} from 'libs/routing/routes/strategyEdit';
+import config from 'config';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -141,6 +146,25 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   }
 
   if (isOwn) {
+    const { to, search } = (() => {
+      if (isDisposable) {
+        return {
+          to: '/strategies/edit/$strategyId/disposable/prices',
+          search: toDisposablePriceSearch(strategy),
+        };
+      } else if (isOverlapping) {
+        return {
+          to: '/strategies/edit/$strategyId/overlapping/prices',
+          search: toOverlappingPriceSearch(strategy),
+        };
+      } else {
+        return {
+          to: '/strategies/edit/$strategyId/recurring/prices',
+          search: toRecurringPriceSearch(strategy),
+        };
+      }
+    })();
+
     items.push({
       id: 'editPrices',
       name: 'Edit Prices',
@@ -150,9 +174,9 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           ...strategyEvent,
         });
         navigate({
-          to: '/strategies/edit/$strategyId',
+          to: to,
+          search: search,
           params: { strategyId: strategy.id },
-          search: { type: 'editPrices' },
         });
       },
     });

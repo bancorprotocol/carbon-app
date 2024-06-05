@@ -1,4 +1,4 @@
-import { EditStrategyMain } from 'components/strategies/edit';
+import { EditStrategyMain } from 'components/strategies/edit/EditStrategyMain';
 import { useNavigate, useParams } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 import { useEffect, useState } from 'react';

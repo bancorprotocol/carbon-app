@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { cn } from 'utils/helpers';
-import { OrderBlock } from 'components/strategies/create/types';
+import { OrderBlock } from 'components/strategies/common/types';
 
 interface Props {
   children: ReactNode;
@@ -17,11 +17,11 @@ export const OrderHeader: FC<Props> = (props) => {
   const isRange = order.settings === 'range';
   const setLimit = () => {
     if (!isRange) return;
-    setOrder({ settings: 'limit', min: undefined, max: undefined });
+    setOrder({ settings: 'limit', min: '', max: '' });
   };
   const setRange = () => {
     if (isRange) return;
-    setOrder({ settings: 'range', min: undefined, max: undefined });
+    setOrder({ settings: 'range', min: '', max: '' });
   };
   return (
     <header className="flex items-center justify-between">

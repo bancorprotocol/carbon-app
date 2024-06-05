@@ -9,7 +9,7 @@ import {
   StrategyDirection,
   StrategySettings,
 } from 'libs/routing';
-import { BaseOrder } from './types';
+import { BaseOrder } from '../common/types';
 
 export const useStrategyEvent = (
   type: StrategyType,

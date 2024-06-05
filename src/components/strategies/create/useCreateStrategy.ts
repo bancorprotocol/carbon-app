@@ -7,7 +7,7 @@ import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
-import { BaseOrder } from 'components/strategies/create/types';
+import { BaseOrder } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { useStrategyEvent } from './useStrategyEventData';
 import { carbonEvents } from 'services/events';

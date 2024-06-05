@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { m } from 'libs/motion';
 import { EditStrategyHeader } from './EditStrategyHeader';
 import { EditStrategyLayout } from './EditStrategyLayout';
-import { list } from '../create/variants';
+import { list } from 'components/strategies/common/variants';
 import { Strategy } from 'libs/queries';
 import { useSearch } from 'libs/routing';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';

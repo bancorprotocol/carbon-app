@@ -1,6 +1,5 @@
 import { Route } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
-import { EditStrategyPage } from 'pages/strategies/edit';
 import {
   validAddress,
   validLiteral,
@@ -94,19 +93,5 @@ export const createOverlappingStrategyPage = new Route({
     spread: validNumber,
     budget: validNumber,
     anchor: validLiteral(['buy', 'sell']),
-  }),
-});
-
-export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
-
-export interface EditStrategySearch {
-  type: EditTypes;
-}
-export const editStrategyPage = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/strategies/edit/$strategyId',
-  component: EditStrategyPage,
-  validateSearch: validateSearchParams<EditStrategySearch>({
-    type: validLiteral(['renew', 'editPrices', 'deposit', 'withdraw']),
   }),
 });

@@ -1,7 +1,7 @@
 import { FC, KeyboardEvent, SyntheticEvent, useRef } from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
-import { items as itemsVariant } from 'components/strategies/create/variants';
+import { items as itemsVariant } from 'components/strategies/common/variants';
 import {
   StrategyOption,
   strategyOptionItems,

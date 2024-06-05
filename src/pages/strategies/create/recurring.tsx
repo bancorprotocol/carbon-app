@@ -3,11 +3,11 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { OrderFields } from 'components/strategies/create/Order/OrderFields';
-import { OrderBlock } from 'components/strategies/create/types';
+import { OrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
-import { outSideMarketWarning } from 'components/strategies/create/Order/utils';
+import { outSideMarketWarning } from 'components/strategies/common/utils';
 
 export interface CreateRecurringStrategySearch {
   base: string;
@@ -111,7 +111,7 @@ export const CreateRecurringStrategyPage = () => {
     max: search.sellMax,
     buy: false,
   });
-  const buyOutSideMarket = outSideMarketWarning({
+  const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
     min: search.buyMin,
@@ -146,7 +146,7 @@ export const CreateRecurringStrategyPage = () => {
           setOrder={setBuyOrder}
           optionalBudget={+sellOrder.budget > 0 && !buyOrder.budget}
           error={getError(search)}
-          warnings={[buyOutSideMarket, getWarning(search)]}
+          warnings={[buyOutsideMarket, getWarning(search)]}
           buy
         />
       </CreateForm>

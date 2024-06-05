@@ -9,7 +9,7 @@ import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
-import { isTouchedZero } from 'components/strategies/create/Order/utils';
+import { isTouchedZero } from 'components/strategies/common/utils';
 
 type InputRangeProps = {
   min: string;

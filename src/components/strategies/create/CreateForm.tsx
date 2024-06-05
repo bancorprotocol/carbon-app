@@ -9,10 +9,10 @@ import { getStatusTextByTxStatus } from '../utils';
 import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
 import { m } from 'libs/motion';
-import { items } from './variants';
+import { items } from 'components/strategies/common/variants';
 import { useWeb3 } from 'libs/web3';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { BaseOrder } from 'components/strategies/create/types';
+import { BaseOrder } from 'components/strategies/common/types';
 import { StrategyType } from 'libs/routing';
 import style from 'components/strategies/common/form.module.css';
 

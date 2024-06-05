@@ -8,7 +8,7 @@ import { MarketPriceIndication } from 'components/strategies/marketPriceIndicati
 import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { isTouchedZero } from './utils';
+import { isTouchedZero } from '../../common/utils';
 
 type InputLimitProps = {
   id?: string;

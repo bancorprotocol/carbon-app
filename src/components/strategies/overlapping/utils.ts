@@ -86,8 +86,8 @@ export function isOverlappingBudgetTooSmall(
 
 export function hasArbOpportunity(
   buyMarginal: string,
-  spread: number,
-  marketPrice?: number
+  spread: string,
+  marketPrice?: string
 ) {
   if (!marketPrice) return false;
   const spreadPPM = new SafeDecimal(spread).div(100);

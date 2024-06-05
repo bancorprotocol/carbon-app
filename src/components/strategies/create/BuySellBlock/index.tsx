@@ -11,7 +11,7 @@ import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { BuySellHeader } from 'components/strategies/create/BuySellBlock/Header';
-import { items } from 'components/strategies/create/variants';
+import { items } from 'components/strategies/common/variants';
 import { BudgetSection } from 'components/strategies/create/BuySellBlock/BudgetSection';
 
 type Props = {

@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import { m } from 'libs/motion';
-import { items, list } from 'components/strategies/create/variants';
+import { items, list } from 'components/strategies/common/variants';
 import { CreateStrategyTokenSelection } from 'components/strategies/create/CreateStrategyTokenSelection';
 import { CreateStrategyOption } from 'components/strategies/create/CreateStrategyOption';
 import { useRouter, useSearch } from '@tanstack/react-router';
