@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { ErrorUnsupportedNetwork } from 'components/core/error/ErrorUnsupportedNetwork';
 import { ErrorNetworkConnection } from 'components/core/error/ErrorNetworkConnection';
 import { useTokens } from 'hooks/useTokens';
@@ -23,7 +23,7 @@ const paths: Record<string, Pathnames> = {
 };
 
 export const MainContent: FC = () => {
-  const web3 = useWeb3();
+  const web3 = useWagmi();
   const { location } = useRouterState();
   const prevPathnameRef = useRef('');
   const tokens = useTokens();

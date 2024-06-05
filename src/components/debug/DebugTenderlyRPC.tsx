@@ -1,4 +1,4 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useState, FormEvent } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
@@ -8,7 +8,7 @@ import config from 'config';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC, isUncheckedSigner, setIsUncheckedSigner } =
-    useWeb3();
+    useWagmi();
   const [urlInput, setUrlInput] = useState(
     lsService.getItem('tenderlyRpc') || ''
   );

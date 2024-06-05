@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
-import { useWeb3, Connection } from 'libs/web3';
+import { useWagmi, Connector } from 'libs/wagmi';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
 import { carbonEvents } from 'services/events';
@@ -10,9 +10,9 @@ import { useStore } from 'store';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
-  const { connect, user } = useWeb3();
+  const { connect, user } = useWagmi();
   const [selectedConnection, setSelectedConnection] =
-    useState<Connection | null>(null);
+    useState<Connector | null>(null);
   const [connectionError, setConnectionError] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const { isManualConnection } = useStore();
@@ -37,10 +37,10 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const isLoading = selectedConnection !== null && !connectionError;
   const isError = selectedConnection !== null && connectionError;
 
-  const onClickConnect = async (c: Connection) => {
+  const onClickConnect = async (c: Connector) => {
     setSelectedConnection(c);
     try {
-      await connect(c.type);
+      await connect(c);
       closeModal(id);
       setIsConnected(true);
       isManualConnection.current = true;
@@ -55,7 +55,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
       {isError ? (
         <div className="flex flex-col items-center space-y-20">
           <ModalWalletError
-            logoUrl={selectedConnection.logoUrl}
+            logoUrl={selectedConnection.icon}
             name={selectedConnection.name}
             error={connectionError}
           />

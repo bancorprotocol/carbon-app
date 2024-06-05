@@ -1,11 +1,11 @@
 import { TokenList } from 'libs/tokens';
-import { SelectableConnectionType } from 'libs/wagmi/web3.constants';
+import { SelectableConnectionType } from 'libs/wagmi';
 
 export interface AppConfig {
   mode: 'development' | 'production';
   appUrl: string;
   carbonApi: string;
-  selectedConnectionTypes: SelectableConnectionType[];
+  selectedConnections: SelectableConnectionType[];
   walletConnectProjectId: string;
   isSimulatorEnabled: boolean;
   sentryDSN?: string;

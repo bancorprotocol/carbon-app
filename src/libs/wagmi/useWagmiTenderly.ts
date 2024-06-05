@@ -1,6 +1,6 @@
 import { lsService } from 'services/localeStorage';
 
-export const useWeb3Tenderly = () => {
+export const useWagmiTenderly = () => {
   const handleTenderlyRPC = (
     url?: string,
     carbonController?: string,

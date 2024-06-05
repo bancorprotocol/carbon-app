@@ -2,7 +2,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { FormEvent, useEffect, useId, useMemo, JSX } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
-import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
+import { IS_TENDERLY_FORK, useWagmi } from 'libs/wagmi';
 import { UseQueryResult } from 'libs/queries';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import useInitEffect from 'hooks/useInitEffect';
@@ -24,7 +24,7 @@ export interface TradeWidgetBuySellProps extends FormAttributes {
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const {
     sourceInput,
     setSourceInput,

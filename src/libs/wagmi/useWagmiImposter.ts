@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 
-export const useWeb3Imposter = () => {
+export const useWagmiImposter = () => {
   const [imposterAccount, setImposterAccount] = useState<string>(
     lsService.getItem('imposterAccount') || ''
   );

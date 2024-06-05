@@ -1,8 +1,8 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Button } from 'components/common/button';
 
 export const DebugResetDefault = () => {
-  const { handleTenderlyRPC, handleImposterAccount } = useWeb3();
+  const { handleTenderlyRPC, handleImposterAccount } = useWagmi();
 
   const handleOnClick = () => {
     handleTenderlyRPC();
@@ -12,7 +12,7 @@ export const DebugResetDefault = () => {
   return (
     <div
       className={
-        'flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20'
+        'rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20'
       }
     >
       <h2>Reset to defaults</h2>

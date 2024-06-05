@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from '@tanstack/react-query';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { shrinkToken } from 'utils/tokens';
 import config from 'config';
@@ -13,7 +13,7 @@ export const useGetTokenBalance = (
   const address = token?.address;
   const decimals = token?.decimals;
   const { Token } = useContract();
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
 
   return useQuery(
     QueryKey.balance(user!, address!),
@@ -51,7 +51,7 @@ export const useGetTokenBalance = (
 export const useGetTokenBalances = (
   tokens: Pick<Token, 'address' | 'decimals'>[]
 ) => {
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
   const { Token } = useContract();
 
   return useQueries({

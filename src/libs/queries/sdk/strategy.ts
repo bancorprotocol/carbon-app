@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Token as TokenContract } from 'abis/types';
 import { utils } from 'ethers';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
@@ -277,7 +277,7 @@ export interface DeleteStrategyParams {
 }
 
 export const useCreateStrategyQuery = () => {
-  const { signer } = useWeb3();
+  const { signer } = useWagmi();
 
   return useMutation(
     async ({ base, quote, order0, order1 }: CreateStrategyParams) => {
@@ -314,7 +314,7 @@ export const useCreateStrategyQuery = () => {
 };
 
 export const useUpdateStrategyQuery = () => {
-  const { signer } = useWeb3();
+  const { signer } = useWagmi();
 
   return useMutation(
     async ({
@@ -340,7 +340,7 @@ export const useUpdateStrategyQuery = () => {
 };
 
 export const useDeleteStrategyQuery = () => {
-  const { signer } = useWeb3();
+  const { signer } = useWagmi();
 
   return useMutation(async ({ id }: DeleteStrategyParams) => {
     const unsignedTx = await carbonSDK.deleteStrategy(id);

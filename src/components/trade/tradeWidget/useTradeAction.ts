@@ -1,4 +1,4 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import config from 'config';
 import { PopulatedTransaction } from 'ethers';
@@ -37,7 +37,7 @@ export const useTradeAction = ({
   } = useStore();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
-  const { user, signer } = useWeb3();
+  const { user, signer } = useWagmi();
 
   const calcMinReturn = useCallback(
     (amount: string) => {

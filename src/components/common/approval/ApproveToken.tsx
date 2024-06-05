@@ -5,7 +5,7 @@ import { Switch } from 'components/common/switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
 import { LogoImager } from 'components/common/imager/Imager';
 import { QueryKey, useQueryClient } from 'libs/queries';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
 import { carbonEvents } from 'services/events';
@@ -33,7 +33,7 @@ export const ApproveToken: FC<Props> = ({
   context,
 }) => {
   const { dispatchNotification } = useNotifications();
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { getTokenById } = useTokens();
   const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();

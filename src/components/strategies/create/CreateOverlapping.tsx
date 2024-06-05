@@ -34,7 +34,7 @@ import {
   OverlappingMarketPrice,
 } from '../overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from '../UserMarketPrice';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { formatNumber } from 'utils/helpers';
 
 interface Props {
@@ -57,7 +57,7 @@ const getInitialPrices = (marketPrice: string | number) => {
 
 export const CreateOverlapping: FC<Props> = (props) => {
   const { base, quote, order0, order1, spread, setSpread } = props;
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const externalPrice = useMarketPrice({ base, quote });
   const [marketPrice, setMarketPrice] = useState(externalPrice ?? 0);
   const baseBalance = useGetTokenBalance(base).data;

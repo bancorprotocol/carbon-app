@@ -8,14 +8,14 @@ import {
   useUpdateStrategyQuery,
 } from 'libs/queries';
 import { useNavigate } from 'libs/routing';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useState } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { handleTxStatusAndRedirectToOverview } from './create/utils';
 import { isOverlappingStrategy } from './overlapping/utils';
 
 export const useUpdateStrategy = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { dispatchNotification } = useNotifications();
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();

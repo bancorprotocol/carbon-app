@@ -9,7 +9,7 @@ import {
   StrategySettings,
 } from 'libs/routing';
 import { Token } from 'libs/tokens';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
@@ -63,7 +63,7 @@ export const useCreateStrategy = () => {
     strategyType = templateStrategy.strategyType,
   } = search;
 
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
   const { openModal } = useModal();
 
   const [showGraph, setShowGraph] = useState(false);

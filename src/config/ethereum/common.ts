@@ -25,12 +25,7 @@ export const commonConfig: AppConfig = {
   mode: 'development',
   appUrl: 'https://app.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/',
-  selectedConnectionTypes: [
-    'injected',
-    'walletConnect',
-    'coinbaseWallet',
-    'gnosisSafe',
-  ],
+  selectedConnections: ['MetaMask', 'WalletConnect', 'Coinbase Wallet', 'safe'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   isSimulatorEnabled: true,
   policiesLastUpdated: '18 April, 2023',

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
 import { BudgetInput, BudgetAction } from '../common/BudgetInput';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 
 interface Props {
   base: Token;
@@ -44,7 +44,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
     error,
     warning,
   } = props;
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
 

@@ -1,4 +1,4 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useMutation, useQueries } from '@tanstack/react-query';
 import { NULL_APPROVAL_CONTRACTS, UNLIMITED_WEI } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
@@ -17,7 +17,7 @@ export type GetUserApprovalProps = Pick<
 };
 
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { Token } = useContract();
 
   return useQueries({
@@ -60,7 +60,7 @@ export type SetUserApprovalProps = GetUserApprovalProps & {
 };
 
 export const useSetUserApproval = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { Token } = useContract();
 
   return useMutation(

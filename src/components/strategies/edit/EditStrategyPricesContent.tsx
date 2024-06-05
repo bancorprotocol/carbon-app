@@ -19,7 +19,7 @@ import { EditPriceOverlappingStrategy } from 'components/strategies/edit/overlap
 import { cn } from 'utils/helpers';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useModal } from 'hooks/useModal';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { getDeposit, strategyBudgetChanges, strategyHasChanged } from './utils';
 import style from 'components/strategies/common/form.module.css';
 
@@ -54,7 +54,7 @@ export const EditStrategyPricesContent = ({
       : strategy.order1
   );
 
-  const { provider } = useWeb3();
+  const { provider } = useWagmi();
   const { approval } = useEditStrategy(
     strategy,
     getDeposit(strategy.order0.balance, order0.budget),

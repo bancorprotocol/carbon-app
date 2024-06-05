@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import { Action } from '@bancor/carbon-sdk';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { ModalTradeRoutingData } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
 import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
 import { useModal } from 'hooks/useModal';
@@ -35,7 +35,7 @@ export const useModalTradeRouting = ({
     setIsAwaiting,
   },
 }: Props) => {
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
   const { openModal, closeModal } = useModal();
   const { useGetTokenPrice } = useFiatCurrency();
   const sourceFiatPrice = useGetTokenPrice(source.address);

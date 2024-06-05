@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { m } from 'libs/motion';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Button } from 'components/common/button';
 import { BuySellBlock } from 'components/strategies/create/BuySellBlock';
 import { items } from 'components/strategies/create/variants';
@@ -38,7 +38,7 @@ export const CreateStrategyOrders = ({
   setSpread,
 }: UseStrategyCreateReturn) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const [approvedWarnings, setApprovedWarnings] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [showWarningApproval, setShowWarningApproval] = useState(false);

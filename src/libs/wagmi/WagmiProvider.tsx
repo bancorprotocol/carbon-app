@@ -1,11 +1,12 @@
-import { useWeb3React } from '@web3-react/core';
 import { createContext, FC, ReactNode, useContext, useMemo } from 'react';
-import { CarbonWeb3ProviderContext } from 'libs/web3/web3.types';
-import { useWeb3Network } from 'libs/web3/useWeb3Network';
-import { useWeb3Imposter } from 'libs/web3/useWeb3Imposter';
-import { useWeb3Tenderly } from 'libs/web3/useWeb3Tenderly';
-import { useWeb3User } from 'libs/web3/useWeb3User';
+import { CarbonWeb3ProviderContext } from 'libs/wagmi/web3.types';
+import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
+import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
+import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
+import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
+import { wagmiConfig } from 'libs/wagmi/config';
 import config from 'config';
+import { getAccount } from '@wagmi/core';
 
 // ********************************** //
 // WEB3 CONTEXT
@@ -17,6 +18,8 @@ const defaultValue: CarbonWeb3ProviderContext = {
   isNetworkActive: false,
   provider: undefined,
   signer: undefined,
+  currentConnector: undefined,
+  connectors: [],
   chainId: 1,
   handleTenderlyRPC: () => {},
   disconnect: async () => {},
@@ -32,7 +35,7 @@ const defaultValue: CarbonWeb3ProviderContext = {
 
 const CarbonWeb3CTX = createContext(defaultValue);
 
-export const useWeb3 = () => useContext(CarbonWeb3CTX);
+export const useWagmi = () => useContext(CarbonWeb3CTX);
 
 // ********************************** //
 // WEB3 PROVIDER
@@ -41,36 +44,29 @@ export const useWeb3 = () => useContext(CarbonWeb3CTX);
 export const CarbonWeb3Provider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const {
-    account: walletAccount,
-    provider: walletProvider,
-    chainId,
-    connector,
-  } = useWeb3React();
+  const { address: walletAccount, chainId } = getAccount(wagmiConfig);
 
-  const { provider, isNetworkActive, networkError, switchNetwork } =
-    useWeb3Network();
+  const { provider, connectors, isNetworkActive, networkError, switchNetwork } =
+    useWagmiNetwork();
 
   const { imposterAccount, handleImposterAccount, isImposter } =
-    useWeb3Imposter();
+    useWagmiImposter();
 
-  const { handleTenderlyRPC } = useWeb3Tenderly();
+  const { handleTenderlyRPC } = useWagmiTenderly();
 
   const {
     user,
     signer,
+    currentConnector,
     connect,
     disconnect,
     isUserBlocked,
     isUncheckedSigner,
     setIsUncheckedSigner,
-  } = useWeb3User({
+  } = useWagmiUser({
     walletAccount,
-    walletProvider,
-    provider,
     handleImposterAccount,
     imposterAccount,
-    connector,
   });
 
   const isSupportedNetwork = useMemo(
@@ -88,6 +84,8 @@ export const CarbonWeb3Provider: FC<{ children: ReactNode }> = ({
         isNetworkActive,
         provider,
         signer,
+        currentConnector,
+        connectors,
         chainId,
         handleTenderlyRPC,
         handleImposterAccount,

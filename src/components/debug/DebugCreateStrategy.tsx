@@ -10,7 +10,7 @@ import { FAUCET_TOKENS } from 'utils/tenderly';
 import config from 'config';
 import { formatNumber, wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useQueryClient } from '@tanstack/react-query';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
@@ -36,7 +36,7 @@ const spender = config.addresses.carbon.carbonController;
 
 export const DebugCreateStrategy = () => {
   const count = useRef(0);
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { openModal } = useModal();
   const queryClient = useQueryClient();
   const createMutation = useCreateStrategyQuery();

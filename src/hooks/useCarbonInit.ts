@@ -9,8 +9,7 @@ import { lsService } from 'services/localeStorage';
 import { carbonSDK } from 'libs/sdk';
 import { useModal } from 'hooks/useModal';
 import { QueryKey } from 'libs/queries';
-import { RPC_URLS, RPC_HEADERS } from 'libs/web3';
-import { SupportedChainId } from 'libs/web3/web3.constants';
+import { RPC_URLS, RPC_HEADERS, SupportedChainId } from 'libs/wagmi';
 import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
 import { carbonApi } from 'utils/carbonApi';
 

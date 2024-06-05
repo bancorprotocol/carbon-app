@@ -1,24 +1,11 @@
-import { Connector } from '@web3-react/types';
-import { Web3ReactHooks } from '@web3-react/core';
 import {
   JsonRpcProvider,
   JsonRpcSigner,
   StaticJsonRpcProvider,
   Web3Provider,
 } from '@ethersproject/providers';
-import {
-  ConnectionType,
-  SupportedChainId,
-  injectedProviders,
-} from 'libs/web3/web3.constants';
-
-export interface Connection {
-  connector: Connector;
-  hooks: Web3ReactHooks;
-  type: ConnectionType;
-  name: string;
-  logoUrl?: string;
-}
+import { SupportedChainId } from 'libs/wagmi/web3.constants';
+import { Connector } from 'libs/wagmi';
 
 export type ChainIdMapTo<T extends string | JsonRpcProvider> = {
   [key in SupportedChainId]: T;
@@ -31,6 +18,8 @@ export interface CarbonWeb3ProviderContext {
   networkError: string | undefined;
   provider?: Web3Provider | StaticJsonRpcProvider;
   signer: JsonRpcSigner | undefined;
+  currentConnector: Connector | undefined;
+  connectors: readonly Connector[];
   handleTenderlyRPC: (
     url?: string,
     carbonController?: string,
@@ -38,7 +27,7 @@ export interface CarbonWeb3ProviderContext {
   ) => void;
   handleImposterAccount: (account: string) => void;
   disconnect: () => Promise<void>;
-  connect: (type: ConnectionType) => Promise<void>;
+  connect: (type: Connector) => Promise<void>;
   isImposter: boolean;
   isSupportedNetwork: boolean;
   switchNetwork: () => void;
@@ -46,6 +35,3 @@ export interface CarbonWeb3ProviderContext {
   isUncheckedSigner: boolean;
   setIsUncheckedSigner: (value: boolean) => void;
 }
-
-export type InjectedProvider =
-  (typeof injectedProviders)[keyof typeof injectedProviders];

@@ -1,6 +1,5 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi, IS_TENDERLY_FORK } from 'libs/wagmi';
 import { shortenString } from 'utils/helpers';
-import { IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 
 export const DebugWeb3 = () => {
   const {
@@ -10,7 +9,7 @@ export const DebugWeb3 = () => {
     isNetworkActive,
     networkError,
     isUserBlocked,
-  } = useWeb3();
+  } = useWagmi();
 
   return (
     <div

@@ -11,7 +11,7 @@ import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
@@ -47,7 +47,7 @@ export const EditStrategyBudgetContent = ({
   const order1: OrderCreate = useOrder(strategy.order1);
   const buyBalance = strategy.order0.balance;
   const sellBalance = strategy.order1.balance;
-  const { provider } = useWeb3();
+  const { provider } = useWagmi();
   const { getFiatValue: getFiatValueBase } = useFiatCurrency(strategy.base);
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(strategy.quote);
   const buyBudgetUsd = getFiatValueQuote(buyBalance, true).toString();

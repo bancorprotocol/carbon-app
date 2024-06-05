@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { utils } from 'ethers';
 
 export const useGetEnsFromAddress = (address: string) => {
-  const { provider } = useWeb3();
+  const { provider } = useWagmi();
 
   return useQuery(
     QueryKey.ensFromAddress(address),
@@ -30,7 +30,7 @@ export const useGetEnsFromAddress = (address: string) => {
 };
 
 export const useGetAddressFromEns = (ens: string) => {
-  const { provider } = useWeb3();
+  const { provider } = useWagmi();
 
   return useQuery(
     QueryKey.ensToAddress(ens),

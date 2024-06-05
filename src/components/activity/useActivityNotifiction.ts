@@ -1,10 +1,10 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useActivityQuery } from './useActivityQuery';
 import { useEffect, useState } from 'react';
 import { useNotifications } from 'hooks/useNotifications';
 
 export const useActivityNotifications = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const [previousUser, setPreviousUser] = useState<string | null>(null);
   const [previous, setPrevious] = useState<number | null>(null);
   const query = useActivityQuery({ ownerId: user });
