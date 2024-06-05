@@ -27,15 +27,14 @@ import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { EditOverlappingStrategySearch } from 'pages/strategies/edit/overlapping/prices';
+import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { InputRange } from '../create/Order/InputRange';
-import { m } from 'libs/motion';
-import { items } from '../common/variants';
 
 interface Props {
   marketPrice: string;
   order0: BaseOrder;
   order1: BaseOrder;
+  spread: string;
 }
 
 // When working with edit overlapping we can't trust marginal price when budget was 0, so we need to recalculate
@@ -78,13 +77,13 @@ export function isEditBelowMarket(
 
 type Search = EditOverlappingStrategySearch;
 
-const url = '/strategies/edit/$strategyId/overlapping/prices';
+const url = '/strategies/edit/$strategyId/prices/overlapping';
 export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
-  const { marketPrice, order0, order1 } = props;
+  const { marketPrice, order0, order1, spread } = props;
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
 
-  const { spread, action, anchor, budget } = useSearch({ from: url });
+  const { action, anchor, budget } = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
 
   const baseBalance = useGetTokenBalance(base).data;
@@ -160,8 +159,13 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   })();
 
   useEffect(() => {
-    if (anchor === 'buy' && aboveMarket) set('anchor', undefined);
-    if (anchor === 'sell' && belowMarket) set('anchor', undefined);
+    if (
+      (anchor === 'buy' && aboveMarket) ||
+      (anchor === 'sell' && belowMarket)
+    ) {
+      set('anchor', undefined);
+      set('budget', '');
+    }
   }, [anchor, aboveMarket, belowMarket, set]);
 
   const setMarketPrice = (price: number) => {
@@ -191,6 +195,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setAction = (value: 'deposit' | 'withdraw') => {
+    set('budget', undefined);
     set('action', value);
   };
 
@@ -222,10 +227,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <UserMarketPrice marketPrice={+marketPrice}>
-      <m.article
-        variants={items}
-        className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
-      >
+      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
         <header className="flex items-center gap-8">
           <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
           <OverlappingMarketPrice
@@ -251,11 +253,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
             price to readjust the budget distribution around.
           </WarningMessageWithIcon>
         )}
-      </m.article>
-      <m.article
-        variants={items}
-        className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
-      >
+      </article>
+      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
         <header className="flex items-center gap-8">
           <h2 className="text-18 font-weight-500 flex-1">
             Edit Price Range&nbsp;
@@ -280,11 +279,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           warnings={[priceWarning]}
           isOverlapping
         />
-      </m.article>
-      <m.article
-        variants={items}
-        className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20"
-      >
+      </article>
+      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
         <header className="mb-10 flex items-center gap-8 ">
           <h2 className="text-18 font-weight-500 flex-1">Edit Spread</h2>
           <Tooltip
@@ -300,7 +296,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           spread={+spread}
           setSpread={setSpread}
         />
-      </m.article>
+      </article>
       <OverlappingAnchor
         base={base}
         quote={quote}
@@ -327,7 +323,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
         />
       )}
       {anchor && (
-        <m.article
+        <article
           id="overlapping-distribution"
           className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
         >
@@ -372,7 +368,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
             deposit={budgetError ? '0' : depositBuyBudget}
             balance={quoteBalance ?? '0'}
           />
-        </m.article>
+        </article>
       )}
     </UserMarketPrice>
   );

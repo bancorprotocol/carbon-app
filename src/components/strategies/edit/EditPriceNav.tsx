@@ -1,5 +1,3 @@
-import { m } from 'libs/motion';
-import { items } from 'components/strategies/common/variants';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { Link, useParams } from '@tanstack/react-router';
 import {
@@ -15,41 +13,40 @@ export const EditPriceNav = () => {
   const isOverlapping = window.location.pathname.includes('overlapping');
   const { strategy } = useEditStrategyCtx();
   return (
-    <m.nav
-      variants={items}
+    <nav
       className="border-background-900 text-14 flex gap-4 rounded-full border-2 p-6"
       aria-label="Switch between type of strategy"
     >
       <Link
         className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
-        to="/strategies/edit/$strategyId/disposable/prices"
+        to="/strategies/edit/$strategyId/prices/disposable"
         search={toDisposablePriceSearch(strategy)}
         params={params}
-        replace={false}
+        replace={true}
         aria-current={isDisposable ? 'page' : 'false'}
       >
         Disposable
       </Link>
       <Link
         className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
-        to="/strategies/edit/$strategyId/recurring/prices"
+        to="/strategies/edit/$strategyId/prices/recurring"
         search={toRecurringPriceSearch(strategy)}
         params={params}
-        replace={false}
+        replace={true}
         aria-current={isRecurring ? 'page' : 'false'}
       >
         Recurring
       </Link>
       <Link
         className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
-        to="/strategies/edit/$strategyId/overlapping/prices"
+        to="/strategies/edit/$strategyId/prices/overlapping"
         search={toOverlappingPriceSearch(strategy)}
         params={params}
-        replace={false}
+        replace={true}
         aria-current={isOverlapping ? 'page' : 'false'}
       >
         Overlapping
       </Link>
-    </m.nav>
+    </nav>
   );
 };

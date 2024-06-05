@@ -1,10 +1,8 @@
 import { FC, ReactNode, useId } from 'react';
-import { m } from 'libs/motion';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { LogoImager } from 'components/common/imager/Imager';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/create/Order/Header';
-import { items } from 'components/strategies/common/variants';
 import { InputRange } from 'components/strategies/create/Order/InputRange';
 import { InputLimit } from 'components/strategies/create/Order/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
@@ -71,8 +69,7 @@ export const EditStrategyOrderField: FC<Props> = ({
   const headerProps = { titleId, order, base, buy, setOrder };
 
   return (
-    <m.article
-      variants={items}
+    <article
       aria-labelledby={titleId}
       className={`rounded-10 bg-background-900 flex flex-col gap-20 border-l-2 p-20 ${
         buy
@@ -136,6 +133,6 @@ export const EditStrategyOrderField: FC<Props> = ({
         base={base}
         quote={quote}
       />
-    </m.article>
+    </article>
   );
 };

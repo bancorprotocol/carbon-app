@@ -2,7 +2,6 @@ import { FormEvent, useState } from 'react';
 import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
-import { EditStrategyLayout } from 'components/strategies/edit/NewEditStrategyLayout';
 import { cn, roundSearchParam } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import {
@@ -40,13 +39,22 @@ import { isZero } from 'components/strategies/common/utils';
 
 export interface EditOverlappingStrategySearch {
   marketPrice?: string;
-  min: string;
-  max: string;
-  spread: string;
+  min?: string;
+  max?: string;
+  spread?: string;
   anchor?: 'buy' | 'sell';
   budget?: string;
   action?: 'deposit' | 'withdraw';
 }
+
+const initSpread = '0.05';
+
+const initMin = (marketPrice: string) => {
+  return new SafeDecimal(marketPrice).times(0.99).toString();
+};
+const initMax = (marketPrice: string) => {
+  return new SafeDecimal(marketPrice).times(1.01).toString();
+};
 
 /** Create the orders out of the search params */
 const getOrders = (
@@ -55,10 +63,6 @@ const getOrders = (
   userMarketPrice?: string
 ) => {
   const { base, quote, order0, order1 } = strategy;
-  const touched =
-    search.min !== roundSearchParam(order0.startRate) ||
-    search.max !== roundSearchParam(order1.endRate) ||
-    search.spread !== getRoundedSpread(strategy).toString();
 
   if (!userMarketPrice) {
     return {
@@ -67,12 +71,25 @@ const getOrders = (
     };
   }
 
+  const {
+    anchor,
+    min = initMin(userMarketPrice),
+    max = initMax(userMarketPrice),
+    spread = initSpread,
+    budget = '0',
+    action = 'deposit',
+  } = search;
+
+  const touched =
+    min !== roundSearchParam(order0.startRate) ||
+    max !== roundSearchParam(order1.endRate) ||
+    spread !== getRoundedSpread(strategy).toString();
+
   const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
   const marketPrice = touched
     ? calculatedPrice?.toString() || userMarketPrice
     : userMarketPrice;
 
-  const { anchor, min, max, spread, budget = '0', action = 'deposit' } = search;
   if (!isValidRange(min, max) || !isValidSpread(spread)) {
     return {
       buy: { min, max: min, marginalPrice: min, budget: '' },
@@ -133,7 +150,7 @@ const getOrders = (
   return orders;
 };
 
-const url = '/strategies/edit/$strategyId/overlapping/prices';
+const url = '/strategies/edit/$strategyId/prices/overlapping';
 
 export const EditStrategyOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
@@ -195,8 +212,10 @@ export const EditStrategyOverlappingPage = () => {
         fieldsToUpdate: {
           buyPriceLow: orders.buy.min,
           buyPriceHigh: orders.buy.max,
+          buyBudget: orders.buy.budget,
           sellPriceLow: orders.sell.min,
           sellPriceHigh: orders.sell.max,
+          sellBudget: orders.sell.budget,
         },
         buyMarginalPrice: orders.buy.marginalPrice,
         sellMarginalPrice: orders.sell.marginalPrice,
@@ -237,81 +256,78 @@ export const EditStrategyOverlappingPage = () => {
       });
     };
     return (
-      <EditStrategyLayout type="editPrices">
-        <div className="flex flex-col gap-20">
-          <EditPriceNav />
-          <EditStrategyOverlapTokens strategy={strategy} />
-          <m.article
-            variants={items}
-            key="marketPrice"
-            className="rounded-10 bg-background-900 flex flex-col md:w-[440px]"
-          >
-            <OverlappingInitMarketPriceField
-              base={base}
-              quote={quote}
-              marketPrice={+(marketPrice || '')}
-              setMarketPrice={setMarketPrice}
-            />
-          </m.article>
-        </div>
-      </EditStrategyLayout>
+      <div className="flex flex-col gap-20">
+        <EditPriceNav />
+        <EditStrategyOverlapTokens strategy={strategy} />
+        <m.article
+          variants={items}
+          key="marketPrice"
+          className="rounded-10 bg-background-900 flex flex-col md:w-[440px]"
+        >
+          <OverlappingInitMarketPriceField
+            base={base}
+            quote={quote}
+            marketPrice={+(marketPrice || '')}
+            setMarketPrice={setMarketPrice}
+          />
+        </m.article>
+      </div>
     );
   }
 
   return (
-    <EditStrategyLayout type="editPrices">
-      <form
-        onSubmit={submit}
-        onReset={() => history.back()}
-        className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
-        data-testid="edit-form"
+    <form
+      onSubmit={submit}
+      onReset={() => history.back()}
+      className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
+      data-testid="edit-form"
+    >
+      <EditPriceNav />
+      <EditStrategyOverlapTokens strategy={strategy} />
+
+      <EditPriceOverlappingStrategy
+        marketPrice={marketPrice}
+        order0={orders.buy}
+        order1={orders.sell}
+        spread={search.spread || initSpread}
+      />
+      <label
+        htmlFor="approve-warnings"
+        className={cn(
+          style.approveWarnings,
+          'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+        )}
       >
-        <EditPriceNav />
-        <EditStrategyOverlapTokens strategy={strategy} />
-
-        <EditPriceOverlappingStrategy
-          marketPrice={marketPrice}
-          order0={orders.buy}
-          order1={orders.sell}
+        <input
+          id="approve-warnings"
+          type="checkbox"
+          name="approval"
+          data-testid="approve-warnings"
         />
-        <label
-          htmlFor="approve-warnings"
-          className={cn(
-            style.approveWarnings,
-            'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
-          )}
-        >
-          <input
-            id="approve-warnings"
-            type="checkbox"
-            name="approval"
-            data-testid="approve-warnings"
-          />
-          I've approved the edits and distribution changes.
-        </label>
+        I've approved the edits and distribution changes.
+      </label>
 
-        <Button
-          type="submit"
-          disabled={!hasChanged}
-          loading={isLoading}
-          loadingChildren={loadingChildren}
-          variant="white"
-          size="lg"
-          fullWidth
-          data-testid="edit-submit"
-        >
-          {type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
-        </Button>
-        <Button
-          type="reset"
-          disabled={isLoading}
-          variant="secondary"
-          size="lg"
-          fullWidth
-        >
-          Cancel
-        </Button>
-      </form>
-    </EditStrategyLayout>
+      <Button
+        type="submit"
+        disabled={!hasChanged}
+        loading={isLoading}
+        loadingChildren={loadingChildren}
+        variant="white"
+        size="lg"
+        fullWidth
+        data-testid="edit-submit"
+      >
+        {type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
+      </Button>
+      <Button
+        type="reset"
+        disabled={isLoading}
+        variant="secondary"
+        size="lg"
+        fullWidth
+      >
+        Cancel
+      </Button>
+    </form>
   );
 };

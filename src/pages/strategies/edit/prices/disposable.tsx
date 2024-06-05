@@ -2,7 +2,6 @@ import { FormEvent, useCallback, useState } from 'react';
 import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
-import { EditStrategyLayout } from 'components/strategies/edit/NewEditStrategyLayout';
 import { cn, roundSearchParam } from 'utils/helpers';
 import { EditStrategyOrderField } from 'components/strategies/edit/NewEditOrderFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
@@ -34,7 +33,7 @@ export interface EditDisposableStrategySearch {
   direction: StrategyDirection;
 }
 
-const url = '/strategies/edit/$strategyId/disposable/prices';
+const url = '/strategies/edit/$strategyId/prices/disposable';
 
 export const EditStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
@@ -174,79 +173,77 @@ export const EditStrategyDisposablePage = () => {
   };
 
   return (
-    <EditStrategyLayout type="editPrices">
-      <form
-        onSubmit={submit}
-        onReset={() => history.back()}
-        className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
-        data-testid="edit-form"
+    <form
+      onSubmit={submit}
+      onReset={() => history.back()}
+      className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
+      data-testid="edit-form"
+    >
+      <EditPriceNav />
+      <EditStrategyOverlapTokens strategy={strategy} />
+      <EditStrategyOrderField
+        type="editPrices"
+        order={order}
+        initialBudget={initialBudget}
+        setOrder={setOrder}
+        warnings={[outSideMarket]}
+        buy={buy}
+        settings={
+          <TabsMenu>
+            <TabsMenuButton
+              onClick={() => setDirection('buy')}
+              isActive={buy}
+              data-testid="tab-buy"
+            >
+              Buy
+            </TabsMenuButton>
+            <TabsMenuButton
+              onClick={() => setDirection('sell')}
+              isActive={!buy}
+              data-testid="tab-sell"
+            >
+              Sell
+            </TabsMenuButton>
+          </TabsMenu>
+        }
+      />
+      <label
+        htmlFor="approve-warnings"
+        className={cn(
+          style.approveWarnings,
+          'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+        )}
       >
-        <EditPriceNav />
-        <EditStrategyOverlapTokens strategy={strategy} />
-        <EditStrategyOrderField
-          type="editPrices"
-          order={order}
-          initialBudget={initialBudget}
-          setOrder={setOrder}
-          warnings={[outSideMarket]}
-          buy={buy}
-          settings={
-            <TabsMenu>
-              <TabsMenuButton
-                onClick={() => setDirection('buy')}
-                isActive={buy}
-                data-testid="tab-buy"
-              >
-                Buy
-              </TabsMenuButton>
-              <TabsMenuButton
-                onClick={() => setDirection('sell')}
-                isActive={!buy}
-                data-testid="tab-sell"
-              >
-                Sell
-              </TabsMenuButton>
-            </TabsMenu>
-          }
+        <input
+          id="approve-warnings"
+          type="checkbox"
+          name="approval"
+          data-testid="approve-warnings"
         />
-        <label
-          htmlFor="approve-warnings"
-          className={cn(
-            style.approveWarnings,
-            'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
-          )}
-        >
-          <input
-            id="approve-warnings"
-            type="checkbox"
-            name="approval"
-            data-testid="approve-warnings"
-          />
-          I've approved the edits and distribution changes.
-        </label>
+        I've approved the edits and distribution changes.
+      </label>
 
-        <Button
-          type="submit"
-          disabled={!hasChanged}
-          loading={isLoading}
-          loadingChildren={loadingChildren}
-          variant="white"
-          size="lg"
-          fullWidth
-          data-testid="edit-submit"
-        >
-          {type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
-        </Button>
-        <Button
-          type="reset"
-          disabled={isLoading}
-          variant="secondary"
-          size="lg"
-          fullWidth
-        >
-          Cancel
-        </Button>
-      </form>
-    </EditStrategyLayout>
+      <Button
+        type="submit"
+        disabled={!hasChanged}
+        loading={isLoading}
+        loadingChildren={loadingChildren}
+        variant="white"
+        size="lg"
+        fullWidth
+        data-testid="edit-submit"
+      >
+        {type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
+      </Button>
+      <Button
+        type="reset"
+        disabled={isLoading}
+        variant="secondary"
+        size="lg"
+        fullWidth
+      >
+        Cancel
+      </Button>
+    </form>
   );
 };

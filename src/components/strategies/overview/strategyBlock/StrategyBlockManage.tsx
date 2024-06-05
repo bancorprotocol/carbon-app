@@ -149,17 +149,17 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     const { to, search } = (() => {
       if (isDisposable) {
         return {
-          to: '/strategies/edit/$strategyId/disposable/prices',
+          to: '/strategies/edit/$strategyId/prices/disposable',
           search: toDisposablePriceSearch(strategy),
         };
       } else if (isOverlapping) {
         return {
-          to: '/strategies/edit/$strategyId/overlapping/prices',
+          to: '/strategies/edit/$strategyId/prices/overlapping',
           search: toOverlappingPriceSearch(strategy),
         };
       } else {
         return {
-          to: '/strategies/edit/$strategyId/recurring/prices',
+          to: '/strategies/edit/$strategyId/prices/recurring',
           search: toRecurringPriceSearch(strategy),
         };
       }
