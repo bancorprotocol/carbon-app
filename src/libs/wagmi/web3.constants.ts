@@ -1,4 +1,4 @@
-import { ChainIdMapTo } from 'libs/wagmi/web3.types';
+import { ChainIdMapTo, SelectableConnectionType } from 'libs/wagmi/web3.types';
 import { lsService } from 'services/localeStorage';
 import config from 'config';
 
@@ -13,41 +13,12 @@ if (typeof CHAIN_RPC_URL === 'undefined') {
 
 export const IS_TENDERLY_FORK = !!TENDERLY_RPC;
 
-export type SelectableConnectionType =
-  | 'MetaMask'
-  | 'WalletConnect'
-  | 'Coinbase Wallet'
-  | 'Safe'
-  | 'Tailwind'
-  | 'Compass Wallet'
-  | 'Seif';
-
-// [START] Used for localstorage migration: Remove it after Nov 2023
 export enum EnumConnectionType {
   METAMASK,
   COINBASE_WALLET,
   WALLET_CONNECT,
   GNOSIS_SAFE,
 }
-const connectionTypeMapping: Record<
-  EnumConnectionType,
-  SelectableConnectionType
-> = {
-  [EnumConnectionType.METAMASK]: 'MetaMask',
-  [EnumConnectionType.COINBASE_WALLET]: 'Coinbase Wallet',
-  [EnumConnectionType.WALLET_CONNECT]: 'WalletConnect',
-  [EnumConnectionType.GNOSIS_SAFE]: 'Safe',
-};
-const isEnumConnectionType = (
-  type: SelectableConnectionType | EnumConnectionType
-): type is EnumConnectionType => type in connectionTypeMapping;
-
-export const getConnectionTypeFromLS = () => {
-  const type = lsService.getItem('connectionType');
-  if (type === undefined) return;
-  return isEnumConnectionType(type) ? connectionTypeMapping[type] : type;
-};
-// [END]
 
 export enum SupportedChainId {
   MAINNET = CHAIN_ID,

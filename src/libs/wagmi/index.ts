@@ -1,5 +1,4 @@
 export {
-  type SelectableConnectionType,
   EnumConnectionType,
   selectedConnections,
   IS_TENDERLY_FORK,
@@ -7,7 +6,7 @@ export {
   RPC_HEADERS,
   SupportedChainId,
 } from 'libs/wagmi/web3.constants';
+export { type SelectableConnectionType } from 'libs/wagmi/web3.types';
 export { useWagmi } from 'libs/wagmi/WagmiProvider';
 export { WagmiReactWrapper } from 'libs/wagmi/WagmiReactWrapper';
-export type { Connector } from 'wagmi';
-export { useAccount } from 'wagmi';
+export { type Connector, useAccount } from 'wagmi';

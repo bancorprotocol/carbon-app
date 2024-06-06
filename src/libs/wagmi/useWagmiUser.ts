@@ -1,20 +1,22 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IS_TENDERLY_FORK } from 'libs/wagmi/web3.constants';
 import {
   useConnect,
   useDisconnect,
   Config,
   useConnectorClient,
-  Connector,
   useAccount,
+  useAccountEffect,
+  type Connector,
 } from 'wagmi';
-import { type DisconnectErrorType } from '@wagmi/core';
+import { type ConnectErrorType, type DisconnectErrorType } from '@wagmi/core';
 import { isAccountBlocked } from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
 import { getChainInfo } from './web3.utils';
 import { clientToSigner } from './ethers';
 import { getUncheckedSigner } from 'utils/tenderly';
+import { carbonEvents } from 'services/events';
 
 type Props = {
   imposterAccount: string;
@@ -47,6 +49,9 @@ export const useWagmiUser = ({
     [imposterAccount, walletAccount]
   );
 
+  const isManualConnection = useRef(false);
+  const oldUser = useRef(user);
+
   const isUserBlocked = useMemo(() => isAccountBlocked(user), [user]);
 
   const { connector: currentConnector } = useAccount();
@@ -64,18 +69,65 @@ export const useWagmiUser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client, IS_TENDERLY_FORK, user, isUncheckedSigner]);
 
+  useEffect(() => {
+    if (user !== oldUser.current && !!user) {
+      // User changed current address
+      console.log('DEBUG: useAccountEffect: changed wallets!');
+      oldUser.current = user;
+      carbonEvents.wallet.walletConnected({
+        address: user,
+        name: currentConnector?.name || '',
+      });
+    }
+  }, [user, currentConnector?.name]);
+
+  useAccountEffect({
+    onConnect(data) {
+      if (isManualConnection.current) {
+        isManualConnection.current = false;
+        carbonEvents.wallet.walletConnect({
+          address: data.address,
+          name: data.connector.name,
+        });
+      } else {
+        carbonEvents.wallet.walletConnected({
+          address: data.address,
+          name: data.connector.name,
+        });
+      }
+      if (window?.OneTrust) {
+        window?.OneTrust?.AllowAll();
+        window?.OneTrust?.Close();
+      }
+      oldUser.current = data.address;
+    },
+    onDisconnect() {
+      if (isManualConnection.current) {
+        carbonEvents.wallet.walletDisconnect({
+          address: user,
+        });
+        isManualConnection.current = false;
+      } else {
+        carbonEvents.wallet.walletDisconnected(undefined);
+      }
+      oldUser.current = undefined;
+    },
+  });
+
   const connect = useCallback(
     async (connector: Connector) => {
       if (isCountryBlocked || isCountryBlocked === null) {
         throw new Error('Your country is restricted from using this app.');
       }
+      isManualConnection.current = true;
       _connect(
         {
           connector,
           chainId: getChainInfo().chainId,
         },
         {
-          onError: (error) => {
+          onError: (error: ConnectErrorType) => {
+            isManualConnection.current = false;
             throw new Error(
               `Error connecting ${connector.name}` + error.message
             );
@@ -87,15 +139,16 @@ export const useWagmiUser = ({
   );
 
   const disconnect = useCallback(async () => {
+    isManualConnection.current = true;
     _disconnect(
       {},
       {
-        onSuccess: () => {
-          console.log('Successfully deactivated connector');
-          handleImposterAccount();
-        },
         onError: (error: DisconnectErrorType) => {
+          isManualConnection.current = false;
           throw new Error(`Error disconnecting` + error.message);
+        },
+        onSettled: () => {
+          handleImposterAccount();
         },
       }
     );

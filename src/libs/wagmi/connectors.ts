@@ -12,10 +12,8 @@ import {
   safe,
 } from 'wagmi/connectors';
 import config from 'config';
-import {
-  SelectableConnectionType,
-  selectedConnections,
-} from './web3.constants';
+import { type SelectableConnectionType } from './web3.types';
+import { selectedConnections } from './web3.constants';
 import { Address } from 'viem';
 
 const createConnectorURL = ({

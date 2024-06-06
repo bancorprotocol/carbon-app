@@ -7,7 +7,7 @@ import { buttonStyles } from 'components/common/button/buttonStyles';
 import { DropdownMenu, useMenuCtx } from 'components/common/dropdownMenu';
 import { useModal } from 'hooks/useModal';
 import { useWagmi } from 'libs/wagmi';
-import { FC, useMemo, useEffect } from 'react';
+import { FC, useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
@@ -25,7 +25,6 @@ export const MainMenuRightWallet: FC = () => {
     isUserBlocked,
     currentConnector,
   } = useWagmi();
-  const { isManualConnection } = useStore();
   const { openModal } = useModal();
   const selectedWallet = currentConnector?.name;
 
@@ -35,21 +34,6 @@ export const MainMenuRightWallet: FC = () => {
   };
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
-  const userConnected = !!user && selectedWallet != null;
-
-  useEffect(() => {
-    if (userConnected) {
-      if (!isManualConnection.current) {
-        carbonEvents.wallet.walletConnected({
-          address: user,
-          name: selectedWallet || '',
-        });
-      } else {
-        isManualConnection.current = false; // Expect an auto wallet connection next
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, selectedWallet]);
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error';
@@ -129,14 +113,6 @@ const ConnectedMenu: FC = () => {
   const { toaster } = useStore();
   const { setMenuOpen } = useMenuCtx();
   const { user, disconnect, isSupportedNetwork, switchNetwork } = useWagmi();
-
-  const onDisconnect = async () => {
-    await disconnect();
-    carbonEvents.wallet.walletDisconnect({
-      address: user,
-    });
-  };
-
   const copyAddress = async () => {
     if (!user) return;
     await navigator.clipboard.writeText(user);
@@ -177,7 +153,7 @@ const ConnectedMenu: FC = () => {
       <button
         role="menuitem"
         className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-black"
-        onClick={onDisconnect}
+        onClick={disconnect}
       >
         <IconDisconnect className="w-16" />
         <span>Disconnect</span>

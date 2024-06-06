@@ -6,29 +6,13 @@ import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletErro
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
 import { carbonEvents } from 'services/events';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
-import { useStore } from 'store';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
-  const { connect, user } = useWagmi();
+  const { connect } = useWagmi();
   const [selectedConnection, setSelectedConnection] =
     useState<Connector | null>(null);
   const [connectionError, setConnectionError] = useState('');
-  const [isConnected, setIsConnected] = useState(false);
-  const { isManualConnection } = useStore();
-
-  useEffect(() => {
-    if (isConnected) {
-      if (window?.OneTrust) {
-        window?.OneTrust?.AllowAll();
-        window?.OneTrust?.Close();
-      }
-      carbonEvents.wallet.walletConnect({
-        address: user,
-        name: selectedConnection?.name || '',
-      });
-    }
-  }, [isConnected, selectedConnection?.name, user]);
 
   useEffect(() => {
     carbonEvents.wallet.walletConnectPopupView(undefined);
@@ -42,8 +26,6 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
     try {
       await connect(c);
       closeModal(id);
-      setIsConnected(true);
-      isManualConnection.current = true;
     } catch (e: any) {
       console.error(`Modal Wallet onClickConnect error: `, e);
       setConnectionError(e.message || 'Unknown connection error.');

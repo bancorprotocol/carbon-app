@@ -4,7 +4,6 @@ import {
   ReactNode,
   useCallback,
   useContext,
-  useRef,
   useState,
 } from 'react';
 import { lsService } from 'services/localeStorage';
@@ -65,7 +64,6 @@ interface StoreContext {
   fiatCurrency: FiatCurrencyStore;
   innerHeight: number;
   setInnerHeight: (value: number) => void;
-  isManualConnection: React.MutableRefObject<boolean>;
   toaster: ToastStore;
   simDisclaimerLastSeen?: number;
   setSimDisclaimerLastSeen: (value?: number) => void;
@@ -87,7 +85,6 @@ const defaultValue: StoreContext = {
   fiatCurrency: defaultFiatCurrencyStore,
   innerHeight: 0,
   setInnerHeight: () => {},
-  isManualConnection: { current: false },
   toaster: defaultToastStore,
   simDisclaimerLastSeen: undefined,
   setSimDisclaimerLastSeen: () => {},
@@ -106,7 +103,6 @@ export const useStore = () => {
 export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [countryBlocked, setCountryBlocked] = useState<boolean | null>(null);
   const [innerHeight, setInnerHeight] = useState<number>(window.innerHeight);
-  const isManualConnection = useRef(false);
   const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
@@ -132,7 +128,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
     setCountryBlocked,
-    isManualConnection,
     sdk,
     tokens,
     notifications,
