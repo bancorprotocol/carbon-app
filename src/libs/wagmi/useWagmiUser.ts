@@ -33,8 +33,8 @@ export const useWagmiUser = ({
   const [isUncheckedSigner, _setIsUncheckedSigner] = useState(
     lsService.getItem('isUncheckedSigner') || false
   );
-  const { connect: _connect } = useConnect();
-  const { disconnect: _disconnect } = useDisconnect();
+  const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
 
   const setIsUncheckedSigner = useCallback(
     (value: boolean) => {
@@ -120,7 +120,7 @@ export const useWagmiUser = ({
         throw new Error('Your country is restricted from using this app.');
       }
       isManualConnection.current = true;
-      _connect(
+      await connectAsync(
         {
           connector,
           chainId: getChainInfo().chainId,
@@ -135,12 +135,12 @@ export const useWagmiUser = ({
         }
       );
     },
-    [isCountryBlocked, _connect]
+    [isCountryBlocked, connectAsync]
   );
 
   const disconnect = useCallback(async () => {
     isManualConnection.current = true;
-    _disconnect(
+    await disconnectAsync(
       {},
       {
         onError: (error: DisconnectErrorType) => {
@@ -152,7 +152,7 @@ export const useWagmiUser = ({
         },
       }
     );
-  }, [_disconnect, handleImposterAccount]);
+  }, [disconnectAsync, handleImposterAccount]);
 
   return {
     user,
