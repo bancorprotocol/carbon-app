@@ -17,10 +17,10 @@ export type SelectableConnectionType =
   | 'MetaMask'
   | 'WalletConnect'
   | 'Coinbase Wallet'
-  | 'safe'
-  | 'Tailwind Wallet'
+  | 'Safe'
+  | 'Tailwind'
   | 'Compass Wallet'
-  | 'Seif Wallet';
+  | 'Seif';
 
 // [START] Used for localstorage migration: Remove it after Nov 2023
 export enum EnumConnectionType {
@@ -36,7 +36,7 @@ const connectionTypeMapping: Record<
   [EnumConnectionType.METAMASK]: 'MetaMask',
   [EnumConnectionType.COINBASE_WALLET]: 'Coinbase Wallet',
   [EnumConnectionType.WALLET_CONNECT]: 'WalletConnect',
-  [EnumConnectionType.GNOSIS_SAFE]: 'safe',
+  [EnumConnectionType.GNOSIS_SAFE]: 'Safe',
 };
 const isEnumConnectionType = (
   type: SelectableConnectionType | EnumConnectionType

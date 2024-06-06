@@ -6,6 +6,7 @@ import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { getConnectors } from '@wagmi/core';
 import { RPC_URLS, RPC_HEADERS, SupportedChainId } from 'libs/wagmi';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import config from 'config';
 
 export const useWagmiNetwork = () => {
   const { switchChain } = useSwitchChain();
@@ -17,8 +18,6 @@ export const useWagmiNetwork = () => {
 
   const [networkError, setNetworkError] = useState<string>();
 
-  const switchNetwork = () => switchChain({ chainId });
-
   const networkProvider = useMemo(() => {
     return new StaticJsonRpcProvider(
       {
@@ -29,6 +28,11 @@ export const useWagmiNetwork = () => {
       chainId
     );
   }, [chainId]);
+
+  const switchNetwork = useCallback(
+    () => switchChain({ chainId }),
+    [chainId, switchChain]
+  );
 
   const activateNetwork = useCallback(async () => {
     if (networkError || isNetworkActive) {
@@ -49,7 +53,19 @@ export const useWagmiNetwork = () => {
     void activateNetwork();
   }, [activateNetwork]);
 
-  const connectors = getConnectors(wagmiConfig);
+  const unsortedConnectors = getConnectors(wagmiConfig);
+  const connectors = useMemo(() => {
+    const connectionOrder = (config.selectedConnections as string[]).map((c) =>
+      c.toLowerCase()
+    );
+    return unsortedConnectors.toSorted((a, b) => {
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
+      if (!connectionOrder.includes(nameA) || !connectionOrder.includes(nameB))
+        return 0;
+      return connectionOrder.indexOf(nameA) - connectionOrder.indexOf(nameB);
+    });
+  }, [unsortedConnectors]);
 
   return {
     provider,
