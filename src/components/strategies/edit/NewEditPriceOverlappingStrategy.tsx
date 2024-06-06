@@ -313,9 +313,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           anchor={anchor}
           action={action}
           setAction={setAction}
-          budgetValue={budget ?? ''}
+          budget={budget ?? ''}
           setBudget={setBudget}
-          resetBudgets={() => setBudget('')}
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
           error={budgetError}

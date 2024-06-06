@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
@@ -32,10 +32,15 @@ import {
 import { EditPriceOverlappingStrategy } from 'components/strategies/edit/NewEditPriceOverlappingStrategy';
 import { items } from 'components/strategies/common/variants';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
-import style from 'components/strategies/common/form.module.css';
 import { SafeDecimal } from 'libs/safedecimal';
 import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
+import style from 'components/strategies/common/form.module.css';
+import config from 'config';
+import { useApproval } from 'hooks/useApproval';
+import { useModal } from 'hooks/useModal';
+import { getDeposit } from 'components/strategies/edit/utils';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 export interface EditOverlappingStrategySearch {
   marketPrice?: string;
@@ -54,6 +59,18 @@ const initMin = (marketPrice: string) => {
 };
 const initMax = (marketPrice: string) => {
   return new SafeDecimal(marketPrice).times(1.01).toString();
+};
+
+const isTouched = (
+  strategy: Strategy,
+  search: EditOverlappingStrategySearch
+) => {
+  const { order0, order1 } = strategy;
+  if (isZero(order0.balance) && isZero(order1.balance)) return true;
+  if (search.min !== roundSearchParam(order0.startRate)) return true;
+  if (search.max !== roundSearchParam(order1.endRate)) return true;
+  if (search.spread !== getRoundedSpread(strategy).toString()) return true;
+  return false;
 };
 
 /** Create the orders out of the search params */
@@ -80,40 +97,49 @@ const getOrders = (
     action = 'deposit',
   } = search;
 
-  const touched =
-    min !== roundSearchParam(order0.startRate) ||
-    max !== roundSearchParam(order1.endRate) ||
-    spread !== getRoundedSpread(strategy).toString();
-
-  const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
-  const marketPrice = touched
-    ? calculatedPrice?.toString() || userMarketPrice
-    : userMarketPrice;
-
   if (!isValidRange(min, max) || !isValidSpread(spread)) {
     return {
       buy: { min, max: min, marginalPrice: min, budget: '' },
       sell: { min, max: min, marginalPrice: min, budget: '' },
     };
   }
-  const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
+
   const orders = {
     buy: {
-      min: prices.buyPriceLow,
-      max: prices.buyPriceHigh,
-      marginalPrice: prices.buyPriceMarginal,
+      min: order0.startRate,
+      max: order0.endRate,
+      marginalPrice: order0.marginalRate,
       budget: order0.balance,
     },
     sell: {
-      min: prices.sellPriceLow,
-      max: prices.sellPriceHigh,
-      marginalPrice: prices.sellPriceMarginal,
+      min: order1.startRate,
+      max: order1.endRate,
+      marginalPrice: order1.marginalRate,
       budget: order1.balance,
     },
   };
 
+  const touched = isTouched(strategy, search);
+
+  const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
+  const marketPrice = touched
+    ? userMarketPrice
+    : calculatedPrice?.toString() || userMarketPrice;
+
+  // PRICES
+  if (touched) {
+    const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
+    orders.buy.min = prices.buyPriceLow;
+    orders.buy.max = prices.buyPriceHigh;
+    orders.buy.marginalPrice = prices.buyPriceMarginal;
+    orders.sell.min = prices.sellPriceLow;
+    orders.sell.max = prices.sellPriceHigh;
+    orders.sell.marginalPrice = prices.sellPriceMarginal;
+  }
+
   if (!anchor || isZero(budget)) return orders;
 
+  // BUDGET
   if (anchor === 'buy') {
     if (isMinAboveMarket(orders.buy)) return orders;
     const buyBudget =
@@ -150,6 +176,7 @@ const getOrders = (
   return orders;
 };
 
+const spenderAddress = config.addresses.carbon.carbonController;
 const url = '/strategies/edit/$strategyId/prices/overlapping';
 
 export const EditStrategyOverlappingPage = () => {
@@ -160,6 +187,7 @@ export const EditStrategyOverlappingPage = () => {
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const { user } = useWeb3();
+  const { openModal } = useModal();
   const externalPrice = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
@@ -175,6 +203,28 @@ export const EditStrategyOverlappingPage = () => {
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
 
   const orders = getOrders(strategy, search, marketPrice);
+
+  const approvalTokens = useMemo(() => {
+    const arr = [];
+    const buyDeposit = getDeposit(strategy.order0.balance, orders.buy.budget);
+    if (!isZero(buyDeposit)) {
+      arr.push({
+        ...quote,
+        spender: spenderAddress,
+        amount: buyDeposit,
+      });
+    }
+    const sellDeposit = getDeposit(strategy.order1.balance, orders.sell.budget);
+    if (!isZero(sellDeposit)) {
+      arr.push({
+        ...base,
+        spender: spenderAddress,
+        amount: sellDeposit,
+      });
+    }
+    return arr;
+  }, [strategy, orders.buy.budget, orders.sell.budget, base, quote]);
+  const approval = useApproval(approvalTokens);
 
   // TODO: move useStrategyEvent to common
   const strategyEventData = useStrategyEvent(
@@ -195,6 +245,7 @@ export const EditStrategyOverlappingPage = () => {
   })();
 
   const isDisabled = (form: HTMLFormElement) => {
+    if (!hasChanged) return true;
     if (!form.checkValidity()) return true;
     if (!!form.querySelector('.error-message')) return true;
     const warnings = form.querySelector('.warning-message');
@@ -202,9 +253,7 @@ export const EditStrategyOverlappingPage = () => {
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
   };
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isDisabled(e.currentTarget)) return;
+  const update = () => {
     updateMutation.mutate(
       {
         id: strategy.id,
@@ -246,6 +295,45 @@ export const EditStrategyOverlappingPage = () => {
     );
   };
 
+  const submit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isDisabled(e.currentTarget)) return;
+    if (isZero(orders.buy.budget) && isZero(orders.sell.budget)) {
+      return openModal('genericInfo', {
+        title: 'Empty Strategy Warning',
+        text: 'You are about to update a strategy with no associated budget. It will be inactive until you deposit funds.',
+        variant: 'warning',
+        onConfirm: update,
+      });
+    }
+
+    if (approval.approvalRequired) {
+      return openModal('txConfirm', {
+        approvalTokens,
+        onConfirm: update,
+        buttonLabel: 'Create Strategy',
+        eventData: {
+          ...strategyEventData,
+          productType: 'strategy',
+          approvalTokens,
+          buyToken: base,
+          sellToken: quote,
+          blockchainNetwork: config.network.name,
+        },
+        context: 'createStrategy',
+      });
+    }
+    return update();
+  };
+
+  if (!marketPrice && typeof externalPrice !== 'number') {
+    return (
+      <div className="grid md:w-[440px]">
+        <CarbonLogoLoading className="h-80 place-self-center" />;
+      </div>
+    );
+  }
+
   if (!marketPrice) {
     const setMarketPrice = (price: number) => {
       navigate({
@@ -256,13 +344,13 @@ export const EditStrategyOverlappingPage = () => {
       });
     };
     return (
-      <div className="flex flex-col gap-20">
+      <div className="flex flex-col gap-20 md:w-[440px]">
         <EditPriceNav />
         <EditStrategyOverlapTokens strategy={strategy} />
         <m.article
           variants={items}
           key="marketPrice"
-          className="rounded-10 bg-background-900 flex flex-col md:w-[440px]"
+          className="rounded-10 bg-background-900 flex flex-col"
         >
           <OverlappingInitMarketPriceField
             base={base}
@@ -304,7 +392,9 @@ export const EditStrategyOverlappingPage = () => {
           name="approval"
           data-testid="approve-warnings"
         />
-        I've approved the edits and distribution changes.
+        {hasChanged
+          ? "I've approved the token deposit(s) and distribution."
+          : "I've reviewed the warning(s) but choose to proceed."}
       </label>
 
       <Button
