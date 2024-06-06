@@ -15,7 +15,6 @@ export const commonConfig: AppConfig = {
   selectedConnections: [
     'MetaMask',
     'Coinbase Wallet',
-    'WalletConnect',
     'Safe',
     'Compass Wallet',
     'Seif',
