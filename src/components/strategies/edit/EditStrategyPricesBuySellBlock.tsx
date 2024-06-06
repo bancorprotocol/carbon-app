@@ -2,7 +2,7 @@ import { FC, useId } from 'react';
 import { Token } from 'libs/tokens';
 import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/LimitRangeSection';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { EditTypes } from 'libs/routing';
+import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { BuySellHeader } from 'components/strategies/create/BuySellBlock/Header';

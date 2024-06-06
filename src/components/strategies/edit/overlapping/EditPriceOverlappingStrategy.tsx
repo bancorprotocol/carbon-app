@@ -133,7 +133,13 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   const budgetWarning = (() => {
     if (action !== 'deposit') return;
-    if (hasArbOpportunity(order0.marginalPrice, spread, userMarketPrice)) {
+    if (
+      hasArbOpportunity(
+        order0.marginalPrice,
+        spread.toString(),
+        userMarketPrice?.toString()
+      )
+    ) {
       const buyBudgetChanged = strategy.order0.balance !== order0.budget;
       const sellBudgetChanged = strategy.order1.balance !== order1.budget;
       if (!buyBudgetChanged && !sellBudgetChanged) return;
@@ -503,9 +509,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           anchor={anchor}
           action={action}
           setAction={setActionValue}
-          budgetValue={delta}
+          budget={delta}
           setBudget={setBudget}
-          resetBudgets={(anchorValue) => resetBudgets({ anchorValue })}
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
           error={budgetError}

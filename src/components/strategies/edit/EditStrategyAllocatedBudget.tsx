@@ -4,7 +4,7 @@ import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Switch } from 'components/common/switch';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { EditTypes } from 'libs/routing';
+import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
 import { TooltipTokenAmount } from 'components/strategies/edit/tooltip/TooltipTokenAmount';

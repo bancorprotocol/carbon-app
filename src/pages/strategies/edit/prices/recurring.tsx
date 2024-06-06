@@ -261,7 +261,7 @@ export const EditStrategyRecurringPage = () => {
           name="approval"
           data-testid="approve-warnings"
         />
-        I've approved the edits and distribution changes.
+        I've reviewed the warning(s) but choose to proceed.
       </label>
 
       <Button

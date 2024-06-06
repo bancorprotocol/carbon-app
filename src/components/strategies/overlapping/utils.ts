@@ -31,7 +31,8 @@ export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
   return buyMax.gte(sellMin);
 };
 
-export const isValidSpread = (spread: string | number) => {
+export const isValidSpread = (spread?: string | number) => {
+  if (!spread) return false;
   const _spread = new SafeDecimal(spread);
   return !_spread.isNaN() && _spread.gt(0) && _spread.lt(100);
 };

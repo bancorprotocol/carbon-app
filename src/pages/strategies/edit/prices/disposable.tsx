@@ -20,11 +20,13 @@ import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   emptyOrder,
+  isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import style from 'components/strategies/common/form.module.css';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 export interface EditDisposableStrategySearch {
   min: string;
@@ -90,9 +92,12 @@ export const EditStrategyDisposablePage = () => {
   };
 
   const hasChanged = (() => {
-    const oldOrder = buy ? strategy.order0 : strategy.order1;
-    if (order.min !== roundSearchParam(oldOrder.startRate)) return true;
-    if (order.max !== roundSearchParam(oldOrder.endRate)) return true;
+    const { order0, order1 } = strategy;
+    if (buyOrder.min !== roundSearchParam(order0.startRate)) return true;
+    if (buyOrder.max !== roundSearchParam(order0.endRate)) return true;
+    if (sellOrder.min !== roundSearchParam(order1.startRate)) return true;
+    if (sellOrder.max !== roundSearchParam(order1.endRate)) return true;
+    return false;
   })();
 
   // Warnings
@@ -172,6 +177,9 @@ export const EditStrategyDisposablePage = () => {
     );
   };
 
+  const fromRecurring =
+    !isZero(strategy.order0.startRate) && !isZero(strategy.order1.startRate);
+
   return (
     <form
       onSubmit={submit}
@@ -207,6 +215,12 @@ export const EditStrategyDisposablePage = () => {
           </TabsMenu>
         }
       />
+      {fromRecurring && (
+        <WarningMessageWithIcon>
+          {buy ? 'Sell High' : 'Buy Low'} order has been removed
+        </WarningMessageWithIcon>
+      )}
+
       <label
         htmlFor="approve-warnings"
         className={cn(
@@ -220,7 +234,11 @@ export const EditStrategyDisposablePage = () => {
           name="approval"
           data-testid="approve-warnings"
         />
-        I've approved the edits and distribution changes.
+        {fromRecurring
+          ? `I understand this change will remove ${
+              buy ? 'Sell High' : 'Buy Low'
+            } order`
+          : "I've reviewed the warning(s) but choose to proceed."}
       </label>
 
       <Button

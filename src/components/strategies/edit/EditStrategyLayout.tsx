@@ -1,4 +1,4 @@
-import { EditTypes } from 'libs/routing';
+import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { CreateStrategyGraph } from '../create/CreateStrategyGraph';
 import { EditStrategyBudgetContent } from './EditStrategyBudgetContent';
 import { EditStrategyPricesContent } from './EditStrategyPricesContent';

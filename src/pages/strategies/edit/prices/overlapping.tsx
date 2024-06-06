@@ -97,10 +97,16 @@ const getOrders = (
     action = 'deposit',
   } = search;
 
+  const touched = isTouched(strategy, search);
+  const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
+  const marketPrice = touched
+    ? userMarketPrice
+    : calculatedPrice?.toString() || userMarketPrice;
+
   if (!isValidRange(min, max) || !isValidSpread(spread)) {
     return {
-      buy: { min, max: min, marginalPrice: min, budget: '' },
-      sell: { min, max: min, marginalPrice: min, budget: '' },
+      buy: { min, max: min, marginalPrice: max, budget: '' },
+      sell: { min: max, max: max, marginalPrice: min, budget: '' },
     };
   }
 
@@ -118,13 +124,6 @@ const getOrders = (
       budget: order1.balance,
     },
   };
-
-  const touched = isTouched(strategy, search);
-
-  const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
-  const marketPrice = touched
-    ? userMarketPrice
-    : calculatedPrice?.toString() || userMarketPrice;
 
   // PRICES
   if (touched) {
@@ -203,6 +202,7 @@ export const EditStrategyOverlappingPage = () => {
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
 
   const orders = getOrders(strategy, search, marketPrice);
+  const spread = isValidSpread(search.spread) ? search.spread! : initSpread;
 
   const approvalTokens = useMemo(() => {
     const arr = [];
@@ -377,7 +377,7 @@ export const EditStrategyOverlappingPage = () => {
         marketPrice={marketPrice}
         order0={orders.buy}
         order1={orders.sell}
-        spread={search.spread || initSpread}
+        spread={spread}
       />
       <label
         htmlFor="approve-warnings"
