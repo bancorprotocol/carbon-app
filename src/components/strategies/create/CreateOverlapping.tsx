@@ -25,14 +25,14 @@ import { useWeb3 } from 'libs/web3';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
 import { InputRange } from './Order/InputRange';
-import { BaseOrder } from 'components/strategies/common/types';
+import { OverlappingOrder } from 'components/strategies/common/types';
 
 interface Props {
   base: Token;
   quote: Token;
   marketPrice: string;
-  order0: BaseOrder;
-  order1: BaseOrder;
+  order0: OverlappingOrder;
+  order1: OverlappingOrder;
   spread: string;
 }
 
