@@ -9,6 +9,10 @@ import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { cn } from 'utils/helpers';
 import { carbonEvents } from 'services/events';
 import { StrategyEditEventType } from 'services/events/types';
+import {
+  getEditBudgetPage,
+  getEditPricesPage,
+} from 'components/strategies/edit/utils';
 
 export interface ModalConfirmWithdrawData {
   strategy: Strategy;
@@ -21,6 +25,8 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
 }) => {
   const { closeModal } = useModal();
   const { strategyEvent, strategy } = data;
+  const editPrices = getEditPricesPage(strategy);
+  const withdraw = getEditBudgetPage(strategy, 'withdraw');
 
   const edit = () => {
     carbonEvents.strategyEdit.strategyEditPricesClick({
@@ -40,9 +46,9 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         <h3 className="text-14 font-weight-500">Did you know ?</h3>
         <Link
           onClick={edit}
-          to="/strategies/edit/$strategyId"
+          to={editPrices.to}
+          search={editPrices.search}
           params={{ strategyId: strategy.id }}
-          search={{ type: 'editPrices' }}
           className={cn(
             'row-span-2 self-center',
             buttonStyles({ variant: 'white' })
@@ -56,9 +62,9 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
       </article>
       <Link
         onClick={edit}
-        to="/strategies/edit/$strategyId"
+        to={withdraw.to}
+        search={withdraw.search}
         params={{ strategyId: strategy.id }}
-        search={{ type: 'withdraw' }}
         className={buttonStyles({ variant: 'white' })}
         data-testid="withdraw-strategy-btn"
       >

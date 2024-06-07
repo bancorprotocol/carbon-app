@@ -2,16 +2,34 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { OrderCreate } from '../create/useOrder';
 import { Strategy } from 'libs/queries';
 import { getSpread, isOverlappingStrategy } from '../overlapping/utils';
+import { isDisposableStrategy } from '../common/utils';
+import {
+  toDisposablePricesSearch,
+  toOverlappingPricesSearch,
+  toRecurringPricesSearch,
+} from 'libs/routing/routes/strategyEdit';
 
-export const getDeposit = (initialBudget: string, newBudget: string) => {
+export const getDeposit = (initialBudget?: string, newBudget?: string) => {
   const value = new SafeDecimal(newBudget || '0').sub(initialBudget || '0');
   if (value.lte(0)) return '';
   return value.toString();
 };
-export const getWithdraw = (initialBudget: string, newBudget: string) => {
+export const getWithdraw = (initialBudget?: string, newBudget?: string) => {
   const value = new SafeDecimal(initialBudget || '0').sub(newBudget || '0');
   if (value.lte(0)) return '';
   return value.toString();
+};
+
+export const getTotalBudget = (
+  action: 'deposit' | 'withdraw',
+  initialBudget?: string,
+  budget?: string
+) => {
+  if (action === 'deposit') {
+    return new SafeDecimal(initialBudget || '0').add(budget || '0').toString();
+  } else {
+    return new SafeDecimal(initialBudget || '0').sub(budget || '0').toString();
+  }
 };
 
 export const strategyBudgetChanges = (
@@ -38,4 +56,48 @@ export const strategyHasChanged = (
     return !getSpread({ order0, order1 }).eq(getSpread(strategy));
   }
   return false;
+};
+
+export const getEditPricesPage = (strategy: Strategy) => {
+  const isOverlapping = isOverlappingStrategy(strategy);
+  const isDisposable = isDisposableStrategy(strategy);
+  if (isDisposable) {
+    return {
+      to: '/strategies/edit/$strategyId/prices/disposable',
+      search: toDisposablePricesSearch(strategy),
+    };
+  } else if (isOverlapping) {
+    return {
+      to: '/strategies/edit/$strategyId/prices/overlapping',
+      search: toOverlappingPricesSearch(strategy),
+    };
+  } else {
+    return {
+      to: '/strategies/edit/$strategyId/prices/recurring',
+      search: toRecurringPricesSearch(strategy),
+    };
+  }
+};
+export const getEditBudgetPage = (
+  strategy: Strategy,
+  action: 'withdraw' | 'deposit'
+) => {
+  const isOverlapping = isOverlappingStrategy(strategy);
+  const isDisposable = isDisposableStrategy(strategy);
+  if (isDisposable) {
+    return {
+      to: '/strategies/edit/$strategyId/budget/disposable',
+      search: { action },
+    };
+  } else if (isOverlapping) {
+    return {
+      to: '/strategies/edit/$strategyId/budget/overlapping',
+      search: { action },
+    };
+  } else {
+    return {
+      to: '/strategies/edit/$strategyId/budget/recurring',
+      search: { action },
+    };
+  }
 };

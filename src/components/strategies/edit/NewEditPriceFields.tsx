@@ -7,13 +7,11 @@ import { InputRange } from 'components/strategies/create/Order/InputRange';
 import { InputLimit } from 'components/strategies/create/Order/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
 import { EditStrategyAllocatedBudget } from './NewEditStrategyAllocatedBudget';
-import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { useEditStrategyCtx } from './EditStrategyContext';
 
 interface Props {
   order: OrderBlock;
   buy?: boolean;
-  type: EditTypes;
   initialBudget: string;
   setOrder: (order: Partial<OrderBlock>) => void;
   settings?: ReactNode;
@@ -21,9 +19,8 @@ interface Props {
   error?: string;
 }
 
-export const EditStrategyOrderField: FC<Props> = ({
+export const EditStrategyPriceField: FC<Props> = ({
   order,
-  type,
   initialBudget,
   setOrder,
   buy = false,
@@ -63,15 +60,13 @@ export const EditStrategyOrderField: FC<Props> = ({
   const setPrice = (price: string) => setOrder({ min: price, max: price });
   const setMin = (min: string) => setOrder({ min });
   const setMax = (max: string) => setOrder({ max });
-  const setMarginalPrice = (marginalPrice: string) =>
-    setOrder({ marginalPrice });
 
   const headerProps = { titleId, order, base, buy, setOrder };
 
   return (
     <article
       aria-labelledby={titleId}
-      className={`rounded-10 bg-background-900 flex flex-col gap-20 border-l-2 p-20 ${
+      className={`rounded-6 bg-background-900 flex flex-col gap-20 border-l-2 p-20 text-left ${
         buy
           ? 'border-buy/50 focus-within:border-buy'
           : 'border-sell/50 focus-within:border-sell'
@@ -117,13 +112,8 @@ export const EditStrategyOrderField: FC<Props> = ({
         )}
       </fieldset>
       <EditStrategyAllocatedBudget
-        type={type}
-        base={base}
-        quote={quote}
-        order={order}
+        token={buy ? quote : base}
         initialBudget={initialBudget}
-        setMarginalPrice={setMarginalPrice}
-        buy={buy}
       />
       <FullOutcome
         min={order.min}

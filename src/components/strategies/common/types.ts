@@ -3,7 +3,7 @@ import { StrategySettings } from 'libs/routing';
 export interface BaseOrder {
   min: string;
   max: string;
-  marginalPrice: string;
+  marginalPrice?: string;
   budget: string;
 }
 

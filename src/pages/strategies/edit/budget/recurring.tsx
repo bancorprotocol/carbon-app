@@ -2,41 +2,45 @@ import { FormEvent, useCallback, useState } from 'react';
 import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
-import { cn, roundSearchParam } from 'utils/helpers';
-import { EditStrategyPriceField } from 'components/strategies/edit/NewEditPriceFields';
-import { StrategyDirection, StrategySettings } from 'libs/routing';
-import { BaseOrder, OrderBlock } from 'components/strategies/common/types';
+import { cn } from 'utils/helpers';
+import { StrategyDirection } from 'libs/routing';
+import { OrderBlock } from 'components/strategies/common/types';
 import { Button } from 'components/common/button';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
-import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
 import { useQueryClient } from '@tanstack/react-query';
-import { Order, QueryKey, useUpdateStrategyQuery } from 'libs/queries';
+import { QueryKey, useUpdateStrategyQuery } from 'libs/queries';
 import { useNotifications } from 'hooks/useNotifications';
 import { useWeb3 } from 'libs/web3';
-import { carbonEvents } from 'services/events';
 import { useStrategyEvent } from 'components/strategies/create/useStrategyEventData';
-import style from 'components/strategies/common/form.module.css';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
-import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
-import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { EditStrategyBudgetField } from 'components/strategies/edit/NewEditBudgetFields';
+import { getDeposit, getTotalBudget } from 'components/strategies/edit/utils';
+import {
+  isZero,
+  outSideMarketWarning,
+} from 'components/strategies/common/utils';
+import { useApproval } from 'hooks/useApproval';
+import { useModal } from 'hooks/useModal';
+import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
+import { carbonEvents } from 'services/events';
+import config from 'config';
+import style from 'components/strategies/common/form.module.css';
 
-export interface EditRecurringStrategySearch {
-  buyMin: string;
-  buyMax: string;
-  buySettings: StrategySettings;
-  sellMin: string;
-  sellMax: string;
-  sellSettings: StrategySettings;
+export interface EditBudgetRecurringStrategySearch {
+  action: 'deposit' | 'withdraw';
+  buyBudget?: string;
+  buyMarginalPrice?: string;
+  sellBudget?: string;
+  sellMarginalPrice?: string;
 }
 
 // TODO: merge that with create
-type OrderKey = keyof EditRecurringStrategySearch;
+type OrderKey = keyof EditBudgetRecurringStrategySearch;
 const toOrderSearch = (
   order: Partial<OrderBlock>,
   direction: 'buy' | 'sell'
 ) => {
-  const search: Partial<EditRecurringStrategySearch> = {};
+  const search: Partial<EditBudgetRecurringStrategySearch> = {};
   for (const [key, value] of Object.entries(order)) {
     const camelCaseKey = key.charAt(0).toUpperCase() + key.slice(1);
     const searchKey = `${direction}${camelCaseKey}` as OrderKey;
@@ -45,39 +49,19 @@ const toOrderSearch = (
   return search;
 };
 
-const getWarning = (search: EditRecurringStrategySearch) => {
-  const { buyMin, buyMax, sellMin, sellMax } = search;
-  const sellMinInRange =
-    buyMin && buyMax && sellMin && +sellMin >= +buyMin && +sellMin < +buyMax;
-  const buyMaxInRange =
-    sellMin && sellMax && buyMax && +buyMax >= +sellMin && +buyMax < +sellMax;
-  if (sellMinInRange || buyMaxInRange) {
-    return 'Notice: your Buy and Sell orders overlap';
-  }
-};
+const spenderAddress = config.addresses.carbon.carbonController;
+const url = '/strategies/edit/$strategyId/budget/recurring';
 
-const getError = (search: EditRecurringStrategySearch) => {
-  const { buyMin, buyMax, sellMin, sellMax } = search;
-  const minReversed = buyMin && sellMin && +buyMin > +sellMin;
-  const maxReversed = buyMax && sellMax && +buyMax > +sellMax;
-  if (minReversed || maxReversed) {
-    return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
-  }
-};
-
-const url = '/strategies/edit/$strategyId/prices/recurring';
-
-export const EditStrategyRecurringPage = () => {
+export const EditBudgetRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
+  const { base, quote, order0, order1 } = strategy;
   const { history } = useRouter();
+  const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const { user } = useWeb3();
   const marketPrice = useMarketPrice({ base, quote });
-  // TODO: support also renew
-  const type = 'editPrices';
 
   const [isProcessing, setIsProcessing] = useState(false);
   const updateMutation = useUpdateStrategyQuery();
@@ -87,20 +71,29 @@ export const EditStrategyRecurringPage = () => {
   const isLoading = isAwaiting || isProcessing;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
 
+  const totalBuyBudget = getTotalBudget(
+    search.action,
+    order0.balance,
+    search.buyBudget
+  );
+  const totalSellBudget = getTotalBudget(
+    search.action,
+    order1.balance,
+    search.sellBudget
+  );
+
   const orders = {
     buy: {
-      min: search.buyMin,
-      max: search.buyMax,
-      budget: '',
-      marginalPrice: '',
-      settings: search.buySettings,
+      min: order0.startRate,
+      max: order0.endRate,
+      budget: totalBuyBudget,
+      marginalPrice: search.buyMarginalPrice,
     },
     sell: {
-      min: search.sellMin,
-      max: search.sellMax,
-      budget: '',
-      marginalPrice: '',
-      settings: search.sellSettings,
+      min: order1.startRate,
+      max: order1.endRate,
+      budget: totalSellBudget,
+      marginalPrice: search.sellMarginalPrice,
     },
   };
 
@@ -113,32 +106,23 @@ export const EditStrategyRecurringPage = () => {
     orders.sell
   );
 
-  const hasChanged = (() => {
-    const { order0, order1 } = strategy;
-    if (search.buyMin !== roundSearchParam(order0.startRate)) return true;
-    if (search.buyMax !== roundSearchParam(order0.endRate)) return true;
-    if (search.sellMin !== roundSearchParam(order1.startRate)) return true;
-    if (search.sellMax !== roundSearchParam(order1.endRate)) return true;
-    return false;
-  })();
+  const hasChanged = !isZero(search.buyBudget) || !isZero(search.sellBudget);
 
   // Warnings
   const sellOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: search.sellMin,
-    max: search.sellMax,
+    min: order1.startRate,
+    max: order1.endRate,
     buy: false,
   });
   const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: search.buyMin,
-    max: search.buyMax,
+    min: order0.startRate,
+    max: order0.endRate,
     buy: true,
   });
-
-  const error = getError(search);
 
   // TODO: create a utils for that
   const setOrder = useCallback(
@@ -174,33 +158,79 @@ export const EditStrategyRecurringPage = () => {
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
   };
 
-  const getMarginalOption = (oldOrder: Order, newOrder: BaseOrder) => {
-    if (type !== 'editPrices') return;
-    if (oldOrder.startRate !== newOrder.min) return MarginalPriceOptions.reset;
-    if (oldOrder.endRate !== newOrder.max) return MarginalPriceOptions.reset;
-  };
+  const approvalTokens = (() => {
+    const arr = [];
+    if (search.action === 'withdraw') return [];
+    const buyDeposit = getDeposit(strategy.order0.balance, orders.buy.budget);
+    if (!isZero(buyDeposit)) {
+      arr.push({
+        ...quote,
+        spender: spenderAddress,
+        amount: buyDeposit,
+      });
+    }
+    const sellDeposit = getDeposit(strategy.order1.balance, orders.sell.budget);
+    if (!isZero(sellDeposit)) {
+      arr.push({
+        ...base,
+        spender: spenderAddress,
+        amount: sellDeposit,
+      });
+    }
+    return arr;
+  })();
+  const approval = useApproval(approvalTokens);
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
+    if (isZero(orders.buy.budget) && isZero(orders.sell.budget)) {
+      return openModal('genericInfo', {
+        title: 'Empty Strategy Warning',
+        text: 'You are about to update a strategy with no associated budget. It will be inactive until you deposit funds.',
+        variant: 'warning',
+        onConfirm: update,
+      });
+    }
+
+    if (approval.approvalRequired) {
+      return openModal('txConfirm', {
+        approvalTokens,
+        onConfirm: update,
+        buttonLabel: 'Confirm Deposit',
+        eventData: {
+          ...strategyEventData,
+          productType: 'strategy',
+          approvalTokens,
+          buyToken: base,
+          sellToken: quote,
+          blockchainNetwork: config.network.name,
+        },
+        context: 'depositStrategyFunds',
+      });
+    }
+    return update();
+  };
+
+  const update = () => {
     updateMutation.mutate(
       {
         id: strategy.id,
         encoded: strategy.encoded,
         fieldsToUpdate: {
-          buyPriceLow: search.buyMin,
-          buyPriceHigh: search.buyMax,
-          sellPriceLow: search.sellMin,
-          sellPriceHigh: search.sellMax,
+          buyBudget: orders.buy.budget,
+          sellBudget: orders.sell.budget,
         },
-        buyMarginalPrice: getMarginalOption(strategy.order0, orders.buy),
-        sellMarginalPrice: getMarginalOption(strategy.order1, orders.sell),
+        buyMarginalPrice: orders.buy.marginalPrice,
+        sellMarginalPrice: orders.sell.marginalPrice,
       },
       {
         onSuccess: async (tx) => {
           handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
           const notif =
-            type === 'editPrices' ? 'changeRatesStrategy' : 'renewStrategy';
+            search.action === 'deposit'
+              ? 'depositStrategy'
+              : 'withdrawStrategy';
           dispatchNotification(notif, { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
@@ -229,21 +259,22 @@ export const EditStrategyRecurringPage = () => {
       className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
       data-testid="edit-form"
     >
-      <EditPriceNav />
       <EditStrategyOverlapTokens strategy={strategy} />
-      <EditStrategyPriceField
+      <EditStrategyBudgetField
+        action={search.action}
         order={orders.sell}
+        budget={search.sellBudget ?? ''}
         initialBudget={strategy.order1.balance}
         setOrder={setSellOrder}
-        warnings={[sellOutsideMarket, getWarning(search)]}
-        error={error}
+        warning={search.action === 'deposit' ? sellOutsideMarket : ''}
       />
-      <EditStrategyPriceField
+      <EditStrategyBudgetField
+        action={search.action}
         order={orders.buy}
+        budget={search.buyBudget ?? ''}
         initialBudget={strategy.order0.balance}
         setOrder={setBuyOrder}
-        warnings={[buyOutsideMarket, getWarning(search)]}
-        error={error}
+        warning={search.action === 'deposit' ? buyOutsideMarket : ''}
         buy
       />
       <label
@@ -272,7 +303,7 @@ export const EditStrategyRecurringPage = () => {
         fullWidth
         data-testid="edit-submit"
       >
-        {type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
+        Confirm Changes
       </Button>
       <Button
         type="reset"

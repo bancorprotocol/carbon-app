@@ -1,9 +1,9 @@
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { Link, useParams } from '@tanstack/react-router';
 import {
-  toDisposablePriceSearch,
-  toOverlappingPriceSearch,
-  toRecurringPriceSearch,
+  toDisposablePricesSearch,
+  toOverlappingPricesSearch,
+  toRecurringPricesSearch,
 } from 'libs/routing/routes/strategyEdit';
 
 export const EditPriceNav = () => {
@@ -20,7 +20,7 @@ export const EditPriceNav = () => {
       <Link
         className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
         to="/strategies/edit/$strategyId/prices/disposable"
-        search={toDisposablePriceSearch(strategy)}
+        search={toDisposablePricesSearch(strategy)}
         params={params}
         replace={true}
         aria-current={isDisposable ? 'page' : 'false'}
@@ -30,7 +30,7 @@ export const EditPriceNav = () => {
       <Link
         className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
         to="/strategies/edit/$strategyId/prices/recurring"
-        search={toRecurringPriceSearch(strategy)}
+        search={toRecurringPricesSearch(strategy)}
         params={params}
         replace={true}
         aria-current={isRecurring ? 'page' : 'false'}
@@ -40,7 +40,7 @@ export const EditPriceNav = () => {
       <Link
         className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
         to="/strategies/edit/$strategyId/prices/overlapping"
-        search={toOverlappingPriceSearch(strategy)}
+        search={toOverlappingPricesSearch(strategy)}
         params={params}
         replace={true}
         aria-current={isOverlapping ? 'page' : 'false'}

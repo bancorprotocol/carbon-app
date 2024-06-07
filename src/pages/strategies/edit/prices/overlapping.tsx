@@ -39,7 +39,7 @@ import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
-import { getDeposit } from 'components/strategies/edit/utils';
+import { getDeposit, getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 export interface EditOverlappingStrategySearch {
@@ -141,10 +141,7 @@ const getOrders = (
   // BUDGET
   if (anchor === 'buy') {
     if (isMinAboveMarket(orders.buy)) return orders;
-    const buyBudget =
-      action === 'withdraw'
-        ? new SafeDecimal(order0.balance).sub(budget).toString()
-        : new SafeDecimal(order0.balance).add(budget).toString();
+    const buyBudget = getTotalBudget(action, order0.balance, budget);
     orders.buy.budget = buyBudget;
     orders.sell.budget = calculateOverlappingSellBudget(
       base.decimals,
@@ -157,10 +154,7 @@ const getOrders = (
     );
   } else {
     if (isMaxBelowMarket(orders.sell)) return orders;
-    const sellBudget =
-      action === 'withdraw'
-        ? new SafeDecimal(order1.balance).sub(budget).toString()
-        : new SafeDecimal(order1.balance).add(budget).toString();
+    const sellBudget = getTotalBudget(action, order1.balance, budget);
     orders.sell.budget = sellBudget;
     orders.buy.budget = calculateOverlappingBuyBudget(
       base.decimals,
@@ -311,7 +305,7 @@ export const EditStrategyOverlappingPage = () => {
       return openModal('txConfirm', {
         approvalTokens,
         onConfirm: update,
-        buttonLabel: 'Create Strategy',
+        buttonLabel: 'Confirm Deposit',
         eventData: {
           ...strategyEventData,
           productType: 'strategy',
@@ -320,7 +314,7 @@ export const EditStrategyOverlappingPage = () => {
           sellToken: quote,
           blockchainNetwork: config.network.name,
         },
-        context: 'createStrategy',
+        context: 'depositStrategyFunds',
       });
     }
     return update();

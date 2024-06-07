@@ -118,7 +118,7 @@ export const OverlappingAction: FC<Props> = (props) => {
             value={budget}
             onChange={setBudget}
             max={getMax()}
-            errors={error}
+            error={error}
             warning={warning}
             data-testid="input-budget"
           />

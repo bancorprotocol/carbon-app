@@ -1,6 +1,11 @@
 import { Route } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
-import { validLiteral, validNumber, validateSearchParams } from '../utils';
+import {
+  validLiteral,
+  validMarginalPrice,
+  validNumber,
+  validateSearchParams,
+} from '../utils';
 import { EditStrategyPageLayout } from 'pages/strategies/edit/layout';
 import {
   EditStrategyRecurringPage,
@@ -19,6 +24,15 @@ import {
   EditStrategyOverlappingPage,
 } from 'pages/strategies/edit/prices/overlapping';
 import { EditPriceLayoutPage } from 'pages/strategies/edit/prices/layout';
+import {
+  EditBudgetRecurringPage,
+  EditBudgetRecurringStrategySearch,
+} from 'pages/strategies/edit/budget/recurring';
+import { EditBudgetLayoutPage } from 'pages/strategies/edit/budget/layout';
+import {
+  EditBudgetDisposablePage,
+  EditBudgetDisposableStrategySearch,
+} from 'pages/strategies/edit/budget/disposable';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
@@ -41,27 +55,29 @@ export const editStrategyLayout = new Route({
   component: EditStrategyPageLayout,
 });
 
-export const editPriceLayout = new Route({
+// PRICES
+
+export const editPricesLayout = new Route({
   getParentRoute: () => editStrategyLayout,
   path: 'prices',
   component: EditPriceLayoutPage,
 });
 
-export const toDisposablePriceSearch = (
+export const toDisposablePricesSearch = (
   strategy: Strategy
 ): EditDisposableStrategySearch => {
   const { order0, order1 } = strategy;
   const direction = isEmptyOrder(order0) ? 'sell' : 'buy';
   const order = direction === 'sell' ? order1 : order0;
   return {
-    min: roundSearchParam(order.startRate) || '',
-    max: roundSearchParam(order.endRate) || '',
+    min: roundSearchParam(order.startRate),
+    max: roundSearchParam(order.endRate),
     settings: order.startRate === order.endRate ? 'limit' : 'range',
     direction,
   };
 };
-export const editStrategyDisposablePrices = new Route({
-  getParentRoute: () => editPriceLayout,
+export const editPricesDisposable = new Route({
+  getParentRoute: () => editPricesLayout,
   path: 'disposable',
   component: EditStrategyDisposablePage,
   validateSearch: validateSearchParams<EditDisposableStrategySearch>({
@@ -72,21 +88,21 @@ export const editStrategyDisposablePrices = new Route({
   }),
 });
 
-export const toRecurringPriceSearch = (
+export const toRecurringPricesSearch = (
   strategy: Strategy
 ): EditRecurringStrategySearch => {
   const { order0: buy, order1: sell } = strategy;
   return {
-    buyMin: roundSearchParam(buy.startRate) || '',
-    buyMax: roundSearchParam(buy.endRate) || '',
+    buyMin: roundSearchParam(buy.startRate),
+    buyMax: roundSearchParam(buy.endRate),
     buySettings: buy.startRate === buy.endRate ? 'limit' : 'range',
-    sellMin: roundSearchParam(sell.startRate) || '',
-    sellMax: roundSearchParam(sell.endRate) || '',
+    sellMin: roundSearchParam(sell.startRate),
+    sellMax: roundSearchParam(sell.endRate),
     sellSettings: sell.startRate === sell.endRate ? 'limit' : 'range',
   };
 };
-export const editStrategyRecurringPrices = new Route({
-  getParentRoute: () => editPriceLayout,
+export const editPricesRecurring = new Route({
+  getParentRoute: () => editPricesLayout,
   path: 'recurring',
   component: EditStrategyRecurringPage,
   validateSearch: validateSearchParams<EditRecurringStrategySearch>({
@@ -99,7 +115,7 @@ export const editStrategyRecurringPrices = new Route({
   }),
 });
 
-export const toOverlappingPriceSearch = (
+export const toOverlappingPricesSearch = (
   strategy: Strategy
 ): EditOverlappingStrategySearch => {
   const { order0: buy, order1: sell } = strategy;
@@ -110,8 +126,79 @@ export const toOverlappingPriceSearch = (
     spread: spread ? spread.toString() : undefined,
   };
 };
-export const editStrategyOverlappingPrices = new Route({
-  getParentRoute: () => editPriceLayout,
+export const editPricesOverlapping = new Route({
+  getParentRoute: () => editPricesLayout,
+  path: 'overlapping',
+  component: EditStrategyOverlappingPage,
+  validateSearch: validateSearchParams<EditOverlappingStrategySearch>({
+    min: validNumber,
+    max: validNumber,
+    spread: validNumber,
+    budget: validNumber,
+    anchor: validLiteral(['buy', 'sell']),
+    action: validLiteral(['deposit', 'withdraw']),
+  }),
+});
+
+// BUDGET
+
+export const editBudgetLayout = new Route({
+  getParentRoute: () => editStrategyLayout,
+  path: 'budget',
+  component: EditBudgetLayoutPage,
+  validateSearch: (search: { action: 'deposit' | 'withdraw' }) => search,
+});
+
+export const toDisposableBudgetSearch = (
+  strategy: Strategy
+): EditDisposableStrategySearch => {
+  const { order0, order1 } = strategy;
+  const direction = isEmptyOrder(order0) ? 'sell' : 'buy';
+  const order = direction === 'sell' ? order1 : order0;
+  return {
+    min: roundSearchParam(order.startRate),
+    max: roundSearchParam(order.endRate),
+    settings: order.startRate === order.endRate ? 'limit' : 'range',
+    direction,
+  };
+};
+export const editBudgetDisposable = new Route({
+  getParentRoute: () => editBudgetLayout,
+  path: 'disposable',
+  component: EditBudgetDisposablePage,
+  validateSearch: validateSearchParams<EditBudgetDisposableStrategySearch>({
+    action: validLiteral(['deposit', 'withdraw']),
+    budget: validNumber,
+    marginalPrice: validMarginalPrice,
+  }),
+});
+
+export const editBudgetRecurring = new Route({
+  getParentRoute: () => editBudgetLayout,
+  path: 'recurring',
+  component: EditBudgetRecurringPage,
+  validateSearch: validateSearchParams<EditBudgetRecurringStrategySearch>({
+    action: validLiteral(['deposit', 'withdraw']),
+    buyBudget: validNumber,
+    buyMarginalPrice: validMarginalPrice,
+    sellBudget: validNumber,
+    sellMarginalPrice: validMarginalPrice,
+  }),
+});
+
+export const toOverlappingBudgetSearch = (
+  strategy: Strategy
+): EditOverlappingStrategySearch => {
+  const { order0: buy, order1: sell } = strategy;
+  const spread = getRoundedSpread(strategy);
+  return {
+    min: roundSearchParam(buy.startRate) || undefined,
+    max: roundSearchParam(sell.endRate) || undefined,
+    spread: spread ? spread.toString() : undefined,
+  };
+};
+export const editBudgetOverlapping = new Route({
+  getParentRoute: () => editBudgetLayout,
   path: 'overlapping',
   component: EditStrategyOverlappingPage,
   validateSearch: validateSearchParams<EditOverlappingStrategySearch>({

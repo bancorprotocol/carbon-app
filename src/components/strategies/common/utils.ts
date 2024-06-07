@@ -1,8 +1,16 @@
-import { Order } from 'libs/queries';
+import { Order, Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from './types';
+
+export const isDisposableStrategy = (strategy: Strategy) => {
+  if (isZero(strategy.order0.startRate)) return true;
+  if (isZero(strategy.order0.endRate)) return true;
+  if (isZero(strategy.order1.startRate)) return true;
+  if (isZero(strategy.order1.endRate)) return true;
+  return false;
+};
 
 export const emptyOrder = (): BaseOrder => ({
   min: '0',

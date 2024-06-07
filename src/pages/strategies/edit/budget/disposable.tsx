@@ -2,52 +2,49 @@ import { FormEvent, useCallback, useState } from 'react';
 import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
-import { cn, roundSearchParam } from 'utils/helpers';
-import { EditStrategyPriceField } from 'components/strategies/edit/NewEditPriceFields';
-import { StrategyDirection, StrategySettings } from 'libs/routing';
-import { BaseOrder, OrderBlock } from 'components/strategies/common/types';
+import { cn } from 'utils/helpers';
+import { OrderBlock } from 'components/strategies/common/types';
 import { Button } from 'components/common/button';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
-import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
 import { useQueryClient } from '@tanstack/react-query';
-import { Order, QueryKey, useUpdateStrategyQuery } from 'libs/queries';
+import { QueryKey, useUpdateStrategyQuery } from 'libs/queries';
 import { useNotifications } from 'hooks/useNotifications';
 import { useWeb3 } from 'libs/web3';
-import { carbonEvents } from 'services/events';
 import { useStrategyEvent } from 'components/strategies/create/useStrategyEventData';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
-import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { EditStrategyBudgetField } from 'components/strategies/edit/NewEditBudgetFields';
+import { getDeposit, getTotalBudget } from 'components/strategies/edit/utils';
 import {
   emptyOrder,
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
-import { TabsMenu } from 'components/common/tabs/TabsMenu';
-import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
+import { useApproval } from 'hooks/useApproval';
+import { useModal } from 'hooks/useModal';
+import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
+import { carbonEvents } from 'services/events';
+import config from 'config';
 import style from 'components/strategies/common/form.module.css';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
-export interface EditDisposableStrategySearch {
-  min: string;
-  max: string;
-  settings: StrategySettings;
-  direction: StrategyDirection;
+export interface EditBudgetDisposableStrategySearch {
+  action: 'deposit' | 'withdraw';
+  budget?: string;
+  marginalPrice?: string;
 }
 
-const url = '/strategies/edit/$strategyId/prices/disposable';
+const spenderAddress = config.addresses.carbon.carbonController;
+const url = '/strategies/edit/$strategyId/budget/disposable';
 
-export const EditStrategyDisposablePage = () => {
+export const EditBudgetDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
   const { history } = useRouter();
+  const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const { user } = useWeb3();
   const marketPrice = useMarketPrice({ base, quote });
-  // TODO: support also renew
-  const type = 'editPrices';
 
   const [isProcessing, setIsProcessing] = useState(false);
   const updateMutation = useUpdateStrategyQuery();
@@ -57,58 +54,42 @@ export const EditStrategyDisposablePage = () => {
   const isLoading = isAwaiting || isProcessing;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
 
-  const buy = search.direction !== 'sell';
-  const initialBudget = buy ? strategy.order0.balance : strategy.order1.balance;
-  const order: OrderBlock = {
-    min: search.min ?? '',
-    max: search.max ?? '',
-    budget: '',
-    marginalPrice: '',
-    settings: search.settings ?? 'limit',
-  };
-  const buyOrder = buy ? order : emptyOrder();
-  const sellOrder = buy ? emptyOrder() : order;
+  const buy = isZero(strategy.order1.startRate);
+  const initialOrder = buy ? strategy.order0 : strategy.order1;
 
+  const totalBudget = getTotalBudget(
+    search.action,
+    initialOrder.balance,
+    search.budget
+  );
+
+  const order = {
+    min: initialOrder.startRate,
+    max: initialOrder.endRate,
+    budget: totalBudget,
+    marginalPrice: search.marginalPrice,
+  };
+
+  // TODO: move useStrategyEvent to common
   const strategyEventData = useStrategyEvent(
     'disposable',
     base,
     quote,
-    buyOrder,
-    sellOrder
+    buy ? order : emptyOrder(),
+    buy ? emptyOrder() : order
   );
 
-  const setDirection = (direction: StrategyDirection) => {
-    navigate({
-      params: (params) => params,
-      search: (previous) => ({
-        ...previous,
-        direction,
-        min: '',
-        max: '',
-      }),
-      replace: true,
-      resetScroll: false,
-    });
-  };
-
-  const hasChanged = (() => {
-    const { order0, order1 } = strategy;
-    if (buyOrder.min !== roundSearchParam(order0.startRate)) return true;
-    if (buyOrder.max !== roundSearchParam(order0.endRate)) return true;
-    if (sellOrder.min !== roundSearchParam(order1.startRate)) return true;
-    if (sellOrder.max !== roundSearchParam(order1.endRate)) return true;
-    return false;
-  })();
+  const hasChanged = !isZero(search.budget);
 
   // Warnings
-  const outSideMarket = outSideMarketWarning({
+  const outsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: search.min,
-    max: search.max,
-    buy: search.direction !== 'sell',
+    min: order.min,
+    max: order.max,
+    buy: buy,
   });
-
+  // TODO: create a utils for that
   const setOrder = useCallback(
     (order: Partial<OrderBlock>) => {
       navigate({
@@ -129,33 +110,76 @@ export const EditStrategyDisposablePage = () => {
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
   };
 
-  const getMarginalOption = (oldOrder: Order, newOrder: BaseOrder) => {
-    if (type !== 'editPrices') return;
-    if (oldOrder.startRate !== newOrder.min) return MarginalPriceOptions.reset;
-    if (oldOrder.endRate !== newOrder.max) return MarginalPriceOptions.reset;
-  };
+  const approvalTokens = (() => {
+    const arr = [];
+    if (search.action === 'withdraw') return [];
+    const token = buy ? quote : base;
+    const deposit = getDeposit(initialOrder.balance, order.budget);
+    if (!isZero(deposit)) {
+      arr.push({
+        ...token,
+        spender: spenderAddress,
+        amount: deposit,
+      });
+    }
+    return arr;
+  })();
+  const approval = useApproval(approvalTokens);
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
+    if (isZero(order.budget)) {
+      return openModal('genericInfo', {
+        title: 'Empty Strategy Warning',
+        text: 'You are about to update a strategy with no associated budget. It will be inactive until you deposit funds.',
+        variant: 'warning',
+        onConfirm: update,
+      });
+    }
+
+    if (approval.approvalRequired) {
+      return openModal('txConfirm', {
+        approvalTokens,
+        onConfirm: update,
+        buttonLabel: 'Confirm Deposit',
+        eventData: {
+          ...strategyEventData,
+          productType: 'strategy',
+          approvalTokens,
+          buyToken: base,
+          sellToken: quote,
+          blockchainNetwork: config.network.name,
+        },
+        context: 'depositStrategyFunds',
+      });
+    }
+    return update();
+  };
+
+  const update = () => {
+    console.log({
+      buyBudget: buy ? order.budget : strategy.order1.balance,
+      sellBudget: buy ? strategy.order0.balance : order.budget,
+    });
     updateMutation.mutate(
       {
         id: strategy.id,
         encoded: strategy.encoded,
         fieldsToUpdate: {
-          buyPriceLow: buyOrder.min,
-          buyPriceHigh: buyOrder.max,
-          sellPriceLow: sellOrder.min,
-          sellPriceHigh: sellOrder.max,
+          buyBudget: buy ? order.budget : strategy.order0.balance,
+          sellBudget: buy ? strategy.order1.balance : order.budget,
         },
-        buyMarginalPrice: getMarginalOption(strategy.order0, buyOrder),
-        sellMarginalPrice: getMarginalOption(strategy.order1, sellOrder),
+        buyMarginalPrice: buy ? order.marginalPrice : undefined,
+        sellMarginalPrice: buy ? undefined : order.marginalPrice,
       },
       {
         onSuccess: async (tx) => {
           handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
           const notif =
-            type === 'editPrices' ? 'changeRatesStrategy' : 'renewStrategy';
+            search.action === 'deposit'
+              ? 'depositStrategy'
+              : 'withdrawStrategy';
           dispatchNotification(notif, { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
@@ -177,9 +201,6 @@ export const EditStrategyDisposablePage = () => {
     );
   };
 
-  const fromRecurring =
-    !isZero(strategy.order0.startRate) && !isZero(strategy.order1.startRate);
-
   return (
     <form
       onSubmit={submit}
@@ -187,39 +208,16 @@ export const EditStrategyDisposablePage = () => {
       className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
       data-testid="edit-form"
     >
-      <EditPriceNav />
       <EditStrategyOverlapTokens strategy={strategy} />
-      <EditStrategyPriceField
+      <EditStrategyBudgetField
+        action={search.action}
         order={order}
-        initialBudget={initialBudget}
+        budget={search.budget ?? ''}
+        initialBudget={initialOrder.balance}
         setOrder={setOrder}
-        warnings={[outSideMarket]}
+        warning={search.action === 'deposit' ? outsideMarket : ''}
         buy={buy}
-        settings={
-          <TabsMenu>
-            <TabsMenuButton
-              onClick={() => setDirection('buy')}
-              isActive={buy}
-              data-testid="tab-buy"
-            >
-              Buy
-            </TabsMenuButton>
-            <TabsMenuButton
-              onClick={() => setDirection('sell')}
-              isActive={!buy}
-              data-testid="tab-sell"
-            >
-              Sell
-            </TabsMenuButton>
-          </TabsMenu>
-        }
       />
-      {fromRecurring && (
-        <WarningMessageWithIcon>
-          {buy ? 'Sell High' : 'Buy Low'} order has been removed
-        </WarningMessageWithIcon>
-      )}
-
       <label
         htmlFor="approve-warnings"
         className={cn(
@@ -233,11 +231,7 @@ export const EditStrategyDisposablePage = () => {
           name="approval"
           data-testid="approve-warnings"
         />
-        {fromRecurring
-          ? `I understand this change will remove ${
-              buy ? 'Sell High' : 'Buy Low'
-            } order`
-          : "I've reviewed the warning(s) but choose to proceed."}
+        I've reviewed the warning(s) but choose to proceed.
       </label>
 
       <Button
@@ -250,7 +244,7 @@ export const EditStrategyDisposablePage = () => {
         fullWidth
         data-testid="edit-submit"
       >
-        {type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
+        Confirm Changes
       </Button>
       <Button
         type="reset"

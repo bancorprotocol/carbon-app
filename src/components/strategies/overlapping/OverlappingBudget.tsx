@@ -79,7 +79,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
         value={budgetValue}
         onChange={setBudget}
         max={getMax()}
-        errors={error}
+        error={error}
         warning={warning}
         disabled={disabled}
         data-testid="input-budget"

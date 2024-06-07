@@ -22,7 +22,7 @@ interface Props {
   title?: string;
   titleTooltip?: string;
   disabled?: boolean;
-  errors?: string[] | string;
+  error?: string;
   warning?: string;
   'data-testid'?: string;
   onChange: (value: string) => void;
@@ -40,6 +40,7 @@ export const BudgetInput: FC<Props> = (props) => {
     max = '',
     placeholder = 'Enter Amount',
     disabled,
+    error,
     warning,
     title,
     titleTooltip,
@@ -67,13 +68,6 @@ export const BudgetInput: FC<Props> = (props) => {
     }
   };
 
-  const getErrors = () => {
-    if (!props.errors) return [];
-    if (Array.isArray(props.errors)) return props.errors;
-    return [props.errors];
-  };
-  const hasErrors = getErrors().length > 0;
-
   return (
     <div className="flex flex-col gap-16">
       {title && (
@@ -87,7 +81,7 @@ export const BudgetInput: FC<Props> = (props) => {
         className={`
           flex cursor-text flex-col gap-8 rounded border-2 border-black bg-black p-16
           focus-within:border-white/50
-          ${hasErrors ? '!border-error/50' : ''}
+          ${error ? '!border-error/50' : ''}
           ${className}
         `}
         onClick={() => inputRef.current?.focus()}
@@ -104,7 +98,7 @@ export const BudgetInput: FC<Props> = (props) => {
             placeholder={placeholder}
             className={`
               text-18 font-weight-500 grow text-ellipsis bg-transparent focus:outline-none
-              ${hasErrors ? 'text-error' : ''}
+              ${error ? 'text-error' : ''}
               ${disabled ? 'text-white/40' : ''}
               ${disabled ? 'cursor-not-allowed' : ''}
             `}
@@ -147,15 +141,10 @@ export const BudgetInput: FC<Props> = (props) => {
           )}
         </div>
       </div>
-      {getErrors().map((error, i) => (
-        <WarningMessageWithIcon
-          key={`error-${i}`}
-          htmlFor={id}
-          message={error}
-          isError
-        />
-      ))}
-      {warning && <WarningMessageWithIcon htmlFor={id} message={warning} />}
+      {error && <WarningMessageWithIcon htmlFor={id} message={error} isError />}
+      {!error && warning && (
+        <WarningMessageWithIcon htmlFor={id} message={warning} />
+      )}
     </div>
   );
 };

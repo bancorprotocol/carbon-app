@@ -23,11 +23,12 @@ import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
 import {
-  toDisposablePriceSearch,
-  toOverlappingPriceSearch,
-  toRecurringPriceSearch,
+  toDisposablePricesSearch,
+  toOverlappingPricesSearch,
+  toRecurringPricesSearch,
 } from 'libs/routing/routes/strategyEdit';
 import config from 'config';
+import { isDisposableStrategy } from 'components/strategies/common/utils';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -86,11 +87,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     },
   });
 
-  const isDisposable =
-    +strategy.order0.startRate === 0 ||
-    +strategy.order0.endRate === 0 ||
-    +strategy.order1.startRate === 0 ||
-    +strategy.order1.endRate === 0;
+  const isDisposable = isDisposableStrategy(strategy);
 
   if (!isDisposable && config.isSimulatorEnabled) {
     items.push({
@@ -146,21 +143,21 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   }
 
   if (isOwn) {
-    const { to, search } = (() => {
+    const editPrices = (() => {
       if (isDisposable) {
         return {
           to: '/strategies/edit/$strategyId/prices/disposable',
-          search: toDisposablePriceSearch(strategy),
+          search: toDisposablePricesSearch(strategy),
         };
       } else if (isOverlapping) {
         return {
           to: '/strategies/edit/$strategyId/prices/overlapping',
-          search: toOverlappingPriceSearch(strategy),
+          search: toOverlappingPricesSearch(strategy),
         };
       } else {
         return {
           to: '/strategies/edit/$strategyId/prices/recurring',
-          search: toRecurringPriceSearch(strategy),
+          search: toRecurringPricesSearch(strategy),
         };
       }
     })();
@@ -174,12 +171,31 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           ...strategyEvent,
         });
         navigate({
-          to: to,
-          search: search,
+          to: editPrices.to,
+          search: editPrices.search,
           params: { strategyId: strategy.id },
         });
       },
     });
+
+    const deposit = (() => {
+      if (isDisposable) {
+        return {
+          to: '/strategies/edit/$strategyId/budget/disposable',
+          search: { action: 'deposit' },
+        };
+      } else if (isOverlapping) {
+        return {
+          to: '/strategies/edit/$strategyId/budget/overlapping',
+          search: { action: 'deposit' },
+        };
+      } else {
+        return {
+          to: '/strategies/edit/$strategyId/budget/recurring',
+          search: { action: 'deposit' },
+        };
+      }
+    })();
 
     // separator
     items.push(0);
@@ -189,14 +205,32 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       action: () => {
         carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
         navigate({
-          to: '/strategies/edit/$strategyId',
+          to: deposit.to,
+          search: deposit.search,
           params: { strategyId: strategy.id },
-          search: { type: 'deposit' },
         });
       },
     });
 
     if (strategy.status !== 'noBudget') {
+      const withdraw = (() => {
+        if (isDisposable) {
+          return {
+            to: '/strategies/edit/$strategyId/budget/disposable',
+            search: { action: 'withdraw' },
+          };
+        } else if (isOverlapping) {
+          return {
+            to: '/strategies/edit/$strategyId/budget/overlapping',
+            search: { action: 'withdraw' },
+          };
+        } else {
+          return {
+            to: '/strategies/edit/$strategyId/budget/recurring',
+            search: { action: 'withdraw' },
+          };
+        }
+      })();
       items.push({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
@@ -205,9 +239,9 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
           if (isOverlapping) {
             navigate({
-              to: '/strategies/edit/$strategyId',
+              to: withdraw.to,
+              search: withdraw.search,
               params: { strategyId: strategy.id },
-              search: { type: 'withdraw' },
             });
           } else {
             openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
