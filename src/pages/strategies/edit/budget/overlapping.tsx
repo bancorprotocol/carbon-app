@@ -2,7 +2,7 @@ import { FormEvent, useMemo, useState } from 'react';
 import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
-import { cn, roundSearchParam } from 'utils/helpers';
+import { cn } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import {
   getStatusTextByTxStatus,
@@ -29,55 +29,36 @@ import {
   isMinAboveMarket,
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
-import { EditPriceOverlappingStrategy } from 'components/strategies/edit/NewEditPriceOverlappingStrategy';
 import { items } from 'components/strategies/common/variants';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
-import { SafeDecimal } from 'libs/safedecimal';
 import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
-import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { getDeposit, getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { EditBudgetOverlappingStrategy } from 'components/strategies/edit/NewEditBudgetOverlappingStrategy';
+import style from 'components/strategies/common/form.module.css';
 
-export interface EditOverlappingStrategySearch {
+export interface EditBudgetOverlappingSearch {
   marketPrice?: string;
-  min?: string;
-  max?: string;
-  spread?: string;
   anchor?: 'buy' | 'sell';
   budget?: string;
   action?: 'deposit' | 'withdraw';
 }
 
-const initSpread = '0.05';
-
-const initMin = (marketPrice: string) => {
-  return new SafeDecimal(marketPrice).times(0.99).toString();
-};
-const initMax = (marketPrice: string) => {
-  return new SafeDecimal(marketPrice).times(1.01).toString();
-};
-
-const isTouched = (
-  strategy: Strategy,
-  search: EditOverlappingStrategySearch
-) => {
+const isTouched = (strategy: Strategy, search: EditBudgetOverlappingSearch) => {
   const { order0, order1 } = strategy;
-  if (search.marketPrice) return true;
   if (isZero(order0.balance) && isZero(order1.balance)) return true;
-  if (search.min !== roundSearchParam(order0.startRate)) return true;
-  if (search.max !== roundSearchParam(order1.endRate)) return true;
-  if (search.spread !== getRoundedSpread(strategy).toString()) return true;
+  if (search.marketPrice) return true;
   return false;
 };
 
 /** Create the orders out of the search params */
 const getOrders = (
   strategy: Strategy,
-  search: EditOverlappingStrategySearch,
+  search: EditBudgetOverlappingSearch,
   userMarketPrice?: string
 ) => {
   const { base, quote, order0, order1 } = strategy;
@@ -89,14 +70,10 @@ const getOrders = (
     };
   }
 
-  const {
-    anchor,
-    min = initMin(userMarketPrice),
-    max = initMax(userMarketPrice),
-    spread = initSpread,
-    budget = '0',
-    action = 'deposit',
-  } = search;
+  const min = strategy.order0.startRate;
+  const max = strategy.order1.endRate;
+  const spread = getRoundedSpread(strategy).toString();
+  const { anchor, budget = '0', action = 'deposit' } = search;
 
   const touched = isTouched(strategy, search);
   const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
@@ -171,9 +148,9 @@ const getOrders = (
 };
 
 const spenderAddress = config.addresses.carbon.carbonController;
-const url = '/strategies/edit/$strategyId/prices/overlapping';
+const url = '/strategies/edit/$strategyId/budget/overlapping';
 
-export const EditStrategyOverlappingPage = () => {
+export const EditBudgetOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
   const { history } = useRouter();
@@ -185,9 +162,6 @@ export const EditStrategyOverlappingPage = () => {
   const externalPrice = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
-  // TODO: support also renew
-  const type = 'editPrices';
-
   const [isProcessing, setIsProcessing] = useState(false);
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
@@ -197,7 +171,6 @@ export const EditStrategyOverlappingPage = () => {
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
 
   const orders = getOrders(strategy, search, marketPrice);
-  const spread = isValidSpread(search.spread) ? search.spread! : initSpread;
 
   const approvalTokens = useMemo(() => {
     const arr = [];
@@ -231,10 +204,7 @@ export const EditStrategyOverlappingPage = () => {
   );
 
   const hasChanged = (() => {
-    const { order0, order1 } = strategy;
-    if (search.min !== roundSearchParam(order0.startRate)) return true;
-    if (search.max !== roundSearchParam(order1.endRate)) return true;
-    if (search.spread !== getRoundedSpread(strategy).toString()) return true;
+    if (search.marketPrice) return true;
     if (search.budget) return true;
     return false;
   })();
@@ -268,7 +238,9 @@ export const EditStrategyOverlappingPage = () => {
         onSuccess: async (tx) => {
           handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
           const notif =
-            type === 'editPrices' ? 'changeRatesStrategy' : 'renewStrategy';
+            search.action === 'deposit'
+              ? 'depositStrategy'
+              : 'withdrawStrategy';
           dispatchNotification(notif, { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
@@ -365,14 +337,12 @@ export const EditStrategyOverlappingPage = () => {
       className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
       data-testid="edit-form"
     >
-      <EditPriceNav />
       <EditStrategyOverlapTokens strategy={strategy} />
 
-      <EditPriceOverlappingStrategy
+      <EditBudgetOverlappingStrategy
         marketPrice={marketPrice}
         order0={orders.buy}
         order1={orders.sell}
-        spread={spread}
       />
       <label
         htmlFor="approve-warnings"
@@ -402,7 +372,7 @@ export const EditStrategyOverlappingPage = () => {
         fullWidth
         data-testid="edit-submit"
       >
-        {type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
+        Confirm Changes
       </Button>
       <Button
         type="reset"

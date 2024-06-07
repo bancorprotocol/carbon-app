@@ -33,6 +33,10 @@ import {
   EditBudgetDisposablePage,
   EditBudgetDisposableStrategySearch,
 } from 'pages/strategies/edit/budget/disposable';
+import {
+  EditBudgetOverlappingPage,
+  EditBudgetOverlappingSearch,
+} from 'pages/strategies/edit/budget/overlapping';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
@@ -131,6 +135,7 @@ export const editPricesOverlapping = new Route({
   path: 'overlapping',
   component: EditStrategyOverlappingPage,
   validateSearch: validateSearchParams<EditOverlappingStrategySearch>({
+    marketPrice: validNumber,
     min: validNumber,
     max: validNumber,
     spread: validNumber,
@@ -200,11 +205,9 @@ export const toOverlappingBudgetSearch = (
 export const editBudgetOverlapping = new Route({
   getParentRoute: () => editBudgetLayout,
   path: 'overlapping',
-  component: EditStrategyOverlappingPage,
-  validateSearch: validateSearchParams<EditOverlappingStrategySearch>({
-    min: validNumber,
-    max: validNumber,
-    spread: validNumber,
+  component: EditBudgetOverlappingPage,
+  validateSearch: validateSearchParams<EditBudgetOverlappingSearch>({
+    marketPrice: validNumber,
     budget: validNumber,
     anchor: validLiteral(['buy', 'sell']),
     action: validLiteral(['deposit', 'withdraw']),

@@ -7,6 +7,10 @@ export interface BaseOrder {
   budget: string;
 }
 
+export interface OverlappingOrder extends BaseOrder {
+  marginalPrice: string;
+}
+
 export interface OrderBlock extends BaseOrder {
   settings: StrategySettings;
 }
