@@ -46,14 +46,14 @@ export const useApproval = (data: ApprovalToken[]) => {
     [result]
   );
 
-  const isLoading = useMemo(() => result.some((x) => x.isLoading), [result]);
+  const isPending = useMemo(() => result.some((x) => x.isPending), [result]);
   const isError = useMemo(() => result.some((x) => x.isError), [result]);
   const error = useMemo(() => result.find((x) => x.isError)?.error, [result]);
 
   return {
     approvalQuery: result,
     approvalRequired,
-    isLoading,
+    isPending,
     isError,
     error,
     tokens: data,

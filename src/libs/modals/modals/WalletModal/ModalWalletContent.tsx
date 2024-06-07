@@ -9,7 +9,7 @@ import { WalletIcon } from 'components/common/WalletIcon';
 
 type Props = {
   onClick: (c: Connector) => Promise<void>;
-  isLoading?: boolean;
+  isPending?: boolean;
 };
 
 const textClasses = 'text-16 font-weight-500';
@@ -29,12 +29,12 @@ const EXT_LINKS = [
   },
 ];
 
-export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
+export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
   const [checked, setChecked] = useState(false);
 
   const { connectors } = useWagmi();
 
-  const isDisabled = isLoading || !checked;
+  const isDisabled = isPending || !checked;
 
   return (
     <div className="space-y-10">

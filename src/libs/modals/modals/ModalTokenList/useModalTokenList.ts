@@ -27,7 +27,7 @@ type Props = {
 export const useModalTokenList = ({ id, data }: Props) => {
   const {
     tokens,
-    isLoading,
+    isPending,
     isError,
     error,
     addFavoriteToken,
@@ -146,7 +146,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
     showNoResults,
     filteredTokens,
     onSelect,
-    isLoading,
+    isPending,
     isError,
     error,
     addFavoriteToken,

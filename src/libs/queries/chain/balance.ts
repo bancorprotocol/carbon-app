@@ -15,9 +15,9 @@ export const useGetTokenBalance = (
   const { Token } = useContract();
   const { user, provider } = useWagmi();
 
-  return useQuery(
-    QueryKey.balance(user!, address!),
-    async () => {
+  return useQuery({
+    queryKey: QueryKey.balance(user!, address!),
+    queryFn: async () => {
       if (!user) {
         throw new Error('useGetTokenBalance no user provided');
       }
@@ -39,13 +39,12 @@ export const useGetTokenBalance = (
         return shrinkToken(res.toString(), decimals, true);
       }
     },
-    {
-      enabled: !!user && !!address && !!decimals && !!provider,
-      refetchInterval: TEN_SEC_IN_MS,
-      onError: (e: any) =>
-        console.error('useGetTokenBalance failed with error:', e),
-    }
-  );
+    meta: {
+      errorMessage: 'useGetTokenBalances failed with error:',
+    },
+    enabled: !!user && !!address && !!decimals && !!provider,
+    refetchInterval: TEN_SEC_IN_MS,
+  });
 };
 
 export const useGetTokenBalances = (
@@ -73,9 +72,10 @@ export const useGetTokenBalances = (
           return shrinkToken(res.toString(), decimals);
         }
       },
+      meta: {
+        errorMessage: 'useGetTokenBalances failed with error:',
+      },
       enabled: !!user && !!provider,
-      onError: (e: any) =>
-        console.error('useGetTokenBalances failed with error:', e),
     })),
   });
 };

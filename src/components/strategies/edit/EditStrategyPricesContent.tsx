@@ -38,8 +38,8 @@ export const EditStrategyPricesContent = ({
   const { history } = useRouter();
   const { renewStrategy, changeRateStrategy, isProcessing, updateMutation } =
     useUpdateStrategy();
-  const isAwaiting = updateMutation.isLoading;
-  const isLoading = isAwaiting || isProcessing;
+  const isPending = updateMutation.isPending;
+  const isLoading = isPending || isProcessing;
   const base = strategy.base;
   const quote = strategy.quote;
 
@@ -174,8 +174,8 @@ export const EditStrategyPricesContent = ({
   };
 
   const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing);
-  }, [isAwaiting, isProcessing]);
+    return getStatusTextByTxStatus(isPending, isProcessing);
+  }, [isPending, isProcessing]);
 
   return (
     <form

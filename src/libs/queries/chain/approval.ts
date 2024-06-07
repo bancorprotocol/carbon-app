@@ -46,10 +46,10 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
         return new SafeDecimal(shrinkToken(allowance.toString(), t.decimals));
       },
-      enabled: !!user,
-      onError: (error: any) => {
-        console.error('useGetUserApproval error', error);
+      meta: {
+        errorMessage: 'useGetUserApproval failed with error:',
       },
+      enabled: !!user,
     })),
   });
 };
@@ -63,8 +63,8 @@ export const useSetUserApproval = () => {
   const { user } = useWagmi();
   const { Token } = useContract();
 
-  return useMutation(
-    async ({
+  return useMutation({
+    mutationFn: async ({
       address,
       spender,
       amount,
@@ -112,6 +112,6 @@ export const useSetUserApproval = () => {
       const approveTx = await Token(address).write.approve(spender, amountWei);
 
       return [approveTx, revokeTx];
-    }
-  );
+    },
+  });
 };

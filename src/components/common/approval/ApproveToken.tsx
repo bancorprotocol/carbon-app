@@ -19,7 +19,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 type Props = {
   data?: ApprovalTokenResult;
-  isLoading: boolean;
+  isPending: boolean;
   error: unknown;
   eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
   context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
@@ -27,7 +27,7 @@ type Props = {
 
 export const ApproveToken: FC<Props> = ({
   data,
-  isLoading,
+  isPending,
   error,
   eventData,
   context,
@@ -157,7 +157,7 @@ export const ApproveToken: FC<Props> = ({
   };
 
   if (!data || !token) {
-    if (isLoading) {
+    if (isPending) {
       return <div>is loading</div>;
     }
     return <div>Unknown Error</div>;

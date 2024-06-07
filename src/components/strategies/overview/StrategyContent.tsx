@@ -9,7 +9,7 @@ import styles from './StrategyContent.module.css';
 
 type Props = {
   strategies: StrategyWithFiat[];
-  isLoading: boolean;
+  isPending: boolean;
   emptyElement: ReactElement;
   isExplorer?: boolean;
 };
@@ -17,10 +17,10 @@ type Props = {
 export const _StrategyContent: FC<Props> = ({
   strategies,
   isExplorer,
-  isLoading,
+  isPending,
   emptyElement,
 }) => {
-  if (isLoading) {
+  if (isPending) {
     return (
       <m.div
         key="loading"
@@ -54,6 +54,6 @@ export const _StrategyContent: FC<Props> = ({
 export const StrategyContent = memo(
   _StrategyContent,
   (prev, next) =>
-    prev.isLoading === next.isLoading &&
+    prev.isPending === next.isPending &&
     JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
 );

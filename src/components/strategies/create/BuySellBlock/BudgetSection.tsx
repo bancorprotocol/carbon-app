@@ -31,7 +31,7 @@ export const BudgetSection: FC<Props> = ({
   const inputId = useId();
   const budgetToken = buy ? quote : base;
   const insufficientBalance =
-    !tokenBalanceQuery.isLoading &&
+    !tokenBalanceQuery.isPending &&
     new SafeDecimal(tokenBalanceQuery.data || 0).lt(order.budget);
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
@@ -84,7 +84,7 @@ export const BudgetSection: FC<Props> = ({
         value={order.budget}
         setValue={order.setBudget}
         token={budgetToken}
-        isBalanceLoading={tokenBalanceQuery.isLoading}
+        isBalanceLoading={tokenBalanceQuery.isPending}
         balance={tokenBalanceQuery.data}
         isError={insufficientBalance}
         data-testid="input-budget"

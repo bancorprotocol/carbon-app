@@ -75,7 +75,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       });
 
     !hasEnoughLiquidity &&
-      !liquidityQuery.isLoading &&
+      !liquidityQuery.isPending &&
       carbonEvents.trade.tradeErrorShow({
         buy,
         buyToken: target,
@@ -87,7 +87,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     errorMsgSource,
     errorMsgTarget,
     getFiatValueSource,
-    liquidityQuery.isLoading,
+    liquidityQuery.isPending,
   ]);
 
   useInitEffect(() => {
@@ -173,7 +173,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     !maxSourceAmountQuery.data;
 
   const getLiquidity = () => {
-    const value = liquidityQuery.isLoading
+    const value = liquidityQuery.isPending
       ? 'loading'
       : prettifyNumber(liquidityQuery.data);
     return `Liquidity: ${value} ${target.symbol}`;
@@ -190,7 +190,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           ? `Buy ${target.symbol} with ${source.symbol}`
           : `Sell ${source.symbol} for ${target.symbol}`}
       </h2>
-      {hasEnoughLiquidity || liquidityQuery.isLoading ? (
+      {hasEnoughLiquidity || liquidityQuery.isPending ? (
         <>
           <header className="text-14 flex justify-between">
             <label htmlFor={`${id}-pay`} className="text-white/50">
@@ -209,7 +209,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             id={`${id}-pay`}
             className="rounded-12 mb-20 mt-5 bg-black p-16"
             token={source}
-            isBalanceLoading={sourceBalanceQuery.isLoading}
+            isBalanceLoading={sourceBalanceQuery.isPending}
             value={sourceInput}
             setValue={(value) => {
               setSourceInput(value);

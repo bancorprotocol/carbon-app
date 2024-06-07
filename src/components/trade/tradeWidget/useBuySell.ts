@@ -203,7 +203,7 @@ export const useBuySell = ({
     if (
       bySourceQuery.isFetching ||
       byTargetQuery.isFetching ||
-      approval.isLoading ||
+      approval.isPending ||
       isLiquidityError ||
       errorBaseBalanceSufficient ||
       maxSourceAmountQuery.isFetching
@@ -252,7 +252,7 @@ export const useBuySell = ({
     }
   }, [
     approval.approvalRequired,
-    approval.isLoading,
+    approval.isPending,
     approval.tokens,
     bySourceQuery.isFetching,
     byTargetQuery.isFetching,

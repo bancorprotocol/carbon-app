@@ -99,7 +99,7 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
         value={delta}
         setValue={setBudget}
         token={budgetToken}
-        isBalanceLoading={tokenBalanceQuery.isLoading}
+        isBalanceLoading={tokenBalanceQuery.isPending}
         isError={insufficientBalance}
         balance={tokenBalanceQuery.data}
         withoutWallet={type === 'withdraw'}

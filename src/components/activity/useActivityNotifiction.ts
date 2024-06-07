@@ -15,7 +15,7 @@ export const useActivityNotifications = () => {
   const { dispatchNotification } = useNotifications();
 
   useEffect(() => {
-    if (query.isLoading) return;
+    if (query.isPending) return;
     // We need to keep this in the same useEffect to force re-evaluate previous in next render
     if (user && user !== previousUser) {
       setPreviousUser(user);
@@ -35,7 +35,7 @@ export const useActivityNotifications = () => {
     buyOrSell,
     dispatchNotification,
     previous,
-    query.isLoading,
+    query.isPending,
     previousUser,
     user,
   ]);

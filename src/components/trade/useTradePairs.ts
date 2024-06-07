@@ -91,7 +91,7 @@ export const useTradePairs = () => {
 
   return {
     openTradePairList,
-    isLoading: pairs.isLoading,
+    isPending: pairs.isPending,
     isError: pairs.isError,
     isTradePairError,
     tradePairsPopular,

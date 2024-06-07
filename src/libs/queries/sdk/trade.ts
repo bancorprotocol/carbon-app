@@ -32,9 +32,14 @@ export const useGetTradeData = ({
 }: Props) => {
   const { isInitialized } = useCarbonInit();
 
-  return useQuery<GetTradeDataResult>(
-    QueryKey.tradeData([sourceToken, targetToken], isTradeBySource, input),
-    async () => {
+  return useQuery<GetTradeDataResult>({
+    queryKey: QueryKey.tradeData(
+      [sourceToken, targetToken],
+      isTradeBySource,
+      input
+    ),
+
+    queryFn: async () => {
       const hasInvalidInput =
         new SafeDecimal(input).isNaN() || new SafeDecimal(input).isZero();
 
@@ -56,10 +61,8 @@ export const useGetTradeData = ({
         !isTradeBySource
       );
     },
-    {
-      enabled: !!enabled && isInitialized && input !== '...',
-      cacheTime: 0,
-      retry: 1,
-    }
-  );
+    enabled: !!enabled && isInitialized && input !== '...',
+    gcTime: 0,
+    retry: 1,
+  });
 };

@@ -7,13 +7,13 @@ import { Strategy, useGetUserStrategies } from 'libs/queries';
 
 export const EditStrategyPage = () => {
   const { user } = useWagmi();
-  const { data: strategies, isLoading } = useGetUserStrategies({ user });
+  const { data: strategies, isPending } = useGetUserStrategies({ user });
   const { strategyId } = useParams({ from: '/strategies/edit/$strategyId' });
   const [strategy, setStrategy] = useState<Strategy>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isPending) return;
     if (!user || !strategyId) {
       navigate({ to: '/' });
     } else {
@@ -21,8 +21,8 @@ export const EditStrategyPage = () => {
       if (strategy) setStrategy(strategy);
       else navigate({ to: '/' });
     }
-  }, [user, strategyId, strategies, isLoading, navigate]);
+  }, [user, strategyId, strategies, isPending, navigate]);
 
   if (!user) return <StrategiesPage />;
-  return <EditStrategyMain strategy={strategy} isLoading={isLoading} />;
+  return <EditStrategyMain strategy={strategy} isPending={isPending} />;
 };

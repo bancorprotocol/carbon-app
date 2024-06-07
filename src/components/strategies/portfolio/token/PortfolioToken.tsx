@@ -13,22 +13,22 @@ import { usePortfolioTokenPieChart } from './usePortfolioTokenPieChart';
 interface Props {
   address: string;
   strategies?: Strategy[];
-  isLoading?: boolean;
+  isPending?: boolean;
   backLinkHref: Pathnames;
   backLinkHrefParams?: PathParams;
 }
 
 const _PortfolioToken = ({
   strategies,
-  isLoading: _isLoading,
+  isPending: _isPending,
   address,
   backLinkHref,
   backLinkHrefParams,
 }: Props) => {
-  const { tableData, isLoading, selectedToken } = usePortfolioToken({
+  const { tableData, isPending, selectedToken } = usePortfolioToken({
     address,
     strategies,
-    isLoading: _isLoading,
+    isPending: _isPending,
   });
 
   const { pieChartOptions } = usePortfolioTokenPieChart(
@@ -37,7 +37,7 @@ const _PortfolioToken = ({
     selectedToken?.token!
   );
 
-  if (!selectedToken && !isLoading) {
+  if (!selectedToken && !isPending) {
     return <div>error token not found</div>;
   }
 
@@ -54,7 +54,7 @@ const _PortfolioToken = ({
       desktopView={
         <PortfolioTokenDesktop
           data={tableData}
-          isLoading={isLoading}
+          isPending={isPending}
           // TODO selectedToken should not be undefined
           selectedToken={selectedToken?.token!}
         />
@@ -62,7 +62,7 @@ const _PortfolioToken = ({
       mobileView={
         <PortfolioTokenMobile
           data={tableData}
-          isLoading={isLoading}
+          isPending={isPending}
           // TODO selectedToken should not be undefined
           selectedToken={selectedToken?.token!}
         />
@@ -71,7 +71,7 @@ const _PortfolioToken = ({
         <PortfolioPieChart
           options={pieChartOptions}
           centerElement={<PortfolioTokenPieChartCenter data={selectedToken} />}
-          isLoading={isLoading}
+          isPending={isPending}
           hideChart={selectedToken?.value.isZero()}
         />
       }
@@ -82,6 +82,6 @@ const _PortfolioToken = ({
 export const PortfolioToken = memo(
   _PortfolioToken,
   (prev, next) =>
-    prev.isLoading === next.isLoading &&
+    prev.isPending === next.isPending &&
     JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
 );

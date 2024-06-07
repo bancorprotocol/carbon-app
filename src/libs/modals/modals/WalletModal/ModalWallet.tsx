@@ -18,7 +18,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
     carbonEvents.wallet.walletConnectPopupView(undefined);
   }, []);
 
-  const isLoading = selectedConnection !== null && !connectionError;
+  const isPending = selectedConnection !== null && !connectionError;
   const isError = selectedConnection !== null && connectionError;
 
   const onClickConnect = async (c: Connector) => {
@@ -33,7 +33,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   };
 
   return (
-    <ModalOrMobileSheet id={id} title="Connect Wallet" isLoading={isLoading}>
+    <ModalOrMobileSheet id={id} title="Connect Wallet" isPending={isPending}>
       {isError ? (
         <div className="flex flex-col items-center space-y-20">
           <ModalWalletError
@@ -43,7 +43,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
           />
         </div>
       ) : (
-        <ModalWalletContent onClick={onClickConnect} isLoading={isLoading} />
+        <ModalWalletContent onClick={onClickConnect} isPending={isPending} />
       )}
     </ModalOrMobileSheet>
   );

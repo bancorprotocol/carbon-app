@@ -59,8 +59,8 @@ export const EditStrategyBudgetContent = ({
     getDeposit(sellBalance, order1.budget)
   );
 
-  const isAwaiting = updateMutation.isLoading;
-  const isLoading = isAwaiting || isProcessing || approval.isLoading;
+  const isAwaiting = updateMutation.isPending;
+  const isPending = isAwaiting || isProcessing || approval.isPending;
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -254,7 +254,7 @@ export const EditStrategyBudgetContent = ({
       <Button
         type="submit"
         disabled={!hasChanged}
-        loading={isLoading}
+        loading={isPending}
         loadingChildren={loadingChildren}
         variant="white"
         size="lg"
@@ -265,7 +265,7 @@ export const EditStrategyBudgetContent = ({
       </Button>
       <Button
         type="reset"
-        disabled={isLoading}
+        disabled={isPending}
         variant="secondary"
         size="lg"
         fullWidth

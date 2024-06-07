@@ -57,7 +57,7 @@ export const useModalTradeRouting = ({
     [selectedIDs, tradeActionsWei]
   );
 
-  const { data, isLoading, isError } = useGetTradeActionsQuery({
+  const { data, isPending, isError } = useGetTradeActionsQuery({
     sourceToken: source.address,
     isTradeBySource,
     targetToken: target.address,
@@ -81,7 +81,7 @@ export const useModalTradeRouting = ({
       return openModal('wallet', undefined);
     }
 
-    if (approval.isLoading || isLoading || isError) {
+    if (approval.isPending || isPending || isError) {
       return;
     }
 
@@ -123,10 +123,10 @@ export const useModalTradeRouting = ({
     }
   }, [
     user,
-    approval.isLoading,
+    approval.isPending,
     approval.approvalRequired,
     approval.tokens,
-    isLoading,
+    isPending,
     isError,
     openModal,
     trade,
@@ -163,7 +163,7 @@ export const useModalTradeRouting = ({
   }, [closeModal, id]);
 
   const disabledCTA =
-    !selectedIDs.length || isLoading || isError || insufficientBalance;
+    !selectedIDs.length || isPending || isError || insufficientBalance;
 
   return {
     selected,

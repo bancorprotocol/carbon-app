@@ -20,13 +20,13 @@ export const useGetTradeActionsQuery = ({
 }: Props) => {
   const { isInitialized } = useCarbonInit();
 
-  return useQuery(
-    QueryKey.tradeActions(
+  return useQuery({
+    queryKey: QueryKey.tradeActions(
       [sourceToken, targetToken],
       isTradeBySource,
       actionsWei
     ),
-    async () => {
+    queryFn: async () => {
       return carbonSDK.getTradeDataFromActions(
         sourceToken,
         targetToken,
@@ -34,9 +34,7 @@ export const useGetTradeActionsQuery = ({
         actionsWei
       );
     },
-    {
-      enabled: isInitialized,
-      staleTime: ONE_DAY_IN_MS,
-    }
-  );
+    enabled: isInitialized,
+    staleTime: ONE_DAY_IN_MS,
+  });
 };

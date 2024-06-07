@@ -26,7 +26,7 @@ export const StrategyPage = () => {
   const query = useGetStrategy(id);
   const [strategy] = useStrategiesWithFiat(query);
 
-  if (query.isLoading) {
+  if (query.isPending) {
     return (
       <Page>
         <CarbonLogoLoading className="m-80 h-[100px] self-center justify-self-center" />

@@ -9,10 +9,10 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 interface Props {
   strategy?: Strategy;
-  isLoading: boolean;
+  isPending: boolean;
 }
 
-export const EditStrategyMain: FC<Props> = ({ strategy, isLoading }) => {
+export const EditStrategyMain: FC<Props> = ({ strategy, isPending }) => {
   const [showGraph, setShowGraph] = useState(true);
   const { type } = useSearch({ from: '/strategies/edit/$strategyId' });
 
@@ -26,8 +26,8 @@ export const EditStrategyMain: FC<Props> = ({ strategy, isLoading }) => {
       animate="visible"
     >
       <EditStrategyHeader {...{ showGraph, setShowGraph, type }} />
-      {isLoading && <CarbonLogoLoading className="my-40 w-60" />}
-      {!isLoading && type && strategy && (
+      {isPending && <CarbonLogoLoading className="my-40 w-60" />}
+      {!isPending && type && strategy && (
         <EditStrategyLayout
           {...{
             strategy,

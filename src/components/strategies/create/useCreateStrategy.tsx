@@ -293,7 +293,7 @@ export const useCreateStrategy = () => {
     order0,
     order1,
     hasApprovalError: approval.isError,
-    isAwaiting: mutation.isLoading,
+    isAwaiting: mutation.isPending,
     createStrategy,
     openTokenListModal,
     showOrders,

@@ -5,14 +5,14 @@ import { createPairMaps } from 'utils/pairSearch';
 export type PairStore = ReturnType<typeof usePairs>;
 
 export const usePairs = () => {
-  const { data, isError, isLoading } = useGetTradePairsData();
+  const { data, isError, isPending } = useGetTradePairsData();
   const { pairMap, nameMap } = useMemo(() => createPairMaps(data), [data]);
 
   return {
     map: pairMap,
     names: nameMap,
     isError,
-    isLoading,
+    isPending,
   };
 };
 
@@ -20,5 +20,5 @@ export const defaultPairs: PairStore = {
   map: new Map(),
   names: new Map(),
   isError: false,
-  isLoading: false,
+  isPending: false,
 };
