@@ -34,7 +34,7 @@ const createPlaceholderConnector = ({
       icon: icon,
       async setup() {},
       async connect() {
-        throw Error(' not installed');
+        throw Error('Wallet not installed');
       },
       async disconnect() {},
       async getAccounts() {
