@@ -1,5 +1,5 @@
 import { createContext, FC, ReactNode, useContext, useMemo } from 'react';
-import { CarbonWeb3ProviderContext } from 'libs/wagmi/web3.types';
+import { CarbonWeb3ProviderContext } from 'libs/wagmi/wagmi.types';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';

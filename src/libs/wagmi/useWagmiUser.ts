@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { IS_TENDERLY_FORK } from 'libs/wagmi/web3.constants';
+import { IS_TENDERLY_FORK } from 'libs/wagmi/wagmi.constants';
 import {
   useConnect,
   useDisconnect,
@@ -13,7 +13,7 @@ import { type ConnectErrorType, type DisconnectErrorType } from '@wagmi/core';
 import { isAccountBlocked } from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
-import { getChainInfo } from './web3.utils';
+import { getChainInfo } from './wagmi.utils';
 import { clientToSigner } from './ethers';
 import { getUncheckedSigner } from 'utils/tenderly';
 import { carbonEvents } from 'services/events';

@@ -1,6 +1,6 @@
 import { type Chain } from 'viem';
 import config from 'config';
-import { RPC_HEADERS, RPC_URLS, SupportedChainId } from './web3.constants';
+import { RPC_HEADERS, RPC_URLS, SupportedChainId } from './wagmi.constants';
 import { http } from 'wagmi';
 
 export const currentChain: Chain = {

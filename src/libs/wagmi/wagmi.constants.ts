@@ -1,4 +1,4 @@
-import { ChainIdMapTo, SelectableConnectionType } from 'libs/wagmi/web3.types';
+import { ChainIdMapTo, SelectableConnectionType } from 'libs/wagmi/wagmi.types';
 import config from 'config';
 import { tenderlyRpc } from 'utils/tenderly';
 

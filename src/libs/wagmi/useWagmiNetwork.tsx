@@ -1,4 +1,4 @@
-import { getChainInfo } from 'libs/wagmi/web3.utils';
+import { getChainInfo } from 'libs/wagmi/wagmi.utils';
 import { useSwitchChain } from 'wagmi';
 import { getEthersProvider } from 'libs/wagmi/ethers';
 import { wagmiConfig } from 'libs/wagmi/config';

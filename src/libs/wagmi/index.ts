@@ -5,8 +5,8 @@ export {
   RPC_URLS,
   RPC_HEADERS,
   SupportedChainId,
-} from 'libs/wagmi/web3.constants';
-export { type SelectableConnectionType } from 'libs/wagmi/web3.types';
+} from 'libs/wagmi/wagmi.constants';
+export { type SelectableConnectionType } from 'libs/wagmi/wagmi.types';
 export { useWagmi } from 'libs/wagmi/WagmiProvider';
 export { WagmiReactWrapper } from 'libs/wagmi/WagmiReactWrapper';
 export { type Connector, useAccount } from 'wagmi';
