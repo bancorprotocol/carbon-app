@@ -25,7 +25,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
 }) => {
   const { closeModal } = useModal();
   const { strategyEvent, strategy } = data;
-  const editPrices = getEditPricesPage(strategy);
+  const editPrices = getEditPricesPage(strategy, 'editPrices');
   const withdraw = getEditBudgetPage(strategy, 'withdraw');
 
   const edit = () => {
