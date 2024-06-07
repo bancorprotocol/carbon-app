@@ -22,13 +22,12 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
-import {
-  toDisposablePricesSearch,
-  toOverlappingPricesSearch,
-  toRecurringPricesSearch,
-} from 'libs/routing/routes/strategyEdit';
-import config from 'config';
 import { isDisposableStrategy } from 'components/strategies/common/utils';
+import {
+  getEditBudgetPage,
+  getEditPricesPage,
+} from 'components/strategies/edit/utils';
+import config from 'config';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -143,24 +142,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   }
 
   if (isOwn) {
-    const editPrices = (() => {
-      if (isDisposable) {
-        return {
-          to: '/strategies/edit/$strategyId/prices/disposable',
-          search: toDisposablePricesSearch(strategy),
-        };
-      } else if (isOverlapping) {
-        return {
-          to: '/strategies/edit/$strategyId/prices/overlapping',
-          search: toOverlappingPricesSearch(strategy),
-        };
-      } else {
-        return {
-          to: '/strategies/edit/$strategyId/prices/recurring',
-          search: toRecurringPricesSearch(strategy),
-        };
-      }
-    })();
+    const editPrices = getEditPricesPage(strategy, 'editPrices');
 
     items.push({
       id: 'editPrices',
@@ -178,24 +160,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       },
     });
 
-    const deposit = (() => {
-      if (isDisposable) {
-        return {
-          to: '/strategies/edit/$strategyId/budget/disposable',
-          search: { action: 'deposit' },
-        };
-      } else if (isOverlapping) {
-        return {
-          to: '/strategies/edit/$strategyId/budget/overlapping',
-          search: { action: 'deposit' },
-        };
-      } else {
-        return {
-          to: '/strategies/edit/$strategyId/budget/recurring',
-          search: { action: 'deposit' },
-        };
-      }
-    })();
+    const deposit = getEditBudgetPage(strategy, 'deposit');
 
     // separator
     items.push(0);
@@ -213,24 +178,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     });
 
     if (strategy.status !== 'noBudget') {
-      const withdraw = (() => {
-        if (isDisposable) {
-          return {
-            to: '/strategies/edit/$strategyId/budget/disposable',
-            search: { action: 'withdraw' },
-          };
-        } else if (isOverlapping) {
-          return {
-            to: '/strategies/edit/$strategyId/budget/overlapping',
-            search: { action: 'withdraw' },
-          };
-        } else {
-          return {
-            to: '/strategies/edit/$strategyId/budget/recurring',
-            search: { action: 'withdraw' },
-          };
-        }
-      })();
+      const withdraw = getEditBudgetPage(strategy, 'withdraw');
       items.push({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
@@ -265,15 +213,16 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     }
 
     if (strategy.status === 'paused') {
+      const renew = getEditPricesPage(strategy, 'renew');
       items.push({
         id: 'renewStrategy',
         name: 'Renew Strategy',
         action: () => {
           carbonEvents.strategyEdit.strategyRenewClick(strategyEvent);
           navigate({
-            to: '/strategies/edit/$strategyId',
+            to: renew.to,
+            search: renew.search,
             params: { strategyId: strategy.id },
-            search: { type: 'renew' },
           });
         },
       });

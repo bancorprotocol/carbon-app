@@ -58,23 +58,26 @@ export const strategyHasChanged = (
   return false;
 };
 
-export const getEditPricesPage = (strategy: Strategy) => {
+export const getEditPricesPage = (
+  strategy: Strategy,
+  type: 'editPrices' | 'renew'
+) => {
   const isOverlapping = isOverlappingStrategy(strategy);
   const isDisposable = isDisposableStrategy(strategy);
   if (isDisposable) {
     return {
       to: '/strategies/edit/$strategyId/prices/disposable',
-      search: toDisposablePricesSearch(strategy),
+      search: toDisposablePricesSearch(strategy, type),
     };
   } else if (isOverlapping) {
     return {
       to: '/strategies/edit/$strategyId/prices/overlapping',
-      search: toOverlappingPricesSearch(strategy),
+      search: toOverlappingPricesSearch(strategy, type),
     };
   } else {
     return {
       to: '/strategies/edit/$strategyId/prices/recurring',
-      search: toRecurringPricesSearch(strategy),
+      search: toRecurringPricesSearch(strategy, type),
     };
   }
 };

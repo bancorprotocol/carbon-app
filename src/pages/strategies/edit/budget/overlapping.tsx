@@ -21,7 +21,6 @@ import {
   calculateOverlappingPrices,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
-import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   getRoundedSpread,
@@ -312,7 +311,6 @@ export const EditBudgetOverlappingPage = () => {
     };
     return (
       <div className="flex flex-col gap-20 md:w-[440px]">
-        <EditPriceNav />
         <EditStrategyOverlapTokens strategy={strategy} />
         <m.article
           variants={items}

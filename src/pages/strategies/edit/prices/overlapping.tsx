@@ -43,6 +43,7 @@ import { getDeposit, getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 export interface EditOverlappingStrategySearch {
+  type: 'editPrices' | 'renew';
   marketPrice?: string;
   min?: string;
   max?: string;
@@ -185,9 +186,6 @@ export const EditStrategyOverlappingPage = () => {
   const externalPrice = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
-  // TODO: support also renew
-  const type = 'editPrices';
-
   const [isProcessing, setIsProcessing] = useState(false);
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
@@ -268,7 +266,9 @@ export const EditStrategyOverlappingPage = () => {
         onSuccess: async (tx) => {
           handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
           const notif =
-            type === 'editPrices' ? 'changeRatesStrategy' : 'renewStrategy';
+            search.type === 'editPrices'
+              ? 'changeRatesStrategy'
+              : 'renewStrategy';
           dispatchNotification(notif, { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
@@ -340,7 +340,7 @@ export const EditStrategyOverlappingPage = () => {
     };
     return (
       <div className="flex flex-col gap-20 md:w-[440px]">
-        <EditPriceNav />
+        <EditPriceNav type={search.type} />
         <EditStrategyOverlapTokens strategy={strategy} />
         <m.article
           variants={items}
@@ -365,7 +365,7 @@ export const EditStrategyOverlappingPage = () => {
       className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
       data-testid="edit-form"
     >
-      <EditPriceNav />
+      <EditPriceNav type={search.type} />
       <EditStrategyOverlapTokens strategy={strategy} />
 
       <EditPriceOverlappingStrategy
@@ -402,7 +402,7 @@ export const EditStrategyOverlappingPage = () => {
         fullWidth
         data-testid="edit-submit"
       >
-        {type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
+        {search.type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
       </Button>
       <Button
         type="reset"

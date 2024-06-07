@@ -29,6 +29,7 @@ import style from 'components/strategies/common/form.module.css';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 export interface EditDisposableStrategySearch {
+  type: 'editPrices' | 'renew';
   min: string;
   max: string;
   settings: StrategySettings;
@@ -46,8 +47,6 @@ export const EditStrategyDisposablePage = () => {
   const search = useSearch({ from: url });
   const { user } = useWeb3();
   const marketPrice = useMarketPrice({ base, quote });
-  // TODO: support also renew
-  const type = 'editPrices';
 
   const [isProcessing, setIsProcessing] = useState(false);
   const updateMutation = useUpdateStrategyQuery();
@@ -130,7 +129,7 @@ export const EditStrategyDisposablePage = () => {
   };
 
   const getMarginalOption = (oldOrder: Order, newOrder: BaseOrder) => {
-    if (type !== 'editPrices') return;
+    if (search.type !== 'editPrices') return;
     if (oldOrder.startRate !== newOrder.min) return MarginalPriceOptions.reset;
     if (oldOrder.endRate !== newOrder.max) return MarginalPriceOptions.reset;
   };
@@ -155,7 +154,9 @@ export const EditStrategyDisposablePage = () => {
         onSuccess: async (tx) => {
           handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
           const notif =
-            type === 'editPrices' ? 'changeRatesStrategy' : 'renewStrategy';
+            search.type === 'editPrices'
+              ? 'changeRatesStrategy'
+              : 'renewStrategy';
           dispatchNotification(notif, { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
@@ -187,7 +188,7 @@ export const EditStrategyDisposablePage = () => {
       className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
       data-testid="edit-form"
     >
-      <EditPriceNav />
+      <EditPriceNav type={search.type} />
       <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyPriceField
         order={order}
@@ -250,7 +251,7 @@ export const EditStrategyDisposablePage = () => {
         fullWidth
         data-testid="edit-submit"
       >
-        {type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
+        {search.type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
       </Button>
       <Button
         type="reset"
