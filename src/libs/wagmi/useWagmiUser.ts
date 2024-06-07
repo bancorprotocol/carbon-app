@@ -128,9 +128,7 @@ export const useWagmiUser = ({
         {
           onError: (error: ConnectErrorType) => {
             isManualConnection.current = false;
-            throw new Error(
-              `Error connecting ${connector.name}` + error.message
-            );
+            console.error(`Error connecting ${connector.name}` + error.message);
           },
         }
       );
@@ -145,7 +143,7 @@ export const useWagmiUser = ({
       {
         onError: (error: DisconnectErrorType) => {
           isManualConnection.current = false;
-          throw new Error(`Error disconnecting` + error.message);
+          console.error(`Error disconnecting` + error.message);
         },
         onSettled: () => {
           handleImposterAccount();
