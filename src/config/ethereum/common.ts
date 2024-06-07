@@ -35,9 +35,7 @@ export const commonConfig: AppConfig = {
     chainId: 1,
     blockExplorer: { name: 'Etherscan', url: 'https://etherscan.io' },
     rpc: {
-      url:
-        import.meta.env.VITE_CHAIN_RPC_URL ||
-        'https://eth-mainnet.g.alchemy.com/v2/demo',
+      url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://eth.llamarpc.com',
     },
     gasToken: {
       name: 'Ether',
