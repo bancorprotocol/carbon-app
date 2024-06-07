@@ -6,6 +6,8 @@ const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   ZERO: '0x0000000000000000000000000000000000000000',
   WSEI: '0xE30feDd158A2e3b13e9badaeABaFc5516e95e8C7',
+  USDC: '0x3894085Ef7Ff0f0aeDf52E2A2704928d1Ec074F1',
+  USDT: '0xB75D0B03c06A926e488e2659DF1A861F860bD3d1',
 };
 
 export const commonConfig: AppConfig = {
@@ -78,4 +80,28 @@ export const commonConfig: AppConfig = {
       parser: tokenListParser('pacific-1-evm'),
     },
   ],
+  tenderly: {
+    nativeTokenDonorAccount: '0x3a7AB16485770c21B7543058De545E986284d0D3',
+    faucetAmount: 1000,
+    faucetTokens: [
+      {
+        donorAccount: '0x029dAb7D8270ab5120bEE56f7D8214e9DB4F2389',
+        tokenContract: addresses.WSEI,
+        decimals: 18,
+        symbol: 'WSEI',
+      },
+      {
+        donorAccount: '0x946a1a3Dacbc7A7Bb2C7dF0b87195d6092f7238B',
+        tokenContract: addresses.USDC,
+        decimals: 6,
+        symbol: 'USDC',
+      },
+      {
+        donorAccount: '0x0eba0a13Ca36AA4784aE6960a331034A7dE91EF7',
+        tokenContract: addresses.USDT,
+        decimals: 6,
+        symbol: 'USDT',
+      },
+    ],
+  },
 };

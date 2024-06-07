@@ -1,6 +1,6 @@
 import {
   FAUCET_TOKENS,
-  tenderlyFaucetTransferETH,
+  tenderlyFaucetTransferNativeToken,
   tenderlyFaucetTransferTKN,
 } from 'utils/tenderly';
 import { useWagmi } from 'libs/wagmi';
@@ -36,7 +36,7 @@ export const DebugTenderlyFaucet = () => {
       return;
     }
 
-    await tenderlyFaucetTransferETH(user);
+    await tenderlyFaucetTransferNativeToken(user);
     await queryClient.invalidateQueries({
       queryKey: QueryKey.balance(user, gasToken.address),
     });

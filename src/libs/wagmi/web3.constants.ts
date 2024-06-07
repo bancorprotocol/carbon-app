@@ -1,17 +1,16 @@
 import { ChainIdMapTo, SelectableConnectionType } from 'libs/wagmi/web3.types';
-import { lsService } from 'services/localeStorage';
 import config from 'config';
+import { tenderlyRpc } from 'utils/tenderly';
 
-const TENDERLY_RPC = lsService.getItem('tenderlyRpc');
-const CHAIN_RPC_URL = TENDERLY_RPC || config.network.rpc.url;
-const CHAIN_RPC_HEADERS = TENDERLY_RPC ? {} : config.network.rpc.headers || {};
+const CHAIN_RPC_URL = tenderlyRpc || config.network.rpc.url;
+const CHAIN_RPC_HEADERS = tenderlyRpc ? {} : config.network.rpc.headers || {};
 const CHAIN_ID = config.network.chainId;
 
 if (typeof CHAIN_RPC_URL === 'undefined') {
   throw new Error(`rpcUrl must be defined in config folder`);
 }
 
-export const IS_TENDERLY_FORK = !!TENDERLY_RPC;
+export const IS_TENDERLY_FORK = !!tenderlyRpc;
 
 export enum EnumConnectionType {
   METAMASK,

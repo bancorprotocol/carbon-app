@@ -1,5 +1,6 @@
 import { TokenList } from 'libs/tokens';
 import { SelectableConnectionType } from 'libs/wagmi';
+import { FaucetToken } from 'utils/tenderly';
 
 type address = `0x${string}`;
 
@@ -59,4 +60,9 @@ export interface AppConfig {
       blockCreated: number;
     };
   } & Record<string, { address: address; blockCreated?: number }>;
+  tenderly: {
+    nativeTokenDonorAccount: string;
+    faucetAmount: number;
+    faucetTokens: FaucetToken[];
+  };
 }
