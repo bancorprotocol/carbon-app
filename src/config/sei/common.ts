@@ -55,8 +55,11 @@ export const commonConfig: AppConfig = {
       carbonController: '0xe4816658ad10bF215053C533cceAe3f59e1f1087',
       voucher: '0xA4682A2A5Fe02feFF8Bd200240A41AD0E6EaF8d5',
     },
-    utils: {
-      multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
+  },
+  utils: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+      blockCreated: 14353601,
     },
   },
   tokenListOverride: [

@@ -1,6 +1,8 @@
 import { TokenList } from 'libs/tokens';
 import { SelectableConnectionType } from 'libs/wagmi';
 
+type address = `0x${string}`;
+
 export interface AppConfig {
   mode: 'development' | 'production';
   appUrl: string;
@@ -45,13 +47,16 @@ export interface AppConfig {
     parser?: (data: any) => TokenList;
   }[];
   addresses: {
-    tokens: { ZERO: string } & Record<symbol, string>;
+    tokens: { ZERO: string } & Record<string, string>;
     carbon: {
       carbonController: string;
       voucher: string;
     };
-    utils: {
-      multicall: string;
-    };
   };
+  utils: {
+    multicall3: {
+      address: address;
+      blockCreated: number;
+    };
+  } & Record<string, { address: address; blockCreated?: number }>;
 }

@@ -101,8 +101,18 @@ export const commonConfig: AppConfig = {
       carbonController: '0xC537e898CD774e2dCBa3B14Ea6f34C93d5eA45e1',
       voucher: '0x3660F04B79751e31128f6378eAC70807e38f554E',
     },
-    utils: {
-      multicall: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
+  },
+  utils: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+      blockCreated: 14353601,
+    },
+    ensRegistry: {
+      address: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+    },
+    ensUniversalResolver: {
+      address: '0xE4Acdd618deED4e6d2f03b9bf62dc6118FC9A4da',
+      blockCreated: 16773775,
     },
   },
   tokenListOverride: [

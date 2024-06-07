@@ -22,6 +22,7 @@ export const currentChain: Chain = {
       url: config.network.blockExplorer.url,
     },
   },
+  contracts: { ...config.utils },
 };
 
 export const configChains: [Chain, ...Chain[]] = [currentChain];
