@@ -41,15 +41,18 @@ export const commonConfig: AppConfig = {
       symbol: 'SEI',
       decimals: 18,
       address: addresses.SEI,
-      logoURI:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/seitestnet2/images/sei.png',
+      logoURI: 'https://cdn.sei.io/assets/Sei_Symbol_Gradient.svg',
     },
   },
   defaultTokenPair: [addresses.SEI, addresses.WSEI],
-  popularPairs: [[addresses.SEI, addresses.WSEI]],
+  popularPairs: [
+    [addresses.SEI, addresses.WSEI],
+    [addresses.SEI, addresses.USDC],
+    [addresses.SEI, addresses.USDT],
+  ],
   popularTokens: {
-    base: [addresses.SEI, addresses.WSEI],
-    quote: [addresses.SEI, addresses.WSEI],
+    base: [addresses.SEI, addresses.WSEI, addresses.USDT, addresses.USDC],
+    quote: [addresses.SEI, addresses.WSEI, addresses.USDT, addresses.USDC],
   },
   addresses: {
     tokens: addresses,
@@ -70,8 +73,7 @@ export const commonConfig: AppConfig = {
       symbol: 'WSEI',
       decimals: 18,
       address: addresses.WSEI,
-      logoURI:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/seitestnet2/images/sei.png',
+      logoURI: 'https://cdn.sei.io/assets/Sei_Symbol_Gradient.svg',
     },
   ],
   tokenLists: [
