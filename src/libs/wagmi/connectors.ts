@@ -14,20 +14,17 @@ import {
 import config from 'config';
 import { type SelectableConnectionType } from './web3.types';
 import { selectedConnections } from './web3.constants';
-import { Address } from 'viem';
 
-const createConnectorURL = ({
+const createPlaceholderConnector = ({
   id,
   name,
   type,
   icon,
-  url,
 }: {
   id: string;
   name: string;
   type: string;
   icon?: string;
-  url: string;
 }) => {
   return createConnector(() => {
     return {
@@ -37,8 +34,7 @@ const createConnectorURL = ({
       icon: icon,
       async setup() {},
       async connect() {
-        window.open(url, '__blank');
-        return { accounts: [] as Address[], chainId: config.network.chainId };
+        throw Error(' not installed');
       },
       async disconnect() {},
       async getAccounts() {
@@ -61,28 +57,25 @@ const createConnectorURL = ({
 const getDefaultConnector = (connectorType: SelectableConnectionType) => {
   switch (connectorType) {
     case 'Compass Wallet':
-      return createConnectorURL({
+      return createPlaceholderConnector({
         name: 'Compass Wallet',
         id: 'compass',
         type: 'url',
         icon: compassWalletLogo,
-        url: 'https://compasswallet.io/',
       });
     case 'Tailwind':
-      return createConnectorURL({
+      return createPlaceholderConnector({
         name: 'TAILWIND',
         id: 'tailwind',
         icon: tailwindWalletLogo,
         type: 'url',
-        url: 'https://www.tailwind.zone/',
       });
     case 'Seif':
-      return createConnectorURL({
+      return createPlaceholderConnector({
         name: 'Seif',
         id: 'seif',
         icon: seifWalletLogo,
         type: 'url',
-        url: 'https://seif.passkeywallet.com/',
       });
     case 'MetaMask':
       return metaMask({
