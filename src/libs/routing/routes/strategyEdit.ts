@@ -14,7 +14,10 @@ import {
 import { Strategy } from 'libs/queries';
 import { roundSearchParam } from 'utils/helpers';
 import { isEmptyOrder } from 'components/strategies/common/utils';
-import { getRoundedSpread } from 'components/strategies/overlapping/utils';
+import {
+  getRoundedSpread,
+  isOverlappingStrategy,
+} from 'components/strategies/overlapping/utils';
 import {
   EditDisposableStrategySearch,
   EditStrategyDisposablePage,
@@ -131,7 +134,9 @@ export const toOverlappingPricesSearch = (
   type: 'editPrices' | 'renew'
 ): EditOverlappingStrategySearch => {
   const { order0: buy, order1: sell } = strategy;
-  const spread = getRoundedSpread(strategy);
+  const isOverlapping = isOverlappingStrategy(strategy);
+  // Do not set spread if the strategy wasn't an overlapping one originally
+  const spread = isOverlapping && getRoundedSpread(strategy);
   return {
     type,
     min: roundSearchParam(buy.startRate) || undefined,

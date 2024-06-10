@@ -10,7 +10,6 @@ import { getStatusTextByTxStatus } from '../utils';
 import { isZero } from '../common/utils';
 import { carbonEvents } from 'services/events';
 import { BaseOrder } from '../common/types';
-import style from 'components/strategies/common/form.module.css';
 import { handleTxStatusAndRedirectToOverview } from '../create/utils';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
@@ -19,9 +18,10 @@ import { useStrategyEvent } from '../create/useStrategyEventData';
 import { StrategyType } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 import { getDeposit } from './utils';
-import config from 'config';
 import { useApproval } from 'hooks/useApproval';
 import { useEditStrategyCtx } from './EditStrategyContext';
+import style from 'components/strategies/common/form.module.css';
+import config from 'config';
 
 interface EditOrders {
   buy: BaseOrder;
