@@ -13,7 +13,7 @@ import {
 import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
 
 export interface EditBudgetDisposableStrategySearch {
-  action: 'deposit' | 'withdraw';
+  editType: 'deposit' | 'withdraw';
   budget?: string;
   marginalPrice?: string;
 }
@@ -30,7 +30,7 @@ export const EditBudgetDisposablePage = () => {
   const initialOrder = buy ? strategy.order0 : strategy.order1;
 
   const totalBudget = getTotalBudget(
-    search.action,
+    search.editType,
     initialOrder.balance,
     search.budget
   );
@@ -71,17 +71,17 @@ export const EditBudgetDisposablePage = () => {
   return (
     <EditStrategyForm
       strategyType="disposable"
-      editType={search.action}
+      editType={search.editType}
       orders={orders}
       hasChanged={!isZero(search.budget)}
     >
       <EditStrategyBudgetField
-        action={search.action}
+        editType={search.editType}
         order={order}
         budget={search.budget ?? ''}
         initialBudget={initialOrder.balance}
         setOrder={setOrder}
-        warning={search.action === 'deposit' ? outsideMarket : ''}
+        warning={search.editType === 'deposit' ? outsideMarket : ''}
         buy={buy}
       />
     </EditStrategyForm>

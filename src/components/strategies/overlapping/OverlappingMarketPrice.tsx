@@ -93,7 +93,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         onChange={changePrice}
         token={quote}
         error={error}
-        action="deposit"
+        editType="deposit"
       />
       {!error && showApproval && (
         <WarningMessageWithIcon>

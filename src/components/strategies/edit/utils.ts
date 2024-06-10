@@ -21,11 +21,11 @@ export const getWithdraw = (initialBudget?: string, newBudget?: string) => {
 };
 
 export const getTotalBudget = (
-  action: 'deposit' | 'withdraw',
+  editType: 'deposit' | 'withdraw',
   initialBudget?: string,
   budget?: string
 ) => {
-  if (action === 'deposit') {
+  if (editType === 'deposit') {
     return new SafeDecimal(initialBudget || '0').add(budget || '0').toString();
   } else {
     return new SafeDecimal(initialBudget || '0').sub(budget || '0').toString();
@@ -60,47 +60,47 @@ export const strategyHasChanged = (
 
 export const getEditPricesPage = (
   strategy: Strategy,
-  type: 'editPrices' | 'renew'
+  editType: 'editPrices' | 'renew'
 ) => {
   const isOverlapping = isOverlappingStrategy(strategy);
   const isDisposable = isDisposableStrategy(strategy);
   if (isDisposable) {
     return {
       to: '/strategies/edit/$strategyId/prices/disposable',
-      search: toDisposablePricesSearch(strategy, type),
+      search: toDisposablePricesSearch(strategy, editType),
     };
   } else if (isOverlapping) {
     return {
       to: '/strategies/edit/$strategyId/prices/overlapping',
-      search: toOverlappingPricesSearch(strategy, type),
+      search: toOverlappingPricesSearch(strategy, editType),
     };
   } else {
     return {
       to: '/strategies/edit/$strategyId/prices/recurring',
-      search: toRecurringPricesSearch(strategy, type),
+      search: toRecurringPricesSearch(strategy, editType),
     };
   }
 };
 export const getEditBudgetPage = (
   strategy: Strategy,
-  action: 'withdraw' | 'deposit'
+  editType: 'withdraw' | 'deposit'
 ) => {
   const isOverlapping = isOverlappingStrategy(strategy);
   const isDisposable = isDisposableStrategy(strategy);
   if (isDisposable) {
     return {
       to: '/strategies/edit/$strategyId/budget/disposable',
-      search: { action },
+      search: { editType },
     };
   } else if (isOverlapping) {
     return {
       to: '/strategies/edit/$strategyId/budget/overlapping',
-      search: { action },
+      search: { editType },
     };
   } else {
     return {
       to: '/strategies/edit/$strategyId/budget/recurring',
-      search: { action },
+      search: { editType },
     };
   }
 };

@@ -20,7 +20,7 @@ export const deposit = (testCase: CreateStrategyTestCase) => {
     await initial.clickManageEntry('depositFunds');
 
     const edit = new EditStrategyDriver(page, testCase);
-    await edit.waitForPage('deposit');
+    await edit.waitForPage('overlapping', 'deposit');
     const form = edit.getOverlappingForm();
     await form.anchor(input.anchor).click();
     await form.budget().fill(input.budget);

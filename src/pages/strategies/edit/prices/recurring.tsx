@@ -12,7 +12,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
 
 export interface EditRecurringStrategySearch {
-  type: 'editPrices' | 'renew';
+  editType: 'editPrices' | 'renew';
   buyMin: string;
   buyMax: string;
   buySettings: StrategySettings;
@@ -135,7 +135,7 @@ export const EditStrategyRecurringPage = () => {
 
   // WHAT TO DO ?
   const getMarginalOption = (oldOrder: Order, newOrder: BaseOrder) => {
-    if (search.type !== 'editPrices') return;
+    if (search.editType !== 'editPrices') return;
     if (oldOrder.startRate !== newOrder.min) return MarginalPriceOptions.reset;
     if (oldOrder.endRate !== newOrder.max) return MarginalPriceOptions.reset;
   };
@@ -143,7 +143,7 @@ export const EditStrategyRecurringPage = () => {
   return (
     <EditStrategyForm
       strategyType="recurring"
-      editType={search.type}
+      editType={search.editType}
       orders={orders}
       hasChanged={hasChanged}
     >

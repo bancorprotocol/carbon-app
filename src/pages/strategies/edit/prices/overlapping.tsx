@@ -27,7 +27,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
 
 export interface EditOverlappingStrategySearch {
-  type: 'editPrices' | 'renew';
+  editType: 'editPrices' | 'renew';
   marketPrice?: string;
   min?: string;
   max?: string;
@@ -197,7 +197,7 @@ export const EditStrategyOverlappingPage = () => {
     };
     return (
       <div className="flex flex-col gap-20 md:w-[440px]">
-        <EditPriceNav type={search.type} />
+        <EditPriceNav editType={search.editType} />
         <EditStrategyOverlapTokens />
         <article className="rounded-10 bg-background-900 flex flex-col">
           <OverlappingInitMarketPriceField
@@ -214,7 +214,7 @@ export const EditStrategyOverlappingPage = () => {
   return (
     <EditStrategyForm
       strategyType="overlapping"
-      editType={search.type}
+      editType={search.editType}
       orders={orders}
       hasChanged={hasChanged}
       approveText={

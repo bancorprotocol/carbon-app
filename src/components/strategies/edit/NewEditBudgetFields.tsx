@@ -16,7 +16,7 @@ import { isZero } from '../common/utils';
 interface Props {
   budget: string;
   order: BaseOrder;
-  action: 'withdraw' | 'deposit';
+  editType: 'withdraw' | 'deposit';
   buy?: boolean;
   optional?: boolean;
   initialBudget: string;
@@ -28,7 +28,7 @@ interface Props {
 export const EditStrategyBudgetField: FC<Props> = ({
   budget,
   order,
-  action,
+  editType,
   initialBudget,
   setOrder,
   optional = false,
@@ -42,7 +42,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
   const token = buy ? quote : base;
   const balance = useGetTokenBalance(token).data ?? '0';
 
-  const max = action === 'deposit' ? balance : initialBudget;
+  const max = editType === 'deposit' ? balance : initialBudget;
   const insufficientBalance = new SafeDecimal(max).lt(budget)
     ? 'Insufficient balance'
     : '';
@@ -64,7 +64,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
       <header className="flex items-center justify-between">
         <h3 id={titleId} className="text-18 flex items-center gap-8">
           <span>
-            {`${action === 'withdraw' ? 'Withdraw' : 'Deposit'}`}{' '}
+            {`${editType === 'withdraw' ? 'Withdraw' : 'Deposit'}`}{' '}
             {buy ? 'Buy' : 'Sell'} Budget
           </span>
           {optional && (
@@ -75,13 +75,13 @@ export const EditStrategyBudgetField: FC<Props> = ({
         </h3>
         <Tooltip
           element={`Indicate the amount you wish to ${
-            action === 'withdraw' ? 'withdraw' : 'deposit'
+            editType === 'withdraw' ? 'withdraw' : 'deposit'
           } from the available "allocated budget"`}
           iconClassName="text-white/60"
         />
       </header>
       <BudgetInput
-        action={action}
+        editType={editType}
         token={token}
         value={budget}
         onChange={setBudget}

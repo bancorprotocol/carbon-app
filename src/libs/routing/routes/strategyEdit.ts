@@ -26,12 +26,10 @@ import {
   EditOverlappingStrategySearch,
   EditStrategyOverlappingPage,
 } from 'pages/strategies/edit/prices/overlapping';
-import { EditPriceLayoutPage } from 'pages/strategies/edit/prices/layout';
 import {
   EditBudgetRecurringPage,
   EditBudgetRecurringStrategySearch,
 } from 'pages/strategies/edit/budget/recurring';
-import { EditBudgetLayoutPage } from 'pages/strategies/edit/budget/layout';
 import {
   EditBudgetDisposablePage,
   EditBudgetDisposableStrategySearch,
@@ -60,26 +58,19 @@ export const editStrategyLayout = new Route({
   getParentRoute: () => rootRoute,
   path: '/strategies/edit/$strategyId',
   component: EditStrategyPageLayout,
+  validateSearch: (search: { editType: 'editPrices' | 'renew' }) => search,
 });
 
 // PRICES
-
-export const editPricesLayout = new Route({
-  getParentRoute: () => editStrategyLayout,
-  path: 'prices',
-  component: EditPriceLayoutPage,
-  validateSearch: (search: { type: 'editPrices' | 'renew' }) => search,
-});
-
 export const toDisposablePricesSearch = (
   strategy: Strategy,
-  type: 'editPrices' | 'renew'
+  editType: 'editPrices' | 'renew'
 ): EditDisposableStrategySearch => {
   const { order0, order1 } = strategy;
   const direction = isEmptyOrder(order0) ? 'sell' : 'buy';
   const order = direction === 'sell' ? order1 : order0;
   return {
-    type,
+    editType,
     min: roundSearchParam(order.startRate),
     max: roundSearchParam(order.endRate),
     settings: order.startRate === order.endRate ? 'limit' : 'range',
@@ -87,11 +78,11 @@ export const toDisposablePricesSearch = (
   };
 };
 export const editPricesDisposable = new Route({
-  getParentRoute: () => editPricesLayout,
-  path: 'disposable',
+  getParentRoute: () => editStrategyLayout,
+  path: 'prices/disposable',
   component: EditStrategyDisposablePage,
   validateSearch: validateSearchParams<EditDisposableStrategySearch>({
-    type: validLiteral(['editPrices', 'renew']),
+    editType: validLiteral(['editPrices', 'renew']),
     min: validNumber,
     max: validNumber,
     settings: validLiteral(['limit', 'range']),
@@ -101,11 +92,11 @@ export const editPricesDisposable = new Route({
 
 export const toRecurringPricesSearch = (
   strategy: Strategy,
-  type: 'editPrices' | 'renew'
+  editType: 'editPrices' | 'renew'
 ): EditRecurringStrategySearch => {
   const { order0: buy, order1: sell } = strategy;
   return {
-    type,
+    editType,
     buyMin: roundSearchParam(buy.startRate),
     buyMax: roundSearchParam(buy.endRate),
     buySettings: buy.startRate === buy.endRate ? 'limit' : 'range',
@@ -115,11 +106,11 @@ export const toRecurringPricesSearch = (
   };
 };
 export const editPricesRecurring = new Route({
-  getParentRoute: () => editPricesLayout,
-  path: 'recurring',
+  getParentRoute: () => editStrategyLayout,
+  path: 'prices/recurring',
   component: EditStrategyRecurringPage,
   validateSearch: validateSearchParams<EditRecurringStrategySearch>({
-    type: validLiteral(['editPrices', 'renew']),
+    editType: validLiteral(['editPrices', 'renew']),
     buyMin: validNumber,
     buyMax: validNumber,
     buySettings: validLiteral(['limit', 'range']),
@@ -131,25 +122,25 @@ export const editPricesRecurring = new Route({
 
 export const toOverlappingPricesSearch = (
   strategy: Strategy,
-  type: 'editPrices' | 'renew'
+  editType: 'editPrices' | 'renew'
 ): EditOverlappingStrategySearch => {
   const { order0: buy, order1: sell } = strategy;
   const isOverlapping = isOverlappingStrategy(strategy);
   // Do not set spread if the strategy wasn't an overlapping one originally
   const spread = isOverlapping && getRoundedSpread(strategy);
   return {
-    type,
+    editType,
     min: roundSearchParam(buy.startRate) || undefined,
     max: roundSearchParam(sell.endRate) || undefined,
     spread: spread ? spread.toString() : undefined,
   };
 };
 export const editPricesOverlapping = new Route({
-  getParentRoute: () => editPricesLayout,
-  path: 'overlapping',
+  getParentRoute: () => editStrategyLayout,
+  path: 'prices/overlapping',
   component: EditStrategyOverlappingPage,
   validateSearch: validateSearchParams<EditOverlappingStrategySearch>({
-    type: validLiteral(['editPrices', 'renew']),
+    editType: validLiteral(['editPrices', 'renew']),
     marketPrice: validNumber,
     min: validNumber,
     max: validNumber,
@@ -161,31 +152,23 @@ export const editPricesOverlapping = new Route({
 });
 
 // BUDGET
-
-export const editBudgetLayout = new Route({
-  getParentRoute: () => editStrategyLayout,
-  path: 'budget',
-  component: EditBudgetLayoutPage,
-  validateSearch: (search: { action: 'deposit' | 'withdraw' }) => search,
-});
-
 export const editBudgetDisposable = new Route({
-  getParentRoute: () => editBudgetLayout,
-  path: 'disposable',
+  getParentRoute: () => editStrategyLayout,
+  path: 'budget/disposable',
   component: EditBudgetDisposablePage,
   validateSearch: validateSearchParams<EditBudgetDisposableStrategySearch>({
-    action: validLiteral(['deposit', 'withdraw']),
+    editType: validLiteral(['deposit', 'withdraw']),
     budget: validNumber,
     marginalPrice: validMarginalPrice,
   }),
 });
 
 export const editBudgetRecurring = new Route({
-  getParentRoute: () => editBudgetLayout,
-  path: 'recurring',
+  getParentRoute: () => editStrategyLayout,
+  path: 'budget/recurring',
   component: EditBudgetRecurringPage,
   validateSearch: validateSearchParams<EditBudgetRecurringStrategySearch>({
-    action: validLiteral(['deposit', 'withdraw']),
+    editType: validLiteral(['deposit', 'withdraw']),
     buyBudget: validNumber,
     buyMarginalPrice: validMarginalPrice,
     sellBudget: validNumber,
@@ -194,13 +177,13 @@ export const editBudgetRecurring = new Route({
 });
 
 export const editBudgetOverlapping = new Route({
-  getParentRoute: () => editBudgetLayout,
-  path: 'overlapping',
+  getParentRoute: () => editStrategyLayout,
+  path: 'budget/overlapping',
   component: EditBudgetOverlappingPage,
   validateSearch: validateSearchParams<EditBudgetOverlappingSearch>({
+    editType: validLiteral(['deposit', 'withdraw']),
     marketPrice: validNumber,
     budget: validNumber,
     anchor: validLiteral(['buy', 'sell']),
-    action: validLiteral(['deposit', 'withdraw']),
   }),
 });

@@ -19,7 +19,7 @@ import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon
 import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
 
 export interface EditDisposableStrategySearch {
-  type: 'editPrices' | 'renew';
+  editType: 'editPrices' | 'renew';
   min: string;
   max: string;
   settings: StrategySettings;
@@ -95,7 +95,7 @@ export const EditStrategyDisposablePage = () => {
 
   // WHAT TO DO WITH THAT ???
   const getMarginalOption = (oldOrder: Order, newOrder: BaseOrder) => {
-    if (search.type !== 'editPrices') return;
+    if (search.editType !== 'editPrices') return;
     if (oldOrder.startRate !== newOrder.min) return MarginalPriceOptions.reset;
     if (oldOrder.endRate !== newOrder.max) return MarginalPriceOptions.reset;
   };
@@ -106,7 +106,7 @@ export const EditStrategyDisposablePage = () => {
   return (
     <EditStrategyForm
       strategyType="disposable"
-      editType={search.type}
+      editType={search.editType}
       orders={orders}
       hasChanged={hasChanged}
     >

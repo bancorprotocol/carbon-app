@@ -12,7 +12,7 @@ interface Props {
   budgetValue: string;
   setBudget: (value: string) => void;
   anchor: 'buy' | 'sell';
-  action: BudgetAction;
+  editType: BudgetAction;
   error?: string;
   warning?: string;
 }
@@ -37,7 +37,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
     quote,
     buyBudget = '',
     sellBudget = '',
-    action,
+    editType,
     anchor,
     budgetValue,
     setBudget,
@@ -49,7 +49,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
   const quoteBalance = useGetTokenBalance(quote).data;
 
   const getMax = () => {
-    if (action === 'deposit') {
+    if (editType === 'deposit') {
       return anchor === 'buy' ? quoteBalance : baseBalance;
     } else {
       return anchor === 'buy' ? buyBudget : sellBudget;
@@ -58,7 +58,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
 
   const disabled = (() => {
     if (!user) return false;
-    if (action !== 'deposit') return false;
+    if (editType !== 'deposit') return false;
     return anchor === 'buy' ? !quoteBalance : !baseBalance;
   })();
 
@@ -69,12 +69,12 @@ export const OverlappingBudget: FC<Props> = (props) => {
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
             2
           </span>
-          {getTitle(action)}
+          {getTitle(editType)}
         </h3>
-        <p className="text-14 text-white/80">{getDescription(action)}</p>
+        <p className="text-14 text-white/80">{getDescription(editType)}</p>
       </hgroup>
       <BudgetInput
-        action={action}
+        editType={editType}
         token={anchor === 'buy' ? quote : base}
         value={budgetValue}
         onChange={setBudget}

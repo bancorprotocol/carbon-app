@@ -9,7 +9,7 @@ import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { StrategyGraph } from 'components/strategies/common/StrategyGraph';
 
 interface Props {
-  type: EditTypes;
+  editType: EditTypes;
   graph?: ReactNode;
   children: ReactNode;
 }
@@ -22,7 +22,7 @@ const titleByType: Record<EditTypes, string> = {
 };
 
 export const EditStrategyLayout: FC<Props> = (props) => {
-  const { type, children } = props;
+  const { editType, children } = props;
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
   const [showGraph, setShowGraph] = useState(true);
@@ -43,7 +43,9 @@ export const EditStrategyLayout: FC<Props> = (props) => {
         >
           <ForwardArrow className="size-18 rotate-180" />
         </button>
-        <h1 className="text-24 font-weight-500 flex-1">{titleByType[type]}</h1>
+        <h1 className="text-24 font-weight-500 flex-1">
+          {titleByType[editType]}
+        </h1>
         {!showGraph && (
           <button
             onClick={() => {

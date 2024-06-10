@@ -370,7 +370,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
             </p>
           </hgroup>
           <BudgetInput
-            action="deposit"
+            editType="deposit"
             token={anchor === 'buy' ? quote : base}
             value={budget}
             onChange={setBudget}

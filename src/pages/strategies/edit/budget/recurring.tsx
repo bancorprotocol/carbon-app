@@ -13,7 +13,7 @@ import {
 import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
 
 export interface EditBudgetRecurringStrategySearch {
-  action: 'deposit' | 'withdraw';
+  editType: 'deposit' | 'withdraw';
   buyBudget?: string;
   buyMarginalPrice?: string;
   sellBudget?: string;
@@ -45,12 +45,12 @@ export const EditBudgetRecurringPage = () => {
   const marketPrice = useMarketPrice({ base, quote });
 
   const totalBuyBudget = getTotalBudget(
-    search.action,
+    search.editType,
     order0.balance,
     search.buyBudget
   );
   const totalSellBudget = getTotalBudget(
-    search.action,
+    search.editType,
     order1.balance,
     search.sellBudget
   );
@@ -115,25 +115,25 @@ export const EditBudgetRecurringPage = () => {
   return (
     <EditStrategyForm
       strategyType="recurring"
-      editType={search.action}
+      editType={search.editType}
       orders={orders}
       hasChanged={!isZero(search.buyBudget) || !isZero(search.sellBudget)}
     >
       <EditStrategyBudgetField
-        action={search.action}
+        editType={search.editType}
         order={orders.sell}
         budget={search.sellBudget ?? ''}
         initialBudget={strategy.order1.balance}
         setOrder={setSellOrder}
-        warning={search.action === 'deposit' ? sellOutsideMarket : ''}
+        warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
       />
       <EditStrategyBudgetField
-        action={search.action}
+        editType={search.editType}
         order={orders.buy}
         budget={search.buyBudget ?? ''}
         initialBudget={strategy.order0.balance}
         setOrder={setBuyOrder}
-        warning={search.action === 'deposit' ? buyOutsideMarket : ''}
+        warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
         buy
       />
     </EditStrategyForm>

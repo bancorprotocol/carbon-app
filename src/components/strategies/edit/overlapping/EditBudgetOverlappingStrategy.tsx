@@ -243,7 +243,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
           base={base}
           quote={quote}
           anchor={anchor}
-          action={action}
+          editType={action}
           budgetValue={delta}
           setBudget={setBudget}
           buyBudget={initialBuyBudget}

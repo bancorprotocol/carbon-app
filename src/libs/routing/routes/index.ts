@@ -37,11 +37,9 @@ import {
 } from 'libs/routing/routes/strategyCreate';
 import {
   editStrategyLayout,
-  editPricesLayout,
   editPricesDisposable,
   editPricesOverlapping,
   editPricesRecurring,
-  editBudgetLayout,
   editBudgetDisposable,
   editBudgetOverlapping,
   editBudgetRecurring,
@@ -60,16 +58,12 @@ export const routeTree = rootRoute.addChildren([
   createRecurringStrategyPage,
   createOverlappingStrategyPage,
   editStrategyLayout.addChildren([
-    editPricesLayout.addChildren([
-      editPricesDisposable,
-      editPricesOverlapping,
-      editPricesRecurring,
-    ]),
-    editBudgetLayout.addChildren([
-      editBudgetDisposable,
-      editBudgetOverlapping,
-      editBudgetRecurring,
-    ]),
+    editPricesDisposable,
+    editPricesOverlapping,
+    editPricesRecurring,
+    editBudgetDisposable,
+    editBudgetOverlapping,
+    editBudgetRecurring,
   ]),
   oldExplorerLayout,
   explorerLayout.addChildren([

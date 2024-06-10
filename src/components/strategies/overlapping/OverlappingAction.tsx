@@ -113,7 +113,7 @@ export const OverlappingAction: FC<Props> = (props) => {
             </label>
           </div>
           <BudgetInput
-            action={action}
+            editType={action}
             token={anchor === 'buy' ? quote : base}
             value={budget}
             onChange={setBudget}

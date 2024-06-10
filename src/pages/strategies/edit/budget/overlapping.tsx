@@ -24,10 +24,10 @@ import { EditBudgetOverlappingStrategy } from 'components/strategies/edit/NewEdi
 import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
 
 export interface EditBudgetOverlappingSearch {
+  editType: 'deposit' | 'withdraw';
   marketPrice?: string;
   anchor?: 'buy' | 'sell';
   budget?: string;
-  action: 'deposit' | 'withdraw';
 }
 
 const isTouched = (strategy: Strategy, search: EditBudgetOverlappingSearch) => {
@@ -55,7 +55,7 @@ const getOrders = (
   const min = strategy.order0.startRate;
   const max = strategy.order1.endRate;
   const spread = getRoundedSpread(strategy).toString();
-  const { anchor, budget = '0', action = 'deposit' } = search;
+  const { anchor, budget = '0', editType = 'deposit' } = search;
 
   const touched = isTouched(strategy, search);
   const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
@@ -101,7 +101,7 @@ const getOrders = (
   // BUDGET
   if (anchor === 'buy') {
     if (isMinAboveMarket(orders.buy)) return orders;
-    const buyBudget = getTotalBudget(action, order0.balance, budget);
+    const buyBudget = getTotalBudget(editType, order0.balance, budget);
     orders.buy.budget = buyBudget;
     orders.sell.budget = calculateOverlappingSellBudget(
       base.decimals,
@@ -114,7 +114,7 @@ const getOrders = (
     );
   } else {
     if (isMaxBelowMarket(orders.sell)) return orders;
-    const sellBudget = getTotalBudget(action, order1.balance, budget);
+    const sellBudget = getTotalBudget(editType, order1.balance, budget);
     orders.sell.budget = sellBudget;
     orders.buy.budget = calculateOverlappingBuyBudget(
       base.decimals,
@@ -182,7 +182,7 @@ export const EditBudgetOverlappingPage = () => {
   return (
     <EditStrategyForm
       strategyType="overlapping"
-      editType={search.action}
+      editType={search.editType}
       orders={orders}
       hasChanged={hasChanged}
       approveText={

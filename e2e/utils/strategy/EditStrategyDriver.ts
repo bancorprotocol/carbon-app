@@ -2,7 +2,7 @@ import { expect } from '@playwright/test';
 import { Page } from 'playwright-core';
 import { MainMenuDriver } from '../MainMenuDriver';
 import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
-import { CreateStrategyTestCase } from './types';
+import { CreateStrategyTestCase, StrategyType } from './types';
 import { Setting, Direction, MinMax } from '../types';
 import {
   assertDisposableTestCase,
@@ -17,9 +17,13 @@ type EditType = 'deposit' | 'withdraw' | 'renew' | 'editPrices';
 export class EditStrategyDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
-  async waitForPage(type: EditType) {
+  async waitForPage(strategyType: StrategyType, editType: EditType) {
     const options = { timeout: 10_000 };
-    return this.page.waitForURL(`/strategies/edit/*?type=${type}`, options);
+    const mode = ['deposit', 'withdraw'].includes(editType)
+      ? 'budget'
+      : 'prices';
+    const url = `/strategies/edit/*/${mode}/${strategyType}?editType=${editType}`;
+    return this.page.waitForURL(url, options);
   }
 
   waitForWallet() {

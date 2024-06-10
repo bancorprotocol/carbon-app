@@ -24,7 +24,7 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
     await modal.waitFor({ state: 'detached' });
 
     const edit = new EditStrategyDriver(page, testCase);
-    await edit.waitForPage('withdraw');
+    await edit.waitForPage('disposable', 'withdraw');
     await edit.fillDisposableBudget('withdraw');
 
     await edit.submit('withdraw');

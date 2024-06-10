@@ -186,7 +186,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
       className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
       data-testid="edit-form"
     >
-      <EditPriceNav type={editType} />
+      <EditPriceNav editType={editType} />
       <EditStrategyOverlapTokens />
 
       {children}

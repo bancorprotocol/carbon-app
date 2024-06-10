@@ -77,7 +77,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
 
-  const { action, anchor, budget } = useSearch({ from: url });
+  const { editType, anchor, budget } = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
 
   const baseBalance = useGetTokenBalance(base).data;
@@ -114,18 +114,18 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const budgetError = (() => {
     const value = anchor === 'buy' ? order0.budget : order1.budget;
     const budget = new SafeDecimal(value);
-    if (action === 'deposit' && anchor === 'buy' && quoteBalance) {
+    if (editType === 'deposit' && anchor === 'buy' && quoteBalance) {
       const delta = budget.sub(initialBuyBudget);
       if (delta.gt(quoteBalance)) return 'Insufficient balance';
     }
-    if (action === 'deposit' && anchor === 'sell' && baseBalance) {
+    if (editType === 'deposit' && anchor === 'sell' && baseBalance) {
       const delta = budget.sub(initialSellBudget);
       if (delta.gt(baseBalance)) return 'Insufficient balance';
     }
-    if (action === 'withdraw' && anchor === 'buy' && quoteBalance) {
+    if (editType === 'withdraw' && anchor === 'buy' && quoteBalance) {
       if (budget.lt(0)) return 'Insufficient funds';
     }
-    if (action === 'withdraw' && anchor === 'sell' && baseBalance) {
+    if (editType === 'withdraw' && anchor === 'sell' && baseBalance) {
       if (budget.lt(0)) return 'Insufficient funds';
     }
     return '';
@@ -138,7 +138,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   }, [anchor, aboveMarket, belowMarket, set]);
 
   const budgetWarning = (() => {
-    if (action !== 'deposit') return;
+    if (editType !== 'deposit') return;
     const spread = getRoundedSpread(strategy).toString();
     if (hasArbOpportunity(order0.marginalPrice, spread, marketPrice)) {
       const buyBudgetChanged = strategy.order0.balance !== order0.budget;
@@ -166,7 +166,6 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const setAnchor = (value: 'buy' | 'sell') => {
     set('budget', undefined);
     set('anchor', value);
-    if (!action) set('action', 'deposit');
   };
 
   const setBudget = async (value: string) => {
@@ -203,12 +202,12 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
         disableBuy={aboveMarket}
         disableSell={belowMarket}
       />
-      {anchor && action && (
+      {anchor && editType && (
         <OverlappingBudget
           base={base}
           quote={quote}
           anchor={anchor}
-          action={action}
+          editType={editType}
           budgetValue={budget ?? ''}
           setBudget={setBudget}
           buyBudget={initialBuyBudget}
@@ -230,7 +229,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
               Distribution
             </h3>
             <p className="text-14 text-white/80">
-              Following the above {action} amount, these are the changes in
+              Following the above {editType} amount, these are the changes in
               budget allocation
             </p>
           </hgroup>

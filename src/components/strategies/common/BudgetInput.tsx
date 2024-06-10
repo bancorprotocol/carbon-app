@@ -12,7 +12,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 export type BudgetAction = 'withdraw' | 'deposit';
 
 interface Props {
-  action?: BudgetAction;
+  editType?: BudgetAction;
   token: Token;
   id?: string;
   className?: string;
@@ -35,7 +35,7 @@ export const BudgetInput: FC<Props> = (props) => {
   const {
     className,
     token,
-    action = 'deposit',
+    editType = 'deposit',
     value = '',
     max = '',
     placeholder = 'Enter Amount',
@@ -125,7 +125,7 @@ export const BudgetInput: FC<Props> = (props) => {
               className="group/budget-input flex items-center gap-4"
             >
               <span className="text-white/60">
-                {action === 'deposit' ? 'Wallet:' : 'Allocated:'}
+                {editType === 'deposit' ? 'Wallet:' : 'Allocated:'}
               </span>
               <span className="text-white">{prettifyNumber(max || '0')}</span>
               <span
