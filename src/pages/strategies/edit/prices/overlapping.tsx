@@ -1,21 +1,9 @@
-import { FormEvent, useMemo, useState } from 'react';
-import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
-import { cn, roundSearchParam } from 'utils/helpers';
-import { Button } from 'components/common/button';
-import {
-  getStatusTextByTxStatus,
-  isValidRange,
-} from 'components/strategies/utils';
-import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
-import { useQueryClient } from '@tanstack/react-query';
-import { QueryKey, Strategy, useUpdateStrategyQuery } from 'libs/queries';
-import { useNotifications } from 'hooks/useNotifications';
-import { m } from 'libs/motion';
-import { useWeb3 } from 'libs/web3';
-import { carbonEvents } from 'services/events';
-import { useStrategyEvent } from 'components/strategies/create/useStrategyEventData';
+import { roundSearchParam } from 'utils/helpers';
+import { isValidRange } from 'components/strategies/utils';
+import { Strategy } from 'libs/queries';
 import {
   calculateOverlappingBuyBudget,
   calculateOverlappingPrices,
@@ -30,17 +18,13 @@ import {
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { EditPriceOverlappingStrategy } from 'components/strategies/edit/NewEditPriceOverlappingStrategy';
-import { items } from 'components/strategies/common/variants';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
-import style from 'components/strategies/common/form.module.css';
-import config from 'config';
-import { useApproval } from 'hooks/useApproval';
-import { useModal } from 'hooks/useModal';
-import { getDeposit, getTotalBudget } from 'components/strategies/edit/utils';
+import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
 
 export interface EditOverlappingStrategySearch {
   type: 'editPrices' | 'renew';
@@ -128,17 +112,18 @@ const getOrders = (
   };
 
   // PRICES
-  if (touched) {
-    const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
-    orders.buy.min = prices.buyPriceLow;
-    orders.buy.max = prices.buyPriceHigh;
-    orders.buy.marginalPrice = prices.buyPriceMarginal;
-    orders.sell.min = prices.sellPriceLow;
-    orders.sell.max = prices.sellPriceHigh;
-    orders.sell.marginalPrice = prices.sellPriceMarginal;
-  }
+  const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
+  orders.buy.min = prices.buyPriceLow;
+  orders.buy.max = prices.buyPriceHigh;
+  orders.buy.marginalPrice = prices.buyPriceMarginal;
+  orders.sell.min = prices.sellPriceLow;
+  orders.sell.max = prices.sellPriceHigh;
+  orders.sell.marginalPrice = prices.sellPriceMarginal;
 
-  if (!anchor || isZero(budget)) return orders;
+  if (!anchor) return orders;
+
+  // If there is no changes we don't recalculate the budget because of precision delta
+  if (isZero(budget) && !touched) return orders;
 
   // BUDGET
   if (anchor === 'buy') {
@@ -171,62 +156,18 @@ const getOrders = (
   return orders;
 };
 
-const spenderAddress = config.addresses.carbon.carbonController;
 const url = '/strategies/edit/$strategyId/prices/overlapping';
 
 export const EditStrategyOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
-  const { history } = useRouter();
-  const { dispatchNotification } = useNotifications();
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const { user } = useWeb3();
-  const { openModal } = useModal();
   const externalPrice = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
-  const [isProcessing, setIsProcessing] = useState(false);
-  const updateMutation = useUpdateStrategyQuery();
-  const cache = useQueryClient();
-
-  const isAwaiting = updateMutation.isLoading;
-  const isLoading = isAwaiting || isProcessing;
-  const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
-
   const orders = getOrders(strategy, search, marketPrice);
   const spread = isValidSpread(search.spread) ? search.spread! : initSpread;
-
-  const approvalTokens = useMemo(() => {
-    const arr = [];
-    const buyDeposit = getDeposit(strategy.order0.balance, orders.buy.budget);
-    if (!isZero(buyDeposit)) {
-      arr.push({
-        ...quote,
-        spender: spenderAddress,
-        amount: buyDeposit,
-      });
-    }
-    const sellDeposit = getDeposit(strategy.order1.balance, orders.sell.budget);
-    if (!isZero(sellDeposit)) {
-      arr.push({
-        ...base,
-        spender: spenderAddress,
-        amount: sellDeposit,
-      });
-    }
-    return arr;
-  }, [strategy, orders.buy.budget, orders.sell.budget, base, quote]);
-  const approval = useApproval(approvalTokens);
-
-  // TODO: move useStrategyEvent to common
-  const strategyEventData = useStrategyEvent(
-    'overlapping',
-    base,
-    quote,
-    orders.buy,
-    orders.sell
-  );
 
   const hasChanged = (() => {
     const { order0, order1 } = strategy;
@@ -236,90 +177,6 @@ export const EditStrategyOverlappingPage = () => {
     if (search.budget) return true;
     return false;
   })();
-
-  const isDisabled = (form: HTMLFormElement) => {
-    if (!hasChanged) return true;
-    if (!form.checkValidity()) return true;
-    if (!!form.querySelector('.error-message')) return true;
-    const warnings = form.querySelector('.warning-message');
-    if (!warnings) return false;
-    return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
-  };
-
-  const update = () => {
-    updateMutation.mutate(
-      {
-        id: strategy.id,
-        encoded: strategy.encoded,
-        fieldsToUpdate: {
-          buyPriceLow: orders.buy.min,
-          buyPriceHigh: orders.buy.max,
-          buyBudget: orders.buy.budget,
-          sellPriceLow: orders.sell.min,
-          sellPriceHigh: orders.sell.max,
-          sellBudget: orders.sell.budget,
-        },
-        buyMarginalPrice: orders.buy.marginalPrice,
-        sellMarginalPrice: orders.sell.marginalPrice,
-      },
-      {
-        onSuccess: async (tx) => {
-          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
-          const notif =
-            search.type === 'editPrices'
-              ? 'changeRatesStrategy'
-              : 'renewStrategy';
-          dispatchNotification(notif, { txHash: tx.hash });
-          if (!tx) return;
-          console.log('tx hash', tx.hash);
-          await tx.wait();
-          cache.invalidateQueries({
-            queryKey: QueryKey.strategies(user),
-          });
-          carbonEvents.strategyEdit.strategyEditPrices({
-            ...strategyEventData,
-            strategyId: strategy.id,
-          });
-          console.log('tx confirmed');
-        },
-        onError: (e) => {
-          setIsProcessing(false);
-          console.error('update mutation failed', e);
-        },
-      }
-    );
-  };
-
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isDisabled(e.currentTarget)) return;
-    if (isZero(orders.buy.budget) && isZero(orders.sell.budget)) {
-      return openModal('genericInfo', {
-        title: 'Empty Strategy Warning',
-        text: 'You are about to update a strategy with no associated budget. It will be inactive until you deposit funds.',
-        variant: 'warning',
-        onConfirm: update,
-      });
-    }
-
-    if (approval.approvalRequired) {
-      return openModal('txConfirm', {
-        approvalTokens,
-        onConfirm: update,
-        buttonLabel: 'Confirm Deposit',
-        eventData: {
-          ...strategyEventData,
-          productType: 'strategy',
-          approvalTokens,
-          buyToken: base,
-          sellToken: quote,
-          blockchainNetwork: config.network.name,
-        },
-        context: 'depositStrategyFunds',
-      });
-    }
-    return update();
-  };
 
   if (!marketPrice && typeof externalPrice !== 'number') {
     return (
@@ -341,78 +198,37 @@ export const EditStrategyOverlappingPage = () => {
     return (
       <div className="flex flex-col gap-20 md:w-[440px]">
         <EditPriceNav type={search.type} />
-        <EditStrategyOverlapTokens strategy={strategy} />
-        <m.article
-          variants={items}
-          key="marketPrice"
-          className="rounded-10 bg-background-900 flex flex-col"
-        >
+        <EditStrategyOverlapTokens />
+        <article className="rounded-10 bg-background-900 flex flex-col">
           <OverlappingInitMarketPriceField
             base={base}
             quote={quote}
             marketPrice={+(marketPrice || '')}
             setMarketPrice={setMarketPrice}
           />
-        </m.article>
+        </article>
       </div>
     );
   }
 
   return (
-    <form
-      onSubmit={submit}
-      onReset={() => history.back()}
-      className={cn('flex w-full flex-col gap-20 md:w-[440px]', style.form)}
-      data-testid="edit-form"
+    <EditStrategyForm
+      strategyType="overlapping"
+      editType={search.type}
+      orders={orders}
+      hasChanged={hasChanged}
+      approveText={
+        hasChanged
+          ? "I've approved the token deposit(s) and distribution."
+          : "I've reviewed the warning(s) but choose to proceed."
+      }
     >
-      <EditPriceNav type={search.type} />
-      <EditStrategyOverlapTokens strategy={strategy} />
-
       <EditPriceOverlappingStrategy
         marketPrice={marketPrice}
         order0={orders.buy}
         order1={orders.sell}
         spread={spread}
       />
-      <label
-        htmlFor="approve-warnings"
-        className={cn(
-          style.approveWarnings,
-          'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
-        )}
-      >
-        <input
-          id="approve-warnings"
-          type="checkbox"
-          name="approval"
-          data-testid="approve-warnings"
-        />
-        {hasChanged
-          ? "I've approved the token deposit(s) and distribution."
-          : "I've reviewed the warning(s) but choose to proceed."}
-      </label>
-
-      <Button
-        type="submit"
-        disabled={!hasChanged}
-        loading={isLoading}
-        loadingChildren={loadingChildren}
-        variant="white"
-        size="lg"
-        fullWidth
-        data-testid="edit-submit"
-      >
-        {search.type === 'editPrices' ? 'Confirm Changes' : 'Renew Strategy'}
-      </Button>
-      <Button
-        type="reset"
-        disabled={isLoading}
-        variant="secondary"
-        size="lg"
-        fullWidth
-      >
-        Cancel
-      </Button>
-    </form>
+    </EditStrategyForm>
   );
 };

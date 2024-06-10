@@ -1,6 +1,7 @@
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { Link, useParams } from '@tanstack/react-router';
 import {
+  EditTypes,
   toDisposablePricesSearch,
   toOverlappingPricesSearch,
   toRecurringPricesSearch,
@@ -8,7 +9,7 @@ import {
 import { FC } from 'react';
 
 interface Props {
-  type: 'editPrices' | 'renew';
+  type: EditTypes;
 }
 export const EditPriceNav: FC<Props> = ({ type }) => {
   const params = useParams({ from: '/strategies/edit/$strategyId' });
@@ -16,6 +17,7 @@ export const EditPriceNav: FC<Props> = ({ type }) => {
   const isRecurring = window.location.pathname.includes('recurring');
   const isOverlapping = window.location.pathname.includes('overlapping');
   const { strategy } = useEditStrategyCtx();
+  if (type !== 'editPrices' && type !== 'renew') return;
   return (
     <nav
       className="border-background-900 text-14 flex gap-4 rounded-full border-2 p-6"

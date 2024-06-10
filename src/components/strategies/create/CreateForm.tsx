@@ -19,7 +19,7 @@ import style from 'components/strategies/common/form.module.css';
 const title: Record<StrategyType, string> = {
   disposable: 'Disposable',
   recurring: 'Recurring',
-  overlapping: 'Overlapping',
+  overlapping: 'Concentrated Liquidity',
 };
 
 interface HeaderProps {

@@ -5,6 +5,10 @@ import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from './types';
 
 export const isDisposableStrategy = (strategy: Strategy) => {
+  // If strategy is inactive, consider it as a recurring
+  if (isEmptyOrder(strategy.order0) && isEmptyOrder(strategy.order1)) {
+    return false;
+  }
   if (isZero(strategy.order0.startRate)) return true;
   if (isZero(strategy.order0.endRate)) return true;
   if (isZero(strategy.order1.startRate)) return true;
@@ -17,6 +21,12 @@ export const emptyOrder = (): BaseOrder => ({
   max: '0',
   budget: '0',
   marginalPrice: '',
+});
+
+export const toBaseOrder = (order: Order): BaseOrder => ({
+  min: order.startRate,
+  max: order.endRate,
+  budget: order.balance,
 });
 
 export const isEmptyOrder = (order: Order) => {

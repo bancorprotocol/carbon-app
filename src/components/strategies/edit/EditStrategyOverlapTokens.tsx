@@ -1,15 +1,10 @@
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { Strategy } from 'libs/queries';
 import { m } from 'libs/motion';
 import { items } from 'components/strategies/common/variants';
+import { useEditStrategyCtx } from './EditStrategyContext';
 
-type EditStrategyOverlapTokensProps = {
-  strategy: Strategy;
-};
-
-export const EditStrategyOverlapTokens = ({
-  strategy,
-}: EditStrategyOverlapTokensProps) => {
+export const EditStrategyOverlapTokens = () => {
+  const { strategy } = useEditStrategyCtx();
   return (
     <m.header
       variants={items}
