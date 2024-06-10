@@ -13,7 +13,7 @@ import { type ConnectErrorType, type DisconnectErrorType } from '@wagmi/core';
 import { isAccountBlocked } from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
-import { getChainInfo } from './wagmi.utils';
+import { errorMessages, getChainInfo } from './wagmi.utils';
 import { clientToSigner } from './ethers';
 import { getUncheckedSigner } from 'utils/tenderly';
 import { carbonEvents } from 'services/events';
@@ -119,36 +119,46 @@ export const useWagmiUser = ({
         throw new Error('Your country is restricted from using this app.');
       }
       isManualConnection.current = true;
-      await connectAsync(
-        {
-          connector,
-          chainId: getChainInfo().chainId,
-        },
-        {
-          onError: (error: ConnectErrorType) => {
-            isManualConnection.current = false;
-            console.error(`Error connecting ${connector.name}` + error.message);
+      try {
+        await connectAsync(
+          {
+            connector,
+            chainId: getChainInfo().chainId,
           },
-        }
-      );
+          {
+            onError: (error: ConnectErrorType) => {
+              isManualConnection.current = false;
+              console.error(`Error connecting ${connector.name}` + error);
+            },
+          }
+        );
+      } catch (error: any) {
+        const codeErrorMessage = error?.code ? errorMessages[error?.code] : '';
+        throw new Error(codeErrorMessage || error.message);
+      }
     },
     [isCountryBlocked, connectAsync]
   );
 
   const disconnect = useCallback(async () => {
     isManualConnection.current = true;
-    await disconnectAsync(
-      {},
-      {
-        onError: (error: DisconnectErrorType) => {
-          isManualConnection.current = false;
-          console.error(`Error disconnecting` + error.message);
-        },
-        onSettled: () => {
-          handleImposterAccount();
-        },
-      }
-    );
+    try {
+      await disconnectAsync(
+        {},
+        {
+          onError: (error: DisconnectErrorType) => {
+            isManualConnection.current = false;
+            console.error(`Error disconnecting` + error);
+          },
+          onSettled: () => {
+            handleImposterAccount();
+          },
+        }
+      );
+    } catch (error: any) {
+      const codeErrorMessage = error?.code ? errorMessages[error?.code] : '';
+      throw new Error(codeErrorMessage || error.message);
+    }
   }, [disconnectAsync, handleImposterAccount]);
 
   return {
