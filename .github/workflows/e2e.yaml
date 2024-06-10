@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 20
       - name: Install dependencies
-        run: yarn
+        run: yarn install --frozen-lockfile
       - name: Install Playwright browsers and run Playwright tests
         run: yarn e2e
         env:
