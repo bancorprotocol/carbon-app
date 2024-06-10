@@ -31,7 +31,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
     }
   };
 
-  const onErrorBack = () => {
+  const onClickReturn = () => {
     setSelectedConnection(null);
     setConnectionError('');
   };
@@ -43,7 +43,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
           <ModalWalletError
             logoUrl={selectedConnection.icon}
             walletName={selectedConnection.name}
-            onClick={onErrorBack}
+            onClick={onClickReturn}
             error={connectionError}
           />
         </div>

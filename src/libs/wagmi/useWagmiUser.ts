@@ -49,9 +49,6 @@ export const useWagmiUser = ({
     [imposterAccount, walletAccount]
   );
 
-  const isManualConnection = useRef(false);
-  const oldUser = useRef(user);
-
   const isUserBlocked = useMemo(() => isAccountBlocked(user), [user]);
 
   const { connector: currentConnector } = useAccount();
@@ -69,6 +66,8 @@ export const useWagmiUser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client, IS_TENDERLY_FORK, user, isUncheckedSigner]);
 
+  const isManualConnection = useRef(false);
+  const oldUser = useRef(user);
   useEffect(() => {
     if (user !== oldUser.current && !!user) {
       // User changed current address
@@ -79,7 +78,6 @@ export const useWagmiUser = ({
       });
     }
   }, [user, currentConnector?.name]);
-
   useAccountEffect({
     onConnect(data) {
       if (isManualConnection.current) {
