@@ -12,7 +12,7 @@ export const useWagmiNetwork = () => {
   const { switchChain } = useSwitchChain();
   const chainId = getChainInfo().chainId;
 
-  const provider = getEthersProvider(wagmiConfig, { chainId });
+  const provider = getEthersProvider(wagmiConfig, chainId);
 
   const [isNetworkActive, setIsNetworkActive] = useState(false);
 
