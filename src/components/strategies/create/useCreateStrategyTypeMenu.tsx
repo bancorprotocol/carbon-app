@@ -123,7 +123,7 @@ export const getStrategyTypeItem = (
     id: 'two-ranges',
   },
   {
-    label: 'Overlapping Liquidity',
+    label: 'Concentrated Liquidity',
     description:
       'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does',
     benefits: [
