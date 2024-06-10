@@ -124,6 +124,10 @@ export const useWagmiUser = ({
   });
 
   const connect = useCallback(
+    /**
+     * Asynchronously connects to the connector in the input
+     * @param {Connector} connector  Connector to connect to
+     */
     async (connector: Connector) => {
       if (isCountryBlocked || isCountryBlocked === null) {
         throw new Error('Your country is restricted from using this app.');
@@ -150,26 +154,32 @@ export const useWagmiUser = ({
     [isCountryBlocked, connectAsync]
   );
 
-  const disconnect = useCallback(async () => {
-    isManualConnection.current = true;
-    try {
-      await disconnectAsync(
-        {},
-        {
-          onError: (error: DisconnectErrorType) => {
-            isManualConnection.current = false;
-            console.error(`Error disconnecting` + error);
-          },
-          onSettled: () => {
-            handleImposterAccount();
-          },
-        }
-      );
-    } catch (error: any) {
-      const codeErrorMessage = error?.code ? errorMessages[error?.code] : '';
-      throw new Error(codeErrorMessage || error.message);
-    }
-  }, [disconnectAsync, handleImposterAccount]);
+  const disconnect = useCallback(
+    /**
+     * Asynchronously disconnects from the last connected connector
+     */
+    async () => {
+      isManualConnection.current = true;
+      try {
+        await disconnectAsync(
+          {},
+          {
+            onError: (error: DisconnectErrorType) => {
+              isManualConnection.current = false;
+              console.error(`Error disconnecting` + error);
+            },
+            onSettled: () => {
+              handleImposterAccount();
+            },
+          }
+        );
+      } catch (error: any) {
+        const codeErrorMessage = error?.code ? errorMessages[error?.code] : '';
+        throw new Error(codeErrorMessage || error.message);
+      }
+    },
+    [disconnectAsync, handleImposterAccount]
+  );
 
   return {
     user,
