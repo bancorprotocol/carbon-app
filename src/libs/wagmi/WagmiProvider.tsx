@@ -1,5 +1,5 @@
 import { createContext, FC, ReactNode, useContext, useMemo } from 'react';
-import { CarbonWeb3ProviderContext } from 'libs/wagmi/wagmi.types';
+import { CarbonWagmiProviderContext } from 'libs/wagmi/wagmi.types';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
@@ -9,10 +9,10 @@ import config from 'config';
 import { getAccount } from '@wagmi/core';
 
 // ********************************** //
-// WEB3 CONTEXT
+// WAGMI CONTEXT
 // ********************************** //
 
-const defaultValue: CarbonWeb3ProviderContext = {
+const defaultValue: CarbonWagmiProviderContext = {
   user: undefined,
   handleImposterAccount: () => {},
   isNetworkActive: false,
@@ -20,7 +20,7 @@ const defaultValue: CarbonWeb3ProviderContext = {
   signer: undefined,
   currentConnector: undefined,
   connectors: [],
-  chainId: 1,
+  chainId: config.network.chainId,
   handleTenderlyRPC: () => {},
   disconnect: async () => {},
   connect: async () => {},
@@ -33,15 +33,15 @@ const defaultValue: CarbonWeb3ProviderContext = {
   setIsUncheckedSigner: () => {},
 };
 
-const CarbonWeb3CTX = createContext(defaultValue);
+const CarbonWagmiCTX = createContext(defaultValue);
 
-export const useWagmi = () => useContext(CarbonWeb3CTX);
+export const useWagmi = () => useContext(CarbonWagmiCTX);
 
 // ********************************** //
-// WEB3 PROVIDER
+// WAGMI PROVIDER
 // ********************************** //
 
-export const CarbonWeb3Provider: FC<{ children: ReactNode }> = ({
+export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const { address: walletAccount, chainId } = getAccount(wagmiConfig);
@@ -78,7 +78,7 @@ export const CarbonWeb3Provider: FC<{ children: ReactNode }> = ({
   );
 
   return (
-    <CarbonWeb3CTX.Provider
+    <CarbonWagmiCTX.Provider
       value={{
         user,
         isNetworkActive,
@@ -101,6 +101,6 @@ export const CarbonWeb3Provider: FC<{ children: ReactNode }> = ({
       }}
     >
       {children}
-    </CarbonWeb3CTX.Provider>
+    </CarbonWagmiCTX.Provider>
   );
 };

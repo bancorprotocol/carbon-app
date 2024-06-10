@@ -20,7 +20,7 @@ export type SelectableConnectionType =
   | 'Compass Wallet'
   | 'Seif';
 
-export interface CarbonWeb3ProviderContext {
+export interface CarbonWagmiProviderContext {
   user: string | undefined;
   chainId: number | undefined;
   isNetworkActive: boolean;

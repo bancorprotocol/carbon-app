@@ -23,7 +23,7 @@ const paths: Record<string, Pathnames> = {
 };
 
 export const MainContent: FC = () => {
-  const web3 = useWagmi();
+  const wagmi = useWagmi();
   const { location } = useRouterState();
   const prevPathnameRef = useRef('');
   const tokens = useTokens();
@@ -47,11 +47,11 @@ export const MainContent: FC = () => {
     return <Outlet />;
   }
 
-  if (!web3.isSupportedNetwork) {
+  if (!wagmi.isSupportedNetwork) {
     return <ErrorUnsupportedNetwork />;
   }
 
-  if (web3.networkError) {
+  if (wagmi.networkError) {
     return <ErrorNetworkConnection />;
   }
 
@@ -63,7 +63,7 @@ export const MainContent: FC = () => {
     return <ErrorTokenList />;
   }
 
-  if (web3.isUserBlocked) {
+  if (wagmi.isUserBlocked) {
     return <ErrorUserBlocked />;
   }
 

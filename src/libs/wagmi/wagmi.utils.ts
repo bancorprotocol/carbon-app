@@ -1,12 +1,12 @@
 import config from 'config';
 // Interface to add new chain to injected wallets as per EIP-3085 (https://github.com/ethereum/EIPs/blob/master/EIPS/eip-3085.md)
 interface AddChainParameter {
-  chainId: number; // EIP-3085 specifies hex string but web3-react expects number
+  chainId: number;
   chainName: string;
   nativeCurrency: {
     name: string;
     symbol: string;
-    decimals: number; // EIP-3085 specifies generic string but web3-react expects 18
+    decimals: number;
   };
   rpcUrls: string[];
   blockExplorerUrls?: string[];

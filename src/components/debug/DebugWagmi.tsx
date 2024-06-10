@@ -1,7 +1,7 @@
 import { useWagmi, IS_TENDERLY_FORK } from 'libs/wagmi';
 import { shortenString } from 'utils/helpers';
 
-export const DebugWeb3 = () => {
+export const DebugWagmi = () => {
   const {
     chainId,
     user,
@@ -17,7 +17,7 @@ export const DebugWeb3 = () => {
         'rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20'
       }
     >
-      <h2>Web3 Status</h2>
+      <h2>Wagmi Status</h2>
       <div className="rounded-10 w-full space-y-3 bg-black p-10">
         <div className="flex justify-between">
           <div>ChainID:</div>
