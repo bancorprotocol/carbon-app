@@ -31,13 +31,19 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
     }
   };
 
+  const onErrorBack = () => {
+    setSelectedConnection(null);
+    setConnectionError('');
+  };
+
   return (
     <ModalOrMobileSheet id={id} title="Connect Wallet" isPending={isPending}>
       {isError ? (
         <div className="flex flex-col items-center space-y-20">
           <ModalWalletError
             logoUrl={selectedConnection.icon}
-            name={selectedConnection.name}
+            walletName={selectedConnection.name}
+            onClick={onErrorBack}
             error={connectionError}
           />
         </div>
