@@ -9,14 +9,14 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container:
-      image: docker://mcr.microsoft.com/playwright:v1.44.1-jammy
+      image: docker://mcr.microsoft.com/playwright:v1.43.0-jammy
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn
       - name: Install Playwright browsers and run Playwright tests
         run: yarn e2e
         env:
