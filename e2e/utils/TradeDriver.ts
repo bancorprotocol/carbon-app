@@ -2,7 +2,7 @@
 import { Page } from '@playwright/test';
 import { waitFor } from './operators';
 import { closeModal, waitModalClose, waitModalOpen } from './modal';
-import { Direction } from './types';
+import { Direction, debugTokens } from './types';
 
 interface TradeTestCase {
   mode: Direction;
@@ -27,11 +27,13 @@ export class TradeDriver {
 
   async selectPair() {
     const { mode, target, source } = this.testCase;
+
     await this.page.getByTestId('select-trade-pair').click();
     await waitModalOpen(this.page);
     const pair = mode === 'buy' ? [target, source] : [source, target];
+    const pairKey = [debugTokens[pair[0]], debugTokens[pair[1]]].join('_');
     this.page.getByTestId('search-token-pair').fill(`${pair.join(' ')}`);
-    const select = await waitFor(this.page, `select-${pair.join('_')}`);
+    const select = await waitFor(this.page, `select-${pairKey}`);
     await select.click();
     await waitModalClose(this.page);
   }
