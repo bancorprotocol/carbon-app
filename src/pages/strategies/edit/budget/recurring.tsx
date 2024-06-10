@@ -4,13 +4,13 @@ import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyConte
 import { StrategyDirection } from 'libs/routing';
 import { OrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { EditStrategyBudgetField } from 'components/strategies/edit/NewEditBudgetFields';
+import { EditStrategyBudgetField } from 'components/strategies/edit/EditBudgetFields';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import {
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
-import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
+import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
 export interface EditBudgetRecurringStrategySearch {
   editType: 'deposit' | 'withdraw';

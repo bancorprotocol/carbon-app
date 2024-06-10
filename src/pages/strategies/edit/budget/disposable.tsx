@@ -3,14 +3,14 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { OrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { EditStrategyBudgetField } from 'components/strategies/edit/NewEditBudgetFields';
+import { EditStrategyBudgetField } from 'components/strategies/edit/EditBudgetFields';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import {
   isZero,
   outSideMarketWarning,
   toBaseOrder,
 } from 'components/strategies/common/utils';
-import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
+import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
 export interface EditBudgetDisposableStrategySearch {
   editType: 'deposit' | 'withdraw';

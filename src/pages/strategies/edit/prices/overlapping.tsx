@@ -17,14 +17,14 @@ import {
   isMinAboveMarket,
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
-import { EditPriceOverlappingStrategy } from 'components/strategies/edit/NewEditPriceOverlappingStrategy';
+import { EditPriceOverlappingStrategy } from 'components/strategies/edit/EditPriceOverlappingStrategy';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
+import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
 export interface EditOverlappingStrategySearch {
   editType: 'editPrices' | 'renew';

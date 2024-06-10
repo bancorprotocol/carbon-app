@@ -5,7 +5,7 @@ import { StrategiesPage } from 'pages/strategies/index';
 import { Strategy, useGetUserStrategies } from 'libs/queries';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
-import { EditStrategyLayout } from 'components/strategies/edit/NewEditStrategyLayout';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 
 const url = '/strategies/edit/$strategyId';
 export const EditStrategyPageLayout = () => {

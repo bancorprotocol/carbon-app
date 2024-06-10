@@ -2,14 +2,14 @@ import { useCallback } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { roundSearchParam } from 'utils/helpers';
-import { EditStrategyPriceField } from 'components/strategies/edit/NewEditPriceFields';
+import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { BaseOrder, OrderBlock } from 'components/strategies/common/types';
 import { Order } from 'libs/queries';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
+import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
 export interface EditRecurringStrategySearch {
   editType: 'editPrices' | 'renew';

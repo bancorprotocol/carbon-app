@@ -6,7 +6,7 @@ import {
   EditBudgetDistribution,
   EditBudgetTokenPrice,
   EditStrategyAllocatedBudget,
-} from './NewEditStrategyAllocatedBudget';
+} from './EditStrategyAllocatedBudget';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { BudgetInput } from '../common/BudgetInput';
 import { useGetTokenBalance } from 'libs/queries';

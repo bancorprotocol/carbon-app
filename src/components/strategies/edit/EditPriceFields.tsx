@@ -6,7 +6,7 @@ import { OrderHeader } from 'components/strategies/create/Order/Header';
 import { InputRange } from 'components/strategies/create/Order/InputRange';
 import { InputLimit } from 'components/strategies/create/Order/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
-import { EditStrategyAllocatedBudget } from './NewEditStrategyAllocatedBudget';
+import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { useEditStrategyCtx } from './EditStrategyContext';
 
 interface Props {

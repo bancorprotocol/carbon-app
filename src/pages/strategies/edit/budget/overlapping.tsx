@@ -20,8 +20,8 @@ import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { EditBudgetOverlappingStrategy } from 'components/strategies/edit/NewEditBudgetOverlappingStrategy';
-import { EditStrategyForm } from 'components/strategies/edit/NewEditStrategyForm';
+import { EditBudgetOverlappingStrategy } from 'components/strategies/edit/EditBudgetOverlappingStrategy';
+import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
 export interface EditBudgetOverlappingSearch {
   editType: 'deposit' | 'withdraw';

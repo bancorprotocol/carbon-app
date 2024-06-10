@@ -68,7 +68,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
             disabled={isAwaiting || isProcessing}
             to="/strategies/edit/$strategyId"
             params={{ strategyId: strategy.id }}
-            search={{ type: 'editPrices' }}
+            search={{ editType: 'editPrices' }}
             className={cn(
               'row-span-2 self-center',
               buttonStyles({ variant: 'white' })
