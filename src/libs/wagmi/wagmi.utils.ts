@@ -27,7 +27,7 @@ export const getChainInfo = (): AddChainParameter => {
   };
 };
 
-// Error messages for EIP-1993 (https://eips.ethereum.org/EIPS/eip-1193#rpc-errors)
+// Error messages for EIP-1993 Provider (https://eips.ethereum.org/EIPS/eip-1193#provider-errors)
 export const errorMessages: Record<string, string> = {
   4001: 'Connection rejected. Please approve dApp connection on your wallet.',
   4100: 'The request method/account is not authorized. Please approve dApp permissions on your wallet.',

@@ -1337,10 +1337,10 @@
   resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20230801.0.tgz#d23ec9671a08d91ad027fb4c783e94dee275d279"
   integrity sha512-RzRUR+J/T3h58qbTZHYntYsnZXu3JnrlZIhqP2hhdyfoZAZ/+ko4wX0foAqlYHi+kXWaWtySHBuMcx6ec6TXlQ==
 
-"@coinbase/wallet-sdk@4.0.2":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-4.0.2.tgz#403b2194ecc9bcf8b8fd217ec5cd6529013b58f4"
-  integrity sha512-WMUeFbtS0rn8zavjAmNhFWq1r3TV7E5KuSij1Sar0/XuOC+nhj96uqSlIApAHdhuScoKZBq39VYsAQCHzOC6/w==
+"@coinbase/wallet-sdk@4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-4.0.3.tgz#fd52dd4c168c35979c7b3294018a6f78d163a593"
+  integrity sha512-y/OGEjlvosikjfB+wk+4CVb9OxD1ob9cidEBLI5h8Hxaf/Qoob2XoVT1uvhtAzBx34KpGYSd+alKvh/GCRre4Q==
   dependencies:
     buffer "^6.0.3"
     clsx "^1.2.1"
@@ -2224,10 +2224,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-3.1.1.tgz#e89b840a7af8097a8ed4953d8dc8470d1302d3ef"
   integrity sha512-ihb3B0T/wJm1eUuArYP4lCTSEoZsClHhuWyfo/kMX3m/odpqNcPfsz5O2A3NT7dXCAgWPGDQGPqygCpgeniKMw==
 
-"@metamask/sdk-communication-layer@0.20.2":
-  version "0.20.2"
-  resolved "https://registry.yarnpkg.com/@metamask/sdk-communication-layer/-/sdk-communication-layer-0.20.2.tgz#7f7fd334b2d26abd1a5a1ec1ffadf823a9589344"
-  integrity sha512-TN+whYbCClFSkx52Ild1RcjoRyz8YZgwNvZeooIcZIvCfBM6U9W5273KGiY7WLc/oO4KKmFk17d7vMO4gNvhhw==
+"@metamask/sdk-communication-layer@0.20.5":
+  version "0.20.5"
+  resolved "https://registry.yarnpkg.com/@metamask/sdk-communication-layer/-/sdk-communication-layer-0.20.5.tgz#b472fe223319a25a060155ea904f7c66062102b2"
+  integrity sha512-Y3pzg1GBB7tDUCUsyhvlhxQ+h/pDrTjO2yUwjCJj2S8Nx5OtdRv/foRGfbDHkfYt6Z9ANRfivWU2U6El17B24A==
   dependencies:
     bufferutil "^4.0.8"
     date-fns "^2.29.3"
@@ -2235,22 +2235,22 @@
     utf-8-validate "^6.0.3"
     uuid "^8.3.2"
 
-"@metamask/sdk-install-modal-web@0.20.2":
-  version "0.20.2"
-  resolved "https://registry.yarnpkg.com/@metamask/sdk-install-modal-web/-/sdk-install-modal-web-0.20.2.tgz#1cf0eb3c26291de7598190878fa9a893c4eb2d66"
-  integrity sha512-0QiaZhV15AGdN1zU2jfTI32eC3YkwEpzDfR9+oiZ9bd2G72c6lYBhTsmDGUd01aP6A+bqJR5PjI8Wh2AWtoLeA==
+"@metamask/sdk-install-modal-web@0.20.4":
+  version "0.20.4"
+  resolved "https://registry.yarnpkg.com/@metamask/sdk-install-modal-web/-/sdk-install-modal-web-0.20.4.tgz#50b97be4e3be17c3622281c2ad9fc49769e33216"
+  integrity sha512-AX3mTr0IDpS0ajV83okTaixG+2wIxTVbgvEuQgAj2Ed7PWAdiZ1aX93AVcaCgkOWhTf267z7mXCSuBDpBCje9g==
   dependencies:
     qr-code-styling "^1.6.0-rc.1"
 
-"@metamask/sdk@0.20.3":
-  version "0.20.3"
-  resolved "https://registry.yarnpkg.com/@metamask/sdk/-/sdk-0.20.3.tgz#73851d68ffe5d45c1872c024182922530b187b7a"
-  integrity sha512-HZ9NwA+LxiXzuy0YWbWsuD4xejQtp85bhcCAf8UgpA/0dOyF3RS4dKDdBBXSyRgk3RWPjeJgHxioaH4CmBmiRA==
+"@metamask/sdk@0.20.5":
+  version "0.20.5"
+  resolved "https://registry.yarnpkg.com/@metamask/sdk/-/sdk-0.20.5.tgz#ae90b4e5108f2a0e5f5536e66354c3e31b121af9"
+  integrity sha512-BEL3BKbb0O09QgOzvyPH5xUONl2uicS9WT1AYhZ8yR4ytz5fhyHWJzs8Q/cwgm1qIdn3eumnjXfgA6pKirWa3A==
   dependencies:
     "@metamask/onboarding" "^1.0.1"
     "@metamask/providers" "^15.0.0"
-    "@metamask/sdk-communication-layer" "0.20.2"
-    "@metamask/sdk-install-modal-web" "0.20.2"
+    "@metamask/sdk-communication-layer" "0.20.5"
+    "@metamask/sdk-install-modal-web" "0.20.4"
     "@types/dom-screen-wake-lock" "^1.0.0"
     bowser "^2.9.0"
     cross-fetch "^4.0.0"
@@ -3802,13 +3802,13 @@
   resolved "https://registry.yarnpkg.com/@wagmi/chains/-/chains-1.6.0.tgz#eb992ad28dbaaab729b5bcab3e5b461e8a035656"
   integrity sha512-5FRlVxse5P4ZaHG3GTvxwVANSmYJas1eQrTBHhjxVtqXoorm0aLmCHbhmN8Xo1yu09PaWKlleEvfE98yH4AgIw==
 
-"@wagmi/connectors@5.0.7":
-  version "5.0.7"
-  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-5.0.7.tgz#f52fd917fa9e55af52acdf21b1c3c8724260a986"
-  integrity sha512-EoTtRKnUPhKpU/LFU7LU4iK8yNU/akU5vSgX+K21QXHi8ImhEEsd2nPEU5kfkWriGf+D/raD4gLZYsfppDRUaw==
+"@wagmi/connectors@5.0.9":
+  version "5.0.9"
+  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-5.0.9.tgz#70f63c5ea94427078df712e3536e4d06b1d28406"
+  integrity sha512-3T3OqMw7wHk5QTBKZ9mW1iH5NSvtGwy59JuApylR5RkVlOP7iYwfGEILYxqBhX8VwTONKkb4G4sxphEQQOYSjg==
   dependencies:
-    "@coinbase/wallet-sdk" "4.0.2"
-    "@metamask/sdk" "0.20.3"
+    "@coinbase/wallet-sdk" "4.0.3"
+    "@metamask/sdk" "0.20.5"
     "@safe-global/safe-apps-provider" "0.18.1"
     "@safe-global/safe-apps-sdk" "8.1.0"
     "@walletconnect/ethereum-provider" "2.13.0"
@@ -10112,12 +10112,12 @@ w3c-xmlserializer@^4.0.0:
   dependencies:
     xml-name-validator "^4.0.0"
 
-wagmi@2.9.8:
-  version "2.9.8"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.9.8.tgz#9a4bb06d0b073a1297d08291119f1f00f0113e54"
-  integrity sha512-uSfYKB0JWtajz8YSntMBO4QQolx1fPPckwAVrRl9X66zQb0FLqgZeXrnf+PjFnmNbNsSyO3neOD/3TQqNL6m4Q==
+wagmi@2.9.10:
+  version "2.9.10"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.9.10.tgz#ea0f87eb025afea171306acd6e9a6f332de1c65c"
+  integrity sha512-9Df6BQghzIw9na4p/jOvQc/pYLTSsUYlFDeft7Ssby+qHv2gxYpzwjx3jIoVfrPY2UEm8ojgXYoEENJN9JmoRQ==
   dependencies:
-    "@wagmi/connectors" "5.0.7"
+    "@wagmi/connectors" "5.0.9"
     "@wagmi/core" "2.10.5"
     use-sync-external-store "1.2.0"
 

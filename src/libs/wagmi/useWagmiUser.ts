@@ -9,7 +9,11 @@ import {
   useAccountEffect,
   type Connector,
 } from 'wagmi';
-import { type ConnectErrorType, type DisconnectErrorType } from '@wagmi/core';
+import {
+  getAccount,
+  type ConnectErrorType,
+  type DisconnectErrorType,
+} from '@wagmi/core';
 import { isAccountBlocked } from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
@@ -17,18 +21,20 @@ import { errorMessages, getChainInfo } from './wagmi.utils';
 import { clientToSigner } from './ethers';
 import { getUncheckedSigner } from 'utils/tenderly';
 import { carbonEvents } from 'services/events';
+import { wagmiConfig } from './config';
 
 type Props = {
   imposterAccount: string;
-  walletAccount?: string;
   handleImposterAccount: (account?: string) => void;
 };
 
 export const useWagmiUser = ({
   imposterAccount,
-  walletAccount,
   handleImposterAccount,
 }: Props) => {
+  const { address: walletAccount, chainId: accountChainId } =
+    getAccount(wagmiConfig);
+
   const { isCountryBlocked } = useStore();
   const [isUncheckedSigner, _setIsUncheckedSigner] = useState(
     lsService.getItem('isUncheckedSigner') || false
@@ -47,6 +53,12 @@ export const useWagmiUser = ({
   const user = useMemo(
     () => imposterAccount || walletAccount,
     [imposterAccount, walletAccount]
+  );
+
+  const chainId = getChainInfo().chainId;
+  const isSupportedNetwork = useMemo(
+    () => !(!!user && (accountChainId || chainId) !== chainId),
+    [accountChainId, chainId, user]
   );
 
   const isUserBlocked = useMemo(() => isAccountBlocked(user), [user]);
@@ -168,5 +180,7 @@ export const useWagmiUser = ({
     isUserBlocked,
     isUncheckedSigner,
     setIsUncheckedSigner,
+    isSupportedNetwork,
+    accountChainId,
   };
 };

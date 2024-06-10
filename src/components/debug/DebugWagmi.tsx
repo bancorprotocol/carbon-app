@@ -4,6 +4,7 @@ import { shortenString } from 'utils/helpers';
 export const DebugWagmi = () => {
   const {
     chainId,
+    accountChainId,
     user,
     isImposter,
     isNetworkActive,
@@ -22,6 +23,10 @@ export const DebugWagmi = () => {
         <div className="flex justify-between">
           <div>ChainID:</div>
           <div>{chainId}</div>
+        </div>
+        <div className="flex justify-between">
+          <div>Account chainID:</div>
+          <div>{accountChainId}</div>
         </div>
         <div className="flex justify-between">
           <div>Network Active:</div>

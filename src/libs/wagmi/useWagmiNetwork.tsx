@@ -68,6 +68,7 @@ export const useWagmiNetwork = () => {
   }, [unsortedConnectors]);
 
   return {
+    chainId,
     provider,
     connectors,
     isNetworkActive,

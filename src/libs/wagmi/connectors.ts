@@ -99,7 +99,7 @@ const getDefaultConnector = (connectorType: SelectableConnectionType) => {
         },
       });
     case 'Safe':
-      return safe({ shimDisconnect: false });
+      return safe();
   }
 };
 

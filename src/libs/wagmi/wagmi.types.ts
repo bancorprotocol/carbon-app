@@ -22,7 +22,8 @@ export type SelectableConnectionType =
 
 export interface CarbonWagmiProviderContext {
   user: string | undefined;
-  chainId: number | undefined;
+  accountChainId: number | undefined;
+  chainId: number;
   isNetworkActive: boolean;
   networkError: string | undefined;
   provider?: Web3Provider | StaticJsonRpcProvider;

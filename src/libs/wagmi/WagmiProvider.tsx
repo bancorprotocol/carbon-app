@@ -1,12 +1,10 @@
-import { createContext, FC, ReactNode, useContext, useMemo } from 'react';
+import { createContext, FC, ReactNode, useContext } from 'react';
 import { CarbonWagmiProviderContext } from 'libs/wagmi/wagmi.types';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
-import { wagmiConfig } from 'libs/wagmi/config';
-import config from 'config';
-import { getAccount } from '@wagmi/core';
+import { getChainInfo } from './wagmi.utils';
 
 // ********************************** //
 // WAGMI CONTEXT
@@ -20,7 +18,8 @@ const defaultValue: CarbonWagmiProviderContext = {
   signer: undefined,
   currentConnector: undefined,
   connectors: [],
-  chainId: config.network.chainId,
+  chainId: getChainInfo().chainId,
+  accountChainId: undefined,
   handleTenderlyRPC: () => {},
   disconnect: async () => {},
   connect: async () => {},
@@ -44,10 +43,14 @@ export const useWagmi = () => useContext(CarbonWagmiCTX);
 export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { address: walletAccount, chainId } = getAccount(wagmiConfig);
-
-  const { provider, connectors, isNetworkActive, networkError, switchNetwork } =
-    useWagmiNetwork();
+  const {
+    chainId,
+    provider,
+    connectors,
+    isNetworkActive,
+    networkError,
+    switchNetwork,
+  } = useWagmiNetwork();
 
   const { imposterAccount, handleImposterAccount, isImposter } =
     useWagmiImposter();
@@ -63,19 +66,12 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
     isUserBlocked,
     isUncheckedSigner,
     setIsUncheckedSigner,
+    isSupportedNetwork,
+    accountChainId,
   } = useWagmiUser({
-    walletAccount,
     handleImposterAccount,
     imposterAccount,
   });
-
-  const isSupportedNetwork = useMemo(
-    () =>
-      !(
-        !!user && (chainId || config.network.chainId) !== config.network.chainId
-      ),
-    [chainId, user]
-  );
 
   return (
     <CarbonWagmiCTX.Provider
@@ -87,6 +83,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         currentConnector,
         connectors,
         chainId,
+        accountChainId,
         handleTenderlyRPC,
         handleImposterAccount,
         connect,
