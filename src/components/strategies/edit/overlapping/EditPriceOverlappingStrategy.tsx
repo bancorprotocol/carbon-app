@@ -27,7 +27,7 @@ import {
   OverlappingBudgetDistribution,
 } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
-import { BudgetAction } from 'components/strategies/common/BudgetInput';
+import { BudgetAction } from 'components/strategies/common/InputBudget';
 import { getDeposit, getWithdraw } from '../utils';
 import { OverlappingAction } from 'components/strategies/overlapping/OverlappingAction';
 import {

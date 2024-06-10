@@ -35,13 +35,11 @@ describe('fullOutcome', () => {
       budget: '1',
       min: '',
       max: '',
-      price: '',
       buy: true,
     };
     it('should return undefined if no budget, 0 or a negative value', () => {
       const input = {
         buy: true,
-        price: '1',
         min: '100',
         max: '10',
         budget: '',
@@ -51,26 +49,32 @@ describe('fullOutcome', () => {
       expect(getFullOutcome({ ...input, budget: '-1' })).toBeUndefined();
     });
     it('should return undefined if neither price nor min&max', () => {
-      const noPriceOrMinAndMax = { ...base, price: '', min: '', max: '' };
-      const noPriceAndMax = { ...base, price: '', min: '10', max: '' };
+      const noPriceOrMinAndMax = { ...base, min: '', max: '' };
+      const noPriceAndMax = { ...base, min: '10', max: '' };
       expect(getFullOutcome(noPriceOrMinAndMax)).toBeUndefined();
       expect(getFullOutcome(noPriceAndMax)).toBeUndefined();
     });
     describe('Limit rate', () => {
       it('[Buy] should return 3.1645569620253164557 with price 1580 & budget 5000', () => {
-        const input = { ...base, price: '1580', budget: '5000' };
+        const input = { ...base, min: '1580', max: '1580', budget: '5000' };
         expect(getFullOutcome(input)?.amount).toBe('3.1645569620253164557');
       });
       it('[Buy] should return 2 with price 1600 & budget 3200', () => {
-        const input = { ...base, price: '1600', budget: '3200' };
+        const input = { ...base, min: '1600', max: '1600', budget: '3200' };
         expect(getFullOutcome(input)?.amount).toBe('2');
       });
       it('[Buy] should return 3 with price 1500 & budget 4500 ', () => {
-        const input = { ...base, price: '1500', budget: '4500' };
+        const input = { ...base, min: '1500', max: '1500', budget: '4500' };
         expect(getFullOutcome(input)?.amount).toBe('3');
       });
       it('[Sell] should return 3260 with price 1630 & budget 2', () => {
-        const input = { ...base, buy: false, price: '1630', budget: '2' };
+        const input = {
+          ...base,
+          buy: false,
+          min: '1630',
+          max: '1630',
+          budget: '2',
+        };
         expect(getFullOutcome(input)?.amount).toBe('3260');
       });
     });

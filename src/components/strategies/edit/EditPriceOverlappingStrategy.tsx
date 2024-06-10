@@ -28,7 +28,7 @@ import { OverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
-import { InputRange } from '../create/Order/InputRange';
+import { InputRange } from '../common/InputRange';
 
 interface Props {
   marketPrice: string;

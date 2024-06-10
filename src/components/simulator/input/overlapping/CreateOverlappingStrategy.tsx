@@ -22,7 +22,7 @@ import {
   SimulatorOverlappingInputDispatch,
 } from 'hooks/useSimulatorOverlappingInput';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
-import { BudgetInput } from 'components/strategies/common/BudgetInput';
+import { InputBudget } from 'components/strategies/common/InputBudget';
 import { formatNumber } from 'utils/helpers';
 
 interface Props {
@@ -369,7 +369,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
               Please enter the amount of tokens you want to deposit.
             </p>
           </hgroup>
-          <BudgetInput
+          <InputBudget
             editType="deposit"
             token={anchor === 'buy' ? quote : base}
             value={budget}

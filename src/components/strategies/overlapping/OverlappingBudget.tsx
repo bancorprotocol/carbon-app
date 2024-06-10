@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
-import { BudgetInput, BudgetAction } from '../common/BudgetInput';
+import { InputBudget, BudgetAction } from '../common/InputBudget';
 import { useWeb3 } from 'libs/web3';
 
 interface Props {
@@ -73,7 +73,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
         </h3>
         <p className="text-14 text-white/80">{getDescription(editType)}</p>
       </hgroup>
-      <BudgetInput
+      <InputBudget
         editType={editType}
         token={anchor === 'buy' ? quote : base}
         value={budgetValue}

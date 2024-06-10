@@ -19,7 +19,7 @@ import {
   OverlappingBudgetDistribution,
 } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
-import { BudgetAction } from 'components/strategies/common/BudgetInput';
+import { BudgetAction } from 'components/strategies/common/InputBudget';
 import { getDeposit, getWithdraw } from '../utils';
 import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';

@@ -24,7 +24,7 @@ import { UserMarketPrice } from '../UserMarketPrice';
 import { useWeb3 } from 'libs/web3';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
-import { InputRange } from './Order/InputRange';
+import { InputRange } from '../common/InputRange';
 import { OverlappingOrder } from 'components/strategies/common/types';
 
 interface Props {

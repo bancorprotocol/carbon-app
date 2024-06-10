@@ -1,6 +1,6 @@
 import { Token } from 'libs/tokens';
 import { FC, useId, useState } from 'react';
-import { BudgetInput } from '../common/BudgetInput';
+import { InputBudget } from '../common/InputBudget';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
@@ -85,7 +85,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   return (
     <div className={cn(props.className, 'flex flex-col gap-20 p-16')}>
       {!externalPrice && <SetPriceText base={base} />}
-      <BudgetInput
+      <InputBudget
         title={`Enter Market Price (${quote.symbol} per 1 ${base.symbol})`}
         titleTooltip="Price used to calculate overlapping strategy params"
         placeholder="Enter Price"

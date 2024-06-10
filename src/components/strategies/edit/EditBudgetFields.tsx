@@ -8,7 +8,7 @@ import {
   EditStrategyAllocatedBudget,
 } from './EditStrategyAllocatedBudget';
 import { useEditStrategyCtx } from './EditStrategyContext';
-import { BudgetInput } from '../common/BudgetInput';
+import { InputBudget } from '../common/InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from '../common/utils';
@@ -80,7 +80,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
           iconClassName="text-white/60"
         />
       </header>
-      <BudgetInput
+      <InputBudget
         editType={editType}
         token={token}
         value={budget}

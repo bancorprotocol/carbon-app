@@ -28,7 +28,7 @@ interface Props {
   onChange: (value: string) => void;
 }
 
-export const BudgetInput: FC<Props> = (props) => {
+export const InputBudget: FC<Props> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = useId();
   const { user } = useWeb3();

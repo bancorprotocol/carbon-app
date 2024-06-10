@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
-import { OrderFields } from 'components/strategies/create/Order/OrderFields';
+import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -84,7 +84,7 @@ export const CreateDisposableStrategyPage = () => {
         order0={buy ? order : emptyOrder()}
         order1={buy ? emptyOrder() : order}
       >
-        <OrderFields
+        <CreateOrder
           type="disposable"
           base={base!}
           quote={quote!}

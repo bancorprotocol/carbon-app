@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
-import { OrderFields } from 'components/strategies/create/Order/OrderFields';
+import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { OrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
@@ -128,7 +128,7 @@ export const CreateRecurringStrategyPage = () => {
         order0={buyOrder}
         order1={sellOrder}
       >
-        <OrderFields
+        <CreateOrder
           type="recurring"
           base={base!}
           quote={quote!}
@@ -138,7 +138,7 @@ export const CreateRecurringStrategyPage = () => {
           error={getError(search)}
           warnings={[sellOutsideMarket, getWarning(search)]}
         />
-        <OrderFields
+        <CreateOrder
           type="recurring"
           base={base!}
           quote={quote!}

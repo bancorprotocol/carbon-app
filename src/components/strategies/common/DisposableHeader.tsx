@@ -12,7 +12,7 @@ interface Props {
   setOrder: (value: Partial<OrderBlock>) => void;
 }
 
-export const OrderHeader: FC<Props> = (props) => {
+export const DisposableHeader: FC<Props> = (props) => {
   const { order, buy, children, base, setOrder } = props;
   const isRange = order.settings === 'range';
   const setLimit = () => {

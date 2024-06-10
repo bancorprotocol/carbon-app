@@ -2,9 +2,9 @@ import { FC, ReactNode, useId } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { LogoImager } from 'components/common/imager/Imager';
 import { FullOutcome } from 'components/strategies/FullOutcome';
-import { OrderHeader } from 'components/strategies/create/Order/Header';
-import { InputRange } from 'components/strategies/create/Order/InputRange';
-import { InputLimit } from 'components/strategies/create/Order/InputLimit';
+import { DisposableHeader } from 'components/strategies/common/DisposableHeader';
+import { InputRange } from 'components/strategies/common/InputRange';
+import { InputLimit } from 'components/strategies/common/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { useEditStrategyCtx } from './EditStrategyContext';
@@ -74,7 +74,7 @@ export const EditStrategyPriceField: FC<Props> = ({
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {settings}
-      <OrderHeader {...headerProps}>
+      <DisposableHeader {...headerProps}>
         <h2 className="text-18 flex items-center gap-8" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
@@ -82,7 +82,7 @@ export const EditStrategyPriceField: FC<Props> = ({
           <LogoImager alt="Token" src={base.logoURI} className="size-18" />
           <span>{base.symbol}</span>
         </h2>
-      </OrderHeader>
+      </DisposableHeader>
       <fieldset className="flex flex-col gap-8">
         <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
           {inputTitle}

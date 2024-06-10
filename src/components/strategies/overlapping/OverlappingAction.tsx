@@ -5,7 +5,7 @@ import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useGetTokenBalance } from 'libs/queries';
 import { cn } from 'utils/helpers';
-import { BudgetInput, BudgetAction } from '../common/BudgetInput';
+import { InputBudget, BudgetAction } from '../common/InputBudget';
 import { m } from 'libs/motion';
 import { items } from '../common/variants';
 import style from './OverlappingBudget.module.css';
@@ -112,7 +112,7 @@ export const OverlappingAction: FC<Props> = (props) => {
               Withdraw
             </label>
           </div>
-          <BudgetInput
+          <InputBudget
             editType={action}
             token={anchor === 'buy' ? quote : base}
             value={budget}
