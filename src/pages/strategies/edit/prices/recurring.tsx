@@ -1,15 +1,12 @@
-import { useCallback } from 'react';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { roundSearchParam } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
-import { StrategyDirection, StrategySettings } from 'libs/routing';
-import { BaseOrder, OrderBlock } from 'components/strategies/common/types';
-import { Order } from 'libs/queries';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
-import { outSideMarketWarning } from 'components/strategies/common/utils';
+import { StrategySettings } from 'libs/routing';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { outSideMarketWarning } from 'components/strategies/common/utils';
+import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 
 export interface EditRecurringStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -21,20 +18,7 @@ export interface EditRecurringStrategySearch {
   sellSettings: StrategySettings;
 }
 
-// TODO: merge that with create
-type OrderKey = keyof EditRecurringStrategySearch;
-const toOrderSearch = (
-  order: Partial<OrderBlock>,
-  direction: 'buy' | 'sell'
-) => {
-  const search: Partial<EditRecurringStrategySearch> = {};
-  for (const [key, value] of Object.entries(order)) {
-    const camelCaseKey = key.charAt(0).toUpperCase() + key.slice(1);
-    const searchKey = `${direction}${camelCaseKey}` as OrderKey;
-    search[searchKey] = value as any;
-  }
-  return search;
-};
+type Search = EditRecurringStrategySearch;
 
 const getWarning = (search: EditRecurringStrategySearch) => {
   const { buyMin, buyMax, sellMin, sellMax } = search;
@@ -61,9 +45,9 @@ const url = '/strategies/edit/$strategyId/prices/recurring';
 export const EditStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
-  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const marketPrice = useMarketPrice({ base, quote });
+  const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const orders = {
     buy: {
@@ -106,39 +90,6 @@ export const EditStrategyRecurringPage = () => {
   });
 
   const error = getError(search);
-
-  // TODO: create a utils for that
-  const setOrder = useCallback(
-    (order: Partial<OrderBlock>, direction: StrategyDirection) => {
-      navigate({
-        params: (params) => params,
-        search: (previous) => ({
-          ...previous,
-          ...toOrderSearch(order, direction),
-        }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate]
-  );
-
-  const setSellOrder = useCallback(
-    (order: Partial<OrderBlock>) => setOrder(order, 'sell'),
-    [setOrder]
-  );
-
-  const setBuyOrder = useCallback(
-    (order: Partial<OrderBlock>) => setOrder(order, 'buy'),
-    [setOrder]
-  );
-
-  // WHAT TO DO ?
-  const getMarginalOption = (oldOrder: Order, newOrder: BaseOrder) => {
-    if (search.editType !== 'editPrices') return;
-    if (oldOrder.startRate !== newOrder.min) return MarginalPriceOptions.reset;
-    if (oldOrder.endRate !== newOrder.max) return MarginalPriceOptions.reset;
-  };
 
   return (
     <EditStrategyForm

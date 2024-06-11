@@ -1,5 +1,4 @@
-import { useCallback } from 'react';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useSearch } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
@@ -13,6 +12,7 @@ import {
   emptyOrder,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
+import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 
 export interface CreateDisposableStrategySearch {
   base: string;
@@ -24,47 +24,22 @@ export interface CreateDisposableStrategySearch {
   budget?: string;
 }
 
+const url = '/strategies/create/disposable';
 export const CreateDisposableStrategyPage = () => {
   const { getTokenById } = useTokens();
-  const navigate = useNavigate({ from: '/strategies/create/disposable' });
   const search = useSearch({ from: '/strategies/create/disposable' });
   const base = getTokenById(search.base);
   const quote = getTokenById(search.quote);
   const marketPrice = useMarketPrice({ base, quote });
+  const { setOrder, setDirection } = useSetDisposableOrder(url);
 
   const buy = search.direction !== 'sell';
   const order: OrderBlock = {
     min: search.min ?? '',
     max: search.max ?? '',
     budget: search.budget ?? '',
-    marginalPrice: '',
     settings: search.settings ?? 'limit',
   };
-
-  const setDirection = (direction: StrategyDirection) => {
-    navigate({
-      search: (previous) => ({
-        ...previous,
-        direction,
-        min: '',
-        max: '',
-        budget: '',
-      }),
-      replace: true,
-      resetScroll: false,
-    });
-  };
-
-  const setOrder = useCallback(
-    (order: Partial<OrderBlock>) => {
-      navigate({
-        search: (previous) => ({ ...previous, ...order }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate]
-  );
 
   // Warnings
   const outSideMarket = outSideMarketWarning({

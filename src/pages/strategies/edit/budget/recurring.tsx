@@ -1,8 +1,5 @@
-import { useCallback } from 'react';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
-import { StrategyDirection } from 'libs/routing';
-import { OrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyBudgetField } from 'components/strategies/edit/EditBudgetFields';
 import { getTotalBudget } from 'components/strategies/edit/utils';
@@ -11,6 +8,7 @@ import {
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 
 export interface EditBudgetRecurringStrategySearch {
   editType: 'deposit' | 'withdraw';
@@ -20,29 +18,16 @@ export interface EditBudgetRecurringStrategySearch {
   sellMarginalPrice?: string;
 }
 
-// TODO: merge that with create
-type OrderKey = keyof EditBudgetRecurringStrategySearch;
-const toOrderSearch = (
-  order: Partial<OrderBlock>,
-  direction: 'buy' | 'sell'
-) => {
-  const search: Partial<EditBudgetRecurringStrategySearch> = {};
-  for (const [key, value] of Object.entries(order)) {
-    const camelCaseKey = key.charAt(0).toUpperCase() + key.slice(1);
-    const searchKey = `${direction}${camelCaseKey}` as OrderKey;
-    search[searchKey] = value as any;
-  }
-  return search;
-};
+type Search = EditBudgetRecurringStrategySearch;
 
 const url = '/strategies/edit/$strategyId/budget/recurring';
 
 export const EditBudgetRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
-  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const marketPrice = useMarketPrice({ base, quote });
+  const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const totalBuyBudget = getTotalBudget(
     search.editType,
@@ -85,32 +70,6 @@ export const EditBudgetRecurringPage = () => {
     max: order1.endRate,
     buy: false,
   });
-
-  // TODO: create a utils for that
-  const setOrder = useCallback(
-    (order: Partial<OrderBlock>, direction: StrategyDirection) => {
-      navigate({
-        params: (params) => params,
-        search: (previous) => ({
-          ...previous,
-          ...toOrderSearch(order, direction),
-        }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate]
-  );
-
-  const setSellOrder = useCallback(
-    (order: Partial<OrderBlock>) => setOrder(order, 'sell'),
-    [setOrder]
-  );
-
-  const setBuyOrder = useCallback(
-    (order: Partial<OrderBlock>) => setOrder(order, 'buy'),
-    [setOrder]
-  );
 
   return (
     <EditStrategyForm

@@ -22,7 +22,7 @@ export class EditStrategyDriver {
     const mode = ['deposit', 'withdraw'].includes(editType)
       ? 'budget'
       : 'prices';
-    const url = `/strategies/edit/*/${mode}/${strategyType}?editType=${editType}`;
+    const url = `/strategies/edit/*/${mode}/${strategyType}?*`;
     return this.page.waitForURL(url, options);
   }
 

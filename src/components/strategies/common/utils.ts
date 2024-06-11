@@ -20,7 +20,6 @@ export const emptyOrder = (): BaseOrder => ({
   min: '0',
   max: '0',
   budget: '0',
-  marginalPrice: '',
 });
 
 export const toBaseOrder = (order: Order): BaseOrder => ({

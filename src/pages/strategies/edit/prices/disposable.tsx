@@ -1,12 +1,9 @@
-import { useCallback } from 'react';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { roundSearchParam } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
-import { BaseOrder, OrderBlock } from 'components/strategies/common/types';
-import { Order } from 'libs/queries';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { OrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   emptyOrder,
@@ -17,6 +14,7 @@ import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 
 export interface EditDisposableStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -31,9 +29,9 @@ const url = '/strategies/edit/$strategyId/prices/disposable';
 export const EditStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
-  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const marketPrice = useMarketPrice({ base, quote });
+  const { setOrder, setDirection } = useSetDisposableOrder(url);
 
   const buy = search.direction !== 'sell';
   const initialBudget = buy ? strategy.order0.balance : strategy.order1.balance;
@@ -41,26 +39,11 @@ export const EditStrategyDisposablePage = () => {
     min: search.min ?? '',
     max: search.max ?? '',
     budget: initialBudget,
-    marginalPrice: '',
     settings: search.settings ?? 'limit',
   };
   const orders = {
     buy: buy ? order : emptyOrder(),
     sell: buy ? emptyOrder() : order,
-  };
-
-  const setDirection = (direction: StrategyDirection) => {
-    navigate({
-      params: (params) => params,
-      search: (previous) => ({
-        ...previous,
-        direction,
-        min: '',
-        max: '',
-      }),
-      replace: true,
-      resetScroll: false,
-    });
   };
 
   const hasChanged = (() => {
@@ -80,25 +63,6 @@ export const EditStrategyDisposablePage = () => {
     max: search.max,
     buy: search.direction !== 'sell',
   });
-
-  const setOrder = useCallback(
-    (order: Partial<OrderBlock>) => {
-      navigate({
-        params: (params) => params,
-        search: (previous) => ({ ...previous, ...order }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate]
-  );
-
-  // WHAT TO DO WITH THAT ???
-  const getMarginalOption = (oldOrder: Order, newOrder: BaseOrder) => {
-    if (search.editType !== 'editPrices') return;
-    if (oldOrder.startRate !== newOrder.min) return MarginalPriceOptions.reset;
-    if (oldOrder.endRate !== newOrder.max) return MarginalPriceOptions.reset;
-  };
 
   const fromRecurring =
     !isZero(strategy.order0.startRate) && !isZero(strategy.order1.startRate);

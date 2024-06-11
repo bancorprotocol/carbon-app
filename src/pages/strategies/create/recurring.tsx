@@ -1,13 +1,13 @@
-import { useCallback } from 'react';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useSearch } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
-import { StrategyDirection, StrategySettings } from 'libs/routing';
+import { StrategySettings } from 'libs/routing';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { OrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { outSideMarketWarning } from 'components/strategies/common/utils';
+import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 
 export interface CreateRecurringStrategySearch {
   base: string;
@@ -22,19 +22,7 @@ export interface CreateRecurringStrategySearch {
   sellSettings: StrategySettings;
 }
 
-type OrderKey = keyof Omit<CreateRecurringStrategySearch, 'base' | 'quote'>;
-const toOrderSearch = (
-  order: Partial<OrderBlock>,
-  direction: 'buy' | 'sell'
-) => {
-  const search: Partial<CreateRecurringStrategySearch> = {};
-  for (const [key, value] of Object.entries(order)) {
-    const camelCaseKey = key.charAt(0).toUpperCase() + key.slice(1);
-    const searchKey = `${direction}${camelCaseKey}` as OrderKey;
-    search[searchKey] = value as any;
-  }
-  return search;
-};
+type Search = Omit<CreateRecurringStrategySearch, 'base' | 'quote'>;
 
 const getWarning = (search: CreateRecurringStrategySearch) => {
   const { buyMin, buyMax, sellMin, sellMax } = search;
@@ -56,52 +44,28 @@ const getError = (search: CreateRecurringStrategySearch) => {
   }
 };
 
+const url = '/strategies/create/recurring';
+
 export const CreateRecurringStrategyPage = () => {
   const { getTokenById } = useTokens();
-  const navigate = useNavigate({ from: '/strategies/create/recurring' });
-  const search = useSearch({ from: '/strategies/create/recurring' });
+  const search = useSearch({ from: url });
   const base = getTokenById(search.base);
   const quote = getTokenById(search.quote);
   const marketPrice = useMarketPrice({ base, quote });
+  const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const buyOrder: OrderBlock = {
     min: search.buyMin ?? '',
     max: search.buyMax ?? '',
-    marginalPrice: '',
     budget: search.buyBudget ?? '',
     settings: search.buySettings ?? 'range',
   };
   const sellOrder: OrderBlock = {
     min: search.sellMin ?? '',
     max: search.sellMax ?? '',
-    marginalPrice: '',
     budget: search.sellBudget ?? '',
     settings: search.sellSettings ?? 'range',
   };
-
-  const setOrder = useCallback(
-    (order: Partial<OrderBlock>, direction: StrategyDirection) => {
-      navigate({
-        search: (previous) => ({
-          ...previous,
-          ...toOrderSearch(order, direction),
-        }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate]
-  );
-
-  const setSellOrder = useCallback(
-    (order: Partial<OrderBlock>) => setOrder(order, 'sell'),
-    [setOrder]
-  );
-
-  const setBuyOrder = useCallback(
-    (order: Partial<OrderBlock>) => setOrder(order, 'buy'),
-    [setOrder]
-  );
 
   // Warnings
   const sellOutsideMarket = outSideMarketWarning({
