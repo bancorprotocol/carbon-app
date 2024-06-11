@@ -97,7 +97,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
           {rowVirtualizer.getVirtualItems().map((row) => {
             const tradePair = pairs[row.index];
             const { baseToken: base, quoteToken: quote } = tradePair;
-            const pairKey = `${base.symbol}_${quote.symbol}`;
+            const pairKey = `${base.address}_${quote.address}`;
             const style = {
               height: `${row.size}px`,
               transform: `translateY(${row.start}px)`,
