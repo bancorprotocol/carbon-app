@@ -105,14 +105,21 @@ const getDefaultConnector = (connectorType: SelectableConnectionType) => {
   }
 };
 
+const isIframe = () =>
+  typeof window !== 'undefined' && window?.parent !== window;
+
 const getConfigConnectors = (): CreateConnectorFn[] => {
   const store = createStore();
-  const injectedProviderNames = store
+
+  const providersToHide = store
     .getProviders()
     .map((provider) => provider.info.name.toLowerCase());
+  if (!isIframe()) providersToHide.push('safe');
+
   const missingConnectors = selectedConnections.filter(
-    (connection) => !injectedProviderNames.includes(connection.toLowerCase())
+    (connection) => !providersToHide.includes(connection.toLowerCase())
   );
+
   store.destroy();
   return missingConnectors.map(getDefaultConnector);
 };
