@@ -10,11 +10,7 @@ export const DebugResetDefault = () => {
   };
 
   return (
-    <div
-      className={
-        'rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20'
-      }
-    >
+    <div className="rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20">
       <h2>Reset to defaults</h2>
       <Button onClick={handleOnClick}>RESET</Button>
     </div>

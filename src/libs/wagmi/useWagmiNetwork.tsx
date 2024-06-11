@@ -1,4 +1,3 @@
-import { getChainInfo } from 'libs/wagmi/wagmi.utils';
 import { useSwitchChain } from 'wagmi';
 import { getEthersProvider } from 'libs/wagmi/ethers';
 import { wagmiConfig } from 'libs/wagmi/config';
@@ -6,11 +5,12 @@ import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { getConnectors } from '@wagmi/core';
 import { RPC_URLS, RPC_HEADERS, SupportedChainId } from 'libs/wagmi';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import config from 'config';
+import { currentChain } from './chains';
+import { selectedConnections } from './wagmi.constants';
 
 export const useWagmiNetwork = () => {
   const { switchChain } = useSwitchChain();
-  const chainId = getChainInfo().chainId;
+  const chainId = currentChain.id;
 
   const provider = getEthersProvider(wagmiConfig, chainId);
 
@@ -32,7 +32,6 @@ export const useWagmiNetwork = () => {
   const switchNetwork = useCallback(
     /**
      * Switch network to specified chainId, using the wagmi config chains
-     *
      * @param {number} chainId ChainId to switch to
      */
     () => switchChain({ chainId }),
@@ -60,7 +59,7 @@ export const useWagmiNetwork = () => {
 
   const unsortedConnectors = getConnectors(wagmiConfig);
   const connectors = useMemo(() => {
-    const connectionOrder = (config.selectedConnections as string[]).map((c) =>
+    const connectionOrder = (selectedConnections as string[]).map((c) =>
       c.toLowerCase()
     );
     return unsortedConnectors.toSorted((a, b) => {

@@ -6,6 +6,7 @@ type address = `0x${string}`;
 
 export interface AppConfig {
   mode: 'development' | 'production';
+  appName: string;
   appUrl: string;
   carbonApi: string;
   selectedConnections: SelectableConnectionType[];

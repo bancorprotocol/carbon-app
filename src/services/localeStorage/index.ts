@@ -1,4 +1,3 @@
-import { SelectableConnectionType, EnumConnectionType } from 'libs/wagmi';
 import { ManagedLocalStorage } from 'utils/managedLocalStorage';
 import { Token } from 'libs/tokens';
 import { Notification } from 'libs/notifications';
@@ -19,7 +18,6 @@ import { FiatSymbol } from 'utils/carbonApi';
 // ************************** /
 
 interface LocalStorageSchema {
-  connectionType: SelectableConnectionType | EnumConnectionType;
   tenderlyRpc: string;
   carbonApi: string;
   imposterAccount: string;

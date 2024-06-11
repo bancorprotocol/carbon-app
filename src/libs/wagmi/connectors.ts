@@ -14,6 +14,8 @@ import {
 import config from 'config';
 import { type SelectableConnectionType } from './wagmi.types';
 import { selectedConnections } from './wagmi.constants';
+import { currentChain } from './chains';
+import { externalLinks } from 'libs/routing';
 
 const createPlaceholderConnector = ({
   id,
@@ -41,7 +43,7 @@ const createPlaceholderConnector = ({
         return [];
       },
       async getChainId() {
-        return config.network.chainId;
+        return currentChain.id;
       },
       async isAuthorized() {
         return true;
@@ -60,35 +62,36 @@ const getDefaultConnector = (connectorType: SelectableConnectionType) => {
       return createPlaceholderConnector({
         name: 'Compass Wallet',
         id: 'compass',
-        type: 'url',
         icon: compassWalletLogo,
+        type: 'compass.placeholder',
       });
     case 'Tailwind':
       return createPlaceholderConnector({
         name: 'TAILWIND',
         id: 'tailwind',
         icon: tailwindWalletLogo,
-        type: 'url',
+        type: 'tailwind.placeholder',
       });
     case 'Seif':
       return createPlaceholderConnector({
         name: 'Seif',
         id: 'seif',
         icon: seifWalletLogo,
-        type: 'url',
+        type: 'seif.placeholder',
       });
     case 'MetaMask':
       return metaMask({
         extensionOnly: false,
+        preferDesktop: true,
         dappMetadata: {
-          name: 'CarbonDeFi',
+          name: config.appName,
           url: config.appUrl,
           iconUrl: carbonLogo,
         },
       });
     case 'Coinbase Wallet':
       return coinbaseWallet({
-        appName: 'Carbon DeFi',
+        appName: config.appName,
         appLogoUrl: carbonLogo,
       });
     case 'WalletConnect':
@@ -96,6 +99,8 @@ const getDefaultConnector = (connectorType: SelectableConnectionType) => {
         projectId: config.walletConnectProjectId,
         qrModalOptions: {
           themeMode: 'dark',
+          privacyPolicyUrl: externalLinks.privacy,
+          termsOfServiceUrl: externalLinks.terms,
         },
       });
     case 'Safe':

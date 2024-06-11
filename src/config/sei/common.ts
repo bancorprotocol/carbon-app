@@ -12,6 +12,7 @@ const addresses = {
 
 export const commonConfig: AppConfig = {
   mode: 'development',
+  appName: 'Carbon DeFi',
   appUrl: 'https://sei.carbondefi.xyz',
   carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
   selectedConnections: [
@@ -31,9 +32,7 @@ export const commonConfig: AppConfig = {
     chainId: 1329,
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
     rpc: {
-      url:
-        import.meta.env.VITE_CHAIN_RPC_URL ||
-        'https://sei-rpc.publicnode.com:443',
+      url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://evm-rpc.sei-apis.com',
       headers: {
         'x-apikey': import.meta.env.VITE_CHAIN_RPC_KEY || '',
       },

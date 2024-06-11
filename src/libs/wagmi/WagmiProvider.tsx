@@ -4,7 +4,7 @@ import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
-import { getChainInfo } from './wagmi.utils';
+import { currentChain } from './chains';
 
 // ********************************** //
 // WAGMI CONTEXT
@@ -18,7 +18,7 @@ const defaultValue: CarbonWagmiProviderContext = {
   signer: undefined,
   currentConnector: undefined,
   connectors: [],
-  chainId: getChainInfo().chainId,
+  chainId: currentChain.id,
   accountChainId: undefined,
   handleTenderlyRPC: () => {},
   disconnect: async () => {},

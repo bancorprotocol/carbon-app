@@ -17,11 +17,12 @@ import {
 import { isAccountBlocked } from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
-import { errorMessages, getChainInfo } from './wagmi.utils';
+import { errorMessages } from './wagmi.utils';
 import { clientToSigner } from './ethers';
 import { getUncheckedSigner } from 'utils/tenderly';
 import { carbonEvents } from 'services/events';
 import { wagmiConfig } from './config';
+import { currentChain } from './chains';
 
 type Props = {
   imposterAccount: string;
@@ -55,7 +56,7 @@ export const useWagmiUser = ({
     [imposterAccount, walletAccount]
   );
 
-  const chainId = getChainInfo().chainId;
+  const chainId = currentChain.id;
   const isSupportedNetwork = useMemo(
     () => !(!!user && (accountChainId || chainId) !== chainId),
     [accountChainId, chainId, user]
@@ -65,9 +66,7 @@ export const useWagmiUser = ({
 
   const { connector: currentConnector } = useAccount();
 
-  const { data: client } = useConnectorClient<Config>({
-    chainId: getChainInfo().chainId,
-  });
+  const { data: client } = useConnectorClient<Config>({ chainId });
 
   const signer = useMemo(() => {
     if (!IS_TENDERLY_FORK || !isUncheckedSigner) {
@@ -135,10 +134,7 @@ export const useWagmiUser = ({
       isManualConnection.current = true;
       try {
         await connectAsync(
-          {
-            connector,
-            chainId: getChainInfo().chainId,
-          },
+          { connector, chainId },
           {
             onError: (error: ConnectErrorType) => {
               isManualConnection.current = false;
