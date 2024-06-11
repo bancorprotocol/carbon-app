@@ -6,8 +6,10 @@ import { DisposableHeader } from 'components/strategies/common/DisposableHeader'
 import { InputRange } from 'components/strategies/common/InputRange';
 import { InputLimit } from 'components/strategies/common/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
-import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { useEditStrategyCtx } from './EditStrategyContext';
+import { OverlappingBudgetDistribution } from '../overlapping/OverlappingBudgetDistribution';
+import { getDeposit, getWithdraw } from './utils';
+import { useGetTokenBalance } from 'libs/queries';
 
 interface Props {
   order: OrderBlock;
@@ -30,6 +32,9 @@ export const EditStrategyPriceField: FC<Props> = ({
 }) => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
+  const token = buy ? quote : base;
+  const balance = useGetTokenBalance(token);
+
   const titleId = useId();
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
@@ -111,9 +116,13 @@ export const EditStrategyPriceField: FC<Props> = ({
           />
         )}
       </fieldset>
-      <EditStrategyAllocatedBudget
-        token={buy ? quote : base}
+      <OverlappingBudgetDistribution
+        token={token}
         initialBudget={initialBudget}
+        withdraw={getWithdraw(initialBudget, order.budget)}
+        deposit={getDeposit(initialBudget, order.budget)}
+        balance={balance.data ?? '0'}
+        buy={buy}
       />
       <FullOutcome
         min={order.min}

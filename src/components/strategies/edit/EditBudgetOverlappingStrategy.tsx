@@ -234,6 +234,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
             </p>
           </hgroup>
           <OverlappingBudgetDistribution
+            title="Sell"
             token={base}
             initialBudget={initialSellBudget}
             withdraw={budgetError ? '0' : withdrawSellBudget}
@@ -248,6 +249,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
             balance={baseBalance ?? '0'}
           />
           <OverlappingBudgetDistribution
+            title="Buy"
             token={quote}
             initialBudget={initialBuyBudget}
             withdraw={budgetError ? '0' : withdrawBuyBudget}

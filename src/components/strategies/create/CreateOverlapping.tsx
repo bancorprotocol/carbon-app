@@ -260,6 +260,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
             </p>
           </hgroup>
           <OverlappingBudgetDistribution
+            title="Sell"
             token={base}
             initialBudget="0"
             withdraw="0"
@@ -277,6 +278,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
             />
           )}
           <OverlappingBudgetDistribution
+            title="Buy"
             token={quote}
             initialBudget="0"
             withdraw="0"

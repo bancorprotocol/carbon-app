@@ -6,6 +6,7 @@ import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
+  title?: string;
   buy?: boolean;
   token: Token;
   initialBudget: string;
@@ -61,7 +62,8 @@ function getBudgetDistribution(
 export const OverlappingBudgetDistribution: FC<Props> = (props) => {
   const allocatedId = useId();
   const walletId = useId();
-  const { buy, token, initialBudget, withdraw, deposit, balance } = props;
+  const { title, buy, token, initialBudget, withdraw, deposit, balance } =
+    props;
   const isSimulator = !!props.isSimulator;
   const dist = getBudgetDistribution(
     Number(initialBudget),
@@ -74,7 +76,7 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
   const allocated = isSimulator ? deposit : initialBudget;
   return (
     <div className="flex flex-col gap-4">
-      <h4 className="text-14 font-weight-500">{buy ? 'Buy' : 'Sell'}</h4>
+      {title && <h4 className="text-14 font-weight-500">{title}</h4>}
       <div className="text-12 flex justify-between text-white/60">
         <label htmlFor={allocatedId}>
           Allocated:&nbsp;

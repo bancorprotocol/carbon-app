@@ -44,7 +44,7 @@ const url = '/strategies/edit/$strategyId/prices/recurring';
 
 export const EditStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
+  const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
   const marketPrice = useMarketPrice({ base, quote });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
@@ -53,13 +53,13 @@ export const EditStrategyRecurringPage = () => {
     buy: {
       min: search.buyMin,
       max: search.buyMax,
-      budget: strategy.order0.balance,
+      budget: order0.balance,
       settings: search.buySettings,
     },
     sell: {
       min: search.sellMin,
       max: search.sellMax,
-      budget: strategy.order1.balance,
+      budget: order1.balance,
       settings: search.sellSettings,
     },
   };
@@ -100,14 +100,14 @@ export const EditStrategyRecurringPage = () => {
     >
       <EditStrategyPriceField
         order={orders.sell}
-        initialBudget={strategy.order1.balance}
+        initialBudget={order1.balance}
         setOrder={setSellOrder}
         warnings={[sellOutsideMarket, getWarning(search)]}
         error={error}
       />
       <EditStrategyPriceField
         order={orders.buy}
-        initialBudget={strategy.order0.balance}
+        initialBudget={order0.balance}
         setOrder={setBuyOrder}
         warnings={[buyOutsideMarket, getWarning(search)]}
         error={error}
