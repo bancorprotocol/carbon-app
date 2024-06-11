@@ -3,25 +3,26 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { cn } from 'utils/helpers';
 import { OrderBlock } from 'components/strategies/common/types';
+import { StrategySettings } from 'libs/routing';
 
 interface Props {
   children: ReactNode;
   order: OrderBlock;
   base: Token;
   buy?: boolean;
-  setOrder: (value: Partial<OrderBlock>) => void;
+  setSettings: (value: StrategySettings) => void;
 }
 
-export const DisposableHeader: FC<Props> = (props) => {
-  const { order, buy, children, base, setOrder } = props;
+export const OrderHeader: FC<Props> = (props) => {
+  const { order, buy, children, base, setSettings } = props;
   const isRange = order.settings === 'range';
   const setLimit = () => {
     if (!isRange) return;
-    setOrder({ settings: 'limit', min: '', max: '' });
+    setSettings('limit');
   };
   const setRange = () => {
     if (isRange) return;
-    setOrder({ settings: 'range', min: '', max: '' });
+    setSettings('range');
   };
   return (
     <header className="flex items-center justify-between">

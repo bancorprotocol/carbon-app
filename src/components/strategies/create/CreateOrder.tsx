@@ -2,10 +2,10 @@ import { FC, ReactNode, useId } from 'react';
 import { Token } from 'libs/tokens';
 import { m } from 'libs/motion';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { StrategyType } from 'libs/routing';
+import { StrategySettings, StrategyType } from 'libs/routing';
 import { LogoImager } from 'components/common/imager/Imager';
 import { FullOutcome } from 'components/strategies/FullOutcome';
-import { DisposableHeader } from 'components/strategies/common/DisposableHeader';
+import { OrderHeader } from 'components/strategies/common/OrderHeader';
 import { items } from 'components/strategies/common/variants';
 import { InputRange } from 'components/strategies/common/InputRange';
 import { InputLimit } from 'components/strategies/common/InputLimit';
@@ -95,8 +95,11 @@ export const CreateOrder: FC<Props> = ({
     }
   };
   const setBudget = (budget: string) => setOrder({ budget });
+  const setSettings = (settings: StrategySettings) => {
+    setOrder({ settings, min: '', max: '' });
+  };
 
-  const headerProps = { titleId, order, base, buy, setOrder };
+  const headerProps = { titleId, order, base, buy, setSettings };
 
   return (
     <m.article
@@ -110,7 +113,7 @@ export const CreateOrder: FC<Props> = ({
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {settings}
-      <DisposableHeader {...headerProps}>
+      <OrderHeader {...headerProps}>
         <h2 className="text-18 flex items-center gap-8" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
@@ -118,7 +121,7 @@ export const CreateOrder: FC<Props> = ({
           <LogoImager alt="Token" src={base.logoURI} className="size-18" />
           <span>{base.symbol}</span>
         </h2>
-      </DisposableHeader>
+      </OrderHeader>
       <fieldset className="flex flex-col gap-8">
         <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
           {inputTitle}

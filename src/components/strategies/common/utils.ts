@@ -71,3 +71,7 @@ export const outSideMarketWarning = (params: OutsideMarketParams) => {
     }
   }
 };
+
+export const resetPrice = (price?: string) => {
+  return isZero(price) ? '' : price;
+};

@@ -37,12 +37,14 @@ export const EditStrategyDisposablePage = () => {
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
   const marketPrice = useMarketPrice({ base, quote });
-  const { setOrder, setDirection } = useSetDisposableOrder(url);
+
+  const buy = search.direction !== 'sell';
+  const otherOrder = buy ? order1 : order0;
+  const { setOrder, setDirection } = useSetDisposableOrder(url, otherOrder);
 
   const baseBalance = useGetTokenBalance(base);
   const quoteBalance = useGetTokenBalance(quote);
 
-  const buy = search.direction !== 'sell';
   const initialBudget = buy ? order0.balance : order1.balance;
   const order: OrderBlock = {
     min: search.min ?? '',

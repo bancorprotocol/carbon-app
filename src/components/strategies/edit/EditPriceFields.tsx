@@ -2,7 +2,7 @@ import { FC, ReactNode, useId } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { LogoImager } from 'components/common/imager/Imager';
 import { FullOutcome } from 'components/strategies/FullOutcome';
-import { DisposableHeader } from 'components/strategies/common/DisposableHeader';
+import { OrderHeader } from 'components/strategies/common/OrderHeader';
 import { InputRange } from 'components/strategies/common/InputRange';
 import { InputLimit } from 'components/strategies/common/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
@@ -10,6 +10,8 @@ import { useEditStrategyCtx } from './EditStrategyContext';
 import { OverlappingBudgetDistribution } from '../overlapping/OverlappingBudgetDistribution';
 import { getDeposit, getWithdraw } from './utils';
 import { useGetTokenBalance } from 'libs/queries';
+import { StrategySettings } from 'libs/routing';
+import { isLimitOrder, resetPrice } from '../common/utils';
 
 interface Props {
   order: OrderBlock;
@@ -31,7 +33,7 @@ export const EditStrategyPriceField: FC<Props> = ({
   warnings,
 }) => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
+  const { base, quote, order0, order1 } = strategy;
   const token = buy ? quote : base;
   const balance = useGetTokenBalance(token);
 
@@ -65,8 +67,17 @@ export const EditStrategyPriceField: FC<Props> = ({
   const setPrice = (price: string) => setOrder({ min: price, max: price });
   const setMin = (min: string) => setOrder({ min });
   const setMax = (max: string) => setOrder({ max });
+  const setSettings = (settings: StrategySettings) => {
+    const order = buy ? order0 : order1;
+    const initialSettings = isLimitOrder(order) ? 'limit' : 'range';
+    setOrder({
+      settings,
+      min: initialSettings === settings ? resetPrice(order.startRate) : '',
+      max: initialSettings === settings ? resetPrice(order.endRate) : '',
+    });
+  };
 
-  const headerProps = { titleId, order, base, buy, setOrder };
+  const headerProps = { titleId, order, base, buy, setSettings };
 
   return (
     <article
@@ -79,7 +90,7 @@ export const EditStrategyPriceField: FC<Props> = ({
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {settings}
-      <DisposableHeader {...headerProps}>
+      <OrderHeader {...headerProps}>
         <h2 className="text-18 flex items-center gap-8" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
@@ -87,7 +98,7 @@ export const EditStrategyPriceField: FC<Props> = ({
           <LogoImager alt="Token" src={base.logoURI} className="size-18" />
           <span>{base.symbol}</span>
         </h2>
-      </DisposableHeader>
+      </OrderHeader>
       <fieldset className="flex flex-col gap-8">
         <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
           {inputTitle}
