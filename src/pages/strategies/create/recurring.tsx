@@ -6,8 +6,11 @@ import { OrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
-import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
+import {
+  isZero,
+  outSideMarketWarning,
+} from 'components/strategies/common/utils';
 
 export interface CreateRecurringStrategySearch {
   base: string;
@@ -98,7 +101,7 @@ export const CreateRecurringStrategyPage = () => {
           quote={quote!}
           order={sellOrder}
           setOrder={setSellOrder}
-          optionalBudget={+buyOrder.budget > 0 && !sellOrder.budget}
+          optionalBudget={+buyOrder.budget > 0 && isZero(sellOrder.budget)}
           error={getError(search)}
           warnings={[sellOutsideMarket, getWarning(search)]}
         />
@@ -108,7 +111,7 @@ export const CreateRecurringStrategyPage = () => {
           quote={quote!}
           order={buyOrder}
           setOrder={setBuyOrder}
-          optionalBudget={+sellOrder.budget > 0 && !buyOrder.budget}
+          optionalBudget={+sellOrder.budget > 0 && isZero(buyOrder.budget)}
           error={getError(search)}
           warnings={[buyOutsideMarket, getWarning(search)]}
           buy
