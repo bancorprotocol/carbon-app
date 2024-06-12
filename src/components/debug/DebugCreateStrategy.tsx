@@ -247,7 +247,7 @@ export const DebugCreateStrategy = () => {
       </fieldset>
 
       <fieldset className="flex flex-col gap-8 rounded border border-white/60 p-16">
-        <legend>Overlapping Spread</legend>
+        <legend>Concentrated Liquidity Fee Tier</legend>
         <Label label="Spread">
           <Input
             type="text"
@@ -259,7 +259,7 @@ export const DebugCreateStrategy = () => {
           />
         </Label>
         <p id="strategy-spread-description" className="text-12 text-white/60">
-          Spread will create an overlapping strategy. You still need to set the
+          Spread will create a concentrated liquidity. You still need to set the
           correct budget.
         </p>
       </fieldset>

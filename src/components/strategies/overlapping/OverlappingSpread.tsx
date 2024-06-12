@@ -22,7 +22,7 @@ interface Props {
 }
 
 const getWarning = (maxSpread: number) => {
-  return `Given price range, max spread cannot exceed ${maxSpread}%`;
+  return `Given price range, max fee tier cannot exceed ${maxSpread}%`;
 };
 
 const round = (value: number) => Math.round(value * 100) / 100;
@@ -160,12 +160,12 @@ export const OverlappingSpread: FC<Props> = (props) => {
       )}
       {spread <= 0 && (
         <WarningMessageWithIcon htmlFor="spread-custom" isError>
-          The spread should be above 0%
+          The fee tier should be above 0%
         </WarningMessageWithIcon>
       )}
       {spread > 100 && (
         <WarningMessageWithIcon htmlFor="spread-custom" isError>
-          The spread should be equal or below 100%
+          The fee tier should be equal or below 100%
         </WarningMessageWithIcon>
       )}
     </>

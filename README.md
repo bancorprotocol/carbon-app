@@ -104,7 +104,7 @@ The '/debug' route is available to debug the app (ex: localhost:3000/debug). It 
 }
 ```
 
-where `spread` is in percentage, and `value` is the number of strategies to create.
+where `spread` (fee tier in the UI) is in percentage, and `value` is the number of strategies to create.
 
 # Customization
 
