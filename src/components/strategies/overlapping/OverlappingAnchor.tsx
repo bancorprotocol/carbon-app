@@ -23,7 +23,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <h2 className="text-18">Budget</h2>
         <Tooltip
           iconClassName="size-14 text-white/60"
-          element="Indicate the token, action and amount for the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values you use."
+          element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
         />
       </header>
       <p className="text-14 text-white/80">Please select a token to proceed.</p>

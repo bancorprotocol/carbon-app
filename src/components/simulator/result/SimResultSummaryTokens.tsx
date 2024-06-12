@@ -7,6 +7,11 @@ interface Props {
   strategyType: 'recurring' | 'overlapping';
 }
 
+const title = {
+  recurring: 'Recurring',
+  overlapping: 'Concentrated Liquidity',
+};
+
 export const SimResultSummaryTokens = ({
   baseToken,
   quoteToken,
@@ -22,7 +27,7 @@ export const SimResultSummaryTokens = ({
           {quoteToken.symbol}
         </h2>
         <h3 className="text-12 flex items-center gap-8 capitalize text-white/60">
-          {strategyType}
+          {title[strategyType]}
         </h3>
       </div>
     </article>

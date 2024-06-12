@@ -366,7 +366,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
         className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20"
       >
         <header className="mb-10 flex items-center gap-8 ">
-          <h3 className="text-18 font-weight-500 flex-1">Set Spread</h3>
+          <h3 className="text-18 font-weight-500 flex-1">Set Fee Tier</h3>
           <Tooltip
             element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
             iconClassName="h-14 w-14 text-white/60"

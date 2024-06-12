@@ -1,3 +1,4 @@
+import { isAddress } from 'ethers/lib/utils';
 import { Token, TokenList } from 'libs/tokens';
 
 type networkDataType = {
@@ -25,7 +26,9 @@ type networkDataType = {
 export const tokenListParser =
   (networkId: string) => (data: Record<string, networkDataType[]>) => {
     const networkTokens: Token[] = data[networkId]
-      .filter((networkData) => networkData.base !== 'usei')
+      .filter((networkData) => {
+        return networkData.base !== 'usei' && isAddress(networkData.base);
+      })
       .map((networkData) => {
         return {
           name: networkData.name,
