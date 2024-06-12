@@ -39,16 +39,12 @@ export const OverlappingAction: FC<Props> = (props) => {
     warning,
   } = props;
   const opened = useRef(!!anchor && !!budget);
-  const baseBalance = useGetTokenBalance(base).data ?? '0';
-  const quoteBalance = useGetTokenBalance(quote).data ?? '0';
 
-  const getMax = () => {
-    if (action === 'deposit') {
-      return anchor === 'buy' ? quoteBalance : baseBalance;
-    } else {
-      return anchor === 'buy' ? buyBudget : sellBudget;
-    }
-  };
+  const token = anchor === 'buy' ? quote : base;
+  const balance = useGetTokenBalance(token);
+  const allocatedBudget = anchor === 'buy' ? buyBudget : sellBudget;
+  const maxIsLoading = action === 'deposit' && balance.isLoading;
+  const max = action === 'deposit' ? balance.data || '0' : allocatedBudget;
 
   const onToggle = (e: SyntheticEvent<HTMLDetailsElement, ToggleEvent>) => {
     if (e.nativeEvent.oldState === 'open') setBudget('');
@@ -117,7 +113,8 @@ export const OverlappingAction: FC<Props> = (props) => {
             token={anchor === 'buy' ? quote : base}
             value={budget}
             onChange={setBudget}
-            max={getMax()}
+            max={max}
+            maxIsLoading={maxIsLoading}
             error={error}
             warning={warning}
             data-testid="input-budget"

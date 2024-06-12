@@ -18,6 +18,7 @@ interface Props {
   className?: string;
   value?: string;
   max?: string;
+  maxIsLoading?: boolean;
   placeholder?: string;
   title?: string;
   titleTooltip?: string;
@@ -38,6 +39,7 @@ export const InputBudget: FC<Props> = (props) => {
     editType = 'deposit',
     value = '',
     max = '',
+    maxIsLoading,
     placeholder = 'Enter Amount',
     disabled,
     error,
@@ -117,7 +119,7 @@ export const InputBudget: FC<Props> = (props) => {
           <p className="flex items-center gap-5 break-all text-white/60">
             {fiatValue.gt(0) && prettifyNumber(fiatValue, { currentCurrency })}
           </p>
-          {user && max && (
+          {user && max && !maxIsLoading && (
             <button
               disabled={disabled}
               type="button"
@@ -127,7 +129,7 @@ export const InputBudget: FC<Props> = (props) => {
               <span className="text-white/60">
                 {editType === 'deposit' ? 'Wallet:' : 'Allocated:'}
               </span>
-              <span className="text-white">{prettifyNumber(max || '0')}</span>
+              <span className="text-white">{prettifyNumber(max)}</span>
               <span
                 className={
                   disabled
@@ -138,6 +140,9 @@ export const InputBudget: FC<Props> = (props) => {
                 MAX
               </span>
             </button>
+          )}
+          {user && max && maxIsLoading && (
+            <span className="loading-message">Loading</span>
           )}
         </div>
       </div>

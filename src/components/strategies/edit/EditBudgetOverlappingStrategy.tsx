@@ -208,7 +208,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
           quote={quote}
           anchor={anchor}
           editType={editType}
-          budgetValue={budget ?? ''}
+          budget={budget ?? ''}
           setBudget={setBudget}
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}

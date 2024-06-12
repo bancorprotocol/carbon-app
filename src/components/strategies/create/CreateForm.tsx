@@ -97,6 +97,7 @@ export const CreateForm: FC<FormProps> = (props) => {
 
   const isDisabled = (form: HTMLFormElement) => {
     if (!form.checkValidity()) return true;
+    if (!!form.querySelector('.loading-message')) return true;
     if (!!form.querySelector('.error-message')) return true;
     const warnings = form.querySelector('.warning-message');
     if (!warnings) return false;

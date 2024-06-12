@@ -235,7 +235,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
           quote={quote}
           anchor={anchor}
           editType="deposit"
-          budgetValue={budget ?? ''}
+          budget={budget ?? ''}
           setBudget={setBudget}
           error={budgetError}
         />

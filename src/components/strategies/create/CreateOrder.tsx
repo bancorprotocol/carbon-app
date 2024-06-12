@@ -169,7 +169,8 @@ export const CreateOrder: FC<Props> = ({
           token={budgetToken}
           value={order.budget}
           onChange={setBudget}
-          max={balance.data}
+          max={balance.data || '0'}
+          maxIsLoading={balance.isLoading}
           error={insufficientBalance}
           data-testid="input-budget"
         />

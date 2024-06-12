@@ -9,7 +9,7 @@ interface Props {
   quote: Token;
   buyBudget?: string;
   sellBudget?: string;
-  budgetValue: string;
+  budget: string;
   setBudget: (value: string) => void;
   anchor: 'buy' | 'sell';
   editType: BudgetAction;
@@ -39,27 +39,23 @@ export const OverlappingBudget: FC<Props> = (props) => {
     sellBudget = '',
     editType,
     anchor,
-    budgetValue,
+    budget,
     setBudget,
     error,
     warning,
   } = props;
   const { user } = useWeb3();
-  const baseBalance = useGetTokenBalance(base).data;
-  const quoteBalance = useGetTokenBalance(quote).data;
 
-  const getMax = () => {
-    if (editType === 'deposit') {
-      return anchor === 'buy' ? quoteBalance : baseBalance;
-    } else {
-      return anchor === 'buy' ? buyBudget : sellBudget;
-    }
-  };
+  const token = anchor === 'buy' ? quote : base;
+  const balance = useGetTokenBalance(token);
+  const allocatedBudget = anchor === 'buy' ? buyBudget : sellBudget;
+  const maxIsLoading = editType === 'deposit' && balance.isLoading;
+  const max = editType === 'deposit' ? balance.data || '0' : allocatedBudget;
 
   const disabled = (() => {
     if (!user) return false;
     if (editType !== 'deposit') return false;
-    return anchor === 'buy' ? !quoteBalance : !baseBalance;
+    return !balance.data;
   })();
 
   return (
@@ -75,10 +71,11 @@ export const OverlappingBudget: FC<Props> = (props) => {
       </hgroup>
       <InputBudget
         editType={editType}
-        token={anchor === 'buy' ? quote : base}
-        value={budgetValue}
+        token={token}
+        value={budget}
         onChange={setBudget}
-        max={getMax()}
+        max={max}
+        maxIsLoading={maxIsLoading}
         error={error}
         warning={warning}
         disabled={disabled}

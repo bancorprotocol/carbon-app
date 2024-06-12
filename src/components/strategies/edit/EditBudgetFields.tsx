@@ -40,12 +40,14 @@ export const EditStrategyBudgetField: FC<Props> = ({
   const { base, quote } = strategy;
   const titleId = useId();
   const token = buy ? quote : base;
-  const balance = useGetTokenBalance(token).data ?? '0';
+  const balance = useGetTokenBalance(token);
 
-  const max = editType === 'deposit' ? balance : initialBudget;
-  const insufficientBalance = new SafeDecimal(max).lt(budget)
-    ? 'Insufficient balance'
-    : '';
+  const max = editType === 'deposit' ? balance.data || '0' : initialBudget;
+  const maxIsLoading = editType === 'deposit' && balance.isLoading;
+  const insufficientBalance =
+    balance.data && new SafeDecimal(max).lt(budget)
+      ? 'Insufficient balance'
+      : '';
 
   const setBudget = (budget: string) => setOrder({ budget });
   const setMarginalPrice = (marginalPrice: string) =>
@@ -86,6 +88,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
         value={budget}
         onChange={setBudget}
         max={max}
+        maxIsLoading={maxIsLoading}
         error={error || insufficientBalance}
         warning={warning}
         data-testid="input-budget"
