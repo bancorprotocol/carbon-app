@@ -12,7 +12,6 @@ import { Button } from 'components/common/button';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { StrategyEditEventType } from 'services/events/types';
 import { carbonEvents } from 'services/events';
-import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 
 export interface ModalConfirmDeleteData {
@@ -27,8 +26,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   const { closeModal } = useModal();
   const { strategy, strategyEvent } = data;
 
-  const { isProcessing, setIsProcessing } = useUpdateStrategy();
-  const { deleteStrategy, deleteMutation } = useDeleteStrategy();
+  const { deleteStrategy, deleteMutation, isProcessing } = useDeleteStrategy();
   const isAwaiting = deleteMutation.isLoading;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
   const isLoading = deleteMutation.isLoading || isProcessing;
@@ -38,7 +36,6 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   const onClick = () => {
     deleteStrategy(
       strategy,
-      setIsProcessing,
       () => carbonEvents.strategyEdit.strategyDelete(strategyEvent),
       () => closeModal(id)
     );

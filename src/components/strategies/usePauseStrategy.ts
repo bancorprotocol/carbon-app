@@ -2,34 +2,41 @@ import { useNotifications } from 'hooks/useNotifications';
 import {
   QueryKey,
   Strategy,
-  useDeleteStrategyQuery,
   useQueryClient,
+  useUpdateStrategyQuery,
 } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useState } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 
-export const useDeleteStrategy = () => {
+export const usePauseStrategy = () => {
   const { user } = useWeb3();
   const { dispatchNotification } = useNotifications();
-  const deleteMutation = useDeleteStrategyQuery();
+  const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
-  const deleteStrategy = async (
+  const pauseStrategy = async (
     strategy: Strategy,
     successEventsCb?: () => void,
     closeModalCb?: () => void
   ) => {
-    const { base, quote, id } = strategy;
+    const { base, quote, encoded, id } = strategy;
 
     if (!base || !quote || !user) {
-      throw new Error('error in delete strategy: missing data ');
+      throw new Error('error in update strategy: missing data ');
     }
 
-    deleteMutation.mutate(
+    updateMutation.mutate(
       {
         id,
+        encoded,
+        fieldsToUpdate: {
+          buyPriceLow: '0',
+          buyPriceHigh: '0',
+          sellPriceLow: '0',
+          sellPriceHigh: '0',
+        },
       },
       {
         onSuccess: async (tx) => {
@@ -39,7 +46,7 @@ export const useDeleteStrategy = () => {
             setIsProcessing(false);
           }, ONE_AND_A_HALF_SECONDS_IN_MS);
 
-          dispatchNotification('deleteStrategy', { txHash: tx.hash });
+          dispatchNotification('pauseStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
@@ -52,15 +59,15 @@ export const useDeleteStrategy = () => {
         },
         onError: (e) => {
           setIsProcessing(false);
-          console.error('delete mutation failed', e);
+          console.error('update mutation failed', e);
         },
       }
     );
   };
 
   return {
-    deleteStrategy,
+    pauseStrategy,
     isProcessing,
-    deleteMutation,
+    updateMutation,
   };
 };
