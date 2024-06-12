@@ -21,7 +21,7 @@ export const commonConfig: AppConfig = {
     'Safe',
     'Compass Wallet',
     'Seif',
-    // 'Tailwind',
+    'Tailwind',
   ],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,

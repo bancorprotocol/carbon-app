@@ -3,7 +3,7 @@ import tailwindWalletLogo from 'assets/logos/tailwindWallet.svg';
 import compassWalletLogo from 'assets/logos/compassWallet.svg';
 import seifWalletLogo from 'assets/logos/seifWallet.svg';
 import { createStore } from 'mipd';
-import { CreateConnectorFn, createConnector } from 'wagmi';
+import { Connector, CreateConnectorFn, createConnector } from 'wagmi';
 
 import {
   metaMask,
@@ -17,22 +17,25 @@ import { selectedConnections } from './wagmi.constants';
 import { currentChain } from './chains';
 import { externalLinks } from 'libs/routing';
 
+const PLACEHOLDER_TAG = '_placeholder';
+
+export const isPlaceHolderConnector = (c: Connector) =>
+  c.type.endsWith(PLACEHOLDER_TAG);
+
 const createPlaceholderConnector = ({
   id,
   name,
-  type,
   icon,
 }: {
   id: string;
   name: string;
-  type: string;
   icon?: string;
 }) => {
   return createConnector(() => {
     return {
       id: id,
       name: name,
-      type: type,
+      type: id + PLACEHOLDER_TAG,
       icon: icon,
       async setup() {},
       async connect() {
@@ -63,21 +66,18 @@ const getDefaultConnector = (connectorType: SelectableConnectionType) => {
         name: 'Compass Wallet',
         id: 'compass',
         icon: compassWalletLogo,
-        type: 'compass.placeholder',
       });
     case 'Tailwind':
       return createPlaceholderConnector({
         name: 'TAILWIND',
         id: 'tailwind',
         icon: tailwindWalletLogo,
-        type: 'tailwind.placeholder',
       });
     case 'Seif':
       return createPlaceholderConnector({
         name: 'Seif',
         id: 'seif',
         icon: seifWalletLogo,
-        type: 'seif.placeholder',
       });
     case 'MetaMask':
       return metaMask({

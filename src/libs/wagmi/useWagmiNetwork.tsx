@@ -7,6 +7,7 @@ import { RPC_URLS, RPC_HEADERS, SupportedChainId } from 'libs/wagmi';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { currentChain } from './chains';
 import { selectedConnections } from './wagmi.constants';
+import { isPlaceHolderConnector } from './connectors';
 
 export const useWagmiNetwork = () => {
   const { switchChain } = useSwitchChain();
@@ -57,8 +58,21 @@ export const useWagmiNetwork = () => {
     void activateNetwork();
   }, [activateNetwork]);
 
-  const unsortedConnectors = getConnectors(wagmiConfig);
+  const wagmiConnectors = getConnectors(wagmiConfig);
   const connectors = useMemo(() => {
+    const wagmiConnectorsNames = wagmiConnectors.map((c) =>
+      c.name.toLowerCase()
+    );
+    const duplicatedConnectorNames = wagmiConnectorsNames.filter(
+      (e, i, a) => a.indexOf(e) !== i
+    );
+    const unsortedConnectors = wagmiConnectors.filter(
+      (c) =>
+        !(
+          duplicatedConnectorNames.includes(c.name.toLowerCase()) &&
+          isPlaceHolderConnector(c)
+        )
+    );
     const connectionOrder = (selectedConnections as string[]).map((c) =>
       c.toLowerCase()
     );
@@ -66,10 +80,10 @@ export const useWagmiNetwork = () => {
       const nameA = a.name.toLowerCase();
       const nameB = b.name.toLowerCase();
       if (!connectionOrder.includes(nameA) || !connectionOrder.includes(nameB))
-        return 0;
+        return connectionOrder.indexOf(nameB) - connectionOrder.indexOf(nameA);
       return connectionOrder.indexOf(nameA) - connectionOrder.indexOf(nameB);
     });
-  }, [unsortedConnectors]);
+  }, [wagmiConnectors]);
 
   return {
     chainId,
