@@ -81,7 +81,7 @@ await expect(first.getTestId('strategy-pair')).toHaveText('ETH/DAI');
 As the same network was used for all tests, mutating a strategy in one test might impact another test. For now, it is suggested to try to use different token pairs for each test to avoid unwanted side effect, for example:
 
 - `ETH/DAI`: Create recurring strategy
-- `ETH/BNT`: Create overlapping strategy
+- `ETH/BNT`: Create concentrated liquidity strategy (overlapping in the code)
 - `ETH/USDC`: Trade Buy
 - `USDC/USDT`: Trade Sell
 

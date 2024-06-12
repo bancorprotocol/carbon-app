@@ -32,7 +32,7 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
       label: 'overlapping',
       svg: <IconOverlappingStrategy className="w-37 h-16" />,
       tooltipText:
-        'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does.',
+        'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask fee tier that moves as the market does.',
     },
   ];
 

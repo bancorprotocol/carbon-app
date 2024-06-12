@@ -125,7 +125,7 @@ export const getStrategyTypeItem = (
   {
     label: 'Concentrated Liquidity',
     description:
-      'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does',
+      'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask fee tier that moves as the market does',
     benefits: [
       {
         summary: 'No trading or gas fees on filled orders',
