@@ -282,7 +282,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
         <header className="mb-10 flex items-center gap-8 ">
-          <h2 className="text-18 font-weight-500 flex-1">Edit Spread</h2>
+          <h2 className="text-18 font-weight-500 flex-1">Edit Fee Tier</h2>
           <Tooltip
             element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
             iconClassName="h-14 w-14 text-white/60"

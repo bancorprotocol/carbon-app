@@ -87,7 +87,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
       {!externalPrice && <SetPriceText base={base} />}
       <InputBudget
         title={`Enter Market Price (${quote.symbol} per 1 ${base.symbol})`}
-        titleTooltip="Price used to calculate overlapping strategy params"
+        titleTooltip="Price used to calculate concentrated liquidity strategy params"
         placeholder="Enter Price"
         value={localPrice}
         onChange={changePrice}
@@ -121,7 +121,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
       )}
       <p className="text-12 text-white/60">
         By adjusting the market price, you alter the price range within which
-        your overlapping strategy initiates.
+        your concentrated liquidity strategy initiates.
         {!!externalPrice && <EditPriceText />}
       </p>
       {!error && showApproval && (

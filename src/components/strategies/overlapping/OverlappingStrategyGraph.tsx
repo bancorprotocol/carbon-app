@@ -546,7 +546,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
           <span>Geometric mean price</span>
         )}
         <span role="separator">·</span>
-        <span>Spread {spread || 0}%</span>
+        <span>Fee Tier {spread || 0}%</span>
       </figcaption>
       <svg
         ref={svg}

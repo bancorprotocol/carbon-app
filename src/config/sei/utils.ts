@@ -1,3 +1,4 @@
+import { isAddress } from 'ethers/lib/utils';
 import { Token, TokenList } from 'libs/tokens';
 
 type networkDataType = {
@@ -20,16 +21,31 @@ type networkDataType = {
     svg?: string;
     png?: string;
   };
+  pointer_contract?: {
+    address: string;
+    type_asset: string;
+  };
 };
 
 export const tokenListParser =
   (networkId: string) => (data: Record<string, networkDataType[]>) => {
     const networkTokens: Token[] = data[networkId]
-      .filter((networkData) => networkData.base !== 'usei')
+      .filter((networkData) => {
+        const hasBaseAddress = isAddress(networkData.base);
+        const hasPointerAddress =
+          !!networkData.pointer_contract?.address &&
+          isAddress(networkData.pointer_contract.address);
+        return (
+          networkData.base !== 'usei' && (hasBaseAddress || hasPointerAddress)
+        );
+      })
       .map((networkData) => {
+        const tokenAddress = isAddress(networkData.base)
+          ? networkData.base
+          : networkData.pointer_contract!.address;
         return {
           name: networkData.name,
-          address: networkData.base,
+          address: tokenAddress,
           symbol: networkData.symbol,
           decimals: networkData.denom_units[1].exponent,
           logoURI:

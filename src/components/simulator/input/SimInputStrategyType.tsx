@@ -7,6 +7,7 @@ import { SimulatorType } from 'libs/routing/routes/sim';
 import { Link } from 'libs/routing';
 
 interface ItemProps {
+  title: string;
   label: SimulatorType;
   svg: JSX.Element;
   tooltipText: string;
@@ -20,16 +21,18 @@ interface Props {
 export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
   const items: ItemProps[] = [
     {
+      title: 'Recurring',
       label: 'recurring',
       svg: <IconTwoRanges className="w-37 h-16" />,
       tooltipText:
         'Create buy and sell orders (limit or range) that are linked together. Newly acquired funds automatically rotate between them, creating an endless trading cycle without need for manual intervention.',
     },
     {
+      title: 'Concentrated',
       label: 'overlapping',
       svg: <IconOverlappingStrategy className="w-37 h-16" />,
       tooltipText:
-        'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does.',
+        'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask fee tier that moves as the market does.',
     },
   ];
 
@@ -42,7 +45,7 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
         <h2 className="text-18 font-weight-500 m-0">Strategy Type</h2>
       </header>
       <article role="tablist" className="grid grid-cols-2 gap-8">
-        {items.map(({ label, svg, tooltipText }) => (
+        {items.map(({ title, label, svg, tooltipText }) => (
           <Link
             role="tab"
             id={'tab-' + label}
@@ -70,7 +73,7 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
                       isActive ? 'text-white' : 'text-white/40'
                     }`}
                   >
-                    {label}
+                    {title}
                   </span>
                   <Tooltip
                     element={<div>{tooltipText}</div>}

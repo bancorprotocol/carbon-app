@@ -69,7 +69,7 @@ export const commonConfig: AppConfig = {
   tokenLists: [
     {
       uri: 'https://raw.githubusercontent.com/Sei-Public-Goods/sei-assetlist/main/assetlist.json',
-      parser: tokenListParser('pacific-1-evm'),
+      parser: tokenListParser('pacific-1'),
     },
   ],
 };
