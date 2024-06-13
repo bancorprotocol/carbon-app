@@ -167,7 +167,7 @@ export const EditStrategyDisposablePage = () => {
       )}
       {fromRecurring && (
         <WarningMessageWithIcon>
-          {buy ? 'Sell High' : 'Buy Low'} order has been removed
+          {buy ? 'Sell High' : 'Buy Low'} order will be removed
         </WarningMessageWithIcon>
       )}
     </EditStrategyForm>
