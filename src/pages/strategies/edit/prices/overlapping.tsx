@@ -181,7 +181,7 @@ export const EditStrategyOverlappingPage = () => {
   if (!marketPrice && typeof externalPrice !== 'number') {
     return (
       <div className="grid md:w-[440px]">
-        <CarbonLogoLoading className="h-80 place-self-center" />;
+        <CarbonLogoLoading className="h-80 place-self-center" />
       </div>
     );
   }

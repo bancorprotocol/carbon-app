@@ -14,7 +14,7 @@ export const StrategyGraph: FC<Props> = ({ setShowGraph, children }) => {
     <m.article
       variants={items}
       key="createStrategyGraph"
-      className="rounded-10 bg-background-900 flex h-[550px] flex-1 flex-col gap-20 p-20 md:sticky md:top-80"
+      className="rounded-10 bg-background-900 flex h-[550px] flex-col gap-20 p-20 md:sticky md:top-80 md:flex-1"
     >
       <header className="flex items-center justify-between">
         <h2 className="font-weight-500">Price Chart</h2>

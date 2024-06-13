@@ -16,7 +16,7 @@ export const CreateStrategyTokenPage = () => {
   return (
     <AnimatePresence mode="sync">
       <m.div
-        className="flex flex-col gap-20 justify-self-center md:w-[440px]"
+        className="flex flex-col gap-20 p-20 md:w-[440px] md:justify-self-center md:p-0"
         variants={list}
         initial="hidden"
         animate="visible"

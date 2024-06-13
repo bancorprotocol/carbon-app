@@ -137,7 +137,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
         >
           <input
             id="spread-custom"
-            className="min-w-0 bg-transparent text-center outline-none placeholder:text-white/40"
+            className="w-full bg-transparent text-center outline-none placeholder:text-white/40"
             defaultValue={options.includes(spread) ? '' : spread}
             name="spread"
             type="text"

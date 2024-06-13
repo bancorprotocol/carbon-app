@@ -81,7 +81,7 @@ export const InputBudget: FC<Props> = (props) => {
       )}
       <div
         className={`
-          flex cursor-text flex-col gap-8 rounded border-2 border-black bg-black p-16
+          flex cursor-text flex-col gap-8 rounded border border-black bg-black p-16
           focus-within:border-white/50
           ${error ? '!border-error/50' : ''}
           ${className}
