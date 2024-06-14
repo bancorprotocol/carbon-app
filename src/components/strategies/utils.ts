@@ -1,9 +1,4 @@
 import { StrategyInputOrder } from 'hooks/useStrategyInput';
-import { OrderCreate } from 'components/strategies/create/useOrder';
-import {
-  isMaxBelowMarket,
-  isMinAboveMarket,
-} from 'components/strategies/overlapping/utils';
 
 interface ValidOrderParams {
   isRange: boolean;
@@ -34,8 +29,8 @@ export const isValidRange = (minStr: string, maxStr: string) => {
 };
 
 export const checkIfOrdersOverlap = (
-  buy: OrderCreate | StrategyInputOrder,
-  sell: OrderCreate | StrategyInputOrder
+  buy: StrategyInputOrder,
+  sell: StrategyInputOrder
 ): boolean => {
   const isSellMinInBuyRange =
     +sell.min < +buy.max &&
@@ -48,17 +43,11 @@ export const checkIfOrdersOverlap = (
 };
 
 export const checkIfOrdersReversed = (
-  buyRaw: OrderCreate | StrategyInputOrder,
-  sellRaw: OrderCreate | StrategyInputOrder
+  buyRaw: StrategyInputOrder,
+  sellRaw: StrategyInputOrder
 ): boolean => {
-  const translateOrder = (order: OrderCreate | StrategyInputOrder) => {
-    let orderPrice;
-    if ((order as OrderCreate).price !== undefined) {
-      orderPrice = +(order as OrderCreate).price;
-    } else {
-      orderPrice = !order.isRange ? +order.min : 0;
-    }
-
+  const translateOrder = (order: StrategyInputOrder) => {
+    const orderPrice = !order.isRange ? +order.min : 0;
     return {
       price: orderPrice,
       min: +order.min,
@@ -100,35 +89,4 @@ export const getStatusTextByTxStatus = (
   if (isAwaiting) return 'Waiting for Confirmation';
   if (isProcessing) return 'Processing';
   return;
-};
-
-interface HasWarningParams {
-  order0: OrderCreate;
-  order1: OrderCreate;
-  buyOutsideMarket: boolean;
-  sellOutsideMarket: boolean;
-  isOverlapping: boolean;
-  isMarketPriceUnknown: boolean;
-}
-
-export const hasWarning = ({
-  order0,
-  order1,
-  buyOutsideMarket,
-  sellOutsideMarket,
-  isOverlapping,
-  isMarketPriceUnknown,
-}: HasWarningParams) => {
-  if (isOverlapping) {
-    const minAboveMarket = isMinAboveMarket(order0);
-    const maxBelowMarket = isMaxBelowMarket(order1);
-    return minAboveMarket || maxBelowMarket;
-  } else {
-    return (
-      checkIfOrdersOverlap(order0, order1) ||
-      buyOutsideMarket ||
-      sellOutsideMarket ||
-      isMarketPriceUnknown
-    );
-  }
 };

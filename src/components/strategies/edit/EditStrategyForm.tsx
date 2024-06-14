@@ -62,7 +62,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
   const { user } = useWeb3();
   const { strategy } = useEditStrategyCtx();
   const { history } = useRouter();
-  const { deleteStrategy } = useDeleteStrategy();
+  const { isProcessing: isDeleting, deleteStrategy } = useDeleteStrategy();
   const navigate = useNavigate({ from: '/strategies/edit/$strategyId' });
 
   const strategyEventData = useStrategyEvent(
@@ -76,8 +76,11 @@ export const EditStrategyForm: FC<Props> = (props) => {
   const cache = useQueryClient();
   const [isProcessing, setIsProcessing] = useState(false);
   const isAwaiting = updateMutation.isLoading;
-  const isLoading = isAwaiting || isProcessing;
-  const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
+  const isLoading = isAwaiting || isProcessing || isDeleting;
+  const loadingChildren = getStatusTextByTxStatus(
+    isAwaiting,
+    isProcessing || isDeleting
+  );
 
   const approvalTokens = (() => {
     const arr = [];
