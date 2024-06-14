@@ -3,6 +3,7 @@ import { SelectableConnectionType } from 'libs/wagmi';
 import { FaucetToken } from 'utils/tenderly';
 
 type address = `0x${string}`;
+type ContractDetails = { address: address; blockCreated?: number };
 
 export interface AppConfig {
   mode: 'development' | 'production';
@@ -56,11 +57,9 @@ export interface AppConfig {
     };
   };
   utils: {
-    multicall3: {
-      address: address;
-      blockCreated: number;
-    };
-  } & Record<string, { address: address; blockCreated?: number }>;
+    multicall3: ContractDetails;
+    [contractName: string]: ContractDetails;
+  };
   tenderly: {
     nativeTokenDonorAccount: string;
     faucetAmount: number;
