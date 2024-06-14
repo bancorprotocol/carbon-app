@@ -17,7 +17,7 @@ import {
   isMinAboveMarket,
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
-import { EditPriceOverlappingStrategy } from 'components/strategies/edit/EditPriceOverlappingStrategy';
+import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { geoMean } from 'utils/fullOutcome';
@@ -223,7 +223,7 @@ export const EditStrategyOverlappingPage = () => {
           : "I've reviewed the warning(s) but choose to proceed."
       }
     >
-      <EditPriceOverlappingStrategy
+      <EditOverlappingPrice
         marketPrice={marketPrice}
         order0={orders.buy}
         order1={orders.sell}

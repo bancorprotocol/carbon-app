@@ -78,7 +78,7 @@ export function isEditBelowMarket(
 type Search = EditOverlappingStrategySearch;
 
 const url = '/strategies/edit/$strategyId/prices/overlapping';
-export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
+export const EditOverlappingPrice: FC<Props> = (props) => {
   const { marketPrice, order0, order1, spread } = props;
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
@@ -264,7 +264,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           </h2>
           <Tooltip
             element="Indicate the strategy exact buy and sell prices."
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-18 text-white/60"
           />
         </header>
         <InputRange
@@ -285,7 +285,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           <h2 className="text-18 font-weight-500 flex-1">Edit Fee Tier</h2>
           <Tooltip
             element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-18 text-white/60"
           />
         </header>
         <OverlappingSpread

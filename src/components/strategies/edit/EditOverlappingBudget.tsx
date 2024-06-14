@@ -72,7 +72,7 @@ export function isEditBelowMarket(
 type Search = EditBudgetOverlappingSearch;
 
 const url = '/strategies/edit/$strategyId/budget/overlapping';
-export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
+export const EditOverlappingBudget: FC<Props> = (props) => {
   const { marketPrice, order0, order1 } = props;
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;

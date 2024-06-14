@@ -5,8 +5,8 @@ import { Token } from 'libs/tokens';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { m } from 'libs/motion';
-import style from './OverlappingBudget.module.css';
 import { items } from '../common/variants';
+import style from './OverlappingBudget.module.css';
 
 interface Props {
   base: Token;
@@ -27,7 +27,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
       <header className="flex items-center justify-between">
         <h2 className="text-18">Budget</h2>
         <Tooltip
-          iconClassName="size-14 text-white/60"
+          iconClassName="size-18 text-white/60"
           element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
         />
       </header>

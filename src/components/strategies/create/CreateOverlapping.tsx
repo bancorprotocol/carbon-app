@@ -183,7 +183,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
           </h3>
           <Tooltip
             element="Indicate the strategy exact buy and sell prices."
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-18 text-white/60"
           />
         </header>
         <InputRange
@@ -208,7 +208,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
           <h3 className="text-18 font-weight-500 flex-1">Set Fee Tier</h3>
           <Tooltip
             element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-18 text-white/60"
           />
         </header>
         <OverlappingSpread

@@ -20,7 +20,7 @@ import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { EditBudgetOverlappingStrategy } from 'components/strategies/edit/EditBudgetOverlappingStrategy';
+import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
 export interface EditBudgetOverlappingSearch {
@@ -191,7 +191,7 @@ export const EditBudgetOverlappingPage = () => {
           : "I've reviewed the warning(s) but choose to proceed."
       }
     >
-      <EditBudgetOverlappingStrategy
+      <EditOverlappingBudget
         marketPrice={marketPrice}
         order0={orders.buy}
         order1={orders.sell}
