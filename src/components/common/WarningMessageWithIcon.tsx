@@ -10,7 +10,7 @@ type Props = {
   'data-testid'?: string;
 };
 
-export const WarningMessageWithIcon: FC<Props> = (props) => {
+export const Warning: FC<Props> = (props) => {
   const { htmlFor, message, className, isError, children } = props;
   return (
     <output

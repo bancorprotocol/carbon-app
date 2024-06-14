@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { m } from 'libs/motion';
 import { items } from '../common/variants';
@@ -79,11 +79,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         </label>
       </div>
       {anchorError && (
-        <WarningMessageWithIcon
-          message={anchorError}
-          isError
-          data-testid="require-anchor"
-        />
+        <Warning message={anchorError} isError data-testid="require-anchor" />
       )}
     </m.article>
   );

@@ -22,7 +22,7 @@ import { OverlappingAction } from 'components/strategies/overlapping/Overlapping
 import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { formatNumber } from 'utils/helpers';
 import { OverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
@@ -244,10 +244,10 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           setMax={setMax}
         />
         {hasNoBudget(strategy) && (
-          <WarningMessageWithIcon>
+          <Warning>
             Since the strategy had no budget, it will use the current market
             price to readjust the budget distribution around.
-          </WarningMessageWithIcon>
+          </Warning>
         )}
       </article>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">

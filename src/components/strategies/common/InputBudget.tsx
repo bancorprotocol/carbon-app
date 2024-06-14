@@ -6,7 +6,7 @@ import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 export type BudgetAction = 'withdraw' | 'deposit';
@@ -146,10 +146,8 @@ export const InputBudget: FC<Props> = (props) => {
           )}
         </div>
       </div>
-      {error && <WarningMessageWithIcon htmlFor={id} message={error} isError />}
-      {!error && warning && (
-        <WarningMessageWithIcon htmlFor={id} message={warning} />
-      )}
+      {error && <Warning htmlFor={id} message={error} isError />}
+      {!error && warning && <Warning htmlFor={id} message={warning} />}
     </div>
   );
 };

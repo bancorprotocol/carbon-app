@@ -32,7 +32,7 @@ export const EditStrategyPageLayout = () => {
     }
   }, [user, strategyId, strategies, isLoading, navigate]);
 
-  // Support old URLs pattern
+  // Support old URLs pattern from before June 2024
   useEffect(() => {
     if (window.location.href.match('/prices|/budget')) return;
     const type = 'type' in search && (search.type as EditTypes);

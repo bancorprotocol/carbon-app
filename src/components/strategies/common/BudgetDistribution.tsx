@@ -3,7 +3,7 @@ import { FC, useId } from 'react';
 import { cn, tokenAmount } from 'utils/helpers';
 import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
   title?: string;
@@ -141,14 +141,14 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
     const balance = Number(props.balance);
     if (deposit > balance) {
       return (
-        <WarningMessageWithIcon className="text-12" isError>
+        <Warning className="text-12" isError>
           You should&nbsp;
           <b className="font-weight-500">
             deposit {tokenAmount(deposit, token)}
           </b>
           &nbsp;from your wallet, but your wallet has insufficient balance.
           Consider changing token deposit amount or prices.
-        </WarningMessageWithIcon>
+        </Warning>
       );
     }
     return (
@@ -170,14 +170,14 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
     const initialBudget = Number(props.initialBudget);
     if (withdraw > initialBudget) {
       return (
-        <WarningMessageWithIcon className="text-12" isError>
+        <Warning className="text-12" isError>
           You should&nbsp;
           <b className="font-weight-500">
             withdraw {tokenAmount(withdraw, token)}
           </b>
           &nbsp;from the strategy, but the strategy has insufficient funds.
           Consider changing token deposit amount or prices.
-        </WarningMessageWithIcon>
+        </Warning>
       );
     }
     return (

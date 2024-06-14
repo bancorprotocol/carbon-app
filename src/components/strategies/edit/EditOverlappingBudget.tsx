@@ -17,7 +17,7 @@ import { getDeposit, getWithdraw } from './utils';
 import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { formatNumber, tokenAmount } from 'utils/helpers';
 import { OverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
@@ -180,10 +180,10 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             <h3>Market Price</h3>
             <span>{tokenAmount(marketPrice, quote)}</span>
           </header>
-          <WarningMessageWithIcon>
+          <Warning>
             Since the strategy had no budget, it will use the current market
             price to readjust the budget distribution around.
-          </WarningMessageWithIcon>
+          </Warning>
           <OverlappingMarketPrice
             base={base}
             quote={quote}

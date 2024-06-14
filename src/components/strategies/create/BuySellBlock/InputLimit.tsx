@@ -6,7 +6,7 @@ import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
 type InputLimitProps = {
@@ -127,18 +127,10 @@ export const InputLimit: FC<InputLimitProps> = ({
         )}
       </div>
       {error ? (
-        <WarningMessageWithIcon
-          isError
-          message={error}
-          htmlFor={id ?? inputId}
-        />
+        <Warning isError message={error} htmlFor={id ?? inputId} />
       ) : (
         warnings?.map((warning, i) => (
-          <WarningMessageWithIcon
-            key={i}
-            message={warning}
-            htmlFor={id ?? inputId}
-          />
+          <Warning key={i} message={warning} htmlFor={id ?? inputId} />
         ))
       )}
     </>

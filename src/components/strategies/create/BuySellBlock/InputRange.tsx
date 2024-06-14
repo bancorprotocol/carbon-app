@@ -7,7 +7,7 @@ import { carbonEvents } from 'services/events';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
 
 type InputRangeProps = {
@@ -218,14 +218,14 @@ export const InputRange: FC<InputRangeProps> = ({
         </div>
       </div>
       {error ? (
-        <WarningMessageWithIcon
+        <Warning
           isError
           message={error}
           htmlFor={`${inputMinId} ${inputMaxId}`}
         />
       ) : (
         warnings?.map((warning, i) => (
-          <WarningMessageWithIcon
+          <Warning
             key={i}
             message={warning}
             htmlFor={`${inputMinId} ${inputMaxId}`}

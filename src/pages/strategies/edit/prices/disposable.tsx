@@ -12,7 +12,7 @@ import {
 } from 'components/strategies/common/utils';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import {
@@ -166,9 +166,7 @@ export const EditStrategyDisposablePage = () => {
         </article>
       )}
       {fromRecurring && (
-        <WarningMessageWithIcon>
-          {buy ? 'Sell High' : 'Buy Low'} order will be removed
-        </WarningMessageWithIcon>
+        <Warning>{buy ? 'Sell High' : 'Buy Low'} order will be removed</Warning>
       )}
     </EditStrategyForm>
   );

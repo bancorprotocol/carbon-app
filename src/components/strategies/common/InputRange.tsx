@@ -7,7 +7,7 @@ import { carbonEvents } from 'services/events';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
 import { isTouchedZero } from 'components/strategies/common/utils';
 
@@ -219,7 +219,7 @@ export const InputRange: FC<InputRangeProps> = ({
         </div>
       </div>
       {!!displayError && (
-        <WarningMessageWithIcon
+        <Warning
           isError
           message={displayError}
           htmlFor={`${inputMinId} ${inputMaxId}`}
@@ -227,10 +227,7 @@ export const InputRange: FC<InputRangeProps> = ({
       )}
       {showWarning &&
         displayWarnings.map((warning) => (
-          <WarningMessageWithIcon
-            message={warning}
-            htmlFor={`${inputMinId} ${inputMaxId}`}
-          />
+          <Warning message={warning} htmlFor={`${inputMinId} ${inputMaxId}`} />
         ))}
     </>
   );

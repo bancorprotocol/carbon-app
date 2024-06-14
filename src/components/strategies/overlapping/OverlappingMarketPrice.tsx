@@ -8,7 +8,7 @@ import { LogoImager } from 'components/common/imager/Imager';
 import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
@@ -96,10 +96,10 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         editType="deposit"
       />
       {!error && showApproval && (
-        <WarningMessageWithIcon>
+        <Warning>
           Warning, your market price will be used in the strategy creation flow
           and calculations.
-        </WarningMessageWithIcon>
+        </Warning>
       )}
       {!!externalPrice && (
         <div className="text-12 flex items-center justify-between rounded border border-white/10 p-16">
