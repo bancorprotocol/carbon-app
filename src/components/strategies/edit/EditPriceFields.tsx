@@ -7,7 +7,7 @@ import { InputRange } from 'components/strategies/common/InputRange';
 import { InputLimit } from 'components/strategies/common/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
-import { OverlappingBudgetDistribution } from '../overlapping/OverlappingBudgetDistribution';
+import { BudgetDistribution } from '../common/BudgetDistribution';
 import { getDeposit, getWithdraw } from './utils';
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategySettings } from 'libs/routing';
@@ -127,7 +127,7 @@ export const EditStrategyPriceField: FC<Props> = ({
           />
         )}
       </fieldset>
-      <OverlappingBudgetDistribution
+      <BudgetDistribution
         token={token}
         initialBudget={initialBudget}
         withdraw={getWithdraw(initialBudget, order.budget)}

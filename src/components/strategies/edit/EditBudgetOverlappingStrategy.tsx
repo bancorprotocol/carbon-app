@@ -9,9 +9,9 @@ import {
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
-  OverlappingBudgetDescription,
-  OverlappingBudgetDistribution,
-} from 'components/strategies/overlapping/OverlappingBudgetDistribution';
+  BudgetDescription,
+  BudgetDistribution,
+} from 'components/strategies/common/BudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { getDeposit, getWithdraw } from './utils';
 import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
@@ -233,7 +233,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
               budget allocation
             </p>
           </hgroup>
-          <OverlappingBudgetDistribution
+          <BudgetDistribution
             title="Sell"
             token={base}
             initialBudget={initialSellBudget}
@@ -241,14 +241,14 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
             deposit={budgetError ? '0' : depositSellBudget}
             balance={baseBalance ?? '0'}
           />
-          <OverlappingBudgetDescription
+          <BudgetDescription
             token={base}
             initialBudget={initialSellBudget}
             withdraw={budgetError ? '0' : withdrawSellBudget}
             deposit={budgetError ? '0' : depositSellBudget}
             balance={baseBalance ?? '0'}
           />
-          <OverlappingBudgetDistribution
+          <BudgetDistribution
             title="Buy"
             token={quote}
             initialBudget={initialBuyBudget}
@@ -257,7 +257,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
             balance={quoteBalance ?? '0'}
             buy
           />
-          <OverlappingBudgetDescription
+          <BudgetDescription
             token={quote}
             initialBudget={initialBuyBudget}
             withdraw={budgetError ? '0' : withdrawBuyBudget}

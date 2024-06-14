@@ -15,7 +15,7 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
-import { OverlappingBudgetDistribution } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
+import { BudgetDistribution } from 'components/strategies/common/BudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import {
   SimulatorInputOverlappingValues,
@@ -395,7 +395,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
               budget allocation
             </p>
           </hgroup>
-          <OverlappingBudgetDistribution
+          <BudgetDistribution
             title="Sell"
             token={base}
             initialBudget=""
@@ -404,7 +404,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
             balance="0"
             isSimulator
           />
-          <OverlappingBudgetDistribution
+          <BudgetDistribution
             title="Buy"
             token={quote}
             initialBudget="0"

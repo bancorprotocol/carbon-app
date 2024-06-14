@@ -16,9 +16,9 @@ import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import {
-  OverlappingBudgetDescription,
-  OverlappingBudgetDistribution,
-} from 'components/strategies/overlapping/OverlappingBudgetDistribution';
+  BudgetDescription,
+  BudgetDistribution,
+} from 'components/strategies/common/BudgetDistribution';
 import { getDeposit, getWithdraw } from 'components/strategies/edit/utils';
 import { useGetTokenBalance } from 'libs/queries';
 
@@ -126,7 +126,7 @@ export const EditStrategyDisposablePage = () => {
           </hgroup>
           {sellBudgetChanges && (
             <>
-              <OverlappingBudgetDistribution
+              <BudgetDistribution
                 title="Sell Budget"
                 token={base}
                 initialBudget={order1.balance}
@@ -134,7 +134,7 @@ export const EditStrategyDisposablePage = () => {
                 deposit={getDeposit(order1.balance, orders.sell.budget)}
                 balance={baseBalance.data ?? '0'}
               />
-              <OverlappingBudgetDescription
+              <BudgetDescription
                 token={base}
                 initialBudget={order1.balance}
                 withdraw={getWithdraw(order1.balance, orders.sell.budget)}
@@ -145,7 +145,7 @@ export const EditStrategyDisposablePage = () => {
           )}
           {buyBudgetChanges && (
             <>
-              <OverlappingBudgetDistribution
+              <BudgetDistribution
                 title="Buy Budget"
                 token={quote}
                 initialBudget={order0.balance}
@@ -154,7 +154,7 @@ export const EditStrategyDisposablePage = () => {
                 balance={quoteBalance.data ?? '0'}
                 buy
               />
-              <OverlappingBudgetDescription
+              <BudgetDescription
                 token={quote}
                 initialBudget={order0.balance}
                 withdraw={getWithdraw(order0.balance, orders.buy.budget)}

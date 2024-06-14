@@ -59,7 +59,7 @@ function getBudgetDistribution(
   }
 }
 
-export const OverlappingBudgetDistribution: FC<Props> = (props) => {
+export const BudgetDistribution: FC<Props> = (props) => {
   const allocatedId = useId();
   const walletId = useId();
   const { title, buy, token, initialBudget, withdraw, deposit, balance } =
@@ -133,7 +133,7 @@ interface DescriptionProps {
   initialBudget: string;
   balance: string;
 }
-export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
+export const BudgetDescription: FC<DescriptionProps> = (props) => {
   const token = props.token;
   const withdraw = Number(props.withdraw);
   const deposit = Number(props.deposit);

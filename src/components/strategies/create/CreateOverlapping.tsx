@@ -12,9 +12,9 @@ import { OverlappingSpread } from 'components/strategies/overlapping/Overlapping
 import { OverlappingBudget } from 'components/strategies/overlapping/OverlappingBudget';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
-  OverlappingBudgetDescription,
-  OverlappingBudgetDistribution,
-} from 'components/strategies/overlapping/OverlappingBudgetDistribution';
+  BudgetDescription,
+  BudgetDistribution,
+} from 'components/strategies/common/BudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { Token } from 'libs/tokens';
 import { m } from 'libs/motion';
@@ -259,7 +259,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
               budget allocation
             </p>
           </hgroup>
-          <OverlappingBudgetDistribution
+          <BudgetDistribution
             title="Sell"
             token={base}
             initialBudget="0"
@@ -269,7 +269,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
             isSimulator={!user}
           />
           {!!user && (
-            <OverlappingBudgetDescription
+            <BudgetDescription
               token={base}
               initialBudget="0"
               withdraw="0"
@@ -277,7 +277,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
               balance={baseBalance || '0'}
             />
           )}
-          <OverlappingBudgetDistribution
+          <BudgetDistribution
             title="Buy"
             token={quote}
             initialBudget="0"
@@ -288,7 +288,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
             buy
           />
           {!!user && (
-            <OverlappingBudgetDescription
+            <BudgetDescription
               token={quote}
               initialBudget="0"
               withdraw="0"
