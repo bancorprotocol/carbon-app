@@ -55,7 +55,7 @@ export const useWagmiNetwork = () => {
   }, [isNetworkActive, networkError, networkProvider]);
 
   useEffect(() => {
-    void activateNetwork();
+    activateNetwork();
   }, [activateNetwork]);
 
   const wagmiConnectors = getConnectors(wagmiConfig);
