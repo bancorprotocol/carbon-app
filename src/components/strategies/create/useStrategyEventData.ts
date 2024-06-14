@@ -1,23 +1,34 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { StrategyEventType } from 'services/events/types';
 import { sanitizeNumber } from 'utils/helpers';
-import { OrderCreate } from './useOrder';
-import {
-  useSearch,
-  StrategyType,
-  StrategyDirection,
-  StrategySettings,
-} from 'libs/routing';
+import { StrategyType } from 'libs/routing';
 import { BaseOrder } from '../common/types';
+import { Strategy } from 'libs/queries';
+import { getStrategyType, toBaseOrder } from '../common/utils';
 
-export const useStrategyEvent = (
-  type: StrategyType,
-  base: Token | undefined,
-  quote: Token | undefined,
-  order0: BaseOrder,
-  order1: BaseOrder
+interface Params {
+  type: StrategyType;
+  base: Token | undefined;
+  quote: Token | undefined;
+  order0: BaseOrder;
+  order1: BaseOrder;
+}
+
+export const toStrategyEventParams = (
+  strategy: Strategy,
+  type?: StrategyType
 ) => {
+  return {
+    type: type ?? getStrategyType(strategy),
+    base: strategy.base,
+    quote: strategy.quote,
+    order0: toBaseOrder(strategy.order0),
+    order1: toBaseOrder(strategy.order1),
+  };
+};
+
+export const useStrategyEvent = (params: Params) => {
+  const { type, base, quote, order0, order1 } = params;
   const { getFiatValue: getFiatValueBase } = useFiatCurrency(base);
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(quote);
   const lowBudgetUsd = getFiatValueQuote(order0?.budget, true).toString();
@@ -42,56 +53,5 @@ export const useStrategyEvent = (
     sellTokenPriceMax: sellIsLimit ? '' : sanitizeNumber(order1.max, 18),
     strategySettings: undefined,
     strategyType: type,
-  };
-};
-
-// TODO: remove once migration is down
-interface StrategyCreateSearch {
-  base?: string;
-  quote?: string;
-  strategyType?: StrategyType;
-  strategyDirection?: StrategyDirection;
-  strategySettings?: StrategySettings;
-  buyMin?: string;
-  buyMax?: string;
-  buyBudget?: string;
-  sellMin?: string;
-  sellMax?: string;
-  sellBudget?: string;
-}
-export const useStrategyEventData = ({
-  base,
-  quote,
-  order0,
-  order1,
-}: {
-  base: Token | undefined;
-  quote: Token | undefined;
-  order0: OrderCreate;
-  order1: OrderCreate;
-}): StrategyEventType => {
-  const { getFiatValue: getFiatValueBase } = useFiatCurrency(base);
-  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(quote);
-  const lowBudgetUsd = getFiatValueQuote(order0?.budget, true).toString();
-  const highBudgetUsd = getFiatValueBase(order1?.budget, true).toString();
-  const search: StrategyCreateSearch = useSearch({ strict: false });
-
-  return {
-    buyOrderType: order0?.isRange ? 'range' : 'limit',
-    baseToken: base,
-    quoteToken: quote,
-    buyBudget: order0.budget,
-    buyBudgetUsd: lowBudgetUsd,
-    buyTokenPrice: sanitizeNumber(order0.price, 18),
-    buyTokenPriceMin: sanitizeNumber(order0.min, 18),
-    buyTokenPriceMax: sanitizeNumber(order0.max, 18),
-    sellOrderType: order1?.isRange ? 'range' : 'limit',
-    sellBudget: order1.budget,
-    sellBudgetUsd: highBudgetUsd,
-    sellTokenPrice: sanitizeNumber(order1.price, 18),
-    sellTokenPriceMin: sanitizeNumber(order1.min, 18),
-    sellTokenPriceMax: sanitizeNumber(order1.max, 18),
-    strategySettings: search?.strategySettings,
-    strategyType: search?.strategyType,
   };
 };

@@ -3,6 +3,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from './types';
+import { isOverlappingStrategy } from '../overlapping/utils';
 
 export const isDisposableStrategy = (strategy: Strategy) => {
   // If strategy is inactive, consider it as a recurring
@@ -14,6 +15,12 @@ export const isDisposableStrategy = (strategy: Strategy) => {
   if (isZero(strategy.order1.startRate)) return true;
   if (isZero(strategy.order1.endRate)) return true;
   return false;
+};
+
+export const getStrategyType = (strategy: Strategy) => {
+  if (isOverlappingStrategy(strategy)) return 'overlapping';
+  if (isDisposableStrategy(strategy)) return 'disposable';
+  return 'recurring';
 };
 
 export const emptyOrder = (): BaseOrder => ({

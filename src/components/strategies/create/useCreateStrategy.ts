@@ -59,7 +59,7 @@ export const useCreateStrategy = (props: Props) => {
     return arr;
   }, [base, quote, order0.budget, order1.budget]);
 
-  const strategyData = useStrategyEvent(type, base, quote, order0, order1);
+  const strategyData = useStrategyEvent({ type, base, quote, order0, order1 });
   const buyMarketPricePercentage = {
     min: marketPricePercent(order0.min, marketPrice),
     max: marketPricePercent(order0.max, marketPrice),

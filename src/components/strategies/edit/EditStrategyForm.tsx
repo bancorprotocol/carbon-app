@@ -14,12 +14,16 @@ import { handleTxStatusAndRedirectToOverview } from '../create/utils';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { NotificationSchema } from 'libs/notifications/data';
-import { useStrategyEvent } from '../create/useStrategyEventData';
+import {
+  toStrategyEventParams,
+  useStrategyEvent,
+} from '../create/useStrategyEventData';
 import { StrategyType } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 import { getDeposit } from './utils';
 import { useApproval } from 'hooks/useApproval';
 import { useEditStrategyCtx } from './EditStrategyContext';
+import { useDeleteStrategy } from '../useDeleteStrategy';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
@@ -58,14 +62,11 @@ export const EditStrategyForm: FC<Props> = (props) => {
   const { user } = useWeb3();
   const { strategy } = useEditStrategyCtx();
   const { history } = useRouter();
+  const { deleteStrategy } = useDeleteStrategy();
   const navigate = useNavigate({ from: '/strategies/edit/$strategyId' });
 
   const strategyEventData = useStrategyEvent(
-    strategyType,
-    strategy.base,
-    strategy.quote,
-    orders.buy,
-    orders.sell
+    toStrategyEventParams(strategy, strategyType)
   );
 
   const { openModal } = useModal();
@@ -153,11 +154,15 @@ export const EditStrategyForm: FC<Props> = (props) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
     if (isZero(orders.buy.budget) && isZero(orders.sell.budget)) {
-      return openModal('genericInfo', {
-        title: 'Empty Strategy Warning',
-        text: 'You are about to update a strategy with no associated budget. It will be inactive until you deposit funds.',
-        variant: 'warning',
-        onConfirm: update,
+      return openModal('withdrawOrDelete', {
+        onWithdraw: update,
+        onDelete: () =>
+          deleteStrategy(strategy, () =>
+            carbonEvents.strategyEdit.strategyDelete({
+              strategyId: strategy.id,
+              ...strategyEventData,
+            })
+          ),
       });
     }
 

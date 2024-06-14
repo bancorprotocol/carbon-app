@@ -12,8 +12,10 @@ import {
   getTooltipTextByStrategyEditOptionsId,
 } from './utils';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { useOrder } from 'components/strategies/create/useOrder';
-import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
+import {
+  toStrategyEventParams,
+  useStrategyEvent,
+} from 'components/strategies/create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
@@ -50,8 +52,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const { openModal } = useModal();
   const navigate = useNavigate();
   const duplicate = useDuplicate();
-  const order0 = useOrder(strategy.order0);
-  const order1 = useOrder(strategy.order1);
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
   const isOwn = useIsStrategyOwner(strategy.id);
@@ -60,12 +60,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
   const isOverlapping = isOverlappingStrategy(strategy);
 
-  const strategyEventData = useStrategyEventData({
-    base: strategy.base,
-    quote: strategy.quote,
-    order0,
-    order1,
-  });
+  const strategyEventData = useStrategyEvent(toStrategyEventParams(strategy));
   const strategyEvent = {
     ...strategyEventData,
     strategyId: strategy.id,
