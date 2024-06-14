@@ -144,8 +144,14 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   })();
 
   useEffect(() => {
-    if (anchor === 'buy' && aboveMarket) set('anchor', undefined);
-    if (anchor === 'sell' && belowMarket) set('anchor', undefined);
+    if (anchor === 'buy' && aboveMarket) {
+      set('anchor', 'sell');
+      set('budget', undefined);
+    }
+    if (anchor === 'sell' && belowMarket) {
+      set('anchor', 'buy');
+      set('budget', undefined);
+    }
   }, [anchor, aboveMarket, belowMarket, set]);
 
   const budgetWarning = (() => {
@@ -157,16 +163,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       return 'Please note that the deposit might create an arb opportunity.';
     }
   })();
-
-  useEffect(() => {
-    if (
-      (anchor === 'buy' && aboveMarket) ||
-      (anchor === 'sell' && belowMarket)
-    ) {
-      set('anchor', undefined);
-      set('budget', '');
-    }
-  }, [anchor, aboveMarket, belowMarket, set]);
 
   const setMarketPrice = (price: number) => {
     setTouched(true);

@@ -85,8 +85,14 @@ export const CreateOverlapping: FC<Props> = (props) => {
   })();
 
   useEffect(() => {
-    if (anchor === 'buy' && aboveMarket) set('anchor', undefined);
-    if (anchor === 'sell' && belowMarket) set('anchor', undefined);
+    if (anchor === 'buy' && aboveMarket) {
+      set('anchor', 'sell');
+      set('budget', undefined);
+    }
+    if (anchor === 'sell' && belowMarket) {
+      set('anchor', 'buy');
+      set('budget', undefined);
+    }
   }, [anchor, aboveMarket, belowMarket, set]);
 
   const setMarketPrice = (price: number) => {
