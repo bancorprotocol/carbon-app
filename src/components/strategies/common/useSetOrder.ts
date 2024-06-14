@@ -45,7 +45,7 @@ export const toOrderSearch = <T>(
   for (const [key, value] of Object.entries(order)) {
     const camelCaseKey = key.charAt(0).toUpperCase() + key.slice(1);
     const searchKey = `${direction}${camelCaseKey}` as keyof T;
-    search[searchKey] = value as any;
+    search[searchKey] = value as T[keyof T];
   }
   return search;
 };

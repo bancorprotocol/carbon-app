@@ -7,6 +7,10 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
+import {
+  checkIfOrdersOverlap,
+  checkIfOrdersReversed,
+} from 'components/strategies/utils';
 
 export interface EditRecurringStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -22,20 +26,18 @@ type Search = EditRecurringStrategySearch;
 
 const getWarning = (search: EditRecurringStrategySearch) => {
   const { buyMin, buyMax, sellMin, sellMax } = search;
-  const sellMinInRange =
-    buyMin && buyMax && sellMin && +sellMin >= +buyMin && +sellMin < +buyMax;
-  const buyMaxInRange =
-    sellMin && sellMax && buyMax && +buyMax >= +sellMin && +buyMax < +sellMax;
-  if (sellMinInRange || buyMaxInRange) {
+  const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
+  const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
+  if (checkIfOrdersOverlap(buyOrder, sellOrder)) {
     return 'Notice: your Buy and Sell orders overlap';
   }
 };
 
 const getError = (search: EditRecurringStrategySearch) => {
   const { buyMin, buyMax, sellMin, sellMax } = search;
-  const minReversed = buyMin && sellMin && +buyMin > +sellMin;
-  const maxReversed = buyMax && sellMax && +buyMax > +sellMax;
-  if (minReversed || maxReversed) {
+  const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
+  const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
+  if (checkIfOrdersReversed(buyOrder, sellOrder)) {
     return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
   }
 };

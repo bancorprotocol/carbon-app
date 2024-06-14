@@ -62,7 +62,7 @@ export const InputLimit: FC<InputLimitProps> = ({
     }
   }, [displayError, buy, price]);
 
-  const formatePrice = (e: FocusEvent<HTMLInputElement>) => {
+  const formatPrice = (e: FocusEvent<HTMLInputElement>) => {
     const formatted = formatNumber(e.target.value);
     if (formatted !== e.target.value) setPrice(formatted);
   };
@@ -86,7 +86,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             value={price}
             onChange={changePrice}
             onFocus={(e) => e.target.select()}
-            onBlur={formatePrice}
+            onBlur={formatPrice}
             aria-label="Enter Price"
             placeholder="Enter Price"
             className={cn(

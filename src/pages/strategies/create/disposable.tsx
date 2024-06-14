@@ -27,7 +27,7 @@ export interface CreateDisposableStrategySearch {
 const url = '/strategies/create/disposable';
 export const CreateDisposableStrategyPage = () => {
   const { getTokenById } = useTokens();
-  const search = useSearch({ from: '/strategies/create/disposable' });
+  const search = useSearch({ from: url });
   const base = getTokenById(search.base);
   const quote = getTokenById(search.quote);
   const marketPrice = useMarketPrice({ base, quote });

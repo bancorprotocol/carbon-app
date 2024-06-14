@@ -18,7 +18,6 @@ interface Props {
   order: BaseOrder;
   editType: 'withdraw' | 'deposit';
   buy?: boolean;
-  optional?: boolean;
   initialBudget: string;
   setOrder: (order: Partial<OrderBlock>) => void;
   error?: string;
@@ -31,7 +30,6 @@ export const EditStrategyBudgetField: FC<Props> = ({
   editType,
   initialBudget,
   setOrder,
-  optional = false,
   buy = false,
   error,
   warning,
@@ -65,15 +63,8 @@ export const EditStrategyBudgetField: FC<Props> = ({
     >
       <header className="flex items-center justify-between">
         <h3 id={titleId} className="text-18 flex items-center gap-8">
-          <span>
-            {`${editType === 'withdraw' ? 'Withdraw' : 'Deposit'}`}{' '}
-            {buy ? 'Buy' : 'Sell'} Budget
-          </span>
-          {optional && (
-            <span className="text-14 font-weight-500 text-white/40">
-              Optional
-            </span>
-          )}
+          {`${editType === 'withdraw' ? 'Withdraw' : 'Deposit'}`}{' '}
+          {buy ? 'Buy' : 'Sell'} Budget
         </h3>
         <Tooltip
           element={`Indicate the amount you wish to ${

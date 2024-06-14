@@ -1,5 +1,3 @@
-import { StrategyInputOrder } from 'hooks/useStrategyInput';
-
 interface ValidOrderParams {
   isRange: boolean;
   min: string;
@@ -29,8 +27,8 @@ export const isValidRange = (minStr: string, maxStr: string) => {
 };
 
 export const checkIfOrdersOverlap = (
-  buy: StrategyInputOrder,
-  sell: StrategyInputOrder
+  buy: { min: string; max: string },
+  sell: { min: string; max: string }
 ): boolean => {
   const isSellMinInBuyRange =
     +sell.min < +buy.max &&
@@ -43,11 +41,11 @@ export const checkIfOrdersOverlap = (
 };
 
 export const checkIfOrdersReversed = (
-  buyRaw: StrategyInputOrder,
-  sellRaw: StrategyInputOrder
+  buyRaw: { min: string; max: string },
+  sellRaw: { min: string; max: string }
 ): boolean => {
-  const translateOrder = (order: StrategyInputOrder) => {
-    const orderPrice = !order.isRange ? +order.min : 0;
+  const translateOrder = (order: { min: string; max: string }) => {
+    const orderPrice = order.min === order.max ? +order.min : 0;
     return {
       price: orderPrice,
       min: +order.min,

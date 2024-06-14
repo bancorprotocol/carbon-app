@@ -116,10 +116,11 @@ const getOrders = (
   return orders;
 };
 
+const url = '/strategies/create/overlapping';
 export const CreateOverlappingStrategyPage = () => {
   const { getTokenById } = useTokens();
-  const navigate = useNavigate({ from: '/strategies/create/overlapping' });
-  const search = useSearch({ from: '/strategies/create/overlapping' });
+  const navigate = useNavigate({ from: url });
+  const search = useSearch({ from: url });
   const base = getTokenById(search.base);
   const quote = getTokenById(search.quote);
   const externalPrice = useMarketPrice({ base, quote });
