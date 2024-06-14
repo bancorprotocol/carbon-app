@@ -48,6 +48,13 @@ const notifKey: Record<EditTypes, keyof NotificationSchema> = {
   renew: 'renewStrategy',
 };
 
+const submitText: Record<EditTypes, string> = {
+  renew: 'Renew Strategy',
+  editPrices: 'Confirm Changes',
+  deposit: 'Confirm Deposit',
+  withdraw: 'Confirm Withdraw',
+};
+
 const spenderAddress = config.addresses.carbon.carbonController;
 
 export const EditStrategyForm: FC<Props> = (props) => {
@@ -226,7 +233,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
         fullWidth
         data-testid="edit-submit"
       >
-        Confirm Changes
+        {submitText[editType]}
       </Button>
       <Button
         type="reset"
