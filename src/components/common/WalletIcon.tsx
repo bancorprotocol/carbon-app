@@ -26,10 +26,7 @@ export const WalletIcon = ({
 
   // For EIP6963 injected wallets
   if (icon) {
-    const sanitisedIconURI = icon;
-    return (
-      <img alt="Wallet Logo" src={sanitisedIconURI} className={className} />
-    );
+    return <img alt="Wallet Logo" src={icon} className={className} />;
   }
 
   switch (selectedWallet) {
