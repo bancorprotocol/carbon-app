@@ -33,7 +33,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
   return (
     <div
       className={`flex flex-col gap-20 p-20 ${
-        showGraph ? '' : 'md:w-[480px] md:justify-self-center'
+        showGraph ? '' : 'md:justify-self-center'
       }`}
     >
       <header className="flex items-center gap-16">

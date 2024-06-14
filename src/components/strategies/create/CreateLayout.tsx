@@ -33,7 +33,7 @@ export const CreateLayout: FC<Props> = (props) => {
     <AnimatePresence mode="sync">
       <m.div
         className={`flex flex-col gap-20 p-20 ${
-          showGraph ? '' : 'md:w-[480px] md:justify-self-center'
+          showGraph ? '' : 'md:justify-self-center'
         }`}
         variants={list}
         initial="hidden"
