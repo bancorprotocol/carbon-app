@@ -75,7 +75,6 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
             disabled={isDisabled}
           >
             <WalletIcon
-              alt="Wallet Logo"
               selectedWallet={c.name}
               className="w-24"
               icon={c.icon}

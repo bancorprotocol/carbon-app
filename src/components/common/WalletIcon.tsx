@@ -8,41 +8,46 @@ import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
 import { ReactComponent as IconWalletConnectLogo } from 'assets/logos/walletConnect.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 
-type Props = JSX.IntrinsicElements['img'] &
-  JSX.IntrinsicElements['svg'] & {
-    isImposter?: boolean;
-    selectedWallet?: string;
-    icon?: string;
-  };
+type Props = {
+  isImposter?: boolean;
+  selectedWallet?: string;
+  icon?: string;
+  className?: string;
+};
 export const WalletIcon = ({
   isImposter,
   selectedWallet,
   icon,
-  ...attr
+  className,
 }: Props) => {
   if (isImposter) {
-    return <IconImposterLogo {...attr} />;
+    return <IconImposterLogo className={className} />;
   }
 
   // For EIP6963 injected wallets
-  if (icon) return <img alt="Wallet Logo" src={icon} {...attr} />;
+  if (icon) {
+    const sanitisedIconURI = icon;
+    return (
+      <img alt="Wallet Logo" src={sanitisedIconURI} className={className} />
+    );
+  }
 
   switch (selectedWallet) {
     case 'MetaMask':
-      return <IconMetaMaskLogo {...attr} />;
+      return <IconMetaMaskLogo className={className} />;
     case 'WalletConnect':
-      return <IconWalletConnectLogo {...attr} />;
+      return <IconWalletConnectLogo className={className} />;
     case 'Coinbase Wallet':
-      return <IconCoinbaseLogo {...attr} />;
+      return <IconCoinbaseLogo className={className} />;
     case 'Safe':
-      return <IconGnosisLogo {...attr} />;
+      return <IconGnosisLogo className={className} />;
     case 'Tailwind Wallet':
-      return <IconTailwindWalletLogo {...attr} />;
+      return <IconTailwindWalletLogo className={className} />;
     case 'Compass Wallet':
-      return <IconCompassWalletLogo {...attr} />;
+      return <IconCompassWalletLogo className={className} />;
     case 'Seif Wallet':
-      return <IconSeifWalletLogo {...attr} />;
+      return <IconSeifWalletLogo className={className} />;
     default:
-      return <IconWallet {...attr} />;
+      return <IconWallet className={className} />;
   }
 };
