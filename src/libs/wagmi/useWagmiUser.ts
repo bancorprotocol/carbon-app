@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { IS_TENDERLY_FORK } from 'libs/wagmi/wagmi.constants';
+import { CHAIN_ID, IS_TENDERLY_FORK } from 'libs/wagmi/wagmi.constants';
 import {
   useConnect,
   useDisconnect,
@@ -9,11 +9,7 @@ import {
   useAccountEffect,
   type Connector,
 } from 'wagmi';
-import {
-  getAccount,
-  type ConnectErrorType,
-  type DisconnectErrorType,
-} from '@wagmi/core';
+import { type ConnectErrorType, type DisconnectErrorType } from '@wagmi/core';
 import { isAccountBlocked } from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
@@ -21,8 +17,6 @@ import { errorMessages } from './wagmi.utils';
 import { clientToSigner } from './ethers';
 import { getUncheckedSigner } from 'utils/tenderly';
 import { carbonEvents } from 'services/events';
-import { wagmiConfig } from './config';
-import { currentChain } from './chains';
 
 type Props = {
   imposterAccount: string;
@@ -33,8 +27,7 @@ export const useWagmiUser = ({
   imposterAccount,
   handleImposterAccount,
 }: Props) => {
-  const { address: walletAccount, chainId: accountChainId } =
-    getAccount(wagmiConfig);
+  const { address: walletAccount, chainId: accountChainId } = useAccount();
 
   const { isCountryBlocked } = useStore();
   const [isUncheckedSigner, _setIsUncheckedSigner] = useState(
@@ -56,7 +49,7 @@ export const useWagmiUser = ({
     [imposterAccount, walletAccount]
   );
 
-  const chainId = currentChain.id;
+  const chainId = CHAIN_ID;
   const isSupportedNetwork = useMemo(
     () => !(!!user && (accountChainId || chainId) !== chainId),
     [accountChainId, chainId, user]
@@ -147,7 +140,7 @@ export const useWagmiUser = ({
         throw new Error(codeErrorMessage || error.message);
       }
     },
-    [isCountryBlocked, connectAsync]
+    [isCountryBlocked, connectAsync, chainId]
   );
 
   const disconnect = useCallback(
