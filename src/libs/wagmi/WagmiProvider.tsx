@@ -12,6 +12,7 @@ import { currentChain } from './chains';
 
 const defaultValue: CarbonWagmiProviderContext = {
   user: undefined,
+  imposterAccount: undefined,
   handleImposterAccount: () => {},
   isNetworkActive: false,
   provider: undefined,
@@ -23,7 +24,6 @@ const defaultValue: CarbonWagmiProviderContext = {
   handleTenderlyRPC: () => {},
   disconnect: async () => {},
   connect: async () => {},
-  isImposter: false,
   networkError: undefined,
   isSupportedNetwork: true,
   switchNetwork: () => {},
@@ -52,8 +52,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
     switchNetwork,
   } = useWagmiNetwork();
 
-  const { imposterAccount, handleImposterAccount, isImposter } =
-    useWagmiImposter();
+  const { imposterAccount, handleImposterAccount } = useWagmiImposter();
 
   const { handleTenderlyRPC } = useWagmiTenderly();
 
@@ -85,10 +84,10 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         chainId,
         accountChainId,
         handleTenderlyRPC,
+        imposterAccount,
         handleImposterAccount,
         connect,
         disconnect,
-        isImposter,
         networkError,
         isSupportedNetwork,
         switchNetwork,

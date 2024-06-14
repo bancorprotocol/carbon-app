@@ -21,7 +21,7 @@ export const MainMenuRightWallet: FC = () => {
   const {
     user,
     isSupportedNetwork,
-    isImposter,
+    imposterAccount,
     isUserBlocked,
     currentConnector,
   } = useWagmi();
@@ -55,7 +55,7 @@ export const MainMenuRightWallet: FC = () => {
     return (
       <WalletIcon
         className="w-20"
-        isImposter={isImposter}
+        isImposter={!!imposterAccount}
         selectedWallet={selectedWallet}
         icon={currentConnector?.icon}
       />
@@ -64,7 +64,7 @@ export const MainMenuRightWallet: FC = () => {
     isUserBlocked,
     isSupportedNetwork,
     user,
-    isImposter,
+    imposterAccount,
     selectedWallet,
     currentConnector?.icon,
   ]);

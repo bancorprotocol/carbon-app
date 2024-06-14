@@ -6,7 +6,7 @@ export const DebugWagmi = () => {
     chainId,
     accountChainId,
     user,
-    isImposter,
+    imposterAccount,
     isNetworkActive,
     networkError,
     isUserBlocked,
@@ -47,8 +47,8 @@ export const DebugWagmi = () => {
           <div>{user ? shortenString(user) : 'Not logged in'}</div>
         </div>
         <div className="flex justify-between">
-          <div>Imposter:</div>
-          <div>{isImposter ? 'true' : 'false'}</div>
+          <div>Is imposter:</div>
+          <div>{!!imposterAccount ? 'true' : 'false'}</div>
         </div>
         <div className="flex justify-between">
           <div>Blocked:</div>

@@ -16,6 +16,7 @@ export type SelectableConnectionType =
 
 export interface CarbonWagmiProviderContext {
   user: string | undefined;
+  imposterAccount: string | undefined;
   accountChainId: number | undefined;
   chainId: number;
   isNetworkActive: boolean;
@@ -32,7 +33,6 @@ export interface CarbonWagmiProviderContext {
   handleImposterAccount: (account: string) => void;
   disconnect: () => Promise<void>;
   connect: (type: Connector) => Promise<void>;
-  isImposter: boolean;
   isSupportedNetwork: boolean;
   switchNetwork: () => void;
   isUserBlocked: boolean;
