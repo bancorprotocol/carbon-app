@@ -1,5 +1,6 @@
 import { SafeDecimal } from 'libs/safedecimal';
 import { sanitizeNumber } from 'utils/helpers';
+import { StrategyInput } from 'components/strategies/common/utils';
 
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
@@ -11,24 +12,6 @@ export const getMinSellMax = (buyMin: number, spread: number) => {
 
 export const getMaxBuyMin = (sellMax: number, spread: number) => {
   return sellMax * (1 - spread / 100) ** 2;
-};
-
-type StrategyOrderInput =
-  | { min: string; max: string }
-  | { startRate: string; endRate: string };
-interface StrategyInput {
-  order0: StrategyOrderInput;
-  order1: StrategyOrderInput;
-}
-export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
-  const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
-  const sellLow = 'startRate' in order1 ? order1.startRate : order1.min;
-  if (!buyHigh || !sellLow) return false;
-  const buyMax = new SafeDecimal(buyHigh);
-  const sellMin = new SafeDecimal(sellLow);
-  if (sellMin.eq(0)) return false; // Limit strategy with only buy
-  if (buyMax.eq(0)) return false;
-  return buyMax.gte(sellMin);
 };
 
 export const isValidSpread = (spread?: string | number) => {

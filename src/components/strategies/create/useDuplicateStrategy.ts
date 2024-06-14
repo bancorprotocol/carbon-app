@@ -1,11 +1,11 @@
 import { useNavigate } from 'libs/routing';
 import { Strategy } from 'libs/queries';
+import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import {
-  getRoundedSpread,
   isOverlappingStrategy,
-} from 'components/strategies/overlapping/utils';
+  isLimitOrder,
+} from 'components/strategies/common/utils';
 import { roundSearchParam } from 'utils/helpers';
-import { isLimitOrder } from '../common/utils';
 
 export const useDuplicate = () => {
   const navigate = useNavigate();

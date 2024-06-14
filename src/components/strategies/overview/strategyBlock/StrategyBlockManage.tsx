@@ -1,4 +1,4 @@
-import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
+import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import { FC, forwardRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';

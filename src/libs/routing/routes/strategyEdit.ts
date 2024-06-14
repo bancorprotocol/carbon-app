@@ -14,10 +14,8 @@ import {
 import { Strategy } from 'libs/queries';
 import { roundSearchParam } from 'utils/helpers';
 import { isEmptyOrder } from 'components/strategies/common/utils';
-import {
-  getRoundedSpread,
-  isOverlappingStrategy,
-} from 'components/strategies/overlapping/utils';
+import { getRoundedSpread } from 'components/strategies/overlapping/utils';
+import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import {
   EditDisposableStrategySearch,
   EditStrategyDisposablePage,

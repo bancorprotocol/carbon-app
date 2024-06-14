@@ -1,4 +1,4 @@
-import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
+import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
