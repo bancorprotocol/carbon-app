@@ -3,7 +3,7 @@ import { getEthersProvider } from 'libs/wagmi/ethers';
 import { wagmiConfig } from 'libs/wagmi/config';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { getConnectors } from '@wagmi/core';
-import { RPC_URLS, RPC_HEADERS, SupportedChainId } from 'libs/wagmi';
+import { RPC_URLS, RPC_HEADERS, CHAIN_ID } from 'libs/wagmi';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { currentChain } from './chains';
 import { selectedConnections } from './wagmi.constants';
@@ -22,8 +22,8 @@ export const useWagmiNetwork = () => {
   const networkProvider = useMemo(() => {
     return new StaticJsonRpcProvider(
       {
-        url: RPC_URLS[SupportedChainId.MAINNET],
-        headers: RPC_HEADERS[SupportedChainId.MAINNET],
+        url: RPC_URLS[CHAIN_ID],
+        headers: RPC_HEADERS[CHAIN_ID],
         skipFetchSetup: true,
       },
       chainId

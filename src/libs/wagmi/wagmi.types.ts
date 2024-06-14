@@ -1,15 +1,9 @@
 import {
-  JsonRpcProvider,
   JsonRpcSigner,
   StaticJsonRpcProvider,
   Web3Provider,
 } from '@ethersproject/providers';
-import { SupportedChainId } from 'libs/wagmi/wagmi.constants';
 import { Connector } from 'libs/wagmi';
-
-export type ChainIdMapTo<T extends string | JsonRpcProvider> = {
-  [key in SupportedChainId]: T;
-};
 
 export type SelectableConnectionType =
   | 'MetaMask'

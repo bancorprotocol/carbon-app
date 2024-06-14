@@ -1,6 +1,6 @@
 import { type Chain } from 'viem';
 import config from 'config';
-import { RPC_HEADERS, RPC_URLS, SupportedChainId } from './wagmi.constants';
+import { CHAIN_ID, RPC_HEADERS, RPC_URLS } from './wagmi.constants';
 import { http } from 'wagmi';
 
 export const currentChain: Chain = {
@@ -28,9 +28,9 @@ export const currentChain: Chain = {
 export const configChains: [Chain, ...Chain[]] = [currentChain];
 
 export const configTransports = {
-  [currentChain.id]: http(RPC_URLS[SupportedChainId.MAINNET], {
+  [currentChain.id]: http(RPC_URLS[CHAIN_ID], {
     fetchOptions: {
-      headers: RPC_HEADERS[SupportedChainId.MAINNET],
+      headers: RPC_HEADERS[CHAIN_ID],
     },
   }),
 };
