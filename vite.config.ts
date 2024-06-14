@@ -67,7 +67,6 @@ export default defineConfig(({ mode }) => {
         process: 'process/browser',
         buffer: 'buffer',
         crypto: 'crypto-browserify',
-        stream: 'stream-browserify',
         assert: 'assert',
         http: 'stream-http',
         https: 'https-browserify',
