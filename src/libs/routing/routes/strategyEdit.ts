@@ -39,24 +39,11 @@ import {
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
-export interface EditStrategySearch {
-  type: EditTypes;
-}
-// TODO: support old urls
-// export const editStrategyPage = new Route({
-//   getParentRoute: () => rootRoute,
-//   path: '/strategies/edit/$strategyId',
-//   component: EditStrategyPage,
-//   validateSearch: validateSearchParams<EditStrategySearch>({
-//     type: validLiteral(['renew', 'editPrices', 'deposit', 'withdraw']),
-//   }),
-// });
-
 export const editStrategyLayout = new Route({
   getParentRoute: () => rootRoute,
   path: '/strategies/edit/$strategyId',
   component: EditStrategyPageLayout,
-  validateSearch: (search: { editType: 'editPrices' | 'renew' }) => search,
+  validateSearch: (search: { editType: EditTypes }) => search,
 });
 
 // PRICES
