@@ -119,6 +119,9 @@ const getConfigConnectors = (): CreateConnectorFn[] => {
   const providersToHide = store
     .getProviders()
     .map((provider) => provider.info.name.toLowerCase());
+
+  // Safe wallet always runs through an iFrame, the same check as the safe connector's getProvider is performed here.
+  // The allowedDomains param in the safe connector is another way to check we're in a safe wallet
   if (!isIframe()) providersToHide.push('safe');
 
   const missingConnectors = selectedConnections.filter(
