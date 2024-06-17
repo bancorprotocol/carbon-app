@@ -1,5 +1,6 @@
 .form:invalid button[type="submit"],
 .form:has(:global(.error-message)) button[type="submit"],
+.form:has(:global(.loading-message)) button[type="submit"],
 .form:has(:global(.warning-message)):has(.approve-warnings input:not(:checked)) button[type="submit"] {
   opacity: 0.4;
   cursor: not-allowed;
@@ -15,6 +16,3 @@
   display: none;
 }
 
-.form > header, .form > article, .form > button {
-  @apply animate-slideUp;
-}

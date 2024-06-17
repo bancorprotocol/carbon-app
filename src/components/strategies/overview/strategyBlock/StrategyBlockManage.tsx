@@ -1,9 +1,9 @@
-import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
+import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import { FC, forwardRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { useNavigate, useParams } from 'libs/routing';
-import { getDuplicateStrategyParams } from 'components/strategies/create/useDuplicateStrategy';
+import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
@@ -12,8 +12,10 @@ import {
   getTooltipTextByStrategyEditOptionsId,
 } from './utils';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { useOrder } from 'components/strategies/create/useOrder';
-import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
+import {
+  toStrategyEventParams,
+  useStrategyEvent,
+} from 'components/strategies/create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
@@ -21,8 +23,13 @@ import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
-import config from 'config';
 import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
+import { isDisposableStrategy } from 'components/strategies/common/utils';
+import {
+  getEditBudgetPage,
+  getEditPricesPage,
+} from 'components/strategies/edit/utils';
+import config from 'config';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -44,8 +51,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const { strategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
   const navigate = useNavigate();
-  const order0 = useOrder(strategy.order0);
-  const order1 = useOrder(strategy.order1);
+  const duplicate = useDuplicate();
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
   const isOwn = useIsStrategyOwner(strategy.id);
@@ -54,12 +60,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
   const isOverlapping = isOverlappingStrategy(strategy);
 
-  const strategyEventData = useStrategyEventData({
-    base: strategy.base,
-    quote: strategy.quote,
-    order0,
-    order1,
-  });
+  const strategyEventData = useStrategyEvent(toStrategyEventParams(strategy));
   const strategyEvent = {
     ...strategyEventData,
     strategyId: strategy.id,
@@ -75,17 +76,12 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       if (!isOverlapping) {
         openModal('duplicateStrategy', { strategy });
       } else {
-        const search = getDuplicateStrategyParams(strategy);
-        navigate({ to: '/strategies/create', search });
+        duplicate(strategy);
       }
     },
   });
 
-  const isDisposable =
-    +strategy.order0.startRate === 0 ||
-    +strategy.order0.endRate === 0 ||
-    +strategy.order1.startRate === 0 ||
-    +strategy.order1.endRate === 0;
+  const isDisposable = isDisposableStrategy(strategy);
 
   if (!isDisposable && config.isSimulatorEnabled) {
     items.push({
@@ -141,6 +137,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   }
 
   if (isOwn) {
+    const editPrices = getEditPricesPage(strategy, 'editPrices');
+
     items.push({
       id: 'editPrices',
       name: 'Edit Prices',
@@ -150,12 +148,14 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           ...strategyEvent,
         });
         navigate({
-          to: '/strategies/edit/$strategyId',
+          to: editPrices.to,
+          search: editPrices.search,
           params: { strategyId: strategy.id },
-          search: { type: 'editPrices' },
         });
       },
     });
+
+    const deposit = getEditBudgetPage(strategy, 'deposit');
 
     // separator
     items.push(0);
@@ -165,14 +165,15 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       action: () => {
         carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
         navigate({
-          to: '/strategies/edit/$strategyId',
+          to: deposit.to,
+          search: deposit.search,
           params: { strategyId: strategy.id },
-          search: { type: 'deposit' },
         });
       },
     });
 
     if (strategy.status !== 'noBudget') {
+      const withdraw = getEditBudgetPage(strategy, 'withdraw');
       items.push({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
@@ -181,9 +182,9 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
           if (isOverlapping) {
             navigate({
-              to: '/strategies/edit/$strategyId',
+              to: withdraw.to,
+              search: withdraw.search,
               params: { strategyId: strategy.id },
-              search: { type: 'withdraw' },
             });
           } else {
             openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
@@ -207,15 +208,16 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     }
 
     if (strategy.status === 'paused') {
+      const renew = getEditPricesPage(strategy, 'renew');
       items.push({
         id: 'renewStrategy',
         name: 'Renew Strategy',
         action: () => {
           carbonEvents.strategyEdit.strategyRenewClick(strategyEvent);
           navigate({
-            to: '/strategies/edit/$strategyId',
+            to: renew.to,
+            search: renew.search,
             params: { strategyId: strategy.id },
-            search: { type: 'renew' },
           });
         },
       });

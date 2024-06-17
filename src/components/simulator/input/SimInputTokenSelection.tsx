@@ -5,7 +5,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useModal } from 'hooks/useModal';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { cn } from 'utils/helpers';
 
 interface Props {
@@ -124,9 +124,9 @@ export const SimInputTokenSelection: FC<Props> = ({
         />
       </article>
       {noPriceHistory && (
-        <WarningMessageWithIcon className="font-weight-500">
+        <Warning className="font-weight-500">
           The pair lacks price history and cannot be simulated.
-        </WarningMessageWithIcon>
+        </Warning>
       )}
     </section>
   );

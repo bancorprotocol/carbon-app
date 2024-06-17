@@ -26,6 +26,11 @@ const lightDark = (l: number, c: number, h: number) => ({
 export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
+    extend: {
+      aria: {
+        'current-page': 'current="page"',
+      },
+    },
     screens: {
       sm: '640px',
       md: '768px',

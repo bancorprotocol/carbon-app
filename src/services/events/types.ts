@@ -1,9 +1,5 @@
 import { ApprovalToken } from 'hooks/useApproval';
-import {
-  StrategyDirection,
-  StrategySettings,
-  StrategyType,
-} from 'libs/routing';
+import { StrategySettings, StrategyType } from 'libs/routing';
 import { Token } from 'libs/tokens';
 
 export interface TradeEventBase {
@@ -31,7 +27,6 @@ export interface StrategyEventTypeBase {
   baseToken: Token | undefined;
   quoteToken: Token | undefined;
   strategyType: StrategyType | undefined;
-  strategyDirection: StrategyDirection | undefined;
   strategySettings: StrategySettings | undefined;
 }
 

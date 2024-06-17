@@ -3,7 +3,7 @@ import { FC, useId } from 'react';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { StrategyType } from 'libs/routing';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { LimitRangeSection } from 'components/simulator/input/BuySellBlockNew/LimitRangeSection';
 import { LogoImager } from 'components/common/imager/Imager';
@@ -115,10 +115,9 @@ export const BuySellBlock: FC<Props> = ({
       </BuySellHeader>
       <LimitRangeSection {...limitRangeProps} />
       <BudgetSection {...budgetProps} />
-      {warningMsg && <WarningMessageWithIcon message={warningMsg} />}
+      {warningMsg && <Warning message={warningMsg} />}
       {!ignoreMarketPriceWarning && (
         <FullOutcome
-          price=""
           min={order.min}
           max={order.max}
           budget={order.budget}

@@ -4,16 +4,62 @@ import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
-import { UseStrategyCreateReturn } from 'components/strategies/create';
-import { items } from './variants';
+import { items } from 'components/strategies/common/variants';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
+import { Token } from 'libs/tokens';
+import { useModal } from 'hooks/useModal';
+import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 
-export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
-  base,
-  quote,
-  openTokenListModal,
-}) => {
-  const navigate = useNavigate();
+interface Props {
+  base?: Token;
+  quote?: Token;
+}
+
+export const CreateStrategyTokenSelection: FC<Props> = ({ base, quote }) => {
+  const navigate = useNavigate({ from: '/strategies/create' });
+  const { openModal } = useModal();
+
+  const tokenEvent = (isSource = false, token: Token) => {
+    const events = carbonEvents.strategy;
+    if (isSource) {
+      if (!base) events.newStrategyBaseTokenSelect({ token });
+      else events.strategyBaseTokenChange({ token });
+    } else {
+      if (!quote) events.newStrategyQuoteTokenSelect({ token });
+      else events.strategyQuoteTokenChange({ token });
+    }
+  };
+
+  const openTokenListModal = (isSource?: boolean) => {
+    const onClick = (token: Token) => {
+      const params: { base?: string; quote?: string } = {};
+      tokenEvent(isSource, token);
+
+      if (isSource) {
+        params.base = token.address;
+        if (quote) params.quote = quote?.address;
+      } else {
+        if (base) params.base = base?.address;
+        params.quote = token.address;
+      }
+
+      navigate({
+        search: (search) => ({
+          ...search,
+          ...params,
+        }),
+        replace: true,
+        resetScroll: false,
+      });
+    };
+
+    const data: ModalTokenListData = {
+      onClick,
+      excludedTokens: [isSource ? quote?.address ?? '' : base?.address ?? ''],
+      isBaseToken: isSource,
+    };
+    openModal('tokenLists', data);
+  };
 
   const swapTokens = () => {
     if (base && quote) {
@@ -22,13 +68,13 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
         updatedQuote: base.symbol,
       });
       navigate({
-        to: '/strategies/create',
         search: (search) => ({
           ...search,
           base: quote.address,
           quote: base.address,
         }),
         replace: true,
+        resetScroll: false,
       });
     }
   };

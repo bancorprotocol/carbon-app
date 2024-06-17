@@ -20,7 +20,7 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
     await initial.clickManageEntry('editPrices');
 
     const edit = new EditStrategyDriver(page, testCase);
-    await edit.waitForPage('editPrices');
+    await edit.waitForPage('overlapping', 'editPrices');
     const form = edit.getOverlappingForm();
     await form.min().fill(input.min);
     await form.max().fill(input.max);
