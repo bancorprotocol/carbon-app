@@ -31,6 +31,7 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
         </hgroup>
         <Link
           to="/strategy/$id"
+          onClick={close}
           params={{ id: activity.strategy.id }}
           className="font-weight-500 flex items-center"
         >
