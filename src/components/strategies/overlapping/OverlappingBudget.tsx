@@ -49,7 +49,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
   const token = anchor === 'buy' ? quote : base;
   const balance = useGetTokenBalance(token);
   const allocatedBudget = anchor === 'buy' ? buyBudget : sellBudget;
-  const maxIsLoading = editType === 'deposit' && balance.isLoading;
+  const maxIsLoading = editType === 'deposit' && balance.isPending;
   const max = editType === 'deposit' ? balance.data || '0' : allocatedBudget;
 
   const disabled = (() => {
