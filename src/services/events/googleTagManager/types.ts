@@ -1,4 +1,4 @@
-import { StrategySettings } from 'libs/routing';
+import { StrategySettings, StrategyType } from 'libs/routing';
 import { EventExplorerSchema } from '../explorerEvents';
 import { EventGeneralSchema } from '../generalEvents';
 import { EventNavigationSchema } from '../navigationEvents';
@@ -54,7 +54,7 @@ export interface StrategyGTMEventTypeBase {
   token_pair: string;
   strategy_base_token: string;
   strategy_quote_token: string;
-  strategy_type?: 'recurring' | 'disposable';
+  strategy_type?: StrategyType;
   strategy_direction?: 'buy' | 'sell' | undefined;
   strategy_settings?: StrategySettings;
 }

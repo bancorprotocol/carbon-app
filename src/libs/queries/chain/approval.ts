@@ -4,10 +4,10 @@ import { NULL_APPROVAL_CONTRACTS, UNLIMITED_WEI } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
 import { SafeDecimal } from 'libs/safedecimal';
 import { QueryKey } from 'libs/queries/queryKey';
-import config from 'config';
 import { useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
 import { ContractTransaction } from 'ethers';
+import config from 'config';
 
 export type GetUserApprovalProps = Pick<
   Token,

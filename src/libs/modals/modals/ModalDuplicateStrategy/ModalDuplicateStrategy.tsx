@@ -1,13 +1,12 @@
 import { ReactComponent as IconCut } from 'assets/icons/cut.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { Button } from 'components/common/button';
-import { getDuplicateStrategyParams } from 'components/strategies/create/useDuplicateStrategy';
+import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { Strategy } from 'libs/queries';
 import { getUndercutStrategy } from './utils';
-import { useNavigate } from 'libs/routing';
 
 export type ModalDuplicateStrategyData = {
   strategy: Strategy;
@@ -17,14 +16,9 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
   id,
   data: { strategy },
 }) => {
-  const navigate = useNavigate();
+  const duplicate = useDuplicate();
   const { closeModal } = useModal();
   const undercutDifference = 0.001;
-
-  const duplicate = (strategy: Strategy) => {
-    const search = getDuplicateStrategyParams(strategy);
-    navigate({ to: '/strategies/create', search });
-  };
 
   const undercutStrategy = () => {
     const undercutStrategy = getUndercutStrategy(strategy, undercutDifference);

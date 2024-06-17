@@ -2,6 +2,8 @@ import { lsService } from 'services/localeStorage';
 import config from 'config';
 import { utils } from 'ethers';
 import * as v from 'valibot';
+import { formatNumber } from 'utils/helpers';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
 function toValue(mix: string | undefined) {
   if (!mix) return '';
@@ -85,7 +87,7 @@ export const validLiteral = (array: string[]) => {
   return v.union(array.map((l) => v.literal(l)));
 };
 export const validNumber = v.string([
-  v.custom((value: string) => isNaN(Number(value)) === false),
+  v.custom((value: string) => isNaN(Number(formatNumber(value))) === false),
 ]);
 export const validAddress = v.string([
   v.custom((value: string) => {
@@ -99,6 +101,10 @@ export const validAddress = v.string([
 ]);
 export const validBoolean = v.boolean([
   v.custom((value) => value === true || value === false),
+]);
+export const validMarginalPrice = v.union([
+  validNumber,
+  validLiteral([MarginalPriceOptions.maintain, MarginalPriceOptions.reset]),
 ]);
 
 export const validateSearchParams = <T>(

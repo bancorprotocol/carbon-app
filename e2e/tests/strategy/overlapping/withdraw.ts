@@ -20,7 +20,7 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
     await initial.clickManageEntry('withdrawFunds');
 
     const edit = new EditStrategyDriver(page, testCase);
-    await edit.waitForPage('withdraw');
+    await edit.waitForPage('overlapping', 'withdraw');
     const form = edit.getOverlappingForm();
     await form.anchor(input.anchor).click();
     await form.budget().fill(input.budget);

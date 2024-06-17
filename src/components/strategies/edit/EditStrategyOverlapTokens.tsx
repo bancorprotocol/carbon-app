@@ -1,13 +1,8 @@
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { Strategy } from 'libs/queries';
+import { useEditStrategyCtx } from './EditStrategyContext';
 
-type EditStrategyOverlapTokensProps = {
-  strategy: Strategy;
-};
-
-export const EditStrategyOverlapTokens = ({
-  strategy,
-}: EditStrategyOverlapTokensProps) => {
+export const EditStrategyOverlapTokens = () => {
+  const { strategy } = useEditStrategyCtx();
   return (
     <header className="rounded-10 bg-background-900 flex w-full items-center space-x-10 p-20">
       <TokensOverlap tokens={[strategy.base, strategy.quote]} size={32} />

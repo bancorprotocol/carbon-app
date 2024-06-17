@@ -2,7 +2,7 @@ import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { prettifyNumber } from 'utils/helpers';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
   base?: Token;
@@ -22,9 +22,9 @@ export const OverlappingSmallBudget: FC<Props> = (props) => {
   const otherToken = isBuyTooSmall ? base : quote;
 
   return (
-    <WarningMessageWithIcon isError htmlFor={htmlFor}>
+    <Warning isError htmlFor={htmlFor}>
       Please increase {otherToken.symbol} budget to have at least&nbsp;
       {prettifyNumber(wei)} {token.symbol}
-    </WarningMessageWithIcon>
+    </Warning>
   );
 };

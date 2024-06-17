@@ -18,7 +18,7 @@ export const useFiatCurrency = (token?: Token) => {
   };
 
   const getFiatValue = useMemo(() => {
-    return (value: string, usd = false) => {
+    return (value?: string, usd = false) => {
       const v = isNaN(Number(value)) ? 0 : value;
       return new SafeDecimal(v || 0).times(
         tokenPriceQuery.data?.[
@@ -33,7 +33,7 @@ export const useFiatCurrency = (token?: Token) => {
     useGetTokenPrice,
     hasFiatValue,
     getFiatValue,
-    getFiatAsString: (value: string) =>
+    getFiatAsString: (value?: string) =>
       getFiatDisplayValue(getFiatValue(value), selectedFiatCurrency),
   };
 };

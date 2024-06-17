@@ -64,28 +64,50 @@ export const SimResultSummary = ({
               quoteToken={state.quoteToken}
             />
             <SimResultSummaryRoi portfolioRoi={roi} />
-            <Link
-              to="/strategies/create"
-              search={{
-                base: state.baseToken.address,
-                quote: state.quoteToken.address,
-                strategyType: 'recurring',
-                strategySettings:
-                  strategyType === 'recurring' ? 'range' : 'overlapping',
-                buyMin: state.buy.min,
-                buyMax: state.buy.max,
-                buyBudget: state.buy.budget,
-                sellMin: state.sell.min,
-                sellMax: state.sell.max,
-                sellBudget: state.sell.budget,
-              }}
-              className={cn(
-                buttonStyles({ variant: 'success', size: 'md' }),
-                'whitespace-nowrap'
-              )}
-            >
-              Create strategy
-            </Link>
+            {strategyType === 'recurring' ? (
+              <Link
+                to="/strategies/create/recurring"
+                search={{
+                  base: state.baseToken.address,
+                  quote: state.quoteToken.address,
+                  buyMin: state.buy.min,
+                  buyMax: state.buy.max,
+                  buyBudget: state.buy.budget,
+                  buySettings:
+                    state.buy.min === state.buy.max ? 'limit' : 'range',
+                  sellMin: state.sell.min,
+                  sellMax: state.sell.max,
+                  sellBudget: state.sell.budget,
+                  sellSettings:
+                    state.sell.min === state.sell.max ? 'limit' : 'range',
+                }}
+                className={cn(
+                  buttonStyles({ variant: 'success', size: 'md' }),
+                  'whitespace-nowrap'
+                )}
+              >
+                Create strategy
+              </Link>
+            ) : (
+              <Link
+                to="/strategies/create/overlapping"
+                search={{
+                  base: state.baseToken.address,
+                  quote: state.quoteToken.address,
+                  min: state.buy.min,
+                  max: state.sell.max,
+                  spread: state.overlappingSpread,
+                  anchor: 'buy',
+                  budget: state.buy.budget,
+                }}
+                className={cn(
+                  buttonStyles({ variant: 'success', size: 'md' }),
+                  'whitespace-nowrap'
+                )}
+              >
+                Create strategy
+              </Link>
+            )}
           </>
         )}
       </section>

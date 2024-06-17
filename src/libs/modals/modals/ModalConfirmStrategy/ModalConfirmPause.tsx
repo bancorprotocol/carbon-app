@@ -3,7 +3,7 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { Strategy } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
-import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
+import { usePauseStrategy } from 'components/strategies/usePauseStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
@@ -21,7 +21,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
 }) => {
   const { strategy, strategyEvent } = data;
   const { closeModal } = useModal();
-  const { pauseStrategy, isProcessing, updateMutation } = useUpdateStrategy();
+  const { pauseStrategy, isProcessing, updateMutation } = usePauseStrategy();
 
   const isPending = updateMutation.isPending;
   const isLoading = isPending || isProcessing;

@@ -23,7 +23,7 @@ export const withdrawStrategyTest = (testCase: CreateStrategyTestCase) => {
     await modal.waitFor({ state: 'detached' });
 
     const edit = new EditStrategyDriver(page, testCase);
-    await edit.waitForPage('withdraw');
+    await edit.waitForPage('recurring', 'withdraw');
     await edit.waitForWallet();
     await edit.fillRecurringBudget('withdraw');
 

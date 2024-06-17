@@ -1,51 +1,37 @@
 import { m } from 'libs/motion';
-import { items } from './variants';
+import { items } from 'components/strategies/common/variants';
 import { Button } from 'components/common/button';
-import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { carbonEvents } from 'services/events';
+import { FC, ReactNode } from 'react';
 
-import { FC } from 'react';
-import { UseStrategyCreateReturn } from 'components/strategies/create';
-
-type Props = Pick<
-  UseStrategyCreateReturn,
-  'base' | 'quote' | 'showGraph' | 'setShowGraph'
->;
-export const CreateStrategyGraph: FC<Props> = ({
-  base,
-  quote,
-  showGraph,
-  setShowGraph,
-}) => {
+interface Props {
+  setShowGraph: (value: boolean) => void;
+  children: ReactNode;
+}
+export const CreateStrategyGraph: FC<Props> = ({ setShowGraph, children }) => {
   return (
-    <div
-      className={`flex flex-col ${showGraph ? 'flex-1' : 'absolute right-20'}`}
+    <m.article
+      variants={items}
+      key="createStrategyGraph"
+      className="rounded-10 bg-background-900 flex h-[550px] flex-1 flex-col gap-20 p-20 md:sticky md:top-80"
     >
-      <m.div
-        variants={items}
-        key="createStrategyGraph"
-        className="rounded-10 bg-background-900 flex h-[550px] flex-col p-20 md:sticky md:top-80"
-      >
-        <div className="flex items-center justify-between">
-          <h2 className="font-weight-500 mb-20">Price Chart</h2>
-          <Button
-            className="bg-background-800 hover:border-background-600 mb-20 self-end"
-            variant="secondary"
-            size="md"
-            onClick={() => {
-              carbonEvents.strategy.strategyChartClose(undefined);
-              setShowGraph(false);
-            }}
-          >
-            <div className="flex items-center justify-center">
-              <IconX className="w-10 md:mr-12" />
-              <span className="hidden md:block">Close Chart</span>
-            </div>
-          </Button>
-        </div>
-        <TradingviewChart base={base} quote={quote} />
-      </m.div>
-    </div>
+      <header className="flex items-center justify-between">
+        <h2 className="font-weight-500">Price Chart</h2>
+        <Button
+          className="bg-background-800 hover:border-background-600 gap-12 self-end"
+          variant="secondary"
+          size="md"
+          onClick={() => {
+            carbonEvents.strategy.strategyChartClose(undefined);
+            setShowGraph(false);
+          }}
+        >
+          <IconX className="w-10" />
+          <span className="hidden md:block">Close Chart</span>
+        </Button>
+      </header>
+      {children}
+    </m.article>
   );
 };
