@@ -1,5 +1,5 @@
 import { TokenList } from 'libs/tokens';
-import { SelectableConnectionType } from 'libs/wagmi';
+import { SelectableConnectionName } from 'libs/wagmi';
 import { FaucetToken } from 'utils/tenderly';
 
 type address = `0x${string}`;
@@ -10,7 +10,8 @@ export interface AppConfig {
   appName: string;
   appUrl: string;
   carbonApi: string;
-  selectedConnections: SelectableConnectionType[];
+  selectedConnectors: SelectableConnectionName[];
+  blockedConnectors?: SelectableConnectionName[];
   walletConnectProjectId: string;
   isSimulatorEnabled: boolean;
   sentryDSN?: string;

@@ -4,7 +4,6 @@ import compassWalletLogo from 'assets/logos/compassWallet.svg';
 import seifWalletLogo from 'assets/logos/seifWallet.svg';
 import { createStore } from 'mipd';
 import { Connector, CreateConnectorFn, createConnector } from 'wagmi';
-
 import {
   metaMask,
   coinbaseWallet,
@@ -12,9 +11,12 @@ import {
   safe,
 } from 'wagmi/connectors';
 import config from 'config';
-import { type SelectableConnectionType } from './wagmi.types';
-import { selectedConnections } from './wagmi.constants';
-import { currentChain } from './chains';
+import {
+  type SelectableConnectionName,
+  providerMapRdnsToName,
+  selectedConnectors,
+  currentChain,
+} from 'libs/wagmi';
 import { externalLinks } from 'libs/routing';
 
 const PLACEHOLDER_TAG = '_placeholder';
@@ -59,7 +61,7 @@ const createPlaceholderConnector = ({
   });
 };
 
-const getDefaultConnector = (connectorType: SelectableConnectionType) => {
+const getDefaultConnector = (connectorType: SelectableConnectionName) => {
   switch (connectorType) {
     case 'Compass Wallet':
       return createPlaceholderConnector({
@@ -113,19 +115,29 @@ const getDefaultConnector = (connectorType: SelectableConnectionType) => {
 const isIframe = () =>
   typeof window !== 'undefined' && window?.parent !== window;
 
+export const providerRdnsToName = (
+  connectionName: string
+): string | undefined => providerMapRdnsToName[connectionName];
+
 const getConfigConnectors = (): CreateConnectorFn[] => {
   const store = createStore();
 
-  const providersToHide = store
+  const initializedProvidersRdns = store
     .getProviders()
-    .map((provider) => provider.info.name.toLowerCase());
+    .map((provider) => provider.info.rdns.toLowerCase());
 
   // Safe wallet always runs through an iFrame, the same check as the safe connector's getProvider is performed here.
   // The allowedDomains param in the safe connector is another way to check we're in a safe wallet
-  if (!isIframe()) providersToHide.push('safe');
+  if (!isIframe()) initializedProvidersRdns.push('safe');
 
-  const missingConnectors = selectedConnections.filter(
-    (connection) => !providersToHide.includes(connection.toLowerCase())
+  const initializedProvidersNames = initializedProvidersRdns
+    .map(providerRdnsToName)
+    .filter((c) => c)
+    .map((c) => c!.toLowerCase());
+
+  // Only initialize connectors that are not injected
+  const missingConnectors = selectedConnectors.filter(
+    (name) => !initializedProvidersNames.includes(name.toLowerCase())
   );
 
   store.destroy();

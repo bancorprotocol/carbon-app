@@ -6,8 +6,8 @@ import { getConnectors } from '@wagmi/core';
 import { RPC_URLS, RPC_HEADERS, CHAIN_ID } from 'libs/wagmi';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { currentChain } from './chains';
-import { selectedConnections } from './wagmi.constants';
-import { isPlaceHolderConnector } from './connectors';
+import { blocklistConnectors, selectedConnectors } from './wagmi.constants';
+import { isPlaceHolderConnector, providerRdnsToName } from './connectors';
 
 export const useWagmiNetwork = () => {
   const { switchChain } = useSwitchChain();
@@ -60,9 +60,10 @@ export const useWagmiNetwork = () => {
 
   const wagmiConnectors = getConnectors(wagmiConfig);
   const connectors = useMemo(() => {
-    const wagmiConnectorsNames = wagmiConnectors.map((c) =>
-      c.name.toLowerCase()
-    );
+    const wagmiConnectorsNames = wagmiConnectors
+      .map((c) => providerRdnsToName(c.id) || c.name)
+      .map((name) => name.toLowerCase());
+
     const duplicatedConnectorNames = wagmiConnectorsNames.filter(
       (e, i, a) => a.indexOf(e) !== i
     );
@@ -71,9 +72,9 @@ export const useWagmiNetwork = () => {
         !(
           duplicatedConnectorNames.includes(c.name.toLowerCase()) &&
           isPlaceHolderConnector(c)
-        )
+        ) && !blocklistConnectors.includes(c.name.toLowerCase())
     );
-    const connectionOrder = (selectedConnections as string[]).map((c) =>
+    const connectionOrder = (selectedConnectors as string[]).map((c) =>
       c.toLowerCase()
     );
     return unsortedConnectors.toSorted((a, b) => {

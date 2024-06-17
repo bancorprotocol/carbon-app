@@ -5,7 +5,7 @@ import {
 } from '@ethersproject/providers';
 import { Connector } from 'libs/wagmi';
 
-export type SelectableConnectionType =
+export type SelectableConnectionName =
   | 'MetaMask'
   | 'WalletConnect'
   | 'Coinbase Wallet'

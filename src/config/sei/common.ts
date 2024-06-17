@@ -15,7 +15,7 @@ export const commonConfig: AppConfig = {
   appName: 'Carbon DeFi',
   appUrl: 'https://sei.carbondefi.xyz',
   carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
-  selectedConnections: [
+  selectedConnectors: [
     'MetaMask',
     'Coinbase Wallet',
     'Safe',
