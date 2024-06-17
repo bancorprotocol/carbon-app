@@ -16,6 +16,8 @@ import {
   TradeEventType,
 } from 'services/events/types';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import config from 'config';
+import seiConfig from 'config/sei/production';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -24,6 +26,8 @@ type Props = {
   eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
   context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
 };
+
+const isSei = config.network.chainId === seiConfig.network.chainId;
 
 export const ApproveToken: FC<Props> = ({
   data,
@@ -37,7 +41,7 @@ export const ApproveToken: FC<Props> = ({
   const { getTokenById } = useTokens();
   const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();
-  const [isLimited, setIsLimited] = useState(false);
+  const [isLimited, setIsLimited] = useState(isSei);
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
