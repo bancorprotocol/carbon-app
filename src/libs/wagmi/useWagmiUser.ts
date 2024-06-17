@@ -136,11 +136,13 @@ export const useWagmiUser = ({
           }
         );
       } catch (error: any) {
+        // Attempt to disconnect
+        await disconnectAsync({ connector });
         const codeErrorMessage = error?.code ? errorMessages[error?.code] : '';
         throw new Error(codeErrorMessage || error.message);
       }
     },
-    [isCountryBlocked, connectAsync, chainId]
+    [isCountryBlocked, connectAsync, chainId, disconnectAsync]
   );
 
   const disconnect = useCallback(
