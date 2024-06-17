@@ -31,7 +31,7 @@ export const EditPriceNav: FC<Props> = ({ editType }) => {
         replace={true}
         aria-current={isDisposable ? 'page' : 'false'}
       >
-        Limit
+        Disposable
       </Link>
       <Link
         className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
