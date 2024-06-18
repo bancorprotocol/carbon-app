@@ -282,7 +282,7 @@ const ActivityPaginator = () => {
             aria-label="Previous page"
             className="p-8 disabled:opacity-50"
           >
-            <IconChevronLeft className="h-12" />
+            <IconChevronLeft className="size-12" />
           </button>
           <p
             className="border-background-800 flex gap-8 rounded-full border-2 px-12 py-8"
@@ -298,7 +298,7 @@ const ActivityPaginator = () => {
             aria-label="Next page"
             className="p-8 disabled:opacity-50"
           >
-            <IconChevronLeft className="h-12 rotate-180" />
+            <IconChevronLeft className="size-12 rotate-180" />
           </button>
           <button
             onClick={lastPage}

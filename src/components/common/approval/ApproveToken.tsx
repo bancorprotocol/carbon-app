@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, FormEvent, useId, useState } from 'react';
 import { useSetUserApproval } from 'libs/queries/chain/approval';
 import { Button } from 'components/common/button';
 import { Switch } from 'components/common/switch';
@@ -32,6 +32,7 @@ export const ApproveToken: FC<Props> = ({
   eventData,
   context,
 }) => {
+  const inputId = useId();
   const { dispatchNotification } = useNotifications();
   const { user } = useWeb3();
   const { getTokenById } = useTokens();
@@ -42,7 +43,8 @@ export const ApproveToken: FC<Props> = ({
   const [txBusy, setTxBusy] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
 
-  const onApprove = async () => {
+  const onApprove = async (e: FormEvent) => {
+    e.preventDefault();
     if (!data || !token) {
       return console.error('No data loaded');
     }
@@ -166,46 +168,47 @@ export const ApproveToken: FC<Props> = ({
   return (
     <>
       <div className="bg-content h-85 flex items-center justify-between rounded px-20">
-        <div className="space-y-6">
-          <div className="flex items-center space-x-10">
-            <LogoImager alt="Token" src={token.logoURI} className="size-30" />
-            <div className="font-weight-500">{token.symbol}</div>
-          </div>
+        <div className="flex items-center gap-10">
+          <LogoImager alt="Token" src={token.logoURI} className="size-30" />
+          <p className="font-weight-500">{token.symbol}</p>
         </div>
 
         {data.approvalRequired ? (
           txBusy ? (
             <div>Waiting for Confirmation</div>
           ) : (
-            <div className="h-82 flex flex-col items-end justify-center gap-10">
-              <div className="flex items-center space-x-8">
-                <div className="flex items-center space-x-10">
-                  <div
-                    className={`text-12 font-weight-500 transition-all ${
-                      isLimited ? 'text-white/60' : 'text-white/85'
-                    }`}
-                  >
-                    Unlimited
-                  </div>
-                  <Switch
-                    variant={isLimited ? 'secondary' : 'white'}
-                    isOn={!isLimited}
-                    setIsOn={handleLimitChange}
-                    size="sm"
-                  />
-                </div>
+            <form
+              onSubmit={onApprove}
+              className="flex flex-col items-end justify-center gap-10"
+            >
+              <div className="flex items-center gap-10">
+                <label
+                  htmlFor={inputId}
+                  className={`text-12 font-weight-500 transition-all ${
+                    isLimited ? 'text-white/60' : 'text-white/85'
+                  }`}
+                >
+                  Unlimited
+                </label>
+                <Switch
+                  id={inputId}
+                  variant={isLimited ? 'secondary' : 'white'}
+                  isOn={!isLimited}
+                  setIsOn={handleLimitChange}
+                  size="sm"
+                />
               </div>
 
               <Button
+                type="submit"
                 variant="white"
-                onClick={onApprove}
                 size="sm"
                 className="text-14 px-10"
                 data-testid={`approve-${token.symbol}`}
               >
                 {data.nullApprovalRequired ? 'Revoke and Approve' : 'Approve'}
               </Button>
-            </div>
+            </form>
           )
         ) : (
           <span className="text-primary" data-testid={`msg-${token.symbol}`}>

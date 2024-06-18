@@ -153,7 +153,7 @@ export function usePagination() {
   const { limit, offset } = searchParams;
 
   const currentPage = Math.floor(offset / limit) + 1;
-  const maxPage = Math.ceil(Math.max(size - limit, 1) / limit);
+  const maxPage = Math.ceil(size / limit);
 
   const setLimit = (limit: number) => setSearchParams({ limit });
   const setOffset = (offset: number) => setSearchParams({ offset });
@@ -172,8 +172,8 @@ export function usePagination() {
     setLimit,
     setOffset,
     firstPage: () => setOffset(0),
-    lastPage: () => setOffset(size - limit),
-    previousPage: () => setOffset(Math.max(0, offset - limit)),
-    nextPage: () => setOffset(Math.min(size - limit, offset + limit)),
+    lastPage: () => setOffset((maxPage - 1) * limit),
+    previousPage: () => setOffset(Math.max(offset - limit, 0)),
+    nextPage: () => setOffset(Math.min(offset + limit, (maxPage - 1) * limit)),
   };
 }
