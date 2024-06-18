@@ -1,5 +1,5 @@
 import { Token } from 'libs/tokens';
-import { FC, useId, useState } from 'react';
+import { FC, FormEvent, useId, useState } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
@@ -11,12 +11,13 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { InputLimit } from '../common/InputLimit';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import style from 'components/strategies/common/form.module.css';
 
 interface Props {
   base: Token;
   quote: Token;
   marketPrice?: string;
-  setMarketPrice: (price: number) => void;
+  setMarketPrice: (price: string) => void;
   className?: string;
 }
 export const OverlappingMarketPrice: FC<Props> = (props) => {
@@ -69,20 +70,31 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
 
   const changePrice = (value: string) => {
     setLocalPrice(value);
-    setApproved(!!marketPrice && +value === +marketPrice);
+    setApproved(!!marketPrice && value === marketPrice);
     setShowApproval(!externalPrice || +value !== externalPrice);
   };
 
-  const setPrice = () => {
-    if (!localPrice) return;
-    props.setMarketPrice(Number(localPrice));
+  const isDisabled = (form: HTMLFormElement) => {
+    if (!form.checkValidity()) return true;
+    if (!!form.querySelector('.loading-message')) return true;
+    if (!!form.querySelector('.error-message')) return true;
+    const warnings = form.querySelector('.warning-message');
+    if (!warnings) return false;
+    return !(document.getElementById(checkboxId) as HTMLInputElement)?.checked;
+  };
+
+  const setPrice = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isDisabled(e.currentTarget)) return;
+    props.setMarketPrice(localPrice);
     if (props.close) props.close();
   };
 
-  const disabled = !localPrice || !+localPrice || (showApproval && !approved);
-
   return (
-    <div className={cn(props.className, 'flex flex-col gap-16 p-16')}>
+    <form
+      className={cn(props.className, style.form, 'flex flex-col gap-16 p-16')}
+      onSubmit={setPrice}
+    >
       {!externalPrice && <SetPriceText base={base} />}
       <Tooltip element="Price used to calculate concentrated liquidity strategy params">
         <label
@@ -112,24 +124,23 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         your concentrated liquidity strategy initiates.
         {!!externalPrice && <EditPriceText />}
       </p>
-      {showApproval && (
-        <label
-          htmlFor={checkboxId}
-          className="rounded-10 text-12 font-weight-500 flex items-center gap-8 text-white/60"
-        >
-          <input
-            id={checkboxId}
-            type="checkbox"
-            checked={approved}
-            onChange={(e) => setApproved(e.target.checked)}
-          />
-          <span>I've reviewed the warning(s) but choose to proceed.</span>
-        </label>
-      )}
-      <Button type="button" disabled={disabled} onClick={setPrice}>
-        Confirm
-      </Button>
-    </div>
+      <label
+        htmlFor={checkboxId}
+        className={cn(
+          style.approveWarnings,
+          'rounded-10 text-12 font-weight-500 flex items-center gap-8 text-white/60'
+        )}
+      >
+        <input
+          id={checkboxId}
+          type="checkbox"
+          checked={approved}
+          onChange={(e) => setApproved(e.target.checked)}
+        />
+        I've reviewed the warning(s) but choose to proceed.
+      </label>
+      <Button type="submit">Confirm</Button>
+    </form>
   );
 };
 
