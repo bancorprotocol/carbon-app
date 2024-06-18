@@ -15,14 +15,14 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
-import { OverlappingBudgetDistribution } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
+import { BudgetDistribution } from 'components/strategies/common/BudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import {
   SimulatorInputOverlappingValues,
   SimulatorOverlappingInputDispatch,
 } from 'hooks/useSimulatorOverlappingInput';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
-import { BudgetInput } from 'components/strategies/common/BudgetInput';
+import { InputBudget } from 'components/strategies/common/InputBudget';
 import { formatNumber } from 'utils/helpers';
 
 interface Props {
@@ -369,8 +369,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
               Please enter the amount of tokens you want to deposit.
             </p>
           </hgroup>
-          <BudgetInput
-            action="deposit"
+          <InputBudget
+            editType="deposit"
             token={anchor === 'buy' ? quote : base}
             value={budget}
             onChange={setBudget}
@@ -395,7 +395,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
               budget allocation
             </p>
           </hgroup>
-          <OverlappingBudgetDistribution
+          <BudgetDistribution
+            title="Sell"
             token={base}
             initialBudget=""
             withdraw="0"
@@ -403,7 +404,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
             balance="0"
             isSimulator
           />
-          <OverlappingBudgetDistribution
+          <BudgetDistribution
+            title="Buy"
             token={quote}
             initialBudget="0"
             withdraw="0"

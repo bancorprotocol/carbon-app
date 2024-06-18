@@ -19,7 +19,7 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
     await strategy.clickManageEntry('editPrices');
 
     const edit = new EditStrategyDriver(page, testCase);
-    await edit.waitForPage('editPrices');
+    await edit.waitForPage('disposable', 'editPrices');
     await edit.fillDisposablePrice('editPrices');
 
     await edit.submit('editPrices');

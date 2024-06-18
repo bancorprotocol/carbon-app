@@ -1,39 +1,70 @@
-import { EditTypes } from 'libs/routing';
-import { CreateStrategyGraph } from '../create/CreateStrategyGraph';
-import { EditStrategyBudgetContent } from './EditStrategyBudgetContent';
-import { EditStrategyPricesContent } from './EditStrategyPricesContent';
-import { Strategy } from 'libs/queries';
-import { UseStrategyCreateReturn } from '../create';
+import { FC, ReactNode, useState } from 'react';
+import { TradingviewChart } from 'components/tradingviewChart';
+import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
+import { useRouter } from '@tanstack/react-router';
+import { ForwardArrow } from 'components/common/forwardArrow';
+import { carbonEvents } from 'services/events';
+import { useEditStrategyCtx } from './EditStrategyContext';
+import { EditTypes } from 'libs/routing/routes/strategyEdit';
+import { StrategyGraph } from 'components/strategies/common/StrategyGraph';
 
-type EditStrategyLayoutProps = {
-  type: EditTypes;
-  strategy: Strategy;
-} & Pick<UseStrategyCreateReturn, 'showGraph' | 'setShowGraph'>;
+interface Props {
+  editType: EditTypes;
+  graph?: ReactNode;
+  children: ReactNode;
+}
 
-export const EditStrategyLayout = ({
-  strategy,
-  type,
-  showGraph,
-  setShowGraph,
-}: EditStrategyLayoutProps) => {
+const titleByType: Record<EditTypes, string> = {
+  renew: 'Renew Strategy',
+  editPrices: 'Edit Prices',
+  deposit: 'Deposit Budgets',
+  withdraw: 'Withdraw Budgets',
+};
+
+export const EditStrategyLayout: FC<Props> = (props) => {
+  const { editType, children } = props;
+  const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
+  const [showGraph, setShowGraph] = useState(true);
+  const { history } = useRouter();
+
+  const graph = props.graph ?? <TradingviewChart base={base} quote={quote} />;
 
   return (
-    <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
-      <div
-        className={`flex flex-col ${
-          showGraph ? 'flex-1' : 'absolute right-20'
-        }`}
-      >
-        {showGraph && (
-          <CreateStrategyGraph {...{ base, quote, showGraph, setShowGraph }} />
+    <div
+      className={`flex flex-col gap-20 p-20 ${
+        showGraph ? '' : 'md:justify-self-center'
+      }`}
+    >
+      <header className="flex items-center gap-16">
+        <button
+          onClick={() => history.back()}
+          className="bg-background-800 grid size-40 place-items-center rounded-full"
+        >
+          <ForwardArrow className="size-18 rotate-180" />
+        </button>
+        <h1 className="text-24 font-weight-500 flex-1">
+          {titleByType[editType]}
+        </h1>
+        {!showGraph && (
+          <button
+            onClick={() => {
+              carbonEvents.strategy.strategyChartOpen(undefined);
+              setShowGraph(true);
+            }}
+            className="bg-background-800 grid size-40 place-items-center rounded-full"
+          >
+            <IconCandles className="size-18" />
+          </button>
         )}
+      </header>
+
+      <div className="flex flex-col gap-20 md:flex-row-reverse md:justify-center">
+        {showGraph && (
+          <StrategyGraph setShowGraph={setShowGraph}>{graph}</StrategyGraph>
+        )}
+        {children}
       </div>
-      {type === 'deposit' || type === 'withdraw' ? (
-        <EditStrategyBudgetContent {...{ strategy, type }} />
-      ) : (
-        <EditStrategyPricesContent {...{ strategy, type }} />
-      )}
     </div>
   );
 };

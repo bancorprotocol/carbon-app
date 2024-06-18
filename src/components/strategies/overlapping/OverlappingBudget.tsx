@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
-import { BudgetInput, BudgetAction } from '../common/BudgetInput';
+import { InputBudget, BudgetAction } from '../common/InputBudget';
 import { useWeb3 } from 'libs/web3';
 
 interface Props {
@@ -9,10 +9,10 @@ interface Props {
   quote: Token;
   buyBudget?: string;
   sellBudget?: string;
-  budgetValue: string;
+  budget: string;
   setBudget: (value: string) => void;
   anchor: 'buy' | 'sell';
-  action: BudgetAction;
+  editType: BudgetAction;
   error?: string;
   warning?: string;
 }
@@ -37,29 +37,25 @@ export const OverlappingBudget: FC<Props> = (props) => {
     quote,
     buyBudget = '',
     sellBudget = '',
-    action,
+    editType,
     anchor,
-    budgetValue,
+    budget,
     setBudget,
     error,
     warning,
   } = props;
   const { user } = useWeb3();
-  const baseBalance = useGetTokenBalance(base).data;
-  const quoteBalance = useGetTokenBalance(quote).data;
 
-  const getMax = () => {
-    if (action === 'deposit') {
-      return anchor === 'buy' ? quoteBalance : baseBalance;
-    } else {
-      return anchor === 'buy' ? buyBudget : sellBudget;
-    }
-  };
+  const token = anchor === 'buy' ? quote : base;
+  const balance = useGetTokenBalance(token);
+  const allocatedBudget = anchor === 'buy' ? buyBudget : sellBudget;
+  const maxIsLoading = editType === 'deposit' && balance.isLoading;
+  const max = editType === 'deposit' ? balance.data || '0' : allocatedBudget;
 
   const disabled = (() => {
     if (!user) return false;
-    if (action !== 'deposit') return false;
-    return anchor === 'buy' ? !quoteBalance : !baseBalance;
+    if (editType !== 'deposit') return false;
+    return !balance.data;
   })();
 
   return (
@@ -69,17 +65,18 @@ export const OverlappingBudget: FC<Props> = (props) => {
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
             2
           </span>
-          {getTitle(action)}
+          {getTitle(editType)}
         </h3>
-        <p className="text-14 text-white/80">{getDescription(action)}</p>
+        <p className="text-14 text-white/80">{getDescription(editType)}</p>
       </hgroup>
-      <BudgetInput
-        action={action}
-        token={anchor === 'buy' ? quote : base}
-        value={budgetValue}
+      <InputBudget
+        editType={editType}
+        token={token}
+        value={budget}
         onChange={setBudget}
-        max={getMax()}
-        errors={error}
+        max={max}
+        maxIsLoading={maxIsLoading}
+        error={error}
         warning={warning}
         disabled={disabled}
         data-testid="input-budget"

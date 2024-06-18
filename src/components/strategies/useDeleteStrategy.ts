@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
-import { Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 
 export const useDeleteStrategy = () => {
@@ -14,10 +14,10 @@ export const useDeleteStrategy = () => {
   const { dispatchNotification } = useNotifications();
   const deleteMutation = useDeleteStrategyQuery();
   const cache = useQueryClient();
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const deleteStrategy = async (
     strategy: Strategy,
-    setIsProcessing: Dispatch<SetStateAction<boolean>>,
     successEventsCb?: () => void,
     closeModalCb?: () => void
   ) => {
@@ -60,6 +60,7 @@ export const useDeleteStrategy = () => {
 
   return {
     deleteStrategy,
+    isProcessing,
     deleteMutation,
   };
 };

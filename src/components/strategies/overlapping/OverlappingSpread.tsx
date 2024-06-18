@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import styles from './OverlappingSpread.module.css';
 
 interface Props {
@@ -137,7 +137,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
         >
           <input
             id="spread-custom"
-            className="min-w-0 bg-transparent text-center outline-none placeholder:text-white/40"
+            className="w-full bg-transparent text-center outline-none placeholder:text-white/40"
             defaultValue={options.includes(spread) ? '' : spread}
             name="spread"
             type="text"
@@ -154,19 +154,17 @@ export const OverlappingSpread: FC<Props> = (props) => {
         </div>
       </div>
       {warning && spread && (
-        <WarningMessageWithIcon htmlFor="spread-custom">
-          {warning}
-        </WarningMessageWithIcon>
+        <Warning htmlFor="spread-custom">{warning}</Warning>
       )}
       {spread <= 0 && (
-        <WarningMessageWithIcon htmlFor="spread-custom" isError>
+        <Warning htmlFor="spread-custom" isError>
           The fee tier should be above 0%
-        </WarningMessageWithIcon>
+        </Warning>
       )}
       {spread > 100 && (
-        <WarningMessageWithIcon htmlFor="spread-custom" isError>
+        <Warning htmlFor="spread-custom" isError>
           The fee tier should be equal or below 100%
-        </WarningMessageWithIcon>
+        </Warning>
       )}
     </>
   );

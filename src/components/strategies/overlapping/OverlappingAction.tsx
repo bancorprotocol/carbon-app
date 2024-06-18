@@ -1,11 +1,13 @@
-import { FC } from 'react';
+import { FC, SyntheticEvent, useRef } from 'react';
 import { Token } from 'libs/tokens';
 import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useGetTokenBalance } from 'libs/queries';
 import { cn } from 'utils/helpers';
-import { BudgetInput, BudgetAction } from '../common/BudgetInput';
+import { InputBudget, BudgetAction } from '../common/InputBudget';
+import { m } from 'libs/motion';
+import { items } from '../common/variants';
 import style from './OverlappingBudget.module.css';
 
 interface Props {
@@ -13,11 +15,10 @@ interface Props {
   quote: Token;
   buyBudget: string;
   sellBudget: string;
-  budgetValue: string;
+  budget: string;
   setBudget: (value: string) => void;
-  resetBudgets: (anchor: 'buy' | 'sell') => void;
   anchor: 'buy' | 'sell';
-  action: BudgetAction;
+  action?: BudgetAction;
   setAction: (action: BudgetAction) => void;
   error: string;
   warning?: string;
@@ -29,29 +30,32 @@ export const OverlappingAction: FC<Props> = (props) => {
     quote,
     buyBudget,
     sellBudget,
-    action,
+    action = 'deposit',
     setAction,
     anchor,
-    budgetValue,
+    budget,
     setBudget,
-    resetBudgets,
     error,
     warning,
   } = props;
-  const baseBalance = useGetTokenBalance(base).data ?? '0';
-  const quoteBalance = useGetTokenBalance(quote).data ?? '0';
+  const opened = useRef(!!anchor && !!budget);
 
-  const getMax = () => {
-    if (action === 'deposit') {
-      return anchor === 'buy' ? quoteBalance : baseBalance;
-    } else {
-      return anchor === 'buy' ? buyBudget : sellBudget;
-    }
+  const token = anchor === 'buy' ? quote : base;
+  const balance = useGetTokenBalance(token);
+  const allocatedBudget = anchor === 'buy' ? buyBudget : sellBudget;
+  const maxIsLoading = action === 'deposit' && balance.isLoading;
+  const max = action === 'deposit' ? balance.data || '0' : allocatedBudget;
+
+  const onToggle = (e: SyntheticEvent<HTMLDetailsElement, ToggleEvent>) => {
+    if (e.nativeEvent.oldState === 'open') setBudget('');
   };
 
   return (
-    <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
-      <details onToggle={() => resetBudgets(anchor)}>
+    <m.article
+      variants={items}
+      className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+    >
+      <details open={opened.current} onToggle={onToggle}>
         <summary
           className="flex cursor-pointer items-center gap-8"
           data-testid="budget-summary"
@@ -104,18 +108,19 @@ export const OverlappingAction: FC<Props> = (props) => {
               Withdraw
             </label>
           </div>
-          <BudgetInput
-            action={action}
+          <InputBudget
+            editType={action}
             token={anchor === 'buy' ? quote : base}
-            value={budgetValue}
+            value={budget}
             onChange={setBudget}
-            max={getMax()}
-            errors={error}
+            max={max}
+            maxIsLoading={maxIsLoading}
+            error={error}
             warning={warning}
             data-testid="input-budget"
           />
         </div>
       </details>
-    </article>
+    </m.article>
   );
 };

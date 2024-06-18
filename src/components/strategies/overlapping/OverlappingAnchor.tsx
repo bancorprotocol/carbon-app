@@ -2,9 +2,11 @@ import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-import style from './OverlappingBudget.module.css';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { m } from 'libs/motion';
+import { items } from '../common/variants';
+import style from './OverlappingBudget.module.css';
 
 interface Props {
   base: Token;
@@ -18,11 +20,14 @@ interface Props {
 export const OverlappingAnchor: FC<Props> = (props) => {
   const { base, quote, anchor, setAnchor, anchorError } = props;
   return (
-    <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+    <m.article
+      variants={items}
+      className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+    >
       <header className="flex items-center justify-between">
         <h2 className="text-18">Budget</h2>
         <Tooltip
-          iconClassName="size-14 text-white/60"
+          iconClassName="size-18 text-white/60"
           element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
         />
       </header>
@@ -74,12 +79,8 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         </label>
       </div>
       {anchorError && (
-        <WarningMessageWithIcon
-          message={anchorError}
-          isError
-          data-testid="require-anchor"
-        />
+        <Warning message={anchorError} isError data-testid="require-anchor" />
       )}
-    </article>
+    </m.article>
   );
 };

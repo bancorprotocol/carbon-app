@@ -1,6 +1,6 @@
 import { Token } from 'libs/tokens';
 import { FC, useId, useState } from 'react';
-import { BudgetInput } from '../common/BudgetInput';
+import { InputBudget } from '../common/InputBudget';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
@@ -8,7 +8,7 @@ import { LogoImager } from 'components/common/imager/Imager';
 import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
@@ -85,21 +85,21 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   return (
     <div className={cn(props.className, 'flex flex-col gap-20 p-16')}>
       {!externalPrice && <SetPriceText base={base} />}
-      <BudgetInput
+      <InputBudget
         title={`Enter Market Price (${quote.symbol} per 1 ${base.symbol})`}
         titleTooltip="Price used to calculate concentrated liquidity strategy params"
         placeholder="Enter Price"
         value={localPrice}
         onChange={changePrice}
         token={quote}
-        errors={error}
-        action="deposit"
+        error={error}
+        editType="deposit"
       />
       {!error && showApproval && (
-        <WarningMessageWithIcon>
+        <Warning>
           Warning, your market price will be used in the strategy creation flow
           and calculations.
-        </WarningMessageWithIcon>
+        </Warning>
       )}
       {!!externalPrice && (
         <div className="text-12 flex items-center justify-between rounded border border-white/10 p-16">
