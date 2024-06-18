@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useId } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -74,12 +74,15 @@ interface BudgetDistributionProps {
   onChange: (marginalPrice: MarginalPriceOptions) => void;
 }
 export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
+  const id = useId();
   const { order, onChange } = props;
   const checked = order.marginalPrice !== MarginalPriceOptions.maintain;
   return (
     <div role="row" className="flex justify-between">
       <p role="columnheader" className="flex items-center">
-        <span className="mr-5">Distribute Across Entire Range</span>
+        <label htmlFor={id} className="mr-5">
+          Distribute Across Entire Range
+        </label>
         <Tooltip
           iconClassName="h-13 text-white/60"
           element={
@@ -117,6 +120,7 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
         />
       </p>
       <Switch
+        id={id}
         size="sm"
         role="cell"
         variant={checked ? 'white' : 'black'}

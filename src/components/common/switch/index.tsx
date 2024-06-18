@@ -21,22 +21,36 @@ export const Switch: FC<SwitchProps> = ({
   className,
   isOn,
   setIsOn,
+  id,
   ...props
 }) => {
   return (
-    <div
-      className={cn(switchStyles({ variant, size, isOn, class: className }))}
-      onClick={() => setIsOn(!isOn)}
-      {...props}
-    >
-      <motion.div
-        className={`aspect-square h-10 rounded-full ${
-          isOn ? 'bg-black' : 'bg-white/60'
-        }`}
-        layout
-        transition={spring}
-      />
-    </div>
+    <>
+      <div
+        className={cn(
+          'relative',
+          switchStyles({ variant, size, isOn, class: className })
+        )}
+        {...props}
+      >
+        <input
+          className="peer absolute inset-0 cursor-pointer opacity-0"
+          type="checkbox"
+          checked={isOn}
+          id={id}
+          onChange={(e) => setIsOn(e.target.checked)}
+        />
+        <motion.div
+          className={cn(
+            'aspect-square h-10 rounded-full outline-2',
+            isOn ? 'bg-black outline-black' : 'bg-white/60 outline-white/60',
+            'peer-focus-visible:outline'
+          )}
+          layout
+          transition={spring}
+        />
+      </div>
+    </>
   );
 };
 
