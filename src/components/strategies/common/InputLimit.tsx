@@ -43,7 +43,7 @@ export const InputLimit: FC<InputLimitProps> = ({
 
   // Warnings
   const noMarketPrice = !marketPrice
-    ? 'Notice: price & slippage are unknown'
+    ? 'Difference from current market price cannot be calculated.'
     : '';
   const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
   const showWarning = !displayError && !!displayWarnings?.length;
