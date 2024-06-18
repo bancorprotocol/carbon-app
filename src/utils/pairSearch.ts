@@ -78,16 +78,25 @@ export const searchPairKeys = (
   search: string,
   transformSlugExp: RegExp = pairSearchExp
 ) => {
+  // Transform search into pair
   const searchSlug = fromPairSearch(search, transformSlugExp);
   const names: { key: string; name: string }[] = [];
   for (const [key, name] of nameMap.entries()) {
     if (name.includes(searchSlug)) names.push({ key, name });
+    else if (key.includes(searchSlug)) names.push({ key, name });
   }
   return names.sort((a, b) => {
     if (a.name.startsWith(searchSlug)) {
       if (!b.name.startsWith(searchSlug)) return -1;
-    } else {
-      if (b.name.startsWith(searchSlug)) return 1;
+    }
+    if (a.key.startsWith(searchSlug)) {
+      if (!b.key.startsWith(searchSlug)) return -1;
+    }
+    if (b.name.startsWith(searchSlug)) {
+      if (!a.name.startsWith(searchSlug)) return 1;
+    }
+    if (b.key.startsWith(searchSlug)) {
+      if (!a.key.startsWith(searchSlug)) return 1;
     }
     return a.name.localeCompare(b.name);
   });

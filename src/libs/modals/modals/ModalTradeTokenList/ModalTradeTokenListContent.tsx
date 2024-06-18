@@ -67,7 +67,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
     [favoritesMap]
   );
 
-  const selectCatergory = (e: FormEvent<HTMLFieldSetElement>) => {
+  const selectCategory = (e: FormEvent<HTMLFieldSetElement>) => {
     if (e.target instanceof HTMLInputElement) {
       setSelectedList(e.target.value as ChooseTokenCategory);
     }
@@ -78,7 +78,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
       <fieldset
         aria-label="Filter tokens"
         className="grid grid-cols-3 px-4"
-        onChange={selectCatergory}
+        onChange={selectCategory}
       >
         {categories.map((category) => (
           <CategoryWithCounter
