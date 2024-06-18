@@ -14,11 +14,6 @@
   --mobile-menu-height: 80px;
 }
 
-input[type='checkbox'] {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--primary);
-}
 
 @layer base {
   html,
@@ -73,6 +68,9 @@ input[type='checkbox'] {
   input[type='number'] {
     -moz-appearance: textfield; /* Firefox */
   }
+  input[type='checkbox'] {
+    accent-color: var(--primary);
+  }  
 
   details .toggle {
     transform: rotate(0);
