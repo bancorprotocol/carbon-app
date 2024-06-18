@@ -26,7 +26,14 @@ export const WalletIcon = ({
 
   // For EIP6963 injected wallets
   if (icon) {
-    return <img alt="Wallet Logo" src={icon} className={className} />;
+    return (
+      <img
+        alt="Injected Wallet"
+        loading="lazy"
+        src={icon}
+        className={className}
+      />
+    );
   }
 
   switch (selectedWallet) {
