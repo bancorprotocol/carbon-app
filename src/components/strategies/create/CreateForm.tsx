@@ -130,6 +130,7 @@ export const CreateForm: FC<FormProps> = (props) => {
         <input
           id="approve-warnings"
           type="checkbox"
+          className="size-18"
           data-testid="approve-warnings"
         />
         {props.approvalText ??
