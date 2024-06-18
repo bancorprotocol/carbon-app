@@ -110,7 +110,6 @@ export const searchPairTrade = (
   transformSlugExp: RegExp = pairSearchExp
 ) => {
   if (!search) return Array.from(pairMap.values());
-  console.log({ search, nameMap, pairMap });
   const result = searchPairKeys(nameMap, search, transformSlugExp);
   return result.map(({ key }) => pairMap.get(key)).filter(exist);
 };
