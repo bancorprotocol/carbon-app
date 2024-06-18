@@ -200,7 +200,7 @@ export const ApproveToken: FC<Props> = ({
               </div>
 
               <Button
-                type="button"
+                type="submit"
                 variant="white"
                 size="sm"
                 className="text-14 px-10"
