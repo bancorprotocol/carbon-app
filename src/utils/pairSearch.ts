@@ -64,6 +64,13 @@ export const createPairMaps = (
   return { pairMap, nameMap };
 };
 
+const specialCharToRomanMap: Record<string, string> = {
+  '₿': 'b',
+  '₮': 't',
+};
+const specialStringToRoman = (value: string) =>
+  value.replace(/./g, (char) => specialCharToRomanMap[char] || char);
+
 /**
  * Filter and sort pair keys based on a search input
  * @param nameMap A mapping of keys and names.
@@ -79,9 +86,11 @@ export const searchPairKeys = (
   transformSlugExp: RegExp = pairSearchExp
 ) => {
   // Transform search into pair
-  const searchSlug = fromPairSearch(search, transformSlugExp);
+  const _searchSlug = fromPairSearch(search, transformSlugExp);
+  const searchSlug = specialStringToRoman(_searchSlug);
   const names: { key: string; name: string }[] = [];
-  for (const [key, name] of nameMap.entries()) {
+  for (const [key, _name] of nameMap.entries()) {
+    const name = specialStringToRoman(_name);
     if (name.includes(searchSlug)) names.push({ key, name });
     else if (key.includes(searchSlug)) names.push({ key, name });
   }
