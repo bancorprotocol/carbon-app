@@ -2,11 +2,11 @@ import { useWagmi } from 'libs/wagmi';
 import { Button } from 'components/common/button';
 
 export const DebugResetDefault = () => {
-  const { handleTenderlyRPC, handleImposterAccount } = useWagmi();
+  const { handleTenderlyRPC, setImposterAccount } = useWagmi();
 
   const handleOnClick = () => {
     handleTenderlyRPC();
-    handleImposterAccount('');
+    setImposterAccount();
   };
 
   return (

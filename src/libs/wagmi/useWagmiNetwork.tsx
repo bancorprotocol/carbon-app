@@ -30,14 +30,7 @@ export const useWagmiNetwork = () => {
     );
   }, [chainId]);
 
-  const switchNetwork = useCallback(
-    /**
-     * Switch network to specified chainId, using the wagmi config chains
-     * @param {number} chainId ChainId to switch to
-     */
-    () => switchChain({ chainId }),
-    [chainId, switchChain]
-  );
+  const switchNetwork = () => switchChain({ chainId });
 
   const activateNetwork = useCallback(async () => {
     if (networkError || isNetworkActive) {

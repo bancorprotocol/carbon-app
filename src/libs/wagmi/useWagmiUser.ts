@@ -19,13 +19,13 @@ import { getUncheckedSigner } from 'utils/tenderly';
 import { carbonEvents } from 'services/events';
 
 type Props = {
-  imposterAccount: string;
-  handleImposterAccount: (account?: string) => void;
+  imposterAccount?: string;
+  setImposterAccount: (account?: string) => void;
 };
 
 export const useWagmiUser = ({
   imposterAccount,
-  handleImposterAccount,
+  setImposterAccount,
 }: Props) => {
   const { address: walletAccount, chainId: accountChainId } = useAccount();
 
@@ -36,26 +36,18 @@ export const useWagmiUser = ({
   const { connectAsync } = useConnect();
   const { disconnectAsync } = useDisconnect();
 
-  const setIsUncheckedSigner = useCallback(
-    (value: boolean) => {
-      _setIsUncheckedSigner(value);
-      lsService.setItem('isUncheckedSigner', value);
-    },
-    [_setIsUncheckedSigner]
-  );
+  const setIsUncheckedSigner = (value: boolean) => {
+    _setIsUncheckedSigner(value);
+    lsService.setItem('isUncheckedSigner', value);
+  };
 
-  const user = useMemo(
-    () => imposterAccount || walletAccount,
-    [imposterAccount, walletAccount]
-  );
+  const user = imposterAccount || walletAccount;
 
   const chainId = CHAIN_ID;
-  const isSupportedNetwork = useMemo(
-    () => !(!!user && (accountChainId || chainId) !== chainId),
-    [accountChainId, chainId, user]
-  );
 
-  const isUserBlocked = useMemo(() => isAccountBlocked(user), [user]);
+  const isSupportedNetwork = !accountChainId || accountChainId === chainId;
+
+  const isUserBlocked = isAccountBlocked(user);
 
   const { connector: currentConnector } = useAccount();
 
@@ -160,7 +152,7 @@ export const useWagmiUser = ({
               console.error(`Error disconnecting` + error);
             },
             onSettled: () => {
-              handleImposterAccount();
+              setImposterAccount();
             },
           }
         );
@@ -169,7 +161,7 @@ export const useWagmiUser = ({
         throw new Error(codeErrorMessage || error.message);
       }
     },
-    [disconnectAsync, handleImposterAccount]
+    [disconnectAsync, setImposterAccount]
   );
 
   return {

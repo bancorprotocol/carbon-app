@@ -30,7 +30,7 @@ export interface CarbonWagmiProviderContext {
     carbonController?: string,
     voucherAddress?: string
   ) => void;
-  handleImposterAccount: (account: string) => void;
+  setImposterAccount: (account?: string) => void;
   disconnect: () => Promise<void>;
   connect: (type: Connector) => Promise<void>;
   isSupportedNetwork: boolean;
