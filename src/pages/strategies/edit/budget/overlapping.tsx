@@ -156,10 +156,10 @@ export const EditBudgetOverlappingPage = () => {
   }
 
   if (!marketPrice) {
-    const setMarketPrice = (price: number) => {
+    const setMarketPrice = (price: string) => {
       navigate({
         params: (params) => params,
-        search: (previous) => ({ ...previous, marketPrice: price.toString() }),
+        search: (previous) => ({ ...previous, marketPrice: price }),
         replace: true,
         resetScroll: false,
       });

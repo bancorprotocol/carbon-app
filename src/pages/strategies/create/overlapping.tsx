@@ -129,9 +129,9 @@ export const CreateOverlappingStrategyPage = () => {
   const orders = getOrders(search, base, quote, marketPrice);
 
   if (!marketPrice) {
-    const setMarketPrice = (price: number) => {
+    const setMarketPrice = (price: string) => {
       navigate({
-        search: (previous) => ({ ...previous, marketPrice: price.toString() }),
+        search: (previous) => ({ ...previous, marketPrice: price }),
         replace: true,
         resetScroll: false,
       });
