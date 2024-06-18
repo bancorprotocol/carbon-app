@@ -154,7 +154,12 @@ export const useBuySell = ({
       setTradeActionsRes(actionsTokenRes);
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-      if (effectiveRate !== '0') {
+
+      if (
+        effectiveRate !== '0' ||
+        (new SafeDecimal(totalTargetAmount).isZero() &&
+          !new SafeDecimal(sourceInput).isZero())
+      ) {
         checkLiquidity();
       }
     }
@@ -176,7 +181,12 @@ export const useBuySell = ({
       setTradeActionsRes(actionsTokenRes);
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-      if (effectiveRate !== '0') {
+
+      if (
+        effectiveRate !== '0' ||
+        (!new SafeDecimal(targetInput).isZero() &&
+          new SafeDecimal(totalSourceAmount).isZero())
+      ) {
         checkLiquidity();
       }
     }
