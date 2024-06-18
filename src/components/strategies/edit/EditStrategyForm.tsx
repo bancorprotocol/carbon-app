@@ -218,6 +218,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
           id="approve-warnings"
           type="checkbox"
           name="approval"
+          className="size-18"
           data-testid="approve-warnings"
         />
         {approveText}

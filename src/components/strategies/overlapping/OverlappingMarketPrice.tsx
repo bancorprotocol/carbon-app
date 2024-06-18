@@ -134,6 +134,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         <input
           id={checkboxId}
           type="checkbox"
+          className="size-18"
           checked={approved}
           onChange={(e) => setApproved(e.target.checked)}
         />
