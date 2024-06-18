@@ -1,20 +1,21 @@
 import { Token } from 'libs/tokens';
 import { FC, useId, useState } from 'react';
-import { InputBudget } from '../common/InputBudget';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { cn } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { InputLimit } from '../common/InputLimit';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 interface Props {
   base: Token;
   quote: Token;
-  marketPrice?: number;
+  marketPrice?: string;
   setMarketPrice: (price: number) => void;
   className?: string;
 }
@@ -57,18 +58,16 @@ interface FieldProps extends Props {
 
 export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   const { base, quote, marketPrice } = props;
+  const inputId = useId();
   const checkboxId = useId();
-  const [localPrice, setLocalPrice] = useState(marketPrice?.toString());
+  const [localPrice, setLocalPrice] = useState(marketPrice?.toString() ?? '');
   const [showApproval, setShowApproval] = useState(false);
   const [approved, setApproved] = useState(
     localPrice === marketPrice?.toString()
   );
-  const [error, setError] = useState('');
   const externalPrice = useMarketPrice({ base, quote });
 
   const changePrice = (value: string) => {
-    if (!+value) setError('Price must be greater than 0');
-    else setError('');
     setLocalPrice(value);
     setApproved(!!marketPrice && +value === +marketPrice);
     setShowApproval(!externalPrice || +value !== externalPrice);
@@ -83,48 +82,37 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   const disabled = !localPrice || !+localPrice || (showApproval && !approved);
 
   return (
-    <div className={cn(props.className, 'flex flex-col gap-20 p-16')}>
+    <div className={cn(props.className, 'flex flex-col gap-16 p-16')}>
       {!externalPrice && <SetPriceText base={base} />}
-      <InputBudget
-        title={`Enter Market Price (${quote.symbol} per 1 ${base.symbol})`}
-        titleTooltip="Price used to calculate concentrated liquidity strategy params"
-        placeholder="Enter Price"
-        value={localPrice}
-        onChange={changePrice}
-        token={quote}
-        error={error}
-        editType="deposit"
+      <Tooltip element="Price used to calculate concentrated liquidity strategy params">
+        <label
+          htmlFor={inputId}
+          className="text-14 font-weight-500 flex items-center gap-4 text-white/80"
+        >
+          Enter <TokenLogo token={base} size={14} /> {base.symbol} market price
+          ({quote.symbol} per 1 {base.symbol})
+        </label>
+      </Tooltip>
+      <InputLimit
+        id={inputId}
+        price={localPrice}
+        setPrice={changePrice}
+        base={base}
+        quote={quote}
+        ignoreMarketPriceWarning
       />
-      {!error && showApproval && (
+      {showApproval && (
         <Warning>
           Warning, your market price will be used in the strategy creation flow
           and calculations.
         </Warning>
-      )}
-      {!!externalPrice && (
-        <div className="text-12 flex items-center justify-between rounded border border-white/10 p-16">
-          <p className="text-white/80">CoinGecko Market Price</p>
-          <button
-            className="flex items-center gap-8"
-            onClick={() => changePrice(externalPrice.toString())}
-            type="button"
-          >
-            {prettifyNumber(externalPrice)}
-            <LogoImager
-              className="size-12"
-              src={quote.logoURI}
-              alt={quote.name ?? ''}
-            />
-            <span className="text-primary">RESET</span>
-          </button>
-        </div>
       )}
       <p className="text-12 text-white/60">
         By adjusting the market price, you alter the price range within which
         your concentrated liquidity strategy initiates.
         {!!externalPrice && <EditPriceText />}
       </p>
-      {!error && showApproval && (
+      {showApproval && (
         <label
           htmlFor={checkboxId}
           className="rounded-10 text-12 font-weight-500 flex items-center gap-8 text-white/60"

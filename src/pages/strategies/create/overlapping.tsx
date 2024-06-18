@@ -148,7 +148,7 @@ export const CreateOverlappingStrategyPage = () => {
             <OverlappingInitMarketPriceField
               base={base!}
               quote={quote!}
-              marketPrice={+(marketPrice || '')}
+              marketPrice={marketPrice}
               setMarketPrice={setMarketPrice}
             />
           </m.article>

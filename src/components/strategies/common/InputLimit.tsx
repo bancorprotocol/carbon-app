@@ -19,6 +19,7 @@ type InputLimitProps = {
   error?: string;
   warnings?: (string | undefined)[];
   buy?: boolean;
+  ignoreMarketPriceWarning?: boolean;
 };
 
 export const InputLimit: FC<InputLimitProps> = ({
@@ -30,6 +31,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   error,
   warnings = [],
   buy = false,
+  ignoreMarketPriceWarning = false,
 }) => {
   const inputId = useId();
   const marketPrice = useMarketPrice({ base, quote });
@@ -113,6 +115,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             </span>
             {!!marketPercent && (
               <MarketPriceIndication
+                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
                 marketPricePercentage={marketPercent}
                 buy={buy}
               />
