@@ -34,7 +34,7 @@ export const Switch: FC<SwitchProps> = ({
         {...props}
       >
         <input
-          className="peer absolute w-full cursor-pointer opacity-0"
+          className="peer absolute inset-0 cursor-pointer opacity-0"
           type="checkbox"
           checked={isOn}
           id={id}
