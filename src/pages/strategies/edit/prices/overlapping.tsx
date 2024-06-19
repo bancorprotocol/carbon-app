@@ -187,10 +187,10 @@ export const EditStrategyOverlappingPage = () => {
   }
 
   if (!marketPrice) {
-    const setMarketPrice = (price: number) => {
+    const setMarketPrice = (price: string) => {
       navigate({
         params: (params) => params,
-        search: (previous) => ({ ...previous, marketPrice: price.toString() }),
+        search: (previous) => ({ ...previous, marketPrice: price }),
         replace: true,
         resetScroll: false,
       });
@@ -203,7 +203,7 @@ export const EditStrategyOverlappingPage = () => {
           <OverlappingInitMarketPriceField
             base={base}
             quote={quote}
-            marketPrice={+(marketPrice || '')}
+            marketPrice={marketPrice}
             setMarketPrice={setMarketPrice}
           />
         </article>

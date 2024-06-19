@@ -158,9 +158,9 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
     }
   }, [anchor, aboveMarket, belowMarket, set]);
 
-  const setMarketPrice = (price: number) => {
+  const setMarketPrice = (price: string) => {
     setTouched(true);
-    set('marketPrice', price.toString());
+    set('marketPrice', price);
   };
 
   const setAnchor = (value: 'buy' | 'sell') => {
@@ -187,7 +187,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
           <OverlappingMarketPrice
             base={base}
             quote={quote}
-            marketPrice={+marketPrice}
+            marketPrice={marketPrice}
             setMarketPrice={setMarketPrice}
             className="self-start"
           />
