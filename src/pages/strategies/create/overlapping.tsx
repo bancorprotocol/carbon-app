@@ -24,6 +24,7 @@ import {
   CreateForm,
   CreateFormHeader,
 } from 'components/strategies/create/CreateForm';
+import { defaultSpread } from 'components/strategies/overlapping/OverlappingSpread';
 
 export interface CreateOverlappingStrategySearch {
   base: string;
@@ -36,8 +37,6 @@ export interface CreateOverlappingStrategySearch {
   budget?: string;
 }
 type Search = CreateOverlappingStrategySearch;
-
-const initSpread = '0.05';
 
 const initMin = (marketPrice: string) => {
   return new SafeDecimal(marketPrice).times(0.99).toString();
@@ -63,7 +62,7 @@ const getOrders = (
     anchor,
     min = initMin(marketPrice),
     max = initMax(marketPrice),
-    spread = initSpread,
+    spread = defaultSpread.toString(),
     budget,
   } = search;
   if (!isValidRange(min, max) || !isValidSpread(spread)) {
@@ -177,7 +176,7 @@ export const CreateOverlappingStrategyPage = () => {
           marketPrice={marketPrice}
           order0={orders.buy}
           order1={orders.sell}
-          spread={search.spread || initSpread}
+          spread={search.spread || defaultSpread.toString()}
         />
       </CreateForm>
     </CreateLayout>

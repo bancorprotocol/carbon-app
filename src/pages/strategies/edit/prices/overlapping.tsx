@@ -25,6 +25,7 @@ import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { defaultSpread } from 'components/strategies/overlapping/OverlappingSpread';
 
 export interface EditOverlappingStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -36,8 +37,6 @@ export interface EditOverlappingStrategySearch {
   budget?: string;
   action?: 'deposit' | 'withdraw';
 }
-
-const initSpread = '0.05';
 
 const initMin = (marketPrice: string) => {
   return new SafeDecimal(marketPrice).times(0.99).toString();
@@ -78,7 +77,7 @@ const getOrders = (
     anchor,
     min = initMin(userMarketPrice),
     max = initMax(userMarketPrice),
-    spread = initSpread,
+    spread = defaultSpread,
     budget = '0',
     action = 'deposit',
   } = search;
@@ -167,7 +166,7 @@ export const EditStrategyOverlappingPage = () => {
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
   const orders = getOrders(strategy, search, marketPrice);
-  const spread = isValidSpread(search.spread) ? search.spread! : initSpread;
+  const spread = search.spread || defaultSpread;
 
   const hasChanged = (() => {
     const { order0, order1 } = strategy;

@@ -11,7 +11,7 @@ import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
-import { getMaxBuyMin, getMinSellMax } from './utils';
+import { getMaxBuyMin, getMaxSpread, getMinSellMax } from './utils';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -161,7 +161,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
-  const { base, quote, order0, order1, spread } = props;
+  const { base, quote, order0, order1 } = props;
+  const spread = clamp(0, props.spread, getMaxSpread(+order0.min, +order1.max));
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
   const disabled = !!props.disabled;
