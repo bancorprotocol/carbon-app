@@ -44,7 +44,8 @@ export const fromPairSearch = (
   value: string,
   regex: RegExp = pairSearchExp
 ) => {
-  return value.toLowerCase().replaceAll(regex, '_');
+  const pairKey = value.toLowerCase().replaceAll(regex, '_');
+  return replaceSpecialCharacters(pairKey);
 };
 
 export const createPairMaps = (
@@ -58,18 +59,20 @@ export const createPairMaps = (
     const slug = toPairSlug(base, quote);
     pairMap.set(slug, pair);
     const displayName = toPairName(base, quote);
-    const name = fromPairSearch(displayName, transformSlugExp);
+    const nameRaw = fromPairSearch(displayName, transformSlugExp);
+    const name = replaceSpecialCharacters(nameRaw);
     nameMap.set(slug, name);
   }
   return { pairMap, nameMap };
 };
 
-const specialCharToRomanMap: Record<string, string> = {
-  '₿': 'b',
-  '₮': 't',
+export const replaceSpecialCharacters = (value: string) => {
+  return value.replace(/(₿)|(₮)/g, (match, p1, p2) => {
+    if (p1) return 'b';
+    if (p2) return 't';
+    return match;
+  });
 };
-const specialStringToRoman = (value: string) =>
-  value.replace(/./g, (char) => specialCharToRomanMap[char] || char);
 
 /**
  * Filter and sort pair keys based on a search input
@@ -86,11 +89,9 @@ export const searchPairKeys = (
   transformSlugExp: RegExp = pairSearchExp
 ) => {
   // Transform search into pair
-  const _searchSlug = fromPairSearch(search, transformSlugExp);
-  const searchSlug = specialStringToRoman(_searchSlug);
+  const searchSlug = fromPairSearch(search, transformSlugExp);
   const names: { key: string; name: string }[] = [];
-  for (const [key, _name] of nameMap.entries()) {
-    const name = specialStringToRoman(_name);
+  for (const [key, name] of nameMap.entries()) {
     if (name.includes(searchSlug)) names.push({ key, name });
     else if (key.includes(searchSlug)) names.push({ key, name });
   }
