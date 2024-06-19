@@ -20,6 +20,7 @@ import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 
 export interface EditBudgetOverlappingSearch {
   editType: 'deposit' | 'withdraw';
@@ -156,7 +157,7 @@ export const EditBudgetOverlappingPage = () => {
   //   );
   // }
 
-  if (!marketPrice) {
+  if (!marketPrice || hasNoBudget(strategy)) {
     const setMarketPrice = (price: string) => {
       navigate({
         params: (params) => params,
