@@ -8,7 +8,7 @@ import { TradingviewChart } from 'components/tradingviewChart';
 import { cn } from 'utils/helpers';
 
 export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
-  const { buyOrders, sellOrders, getOptions, isLoading } = useDepthChartWidget(
+  const { buyOrders, sellOrders, getOptions, isPending } = useDepthChartWidget(
     base,
     quote
   );
@@ -42,7 +42,7 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
         </button>
       </div>
 
-      {isLoading ? (
+      {isPending ? (
         <div className="rounded-10 flex h-[450px] items-center justify-center bg-black">
           <div className="h-80">
             <CarbonLogoLoading />

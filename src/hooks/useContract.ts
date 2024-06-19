@@ -1,10 +1,10 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Token__factory, Voucher__factory } from 'abis/types';
 import { useCallback, useMemo } from 'react';
 import config from 'config';
 
 export const useContract = () => {
-  const { provider, signer } = useWeb3();
+  const { provider, signer } = useWagmi();
 
   const Token = useCallback(
     (address: string) => ({

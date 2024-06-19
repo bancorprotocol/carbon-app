@@ -43,7 +43,7 @@ export const OverlappingAction: FC<Props> = (props) => {
   const token = anchor === 'buy' ? quote : base;
   const balance = useGetTokenBalance(token);
   const allocatedBudget = anchor === 'buy' ? buyBudget : sellBudget;
-  const maxIsLoading = action === 'deposit' && balance.isLoading;
+  const maxIsLoading = action === 'deposit' && balance.isPending;
   const max = action === 'deposit' ? balance.data || '0' : allocatedBudget;
 
   const onToggle = (e: SyntheticEvent<HTMLDetailsElement, ToggleEvent>) => {

@@ -24,7 +24,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   const { belowBreakpoint } = useBreakpoints();
   const {
     tradePairs,
-    isLoading,
+    isPending,
     isError,
     handleSelect,
     search,
@@ -51,7 +51,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
 
       {isError ? (
         <ModalTokenListError />
-      ) : isLoading ? (
+      ) : isPending ? (
         <ModalTokenListLoading />
       ) : (
         <ModalTradeTokenListContent

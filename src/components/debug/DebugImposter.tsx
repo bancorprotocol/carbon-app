@@ -1,17 +1,15 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { InputUserAccount } from 'components/common/inputField';
 import { Button } from 'components/common/button';
 
 export const DebugImposter = () => {
-  const { handleImposterAccount } = useWeb3();
-  const [input, setInput] = useState(
-    lsService.getItem('imposterAccount') || ''
-  );
+  const { setImposterAccount } = useWagmi();
+  const [input, setInput] = useState(lsService.getItem('imposterAccount'));
 
   const handleOnClick = () => {
-    handleImposterAccount(input);
+    setImposterAccount(input);
   };
 
   return (

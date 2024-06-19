@@ -17,12 +17,12 @@ export interface PortfolioData {
 }
 interface Props {
   strategies?: Strategy[];
-  isLoading?: boolean;
+  isPending?: boolean;
 }
 
 export const usePortfolioData = ({
   strategies,
-  isLoading: _isLoading,
+  isPending: _isPending,
 }: Props) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
@@ -129,9 +129,9 @@ export const usePortfolioData = ({
     );
   }, [selectedFiatCurrency, strategies, tokenPriceMap, totalValue]);
 
-  const isLoading = useMemo(() => {
-    return _isLoading || tokenPriceQueries.some((query) => query.isLoading);
-  }, [_isLoading, tokenPriceQueries]);
+  const isPending = useMemo(() => {
+    return _isPending || tokenPriceQueries.some((query) => query.isPending);
+  }, [_isPending, tokenPriceQueries]);
 
-  return { tableData, totalValue, isLoading };
+  return { tableData, totalValue, isPending };
 };
