@@ -135,7 +135,10 @@ export const EditBudgetOverlappingPage = () => {
   const { base, quote, order0, order1 } = strategy;
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const externalPrice = geoMean(order0.marginalRate, order1.marginalRate);
+  const externalPrice = geoMean(
+    order0.marginalRate,
+    order1.marginalRate
+  )?.toNumber();
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
   const orders = getOrders(strategy, search, marketPrice);
