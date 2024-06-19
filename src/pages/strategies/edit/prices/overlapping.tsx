@@ -23,7 +23,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+// import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
 export interface EditOverlappingStrategySearch {
@@ -178,13 +178,14 @@ export const EditStrategyOverlappingPage = () => {
     return false;
   })();
 
-  if (!marketPrice && typeof externalPrice !== 'number') {
-    return (
-      <div className="grid md:w-[440px]">
-        <CarbonLogoLoading className="h-80 place-self-center" />
-      </div>
-    );
-  }
+  // TODO: put it back after hotfix
+  // if (!marketPrice && typeof externalPrice !== 'number') {
+  //   return (
+  //     <div className="grid md:w-[440px]">
+  //       <CarbonLogoLoading className="h-80 place-self-center" />
+  //     </div>
+  //   );
+  // }
 
   if (!marketPrice) {
     const setMarketPrice = (price: string) => {

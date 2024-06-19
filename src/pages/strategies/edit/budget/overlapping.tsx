@@ -8,7 +8,6 @@ import {
   calculateOverlappingPrices,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   getRoundedSpread,
   isMaxBelowMarket,
@@ -19,9 +18,9 @@ import { OverlappingInitMarketPriceField } from 'components/strategies/overlappi
 import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 
 export interface EditBudgetOverlappingSearch {
   editType: 'deposit' | 'withdraw';
@@ -133,10 +132,13 @@ const url = '/strategies/edit/$strategyId/budget/overlapping';
 
 export const EditBudgetOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
+  const { base, quote, order0, order1 } = strategy;
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const externalPrice = useMarketPrice({ base, quote });
+  const externalPrice = geoMean(
+    order0.marginalRate,
+    order1.marginalRate
+  )!.toNumber();
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
   const orders = getOrders(strategy, search, marketPrice);
@@ -147,15 +149,15 @@ export const EditBudgetOverlappingPage = () => {
     return false;
   })();
 
-  if (!marketPrice && typeof externalPrice !== 'number') {
-    return (
-      <div className="grid md:w-[440px]">
-        <CarbonLogoLoading className="h-80 place-self-center" />
-      </div>
-    );
-  }
+  // if (!marketPrice && typeof externalPrice !== 'number') {
+  //   return (
+  //     <div className="grid md:w-[440px]">
+  //       <CarbonLogoLoading className="h-80 place-self-center" />
+  //     </div>
+  //   );
+  // }
 
-  if (!marketPrice) {
+  if (!search.marketPrice && hasNoBudget(strategy)) {
     const setMarketPrice = (price: string) => {
       navigate({
         params: (params) => params,
