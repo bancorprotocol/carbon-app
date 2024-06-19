@@ -70,7 +70,7 @@ export const useWagmiNetwork = () => {
     const connectionOrder = (selectedConnectors as string[]).map((c) =>
       c.toLowerCase()
     );
-    return unsortedConnectors.toSorted((a, b) => {
+    return [...unsortedConnectors].sort((a, b) => {
       const nameA = a.name.toLowerCase();
       const nameB = b.name.toLowerCase();
       if (!connectionOrder.includes(nameA) || !connectionOrder.includes(nameB))
