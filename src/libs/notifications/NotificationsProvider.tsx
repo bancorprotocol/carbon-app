@@ -1,4 +1,4 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { FC, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getLSUserNotifications } from 'libs/notifications/utils';
@@ -8,7 +8,7 @@ import { NotificationLine } from './NotificationLine';
 import { Notification } from './types';
 
 export const NotificationAlerts: FC = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { alerts, notifications, checkStatus, setNotifications } =
     useNotifications();
 

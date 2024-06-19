@@ -159,7 +159,8 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `appUrl`: The URL of the app.
 - `carbonApi`: The URL of the API.
 - `walletConnectProjectId`: The WalletConnect project ID If you wish to add walletConnect, make sure to add it to `selectableConnectionTypes` as well.
-- `selectableConnectionTypes`: List of available connection types to be used in the wallet selection modal.
+- `selectedConnectors`: List of connectors to make available by default in the wallet selection modal that will be shown even if the connector is not injected.
+- `blockedConnectors`: List of EIP-6963 injected connectors names to block in the wallet selection modal.
 - `isSimulatorEnabled`: Flag to enable the simulation page.
 - `network`
   - `name`: Network name.

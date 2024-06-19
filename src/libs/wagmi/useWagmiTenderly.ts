@@ -1,6 +1,14 @@
 import { lsService } from 'services/localeStorage';
 
-export const useWeb3Tenderly = () => {
+export const useWagmiTenderly = () => {
+  /**
+   * Sets tenderly rpc url, carbonController and voucher address to localStorage if available
+   * Remove sdk and token cache data
+   *
+   * @param {string} url Tenderly Url to store
+   * @param {string} carbonController Custom carbonController address to store
+   * @param {string} voucherAddress Custom voucherAddress address to store
+   */
   const handleTenderlyRPC = (
     url?: string,
     carbonController?: string,

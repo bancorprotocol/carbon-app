@@ -5,7 +5,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
@@ -32,7 +32,7 @@ interface Props {
 export const InputBudget: FC<Props> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = useId();
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const {
     className,
     token,

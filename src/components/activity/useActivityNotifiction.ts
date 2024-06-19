@@ -1,10 +1,10 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useActivityQuery } from './useActivityQuery';
 import { useEffect, useState } from 'react';
 import { useNotifications } from 'hooks/useNotifications';
 
 export const useActivityNotifications = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const [previousUser, setPreviousUser] = useState<string | null>(null);
   const [previous, setPrevious] = useState<number | null>(null);
   const query = useActivityQuery({ ownerId: user });
@@ -15,7 +15,7 @@ export const useActivityNotifications = () => {
   const { dispatchNotification } = useNotifications();
 
   useEffect(() => {
-    if (query.isLoading) return;
+    if (query.isPending) return;
     // We need to keep this in the same useEffect to force re-evaluate previous in next render
     if (user && user !== previousUser) {
       setPreviousUser(user);
@@ -35,7 +35,7 @@ export const useActivityNotifications = () => {
     buyOrSell,
     dispatchNotification,
     previous,
-    query.isLoading,
+    query.isPending,
     previousUser,
     user,
   ]);

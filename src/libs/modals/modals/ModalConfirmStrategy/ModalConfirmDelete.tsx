@@ -25,11 +25,11 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
 }) => {
   const { closeModal } = useModal();
   const { strategy, strategyEvent } = data;
-
   const { deleteStrategy, deleteMutation, isProcessing } = useDeleteStrategy();
-  const isAwaiting = deleteMutation.isLoading;
+  const isAwaiting = deleteMutation.isPending;
+
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
-  const isLoading = deleteMutation.isLoading || isProcessing;
+  const isPending = deleteMutation.isPending || isProcessing;
 
   const isOverlapping = isOverlappingStrategy(strategy);
 
@@ -82,7 +82,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       <Button
         variant="white"
         onClick={onClick}
-        loading={isLoading}
+        loading={isPending}
         loadingChildren={loadingChildren}
         data-testid="delete-strategy-btn"
       >

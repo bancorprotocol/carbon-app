@@ -18,7 +18,7 @@ export const TradePage = () => {
   const search = useSearch({ from: '/trade' });
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
-  const { isLoading, isTradePairError } = useTradePairs();
+  const { isPending, isTradePairError } = useTradePairs();
   const isValidPair = !(!baseToken || !quoteToken);
   const noTokens = !baseToken && !quoteToken;
 
@@ -41,7 +41,7 @@ export const TradePage = () => {
     <>
       {belowBreakpoint('md') && <MainMenuTrade />}
 
-      {isLoading ? (
+      {isPending ? (
         <div className="flex flex-grow items-center justify-center">
           <div className="h-80">
             <CarbonLogoLoading />

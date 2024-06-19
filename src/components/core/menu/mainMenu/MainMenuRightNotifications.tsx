@@ -2,12 +2,12 @@ import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconBell } from 'assets/icons/bell.svg';
 import { useNotifications } from 'hooks/useNotifications';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Button } from 'components/common/button';
 import { carbonEvents } from 'services/events';
 
 export const MainMenuRightNotifications: FC = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { openModal } = useModal();
   const { hasPendingTx, notifications } = useNotifications();
 

@@ -25,7 +25,7 @@ export type StrategyFilterOutput = ReturnType<typeof useStrategyFilter>;
 
 export const useStrategyFilter = (
   strategies: StrategyWithFiat[],
-  isLoading: boolean
+  isPending: boolean
 ) => {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<StrategySort>(getSortFromLS());
@@ -60,7 +60,7 @@ export const useStrategyFilter = (
 
   return {
     strategies: filteredStrategies,
-    isLoading,
+    isPending,
     search,
     setSearch,
     sort,
@@ -100,7 +100,7 @@ export const useStrategiesWithFiat = (
 type StrategyCtx = ReturnType<typeof useStrategyFilter>;
 export const StrategyContext = createContext<StrategyCtx>({
   strategies: [],
-  isLoading: true,
+  isPending: true,
   search: '',
   setSearch: () => undefined,
   sort: 'roiDesc',
@@ -115,7 +115,7 @@ interface StrategyProviderProps {
 }
 export const StrategyProvider: FC<StrategyProviderProps> = (props) => {
   const strategies = useStrategiesWithFiat(props.query);
-  const ctx = useStrategyFilter(strategies, props.query.isLoading);
+  const ctx = useStrategyFilter(strategies, props.query.isPending);
   return (
     <StrategyContext.Provider value={ctx}>
       {props.children}

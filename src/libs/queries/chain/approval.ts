@@ -1,4 +1,4 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useMutation, useQueries } from '@tanstack/react-query';
 import { NULL_APPROVAL_CONTRACTS, UNLIMITED_WEI } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
@@ -17,7 +17,7 @@ export type GetUserApprovalProps = Pick<
 };
 
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { Token } = useContract();
 
   return useQueries({
@@ -46,10 +46,10 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
         return new SafeDecimal(shrinkToken(allowance.toString(), t.decimals));
       },
-      enabled: !!user,
-      onError: (error: any) => {
-        console.error('useGetUserApproval error', error);
+      meta: {
+        errorMessage: 'useGetUserApproval failed with error:',
       },
+      enabled: !!user,
     })),
   });
 };
@@ -60,11 +60,11 @@ export type SetUserApprovalProps = GetUserApprovalProps & {
 };
 
 export const useSetUserApproval = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { Token } = useContract();
 
-  return useMutation(
-    async ({
+  return useMutation({
+    mutationFn: async ({
       address,
       spender,
       amount,
@@ -112,6 +112,6 @@ export const useSetUserApproval = () => {
       const approveTx = await Token(address).write.approve(spender, amountWei);
 
       return [approveTx, revokeTx];
-    }
-  );
+    },
+  });
 };

@@ -20,7 +20,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
   data: { address },
 }) => {
   const { closeModal } = useModal();
-  const { data, isLoading, isError } = useGetTokenData(address);
+  const { data, isPending, isError } = useGetTokenData(address);
   const { importToken } = useTokens();
 
   const onClick = () => {
@@ -46,7 +46,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         />
       </div>
 
-      {isLoading && (
+      {isPending && (
         <div className={cn(blockClasses, 'animate-pulse bg-black')}></div>
       )}
       {isError && (
@@ -81,7 +81,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         variant="white"
         fullWidth
         onClick={onClick}
-        disabled={isLoading || isError}
+        disabled={isPending || isError}
       >
         Import Token
       </Button>

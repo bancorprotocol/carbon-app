@@ -52,7 +52,7 @@ export const ExplorerPage = () => {
 const ExplorerEvents = () => {
   const [mounted, setMounted] = useState(false);
   const { slug, type } = useExplorerParams();
-  const { strategies, isLoading, filter, sort } = useStrategyCtx();
+  const { strategies, isPending, filter, sort } = useStrategyCtx();
 
   useEffect(() => {
     if (!mounted) return;
@@ -61,10 +61,10 @@ const ExplorerEvents = () => {
   }, [type]);
 
   useEffect(() => {
-    if (!slug || isLoading) return;
+    if (!slug || isPending) return;
     explorerEvents.search({ type, slug, strategies, filter, sort });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, isLoading]);
+  }, [slug, isPending]);
 
   useEffect(() => {
     if (!mounted || !slug) return;

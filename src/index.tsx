@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
 import { StoreProvider } from 'store';
-import { Web3ReactWrapper } from 'libs/web3';
+import { WagmiReactWrapper } from 'libs/wagmi';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
@@ -20,11 +20,11 @@ root.render(
   <React.StrictMode>
     <QueryProvider>
       <StoreProvider>
-        <Web3ReactWrapper>
+        <WagmiReactWrapper>
           <LazyMotion>
             <RouterProvider router={router} />
           </LazyMotion>
-        </Web3ReactWrapper>
+        </WagmiReactWrapper>
       </StoreProvider>
     </QueryProvider>
   </React.StrictMode>

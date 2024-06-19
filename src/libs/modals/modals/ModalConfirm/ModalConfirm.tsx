@@ -53,11 +53,11 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
     >
       <h3 className="text-14 my-10 text-white/60">Approve Tokens</h3>
       <ul className="space-y-20">
-        {approvalQuery.map(({ data, isLoading, error }, i) => (
+        {approvalQuery.map(({ data, isPending, error }, i) => (
           <li key={i}>
             <ApproveToken
               data={data}
-              isLoading={isLoading}
+              isPending={isPending}
               error={error}
               eventData={eventData}
               context={context}

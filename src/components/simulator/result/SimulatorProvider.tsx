@@ -31,7 +31,7 @@ interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
   onBrush: (frame: number) => void;
   onBrushEnd: () => void;
   animationData: SimulatorData[];
-  isLoading: boolean;
+  isPending: boolean;
   isError: boolean;
   errorMsg?: string;
   isSuccess: boolean;
@@ -199,7 +199,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
         pause,
         unpause,
         status: status.current,
-        isLoading: query.isLoading || tokens.isLoading,
+        isPending: query.isPending || tokens.isPending,
         isSuccess: query.isSuccess,
         isError: query.isError || tokens.isError,
         timer,

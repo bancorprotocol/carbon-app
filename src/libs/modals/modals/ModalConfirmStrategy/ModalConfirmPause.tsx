@@ -23,8 +23,8 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
   const { closeModal } = useModal();
   const { pauseStrategy, isProcessing, updateMutation } = usePauseStrategy();
 
-  const isAwaiting = updateMutation.isLoading;
-  const isLoading = isAwaiting || isProcessing;
+  const isPending = updateMutation.isPending;
+  const isLoading = isPending || isProcessing;
 
   const handleOnActionClick = () => {
     pauseStrategy(
@@ -34,7 +34,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
     );
   };
 
-  const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
+  const loadingChildren = getStatusTextByTxStatus(isPending, isProcessing);
 
   return (
     <ModalOrMobileSheet id={id} title="Pause Strategy">

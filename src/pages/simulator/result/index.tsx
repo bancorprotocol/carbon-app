@@ -85,7 +85,7 @@ export const SimulatorResultPage = () => {
           gains={ctx.gains}
           state={ctx.state}
           strategyType={simulationType}
-          isLoading={ctx.isLoading}
+          isPending={ctx.isPending}
         />
 
         <SimResultChart state={ctx.state} simulationType={simulationType} />
