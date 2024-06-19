@@ -91,7 +91,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
         setSpread(defaultValue);
         e.target.value = '';
       } else {
-        e.target.value = Number(value).toFixed(2);
+        e.target.value = Number(Number(value).toFixed(6)).toString();
       }
     }
   };
