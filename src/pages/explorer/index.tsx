@@ -14,10 +14,10 @@ import config from 'config';
 
 export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: '/explore/$type/$slug' });
 
   useEffect(() => {
-    if (slug || type === 'wallet') return;
+    if (slug || type !== 'token-pair') return;
     const defaultSlug = toPairSlug(
       { address: config.defaultTokenPair[0] },
       { address: config.defaultTokenPair[1] }

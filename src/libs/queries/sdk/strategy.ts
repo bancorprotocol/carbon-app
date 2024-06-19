@@ -229,7 +229,7 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
     QueryKey.strategiesByPair(token0, token1),
     async () => {
       const strategies = await carbonSDK.getStrategiesByPair(token0!, token1!);
-      return await buildStrategiesHelper({
+      return buildStrategiesHelper({
         strategies,
         getTokenById,
         importToken,
