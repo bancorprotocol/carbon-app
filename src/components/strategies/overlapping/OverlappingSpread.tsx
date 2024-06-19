@@ -20,6 +20,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spread);
   const maxSpread = round(getMaxSpread(buyMin, sellMax));
+  const isValidMaxSpread = maxSpread > 0 && maxSpread < 100;
   const hasError = spread <= 0 || spread > maxSpread || spread > 100;
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -123,7 +124,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
           <span className={styles.suffix}>%</span>
         </div>
       </div>
-      {spread > maxSpread && (
+      {isValidMaxSpread && spread > maxSpread && (
         <Warning htmlFor="spread-custom" isError>
           Given price range, max fee tier cannot exceed&nbsp;
           <button onClick={setMax} className="font-weight-600 border-b">
@@ -131,14 +132,9 @@ export const OverlappingSpread: FC<Props> = (props) => {
           </button>
         </Warning>
       )}
-      {spread <= 0 && (
+      {isValidMaxSpread && spread <= 0 && (
         <Warning htmlFor="spread-custom" isError>
           The fee tier should be above 0%
-        </Warning>
-      )}
-      {maxSpread > 100 && spread > 100 && (
-        <Warning htmlFor="spread-custom" isError>
-          The fee tier should be equal or below 100%
         </Warning>
       )}
     </>

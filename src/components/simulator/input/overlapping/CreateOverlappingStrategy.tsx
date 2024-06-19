@@ -24,6 +24,7 @@ import {
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { InputBudget } from 'components/strategies/common/InputBudget';
 import { formatNumber } from 'utils/helpers';
+import { isZero } from 'components/strategies/common/utils';
 
 interface Props {
   state: SimulatorInputOverlappingValues;
@@ -280,7 +281,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
 
   // Update on buyMin changes
   useEffect(() => {
-    if (!+formatNumber(buy.min)) return;
+    if (isZero(buy.min)) return;
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(buy.min), spread);
       if (Number(sell.max) < minSellMax) setMax(minSellMax.toString());
@@ -291,7 +292,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
 
   // Update on sellMax changes
   useEffect(() => {
-    if (!+formatNumber(sell.max)) return;
+    if (isZero(sell.max)) return;
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(sell.max), spread);
       if (Number(buy.min) > maxBuyMin) setMin(maxBuyMin.toString());

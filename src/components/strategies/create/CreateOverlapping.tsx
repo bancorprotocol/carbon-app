@@ -5,6 +5,7 @@ import {
   getMinSellMax,
   isMaxBelowMarket,
   isMinAboveMarket,
+  isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
@@ -26,6 +27,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
 import { InputRange } from '../common/InputRange';
 import { OverlappingOrder } from 'components/strategies/common/types';
+import { isZero } from '../common/utils';
 
 interface Props {
   base: Token;
@@ -126,7 +128,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
 
   // Update on buyMin changes
   useEffect(() => {
-    if (!order0.min) return;
+    if (isZero(order0.min) || !isValidSpread(spread)) return;
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
       if (Number(order1.max) < minSellMax) set('max', minSellMax.toString());
@@ -137,7 +139,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
 
   // Update on sellMax changes
   useEffect(() => {
-    if (!order1.max) return;
+    if (isZero(order1.max) || !isValidSpread(spread)) return;
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
       if (Number(order0.min) > maxBuyMin) set('min', maxBuyMin.toString());
