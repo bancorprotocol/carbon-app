@@ -138,7 +138,7 @@ export const EditBudgetOverlappingPage = () => {
   const externalPrice = geoMean(
     order0.marginalRate,
     order1.marginalRate
-  )?.toNumber();
+  )!.toNumber();
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
   const orders = getOrders(strategy, search, marketPrice);
@@ -157,7 +157,7 @@ export const EditBudgetOverlappingPage = () => {
   //   );
   // }
 
-  if (!marketPrice || hasNoBudget(strategy)) {
+  if (!search.marketPrice && hasNoBudget(strategy)) {
     const setMarketPrice = (price: string) => {
       navigate({
         params: (params) => params,
