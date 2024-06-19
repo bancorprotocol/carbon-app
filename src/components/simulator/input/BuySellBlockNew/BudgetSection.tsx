@@ -38,7 +38,7 @@ export const BudgetSection: FC<Props> = ({
   const budgetToken = buy ? quote : base;
   const insufficientBalance =
     tokenBalanceQuery &&
-    !tokenBalanceQuery?.isLoading &&
+    !tokenBalanceQuery?.isPending &&
     new SafeDecimal(tokenBalanceQuery?.data || 0).lt(order.budget);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export const BudgetSection: FC<Props> = ({
         value={order.budget}
         setValue={(value) => dispatch(`${type}Budget`, value)}
         token={budgetToken}
-        isBalanceLoading={tokenBalanceQuery?.isLoading}
+        isBalanceLoading={tokenBalanceQuery?.isPending}
         balance={tokenBalanceQuery?.data}
         isError={insufficientBalance}
         data-testid="input-budget"

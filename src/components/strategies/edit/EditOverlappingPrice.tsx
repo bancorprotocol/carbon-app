@@ -164,9 +164,9 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     }
   })();
 
-  const setMarketPrice = (price: number) => {
+  const setMarketPrice = (price: string) => {
     setTouched(true);
-    set('marketPrice', price.toString());
+    set('marketPrice', price);
   };
 
   const setMin = (min: string) => {
@@ -229,7 +229,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           <OverlappingMarketPrice
             base={base}
             quote={quote}
-            marketPrice={+marketPrice}
+            marketPrice={marketPrice}
             setMarketPrice={setMarketPrice}
           />
         </header>

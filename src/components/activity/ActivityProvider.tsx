@@ -24,7 +24,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
     user: params.ownerId,
   });
 
-  if (activityQuery.isLoading || userStrategiesQuery.isLoading) {
+  if (activityQuery.isPending || userStrategiesQuery.isPending) {
     return <CarbonLogoLoading className="w-[100px] flex-1 self-center" />;
   }
   const activities = activityQuery.data ?? [];

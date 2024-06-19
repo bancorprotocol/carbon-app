@@ -3,7 +3,7 @@ import {
   StrategyTab,
 } from 'components/strategies/StrategyPageTabs';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { WalletConnect } from 'components/common/walletConnect';
 import { StrategyPageTitleWidget } from 'components/strategies/overview/StrategyPageTitleWidget';
 import { useGetUserStrategies } from 'libs/queries';
@@ -18,7 +18,7 @@ import { StrategyProvider } from 'hooks/useStrategies';
 export const StrategiesPage = () => {
   const { pathname } = useRouterState().location;
   const { belowBreakpoint } = useBreakpoints();
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const query = useGetUserStrategies({ user });
   const match = useMatchRoute();
   const isStrategiesPage = match({ to: '/' });

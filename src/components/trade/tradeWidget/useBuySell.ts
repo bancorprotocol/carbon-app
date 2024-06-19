@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { carbonEvents } from 'services/events';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import {
   useGetTradeLiquidity,
   useGetTradeData,
@@ -21,7 +21,7 @@ export const useBuySell = ({
   sourceBalanceQuery,
   buy = false,
 }: TradeWidgetBuySellProps) => {
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
   const { openModal } = useModal();
   const { selectedFiatCurrency } = useFiatCurrency();
   const sourceTokenPriceQuery = useGetTokenPrice(source.address);
@@ -203,7 +203,7 @@ export const useBuySell = ({
     if (
       bySourceQuery.isFetching ||
       byTargetQuery.isFetching ||
-      approval.isLoading ||
+      approval.isPending ||
       isLiquidityError ||
       errorBaseBalanceSufficient ||
       maxSourceAmountQuery.isFetching
@@ -252,7 +252,7 @@ export const useBuySell = ({
     }
   }, [
     approval.approvalRequired,
-    approval.isLoading,
+    approval.isPending,
     approval.tokens,
     bySourceQuery.isFetching,
     byTargetQuery.isFetching,

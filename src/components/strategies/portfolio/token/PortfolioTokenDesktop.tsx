@@ -15,7 +15,7 @@ import { cn, getFiatDisplayValue } from 'utils/helpers';
 export type PortfolioTokenProps = {
   selectedToken: Token;
   data: PortfolioTokenData[];
-  isLoading: boolean;
+  isPending: boolean;
 };
 
 const columnHelper = createColumnHelper<PortfolioTokenData>();
@@ -38,7 +38,7 @@ const CellID = (info: CellContext<PortfolioTokenData, string>) => {
 export const PortfolioTokenDesktop: FC<PortfolioTokenProps> = ({
   selectedToken,
   data,
-  isLoading,
+  isPending,
 }) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
@@ -76,7 +76,7 @@ export const PortfolioTokenDesktop: FC<PortfolioTokenProps> = ({
       columns={tableColumns}
       data={data}
       manualSorting
-      isLoading={isLoading}
+      isPending={isPending}
     />
   );
 };

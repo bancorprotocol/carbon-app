@@ -44,6 +44,11 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    optimizeDeps: {
+      // @safe-global/safe-apps-provider is included here as vite isn't pre-bundling the conditional safe-apps-provider import in the wagmi safe connector
+      // which leads to the safe connector not working in dev mode (error "SafeAppProvider is not a constructor")
+      include: ['@safe-global/safe-apps-provider'],
+    },
     build: {
       outDir: 'build',
       sourcemap: !!(
@@ -62,7 +67,6 @@ export default defineConfig(({ mode }) => {
         process: 'process/browser',
         buffer: 'buffer',
         crypto: 'crypto-browserify',
-        stream: 'stream-browserify',
         assert: 'assert',
         http: 'stream-http',
         https: 'https-browserify',

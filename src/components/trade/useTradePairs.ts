@@ -3,13 +3,13 @@ import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { toPairSlug } from 'utils/pairSearch';
 import { usePairs } from 'hooks/usePairs';
 import config from 'config';
 
 export const useTradePairs = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { openModal } = useModal();
 
   const navigate = useNavigate();
@@ -91,7 +91,7 @@ export const useTradePairs = () => {
 
   return {
     openTradePairList,
-    isLoading: pairs.isLoading,
+    isPending: pairs.isPending,
     isError: pairs.isError,
     isTradePairError,
     tradePairsPopular,

@@ -9,7 +9,7 @@ import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
 export const ExplorerTypePortfolioPage = () => {
   const navigate = useNavigate();
   const { type, slug } = useExplorerParams();
-  const { strategies, isLoading } = useStrategyCtx();
+  const { strategies, isPending } = useStrategyCtx();
   const href = '/explore/$type/$slug/portfolio/token/$address';
 
   const getPortfolioTokenHref: GetPortfolioTokenHref = (row) => ({
@@ -34,7 +34,7 @@ export const ExplorerTypePortfolioPage = () => {
     <>
       <PortfolioAllTokens
         strategies={strategies}
-        isLoading={isLoading}
+        isPending={isPending}
         getHref={getPortfolioTokenHref}
         onRowClick={onRowClick}
         isExplorer

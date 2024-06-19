@@ -3,10 +3,10 @@ import { useCallback, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 
 export const useTokens = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const {
     tokens: { tokensMap, importedTokens, setImportedTokens, ...props },
   } = useStore();

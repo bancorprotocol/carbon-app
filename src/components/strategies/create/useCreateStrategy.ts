@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useCreateStrategyQuery } from 'libs/queries';
 import { StrategyType, useNavigate } from 'libs/routing';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
@@ -31,7 +31,7 @@ export const useCreateStrategy = (props: Props) => {
   const { type, base, quote, order0, order1 } = props;
   const cache = useQueryClient();
   const navigate = useNavigate();
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
   const marketPrice = useMarketPrice({ base, quote });
@@ -160,7 +160,7 @@ export const useCreateStrategy = (props: Props) => {
 
   return {
     hasApprovalError: approval.isError,
-    isAwaiting: mutation.isLoading,
+    isAwaiting: mutation.isPending,
     createStrategy,
     isProcessing,
   };
