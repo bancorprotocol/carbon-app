@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { IS_TENDERLY_FORK } from 'libs/web3';
+import { IS_TENDERLY_FORK } from 'libs/wagmi';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MainMenuRightWallet } from 'components/core/menu/mainMenu/MainMenuRightWallet';
 import { MainMenuRightNotifications } from 'components/core/menu/mainMenu/MainMenuRightNotifications';

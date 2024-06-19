@@ -5,7 +5,7 @@ import { Switch } from 'components/common/switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
 import { LogoImager } from 'components/common/imager/Imager';
 import { QueryKey, useQueryClient } from 'libs/queries';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
 import { carbonEvents } from 'services/events';
@@ -21,7 +21,7 @@ import seiConfig from 'config/sei/production';
 
 type Props = {
   data?: ApprovalTokenResult;
-  isLoading: boolean;
+  isPending: boolean;
   error: unknown;
   eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
   context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
@@ -31,14 +31,14 @@ const isSei = config.network.chainId === seiConfig.network.chainId;
 
 export const ApproveToken: FC<Props> = ({
   data,
-  isLoading,
+  isPending,
   error,
   eventData,
   context,
 }) => {
   const inputId = useId();
   const { dispatchNotification } = useNotifications();
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { getTokenById } = useTokens();
   const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();
@@ -164,7 +164,7 @@ export const ApproveToken: FC<Props> = ({
   };
 
   if (!data || !token) {
-    if (isLoading) {
+    if (isPending) {
       return <div>is loading</div>;
     }
     return <div>Unknown Error</div>;

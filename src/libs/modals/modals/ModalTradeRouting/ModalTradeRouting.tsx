@@ -41,6 +41,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     totalSourceAmount,
     totalTargetAmount,
     disabledCTA,
+    buttonText,
     errorMsg,
   } = useModalTradeRouting({
     id,
@@ -214,7 +215,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           loadingChildren="Waiting for Confirmation"
           className="shrink-0"
         >
-          Confirm
+          {buttonText}
         </Button>
       </form>
     </ModalOrMobileSheet>

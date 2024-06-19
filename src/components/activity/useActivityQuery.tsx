@@ -47,19 +47,17 @@ const isValidParams = (params: QueryActivityParams) => {
 };
 
 export const useActivityQuery = (params: QueryActivityParams = {}) => {
-  const { tokensMap, isLoading } = useTokens();
+  const { tokensMap, isPending } = useTokens();
   const validParams = isValidParams(params);
-  return useQuery(
-    QueryKey.activities(params),
-    async () => {
+  return useQuery({
+    queryKey: QueryKey.activities(params),
+    queryFn: async () => {
       const activities = await carbonApi.getActivity(params);
       return toActivities(activities, tokensMap).sort((a, b) => {
         return b.date.getTime() - a.date.getTime();
       });
     },
-    {
-      enabled: !isLoading && validParams,
-      refetchInterval: THIRTY_SEC_IN_MS,
-    }
-  );
+    enabled: !isPending && validParams,
+    refetchInterval: THIRTY_SEC_IN_MS,
+  });
 };

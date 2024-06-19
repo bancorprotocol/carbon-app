@@ -1,15 +1,15 @@
 import { FC, useState } from 'react';
 import { NewTabLink, Link } from 'libs/routing';
-import { Connection, selectableConnectionTypes } from 'libs/web3';
-import { getConnection } from 'libs/web3/web3.utils';
+import { Connector, useWagmi } from 'libs/wagmi';
 import { Imager } from 'components/common/imager/Imager';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import iconLedger from 'assets/logos/ledger.svg';
 import iconTrezor from 'assets/logos/trezor.svg';
+import { WalletIcon } from 'components/common/WalletIcon';
 
 type Props = {
-  onClick: (c: Connection) => Promise<void>;
-  isLoading?: boolean;
+  onClick: (c: Connector) => Promise<void>;
+  isPending?: boolean;
 };
 
 const textClasses = 'text-16 font-weight-500';
@@ -29,10 +29,12 @@ const EXT_LINKS = [
   },
 ];
 
-export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
+export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
   const [checked, setChecked] = useState(false);
 
-  const isDisabled = isLoading || !checked;
+  const { connectors } = useWagmi();
+
+  const isDisabled = isPending || !checked;
 
   return (
     <div className="space-y-10">
@@ -64,17 +66,23 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
         </div>
       </div>
 
-      {selectableConnectionTypes.map(getConnection).map((c) => (
-        <button
-          key={c.type}
-          onClick={() => onClick(c)}
-          className={buttonClasses}
-          disabled={isDisabled}
-        >
-          <Imager alt="Wallet Logo" src={c.logoUrl} className="w-24" />
-          <span className={textClasses}>{c.name}</span>
-        </button>
-      ))}
+      {connectors.map((c) => {
+        return (
+          <button
+            key={c.uid}
+            onClick={() => onClick(c)}
+            className={buttonClasses}
+            disabled={isDisabled}
+          >
+            <WalletIcon
+              selectedWallet={c.name}
+              className="w-24"
+              icon={c.icon}
+            />
+            <span className={textClasses}>{c?.name}</span>
+          </button>
+        );
+      })}
 
       {EXT_LINKS.map(({ url, name, logoUrl }) => (
         <NewTabLink

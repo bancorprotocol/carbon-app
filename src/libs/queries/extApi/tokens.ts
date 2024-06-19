@@ -5,16 +5,14 @@ import { ONE_DAY_IN_MS } from 'utils/time';
 import { lsService } from 'services/localeStorage';
 
 export const useTokensQuery = () => {
-  return useQuery(
-    QueryKey.tokens(),
-    async () => {
+  return useQuery({
+    queryKey: QueryKey.tokens(),
+    queryFn: async () => {
       const tokens = buildTokenList(await fetchTokenLists());
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
     },
-    {
-      placeholderData: lsService.getItem('tokenListCache')?.tokens,
-      staleTime: ONE_DAY_IN_MS,
-    }
-  );
+    placeholderData: lsService.getItem('tokenListCache')?.tokens,
+    staleTime: ONE_DAY_IN_MS,
+  });
 };

@@ -21,7 +21,7 @@ import { m } from 'libs/motion';
 import { items } from 'components/strategies/common/variants';
 import { OverlappingMarketPrice } from '../overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from '../UserMarketPrice';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
 import { InputRange } from '../common/InputRange';
@@ -43,7 +43,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
   const { base, quote, order0, order1, marketPrice, spread } = props;
   const navigate = useNavigate({ from: url });
   const { anchor, budget } = useSearch({ from: url });
-  const { user } = useWeb3();
+  const { user } = useWagmi();
 
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
@@ -95,9 +95,9 @@ export const CreateOverlapping: FC<Props> = (props) => {
     }
   }, [anchor, aboveMarket, belowMarket, set]);
 
-  const setMarketPrice = (price: number) => {
+  const setMarketPrice = (price: string) => {
     setTouched(true);
-    set('marketPrice', price.toString());
+    set('marketPrice', price);
   };
 
   const setMin = (min: string) => {
@@ -160,7 +160,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
           <OverlappingMarketPrice
             base={base}
             quote={quote}
-            marketPrice={+marketPrice}
+            marketPrice={marketPrice}
             setMarketPrice={setMarketPrice}
           />
         </header>

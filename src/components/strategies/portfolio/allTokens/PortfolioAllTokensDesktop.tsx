@@ -14,7 +14,7 @@ import { getColorByIndex } from 'utils/colorPalettes';
 
 type Props = {
   data: PortfolioData[];
-  isLoading: boolean;
+  isPending: boolean;
   onRowClick: (row: Row<PortfolioData>) => void;
 };
 
@@ -38,7 +38,7 @@ const CellToken = (info: CellContext<PortfolioData, Token>) => {
 
 export const PortfolioAllTokensDesktop: FC<Props> = ({
   data,
-  isLoading,
+  isPending,
   onRowClick,
 }) => {
   const {
@@ -75,7 +75,7 @@ export const PortfolioAllTokensDesktop: FC<Props> = ({
       data={data}
       onRowClick={onRowClick}
       manualSorting
-      isLoading={isLoading}
+      isPending={isPending}
     />
   );
 };

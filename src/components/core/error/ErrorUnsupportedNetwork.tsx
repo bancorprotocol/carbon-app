@@ -1,11 +1,11 @@
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { Button } from 'components/common/button';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
 import config from 'config';
 
 export const ErrorUnsupportedNetwork = () => {
-  const { disconnect, switchNetwork } = useWeb3();
+  const { disconnect, switchNetwork } = useWagmi();
 
   const networkName = config.network.name;
 

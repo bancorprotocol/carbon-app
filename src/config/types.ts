@@ -1,11 +1,17 @@
 import { TokenList } from 'libs/tokens';
-import { selectableConnectionType } from 'libs/web3/web3.constants';
+import { SelectableConnectionName } from 'libs/wagmi';
+import { FaucetToken } from 'utils/tenderly';
+
+type address = `0x${string}`;
+type ContractDetails = { address: address; blockCreated?: number };
 
 export interface AppConfig {
   mode: 'development' | 'production';
+  appName: string;
   appUrl: string;
   carbonApi: string;
-  selectableConnectionTypes: selectableConnectionType[];
+  selectedConnectors: SelectableConnectionName[];
+  blockedConnectors?: SelectableConnectionName[];
   walletConnectProjectId: string;
   isSimulatorEnabled: boolean;
   sentryDSN?: string;
@@ -16,7 +22,7 @@ export interface AppConfig {
     chainId: number;
     rpc: {
       url: string;
-      headers?: { [key: string]: string | number };
+      headers?: Record<string, string>;
     };
     blockExplorer: { name: string; url: string };
     gasToken: {
@@ -45,13 +51,19 @@ export interface AppConfig {
     parser?: (data: any) => TokenList;
   }[];
   addresses: {
-    tokens: { ZERO: string } & Record<symbol, string>;
+    tokens: { ZERO: string } & Record<string, string>;
     carbon: {
       carbonController: string;
       voucher: string;
     };
-    utils: {
-      multicall: string;
-    };
+  };
+  utils: {
+    multicall3: ContractDetails;
+    [contractName: string]: ContractDetails;
+  };
+  tenderly: {
+    nativeTokenDonorAccount: string;
+    faucetAmount: number;
+    faucetTokens: FaucetToken[];
   };
 }
