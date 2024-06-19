@@ -14,6 +14,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
+import { isTouchedZero, isZero } from 'components/strategies/common/utils';
 
 export const useBuySell = ({
   source,
@@ -157,8 +158,7 @@ export const useBuySell = ({
 
       if (
         effectiveRate !== '0' ||
-        (new SafeDecimal(totalTargetAmount).isZero() &&
-          !new SafeDecimal(sourceInput).isZero())
+        (!isZero(sourceInput) && isTouchedZero(totalTargetAmount))
       ) {
         checkLiquidity();
       }
@@ -184,8 +184,7 @@ export const useBuySell = ({
 
       if (
         effectiveRate !== '0' ||
-        (!new SafeDecimal(targetInput).isZero() &&
-          new SafeDecimal(totalSourceAmount).isZero())
+        (!isZero(targetInput) && isTouchedZero(totalSourceAmount))
       ) {
         checkLiquidity();
       }
