@@ -23,7 +23,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-// import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
 export interface EditOverlappingStrategySearch {
@@ -163,7 +163,10 @@ export const EditStrategyOverlappingPage = () => {
   const { base, quote } = strategy;
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const externalPrice = useMarketPrice({ base, quote });
+  const { marketPrice: externalPrice, isPending } = useMarketPrice({
+    base,
+    quote,
+  });
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
   const orders = getOrders(strategy, search, marketPrice);
@@ -178,14 +181,13 @@ export const EditStrategyOverlappingPage = () => {
     return false;
   })();
 
-  // TODO: put it back after hotfix
-  // if (!marketPrice && typeof externalPrice !== 'number') {
-  //   return (
-  //     <div className="grid md:w-[440px]">
-  //       <CarbonLogoLoading className="h-80 place-self-center" />
-  //     </div>
-  //   );
-  // }
+  if (isPending) {
+    return (
+      <div className="grid md:w-[440px]">
+        <CarbonLogoLoading className="h-80 place-self-center" />
+      </div>
+    );
+  }
 
   if (!marketPrice) {
     const setMarketPrice = (price: string) => {

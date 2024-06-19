@@ -30,6 +30,7 @@ export const useFiatCurrency = (token?: Token) => {
 
   return {
     ...fiatCurrency,
+
     useGetTokenPrice,
     hasFiatValue,
     getFiatValue,

@@ -9,7 +9,7 @@ export const hasNoBudget = (strategy: Strategy) => {
 
 export const useOverlappingMarketPrice = (strategy: Strategy) => {
   const { base, quote, order0, order1 } = strategy;
-  const externalPrice = useMarketPrice({ base, quote });
+  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
   return hasNoBudget(strategy)
     ? externalPrice

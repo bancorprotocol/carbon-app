@@ -22,7 +22,7 @@ export const EditBudgetDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
   const search = useSearch({ from: url });
-  const marketPrice = useMarketPrice({ base, quote });
+  const { marketPrice } = useMarketPrice({ base, quote });
   const { setOrder } = useSetDisposableOrder(url);
 
   const buy = isZero(strategy.order1.startRate);
