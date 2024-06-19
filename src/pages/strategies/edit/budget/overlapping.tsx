@@ -8,7 +8,6 @@ import {
   calculateOverlappingPrices,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   getRoundedSpread,
   isMaxBelowMarket,
@@ -133,10 +132,10 @@ const url = '/strategies/edit/$strategyId/budget/overlapping';
 
 export const EditBudgetOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
+  const { base, quote, order0, order1 } = strategy;
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const externalPrice = useMarketPrice({ base, quote });
+  const externalPrice = geoMean(order0.marginalRate, order1.marginalRate);
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
   const orders = getOrders(strategy, search, marketPrice);
