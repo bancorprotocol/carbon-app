@@ -8,7 +8,7 @@ export interface TokensStore {
   importedTokens: Token[];
   setImportedTokens: Dispatch<SetStateAction<Token[]>>;
   tokensMap: Map<string, Token>;
-  isLoading: boolean;
+  isPending: boolean;
   isError: boolean;
   error: unknown;
 }
@@ -32,7 +32,7 @@ export const useTokensStore = (): TokensStore => {
     [tokens]
   );
 
-  const isLoading = tokensQuery.isLoading;
+  const isPending = tokensQuery.isPending;
   const isError = tokensQuery.isError;
   const error = tokensQuery.error;
 
@@ -40,7 +40,7 @@ export const useTokensStore = (): TokensStore => {
     tokens,
     importedTokens,
     tokensMap,
-    isLoading,
+    isPending,
     isError,
     error,
     setImportedTokens,
@@ -52,7 +52,7 @@ export const defaultTokensStore: TokensStore = {
   importedTokens: [],
   setImportedTokens: () => {},
   tokensMap: new Map(),
-  isLoading: false,
+  isPending: false,
   isError: false,
   error: undefined,
 };

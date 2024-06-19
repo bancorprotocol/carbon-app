@@ -1,6 +1,6 @@
 import { DebugImposter } from 'components/debug/DebugImposter';
 import { DebugTenderlyRPC } from 'components/debug/DebugTenderlyRPC';
-import { DebugWeb3 } from 'components/debug/DebugWeb3';
+import { DebugWagmi } from 'components/debug/DebugWagmi';
 import { Page } from 'components/common/page';
 import { DebugTenderlyFaucet } from 'components/debug/DebugTenderlyFaucet';
 import { DebugTransferNFT } from 'components/debug/DebugTransferNFT';
@@ -15,7 +15,7 @@ export const DebugPage = () => {
     <Page title="Debug">
       <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
         <DebugResetDefault />
-        <DebugWeb3 />
+        <DebugWagmi />
         <DebugImposter />
         <DebugTenderlyRPC />
         <DebugTenderlyFaucet />

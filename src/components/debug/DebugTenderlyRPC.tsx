@@ -1,17 +1,16 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useState, FormEvent } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import config from 'config';
+import { tenderlyRpc } from 'utils/tenderly';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC, isUncheckedSigner, setIsUncheckedSigner } =
-    useWeb3();
-  const [urlInput, setUrlInput] = useState(
-    lsService.getItem('tenderlyRpc') || ''
-  );
+    useWagmi();
+  const [urlInput, setUrlInput] = useState(tenderlyRpc || '');
   const [backendUrl, setBackendUrl] = useState(
     lsService.getItem('carbonApi') || config.carbonApi
   );

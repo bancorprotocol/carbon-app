@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Token as TokenContract } from 'abis/types';
 import { utils } from 'ethers';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
@@ -160,9 +160,9 @@ export const useGetUserStrategies = ({ user }: Props) => {
 
   const roiQuery = useGetRoi();
 
-  return useQuery<Strategy[]>(
-    QueryKey.strategies(address),
-    async () => {
+  return useQuery<Strategy[]>({
+    queryKey: QueryKey.strategies(address),
+    queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
 
       const strategies = await carbonSDK.getUserStrategies(address);
@@ -174,16 +174,14 @@ export const useGetUserStrategies = ({ user }: Props) => {
         roiData: roiQuery.data || [],
       });
     },
-    {
-      enabled:
-        tokens.length > 0 &&
-        isInitialized &&
-        roiQuery.isFetched &&
-        ensAddress.isFetched,
-      staleTime: ONE_DAY_IN_MS,
-      retry: false,
-    }
-  );
+    enabled:
+      tokens.length > 0 &&
+      isInitialized &&
+      roiQuery.isFetched &&
+      ensAddress.isFetched,
+    staleTime: ONE_DAY_IN_MS,
+    retry: false,
+  });
 };
 
 export const useGetStrategy = (id: string) => {
@@ -192,9 +190,9 @@ export const useGetStrategy = (id: string) => {
   const { Token } = useContract();
   const roiQuery = useGetRoi();
 
-  return useQuery<Strategy>(
-    QueryKey.strategy(id),
-    async () => {
+  return useQuery<Strategy>({
+    queryKey: QueryKey.strategy(id),
+    queryFn: async () => {
       const strategy = await carbonSDK.getStrategy(id);
       const strategies = await buildStrategiesHelper({
         strategies: [strategy],
@@ -205,12 +203,10 @@ export const useGetStrategy = (id: string) => {
       });
       return strategies[0];
     },
-    {
-      enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
-      staleTime: ONE_DAY_IN_MS,
-      retry: false,
-    }
-  );
+    enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
+    staleTime: ONE_DAY_IN_MS,
+    retry: false,
+  });
 };
 
 interface PropsPair {
@@ -225,9 +221,9 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
 
   const roiQuery = useGetRoi();
 
-  return useQuery<Strategy[]>(
-    QueryKey.strategiesByPair(token0, token1),
-    async () => {
+  return useQuery<Strategy[]>({
+    queryKey: QueryKey.strategiesByPair(token0, token1),
+    queryFn: async () => {
       if (!token0 || !token1) return [];
       const strategies = await carbonSDK.getStrategiesByPair(token0, token1);
       return await buildStrategiesHelper({
@@ -238,12 +234,10 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
         roiData: roiQuery.data || [],
       });
     },
-    {
-      enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
-      staleTime: ONE_DAY_IN_MS,
-      retry: false,
-    }
-  );
+    enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
+    staleTime: ONE_DAY_IN_MS,
+    retry: false,
+  });
 };
 
 interface CreateStrategyOrder {
@@ -276,10 +270,15 @@ export interface DeleteStrategyParams {
 }
 
 export const useCreateStrategyQuery = () => {
-  const { signer } = useWeb3();
+  const { signer } = useWagmi();
 
-  return useMutation(
-    async ({ base, quote, order0, order1 }: CreateStrategyParams) => {
+  return useMutation({
+    mutationFn: async ({
+      base,
+      quote,
+      order0,
+      order1,
+    }: CreateStrategyParams) => {
       const unsignedTx = await carbonSDK.createBuySellStrategy(
         base.address,
         quote.address,
@@ -294,15 +293,15 @@ export const useCreateStrategyQuery = () => {
       );
 
       return signer!.sendTransaction(unsignedTx);
-    }
-  );
+    },
+  });
 };
 
 export const useUpdateStrategyQuery = () => {
-  const { signer } = useWeb3();
+  const { signer } = useWagmi();
 
-  return useMutation(
-    async ({
+  return useMutation({
+    mutationFn: async ({
       id,
       encoded,
       fieldsToUpdate,
@@ -320,16 +319,18 @@ export const useUpdateStrategyQuery = () => {
       );
 
       return signer!.sendTransaction(unsignedTx);
-    }
-  );
+    },
+  });
 };
 
 export const useDeleteStrategyQuery = () => {
-  const { signer } = useWeb3();
+  const { signer } = useWagmi();
 
-  return useMutation(async ({ id }: DeleteStrategyParams) => {
-    const unsignedTx = await carbonSDK.deleteStrategy(id);
+  return useMutation({
+    mutationFn: async ({ id }: DeleteStrategyParams) => {
+      const unsignedTx = await carbonSDK.deleteStrategy(id);
 
-    return signer!.sendTransaction(unsignedTx);
+      return signer!.sendTransaction(unsignedTx);
+    },
   });
 };

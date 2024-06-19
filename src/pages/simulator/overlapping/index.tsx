@@ -17,7 +17,7 @@ export const SimulatorInputOverlappingPage = () => {
     searchState,
   });
 
-  const { data, isLoading, isError } = useGetTokenPriceHistory({
+  const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: searchState.baseToken,
     quoteToken: searchState.quoteToken,
     start: searchState.start,
@@ -50,15 +50,15 @@ export const SimulatorInputOverlappingPage = () => {
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
   const noBudgetText =
     !isError && noBudget && 'Please add Sell and/or Buy budgets';
-  const loadingText = isLoading && 'Loading price history...';
+  const loadingText = isPending && 'Loading price history...';
   const priceError = state.buy.priceError || state.sell.priceError;
-  const btnDisabled = isLoading || isError || noBudget || !!priceError;
+  const btnDisabled = isPending || isError || noBudget || !!priceError;
 
   const navigate = useNavigate();
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isLoading || isError || noBudget) return;
+    if (isPending || isError || noBudget) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
 
@@ -122,7 +122,7 @@ export const SimulatorInputOverlappingPage = () => {
         dispatch={dispatch}
         bounds={bounds}
         data={data}
-        isLoading={isLoading}
+        isPending={isPending}
         isError={isError}
         spread={state.spread}
         simulationType="overlapping"

@@ -1,16 +1,16 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi, IS_TENDERLY_FORK } from 'libs/wagmi';
 import { shortenString } from 'utils/helpers';
-import { IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 
-export const DebugWeb3 = () => {
+export const DebugWagmi = () => {
   const {
     chainId,
+    accountChainId,
     user,
-    isImposter,
+    imposterAccount,
     isNetworkActive,
     networkError,
     isUserBlocked,
-  } = useWeb3();
+  } = useWagmi();
 
   return (
     <div
@@ -18,11 +18,15 @@ export const DebugWeb3 = () => {
         'rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20'
       }
     >
-      <h2>Web3 Status</h2>
+      <h2>Wagmi Status</h2>
       <div className="rounded-10 w-full space-y-3 bg-black p-10">
         <div className="flex justify-between">
           <div>ChainID:</div>
           <div>{chainId}</div>
+        </div>
+        <div className="flex justify-between">
+          <div>Account chainID:</div>
+          <div>{accountChainId}</div>
         </div>
         <div className="flex justify-between">
           <div>Network Active:</div>
@@ -43,8 +47,8 @@ export const DebugWeb3 = () => {
           <div>{user ? shortenString(user) : 'Not logged in'}</div>
         </div>
         <div className="flex justify-between">
-          <div>Imposter:</div>
-          <div>{isImposter ? 'true' : 'false'}</div>
+          <div>Is imposter:</div>
+          <div>{!!imposterAccount ? 'true' : 'false'}</div>
         </div>
         <div className="flex justify-between">
           <div>Blocked:</div>

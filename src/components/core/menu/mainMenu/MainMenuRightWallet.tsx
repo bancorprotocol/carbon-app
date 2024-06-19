@@ -2,52 +2,31 @@ import { ReactComponent as IconDisconnect } from 'assets/icons/disconnect.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
-import { ReactComponent as IconCoinbaseLogo } from 'assets/logos/coinbase.svg';
-import { ReactComponent as IconGnosisLogo } from 'assets/logos/gnosis.svg';
-import { ReactComponent as IconImposterLogo } from 'assets/logos/imposter.svg';
-import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
-import { ReactComponent as IconWalletConnectLogo } from 'assets/logos/walletConnect.svg';
 import { Button } from 'components/common/button';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { DropdownMenu, useMenuCtx } from 'components/common/dropdownMenu';
 import { useModal } from 'hooks/useModal';
-
-import { useWeb3 } from 'libs/web3';
-import { getConnection } from 'libs/web3/web3.utils';
-import { FC, useMemo, useEffect } from 'react';
+import { useWagmi } from 'libs/wagmi';
+import { FC, useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
 import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
 import config from 'config';
+import { WalletIcon } from 'components/common/WalletIcon';
 
 const iconProps = { className: 'w-20' };
 
-const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
-  const { selectedWallet } = useStore();
-
-  if (isImposter) {
-    return <IconImposterLogo {...iconProps} />;
-  }
-
-  switch (selectedWallet) {
-    case 'injected':
-      return <IconMetaMaskLogo {...iconProps} />;
-    case 'walletConnect':
-      return <IconWalletConnectLogo {...iconProps} />;
-    case 'coinbaseWallet':
-      return <IconCoinbaseLogo {...iconProps} />;
-    case 'gnosisSafe':
-      return <IconGnosisLogo {...iconProps} />;
-    default:
-      return <IconWallet {...iconProps} />;
-  }
-};
-
 export const MainMenuRightWallet: FC = () => {
-  const { user, isSupportedNetwork, isImposter, isUserBlocked } = useWeb3();
-  const { selectedWallet, isManualConnection } = useStore();
+  const {
+    user,
+    isSupportedNetwork,
+    imposterAccount,
+    isUserBlocked,
+    currentConnector,
+  } = useWagmi();
   const { openModal } = useModal();
+  const selectedWallet = currentConnector?.name;
 
   const onClickOpenModal = () => {
     carbonEvents.navigation.navWalletConnectClick(undefined);
@@ -55,21 +34,6 @@ export const MainMenuRightWallet: FC = () => {
   };
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
-  const userConnected = !!user && selectedWallet != null;
-
-  useEffect(() => {
-    if (userConnected) {
-      if (!isManualConnection.current) {
-        carbonEvents.wallet.walletConnected({
-          address: user,
-          name: getConnection(selectedWallet)?.name || '',
-        });
-      } else {
-        isManualConnection.current = false; // Expect an auto wallet connection next
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, selectedWallet]);
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error';
@@ -88,8 +52,22 @@ export const MainMenuRightWallet: FC = () => {
     if (isUserBlocked) return <IconWarning {...iconProps} />;
     if (!isSupportedNetwork) return <IconWarning {...iconProps} />;
     if (!user) return <IconWallet {...iconProps} />;
-    return <WalletIcon isImposter={isImposter} />;
-  }, [isSupportedNetwork, isUserBlocked, user, isImposter]);
+    return (
+      <WalletIcon
+        className="w-20"
+        isImposter={!!imposterAccount}
+        selectedWallet={selectedWallet}
+        icon={currentConnector?.icon}
+      />
+    );
+  }, [
+    isUserBlocked,
+    isSupportedNetwork,
+    user,
+    imposterAccount,
+    selectedWallet,
+    currentConnector?.icon,
+  ]);
 
   if (user) {
     return (
@@ -134,15 +112,7 @@ export const MainMenuRightWallet: FC = () => {
 const ConnectedMenu: FC = () => {
   const { toaster } = useStore();
   const { setMenuOpen } = useMenuCtx();
-  const { user, disconnect, isSupportedNetwork, switchNetwork } = useWeb3();
-
-  const onDisconnect = async () => {
-    await disconnect();
-    carbonEvents.wallet.walletDisconnect({
-      address: user,
-    });
-  };
-
+  const { user, disconnect, isSupportedNetwork, switchNetwork } = useWagmi();
   const copyAddress = async () => {
     if (!user) return;
     await navigator.clipboard.writeText(user);
@@ -183,7 +153,7 @@ const ConnectedMenu: FC = () => {
       <button
         role="menuitem"
         className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-black"
-        onClick={onDisconnect}
+        onClick={disconnect}
       >
         <IconDisconnect className="w-16" />
         <span>Disconnect</span>

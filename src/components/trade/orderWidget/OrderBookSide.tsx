@@ -12,7 +12,7 @@ type OrderBookSideProps = {
   buy?: boolean;
   base: Token;
   quote: Token;
-  isLoading: boolean;
+  isPending: boolean;
 };
 
 export const OrderBookSide: FC<OrderBookSideProps> = ({
@@ -20,11 +20,11 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
   buy,
   base,
   quote,
-  isLoading,
+  isPending,
 }) => {
   return (
     <AnimatePresence exitBeforeEnter={true}>
-      {isLoading ? (
+      {isPending ? (
         <m.div
           key="loading"
           className="flex h-[392px] w-full items-center justify-center"

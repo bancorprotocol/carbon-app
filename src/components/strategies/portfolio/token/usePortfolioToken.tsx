@@ -14,17 +14,17 @@ export interface PortfolioTokenData {
 interface Props {
   address: string;
   strategies?: Strategy[];
-  isLoading?: boolean;
+  isPending?: boolean;
 }
 
 export const usePortfolioToken = ({
   address,
   strategies,
-  isLoading: _isLoading,
+  isPending: _isPending,
 }: Props) => {
-  const { tableData: sourceData, isLoading } = usePortfolioData({
+  const { tableData: sourceData, isPending } = usePortfolioData({
     strategies,
-    isLoading: _isLoading,
+    isPending: _isPending,
   });
 
   const selectedToken = useMemo(() => {
@@ -71,5 +71,5 @@ export const usePortfolioToken = ({
     );
   }, [address, selectedToken]);
 
-  return { tableData, isLoading, selectedToken };
+  return { tableData, isPending, selectedToken };
 };

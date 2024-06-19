@@ -15,7 +15,7 @@ import { cn, getFiatDisplayValue } from 'utils/helpers';
 
 export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
   data,
-  isLoading,
+  isPending,
   selectedToken,
 }) => {
   const {
@@ -24,7 +24,7 @@ export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
 
   return (
     <div className={cn('space-y-20')}>
-      {isLoading
+      {isPending
         ? Array.from({ length: 3 }).map((_, i) => (
             <PortfolioMobileCardLoading key={i} />
           ))

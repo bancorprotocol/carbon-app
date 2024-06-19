@@ -5,17 +5,17 @@ import { cn } from 'utils/helpers';
 interface Props<D> {
   table: Table<D>;
   onRowClick?: (row: Row<D>) => void;
-  isLoading?: boolean;
+  isPending?: boolean;
 }
 
 export const TBody = <D extends object>({
   table,
   onRowClick,
-  isLoading,
+  isPending,
 }: Props<D>) => {
   return (
     <tbody className="border-background-800 border-b-2">
-      {isLoading ? (
+      {isPending ? (
         <tr>
           <td
             colSpan={table.getVisibleFlatColumns().length}

@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import { Action } from '@bancor/carbon-sdk';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { ModalTradeRoutingData } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
 import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
 import { useModal } from 'hooks/useModal';
@@ -35,7 +35,7 @@ export const useModalTradeRouting = ({
     setIsAwaiting,
   },
 }: Props) => {
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
   const { openModal, closeModal } = useModal();
   const { useGetTokenPrice } = useFiatCurrency();
   const sourceFiatPrice = useGetTokenPrice(source.address);
@@ -57,7 +57,7 @@ export const useModalTradeRouting = ({
     [selectedIDs, tradeActionsWei]
   );
 
-  const { data, isLoading, isError } = useGetTradeActionsQuery({
+  const { data, isPending, isError } = useGetTradeActionsQuery({
     sourceToken: source.address,
     isTradeBySource,
     targetToken: target.address,
@@ -81,7 +81,7 @@ export const useModalTradeRouting = ({
       return openModal('wallet', undefined);
     }
 
-    if (approval.isLoading || isLoading || isError) {
+    if (approval.isPending || isPending || isError) {
       return;
     }
 
@@ -123,10 +123,10 @@ export const useModalTradeRouting = ({
     }
   }, [
     user,
-    approval.isLoading,
+    approval.isPending,
     approval.approvalRequired,
     approval.tokens,
-    isLoading,
+    isPending,
     isError,
     openModal,
     trade,
@@ -163,7 +163,7 @@ export const useModalTradeRouting = ({
   }, [closeModal, id]);
 
   const disabledCTA =
-    !selectedIDs.length || isLoading || isError || insufficientBalance;
+    !selectedIDs.length || isPending || isError || insufficientBalance;
 
   return {
     selected,

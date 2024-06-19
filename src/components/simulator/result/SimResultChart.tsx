@@ -86,7 +86,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
     );
   }
 
-  if (ctx.isLoading || ctx.status === 'idle') {
+  if (ctx.isPending || ctx.status === 'idle') {
     return <Loading />;
   }
 
