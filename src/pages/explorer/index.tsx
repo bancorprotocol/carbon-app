@@ -1,5 +1,5 @@
 import { Page } from 'components/common/page';
-import { Outlet, Navigate } from 'libs/routing';
+import { Outlet, Navigate, useNavigate } from 'libs/routing';
 import {
   ExplorerSearch,
   useExplorer,
@@ -9,9 +9,27 @@ import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { useEffect, useState } from 'react';
 import { explorerEvents } from 'services/events/explorerEvents';
+import { toPairSlug } from 'utils/pairSearch';
+import config from 'config';
 
 export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
+  const navigate = useNavigate({ from: '/explore/$type/$slug' });
+
+  useEffect(() => {
+    if (slug || type !== 'token-pair') return;
+    const defaultSlug = toPairSlug(
+      { address: config.defaultTokenPair[0] },
+      { address: config.defaultTokenPair[1] }
+    );
+
+    navigate({
+      to: '/explore/$type/$slug',
+      params: { type, slug: defaultSlug },
+      replace: true,
+    });
+  }, [slug, navigate, type]);
+
   const query = useExplorer();
   if (type !== 'wallet' && type !== 'token-pair') {
     return <Navigate to="/explore/$type" params={{ type: 'token-pair' }} />;
