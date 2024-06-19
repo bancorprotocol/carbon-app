@@ -1,11 +1,11 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { NewTabLink, externalLinks } from 'libs/routing';
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export const ErrorUserBlocked = () => {
-  const { disconnect } = useWeb3();
+  const { disconnect } = useWagmi();
 
   return (
     <ErrorWrapper

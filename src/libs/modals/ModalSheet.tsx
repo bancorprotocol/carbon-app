@@ -10,7 +10,7 @@ export const ModalSheet: FC<ModalProps> = ({
   id,
   title,
   showCloseButton = true,
-  isLoading = false,
+  isPending = false,
   onClose,
   'data-testid': testId,
 }) => {
@@ -32,7 +32,7 @@ export const ModalSheet: FC<ModalProps> = ({
         exit="exit"
       >
         <div className="rounded-t-10 bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-none focus:outline-none">
-          {isLoading && (
+          {isPending && (
             <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
           )}
           <header data-testid={testId} className="flex justify-between">

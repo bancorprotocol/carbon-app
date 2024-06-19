@@ -17,7 +17,7 @@ import { NotFound } from 'components/common/NotFound';
 
 interface Props {
   strategies?: Strategy[];
-  isLoading?: boolean;
+  isPending?: boolean;
   isExplorer?: boolean;
   onRowClick: (row: Row<PortfolioData>) => void;
   getHref: GetPortfolioTokenHref;
@@ -25,18 +25,18 @@ interface Props {
 
 const _PortfolioAllTokens = ({
   strategies,
-  isLoading: _isLoading,
+  isPending: _isPending,
   isExplorer,
   onRowClick,
   getHref,
 }: Props) => {
-  const { tableData, totalValue, isLoading } = usePortfolioData({
+  const { tableData, totalValue, isPending } = usePortfolioData({
     strategies,
-    isLoading: _isLoading,
+    isPending: _isPending,
   });
   const { pieChartOptions } = usePortfolioAllTokensPieChart(tableData);
 
-  if (!isLoading && tableData && tableData.length === 0) {
+  if (!isPending && tableData && tableData.length === 0) {
     if (isExplorer) {
       return (
         <NotFound
@@ -55,14 +55,14 @@ const _PortfolioAllTokens = ({
       desktopView={
         <PortfolioAllTokensDesktop
           data={tableData}
-          isLoading={isLoading}
+          isPending={isPending}
           onRowClick={onRowClick}
         />
       }
       mobileView={
         <PortfolioAllTokensMobile
           data={tableData}
-          isLoading={isLoading}
+          isPending={isPending}
           getHref={getHref}
         />
       }
@@ -75,7 +75,7 @@ const _PortfolioAllTokens = ({
               assetsCount={tableData.length}
             />
           }
-          isLoading={isLoading}
+          isPending={isPending}
         />
       }
     />
@@ -85,6 +85,6 @@ const _PortfolioAllTokens = ({
 export const PortfolioAllTokens = memo(
   _PortfolioAllTokens,
   (prev, next) =>
-    prev.isLoading === next.isLoading &&
+    prev.isPending === next.isPending &&
     JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
 );

@@ -79,6 +79,6 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
     ...orderBookQuery,
     data: orders,
     isLastTradeBuy: lastTradeBuyQuery.data,
-    isLastTradeLoading: lastTradeBuyQuery.isLoading,
+    isLastTradeLoading: lastTradeBuyQuery.isPending,
   };
 };

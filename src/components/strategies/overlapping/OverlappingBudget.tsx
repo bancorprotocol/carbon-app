@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
 import { InputBudget, BudgetAction } from '../common/InputBudget';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 
 interface Props {
   base: Token;
@@ -44,12 +44,12 @@ export const OverlappingBudget: FC<Props> = (props) => {
     error,
     warning,
   } = props;
-  const { user } = useWeb3();
+  const { user } = useWagmi();
 
   const token = anchor === 'buy' ? quote : base;
   const balance = useGetTokenBalance(token);
   const allocatedBudget = anchor === 'buy' ? buyBudget : sellBudget;
-  const maxIsLoading = editType === 'deposit' && balance.isLoading;
+  const maxIsLoading = editType === 'deposit' && balance.isPending;
   const max = editType === 'deposit' ? balance.data || '0' : allocatedBudget;
 
   const disabled = (() => {

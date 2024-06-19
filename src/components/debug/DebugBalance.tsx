@@ -1,8 +1,8 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useCallback, useEffect, useState } from 'react';
 
 export const DebugBalance = () => {
-  const { provider, user } = useWeb3();
+  const { provider, user } = useWagmi();
   const [balance, setBalance] = useState('');
 
   const fetchGasToken = useCallback(async () => {

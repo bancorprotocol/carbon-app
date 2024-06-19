@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, useParams, useSearch } from 'libs/routing';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useEffect, useState } from 'react';
 import { StrategiesPage } from 'pages/strategies/index';
 import { Strategy, useGetUserStrategies } from 'libs/queries';
@@ -14,15 +14,15 @@ import { EditTypes } from 'libs/routing/routes/strategyEdit';
 
 const url = '/strategies/edit/$strategyId';
 export const EditStrategyPageLayout = () => {
-  const { user } = useWeb3();
-  const { data: strategies, isLoading } = useGetUserStrategies({ user });
+  const { user } = useWagmi();
+  const { data: strategies, isPending } = useGetUserStrategies({ user });
   const { strategyId } = useParams({ from: url });
   const search = useSearch({ from: url });
   const [strategy, setStrategy] = useState<Strategy | undefined>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isPending) return;
     if (!user || !strategyId) {
       navigate({ to: '/' });
     } else {
@@ -30,7 +30,7 @@ export const EditStrategyPageLayout = () => {
       if (!strategy) navigate({ to: '/' });
       else setStrategy(strategy);
     }
-  }, [user, strategyId, strategies, isLoading, navigate]);
+  }, [user, strategyId, strategies, isPending, navigate]);
 
   // Support old URLs pattern from before June 2024
   useEffect(() => {
@@ -52,7 +52,7 @@ export const EditStrategyPageLayout = () => {
   }, [navigate, strategy]);
 
   if (!user) return <StrategiesPage />;
-  if (isLoading) {
+  if (isPending) {
     return <CarbonLogoLoading className="h-100 place-self-center" />;
   }
   if (!strategy) return;

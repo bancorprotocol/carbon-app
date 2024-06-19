@@ -37,7 +37,7 @@ export const useModalTradeTokenList = ({ id, data }: Props) => {
   return {
     tradePairs: filteredPairs,
     tradePairsPopular,
-    isLoading: pairs.isLoading,
+    isPending: pairs.isPending,
     isError: pairs.isError,
     handleSelect,
     search,

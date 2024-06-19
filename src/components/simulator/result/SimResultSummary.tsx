@@ -13,7 +13,7 @@ interface Props {
   gains?: number;
   state: StrategyInputValues;
   strategyType: SimulatorType;
-  isLoading: boolean;
+  isPending: boolean;
 }
 
 export const SimResultSummary = ({
@@ -21,7 +21,7 @@ export const SimResultSummary = ({
   gains = 0.0,
   state,
   strategyType,
-  isLoading,
+  isPending,
 }: Props) => {
   return (
     <header className="my-8 grid gap-8 xl:grid-cols-2">
@@ -29,11 +29,11 @@ export const SimResultSummary = ({
         className={cn(
           'rounded-10 flex min-h-[72px] items-center justify-between gap-8 bg-black px-16 py-10',
           {
-            'animate-pulse': isLoading,
+            'animate-pulse': isPending,
           }
         )}
       >
-        {!isLoading && !!state.baseToken && !!state.quoteToken && (
+        {!isPending && !!state.baseToken && !!state.quoteToken && (
           <>
             <SimResultSummaryTokens
               baseToken={state.baseToken}
@@ -53,11 +53,11 @@ export const SimResultSummary = ({
         className={cn(
           'rounded-10 grid min-h-[72px] grid-cols-4 items-center gap-8 bg-black px-16 py-10',
           {
-            'animate-pulse': isLoading,
+            'animate-pulse': isPending,
           }
         )}
       >
-        {!isLoading && !!state.baseToken && !!state.quoteToken && (
+        {!isPending && !!state.baseToken && !!state.quoteToken && (
           <>
             <SimResultSummaryGains
               portfolioGains={gains}

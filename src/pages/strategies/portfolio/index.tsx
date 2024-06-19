@@ -6,7 +6,7 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { useNavigate } from 'libs/routing';
 
 export const StrategiesPortfolioPage = () => {
-  const { strategies, isLoading } = useStrategyCtx();
+  const { strategies, isPending } = useStrategyCtx();
   const navigate = useNavigate();
   const href = '/strategies/portfolio/token/$address';
 
@@ -24,7 +24,7 @@ export const StrategiesPortfolioPage = () => {
   return (
     <PortfolioAllTokens
       strategies={strategies}
-      isLoading={isLoading}
+      isPending={isPending}
       getHref={getPortfolioTokenHref}
       onRowClick={onRowClick}
     />

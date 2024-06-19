@@ -1,4 +1,4 @@
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useStore } from 'store';
 import {
   DispatchNotification,
@@ -12,7 +12,7 @@ import { uuid } from 'utils/helpers';
 import { dayjs } from 'libs/dayjs';
 
 export const useNotifications = () => {
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
   const {
     notifications: { notifications, setNotifications, alerts, hasPendingTx },
   } = useStore();

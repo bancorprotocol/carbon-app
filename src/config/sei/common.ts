@@ -12,9 +12,17 @@ const addresses = {
 
 export const commonConfig: AppConfig = {
   mode: 'development',
+  appName: 'Carbon DeFi',
   appUrl: 'https://sei.carbondefi.xyz',
   carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
-  selectableConnectionTypes: ['injected', 'coinbaseWallet'],
+  selectedConnectors: [
+    'MetaMask',
+    'Coinbase Wallet',
+    'Safe',
+    'Compass Wallet',
+    'Seif',
+    'Tailwind',
+  ],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
   policiesLastUpdated: '27 May, 2024',
@@ -53,8 +61,11 @@ export const commonConfig: AppConfig = {
       carbonController: '0xe4816658ad10bF215053C533cceAe3f59e1f1087',
       voucher: '0xA4682A2A5Fe02feFF8Bd200240A41AD0E6EaF8d5',
     },
-    utils: {
-      multicall: '0xe033Bed7cae4114Af84Be1e9F1CA7DEa07Dfe1Cf',
+  },
+  utils: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+      blockCreated: 14353601,
     },
   },
   tokenListOverride: [
@@ -72,4 +83,28 @@ export const commonConfig: AppConfig = {
       parser: tokenListParser('pacific-1'),
     },
   ],
+  tenderly: {
+    nativeTokenDonorAccount: '0x3a7AB16485770c21B7543058De545E986284d0D3',
+    faucetAmount: 1000,
+    faucetTokens: [
+      {
+        donorAccount: '0x029dAb7D8270ab5120bEE56f7D8214e9DB4F2389',
+        tokenContract: addresses.WSEI,
+        decimals: 18,
+        symbol: 'WSEI',
+      },
+      {
+        donorAccount: '0x946a1a3Dacbc7A7Bb2C7dF0b87195d6092f7238B',
+        tokenContract: addresses.USDC,
+        decimals: 6,
+        symbol: 'USDC',
+      },
+      {
+        donorAccount: '0x0eba0a13Ca36AA4784aE6960a331034A7dE91EF7',
+        tokenContract: addresses.USDT,
+        decimals: 6,
+        symbol: 'USDT',
+      },
+    ],
+  },
 };

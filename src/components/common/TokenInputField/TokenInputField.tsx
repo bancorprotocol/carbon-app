@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, FocusEvent, useRef } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
@@ -49,7 +49,7 @@ export const TokenInputField: FC<Props> = (props) => {
     withoutWallet,
     'data-testid': testid,
   } = props;
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const inputRef = useRef<HTMLInputElement>(null);
   const { getFiatValue, getFiatAsString } = useFiatCurrency(token);
   const fiatValueUsd = getFiatValue(value, true);

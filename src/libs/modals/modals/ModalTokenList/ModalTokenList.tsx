@@ -30,7 +30,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
     filteredTokens,
     onSelect,
     isError,
-    isLoading,
+    isPending,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
@@ -58,7 +58,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
 
       {isError ? (
         <ModalTokenListError />
-      ) : isLoading ? (
+      ) : isPending ? (
         <ModalTokenListLoading />
       ) : showImportToken ? (
         <ModalTokenListImport address={search} />

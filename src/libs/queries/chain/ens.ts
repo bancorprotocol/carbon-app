@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { utils } from 'ethers';
 
 export const useGetEnsFromAddress = (address: string) => {
-  const { provider } = useWeb3();
+  const { provider } = useWagmi();
 
-  return useQuery(
-    QueryKey.ensFromAddress(address),
-    async () => {
+  return useQuery({
+    queryKey: QueryKey.ensFromAddress(address),
+    queryFn: async () => {
       if (!provider) {
         throw new Error('useGetEnsFromAddress no provider provided');
       }
@@ -22,19 +22,17 @@ export const useGetEnsFromAddress = (address: string) => {
       }
       return '';
     },
-    {
-      enabled: !!provider,
-      staleTime: ONE_DAY_IN_MS,
-    }
-  );
+    enabled: !!provider,
+    staleTime: ONE_DAY_IN_MS,
+  });
 };
 
 export const useGetAddressFromEns = (ens: string) => {
-  const { provider } = useWeb3();
+  const { provider } = useWagmi();
 
-  return useQuery(
-    QueryKey.ensToAddress(ens),
-    async () => {
+  return useQuery({
+    queryKey: QueryKey.ensToAddress(ens),
+    queryFn: async () => {
       if (!provider) {
         throw new Error('useGetAddressFromEns no provider provided');
       }
@@ -43,11 +41,9 @@ export const useGetAddressFromEns = (ens: string) => {
       }
       return '';
     },
-    {
-      enabled: !!provider,
-      staleTime: ONE_DAY_IN_MS,
-    }
-  );
+    enabled: !!provider,
+    staleTime: ONE_DAY_IN_MS,
+  });
 };
 
 let ensRegex: RegExp;

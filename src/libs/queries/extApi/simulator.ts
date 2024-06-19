@@ -90,9 +90,9 @@ export type SimulatorAPIParams = Omit<
 >;
 
 export const useGetSimulator = (search: SimulatorResultSearch) => {
-  return useQuery<SimulatorReturn, Error>(
-    QueryKey.simulator(search),
-    async () => {
+  return useQuery<SimulatorReturn, Error>({
+    queryKey: QueryKey.simulator(search),
+    queryFn: async () => {
       try {
         const { buyIsRange, sellIsRange, type, spread, ...params } = search;
         const res = await carbonApi.getSimulator(params);
@@ -129,9 +129,7 @@ export const useGetSimulator = (search: SimulatorResultSearch) => {
         throw new Error('Unknown internal error.');
       }
     },
-    {
-      staleTime: FIVE_MIN_IN_MS,
-      retry: false,
-    }
-  );
+    staleTime: FIVE_MIN_IN_MS,
+    retry: false,
+  });
 };

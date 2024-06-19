@@ -20,15 +20,13 @@ export const useGetTokenPrice = (address?: string) => {
     fiatCurrency: { availableCurrencies },
   } = useStore();
 
-  return useQuery(
-    QueryKey.tokenPrice(address!),
-    async () => carbonApi.getMarketRate(address!, availableCurrencies),
-    {
-      enabled: !!address && availableCurrencies.length > 0,
-      refetchInterval: FIVE_MIN_IN_MS,
-      staleTime: FIVE_MIN_IN_MS,
-    }
-  );
+  return useQuery({
+    queryKey: QueryKey.tokenPrice(address!),
+    queryFn: async () => carbonApi.getMarketRate(address!, availableCurrencies),
+    enabled: !!address && availableCurrencies.length > 0,
+    refetchInterval: FIVE_MIN_IN_MS,
+    staleTime: FIVE_MIN_IN_MS,
+  });
 };
 
 export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
@@ -66,9 +64,9 @@ export interface TokenPriceHistorySearch {
 }
 
 export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
-  return useQuery<CandlestickData[]>(
-    QueryKey.tokenPriceHistory(params),
-    async () => {
+  return useQuery<CandlestickData[]>({
+    queryKey: QueryKey.tokenPriceHistory(params),
+    queryFn: async () => {
       const data = await carbonApi.getMarketRateHistory(params);
 
       return data.map((item) => ({
@@ -79,10 +77,8 @@ export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
         low: Number(item.low),
       }));
     },
-    {
-      enabled: !!params.baseToken && !!params.quoteToken,
-      staleTime: Infinity,
-      refetchOnWindowFocus: false,
-    }
-  );
+    enabled: !!params.baseToken && !!params.quoteToken,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
 };

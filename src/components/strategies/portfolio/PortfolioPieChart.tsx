@@ -6,20 +6,20 @@ import { cn } from 'utils/helpers';
 interface Props {
   centerElement?: ReactNode;
   options?: Options;
-  isLoading?: boolean;
+  isPending?: boolean;
   hideChart?: boolean;
 }
 
 export const PortfolioPieChart = ({
   centerElement,
   options,
-  isLoading,
+  isPending,
   hideChart,
 }: Props) => {
   return (
     <div className="rounded-10 bg-background-900 relative aspect-square w-full flex-shrink-0 md:size-[400px]">
       <div className="absolute flex size-full items-center justify-center">
-        {isLoading ? (
+        {isPending ? (
           <div className="h-[80px]">
             <CarbonLogoLoading />
           </div>
@@ -61,7 +61,7 @@ export const PortfolioPieChart = ({
         </div>
       )}
 
-      {!isLoading && !hideChart && (
+      {!isPending && !hideChart && (
         <HighchartsReact highcharts={Highcharts} options={options} />
       )}
     </div>
