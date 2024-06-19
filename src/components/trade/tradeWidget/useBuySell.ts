@@ -14,6 +14,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
+import { isTouchedZero, isZero } from 'components/strategies/common/utils';
 
 export const useBuySell = ({
   source,
@@ -154,7 +155,11 @@ export const useBuySell = ({
       setTradeActionsRes(actionsTokenRes);
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-      if (effectiveRate !== '0') {
+
+      if (
+        effectiveRate !== '0' ||
+        (!isZero(sourceInput) && isTouchedZero(totalTargetAmount))
+      ) {
         checkLiquidity();
       }
     }
@@ -176,7 +181,11 @@ export const useBuySell = ({
       setTradeActionsRes(actionsTokenRes);
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-      if (effectiveRate !== '0') {
+
+      if (
+        effectiveRate !== '0' ||
+        (!isZero(targetInput) && isTouchedZero(totalSourceAmount))
+      ) {
         checkLiquidity();
       }
     }
