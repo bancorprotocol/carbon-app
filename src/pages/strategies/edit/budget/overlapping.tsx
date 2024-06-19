@@ -18,7 +18,6 @@ import { OverlappingInitMarketPriceField } from 'components/strategies/overlappi
 import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
@@ -149,13 +148,13 @@ export const EditBudgetOverlappingPage = () => {
     return false;
   })();
 
-  if (!marketPrice && typeof externalPrice !== 'number') {
-    return (
-      <div className="grid md:w-[440px]">
-        <CarbonLogoLoading className="h-80 place-self-center" />
-      </div>
-    );
-  }
+  // if (!marketPrice && typeof externalPrice !== 'number') {
+  //   return (
+  //     <div className="grid md:w-[440px]">
+  //       <CarbonLogoLoading className="h-80 place-self-center" />
+  //     </div>
+  //   );
+  // }
 
   if (!marketPrice) {
     const setMarketPrice = (price: string) => {

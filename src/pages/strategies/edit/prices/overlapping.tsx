@@ -178,6 +178,7 @@ export const EditStrategyOverlappingPage = () => {
     return false;
   })();
 
+  // TODO: put it back after hotfix
   // if (!marketPrice && typeof externalPrice !== 'number') {
   //   return (
   //     <div className="grid md:w-[440px]">
