@@ -8,8 +8,8 @@ const defaultCacheTTL = config.sdk.cacheTTL ?? ONE_HOUR_IN_MS;
 
 export const DebugSDKConfig = () => {
   const [counter, setCounter] = useState(0);
-  const [timestamp, setTimestamp] = useState(0);
-  const [ttl, setTTL] = useState(0);
+  const [timestamp, setTimestamp] = useState(Date.now());
+  const [ttl, setTTL] = useState(defaultCacheTTL);
   const save = (e: FormEvent) => {
     e.preventDefault();
     lsService.setItem('lastSdkCache', { timestamp, ttl });
