@@ -1,6 +1,7 @@
 import { AppConfig } from 'config/types';
 import IconSeiLogo from 'assets/logos/seilogo.svg';
 import { tokenListParser } from 'config/sei/utils';
+import { ONE_HOUR_IN_MS } from 'utils/time';
 
 const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -38,6 +39,9 @@ export const commonConfig: AppConfig = {
       address: addresses.SEI,
       logoURI: 'https://cdn.sei.io/assets/Sei_Symbol_Gradient.svg',
     },
+  },
+  sdk: {
+    cacheTTL: ONE_HOUR_IN_MS,
   },
   defaultTokenPair: [addresses.SEI, addresses.WSEI],
   popularPairs: [

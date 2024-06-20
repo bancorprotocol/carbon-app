@@ -43,6 +43,7 @@ interface LocalStorageSchema {
   hasSeenRestrictedCountryModal: boolean;
   hasSeenCreateStratExpertMode: boolean;
   simDisclaimerLastSeen: number;
+  lastSdkCache: { timestamp: number; ttl: number };
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>

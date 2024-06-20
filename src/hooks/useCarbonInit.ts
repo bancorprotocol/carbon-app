@@ -4,7 +4,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import * as Comlink from 'comlink';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ContractsConfig } from '@bancor/carbon-sdk/contracts-api';
-import config from 'config';
 import { lsService } from 'services/localeStorage';
 import { carbonSDK } from 'libs/sdk';
 import { useModal } from 'hooks/useModal';
@@ -12,6 +11,8 @@ import { QueryKey } from 'libs/queries';
 import { CHAIN_ID, RPC_URLS, RPC_HEADERS } from 'libs/wagmi';
 import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
 import { carbonApi } from 'utils/carbonApi';
+import { ONE_HOUR_IN_MS } from 'utils/time';
+import config from 'config';
 
 const contractsConfig: ContractsConfig = {
   carbonControllerAddress: config.addresses.carbon.carbonController,
@@ -19,9 +20,12 @@ const contractsConfig: ContractsConfig = {
   multiCallAddress: config.utils.multicall3.address,
 };
 
+const defaultCacheTTL = config.sdk.cacheTTL || ONE_HOUR_IN_MS;
 const persistSdkCacheDump = async () => {
   console.log('SDK Cache dumped into local storage');
   const cachedDump = await carbonSDK.getCacheDump();
+  const { ttl = defaultCacheTTL } = lsService.getItem('lastSdkCache') ?? {};
+  lsService.setItem('lastSdkCache', { timestamp: Date.now(), ttl });
   lsService.setItem('sdkCompressedCacheData', cachedDump, true);
 };
 
@@ -92,8 +96,11 @@ export const useCarbonInit = () => {
   const initSDK = useCallback(async () => {
     try {
       setIsLoading(true);
-      const cacheData = lsService.getItem('sdkCompressedCacheData');
-
+      const { timestamp, ttl } = lsService.getItem('lastSdkCache') ?? {};
+      let cacheData: string | undefined;
+      if (timestamp && ttl && timestamp + ttl > Date.now()) {
+        cacheData = lsService.getItem('sdkCompressedCacheData');
+      }
       await Promise.all([
         carbonSDK.init(
           CHAIN_ID,
