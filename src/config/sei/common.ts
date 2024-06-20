@@ -39,7 +39,7 @@ export const commonConfig: AppConfig = {
       logoURI: 'https://cdn.sei.io/assets/Sei_Symbol_Gradient.svg',
     },
   },
-  defaultTokenPair: [addresses.SEI, addresses.WSEI],
+  defaultTokenPair: [addresses.SEI, addresses.USDC],
   popularPairs: [
     [addresses.SEI, addresses.WSEI],
     [addresses.SEI, addresses.USDC],
