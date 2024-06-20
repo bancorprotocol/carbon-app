@@ -20,7 +20,7 @@ const contractsConfig: ContractsConfig = {
   multiCallAddress: config.utils.multicall3.address,
 };
 
-const defaultCacheTTL = config.sdk.cacheTTL || ONE_HOUR_IN_MS;
+const defaultCacheTTL = config.sdk.cacheTTL ?? ONE_HOUR_IN_MS;
 const persistSdkCacheDump = async () => {
   console.log('SDK Cache dumped into local storage');
   const cachedDump = await carbonSDK.getCacheDump();
