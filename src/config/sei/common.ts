@@ -1,7 +1,6 @@
 import { AppConfig } from 'config/types';
 import IconSeiLogo from 'assets/logos/seilogo.svg';
 import { tokenListParser } from 'config/sei/utils';
-import { THIRTY_SEC_IN_MS } from 'utils/time';
 
 const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -41,7 +40,7 @@ export const commonConfig: AppConfig = {
     },
   },
   sdk: {
-    cacheTTL: THIRTY_SEC_IN_MS,
+    cacheTTL: 0,
   },
   defaultTokenPair: [addresses.SEI, addresses.WSEI],
   popularPairs: [
