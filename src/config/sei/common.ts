@@ -26,7 +26,9 @@ export const commonConfig: AppConfig = {
     chainId: 1329,
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
     rpc: {
-      url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://evm-rpc.sei-apis.com',
+      url:
+        import.meta.env.VITE_CHAIN_RPC_URL ||
+        'https://virulent-falling-resonance.sei-pacific.quiknode.pro/06351027fe1296146c8d687d8ef7b8a8c34df306/',
       headers: {
         'x-apikey': import.meta.env.VITE_CHAIN_RPC_KEY || '',
       },
