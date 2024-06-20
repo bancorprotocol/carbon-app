@@ -21,6 +21,7 @@ import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 export interface EditBudgetOverlappingSearch {
   editType: 'deposit' | 'withdraw';
@@ -40,11 +41,11 @@ const isTouched = (strategy: Strategy, search: EditBudgetOverlappingSearch) => {
 const getOrders = (
   strategy: Strategy,
   search: EditBudgetOverlappingSearch,
-  userMarketPrice?: string
+  marketPrice?: string
 ) => {
   const { base, quote, order0, order1 } = strategy;
 
-  if (!userMarketPrice) {
+  if (!marketPrice) {
     return {
       buy: { min: '', max: '', marginalPrice: '', budget: '' },
       sell: { min: '', max: '', marginalPrice: '', budget: '' },
@@ -55,12 +56,6 @@ const getOrders = (
   const max = strategy.order1.endRate;
   const spread = getRoundedSpread(strategy).toString();
   const { anchor, budget = '0', editType = 'deposit' } = search;
-
-  const touched = isTouched(strategy, search);
-  const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
-  const marketPrice = touched
-    ? userMarketPrice
-    : calculatedPrice?.toString() || userMarketPrice;
 
   if (!isValidRange(min, max) || !isValidSpread(spread)) {
     return {
@@ -85,7 +80,7 @@ const getOrders = (
   };
 
   // PRICES
-  if (touched) {
+  if (isTouched(strategy, search)) {
     const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
     orders.buy.min = prices.buyPriceLow;
     orders.buy.max = prices.buyPriceHigh;
@@ -135,11 +130,17 @@ export const EditBudgetOverlappingPage = () => {
   const { base, quote, order0, order1 } = strategy;
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
+
+  const { marketPrice: externalPrice } = useMarketPrice({
+    base,
+    quote,
+  });
   const calculatedPrice = (() => {
     if (hasNoBudget(strategy)) return;
-    return geoMean(order0.marginalRate, order1.marginalRate);
+    return geoMean(order0.marginalRate, order1.marginalRate)?.toString();
   })();
-  const marketPrice = search.marketPrice ?? calculatedPrice?.toString();
+  const marketPrice =
+    search.marketPrice ?? calculatedPrice ?? externalPrice?.toString();
 
   const orders = getOrders(strategy, search, marketPrice);
 
