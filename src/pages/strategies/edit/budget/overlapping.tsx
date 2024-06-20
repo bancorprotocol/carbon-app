@@ -135,11 +135,11 @@ export const EditBudgetOverlappingPage = () => {
   const { base, quote, order0, order1 } = strategy;
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const externalPrice = geoMean(
-    order0.marginalRate,
-    order1.marginalRate
-  )!.toNumber();
-  const marketPrice = search.marketPrice ?? externalPrice?.toString();
+  const calculatedPrice = (() => {
+    if (hasNoBudget(strategy)) return;
+    return geoMean(order0.marginalRate, order1.marginalRate);
+  })();
+  const marketPrice = search.marketPrice ?? calculatedPrice?.toString();
 
   const orders = getOrders(strategy, search, marketPrice);
 
@@ -149,15 +149,7 @@ export const EditBudgetOverlappingPage = () => {
     return false;
   })();
 
-  // if (!marketPrice && typeof externalPrice !== 'number') {
-  //   return (
-  //     <div className="grid md:w-[440px]">
-  //       <CarbonLogoLoading className="h-80 place-self-center" />
-  //     </div>
-  //   );
-  // }
-
-  if (!search.marketPrice && hasNoBudget(strategy)) {
+  if (!marketPrice) {
     const setMarketPrice = (price: string) => {
       navigate({
         params: (params) => params,

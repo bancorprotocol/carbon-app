@@ -16,8 +16,9 @@ export const useMarketPrice = ({ base, quote }: Props) => {
   );
   const basePrice = basePriceMap?.[selectedFiatCurrency];
   const quotePrice = quotePriceMap?.[selectedFiatCurrency];
-  if (!basePrice || !quotePrice)
+  if (!basePrice || !quotePrice) {
     return { marketPrice: undefined, isPending: false };
+  }
   return {
     marketPrice: basePrice / quotePrice,
     isPending: isPendingBase || isPendingQuote,

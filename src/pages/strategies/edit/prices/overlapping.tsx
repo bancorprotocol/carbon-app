@@ -25,6 +25,7 @@ import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 
 export interface EditOverlappingStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -63,11 +64,11 @@ const isTouched = (
 const getOrders = (
   strategy: Strategy,
   search: EditOverlappingStrategySearch,
-  userMarketPrice?: string
+  marketPrice?: string
 ) => {
   const { base, quote, order0, order1 } = strategy;
 
-  if (!userMarketPrice) {
+  if (!marketPrice) {
     return {
       buy: { min: '', max: '', marginalPrice: '', budget: '' },
       sell: { min: '', max: '', marginalPrice: '', budget: '' },
@@ -76,18 +77,12 @@ const getOrders = (
 
   const {
     anchor,
-    min = initMin(userMarketPrice),
-    max = initMax(userMarketPrice),
+    min = initMin(marketPrice),
+    max = initMax(marketPrice),
     spread = initSpread,
     budget = '0',
     action = 'deposit',
   } = search;
-
-  const touched = isTouched(strategy, search);
-  const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
-  const marketPrice = touched
-    ? userMarketPrice
-    : calculatedPrice?.toString() || userMarketPrice;
 
   if (!isValidRange(min, max) || !isValidSpread(spread)) {
     return {
@@ -123,6 +118,7 @@ const getOrders = (
   if (!anchor) return orders;
 
   // If there is no changes we don't recalculate the budget because of precision delta
+  const touched = isTouched(strategy, search);
   if (isZero(budget) && !touched) return orders;
 
   // BUDGET
@@ -160,20 +156,29 @@ const url = '/strategies/edit/$strategyId/prices/overlapping';
 
 export const EditStrategyOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
+  const { base, quote, order0, order1 } = strategy;
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const { marketPrice: externalPrice, isPending } = useMarketPrice({
     base,
     quote,
   });
-  const marketPrice = search.marketPrice ?? externalPrice?.toString();
+  const calculatedPrice = (() => {
+    if (hasNoBudget(strategy)) return;
+    return geoMean(order0.marginalRate, order1.marginalRate)?.toString();
+  })();
+  const userMarketPrice = search.marketPrice ?? externalPrice?.toString();
+  const touched = isTouched(strategy, search);
+  const marketPrice = (() => {
+    if (!userMarketPrice) return calculatedPrice;
+    if (!calculatedPrice) return userMarketPrice;
+    return touched ? userMarketPrice : calculatedPrice;
+  })();
 
   const orders = getOrders(strategy, search, marketPrice);
   const spread = isValidSpread(search.spread) ? search.spread! : initSpread;
 
   const hasChanged = (() => {
-    const { order0, order1 } = strategy;
     if (search.min !== roundSearchParam(order0.startRate)) return true;
     if (search.max !== roundSearchParam(order1.endRate)) return true;
     if (search.spread !== getRoundedSpread(strategy).toString()) return true;
