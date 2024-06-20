@@ -10,7 +10,7 @@ import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
 import { m } from 'libs/motion';
 import { items } from 'components/strategies/common/variants';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { BaseOrder } from 'components/strategies/common/types';
 import { StrategyType } from 'libs/routing';
@@ -69,7 +69,7 @@ interface FormProps {
 export const CreateForm: FC<FormProps> = (props) => {
   const { base, quote, order0, order1, type, children } = props;
   const { openModal } = useModal();
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const search = useSearch({ strict: false }) as any;
 
   const { isProcessing, isAwaiting, createStrategy } = useCreateStrategy({
@@ -130,6 +130,7 @@ export const CreateForm: FC<FormProps> = (props) => {
         <input
           id="approve-warnings"
           type="checkbox"
+          className="size-18"
           data-testid="approve-warnings"
         />
         {props.approvalText ??

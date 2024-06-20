@@ -19,7 +19,7 @@ import {
   useStrategyEvent,
 } from '../create/useStrategyEventData';
 import { StrategyType } from 'libs/routing';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { getDeposit } from './utils';
 import { useApproval } from 'hooks/useApproval';
 import { useEditStrategyCtx } from './EditStrategyContext';
@@ -66,7 +66,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
     children,
     approveText = "I've reviewed the warning(s) but choose to proceed.",
   } = props;
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const { strategy } = useEditStrategyCtx();
   const { history } = useRouter();
   const { isProcessing: isDeleting, deleteStrategy } = useDeleteStrategy();
@@ -82,10 +82,10 @@ export const EditStrategyForm: FC<Props> = (props) => {
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
   const [isProcessing, setIsProcessing] = useState(false);
-  const isAwaiting = updateMutation.isLoading;
-  const isLoading = isAwaiting || isProcessing || isDeleting;
+  const isPending = updateMutation.isPending;
+  const isLoading = isPending || isProcessing || isDeleting;
   const loadingChildren = getStatusTextByTxStatus(
-    isAwaiting,
+    isPending,
     isProcessing || isDeleting
   );
 
@@ -218,6 +218,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
           id="approve-warnings"
           type="checkbox"
           name="approval"
+          className="size-18"
           data-testid="approve-warnings"
         />
         {approveText}

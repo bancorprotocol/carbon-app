@@ -1,9 +1,9 @@
 import {
   FAUCET_TOKENS,
-  tenderlyFaucetTransferETH,
+  tenderlyFaucetTransferNativeToken,
   tenderlyFaucetTransferTKN,
 } from 'utils/tenderly';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { useGetTokenBalances } from 'libs/queries/chain/balance';
 import { useQueryClient } from '@tanstack/react-query';
 import config from 'config';
@@ -25,7 +25,7 @@ TOKENS.push({
 });
 
 export const DebugTenderlyFaucet = () => {
-  const { user } = useWeb3();
+  const { user } = useWagmi();
   const queryClient = useQueryClient();
   const queries = useGetTokenBalances(TOKENS);
 
@@ -36,7 +36,7 @@ export const DebugTenderlyFaucet = () => {
       return;
     }
 
-    await tenderlyFaucetTransferETH(user);
+    await tenderlyFaucetTransferNativeToken(user);
     await queryClient.invalidateQueries({
       queryKey: QueryKey.balance(user, gasToken.address),
     });

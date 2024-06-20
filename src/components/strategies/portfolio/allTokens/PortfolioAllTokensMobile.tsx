@@ -16,13 +16,13 @@ import { cn, getFiatDisplayValue } from 'utils/helpers';
 
 type Props = {
   data: PortfolioData[];
-  isLoading: boolean;
+  isPending: boolean;
   getHref: GetPortfolioTokenHref;
 };
 
 export const PortfolioAllTokensMobile: FC<Props> = ({
   data,
-  isLoading,
+  isPending,
   getHref,
 }) => {
   const {
@@ -31,7 +31,7 @@ export const PortfolioAllTokensMobile: FC<Props> = ({
 
   return (
     <div className={cn('space-y-20')}>
-      {isLoading
+      {isPending
         ? Array.from({ length: 3 }).map((_, i) => (
             <PortfolioMobileCardLoading key={i} />
           ))

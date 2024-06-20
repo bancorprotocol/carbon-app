@@ -19,6 +19,7 @@ type InputLimitProps = {
   error?: string;
   warnings?: (string | undefined)[];
   buy?: boolean;
+  ignoreMarketPriceWarning?: boolean;
 };
 
 export const InputLimit: FC<InputLimitProps> = ({
@@ -30,6 +31,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   error,
   warnings = [],
   buy = false,
+  ignoreMarketPriceWarning = false,
 }) => {
   const inputId = useId();
   const marketPrice = useMarketPrice({ base, quote });
@@ -43,7 +45,7 @@ export const InputLimit: FC<InputLimitProps> = ({
 
   // Warnings
   const noMarketPrice = !marketPrice
-    ? 'Notice: price & slippage are unknown'
+    ? 'Difference from current market price cannot be calculated.'
     : '';
   const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
   const showWarning = !displayError && !!displayWarnings?.length;
@@ -90,7 +92,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             aria-label="Enter Price"
             placeholder="Enter Price"
             className={cn(
-              'text-18 font-weight-500 flex-1 text-ellipsis bg-transparent text-start focus:outline-none',
+              'text-18 font-weight-500 w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-none',
               displayError && 'text-error'
             )}
             data-testid="input-price"
@@ -113,6 +115,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             </span>
             {!!marketPercent && (
               <MarketPriceIndication
+                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
                 marketPricePercentage={marketPercent}
                 buy={buy}
               />

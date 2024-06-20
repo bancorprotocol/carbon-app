@@ -33,7 +33,7 @@ interface Props {
   spread?: string;
   bounds: ChartPrices;
   data?: CandlestickData[];
-  isLoading: boolean;
+  isPending: boolean;
   isError: boolean;
   simulationType: SimulatorType;
 }
@@ -53,7 +53,7 @@ export const SimInputChart = ({
   isLimit,
   spread,
   bounds,
-  isLoading,
+  isPending,
   isError,
   data,
   simulationType,
@@ -127,7 +127,7 @@ export const SimInputChart = ({
         />
       )}
 
-      {isLoading && (
+      {isPending && (
         <CarbonLogoLoading className="h-[100px] self-center justify-self-center" />
       )}
 

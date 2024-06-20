@@ -23,14 +23,11 @@ const addresses = {
 
 export const commonConfig: AppConfig = {
   mode: 'development',
+  appName: 'Carbon DeFi',
   appUrl: 'https://app.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/',
-  selectableConnectionTypes: [
-    'injected',
-    'walletConnect',
-    'coinbaseWallet',
-    'gnosisSafe',
-  ],
+  selectedConnectors: ['MetaMask', 'WalletConnect', 'Coinbase Wallet', 'Safe'],
+  blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   isSimulatorEnabled: true,
   policiesLastUpdated: '18 April, 2023',
@@ -42,7 +39,7 @@ export const commonConfig: AppConfig = {
     rpc: {
       url:
         import.meta.env.VITE_CHAIN_RPC_URL ||
-        'https://eth-mainnet.g.alchemy.com/v2/demo',
+        'https://ethereum-rpc.publicnode.com',
     },
     gasToken: {
       name: 'Ether',
@@ -108,8 +105,18 @@ export const commonConfig: AppConfig = {
       carbonController: '0xC537e898CD774e2dCBa3B14Ea6f34C93d5eA45e1',
       voucher: '0x3660F04B79751e31128f6378eAC70807e38f554E',
     },
-    utils: {
-      multicall: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
+  },
+  utils: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+      blockCreated: 14353601,
+    },
+    ensRegistry: {
+      address: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+    },
+    ensUniversalResolver: {
+      address: '0xE4Acdd618deED4e6d2f03b9bf62dc6118FC9A4da',
+      blockCreated: 16773775,
     },
   },
   tokenListOverride: [
@@ -132,4 +139,70 @@ export const commonConfig: AppConfig = {
       uri: 'https://tokens.coingecko.com/ethereum/all.json',
     },
   ],
+  tenderly: {
+    nativeTokenDonorAccount: '0x00000000219ab540356cbb839cbe05303d7705fa',
+    faucetAmount: 1000,
+    faucetTokens: [
+      {
+        donorAccount: '0x0a59649758aa4d66e25f08dd01271e891fe52199',
+        tokenContract: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+        decimals: 6,
+        symbol: 'USDC',
+      },
+      {
+        donorAccount: '0x5777d92f208679db4b9778590fa3cab3ac9e2168',
+        tokenContract: '0x6b175474e89094c44da98b954eedeac495271d0f',
+        decimals: 18,
+        symbol: 'DAI',
+      },
+      {
+        donorAccount: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
+        tokenContract: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c',
+        decimals: 18,
+        symbol: 'BNT',
+      },
+      {
+        donorAccount: '0x4338545408d73b0e6135876f9ff691bb72f1c8d9',
+        tokenContract: '0x15b0dD2c5Db529Ab870915ff498bEa6d20Fb6b96',
+        decimals: 18,
+        symbol: 'PARQ',
+      },
+      {
+        donorAccount: '0xccF4429DB6322D5C611ee964527D42E5d685DD6a',
+        tokenContract: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
+        decimals: 8,
+        symbol: 'WBTC',
+      },
+      {
+        donorAccount: '0x480234599362dC7a76cd99D09738A626F6d77e5F',
+        tokenContract: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
+        decimals: 18,
+        symbol: 'BNB',
+      },
+      {
+        donorAccount: '0x5e3ef299fddf15eaa0432e6e66473ace8c13d908',
+        tokenContract: '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
+        decimals: 18,
+        symbol: 'MATIC',
+      },
+      {
+        donorAccount: '0x5a52e96bacdabb82fd05763e25335261b270efcb',
+        tokenContract: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+        decimals: 18,
+        symbol: 'SHIB',
+      },
+      {
+        donorAccount: '0x4b4e140d1f131fdad6fb59c13af796fd194e4135',
+        tokenContract: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+        decimals: 18,
+        symbol: 'UNI',
+      },
+      {
+        donorAccount: '0x0162Cd2BA40E23378Bf0FD41f919E1be075f025F',
+        tokenContract: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+        decimals: 6,
+        symbol: 'USDT',
+      },
+    ],
+  },
 };

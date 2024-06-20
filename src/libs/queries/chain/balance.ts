@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from '@tanstack/react-query';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { shrinkToken } from 'utils/tokens';
 import config from 'config';
@@ -13,11 +13,11 @@ export const useGetTokenBalance = (
   const address = token?.address;
   const decimals = token?.decimals;
   const { Token } = useContract();
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
 
-  return useQuery(
-    QueryKey.balance(user!, address!),
-    async () => {
+  return useQuery({
+    queryKey: QueryKey.balance(user!, address!),
+    queryFn: async () => {
       if (!user) {
         throw new Error('useGetTokenBalance no user provided');
       }
@@ -39,19 +39,18 @@ export const useGetTokenBalance = (
         return shrinkToken(res.toString(), decimals, true);
       }
     },
-    {
-      enabled: !!user && !!address && !!decimals && !!provider,
-      refetchInterval: TEN_SEC_IN_MS,
-      onError: (e: any) =>
-        console.error('useGetTokenBalance failed with error:', e),
-    }
-  );
+    meta: {
+      errorMessage: 'useGetTokenBalances failed with error:',
+    },
+    enabled: !!user && !!address && !!decimals && !!provider,
+    refetchInterval: TEN_SEC_IN_MS,
+  });
 };
 
 export const useGetTokenBalances = (
   tokens: Pick<Token, 'address' | 'decimals'>[]
 ) => {
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
   const { Token } = useContract();
 
   return useQueries({
@@ -73,9 +72,10 @@ export const useGetTokenBalances = (
           return shrinkToken(res.toString(), decimals);
         }
       },
+      meta: {
+        errorMessage: 'useGetTokenBalances failed with error:',
+      },
       enabled: !!user && !!provider,
-      onError: (e: any) =>
-        console.error('useGetTokenBalances failed with error:', e),
     })),
   });
 };

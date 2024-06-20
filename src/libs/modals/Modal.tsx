@@ -22,7 +22,7 @@ export const Modal: FC<ModalProps> = ({
   title,
   size = 'sm',
   showCloseButton = true,
-  isLoading = false,
+  isPending = false,
   onClose,
   'data-testid': testId,
 }) => {
@@ -53,7 +53,7 @@ export const Modal: FC<ModalProps> = ({
           data-testid={testId}
           className="rounded-10 bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-none focus:outline-none"
         >
-          {isLoading && (
+          {isPending && (
             <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
           )}
           <header className="flex justify-between">

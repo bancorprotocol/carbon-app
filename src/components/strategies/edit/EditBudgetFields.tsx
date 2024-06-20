@@ -41,7 +41,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
   const balance = useGetTokenBalance(token);
 
   const max = editType === 'deposit' ? balance.data || '0' : initialBudget;
-  const maxIsLoading = editType === 'deposit' && balance.isLoading;
+  const maxIsLoading = editType === 'deposit' && balance.isPending;
   const insufficientBalance =
     balance.data && new SafeDecimal(max).lt(budget)
       ? 'Insufficient balance'

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { carbonEvents } from 'services/events';
-import { useWeb3 } from 'libs/web3';
+import { useWagmi } from 'libs/wagmi';
 import {
   useGetTradeLiquidity,
   useGetTradeData,
@@ -14,6 +14,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
+import { isTouchedZero, isZero } from 'components/strategies/common/utils';
 
 export const useBuySell = ({
   source,
@@ -21,7 +22,7 @@ export const useBuySell = ({
   sourceBalanceQuery,
   buy = false,
 }: TradeWidgetBuySellProps) => {
-  const { user, provider } = useWeb3();
+  const { user, provider } = useWagmi();
   const { openModal } = useModal();
   const { selectedFiatCurrency } = useFiatCurrency();
   const sourceTokenPriceQuery = useGetTokenPrice(source.address);
@@ -154,7 +155,11 @@ export const useBuySell = ({
       setTradeActionsRes(actionsTokenRes);
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-      if (effectiveRate !== '0') {
+
+      if (
+        effectiveRate !== '0' ||
+        (!isZero(sourceInput) && isTouchedZero(totalTargetAmount))
+      ) {
         checkLiquidity();
       }
     }
@@ -176,7 +181,11 @@ export const useBuySell = ({
       setTradeActionsRes(actionsTokenRes);
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-      if (effectiveRate !== '0') {
+
+      if (
+        effectiveRate !== '0' ||
+        (!isZero(targetInput) && isTouchedZero(totalSourceAmount))
+      ) {
         checkLiquidity();
       }
     }
@@ -203,7 +212,7 @@ export const useBuySell = ({
     if (
       bySourceQuery.isFetching ||
       byTargetQuery.isFetching ||
-      approval.isLoading ||
+      approval.isPending ||
       isLiquidityError ||
       errorBaseBalanceSufficient ||
       maxSourceAmountQuery.isFetching
@@ -252,7 +261,7 @@ export const useBuySell = ({
     }
   }, [
     approval.approvalRequired,
-    approval.isLoading,
+    approval.isPending,
     approval.tokens,
     bySourceQuery.isFetching,
     byTargetQuery.isFetching,

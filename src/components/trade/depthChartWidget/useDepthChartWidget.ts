@@ -12,7 +12,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
       settings: { steps, depthChartBuckets },
     },
   } = useStore();
-  const { data, isLoading } = useGetOrderBook(
+  const { data, isPending } = useGetOrderBook(
     steps,
     base?.address,
     quote?.address
@@ -212,6 +212,6 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
     buyOrders: getOrders(data?.buy, true),
     sellOrders: getOrders(data?.sell),
     getOptions,
-    isLoading,
+    isPending,
   };
 };
