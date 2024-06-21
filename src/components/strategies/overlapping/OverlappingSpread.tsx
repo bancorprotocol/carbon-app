@@ -1,11 +1,4 @@
-import {
-  useRef,
-  FC,
-  KeyboardEvent,
-  useState,
-  FocusEvent,
-  ChangeEvent,
-} from 'react';
+import { useRef, FC, KeyboardEvent, FocusEvent, ChangeEvent } from 'react';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
@@ -21,10 +14,6 @@ interface Props {
   setSpread: (value: number) => void;
 }
 
-const getWarning = (maxSpread: number) => {
-  return `Given price range, max fee tier cannot exceed ${maxSpread}%`;
-};
-
 const round = (value: number) => Math.round(value * 100) / 100;
 
 export const OverlappingSpread: FC<Props> = (props) => {
@@ -32,18 +21,15 @@ export const OverlappingSpread: FC<Props> = (props) => {
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spread);
   const hasError = spread <= 0 || spread > 100;
-  const [warning, setWarning] = useState('');
 
   const selectSpread = (value: number) => {
     const input = document.getElementById('spread-custom') as HTMLInputElement;
     const maxSpread = round(getMaxSpread(buyMin, sellMax));
     if (value > maxSpread) {
-      setWarning(getWarning(maxSpread));
       setSpread(maxSpread);
       input.value = maxSpread.toFixed(2);
       input.focus();
     } else {
-      setWarning('');
       setSpread(value);
       input.value = '';
     }
@@ -73,11 +59,9 @@ export const OverlappingSpread: FC<Props> = (props) => {
     if (isNaN(value)) {
       e.target.value = sanitizeNumber(e.target.value);
     } else if (value > maxSpread) {
-      setWarning(getWarning(maxSpread));
       setSpread(maxSpread);
       e.target.value = maxSpread.toFixed(2);
     } else {
-      setWarning('');
       setSpread(value);
     }
   };
@@ -153,9 +137,6 @@ export const OverlappingSpread: FC<Props> = (props) => {
           <span className={styles.suffix}>%</span>
         </div>
       </div>
-      {warning && spread && (
-        <Warning htmlFor="spread-custom">{warning}</Warning>
-      )}
       {spread <= 0 && (
         <Warning htmlFor="spread-custom" isError>
           The fee tier should be above 0%
