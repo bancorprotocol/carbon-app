@@ -28,8 +28,8 @@ import { formatNumber } from 'utils/helpers';
 interface Props {
   state: SimulatorInputOverlappingValues;
   dispatch: SimulatorOverlappingInputDispatch;
-  spread: number;
-  setSpread: (value: number) => void;
+  spread: string;
+  setSpread: (value: string) => void;
   marketPrice: number;
 }
 
@@ -184,7 +184,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
-  const setSpreadValue = (value: number) => {
+  const setSpreadValue = (value: string) => {
     setTouched(true);
     setSpread(value);
   };
@@ -282,7 +282,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   useEffect(() => {
     if (!+formatNumber(buy.min)) return;
     const timeout = setTimeout(async () => {
-      const minSellMax = getMinSellMax(Number(buy.min), spread);
+      const minSellMax = getMinSellMax(Number(buy.min), +spread);
       if (Number(sell.max) < minSellMax) setMax(minSellMax.toString());
     }, 1500);
     return () => clearTimeout(timeout);
@@ -293,7 +293,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   useEffect(() => {
     if (!+formatNumber(sell.max)) return;
     const timeout = setTimeout(async () => {
-      const maxBuyMin = getMaxBuyMin(Number(sell.max), spread);
+      const maxBuyMin = getMaxBuyMin(Number(sell.max), +spread);
       if (Number(buy.min) > maxBuyMin) setMin(maxBuyMin.toString());
     }, 1500);
     return () => clearTimeout(timeout);

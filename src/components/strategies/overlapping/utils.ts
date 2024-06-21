@@ -30,7 +30,7 @@ export const getSpread = ({ order0, order1 }: StrategyInput) => {
 };
 
 export const getRoundedSpread = (strategy: StrategyInput) => {
-  return Number(getSpread(strategy).toFixed(2));
+  return Number(getSpread(strategy).toFixed(6));
 };
 
 interface BuyOrder {
