@@ -33,6 +33,9 @@ export interface AppConfig {
       logoURI: string;
     };
   };
+  sdk: {
+    cacheTTL: number;
+  };
   defaultTokenPair: [string, string];
   popularPairs: [string, string][];
   popularTokens: {

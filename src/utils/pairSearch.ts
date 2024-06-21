@@ -44,7 +44,8 @@ export const fromPairSearch = (
   value: string,
   regex: RegExp = pairSearchExp
 ) => {
-  return value.toLowerCase().replaceAll(regex, '_');
+  const pairKey = value.toLowerCase().replaceAll(regex, '_');
+  return replaceSpecialCharacters(pairKey);
 };
 
 export const createPairMaps = (
@@ -58,10 +59,19 @@ export const createPairMaps = (
     const slug = toPairSlug(base, quote);
     pairMap.set(slug, pair);
     const displayName = toPairName(base, quote);
-    const name = fromPairSearch(displayName, transformSlugExp);
+    const nameRaw = fromPairSearch(displayName, transformSlugExp);
+    const name = replaceSpecialCharacters(nameRaw);
     nameMap.set(slug, name);
   }
   return { pairMap, nameMap };
+};
+
+export const replaceSpecialCharacters = (value: string) => {
+  return value.replace(/(₿)|(₮)/g, (match, p1, p2) => {
+    if (p1) return 'b';
+    if (p2) return 't';
+    return match;
+  });
 };
 
 /**
