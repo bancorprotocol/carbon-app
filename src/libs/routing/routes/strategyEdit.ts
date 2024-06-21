@@ -70,8 +70,10 @@ export const editPricesDisposable = new Route({
     editType: validLiteral(['editPrices', 'renew']),
     min: validNumber,
     max: validNumber,
+    budget: validNumber,
     settings: validLiteral(['limit', 'range']),
     direction: validLiteral(['buy', 'sell']),
+    action: validLiteral(['deposit', 'withdraw']),
   }),
 });
 
@@ -98,10 +100,14 @@ export const editPricesRecurring = new Route({
     editType: validLiteral(['editPrices', 'renew']),
     buyMin: validNumber,
     buyMax: validNumber,
+    buyBudget: validNumber,
     buySettings: validLiteral(['limit', 'range']),
+    buyAction: validLiteral(['deposit', 'withdraw']),
     sellMin: validNumber,
     sellMax: validNumber,
+    sellBudget: validNumber,
     sellSettings: validLiteral(['limit', 'range']),
+    sellAction: validLiteral(['deposit', 'withdraw']),
   }),
 });
 

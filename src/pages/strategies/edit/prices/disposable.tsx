@@ -3,7 +3,7 @@ import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyConte
 import { roundSearchParam } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
-import { OrderBlock } from 'components/strategies/common/types';
+import { EditOrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   emptyOrder,
@@ -19,7 +19,11 @@ import {
   BudgetDescription,
   BudgetDistribution,
 } from 'components/strategies/common/BudgetDistribution';
-import { getDeposit, getWithdraw } from 'components/strategies/edit/utils';
+import {
+  getDeposit,
+  getTotalBudget,
+  getWithdraw,
+} from 'components/strategies/edit/utils';
 import { useGetTokenBalance } from 'libs/queries';
 
 export interface EditDisposableStrategySearch {
@@ -28,6 +32,8 @@ export interface EditDisposableStrategySearch {
   max: string;
   settings: StrategySettings;
   direction: StrategyDirection;
+  action?: 'deposit' | 'withdraw';
+  budget?: string;
 }
 
 const url = '/strategies/edit/$strategyId/prices/disposable';
@@ -38,23 +44,29 @@ export const EditStrategyDisposablePage = () => {
   const search = useSearch({ from: url });
   const marketPrice = useMarketPrice({ base, quote });
 
-  const buy = search.direction !== 'sell';
-  const otherOrder = buy ? order1 : order0;
+  const isBuy = search.direction !== 'sell';
+  const otherOrder = isBuy ? order1 : order0;
   const { setOrder, setDirection } = useSetDisposableOrder(url, otherOrder);
 
   const baseBalance = useGetTokenBalance(base);
   const quoteBalance = useGetTokenBalance(quote);
 
-  const initialBudget = buy ? order0.balance : order1.balance;
-  const order: OrderBlock = {
+  const initialBudget = isBuy ? order0.balance : order1.balance;
+  const totalBudget = getTotalBudget(
+    search.action ?? 'deposit',
+    initialBudget,
+    search.budget
+  );
+  const order: EditOrderBlock = {
     min: search.min ?? '',
     max: search.max ?? '',
-    budget: initialBudget,
+    budget: totalBudget,
     settings: search.settings ?? 'limit',
+    action: search.action ?? 'deposit',
   };
   const orders = {
-    buy: buy ? order : emptyOrder(),
-    sell: buy ? emptyOrder() : order,
+    buy: isBuy ? order : emptyOrder(),
+    sell: isBuy ? emptyOrder() : order,
   };
 
   const hasChanged = (() => {
@@ -72,12 +84,12 @@ export const EditStrategyDisposablePage = () => {
     marketPrice,
     min: search.min,
     max: search.max,
-    buy: search.direction !== 'sell',
+    buy: isBuy,
   });
 
   const fromRecurring = !isZero(order0.startRate) && !isZero(order1.startRate);
-  const buyBudgetChanges = order0.balance !== orders.buy.budget;
-  const sellBudgetChanges = order1.balance !== orders.sell.budget;
+  const buyBudgetChanges = !isBuy && totalBudget !== order0.balance;
+  const sellBudgetChanges = isBuy && totalBudget !== order1.balance;
 
   return (
     <EditStrategyForm
@@ -88,22 +100,23 @@ export const EditStrategyDisposablePage = () => {
     >
       <EditStrategyPriceField
         order={order}
+        budget={search.budget ?? ''}
         initialBudget={initialBudget}
         setOrder={setOrder}
         warnings={[outSideMarket]}
-        buy={buy}
+        buy={isBuy}
         settings={
           <TabsMenu>
             <TabsMenuButton
               onClick={() => setDirection('buy')}
-              isActive={buy}
+              isActive={isBuy}
               data-testid="tab-buy"
             >
               Buy
             </TabsMenuButton>
             <TabsMenuButton
               onClick={() => setDirection('sell')}
-              isActive={!buy}
+              isActive={!isBuy}
               data-testid="tab-sell"
             >
               Sell
@@ -166,7 +179,9 @@ export const EditStrategyDisposablePage = () => {
         </article>
       )}
       {fromRecurring && (
-        <Warning>{buy ? 'Sell High' : 'Buy Low'} order will be removed</Warning>
+        <Warning>
+          {isBuy ? 'Sell High' : 'Buy Low'} order will be removed
+        </Warning>
       )}
     </EditStrategyForm>
   );
