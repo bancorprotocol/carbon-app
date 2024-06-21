@@ -143,6 +143,16 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     return 'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
   })();
 
+  const budgetWarning = (() => {
+    if (action !== 'deposit') return;
+    if (hasArbOpportunity(order0.marginalPrice, spread, marketPrice)) {
+      const buyBudgetChanged = strategy.order0.balance !== order0.budget;
+      const sellBudgetChanged = strategy.order1.balance !== order1.budget;
+      if (!buyBudgetChanged && !sellBudgetChanged) return;
+      return 'Please note that the deposit might create an arb opportunity.';
+    }
+  })();
+
   useEffect(() => {
     if (anchor === 'buy' && aboveMarket) {
       set('anchor', 'sell');
@@ -153,16 +163,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       set('budget', undefined);
     }
   }, [anchor, aboveMarket, belowMarket, set]);
-
-  const budgetWarning = (() => {
-    if (action !== 'deposit') return;
-    if (hasArbOpportunity(order0.marginalPrice, spread, marketPrice)) {
-      const buyBudgetChanged = strategy.order0.balance !== order0.budget;
-      const sellBudgetChanged = strategy.order1.balance !== order1.budget;
-      if (!buyBudgetChanged && !sellBudgetChanged) return;
-      return 'Please note that the deposit might create an arb opportunity.';
-    }
-  })();
 
   const setMarketPrice = (price: string) => {
     setTouched(true);
@@ -303,19 +303,20 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
         disableSell={belowMarket}
       />
       {anchor && (
-        <OverlappingAction
-          base={base}
-          quote={quote}
-          anchor={anchor}
-          action={action}
-          setAction={setAction}
-          budget={budget ?? ''}
-          setBudget={setBudget}
-          buyBudget={initialBuyBudget}
-          sellBudget={initialSellBudget}
-          error={budgetError}
-          warning={budgetWarning}
-        />
+        <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+          <OverlappingAction
+            base={base}
+            quote={quote}
+            anchor={anchor}
+            action={action}
+            setAction={setAction}
+            budget={budget ?? ''}
+            setBudget={setBudget}
+            buyBudget={initialBuyBudget}
+            sellBudget={initialSellBudget}
+            warning={budgetWarning}
+          />
+        </article>
       )}
       {anchor && (
         <article

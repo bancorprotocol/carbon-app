@@ -11,15 +11,20 @@ import {
   checkIfOrdersOverlap,
   checkIfOrdersReversed,
 } from 'components/strategies/utils';
+import { getTotalBudget } from 'components/strategies/edit/utils';
 
 export interface EditRecurringStrategySearch {
   editType: 'editPrices' | 'renew';
   buyMin: string;
   buyMax: string;
   buySettings: StrategySettings;
+  buyBudget?: string;
+  buyAction?: 'deposit' | 'withdraw';
   sellMin: string;
   sellMax: string;
   sellSettings: StrategySettings;
+  sellBudget?: string;
+  sellAction?: 'deposit' | 'withdraw';
 }
 
 type Search = EditRecurringStrategySearch;
@@ -55,14 +60,24 @@ export const EditStrategyRecurringPage = () => {
     buy: {
       min: search.buyMin,
       max: search.buyMax,
-      budget: order0.balance,
       settings: search.buySettings,
+      action: search.buyAction ?? 'deposit',
+      budget: getTotalBudget(
+        search.buyAction ?? 'deposit',
+        order0.balance,
+        search.buyBudget
+      ),
     },
     sell: {
       min: search.sellMin,
       max: search.sellMax,
-      budget: order1.balance,
       settings: search.sellSettings,
+      action: search.sellAction ?? 'deposit',
+      budget: getTotalBudget(
+        search.sellAction ?? 'deposit',
+        order1.balance,
+        search.sellBudget
+      ),
     },
   };
 
@@ -102,6 +117,7 @@ export const EditStrategyRecurringPage = () => {
     >
       <EditStrategyPriceField
         order={orders.sell}
+        budget={search.sellBudget ?? ''}
         initialBudget={order1.balance}
         setOrder={setSellOrder}
         warnings={[sellOutsideMarket, getWarning(search)]}
@@ -109,6 +125,7 @@ export const EditStrategyRecurringPage = () => {
       />
       <EditStrategyPriceField
         order={orders.buy}
+        budget={search.buyBudget ?? ''}
         initialBudget={order0.balance}
         setOrder={setBuyOrder}
         warnings={[buyOutsideMarket, getWarning(search)]}
