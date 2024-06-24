@@ -41,6 +41,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await createForm.submit();
     await tokenApproval.checkApproval([base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
+    await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
 
     // Verify strategy data

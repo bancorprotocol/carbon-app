@@ -52,15 +52,16 @@ export const StrategiesPage = () => {
     <Page hideTitle={true}>
       <StrategyProvider query={query}>
         {user && (
-          <header
-            role="toolbar"
-            className="mb-20 flex items-center justify-between"
-          >
+          <header role="toolbar" className="flex items-center justify-between">
             <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
             <StrategyPageTitleWidget showFilter={showFilter} />
           </header>
         )}
-
+        <div className="relative my-8 h-[4px] w-full overflow-hidden rounded">
+          {!query.isPending && query.isFetching && (
+            <div data-testid="fetch-strategies" className="statusBar"></div>
+          )}
+        </div>
         {user ? <Outlet /> : <WalletConnect />}
       </StrategyProvider>
     </Page>

@@ -19,12 +19,14 @@ export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
     await edit.waitForPage('recurring', 'renew');
     await edit.fillRecurringPrice('renew');
     await edit.submit('renew');
+
     await page.waitForURL('/', { timeout: 10_000 });
+    const myStrategies = new MyStrategyDriver(page);
+    await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
+    const strategyEdited = await myStrategies.getStrategy(1);
 
     await expect(strategy.status()).toHaveText('Active');
-    const myStrategies = new MyStrategyDriver(page);
-    const strategyEdited = await myStrategies.getStrategy(1);
 
     // Check range
     const { buy, sell } = testCase.output.editPrices;
