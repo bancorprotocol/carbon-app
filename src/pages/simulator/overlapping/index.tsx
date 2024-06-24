@@ -103,8 +103,8 @@ export const SimulatorInputOverlappingPage = () => {
           state={state}
           dispatch={dispatch}
           marketPrice={data?.[0].open ?? 0}
-          spread={+state.spread!}
-          setSpread={(v) => dispatch('spread', v.toString())}
+          spread={state.spread}
+          setSpread={(v) => dispatch('spread', v)}
         />
         <Button
           type="submit"
