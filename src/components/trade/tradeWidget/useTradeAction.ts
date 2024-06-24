@@ -100,9 +100,9 @@ export const useTradeAction = ({
           from: source.symbol,
           to: target.symbol,
         });
-        onSuccess?.(tx.hash);
 
         await tx.wait();
+        onSuccess?.(tx.hash);
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, source.address),
         });
