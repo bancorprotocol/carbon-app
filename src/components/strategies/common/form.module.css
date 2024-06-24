@@ -1,18 +1,21 @@
 .form:invalid button[type="submit"],
 .form:has(:global(.error-message)) button[type="submit"],
 .form:has(:global(.loading-message)) button[type="submit"],
-.form:has(:global(.warning-message)):has(.approve-warnings input:not(:checked)) button[type="submit"] {
+.form:has(:global(.warning-message)):has(.approve-warnings input:not(:checked)) button[type="submit"],
+.form.overlapping:has(:global(.budget-message)):has(.approve-warnings input:not(:checked)) button[type="submit"] {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 .form:invalid button[type="submit"]:hover,
-.form:has(:global(.error-message)) button[type="submit"]:hover {
+.form:has(:global(.error-message)) button[type="submit"]:hover, 
+.form.overlapping:has(:global(.budget-message)) button[type="submit"]:hover {
   border: none;
 }
 
 .form:has(:global(.error-message)) .approve-warnings,
-.form:not(:has(:global(.warning-message))) .approve-warnings {
+.form:not(.overlapping):not(:has(:global(.warning-message))) .approve-warnings,
+.form.overlapping:not(:has(:global(.warning-message))):not(:has(:global(.budget-message))) .approve-warnings {
   display: none;
 }
 

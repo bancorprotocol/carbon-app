@@ -116,7 +116,10 @@ export const EditStrategyForm: FC<Props> = (props) => {
     if (!!form.querySelector('.loading-message')) return true;
     if (!!form.querySelector('.error-message')) return true;
     const warnings = form.querySelector('.warning-message');
-    if (!warnings) return false;
+    const budgets = form.querySelector('.budget-message');
+    const needApproval =
+      !!warnings || (!!budgets && strategyType === 'overlapping');
+    if (!needApproval) return false;
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
   };
 
@@ -199,7 +202,9 @@ export const EditStrategyForm: FC<Props> = (props) => {
     <form
       onSubmit={submit}
       onReset={() => history.back()}
-      className={cn('flex flex-col gap-20 md:w-[440px]', style.form)}
+      className={cn('flex flex-col gap-20 md:w-[440px]', style.form, {
+        [style.overlapping]: strategyType === 'overlapping',
+      })}
       data-testid="edit-form"
     >
       <EditPriceNav editType={editType} />

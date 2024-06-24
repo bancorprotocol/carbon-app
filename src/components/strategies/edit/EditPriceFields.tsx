@@ -74,12 +74,8 @@ export const EditStrategyPriceField: FC<Props> = ({
   const setPrice = (price: string) => setOrder({ min: price, max: price });
   const setMin = (min: string) => setOrder({ min });
   const setMax = (max: string) => setOrder({ max });
-  const setBudget = (budget: string) => {
-    console.log('set budget', { buy });
-    setOrder({ budget });
-  };
+  const setBudget = (budget: string) => setOrder({ budget });
   const setAction = (action: 'deposit' | 'withdraw') => {
-    console.log('set action', { action, buy });
     setOrder({ action, budget: undefined });
   };
   const setSettings = (settings: StrategySettings) => {

@@ -63,8 +63,6 @@ export const OverlappingAction: FC<Props> = (props) => {
     return '';
   })();
 
-  console.log({ anchor, action });
-
   return (
     <details open={opened.current} onToggle={onToggle}>
       <summary

@@ -75,6 +75,7 @@ export const EditStrategyDisposablePage = () => {
     if (orders.buy.max !== roundSearchParam(order0.endRate)) return true;
     if (orders.sell.min !== roundSearchParam(order1.startRate)) return true;
     if (orders.sell.max !== roundSearchParam(order1.endRate)) return true;
+    if (!isZero(search.budget)) return true;
     return false;
   })();
 
