@@ -8,7 +8,6 @@ import { useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
 import { ContractTransaction } from 'ethers';
 import config from 'config';
-import { TEN_SEC_IN_MS } from 'utils/time';
 
 export type GetUserApprovalProps = Pick<
   Token,
@@ -51,7 +50,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
         errorMessage: 'useGetUserApproval failed with error:',
       },
       enabled: !!user,
-      gcTime: TEN_SEC_IN_MS,
+      gcTime: 0,
     })),
   });
 };
