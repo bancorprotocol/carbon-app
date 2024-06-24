@@ -2,15 +2,8 @@
 import { Page } from '@playwright/test';
 import { waitFor } from './operators';
 import { closeModal, waitModalClose, waitModalOpen } from './modal';
-import { Direction, debugTokens } from './types';
-
-interface TradeTestCase {
-  mode: Direction;
-  source: string;
-  target: string;
-  sourceValue: string;
-  targetValue: string;
-}
+import { debugTokens } from './types';
+import { TestCaseSwap, TradeTestCase } from './trade/types';
 
 export class TradeDriver {
   public form = this.page.getByTestId(`${this.testCase.mode}-form`);
@@ -38,8 +31,8 @@ export class TradeDriver {
     await waitModalClose(this.page);
   }
 
-  setPay() {
-    const { sourceValue } = this.testCase;
+  setPay(swap: TestCaseSwap) {
+    const { sourceValue } = swap;
     return this.form.getByLabel('You Pay').fill(sourceValue);
   }
 
