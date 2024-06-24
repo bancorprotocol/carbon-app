@@ -102,20 +102,19 @@ export const useTradeAction = ({
         });
         onSuccess?.(tx.hash);
 
-        void cache.invalidateQueries({
-          queryKey: QueryKey.approval(
-            user,
-            source.address,
-            config.addresses.carbon.carbonController
-          ),
-        });
-
         await tx.wait();
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, source.address),
         });
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, target.address),
+        });
+        void cache.invalidateQueries({
+          queryKey: QueryKey.approval(
+            user,
+            source.address,
+            config.addresses.carbon.carbonController
+          ),
         });
       } catch (error) {
         console.error(error);
