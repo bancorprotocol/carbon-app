@@ -107,19 +107,22 @@ const getOrders = (
   };
 
   // PRICES
-  const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
-  orders.buy.min = prices.buyPriceLow;
-  orders.buy.max = prices.buyPriceHigh;
-  orders.buy.marginalPrice = prices.buyPriceMarginal;
-  orders.sell.min = prices.sellPriceLow;
-  orders.sell.max = prices.sellPriceHigh;
-  orders.sell.marginalPrice = prices.sellPriceMarginal;
+  const touched = isTouched(strategy, search);
+
+  if (touched) {
+    const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
+    orders.buy.min = prices.buyPriceLow;
+    orders.buy.max = prices.buyPriceHigh;
+    orders.buy.marginalPrice = prices.buyPriceMarginal;
+    orders.sell.min = prices.sellPriceLow;
+    orders.sell.max = prices.sellPriceHigh;
+    orders.sell.marginalPrice = prices.sellPriceMarginal;
+  }
 
   if (!anchor) return orders;
 
   // If there is no changes we don't recalculate the budget because of precision delta
-  const touched = isTouched(strategy, search);
-  if (isZero(budget) && !touched) return orders;
+  if (!touched && isZero(budget)) return orders;
 
   // BUDGET
   if (anchor === 'buy') {
