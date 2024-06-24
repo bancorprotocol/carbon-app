@@ -110,9 +110,9 @@ export const CreateOverlapping: FC<Props> = (props) => {
     set('max', max);
   };
 
-  const setSpreadValue = (value: number) => {
+  const setSpread = (value: string) => {
     setTouched(true);
-    set('spread', value.toString());
+    set('spread', value);
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
@@ -222,8 +222,8 @@ export const CreateOverlapping: FC<Props> = (props) => {
           sellMax={Number(order1.max)}
           defaultValue={0.05}
           options={[0.01, 0.05, 0.1]}
-          spread={+spread}
-          setSpread={setSpreadValue}
+          spread={spread}
+          setSpread={setSpread}
         />
       </m.article>
       <OverlappingAnchor

@@ -9,6 +9,7 @@ import { DebugNotifications } from 'components/debug/DebugNotifications';
 import { DebugCreateStrategy } from 'components/debug/DebugCreateStrategy';
 import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
 import { DebugOrderBook } from 'components/debug/DebugOrderBook';
+import { DebugSDKConfig } from 'components/debug/DebugSDKConfig';
 
 export const DebugPage = () => {
   return (
@@ -24,6 +25,7 @@ export const DebugPage = () => {
         <DebugCreateStrategy />
         <DebugFiatCurrency />
         <DebugOrderBook />
+        <DebugSDKConfig />
       </div>
     </Page>
   );

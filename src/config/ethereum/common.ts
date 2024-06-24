@@ -1,5 +1,6 @@
 import { AppConfig } from 'config/types';
 import IconETHLogo from 'assets/logos/ethlogo.svg';
+import { ONE_HOUR_IN_MS } from 'utils/time';
 
 const addresses = {
   ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -49,6 +50,9 @@ export const commonConfig: AppConfig = {
       logoURI:
         'https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg',
     },
+  },
+  sdk: {
+    cacheTTL: ONE_HOUR_IN_MS,
   },
   defaultTokenPair: [addresses.ETH, addresses.USDC],
   popularPairs: [
