@@ -19,7 +19,7 @@ import {
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { getDeposit, getWithdraw } from './utils';
 import { OverlappingAction } from 'components/strategies/overlapping/OverlappingAction';
-import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
+import { hasNoBudget } from '../overlapping/utils';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
 import { Warning } from 'components/common/WarningMessageWithIcon';

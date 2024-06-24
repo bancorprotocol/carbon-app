@@ -1,6 +1,7 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { sanitizeNumber } from 'utils/helpers';
 import { StrategyInput } from 'components/strategies/common/utils';
+import { Strategy } from 'libs/queries';
+import { geoMean } from 'utils/fullOutcome';
 
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
@@ -33,40 +34,39 @@ export const getRoundedSpread = (strategy: StrategyInput) => {
   return Number(getSpread(strategy).toFixed(6));
 };
 
-interface BuyOrder {
-  min: string;
-  marginalPrice: string;
-}
+type BuyOrder =
+  | { min: string; marginalPrice: string }
+  | { startRate: string; marginalRate: string };
 export const isMinAboveMarket = (buyOrder: BuyOrder) => {
-  return new SafeDecimal(buyOrder.min).eq(buyOrder.marginalPrice);
+  if ('min' in buyOrder) {
+    return new SafeDecimal(buyOrder.min).eq(buyOrder.marginalPrice);
+  } else {
+    return new SafeDecimal(buyOrder.startRate).eq(buyOrder.marginalRate);
+  }
 };
-interface SellOrder {
-  max: string;
-  marginalPrice: string;
-}
+type SellOrder =
+  | { max: string; marginalPrice: string }
+  | { endRate: string; marginalRate: string };
 export const isMaxBelowMarket = (sellOrder: SellOrder) => {
-  return new SafeDecimal(sellOrder.marginalPrice).eq(sellOrder.max);
+  if ('max' in sellOrder) {
+    return new SafeDecimal(sellOrder.marginalPrice).eq(sellOrder.max);
+  } else {
+    return new SafeDecimal(sellOrder.marginalRate).eq(sellOrder.endRate);
+  }
 };
 
-interface BuyBudgetOrder extends BuyOrder {
-  budget: string;
-}
-interface SellBudgetOrder extends SellOrder {
-  budget: string;
-}
-/** Verify that both budget are above 1wei if they are enabled */
-export function isOverlappingBudgetTooSmall(
-  order0: BuyBudgetOrder,
-  order1: SellBudgetOrder
-) {
-  if (isMaxBelowMarket(order1)) return false;
-  if (isMinAboveMarket(order0)) return false;
-  const buyBudget = Number(sanitizeNumber(order0.budget));
-  const sellBudget = Number(sanitizeNumber(order1.budget));
-  if (!!buyBudget && !!sellBudget) return false;
-  if (!buyBudget && !sellBudget) return false;
-  return true;
-}
+export const hasNoBudget = (strategy: Strategy) => {
+  const { order0, order1 } = strategy;
+  return !Number(order0.balance) && !Number(order1.balance);
+};
+
+export const getCalculatedPrice = (strategy: Strategy) => {
+  const { order0, order1 } = strategy;
+  if (hasNoBudget(strategy)) return;
+  if (isMinAboveMarket(order0)) return;
+  if (isMaxBelowMarket(order1)) return;
+  return geoMean(order0.marginalRate, order1.marginalRate)?.toString();
+};
 
 export function hasArbOpportunity(
   buyMarginal: string,

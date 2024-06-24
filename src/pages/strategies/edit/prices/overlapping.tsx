@@ -12,6 +12,7 @@ import {
 import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
+  getCalculatedPrice,
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
@@ -20,12 +21,10 @@ import {
 import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
-import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
-import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 
 export interface EditOverlappingStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -166,16 +165,14 @@ export const EditStrategyOverlappingPage = () => {
     base,
     quote,
   });
-  const calculatedPrice = (() => {
-    if (hasNoBudget(strategy)) return;
-    return geoMean(order0.marginalRate, order1.marginalRate)?.toString();
-  })();
-  const userMarketPrice = search.marketPrice ?? externalPrice?.toString();
+  const calculatedPrice = getCalculatedPrice(strategy);
   const touched = isTouched(strategy, search);
   const marketPrice = (() => {
-    if (!userMarketPrice) return calculatedPrice;
-    if (!calculatedPrice) return userMarketPrice;
-    return touched ? userMarketPrice : calculatedPrice;
+    if (touched) {
+      return search.marketPrice ?? externalPrice?.toString() ?? calculatedPrice;
+    } else {
+      return search.marketPrice ?? calculatedPrice ?? externalPrice?.toString();
+    }
   })();
 
   const orders = getOrders(strategy, search, marketPrice);

@@ -26,7 +26,7 @@ import { useEditStrategyCtx } from './EditStrategyContext';
 import { useDeleteStrategy } from '../useDeleteStrategy';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
-import { hasNoBudget } from '../overlapping/useOverlappingMarketPrice';
+import { hasNoBudget } from '../overlapping/utils';
 
 interface EditOrders {
   buy: BaseOrder;

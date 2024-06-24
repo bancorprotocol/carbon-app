@@ -9,18 +9,17 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import {
+  getCalculatedPrice,
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
-import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
-import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
 export interface EditBudgetOverlappingSearch {
@@ -127,7 +126,7 @@ const url = '/strategies/edit/$strategyId/budget/overlapping';
 
 export const EditBudgetOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote } = strategy;
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
 
@@ -135,10 +134,7 @@ export const EditBudgetOverlappingPage = () => {
     base,
     quote,
   });
-  const calculatedPrice = (() => {
-    if (hasNoBudget(strategy)) return;
-    return geoMean(order0.marginalRate, order1.marginalRate)?.toString();
-  })();
+  const calculatedPrice = getCalculatedPrice(strategy);
   const marketPrice =
     search.marketPrice ?? calculatedPrice ?? externalPrice?.toString();
 
