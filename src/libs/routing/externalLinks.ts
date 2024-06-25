@@ -3,7 +3,7 @@ export const externalLinks = {
   carbonHomepage: 'https://carbondefi.xyz',
   blog: 'https://blog.carbondefi.xyz',
   faq: 'https://faq.carbondefi.xyz/',
-  analytics: 'http://analytics.carbondefi.xyz',
+  analytics: config.carbonAnalytics,
   x: 'https://x.com/carbondefixyz',
   youtube: 'https://www.youtube.com/c/BancorProtocol',
   discord: 'https://discord.gg/bancor',
