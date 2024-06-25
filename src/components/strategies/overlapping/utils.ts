@@ -63,6 +63,8 @@ export const hasNoBudget = (strategy: Strategy) => {
 export const getCalculatedPrice = (strategy: Strategy) => {
   const { order0, order1 } = strategy;
   if (hasNoBudget(strategy)) return;
+  if (isMinAboveMarket(strategy.order0)) return strategy.order0.marginalRate;
+  if (isMaxBelowMarket(strategy.order1)) return strategy.order1.marginalRate;
   return geoMean(order0.marginalRate, order1.marginalRate)?.toString();
 };
 
