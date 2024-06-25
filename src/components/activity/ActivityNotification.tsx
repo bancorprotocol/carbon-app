@@ -7,17 +7,20 @@ import { cn } from 'utils/helpers';
 import { ActivityAction } from 'libs/queries/extApi/activity';
 import { unix } from 'dayjs';
 import style from './ActivityNotification.module.css';
-import { useNotifications } from 'hooks/useNotifications';
 
 interface Props {
   notification: NotificationActivity;
   close: () => void;
+  onClick?: () => void;
 }
 
-export const ActivityNotification: FC<Props> = ({ notification, close }) => {
+export const ActivityNotification: FC<Props> = ({
+  notification,
+  close,
+  onClick,
+}) => {
   const titleId = useId();
   const { activity } = notification;
-  const { dismissAlert } = useNotifications();
 
   return (
     <article aria-labelledby={titleId} className="flex gap-16">
@@ -33,7 +36,7 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
         </hgroup>
         <Link
           to="/strategy/$id"
-          onClick={() => dismissAlert(notification.id)}
+          onClick={onClick}
           params={{ id: activity.strategy.id }}
           className="font-weight-500 flex items-center"
         >
