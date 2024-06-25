@@ -42,13 +42,17 @@ export const useBurgerMenuItems = () => {
         </NewTabLink>
       ),
     },
-    {
-      content: (
-        <NewTabLink className="flex" to={externalLinks.analytics}>
-          Analytics
-        </NewTabLink>
-      ),
-    },
+    ...(externalLinks.analytics
+      ? [
+          {
+            content: (
+              <NewTabLink className="flex" to={externalLinks.analytics}>
+                Analytics
+              </NewTabLink>
+            ),
+          },
+        ]
+      : []),
     {
       content: (
         <NewTabLink className="flex" to={externalLinks.blog}>
