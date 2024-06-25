@@ -18,7 +18,10 @@ import {
   isMinAboveMarket,
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
-import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
+import {
+  EditOverlappingPrice,
+  isTouched,
+} from 'components/strategies/edit/EditOverlappingPrice';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from 'components/strategies/common/utils';
@@ -44,19 +47,6 @@ const initMin = (marketPrice: string) => {
 };
 const initMax = (marketPrice: string) => {
   return new SafeDecimal(marketPrice).times(1.01).toString();
-};
-
-const isTouched = (
-  strategy: Strategy,
-  search: EditOverlappingStrategySearch
-) => {
-  const { order0, order1 } = strategy;
-  if (search.marketPrice) return true;
-  if (isZero(order0.balance) && isZero(order1.balance)) return true;
-  if (search.min !== roundSearchParam(order0.startRate)) return true;
-  if (search.max !== roundSearchParam(order1.endRate)) return true;
-  if (search.spread !== getRoundedSpread(strategy).toString()) return true;
-  return false;
 };
 
 /** Create the orders out of the search params */
@@ -107,7 +97,6 @@ const getOrders = (
 
   // PRICES
   const touched = isTouched(strategy, search);
-
   if (touched) {
     const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
     orders.buy.min = prices.buyPriceLow;

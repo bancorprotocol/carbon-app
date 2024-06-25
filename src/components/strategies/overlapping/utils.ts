@@ -49,9 +49,9 @@ type SellOrder =
   | { endRate: string; marginalRate: string };
 export const isMaxBelowMarket = (sellOrder: SellOrder) => {
   if ('max' in sellOrder) {
-    return new SafeDecimal(sellOrder.marginalPrice).eq(sellOrder.max);
+    return new SafeDecimal(sellOrder.max).eq(sellOrder.marginalPrice);
   } else {
-    return new SafeDecimal(sellOrder.marginalRate).eq(sellOrder.endRate);
+    return new SafeDecimal(sellOrder.endRate).eq(sellOrder.marginalRate);
   }
 };
 
@@ -63,8 +63,6 @@ export const hasNoBudget = (strategy: Strategy) => {
 export const getCalculatedPrice = (strategy: Strategy) => {
   const { order0, order1 } = strategy;
   if (hasNoBudget(strategy)) return;
-  if (isMinAboveMarket(order0)) return;
-  if (isMaxBelowMarket(order1)) return;
   return geoMean(order0.marginalRate, order1.marginalRate)?.toString();
 };
 

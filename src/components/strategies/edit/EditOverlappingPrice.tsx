@@ -1,8 +1,9 @@
-import { FC, useCallback, useEffect, useState } from 'react';
-import { useGetTokenBalance } from 'libs/queries';
+import { FC, useCallback, useEffect } from 'react';
+import { Strategy, useGetTokenBalance } from 'libs/queries';
 import {
   getMaxBuyMin,
   getMinSellMax,
+  getRoundedSpread,
   hasArbOpportunity,
   isMaxBelowMarket,
   isMinAboveMarket,
@@ -23,12 +24,13 @@ import { hasNoBudget } from '../overlapping/utils';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { formatNumber } from 'utils/helpers';
+import { formatNumber, roundSearchParam } from 'utils/helpers';
 import { OverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { InputRange } from '../common/InputRange';
+import { isZero } from '../common/utils';
 
 interface Props {
   marketPrice: string;
@@ -36,6 +38,19 @@ interface Props {
   order1: OverlappingOrder;
   spread: string;
 }
+
+export const isTouched = (
+  strategy: Strategy,
+  search: EditOverlappingStrategySearch
+) => {
+  const { order0, order1 } = strategy;
+  if (search.marketPrice) return true;
+  if (isZero(order0.balance) && isZero(order1.balance)) return true;
+  if (search.min !== roundSearchParam(order0.startRate)) return true;
+  if (search.max !== roundSearchParam(order1.endRate)) return true;
+  if (search.spread !== getRoundedSpread(strategy).toString()) return true;
+  return false;
+};
 
 // When working with edit overlapping we can't trust marginal price when budget was 0, so we need to recalculate
 export function isEditAboveMarket(
@@ -83,12 +98,12 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
 
-  const { action, anchor, budget } = useSearch({ from: url });
+  const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
+  const { action, anchor, budget } = search;
 
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
-  const [touched, setTouched] = useState(false);
 
   const initialBuyBudget = strategy.order0.balance;
   const initialSellBudget = strategy.order1.balance;
@@ -109,6 +124,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     [navigate]
   );
 
+  const touched = isTouched(strategy, search);
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
 
@@ -164,25 +180,10 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     }
   })();
 
-  const setMarketPrice = (price: string) => {
-    setTouched(true);
-    set('marketPrice', price);
-  };
-
-  const setMin = (min: string) => {
-    setTouched(true);
-    set('min', min);
-  };
-
-  const setMax = (max: string) => {
-    setTouched(true);
-    set('max', max);
-  };
-
-  const setSpread = (value: string) => {
-    setTouched(true);
-    set('spread', value);
-  };
+  const setMarketPrice = (price: string) => set('marketPrice', price);
+  const setMin = (min: string) => set('min', min);
+  const setMax = (max: string) => set('max', max);
+  const setSpread = (value: string) => set('spread', value);
 
   const setAnchor = (value: 'buy' | 'sell') => {
     set('budget', undefined);
