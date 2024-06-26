@@ -10,7 +10,7 @@ export interface AppConfig {
   appName: string;
   appUrl: string;
   carbonApi: string;
-  carbonAnalytics?: string;
+  externalLinks?: Record<string, string>;
   selectedConnectors: SelectableConnectionName[];
   blockedConnectors?: SelectableConnectionName[];
   walletConnectProjectId: string;

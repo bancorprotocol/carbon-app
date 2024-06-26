@@ -160,27 +160,39 @@ export const useBurgerMenuItems = () => {
         </NewTabLink>
       ),
     },
-    {
-      content: (
-        <NewTabLink className="flex" to={externalLinks.simulatorRepo}>
-          Simulator Repo
-        </NewTabLink>
-      ),
-    },
-    {
-      content: (
-        <NewTabLink className="flex" to={externalLinks.interactiveSim}>
-          Interactive Simulator
-        </NewTabLink>
-      ),
-    },
-    {
-      content: (
-        <NewTabLink className="flex" to={externalLinks.duneDashboard}>
-          Dune Dashboard
-        </NewTabLink>
-      ),
-    },
+    ...(externalLinks.simulatorRepo
+      ? [
+          {
+            content: (
+              <NewTabLink className="flex" to={externalLinks.simulatorRepo}>
+                Simulator Repo
+              </NewTabLink>
+            ),
+          },
+        ]
+      : []),
+    ...(externalLinks.interactiveSim
+      ? [
+          {
+            content: (
+              <NewTabLink className="flex" to={externalLinks.interactiveSim}>
+                Interactive Simulator
+              </NewTabLink>
+            ),
+          },
+        ]
+      : []),
+    ...(externalLinks.duneDashboard
+      ? [
+          {
+            content: (
+              <NewTabLink className="flex" to={externalLinks.duneDashboard}>
+                Dune Dashboard
+              </NewTabLink>
+            ),
+          },
+        ]
+      : []),
   ];
 
   menuMap.set('main', { items: mainItems });
