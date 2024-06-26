@@ -12,7 +12,7 @@ import {
 import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
-  getCalculatedPrice,
+  getOverlappingMarketPrice,
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
@@ -20,7 +20,7 @@ import {
 } from 'components/strategies/overlapping/utils';
 import {
   EditOverlappingPrice,
-  isTouched,
+  isOverlappingTouched,
 } from 'components/strategies/edit/EditOverlappingPrice';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -96,7 +96,7 @@ const getOrders = (
   };
 
   // PRICES
-  const touched = isTouched(strategy, search);
+  const touched = isOverlappingTouched(strategy, search);
   if (touched) {
     const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
     orders.buy.min = prices.buyPriceLow;
@@ -154,15 +154,11 @@ export const EditStrategyOverlappingPage = () => {
     base,
     quote,
   });
-  const calculatedPrice = getCalculatedPrice(strategy);
-  const touched = isTouched(strategy, search);
-  const marketPrice = (() => {
-    if (touched) {
-      return search.marketPrice ?? externalPrice?.toString() ?? calculatedPrice;
-    } else {
-      return search.marketPrice ?? calculatedPrice ?? externalPrice?.toString();
-    }
-  })();
+  const marketPrice = getOverlappingMarketPrice(
+    strategy,
+    search,
+    externalPrice?.toString()
+  );
 
   const orders = getOrders(strategy, search, marketPrice);
   const spread = isValidSpread(search.spread) ? search.spread! : initSpread;

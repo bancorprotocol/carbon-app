@@ -1,7 +1,11 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { StrategyInput } from 'components/strategies/common/utils';
+import { StrategyInput, isZero } from 'components/strategies/common/utils';
 import { Strategy } from 'libs/queries';
 import { geoMean } from 'utils/fullOutcome';
+import {
+  OverlappingSearch,
+  isOverlappingTouched,
+} from '../edit/EditOverlappingPrice';
 
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
@@ -63,9 +67,25 @@ export const hasNoBudget = (strategy: Strategy) => {
 export const getCalculatedPrice = (strategy: Strategy) => {
   const { order0, order1 } = strategy;
   if (hasNoBudget(strategy)) return;
+  if (isZero(strategy.order0.marginalRate)) return;
+  if (isZero(strategy.order1.marginalRate)) return;
   if (isMinAboveMarket(strategy.order0)) return strategy.order0.marginalRate;
   if (isMaxBelowMarket(strategy.order1)) return strategy.order1.marginalRate;
   return geoMean(order0.marginalRate, order1.marginalRate)?.toString();
+};
+
+export const getOverlappingMarketPrice = (
+  strategy: Strategy,
+  search: OverlappingSearch,
+  externalPrice?: string
+) => {
+  const calculatedPrice = getCalculatedPrice(strategy);
+  const touched = isOverlappingTouched(strategy, search);
+  if (touched) {
+    return search.marketPrice ?? externalPrice ?? calculatedPrice;
+  } else {
+    return search.marketPrice ?? calculatedPrice ?? externalPrice;
+  }
 };
 
 export function hasArbOpportunity(

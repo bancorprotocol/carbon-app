@@ -9,7 +9,7 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import {
-  getCalculatedPrice,
+  getOverlappingMarketPrice,
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
@@ -134,9 +134,11 @@ export const EditBudgetOverlappingPage = () => {
     base,
     quote,
   });
-  const calculatedPrice = getCalculatedPrice(strategy);
-  const marketPrice =
-    search.marketPrice ?? calculatedPrice ?? externalPrice?.toString();
+  const marketPrice = getOverlappingMarketPrice(
+    strategy,
+    search,
+    externalPrice?.toString()
+  );
 
   const orders = getOrders(strategy, search, marketPrice);
 

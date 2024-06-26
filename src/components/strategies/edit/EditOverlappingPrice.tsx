@@ -38,16 +38,24 @@ interface Props {
   spread: string;
 }
 
-export const isTouched = (
+export interface OverlappingSearch {
+  marketPrice?: string;
+  min?: string;
+  max?: string;
+  spread?: string;
+}
+
+export const isOverlappingTouched = (
   strategy: Strategy,
-  search: EditOverlappingStrategySearch
+  search: OverlappingSearch
 ) => {
   const { order0, order1 } = strategy;
-  if (search.marketPrice) return true;
+  const { min, max, spread, marketPrice } = search;
+  if (marketPrice) return true;
   if (isZero(order0.balance) && isZero(order1.balance)) return true;
-  if (search.min !== roundSearchParam(order0.startRate)) return true;
-  if (search.max !== roundSearchParam(order1.endRate)) return true;
-  if (search.spread !== getRoundedSpread(strategy).toString()) return true;
+  if (min && min !== roundSearchParam(order0.startRate)) return true;
+  if (max && max !== roundSearchParam(order1.endRate)) return true;
+  if (spread && spread !== getRoundedSpread(strategy).toString()) return true;
   return false;
 };
 
@@ -123,7 +131,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     [navigate]
   );
 
-  const touched = isTouched(strategy, search);
+  const touched = isOverlappingTouched(strategy, search);
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
 
