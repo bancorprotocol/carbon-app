@@ -1,5 +1,9 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { StrategyInput, isZero } from 'components/strategies/common/utils';
+import {
+  StrategyInput,
+  isOverlappingStrategy,
+  isZero,
+} from 'components/strategies/common/utils';
 import { Strategy } from 'libs/queries';
 import { geoMean } from 'utils/fullOutcome';
 import {
@@ -67,6 +71,7 @@ export const hasNoBudget = (strategy: Strategy) => {
 export const getCalculatedPrice = (strategy: Strategy) => {
   const { order0, order1 } = strategy;
   if (hasNoBudget(strategy)) return;
+  if (!isOverlappingStrategy(strategy)) return;
   if (isZero(strategy.order0.marginalRate)) return;
   if (isZero(strategy.order1.marginalRate)) return;
   if (isMinAboveMarket(strategy.order0)) return strategy.order0.marginalRate;
