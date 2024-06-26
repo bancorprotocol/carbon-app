@@ -1,6 +1,9 @@
 import { AppConfig } from 'config/types';
 import IconSeiLogo from 'assets/logos/seilogo.svg';
-import { tokenListParser } from 'config/sei/utils';
+import {
+  tokenSeiListParser,
+  tokenDragonswapListParser,
+} from 'config/sei/utils';
 
 const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -77,7 +80,11 @@ export const commonConfig: AppConfig = {
   tokenLists: [
     {
       uri: 'https://raw.githubusercontent.com/Sei-Public-Goods/sei-assetlist/main/assetlist.json',
-      parser: tokenListParser('pacific-1'),
+      parser: tokenSeiListParser('pacific-1'),
+    },
+    {
+      uri: 'https://raw.githubusercontent.com/dragonswap-app/assets/main/tokenlist-sei-mainnet.json',
+      parser: tokenDragonswapListParser('dragonswap-app/assets', 'logos'),
     },
   ],
   tenderly: {
