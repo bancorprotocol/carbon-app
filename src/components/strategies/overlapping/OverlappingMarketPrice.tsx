@@ -85,6 +85,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
 
   const setPrice = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     if (isDisabled(e.currentTarget)) return;
     props.setMarketPrice(localPrice);
     if (props.close) props.close();
