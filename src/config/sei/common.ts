@@ -15,8 +15,8 @@ export const commonConfig: AppConfig = {
   appName: 'Carbon DeFi',
   appUrl: 'https://sei.carbondefi.xyz',
   carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
-  selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe'],
-  blockedConnectors: ['Seif', 'Tailwind', 'Compass Wallet'],
+  selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe', 'Compass Wallet'],
+  blockedConnectors: ['Seif', 'Tailwind'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
   policiesLastUpdated: '27 May, 2024',
@@ -39,7 +39,10 @@ export const commonConfig: AppConfig = {
       logoURI: 'https://cdn.sei.io/assets/Sei_Symbol_Gradient.svg',
     },
   },
-  defaultTokenPair: [addresses.SEI, addresses.WSEI],
+  sdk: {
+    cacheTTL: 0,
+  },
+  defaultTokenPair: [addresses.SEI, addresses.USDC],
   popularPairs: [
     [addresses.SEI, addresses.WSEI],
     [addresses.SEI, addresses.USDC],
