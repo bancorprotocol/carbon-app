@@ -18,10 +18,8 @@ import {
   isMinAboveMarket,
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
-import {
-  EditOverlappingPrice,
-  isOverlappingTouched,
-} from 'components/strategies/edit/EditOverlappingPrice';
+import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
+import { isOverlappingTouched } from 'components/strategies/overlapping/utils';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from 'components/strategies/common/utils';

@@ -1,9 +1,8 @@
 import { FC, useCallback, useEffect } from 'react';
-import { Strategy, useGetTokenBalance } from 'libs/queries';
+import { useGetTokenBalance } from 'libs/queries';
 import {
   getMaxBuyMin,
   getMinSellMax,
-  getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
@@ -23,13 +22,13 @@ import { hasNoBudget } from '../overlapping/utils';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { formatNumber, roundSearchParam } from 'utils/helpers';
+import { formatNumber } from 'utils/helpers';
 import { OverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { InputRange } from '../common/InputRange';
-import { isZero } from '../common/utils';
+import { isOverlappingTouched } from '../overlapping/utils';
 
 interface Props {
   marketPrice: string;
@@ -37,27 +36,6 @@ interface Props {
   order1: OverlappingOrder;
   spread: string;
 }
-
-export interface OverlappingSearch {
-  marketPrice?: string;
-  min?: string;
-  max?: string;
-  spread?: string;
-}
-
-export const isOverlappingTouched = (
-  strategy: Strategy,
-  search: OverlappingSearch
-) => {
-  const { order0, order1 } = strategy;
-  const { min, max, spread, marketPrice } = search;
-  if (marketPrice) return true;
-  if (isZero(order0.balance) && isZero(order1.balance)) return true;
-  if (min && min !== roundSearchParam(order0.startRate)) return true;
-  if (max && max !== roundSearchParam(order1.endRate)) return true;
-  if (spread && spread !== getRoundedSpread(strategy).toString()) return true;
-  return false;
-};
 
 // When working with edit overlapping we can't trust marginal price when budget was 0, so we need to recalculate
 export function isEditAboveMarket(

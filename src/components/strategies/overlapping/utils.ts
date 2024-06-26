@@ -4,12 +4,16 @@ import {
   isOverlappingStrategy,
   isZero,
 } from 'components/strategies/common/utils';
-import { Strategy } from 'libs/queries';
+import { type Strategy } from 'libs/queries';
 import { geoMean } from 'utils/fullOutcome';
-import {
-  OverlappingSearch,
-  isOverlappingTouched,
-} from '../edit/EditOverlappingPrice';
+import { roundSearchParam } from 'utils/helpers';
+
+export interface OverlappingSearch {
+  marketPrice?: string;
+  min?: string;
+  max?: string;
+  spread?: string;
+}
 
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
@@ -103,3 +107,17 @@ export function hasArbOpportunity(
   const calculatedPrice = spreadPPM.add(1).sqrt().times(buyMarginal);
   return !calculatedPrice.eq(marketPrice);
 }
+
+export const isOverlappingTouched = (
+  strategy: Strategy,
+  search: OverlappingSearch
+) => {
+  const { order0, order1 } = strategy;
+  const { min, max, spread, marketPrice } = search;
+  if (marketPrice) return true;
+  if (isZero(order0.balance) && isZero(order1.balance)) return true;
+  if (min && min !== roundSearchParam(order0.startRate)) return true;
+  if (max && max !== roundSearchParam(order1.endRate)) return true;
+  if (spread && spread !== getRoundedSpread(strategy).toString()) return true;
+  return false;
+};
