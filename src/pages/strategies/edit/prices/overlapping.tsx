@@ -166,6 +166,7 @@ export const EditStrategyOverlappingPage = () => {
     if (search.max !== roundSearchParam(order1.endRate)) return true;
     if (search.spread !== getRoundedSpread(strategy).toString()) return true;
     if (search.budget) return true;
+    if (search.marketPrice) return true;
     return false;
   })();
 
