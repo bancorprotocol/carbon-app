@@ -2,6 +2,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import {
   StrategyInput,
   isOverlappingStrategy,
+  isPaused,
   isZero,
 } from 'components/strategies/common/utils';
 import { type Strategy } from 'libs/queries';
@@ -115,7 +116,8 @@ export const isOverlappingTouched = (
   const { order0, order1 } = strategy;
   const { min, max, spread, marketPrice } = search;
   if (marketPrice) return true;
-  if (isZero(order0.balance) && isZero(order1.balance)) return true;
+  if (hasNoBudget(strategy)) return true;
+  if (isPaused(strategy)) return true;
   if (min && min !== roundSearchParam(order0.startRate)) return true;
   if (max && max !== roundSearchParam(order1.endRate)) return true;
   if (spread && spread !== getRoundedSpread(strategy).toString()) return true;
