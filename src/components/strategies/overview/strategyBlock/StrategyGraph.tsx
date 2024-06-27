@@ -8,8 +8,8 @@ import {
 } from 'components/common/tooltip/FloatTooltip';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import style from './StrategyGraph.module.css';
-import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { Token } from 'libs/tokens';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
   strategy: Strategy;
@@ -32,13 +32,8 @@ const fontSize = 16;
 const fontWidth = fontSize / 2;
 
 export const StrategyGraph: FC<Props> = ({ strategy }) => {
-  const buyOrder = strategy.order0;
-  const sellOrder = strategy.order1;
-  const currentPrice = useCompareTokenPrice(
-    strategy.base.address,
-    strategy.quote.address
-  );
-
+  const { base, quote, order0: buyOrder, order1: sellOrder } = strategy;
+  const { marketPrice: currentPrice } = useMarketPrice({ base, quote });
   const buy = {
     from: Number(sanitizeNumber(buyOrder.startRate)),
     to: Number(sanitizeNumber(buyOrder.endRate)),

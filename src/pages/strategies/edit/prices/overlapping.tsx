@@ -12,18 +12,19 @@ import {
 import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
+  getOverlappingMarketPrice,
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
+import { isOverlappingTouched } from 'components/strategies/overlapping/utils';
 import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
-import { geoMean } from 'utils/fullOutcome';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-// import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 
 export interface EditOverlappingStrategySearch {
@@ -46,28 +47,15 @@ const initMax = (marketPrice: string) => {
   return new SafeDecimal(marketPrice).times(1.01).toString();
 };
 
-const isTouched = (
-  strategy: Strategy,
-  search: EditOverlappingStrategySearch
-) => {
-  const { order0, order1 } = strategy;
-  if (search.marketPrice) return true;
-  if (isZero(order0.balance) && isZero(order1.balance)) return true;
-  if (search.min !== roundSearchParam(order0.startRate)) return true;
-  if (search.max !== roundSearchParam(order1.endRate)) return true;
-  if (search.spread !== getRoundedSpread(strategy).toString()) return true;
-  return false;
-};
-
 /** Create the orders out of the search params */
 const getOrders = (
   strategy: Strategy,
   search: EditOverlappingStrategySearch,
-  userMarketPrice?: string
+  marketPrice?: string
 ) => {
   const { base, quote, order0, order1 } = strategy;
 
-  if (!userMarketPrice) {
+  if (!marketPrice) {
     return {
       buy: { min: '', max: '', marginalPrice: '', budget: '' },
       sell: { min: '', max: '', marginalPrice: '', budget: '' },
@@ -76,18 +64,12 @@ const getOrders = (
 
   const {
     anchor,
-    min = initMin(userMarketPrice),
-    max = initMax(userMarketPrice),
+    min = initMin(marketPrice),
+    max = initMax(marketPrice),
     spread = initSpread,
     budget = '0',
     action = 'deposit',
   } = search;
-
-  const touched = isTouched(strategy, search);
-  const calculatedPrice = geoMean(order0.marginalRate, order1.marginalRate);
-  const marketPrice = touched
-    ? userMarketPrice
-    : calculatedPrice?.toString() || userMarketPrice;
 
   if (!isValidRange(min, max) || !isValidSpread(spread)) {
     return {
@@ -112,18 +94,21 @@ const getOrders = (
   };
 
   // PRICES
-  const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
-  orders.buy.min = prices.buyPriceLow;
-  orders.buy.max = prices.buyPriceHigh;
-  orders.buy.marginalPrice = prices.buyPriceMarginal;
-  orders.sell.min = prices.sellPriceLow;
-  orders.sell.max = prices.sellPriceHigh;
-  orders.sell.marginalPrice = prices.sellPriceMarginal;
+  const touched = isOverlappingTouched(strategy, search);
+  if (touched) {
+    const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
+    orders.buy.min = prices.buyPriceLow;
+    orders.buy.max = prices.buyPriceHigh;
+    orders.buy.marginalPrice = prices.buyPriceMarginal;
+    orders.sell.min = prices.sellPriceLow;
+    orders.sell.max = prices.sellPriceHigh;
+    orders.sell.marginalPrice = prices.sellPriceMarginal;
+  }
 
   if (!anchor) return orders;
 
   // If there is no changes we don't recalculate the budget because of precision delta
-  if (isZero(budget) && !touched) return orders;
+  if (!touched && isZero(budget)) return orders;
 
   // BUDGET
   if (anchor === 'buy') {
@@ -160,32 +145,38 @@ const url = '/strategies/edit/$strategyId/prices/overlapping';
 
 export const EditStrategyOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
+  const { base, quote, order0, order1 } = strategy;
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const externalPrice = useMarketPrice({ base, quote });
-  const marketPrice = search.marketPrice ?? externalPrice?.toString();
+  const { marketPrice: externalPrice, isPending } = useMarketPrice({
+    base,
+    quote,
+  });
+  const marketPrice = getOverlappingMarketPrice(
+    strategy,
+    search,
+    externalPrice?.toString()
+  );
 
   const orders = getOrders(strategy, search, marketPrice);
   const spread = isValidSpread(search.spread) ? search.spread! : initSpread;
 
   const hasChanged = (() => {
-    const { order0, order1 } = strategy;
     if (search.min !== roundSearchParam(order0.startRate)) return true;
     if (search.max !== roundSearchParam(order1.endRate)) return true;
     if (search.spread !== getRoundedSpread(strategy).toString()) return true;
     if (search.budget) return true;
+    if (search.marketPrice) return true;
     return false;
   })();
 
-  // TODO: put it back after hotfix
-  // if (!marketPrice && typeof externalPrice !== 'number') {
-  //   return (
-  //     <div className="grid md:w-[440px]">
-  //       <CarbonLogoLoading className="h-80 place-self-center" />
-  //     </div>
-  //   );
-  // }
+  if (isPending) {
+    return (
+      <div className="grid md:w-[440px]">
+        <CarbonLogoLoading className="h-80 place-self-center" />
+      </div>
+    );
+  }
 
   if (!marketPrice) {
     const setMarketPrice = (price: string) => {
