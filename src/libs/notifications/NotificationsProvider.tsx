@@ -65,6 +65,7 @@ const NotificationItem: FC<{ notification: Notification }> = (props) => {
       <NotificationLine
         notification={notification}
         close={() => dismissAlert(id)}
+        onClick={() => dismissAlert(id)}
       />
     </motion.li>
   );
