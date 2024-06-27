@@ -10,7 +10,7 @@ import { ReactComponent as IconV } from 'assets/icons/v.svg';
 
 export type MenuItemType = {
   subMenu?: MenuType;
-  content: string | ReactElement;
+  content?: string | ReactElement;
   onClick?: Function;
   postClickAction?: MenuItemActions;
 };
@@ -43,7 +43,7 @@ export const useBurgerMenuItems = () => {
       ),
     },
     {
-      content: (
+      content: externalLinks.analytics && (
         <NewTabLink className="flex" to={externalLinks.analytics}>
           Analytics
         </NewTabLink>
@@ -157,21 +157,21 @@ export const useBurgerMenuItems = () => {
       ),
     },
     {
-      content: (
+      content: externalLinks.simulatorRepo && (
         <NewTabLink className="flex" to={externalLinks.simulatorRepo}>
           Simulator Repo
         </NewTabLink>
       ),
     },
     {
-      content: (
+      content: externalLinks.interactiveSim && (
         <NewTabLink className="flex" to={externalLinks.interactiveSim}>
           Interactive Simulator
         </NewTabLink>
       ),
     },
     {
-      content: (
+      content: externalLinks.duneDashboard && (
         <NewTabLink className="flex" to={externalLinks.duneDashboard}>
           Dune Dashboard
         </NewTabLink>

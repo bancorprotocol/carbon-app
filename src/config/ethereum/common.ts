@@ -27,6 +27,12 @@ export const commonConfig: AppConfig = {
   appName: 'Carbon DeFi',
   appUrl: 'https://app.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/',
+  externalLinks: {
+    analytics: 'http://analytics.carbondefi.xyz',
+    interactiveSim: 'https://simulator.carbondefi.xyz/',
+    simulatorRepo: 'https://github.com/bancorprotocol/carbon-simulator',
+    duneDashboard: 'https://dune.com/bancor/carbon-by-bancor',
+  },
   selectedConnectors: ['MetaMask', 'WalletConnect', 'Coinbase Wallet', 'Safe'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
