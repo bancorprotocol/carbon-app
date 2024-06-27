@@ -10,7 +10,7 @@ import { ReactComponent as IconV } from 'assets/icons/v.svg';
 
 export type MenuItemType = {
   subMenu?: MenuType;
-  content: string | ReactElement;
+  content?: string | ReactElement;
   onClick?: Function;
   postClickAction?: MenuItemActions;
 };
@@ -42,17 +42,13 @@ export const useBurgerMenuItems = () => {
         </NewTabLink>
       ),
     },
-    ...(externalLinks.analytics
-      ? [
-          {
-            content: (
-              <NewTabLink className="flex" to={externalLinks.analytics}>
-                Analytics
-              </NewTabLink>
-            ),
-          },
-        ]
-      : []),
+    {
+      content: externalLinks.analytics && (
+        <NewTabLink className="flex" to={externalLinks.analytics}>
+          Analytics
+        </NewTabLink>
+      ),
+    },
     {
       content: (
         <NewTabLink className="flex" to={externalLinks.blog}>
@@ -160,39 +156,27 @@ export const useBurgerMenuItems = () => {
         </NewTabLink>
       ),
     },
-    ...(externalLinks.simulatorRepo
-      ? [
-          {
-            content: (
-              <NewTabLink className="flex" to={externalLinks.simulatorRepo}>
-                Simulator Repo
-              </NewTabLink>
-            ),
-          },
-        ]
-      : []),
-    ...(externalLinks.interactiveSim
-      ? [
-          {
-            content: (
-              <NewTabLink className="flex" to={externalLinks.interactiveSim}>
-                Interactive Simulator
-              </NewTabLink>
-            ),
-          },
-        ]
-      : []),
-    ...(externalLinks.duneDashboard
-      ? [
-          {
-            content: (
-              <NewTabLink className="flex" to={externalLinks.duneDashboard}>
-                Dune Dashboard
-              </NewTabLink>
-            ),
-          },
-        ]
-      : []),
+    {
+      content: externalLinks.simulatorRepo && (
+        <NewTabLink className="flex" to={externalLinks.simulatorRepo}>
+          Simulator Repo
+        </NewTabLink>
+      ),
+    },
+    {
+      content: externalLinks.interactiveSim && (
+        <NewTabLink className="flex" to={externalLinks.interactiveSim}>
+          Interactive Simulator
+        </NewTabLink>
+      ),
+    },
+    {
+      content: externalLinks.duneDashboard && (
+        <NewTabLink className="flex" to={externalLinks.duneDashboard}>
+          Dune Dashboard
+        </NewTabLink>
+      ),
+    },
   ];
 
   menuMap.set('main', { items: mainItems });

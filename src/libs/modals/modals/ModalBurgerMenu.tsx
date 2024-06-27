@@ -19,7 +19,9 @@ export const ModalBurgerMenu: ModalFC<undefined> = ({ id }) => {
     defaultState: true,
   });
 
-  const currentMenuItems = menuContext.top()?.items;
+  const currentMenuItems = menuContext
+    .top()
+    ?.items.filter((item) => !!item.content);
 
   useEffect(() => {
     if (!isOpen) {
