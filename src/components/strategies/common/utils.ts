@@ -34,6 +34,17 @@ export const isDisposableStrategy = (strategy: Strategy) => {
   return false;
 };
 
+export const isPaused = ({ order0, order1 }: Strategy) => {
+  return (
+    isZero(order0.startRate) &&
+    isZero(order0.endRate) &&
+    isZero(order0.marginalRate) &&
+    isZero(order1.startRate) &&
+    isZero(order1.endRate) &&
+    isZero(order1.marginalRate)
+  );
+};
+
 export const getStrategyType = (strategy: Strategy) => {
   if (isOverlappingStrategy(strategy)) return 'overlapping';
   if (isDisposableStrategy(strategy)) return 'disposable';

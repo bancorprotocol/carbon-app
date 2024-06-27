@@ -26,7 +26,7 @@ export const EditBudgetRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
-  const marketPrice = useMarketPrice({ base, quote });
+  const { marketPrice } = useMarketPrice({ base, quote });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const totalBuyBudget = getTotalBudget(

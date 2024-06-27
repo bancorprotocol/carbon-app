@@ -23,7 +23,7 @@ interface MarketPriceProps {
 }
 /** Use external market price or user price */
 export const useUserMarketPrice = ({ base, quote }: MarketPriceProps) => {
-  const externalMarketPrice = useMarketPrice({ base, quote });
+  const { marketPrice: externalMarketPrice } = useMarketPrice({ base, quote });
   const userMarketPrice = useContext(UserMarketContext);
   return userMarketPrice || externalMarketPrice;
 };

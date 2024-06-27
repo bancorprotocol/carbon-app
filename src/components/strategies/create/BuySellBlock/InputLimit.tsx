@@ -39,7 +39,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   isOrdersReversed,
 }) => {
   const inputId = useId();
-  const marketPrice = useMarketPrice({ base, quote });
+  const { marketPrice } = useMarketPrice({ base, quote });
 
   const errorAboveZero = 'Price must be greater than 0';
   const errorReversedOrders =

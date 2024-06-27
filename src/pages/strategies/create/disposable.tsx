@@ -30,7 +30,7 @@ export const CreateDisposableStrategyPage = () => {
   const search = useSearch({ from: url });
   const base = getTokenById(search.base);
   const quote = getTokenById(search.quote);
-  const marketPrice = useMarketPrice({ base, quote });
+  const { marketPrice } = useMarketPrice({ base, quote });
   const { setOrder, setDirection } = useSetDisposableOrder(url);
 
   const buy = search.direction !== 'sell';
