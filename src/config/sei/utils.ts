@@ -39,9 +39,7 @@ export const tokenSeiListParser =
     return parsedData;
   };
 
-const getGitFolderContent = async (
-  gitRepoInfoApi: string
-): Promise<unknown> => {
+const getGitFolderContent = async (gitRepoInfoApi: string) => {
   const signal = AbortSignal.timeout(10000);
   const response = await fetch(gitRepoInfoApi, {
     signal,
