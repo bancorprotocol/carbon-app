@@ -7,14 +7,17 @@ To calculate the price & budget we need the market price. There are 3 types of m
 - calculated market price
 
 **User Market Price**
+
 Price set by the user in the UI. It's a search param of the URL `search.marketPrice`.
 
 **External Market Price**
+
 Price given by CoinGecko.
 - If one of the token is not listed: `undefined`
 - If both token are listed: `basePrice / quotePrice`
 
 **Calculated Market Price**
+
 Price calculated from the initial strategy.
 - If no budget: `undefined`
 - If not overlapping: `undefined`
@@ -27,6 +30,7 @@ Price calculated from the initial strategy.
 The behavior is different if the strategy has been **touched** or not.
 
 **touched**
+
 Price is considered **touched** if : 
 - User market price is set
 - Strategy is not overlapping
