@@ -123,7 +123,7 @@ export const CreateOverlappingStrategyPage = () => {
   const search = useSearch({ from: url });
   const base = getTokenById(search.base);
   const quote = getTokenById(search.quote);
-  const externalPrice = useMarketPrice({ base, quote });
+  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
   const orders = getOrders(search, base, quote, marketPrice);
