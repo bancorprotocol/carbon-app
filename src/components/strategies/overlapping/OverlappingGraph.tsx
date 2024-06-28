@@ -2,6 +2,7 @@ import {
   FC,
   MouseEvent as ReactMouseEvent,
   WheelEvent,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -15,12 +16,13 @@ import { getMaxBuyMin, getMinSellMax } from './utils';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import styles from './OverlappingStrategyGraph.module.css';
+import { UserMarketContext } from '../UserMarketPrice';
+import styles from './OverlappingGraph.module.css';
 
 type Props = EnableProps | DisableProps;
 
 interface EnableProps {
-  marketPrice: number;
+  userMarketPrice?: string;
   base?: Token;
   quote?: Token;
   order0: { min: string; max: string; marginalPrice: string };
@@ -32,7 +34,7 @@ interface EnableProps {
 }
 
 interface DisableProps {
-  marketPrice?: number;
+  userMarketPrice?: string;
   base?: Token;
   quote?: Token;
   order0: { min: string; max: string; marginalPrice: string };
@@ -157,7 +159,7 @@ const getXFactor = (min: number, max: number, marketPrice: number) => {
   return 1 / delta;
 };
 
-export const OverlappingStrategyGraph: FC<Props> = (props) => {
+export const OverlappingGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
@@ -166,21 +168,18 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const baseMax = Number(formatNumber(order1.max));
   const disabled = !!props.disabled;
 
+  const userMarketPrice = props.userMarketPrice
+    ? +props.userMarketPrice
+    : undefined;
+  const overlappingMarketPrice = useContext(UserMarketContext);
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
-  const userMarketPrice = disabled
-    ? externalPrice || props?.marketPrice
-    : props?.marketPrice || externalPrice;
-
-  if (!userMarketPrice) throw Error('Market price is undefined');
-  const baseMarketPrice = Number(userMarketPrice);
-
-  const isUserPriceSource =
-    !disabled && !!props.marketPrice && externalPrice !== +props.marketPrice;
+  const baseMarketPrice =
+    userMarketPrice ?? externalPrice ?? overlappingMarketPrice;
 
   const isCoingeckoPriceSource = !!externalPrice;
+  const isUserPriceSource = !!userMarketPrice;
 
   const xFactor = getXFactor(baseMin, baseMax, baseMarketPrice);
-
   const marketPrice = baseMarketPrice * xFactor;
 
   const { left, right, mean, minMean, maxMean } = getBoundaries({
@@ -312,7 +311,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     });
   };
 
-  const config = getConfig();
+  const config = getStaticConfig(); // getConfig();
   const { min, max, sellMin, buyMax } = config;
 
   const marketPercent = {
