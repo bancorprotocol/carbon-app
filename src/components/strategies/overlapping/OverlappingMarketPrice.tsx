@@ -66,7 +66,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   const [approved, setApproved] = useState(
     localPrice === marketPrice?.toString()
   );
-  const externalPrice = useMarketPrice({ base, quote });
+  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
 
   const changePrice = (value: string) => {
     setLocalPrice(value);
@@ -85,6 +85,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
 
   const setPrice = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     if (isDisabled(e.currentTarget)) return;
     props.setMarketPrice(localPrice);
     if (props.close) props.close();

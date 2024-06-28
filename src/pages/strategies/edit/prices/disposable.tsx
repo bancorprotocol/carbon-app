@@ -42,7 +42,7 @@ export const EditStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
-  const marketPrice = useMarketPrice({ base, quote });
+  const { marketPrice } = useMarketPrice({ base, quote });
 
   const isBuy = search.direction !== 'sell';
   const otherOrder = isBuy ? order1 : order0;

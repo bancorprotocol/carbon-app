@@ -201,6 +201,7 @@ export const ApproveToken: FC<Props> = ({
                   isOn={!isLimited}
                   setIsOn={handleLimitChange}
                   size="sm"
+                  data-testid={`approve-limited-${token.symbol}`}
                 />
               </div>
 

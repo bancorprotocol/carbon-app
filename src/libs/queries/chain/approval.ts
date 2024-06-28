@@ -50,6 +50,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
         errorMessage: 'useGetUserApproval failed with error:',
       },
       enabled: !!user,
+      gcTime: 0,
     })),
   });
 };

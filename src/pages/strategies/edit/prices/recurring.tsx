@@ -7,6 +7,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import {
   isZero,
+  isOverlappingStrategy,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
@@ -56,7 +57,7 @@ export const EditStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
-  const marketPrice = useMarketPrice({ base, quote });
+  const { marketPrice } = useMarketPrice({ base, quote });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const orders = {
@@ -86,6 +87,7 @@ export const EditStrategyRecurringPage = () => {
 
   const hasChanged = (() => {
     const { order0, order1 } = strategy;
+    if (isOverlappingStrategy(strategy)) return true;
     if (search.buyMin !== roundSearchParam(order0.startRate)) return true;
     if (search.buyMax !== roundSearchParam(order0.endRate)) return true;
     if (!isZero(search.buyBudget)) return true;

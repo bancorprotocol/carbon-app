@@ -10,6 +10,7 @@ export interface AppConfig {
   appName: string;
   appUrl: string;
   carbonApi: string;
+  externalLinks?: Record<string, string>;
   selectedConnectors: SelectableConnectionName[];
   blockedConnectors?: SelectableConnectionName[];
   walletConnectProjectId: string;
@@ -51,7 +52,7 @@ export interface AppConfig {
   }[];
   tokenLists: {
     uri: string;
-    parser?: (data: any) => TokenList;
+    parser?: (data: any) => Promise<TokenList> | TokenList;
   }[];
   addresses: {
     tokens: { ZERO: string } & Record<string, string>;

@@ -25,7 +25,7 @@ export const fetchTokenLists = async () => {
         );
       }
 
-      const parsedResult = parser ? parser(result) : result;
+      const parsedResult = parser ? await parser(result) : result;
 
       return {
         ...parsedResult,

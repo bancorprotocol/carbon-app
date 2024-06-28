@@ -166,7 +166,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const baseMax = Number(formatNumber(order1.max));
   const disabled = !!props.disabled;
 
-  const externalPrice = useMarketPrice({ base, quote });
+  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const userMarketPrice = disabled
     ? externalPrice || props?.marketPrice
     : props?.marketPrice || externalPrice;

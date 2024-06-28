@@ -26,6 +26,7 @@ import { useEditStrategyCtx } from './EditStrategyContext';
 import { useDeleteStrategy } from '../useDeleteStrategy';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
+import { hasNoBudget } from '../overlapping/utils';
 
 interface EditOrders {
   buy: BaseOrder;
@@ -166,7 +167,11 @@ export const EditStrategyForm: FC<Props> = (props) => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
-    if (isZero(orders.buy.budget) && isZero(orders.sell.budget)) {
+    if (
+      !hasNoBudget(strategy) &&
+      isZero(orders.buy.budget) &&
+      isZero(orders.sell.budget)
+    ) {
       return openModal('withdrawOrDelete', {
         onWithdraw: update,
         onDelete: () =>

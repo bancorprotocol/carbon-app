@@ -100,22 +100,21 @@ export const useTradeAction = ({
           from: source.symbol,
           to: target.symbol,
         });
-        onSuccess?.(tx.hash);
 
+        await tx.wait();
+        onSuccess?.(tx.hash);
+        void cache.invalidateQueries({
+          queryKey: QueryKey.balance(user, source.address),
+        });
+        void cache.invalidateQueries({
+          queryKey: QueryKey.balance(user, target.address),
+        });
         void cache.invalidateQueries({
           queryKey: QueryKey.approval(
             user,
             source.address,
             config.addresses.carbon.carbonController
           ),
-        });
-
-        await tx.wait();
-        void cache.invalidateQueries({
-          queryKey: QueryKey.balance(user, source.address),
-        });
-        void cache.invalidateQueries({
-          queryKey: QueryKey.balance(user, target.address),
         });
       } catch (error) {
         console.error(error);

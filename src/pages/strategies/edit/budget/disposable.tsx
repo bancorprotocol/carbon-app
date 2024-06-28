@@ -6,71 +6,103 @@ import { getTotalBudget } from 'components/strategies/edit/utils';
 import {
   isZero,
   outSideMarketWarning,
-  toBaseOrder,
 } from 'components/strategies/common/utils';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
-import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
+import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 
 export interface EditBudgetDisposableStrategySearch {
   editType: 'deposit' | 'withdraw';
-  budget?: string;
+  buyBudget?: string;
+  sellBudget?: string;
   marginalPrice?: string;
 }
+type Search = EditBudgetDisposableStrategySearch;
 
 const url = '/strategies/edit/$strategyId/budget/disposable';
 export const EditBudgetDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
+  const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
-  const marketPrice = useMarketPrice({ base, quote });
-  const { setOrder } = useSetDisposableOrder(url);
+  const { marketPrice } = useMarketPrice({ base, quote });
+  const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const buy = isZero(strategy.order1.startRate);
-  const initialOrder = buy ? strategy.order0 : strategy.order1;
 
-  const totalBudget = getTotalBudget(
+  const totalBuyBudget = getTotalBudget(
     search.editType,
-    initialOrder.balance,
-    search.budget
+    order0.balance,
+    search.buyBudget
+  );
+  const totalSellBudget = getTotalBudget(
+    search.editType,
+    order1.balance,
+    search.sellBudget
   );
 
-  const order = {
-    min: initialOrder.startRate,
-    max: initialOrder.endRate,
-    budget: totalBudget,
-    marginalPrice: search.marginalPrice,
-  };
-
   const orders = {
-    buy: buy ? order : toBaseOrder(strategy.order0),
-    sell: buy ? toBaseOrder(strategy.order1) : order,
+    buy: {
+      min: order0.startRate,
+      max: order0.endRate,
+      budget: totalBuyBudget,
+      marginalPrice: order0.marginalRate,
+    },
+    sell: {
+      min: order1.startRate,
+      max: order1.endRate,
+      budget: totalSellBudget,
+      marginalPrice: order1.marginalRate,
+    },
   };
 
   // Warnings
-  const outsideMarket = outSideMarketWarning({
+  const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: order.min,
-    max: order.max,
-    buy: buy,
+    min: order0.startRate,
+    max: order0.endRate,
+    buy: true,
   });
+  const sellOutsideMarket = outSideMarketWarning({
+    base,
+    marketPrice,
+    min: order1.startRate,
+    max: order1.endRate,
+    buy: false,
+  });
+
+  const showBuy =
+    buy || (search.editType === 'withdraw' && !isZero(order0.balance));
+  const showSell =
+    !buy || (search.editType === 'withdraw' && !isZero(order1.balance));
 
   return (
     <EditStrategyForm
       strategyType="disposable"
       editType={search.editType}
       orders={orders}
-      hasChanged={!isZero(search.budget)}
+      hasChanged={!isZero(search.buyBudget) || !isZero(search.sellBudget)}
     >
-      <EditStrategyBudgetField
-        editType={search.editType}
-        order={order}
-        budget={search.budget ?? ''}
-        initialBudget={initialOrder.balance}
-        setOrder={setOrder}
-        warning={search.editType === 'deposit' ? outsideMarket : ''}
-        buy={buy}
-      />
+      {showSell && (
+        <EditStrategyBudgetField
+          editType={search.editType}
+          order={orders.sell}
+          budget={search.sellBudget ?? ''}
+          initialBudget={strategy.order1.balance}
+          setOrder={setSellOrder}
+          warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
+        />
+      )}
+      {showBuy && (
+        <EditStrategyBudgetField
+          editType={search.editType}
+          order={orders.buy}
+          budget={search.buyBudget ?? ''}
+          initialBudget={strategy.order0.balance}
+          setOrder={setBuyOrder}
+          warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
+          buy
+        />
+      )}
     </EditStrategyForm>
   );
 };
