@@ -20,7 +20,7 @@ import { Token } from 'libs/tokens';
 import { m } from 'libs/motion';
 import { items } from 'components/strategies/common/variants';
 import { OverlappingMarketPrice } from '../overlapping/OverlappingMarketPrice';
-import { UserMarketPrice } from '../UserMarketPrice';
+import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
 import { useWagmi } from 'libs/wagmi';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
@@ -150,7 +150,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
   if (!base || !quote) return null;
 
   return (
-    <UserMarketPrice marketPrice={+marketPrice}>
+    <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
       <m.article
         variants={items}
         key="price-graph"
@@ -305,6 +305,6 @@ export const CreateOverlapping: FC<Props> = (props) => {
           )}
         </m.article>
       )}
-    </UserMarketPrice>
+    </OverlappingMarketPriceProvider>
   );
 };

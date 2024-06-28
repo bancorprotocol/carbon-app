@@ -16,7 +16,7 @@ import { getMaxBuyMin, getMinSellMax } from './utils';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { UserMarketContext } from '../UserMarketPrice';
+import { OverlappingMarketPriceContext } from '../UserMarketPrice';
 import styles from './OverlappingGraph.module.css';
 
 type Props = EnableProps | DisableProps;
@@ -171,7 +171,7 @@ export const OverlappingGraph: FC<Props> = (props) => {
   const userMarketPrice = props.userMarketPrice
     ? +props.userMarketPrice
     : undefined;
-  const overlappingMarketPrice = useContext(UserMarketContext);
+  const overlappingMarketPrice = useContext(OverlappingMarketPriceContext);
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const baseMarketPrice =
     userMarketPrice ?? externalPrice ?? overlappingMarketPrice;

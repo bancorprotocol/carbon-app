@@ -8,7 +8,7 @@ import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
+import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice';
 import { isTouchedZero } from 'components/strategies/common/utils';
 
 type InputRangeProps = {
@@ -40,7 +40,7 @@ export const InputRange: FC<InputRangeProps> = ({
   warnings = [],
   isOverlapping,
 }) => {
-  const marketPrice = useUserMarketPrice({ base, quote });
+  const marketPrice = useOverlappingMarketPrice({ base, quote });
   const inputMinId = useId();
   const inputMaxId = useId();
 
