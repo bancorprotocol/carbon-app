@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext", "webworker"],
-    "types": ["vite/client", "vite-plugin-svgr/client", "@cloudflare/workers-types"],
+    "types": ["vite/client", "vite-plugin-svgr/client", "@cloudflare/workers-types", "@testing-library/jest-dom/vitest"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
