@@ -212,8 +212,8 @@ export const EditStrategyForm: FC<Props> = (props) => {
       })}
       data-testid="edit-form"
     >
-      <EditPriceNav editType={editType} />
       <EditStrategyOverlapTokens />
+      <EditPriceNav editType={editType} />
 
       {children}
 

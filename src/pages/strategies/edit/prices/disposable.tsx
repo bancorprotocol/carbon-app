@@ -70,7 +70,6 @@ export const EditStrategyDisposablePage = () => {
   };
 
   const hasChanged = (() => {
-    const { order0, order1 } = strategy;
     if (orders.buy.min !== roundSearchParam(order0.startRate)) return true;
     if (orders.buy.max !== roundSearchParam(order0.endRate)) return true;
     if (orders.sell.min !== roundSearchParam(order1.startRate)) return true;
@@ -88,9 +87,8 @@ export const EditStrategyDisposablePage = () => {
     buy: isBuy,
   });
 
-  const fromRecurring = !isZero(order0.startRate) && !isZero(order1.startRate);
-  const buyBudgetChanges = !isBuy && totalBudget !== order0.balance;
-  const sellBudgetChanges = isBuy && totalBudget !== order1.balance;
+  const buyBudgetChanges = orders.buy.budget !== order0.balance;
+  const sellBudgetChanges = orders.sell.budget !== order1.balance;
 
   return (
     <EditStrategyForm
@@ -138,6 +136,9 @@ export const EditStrategyDisposablePage = () => {
               These are the changes in budget allocation
             </p>
           </hgroup>
+          <Warning>
+            {isBuy ? 'Sell High' : 'Buy Low'} order will be removed
+          </Warning>
           {sellBudgetChanges && (
             <>
               <BudgetDistribution
@@ -178,11 +179,6 @@ export const EditStrategyDisposablePage = () => {
             </>
           )}
         </article>
-      )}
-      {fromRecurring && (
-        <Warning>
-          {isBuy ? 'Sell High' : 'Buy Low'} order will be removed
-        </Warning>
       )}
     </EditStrategyForm>
   );
