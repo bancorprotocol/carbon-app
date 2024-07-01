@@ -63,11 +63,9 @@ export const InputBudget: FC<Props> = (props) => {
   };
 
   const setMax = () => {
-    if (max === value) return;
-    if (max) {
-      const balanceValue = new SafeDecimal(max).toFixed(token.decimals);
-      props.onChange(balanceValue);
-    }
+    if (!max || max === value) return;
+    const maxBudget = new SafeDecimal(max).toFixed(token.decimals);
+    props.onChange(maxBudget);
   };
 
   return (

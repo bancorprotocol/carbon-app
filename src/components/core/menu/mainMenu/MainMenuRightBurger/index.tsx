@@ -15,7 +15,9 @@ export const MainMenuRightBurger: FC<{
     menuMapping,
   });
 
-  const currentMenuItems = menuContext.top()?.items;
+  const currentMenuItems = menuContext
+    .top()
+    ?.items.filter((item) => !!item.content);
 
   return (
     <DropdownMenu

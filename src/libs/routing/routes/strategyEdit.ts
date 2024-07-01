@@ -143,7 +143,8 @@ export const editBudgetDisposable = new Route({
   component: EditBudgetDisposablePage,
   validateSearch: validateSearchParams<EditBudgetDisposableStrategySearch>({
     editType: validLiteral(['deposit', 'withdraw']),
-    budget: validNumber,
+    buyBudget: validNumber,
+    sellBudget: validNumber,
     marginalPrice: validMarginalPrice,
   }),
 });

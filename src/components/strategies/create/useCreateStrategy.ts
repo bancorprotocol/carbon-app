@@ -34,7 +34,7 @@ export const useCreateStrategy = (props: Props) => {
   const { user, provider } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
-  const marketPrice = useMarketPrice({ base, quote });
+  const { marketPrice } = useMarketPrice({ base, quote });
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
