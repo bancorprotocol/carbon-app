@@ -84,7 +84,6 @@
     "valibot": "^0.28.1",
     "viem": "2.x",
     "vite": "5.0.13",
-    "vite-plugin-rewrite-all": "1.0.1",
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^1.6.0",
