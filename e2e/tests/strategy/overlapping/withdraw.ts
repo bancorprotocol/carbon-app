@@ -32,6 +32,7 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
 
     // Verify strategy data
     const myStrategies = new MyStrategyDriver(page);
+    await myStrategies.waitForUpdates();
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);
     const strategy = await myStrategies.getStrategy(1);
