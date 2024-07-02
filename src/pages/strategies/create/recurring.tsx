@@ -56,7 +56,7 @@ export const CreateRecurringStrategyPage = () => {
   const search = useSearch({ from: url });
   const base = getTokenById(search.base);
   const quote = getTokenById(search.quote);
-  const marketPrice = useMarketPrice({ base, quote });
+  const { marketPrice } = useMarketPrice({ base, quote });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const buyOrder: OrderBlock = {

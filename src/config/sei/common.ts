@@ -1,6 +1,9 @@
 import { AppConfig } from 'config/types';
 import IconSeiLogo from 'assets/logos/seilogo.svg';
-import { tokenListParser } from 'config/sei/utils';
+import {
+  tokenSeiListParser,
+  tokenDragonswapListParser,
+} from 'config/sei/utils';
 
 const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -15,8 +18,14 @@ export const commonConfig: AppConfig = {
   appName: 'Carbon DeFi',
   appUrl: 'https://sei.carbondefi.xyz',
   carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
-  selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe'],
-  blockedConnectors: ['Seif', 'Tailwind', 'Compass Wallet'],
+  selectedConnectors: [
+    'MetaMask',
+    'Coinbase Wallet',
+    'Safe',
+    'Compass Wallet',
+    'Seif',
+  ],
+  blockedConnectors: ['Tailwind'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
   policiesLastUpdated: '27 May, 2024',
@@ -44,7 +53,7 @@ export const commonConfig: AppConfig = {
   sdk: {
     cacheTTL: 0,
   },
-  defaultTokenPair: [addresses.SEI, addresses.WSEI],
+  defaultTokenPair: [addresses.SEI, addresses.USDC],
   popularPairs: [
     [addresses.SEI, addresses.WSEI],
     [addresses.SEI, addresses.USDC],
@@ -79,7 +88,11 @@ export const commonConfig: AppConfig = {
   tokenLists: [
     {
       uri: 'https://raw.githubusercontent.com/Sei-Public-Goods/sei-assetlist/main/assetlist.json',
-      parser: tokenListParser('pacific-1'),
+      parser: tokenSeiListParser('pacific-1'),
+    },
+    {
+      uri: 'https://raw.githubusercontent.com/dragonswap-app/assets/main/tokenlist-sei-mainnet.json',
+      parser: tokenDragonswapListParser('dragonswap-app/assets', 'logos'),
     },
   ],
   tenderly: {

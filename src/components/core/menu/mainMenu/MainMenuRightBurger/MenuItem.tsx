@@ -5,7 +5,7 @@ import { cn } from 'utils/helpers';
 type MenuItemProps = {
   item: {
     onClick?: Function;
-    content: string | ReactElement;
+    content?: string | ReactElement;
     hasSubMenu?: boolean;
     disableHoverEffect?: boolean;
     className?: string;

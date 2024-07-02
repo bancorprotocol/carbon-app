@@ -35,6 +35,7 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
     await waitForTenderlyRpc(page);
 
     const myStrategies = new MyStrategyDriver(page);
+    await myStrategies.waitForUpdates();
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
 

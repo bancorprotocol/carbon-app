@@ -5,6 +5,7 @@ import {
   assertRecurringTestCase,
   CreateStrategyTestCase,
   EditStrategyDriver,
+  MyStrategyDriver,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 import { waitForTenderlyRpc } from '../../../utils/tenderly';
@@ -29,6 +30,8 @@ export const withdrawStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     await edit.submit('withdraw');
     await page.waitForURL('/', { timeout: 20_000 });
+    const myStrategies = new MyStrategyDriver(page);
+    await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
 
     await expect(strategy.budget('buy')).toHaveText(buy);

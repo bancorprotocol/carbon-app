@@ -14,7 +14,7 @@ import {
 } from 'components/strategies/common/BudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { getDeposit, getWithdraw } from './utils';
-import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
+import { hasNoBudget } from '../overlapping/utils';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
 import { Warning } from 'components/common/WarningMessageWithIcon';

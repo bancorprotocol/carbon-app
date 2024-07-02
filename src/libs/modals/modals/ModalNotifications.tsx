@@ -2,11 +2,13 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { useNotifications } from 'hooks/useNotifications';
+import { useModal } from 'hooks/useModal';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
   const { notifications, clearNotifications, removeNotification } =
     useNotifications();
   const reversedNotifications = notifications.slice().reverse();
+  const { closeModal } = useModal();
 
   return (
     <ModalSlideOver
@@ -30,6 +32,7 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
             <NotificationLine
               notification={n}
               close={() => removeNotification(n.id)}
+              onClick={() => closeModal(id)}
             />
           </li>
         ))}

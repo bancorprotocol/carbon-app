@@ -11,9 +11,14 @@ import style from './ActivityNotification.module.css';
 interface Props {
   notification: NotificationActivity;
   close: () => void;
+  onClick?: () => void;
 }
 
-export const ActivityNotification: FC<Props> = ({ notification, close }) => {
+export const ActivityNotification: FC<Props> = ({
+  notification,
+  close,
+  onClick,
+}) => {
   const titleId = useId();
   const { activity } = notification;
 
@@ -31,6 +36,7 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
         </hgroup>
         <Link
           to="/strategy/$id"
+          onClick={onClick}
           params={{ id: activity.strategy.id }}
           className="font-weight-500 flex items-center"
         >

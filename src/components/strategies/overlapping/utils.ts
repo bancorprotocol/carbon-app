@@ -1,6 +1,20 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { sanitizeNumber } from 'utils/helpers';
-import { StrategyInput } from 'components/strategies/common/utils';
+import {
+  StrategyInput,
+  isOverlappingStrategy,
+  isPaused,
+  isZero,
+} from 'components/strategies/common/utils';
+import { type Strategy } from 'libs/queries';
+import { geoMean } from 'utils/fullOutcome';
+import { roundSearchParam } from 'utils/helpers';
+
+export interface OverlappingSearch {
+  marketPrice?: string;
+  min?: string;
+  max?: string;
+  spread?: string;
+}
 
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
@@ -30,43 +44,59 @@ export const getSpread = ({ order0, order1 }: StrategyInput) => {
 };
 
 export const getRoundedSpread = (strategy: StrategyInput) => {
-  return Number(getSpread(strategy).toFixed(2));
+  return Number(getSpread(strategy).toFixed(6));
 };
 
-interface BuyOrder {
-  min: string;
-  marginalPrice: string;
-}
+type BuyOrder =
+  | { min: string; marginalPrice: string }
+  | { startRate: string; marginalRate: string };
 export const isMinAboveMarket = (buyOrder: BuyOrder) => {
-  return new SafeDecimal(buyOrder.min).eq(buyOrder.marginalPrice);
+  if ('min' in buyOrder) {
+    return new SafeDecimal(buyOrder.min).eq(buyOrder.marginalPrice);
+  } else {
+    return new SafeDecimal(buyOrder.startRate).eq(buyOrder.marginalRate);
+  }
 };
-interface SellOrder {
-  max: string;
-  marginalPrice: string;
-}
+type SellOrder =
+  | { max: string; marginalPrice: string }
+  | { endRate: string; marginalRate: string };
 export const isMaxBelowMarket = (sellOrder: SellOrder) => {
-  return new SafeDecimal(sellOrder.marginalPrice).eq(sellOrder.max);
+  if ('max' in sellOrder) {
+    return new SafeDecimal(sellOrder.max).eq(sellOrder.marginalPrice);
+  } else {
+    return new SafeDecimal(sellOrder.endRate).eq(sellOrder.marginalRate);
+  }
 };
 
-interface BuyBudgetOrder extends BuyOrder {
-  budget: string;
-}
-interface SellBudgetOrder extends SellOrder {
-  budget: string;
-}
-/** Verify that both budget are above 1wei if they are enabled */
-export function isOverlappingBudgetTooSmall(
-  order0: BuyBudgetOrder,
-  order1: SellBudgetOrder
-) {
-  if (isMaxBelowMarket(order1)) return false;
-  if (isMinAboveMarket(order0)) return false;
-  const buyBudget = Number(sanitizeNumber(order0.budget));
-  const sellBudget = Number(sanitizeNumber(order1.budget));
-  if (!!buyBudget && !!sellBudget) return false;
-  if (!buyBudget && !sellBudget) return false;
-  return true;
-}
+export const hasNoBudget = (strategy: Strategy) => {
+  const { order0, order1 } = strategy;
+  return !Number(order0.balance) && !Number(order1.balance);
+};
+
+export const getCalculatedPrice = (strategy: Strategy) => {
+  const { order0, order1 } = strategy;
+  if (hasNoBudget(strategy)) return;
+  if (!isOverlappingStrategy(strategy)) return;
+  if (isZero(strategy.order0.marginalRate)) return;
+  if (isZero(strategy.order1.marginalRate)) return;
+  if (isMinAboveMarket(strategy.order0)) return strategy.order0.marginalRate;
+  if (isMaxBelowMarket(strategy.order1)) return strategy.order1.marginalRate;
+  return geoMean(order0.marginalRate, order1.marginalRate)?.toString();
+};
+
+export const getOverlappingMarketPrice = (
+  strategy: Strategy,
+  search: OverlappingSearch,
+  externalPrice?: string
+) => {
+  const calculatedPrice = getCalculatedPrice(strategy);
+  const touched = isOverlappingTouched(strategy, search);
+  if (touched) {
+    return search.marketPrice ?? externalPrice ?? calculatedPrice;
+  } else {
+    return search.marketPrice ?? calculatedPrice ?? externalPrice;
+  }
+};
 
 export function hasArbOpportunity(
   buyMarginal: string,
@@ -78,3 +108,19 @@ export function hasArbOpportunity(
   const calculatedPrice = spreadPPM.add(1).sqrt().times(buyMarginal);
   return !calculatedPrice.eq(marketPrice);
 }
+
+export const isOverlappingTouched = (
+  strategy: Strategy,
+  search: OverlappingSearch
+) => {
+  const { order0, order1 } = strategy;
+  const { min, max, spread, marketPrice } = search;
+  if (marketPrice) return true;
+  if (!isOverlappingStrategy(strategy)) return true;
+  if (hasNoBudget(strategy)) return true;
+  if (isPaused(strategy)) return true;
+  if (min && min !== roundSearchParam(order0.startRate)) return true;
+  if (max && max !== roundSearchParam(order1.endRate)) return true;
+  if (spread && spread !== getRoundedSpread(strategy).toString()) return true;
+  return false;
+};
