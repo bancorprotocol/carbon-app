@@ -28,7 +28,7 @@ export const commonConfig: AppConfig = {
     rpc: {
       url:
         import.meta.env.VITE_CHAIN_RPC_URL ||
-        'https://virulent-falling-resonance.sei-pacific.quiknode.pro/06351027fe1296146c8d687d8ef7b8a8c34df306/',
+        'https://holy-frequent-sky.sei-pacific.quiknode.pro/8d454102397f7c651636c3c832e6451a5a7f5928/',
       headers: {
         'x-apikey': import.meta.env.VITE_CHAIN_RPC_KEY || '',
       },
