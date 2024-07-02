@@ -35,9 +35,7 @@ export const commonConfig: AppConfig = {
     chainId: 1329,
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
     rpc: {
-      url:
-        import.meta.env.VITE_CHAIN_RPC_URL ||
-        'https://holy-frequent-sky.sei-pacific.quiknode.pro/8d454102397f7c651636c3c832e6451a5a7f5928/',
+      url: 'https://evm-rpc.sei-apis.com',
       headers: {
         'x-apikey': import.meta.env.VITE_CHAIN_RPC_KEY || '',
       },
