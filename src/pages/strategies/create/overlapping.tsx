@@ -6,7 +6,7 @@ import { isValidRange } from 'components/strategies/utils';
 import { CreateOverlapping } from 'components/strategies/create/CreateOverlapping';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
-import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { OverlappingInitMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { isZero } from 'components/strategies/common/utils';
 import {
   isMaxBelowMarket,
@@ -145,7 +145,7 @@ export const CreateOverlappingStrategyPage = () => {
             key="marketPrice"
             className="rounded-10 bg-background-900 flex flex-col md:w-[440px]"
           >
-            <OverlappingInitMarketPriceField
+            <OverlappingInitMarketPrice
               base={base!}
               quote={quote!}
               marketPrice={marketPrice}

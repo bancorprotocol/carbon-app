@@ -210,10 +210,10 @@ export const formatNumberWithApproximation = (
 };
 
 /** Round to 6 decimals after leading zeros */
-export const roundSearchParam = (param: string) => {
-  if (Number(param) === 0 || isNaN(Number(param))) return '';
-  const [radix, decimals] = param.split('.');
-  if (!decimals) return param;
+export const roundSearchParam = (param?: string | number) => {
+  if (!param || Number(param) === 0 || isNaN(Number(param))) return '';
+  const [radix, decimals] = param.toString().split('.');
+  if (!decimals) return param.toString();
   let leadingZeros = '';
   for (const char of decimals) {
     if (char !== '0') break;
@@ -245,4 +245,13 @@ export const tokenRange = (
   const from = tokenAmount(min, token, options);
   const to = tokenAmount(max, token, options);
   return `${from} - ${to}`;
+};
+
+/** Round number to a fixed value */
+export const roundNumber = (
+  value: number | string | undefined,
+  precision = 6
+) => {
+  if (!value) return;
+  return Number(Number(value).toFixed(precision)).toString();
 };
