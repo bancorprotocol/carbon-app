@@ -98,7 +98,7 @@
     "prebuild": "yarn compile-abis",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "test": "vitest run",
+    "test": "vitest run --mode production",
     "pree2e": "yarn playwright install --with-deps chromium",
     "e2e": "playwright test",
     "lint": "eslint --ext .tsx,.ts .",
