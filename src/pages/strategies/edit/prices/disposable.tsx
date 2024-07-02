@@ -36,6 +36,10 @@ export interface EditDisposableStrategySearch {
   budget?: string;
 }
 
+const isDifferent = (next: string, previous: string) => {
+  return next !== (roundSearchParam(previous) || '0');
+};
+
 const url = '/strategies/edit/$strategyId/prices/disposable';
 
 export const EditStrategyDisposablePage = () => {
@@ -70,10 +74,10 @@ export const EditStrategyDisposablePage = () => {
   };
 
   const hasChanged = (() => {
-    if (orders.buy.min !== roundSearchParam(order0.startRate)) return true;
-    if (orders.buy.max !== roundSearchParam(order0.endRate)) return true;
-    if (orders.sell.min !== roundSearchParam(order1.startRate)) return true;
-    if (orders.sell.max !== roundSearchParam(order1.endRate)) return true;
+    if (isDifferent(orders.buy.min, order0.startRate)) return true;
+    if (isDifferent(orders.buy.max, order0.endRate)) return true;
+    if (isDifferent(orders.sell.min, order1.startRate)) return true;
+    if (isDifferent(orders.sell.max, order1.endRate)) return true;
     if (!isZero(search.budget)) return true;
     return false;
   })();
@@ -137,7 +141,7 @@ export const EditStrategyDisposablePage = () => {
             </p>
           </hgroup>
           <Warning>
-            {isBuy ? 'Sell High' : 'Buy Low'} order will be removed
+            You will withdraw the following funds to your wallet
           </Warning>
           {sellBudgetChanges && (
             <>
