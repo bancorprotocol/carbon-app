@@ -20,7 +20,7 @@ import {
 } from 'components/strategies/overlapping/utils';
 import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
 import { isOverlappingTouched } from 'components/strategies/overlapping/utils';
-import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { OverlappingInitMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
@@ -192,7 +192,7 @@ export const EditStrategyOverlappingPage = () => {
         <EditPriceNav editType={search.editType} />
         <EditStrategyOverlapTokens />
         <article className="rounded-10 bg-background-900 flex flex-col">
-          <OverlappingInitMarketPriceField
+          <OverlappingInitMarketPrice
             base={base}
             quote={quote}
             marketPrice={marketPrice}

@@ -43,7 +43,7 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
       placement="bottom-end"
       button={Trigger}
     >
-      <OverlappingInitMarketPriceField
+      <OverlappingInitMarketPrice
         {...props}
         className="w-[400px] max-w-[80vw]"
         close={() => setOpen(false)}
@@ -57,7 +57,7 @@ interface FieldProps extends Props {
   close?: () => void;
 }
 
-export const OverlappingInitMarketPriceField = (props: FieldProps) => {
+export const OverlappingInitMarketPrice = (props: FieldProps) => {
   const { base, quote, marketPrice } = props;
   const inputId = useId();
   const checkboxId = useId();

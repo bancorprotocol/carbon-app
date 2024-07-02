@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useGetTokenBalance } from 'libs/queries';
 import {
   getMaxBuyMin,
@@ -29,6 +29,10 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { InputRange } from '../common/InputRange';
 import { isOverlappingTouched } from '../overlapping/utils';
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { TokenLogo } from 'components/common/imager/Imager';
+import { InputLimit } from '../common/InputLimit';
+import { Button } from 'components/common/button';
 
 interface Props {
   marketPrice: string;
@@ -83,12 +87,15 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
 
+  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
+
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
   const { action, anchor, budget } = search;
 
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
+  const [localPrice, setLocalPrice] = useState('');
 
   const initialBuyBudget = strategy.order0.balance;
   const initialSellBudget = strategy.order1.balance;
@@ -109,6 +116,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     [navigate]
   );
 
+  const displayPrice = externalPrice || search.marketPrice;
   const touched = isOverlappingTouched(strategy, search);
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
@@ -207,12 +215,14 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
         <header className="flex items-center gap-8">
           <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
-          <OverlappingMarketPrice
-            base={base}
-            quote={quote}
-            marketPrice={marketPrice}
-            setMarketPrice={setMarketPrice}
-          />
+          {displayPrice && (
+            <OverlappingMarketPrice
+              base={base}
+              quote={quote}
+              marketPrice={marketPrice}
+              setMarketPrice={setMarketPrice}
+            />
+          )}
         </header>
         <OverlappingGraph
           base={base}
@@ -231,49 +241,88 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           </Warning>
         )}
       </article>
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
-        <header className="flex items-center gap-8">
-          <h2 className="text-18 font-weight-500 flex-1">
-            Edit Price Range&nbsp;
-            <span className="text-white/40">
-              ({quote?.symbol} per 1 {base?.symbol})
-            </span>
-          </h2>
-          <Tooltip
-            element="Indicate the strategy exact buy and sell prices."
-            iconClassName="size-18 text-white/60"
+      {displayPrice && (
+        <>
+          <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+            <header className="flex items-center gap-8">
+              <h2 className="text-18 font-weight-500 flex-1">
+                Edit Price Range&nbsp;
+                <span className="text-white/40">
+                  ({quote?.symbol} per 1 {base?.symbol})
+                </span>
+              </h2>
+              <Tooltip
+                element="Indicate the strategy exact buy and sell prices."
+                iconClassName="size-18 text-white/60"
+              />
+            </header>
+            <InputRange
+              base={base}
+              quote={quote}
+              min={order0.min}
+              max={order1.max}
+              setMin={setMin}
+              setMax={setMax}
+              minLabel="Min Buy Price"
+              maxLabel="Max Sell Price"
+              warnings={[priceWarning]}
+              isOverlapping
+            />
+          </article>
+          <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
+            <header className="mb-10 flex items-center gap-8 ">
+              <h2 className="text-18 font-weight-500 flex-1">Edit Fee Tier</h2>
+              <Tooltip
+                element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
+                iconClassName="size-18 text-white/60"
+              />
+            </header>
+            <OverlappingSpread
+              buyMin={Number(order0.min)}
+              sellMax={Number(order1.max)}
+              defaultValue={0.05}
+              options={[0.01, 0.05, 0.1]}
+              spread={spread}
+              setSpread={setSpread}
+            />
+          </article>
+        </>
+      )}
+      {!displayPrice && (
+        <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+          <hgroup>
+            <h2 className="text-18 font-weight-500 flex-1">Market Price</h2>
+            <p className="text-12 text-white/80">
+              {base.symbol} market price is missing. To continue the prices of
+              the strategy, enter its market price below.
+            </p>
+          </hgroup>
+          <Tooltip element="Price used to calculate concentrated liquidity strategy params">
+            <label
+              htmlFor="market-price-input"
+              className="text-14 font-weight-500 flex items-center gap-4 text-white/80"
+            >
+              Enter <TokenLogo token={base} size={14} /> {base.symbol} market
+              price ({quote.symbol} per 1 {base.symbol})
+            </label>
+          </Tooltip>
+          <InputLimit
+            id="market-price-input"
+            price={localPrice}
+            setPrice={setLocalPrice}
+            base={base}
+            quote={quote}
+            ignoreMarketPriceWarning
           />
-        </header>
-        <InputRange
-          base={base}
-          quote={quote}
-          min={order0.min}
-          max={order1.max}
-          setMin={setMin}
-          setMax={setMax}
-          minLabel="Min Buy Price"
-          maxLabel="Max Sell Price"
-          warnings={[priceWarning]}
-          isOverlapping
-        />
-      </article>
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
-        <header className="mb-10 flex items-center gap-8 ">
-          <h2 className="text-18 font-weight-500 flex-1">Edit Fee Tier</h2>
-          <Tooltip
-            element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="size-18 text-white/60"
-          />
-        </header>
-        <OverlappingSpread
-          buyMin={Number(order0.min)}
-          sellMax={Number(order1.max)}
-          defaultValue={0.05}
-          options={[0.01, 0.05, 0.1]}
-          spread={spread}
-          setSpread={setSpread}
-        />
-      </article>
+          <Button
+            type="button"
+            disabled={!localPrice}
+            onClick={() => setMarketPrice(localPrice)}
+          >
+            Confirm
+          </Button>
+        </article>
+      )}
       <OverlappingAnchor
         base={base}
         quote={quote}

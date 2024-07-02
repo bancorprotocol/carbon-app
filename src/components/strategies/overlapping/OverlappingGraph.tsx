@@ -2,7 +2,6 @@ import {
   FC,
   MouseEvent as ReactMouseEvent,
   WheelEvent,
-  useContext,
   useEffect,
   useRef,
   useState,
@@ -16,7 +15,6 @@ import { getMaxBuyMin, getMinSellMax } from './utils';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { OverlappingMarketPriceContext } from '../UserMarketPrice';
 import styles from './OverlappingGraph.module.css';
 
 type Props = EnableProps | DisableProps;
@@ -56,7 +54,7 @@ const getBoundaries = (params: BoundariesParams) => {
   const min = new SafeDecimal(params.min || '0');
   const max = new SafeDecimal(params.max || '0');
   const marketPrice = new SafeDecimal(params.marketPrice);
-  const minMean = marketPrice.lt(min) ? marketPrice : min;
+  const minMean = marketPrice.gt(0) && marketPrice.lt(min) ? marketPrice : min;
   const maxMean = marketPrice.gt(max) ? marketPrice : max;
   const mean = minMean.plus(maxMean).div(2);
   const padding = maxMean.minus(minMean).times(params.zoom);
@@ -171,10 +169,8 @@ export const OverlappingGraph: FC<Props> = (props) => {
   const userMarketPrice = props.userMarketPrice
     ? +props.userMarketPrice
     : undefined;
-  const overlappingMarketPrice = useContext(OverlappingMarketPriceContext);
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
-  const baseMarketPrice =
-    userMarketPrice ?? externalPrice ?? overlappingMarketPrice;
+  const baseMarketPrice = userMarketPrice ?? externalPrice ?? 0;
 
   const isCoingeckoPriceSource = !!externalPrice;
   const isUserPriceSource = !!userMarketPrice;
@@ -303,15 +299,8 @@ export const OverlappingGraph: FC<Props> = (props) => {
       marginalSell: Number(params.sellPriceMarginal),
     };
   };
-  const getConfig = () => {
-    if (disabled) return getStaticConfig();
-    return getPointConfig({
-      min: baseMin * xFactor,
-      max: baseMax * xFactor,
-    });
-  };
 
-  const config = getStaticConfig(); // getConfig();
+  const config = getStaticConfig();
   const { min, max, sellMin, buyMax } = config;
 
   const marketPercent = {
@@ -542,7 +531,7 @@ export const OverlappingGraph: FC<Props> = (props) => {
             <IconCoinGecko className="size-8" />
           </>
         ) : (
-          <span>Geometric mean price</span>
+          <span>No market price found</span>
         )}
         <span role="separator">·</span>
         <span>Fee Tier {spread || 0}%</span>
@@ -698,17 +687,19 @@ export const OverlappingGraph: FC<Props> = (props) => {
             ))}
           </g>
           {/* Market Price */}
-          <g>
-            <line
-              {...marketIndicator.line}
-              stroke="#404040"
-              strokeWidth={ratio}
-            />
-            <rect {...marketIndicator.rect} fill="#404040" />
-            <text {...marketIndicator.text} fill="white">
-              {marketValue}
-            </text>
-          </g>
+          {marketPrice && (
+            <g>
+              <line
+                {...marketIndicator.line}
+                stroke="#404040"
+                strokeWidth={ratio}
+              />
+              <rect {...marketIndicator.rect} fill="#404040" />
+              <text {...marketIndicator.text} fill="white">
+                {marketValue}
+              </text>
+            </g>
+          )}
 
           {/* Handlers: must be at the end to always be above the graph */}
           <g
