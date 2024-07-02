@@ -35,7 +35,7 @@ export const commonConfig: AppConfig = {
     chainId: 1329,
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
     rpc: {
-      url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://evm-rpc.sei-apis.com',
+      url: 'https://evm-rpc.sei-apis.com',
       headers: {
         'x-apikey': import.meta.env.VITE_CHAIN_RPC_KEY || '',
       },
