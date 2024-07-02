@@ -45,6 +45,7 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await waitForTenderlyRpc(page);
 
     // Verify strategy data
+    myStrategies.waitForUpdates();
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);
     const strategy = await myStrategies.getStrategy(1);

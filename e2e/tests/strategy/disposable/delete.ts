@@ -19,6 +19,7 @@ export const deleteStrategy = (testCase: CreateStrategyTestCase) => {
     await modal.waitFor({ state: 'detached' });
 
     const myStrategies = new MyStrategyDriver(page);
+    await myStrategies.waitForUpdates();
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(0);
   });
