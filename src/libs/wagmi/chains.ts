@@ -13,7 +13,7 @@ export const currentChain: Chain = {
   },
   rpcUrls: {
     default: {
-      http: [config.network.rpc.url],
+      http: [config.network.defaultRpc.url],
     },
   },
   blockExplorers: {

@@ -21,7 +21,11 @@ export interface AppConfig {
     name: string;
     logoUrl: string;
     chainId: number;
-    rpc: {
+    defaultRpc: {
+      url: string;
+      headers?: Record<string, string>;
+    };
+    customRpc?: {
       url: string;
       headers?: Record<string, string>;
     };

@@ -34,8 +34,11 @@ export const commonConfig: AppConfig = {
     logoUrl: IconSeiLogo,
     chainId: 1329,
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
-    rpc: {
+    defaultRpc: {
       url: 'https://evm-rpc.sei-apis.com',
+      headers: {
+        'x-apikey': 'a5063ab2',
+      },
     },
     gasToken: {
       name: 'SEI',

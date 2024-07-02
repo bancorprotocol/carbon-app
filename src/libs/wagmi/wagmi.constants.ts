@@ -3,8 +3,12 @@ import config from 'config';
 import { tenderlyRpc } from 'utils/tenderly';
 
 const CHAIN_RPC_URL =
-  tenderlyRpc || import.meta.env.VITE_CHAIN_RPC_URL || config.network.rpc.url;
-const CHAIN_RPC_HEADERS = tenderlyRpc ? {} : config.network.rpc.headers || {};
+  tenderlyRpc || config.network.customRpc?.url || config.network.defaultRpc.url;
+const CHAIN_RPC_HEADERS = tenderlyRpc
+  ? {}
+  : config.network.customRpc?.headers ??
+    config.network.defaultRpc.headers ??
+    {};
 export const CHAIN_ID = config.network.chainId;
 
 if (typeof CHAIN_RPC_URL === 'undefined') {

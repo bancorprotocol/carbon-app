@@ -22,7 +22,6 @@ jobs:
       - name: Install Playwright browsers and run Playwright tests
         run: yarn e2e
         env:
-          VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
           TENDERLY_ACCOUNT: bancor
           TENDERLY_PROJECT: carbon-test-forks
           TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
