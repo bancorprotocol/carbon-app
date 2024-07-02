@@ -98,6 +98,7 @@
     "prebuild": "yarn compile-abis",
     "build": "tsc && vite build",
     "serve": "vite preview",
+    "pretest": "yarn compile-abis",
     "test": "vitest run --mode production",
     "pree2e": "yarn playwright install --with-deps chromium",
     "e2e": "playwright test",
