@@ -23,7 +23,6 @@ To run the app locally, you need the following:
 
 - Node.js 20+
 - Yarn
-- RPC Node Provider API Key (Alchemy, Infura, etc)
 
 For E2E testing you need a Tenderly account and API Key.
 
@@ -106,13 +105,13 @@ The '/debug' route is available to debug the app (ex: localhost:3000/debug). It 
 
 where `spread` (fee tier in the UI) is in percentage, and `value` is the number of strategies to create.
 
-# Customization
+# Network Configuration
 
 ## Change Network
 
 1. Create a new folder under `src/config` with the name of the network (ex: "polygon")
-2. Copy paste the files from `src/config/ethereum` into your folder
-3. Update the `common.ts`, `production.ts` & `development.ts` files with your config, pointing to the CarbonDeFi contracts in that network
+2. Copy and paste the files from `src/config/ethereum` into your folder
+3. Update the `common.ts`, `production.ts` & `development.ts` files with your config, pointing to the CarbonDeFi contracts in that network, as well as setting the defaultRpc.url (must match the one found in [Chain Lists](https://chainlist.org/)) and the optional customRpc.url.
 4. Update the `src/config/index.ts` files to import your files
    `index.ts`
 
@@ -138,14 +137,19 @@ const configs = {
 };
 ```
 
-5. Update the `.env` file to use the required network (ex: "polygon") and set your RPC url if you wish to use a custom one not defined under the `common.ts` file.
+5. Update the `.env` file to use the required network (ex: "polygon").
 
 ```bash
 # Use polygon network
 VITE_NETWORK=polygon
-# Use any RPC URL to your network
-VITE_CHAIN_RPC_URL=https://eth-mainnet.alchemyapi.io/v2/<API_KEY>
 ```
+
+The app will use the rpc settings for the following purposes:
+
+1. Add a network to the injected wallet.
+2. Fetch data from the network.
+
+The defaultRpc.url will be used to add the network to the injected wallet, and the customRpc.url will be used to fetch data from the network. If the customRpc.url is not defined, the defaultRpc.url will be used for both purposes.
 
 ### Contracts with version < 5
 
@@ -168,7 +172,8 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `chainId`: Chain ID.
   - `gasToken`: Gas token name, symbol, decimals, address and logoURI.
   - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
-  - `rpcUrl`: The RPC URL of the network.
+  - `defaultRpc`: The RPC url and headers of the network, used to add the network to the injected wallet and to fetch data from the chain if the customRpc is not defined.
+  - `customRpc`: The custom RPC url and headers of the network, used to fetch data from the chain. If not defined, the defaultRpc will be used instead.
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
 - `popularTokens`: List of popular tokens to be used in the app when opening the token selection modal.
@@ -180,6 +185,19 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 ### Add pairsToExchangeMapping
 
 The file [`pairsToExchangeMapping.ts`](src/config/utils.ts) contains the mapping of pair symbols to exchange symbol to be used in the TradingView chart.
+
+# Customization
+
+## Change Logo
+
+To change the logo in the app, you can replace the following files with your own:
+
+- Logo file: [`carbon.svg`](src/assets/logos/carbon.svg).
+- Banner file: [`carbon.jpg`](public/carbon.jpg) - used when sharing links to the app.
+- Carbon Logo Loading: [`CarbonLogoLoading.tsx`](src/components/common/CarbonLogoLoading.tsx) - Used for loading animations in the app.
+- Favicon file: [`favicon.ico`](public/favicon.ico).
+
+Please do not replace the [`carbondefi.svg`](src/assets/logos/carbondefi.svg) file as it is used for the "Powered by CarbonDeFi" logo in the footer.
 
 ## Change Colors
 
