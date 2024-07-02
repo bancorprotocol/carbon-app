@@ -1,18 +1,10 @@
-import { test, expect, describe, beforeEach, vitest } from 'vitest';
+import { test, expect, describe, afterEach } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarketPriceIndication } from './index';
 
-vitest.mock('components/common/tooltip/Tooltip', () => ({
-  Tooltip: vitest.fn(({ element }) => <div>{element}</div>),
-}));
-
-vitest.mock('./useMarketIndication.ts', () => ({
-  Tooltip: vitest.fn(() => null),
-}));
-
 describe('MarketPriceIndication', () => {
-  beforeEach(() => {
+  afterEach(() => {
     cleanup(); // Clear the screen before each test
   });
 
@@ -23,7 +15,7 @@ describe('MarketPriceIndication', () => {
     );
 
     const indicationText = screen.getByText('5.00% above market');
-    expect(indicationText).toBeTruthy();
+    expect(indicationText).toBeInTheDocument();
   });
 
   test('renders the market price indication correctly for positive percentage - greater than 99.99', () => {
@@ -33,7 +25,7 @@ describe('MarketPriceIndication', () => {
     );
 
     const indicationText = screen.getByText('>99.99% above market');
-    expect(indicationText).toBeTruthy();
+    expect(indicationText).toBeInTheDocument();
   });
 
   test('renders the market price indication correctly for positive percentage - smaller than 0.01', () => {
@@ -43,7 +35,7 @@ describe('MarketPriceIndication', () => {
     );
 
     const indicationText = screen.getByText('<0.01% above market');
-    expect(indicationText).toBeTruthy();
+    expect(indicationText).toBeInTheDocument();
   });
 
   test('renders the market price indication correctly for negative percentage', () => {
@@ -53,7 +45,7 @@ describe('MarketPriceIndication', () => {
     );
 
     const indicationText = screen.getByText('6.00% below market');
-    expect(indicationText).toBeTruthy();
+    expect(indicationText).toBeInTheDocument();
   });
 
   test('renders the market price indication correctly for negative percentage - lower than 99.99', () => {
@@ -63,7 +55,7 @@ describe('MarketPriceIndication', () => {
     );
 
     const indicationText = screen.getByText('99.99% below market');
-    expect(indicationText).toBeTruthy();
+    expect(indicationText).toBeInTheDocument();
   });
 
   test('renders the market price indication correctly for zero percentage', async () => {
@@ -73,7 +65,7 @@ describe('MarketPriceIndication', () => {
     );
 
     const component = screen.queryByTestId('market-price-indication');
-    expect(component).toBeNull();
+    expect(component).not.toBeInTheDocument();
   });
 
   test('renders the market price indication with range text when isRange = true & positive', () => {
@@ -86,7 +78,7 @@ describe('MarketPriceIndication', () => {
     );
 
     const indicationText = screen.getByText('3.10% above');
-    expect(indicationText).toBeTruthy();
+    expect(indicationText).toBeInTheDocument();
   });
 
   test('renders the market price indication with range text when isRange = true & negative', () => {
@@ -99,6 +91,6 @@ describe('MarketPriceIndication', () => {
     );
 
     const indicationText = screen.getByText('3.12% below');
-    expect(indicationText).toBeTruthy();
+    expect(indicationText).toBeInTheDocument();
   });
 });
