@@ -36,9 +36,6 @@ export const commonConfig: AppConfig = {
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
     rpc: {
       url: 'https://evm-rpc.sei-apis.com',
-      headers: {
-        'x-apikey': import.meta.env.VITE_CHAIN_RPC_KEY || '',
-      },
     },
     gasToken: {
       name: 'SEI',
