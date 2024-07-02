@@ -17,6 +17,14 @@ type ManageStrategyID =
 export class MyStrategyDriver {
   constructor(private page: Page) {}
 
+  async waitForUpdates(timeout = 2_000) {
+    try {
+      const indicator = this.page.getByTestId('fetch-strategies');
+      await indicator.waitFor({ state: 'attached', timeout });
+      return indicator.waitFor({ state: 'detached', timeout });
+    } catch {}
+  }
+
   firstStrategy() {
     return this.page.getByTestId('first-strategy');
   }

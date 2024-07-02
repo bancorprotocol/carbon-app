@@ -2,7 +2,10 @@ import { expect, test } from '@playwright/test';
 import { waitModalOpen } from './../../../utils/modal';
 import { Page } from 'playwright-core';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
-import { CreateStrategyTestCase } from '../../../utils/strategy';
+import {
+  CreateStrategyTestCase,
+  MyStrategyDriver,
+} from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const pauseStrategy = async (
@@ -17,6 +20,9 @@ export const pauseStrategy = async (
   const modal = await waitModalOpen(page);
   await modal.getByTestId('pause-strategy-btn').click();
   await modal.waitFor({ state: 'detached' });
+
+  const myStrategies = new MyStrategyDriver(page);
+  await myStrategies.waitForUpdates();
 
   await expect(strategy.status()).toHaveText('Inactive');
 
