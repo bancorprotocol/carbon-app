@@ -10,8 +10,7 @@ describe('MarketPriceIndication', () => {
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
 
-    const indicationText = screen.getByText('5.00% above market');
-    expect(indicationText).toBeInTheDocument();
+    screen.findByText('5.00% above market');
   });
 
   test('renders the market price indication correctly for positive percentage - greater than 99.99', () => {
@@ -20,8 +19,7 @@ describe('MarketPriceIndication', () => {
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
 
-    const indicationText = screen.getByText('>99.99% above market');
-    expect(indicationText).toBeInTheDocument();
+    screen.findByText('>99.99% above market');
   });
 
   test('renders the market price indication correctly for positive percentage - smaller than 0.01', () => {
@@ -30,8 +28,7 @@ describe('MarketPriceIndication', () => {
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
 
-    const indicationText = screen.getByText('<0.01% above market');
-    expect(indicationText).toBeInTheDocument();
+    screen.findByText('<0.01% above market');
   });
 
   test('renders the market price indication correctly for negative percentage', () => {
@@ -40,8 +37,7 @@ describe('MarketPriceIndication', () => {
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
 
-    const indicationText = screen.getByText('6.00% below market');
-    expect(indicationText).toBeInTheDocument();
+    screen.findByText('6.00% below market');
   });
 
   test('renders the market price indication correctly for negative percentage - lower than 99.99', () => {
@@ -50,8 +46,7 @@ describe('MarketPriceIndication', () => {
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
 
-    const indicationText = screen.getByText('99.99% below market');
-    expect(indicationText).toBeInTheDocument();
+    screen.findByText('99.99% below market');
   });
 
   test('renders the market price indication correctly for zero percentage', async () => {
@@ -73,8 +68,7 @@ describe('MarketPriceIndication', () => {
       />
     );
 
-    const indicationText = screen.getByText('3.10% above');
-    expect(indicationText).toBeInTheDocument();
+    screen.findByText('3.10% above');
   });
 
   test('renders the market price indication with range text when isRange = true & negative', () => {
@@ -86,7 +80,6 @@ describe('MarketPriceIndication', () => {
       />
     );
 
-    const indicationText = screen.getByText('3.12% below');
-    expect(indicationText).toBeInTheDocument();
+    screen.findByText('3.12% below');
   });
 });
