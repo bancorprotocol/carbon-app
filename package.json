@@ -67,8 +67,6 @@
     "lodash": "^4.17.21",
     "lz-string": "^1.5.0",
     "mipd": "^0.0.7",
-    "numbro": "^2.3.6",
-    "numeral": "^2.0.6",
     "postcss": "^8.4.31",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
