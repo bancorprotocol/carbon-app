@@ -51,8 +51,10 @@ vitest.mock('@bancor/carbon-sdk/strategy-management', () => ({
 // MOCK WAGMI WALLET
 const mockedWallet = await vitest.hoisted(async () => {
   const { mock } = await import('wagmi/connectors');
+  const { Wallet } = await import('ethers');
+  const randomWalletAddress = Wallet.createRandom().address as `0x${string}`;
   return mock({
-    accounts: ['0x5f7a009664B771E889751f4FD721aDc439033ECD'],
+    accounts: [randomWalletAddress],
   });
 });
 vitest.mock('libs/wagmi/connectors', async (importOriginal) => {
