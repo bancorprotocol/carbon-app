@@ -5,7 +5,10 @@ import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFiel
 import { StrategySettings } from 'libs/routing';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
-import { outSideMarketWarning } from 'components/strategies/common/utils';
+import {
+  isOverlappingStrategy,
+  outSideMarketWarning,
+} from 'components/strategies/common/utils';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import {
   checkIfOrdersOverlap,
@@ -68,6 +71,7 @@ export const EditStrategyRecurringPage = () => {
 
   const hasChanged = (() => {
     const { order0, order1 } = strategy;
+    if (isOverlappingStrategy(strategy)) return true;
     if (search.buyMin !== roundSearchParam(order0.startRate)) return true;
     if (search.buyMax !== roundSearchParam(order0.endRate)) return true;
     if (search.sellMin !== roundSearchParam(order1.startRate)) return true;

@@ -27,6 +27,7 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
     await waitForTenderlyRpc(page);
 
     const myStrategies = new MyStrategyDriver(page);
+    await myStrategies.waitForUpdates();
     const strategyEdited = await myStrategies.getStrategy(1);
 
     // Check range
