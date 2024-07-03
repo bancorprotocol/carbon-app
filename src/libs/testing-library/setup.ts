@@ -26,12 +26,6 @@ vitest.mock('store/useTokensStore.ts', async (importOriginal) => {
 });
 
 // MOCK CARBON SDK
-enum MarginalPriceOptions {
-  /** Indicates that the marginal price should be reset to its default value. */
-  reset = 'RESET',
-  /** Indicates that the marginal price should be maintained at its current value. */
-  maintain = 'MAINTAIN',
-}
 
 vitest.mock('libs/sdk/index.ts', () => {
   return {
@@ -49,8 +43,8 @@ vitest.mock('libs/sdk/index.ts', () => {
 
 vitest.mock('@bancor/carbon-sdk/strategy-management', () => ({
   MarginalPriceOptions: {
-    reset: MarginalPriceOptions.reset,
-    maintain: MarginalPriceOptions.maintain,
+    reset: 'RESET',
+    maintain: 'MAINTAIN',
   },
 }));
 
