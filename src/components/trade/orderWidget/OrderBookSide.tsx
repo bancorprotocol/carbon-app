@@ -23,7 +23,7 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
   isPending,
 }) => {
   return (
-    <AnimatePresence exitBeforeEnter={true}>
+    <AnimatePresence mode="wait">
       {isPending ? (
         <m.div
           key="loading"
