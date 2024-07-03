@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom/vitest'; // to add vitest jsdom matcher support
-import { vitest } from 'vitest';
+import { afterEach, vitest } from 'vitest';
 import { tokens } from './utils';
+import { cleanup } from '@testing-library/react';
+
+// Set up clean-up after each test. See issue https://github.com/vitest-dev/vitest/issues/1430
+afterEach(() => cleanup());
 
 // MOCK STORE PROVIDER CONTEXTS
 
