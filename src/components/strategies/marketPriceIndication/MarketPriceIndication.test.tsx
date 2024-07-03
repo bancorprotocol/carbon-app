@@ -1,13 +1,9 @@
-import { test, expect, describe, afterEach } from 'vitest';
-import { cleanup, render, screen } from 'libs/testing-library';
+import { test, expect, describe } from 'vitest';
+import { render, screen } from 'libs/testing-library';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarketPriceIndication } from './index';
 
 describe('MarketPriceIndication', () => {
-  afterEach(() => {
-    cleanup(); // Clear the screen before each test
-  });
-
   test('renders the market price indication correctly for positive percentage', () => {
     const marketPricePercentage = new SafeDecimal(5);
     render(

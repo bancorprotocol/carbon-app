@@ -1,11 +1,10 @@
 import { test, expect, afterEach } from 'vitest';
-import { cleanup, renderWithRouter, screen } from 'libs/testing-library';
+import { renderWithRouter, screen } from 'libs/testing-library';
 import { debugTokens } from '../../../../e2e/utils/types';
 import { CreateRecurringStrategyPage } from './recurring';
 
 const basePath = '/strategies/create/recurring';
 afterEach(async () => {
-  cleanup(); // Clear the screen after each test
   window.history.replaceState(null, 'root', '/');
 });
 
