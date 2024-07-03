@@ -42,14 +42,14 @@ export const loadRouter = async ({
   const subPath = encode(search);
   const path = `${basePath}?${subPath}`;
 
-  const recurringRoute = new Route({
+  const componentRoute = new Route({
     getParentRoute: () => rootRoute,
     path: basePath,
     component,
   });
 
   const customRouter = new Router({
-    routeTree: rootRoute.addChildren([recurringRoute]),
+    routeTree: rootRoute.addChildren([componentRoute]),
     history: createMemoryHistory({ initialEntries: [path] }),
   });
 
