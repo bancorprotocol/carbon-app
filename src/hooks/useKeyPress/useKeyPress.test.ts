@@ -1,6 +1,6 @@
 import { useKeyPress } from '.';
 import { test, expect, vi, describe } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act } from 'libs/testing-library';
 
 describe('useKeyPress', () => {
   test('Should update the keyPressed state when esc key is pressed', () => {

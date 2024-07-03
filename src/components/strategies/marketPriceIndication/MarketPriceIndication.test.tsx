@@ -1,5 +1,5 @@
 import { test, expect, describe, afterEach } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from 'libs/testing-library';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarketPriceIndication } from './index';
 
