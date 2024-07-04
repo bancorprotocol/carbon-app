@@ -1,6 +1,6 @@
 import { Token } from 'libs/tokens';
 import { FC, FormEvent, useId, useState } from 'react';
-import { cn } from 'utils/helpers';
+import { cn, roundSearchParam } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { TokenLogo } from 'components/common/imager/Imager';
@@ -43,7 +43,7 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
       placement="bottom-end"
       button={Trigger}
     >
-      <OverlappingInitMarketPriceField
+      <OverlappingInitMarketPrice
         {...props}
         className="w-[400px] max-w-[80vw]"
         close={() => setOpen(false)}
@@ -57,15 +57,13 @@ interface FieldProps extends Props {
   close?: () => void;
 }
 
-export const OverlappingInitMarketPriceField = (props: FieldProps) => {
+export const OverlappingInitMarketPrice = (props: FieldProps) => {
   const { base, quote, marketPrice } = props;
   const inputId = useId();
   const checkboxId = useId();
-  const [localPrice, setLocalPrice] = useState(marketPrice?.toString() ?? '');
+  const [localPrice, setLocalPrice] = useState(roundSearchParam(marketPrice));
   const [showApproval, setShowApproval] = useState(false);
-  const [approved, setApproved] = useState(
-    localPrice === marketPrice?.toString()
-  );
+  const [approved, setApproved] = useState(false);
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
 
   const changePrice = (value: string) => {
@@ -113,11 +111,12 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         base={base}
         quote={quote}
         ignoreMarketPriceWarning
+        required
       />
       {showApproval && (
         <Warning>
-          Warning, your market price will be used in the strategy creation flow
-          and calculations.
+          Warning, the defined market price will be used for strategy budget
+          distribution.
         </Warning>
       )}
       <p className="text-12 text-white/60">

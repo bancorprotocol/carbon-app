@@ -15,12 +15,12 @@ import { getMaxBuyMin, getMinSellMax } from './utils';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import styles from './OverlappingStrategyGraph.module.css';
+import styles from './OverlappingGraph.module.css';
 
 type Props = EnableProps | DisableProps;
 
 interface EnableProps {
-  marketPrice: number;
+  userMarketPrice?: string;
   base?: Token;
   quote?: Token;
   order0: { min: string; max: string; marginalPrice: string };
@@ -32,7 +32,7 @@ interface EnableProps {
 }
 
 interface DisableProps {
-  marketPrice?: number;
+  userMarketPrice?: string;
   base?: Token;
   quote?: Token;
   order0: { min: string; max: string; marginalPrice: string };
@@ -54,7 +54,7 @@ const getBoundaries = (params: BoundariesParams) => {
   const min = new SafeDecimal(params.min || '0');
   const max = new SafeDecimal(params.max || '0');
   const marketPrice = new SafeDecimal(params.marketPrice);
-  const minMean = marketPrice.lt(min) ? marketPrice : min;
+  const minMean = marketPrice.gt(0) && marketPrice.lt(min) ? marketPrice : min;
   const maxMean = marketPrice.gt(max) ? marketPrice : max;
   const mean = minMean.plus(maxMean).div(2);
   const padding = maxMean.minus(minMean).times(params.zoom);
@@ -157,7 +157,7 @@ const getXFactor = (min: number, max: number, marketPrice: number) => {
   return 1 / delta;
 };
 
-export const OverlappingStrategyGraph: FC<Props> = (props) => {
+export const OverlappingGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
@@ -166,21 +166,16 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const baseMax = Number(formatNumber(order1.max));
   const disabled = !!props.disabled;
 
+  const userMarketPrice = props.userMarketPrice
+    ? +props.userMarketPrice
+    : undefined;
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
-  const userMarketPrice = disabled
-    ? externalPrice || props?.marketPrice
-    : props?.marketPrice || externalPrice;
-
-  if (!userMarketPrice) throw Error('Market price is undefined');
-  const baseMarketPrice = Number(userMarketPrice);
-
-  const isUserPriceSource =
-    !disabled && !!props.marketPrice && externalPrice !== +props.marketPrice;
+  const baseMarketPrice = userMarketPrice ?? externalPrice ?? 0;
 
   const isCoingeckoPriceSource = !!externalPrice;
+  const isUserPriceSource = !!userMarketPrice;
 
   const xFactor = getXFactor(baseMin, baseMax, baseMarketPrice);
-
   const marketPrice = baseMarketPrice * xFactor;
 
   const { left, right, mean, minMean, maxMean } = getBoundaries({
@@ -304,15 +299,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
       marginalSell: Number(params.sellPriceMarginal),
     };
   };
-  const getConfig = () => {
-    if (disabled) return getStaticConfig();
-    return getPointConfig({
-      min: baseMin * xFactor,
-      max: baseMax * xFactor,
-    });
-  };
 
-  const config = getConfig();
+  const config = getStaticConfig();
   const { min, max, sellMin, buyMax } = config;
 
   const marketPercent = {
@@ -487,12 +475,14 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     const priceValue = draggedHandler === 'buy' ? newMin : newMax;
     if (tooltipPrice)
       tooltipPrice.textContent = prettifySignedNumber(priceValue / xFactor);
-    const percentSelector = `#${draggedHandler}-handler .tooltip-percent`;
-    const tooltipPercent = document.querySelector(percentSelector);
-    const percentValue = getSignedMarketPricePercentage(
-      new SafeDecimal((100 * (priceValue - marketPrice)) / marketPrice)
-    );
-    if (tooltipPercent) tooltipPercent.textContent = `${percentValue}%`;
+    if (marketPrice) {
+      const percentSelector = `#${draggedHandler}-handler .tooltip-percent`;
+      const tooltipPercent = document.querySelector(percentSelector);
+      const percentValue = getSignedMarketPricePercentage(
+        new SafeDecimal((100 * (priceValue - marketPrice)) / marketPrice)
+      );
+      if (tooltipPercent) tooltipPercent.textContent = `${percentValue}%`;
+    }
   };
 
   const dragEnd = () => {
@@ -543,7 +533,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
             <IconCoinGecko className="size-8" />
           </>
         ) : (
-          <span>Geometric mean price</span>
+          <span>No market price found</span>
         )}
         <span role="separator">·</span>
         <span>Fee Tier {spread || 0}%</span>
@@ -699,17 +689,19 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
             ))}
           </g>
           {/* Market Price */}
-          <g>
-            <line
-              {...marketIndicator.line}
-              stroke="#404040"
-              strokeWidth={ratio}
-            />
-            <rect {...marketIndicator.rect} fill="#404040" />
-            <text {...marketIndicator.text} fill="white">
-              {marketValue}
-            </text>
-          </g>
+          {!!marketPrice && (
+            <g>
+              <line
+                {...marketIndicator.line}
+                stroke="#404040"
+                strokeWidth={ratio}
+              />
+              <rect {...marketIndicator.rect} fill="#404040" />
+              <text {...marketIndicator.text} fill="white">
+                {marketValue}
+              </text>
+            </g>
+          )}
 
           {/* Handlers: must be at the end to always be above the graph */}
           <g
@@ -733,7 +725,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 fillOpacity="0.4"
                 {...buyTooltip.text}
               >
-                {minPercent}%
+                {marketPrice ? minPercent + '%' : '...'}
               </text>
             </g>
             {!disabled && (
@@ -793,7 +785,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 fillOpacity="0.4"
                 {...sellTooltip.text}
               >
-                {maxPercent}%
+                {marketPrice ? maxPercent + '%' : '...'}
               </text>
             </g>
             {!disabled && (

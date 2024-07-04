@@ -114,6 +114,7 @@ export const EditStrategyPriceField: FC<Props> = ({
             buy={buy}
             error={error}
             warnings={warnings}
+            required
           />
         ) : (
           <InputLimit
@@ -124,6 +125,7 @@ export const EditStrategyPriceField: FC<Props> = ({
             buy={buy}
             error={error}
             warnings={warnings}
+            required
           />
         )}
       </fieldset>
