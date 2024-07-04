@@ -111,6 +111,7 @@ export const OverlappingInitMarketPrice = (props: FieldProps) => {
         base={base}
         quote={quote}
         ignoreMarketPriceWarning
+        required
       />
       {showApproval && (
         <Warning>

@@ -233,6 +233,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           spread={+spread}
           setMin={setMin}
           setMax={setMax}
+          disabled={!displayPrice}
         />
         {hasNoBudget(strategy) && (
           <Warning>
@@ -267,6 +268,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
               maxLabel="Max Sell Price"
               warnings={[priceWarning]}
               isOverlapping
+              required
             />
           </article>
           <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">

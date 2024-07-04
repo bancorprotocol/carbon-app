@@ -24,6 +24,7 @@ type InputRangeProps = {
   error?: string;
   warnings?: (string | undefined)[];
   isOverlapping?: boolean;
+  required?: boolean;
 };
 
 export const InputRange: FC<InputRangeProps> = ({
@@ -39,6 +40,7 @@ export const InputRange: FC<InputRangeProps> = ({
   buy = false,
   warnings = [],
   isOverlapping,
+  required,
 }) => {
   const marketPrice = useOverlappingMarketPrice({ base, quote });
   const inputMinId = useId();
@@ -141,7 +143,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onFocus={(e) => e.target.select()}
             onBlur={formatMin}
             data-testid="input-min"
-            required
+            required={required}
           />
           {!!marketPrice && (
             <p className="flex flex-wrap items-center gap-4">
@@ -200,7 +202,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onFocus={(e) => e.target.select()}
             onBlur={formatMax}
             data-testid="input-max"
-            required
+            required={required}
           />
           {!!marketPrice && (
             <div className="flex flex-wrap items-center gap-4">
