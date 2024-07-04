@@ -115,8 +115,8 @@ export const toOverlappingPricesSearch = (
   const spread = isOverlapping && getRoundedSpread(strategy);
   return {
     editType,
-    min: roundSearchParam(buy.startRate) || undefined,
-    max: roundSearchParam(sell.endRate) || undefined,
+    min: buy.startRate,
+    max: sell.endRate,
     spread: spread ? spread.toString() : undefined,
   };
 };
