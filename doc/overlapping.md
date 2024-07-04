@@ -124,3 +124,18 @@ If calculated price is below market price: **do not calculate budget**
 else : 
 - buy budget: initial sell budget +/- calculated buy budget
 - sell budget: initial sell budget +/- user budget
+
+
+## Chart
+### Market Price
+The chart displays either : 
+1. User Market Price
+2. External Market Price
+
+But it doesn't display the calculated market price !
+If neither user market price nor extern market price are defined, the chart is **disabled**.
+
+### Marginal Price
+The marginal price displayed depends on the state of the form : 
+- **untouched**: displays the marginal price of the strategy.
+- **touched**: displays the marginal price calculated based on the form params.
