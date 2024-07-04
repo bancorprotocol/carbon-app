@@ -158,6 +158,8 @@ export const EditStrategyOverlappingPage = () => {
   );
 
   const orders = getOrders(strategy, search, marketPrice);
+  console.log('Old Orders', { buy: strategy.order0, sell: strategy.order1 });
+  console.log('New Orders', orders);
   const spread = isValidSpread(search.spread) ? search.spread! : initSpread;
 
   const hasChanged = (() => {

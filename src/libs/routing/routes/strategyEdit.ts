@@ -12,7 +12,6 @@ import {
   EditRecurringStrategySearch,
 } from 'pages/strategies/edit/prices/recurring';
 import { Strategy } from 'libs/queries';
-import { roundSearchParam } from 'utils/helpers';
 import { isEmptyOrder } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
@@ -56,8 +55,8 @@ export const toDisposablePricesSearch = (
   const order = direction === 'sell' ? order1 : order0;
   return {
     editType,
-    min: roundSearchParam(order.startRate),
-    max: roundSearchParam(order.endRate),
+    min: order.startRate,
+    max: order.endRate,
     settings: order.startRate === order.endRate ? 'limit' : 'range',
     direction,
   };
@@ -82,11 +81,11 @@ export const toRecurringPricesSearch = (
   const { order0: buy, order1: sell } = strategy;
   return {
     editType,
-    buyMin: roundSearchParam(buy.startRate),
-    buyMax: roundSearchParam(buy.endRate),
+    buyMin: buy.startRate,
+    buyMax: buy.endRate,
     buySettings: buy.startRate === buy.endRate ? 'limit' : 'range',
-    sellMin: roundSearchParam(sell.startRate),
-    sellMax: roundSearchParam(sell.endRate),
+    sellMin: sell.startRate,
+    sellMax: sell.endRate,
     sellSettings: sell.startRate === sell.endRate ? 'limit' : 'range',
   };
 };
