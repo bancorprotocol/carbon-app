@@ -475,12 +475,14 @@ export const OverlappingGraph: FC<Props> = (props) => {
     const priceValue = draggedHandler === 'buy' ? newMin : newMax;
     if (tooltipPrice)
       tooltipPrice.textContent = prettifySignedNumber(priceValue / xFactor);
-    const percentSelector = `#${draggedHandler}-handler .tooltip-percent`;
-    const tooltipPercent = document.querySelector(percentSelector);
-    const percentValue = getSignedMarketPricePercentage(
-      new SafeDecimal((100 * (priceValue - marketPrice)) / marketPrice)
-    );
-    if (tooltipPercent) tooltipPercent.textContent = `${percentValue}%`;
+    if (marketPrice) {
+      const percentSelector = `#${draggedHandler}-handler .tooltip-percent`;
+      const tooltipPercent = document.querySelector(percentSelector);
+      const percentValue = getSignedMarketPricePercentage(
+        new SafeDecimal((100 * (priceValue - marketPrice)) / marketPrice)
+      );
+      if (tooltipPercent) tooltipPercent.textContent = `${percentValue}%`;
+    }
   };
 
   const dragEnd = () => {
@@ -687,7 +689,7 @@ export const OverlappingGraph: FC<Props> = (props) => {
             ))}
           </g>
           {/* Market Price */}
-          {marketPrice && (
+          {!!marketPrice && (
             <g>
               <line
                 {...marketIndicator.line}
@@ -723,7 +725,7 @@ export const OverlappingGraph: FC<Props> = (props) => {
                 fillOpacity="0.4"
                 {...buyTooltip.text}
               >
-                {minPercent}%
+                {marketPrice ? minPercent + '%' : '...'}
               </text>
             </g>
             {!disabled && (
@@ -783,7 +785,7 @@ export const OverlappingGraph: FC<Props> = (props) => {
                 fillOpacity="0.4"
                 {...sellTooltip.text}
               >
-                {maxPercent}%
+                {marketPrice ? maxPercent + '%' : '...'}
               </text>
             </g>
             {!disabled && (
