@@ -295,8 +295,8 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           <hgroup>
             <h2 className="text-18 font-weight-500 flex-1">Market Price</h2>
             <p className="text-12 text-white/80">
-              {base.symbol} market price is missing. To continue the prices of
-              the strategy, enter its market price below.
+              {base.symbol} market price is missing. Please provide the market
+              price to enable price editing.
             </p>
           </hgroup>
           <Tooltip element="Price used to calculate concentrated liquidity strategy params">
