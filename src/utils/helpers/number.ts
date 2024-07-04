@@ -246,12 +246,3 @@ export const tokenRange = (
   const to = tokenAmount(max, token, options);
   return `${from} - ${to}`;
 };
-
-/** Round number to a fixed value */
-export const roundNumber = (
-  value: number | string | undefined,
-  precision = 6
-) => {
-  if (!value) return;
-  return Number(Number(value).toFixed(precision)).toString();
-};
