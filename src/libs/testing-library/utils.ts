@@ -1,5 +1,4 @@
 import {
-  encode,
   RootRoute,
   Route,
   Router,
@@ -7,6 +6,8 @@ import {
 } from '@tanstack/react-router';
 import { RouterRenderParams } from './types';
 import { debugTokens } from '../../../e2e/utils/types';
+import { parseSearchWith } from 'libs/routing/utils';
+import { isAddress } from 'ethers/lib/utils';
 
 export const tokens = [
   {
@@ -20,6 +21,20 @@ export const tokens = [
     symbol: 'USDC',
   },
 ];
+
+const encodeValue = (value: string | number | symbol) => {
+  if (typeof value == 'string' && isAddress(value)) return `${String(value)}`;
+  if (!isNaN(Number(value))) return `"${String(value)}"`;
+  return `${String(value)}`;
+};
+
+const encodeParams = (
+  searchParams: Record<string, string | number | symbol>
+): string => {
+  return Object.entries(searchParams)
+    .map(([key, value]) => `${key}=${encodeValue(value)}`)
+    .join('&');
+};
 
 /**
  * Asynchronously created and loads a custom router with the specified component and optional base path and search parameters.
@@ -39,7 +54,7 @@ export const loadRouter = async ({
   search = {},
 }: RouterRenderParams) => {
   const rootRoute = new RootRoute();
-  const subPath = encode(search);
+  const subPath = encodeParams(search);
   const path = `${basePath}?${subPath}`;
 
   const componentRoute = new Route({
@@ -50,6 +65,7 @@ export const loadRouter = async ({
 
   const customRouter = new Router({
     routeTree: rootRoute.addChildren([componentRoute]),
+    parseSearch: parseSearchWith(JSON.parse),
     history: createMemoryHistory({ initialEntries: [path] }),
   });
 
