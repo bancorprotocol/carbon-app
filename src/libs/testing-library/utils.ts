@@ -8,6 +8,30 @@ import { RouterRenderParams } from './types';
 import { debugTokens } from '../../../e2e/utils/types';
 import { parseSearchWith } from 'libs/routing/utils';
 import { isAddress } from 'ethers/lib/utils';
+import { RequestHandler } from 'msw';
+import { setupServer } from 'msw/node';
+import { afterAll, beforeAll } from 'vitest';
+
+export class MockServer {
+  private server;
+  constructor(private handlers: RequestHandler[] = []) {
+    this.server = setupServer(...this.handlers);
+  }
+
+  addHandler(handler: RequestHandler) {
+    this.handlers.push(handler);
+    this.server.resetHandlers(...this.handlers);
+  }
+
+  reset() {
+    this.server.resetHandlers();
+  }
+
+  start() {
+    beforeAll(() => this.server.listen({ onUnhandledRequest: 'error' }));
+    afterAll(() => this.server.close());
+  }
+}
 
 export const tokens = [
   {
