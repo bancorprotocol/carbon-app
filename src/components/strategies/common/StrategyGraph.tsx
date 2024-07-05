@@ -22,6 +22,7 @@ export const StrategyGraph: FC<Props> = ({ setShowGraph, children }) => {
           className="bg-background-800 hover:border-background-600 gap-12 self-end"
           variant="secondary"
           size="md"
+          data-testid="close-chart"
           onClick={() => {
             carbonEvents.strategy.strategyChartClose(undefined);
             setShowGraph(false);
