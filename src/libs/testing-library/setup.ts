@@ -3,11 +3,12 @@ import { afterEach, vitest } from 'vitest';
 import { tokens } from './utils';
 import { cleanup } from '@testing-library/react';
 
-// Set up clean-up after each test. See issue https://github.com/vitest-dev/vitest/issues/1430
-afterEach(() => cleanup());
+afterEach(() => {
+  window.history.replaceState(null, 'root', '/');
+  cleanup();
+});
 
 // MOCK STORE PROVIDER CONTEXTS
-
 vitest.mock('store/useTokensStore.ts', async (importOriginal) => {
   const mod = await importOriginal<typeof import('store/useTokensStore.ts')>();
   const tokensMap = new Map(
@@ -30,7 +31,6 @@ vitest.mock('store/useTokensStore.ts', async (importOriginal) => {
 });
 
 // MOCK CARBON SDK
-
 vitest.mock('libs/sdk/index.ts', () => {
   return {
     carbonSDK: {
