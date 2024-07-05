@@ -127,8 +127,8 @@ export const InputLimit: FC<InputLimitProps> = ({
         <Warning isError message={displayError} htmlFor={inputId} />
       )}
       {showWarning &&
-        displayWarnings.map((warning) => (
-          <Warning message={warning} htmlFor={inputId} />
+        displayWarnings.map((warning, i) => (
+          <Warning key={i} message={warning} htmlFor={inputId} />
         ))}
     </>
   );
