@@ -45,13 +45,6 @@ vitest.mock('libs/sdk/index.ts', () => {
   };
 });
 
-vitest.mock('@bancor/carbon-sdk/strategy-management', () => ({
-  MarginalPriceOptions: {
-    reset: 'RESET',
-    maintain: 'MAINTAIN',
-  },
-}));
-
 // MOCK WAGMI WALLET
 const mockedWallet = await vitest.hoisted(async () => {
   const { mock } = await import('wagmi/connectors');
