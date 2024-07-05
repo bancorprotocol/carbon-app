@@ -16,7 +16,7 @@ export default defineConfig({
   forbidOnly: !!isCI,
   retries: isCI ? 2 : 0,
   /* Opt out of parallel tests on CI. (As recommended in https://playwright.dev/docs/ci#workers) */
-  workers: 4,
+  workers: isCI ? 8 : undefined,
   /* See https://playwright.dev/docs/test-reporters */
   reporter: isCI ? 'html' : 'list',
   // Limit the number of failures on CI to save resources
