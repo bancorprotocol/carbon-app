@@ -15,6 +15,11 @@ export default defineConfig({
         inline: ['/@bancor/carbon-sdk/'],
       },
     },
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      include: ['**/src/**'],
+      exclude: ['**/src/abis/**'],
+    },
   },
   plugins: [tsconfigPaths(), svgrPlugin()],
 });
