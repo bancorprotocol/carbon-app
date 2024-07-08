@@ -15,7 +15,7 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!isCI,
   retries: isCI ? 2 : 0,
-  /* Opt out of parallel tests on CI. (As recommended in https://playwright.dev/docs/ci#workers) */
+  /* Use 100% of available cores for workers on CI. (See https://playwright.dev/docs/api/class-testconfig#test-config-workers) */
   workers: isCI ? 4 : undefined,
   /* See https://playwright.dev/docs/test-reporters */
   reporter: isCI ? 'html' : 'list',
