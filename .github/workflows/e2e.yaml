@@ -2,7 +2,7 @@ name: E2E Tests
 on:
   pull_request:
     branches: [main]
-    types: [opened, reopened, synchronize, ready_for_review]
+    types: [opened, reopened, synchronize]
 jobs:
   e2e:
     name: 'E2E Tests'
