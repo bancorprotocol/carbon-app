@@ -16,7 +16,7 @@ export default defineConfig({
   forbidOnly: !!isCI,
   retries: isCI ? 2 : 0,
   /* Use 100% of available cores for workers on CI. (See https://playwright.dev/docs/api/class-testconfig#test-config-workers) */
-  workers: isCI ? 100% : undefined,
+  workers: isCI ? '100%' : undefined,
   /* See https://playwright.dev/docs/test-reporters */
   reporter: isCI ? 'html' : 'list',
   // Limit the number of failures on CI to save resources
