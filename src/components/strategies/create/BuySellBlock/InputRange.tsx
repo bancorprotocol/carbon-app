@@ -8,7 +8,7 @@ import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
+import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice';
 
 type InputRangeProps = {
   min: string;
@@ -48,7 +48,7 @@ export const InputRange: FC<InputRangeProps> = ({
   isOrdersReversed,
   isOverlapping,
 }) => {
-  const marketPrice = useUserMarketPrice({ base, quote });
+  const marketPrice = useOverlappingMarketPrice({ base, quote });
   const inputMinId = useId();
   const inputMaxId = useId();
   const errorMinMax = 'Maximum price must be higher than the minimum price';

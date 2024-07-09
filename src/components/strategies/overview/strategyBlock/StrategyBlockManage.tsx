@@ -30,6 +30,7 @@ import {
   getEditPricesPage,
 } from 'components/strategies/edit/utils';
 import config from 'config';
+import { toPairSlug } from 'utils/pairSearch';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -133,6 +134,22 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         });
       },
       disabled: !owner.data,
+    });
+  }
+
+  if (type !== 'token-pair') {
+    items.push({
+      id: 'explorePair',
+      name: 'Explore Pair',
+      action: () => {
+        const slug = toPairSlug(strategy.base, strategy.quote);
+        const event = { type, slug, strategies, filter, sort };
+        explorerEvents.search(event);
+        navigate({
+          to: '/explore/$type/$slug',
+          params: { type: 'token-pair', slug },
+        });
+      },
     });
   }
 

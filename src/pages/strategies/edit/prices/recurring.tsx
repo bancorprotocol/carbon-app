@@ -1,6 +1,5 @@
 import { useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
-import { roundSearchParam } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategySettings } from 'libs/routing';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -72,10 +71,10 @@ export const EditStrategyRecurringPage = () => {
   const hasChanged = (() => {
     const { order0, order1 } = strategy;
     if (isOverlappingStrategy(strategy)) return true;
-    if (search.buyMin !== roundSearchParam(order0.startRate)) return true;
-    if (search.buyMax !== roundSearchParam(order0.endRate)) return true;
-    if (search.sellMin !== roundSearchParam(order1.startRate)) return true;
-    if (search.sellMax !== roundSearchParam(order1.endRate)) return true;
+    if (search.buyMin !== order0.startRate) return true;
+    if (search.buyMax !== order0.endRate) return true;
+    if (search.sellMin !== order1.startRate) return true;
+    if (search.sellMax !== order1.endRate) return true;
     return false;
   })();
 

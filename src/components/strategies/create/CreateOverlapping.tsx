@@ -7,7 +7,7 @@ import {
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
+import { OverlappingGraph } from 'components/strategies/overlapping/OverlappingGraph';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
 import { OverlappingBudget } from 'components/strategies/overlapping/OverlappingBudget';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -20,7 +20,7 @@ import { Token } from 'libs/tokens';
 import { m } from 'libs/motion';
 import { items } from 'components/strategies/common/variants';
 import { OverlappingMarketPrice } from '../overlapping/OverlappingMarketPrice';
-import { UserMarketPrice } from '../UserMarketPrice';
+import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
 import { useWagmi } from 'libs/wagmi';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
@@ -42,7 +42,8 @@ const url = '/strategies/create/overlapping';
 export const CreateOverlapping: FC<Props> = (props) => {
   const { base, quote, order0, order1, marketPrice, spread } = props;
   const navigate = useNavigate({ from: url });
-  const { anchor, budget } = useSearch({ from: url });
+  const search = useSearch({ from: url });
+  const { anchor, budget } = search;
   const { user } = useWagmi();
 
   const baseBalance = useGetTokenBalance(base).data;
@@ -149,7 +150,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
   if (!base || !quote) return null;
 
   return (
-    <UserMarketPrice marketPrice={+marketPrice}>
+    <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
       <m.article
         variants={items}
         key="price-graph"
@@ -164,12 +165,12 @@ export const CreateOverlapping: FC<Props> = (props) => {
             setMarketPrice={setMarketPrice}
           />
         </header>
-        <OverlappingStrategyGraph
+        <OverlappingGraph
           base={base}
           quote={quote}
           order0={order0}
           order1={order1}
-          marketPrice={+marketPrice}
+          userMarketPrice={search.marketPrice}
           spread={+spread}
           setMin={setMin}
           setMax={setMax}
@@ -203,6 +204,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
           maxLabel="Max Sell Price"
           warnings={[priceWarning]}
           isOverlapping
+          required
         />
       </m.article>
       <m.article
@@ -304,6 +306,6 @@ export const CreateOverlapping: FC<Props> = (props) => {
           )}
         </m.article>
       )}
-    </UserMarketPrice>
+    </OverlappingMarketPriceProvider>
   );
 };
