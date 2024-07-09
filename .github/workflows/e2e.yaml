@@ -34,7 +34,7 @@ jobs:
           path: playwright-report/
           retention-days: 3
       - uses: actions/upload-artifact@v4
-        if: ${{ github.event.pull_request.draft == 'false' && github.base_ref == 'main' && !cancelled() }}
+        if: ${{ !cancelled() }}
         with:
           name: screenshots
           path: e2e/screenshots
