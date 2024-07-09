@@ -19,7 +19,6 @@ interface Props {
   anchor: 'buy' | 'sell';
   action?: BudgetAction;
   setAction: (action: BudgetAction) => void;
-  error?: string;
   warning?: string;
 }
 
@@ -34,7 +33,6 @@ export const OverlappingAction: FC<Props> = (props) => {
     anchor,
     budget,
     setBudget,
-    error,
     warning,
   } = props;
   const actionName = useId();
@@ -124,7 +122,7 @@ export const OverlappingAction: FC<Props> = (props) => {
           onChange={setBudget}
           max={max}
           maxIsLoading={maxIsLoading}
-          error={budgetError || error}
+          error={budgetError}
           warning={warning}
           data-testid="input-budget"
         />
