@@ -2,8 +2,7 @@ name: Build
 
 on:
   pull_request:
-    types:
-      [opened, closed, edited, ready_for_review, review_requested, reopened]
+    types: [opened, reopened, synchronize]
   push:
 
 jobs:
