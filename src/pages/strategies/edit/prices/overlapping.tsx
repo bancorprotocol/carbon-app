@@ -1,7 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
-import { roundSearchParam } from 'utils/helpers';
 import { isValidRange } from 'components/strategies/utils';
 import { Strategy } from 'libs/queries';
 import {
@@ -20,7 +19,7 @@ import {
 } from 'components/strategies/overlapping/utils';
 import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
 import { isOverlappingTouched } from 'components/strategies/overlapping/utils';
-import { OverlappingInitMarketPriceField } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { OverlappingInitMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
@@ -162,8 +161,8 @@ export const EditStrategyOverlappingPage = () => {
   const spread = isValidSpread(search.spread) ? search.spread! : initSpread;
 
   const hasChanged = (() => {
-    if (search.min !== roundSearchParam(order0.startRate)) return true;
-    if (search.max !== roundSearchParam(order1.endRate)) return true;
+    if (search.min !== order0.startRate) return true;
+    if (search.max !== order1.endRate) return true;
     if (search.spread !== getRoundedSpread(strategy).toString()) return true;
     if (search.marketPrice) return true;
     if (!isZero(search.budget)) return true;
@@ -192,7 +191,7 @@ export const EditStrategyOverlappingPage = () => {
         <EditPriceNav editType={search.editType} />
         <EditStrategyOverlapTokens />
         <article className="rounded-10 bg-background-900 flex flex-col">
-          <OverlappingInitMarketPriceField
+          <OverlappingInitMarketPrice
             base={base}
             quote={quote}
             marketPrice={marketPrice}

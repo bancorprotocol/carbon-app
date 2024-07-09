@@ -5,7 +5,6 @@ import {
   isOverlappingStrategy,
   isLimitOrder,
 } from 'components/strategies/common/utils';
-import { roundSearchParam } from 'utils/helpers';
 
 export const useDuplicate = () => {
   const navigate = useNavigate();
@@ -20,9 +19,9 @@ export const useDuplicate = () => {
         search: {
           base: base.address,
           quote: quote.address,
-          min: roundSearchParam(order.startRate),
-          max: roundSearchParam(order.endRate),
-          budget: roundSearchParam(order.balance),
+          min: order.startRate,
+          max: order.endRate,
+          budget: order.balance,
           settings: isLimitOrder(order) ? 'limit' : 'range',
           direction: isBuyEmpty ? 'sell' : 'buy',
         },
@@ -33,8 +32,8 @@ export const useDuplicate = () => {
         search: {
           base: base.address,
           quote: quote.address,
-          min: roundSearchParam(order0.startRate),
-          max: roundSearchParam(order1.endRate),
+          min: order0.startRate,
+          max: order1.endRate,
           spread: getRoundedSpread({ order0, order1 }).toString(),
         },
       });
@@ -44,13 +43,13 @@ export const useDuplicate = () => {
         search: {
           base: base.address,
           quote: quote.address,
-          buyMin: roundSearchParam(order0.startRate),
-          buyMax: roundSearchParam(order0.endRate),
-          buyBudget: roundSearchParam(order0.balance),
+          buyMin: order0.startRate,
+          buyMax: order0.endRate,
+          buyBudget: order0.balance,
           buySettings: isLimitOrder(order0) ? 'limit' : 'range',
-          sellMin: roundSearchParam(order1.startRate),
-          sellMax: roundSearchParam(order1.endRate),
-          sellBudget: roundSearchParam(order1.balance),
+          sellMin: order1.startRate,
+          sellMax: order1.endRate,
+          sellBudget: order1.balance,
           sellSettings: isLimitOrder(order1) ? 'limit' : 'range',
         },
       });

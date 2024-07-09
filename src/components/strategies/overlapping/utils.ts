@@ -7,7 +7,6 @@ import {
 } from 'components/strategies/common/utils';
 import { type Strategy } from 'libs/queries';
 import { geoMean } from 'utils/fullOutcome';
-import { roundSearchParam } from 'utils/helpers';
 
 export interface OverlappingSearch {
   marketPrice?: string;
@@ -119,8 +118,8 @@ export const isOverlappingTouched = (
   if (!isOverlappingStrategy(strategy)) return true;
   if (hasNoBudget(strategy)) return true;
   if (isPaused(strategy)) return true;
-  if (min && min !== roundSearchParam(order0.startRate)) return true;
-  if (max && max !== roundSearchParam(order1.endRate)) return true;
+  if (min && min !== order0.startRate) return true;
+  if (max && max !== order1.endRate) return true;
   if (spread && spread !== getRoundedSpread(strategy).toString()) return true;
   return false;
 };

@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
-import { useUserMarketPrice } from '../UserMarketPrice';
 import { formatNumber } from 'utils/helpers';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 export type MarketPricePercentage = {
   min: SafeDecimal;
@@ -28,7 +28,7 @@ export const useMarketIndication = ({
   order,
   buy = false,
 }: UseMarketIndicationProps) => {
-  const marketPrice = useUserMarketPrice({ base, quote });
+  const { marketPrice } = useMarketPrice({ base, quote });
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
     if (order.isRange) {
       const min = new SafeDecimal(order.min);
