@@ -14,9 +14,12 @@
     "react-app",
     "prettier",
     "plugin:prettier/recommended",
-    "plugin:jest-dom/recommended"
+    "plugin:jest-dom/recommended",
+    "plugin:react/recommended"
   ],
   "rules": {
+    // suppress errors for missing 'import React' in files
+   "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-unused-vars": 0,
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
