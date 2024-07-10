@@ -35,6 +35,7 @@ export const blocklistConnectors: string[] =
 export const providerMapRdnsToName: Record<string, SelectableConnectionName> = {
   'tailwind.zone': 'Tailwind',
   'io.metamask': 'MetaMask',
+  'io.metamask.mobile': 'MetaMask',
   'io.leapwallet.CompassWallet': 'Compass Wallet',
   'com.coinbase.wallet': 'Coinbase Wallet',
   'com.passkeywallet.seif': 'Seif',

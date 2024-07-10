@@ -16,7 +16,7 @@ import { OverlappingAnchor } from 'components/strategies/overlapping/Overlapping
 import { getDeposit, getWithdraw } from './utils';
 import { hasNoBudget } from '../overlapping/utils';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
-import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
+import { OverlappingMarketPriceProvider } from 'components/strategies/UserMarketPrice';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { formatNumber, tokenAmount } from 'utils/helpers';
 import { OverlappingOrder } from '../common/types';
@@ -173,7 +173,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
   };
 
   return (
-    <UserMarketPrice marketPrice={+marketPrice}>
+    <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
       {hasNoBudget(strategy) && (
         <article className="rounded-10 bg-background-900 flex flex-col gap-16 p-20">
           <header className="text-14 flex items-center justify-between">
@@ -266,6 +266,6 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
           />
         </article>
       )}
-    </UserMarketPrice>
+    </OverlappingMarketPriceProvider>
   );
 };
