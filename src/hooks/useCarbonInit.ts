@@ -47,6 +47,17 @@ const removeOldI18nKeys = () => {
   });
 };
 
+const removeOldV1Keys = () => {
+  Object.keys(localStorage).forEach((key) => {
+    if (
+      key.match(/carbon-v1(\.1)?-([a-zA-Z0-9]+-?)+/) &&
+      !['carbon-ethereum', 'carbon-sei'].includes(key)
+    ) {
+      localStorage.removeItem(key);
+    }
+  });
+};
+
 export const useCarbonInit = () => {
   const cache = useQueryClient();
   const {
@@ -143,6 +154,7 @@ export const useCarbonInit = () => {
       }
 
       removeOldI18nKeys();
+      removeOldV1Keys();
     } catch (e) {
       console.error('Error carbonApi.getCheck', e);
       setIsError(true);
