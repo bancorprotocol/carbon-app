@@ -21,11 +21,11 @@ export interface AppConfig {
     name: string;
     logoUrl: string;
     chainId: number;
-    defaultRpc: {
+    walletConnectRpc: {
       url: string;
       headers?: Record<string, string>;
     };
-    walletConnectRpc?: {
+    appRpc?: {
       url: string;
       headers?: Record<string, string>;
     };

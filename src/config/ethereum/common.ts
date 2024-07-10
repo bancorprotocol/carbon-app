@@ -43,10 +43,10 @@ export const commonConfig: AppConfig = {
     logoUrl: IconETHLogo,
     chainId: 1,
     blockExplorer: { name: 'Etherscan', url: 'https://etherscan.io' },
-    defaultRpc: {
+    walletConnectRpc: {
       url: 'https://ethereum-rpc.publicnode.com',
     },
-    walletConnectRpc: {
+    appRpc: {
       url: 'https://eth-mainnet.alchemyapi.io/v2/jI3jij3fQZu7_LhpCF5YAXZlFyjS79Ea',
     },
     gasToken: {
