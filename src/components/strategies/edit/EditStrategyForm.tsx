@@ -107,7 +107,10 @@ export const EditStrategyForm: FC<Props> = (props) => {
   })();
   const approval = useApproval(approvalTokens);
   const isLoading =
-    approval.isPending || isPending || isProcessing || isDeleting;
+    (approval.isPending && approval.approvalRequired) ||
+    isPending ||
+    isProcessing ||
+    isDeleting;
   const loadingChildren = getStatusTextByTxStatus(
     isPending,
     isProcessing || isDeleting
