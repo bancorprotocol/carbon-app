@@ -47,5 +47,5 @@ interface LocalStorageSchema {
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
-  [APP_ID, APP_VERSION, NETWORK, key].join('-')
+  [APP_ID, NETWORK, APP_VERSION, key].join('-')
 );
