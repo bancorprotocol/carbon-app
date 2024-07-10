@@ -10,7 +10,7 @@ import {
   StrategyFilter,
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
-import { APP_ID, APP_VERSION } from 'utils/constants';
+import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
 import { FiatSymbol } from 'utils/carbonApi';
 
 // ************************** /
@@ -47,5 +47,5 @@ interface LocalStorageSchema {
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
-  [APP_ID, APP_VERSION, key].join('-')
+  [APP_ID, APP_VERSION, NETWORK, key].join('-')
 );
