@@ -46,7 +46,7 @@ export const commonConfig: AppConfig = {
     defaultRpc: {
       url: 'https://ethereum-rpc.publicnode.com',
     },
-    customRpc: {
+    walletConnectRpc: {
       url: 'https://eth-mainnet.alchemyapi.io/v2/jI3jij3fQZu7_LhpCF5YAXZlFyjS79Ea',
     },
     gasToken: {

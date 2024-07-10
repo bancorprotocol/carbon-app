@@ -111,7 +111,7 @@ where `spread` (fee tier in the UI) is in percentage, and `value` is the number 
 
 1. Create a new folder under `src/config` with the name of the network (ex: "polygon")
 2. Copy and paste the files from `src/config/ethereum` into your folder
-3. Update the `common.ts`, `production.ts` & `development.ts` files with your config, pointing to the CarbonDeFi contracts in that network, as well as setting the defaultRpc.url (must match the one found in [Chain Lists](https://chainlist.org/)) and the optional customRpc.url.
+3. Update the `common.ts`, `production.ts` & `development.ts` files with your config, pointing to the CarbonDeFi contracts in that network, as well as setting the defaultRpc.url (must match the one found in [Chain Lists](https://chainlist.org/)) and the optional walletConnectRpc.url.
 4. Update the `src/config/index.ts` files to import your files
    `index.ts`
 
@@ -149,7 +149,7 @@ The app will use the rpc settings for the following purposes:
 1. Add a network to the injected wallet.
 2. Fetch data from the network.
 
-The defaultRpc.url will be used to add the network to the injected wallet, and the customRpc.url will be used to fetch data from the network. If the customRpc.url is not defined, the defaultRpc.url will be used for both purposes.
+The defaultRpc.url will be used to add the network to the injected wallet, and the walletConnectRpc.url will be used to fetch data from the network. If the walletConnectRpc.url is not defined, the defaultRpc.url will be used for both purposes.
 
 ### Contracts with version < 5
 
@@ -172,8 +172,8 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `chainId`: Chain ID.
   - `gasToken`: Gas token name, symbol, decimals, address and logoURI.
   - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
-  - `defaultRpc`: The RPC url and headers of the network, used to add the network to the injected wallet and to fetch data from the chain if the customRpc is not defined.
-  - `customRpc`: The custom RPC url and headers of the network, used to fetch data from the chain. If not defined, the defaultRpc will be used instead.
+  - `defaultRpc`: The RPC url and headers of the network, used to add the network to the injected wallet and to fetch data from the chain if the walletConnectRpc is not defined.
+  - `walletConnectRpc`: The custom RPC url and headers of the network, used to fetch data from the chain. If not defined, the defaultRpc will be used instead.
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
 - `popularTokens`: List of popular tokens to be used in the app when opening the token selection modal.

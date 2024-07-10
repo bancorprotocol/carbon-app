@@ -6,7 +6,7 @@ const config: AppConfig = {
   mode: 'production',
   network: {
     ...commonConfig.network,
-    customRpc: {
+    walletConnectRpc: {
       url: 'https://eth-mainnet.alchemyapi.io/v2/F_rd_k1L6YXk5hWDA1WQQnwsMdFLzlc1',
     },
   },

@@ -25,7 +25,7 @@ export interface AppConfig {
       url: string;
       headers?: Record<string, string>;
     };
-    customRpc?: {
+    walletConnectRpc?: {
       url: string;
       headers?: Record<string, string>;
     };

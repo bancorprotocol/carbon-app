@@ -3,10 +3,12 @@ import config from 'config';
 import { tenderlyRpc } from 'utils/tenderly';
 
 const CHAIN_RPC_URL =
-  tenderlyRpc || config.network.customRpc?.url || config.network.defaultRpc.url;
+  tenderlyRpc ||
+  config.network.walletConnectRpc?.url ||
+  config.network.defaultRpc.url;
 const CHAIN_RPC_HEADERS = tenderlyRpc
   ? {}
-  : config.network.customRpc?.headers ??
+  : config.network.walletConnectRpc?.headers ??
     config.network.defaultRpc.headers ??
     {};
 export const CHAIN_ID = config.network.chainId;
