@@ -72,8 +72,13 @@ export const CreateForm: FC<FormProps> = (props) => {
   const { user } = useWagmi();
   const search = useSearch({ strict: false }) as any;
 
-  const { isLoading, isProcessing, isAwaiting, createStrategy } =
-    useCreateStrategy({ type, base, quote, order0, order1 });
+  const { isProcessing, isAwaiting, createStrategy } = useCreateStrategy({
+    type,
+    base,
+    quote,
+    order0,
+    order1,
+  });
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -82,7 +87,7 @@ export const CreateForm: FC<FormProps> = (props) => {
     return () => clearTimeout(timeout);
   }, [type, search]);
 
-  const loading = isLoading || isProcessing || isAwaiting;
+  const loading = isProcessing || isAwaiting;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
 
   const connectWallet = () => {
