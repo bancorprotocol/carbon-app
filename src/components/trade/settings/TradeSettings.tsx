@@ -25,7 +25,7 @@ export const TradeSettings = ({
       id: 'slippageTolerance',
       title: 'Slippage Tolerance',
       value: slippage,
-      prepend: '+',
+      prepend: '±',
       append: '%',
       setValue: (value) => {
         setSlippage(value);
