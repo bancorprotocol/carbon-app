@@ -13,7 +13,7 @@
 
 # CarbonDeFi webapp
 
-Carbon DeFi is an advanced onchain trading protocol enabling automated limit orders, efficiently adjustable with custom price ranges, grid trading like recurring orders, works like a DEX trading bot.
+Carbon DeFi is an advanced onchain trading protocol enabling automated limit orders, efficiently adjustable with custom price ranges, grid trading like recurring orders, working like a DEX trading bot.
 
 # Setup
 
@@ -44,7 +44,7 @@ yarn start
 
 You can choose the network to run the app by setting the `VITE_NETWORK` variable in the `.env` file. The default network is `ethereum`.
 
-Alternatively, f defined in the in the [package.json](package.json) file, you can select the network to use by running `yarn:network` where `network` is the defined in the [config](src/config/index.ts) and `yarn:network` command can be defined in [package.json](package.json) file as follows:
+Alternatively, if defined in the in the [package.json](package.json) file, you can select the network to use by running `yarn:network` where `network` is one of the networks defined in the [config](src/config/index.ts) and the `yarn:network` command is defined in [package.json](package.json) file as follows:
 
 ```bash
 "start:network": "export VITE_NETWORK=network && vite",
@@ -74,11 +74,11 @@ Running the following, will build the app for production:
 yarn build
 ```
 
-It will build the for production to the `build` folder.\
+It will build the app for production to the `build` folder.
+
 It correctly bundles the App in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The build is minified and the filenames include the hashes. Your app is ready to be deployed!
 
 # Debug
 
@@ -157,7 +157,7 @@ The app will use the rpc settings for the following purposes:
 1. Add a network to the injected wallet.
 2. Fetch data from the network.
 
-The walletConnectRpc.url will be used to add the network to the injected wallet, and the productionRpc.url will be used to fetch data from the network. If the productionRpc.url is not defined, the walletConnectRpc.url will be used for both purposes.
+The `walletConnectRpc.url` will be used to add the network to the injected wallet, and the `productionRpc.url` will be used to fetch data from the network. If the `productionRpc.url` is not defined, then `walletConnectRpc.url` will be used for both purposes.
 
 ### Contracts with version < 5
 
@@ -185,7 +185,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
 - `popularTokens`: List of popular tokens to be used in the app when opening the token selection modal.
-- `addresses`/`carbon` and `addresses/utils`: CarbonController, Voucher and multicall contract addresses.
+- `addresses`/`carbon` and `addresses/utils`: CarbonController, Voucher and multicall3 contract addresses.
 - `tokenListOverride`: Token list override to be used in the app when fetching the token list. Tokens in the list will override any other token with the same address.
 - `tokenLists`: List of token lists including the uri and the parser to be used to parse the token list.
 - `sdk`/`cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
