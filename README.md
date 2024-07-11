@@ -42,7 +42,15 @@ yarn install
 yarn start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+You can choose the network to run the app by setting the `VITE_NETWORK` variable in the `.env` file. The default network is `ethereum`.
+
+Alternatively, f defined in the in the [package.json](package.json) file, you can select the network to use by running `yarn:network` where `network` is the defined in the [config](src/config/index.ts) and `yarn:network` command can be defined in [package.json](package.json) file as follows:
+
+```bash
+"start:network": "export VITE_NETWORK=network && vite",
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the development mode app in the browser.
 
 # Test
 
