@@ -2,15 +2,15 @@ import { SelectableConnectionName } from 'libs/wagmi/wagmi.types';
 import config from 'config';
 import { tenderlyRpc } from 'utils/tenderly';
 
-const IS_APP_RPC = !!config.network.appRpc?.url;
+const IS_APP_RPC = !!config.network.productionRpc?.url;
 const CHAIN_RPC_URL =
   tenderlyRpc ||
-  config.network.appRpc?.url ||
+  config.network.productionRpc?.url ||
   config.network.walletConnectRpc.url;
 const CHAIN_RPC_HEADERS = tenderlyRpc
   ? {}
   : (IS_APP_RPC
-      ? config.network.appRpc?.headers
+      ? config.network.productionRpc?.headers
       : config.network.walletConnectRpc.headers) ?? {};
 export const CHAIN_ID = config.network.chainId;
 

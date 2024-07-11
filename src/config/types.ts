@@ -25,7 +25,7 @@ export interface AppConfig {
       url: string;
       headers?: Record<string, string>;
     };
-    appRpc?: {
+    productionRpc?: {
       url: string;
       headers?: Record<string, string>;
     };
