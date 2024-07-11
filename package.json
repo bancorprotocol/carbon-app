@@ -99,8 +99,6 @@
     "start:sei": "export VITE_NETWORK=sei && vite",
     "prebuild": "yarn compile-abis",
     "build": "tsc && vite build",
-    "build:ethereum": "export VITE_NETWORK=ethereum && tsc && vite build",
-    "build:sei": "export VITE_NETWORK=sei && tsc && vite build",
     "serve": "vite preview",
     "pretest": "yarn compile-abis",
     "test": "vitest run --mode production",
