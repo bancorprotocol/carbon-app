@@ -27,6 +27,7 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { cn } from 'utils/helpers';
 import style from './index.module.css';
+import { replaceSpecialCharacters } from 'utils/pairSearch';
 
 interface ComboboxCtx {
   name: string;
@@ -85,10 +86,15 @@ export const Combobox: FC<ComboboxProps> = (props) => {
   }, [inputId, selected]);
 
   const filter = (value: string) => {
+    const lcValue = value.toLowerCase();
     const options = document.querySelectorAll(`.${style.option}`)!;
     let empty = true;
     for (const option of options) {
-      if (option.textContent?.toLowerCase().includes(value)) {
+      const lcOption = (option.textContent ?? '').toLowerCase();
+      if (
+        lcOption.includes(lcValue) ||
+        replaceSpecialCharacters(lcOption).includes(lcValue)
+      ) {
         empty = false;
         option.classList.remove(style.hidden);
       } else {

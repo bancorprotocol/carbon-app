@@ -84,11 +84,6 @@ export const EditStrategyForm: FC<Props> = (props) => {
   const cache = useQueryClient();
   const [isProcessing, setIsProcessing] = useState(false);
   const isPending = updateMutation.isPending;
-  const isLoading = isPending || isProcessing || isDeleting;
-  const loadingChildren = getStatusTextByTxStatus(
-    isPending,
-    isProcessing || isDeleting
-  );
 
   const approvalTokens = (() => {
     const arr = [];
@@ -111,6 +106,12 @@ export const EditStrategyForm: FC<Props> = (props) => {
     return arr;
   })();
   const approval = useApproval(approvalTokens);
+  const isLoading =
+    (approval.isPending && !!user) || isPending || isProcessing || isDeleting;
+  const loadingChildren = getStatusTextByTxStatus(
+    isPending,
+    isProcessing || isDeleting
+  );
 
   const isDisabled = (form: HTMLFormElement) => {
     if (!form.checkValidity()) return true;
@@ -228,7 +229,6 @@ export const EditStrategyForm: FC<Props> = (props) => {
         />
         {approveText}
       </label>
-
       <Button
         type="submit"
         disabled={!hasChanged}

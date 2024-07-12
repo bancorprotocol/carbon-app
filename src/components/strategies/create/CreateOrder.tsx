@@ -137,6 +137,7 @@ export const CreateOrder: FC<Props> = ({
             buy={buy}
             error={error}
             warnings={warnings}
+            required
           />
         ) : (
           <InputLimit
@@ -147,6 +148,7 @@ export const CreateOrder: FC<Props> = ({
             buy={buy}
             error={error}
             warnings={warnings}
+            required
           />
         )}
       </fieldset>
