@@ -135,12 +135,15 @@ export const OverlappingInitMarketPrice = (props: FieldProps) => {
           id={checkboxId}
           type="checkbox"
           className="size-18"
+          data-testid="approve-warnings"
           checked={approved}
           onChange={(e) => setApproved(e.target.checked)}
         />
         I've reviewed the warning(s) but choose to proceed.
       </label>
-      <Button type="submit">Confirm</Button>
+      <Button type="submit" data-testid="set-overlapping-price">
+        Confirm
+      </Button>
     </form>
   );
 };
