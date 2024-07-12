@@ -1,36 +1,24 @@
-import { describe, test, expect } from 'vitest';
-import { HttpResponse, http } from 'msw';
+import { describe, test, expect, beforeAll, afterAll } from 'vitest';
 import { renderWithRouter, screen } from 'libs/testing-library';
 import userEvent from '@testing-library/user-event';
 import { debugTokens } from '../../../../e2e/utils/types';
 import { CreateOverlappingStrategyPage } from './overlapping';
-import { MockServer } from 'libs/testing-library/utils';
+import { MockServer, marketRateHandler } from 'libs/testing-library/utils';
 
 const basePath = '/strategies/create/overlapping';
 
 const marketRates: Record<string, Record<string, number>> = {
-  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { USD: 1 },
-  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { USD: 2800 },
-};
-
-const marketRateHandler = (
-  marketRates: Record<string, Record<string, number>>
-) => {
-  return http.get('**/*/market-rate', ({ request }) => {
-    const queryParams = new URL(request.url).searchParams;
-    const address = queryParams.get('address')?.toLowerCase();
-    if (!address) return new HttpResponse(null, { status: 404 });
-    return HttpResponse.json({
-      data: marketRates[address],
-    });
-  });
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { USD: 1 }, // USDC
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { USD: 2800 }, // ETH
 };
 
 const mockServer = new MockServer([marketRateHandler(marketRates)]);
 
+beforeAll(() => mockServer.start());
+afterAll(() => mockServer.close());
+
 describe('overlapping page', () => {
-  mockServer.start();
-  test('run overlapping form with deeplink and user market price', async () => {
+  test('check search params with deeplink and user market price defined', async () => {
     // Initialize user and set search params
     const user = userEvent.setup();
     const search = {
@@ -82,7 +70,43 @@ describe('overlapping page', () => {
     expect(depositWarning).toBeInTheDocument();
   });
 
-  test('run overlapping form with external market price', async () => {
+  test('check search params with no external price after setting user market price', async () => {
+    const user = userEvent.setup();
+    const search = {
+      base: debugTokens.USDT,
+      quote: debugTokens.WBTC,
+      min: '45000',
+      max: '55000',
+      spread: '0.01',
+      anchor: 'buy',
+      budget: '10',
+    };
+    const marketPrice = '50000';
+
+    // Render page
+    const { router } = await renderWithRouter({
+      component: () => <CreateOverlappingStrategyPage />,
+      basePath,
+      search,
+    });
+
+    const userPriceInput = await screen.findByTestId('input-price');
+    const userWarning = await screen.findByTestId('approve-warnings');
+    const setMarketPriceButton = await screen.findByTestId(
+      'set-overlapping-price'
+    );
+    await user.click(userPriceInput);
+    await user.keyboard(marketPrice);
+    await user.click(userWarning);
+    await user.click(setMarketPriceButton);
+
+    expect(router.state.location.search).toStrictEqual({
+      ...search,
+      marketPrice: marketPrice,
+    });
+  });
+
+  test('check search params with external market price', async () => {
     // Set search params
     const search = {
       base: debugTokens.ETH,
@@ -117,7 +141,7 @@ describe('overlapping page', () => {
     expect(marketPriceIndications[1]).toHaveTextContent('7.14% above');
   });
 
-  test('run overlapping form with user market price below min price', async () => {
+  test('create with user market price below min price', async () => {
     // Set search params
     const search = {
       base: debugTokens.ETH,
