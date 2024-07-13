@@ -1,5 +1,10 @@
 import { Page } from 'components/common/page';
-import { Outlet, Navigate, useNavigate } from 'libs/routing';
+import {
+  Outlet,
+  Navigate,
+  useNavigate,
+  getLastVisitedPair,
+} from 'libs/routing';
 import {
   ExplorerSearch,
   useExplorer,
@@ -10,17 +15,24 @@ import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { useEffect, useState } from 'react';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { toPairSlug } from 'utils/pairSearch';
-import config from 'config';
+import { lsService } from 'services/localeStorage';
 
 export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
   const navigate = useNavigate({ from: '/explore/$type/$slug' });
 
   useEffect(() => {
+    if (slug && type === 'token-pair') {
+      // Set last visited pair
+      const [base, quote] = slug.split('_');
+      lsService.setItem('tradePair', [base, quote]);
+      return;
+    }
     if (slug || type !== 'token-pair') return;
+    const defaultPair = getLastVisitedPair();
     const defaultSlug = toPairSlug(
-      { address: config.defaultTokenPair[0] },
-      { address: config.defaultTokenPair[1] }
+      { address: defaultPair.base },
+      { address: defaultPair.quote }
     );
 
     navigate({
