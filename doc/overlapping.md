@@ -63,7 +63,6 @@ If the strategy is **touched** the hierarchy of market price for calculation is 
 |        X       |            |        |              |              |                       |       X       |                | External Price    |
 |        X       |            |        |              |              |                       |               |                | -                 |
 |        X       |      X     |    X   |              |              |                       |       X       |                | External Price    |
-|        X       |      X     |    X   |              |              |                       |       X       |                | -                 |
 |        X       |            |        |       X      |              |                       |       X       |                | Buy Marginal      |
 |        X       |            |        |       X      |              |           X           |       X       |                | External Price    |
 |        X       |            |        |       X      |              |           X           |               |                | Buy Marginal      |
@@ -139,3 +138,24 @@ If neither user market price nor extern market price are defined, the chart is *
 The marginal price displayed depends on the state of the form : 
 - **untouched**: displays the marginal price of the strategy.
 - **touched**: displays the marginal price calculated based on the form params.
+
+
+## Switching between type of strategies
+In edit prices, when switching from disposable or recurring to overlapping, we want to follow this behavior : 
+- `spread`: Do not set the spread
+- `min`: Get the minimum price of both orders
+- `max`: Get the maximum value of both orders
+If there is only one price, min & max will be the same, we let the overlapping form calculate the closest min/max
+
+Example:
+- From: Disposable buy limit: 1000
+- To: Overlapping min: 1000, max: 1000 -> will be updated by the form
+
+- From: Disposable sell range: 1000-2000
+- To: Overlapping min 1000, max 2000
+
+- From: Recurring buy 1000-2000, sell 2000-3000
+- To: Overlapping min: 1000, max: 3000
+
+- From: Recurring buy 1000-2500, sell 2000-3000
+- To: Overlapping min: 1000, max: 3000
