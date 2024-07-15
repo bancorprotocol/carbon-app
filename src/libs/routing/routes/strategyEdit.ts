@@ -123,10 +123,10 @@ export const toOverlappingPricesSearch = (
   const { order0: buy, order1: sell } = strategy;
 
   // If come from disposable, prevent setting 0
-  const startRates = [buy.startRate, sell.startRate].filter((v) => !isZero(v));
-  const endRates = [buy.endRate, sell.endRate].filter((v) => !isZero(v));
-  const min = SafeDecimal.min(...startRates).toString();
-  const max = SafeDecimal.max(...endRates).toString();
+  const lowRates = [buy.startRate, sell.startRate].filter((v) => !isZero(v));
+  const highRates = [buy.endRate, sell.endRate].filter((v) => !isZero(v));
+  const min = lowRates.length ? SafeDecimal.min(...lowRates).toString() : '';
+  const max = highRates.length ? SafeDecimal.max(...highRates).toString() : '';
 
   // Do not set spread if the strategy wasn't an overlapping one originally
   const isOverlapping = isOverlappingStrategy(strategy);
