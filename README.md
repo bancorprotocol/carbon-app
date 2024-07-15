@@ -150,12 +150,16 @@ const configs = {
 ```bash
 # Use polygon network
 VITE_NETWORK=polygon
+# Use any RPC URL to your network
+VITE_CHAIN_RPC_URL=https://eth-mainnet.alchemyapi.io/v2/<API_KEY>
 ```
 
-The app will use the rpc set in the development/production config for the following purposes:
+The app will use the rpc for the following purposes:
 
 1. Add a network to the injected wallet.
 2. Fetch data from the network.
+
+If VITE_CHAIN_RPC_URL is not set, the app will use the rpc.url and rpc.headers from the development/production network configuration.
 
 ### Contracts with version < 5
 

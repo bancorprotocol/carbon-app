@@ -2,8 +2,11 @@ import { SelectableConnectionName } from 'libs/wagmi/wagmi.types';
 import config from 'config';
 import { tenderlyRpc } from 'utils/tenderly';
 
-const CHAIN_RPC_URL = tenderlyRpc || config.network.rpc.url;
-const CHAIN_RPC_HEADERS = tenderlyRpc ? {} : config.network.rpc?.headers ?? {};
+const IS_ENV_RPC = !!import.meta.env.VITE_CHAIN_RPC_URL;
+const CHAIN_RPC_URL =
+  tenderlyRpc || import.meta.env.VITE_CHAIN_RPC_URL || config.network.rpc.url;
+const CHAIN_RPC_HEADERS =
+  tenderlyRpc || IS_ENV_RPC ? {} : config.network.rpc?.headers || {};
 export const CHAIN_ID = config.network.chainId;
 
 if (typeof CHAIN_RPC_URL === 'undefined') {
