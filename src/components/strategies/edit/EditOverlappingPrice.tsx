@@ -33,6 +33,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { InputLimit } from '../common/InputLimit';
 import { Button } from 'components/common/button';
+import { isZero } from '../common/utils';
 
 interface Props {
   marketPrice: string;
@@ -190,10 +191,14 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
 
   // Update on buyMin changes
   useEffect(() => {
-    if (!order0.min) return;
     const timeout = setTimeout(async () => {
-      const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
-      if (Number(order1.max) < minSellMax) set('max', minSellMax.toString());
+      if (isZero(order0.min)) {
+        const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
+        set('min', maxBuyMin.toString());
+      } else {
+        const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
+        if (Number(order1.max) < minSellMax) set('max', minSellMax.toString());
+      }
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -201,10 +206,14 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
 
   // Update on sellMax changes
   useEffect(() => {
-    if (!order1.max) return;
     const timeout = setTimeout(async () => {
-      const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
-      if (Number(order0.min) > maxBuyMin) set('min', maxBuyMin.toString());
+      if (isZero(order1.max)) {
+        const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
+        set('max', minSellMax.toString());
+      } else {
+        const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
+        if (Number(order0.min) > maxBuyMin) set('min', maxBuyMin.toString());
+      }
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
