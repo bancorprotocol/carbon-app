@@ -8,7 +8,7 @@ import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
+import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice';
 import { isTouchedZero } from 'components/strategies/common/utils';
 
 type InputRangeProps = {
@@ -24,6 +24,7 @@ type InputRangeProps = {
   error?: string;
   warnings?: (string | undefined)[];
   isOverlapping?: boolean;
+  required?: boolean;
 };
 
 export const InputRange: FC<InputRangeProps> = ({
@@ -39,8 +40,9 @@ export const InputRange: FC<InputRangeProps> = ({
   buy = false,
   warnings = [],
   isOverlapping,
+  required,
 }) => {
-  const marketPrice = useUserMarketPrice({ base, quote });
+  const marketPrice = useOverlappingMarketPrice({ base, quote });
   const inputMinId = useId();
   const inputMaxId = useId();
 
@@ -141,7 +143,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onFocus={(e) => e.target.select()}
             onBlur={formatMin}
             data-testid="input-min"
-            required
+            required={required}
           />
           {!!marketPrice && (
             <p className="flex flex-wrap items-center gap-4">
@@ -200,7 +202,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onFocus={(e) => e.target.select()}
             onBlur={formatMax}
             data-testid="input-max"
-            required
+            required={required}
           />
           {!!marketPrice && (
             <div className="flex flex-wrap items-center gap-4">
@@ -226,8 +228,12 @@ export const InputRange: FC<InputRangeProps> = ({
         />
       )}
       {showWarning &&
-        displayWarnings.map((warning) => (
-          <Warning message={warning} htmlFor={`${inputMinId} ${inputMaxId}`} />
+        displayWarnings.map((warning, i) => (
+          <Warning
+            key={i}
+            message={warning}
+            htmlFor={`${inputMinId} ${inputMaxId}`}
+          />
         ))}
     </>
   );

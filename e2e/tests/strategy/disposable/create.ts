@@ -44,6 +44,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     }
 
     await page.waitForURL('/', { timeout: 10_000 });
+    await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
     // Verify strategy data
     const strategies = myStrategies.getAllStrategies();

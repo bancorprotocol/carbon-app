@@ -13,10 +13,15 @@
   "extends": [
     "react-app",
     "prettier",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:jest-dom/recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime"
   ],
   "rules": {
+   "react/prop-types": "off", // suppress prop-type errors
     "@typescript-eslint/no-unused-vars": 0,
+    "react/no-unescaped-entities": 0,
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",

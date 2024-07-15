@@ -4,6 +4,7 @@ import {
   assertDisposableTestCase,
   CreateStrategyTestCase,
   EditStrategyDriver,
+  MyStrategyDriver,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 import { waitForTenderlyRpc } from '../../../utils/tenderly';
@@ -23,7 +24,10 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
     await edit.fillDisposablePrice('editPrices');
 
     await edit.submit('editPrices');
+
+    const myStrategies = new MyStrategyDriver(page);
     await page.waitForURL('/', { timeout: 10_000 });
+    await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
 
     const tooltip = await strategy.priceTooltip(direction);

@@ -1,6 +1,5 @@
 import { useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
-import { roundSearchParam } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { OrderBlock } from 'components/strategies/common/types';
@@ -59,10 +58,10 @@ export const EditStrategyDisposablePage = () => {
 
   const hasChanged = (() => {
     const { order0, order1 } = strategy;
-    if (orders.buy.min !== roundSearchParam(order0.startRate)) return true;
-    if (orders.buy.max !== roundSearchParam(order0.endRate)) return true;
-    if (orders.sell.min !== roundSearchParam(order1.startRate)) return true;
-    if (orders.sell.max !== roundSearchParam(order1.endRate)) return true;
+    if (orders.buy.min !== order0.startRate) return true;
+    if (orders.buy.max !== order0.endRate) return true;
+    if (orders.sell.min !== order1.startRate) return true;
+    if (orders.sell.max !== order1.endRate) return true;
     return false;
   })();
 

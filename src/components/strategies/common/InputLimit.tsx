@@ -20,6 +20,7 @@ type InputLimitProps = {
   warnings?: (string | undefined)[];
   buy?: boolean;
   ignoreMarketPriceWarning?: boolean;
+  required?: boolean;
 };
 
 export const InputLimit: FC<InputLimitProps> = ({
@@ -32,6 +33,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   warnings = [],
   buy = false,
   ignoreMarketPriceWarning = false,
+  required,
 }) => {
   const inputId = useId();
   const { marketPrice } = useMarketPrice({ base, quote });
@@ -96,7 +98,7 @@ export const InputLimit: FC<InputLimitProps> = ({
               displayError && 'text-error'
             )}
             data-testid="input-price"
-            required
+            required={required}
           />
           {!!marketPrice && (
             <button
@@ -127,8 +129,8 @@ export const InputLimit: FC<InputLimitProps> = ({
         <Warning isError message={displayError} htmlFor={inputId} />
       )}
       {showWarning &&
-        displayWarnings.map((warning) => (
-          <Warning message={warning} htmlFor={inputId} />
+        displayWarnings.map((warning, i) => (
+          <Warning key={i} message={warning} htmlFor={inputId} />
         ))}
     </>
   );

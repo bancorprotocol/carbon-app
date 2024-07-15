@@ -30,6 +30,7 @@ import {
   getEditPricesPage,
 } from 'components/strategies/edit/utils';
 import config from 'config';
+import { toPairSlug } from 'utils/pairSearch';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -133,6 +134,22 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         });
       },
       disabled: !owner.data,
+    });
+  }
+
+  if (type !== 'token-pair') {
+    items.push({
+      id: 'explorePair',
+      name: 'Explore Pair',
+      action: () => {
+        const slug = toPairSlug(strategy.base, strategy.quote);
+        const event = { type, slug, strategies, filter, sort };
+        explorerEvents.search(event);
+        navigate({
+          to: '/explore/$type/$slug',
+          params: { type: 'token-pair', slug },
+        });
+      },
     });
   }
 
@@ -293,7 +310,7 @@ interface ManageButtonProps extends MenuButtonProps {
 }
 
 export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
-  (props, ref) => {
+  function ManageButton(props, ref) {
     const style = cn(buttonStyles({ variant: 'white' }), 'max-md:p-8 gap-8');
     const { aboveBreakpoint } = useBreakpoints();
     return (
@@ -308,7 +325,7 @@ export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
 export const ManageButtonIcon = forwardRef<
   HTMLButtonElement,
   ManageButtonProps
->((props, ref) => {
+>(function ManageButtonIcon(props, ref) {
   return (
     <button
       {...props}

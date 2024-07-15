@@ -60,7 +60,14 @@ export const StrategiesPage = () => {
             <StrategyPageTitleWidget showFilter={showFilter} />
           </header>
         )}
-
+        {/* Hidden tag to target in E2E */}
+        {query.isFetching && (
+          <div
+            className="pointer-events-none fixed opacity-0"
+            aria-hidden="true"
+            data-testid="fetch-strategies"
+          ></div>
+        )}
         {user ? <Outlet /> : <WalletConnect />}
       </StrategyProvider>
     </Page>
