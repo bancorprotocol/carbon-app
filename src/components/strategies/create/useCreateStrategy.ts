@@ -159,7 +159,7 @@ export const useCreateStrategy = (props: Props) => {
   };
 
   return {
-    isLoading: approval.isPending,
+    isLoading: approval.isPending && !!user,
     isAwaiting: mutation.isPending,
     createStrategy,
     isProcessing,
