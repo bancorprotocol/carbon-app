@@ -3,9 +3,8 @@ import { render, RenderOptions } from '@testing-library/react';
 import { WagmiReactWrapper } from 'libs/wagmi';
 import { StoreProvider } from 'store';
 import { QueryProvider } from 'libs/queries';
-import { loadRouter } from './utils';
+import { loadRouter, type RouterRenderParams } from './utils';
 import { RouterProvider } from '@tanstack/react-router';
-import { RouterRenderParams } from './types';
 
 const AllTheProviders = ({ children }: { children: ReactNode }) => {
   return (
@@ -17,6 +16,18 @@ const AllTheProviders = ({ children }: { children: ReactNode }) => {
   );
 };
 
+/**
+ * Custom render function that wraps the component with predefined providers.
+ * This function is an extension of the `render` method from `@testing-library/react`.
+ * All the render options are provided for `wrapper`, which is predefined in this function.
+ *
+ * @param {ReactElement} ui The React element to render.
+ * @param {Omit<RenderOptions, 'wrapper'>} [options] Optional rendering options, excluding `wrapper`.
+ * @returns {RenderResult} The result of rendering the given React element.
+ *
+ * @example
+ * customRender(<MyComponent />);
+ */
 const customRender = (
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
@@ -39,6 +50,17 @@ const customRender = (
  * @param params.search - The optional search parameters to be included in the route. Object keys and values are encoded into a query string.
  
  * @returns {Promise<{container: RenderResult, router: Router}>} A promise that resolves to an object containing the `container` with the rendered output and the `router` instance.
+ * 
+ * @example
+ * // Render page
+ * const { router } = await renderWithRouter({
+ *   component: () => <CreateOverlappingStrategyPage />,
+ *   basePath: '/strategies/create/overlapping',
+ *   search: {
+ *     base: 'ETH',
+ *     quote: 'USDC',
+ *   },
+ * });
  */
 export const renderWithRouter = async (params: RouterRenderParams) => {
   const customRouter = await loadRouter(params);

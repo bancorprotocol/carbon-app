@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeAll, afterAll } from 'vitest';
-import { renderWithRouter, screen } from 'libs/testing-library';
+import { renderWithRouter, screen, waitFor } from 'libs/testing-library';
 import userEvent from '@testing-library/user-event';
 import { debugTokens } from '../../../../e2e/utils/types';
 import { CreateOverlappingStrategyPage } from './overlapping';
@@ -114,8 +114,8 @@ describe('overlapping page', () => {
       min: '2000',
       max: '3000',
       spread: '0.01',
-      anchor: 'buy',
-      budget: '100',
+      anchor: 'sell',
+      budget: '10',
     };
 
     // Render page
@@ -139,6 +139,26 @@ describe('overlapping page', () => {
     expect(priceRangeMax).toHaveValue(search.max);
     expect(marketPriceIndications[0]).toHaveTextContent('28.57% below');
     expect(marketPriceIndications[1]).toHaveTextContent('7.14% above');
+  });
+
+  test('check form spread with spread unset', async () => {
+    // Set search params
+    const search = {
+      base: debugTokens.ETH,
+      quote: debugTokens.USDC,
+      min: '2000',
+      max: '3000',
+    };
+
+    // Render page
+    await renderWithRouter({
+      component: () => <CreateOverlappingStrategyPage />,
+      basePath,
+      search,
+    });
+
+    const defaultSpreadOption = await screen.findByTestId('spread-0.05');
+    expect(defaultSpreadOption).toBeChecked();
   });
 
   test('create with user market price below min price', async () => {
@@ -181,7 +201,7 @@ describe('overlapping page', () => {
     expect(marketPriceIndications[1]).toHaveTextContent('>99.99% above');
   });
 
-  test('run overlapping form with user market price above max price', async () => {
+  test('create with user market price above max price', async () => {
     // Set search params
     const search = {
       base: debugTokens.ETH,
@@ -219,5 +239,94 @@ describe('overlapping page', () => {
     expect(priceRangeMax).toHaveValue(search.max);
     expect(marketPriceIndications[0]).toHaveTextContent('37.50% below');
     expect(marketPriceIndications[1]).toHaveTextContent('6.25% below');
+  });
+
+  test('check form without min and max defined and with user market price', async () => {
+    // Set search params
+    const search = {
+      base: debugTokens.ETH,
+      quote: debugTokens.USDC,
+      marketPrice: '3000',
+      spread: '0.05',
+      anchor: 'buy',
+      budget: '100',
+    };
+
+    // Render page
+    await renderWithRouter({
+      component: () => <CreateOverlappingStrategyPage />,
+      basePath,
+      search,
+    });
+
+    // Check price range input and market price indication
+    const priceRangeMin = await screen.findByTestId('input-min');
+    const priceRangeMax = await screen.findByTestId('input-max');
+    const marketPriceIndications = await screen.findAllByTestId(
+      'market-price-indication'
+    );
+    expect(priceRangeMin).toHaveValue('2970');
+    expect(priceRangeMax).toHaveValue('3030');
+    expect(marketPriceIndications[0]).toHaveTextContent('1.00% below');
+    expect(marketPriceIndications[1]).toHaveTextContent('1.00% above');
+  });
+
+  test('check form with invalid range', async () => {
+    // Set search params
+    const search = {
+      base: debugTokens.ETH,
+      quote: debugTokens.USDC,
+      marketPrice: '3000',
+      spread: '0.05',
+      min: '3000',
+      max: '2000',
+      anchor: 'buy',
+      budget: '100',
+    };
+
+    // Render page
+    await renderWithRouter({
+      component: () => <CreateOverlappingStrategyPage />,
+      basePath,
+      search,
+    });
+
+    // Check price range input and market price indication
+    const priceRangeMin = await screen.findByTestId('input-min');
+    const priceRangeMax = await screen.findByTestId('input-max');
+    expect(priceRangeMin).toHaveValue('3000');
+    expect(priceRangeMax).toHaveValue('2000');
+
+    await waitFor(
+      () => expect(priceRangeMax).toHaveValue('3003.0022515009377'),
+      {
+        timeout: 2000,
+      }
+    ); // check value in CreateOverlapping.tsx
+  });
+
+  test('check form after touching', async () => {
+    const user = userEvent.setup();
+    // Set search params
+    const search = {
+      base: debugTokens.ETH,
+      quote: debugTokens.USDC,
+      marketPrice: '3000',
+      spread: '0.05',
+      min: '3000',
+      max: '2000',
+    };
+
+    // Render page
+    await renderWithRouter({
+      component: () => <CreateOverlappingStrategyPage />,
+      basePath,
+      search,
+    });
+
+    const priceMin = await screen.findByTestId('input-min');
+    await user.click(priceMin);
+    await user.keyboard('3005');
+    await screen.findByText('Please select a token to proceed');
   });
 });
