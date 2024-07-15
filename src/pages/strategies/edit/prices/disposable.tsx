@@ -1,6 +1,6 @@
 import { useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
-import { roundSearchParam } from 'utils/helpers';
+import { roundSearchParam, tokenAmount } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { EditOrderBlock } from 'components/strategies/common/types';
@@ -12,19 +12,10 @@ import {
 } from 'components/strategies/common/utils';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
-import {
-  BudgetDescription,
-  BudgetDistribution,
-} from 'components/strategies/common/BudgetDistribution';
-import {
-  getDeposit,
-  getTotalBudget,
-  getWithdraw,
-} from 'components/strategies/edit/utils';
-import { useGetTokenBalance } from 'libs/queries';
+import { getTotalBudget, getWithdraw } from 'components/strategies/edit/utils';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export interface EditDisposableStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -51,9 +42,6 @@ export const EditStrategyDisposablePage = () => {
   const isBuy = search.direction !== 'sell';
   const otherOrder = isBuy ? order1 : order0;
   const { setOrder, setDirection } = useSetDisposableOrder(url, otherOrder);
-
-  const baseBalance = useGetTokenBalance(base);
-  const quoteBalance = useGetTokenBalance(quote);
 
   const initialBudget = isBuy ? order0.balance : order1.balance;
   const totalBudget = getTotalBudget(
@@ -92,7 +80,9 @@ export const EditStrategyDisposablePage = () => {
   });
 
   const buyBudgetChanges = orders.buy.budget !== order0.balance;
+  const buyWithdraw = getWithdraw(order0.balance, orders.buy.budget);
   const sellBudgetChanges = orders.sell.budget !== order1.balance;
+  const sellWithdraw = getWithdraw(order1.balance, orders.sell.budget);
 
   return (
     <EditStrategyForm
@@ -130,57 +120,25 @@ export const EditStrategyDisposablePage = () => {
       {(buyBudgetChanges || sellBudgetChanges) && (
         <article
           id="budget-changed"
-          className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+          className="warning-message border-warning/40 rounded-10 bg-background-900 flex w-full flex-col gap-12 border p-20"
         >
-          <hgroup>
-            <h3 className="text-16 font-weight-500 flex items-center gap-8">
-              Budget Changes
-            </h3>
-            <p className="text-14 text-white/80">
-              These are the changes in budget allocation
-            </p>
-          </hgroup>
-          <Warning>
-            You will withdraw the following funds to your wallet
-          </Warning>
-          {sellBudgetChanges && (
-            <>
-              <BudgetDistribution
-                title="Sell Budget"
-                token={base}
-                initialBudget={order1.balance}
-                withdraw={getWithdraw(order1.balance, orders.sell.budget)}
-                deposit={getDeposit(order1.balance, orders.sell.budget)}
-                balance={baseBalance.data ?? '0'}
-              />
-              <BudgetDescription
-                token={base}
-                initialBudget={order1.balance}
-                withdraw={getWithdraw(order1.balance, orders.sell.budget)}
-                deposit={getDeposit(order1.balance, orders.sell.budget)}
-                balance={baseBalance.data ?? '0'}
-              />
-            </>
-          )}
+          <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
+            <IconWarning className="size-20" />
+            Notice
+          </h3>
           {buyBudgetChanges && (
-            <>
-              <BudgetDistribution
-                title="Buy Budget"
-                token={quote}
-                initialBudget={order0.balance}
-                withdraw={getWithdraw(order0.balance, orders.buy.budget)}
-                deposit={getDeposit(order0.balance, orders.buy.budget)}
-                balance={quoteBalance.data ?? '0'}
-                buy
-              />
-              <BudgetDescription
-                token={quote}
-                initialBudget={order0.balance}
-                withdraw={getWithdraw(order0.balance, orders.buy.budget)}
-                deposit={getDeposit(order0.balance, orders.buy.budget)}
-                balance={quoteBalance.data ?? '0'}
-              />
-            </>
+            <p className="text-14 text-white/80">
+              You will withdraw&nbsp;
+              {tokenAmount(buyWithdraw, quote)} from the inactive buy order to
+              your wallet.
+            </p>
+          )}
+          {sellBudgetChanges && (
+            <p className="text-14 text-white/80">
+              You will withdraw&nbsp;
+              {tokenAmount(sellWithdraw, base)} from the inactive sell order to
+              your wallet.
+            </p>
           )}
         </article>
       )}
