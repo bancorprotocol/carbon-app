@@ -52,7 +52,9 @@ const displayRange = (start?: Date, end?: Date) => {
   return `${dateFormatter.format(start)} - ${dateFormatter.format(end)}`;
 };
 
-export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
+export const DateRangePicker = memo(function DateRangePicker(
+  props: Omit<Props, 'setIsOpen'>
+) {
   const [isOpen, setIsOpen] = useState(false);
 
   const hasDates = !!(props.start && props.end);
@@ -246,24 +248,25 @@ interface DatePickerButtonProps {
   end?: Date;
 }
 
-export const DatePickerButton = memo(
-  ({ start, end }: DatePickerButtonProps) => {
-    const startDate = dateFormatter.format(start);
-    const endDate = dateFormatter.format(end);
+export const DatePickerButton = memo(function DatePickerButton({
+  start,
+  end,
+}: DatePickerButtonProps) {
+  const startDate = dateFormatter.format(start);
+  const endDate = dateFormatter.format(end);
 
-    const hasDates = !!(start && end);
+  const hasDates = !!(start && end);
 
-    return (
-      <>
-        <CalendarIcon className="text-primary size-14" />
-        <span
-          className="justify-self-end text-white/60"
-          data-testid="simulation-dates"
-        >
-          {hasDates ? `${startDate} - ${endDate}` : 'Select Date Range'}
-        </span>
-        <ChevronIcon className="size-12 rotate-180 text-white/80" />
-      </>
-    );
-  }
-);
+  return (
+    <>
+      <CalendarIcon className="text-primary size-14" />
+      <span
+        className="justify-self-end text-white/60"
+        data-testid="simulation-dates"
+      >
+        {hasDates ? `${startDate} - ${endDate}` : 'Select Date Range'}
+      </span>
+      <ChevronIcon className="size-12 rotate-180 text-white/80" />
+    </>
+  );
+});

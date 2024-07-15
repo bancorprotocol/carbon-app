@@ -5,19 +5,22 @@ import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/common/OrderHeader';
 import { InputRange } from 'components/strategies/common/InputRange';
 import { InputLimit } from 'components/strategies/common/InputLimit';
-import { OrderBlock } from 'components/strategies/common/types';
+import { EditOrderBlock } from 'components/strategies/common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { BudgetDistribution } from '../common/BudgetDistribution';
 import { getDeposit, getWithdraw } from './utils';
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategySettings } from 'libs/routing';
 import { isLimitOrder, resetPrice } from '../common/utils';
+import { OverlappingAction } from '../overlapping/OverlappingAction';
 
 interface Props {
-  order: OrderBlock;
+  order: EditOrderBlock;
   buy?: boolean;
   initialBudget: string;
-  setOrder: (order: Partial<OrderBlock>) => void;
+  budget: string;
+  action?: 'deposit' | 'withdraw';
+  setOrder: (order: Partial<EditOrderBlock>) => void;
   settings?: ReactNode;
   warnings?: (string | undefined)[];
   error?: string;
@@ -26,6 +29,7 @@ interface Props {
 export const EditStrategyPriceField: FC<Props> = ({
   order,
   initialBudget,
+  budget,
   setOrder,
   buy = false,
   settings,
@@ -44,7 +48,7 @@ export const EditStrategyPriceField: FC<Props> = ({
 
   const inputTitle = (
     <>
-      <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
         1
       </span>
       <Tooltip
@@ -67,6 +71,10 @@ export const EditStrategyPriceField: FC<Props> = ({
   const setPrice = (price: string) => setOrder({ min: price, max: price });
   const setMin = (min: string) => setOrder({ min });
   const setMax = (max: string) => setOrder({ max });
+  const setBudget = (budget: string) => setOrder({ budget });
+  const setAction = (action: 'deposit' | 'withdraw') => {
+    setOrder({ action, budget: undefined });
+  };
   const setSettings = (settings: StrategySettings) => {
     const order = buy ? order0 : order1;
     const initialSettings = isLimitOrder(order) ? 'limit' : 'range';
@@ -129,6 +137,17 @@ export const EditStrategyPriceField: FC<Props> = ({
           />
         )}
       </fieldset>
+      <OverlappingAction
+        base={base}
+        quote={quote}
+        anchor={buy ? 'buy' : 'sell'}
+        action={order.action}
+        setAction={setAction}
+        budget={budget}
+        setBudget={setBudget}
+        buyBudget={strategy.order0.balance}
+        sellBudget={strategy.order1.balance}
+      />
       <BudgetDistribution
         token={token}
         initialBudget={initialBudget}
