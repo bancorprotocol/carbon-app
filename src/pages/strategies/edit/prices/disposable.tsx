@@ -1,8 +1,9 @@
 import { useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
+import { tokenAmount } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
-import { OrderBlock } from 'components/strategies/common/types';
+import { EditOrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   emptyOrder,
@@ -11,15 +12,10 @@ import {
 } from 'components/strategies/common/utils';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
-import {
-  BudgetDescription,
-  BudgetDistribution,
-} from 'components/strategies/common/BudgetDistribution';
-import { getDeposit, getWithdraw } from 'components/strategies/edit/utils';
-import { useGetTokenBalance } from 'libs/queries';
+import { getTotalBudget, getWithdraw } from 'components/strategies/edit/utils';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export interface EditDisposableStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -27,6 +23,8 @@ export interface EditDisposableStrategySearch {
   max: string;
   settings: StrategySettings;
   direction: StrategyDirection;
+  action?: 'deposit' | 'withdraw';
+  budget?: string;
 }
 
 const url = '/strategies/edit/$strategyId/prices/disposable';
@@ -37,31 +35,34 @@ export const EditStrategyDisposablePage = () => {
   const search = useSearch({ from: url });
   const { marketPrice } = useMarketPrice({ base, quote });
 
-  const buy = search.direction !== 'sell';
-  const otherOrder = buy ? order1 : order0;
+  const isBuy = search.direction !== 'sell';
+  const otherOrder = isBuy ? order1 : order0;
   const { setOrder, setDirection } = useSetDisposableOrder(url, otherOrder);
 
-  const baseBalance = useGetTokenBalance(base);
-  const quoteBalance = useGetTokenBalance(quote);
-
-  const initialBudget = buy ? order0.balance : order1.balance;
-  const order: OrderBlock = {
+  const initialBudget = isBuy ? order0.balance : order1.balance;
+  const totalBudget = getTotalBudget(
+    search.action ?? 'deposit',
+    initialBudget,
+    search.budget
+  );
+  const order: EditOrderBlock = {
     min: search.min ?? '',
     max: search.max ?? '',
-    budget: initialBudget,
+    budget: totalBudget,
     settings: search.settings ?? 'limit',
+    action: search.action ?? 'deposit',
   };
   const orders = {
-    buy: buy ? order : emptyOrder(),
-    sell: buy ? emptyOrder() : order,
+    buy: isBuy ? order : emptyOrder(),
+    sell: isBuy ? emptyOrder() : order,
   };
 
   const hasChanged = (() => {
-    const { order0, order1 } = strategy;
     if (orders.buy.min !== order0.startRate) return true;
     if (orders.buy.max !== order0.endRate) return true;
     if (orders.sell.min !== order1.startRate) return true;
     if (orders.sell.max !== order1.endRate) return true;
+    if (!isZero(search.budget)) return true;
     return false;
   })();
 
@@ -71,12 +72,14 @@ export const EditStrategyDisposablePage = () => {
     marketPrice,
     min: search.min,
     max: search.max,
-    buy: search.direction !== 'sell',
+    buy: isBuy,
   });
 
-  const fromRecurring = !isZero(order0.startRate) && !isZero(order1.startRate);
-  const buyBudgetChanges = order0.balance !== orders.buy.budget;
-  const sellBudgetChanges = order1.balance !== orders.sell.budget;
+  // Check if inactive budget changed
+  const buyBudgetChanges = !isBuy && orders.buy.budget !== order0.balance;
+  const buyWithdraw = getWithdraw(order0.balance, orders.buy.budget);
+  const sellBudgetChanges = isBuy && orders.sell.budget !== order1.balance;
+  const sellWithdraw = getWithdraw(order1.balance, orders.sell.budget);
 
   return (
     <EditStrategyForm
@@ -87,22 +90,23 @@ export const EditStrategyDisposablePage = () => {
     >
       <EditStrategyPriceField
         order={order}
+        budget={search.budget ?? ''}
         initialBudget={initialBudget}
         setOrder={setOrder}
         warnings={[outSideMarket]}
-        buy={buy}
+        buy={isBuy}
         settings={
           <TabsMenu>
             <TabsMenuButton
               onClick={() => setDirection('buy')}
-              isActive={buy}
+              isActive={isBuy}
               data-testid="tab-buy"
             >
               Buy
             </TabsMenuButton>
             <TabsMenuButton
               onClick={() => setDirection('sell')}
-              isActive={!buy}
+              isActive={!isBuy}
               data-testid="tab-sell"
             >
               Sell
@@ -113,59 +117,27 @@ export const EditStrategyDisposablePage = () => {
       {(buyBudgetChanges || sellBudgetChanges) && (
         <article
           id="budget-changed"
-          className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+          className="warning-message border-warning/40 rounded-10 bg-background-900 flex w-full flex-col gap-12 border p-20"
         >
-          <hgroup>
-            <h3 className="text-16 font-weight-500 flex items-center gap-8">
-              Budget Changes
-            </h3>
-            <p className="text-14 text-white/80">
-              These are the changes in budget allocation
-            </p>
-          </hgroup>
-          {sellBudgetChanges && (
-            <>
-              <BudgetDistribution
-                title="Sell Budget"
-                token={base}
-                initialBudget={order1.balance}
-                withdraw={getWithdraw(order1.balance, orders.sell.budget)}
-                deposit={getDeposit(order1.balance, orders.sell.budget)}
-                balance={baseBalance.data ?? '0'}
-              />
-              <BudgetDescription
-                token={base}
-                initialBudget={order1.balance}
-                withdraw={getWithdraw(order1.balance, orders.sell.budget)}
-                deposit={getDeposit(order1.balance, orders.sell.budget)}
-                balance={baseBalance.data ?? '0'}
-              />
-            </>
-          )}
+          <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
+            <IconWarning className="size-16" />
+            Notice
+          </h3>
           {buyBudgetChanges && (
-            <>
-              <BudgetDistribution
-                title="Buy Budget"
-                token={quote}
-                initialBudget={order0.balance}
-                withdraw={getWithdraw(order0.balance, orders.buy.budget)}
-                deposit={getDeposit(order0.balance, orders.buy.budget)}
-                balance={quoteBalance.data ?? '0'}
-                buy
-              />
-              <BudgetDescription
-                token={quote}
-                initialBudget={order0.balance}
-                withdraw={getWithdraw(order0.balance, orders.buy.budget)}
-                deposit={getDeposit(order0.balance, orders.buy.budget)}
-                balance={quoteBalance.data ?? '0'}
-              />
-            </>
+            <p className="text-14 text-white/80">
+              You will withdraw&nbsp;
+              {tokenAmount(buyWithdraw, quote)} from the inactive buy order to
+              your wallet.
+            </p>
+          )}
+          {sellBudgetChanges && (
+            <p className="text-14 text-white/80">
+              You will withdraw&nbsp;
+              {tokenAmount(sellWithdraw, base)} from the inactive sell order to
+              your wallet.
+            </p>
           )}
         </article>
-      )}
-      {fromRecurring && (
-        <Warning>{buy ? 'Sell High' : 'Buy Low'} order will be removed</Warning>
       )}
     </EditStrategyForm>
   );

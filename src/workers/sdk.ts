@@ -131,7 +131,11 @@ const buildOrderBook = async (
     });
   });
 
-  return orders;
+  const sortedOrders = orders.sort(
+    (a, b) => +new Decimal(a.rate).sub(b.rate).toNumber()
+  );
+
+  return sortedOrders;
 };
 
 const getStep = (
