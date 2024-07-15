@@ -75,9 +75,10 @@ export const EditStrategyDisposablePage = () => {
     buy: isBuy,
   });
 
-  const buyBudgetChanges = orders.buy.budget !== order0.balance;
+  // Check if inactive budget changed
+  const buyBudgetChanges = !isBuy && orders.buy.budget !== order0.balance;
   const buyWithdraw = getWithdraw(order0.balance, orders.buy.budget);
-  const sellBudgetChanges = orders.sell.budget !== order1.balance;
+  const sellBudgetChanges = isBuy && orders.sell.budget !== order1.balance;
   const sellWithdraw = getWithdraw(order1.balance, orders.sell.budget);
 
   return (
@@ -119,7 +120,7 @@ export const EditStrategyDisposablePage = () => {
           className="warning-message border-warning/40 rounded-10 bg-background-900 flex w-full flex-col gap-12 border p-20"
         >
           <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
-            <IconWarning className="size-20" />
+            <IconWarning className="size-16" />
             Notice
           </h3>
           {buyBudgetChanges && (
