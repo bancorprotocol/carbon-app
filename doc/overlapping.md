@@ -147,15 +147,15 @@ In edit prices, when switching from disposable or recurring to overlapping, we w
 - `max`: Get the maximum value of both orders
 If there is only one price, min & max will be the same, we let the overlapping form calculate the closest min/max
 
-Example:
+### Examples:
 - From: Disposable buy limit: 1000
 - To: Overlapping min: 1000, max: 1000 -> will be updated by the form
-
+---
 - From: Disposable sell range: 1000-2000
 - To: Overlapping min 1000, max 2000
-
+---
 - From: Recurring buy 1000-2000, sell 2000-3000
 - To: Overlapping min: 1000, max: 3000
-
+---
 - From: Recurring buy 1000-2500, sell 2000-3000
 - To: Overlapping min: 1000, max: 3000
