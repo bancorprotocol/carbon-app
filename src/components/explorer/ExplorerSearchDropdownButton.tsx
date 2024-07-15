@@ -8,7 +8,7 @@ import { MenuButtonProps } from 'components/common/dropdownMenu';
 export const ExplorerSearchDropdownButton = forwardRef<
   HTMLButtonElement,
   MenuButtonProps
->((props, ref) => {
+>(function ExplorerSearchDropdownButton(props, ref) {
   const { type } = useExplorerParams();
   return (
     <button
