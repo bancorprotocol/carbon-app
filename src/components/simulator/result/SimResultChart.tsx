@@ -41,7 +41,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
         />
         {simulationType === 'recurring' && (
           <Link
-            to={`/simulate/recurring`}
+            to="/simulate/recurring"
             search={{
               baseToken: ctx.search.baseToken,
               quoteToken: ctx.search.quoteToken,

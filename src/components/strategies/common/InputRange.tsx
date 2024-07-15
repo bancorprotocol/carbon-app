@@ -228,8 +228,12 @@ export const InputRange: FC<InputRangeProps> = ({
         />
       )}
       {showWarning &&
-        displayWarnings.map((warning) => (
-          <Warning message={warning} htmlFor={`${inputMinId} ${inputMaxId}`} />
+        displayWarnings.map((warning, i) => (
+          <Warning
+            key={i}
+            message={warning}
+            htmlFor={`${inputMinId} ${inputMaxId}`}
+          />
         ))}
     </>
   );

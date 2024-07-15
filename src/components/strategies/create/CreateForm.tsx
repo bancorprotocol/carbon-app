@@ -86,7 +86,6 @@ export const CreateForm: FC<FormProps> = (props) => {
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
 
   const connectWallet = () => {
-    createStrategyEvents.connectWallet(type, search);
     openModal('wallet', undefined);
   };
 
