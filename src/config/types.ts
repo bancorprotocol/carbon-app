@@ -21,11 +21,7 @@ export interface AppConfig {
     name: string;
     logoUrl: string;
     chainId: number;
-    walletConnectRpc: {
-      url: string;
-      headers?: Record<string, string>;
-    };
-    productionRpc?: {
+    rpc: {
       url: string;
       headers?: Record<string, string>;
     };

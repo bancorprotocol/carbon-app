@@ -13,7 +13,7 @@ export const currentChain: Chain = {
   },
   rpcUrls: {
     default: {
-      http: [config.network.walletConnectRpc.url],
+      http: [config.network.rpc.url],
     },
   },
   blockExplorers: {

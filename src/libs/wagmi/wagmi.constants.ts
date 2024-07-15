@@ -2,16 +2,8 @@ import { SelectableConnectionName } from 'libs/wagmi/wagmi.types';
 import config from 'config';
 import { tenderlyRpc } from 'utils/tenderly';
 
-const IS_APP_RPC = !!config.network.productionRpc?.url;
-const CHAIN_RPC_URL =
-  tenderlyRpc ||
-  config.network.productionRpc?.url ||
-  config.network.walletConnectRpc.url;
-const CHAIN_RPC_HEADERS = tenderlyRpc
-  ? {}
-  : (IS_APP_RPC
-      ? config.network.productionRpc?.headers
-      : config.network.walletConnectRpc.headers) ?? {};
+const CHAIN_RPC_URL = tenderlyRpc || config.network.rpc.url;
+const CHAIN_RPC_HEADERS = tenderlyRpc ? {} : config.network.rpc?.headers ?? {};
 export const CHAIN_ID = config.network.chainId;
 
 if (typeof CHAIN_RPC_URL === 'undefined') {

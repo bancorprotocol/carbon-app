@@ -6,7 +6,7 @@ const config: AppConfig = {
   mode: 'production',
   network: {
     ...commonConfig.network,
-    productionRpc: {
+    rpc: {
       url: 'https://holy-frequent-sky.sei-pacific.quiknode.pro/8d454102397f7c651636c3c832e6451a5a7f5928/',
     },
   },
