@@ -91,11 +91,11 @@ To calculate prices we need these information :
 
 **Min Price**
 1. Use min price entered by the User
-2. Use market price above * 0.99
+2. Use market price * 0.99
 
 **Max Price**
 1. Use max price entered by the User
-2. Use market price above * 1.01
+2. Use market price * 1.01
 
 **Spread**
 1. Use max price entered by the User
