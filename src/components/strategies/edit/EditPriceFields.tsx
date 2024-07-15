@@ -7,10 +7,7 @@ import { InputRange } from 'components/strategies/common/InputRange';
 import { InputLimit } from 'components/strategies/common/InputLimit';
 import { EditOrderBlock } from 'components/strategies/common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
-import {
-  BudgetDescription,
-  BudgetDistribution,
-} from '../common/BudgetDistribution';
+import { BudgetDistribution } from '../common/BudgetDistribution';
 import { getDeposit, getWithdraw } from './utils';
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategySettings } from 'libs/routing';
@@ -158,13 +155,6 @@ export const EditStrategyPriceField: FC<Props> = ({
         deposit={getDeposit(initialBudget, order.budget)}
         balance={balance.data ?? '0'}
         buy={buy}
-      />
-      <BudgetDescription
-        token={token}
-        initialBudget={initialBudget}
-        withdraw={getWithdraw(initialBudget, order.budget)}
-        deposit={getDeposit(initialBudget, order.budget)}
-        balance={balance.data ?? '0'}
       />
       <FullOutcome
         min={order.min}

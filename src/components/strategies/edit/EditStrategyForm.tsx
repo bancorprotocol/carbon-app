@@ -118,10 +118,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
     if (!!form.querySelector('.loading-message')) return true;
     if (!!form.querySelector('.error-message')) return true;
     const warnings = form.querySelector('.warning-message');
-    const budgets = form.querySelector('.budget-message');
-    const needApproval =
-      !!warnings || (!!budgets && strategyType === 'overlapping');
-    if (!needApproval) return false;
+    if (!warnings) return false;
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
   };
 

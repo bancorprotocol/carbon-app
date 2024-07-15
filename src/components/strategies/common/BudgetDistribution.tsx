@@ -152,7 +152,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="budget-message animate-scaleUp text-12 flex items-start gap-8 text-white/60">
+      <p className="warning-message animate-scaleUp text-12 flex items-start gap-8 text-white/60">
         <span className="bg-buy/10 text-buy rounded-full p-4">
           <IconDeposit className="h-12 w-12" />
         </span>
@@ -181,7 +181,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="budget-message animate-scaleUp text-12 flex items-start gap-8 text-white/60">
+      <p className="warning-message animate-scaleUp text-12 flex items-start gap-8 text-white/60">
         <span className="bg-sell/10 text-sell rounded-full p-4">
           <IconWithdraw className="h-12 w-12" />
         </span>
