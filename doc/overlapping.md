@@ -84,26 +84,10 @@ We need to calculate buy.max, buy.marginalPrice, sell.min & sell.marginalPrice.
 If strategy is **not touched** we use existing values, else we calculate them.
 
 To calculate prices we need these information : 
-- Min Price
-- Max Price
-- Spread
-- Market Price
-
-**Min Price**
-1. Use min price entered by the User
-2. Use market price * 0.99
-
-**Max Price**
-1. Use max price entered by the User
-2. Use market price * 1.01
-
-**Spread**
-1. Use max price entered by the User
-2. Use 0.05
-
-**Market Price**
-1. Use Market Price defined above
-
+- `marketPrice` (defined above)
+- `min` (default to `marketPrice * 0.99`)
+- `max` (default to `marketPrice * 1.01`)
+- `spread` (default to `0.05`)
 
 
 ### Calculate Budget
