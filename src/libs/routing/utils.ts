@@ -86,9 +86,11 @@ export type SearchParamsValidator<T> = {
 export const validLiteral = (array: string[]) => {
   return v.union(array.map((l) => v.literal(l)));
 };
+
 export const validNumber = v.string([
   v.custom((value: string) => isNaN(Number(formatNumber(value))) === false),
 ]);
+
 export const validAddress = v.string([
   v.custom((value: string) => {
     try {
@@ -99,9 +101,11 @@ export const validAddress = v.string([
     }
   }),
 ]);
+
 export const validBoolean = v.boolean([
   v.custom((value) => value === true || value === false),
 ]);
+
 export const validMarginalPrice = v.union([
   validNumber,
   validLiteral([MarginalPriceOptions.maintain, MarginalPriceOptions.reset]),

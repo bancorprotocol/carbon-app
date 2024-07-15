@@ -12,7 +12,7 @@ import {
   EditRecurringStrategySearch,
 } from 'pages/strategies/edit/prices/recurring';
 import { Strategy } from 'libs/queries';
-import { isEmptyOrder } from 'components/strategies/common/utils';
+import { isEmptyOrder, isZero } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import {
@@ -35,6 +35,7 @@ import {
   EditBudgetOverlappingPage,
   EditBudgetOverlappingSearch,
 } from 'pages/strategies/edit/budget/overlapping';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
@@ -46,6 +47,11 @@ export const editStrategyLayout = new Route({
 });
 
 // PRICES
+const initInput = (value: string) => {
+  if (isZero(value)) return '';
+  return value;
+};
+
 export const toDisposablePricesSearch = (
   strategy: Strategy,
   editType: 'editPrices' | 'renew'
@@ -55,8 +61,8 @@ export const toDisposablePricesSearch = (
   const order = direction === 'sell' ? order1 : order0;
   return {
     editType,
-    min: order.startRate,
-    max: order.endRate,
+    min: initInput(order.startRate),
+    max: initInput(order.endRate),
     settings: order.startRate === order.endRate ? 'limit' : 'range',
     direction,
   };
@@ -69,8 +75,10 @@ export const editPricesDisposable = new Route({
     editType: validLiteral(['editPrices', 'renew']),
     min: validNumber,
     max: validNumber,
+    budget: validNumber,
     settings: validLiteral(['limit', 'range']),
     direction: validLiteral(['buy', 'sell']),
+    action: validLiteral(['deposit', 'withdraw']),
   }),
 });
 
@@ -81,11 +89,11 @@ export const toRecurringPricesSearch = (
   const { order0: buy, order1: sell } = strategy;
   return {
     editType,
-    buyMin: buy.startRate,
-    buyMax: buy.endRate,
+    buyMin: initInput(buy.startRate),
+    buyMax: initInput(buy.endRate),
     buySettings: buy.startRate === buy.endRate ? 'limit' : 'range',
-    sellMin: sell.startRate,
-    sellMax: sell.endRate,
+    sellMin: initInput(sell.startRate),
+    sellMax: initInput(sell.endRate),
     sellSettings: sell.startRate === sell.endRate ? 'limit' : 'range',
   };
 };
@@ -97,10 +105,14 @@ export const editPricesRecurring = new Route({
     editType: validLiteral(['editPrices', 'renew']),
     buyMin: validNumber,
     buyMax: validNumber,
+    buyBudget: validNumber,
     buySettings: validLiteral(['limit', 'range']),
+    buyAction: validLiteral(['deposit', 'withdraw']),
     sellMin: validNumber,
     sellMax: validNumber,
+    sellBudget: validNumber,
     sellSettings: validLiteral(['limit', 'range']),
+    sellAction: validLiteral(['deposit', 'withdraw']),
   }),
 });
 
@@ -109,13 +121,21 @@ export const toOverlappingPricesSearch = (
   editType: 'editPrices' | 'renew'
 ): EditOverlappingStrategySearch => {
   const { order0: buy, order1: sell } = strategy;
-  const isOverlapping = isOverlappingStrategy(strategy);
+
+  // If come from disposable, prevent setting 0
+  const lowRates = [buy.startRate, sell.startRate].filter((v) => !isZero(v));
+  const highRates = [buy.endRate, sell.endRate].filter((v) => !isZero(v));
+  const min = lowRates.length ? SafeDecimal.min(...lowRates).toString() : '';
+  const max = highRates.length ? SafeDecimal.max(...highRates).toString() : '';
+
   // Do not set spread if the strategy wasn't an overlapping one originally
+  const isOverlapping = isOverlappingStrategy(strategy);
   const spread = isOverlapping && getRoundedSpread(strategy);
+
   return {
     editType,
-    min: buy.startRate,
-    max: sell.endRate,
+    min: initInput(min),
+    max: initInput(max),
     spread: spread ? spread.toString() : undefined,
   };
 };

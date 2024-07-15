@@ -205,11 +205,13 @@ export const EditStrategyForm: FC<Props> = (props) => {
     <form
       onSubmit={submit}
       onReset={() => history.back()}
-      className={cn('flex flex-col gap-20 md:w-[440px]', style.form)}
+      className={cn('flex flex-col gap-20 md:w-[440px]', style.form, {
+        [style.overlapping]: strategyType === 'overlapping',
+      })}
       data-testid="edit-form"
     >
-      <EditPriceNav editType={editType} />
       <EditStrategyOverlapTokens />
+      <EditPriceNav editType={editType} />
 
       {children}
 
