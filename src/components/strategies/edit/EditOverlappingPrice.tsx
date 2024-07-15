@@ -152,6 +152,11 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     return 'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
   })();
 
+  const budgetWarning = (() => {
+    if (action !== 'deposit' || !search.budget) return;
+    return 'Please note that the deposit might create an arb opportunity.';
+  })();
+
   useEffect(() => {
     if (anchor === 'buy' && aboveMarket) {
       set('anchor', 'sell');
@@ -162,11 +167,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       set('budget', undefined);
     }
   }, [anchor, aboveMarket, belowMarket, set]);
-
-  const budgetWarning = (() => {
-    if (action !== 'deposit' || !search.budget) return;
-    return 'Please note that the deposit might create an arb opportunity.';
-  })();
 
   const setMarketPrice = (price: string) => set('marketPrice', price);
   const setMin = (min: string) => set('min', min);
@@ -335,19 +335,20 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
         disableSell={belowMarket}
       />
       {anchor && (
-        <OverlappingAction
-          base={base}
-          quote={quote}
-          anchor={anchor}
-          action={action}
-          setAction={setAction}
-          budget={budget ?? ''}
-          setBudget={setBudget}
-          buyBudget={initialBuyBudget}
-          sellBudget={initialSellBudget}
-          error={budgetError}
-          warning={budgetWarning}
-        />
+        <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+          <OverlappingAction
+            base={base}
+            quote={quote}
+            anchor={anchor}
+            action={action}
+            setAction={setAction}
+            budget={budget ?? ''}
+            setBudget={setBudget}
+            buyBudget={initialBuyBudget}
+            sellBudget={initialSellBudget}
+            warning={budgetWarning}
+          />
+        </article>
       )}
       {anchor && (
         <article
