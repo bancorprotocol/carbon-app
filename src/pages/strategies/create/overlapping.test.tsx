@@ -106,7 +106,7 @@ describe('overlapping page', () => {
     });
   });
 
-  test('check search params with external market price', async () => {
+  test('check form prices with external market price', async () => {
     // Set search params
     const search = {
       base: debugTokens.ETH,
