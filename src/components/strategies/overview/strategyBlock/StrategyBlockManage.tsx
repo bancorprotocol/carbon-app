@@ -1,4 +1,7 @@
-import { isOverlappingStrategy } from 'components/strategies/common/utils';
+import {
+  isOverlappingStrategy,
+  isPaused,
+} from 'components/strategies/common/utils';
 import { FC, forwardRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
@@ -67,14 +70,16 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
   const items: (itemsType | separatorCounterType)[] = [];
 
-  items.push({
-    id: 'duplicateStrategy',
-    name: 'Duplicate Strategy',
-    action: () => {
-      carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
-      openModal('duplicateStrategy', { strategy });
-    },
-  });
+  if (!isPaused(strategy)) {
+    items.push({
+      id: 'duplicateStrategy',
+      name: 'Duplicate Strategy',
+      action: () => {
+        carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
+        openModal('duplicateStrategy', { strategy });
+      },
+    });
+  }
 
   const isDisposable = isDisposableStrategy(strategy);
 
