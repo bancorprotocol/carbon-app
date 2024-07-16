@@ -19,17 +19,17 @@ export const TradePage = () => {
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
   const { isPending, isTradePairError } = useTradePairs();
-  const isValidPair = !(!baseToken || !quoteToken);
-  const noTokens = !baseToken && !quoteToken;
+  const isValidPair = baseToken && quoteToken;
+  const pairFound = !isTradePairError && isValidPair;
 
   useEffect(() => {
-    if (search.base && search.quote) return;
+    if (search.base && search.quote && pairFound) return;
     navigate({
       search: { ...search, ...getLastVisitedPair() },
       params: {},
       replace: true,
     });
-  }, [search, navigate]);
+  }, [search, navigate, pairFound]);
 
   useEffect(() => {
     if (baseToken && quoteToken) {
@@ -47,8 +47,8 @@ export const TradePage = () => {
             <CarbonLogoLoading />
           </div>
         </div>
-      ) : isTradePairError || !isValidPair ? (
-        <p>{!noTokens && <>Not found</>}</p>
+      ) : !pairFound ? (
+        <p>Pair not found</p>
       ) : (
         <div className="px-content mt-25 pb-30 xl:px-50 grid grid-cols-1 gap-20 md:grid-cols-12">
           <div className="order-3 md:order-1 md:col-span-4 md:row-span-2">
