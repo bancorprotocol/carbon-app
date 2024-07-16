@@ -1,6 +1,7 @@
 import type { FiatSymbol } from 'utils/carbonApi';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
+import { Order } from 'libs/queries';
 
 export type NumberLike = number | string | SafeDecimal;
 
@@ -107,19 +108,7 @@ interface PrettifyNumberOptions {
   noSubscript?: boolean;
 }
 
-export function prettifyNumber(num: NumberLike): string;
-
-export function prettifyNumber(
-  num: NumberLike,
-  options?: PrettifyNumberOptions
-): string;
-
-export function prettifyNumber(
-  value: NumberLike,
-  options: PrettifyNumberOptions = {}
-): string {
-  const num = new SafeDecimal(value);
-  const { locale = 'en-US' } = options;
+const getIntlOptions = (value: SafeDecimal, options: PrettifyNumberOptions) => {
   const intlOptions: Intl.NumberFormatOptions = {
     // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
     roundingMode: 'trunc',
@@ -139,9 +128,26 @@ export function prettifyNumber(
     intlOptions.useGrouping = true;
   }
 
-  if (options.abbreviate && num.gte(1_000_000)) {
+  if (options.abbreviate && value.gte(1_000_000)) {
     intlOptions.notation = 'compact';
   }
+  return intlOptions;
+};
+
+export function prettifyNumber(num: NumberLike): string;
+
+export function prettifyNumber(
+  num: NumberLike,
+  options?: PrettifyNumberOptions
+): string;
+
+export function prettifyNumber(
+  value: NumberLike,
+  options: PrettifyNumberOptions = {}
+): string {
+  const num = new SafeDecimal(value);
+  const { locale = 'en-US' } = options;
+  const intlOptions = getIntlOptions(num, options);
 
   // Force value to be positive
   if (num.lte(0)) {
@@ -161,7 +167,6 @@ export function prettifyNumber(
   } else {
     intlOptions.maximumSignificantDigits = 5;
   }
-
   const formatter = new Intl.NumberFormat(locale, intlOptions);
 
   if (options.highPrecision) {
@@ -245,4 +250,30 @@ export const tokenRange = (
   const from = tokenAmount(min, token, options);
   const to = tokenAmount(max, token, options);
   return `${from} - ${to}`;
+};
+
+/**
+ * Decide how to display ce price based on the distance between min & max
+ * if max - min < 1, use subscript
+ */
+export const orderPrices = (
+  order: Order,
+  options: PrettifyNumberOptions = {}
+) => {
+  const { startRate, endRate } = order;
+  const delta = new SafeDecimal(endRate).sub(startRate);
+  if (!delta.eq(0) && delta.lt(1)) {
+    const intlOptions = getIntlOptions(new SafeDecimal(startRate), options);
+    intlOptions.maximumFractionDigits = 20;
+    const formatter = new Intl.NumberFormat('en-US', intlOptions);
+    return {
+      startPrice: subscript(new SafeDecimal(startRate), formatter),
+      endPrice: subscript(new SafeDecimal(endRate), formatter),
+    };
+  } else {
+    return {
+      startPrice: prettifyNumber(new SafeDecimal(startRate), options),
+      endPrice: prettifyNumber(new SafeDecimal(endRate), options),
+    };
+  }
 };

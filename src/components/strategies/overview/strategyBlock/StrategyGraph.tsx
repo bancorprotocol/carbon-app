@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Strategy } from 'libs/queries';
-import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
+import { cn, orderPrices, prettifyNumber, sanitizeNumber } from 'utils/helpers';
 import {
   FloatTooltip,
   FloatTooltipContent,
@@ -557,10 +557,8 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const priceOption = {
     abbreviate: true,
     round: true,
-    useSubscript: false,
   };
-  const startPrice = prettifyNumber(order.startRate, priceOption);
-  const endPrice = prettifyNumber(order.endRate, priceOption);
+  const { startPrice, endPrice } = orderPrices(order, priceOption);
   const marginalPrice = prettifyNumber(order.marginalRate, priceOption);
   const { quote, base } = strategy;
   const color = buy ? 'text-buy' : 'text-sell';
