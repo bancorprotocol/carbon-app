@@ -144,7 +144,7 @@ export const EditBudgetOverlappingPage = () => {
 
   const hasChanged = (() => {
     if (search.marketPrice) return true;
-    if (search.budget) return true;
+    if (!isZero(search.budget)) return true;
     return false;
   })();
 

@@ -81,9 +81,8 @@ export const AnimatedActionIcon = (props: { action: ActivityAction }) => {
             y1="50"
             y2="50"
             stroke="currentColor"
-            stroke-width="8"
-            stroke-linecap="round"
-            transform-origin="75 50"
+            strokeWidth="8"
+            strokeLinecap="round"
           />
           <line
             x1="50"
@@ -91,9 +90,8 @@ export const AnimatedActionIcon = (props: { action: ActivityAction }) => {
             y1="25"
             y2="50"
             stroke="currentColor"
-            stroke-width="8"
-            stroke-linecap="round"
-            transform-origin="75 50"
+            strokeWidth="8"
+            strokeLinecap="round"
           />
           <line
             x1="50"
@@ -101,9 +99,8 @@ export const AnimatedActionIcon = (props: { action: ActivityAction }) => {
             y1="75"
             y2="50"
             stroke="currentColor"
-            stroke-width="8"
-            stroke-linecap="round"
-            transform-origin="75 50"
+            strokeWidth="8"
+            strokeLinecap="round"
           />
         </g>
       </svg>
