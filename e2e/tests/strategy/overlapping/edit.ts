@@ -55,14 +55,14 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
     const sellTooltip = await strategy.priceTooltip('sell', { isOverlapping });
     await expect(sellTooltip.minPrice()).toHaveText(output.sell.min);
     await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);
-    await expect(sellTooltip.spread()).toHaveText(output.sell.max);
+    await expect(sellTooltip.spread()).toHaveText(output.sell.spread);
     await expect(sellTooltip.marginalPrice()).toHaveText(output.sell.marginal);
     await sellTooltip.waitForDetached();
 
     const buyTooltip = await strategy.priceTooltip('buy', { isOverlapping });
     await expect(buyTooltip.minPrice()).toHaveText(output.buy.min);
     await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
-    await expect(buyTooltip.spread()).toHaveText(output.buy.max);
+    await expect(buyTooltip.spread()).toHaveText(output.buy.spread);
     await expect(buyTooltip.marginalPrice()).toHaveText(output.buy.marginal);
     await buyTooltip.waitForDetached();
   });
