@@ -1,4 +1,3 @@
-import carbonLogo from 'assets/logos/carbon.svg';
 import tailwindWalletLogo from 'assets/logos/tailwindWallet.svg';
 import compassWalletLogo from 'assets/logos/compassWallet.svg';
 import seifWalletLogo from 'assets/logos/seifWallet.svg';
@@ -88,13 +87,11 @@ const getDefaultConnector = (connectorType: SelectableConnectionName) => {
         dappMetadata: {
           name: config.appName,
           url: config.appUrl,
-          iconUrl: carbonLogo,
         },
       });
     case 'Coinbase Wallet':
       return coinbaseWallet({
         appName: config.appName,
-        appLogoUrl: carbonLogo,
       });
     case 'WalletConnect':
       return walletConnect({
