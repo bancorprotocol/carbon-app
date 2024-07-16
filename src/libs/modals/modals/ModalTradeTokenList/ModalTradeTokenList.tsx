@@ -43,7 +43,8 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         setValue={setSearch}
         className="rounded-8"
         onKeyDown={(e) => {
-          if (e.key === 'Enter') handleSelect(tradePairs[0]);
+          if (e.key === 'Enter' && !!tradePairs.length)
+            handleSelect(tradePairs[0]);
         }}
         aria-label="Search Token Pair"
         data-testid="search-token-pair"

@@ -1,10 +1,15 @@
 import * as Sentry from '@sentry/react';
 import config from 'config';
+import { router } from 'libs/routing';
 
 if (config.sentryDSN) {
   Sentry.init({
     dsn: config.sentryDSN,
-    integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+    integrations: [
+      Sentry.tanstackRouterBrowserTracingIntegration(router),
+      Sentry.replayIntegration(),
+      Sentry.captureConsoleIntegration(),
+    ],
     // Performance Monitoring
     tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
     // Session Replay
