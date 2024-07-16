@@ -70,11 +70,11 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
     to - (3 / 4) * (to - center),
     to - (1 / 4) * (to - center),
   ];
-  const smallDelta = max !== min && max - min < 1;
+  const smallRange = max !== min && max - min < 1;
   const priceIntlOption = {
     abbreviate: true,
-    round: !smallDelta,
-    decimals: smallDelta ? 6 : undefined,
+    round: !smallRange,
+    decimals: smallRange ? 6 : undefined,
   };
 
   // X position
