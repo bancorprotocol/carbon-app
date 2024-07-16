@@ -23,13 +23,13 @@ export const TradePage = () => {
   const pairFound = !isTradePairError && isValidPair;
 
   useEffect(() => {
-    if (search.base && search.quote && pairFound) return;
+    if (search.base && search.quote) return;
     navigate({
       search: { ...search, ...getLastVisitedPair() },
       params: {},
       replace: true,
     });
-  }, [search, navigate, pairFound]);
+  }, [search, navigate]);
 
   useEffect(() => {
     if (baseToken && quoteToken) {
