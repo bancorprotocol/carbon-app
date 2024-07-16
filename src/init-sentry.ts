@@ -8,7 +8,7 @@ if (config.sentryDSN) {
     integrations: [
       Sentry.tanstackRouterBrowserTracingIntegration(router),
       Sentry.replayIntegration(),
-      Sentry.captureConsoleIntegration(),
+      Sentry.captureConsoleIntegration({ levels: ['error'] }),
     ],
     // Performance Monitoring
     tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
