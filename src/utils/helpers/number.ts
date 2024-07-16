@@ -1,7 +1,6 @@
 import type { FiatSymbol } from 'utils/carbonApi';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
-import { Order } from 'libs/queries';
 
 export type NumberLike = number | string | SafeDecimal;
 
@@ -88,14 +87,14 @@ const subscriptCharacters = (amount: number | string) => {
     .join('');
 };
 
-const subscript = (num: SafeDecimal, formatter: Intl.NumberFormat) => {
+const subscript = (num: number, formatter: Intl.NumberFormat) => {
   const transform = (part: Intl.NumberFormatPart) => {
     if (part.type !== 'fraction') return part.value;
     return part.value.replace(/0+/, (match) => {
       return `0${subscriptCharacters(match.length)}`;
     });
   };
-  return formatter.formatToParts(num.toNumber()).map(transform).join('');
+  return formatter.formatToParts(num).map(transform).join('');
 };
 
 interface PrettifyNumberOptions {
@@ -134,13 +133,6 @@ const getIntlOptions = (value: SafeDecimal, options: PrettifyNumberOptions) => {
   return intlOptions;
 };
 
-export function prettifyNumber(num: NumberLike): string;
-
-export function prettifyNumber(
-  num: NumberLike,
-  options?: PrettifyNumberOptions
-): string;
-
 export function prettifyNumber(
   value: NumberLike,
   options: PrettifyNumberOptions = {}
@@ -174,7 +166,7 @@ export function prettifyNumber(
   }
 
   if (!options.noSubscript && num.lt(0.001)) {
-    return subscript(num, formatter);
+    return subscript(num.toNumber(), formatter);
   }
 
   return formatter.format(num.toNumber());
@@ -250,30 +242,4 @@ export const tokenRange = (
   const from = tokenAmount(min, token, options);
   const to = tokenAmount(max, token, options);
   return `${from} - ${to}`;
-};
-
-/**
- * Decide how to display ce price based on the distance between min & max
- * if max - min < 1, use subscript
- */
-export const orderPrices = (
-  order: Order,
-  options: PrettifyNumberOptions = {}
-) => {
-  const { startRate, endRate } = order;
-  const delta = new SafeDecimal(endRate).sub(startRate);
-  if (!delta.eq(0) && delta.lt(1)) {
-    const intlOptions = getIntlOptions(new SafeDecimal(startRate), options);
-    intlOptions.maximumFractionDigits = 20;
-    const formatter = new Intl.NumberFormat('en-US', intlOptions);
-    return {
-      startPrice: subscript(new SafeDecimal(startRate), formatter),
-      endPrice: subscript(new SafeDecimal(endRate), formatter),
-    };
-  } else {
-    return {
-      startPrice: prettifyNumber(new SafeDecimal(startRate), options),
-      endPrice: prettifyNumber(new SafeDecimal(endRate), options),
-    };
-  }
 };

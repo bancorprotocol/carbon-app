@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Strategy } from 'libs/queries';
-import { cn, orderPrices, prettifyNumber, sanitizeNumber } from 'utils/helpers';
+import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
 import {
   FloatTooltip,
   FloatTooltipContent,
@@ -10,6 +10,7 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import style from './StrategyGraph.module.css';
 import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   strategy: Strategy;
@@ -69,6 +70,12 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
     to - (3 / 4) * (to - center),
     to - (1 / 4) * (to - center),
   ];
+  const smallDelta = max !== min && max - min < 1;
+  const priceIntlOption = {
+    abbreviate: true,
+    round: !smallDelta,
+    decimals: smallDelta ? 6 : undefined,
+  };
 
   // X position
   const ratio = width / (to - from);
@@ -383,7 +390,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
               fontSize={fontSize}
               opacity="60%"
             >
-              {prettifyNumber(point, { abbreviate: true, round: true })}
+              {prettifyNumber(point, priceIntlOption)}
             </text>
           </g>
         ))}
@@ -553,13 +560,17 @@ interface OrderTooltipProps {
 
 const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const order = buy ? strategy.order0 : strategy.order1;
-  const limit = order.startRate === order.endRate;
+  const { startRate, endRate, marginalRate } = order;
+  const limit = startRate === endRate;
+  const smallRange = !limit && new SafeDecimal(endRate).sub(startRate).lt(1);
   const priceOption = {
     abbreviate: true,
-    round: true,
+    round: !smallRange,
+    decimals: smallRange ? 6 : undefined,
   };
-  const { startPrice, endPrice } = orderPrices(order, priceOption);
-  const marginalPrice = prettifyNumber(order.marginalRate, priceOption);
+  const startPrice = prettifyNumber(startRate, priceOption);
+  const endPrice = prettifyNumber(endRate, priceOption);
+  const marginalPrice = prettifyNumber(marginalRate, priceOption);
   const { quote, base } = strategy;
   const color = buy ? 'text-buy' : 'text-sell';
   return (
