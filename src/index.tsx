@@ -1,5 +1,4 @@
 import 'global-shim';
-import 'init-sentry';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
@@ -8,6 +7,7 @@ import { WagmiReactWrapper } from 'libs/wagmi';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
+import 'init-sentry';
 import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';
