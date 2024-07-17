@@ -44,10 +44,16 @@ yarn start
 
 You can choose the network to run the app by setting the `VITE_NETWORK` variable in the `.env` file. The default network is `ethereum`.
 
-Alternatively, if defined in the in the [package.json](package.json) file, you can select the network to use by running `yarn:network` where `network` is one of the networks defined in the [config](src/config/index.ts) and the `yarn:network` command is defined in [package.json](package.json) file as follows:
+Alternatively, if defined in the in the [package.json](package.json) file, you can select the network to use by running `yarn:network` where `network` at the end of the command is one of the networks defined in the [config](src/config/index.ts) and the `yarn:network` command is defined in [package.json](package.json) file as follows:
 
 ```bash
-"start:network": "export VITE_NETWORK=network && vite",
+"start:network": "node scripts/start-network.mjs network",
+```
+
+Example:
+
+```bash
+"start:ethereum": "node scripts/start-network.mjs ethereum",
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the development mode app in the browser.
