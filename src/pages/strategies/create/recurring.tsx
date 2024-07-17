@@ -1,5 +1,4 @@
 import { useSearch } from '@tanstack/react-router';
-import { useTokens } from 'hooks/useTokens';
 import { StrategySettings } from 'libs/routing';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { OrderBlock } from 'components/strategies/common/types';
@@ -15,6 +14,7 @@ import {
   checkIfOrdersOverlap,
   checkIfOrdersReversed,
 } from 'components/strategies/utils';
+import { usePersistLastPair } from './usePersistLastPair';
 
 export interface CreateRecurringStrategySearch {
   base: string;
@@ -52,10 +52,8 @@ const getError = (search: CreateRecurringStrategySearch) => {
 const url = '/strategies/create/recurring';
 
 export const CreateRecurringStrategyPage = () => {
-  const { getTokenById } = useTokens();
   const search = useSearch({ from: url });
-  const base = getTokenById(search.base);
-  const quote = getTokenById(search.quote);
+  const { base, quote } = usePersistLastPair(url);
   const { marketPrice } = useMarketPrice({ base, quote });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
