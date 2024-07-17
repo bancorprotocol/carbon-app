@@ -38,10 +38,7 @@ const getTokenDecimalMap = () => {
 
 const removeOldV1Keys = () => {
   Object.keys(localStorage).forEach((key) => {
-    if (
-      key.match(/carbon-v1(\.1)?-([a-zA-Z0-9]+-?)+/) &&
-      !['carbon-ethereum', 'carbon-sei'].includes(key)
-    ) {
+    if (key.startsWith('carbon-v1')) {
       localStorage.removeItem(key);
     }
   });
