@@ -17,7 +17,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
   const { buy, sell, spread } = testCase.input.create;
   const output = testCase.output.create;
 
-  return test(`Create ${base}->${quote}`, async ({ page }) => {
+  return test('Create', async ({ page }) => {
     await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');
