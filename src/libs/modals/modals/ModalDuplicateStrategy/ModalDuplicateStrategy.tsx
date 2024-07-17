@@ -7,21 +7,12 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { Strategy } from 'libs/queries';
 import { getUndercutStrategy } from './utils';
-import { isOverlappingStrategy } from 'components/strategies/common/utils';
+import { getStrategyType } from 'components/strategies/common/utils';
 import { useNavigate } from '@tanstack/react-router';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
-import { StrategyType } from 'libs/routing';
 
 export type ModalDuplicateStrategyData = {
   strategy: Strategy;
-};
-
-const getStrategyType = (strategy: Strategy): StrategyType => {
-  const isBuyEmpty = !+strategy.order0.endRate;
-  const isSellEmpty = !+strategy.order1.endRate;
-  if (isBuyEmpty || isSellEmpty) return 'disposable';
-  if (isOverlappingStrategy(strategy)) return 'overlapping';
-  return 'recurring';
 };
 
 export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
@@ -29,12 +20,13 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
   data: { strategy },
 }) => {
   const navigate = useNavigate();
-  const duplicate = useDuplicate(getStrategyType(strategy));
+  const strategyType = getStrategyType(strategy);
+  const duplicate = useDuplicate(strategyType);
   const { closeModal } = useModal();
   const undercutDifference = 0.001;
 
   const undercutStrategy = () => {
-    if (isOverlappingStrategy(strategy)) {
+    if (strategyType === 'overlapping') {
       // Reduce spread by 0.1% for overlapping strategies
       const spread = getRoundedSpread(strategy) * 0.99;
       navigate({
