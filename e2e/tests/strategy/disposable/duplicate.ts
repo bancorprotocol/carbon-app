@@ -30,7 +30,7 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     });
 
     const createForm = new CreateStrategyDriver(page, testCase);
-    await createForm.submit();
+    await createForm.submit('duplicate');
 
     await page.waitForURL('/', { timeout: 10_000 });
     const myStrategies = new MyStrategyDriver(page);

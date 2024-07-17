@@ -38,7 +38,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await form.budget().fill(sell.budget.toString());
 
     const tokenApproval = new TokenApprovalDriver(page);
-    await createForm.submit();
+    await createForm.submit('create');
     await tokenApproval.checkApproval([base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
     await myStrategies.waitForUpdates();
