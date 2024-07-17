@@ -27,6 +27,7 @@ import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlap
 import { InputRange } from '../common/InputRange';
 import { OverlappingOrder } from 'components/strategies/common/types';
 import { isZero } from '../common/utils';
+import { isValidRange } from '../utils';
 
 interface Props {
   base: Token;
@@ -87,6 +88,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
   })();
 
   useEffect(() => {
+    if (!isValidRange(order0.min, order1.max)) return;
     if (anchor === 'buy' && aboveMarket) {
       set('anchor', 'sell');
       set('budget', undefined);
@@ -95,7 +97,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
       set('anchor', 'buy');
       set('budget', undefined);
     }
-  }, [anchor, aboveMarket, belowMarket, set]);
+  }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
 
   const setMarketPrice = (price: string) => {
     setTouched(true);
@@ -128,14 +130,10 @@ export const CreateOverlapping: FC<Props> = (props) => {
 
   // Update on buyMin changes
   useEffect(() => {
+    if (isZero(order0.min)) return;
     const timeout = setTimeout(async () => {
-      if (isZero(order0.min)) {
-        const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
-        set('min', maxBuyMin.toString());
-      } else {
-        const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
-        if (Number(order1.max) < minSellMax) set('max', minSellMax.toString());
-      }
+      const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
+      if (Number(order1.max) < minSellMax) set('max', minSellMax.toString());
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,14 +141,10 @@ export const CreateOverlapping: FC<Props> = (props) => {
 
   // Update on sellMax changes
   useEffect(() => {
+    if (isZero(order1.max)) return;
     const timeout = setTimeout(async () => {
-      if (isZero(order1.max)) {
-        const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
-        set('max', minSellMax.toString());
-      } else {
-        const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
-        if (Number(order0.min) > maxBuyMin) set('min', maxBuyMin.toString());
-      }
+      const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
+      if (Number(order0.min) > maxBuyMin) set('min', maxBuyMin.toString());
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
