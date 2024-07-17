@@ -3,16 +3,15 @@ import { m } from 'libs/motion';
 import { items, list } from 'components/strategies/common/variants';
 import { CreateStrategyTokenSelection } from 'components/strategies/create/CreateStrategyTokenSelection';
 import { CreateStrategyOption } from 'components/strategies/create/CreateStrategyOption';
-import { useRouter, useSearch } from '@tanstack/react-router';
+import { useRouter } from '@tanstack/react-router';
 import { ForwardArrow } from 'components/common/forwardArrow';
-import { useTokens } from 'hooks/useTokens';
+import { usePersistLastPair } from './usePersistLastPair';
 
+const url = '/strategies/create';
 export const CreateStrategyTokenPage = () => {
   const { history } = useRouter();
-  const { getTokenById } = useTokens();
-  const search = useSearch({ from: '/strategies/create' });
-  const base = getTokenById(search.base);
-  const quote = getTokenById(search.quote);
+  const { base, quote } = usePersistLastPair(url);
+
   return (
     <AnimatePresence mode="sync">
       <m.div

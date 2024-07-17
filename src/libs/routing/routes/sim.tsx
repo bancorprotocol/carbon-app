@@ -2,7 +2,12 @@ import { redirect, Route } from '@tanstack/react-router';
 import { SimulatorProvider } from 'components/simulator/result/SimulatorProvider';
 import { endOfDay, getUnixTime, startOfDay, sub } from 'date-fns';
 import { rootRoute } from 'libs/routing/routes/root';
-import { validAddress, validBoolean, validNumber } from 'libs/routing/utils';
+import {
+  getLastVisitedPair,
+  validAddress,
+  validBoolean,
+  validNumber,
+} from 'libs/routing/utils';
 import { SimulatorPage } from 'pages/simulator';
 import { SimulatorInputOverlappingPage } from 'pages/simulator/overlapping';
 import { SimulatorInputRecurringPage } from 'pages/simulator/recurring';
@@ -56,12 +61,13 @@ export const simulatorInputRootRoute = new Route({
       throw new Error('Invalid date range');
     }
 
+    const defaultPair = getLastVisitedPair();
     const baseToken = v.is(validAddress, search.baseToken)
       ? search.baseToken
-      : config.defaultTokenPair[0];
+      : defaultPair.base;
     const quoteToken = v.is(validAddress, search.quoteToken)
       ? search.quoteToken
-      : config.defaultTokenPair[1];
+      : defaultPair.quote;
 
     return {
       baseToken,
