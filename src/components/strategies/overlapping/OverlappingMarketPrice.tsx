@@ -29,6 +29,7 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
         'text-12 font-weight-500 bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8',
         props.className
       )}
+      data-testid="edit-market-price"
       type="button"
     >
       <IconEdit className="size-16" />
@@ -135,7 +136,7 @@ export const OverlappingInitMarketPrice = (props: FieldProps) => {
           id={checkboxId}
           type="checkbox"
           className="size-18"
-          data-testid="approve-warnings"
+          data-testid="approve-price-warnings"
           checked={approved}
           onChange={(e) => setApproved(e.target.checked)}
         />

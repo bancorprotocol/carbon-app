@@ -17,9 +17,8 @@ const mockServer = new MockServer([marketRateHandler(marketRates)]);
 beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());
 
-describe('overlapping page', () => {
-  test('check search params with deeplink and user market price defined', async () => {
-    // Initialize user and set search params
+describe('Create overlapping page', () => {
+  test('should open and close chart', async () => {
     const user = userEvent.setup();
     const search = {
       base: debugTokens.ETH,
@@ -32,7 +31,33 @@ describe('overlapping page', () => {
       budget: '100',
     };
 
-    // Render page
+    await renderWithRouter({
+      component: () => <CreateOverlappingStrategyPage />,
+      basePath,
+      search,
+    });
+
+    // Check close chart
+    await user.click(screen.getByTestId('close-chart'));
+    expect(screen.queryByTestId('strategy-graph')).not.toBeInTheDocument();
+
+    // Check open chart
+    await user.click(screen.getByTestId('open-chart'));
+    expect(screen.queryByTestId('strategy-graph')).toBeInTheDocument();
+  });
+
+  test('should populate form with search params and user market price defined in url', async () => {
+    const search = {
+      base: debugTokens.ETH,
+      quote: debugTokens.USDC,
+      marketPrice: '2500',
+      min: '2000',
+      max: '3000',
+      spread: '0.01',
+      anchor: 'buy',
+      budget: '100',
+    };
+
     const { router } = await renderWithRouter({
       component: () => <CreateOverlappingStrategyPage />,
       basePath,
@@ -42,13 +67,6 @@ describe('overlapping page', () => {
     // Check search params
     expect(router.state.location.pathname).toBe(basePath);
     expect(router.state.location.search).toStrictEqual(search);
-
-    // Close price chart
-    await user.click(screen.getByTestId('close-chart'));
-    const priceChart = screen.queryByRole('heading', {
-      name: 'Price Chart',
-    });
-    expect(priceChart).not.toBeInTheDocument();
 
     // Check price range input and market price indication
     const priceRangeMin = await screen.findByTestId('input-min');
@@ -70,7 +88,7 @@ describe('overlapping page', () => {
     expect(depositWarning).toBeInTheDocument();
   });
 
-  test('check search params with no external price after setting user market price', async () => {
+  test('should populate form and search params with unavailable external price after setting user market price', async () => {
     const user = userEvent.setup();
     const search = {
       base: debugTokens.USDT,
@@ -83,7 +101,6 @@ describe('overlapping page', () => {
     };
     const marketPrice = '50000';
 
-    // Render page
     const { router } = await renderWithRouter({
       component: () => <CreateOverlappingStrategyPage />,
       basePath,
@@ -91,7 +108,7 @@ describe('overlapping page', () => {
     });
 
     const userPriceInput = await screen.findByTestId('input-price');
-    const userWarning = await screen.findByTestId('approve-warnings');
+    const userWarning = await screen.findByTestId('approve-price-warnings');
     const setMarketPriceButton = await screen.findByTestId(
       'set-overlapping-price'
     );
@@ -106,8 +123,7 @@ describe('overlapping page', () => {
     });
   });
 
-  test('check form prices with external market price', async () => {
-    // Set search params
+  test('should populate form and search params with available external market price', async () => {
     const search = {
       base: debugTokens.ETH,
       quote: debugTokens.USDC,
@@ -118,7 +134,6 @@ describe('overlapping page', () => {
       budget: '10',
     };
 
-    // Render page
     const { router } = await renderWithRouter({
       component: () => <CreateOverlappingStrategyPage />,
       basePath,
@@ -141,8 +156,7 @@ describe('overlapping page', () => {
     expect(marketPriceIndications[1]).toHaveTextContent('7.14% above');
   });
 
-  test('check form spread with spread unset', async () => {
-    // Set search params
+  test('should set default spread with spread unset in the search params', async () => {
     const search = {
       base: debugTokens.ETH,
       quote: debugTokens.USDC,
@@ -150,7 +164,6 @@ describe('overlapping page', () => {
       max: '3000',
     };
 
-    // Render page
     await renderWithRouter({
       component: () => <CreateOverlappingStrategyPage />,
       basePath,
@@ -161,8 +174,7 @@ describe('overlapping page', () => {
     expect(defaultSpreadOption).toBeChecked();
   });
 
-  test('create with user market price below min price', async () => {
-    // Set search params
+  test('should populate form with user market price below min price', async () => {
     const search = {
       base: debugTokens.ETH,
       quote: debugTokens.USDC,
@@ -174,7 +186,6 @@ describe('overlapping page', () => {
       budget: '100',
     };
 
-    // Render page
     const { router } = await renderWithRouter({
       component: () => <CreateOverlappingStrategyPage />,
       basePath,
@@ -182,6 +193,7 @@ describe('overlapping page', () => {
     });
 
     // Check search params
+    // eslint-disable-next-line unused-imports/no-unused-vars
     const { budget, ...rest } = search;
     expect(router.state.location.pathname).toBe(basePath);
     expect(router.state.location.search).toStrictEqual({
@@ -201,8 +213,7 @@ describe('overlapping page', () => {
     expect(marketPriceIndications[1]).toHaveTextContent('>99.99% above');
   });
 
-  test('create with user market price above max price', async () => {
-    // Set search params
+  test('should populate form with user market price above max price', async () => {
     const search = {
       base: debugTokens.ETH,
       quote: debugTokens.USDC,
@@ -214,7 +225,6 @@ describe('overlapping page', () => {
       budget: '100',
     };
 
-    // Render page
     const { router } = await renderWithRouter({
       component: () => <CreateOverlappingStrategyPage />,
       basePath,
@@ -222,6 +232,7 @@ describe('overlapping page', () => {
     });
 
     // Check search params
+    // eslint-disable-next-line unused-imports/no-unused-vars
     const { budget, ...rest } = search;
     expect(router.state.location.pathname).toBe(basePath);
     expect(router.state.location.search).toStrictEqual({
@@ -241,8 +252,7 @@ describe('overlapping page', () => {
     expect(marketPriceIndications[1]).toHaveTextContent('6.25% below');
   });
 
-  test('check form without min and max defined and with user market price', async () => {
-    // Set search params
+  test('should populate form without min and max defined and with user market price', async () => {
     const search = {
       base: debugTokens.ETH,
       quote: debugTokens.USDC,
@@ -252,7 +262,6 @@ describe('overlapping page', () => {
       budget: '100',
     };
 
-    // Render page
     await renderWithRouter({
       component: () => <CreateOverlappingStrategyPage />,
       basePath,
@@ -271,8 +280,7 @@ describe('overlapping page', () => {
     expect(marketPriceIndications[1]).toHaveTextContent('1.00% above');
   });
 
-  test('check form with invalid range', async () => {
-    // Set search params
+  test('should populate form with invalid range in search (min>max)', async () => {
     const search = {
       base: debugTokens.ETH,
       quote: debugTokens.USDC,
@@ -284,7 +292,6 @@ describe('overlapping page', () => {
       budget: '100',
     };
 
-    // Render page
     await renderWithRouter({
       component: () => <CreateOverlappingStrategyPage />,
       basePath,
@@ -302,31 +309,126 @@ describe('overlapping page', () => {
       {
         timeout: 2000,
       }
-    ); // check value in CreateOverlapping.tsx
+    );
   });
 
-  test('check form after touching', async () => {
+  test('should check form touched: after changing min range', async () => {
     const user = userEvent.setup();
-    // Set search params
     const search = {
       base: debugTokens.ETH,
       quote: debugTokens.USDC,
-      marketPrice: '3000',
-      spread: '0.05',
-      min: '3000',
-      max: '2000',
     };
 
-    // Render page
     await renderWithRouter({
       component: () => <CreateOverlappingStrategyPage />,
       basePath,
       search,
     });
 
+    const anchorWarningHidden = screen.queryByText(
+      'Please select a token to proceed'
+    );
+    expect(anchorWarningHidden).not.toBeInTheDocument();
+
     const priceMin = await screen.findByTestId('input-min');
     await user.click(priceMin);
     await user.keyboard('3005');
-    await screen.findByText('Please select a token to proceed');
+
+    // Text only shows up if form state touched is true
+    const anchorWarningShown = screen.queryByText(
+      'Please select a token to proceed'
+    );
+    expect(anchorWarningShown).toBeInTheDocument();
+  });
+
+  test('should check form touched: after changing max range', async () => {
+    const user = userEvent.setup();
+    const search = {
+      base: debugTokens.ETH,
+      quote: debugTokens.USDC,
+    };
+
+    await renderWithRouter({
+      component: () => <CreateOverlappingStrategyPage />,
+      basePath,
+      search,
+    });
+
+    const anchorWarningHidden = screen.queryByText(
+      'Please select a token to proceed'
+    );
+    expect(anchorWarningHidden).not.toBeInTheDocument();
+
+    const priceMin = await screen.findByTestId('input-max');
+    await user.click(priceMin);
+    await user.keyboard('3005');
+
+    // Text only shows up if form state touched is true
+    const anchorWarningShown = screen.queryByText(
+      'Please select a token to proceed'
+    );
+    expect(anchorWarningShown).toBeInTheDocument();
+  });
+
+  test('should check form touched: after changing spread', async () => {
+    const user = userEvent.setup();
+    const search = {
+      base: debugTokens.ETH,
+      quote: debugTokens.USDC,
+    };
+
+    await renderWithRouter({
+      component: () => <CreateOverlappingStrategyPage />,
+      basePath,
+      search,
+    });
+
+    const anchorWarningHidden = screen.queryByText(
+      'Please select a token to proceed'
+    );
+    expect(anchorWarningHidden).not.toBeInTheDocument();
+
+    const customSpread = await screen.findByTestId('spread-input');
+    await user.click(customSpread);
+    await user.keyboard('0.1');
+
+    // Text only shows up if form state touched is true
+    const anchorWarningShown = screen.queryByText(
+      'Please select a token to proceed'
+    );
+    expect(anchorWarningShown).toBeInTheDocument();
+  });
+
+  test('should check form touched: after setting user price', async () => {
+    const user = userEvent.setup();
+    const search = {
+      base: debugTokens.ETH,
+      quote: debugTokens.USDC,
+    };
+
+    await renderWithRouter({
+      component: () => <CreateOverlappingStrategyPage />,
+      basePath,
+      search,
+    });
+
+    const anchorWarningHidden = screen.queryByText(
+      'Please select a token to proceed'
+    );
+    expect(anchorWarningHidden).not.toBeInTheDocument();
+
+    const editPriceButton = await screen.findByTestId('edit-market-price');
+    await user.click(editPriceButton);
+    await user.keyboard('1');
+    const approveWarning = await screen.findByTestId('approve-price-warnings');
+    await user.click(approveWarning);
+    const confirmPrice = await screen.findByTestId('set-overlapping-price');
+    await user.click(confirmPrice);
+
+    // Text only shows up if form state touched is true
+    const anchorWarningShown = screen.queryByText(
+      'Please select a token to proceed'
+    );
+    expect(anchorWarningShown).toBeInTheDocument();
   });
 });
