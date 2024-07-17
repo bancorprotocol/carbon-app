@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { debugTokens } from '../../../../e2e/utils/types';
 import { CreateOverlappingStrategyPage } from './overlapping';
 import { MockServer, marketRateHandler } from 'libs/testing-library/utils';
+import { CreateOverlappingDriver } from 'libs/testing-library/utils/CreateOverlappingDriver';
 
 const basePath = '/strategies/create/overlapping';
 
@@ -37,13 +38,16 @@ describe('Create overlapping page', () => {
       search,
     });
 
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const strategyChart = overlappingDriver.getStrategyChart();
+
     // Check close chart
-    await user.click(screen.getByTestId('close-chart'));
-    expect(screen.queryByTestId('strategy-graph')).not.toBeInTheDocument();
+    await user.click(strategyChart.closeChart());
+    expect(strategyChart.chart()).not.toBeInTheDocument();
 
     // Check open chart
-    await user.click(screen.getByTestId('open-chart'));
-    expect(screen.queryByTestId('strategy-graph')).toBeInTheDocument();
+    await user.click(strategyChart.openChart());
+    expect(strategyChart.chart()).toBeInTheDocument();
   });
 
   test('should populate form with search params and user market price defined in url', async () => {
@@ -68,24 +72,21 @@ describe('Create overlapping page', () => {
     expect(router.state.location.pathname).toBe(basePath);
     expect(router.state.location.search).toStrictEqual(search);
 
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
+
     // Check price range input and market price indication
-    const priceRangeMin = screen.getByTestId('input-min');
-    const priceRangeMax = screen.getByTestId('input-max');
-    const marketPriceIndications = await screen.findAllByTestId(
-      'market-price-indication'
-    );
-    expect(priceRangeMin).toHaveValue(search.min);
-    expect(priceRangeMax).toHaveValue(search.max);
+    const marketPriceIndications = form.marketPriceIndicators();
+    expect(form.min()).toHaveValue(search.min);
+    expect(form.max()).toHaveValue(search.max);
     expect(marketPriceIndications[0]).toHaveTextContent('20.00% below');
     expect(marketPriceIndications[1]).toHaveTextContent('20.00% above');
 
     // Check budget
-    const inputBudget = screen.getByTestId('input-budget');
-    expect(inputBudget).toHaveValue(search.budget);
+    expect(form.budget()).toHaveValue(search.budget);
 
     // Check warning to approve deposit exists
-    const depositWarning = screen.queryByTestId('approve-warnings');
-    expect(depositWarning).toBeInTheDocument();
+    expect(form.approveWarnings()).toBeInTheDocument();
   });
 
   test('should populate form and search params with unavailable external price after setting user market price', async () => {
@@ -107,13 +108,13 @@ describe('Create overlapping page', () => {
       search,
     });
 
-    const userPriceInput = screen.getByTestId('input-price');
-    const userWarning = await screen.findByTestId('approve-price-warnings');
-    const setMarketPriceButton = screen.getByTestId('set-overlapping-price');
-    await user.click(userPriceInput);
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const priceInput = overlappingDriver.getUserPriceInput();
+
+    await user.click(priceInput.editPrice());
     await user.keyboard(marketPrice);
-    await user.click(userWarning);
-    await user.click(setMarketPriceButton);
+    await user.click(priceInput.approveWarning());
+    await user.click(priceInput.confirm());
 
     expect(router.state.location.search).toStrictEqual({
       ...search,
@@ -142,14 +143,13 @@ describe('Create overlapping page', () => {
     expect(router.state.location.pathname).toBe(basePath);
     expect(router.state.location.search).toStrictEqual(search);
 
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
+
     // Check price range input and market price indication
-    const priceRangeMin = screen.getByTestId('input-min');
-    const priceRangeMax = screen.getByTestId('input-max');
-    const marketPriceIndications = await screen.findAllByTestId(
-      'market-price-indication'
-    );
-    expect(priceRangeMin).toHaveValue(search.min);
-    expect(priceRangeMax).toHaveValue(search.max);
+    const marketPriceIndications = form.marketPriceIndicators();
+    expect(form.min()).toHaveValue(search.min);
+    expect(form.max()).toHaveValue(search.max);
     expect(marketPriceIndications[0]).toHaveTextContent('28.57% below');
     expect(marketPriceIndications[1]).toHaveTextContent('7.14% above');
   });
@@ -168,8 +168,10 @@ describe('Create overlapping page', () => {
       search,
     });
 
-    const defaultSpreadOption = screen.getByTestId('spread-0.05');
-    expect(defaultSpreadOption).toBeChecked();
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
+
+    expect(form.spread.default()).toBeChecked();
   });
 
   test('should populate form with user market price below min price', async () => {
@@ -199,14 +201,13 @@ describe('Create overlapping page', () => {
       anchor: 'sell',
     });
 
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
+
     // Check price range input and market price indication
-    const priceRangeMin = screen.getByTestId('input-min');
-    const priceRangeMax = screen.getByTestId('input-max');
-    const marketPriceIndications = await screen.findAllByTestId(
-      'market-price-indication'
-    );
-    expect(priceRangeMin).toHaveValue(search.min);
-    expect(priceRangeMax).toHaveValue(search.max);
+    const marketPriceIndications = form.marketPriceIndicators();
+    expect(form.min()).toHaveValue(search.min);
+    expect(form.max()).toHaveValue(search.max);
     expect(marketPriceIndications[0]).toHaveTextContent('33.33% above');
     expect(marketPriceIndications[1]).toHaveTextContent('>99.99% above');
   });
@@ -238,14 +239,13 @@ describe('Create overlapping page', () => {
       anchor: 'buy',
     });
 
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
+
     // Check price range input and market price indication
-    const priceRangeMin = screen.getByTestId('input-min');
-    const priceRangeMax = screen.getByTestId('input-max');
-    const marketPriceIndications = await screen.findAllByTestId(
-      'market-price-indication'
-    );
-    expect(priceRangeMin).toHaveValue(search.min);
-    expect(priceRangeMax).toHaveValue(search.max);
+    const marketPriceIndications = form.marketPriceIndicators();
+    expect(form.min()).toHaveValue(search.min);
+    expect(form.max()).toHaveValue(search.max);
     expect(marketPriceIndications[0]).toHaveTextContent('37.50% below');
     expect(marketPriceIndications[1]).toHaveTextContent('6.25% below');
   });
@@ -266,14 +266,13 @@ describe('Create overlapping page', () => {
       search,
     });
 
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
+
     // Check price range input and market price indication
-    const priceRangeMin = screen.getByTestId('input-min');
-    const priceRangeMax = screen.getByTestId('input-max');
-    const marketPriceIndications = await screen.findAllByTestId(
-      'market-price-indication'
-    );
-    expect(priceRangeMin).toHaveValue('2970');
-    expect(priceRangeMax).toHaveValue('3030');
+    const marketPriceIndications = form.marketPriceIndicators();
+    expect(form.min()).toHaveValue('2970');
+    expect(form.max()).toHaveValue('3030');
     expect(marketPriceIndications[0]).toHaveTextContent('1.00% below');
     expect(marketPriceIndications[1]).toHaveTextContent('1.00% above');
   });
@@ -296,18 +295,16 @@ describe('Create overlapping page', () => {
       search,
     });
 
-    // Check price range input and market price indication
-    const priceRangeMin = screen.getByTestId('input-min');
-    const priceRangeMax = screen.getByTestId('input-max');
-    expect(priceRangeMin).toHaveValue('3000');
-    expect(priceRangeMax).toHaveValue('2000');
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
 
-    await waitFor(
-      () => expect(priceRangeMax).toHaveValue('3003.0022515009377'),
-      {
-        timeout: 2000,
-      }
-    );
+    // Check price range input and market price indication
+    expect(form.min()).toHaveValue('3000');
+    expect(form.max()).toHaveValue('2000');
+
+    await waitFor(() => expect(form.max()).toHaveValue('3003.0022515009377'), {
+      timeout: 2000,
+    });
   });
 
   test('should check form touched: after changing min range', async () => {
@@ -323,20 +320,14 @@ describe('Create overlapping page', () => {
       search,
     });
 
-    const anchorWarningHidden = screen.queryByText(
-      'Please select a token to proceed'
-    );
-    expect(anchorWarningHidden).not.toBeInTheDocument();
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
 
-    const priceMin = screen.getByTestId('input-min');
-    await user.click(priceMin);
-    await user.keyboard('3005');
-
-    // Text only shows up if form state touched is true
-    const anchorWarningShown = screen.queryByText(
-      'Please select a token to proceed'
-    );
-    expect(anchorWarningShown).toBeInTheDocument();
+    // Anchor required warning only shows up if form state touched is true
+    expect(form.anchorRequired()).not.toBeInTheDocument();
+    await user.click(form.min());
+    await user.keyboard('1');
+    expect(form.anchorRequired()).toBeInTheDocument();
   });
 
   test('should check form touched: after changing max range', async () => {
@@ -352,20 +343,14 @@ describe('Create overlapping page', () => {
       search,
     });
 
-    const anchorWarningHidden = screen.queryByText(
-      'Please select a token to proceed'
-    );
-    expect(anchorWarningHidden).not.toBeInTheDocument();
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
 
-    const priceMin = screen.getByTestId('input-max');
-    await user.click(priceMin);
-    await user.keyboard('3005');
-
-    // Text only shows up if form state touched is true
-    const anchorWarningShown = screen.queryByText(
-      'Please select a token to proceed'
-    );
-    expect(anchorWarningShown).toBeInTheDocument();
+    // Anchor required warning only shows up if form state touched is true
+    expect(form.anchorRequired()).not.toBeInTheDocument();
+    await user.click(form.max());
+    await user.keyboard('1');
+    expect(form.anchorRequired()).toBeInTheDocument();
   });
 
   test('should check form touched: after changing spread', async () => {
@@ -381,20 +366,14 @@ describe('Create overlapping page', () => {
       search,
     });
 
-    const anchorWarningHidden = screen.queryByText(
-      'Please select a token to proceed'
-    );
-    expect(anchorWarningHidden).not.toBeInTheDocument();
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
 
-    const customSpread = screen.getByTestId('spread-input');
-    await user.click(customSpread);
+    // Anchor required warning only shows up if form state touched is true
+    expect(form.anchorRequired()).not.toBeInTheDocument();
+    await user.click(form.spread.input());
     await user.keyboard('0.1');
-
-    // Text only shows up if form state touched is true
-    const anchorWarningShown = screen.queryByText(
-      'Please select a token to proceed'
-    );
-    expect(anchorWarningShown).toBeInTheDocument();
+    expect(form.anchorRequired()).toBeInTheDocument();
   });
 
   test('should check form touched: after setting user price', async () => {
@@ -410,23 +389,16 @@ describe('Create overlapping page', () => {
       search,
     });
 
-    const anchorWarningHidden = screen.queryByText(
-      'Please select a token to proceed'
-    );
-    expect(anchorWarningHidden).not.toBeInTheDocument();
+    const overlappingDriver = new CreateOverlappingDriver(screen);
+    const form = overlappingDriver.getOverlappingInput();
+    const priceInput = overlappingDriver.getUserPriceInput();
 
-    const editPriceButton = screen.getByTestId('edit-market-price');
-    await user.click(editPriceButton);
+    // Anchor required warning only shows up if form state touched is true
+    expect(form.anchorRequired()).not.toBeInTheDocument();
+    await user.click(priceInput.open());
     await user.keyboard('1');
-    const approveWarning = await screen.findByTestId('approve-price-warnings');
-    await user.click(approveWarning);
-    const confirmPrice = screen.getByTestId('set-overlapping-price');
-    await user.click(confirmPrice);
-
-    // Text only shows up if form state touched is true
-    const anchorWarningShown = screen.queryByText(
-      'Please select a token to proceed'
-    );
-    expect(anchorWarningShown).toBeInTheDocument();
+    await user.click(priceInput.approveWarning());
+    await user.click(priceInput.confirm());
+    expect(form.anchorRequired()).toBeInTheDocument();
   });
 });
