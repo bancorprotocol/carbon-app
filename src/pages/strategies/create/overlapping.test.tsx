@@ -69,8 +69,8 @@ describe('Create overlapping page', () => {
     expect(router.state.location.search).toStrictEqual(search);
 
     // Check price range input and market price indication
-    const priceRangeMin = await screen.findByTestId('input-min');
-    const priceRangeMax = await screen.findByTestId('input-max');
+    const priceRangeMin = screen.getByTestId('input-min');
+    const priceRangeMax = screen.getByTestId('input-max');
     const marketPriceIndications = await screen.findAllByTestId(
       'market-price-indication'
     );
@@ -107,11 +107,9 @@ describe('Create overlapping page', () => {
       search,
     });
 
-    const userPriceInput = await screen.findByTestId('input-price');
+    const userPriceInput = screen.getByTestId('input-price');
     const userWarning = await screen.findByTestId('approve-price-warnings');
-    const setMarketPriceButton = await screen.findByTestId(
-      'set-overlapping-price'
-    );
+    const setMarketPriceButton = screen.getByTestId('set-overlapping-price');
     await user.click(userPriceInput);
     await user.keyboard(marketPrice);
     await user.click(userWarning);
@@ -145,8 +143,8 @@ describe('Create overlapping page', () => {
     expect(router.state.location.search).toStrictEqual(search);
 
     // Check price range input and market price indication
-    const priceRangeMin = await screen.findByTestId('input-min');
-    const priceRangeMax = await screen.findByTestId('input-max');
+    const priceRangeMin = screen.getByTestId('input-min');
+    const priceRangeMax = screen.getByTestId('input-max');
     const marketPriceIndications = await screen.findAllByTestId(
       'market-price-indication'
     );
@@ -170,7 +168,7 @@ describe('Create overlapping page', () => {
       search,
     });
 
-    const defaultSpreadOption = await screen.findByTestId('spread-0.05');
+    const defaultSpreadOption = screen.getByTestId('spread-0.05');
     expect(defaultSpreadOption).toBeChecked();
   });
 
@@ -202,8 +200,8 @@ describe('Create overlapping page', () => {
     });
 
     // Check price range input and market price indication
-    const priceRangeMin = await screen.findByTestId('input-min');
-    const priceRangeMax = await screen.findByTestId('input-max');
+    const priceRangeMin = screen.getByTestId('input-min');
+    const priceRangeMax = screen.getByTestId('input-max');
     const marketPriceIndications = await screen.findAllByTestId(
       'market-price-indication'
     );
@@ -241,8 +239,8 @@ describe('Create overlapping page', () => {
     });
 
     // Check price range input and market price indication
-    const priceRangeMin = await screen.findByTestId('input-min');
-    const priceRangeMax = await screen.findByTestId('input-max');
+    const priceRangeMin = screen.getByTestId('input-min');
+    const priceRangeMax = screen.getByTestId('input-max');
     const marketPriceIndications = await screen.findAllByTestId(
       'market-price-indication'
     );
@@ -269,8 +267,8 @@ describe('Create overlapping page', () => {
     });
 
     // Check price range input and market price indication
-    const priceRangeMin = await screen.findByTestId('input-min');
-    const priceRangeMax = await screen.findByTestId('input-max');
+    const priceRangeMin = screen.getByTestId('input-min');
+    const priceRangeMax = screen.getByTestId('input-max');
     const marketPriceIndications = await screen.findAllByTestId(
       'market-price-indication'
     );
@@ -299,8 +297,8 @@ describe('Create overlapping page', () => {
     });
 
     // Check price range input and market price indication
-    const priceRangeMin = await screen.findByTestId('input-min');
-    const priceRangeMax = await screen.findByTestId('input-max');
+    const priceRangeMin = screen.getByTestId('input-min');
+    const priceRangeMax = screen.getByTestId('input-max');
     expect(priceRangeMin).toHaveValue('3000');
     expect(priceRangeMax).toHaveValue('2000');
 
@@ -330,7 +328,7 @@ describe('Create overlapping page', () => {
     );
     expect(anchorWarningHidden).not.toBeInTheDocument();
 
-    const priceMin = await screen.findByTestId('input-min');
+    const priceMin = screen.getByTestId('input-min');
     await user.click(priceMin);
     await user.keyboard('3005');
 
@@ -359,7 +357,7 @@ describe('Create overlapping page', () => {
     );
     expect(anchorWarningHidden).not.toBeInTheDocument();
 
-    const priceMin = await screen.findByTestId('input-max');
+    const priceMin = screen.getByTestId('input-max');
     await user.click(priceMin);
     await user.keyboard('3005');
 
@@ -388,7 +386,7 @@ describe('Create overlapping page', () => {
     );
     expect(anchorWarningHidden).not.toBeInTheDocument();
 
-    const customSpread = await screen.findByTestId('spread-input');
+    const customSpread = screen.getByTestId('spread-input');
     await user.click(customSpread);
     await user.keyboard('0.1');
 
@@ -417,12 +415,12 @@ describe('Create overlapping page', () => {
     );
     expect(anchorWarningHidden).not.toBeInTheDocument();
 
-    const editPriceButton = await screen.findByTestId('edit-market-price');
+    const editPriceButton = screen.getByTestId('edit-market-price');
     await user.click(editPriceButton);
     await user.keyboard('1');
     const approveWarning = await screen.findByTestId('approve-price-warnings');
     await user.click(approveWarning);
-    const confirmPrice = await screen.findByTestId('set-overlapping-price');
+    const confirmPrice = screen.getByTestId('set-overlapping-price');
     await user.click(confirmPrice);
 
     // Text only shows up if form state touched is true
