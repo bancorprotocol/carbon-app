@@ -44,12 +44,12 @@ The behavior is different if the strategy has been **touched** or not.
 
 Price is considered **touched** if : 
 - User market price is set
-- Strategy is not overlapping
-- Strategy has no budget
-- Strategy is paused
 - Min price has been updated
 - Max price has been updated
 - Spread has been updated
+- Strategy is not overlapping (only for edit)
+- Strategy has no budget (only for edit)
+- Strategy is paused (only for edit)
 
 #### Untouched
 If the strategy is **not touched** the hierarchy of market price for calculation is : 
@@ -107,16 +107,18 @@ The user will select an anchor token and provide the amount to deposit or withdr
 
 Because of a precision error if **not touched** & user budget is zero: **do not calculate budget**.
 
+The user budget and calculated budget will be added or subtracted depending on whether the user wishes to deposit or withdraw.
+
 #### Anchor BUY
 If calculated price is above market price: **do not calculate budget**
 else : 
 - buy budget: initial buy budget +/- user budget
-- sell budget: initial buy budget +/- calculated sell budget
+- sell budget: initial sell budget +/- calculated sell budget
 
 #### Anchor SELL
 If calculated price is below market price: **do not calculate budget**
 else : 
-- buy budget: initial sell budget +/- calculated buy budget
+- buy budget: initial buy budget +/- calculated buy budget
 - sell budget: initial sell budget +/- user budget
 
 
@@ -127,7 +129,7 @@ The chart displays either :
 2. External Market Price
 
 But it doesn't display the calculated market price !
-If neither user market price nor extern market price are defined, the chart is **disabled**.
+If neither user market price nor external market price are defined, the chart is **disabled**.
 
 ### Marginal Price
 The marginal price displayed depends on the state of the form : 
