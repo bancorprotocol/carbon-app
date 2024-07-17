@@ -7,14 +7,29 @@ import {
   FloatTooltipTrigger,
 } from 'components/common/tooltip/FloatTooltip';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import style from './StrategyGraph.module.css';
 import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
+import { isZero } from 'components/strategies/common/utils';
+import style from './StrategyGraph.module.css';
 
 interface Props {
   strategy: Strategy;
 }
+
+const isSmallRange = ({ order0, order1 }: Strategy) => {
+  const allPrices = new Set([
+    order0.startRate,
+    order0.endRate,
+    order1.startRate,
+    order1.endRate,
+  ]);
+  const prices = Array.from(allPrices).filter((v) => !isZero(v));
+  if (prices.length < 2) return false;
+  const min = SafeDecimal.min(...prices);
+  const max = SafeDecimal.max(...prices);
+  return max.sub(min).lt(1);
+};
 
 // SVG ratio
 const height = 130;
@@ -70,7 +85,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
     to - (3 / 4) * (to - center),
     to - (1 / 4) * (to - center),
   ];
-  const smallRange = max !== min && max - min < 1;
+  const smallRange = isSmallRange(strategy);
   const priceIntlOption = {
     abbreviate: true,
     round: !smallRange,
@@ -562,7 +577,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const order = buy ? strategy.order0 : strategy.order1;
   const { startRate, endRate, marginalRate } = order;
   const limit = startRate === endRate;
-  const smallRange = !limit && new SafeDecimal(endRate).sub(startRate).lt(1);
+  const smallRange = isSmallRange(strategy);
   const priceOption = {
     abbreviate: true,
     round: !smallRange,
