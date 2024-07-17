@@ -1,7 +1,6 @@
 import { m } from 'libs/motion';
 import { items } from 'components/strategies/common/variants';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { useTokens } from 'hooks/useTokens';
 import { isValidRange } from 'components/strategies/utils';
 import { CreateOverlapping } from 'components/strategies/create/CreateOverlapping';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -24,6 +23,7 @@ import {
   CreateForm,
   CreateFormHeader,
 } from 'components/strategies/create/CreateForm';
+import { usePersistLastPair } from './usePersistLastPair';
 
 export interface CreateOverlappingStrategySearch {
   base: string;
@@ -118,11 +118,9 @@ const getOrders = (
 
 const url = '/strategies/create/overlapping';
 export const CreateOverlappingStrategyPage = () => {
-  const { getTokenById } = useTokens();
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const base = getTokenById(search.base);
-  const quote = getTokenById(search.quote);
+  const { base, quote } = usePersistLastPair(url);
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
