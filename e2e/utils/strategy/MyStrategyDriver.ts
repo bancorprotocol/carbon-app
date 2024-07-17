@@ -71,6 +71,7 @@ export class MyStrategyDriver {
           price: () => tooltip.getByTestId('price'),
           minPrice: () => tooltip.getByTestId('min-price'),
           maxPrice: () => tooltip.getByTestId('max-price'),
+          spread: () => tooltip.getByTestId('spread'),
           marginalPrice: () => tooltip.getByTestId('marginal-price'),
           waitForDetached: async () => {
             await this.page.mouse.move(0, 0);

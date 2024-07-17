@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { getLastVisitedPair, useNavigate, useSearch } from 'libs/routing';
+import { NotFound } from 'components/common/NotFound';
 
 export type TradePageProps = { base: Token; quote: Token };
 
@@ -19,8 +20,8 @@ export const TradePage = () => {
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
   const { isPending, isTradePairError } = useTradePairs();
-  const isValidPair = !(!baseToken || !quoteToken);
-  const noTokens = !baseToken && !quoteToken;
+  const isValidPair = baseToken && quoteToken;
+  const pairFound = !isTradePairError && isValidPair;
 
   useEffect(() => {
     if (search.base && search.quote) return;
@@ -47,8 +48,12 @@ export const TradePage = () => {
             <CarbonLogoLoading />
           </div>
         </div>
-      ) : isTradePairError || !isValidPair ? (
-        <p>{!noTokens && <>Not found</>}</p>
+      ) : !pairFound ? (
+        <NotFound
+          variant="error"
+          title="We couldn't find any orders for this pair"
+          text="Try selecting a different token pair from the dropdown above."
+        />
       ) : (
         <div className="px-content mt-25 pb-30 xl:px-50 grid grid-cols-1 gap-20 md:grid-cols-12">
           <div className="order-3 md:order-1 md:col-span-4 md:row-span-2">

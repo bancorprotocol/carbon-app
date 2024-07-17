@@ -118,6 +118,7 @@ export interface EditPriceOverlappingStrategyInput {
 interface OverlappingOrderOutput {
   min: string;
   max: string;
+  spread: string;
   marginal: string;
   budget: string;
   fiat: string;
