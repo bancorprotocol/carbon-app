@@ -14,3 +14,6 @@ export interface OverlappingOrder extends BaseOrder {
 export interface OrderBlock extends BaseOrder {
   settings: StrategySettings;
 }
+export interface EditOrderBlock extends OrderBlock {
+  action: 'deposit' | 'withdraw';
+}

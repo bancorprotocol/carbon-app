@@ -164,8 +164,8 @@ export const EditStrategyOverlappingPage = () => {
     if (search.min !== order0.startRate) return true;
     if (search.max !== order1.endRate) return true;
     if (search.spread !== getRoundedSpread(strategy).toString()) return true;
-    if (search.budget) return true;
     if (search.marketPrice) return true;
+    if (!isZero(search.budget)) return true;
     return false;
   })();
 
