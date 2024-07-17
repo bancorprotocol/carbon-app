@@ -10,6 +10,8 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import style from './StrategyGraph.module.css';
 import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { isOverlappingStrategy } from 'components/strategies/common/utils';
+import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 
 interface Props {
   strategy: Strategy;
@@ -553,6 +555,7 @@ interface OrderTooltipProps {
 
 const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const order = buy ? strategy.order0 : strategy.order1;
+  const spread = isOverlappingStrategy(strategy) && getRoundedSpread(strategy);
   const limit = order.startRate === order.endRate;
   const priceOption = {
     abbreviate: true,
@@ -587,24 +590,34 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         </table>
       )}
       {!limit && (
-        <table className="rounded-8 border-separate border border-white/40">
+        <table className="rounded-8 border-separate border border-white/40 p-8">
           <tbody>
             <tr>
-              <th className="font-weight-400 p-8 pb-4 text-start text-white/60">
+              <th className="font-weight-400 text-start text-white/60">
                 Min Price
               </th>
-              <td className="p-8 pb-4 text-end" data-testid="min-price">
+              <td className="text-end" data-testid="min-price">
                 {startPrice} {quote.symbol}
               </td>
             </tr>
             <tr>
-              <th className="font-weight-400 p-8 pt-4 text-start text-white/60">
+              <th className="font-weight-400 text-start text-white/60">
                 Max Price
               </th>
-              <td className="p-8 pt-4 text-end" data-testid="max-price">
+              <td className="text-end" data-testid="max-price">
                 {endPrice} {quote.symbol}
               </td>
             </tr>
+            {!!spread && (
+              <tr>
+                <th className="font-weight-400 text-start text-white/60">
+                  Spread
+                </th>
+                <td className="text-end" data-testid="spread">
+                  {spread}%
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}

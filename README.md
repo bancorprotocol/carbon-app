@@ -183,7 +183,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `gasToken`: Gas token name, symbol, decimals, address and logoURI.
   - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
   - `rpc`: The RPC url and headers of the network, used to add the network to the injected wallet and to fetch data from the chain.
-- `defaultTokenPair`: Default token pair to be used in the app when opening the trade and simulation pages.
+- `defaultTokenPair`: Default token pair to be used in the app when opening the trade, explore, and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
 - `popularTokens`: List of popular tokens to be used in the app when opening the token selection modal.
 - `addresses`/`carbon` and `addresses/utils`: CarbonController, Voucher and multicall3 contract addresses.
