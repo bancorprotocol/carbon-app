@@ -10,11 +10,11 @@ import {
 } from 'utils/helpers';
 import { isEmpty } from 'utils/helpers/operators';
 
-interface SortParams {
+export interface SortParams {
   sortBy: string;
   order: 'asc' | 'desc';
 }
-interface PaginationParams {
+export interface PaginationParams {
   limit: number;
   offset: number;
 }
@@ -54,6 +54,7 @@ const ListContext = createContext<ListContextType<any, any>>({
 
 export interface ListOptions<T, P> {
   all: T[];
+  size?: number;
   schema: GroupSchema<P>;
   defaultLimit?: number;
   defaultOffset?: number;
@@ -74,6 +75,7 @@ export function ListProvider<T, P>(props: ListProviderProps<T, P>) {
     defaultOffset = 0,
     filter = (list) => list,
     sort = (list) => list,
+    size = all.length,
   } = props;
 
   // Get params from URL as string
@@ -121,7 +123,7 @@ export function ListProvider<T, P>(props: ListProviderProps<T, P>) {
   const ctx = {
     all,
     list: sorted,
-    size: filtered.length,
+    size: size ?? filtered.length,
     searchParams,
     setSearchParams,
   };

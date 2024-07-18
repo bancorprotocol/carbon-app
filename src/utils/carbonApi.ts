@@ -10,6 +10,7 @@ import config from 'config';
 import {
   QueryActivityParams,
   ServerActivity,
+  ServerActivityMeta,
 } from 'libs/queries/extApi/activity';
 import { lsService } from 'services/localeStorage';
 
@@ -85,6 +86,9 @@ const carbonApi = {
   },
   getActivity: async (params: QueryActivityParams) => {
     return get<ServerActivity[]>('activity', params);
+  },
+  getActivityMeta: async (params: QueryActivityParams) => {
+    return get<ServerActivityMeta>('activity-meta', params);
   },
 };
 

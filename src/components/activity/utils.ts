@@ -1,26 +1,30 @@
-import { endOfDay, startOfDay } from 'date-fns';
-import { Activity } from 'libs/queries/extApi/activity';
+import { PaginationParams } from 'hooks/useList';
+import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
+import {
+  validArrayOf,
+  validLiteral,
+  validNumber,
+  validString,
+  validateSearchParams,
+} from 'libs/routing/utils';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
-  GroupSchema,
   getLowestBits,
   prettifyNumber,
   shortenString,
-  toArray,
   tokenAmount,
   tokenRange,
 } from 'utils/helpers';
 import { exist } from 'utils/helpers/operators';
 
-export interface ActivitySearchParams {
-  pairs: string[];
-  ids: string[];
-  actions: string[];
+export interface ActivitySearchParams extends Partial<PaginationParams> {
+  pairs?: string[];
+  ids?: string[];
+  actions?: ActivityAction[];
   start?: Date;
   end?: Date;
 }
-
-export const activityActionName = {
+export const activityActionName: Record<ActivityAction, string> = {
   create: 'Create',
   edit: 'Edit Price',
   deposit: 'Deposit',
@@ -31,22 +35,36 @@ export const activityActionName = {
   delete: 'Delete',
   pause: 'Pause',
 };
+export const activityActions = Object.keys(
+  activityActionName
+) as ActivityAction[];
 
-export const activitySchema: GroupSchema<ActivitySearchParams> = {
-  pairs: toArray([]),
-  actions: toArray([]),
-  ids: toArray([]),
-  start: (value?: string) => {
-    if (!value) return;
-    return startOfDay(new Date(value));
-  },
-  end: (value?: string) => {
-    if (!value) return;
-    return endOfDay(new Date(value));
-  },
-};
+export const validateActivityParams =
+  validateSearchParams<ActivitySearchParams>({
+    actions: validArrayOf(validLiteral(activityActions)),
+    ids: validArrayOf(validString),
+    pairs: validArrayOf(validString),
+    start: validString,
+    end: validString,
+    limit: validNumber,
+    offset: validNumber,
+  });
 
-export const activityHasPairs = (activity: Activity, pairs: string[]) => {
+// export const activitySchema: GroupSchema<ActivitySearchParams> = {
+//   pairs: toArray([]),
+//   actions: toArray<ActivityAction>([]),
+//   ids: toArray([]),
+//   start: (value?: string) => {
+//     if (!value) return;
+//     return startOfDay(new Date(value));
+//   },
+//   end: (value?: string) => {
+//     if (!value) return;
+//     return endOfDay(new Date(value));
+//   },
+// };
+
+export const activityHasPairs = (activity: Activity, pairs: string[] = []) => {
   if (pairs.length === 0) return true;
   const base = activity.strategy.base.address.toLowerCase();
   const quote = activity.strategy.quote.address.toLowerCase();
@@ -59,9 +77,9 @@ export const filterActivity = (
 ) => {
   const { ids, actions, pairs, start, end } = searchParams;
   return list.filter((activity) => {
-    if (ids.length && !ids.includes(getLowestBits(activity.strategy.id)))
+    if (ids?.length && !ids.includes(getLowestBits(activity.strategy.id)))
       return false;
-    if (actions.length && !actions.includes(activity.action)) return false;
+    if (actions?.length && !actions.includes(activity.action)) return false;
     if (!activityHasPairs(activity, pairs)) return false;
     if (start && activity.date < start) return false;
     if (end && activity.date > end) return false;

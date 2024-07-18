@@ -21,12 +21,11 @@ import {
   activityKey,
   budgetColor,
 } from './utils';
-import { usePagination } from 'hooks/useList';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { ActivityListProps } from './ActivityList';
 import { NotFound } from 'components/common/NotFound';
-import { useActivity } from './ActivityProvider';
+import { useActivity, useActivityPagination } from './ActivityProvider';
 import style from './ActivityTable.module.css';
 
 const thStyle = cn(
@@ -102,7 +101,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
   const setAction = () => {
-    const actions = searchParams.actions.includes(activity.action)
+    const actions = searchParams.actions?.includes(activity.action)
       ? []
       : [activity.action];
     setSearchParams({ actions });
@@ -241,7 +240,7 @@ const ActivityPaginator = () => {
     lastPage,
     previousPage,
     nextPage,
-  } = usePagination();
+  } = useActivityPagination();
 
   const changeLimit = (e: ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));

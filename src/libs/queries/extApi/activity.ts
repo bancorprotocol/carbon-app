@@ -46,4 +46,17 @@ export interface QueryActivityParams {
   token0?: string;
   token1?: string;
   strategyIds?: string;
+  pairs?: string;
+  actions?: string[];
+  limit?: number;
+  offset?: number;
 }
+
+interface RawActivityMeta<T extends string | Token> {
+  size: number;
+  actions: ActivityAction[];
+  strategies: Record<string, [T, T]>;
+  pairs: [T, T][];
+}
+export type ServerActivityMeta = RawActivityMeta<string>;
+export type ActivityMeta = RawActivityMeta<Token>;

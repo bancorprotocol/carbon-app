@@ -63,7 +63,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
   const setAction = () => {
-    const actions = searchParams.actions.includes(activity.action)
+    const actions = searchParams.actions?.includes(activity.action)
       ? []
       : [activity.action];
     setSearchParams({ actions });

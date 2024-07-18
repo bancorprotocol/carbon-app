@@ -1,3 +1,4 @@
+import { useSearch } from '@tanstack/react-router';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { ActivitySection } from 'components/activity/ActivitySection';
 import { useExplorerParams } from 'components/explorer';
@@ -5,7 +6,11 @@ import { QueryActivityParams } from 'libs/queries/extApi/activity';
 
 export const ExplorerActivityPage = () => {
   const { type, slug } = useExplorerParams();
-  const params: QueryActivityParams = {};
+  const search = useSearch({ from: '/explore/$type/$slug/activity' });
+  const params: QueryActivityParams = {
+    limit: search.limit ?? 10,
+    offset: search.offset ?? 0,
+  };
   if (type === 'wallet') params.ownerId = slug;
   if (type === 'token-pair') {
     const [base, quote] = slug.split('_');
