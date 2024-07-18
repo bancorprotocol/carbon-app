@@ -26,6 +26,8 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
 import { InputRange } from '../common/InputRange';
 import { OverlappingOrder } from 'components/strategies/common/types';
+import { isZero } from '../common/utils';
+import { isValidRange } from '../utils';
 
 interface Props {
   base: Token;
@@ -86,6 +88,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
   })();
 
   useEffect(() => {
+    if (!isValidRange(order0.min, order1.max)) return;
     if (anchor === 'buy' && aboveMarket) {
       set('anchor', 'sell');
       set('budget', undefined);
@@ -94,7 +97,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
       set('anchor', 'buy');
       set('budget', undefined);
     }
-  }, [anchor, aboveMarket, belowMarket, set]);
+  }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
 
   const setMarketPrice = (price: string) => {
     setTouched(true);
@@ -127,7 +130,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
 
   // Update on buyMin changes
   useEffect(() => {
-    if (!order0.min) return;
+    if (isZero(order0.min)) return;
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
       if (Number(order1.max) < minSellMax) set('max', minSellMax.toString());
@@ -138,7 +141,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
 
   // Update on sellMax changes
   useEffect(() => {
-    if (!order1.max) return;
+    if (isZero(order1.max)) return;
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
       if (Number(order0.min) > maxBuyMin) set('min', maxBuyMin.toString());
