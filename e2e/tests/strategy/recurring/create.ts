@@ -38,7 +38,7 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(sellForm.outcomeQuote()).toHaveText(output.sell.outcomeQuote);
 
     const tokenApproval = new TokenApprovalDriver(page);
-    await createForm.submit();
+    await createForm.submit('create');
     await tokenApproval.checkApproval([base, quote]);
 
     await page.waitForURL('/', { timeout: 10_000 });
