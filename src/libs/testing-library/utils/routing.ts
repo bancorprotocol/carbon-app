@@ -9,7 +9,7 @@ import { parseSearchWith } from 'libs/routing/utils';
 import { isAddress } from 'ethers/lib/utils';
 
 const encodeValue = (value: string | number | symbol) => {
-  if (typeof value == 'string' && isAddress(value)) return `${String(value)}`;
+  if (typeof value == 'string' && isAddress(value)) return value;
   if (!isNaN(Number(value))) return `"${String(value)}"`;
   return `${String(value)}`;
 };
