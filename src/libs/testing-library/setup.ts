@@ -4,6 +4,7 @@ import { tokens } from './utils';
 import { cleanup } from '@testing-library/react';
 
 afterEach(() => {
+  // Set up clean-up after each test. See issue https://github.com/vitest-dev/vitest/issues/1430
   window.history.replaceState(null, 'root', '/');
   cleanup();
 });

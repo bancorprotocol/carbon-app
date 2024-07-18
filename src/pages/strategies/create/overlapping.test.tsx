@@ -1,10 +1,15 @@
 import { describe, test, expect, beforeAll, afterAll } from 'vitest';
-import { renderWithRouter, screen, waitFor } from 'libs/testing-library';
-import userEvent from '@testing-library/user-event';
 import { debugTokens } from '../../../../e2e/utils/types';
 import { CreateOverlappingStrategyPage } from './overlapping';
-import { MockServer, marketRateHandler } from 'libs/testing-library/utils';
-import { CreateOverlappingDriver } from 'libs/testing-library/utils/CreateOverlappingDriver';
+import {
+  MockServer,
+  marketRateHandler,
+  CreateOverlappingDriver,
+  renderWithRouter,
+  screen,
+  waitFor,
+  userEvent,
+} from 'libs/testing-library';
 
 const basePath = '/strategies/create/overlapping';
 

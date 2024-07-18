@@ -26,9 +26,9 @@ const AllTheProviders = ({ children }: { children: ReactNode }) => {
  * @returns {RenderResult} The result of rendering the given React element.
  *
  * @example
- * customRender(<MyComponent />);
+ * renderWithProviders(<MyComponent />);
  */
-const customRender = (
+export const renderWithProviders = (
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
 ) =>
@@ -65,10 +65,12 @@ const customRender = (
 export const renderWithRouter = async (params: RouterRenderParams) => {
   const customRouter = await loadRouter(params);
   return {
-    container: customRender(<RouterProvider router={customRouter} />),
+    container: renderWithProviders(<RouterProvider router={customRouter} />),
     router: customRouter,
   };
 };
 
 export * from '@testing-library/react';
-export { customRender as render };
+export { userEvent } from '@testing-library/user-event';
+export * from './utils';
+export * from './drivers';
