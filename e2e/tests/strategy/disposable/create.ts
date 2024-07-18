@@ -34,7 +34,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await expect(form.outcomeValue()).toHaveText(output.outcomeValue);
     await expect(form.outcomeQuote()).toHaveText(output.outcomeQuote);
 
-    await createForm.submit();
+    await createForm.submit('create');
 
     const tokenApproval = new TokenApprovalDriver(page);
     if (direction === 'buy') {

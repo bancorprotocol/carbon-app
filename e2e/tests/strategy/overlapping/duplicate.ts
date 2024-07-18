@@ -8,6 +8,7 @@ import {
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 import { waitForTenderlyRpc } from '../../../utils/tenderly';
+import { waitModalOpen } from '../../../utils/modal';
 
 export const duplicate = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
@@ -20,6 +21,10 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     const strategy = await manage.createStrategy(testCase, { tokenApproval });
     await strategy.clickManageEntry('duplicateStrategy');
 
+    const modal = await waitModalOpen(page);
+    await modal.getByTestId('duplicate-strategy-btn').click();
+    await modal.waitFor({ state: 'detached' });
+
     await page.waitForURL('/strategies/create?*', {
       timeout: 10_000,
     });
@@ -28,7 +33,7 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     const overlappingForm = createForm.getOverlappingForm();
     await overlappingForm.anchor('sell').click();
     await overlappingForm.budget().fill(sell.budget);
-    await createForm.submit();
+    await createForm.submit('duplicate');
 
     await page.waitForURL('/', { timeout: 10_000 });
     const myStrategies = new MyStrategyDriver(page);
