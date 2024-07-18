@@ -1,7 +1,6 @@
-import { debugTokens } from '../../../../e2e/utils/types';
-import { RequestHandler } from 'msw';
 import { setupServer } from 'msw/node';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http, RequestHandler } from 'msw';
+import { debugTokens } from '../../../../e2e/utils/types';
 import tokenListsMock from '../../../../e2e/mocks/tokenLists.json';
 
 /**
