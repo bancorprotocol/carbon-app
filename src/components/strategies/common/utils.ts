@@ -34,6 +34,12 @@ export const isDisposableStrategy = (strategy: Strategy) => {
   return false;
 };
 
+export const getStrategyType = (strategy: Strategy) => {
+  if (isOverlappingStrategy(strategy)) return 'overlapping';
+  if (isDisposableStrategy(strategy)) return 'disposable';
+  return 'recurring';
+};
+
 export const isPaused = ({ order0, order1 }: Strategy) => {
   return (
     isZero(order0.startRate) &&
@@ -43,12 +49,6 @@ export const isPaused = ({ order0, order1 }: Strategy) => {
     isZero(order1.endRate) &&
     isZero(order1.marginalRate)
   );
-};
-
-export const getStrategyType = (strategy: Strategy) => {
-  if (isOverlappingStrategy(strategy)) return 'overlapping';
-  if (isDisposableStrategy(strategy)) return 'disposable';
-  return 'recurring';
 };
 
 export const emptyOrder = (): BaseOrder => ({

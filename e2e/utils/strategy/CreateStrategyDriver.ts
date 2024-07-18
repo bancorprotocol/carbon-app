@@ -7,7 +7,13 @@ import {
   screenshotPath,
 } from './utils';
 import { CreateStrategyTestCase, StrategySettings } from './types';
-import { RangeOrder, debugTokens, Direction, Setting } from '../types';
+import {
+  RangeOrder,
+  debugTokens,
+  Direction,
+  Setting,
+  StrategyCase,
+} from '../types';
 import { waitModalClose, waitModalOpen, waitTooltipsClose } from '../modal';
 import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
 import { MainMenuDriver } from '../MainMenuDriver';
@@ -101,14 +107,14 @@ export class CreateStrategyDriver {
     return this.page.getByText('Next Step').click();
   }
 
-  async submit() {
+  async submit(type: StrategyCase) {
     const btn = this.page.getByText('Create Strategy');
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
       await waitTooltipsClose(this.page);
       const form = this.getForm();
-      const path = screenshotPath(this.testCase, 'create', 'form');
+      const path = screenshotPath(this.testCase, type, 'form');
       await screenshot(form, path);
       await mainMenu.show();
     }

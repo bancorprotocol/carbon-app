@@ -1,3 +1,4 @@
+import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import type { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 
@@ -49,6 +50,9 @@ export const getUndercutStrategy = (
     strategy.order1.endRate,
     1 - undercutDifference
   );
+
+  // If buy & sell orders are inverted, return existing strategy
+  if (isOverlappingStrategy(undercutStrategy)) return strategy;
 
   return undercutStrategy;
 };
