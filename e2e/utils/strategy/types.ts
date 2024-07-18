@@ -118,6 +118,7 @@ export interface EditPriceOverlappingStrategyInput {
 interface OverlappingOrderOutput {
   min: string;
   max: string;
+  spread: string;
   marginal: string;
   budget: string;
   fiat: string;
@@ -141,6 +142,7 @@ export interface OverlappingStrategyTestCase {
   output: {
     create: OverlappingOutput;
     editPrices: OverlappingOutput;
+    undercut: OverlappingOutput;
     withdraw: { buy: string; sell: string };
     deposit: { buy: string; sell: string };
   };
@@ -170,6 +172,7 @@ export interface DisposableStrategyTestCase {
   };
   output: {
     create: OrderOutput;
+    undercut: MinMax;
     editPrices: MinMax;
     deposit: string;
     withdraw: string;

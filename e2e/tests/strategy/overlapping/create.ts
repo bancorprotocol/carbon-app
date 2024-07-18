@@ -17,7 +17,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
   const { buy, sell, spread } = testCase.input.create;
   const output = testCase.output.create;
 
-  return test(`Create ${base}->${quote}`, async ({ page }) => {
+  return test('Create', async ({ page }) => {
     await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');
@@ -38,7 +38,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await form.budget().fill(sell.budget.toString());
 
     const tokenApproval = new TokenApprovalDriver(page);
-    await createForm.submit();
+    await createForm.submit('create');
     await tokenApproval.checkApproval([base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
     await myStrategies.waitForUpdates();
@@ -60,12 +60,14 @@ export const create = (testCase: CreateStrategyTestCase) => {
     const sellTooltip = await strategy.priceTooltip('sell', { isOverlapping });
     await expect(sellTooltip.minPrice()).toHaveText(output.sell.min);
     await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);
+    await expect(sellTooltip.spread()).toHaveText(output.sell.spread);
     await expect(sellTooltip.marginalPrice()).toHaveText(output.sell.marginal);
     await sellTooltip.waitForDetached();
 
     const buyTooltip = await strategy.priceTooltip('buy', { isOverlapping });
     await expect(buyTooltip.minPrice()).toHaveText(output.buy.min);
     await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
+    await expect(sellTooltip.spread()).toHaveText(output.buy.spread);
     await expect(buyTooltip.marginalPrice()).toHaveText(output.buy.marginal);
     await buyTooltip.waitForDetached();
 

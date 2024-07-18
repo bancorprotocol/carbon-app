@@ -234,12 +234,7 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
         roiData: roiQuery.data || [],
       });
     },
-    enabled:
-      !!token0 &&
-      !!token1 &&
-      tokens.length > 0 &&
-      isInitialized &&
-      roiQuery.isFetched,
+    enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });

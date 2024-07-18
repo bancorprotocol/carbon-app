@@ -24,6 +24,7 @@ export const useSetDisposableOrder = (url: string, otherOrder?: Order) => {
         search: (previous) => ({
           ...previous,
           direction,
+          budget: undefined,
           min: resetPrice(otherOrder?.startRate),
           max: resetPrice(otherOrder?.endRate),
         }),

@@ -33,6 +33,10 @@ const testCases: CreateStrategyTestCase[] = [
         budget: '10.00 DAI',
         fiat: '$10.00',
       },
+      undercut: {
+        min: '1,501.50 DAI',
+        max: '1,501.50 DAI',
+      },
       editPrices: {
         min: '1,600.00 DAI',
         max: '1,600.00 DAI',
@@ -61,6 +65,10 @@ const testCases: CreateStrategyTestCase[] = [
         outcomeQuote: '1,700.00 DAI',
         budget: '2.00 ETH',
         fiat: '$3,334.42',
+      },
+      undercut: {
+        min: '1,698.30 DAI',
+        max: '1,698.30 DAI',
       },
       editPrices: {
         min: '1,800.00 DAI',
@@ -98,6 +106,10 @@ const testCases: CreateStrategyTestCase[] = [
         budget: '10.00 DAI',
         fiat: '$10.00',
       },
+      undercut: {
+        min: '1,501.50 DAI',
+        max: '1,701.70 DAI',
+      },
       editPrices: {
         min: '1,600.00 DAI',
         max: '1,800.00 DAI',
@@ -133,6 +145,10 @@ const testCases: CreateStrategyTestCase[] = [
         outcomeQuote: '1,596.87 DAI',
         budget: '2.00 ETH',
         fiat: '$3,334.42',
+      },
+      undercut: {
+        min: '1,498.50 DAI',
+        max: '1,698.30 DAI',
       },
       editPrices: {
         min: '1,600.00 DAI',
@@ -567,6 +583,7 @@ const testCases: CreateStrategyTestCase[] = [
           min: '0.30 USDC',
           max: '0.545455 USDC',
           marginal: '0.400854 USDC',
+          spread: '10%',
           budget: '12.50 USDC',
           fiat: '$12.50',
         },
@@ -574,6 +591,26 @@ const testCases: CreateStrategyTestCase[] = [
           min: '0.33 USDC',
           max: '0.60 USDC',
           marginal: '0.440939 USDC',
+          spread: '10%',
+          budget: '30.00 BNT',
+          fiat: '$12.61',
+        },
+      },
+      undercut: {
+        totalFiat: '$25.10',
+        buy: {
+          min: '0.30 USDC',
+          max: '0.545951 USDC',
+          marginal: '0.401036 USDC',
+          spread: '9.9%',
+          budget: '12.49 USDC',
+          fiat: '$12.49',
+        },
+        sell: {
+          min: '0.3297 USDC',
+          max: '0.60 USDC',
+          marginal: '0.440739 USDC',
+          spread: '9.9%',
           budget: '30.00 BNT',
           fiat: '$12.61',
         },
@@ -584,6 +621,7 @@ const testCases: CreateStrategyTestCase[] = [
           min: '0.20 USDC',
           max: '0.608696 USDC',
           marginal: '0.392043 USDC',
+          spread: '15.000001%',
           budget: '22.50 USDC',
           fiat: '$22.50',
         },
@@ -591,6 +629,7 @@ const testCases: CreateStrategyTestCase[] = [
           min: '0.23 USDC',
           max: '0.70 USDC',
           marginal: '0.450849 USDC',
+          spread: '15.000001%',
           budget: '39.66 BNT',
           fiat: '$16.67',
         },
