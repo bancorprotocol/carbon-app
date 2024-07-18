@@ -1,11 +1,11 @@
 # Overlapping strategy
-This document covers the logic behind creating and updating overlapping strategies (called concentrated liquidity in the UI). A concentrated liquidity consists of two orders that have an overlapping price range, usually market maker use it to ensure liquidity of a token for traders. An overlapping strategy with a large price range and budget can also serve as an oracle for token price.
+This document covers the logic behind creating and updating overlapping strategies (called concentrated liquidity in the UI). A concentrated liquidity consists of two orders that have an overlapping price range, usually market makers use it to ensure liquidity of a token for traders. An overlapping strategy with a large price range and budget can also serve as an oracle for token price.
 
 An overlapping strategy is defined by 6 dynamic parameters: 
 - `min`: minimum price at which to buy
 - `max`: maximum price at which to sell
 - `spread`: describe the distance between maximum buy price & maximum sell price and the distance between minimum buy price & minimum sell price.
-- `marketPrice`: this is the market price at which the tokens are traded currently. Can be provided by an external source (CoinGecko in Carbon), or the user. When only updating the budget, under specific condition we can calculate the market price of the last trade.
+- `marketPrice`: this is the market price at which the tokens are traded currently. Can be provided by an external source (CoinGecko in Carbon), or the user. When only updating the budget, under specific conditions we can calculate the market price of the last trade.
 - `anchor`: define which budget can be updated and which one is calculated
 - `budget`: the amount of a token to deposit/withdraw on/from the strategy. It'll automatically calculate the amount of the other token to deposit/withdraw
 
