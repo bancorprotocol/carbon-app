@@ -41,7 +41,7 @@ const get = async <T>(endpoint: string, params: Object = {}): Promise<T> => {
   const api = lsService.getItem('carbonApi') || config.carbonApi;
   const url = new URL(api + endpoint);
   for (const [key, value] of Object.entries(params)) {
-    value !== 'undefined' && url.searchParams.set(key, value);
+    if (value !== undefined) url.searchParams.set(key, value);
   }
   const response = await fetch(url);
   const result = await response.json();
@@ -85,10 +85,10 @@ const carbonApi = {
     return get<SimulatorReturnNew>('simulator/create', params);
   },
   getActivity: async (params: QueryActivityParams) => {
-    return get<ServerActivity[]>('activity', params);
+    return get<{ data: ServerActivity[] }>('activity', params);
   },
   getActivityMeta: async (params: QueryActivityParams) => {
-    return get<ServerActivityMeta>('activity-meta', params);
+    return get<ServerActivityMeta>('activity/meta', params);
   },
 };
 

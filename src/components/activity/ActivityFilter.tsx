@@ -27,7 +27,7 @@ interface DisplayPair {
 
 const getAllIds = (meta: ActivityMeta): DisplayID[] => {
   return Object.entries(meta.strategies).map(([id, pair]) => ({
-    id: getLowestBits(id),
+    id: id,
     base: pair[0],
     quote: pair[1],
   }));
@@ -94,7 +94,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
           filterLabel="Search by ID or Symbol"
           options={allIds.map(({ id, base, quote }) => (
             <Option key={id} value={id}>
-              <span>{id}</span>
+              <span>{getLowestBits(id)}</span>
               <svg width="4" height="4">
                 <circle cx="2" cy="2" r="2" fill="white" fillOpacity="0.4" />
               </svg>
@@ -144,8 +144,8 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         form={formId}
         presets={datePickerPresets}
         onConfirm={updateParams}
-        start={start}
-        end={end}
+        start={start ? new Date(start) : undefined}
+        end={end ? new Date(end) : undefined}
         options={{
           disabled: { after: new Date() },
         }}

@@ -14,6 +14,11 @@ export namespace QueryKey {
     'activity',
     params,
   ];
+  export const activitiesMeta = (params: QueryActivityParams) => [
+    ...extAPI,
+    'activity-meta',
+    params,
+  ];
 
   export const roi = () => [...extAPI, 'roi'];
   export const simulator = (params: SimulatorResultSearch) => [

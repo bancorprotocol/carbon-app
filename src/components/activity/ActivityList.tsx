@@ -13,9 +13,8 @@ import {
   TransactionLink,
 } from './ActivityTable';
 import { tokenAmount } from 'utils/helpers';
-import { usePagination } from 'hooks/useList';
 import { Button } from 'components/common/button';
-import { useActivity } from './ActivityProvider';
+import { useActivity, useActivityPagination } from './ActivityProvider';
 
 export interface ActivityListProps {
   activities: Activity[];
@@ -24,7 +23,7 @@ export interface ActivityListProps {
 
 export const ActivityList: FC<ActivityListProps> = (props) => {
   const { activities, hideIds = false } = props;
-  const { size, limit, setLimit } = usePagination();
+  const { size, limit, setLimit } = useActivityPagination();
   return (
     <>
       <ul className="flex flex-col gap-16 p-16">

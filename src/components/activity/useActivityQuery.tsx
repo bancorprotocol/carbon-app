@@ -54,8 +54,9 @@ export const useActivityQuery = (params: QueryActivityParams = {}) => {
   return useQuery({
     queryKey: QueryKey.activities(params),
     queryFn: async () => {
+      console.log({ params });
       const activities = await carbonApi.getActivity(params);
-      return toActivities(activities, tokensMap).sort((a, b) => {
+      return toActivities(activities.data, tokensMap).sort((a, b) => {
         return b.date.getTime() - a.date.getTime();
       });
     },
@@ -93,7 +94,7 @@ export const useActivityMetaQuery = (params: QueryActivityParams = {}) => {
   const { tokensMap, isPending } = useTokens();
   const validParams = isValidParams(params);
   return useQuery({
-    queryKey: QueryKey.activities(params),
+    queryKey: QueryKey.activitiesMeta(params),
     queryFn: async () => {
       const meta = await carbonApi.getActivityMeta(params);
       return toMetaActivities(meta, tokensMap);

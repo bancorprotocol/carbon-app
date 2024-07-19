@@ -18,6 +18,7 @@ import { NotFound } from 'components/common/NotFound';
 import { useGetUserStrategies } from 'libs/queries';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { isEmpty } from 'utils/helpers/operators';
+import { addDays, getUnixTime } from 'date-fns';
 
 interface ActivityContextType {
   activities: Activity[];
@@ -38,17 +39,25 @@ interface Props {
   empty?: ReactNode;
   children: ReactNode;
 }
+type ParamsKey = Extract<keyof QueryActivityParams, string>;
 export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   const nav = useNavigate();
 
   const search: ActivitySearchParams = useSearch({ strict: false });
   params.limit ||= search.limit ?? 10;
   params.offset ||= search.offset ?? 0;
-  params.actions ||= search.actions;
-  params.strategyIds ||= search.ids?.join(',');
-  params.pairs ||= search.pairs
-    ?.map((pair) => `${pair[0]}_${pair[1]}`)
-    .join(',');
+  if (search.actions) params.actions ||= search.actions;
+  if (search.ids) params.strategyIds ||= search.ids?.join(',');
+  if (search.pairs)
+    params.pairs ||= search.pairs
+      .map((pair) => `${pair[0]}_${pair[1]}`)
+      .join(',');
+  if (search.start) params.start ||= getUnixTime(new Date(search.start));
+  if (search.end) params.end ||= getUnixTime(addDays(new Date(search.end), 1));
+
+  for (const key in params) {
+    if (isEmpty(params[key as ParamsKey])) delete params[key as ParamsKey];
+  }
 
   const activityQuery = useActivityQuery(params);
   const activityMetaQuery = useActivityMetaQuery(params);
