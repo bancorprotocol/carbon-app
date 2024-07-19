@@ -12,6 +12,11 @@ import {
 } from 'components/strategies/overview/StrategyFilterSort';
 import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
 import { FiatSymbol } from 'utils/carbonApi';
+import {
+  Migration,
+  migrateAndRemoveItem,
+  removeItem,
+} from 'utils/localStorageMigration';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
@@ -46,6 +51,36 @@ interface LocalStorageSchema {
   lastSdkCache: { timestamp: number; ttl: number };
 }
 
-export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
-  [APP_ID, NETWORK, APP_VERSION, key].join('-')
+// ************************** /
+// LOCAL STORAGE MIGRATION AND CLEAN_UP
+// ************************** /
+
+/**
+ * An array of migration objects, each designed to handle specific versions of stored items.
+ * @type {Migration[]}
+ * @property {Function} matcher - A function that takes a formattedKey and returns the key found or undefined if not found.
+ * @property {Function} action - The action to take for each key found with the matcher function, receives oldFormattedKey, key = matcher(oldFormattedKey) and the newFormattedKey.
+ */
+const migrations: Migration[] = [
+  {
+    matcher: (formattedKey) => {
+      const prefix = 'carbon-v1.1-';
+      const isMatch = formattedKey.startsWith(prefix);
+      if (isMatch) return formattedKey.slice(prefix.length);
+    },
+    action: migrateAndRemoveItem,
+  },
+  {
+    matcher: (formattedKey) => {
+      const prefix = 'carbon-v1-';
+      const isMatch = formattedKey.startsWith(prefix);
+      if (isMatch) return formattedKey.slice(prefix.length);
+    },
+    action: removeItem,
+  },
+];
+
+export const lsService = new ManagedLocalStorage<LocalStorageSchema>(
+  (key) => [APP_ID, NETWORK, APP_VERSION, key].join('-'),
+  migrations
 );

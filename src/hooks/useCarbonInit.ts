@@ -36,14 +36,6 @@ const getTokenDecimalMap = () => {
   );
 };
 
-const removeOldV1Keys = () => {
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith('carbon-v1')) {
-      localStorage.removeItem(key);
-    }
-  });
-};
-
 export const useCarbonInit = () => {
   const cache = useQueryClient();
   const {
@@ -138,8 +130,7 @@ export const useCarbonInit = () => {
       if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
         openModal('restrictedCountry', undefined);
       }
-
-      removeOldV1Keys();
+      lsService.migrateItems();
     } catch (e) {
       console.error('Error carbonApi.getCheck', e);
       setIsError(true);
