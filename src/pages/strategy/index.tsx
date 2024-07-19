@@ -1,4 +1,4 @@
-import { useParams, useRouter, useSearch } from '@tanstack/react-router';
+import { useParams, useRouter } from '@tanstack/react-router';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { ActivitySection } from 'components/activity/ActivitySection';
 import { Page } from 'components/common/page';
@@ -23,12 +23,7 @@ import { NotFound } from 'components/common/NotFound';
 export const StrategyPage = () => {
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
-  const search = useSearch({ from: '/strategy/$id' });
-  const params = {
-    limit: search.limit ?? 10,
-    offset: search.offset ?? 0,
-    strategyIds: id,
-  };
+  const params = { strategyIds: id };
   const query = useGetStrategy(id);
   const [strategy] = useStrategiesWithFiat(query);
 

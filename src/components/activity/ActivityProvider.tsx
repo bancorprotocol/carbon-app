@@ -44,16 +44,24 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   const nav = useNavigate();
 
   const search: ActivitySearchParams = useSearch({ strict: false });
-  params.limit ||= search.limit ?? 10;
-  params.offset ||= search.offset ?? 0;
-  if (search.actions) params.actions ||= search.actions;
-  if (search.ids) params.strategyIds ||= search.ids?.join(',');
-  if (search.pairs)
-    params.pairs ||= search.pairs
+  const searchParams = {
+    ...search,
+    limit: search.limit ? Number(search.limit) : 10,
+    offset: search.offset ? Number(search.offset) : 0,
+  };
+
+  params.limit ||= searchParams.limit;
+  params.offset ||= searchParams.offset;
+  if (searchParams.actions) params.actions ||= searchParams.actions;
+  if (searchParams.ids) params.strategyIds ||= searchParams.ids?.join(',');
+  if (searchParams.pairs)
+    params.pairs ||= searchParams.pairs
       .map((pair) => `${pair[0]}_${pair[1]}`)
       .join(',');
-  if (search.start) params.start ||= getUnixTime(new Date(search.start));
-  if (search.end) params.end ||= getUnixTime(addDays(new Date(search.end), 1));
+  if (searchParams.start)
+    params.start ||= getUnixTime(new Date(searchParams.start));
+  if (searchParams.end)
+    params.end ||= getUnixTime(addDays(new Date(searchParams.end), 1));
 
   for (const key in params) {
     if (isEmpty(params[key as ParamsKey])) delete params[key as ParamsKey];
@@ -94,7 +102,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
     userStrategiesQuery.isPending;
 
   if (isPending) {
-    return <CarbonLogoLoading className="w-[100px] flex-1 self-center" />;
+    return <CarbonLogoLoading className="h-[80px] self-center" />;
   }
   const activities = activityQuery.data ?? [];
   const meta = activityMetaQuery.data;
@@ -120,7 +128,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   const ctx: ActivityContextType = {
     activities,
     meta: meta,
-    searchParams: search,
+    searchParams,
     setSearchParams,
   };
 

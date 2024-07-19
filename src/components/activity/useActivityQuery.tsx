@@ -54,11 +54,8 @@ export const useActivityQuery = (params: QueryActivityParams = {}) => {
   return useQuery({
     queryKey: QueryKey.activities(params),
     queryFn: async () => {
-      console.log({ params });
       const activities = await carbonApi.getActivity(params);
-      return toActivities(activities.data, tokensMap).sort((a, b) => {
-        return b.date.getTime() - a.date.getTime();
-      });
+      return toActivities(activities, tokensMap);
     },
     enabled: !isPending && validParams,
     refetchInterval: THIRTY_SEC_IN_MS,

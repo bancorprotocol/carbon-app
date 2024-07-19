@@ -85,7 +85,7 @@ const carbonApi = {
     return get<SimulatorReturnNew>('simulator/create', params);
   },
   getActivity: async (params: QueryActivityParams) => {
-    return get<{ data: ServerActivity[] }>('activity', params);
+    return get<ServerActivity[]>('activity', params);
   },
   getActivityMeta: async (params: QueryActivityParams) => {
     return get<ServerActivityMeta>('activity/meta', params);
