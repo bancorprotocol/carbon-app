@@ -23,7 +23,8 @@ export const useActivityToast = () => {
     if (query.fetchStatus !== 'idle') return;
     const length = activities.length;
     setPrevious(length);
-    if (typeof previous !== 'number' || length <= previous) return;
+    // TODO: put it back before merging
+    //  if (typeof previous !== 'number' || length <= previous) return;
     const displayToast = async () => {
       let max = 5;
       for (let i = 0; i < activities.length; i++) {
