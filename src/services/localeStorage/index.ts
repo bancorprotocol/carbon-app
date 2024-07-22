@@ -71,7 +71,6 @@ const migrations: Migration[] = [
       const isMatch = oldFormattedKey.startsWith(prefix);
       if (isMatch) return oldFormattedKey.slice(prefix.length);
     },
-    newKeyFormatter: (key: string) => key,
     action: removeItem,
   },
   {
