@@ -50,18 +50,18 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
     offset: search.offset ? Number(search.offset) : 0,
   };
 
-  params.limit ||= searchParams.limit;
-  params.offset ||= searchParams.offset;
-  if (searchParams.actions) params.actions ||= searchParams.actions;
-  if (searchParams.ids) params.strategyIds ||= searchParams.ids?.join(',');
+  params.limit = searchParams.limit;
+  params.offset = searchParams.offset;
+  if (searchParams.actions) params.actions = searchParams.actions;
+  if (searchParams.ids) params.strategyIds = searchParams.ids?.join(',');
   if (searchParams.pairs)
-    params.pairs ||= searchParams.pairs
+    params.pairs = searchParams.pairs
       .map((pair) => `${pair[0]}_${pair[1]}`)
       .join(',');
   if (searchParams.start)
-    params.start ||= getUnixTime(new Date(searchParams.start));
+    params.start = getUnixTime(new Date(searchParams.start));
   if (searchParams.end)
-    params.end ||= getUnixTime(addDays(new Date(searchParams.end), 1));
+    params.end = getUnixTime(addDays(new Date(searchParams.end), 1));
 
   for (const key in params) {
     if (isEmpty(params[key as ParamsKey])) delete params[key as ParamsKey];
