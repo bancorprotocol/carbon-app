@@ -27,10 +27,11 @@ export const migrateAndRemoveItem: MigrationAction = ({
   newFormattedKey,
 }) => {
   const oldObj = localStorage.getItem(oldFormattedKey);
-  if (!oldObj) return;
+  localStorage.removeItem(oldFormattedKey);
   try {
-    localStorage.removeItem(oldFormattedKey);
-    if (!localStorage.getItem(newFormattedKey)) {
+    if (!oldObj) return;
+    const oldObjParsed = JSON.parse(oldObj);
+    if (!localStorage.getItem(newFormattedKey) && !!oldObjParsed) {
       localStorage.setItem(newFormattedKey, oldObj);
     }
   } catch (e) {

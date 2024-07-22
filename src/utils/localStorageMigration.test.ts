@@ -157,4 +157,95 @@ describe('managedLocalStorage', () => {
       data: 'v11LS-item3',
     });
   });
+
+  it('should not migrate empty or undefined non-compressed objects but should delete them', () => {
+    // SETUP
+    interface TestLocalStorageSchema {
+      item1: string;
+      item2: string;
+      item3: string;
+      item4: string;
+    }
+
+    const migrations: Migration[] = [
+      {
+        matcher: (formattedKey) => {
+          const prefix = 'v1-';
+          const isMatch = formattedKey.startsWith(prefix);
+          if (isMatch) return formattedKey.slice(prefix.length);
+        },
+        action: migrateAndRemoveItem,
+      },
+    ];
+
+    const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
+      ['v1', key].join('-')
+    );
+    const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
+      (key: string) => ['v1.1', key].join('-'),
+      migrations
+    );
+
+    // To migrate
+    v1LS.setItem('item1', '');
+    v1LS.setItem('item2', '');
+
+    // Already exist
+    v11LS.setItem('item2', '');
+
+    // ACT
+    v11LS.migrateItems();
+
+    // ASSERT
+    // All migrated items have been deleted
+    expect(localStorage.getItem('v1-item1')).toBeNull();
+    expect(localStorage.getItem('v1-item2')).toBeNull();
+
+    // Migration is done properly for empty non-compressed items
+    expect(localStorage.getItem('v1.1-item1')).toBeNull();
+    expect(v11LS.getItem('item2')).toEqual('');
+  });
+
+  it('should migrate any compressed object', () => {
+    // SETUP
+    interface TestLocalStorageSchema {
+      item1: string;
+      item2: string;
+    }
+
+    const migrations: Migration[] = [
+      {
+        matcher: (formattedKey) => {
+          const prefix = 'v1-';
+          const isMatch = formattedKey.startsWith(prefix);
+          if (isMatch) return formattedKey.slice(prefix.length);
+        },
+        action: migrateAndRemoveItem,
+      },
+    ];
+
+    const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
+      ['v1', key].join('-')
+    );
+    const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
+      (key: string) => ['v1.1', key].join('-'),
+      migrations
+    );
+
+    // To migrate
+    v1LS.setItem('item1', '', true);
+    v1LS.setItem('item2', {}, true);
+
+    // ACT
+    v11LS.migrateItems();
+
+    // ASSERT
+    // All migrated items have been deleted
+    expect(localStorage.getItem('v1-item1')).toBeNull();
+    expect(localStorage.getItem('v1-item2')).toBeNull();
+
+    // Migration is done properly
+    expect(v11LS.getItem('item1')).toEqual('');
+    expect(v11LS.getItem('item2')).toStrictEqual({});
+  });
 });
