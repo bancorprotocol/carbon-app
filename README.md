@@ -60,12 +60,18 @@ Open [http://localhost:3000](http://localhost:3000) to view the development mode
 
 # Test
 
-## Unit tests
+## Unit/Integration tests & coverage
 
 To launch the test runner, run the following command:
 
 ```bash
 yarn test
+```
+
+If you wish to check the test coverage, run the following command:
+
+```bash
+yarn coverage
 ```
 
 ## E2E tests

@@ -87,14 +87,14 @@ const subscriptCharacters = (amount: number | string) => {
     .join('');
 };
 
-const subscript = (num: SafeDecimal, formatter: Intl.NumberFormat) => {
+const subscript = (num: number, formatter: Intl.NumberFormat) => {
   const transform = (part: Intl.NumberFormatPart) => {
     if (part.type !== 'fraction') return part.value;
     return part.value.replace(/0+/, (match) => {
       return `0${subscriptCharacters(match.length)}`;
     });
   };
-  return formatter.formatToParts(num.toNumber()).map(transform).join('');
+  return formatter.formatToParts(num).map(transform).join('');
 };
 
 interface PrettifyNumberOptions {
@@ -107,19 +107,7 @@ interface PrettifyNumberOptions {
   noSubscript?: boolean;
 }
 
-export function prettifyNumber(num: NumberLike): string;
-
-export function prettifyNumber(
-  num: NumberLike,
-  options?: PrettifyNumberOptions
-): string;
-
-export function prettifyNumber(
-  value: NumberLike,
-  options: PrettifyNumberOptions = {}
-): string {
-  const num = new SafeDecimal(value);
-  const { locale = 'en-US' } = options;
+const getIntlOptions = (value: SafeDecimal, options: PrettifyNumberOptions) => {
   const intlOptions: Intl.NumberFormatOptions = {
     // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
     roundingMode: 'trunc',
@@ -139,9 +127,19 @@ export function prettifyNumber(
     intlOptions.useGrouping = true;
   }
 
-  if (options.abbreviate && num.gte(1_000_000)) {
+  if (options.abbreviate && value.gte(1_000_000)) {
     intlOptions.notation = 'compact';
   }
+  return intlOptions;
+};
+
+export function prettifyNumber(
+  value: NumberLike,
+  options: PrettifyNumberOptions = {}
+): string {
+  const num = new SafeDecimal(value);
+  const { locale = 'en-US' } = options;
+  const intlOptions = getIntlOptions(num, options);
 
   // Force value to be positive
   if (num.lte(0)) {
@@ -161,7 +159,6 @@ export function prettifyNumber(
   } else {
     intlOptions.maximumSignificantDigits = 5;
   }
-
   const formatter = new Intl.NumberFormat(locale, intlOptions);
 
   if (options.highPrecision) {
@@ -169,7 +166,7 @@ export function prettifyNumber(
   }
 
   if (!options.noSubscript && num.lt(0.001)) {
-    return subscript(num, formatter);
+    return subscript(num.toNumber(), formatter);
   }
 
   return formatter.format(num.toNumber());

@@ -1,5 +1,5 @@
 import { test, expect, afterEach } from 'vitest';
-import { renderWithRouter, screen } from 'libs/testing-library';
+import { renderWithRouter } from 'libs/testing-library';
 import { debugTokens } from '../../../../e2e/utils/types';
 import { CreateRecurringStrategyPage } from './recurring';
 
@@ -19,14 +19,9 @@ test('run recurring form', async () => {
     },
   });
 
-  // ACT
-
-  // ASSERT
   expect(router.state.location.pathname).toBe(basePath);
   expect(router.state.location.search).toStrictEqual({
     base: debugTokens.ETH,
     quote: debugTokens.USDC,
   });
-  screen.debug();
-  screen.logTestingPlaygroundURL();
 });

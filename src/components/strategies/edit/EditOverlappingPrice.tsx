@@ -33,6 +33,8 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { InputLimit } from '../common/InputLimit';
 import { Button } from 'components/common/button';
+import { isZero } from '../common/utils';
+import { isValidRange } from '../utils';
 
 interface Props {
   marketPrice: string;
@@ -158,6 +160,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   })();
 
   useEffect(() => {
+    if (!isValidRange(order0.min, order1.max)) return;
     if (anchor === 'buy' && aboveMarket) {
       set('anchor', 'sell');
       set('budget', undefined);
@@ -166,7 +169,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       set('anchor', 'buy');
       set('budget', undefined);
     }
-  }, [anchor, aboveMarket, belowMarket, set]);
+  }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
 
   const setMarketPrice = (price: string) => set('marketPrice', price);
   const setMin = (min: string) => set('min', min);
@@ -190,7 +193,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
 
   // Update on buyMin changes
   useEffect(() => {
-    if (!order0.min) return;
+    if (isZero(order0.min)) return;
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
       if (Number(order1.max) < minSellMax) set('max', minSellMax.toString());
@@ -201,7 +204,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
 
   // Update on sellMax changes
   useEffect(() => {
-    if (!order1.max) return;
+    if (isZero(order1.max)) return;
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
       if (Number(order0.min) > maxBuyMin) set('min', maxBuyMin.toString());

@@ -17,7 +17,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
   const { buy, sell, spread } = testCase.input.create;
   const output = testCase.output.create;
 
-  return test(`Create ${base}->${quote}`, async ({ page }) => {
+  return test('Create', async ({ page }) => {
     await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');
@@ -38,7 +38,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await form.budget().fill(sell.budget.toString());
 
     const tokenApproval = new TokenApprovalDriver(page);
-    await createForm.submit();
+    await createForm.submit('create');
     await tokenApproval.checkApproval([base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
     await myStrategies.waitForUpdates();

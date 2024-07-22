@@ -10,6 +10,16 @@ export default defineConfig({
       'src/**/*.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
       'e2e/**/*.test.ts',
     ],
+    server: {
+      deps: {
+        inline: ['/@bancor/carbon-sdk/'],
+      },
+    },
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      include: ['**/src/**'],
+      exclude: ['**/src/abis/**'],
+    },
   },
   plugins: [tsconfigPaths(), svgrPlugin()],
 });
