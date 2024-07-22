@@ -580,9 +580,9 @@ const testCases: CreateStrategyTestCase[] = [
       create: {
         totalFiat: '$25.11',
         buy: {
-          min: '0.30 USDC',
-          max: '0.545455 USDC',
-          marginal: '0.400854 USDC',
+          min: '0.299999 USDC',
+          max: '0.545454 USDC',
+          marginal: '0.400853 USDC',
           spread: '10%',
           budget: '12.50 USDC',
           fiat: '$12.50',
@@ -599,17 +599,17 @@ const testCases: CreateStrategyTestCase[] = [
       undercut: {
         totalFiat: '$25.10',
         buy: {
-          min: '0.30 USDC',
-          max: '0.545951 USDC',
+          min: '0.299999 USDC',
+          max: '0.54595 USDC',
           marginal: '0.401036 USDC',
           spread: '9.9%',
           budget: '12.49 USDC',
           fiat: '$12.49',
         },
         sell: {
-          min: '0.3297 USDC',
+          min: '0.329699 USDC',
           max: '0.60 USDC',
-          marginal: '0.440739 USDC',
+          marginal: '0.440738 USDC',
           spread: '9.9%',
           budget: '30.00 BNT',
           fiat: '$12.61',
@@ -618,9 +618,9 @@ const testCases: CreateStrategyTestCase[] = [
       editPrices: {
         totalFiat: '$39.17',
         buy: {
-          min: '0.20 USDC',
-          max: '0.608696 USDC',
-          marginal: '0.392043 USDC',
+          min: '0.199999 USDC',
+          max: '0.608695 USDC',
+          marginal: '0.392042 USDC',
           spread: '15.000001%',
           budget: '22.50 USDC',
           fiat: '$22.50',
