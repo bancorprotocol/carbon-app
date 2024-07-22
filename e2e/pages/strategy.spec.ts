@@ -607,7 +607,7 @@ const testCases: CreateStrategyTestCase[] = [
           fiat: '$12.49',
         },
         sell: {
-          min: '0.3297 USDC',
+          min: '0.329699 USDC',
           max: '0.60 USDC',
           marginal: '0.440739 USDC',
           spread: '9.9%',
