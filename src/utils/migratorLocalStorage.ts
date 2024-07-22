@@ -1,36 +1,36 @@
-type OldKeyExtractor = (key: string) => string | undefined;
-type NewKeyFormatter = (key: string) => string;
+type PrevKeyExtractor = (key: string) => string | undefined;
+type NextKeyFormatter = (key: string) => string;
 
 // Action types
 type MigrationActionWithFormatter = ({
-  oldFormattedKey,
-  newFormattedKey,
+  prevFormattedKey,
+  nextFormattedKey,
   key,
 }: {
   key: string;
-  oldFormattedKey: string;
-  newFormattedKey: string;
+  prevFormattedKey: string;
+  nextFormattedKey: string;
 }) => void;
 
 type MigrationActionWithoutFormatter = ({
-  oldFormattedKey,
+  prevFormattedKey,
   key,
 }: {
   key: string;
-  oldFormattedKey: string;
+  prevFormattedKey: string;
 }) => void;
 
 // Migration types
 interface MigrationWithKeyFormatter {
   action: MigrationActionWithFormatter;
-  oldKeyExtractor: OldKeyExtractor;
-  newKeyFormatter: NewKeyFormatter;
+  prevKeyExtractor: PrevKeyExtractor;
+  nextKeyFormatter: NextKeyFormatter;
 }
 
 interface MigrationWithoutKeyFormatter {
   action: MigrationActionWithoutFormatter;
-  oldKeyExtractor: OldKeyExtractor;
-  newKeyFormatter?: NewKeyFormatter;
+  prevKeyExtractor: PrevKeyExtractor;
+  nextKeyFormatter?: NextKeyFormatter;
 }
 
 // Union type for migrations
@@ -39,30 +39,30 @@ export type Migration =
   | MigrationWithoutKeyFormatter;
 
 /**
- * Migrates data from an old key to a new key in localStorage and removes the old key.
- * If the new key already exists, it does not overwrite the existing data.
- * In case of an error during migration, it attempts to remove the new key to avoid partial data migration.
+ * Migrates data from an previous (prev) key to a next key in localStorage and removes the prev key.
+ * If the next key already exists, it does not overwrite the existing data.
+ * In case of an error during migration, it attempts to remove the next key to avoid partial data migration.
  *
  * @param {Object} params - The parameters object.
- * @param {string} params.oldFormattedKey - The old key in localStorage to migrate data from.
- * @param {string} params.newFormattedKey - The new key in localStorage to migrate data to.
+ * @param {string} params.prevFormattedKey - The prev key in localStorage to migrate data from.
+ * @param {string} params.nextFormattedKey - The next key in localStorage to migrate data to.
  */
 export const migrateAndRemoveItem: MigrationActionWithFormatter = ({
-  oldFormattedKey,
-  newFormattedKey,
+  prevFormattedKey,
+  nextFormattedKey,
 }) => {
-  const oldObj = localStorage.getItem(oldFormattedKey);
-  localStorage.removeItem(oldFormattedKey);
-  if (!oldObj || !newFormattedKey) return;
+  const prevObj = localStorage.getItem(prevFormattedKey);
+  localStorage.removeItem(prevFormattedKey);
+  if (!prevObj || !nextFormattedKey) return;
   try {
-    const oldObjParsed = JSON.parse(oldObj);
-    if (!localStorage.getItem(newFormattedKey) && !!oldObjParsed) {
-      localStorage.setItem(newFormattedKey, oldObj);
+    const prevObjParsed = JSON.parse(prevObj);
+    if (!localStorage.getItem(nextFormattedKey) && !!prevObjParsed) {
+      localStorage.setItem(nextFormattedKey, prevObj);
     }
   } catch (e) {
-    localStorage.removeItem(newFormattedKey);
+    localStorage.removeItem(nextFormattedKey);
     console.error(
-      `Migration from ${oldFormattedKey} to ${newFormattedKey} has failed`,
+      `Migration from ${prevFormattedKey} to ${nextFormattedKey} has failed`,
       e
     );
   }
@@ -72,11 +72,11 @@ export const migrateAndRemoveItem: MigrationActionWithFormatter = ({
  * Removes a specified key from localStorage.
  *
  * @param {Object} params - The parameters object.
- * @param {string} params.oldFormattedKey - The key in localStorage to be removed.
+ * @param {string} params.prevFormattedKey - The key in localStorage to be removed.
  */
 export const removeItem: MigrationActionWithoutFormatter = ({
-  oldFormattedKey,
-}) => localStorage.removeItem(oldFormattedKey);
+  prevFormattedKey,
+}) => localStorage.removeItem(prevFormattedKey);
 
 export class MigratorLocalStorage {
   private readonly migrations: Migration[] = [];
@@ -84,19 +84,21 @@ export class MigratorLocalStorage {
     if (migrations) this.migrations = migrations;
   }
 
-  migrateItem = (oldFormattedKey: string) => {
-    this.migrations.forEach(({ action, oldKeyExtractor, newKeyFormatter }) => {
-      const key = oldKeyExtractor(oldFormattedKey);
-      if (!key) return;
-      const newFormattedKey = newKeyFormatter ? newKeyFormatter(key) : '';
-      action({ key, oldFormattedKey, newFormattedKey });
-    });
+  migrateItem = (prevFormattedKey: string) => {
+    this.migrations.forEach(
+      ({ action, prevKeyExtractor, nextKeyFormatter }) => {
+        const key = prevKeyExtractor(prevFormattedKey);
+        if (!key) return;
+        const nextFormattedKey = nextKeyFormatter ? nextKeyFormatter(key) : '';
+        action({ key, prevFormattedKey, nextFormattedKey });
+      }
+    );
   };
 
   migrateAllItems = () => {
     if (!this.migrations?.length) return;
-    Object.keys(localStorage).forEach((oldFormattedKey) =>
-      this.migrateItem(oldFormattedKey)
+    Object.keys(localStorage).forEach((prevFormattedKey) =>
+      this.migrateItem(prevFormattedKey)
     );
   };
 }

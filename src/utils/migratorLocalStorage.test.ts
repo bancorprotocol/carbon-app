@@ -23,16 +23,16 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        oldKeyExtractor: (formattedKey) => {
+        prevKeyExtractor: (formattedKey) => {
           const prefix = 'v1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
-        newKeyFormatter: (key: string) => ['v1.1', key].join('-'),
+        nextKeyFormatter: (key: string) => ['v1.1', key].join('-'),
         action: migrateAndRemoveItem,
       },
       {
-        oldKeyExtractor: (formattedKey) => {
+        prevKeyExtractor: (formattedKey) => {
           const prefix = 'v1.1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
@@ -40,12 +40,12 @@ describe('managedLocalStorage', () => {
         action: removeItem,
       },
       {
-        oldKeyExtractor: (formattedKey) => {
+        prevKeyExtractor: (formattedKey) => {
           const prefix = 'v1.2-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
-        newKeyFormatter: (key: string) => ['v1.3', key].join('-'),
+        nextKeyFormatter: (key: string) => ['v1.3', key].join('-'),
         action: migrateAndRemoveItem,
       },
     ];
@@ -117,12 +117,12 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        oldKeyExtractor: (formattedKey) => {
+        prevKeyExtractor: (formattedKey) => {
           const prefix = 'v1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
-        newKeyFormatter: (key: string) => ['v1.1', key].join('-'),
+        nextKeyFormatter: (key: string) => ['v1.1', key].join('-'),
         action: migrateAndRemoveItem,
       },
     ];
@@ -175,12 +175,12 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        oldKeyExtractor: (formattedKey) => {
+        prevKeyExtractor: (formattedKey) => {
           const prefix = 'v1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
-        newKeyFormatter: (key: string) => ['v1.1', key].join('-'),
+        nextKeyFormatter: (key: string) => ['v1.1', key].join('-'),
         action: migrateAndRemoveItem,
       },
     ];
@@ -223,12 +223,12 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        oldKeyExtractor: (formattedKey) => {
+        prevKeyExtractor: (formattedKey) => {
           const prefix = 'v1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
-        newKeyFormatter: (key: string) => ['v1.1', key].join('-'),
+        nextKeyFormatter: (key: string) => ['v1.1', key].join('-'),
         action: migrateAndRemoveItem,
       },
     ];

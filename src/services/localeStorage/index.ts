@@ -60,26 +60,26 @@ interface LocalStorageSchema {
 /**
  * An array of migration objects, each designed to handle specific versions of stored items.
  * @type {Migration[]}
- * @property {Function} oldKeyExtractor - A function that takes the formattedKey of the object to be migrated and returns the key found or undefined if not found.
- * @property {Function} newKeyFormatter - A function that takes the key of the object and returns the new formatted key that it should be migrated to.
- * @property {Function} action - The action to take for each key found with the oldKeyExtractor function, receives `oldFormattedKey`, `key = oldKeyExtractor(oldFormattedKey)` and the `newFormattedKey = newKeyFormatter(key)`.
+ * @property {Function} prevKeyExtractor - A function that takes the formattedKey of the object to be migrated and returns the key found, or undefined if not found.
+ * @property {Function} nextKeyFormatter - A function that takes the key of the object and returns the next formatted key that it should be migrated to.
+ * @property {Function} action - The action to take for each key found with the prevKeyExtractor function, receives `prevFormattedKey`, `key = prevKeyExtractor(prevFormattedKey)` and the `nextFormattedKey = nextKeyFormatter(key)`.
  */
 const migrations: Migration[] = [
   {
-    oldKeyExtractor: (oldFormattedKey) => {
+    prevKeyExtractor: (prevFormattedKey) => {
       const prefix = 'carbon-v1-';
-      const isMatch = oldFormattedKey.startsWith(prefix);
-      if (isMatch) return oldFormattedKey.slice(prefix.length);
+      const isMatch = prevFormattedKey.startsWith(prefix);
+      if (isMatch) return prevFormattedKey.slice(prefix.length);
     },
     action: removeItem,
   },
   {
-    oldKeyExtractor: (oldFormattedKey) => {
+    prevKeyExtractor: (prevFormattedKey) => {
       const prefix = 'carbon-v1.1-';
-      const isMatch = oldFormattedKey.startsWith(prefix);
-      if (isMatch) return oldFormattedKey.slice(prefix.length);
+      const isMatch = prevFormattedKey.startsWith(prefix);
+      if (isMatch) return prevFormattedKey.slice(prefix.length);
     },
-    newKeyFormatter: (key: string) =>
+    nextKeyFormatter: (key: string) =>
       ['carbon', NETWORK, 'v1.1', key].join('-'),
     action: migrateAndRemoveItem,
   },
