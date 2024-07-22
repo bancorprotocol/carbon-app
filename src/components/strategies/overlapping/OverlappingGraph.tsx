@@ -15,6 +15,7 @@ import { getMaxBuyMin, getMinSellMax } from './utils';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { isValidRange } from '../utils';
 import styles from './OverlappingGraph.module.css';
 
 type Props = EnableProps | DisableProps;
@@ -165,6 +166,8 @@ export const OverlappingGraph: FC<Props> = (props) => {
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
   const disabled = !!props.disabled;
+
+  const isValid = isValidRange(order0.min, order1.max);
 
   const userMarketPrice = props.userMarketPrice
     ? +props.userMarketPrice
@@ -611,52 +614,56 @@ export const OverlappingGraph: FC<Props> = (props) => {
 
         <g className={styles.content}>
           {/* Buy */}
-          <g>
-            <polygon
-              id="buy-polygon"
-              points={buyPoints}
-              fill="var(--buy)"
-              fillOpacity="0.35"
-            />
-            <polygon
-              id="marginal-buy-polygon"
-              points={marginalBuyPoints}
-              fill="url(#buy-pattern)"
-            />
-            <line
-              id="buy-max-line"
-              x1={buyMax}
-              x2={buyMax}
-              y1={bottom}
-              y2={middle}
-              stroke="var(--buy)"
-              strokeWidth={2 * ratio}
-            />
-          </g>
+          {isValid && (
+            <g>
+              <polygon
+                id="buy-polygon"
+                points={buyPoints}
+                fill="var(--buy)"
+                fillOpacity="0.35"
+              />
+              <polygon
+                id="marginal-buy-polygon"
+                points={marginalBuyPoints}
+                fill="url(#buy-pattern)"
+              />
+              <line
+                id="buy-max-line"
+                x1={buyMax}
+                x2={buyMax}
+                y1={bottom}
+                y2={middle}
+                stroke="var(--buy)"
+                strokeWidth={2 * ratio}
+              />
+            </g>
+          )}
 
           {/* Sell */}
-          <g>
-            <line
-              id="sell-min-line"
-              x1={sellMin}
-              x2={sellMin}
-              y1={middle}
-              y2={top}
-              stroke="var(--sell)"
-              strokeWidth={2 * ratio}
-            />
-            <polygon
-              id="sell-polygon"
-              points={sellPoints}
-              fill="var(--sell)"
-              fillOpacity="0.35"
-            />
-            <polygon
-              id="marginal-sell-polygon"
-              points={marginalSellPoints}
-              fill="url(#sell-pattern)"
-            />
-          </g>
+          {isValid && (
+            <g>
+              <line
+                id="sell-min-line"
+                x1={sellMin}
+                x2={sellMin}
+                y1={middle}
+                y2={top}
+                stroke="var(--sell)"
+                strokeWidth={2 * ratio}
+              />
+              <polygon
+                id="sell-polygon"
+                points={sellPoints}
+                fill="var(--sell)"
+                fillOpacity="0.35"
+              />
+              <polygon
+                id="marginal-sell-polygon"
+                points={marginalSellPoints}
+                fill="url(#sell-pattern)"
+              />
+            </g>
+          )}
           {/* Price line */}
           <g>
             <line
@@ -704,127 +711,131 @@ export const OverlappingGraph: FC<Props> = (props) => {
           )}
 
           {/* Handlers: must be at the end to always be above the graph */}
-          <g
-            id="buy-handler"
-            className={cn(styles.handler, disabled ? '' : 'cursor-ew-resize')}
-            onMouseDown={(e) => dragStart(e, 'buy')}
-          >
-            <g className={styles.handlerTooltip}>
-              <rect {...buyTooltip.rect} />
-              <text
-                className="tooltip-price"
-                y={top - 2 * fontSize - 3 * padding}
-                {...buyTooltip.text}
-              >
-                {minValue}
-              </text>
+          {isValid && (
+            <g
+              id="buy-handler"
+              className={cn(styles.handler, disabled ? '' : 'cursor-ew-resize')}
+              onMouseDown={(e) => dragStart(e, 'buy')}
+            >
+              <g className={styles.handlerTooltip}>
+                <rect {...buyTooltip.rect} />
+                <text
+                  className="tooltip-price"
+                  y={top - 2 * fontSize - 3 * padding}
+                  {...buyTooltip.text}
+                >
+                  {minValue}
+                </text>
 
-              <text
-                className="tooltip-percent"
-                y={top - 1 * fontSize - 2 * padding}
-                fillOpacity="0.4"
-                {...buyTooltip.text}
-              >
-                {marketPrice ? minPercent + '%' : '...'}
-              </text>
-            </g>
-            {!disabled && (
-              <rect
-                x={min - 11 * ratio}
-                y={top - 1 * ratio}
-                width={12 * ratio}
-                height={24 * ratio}
-                fill="var(--buy)"
-                rx={4 * ratio}
+                <text
+                  className="tooltip-percent"
+                  y={top - 1 * fontSize - 2 * padding}
+                  fillOpacity="0.4"
+                  {...buyTooltip.text}
+                >
+                  {marketPrice ? minPercent + '%' : '...'}
+                </text>
+              </g>
+              {!disabled && (
+                <rect
+                  x={min - 11 * ratio}
+                  y={top - 1 * ratio}
+                  width={12 * ratio}
+                  height={24 * ratio}
+                  fill="var(--buy)"
+                  rx={4 * ratio}
+                />
+              )}
+              <line
+                x1={min - 7 * ratio}
+                x2={min - 7 * ratio}
+                y1={top + 19 * ratio}
+                y2={top + 4 * ratio}
+                stroke="black"
+                strokeOpacity="0.5"
+                strokeWidth={ratio}
               />
-            )}
-            <line
-              x1={min - 7 * ratio}
-              x2={min - 7 * ratio}
-              y1={top + 19 * ratio}
-              y2={top + 4 * ratio}
-              stroke="black"
-              strokeOpacity="0.5"
-              strokeWidth={ratio}
-            />
-            <line
-              x1={min - 3 * ratio}
-              x2={min - 3 * ratio}
-              y1={top + 19 * ratio}
-              y2={top + 4 * ratio}
-              stroke="black"
-              strokeOpacity="0.5"
-              strokeWidth={ratio}
-            />
-            <line
-              x1={min}
-              x2={min}
-              y1={bottom}
-              y2={top}
-              stroke="var(--buy)"
-              strokeWidth={2 * ratio}
-            />
-          </g>
-          <g
-            id="sell-handler"
-            className={cn(styles.handler, disabled ? '' : 'cursor-ew-resize')}
-            onMouseDown={(e) => dragStart(e, 'sell')}
-          >
-            <g className={styles.handlerTooltip}>
-              <rect {...sellTooltip.rect} />
-              <text
-                className="tooltip-price"
-                y={top - 2 * fontSize - 3 * padding}
-                {...sellTooltip.text}
-              >
-                {maxValue}
-              </text>
-              <text
-                className="tooltip-percent"
-                y={top - 1 * fontSize - 2 * padding}
-                fillOpacity="0.4"
-                {...sellTooltip.text}
-              >
-                {marketPrice ? maxPercent + '%' : '...'}
-              </text>
-            </g>
-            {!disabled && (
-              <rect
-                x={max - 1 * ratio}
-                y={top - 1 * ratio}
-                width={12 * ratio}
-                height={24 * ratio}
-                fill="var(--sell)"
-                rx={4 * ratio}
+              <line
+                x1={min - 3 * ratio}
+                x2={min - 3 * ratio}
+                y1={top + 19 * ratio}
+                y2={top + 4 * ratio}
+                stroke="black"
+                strokeOpacity="0.5"
+                strokeWidth={ratio}
               />
-            )}
-            <line
-              x1={max + 7 * ratio}
-              x2={max + 7 * ratio}
-              y1={top + 19 * ratio}
-              y2={top + 4 * ratio}
-              stroke="black"
-              strokeOpacity="0.5"
-              strokeWidth={ratio}
-            />
-            <line
-              x1={max + 3 * ratio}
-              x2={max + 3 * ratio}
-              y1={top + 19 * ratio}
-              y2={top + 4 * ratio}
-              stroke="black"
-              strokeOpacity="0.5"
-              strokeWidth={ratio}
-            />
-            <line
-              x1={max}
-              x2={max}
-              y1={bottom}
-              y2={top}
-              stroke="var(--sell)"
-              strokeWidth={2 * ratio}
-            />
-          </g>
+              <line
+                x1={min}
+                x2={min}
+                y1={bottom}
+                y2={top}
+                stroke="var(--buy)"
+                strokeWidth={2 * ratio}
+              />
+            </g>
+          )}
+          {isValid && (
+            <g
+              id="sell-handler"
+              className={cn(styles.handler, disabled ? '' : 'cursor-ew-resize')}
+              onMouseDown={(e) => dragStart(e, 'sell')}
+            >
+              <g className={styles.handlerTooltip}>
+                <rect {...sellTooltip.rect} />
+                <text
+                  className="tooltip-price"
+                  y={top - 2 * fontSize - 3 * padding}
+                  {...sellTooltip.text}
+                >
+                  {maxValue}
+                </text>
+                <text
+                  className="tooltip-percent"
+                  y={top - 1 * fontSize - 2 * padding}
+                  fillOpacity="0.4"
+                  {...sellTooltip.text}
+                >
+                  {marketPrice ? maxPercent + '%' : '...'}
+                </text>
+              </g>
+              {!disabled && (
+                <rect
+                  x={max - 1 * ratio}
+                  y={top - 1 * ratio}
+                  width={12 * ratio}
+                  height={24 * ratio}
+                  fill="var(--sell)"
+                  rx={4 * ratio}
+                />
+              )}
+              <line
+                x1={max + 7 * ratio}
+                x2={max + 7 * ratio}
+                y1={top + 19 * ratio}
+                y2={top + 4 * ratio}
+                stroke="black"
+                strokeOpacity="0.5"
+                strokeWidth={ratio}
+              />
+              <line
+                x1={max + 3 * ratio}
+                x2={max + 3 * ratio}
+                y1={top + 19 * ratio}
+                y2={top + 4 * ratio}
+                stroke="black"
+                strokeOpacity="0.5"
+                strokeWidth={ratio}
+              />
+              <line
+                x1={max}
+                x2={max}
+                y1={bottom}
+                y2={top}
+                stroke="var(--sell)"
+                strokeWidth={2 * ratio}
+              />
+            </g>
+          )}
         </g>
       </svg>
     </figure>

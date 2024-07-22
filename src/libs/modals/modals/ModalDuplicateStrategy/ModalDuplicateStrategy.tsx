@@ -7,6 +7,9 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { Strategy } from 'libs/queries';
 import { getUndercutStrategy } from './utils';
+import { getStrategyType } from 'components/strategies/common/utils';
+import { useNavigate } from '@tanstack/react-router';
+import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 
 export type ModalDuplicateStrategyData = {
   strategy: Strategy;
@@ -16,13 +19,30 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
   id,
   data: { strategy },
 }) => {
-  const duplicate = useDuplicate();
+  const navigate = useNavigate();
+  const strategyType = getStrategyType(strategy);
+  const duplicate = useDuplicate(strategyType);
   const { closeModal } = useModal();
   const undercutDifference = 0.001;
 
   const undercutStrategy = () => {
-    const undercutStrategy = getUndercutStrategy(strategy, undercutDifference);
-    duplicate(undercutStrategy);
+    if (strategyType === 'overlapping') {
+      // Reduce spread by 0.1% for overlapping strategies
+      const spread = getRoundedSpread(strategy) * 0.99;
+      navigate({
+        to: '/strategies/create/overlapping',
+        search: {
+          base: strategy.base.address,
+          quote: strategy.quote.address,
+          min: strategy.order0.startRate,
+          max: strategy.order1.endRate,
+          spread: spread.toString(),
+        },
+      });
+    } else {
+      const undercut = getUndercutStrategy(strategy, undercutDifference);
+      duplicate(undercut);
+    }
     closeModal(id);
   };
 

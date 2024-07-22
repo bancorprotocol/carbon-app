@@ -1,9 +1,11 @@
-import { isOverlappingStrategy } from 'components/strategies/common/utils';
+import {
+  isOverlappingStrategy,
+  isPaused,
+} from 'components/strategies/common/utils';
 import { FC, forwardRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { useNavigate, useParams } from 'libs/routing';
-import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
@@ -52,7 +54,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const { strategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
   const navigate = useNavigate();
-  const duplicate = useDuplicate();
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
   const isOwn = useIsStrategyOwner(strategy.id);
@@ -69,18 +70,16 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
   const items: (itemsType | separatorCounterType)[] = [];
 
-  items.push({
-    id: 'duplicateStrategy',
-    name: 'Duplicate Strategy',
-    action: () => {
-      carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
-      if (!isOverlapping) {
+  if (!isPaused(strategy)) {
+    items.push({
+      id: 'duplicateStrategy',
+      name: 'Duplicate Strategy',
+      action: () => {
+        carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
         openModal('duplicateStrategy', { strategy });
-      } else {
-        duplicate(strategy);
-      }
-    },
-  });
+      },
+    });
+  }
 
   const isDisposable = isDisposableStrategy(strategy);
 

@@ -72,8 +72,8 @@ const getOrders = (
 
   if (!isValidRange(min, max) || !isValidSpread(spread)) {
     return {
-      buy: { min, max: min, marginalPrice: max, budget: '' },
-      sell: { min: max, max: max, marginalPrice: min, budget: '' },
+      buy: { min: min, max: min, marginalPrice: max, budget },
+      sell: { min: max, max: max, marginalPrice: min, budget },
     };
   }
 
