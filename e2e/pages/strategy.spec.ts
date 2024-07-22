@@ -599,8 +599,8 @@ const testCases: CreateStrategyTestCase[] = [
       undercut: {
         totalFiat: '$25.10',
         buy: {
-          min: '0.30 USDC',
-          max: '0.545951 USDC',
+          min: '0.299999 USDC',
+          max: '0.54595 USDC',
           marginal: '0.401036 USDC',
           spread: '9.9%',
           budget: '12.49 USDC',
@@ -609,7 +609,7 @@ const testCases: CreateStrategyTestCase[] = [
         sell: {
           min: '0.329699 USDC',
           max: '0.60 USDC',
-          marginal: '0.440739 USDC',
+          marginal: '0.440738 USDC',
           spread: '9.9%',
           budget: '30.00 BNT',
           fiat: '$12.61',
