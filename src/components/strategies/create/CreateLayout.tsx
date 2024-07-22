@@ -57,6 +57,7 @@ export const CreateLayout: FC<Props> = (props) => {
                 carbonEvents.strategy.strategyChartOpen(undefined);
                 setShowGraph(true);
               }}
+              data-testid="open-chart"
               className="bg-background-800 grid size-40 place-items-center rounded-full"
             >
               <IconCandles className="size-18" />
