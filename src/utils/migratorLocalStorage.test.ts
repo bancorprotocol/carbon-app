@@ -2,9 +2,10 @@ import { describe, it, expect, afterEach } from 'vitest';
 import { ManagedLocalStorage } from 'utils/managedLocalStorage';
 import {
   Migration,
+  MigratorLocalStorage,
   migrateAndRemoveItem,
   removeItem,
-} from './localStorageMigration';
+} from './migratorLocalStorage';
 
 describe('managedLocalStorage', () => {
   afterEach(() => {
@@ -22,15 +23,16 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        matcher: (formattedKey) => {
+        oldKeyExtractor: (formattedKey) => {
           const prefix = 'v1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
+        newKeyFormatter: (key: string) => ['v1.1', key].join('-'),
         action: migrateAndRemoveItem,
       },
       {
-        matcher: (formattedKey) => {
+        oldKeyExtractor: (formattedKey) => {
           const prefix = 'v1.1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
@@ -38,14 +40,16 @@ describe('managedLocalStorage', () => {
         action: removeItem,
       },
       {
-        matcher: (formattedKey) => {
+        oldKeyExtractor: (formattedKey) => {
           const prefix = 'v1.2-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
+        newKeyFormatter: (key: string) => ['v1.3', key].join('-'),
         action: migrateAndRemoveItem,
       },
     ];
+    const migrator = new MigratorLocalStorage(migrations);
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
       ['v1', key].join('-')
@@ -58,7 +62,7 @@ describe('managedLocalStorage', () => {
     );
     const v13LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.3', key].join('-'),
-      migrations
+      migrator
     );
 
     // To migrate
@@ -92,7 +96,7 @@ describe('managedLocalStorage', () => {
 
     // Migration is done properly
     expect(v13LS.getItem('item1')).toStrictEqual({
-      data: 'v1LS-item1',
+      data: 'v12LS-item1',
     });
     expect(v13LS.getItem('item2')).toBeUndefined(); // ManagedLocalStorage getItem for key not found has a different output than localStorage (null vs undefined)
     expect(v13LS.getItem('item3')).toStrictEqual({
@@ -113,21 +117,23 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        matcher: (formattedKey) => {
+        oldKeyExtractor: (formattedKey) => {
           const prefix = 'v1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
+        newKeyFormatter: (key: string) => ['v1.1', key].join('-'),
         action: migrateAndRemoveItem,
       },
     ];
+    const migrator = new MigratorLocalStorage(migrations);
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
       ['v1', key].join('-')
     );
     const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.1', key].join('-'),
-      migrations
+      migrator
     );
 
     // To migrate
@@ -169,21 +175,23 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        matcher: (formattedKey) => {
+        oldKeyExtractor: (formattedKey) => {
           const prefix = 'v1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
+        newKeyFormatter: (key: string) => ['v1.1', key].join('-'),
         action: migrateAndRemoveItem,
       },
     ];
+    const migrator = new MigratorLocalStorage(migrations);
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
       ['v1', key].join('-')
     );
     const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.1', key].join('-'),
-      migrations
+      migrator
     );
 
     // To migrate
@@ -215,21 +223,23 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        matcher: (formattedKey) => {
+        oldKeyExtractor: (formattedKey) => {
           const prefix = 'v1-';
           const isMatch = formattedKey.startsWith(prefix);
           if (isMatch) return formattedKey.slice(prefix.length);
         },
+        newKeyFormatter: (key: string) => ['v1.1', key].join('-'),
         action: migrateAndRemoveItem,
       },
     ];
+    const migrator = new MigratorLocalStorage(migrations);
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
       ['v1', key].join('-')
     );
     const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.1', key].join('-'),
-      migrations
+      migrator
     );
 
     // To migrate

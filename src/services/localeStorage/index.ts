@@ -14,9 +14,10 @@ import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
 import { FiatSymbol } from 'utils/carbonApi';
 import {
   Migration,
+  MigratorLocalStorage,
   migrateAndRemoveItem,
   removeItem,
-} from 'utils/localStorageMigration';
+} from 'utils/migratorLocalStorage';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
@@ -53,34 +54,41 @@ interface LocalStorageSchema {
 
 // ************************** /
 // LOCAL STORAGE MIGRATION AND CLEAN_UP
+// Order matters! The migrations are performed in top to bottom order. In most cases, new migrations should be added to the bottom of the list
 // ************************** /
 
 /**
  * An array of migration objects, each designed to handle specific versions of stored items.
  * @type {Migration[]}
- * @property {Function} matcher - A function that takes a formattedKey and returns the key found or undefined if not found.
- * @property {Function} action - The action to take for each key found with the matcher function, receives oldFormattedKey, key = matcher(oldFormattedKey) and the newFormattedKey.
+ * @property {Function} oldKeyExtractor - A function that takes the formattedKey of the object to be migrated and returns the key found or undefined if not found.
+ * @property {Function} newKeyFormatter - A function that takes the key of the object and returns the new formatted key that it should be migrated to.
+ * @property {Function} action - The action to take for each key found with the oldKeyExtractor function, receives `oldFormattedKey`, `key = oldKeyExtractor(oldFormattedKey)` and the `newFormattedKey = newKeyFormatter(key)`.
  */
 const migrations: Migration[] = [
   {
-    matcher: (formattedKey) => {
-      const prefix = 'carbon-v1.1-';
-      const isMatch = formattedKey.startsWith(prefix);
-      if (isMatch) return formattedKey.slice(prefix.length);
+    oldKeyExtractor: (oldFormattedKey) => {
+      const prefix = 'carbon-v1-';
+      const isMatch = oldFormattedKey.startsWith(prefix);
+      if (isMatch) return oldFormattedKey.slice(prefix.length);
     },
-    action: migrateAndRemoveItem,
+    newKeyFormatter: (key: string) => key,
+    action: removeItem,
   },
   {
-    matcher: (formattedKey) => {
-      const prefix = 'carbon-v1-';
-      const isMatch = formattedKey.startsWith(prefix);
-      if (isMatch) return formattedKey.slice(prefix.length);
+    oldKeyExtractor: (oldFormattedKey) => {
+      const prefix = 'carbon-v1.1-';
+      const isMatch = oldFormattedKey.startsWith(prefix);
+      if (isMatch) return oldFormattedKey.slice(prefix.length);
     },
-    action: removeItem,
+    newKeyFormatter: (key: string) =>
+      ['carbon', NETWORK, 'v1.1', key].join('-'),
+    action: migrateAndRemoveItem,
   },
 ];
 
+const migrator = new MigratorLocalStorage(migrations);
+
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>(
   (key) => [APP_ID, NETWORK, APP_VERSION, key].join('-'),
-  migrations
+  migrator
 );
