@@ -59,5 +59,6 @@ export const useActivityQuery = (params: QueryActivityParams = {}) => {
     },
     enabled: !isPending && validParams,
     refetchInterval: THIRTY_SEC_IN_MS,
+    refetchOnWindowFocus: false,
   });
 };

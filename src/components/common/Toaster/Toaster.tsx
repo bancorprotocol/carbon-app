@@ -4,13 +4,19 @@ import { useStore } from 'store';
 export const Toaster: FC = () => {
   const { toaster } = useStore();
   return (
-    <ul className="fixed bottom-16 right-16 z-10">
+    <ul
+      id="toaster"
+      className="fixed bottom-16 right-16 z-10 flex flex-col gap-8"
+    >
       {toaster.toasts.map((toast) => (
-        <li
-          key={toast.id}
-          className="animate-slideUp bg-background-800 my-5 rounded-full border border-white/60 px-16 py-8"
-        >
-          <output>{toast.content}</output>
+        <li id={toast.id} key={toast.id}>
+          {typeof toast.content === 'string' ? (
+            <output className="bg-background-900 text-14 rounded-6 block border border-white/40 p-16">
+              {toast.content}
+            </output>
+          ) : (
+            toast.content
+          )}
         </li>
       ))}
     </ul>
