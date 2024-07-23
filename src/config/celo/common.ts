@@ -30,6 +30,7 @@ export const commonConfig: AppConfig = {
     rpc: {
       url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://rpc.ankr.com/celo',
     },
+    useLimitedApproval: true, // TODO
     gasToken: {
       name: 'CELO',
       symbol: 'CELO',

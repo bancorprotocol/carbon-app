@@ -26,6 +26,7 @@ export interface AppConfig {
       headers?: Record<string, string>;
     };
     blockExplorer: { name: string; url: string };
+    useLimitedApproval: boolean;
     gasToken: {
       name: string;
       symbol: string;

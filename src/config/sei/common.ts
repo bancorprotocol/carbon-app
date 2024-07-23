@@ -40,6 +40,7 @@ export const commonConfig: AppConfig = {
         'x-apikey': import.meta.env.VITE_CHAIN_RPC_KEY || '',
       },
     },
+    useLimitedApproval: true,
     gasToken: {
       name: 'SEI',
       symbol: 'SEI',

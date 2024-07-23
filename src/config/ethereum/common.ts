@@ -48,6 +48,7 @@ export const commonConfig: AppConfig = {
         import.meta.env.VITE_CHAIN_RPC_URL ||
         'https://ethereum-rpc.publicnode.com',
     },
+    useLimitedApproval: false,
     gasToken: {
       name: 'Ether',
       symbol: 'ETH',

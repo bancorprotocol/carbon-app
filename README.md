@@ -172,6 +172,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `name`: Network name.
   - `logoUrl`: Network logo URL.
   - `chainId`: Chain ID.
+  - `useLimitedApproval`: Flag to enable limited ERC-20 approval. For chains where gas is low, it is recommended to set this flag to true.
   - `gasToken`: Gas token name, symbol, decimals, address and logoURI.
   - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
   - `rpcUrl`: The RPC URL of the network.

@@ -17,7 +17,6 @@ import {
 } from 'services/events/types';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import config from 'config';
-import seiConfig from 'config/sei/production';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -26,8 +25,6 @@ type Props = {
   eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
   context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
 };
-
-const isSei = config.network.chainId === seiConfig.network.chainId;
 
 export const ApproveToken: FC<Props> = ({
   data,
@@ -43,7 +40,7 @@ export const ApproveToken: FC<Props> = ({
   const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();
   // Gasprice on SEI is cheap, best practice is to use exact amount approval
-  const [isLimited, setIsLimited] = useState(isSei);
+  const [isLimited, setIsLimited] = useState(config.network.useLimitedApproval);
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
