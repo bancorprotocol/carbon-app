@@ -14,10 +14,9 @@ import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
 import { FiatSymbol } from 'utils/carbonApi';
 import {
   Migration,
-  MigratorLocalStorage,
   migrateAndRemoveItem,
   removeItem,
-} from 'utils/migratorLocalStorage';
+} from 'utils/migrateLocalStorage';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
@@ -60,34 +59,31 @@ interface LocalStorageSchema {
 /**
  * An array of migration objects, each designed to handle specific versions of stored items.
  * @type {Migration[]}
- * @property {Function} prevKeyExtractor - A function that takes the formattedKey of the object to be migrated and returns the key found, or undefined if not found.
- * @property {Function} nextKeyFormatter - A function that takes the key of the object and returns the next formatted key that it should be migrated to.
- * @property {Function} action - The action to take for each key found with the prevKeyExtractor function, receives `prevFormattedKey`, `key = prevKeyExtractor(prevFormattedKey)` and the `nextFormattedKey = nextKeyFormatter(key)`.
+ * @property {Function} migrate - A function that takes the prevFormattedKey of each localStorage object key to be migrated and performs any migration operations.
  */
 const migrations: Migration[] = [
   {
-    prevKeyExtractor: (prevFormattedKey) => {
+    migrate: (prevFormattedKey) => {
       const prefix = 'carbon-v1-';
       const isMatch = prevFormattedKey.startsWith(prefix);
-      if (isMatch) return prevFormattedKey.slice(prefix.length);
+      if (!isMatch) return;
+      removeItem({ prevFormattedKey });
     },
-    action: removeItem,
   },
   {
-    prevKeyExtractor: (prevFormattedKey) => {
-      const prefix = 'carbon-v1.1-';
+    migrate: (prevFormattedKey) => {
+      const prefix = 'carbon-v1-1-';
       const isMatch = prevFormattedKey.startsWith(prefix);
-      if (isMatch) return prevFormattedKey.slice(prefix.length);
+      if (!isMatch) return;
+      const key = prevFormattedKey.slice(prefix.length);
+      if (!key) return;
+      const nextFormattedKey = ['carbon-v1.1', key].join('-');
+      migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
     },
-    nextKeyFormatter: (key: string) =>
-      ['carbon', NETWORK, 'v1.1', key].join('-'),
-    action: migrateAndRemoveItem,
   },
 ];
 
-const migrator = new MigratorLocalStorage(migrations);
-
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>(
   (key) => [APP_ID, NETWORK, APP_VERSION, key].join('-'),
-  migrator
+  migrations
 );

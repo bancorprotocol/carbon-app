@@ -2,10 +2,9 @@ import { describe, it, expect, afterEach } from 'vitest';
 import { ManagedLocalStorage } from 'utils/managedLocalStorage';
 import {
   Migration,
-  MigratorLocalStorage,
   migrateAndRemoveItem,
   removeItem,
-} from './migratorLocalStorage';
+} from './migrateLocalStorage';
 
 describe('managedLocalStorage', () => {
   afterEach(() => {
@@ -23,33 +22,36 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        prevKeyExtractor: (formattedKey) => {
+        migrate: (prevFormattedKey) => {
           const prefix = 'v1-';
-          const isMatch = formattedKey.startsWith(prefix);
-          if (isMatch) return formattedKey.slice(prefix.length);
+          const isMatch = prevFormattedKey.startsWith(prefix);
+          if (!isMatch) return;
+          const key = prevFormattedKey.slice(prefix.length);
+          if (!key) return;
+          const nextFormattedKey = ['v1.1', key].join('-');
+          migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
         },
-        nextKeyFormatter: (key: string) => ['v1.1', key].join('-'),
-        action: migrateAndRemoveItem,
       },
       {
-        prevKeyExtractor: (formattedKey) => {
+        migrate: (prevFormattedKey) => {
           const prefix = 'v1.1-';
-          const isMatch = formattedKey.startsWith(prefix);
-          if (isMatch) return formattedKey.slice(prefix.length);
+          const isMatch = prevFormattedKey.startsWith(prefix);
+          if (!isMatch) return;
+          removeItem({ prevFormattedKey });
         },
-        action: removeItem,
       },
       {
-        prevKeyExtractor: (formattedKey) => {
+        migrate: (prevFormattedKey) => {
           const prefix = 'v1.2-';
-          const isMatch = formattedKey.startsWith(prefix);
-          if (isMatch) return formattedKey.slice(prefix.length);
+          const isMatch = prevFormattedKey.startsWith(prefix);
+          if (!isMatch) return;
+          const key = prevFormattedKey.slice(prefix.length);
+          if (!key) return;
+          const nextFormattedKey = ['v1.3', key].join('-');
+          migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
         },
-        nextKeyFormatter: (key: string) => ['v1.3', key].join('-'),
-        action: migrateAndRemoveItem,
       },
     ];
-    const migrator = new MigratorLocalStorage(migrations);
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
       ['v1', key].join('-')
@@ -62,7 +64,7 @@ describe('managedLocalStorage', () => {
     );
     const v13LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.3', key].join('-'),
-      migrator
+      migrations
     );
 
     // To migrate
@@ -117,23 +119,24 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        prevKeyExtractor: (formattedKey) => {
+        migrate: (prevFormattedKey) => {
           const prefix = 'v1-';
-          const isMatch = formattedKey.startsWith(prefix);
-          if (isMatch) return formattedKey.slice(prefix.length);
+          const isMatch = prevFormattedKey.startsWith(prefix);
+          if (!isMatch) return;
+          const key = prevFormattedKey.slice(prefix.length);
+          if (!key) return;
+          const nextFormattedKey = ['v1.1', key].join('-');
+          migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
         },
-        nextKeyFormatter: (key: string) => ['v1.1', key].join('-'),
-        action: migrateAndRemoveItem,
       },
     ];
-    const migrator = new MigratorLocalStorage(migrations);
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
       ['v1', key].join('-')
     );
     const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.1', key].join('-'),
-      migrator
+      migrations
     );
 
     // To migrate
@@ -175,23 +178,24 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        prevKeyExtractor: (formattedKey) => {
+        migrate: (prevFormattedKey) => {
           const prefix = 'v1-';
-          const isMatch = formattedKey.startsWith(prefix);
-          if (isMatch) return formattedKey.slice(prefix.length);
+          const isMatch = prevFormattedKey.startsWith(prefix);
+          if (!isMatch) return;
+          const key = prevFormattedKey.slice(prefix.length);
+          if (!key) return;
+          const nextFormattedKey = ['v1.1', key].join('-');
+          migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
         },
-        nextKeyFormatter: (key: string) => ['v1.1', key].join('-'),
-        action: migrateAndRemoveItem,
       },
     ];
-    const migrator = new MigratorLocalStorage(migrations);
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
       ['v1', key].join('-')
     );
     const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.1', key].join('-'),
-      migrator
+      migrations
     );
 
     // To migrate
@@ -223,23 +227,24 @@ describe('managedLocalStorage', () => {
 
     const migrations: Migration[] = [
       {
-        prevKeyExtractor: (formattedKey) => {
+        migrate: (prevFormattedKey) => {
           const prefix = 'v1-';
-          const isMatch = formattedKey.startsWith(prefix);
-          if (isMatch) return formattedKey.slice(prefix.length);
+          const isMatch = prevFormattedKey.startsWith(prefix);
+          if (!isMatch) return;
+          const key = prevFormattedKey.slice(prefix.length);
+          if (!key) return;
+          const nextFormattedKey = ['v1.1', key].join('-');
+          migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
         },
-        nextKeyFormatter: (key: string) => ['v1.1', key].join('-'),
-        action: migrateAndRemoveItem,
       },
     ];
-    const migrator = new MigratorLocalStorage(migrations);
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
       ['v1', key].join('-')
     );
     const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.1', key].join('-'),
-      migrator
+      migrations
     );
 
     // To migrate
