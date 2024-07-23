@@ -40,7 +40,9 @@ export const ApproveToken: FC<Props> = ({
   const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();
   // Gasprice on SEI is cheap, best practice is to use exact amount approval
-  const [isLimited, setIsLimited] = useState(config.network.useLimitedApproval);
+  const [isLimited, setIsLimited] = useState(
+    config.network.defaultLimitedApproval
+  );
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
