@@ -2,6 +2,8 @@ import ethereumDev from './ethereum/development';
 import ethereumProd from './ethereum/production';
 import seiDev from './sei/development';
 import seiProd from './sei/production';
+import celoDev from './celo/development';
+import celoProd from './celo/production';
 export { pairsToExchangeMapping } from './utils';
 
 const configs = {
@@ -12,6 +14,10 @@ const configs = {
   sei: {
     development: seiDev,
     production: seiProd,
+  },
+  celo: {
+    development: celoDev,
+    production: celoProd,
   },
 };
 type Network = keyof typeof configs;
