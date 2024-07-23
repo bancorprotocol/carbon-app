@@ -7,7 +7,7 @@ export const useActivityNotifications = () => {
   const { user } = useWagmi();
   const [previousUser, setPreviousUser] = useState<string>();
   const [previous, setPrevious] = useState<number | null>(null);
-  const query = useActivityQuery({ ownerId: user });
+  const query = useActivityQuery({ ownerId: user }, 5_000);
   const allActivities = query.data || [];
   const buyOrSell = allActivities.filter(
     (a) => a.action === 'sell' || a.action === 'buy'

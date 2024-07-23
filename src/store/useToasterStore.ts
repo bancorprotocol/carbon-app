@@ -1,8 +1,8 @@
 import { ReactNode, useCallback, useState } from 'react';
 
-interface Toast {
+export interface Toast {
   id: string;
-  content: string | ReactNode;
+  content: string | ReactNode | ((id: string) => ReactNode);
   duration: number;
 }
 
@@ -68,7 +68,7 @@ export const useToastStore = () => {
 
   const addToast = useCallback(
     (
-      content: string | ReactNode,
+      content: string | ReactNode | ((id: string) => ReactNode),
       toast: Partial<Omit<Toast, 'content'>> = {}
     ) => {
       const id: string = crypto.randomUUID();

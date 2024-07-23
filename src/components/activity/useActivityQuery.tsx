@@ -46,13 +46,24 @@ const isValidParams = (params: QueryActivityParams) => {
   return true;
 };
 
-export const useActivityQuery = (params: QueryActivityParams = {}) => {
+// TODO: We can remove the abortTimeout when we consider the backend API stable
+export const useActivityQuery = (
+  params: QueryActivityParams = {},
+  abortTimeout?: number
+) => {
   const { tokensMap, isPending } = useTokens();
   const validParams = isValidParams(params);
   return useQuery({
     queryKey: QueryKey.activities(params),
     queryFn: async () => {
-      const activities = await carbonApi.getActivity(params);
+      const activities = await (async () => {
+        if (!abortTimeout) return carbonApi.getActivity(params);
+        const control = new AbortController();
+        const timeout = setTimeout(() => control.abort(), abortTimeout);
+        const activities = await carbonApi.getActivity(params, control.signal);
+        clearTimeout(timeout);
+        return activities;
+      })();
       return toActivities(activities, tokensMap).sort((a, b) => {
         return b.date.getTime() - a.date.getTime();
       });

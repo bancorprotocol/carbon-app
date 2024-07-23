@@ -3,15 +3,15 @@ import { useActivityQuery } from './useActivityQuery';
 import { useEffect, useState } from 'react';
 import { useStore } from 'store';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { Link } from '@tanstack/react-router';
 import { lsService } from 'services/localeStorage';
 import { toPairSlug } from 'utils/pairSearch';
+import { BaseToast } from 'components/common/Toaster/Toast';
 
 export const useActivityToast = () => {
   const { user } = useWagmi();
   const [previous, setPrevious] = useState<number | null>(null);
-  const query = useActivityQuery({});
+  const query = useActivityQuery({}, 5_000);
   const allActivities = query.data || [];
   const activities = allActivities.filter((a) => {
     if (a.action !== 'buy' && a.action !== 'sell') return false;
@@ -31,8 +31,8 @@ export const useActivityToast = () => {
         const preferences = lsService.getItem('notificationPreferences');
         if (preferences?.global === false) return;
         const { base, quote } = activities[i].strategy;
-        const id = toaster.addToast(
-          <div className="flex">
+        toaster.addToast((id) => (
+          <BaseToast id={id}>
             <Link
               to="/explore/$type/$slug/activity"
               params={{ type: 'token-pair', slug: toPairSlug(base, quote) }}
@@ -42,18 +42,8 @@ export const useActivityToast = () => {
               <TokensOverlap tokens={[base, quote]} size={18} />
               {base.symbol}/{quote.symbol} Trade
             </Link>
-            <button
-              className="p-16 text-white/80"
-              aria-label="close message"
-              onClick={() => toaster.removeToast(id)}
-            >
-              <IconClose className="size-10" />
-            </button>
-          </div>,
-          {
-            duration: 2000,
-          }
-        );
+          </BaseToast>
+        ));
       }, (30_000 * (Math.random() + i)) / max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
