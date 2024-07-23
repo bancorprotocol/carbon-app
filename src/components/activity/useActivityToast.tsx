@@ -6,6 +6,7 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { Link } from '@tanstack/react-router';
 import { lsService } from 'services/localeStorage';
+import { toPairSlug } from 'utils/pairSearch';
 
 export const useActivityToast = () => {
   const { user } = useWagmi();
@@ -26,25 +27,21 @@ export const useActivityToast = () => {
     // TODO: put it back before merging
     //  if (typeof previous !== 'number' || length <= previous) return;
     const displayToast = async () => {
-      let max = 5;
+      let max = 8;
       for (let i = 0; i < activities.length; i++) {
         if (!max) break;
 
-        const delay = Math.max(500, (Math.random() * 30_000) / 5);
+        const delay = Math.max(500, (Math.random() * 30_000) / max);
         await new Promise((res) => setTimeout(res, delay));
         const preferences = lsService.getItem('notificationPreferences');
         if (preferences?.global === false) return;
 
-        const { base, quote, id: strategyId } = activities[i].strategy;
-        const toColor =
-          activities[i].action === 'buy' ? 'to-buy-dark' : 'to-sell-dark';
+        const { base, quote } = activities[i].strategy;
         const id = toaster.addToast(
-          <div
-            className={`from-background-900 bg-gradient-to-r ${toColor} text-14 rounded-6 flex min-w-[250px] from-30%`}
-          >
+          <div className="bg-background-900 text-14 rounded-6 flex min-w-[250px] border border-white/10 from-30%">
             <Link
-              to="/strategy/$id"
-              params={{ id: strategyId }}
+              to="/explore/$type/$slug/activity"
+              params={{ type: 'token-pair', slug: toPairSlug(base, quote) }}
               className="flex flex-1 gap-4 p-16"
               onClick={() => toaster.removeToast(id)}
             >
