@@ -24,10 +24,8 @@ export const useActivityToast = () => {
     if (query.fetchStatus !== 'idle') return;
     const length = activities.length;
     setPrevious(length);
-    // TODO: put it back before merging
-    // if (typeof previous !== 'number' || length <= previous) return;
-    // const max = Math.min(length - previous, 8);
-    const max = 8;
+    if (typeof previous !== 'number' || length <= previous) return;
+    const max = Math.min(length - previous, 8);
     for (let i = 0; i < max; i++) {
       setTimeout(() => {
         const preferences = lsService.getItem('notificationPreferences');
