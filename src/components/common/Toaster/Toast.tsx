@@ -11,7 +11,7 @@ export const BaseToast: FC<Props> = ({ id, children }) => {
   return (
     <li
       id={id}
-      className="from-background-900 to-primary-dark text-14 rounded-6 border border-white/10 bg-gradient-to-r"
+      className="from-background-900 to-primary-dark text-14 rounded-6 flex items-center border border-white/10 bg-gradient-to-r"
     >
       {children}
       <button
@@ -28,7 +28,7 @@ export const BaseToast: FC<Props> = ({ id, children }) => {
 export const DefaultToast: FC<Props> = ({ id, children }) => {
   return (
     <BaseToast id={id}>
-      <output className="p-16">{children}</output>
+      <output className="flex-1 p-16">{children}</output>
     </BaseToast>
   );
 };
