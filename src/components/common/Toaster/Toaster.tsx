@@ -13,7 +13,7 @@ export const Toaster: FC = () => {
         <li
           id={toast.id}
           key={toast.id}
-          className="from-background-900 to-primary-dark text-14 rounded-6 border border-white/10 bg-gradient-to-r from-30%"
+          className="from-background-900 to-primary-dark text-14 rounded-6 border border-white/10 bg-gradient-to-r"
         >
           {typeof toast.content === 'string' ? (
             <output className="flex">
