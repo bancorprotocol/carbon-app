@@ -25,17 +25,13 @@ export const useActivityToast = () => {
     const length = activities.length;
     setPrevious(length);
     // TODO: put it back before merging
-    //  if (typeof previous !== 'number' || length <= previous) return;
-    const displayToast = async () => {
-      let max = 8;
-      for (let i = 0; i < activities.length; i++) {
-        if (!max) break;
-
-        const delay = Math.max(500, (Math.random() * 30_000) / max);
-        await new Promise((res) => setTimeout(res, delay));
+    // if (typeof previous !== 'number' || length <= previous) return;
+    // const max = Math.min(length - previous, 8);
+    const max = 8;
+    for (let i = 0; i < max; i++) {
+      setTimeout(() => {
         const preferences = lsService.getItem('notificationPreferences');
         if (preferences?.global === false) return;
-
         const { base, quote } = activities[i].strategy;
         const id = toaster.addToast(
           <div className="bg-background-900 text-14 rounded-6 flex min-w-[250px] border border-white/10 from-30%">
@@ -60,10 +56,8 @@ export const useActivityToast = () => {
             duration: 2000,
           }
         );
-        max--;
-      }
-    };
-    displayToast();
+      }, (30_000 * (Math.random() + i)) / max);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query.fetchStatus, toaster.addToast, toaster.removeToast]);
 };
