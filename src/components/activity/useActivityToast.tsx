@@ -34,7 +34,7 @@ export const useActivityToast = () => {
         if (preferences?.global === false) return;
         const { base, quote } = activities[i].strategy;
         const id = toaster.addToast(
-          <div className="bg-background-900 text-14 rounded-6 flex min-w-[250px] border border-white/10 from-30%">
+          <div className="flex">
             <Link
               to="/explore/$type/$slug/activity"
               params={{ type: 'token-pair', slug: toPairSlug(base, quote) }}
@@ -45,7 +45,7 @@ export const useActivityToast = () => {
               {base.symbol}/{quote.symbol} Trade
             </Link>
             <button
-              className="ml-auto p-16 text-white/80"
+              className="p-16 text-white/80"
               aria-label="close message"
               onClick={() => toaster.removeToast(id)}
             >
