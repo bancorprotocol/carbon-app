@@ -30,20 +30,21 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
       button={(attr) => (
         <button
           {...attr}
-          className={cn(buttonStyles({ variant: 'secondary' }), 'relative p-0')}
+          className={cn(
+            buttonStyles({ variant: 'secondary' }),
+            'relative flex size-40 items-center justify-center p-0'
+          )}
           onClick={(e) => {
             setIsOpen(true);
             carbonEvents.navigation.navNetworkClick(undefined);
             attr.onClick(e);
           }}
         >
-          <span className="flex items-center justify-center p-10">
-            <img
-              alt={`Select ${activeNetwork.name}`}
-              src={activeNetwork.logoUrl}
-              className="w-20"
-            />
-          </span>
+          <img
+            alt={`Select ${activeNetwork.name}`}
+            src={activeNetwork.logoUrl}
+            className="w-20"
+          />
         </button>
       )}
     >
