@@ -17,7 +17,7 @@ const configs = {
 type Network = keyof typeof configs;
 type Mode = 'development' | 'production';
 
-const network = (import.meta.env.VITE_NETWORK || 'ethereum') as Network;
+export const network = (import.meta.env.VITE_NETWORK || 'ethereum') as Network;
 const mode = import.meta.env.MODE as Mode;
 
 if (!configs[network]) {
@@ -28,5 +28,9 @@ if (!configs[network][mode]) {
   const modes = Object.keys(configs[network]).join(' or ');
   throw new Error(`NODE_ENV should be ${modes}, got "${mode}"`);
 }
+
+export const networkConfigs = Object.fromEntries(
+  Object.entries(configs).map(([network, config]) => [network, config[mode]])
+);
 
 export default configs[network][mode];
