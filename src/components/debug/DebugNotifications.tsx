@@ -1,8 +1,10 @@
 import { Button } from 'components/common/button';
 import { useNotifications } from 'hooks/useNotifications';
+import { useStore } from 'store';
 
 export const DebugNotifications = () => {
   const { dispatchNotification } = useNotifications();
+  const { toaster } = useStore();
 
   return (
     <div
@@ -96,6 +98,14 @@ export const DebugNotifications = () => {
         }
       >
         Activity Create
+      </Button>
+
+      <Button
+        onClick={() =>
+          toaster.addToast(`It is ` + new Date().toLocaleTimeString())
+        }
+      >
+        Open Toast
       </Button>
 
       <Button onClick={() => dispatchNotification('reject', undefined)}>

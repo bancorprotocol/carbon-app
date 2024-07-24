@@ -3,6 +3,7 @@ import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { useNotifications } from 'hooks/useNotifications';
 import { useModal } from 'hooks/useModal';
+import { NotificationPreferences } from 'libs/notifications/NotificationPreferences';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
   const { notifications, clearNotifications, removeNotification } =
@@ -23,7 +24,8 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
       }
       size="md"
     >
-      <ul className="mt-25 flex flex-col gap-10">
+      <NotificationPreferences />
+      <ul className="mt-24 flex flex-col gap-10">
         {reversedNotifications.map((n) => (
           <li
             key={n.id}
