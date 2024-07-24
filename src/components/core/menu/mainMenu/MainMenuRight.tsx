@@ -23,7 +23,7 @@ export const MainMenuRight: FC = () => {
   const { networks } = useNetworkMenu();
 
   return (
-    <div className="flex items-center space-x-20">
+    <div className="flex items-center space-x-10 sm:space-x-20">
       <TenderlyForkAlert />
       <MainMenuRightNotifications />
       <MainMenuRightChainSelector networks={networks} />
