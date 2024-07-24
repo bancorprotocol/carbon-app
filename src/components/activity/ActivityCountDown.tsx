@@ -1,6 +1,5 @@
 import { FC, useCallback, useEffect, useId, useState } from 'react';
-import { useIsFetching } from '@tanstack/react-query';
-import { QueryKey } from 'libs/queries';
+import { useActivity } from './ActivityProvider';
 
 interface Props {
   time: number;
@@ -45,9 +44,8 @@ const perimeter = 2 * Math.PI * radius;
 
 export const ActivityCountDown: FC<Props> = ({ time }) => {
   const baseId = useId();
-  const amount = useIsFetching({ queryKey: QueryKey.activities({}) });
+  const { status } = useActivity();
   const [count, setCount] = useState(time);
-  const hasFetched = amount === 0;
   const id = useCallback((name: string) => `${baseId}-${name}`, [baseId]);
 
   useEffect(() => {
@@ -55,7 +53,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
     const lines = document.getElementById(id('lines'));
     const circle = document.getElementById(id('circle'));
     const text = document.getElementById(id('text'));
-    if (hasFetched) {
+    if (status === 'idle') {
       runAnimationAfterLast({
         element: circle,
         keyframes: [
@@ -101,7 +99,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         options
       );
     }
-  }, [hasFetched, time, id]);
+  }, [status, time, id]);
 
   return (
     <svg
