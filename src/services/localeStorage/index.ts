@@ -12,6 +12,7 @@ import {
 } from 'components/strategies/overview/StrategyFilterSort';
 import { APP_ID, APP_VERSION } from 'utils/constants';
 import { FiatSymbol } from 'utils/carbonApi';
+import { NotificationPreference } from 'libs/notifications/NotificationPreferences';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
@@ -44,6 +45,7 @@ interface LocalStorageSchema {
   hasSeenCreateStratExpertMode: boolean;
   simDisclaimerLastSeen: number;
   lastSdkCache: { timestamp: number; ttl: number };
+  notificationPreferences: NotificationPreference;
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
