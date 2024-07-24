@@ -9,6 +9,7 @@ import {
 import { Wallet } from 'ethers';
 import { CreateStrategyTestCase, toDebugStrategy } from './strategy';
 import { TokenApprovalDriver } from './TokenApprovalDriver';
+import mockLocalStorage from '../mocks/localstorage.json';
 
 const forkConfig: CreateForkBody = {
   network_id: '1',
@@ -25,27 +26,20 @@ export const setupFork = async (testInfo: TestInfo) => {
 export const setupLocalStorage = async (page: Page, testInfo: TestInfo) => {
   const forkId = process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`];
   if (!forkId)
-    throw new Error('Fork should be created before setting theRC URL');
-  const rpcUrl = forkRpcUrl(forkId);
+    throw new Error('Fork should be created before setting the RPC URL');
+  const tenderlyRpc = forkRpcUrl(forkId);
   // We need to be on a page to set localstorage so we create an empty page
   await page.route(testInfo.testId, (route) => {
     return route.fulfill({ status: 200, contentType: 'text/plain', body: '' });
   });
   await page.goto(testInfo.testId);
-
-  return page.evaluate((rpc) => {
+  const storage = { ...mockLocalStorage, tenderlyRpc };
+  return page.evaluate((storage) => {
     // each value is stringified to match lsservice
-    localStorage.setItem('carbon-v1.1-tenderlyRpc', `"${rpc}"`);
-    localStorage.setItem('carbon-v1.1-isUncheckedSigner', 'true');
-    localStorage.setItem(
-      'carbon-v1.1-carbonControllerAddress',
-      '"0xC537e898CD774e2dCBa3B14Ea6f34C93d5eA45e1"'
-    );
-    localStorage.setItem(
-      'carbon-v1.1-voucherContractAddress',
-      '"0x3660F04B79751e31128f6378eAC70807e38f554E"'
-    );
-  }, rpcUrl);
+    for (const [key, value] of Object.entries(storage)) {
+      localStorage.setItem(`carbon-v1.1-${key}`, JSON.stringify(value));
+    }
+  }, storage);
 };
 
 export const removeFork = async (testInfo: TestInfo) => {
