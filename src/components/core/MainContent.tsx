@@ -15,6 +15,7 @@ import {
   useScrollRestoration,
 } from 'libs/routing';
 import { useActivityNotifications } from 'components/activity/useActivityNotifiction';
+import { useActivityToast } from 'components/activity/useActivityToast';
 
 const paths: Record<string, Pathnames> = {
   debug: '/debug',
@@ -30,6 +31,7 @@ export const MainContent: FC = () => {
   const sdk = useCarbonInit();
   useScrollRestoration();
   useActivityNotifications();
+  useActivityToast();
 
   useEffect(() => {
     if (prevPathnameRef.current !== location.pathname) {
