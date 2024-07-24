@@ -54,7 +54,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
             key={id}
             role="menuitem"
             className={cn(
-              'rounded-6 flex w-full items-center space-x-10 p-12',
+              'rounded-6 flex w-full items-center gap-x-10 p-12',
               isCurrentNetwork ? 'bg-black' : 'hover:bg-black'
             )}
             onClick={network.selectNetwork}
@@ -62,7 +62,9 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
           >
             <img alt={name} src={logoUrl} className="w-20" />
             <span>{name}</span>
-            {isCurrentNetwork && <IconCheck className="ml-auto" />}
+            <IconCheck
+              className={cn('ml-auto', isCurrentNetwork ? '' : 'invisible')}
+            />
           </button>
         );
       })}
