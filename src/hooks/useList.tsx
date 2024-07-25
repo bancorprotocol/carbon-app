@@ -1,3 +1,4 @@
+import { FetchStatus } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useContext, createContext, useCallback, useEffect } from 'react';
 import {
@@ -37,6 +38,7 @@ const paginationSchema = (
 type ListParams<P> = P & SortParams & PaginationParams;
 
 interface ListContextType<T, P> {
+  status: FetchStatus;
   all: T[];
   list: T[];
   size: number;
@@ -45,6 +47,7 @@ interface ListContextType<T, P> {
 }
 
 const ListContext = createContext<ListContextType<any, any>>({
+  status: 'idle',
   all: [],
   list: [],
   size: 0,
@@ -54,7 +57,7 @@ const ListContext = createContext<ListContextType<any, any>>({
 
 export interface ListOptions<T, P> {
   all: T[];
-  size?: number;
+  status: FetchStatus;
   schema: GroupSchema<P>;
   defaultLimit?: number;
   defaultOffset?: number;
@@ -70,6 +73,7 @@ export function ListProvider<T, P>(props: ListProviderProps<T, P>) {
   const {
     children,
     all,
+    status,
     schema,
     defaultLimit = 10,
     defaultOffset = 0,
@@ -122,6 +126,7 @@ export function ListProvider<T, P>(props: ListProviderProps<T, P>) {
 
   const ctx = {
     all,
+    status,
     list: sorted,
     size: size ?? filtered.length,
     searchParams,
