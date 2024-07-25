@@ -160,7 +160,7 @@ export function useActivityPagination() {
 
   const currentPage = Math.floor(offset / limit) + 1;
   const maxPage = Math.ceil(size / limit);
-  const maxOffset = (maxPage - 1) * limit;
+  const maxOffset = Math.max((maxPage - 1) * limit, 0);
 
   const setLimit = (limit: number) => setSearchParams({ limit });
   const setOffset = (offset: number) => setSearchParams({ offset });

@@ -16,11 +16,10 @@ export const useActivityToast = () => {
   const query = useActivityQuery({
     start: lastFetch,
     limit: max,
-    // actions: 'buy,sell',
+    actions: 'buy,sell',
   });
   const allActivities = query.data || [];
   const activities = allActivities.filter((a) => {
-    if (a.action !== 'buy' && a.action !== 'sell') return false;
     if (user && a.strategy.owner === user) return false;
     return true;
   });
