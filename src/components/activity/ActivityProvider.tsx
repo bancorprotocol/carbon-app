@@ -19,16 +19,19 @@ import { useGetUserStrategies } from 'libs/queries';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { isEmpty } from 'utils/helpers/operators';
 import { addDays, getUnixTime } from 'date-fns';
+import { FetchStatus } from '@tanstack/react-query';
 
 interface ActivityContextType {
   activities: Activity[];
   meta?: ActivityMeta;
+  status: FetchStatus;
   searchParams: ActivitySearchParams;
   setSearchParams: (searchParams: Partial<ActivitySearchParams>) => any;
 }
 
 const ActivityContext = createContext<ActivityContextType>({
   activities: [],
+  status: 'idle',
   searchParams: { limit: 10, offset: 0 },
   setSearchParams: () => {},
 });
@@ -131,6 +134,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
 
   const ctx: ActivityContextType = {
     activities,
+    status: activityQuery.fetchStatus,
     meta: meta,
     searchParams,
     setSearchParams,

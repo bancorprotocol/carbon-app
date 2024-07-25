@@ -57,6 +57,7 @@ const ListContext = createContext<ListContextType<any, any>>({
 
 export interface ListOptions<T, P> {
   all: T[];
+  size: number;
   status: FetchStatus;
   schema: GroupSchema<P>;
   defaultLimit?: number;
