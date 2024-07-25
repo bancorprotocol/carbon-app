@@ -47,7 +47,7 @@ export interface QueryActivityParams {
   token1?: string;
   strategyIds?: string;
   pairs?: string;
-  actions?: string[];
+  actions?: string;
   limit?: number;
   offset?: number;
   start?: number;

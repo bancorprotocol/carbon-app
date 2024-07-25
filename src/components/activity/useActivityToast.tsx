@@ -7,11 +7,17 @@ import { Link } from '@tanstack/react-router';
 import { lsService } from 'services/localeStorage';
 import { toPairSlug } from 'utils/pairSearch';
 import { BaseToast } from 'components/common/Toaster/Toast';
+import { getUnixTime } from 'date-fns';
 
+const max = 8;
 export const useActivityToast = () => {
   const { user } = useWagmi();
-  const [previous, setPrevious] = useState<number | null>(null);
-  const query = useActivityQuery({}, 5_000);
+  const [lastFetch, setLastFetch] = useState<number>(getUnixTime(new Date()));
+  const query = useActivityQuery({
+    start: lastFetch,
+    limit: max,
+    // actions: 'buy,sell',
+  });
   const allActivities = query.data || [];
   const activities = allActivities.filter((a) => {
     if (a.action !== 'buy' && a.action !== 'sell') return false;
@@ -22,11 +28,8 @@ export const useActivityToast = () => {
 
   useEffect(() => {
     if (query.fetchStatus !== 'idle') return;
-    const length = activities.length;
-    setPrevious(length);
-    if (typeof previous !== 'number' || length <= previous) return;
-    const max = Math.min(length - previous, 8);
-    for (let i = 0; i < max; i++) {
+    setLastFetch(getUnixTime(new Date()));
+    for (let i = 0; i < activities.length; i++) {
       setTimeout(() => {
         const preferences = lsService.getItem('notificationPreferences');
         if (preferences?.global === false) return;

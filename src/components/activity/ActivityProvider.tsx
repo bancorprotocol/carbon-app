@@ -22,37 +22,23 @@ import { addDays, getUnixTime } from 'date-fns';
 
 interface ActivityContextType {
   activities: Activity[];
-  meta: ActivityMeta;
+  meta?: ActivityMeta;
   searchParams: ActivitySearchParams;
   setSearchParams: (searchParams: Partial<ActivitySearchParams>) => any;
 }
 
 const ActivityContext = createContext<ActivityContextType>({
   activities: [],
-  meta: { size: 0, pairs: [], actions: [], strategies: {} },
   searchParams: { limit: 10, offset: 0 },
   setSearchParams: () => {},
 });
 
-interface Props {
-  params: QueryActivityParams;
-  empty?: ReactNode;
-  children: ReactNode;
-}
-type ParamsKey = Extract<keyof QueryActivityParams, string>;
-export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
-  const nav = useNavigate();
-
-  const search: ActivitySearchParams = useSearch({ strict: false });
-  const searchParams = {
-    ...search,
-    limit: search.limit ? Number(search.limit) : 10,
-    offset: search.offset ? Number(search.offset) : 0,
-  };
-
-  params.limit = searchParams.limit;
-  params.offset = searchParams.offset;
-  if (searchParams.actions) params.actions = searchParams.actions;
+const getQueryParams = (
+  baseParams: QueryActivityParams,
+  searchParams: ActivitySearchParams
+) => {
+  const params = { ...baseParams };
+  if (searchParams.actions) params.actions = searchParams.actions.join(',');
   if (searchParams.ids) params.strategyIds = searchParams.ids?.join(',');
   if (searchParams.pairs)
     params.pairs = searchParams.pairs
@@ -66,12 +52,33 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   for (const key in params) {
     if (isEmpty(params[key as ParamsKey])) delete params[key as ParamsKey];
   }
+  return params;
+};
 
-  const activityQuery = useActivityQuery(params);
-  const activityMetaQuery = useActivityMetaQuery(params);
+interface Props {
+  params: QueryActivityParams;
+  empty?: ReactNode;
+  children: ReactNode;
+}
+type ParamsKey = Extract<keyof QueryActivityParams, string>;
+export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
+  const nav = useNavigate();
+  const search: ActivitySearchParams = useSearch({ strict: false });
+  const searchParams = {
+    ...search,
+    limit: search.limit ? Number(search.limit) : 10,
+    offset: search.offset ? Number(search.offset) : 0,
+  };
+
+  const limit = searchParams.limit;
+  const offset = searchParams.offset;
+
+  const queryParams = getQueryParams(params, searchParams);
+  const activityQuery = useActivityQuery({ ...queryParams, limit, offset });
+  const activityMetaQuery = useActivityMetaQuery(queryParams);
 
   const userStrategiesQuery = useGetUserStrategies({
-    user: params.ownerId,
+    user: queryParams.ownerId,
   });
 
   const setSearchParams = useCallback(
@@ -96,10 +103,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
     [nav]
   );
 
-  const isPending =
-    activityQuery.isPending ||
-    activityMetaQuery.isPending ||
-    userStrategiesQuery.isPending;
+  const isPending = activityQuery.isPending || userStrategiesQuery.isPending;
 
   if (isPending) {
     return <CarbonLogoLoading className="h-[80px] self-center" />;
@@ -107,7 +111,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   const activities = activityQuery.data ?? [];
   const meta = activityMetaQuery.data;
 
-  if (!activities.length || !meta) {
+  if (!activities.length) {
     if (empty) {
       const userStrategies = userStrategiesQuery.data;
       const userHasNoStrategies =
@@ -148,18 +152,21 @@ export function useActivity(): ActivityContextType {
 export function useActivityPagination() {
   const { meta, searchParams, setSearchParams } = useActivity();
   const { limit = 10, offset = 0 } = searchParams;
-  const { size } = meta;
+  const size = meta?.size ?? 0;
 
   const currentPage = Math.floor(offset / limit) + 1;
   const maxPage = Math.ceil(size / limit);
+  const maxOffset = (maxPage - 1) * limit;
 
   const setLimit = (limit: number) => setSearchParams({ limit });
   const setOffset = (offset: number) => setSearchParams({ offset });
 
   // Remove offset when list size changes
   useEffect(() => {
-    setSearchParams({ offset: undefined });
-  }, [size, setSearchParams]);
+    if (offset >= maxOffset) {
+      setSearchParams({ offset: maxOffset });
+    }
+  }, [offset, setSearchParams, maxOffset]);
 
   return {
     size,
@@ -170,8 +177,8 @@ export function useActivityPagination() {
     setLimit,
     setOffset,
     firstPage: () => setOffset(0),
-    lastPage: () => setOffset((maxPage - 1) * limit),
+    lastPage: () => setOffset(maxOffset),
     previousPage: () => setOffset(Math.max(offset - limit, 0)),
-    nextPage: () => setOffset(Math.min(offset + limit, (maxPage - 1) * limit)),
+    nextPage: () => setOffset(Math.min(offset + limit, maxOffset)),
   };
 }

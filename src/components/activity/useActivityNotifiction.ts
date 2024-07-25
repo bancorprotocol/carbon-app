@@ -8,13 +8,12 @@ export const useActivityNotifications = () => {
   const { user } = useWagmi();
   const [previousUser, setPreviousUser] = useState<string>();
   const [lastFetch, setLastFetch] = useState<number>(getUnixTime(new Date()));
-  const query = useActivityQuery({ ownerId: user, start: lastFetch }, 5_000);
-  const allActivities = query.data || [];
-  const buyOrSell = allActivities.filter(
-    (a) => a.action === 'sell' || a.action === 'buy'
-  );
+  const query = useActivityQuery({
+    ownerId: user,
+    start: lastFetch,
+    actions: 'sell,buy',
+  });
   const { dispatchNotification } = useNotifications();
-
   useEffect(() => {
     if (query.fetchStatus !== 'idle') return;
     // We need to keep this in the same useEffect to force re-evaluate previous in next render
@@ -22,12 +21,13 @@ export const useActivityNotifications = () => {
       setPreviousUser(user);
       return;
     }
-    for (const activity of buyOrSell) {
+    const activities = query.data || [];
+    for (const activity of activities) {
       dispatchNotification('activity', { activity });
     }
     setLastFetch(getUnixTime(new Date()));
   }, [
-    buyOrSell,
+    query.data,
     dispatchNotification,
     lastFetch,
     query.fetchStatus,

@@ -12,12 +12,12 @@ export namespace QueryKey {
   export const activities = (params: QueryActivityParams) => [
     ...extAPI,
     'activity',
-    ...Object.entries(params).map(([k, v]) => `${k}=${v}`),
+    params,
   ];
   export const activitiesMeta = (params: QueryActivityParams) => [
     ...extAPI,
     'activity-meta',
-    ...Object.entries(params).map(([k, v]) => `${k}=${v}`),
+    params,
   ];
 
   export const roi = () => [...extAPI, 'roi'];
