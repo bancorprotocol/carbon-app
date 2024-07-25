@@ -17,7 +17,7 @@ const finishRemainingAnimations = (element: HTMLElement | null) => {
 
 const commitAnimationStyle = (element: HTMLElement | null) => {
   const animations = element?.getAnimations() ?? [];
-  animations.forEach(async (a) => {
+  animations.forEach((a) => {
     a.commitStyles();
     a.cancel();
   });
