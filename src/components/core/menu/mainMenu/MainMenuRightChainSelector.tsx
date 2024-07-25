@@ -1,5 +1,5 @@
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { carbonEvents } from 'services/events';
@@ -10,23 +10,19 @@ interface Props {
     id: string;
     name: string;
     logoUrl: string;
+    appUrl: string;
     isCurrentNetwork: boolean;
-    selectNetwork: () => void;
   }[];
 }
 
 export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const activeNetwork = networks.find((network) => network.isCurrentNetwork);
   if (!activeNetwork) return;
 
   return (
     <DropdownMenu
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
       placement="bottom"
       className="space-y-2 rounded-[12px] p-8"
-      aria-expanded={isOpen}
       button={(attr) => (
         <button
           {...attr}
@@ -35,7 +31,6 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
             'relative flex size-40 items-center justify-center p-0'
           )}
           onClick={(e) => {
-            setIsOpen(true);
             carbonEvents.navigation.navNetworkClick(undefined);
             attr.onClick(e);
           }}
@@ -49,24 +44,27 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
       )}
     >
       {networks.map((network) => {
-        const { id, name, logoUrl, isCurrentNetwork } = network;
+        const { id, name, logoUrl, appUrl, isCurrentNetwork } = network;
         return (
-          <button
+          <a
             key={id}
             role="menuitem"
             className={cn(
               'rounded-6 flex w-full items-center gap-x-10 p-12',
-              isCurrentNetwork ? 'bg-black' : 'hover:bg-black'
+              isCurrentNetwork
+                ? 'pointer-events-none bg-black'
+                : 'hover:bg-black'
             )}
-            onClick={network.selectNetwork}
-            disabled={isCurrentNetwork}
+            href={appUrl}
+            aria-current={isCurrentNetwork}
+            aria-disabled={isCurrentNetwork}
           >
             <img alt={name} src={logoUrl} className="w-20" />
             <span>{name}</span>
             <IconCheck
               className={cn('ml-auto', isCurrentNetwork ? '' : 'invisible')}
             />
-          </button>
+          </a>
         );
       })}
     </DropdownMenu>
