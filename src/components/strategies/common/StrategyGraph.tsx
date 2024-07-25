@@ -14,6 +14,7 @@ export const StrategyGraph: FC<Props> = ({ setShowGraph, children }) => {
     <m.article
       variants={items}
       key="createStrategyGraph"
+      data-testid="strategy-chart"
       className="rounded-10 bg-background-900 flex h-[550px] flex-col gap-20 p-20 md:sticky md:top-80 md:flex-1"
     >
       <header className="flex items-center justify-between">
@@ -22,6 +23,7 @@ export const StrategyGraph: FC<Props> = ({ setShowGraph, children }) => {
           className="bg-background-800 hover:border-background-600 gap-12 self-end"
           variant="secondary"
           size="md"
+          data-testid="close-chart"
           onClick={() => {
             carbonEvents.strategy.strategyChartClose(undefined);
             setShowGraph(false);

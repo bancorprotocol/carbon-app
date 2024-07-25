@@ -29,6 +29,7 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
         'text-12 font-weight-500 bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8',
         props.className
       )}
+      data-testid="edit-market-price"
       type="button"
     >
       <IconEdit className="size-16" />
@@ -92,6 +93,7 @@ export const OverlappingInitMarketPrice = (props: FieldProps) => {
   return (
     <form
       className={cn(props.className, style.form, 'flex flex-col gap-16 p-16')}
+      data-testid="user-price-form"
       onSubmit={setPrice}
     >
       {!externalPrice && <SetPriceText base={base} />}
@@ -135,12 +137,15 @@ export const OverlappingInitMarketPrice = (props: FieldProps) => {
           id={checkboxId}
           type="checkbox"
           className="size-18"
+          data-testid="approve-price-warnings"
           checked={approved}
           onChange={(e) => setApproved(e.target.checked)}
         />
         I've reviewed the warning(s) but choose to proceed.
       </label>
-      <Button type="submit">Confirm</Button>
+      <Button type="submit" data-testid="set-overlapping-price">
+        Confirm
+      </Button>
     </form>
   );
 };

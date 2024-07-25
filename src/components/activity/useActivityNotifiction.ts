@@ -6,9 +6,9 @@ import { getUnixTime } from 'date-fns';
 
 export const useActivityNotifications = () => {
   const { user } = useWagmi();
-  const [previousUser, setPreviousUser] = useState<string | null>(null);
+  const [previousUser, setPreviousUser] = useState<string>();
   const [lastFetch, setLastFetch] = useState<number>(getUnixTime(new Date()));
-  const query = useActivityQuery({ ownerId: user, start: lastFetch });
+  const query = useActivityQuery({ ownerId: user, start: lastFetch }, 5_000);
   const allActivities = query.data || [];
   const buyOrSell = allActivities.filter(
     (a) => a.action === 'sell' || a.action === 'buy'
@@ -16,9 +16,9 @@ export const useActivityNotifications = () => {
   const { dispatchNotification } = useNotifications();
 
   useEffect(() => {
-    if (query.isPending) return;
+    if (query.fetchStatus !== 'idle') return;
     // We need to keep this in the same useEffect to force re-evaluate previous in next render
-    if (user && user !== previousUser) {
+    if (user !== previousUser) {
       setPreviousUser(user);
       return;
     }
@@ -30,7 +30,7 @@ export const useActivityNotifications = () => {
     buyOrSell,
     dispatchNotification,
     lastFetch,
-    query.isPending,
+    query.fetchStatus,
     previousUser,
     user,
   ]);

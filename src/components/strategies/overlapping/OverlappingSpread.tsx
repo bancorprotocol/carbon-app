@@ -119,6 +119,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
               tabIndex={spread === option ? 0 : -1}
               onChange={() => selectSpread(option)}
               onFocus={() => selectSpread(option)}
+              data-testid={'spread-' + option}
             />
             <label
               htmlFor={'spread-' + option}

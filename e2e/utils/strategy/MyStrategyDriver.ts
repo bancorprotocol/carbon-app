@@ -21,7 +21,7 @@ export class MyStrategyDriver {
     try {
       const indicator = this.page.getByTestId('fetch-strategies');
       await indicator.waitFor({ state: 'attached', timeout });
-      return indicator.waitFor({ state: 'detached', timeout });
+      return indicator.waitFor({ state: 'detached' });
     } catch {}
   }
 
