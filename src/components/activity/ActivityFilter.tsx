@@ -25,14 +25,16 @@ interface DisplayPair {
   quote: Token;
 }
 
-const getAllIds = (meta: ActivityMeta): DisplayID[] => {
+const getAllIds = (meta?: ActivityMeta): DisplayID[] => {
+  if (!meta) return [];
   return Object.entries(meta.strategies).map(([id, pair]) => ({
     id: id,
     base: pair[0],
     quote: pair[1],
   }));
 };
-const getAllPairs = (meta: ActivityMeta): DisplayPair[] => {
+const getAllPairs = (meta?: ActivityMeta): DisplayPair[] => {
+  if (!meta) return [];
   return meta.pairs.map(([base, quote]) => ({
     pair: toPairSlug(base, quote),
     base,
@@ -50,7 +52,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
 
   const allIds = getAllIds(meta);
   const allPairs = getAllPairs(meta);
-  const allActions = meta.actions.sort();
+  const allActions = meta?.actions.sort() ?? [];
 
   const { pairs, ids, actions, start, end } = searchParams;
 
