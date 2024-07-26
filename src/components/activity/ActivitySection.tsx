@@ -19,7 +19,7 @@ export const ActivitySection: FC<ActivityFilterProps> = ({ filters = [] }) => {
           className="col-span-2 row-start-2 md:col-auto md:row-start-1"
         />
         <div className="row-start-1 flex items-center gap-8 self-start justify-self-end">
-          <ActivityExport activities={activities} />
+          <ActivityExport />
           <ActivityCountDown time={30} />
         </div>
       </header>

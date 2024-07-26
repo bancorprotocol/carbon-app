@@ -26,6 +26,7 @@ interface ActivityContextType {
   meta?: ActivityMeta;
   size?: number;
   status: FetchStatus;
+  queryParams: QueryActivityParams;
   searchParams: ActivitySearchParams;
   setSearchParams: (searchParams: Partial<ActivitySearchParams>) => any;
 }
@@ -33,6 +34,7 @@ interface ActivityContextType {
 const ActivityContext = createContext<ActivityContextType>({
   activities: [],
   status: 'idle',
+  queryParams: {},
   searchParams: { limit: 10, offset: 0 },
   setSearchParams: () => {},
 });
@@ -67,15 +69,10 @@ interface Props {
 type ParamsKey = Extract<keyof QueryActivityParams, string>;
 export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   const nav = useNavigate();
-  const search: ActivitySearchParams = useSearch({ strict: false });
-  const searchParams = {
-    ...search,
-    limit: search.limit ? Number(search.limit) : 10,
-    offset: search.offset ? Number(search.offset) : 0,
-  };
+  const searchParams: ActivitySearchParams = useSearch({ strict: false });
 
-  const limit = searchParams.limit;
-  const offset = searchParams.offset;
+  const limit = searchParams.limit ?? 10;
+  const offset = searchParams.offset ?? 0;
 
   const queryParams = getQueryParams(params, searchParams);
   // Query the list
@@ -145,6 +142,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
     status: activityQuery.fetchStatus,
     meta: meta,
     size: size,
+    queryParams: params,
     searchParams,
     setSearchParams,
   };

@@ -15,7 +15,7 @@ import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { carbonApi } from 'utils/carbonApi';
 import { THIRTY_SEC_IN_MS } from 'utils/time';
 
-const toActivities = (
+export const toActivities = (
   data: ServerActivity[],
   tokensMap: Map<string, Token>
 ): Activity[] => {
