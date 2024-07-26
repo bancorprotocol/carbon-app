@@ -9,7 +9,6 @@ import {
 import { Wallet } from 'ethers';
 import { CreateStrategyTestCase, toDebugStrategy } from './strategy';
 import { TokenApprovalDriver } from './TokenApprovalDriver';
-import { APP_ID, APP_VERSION } from '../../src/utils/constants';
 import mockLocalStorage from '../mocks/localstorage.json';
 
 const forkConfig: CreateForkBody = {
@@ -38,8 +37,7 @@ export const setupLocalStorage = async (page: Page, testInfo: TestInfo) => {
   return page.evaluate((storage) => {
     // each value is stringified to match lsservice
     for (const [key, value] of Object.entries(storage)) {
-      const fullKey = `${APP_ID}-${APP_VERSION}-${key}`;
-      localStorage.setItem(fullKey, JSON.stringify(value));
+      localStorage.setItem(`carbon-v1.1-${key}`, JSON.stringify(value));
     }
   }, storage);
 };
