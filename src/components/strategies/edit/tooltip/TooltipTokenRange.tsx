@@ -37,11 +37,13 @@ export const TooltipTokenRange: FC<TooltipPriceProps> = ({
             <TokenPrice price={maxFullPrice} />
             {token.symbol}
           </div>
-          <div className="align-center flex gap-6">
-            <TokenPrice className="text-white/60" price={minFiatPrice} />
-            -
-            <TokenPrice className="text-white/60" price={maxFiatPrice} />
-          </div>
+          {minFiatPrice && maxFiatPrice && (
+            <div className="align-center flex gap-6">
+              <TokenPrice className="text-white/60" price={minFiatPrice} />
+              -
+              <TokenPrice className="text-white/60" price={maxFiatPrice} />
+            </div>
+          )}
         </>
       }
     >
