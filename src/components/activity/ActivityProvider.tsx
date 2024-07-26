@@ -24,6 +24,7 @@ import { FetchStatus } from '@tanstack/react-query';
 interface ActivityContextType {
   activities: Activity[];
   meta?: ActivityMeta;
+  size?: number;
   status: FetchStatus;
   searchParams: ActivitySearchParams;
   setSearchParams: (searchParams: Partial<ActivitySearchParams>) => any;
@@ -77,8 +78,14 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   const offset = searchParams.offset;
 
   const queryParams = getQueryParams(params, searchParams);
+  // Query the list
   const activityQuery = useActivityQuery({ ...queryParams, limit, offset });
-  const activityMetaQuery = useActivityMetaQuery(queryParams);
+  // Query the size of items in the list
+  const activitySizeQuery = useActivityMetaQuery(queryParams);
+  // Query the filtering option for the root query. We need to query with different params to make sure we've got
+  // all filtering items for the base query
+  // Note: This could be improved in the backend with a single request, but at the time of writing this code, this was not an option
+  const activityMetaQuery = useActivityMetaQuery(params);
 
   const userStrategiesQuery = useGetUserStrategies({
     user: queryParams.ownerId,
@@ -112,6 +119,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
     return <CarbonLogoLoading className="h-[80px] self-center" />;
   }
   const activities = activityQuery.data ?? [];
+  const size = activitySizeQuery.data?.size;
   const meta = activityMetaQuery.data;
 
   if (!activities.length) {
@@ -136,6 +144,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
     activities,
     status: activityQuery.fetchStatus,
     meta: meta,
+    size: size,
     searchParams,
     setSearchParams,
   };
@@ -154,9 +163,8 @@ export function useActivity(): ActivityContextType {
 }
 
 export function useActivityPagination() {
-  const { meta, searchParams, setSearchParams } = useActivity();
+  const { size = 0, searchParams, setSearchParams } = useActivity();
   const { limit = 10, offset = 0 } = searchParams;
-  const size = meta?.size ?? 0;
 
   const currentPage = Math.floor(offset / limit) + 1;
   const maxPage = Math.ceil(size / limit);
