@@ -142,7 +142,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
     status: activityQuery.fetchStatus,
     meta: meta,
     size: size,
-    queryParams: params,
+    queryParams,
     searchParams,
     setSearchParams,
   };
