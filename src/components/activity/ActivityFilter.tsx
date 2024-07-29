@@ -1,4 +1,4 @@
-import { Activity } from 'libs/queries/extApi/activity';
+import { ActivityMeta } from 'libs/queries/extApi/activity';
 import { Token } from 'libs/tokens';
 import { activityActionName } from './utils';
 import { toPairSlug } from 'utils/pairSearch';
@@ -25,23 +25,21 @@ interface DisplayPair {
   quote: Token;
 }
 
-const getAllIds = (activities: Activity[]) => {
-  const map = new Map<string, DisplayID>();
-  for (const activity of activities) {
-    const { base, quote } = activity.strategy;
-    const id = getLowestBits(activity.strategy.id);
-    map.set(id, { id, base, quote });
-  }
-  return Array.from(map.values());
+const getAllIds = (meta?: ActivityMeta): DisplayID[] => {
+  if (!meta) return [];
+  return Object.entries(meta.strategies).map(([id, pair]) => ({
+    id: id,
+    base: pair[0],
+    quote: pair[1],
+  }));
 };
-const getAllPairs = (activities: Activity[]) => {
-  const map = new Map<string, DisplayPair>();
-  for (const activity of activities) {
-    const { base, quote } = activity.strategy;
-    const pair = toPairSlug(base, quote);
-    map.set(pair, { pair, base, quote });
-  }
-  return Array.from(map.values());
+const getAllPairs = (meta?: ActivityMeta): DisplayPair[] => {
+  if (!meta) return [];
+  return meta.pairs.map(([base, quote]) => ({
+    pair: toPairSlug(base, quote),
+    base,
+    quote,
+  }));
 };
 export interface ActivityFilterProps {
   filters?: ('ids' | 'pairs')[];
@@ -50,13 +48,11 @@ export interface ActivityFilterProps {
 export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
   const { filters = [], className } = props;
   const formId = useId();
-  const { all: activities, searchParams, setSearchParams } = useActivity();
+  const { meta, searchParams, setSearchParams } = useActivity();
 
-  const allIds = getAllIds(activities);
-  const allPairs = getAllPairs(activities);
-  const allActions = Array.from(
-    new Set(activities.map((a) => a.action))
-  ).sort();
+  const allIds = getAllIds(meta);
+  const allPairs = getAllPairs(meta);
+  const allActions = meta?.actions.sort() ?? [];
 
   const { pairs, ids, actions, start, end } = searchParams;
 
@@ -73,7 +69,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         params[name] = input.value;
       }
     }
-    setSearchParams(params);
+    setSearchParams({ ...params, offset: 0 });
   };
 
   return (
@@ -90,17 +86,17 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         <Combobox
           form={formId}
           name="ids"
-          value={ids}
+          value={ids ?? []}
           icon={<IconSearch className="text-primary w-14" />}
           label={
-            ids.length
+            ids?.length
               ? `${ids.length} Strategies Selected`
               : 'Filter Strategies'
           }
           filterLabel="Search by ID or Symbol"
           options={allIds.map(({ id, base, quote }) => (
             <Option key={id} value={id}>
-              <span>{id}</span>
+              <span>{getLowestBits(id)}</span>
               <svg width="4" height="4">
                 <circle cx="2" cy="2" r="2" fill="white" fillOpacity="0.4" />
               </svg>
@@ -115,10 +111,10 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         <Combobox
           form={formId}
           name="pairs"
-          value={pairs}
+          value={pairs ?? []}
           icon={<IconPair className="text-primary w-14" />}
           label={
-            pairs.length ? `${pairs.length} Pairs Selected` : 'Filter Pairs'
+            pairs?.length ? `${pairs.length} Pairs Selected` : 'Filter Pairs'
           }
           filterLabel="Search by Pair"
           options={allPairs.map(({ pair, base, quote }) => (
@@ -132,10 +128,10 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
       <Combobox
         form={formId}
         name="actions"
-        value={actions}
+        value={actions ?? []}
         icon={<IconSearch className="text-primary w-14" />}
         label={
-          actions.length
+          actions?.length
             ? `${actions.length} Actions Selected`
             : 'Filter Actions'
         }
@@ -150,8 +146,8 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         form={formId}
         presets={datePickerPresets}
         onConfirm={updateParams}
-        start={start}
-        end={end}
+        start={start ? new Date(start) : undefined}
+        end={end ? new Date(end) : undefined}
         options={{
           disabled: { after: new Date() },
         }}

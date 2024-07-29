@@ -1,24 +1,28 @@
 import { useQuery } from '@tanstack/react-query';
 import { isAddress } from 'ethers/lib/utils';
+import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
 import { QueryKey } from 'libs/queries';
 import {
   Activity,
+  ActivityMeta,
   QueryActivityParams,
   ServerActivity,
+  ServerActivityMeta,
 } from 'libs/queries/extApi/activity';
 import { Token } from 'libs/tokens';
+import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { carbonApi } from 'utils/carbonApi';
 import { THIRTY_SEC_IN_MS } from 'utils/time';
 
-const toActivities = (
+export const toActivities = (
   data: ServerActivity[],
-  tokenMap: Map<string, Token>
+  tokensMap: Map<string, Token>
 ): Activity[] => {
   return data.map((activity) => {
     const { strategy } = activity;
-    const base = tokenMap.get(strategy.base.toLowerCase());
-    const quote = tokenMap.get(strategy.quote.toLowerCase());
+    const base = tokensMap.get(strategy.base.toLowerCase());
+    const quote = tokensMap.get(strategy.quote.toLowerCase());
     if (!base) {
       throw new Error(
         `Base "${strategy.base}" not found for activity with txhash "${activity.txHash}"`
@@ -46,16 +50,71 @@ const isValidParams = (params: QueryActivityParams) => {
   return true;
 };
 
+const toMetaActivities = (
+  meta: ServerActivityMeta,
+  tokenMap: Map<string, Token>
+) => {
+  const result: ActivityMeta = {
+    size: meta.size,
+    actions: meta.actions,
+    pairs: [],
+    strategies: {},
+  };
+  for (const pair of meta.pairs) {
+    const base = tokenMap.get(pair[0].toLowerCase());
+    const quote = tokenMap.get(pair[1].toLowerCase());
+    if (!base || !quote) throw new Error('token not found');
+    result.pairs.push([base, quote]);
+  }
+  for (const [id, pair] of Object.entries(meta.strategies)) {
+    const base = tokenMap.get(pair[0].toLowerCase());
+    const quote = tokenMap.get(pair[1].toLowerCase());
+    if (!base || !quote) throw new Error('token not found');
+    result.strategies[id] = [base, quote];
+  }
+  return result;
+};
+
 export const useActivityQuery = (params: QueryActivityParams = {}) => {
-  const { tokensMap, isPending } = useTokens();
+  const { tokensMap, isPending, importToken } = useTokens();
+  const { Token } = useContract();
   const validParams = isValidParams(params);
+
+  const importMissingTokens = async (activities: ServerActivity[]) => {
+    const missingTokens = new Set<string>();
+    for (const activity of activities) {
+      const { base, quote } = activity.strategy;
+      if (!tokensMap.has(base.toLowerCase())) missingTokens.add(base);
+      if (!tokensMap.has(quote.toLowerCase())) missingTokens.add(quote);
+    }
+    if (!missingTokens.size) return;
+    const getTokens = Array.from(missingTokens).map((address) => {
+      return fetchTokenData(Token, address);
+    });
+    const tokens = await Promise.all(getTokens);
+    tokens.forEach((data) => importToken(data));
+  };
+
   return useQuery({
     queryKey: QueryKey.activities(params),
     queryFn: async () => {
       const activities = await carbonApi.getActivity(params);
-      return toActivities(activities, tokensMap).sort((a, b) => {
-        return b.date.getTime() - a.date.getTime();
-      });
+      await importMissingTokens(activities);
+      return toActivities(activities, tokensMap);
+    },
+    enabled: !isPending && validParams,
+    refetchInterval: THIRTY_SEC_IN_MS,
+  });
+};
+
+export const useActivityMetaQuery = (params: QueryActivityParams = {}) => {
+  const { tokensMap, isPending } = useTokens();
+  const validParams = isValidParams(params);
+  return useQuery({
+    queryKey: QueryKey.activitiesMeta(params),
+    queryFn: async () => {
+      const meta = await carbonApi.getActivityMeta(params);
+      return toMetaActivities(meta, tokensMap);
     },
     enabled: !isPending && validParams,
     refetchInterval: THIRTY_SEC_IN_MS,

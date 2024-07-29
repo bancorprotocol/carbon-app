@@ -35,4 +35,14 @@ if (!configs[network][mode]) {
   throw new Error(`NODE_ENV should be ${modes}, got "${mode}"`);
 }
 
+export const networks = Object.entries(configs).map(([id, config]) => {
+  return {
+    id,
+    name: config[mode].network.name,
+    logoUrl: config[mode].network.logoUrl,
+    isCurrentNetwork: network === id,
+    appUrl: config[mode].appUrl,
+  };
+});
+
 export default configs[network][mode];

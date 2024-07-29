@@ -80,7 +80,11 @@ export const getLastVisitedPair = () => {
 // Validate Search Params //
 
 export type SearchParamsValidator<T> = {
-  [key in keyof T]: v.BaseSchema<string, any>;
+  [key in keyof T]: v.BaseSchema<any, any>;
+};
+
+export const validArrayOf = (schema: v.BaseSchema<string, any>) => {
+  return v.array(schema);
 };
 
 export const validLiteral = (array: string[]) => {
@@ -101,6 +105,8 @@ export const validAddress = v.string([
     }
   }),
 ]);
+
+export const validString = v.string();
 
 export const validBoolean = v.boolean([
   v.custom((value) => value === true || value === false),

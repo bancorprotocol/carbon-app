@@ -1,10 +1,14 @@
 import { Activity } from 'libs/queries/extApi/activity';
-import { FC, useMemo } from 'react';
 import { activityActionName } from './utils';
 import { getLowestBits } from 'utils/helpers';
 import { ReactComponent as IconDownloadFile } from 'assets/icons/download-file.svg';
+import { useActivity } from './ActivityProvider';
+import { carbonApi } from 'utils/carbonApi';
+import { useTokens } from 'hooks/useTokens';
+import { toActivities } from './useActivityQuery';
+import { useState } from 'react';
 
-const getCSV = (activities: Activity[]) => {
+export const getActivityCSV = (activities: Activity[]) => {
   const header = [
     'ID',
     'Strategy NFT ID',
@@ -62,19 +66,30 @@ const getCSV = (activities: Activity[]) => {
   return encodeURI(csvContent);
 };
 
-interface Props {
-  activities: Activity[];
-}
-export const ActivityExport: FC<Props> = ({ activities }) => {
-  const csvURI = useMemo(() => getCSV(activities), [activities]);
+export const ActivityExport = () => {
+  const [loading, setLoading] = useState(false);
+  const { queryParams } = useActivity();
+  const { tokensMap } = useTokens();
+
+  const download = async () => {
+    setLoading(true);
+    const data = await carbonApi.getActivity(queryParams);
+    const activities = toActivities(data, tokensMap);
+    const anchor = document.createElement('a');
+    anchor.href = getActivityCSV(activities);
+    anchor.download = 'activities.csv';
+    anchor.click();
+    setLoading(false);
+  };
   return (
-    <a
-      href={csvURI}
-      className="border-background-800 text-12 hover:border-background-700 hover:bg-background-800 flex items-center gap-8 rounded-full border-2 px-12 py-8"
-      download="activities.csv"
+    <button
+      type="button"
+      onClick={download}
+      disabled={loading}
+      className="border-background-800 text-12 hover:border-background-700 hover:bg-background-800 flex items-center gap-8 rounded-full border-2 px-12 py-8 disabled:pointer-events-none disabled:opacity-60"
     >
       <IconDownloadFile className="text-primary size-14" />
-      <span>Export</span>
-    </a>
+      <span>{loading ? 'Exporting' : 'Export'}</span>
+    </button>
   );
 };

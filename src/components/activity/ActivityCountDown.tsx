@@ -1,10 +1,29 @@
 import { FC, useCallback, useEffect, useId, useState } from 'react';
-import { useIsFetching } from '@tanstack/react-query';
-import { QueryKey } from 'libs/queries';
+import { useActivity } from './ActivityProvider';
 
 interface Props {
   time: number;
 }
+
+const finishRemainingAnimations = (element: HTMLElement | null) => {
+  const animations = element?.getAnimations() ?? [];
+  const operations = animations.map(async (a) => {
+    await a.finished;
+    if (element?.offsetParent === null) return; // cannot commit style to not rendered element
+    a.commitStyles();
+    a.cancel();
+  });
+  return Promise.all(operations);
+};
+
+const commitAnimationStyle = (element: HTMLElement | null) => {
+  const animations = element?.getAnimations() ?? [];
+  animations.forEach((a) => {
+    if (!element?.offsetParent === null) return;
+    a.commitStyles();
+    a.cancel();
+  });
+};
 
 interface AnimationOptions {
   element: HTMLElement | null;
@@ -13,83 +32,22 @@ interface AnimationOptions {
 }
 async function runAnimationAfterLast(options: AnimationOptions) {
   const { element, keyframes, duration } = options;
-  const animations = element?.getAnimations() ?? [];
   const beforeFinished = Date.now();
-  await new Promise<void>((res) => {
-    if (!animations.length) return res();
-    animations.forEach((a) => (a.onfinish = () => res()));
-  });
+  await finishRemainingAnimations(element);
   const delta = Date.now() - beforeFinished;
   return element?.animate(keyframes, {
-    duration: duration - delta,
+    duration: Math.max(duration - delta, 0),
     fill: 'forwards',
   });
 }
-
-export const useCountDown = (time: number, isFetching: boolean) => {
-  const [count, setCount] = useState(time);
-  useEffect(() => {
-    const arrow = document.getElementById('arrow');
-    const lines = document.getElementById('lines');
-    const circle = document.getElementById('circle');
-    const text = document.getElementById('text');
-    if (!isFetching) {
-      runAnimationAfterLast({
-        element: circle,
-        keyframes: [
-          { strokeDashoffset: perimeter },
-          { strokeDashoffset: 0.1 * perimeter },
-        ],
-        duration: time * 1000,
-      });
-      runAnimationAfterLast({
-        element: arrow,
-        keyframes: [
-          { transform: 'rotate(0deg)' },
-          { transform: 'rotate(324deg)' }, // 0.9 * 360
-        ],
-        duration: time * 1000,
-      });
-      runAnimationAfterLast({
-        element: lines,
-        keyframes: [
-          { transform: 'translateY(15px) scale(0)' },
-          { transform: 'translateY(0) scale(1)' },
-        ],
-        duration: time * 1000,
-      });
-      setCount(time);
-      const i = setInterval(() => setCount((v) => Math.max(--v, 0)), 1000);
-      return () => clearInterval(i);
-    } else {
-      const options: KeyframeAnimationOptions = {
-        duration: 1000,
-        easing: 'cubic-bezier(0.87, 0, 0.13, 1)',
-      };
-      arrow?.animate([{ transform: 'rotate(720deg)' }], options);
-      lines?.animate([{ transform: 'translateY(15px) scale(0)' }], options);
-      circle?.animate([{ strokeDashoffset: -1 * perimeter }], options);
-      text?.animate(
-        [
-          { opacity: 1, transform: 'scale(1)' },
-          { opacity: 0, transform: 'scale(0.5)' },
-          { opacity: 1, transform: 'scale(1)' },
-        ],
-        options
-      );
-    }
-  }, [isFetching, time]);
-  return { count };
-};
 
 const radius = 35;
 const perimeter = 2 * Math.PI * radius;
 
 export const ActivityCountDown: FC<Props> = ({ time }) => {
   const baseId = useId();
-  const amount = useIsFetching({ queryKey: QueryKey.activities({}) });
+  const { status } = useActivity();
   const [count, setCount] = useState(time);
-
   const id = useCallback((name: string) => `${baseId}-${name}`, [baseId]);
 
   useEffect(() => {
@@ -97,7 +55,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
     const lines = document.getElementById(id('lines'));
     const circle = document.getElementById(id('circle'));
     const text = document.getElementById(id('text'));
-    if (amount === 0) {
+    if (status === 'idle') {
       runAnimationAfterLast({
         element: circle,
         keyframes: [
@@ -130,9 +88,10 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         duration: 1000,
         easing: 'cubic-bezier(0.87, 0, 0.13, 1)',
       };
+      for (const el of [circle, arrow, lines]) commitAnimationStyle(el);
+      circle?.animate([{ strokeDashoffset: -1 * perimeter }], options);
       arrow?.animate([{ transform: 'rotate(720deg)' }], options);
       lines?.animate([{ transform: 'translateY(15px) scale(0)' }], options);
-      circle?.animate([{ strokeDashoffset: -1 * perimeter }], options);
       text?.animate(
         [
           { opacity: 1, transform: 'scale(1)' },
@@ -142,7 +101,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         options
       );
     }
-  }, [amount, time, id]);
+  }, [status, time, id]);
 
   return (
     <svg

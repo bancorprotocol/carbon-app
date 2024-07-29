@@ -1,7 +1,12 @@
 import { test } from '@playwright/test';
 import { capitalize } from 'lodash';
 import { mockApi } from '../utils/mock-api';
-import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
+import {
+  DebugDriver,
+  removeFork,
+  setupFork,
+  setupLocalStorage,
+} from '../utils/DebugDriver';
 import { CreateStrategyTestCase } from '../utils/simulator';
 import * as recurring from '../tests/simulator/recurring';
 import * as overlapping from '../tests/simulator/overlapping';
@@ -192,9 +197,9 @@ test.describe('Simulator', () => {
     await mockApi(page);
     await mockDate(page, '2024-02-26T00:00:00.000Z');
     await setupFork(testInfo);
+    await setupLocalStorage(page, testInfo);
     const debug = new DebugDriver(page);
     await debug.visit();
-    await debug.setRpcUrl(testInfo);
   });
   test.afterEach(async ({}, testInfo) => {
     await removeFork(testInfo);

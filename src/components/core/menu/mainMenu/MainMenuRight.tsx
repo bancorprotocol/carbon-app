@@ -6,6 +6,8 @@ import { MainMenuRightNotifications } from 'components/core/menu/mainMenu/MainMe
 import { Button } from 'components/common/button';
 import { MainMenuRightBurger } from './MainMenuRightBurger';
 import { useBurgerMenuItems } from './MainMenuRightBurger/useBurgerMenuItems';
+import { MainMenuRightChainSelector } from './MainMenuRightChainSelector';
+import { networks } from 'config';
 
 const TenderlyForkAlert = () => {
   return IS_TENDERLY_FORK ? (
@@ -20,9 +22,10 @@ export const MainMenuRight: FC = () => {
   const { aboveBreakpoint } = useBreakpoints();
 
   return (
-    <div className="flex items-center space-x-20">
+    <div className="flex items-center gap-10 sm:gap-20">
       <TenderlyForkAlert />
       <MainMenuRightNotifications />
+      <MainMenuRightChainSelector networks={networks} />
       {aboveBreakpoint('md') && (
         <MainMenuRightBurger menuMapping={menuMapping} />
       )}

@@ -10,6 +10,7 @@ import config from 'config';
 import {
   QueryActivityParams,
   ServerActivity,
+  ServerActivityMeta,
 } from 'libs/queries/extApi/activity';
 import { lsService } from 'services/localeStorage';
 
@@ -36,13 +37,17 @@ export type RoiRow = {
   id: string;
 };
 
-const get = async <T>(endpoint: string, params: Object = {}): Promise<T> => {
+const get = async <T>(
+  endpoint: string,
+  params: Object = {},
+  abortSignal?: AbortSignal
+): Promise<T> => {
   const api = lsService.getItem('carbonApi') || config.carbonApi;
   const url = new URL(api + endpoint);
   for (const [key, value] of Object.entries(params)) {
-    value !== 'undefined' && url.searchParams.set(key, value);
+    if (value !== undefined) url.searchParams.set(key, value);
   }
-  const response = await fetch(url);
+  const response = await fetch(url, { signal: abortSignal });
   const result = await response.json();
 
   if (!response.ok) {
@@ -83,8 +88,14 @@ const carbonApi = {
   ): Promise<SimulatorReturnNew> => {
     return get<SimulatorReturnNew>('simulator/create', params);
   },
-  getActivity: async (params: QueryActivityParams) => {
-    return get<ServerActivity[]>('activity', params);
+  getActivity: async (
+    params: QueryActivityParams,
+    abortSignal?: AbortSignal
+  ) => {
+    return get<ServerActivity[]>('activity', params, abortSignal);
+  },
+  getActivityMeta: async (params: QueryActivityParams) => {
+    return get<ServerActivityMeta>('activity/meta', params);
   },
 };
 
