@@ -1,10 +1,15 @@
-import { ChangeEvent, FocusEvent, FC, useId, useEffect } from 'react';
+import { ChangeEvent, FocusEvent, FC, useId, useEffect, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { carbonEvents } from 'services/events';
-import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
+import {
+  cn,
+  formatNumber,
+  roundSearchParam,
+  sanitizeNumber,
+} from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { Warning } from 'components/common/WarningMessageWithIcon';
@@ -42,6 +47,8 @@ export const InputRange: FC<InputRangeProps> = ({
   isOverlapping,
   required,
 }) => {
+  const [localMin, setLocalMin] = useState(roundSearchParam(min));
+  const [localMax, setLocalMax] = useState(roundSearchParam(max));
   const marketPrice = useOverlappingMarketPrice({ base, quote });
   const inputMinId = useId();
   const inputMaxId = useId();
@@ -80,20 +87,50 @@ export const InputRange: FC<InputRangeProps> = ({
     }
   }, [min, max, displayError, buy]);
 
-  const changeMin = (e: ChangeEvent<HTMLInputElement>) => {
-    setMin(sanitizeNumber(e.target.value));
-  };
-  const formatMin = (e: FocusEvent<HTMLInputElement>) => {
-    const formatted = formatNumber(e.target.value);
-    if (formatted !== e.target.value) setMin(formatted);
+  useEffect(() => {
+    if (document.activeElement !== document.getElementById(inputMinId)) {
+      setLocalMin(roundSearchParam(min));
+    }
+  }, [inputMinId, min]);
+
+  useEffect(() => {
+    if (document.activeElement !== document.getElementById(inputMaxId)) {
+      setLocalMax(roundSearchParam(max));
+    }
+  }, [inputMaxId, max]);
+
+  const onMinFocus = (e: FocusEvent<HTMLInputElement>) => {
+    setLocalMin(min);
+    e.target.select();
   };
 
-  const changeMax = (e: ChangeEvent<HTMLInputElement>) => {
-    setMax(sanitizeNumber(e.target.value));
+  const onMinChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = sanitizeNumber(e.target.value);
+    setLocalMin(value);
+    setMin(value);
   };
-  const formatMax = (e: FocusEvent<HTMLInputElement>) => {
+
+  const onMinBlur = (e: FocusEvent<HTMLInputElement>) => {
     const formatted = formatNumber(e.target.value);
-    if (formatted !== e.target.value) setMax(formatted);
+    setLocalMin(roundSearchParam(formatted));
+    setMin(formatted);
+  };
+
+  const onMaxFocus = (e: FocusEvent<HTMLInputElement>) => {
+    setLocalMax(max);
+    e.target.select();
+  };
+
+  const onMaxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = sanitizeNumber(e.target.value);
+    setLocalMax(value);
+    setMax(value);
+  };
+
+  const onMaxBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const formatted = formatNumber(e.target.value);
+    setLocalMax(roundSearchParam(formatted));
+    setMax(formatted);
   };
 
   const { getFiatAsString } = useFiatCurrency(quote);
@@ -133,15 +170,15 @@ export const InputRange: FC<InputRangeProps> = ({
             type="text"
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
-            value={min}
+            value={localMin}
             placeholder="Enter Price"
             className={cn(
               'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
               hasMinError && 'text-error'
             )}
-            onChange={changeMin}
-            onFocus={(e) => e.target.select()}
-            onBlur={formatMin}
+            onChange={onMinChange}
+            onFocus={onMinFocus}
+            onBlur={onMinBlur}
             data-testid="input-min"
             required={required}
           />
@@ -192,15 +229,15 @@ export const InputRange: FC<InputRangeProps> = ({
             type="text"
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
-            value={max}
+            value={localMax}
             placeholder="Enter Price"
             className={cn(
               'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
               hasMaxError && 'text-error'
             )}
-            onChange={changeMax}
-            onFocus={(e) => e.target.select()}
-            onBlur={formatMax}
+            onChange={onMaxChange}
+            onFocus={onMaxFocus}
+            onBlur={onMaxBlur}
             data-testid="input-max"
             required={required}
           />

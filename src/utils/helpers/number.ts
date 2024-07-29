@@ -206,21 +206,20 @@ export const formatNumberWithApproximation = (
   }
 };
 
+const firstZero = new RegExp(/^0+/);
+const lastZero = new RegExp(/0+$/);
+
 /** Round to 6 decimals after leading zeros */
 export const roundSearchParam = (param?: string | number) => {
   if (!param || Number(param) === 0 || isNaN(Number(param))) return '';
   const [radix, decimals] = param.toString().split('.');
   if (!decimals) return param.toString();
-  let leadingZeros = '';
-  for (const char of decimals) {
-    if (char !== '0') break;
-    leadingZeros += '0';
+  let maxDecimals = 6;
+  if (Number(param) < 1) {
+    maxDecimals += decimals.match(firstZero)?.[0].length ?? 0;
   }
-  if (leadingZeros === decimals) return radix;
-  const rest = decimals
-    .slice(leadingZeros.length, leadingZeros.length + 6)
-    .replace(/0+$/, '');
-  return `${radix}.${leadingZeros}${rest}`;
+  const roundedDecimals = decimals.slice(0, maxDecimals).replace(lastZero, '');
+  return [radix, roundedDecimals].filter((v) => !!v).join('.');
 };
 
 export const tokenAmount = (

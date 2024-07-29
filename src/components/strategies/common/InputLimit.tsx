@@ -1,8 +1,13 @@
-import { ChangeEvent, FC, FocusEvent, useEffect, useId } from 'react';
+import { ChangeEvent, FC, FocusEvent, useEffect, useId, useState } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
+import {
+  cn,
+  formatNumber,
+  roundSearchParam,
+  sanitizeNumber,
+} from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
@@ -35,6 +40,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   ignoreMarketPriceWarning = false,
   required,
 }) => {
+  const [localPrice, setLocalPrice] = useState(roundSearchParam(price));
   const inputId = useId();
   const { marketPrice } = useMarketPrice({ base, quote });
   const marketPercent = marketPricePercent(price, marketPrice);
@@ -52,10 +58,6 @@ export const InputLimit: FC<InputLimitProps> = ({
   const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
   const showWarning = !displayError && !!displayWarnings?.length;
 
-  const changePrice = (e: ChangeEvent<HTMLInputElement>) => {
-    setPrice(sanitizeNumber(e.target.value));
-  };
-
   useEffect(() => {
     if (!price) return;
     if (displayError) {
@@ -66,9 +68,21 @@ export const InputLimit: FC<InputLimitProps> = ({
     }
   }, [displayError, buy, price]);
 
-  const formatPrice = (e: FocusEvent<HTMLInputElement>) => {
+  const onFocus = (e: FocusEvent<HTMLInputElement>) => {
+    setLocalPrice(price);
+    e.target.select();
+  };
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = sanitizeNumber(e.target.value);
+    setLocalPrice(value);
+    setPrice(value);
+  };
+
+  const onBlur = (e: FocusEvent<HTMLInputElement>) => {
     const formatted = formatNumber(e.target.value);
-    if (formatted !== e.target.value) setPrice(formatted);
+    setLocalPrice(roundSearchParam(formatted));
+    setPrice(formatted);
   };
 
   return (
@@ -87,10 +101,10 @@ export const InputLimit: FC<InputLimitProps> = ({
             type="text"
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
-            value={price}
-            onChange={changePrice}
-            onFocus={(e) => e.target.select()}
-            onBlur={formatPrice}
+            value={localPrice}
+            onChange={onChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
             aria-label="Enter Price"
             placeholder="Enter Price"
             className={cn(
