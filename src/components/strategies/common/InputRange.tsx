@@ -1,4 +1,4 @@
-import { ChangeEvent, FocusEvent, FC, useId, useEffect, useState } from 'react';
+import { FocusEvent, FC, useId, useEffect, useState, MouseEvent } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -104,10 +104,10 @@ export const InputRange: FC<InputRangeProps> = ({
     e.target.select();
   };
 
-  const onMinChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = sanitizeNumber(e.target.value);
-    setLocalMin(value);
-    setMin(value);
+  const onMinChange = (value: string) => {
+    const sanitized = sanitizeNumber(value);
+    setLocalMin(sanitized);
+    setMin(sanitized);
   };
 
   const onMinBlur = (e: FocusEvent<HTMLInputElement>) => {
@@ -116,21 +116,31 @@ export const InputRange: FC<InputRangeProps> = ({
     setMin(formatted);
   };
 
+  const setMinMarket = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    onMinChange(marketPrice?.toString() ?? '');
+  };
+
   const onMaxFocus = (e: FocusEvent<HTMLInputElement>) => {
     setLocalMax(max);
     e.target.select();
   };
 
-  const onMaxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = sanitizeNumber(e.target.value);
-    setLocalMax(value);
-    setMax(value);
+  const onMaxChange = (value: string) => {
+    const sanitized = sanitizeNumber(value);
+    setLocalMax(sanitized);
+    setMax(sanitized);
   };
 
   const onMaxBlur = (e: FocusEvent<HTMLInputElement>) => {
     const formatted = formatNumber(e.target.value);
     setLocalMax(roundSearchParam(formatted));
     setMax(formatted);
+  };
+
+  const setMaxMarket = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    onMaxChange(marketPrice?.toString() ?? '');
   };
 
   const { getFiatAsString } = useFiatCurrency(quote);
@@ -159,7 +169,7 @@ export const InputRange: FC<InputRangeProps> = ({
               <button
                 className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
                 type="button"
-                onClick={() => setMin(formatNumber(marketPrice.toString()))}
+                onClick={setMinMarket}
               >
                 Use Market
               </button>
@@ -176,7 +186,7 @@ export const InputRange: FC<InputRangeProps> = ({
               'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
               hasMinError && 'text-error'
             )}
-            onChange={onMinChange}
+            onChange={(e) => onMinChange(e.target.value)}
             onFocus={onMinFocus}
             onBlur={onMinBlur}
             data-testid="input-min"
@@ -218,7 +228,7 @@ export const InputRange: FC<InputRangeProps> = ({
               <button
                 className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
                 type="button"
-                onClick={() => setMax(formatNumber(marketPrice.toString()))}
+                onClick={setMaxMarket}
               >
                 Use Market
               </button>
@@ -235,7 +245,7 @@ export const InputRange: FC<InputRangeProps> = ({
               'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
               hasMaxError && 'text-error'
             )}
-            onChange={onMaxChange}
+            onChange={(e) => onMaxChange(e.target.value)}
             onFocus={onMaxFocus}
             onBlur={onMaxBlur}
             data-testid="input-max"

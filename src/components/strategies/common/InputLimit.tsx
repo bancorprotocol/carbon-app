@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FocusEvent, useEffect, useId, useState } from 'react';
+import { FC, FocusEvent, MouseEvent, useEffect, useId, useState } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
@@ -68,21 +68,32 @@ export const InputLimit: FC<InputLimitProps> = ({
     }
   }, [displayError, buy, price]);
 
+  useEffect(() => {
+    if (document.activeElement !== document.getElementById(inputId)) {
+      setLocalPrice(roundSearchParam(price));
+    }
+  }, [inputId, price]);
+
   const onFocus = (e: FocusEvent<HTMLInputElement>) => {
     setLocalPrice(price);
     e.target.select();
   };
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = sanitizeNumber(e.target.value);
-    setLocalPrice(value);
-    setPrice(value);
+  const onChange = (value: string) => {
+    const sanitized = sanitizeNumber(value);
+    setLocalPrice(sanitized);
+    setPrice(sanitized);
   };
 
   const onBlur = (e: FocusEvent<HTMLInputElement>) => {
     const formatted = formatNumber(e.target.value);
     setLocalPrice(roundSearchParam(formatted));
     setPrice(formatted);
+  };
+
+  const setMarket = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    onChange(marketPrice?.toString() ?? '');
   };
 
   return (
@@ -102,7 +113,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={localPrice}
-            onChange={onChange}
+            onChange={(e) => onChange(e.target.value)}
             onFocus={onFocus}
             onBlur={onBlur}
             aria-label="Enter Price"
@@ -118,7 +129,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             <button
               className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
               type="button"
-              onClick={() => setPrice(formatNumber(marketPrice.toString()))}
+              onClick={setMarket}
             >
               Use Market
             </button>
