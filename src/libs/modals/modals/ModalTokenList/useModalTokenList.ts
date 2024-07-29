@@ -7,6 +7,11 @@ import { utils } from 'ethers';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/ModalTokenList';
 import { orderBy } from 'lodash';
 import config from 'config';
+import {
+  NATIVE_TOKEN_ADDRESS,
+  isGasTokenToHide,
+  nativeToken,
+} from 'utils/tokens';
 
 const SEARCH_KEYS = [
   {
@@ -64,7 +69,8 @@ export const useModalTokenList = ({ id, data }: Props) => {
         (token) =>
           (includedTokens.length === 0 ||
             includedTokens.includes(token.address)) &&
-          !excludedTokens.includes(token.address)
+          !excludedTokens.includes(token.address) &&
+          !isGasTokenToHide(token.address)
       ),
     [tokens, excludedTokens, includedTokens]
   );
@@ -103,6 +109,11 @@ export const useModalTokenList = ({ id, data }: Props) => {
 
     const isAddress = utils.isAddress(search.toLowerCase());
     if (isAddress) {
+      if (
+        isGasTokenToHide(search.toLowerCase()) &&
+        !excludedTokens.includes(NATIVE_TOKEN_ADDRESS)
+      )
+        return [nativeToken];
       const found = sanitizedTokens.find(
         (token) => token.address.toLowerCase() === search.toLowerCase()
       );
@@ -118,6 +129,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
 
   const showImportToken = useMemo(() => {
     const isValidAddress = utils.isAddress(search.toLowerCase());
+    if (isGasTokenToHide(search.toLowerCase())) return false;
     return (
       isValidAddress &&
       !filteredTokens.find(
