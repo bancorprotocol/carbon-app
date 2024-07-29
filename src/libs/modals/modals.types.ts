@@ -7,6 +7,7 @@ export type ModalProps = {
   title?: string | ReactNode;
   showCloseButton?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  modalClasses?: string;
   isPending?: boolean;
   onClose?: (id: string) => void;
   'data-testid'?: string;

@@ -16,6 +16,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   const activityQuery = useActivityQuery(params);
   const listOptions: ListOptions<Activity, ActivitySearchParams> = {
     all: activityQuery.data ?? [],
+    status: activityQuery.fetchStatus,
     defaultLimit: 10,
     schema: activitySchema,
     filter: filterActivity,

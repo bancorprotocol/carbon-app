@@ -17,6 +17,7 @@ import {
   migrateAndRemoveItem,
   removeItem,
 } from 'utils/migrateLocalStorage';
+import { NotificationPreference } from 'libs/notifications/NotificationPreferences';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
@@ -49,6 +50,7 @@ interface LocalStorageSchema {
   hasSeenCreateStratExpertMode: boolean;
   simDisclaimerLastSeen: number;
   lastSdkCache: { timestamp: number; ttl: number };
+  notificationPreferences: NotificationPreference;
 }
 
 // ************************** /
