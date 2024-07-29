@@ -8,6 +8,7 @@ import { useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
 import { ContractTransaction } from 'ethers';
 import config from 'config';
+import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 
 export type GetUserApprovalProps = Pick<
   Token,
@@ -34,7 +35,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           throw new Error('useGetUserApproval no spenderAddress provided');
         }
 
-        const isGasToken = t.address === config.network.gasToken.address;
+        const isGasToken = t.address === NATIVE_TOKEN_ADDRESS;
         if (isGasToken) {
           return new SafeDecimal(shrinkToken(UNLIMITED_WEI, t.decimals));
         }
@@ -75,7 +76,7 @@ export const useSetUserApproval = () => {
       [ContractTransaction, ContractTransaction | undefined]
     > => {
       const gasToken = config.network.gasToken;
-      const isGasToken = address === gasToken.address;
+      const isGasToken = address === NATIVE_TOKEN_ADDRESS;
       if (isGasToken) {
         throw new Error(`useSetUserApproval cannot approve ${gasToken.symbol}`);
       }
