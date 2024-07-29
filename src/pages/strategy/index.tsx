@@ -23,6 +23,7 @@ import { NotFound } from 'components/common/NotFound';
 export const StrategyPage = () => {
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
+  const params = { strategyIds: id };
   const query = useGetStrategy(id);
   const [strategy] = useStrategiesWithFiat(query);
 
@@ -99,7 +100,7 @@ export const StrategyPage = () => {
           <TradingviewChart base={base} quote={quote} />
         </article>
       </section>
-      <ActivityProvider params={{ strategyIds: id }}>
+      <ActivityProvider params={params}>
         <ActivitySection filters={[]} />
       </ActivityProvider>
     </Page>

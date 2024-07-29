@@ -10,6 +10,7 @@ import config from 'config';
 import {
   QueryActivityParams,
   ServerActivity,
+  ServerActivityMeta,
 } from 'libs/queries/extApi/activity';
 import { lsService } from 'services/localeStorage';
 
@@ -44,7 +45,7 @@ const get = async <T>(
   const api = lsService.getItem('carbonApi') || config.carbonApi;
   const url = new URL(api + endpoint);
   for (const [key, value] of Object.entries(params)) {
-    value !== 'undefined' && url.searchParams.set(key, value);
+    if (value !== undefined) url.searchParams.set(key, value);
   }
   const response = await fetch(url, { signal: abortSignal });
   const result = await response.json();
@@ -92,6 +93,9 @@ const carbonApi = {
     abortSignal?: AbortSignal
   ) => {
     return get<ServerActivity[]>('activity', params, abortSignal);
+  },
+  getActivityMeta: async (params: QueryActivityParams) => {
+    return get<ServerActivityMeta>('activity/meta', params);
   },
 };
 
