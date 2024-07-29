@@ -1,7 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { test, expect } from '@playwright/test';
 import { mockApi } from '../utils/mock-api';
-import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
+import {
+  DebugDriver,
+  removeFork,
+  setupFork,
+  setupLocalStorage,
+} from '../utils/DebugDriver';
 import { TradeDriver } from '../utils/TradeDriver';
 import { navigateTo } from '../utils/operators';
 import { TokenApprovalDriver } from '../utils/TokenApprovalDriver';
@@ -92,10 +97,10 @@ test.describe('Trade', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     testInfo.setTimeout(90_000);
     await mockApi(page);
+    await setupFork(testInfo);
+    await setupLocalStorage(page, testInfo);
     const debug = new DebugDriver(page);
     await debug.visit();
-    await setupFork(testInfo);
-    await debug.setRpcUrl(testInfo);
     await debug.setupImposter();
   });
 
