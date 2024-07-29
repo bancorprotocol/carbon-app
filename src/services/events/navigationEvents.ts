@@ -6,6 +6,10 @@ export interface EventNavigationSchema extends EventCategory {
     input: undefined;
     gtmData: undefined;
   };
+  navNetworkClick: {
+    input: undefined;
+    gtmData: undefined;
+  };
   navStrategyClick: {
     input: undefined;
     gtmData: undefined;
@@ -31,6 +35,9 @@ export interface EventNavigationSchema extends EventCategory {
 export const navigationEvents: CarbonEvents['navigation'] = {
   navHomeClick: () => {
     sendGTMEvent('navigation', 'navHomeClick', undefined);
+  },
+  navNetworkClick: () => {
+    sendGTMEvent('navigation', 'navNetworkClick', undefined);
   },
   navStrategyClick: () => {
     sendGTMEvent('navigation', 'navStrategyClick', undefined);

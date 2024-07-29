@@ -12,7 +12,6 @@ import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
 import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
-import config from 'config';
 import { WalletIcon } from 'components/common/WalletIcon';
 
 const iconProps = { className: 'w-20' };
@@ -124,14 +123,6 @@ const ConnectedMenu: FC = () => {
     <div role="menu" className="font-weight-400 space-y-10 text-white">
       {isSupportedNetwork ? (
         <>
-          <div className="font-weight-400 flex w-full items-center space-x-10 p-8">
-            <img
-              alt="Network Logo"
-              src={config.network.logoUrl}
-              className="w-16"
-            />
-            <span>{config.network.name}</span>
-          </div>
           <button
             role="menuitem"
             className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-black"
