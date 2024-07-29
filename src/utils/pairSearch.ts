@@ -1,5 +1,6 @@
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { exist } from './helpers/operators';
+import { includesGasToken, isDifferentGasToken } from './tokens';
 
 /**
  * Remove " ", "-", "/" from a string
@@ -92,6 +93,13 @@ export const searchPairKeys = (
   const searchSlug = fromPairSearch(search, transformSlugExp);
   const names: { key: string; name: string }[] = [];
   for (const [key, name] of nameMap.entries()) {
+    // Skip search results for gasTokens different than 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE unless specifically searching for it
+    if (
+      isDifferentGasToken &&
+      !includesGasToken(search) &&
+      includesGasToken(key)
+    )
+      continue;
     if (name.includes(searchSlug)) names.push({ key, name });
     else if (key.includes(searchSlug)) names.push({ key, name });
   }
@@ -119,7 +127,7 @@ export const searchPairTrade = (
   search: string,
   transformSlugExp: RegExp = pairSearchExp
 ) => {
-  if (!search) return Array.from(pairMap.values());
+  if (!search && !isDifferentGasToken) return Array.from(pairMap.values());
   const result = searchPairKeys(nameMap, search, transformSlugExp);
   return result.map(({ key }) => pairMap.get(key)).filter(exist);
 };
