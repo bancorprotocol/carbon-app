@@ -3,6 +3,8 @@ import IconCeloLogo from 'assets/logos/celologo.svg';
 
 const addresses = {
   CELO: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+  CELO_ERC20: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+  CELO_ALFAJORES: '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9',
   ZERO: '0x0000000000000000000000000000000000000000',
   CUSD: '0x765de816845861e75a25fca122bb6898b8b1282a',
   USDC: '0xceba9300f2b948710d2653dd7b07f33a8b32118c',
@@ -35,7 +37,7 @@ export const commonConfig: AppConfig = {
       name: 'CELO',
       symbol: 'CELO',
       decimals: 18,
-      address: addresses.CELO,
+      address: addresses.CELO_ERC20,
       logoURI:
         'https://raw.githubusercontent.com/celo-org/celo-token-list/main/assets/celo_logo.svg',
     },
@@ -66,7 +68,24 @@ export const commonConfig: AppConfig = {
       blockCreated: 13112599,
     },
   },
-  tokenListOverride: [],
+  tokenListOverride: [
+    {
+      name: 'CELO',
+      symbol: 'CELO',
+      decimals: 18,
+      address: addresses.CELO,
+      logoURI:
+        'https://raw.githubusercontent.com/celo-org/celo-token-list/main/assets/celo_logo.svg',
+    },
+    {
+      name: 'CELO (Alfajores Testnet)',
+      symbol: 'CELO (Alfajores)',
+      decimals: 18,
+      address: addresses.CELO_ALFAJORES,
+      logoURI:
+        'https://raw.githubusercontent.com/celo-org/celo-token-list/main/assets/celo_logo.svg',
+    },
+  ],
   tokenLists: [
     {
       uri: 'https://raw.githubusercontent.com/celo-org/celo-token-list/main/celo.tokenlist.json',
