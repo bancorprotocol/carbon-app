@@ -13,8 +13,9 @@ export const useFiatValue = (params: FiatValueParams) => {
   const { price, token, highPrecision } = params;
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
   const { data: fiatPriceMap } = useGetTokenPrice(token.address);
-  const fiatPrice = fiatPriceMap?.[selectedFiatCurrency] || 0;
-  const value = new SafeDecimal(price || 0).times(fiatPrice);
+  const fiatPrice = fiatPriceMap?.[selectedFiatCurrency];
+  if (!price || !fiatPrice) return;
+  const value = new SafeDecimal(price).times(fiatPrice);
   return prettifyNumber(value, {
     currentCurrency: selectedFiatCurrency,
     highPrecision,
