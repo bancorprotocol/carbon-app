@@ -307,7 +307,7 @@ describe('Create overlapping page', () => {
     expect(form.min()).toHaveValue('3000');
     expect(form.max()).toHaveValue('2000');
 
-    await waitFor(() => expect(form.max()).toHaveValue('3003.0022515009377'), {
+    await waitFor(() => expect(form.max()).toHaveValue('3003.002251'), {
       timeout: 2000,
     });
   });
