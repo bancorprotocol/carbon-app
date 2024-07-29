@@ -69,7 +69,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         params[name] = input.value;
       }
     }
-    setSearchParams(params);
+    setSearchParams({ ...params, offset: 0 });
   };
 
   return (
