@@ -90,6 +90,5 @@ export const useActivityQuery = (
     },
     enabled: !isPending && validParams,
     refetchInterval: THIRTY_SEC_IN_MS,
-    refetchOnWindowFocus: false,
   });
 };

@@ -9,6 +9,7 @@ import {
 import { Wallet } from 'ethers';
 import { CreateStrategyTestCase, toDebugStrategy } from './strategy';
 import { TokenApprovalDriver } from './TokenApprovalDriver';
+import mockLocalStorage from '../mocks/localstorage.json';
 
 const forkConfig: CreateForkBody = {
   network_id: '1',
@@ -20,6 +21,25 @@ const forkConfig: CreateForkBody = {
 export const setupFork = async (testInfo: TestInfo) => {
   const fork = await createFork(forkConfig);
   process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`] = fork.id;
+};
+
+export const setupLocalStorage = async (page: Page, testInfo: TestInfo) => {
+  const forkId = process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`];
+  if (!forkId)
+    throw new Error('Fork should be created before setting the RPC URL');
+  const tenderlyRpc = forkRpcUrl(forkId);
+  // We need to be on a page to set localstorage so we create an empty page
+  await page.route(testInfo.testId, (route) => {
+    return route.fulfill({ status: 200, contentType: 'text/plain', body: '' });
+  });
+  await page.goto(testInfo.testId);
+  const storage = { ...mockLocalStorage, tenderlyRpc };
+  return page.evaluate((storage) => {
+    // each value is stringified to match lsservice
+    for (const [key, value] of Object.entries(storage)) {
+      localStorage.setItem(`carbon-v1.1-${key}`, JSON.stringify(value));
+    }
+  }, storage);
 };
 
 export const removeFork = async (testInfo: TestInfo) => {
@@ -43,18 +63,6 @@ export class DebugDriver {
 
   visit() {
     return this.page.goto('/debug');
-  }
-
-  async setRpcUrl(testInfo: TestInfo) {
-    const forkId = process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`];
-    if (!forkId) {
-      throw new Error('Fork should be created before setting theRC URL');
-    }
-    const rpcUrl = forkRpcUrl(forkId);
-    await this.page.getByLabel('RPC URL').fill(rpcUrl);
-    await this.page.getByTestId('unchecked-signer').click();
-    await this.page.getByTestId('save-rpc').click();
-    await this.page.waitForURL('/debug');
   }
 
   async setupImposter(config: ImposterConfig = {}) {

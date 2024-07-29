@@ -4,6 +4,7 @@ import { cn, tokenAmount } from 'utils/helpers';
 import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
 import { Warning } from 'components/common/WarningMessageWithIcon';
+import { useFiatValue } from 'hooks/useFiatValue';
 
 interface Props {
   title?: string;
@@ -137,6 +138,8 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
   const token = props.token;
   const withdraw = Number(props.withdraw);
   const deposit = Number(props.deposit);
+  const withdrawFiat = useFiatValue({ price: props.withdraw, token });
+  const depositFiat = useFiatValue({ price: props.deposit, token });
   if (deposit) {
     const balance = Number(props.balance);
     if (deposit > balance) {
@@ -146,6 +149,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
           <b className="font-weight-500">
             deposit {tokenAmount(deposit, token)}
           </b>
+          {depositFiat && <b>&nbsp;({depositFiat})</b>}
           &nbsp;from your wallet, but your wallet has insufficient balance.
           Consider changing token deposit amount or prices.
         </Warning>
@@ -161,6 +165,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
           <b className="font-weight-500">
             deposit {tokenAmount(deposit, token)}
           </b>
+          {depositFiat && <b>&nbsp;({depositFiat})</b>}
           &nbsp;from your wallet to the strategy.
         </span>
       </p>
@@ -175,6 +180,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
           <b className="font-weight-500">
             withdraw {tokenAmount(withdraw, token)}
           </b>
+          {withdrawFiat && <b>&nbsp;({withdrawFiat})</b>}
           &nbsp;from the strategy, but the strategy has insufficient funds.
           Consider changing token deposit amount or prices.
         </Warning>
@@ -190,6 +196,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
           <b className="font-weight-500">
             withdraw {tokenAmount(withdraw, token)}
           </b>
+          {withdrawFiat && <b>&nbsp;({withdrawFiat})</b>}
           &nbsp;from the strategy to your wallet.
         </span>
       </p>
