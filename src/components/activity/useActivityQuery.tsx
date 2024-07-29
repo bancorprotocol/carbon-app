@@ -75,11 +75,7 @@ const toMetaActivities = (
   return result;
 };
 
-// TODO: We can remove the abortTimeout when we consider the backend API stable
-export const useActivityQuery = (
-  params: QueryActivityParams = {},
-  abortTimeout?: number
-) => {
+export const useActivityQuery = (params: QueryActivityParams = {}) => {
   const { tokensMap, isPending, importToken } = useTokens();
   const { Token } = useContract();
   const validParams = isValidParams(params);
@@ -102,14 +98,7 @@ export const useActivityQuery = (
   return useQuery({
     queryKey: QueryKey.activities(params),
     queryFn: async () => {
-      const activities = await (async () => {
-        if (!abortTimeout) return carbonApi.getActivity(params);
-        const control = new AbortController();
-        const timeout = setTimeout(() => control.abort(), abortTimeout);
-        const activities = await carbonApi.getActivity(params, control.signal);
-        clearTimeout(timeout);
-        return activities;
-      })();
+      const activities = await carbonApi.getActivity(params);
       await importMissingTokens(activities);
       return toActivities(activities, tokensMap);
     },

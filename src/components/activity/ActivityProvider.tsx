@@ -4,14 +4,7 @@ import {
   QueryActivityParams,
 } from 'libs/queries/extApi/activity';
 import { ActivitySearchParams } from './utils';
-import {
-  FC,
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-} from 'react';
+import { FC, ReactNode, createContext, useCallback, useContext } from 'react';
 import { useActivityQuery, useActivityMetaQuery } from './useActivityQuery';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { NotFound } from 'components/common/NotFound';
@@ -170,13 +163,6 @@ export function useActivityPagination() {
 
   const setLimit = (limit: number) => setSearchParams({ limit });
   const setOffset = (offset: number) => setSearchParams({ offset });
-
-  // Remove offset when list size changes
-  useEffect(() => {
-    if (offset >= maxOffset) {
-      setSearchParams({ offset: maxOffset });
-    }
-  }, [offset, setSearchParams, maxOffset]);
 
   return {
     size,
