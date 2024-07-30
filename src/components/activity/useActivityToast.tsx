@@ -9,7 +9,7 @@ import { toPairSlug } from 'utils/pairSearch';
 import { BaseToast } from 'components/common/Toaster/Toast';
 import { getUnixTime, subMinutes } from 'date-fns';
 
-const max = 25;
+const max = 50;
 const refetchInterval = 5 * 60 * 1000;
 
 export const useActivityToast = () => {
