@@ -34,8 +34,8 @@ export const commonConfig: AppConfig = {
     },
     defaultLimitedApproval: true,
     gasToken: {
-      name: 'CELO',
-      symbol: 'CELO',
+      name: 'CELO (erc20)',
+      symbol: 'CELO (erc20)',
       decimals: 18,
       address: addresses.CELO_ERC20,
       logoURI:
@@ -74,14 +74,6 @@ export const commonConfig: AppConfig = {
       symbol: 'CELO',
       decimals: 18,
       address: addresses.CELO,
-      logoURI:
-        'https://raw.githubusercontent.com/celo-org/celo-token-list/main/assets/celo_logo.svg',
-    },
-    {
-      name: 'CELO (ERC-20)',
-      symbol: 'CELO (ERC-20)',
-      decimals: 18,
-      address: addresses.CELO_ERC20,
       logoURI:
         'https://raw.githubusercontent.com/celo-org/celo-token-list/main/assets/celo_logo.svg',
     },
