@@ -5,11 +5,9 @@ import { useWagmi } from 'libs/wagmi';
 
 export const StrategiesActivityPage = () => {
   const { user } = useWagmi();
+  const params = { ownerId: user };
   return (
-    <ActivityProvider
-      params={{ ownerId: user }}
-      empty={<StrategyCreateFirst />}
-    >
+    <ActivityProvider params={params} empty={<StrategyCreateFirst />}>
       <ActivitySection filters={['ids', 'pairs']} />
     </ActivityProvider>
   );

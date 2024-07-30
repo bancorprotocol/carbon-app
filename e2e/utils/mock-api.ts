@@ -84,7 +84,7 @@ export const mockApi = async (page: Page) => {
     return route.fulfill({ json: false });
   });
 
-  await page.route('**/*/v1/activity', (route) => {
+  await page.route('**/*/v1/activity?*', (route) => {
     return route.fulfill({ json: [] });
   });
 
