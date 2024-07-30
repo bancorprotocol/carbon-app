@@ -75,10 +75,18 @@ const toMetaActivities = (
   return result;
 };
 
-export const useActivityQuery = (params: QueryActivityParams = {}) => {
+interface ActivityQueryConfig {
+  refetchInterval?: number;
+}
+export const useActivityQuery = (
+  params: QueryActivityParams = {},
+  config: ActivityQueryConfig = {}
+) => {
   const { tokensMap, isPending, importToken } = useTokens();
   const { Token } = useContract();
   const validParams = isValidParams(params);
+
+  const { refetchInterval = THIRTY_SEC_IN_MS } = config;
 
   const importMissingTokens = async (activities: ServerActivity[]) => {
     const missingTokens = new Set<string>();
@@ -103,7 +111,7 @@ export const useActivityQuery = (params: QueryActivityParams = {}) => {
       return toActivities(activities, tokensMap);
     },
     enabled: !isPending && validParams,
-    refetchInterval: THIRTY_SEC_IN_MS,
+    refetchInterval,
   });
 };
 
