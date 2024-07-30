@@ -184,6 +184,10 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `tokenLists`: List of token lists including the uri and the parser to be used to parse the token list.
 - `sdk`/`cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
 
+#### Gas token different than native token
+
+The CarbonDeFi Contracts, Backend and SDK use an internal fixed address for the native gas token, `0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE`, hereby called `native token`. If a different `gas token` address than the `native token` address is set in `network.gasToken.address`, the app will hide the `gas token` from the token list and use the `network token` address for all token and pair searches.
+
 ### Add pairsToExchangeMapping
 
 The file [`pairsToExchangeMapping.ts`](src/config/utils.ts) contains the mapping of pair symbols to exchange symbol to be used in the TradingView chart.
