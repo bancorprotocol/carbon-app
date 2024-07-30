@@ -8,7 +8,7 @@ import { ActivityExport } from './ActivityExport';
 import { useActivity } from './ActivityProvider';
 
 export const ActivitySection: FC<ActivityFilterProps> = ({ filters = [] }) => {
-  const { list: activities, all: allActivities } = useActivity();
+  const { activities } = useActivity();
   const { aboveBreakpoint } = useBreakpoints();
   return (
     <section className="bg-background-900 rounded">
@@ -19,7 +19,7 @@ export const ActivitySection: FC<ActivityFilterProps> = ({ filters = [] }) => {
           className="col-span-2 row-start-2 md:col-auto md:row-start-1"
         />
         <div className="row-start-1 flex items-center gap-8 self-start justify-self-end">
-          <ActivityExport activities={allActivities} />
+          <ActivityExport />
           <ActivityCountDown time={30} />
         </div>
       </header>

@@ -20,9 +20,9 @@ export const toNumber =
     return value ? Number(value) : fallback;
   };
 export const toArray =
-  (fallback: string[] = []) =>
+  <T>(fallback: T[] = []) =>
   (value: string = '') => {
-    return value ? (value as unknown as string[]) : fallback;
+    return value ? (value as unknown as T[]) : fallback;
   };
 export const toLiteral =
   <T>(literals: T[], fallback: T) =>
