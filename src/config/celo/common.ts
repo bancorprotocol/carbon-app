@@ -78,6 +78,14 @@ export const commonConfig: AppConfig = {
         'https://raw.githubusercontent.com/celo-org/celo-token-list/main/assets/celo_logo.svg',
     },
     {
+      name: 'CELO (ERC-20)',
+      symbol: 'CELO (ERC-20)',
+      decimals: 18,
+      address: addresses.CELO_ERC20,
+      logoURI:
+        'https://raw.githubusercontent.com/celo-org/celo-token-list/main/assets/celo_logo.svg',
+    },
+    {
       name: 'CELO (Alfajores Testnet)',
       symbol: 'CELO (Alfajores)',
       decimals: 18,
