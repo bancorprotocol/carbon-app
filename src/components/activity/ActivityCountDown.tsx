@@ -9,6 +9,7 @@ const finishRemainingAnimations = (element: HTMLElement | null) => {
   const animations = element?.getAnimations() ?? [];
   const operations = animations.map(async (a) => {
     await a.finished;
+    if (element?.offsetParent === null) return; // cannot commit style to not rendered element
     a.commitStyles();
     a.cancel();
   });
@@ -18,6 +19,7 @@ const finishRemainingAnimations = (element: HTMLElement | null) => {
 const commitAnimationStyle = (element: HTMLElement | null) => {
   const animations = element?.getAnimations() ?? [];
   animations.forEach((a) => {
+    if (!element?.offsetParent === null) return;
     a.commitStyles();
     a.cancel();
   });

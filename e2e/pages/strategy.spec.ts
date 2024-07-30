@@ -1,6 +1,11 @@
 import { test } from '@playwright/test';
 import { mockApi } from '../utils/mock-api';
-import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
+import {
+  DebugDriver,
+  removeFork,
+  setupFork,
+  setupLocalStorage,
+} from '../utils/DebugDriver';
 import {
   CreateStrategyTestCase,
   fromLimitOrder,
@@ -652,9 +657,9 @@ test.describe('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     await mockApi(page);
     await setupFork(testInfo);
+    await setupLocalStorage(page, testInfo);
     const debug = new DebugDriver(page);
     await debug.visit();
-    await debug.setRpcUrl(testInfo);
     await debug.setupImposter();
   });
   test.afterEach(async ({}, testInfo) => {
