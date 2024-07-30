@@ -79,7 +79,7 @@ const migrations: Migration[] = [
       if (!isMatch) return;
       const key = prevFormattedKey.slice(prefix.length);
       if (!key) return;
-      const nextFormattedKey = ['carbon-v1.1', NETWORK, key].join('-');
+      const nextFormattedKey = ['carbon', NETWORK, 'v1.1', key].join('-');
       migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
     },
   },
