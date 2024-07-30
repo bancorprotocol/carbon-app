@@ -96,6 +96,7 @@ export class EditStrategyDriver {
 
   async fillBudget(direction: Direction, budget: string) {
     const form = this.getBudgetSection(direction);
+    await form.budget().focus();
     return form.budget().fill(budget);
   }
 
@@ -112,6 +113,7 @@ export class EditStrategyDriver {
         // wait for input to have a value before overriding
         expect(form.price()).toHaveValue(/\S+/);
       }
+      await form.price().focus();
       await form.price().fill(order.min);
     } else {
       if (type !== 'renew') {
@@ -119,7 +121,9 @@ export class EditStrategyDriver {
         expect(form.min()).toHaveValue(/\S+/);
         expect(form.max()).toHaveValue(/\S+/);
       }
+      await form.min().focus();
       await form.min().fill(order.min);
+      await form.max().focus();
       await form.max().fill(order.max);
     }
     return form;

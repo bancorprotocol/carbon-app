@@ -23,6 +23,7 @@ export const deposit = (testCase: CreateStrategyTestCase) => {
     await edit.waitForPage('overlapping', 'deposit');
     const form = edit.getOverlappingForm();
     await form.anchor(input.anchor).click();
+    await form.budget().focus();
     await form.budget().fill(input.budget);
     await edit.submit('deposit');
 

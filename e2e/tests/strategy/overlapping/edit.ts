@@ -22,13 +22,16 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('overlapping', 'editPrices');
     const form = edit.getOverlappingForm();
+    await form.min().focus();
     await form.min().fill(input.min);
+    await form.max().focus();
     await form.max().fill(input.max);
     await form.spread().fill(input.spread);
     await expect(form.anchorRequired()).toBeVisible();
     await form.anchor(input.anchor).click();
     await form.budgetSummary().click();
     if (input.action) await form.action(input.action).click();
+    await form.budget().focus();
     await form.budget().fill(input.budget);
     await edit.submit('editPrices');
 
