@@ -125,7 +125,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
 
     const result = fuse.search(search);
     return result.map((result) => result.item);
-  }, [search, sanitizedTokens, fuse]);
+  }, [search, fuse, sanitizedTokens, excludedTokens]);
 
   const showImportToken = useMemo(() => {
     const isValidAddress = utils.isAddress(search.toLowerCase());
