@@ -10,8 +10,13 @@ import {
   StrategyFilter,
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
-import { APP_ID, APP_VERSION } from 'utils/constants';
+import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
 import { FiatSymbol } from 'utils/carbonApi';
+import {
+  Migration,
+  migrateAndRemoveItem,
+  removeItem,
+} from 'utils/migrateLocalStorage';
 import { NotificationPreference } from 'libs/notifications/NotificationPreferences';
 
 // ************************** /
@@ -48,6 +53,39 @@ interface LocalStorageSchema {
   notificationPreferences: NotificationPreference;
 }
 
-export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
-  [APP_ID, APP_VERSION, key].join('-')
+// ************************** /
+// LOCAL STORAGE MIGRATION AND CLEAN_UP
+// Order matters! The migrations are performed in top to bottom order. In most cases, new migrations should be added to the bottom of the list
+// ************************** /
+
+/**
+ * An array of migration objects, each designed to handle specific versions of stored items.
+ * @type {Migration[]}
+ * @property {Function} migrate - A function that takes the prevFormattedKey of each localStorage object key to be migrated and performs any migration operations.
+ */
+const migrations: Migration[] = [
+  {
+    migrate: (prevFormattedKey) => {
+      const prefix = 'carbon-v1-';
+      const isMatch = prevFormattedKey.startsWith(prefix);
+      if (!isMatch) return;
+      removeItem({ prevFormattedKey });
+    },
+  },
+  {
+    migrate: (prevFormattedKey) => {
+      const prefix = 'carbon-v1.1-';
+      const isMatch = prevFormattedKey.startsWith(prefix);
+      if (!isMatch) return;
+      const key = prevFormattedKey.slice(prefix.length);
+      if (!key) return;
+      const nextFormattedKey = ['carbon', NETWORK, 'v1.1', key].join('-');
+      migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
+    },
+  },
+];
+
+export const lsService = new ManagedLocalStorage<LocalStorageSchema>(
+  (key) => [APP_ID, NETWORK, APP_VERSION, key].join('-'),
+  migrations
 );
