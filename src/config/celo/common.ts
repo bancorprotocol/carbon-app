@@ -32,7 +32,7 @@ export const commonConfig: AppConfig = {
     rpc: {
       url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://forno.celo.org',
     },
-    defaultLimitedApproval: true, // TODO
+    defaultLimitedApproval: true,
     gasToken: {
       name: 'CELO',
       symbol: 'CELO',
