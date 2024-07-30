@@ -13,7 +13,7 @@
 
 # CarbonDeFi webapp
 
-Carbon DeFi is an advanced onchain trading protocol enabling automated limit orders, efficiently adjustable with custom price ranges, grid trading like recurring orders, works like a DEX trading bot.
+Carbon DeFi is an advanced onchain trading protocol enabling automated limit orders, efficiently adjustable with custom price ranges, grid trading like recurring orders, working like a DEX trading bot.
 
 # Setup
 
@@ -23,7 +23,6 @@ To run the app locally, you need the following:
 
 - Node.js 20+
 - Yarn
-- RPC Node Provider API Key (Alchemy, Infura, etc)
 
 For E2E testing you need a Tenderly account and API Key.
 
@@ -43,7 +42,21 @@ yarn install
 yarn start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+You can choose the network to run the app by setting the `VITE_NETWORK` variable in the `.env` file. The default network is `ethereum`.
+
+Alternatively, if defined in the in the [package.json](package.json) file, you can select the network to use by running `yarn:network` where `network` is one of the networks defined in the [config](src/config/index.ts) and the `yarn:network` command is defined in [package.json](package.json) file as follows:
+
+```bash
+"start:network": "cross-env VITE_NETWORK=network vite",
+```
+
+Example:
+
+```bash
+"start:ethereum": "cross-env VITE_NETWORK=ethereum vite",
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the development mode app in the browser.
 
 # Test
 
@@ -73,11 +86,11 @@ Running the following, will build the app for production:
 yarn build
 ```
 
-It will build the for production to the `build` folder.\
+It will build the app for production to the `build` folder.
+
 It correctly bundles the App in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The build is minified and the filenames include the hashes. Your app is ready to be deployed!
 
 # Debug
 
@@ -112,13 +125,13 @@ The '/debug' route is available to debug the app (ex: localhost:3000/debug). It 
 
 where `spread` (fee tier in the UI) is in percentage, and `value` is the number of strategies to create.
 
-# Customization
+# Network Configuration
 
 ## Change Network
 
 1. Create a new folder under `src/config` with the name of the network (ex: "polygon")
-2. Copy paste the files from `src/config/ethereum` into your folder
-3. Update the `common.ts`, `production.ts` & `development.ts` files with your config, pointing to the CarbonDeFi contracts in that network
+2. Copy and paste the files from `src/config/ethereum` into your folder
+3. Update the `common.ts`, `production.ts` & `development.ts` files with your config, pointing to the CarbonDeFi contracts in that network, as well as setting the rpc.url and rpc.headers (rpc.url must match the one found in [Chain Lists](https://chainlist.org/)).
 4. Update the `src/config/index.ts` files to import your files
    `index.ts`
 
@@ -144,7 +157,7 @@ const configs = {
 };
 ```
 
-5. Update the `.env` file to use the required network (ex: "polygon") and set your RPC url if you wish to use a custom one not defined under the `common.ts` file.
+5. Update the `.env` file to use the required network (ex: "polygon").
 
 ```bash
 # Use polygon network
@@ -152,6 +165,13 @@ VITE_NETWORK=polygon
 # Use any RPC URL to your network
 VITE_CHAIN_RPC_URL=https://eth-mainnet.alchemyapi.io/v2/<API_KEY>
 ```
+
+The app will use the rpc for the following purposes:
+
+1. Add a network to the injected wallet.
+2. Fetch data from the network.
+
+If VITE_CHAIN_RPC_URL is not set, the app will use the rpc.url and rpc.headers from the development/production network configuration.
 
 ### Contracts with version < 5
 
@@ -175,11 +195,11 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `defaultLimitedApproval`: Optional flag to set the default ERC-20 approval to limited approval. For chains where gas is low, it is recommended to set this flag to true.
   - `gasToken`: Gas token name, symbol, decimals, address and logoURI. This parameter will take priority over the `tokenListOverride`.
   - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
-  - `rpcUrl`: The RPC URL of the network.
+  - `rpc`: The RPC url and headers of the network, used to add the network to the injected wallet and to fetch data from the chain.
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade, explore, and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
 - `popularTokens`: List of popular tokens to be used in the app when opening the token selection modal.
-- `addresses`/`carbon` and `addresses/utils`: CarbonController, Voucher and multicall contract addresses.
+- `addresses`/`carbon` and `addresses/utils`: CarbonController, Voucher and multicall3 contract addresses.
 - `tokenListOverride`: Token list override to be used in the app when fetching the token list. Tokens in the list will override any other token with the same address.
 - `tokenLists`: List of token lists including the uri and the parser to be used to parse the token list.
 - `sdk`/`cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
@@ -191,6 +211,19 @@ The CarbonDeFi Contracts, Backend and SDK use an internal fixed address for the 
 ### Add pairsToExchangeMapping
 
 The file [`pairsToExchangeMapping.ts`](src/config/utils.ts) contains the mapping of pair symbols to exchange symbol to be used in the TradingView chart.
+
+# Customization
+
+## Change Logo
+
+To change the logo in the app, you can replace the following files with your own:
+
+- Logo file: [`carbon.svg`](src/assets/logos/carbon.svg).
+- Banner file: [`carbon.jpg`](public/carbon.jpg) - used when sharing links to the app.
+- Carbon Logo Loading: [`CarbonLogoLoading.tsx`](src/components/common/CarbonLogoLoading.tsx) - Used for loading animations in the app.
+- Favicon file: [`favicon.ico`](public/favicon.ico).
+
+Please do not replace the [`carbondefi.svg`](src/assets/logos/carbondefi.svg) file as it is used for the "Powered by CarbonDeFi" logo in the footer.
 
 ## Change Colors
 

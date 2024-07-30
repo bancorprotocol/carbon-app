@@ -37,7 +37,10 @@ export const setupLocalStorage = async (page: Page, testInfo: TestInfo) => {
   return page.evaluate((storage) => {
     // each value is stringified to match lsservice
     for (const [key, value] of Object.entries(storage)) {
-      localStorage.setItem(`carbon-v1.1-${key}`, JSON.stringify(value));
+      localStorage.setItem(
+        `carbon-ethereum-v1.1-${key}`,
+        JSON.stringify(value)
+      );
     }
   }, storage);
 };

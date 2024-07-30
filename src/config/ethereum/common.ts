@@ -44,9 +44,7 @@ export const commonConfig: AppConfig = {
     chainId: 1,
     blockExplorer: { name: 'Etherscan', url: 'https://etherscan.io' },
     rpc: {
-      url:
-        import.meta.env.VITE_CHAIN_RPC_URL ||
-        'https://ethereum-rpc.publicnode.com',
+      url: 'https://ethereum-rpc.publicnode.com',
     },
     defaultLimitedApproval: false,
     gasToken: {

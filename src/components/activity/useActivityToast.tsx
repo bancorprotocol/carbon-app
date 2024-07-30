@@ -7,17 +7,23 @@ import { Link } from '@tanstack/react-router';
 import { lsService } from 'services/localeStorage';
 import { toPairSlug } from 'utils/pairSearch';
 import { BaseToast } from 'components/common/Toaster/Toast';
-import { getUnixTime } from 'date-fns';
+import { getUnixTime, subMinutes } from 'date-fns';
 
-const max = 8;
+const max = 50;
+const refetchInterval = 5 * 60 * 1000;
+
 export const useActivityToast = () => {
   const { user } = useWagmi();
-  const [lastFetch, setLastFetch] = useState<number>(getUnixTime(new Date()));
-  const query = useActivityQuery({
+  const [lastFetch, setLastFetch] = useState<number>(
+    getUnixTime(subMinutes(new Date(), refetchInterval))
+  );
+  const params = {
     start: lastFetch,
     limit: max,
     actions: 'buy,sell',
-  });
+  };
+  const queryConfig = { refetchInterval };
+  const query = useActivityQuery(params, queryConfig);
   const allActivities = query.data || [];
   const activities = allActivities.filter((a) => {
     if (user && a.strategy.owner === user) return false;
@@ -46,7 +52,7 @@ export const useActivityToast = () => {
             </Link>
           </BaseToast>
         ));
-      }, (30_000 * (Math.random() + i)) / max);
+      }, (refetchInterval * (Math.random() + i)) / max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query.fetchStatus, toaster.addToast, toaster.removeToast]);

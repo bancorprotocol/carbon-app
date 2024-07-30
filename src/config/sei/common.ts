@@ -35,9 +35,9 @@ export const commonConfig: AppConfig = {
     chainId: 1329,
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
     rpc: {
-      url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://evm-rpc.sei-apis.com',
+      url: 'https://evm-rpc.sei-apis.com',
       headers: {
-        'x-apikey': import.meta.env.VITE_CHAIN_RPC_KEY || '',
+        'x-apikey': 'a5063ab2',
       },
     },
     defaultLimitedApproval: true,
@@ -99,19 +99,19 @@ export const commonConfig: AppConfig = {
     faucetAmount: 1000,
     faucetTokens: [
       {
-        donorAccount: '0x029dAb7D8270ab5120bEE56f7D8214e9DB4F2389',
+        donorAccount: '0x06b49C508f278a9219a6e45A7bcEbBC0aA1E2e7b',
         tokenContract: addresses.WSEI,
         decimals: 18,
         symbol: 'WSEI',
       },
       {
-        donorAccount: '0x946a1a3Dacbc7A7Bb2C7dF0b87195d6092f7238B',
+        donorAccount: '0xE071600b2445Ba5aD609Cb282436663789b388F8',
         tokenContract: addresses.USDC,
         decimals: 6,
         symbol: 'USDC',
       },
       {
-        donorAccount: '0x0eba0a13Ca36AA4784aE6960a331034A7dE91EF7',
+        donorAccount: '0x41eEa09c971294FcDE3B6E553902B04a47be7442',
         tokenContract: addresses.USDT,
         decimals: 6,
         symbol: 'USDT',

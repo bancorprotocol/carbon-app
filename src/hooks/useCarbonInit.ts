@@ -125,6 +125,7 @@ export const useCarbonInit = () => {
 
   const initCheck = useCallback(async () => {
     try {
+      lsService.migrateItems();
       const isBlocked = await carbonApi.getCheck();
       setCountryBlocked(isBlocked);
       if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
