@@ -145,11 +145,15 @@ export class CreateSimulationDriver {
     const form = this.getFormSection(direction);
     await form.setting(setting).click();
     if (setting === 'limit') {
+      await form.price().focus();
       await form.price().fill(order.min);
     } else {
+      await form.min().focus();
       await form.min().fill(order.min);
+      await form.max().focus();
       await form.max().fill(order.max);
     }
+    await form.budget().focus();
     await form.budget().fill(order.budget);
     return form;
   }
@@ -167,9 +171,12 @@ export class CreateSimulationDriver {
     assertOverlappingTestCase(this.testCase);
     const { buy, sell, spread } = this.testCase.input;
     const form = this.getOverlappingForm();
+    await form.max().focus();
     await form.max().fill(sell.max.toString());
+    await form.min().focus();
     await form.min().fill(buy.min.toString());
     await form.spread().fill(spread.toString());
+    await form.budgetBase().focus();
     await form.budgetBase().fill(sell.budget.toString());
     return form;
   }
