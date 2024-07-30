@@ -74,7 +74,7 @@ const migrations: Migration[] = [
   },
   {
     migrate: (prevFormattedKey) => {
-      const prefix = 'carbon-v1-1-';
+      const prefix = 'carbon-v1.1-';
       const isMatch = prevFormattedKey.startsWith(prefix);
       if (!isMatch) return;
       const key = prevFormattedKey.slice(prefix.length);
