@@ -1,9 +1,13 @@
 import LZString from 'lz-string';
+import { Migration } from './migrateLocalStorage';
 
 export class ManagedLocalStorage<T> {
   private readonly keyFormatter = (key: keyof T) => key as string;
 
-  constructor(keyFormatter?: (key: keyof T) => string) {
+  constructor(
+    keyFormatter?: (key: keyof T) => string,
+    private migrations?: Migration[]
+  ) {
     if (keyFormatter) {
       this.keyFormatter = keyFormatter;
     }
@@ -48,5 +52,11 @@ export class ManagedLocalStorage<T> {
   removeItem = <K extends keyof T>(key: K) => {
     const formattedId = this.keyFormatter(key);
     localStorage.removeItem(formattedId);
+  };
+
+  migrateItems = () => {
+    this.migrations?.forEach(({ migrate }) => {
+      Object.keys(localStorage).forEach(migrate);
+    });
   };
 }
