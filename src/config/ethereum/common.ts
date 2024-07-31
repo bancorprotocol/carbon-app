@@ -46,6 +46,7 @@ export const commonConfig: AppConfig = {
     rpc: {
       url: 'https://ethereum-rpc.publicnode.com',
     },
+    defaultLimitedApproval: false,
     gasToken: {
       name: 'Ether',
       symbol: 'ETH',

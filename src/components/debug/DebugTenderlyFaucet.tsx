@@ -10,6 +10,7 @@ import config from 'config';
 import { Button } from 'components/common/button';
 import { QueryKey } from 'libs/queries';
 import { FormEvent } from 'react';
+import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -19,7 +20,7 @@ const TOKENS = FAUCET_TOKENS.map((tkn) => ({
 
 const gasToken = config.network.gasToken;
 TOKENS.push({
-  address: gasToken.address,
+  address: NATIVE_TOKEN_ADDRESS,
   decimals: gasToken.decimals,
   symbol: gasToken.symbol,
 });
@@ -38,7 +39,7 @@ export const DebugTenderlyFaucet = () => {
 
     await tenderlyFaucetTransferNativeToken(user);
     await queryClient.invalidateQueries({
-      queryKey: QueryKey.balance(user, gasToken.address),
+      queryKey: QueryKey.balance(user, NATIVE_TOKEN_ADDRESS),
     });
 
     for (const tkn of FAUCET_TOKENS) {

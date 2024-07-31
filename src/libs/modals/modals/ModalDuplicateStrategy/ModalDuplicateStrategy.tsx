@@ -10,6 +10,7 @@ import { getUndercutStrategy } from './utils';
 import { getStrategyType } from 'components/strategies/common/utils';
 import { useNavigate } from '@tanstack/react-router';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
+import { NATIVE_TOKEN_ADDRESS, isGasTokenToHide } from 'utils/tokens';
 
 export type ModalDuplicateStrategyData = {
   strategy: Strategy;
@@ -29,11 +30,17 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
     if (strategyType === 'overlapping') {
       // Reduce spread by 0.1% for overlapping strategies
       const spread = getRoundedSpread(strategy) * 0.99;
+      // Force native token address if gas token is different
+      let baseAddress = strategy.base.address;
+      let quoteAddress = strategy.quote.address;
+      if (isGasTokenToHide(baseAddress)) baseAddress = NATIVE_TOKEN_ADDRESS;
+      if (isGasTokenToHide(quoteAddress)) quoteAddress = NATIVE_TOKEN_ADDRESS;
+
       navigate({
         to: '/strategies/create/overlapping',
         search: {
-          base: strategy.base.address,
-          quote: strategy.quote.address,
+          base: baseAddress,
+          quote: quoteAddress,
           min: strategy.order0.startRate,
           max: strategy.order1.endRate,
           spread: spread.toString(),

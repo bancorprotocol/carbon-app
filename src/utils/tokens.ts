@@ -1,3 +1,4 @@
+import config from 'config';
 import { SafeDecimal } from 'libs/safedecimal';
 
 export const expandToken = (amount: string | number, precision: number) => {
@@ -20,3 +21,22 @@ export const shrinkToken = (
 
   return chopZeros ? new SafeDecimal(res).toString() : res;
 };
+
+export const NATIVE_TOKEN_ADDRESS =
+  '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+
+export const nativeToken = {
+  ...config.network.gasToken,
+  address: NATIVE_TOKEN_ADDRESS,
+};
+
+export const isDifferentGasToken =
+  config.network.gasToken.address.toLowerCase() !==
+  NATIVE_TOKEN_ADDRESS.toLowerCase();
+
+export const isGasTokenToHide = (address: string) =>
+  isDifferentGasToken &&
+  address.toLowerCase() === config.network.gasToken.address.toLowerCase();
+
+export const includesGasToken = (address: string) =>
+  address.toLowerCase().includes(config.network.gasToken.address.toLowerCase());
