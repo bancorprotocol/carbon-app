@@ -399,12 +399,19 @@ describe('Test helpers', () => {
       expect(roundSearchParam('0')).toBe('');
       expect(roundSearchParam('0.0')).toBe('');
     });
+    test('If inputValue >= 1, apply 6 decimal accuracy', () => {
+      expect(roundSearchParam('12345.12345678901234567890')).toBe(
+        '12345.123456'
+      );
+      expect(roundSearchParam('123.12345678901234567890')).toBe('123.123456');
+      expect(roundSearchParam('1.12345678901234567890')).toBe('1.123456');
+      expect(roundSearchParam('1.000000123456789')).toBe('1');
+    });
     test('Should display maximum 6 decimals after leading 0 & remove trailing 0', () => {
-      expect(roundSearchParam('10')).toBe('10');
-      expect(roundSearchParam('0.1234567')).toBe('0.123456');
-      expect(roundSearchParam('1.1234567')).toBe('1.123456');
-      expect(roundSearchParam('1.00000001234567')).toBe('1.0000000123456');
+      expect(roundSearchParam('0.12345678')).toBe('0.123456');
+      expect(roundSearchParam('0.0001234567890')).toBe('0.000123456');
       expect(roundSearchParam('0.000000012345600001')).toBe('0.0000000123456');
+      expect(roundSearchParam('0.100000012345678901234567890')).toBe('0.1');
     });
   });
 });

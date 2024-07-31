@@ -32,6 +32,7 @@ export const undercut = (testCase: CreateStrategyTestCase) => {
     const createForm = new CreateStrategyDriver(page, testCase);
     const overlappingForm = createForm.getOverlappingForm();
     await overlappingForm.anchor('sell').click();
+    await overlappingForm.budget().focus();
     await overlappingForm.budget().fill(sell.budget);
     await createForm.submit('undercut');
 

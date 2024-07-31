@@ -77,11 +77,15 @@ export class CreateStrategyDriver {
     const form = this.getFormSection(direction);
     await form.setting(setting).click();
     if (setting === 'limit') {
+      await form.price().focus();
       await form.price().fill(order.min);
     } else {
+      await form.min().focus();
       await form.min().fill(order.min);
+      await form.max().focus();
       await form.max().fill(order.max);
     }
+    await form.budget().focus();
     await form.budget().fill(order.budget);
     return form;
   }
