@@ -20,7 +20,7 @@ export const commonConfig: AppConfig = {
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
-  policiesLastUpdated: '27 May, 2024',
+  policiesLastUpdated: '31 Jul, 2024',
   network: {
     name: 'Celo Network',
     logoUrl: IconCeloLogo,
