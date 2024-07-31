@@ -23,6 +23,7 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
     await edit.waitForPage('overlapping', 'withdraw');
     const form = edit.getOverlappingForm();
     await form.anchor(input.anchor).click();
+    await form.budget().focus();
     await form.budget().fill(input.budget);
     await edit.submit('withdraw');
 

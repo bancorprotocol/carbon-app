@@ -1,6 +1,20 @@
-import { ChangeEvent, FC, FocusEvent, useId, useRef } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  FocusEvent,
+  MouseEvent,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import { Token } from 'libs/tokens';
-import { formatNumber, prettifyNumber, sanitizeNumber } from 'utils/helpers';
+import {
+  formatNumber,
+  prettifyNumber,
+  roundSearchParam,
+  sanitizeNumber,
+} from 'utils/helpers';
 import { SafeDecimal } from 'libs/safedecimal';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { TokenLogo } from 'components/common/imager/Imager';
@@ -30,9 +44,6 @@ interface Props {
 }
 
 export const InputBudget: FC<Props> = (props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const inputId = useId();
-  const { user } = useWagmi();
   const {
     className,
     token,
@@ -47,24 +58,43 @@ export const InputBudget: FC<Props> = (props) => {
     title,
     titleTooltip,
   } = props;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const inputId = useId();
+  const { user } = useWagmi();
   const id = props.id ?? inputId;
+  const [localBudget, setLocalBudget] = useState(roundSearchParam(value));
   const { getFiatValue, selectedFiatCurrency: currentCurrency } =
     useFiatCurrency(token);
-  const fiatValue = getFiatValue(value ?? '0', true);
+  const fiatValue = getFiatValue(localBudget ?? '0', true);
 
-  const onBlur = (e: FocusEvent<HTMLInputElement>) => {
-    const formatted = formatNumber(e.target.value);
-    if (formatted !== e.target.value) props.onChange(formatted);
+  useEffect(() => {
+    if (document.activeElement !== document.getElementById(inputId)) {
+      setLocalBudget(roundSearchParam(value));
+    }
+  }, [inputId, value]);
+
+  const onFocus = (e: FocusEvent<HTMLInputElement>) => {
+    setLocalBudget(value);
+    e.target.select();
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeNumber(e.target.value, token.decimals);
-    props.onChange(sanitized);
+    const budget = sanitizeNumber(e.target.value, token.decimals);
+    setLocalBudget(budget);
+    props.onChange(budget);
   };
 
-  const setMax = () => {
+  const onBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const budget = formatNumber(e.target.value);
+    setLocalBudget(roundSearchParam(budget));
+    props.onChange(budget);
+  };
+
+  const setMax = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
     if (!max || max === value) return;
     const maxBudget = new SafeDecimal(max).toFixed(token.decimals);
+    setLocalBudget(roundSearchParam(maxBudget));
     props.onChange(maxBudget);
   };
 
@@ -93,7 +123,7 @@ export const InputBudget: FC<Props> = (props) => {
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             ref={inputRef}
-            value={value}
+            value={localBudget}
             size={1}
             placeholder={placeholder}
             className={`
@@ -102,7 +132,7 @@ export const InputBudget: FC<Props> = (props) => {
               ${disabled ? 'text-white/40' : ''}
               ${disabled ? 'cursor-not-allowed' : ''}
             `}
-            onFocus={(e) => e.target.select()}
+            onFocus={onFocus}
             onChange={onChange}
             onBlur={onBlur}
             disabled={disabled}
