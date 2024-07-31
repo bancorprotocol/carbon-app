@@ -10,8 +10,8 @@ interface Props {
     id: string;
     name: string;
     logoUrl: string;
-    appUrl: string;
     isCurrentNetwork: boolean;
+    selectNetwork: () => void;
   }[];
 }
 
@@ -44,27 +44,24 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
       )}
     >
       {networks.map((network) => {
-        const { id, name, logoUrl, appUrl, isCurrentNetwork } = network;
+        const { id, name, logoUrl, selectNetwork, isCurrentNetwork } = network;
         return (
-          <a
+          <button
             key={id}
             role="menuitem"
             className={cn(
               'rounded-6 flex w-full items-center gap-x-10 p-12',
-              isCurrentNetwork
-                ? 'pointer-events-none bg-black'
-                : 'hover:bg-black'
+              isCurrentNetwork ? 'bg-black' : 'hover:bg-black'
             )}
-            href={appUrl}
-            aria-current={isCurrentNetwork}
-            aria-disabled={isCurrentNetwork}
+            onClick={() => selectNetwork()}
+            disabled={isCurrentNetwork}
           >
             <img alt={name} src={logoUrl} className="w-20" />
             <span>{name}</span>
             <IconCheck
               className={cn('ml-auto', isCurrentNetwork ? '' : 'invisible')}
             />
-          </a>
+          </button>
         );
       })}
     </DropdownMenu>

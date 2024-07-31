@@ -23,8 +23,14 @@ const configs = {
 type Network = keyof typeof configs;
 type Mode = 'development' | 'production';
 
-const network = (import.meta.env.VITE_NETWORK || 'ethereum') as Network;
 const mode = import.meta.env.MODE as Mode;
+const useStoredChainSwitch = !!import.meta.env.VITE_USE_STORED_CHAIN_SWITCH;
+
+export const network = ((useStoredChainSwitch
+  ? localStorage.getItem('currentNetwork')
+  : undefined) ||
+  import.meta.env.VITE_NETWORK ||
+  'ethereum') as Network;
 
 if (!configs[network]) {
   const networks = Object.keys(configs).join(' or ');
@@ -41,7 +47,14 @@ export const networks = Object.entries(configs).map(([id, config]) => {
     name: config[mode].network.name,
     logoUrl: config[mode].network.logoUrl,
     isCurrentNetwork: network === id,
-    appUrl: config[mode].appUrl,
+    selectNetwork: () => {
+      if (useStoredChainSwitch) {
+        localStorage.setItem('currentNetwork', id);
+        window.location.reload();
+      } else {
+        window.location.href = config[mode].appUrl;
+      }
+    },
   };
 });
 

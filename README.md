@@ -173,6 +173,15 @@ The app will use the rpc for the following purposes:
 
 If VITE_CHAIN_RPC_URL is not set, the app will use the rpc.url and rpc.headers from the development/production network configuration.
 
+### Network switch
+
+The network switch is available in the header of the app. It allows the user to switch between networks and has the following behavior:
+
+- If running with VITE_USE_STORED_CHAIN_SWITCH flag set to true, it will change the network in the same page storing the selected network in the local storage.
+- If running with VITE_USE_STORED_CHAIN_SWITCH flag set to false, it will redirect the user to the home page of the selected network set in config `appUrl`.
+
+If changing the network in the same page, it is recommended to set the chain rpc url via the config instead of using VITE_CHAIN_RPC_URL
+
 ### Contracts with version < 5
 
 In case the network is using a version of CarbonController older than 5 then there's no support for extended range for trade by source,

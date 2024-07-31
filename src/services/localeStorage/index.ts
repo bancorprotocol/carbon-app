@@ -10,14 +10,11 @@ import {
   StrategyFilter,
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
-import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
+import { APP_ID, APP_VERSION } from 'utils/constants';
 import { FiatSymbol } from 'utils/carbonApi';
-import {
-  Migration,
-  migrateAndRemoveItem,
-  removeItem,
-} from 'utils/migrateLocalStorage';
+import { Migration, removeItem } from 'utils/migrateLocalStorage';
 import { NotificationPreference } from 'libs/notifications/NotificationPreferences';
+import { network } from 'config';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
@@ -77,15 +74,12 @@ const migrations: Migration[] = [
       const prefix = 'carbon-v1.1-';
       const isMatch = prevFormattedKey.startsWith(prefix);
       if (!isMatch) return;
-      const key = prevFormattedKey.slice(prefix.length);
-      if (!key) return;
-      const nextFormattedKey = ['carbon', NETWORK, 'v1.1', key].join('-');
-      migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
+      removeItem({ prevFormattedKey });
     },
   },
 ];
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>(
-  (key) => [APP_ID, NETWORK, APP_VERSION, key].join('-'),
+  (key) => [APP_ID, network, APP_VERSION, key].join('-'),
   migrations
 );
