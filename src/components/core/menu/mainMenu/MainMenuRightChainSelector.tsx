@@ -17,7 +17,7 @@ interface Props {
 
 export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
   const activeNetwork = networks.find((network) => network.isCurrentNetwork);
-  if (!activeNetwork) return;
+  if (!activeNetwork || networks.length < 2) return;
 
   return (
     <DropdownMenu
