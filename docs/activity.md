@@ -8,13 +8,13 @@ The meta endpoint provides information to the frontend to manage filtering and p
 
 ## Activity List
 
-**Examples**
+### Examples
 - Last 10 activities that happened: `/v1/activity?limit=10`
 - All activities owned by user 0x123: `/v1/activity?ownerId=0x123`
 - Trade activities for the pair USDC/DAI: `/v1/activity?actions=buy,sell&pairs=0xA0...eB48_0x6B...d0F`
 
 
-**Search Params**
+### Search Params
 ```typescript
 interface ActivityListSearch {
   /** address of a strategy owner */
@@ -59,7 +59,7 @@ interface ActivityListSearch {
 ## Activity Meta
 The meta endpoint uses the same params as the activity list without the pagination params (limit & offset)
 
-**Example**
+### Example
 Get all strategy IDs owned by user 0x123:
 ```typescript
 const { strategies } = await fetch('https://api.carbondefi.xyz/v1/activity/meta?owner=0x123').then(res => res.json());
@@ -81,7 +81,7 @@ const activities = await fetch(`https://api.carbondefi.xyz/v1/activity/meta?owne
 ```
 
 
-**Search Params**
+### Search Params
 ```typescript
 type ActivityMetaSearch = Omit<ActivityListSearch, 'limit' | 'offset'>;
 ```
