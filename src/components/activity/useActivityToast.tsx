@@ -7,7 +7,7 @@ import { Link } from '@tanstack/react-router';
 import { lsService } from 'services/localeStorage';
 import { toPairSlug } from 'utils/pairSearch';
 import { BaseToast } from 'components/common/Toaster/Toast';
-import { getUnixTime, subMinutes } from 'date-fns';
+import { getUnixTime, subMilliseconds } from 'date-fns';
 
 const max = 50;
 const refetchInterval = 5 * 60 * 1000;
@@ -15,7 +15,7 @@ const refetchInterval = 5 * 60 * 1000;
 export const useActivityToast = () => {
   const { user } = useWagmi();
   const [lastFetch, setLastFetch] = useState<number>(
-    getUnixTime(subMinutes(new Date(), refetchInterval))
+    getUnixTime(subMilliseconds(new Date(), refetchInterval))
   );
   const params = {
     start: lastFetch,
