@@ -16,6 +16,7 @@ export const MainMenuTradeSettings: FC<Props> = ({ baseToken, quoteToken }) => {
 
   return (
     <Button
+      aria-haspopup="dialog"
       variant="secondary"
       className="flex w-40 items-center justify-center p-0"
       onClick={() => {

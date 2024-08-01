@@ -4,13 +4,7 @@ import { getLastVisitedPair } from 'libs/routing/utils';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 
-export const usePersistLastPair = (
-  url:
-    | '/strategies/create'
-    | '/strategies/create/disposable'
-    | '/strategies/create/recurring'
-    | '/strategies/create/overlapping'
-) => {
+export const usePersistLastPair = (url: '/trade') => {
   const { getTokenById } = useTokens();
   const search = useSearch({ from: url });
   const defaultPair = getLastVisitedPair();

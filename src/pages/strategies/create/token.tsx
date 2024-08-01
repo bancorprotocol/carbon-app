@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'framer-motion';
 import { m } from 'libs/motion';
 import { items, list } from 'components/strategies/common/variants';
-import { CreateStrategyTokenSelection } from 'components/strategies/create/CreateStrategyTokenSelection';
+import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { CreateStrategyOption } from 'components/strategies/create/CreateStrategyOption';
 import { useRouter } from '@tanstack/react-router';
 import { ForwardArrow } from 'components/common/forwardArrow';
@@ -33,7 +33,7 @@ export const CreateStrategyTokenPage = () => {
           </button>
           <h1 className="text-24 font-weight-500 flex-1">Create Strategy</h1>
         </m.header>
-        <CreateStrategyTokenSelection base={base} quote={quote} />
+        <TokenSelection base={base!} quote={quote!} />
         {base && quote && <CreateStrategyOption base={base} quote={quote} />}
       </m.div>
     </AnimatePresence>
