@@ -84,6 +84,12 @@ jobs:
               compare -metric AE "$img1" "$img2" "$diff_img" 2>/dev/null || return 1
           }
 
+          # Check if any modified files are found
+          if [[ -z "$modified_files" ]]; then
+              echo "No modified PNG files found in $SCREENSHOT_DIR."
+              exit 0
+          fi
+
           # Process each modified screenshot
           for screenshot in $modified_files; do
               # Full path to the modified screenshot
