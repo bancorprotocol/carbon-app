@@ -28,20 +28,21 @@ type InputLimitProps = {
   required?: boolean;
 };
 
-export const InputLimit: FC<InputLimitProps> = ({
-  id,
-  price,
-  setPrice,
-  base,
-  quote,
-  error,
-  warnings = [],
-  buy = false,
-  ignoreMarketPriceWarning = false,
-  required,
-}) => {
+export const InputLimit: FC<InputLimitProps> = (props) => {
+  const {
+    price,
+    setPrice,
+    base,
+    quote,
+    error,
+    warnings = [],
+    buy = false,
+    ignoreMarketPriceWarning = false,
+    required,
+  } = props;
   const [localPrice, setLocalPrice] = useState(roundSearchParam(price));
   const inputId = useId();
+  const id = props.id ?? inputId;
   const { marketPrice } = useMarketPrice({ base, quote });
   const marketPercent = marketPricePercent(price, marketPrice);
   const { getFiatAsString } = useFiatCurrency(quote);
@@ -69,10 +70,10 @@ export const InputLimit: FC<InputLimitProps> = ({
   }, [displayError, buy, price]);
 
   useEffect(() => {
-    if (document.activeElement !== document.getElementById(inputId)) {
+    if (document.activeElement?.id !== id) {
       setLocalPrice(roundSearchParam(price));
     }
-  }, [inputId, price]);
+  }, [id, price]);
 
   const onFocus = (e: FocusEvent<HTMLInputElement>) => {
     setLocalPrice(price);
@@ -104,11 +105,11 @@ export const InputLimit: FC<InputLimitProps> = ({
           showWarning && 'border-warning focus-within:border-warning',
           displayError && 'border-error/50 focus-within:border-error/50'
         )}
-        onClick={() => document.getElementById(id ?? inputId)?.focus()}
+        onClick={() => document.getElementById(id)?.focus()}
       >
         <div className="flex">
           <input
-            id={id ?? inputId}
+            id={id}
             type="text"
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
@@ -151,11 +152,11 @@ export const InputLimit: FC<InputLimitProps> = ({
         )}
       </div>
       {!!displayError && (
-        <Warning isError message={displayError} htmlFor={inputId} />
+        <Warning isError message={displayError} htmlFor={id} />
       )}
       {showWarning &&
         displayWarnings.map((warning, i) => (
-          <Warning key={i} message={warning} htmlFor={inputId} />
+          <Warning key={i} message={warning} htmlFor={id} />
         ))}
     </>
   );
