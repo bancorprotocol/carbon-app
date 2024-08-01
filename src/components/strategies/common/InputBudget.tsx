@@ -60,18 +60,18 @@ export const InputBudget: FC<Props> = (props) => {
   } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = useId();
-  const { user } = useWagmi();
   const id = props.id ?? inputId;
+  const { user } = useWagmi();
   const [localBudget, setLocalBudget] = useState(roundSearchParam(value));
   const { getFiatValue, selectedFiatCurrency: currentCurrency } =
     useFiatCurrency(token);
   const fiatValue = getFiatValue(localBudget ?? '0', true);
 
   useEffect(() => {
-    if (document.activeElement !== document.getElementById(inputId)) {
+    if (document.activeElement?.id !== id) {
       setLocalBudget(roundSearchParam(value));
     }
-  }, [inputId, value]);
+  }, [id, value]);
 
   const onFocus = (e: FocusEvent<HTMLInputElement>) => {
     setLocalBudget(value);
