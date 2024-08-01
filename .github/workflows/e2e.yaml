@@ -8,14 +8,15 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container:
-      image: docker://mcr.microsoft.com/playwright:v1.43.0-jammy
+      image: docker://yourusername/playwright-imagemagick:latest # Use the custom image
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Fetch the last 2 commits for comparison
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install build-essential
-        run: apt-get update && apt-get install -y build-essential
       - name: Install dependencies
         run: yarn
       - name: Install Playwright browsers and run Playwright tests
@@ -48,16 +49,15 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Ensure the last 2 commits are fetched for diff
+
       - uses: actions/download-artifact@master
         with:
           name: screenshots
           path: e2e/screenshots
 
-      # Install ImageMagick for image comparison
-      - name: Install ImageMagick
-        run: sudo apt-get update && sudo apt-get install -y imagemagick
-
-      # Compare only modified screenshots and keep only different ones
+      # Use ImageMagick directly without installing it again
       - name: Compare Modified Screenshots
         id: compare-screenshots
         run: |
@@ -68,7 +68,7 @@ jobs:
           SCREENSHOT_DIR="e2e/screenshots"
 
           # Get a list of modified screenshots
-          modified_files=$(git diff --name-only --diff-filter=M HEAD~1..HEAD | grep "$SCREENSHOT_DIR" | grep '.png$')
+          modified_files=$(git diff --name-only --diff-filter=M HEAD~1..HEAD -- "$SCREENSHOT_DIR" | grep '.png$')
 
           # Function to compare images
           compare_images() {
