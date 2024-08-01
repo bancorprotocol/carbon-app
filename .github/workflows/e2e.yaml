@@ -8,17 +8,19 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container:
-      image: docker://yourusername/playwright-imagemagick:latest # Use the custom image
+      image: docker://doronbancor/playwright-imagemagick:latest  # Updated to use your Docker image
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2 # Fetch the last 2 commits for comparison
+          fetch-depth: 2  # Fetch the last 2 commits for comparison
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - name: Install dependencies
         run: yarn
+
       - name: Install Playwright browsers and run Playwright tests
         run: yarn e2e
         env:
@@ -27,12 +29,14 @@ jobs:
           TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
           CI: true
           DRAFT: ${{ github.event.pull_request.draft || github.base_ref != 'main' }}
+
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 3
+
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -50,14 +54,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2 # Ensure the last 2 commits are fetched for diff
+          fetch-depth: 2  # Ensure the last 2 commits are fetched for diff
 
       - uses: actions/download-artifact@master
         with:
           name: screenshots
           path: e2e/screenshots
 
-      # Use ImageMagick directly without installing it again
       - name: Compare Modified Screenshots
         id: compare-screenshots
         run: |
