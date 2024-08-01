@@ -38,13 +38,13 @@ jobs:
           name: screenshots
           path: e2e/screenshots
           retention-days: 3
+
   commit-screenshots:
     name: 'Commit Screenshots'
     needs: e2e
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false && github.base_ref == 'main'
     permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push (see auto-commit below)
       contents: write
     steps:
       - uses: actions/checkout@v4
@@ -52,6 +52,62 @@ jobs:
         with:
           name: screenshots
           path: e2e/screenshots
+
+      # Install ImageMagick for image comparison
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
+      # Compare only modified screenshots and keep only different ones
+      - name: Compare Modified Screenshots
+        id: compare-screenshots
+        run: |
+          #!/bin/bash
+          set -e
+
+          # Directory where screenshots are stored
+          SCREENSHOT_DIR="e2e/screenshots"
+
+          # Get a list of modified screenshots
+          modified_files=$(git diff --name-only --diff-filter=M HEAD~1..HEAD | grep "$SCREENSHOT_DIR" | grep '.png$')
+
+          # Function to compare images
+          compare_images() {
+              local img1="$1"
+              local img2="$2"
+              local diff_img="$3"
+
+              # Use ImageMagick's compare tool to create a diff image
+              compare -metric AE "$img1" "$img2" "$diff_img" 2>/dev/null || return 1
+          }
+
+          # Process each modified screenshot
+          for screenshot in $modified_files; do
+              # Full path to the modified screenshot
+              current_screenshot="${GITHUB_WORKSPACE}/${screenshot}"
+
+              # Check if the baseline screenshot exists
+              if [ -f "$current_screenshot" ]; then
+                  # Create a temporary diff image file
+                  diff_file="${current_screenshot}.diff.png"
+
+                  # Compare with the baseline version
+                  compare_images "$current_screenshot" "$screenshot" "$diff_file"
+
+                  # Check if the image is identical to the baseline
+                  if [ $? -eq 0 ]; then
+                      echo "No visual difference for $screenshot. Reverting changes."
+                      git restore "$screenshot"
+                  else
+                      echo "Visual difference detected for $screenshot. Keeping changes."
+                  fi
+
+                  # Clean up diff file
+                  rm -f "$diff_file"
+              else
+                  echo "Baseline image does not exist for $screenshot. Keeping new image."
+              fi
+          done
+
       - name: Import GPG key
         id: import-gpg
         uses: crazy-max/ghaction-import-gpg@v6
@@ -60,12 +116,16 @@ jobs:
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
           git_user_signingkey: true
           git_commit_gpgsign: true
+
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: '[CI] Update Screenshots'
           commit_user_name: ${{ steps.import-gpg.outputs.name }}
           commit_user_email: ${{ steps.import-gpg.outputs.email }}
+        env:
+          GIT_CONFIG_PARAMETERS: "'--local commit.gpgsign true'"
+
       - uses: geekyeggo/delete-artifact@v5
         with:
           name: screenshots
