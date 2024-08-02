@@ -192,7 +192,8 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `name`: Network name.
   - `logoUrl`: Network logo URL.
   - `chainId`: Chain ID.
-  - `gasToken`: Gas token name, symbol, decimals, address and logoURI.
+  - `defaultLimitedApproval`: Optional flag to set the default ERC-20 approval to limited approval. For chains where gas is low, it is recommended to set this flag to true.
+  - `gasToken`: Gas token name, symbol, decimals, address and logoURI. This parameter will take priority over the `tokenListOverride`.
   - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
   - `rpc`: The RPC url and headers of the network, used to add the network to the injected wallet and to fetch data from the chain.
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade, explore, and simulation pages.
@@ -202,6 +203,10 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `tokenListOverride`: Token list override to be used in the app when fetching the token list. Tokens in the list will override any other token with the same address.
 - `tokenLists`: List of token lists including the uri and the parser to be used to parse the token list.
 - `sdk`/`cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
+
+#### Gas token different than native token
+
+The CarbonDeFi Contracts, Backend and SDK use an internal fixed address for the native gas token, `0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE`, hereby called `native token`. If a different `gas token` address than the `native token` address is set in `network.gasToken.address`, the app will hide the `gas token` from the token list and use the `network token` address for all token and pair searches.
 
 ### Add pairsToExchangeMapping
 

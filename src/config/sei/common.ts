@@ -40,6 +40,7 @@ export const commonConfig: AppConfig = {
         'x-apikey': 'a5063ab2',
       },
     },
+    defaultLimitedApproval: true,
     gasToken: {
       name: 'SEI',
       symbol: 'SEI',

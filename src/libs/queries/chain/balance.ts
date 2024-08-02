@@ -6,6 +6,7 @@ import config from 'config';
 import { QueryKey } from 'libs/queries/queryKey';
 import { useContract } from 'hooks/useContract';
 import { TEN_SEC_IN_MS } from 'utils/time';
+import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 
 export const useGetTokenBalance = (
   token?: Pick<Token, 'address' | 'decimals'>
@@ -31,7 +32,7 @@ export const useGetTokenBalance = (
         throw new Error('useGetTokenBalance no token decimals provided');
       }
 
-      if (address === config.network.gasToken.address) {
+      if (address === NATIVE_TOKEN_ADDRESS) {
         const res = await provider.getBalance(user!);
         return shrinkToken(res.toString(), decimals, true);
       } else {
@@ -64,7 +65,7 @@ export const useGetTokenBalances = (
           throw new Error('useGetTokenBalances no provider provided');
         }
 
-        if (address === config.network.gasToken.address) {
+        if (address === NATIVE_TOKEN_ADDRESS) {
           const res = await provider.getBalance(user);
           return shrinkToken(res.toString(), config.network.gasToken.decimals);
         } else {
