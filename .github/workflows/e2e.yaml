@@ -68,11 +68,15 @@ jobs:
           #!/bin/bash
           set -e
 
+          echo "DEBUG: start bash script"
+
           # Directory where screenshots are stored
           SCREENSHOT_DIR="e2e/screenshots"
 
           # Get a list of modified screenshots
           modified_files=$(git diff --name-only --diff-filter=M HEAD~1..HEAD -- "$SCREENSHOT_DIR" | grep '.png$')
+
+          echo "DEBUG: modified_files: $modified_files"
 
           # Function to compare images
           compare_images() {
@@ -84,24 +88,32 @@ jobs:
               compare -metric AE "$img1" "$img2" "$diff_img" 2>/dev/null || return 1
           }
 
+          echo "DEBUG: compare_images function defined"
+
           # Check if any modified files are found
           if [[ -z "$modified_files" ]]; then
               echo "No modified PNG files found in $SCREENSHOT_DIR."
               exit 0
           fi
 
+          echo "DEBUG: modified_files is not empty"
+
           # Process each modified screenshot
           for screenshot in $modified_files; do
+              echo "DEBUG: loop iteration screenshot: $screenshot"
               # Full path to the modified screenshot
               current_screenshot="${GITHUB_WORKSPACE}/${screenshot}"
+              echo "DEBUG: current_screenshot: $current_screenshot"
 
               # Check if the baseline screenshot exists
               if [ -f "$current_screenshot" ]; then
+                  echo "DEBUG: baseline screenshot exists"
                   # Create a temporary diff image file
                   diff_file="${current_screenshot}.diff.png"
 
                   # Compare with the baseline version
                   compare_images "$current_screenshot" "$screenshot" "$diff_file"
+                  echo "DEBUG: compare_images exit code: $?"
 
                   # Check if the image is identical to the baseline
                   if [ $? -eq 0 ]; then

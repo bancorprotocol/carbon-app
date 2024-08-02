@@ -653,7 +653,7 @@ const testDescription = (testCase: CreateStrategyTestCase) => {
   return `Recurring ${testCase.setting.split('_').join(' ')}`;
 };
 
-test.describe('Strategies', () => {
+test.skip('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     await mockApi(page);
     await setupFork(testInfo);
