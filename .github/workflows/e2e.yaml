@@ -74,7 +74,7 @@ jobs:
           SCREENSHOT_DIR="e2e/screenshots"
 
           # Get a list of modified screenshots
-          modified_files=$(git diff --name-only --diff-filter=M HEAD~1..HEAD -- "$SCREENSHOT_DIR" | grep '.png$')
+          modified_files=$(git diff --name-only --diff-filter=M -- "$SCREENSHOT_DIR" | grep '.png$' || true)
 
           echo "DEBUG: modified_files: $modified_files"
 
