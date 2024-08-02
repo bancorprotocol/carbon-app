@@ -68,8 +68,8 @@ jobs:
       - name: Compare Modified Screenshots
         id: compare-screenshots
         run: |
-          chmod +x ../scripts/compare_screenshots.sh  # Add execute permissions
-          ../scripts/compare_screenshots.sh
+          chmod +x $GITHUB_WORKSPACE/scripts/compare_screenshots.sh  # Add execute permissions
+          $GITHUB_WORKSPACE/scripts/compare_screenshots.sh  # Execute the script
 
       - name: Import GPG key
         id: import-gpg
