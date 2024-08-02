@@ -648,9 +648,9 @@ const testCases: CreateStrategyTestCase[] = [
 const testDescription = (testCase: CreateStrategyTestCase) => {
   if (testCase.type === 'overlapping') return 'Overlapping';
   if (testCase.type === 'disposable') {
-    return `Disposable ${testCase.direction} ${testCase.setting}`;
+    return `Disposable_${testCase.direction}_${testCase.setting}`;
   }
-  return `Recurring ${testCase.setting.split('_').join(' ')}`;
+  return `Recurring_${testCase.setting}`;
 };
 
 test.describe('Strategies', () => {
