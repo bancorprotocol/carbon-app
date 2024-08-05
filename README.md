@@ -58,6 +58,68 @@ Example:
 
 Open [http://localhost:3000](http://localhost:3000) to view the development mode app in the browser.
 
+### Docker Usage
+
+We use Docker to streamline the testing and deployment process, specifically for E2E tests. Docker ensures a consistent environment across different machines, allowing tests to run reliably.
+
+#### Pre-Built Docker Image
+
+We have a pre-built Docker image that includes all necessary dependencies for running Playwright tests and ImageMagick for image comparison:
+
+- **Docker Image**: `doronbancor/playwright-imagemagick:latest`
+
+This image is hosted on Docker Hub and can be used in your CI/CD pipelines.
+
+#### Building the Docker Image Locally
+
+If you need to make changes to the Docker image or update dependencies, you can build it locally using the provided `Dockerfile`.
+
+##### Steps to Build the Docker Image
+
+1. **Install Docker**
+
+   If you don't have Docker installed, you can install it using Homebrew:
+
+   ```bash
+   brew install --cask docker
+   ```
+
+   Start Docker Desktop and ensure it is running on your system.
+
+2. **Build the Docker Image**
+
+   Navigate to the project directory where the `Dockerfile` is located and run the following command to build the image:
+
+   ```bash
+   docker build --platform linux/amd64 -t yourusername/playwright-imagemagick:latest .
+   ```
+
+   Replace `yourusername` with your Docker Hub username.
+
+3. **Push the Docker Image to Docker Hub**
+
+   Log in to Docker Hub and push the image:
+
+   ```bash
+   docker login
+   docker push yourusername/playwright-imagemagick:latest
+   ```
+
+4. **Using the Docker Image in CI/CD**
+
+   Update your GitHub Actions workflow to use this Docker image for running tests and deployments:
+
+   ```yaml
+   jobs:
+     e2e:
+       runs-on: ubuntu-latest
+       container:
+         image: docker://yourusername/playwright-imagemagick:latest
+         options: --platform linux/amd64 # Specify the platform
+   ```
+
+**Note**: If your system architecture differs, make sure to adjust the platform as needed to ensure compatibility.
+
 # Test
 
 ## Unit/Integration tests & coverage
@@ -77,6 +139,8 @@ yarn coverage
 ## E2E tests
 
 To run the E2E tests, you must have a Tenderly API key to create and delete forks. You can set it in the `.env` file. Please refer to the [E2E readme](/e2e/README) for more information.
+
+To ensure consistency and reliability in testing environments, we use Docker. Make sure the Docker image `doronbancor/playwright-imagemagick:latest` is specified in your CI/CD configuration.
 
 # Build
 
