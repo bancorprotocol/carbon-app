@@ -8,7 +8,7 @@ import { buttonStyles } from 'components/common/button/buttonStyles';
 export const CreateStrategyCTA = () => {
   return (
     <Link
-      to="/trade"
+      to="/trade/overview/type"
       className={buttonStyles({ variant: 'success' })}
       data-testid="create-strategy-desktop"
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
@@ -33,7 +33,7 @@ export const CreateStrategyCTAMobile = () => {
 
   return (
     <Link
-      to="/trade"
+      to="/trade/overview/type"
       className="bottom-100 right-30 fixed md:hidden"
       data-testid="create-strategy-mobile"
     >

@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
-import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
-import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
-import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
+import { ReactComponent as IconBuyLimit } from 'assets/icons/disposable.svg';
+import { ReactComponent as IconTwoRanges } from 'assets/icons/recurring.svg';
+import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping.svg';
+import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { TradeTypeSelection } from 'libs/routing/routes/trade';
 
 interface StrategyOptionItem {
@@ -37,7 +38,7 @@ export const strategyOptionItems = (): StrategyOptionItem[] => [
           'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
       },
     ],
-    svg: <IconBuyLimit className="w-full" />,
+    svg: <IconBuyLimit className="size-28" />,
     to: '../disposable',
     isRecommended: true,
     id: 'disposable',
@@ -64,7 +65,7 @@ export const strategyOptionItems = (): StrategyOptionItem[] => [
           'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
       },
     ],
-    svg: <IconTwoRanges className="w-full" />,
+    svg: <IconTwoRanges className="size-28" />,
     to: '../recurring',
     isRecommended: true,
     id: 'recurring',
@@ -90,7 +91,7 @@ export const strategyOptionItems = (): StrategyOptionItem[] => [
         details: 'Your profits stay within your position, earning you more!',
       },
     ],
-    svg: <IconOverlappingStrategy className="w-full" />,
+    svg: <IconOverlappingStrategy className="size-28" />,
     to: '../overlapping',
     id: 'overlapping',
   },
@@ -104,7 +105,7 @@ export const strategyOptionItems = (): StrategyOptionItem[] => [
         details: '',
       },
     ],
-    svg: <IconOverlappingStrategy className="w-full" />,
+    svg: <IconMarket className="size-28" />,
     to: '../market',
     id: 'market',
   },

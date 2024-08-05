@@ -39,9 +39,9 @@ export const createStrategyPage = new Route({
     base: validAddress,
     quote: validAddress,
     strategyOption: validLiteral([
-      'buy-limit',
+      'disposable',
       'range-order',
-      'two-ranges',
+      'recurring',
       'overlapping',
     ]),
   }),

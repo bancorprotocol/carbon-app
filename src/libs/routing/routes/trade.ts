@@ -112,7 +112,7 @@ const getTradeRecurringRoute = <P extends AnyRoute, V>(
   });
   const sell = new Route({
     getParentRoute: () => root as any,
-    path: '/sell',
+    path: '/',
     component: TradeRecurringSell,
   });
   const buy = new Route({
@@ -159,7 +159,7 @@ const getTradeOverlappingRoute = <P extends AnyRoute, V>(
   });
   const price = new Route({
     getParentRoute: () => root as any,
-    path: '/price',
+    path: '/',
     component: TradeOverlappingPrice,
   });
   const budget = new Route({

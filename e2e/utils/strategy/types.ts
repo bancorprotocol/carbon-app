@@ -26,10 +26,7 @@ export interface OverlappingParams {
   spread: string;
 }
 
-export type StrategySettings =
-  | `two-${Setting}s`
-  | `${Direction}-${Setting}`
-  | 'overlapping';
+export type StrategySettings = 'disposable' | 'recurring' | 'overlapping';
 
 interface OrderOutput {
   min: string;

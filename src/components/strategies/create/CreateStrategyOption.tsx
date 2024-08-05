@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: '/trade/overview/type' });
   const { type } = useSearch({ strict: false }) as TradeTypeSearch;
   const list = useRef<HTMLUListElement>(null);
   const items = strategyOptionItems();
@@ -45,8 +45,7 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
   const setItem = (type: TradeTypeSelection) => {
     document.querySelectorAll('details').forEach((d) => (d.open = false));
     navigate({
-      to: '.',
-      search: (s) => ({ ...s, type } as TradeTypeSearch),
+      search: (s) => ({ ...s, type }),
       replace: true,
       resetScroll: false,
     });
@@ -86,7 +85,6 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
               onClick={() => setItem(id)}
               className={cn(
                 'rounded-10 text-10 flex size-full flex-col items-center justify-start gap-8 bg-black py-16 text-white/40 outline-1 outline-white/60',
-                'md:px-12',
                 'focus-visible:outline',
                 'aria-selected:text-white aria-selected:outline aria-selected:outline-white'
               )}
@@ -146,8 +144,8 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
 
       <Link
         to={selectedItem.to}
-        params={(p) => p}
-        search={(s) => s}
+        params={{}}
+        search={(s) => ({ base: s.base, quote: s.quote })}
         className={cn(
           'mt-auto shrink-0',
           buttonStyles({ variant: 'success', fullWidth: true, size: 'lg' }),
