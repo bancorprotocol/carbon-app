@@ -41,7 +41,6 @@ export const PortfolioAllTokensMobile: FC<Props> = ({
               index={i}
               href={getHref(value).href}
               params={getHref(value).params}
-              search={getHref(value).search}
             >
               <div className={cn('flex', 'items-center', 'text-18')}>
                 <LogoImager
