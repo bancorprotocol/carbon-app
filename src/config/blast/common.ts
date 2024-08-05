@@ -2,8 +2,8 @@ import { AppConfig } from 'config/types';
 import IconBlastLogo from 'assets/logos/blastlogo.svg';
 
 const addresses = {
-  BLAST: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-  BLAST_ERC20: '0xb1a5700fA2358173Fe465e6eA4Ff52E36e88E2ad',
+  ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+  BLAST: '0xb1a5700fA2358173Fe465e6eA4Ff52E36e88E2ad',
   USDB: '0x4300000000000000000000000000000000000003',
   WETH: '0x4300000000000000000000000000000000000004',
   MIM: '0x76da31d7c9cbeae102aff34d3398bc450c8374c1',
@@ -40,11 +40,12 @@ export const commonConfig: AppConfig = {
     },
     defaultLimitedApproval: true,
     gasToken: {
-      name: 'BLAST (erc20)',
-      symbol: 'BLAST (erc20)',
+      name: 'Ether',
+      symbol: 'ETH',
       decimals: 18,
-      address: addresses.BLAST_ERC20,
-      logoURI: 'https://blastscan.io/assets/blast/images/svg/empty-token.svg',
+      address: addresses.ETH,
+      logoURI:
+        'https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg',
     },
   },
   sdk: {
