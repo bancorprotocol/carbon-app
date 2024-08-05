@@ -6,6 +6,7 @@ type address = `0x${string}`;
 type ContractDetails = { address: address; blockCreated?: number };
 
 export interface AppConfig {
+  hidden?: boolean;
   mode: 'development' | 'production';
   appName: string;
   appUrl: string;

@@ -96,6 +96,7 @@
     "start:ethereum": "cross-env VITE_NETWORK=ethereum vite",
     "start:sei": "cross-env VITE_NETWORK=sei vite",
     "start:celo": "cross-env VITE_NETWORK=celo vite",
+    "start:blast": "cross-env VITE_NETWORK=blast vite",
     "prebuild": "yarn compile-abis",
     "build": "tsc && vite build",
     "serve": "vite preview",
