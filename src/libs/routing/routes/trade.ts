@@ -57,12 +57,12 @@ export interface TradeDisposableSearch extends TradeSearch {
   max?: string;
   budget?: string;
 }
-const getTradeDisposableRoute = <P, V>(
+const getTradeDisposableRoute = <P extends AnyRoute, V>(
   parent: P,
   validators: SearchParamsValidator<V>
 ) => {
   return new Route({
-    getParentRoute: () => parent as any,
+    getParentRoute: () => parent,
     path: '/disposable',
     component: TradeDisposable,
     validateSearch: validateSearchParams<TradeDisposableSearch & V>({

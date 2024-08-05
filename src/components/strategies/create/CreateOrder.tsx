@@ -1,12 +1,9 @@
 import { FC, ReactNode, useId } from 'react';
 import { Token } from 'libs/tokens';
-import { m } from 'libs/motion';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { StrategySettings, StrategyType } from 'libs/routing';
-import { LogoImager } from 'components/common/imager/Imager';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/common/OrderHeader';
-import { items } from 'components/strategies/common/variants';
 import { InputRange } from 'components/strategies/common/InputRange';
 import { InputLimit } from 'components/strategies/common/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
@@ -42,10 +39,6 @@ export const CreateOrder: FC<Props> = ({
   const titleId = useId();
 
   // PRICES
-  const tooltipText = `This section will define the order details in which you are willing to ${
-    buy ? 'buy' : 'sell'
-  } ${base.symbol} at.`;
-
   const inputTitle = (
     <>
       <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
@@ -102,26 +95,13 @@ export const CreateOrder: FC<Props> = ({
   const headerProps = { titleId, order, base, buy, setSettings };
 
   return (
-    <m.article
-      variants={items}
+    <article
       aria-labelledby={titleId}
-      className={`rounded-10 bg-background-900 flex flex-col gap-20 border-l-2 p-20 ${
-        buy
-          ? 'border-buy/50 focus-within:border-buy'
-          : 'border-sell/50 focus-within:border-sell'
-      }`}
+      className="flex flex-col gap-20"
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {settings}
-      <OrderHeader {...headerProps}>
-        <h2 className="text-18 flex items-center gap-8" id={titleId}>
-          <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
-            <span>{buy ? 'Buy Low' : 'Sell High'}</span>
-          </Tooltip>
-          <LogoImager alt="Token" src={base.logoURI} className="size-18" />
-          <span>{base.symbol}</span>
-        </h2>
-      </OrderHeader>
+      <OrderHeader {...headerProps} />
       <fieldset className="flex flex-col gap-8">
         <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
           {inputTitle}
@@ -185,6 +165,6 @@ export const CreateOrder: FC<Props> = ({
         base={base}
         quote={quote}
       />
-    </m.article>
+    </article>
   );
 };
