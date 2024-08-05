@@ -5,6 +5,7 @@ import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTra
 import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { StrategyProvider } from 'hooks/useStrategies';
 import { useGetPairStrategies } from 'libs/queries';
+import { TradeProvider } from 'components/trade/TradeContext';
 
 const url = '/trade';
 export const TradeRoot = () => {
@@ -24,14 +25,16 @@ export const TradeRoot = () => {
     );
   }
   return (
-    <div className="grid grid-cols-[350px_auto] grid-rows-[40px_550px_auto] gap-20 p-20">
-      <header role="menubar" className="col-span-2 flex gap-8">
-        <TokenSelection base={base} quote={quote} />
-        <MainMenuTradeSettings baseToken={base} quoteToken={quote} />
-      </header>
-      <StrategyProvider query={strategiesQuery}>
-        <Outlet />
-      </StrategyProvider>
-    </div>
+    <TradeProvider base={base} quote={quote}>
+      <div className="grid grid-cols-[350px_auto] grid-rows-[40px_550px_auto] gap-20 p-20">
+        <header role="menubar" className="col-span-2 flex gap-8">
+          <TokenSelection base={base} quote={quote} />
+          <MainMenuTradeSettings base={base} quote={quote} />
+        </header>
+        <StrategyProvider query={strategiesQuery}>
+          <Outlet />
+        </StrategyProvider>
+      </div>
+    </TradeProvider>
   );
 };

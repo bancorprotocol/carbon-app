@@ -1,4 +1,4 @@
-import { Route, redirect } from '@tanstack/react-router';
+import { AnyRoute, Route, redirect } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   SearchParamsValidator,
@@ -24,15 +24,20 @@ import { TradeRoot } from 'pages/trade/root';
 import { TradeMarket } from 'pages/trade/market';
 
 // TRADE TYPE
-interface TradeTypeSearch extends TradeSearch {
-  type: 'disposable' | 'recurring' | 'overlapping' | 'market';
+export type TradeTypeSelection =
+  | 'disposable'
+  | 'recurring'
+  | 'overlapping'
+  | 'market';
+export interface TradeTypeSearch extends TradeSearch {
+  type?: TradeTypeSelection;
 }
-const getTradeTypeRoute = <P, V>(
+const getTradeTypeRoute = <P extends AnyRoute, V>(
   parent: P,
   validators: SearchParamsValidator<V>
 ) => {
   return new Route({
-    getParentRoute: () => parent as any,
+    getParentRoute: () => parent,
     path: '/type',
     component: TradeType,
     validateSearch: validateSearchParams<TradeTypeSearch & V>({
@@ -45,7 +50,7 @@ const getTradeTypeRoute = <P, V>(
 };
 
 // TRADE DISPOSABLE
-interface TradeDisposableSearch extends TradeSearch {
+export interface TradeDisposableSearch extends TradeSearch {
   direction: StrategyDirection;
   settings: StrategySettings;
   min?: string;
@@ -74,7 +79,7 @@ const getTradeDisposableRoute = <P, V>(
 };
 
 // TRADE RECURRING
-interface TradeRecurringSearch extends TradeSearch {
+export interface TradeRecurringSearch extends TradeSearch {
   buyMin?: string;
   buyMax?: string;
   buyBudget?: string;
@@ -84,12 +89,12 @@ interface TradeRecurringSearch extends TradeSearch {
   sellBudget?: string;
   sellSettings: StrategySettings;
 }
-const getTradeRecurringRoute = <P, V>(
+const getTradeRecurringRoute = <P extends AnyRoute, V>(
   parent: P,
   validators: SearchParamsValidator<V>
 ) => {
   const root = new Route({
-    getParentRoute: () => parent as any,
+    getParentRoute: () => parent,
     path: '/recurring',
     validateSearch: validateSearchParams<TradeRecurringSearch & V>({
       ...validators,
@@ -133,12 +138,12 @@ interface TradeOverlappingSearch extends TradeSearch {
   budget?: string;
   chartType?: 'history' | 'range';
 }
-const getTradeOverlappingRoute = <P, V>(
+const getTradeOverlappingRoute = <P extends AnyRoute, V>(
   parent: P,
   validators: SearchParamsValidator<V>
 ) => {
   const root = new Route({
-    getParentRoute: () => parent as any,
+    getParentRoute: () => parent,
     path: '/overlapping',
     validateSearch: validateSearchParams<TradeOverlappingSearch>({
       ...validators,
@@ -204,15 +209,11 @@ const tradePage = new Route({
   getParentRoute: () => rootRoute,
   path: '/trade',
   component: TradeRoot,
-  beforeLoad: ({ location }) => {
+  beforeLoad: ({ location, search }) => {
     if (location.pathname.endsWith('trade')) {
-      throw redirect({ to: '/trade/overview/type' });
+      throw redirect({ to: '/trade/overview/type', search });
     }
   },
-  validateSearch: validateSearchParams<TradeSearch>({
-    base: validAddress,
-    quote: validAddress,
-  }),
 });
 
 const tradeOverview = new Route({
@@ -227,7 +228,7 @@ const tradeOverview = new Route({
 });
 
 interface TradePortfolioSearch {
-  token: string;
+  token?: string;
 }
 const portfolioValidator: SearchParamsValidator<TradePortfolioSearch> = {
   token: validAddress,
@@ -241,9 +242,6 @@ const tradePortfolio = new Route({
       throw redirect({ to: '/trade/portfolio/type' });
     }
   },
-  validateSearch: validateSearchParams<TradePortfolioSearch>({
-    token: validAddress,
-  }),
 });
 
 const tradeActivity = new Route({

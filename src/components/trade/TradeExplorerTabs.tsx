@@ -47,7 +47,6 @@ export const TradeExplorerTab: FC<Props> = ({ current }) => {
           params={(p) => p}
           search={(s) => s}
           key={key}
-          resetScroll={false}
           className="flex w-full items-center justify-center gap-4 rounded-full py-5 aria-[current=location]:bg-white/10 md:px-10"
           aria-current={key === current ? 'location' : 'false'}
         >

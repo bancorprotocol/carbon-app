@@ -12,7 +12,7 @@ export const MainMenuTrade = () => {
     <header className="flex justify-between gap-8 px-10 md:px-0">
       <MainMenuTradeSwitch baseToken={baseToken} quoteToken={quoteToken} />
       <MainMenuTradePairs baseToken={baseToken} quoteToken={quoteToken} />
-      <MainMenuTradeSettings baseToken={baseToken} quoteToken={quoteToken} />
+      <MainMenuTradeSettings base={baseToken} quote={quoteToken} />
     </header>
   );
 };
