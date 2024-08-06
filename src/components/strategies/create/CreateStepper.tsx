@@ -21,7 +21,7 @@ export const CreateStepper: FC<Props> = (props) => {
   };
   return (
     <form
-      className={cn('flex flex-1 flex-col', style.stepper)}
+      className={cn('flex flex-1 flex-col gap-20', style.stepper)}
       onSubmit={submit}
     >
       {children}

@@ -22,7 +22,7 @@ type UseMarketIndicationProps = {
   buy?: boolean;
 };
 
-export const useMarketIndication = ({
+export const useMarketPercent = ({
   base,
   quote,
   order,

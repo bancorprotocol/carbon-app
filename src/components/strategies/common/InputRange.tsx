@@ -1,8 +1,6 @@
 import { FocusEvent, FC, useId, useEffect, useState, MouseEvent } from 'react';
 import { Token } from 'libs/tokens';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { carbonEvents } from 'services/events';
 import {
   cn,
@@ -11,10 +9,10 @@ import {
   sanitizeNumber,
 } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
-import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice';
 import { isTouchedZero } from 'components/strategies/common/utils';
+import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
 
 type InputRangeProps = {
   min: string;
@@ -72,10 +70,6 @@ export const InputRange: FC<InputRangeProps> = ({
     : '';
   const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
   const showWarning = !displayError && !!displayWarnings.length;
-  const marketPricePercentages = {
-    min: marketPricePercent(min, marketPrice),
-    max: marketPricePercent(max, marketPrice),
-  };
 
   useEffect(() => {
     if (!min || !max) return;
@@ -143,8 +137,6 @@ export const InputRange: FC<InputRangeProps> = ({
     onMaxChange(marketPrice?.toString() ?? '');
   };
 
-  const { getFiatAsString } = useFiatCurrency(quote);
-
   return (
     <>
       <div className="grid grid-cols-2 gap-6">
@@ -192,20 +184,13 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-min"
             required={required}
           />
-          {!!marketPrice && (
-            <p className="flex flex-wrap items-center gap-4">
-              <span className="text-12 break-all text-white/60">
-                {getFiatAsString(min)}
-              </span>
-              {marketPricePercentages && (
-                <MarketPriceIndication
-                  marketPricePercentage={marketPricePercentages.min}
-                  isRange
-                  buy={buy || isOverlapping === true}
-                />
-              )}
-            </p>
-          )}
+          <MarketPriceIndication
+            base={base}
+            quote={quote}
+            price={min}
+            buy={buy || isOverlapping === true}
+            isRange
+          />
         </div>
         <div
           className={cn(
@@ -251,20 +236,13 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-max"
             required={required}
           />
-          {!!marketPrice && (
-            <div className="flex flex-wrap items-center gap-4">
-              <p className="text-12 break-all text-white/60">
-                {getFiatAsString(max)}
-              </p>
-              {marketPricePercentages && (
-                <MarketPriceIndication
-                  marketPricePercentage={marketPricePercentages.max}
-                  isRange
-                  buy={buy}
-                />
-              )}
-            </div>
-          )}
+          <MarketPriceIndication
+            base={base}
+            quote={quote}
+            price={max}
+            buy={buy || isOverlapping === true}
+            isRange
+          />
         </div>
       </div>
       {!!displayError && (

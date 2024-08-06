@@ -15,7 +15,7 @@ import {
   StrategyEventTypeBase,
   StrategySellEventType,
 } from './types';
-import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketPercent';
 import { StrategyOption } from 'components/strategies/create/strategyOptionItems';
 import { CreateRecurringStrategySearch } from 'pages/strategies/create/recurring';
 import { CreateDisposableStrategySearch } from 'pages/strategies/create/disposable';
