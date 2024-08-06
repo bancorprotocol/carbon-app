@@ -4,35 +4,17 @@ import { OrderBlock } from 'components/strategies/common/types';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
-import {
-  checkIfOrdersOverlap,
-  checkIfOrdersReversed,
-} from 'components/strategies/utils';
 import { TradeChartSection } from 'components/trade/TradeChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeRecurringSearch } from 'libs/routing/routes/trade';
 import { cn } from 'utils/helpers';
-import style from 'components/strategies/common/stepper.module.css';
 import { CreateStepper } from 'components/strategies/create/CreateStepper';
-
-const getError = (search: TradeRecurringSearch) => {
-  const { buyMin, buyMax, sellMin, sellMax } = search;
-  const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
-  const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
-  if (checkIfOrdersReversed(buyOrder, sellOrder)) {
-    return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
-  }
-};
-
-const getWarning = (search: TradeRecurringSearch) => {
-  const { buyMin, buyMax, sellMin, sellMax } = search;
-  const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
-  const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
-  if (checkIfOrdersOverlap(buyOrder, sellOrder)) {
-    return 'Notice: your Buy and Sell orders overlap';
-  }
-};
+import {
+  getRecurringError,
+  getRecurringWarning,
+} from 'components/strategies/create/utils';
+import style from 'components/strategies/common/stepper.module.css';
 
 const url = '/trade/overview/recurring/buy';
 export const TradeRecurringBuy = () => {
@@ -90,8 +72,8 @@ export const TradeRecurringBuy = () => {
             quote={quote}
             order={buyOrder}
             setOrder={setBuyOrder}
-            error={getError(search)}
-            warnings={[buyOutsideMarket, getWarning(search)]}
+            error={getRecurringError(search)}
+            warnings={[buyOutsideMarket, getRecurringWarning(search)]}
             buy
           />
         </CreateStepper>

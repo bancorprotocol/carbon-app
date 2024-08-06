@@ -66,8 +66,19 @@ export const TradeRecurringSummary = () => {
               Trade Summary
             </h2>
           </header>
-          <SummaryOrder base={base} quote={quote} order={sellOrder} />
-          <SummaryOrder base={base} quote={quote} order={buyOrder} buy />
+          <SummaryOrder
+            base={base}
+            quote={quote}
+            order={sellOrder}
+            warning={sellOutsideMarket}
+          />
+          <SummaryOrder
+            base={base}
+            quote={quote}
+            order={buyOrder}
+            warning={buyOutsideMarket}
+            buy
+          />
         </CreateForm>
       </section>
       <TradeChartSection />

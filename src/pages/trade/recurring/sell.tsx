@@ -6,31 +6,13 @@ import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { CreateStepper } from 'components/strategies/create/CreateStepper';
 import {
-  checkIfOrdersOverlap,
-  checkIfOrdersReversed,
-} from 'components/strategies/utils';
+  getRecurringError,
+  getRecurringWarning,
+} from 'components/strategies/create/utils';
 import { TradeChartSection } from 'components/trade/TradeChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeRecurringSearch } from 'libs/routing/routes/trade';
-
-const getError = (search: TradeRecurringSearch) => {
-  const { buyMin, buyMax, sellMin, sellMax } = search;
-  const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
-  const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
-  if (checkIfOrdersReversed(buyOrder, sellOrder)) {
-    return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
-  }
-};
-
-const getWarning = (search: TradeRecurringSearch) => {
-  const { buyMin, buyMax, sellMin, sellMax } = search;
-  const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
-  const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
-  if (checkIfOrdersOverlap(buyOrder, sellOrder)) {
-    return 'Notice: your Buy and Sell orders overlap';
-  }
-};
 
 const url = '/trade/overview/recurring/sell';
 export const TradeRecurringSell = () => {
@@ -80,8 +62,8 @@ export const TradeRecurringSell = () => {
             quote={quote}
             order={sellOrder}
             setOrder={setSellOrder}
-            error={getError(search)}
-            warnings={[sellOutsideMarket, getWarning(search)]}
+            error={getRecurringError(search)}
+            warnings={[sellOutsideMarket, getRecurringWarning(search)]}
           />
         </CreateStepper>
       </section>
