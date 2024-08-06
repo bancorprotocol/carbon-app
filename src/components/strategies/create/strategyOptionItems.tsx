@@ -66,7 +66,7 @@ export const strategyOptionItems = (): StrategyOptionItem[] => [
       },
     ],
     svg: <IconTwoRanges className="size-28" />,
-    to: '../recurring',
+    to: '../recurring/sell',
     isRecommended: true,
     id: 'recurring',
   },
@@ -92,7 +92,7 @@ export const strategyOptionItems = (): StrategyOptionItem[] => [
       },
     ],
     svg: <IconOverlappingStrategy className="size-28" />,
-    to: '../overlapping',
+    to: '../overlapping/price',
     id: 'overlapping',
   },
   {

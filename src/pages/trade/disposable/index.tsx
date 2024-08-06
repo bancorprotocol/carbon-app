@@ -13,15 +13,16 @@ import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { TradeChartSection } from 'components/trade/TradeChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { TradeDisposableSearch } from 'libs/routing/routes/trade';
 
 const url = '/trade/overview/disposable';
 export const TradeDisposable = () => {
   const { base, quote } = useTradeCtx();
-  const search = useSearch({ from: url });
+  const search = useSearch({ strict: false }) as TradeDisposableSearch;
   const { marketPrice } = useMarketPrice({ base, quote });
   const { setOrder, setDirection } = useSetDisposableOrder(url);
 
-  const buy = search.direction !== 'sell';
+  const sell = search.direction !== 'buy';
   const order: OrderBlock = {
     min: search.min ?? '',
     max: search.max ?? '',
@@ -59,32 +60,32 @@ export const TradeDisposable = () => {
           type="disposable"
           base={base!}
           quote={quote!}
-          order0={buy ? order : emptyOrder()}
-          order1={buy ? emptyOrder() : order}
+          order0={sell ? emptyOrder() : order}
+          order1={sell ? order : emptyOrder()}
         >
           <CreateOrder
             type="disposable"
             base={base!}
             quote={quote!}
-            buy={buy}
+            buy={!sell}
             order={order}
             setOrder={setOrder}
             warnings={[outSideMarket]}
             settings={
               <TabsMenu>
                 <TabsMenuButton
-                  onClick={() => setDirection('buy')}
-                  variant={buy ? 'buy' : 'black'}
-                  data-testid="tab-buy"
-                >
-                  Buy
-                </TabsMenuButton>
-                <TabsMenuButton
                   onClick={() => setDirection('sell')}
-                  variant={!buy ? 'sell' : 'black'}
+                  variant={sell ? 'sell' : 'black'}
                   data-testid="tab-sell"
                 >
                   Sell
+                </TabsMenuButton>
+                <TabsMenuButton
+                  onClick={() => setDirection('buy')}
+                  variant={!sell ? 'buy' : 'black'}
+                  data-testid="tab-buy"
+                >
+                  Buy
                 </TabsMenuButton>
               </TabsMenu>
             }

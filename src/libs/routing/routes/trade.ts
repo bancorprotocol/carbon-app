@@ -93,37 +93,40 @@ const getTradeRecurringRoute = <P extends AnyRoute, V>(
   parent: P,
   validators: SearchParamsValidator<V>
 ) => {
+  const validateSearch = validateSearchParams<TradeRecurringSearch & V>({
+    ...validators,
+    base: validAddress,
+    quote: validAddress,
+    buyMin: validNumber,
+    buyMax: validNumber,
+    buyBudget: validNumber,
+    buySettings: validLiteral(['limit', 'range']),
+    sellMin: validNumber,
+    sellMax: validNumber,
+    sellBudget: validNumber,
+    sellSettings: validLiteral(['limit', 'range']),
+  });
   const root = new Route({
     getParentRoute: () => parent,
     path: '/recurring',
-    validateSearch: validateSearchParams<TradeRecurringSearch & V>({
-      ...validators,
-      base: validAddress,
-      quote: validAddress,
-      buyMin: validNumber,
-      buyMax: validNumber,
-      buyBudget: validNumber,
-      buySettings: validLiteral(['limit', 'range']),
-      sellMin: validNumber,
-      sellMax: validNumber,
-      sellBudget: validNumber,
-      sellSettings: validLiteral(['limit', 'range']),
-    }),
   });
   const sell = new Route({
-    getParentRoute: () => root as any,
-    path: '/',
+    getParentRoute: () => root,
+    path: '/sell',
     component: TradeRecurringSell,
+    validateSearch,
   });
   const buy = new Route({
-    getParentRoute: () => root as any,
+    getParentRoute: () => root,
     path: '/buy',
     component: TradeRecurringBuy,
+    validateSearch,
   });
   const summary = new Route({
-    getParentRoute: () => root as any,
+    getParentRoute: () => root,
     path: '/summary',
     component: TradeRecurringSummary,
+    validateSearch,
   });
   return root.addChildren([sell, buy, summary]);
 };
@@ -158,17 +161,17 @@ const getTradeOverlappingRoute = <P extends AnyRoute, V>(
     }),
   });
   const price = new Route({
-    getParentRoute: () => root as any,
-    path: '/',
+    getParentRoute: () => root,
+    path: '/price',
     component: TradeOverlappingPrice,
   });
   const budget = new Route({
-    getParentRoute: () => root as any,
+    getParentRoute: () => root,
     path: '/budget',
     component: TradeOverlappingBudget,
   });
   const summary = new Route({
-    getParentRoute: () => root as any,
+    getParentRoute: () => root,
     path: '/summary',
     component: TradeOverlappingSummary,
   });
@@ -181,12 +184,12 @@ interface TradeMarketSearch extends TradeSearch {
   amount?: number;
   anchor?: StrategyDirection;
 }
-const getTradeMarketRoute = <P, V>(
+const getTradeMarketRoute = <P extends AnyRoute, V>(
   parent: P,
   validators: SearchParamsValidator<V>
 ) => {
   return new Route({
-    getParentRoute: () => parent as any,
+    getParentRoute: () => parent,
     path: '/market',
     component: TradeMarket,
     validateSearch: validateSearchParams<TradeMarketSearch & V>({
