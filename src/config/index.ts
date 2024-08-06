@@ -4,6 +4,8 @@ import seiDev from './sei/development';
 import seiProd from './sei/production';
 import celoDev from './celo/development';
 import celoProd from './celo/production';
+import blastDev from './blast/development';
+import blastProd from './blast/production';
 export { pairsToExchangeMapping } from './utils';
 
 const configs = {
@@ -18,6 +20,10 @@ const configs = {
   celo: {
     development: celoDev,
     production: celoProd,
+  },
+  blast: {
+    development: blastDev,
+    production: blastProd,
   },
 };
 type Network = keyof typeof configs;
@@ -35,14 +41,16 @@ if (!configs[network][mode]) {
   throw new Error(`NODE_ENV should be ${modes}, got "${mode}"`);
 }
 
-export const networks = Object.entries(configs).map(([id, config]) => {
-  return {
-    id,
-    name: config[mode].network.name,
-    logoUrl: config[mode].network.logoUrl,
-    isCurrentNetwork: network === id,
-    appUrl: config[mode].appUrl,
-  };
-});
+export const networks = Object.entries(configs)
+  .filter(([_id, config]) => config[mode].hidden !== true)
+  .map(([id, config]) => {
+    return {
+      id,
+      name: config[mode].network.name,
+      logoUrl: config[mode].network.logoUrl,
+      isCurrentNetwork: network === id,
+      appUrl: config[mode].appUrl,
+    };
+  });
 
 export default configs[network][mode];

@@ -45,7 +45,7 @@ export function assertDebugToken(
 
 export const testDescription = (testCase: CreateStrategyTestCase) => {
   if (isOverlappingTestCase(testCase)) return 'Overlapping';
-  return `Recurring ${testCase.setting.split('_').join(' ')}`;
+  return `Recurring_${testCase.setting}`;
 };
 
 export const screenshotPath = (
