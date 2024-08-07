@@ -58,7 +58,7 @@ export const CreateLayout: FC<Props> = (props) => {
                 setShowGraph(true);
               }}
               data-testid="open-chart"
-              className="bg-background-800 grid size-40 place-items-center rounded-full"
+              className="bg-background-800 hover:border-background-700 border-background-800 grid size-40 place-items-center rounded-full border-2"
             >
               <IconCandles className="size-18" />
             </button>
