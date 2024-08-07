@@ -1,5 +1,5 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { FormEvent, useEffect, useId, useMemo, JSX } from 'react';
+import { FormEvent, useEffect, useId, JSX } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWagmi } from 'libs/wagmi';
@@ -13,6 +13,8 @@ import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
+import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
+import { useTradePairs } from '../useTradePairs';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
@@ -25,6 +27,7 @@ export interface TradeWidgetBuySellProps extends FormAttributes {
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
   const { user } = useWagmi();
+  const { isTradePairError } = useTradePairs();
   const {
     sourceInput,
     setSourceInput,
@@ -137,13 +140,10 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         });
   };
 
-  const ctaButtonText = useMemo(() => {
-    if (user) {
-      return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
-    }
-
-    return 'Connect Wallet';
-  }, [buy, source.symbol, target.symbol, user]);
+  const ctaButtonText = (() => {
+    if (!user) return 'Connect Wallet';
+    return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
+  })();
 
   if (liquidityQuery?.isError) return <div>Error</div>;
 
@@ -178,6 +178,20 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       : prettifyNumber(liquidityQuery.data);
     return `Liquidity: ${value} ${target.symbol}`;
   };
+
+  if (isTradePairError) {
+    return (
+      <div className="bg-background-900 border-warning rounded-8 grid gap-8 border p-16">
+        <header className="text-warning flex items-center gap-8">
+          <WarningIcon className="size-16" />
+          <h3 className="text-16">Notice</h3>
+        </header>
+        <p className="text-14 text-white/80">
+          Token pair not available. Please select another pair.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form {...formProps} onSubmit={handleTrade} className="flex flex-col">

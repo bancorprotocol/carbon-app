@@ -27,6 +27,7 @@ export const TradeMarket = () => {
       resetScroll: false,
     });
   };
+
   return (
     <>
       <section
