@@ -4,7 +4,6 @@ import { useTradeCtx } from 'components/trade/TradeContext';
 
 export const TradeType = () => {
   const { base, quote } = useTradeCtx();
-
   return (
     <>
       <section

@@ -13,8 +13,8 @@ import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
-import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
 import { useTradePairs } from '../useTradePairs';
+import { NoTrade } from '../NoTrade';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
@@ -179,19 +179,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return `Liquidity: ${value} ${target.symbol}`;
   };
 
-  if (isTradePairError) {
-    return (
-      <div className="bg-background-900 border-warning rounded-8 grid gap-8 border p-16">
-        <header className="text-warning flex items-center gap-8">
-          <WarningIcon className="size-16" />
-          <h3 className="text-16">Notice</h3>
-        </header>
-        <p className="text-14 text-white/80">
-          Token pair not available. Please select another pair.
-        </p>
-      </div>
-    );
-  }
+  if (isTradePairError) return <NoTrade />;
 
   return (
     <form {...formProps} onSubmit={handleTrade} className="flex flex-col">

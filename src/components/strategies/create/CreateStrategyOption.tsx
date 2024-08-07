@@ -9,6 +9,8 @@ import { Link, useNavigate, useSearch } from 'libs/routing';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Token } from 'libs/tokens';
 import { TradeTypeSearch, TradeTypeSelection } from 'libs/routing/routes/trade';
+import { useTradePairs } from 'components/trade/useTradePairs';
+import { NoTrade } from 'components/trade/NoTrade';
 
 interface Props {
   base: Token;
@@ -18,6 +20,8 @@ interface Props {
 export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
   const navigate = useNavigate({ from: '/trade/overview/type' });
   const { type } = useSearch({ strict: false }) as TradeTypeSearch;
+  const { isTradePairError } = useTradePairs();
+
   const list = useRef<HTMLUListElement>(null);
   const items = strategyOptionItems();
   const selectedItem = (() => {
@@ -141,6 +145,8 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
           )}
         </article>
       ))}
+
+      {selectedId === 'market' && isTradePairError && <NoTrade />}
 
       <Link
         to={selectedItem.to}
