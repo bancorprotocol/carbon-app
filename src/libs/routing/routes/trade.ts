@@ -8,7 +8,10 @@ import {
   validateSearchParams,
 } from '../utils';
 import { StrategyDirection, StrategySettings } from './strategyCreate';
-import { activityValidators } from 'components/activity/utils';
+import {
+  ActivitySearchParams,
+  activityValidators,
+} from 'components/activity/utils';
 import { TradeType } from 'pages/trade/type';
 import { TradeDisposable } from 'pages/trade/disposable';
 import { TradeRecurringSell } from 'pages/trade/recurring/sell';
@@ -230,7 +233,7 @@ const tradeOverview = new Route({
   },
 });
 
-interface TradePortfolioSearch {
+export interface TradePortfolioSearch {
   token?: string;
 }
 const portfolioValidator: SearchParamsValidator<TradePortfolioSearch> = {
@@ -247,6 +250,7 @@ const tradePortfolio = new Route({
   },
 });
 
+export type TradeActivitySearch = ActivitySearchParams & TradeSearch;
 const tradeActivity = new Route({
   getParentRoute: () => tradePage,
   path: '/activity',

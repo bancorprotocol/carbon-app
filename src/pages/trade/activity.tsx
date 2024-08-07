@@ -3,10 +3,10 @@ import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { ActivitySection } from 'components/activity/ActivitySection';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { TradeExplorerTab } from 'components/trade/TradeExplorerTabs';
+import { TradeActivitySearch } from 'libs/routing/routes/trade';
 
-const url = '/trade/activity/type';
 export const TradeActivity = () => {
-  const { base, quote } = useSearch({ from: url });
+  const { base, quote } = useSearch({ strict: false }) as TradeActivitySearch;
   const params = { token0: base, token1: quote };
   return (
     <>

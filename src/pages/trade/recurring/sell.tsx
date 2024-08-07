@@ -44,6 +44,7 @@ export const TradeRecurringSell = () => {
             from="/trade/overview/recurring/sell"
             to="../.."
             search
+            resetScroll={false}
             className="grid size-28 place-items-center rounded-full bg-black"
           >
             <ForwardArrow className="size-14 rotate-180" />

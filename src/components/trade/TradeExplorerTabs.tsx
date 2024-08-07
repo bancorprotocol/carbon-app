@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Link, useRouterState, useSearch } from '@tanstack/react-router';
+import { Link, useRouterState } from '@tanstack/react-router';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
@@ -12,7 +12,6 @@ interface Props {
 export const TradeExplorerTab: FC<Props> = ({ current }) => {
   const { strategies } = useStrategyCtx();
   const { location } = useRouterState();
-  const currentSearch = useSearch({ strict: false });
   const getHref = (page: 'overview' | 'portfolio' | 'activity') => {
     return location.href.replace(current, page);
   };
@@ -44,10 +43,11 @@ export const TradeExplorerTab: FC<Props> = ({ current }) => {
     >
       {tabs.map(({ key, label, href, icon, badge }) => (
         <Link
+          key={key}
           to={href}
           params={{}}
           search={{}}
-          key={key}
+          resetScroll={false}
           className="flex w-full items-center justify-center gap-4 rounded-full py-5 aria-[current=location]:bg-white/10 md:px-10"
           aria-current={key === current ? 'location' : 'false'}
         >

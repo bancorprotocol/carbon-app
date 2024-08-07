@@ -17,7 +17,7 @@ export const CreateStepper: FC<Props> = (props) => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!e.currentTarget.checkValidity()) return;
-    navigate({ to, params: true, search: true });
+    navigate({ to, params: true, search: true, resetScroll: false });
   };
   return (
     <form

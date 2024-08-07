@@ -58,6 +58,7 @@ export const TradeRecurringSummary = () => {
               from="/trade/overview/recurring/summary"
               to="../buy"
               search
+              resetScroll={false}
               className="grid size-28 place-items-center rounded-full bg-black"
             >
               <ForwardArrow className="size-14 rotate-180" />
