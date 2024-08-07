@@ -179,7 +179,7 @@ const getTradeOverlappingRoute = <P extends AnyRoute, V>(
 };
 
 // TRADE MARKET
-interface TradeMarketSearch extends TradeSearch {
+export interface TradeMarketSearch extends TradeSearch {
   direction: StrategyDirection;
   amount?: number;
   anchor?: StrategyDirection;

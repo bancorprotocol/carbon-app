@@ -180,16 +180,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   };
 
   return (
-    <form
-      {...formProps}
-      onSubmit={handleTrade}
-      className="rounded-12 bg-background-900 flex flex-col p-20"
-    >
-      <h2 className="mb-20">
-        {buy
-          ? `Buy ${target.symbol} with ${source.symbol}`
-          : `Sell ${source.symbol} for ${target.symbol}`}
-      </h2>
+    <form {...formProps} onSubmit={handleTrade} className="flex flex-col">
       {hasEnoughLiquidity || liquidityQuery.isPending ? (
         <>
           <header className="text-14 flex justify-between">
