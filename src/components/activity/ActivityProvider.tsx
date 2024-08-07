@@ -155,7 +155,10 @@ export function useActivity(): ActivityContextType {
 
 export function useActivityPagination() {
   const { size = 0, searchParams, setSearchParams } = useActivity();
-  const { limit = 10, offset = 0 } = searchParams;
+  const { limit: rawLimit = 10, offset: rawOffset = 0 } = searchParams;
+
+  const limit = Number(rawLimit);
+  const offset = Number(rawOffset);
 
   const currentPage = Math.floor(offset / limit) + 1;
   const maxPage = Math.ceil(size / limit);
