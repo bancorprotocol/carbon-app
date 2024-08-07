@@ -14,7 +14,8 @@ export interface EditBudgetDisposableStrategySearch {
   editType: 'deposit' | 'withdraw';
   buyBudget?: string;
   sellBudget?: string;
-  marginalPrice?: string;
+  buyMarginalPrice?: string;
+  sellMarginalPrice?: string;
 }
 type Search = EditBudgetDisposableStrategySearch;
 
@@ -44,13 +45,13 @@ export const EditBudgetDisposablePage = () => {
       min: order0.startRate,
       max: order0.endRate,
       budget: totalBuyBudget,
-      marginalPrice: order0.marginalRate,
+      marginalPrice: search.buyMarginalPrice || order0.marginalRate,
     },
     sell: {
       min: order1.startRate,
       max: order1.endRate,
       budget: totalSellBudget,
-      marginalPrice: order1.marginalRate,
+      marginalPrice: search.sellMarginalPrice || order1.marginalRate,
     },
   };
 
