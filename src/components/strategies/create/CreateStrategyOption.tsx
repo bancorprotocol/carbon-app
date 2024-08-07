@@ -145,7 +145,7 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
       <Link
         to={selectedItem.to}
         params={{}}
-        search={(s) => ({ base: s.base, quote: s.quote })}
+        search
         className={cn(
           'mt-auto shrink-0',
           buttonStyles({ variant: 'success', fullWidth: true, size: 'lg' }),

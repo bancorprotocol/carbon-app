@@ -16,7 +16,7 @@ import {
   StrategySellEventType,
 } from './types';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketPercent';
-import { StrategyOption } from 'components/strategies/create/strategyOptionItems';
+import { TradeTypeSelection } from 'libs/routing/routes/trade';
 import { CreateRecurringStrategySearch } from 'pages/strategies/create/recurring';
 import { CreateDisposableStrategySearch } from 'pages/strategies/create/disposable';
 import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
@@ -134,11 +134,11 @@ export interface EventStrategySchema extends EventCategory {
     };
   };
   newStrategyNextStepClick: {
-    input: { base: Token; quote: Token; strategyOption: StrategyOption };
+    input: { base: Token; quote: Token; strategyOption: TradeTypeSelection };
     gtmData: {
       strategy_base_token: string;
       strategy_quote_token: string;
-      strategy_option: StrategyOption;
+      strategy_option: TradeTypeSelection;
       token_pair: string;
     };
   };

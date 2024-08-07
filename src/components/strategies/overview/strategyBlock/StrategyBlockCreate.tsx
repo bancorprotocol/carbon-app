@@ -15,7 +15,7 @@ export const StrategyBlockCreate: FC<Props> = ({
   return (
     <Link
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
-      to="/strategies/create"
+      to="/trade/overview/type"
       className={cn(
         'bg-content rounded-10 py-50 text-24 font-weight-500 flex flex-col items-center justify-center gap-24 md:text-[32px]',
         className

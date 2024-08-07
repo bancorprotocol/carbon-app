@@ -9,14 +9,19 @@ import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { getLastVisitedPair, useNavigate, useSearch } from 'libs/routing';
+import {
+  TradeSearch,
+  getLastVisitedPair,
+  useNavigate,
+  useSearch,
+} from 'libs/routing';
 import { NotFound } from 'components/common/NotFound';
 
 export type TradePageProps = { base: Token; quote: Token };
 
 export const TradePage = () => {
   const navigate = useNavigate();
-  const search = useSearch({ from: '/trade' });
+  const search = useSearch({ strict: false }) as TradeSearch;
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
   const { isPending, isTradePairError } = useTradePairs();
