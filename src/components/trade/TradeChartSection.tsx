@@ -12,7 +12,6 @@ export const TradeChartSection = () => {
         <h2 id="price-chart-title" className="text-18">
           Price Chart
         </h2>
-        <p>Date Picker</p>
       </header>
       <TradingviewChart base={base} quote={quote} />
     </section>

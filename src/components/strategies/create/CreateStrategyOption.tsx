@@ -148,7 +148,7 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
         search
         className={cn(
           'mt-auto shrink-0',
-          buttonStyles({ variant: 'success', fullWidth: true, size: 'lg' }),
+          buttonStyles({ variant: 'success', fullWidth: true }),
           selectedItem
             ? ''
             : 'pointer-events-none cursor-not-allowed opacity-40'
