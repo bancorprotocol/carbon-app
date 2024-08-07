@@ -181,8 +181,8 @@ const getTradeOverlappingRoute = <P extends AnyRoute, V>(
 // TRADE MARKET
 export interface TradeMarketSearch extends TradeSearch {
   direction: StrategyDirection;
-  amount?: number;
-  anchor?: StrategyDirection;
+  source?: string;
+  target?: string;
 }
 const getTradeMarketRoute = <P extends AnyRoute, V>(
   parent: P,
@@ -197,8 +197,8 @@ const getTradeMarketRoute = <P extends AnyRoute, V>(
       base: validAddress,
       quote: validAddress,
       direction: validLiteral(['buy', 'sell']),
-      amount: validNumber,
-      anchor: validLiteral(['buy', 'sell']),
+      source: validNumber,
+      target: validNumber,
     }),
   });
 };
