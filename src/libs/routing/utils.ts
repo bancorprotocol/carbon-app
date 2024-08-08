@@ -99,6 +99,8 @@ export const validNumber = v.string([
   v.custom((value: string) => isNaN(Number(formatNumber(value))) === false),
 ]);
 
+export const validNumberType = v.number();
+
 export const validAddress = v.string([
   v.custom((value: string) => {
     try {

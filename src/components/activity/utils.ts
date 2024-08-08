@@ -3,7 +3,7 @@ import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
 import {
   validArrayOf,
   validLiteral,
-  validNumber,
+  validNumberType,
   validString,
   validateSearchParams,
 } from 'libs/routing/utils';
@@ -45,8 +45,8 @@ export const validateActivityParams =
     pairs: validArrayOf(validString),
     start: validString,
     end: validString,
-    limit: validNumber,
-    offset: validNumber,
+    limit: validNumberType,
+    offset: validNumberType,
   });
 
 export const activityHasPairs = (activity: Activity, pairs: string[] = []) => {
