@@ -44,7 +44,6 @@ const getGitFolderContent = async (gitRepoInfoApi: string) => {
   const abort = setTimeout(() => {
     controller.abort();
   }, 10000);
-  clearTimeout(abort);
   const response = await fetch(gitRepoInfoApi, {
     signal: controller.signal,
     headers: {
@@ -52,6 +51,7 @@ const getGitFolderContent = async (gitRepoInfoApi: string) => {
       'x-github-api-version': '2022-11-28',
     },
   });
+  clearTimeout(abort);
   return response.json();
 };
 
