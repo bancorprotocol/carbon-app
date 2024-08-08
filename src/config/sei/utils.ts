@@ -40,9 +40,13 @@ export const tokenSeiListParser =
   };
 
 const getGitFolderContent = async (gitRepoInfoApi: string) => {
-  const signal = AbortSignal.timeout(10000);
+  const controller = new AbortController();
+  const abort = setTimeout(() => {
+    controller.abort();
+  }, 10000);
+  clearTimeout(abort);
   const response = await fetch(gitRepoInfoApi, {
-    signal,
+    signal: controller.signal,
     headers: {
       accept: 'application/vnd.github+json',
       'x-github-api-version': '2022-11-28',
