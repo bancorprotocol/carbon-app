@@ -41,7 +41,7 @@ export const TradeRecurringSell = () => {
       >
         <header className="flex items-center gap-8">
           <Link
-            from="/trade/overview/recurring/sell"
+            from={url}
             to="../.."
             search
             resetScroll={false}

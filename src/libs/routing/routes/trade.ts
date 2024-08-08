@@ -135,7 +135,7 @@ const getTradeRecurringRoute = <P extends AnyRoute, V>(
 };
 
 // TRADE OVERLAPPING
-interface TradeOverlappingSearch extends TradeSearch {
+export interface TradeOverlappingSearch extends TradeSearch {
   marketPrice?: string;
   min?: string;
   max?: string;

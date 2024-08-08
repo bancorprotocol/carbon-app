@@ -1,6 +1,6 @@
 import { Link, useSearch } from '@tanstack/react-router';
 import { ForwardArrow } from 'components/common/forwardArrow';
-import { SummaryOrder } from 'components/strategies/common/SummaryOrder';
+import { CreateRecurringSummary } from 'components/strategies/create/CreateRecurringSummary';
 import { OrderBlock } from 'components/strategies/common/types';
 import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';
@@ -67,13 +67,13 @@ export const TradeRecurringSummary = () => {
               Trade Summary
             </h2>
           </header>
-          <SummaryOrder
+          <CreateRecurringSummary
             base={base}
             quote={quote}
             order={sellOrder}
             warning={sellOutsideMarket}
           />
-          <SummaryOrder
+          <CreateRecurringSummary
             base={base}
             quote={quote}
             order={buyOrder}

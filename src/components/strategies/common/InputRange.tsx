@@ -240,7 +240,7 @@ export const InputRange: FC<InputRangeProps> = ({
             base={base}
             quote={quote}
             price={max}
-            buy={buy || isOverlapping === true}
+            buy={buy || isOverlapping === false}
             isRange
           />
         </div>

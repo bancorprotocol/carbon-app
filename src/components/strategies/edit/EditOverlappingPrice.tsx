@@ -328,15 +328,27 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           </Button>
         </article>
       )}
-      <OverlappingAnchor
-        base={base}
-        quote={quote}
-        anchor={anchor}
-        setAnchor={setAnchor}
-        anchorError={anchorError}
-        disableBuy={aboveMarket}
-        disableSell={belowMarket}
-      />
+      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+        <header className="flex items-center justify-between">
+          <h2 className="text-18">Budget</h2>
+          <Tooltip
+            iconClassName="size-18 text-white/60"
+            element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
+          />
+        </header>
+        <p className="text-14 text-white/80">
+          Please specify which token you'd prefer to use as the anchor.
+        </p>
+        <OverlappingAnchor
+          base={base}
+          quote={quote}
+          anchor={anchor}
+          setAnchor={setAnchor}
+          anchorError={anchorError}
+          disableBuy={aboveMarket}
+          disableSell={belowMarket}
+        />
+      </article>
       {anchor && (
         <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
           <OverlappingAction

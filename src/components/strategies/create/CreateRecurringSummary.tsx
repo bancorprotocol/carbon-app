@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { OrderBlock } from './types';
+import { OrderBlock } from '../common/types';
 import { cn, tokenAmount } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
@@ -13,7 +13,7 @@ interface Props {
   buy?: boolean;
   warning?: string;
 }
-export const SummaryOrder: FC<Props> = (props) => {
+export const CreateRecurringSummary: FC<Props> = (props) => {
   const { base, quote, order, buy, warning } = props;
   const isRange = order.min !== order.max;
   const indicationProps = { base, quote, buy, isRange };

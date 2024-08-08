@@ -11,7 +11,7 @@ export const TradeType = () => {
         className="bg-background-800 flex flex-col gap-20 overflow-auto rounded p-20"
       >
         <h2 id="trade-form-title" className="text-18">
-          Trade Strategy Type
+          Select Trade Strategy Type
         </h2>
         <CreateStrategyOption base={base} quote={quote} />
       </section>
