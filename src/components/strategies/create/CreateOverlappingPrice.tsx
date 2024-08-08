@@ -173,7 +173,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
             />
           </h3>
           <p className="text-14 text-white/80">
-            Please specify which token you'd prefer to use as the anchor.
+            Please select a token to proceed.
           </p>
         </hgroup>
         <OverlappingAnchor

@@ -16,7 +16,10 @@ export const CreateStepper: FC<Props> = (props) => {
   const navigate = useNavigate({ from });
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!e.currentTarget.checkValidity()) return;
+    const form = e.currentTarget;
+    if (!form.checkValidity()) return;
+    if (!!form.querySelector('.loading-message')) return;
+    if (!!form.querySelector('.error-message')) return;
     navigate({ to, params: true, search: true, resetScroll: false });
   };
   return (

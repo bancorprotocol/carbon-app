@@ -203,7 +203,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
           />
         </header>
         <p className="text-14 text-white/80">
-          Please specify which token you'd prefer to use as the anchor.
+          Please select a token to proceed.
         </p>
         <OverlappingAnchor
           base={base}
