@@ -55,7 +55,11 @@ export const parseSearchWith = (parser: (str: string) => any) => {
           try {
             const parsed = parser(value);
             if (typeof parsed === 'number') {
-              query[key] = parsed.toString();
+              if (key === 'limit' || key === 'offset') {
+                query[key] = parsed;
+              } else {
+                query[key] = parsed.toString();
+              }
             } else {
               query[key] = parsed;
             }
