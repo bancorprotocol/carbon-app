@@ -164,7 +164,8 @@ export const editBudgetDisposable = new Route({
     editType: validLiteral(['deposit', 'withdraw']),
     buyBudget: validNumber,
     sellBudget: validNumber,
-    marginalPrice: validMarginalPrice,
+    buyMarginalPrice: validMarginalPrice,
+    sellMarginalPrice: validMarginalPrice,
   }),
 });
 
