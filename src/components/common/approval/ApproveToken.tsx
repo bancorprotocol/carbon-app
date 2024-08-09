@@ -21,7 +21,7 @@ import config from 'config';
 type Props = {
   data?: ApprovalTokenResult;
   isPending: boolean;
-  error: unknown;
+  error: Error | null;
   eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
   context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
 };
@@ -164,14 +164,14 @@ export const ApproveToken: FC<Props> = ({
 
   if (!data || !token) {
     if (isPending) {
-      return <div>is loading</div>;
+      return <div>Loading...</div>;
     }
     return <div>Unknown Error</div>;
   }
 
   return (
     <>
-      <div className="bg-content h-85 flex items-center justify-between rounded px-20">
+      <div className="bg-content min-h-85 flex items-center justify-between rounded px-20">
         <div className="flex items-center gap-10">
           <LogoImager alt="Token" src={token.logoURI} className="size-30" />
           <p className="font-weight-500">{token.symbol}</p>
@@ -221,7 +221,9 @@ export const ApproveToken: FC<Props> = ({
           </span>
         )}
 
-        {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
+        {error ? (
+          <pre className="max-w-min text-wrap">{error.message}</pre>
+        ) : null}
       </div>
       {data.nullApprovalRequired && (
         <div className="text-14 text-warning flex space-x-20">
