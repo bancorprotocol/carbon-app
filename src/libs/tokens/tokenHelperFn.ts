@@ -13,8 +13,12 @@ const buildIpfsUri = (ipfsHash: string) => `https://ipfs.io/ipfs/${ipfsHash}`;
 export const fetchTokenLists = async () => {
   const res = await Promise.all(
     config.tokenLists.map(async ({ uri, parser }) => {
-      const signal = AbortSignal.timeout(10000);
-      const response = await fetch(uri, { signal });
+      const controller = new AbortController();
+      const abort = setTimeout(() => {
+        controller.abort();
+      }, 10000);
+      const response = await fetch(uri, { signal: controller.signal });
+      clearTimeout(abort);
       const result: TokenList = await response.json();
 
       if (!response.ok) {
