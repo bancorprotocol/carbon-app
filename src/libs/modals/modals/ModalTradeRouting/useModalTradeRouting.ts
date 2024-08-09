@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Action } from '@bancor/carbon-sdk';
 import { useWagmi } from 'libs/wagmi';
 import { ModalTradeRoutingData } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
@@ -16,9 +10,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 
 type Props = {
   id: string;
-  data: ModalTradeRoutingData & {
-    setIsAwaiting: Dispatch<SetStateAction<boolean>>;
-  };
+  data: ModalTradeRoutingData;
 };
 
 export const useModalTradeRouting = ({
@@ -32,7 +24,6 @@ export const useModalTradeRouting = ({
     onSuccess,
     buy = false,
     sourceBalance,
-    setIsAwaiting,
   },
 }: Props) => {
   const { user, provider } = useWagmi();
@@ -65,14 +56,13 @@ export const useModalTradeRouting = ({
   });
   const sourceInput = data?.totalSourceAmount || '0';
 
-  const { trade, calcMaxInput, approval } = useTradeAction({
+  const { trade, calcMaxInput, isAwaiting, approval } = useTradeAction({
     source,
     isTradeBySource,
     sourceInput,
     onSuccess: () => {
       onSuccess();
       closeModal(id);
-      setIsAwaiting(false);
     },
   });
 
@@ -93,14 +83,12 @@ export const useModalTradeRouting = ({
         isTradeBySource,
         sourceInput,
         targetInput: data.totalTargetAmount,
-        setIsAwaiting,
       });
 
     if (approval.approvalRequired) {
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
         onConfirm: () => {
-          setIsAwaiting(true);
           tradeFn();
         },
         buttonLabel: 'Confirm Trade',
@@ -118,7 +106,6 @@ export const useModalTradeRouting = ({
         },
       });
     } else {
-      setIsAwaiting(true);
       void tradeFn();
     }
   }, [
@@ -136,7 +123,6 @@ export const useModalTradeRouting = ({
     data?.totalSourceAmount,
     data?.totalTargetAmount,
     isTradeBySource,
-    setIsAwaiting,
     buy,
     getFiatValueSource,
     provider?.network?.name,
@@ -181,5 +167,6 @@ export const useModalTradeRouting = ({
     disabledCTA,
     buttonText,
     errorMsg,
+    isAwaiting,
   };
 };

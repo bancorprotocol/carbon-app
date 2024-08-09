@@ -1,10 +1,9 @@
 import { useWagmi } from 'libs/wagmi';
-import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import config from 'config';
-import { PopulatedTransaction } from 'ethers';
-import { TradeActionBNStr, carbonSDK } from 'libs/sdk';
+import { TradeActionBNStr } from 'libs/sdk';
 import { SafeDecimal } from 'libs/safedecimal';
-import { QueryKey, useQueryClient } from 'libs/queries';
+import { QueryKey, useQueryClient, useTradeQuery } from 'libs/queries';
 import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
@@ -17,7 +16,6 @@ type TradeProps = {
   isTradeBySource: boolean;
   sourceInput: string;
   targetInput: string;
-  setIsAwaiting: Dispatch<SetStateAction<boolean>>;
 };
 
 type Props = Pick<TradeProps, 'source' | 'isTradeBySource' | 'sourceInput'> & {
@@ -60,79 +58,64 @@ export const useTradeAction = ({
     return deadlineInMs.plus(Date.now()).toString();
   }, []);
 
-  const trade = useCallback(
-    async ({
-      source,
-      target,
-      isTradeBySource,
-      sourceInput,
-      targetInput,
-      tradeActions,
-      setIsAwaiting,
-    }: TradeProps) => {
-      if (!user || !signer) {
-        throw new Error('No user or signer');
-      }
-      try {
-        let unsignedTx: PopulatedTransaction;
-        if (isTradeBySource) {
-          unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
-            source.address,
-            target.address,
-            tradeActions,
-            calcDeadline(deadline),
-            calcMinReturn(targetInput)
-          );
-        } else {
-          unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
-            source.address,
-            target.address,
-            tradeActions,
-            calcDeadline(deadline),
-            calcMaxInput(sourceInput)
-          );
-        }
+  const mutation = useTradeQuery();
 
-        const tx = await signer.sendTransaction(unsignedTx);
-        dispatchNotification('trade', {
-          txHash: tx.hash,
-          amount: sourceInput,
-          from: source.symbol,
-          to: target.symbol,
-        });
+  const trade = async ({
+    source,
+    target,
+    isTradeBySource,
+    sourceInput,
+    targetInput,
+    tradeActions,
+  }: TradeProps) => {
+    if (!user || !signer) {
+      throw new Error('No user or signer');
+    }
 
-        await tx.wait();
-        onSuccess?.(tx.hash);
-        void cache.invalidateQueries({
-          queryKey: QueryKey.balance(user, source.address),
-        });
-        void cache.invalidateQueries({
-          queryKey: QueryKey.balance(user, target.address),
-        });
-        void cache.invalidateQueries({
-          queryKey: QueryKey.approval(
-            user,
-            source.address,
-            config.addresses.carbon.carbonController
-          ),
-        });
-      } catch (error) {
-        console.error(error);
-        setIsAwaiting(false);
+    return mutation.mutate(
+      {
+        sourceAddress: source.address,
+        targetAddress: target.address,
+        isTradeBySource,
+        tradeActions,
+        sourceInput,
+        targetInput,
+        deadline,
+        calcDeadline,
+        calcMaxInput,
+        calcMinReturn,
+      },
+      {
+        onSuccess: async (tx) => {
+          dispatchNotification('trade', {
+            txHash: tx.hash,
+            amount: sourceInput,
+            from: source.symbol,
+            to: target.symbol,
+          });
+
+          await tx.wait();
+          onSuccess?.(tx.hash);
+          cache.invalidateQueries({
+            queryKey: QueryKey.balance(user, source.address),
+          });
+          cache.invalidateQueries({
+            queryKey: QueryKey.balance(user, target.address),
+          });
+          cache.invalidateQueries({
+            queryKey: QueryKey.approval(
+              user,
+              source.address,
+              config.addresses.carbon.carbonController
+            ),
+          });
+        },
+        onError: (e: any) => {
+          console.error(e);
+        },
       }
-    },
-    [
-      cache,
-      calcDeadline,
-      calcMaxInput,
-      calcMinReturn,
-      deadline,
-      dispatchNotification,
-      onSuccess,
-      signer,
-      user,
-    ]
-  );
+    );
+  };
 
   const approvalTokens = useMemo(
     () => [
@@ -153,5 +136,6 @@ export const useTradeAction = ({
     calcMinReturn,
     calcDeadline,
     approval,
+    isAwaiting: mutation.isPending,
   };
 };
