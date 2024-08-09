@@ -8,6 +8,7 @@ import { useCallback, useEffect } from 'react';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { wait } from 'utils/helpers';
 import { THREE_SECONDS_IN_MS } from 'utils/time';
+import { BackButton } from 'components/common/backButton';
 
 export const SimulatorResultPage = () => {
   const { status, isSuccess, start, ...ctx } = useSimulator();
@@ -52,9 +53,7 @@ export const SimulatorResultPage = () => {
           }}
           className="text-24 font-weight-500 mb-16 flex items-center"
         >
-          <div className="bg-background-800 mr-16 flex size-40 items-center justify-center rounded-full">
-            <IconChevronLeft className="size-16" />
-          </div>
+          <BackButton className="mr-16" />
           Simulate Strategy
         </Link>
       )}
@@ -72,7 +71,7 @@ export const SimulatorResultPage = () => {
           }}
           className="text-24 font-weight-500 mb-16 flex items-center"
         >
-          <div className="bg-background-800 mr-16 flex size-40 items-center justify-center rounded-full">
+          <div className="bg-background-900 hover:bg-background-800 mr-16 flex size-40 items-center justify-center rounded-full">
             <IconChevronLeft className="size-16" />
           </div>
           Simulate Strategy
