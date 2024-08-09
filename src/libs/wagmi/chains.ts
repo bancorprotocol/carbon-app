@@ -6,6 +6,7 @@ import { http } from 'wagmi';
 // Native Currency Symbol
 // Remove content in parenthesis
 // Symbol must be 2-6 characters to add new network
+// @todo(#1417) refactor this implementation to use the gasToken symbol in a different way
 const nativeCurrencySymbol = config.network.gasToken.symbol
   .replace(/\s*\(.*?\)\s*/g, '')
   .substring(0, 6);
