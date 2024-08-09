@@ -35,7 +35,9 @@ export const OrderHeader: FC<Props> = (props) => {
             onClick={setLimit}
             className={cn(
               'rounded-40 font-weight-500',
-              !isRange ? 'bg-background-900' : 'text-white/60',
+              !isRange
+                ? 'bg-background-900'
+                : 'text-white/60 hover:text-white/80',
               'px-10 py-4'
             )}
             data-testid="tab-limit"
@@ -48,7 +50,9 @@ export const OrderHeader: FC<Props> = (props) => {
             onClick={setRange}
             className={cn(
               'rounded-40 font-weight-500',
-              isRange ? 'bg-background-900' : 'text-white/60',
+              isRange
+                ? 'bg-background-900'
+                : 'text-white/60 hover:text-white/80',
               'px-10 py-4'
             )}
             data-testid="tab-range"

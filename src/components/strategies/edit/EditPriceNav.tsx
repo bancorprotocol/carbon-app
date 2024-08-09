@@ -24,7 +24,7 @@ export const EditPriceNav: FC<Props> = ({ editType }) => {
       aria-label="Switch between type of strategy"
     >
       <Link
-        className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
+        className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60 hover:text-white/80"
         to="/strategies/edit/$strategyId/prices/disposable"
         search={toDisposablePricesSearch(strategy, editType)}
         params={params}
@@ -34,7 +34,7 @@ export const EditPriceNav: FC<Props> = ({ editType }) => {
         Disposable
       </Link>
       <Link
-        className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
+        className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60 hover:text-white/80"
         to="/strategies/edit/$strategyId/prices/recurring"
         search={toRecurringPricesSearch(strategy, editType)}
         params={params}
@@ -44,7 +44,7 @@ export const EditPriceNav: FC<Props> = ({ editType }) => {
         Recurring
       </Link>
       <Link
-        className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60"
+        className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60 hover:text-white/80"
         to="/strategies/edit/$strategyId/prices/overlapping"
         search={toOverlappingPricesSearch(strategy, editType)}
         params={params}

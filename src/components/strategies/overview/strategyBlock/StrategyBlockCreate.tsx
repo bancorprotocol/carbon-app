@@ -17,11 +17,11 @@ export const StrategyBlockCreate: FC<Props> = ({
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
       to="/strategies/create"
       className={cn(
-        'bg-content rounded-10 py-50 text-24 font-weight-500 flex flex-col items-center justify-center gap-24 md:text-[32px]',
+        'bg-content rounded-10 py-50 text-24 font-weight-500 group flex flex-col items-center justify-center gap-24 md:text-[32px]',
         className
       )}
     >
-      <div className="bg-primary/20 size-72 rounded-full md:size-80">
+      <div className="bg-primary/15 group-hover:bg-primary/25 size-72 rounded-full md:size-80">
         <IconPlus className="text-primary md:p-26 p-24" />
       </div>
       <h1 className="w-[200px] text-center leading-9 md:w-[250px]">{title}</h1>
