@@ -1,6 +1,5 @@
 import { FC, FocusEvent, MouseEvent, useEffect, useId, useState } from 'react';
 import { carbonEvents } from 'services/events';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import {
   cn,
@@ -9,11 +8,10 @@ import {
   sanitizeNumber,
 } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
-import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
-import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { isTouchedZero } from './utils';
+import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
 
 type InputLimitProps = {
   id?: string;
@@ -44,9 +42,6 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
   const inputId = useId();
   const id = props.id ?? inputId;
   const { marketPrice } = useMarketPrice({ base, quote });
-  const marketPercent = marketPricePercent(price, marketPrice);
-  const { getFiatAsString } = useFiatCurrency(quote);
-  const fiatAsString = getFiatAsString(price);
 
   // Errors
   const priceError = isTouchedZero(price) && 'Price must be greater than 0';
@@ -136,20 +131,13 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
             </button>
           )}
         </div>
-        {!!marketPrice && (
-          <p className="flex flex-wrap items-center gap-8">
-            <span className="text-12 break-all text-white/60">
-              {fiatAsString}
-            </span>
-            {!!marketPercent && (
-              <MarketPriceIndication
-                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-                marketPricePercentage={marketPercent}
-                buy={buy}
-              />
-            )}
-          </p>
-        )}
+        <MarketPriceIndication
+          base={base}
+          quote={quote}
+          price={price}
+          buy={buy}
+          ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+        />
       </div>
       {!!displayError && (
         <Warning isError message={displayError} htmlFor={id} />

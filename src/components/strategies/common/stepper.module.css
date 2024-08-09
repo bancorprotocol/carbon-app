@@ -1,0 +1,12 @@
+.stepper:invalid .next,
+.stepper:has(:global(.error-message)) .next,
+.stepper:has(:global(.loading-message)) .next {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.stepper:invalid .next:hover,
+.stepper:has(:global(.error-message)) .next:hover,
+.stepper:has(:global(.loading-message)) .next:hover {
+  border: none;
+}

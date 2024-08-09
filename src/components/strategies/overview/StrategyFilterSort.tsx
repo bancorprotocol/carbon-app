@@ -6,6 +6,7 @@ import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { ReactComponent as IconFilter } from 'assets/icons/filter.svg';
 import { lsService } from 'services/localeStorage';
 import { useStrategyCtx } from 'hooks/useStrategies';
+import { cn } from 'utils/helpers';
 
 // [START] Used for localStorage migration: Remove it after Nov 2023
 export enum EnumStrategySort {
@@ -75,7 +76,11 @@ export const strategySort = {
 };
 export type StrategySort = keyof typeof strategySort;
 
-export const StrategyFilterSort = () => {
+interface Props {
+  className?: string;
+}
+
+export const StrategyFilterSort: FC<Props> = (props) => {
   const { filter, sort, setFilter, setSort } = useStrategyCtx();
   const { sortItems, filterItems } = getSortAndFilterItems();
 
@@ -97,16 +102,16 @@ export const StrategyFilterSort = () => {
       button={(attr) => (
         <button
           type="button"
-          className="
-            border-background-800 md:px-30 grid h-40 min-w-[40px] place-items-center rounded-full
-            border-2
-            hover:bg-white/10
-            active:bg-white/20
-          "
+          className={cn(
+            'border-background-800 lg:px-30 grid h-40 min-w-[40px] items-center justify-center rounded-full border-2',
+            'hover:bg-white/10',
+            'active:bg-white/20',
+            props.className
+          )}
           {...attr}
         >
-          <IconFilter className="size-18 md:hidden" />
-          <span className="hidden gap-10 md:inline-flex md:items-center">
+          <IconFilter className="size-18 lg:hidden" />
+          <span className="hidden gap-10 lg:inline-flex lg:items-center">
             Filter & Sort <IconChevron className="w-14" />
           </span>
         </button>

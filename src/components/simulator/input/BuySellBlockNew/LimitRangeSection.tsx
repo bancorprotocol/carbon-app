@@ -6,7 +6,6 @@ import { FC, ReactNode, useCallback } from 'react';
 import { Token } from 'libs/tokens';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
-import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 type Props = {
   base: Token;
@@ -17,7 +16,6 @@ type Props = {
   buy?: boolean;
   isOrdersOverlap: boolean;
   isOrdersReversed: boolean;
-  ignoreMarketPriceWarning?: boolean;
 };
 
 export const LimitRangeSection: FC<Props> = ({
@@ -29,23 +27,8 @@ export const LimitRangeSection: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
   isOrdersReversed,
-  ignoreMarketPriceWarning,
 }) => {
   const { isRange } = order;
-  const { isOrderAboveOrBelowMarketPrice } = useMarketIndication({
-    base,
-    quote,
-    order: { ...order, price: order.min },
-    buy,
-  });
-
-  const overlappingOrdersPricesMessage =
-    'Notice: your Buy and Sell orders overlap';
-
-  const warningMarketPriceMessage = buy
-    ? `Notice: you offer to buy ${base.symbol} above current market price`
-    : `Notice: you offer to sell ${base.symbol} below current market price`;
-
   const type = buy ? 'buy' : 'sell';
 
   const setPriceError = useCallback(
@@ -58,9 +41,7 @@ export const LimitRangeSection: FC<Props> = ({
   const getWarnings = () => {
     let warnings = [];
     if (isOrdersOverlap && !isOrdersReversed)
-      warnings.push(overlappingOrdersPricesMessage);
-    if (isOrderAboveOrBelowMarketPrice && !ignoreMarketPriceWarning)
-      warnings.push(warningMarketPriceMessage);
+      warnings.push('Notice: your Buy and Sell orders overlap');
     return warnings;
   };
 
@@ -80,7 +61,6 @@ export const LimitRangeSection: FC<Props> = ({
           quote={quote}
           base={base}
           buy={buy}
-          ignoreMarketPriceWarning={ignoreMarketPriceWarning}
           isOrdersReversed={isOrdersReversed}
           warnings={getWarnings()}
         />
@@ -96,7 +76,6 @@ export const LimitRangeSection: FC<Props> = ({
           error={order.priceError}
           setPriceError={setPriceError}
           buy={buy}
-          ignoreMarketPriceWarning={ignoreMarketPriceWarning}
           isOrdersReversed={isOrdersReversed}
           warnings={getWarnings()}
         />

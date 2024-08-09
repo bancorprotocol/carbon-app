@@ -13,7 +13,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { getMaxBuyMin, getMinSellMax } from './utils';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
-import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
+import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { isValidRange } from '../utils';
 import styles from './OverlappingGraph.module.css';

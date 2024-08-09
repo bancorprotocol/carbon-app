@@ -1,44 +1,34 @@
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { Token } from 'libs/tokens';
 import { FC } from 'react';
-import { SafeDecimal } from 'libs/safedecimal';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { getMarketPricePercentage } from './utils';
+import { MarketPricePercent } from './MarketPricePercent';
+import { marketPricePercent } from './useMarketPercent';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
-type MarketPriceIndicationProps = {
-  marketPricePercentage: SafeDecimal;
-  isRange?: boolean;
-  buy?: boolean;
+interface Props {
+  base: Token;
+  quote: Token;
+  price: string;
   ignoreMarketPriceWarning?: boolean;
-};
-
-export const MarketPriceIndication: FC<MarketPriceIndicationProps> = ({
-  marketPricePercentage,
-  isRange = false,
-  buy,
-  ignoreMarketPriceWarning,
-}) => {
-  if (marketPricePercentage.eq(0)) {
-    return null;
-  }
-  const isAbove = marketPricePercentage.gt(0);
-  const percentage = getMarketPricePercentage(marketPricePercentage);
-  const isOrderAboveOrBelowMarketPrice = (isAbove && buy) || (!isAbove && !buy);
-  const marketPriceWarning =
-    !ignoreMarketPriceWarning && isOrderAboveOrBelowMarketPrice;
-
+  buy?: boolean;
+  isRange?: boolean;
+}
+export const MarketPriceIndication: FC<Props> = (props) => {
+  const { base, quote, price, ignoreMarketPriceWarning, buy, isRange } = props;
+  const { marketPrice } = useMarketPrice({ base, quote });
+  const marketPercent = marketPricePercent(price, marketPrice);
+  const { getFiatAsString } = useFiatCurrency(quote);
+  const fiatAsString = getFiatAsString(price);
+  if (!marketPrice) return;
   return (
-    <span
-      className={`rounded-6 bg-background-800 flex items-center gap-5 px-6 py-4 ${
-        marketPriceWarning ? 'text-warning' : 'text-white/60'
-      }`}
-      data-testid="market-price-indication"
-    >
-      <span className="text-10">
-        {percentage}% {isAbove ? 'above' : 'below'} {isRange ? '' : 'market'}
-      </span>
-      <Tooltip
-        iconClassName="size-10"
-        element="The percentage difference between the input price and the current market price of the token"
+    <p className="flex flex-wrap items-center gap-8">
+      <span className="text-12 break-all text-white/60">{fiatAsString}</span>
+      <MarketPricePercent
+        ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+        marketPricePercentage={marketPercent}
+        buy={buy}
+        isRange={isRange}
       />
-    </span>
+    </p>
   );
 };

@@ -31,14 +31,12 @@ export const ExplorerTypePortfolioPage = () => {
     });
 
   return (
-    <>
-      <PortfolioAllTokens
-        strategies={strategies}
-        isPending={isPending}
-        getHref={getPortfolioTokenHref}
-        onRowClick={onRowClick}
-        isExplorer
-      />
-    </>
+    <PortfolioAllTokens
+      strategies={strategies}
+      isPending={isPending}
+      getHref={getPortfolioTokenHref}
+      onRowClick={onRowClick}
+      isExplorer
+    />
   );
 };

@@ -7,7 +7,6 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { LimitRangeSection } from 'components/simulator/input/BuySellBlockNew/LimitRangeSection';
 import { LogoImager } from 'components/common/imager/Imager';
-import { FullOutcome } from 'components/strategies/FullOutcome';
 import { BuySellHeader } from 'components/simulator/input/BuySellBlockNew/Header';
 import { BudgetSection } from 'components/simulator/input/BuySellBlockNew/BudgetSection';
 import {
@@ -26,7 +25,6 @@ type Props = {
   strategyType?: StrategyType;
   isOrdersOverlap: boolean;
   isOrdersReversed: boolean;
-  ignoreMarketPriceWarning?: boolean;
   warningMsg?: string;
 };
 
@@ -41,7 +39,6 @@ export const BuySellBlock: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
   isOrdersReversed,
-  ignoreMarketPriceWarning,
   warningMsg,
 }) => {
   const titleId = useId();
@@ -81,7 +78,6 @@ export const BuySellBlock: FC<Props> = ({
     inputTitle,
     isOrdersOverlap,
     isOrdersReversed,
-    ignoreMarketPriceWarning,
   };
   const budgetProps = {
     buy,
@@ -116,16 +112,6 @@ export const BuySellBlock: FC<Props> = ({
       <LimitRangeSection {...limitRangeProps} />
       <BudgetSection {...budgetProps} />
       {warningMsg && <Warning message={warningMsg} />}
-      {!ignoreMarketPriceWarning && (
-        <FullOutcome
-          min={order.min}
-          max={order.max}
-          budget={order.budget}
-          buy={buy}
-          base={base}
-          quote={quote}
-        />
-      )}
     </section>
   );
 };

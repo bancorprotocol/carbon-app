@@ -8,6 +8,7 @@ type Props = {
   index: number;
   href?: Pathnames;
   params?: PathParams;
+  search?: <T>(currentSearch: T) => T & { token: string };
   gridColsClassName?: string;
 };
 
@@ -24,6 +25,7 @@ export const PortfolioMobileCard: FC<Props> = ({
   index,
   href,
   params,
+  search,
   children,
   gridColsClassName = 'grid-cols-2',
 }) => {
@@ -46,7 +48,8 @@ export const PortfolioMobileCard: FC<Props> = ({
         to={href}
         // TODO: fix this
         params={params ?? {}}
-        search={{}}
+        search={search ?? {}}
+        resetScroll={false}
         className={wrapperClasses}
       >
         {content}

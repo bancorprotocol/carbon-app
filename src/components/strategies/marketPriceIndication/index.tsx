@@ -1,4 +1,4 @@
 export { getMarketPricePercentage } from './utils';
-export { MarketPriceIndication } from './MarketPriceIndication';
-export { useMarketIndication } from './useMarketIndication';
-export type { MarketPricePercentage } from './useMarketIndication';
+export { MarketPricePercent } from './MarketPricePercent';
+export { useMarketPercent as useMarketIndication } from './useMarketPercent';
+export type { MarketPricePercentage } from './useMarketPercent';

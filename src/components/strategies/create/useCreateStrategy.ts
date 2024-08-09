@@ -11,7 +11,7 @@ import { BaseOrder } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { useStrategyEvent } from './useStrategyEventData';
 import { carbonEvents } from 'services/events';
-import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
+import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import config from 'config';
 

@@ -99,14 +99,14 @@ export const EditStrategyDisposablePage = () => {
           <TabsMenu>
             <TabsMenuButton
               onClick={() => setDirection('buy')}
-              isActive={isBuy}
+              variant={isBuy ? 'buy' : 'black'}
               data-testid="tab-buy"
             >
               Buy
             </TabsMenuButton>
             <TabsMenuButton
               onClick={() => setDirection('sell')}
-              isActive={!isBuy}
+              variant={!isBuy ? 'sell' : 'black'}
               data-testid="tab-sell"
             >
               Sell
