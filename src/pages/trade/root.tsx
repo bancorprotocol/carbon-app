@@ -26,7 +26,10 @@ export const TradeRoot = () => {
   return (
     <TradeProvider base={base} quote={quote}>
       <div className="flex flex-col gap-20 p-20 md:grid md:grid-cols-[450px_auto] md:grid-rows-[40px_650px_auto]">
-        <header role="menubar" className="col-span-2 flex gap-8">
+        <header
+          role="menubar"
+          className="col-span-2 flex grid grid-cols-subgrid gap-8"
+        >
           <TokenSelection base={base} quote={quote} />
         </header>
         <StrategyProvider query={strategiesQuery}>

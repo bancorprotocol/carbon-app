@@ -77,7 +77,7 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
   };
 
   return (
-    <div className="grid w-full max-w-[400px] grid-cols-2 gap-20">
+    <div className="col-span-1 grid w-full grid-cols-2 gap-20">
       <button
         role="menuitem"
         className="bg-background-800 rounded-12 pe-15 flex items-center gap-8 py-5 ps-10"
