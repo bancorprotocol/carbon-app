@@ -31,22 +31,20 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
   const openTokenListModal = (type: 'base' | 'quote') => {
     const isBase = type === 'base';
     const onClick = (token: Token) => {
-      const params: { base?: string; quote?: string } = {};
+      const search: { base?: string; quote?: string } = {};
       tokenEvent(isBase, token);
 
       if (isBase) {
-        params.base = token.address;
-        if (quote) params.quote = quote?.address;
+        search.base = token.address;
+        if (quote) search.quote = quote?.address;
       } else {
-        if (base) params.base = base?.address;
-        params.quote = token.address;
+        if (base) search.base = base?.address;
+        search.quote = token.address;
       }
 
       navigate({
-        search: (search) => ({
-          ...search,
-          ...params,
-        }),
+        to: '/trade',
+        search,
         replace: true,
         resetScroll: false,
       });
@@ -67,8 +65,8 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
         updatedQuote: base.symbol,
       });
       navigate({
-        search: (search) => ({
-          ...search,
+        to: '/trade',
+        search: () => ({
           base: quote.address,
           quote: base.address,
         }),

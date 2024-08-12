@@ -20,7 +20,7 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
   const { getFiatAsString } = useFiatCurrency(quote);
 
   return (
-    <article className="rounded-8 grid gap-4 bg-black px-16 py-12">
+    <article className="rounded-8 text-12 grid gap-4 bg-black px-16 py-12">
       <h3
         className={cn(
           'text-14 font-weight-600',
@@ -30,24 +30,24 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
         {buy ? 'Buy' : 'Sell'} Overview
       </h3>
       {isRange ? (
-        <>
-          <div className="text-12">
+        <div className="grid grid-flow-col gap-20">
+          <div className="grid gap-4">
             <h4 className="font-weight-600">Min Price</h4>
             <p className="font-weight-500 text-white/80">
               {tokenAmount(order.min, quote)}
             </p>
             <MarketPriceIndication {...indicationProps} price={order.min} />
           </div>
-          <div className="text-12">
+          <div className="grid gap-4">
             <h4 className="font-weight-600">Max Price</h4>
             <p className="font-weight-500 text-white/80">
               {tokenAmount(order.max, quote)}
             </p>
             <MarketPriceIndication {...indicationProps} price={order.max} />
           </div>
-        </>
+        </div>
       ) : (
-        <div className="text-12">
+        <div className="grid gap-4">
           <h4 className="font-weight-600">{buy ? 'Buy' : 'Sell'} Price</h4>
           <p className="font-weight-500 text-white/80">
             {tokenAmount(order.min, quote)}
@@ -55,7 +55,7 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
           <MarketPriceIndication {...indicationProps} price={order.min} />
         </div>
       )}
-      <div className="text-12">
+      <div className="grid gap-4">
         <h4 className="font-weight-600">Budget</h4>
         <p className="font-weight-500 text-white/80">
           {tokenAmount(order.budget, buy ? quote : base)}
