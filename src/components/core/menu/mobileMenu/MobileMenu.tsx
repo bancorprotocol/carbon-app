@@ -18,7 +18,7 @@ export const MobileMenu: FC = () => {
 
   return (
     <footer className="mobile-menu">
-      {menuItems.map(({ label, href }, index) => {
+      {menuItems.map(({ label, href, testid }, index) => {
         const isSamePage = isSamePageLink(href);
 
         return (
@@ -30,6 +30,7 @@ export const MobileMenu: FC = () => {
             params={{}}
             search={{}}
             aria-current={isSamePage ? 'page' : 'false'}
+            data-testid={testid}
             className={`px-3 py-3 ${
               isSamePage ? 'text-white' : 'hover:text-white'
             }`}

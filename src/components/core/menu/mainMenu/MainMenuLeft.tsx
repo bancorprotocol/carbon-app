@@ -29,7 +29,7 @@ export const MainMenuLeft: FC = () => {
       </Link>
 
       <div className="hidden space-x-24 md:block">
-        {menuItems.map(({ label, href }, index) => {
+        {menuItems.map(({ label, href, testid }, index) => {
           const isSamePage = isSamePageLink(href);
 
           return (
@@ -41,6 +41,7 @@ export const MainMenuLeft: FC = () => {
               params={{}}
               search={{}}
               aria-current={isSamePage ? 'page' : 'false'}
+              data-testid={testid}
               className={`font-title px-3 py-3 transition-colors duration-300 ${
                 isSamePage ? 'text-white' : 'hover:text-white'
               }`}

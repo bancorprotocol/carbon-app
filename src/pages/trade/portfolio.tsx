@@ -15,7 +15,10 @@ export const TradePortfolio = () => {
   return (
     <>
       <Outlet />
-      <section aria-label="Portfolio" className="col-span-2 grid gap-20">
+      <section
+        aria-labelledby="portfolio-tab"
+        className="col-span-2 mx-auto grid w-full max-w-[1220px] gap-20"
+      >
         <TradeExplorerTab current="portfolio" />
         <PortfolioView />
       </section>

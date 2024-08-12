@@ -17,6 +17,7 @@ export const TradeExplorerTab: FC<Props> = ({ current }) => {
   };
   const tabs = [
     {
+      id: 'overview-tab',
       key: 'overview',
       label: 'Overview',
       href: getHref('overview'),
@@ -24,12 +25,14 @@ export const TradeExplorerTab: FC<Props> = ({ current }) => {
       badge: strategies?.length || 0,
     },
     {
+      id: 'portfolio-tab',
       key: 'portfolio',
       label: 'Portfolio',
       href: getHref('portfolio'),
       icon: <IconPieChart className="size-18" />,
     },
     {
+      id: 'activity-tab',
       key: 'activity',
       label: 'Activity',
       href: getHref('activity'),
@@ -41,8 +44,9 @@ export const TradeExplorerTab: FC<Props> = ({ current }) => {
       aria-label="Strategy Panels"
       className="border-background-900 text-14 mr-auto flex w-full gap-2 rounded-full border-2 p-6 md:w-auto"
     >
-      {tabs.map(({ key, label, href, icon, badge }) => (
+      {tabs.map(({ id, key, label, href, icon, badge }) => (
         <Link
+          id={id}
           key={key}
           to={href}
           params={{}}

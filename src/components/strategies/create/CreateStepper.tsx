@@ -32,6 +32,7 @@ export const CreateStepper: FC<Props> = (props) => {
         type="submit"
         variant={variant}
         className={cn('mt-auto shrink-0', style.next)}
+        data-testid="next-step"
       >
         Next Step: {nextPage}
       </Button>

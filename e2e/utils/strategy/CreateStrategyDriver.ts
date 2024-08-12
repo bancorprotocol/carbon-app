@@ -108,7 +108,7 @@ export class CreateStrategyDriver {
   }
 
   nextStep() {
-    return this.page.getByText('Next Step').click();
+    return this.page.getByTestId('next-page').click();
   }
 
   async submit(type: StrategyCase) {

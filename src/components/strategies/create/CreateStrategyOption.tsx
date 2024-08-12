@@ -152,6 +152,7 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
         to={selectedItem.to}
         params={{}}
         search
+        resetScroll={false}
         className={cn(
           'mt-auto shrink-0',
           buttonStyles({ variant: 'success', fullWidth: true }),
@@ -166,6 +167,7 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
             strategyOption: selectedItem.id,
           });
         }}
+        data-testid="next-step"
       >
         Next Step
       </Link>

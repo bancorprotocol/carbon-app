@@ -14,7 +14,10 @@ export const TradeOverview = () => {
   return (
     <>
       <Outlet />
-      <section className="col-span-2 grid gap-20">
+      <section
+        aria-labelledby="overview-tab"
+        className="col-span-2 mx-auto grid w-full max-w-[1220px] gap-20"
+      >
         <header className="flex items-center gap-20">
           <TradeExplorerTab current="overview" />
           <StrategySearch className="hidden md:flex" />
