@@ -29,13 +29,14 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await createForm.selectSetting('recurring');
     await createForm.nextStep();
 
-    const { buyForm, sellForm } = await createForm.fillRecurring();
-
-    // Assert 100% outcome
-    await expect(buyForm.outcomeValue()).toHaveText(output.buy.outcomeValue);
-    await expect(buyForm.outcomeQuote()).toHaveText(output.buy.outcomeQuote);
+    const sellForm = await createForm.fillRecurring('sell');
     await expect(sellForm.outcomeValue()).toHaveText(output.sell.outcomeValue);
     await expect(sellForm.outcomeQuote()).toHaveText(output.sell.outcomeQuote);
+    await createForm.nextStep();
+    const buyForm = await createForm.fillRecurring('buy');
+    await expect(buyForm.outcomeValue()).toHaveText(output.buy.outcomeValue);
+    await expect(buyForm.outcomeQuote()).toHaveText(output.buy.outcomeQuote);
+    await createForm.nextStep();
 
     const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit('create');

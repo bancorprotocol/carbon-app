@@ -90,13 +90,12 @@ export class CreateStrategyDriver {
     return form;
   }
 
-  async fillRecurring() {
+  async fillRecurring(direction: Direction) {
     assertRecurringTestCase(this.testCase);
-    const { buy, sell } = this.testCase.input.create;
-    const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
-    const sellForm = await this.fillFormSection('sell', sellSetting, sell);
-    const buyForm = await this.fillFormSection('buy', buySetting, buy);
-    return { buyForm, sellForm };
+    const input = this.testCase.input.create[direction];
+    const index = direction === 'buy' ? 0 : 1;
+    const settings = getRecurringSettings(this.testCase)[index];
+    return this.fillFormSection(direction, settings, input);
   }
 
   async fillDisposable() {
@@ -108,11 +107,11 @@ export class CreateStrategyDriver {
   }
 
   nextStep() {
-    return this.page.getByTestId('next-page').click();
+    return this.page.getByTestId('next-step').click();
   }
 
   async submit(type: StrategyCase) {
-    const btn = this.page.getByText('Create Strategy');
+    const btn = this.page.getByTestId('create-strategy');
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
@@ -129,7 +128,7 @@ export class CreateStrategyDriver {
       }
       await btn.click();
     } catch {
-      await btn.click({ timeout: 1_000 });
+      await btn.click({ timeout: 5_000 });
     }
   }
 }

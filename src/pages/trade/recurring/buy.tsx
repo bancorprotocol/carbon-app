@@ -33,7 +33,7 @@ export const TradeRecurringBuy = () => {
     marketPrice,
     min: search.buyMin,
     max: search.buyMax,
-    buy: false,
+    buy: true,
   });
   return (
     <>

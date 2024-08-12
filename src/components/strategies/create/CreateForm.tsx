@@ -95,6 +95,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           fullWidth
           loading={loading}
           loadingChildren={loadingChildren}
+          data-testid="create-strategy"
         >
           Create Strategy
         </Button>
