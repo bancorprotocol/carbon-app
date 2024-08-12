@@ -13,16 +13,24 @@ import {
   initSpread,
 } from 'components/strategies/create/utils';
 import style from 'components/strategies/common/stepper.module.css';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 const url = '/trade/overview/overlapping/price';
 export const TradeOverlappingPrice = () => {
   const navigate = useNavigate({ from: url });
   const { base, quote } = useTradeCtx();
   const search = useSearch({ strict: false }) as TradeOverlappingSearch;
-  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
+  const { marketPrice: externalPrice, isPending } = useMarketPrice({
+    base,
+    quote,
+  });
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
   const orders = getOverlappingOrders(search, base, quote, marketPrice);
+
+  if (isPending) {
+    return <CarbonLogoLoading className="h-[80px]" />;
+  }
 
   if (!marketPrice) {
     const setMarketPrice = (price: string) => {
@@ -36,7 +44,7 @@ export const TradeOverlappingPrice = () => {
       <div className="flex flex-col gap-20">
         <article
           key="marketPrice"
-          className="rounded-10 bg-background-900 flex flex-col md:w-[440px]"
+          className="rounded-10 bg-background-800 flex flex-col md:w-[440px]"
         >
           <OverlappingInitMarketPrice
             base={base}
