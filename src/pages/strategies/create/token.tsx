@@ -5,7 +5,7 @@ import { CreateStrategyTokenSelection } from 'components/strategies/create/Creat
 import { CreateStrategyOption } from 'components/strategies/create/CreateStrategyOption';
 import { useRouter } from '@tanstack/react-router';
 import { usePersistLastPair } from './usePersistLastPair';
-import { BackButton } from 'components/common/backButton';
+import { BackButton } from 'components/common/BackButton';
 
 const url = '/strategies/create';
 export const CreateStrategyTokenPage = () => {

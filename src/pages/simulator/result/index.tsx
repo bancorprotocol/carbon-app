@@ -8,7 +8,7 @@ import { useCallback, useEffect } from 'react';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { wait } from 'utils/helpers';
 import { THREE_SECONDS_IN_MS } from 'utils/time';
-import { BackButton } from 'components/common/backButton';
+import { BackButton } from 'components/common/BackButton';
 
 export const SimulatorResultPage = () => {
   const { status, isSuccess, start, ...ctx } = useSimulator();

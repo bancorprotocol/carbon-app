@@ -6,7 +6,7 @@ import { carbonEvents } from 'services/events';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { StrategyGraph } from 'components/strategies/common/StrategyGraph';
-import { BackButton } from 'components/common/backButton';
+import { BackButton } from 'components/common/BackButton';
 
 interface Props {
   editType: EditTypes;

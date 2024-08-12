@@ -18,7 +18,7 @@ import { StrategySubtitle } from 'components/strategies/overview/strategyBlock/S
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { NotFound } from 'components/common/NotFound';
-import { BackButton } from 'components/common/backButton';
+import { BackButton } from 'components/common/BackButton';
 
 export const StrategyPage = () => {
   const { history } = useRouter();

@@ -9,7 +9,7 @@ import { useRouter } from '@tanstack/react-router';
 import { carbonEvents } from 'services/events';
 import { StrategyGraph } from 'components/strategies/common/StrategyGraph';
 import { items, list } from 'components/strategies/common/variants';
-import { BackButton } from 'components/common/backButton';
+import { BackButton } from 'components/common/BackButton';
 
 interface Props {
   base?: Token;
