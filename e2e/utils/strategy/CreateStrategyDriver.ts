@@ -126,6 +126,10 @@ export class CreateStrategyDriver {
       await mainMenu.show();
     }
     try {
+      const loadings = await this.page.locator('.loading-message').all();
+      await Promise.all(
+        loadings.map((loading) => loading.waitFor({ state: 'detached' }))
+      );
       await waitFor(this.page, 'approve-warnings', 2_000);
       if (await this.page.isVisible('[data-testid=approve-warnings]')) {
         await this.page.getByTestId('approve-warnings').click();
