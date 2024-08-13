@@ -1,22 +1,15 @@
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { cn } from 'utils/helpers';
+import { ButtonHTMLProps } from './button';
 
-interface Props {
-  onClick: () => void;
-  className?: string;
-}
+export const backStyle =
+  'bg-background-900 hover:bg-background-800 grid size-40 place-items-center rounded-full p-12';
+export const BackIcon = () => <IconChevronLeft className="size-16" />;
 
-export const BackButton = ({ onClick, className }: Props) => {
+export const BackButton = ({ className, ...props }: ButtonHTMLProps) => {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        'bg-background-900 hover:bg-background-800 grid size-40 place-items-center rounded-full p-12',
-        className
-      )}
-    >
-      <IconChevronLeft className="size-16" />
+    <button type="button" className={cn(backStyle, className)} {...props}>
+      <BackIcon />
     </button>
   );
 };
