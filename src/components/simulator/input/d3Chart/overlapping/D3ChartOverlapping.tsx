@@ -63,18 +63,24 @@ export const D3ChartOverlapping = (props: Props) => {
   );
 
   const yPos = useMemo(() => {
-    const { buyPriceHigh, sellPriceLow } = calcPrices(
-      formatNumber(prices.buy.min),
-      formatNumber(prices.sell.max)
-    );
+    let buyMax = prices.buy.min;
+    let sellMin = prices.sell.max;
+    if (prices.buy.min && prices.sell.max) {
+      const calculatedPrices = calcPrices(
+        formatNumber(prices.buy.min),
+        formatNumber(prices.sell.max)
+      );
+      buyMax = calculatedPrices.buyPriceHigh;
+      sellMin = calculatedPrices.sellPriceLow;
+    }
 
     return {
       buy: {
         min: yScale(Number(prices.buy.min)),
-        max: yScale(Number(buyPriceHigh)),
+        max: yScale(Number(buyMax)),
       },
       sell: {
-        min: yScale(Number(sellPriceLow)),
+        min: yScale(Number(sellMin)),
         max: yScale(Number(prices.sell.max)),
       },
       marketPrice: marketPrice ? yScale(marketPrice) : 0,
