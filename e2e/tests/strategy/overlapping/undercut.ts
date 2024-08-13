@@ -35,6 +35,7 @@ export const undercut = (testCase: CreateStrategyTestCase) => {
     await overlappingForm.budget().fill(sell.budget);
 
     await createForm.nextStep();
+    await page.waitForURL('/trade/overview/overlapping/summary?*');
     await createForm.submit('undercut');
 
     await page.waitForURL('/', { timeout: 10_000 });

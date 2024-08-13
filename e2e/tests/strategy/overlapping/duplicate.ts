@@ -36,6 +36,7 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     await overlappingForm.budget().fill(sell.budget);
 
     await createForm.nextStep();
+    await page.waitForURL('/trade/overview/overlapping/summary?*');
     await createForm.submit('duplicate');
 
     await page.waitForURL('/', { timeout: 10_000 });

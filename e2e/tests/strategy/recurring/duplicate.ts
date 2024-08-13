@@ -30,6 +30,7 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
     await createForm.nextStep();
     await page.waitForURL('/trade/overview/recurring/buy?*');
     await createForm.nextStep();
+    await page.waitForURL('/trade/overview/recurring/summary?*');
     await createForm.submit('duplicate');
 
     await page.waitForURL('/', { timeout: 10_000 });

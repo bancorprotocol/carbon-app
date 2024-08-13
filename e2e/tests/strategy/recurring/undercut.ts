@@ -30,6 +30,7 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     await createForm.nextStep();
     await page.waitForURL('/trade/overview/recurring/buy?*');
     await createForm.nextStep();
+    await page.waitForURL('/trade/overview/recurring/summary?*');
     await createForm.submit('undercut');
 
     await page.waitForURL('/', { timeout: 10_000 });
