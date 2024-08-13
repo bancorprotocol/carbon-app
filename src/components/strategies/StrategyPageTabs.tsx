@@ -39,7 +39,9 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
             key={href}
             className={cn(
               'flex w-full items-center justify-center gap-4 rounded-full py-5 md:px-10',
-              active ? 'bg-white/10' : 'bg-transparent text-white/60'
+              active
+                ? 'bg-white/10'
+                : 'bg-transparent text-white/60 hover:text-white/80'
             )}
             aria-current={active ? 'location' : 'false'}
           >

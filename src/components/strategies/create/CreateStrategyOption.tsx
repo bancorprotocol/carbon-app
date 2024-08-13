@@ -88,9 +88,10 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
               aria-selected={id === selectedId}
               onClick={() => setItem(id)}
               className={cn(
-                'rounded-10 text-10 flex size-full flex-col items-center justify-start gap-8 bg-black py-16 text-white/40 outline-1 outline-white/60',
-                'focus-visible:outline',
-                'aria-selected:text-white aria-selected:outline aria-selected:outline-white'
+                'rounded-10 text-10 group flex size-full flex-col items-center justify-start gap-8 bg-black py-16 text-white/40 text-white/60 outline-1 outline-white/60',
+                'focus-visible:outline focus-visible:outline-1',
+                'hover:outline-background-400 hover:text-white/80 hover:outline hover:outline-1',
+                'aria-selected:text-white aria-selected:outline aria-selected:outline-1 aria-selected:outline-white'
               )}
               data-testid={id}
             >

@@ -52,7 +52,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
               carbonEvents.strategy.strategyChartOpen(undefined);
               setShowGraph(true);
             }}
-            className="bg-background-800 grid size-40 place-items-center rounded-full"
+            className="hover:border-background-700 border-background-800 bg-background-800 grid size-40 place-items-center rounded-full border-2"
           >
             <IconCandles className="size-18" />
           </button>

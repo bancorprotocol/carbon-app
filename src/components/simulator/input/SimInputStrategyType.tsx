@@ -54,10 +54,14 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
             to={`/simulate/${label}`}
             search={{ baseToken, quoteToken }}
             className={cn(
-              'rounded-10 text-14 font-weight-500 flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white/60',
+              'rounded-10 text-14 font-weight-500 group flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white',
               'md:px-12',
               'focus-visible:outline focus-visible:outline-1'
             )}
+            inactiveProps={{
+              className:
+                'hover:outline hover:outline-1 hover:outline-background-400',
+            }}
             activeProps={{ className: 'outline outline-1 outline-white' }}
             replace={true}
             resetScroll={false}
@@ -70,7 +74,9 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
                   {svg}
                   <span
                     className={`capitalize ${
-                      isActive ? 'text-white' : 'text-white/40'
+                      isActive
+                        ? 'text-white'
+                        : 'text-white/40 group-hover:text-white/80'
                     }`}
                   >
                     {title}
