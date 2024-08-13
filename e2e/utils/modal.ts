@@ -32,6 +32,7 @@ export const checkApproval = async (page: Page, tokens: string[]) => {
 
 export const waitTooltipsClose = async (page: Page) => {
   const selector = '[data-testid="tippy-tooltip"]';
+  await page.mouse.move(0, 0);
   const tooltips = await page.locator(selector).all();
   for (const tooltip of tooltips) {
     await tooltip.waitFor({ state: 'detached' });

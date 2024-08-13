@@ -3,12 +3,20 @@ import config from 'config';
 import { CHAIN_ID, RPC_HEADERS, RPC_URLS } from './wagmi.constants';
 import { http } from 'wagmi';
 
+// Native Currency Symbol
+// Remove content in parenthesis
+// Symbol must be 2-6 characters to add new network
+// @todo(#1417) refactor this implementation to use the gasToken symbol in a different way
+const nativeCurrencySymbol = config.network.gasToken.symbol
+  .replace(/\s*\(.*?\)\s*/g, '')
+  .substring(0, 6);
+
 export const currentChain: Chain = {
   id: config.network.chainId,
   name: config.network.name,
   nativeCurrency: {
     name: config.network.gasToken.name,
-    symbol: config.network.gasToken.symbol,
+    symbol: nativeCurrencySymbol,
     decimals: config.network.gasToken.decimals,
   },
   rpcUrls: {
