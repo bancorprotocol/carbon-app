@@ -5,7 +5,7 @@ import { SimResultSummary } from 'components/simulator/result/SimResultSummary';
 import { useSimulator } from 'components/simulator/result/SimulatorProvider';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useCallback, useEffect } from 'react';
-import { cn, wait } from 'utils/helpers';
+import { wait } from 'utils/helpers';
 import { THREE_SECONDS_IN_MS } from 'utils/time';
 import { BackIcon, backStyle } from 'components/common/BackButton';
 
@@ -34,7 +34,7 @@ export const SimulatorResultPage = () => {
   return (
     <div className="p-20">
       {simulationType === 'recurring' && (
-        <div className="text-24 font-weight-500 mb-16 flex items-center">
+        <div className="text-24 font-weight-500 mb-16 flex items-center gap-16">
           <Link
             to="/simulate/recurring"
             search={{
@@ -51,7 +51,7 @@ export const SimulatorResultPage = () => {
               buyIsRange: ctx.search.buyIsRange,
               sellIsRange: ctx.search.sellIsRange,
             }}
-            className={cn(backStyle, 'mr-16')}
+            className={backStyle}
           >
             <BackIcon />
           </Link>
@@ -59,7 +59,7 @@ export const SimulatorResultPage = () => {
         </div>
       )}
       {simulationType === 'overlapping' && (
-        <div className="text-24 font-weight-500 mb-16 flex items-center">
+        <div className="text-24 font-weight-500 mb-16 flex items-center gap-16">
           <Link
             to="/simulate/overlapping"
             search={{
@@ -71,7 +71,7 @@ export const SimulatorResultPage = () => {
               sellMax: ctx.search.sellMax,
               spread: ctx.search.spread,
             }}
-            className={cn(backStyle, 'mr-16')}
+            className={backStyle}
           >
             <BackIcon />
           </Link>
