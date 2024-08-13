@@ -5,9 +5,9 @@ import { SimResultSummary } from 'components/simulator/result/SimResultSummary';
 import { useSimulator } from 'components/simulator/result/SimulatorProvider';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useCallback, useEffect } from 'react';
-import { wait } from 'utils/helpers';
+import { cn, wait } from 'utils/helpers';
 import { THREE_SECONDS_IN_MS } from 'utils/time';
-import { BackButton } from 'components/common/BackButton';
+import { BackIcon, backStyle } from 'components/common/BackButton';
 
 export const SimulatorResultPage = () => {
   const { status, isSuccess, start, ...ctx } = useSimulator();
@@ -51,8 +51,9 @@ export const SimulatorResultPage = () => {
               buyIsRange: ctx.search.buyIsRange,
               sellIsRange: ctx.search.sellIsRange,
             }}
+            className={cn(backStyle, 'mr-16')}
           >
-            <BackButton className="mr-16" />
+            <BackIcon />
           </Link>
           Simulate Strategy
         </div>
@@ -70,8 +71,9 @@ export const SimulatorResultPage = () => {
               sellMax: ctx.search.sellMax,
               spread: ctx.search.spread,
             }}
+            className={cn(backStyle, 'mr-16')}
           >
-            <BackButton className="mr-16" />
+            <BackIcon />
           </Link>
           Simulate Strategy
         </div>
