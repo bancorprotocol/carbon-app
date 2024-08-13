@@ -99,18 +99,21 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
                 aria-selected={id === selectedId}
                 onClick={() => setItem(id)}
                 className={cn(
-                  'rounded-10 text-14 flex size-full flex-col items-center justify-start gap-8 bg-black px-8 py-16 outline-white/60',
+                  'rounded-10 text-14 group flex size-full flex-col items-center justify-start gap-8 bg-black px-8 py-16 outline-white/60',
                   'md:px-12',
                   'focus-visible:outline focus-visible:outline-1',
-                  id === selectedId ? 'outline outline-1 outline-white' : ''
+                  'aria-selected:outline aria-selected:outline-1 aria-selected:outline-white',
+                  'hover:outline-background-400 hover:outline hover:outline-1'
                 )}
                 data-testid={id}
               >
                 {svg}
                 <span
-                  className={`text-12 md:text-14 ${
-                    id === selectedId ? 'text-white' : 'text-white/40'
-                  }`}
+                  className={cn(
+                    'text-12 md:text-14',
+                    'text-white/60 group-hover:text-white/80',
+                    'group-aria-selected:text-white'
+                  )}
                 >
                   {aboveBreakpoint('md') ? label : label.split(' ')[0]}
                 </span>

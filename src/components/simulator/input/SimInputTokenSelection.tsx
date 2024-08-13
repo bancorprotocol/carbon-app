@@ -81,7 +81,7 @@ export const SimInputTokenSelection: FC<Props> = ({
         />
         <button
           type="button"
-          className="border-background-900 relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] bg-black"
+          className="border-background-900 hover:bg-background-800 relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] bg-black"
           onClick={() => {
             navigate({
               search: { baseToken: quoteToken, quoteToken: baseToken },
