@@ -222,7 +222,7 @@ export const ApproveToken: FC<Props> = ({
         )}
 
         {error ? (
-          <pre className="max-w-min text-wrap">{error.message}</pre>
+          <output className="max-w-min text-wrap">{error.message}</output>
         ) : null}
       </div>
       {data.nullApprovalRequired && (
