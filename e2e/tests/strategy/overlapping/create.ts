@@ -37,8 +37,10 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await form.spread().fill(spread.toString());
     await expect(form.anchorRequired()).toBeVisible();
     await form.anchor('sell').click();
+    await createForm.nextStep();
     await form.budget().focus();
     await form.budget().fill(sell.budget.toString());
+    await createForm.nextStep();
 
     const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit('create');

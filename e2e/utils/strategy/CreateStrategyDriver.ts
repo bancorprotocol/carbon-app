@@ -25,6 +25,10 @@ export class CreateStrategyDriver {
     return this.page.getByTestId('create-strategy-form');
   }
 
+  getStep() {
+    return this.page.getByTestId('create-strategy-step');
+  }
+
   getFormSection(direction: Direction) {
     const form = this.page.getByTestId(`${direction}-section`);
     return {
@@ -42,15 +46,15 @@ export class CreateStrategyDriver {
   }
 
   getOverlappingForm() {
-    const form = this.getForm();
+    const step = this.getStep();
     return {
-      locator: form,
-      min: () => form.getByTestId('input-min'),
-      max: () => form.getByTestId('input-max'),
-      spread: () => form.getByTestId('spread-input'),
-      anchorRequired: () => form.getByTestId('require-anchor'),
-      anchor: (anchor: 'buy' | 'sell') => form.getByTestId(`anchor-${anchor}`),
-      budget: () => form.getByTestId('input-budget'),
+      locator: step,
+      min: () => step.getByTestId('input-min'),
+      max: () => step.getByTestId('input-max'),
+      spread: () => step.getByTestId('spread-input'),
+      anchorRequired: () => step.getByTestId('require-anchor'),
+      anchor: (anchor: 'buy' | 'sell') => step.getByTestId(`anchor-${anchor}`),
+      budget: () => step.getByTestId('input-budget'),
     };
   }
 

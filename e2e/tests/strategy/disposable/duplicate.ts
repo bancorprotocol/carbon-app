@@ -25,7 +25,7 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     await modal.getByTestId('duplicate-strategy-btn').click();
     await modal.waitFor({ state: 'detached' });
 
-    await page.waitForURL('/strategies/create?*', {
+    await page.waitForURL('/trade/overview/disposable?*', {
       timeout: 10_000,
     });
 
