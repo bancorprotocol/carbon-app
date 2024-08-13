@@ -11,10 +11,10 @@ interface Props {
   quote: Token;
   order: OrderBlock;
   buy?: boolean;
-  warning?: string;
+  warnings: string[];
 }
 export const CreateRecurringSummary: FC<Props> = (props) => {
-  const { base, quote, order, buy, warning } = props;
+  const { base, quote, order, buy, warnings } = props;
   const isRange = order.min !== order.max;
   const indicationProps = { base, quote, buy, isRange };
   const { getFiatAsString } = useFiatCurrency(quote);
@@ -64,7 +64,8 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
           {getFiatAsString(order.budget)}
         </p>
       </div>
-      {warning && <Warning message={warning} />}
+      {warnings.length &&
+        warnings.map((warning) => <Warning key={warning} message={warning} />)}
     </article>
   );
 };

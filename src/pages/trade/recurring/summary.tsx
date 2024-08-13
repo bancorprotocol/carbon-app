@@ -8,6 +8,8 @@ import { TradeChartSection } from 'components/trade/TradeChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeRecurringSearch } from 'libs/routing/routes/trade';
+import { getRecurringWarning } from 'components/strategies/create/utils';
+import { exist } from 'utils/helpers/operators';
 
 export const TradeRecurringSummary = () => {
   const search = useSearch({ strict: false }) as TradeRecurringSearch;
@@ -26,6 +28,7 @@ export const TradeRecurringSummary = () => {
     settings: search.sellSettings ?? 'range',
   };
   // Warnings
+  const overlap = getRecurringWarning(search);
   const sellOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
@@ -33,6 +36,7 @@ export const TradeRecurringSummary = () => {
     max: search.sellMax,
     buy: false,
   });
+  const sellWarnings = [overlap, sellOutsideMarket].filter(exist);
   const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
@@ -40,6 +44,7 @@ export const TradeRecurringSummary = () => {
     max: search.buyMax,
     buy: true,
   });
+  const buyWarnings = [overlap, sellOutsideMarket].filter(exist);
   return (
     <>
       <section
@@ -71,13 +76,13 @@ export const TradeRecurringSummary = () => {
             base={base}
             quote={quote}
             order={sellOrder}
-            warning={sellOutsideMarket}
+            warnings={sellWarnings}
           />
           <CreateRecurringSummary
             base={base}
             quote={quote}
             order={buyOrder}
-            warning={buyOutsideMarket}
+            warnings={buyWarnings}
             buy
           />
         </CreateForm>
