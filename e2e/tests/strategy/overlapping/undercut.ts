@@ -25,15 +25,16 @@ export const undercut = (testCase: CreateStrategyTestCase) => {
     await modal.getByTestId('undercut-strategy-btn').click();
     await modal.waitFor({ state: 'detached' });
 
-    await page.waitForURL('/strategies/create?*', {
-      timeout: 10_000,
-    });
+    await page.waitForURL('/trade/overview/overlapping/price?*');
 
     const createForm = new CreateStrategyDriver(page, testCase);
     const overlappingForm = createForm.getOverlappingForm();
     await overlappingForm.anchor('sell').click();
+    await createForm.nextStep();
     await overlappingForm.budget().focus();
     await overlappingForm.budget().fill(sell.budget);
+
+    await createForm.nextStep();
     await createForm.submit('undercut');
 
     await page.waitForURL('/', { timeout: 10_000 });

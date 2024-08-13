@@ -24,11 +24,12 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     await modal.getByTestId('undercut-strategy-btn').click();
     await modal.waitFor({ state: 'detached' });
 
-    await page.waitForURL('/strategies/create?*', {
-      timeout: 10_000,
-    });
+    await page.waitForURL('/trade/overview/recurring/sell?*');
 
     const createForm = new CreateStrategyDriver(page, testCase);
+    await createForm.nextStep();
+    await page.waitForURL('/trade/overview/recurring/buy?*');
+    await createForm.nextStep();
     await createForm.submit('undercut');
 
     await page.waitForURL('/', { timeout: 10_000 });
