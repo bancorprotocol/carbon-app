@@ -1,6 +1,6 @@
 import { Outlet, useSearch } from '@tanstack/react-router';
+import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
-import { ActivitySection } from 'components/activity/ActivitySection';
 import { TradeExplorerTab } from 'components/trade/TradeExplorerTabs';
 import { TradeActivitySearch } from 'libs/routing/routes/trade';
 
@@ -16,7 +16,7 @@ export const TradeActivity = () => {
       >
         <TradeExplorerTab current="activity" />
         <ActivityProvider params={params}>
-          <ActivitySection filters={['ids']} />
+          <ActivityLayout filters={['ids']} />
         </ActivityProvider>
       </section>
     </>

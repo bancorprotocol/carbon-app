@@ -1,6 +1,5 @@
 import { useParams, useRouter } from '@tanstack/react-router';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
-import { ActivitySection } from 'components/activity/ActivitySection';
 import { Page } from 'components/common/page';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { TokensOverlap } from 'components/common/tokensOverlap';
@@ -19,6 +18,7 @@ import { StrategySubtitle } from 'components/strategies/overview/strategyBlock/S
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { NotFound } from 'components/common/NotFound';
+import { ActivityLayout } from 'components/activity/ActivityLayout';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -101,7 +101,7 @@ export const StrategyPage = () => {
         </article>
       </section>
       <ActivityProvider params={params}>
-        <ActivitySection filters={[]} />
+        <ActivityLayout filters={[]} />
       </ActivityProvider>
     </Page>
   );

@@ -28,7 +28,7 @@ export const TradeOverlappingPrice = () => {
 
   const orders = getOverlappingOrders(search, base, quote, marketPrice);
 
-  if (isPending) {
+  if (!marketPrice && isPending) {
     return <CarbonLogoLoading className="h-[80px]" />;
   }
 

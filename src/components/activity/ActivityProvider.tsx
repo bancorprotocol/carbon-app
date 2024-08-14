@@ -1,10 +1,18 @@
 import {
+  FC,
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import {
   Activity,
   ActivityMeta,
   QueryActivityParams,
 } from 'libs/queries/extApi/activity';
 import { ActivitySearchParams } from './utils';
-import { FC, ReactNode, createContext, useCallback, useContext } from 'react';
 import { useActivityQuery, useActivityMetaQuery } from './useActivityQuery';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { useNavigate, useSearch } from '@tanstack/react-router';
@@ -16,7 +24,8 @@ interface ActivityContextType {
   activities: Activity[];
   meta?: ActivityMeta;
   size?: number;
-  status: FetchStatus;
+  status: 'error' | 'pending' | 'success';
+  fetchStatus: FetchStatus;
   queryParams: QueryActivityParams;
   searchParams: ActivitySearchParams;
   setSearchParams: (searchParams: Partial<ActivitySearchParams>) => any;
@@ -24,7 +33,8 @@ interface ActivityContextType {
 
 const ActivityContext = createContext<ActivityContextType>({
   activities: [],
-  status: 'idle',
+  status: 'pending',
+  fetchStatus: 'idle',
   queryParams: {},
   searchParams: { limit: 10, offset: 0 },
   setSearchParams: () => {},
@@ -92,16 +102,26 @@ export const ActivityProvider: FC<Props> = ({ children, params }) => {
     [nav]
   );
 
-  if (activityQuery.isPending) {
-    return <CarbonLogoLoading className="h-[80px] self-center" />;
-  }
+  // We need display the loading only when params change, not when search changes.
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(params)]);
+  useEffect(() => {
+    if (loading && !activityQuery.isPending) setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, activityQuery.isPending]);
+  if (loading) return <CarbonLogoLoading className="h-[80px] self-center" />;
+
   const activities = activityQuery.data ?? [];
   const size = activitySizeQuery.data?.size;
   const meta = activityMetaQuery.data;
 
   const ctx: ActivityContextType = {
     activities,
-    status: activityQuery.fetchStatus,
+    status: activityQuery.status,
+    fetchStatus: activityQuery.fetchStatus,
     meta: meta,
     size: size,
     queryParams,
