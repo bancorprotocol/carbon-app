@@ -32,14 +32,18 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
       {isRange ? (
         <div className="grid grid-flow-col gap-20">
           <div className="grid gap-4">
-            <h4 className="font-weight-600">Min Price</h4>
+            <h4 className="font-weight-600 flex items-center gap-8">
+              Min Price
+            </h4>
             <p className="font-weight-500 text-white/80">
               {tokenAmount(order.min, quote)}
             </p>
             <MarketPriceIndication {...indicationProps} price={order.min} />
           </div>
           <div className="grid gap-4">
-            <h4 className="font-weight-600">Max Price</h4>
+            <h4 className="font-weight-600 flex items-center gap-8">
+              Max Price
+            </h4>
             <p className="font-weight-500 text-white/80">
               {tokenAmount(order.max, quote)}
             </p>
@@ -64,7 +68,7 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
           {getFiatAsString(order.budget)}
         </p>
       </div>
-      {warnings.length &&
+      {!!warnings.length &&
         warnings.map((warning) => <Warning key={warning} message={warning} />)}
     </article>
   );
