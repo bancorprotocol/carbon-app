@@ -57,6 +57,18 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
       <div className="grid grid-flow-col gap-20">
         <div className="grid gap-4">
           <h4 className="font-weight-600 flex items-center gap-4">
+            <TokenLogo token={base} size={16} />
+            {base.symbol} Budget
+          </h4>
+          <p className="font-weight-500 text-white/80">
+            {tokenAmount(order1.budget, base)}
+          </p>
+          <p className="break-all text-white/60">
+            {getFiatAsString(order1.budget)}
+          </p>
+        </div>
+        <div className="grid gap-4">
+          <h4 className="font-weight-600 flex items-center gap-4">
             <TokenLogo token={quote} size={16} />
             {quote.symbol} Budget
           </h4>
@@ -65,18 +77,6 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
           </p>
           <p className="break-all text-white/60">
             {getFiatAsString(order0.budget)}
-          </p>
-        </div>
-        <div className="grid gap-4">
-          <h4 className="font-weight-600 flex items-center gap-4">
-            <TokenLogo token={base} size={16} />
-            {base.symbol} Budget
-          </h4>
-          <p className="font-weight-500 text-white/80">
-            {tokenAmount(order1.budget, quote)}
-          </p>
-          <p className="break-all text-white/60">
-            {getFiatAsString(order1.budget)}
           </p>
         </div>
       </div>
