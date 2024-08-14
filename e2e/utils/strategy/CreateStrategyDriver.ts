@@ -58,6 +58,13 @@ export class CreateStrategyDriver {
     };
   }
 
+  async waitForLoading() {
+    const loadings = await this.page.locator('.loading-message').all();
+    return Promise.all(
+      loadings.map((loading) => loading.waitFor({ state: 'detached' }))
+    );
+  }
+
   async selectToken(tokenType: 'base' | 'quote') {
     const symbol = this.testCase[tokenType];
     assertDebugToken(symbol);
@@ -110,7 +117,8 @@ export class CreateStrategyDriver {
     return this.fillFormSection(direction, setting, order);
   }
 
-  nextStep() {
+  async nextStep() {
+    await this.waitForLoading();
     return this.page.getByTestId('next-step').click();
   }
 
@@ -126,10 +134,7 @@ export class CreateStrategyDriver {
       await mainMenu.show();
     }
     try {
-      const loadings = await this.page.locator('.loading-message').all();
-      await Promise.all(
-        loadings.map((loading) => loading.waitFor({ state: 'detached' }))
-      );
+      await this.waitForLoading();
       await waitFor(this.page, 'approve-warnings', 2_000);
       if (await this.page.isVisible('[data-testid=approve-warnings]')) {
         await this.page.getByTestId('approve-warnings').click();
