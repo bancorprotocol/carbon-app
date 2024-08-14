@@ -35,7 +35,6 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await form.min().focus();
     await form.min().fill(buy.min.toString());
     await form.spread().fill(spread.toString());
-    await expect(form.anchorRequired()).toBeVisible();
     await form.anchor('sell').click();
     await createForm.nextStep();
     await form.budget().focus();

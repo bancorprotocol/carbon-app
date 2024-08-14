@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useGetTokenBalance } from 'libs/queries';
 import {
   getRoundedSpread,
@@ -83,7 +83,6 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
 
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
-  const [touched, setTouched] = useState(false);
 
   const initialBuyBudget = strategy.order0.balance;
   const initialSellBudget = strategy.order1.balance;
@@ -106,11 +105,6 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
 
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
-
-  // ERROR
-  const anchorError = (() => {
-    if (touched && !anchor) return 'Please select a token to proceed';
-  })();
 
   const budgetError = (() => {
     const value = anchor === 'buy' ? order0.budget : order1.budget;
@@ -160,7 +154,6 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
   }, [anchor, aboveMarket, belowMarket, set]);
 
   const setMarketPrice = (price: string) => {
-    setTouched(true);
     set('marketPrice', price);
   };
 
@@ -210,7 +203,6 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
           quote={quote}
           anchor={anchor}
           setAnchor={setAnchor}
-          anchorError={anchorError}
           disableBuy={aboveMarket}
           disableSell={belowMarket}
         />

@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import { Warning } from 'components/common/WarningMessageWithIcon';
 import style from './OverlappingBudget.module.css';
 
 interface Props {
@@ -12,10 +11,9 @@ interface Props {
   setAnchor: (order: 'buy' | 'sell') => void;
   disableBuy: boolean;
   disableSell: boolean;
-  anchorError?: string;
 }
 export const OverlappingAnchor: FC<Props> = (props) => {
-  const { base, quote, anchor, setAnchor, anchorError } = props;
+  const { base, quote, anchor, setAnchor } = props;
   return (
     <>
       <h3 className="text-16 font-weight-500 flex items-center gap-8">
@@ -64,9 +62,6 @@ export const OverlappingAnchor: FC<Props> = (props) => {
           {quote.symbol}
         </label>
       </div>
-      {anchorError && (
-        <Warning message={anchorError} isError data-testid="require-anchor" />
-      )}
     </>
   );
 };
