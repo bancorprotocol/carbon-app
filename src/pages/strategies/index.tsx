@@ -21,9 +21,19 @@ export const StrategiesPage = () => {
   const { user } = useWagmi();
   const query = useGetUserStrategies({ user });
   const match = useMatchRoute();
-  const isStrategiesPage = match({ to: '/' });
+
+  const isStrategiesPage = match({ to: '/', includeSearch: false });
+  const isActivityPage = match({
+    to: '/strategies/activity',
+  });
 
   const showFilter = useMemo(() => {
+    if (isActivityPage) return false;
+    if (belowBreakpoint('lg')) return false;
+    return !!(query.data && query.data.length > 2);
+  }, [belowBreakpoint, isActivityPage, query.data]);
+
+  const showSearch = useMemo(() => {
     if (!isStrategiesPage) return false;
     if (belowBreakpoint('lg')) return false;
     return !!(query.data && query.data.length > 2);
@@ -57,7 +67,10 @@ export const StrategiesPage = () => {
             className="mb-20 flex items-center justify-between"
           >
             <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-            <StrategyPageTitleWidget showFilter={showFilter} />
+            <StrategyPageTitleWidget
+              showFilter={showFilter}
+              showSearch={showSearch}
+            />
           </header>
         )}
         {/* Hidden tag to target in E2E */}

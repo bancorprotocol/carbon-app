@@ -7,22 +7,21 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const StrategyPageTitleWidget: FC<{
   showFilter: boolean;
-}> = ({ showFilter }) => {
+  showSearch: boolean;
+}> = ({ showFilter, showSearch }) => {
   const { search, setSearch } = useStrategyCtx();
   return (
     <div className="flex items-center gap-20">
-      {showFilter && (
-        <>
-          <div className="order-last col-span-2 md:order-first">
-            <SearchInput
-              value={search}
-              setValue={setSearch}
-              className="bg-background-900 rounded-full"
-            />
-          </div>
-          <StrategyFilterSort />
-        </>
+      {showSearch && (
+        <div className="order-last col-span-2 md:order-first">
+          <SearchInput
+            value={search}
+            setValue={setSearch}
+            className="bg-background-900 rounded-full"
+          />
+        </div>
       )}
+      {showFilter && <StrategyFilterSort />}
 
       <div className={cn('hidden', 'md:block')}>
         <CreateStrategyCTA />
