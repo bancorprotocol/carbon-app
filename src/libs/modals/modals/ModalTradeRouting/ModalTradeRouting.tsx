@@ -1,4 +1,4 @@
-import { FormEvent, KeyboardEvent, useId, useRef, useState } from 'react';
+import { FormEvent, KeyboardEvent, useId, useRef } from 'react';
 import { ModalFC } from '../../modals.types';
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
@@ -30,7 +30,6 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
 }) => {
   const sourceInputId = useId();
   const table = useRef<HTMLTableElement>(null);
-  const [isAwaiting, setIsAwaiting] = useState(false);
   const { source, target } = data;
   const {
     selected,
@@ -43,9 +42,10 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     disabledCTA,
     buttonText,
     errorMsg,
+    isAwaiting,
   } = useModalTradeRouting({
     id,
-    data: { ...data, setIsAwaiting },
+    data,
   });
 
   const selectedSorted = selected.sort((a, b) => {
