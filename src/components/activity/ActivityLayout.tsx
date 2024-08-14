@@ -19,7 +19,7 @@ export const ActivityLayout: FC<ActivityFilterProps> = (props) => {
           <ActivityCountDown time={30} />
         </div>
       </header>
-      <ActivitySection />
+      <ActivitySection hideIds={!filters.includes('ids')} />
     </section>
   );
 };

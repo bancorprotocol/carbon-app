@@ -1,17 +1,33 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { ActivityTable } from './ActivityTable';
-import { ActivityFilterProps } from './ActivityFilter';
 import { ActivityList } from './ActivityList';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useActivity } from './ActivityProvider';
 import { NotFound } from 'components/common/NotFound';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { useRouterState } from '@tanstack/react-router';
 
-interface SectionProps extends ActivityFilterProps {
-  empty?: ReactNode;
+interface SectionProps {
+  hideIds?: boolean;
 }
-export const ActivitySection: FC<SectionProps> = ({ filters = [], empty }) => {
+
+const emptyTexts = {
+  '/trade': 'Try selecting a different token pair or reset your filters.',
+  '/explorer':
+    'Try entering a different wallet address, selecting another token pair, or resetting your filters.',
+  '/strategies': "We couldn't find any activities",
+};
+
+const getEmptyText = (pathname: string) => {
+  for (const [key, value] of Object.entries(emptyTexts)) {
+    if (pathname.startsWith(key)) return value;
+  }
+  return emptyTexts['/explorer'];
+};
+
+export const ActivitySection: FC<SectionProps> = ({ hideIds }) => {
   const { activities, status } = useActivity();
+  const { location } = useRouterState();
   const { aboveBreakpoint } = useBreakpoints();
   if (status === 'pending') {
     return (
@@ -21,24 +37,16 @@ export const ActivitySection: FC<SectionProps> = ({ filters = [], empty }) => {
     );
   }
   if (!activities.length) {
-    if (empty) return empty;
     return (
       <NotFound
         variant="error"
         title="We couldn't find any activities"
-        text="Try entering a different wallet address or choose a different token pair."
+        text={getEmptyText(location.pathname)}
       />
     );
   }
   if (aboveBreakpoint('md')) {
-    return (
-      <ActivityTable
-        activities={activities}
-        hideIds={!filters.includes('ids')}
-      />
-    );
+    return <ActivityTable activities={activities} hideIds={hideIds} />;
   }
-  return (
-    <ActivityList activities={activities} hideIds={!filters.includes('ids')} />
-  );
+  return <ActivityList activities={activities} hideIds={hideIds} />;
 };
