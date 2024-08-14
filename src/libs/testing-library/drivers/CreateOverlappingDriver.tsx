@@ -12,7 +12,7 @@ export class CreateOverlappingDriver {
   }
 
   getOverlappingForm() {
-    return this.screen.getByTestId('create-strategy-form');
+    return this.screen.getByTestId('create-strategy-step');
   }
 
   getOverlappingInput() {
