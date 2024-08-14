@@ -4,12 +4,12 @@ import { StrategyNotFound } from 'components/strategies/overview/StrategyNotFoun
 import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const StrategiesOverviewPage = () => {
-  const { strategies, isPending, search } = useStrategyCtx();
+  const { filteredStrategies, isPending, search } = useStrategyCtx();
   const emptyElement = search ? <StrategyNotFound /> : <StrategyCreateFirst />;
 
   return (
     <StrategyContent
-      strategies={strategies}
+      strategies={filteredStrategies}
       isPending={isPending}
       emptyElement={emptyElement}
     />

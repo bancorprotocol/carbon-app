@@ -3,7 +3,7 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { NotFound } from 'components/common/NotFound';
 
 export const ExplorerTypeOverviewPage = () => {
-  const { strategies, isPending } = useStrategyCtx();
+  const { filteredStrategies, isPending } = useStrategyCtx();
 
   const empty = (
     <NotFound
@@ -17,7 +17,7 @@ export const ExplorerTypeOverviewPage = () => {
   return (
     <>
       <StrategyContent
-        strategies={strategies}
+        strategies={filteredStrategies}
         isExplorer
         isPending={isPending}
         emptyElement={empty}

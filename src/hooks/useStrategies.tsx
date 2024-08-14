@@ -81,7 +81,8 @@ export const useStrategyFilter = (
   }, [search, strategies, filter, sort]);
 
   return {
-    strategies: filteredStrategies,
+    strategies,
+    filteredStrategies,
     isPending,
     search,
     setSearch,
@@ -122,6 +123,7 @@ export const useStrategiesWithFiat = (
 type StrategyCtx = ReturnType<typeof useStrategyFilter>;
 export const StrategyContext = createContext<StrategyCtx>({
   strategies: [],
+  filteredStrategies: [],
   isPending: true,
   search: '',
   setSearch: () => undefined,
