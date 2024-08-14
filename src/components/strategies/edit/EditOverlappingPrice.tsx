@@ -28,7 +28,6 @@ import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { InputRange } from '../common/InputRange';
-import { isOverlappingTouched } from '../overlapping/utils';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { InputLimit } from '../common/InputLimit';
@@ -119,15 +118,10 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   );
 
   const displayPrice = externalPrice || search.marketPrice;
-  const touched = isOverlappingTouched(strategy, search);
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
 
   // ERROR
-  const anchorError = (() => {
-    if (touched && !anchor) return 'Please select a token to proceed';
-  })();
-
   const budgetError = (() => {
     const value = anchor === 'buy' ? order0.budget : order1.budget;
     const budget = new SafeDecimal(value);
@@ -344,7 +338,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           quote={quote}
           anchor={anchor}
           setAnchor={setAnchor}
-          anchorError={anchorError}
           disableBuy={aboveMarket}
           disableSell={belowMarket}
         />

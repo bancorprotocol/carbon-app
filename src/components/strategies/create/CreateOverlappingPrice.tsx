@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import {
   getMaxBuyMin,
   getMinSellMax,
@@ -34,8 +34,6 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
   const search = useSearch({ strict: false }) as Search;
   const { anchor } = search;
 
-  const [touched, setTouched] = useState(false);
-
   const set = useCallback(
     <T extends keyof Search>(key: T, value: Search[T]) => {
       navigate({
@@ -49,11 +47,6 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
 
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
-
-  // ERROR
-  const anchorError = (() => {
-    if (touched && !anchor) return 'Please select a token to proceed';
-  })();
 
   // WARNING
   const priceWarning = (() => {
@@ -73,20 +66,11 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
     }
   }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
 
-  const setMin = (min: string) => {
-    setTouched(true);
-    set('min', min);
-  };
+  const setMin = (min: string) => set('min', min);
 
-  const setMax = (max: string) => {
-    setTouched(true);
-    set('max', max);
-  };
+  const setMax = (max: string) => set('max', max);
 
-  const setSpread = (value: string) => {
-    setTouched(true);
-    set('spread', value);
-  };
+  const setSpread = (value: string) => set('spread', value);
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
     set('budget', undefined);
@@ -181,7 +165,6 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           quote={quote}
           anchor={anchor}
           setAnchor={setAnchorValue}
-          anchorError={anchorError}
           disableBuy={aboveMarket}
           disableSell={belowMarket}
         />

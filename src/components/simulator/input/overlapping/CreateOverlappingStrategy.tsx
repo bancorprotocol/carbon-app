@@ -46,7 +46,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const { baseToken: base, quoteToken: quote, buy, sell } = state;
   const [touched, setTouched] = useState(false);
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
-  const [anchorError, setAnchorError] = useState('');
 
   const { buyMarginal, sellMarginal } = useMemo(() => {
     const min = state.buy.min;
@@ -190,7 +189,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
-    if (!anchor) setAnchorError('');
     resetBudgets(value);
     setAnchor(value);
   };
@@ -363,7 +361,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           quote={quote}
           anchor={anchor}
           setAnchor={setAnchorValue}
-          anchorError={anchorError}
           disableBuy={disabledAnchor === 'buy'}
           disableSell={disabledAnchor === 'sell'}
         />
