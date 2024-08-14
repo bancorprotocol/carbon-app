@@ -6,6 +6,8 @@ import { StrategiesActivityPage } from 'pages/strategies/activity';
 import { StrategiesOverviewPage } from 'pages/strategies/overview';
 import { StrategiesPortfolioPage } from 'pages/strategies/portfolio';
 import { StrategiesPortfolioTokenPage } from 'pages/strategies/portfolio/token';
+import { validString, validateSearchParams } from '../utils';
+import { MyStrategiesSearch } from 'hooks/useStrategies';
 
 export const myStrategyLayout = new Route({
   getParentRoute: () => rootRoute,
@@ -17,6 +19,9 @@ export const strategyOverviewPage = new Route({
   getParentRoute: () => myStrategyLayout,
   path: '/',
   component: StrategiesOverviewPage,
+  validateSearch: validateSearchParams<MyStrategiesSearch>({
+    search: validString,
+  }),
 });
 
 export const strategyPortfolioLayout = new Route({
