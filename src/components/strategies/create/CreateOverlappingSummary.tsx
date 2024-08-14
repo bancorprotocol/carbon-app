@@ -21,7 +21,8 @@ const warningText =
 
 export const CreateOverlappingSummary: FC<Props> = (props) => {
   const { base, quote, order0, order1, spread } = props;
-  const { getFiatAsString } = useFiatCurrency(quote);
+  const { getFiatAsString: getQuoteFiat } = useFiatCurrency(quote);
+  const { getFiatAsString: getBaseFiat } = useFiatCurrency(base);
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
 
@@ -64,7 +65,7 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
             {tokenAmount(order1.budget, base)}
           </p>
           <p className="break-all text-white/60">
-            {getFiatAsString(order1.budget)}
+            {getBaseFiat(order1.budget)}
           </p>
         </div>
         <div className="grid gap-4">
@@ -76,7 +77,7 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
             {tokenAmount(order0.budget, quote)}
           </p>
           <p className="break-all text-white/60">
-            {getFiatAsString(order0.budget)}
+            {getQuoteFiat(order0.budget)}
           </p>
         </div>
       </div>
