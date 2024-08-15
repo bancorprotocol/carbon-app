@@ -41,7 +41,12 @@ export const useStrategyFilter = (
   const setSearch = useCallback(
     (value: string) => {
       navigate({
-        search: (previous) => ({ ...previous, search: value }),
+        search: (currentSearch: MyStrategiesSearch) => {
+          if (value) return { ...currentSearch, search: value };
+          const searchCopy = structuredClone(currentSearch);
+          delete searchCopy.search;
+          return searchCopy;
+        },
         replace: true,
         resetScroll: false,
         params: (params) => params,
