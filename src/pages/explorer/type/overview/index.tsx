@@ -3,13 +3,22 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { NotFound } from 'components/common/NotFound';
 
 export const ExplorerTypeOverviewPage = () => {
-  const { filteredStrategies, isPending } = useStrategyCtx();
+  const { strategies, filteredStrategies, isPending } = useStrategyCtx();
+  const isFilterTooNarrow =
+    strategies.length > 0 && filteredStrategies.length === 0;
 
-  const empty = (
+  const empty = isFilterTooNarrow ? (
+    <NotFound
+      variant="error"
+      title="There are no results for your filter"
+      text="Please adjust your search and/or filters."
+      bordered
+    />
+  ) : (
     <NotFound
       variant="error"
       title="We couldn't find any strategies"
-      text="Try entering a different wallet address or choose a different token pair or reset your filters."
+      text="Try entering a different wallet address or choose a different token pair."
       bordered
     />
   );
