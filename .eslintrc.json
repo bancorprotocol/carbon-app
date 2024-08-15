@@ -9,14 +9,15 @@
     "sourceType": "module"
   },
   "ignorePatterns": ["**/debug/*", "**/pages/privacy/**", "**/pages/terms/**"],
-  "plugins": ["react", "react-hooks", "unused-imports"],
+  "plugins": ["react", "react-hooks", "unused-imports", "compat"],
   "extends": [
     "react-app",
     "prettier",
     "plugin:prettier/recommended",
     "plugin:jest-dom/recommended",
     "plugin:react/recommended",
-    "plugin:react/jsx-runtime"
+    "plugin:react/jsx-runtime",
+    "plugin:compat/recommended"
   ],
   "rules": {
    "react/prop-types": "off", // suppress prop-type errors
