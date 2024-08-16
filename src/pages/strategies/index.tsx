@@ -35,13 +35,13 @@ export const StrategiesPage = () => {
 
   const tabs: StrategyTab[] = [
     {
-      label: 'Overview',
+      label: 'Strategies',
       href: '/',
       icon: <IconOverview className="size-18" />,
       badge: query.data?.length,
     },
     {
-      label: 'Portfolio',
+      label: 'Distribution',
       href: '/strategies/portfolio',
       icon: <IconPieChart className="size-18" />,
     },

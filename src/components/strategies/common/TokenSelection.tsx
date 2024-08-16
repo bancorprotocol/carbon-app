@@ -80,7 +80,7 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
     <div className="col-span-1 grid w-full grid-cols-2 gap-20">
       <button
         role="menuitem"
-        className="bg-background-800 rounded-12 pe-15 flex items-center gap-8 py-5 ps-10"
+        className="bg-background-900 rounded-12 pe-15 flex items-center gap-8 py-5 ps-10"
         aria-haspopup="dialog"
         data-testid="select-base-token"
         onClick={() => openTokenListModal('base')}
@@ -91,7 +91,7 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
       </button>
       <button
         role="menuitem"
-        className="bg-background-800 absolute grid size-40 place-items-center place-self-center rounded-full border-4 border-black"
+        className="bg-background-900 absolute grid size-40 place-items-center place-self-center rounded-full border-4 border-black"
         onClick={swapTokens}
       >
         <ForwardArrowIcon className="size-14" />
@@ -99,7 +99,7 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
       <button
         role="menuitem"
         aria-haspopup="dialog"
-        className="bg-background-800 rounded-12 ps-15 flex items-center gap-8 py-5 pe-10"
+        className="bg-background-900 rounded-12 ps-15 flex items-center gap-8 py-5 pe-10"
         data-testid="select-quote-token"
         onClick={() => openTokenListModal('quote')}
       >

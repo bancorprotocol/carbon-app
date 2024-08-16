@@ -218,7 +218,7 @@ const tradePage = new Route({
   component: TradeRoot,
   beforeLoad: ({ location, search }) => {
     if (location.pathname.endsWith('trade')) {
-      throw redirect({ to: '/trade/overview/type', search });
+      throw redirect({ to: '/trade/activity/type', search });
     }
   },
 });

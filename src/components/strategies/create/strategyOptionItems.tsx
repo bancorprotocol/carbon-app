@@ -12,7 +12,6 @@ interface StrategyOptionItem {
   description: string;
   benefits: { summary: string; details: string }[];
   to: string;
-  isRecommended?: boolean;
   svg: ReactNode;
 }
 
@@ -40,7 +39,6 @@ export const strategyOptionItems = (): StrategyOptionItem[] => [
     ],
     svg: <IconBuyLimit className="size-28" />,
     to: '../disposable',
-    isRecommended: true,
     id: 'disposable',
   },
   {
@@ -67,7 +65,6 @@ export const strategyOptionItems = (): StrategyOptionItem[] => [
     ],
     svg: <IconTwoRanges className="size-28" />,
     to: '../recurring/sell',
-    isRecommended: true,
     id: 'recurring',
   },
   {

@@ -20,7 +20,7 @@ export const CreateStepper: FC<Props> = (props) => {
     if (!form.checkValidity()) return;
     if (!!form.querySelector('.loading-message')) return;
     if (!!form.querySelector('.error-message')) return;
-    navigate({ to, params: true, search: true, resetScroll: false });
+    navigate({ to, params: true, search: true });
   };
   return (
     <form

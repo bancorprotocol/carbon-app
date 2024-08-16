@@ -19,7 +19,7 @@ export const TradeExplorerTab: FC<Props> = ({ current }) => {
     {
       id: 'overview-tab',
       key: 'overview',
-      label: 'Overview',
+      label: 'Strategies',
       href: getHref('overview'),
       icon: <IconOverview className="size-18" />,
       badge: strategies?.length || 0,
@@ -27,7 +27,7 @@ export const TradeExplorerTab: FC<Props> = ({ current }) => {
     {
       id: 'portfolio-tab',
       key: 'portfolio',
-      label: 'Portfolio',
+      label: 'Distribution',
       href: getHref('portfolio'),
       icon: <IconPieChart className="size-18" />,
     },

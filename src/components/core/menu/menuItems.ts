@@ -10,13 +10,13 @@ export interface MenuItem {
 
 export const menuItems: MenuItem[] = [
   {
-    label: 'My Strategies',
+    label: 'Portfolio',
     href: '/',
     testid: 'my-strategies-page',
   },
   {
     label: 'Trade',
-    href: '/trade/overview/type',
+    href: '/trade/activity/type',
     testid: 'trade-page',
   },
   {

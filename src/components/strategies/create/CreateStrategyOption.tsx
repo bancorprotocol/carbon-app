@@ -1,7 +1,6 @@
 import { FC, KeyboardEvent, SyntheticEvent, useRef } from 'react';
 import { carbonEvents } from 'services/events';
 import { strategyOptionItems } from 'components/strategies/create/strategyOptionItems';
-import { ReactComponent as IconStar } from 'assets/icons/star-fill.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { cn } from 'utils/helpers';
@@ -18,7 +17,7 @@ interface Props {
 }
 
 export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
-  const navigate = useNavigate({ from: '/trade/overview/type' });
+  const navigate = useNavigate({ from: '/trade/activity/type' });
   const { type } = useSearch({ strict: false }) as TradeTypeSearch;
   const { isTradePairError } = useTradePairs();
 
@@ -73,16 +72,8 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
         role="tablist"
         className={`grid grid-cols-${items.length} gap-8`}
       >
-        {items.map(({ isRecommended, svg, id, label }) => (
+        {items.map(({ svg, id, label }) => (
           <li role="none" key={id} className="relative">
-            {isRecommended && (
-              <span
-                aria-labelledby={'legend-' + id}
-                className="bg-primary-dark text-primary absolute right-8 top-8 rounded p-4"
-              >
-                <IconStar aria-hidden className="size-10" />
-              </span>
-            )}
             <button
               id={'tab-' + id}
               role="tab"
@@ -103,7 +94,7 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
           </li>
         ))}
       </ul>
-      {items.map(({ id, title, description, benefits, isRecommended }) => (
+      {items.map(({ id, title, description, benefits }) => (
         <article
           role="tabpanel"
           id={'panel-' + id}
@@ -138,14 +129,6 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
               </p>
             </details>
           ))}
-          {isRecommended && (
-            <p id={'legend-' + id} className="text-12 flex gap-8 text-white/40">
-              <span className="bg-primary-dark text-primary rounded p-4">
-                <IconStar aria-hidden className="size-10" />
-              </span>
-              Carbon Signature Feature
-            </p>
-          )}
         </article>
       ))}
 
