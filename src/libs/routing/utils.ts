@@ -55,7 +55,7 @@ export const parseSearchWith = (parser: (str: string) => any) => {
           try {
             query[key] = parser(value);
           } catch (err) {
-            //
+            console.error(`Error parsing param for key ${key}: `, err);
           }
         }
       }
