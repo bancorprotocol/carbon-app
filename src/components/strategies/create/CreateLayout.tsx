@@ -6,10 +6,10 @@ import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { m } from 'libs/motion';
 import { Token } from 'libs/tokens';
 import { useRouter } from '@tanstack/react-router';
-import { ForwardArrow } from 'components/common/forwardArrow';
 import { carbonEvents } from 'services/events';
 import { StrategyGraph } from 'components/strategies/common/StrategyGraph';
 import { items, list } from 'components/strategies/common/variants';
+import { BackButton } from 'components/common/BackButton';
 
 interface Props {
   base?: Token;
@@ -44,12 +44,7 @@ export const CreateLayout: FC<Props> = (props) => {
           key="createStrategyHeader"
           className="flex items-center gap-16"
         >
-          <button
-            onClick={() => history.back()}
-            className="bg-background-800 grid size-40 place-items-center rounded-full"
-          >
-            <ForwardArrow className="size-18 rotate-180" />
-          </button>
+          <BackButton onClick={() => history.back()} />
           <h1 className="text-24 font-weight-500 flex-1">Set Prices</h1>
           {!showGraph && (
             <button
@@ -58,7 +53,7 @@ export const CreateLayout: FC<Props> = (props) => {
                 setShowGraph(true);
               }}
               data-testid="open-chart"
-              className="bg-background-800 grid size-40 place-items-center rounded-full"
+              className="bg-background-800 hover:border-background-700 border-background-800 grid size-40 place-items-center rounded-full border-2"
             >
               <IconCandles className="size-18" />
             </button>

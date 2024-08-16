@@ -114,7 +114,7 @@ export const CreateStrategyTokenSelection: FC<Props> = ({ base, quote }) => {
         {!!base && (
           <>
             <button
-              className="border-background-900 relative z-10 mx-auto grid size-40 place-items-center rounded-full border-[5px] bg-black"
+              className="border-background-900 hover:bg-background-800 relative z-10 mx-auto grid size-40 place-items-center rounded-full border-[5px] bg-black"
               onClick={swapTokens}
               disabled={!base || !quote}
             >

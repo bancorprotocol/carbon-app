@@ -1,10 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useCarbonInit } from 'hooks/useCarbonInit';
 import { Action, TradeActionBNStr } from 'libs/sdk';
-import { MatchActionBNStr } from '@bancor/carbon-sdk';
+import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
+import { useWagmi } from 'libs/wagmi';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionBNStr[];
@@ -21,6 +22,48 @@ type Props = {
   input: string;
   isTradeBySource: boolean;
   enabled?: boolean;
+};
+
+export interface TradeParams {
+  sourceAddress: string;
+  targetAddress: string;
+  tradeActions: TradeActionBNStr[];
+  isTradeBySource: boolean;
+  sourceInput: string;
+  targetInput: string;
+  deadline: string;
+  calcDeadline: (value: string) => string;
+  calcMaxInput: (amount: string) => string;
+  calcMinReturn: (amount: string) => string;
+}
+
+export const useTradeQuery = () => {
+  const { signer } = useWagmi();
+
+  return useMutation({
+    mutationFn: async (params: TradeParams) => {
+      const { calcDeadline, calcMinReturn, calcMaxInput } = params;
+      let unsignedTx: PopulatedTransaction;
+      if (params.isTradeBySource) {
+        unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
+          params.sourceAddress,
+          params.targetAddress,
+          params.tradeActions,
+          calcDeadline(params.deadline),
+          calcMinReturn(params.targetInput)
+        );
+      } else {
+        unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
+          params.sourceAddress,
+          params.targetAddress,
+          params.tradeActions,
+          calcDeadline(params.deadline),
+          calcMaxInput(params.sourceInput)
+        );
+      }
+      return signer!.sendTransaction(unsignedTx);
+    },
+  });
 };
 
 export const useGetTradeData = ({

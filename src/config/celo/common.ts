@@ -33,7 +33,7 @@ export const commonConfig: AppConfig = {
       url: 'https://celoscan.io',
     },
     rpc: {
-      url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://forno.celo.org',
+      url: 'https://forno.celo.org',
     },
     defaultLimitedApproval: true,
     gasToken: {

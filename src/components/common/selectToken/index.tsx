@@ -30,7 +30,7 @@ export const SelectTokenButton: FC<Props> = ({
       type="button"
       data-testid={testId}
       className={cn(
-        'rounded-12 flex items-center gap-8 p-10',
+        'rounded-12 hover:outline-background-400 flex items-center gap-8 p-10 hover:outline hover:outline-1',
         symbol ? 'bg-black text-white' : 'bg-primary text-black',
         className
       )}
