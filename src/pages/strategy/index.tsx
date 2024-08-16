@@ -1,7 +1,6 @@
 import { useParams, useRouter } from '@tanstack/react-router';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { Page } from 'components/common/page';
-import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { cn } from 'utils/helpers';
 import { useGetStrategy } from 'libs/queries';
@@ -19,6 +18,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
+import { BackButton } from 'components/common/BackButton';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -53,12 +53,7 @@ export const StrategyPage = () => {
   return (
     <Page hideTitle={true} className="gap-20">
       <header className="flex items-center gap-8">
-        <button
-          onClick={() => history.back()}
-          className="bg-background-900 hover:bg-background-800 rounded-full p-12"
-        >
-          <IconChevronLeft className="size-16" />
-        </button>
+        <BackButton onClick={() => history.back()} />
         <TokensOverlap tokens={[base, quote]} size={40} />
         <div className="flex-1 flex-col gap-8">
           <h1 className="text-18 font-weight-500 flex gap-8">

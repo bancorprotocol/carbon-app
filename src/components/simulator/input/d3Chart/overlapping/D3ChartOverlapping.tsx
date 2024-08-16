@@ -50,6 +50,21 @@ export const D3ChartOverlapping = (props: Props) => {
   const selectorHandleSellMax = getHandleSelector('sell', 'line1');
   const selectorHandleSellMin = getHandleSelector('sell', 'line2');
 
+  const yPos = useMemo(
+    () => ({
+      buy: {
+        min: yScale(Number(prices.buy.min)),
+        max: yScale(Number(prices.buy.max)),
+      },
+      sell: {
+        min: yScale(Number(prices.sell.min)),
+        max: yScale(Number(prices.sell.max)),
+      },
+      marketPrice: marketPrice ? yScale(marketPrice) : 0,
+    }),
+    [prices, yScale, marketPrice]
+  );
+
   const calcPrices = useCallback(
     (buyMin: string, sellMax: string) => {
       return calculateOverlappingPrices(
@@ -61,25 +76,6 @@ export const D3ChartOverlapping = (props: Props) => {
     },
     [marketPrice, spread]
   );
-
-  const yPos = useMemo(() => {
-    const { buyPriceHigh, sellPriceLow } = calcPrices(
-      formatNumber(prices.buy.min),
-      formatNumber(prices.sell.max)
-    );
-
-    return {
-      buy: {
-        min: yScale(Number(prices.buy.min)),
-        max: yScale(Number(buyPriceHigh)),
-      },
-      sell: {
-        min: yScale(Number(sellPriceLow)),
-        max: yScale(Number(prices.sell.max)),
-      },
-      marketPrice: marketPrice ? yScale(marketPrice) : 0,
-    };
-  }, [prices, yScale, marketPrice, calcPrices]);
 
   const onDragBuy = useCallback(
     (y: number) => {
