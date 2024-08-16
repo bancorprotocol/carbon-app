@@ -548,7 +548,7 @@ export const OverlappingGraph: FC<Props> = (props) => {
         className={cn(
           styles.graph,
           dragging,
-          'aspect-[400/265] w-full rounded bg-black'
+          'aspect-[400/265] max-h-[550px] w-full rounded bg-black'
         )}
         viewBox={`${left} 0 ${width} ${height}`}
         onWheel={onWheel}

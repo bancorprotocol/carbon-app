@@ -1,7 +1,12 @@
-import { TradingviewChart } from 'components/tradingviewChart';
 import { useTradeCtx } from './TradeContext';
+import { FC, ReactNode } from 'react';
+import { TradingviewChart } from 'components/tradingviewChart';
 
-export const TradeChartSection = () => {
+interface Props {
+  children?: ReactNode;
+}
+
+export const TradeOverlappingChart: FC<Props> = (props) => {
   const { base, quote } = useTradeCtx();
   return (
     <section
@@ -12,6 +17,7 @@ export const TradeChartSection = () => {
         <h2 id="price-chart-title" className="text-18">
           Price Chart
         </h2>
+        {props.children}
       </header>
       <TradingviewChart base={base} quote={quote} />
     </section>

@@ -161,6 +161,7 @@ const getTradeOverlappingRoute = <P extends AnyRoute, V>(
       spread: validNumber,
       budget: validNumber,
       anchor: validLiteral(['buy', 'sell']),
+      chartType: validLiteral(['history', 'range']),
     }),
   });
   const price = new Route({

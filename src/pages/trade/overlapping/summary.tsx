@@ -7,8 +7,8 @@ import {
   getOverlappingOrders,
   initSpread,
 } from 'components/strategies/create/utils';
-import { TradeChartSection } from 'components/trade/TradeChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
+import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
 import { useEffect } from 'react';
@@ -33,7 +33,7 @@ export const TradeOverlappingSummary = () => {
     <>
       <section
         aria-labelledby="trade-form-title"
-        className="bg-background-800 flex flex-col gap-20 overflow-auto rounded p-20"
+        className="bg-background-900 flex flex-col gap-20 overflow-auto rounded p-20"
       >
         <CreateForm
           type="overlapping"
@@ -65,7 +65,7 @@ export const TradeOverlappingSummary = () => {
           />
         </CreateForm>
       </section>
-      <TradeChartSection />
+      <TradeOverlappingChart />
     </>
   );
 };

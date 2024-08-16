@@ -1,6 +1,5 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { ForwardArrow } from 'components/common/forwardArrow';
-import { TradeChartSection } from 'components/trade/TradeChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
@@ -8,8 +7,9 @@ import { cn } from 'utils/helpers';
 import { CreateStepper } from 'components/strategies/create/CreateStepper';
 import { CreateOverlappingBudget } from 'components/strategies/create/CreateOverlappingBudget';
 import { getOverlappingOrders } from 'components/strategies/create/utils';
-import style from 'components/strategies/common/stepper.module.css';
 import { useEffect } from 'react';
+import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
+import style from 'components/strategies/common/stepper.module.css';
 
 const url = '/trade/overview/overlapping/budget';
 export const TradeOverlappingBudget = () => {
@@ -34,7 +34,7 @@ export const TradeOverlappingBudget = () => {
         aria-labelledby="trade-form-title"
         className={cn(
           style.stepper,
-          'bg-background-800 flex flex-col gap-20 overflow-auto rounded p-20'
+          'bg-background-900 flex flex-col gap-20 overflow-auto rounded p-20'
         )}
       >
         <header className="flex items-center gap-8">
@@ -66,7 +66,7 @@ export const TradeOverlappingBudget = () => {
           />
         </CreateStepper>
       </section>
-      <TradeChartSection />
+      <TradeOverlappingChart />
     </>
   );
 };

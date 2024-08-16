@@ -47,7 +47,8 @@ describe('Create overlapping page', () => {
     expect(router.state.location.search).toStrictEqual(search);
 
     const overlappingDriver = new CreateOverlappingDriver(screen);
-    const form = overlappingDriver.getOverlappingInput();
+    const form = overlappingDriver.getOverlappingForm();
+    await overlappingDriver.waitForLoading(form.element);
 
     // Check price range input and market price indication
     const marketPriceIndications = form.marketPriceIndicators();
@@ -118,7 +119,7 @@ describe('Create overlapping page', () => {
     expect(router.state.location.search).toStrictEqual(search);
 
     const overlappingDriver = new CreateOverlappingDriver(screen);
-    const form = overlappingDriver.getOverlappingInput();
+    const form = overlappingDriver.getOverlappingForm();
 
     // Check price range input and market price indication
     expect(form.min()).toHaveValue(search.min);
@@ -143,7 +144,7 @@ describe('Create overlapping page', () => {
     });
 
     const overlappingDriver = new CreateOverlappingDriver(screen);
-    const form = overlappingDriver.getOverlappingInput();
+    const form = overlappingDriver.getOverlappingForm();
 
     expect(form.spread.default()).toBeChecked();
   });
@@ -176,7 +177,7 @@ describe('Create overlapping page', () => {
     });
 
     const overlappingDriver = new CreateOverlappingDriver(screen);
-    const form = overlappingDriver.getOverlappingInput();
+    const form = overlappingDriver.getOverlappingForm();
 
     // Check price range input and market price indication
     const marketPriceIndications = form.marketPriceIndicators();
@@ -214,7 +215,7 @@ describe('Create overlapping page', () => {
     });
 
     const overlappingDriver = new CreateOverlappingDriver(screen);
-    const form = overlappingDriver.getOverlappingInput();
+    const form = overlappingDriver.getOverlappingForm();
 
     // Check price range input and market price indication
     const marketPriceIndications = form.marketPriceIndicators();
@@ -241,7 +242,7 @@ describe('Create overlapping page', () => {
     });
 
     const overlappingDriver = new CreateOverlappingDriver(screen);
-    const form = overlappingDriver.getOverlappingInput();
+    const form = overlappingDriver.getOverlappingForm();
 
     // Check price range input and market price indication
     const marketPriceIndications = form.marketPriceIndicators();
@@ -270,7 +271,7 @@ describe('Create overlapping page', () => {
     });
 
     const overlappingDriver = new CreateOverlappingDriver(screen);
-    const form = overlappingDriver.getOverlappingInput();
+    const form = overlappingDriver.getOverlappingForm();
 
     // Check price range input and market price indication
     expect(form.min()).toHaveValue('3000');

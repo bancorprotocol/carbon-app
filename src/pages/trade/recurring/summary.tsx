@@ -49,7 +49,7 @@ export const TradeRecurringSummary = () => {
     <>
       <section
         aria-labelledby="trade-form-title"
-        className="bg-background-800 flex flex-col gap-20 overflow-auto rounded p-20"
+        className="bg-background-900 flex flex-col gap-20 overflow-auto rounded p-20"
       >
         <CreateForm
           type="recurring"

@@ -63,6 +63,8 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
     }
   };
 
+  const noTrade = selectedId === 'market' && isTradePairError;
+
   return (
     <>
       <ul
@@ -147,7 +149,7 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
         </article>
       ))}
 
-      {selectedId === 'market' && isTradePairError && <NoTrade />}
+      {noTrade && <NoTrade />}
 
       <Link
         to={selectedItem.to}
@@ -157,7 +159,7 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
         className={cn(
           'mt-auto shrink-0',
           buttonStyles({ variant: 'success', fullWidth: true }),
-          selectedItem
+          selectedItem && !noTrade
             ? ''
             : 'pointer-events-none cursor-not-allowed opacity-40'
         )}
@@ -168,6 +170,7 @@ export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
             strategyOption: selectedItem.id,
           });
         }}
+        disabled={noTrade}
         data-testid="next-step"
       >
         Next Step

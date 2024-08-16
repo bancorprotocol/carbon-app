@@ -1,4 +1,8 @@
-import { Screen, within } from '@testing-library/dom';
+import {
+  Screen,
+  waitForElementToBeRemoved,
+  within,
+} from '@testing-library/dom';
 
 export class CreateOverlappingDriver {
   constructor(private screen: Screen) {}
@@ -12,12 +16,9 @@ export class CreateOverlappingDriver {
   }
 
   getOverlappingForm() {
-    return this.screen.getByTestId('create-strategy-step');
-  }
-
-  getOverlappingInput() {
-    const form = this.getOverlappingForm();
+    const form = this.screen.getByTestId('create-strategy-step');
     return {
+      element: form,
       min: () => within(form).getByTestId('input-min'),
       max: () => within(form).getByTestId('input-max'),
       spread: {
@@ -49,5 +50,13 @@ export class CreateOverlappingDriver {
       confirm: () =>
         within(this.getUserPriceForm()).getByTestId('set-overlapping-price'),
     };
+  }
+
+  waitForLoading(parent: HTMLElement) {
+    const loadings = parent.querySelectorAll('.loading-message');
+    const waitForAll = Array.from(loadings).map((loading) => {
+      return waitForElementToBeRemoved(() => loading);
+    });
+    return Promise.all(waitForAll);
   }
 }

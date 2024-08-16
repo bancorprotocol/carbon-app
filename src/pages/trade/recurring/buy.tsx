@@ -41,7 +41,7 @@ export const TradeRecurringBuy = () => {
         aria-labelledby="trade-form-title"
         className={cn(
           style.stepper,
-          'bg-background-800 flex flex-col gap-20 overflow-auto rounded p-20'
+          'bg-background-900 flex flex-col gap-20 overflow-auto rounded p-20'
         )}
       >
         <header className="flex items-center gap-8">
