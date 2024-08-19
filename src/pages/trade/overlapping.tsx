@@ -44,12 +44,9 @@ export const TradeOverlapping = () => {
   if (!marketPrice) {
     return (
       <TradeLayout>
-        <header className="flex items-center justify-between">
-          <h2>Concentrated Liquidity Trade</h2>
-        </header>
         <article
           key="marketPrice"
-          className="rounded-10 bg-background-800 flex flex-col md:w-[440px]"
+          className="rounded-10 bg-background-900 flex flex-col md:w-[440px]"
         >
           <OverlappingInitMarketPrice
             base={base}
@@ -65,9 +62,6 @@ export const TradeOverlapping = () => {
   return (
     <>
       <TradeLayout>
-        <header className="flex items-center justify-between">
-          <h2>Concentrated Liquidity Trade</h2>
-        </header>
         <CreateForm
           type="overlapping"
           base={base}

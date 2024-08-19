@@ -50,9 +50,6 @@ export const TradeRecurring = () => {
   return (
     <>
       <TradeLayout>
-        <header className="flex items-center justify-between">
-          <h2>Recurring Trade</h2>
-        </header>
         <CreateForm
           type="recurring"
           base={base!}

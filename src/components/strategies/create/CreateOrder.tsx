@@ -11,6 +11,7 @@ import { InputBudget } from 'components/strategies/common/InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { cn } from 'utils/helpers';
+import { LogoImager } from 'components/common/imager/Imager';
 
 interface Props {
   base: Token;
@@ -40,6 +41,7 @@ export const CreateOrder: FC<Props> = ({
   const titleId = useId();
 
   // PRICES
+  const tooltipText = `This section will define the order details in which you are willing to ${type} ${base.symbol} at.`;
   const inputTitle = (
     <>
       <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
@@ -107,7 +109,15 @@ export const CreateOrder: FC<Props> = ({
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {settings}
-      <OrderHeader {...headerProps} />
+      <OrderHeader {...headerProps}>
+        <h2 className="text-18 flex items-center gap-8" id={titleId}>
+          <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
+            <span>{buy ? 'Buy Low' : 'Sell High'}</span>
+          </Tooltip>
+          <LogoImager alt="Token" src={base.logoURI} className="size-18" />
+          <span>{base.symbol}</span>
+        </h2>
+      </OrderHeader>
       <fieldset className="flex flex-col gap-8">
         <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
           {inputTitle}
