@@ -40,20 +40,17 @@ export const TradeDisposable = () => {
   return (
     <>
       <TradeLayout>
-        <header className="flex items-center justify-between">
-          <h2>Trade</h2>
-        </header>
         <CreateForm
           type="disposable"
-          base={base!}
-          quote={quote!}
+          base={base}
+          quote={quote}
           order0={sell ? emptyOrder() : order}
           order1={sell ? order : emptyOrder()}
         >
           <CreateOrder
             type="disposable"
-            base={base!}
-            quote={quote!}
+            base={base}
+            quote={quote}
             buy={!sell}
             order={order}
             setOrder={setOrder}
