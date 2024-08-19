@@ -310,7 +310,10 @@ interface ManageButtonProps extends MenuButtonProps {
 
 export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
   function ManageButton(props, ref) {
-    const style = cn(buttonStyles({ variant: 'white' }), 'max-md:p-8 gap-8');
+    const style = cn(
+      buttonStyles({ variant: 'secondary' }),
+      'max-md:p-8 gap-8'
+    );
     const { aboveBreakpoint } = useBreakpoints();
     return (
       <button {...props} className={style} ref={ref}>
