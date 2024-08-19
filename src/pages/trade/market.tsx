@@ -1,19 +1,20 @@
-import { Link, useNavigate, useSearch } from '@tanstack/react-router';
-import { ForwardArrow } from 'components/common/forwardArrow';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTradeSettings';
 import { TradeChartSection } from 'components/trade/TradeChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
+import { TradeLayout } from 'components/trade/TradeLayout';
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategyDirection } from 'libs/routing';
 import { TradeMarketSearch } from 'libs/routing/routes/trade';
 
+const url = '/trade/market';
 export const TradeMarket = () => {
   const { base, quote } = useTradeCtx();
   const search = useSearch({ strict: false }) as TradeMarketSearch;
-  const navigate = useNavigate({ from: '/trade/activity/market' });
+  const navigate = useNavigate({ from: url });
   const sell = search.direction !== 'buy';
   const balanceQuery = useGetTokenBalance(sell ? base : quote);
   const setDirection = (direction: StrategyDirection) => {
@@ -30,21 +31,9 @@ export const TradeMarket = () => {
 
   return (
     <>
-      <section
-        aria-labelledby="trade-form-title"
-        className="bg-background-900 flex flex-col gap-20 overflow-auto rounded p-20"
-      >
-        <header className="flex items-center gap-8">
-          <Link
-            from="/trade/activity/market"
-            to=".."
-            className="grid size-28 place-items-center rounded-full bg-black"
-          >
-            <ForwardArrow className="size-14 rotate-180" />
-          </Link>
-          <h2 id="trade-form-title" className="text-18 flex-1">
-            Spot Trade
-          </h2>
+      <TradeLayout>
+        <header className="flex items-center justify-between">
+          <h2>Spot Trade</h2>
           <MainMenuTradeSettings base={base} quote={quote} />
         </header>
         <TabsMenu>
@@ -70,7 +59,7 @@ export const TradeMarket = () => {
           buy={!sell}
           data-testid="buy-form"
         />
-      </section>
+      </TradeLayout>
       <TradeChartSection />
     </>
   );

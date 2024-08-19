@@ -1,5 +1,5 @@
-import { Token } from 'libs/tokens';
 import { FC, ReactNode, createContext, useContext } from 'react';
+import { Token } from 'libs/tokens';
 
 const defaultToken = () => ({
   address: '',
@@ -26,7 +26,7 @@ export const TradeProvider: FC<Props> = ({ base, quote, children }) => {
 };
 
 export const useTradeCtx = () => {
-  const ctx = useContext(TradeContext) as any;
+  const ctx = useContext(TradeContext);
   if (!ctx) {
     throw new Error('useTradeCtx must be used within a TradeProvider');
   }

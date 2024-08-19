@@ -1,5 +1,4 @@
 import { useNavigate } from 'libs/routing';
-import { FC } from 'react';
 import { carbonEvents } from 'services/events';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
@@ -7,13 +6,10 @@ import { ReactComponent as ForwardArrowIcon } from 'assets/icons/arrow.svg';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
+import { useTradeCtx } from 'components/trade/TradeContext';
 
-interface Props {
-  base: Token;
-  quote: Token;
-}
-
-export const TokenSelection: FC<Props> = ({ base, quote }) => {
+export const TokenSelection = () => {
+  const { base, quote } = useTradeCtx();
   const navigate = useNavigate({ from: '/trade' });
   const { openModal } = useModal();
 
@@ -77,10 +73,10 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
   };
 
   return (
-    <div className="col-span-1 grid w-full grid-cols-2 gap-20">
+    <header role="menu" className="col-span-1 grid w-full grid-cols-2 gap-20">
       <button
         role="menuitem"
-        className="bg-background-900 rounded-12 pe-15 flex items-center gap-8 py-5 ps-10"
+        className="rounded-12 pe-15 flex items-center gap-8 bg-black py-5 ps-10"
         aria-haspopup="dialog"
         data-testid="select-base-token"
         onClick={() => openTokenListModal('base')}
@@ -91,7 +87,7 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
       </button>
       <button
         role="menuitem"
-        className="bg-background-900 absolute grid size-40 place-items-center place-self-center rounded-full border-4 border-black"
+        className="border-background-900 absolute grid size-40 place-items-center place-self-center rounded-full border-4 bg-black"
         onClick={swapTokens}
       >
         <ForwardArrowIcon className="size-14" />
@@ -99,7 +95,7 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
       <button
         role="menuitem"
         aria-haspopup="dialog"
-        className="bg-background-900 rounded-12 ps-15 flex items-center gap-8 py-5 pe-10"
+        className="rounded-12 ps-15 flex items-center gap-8 bg-black py-5 pe-10"
         data-testid="select-quote-token"
         onClick={() => openTokenListModal('quote')}
       >
@@ -107,6 +103,6 @@ export const TokenSelection: FC<Props> = ({ base, quote }) => {
         {quote.symbol}
         <ChevronIcon className="ml-auto size-16" />
       </button>
-    </div>
+    </header>
   );
 };

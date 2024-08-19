@@ -1,5 +1,4 @@
-import { Link, useSearch } from '@tanstack/react-router';
-import { ForwardArrow } from 'components/common/forwardArrow';
+import { useSearch } from '@tanstack/react-router';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { OrderBlock } from 'components/strategies/common/types';
@@ -12,13 +11,13 @@ import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { TradeChartSection } from 'components/trade/TradeChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
+import { TradeLayout } from 'components/trade/TradeLayout';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { TradeDisposableSearch } from 'libs/routing/routes/trade';
 
-const url = '/trade/activity/disposable';
+const url = '/trade/disposable';
 export const TradeDisposable = () => {
   const { base, quote } = useTradeCtx();
-  const search = useSearch({ strict: false }) as TradeDisposableSearch;
+  const search = useSearch({ from: url });
   const { marketPrice } = useMarketPrice({ base, quote });
   const { setOrder, setDirection } = useSetDisposableOrder(url);
 
@@ -40,21 +39,9 @@ export const TradeDisposable = () => {
   });
   return (
     <>
-      <section
-        aria-labelledby="trade-form-title"
-        className="bg-background-900 flex flex-col gap-20 overflow-auto rounded p-20"
-      >
-        <header className="flex items-center gap-8">
-          <Link
-            from="/trade/activity/disposable"
-            to=".."
-            className="grid size-28 place-items-center rounded-full bg-black"
-          >
-            <ForwardArrow className="size-14 rotate-180" />
-          </Link>
-          <h2 id="trade-form-title" className="text-18">
-            Trade
-          </h2>
+      <TradeLayout>
+        <header className="flex items-center justify-between">
+          <h2>Trade</h2>
         </header>
         <CreateForm
           type="disposable"
@@ -91,7 +78,7 @@ export const TradeDisposable = () => {
             }
           />
         </CreateForm>
-      </section>
+      </TradeLayout>
       <TradeChartSection />
     </>
   );

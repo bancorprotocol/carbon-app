@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const CreateStrategyOption: FC<Props> = ({ base, quote }) => {
-  const navigate = useNavigate({ from: '/trade/activity/type' });
+  const navigate = useNavigate({ from: '/trade/market' });
   const { type } = useSearch({ strict: false }) as TradeTypeSearch;
   const { isTradePairError } = useTradePairs();
 

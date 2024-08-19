@@ -16,7 +16,9 @@ interface Props extends TippyProps {
   };
   disabled?: boolean;
   damping?: number;
+  delay?: number;
   stiffness?: number;
+  hideOnClick?: boolean;
 }
 
 export const Tooltip: FC<Props> = ({
@@ -28,6 +30,8 @@ export const Tooltip: FC<Props> = ({
   disabled = false,
   damping = 15,
   stiffness = 300,
+  delay = 500,
+  hideOnClick = false,
   children = (
     <span>
       <IconTooltip className={cn('size-18', iconClassName)} />
@@ -73,8 +77,8 @@ export const Tooltip: FC<Props> = ({
   return (
     <Tippy
       appendTo={() => document.body}
-      hideOnClick={false}
-      delay={500}
+      hideOnClick={hideOnClick}
+      delay={delay}
       render={(attrs) => (
         <m.div
           className={cn(
