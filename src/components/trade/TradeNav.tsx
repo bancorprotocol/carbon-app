@@ -72,25 +72,28 @@ export const TradeNav = () => {
   const quote = search.quote.address;
 
   return (
-    <nav aria-label="type of strategy" className="grid grid-cols-2 gap-8">
-      {links.map((link) => (
-        <Tooltip
-          key={link.id}
-          hideOnClick
-          element={<LinkTooltip link={link} />}
-        >
-          <Link
-            id={link.id}
-            to={link.to}
-            search={{ base, quote }}
-            aria-current={current === link.id ? 'page' : 'false'}
-            className="rounded-8 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
+    <article className="bg-background-900 grid gap-20 rounded p-20">
+      <h2 className="text-18">Token Strategy</h2>
+      <nav aria-label="type of strategy" className="grid grid-cols-2 gap-8">
+        {links.map((link) => (
+          <Tooltip
+            key={link.id}
+            hideOnClick
+            element={<LinkTooltip link={link} />}
           >
-            {link.svg}
-            {link.label}
-          </Link>
-        </Tooltip>
-      ))}
-    </nav>
+            <Link
+              id={link.id}
+              to={link.to}
+              search={{ base, quote }}
+              aria-current={current === link.id ? 'page' : 'false'}
+              className="rounded-8 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
+            >
+              {link.svg}
+              {link.label}
+            </Link>
+          </Tooltip>
+        ))}
+      </nav>
+    </article>
   );
 };

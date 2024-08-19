@@ -38,9 +38,7 @@ export const TradeOverlapping = () => {
   };
 
   if (!marketPrice && isPending) {
-    return (
-      <CarbonLogoLoading className="col-span-2 h-[80px] place-self-center" />
-    );
+    return <CarbonLogoLoading className="h-[80px] place-self-center" />;
   }
 
   if (!marketPrice) {

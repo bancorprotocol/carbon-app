@@ -27,7 +27,7 @@ interface Props {
 }
 type Search = TradeOverlappingSearch;
 
-const url = '/trade/activity/overlapping/price';
+const url = '/trade/overlapping';
 export const CreateOverlappingPrice: FC<Props> = (props) => {
   const { base, quote, order0, order1, marketPrice, spread } = props;
   const navigate = useNavigate({ from: url });
@@ -103,7 +103,10 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
 
   return (
     <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
-      <article key="price-range" className="grid gap-16">
+      <article
+        key="price-range"
+        className="bg-background-900 grid gap-16 rounded p-20"
+      >
         <header className="flex items-center gap-8">
           <h3 className="text-16 font-weight-500 flex-1">
             Set Price Range&nbsp;
@@ -130,7 +133,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           required
         />
       </article>
-      <article className="grid gap-10">
+      <article className="bg-background-900 grid gap-16 rounded p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="text-16 font-weight-500 flex-1">Set Fee Tier</h3>
           <Tooltip
@@ -147,7 +150,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           setSpread={setSpread}
         />
       </article>
-      <article className="grid gap-16">
+      <article className="bg-background-900 grid gap-16 rounded p-20">
         <hgroup>
           <h3 className="text-16 font-weight-500 flex items-center justify-between">
             Budget

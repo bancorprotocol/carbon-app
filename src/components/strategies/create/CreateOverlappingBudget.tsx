@@ -28,7 +28,7 @@ interface Props {
 
 type Search = TradeOverlappingSearch;
 
-const url = '/trade/activity/overlapping/budget';
+const url = '/trade/overlapping';
 export const CreateOverlappingBudget: FC<Props> = (props) => {
   const { base, quote, order0, order1, marketPrice } = props;
   const navigate = useNavigate({ from: url });
@@ -87,7 +87,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
 
   return (
     <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
-      <article className="grid gap-16">
+      <article className="bg-background-900 grid gap-16 rounded p-20">
         <OverlappingBudget
           base={base}
           quote={quote}
@@ -98,7 +98,10 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
           error={budgetError}
         />
       </article>
-      <article id="overlapping-distribution" className="grid gap-16">
+      <article
+        id="overlapping-distribution"
+        className="bg-background-900 grid gap-16 rounded p-20"
+      >
         <hgroup>
           <h3 className="text-16 font-weight-500 flex items-center gap-8">
             <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">

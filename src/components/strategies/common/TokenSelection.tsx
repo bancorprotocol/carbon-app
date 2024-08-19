@@ -73,36 +73,39 @@ export const TokenSelection = () => {
   };
 
   return (
-    <header role="menu" className="col-span-1 grid w-full grid-cols-2 gap-20">
-      <button
-        role="menuitem"
-        className="rounded-12 pe-15 flex items-center gap-8 bg-black py-5 ps-10"
-        aria-haspopup="dialog"
-        data-testid="select-base-token"
-        onClick={() => openTokenListModal('base')}
-      >
-        <TokenLogo token={base} size={30} />
-        {base.symbol}
-        <ChevronIcon className="ml-auto size-16" />
-      </button>
-      <button
-        role="menuitem"
-        className="border-background-900 absolute grid size-40 place-items-center place-self-center rounded-full border-4 bg-black"
-        onClick={swapTokens}
-      >
-        <ForwardArrowIcon className="size-14" />
-      </button>
-      <button
-        role="menuitem"
-        aria-haspopup="dialog"
-        className="rounded-12 ps-15 flex items-center gap-8 bg-black py-5 pe-10"
-        data-testid="select-quote-token"
-        onClick={() => openTokenListModal('quote')}
-      >
-        <TokenLogo token={quote} size={30} />
-        {quote.symbol}
-        <ChevronIcon className="ml-auto size-16" />
-      </button>
-    </header>
+    <article className="bg-background-900 grid gap-20 rounded p-20">
+      <h2 className="text-18">Token Pair</h2>
+      <div role="menu" className=" grid grid-cols-2 gap-20">
+        <button
+          role="menuitem"
+          className="rounded-12 pe-15 flex items-center gap-8 bg-black py-5 ps-10"
+          aria-haspopup="dialog"
+          data-testid="select-base-token"
+          onClick={() => openTokenListModal('base')}
+        >
+          <TokenLogo token={base} size={30} />
+          {base.symbol}
+          <ChevronIcon className="ml-auto size-16" />
+        </button>
+        <button
+          role="menuitem"
+          className="border-background-900 absolute grid size-40 place-items-center place-self-center rounded-full border-4 bg-black"
+          onClick={swapTokens}
+        >
+          <ForwardArrowIcon className="size-14" />
+        </button>
+        <button
+          role="menuitem"
+          aria-haspopup="dialog"
+          className="rounded-12 ps-15 flex items-center gap-8 bg-black py-5 pe-10"
+          data-testid="select-quote-token"
+          onClick={() => openTokenListModal('quote')}
+        >
+          <TokenLogo token={quote} size={30} />
+          {quote.symbol}
+          <ChevronIcon className="ml-auto size-16" />
+        </button>
+      </div>
+    </article>
   );
 };

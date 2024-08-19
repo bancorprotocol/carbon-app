@@ -10,6 +10,7 @@ import { OrderBlock } from 'components/strategies/common/types';
 import { InputBudget } from 'components/strategies/common/InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
+import { cn } from 'utils/helpers';
 
 interface Props {
   base: Token;
@@ -93,11 +94,16 @@ export const CreateOrder: FC<Props> = ({
   };
 
   const headerProps = { titleId, order, base, buy, setSettings };
-
+  const border = buy
+    ? 'border-buy/50 focus-within:border-buy'
+    : 'border-sell/50 focus-within:border-sell';
   return (
     <article
       aria-labelledby={titleId}
-      className="flex flex-col gap-20"
+      className={cn(
+        'bg-background-900 flex flex-col gap-20 rounded border-s p-20',
+        border
+      )}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {settings}

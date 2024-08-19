@@ -8,7 +8,7 @@ interface Props {
 
 export const TradeLayout: FC<Props> = ({ children }) => {
   return (
-    <section className="bg-background-900 grid gap-20 rounded p-20">
+    <section className="grid gap-20">
       <TokenSelection />
       <TradeNav />
       {children}
