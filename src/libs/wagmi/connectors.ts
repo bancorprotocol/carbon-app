@@ -9,7 +9,7 @@ import {
   walletConnect,
   safe,
 } from 'wagmi/connectors';
-import config from 'config';
+import config, { networks } from 'config';
 import {
   type SelectableConnectionName,
   providerMapRdnsToName,
@@ -111,6 +111,19 @@ const getDefaultConnector = (connectorType: SelectableConnectionName) => {
 
 const isIframe = () =>
   typeof window !== 'undefined' && window?.parent !== window;
+
+export const redirectSafeWallet = (
+  currentId: number,
+  redirectToId?: number
+) => {
+  if (isIframe() && redirectToId && currentId !== redirectToId) {
+    const networkToRedirect = networks.find(
+      (network) => Number(network.chainId) === redirectToId
+    );
+    if (!networkToRedirect) return;
+    window.location.href = networkToRedirect.appUrl;
+  }
+};
 
 export const providerRdnsToName = (
   connectionName: string
