@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeAll, afterAll } from 'vitest';
-import { debugTokens } from '../../../../e2e/utils/types';
-import { TradeOverlappingPrice } from './price';
+import { debugTokens } from '../../../e2e/utils/types';
+import { TradeOverlapping } from './overlapping';
 import {
   MockServer,
   marketRateHandler,
@@ -37,7 +37,7 @@ describe('Create overlapping page', () => {
     };
 
     const { router } = await renderWithRouter({
-      component: () => <TradeOverlappingPrice />,
+      component: () => <TradeOverlapping />,
       basePath,
       search,
     });
@@ -78,7 +78,7 @@ describe('Create overlapping page', () => {
     const marketPrice = '50000';
 
     const { router } = await renderWithRouter({
-      component: () => <TradeOverlappingPrice />,
+      component: () => <TradeOverlapping />,
       basePath,
       search,
     });
@@ -109,7 +109,7 @@ describe('Create overlapping page', () => {
     };
 
     const { router } = await renderWithRouter({
-      component: () => <TradeOverlappingPrice />,
+      component: () => <TradeOverlapping />,
       basePath,
       search,
     });
@@ -138,7 +138,7 @@ describe('Create overlapping page', () => {
     };
 
     await renderWithRouter({
-      component: () => <TradeOverlappingPrice />,
+      component: () => <TradeOverlapping />,
       basePath,
       search,
     });
@@ -162,7 +162,7 @@ describe('Create overlapping page', () => {
     };
 
     const { router } = await renderWithRouter({
-      component: () => <TradeOverlappingPrice />,
+      component: () => <TradeOverlapping />,
       basePath,
       search,
     });
@@ -200,7 +200,7 @@ describe('Create overlapping page', () => {
     };
 
     const { router } = await renderWithRouter({
-      component: () => <TradeOverlappingPrice />,
+      component: () => <TradeOverlapping />,
       basePath,
       search,
     });
@@ -236,7 +236,7 @@ describe('Create overlapping page', () => {
     };
 
     await renderWithRouter({
-      component: () => <TradeOverlappingPrice />,
+      component: () => <TradeOverlapping />,
       basePath,
       search,
     });
@@ -265,7 +265,7 @@ describe('Create overlapping page', () => {
     };
 
     await renderWithRouter({
-      component: () => <TradeOverlappingPrice />,
+      component: () => <TradeOverlapping />,
       basePath,
       search,
     });
@@ -290,7 +290,7 @@ describe('Create overlapping page', () => {
     };
 
     await renderWithRouter({
-      component: () => <TradeOverlappingPrice />,
+      component: () => <TradeOverlapping />,
       basePath,
       search,
     });

@@ -1,9 +1,9 @@
 import { test, expect, afterEach } from 'vitest';
 import { renderWithRouter } from 'libs/testing-library';
-import { debugTokens } from '../../../../e2e/utils/types';
-import { TradeRecurringSell } from './sell';
+import { debugTokens } from '../../../e2e/utils/types';
+import { TradeRecurring } from './recurring';
 
-const basePath = '/trade/activity/recurring/sell';
+const basePath = '/trade/recurring';
 afterEach(async () => {
   window.history.replaceState(null, 'root', '/');
 });
@@ -11,7 +11,7 @@ afterEach(async () => {
 test('run recurring form', async () => {
   // ARRANGE
   const { router } = await renderWithRouter({
-    component: () => <TradeRecurringSell />,
+    component: () => <TradeRecurring />,
     basePath,
     search: {
       base: debugTokens.ETH,

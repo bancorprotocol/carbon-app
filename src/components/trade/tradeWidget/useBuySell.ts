@@ -53,7 +53,7 @@ export const useBuySell = ({
     target.address
   );
 
-  const navigate = useNavigate({ from: '/trade/activity/market' });
+  const navigate = useNavigate({ from: '/trade/market' });
   const setSourceInput = (value: string) => {
     navigate({
       search: (s) => ({ ...s, source: value }),
