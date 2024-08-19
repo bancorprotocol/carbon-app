@@ -15,7 +15,7 @@ import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeDisposableSearch } from 'libs/routing/routes/trade';
 
-const url = '/trade/overview/disposable';
+const url = '/trade/activity/disposable';
 export const TradeDisposable = () => {
   const { base, quote } = useTradeCtx();
   const search = useSearch({ strict: false }) as TradeDisposableSearch;
@@ -46,7 +46,7 @@ export const TradeDisposable = () => {
       >
         <header className="flex items-center gap-8">
           <Link
-            from="/trade/overview/disposable"
+            from="/trade/activity/disposable"
             to=".."
             className="grid size-28 place-items-center rounded-full bg-black"
           >

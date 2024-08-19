@@ -27,7 +27,7 @@ interface Props {
 }
 type Search = TradeOverlappingSearch;
 
-const url = '/trade/overview/overlapping/price';
+const url = '/trade/activity/overlapping/price';
 export const CreateOverlappingPrice: FC<Props> = (props) => {
   const { base, quote, order0, order1, marketPrice, spread } = props;
   const navigate = useNavigate({ from: url });

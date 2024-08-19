@@ -29,7 +29,7 @@ interface Props {
 
 type Search = CreateOverlappingStrategySearch;
 
-const url = '/trade/overview/overlapping/budget';
+const url = '/trade/activity/overlapping/budget';
 export const CreateOverlappingBudget: FC<Props> = (props) => {
   const { base, quote, order0, order1, marketPrice } = props;
   const navigate = useNavigate({ from: url });

@@ -19,7 +19,7 @@ export const useDuplicate = (type: StrategyType) => {
         const isBuyEmpty = !+order0.endRate;
         const order = isBuyEmpty ? order1 : order0;
         return navigate({
-          to: '/trade/overview/disposable',
+          to: '/trade/activity/disposable',
           search: {
             base: baseAddress,
             quote: quoteAddress,
@@ -33,7 +33,7 @@ export const useDuplicate = (type: StrategyType) => {
       }
       case 'overlapping': {
         return navigate({
-          to: '/trade/overview/overlapping/price',
+          to: '/trade/activity/overlapping/price',
           search: {
             base: baseAddress,
             quote: quoteAddress,
@@ -45,7 +45,7 @@ export const useDuplicate = (type: StrategyType) => {
       }
       case 'recurring': {
         return navigate({
-          to: '/trade/overview/recurring/sell',
+          to: '/trade/activity/recurring/sell',
           search: {
             base: baseAddress,
             quote: quoteAddress,

@@ -16,7 +16,7 @@ import {
 } from 'components/strategies/create/utils';
 import style from 'components/strategies/common/stepper.module.css';
 
-const url = '/trade/overview/recurring/buy';
+const url = '/trade/activity/recurring/buy';
 export const TradeRecurringBuy = () => {
   const search = useSearch({ strict: false }) as TradeRecurringSearch;
   const { base, quote } = useTradeCtx();
@@ -46,7 +46,7 @@ export const TradeRecurringBuy = () => {
       >
         <header className="flex items-center gap-8">
           <Link
-            from="/trade/overview/recurring/buy"
+            from="/trade/activity/recurring/buy"
             to="../sell"
             search
             resetScroll={false}

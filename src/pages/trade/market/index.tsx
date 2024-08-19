@@ -13,7 +13,7 @@ import { TradeMarketSearch } from 'libs/routing/routes/trade';
 export const TradeMarket = () => {
   const { base, quote } = useTradeCtx();
   const search = useSearch({ strict: false }) as TradeMarketSearch;
-  const navigate = useNavigate({ from: '/trade/overview/market' });
+  const navigate = useNavigate({ from: '/trade/activity/market' });
   const sell = search.direction !== 'buy';
   const balanceQuery = useGetTokenBalance(sell ? base : quote);
   const setDirection = (direction: StrategyDirection) => {
@@ -36,7 +36,7 @@ export const TradeMarket = () => {
       >
         <header className="flex items-center gap-8">
           <Link
-            from="/trade/overview/market"
+            from="/trade/activity/market"
             to=".."
             className="grid size-28 place-items-center rounded-full bg-black"
           >

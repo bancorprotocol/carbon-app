@@ -60,7 +60,7 @@ export const TradeRecurringSummary = () => {
         >
           <header className="flex items-center gap-8">
             <Link
-              from="/trade/overview/recurring/summary"
+              from="/trade/activity/recurring/summary"
               to="../buy"
               search
               resetScroll={false}

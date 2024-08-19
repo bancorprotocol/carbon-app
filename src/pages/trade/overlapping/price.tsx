@@ -18,7 +18,7 @@ import style from 'components/strategies/common/stepper.module.css';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
 
-const url = '/trade/overview/overlapping/price';
+const url = '/trade/activity/overlapping/price';
 export const TradeOverlappingPrice = () => {
   const navigate = useNavigate({ from: url });
   const { base, quote } = useTradeCtx();

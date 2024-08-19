@@ -13,7 +13,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
 import { useEffect } from 'react';
 
-const url = '/trade/overview/overlapping/summary';
+const url = '/trade/activity/overlapping/summary';
 export const TradeOverlappingSummary = () => {
   const navigate = useNavigate({ from: url });
   const { base, quote } = useTradeCtx();

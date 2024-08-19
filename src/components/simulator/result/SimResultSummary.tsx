@@ -66,7 +66,7 @@ export const SimResultSummary = ({
             <SimResultSummaryRoi portfolioRoi={roi} />
             {strategyType === 'recurring' ? (
               <Link
-                to="/trade/overview/recurring/sell"
+                to="/trade/activity/recurring/sell"
                 search={{
                   base: state.baseToken.address,
                   quote: state.quoteToken.address,
@@ -90,7 +90,7 @@ export const SimResultSummary = ({
               </Link>
             ) : (
               <Link
-                to="/trade/overview/overlapping/price"
+                to="/trade/activity/overlapping/price"
                 search={{
                   base: state.baseToken.address,
                   quote: state.quoteToken.address,

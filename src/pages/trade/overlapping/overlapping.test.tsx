@@ -11,7 +11,7 @@ import {
   userEvent,
 } from 'libs/testing-library';
 
-const basePath = '/trade/overview/overlapping';
+const basePath = '/trade/activity/overlapping';
 
 const marketRates: Record<string, Record<string, number>> = {
   '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { USD: 1 }, // USDC

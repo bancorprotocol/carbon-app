@@ -14,7 +14,7 @@ import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeRecurringSearch } from 'libs/routing/routes/trade';
 
-const url = '/trade/overview/recurring/sell';
+const url = '/trade/activity/recurring/sell';
 export const TradeRecurringSell = () => {
   const search = useSearch({ strict: false }) as TradeRecurringSearch;
   const { base, quote } = useTradeCtx();

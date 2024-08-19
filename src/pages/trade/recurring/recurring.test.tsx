@@ -3,7 +3,7 @@ import { renderWithRouter } from 'libs/testing-library';
 import { debugTokens } from '../../../../e2e/utils/types';
 import { TradeRecurringSell } from './sell';
 
-const basePath = '/trade/overview/recurring/sell';
+const basePath = '/trade/activity/recurring/sell';
 afterEach(async () => {
   window.history.replaceState(null, 'root', '/');
 });

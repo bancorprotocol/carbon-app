@@ -17,9 +17,11 @@ import {
 } from './types';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketPercent';
 import { TradeTypeSelection } from 'libs/routing/routes/trade';
-import { CreateRecurringStrategySearch } from 'pages/strategies/create/recurring';
-import { CreateDisposableStrategySearch } from 'pages/strategies/create/disposable';
-import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
+import {
+  TradeDisposableSearch,
+  TradeRecurringSearch,
+  TradeOverlappingSearch,
+} from 'libs/routing/routes/trade';
 import { StrategyType } from 'libs/routing';
 
 export interface EventStrategySchema extends EventCategory {
@@ -149,9 +151,9 @@ export interface EventStrategySchema extends EventCategory {
 }
 
 type CreateStrategySearch =
-  | CreateDisposableStrategySearch
-  | CreateRecurringStrategySearch
-  | CreateOverlappingStrategySearch;
+  | TradeDisposableSearch
+  | TradeRecurringSearch
+  | TradeOverlappingSearch;
 export const createStrategyEvents = {
   change: (type: StrategyType, search: CreateStrategySearch) => {
     sendGTMEvent('strategy', 'createStrategyChange', { type, ...search });

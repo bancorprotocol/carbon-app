@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
 import style from 'components/strategies/common/stepper.module.css';
 
-const url = '/trade/overview/overlapping/budget';
+const url = '/trade/activity/overlapping/budget';
 export const TradeOverlappingBudget = () => {
   const navigate = useNavigate({ from: url });
   const { base, quote } = useTradeCtx();
