@@ -14,7 +14,6 @@ import { Token } from 'libs/tokens';
 import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
 import { useWagmi } from 'libs/wagmi';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { CreateOverlappingStrategySearch } from 'pages/strategies/create/overlapping';
 import { OverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
@@ -27,13 +26,13 @@ interface Props {
   order1: OverlappingOrder;
 }
 
-type Search = CreateOverlappingStrategySearch;
+type Search = TradeOverlappingSearch;
 
 const url = '/trade/activity/overlapping/budget';
 export const CreateOverlappingBudget: FC<Props> = (props) => {
   const { base, quote, order0, order1, marketPrice } = props;
   const navigate = useNavigate({ from: url });
-  const search = useSearch({ strict: false }) as TradeOverlappingSearch;
+  const search = useSearch({ strict: false }) as Search;
   const { anchor, budget } = search;
   const { user } = useWagmi();
 
