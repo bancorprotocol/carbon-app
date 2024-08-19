@@ -145,6 +145,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
   })();
 
+  if (isTradePairError) return <NoTrade />;
   if (liquidityQuery?.isError) return <div>Error</div>;
 
   if (!source || !target) return null;
@@ -178,8 +179,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       : prettifyNumber(liquidityQuery.data);
     return `Liquidity: ${value} ${target.symbol}`;
   };
-
-  if (isTradePairError) return <NoTrade />;
 
   return (
     <form {...formProps} onSubmit={handleTrade} className="flex flex-col">
