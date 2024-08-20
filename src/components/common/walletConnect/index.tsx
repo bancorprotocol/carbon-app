@@ -17,7 +17,7 @@ export const WalletConnect = () => {
         </p>
 
         <Link
-          to="/trade/market"
+          to="/trade/disposable"
           className={buttonStyles({ variant: 'success', size: 'lg' })}
         >
           Create strategy

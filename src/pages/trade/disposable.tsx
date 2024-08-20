@@ -35,7 +35,7 @@ export const TradeDisposable = () => {
     marketPrice,
     min: search.min,
     max: search.max,
-    buy: search.direction !== 'sell',
+    buy: search.direction === 'buy',
   });
   return (
     <>

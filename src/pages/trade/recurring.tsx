@@ -24,13 +24,13 @@ export const TradeRecurring = () => {
     min: search.buyMin ?? '',
     max: search.buyMax ?? '',
     budget: search.buyBudget ?? '',
-    settings: search.buySettings ?? 'range',
+    settings: search.buySettings ?? 'limit',
   };
   const sellOrder: OrderBlock = {
     min: search.sellMin ?? '',
     max: search.sellMax ?? '',
     budget: search.sellBudget ?? '',
-    settings: search.sellSettings ?? 'range',
+    settings: search.sellSettings ?? 'limit',
   };
   const buyOutsideMarket = outSideMarketWarning({
     base,

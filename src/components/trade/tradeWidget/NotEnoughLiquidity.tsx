@@ -14,7 +14,7 @@ export const NotEnoughLiquidity = ({
   const navigate = useNavigate();
   const duplicate = () => {
     const search = { base: source.address, quote: target.address };
-    navigate({ to: '/trade/market', search });
+    navigate({ to: '/trade/disposable', search });
   };
 
   return (

@@ -16,7 +16,7 @@ import {
   StrategySellEventType,
 } from './types';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketPercent';
-import { TradeTypeSelection } from 'libs/routing/routes/trade';
+import { TradeTypes } from 'libs/routing/routes/trade';
 import {
   TradeDisposableSearch,
   TradeRecurringSearch,
@@ -136,11 +136,11 @@ export interface EventStrategySchema extends EventCategory {
     };
   };
   newStrategyNextStepClick: {
-    input: { base: Token; quote: Token; strategyOption: TradeTypeSelection };
+    input: { base: Token; quote: Token; strategyOption: TradeTypes };
     gtmData: {
       strategy_base_token: string;
       strategy_quote_token: string;
-      strategy_option: TradeTypeSelection;
+      strategy_option: TradeTypes;
       token_pair: string;
     };
   };

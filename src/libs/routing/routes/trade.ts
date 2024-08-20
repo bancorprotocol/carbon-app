@@ -14,19 +14,15 @@ import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
 
 // TRADE TYPE
-export type TradeTypeSelection =
-  | 'disposable'
-  | 'recurring'
-  | 'overlapping'
-  | 'market';
+export type TradeTypes = 'disposable' | 'recurring' | 'overlapping' | 'market';
 export interface TradeTypeSearch extends TradeSearch {
-  type?: TradeTypeSelection;
+  type?: TradeTypes;
 }
 
 // TRADE DISPOSABLE
 export interface TradeDisposableSearch extends TradeSearch {
-  direction: StrategyDirection;
-  settings: StrategySettings;
+  direction?: StrategyDirection;
+  settings?: StrategySettings;
   min?: string;
   max?: string;
   budget?: string;
@@ -73,7 +69,7 @@ const tradePage = new Route({
   component: TradeRoot,
   beforeLoad: ({ location, search }) => {
     if (location.pathname.endsWith('trade')) {
-      throw redirect({ to: '/trade/market', search });
+      throw redirect({ to: '/trade/disposable', search });
     }
   },
 });

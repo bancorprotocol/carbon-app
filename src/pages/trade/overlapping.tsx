@@ -45,10 +45,7 @@ export const TradeOverlapping = () => {
   if (!marketPrice) {
     return (
       <TradeLayout>
-        <article
-          key="marketPrice"
-          className="rounded-10 bg-background-900 flex flex-col md:w-[440px]"
-        >
+        <article key="marketPrice" className="bg-background-900 rounded">
           <OverlappingInitMarketPrice
             base={base}
             quote={quote}

@@ -39,7 +39,6 @@ export const TokenSelection = () => {
       }
 
       navigate({
-        to: '/trade',
         search,
         replace: true,
         resetScroll: false,
