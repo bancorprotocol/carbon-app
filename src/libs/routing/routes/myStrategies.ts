@@ -22,6 +22,12 @@ export const strategyOverviewPage = new Route({
   validateSearch: validateSearchParams<MyStrategiesSearch>({
     search: validString,
   }),
+  postSearchFilters: [
+    (search: MyStrategiesSearch) => {
+      if (!search.search) delete search.search;
+      return search;
+    },
+  ],
 });
 
 export const strategyPortfolioLayout = new Route({

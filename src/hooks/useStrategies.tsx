@@ -42,10 +42,7 @@ export const useStrategyFilter = (
     (value: string) => {
       navigate({
         search: (currentSearch: MyStrategiesSearch) => {
-          if (value) return { ...currentSearch, search: value };
-          const searchCopy = structuredClone(currentSearch);
-          delete searchCopy.search;
-          return searchCopy;
+          return { ...currentSearch, search: value };
         },
         replace: true,
         resetScroll: false,
