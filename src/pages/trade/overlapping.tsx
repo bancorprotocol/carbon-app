@@ -22,11 +22,8 @@ export const TradeOverlapping = () => {
   const navigate = useNavigate({ from: url });
   const { base, quote } = useTradeCtx();
   const search = useSearch({ strict: false }) as TradeOverlappingSearch;
-  const { marketPrice: externalPrice, isPending } = useMarketPrice({
-    base,
-    quote,
-  });
-  const marketPrice = search.marketPrice ?? externalPrice?.toString();
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
   const orders = getOverlappingOrders(search, base, quote, marketPrice);
   const setMarketPrice = (price: string) => {
@@ -37,8 +34,12 @@ export const TradeOverlapping = () => {
     });
   };
 
-  if (!marketPrice && isPending) {
-    return <CarbonLogoLoading className="h-[80px] place-self-center" />;
+  if (!marketPrice && marketQuery.isPending) {
+    return (
+      <TradeLayout>
+        <CarbonLogoLoading className="h-[80px] place-self-center" />
+      </TradeLayout>
+    );
   }
 
   if (!marketPrice) {
