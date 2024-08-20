@@ -8,7 +8,9 @@ export const NoTrade = () => {
         <h3 className="text-16">Notice</h3>
       </header>
       <p className="text-14 text-white/80">
-        Token pair not available. Please select another pair.
+        Congratulations, you're the first to trade this pair! Choose an
+        alternative strategy and the built-in solver system will search
+        liquidity chain-wide to fulfill your trades.
       </p>
     </div>
   );

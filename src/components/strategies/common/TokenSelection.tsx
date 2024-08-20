@@ -60,7 +60,6 @@ export const TokenSelection = () => {
         updatedQuote: base.symbol,
       });
       navigate({
-        to: '/trade',
         search: () => ({
           base: quote.address,
           quote: base.address,
