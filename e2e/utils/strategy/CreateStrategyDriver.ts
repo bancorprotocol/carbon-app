@@ -6,7 +6,7 @@ import {
   getRecurringSettings,
   screenshotPath,
 } from './utils';
-import { CreateStrategyTestCase, StrategySettings } from './types';
+import { CreateStrategyTestCase, StrategyType } from './types';
 import {
   RangeOrder,
   debugTokens,
@@ -23,10 +23,6 @@ export class CreateStrategyDriver {
 
   getForm() {
     return this.page.getByTestId('create-strategy-form');
-  }
-
-  getStep() {
-    return this.page.getByTestId('create-strategy-step');
   }
 
   getFormSection(direction: Direction) {
@@ -46,15 +42,15 @@ export class CreateStrategyDriver {
   }
 
   getOverlappingForm() {
-    const step = this.getStep();
+    const form = this.getForm();
     return {
-      locator: step,
-      min: () => step.getByTestId('input-min'),
-      max: () => step.getByTestId('input-max'),
-      spread: () => step.getByTestId('spread-input'),
-      anchorRequired: () => step.getByTestId('require-anchor'),
-      anchor: (anchor: 'buy' | 'sell') => step.getByTestId(`anchor-${anchor}`),
-      budget: () => step.getByTestId('input-budget'),
+      locator: form,
+      min: () => form.getByTestId('input-min'),
+      max: () => form.getByTestId('input-max'),
+      spread: () => form.getByTestId('spread-input'),
+      anchorRequired: () => form.getByTestId('require-anchor'),
+      anchor: (anchor: 'buy' | 'sell') => form.getByTestId(`anchor-${anchor}`),
+      budget: () => form.getByTestId('input-budget'),
     };
   }
 
@@ -76,7 +72,7 @@ export class CreateStrategyDriver {
     await waitModalClose(this.page);
   }
 
-  selectSetting(strategySettings: StrategySettings) {
+  selectSetting(strategySettings: StrategyType) {
     return this.page.getByTestId(strategySettings).click();
   }
 
@@ -115,11 +111,6 @@ export class CreateStrategyDriver {
     await this.page.getByTestId(`tab-${direction}`).click();
     const order = this.testCase.input.create;
     return this.fillFormSection(direction, setting, order);
-  }
-
-  async nextStep() {
-    await this.waitForLoading();
-    return this.page.getByTestId('next-step').click();
   }
 
   async submit(type: StrategyCase) {

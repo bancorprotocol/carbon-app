@@ -25,7 +25,7 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     await modal.getByTestId('duplicate-strategy-btn').click();
     await modal.waitFor({ state: 'detached' });
 
-    await page.waitForURL('/trade/activity/disposable?*');
+    await page.waitForURL('/trade/disposable?*');
 
     const createForm = new CreateStrategyDriver(page, testCase);
     await createForm.submit('duplicate');

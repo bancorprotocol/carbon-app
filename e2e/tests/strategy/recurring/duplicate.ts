@@ -24,13 +24,9 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
     await modal.getByTestId('duplicate-strategy-btn').click();
     await modal.waitFor({ state: 'detached' });
 
-    await page.waitForURL('/trade/activity/recurring/sell?*');
+    await page.waitForURL('/trade/recurring?*');
 
     const createForm = new CreateStrategyDriver(page, testCase);
-    await createForm.nextStep();
-    await page.waitForURL('/trade/activity/recurring/buy?*');
-    await createForm.nextStep();
-    await page.waitForURL('/trade/activity/recurring/summary?*');
     await createForm.submit('duplicate');
 
     await page.waitForURL('/', { timeout: 10_000 });

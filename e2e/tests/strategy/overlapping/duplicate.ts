@@ -25,18 +25,14 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     await modal.getByTestId('duplicate-strategy-btn').click();
     await modal.waitFor({ state: 'detached' });
 
-    await page.waitForURL('/trade/activity/overlapping/price?*');
+    await page.waitForURL('/trade/overlapping?*');
 
     const createForm = new CreateStrategyDriver(page, testCase);
     const overlappingForm = createForm.getOverlappingForm();
     await overlappingForm.anchor('sell').click();
-    await createForm.nextStep();
-    await page.waitForURL('/trade/activity/overlapping/budget?*');
     await overlappingForm.budget().focus();
     await overlappingForm.budget().fill(sell.budget);
 
-    await createForm.nextStep();
-    await page.waitForURL('/trade/activity/overlapping/summary?*');
     await createForm.submit('duplicate');
 
     await page.waitForURL('/', { timeout: 10_000 });

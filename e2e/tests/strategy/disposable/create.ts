@@ -26,7 +26,6 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
     await createForm.selectSetting('disposable');
-    await createForm.nextStep();
 
     const form = await createForm.fillDisposable();
 

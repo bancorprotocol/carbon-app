@@ -7,7 +7,12 @@ import {
   Direction,
 } from '../types';
 
-const STRATEGY_TYPES = ['recurring', 'disposable', 'overlapping'] as const;
+const STRATEGY_TYPES = [
+  'market',
+  'recurring',
+  'disposable',
+  'overlapping',
+] as const;
 
 export type StrategyType = (typeof STRATEGY_TYPES)[number];
 
@@ -25,8 +30,6 @@ export interface OverlappingParams {
   sellBudget: string;
   spread: string;
 }
-
-export type StrategySettings = 'disposable' | 'recurring' | 'overlapping';
 
 interface OrderOutput {
   min: string;
