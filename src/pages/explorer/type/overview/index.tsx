@@ -7,21 +7,17 @@ export const ExplorerTypeOverviewPage = () => {
   const isFilterTooNarrow =
     strategies.length > 0 && filteredStrategies.length === 0;
 
-  const empty = isFilterTooNarrow ? (
-    <NotFound
-      variant="error"
-      title="There are no results for your filter"
-      text="Please adjust your search and/or filters."
-      bordered
-    />
-  ) : (
-    <NotFound
-      variant="error"
-      title="We couldn't find any strategies"
-      text="Try entering a different wallet address or choose a different token pair."
-      bordered
-    />
-  );
+  const emptyProps = isFilterTooNarrow
+    ? {
+        title: 'There are no results for your filter',
+        text: 'Please adjust your search and/or filters.',
+      }
+    : {
+        title: "We couldn't find any strategies",
+        text: 'Try entering a different wallet address or choose a different token pair.',
+      };
+
+  const empty = <NotFound variant="error" bordered {...emptyProps} />;
 
   return (
     <>
