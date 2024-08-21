@@ -82,7 +82,7 @@ export const TradeMarket = () => {
             target={buy ? base : quote}
             sourceBalanceQuery={balanceQuery}
             buy={buy}
-            data-testid="buy-form"
+            data-testid={buy ? 'buy-form' : 'sell-form'}
           />
         </article>
       </TradeLayout>

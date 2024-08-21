@@ -4,6 +4,7 @@ import { waitFor } from './operators';
 import { closeModal, waitModalClose, waitModalOpen } from './modal';
 import { debugTokens } from './types';
 import { TestCaseSwap, TradeTestCase } from './trade/types';
+import { assertDebugToken } from './strategy/utils';
 
 export class TradeDriver {
   public form = this.page.getByTestId(`${this.testCase.mode}-form`);
@@ -18,16 +19,14 @@ export class TradeDriver {
     return this.form.getByLabel('You Receive');
   }
 
-  async selectPair() {
-    const { mode, target, source } = this.testCase;
-
-    await this.page.getByTestId('select-trade-pair').click();
+  async selectToken(tokenType: 'base' | 'quote') {
+    const symbol = this.testCase[tokenType];
+    assertDebugToken(symbol);
+    const token = debugTokens[symbol];
+    await this.page.getByTestId(`select-${tokenType}-token`).click();
     await waitModalOpen(this.page);
-    const pair = mode === 'buy' ? [target, source] : [source, target];
-    const pairKey = [debugTokens[pair[0]], debugTokens[pair[1]]].join('_');
-    this.page.getByTestId('search-token-pair').fill(`${pair.join(' ')}`);
-    const select = await waitFor(this.page, `select-${pairKey}`);
-    await select.click();
+    await this.page.getByLabel('Select Token').fill(symbol);
+    await this.page.getByTestId(`select-token-${token}`).click();
     await waitModalClose(this.page);
   }
 
