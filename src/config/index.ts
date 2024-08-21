@@ -48,6 +48,7 @@ export const networks = Object.entries(configs)
       id,
       name: config[mode].network.name,
       logoUrl: config[mode].network.logoUrl,
+      chainId: config[mode].network.chainId,
       isCurrentNetwork: network === id,
       appUrl: config[mode].appUrl,
     };
