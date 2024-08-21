@@ -70,7 +70,8 @@ export const TradeMarket = () => {
           </TabsMenu>
           <div className="flex items-center justify-between">
             <h2 className="text-18 flex items-center gap-8">
-              {buy ? 'Buy' : 'Sell'} {base.symbol} for {quote.symbol}
+              {buy ? 'Buy' : 'Sell'} {base.symbol} {buy ? 'with' : 'for'}&nbsp;
+              {quote.symbol}
             </h2>
             <MainMenuTradeSettings base={base} quote={quote} />
           </div>
