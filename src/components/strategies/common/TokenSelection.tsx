@@ -7,6 +7,27 @@ import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useTradeCtx } from 'components/trade/TradeContext';
+import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+
+export const TokenSelectionTooltip = () => {
+  return (
+    <Tooltip
+      iconClassName="size-18 text-white/60"
+      element={
+        <p>
+          Selecting the tokens you would like to create a simulation for.
+          <br />
+          <b>Buy or Sell</b> token (also called <b>Base</b> token) is the token
+          you would like to buy or sell in the strategy.
+          <br />
+          <b>With</b> token (also called <b>Quote</b> token) is the token you
+          would denominate the rates in.
+        </p>
+      }
+    />
+  );
+};
 
 export const TokenSelection = () => {
   const { base, quote } = useTradeCtx();
@@ -72,7 +93,10 @@ export const TokenSelection = () => {
 
   return (
     <article className="bg-background-900 grid gap-20 rounded p-20">
-      <h2 className="text-18">Token Pair</h2>
+      <header className="flex items-center justify-between">
+        <h2 className="text-18">Token Pair</h2>
+        <TokenSelectionTooltip />
+      </header>
       <div role="menu" className=" grid grid-cols-2 gap-20">
         <button
           role="menuitem"
@@ -82,7 +106,12 @@ export const TokenSelection = () => {
           onClick={() => openTokenListModal('base')}
         >
           <TokenLogo token={base} size={30} />
-          {base.symbol}
+          <p className="grid flex-1 text-start">
+            <span className="font-weight-500 text-12 text-white/60">
+              Buy or Sell
+            </span>
+            <span>{base.symbol}</span>
+          </p>
           <ChevronIcon className="ml-auto size-16" />
         </button>
         <button
@@ -100,10 +129,17 @@ export const TokenSelection = () => {
           onClick={() => openTokenListModal('quote')}
         >
           <TokenLogo token={quote} size={30} />
-          {quote.symbol}
+          <p className="grid flex-1 text-start">
+            <span className="font-weight-500 text-12 text-white/60">With</span>
+            <span>{quote.symbol}</span>
+          </p>
           <ChevronIcon className="ml-auto size-16" />
         </button>
       </div>
+      <p className="text-14 flex items-center gap-8 text-white/60">
+        <WarningIcon className="size-14" />
+        Rebasing and fee-on-transfer tokens are not supported.
+      </p>
     </article>
   );
 };

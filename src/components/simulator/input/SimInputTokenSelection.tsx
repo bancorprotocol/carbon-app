@@ -1,12 +1,12 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { FC } from 'react';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useModal } from 'hooks/useModal';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { cn } from 'utils/helpers';
+import { TokenSelectionTooltip } from 'components/strategies/common/TokenSelection';
 
 interface Props {
   baseToken?: string;
@@ -32,20 +32,7 @@ export const SimInputTokenSelection: FC<Props> = ({
     >
       <header className="flex items-center justify-between">
         <h2 className="text-18 font-weight-500 m-0">Token Pair</h2>
-        <Tooltip
-          iconClassName="size-18 text-white/60"
-          element={
-            <p>
-              Selecting the tokens you would like to create a simulation for.
-              <br />
-              <b>Buy or Sell</b> token (also called <b>Base</b> token) is the
-              token you would like to buy or sell in the strategy.
-              <br />
-              <b>With</b> token (also called <b>Quote</b> token) is the token
-              you would denominate the rates in.
-            </p>
-          }
-        />
+        <TokenSelectionTooltip />
       </header>
       <article className="font-weight-500 flex flex-row items-center -space-x-10">
         <SelectTokenButton
