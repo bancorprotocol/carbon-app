@@ -61,7 +61,7 @@ export const TradeNav = () => {
             to={link.to}
             search={{ base, quote }}
             aria-current={current === link.id ? 'page' : 'false'}
-            data-testId={link.id}
+            data-testid={link.id}
             className="rounded-8 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 hover:border-white aria-[current=page]:border-white aria-[current=page]:text-white"
           >
             {link.svg}

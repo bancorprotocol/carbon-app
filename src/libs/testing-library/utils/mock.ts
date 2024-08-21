@@ -2,6 +2,7 @@ import { setupServer } from 'msw/node';
 import { HttpResponse, http, RequestHandler } from 'msw';
 import { debugTokens } from '../../../../e2e/utils/types';
 import tokenListsMock from '../../../../e2e/mocks/tokenLists.json';
+import { Token } from 'libs/tokens';
 
 /**
  * Creates a handler for fetching market rates based on the provided market rates object.
@@ -95,25 +96,25 @@ export class MockServer {
   }
 }
 
-export const tokens = [
-  {
-    address: debugTokens.ETH,
-    decimals: 18,
-    symbol: 'ETH',
-  },
-  {
-    address: debugTokens.USDC,
-    decimals: 6,
-    symbol: 'USDC',
-  },
-  {
-    address: debugTokens.WBTC,
-    decimals: 8,
-    symbol: 'WBTC',
-  },
-  {
+export const tokenList: Record<string, Token> = {
+  USDT: {
     address: debugTokens.USDT,
     decimals: 6,
     symbol: 'USDT',
   },
-];
+  WBTC: {
+    address: debugTokens.WBTC,
+    decimals: 8,
+    symbol: 'WBTC',
+  },
+  USDC: {
+    address: debugTokens.USDC,
+    decimals: 6,
+    symbol: 'USDC',
+  },
+  ETH: {
+    address: debugTokens.ETH,
+    decimals: 18,
+    symbol: 'ETH',
+  },
+};
