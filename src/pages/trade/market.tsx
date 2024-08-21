@@ -16,16 +16,8 @@ export const TradeMarket = () => {
   const { base, quote } = useTradeCtx();
   const search = useSearch({ strict: false }) as TradeMarketSearch;
   const navigate = useNavigate({ from: url });
-  const quoteBalance = useGetTokenBalance(quote);
-  const baseBalance = useGetTokenBalance(base);
-
-  const buy = (() => {
-    if (search.direction === 'buy') return true;
-    if (search.direction === 'sell') return false;
-    if (!Number(baseBalance.data)) return true;
-    return false;
-  })();
-  const balanceQuery = buy ? quoteBalance : baseBalance;
+  const buy = search.direction === 'buy';
+  const balanceQuery = useGetTokenBalance(buy ? quote : base);
 
   const setDirection = (direction: StrategyDirection) => {
     navigate({
