@@ -4,19 +4,15 @@ import {
   within,
 } from '@testing-library/dom';
 
-export class CreateOverlappingDriver {
+export class CreateStrategyDriver {
   constructor(private screen: Screen) {}
 
-  getStrategyChart() {
-    return {
-      closeChart: () => this.screen.getByTestId('close-chart'),
-      openChart: () => this.screen.getByTestId('open-chart'),
-      chart: () => this.screen.queryByTestId('strategy-chart'),
-    };
+  async findCreateForm() {
+    return this.screen.findByTestId('create-strategy-form');
   }
 
-  getOverlappingForm() {
-    const form = this.screen.getByTestId('create-strategy-step');
+  async findOverlappingForm() {
+    const form = await this.findCreateForm();
     return {
       element: form,
       min: () => within(form).getByTestId('input-min'),
@@ -36,19 +32,21 @@ export class CreateOverlappingDriver {
     };
   }
 
-  getUserPriceForm() {
-    return this.screen.getByTestId('user-price-form');
+  async findUserPriceForm() {
+    return this.screen.findByTestId('user-price-form');
   }
 
-  getUserPriceInput() {
+  async findEditMarketPrice() {
+    return this.screen.findByTestId('edit-market-price');
+  }
+
+  async findUserPriceInput() {
+    const priceForm = await this.findUserPriceForm();
     return {
-      open: () => this.screen.getByTestId('edit-market-price'),
-      editPrice: () =>
-        within(this.getUserPriceForm()).getByTestId('input-price'),
+      editPrice: () => within(priceForm).getByTestId('input-price'),
       approveWarning: () =>
-        within(this.getUserPriceForm()).getByTestId('approve-price-warnings'),
-      confirm: () =>
-        within(this.getUserPriceForm()).getByTestId('set-overlapping-price'),
+        within(priceForm).getByTestId('approve-price-warnings'),
+      confirm: () => within(priceForm).getByTestId('set-overlapping-price'),
     };
   }
 
