@@ -18,20 +18,27 @@ export const TradeRecurring = () => {
   const search = useSearch({ from: url });
   const { base, quote } = useTradeCtx();
   const { marketPrice } = useMarketPrice({ base, quote });
-  const { setBuyOrder, setSellOrder } =
+  const { setSellOrder, setBuyOrder } =
     useSetRecurringOrder<typeof search>(url);
-  const buyOrder: OrderBlock = {
-    min: search.buyMin ?? '',
-    max: search.buyMax ?? '',
-    budget: search.buyBudget ?? '',
-    settings: search.buySettings ?? 'limit',
-  };
   const sellOrder: OrderBlock = {
     min: search.sellMin ?? '',
     max: search.sellMax ?? '',
     budget: search.sellBudget ?? '',
     settings: search.sellSettings ?? 'limit',
   };
+  const buyOrder: OrderBlock = {
+    min: search.buyMin ?? '',
+    max: search.buyMax ?? '',
+    budget: search.buyBudget ?? '',
+    settings: search.buySettings ?? 'limit',
+  };
+  const sellOutsideMarket = outSideMarketWarning({
+    base,
+    marketPrice,
+    min: search.sellMin,
+    max: search.sellMax,
+    buy: false,
+  });
   const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
@@ -40,13 +47,6 @@ export const TradeRecurring = () => {
     buy: true,
   });
 
-  const sellOutsideMarket = outSideMarketWarning({
-    base,
-    marketPrice,
-    min: search.sellMin,
-    max: search.sellMax,
-    buy: false,
-  });
   return (
     <>
       <TradeLayout>
@@ -61,20 +61,20 @@ export const TradeRecurring = () => {
             type="recurring"
             base={base}
             quote={quote}
-            order={buyOrder}
-            setOrder={setBuyOrder}
+            order={sellOrder}
+            setOrder={setSellOrder}
             error={getRecurringError(search)}
-            warnings={[buyOutsideMarket, getRecurringWarning(search)]}
-            buy
+            warnings={[sellOutsideMarket, getRecurringWarning(search)]}
           />
           <CreateOrder
             type="recurring"
             base={base}
             quote={quote}
-            order={sellOrder}
-            setOrder={setSellOrder}
+            order={buyOrder}
+            setOrder={setBuyOrder}
             error={getRecurringError(search)}
-            warnings={[sellOutsideMarket, getRecurringWarning(search)]}
+            warnings={[buyOutsideMarket, getRecurringWarning(search)]}
+            buy
           />
         </CreateForm>
       </TradeLayout>
