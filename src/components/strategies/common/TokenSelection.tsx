@@ -16,7 +16,7 @@ export const TokenSelectionTooltip = () => {
       iconClassName="size-18 text-white/60"
       element={
         <p>
-          Selecting the tokens you would like to create a simulation for.
+          Selecting the tokens you would like to create a strategy for.
           <br />
           <b>Buy or Sell</b> token (also called <b>Base</b> token) is the token
           you would like to buy or sell in the strategy.
