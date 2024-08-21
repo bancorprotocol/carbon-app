@@ -60,6 +60,7 @@ export class CreateStrategyDriver {
       marketPriceIndicators: () =>
         within(form).queryAllByTestId('market-price-indication'),
       approveWarnings: () => within(form).queryByTestId('approve-warnings'),
+      submit: () => within(form).getByTestId('create-strategy'),
     };
   }
 
