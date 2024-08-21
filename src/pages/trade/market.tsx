@@ -1,5 +1,4 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { LogoImager } from 'components/common/imager/Imager';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTradeSettings';
@@ -71,9 +70,7 @@ export const TradeMarket = () => {
           </TabsMenu>
           <div className="flex items-center justify-between">
             <h2 className="text-18 flex items-center gap-8">
-              <span>{buy ? 'Buy Low' : 'Sell High'}</span>
-              <LogoImager alt="Token" src={base.logoURI} className="size-18" />
-              <span>{base.symbol}</span>
+              {buy ? 'Buy' : 'Sell'} {base.symbol} for {quote.symbol}
             </h2>
             <MainMenuTradeSettings base={base} quote={quote} />
           </div>
@@ -82,7 +79,7 @@ export const TradeMarket = () => {
             target={buy ? base : quote}
             sourceBalanceQuery={balanceQuery}
             buy={buy}
-            data-testid="buy-form"
+            data-testid={buy ? 'buy-form' : 'sell-form'}
           />
         </article>
       </TradeLayout>

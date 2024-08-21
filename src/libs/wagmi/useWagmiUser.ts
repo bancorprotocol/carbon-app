@@ -17,6 +17,7 @@ import { errorMessages } from './wagmi.utils';
 import { clientToSigner } from './ethers';
 import { getUncheckedSigner } from 'utils/tenderly';
 import { carbonEvents } from 'services/events';
+import { redirectSafeWallet } from './connectors';
 
 type Props = {
   imposterAccount?: string;
@@ -87,6 +88,7 @@ export const useWagmiUser = ({
           address: data.address,
           name: data.connector.name,
         });
+        redirectSafeWallet(chainId, accountChainId);
       }
       if (window?.OneTrust) {
         window?.OneTrust?.AllowAll();

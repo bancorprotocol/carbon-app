@@ -3,6 +3,7 @@ import { Token } from 'libs/tokens';
 import { cn } from 'utils/helpers';
 import { OrderBlock } from 'components/strategies/common/types';
 import { StrategySettings } from 'libs/routing';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 interface Props {
   children?: ReactNode;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 export const OrderHeader: FC<Props> = (props) => {
-  const { order, children, setSettings } = props;
+  const { order, children, buy, base, setSettings } = props;
   const isRange = order.settings === 'range';
   const setLimit = () => {
     if (!isRange) return;
@@ -24,9 +25,9 @@ export const OrderHeader: FC<Props> = (props) => {
     setSettings('range');
   };
   return (
-    <header className="flex items-center justify-between">
+    <header className="flex items-center gap-10">
       {children}
-      <div className="text-14 flex items-center rounded-full bg-black p-2">
+      <div className="text-14 ms-auto flex items-center rounded-full bg-black p-2">
         <button
           type="button"
           tabIndex={!isRange ? -1 : 0}
@@ -58,6 +59,22 @@ export const OrderHeader: FC<Props> = (props) => {
           Range
         </button>
       </div>
+      <Tooltip
+        sendEventOnMount={{ buy }}
+        iconClassName="text-white/60"
+        element={
+          <>
+            This section will define the order details in which you are willing
+            to {buy ? 'buy' : 'sell'} {base.symbol} at.
+            <br />
+            <b>Limit</b> will allow you to define a specific price point to{' '}
+            {buy ? 'buy' : 'sell'} the token at.
+            <br />
+            <b>Range</b> will allow you to define a range of prices to{' '}
+            {buy ? 'buy' : 'sell'} the token at.
+          </>
+        }
+      />
     </header>
   );
 };
