@@ -88,7 +88,7 @@ export const CreateForm: FC<FormProps> = (props) => {
 
       {user ? (
         <Button
-          className="mt-auto shrink-0"
+          className="shrink-0"
           type="submit"
           variant={isSell ? 'sell' : 'buy'}
           size="lg"
@@ -101,7 +101,7 @@ export const CreateForm: FC<FormProps> = (props) => {
         </Button>
       ) : (
         <Button
-          className="mt-auto shrink-0"
+          className="shrink-0"
           type="button"
           variant="success"
           size="lg"
