@@ -22,10 +22,16 @@ export const useGetTokenPrice = (address?: string) => {
 
   return useQuery({
     queryKey: QueryKey.tokenPrice(address!),
-    queryFn: () =>
-      carbonApi
+    queryFn: () => {
+      return carbonApi
         .getMarketRate(address!, availableCurrencies)
-        .catch(() => ({} as FiatPriceDict)), // Return an empty object to prevent refetch on error from child component
+        .catch((err) => {
+          console.error(err);
+          // Return an empty object to prevent refetch on error from child component
+          // @todo(#1438) see how to multi cast the error state
+          return {} as FiatPriceDict;
+        });
+    },
     enabled: !!address && availableCurrencies.length > 0,
     refetchInterval: FIVE_MIN_IN_MS,
     staleTime: FIVE_MIN_IN_MS,

@@ -1,12 +1,4 @@
-import {
-  FC,
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { FC, ReactNode, createContext, useCallback, useContext } from 'react';
 import {
   Activity,
   ActivityMeta,
@@ -102,17 +94,9 @@ export const ActivityProvider: FC<Props> = ({ children, params }) => {
     [nav]
   );
 
-  // We need display the loading only when params change, not when search changes.
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(params)]);
-  useEffect(() => {
-    if (loading && !activityQuery.isPending) setLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, activityQuery.isPending]);
-  if (loading) return <CarbonLogoLoading className="h-[80px] self-center" />;
+  if (activityMetaQuery.isPending) {
+    return <CarbonLogoLoading className="h-[80px] self-center" />;
+  }
 
   const activities = activityQuery.data ?? [];
   const size = activitySizeQuery.data?.size;

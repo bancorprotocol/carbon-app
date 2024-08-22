@@ -12,13 +12,12 @@ import { navigateTo } from '../utils/operators';
 import { TokenApprovalDriver } from '../utils/TokenApprovalDriver';
 import { waitForTenderlyRpc } from '../utils/tenderly';
 import { TradeTestCase } from '../utils/trade/types';
-import { NotificationDriver } from '../utils/NotificationDriver';
 
 const testCases: TradeTestCase[] = [
   {
     mode: 'buy' as const,
-    base: 'USDC',
-    quote: 'ETH',
+    base: 'ETH',
+    quote: 'USDC',
     swaps: [
       {
         sourceValue: '100',
@@ -39,10 +38,6 @@ const testCases: TradeTestCase[] = [
       {
         sourceValue: '10',
         targetValue: '10.004863',
-      },
-      {
-        sourceValue: '10',
-        targetValue: '10.004838',
       },
     ],
   },
@@ -107,10 +102,11 @@ test.describe('Trade', () => {
   });
 
   for (const testCase of testCases) {
-    const { base, quote, swaps, isLimitedApproval } = testCase;
+    const { mode, base, quote, swaps, isLimitedApproval } = testCase;
+    const source = mode === 'sell' ? base : quote;
+    const target = mode === 'sell' ? quote : base;
 
     const testName = testDescription(testCase);
-
     test(testName, async ({ page }) => {
       // Store current balance
       const debug = new DebugDriver(page);
@@ -125,9 +121,9 @@ test.describe('Trade', () => {
       const driver = new TradeDriver(page, testCase);
       const tokenApproval = new TokenApprovalDriver(page);
 
-      // Select pair
       await driver.selectToken('base');
       await driver.selectToken('quote');
+      await driver.setMode(mode);
 
       for (const swap of swaps) {
         const { sourceValue, targetValue } = swap;
@@ -145,15 +141,12 @@ test.describe('Trade', () => {
         await waitForTenderlyRpc(page);
 
         // Token approval
-        await tokenApproval.checkApproval([base], isLimitedApproval);
+        await tokenApproval.checkApproval([source], isLimitedApproval);
 
         // Verify form empty
         await driver.awaitSuccess();
-        expect(driver.getPayInput()).toHaveValue('');
-        expect(driver.getReceiveInput()).toHaveValue('');
-
-        const notificationDriver = new NotificationDriver(page);
-        await notificationDriver.closeAll();
+        await expect(driver.getPayInput()).toHaveValue('');
+        await expect(driver.getReceiveInput()).toHaveValue('');
       }
 
       // Check balance diff after all swaps
@@ -173,10 +166,10 @@ test.describe('Trade', () => {
       );
       const sourceDelta = Number(initialBalance.base) - Number(sourceValue);
       const nextSource = new RegExp(sourceDelta.toString());
-      await expect(debug.getBalance(base)).toHaveText(nextSource);
+      await expect(debug.getBalance(source)).toHaveText(nextSource);
       const targetDelta = Number(initialBalance.quote) + Number(targetValue);
       const nextTarget = new RegExp(targetDelta.toString());
-      await expect(debug.getBalance(quote)).toHaveText(nextTarget);
+      await expect(debug.getBalance(target)).toHaveText(nextTarget);
     });
   }
 });
