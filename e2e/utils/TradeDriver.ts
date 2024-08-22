@@ -19,6 +19,10 @@ export class TradeDriver {
     return this.form.getByLabel('You Receive');
   }
 
+  setMode(mode: 'buy' | 'sell') {
+    return this.page.getByTestId(`tab-${mode}`).click();
+  }
+
   async selectToken(tokenType: 'base' | 'quote') {
     const symbol = this.testCase[tokenType];
     assertDebugToken(symbol);
