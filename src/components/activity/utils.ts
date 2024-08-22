@@ -1,6 +1,7 @@
 import { PaginationParams } from 'hooks/useList';
 import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
 import {
+  SearchParamsValidator,
   validArrayOf,
   validLiteral,
   validNumberType,
@@ -38,16 +39,16 @@ export const activityActions = Object.keys(
   activityActionName
 ) as ActivityAction[];
 
-export const validateActivityParams =
-  validateSearchParams<ActivitySearchParams>({
-    actions: validArrayOf(validLiteral(activityActions)),
-    ids: validArrayOf(validString),
-    pairs: validArrayOf(validString),
-    start: validString,
-    end: validString,
-    limit: validNumberType,
-    offset: validNumberType,
-  });
+export const activityValidators: SearchParamsValidator<ActivitySearchParams> = {
+  actions: validArrayOf(validLiteral(activityActions)),
+  ids: validArrayOf(validString),
+  pairs: validArrayOf(validString),
+  start: validString,
+  end: validString,
+  limit: validNumber,
+  offset: validNumber,
+};
+export const validateActivityParams = validateSearchParams(activityValidators);
 
 export const activityHasPairs = (activity: Activity, pairs: string[] = []) => {
   if (pairs.length === 0) return true;

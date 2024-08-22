@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'; // to add vitest jsdom matcher support
 import { afterEach, vitest } from 'vitest';
-import { tokens } from './utils';
 import { cleanup } from '@testing-library/react';
+import { tokenList } from './utils/mock';
 
 afterEach(() => {
   // Set up clean-up after each test. See issue https://github.com/vitest-dev/vitest/issues/1430
@@ -12,6 +12,7 @@ afterEach(() => {
 // MOCK STORE PROVIDER CONTEXTS
 vitest.mock('store/useTokensStore.ts', async (importOriginal) => {
   const mod = await importOriginal<typeof import('store/useTokensStore.ts')>();
+  const tokens = Object.values(tokenList);
   const tokensMap = new Map(
     tokens.map((token) => [token.address.toLowerCase(), token])
   );

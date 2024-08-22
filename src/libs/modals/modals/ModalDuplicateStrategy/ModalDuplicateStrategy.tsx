@@ -37,7 +37,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       if (isGasTokenToHide(quoteAddress)) quoteAddress = NATIVE_TOKEN_ADDRESS;
 
       navigate({
-        to: '/strategies/create/overlapping',
+        to: '/trade/overlapping',
         search: {
           base: baseAddress,
           quote: quoteAddress,

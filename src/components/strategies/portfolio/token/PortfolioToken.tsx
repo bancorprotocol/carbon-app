@@ -9,6 +9,7 @@ import { PortfolioPieChart } from './../PortfolioPieChart';
 import { PortfolioTokenDesktop } from './PortfolioTokenDesktop';
 import { PortfolioTokenMobile } from './PortfolioTokenMobile';
 import { usePortfolioTokenPieChart } from './usePortfolioTokenPieChart';
+import { NotFound } from 'components/common/NotFound';
 
 interface Props {
   address: string;
@@ -38,7 +39,13 @@ const _PortfolioToken = ({
   );
 
   if (!selectedToken && !isPending) {
-    return <div>error token not found</div>;
+    return (
+      <NotFound
+        variant="error"
+        title="Token information not found"
+        text="Please search the portfolio by a different token."
+      />
+    );
   }
 
   return (

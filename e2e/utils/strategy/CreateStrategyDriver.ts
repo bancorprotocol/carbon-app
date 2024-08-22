@@ -6,7 +6,7 @@ import {
   getRecurringSettings,
   screenshotPath,
 } from './utils';
-import { CreateStrategyTestCase, StrategySettings } from './types';
+import { CreateStrategyTestCase, StrategyType } from './types';
 import {
   RangeOrder,
   debugTokens,
@@ -54,6 +54,13 @@ export class CreateStrategyDriver {
     };
   }
 
+  async waitForLoading() {
+    const loadings = await this.page.locator('.loading-message').all();
+    return Promise.all(
+      loadings.map((loading) => loading.waitFor({ state: 'detached' }))
+    );
+  }
+
   async selectToken(tokenType: 'base' | 'quote') {
     const symbol = this.testCase[tokenType];
     assertDebugToken(symbol);
@@ -65,7 +72,7 @@ export class CreateStrategyDriver {
     await waitModalClose(this.page);
   }
 
-  selectSetting(strategySettings: StrategySettings) {
+  selectSetting(strategySettings: StrategyType) {
     return this.page.getByTestId(strategySettings).click();
   }
 
@@ -90,13 +97,12 @@ export class CreateStrategyDriver {
     return form;
   }
 
-  async fillRecurring() {
+  async fillRecurring(direction: Direction) {
     assertRecurringTestCase(this.testCase);
-    const { buy, sell } = this.testCase.input.create;
-    const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
-    const sellForm = await this.fillFormSection('sell', sellSetting, sell);
-    const buyForm = await this.fillFormSection('buy', buySetting, buy);
-    return { buyForm, sellForm };
+    const input = this.testCase.input.create[direction];
+    const index = direction === 'buy' ? 0 : 1;
+    const settings = getRecurringSettings(this.testCase)[index];
+    return this.fillFormSection(direction, settings, input);
   }
 
   async fillDisposable() {
@@ -107,12 +113,8 @@ export class CreateStrategyDriver {
     return this.fillFormSection(direction, setting, order);
   }
 
-  nextStep() {
-    return this.page.getByText('Next Step').click();
-  }
-
   async submit(type: StrategyCase) {
-    const btn = this.page.getByText('Create Strategy');
+    const btn = this.page.getByTestId('create-strategy');
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
@@ -123,13 +125,14 @@ export class CreateStrategyDriver {
       await mainMenu.show();
     }
     try {
+      await this.waitForLoading();
       await waitFor(this.page, 'approve-warnings', 2_000);
       if (await this.page.isVisible('[data-testid=approve-warnings]')) {
         await this.page.getByTestId('approve-warnings').click();
       }
       await btn.click();
     } catch {
-      await btn.click({ timeout: 1_000 });
+      await btn.click({ timeout: 5_000 });
     }
   }
 }

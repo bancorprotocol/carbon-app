@@ -1,18 +1,17 @@
 import { FC, ReactNode, useId } from 'react';
 import { Token } from 'libs/tokens';
-import { m } from 'libs/motion';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { StrategySettings, StrategyType } from 'libs/routing';
-import { LogoImager } from 'components/common/imager/Imager';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/common/OrderHeader';
-import { items } from 'components/strategies/common/variants';
 import { InputRange } from 'components/strategies/common/InputRange';
 import { InputLimit } from 'components/strategies/common/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
 import { InputBudget } from 'components/strategies/common/InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
+import { cn } from 'utils/helpers';
+import { LogoImager } from 'components/common/imager/Imager';
 
 interface Props {
   base: Token;
@@ -42,10 +41,7 @@ export const CreateOrder: FC<Props> = ({
   const titleId = useId();
 
   // PRICES
-  const tooltipText = `This section will define the order details in which you are willing to ${
-    buy ? 'buy' : 'sell'
-  } ${base.symbol} at.`;
-
+  const tooltipText = `This section will define the order details in which you are willing to ${type} ${base.symbol} at.`;
   const inputTitle = (
     <>
       <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
@@ -100,16 +96,16 @@ export const CreateOrder: FC<Props> = ({
   };
 
   const headerProps = { titleId, order, base, buy, setSettings };
-
+  const border = buy
+    ? 'border-buy/50 focus-within:border-buy'
+    : 'border-sell/50 focus-within:border-sell';
   return (
-    <m.article
-      variants={items}
+    <article
       aria-labelledby={titleId}
-      className={`rounded-10 bg-background-900 flex flex-col gap-20 border-l-2 p-20 ${
-        buy
-          ? 'border-buy/50 focus-within:border-buy'
-          : 'border-sell/50 focus-within:border-sell'
-      }`}
+      className={cn(
+        'bg-background-900 flex flex-col gap-20 rounded border-s p-20',
+        border
+      )}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {settings}
@@ -185,6 +181,6 @@ export const CreateOrder: FC<Props> = ({
         base={base}
         quote={quote}
       />
-    </m.article>
+    </article>
   );
 };

@@ -5,15 +5,19 @@ import {
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useWagmi } from 'libs/wagmi';
 import { WalletConnect } from 'components/common/walletConnect';
-import { StrategyPageTitleWidget } from 'components/strategies/overview/StrategyPageTitleWidget';
+import { StrategySearch } from 'components/strategies/overview/StrategySearch';
 import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
-import { Outlet, useRouterState, useMatchRoute } from 'libs/routing';
+import { Outlet, useRouterState, useMatchRoute, Link } from 'libs/routing';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
 import { StrategyProvider } from 'hooks/useStrategies';
+import { cn } from 'utils/helpers';
+import { carbonEvents } from 'services/events';
+import { buttonStyles } from 'components/common/button/buttonStyles';
+import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
 
 export const StrategiesPage = () => {
   const { pathname } = useRouterState().location;
@@ -25,19 +29,19 @@ export const StrategiesPage = () => {
 
   const showFilter = useMemo(() => {
     if (!isStrategiesPage) return false;
-    if (belowBreakpoint('lg')) return false;
+    if (belowBreakpoint('md')) return false;
     return !!(query.data && query.data.length > 2);
   }, [belowBreakpoint, isStrategiesPage, query.data]);
 
   const tabs: StrategyTab[] = [
     {
-      label: 'Overview',
+      label: 'Strategies',
       href: '/',
       icon: <IconOverview className="size-18" />,
       badge: query.data?.length,
     },
     {
-      label: 'Portfolio',
+      label: 'Distribution',
       href: '/strategies/portfolio',
       icon: <IconPieChart className="size-18" />,
     },
@@ -52,12 +56,27 @@ export const StrategiesPage = () => {
     <Page hideTitle={true}>
       <StrategyProvider query={query}>
         {user && (
-          <header
-            role="toolbar"
-            className="mb-20 flex items-center justify-between"
-          >
+          <header role="toolbar" className="mb-20 flex items-center gap-20">
             <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-            <StrategyPageTitleWidget showFilter={showFilter} />
+            {showFilter && (
+              <>
+                <StrategySearch />
+                <StrategyFilterSort />
+              </>
+            )}
+            <Link
+              to="/trade"
+              className={cn(
+                buttonStyles({ variant: 'success' }),
+                'hidden md:flex'
+              )}
+              data-testid="create-strategy-desktop"
+              onClick={() =>
+                carbonEvents.strategy.newStrategyCreateClick(undefined)
+              }
+            >
+              Create Strategy
+            </Link>
           </header>
         )}
         {/* Hidden tag to target in E2E */}

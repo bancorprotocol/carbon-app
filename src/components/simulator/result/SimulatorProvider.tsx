@@ -26,6 +26,7 @@ interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
   status: SimulationStatus;
   start: () => void;
   end: () => void;
+  replay: () => void;
   pause: () => void;
   unpause: () => void;
   onBrush: (frame: number) => void;
@@ -152,6 +153,15 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
     setAnimationData(query.data?.data || []);
   };
 
+  const replay = useCallback(() => {
+    setAnimationData([]);
+    animationFrame.current = 0;
+    if (status.current !== 'running') {
+      status.current = 'running';
+      handleAnimationStep();
+    }
+  }, [handleAnimationStep]);
+
   const onBrush = (frame: number) => {
     if (!actionAfterBrushEnd.current) {
       if (status.current === 'running') {
@@ -194,6 +204,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
         animationData,
         start,
         end,
+        replay,
         onBrush,
         onBrushEnd,
         pause,
