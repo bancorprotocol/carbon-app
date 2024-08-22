@@ -11,6 +11,56 @@ export class CreateStrategyDriver {
     return this.screen.findByTestId('create-strategy-form');
   }
 
+  async findDisposableForm() {
+    const form = await this.findCreateForm();
+    return {
+      element: form,
+      min: () => within(form).getByTestId('input-min'),
+      max: () => within(form).getByTestId('input-max'),
+      price: () => within(form).getByTestId('input-price'),
+      tabSell: () => within(form).getByTestId('tab-sell'),
+      tabBuy: () => within(form).getByTestId('tab-buy'),
+      limit: () => within(form).getByTestId('tab-limit'),
+      range: () => within(form).getByTestId('tab-range'),
+      budget: () => within(form).getByTestId('input-budget'),
+      marketPriceIndicators: () =>
+        within(form).queryAllByTestId('market-price-indication'),
+      approveWarnings: () => within(form).queryByTestId('approve-warnings'),
+      submit: () => within(form).getByTestId('create-strategy'),
+    };
+  }
+
+  async findRecurringForm() {
+    const form = await this.findCreateForm();
+    const buySection = within(form).getByTestId('buy-section');
+    const sellSection = within(form).getByTestId('sell-section');
+    return {
+      element: form,
+      buy: {
+        min: () => within(buySection).getByTestId('input-min'),
+        max: () => within(buySection).getByTestId('input-max'),
+        price: () => within(buySection).getByTestId('input-price'),
+        limit: () => within(buySection).getByTestId('tab-limit'),
+        range: () => within(buySection).getByTestId('tab-range'),
+        budget: () => within(buySection).getByTestId('input-budget'),
+        marketPriceIndicators: () =>
+          within(buySection).queryAllByTestId('market-price-indication'),
+      },
+      sell: {
+        min: () => within(sellSection).getByTestId('input-min'),
+        max: () => within(sellSection).getByTestId('input-max'),
+        price: () => within(sellSection).getByTestId('input-price'),
+        limit: () => within(sellSection).getByTestId('tab-limit'),
+        range: () => within(sellSection).getByTestId('tab-range'),
+        budget: () => within(sellSection).getByTestId('input-budget'),
+        marketPriceIndicators: () =>
+          within(sellSection).queryAllByTestId('market-price-indication'),
+      },
+      approveWarnings: () => within(form).queryByTestId('approve-warnings'),
+      submit: () => within(form).getByTestId('create-strategy'),
+    };
+  }
+
   async findOverlappingForm() {
     const form = await this.findCreateForm();
     return {
@@ -27,8 +77,9 @@ export class CreateStrategyDriver {
         within(form).getByTestId(`anchor-${anchor}`),
       budget: () => within(form).getByTestId('input-budget'),
       marketPriceIndicators: () =>
-        within(form).getAllByTestId('market-price-indication'),
+        within(form).queryAllByTestId('market-price-indication'),
       approveWarnings: () => within(form).queryByTestId('approve-warnings'),
+      submit: () => within(form).getByTestId('create-strategy'),
     };
   }
 
