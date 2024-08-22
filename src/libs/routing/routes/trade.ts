@@ -6,7 +6,6 @@ import {
   validNumber,
   validateSearchParams,
 } from '../utils';
-import { StrategyDirection, StrategySettings } from './strategyCreate';
 import { TradeDisposable } from 'pages/trade/disposable';
 import { TradeRoot } from 'pages/trade/root';
 import { TradeMarket } from 'pages/trade/market';
@@ -14,7 +13,11 @@ import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
 
 // TRADE TYPE
-export type TradeTypes = 'disposable' | 'recurring' | 'overlapping' | 'market';
+export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
+export type StrategyDirection = 'buy' | 'sell';
+export type StrategySettings = 'limit' | 'range';
+
+export type TradeTypes = StrategyType | 'market';
 export interface TradeTypeSearch extends TradeSearch {
   type?: TradeTypes;
 }
@@ -37,7 +40,7 @@ export interface TradeRecurringSearch extends TradeSearch {
   sellMin?: string;
   sellMax?: string;
   sellBudget?: string;
-  sellSettings: StrategySettings;
+  sellSettings?: StrategySettings;
 }
 
 // TRADE OVERLAPPING
