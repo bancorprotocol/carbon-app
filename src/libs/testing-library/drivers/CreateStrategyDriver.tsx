@@ -11,6 +11,25 @@ export class CreateStrategyDriver {
     return this.screen.findByTestId('create-strategy-form');
   }
 
+  async findDisposableForm() {
+    const form = await this.findCreateForm();
+    return {
+      element: form,
+      min: () => within(form).getByTestId('input-min'),
+      max: () => within(form).getByTestId('input-max'),
+      price: () => within(form).getByTestId('input-price'),
+      tabSell: () => within(form).getByTestId('tab-sell'),
+      tabBuy: () => within(form).getByTestId('tab-buy'),
+      limit: () => within(form).getByTestId('tab-limit'),
+      range: () => within(form).getByTestId('tab-range'),
+      budget: () => within(form).getByTestId('input-budget'),
+      marketPriceIndicators: () =>
+        within(form).queryAllByTestId('market-price-indication'),
+      approveWarnings: () => within(form).queryByTestId('approve-warnings'),
+      submit: () => within(form).getByTestId('create-strategy'),
+    };
+  }
+
   async findRecurringForm() {
     const form = await this.findCreateForm();
     const buySection = within(form).getByTestId('buy-section');
