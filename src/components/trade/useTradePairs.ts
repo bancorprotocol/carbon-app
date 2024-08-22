@@ -19,7 +19,7 @@ export const useTradePairs = () => {
 
   const onTradePairSelect = (tradePair: TradePair) => {
     navigate({
-      to: '/trade',
+      to: '/trade/disposable',
       search: {
         base: tradePair.baseToken.address,
         quote: tradePair.quoteToken.address,

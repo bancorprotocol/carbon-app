@@ -49,7 +49,6 @@ const get = async <T>(
   }
   const response = await fetch(url, { signal: abortSignal });
   const result = await response.json();
-
   if (!response.ok) {
     const error = (result as { error?: string }).error;
     throw new Error(

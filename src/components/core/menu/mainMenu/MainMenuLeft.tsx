@@ -11,6 +11,7 @@ export const MainMenuLeft: FC = () => {
 
   const isSamePageLink = (to: string) => {
     if (pathname.startsWith('/strategies') && to === '/') return true;
+    if (pathname.startsWith('/trade') && to.startsWith('/trade')) return true;
     return !!match({ to, search: {}, params: {}, fuzzy: true });
   };
 
@@ -28,7 +29,7 @@ export const MainMenuLeft: FC = () => {
       </Link>
 
       <div className="hidden space-x-24 md:block">
-        {menuItems.map(({ label, href }, index) => {
+        {menuItems.map(({ label, href, testid }, index) => {
           const isSamePage = isSamePageLink(href);
 
           return (
@@ -40,6 +41,7 @@ export const MainMenuLeft: FC = () => {
               params={{}}
               search={{}}
               aria-current={isSamePage ? 'page' : 'false'}
+              data-testid={testid}
               className={`font-title px-3 py-3 transition-colors duration-300 ${
                 isSamePage ? 'text-white' : 'hover:text-white'
               }`}

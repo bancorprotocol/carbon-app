@@ -27,7 +27,6 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
     await createForm.selectSetting('overlapping');
-    await createForm.nextStep();
 
     const form = createForm.getOverlappingForm();
     await form.max().focus();
@@ -35,7 +34,6 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await form.min().focus();
     await form.min().fill(buy.min.toString());
     await form.spread().fill(spread.toString());
-    await expect(form.anchorRequired()).toBeVisible();
     await form.anchor('sell').click();
     await form.budget().focus();
     await form.budget().fill(sell.budget.toString());

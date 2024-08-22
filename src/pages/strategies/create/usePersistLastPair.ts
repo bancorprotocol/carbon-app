@@ -1,18 +1,13 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
+import { TradeSearch } from 'libs/routing';
 import { getLastVisitedPair } from 'libs/routing/utils';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 
-export const usePersistLastPair = (
-  url:
-    | '/strategies/create'
-    | '/strategies/create/disposable'
-    | '/strategies/create/recurring'
-    | '/strategies/create/overlapping'
-) => {
+export const usePersistLastPair = (from: '/trade') => {
   const { getTokenById } = useTokens();
-  const search = useSearch({ from: url });
+  const search = useSearch({ strict: false }) as TradeSearch;
   const defaultPair = getLastVisitedPair();
   const base = getTokenById(search.base ?? defaultPair.base);
   const quote = getTokenById(search.quote ?? defaultPair.quote);
@@ -22,7 +17,7 @@ export const usePersistLastPair = (
     lsService.setItem('tradePair', [base.address, quote.address]);
   }, [base, quote]);
 
-  const navigate = useNavigate({ from: url });
+  const navigate = useNavigate({ from });
   useEffect(() => {
     if (search.base && search.quote) return;
     navigate({
