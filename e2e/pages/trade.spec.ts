@@ -39,10 +39,6 @@ const testCases: TradeTestCase[] = [
         sourceValue: '10',
         targetValue: '10.004863',
       },
-      // {
-      //   sourceValue: '10',
-      //   targetValue: '10.004838',
-      // },
     ],
   },
   {
