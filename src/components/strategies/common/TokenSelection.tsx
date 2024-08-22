@@ -108,12 +108,12 @@ export const TokenSelection = () => {
           data-testid="select-base-token"
           onClick={() => openTokenListModal('base')}
         >
-          <TokenLogo token={base} size={30} />
+          <TokenLogo token={base} size={30} className="hidden md:inline" />
           <p className="grid flex-1 text-start">
             <span className="font-weight-500 text-12 text-white/60">
               Buy or Sell
             </span>
-            <span>{base.symbol}</span>
+            <span className="break-all">{base.symbol}</span>
           </p>
           <ChevronIcon className="ml-auto size-16" />
         </button>
@@ -131,10 +131,10 @@ export const TokenSelection = () => {
           data-testid="select-quote-token"
           onClick={() => openTokenListModal('quote')}
         >
-          <TokenLogo token={quote} size={30} />
+          <TokenLogo token={quote} size={30} className="hidden md:inline" />
           <p className="grid flex-1 text-start">
             <span className="font-weight-500 text-12 text-white/60">With</span>
-            <span>{quote.symbol}</span>
+            <span className="break-all">{quote.symbol}</span>
           </p>
           <ChevronIcon className="ml-auto size-16" />
         </button>

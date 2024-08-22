@@ -15,6 +15,7 @@ import {
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
   myStrategyLayout,
+  oldCreateStrategies,
   strategyActivityPage,
   strategyOverviewPage,
   strategyPortfolioLayout,
@@ -47,6 +48,7 @@ export const routeTree = rootRoute.addChildren([
   debugPage,
   tradePage,
   strategyPage,
+  oldCreateStrategies,
   editStrategyLayout.addChildren([
     editPricesDisposable,
     editPricesOverlapping,
