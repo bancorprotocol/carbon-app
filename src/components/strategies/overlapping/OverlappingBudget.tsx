@@ -59,7 +59,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
   })();
 
   return (
-    <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+    <>
       <hgroup>
         <h3 className="text-16 font-weight-500 flex items-center gap-6">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
@@ -81,6 +81,6 @@ export const OverlappingBudget: FC<Props> = (props) => {
         disabled={disabled}
         data-testid="input-budget"
       />
-    </article>
+    </>
   );
 };

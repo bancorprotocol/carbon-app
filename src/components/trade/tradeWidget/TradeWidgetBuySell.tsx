@@ -1,5 +1,5 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { FormEvent, useEffect, useId, useMemo, JSX } from 'react';
+import { FormEvent, useEffect, useId, JSX } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWagmi } from 'libs/wagmi';
@@ -13,6 +13,8 @@ import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
+import { useTradePairs } from '../useTradePairs';
+import { NoTrade } from '../NoTrade';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
@@ -25,6 +27,7 @@ export interface TradeWidgetBuySellProps extends FormAttributes {
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
   const { user } = useWagmi();
+  const { isTradePairError } = useTradePairs();
   const {
     sourceInput,
     setSourceInput,
@@ -137,14 +140,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         });
   };
 
-  const ctaButtonText = useMemo(() => {
-    if (user) {
-      return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
-    }
+  const ctaButtonText = (() => {
+    if (!user) return 'Connect Wallet';
+    return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
+  })();
 
-    return 'Connect Wallet';
-  }, [buy, source.symbol, target.symbol, user]);
-
+  if (isTradePairError) return <NoTrade />;
   if (liquidityQuery?.isError) return <div>Error</div>;
 
   if (!source || !target) return null;
@@ -180,16 +181,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   };
 
   return (
-    <form
-      {...formProps}
-      onSubmit={handleTrade}
-      className="rounded-12 bg-background-900 flex flex-col p-20"
-    >
-      <h2 className="mb-20">
-        {buy
-          ? `Buy ${target.symbol} with ${source.symbol}`
-          : `Sell ${source.symbol} for ${target.symbol}`}
-      </h2>
+    <form {...formProps} onSubmit={handleTrade} className="flex flex-col">
       {hasEnoughLiquidity || liquidityQuery.isPending ? (
         <>
           <header className="text-14 flex justify-between">
@@ -288,7 +280,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         loadingChildren="Waiting for Confirmation"
         variant={buy ? 'buy' : 'sell'}
         fullWidth
-        size="lg"
         className="mt-20"
         data-testid="submit"
       >

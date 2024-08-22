@@ -2,7 +2,7 @@ export {
   marketRateHandler,
   tokenListHandlers,
   MockServer,
-  tokens,
+  tokenList,
 } from './mock';
 export { loadRouter } from './routing';
 export { type RouterRenderParams } from './types';

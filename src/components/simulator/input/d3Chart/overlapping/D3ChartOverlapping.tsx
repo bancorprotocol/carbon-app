@@ -1,4 +1,3 @@
-import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { D3ChartCandlesticksProps } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
 import { D3ChartHandleLine } from 'components/simulator/input/d3Chart/D3ChartHandleLine';
 import { D3ChartPriceOutOfScale } from 'components/simulator/input/d3Chart/D3ChartPriceOutOfScale';
@@ -19,8 +18,9 @@ import {
   getMinSellMax,
 } from 'components/strategies/overlapping/utils';
 import { ScaleLinear } from 'd3';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { formatNumber, prettifyNumber } from 'utils/helpers';
+import { useCallback, useEffect, useRef } from 'react';
+import { prettifyNumber } from 'utils/helpers';
+import { useD3OverlappingChart } from './useD3OverlappingChart';
 
 type Props = Pick<
   D3ChartCandlesticksProps,
@@ -50,32 +50,12 @@ export const D3ChartOverlapping = (props: Props) => {
   const selectorHandleSellMax = getHandleSelector('sell', 'line1');
   const selectorHandleSellMin = getHandleSelector('sell', 'line2');
 
-  const yPos = useMemo(
-    () => ({
-      buy: {
-        min: yScale(Number(prices.buy.min)),
-        max: yScale(Number(prices.buy.max)),
-      },
-      sell: {
-        min: yScale(Number(prices.sell.min)),
-        max: yScale(Number(prices.sell.max)),
-      },
-      marketPrice: marketPrice ? yScale(marketPrice) : 0,
-    }),
-    [prices, yScale, marketPrice]
-  );
-
-  const calcPrices = useCallback(
-    (buyMin: string, sellMax: string) => {
-      return calculateOverlappingPrices(
-        formatNumber(buyMin),
-        formatNumber(sellMax),
-        marketPrice?.toString() ?? '0',
-        spread.toString()
-      );
-    },
-    [marketPrice, spread]
-  );
+  const { calcPrices, yPos } = useD3OverlappingChart({
+    prices,
+    yScale,
+    spread,
+    marketPrice,
+  });
 
   const onDragBuy = useCallback(
     (y: number) => {

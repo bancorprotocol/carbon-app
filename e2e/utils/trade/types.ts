@@ -7,8 +7,8 @@ export type TestCaseSwap = {
 
 export type TradeTestCase = {
   mode: Direction;
-  source: DebugTokens;
-  target: DebugTokens;
+  base: DebugTokens;
+  quote: DebugTokens;
   isLimitedApproval?: boolean;
   swaps: TestCaseSwap[];
 };

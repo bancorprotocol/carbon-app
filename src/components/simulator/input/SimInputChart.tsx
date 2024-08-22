@@ -172,7 +172,7 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
       </p>
 
       <Link
-        to="/strategies/create"
+        to="/trade/disposable"
         search={{ base, quote }}
         className={buttonStyles({ variant: 'success' })}
       >

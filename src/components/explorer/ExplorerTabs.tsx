@@ -27,14 +27,14 @@ export const ExplorerTabs = () => {
 
   const tabs: StrategyTab[] = [
     {
-      label: 'Overview',
+      label: 'Strategies',
       href: '/explore/$type/$slug',
       params: { type, slug },
       icon: <IconOverview className="size-18" />,
       badge: filteredStrategies?.length || 0,
     },
     {
-      label: 'Portfolio',
+      label: 'Distribution',
       href: '/explore/$type/$slug/portfolio',
       params: { type, slug },
       icon: <IconPieChart className="size-18" />,
