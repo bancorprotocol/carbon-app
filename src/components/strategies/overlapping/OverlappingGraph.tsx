@@ -16,6 +16,7 @@ import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-manageme
 import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { isValidRange } from '../utils';
+import { OverlappingOrder } from '../common/types';
 import styles from './OverlappingGraph.module.css';
 
 type Props = EnableProps | DisableProps;
@@ -24,8 +25,8 @@ interface EnableProps {
   userMarketPrice?: string;
   base?: Token;
   quote?: Token;
-  order0: { min: string; max: string; marginalPrice: string };
-  order1: { min: string; max: string; marginalPrice: string };
+  order0: OverlappingOrder;
+  order1: OverlappingOrder;
   spread: number;
   setMin: (value: string) => void;
   setMax: (value: string) => void;
@@ -36,8 +37,8 @@ interface DisableProps {
   userMarketPrice?: string;
   base?: Token;
   quote?: Token;
-  order0: { min: string; max: string; marginalPrice: string };
-  order1: { min: string; max: string; marginalPrice: string };
+  order0: OverlappingOrder;
+  order1: OverlappingOrder;
   spread: number;
   disabled: true;
 }

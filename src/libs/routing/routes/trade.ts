@@ -53,6 +53,10 @@ export interface TradeOverlappingSearch extends TradeSearch {
   budget?: string;
   chartType?: 'history' | 'range';
 }
+export type SetOverlapping = <T extends keyof TradeOverlappingSearch>(
+  key: T,
+  value: TradeOverlappingSearch[T]
+) => void;
 
 // TRADE MARKET
 export interface TradeMarketSearch extends TradeSearch {

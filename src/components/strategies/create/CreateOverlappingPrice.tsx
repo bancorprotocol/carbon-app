@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import {
   getMaxBuyMin,
   getMinSellMax,
@@ -10,12 +10,12 @@ import { OverlappingSpread } from 'components/strategies/overlapping/Overlapping
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { Token } from 'libs/tokens';
 import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useSearch } from '@tanstack/react-router';
 import { InputRange } from '../common/InputRange';
 import { OverlappingOrder } from 'components/strategies/common/types';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
-import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
+import { SetOverlapping } from 'libs/routing/routes/trade';
 
 interface Props {
   base: Token;
@@ -24,26 +24,14 @@ interface Props {
   order0: OverlappingOrder;
   order1: OverlappingOrder;
   spread: string;
+  set: SetOverlapping;
 }
-type Search = TradeOverlappingSearch;
 
 const url = '/trade/overlapping';
 export const CreateOverlappingPrice: FC<Props> = (props) => {
-  const { base, quote, order0, order1, marketPrice, spread } = props;
-  const navigate = useNavigate({ from: url });
-  const search = useSearch({ strict: false }) as Search;
+  const { base, quote, order0, order1, marketPrice, spread, set } = props;
+  const search = useSearch({ from: url });
   const { anchor } = search;
-
-  const set = useCallback(
-    <T extends keyof Search>(key: T, value: Search[T]) => {
-      navigate({
-        search: (previous) => ({ ...previous, [key]: value }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate]
-  );
 
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
