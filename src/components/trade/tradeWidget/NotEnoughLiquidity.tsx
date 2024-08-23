@@ -27,7 +27,7 @@ export const NotEnoughLiquidity = ({
           <IconWarning className="fill-error/100 size-16" />
         </div>
         <h2 className="font-weight-500 text-14 mb-8">No Liquidity Available</h2>
-        <p>No availble orders at this moment</p>
+        <p>No available orders at this moment</p>
         <div>
           You can&nbsp;
           <span
