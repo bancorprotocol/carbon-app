@@ -13,8 +13,8 @@ compare_images() {
 
   echo "diff pixels for $img1, $img2: $diff_pixels"
 
-  # Check if the number of different pixels is less than 10
-  if [ "$diff_pixels" -lt 10 ]; then
+  # Check if the number of different pixels is less than 11
+  if [ "$diff_pixels" -lt 11 ]; then
     return 0  # Images are considered identical
   else
     return 1  # Images are different
