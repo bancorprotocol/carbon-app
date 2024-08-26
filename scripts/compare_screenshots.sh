@@ -112,10 +112,14 @@ for screenshot in $modified_files; do
 
   # Compare with the baseline version
   diff_file="${current_screenshot}.diff.png"
+  # Temporarily disable 'set -e' to handle non-zero exit status
+  set +e
   compare_images "$baseline_screenshot" "$current_screenshot" "$diff_file"
+  comparison_result=$?
+  set -e
 
-  # Check if the image is identical to the baseline
-  if [ $? -eq 0 ]; then
+  # If images are identical, revert the screenshot
+  if [ $comparison_result -eq 0 ]; then
     echo "No visual difference for $screenshot. Reverting changes."
     git restore "$screenshot"
   else
