@@ -35,25 +35,22 @@ for screenshot in $modified_files; do
   # Full path to the modified screenshot
   current_screenshot="${GITHUB_WORKSPACE}/${screenshot}"
 
-  # Check if the baseline screenshot exists
-  if [ -f "$current_screenshot" ]; then
-    # Create a temporary diff image file
-    diff_file="${current_screenshot}.diff.png"
+  # Retrieve the original version of the file from the previous commit
+  git show HEAD~1:"$screenshot" > original_screenshot.png
+  baseline_screenshot="original_screenshot.png"
 
-    # Compare with the baseline version
-    compare_images "$current_screenshot" "$screenshot" "$diff_file"
+  # Compare with the baseline version
+  diff_file="${current_screenshot}.diff.png"
+  compare_images "$baseline_screenshot" "$current_screenshot" "$diff_file"
 
-    # Check if the image is identical to the baseline
-    if [ $? -eq 0 ]; then
-        echo "No visual difference for $screenshot. Reverting changes."
-        git restore "$screenshot"
-    else
-        echo "Visual difference detected for $screenshot. Keeping changes."
-    fi
-
-    # Clean up diff file
-    rm -f "$diff_file"
+  # Check if the image is identical to the baseline
+  if [ $? -eq 0 ]; then
+    echo "No visual difference for $screenshot. Reverting changes."
+    git restore "$screenshot"
   else
-    echo "Baseline image does not exist for $screenshot. Keeping new image."
+    echo "Visual difference detected for $screenshot. Keeping changes."
   fi
+
+  # Clean up temporary files
+  rm -f "$diff_file" "$baseline_screenshot"
 done
