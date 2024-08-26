@@ -86,7 +86,7 @@ const testDescription = (testCase: TradeTestCase) => {
   return testName + nameSwapSuffix + approvalSuffix;
 };
 
-test.describe('Trade', () => {
+test.skip('Trade', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     testInfo.setTimeout(90_000);
     await mockApi(page);

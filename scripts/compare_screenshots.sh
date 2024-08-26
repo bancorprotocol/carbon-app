@@ -18,7 +18,19 @@ compare_images() {
   local img1="$1"
   local img2="$2"
   local diff_img="$3"
+
   echo "Comparing baseline $img1 and screenshot $img2"
+
+  # Check if both files exist
+  if [[ ! -f "$img1" ]]; then
+    echo "Error: Baseline image $img1 does not exist."
+    exit 1
+  fi
+
+  if [[ ! -f "$img2" ]]; then
+    echo "Error: Current screenshot $img2 does not exist."
+    exit 1
+  fi
 
   # Use ImageMagick's compare tool to create a diff image and return the error count
   compare -metric AE "$img1" "$img2" "$diff_img" 2>compare_output.txt
@@ -47,6 +59,12 @@ for screenshot in $modified_files; do
   # Retrieve the original version of the file from the previous commit
   git show HEAD~1:"$screenshot" > original_screenshot.png
   baseline_screenshot="original_screenshot.png"
+
+  # Verify that the baseline screenshot was retrieved successfully
+  if [[ ! -s "$baseline_screenshot" ]]; then
+    echo "Error: Failed to retrieve baseline image $baseline_screenshot."
+    exit 1
+  fi
 
   # Compare with the baseline version
   diff_file="${current_screenshot}.diff.png"
