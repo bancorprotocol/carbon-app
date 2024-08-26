@@ -143,7 +143,7 @@ export const useCreateStrategy = (props: Props) => {
       return openModal('txConfirm', {
         approvalTokens,
         onConfirm,
-        buttonLabel: 'Create Doron',
+        buttonLabel: 'Create Strategy',
         eventData: {
           ...strategyData,
           productType: 'strategy',

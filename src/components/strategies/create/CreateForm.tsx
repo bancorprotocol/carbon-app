@@ -97,7 +97,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           loadingChildren={loadingChildren}
           data-testid="create-strategy"
         >
-          Create Doron
+          Create Strategy
         </Button>
       ) : (
         <Button

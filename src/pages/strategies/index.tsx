@@ -75,7 +75,7 @@ export const StrategiesPage = () => {
                 carbonEvents.strategy.newStrategyCreateClick(undefined)
               }
             >
-              Create Doron
+              Create Strategy
             </Link>
           </header>
         )}

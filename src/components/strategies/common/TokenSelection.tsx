@@ -94,7 +94,7 @@ export const TokenSelection = () => {
   return (
     <article className="bg-background-900 grid gap-20 rounded p-20">
       <header className="flex items-center justify-between">
-        <h2 className="text-18">Doron Pair</h2>
+        <h2 className="text-18">Token Pair</h2>
         <TokenSelectionTooltip />
       </header>
       <div

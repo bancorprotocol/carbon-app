@@ -34,7 +34,7 @@ export const ExplorerTabs = () => {
       badge: strategies?.length || 0,
     },
     {
-      label: 'Doron123',
+      label: 'Distribution',
       href: '/explore/$type/$slug/portfolio',
       params: { type, slug },
       icon: <IconPieChart className="size-18" />,

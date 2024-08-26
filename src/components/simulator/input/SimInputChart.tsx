@@ -176,7 +176,7 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
         search={{ base, quote }}
         className={buttonStyles({ variant: 'success' })}
       >
-        Create Doron
+        Create Strategy
       </Link>
     </div>
   );
