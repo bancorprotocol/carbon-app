@@ -34,11 +34,14 @@ compare_images() {
 
   # Use ImageMagick's compare tool to create a diff image and return the error count
   compare -metric AE "$img1" "$img2" "$diff_img" 2>compare_output.txt
-  diff_value=$(cat compare_output.txt | grep -o '[0-9]\+')
+  diff_value=$(cat compare_output.txt | grep -o '[0-9]\+' || echo "None")
   echo "Difference value for $img1 vs $img2: $diff_value"
-  
+
+  # Display any output from the compare command for debugging
+  cat compare_output.txt
+
   # Check if the difference value is zero (images are identical)
-  if [ "$diff_value" -eq 0 ]; then
+  if [ "$diff_value" == "0" ]; then
     return 0  # Images are identical
   else
     return 1  # Images are different
