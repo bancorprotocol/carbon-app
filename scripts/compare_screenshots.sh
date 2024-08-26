@@ -13,6 +13,17 @@ SCREENSHOT_DIR="${GITHUB_WORKSPACE}/e2e/screenshots"
 # Get a list of modified screenshots
 modified_files=$(git diff --name-only | grep '.png$' || true)
 
+# Function to check images with identify
+check_image() {
+  local img="$1"
+  echo "Running identify on $img"
+  identify "$img"
+  if [[ $? -ne 0 ]]; then
+    echo "Error: Image $img failed to be identified. It may be corrupted."
+    exit 1
+  fi
+}
+
 # Function to compare images
 compare_images() {
   local img1="$1"
@@ -38,33 +49,37 @@ compare_images() {
     exit 1
   fi
 
-  # Check file types to ensure they are valid images
-  file_type1=$(file --mime-type -b "$img1")
-  file_type2=$(file --mime-type -b "$img2")
+  # Use identify to check images
+  check_image "$img1"
+  check_image "$img2"
 
-  echo "File types: $img1 is $file_type1, $img2 is $file_type2"
-
-  if [[ "$file_type1" != "image/png" || "$file_type2" != "image/png" ]]; then
-    echo "Error: One of the files is not a PNG image."
-    exit 1
-  fi
+  # Optional: Use convert to reprocess images to a standard format
+  echo "Converting images to standard format"
+  convert "$img1" "${img1}.standard.png"
+  convert "$img2" "${img2}.standard.png"
+  img1="${img1}.standard.png"
+  img2="${img2}.standard.png"
 
   # Proceed with image comparison
   echo "Running ImageMagick compare on $img1 and $img2"
-  compare -metric AE "$img1" "$img2" "$diff_img" 2>compare_output.txt
-  echo "Finished running ImageMagick compare on $img1 and $img2"
-  # Check for comparison errors
-  if [[ $? -ne 0 ]]; then
-    echo "ImageMagick compare command failed."
-    cat compare_output.txt
-    exit 1
+  compare -metric AE "$img1" "$img2" "$diff_img" 2>compare_output.txt || true
+
+  # Capture the exit status
+  compare_exit_status=$?
+
+  echo "ImageMagick compare command exit status: $compare_exit_status"
+
+  # Display any output from the compare command for debugging
+  echo "Contents of compare_output.txt:"
+  cat compare_output.txt
+
+  if [[ $compare_exit_status -ne 0 ]]; then
+    echo "ImageMagick compare command failed or images are different."
+    exit $compare_exit_status
   fi
 
   diff_value=$(cat compare_output.txt | grep -o '[0-9]\+' || echo "None")
   echo "Difference value for $img1 vs $img2: $diff_value"
-
-  # Display any output from the compare command for debugging
-  cat compare_output.txt
 
   # Check if the difference value is zero (images are identical)
   if [ "$diff_value" == "0" ]; then
@@ -108,5 +123,5 @@ for screenshot in $modified_files; do
   fi
 
   # Clean up temporary files
-  rm -f "$diff_file" "$baseline_screenshot"
+  rm -f "$diff_file" "$baseline_screenshot" "${baseline_screenshot}.standard.png" "${current_screenshot}.standard.png"
 done
