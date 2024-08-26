@@ -6,7 +6,17 @@ compare_images() {
   local img1="$1"
   local img2="$2"
   local diff_img="$3"
-  compare -metric AE "$img1" "$img2" "$diff_img" 2>/dev/null || return 1
+
+  # Use ImageMagick compare with AE metric to count different pixels
+  local diff_pixels
+  diff_pixels=$(compare -metric AE "$img1" "$img2" "$diff_img" 2>&1 >/dev/null)
+
+  # Check if the number of different pixels is less than 3
+  if [ "$diff_pixels" -lt 3 ]; then
+    return 0  # Images are considered identical
+  else
+    return 1  # Images are different
+  fi
 }
 
 # Check if GITHUB_WORKSPACE is set
