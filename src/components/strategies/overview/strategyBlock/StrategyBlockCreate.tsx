@@ -9,7 +9,7 @@ type Props = {
   className?: string;
 };
 export const StrategyBlockCreate: FC<Props> = ({
-  title = 'Create Strategy',
+  title = 'Create Doron',
   className = '',
 }) => {
   return (
