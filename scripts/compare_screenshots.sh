@@ -18,6 +18,7 @@ compare_images() {
   local img1="$1"
   local img2="$2"
   local diff_img="$3"
+  echo "comparing baseline $img1 and screenshot $img2"
 
   # Use ImageMagick's compare tool to create a diff image
   compare -metric AE "$img1" "$img2" "$diff_img" 2>/dev/null || return 1
