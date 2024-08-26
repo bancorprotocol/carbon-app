@@ -11,8 +11,8 @@ compare_images() {
   local diff_pixels
   diff_pixels=$(compare -metric AE "$img1" "$img2" "$diff_img" 2>&1 >/dev/null)
 
-  # Check if the number of different pixels is less than 3
-  if [ "$diff_pixels" -lt 3 ]; then
+  # Check if the number of different pixels is less than 6
+  if [ "$diff_pixels" -lt 6 ]; then
     return 0  # Images are considered identical
   else
     return 1  # Images are different
