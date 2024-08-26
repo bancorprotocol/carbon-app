@@ -2,13 +2,13 @@ import { useTradeCtx } from './TradeContext';
 import { FC } from 'react';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { useSearch } from '@tanstack/react-router';
-import { OverlappingGraph } from 'components/strategies/overlapping/OverlappingGraph';
 import { OverlappingOrder } from 'components/strategies/common/types';
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { initSpread } from 'components/strategies/create/utils';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { NotFound } from 'components/common/NotFound';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { OverlappingChart } from 'components/strategies/overlapping/OverlappingChart';
 
 interface Props {
   marketPrice?: string;
@@ -25,13 +25,13 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
   });
 
   const range = marketPrice ? (
-    <OverlappingGraph
+    <OverlappingChart
       base={base}
       quote={quote}
       order0={order0}
       order1={order1}
-      userMarketPrice={marketPrice}
-      spread={+spread}
+      marketPrice={marketPrice}
+      spread={spread}
       setMin={(min) => set('min', min)}
       setMax={(max) => set('max', max)}
     />
