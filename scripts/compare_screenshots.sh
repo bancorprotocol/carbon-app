@@ -18,10 +18,19 @@ compare_images() {
   local img1="$1"
   local img2="$2"
   local diff_img="$3"
-  echo "comparing baseline $img1 and screenshot $img2"
+  echo "Comparing baseline $img1 and screenshot $img2"
 
-  # Use ImageMagick's compare tool to create a diff image
-  compare -metric AE "$img1" "$img2" "$diff_img" 2>/dev/null || return 1
+  # Use ImageMagick's compare tool to create a diff image and return the error count
+  compare -metric AE "$img1" "$img2" "$diff_img" 2>compare_output.txt
+  diff_value=$(cat compare_output.txt | grep -o '[0-9]\+')
+  echo "Difference value for $img1 vs $img2: $diff_value"
+  
+  # Check if the difference value is zero (images are identical)
+  if [ "$diff_value" -eq 0 ]; then
+    return 0  # Images are identical
+  else
+    return 1  # Images are different
+  fi
 }
 
 # Check if any modified files are found
