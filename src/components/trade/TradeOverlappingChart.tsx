@@ -47,7 +47,7 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
   return (
     <section
       aria-labelledby="price-chart-title"
-      className="bg-background-900 sticky top-[80px] flex max-h-[600px] min-h-[400px] flex-col gap-20 rounded p-20"
+      className="bg-background-900 sticky top-[80px] flex max-h-[600px] min-h-[500px] flex-col gap-20 rounded p-20"
     >
       <header className="flex flex-wrap items-center gap-20">
         <h2 id="price-chart-title" className="text-18">
@@ -55,12 +55,14 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
         </h2>
         <RadioGroup className="mr-auto">
           <Radio
+            name="chartType"
             checked={search.chartType !== 'history'}
             onChange={() => set('chartType', 'range')}
           >
             Range
           </Radio>
           <Radio
+            name="chartType"
             checked={search.chartType === 'history'}
             onChange={() => set('chartType', 'history')}
           >

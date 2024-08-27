@@ -1,6 +1,6 @@
 import { FC, ReactNode, useId } from 'react';
-import style from './RadioGroup.module.css';
 import { cn } from 'utils/helpers';
+import style from './RadioGroup.module.css';
 
 interface RadioGroupProps {
   className?: string;
@@ -40,6 +40,7 @@ export const Radio: FC<RadioProps> = (props) => {
         type="radio"
         checked={props.checked}
         value={props.value}
+        name={props.name}
         onChange={() => props.onChange?.(props.value)}
         className={style.radio}
         data-testid={props['data-testid']}

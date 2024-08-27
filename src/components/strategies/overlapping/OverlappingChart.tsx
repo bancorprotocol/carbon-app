@@ -504,7 +504,7 @@ export const OverlappingChart: FC<Props> = (props) => {
         <text
           x={box.width / 2}
           y={y(100) + padding + fontSize}
-          fontSize={fontSize}
+          fontSize={box.width < 500 ? fontSize - 2 : fontSize}
           textAnchor="middle"
           fill="white"
           fillOpacity="0.8"
