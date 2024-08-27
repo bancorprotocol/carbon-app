@@ -26,6 +26,7 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
 
   const range = marketPrice ? (
     <OverlappingChart
+      className="flex-1"
       base={base}
       quote={quote}
       order0={order0}
