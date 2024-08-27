@@ -369,6 +369,7 @@ export const OverlappingChart: FC<Props> = (props) => {
     e: ReactMouseEvent | ReactTouchEvent,
     mode: 'buy' | 'sell'
   ) => {
+    e.preventDefault();
     if (disabled) return;
     const x = 'clientX' in e ? e.clientX : e.touches.item(0).clientX;
     initialPosition = x;
@@ -599,7 +600,7 @@ export const OverlappingChart: FC<Props> = (props) => {
               stroke={outline}
               x1={0}
               x2={0}
-              y1={y(top + 5)}
+              y1={y(top + 10)}
               y2={y(bottom)}
               strokeWidth={3}
             />
