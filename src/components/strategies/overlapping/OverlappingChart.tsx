@@ -283,7 +283,6 @@ export const OverlappingChart: FC<Props> = (props) => {
 
   // ZOOM
   const updateZoom = (e: WheelEvent) => {
-    e.preventDefault();
     const newZoom = clamp(1, zoom + e.deltaY * 0.005, 2);
     setZoom(newZoom);
   };
