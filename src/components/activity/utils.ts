@@ -4,7 +4,7 @@ import {
   SearchParamsValidator,
   validArrayOf,
   validLiteral,
-  validNumber,
+  validNumberType,
   validString,
   validateSearchParams,
 } from 'libs/routing/utils';
@@ -45,8 +45,8 @@ export const activityValidators: SearchParamsValidator<ActivitySearchParams> = {
   pairs: validArrayOf(validString),
   start: validString,
   end: validString,
-  limit: validNumber,
-  offset: validNumber,
+  limit: validNumberType,
+  offset: validNumberType,
 };
 export const validateActivityParams = validateSearchParams(activityValidators);
 

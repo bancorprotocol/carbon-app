@@ -53,14 +53,9 @@ export const parseSearchWith = (parser: (str: string) => any) => {
         const value = query[key];
         if (typeof value === 'string') {
           try {
-            const parsed = parser(value);
-            if (typeof parsed === 'number') {
-              query[key] = parsed.toString();
-            } else {
-              query[key] = parsed;
-            }
+            query[key] = parser(value);
           } catch (err) {
-            //
+            console.error(`Error parsing param for key ${key}: `, err);
           }
         }
       }
@@ -94,6 +89,8 @@ export const validLiteral = (array: string[]) => {
 export const validNumber = v.string([
   v.custom((value: string) => isNaN(Number(formatNumber(value))) === false),
 ]);
+
+export const validNumberType = v.number();
 
 export const validAddress = v.string([
   v.custom((value: string) => {
