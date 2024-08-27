@@ -77,7 +77,12 @@ export const Imager = ({
   );
 };
 
-export const TokenLogo = ({ token, size }: { token: Token; size: number }) => {
+interface TokenLogoProps {
+  token: Token;
+  size: number;
+  className?: string;
+}
+export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
   return (
     <LogoImager
       width={size}
@@ -85,6 +90,7 @@ export const TokenLogo = ({ token, size }: { token: Token; size: number }) => {
       src={token.logoURI}
       alt={token.name ?? token.symbol}
       title={token.symbol}
+      className={className}
     />
   );
 };

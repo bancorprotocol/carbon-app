@@ -1,4 +1,4 @@
-import { Route } from '@tanstack/react-router';
+import { Route, redirect } from '@tanstack/react-router';
 import { validateActivityParams } from 'components/activity/utils';
 import { rootRoute } from 'libs/routing/routes/root';
 import { StrategiesPage } from 'pages/strategies';
@@ -52,4 +52,19 @@ export const strategyActivityPage = new Route({
   path: 'strategies/activity',
   component: StrategiesActivityPage,
   validateSearch: validateActivityParams,
+});
+
+// REDIRECT
+export const oldCreateStrategies = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/strategies/create/*',
+  beforeLoad: ({ location, params }) => {
+    const allParams = (params as any)['*'];
+    redirect({
+      to: `/trade/${allParams}`,
+      search: location.search,
+      throw: true,
+      replace: true,
+    } as any);
+  },
 });

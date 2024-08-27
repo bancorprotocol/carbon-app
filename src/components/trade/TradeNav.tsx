@@ -9,28 +9,28 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 export const links = [
   {
     label: 'Limit / Range',
-    svg: <IconBuyLimit className="size-16" />,
+    svg: <IconBuyLimit className="hidden size-14 md:inline" />,
     to: '/trade/disposable',
     text: 'Buy or sell at a specific price, or gradually scale in or out of a position.',
     id: 'disposable',
   },
   {
     label: 'Recurring',
-    svg: <IconRecurring className="size-16" />,
+    svg: <IconRecurring className="hidden size-14 md:inline" />,
     to: '/trade/recurring',
     text: 'Create an automated trading cycle of buy low/sell high with two separate orders.',
     id: 'recurring',
   },
   {
     label: 'Concentrated',
-    svg: <IconOverlappingStrategy className="size-16" />,
+    svg: <IconOverlappingStrategy className="hidden size-14 md:inline" />,
     to: '/trade/overlapping',
     text: 'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
     id: 'overlapping',
   },
   {
     label: 'Spot',
-    svg: <IconMarket className="size-16" />,
+    svg: <IconMarket className="hidden size-14 md:inline" />,
     to: '/trade/market',
     text: 'Instantly execute trades by directly trading against available strategies, with prices determined by current liquidity.',
     id: 'market',
@@ -52,7 +52,7 @@ export const TradeNav = () => {
       </h2>
       <nav
         aria-labelledby="trading-strateg-nav"
-        className="grid grid-cols-2 gap-8"
+        className="text-14 grid grid-cols-2 gap-8"
       >
         {links.map((link) => (
           <Link
@@ -62,7 +62,7 @@ export const TradeNav = () => {
             search={{ base, quote }}
             aria-current={current === link.id ? 'page' : 'false'}
             data-testid={link.id}
-            className="rounded-8 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 hover:border-white aria-[current=page]:border-white aria-[current=page]:text-white"
+            className="rounded-8 hover:border-background-400 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
           >
             {link.svg}
             {link.label}

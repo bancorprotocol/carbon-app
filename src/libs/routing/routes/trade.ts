@@ -36,7 +36,7 @@ export interface TradeRecurringSearch extends TradeSearch {
   buyMin?: string;
   buyMax?: string;
   buyBudget?: string;
-  buySettings: StrategySettings;
+  buySettings?: StrategySettings;
   sellMin?: string;
   sellMax?: string;
   sellBudget?: string;
