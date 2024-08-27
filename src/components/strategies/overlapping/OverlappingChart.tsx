@@ -179,8 +179,8 @@ const getBoundaries = ({ order0, order1, marketPrice }: Props) => {
   const delta = max - min;
   const mean = (max + min) / 2;
   return {
-    left: mean - delta * 2.5,
-    right: mean + delta * 2.5,
+    left: mean - delta * 1.2,
+    right: mean + delta * 1.2,
   };
 };
 
@@ -201,14 +201,14 @@ const getPrices = ({ order0, order1, marketPrice }: Props, width: number) => {
   const delta = max - min;
   const mean = (max + min) / 2;
   if (width < 500) {
-    return [mean - delta * 2, mean, mean + delta * 2];
+    return [mean - delta * 0.5, mean, mean + delta * 0.5];
   } else {
     return [
-      mean - delta * 2,
       mean - delta,
+      mean - delta * 0.5,
       mean,
+      mean + delta * 0.5,
       mean + delta,
-      mean + delta * 2,
     ];
   }
 };
@@ -267,7 +267,7 @@ export const OverlappingChart: FC<Props> = (props) => {
   // ZOOM
   const updateZoom = (e: WheelEvent) => {
     e.preventDefault();
-    const newZoom = clamp(1, zoom + e.deltaY * 0.005, 3);
+    const newZoom = clamp(1, zoom + e.deltaY * 0.005, 2);
     setZoom(newZoom);
   };
 

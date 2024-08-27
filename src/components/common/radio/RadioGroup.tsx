@@ -1,16 +1,20 @@
 import { FC, ReactNode, useId } from 'react';
 import style from './RadioGroup.module.css';
+import { cn } from 'utils/helpers';
 
 interface RadioGroupProps {
   className?: string;
   children: ReactNode;
 }
 
-export const RadioGroup: FC<RadioGroupProps> = ({ children }) => {
+export const RadioGroup: FC<RadioGroupProps> = ({ children, className }) => {
   return (
     <div
       role="group"
-      className="text-14 relative flex items-center rounded-full bg-black p-2"
+      className={cn(
+        'text-14 relative flex items-center rounded-full bg-black p-2',
+        className
+      )}
     >
       {children}
     </div>
