@@ -50,7 +50,7 @@ export const parseSearchWith = (parser: (str: string) => any) => {
 
     let query: Record<string, unknown> = decode(searchStr);
 
-    const shouldSkipKey = (key: string) => {
+    const skipParsing = (key: string) => {
       if (key === 'settings') return true;
       if (key === 'type') return true;
       if (key === 'anchor') return true;
@@ -66,7 +66,7 @@ export const parseSearchWith = (parser: (str: string) => any) => {
       if (
         isAddress(String(query[key])) ||
         isDate(String(query[key])) ||
-        shouldSkipKey(key)
+        skipParsing(key)
       ) {
         // eslint-disable-next-line
         query[key] = query[key];
