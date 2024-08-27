@@ -23,14 +23,14 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
     {
       title: 'Recurring',
       label: 'recurring',
-      svg: <IconTwoRanges className="w-37 h-16" />,
+      svg: <IconTwoRanges className="size-14" />,
       tooltipText:
         'Create an automated trading cycle of buy low/sell high with two separate orders.',
     },
     {
       title: 'Concentrated',
       label: 'overlapping',
-      svg: <IconOverlappingStrategy className="w-37 h-16" />,
+      svg: <IconOverlappingStrategy className="size-14" />,
       tooltipText:
         'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
     },
