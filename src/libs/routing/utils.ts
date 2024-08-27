@@ -4,7 +4,7 @@ import { utils } from 'ethers';
 import * as v from 'valibot';
 import { formatNumber } from 'utils/helpers';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
-import { isAddress } from 'viem';
+import { isAddress } from 'ethers/lib/utils';
 
 function toValue(mix: string | undefined) {
   if (!mix) return '';
@@ -53,6 +53,11 @@ export const parseSearchWith = (parser: (str: string) => any) => {
     const shouldSkipKey = (key: string) => {
       if (key === 'settings') return true;
       if (key === 'type') return true;
+      if (key === 'anchor') return true;
+      if (key === 'direction') return true;
+      if (key === 'buySettings') return true;
+      if (key === 'sellSettings') return true;
+      return false;
     };
 
     // Try to parse any query params that might be json
