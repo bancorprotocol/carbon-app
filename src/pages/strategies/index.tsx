@@ -25,7 +25,8 @@ export const StrategiesPage = () => {
   const { user } = useWagmi();
   const query = useGetUserStrategies({ user });
   const match = useMatchRoute();
-  const isStrategiesPage = match({ to: '/' });
+
+  const isStrategiesPage = match({ to: '/', includeSearch: false });
 
   const showFilter = useMemo(() => {
     if (!isStrategiesPage) return false;
