@@ -13,11 +13,11 @@ import { cn, prettifySignedNumber, tokenAmount } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import { isValidRange } from '../utils';
 import { getMaxBuyMin, getMinSellMax } from './utils';
-import styles from './OverlappingGraph.module.css';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { getSignedMarketPricePercentage } from '../marketPriceIndication/utils';
 import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import styles from './OverlappingChart.module.css';
 
 type Scale = ReturnType<typeof getScale>;
 
@@ -145,7 +145,7 @@ const useResize = (id: string) => {
   });
   useEffect(() => {
     const svg = document.getElementById(id);
-    if (!svg) return;
+    if (!svg || !('ResizeObserver' in window)) return;
     // Start observing
     const observer = new ResizeObserver(([entry]) => {
       const { width, height } = entry.contentRect;
@@ -568,9 +568,9 @@ export const OverlappingChart: FC<Props> = (props) => {
             y1={y(bottom)}
             y2={y(bottom)}
           />
-          {getSteps(box.width).map((step) => (
+          {getSteps(box.width).map((step, i) => (
             <line
-              key={step}
+              key={`${step}-${i}`}
               stroke={outline}
               x1={step}
               x2={step}
@@ -578,9 +578,9 @@ export const OverlappingChart: FC<Props> = (props) => {
               y2={y(bottom + 3)}
             />
           ))}
-          {prices.map((price) => (
+          {prices.map((price, i) => (
             <text
-              key={price}
+              key={`${price}-${i}`}
               x={x(price)}
               y={y(5)}
               fontSize={fontSize}
@@ -595,7 +595,7 @@ export const OverlappingChart: FC<Props> = (props) => {
         </g>
 
         {marketPrice && (
-          <g id="market-price" transform={`translate(${x(+marketPrice)}, 0)`}>
+          <g id="market-price" transform={`translate(${x(marketPrice)}, 0)`}>
             <line
               stroke={outline}
               x1={0}
@@ -674,7 +674,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           {!disabled && (
             <g id="buy-handler-rect" transform="translate(-20, 0)">
               <rect
-                x={x(+order0.min)}
+                x={x(order0.min)}
                 y={y(top)}
                 width={20}
                 height={30}
@@ -682,7 +682,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 rx="4"
               />
               <rect
-                x={x(+order0.min) + 7}
+                x={x(order0.min) + 7}
                 y={y(top) + 10}
                 width={1}
                 height={10}
@@ -690,7 +690,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 fillOpacity="0.5"
               />
               <rect
-                x={x(+order0.min) + 13}
+                x={x(order0.min) + 13}
                 y={y(top) + 10}
                 width={1}
                 height={10}
@@ -700,8 +700,8 @@ export const OverlappingChart: FC<Props> = (props) => {
             </g>
           )}
           <line
-            x1={x(+order0.min) - 1}
-            x2={x(+order0.min) - 1}
+            x1={x(order0.min) - 1}
+            x2={x(order0.min) - 1}
             y1={y(top)}
             y2={y(bottom)}
             stroke="var(--buy)"
@@ -758,7 +758,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           {!disabled && (
             <g id="sell-handler-rect">
               <rect
-                x={x(+order1.max)}
+                x={x(order1.max)}
                 y={y(top)}
                 width={20}
                 height={30}
@@ -766,7 +766,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 rx="4"
               />
               <rect
-                x={x(+order1.max) + 7}
+                x={x(order1.max) + 7}
                 y={y(top) + 10}
                 width={1}
                 height={10}
@@ -774,7 +774,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 fillOpacity="0.5"
               />
               <rect
-                x={x(+order1.max) + 13}
+                x={x(order1.max) + 13}
                 y={y(top) + 10}
                 width={1}
                 height={10}
@@ -784,8 +784,8 @@ export const OverlappingChart: FC<Props> = (props) => {
             </g>
           )}
           <line
-            x1={x(+order1.max) + 1}
-            x2={x(+order1.max) + 1}
+            x1={x(order1.max) + 1}
+            x2={x(order1.max) + 1}
             y1={y(top)}
             y2={y(bottom)}
             stroke="var(--sell)"
