@@ -20,7 +20,7 @@ interface Props {
 export const TradeOverlappingChart: FC<Props> = (props) => {
   const { base, quote } = useTradeCtx();
   const { marketPrice, order0, order1, set } = props;
-  const { chartType, spread = initSpread } = useSearch({
+  const search = useSearch({
     from: '/trade/overlapping',
   });
 
@@ -30,8 +30,8 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
       quote={quote}
       order0={order0}
       order1={order1}
-      marketPrice={marketPrice}
-      spread={spread}
+      userMarketPrice={search.marketPrice}
+      spread={search.spread ?? initSpread}
       setMin={(min) => set('min', min)}
       setMax={(max) => set('max', max)}
     />
@@ -54,13 +54,13 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
         </h2>
         <RadioGroup className="mr-auto">
           <Radio
-            checked={chartType !== 'history'}
+            checked={search.chartType !== 'history'}
             onChange={() => set('chartType', 'range')}
           >
             Range
           </Radio>
           <Radio
-            checked={chartType === 'history'}
+            checked={search.chartType === 'history'}
             onChange={() => set('chartType', 'history')}
           >
             History
@@ -73,7 +73,7 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
           setMarketPrice={(price) => set('marketPrice', price)}
         />
       </header>
-      {chartType === 'history' ? (
+      {search.chartType === 'history' ? (
         <TradingviewChart base={base} quote={quote} />
       ) : (
         range

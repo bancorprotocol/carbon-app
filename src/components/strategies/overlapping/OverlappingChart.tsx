@@ -174,11 +174,9 @@ const getScale = ({ width, height, left, right, zoom }: ScaleParams) => {
     y: (value: string | number) => round((100 - +value) * yRatio),
   };
 };
-const getBoundaries = ({ order0, order1, marketPrice }: Props) => {
-  const min = getMin(order0.min, marketPrice);
-  const max = getMax(order1.max, marketPrice);
-  const delta = max - min;
-  const mean = (max + min) / 2;
+const getBoundaries = (lowest: number, highest: number) => {
+  const delta = highest - lowest;
+  const mean = (highest + lowest) / 2;
   return {
     left: mean - delta * 1.2,
     right: mean + delta * 1.2,
@@ -196,11 +194,9 @@ const getSteps = (width: number) => {
   return steps;
 };
 
-const getPrices = ({ order0, order1, marketPrice }: Props, width: number) => {
-  const min = getMin(order0.min, marketPrice);
-  const max = getMax(order1.max, marketPrice);
-  const delta = max - min;
-  const mean = (max + min) / 2;
+const getPrices = (lowest: number, highest: number, width: number) => {
+  const delta = highest - lowest;
+  const mean = (highest + lowest) / 2;
   if (width < 500) {
     return [mean - delta * 0.5, mean, mean + delta * 0.5];
   } else {
@@ -219,25 +215,38 @@ interface Props {
   quote: Token;
   order0: OverlappingOrder;
   order1: OverlappingOrder;
-  marketPrice: string;
   spread: string;
+  userMarketPrice?: string;
+  disabled?: boolean;
+  className?: string;
   setMin: (min: string) => any;
   setMax: (max: string) => any;
 }
 export const OverlappingChart: FC<Props> = (props) => {
-  const { base, quote, order0, order1, marketPrice, spread } = props;
+  const {
+    base,
+    quote,
+    order0,
+    order1,
+    userMarketPrice,
+    spread,
+    disabled,
+    className,
+  } = props;
   const id = useId();
   const [zoom, setZoom] = useState(1);
   const [dragging, setDragging] = useState('');
   const box = useResize(id);
   const isValid = isValidRange(order0.min, order1.max);
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
-  const isUserPrice = externalPrice?.toString() !== marketPrice;
+  const marketPrice = userMarketPrice ?? externalPrice?.toString();
 
   const min = +order0.min;
   const max = +order1.max;
-  const prices = getPrices(props, box.width);
-  const { left, right } = getBoundaries(props);
+  const lowest = getMin(order0.min, marketPrice ?? order0.min);
+  const highest = getMax(order1.max, marketPrice ?? order1.max);
+  const prices = getPrices(lowest, highest, box.width);
+  const { left, right } = getBoundaries(lowest, highest);
 
   const scaleConfig = {
     left,
@@ -255,15 +264,22 @@ export const OverlappingChart: FC<Props> = (props) => {
     max: marketPricePercent(order1.max, marketPrice),
   };
   const minText = tokenAmount(min, quote);
-  const minPercent = `${getSignedMarketPricePercentage(marketPercent.min)}%`;
+  const minPrecent = getSignedMarketPricePercentage(marketPercent.min);
+  const minPercentText = minPrecent ? `${minPrecent}%` : '...';
   const maxText = tokenAmount(max, quote);
-  const maxPercent = `${getSignedMarketPricePercentage(marketPercent.max)}%`;
+  const maxPercent = getSignedMarketPricePercentage(marketPercent.max);
+  const maxPercentText = maxPercent ? `${maxPercent}%` : '...';
   const marketPriceText = tokenAmount(marketPrice, quote);
-  const title = `${
-    isUserPrice
-      ? 'User-defined market price'
-      : 'Market price provided by CoinGecko'
-  } · Fee Tier ${spread || 0}%`;
+  const title = (() => {
+    const feeTier = `Fee Tier ${spread || 0}%`;
+    if (userMarketPrice) {
+      return ['User-defined market price', feeTier].join(' · ');
+    } else if (externalPrice) {
+      return ['Market price provided by CoinGecko', feeTier].join(' · ');
+    } else {
+      return ['No Market price found', feeTier].join(' · ');
+    }
+  })();
 
   // ZOOM
   const updateZoom = (e: WheelEvent) => {
@@ -353,6 +369,7 @@ export const OverlappingChart: FC<Props> = (props) => {
     e: ReactMouseEvent | ReactTouchEvent,
     mode: 'buy' | 'sell'
   ) => {
+    if (disabled) return;
     const x = 'clientX' in e ? e.clientX : e.touches.item(0).clientX;
     initialPosition = x;
     draggedHandler = mode;
@@ -365,6 +382,7 @@ export const OverlappingChart: FC<Props> = (props) => {
 
   const drag = (e: MouseEvent | TouchEvent) => {
     e.preventDefault();
+    if (!marketPrice) return;
     if (!draggedHandler) return;
     const { newMin, newMax } = updatedMinMax(e);
     // Translate handlers
@@ -429,7 +447,7 @@ export const OverlappingChart: FC<Props> = (props) => {
   return (
     <svg
       id={id}
-      className={cn(styles.graph, dragging, 'flex-1 rounded bg-black')}
+      className={cn(styles.graph, dragging, 'rounded bg-black', className)}
       viewBox={viewBox}
       onWheel={updateZoom}
     >
@@ -496,16 +514,6 @@ export const OverlappingChart: FC<Props> = (props) => {
       </g>
 
       <g className={styles.content}>
-        <g className="market-price">
-          <line
-            stroke={outline}
-            x1={x(+marketPrice)}
-            x2={x(+marketPrice)}
-            y1={y(top)}
-            y2={y(bottom)}
-          />
-        </g>
-
         <g className={cn('buy', isValid ? '' : 'hidden')}>
           <polygon
             id="buy-polygon"
@@ -585,38 +593,39 @@ export const OverlappingChart: FC<Props> = (props) => {
           ))}
         </g>
 
-        <g id="market-price" transform={`translate(${x(+marketPrice)}, 0)`}>
-          <line
-            stroke={outline}
-            x1={0}
-            x2={0}
-            y1={y(top + 5)}
-            y2={y(bottom)}
-            strokeWidth={3}
-          />
-          <rect
-            x={(textWidth(marketPriceText) / 2) * -1 - padding}
-            y={y(top + 10) - fontSize / 2 - padding}
-            width={textWidth(marketPriceText) + 2 * padding}
-            height={fontSize + 2 * padding}
-            fill={outline}
-            rx="4"
-          />
-          <text
-            x={0}
-            y={y(top + 10)}
-            fontSize={fontSize}
-            dominantBaseline="middle"
-            textAnchor="middle"
-            fill="white"
-          >
-            {marketPriceText}
-          </text>
-        </g>
-
+        {marketPrice && (
+          <g id="market-price" transform={`translate(${x(+marketPrice)}, 0)`}>
+            <line
+              stroke={outline}
+              x1={0}
+              x2={0}
+              y1={y(top + 5)}
+              y2={y(bottom)}
+              strokeWidth={3}
+            />
+            <rect
+              x={(textWidth(marketPriceText) / 2) * -1 - padding}
+              y={y(top + 10) - fontSize / 2 - padding}
+              width={textWidth(marketPriceText) + 2 * padding}
+              height={fontSize + 2 * padding}
+              fill={outline}
+              rx="4"
+            />
+            <text
+              x={0}
+              y={y(top + 10)}
+              fontSize={fontSize}
+              dominantBaseline="middle"
+              textAnchor="middle"
+              fill="white"
+            >
+              {marketPriceText}
+            </text>
+          </g>
+        )}
         <g
           id="buy-handler"
-          className="cursor-ew-resize"
+          className={disabled ? '' : 'cursor-ew-resize'}
           onMouseDown={(e) => dragStart(e, 'buy')}
           onTouchStart={(e) => dragStart(e, 'buy')}
         >
@@ -624,12 +633,13 @@ export const OverlappingChart: FC<Props> = (props) => {
             <rect
               x={
                 x(min) +
-                (Math.max(textWidth(minText), textWidth(minPercent)) / 2) * -1 -
+                (Math.max(textWidth(minText), textWidth(minPercentText)) / 2) *
+                  -1 -
                 padding
               }
               y={y(top) - 3 * fontSize - 3 * padding}
               width={
-                Math.max(textWidth(minText), textWidth(minPercent)) +
+                Math.max(textWidth(minText), textWidth(minPercentText)) +
                 2 * padding
               }
               height={2 * fontSize + 3 * padding}
@@ -657,35 +667,37 @@ export const OverlappingChart: FC<Props> = (props) => {
               fill="white"
               fillOpacity="0.4"
             >
-              {minPercent}
+              {minPercentText}
             </text>
           </g>
-          <g id="buy-handler-rect" transform="translate(-20, 0)">
-            <rect
-              x={x(+order0.min)}
-              y={y(top)}
-              width={20}
-              height={30}
-              fill="var(--buy)"
-              rx="4"
-            />
-            <rect
-              x={x(+order0.min) + 7}
-              y={y(top) + 10}
-              width={1}
-              height={10}
-              fill="black"
-              fillOpacity="0.5"
-            />
-            <rect
-              x={x(+order0.min) + 13}
-              y={y(top) + 10}
-              width={1}
-              height={10}
-              fill="black"
-              fillOpacity="0.5"
-            />
-          </g>
+          {!disabled && (
+            <g id="buy-handler-rect" transform="translate(-20, 0)">
+              <rect
+                x={x(+order0.min)}
+                y={y(top)}
+                width={20}
+                height={30}
+                fill="var(--buy)"
+                rx="4"
+              />
+              <rect
+                x={x(+order0.min) + 7}
+                y={y(top) + 10}
+                width={1}
+                height={10}
+                fill="black"
+                fillOpacity="0.5"
+              />
+              <rect
+                x={x(+order0.min) + 13}
+                y={y(top) + 10}
+                width={1}
+                height={10}
+                fill="black"
+                fillOpacity="0.5"
+              />
+            </g>
+          )}
           <line
             x1={x(+order0.min) - 1}
             x2={x(+order0.min) - 1}
@@ -697,7 +709,7 @@ export const OverlappingChart: FC<Props> = (props) => {
         </g>
         <g
           id="sell-handler"
-          className="cursor-ew-resize"
+          className={disabled ? '' : 'cursor-ew-resize'}
           onMouseDown={(e) => dragStart(e, 'sell')}
           onTouchStart={(e) => dragStart(e, 'sell')}
         >
@@ -705,12 +717,13 @@ export const OverlappingChart: FC<Props> = (props) => {
             <rect
               x={
                 x(max) +
-                (Math.max(textWidth(maxText), textWidth(maxPercent)) / 2) * -1 -
+                (Math.max(textWidth(maxText), textWidth(maxPercentText)) / 2) *
+                  -1 -
                 padding
               }
               y={y(top) - 3 * fontSize - 3 * padding}
               width={
-                Math.max(textWidth(maxText), textWidth(maxPercent)) +
+                Math.max(textWidth(maxText), textWidth(maxPercentText)) +
                 2 * padding
               }
               height={2 * fontSize + 3 * padding}
@@ -738,35 +751,37 @@ export const OverlappingChart: FC<Props> = (props) => {
               fill="white"
               fillOpacity="0.4"
             >
-              {maxPercent}
+              {maxPercentText}
             </text>
           </g>
-          <g id="sell-handler-rect">
-            <rect
-              x={x(+order1.max)}
-              y={y(top)}
-              width={20}
-              height={30}
-              fill="var(--sell)"
-              rx="4"
-            />
-            <rect
-              x={x(+order1.max) + 7}
-              y={y(top) + 10}
-              width={1}
-              height={10}
-              fill="black"
-              fillOpacity="0.5"
-            />
-            <rect
-              x={x(+order1.max) + 13}
-              y={y(top) + 10}
-              width={1}
-              height={10}
-              fill="black"
-              fillOpacity="0.5"
-            />
-          </g>
+          {!disabled && (
+            <g id="sell-handler-rect">
+              <rect
+                x={x(+order1.max)}
+                y={y(top)}
+                width={20}
+                height={30}
+                fill="var(--sell)"
+                rx="4"
+              />
+              <rect
+                x={x(+order1.max) + 7}
+                y={y(top) + 10}
+                width={1}
+                height={10}
+                fill="black"
+                fillOpacity="0.5"
+              />
+              <rect
+                x={x(+order1.max) + 13}
+                y={y(top) + 10}
+                width={1}
+                height={10}
+                fill="black"
+                fillOpacity="0.5"
+              />
+            </g>
+          )}
           <line
             x1={x(+order1.max) + 1}
             x2={x(+order1.max) + 1}
