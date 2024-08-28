@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useGetTokenBalance } from 'libs/queries';
 import {
   isMaxBelowMarket,
@@ -13,10 +13,10 @@ import {
 import { Token } from 'libs/tokens';
 import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
 import { useWagmi } from 'libs/wagmi';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useSearch } from '@tanstack/react-router';
 import { OverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
-import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
+import { SetOverlapping } from 'libs/routing/routes/trade';
 
 interface Props {
   base: Token;
@@ -24,31 +24,18 @@ interface Props {
   marketPrice: string;
   order0: OverlappingOrder;
   order1: OverlappingOrder;
+  set: SetOverlapping;
 }
-
-type Search = TradeOverlappingSearch;
 
 const url = '/trade/overlapping';
 export const CreateOverlappingBudget: FC<Props> = (props) => {
-  const { base, quote, order0, order1, marketPrice } = props;
-  const navigate = useNavigate({ from: url });
-  const search = useSearch({ strict: false }) as Search;
+  const { base, quote, order0, order1, marketPrice, set } = props;
+  const search = useSearch({ from: url });
   const { anchor, budget } = search;
   const { user } = useWagmi();
 
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
-
-  const set = useCallback(
-    <T extends keyof Search>(key: T, value: Search[T]) => {
-      navigate({
-        search: (previous) => ({ ...previous, [key]: value }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate]
-  );
 
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);

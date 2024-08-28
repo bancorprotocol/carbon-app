@@ -7,7 +7,6 @@ import {
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { OverlappingGraph } from 'components/strategies/overlapping/OverlappingGraph';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -34,6 +33,7 @@ import { InputLimit } from '../common/InputLimit';
 import { Button } from 'components/common/button';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
+import { OverlappingChart } from '../overlapping/OverlappingChart';
 
 interface Props {
   marketPrice: string;
@@ -221,13 +221,14 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
             />
           )}
         </header>
-        <OverlappingGraph
+        <OverlappingChart
+          className="min-h-[250px]"
           base={base}
           quote={quote}
           order0={order0}
           order1={order1}
           userMarketPrice={search.marketPrice}
-          spread={+spread}
+          spread={spread}
           setMin={setMin}
           setMax={setMax}
           disabled={!displayPrice}

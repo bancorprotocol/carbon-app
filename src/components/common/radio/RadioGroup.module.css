@@ -8,3 +8,6 @@
 .radio:checked + label:hover {
   @apply text-white;
 }
+.radio:focus-visible + label {
+  @apply outline outline-1;
+}

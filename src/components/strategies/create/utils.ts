@@ -23,6 +23,7 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
+import { OverlappingOrder } from '../common/types';
 
 export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing: Dispatch<SetStateAction<boolean>>,
@@ -66,7 +67,7 @@ export const getOverlappingOrders = (
   base?: Token,
   quote?: Token,
   marketPrice?: string
-) => {
+): { buy: OverlappingOrder; sell: OverlappingOrder } => {
   if (!base || !quote || !marketPrice) {
     return {
       buy: { min: '', max: '', marginalPrice: '', budget: '' },
