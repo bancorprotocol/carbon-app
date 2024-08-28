@@ -112,6 +112,11 @@
   },
   "browserslist": {
     "production": [
+      "Safari > 15.4",
+      "iOS > 15.4",
+      "Chrome > 119",
+      "Android > 119",
+      "Firefox > 115",
       ">0.2%",
       "not dead",
       "not op_mini all"
