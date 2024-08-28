@@ -14,6 +14,7 @@ import { SimulatorType } from 'libs/routing/routes/sim';
 import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from 'components/simulator/input/d3Chart/Candlesticks';
+import { D3ChartDisposable } from './recurring/D3ChartDisposable';
 
 export type ChartPrices<T = string> = {
   buy: { min: T; max: T };
@@ -82,6 +83,16 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           y={y.scale(marketPrice)}
           lineProps={{ strokeDasharray: 2 }}
           label={prettifyNumber(marketPrice ?? '')}
+        />
+      )}
+      {type === 'disposable' && isLimit && (
+        <D3ChartDisposable
+          yScale={y.scale}
+          isLimit={isLimit}
+          dms={dms}
+          prices={prices}
+          onDragEnd={onDragEnd}
+          onPriceUpdates={onPriceUpdates}
         />
       )}
       {type === 'recurring' && isLimit && (

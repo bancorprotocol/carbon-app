@@ -11,6 +11,7 @@ import { TradeRoot } from 'pages/trade/root';
 import { TradeMarket } from 'pages/trade/market';
 import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
+import { defaultEnd, defaultStart } from 'pages/simulator';
 
 // TRADE TYPE
 export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
@@ -69,12 +70,16 @@ export interface TradeMarketSearch extends TradeSearch {
 export interface TradeSearch {
   base?: string;
   quote?: string;
+  priceStart?: string;
+  priceEnd?: string;
 }
 const tradePage = new Route({
   getParentRoute: () => rootRoute,
   path: '/trade',
   component: TradeRoot,
   beforeLoad: ({ location, search }) => {
+    (search as TradeSearch).priceStart ||= defaultStart().toString();
+    (search as TradeSearch).priceEnd ||= defaultEnd().toString();
     if (location.pathname.endsWith('trade')) {
       throw redirect({ to: '/trade/disposable', search });
     }
@@ -88,6 +93,8 @@ const marketPage = new Route({
   validateSearch: validateSearchParams<TradeMarketSearch>({
     base: validAddress,
     quote: validAddress,
+    priceStart: validNumber,
+    priceEnd: validNumber,
     direction: validLiteral(['buy', 'sell']),
     source: validNumber,
     target: validNumber,
@@ -101,6 +108,8 @@ const disposablePage = new Route({
   validateSearch: validateSearchParams<TradeDisposableSearch>({
     base: validAddress,
     quote: validAddress,
+    priceStart: validNumber,
+    priceEnd: validNumber,
     direction: validLiteral(['buy', 'sell']),
     settings: validLiteral(['limit', 'range']),
     min: validNumber,
@@ -116,6 +125,8 @@ const recurringPage = new Route({
   validateSearch: validateSearchParams<TradeRecurringSearch>({
     base: validAddress,
     quote: validAddress,
+    priceStart: validNumber,
+    priceEnd: validNumber,
     buyMin: validNumber,
     buyMax: validNumber,
     buyBudget: validNumber,
@@ -134,6 +145,8 @@ const overlappingPage = new Route({
   validateSearch: validateSearchParams<TradeOverlappingSearch>({
     base: validAddress,
     quote: validAddress,
+    priceStart: validNumber,
+    priceEnd: validNumber,
     marketPrice: validNumber,
     min: validNumber,
     max: validNumber,

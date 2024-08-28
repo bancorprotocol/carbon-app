@@ -1,8 +1,15 @@
 import { TradingviewChart } from 'components/tradingviewChart';
 import { useTradeCtx } from './TradeContext';
+import { FC, ReactNode } from 'react';
+import config from 'config';
 
-export const TradeChartSection = () => {
+interface Props {
+  children: ReactNode;
+}
+
+export const TradeChartSection: FC<Props> = ({ children }) => {
   const { base, quote } = useTradeCtx();
+  const chartType = config.ui?.priceChart ?? 'tradingView';
   return (
     <section
       aria-labelledby="price-chart-title"
@@ -13,7 +20,10 @@ export const TradeChartSection = () => {
           Price Chart
         </h2>
       </header>
-      <TradingviewChart base={base} quote={quote} />
+      {chartType === 'tradingView' && (
+        <TradingviewChart base={base} quote={quote} />
+      )}
+      {chartType === 'native' && children}
     </section>
   );
 };

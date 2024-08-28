@@ -12,6 +12,8 @@ import { useGetTokenBalance } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { cn } from 'utils/helpers';
 import { LogoImager } from 'components/common/imager/Imager';
+import { getDefaultOrder } from './utils';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
   base: Token;
@@ -39,6 +41,7 @@ export const CreateOrder: FC<Props> = ({
   warnings,
 }) => {
   const titleId = useId();
+  const { marketPrice } = useMarketPrice({ base, quote });
 
   // PRICES
   const tooltipText = `This section will define the order details in which you are willing to ${type} ${base.symbol} at.`;
@@ -92,7 +95,9 @@ export const CreateOrder: FC<Props> = ({
   };
   const setBudget = (budget: string) => setOrder({ budget });
   const setSettings = (settings: StrategySettings) => {
-    setOrder({ settings, min: '', max: '' });
+    const direction = buy ? 'buy' : 'sell';
+    const { min, max } = getDefaultOrder(direction, { settings }, marketPrice);
+    setOrder({ settings, min, max });
   };
 
   const headerProps = { titleId, order, base, buy, setSettings };

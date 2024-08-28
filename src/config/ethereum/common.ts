@@ -214,4 +214,7 @@ export const commonConfig: AppConfig = {
       },
     ],
   },
+  ui: {
+    priceChart: 'native',
+  },
 };

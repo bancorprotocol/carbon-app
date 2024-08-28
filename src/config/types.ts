@@ -72,4 +72,8 @@ export interface AppConfig {
     faucetAmount: number;
     faucetTokens: FaucetToken[];
   };
+  ui?: {
+    /** Which chart to use for price history */
+    priceChart?: 'native' | 'tradingView';
+  };
 }

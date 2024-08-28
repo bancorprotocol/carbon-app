@@ -2,6 +2,8 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTradeSettings';
+import { emptyOrder } from 'components/strategies/common/utils';
+import { TradeChartHistory } from 'components/trade/TradeChartHistory';
 import { TradeChartSection } from 'components/trade/TradeChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { TradeLayout } from 'components/trade/TradeLayout';
@@ -29,6 +31,11 @@ export const TradeMarket = () => {
       replace: true,
       resetScroll: false,
     });
+  };
+
+  const isLimit = {
+    buy: true,
+    sell: true,
   };
 
   const border = buy
@@ -76,7 +83,14 @@ export const TradeMarket = () => {
           />
         </article>
       </TradeLayout>
-      <TradeChartSection />
+      <TradeChartSection>
+        <TradeChartHistory
+          order0={emptyOrder()}
+          order1={emptyOrder()}
+          isLimit={isLimit}
+          type="market"
+        />
+      </TradeChartSection>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { tokenAmount } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
@@ -9,6 +9,7 @@ import {
   emptyOrder,
   isZero,
   outSideMarketWarning,
+  resetPrice,
 } from 'components/strategies/common/utils';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
@@ -33,11 +34,28 @@ export const EditStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
+  const navigate = useNavigate({ from: url });
+
   const { marketPrice } = useMarketPrice({ base, quote });
 
   const isBuy = search.direction !== 'sell';
   const otherOrder = isBuy ? order1 : order0;
-  const { setOrder, setDirection } = useSetDisposableOrder(url, otherOrder);
+  const { setOrder } = useSetDisposableOrder(url);
+
+  const setDirection = (direction: StrategyDirection) => {
+    navigate({
+      params: (params) => params,
+      search: (previous) => ({
+        ...previous,
+        direction,
+        budget: undefined,
+        min: resetPrice(otherOrder?.startRate),
+        max: resetPrice(otherOrder?.endRate),
+      }),
+      replace: true,
+      resetScroll: false,
+    });
+  };
 
   const initialBudget = isBuy ? order0.balance : order1.balance;
   const totalBudget = getTotalBudget(
