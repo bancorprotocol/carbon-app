@@ -4,6 +4,7 @@ import { utils } from 'ethers';
 import * as v from 'valibot';
 import { formatNumber } from 'utils/helpers';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { isAddress } from 'ethers/lib/utils';
 
 function toValue(mix: string | undefined) {
   if (!mix) return '';
@@ -36,6 +37,11 @@ export function decode(str: string) {
   return out;
 }
 
+const isDate = (date: string) => {
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  return regex.test(date);
+};
+
 export const parseSearchWith = (parser: (str: string) => any) => {
   return (searchStr: string): Record<string, any> => {
     if (searchStr.substring(0, 1) === '?') {
@@ -44,23 +50,33 @@ export const parseSearchWith = (parser: (str: string) => any) => {
 
     let query: Record<string, unknown> = decode(searchStr);
 
+    const skipParsing = (key: string) => {
+      if (key === 'settings') return true;
+      if (key === 'type') return true;
+      if (key === 'anchor') return true;
+      if (key === 'direction') return true;
+      if (key === 'buySettings') return true;
+      if (key === 'sellSettings') return true;
+      return false;
+    };
+
     // Try to parse any query params that might be json
     for (let key in query) {
-      if (key === 'quote' || key === 'base') {
+      if (!query[key]) continue;
+      if (
+        isAddress(String(query[key])) ||
+        isDate(String(query[key])) ||
+        skipParsing(key)
+      ) {
         // eslint-disable-next-line
         query[key] = query[key];
       } else {
         const value = query[key];
         if (typeof value === 'string') {
           try {
-            const parsed = parser(value);
-            if (typeof parsed === 'number') {
-              query[key] = parsed.toString();
-            } else {
-              query[key] = parsed;
-            }
+            query[key] = parser(value);
           } catch (err) {
-            //
+            console.error(`Error parsing param for key ${key}: `, err);
           }
         }
       }
@@ -94,6 +110,8 @@ export const validLiteral = (array: string[]) => {
 export const validNumber = v.string([
   v.custom((value: string) => isNaN(Number(formatNumber(value))) === false),
 ]);
+
+export const validNumberType = v.number();
 
 export const validAddress = v.string([
   v.custom((value: string) => {

@@ -4,8 +4,6 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
-import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
-import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
@@ -19,8 +17,6 @@ type InputLimitProps = {
   warnings?: string[];
   setPriceError?: (error: string) => void;
   buy?: boolean;
-  marketPricePercentage?: MarketPricePercentage;
-  ignoreMarketPriceWarning?: boolean;
   isOrdersReversed: boolean;
 };
 
@@ -33,9 +29,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   error,
   warnings,
   setPriceError,
-  marketPricePercentage,
   buy = false,
-  ignoreMarketPriceWarning,
   isOrdersReversed,
 }) => {
   const inputId = useId();
@@ -112,18 +106,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           )}
         </div>
         {!!marketPrice && (
-          <p className="flex flex-wrap items-center gap-8">
-            <span className="text-12 break-all text-white/60">
-              {fiatAsString}
-            </span>
-            {marketPricePercentage && (
-              <MarketPriceIndication
-                marketPricePercentage={marketPricePercentage.price}
-                buy={buy}
-                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-              />
-            )}
-          </p>
+          <p className="text-12 break-all text-white/60">{fiatAsString}</p>
         )}
       </div>
       {error ? (

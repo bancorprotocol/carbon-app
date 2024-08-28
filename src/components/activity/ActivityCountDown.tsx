@@ -46,7 +46,7 @@ const perimeter = 2 * Math.PI * radius;
 
 export const ActivityCountDown: FC<Props> = ({ time }) => {
   const baseId = useId();
-  const { status } = useActivity();
+  const { fetchStatus } = useActivity();
   const [count, setCount] = useState(time);
   const id = useCallback((name: string) => `${baseId}-${name}`, [baseId]);
 
@@ -55,7 +55,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
     const lines = document.getElementById(id('lines'));
     const circle = document.getElementById(id('circle'));
     const text = document.getElementById(id('text'));
-    if (status === 'idle') {
+    if (fetchStatus === 'idle') {
       runAnimationAfterLast({
         element: circle,
         keyframes: [
@@ -101,7 +101,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         options
       );
     }
-  }, [status, time, id]);
+  }, [fetchStatus, time, id]);
 
   return (
     <svg

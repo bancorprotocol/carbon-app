@@ -2,19 +2,23 @@ import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search-eye.svg';
 import { ReactComponent as ForwardArrow } from 'assets/icons/arrow.svg';
 import { useRouter } from '@tanstack/react-router';
+import { FC } from 'react';
 
-export const NotFound = ({
-  variant,
-  title,
-  text,
-  bordered = false,
-  showBackButton = false,
-}: {
+interface Props {
   variant: 'info' | 'error';
   title: string;
   text: string;
   bordered?: boolean;
   showBackButton?: boolean;
+  className?: string;
+}
+export const NotFound: FC<Props> = ({
+  variant,
+  title,
+  text,
+  bordered = false,
+  showBackButton = false,
+  className,
 }) => {
   const { history } = useRouter();
 
@@ -34,10 +38,14 @@ export const NotFound = ({
         </button>
       )}
       <div
-        className={cn('rounded-full p-20', {
-          'bg-primary/20': variant === 'info',
-          'bg-error/20': variant === 'error',
-        })}
+        className={cn(
+          'rounded-full p-20',
+          {
+            'bg-primary/20': variant === 'info',
+            'bg-error/20': variant === 'error',
+          },
+          className
+        )}
       >
         <IconSearch
           className={cn('size-32', {

@@ -1,0 +1,13 @@
+.radio {
+  position: absolute;
+  opacity: 0;
+}
+.radio:checked + label {
+  @apply bg-background-800 text-white/80;
+}
+.radio:checked + label:hover {
+  @apply text-white;
+}
+.radio:focus-visible + label {
+  @apply outline outline-1;
+}

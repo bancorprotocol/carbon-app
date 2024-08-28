@@ -2,12 +2,10 @@ import { FC } from 'react';
 import { Button, ButtonProps } from 'components/common/button';
 
 type Props = ButtonProps & {
-  isActive?: boolean;
+  variant: 'buy' | 'sell' | 'black';
 };
 
-export const TabsMenuButton: FC<Props> = ({ children, isActive, ...props }) => {
-  const variant = isActive ? 'secondary' : 'black';
-
+export const TabsMenuButton: FC<Props> = ({ children, variant, ...props }) => {
   return (
     <Button
       type="button"

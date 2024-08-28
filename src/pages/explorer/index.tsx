@@ -64,7 +64,7 @@ export const ExplorerPage = () => {
 const ExplorerEvents = () => {
   const [mounted, setMounted] = useState(false);
   const { slug, type } = useExplorerParams();
-  const { strategies, isPending, filter, sort } = useStrategyCtx();
+  const { filteredStrategies, isPending, filter, sort } = useStrategyCtx();
 
   useEffect(() => {
     if (!mounted) return;
@@ -74,19 +74,37 @@ const ExplorerEvents = () => {
 
   useEffect(() => {
     if (!slug || isPending) return;
-    explorerEvents.search({ type, slug, strategies, filter, sort });
+    explorerEvents.search({
+      type,
+      slug,
+      strategies: filteredStrategies,
+      filter,
+      sort,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, isPending]);
 
   useEffect(() => {
     if (!mounted || !slug) return;
-    explorerEvents.resultsFilter({ type, slug, strategies, filter, sort });
+    explorerEvents.resultsFilter({
+      type,
+      slug,
+      strategies: filteredStrategies,
+      filter,
+      sort,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   useEffect(() => {
     if (!mounted || !slug) return;
-    explorerEvents.resultsSort({ type, slug, strategies, filter, sort });
+    explorerEvents.resultsSort({
+      type,
+      slug,
+      strategies: filteredStrategies,
+      filter,
+      sort,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort]);
 
