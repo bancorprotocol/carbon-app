@@ -51,4 +51,4 @@ jobs:
           labels: 'dependencies'
           branch: 'update-browserslist-db/${{ steps.update-browserslist-db.outputs.latest_version }}'
           delete-branch: true
-          base: 'main'
+          base: 'issue-#1421'
