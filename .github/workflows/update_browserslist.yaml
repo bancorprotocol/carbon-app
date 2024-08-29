@@ -49,7 +49,6 @@ jobs:
             Bumps caniuse-lite from ${{ steps.update-browserslist-db.outputs.installed_version }} to ${{ steps.update-browserslist-db.outputs.latest_version }}.
             Update output: ${{ steps.update-browserslist-db.outputs.update_output }}
           labels: 'dependencies'
-          branch: 'update-browserslist-db'
+          branch: 'update-browserslist-db/${{ steps.update-browserslist-db.outputs.latest_version }}'
           delete-branch: true
-          branch-suffix: '${{ steps.update-browserslist-db.outputs.latest_version }}'
           base: 'main'
