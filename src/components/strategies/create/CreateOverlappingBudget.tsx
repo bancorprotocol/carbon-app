@@ -55,18 +55,14 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
   useEffect(() => {
     if (!isValidRange(order0.min, order1.max)) return;
     if (anchor === 'buy' && aboveMarket) {
-      set('anchor', 'sell');
-      set('budget', undefined);
+      set({ anchor: 'sell', budget: null });
     }
     if (anchor === 'sell' && belowMarket) {
-      set('anchor', 'buy');
-      set('budget', undefined);
+      set({ anchor: 'buy', budget: null });
     }
   }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
 
-  const setBudget = async (value: string) => {
-    set('budget', value);
-  };
+  const setBudget = async (budget: string) => set({ budget });
 
   if (!anchor) return null;
 

@@ -12,36 +12,44 @@ import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOverlappingBudget } from 'components/strategies/create/CreateOverlappingBudget';
-import { useCallback } from 'react';
-import { SetOverlapping } from 'libs/routing/routes/trade';
+import { useEffect, useState } from 'react';
+import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
 
-const url = '/trade/overlapping';
-export const TradeOverlapping = () => {
-  const navigate = useNavigate({ from: url });
+const useCreateOverlapping = () => {
   const { base, quote } = useTradeCtx();
+  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const marketQuery = useMarketPrice({ base, quote });
-  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
+  const [local, setLocal] = useState<TradeOverlappingSearch>(search);
+  const marketPrice = local.marketPrice ?? marketQuery.marketPrice?.toString();
 
-  const orders = getOverlappingOrders(search, base, quote, marketPrice);
-  const set: SetOverlapping = useCallback(
-    (key, value) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
       navigate({
-        search: (previous) => ({ ...previous, [key]: value }),
+        search: (previous) => ({ ...previous, ...local }),
         replace: true,
         resetScroll: false,
       });
-    },
-    [navigate]
-  );
+    }, 100);
+    return () => clearInterval(timeout);
+  }, [navigate, local]);
 
-  const setMarketPrice = (price: string) => {
-    navigate({
-      search: (previous) => ({ ...previous, marketPrice: price }),
-      replace: true,
-      resetScroll: false,
-    });
+  return {
+    search: local,
+    orders: getOverlappingOrders(local, base, quote, marketPrice),
+    set: (next: TradeOverlappingSearch) => {
+      setLocal((current) => ({ ...current, ...next }));
+    },
   };
+};
+
+const url = '/trade/overlapping';
+export const TradeOverlapping = () => {
+  const { base, quote } = useTradeCtx();
+
+  const { search, orders, set } = useCreateOverlapping();
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
   if (!marketPrice && marketQuery.isPending) {
     return (
@@ -60,7 +68,7 @@ export const TradeOverlapping = () => {
               base={base}
               quote={quote}
               marketPrice={marketPrice}
-              setMarketPrice={(price) => set('marketPrice', price)}
+              setMarketPrice={(price) => set({ marketPrice: price })}
             />
           </article>
         </TradeLayout>

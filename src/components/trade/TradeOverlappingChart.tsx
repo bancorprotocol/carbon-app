@@ -38,14 +38,14 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
           <Radio
             name="chartType"
             checked={search.chartType !== 'history'}
-            onChange={() => set('chartType', 'range')}
+            onChange={() => set({ chartType: 'range' })}
           >
             Range
           </Radio>
           <Radio
             name="chartType"
             checked={search.chartType === 'history'}
-            onChange={() => set('chartType', 'history')}
+            onChange={() => set({ chartType: 'history' })}
           >
             History
           </Radio>
@@ -54,7 +54,7 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
           base={base}
           quote={quote}
           marketPrice={marketPrice}
-          setMarketPrice={(price) => set('marketPrice', price)}
+          setMarketPrice={(price) => set({ marketPrice: price })}
         />
       </header>
       <OverlappingChartContent {...props} />
@@ -70,8 +70,8 @@ const OverlappingChartContent: FC<Props> = (props) => {
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
-      if (buy.min !== search.min) set('min', buy.min);
-      if (sell.max !== search.max) set('max', sell.max);
+      if (buy.min !== search.min) set({ min: buy.min });
+      if (sell.max !== search.max) set({ max: sell.max });
     },
     [set, search.min, search.max]
   );
@@ -85,7 +85,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
       />
     );
   }
-  if (search.chartType === 'range') {
+  if (search.chartType !== 'history') {
     return (
       <OverlappingChart
         className="flex-1"
@@ -95,8 +95,8 @@ const OverlappingChartContent: FC<Props> = (props) => {
         order1={order1}
         userMarketPrice={search.marketPrice}
         spread={search.spread ?? initSpread}
-        setMin={(min) => set('min', min)}
-        setMax={(max) => set('max', max)}
+        setMin={(min) => set({ min })}
+        setMax={(max) => set({ max })}
       />
     );
   }

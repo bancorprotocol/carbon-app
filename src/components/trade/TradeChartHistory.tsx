@@ -14,6 +14,7 @@ import { useTradeCtx } from './TradeContext';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { defaultEnd, defaultStart } from 'pages/simulator';
+import { NotFound } from 'components/common/NotFound';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -63,6 +64,15 @@ export const TradeChartHistory: FC<Props> = (props) => {
   });
 
   if (isPending) return <CarbonLogoLoading className="h-[80px]" />;
+  if (isError) {
+    return (
+      <NotFound
+        variant="error"
+        title="Well, this doesn't happen often..."
+        text="Unfortunately, price history for this pair is not available."
+      />
+    );
+  }
   if (!data) return null;
   return (
     <D3ChartWrapper

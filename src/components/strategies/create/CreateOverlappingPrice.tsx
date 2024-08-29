@@ -45,24 +45,19 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
   useEffect(() => {
     if (!isValidRange(order0.min, order1.max)) return;
     if (anchor === 'buy' && aboveMarket) {
-      set('anchor', 'sell');
-      set('budget', undefined);
+      set({ anchor: 'sell', budget: null });
     }
     if (anchor === 'sell' && belowMarket) {
-      set('anchor', 'buy');
-      set('budget', undefined);
+      set({ anchor: 'buy', budget: null });
     }
   }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
 
-  const setMin = (min: string) => set('min', min);
-
-  const setMax = (max: string) => set('max', max);
-
-  const setSpread = (value: string) => set('spread', value);
+  const setMin = (min: string) => set({ min });
+  const setMax = (max: string) => set({ max });
+  const setSpread = (spread: string) => set({ spread });
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
-    set('budget', undefined);
-    set('anchor', value);
+    set({ anchor: value, budget: null });
   };
 
   // Update on buyMin changes
@@ -70,7 +65,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
     if (isZero(order0.min)) return;
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
-      if (Number(order1.max) < minSellMax) set('max', minSellMax.toString());
+      if (Number(order1.max) < minSellMax) set({ max: minSellMax.toString() });
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,7 +76,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
     if (isZero(order1.max)) return;
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
-      if (Number(order0.min) > maxBuyMin) set('min', maxBuyMin.toString());
+      if (Number(order0.min) > maxBuyMin) set({ min: maxBuyMin.toString() });
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
