@@ -1,5 +1,9 @@
 {
   "isUncheckedSigner": true,
   "carbonControllerAddress": "0xC537e898CD774e2dCBa3B14Ea6f34C93d5eA45e1",
-  "voucherContractAddress": "0x3660F04B79751e31128f6378eAC70807e38f554E"
+  "voucherContractAddress": "0x3660F04B79751e31128f6378eAC70807e38f554E",
+  "tradePair": [
+    "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+    "0x2730d6FdC86C95a74253BefFaA8306B40feDecbb"
+  ]
 }

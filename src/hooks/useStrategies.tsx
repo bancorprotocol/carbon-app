@@ -8,6 +8,7 @@ import {
   FC,
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -20,14 +21,37 @@ import { getCompareFunctionBySortType } from 'components/strategies/overview/uti
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { useStore } from 'store';
 import { SafeDecimal } from 'libs/safedecimal';
+import { useNavigate, useSearch } from 'libs/routing';
 
 export type StrategyFilterOutput = ReturnType<typeof useStrategyFilter>;
+
+export interface MyStrategiesSearch {
+  search?: string;
+}
+type Search = MyStrategiesSearch;
 
 export const useStrategyFilter = (
   strategies: StrategyWithFiat[],
   isPending: boolean
 ) => {
-  const [search, setSearch] = useState('');
+  const searchParams: Search = useSearch({ strict: false });
+  const navigate = useNavigate();
+  const search = searchParams.search || '';
+
+  const setSearch = useCallback(
+    (value: string) => {
+      navigate({
+        search: (currentSearch: MyStrategiesSearch) => {
+          return { ...currentSearch, search: value };
+        },
+        replace: true,
+        resetScroll: false,
+        params: (params) => params,
+      });
+    },
+    [navigate]
+  );
+
   const [sort, setSort] = useState<StrategySort>(getSortFromLS());
   const [filter, setFilter] = useState<StrategyFilter>(getFilterFromLS());
 
@@ -59,7 +83,8 @@ export const useStrategyFilter = (
   }, [search, strategies, filter, sort]);
 
   return {
-    strategies: filteredStrategies,
+    strategies,
+    filteredStrategies,
     isPending,
     search,
     setSearch,
@@ -100,6 +125,7 @@ export const useStrategiesWithFiat = (
 type StrategyCtx = ReturnType<typeof useStrategyFilter>;
 export const StrategyContext = createContext<StrategyCtx>({
   strategies: [],
+  filteredStrategies: [],
   isPending: true,
   search: '',
   setSearch: () => undefined,

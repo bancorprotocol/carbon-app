@@ -27,7 +27,6 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
     await form.max().focus();
     await form.max().fill(input.max);
     await form.spread().fill(input.spread);
-    await expect(form.anchorRequired()).toBeVisible();
     await form.anchor(input.anchor).click();
     await form.budgetSummary().click();
     if (input.action) await form.action(input.action).click();

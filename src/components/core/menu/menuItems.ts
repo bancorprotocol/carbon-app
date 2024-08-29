@@ -5,20 +5,24 @@ import config from 'config';
 export interface MenuItem {
   label: string;
   href: Pathnames;
+  testid: string;
 }
 
 export const menuItems: MenuItem[] = [
   {
-    label: 'My Strategies',
+    label: 'Portfolio',
     href: '/',
+    testid: 'my-strategies-page',
   },
   {
     label: 'Trade',
-    href: '/trade',
+    href: '/trade/disposable',
+    testid: 'trade-page',
   },
   {
     label: 'Explore',
     href: '/explore',
+    testid: 'explore-page',
   },
   ...(!config.isSimulatorEnabled
     ? []
@@ -26,6 +30,7 @@ export const menuItems: MenuItem[] = [
         {
           label: 'Simulate',
           href: '/simulate',
+          testid: 'simulate-page',
         } as MenuItem,
       ]),
   ...(isProduction
@@ -34,6 +39,7 @@ export const menuItems: MenuItem[] = [
         {
           label: 'Debug',
           href: '/debug',
+          testid: 'debug-page',
         } as MenuItem,
       ]),
 ];

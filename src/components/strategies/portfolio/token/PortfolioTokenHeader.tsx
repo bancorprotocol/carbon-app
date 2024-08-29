@@ -34,7 +34,8 @@ export const PortfolioTokenHeader: FC<Props> = ({
       <Link
         to={backLinkHref}
         params={backLinkHrefParams ?? {}}
-        search={{}}
+        search={(s) => ({ ...s, token: undefined })}
+        resetScroll={false}
         className={cn(
           'flex',
           'justify-center',

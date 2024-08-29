@@ -11,7 +11,7 @@ import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilte
 import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const ExplorerTabs = () => {
-  const { strategies } = useStrategyCtx();
+  const { filteredStrategies } = useStrategyCtx();
   const { slug, type } = useExplorerParams();
 
   // To support emojis in ens domains
@@ -20,21 +20,21 @@ export const ExplorerTabs = () => {
 
   const match = useMatchRoute();
 
-  const isActivity = !!match({
-    to: '/explore/$type/$slug/activity',
+  const isOverview = !!match({
+    to: '/explore/$type/$slug',
     params: { type, slug },
   });
 
   const tabs: StrategyTab[] = [
     {
-      label: 'Overview',
+      label: 'Strategies',
       href: '/explore/$type/$slug',
       params: { type, slug },
       icon: <IconOverview className="size-18" />,
-      badge: strategies?.length || 0,
+      badge: filteredStrategies?.length || 0,
     },
     {
-      label: 'Portfolio',
+      label: 'Distribution',
       href: '/explore/$type/$slug/portfolio',
       params: { type, slug },
       icon: <IconPieChart className="size-18" />,
@@ -50,7 +50,7 @@ export const ExplorerTabs = () => {
   return (
     <div className="flex items-center justify-between gap-16">
       <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-      {!isActivity && <StrategyFilterSort />}
+      {isOverview && <StrategyFilterSort />}
     </div>
   );
 };

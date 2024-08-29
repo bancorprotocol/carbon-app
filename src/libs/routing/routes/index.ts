@@ -15,6 +15,7 @@ import {
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
   myStrategyLayout,
+  oldCreateStrategies,
   strategyActivityPage,
   strategyOverviewPage,
   strategyPortfolioLayout,
@@ -30,12 +31,6 @@ import {
   simulatorRootRoute,
 } from 'libs/routing/routes/sim';
 import {
-  createDisposableStrategyPage,
-  createOverlappingStrategyPage,
-  createRecurringStrategyPage,
-  createStrategyPage,
-} from 'libs/routing/routes/strategyCreate';
-import {
   editStrategyLayout,
   editPricesDisposable,
   editPricesOverlapping,
@@ -44,7 +39,7 @@ import {
   editBudgetOverlapping,
   editBudgetRecurring,
 } from './strategyEdit';
-import { tradePage } from 'libs/routing/routes/trade';
+import tradePage from 'libs/routing/routes/trade';
 import { strategyPage } from 'libs/routing/routes/strategy';
 
 export const routeTree = rootRoute.addChildren([
@@ -53,10 +48,7 @@ export const routeTree = rootRoute.addChildren([
   debugPage,
   tradePage,
   strategyPage,
-  createStrategyPage,
-  createDisposableStrategyPage,
-  createRecurringStrategyPage,
-  createOverlappingStrategyPage,
+  oldCreateStrategies,
   editStrategyLayout.addChildren([
     editPricesDisposable,
     editPricesOverlapping,

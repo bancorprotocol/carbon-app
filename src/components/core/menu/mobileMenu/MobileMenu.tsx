@@ -12,6 +12,7 @@ export const MobileMenu: FC = () => {
 
   const isSamePageLink = (to: string) => {
     if (pathname.startsWith('/strategies') && to === '/') return true;
+    if (pathname.startsWith('/trade') && to.startsWith('/trade')) return true;
     return !!match({ to, search: {}, params: {}, fuzzy: true });
   };
 

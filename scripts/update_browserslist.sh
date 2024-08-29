@@ -23,8 +23,8 @@ echo "installed_version=$INSTALLED_VERSION" >> "$GITHUB_OUTPUT"
 
 echo "::group::Update result"
 echo "$OUTPUT"
-echo "Parsed Installed Version: $INSTALLED_VERSION"
-echo "Parsed Latest Version: $LATEST_VERSION"
+echo "Parsed installed Version: $INSTALLED_VERSION"
+echo "Parsed latest Version: $LATEST_VERSION"
 echo "::endgroup::"
 
 # Determine if an update should be performed

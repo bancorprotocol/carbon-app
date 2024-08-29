@@ -15,6 +15,7 @@ export const SimResultChartControls = () => {
     status,
     start,
     end,
+    replay,
     playbackSpeed,
     setPlaybackSpeed,
     data,
@@ -33,11 +34,6 @@ export const SimResultChartControls = () => {
   const setSpeed = (speed: PlaybackSpeed) => {
     setPlaybackSpeed(speed);
     setIsOpen(false);
-  };
-
-  const replay = () => {
-    end();
-    start();
   };
 
   const playPause = () => {

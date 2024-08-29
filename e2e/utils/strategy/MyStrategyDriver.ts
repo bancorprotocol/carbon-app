@@ -88,6 +88,6 @@ export class MyStrategyDriver {
   }
 
   createStrategy() {
-    return this.page.getByTestId('create-strategy-desktop').click();
+    return this.page.getByTestId('trade-page').click();
   }
 }

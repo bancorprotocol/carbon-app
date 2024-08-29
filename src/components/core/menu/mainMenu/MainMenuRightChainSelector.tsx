@@ -11,6 +11,7 @@ interface Props {
     name: string;
     logoUrl: string;
     appUrl: string;
+    chainId: number;
     isCurrentNetwork: boolean;
   }[];
 }

@@ -7,7 +7,6 @@ import {
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { OverlappingGraph } from 'components/strategies/overlapping/OverlappingGraph';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -28,13 +27,13 @@ import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { InputRange } from '../common/InputRange';
-import { isOverlappingTouched } from '../overlapping/utils';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { InputLimit } from '../common/InputLimit';
 import { Button } from 'components/common/button';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
+import { OverlappingChart } from '../overlapping/OverlappingChart';
 
 interface Props {
   marketPrice: string;
@@ -119,15 +118,10 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   );
 
   const displayPrice = externalPrice || search.marketPrice;
-  const touched = isOverlappingTouched(strategy, search);
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
 
   // ERROR
-  const anchorError = (() => {
-    if (touched && !anchor) return 'Please select a token to proceed';
-  })();
-
   const budgetError = (() => {
     const value = anchor === 'buy' ? order0.budget : order1.budget;
     const budget = new SafeDecimal(value);
@@ -227,13 +221,14 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
             />
           )}
         </header>
-        <OverlappingGraph
+        <OverlappingChart
+          className="min-h-[250px]"
           base={base}
           quote={quote}
           order0={order0}
           order1={order1}
           userMarketPrice={search.marketPrice}
-          spread={+spread}
+          spread={spread}
           setMin={setMin}
           setMax={setMax}
           disabled={!displayPrice}
@@ -328,15 +323,26 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           </Button>
         </article>
       )}
-      <OverlappingAnchor
-        base={base}
-        quote={quote}
-        anchor={anchor}
-        setAnchor={setAnchor}
-        anchorError={anchorError}
-        disableBuy={aboveMarket}
-        disableSell={belowMarket}
-      />
+      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+        <header className="flex items-center justify-between">
+          <h2 className="text-18">Budget</h2>
+          <Tooltip
+            iconClassName="size-18 text-white/60"
+            element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
+          />
+        </header>
+        <p className="text-14 text-white/80">
+          Please select a token to proceed.
+        </p>
+        <OverlappingAnchor
+          base={base}
+          quote={quote}
+          anchor={anchor}
+          setAnchor={setAnchor}
+          disableBuy={aboveMarket}
+          disableSell={belowMarket}
+        />
+      </article>
       {anchor && (
         <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
           <OverlappingAction

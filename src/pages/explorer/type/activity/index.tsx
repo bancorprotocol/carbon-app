@@ -1,5 +1,5 @@
+import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
-import { ActivitySection } from 'components/activity/ActivitySection';
 import { useExplorerParams } from 'components/explorer';
 import { QueryActivityParams } from 'libs/queries/extApi/activity';
 
@@ -14,7 +14,7 @@ export const ExplorerActivityPage = () => {
   }
   return (
     <ActivityProvider params={params}>
-      <ActivitySection
+      <ActivityLayout
         filters={type === 'wallet' ? ['ids', 'pairs'] : ['ids']}
       />
     </ActivityProvider>

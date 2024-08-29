@@ -51,7 +51,7 @@ interface Props {
 export const StrategyBlockManage: FC<Props> = (props) => {
   const { strategy } = props;
   const [manage, setManage] = useState(false);
-  const { strategies, sort, filter } = useStrategyCtx();
+  const { filteredStrategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
   const navigate = useNavigate();
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
@@ -125,7 +125,14 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       id: 'walletOwner',
       name: "View Owner's Strategies",
       action: () => {
-        const event = { type, slug, strategyEvent, strategies, sort, filter };
+        const event = {
+          type,
+          slug,
+          strategyEvent,
+          strategies: filteredStrategies,
+          sort,
+          filter,
+        };
         explorerEvents.viewOwnersStrategiesClick(event);
         navigate({
           to: '/explore/$type/$slug',
@@ -142,7 +149,13 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       name: 'Explore Pair',
       action: () => {
         const slug = toPairSlug(strategy.base, strategy.quote);
-        const event = { type, slug, strategies, filter, sort };
+        const event = {
+          type,
+          slug,
+          strategies: filteredStrategies,
+          filter,
+          sort,
+        };
         explorerEvents.search(event);
         navigate({
           to: '/explore/$type/$slug',
@@ -260,7 +273,13 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           onClick: (e) => {
             attr.onClick(e);
             if (!isOwn) {
-              const baseEvent = { type, slug, strategies, sort, filter };
+              const baseEvent = {
+                type,
+                slug,
+                strategies: filteredStrategies,
+                sort,
+                filter,
+              };
               explorerEvents.manageClick({ ...baseEvent, strategyEvent });
             } else {
               strategyEditEvents.strategyManageClick(strategyEvent);
@@ -310,7 +329,10 @@ interface ManageButtonProps extends MenuButtonProps {
 
 export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
   function ManageButton(props, ref) {
-    const style = cn(buttonStyles({ variant: 'white' }), 'max-md:p-8 gap-8');
+    const style = cn(
+      buttonStyles({ variant: 'secondary' }),
+      'max-md:p-8 gap-8'
+    );
     const { aboveBreakpoint } = useBreakpoints();
     return (
       <button {...props} className={style} ref={ref}>
