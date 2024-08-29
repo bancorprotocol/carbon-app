@@ -37,10 +37,9 @@ interface Props {
 export const TradeChartHistory: FC<Props> = (props) => {
   const { type, order0, order1, isLimit, spread, onPriceUpdates } = props;
   const { base, quote } = useTradeCtx();
-  const { priceStart, priceEnd } = useSearch({
-    strict: false,
-  }) as TradeSearch;
+  const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice } = useMarketPrice({ base, quote });
+
   const prices: ChartPrices = {
     buy: {
       min: order0.min || '0',
@@ -63,7 +62,13 @@ export const TradeChartHistory: FC<Props> = (props) => {
     end: priceEnd ?? defaultEnd().toString(),
   });
 
-  if (isPending) return <CarbonLogoLoading className="h-[80px]" />;
+  if (isPending) {
+    return (
+      <section className="rounded-12 grid flex-1 items-center bg-black">
+        <CarbonLogoLoading className="h-[80px]" />;
+      </section>
+    );
+  }
   if (isError) {
     return (
       <NotFound

@@ -10,8 +10,16 @@ import { NotFound } from 'components/common/NotFound';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { OverlappingChart } from 'components/strategies/overlapping/OverlappingChart';
 import { TradeChartHistory } from './TradeChartHistory';
-import config from 'config';
 import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
+import {
+  DateRangePicker,
+  datePickerPresets,
+} from 'components/common/datePicker/DateRangePicker';
+import { defaultEndDate, defaultStartDate } from 'pages/simulator';
+import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
+import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
+import { useNavigate } from '@tanstack/react-router';
+import config from 'config';
 
 interface Props {
   marketPrice?: string;
@@ -20,10 +28,26 @@ interface Props {
   set: SetOverlapping;
 }
 
+const url = '/trade/overlapping';
 export const TradeOverlappingChart: FC<Props> = (props) => {
   const { base, quote } = useTradeCtx();
   const { marketPrice, set } = props;
-  const search = useSearch({ from: '/trade/overlapping' });
+  const search = useSearch({ from: url });
+  const navigate = useNavigate({ from: url });
+
+  const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {
+    const { start, end } = props;
+    if (!start || !end) return;
+    navigate({
+      search: (previous) => ({
+        ...previous,
+        priceStart: toUnixUTC(start),
+        priceEnd: toUnixUTC(end),
+      }),
+      resetScroll: false,
+      replace: true,
+    });
+  };
 
   return (
     <section
@@ -50,6 +74,18 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
             History
           </Radio>
         </RadioGroup>
+        <DateRangePicker
+          defaultStart={defaultStartDate()}
+          defaultEnd={defaultEndDate()}
+          start={fromUnixUTC(search.priceStart)}
+          end={fromUnixUTC(search.priceEnd)}
+          onConfirm={onDatePickerConfirm}
+          presets={datePickerPresets}
+          options={{
+            disabled: datePickerDisabledDays,
+          }}
+          required
+        />
         <OverlappingMarketPrice
           base={base}
           quote={quote}
