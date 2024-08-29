@@ -1,0 +1,62 @@
+name: Update Browserslist DB
+on:
+  schedule:
+    - cron: '0 0 1 * *' # Runs at 00:00 on the 1st of every month
+  workflow_dispatch: # Allows manual triggering of the workflow
+  pull_request:
+jobs:
+  update-browserslist-db:
+    name: 'Run Browserlist update'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Update Browserslist DB
+        id: update-browserslist-db
+        run: |
+          chmod +x $GITHUB_WORKSPACE/scripts/update_browserslist.sh  # Add execute permissions
+          $GITHUB_WORKSPACE/scripts/update_browserslist.sh  # Execute the script
+
+      - name: Import GPG key
+        if: steps.update-browserslist-db.outputs.should_update == 'true'
+        id: import-gpg
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Commit changes
+        if: steps.update-browserslist-db.outputs.should_update == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          create_branch: true
+          branch: 'update-browserslist-db/${{ steps.update-browserslist-db.outputs.latest_version }}'
+          commit_message: '[CI] Update browserslist DB to  ${{ steps.update-browserslist-db.outputs.latest_version }}'
+          commit_user_name: ${{ steps.import-gpg.outputs.name }}
+          commit_user_email: ${{ steps.import-gpg.outputs.email }}
+
+      - name: Create Pull Request
+        if: steps.update-browserslist-db.outputs.should_update == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          committer: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
+          author: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
+          title: 'Bump browserslist DB from ${{ steps.update-browserslist-db.outputs.installed_version }} to ${{ steps.update-browserslist-db.outputs.latest_version }}'
+          body: |
+            Bumps caniuse-lite from ${{ steps.update-browserslist-db.outputs.installed_version }} to ${{ steps.update-browserslist-db.outputs.latest_version }}.
+            Update output: ${{ steps.update-browserslist-db.outputs.update_output }}
+          labels: 'dependencies'
+          branch: 'update-browserslist-db/${{ steps.update-browserslist-db.outputs.latest_version }}'
+          base: 'main'
