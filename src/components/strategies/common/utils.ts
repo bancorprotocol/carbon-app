@@ -52,9 +52,9 @@ export const isPaused = ({ order0, order1 }: Strategy) => {
 };
 
 export const emptyOrder = (): BaseOrder => ({
-  min: '0',
-  max: '0',
-  budget: '0',
+  min: '',
+  max: '',
+  budget: '',
 });
 
 export const toBaseOrder = (order: Order): BaseOrder => ({
@@ -71,7 +71,9 @@ export const isLimitOrder = (order: Order) => {
 };
 
 /** Check if a string value is zero-like value, null or undefined */
-export const isZero = (value?: string): value is '' | '0' | '.' | undefined => {
+export const isZero = (
+  value?: string | null
+): value is '' | '0' | '.' | undefined | null => {
   if (!value) return true;
   return !+formatNumber(value);
 };

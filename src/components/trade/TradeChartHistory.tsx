@@ -50,9 +50,16 @@ export const TradeChartHistory: FC<Props> = (props) => {
       max: order1.max || '0',
     },
   };
+
   const bounds: ChartPrices = {
-    buy: { min: order0.min, max: order0.max },
-    sell: { min: order1.min, max: order1.max },
+    buy: {
+      min: order0.min || order1.min,
+      max: order0.max || order1.max,
+    },
+    sell: {
+      min: order1.min || order0.min,
+      max: order1.max || order0.max,
+    },
   };
 
   const { data, isPending, isError } = useGetTokenPriceHistory({
@@ -65,7 +72,7 @@ export const TradeChartHistory: FC<Props> = (props) => {
   if (isPending) {
     return (
       <section className="rounded-12 grid flex-1 items-center bg-black">
-        <CarbonLogoLoading className="h-[80px]" />;
+        <CarbonLogoLoading className="h-[80px]" />
       </section>
     );
   }
