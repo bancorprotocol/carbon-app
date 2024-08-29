@@ -3,7 +3,7 @@ import {
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/simulator/input/d3Chart';
-import { D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
+import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { TradeSearch } from 'libs/routing';
@@ -23,6 +23,25 @@ const chartSettings: D3ChartSettingsProps = {
   marginBottom: 40,
   marginLeft: 0,
   marginRight: 80,
+};
+
+const getBounds = (
+  order0: BaseOrder,
+  order1: BaseOrder,
+  data: CandlestickData[] = []
+): ChartPrices => {
+  const min = Math.min(...data.map((d) => d.low));
+  const max = Math.max(...data.map((d) => d.high));
+  return {
+    buy: {
+      min: order0.min || min.toString(),
+      max: order0.max || max.toString(),
+    },
+    sell: {
+      min: order1.min || min.toString(),
+      max: order1.max || max.toString(),
+    },
+  };
 };
 
 interface Props {
@@ -51,23 +70,14 @@ export const TradeChartHistory: FC<Props> = (props) => {
     },
   };
 
-  const bounds: ChartPrices = {
-    buy: {
-      min: order0.min || order1.min,
-      max: order0.max || order1.max,
-    },
-    sell: {
-      min: order1.min || order0.min,
-      max: order1.max || order0.max,
-    },
-  };
-
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: base.address,
     quoteToken: quote.address,
     start: priceStart ?? defaultStart().toString(),
     end: priceEnd ?? defaultEnd().toString(),
   });
+
+  const bounds: ChartPrices = getBounds(order0, order1, data);
 
   if (isPending) {
     return (
