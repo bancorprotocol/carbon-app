@@ -35,6 +35,7 @@ export interface D3ChartCandlesticksProps {
   dms: D3ChartSettings;
   type: SimulatorType;
   overlappingSpread?: string;
+  overlappingMarketPrice?: number;
 }
 
 export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
@@ -49,6 +50,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     dms,
     type,
     overlappingSpread,
+    overlappingMarketPrice,
   } = props;
 
   const xScale = useMemo(
@@ -112,7 +114,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           prices={prices}
           onDragEnd={onDragEnd}
           onPriceUpdates={onPriceUpdates}
-          marketPrice={data[0].open ?? 0}
+          marketPrice={overlappingMarketPrice ?? data[0].open ?? 0}
           spread={Number(overlappingSpread)}
         />
       )}

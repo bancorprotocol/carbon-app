@@ -114,6 +114,7 @@ export const TradeChartHistory: FC<Props> = (props) => {
           isLimit={isLimit}
           type={type}
           overlappingSpread={spread}
+          overlappingMarketPrice={marketPrice}
         />
       )}
     </D3ChartWrapper>
