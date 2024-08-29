@@ -41,10 +41,10 @@ export const getDefaultOrder = (
   base: Partial<OrderBlock>,
   marketPrice: number = 0
 ): OrderBlock => {
-  const multiplierMax = type === 'buy' ? 0.9 : 1.2;
-  const multiplierMin = type === 'buy' ? 0.8 : 1.1;
   const settings = base.settings ?? 'limit';
   if (base.settings === 'range') {
+    const multiplierMax = type === 'buy' ? 0.9 : 1.2;
+    const multiplierMin = type === 'buy' ? 0.8 : 1.1;
     return {
       min: base.min ?? (marketPrice * multiplierMin).toString(),
       max: base.max ?? (marketPrice * multiplierMax).toString(),
@@ -52,9 +52,10 @@ export const getDefaultOrder = (
       settings,
     };
   } else {
+    const multiplier = type === 'buy' ? 0.9 : 1.1;
     return {
-      min: base.min ?? marketPrice.toString(),
-      max: base.max ?? marketPrice.toString(),
+      min: base.min ?? (marketPrice * multiplier).toString(),
+      max: base.max ?? (marketPrice * multiplier).toString(),
       budget: base.budget ?? '',
       settings,
     };

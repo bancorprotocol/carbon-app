@@ -1,6 +1,7 @@
 import {
   ChartPrices,
   D3ChartCandlesticks,
+  OnPriceUpdates,
 } from 'components/simulator/input/d3Chart';
 import { D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { useSearch } from '@tanstack/react-router';
@@ -12,6 +13,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { useTradeCtx } from './TradeContext';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { defaultEnd, defaultStart } from 'pages/simulator';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -26,11 +28,13 @@ interface Props {
   order0: BaseOrder;
   order1: BaseOrder;
   type: TradeTypes;
-  isLimit: { buy: boolean; sell: boolean };
+  isLimit?: { buy: boolean; sell: boolean };
+  spread?: string;
+  onPriceUpdates: OnPriceUpdates;
 }
 
 export const TradeChartHistory: FC<Props> = (props) => {
-  const { type, order0, order1, isLimit } = props;
+  const { type, order0, order1, isLimit, spread, onPriceUpdates } = props;
   const { base, quote } = useTradeCtx();
   const { priceStart, priceEnd } = useSearch({
     strict: false,
@@ -54,16 +58,10 @@ export const TradeChartHistory: FC<Props> = (props) => {
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: base.address,
     quoteToken: quote.address,
-    start: priceStart,
-    end: priceEnd,
+    start: priceStart ?? defaultStart().toString(),
+    end: priceEnd ?? defaultEnd().toString(),
   });
 
-  const onPriceUpdates = (...data: any[]) => {
-    console.log(data);
-  };
-  const onPriceUpdatesEnd = (...data: any[]) => {
-    console.log(data);
-  };
   if (isPending) return <CarbonLogoLoading className="h-[80px]" />;
   if (!data) return null;
   return (
@@ -80,9 +78,10 @@ export const TradeChartHistory: FC<Props> = (props) => {
           data={data}
           marketPrice={marketPrice}
           bounds={bounds}
-          onDragEnd={onPriceUpdatesEnd}
+          onDragEnd={onPriceUpdates}
           isLimit={isLimit}
           type={type}
+          overlappingSpread={spread}
         />
       )}
     </D3ChartWrapper>

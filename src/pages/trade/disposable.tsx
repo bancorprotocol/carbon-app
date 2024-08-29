@@ -1,6 +1,8 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
+import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
+import { OrderBlock } from 'components/strategies/common/types';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import {
   emptyOrder,
@@ -15,6 +17,31 @@ import { useTradeCtx } from 'components/trade/TradeContext';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing';
+import { useCallback, useEffect, useState } from 'react';
+
+const useCreateDispoable = () => {
+  const { base, quote } = useTradeCtx();
+  const search = useSearch({ from: url });
+  const { setOrder } = useSetDisposableOrder(url);
+  const { marketPrice } = useMarketPrice({ base, quote });
+  const [localOrder, setLocalOrder] = useState(
+    getDefaultOrder(search.direction ?? 'sell', search, marketPrice)
+  );
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setOrder(localOrder);
+    }, 300);
+    return clearTimeout(timeout);
+  }, [setOrder, localOrder]);
+
+  return {
+    order: localOrder,
+    setOrder: (next: Partial<OrderBlock>) => {
+      setLocalOrder((current) => ({ ...current, ...next }));
+    },
+  };
+};
 
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
@@ -24,9 +51,7 @@ export const TradeDisposable = () => {
   const buy = search.direction === 'buy';
   const { marketPrice } = useMarketPrice({ base, quote });
 
-  const order = getDefaultOrder(buy ? 'buy' : 'sell', search, marketPrice);
-
-  const { setOrder } = useSetDisposableOrder(url);
+  const { order, setOrder } = useCreateDispoable();
 
   const setDirection = (direction: StrategyDirection) => {
     const settings = search.settings;
@@ -44,6 +69,14 @@ export const TradeDisposable = () => {
       resetScroll: false,
     });
   };
+
+  const onPriceUpdates: OnPriceUpdates = useCallback(
+    (orders) => {
+      if (buy) setOrder({ min: orders.buy.min, max: orders.buy.max });
+      else setOrder({ min: orders.sell.min, max: orders.sell.max });
+    },
+    [setOrder, buy]
+  );
 
   // Warnings
   const outSideMarket = outSideMarketWarning({
@@ -104,6 +137,7 @@ export const TradeDisposable = () => {
           order0={order0}
           order1={order1}
           isLimit={isLimit}
+          onPriceUpdates={onPriceUpdates}
         />
       </TradeChartSection>
     </>

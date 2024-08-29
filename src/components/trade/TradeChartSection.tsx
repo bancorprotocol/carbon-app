@@ -2,14 +2,15 @@ import { TradingviewChart } from 'components/tradingviewChart';
 import { useTradeCtx } from './TradeContext';
 import { FC, ReactNode } from 'react';
 import config from 'config';
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { NotFound } from 'components/common/NotFound';
 
 interface Props {
   children: ReactNode;
 }
 
 export const TradeChartSection: FC<Props> = ({ children }) => {
-  const { base, quote } = useTradeCtx();
-  const chartType = config.ui?.priceChart ?? 'tradingView';
   return (
     <section
       aria-labelledby="price-chart-title"
@@ -20,10 +21,29 @@ export const TradeChartSection: FC<Props> = ({ children }) => {
           Price Chart
         </h2>
       </header>
-      {chartType === 'tradingView' && (
-        <TradingviewChart base={base} quote={quote} />
-      )}
-      {chartType === 'native' && children}
+      <ChartContent>{children}</ChartContent>
     </section>
   );
+};
+
+const ChartContent: FC<Props> = ({ children }) => {
+  const { base, quote } = useTradeCtx();
+  const priceChartType = config.ui?.priceChart ?? 'tradingView';
+  const { marketPrice, isPending } = useMarketPrice({ base, quote });
+  if (isPending) {
+    return <CarbonLogoLoading className="h-[80px]" />;
+  }
+  if (!marketPrice) {
+    return (
+      <NotFound
+        variant="info"
+        title="Market Price Unavailable"
+        text="Please provide a price."
+      />
+    );
+  }
+  if (priceChartType === 'tradingView') {
+    return <TradingviewChart base={base} quote={quote} />;
+  }
+  return children;
 };

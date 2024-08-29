@@ -13,15 +13,17 @@ import {
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { TradeChartHistory } from 'components/trade/TradeChartHistory';
+import { useCallback, useEffect, useState } from 'react';
+import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
+import { OrderBlock } from 'components/strategies/common/types';
 
-const url = '/trade/recurring';
-export const TradeRecurring = () => {
-  const search = useSearch({ from: url });
+const useCreateRecurring = () => {
   const { base, quote } = useTradeCtx();
+  const search = useSearch({ from: url });
+  const { setSellOrder, setBuyOrder } = useSetRecurringOrder(url);
   const { marketPrice } = useMarketPrice({ base, quote });
-  const { setSellOrder, setBuyOrder } =
-    useSetRecurringOrder<typeof search>(url);
-  const sellOrder = getDefaultOrder(
+
+  const initSellOrder = getDefaultOrder(
     'sell',
     {
       min: search.sellMin,
@@ -31,7 +33,7 @@ export const TradeRecurring = () => {
     },
     marketPrice
   );
-  const buyOrder = getDefaultOrder(
+  const initBuyOrder = getDefaultOrder(
     'buy',
     {
       min: search.buyMin,
@@ -41,6 +43,46 @@ export const TradeRecurring = () => {
     },
     marketPrice
   );
+  const [localSellOrder, setLocalSellOrder] = useState(initSellOrder);
+  const [localBuyOrder, setLocalBuyOrder] = useState(initBuyOrder);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setSellOrder(localSellOrder), 300);
+    return clearTimeout(timeout);
+  }, [setSellOrder, localSellOrder]);
+  useEffect(() => {
+    const timeout = setTimeout(() => setBuyOrder(localBuyOrder), 300);
+    return clearTimeout(timeout);
+  }, [setBuyOrder, localBuyOrder]);
+
+  return {
+    sellOrder: localSellOrder,
+    buyOrder: localBuyOrder,
+    setSellOrder: (next: Partial<OrderBlock>) => {
+      setLocalSellOrder((current) => ({ ...current, ...next }));
+    },
+    setBuyOrder: (next: Partial<OrderBlock>) => {
+      setLocalBuyOrder((current) => ({ ...current, ...next }));
+    },
+  };
+};
+
+const url = '/trade/recurring';
+export const TradeRecurring = () => {
+  const search = useSearch({ from: url });
+  const { base, quote } = useTradeCtx();
+  const { marketPrice } = useMarketPrice({ base, quote });
+  const { setBuyOrder, setSellOrder, buyOrder, sellOrder } =
+    useCreateRecurring();
+
+  const onPriceUpdates: OnPriceUpdates = useCallback(
+    ({ buy, sell }) => {
+      setBuyOrder({ min: buy.min, max: buy.max });
+      setSellOrder({ min: sell.min, max: sell.max });
+    },
+    [setBuyOrder, setSellOrder]
+  );
+
   const sellOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
@@ -97,6 +139,7 @@ export const TradeRecurring = () => {
           order0={buyOrder}
           order1={sellOrder}
           isLimit={isLimit}
+          onPriceUpdates={onPriceUpdates}
         />
       </TradeChartSection>
     </>

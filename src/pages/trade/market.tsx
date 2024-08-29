@@ -10,13 +10,12 @@ import { TradeLayout } from 'components/trade/TradeLayout';
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategyDirection } from 'libs/routing';
-import { TradeMarketSearch } from 'libs/routing/routes/trade';
 import { cn } from 'utils/helpers';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
   const { base, quote } = useTradeCtx();
-  const search = useSearch({ strict: false }) as TradeMarketSearch;
+  const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
   const buy = search.direction === 'buy';
   const balanceQuery = useGetTokenBalance(buy ? quote : base);
@@ -32,6 +31,9 @@ export const TradeMarket = () => {
       resetScroll: false,
     });
   };
+
+  // TODO: remove this and update the code accordingly
+  const onPriceUpdates = () => {};
 
   const isLimit = {
     buy: true,
@@ -89,6 +91,7 @@ export const TradeMarket = () => {
           order1={emptyOrder()}
           isLimit={isLimit}
           type="market"
+          onPriceUpdates={onPriceUpdates}
         />
       </TradeChartSection>
     </>
