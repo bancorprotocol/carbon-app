@@ -2,8 +2,6 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
-import { OrderBlock } from 'components/strategies/common/types';
-import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import {
   emptyOrder,
   outSideMarketWarning,
@@ -17,28 +15,33 @@ import { useTradeCtx } from 'components/trade/TradeContext';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing';
+import { TradeDisposableSearch } from 'libs/routing/routes/trade';
 import { useCallback, useEffect, useState } from 'react';
 
 const useCreateDispoable = () => {
   const { base, quote } = useTradeCtx();
   const search = useSearch({ from: url });
-  const { setOrder } = useSetDisposableOrder(url);
+  const navigate = useNavigate({ from: url });
   const { marketPrice } = useMarketPrice({ base, quote });
-  const [localOrder, setLocalOrder] = useState(
-    getDefaultOrder(search.direction ?? 'sell', search, marketPrice)
-  );
+  const [local, setLocal] = useState<TradeDisposableSearch>(search);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setOrder(localOrder);
-    }, 300);
+      navigate({
+        params: (params) => params,
+        search: (previous) => ({ ...previous, ...local }),
+        replace: true,
+        resetScroll: false,
+      });
+    }, 100);
     return clearTimeout(timeout);
-  }, [setOrder, localOrder]);
+  }, [navigate, local]);
 
   return {
-    order: localOrder,
-    setOrder: (next: Partial<OrderBlock>) => {
-      setLocalOrder((current) => ({ ...current, ...next }));
+    search: local,
+    order: getDefaultOrder(local.direction ?? 'sell', local, marketPrice),
+    setSearch: (next: TradeDisposableSearch) => {
+      setLocal((current) => ({ ...current, ...next }));
     },
   };
 };
@@ -46,36 +49,21 @@ const useCreateDispoable = () => {
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
   const { base, quote } = useTradeCtx();
-  const navigate = useNavigate({ from: url });
-  const search = useSearch({ from: url });
-  const buy = search.direction === 'buy';
   const { marketPrice } = useMarketPrice({ base, quote });
 
-  const { order, setOrder } = useCreateDispoable();
+  const { search, order, setSearch } = useCreateDispoable();
+  const isBuy = search.direction === 'buy';
 
   const setDirection = (direction: StrategyDirection) => {
-    const settings = search.settings;
-    const { min, max } = getDefaultOrder(direction, { settings }, marketPrice);
-    navigate({
-      params: (params) => params,
-      search: (previous) => ({
-        ...previous,
-        direction,
-        budget: undefined,
-        min,
-        max,
-      }),
-      replace: true,
-      resetScroll: false,
-    });
+    setSearch({ direction, budget: undefined, min: undefined, max: undefined });
   };
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
-    (orders) => {
-      if (buy) setOrder({ min: orders.buy.min, max: orders.buy.max });
-      else setOrder({ min: orders.sell.min, max: orders.sell.max });
+    ({ buy, sell }) => {
+      if (isBuy) setSearch({ min: buy.min, max: buy.max });
+      else setSearch({ min: sell.min, max: sell.max });
     },
-    [setOrder, buy]
+    [setSearch, isBuy]
   );
 
   // Warnings
@@ -84,10 +72,10 @@ export const TradeDisposable = () => {
     marketPrice,
     min: order.min,
     max: order.max,
-    buy,
+    buy: isBuy,
   });
-  const order0 = buy ? order : emptyOrder();
-  const order1 = buy ? emptyOrder() : order;
+  const order0 = isBuy ? order : emptyOrder();
+  const order1 = isBuy ? emptyOrder() : order;
   const isLimit = {
     buy: order.settings !== 'range',
     sell: order.settings !== 'range',
@@ -106,22 +94,22 @@ export const TradeDisposable = () => {
             type="disposable"
             base={base}
             quote={quote}
-            buy={buy}
+            buy={isBuy}
             order={order}
-            setOrder={setOrder}
+            setOrder={setSearch}
             warnings={[outSideMarket]}
             settings={
               <TabsMenu>
                 <TabsMenuButton
                   onClick={() => setDirection('sell')}
-                  variant={buy ? 'black' : 'sell'}
+                  variant={isBuy ? 'black' : 'sell'}
                   data-testid="tab-sell"
                 >
                   Sell
                 </TabsMenuButton>
                 <TabsMenuButton
                   onClick={() => setDirection('buy')}
-                  variant={!buy ? 'black' : 'buy'}
+                  variant={!isBuy ? 'black' : 'buy'}
                   data-testid="tab-buy"
                 >
                   Buy
