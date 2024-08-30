@@ -49,6 +49,9 @@ export const D3ChartDisposable = ({
 
   const hasDragEnded = useRef(false);
 
+  const type =
+    isZero(prices.buy.min) && isZero(prices.buy.max) ? 'sell' : 'buy';
+
   const onMinMaxChangeEnd = useCallback(
     (type: 'buy' | 'sell', y1?: number, y2?: number) => {
       const minInverted = y1
@@ -110,44 +113,20 @@ export const D3ChartDisposable = ({
     if (!hasDragEnded.current) {
       return;
     }
-
     handleStateChange({
-      type: 'sell',
+      type,
       id: 'line1',
-      y: yScale(Number(prices.sell.max)),
-      isLimit: isLimit.sell,
+      y: yScale(Number(prices[type].max)),
+      isLimit: isLimit[type],
     });
     handleStateChange({
-      type: 'sell',
+      type,
       id: 'line2',
-      y: yScale(Number(prices.sell.min)),
-      isLimit: isLimit.sell,
-    });
-    handleStateChange({
-      type: 'buy',
-      id: 'line1',
-      y: yScale(Number(prices.buy.max)),
-      isLimit: isLimit.buy,
-    });
-    handleStateChange({
-      type: 'buy',
-      id: 'line2',
-      y: yScale(Number(prices.buy.min)),
-      isLimit: isLimit.buy,
+      y: yScale(Number(prices[type].min)),
+      isLimit: isLimit[type],
     });
     hasDragEnded.current = false;
-  }, [
-    isLimit.buy,
-    isLimit.sell,
-    prices.buy.max,
-    prices.buy.min,
-    prices.sell.max,
-    prices.sell.min,
-    yScale,
-  ]);
-
-  const type =
-    isZero(prices.buy.min) && isZero(prices.buy.max) ? 'sell' : 'buy';
+  }, [type, isLimit, yScale, prices]);
 
   return (
     <>
