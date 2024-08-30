@@ -1,7 +1,7 @@
 name: Update Browserslist DB
 on:
   schedule:
-    - cron: '0 0 1 * *' # Runs at 00:00 on the 1st of every month
+    - cron: '0 0 * * 0' # Runs every week at 00:00 on Sunday
   workflow_dispatch: # Allows manual triggering of the workflow
 jobs:
   update-browserslist-db:
