@@ -42,7 +42,7 @@ jobs:
         if: steps.update-browserslist-db.outputs.should_update == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PR_OPEN_KEY }}
           committer: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
           author: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
           commit-message: '[CI] Update browserslist DB to ${{ steps.update-browserslist-db.outputs.latest_version }}'
