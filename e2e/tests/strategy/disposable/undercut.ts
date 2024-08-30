@@ -26,9 +26,7 @@ export const undercut = (testCase: CreateStrategyTestCase) => {
     await modal.getByTestId('undercut-strategy-btn').click();
     await modal.waitFor({ state: 'detached' });
 
-    await page.waitForURL('/strategies/create?*', {
-      timeout: 10_000,
-    });
+    await page.waitForURL('/trade/disposable?*');
 
     const createForm = new CreateStrategyDriver(page, testCase);
     await createForm.submit('undercut');

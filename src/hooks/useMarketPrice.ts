@@ -1,5 +1,6 @@
 import { Token } from 'libs/tokens';
-import { useFiatCurrency } from './useFiatCurrency';
+import { useStore } from 'store';
+import { useGetTokenPrice } from 'libs/queries';
 
 interface Props {
   base?: Token;
@@ -7,20 +8,19 @@ interface Props {
 }
 /** Return the market price of the base token in quote */
 export const useMarketPrice = ({ base, quote }: Props) => {
-  const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-  const { data: basePriceMap, isPending: isPendingBase } = useGetTokenPrice(
-    base?.address
-  );
-  const { data: quotePriceMap, isPending: isPendingQuote } = useGetTokenPrice(
-    quote?.address
-  );
-  const basePrice = basePriceMap?.[selectedFiatCurrency];
-  const quotePrice = quotePriceMap?.[selectedFiatCurrency];
+  const { fiatCurrency } = useStore();
+  const baseQuery = useGetTokenPrice(base?.address);
+  const quoteQuery = useGetTokenPrice(quote?.address);
+  const basePrice = baseQuery.data?.[fiatCurrency.selectedFiatCurrency];
+  const quotePrice = quoteQuery.data?.[fiatCurrency.selectedFiatCurrency];
+  const isPending = baseQuery.isPending || quoteQuery.isPending;
+  const isError = baseQuery.isError || quoteQuery.isError;
   if (!basePrice || !quotePrice) {
-    return { marketPrice: undefined, isPending: false };
+    return { marketPrice: undefined, isPending, isError };
   }
   return {
     marketPrice: basePrice / quotePrice,
-    isPending: isPendingBase || isPendingQuote,
+    isPending,
+    isError,
   };
 };

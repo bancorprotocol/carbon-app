@@ -1,10 +1,10 @@
+import { FC, ReactNode, createContext, useCallback, useContext } from 'react';
 import {
   Activity,
   ActivityMeta,
   QueryActivityParams,
 } from 'libs/queries/extApi/activity';
 import { ActivitySearchParams } from './utils';
-import { FC, ReactNode, createContext, useCallback, useContext } from 'react';
 import { useActivityQuery, useActivityMetaQuery } from './useActivityQuery';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { useNavigate, useSearch } from '@tanstack/react-router';
@@ -16,7 +16,8 @@ interface ActivityContextType {
   activities: Activity[];
   meta?: ActivityMeta;
   size?: number;
-  status: FetchStatus;
+  status: 'error' | 'pending' | 'success';
+  fetchStatus: FetchStatus;
   queryParams: QueryActivityParams;
   searchParams: ActivitySearchParams;
   setSearchParams: (searchParams: Partial<ActivitySearchParams>) => any;
@@ -24,7 +25,8 @@ interface ActivityContextType {
 
 const ActivityContext = createContext<ActivityContextType>({
   activities: [],
-  status: 'idle',
+  status: 'pending',
+  fetchStatus: 'idle',
   queryParams: {},
   searchParams: { limit: 10, offset: 0 },
   setSearchParams: () => {},
@@ -92,16 +94,18 @@ export const ActivityProvider: FC<Props> = ({ children, params }) => {
     [nav]
   );
 
-  if (activityQuery.isPending) {
+  if (activityMetaQuery.isPending) {
     return <CarbonLogoLoading className="h-[80px] self-center" />;
   }
+
   const activities = activityQuery.data ?? [];
   const size = activitySizeQuery.data?.size;
   const meta = activityMetaQuery.data;
 
   const ctx: ActivityContextType = {
     activities,
-    status: activityQuery.fetchStatus,
+    status: activityQuery.status,
+    fetchStatus: activityQuery.fetchStatus,
     meta: meta,
     size: size,
     queryParams,
@@ -124,10 +128,7 @@ export function useActivity(): ActivityContextType {
 
 export function useActivityPagination() {
   const { size = 0, searchParams, setSearchParams } = useActivity();
-  const { limit: rawLimit = 10, offset: rawOffset = 0 } = searchParams;
-
-  const limit = Number(rawLimit);
-  const offset = Number(rawOffset);
+  const { limit = 10, offset = 0 } = searchParams;
 
   const currentPage = Math.floor(offset / limit) + 1;
   const maxPage = Math.ceil(size / limit);

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
-import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
+import { ReactComponent as IconTwoRanges } from 'assets/icons/recurring.svg';
+import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping.svg';
 import { cn } from 'utils/helpers';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { Link } from 'libs/routing';
@@ -23,16 +23,16 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
     {
       title: 'Recurring',
       label: 'recurring',
-      svg: <IconTwoRanges className="w-37 h-16" />,
+      svg: <IconTwoRanges className="size-14" />,
       tooltipText:
-        'Create buy and sell orders (limit or range) that are linked together. Newly acquired funds automatically rotate between them, creating an endless trading cycle without need for manual intervention.',
+        'Create an automated trading cycle of buy low/sell high with two separate orders.',
     },
     {
       title: 'Concentrated',
       label: 'overlapping',
-      svg: <IconOverlappingStrategy className="w-37 h-16" />,
+      svg: <IconOverlappingStrategy className="size-14" />,
       tooltipText:
-        'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask fee tier that moves as the market does.',
+        'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
     },
   ];
 
@@ -42,7 +42,7 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
       key="simulatorTypeSelection"
     >
       <header className="mb-16 flex items-center justify-between">
-        <h2 className="text-18 font-weight-500 m-0">Strategy Type</h2>
+        <h2 className="text-18 font-weight-500 m-0">Trading Strategy</h2>
       </header>
       <article role="tablist" className="grid grid-cols-2 gap-8">
         {items.map(({ title, label, svg, tooltipText }) => (

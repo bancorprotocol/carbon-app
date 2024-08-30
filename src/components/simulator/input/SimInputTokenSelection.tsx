@@ -1,12 +1,12 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { FC } from 'react';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useModal } from 'hooks/useModal';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { cn } from 'utils/helpers';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 interface Props {
   baseToken?: string;

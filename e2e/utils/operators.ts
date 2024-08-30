@@ -23,7 +23,7 @@ export const screenshot = async (target: Page | Locator, name: string) => {
 };
 
 const urlNames = {
-  '/': 'My Strategies',
+  '/': 'Portfolio',
   '/trade?*': 'Trade',
   '/explore': 'Explore',
   '/simulate/recurring?*': 'Simulate',

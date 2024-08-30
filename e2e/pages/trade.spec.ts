@@ -12,13 +12,12 @@ import { navigateTo } from '../utils/operators';
 import { TokenApprovalDriver } from '../utils/TokenApprovalDriver';
 import { waitForTenderlyRpc } from '../utils/tenderly';
 import { TradeTestCase } from '../utils/trade/types';
-import { NotificationDriver } from '../utils/NotificationDriver';
 
 const testCases: TradeTestCase[] = [
   {
     mode: 'buy' as const,
-    source: 'USDC',
-    target: 'ETH',
+    base: 'ETH',
+    quote: 'USDC',
     swaps: [
       {
         sourceValue: '100',
@@ -28,8 +27,8 @@ const testCases: TradeTestCase[] = [
   },
   {
     mode: 'sell' as const,
-    source: 'USDC',
-    target: 'USDT',
+    base: 'USDC',
+    quote: 'USDT',
     isLimitedApproval: true,
     swaps: [
       {
@@ -40,16 +39,12 @@ const testCases: TradeTestCase[] = [
         sourceValue: '10',
         targetValue: '10.004863',
       },
-      {
-        sourceValue: '10',
-        targetValue: '10.004838',
-      },
     ],
   },
   {
     mode: 'sell' as const,
-    source: 'USDC',
-    target: 'USDT',
+    base: 'USDC',
+    quote: 'USDT',
     swaps: [
       {
         sourceValue: '10',
@@ -63,8 +58,8 @@ const testCases: TradeTestCase[] = [
   },
   {
     mode: 'sell' as const,
-    source: 'ETH',
-    target: 'USDC',
+    base: 'ETH',
+    quote: 'USDC',
     swaps: [
       {
         sourceValue: '0.005',
@@ -79,16 +74,14 @@ const testCases: TradeTestCase[] = [
 ];
 
 const testDescription = (testCase: TradeTestCase) => {
-  const { mode, source, target, isLimitedApproval } = testCase;
+  const { mode, base, quote, isLimitedApproval } = testCase;
 
   const numSwaps = testCase.swaps.length;
   const nameSwapSuffix = numSwaps > 1 ? ` ${numSwaps} times` : '';
   const approvalSuffix = isLimitedApproval ? ' with limited approval ' : '';
 
   const testName =
-    mode === 'buy'
-      ? `Buy ${target} with ${source}`
-      : `Sell ${source} for ${target}`;
+    mode === 'buy' ? `Buy ${quote} with ${base}` : `Sell ${base} for ${quote}`;
 
   return testName + nameSwapSuffix + approvalSuffix;
 };
@@ -109,25 +102,28 @@ test.describe('Trade', () => {
   });
 
   for (const testCase of testCases) {
-    const { source, target, swaps, isLimitedApproval } = testCase;
+    const { mode, base, quote, swaps, isLimitedApproval } = testCase;
+    const source = mode === 'sell' ? base : quote;
+    const target = mode === 'sell' ? quote : base;
 
     const testName = testDescription(testCase);
-
     test(testName, async ({ page }) => {
       // Store current balance
       const debug = new DebugDriver(page);
       const initialBalance = {
-        source: await debug.getBalance(source).textContent(),
-        target: await debug.getBalance(target).textContent(),
+        base: await debug.getBalance(base).textContent(),
+        quote: await debug.getBalance(quote).textContent(),
       };
 
       // Test Trade
       await navigateTo(page, '/trade?*');
+      await page.getByTestId('market').click();
       const driver = new TradeDriver(page, testCase);
       const tokenApproval = new TokenApprovalDriver(page);
 
-      // Select pair
-      await driver.selectPair();
+      await driver.selectToken('base');
+      await driver.selectToken('quote');
+      await driver.setMode(mode);
 
       for (const swap of swaps) {
         const { sourceValue, targetValue } = swap;
@@ -149,11 +145,8 @@ test.describe('Trade', () => {
 
         // Verify form empty
         await driver.awaitSuccess();
-        expect(driver.getPayInput()).toHaveValue('');
-        expect(driver.getReceiveInput()).toHaveValue('');
-
-        const notificationDriver = new NotificationDriver(page);
-        await notificationDriver.closeAll();
+        await expect(driver.getPayInput()).toHaveValue('');
+        await expect(driver.getReceiveInput()).toHaveValue('');
       }
 
       // Check balance diff after all swaps
@@ -171,10 +164,10 @@ test.describe('Trade', () => {
           targetValue: 0,
         }
       );
-      const sourceDelta = Number(initialBalance.source) - Number(sourceValue);
+      const sourceDelta = Number(initialBalance.base) - Number(sourceValue);
       const nextSource = new RegExp(sourceDelta.toString());
       await expect(debug.getBalance(source)).toHaveText(nextSource);
-      const targetDelta = Number(initialBalance.target) + Number(targetValue);
+      const targetDelta = Number(initialBalance.quote) + Number(targetValue);
       const nextTarget = new RegExp(targetDelta.toString());
       await expect(debug.getBalance(target)).toHaveText(nextTarget);
     });

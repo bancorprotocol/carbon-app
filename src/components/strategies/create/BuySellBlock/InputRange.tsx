@@ -2,11 +2,9 @@ import { ChangeEvent, FocusEvent, FC, useId, useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { carbonEvents } from 'services/events';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
-import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice';
 
@@ -23,7 +21,6 @@ type InputRangeProps = {
   error?: string;
   warnings?: string[];
   setRangeError: (error: string) => void;
-  marketPricePercentages?: MarketPricePercentage;
   ignoreMarketPriceWarning?: boolean;
   isOrdersReversed?: boolean;
   /** Used to change the warning logic in market price percent */
@@ -42,11 +39,8 @@ export const InputRange: FC<InputRangeProps> = ({
   error,
   setRangeError,
   buy = false,
-  marketPricePercentages,
   warnings,
-  ignoreMarketPriceWarning,
   isOrdersReversed,
-  isOverlapping,
 }) => {
   const marketPrice = useOverlappingMarketPrice({ base, quote });
   const inputMinId = useId();
@@ -141,18 +135,8 @@ export const InputRange: FC<InputRangeProps> = ({
             required
           />
           {!!marketPrice && (
-            <p className="flex flex-wrap items-center gap-4">
-              <span className="text-12 break-all text-white/60">
-                {getFiatAsString(min)}
-              </span>
-              {marketPricePercentages && (
-                <MarketPriceIndication
-                  marketPricePercentage={marketPricePercentages.min}
-                  isRange
-                  buy={buy || isOverlapping === true}
-                  ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-                />
-              )}
+            <p className="text-12 break-all text-white/60">
+              {getFiatAsString(min)}
             </p>
           )}
         </div>
@@ -201,19 +185,9 @@ export const InputRange: FC<InputRangeProps> = ({
             required
           />
           {!!marketPrice && (
-            <div className="flex flex-wrap items-center gap-4">
-              <p className="text-12 break-all text-white/60">
-                {getFiatAsString(max)}
-              </p>
-              {marketPricePercentages && (
-                <MarketPriceIndication
-                  marketPricePercentage={marketPricePercentages.max}
-                  isRange
-                  buy={buy}
-                  ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-                />
-              )}
-            </div>
+            <p className="text-12 break-all text-white/60">
+              {getFiatAsString(max)}
+            </p>
           )}
         </div>
       </div>
