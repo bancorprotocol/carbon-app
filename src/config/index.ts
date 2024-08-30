@@ -6,6 +6,8 @@ import celoDev from './celo/development';
 import celoProd from './celo/production';
 import blastDev from './blast/development';
 import blastProd from './blast/production';
+import { lsService } from 'services/localeStorage';
+
 export { pairsToExchangeMapping } from './utils';
 
 const configs = {
@@ -53,4 +55,11 @@ export const networks = Object.entries(configs)
     };
   });
 
-export default configs[network][mode];
+export const defaultConfig = configs[network][mode];
+
+const currentConfig = {
+  ...defaultConfig,
+  ...lsService.getItem('currentConfig'),
+};
+
+export default currentConfig;

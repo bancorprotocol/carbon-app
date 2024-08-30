@@ -1,0 +1,36 @@
+.growwrap {
+  /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+  display: grid;
+}
+.growwrap::after {
+  /* Note the weird space! Needed to preventy jumpy behavior */
+  content: attr(data-replicated-value) ' ';
+
+  /* This is how textarea text behaves */
+  white-space: pre-wrap;
+
+  /* Hidden from view, clicks, and screen readers */
+  visibility: hidden;
+}
+.growwrap > textarea {
+  /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+  resize: none;
+
+  /* Firefox shows scrollbar on growth, you can hide like this. */
+  overflow: hidden;
+}
+.growwrap > textarea,
+.growwrap::after {
+  /* Identical styling required!! */
+  border-radius: 1.125rem /* 18px */;
+  width: 100%;
+  --tw-bg-opacity: 1;
+  background-color: rgba(7, 7, 7, var(--tw-bg-opacity)) /* #070707 */;
+  padding-left: 1rem /* 16px */;
+  padding-right: 1rem /* 16px */;
+  padding-top: 0.5rem /* 8px */;
+  padding-bottom: 0.5rem /* 8px */;
+
+  /* Place on top of each other */
+  grid-area: 1 / 1 / 2 / 2;
+}

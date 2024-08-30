@@ -4,6 +4,7 @@ import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
 import { Pathnames } from 'libs/routing';
+import config from 'config';
 
 export type StrategyOption =
   | 'buy-limit'
@@ -41,8 +42,7 @@ export const strategyOptionItems = (
       },
       {
         summary: 'No trading or gas fees on filled orders',
-        details:
-          'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
+        details: `Makers pay no gas when a trade is executed, and there are currently no maker fees on ${config.appName}.`,
       },
     ],
     svg: <IconBuyLimit className="w-full" />,
@@ -78,8 +78,7 @@ export const strategyOptionItems = (
       },
       {
         summary: 'No trading or gas fees on filled orders',
-        details:
-          'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
+        details: `Makers pay no gas when a trade is executed, and there are currently no maker fees on ${config.appName}.`,
       },
     ],
     svg: <IconBuyRange className="w-full" />,
@@ -110,8 +109,7 @@ export const strategyOptionItems = (
       },
       {
         summary: 'No trading or gas fees on filled orders',
-        details:
-          'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
+        details: `Makers pay no gas when a trade is executed, and there are currently no maker fees on ${config.appName}.`,
       },
     ],
     svg: <IconTwoRanges className="w-full" />,
@@ -130,8 +128,7 @@ export const strategyOptionItems = (
     benefits: [
       {
         summary: 'No trading or gas fees on filled orders',
-        details:
-          'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
+        details: `Makers pay no gas when a trade is executed, and there are currently no maker fees on ${config.appName}.`,
       },
       {
         summary: 'Adjustable',
