@@ -20,7 +20,7 @@ CLEAN_OUTPUT=$(echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
 LATEST_VERSION=$(yarn info caniuse-lite version | sed -n '2p' | sed 's/\x1b\[[0-9;]*m//g')
 echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 
-echo "::group::Update result"
+echo "::group::Update Result"
 echo "$CLEAN_OUTPUT"
 echo "Latest Version: $LATEST_VERSION"
 echo "::endgroup::"
