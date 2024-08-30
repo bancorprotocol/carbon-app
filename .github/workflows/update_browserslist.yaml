@@ -29,7 +29,6 @@ jobs:
           $GITHUB_WORKSPACE/scripts/update_browserslist.sh  # Execute the script
 
       - name: Import GPG key
-        if: steps.update-browserslist-db.outputs.should_update == 'true'
         id: import-gpg
         uses: crazy-max/ghaction-import-gpg@v6
         with:
@@ -39,7 +38,6 @@ jobs:
           git_commit_gpgsign: true
 
       - name: Create Pull Request
-        if: steps.update-browserslist-db.outputs.should_update == 'true'
         uses: peter-evans/create-pull-request@v6
         env:
           HUSKY: '0'
