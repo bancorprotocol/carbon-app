@@ -18,6 +18,7 @@ CLEAN_OUTPUT=$(echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
 
 # Extract and save version information
 LATEST_VERSION=$(yarn info caniuse-lite version | sed -n '2p' | sed 's/\x1b\[[0-9;]*m//g')
+echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 
 echo "::group::Update result"
 echo "$CLEAN_OUTPUT"
