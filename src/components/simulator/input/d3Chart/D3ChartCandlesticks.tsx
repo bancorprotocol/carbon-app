@@ -10,11 +10,11 @@ import {
   scaleBand,
   D3ChartSettings,
 } from 'libs/d3';
-import { SimulatorType } from 'libs/routing/routes/sim';
 import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from 'components/simulator/input/d3Chart/Candlesticks';
 import { D3ChartDisposable } from './recurring/D3ChartDisposable';
+import { TradeTypes } from 'libs/routing/routes/trade';
 
 export type ChartPrices<T = string> = {
   buy: { min: T; max: T };
@@ -33,7 +33,7 @@ export interface D3ChartCandlesticksProps {
   onDragEnd?: OnPriceUpdates;
   isLimit?: { buy: boolean; sell: boolean };
   dms: D3ChartSettings;
-  type: SimulatorType;
+  type: TradeTypes;
   overlappingSpread?: string;
   overlappingMarketPrice?: number;
 }

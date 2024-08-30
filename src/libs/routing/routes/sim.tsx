@@ -15,7 +15,6 @@ import { SimulatorResultPage } from 'pages/simulator/result';
 import config from 'config';
 import { roundSearchParam } from 'utils/helpers';
 import * as v from 'valibot';
-import { TradeTypes } from './trade';
 
 export const simulatorRootRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -90,7 +89,7 @@ export interface StrategyInputSearch extends StrategyInputBase {
   buyIsRange?: boolean;
 }
 
-export type SimulatorType = TradeTypes;
+export type SimulatorType = 'overlapping' | 'recurring';
 
 export const simulatorInputRecurringRoute = new Route({
   getParentRoute: () => simulatorInputRootRoute,
