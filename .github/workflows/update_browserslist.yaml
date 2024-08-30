@@ -46,9 +46,9 @@ jobs:
           committer: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
           author: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
           commit-message: '[CI] Update browserslist DB to ${{ steps.update-browserslist-db.outputs.latest_version }}'
-          title: 'Bump browserslist DB from ${{ steps.update-browserslist-db.outputs.installed_version }} to ${{ steps.update-browserslist-db.outputs.latest_version }}'
+          title: 'Bump browserslist DB to ${{ steps.update-browserslist-db.outputs.latest_version }}'
           body: |
-            Bumps caniuse-lite from ${{ steps.update-browserslist-db.outputs.installed_version }} to ${{ steps.update-browserslist-db.outputs.latest_version }}.
+            Bumps caniuse-lite to ${{ steps.update-browserslist-db.outputs.latest_version }}.
             Update output: ${{ steps.update-browserslist-db.outputs.update_output }}
           labels: 'dependencies'
           branch: 'update-browserslist-db/${{ steps.update-browserslist-db.outputs.latest_version }}'
