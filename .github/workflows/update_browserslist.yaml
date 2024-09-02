@@ -24,8 +24,15 @@ jobs:
       - name: Update Browserslist DB
         id: update-browserslist-db
         run: |
-          chmod +x $GITHUB_WORKSPACE/scripts/update_browserslist.sh  # Add execute permissions
-          $GITHUB_WORKSPACE/scripts/update_browserslist.sh  # Execute the script
+          OUTPUT=$(yarn update-browserslist)
+          CLEAN_OUTPUT=$(echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
+          {
+          echo 'update_output<<EOF'
+          echo "$CLEAN_OUTPUT"
+          echo EOF
+          } >> "$GITHUB_OUTPUT"
+          LATEST_VERSION=$(yarn info caniuse-lite version | sed -n '2p' | sed 's/\x1b\[[0-9;]*m//g')
+          echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Import GPG key
         id: import-gpg
