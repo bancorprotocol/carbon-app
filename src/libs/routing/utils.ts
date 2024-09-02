@@ -62,6 +62,8 @@ export const parseSearchWith = (parser: (str: string) => any) => {
       'buyAction',
       'sellAction',
       'chartType',
+      'sellMarginalPrice',
+      'buyMarginalPrice',
     ];
 
     const skipParsing = (key: string) => keysToSkipParse.includes(key);
