@@ -3,6 +3,7 @@ on:
   schedule:
     - cron: '0 0 * * 0' # Runs every week at 00:00 on Sunday
   workflow_dispatch: # Allows manual triggering of the workflow
+  pull_request:
 jobs:
   update-browserslist-db:
     name: 'Run Browserlist update'
@@ -60,4 +61,4 @@ jobs:
           labels: 'dependencies'
           branch: 'update-browserslist-db/${{ steps.update-browserslist-db.outputs.latest_version }}'
           delete-branch: true
-          base: 'main'
+          base: 'issue-#1421'
