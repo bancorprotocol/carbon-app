@@ -70,22 +70,20 @@ export const parseSearchWith = (parser: (str: string) => any) => {
 
     // Try to parse any query params that might be json
     for (let key in query) {
-      if (!query[key]) continue;
       if (
+        !query[key] ||
         isAddress(String(query[key])) ||
         isDate(String(query[key])) ||
         skipParsing(key)
-      ) {
-        // eslint-disable-next-line
-        query[key] = query[key];
-      } else {
-        const value = query[key];
-        if (typeof value === 'string') {
-          try {
-            query[key] = parser(value);
-          } catch (err) {
-            console.error(`Error parsing param for key ${key}: `, err);
-          }
+      )
+        continue;
+
+      const value = query[key];
+      if (typeof value === 'string') {
+        try {
+          query[key] = parser(value);
+        } catch (err) {
+          //
         }
       }
     }
