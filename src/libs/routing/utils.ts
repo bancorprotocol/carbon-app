@@ -50,15 +50,21 @@ export const parseSearchWith = (parser: (str: string) => any) => {
 
     let query: Record<string, unknown> = decode(searchStr);
 
-    const skipParsing = (key: string) => {
-      if (key === 'settings') return true;
-      if (key === 'type') return true;
-      if (key === 'anchor') return true;
-      if (key === 'direction') return true;
-      if (key === 'buySettings') return true;
-      if (key === 'sellSettings') return true;
-      return false;
-    };
+    const keysToSkipParse = [
+      'settings',
+      'type',
+      'anchor',
+      'direction',
+      'buySettings',
+      'sellSettings',
+      'editType',
+      'action',
+      'buyAction',
+      'sellAction',
+      'chartType',
+    ];
+
+    const skipParsing = (key: string) => keysToSkipParse.includes(key);
 
     // Try to parse any query params that might be json
     for (let key in query) {
