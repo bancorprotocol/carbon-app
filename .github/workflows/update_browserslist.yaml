@@ -6,7 +6,7 @@ on:
   pull_request:
 jobs:
   update-browserslist-db:
-    name: 'Run Browserlist update'
+    name: 'Run Browserlist Update'
     runs-on: ubuntu-latest
     permissions:
       contents: write
