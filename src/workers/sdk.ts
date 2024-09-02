@@ -14,17 +14,10 @@ import {
   ContractsApi,
   ContractsConfig,
 } from '@bancor/carbon-sdk/contracts-api';
-import Decimal from 'decimal.js';
+import { Decimal } from 'libs/safedecimal';
 import { OrderRow } from 'libs/queries';
 import { OrderBook } from 'libs/queries/sdk/orderBook';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
-
-Decimal.set({
-  precision: 100,
-  rounding: Decimal.ROUND_HALF_DOWN,
-  toExpNeg: -30,
-  toExpPos: 30,
-});
 
 const ONE = new Decimal(1);
 
