@@ -56,7 +56,7 @@ export const DebugConfig = () => {
       >
         <textarea
           id="custom-config-json"
-          className="rounded-18 w-full bg-black px-16 py-8"
+          className="rounded-18 bg-black px-16 py-8"
           placeholder="Enter a config file in JSON format"
           value={config}
           onChange={handleConfigChange}
