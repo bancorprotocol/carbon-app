@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
 import style from './growwrap.module.css';
 import { cn } from 'utils/helpers';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import currentConfig, { defaultConfig } from 'config';
+import { defaultConfig } from 'config';
+import * as v from 'valibot';
+import { AppConfigSchema } from 'config/configSchema';
 
 export const DebugConfig = () => {
   const parsedCurrentConfig = JSON.stringify(
@@ -16,6 +18,7 @@ export const DebugConfig = () => {
 
   const [config, setConfig] = useState(parsedCurrentConfig);
   const [error, setError] = useState('');
+  const parentRef = useRef<HTMLDivElement>(null);
 
   const errorMessage = 'Failed parsing JSON file';
 
@@ -26,6 +29,7 @@ export const DebugConfig = () => {
         lsService.removeItem('currentConfig');
       } else {
         const parsedConfig = JSON.parse(config || '');
+        v.parse(v.partial(AppConfigSchema), parsedConfig);
         lsService.setItem('currentConfig', parsedConfig);
       }
       setError('');
@@ -37,45 +41,55 @@ export const DebugConfig = () => {
 
   const handleConfigChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setConfig(e.target.value);
-    if (e.target.parentNode)
-      (e.target.parentNode as HTMLElement).dataset.replicatedValue =
-        e.target.value;
+    if (parentRef.current)
+      parentRef.current.dataset.replicatedValue = e.target.value;
+  };
+
+  const handleLoadDefault = () => {
+    setConfig(parsedDefaultConfig);
+    if (parentRef.current)
+      parentRef.current.dataset.replicatedValue = parsedDefaultConfig;
+  };
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    saveConfig(config);
   };
 
   return (
-    <div className="rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20">
+    <form
+      onSubmit={submit}
+      className="rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20"
+    >
       <h2 className="text-center">Set Config</h2>
       <label htmlFor="custom-config-json">Config Override</label>
-      {!!error && (
-        <Warning isError message={error} htmlFor="custom-config-json" />
-      )}
 
       <div
+        ref={parentRef}
         data-replicated-value={parsedCurrentConfig}
         className={cn('w-full', style.growwrap)}
       >
         <textarea
           id="custom-config-json"
           className="rounded-18 bg-black px-16 py-8"
-          placeholder="Enter a config file in JSON format"
+          placeholder="Enter config file overrides in JSON format"
           value={config}
           onChange={handleConfigChange}
           aria-describedby="custom-config-title"
         />
       </div>
-      <Button
-        data-testid="save-imposter"
-        onClick={() => saveConfig(config)}
-        fullWidth
-      >
+      {!!error && (
+        <Warning isError message={error} htmlFor="custom-config-json" />
+      )}
+      <Button data-testid="save-imposter" type="submit" fullWidth>
         Save
       </Button>
-      <Button onClick={() => saveConfig(parsedDefaultConfig)} fullWidth>
+      <Button type="button" onClick={handleLoadDefault} fullWidth>
         Load Default Config
       </Button>
-      <Button onClick={() => saveConfig()} fullWidth>
+      <Button type="button" onClick={() => saveConfig()} fullWidth>
         Reset
       </Button>
-    </div>
+    </form>
   );
 };
