@@ -6,12 +6,7 @@ import celoDev from './celo/development';
 import celoProd from './celo/production';
 import blastDev from './blast/development';
 import blastProd from './blast/production';
-import { lsService } from 'services/localeStorage';
-import * as v from 'valibot';
-import { AppConfigSchema } from './configSchema';
-import { AppConfig } from './types';
-
-export { pairsToExchangeMapping } from './utils';
+import { getConfig } from './utils';
 
 const configs = {
   ethereum: {
@@ -46,6 +41,8 @@ if (!configs[network][mode]) {
   throw new Error(`NODE_ENV should be ${modes}, got "${mode}"`);
 }
 
+export { pairsToExchangeMapping } from './utils';
+
 export const networks = Object.entries(configs)
   .filter(([_id, config]) => config[mode].hidden !== true)
   .map(([id, config]) => {
@@ -60,17 +57,5 @@ export const networks = Object.entries(configs)
   });
 
 export const defaultConfig = configs[network][mode];
-
-const currentConfig = lsService.getItem('currentConfig');
-const AppConfigWithFallback = v.fallback(AppConfigSchema, defaultConfig);
-
-const newConfig = Object.assign({}, defaultConfig, currentConfig);
-const parseResult = v.safeParse(AppConfigWithFallback, newConfig);
-
-if (parseResult.issues) {
-  console.log("Couldn't load config, clearing config overrides...");
-  lsService.removeItem('currentConfig');
-}
-const parsedConfig = parseResult.output as AppConfig;
-
+const parsedConfig = getConfig(defaultConfig);
 export default parsedConfig;

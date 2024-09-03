@@ -52,7 +52,7 @@ interface LocalStorageSchema {
   simDisclaimerLastSeen: number;
   lastSdkCache: { timestamp: number; ttl: number };
   notificationPreferences: NotificationPreference;
-  currentConfig: AppConfig;
+  configOverride: Partial<AppConfig>;
 }
 
 // ************************** /

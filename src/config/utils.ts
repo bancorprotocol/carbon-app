@@ -1,5 +1,9 @@
 import { TokenList } from 'libs/tokens';
 import { tokenDragonswapListParser, tokenSeiListParser } from './sei/utils';
+import { lsService } from 'services/localeStorage';
+import { AppConfigSchema } from './configSchema';
+import * as v from 'valibot';
+import { AppConfig } from './types';
 
 export const pairsToExchangeMapping: { [key: string]: string } = {
   ETHUSDT: 'BINANCE:ETHUSDT',
@@ -276,4 +280,20 @@ export const tokenParserMap: Record<
     'logos'
   ),
   tokenSeiListParser: tokenSeiListParser('pacific-1'),
+};
+
+export const getConfig = (defaultConfig: AppConfig) => {
+  const configOverride = lsService.getItem('configOverride');
+  const AppConfigWithFallback = v.fallback(AppConfigSchema, defaultConfig);
+
+  const currentConfig = Object.assign({}, defaultConfig, configOverride);
+  const parseResult = v.safeParse(AppConfigWithFallback, currentConfig);
+
+  if (parseResult.issues) {
+    console.log("Couldn't load config, clearing config overrides...");
+    lsService.removeItem('configOverride');
+    return defaultConfig;
+  }
+  console.log('Config loaded successfully');
+  return parseResult.output as AppConfig;
 };

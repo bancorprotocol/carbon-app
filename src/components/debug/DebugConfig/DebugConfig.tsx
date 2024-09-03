@@ -1,36 +1,33 @@
 import { FormEvent, useRef, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
-import style from './growwrap.module.css';
-import { cn } from 'utils/helpers';
 import { Warning } from 'components/common/WarningMessageWithIcon';
+import style from 'components/debug/DebugConfig/growwrap.module.css';
 import { defaultConfig } from 'config';
-import * as v from 'valibot';
 import { AppConfigSchema } from 'config/configSchema';
+import { AppConfig } from 'config/types';
+import { cn } from 'utils/helpers';
+import * as v from 'valibot';
+
+const formatConfig = (config?: Partial<AppConfig>) =>
+  JSON.stringify(config, undefined, 4);
 
 export const DebugConfig = () => {
-  const parsedCurrentConfig = JSON.stringify(
-    lsService.getItem('currentConfig'),
-    undefined,
-    4
-  );
-  const parsedDefaultConfig = JSON.stringify(defaultConfig, undefined, 4);
-
-  const [config, setConfig] = useState(parsedCurrentConfig);
+  const savedConfigOverride = formatConfig(lsService.getItem('configOverride'));
+  const [configOverride, setConfigOverride] = useState(savedConfigOverride);
   const [error, setError] = useState('');
   const parentRef = useRef<HTMLDivElement>(null);
 
   const errorMessage = 'Failed parsing JSON file';
-
-  const saveConfig = (config?: string) => {
+  const saveConfigOverride = (configOverride?: string) => {
     try {
-      if (!config) {
-        setConfig('');
-        lsService.removeItem('currentConfig');
+      if (!configOverride) {
+        setConfigOverride('');
+        lsService.removeItem('configOverride');
       } else {
-        const parsedConfig = JSON.parse(config || '');
+        const parsedConfig = JSON.parse(configOverride || '');
         v.parse(v.partial(AppConfigSchema), parsedConfig);
-        lsService.setItem('currentConfig', parsedConfig);
+        lsService.setItem('configOverride', parsedConfig);
       }
       setError('');
       window?.location.reload();
@@ -40,20 +37,21 @@ export const DebugConfig = () => {
   };
 
   const handleConfigChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setConfig(e.target.value);
+    setConfigOverride(e.target.value);
     if (parentRef.current)
       parentRef.current.dataset.replicatedValue = e.target.value;
   };
 
   const handleLoadDefault = () => {
-    setConfig(parsedDefaultConfig);
+    const parsedDefaultConfig = formatConfig(defaultConfig);
+    setConfigOverride(parsedDefaultConfig);
     if (parentRef.current)
       parentRef.current.dataset.replicatedValue = parsedDefaultConfig;
   };
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    saveConfig(config);
+    saveConfigOverride(configOverride);
   };
 
   return (
@@ -66,13 +64,13 @@ export const DebugConfig = () => {
 
       <div
         ref={parentRef}
-        data-replicated-value={parsedCurrentConfig}
+        data-replicated-value={savedConfigOverride}
         className={cn('w-full', style.growwrap)}
       >
         <textarea
           id="custom-config-json"
           placeholder="Enter config file overrides in JSON format"
-          value={config}
+          value={configOverride}
           onChange={handleConfigChange}
           aria-describedby="custom-config-title"
         />
@@ -86,7 +84,7 @@ export const DebugConfig = () => {
       <Button type="button" onClick={handleLoadDefault} fullWidth>
         Load Default Config
       </Button>
-      <Button type="button" onClick={() => saveConfig()} fullWidth>
+      <Button type="button" onClick={() => saveConfigOverride()} fullWidth>
         Reset
       </Button>
     </form>
