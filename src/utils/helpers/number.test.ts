@@ -26,9 +26,13 @@ describe('Test helpers', () => {
   test('formatNumber', () => {
     expect(formatNumber('')).toBe('');
     expect(formatNumber('.')).toBe('0');
+    expect(formatNumber('0.0000000')).toBe('0');
     expect(formatNumber('.1')).toBe('0.1');
     expect(formatNumber('1.1010')).toBe('1.101');
     expect(formatNumber('01.100')).toBe('1.1');
+    expect(formatNumber('01.00')).toBe('1');
+    expect(formatNumber('1.000000000100')).toBe('1.0000000001');
+    expect(formatNumber('.000000000100')).toBe('0.0000000001');
   });
   describe('prettifyNumber', () => {
     test('should return 0 for input lower then 0', () => {

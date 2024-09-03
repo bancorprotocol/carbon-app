@@ -29,7 +29,10 @@ export const sanitizeNumber = (input: string, precision?: number): string => {
 export const formatNumber = (value: string) => {
   if (!value) return '';
   if (value === '.') return '0';
-  return new SafeDecimal(value).toString();
+  return new SafeDecimal(value)
+    .toFixed(100)
+    .replace(lastZero, '')
+    .replace(/\.+$/, ''); // Remove "." if it's the last character
 };
 
 const getDisplayCurrency = (currency: string) => {
@@ -219,7 +222,7 @@ export const roundSearchParam = (param?: string | number) => {
     maxDecimals += decimals.match(firstZero)?.[0].length ?? 0;
   }
   const roundedDecimals = decimals.slice(0, maxDecimals).replace(lastZero, '');
-  return [radix, roundedDecimals].filter((v) => !!v).join('.');
+  return [radix || '0', roundedDecimals].filter((v) => !!v).join('.');
 };
 
 export const tokenAmount = (
