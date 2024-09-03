@@ -19,7 +19,6 @@ export const DebugPage = () => {
         <DebugResetDefault />
         <DebugWagmi />
         <DebugImposter />
-        <DebugConfig />
         <DebugTenderlyRPC />
         <DebugTenderlyFaucet />
         <DebugTransferNFT />
@@ -27,6 +26,7 @@ export const DebugPage = () => {
         <DebugCreateStrategy />
         <DebugFiatCurrency />
         <DebugOrderBook />
+        <DebugConfig />
         <DebugSDKConfig />
       </div>
     </Page>
