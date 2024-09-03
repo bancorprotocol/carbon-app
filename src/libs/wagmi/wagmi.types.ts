@@ -5,14 +5,18 @@ import {
 } from '@ethersproject/providers';
 import { Connector } from 'libs/wagmi';
 
+export const selectableConnectionNames = [
+  'MetaMask',
+  'WalletConnect',
+  'Coinbase Wallet',
+  'Safe',
+  'Tailwind',
+  'Compass Wallet',
+  'Seif',
+] as const;
+
 export type SelectableConnectionName =
-  | 'MetaMask'
-  | 'WalletConnect'
-  | 'Coinbase Wallet'
-  | 'Safe'
-  | 'Tailwind'
-  | 'Compass Wallet'
-  | 'Seif';
+  (typeof selectableConnectionNames)[number];
 
 export interface CarbonWagmiProviderContext {
   user: string | undefined;
