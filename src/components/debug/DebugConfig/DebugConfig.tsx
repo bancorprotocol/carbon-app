@@ -78,7 +78,7 @@ export const DebugConfig = () => {
       {!!error && (
         <Warning isError message={error} htmlFor="custom-config-json" />
       )}
-      <Button data-testid="save-imposter" type="submit" fullWidth>
+      <Button data-testid="save-config" type="submit" fullWidth>
         Save
       </Button>
       <Button type="button" onClick={handleLoadDefault} fullWidth>
