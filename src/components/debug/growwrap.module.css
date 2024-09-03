@@ -8,7 +8,6 @@
   visibility: hidden;
 }
 .growwrap > textarea {
-  /* display: inline-block; */
   resize: none;
   overflow: hidden;
 }
