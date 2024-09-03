@@ -1,6 +1,6 @@
 import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'libs/queries';
-import { getStrategyType } from 'components/strategies/common/utils';
+import { getStrategyType, isZero } from 'components/strategies/common/utils';
 import {
   toDisposablePricesSearch,
   toOverlappingPricesSearch,
@@ -20,13 +20,14 @@ export const getWithdraw = (initialBudget?: string, newBudget?: string) => {
 
 export const getTotalBudget = (
   editType: 'deposit' | 'withdraw',
-  initialBudget?: string,
-  budget?: string
+  initialBudget: string = '0',
+  budget: string = '0'
 ) => {
+  if (isZero(budget)) return initialBudget;
   if (editType === 'deposit') {
-    return new SafeDecimal(initialBudget || '0').add(budget || '0').toString();
+    return new SafeDecimal(initialBudget).add(budget).toString();
   } else {
-    return new SafeDecimal(initialBudget || '0').sub(budget || '0').toString();
+    return new SafeDecimal(initialBudget).sub(budget).toString();
   }
 };
 
