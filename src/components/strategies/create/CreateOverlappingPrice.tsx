@@ -45,10 +45,10 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
   useEffect(() => {
     if (!isValidRange(order0.min, order1.max)) return;
     if (anchor === 'buy' && aboveMarket) {
-      set({ anchor: 'sell', budget: null });
+      set({ anchor: 'sell', budget: undefined });
     }
     if (anchor === 'sell' && belowMarket) {
-      set({ anchor: 'buy', budget: null });
+      set({ anchor: 'buy', budget: undefined });
     }
   }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
 
@@ -57,7 +57,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
   const setSpread = (spread: string) => set({ spread });
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
-    set({ anchor: value, budget: null });
+    set({ anchor: value, budget: undefined });
   };
 
   // Update on buyMin changes
