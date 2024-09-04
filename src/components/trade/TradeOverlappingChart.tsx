@@ -1,5 +1,5 @@
 import { useTradeCtx } from './TradeContext';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useRef } from 'react';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { useSearch } from '@tanstack/react-router';
 import { OverlappingOrder } from 'components/strategies/common/types';
@@ -99,6 +99,7 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
 };
 
 const OverlappingChartContent: FC<Props> = (props) => {
+  const timeout = useRef<NodeJS.Timeout>();
   const { base, quote } = useTradeCtx();
   const { marketPrice, order0, order1, set } = props;
   const search = useSearch({ from: '/trade/overlapping' });
@@ -106,22 +107,25 @@ const OverlappingChartContent: FC<Props> = (props) => {
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
-      if (buy.min !== search.min) set({ min: buy.min });
-      if (sell.max !== search.max) set({ max: sell.max });
+      if (timeout.current) clearTimeout(timeout.current);
+      timeout.current = setTimeout(() => {
+        if (buy.min !== search.min) set({ min: buy.min });
+        if (sell.max !== search.max) set({ max: sell.max });
+      }, 200);
     },
     [set, search.min, search.max]
   );
 
-  if (!marketPrice) {
-    return (
-      <NotFound
-        variant="info"
-        title="Market Price Unavailable"
-        text="Please provide a price."
-      />
-    );
-  }
   if (search.chartType !== 'history') {
+    if (!marketPrice) {
+      return (
+        <NotFound
+          variant="info"
+          title="Market Price Unavailable"
+          text="Please provide a price."
+        />
+      );
+    }
     return (
       <OverlappingChart
         className="flex-1"

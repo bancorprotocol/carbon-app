@@ -1,9 +1,6 @@
 import { TradingviewChart } from 'components/tradingviewChart';
 import { useTradeCtx } from './TradeContext';
 import { FC, ReactNode } from 'react';
-import { useMarketPrice } from 'hooks/useMarketPrice';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { NotFound } from 'components/common/NotFound';
 import {
   DateRangePicker,
   datePickerPresets,
@@ -66,19 +63,6 @@ export const TradeChartSection: FC<Props> = ({ children }) => {
 const ChartContent: FC<{ children: ReactNode }> = ({ children }) => {
   const { base, quote } = useTradeCtx();
   const priceChartType = config.ui?.priceChart ?? 'tradingView';
-  const { marketPrice, isPending } = useMarketPrice({ base, quote });
-  if (isPending) {
-    return <CarbonLogoLoading className="h-[80px]" />;
-  }
-  if (!marketPrice) {
-    return (
-      <NotFound
-        variant="info"
-        title="Market Price Unavailable"
-        text="Please provide a price."
-      />
-    );
-  }
   if (priceChartType === 'tradingView') {
     return <TradingviewChart base={base} quote={quote} />;
   }

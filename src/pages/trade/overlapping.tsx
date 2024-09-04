@@ -12,44 +12,28 @@ import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOverlappingBudget } from 'components/strategies/create/CreateOverlappingBudget';
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
-
-const useCreateOverlapping = () => {
-  const { base, quote } = useTradeCtx();
-  const navigate = useNavigate({ from: url });
-  const search = useSearch({ from: url });
-  const marketQuery = useMarketPrice({ base, quote });
-  const [local, setLocal] = useState<TradeOverlappingSearch>(search);
-  const marketPrice = local.marketPrice ?? marketQuery.marketPrice?.toString();
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      navigate({
-        search: (previous) => ({ ...previous, ...local }),
-        replace: true,
-        resetScroll: false,
-      });
-    }, 100);
-    return () => clearInterval(timeout);
-  }, [navigate, local]);
-
-  return {
-    search: local,
-    orders: getOverlappingOrders(local, base, quote, marketPrice),
-    set: (next: TradeOverlappingSearch) => {
-      setLocal((current) => ({ ...current, ...next }));
-    },
-  };
-};
 
 const url = '/trade/overlapping';
 export const TradeOverlapping = () => {
   const { base, quote } = useTradeCtx();
-
-  const { search, orders, set } = useCreateOverlapping();
+  const navigate = useNavigate({ from: url });
+  const search = useSearch({ from: url });
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
+  const orders = getOverlappingOrders(search, base, quote, marketPrice);
+
+  const set = useCallback(
+    (next: TradeOverlappingSearch) => {
+      navigate({
+        search: (previous) => ({ ...previous, ...next }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate]
+  );
 
   if (!marketPrice && marketQuery.isPending) {
     return (

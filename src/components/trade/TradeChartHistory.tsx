@@ -7,7 +7,7 @@ import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { TradeSearch } from 'libs/routing';
-import { FC } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { BaseOrder } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { useTradeCtx } from './TradeContext';
@@ -54,20 +54,30 @@ interface Props {
 }
 
 export const TradeChartHistory: FC<Props> = (props) => {
-  const { type, order0, order1, isLimit, spread, onPriceUpdates } = props;
+  const timeout = useRef<NodeJS.Timeout>();
+  const { type, order0, order1, isLimit, spread } = props;
   const { base, quote } = useTradeCtx();
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice } = useMarketPrice({ base, quote });
 
-  const prices: ChartPrices = {
-    buy: {
-      min: order0.min || '0',
-      max: order0.max || '0',
-    },
-    sell: {
-      min: order1.min || '0',
-      max: order1.max || '0',
-    },
+  const [prices, setPrices] = useState({
+    buy: { min: order0.min || '0', max: order0.max || '0' },
+    sell: { min: order1.min || '0', max: order1.max || '0' },
+  });
+
+  useEffect(() => {
+    setPrices({
+      buy: { min: order0.min || '0', max: order0.max || '0' },
+      sell: { min: order1.min || '0', max: order1.max || '0' },
+    });
+  }, [order0.min, order0.max, order1.min, order1.max]);
+
+  const onPriceUpdates: OnPriceUpdates = ({ buy, sell }) => {
+    setPrices({ buy, sell });
+    if (timeout.current) clearTimeout(timeout.current);
+    timeout.current = setTimeout(() => {
+      props.onPriceUpdates({ buy, sell });
+    }, 200);
   };
 
   const { data, isPending, isError } = useGetTokenPriceHistory({

@@ -16,43 +16,26 @@ import { TradeLayout } from 'components/trade/TradeLayout';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing';
 import { TradeDisposableSearch } from 'libs/routing/routes/trade';
-import { useCallback, useEffect, useState } from 'react';
-
-const useCreateDispoable = () => {
-  const { base, quote } = useTradeCtx();
-  const search = useSearch({ from: url });
-  const navigate = useNavigate({ from: url });
-  const { marketPrice } = useMarketPrice({ base, quote });
-  const [local, setLocal] = useState<TradeDisposableSearch>(search);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      navigate({
-        params: (params) => params,
-        search: (previous) => ({ ...previous, ...local }),
-        replace: true,
-        resetScroll: false,
-      });
-    }, 100);
-    return clearTimeout(timeout);
-  }, [navigate, local]);
-
-  return {
-    search: local,
-    order: getDefaultOrder(local.direction ?? 'sell', local, marketPrice),
-    setSearch: (next: TradeDisposableSearch) => {
-      setLocal((current) => ({ ...current, ...next }));
-    },
-  };
-};
+import { useCallback } from 'react';
 
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
   const { base, quote } = useTradeCtx();
   const { marketPrice } = useMarketPrice({ base, quote });
+  const search = useSearch({ from: url });
+  const navigate = useNavigate({ from: url });
 
-  const { search, order, setSearch } = useCreateDispoable();
+  const setSearch = (next: TradeDisposableSearch) => {
+    navigate({
+      params: (params) => params,
+      search: (previous) => ({ ...previous, ...next }),
+      replace: true,
+      resetScroll: false,
+    });
+  };
+
   const isBuy = search.direction === 'buy';
+  const order = getDefaultOrder(isBuy ? 'buy' : 'sell', search, marketPrice);
 
   const setDirection = (direction: StrategyDirection) => {
     setSearch({ direction, budget: undefined, min: undefined, max: undefined });
