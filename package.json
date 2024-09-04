@@ -51,6 +51,7 @@
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-compat": "^6.0.0",
     "eslint-plugin-jest-dom": "^5.4.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
@@ -107,10 +108,16 @@
     "e2e": "playwright test",
     "lint": "eslint --ext .tsx,.ts .",
     "pre-commit": "yarn lint-staged",
-    "e2e:report": "npx playwright show-report e2e/playwright-report"
+    "e2e:report": "npx playwright show-report e2e/playwright-report",
+    "update-browserslist": "npx update-browserslist-db@latest"
   },
   "browserslist": {
     "production": [
+      "Safari > 15.4",
+      "iOS > 15.4",
+      "Chrome > 119",
+      "Android > 119",
+      "Firefox > 115",
       ">0.2%",
       "not dead",
       "not op_mini all"
