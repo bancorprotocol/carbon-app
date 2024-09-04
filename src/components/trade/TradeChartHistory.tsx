@@ -64,15 +64,9 @@ export const TradeChartHistory: FC<Props> = (props) => {
     buy: { min: order0.min || '0', max: order0.max || '0' },
     sell: { min: order1.min || '0', max: order1.max || '0' },
   });
+  const [bounds, setBounds] = useState(getBounds(order0, order1, []));
 
-  useEffect(() => {
-    setPrices({
-      buy: { min: order0.min || '0', max: order0.max || '0' },
-      sell: { min: order1.min || '0', max: order1.max || '0' },
-    });
-  }, [order0.min, order0.max, order1.min, order1.max]);
-
-  const onPriceUpdates: OnPriceUpdates = ({ buy, sell }) => {
+  const updatePrices: OnPriceUpdates = ({ buy, sell }) => {
     setPrices({ buy, sell });
     if (timeout.current) clearTimeout(timeout.current);
     timeout.current = setTimeout(() => {
@@ -87,7 +81,16 @@ export const TradeChartHistory: FC<Props> = (props) => {
     end: priceEnd ?? defaultEnd().toString(),
   });
 
-  const bounds: ChartPrices = getBounds(order0, order1, data);
+  useEffect(() => {
+    setPrices({
+      buy: { min: order0.min || '0', max: order0.max || '0' },
+      sell: { min: order1.min || '0', max: order1.max || '0' },
+    });
+  }, [order0.min, order0.max, order1.min, order1.max]);
+
+  useEffect(() => {
+    setBounds(getBounds(order0, order1, data));
+  }, [order0, order1, data]);
 
   if (isPending) {
     return (
@@ -116,11 +119,11 @@ export const TradeChartHistory: FC<Props> = (props) => {
         <D3ChartCandlesticks
           dms={dms}
           prices={prices}
-          onPriceUpdates={onPriceUpdates}
+          onPriceUpdates={updatePrices}
           data={data}
           marketPrice={marketPrice}
           bounds={bounds}
-          onDragEnd={onPriceUpdates}
+          onDragEnd={updatePrices}
           isLimit={isLimit}
           type={type}
           overlappingSpread={spread}
