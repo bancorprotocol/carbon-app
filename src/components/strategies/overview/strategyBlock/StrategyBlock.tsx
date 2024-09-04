@@ -4,10 +4,9 @@ import { m, mItemVariant } from 'libs/motion';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 
 import { cn } from 'utils/helpers';
-import { StrategyBlockRoi } from './StrategyBlockRoi';
-import { StrategyBlockBudget } from './StrategyBlockBudget';
 import { StrategyBlockHeader } from './StrategyBlockHeader';
 import { StrategyGraph } from './StrategyGraph';
+import { StrategyBlockInfo } from './StrategyBlockInfo';
 
 interface Props {
   strategy: StrategyWithFiat;
@@ -32,8 +31,10 @@ export const StrategyBlock: FC<Props> = ({
       data-testid={`${strategy.base.symbol}/${strategy.quote.symbol}`}
     >
       <StrategyBlockHeader strategy={strategy} isExplorer={isExplorer} />
-      {!!showStrategyRoi && <StrategyBlockRoi strategy={strategy} />}
-      <StrategyBlockBudget strategy={strategy} fullWidth={!showStrategyRoi} />
+      <StrategyBlockInfo
+        strategy={strategy}
+        showStrategyRoi={showStrategyRoi}
+      />
       <div
         className={cn(
           'rounded-8 border-background-800 col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] border-2',
