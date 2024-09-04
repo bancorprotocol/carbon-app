@@ -21,7 +21,10 @@ describe('SafeDecimal', () => {
     it('should return a valid output if input is exponential number', () => {
       expect(new SafeDecimal('1E-5').toString()).toEqual('0.00001');
       expect(new SafeDecimal('10E0').toString()).toEqual('10');
-      expect(new SafeDecimal('10E20').toString()).toEqual('1e+21');
+      expect(new SafeDecimal('10E20').toString()).toEqual(
+        '1000000000000000000000'
+      );
+      expect(new SafeDecimal('10E101').toString()).toEqual('1e+102');
     });
     it('should return a valid output if input is a negative number', () => {
       expect(new SafeDecimal('-1E-5').toString()).toEqual('-0.00001');

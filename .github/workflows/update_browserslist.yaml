@@ -1,0 +1,63 @@
+name: Update Browserslist DB
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Runs every week at 00:00 on Sunday
+  workflow_dispatch: # Allows manual triggering of the workflow
+jobs:
+  update-browserslist-db:
+    name: 'Run Browserlist update'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Update Browserslist DB
+        id: update-browserslist-db
+        run: |
+          OUTPUT=$(yarn update-browserslist)
+          CLEAN_OUTPUT=$(echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g')
+          {
+          echo 'update_output<<EOF'
+          echo "$CLEAN_OUTPUT"
+          echo EOF
+          } >> "$GITHUB_OUTPUT"
+          LATEST_VERSION=$(yarn info caniuse-lite version | sed -n '2p' | sed 's/\x1b\[[0-9;]*m//g')
+          echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Import GPG key
+        id: import-gpg
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        env:
+          HUSKY: '0'
+        with:
+          token: ${{ secrets.PR_OPEN_KEY }}
+          committer: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
+          author: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
+          commit-message: '[CI] Update browserslist DB to ${{ steps.update-browserslist-db.outputs.latest_version }}'
+          title: 'Bump browserslist DB to ${{ steps.update-browserslist-db.outputs.latest_version }}'
+          body: |
+            Bumps caniuse-lite to ${{ steps.update-browserslist-db.outputs.latest_version }}.
+            Update output: 
+            ${{ steps.update-browserslist-db.outputs.update_output }}
+          labels: 'dependencies'
+          branch: 'update-browserslist-db/${{ steps.update-browserslist-db.outputs.latest_version }}'
+          delete-branch: true
+          base: 'main'
