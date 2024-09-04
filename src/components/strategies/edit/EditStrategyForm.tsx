@@ -5,7 +5,12 @@ import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { Button } from 'components/common/button';
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
-import { QueryKey, useQueryClient, useUpdateStrategyQuery } from 'libs/queries';
+import {
+  QueryKey,
+  Strategy,
+  useQueryClient,
+  useUpdateStrategyQuery,
+} from 'libs/queries';
 import { getStatusTextByTxStatus } from '../utils';
 import { isZero } from '../common/utils';
 import { carbonEvents } from 'services/events';
@@ -27,6 +32,7 @@ import { useDeleteStrategy } from '../useDeleteStrategy';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 import { hasNoBudget } from '../overlapping/utils';
+import { StrategyUpdate } from '@bancor/carbon-sdk';
 
 interface EditOrders {
   buy: BaseOrder;
@@ -57,6 +63,19 @@ const submitText: Record<EditTypes, string> = {
 };
 
 const spenderAddress = config.addresses.carbon.carbonController;
+
+const getFieldsToUpdate = (orders: EditOrders, strategy: Strategy) => {
+  const { buy, sell } = orders;
+  const { order0, order1 } = strategy;
+  const fieldsToUpdate: Partial<StrategyUpdate> = {};
+  if (buy.min !== order0.startRate) fieldsToUpdate.buyPriceLow = buy.min;
+  if (buy.max !== order0.endRate) fieldsToUpdate.buyPriceHigh = buy.max;
+  if (buy.budget !== order0.balance) fieldsToUpdate.buyBudget = buy.budget;
+  if (sell.min !== order1.startRate) fieldsToUpdate.sellPriceLow = sell.min;
+  if (sell.max !== order1.endRate) fieldsToUpdate.sellPriceHigh = sell.max;
+  if (sell.budget !== order1.balance) fieldsToUpdate.sellBudget = sell.budget;
+  return fieldsToUpdate as StrategyUpdate;
+};
 
 export const EditStrategyForm: FC<Props> = (props) => {
   const {
@@ -127,14 +146,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
       {
         id: strategy.id,
         encoded: strategy.encoded,
-        fieldsToUpdate: {
-          buyPriceLow: orders.buy.min,
-          buyPriceHigh: orders.buy.max,
-          buyBudget: orders.buy.budget,
-          sellPriceLow: orders.sell.min,
-          sellPriceHigh: orders.sell.max,
-          sellBudget: orders.sell.budget,
-        },
+        fieldsToUpdate: getFieldsToUpdate(orders, strategy),
         buyMarginalPrice: orders.buy.marginalPrice,
         sellMarginalPrice: orders.sell.marginalPrice,
       },
