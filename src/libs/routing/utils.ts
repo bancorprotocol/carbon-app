@@ -67,11 +67,8 @@ export const parseSearchWith = (parser: (str: string) => any) => {
     const skipParsing = (key: string) => keysToSkipParse.includes(key);
 
     const formatNumberParam = (value: string): string => {
-      const startWithDot = /^.\d+$/;
-      const endsWithDot = /\d+\.$/;
-      if (value === '.') return '0';
-      if (value.match(startWithDot)) return `"${'0' + value}"`;
-      if (value.match(endsWithDot)) return `"${value.slice(0, -1)}"`;
+      const number = /^\d*\.*\d*$/;
+      if (value.match(number)) return `"${formatNumber(value)}"`;
       return value;
     };
 
