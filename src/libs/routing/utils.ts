@@ -62,11 +62,18 @@ export const parseSearchWith = (parser: (str: string) => any) => {
       'buyAction',
       'sellAction',
       'chartType',
-      'sellMarginalPrice',
-      'buyMarginalPrice',
     ];
 
     const skipParsing = (key: string) => keysToSkipParse.includes(key);
+
+    const formatNumberParam = (value: string): string => {
+      const startWithDot = /^.\d+$/;
+      const endsWithDot = /\d+\.$/;
+      if (value === '.') return '0';
+      if (value.match(startWithDot)) return `"${'0' + value}"`;
+      if (value.match(endsWithDot)) return `"${value.slice(0, -1)}"`;
+      return value;
+    };
 
     // Try to parse any query params that might be json
     for (let key in query) {
@@ -81,7 +88,7 @@ export const parseSearchWith = (parser: (str: string) => any) => {
       const value = query[key];
       if (typeof value === 'string') {
         try {
-          query[key] = parser(value);
+          query[key] = parser(formatNumberParam(value));
         } catch (err) {
           //
         }
