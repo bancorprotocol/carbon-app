@@ -16,6 +16,7 @@ export interface AppConfig {
   blockedConnectors?: SelectableConnectionName[];
   walletConnectProjectId: string;
   isSimulatorEnabled: boolean;
+  showStrategyRoi?: boolean;
   sentryDSN?: string;
   policiesLastUpdated?: string;
   network: {
