@@ -5,6 +5,7 @@ import {
   renderWithRouter,
   screen,
   tokenList,
+  userEvent,
 } from 'libs/testing-library';
 import { EditStrategyDriver } from 'libs/testing-library/drivers/EditStrategyDriver';
 import { EditBudgetRecurringPage } from './recurring';
@@ -19,7 +20,7 @@ const basePath = '/strategies/edit/$strategyId/budget/recurring';
 
 const marketRates: Record<string, Record<string, number>> = {
   '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { USD: 1 }, // USDC
-  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { USD: 2800 }, // ETH
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { USD: 2.5 }, // ETH
 };
 
 const mockServer = new MockServer([marketRateHandler(marketRates)]);
@@ -43,7 +44,7 @@ const WrappedRecurring = ({ strategy, type }: Props) => {
 };
 
 describe('Create recurring page', () => {
-  test.only('should only send to the SDK what has been changed', async () => {
+  test('should only send to the SDK what has been changed', async () => {
     const baseToken = tokenList.ETH;
     const quoteToken = tokenList.USDC;
 
@@ -81,7 +82,7 @@ describe('Create recurring page', () => {
       search,
       params: { strategyId: strategy.id },
     });
-    screen.debug();
+    const user = userEvent.setup();
 
     // Check search params
     expect(router.state.location.pathname).toBe(url);
@@ -94,15 +95,13 @@ describe('Create recurring page', () => {
     expect(form.buy.budget()).toHaveValue(search.buyBudget);
     expect(form.sell.budget()).toHaveValue('');
     const spy = spyOn(carbonSDK, 'updateStrategy');
-    form.submit().click();
-    setTimeout(() => {
-      expect(spy).toHaveBeenCalledWith(
-        strategy.id,
-        strategy.encoded,
-        { buyBudget: search.buyBudget },
-        undefined,
-        undefined
-      );
-    }, 100);
+    await user.click(form.submit());
+    expect(spy).toHaveBeenCalledWith(
+      strategy.id,
+      strategy.encoded,
+      { buyBudget: '3' },
+      undefined,
+      undefined
+    );
   });
 });
