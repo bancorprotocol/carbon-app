@@ -28,43 +28,73 @@ const chartSettings: D3ChartSettingsProps = {
 const getBounds = (
   order0: BaseOrder,
   order1: BaseOrder,
-  data: CandlestickData[] = []
+  data: CandlestickData[] = [],
+  direction?: 'buy' | 'sell'
 ): ChartPrices => {
   const min = Math.min(...data.map((d) => d.low));
   const max = Math.max(...data.map((d) => d.high));
-  return {
-    buy: {
-      min: order0.min || min.toString(),
-      max: order0.max || max.toString(),
-    },
-    sell: {
-      min: order1.min || min.toString(),
-      max: order1.max || max.toString(),
-    },
-  };
+  if (direction === 'buy') {
+    return {
+      buy: {
+        min: order0.min || '0',
+        max: order0.max || max.toString(),
+      },
+      sell: {
+        min: min.toString(),
+        max: max.toString(),
+      },
+    };
+  } else if (direction === 'sell') {
+    return {
+      buy: {
+        min: min.toString(),
+        max: max.toString(),
+      },
+      sell: {
+        min: order1.min || '0',
+        max: order1.max || max.toString(),
+      },
+    };
+  } else {
+    return {
+      buy: {
+        min: order0.min || min.toString(),
+        max: order0.max || max.toString(),
+      },
+      sell: {
+        min: order1.min || min.toString(),
+        max: order1.max || max.toString(),
+      },
+    };
+  }
 };
 
 interface Props {
+  type: TradeTypes;
   order0: BaseOrder;
   order1: BaseOrder;
-  type: TradeTypes;
   isLimit?: { buy: boolean; sell: boolean };
-  spread?: string;
+  direction?: 'buy' | 'sell'; // Only for disposable
+  spread?: string; // Only overlapping
   onPriceUpdates: OnPriceUpdates;
 }
 
 export const TradeChartHistory: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>();
-  const { type, order0, order1, isLimit, spread } = props;
+  const { type, order0, order1 } = props;
   const { base, quote } = useTradeCtx();
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice } = useMarketPrice({ base, quote });
+
+  const direction = props.direction;
 
   const [prices, setPrices] = useState({
     buy: { min: order0.min || '0', max: order0.max || '0' },
     sell: { min: order1.min || '0', max: order1.max || '0' },
   });
-  const [bounds, setBounds] = useState(getBounds(order0, order1, []));
+  const [bounds, setBounds] = useState(
+    getBounds(order0, order1, [], direction)
+  );
 
   const updatePrices: OnPriceUpdates = ({ buy, sell }) => {
     setPrices({ buy, sell });
@@ -89,8 +119,8 @@ export const TradeChartHistory: FC<Props> = (props) => {
   }, [order0.min, order0.max, order1.min, order1.max]);
 
   useEffect(() => {
-    setBounds(getBounds(order0, order1, data));
-  }, [order0, order1, data]);
+    setBounds(getBounds(order0, order1, data, direction));
+  }, [order0, order1, data, direction]);
 
   if (isPending) {
     return (
@@ -124,9 +154,9 @@ export const TradeChartHistory: FC<Props> = (props) => {
           marketPrice={marketPrice}
           bounds={bounds}
           onDragEnd={updatePrices}
-          isLimit={isLimit}
+          isLimit={props.isLimit}
           type={type}
-          overlappingSpread={spread}
+          overlappingSpread={props.spread}
           overlappingMarketPrice={marketPrice}
         />
       )}

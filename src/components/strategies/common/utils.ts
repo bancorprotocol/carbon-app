@@ -52,9 +52,9 @@ export const isPaused = ({ order0, order1 }: Strategy) => {
 };
 
 export const emptyOrder = (): BaseOrder => ({
-  min: '',
-  max: '',
-  budget: '',
+  min: '0',
+  max: '0',
+  budget: '0',
 });
 
 export const toBaseOrder = (order: Order): BaseOrder => ({

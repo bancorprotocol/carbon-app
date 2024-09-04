@@ -108,6 +108,7 @@ export const TradeDisposable = () => {
           order0={order0}
           order1={order1}
           isLimit={isLimit}
+          direction={search.direction ?? 'sell'}
           onPriceUpdates={onPriceUpdates}
         />
       </TradeChartSection>
