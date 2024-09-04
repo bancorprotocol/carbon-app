@@ -36,13 +36,8 @@ vitest.mock('store/useTokensStore.ts', async (importOriginal) => {
 vitest.mock('libs/sdk/index.ts', () => {
   return {
     carbonSDK: {
-      createBuySellStrategy: () => {
-        return {
-          to: '',
-          from: '',
-          nonce: 1,
-        };
-      },
+      createBuySellStrategy: () => ({ to: '', from: '', nonce: 1 }),
+      updateStrategy: () => ({ to: '', from: '', nonce: 1 }),
     },
   };
 });

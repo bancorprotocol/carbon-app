@@ -25,7 +25,9 @@ describe('fullOutcome', () => {
     });
 
     it('should return mean price for range price', () => {
-      const mean = new SafeDecimal('158.1138830084189666');
+      const mean = new SafeDecimal(
+        '158.1138830084189665999446772216359266859777569662608413428752426396297219319619110672124054189650148'
+      );
       expect(geoMean('100', '250')).toEqual(mean);
     });
   });
@@ -55,9 +57,11 @@ describe('fullOutcome', () => {
       expect(getFullOutcome(noPriceAndMax)).toBeUndefined();
     });
     describe('Limit rate', () => {
-      it('[Buy] should return 3.1645569620253164557 with price 1580 & budget 5000', () => {
+      it('[Buy] should return 3.164556962025316455696202531645569620253164556962025316455696202531645569620253164556962025316455696 with price 1580 & budget 5000', () => {
         const input = { ...base, min: '1580', max: '1580', budget: '5000' };
-        expect(getFullOutcome(input)?.amount).toBe('3.1645569620253164557');
+        expect(getFullOutcome(input)?.amount).toBe(
+          '3.164556962025316455696202531645569620253164556962025316455696202531645569620253164556962025316455696'
+        );
       });
       it('[Buy] should return 2 with price 1600 & budget 3200', () => {
         const input = { ...base, min: '1600', max: '1600', budget: '3200' };
@@ -79,16 +83,18 @@ describe('fullOutcome', () => {
       });
     });
     describe('Range rate', () => {
-      it('[Buy] should return 1.8353258709644941273 with min 1600, max 1900 & budget 3200', () => {
+      it('[Buy] should return 1.835325870964494127257676624782996067005054284308397868164355426593497822401329720276277539306081906 with min 1600, max 1900 & budget 3200', () => {
         const input = {
           ...base,
           min: '1600',
           max: '1900',
           budget: '3200',
         };
-        expect(getFullOutcome(input)?.amount).toBe('1.8353258709644941273');
+        expect(getFullOutcome(input)?.amount).toBe(
+          '1.835325870964494127257676624782996067005054284308397868164355426593497822401329720276277539306081906'
+        );
       });
-      it('[Sell] should return 4623.3105022267323378 with min 1800, max 1900 & budget 2.5', () => {
+      it('[Sell] should return 4623.31050222673233768764428609068316892671801758343090865592905434379973769774815972504734939917496 with min 1800, max 1900 & budget 2.5', () => {
         const input = {
           ...base,
           buy: false,
@@ -96,7 +102,9 @@ describe('fullOutcome', () => {
           max: '1900',
           budget: '2.5',
         };
-        expect(getFullOutcome(input)?.amount).toBe('4623.3105022267323378');
+        expect(getFullOutcome(input)?.amount).toBe(
+          '4623.31050222673233768764428609068316892671801758343090865592905434379973769774815972504734939917496'
+        );
       });
     });
   });

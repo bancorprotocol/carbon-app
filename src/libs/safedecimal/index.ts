@@ -1,5 +1,12 @@
 import { Decimal } from 'decimal.js';
 
+Decimal.set({
+  precision: 100,
+  rounding: Decimal.ROUND_HALF_DOWN,
+  toExpNeg: -30,
+  toExpPos: 30,
+});
+
 /**
  * Sanitizes the input value for safe decimal creation.
  * If the value is a string, it checks if it's a valid
@@ -52,4 +59,4 @@ class SafeDecimal extends Decimal {
   }
 }
 
-export { SafeDecimal };
+export { SafeDecimal, Decimal };
