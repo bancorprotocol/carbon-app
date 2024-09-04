@@ -110,9 +110,7 @@ export const D3ChartDisposable = ({
   };
 
   useEffect(() => {
-    if (!hasDragEnded.current) {
-      return;
-    }
+    if (!hasDragEnded.current) return;
     handleStateChange({
       type,
       id: 'line1',

@@ -25,34 +25,33 @@ export const D3ChartRectDraggable = ({
   onDrag,
   onDragEnd,
 }: Props) => {
-  const selection = getSelector(selector);
   const [isDragging, setIsDragging] = useState(false);
   const isSelectable = useSelectable(selector);
 
-  const handleDrag = drag()
-    .subject(() => ({
-      y: Number(selection.attr('y')),
-      height: Number(selection.attr('height')),
-    }))
-    .on('start', ({ y, subject: { height } }) => {
-      setIsDragging(true);
-      const y2 = y + height;
-      onDragStart?.(y2, y);
-    })
-    .on('drag', ({ y, subject: { height } }) => {
-      const y2 = y + height;
-      onDrag?.(y, y2);
-    })
-    .on('end', ({ y, subject: { height } }) => {
-      setIsDragging(false);
-      const y2 = y + height;
-      onDragEnd?.(y2, y);
-    });
-
   useEffect(() => {
+    const selection = getSelector(selector);
+    const handleDrag = drag()
+      .subject(() => ({
+        y: Number(selection.attr('y')),
+        height: Number(selection.attr('height')),
+      }))
+      .on('start', ({ y, subject: { height } }) => {
+        setIsDragging(true);
+        const y2 = y + height;
+        onDragStart?.(y2, y);
+      })
+      .on('drag', ({ y, subject: { height } }) => {
+        const y2 = y + height;
+        onDrag?.(y, y2);
+      })
+      .on('end', ({ y, subject: { height } }) => {
+        setIsDragging(false);
+        const y2 = y + height;
+        onDragEnd?.(y2, y);
+      });
     if (!isSelectable || !onDrag) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  }, [isSelectable, handleDrag, selection, onDrag]);
+  }, [isSelectable, selector, setIsDragging, onDrag, onDragStart, onDragEnd]);
 
   return (
     <D3ChartRect

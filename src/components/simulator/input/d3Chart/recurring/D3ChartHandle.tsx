@@ -25,36 +25,35 @@ export const D3ChartHandle = ({
   isLimit,
   ...props
 }: Props) => {
-  const selection = getSelector(props.selector);
   const isSelectable = useSelectable(props.selector);
 
-  const handleDrag = drag()
-    .subject(() => ({
-      y: Number(selection.select('line').attr('y1')),
-    }))
-    .on('start', ({ y }) => onDragStart?.(y))
-    .on('drag', ({ y }) => onDrag(y))
-    .on('end', ({ y }) => {
-      if (isLimit) {
-        onDragEnd?.(y, y);
-        return;
-      }
-
-      const oppositeY = Number(
-        getSelector(props.selectorOpposite).select('line').attr('y1')
-      );
-
-      if (oppositeY < y) {
-        onDragEnd?.(y, oppositeY);
-      } else {
-        onDragEnd?.(oppositeY, y);
-      }
-    });
-
   useEffect(() => {
+    const selection = getSelector(props.selector);
+    const handleDrag = drag()
+      .subject(() => ({
+        y: Number(selection.select('line').attr('y1')),
+      }))
+      .on('start', ({ y }) => onDragStart?.(y))
+      .on('drag', ({ y }) => onDrag(y))
+      .on('end', ({ y }) => {
+        if (isLimit) {
+          onDragEnd?.(y, y);
+          return;
+        }
+
+        const oppositeY = Number(
+          getSelector(props.selectorOpposite).select('line').attr('y1')
+        );
+
+        if (oppositeY < y) {
+          onDragEnd?.(y, oppositeY);
+        } else {
+          onDragEnd?.(oppositeY, y);
+        }
+      });
     if (!isSelectable) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  }, [isSelectable, handleDrag, selection]);
+  }, [props.selector, isSelectable, onDragStart, onDrag, onDragEnd]);
 
   return <D3ChartHandleLine {...props} isDraggable />;
 };
