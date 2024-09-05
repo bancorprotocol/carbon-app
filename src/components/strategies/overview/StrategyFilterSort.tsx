@@ -32,6 +32,9 @@ const isEnumSort = (
 
 export const getSortFromLS = (): StrategySort => {
   const sort = lsService.getItem('strategyOverviewSort');
+  const isRoiSort = sort === 'roiDesc' || sort === 'roiAsc';
+  if (!config.showStrategyRoi && (sort === undefined || isRoiSort))
+    return 'recent';
   if (sort === undefined) return 'roiDesc';
   return isEnumSort(sort) ? strategySortMapping[sort] : sort;
 };
