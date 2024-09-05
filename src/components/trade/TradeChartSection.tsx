@@ -1,5 +1,3 @@
-import { TradingviewChart } from 'components/tradingviewChart';
-import { useTradeCtx } from './TradeContext';
 import { FC, ReactNode } from 'react';
 import {
   DateRangePicker,
@@ -10,7 +8,6 @@ import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { TradeSearch } from 'libs/routing';
-import config from 'config';
 
 interface Props {
   children: ReactNode;
@@ -55,16 +52,7 @@ export const TradeChartSection: FC<Props> = ({ children }) => {
           required
         />
       </header>
-      <ChartContent>{children}</ChartContent>
+      {children}
     </section>
   );
-};
-
-const ChartContent: FC<{ children: ReactNode }> = ({ children }) => {
-  const { base, quote } = useTradeCtx();
-  const priceChartType = config.ui?.priceChart ?? 'tradingView';
-  if (priceChartType === 'tradingView') {
-    return <TradingviewChart base={base} quote={quote} />;
-  }
-  return children;
 };

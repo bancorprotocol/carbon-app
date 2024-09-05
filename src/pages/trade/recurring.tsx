@@ -105,6 +105,8 @@ export const TradeRecurring = () => {
       <TradeChartSection>
         <TradeChartHistory
           type="recurring"
+          base={base}
+          quote={quote}
           order0={buyOrder}
           order1={sellOrder}
           isLimit={isLimit}

@@ -87,10 +87,12 @@ export const TradeMarket = () => {
       </TradeLayout>
       <TradeChartSection>
         <TradeChartHistory
+          type="market"
+          base={base}
+          quote={quote}
           order0={emptyOrder()}
           order1={emptyOrder()}
           isLimit={isLimit}
-          type="market"
           onPriceUpdates={onPriceUpdates}
         />
       </TradeChartSection>

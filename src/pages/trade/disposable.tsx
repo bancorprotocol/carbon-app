@@ -25,14 +25,17 @@ export const TradeDisposable = () => {
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
 
-  const setSearch = (next: TradeDisposableSearch) => {
-    navigate({
-      params: (params) => params,
-      search: (previous) => ({ ...previous, ...next }),
-      replace: true,
-      resetScroll: false,
-    });
-  };
+  const setSearch = useCallback(
+    (next: TradeDisposableSearch) => {
+      navigate({
+        params: (params) => params,
+        search: (previous) => ({ ...previous, ...next }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate]
+  );
 
   const isBuy = search.direction === 'buy';
   const order = getDefaultOrder(isBuy ? 'buy' : 'sell', search, marketPrice);
@@ -105,6 +108,8 @@ export const TradeDisposable = () => {
       <TradeChartSection>
         <TradeChartHistory
           type="disposable"
+          base={base}
+          quote={quote}
           order0={order0}
           order1={order1}
           isLimit={isLimit}

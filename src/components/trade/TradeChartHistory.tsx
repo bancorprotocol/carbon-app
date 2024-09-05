@@ -10,11 +10,13 @@ import { TradeSearch } from 'libs/routing';
 import { FC, useEffect, useRef, useState } from 'react';
 import { BaseOrder } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { useTradeCtx } from './TradeContext';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { defaultEnd, defaultStart } from 'pages/simulator';
 import { NotFound } from 'components/common/NotFound';
+import { TradingviewChart } from 'components/tradingviewChart';
+import { Token } from 'libs/tokens';
+import config from 'config';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -71,6 +73,8 @@ const getBounds = (
 
 interface Props {
   type: TradeTypes;
+  base: Token;
+  quote: Token;
   order0: BaseOrder;
   order1: BaseOrder;
   isLimit?: { buy: boolean; sell: boolean };
@@ -81,8 +85,7 @@ interface Props {
 
 export const TradeChartHistory: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>();
-  const { type, order0, order1 } = props;
-  const { base, quote } = useTradeCtx();
+  const { base, quote, type, order0, order1 } = props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice } = useMarketPrice({ base, quote });
 
@@ -122,6 +125,10 @@ export const TradeChartHistory: FC<Props> = (props) => {
     setBounds(getBounds(order0, order1, data, direction));
   }, [order0, order1, data, direction]);
 
+  const priceChartType = config.ui?.priceChart ?? 'tradingView';
+  if (priceChartType === 'tradingView') {
+    return <TradingviewChart base={base} quote={quote} />;
+  }
   if (isPending) {
     return (
       <section className="rounded-12 grid flex-1 items-center bg-black">

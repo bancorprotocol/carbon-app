@@ -1,6 +1,5 @@
 import { useTradeCtx } from './TradeContext';
 import { FC, useCallback, useRef } from 'react';
-import { TradingviewChart } from 'components/tradingviewChart';
 import { useSearch } from '@tanstack/react-router';
 import { OverlappingOrder } from 'components/strategies/common/types';
 import { SetOverlapping } from 'libs/routing/routes/trade';
@@ -19,7 +18,6 @@ import { defaultEndDate, defaultStartDate } from 'pages/simulator';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import { useNavigate } from '@tanstack/react-router';
-import config from 'config';
 
 interface Props {
   marketPrice?: string;
@@ -103,7 +101,6 @@ const OverlappingChartContent: FC<Props> = (props) => {
   const { base, quote } = useTradeCtx();
   const { marketPrice, order0, order1, set } = props;
   const search = useSearch({ from: '/trade/overlapping' });
-  const priceChartType = config.ui?.priceChart ?? 'tradingView';
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
@@ -140,16 +137,15 @@ const OverlappingChartContent: FC<Props> = (props) => {
       />
     );
   }
-  if (priceChartType === 'native') {
-    return (
-      <TradeChartHistory
-        type="overlapping"
-        order0={order0}
-        order1={order1}
-        spread={search.spread || initSpread}
-        onPriceUpdates={onPriceUpdates}
-      />
-    );
-  }
-  return <TradingviewChart base={base} quote={quote} />;
+  return (
+    <TradeChartHistory
+      type="overlapping"
+      base={base}
+      quote={quote}
+      order0={order0}
+      order1={order1}
+      spread={search.spread || initSpread}
+      onPriceUpdates={onPriceUpdates}
+    />
+  );
 };
