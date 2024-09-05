@@ -15,6 +15,7 @@ import {
   checkIfOrdersReversed,
 } from 'components/strategies/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 
 export interface EditRecurringStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -115,29 +116,31 @@ export const EditStrategyRecurringPage = () => {
   const error = getError(search);
 
   return (
-    <EditStrategyForm
-      strategyType="recurring"
-      editType={search.editType}
-      orders={orders}
-      hasChanged={hasChanged}
-    >
-      <EditStrategyPriceField
-        order={orders.sell}
-        budget={search.sellBudget ?? ''}
-        initialBudget={order1.balance}
-        setOrder={setSellOrder}
-        warnings={[sellOutsideMarket, getWarning(search)]}
-        error={error}
-      />
-      <EditStrategyPriceField
-        order={orders.buy}
-        budget={search.buyBudget ?? ''}
-        initialBudget={order0.balance}
-        setOrder={setBuyOrder}
-        warnings={[buyOutsideMarket, getWarning(search)]}
-        error={error}
-        buy
-      />
-    </EditStrategyForm>
+    <EditStrategyLayout editType={search.editType}>
+      <EditStrategyForm
+        strategyType="recurring"
+        editType={search.editType}
+        orders={orders}
+        hasChanged={hasChanged}
+      >
+        <EditStrategyPriceField
+          order={orders.sell}
+          budget={search.sellBudget ?? ''}
+          initialBudget={order1.balance}
+          setOrder={setSellOrder}
+          warnings={[sellOutsideMarket, getWarning(search)]}
+          error={error}
+        />
+        <EditStrategyPriceField
+          order={orders.buy}
+          budget={search.buyBudget ?? ''}
+          initialBudget={order0.balance}
+          setOrder={setBuyOrder}
+          warnings={[buyOutsideMarket, getWarning(search)]}
+          error={error}
+          buy
+        />
+      </EditStrategyForm>
+    </EditStrategyLayout>
   );
 };

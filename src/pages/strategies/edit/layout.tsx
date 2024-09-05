@@ -5,7 +5,6 @@ import { StrategiesPage } from 'pages/strategies/index';
 import { Strategy, useGetUserStrategies } from 'libs/queries';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
-import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import {
   getEditBudgetPage,
   getEditPricesPage,
@@ -58,9 +57,7 @@ export const EditStrategyPageLayout = () => {
   if (!strategy) return;
   return (
     <EditStrategyProvider strategy={strategy}>
-      <EditStrategyLayout editType={search.editType}>
-        <Outlet />
-      </EditStrategyLayout>
+      <Outlet />
     </EditStrategyProvider>
   );
 };

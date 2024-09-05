@@ -25,6 +25,9 @@ export const TradeDisposable = () => {
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
 
+  const isBuy = search.direction === 'buy';
+  const order = getDefaultOrder(isBuy ? 'buy' : 'sell', search, marketPrice);
+
   const setSearch = useCallback(
     (next: TradeDisposableSearch) => {
       navigate({
@@ -36,9 +39,6 @@ export const TradeDisposable = () => {
     },
     [navigate]
   );
-
-  const isBuy = search.direction === 'buy';
-  const order = getDefaultOrder(isBuy ? 'buy' : 'sell', search, marketPrice);
 
   const setDirection = (direction: StrategyDirection) => {
     setSearch({ direction, budget: undefined, min: undefined, max: undefined });

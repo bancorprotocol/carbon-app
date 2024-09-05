@@ -21,6 +21,7 @@ import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 
 export interface EditBudgetOverlappingSearch {
   editType: 'deposit' | 'withdraw';
@@ -125,6 +126,15 @@ const getOrders = (
 const url = '/strategies/edit/$strategyId/budget/overlapping';
 
 export const EditBudgetOverlappingPage = () => {
+  const search = useSearch({ from: url });
+  return (
+    <EditStrategyLayout editType={search.editType}>
+      <OverlappingContent />
+    </EditStrategyLayout>
+  );
+};
+
+const OverlappingContent = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
   const navigate = useNavigate({ from: url });

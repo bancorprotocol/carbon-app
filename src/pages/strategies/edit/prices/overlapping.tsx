@@ -25,6 +25,7 @@ import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 
 export interface EditOverlappingStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -143,6 +144,15 @@ const getOrders = (
 const url = '/strategies/edit/$strategyId/prices/overlapping';
 
 export const EditStrategyOverlappingPage = () => {
+  const search = useSearch({ from: url });
+  return (
+    <EditStrategyLayout editType={search.editType}>
+      <OverlappingContent />
+    </EditStrategyLayout>
+  );
+};
+
+const OverlappingContent = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const navigate = useNavigate({ from: url });
