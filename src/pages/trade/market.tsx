@@ -3,8 +3,8 @@ import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTradeSettings';
 import { emptyOrder } from 'components/strategies/common/utils';
-import { TradeChartHistory } from 'components/trade/TradeChartHistory';
-import { TradeChartSection } from 'components/trade/TradeChartSection';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
@@ -85,8 +85,8 @@ export const TradeMarket = () => {
           />
         </article>
       </TradeLayout>
-      <TradeChartSection>
-        <TradeChartHistory
+      <StrategyChartSection>
+        <StrategyChartHistory
           type="market"
           base={base}
           quote={quote}
@@ -95,7 +95,7 @@ export const TradeMarket = () => {
           isLimit={isLimit}
           onPriceUpdates={onPriceUpdates}
         />
-      </TradeChartSection>
+      </StrategyChartSection>
     </>
   );
 };

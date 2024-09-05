@@ -2,7 +2,7 @@ import { useSearch } from '@tanstack/react-router';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
-import { TradeChartSection } from 'components/trade/TradeChartSection';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
@@ -12,7 +12,7 @@ import {
 } from 'components/strategies/create/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { TradeLayout } from 'components/trade/TradeLayout';
-import { TradeChartHistory } from 'components/trade/TradeChartHistory';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { useCallback } from 'react';
 import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
 
@@ -102,8 +102,8 @@ export const TradeRecurring = () => {
           />
         </CreateForm>
       </TradeLayout>
-      <TradeChartSection>
-        <TradeChartHistory
+      <StrategyChartSection>
+        <StrategyChartHistory
           type="recurring"
           base={base}
           quote={quote}
@@ -112,7 +112,7 @@ export const TradeRecurring = () => {
           isLimit={isLimit}
           onPriceUpdates={onPriceUpdates}
         />
-      </TradeChartSection>
+      </StrategyChartSection>
     </>
   );
 };

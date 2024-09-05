@@ -13,7 +13,7 @@ interface Props {
   children: ReactNode;
 }
 
-export const TradeChartSection: FC<Props> = ({ children }) => {
+export const StrategyChartSection: FC<Props> = ({ children }) => {
   const navigate = useNavigate({ from: '/trade' });
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {

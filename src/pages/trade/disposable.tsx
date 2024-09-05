@@ -9,8 +9,8 @@ import {
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { getDefaultOrder } from 'components/strategies/create/utils';
-import { TradeChartHistory } from 'components/trade/TradeChartHistory';
-import { TradeChartSection } from 'components/trade/TradeChartSection';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -105,8 +105,8 @@ export const TradeDisposable = () => {
           />
         </CreateForm>
       </TradeLayout>
-      <TradeChartSection>
-        <TradeChartHistory
+      <StrategyChartSection>
+        <StrategyChartHistory
           type="disposable"
           base={base}
           quote={quote}
@@ -116,7 +116,7 @@ export const TradeDisposable = () => {
           direction={search.direction ?? 'sell'}
           onPriceUpdates={onPriceUpdates}
         />
-      </TradeChartSection>
+      </StrategyChartSection>
     </>
   );
 };

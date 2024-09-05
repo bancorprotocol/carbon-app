@@ -83,7 +83,7 @@ interface Props {
   onPriceUpdates: OnPriceUpdates;
 }
 
-export const TradeChartHistory: FC<Props> = (props) => {
+export const StrategyChartHistory: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>();
   const { base, quote, type, order0, order1 } = props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;

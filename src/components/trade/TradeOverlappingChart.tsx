@@ -8,7 +8,7 @@ import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { NotFound } from 'components/common/NotFound';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { OverlappingChart } from 'components/strategies/overlapping/OverlappingChart';
-import { TradeChartHistory } from './TradeChartHistory';
+import { StrategyChartHistory } from '../strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
 import {
   DateRangePicker,
@@ -138,7 +138,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
     );
   }
   return (
-    <TradeChartHistory
+    <StrategyChartHistory
       type="overlapping"
       base={base}
       quote={quote}
