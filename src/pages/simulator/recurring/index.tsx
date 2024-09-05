@@ -10,7 +10,7 @@ import {
 import { StrategyDirection } from 'libs/routing';
 import { simulatorInputRecurringRoute } from 'libs/routing/routes/sim';
 import { SafeDecimal } from 'libs/safedecimal';
-import { defaultEnd, defaultStart } from 'pages/simulator/index';
+import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 
 export const SimulatorInputRecurringPage = () => {

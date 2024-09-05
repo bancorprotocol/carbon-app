@@ -17,6 +17,11 @@ import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import { getTotalBudget, getWithdraw } from 'components/strategies/edit/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
+import { useCallback } from 'react';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 
 export interface EditDisposableStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -42,20 +47,34 @@ export const EditStrategyDisposablePage = () => {
   const otherOrder = isBuy ? order1 : order0;
   const { setOrder } = useSetDisposableOrder(url);
 
+  const setSearch = useCallback(
+    (next: Partial<EditDisposableStrategySearch>) => {
+      navigate({
+        params: (params) => params,
+        search: (previous) => ({ ...previous, ...next }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate]
+  );
+
   const setDirection = (direction: StrategyDirection) => {
-    navigate({
-      params: (params) => params,
-      search: (previous) => ({
-        ...previous,
-        direction,
-        budget: undefined,
-        min: resetPrice(otherOrder?.startRate),
-        max: resetPrice(otherOrder?.endRate),
-      }),
-      replace: true,
-      resetScroll: false,
+    setSearch({
+      direction,
+      budget: undefined,
+      min: resetPrice(otherOrder?.startRate),
+      max: resetPrice(otherOrder?.endRate),
     });
   };
+
+  const onPriceUpdates: OnPriceUpdates = useCallback(
+    ({ buy, sell }) => {
+      if (isBuy) setSearch({ min: buy.min, max: buy.max });
+      else setSearch({ min: sell.min, max: sell.max });
+    },
+    [setSearch, isBuy]
+  );
 
   const initialBudget = isBuy ? order0.balance : order1.balance;
   const totalBudget = getTotalBudget(
@@ -63,6 +82,7 @@ export const EditStrategyDisposablePage = () => {
     initialBudget,
     search.budget
   );
+  // TODO: initialize min/max with existing strategy instead of forcing in search
   const order: EditOrderBlock = {
     min: search.min ?? '',
     max: search.max ?? '',
@@ -73,6 +93,10 @@ export const EditStrategyDisposablePage = () => {
   const orders = {
     buy: isBuy ? order : emptyOrder(),
     sell: isBuy ? emptyOrder() : order,
+  };
+  const isLimit = {
+    buy: order.settings !== 'range',
+    sell: order.settings !== 'range',
   };
 
   const hasChanged = (() => {
@@ -100,63 +124,77 @@ export const EditStrategyDisposablePage = () => {
   const sellWithdraw = getWithdraw(order1.balance, orders.sell.budget);
 
   return (
-    <EditStrategyForm
-      strategyType="disposable"
-      editType={search.editType}
-      orders={orders}
-      hasChanged={hasChanged}
-    >
-      <EditStrategyPriceField
-        order={order}
-        budget={search.budget ?? ''}
-        initialBudget={initialBudget}
-        setOrder={setOrder}
-        warnings={[outSideMarket]}
-        buy={isBuy}
-        settings={
-          <TabsMenu>
-            <TabsMenuButton
-              onClick={() => setDirection('buy')}
-              variant={isBuy ? 'buy' : 'black'}
-              data-testid="tab-buy"
-            >
-              Buy
-            </TabsMenuButton>
-            <TabsMenuButton
-              onClick={() => setDirection('sell')}
-              variant={!isBuy ? 'sell' : 'black'}
-              data-testid="tab-sell"
-            >
-              Sell
-            </TabsMenuButton>
-          </TabsMenu>
-        }
-      />
-      {(buyBudgetChanges || sellBudgetChanges) && (
-        <article
-          id="budget-changed"
-          className="warning-message border-warning/40 rounded-10 bg-background-900 flex w-full flex-col gap-12 border p-20"
-        >
-          <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
-            <IconWarning className="size-16" />
-            Notice
-          </h3>
-          {buyBudgetChanges && (
-            <p className="text-14 text-white/80">
-              You will withdraw&nbsp;
-              {tokenAmount(buyWithdraw, quote)} from the inactive buy order to
-              your wallet.
-            </p>
-          )}
-          {sellBudgetChanges && (
-            <p className="text-14 text-white/80">
-              You will withdraw&nbsp;
-              {tokenAmount(sellWithdraw, base)} from the inactive sell order to
-              your wallet.
-            </p>
-          )}
-        </article>
-      )}
-    </EditStrategyForm>
+    <EditStrategyLayout editType={search.editType}>
+      <EditStrategyForm
+        strategyType="disposable"
+        editType={search.editType}
+        orders={orders}
+        hasChanged={hasChanged}
+      >
+        <EditStrategyPriceField
+          order={order}
+          budget={search.budget ?? ''}
+          initialBudget={initialBudget}
+          setOrder={setOrder}
+          warnings={[outSideMarket]}
+          buy={isBuy}
+          settings={
+            <TabsMenu>
+              <TabsMenuButton
+                onClick={() => setDirection('buy')}
+                variant={isBuy ? 'buy' : 'black'}
+                data-testid="tab-buy"
+              >
+                Buy
+              </TabsMenuButton>
+              <TabsMenuButton
+                onClick={() => setDirection('sell')}
+                variant={!isBuy ? 'sell' : 'black'}
+                data-testid="tab-sell"
+              >
+                Sell
+              </TabsMenuButton>
+            </TabsMenu>
+          }
+        />
+        {(buyBudgetChanges || sellBudgetChanges) && (
+          <article
+            id="budget-changed"
+            className="warning-message border-warning/40 rounded-10 bg-background-900 flex w-full flex-col gap-12 border p-20"
+          >
+            <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
+              <IconWarning className="size-16" />
+              Notice
+            </h3>
+            {buyBudgetChanges && (
+              <p className="text-14 text-white/80">
+                You will withdraw&nbsp;
+                {tokenAmount(buyWithdraw, quote)} from the inactive buy order to
+                your wallet.
+              </p>
+            )}
+            {sellBudgetChanges && (
+              <p className="text-14 text-white/80">
+                You will withdraw&nbsp;
+                {tokenAmount(sellWithdraw, base)} from the inactive sell order
+                to your wallet.
+              </p>
+            )}
+          </article>
+        )}
+      </EditStrategyForm>
+      <StrategyChartSection>
+        <StrategyChartHistory
+          type="disposable"
+          base={base}
+          quote={quote}
+          order0={orders.buy}
+          order1={orders.sell}
+          isLimit={isLimit}
+          direction={search.direction ?? 'sell'}
+          onPriceUpdates={onPriceUpdates}
+        />
+      </StrategyChartSection>
+    </EditStrategyLayout>
   );
 };

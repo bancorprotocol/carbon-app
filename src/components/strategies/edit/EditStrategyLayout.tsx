@@ -29,7 +29,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
         </h1>
       </header>
 
-      <div className="flex flex-col gap-20 md:flex-row-reverse md:justify-center">
+      <div className="flex flex-col gap-20 p-20 md:grid md:grid-cols-[450px_auto]">
         {children}
       </div>
     </div>

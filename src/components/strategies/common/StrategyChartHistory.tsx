@@ -12,7 +12,7 @@ import { BaseOrder } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { defaultEnd, defaultStart } from 'pages/simulator';
+import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { Token } from 'libs/tokens';

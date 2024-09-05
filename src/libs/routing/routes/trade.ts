@@ -11,7 +11,8 @@ import { TradeRoot } from 'pages/trade/root';
 import { TradeMarket } from 'pages/trade/market';
 import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
-import { defaultEnd, defaultStart } from 'pages/simulator';
+import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
+import { OverlappingSearch } from 'components/strategies/common/types';
 
 // TRADE TYPE
 export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
@@ -45,16 +46,8 @@ export interface TradeRecurringSearch extends TradeSearch {
 }
 
 // TRADE OVERLAPPING
-export interface TradeOverlappingSearch extends TradeSearch {
-  marketPrice?: string;
-  min?: string;
-  max?: string;
-  spread?: string;
-  anchor?: StrategyDirection;
-  budget?: string;
-  chartType?: 'history' | 'range';
-}
-export type SetOverlapping = (next: TradeOverlappingSearch) => any;
+export type TradeOverlappingSearch = TradeSearch & OverlappingSearch;
+export type SetOverlapping = (next: OverlappingSearch) => any;
 
 // TRADE MARKET
 export interface TradeMarketSearch extends TradeSearch {

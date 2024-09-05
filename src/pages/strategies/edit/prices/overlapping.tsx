@@ -26,15 +26,12 @@ import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
+import { useCallback } from 'react';
+import { OverlappingSearch } from 'components/strategies/common/types';
 
-export interface EditOverlappingStrategySearch {
+export interface EditOverlappingStrategySearch extends OverlappingSearch {
   editType: 'editPrices' | 'renew';
-  marketPrice?: string;
-  min?: string;
-  max?: string;
-  spread?: string;
-  anchor?: 'buy' | 'sell';
-  budget?: string;
   action?: 'deposit' | 'withdraw';
 }
 
@@ -144,10 +141,44 @@ const getOrders = (
 const url = '/strategies/edit/$strategyId/prices/overlapping';
 
 export const EditStrategyOverlappingPage = () => {
+  const { strategy } = useEditStrategyCtx();
+  const { base, quote } = strategy;
+  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
+  const { marketPrice: externalPrice } = useMarketPrice({
+    base,
+    quote,
+  });
+  const marketPrice = getOverlappingMarketPrice(
+    strategy,
+    search,
+    externalPrice?.toString()
+  );
+
+  const set = useCallback(
+    (next: Partial<EditOverlappingStrategySearch>) => {
+      navigate({
+        params: (params) => params,
+        search: (previous) => ({ ...previous, ...next }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate]
+  );
+
+  const orders = getOrders(strategy, search, marketPrice);
   return (
     <EditStrategyLayout editType={search.editType}>
       <OverlappingContent />
+      <TradeOverlappingChart
+        base={base}
+        quote={quote}
+        order0={orders.buy}
+        order1={orders.sell}
+        set={set}
+        marketPrice={marketPrice}
+      />
     </EditStrategyLayout>
   );
 };
@@ -181,7 +212,7 @@ const OverlappingContent = () => {
 
   if (isPending) {
     return (
-      <div className="grid md:w-[440px]">
+      <div className="grid">
         <CarbonLogoLoading className="h-80 place-self-center" />
       </div>
     );
@@ -197,7 +228,7 @@ const OverlappingContent = () => {
       });
     };
     return (
-      <div className="flex flex-col gap-20 md:w-[440px]">
+      <div className="flex flex-col gap-20">
         <EditPriceNav editType={search.editType} />
         <EditStrategyOverlapTokens />
         <article className="rounded-10 bg-background-900 flex flex-col">

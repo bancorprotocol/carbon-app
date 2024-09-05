@@ -16,6 +16,10 @@ import {
 } from 'components/strategies/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
+import { useCallback } from 'react';
 
 export interface EditRecurringStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -60,6 +64,14 @@ export const EditStrategyRecurringPage = () => {
   const { marketPrice } = useMarketPrice({ base, quote });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
+  const onPriceUpdates: OnPriceUpdates = useCallback(
+    ({ buy, sell }) => {
+      setBuyOrder({ min: buy.min, max: buy.max });
+      setSellOrder({ min: sell.min, max: sell.max });
+    },
+    [setBuyOrder, setSellOrder]
+  );
+
   const orders = {
     buy: {
       min: search.buyMin,
@@ -83,6 +95,10 @@ export const EditStrategyRecurringPage = () => {
         search.sellBudget
       ),
     },
+  };
+  const isLimit = {
+    buy: orders.buy.settings === 'limit',
+    sell: orders.sell.settings === 'limit',
   };
 
   const hasChanged = (() => {
@@ -141,6 +157,17 @@ export const EditStrategyRecurringPage = () => {
           buy
         />
       </EditStrategyForm>
+      <StrategyChartSection>
+        <StrategyChartHistory
+          type="recurring"
+          base={base}
+          quote={quote}
+          order0={orders.buy}
+          order1={orders.sell}
+          isLimit={isLimit}
+          onPriceUpdates={onPriceUpdates}
+        />
+      </StrategyChartSection>
     </EditStrategyLayout>
   );
 };

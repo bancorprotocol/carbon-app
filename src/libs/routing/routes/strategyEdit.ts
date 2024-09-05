@@ -145,6 +145,7 @@ export const editPricesOverlapping = new Route({
   component: EditStrategyOverlappingPage,
   validateSearch: validateSearchParams<EditOverlappingStrategySearch>({
     editType: validLiteral(['editPrices', 'renew']),
+    chartType: validLiteral(['history', 'range']),
     marketPrice: validNumber,
     min: validNumber,
     max: validNumber,

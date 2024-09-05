@@ -57,6 +57,8 @@ export const TradeOverlapping = () => {
           </article>
         </TradeLayout>
         <TradeOverlappingChart
+          base={base}
+          quote={quote}
           marketPrice={marketPrice}
           order0={orders.buy}
           order1={orders.sell}
@@ -97,6 +99,8 @@ export const TradeOverlapping = () => {
         </CreateForm>
       </TradeLayout>
       <TradeOverlappingChart
+        base={base}
+        quote={quote}
         order0={orders.buy}
         order1={orders.sell}
         set={set}

@@ -6,14 +6,8 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { simulatorInputRootRoute } from 'libs/routing/routes/sim';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
-import { endOfDay, getUnixTime, startOfDay, subDays } from 'date-fns';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
-
-export const defaultStartDate = () => startOfDay(subDays(new Date(), 364));
-export const defaultEndDate = () => endOfDay(new Date());
-export const defaultStart = () => getUnixTime(defaultStartDate());
-export const defaultEnd = () => getUnixTime(defaultEndDate());
 
 export const SimulatorPage = () => {
   useSimDisclaimer();

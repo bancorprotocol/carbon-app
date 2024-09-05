@@ -3,7 +3,10 @@ import {
   DateRangePicker,
   datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
-import { defaultEndDate, defaultStartDate } from 'pages/simulator';
+import {
+  defaultEndDate,
+  defaultStartDate,
+} from 'components/strategies/common/utils';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import { useNavigate, useSearch } from '@tanstack/react-router';

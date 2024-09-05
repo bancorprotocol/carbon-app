@@ -1,7 +1,10 @@
 import { useTradeCtx } from './TradeContext';
 import { FC, useCallback, useRef } from 'react';
 import { useSearch } from '@tanstack/react-router';
-import { OverlappingOrder } from 'components/strategies/common/types';
+import {
+  OverlappingOrder,
+  OverlappingSearch,
+} from 'components/strategies/common/types';
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { initSpread } from 'components/strategies/create/utils';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
@@ -14,13 +17,19 @@ import {
   DateRangePicker,
   datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
-import { defaultEndDate, defaultStartDate } from 'pages/simulator';
+import {
+  defaultEndDate,
+  defaultStartDate,
+} from 'components/strategies/common/utils';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import { useNavigate } from '@tanstack/react-router';
+import { Token } from 'libs/tokens';
 
 interface Props {
   marketPrice?: string;
+  base: Token;
+  quote: Token;
   order0: OverlappingOrder;
   order1: OverlappingOrder;
   set: SetOverlapping;
@@ -28,9 +37,8 @@ interface Props {
 
 const url = '/trade/overlapping';
 export const TradeOverlappingChart: FC<Props> = (props) => {
-  const { base, quote } = useTradeCtx();
-  const { marketPrice, set } = props;
-  const search = useSearch({ from: url });
+  const { base, quote, marketPrice, set } = props;
+  const search = useSearch({ strict: false }) as OverlappingSearch;
   const navigate = useNavigate({ from: url });
 
   const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {
@@ -100,7 +108,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>();
   const { base, quote } = useTradeCtx();
   const { marketPrice, order0, order1, set } = props;
-  const search = useSearch({ from: '/trade/overlapping' });
+  const search = useSearch({ strict: false }) as OverlappingSearch;
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
