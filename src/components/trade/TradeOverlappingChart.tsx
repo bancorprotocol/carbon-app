@@ -1,4 +1,3 @@
-import { useTradeCtx } from './TradeContext';
 import { FC, useCallback, useRef } from 'react';
 import { useSearch } from '@tanstack/react-router';
 import {
@@ -80,18 +79,20 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
             History
           </Radio>
         </RadioGroup>
-        <DateRangePicker
-          defaultStart={defaultStartDate()}
-          defaultEnd={defaultEndDate()}
-          start={fromUnixUTC(search.priceStart)}
-          end={fromUnixUTC(search.priceEnd)}
-          onConfirm={onDatePickerConfirm}
-          presets={datePickerPresets}
-          options={{
-            disabled: datePickerDisabledDays,
-          }}
-          required
-        />
+        {search.chartType === 'history' && (
+          <DateRangePicker
+            defaultStart={defaultStartDate()}
+            defaultEnd={defaultEndDate()}
+            start={fromUnixUTC(search.priceStart)}
+            end={fromUnixUTC(search.priceEnd)}
+            onConfirm={onDatePickerConfirm}
+            presets={datePickerPresets}
+            options={{
+              disabled: datePickerDisabledDays,
+            }}
+            required
+          />
+        )}
         <OverlappingMarketPrice
           base={base}
           quote={quote}
@@ -106,8 +107,7 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
 
 const OverlappingChartContent: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>();
-  const { base, quote } = useTradeCtx();
-  const { marketPrice, order0, order1, set } = props;
+  const { base, quote, marketPrice, order0, order1, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
