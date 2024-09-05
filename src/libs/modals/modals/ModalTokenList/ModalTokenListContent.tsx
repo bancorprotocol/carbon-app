@@ -14,9 +14,21 @@ import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
+import { ModalTokenListDuplicateWarning } from 'libs/modals/modals/ModalTokenList/ModalTokenListDuplicateWarning';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
+
+const getDuplicateTokenSymbols = (tokens: Token[]): string[] => {
+  return Object.values(
+    tokens.reduce((r: { [symbol: string]: string[] }, v) => {
+      (r[v.symbol] ??= []).push(v.symbol);
+      return r;
+    }, {})
+  )
+    .filter((g) => g.length > 1)
+    .flat();
+};
 
 type Props = {
   tokens: { [k in ChooseTokenCategory]: Token[] };
@@ -39,6 +51,11 @@ export const ModalTokenListContent: FC<Props> = ({
   );
   const _tokens = !!search ? tokens.all : tokens[selectedList];
 
+  const duplicates = useMemo(
+    () => getDuplicateTokenSymbols(tokens.all),
+    [tokens.all]
+  );
+
   const setSelectedList = (category: ChooseTokenCategory) => {
     _setSelectedList(category);
     lsService.setItem('chooseTokenCategory', category);
@@ -47,7 +64,7 @@ export const ModalTokenListContent: FC<Props> = ({
   const rowVirtualizer = useVirtualizer({
     count: _tokens.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 55,
+    estimateSize: () => 60,
     overscan: 10,
   });
 
@@ -68,7 +85,7 @@ export const ModalTokenListContent: FC<Props> = ({
   const suspiciousTokenTooltipMsg =
     'This token is not part of any known token list. Always conduct your own research before trading.';
 
-  const selectCatergory = (e: FormEvent<HTMLFieldSetElement>) => {
+  const selectCategory = (e: FormEvent<HTMLFieldSetElement>) => {
     if (e.target instanceof HTMLInputElement) {
       setSelectedList(e.target.value as ChooseTokenCategory);
     }
@@ -79,7 +96,7 @@ export const ModalTokenListContent: FC<Props> = ({
       <fieldset
         aria-label="Filter tokens"
         className="grid grid-cols-3 px-4"
-        onChange={selectCatergory}
+        onChange={selectCategory}
       >
         {categories.map((category) => (
           <CategoryWithCounter
@@ -130,6 +147,9 @@ export const ModalTokenListContent: FC<Props> = ({
                     <div className="text-12 max-w-full truncate text-white/60">
                       {token.name ?? token.symbol}
                     </div>
+                    {duplicates.includes(token.symbol) && (
+                      <ModalTokenListDuplicateWarning token={token} />
+                    )}
                   </div>
                 </button>
                 <button
