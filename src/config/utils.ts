@@ -282,12 +282,11 @@ export const tokenParserMap: Record<
   tokenSeiListParser: tokenSeiListParser('pacific-1'),
 };
 
-export const getConfig = (defaultConfig: AppConfig) => {
+export const handleConfigOverrides = (defaultConfig: AppConfig) => {
   const configOverride = lsService.getItem('configOverride');
-  const AppConfigWithFallback = v.fallback(AppConfigSchema, defaultConfig);
 
-  const currentConfig = Object.assign({}, defaultConfig, configOverride);
-  const parseResult = v.safeParse(AppConfigWithFallback, currentConfig);
+  const currentConfig = { ...defaultConfig, ...configOverride };
+  const parseResult = v.safeParse(AppConfigSchema, currentConfig);
 
   if (parseResult.issues) {
     console.log("Couldn't load config, clearing config overrides...");

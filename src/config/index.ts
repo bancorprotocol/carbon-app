@@ -6,7 +6,7 @@ import celoDev from './celo/development';
 import celoProd from './celo/production';
 import blastDev from './blast/development';
 import blastProd from './blast/production';
-import { getConfig } from './utils';
+import { handleConfigOverrides } from './utils';
 
 const configs = {
   ethereum: {
@@ -57,5 +57,5 @@ export const networks = Object.entries(configs)
   });
 
 export const defaultConfig = configs[network][mode];
-const parsedConfig = getConfig(defaultConfig);
-export default parsedConfig;
+const currentConfig = handleConfigOverrides(defaultConfig);
+export default currentConfig;
