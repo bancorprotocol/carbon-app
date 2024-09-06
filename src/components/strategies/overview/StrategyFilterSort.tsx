@@ -74,10 +74,15 @@ export const strategySort = {
   old: 'Oldest Created',
   pairAsc: 'Pair (A->Z)',
   pairDesc: 'Pair (Z->A)',
-  ...(!!config.showStrategyRoi && { roiAsc: 'ROI (Ascending)' }),
-  ...(!!config.showStrategyRoi && { roiDesc: 'ROI (Descending)' }),
+  roiAsc: 'ROI (Ascending)',
+  roiDesc: 'ROI (Descending)',
   totalBudgetDesc: 'Total Budget',
 };
+
+if (config.showStrategyRoi) {
+  strategySort['roiAsc'] = '';
+  strategySort['roiDesc'] = '';
+}
 
 export type StrategySort = keyof typeof strategySort;
 
