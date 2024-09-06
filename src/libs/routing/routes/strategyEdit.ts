@@ -189,6 +189,7 @@ export const editBudgetOverlapping = new Route({
   component: EditBudgetOverlappingPage,
   validateSearch: validateSearchParams<EditBudgetOverlappingSearch>({
     editType: validLiteral(['deposit', 'withdraw']),
+    chartType: validLiteral(['history', 'range']),
     marketPrice: validNumber,
     budget: validNumber,
     anchor: validLiteral(['buy', 'sell']),

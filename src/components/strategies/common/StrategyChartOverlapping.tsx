@@ -10,7 +10,7 @@ import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { NotFound } from 'components/common/NotFound';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { OverlappingChart } from 'components/strategies/overlapping/OverlappingChart';
-import { StrategyChartHistory } from '../strategies/common/StrategyChartHistory';
+import { StrategyChartHistory } from './StrategyChartHistory';
 import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
 import {
   DateRangePicker,
@@ -24,6 +24,7 @@ import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import { useNavigate } from '@tanstack/react-router';
 import { Token } from 'libs/tokens';
+import { StrategyChartLegend } from './StrategyChartLegend';
 
 interface Props {
   marketPrice?: string;
@@ -31,11 +32,12 @@ interface Props {
   quote: Token;
   order0: OverlappingOrder;
   order1: OverlappingOrder;
+  readonly?: boolean;
   set: SetOverlapping;
 }
 
 const url = '/trade/overlapping';
-export const TradeOverlappingChart: FC<Props> = (props) => {
+export const StrategyChartOverlapping: FC<Props> = (props) => {
   const { base, quote, marketPrice, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
   const navigate = useNavigate({ from: url });
@@ -107,7 +109,7 @@ export const TradeOverlappingChart: FC<Props> = (props) => {
 
 const OverlappingChartContent: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>();
-  const { base, quote, marketPrice, order0, order1, set } = props;
+  const { base, quote, marketPrice, order0, order1, readonly, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
@@ -146,15 +148,19 @@ const OverlappingChartContent: FC<Props> = (props) => {
     );
   }
   return (
-    <StrategyChartHistory
-      type="overlapping"
-      base={base}
-      quote={quote}
-      order0={order0}
-      order1={order1}
-      spread={search.spread || initSpread}
-      marketPrice={search.marketPrice}
-      onPriceUpdates={onPriceUpdates}
-    />
+    <>
+      <StrategyChartHistory
+        type="overlapping"
+        base={base}
+        quote={quote}
+        order0={order0}
+        order1={order1}
+        spread={search.spread || initSpread}
+        marketPrice={search.marketPrice}
+        readonly={readonly}
+        onPriceUpdates={onPriceUpdates}
+      />
+      {readonly && <StrategyChartLegend />}
+    </>
   );
 };

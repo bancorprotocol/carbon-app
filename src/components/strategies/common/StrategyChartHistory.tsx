@@ -150,7 +150,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
       />
     );
   }
-  if (!data) return null;
+  if (!data?.length) return null;
   return (
     <D3ChartWrapper
       settings={chartSettings}

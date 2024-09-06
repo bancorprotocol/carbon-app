@@ -26,7 +26,7 @@ import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
-import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
+import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
 import { useCallback } from 'react';
 import { OverlappingSearch } from 'components/strategies/common/types';
 
@@ -172,7 +172,7 @@ export const EditStrategyOverlappingPage = () => {
   return (
     <EditStrategyLayout editType={search.editType}>
       <OverlappingContent />
-      <TradeOverlappingChart
+      <StrategyChartOverlapping
         base={base}
         quote={quote}
         order0={orders.buy}

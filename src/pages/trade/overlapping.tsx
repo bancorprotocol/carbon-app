@@ -8,7 +8,7 @@ import {
   initSpread,
 } from 'components/strategies/create/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
+import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOverlappingBudget } from 'components/strategies/create/CreateOverlappingBudget';
@@ -56,7 +56,7 @@ export const TradeOverlapping = () => {
             />
           </article>
         </TradeLayout>
-        <TradeOverlappingChart
+        <StrategyChartOverlapping
           base={base}
           quote={quote}
           marketPrice={marketPrice}
@@ -98,7 +98,7 @@ export const TradeOverlapping = () => {
           />
         </CreateForm>
       </TradeLayout>
-      <TradeOverlappingChart
+      <StrategyChartOverlapping
         base={base}
         quote={quote}
         order0={orders.buy}
