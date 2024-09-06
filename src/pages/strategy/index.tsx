@@ -5,8 +5,6 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { cn } from 'utils/helpers';
 import { useGetStrategy } from 'libs/queries';
 import { useStrategiesWithFiat } from 'hooks/useStrategies';
-import { StrategyBlockRoi } from 'components/strategies/overview/strategyBlock/StrategyBlockRoi';
-import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import {
@@ -19,6 +17,8 @@ import { TradingviewChart } from 'components/tradingviewChart';
 import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { BackButton } from 'components/common/BackButton';
+import config from 'config';
+import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -49,6 +49,7 @@ export const StrategyPage = () => {
   }
   const base = strategy.base;
   const quote = strategy.quote;
+  const showStrategyRoi = config.showStrategyRoi;
 
   return (
     <Page hideTitle={true} className="gap-20">
@@ -71,8 +72,10 @@ export const StrategyPage = () => {
       <section className="flex flex-col gap-16 md:flex-row">
         <article className="bg-background-900 grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded p-24 md:w-[400px]">
           <h2 className="text-18 font-weight-500 col-span-2">Strategy Info</h2>
-          <StrategyBlockRoi strategy={strategy} />
-          <StrategyBlockBudget strategy={strategy} />
+          <StrategyBlockInfo
+            strategy={strategy}
+            showStrategyRoi={showStrategyRoi}
+          />
           <div
             className={cn(
               'rounded-8 border-background-800 col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] border-2',

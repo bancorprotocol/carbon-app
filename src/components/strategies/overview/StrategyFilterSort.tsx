@@ -7,6 +7,7 @@ import { ReactComponent as IconFilter } from 'assets/icons/filter.svg';
 import { lsService } from 'services/localeStorage';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { cn } from 'utils/helpers';
+import config from 'config';
 
 // [START] Used for localStorage migration: Remove it after Nov 2023
 export enum EnumStrategySort {
@@ -31,6 +32,9 @@ const isEnumSort = (
 
 export const getSortFromLS = (): StrategySort => {
   const sort = lsService.getItem('strategyOverviewSort');
+  const isRoiSort = sort === 'roiDesc' || sort === 'roiAsc';
+  if (!config.showStrategyRoi && (sort === undefined || isRoiSort))
+    return 'recent';
   if (sort === undefined) return 'roiDesc';
   return isEnumSort(sort) ? strategySortMapping[sort] : sort;
 };
@@ -74,6 +78,12 @@ export const strategySort = {
   roiDesc: 'ROI (Descending)',
   totalBudgetDesc: 'Total Budget',
 };
+
+if (config.showStrategyRoi) {
+  strategySort['roiAsc'] = '';
+  strategySort['roiDesc'] = '';
+}
+
 export type StrategySort = keyof typeof strategySort;
 
 interface Props {
