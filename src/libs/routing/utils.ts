@@ -50,34 +50,44 @@ export const parseSearchWith = (parser: (str: string) => any) => {
 
     let query: Record<string, unknown> = decode(searchStr);
 
-    const skipParsing = (key: string) => {
-      if (key === 'settings') return true;
-      if (key === 'type') return true;
-      if (key === 'anchor') return true;
-      if (key === 'direction') return true;
-      if (key === 'buySettings') return true;
-      if (key === 'sellSettings') return true;
-      return false;
+    const keysToSkipParse = [
+      'settings',
+      'type',
+      'anchor',
+      'direction',
+      'buySettings',
+      'sellSettings',
+      'editType',
+      'action',
+      'buyAction',
+      'sellAction',
+      'chartType',
+    ];
+
+    const skipParsing = (key: string) => keysToSkipParse.includes(key);
+
+    const formatNumberParam = (value: string): string => {
+      const number = /^\d*\.*\d*$/;
+      if (value.match(number)) return `"${formatNumber(value)}"`;
+      return value;
     };
 
     // Try to parse any query params that might be json
     for (let key in query) {
-      if (!query[key]) continue;
       if (
+        !query[key] ||
         isAddress(String(query[key])) ||
         isDate(String(query[key])) ||
         skipParsing(key)
-      ) {
-        // eslint-disable-next-line
-        query[key] = query[key];
-      } else {
-        const value = query[key];
-        if (typeof value === 'string') {
-          try {
-            query[key] = parser(value);
-          } catch (err) {
-            console.error(`Error parsing param for key ${key}: `, err);
-          }
+      )
+        continue;
+
+      const value = query[key];
+      if (typeof value === 'string') {
+        try {
+          query[key] = parser(formatNumberParam(value));
+        } catch (err) {
+          //
         }
       }
     }

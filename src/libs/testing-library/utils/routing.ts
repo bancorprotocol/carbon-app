@@ -22,6 +22,15 @@ const encodeParams = (
     .join('&');
 };
 
+const replaceParams = (url: string, params: Record<string, string>) => {
+  if (!Object.keys(params).length) return url;
+  const pattern = Object.keys(params)
+    .map((key) => `\\$${key}`)
+    .join('|');
+  const regex = new RegExp(pattern, 'g');
+  return url.replace(regex, (match) => params[match.replace('$', '')]);
+};
+
 /**
  * Asynchronously created and loads a custom router with the specified component and optional base path and search parameters.
  *
@@ -38,10 +47,11 @@ export const loadRouter = async ({
   component,
   basePath = '/',
   search = {},
+  params = {},
 }: RouterRenderParams) => {
   const rootRoute = new RootRoute();
   const subPath = encodeParams(search);
-  const path = `${basePath}?${subPath}`;
+  const path = `${replaceParams(basePath, params)}?${subPath}`;
 
   const componentRoute = new Route({
     getParentRoute: () => rootRoute,
