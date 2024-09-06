@@ -1,7 +1,7 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { ReactComponent as IconBuyLimit } from 'assets/icons/disposable.svg';
+import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
 import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
-import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping.svg';
+import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TradeSearch } from 'libs/routing';
@@ -9,7 +9,7 @@ import { TradeSearch } from 'libs/routing';
 export const links = [
   {
     label: 'Limit / Range',
-    svg: <IconBuyLimit className="hidden size-14 md:inline" />,
+    svg: <IconDisposable className="hidden size-14 md:inline" />,
     to: '/trade/disposable',
     text: 'Buy or sell at a specific price, or gradually scale in or out of a position.',
     id: 'disposable',
@@ -23,7 +23,7 @@ export const links = [
   },
   {
     label: 'Concentrated',
-    svg: <IconOverlappingStrategy className="hidden size-14 md:inline" />,
+    svg: <IconOverlapping className="hidden size-14 md:inline" />,
     to: '/trade/overlapping',
     text: 'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
     id: 'overlapping',
