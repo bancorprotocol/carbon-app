@@ -153,6 +153,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
       order0={order0}
       order1={order1}
       spread={search.spread || initSpread}
+      marketPrice={search.marketPrice}
       onPriceUpdates={onPriceUpdates}
     />
   );

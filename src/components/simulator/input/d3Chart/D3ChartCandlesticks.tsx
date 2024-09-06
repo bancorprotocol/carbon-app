@@ -36,6 +36,7 @@ export interface D3ChartCandlesticksProps {
   type: TradeTypes;
   overlappingSpread?: string;
   overlappingMarketPrice?: number;
+  readonly?: boolean;
 }
 
 export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
@@ -51,6 +52,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     type,
     overlappingSpread,
     overlappingMarketPrice,
+    readonly,
   } = props;
 
   const xScale = useMemo(
@@ -89,6 +91,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
       )}
       {type === 'disposable' && isLimit && (
         <D3ChartDisposable
+          readonly={readonly}
           yScale={y.scale}
           isLimit={isLimit}
           dms={dms}
@@ -99,6 +102,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
       )}
       {type === 'recurring' && isLimit && (
         <D3ChartRecurring
+          readonly={readonly}
           yScale={y.scale}
           isLimit={isLimit}
           dms={dms}

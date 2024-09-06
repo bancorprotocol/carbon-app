@@ -15,12 +15,14 @@ interface Props {
   onDragEnd?: (y: number, y2: number) => void;
   initialY?: number;
   color: string;
+  readonly?: boolean;
 }
 
 export const D3ChartRectDraggable = ({
   selector,
   dms,
   color,
+  readonly,
   onDragStart,
   onDrag,
   onDragEnd,
@@ -29,6 +31,7 @@ export const D3ChartRectDraggable = ({
   const isSelectable = useSelectable(selector);
 
   useEffect(() => {
+    if (readonly) return;
     const selection = getSelector(selector);
     const handleDrag = drag()
       .subject(() => ({
@@ -51,7 +54,15 @@ export const D3ChartRectDraggable = ({
       });
     if (!isSelectable || !onDrag) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  }, [isSelectable, selector, setIsDragging, onDrag, onDragStart, onDragEnd]);
+  }, [
+    isSelectable,
+    selector,
+    setIsDragging,
+    onDrag,
+    onDragStart,
+    onDragEnd,
+    readonly,
+  ]);
 
   return (
     <D3ChartRect
@@ -59,6 +70,7 @@ export const D3ChartRectDraggable = ({
       isDragging={isDragging}
       width={dms.boundedWidth}
       fill={color}
+      readonly={readonly}
     />
   );
 };

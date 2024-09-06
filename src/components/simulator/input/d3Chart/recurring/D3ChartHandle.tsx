@@ -15,6 +15,7 @@ interface Props {
   onDragEnd?: (y?: number, y2?: number) => void;
   color: string;
   label?: string;
+  readonly?: boolean;
   isLimit: boolean;
 }
 
@@ -28,6 +29,7 @@ export const D3ChartHandle = ({
   const isSelectable = useSelectable(props.selector);
 
   useEffect(() => {
+    if (props.readonly) return;
     const selection = getSelector(props.selector);
     const handleDrag = drag()
       .subject(() => ({
@@ -53,7 +55,16 @@ export const D3ChartHandle = ({
       });
     if (!isSelectable) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  }, [props.selector, isSelectable, onDragStart, onDrag, onDragEnd]);
+  }, [
+    isSelectable,
+    onDragStart,
+    onDrag,
+    onDragEnd,
+    props.selector,
+    props.readonly,
+    props.selectorOpposite,
+    isLimit,
+  ]);
 
   return <D3ChartHandleLine {...props} isDraggable />;
 };

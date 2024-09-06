@@ -10,6 +10,8 @@ import {
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 
 export interface EditBudgetDisposableStrategySearch {
   editType: 'deposit' | 'withdraw';
@@ -55,6 +57,12 @@ export const EditBudgetDisposablePage = () => {
       marginalPrice: search.sellMarginalPrice || order1.marginalRate,
     },
   };
+  const isLimit = {
+    buy: order0.startRate === order0.endRate,
+    sell: order1.startRate === order1.endRate,
+  };
+  const direction =
+    isZero(order0.startRate) && isZero(order0.endRate) ? 'sell' : 'buy';
 
   // Warnings
   const buyOutsideMarket = outSideMarketWarning({
@@ -107,6 +115,18 @@ export const EditBudgetDisposablePage = () => {
           />
         )}
       </EditStrategyForm>
+      <StrategyChartSection>
+        <StrategyChartHistory
+          type="disposable"
+          base={base}
+          quote={quote}
+          order0={orders.buy}
+          order1={orders.sell}
+          isLimit={isLimit}
+          direction={direction}
+          readonly={true}
+        />
+      </StrategyChartSection>
     </EditStrategyLayout>
   );
 };

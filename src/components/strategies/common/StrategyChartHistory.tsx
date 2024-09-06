@@ -80,15 +80,20 @@ interface Props {
   isLimit?: { buy: boolean; sell: boolean };
   direction?: 'buy' | 'sell'; // Only for disposable
   spread?: string; // Only overlapping
-  onPriceUpdates: OnPriceUpdates;
+  readonly?: boolean;
+  marketPrice?: string;
+  onPriceUpdates?: OnPriceUpdates;
 }
 
 export const StrategyChartHistory: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>();
   const { base, quote, type, order0, order1 } = props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
-  const { marketPrice } = useMarketPrice({ base, quote });
+  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
 
+  const marketPrice = props.marketPrice
+    ? Number(props.marketPrice)
+    : externalPrice;
   const direction = props.direction;
 
   const [prices, setPrices] = useState({
@@ -103,7 +108,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     setPrices({ buy, sell });
     if (timeout.current) clearTimeout(timeout.current);
     timeout.current = setTimeout(() => {
-      props.onPriceUpdates({ buy, sell });
+      props.onPriceUpdates?.({ buy, sell });
     }, 200);
   };
 
@@ -154,6 +159,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     >
       {(dms) => (
         <D3ChartCandlesticks
+          readonly={props.readonly}
           dms={dms}
           prices={prices}
           onPriceUpdates={updatePrices}

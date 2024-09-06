@@ -12,6 +12,7 @@ type Props = Pick<
 > & {
   yScale: ScaleLinear<number, number>;
   isLimit: { buy: boolean; sell: boolean };
+  readonly?: boolean;
 };
 
 export const D3ChartDisposable = ({
@@ -20,6 +21,7 @@ export const D3ChartDisposable = ({
   dms,
   yScale,
   isLimit,
+  readonly,
   onDragEnd,
 }: Props) => {
   const onMinMaxChange = useCallback(
@@ -127,16 +129,15 @@ export const D3ChartDisposable = ({
   }, [type, isLimit, yScale, prices]);
 
   return (
-    <>
-      <DragablePriceRange
-        type={type}
-        onMinMaxChange={onMinMaxChange}
-        labels={labels[type]}
-        yPos={yPos[type]}
-        dms={dms}
-        onDragEnd={onMinMaxChangeEnd}
-        isLimit={isLimit[type]}
-      />
-    </>
+    <DragablePriceRange
+      type={type}
+      onMinMaxChange={onMinMaxChange}
+      labels={labels[type]}
+      yPos={yPos[type]}
+      dms={dms}
+      onDragEnd={onMinMaxChangeEnd}
+      isLimit={isLimit[type]}
+      readonly={readonly}
+    />
   );
 };

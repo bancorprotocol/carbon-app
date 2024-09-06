@@ -11,6 +11,7 @@ type Props = Pick<
 > & {
   yScale: ScaleLinear<number, number>;
   isLimit: { buy: boolean; sell: boolean };
+  readonly?: boolean;
 };
 
 export const D3ChartRecurring = ({
@@ -19,6 +20,7 @@ export const D3ChartRecurring = ({
   dms,
   yScale,
   isLimit,
+  readonly,
   onDragEnd,
 }: Props) => {
   const onMinMaxChange = useCallback(
@@ -155,6 +157,7 @@ export const D3ChartRecurring = ({
         dms={dms}
         onDragEnd={onMinMaxChangeEnd}
         isLimit={isLimit.buy}
+        readonly={readonly}
       />
       <DragablePriceRange
         type="sell"
@@ -164,6 +167,7 @@ export const D3ChartRecurring = ({
         dms={dms}
         isLimit={isLimit.sell}
         onDragEnd={onMinMaxChangeEnd}
+        readonly={readonly}
       />
     </>
   );
