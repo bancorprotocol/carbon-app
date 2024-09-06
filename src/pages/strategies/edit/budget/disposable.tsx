@@ -12,6 +12,7 @@ import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { StrategyChartLegend } from 'components/strategies/common/StrategyChartLegend';
 
 export interface EditBudgetDisposableStrategySearch {
   editType: 'deposit' | 'withdraw';
@@ -126,6 +127,7 @@ export const EditBudgetDisposablePage = () => {
           direction={direction}
           readonly={true}
         />
+        <StrategyChartLegend />
       </StrategyChartSection>
     </EditStrategyLayout>
   );
