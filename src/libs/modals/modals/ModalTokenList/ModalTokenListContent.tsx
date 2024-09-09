@@ -19,19 +19,9 @@ import { ModalTokenListDuplicateWarning } from 'libs/modals/modals/ModalTokenLis
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
 
-const getDuplicateTokenSymbols = (tokens: Token[]): string[] => {
-  return Object.values(
-    tokens.reduce((r: { [symbol: string]: string[] }, v) => {
-      (r[v.symbol] ??= []).push(v.symbol);
-      return r;
-    }, {})
-  )
-    .filter((g) => g.length > 1)
-    .flat();
-};
-
 type Props = {
   tokens: { [k in ChooseTokenCategory]: Token[] };
+  duplicateSymbols: string[];
   onSelect: (token: Token) => void;
   search: string;
   onAddFavorite: (token: Token) => void;
@@ -40,6 +30,7 @@ type Props = {
 
 export const ModalTokenListContent: FC<Props> = ({
   tokens,
+  duplicateSymbols,
   onSelect,
   search,
   onAddFavorite,
@@ -50,11 +41,6 @@ export const ModalTokenListContent: FC<Props> = ({
     lsService.getItem('chooseTokenCategory') || 'popular'
   );
   const _tokens = !!search ? tokens.all : tokens[selectedList];
-
-  const duplicates = useMemo(
-    () => getDuplicateTokenSymbols(tokens.all),
-    [tokens.all]
-  );
 
   const setSelectedList = (category: ChooseTokenCategory) => {
     _setSelectedList(category);
@@ -147,7 +133,7 @@ export const ModalTokenListContent: FC<Props> = ({
                     <div className="text-12 max-w-full truncate text-white/60">
                       {token.name ?? token.symbol}
                     </div>
-                    {duplicates.includes(token.symbol) && (
+                    {duplicateSymbols.includes(token.symbol) && (
                       <ModalTokenListDuplicateWarning token={token} />
                     )}
                   </div>

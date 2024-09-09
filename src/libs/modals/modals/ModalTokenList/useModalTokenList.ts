@@ -75,6 +75,17 @@ export const useModalTokenList = ({ id, data }: Props) => {
     [tokens, excludedTokens, includedTokens]
   );
 
+  const duplicateSymbols = useMemo(() => {
+    return Object.values(
+      tokens.reduce((r: { [symbol: string]: string[] }, v) => {
+        (r[v.symbol] ??= []).push(v.symbol);
+        return r;
+      }, {})
+    )
+      .filter((g) => g.length > 1)
+      .flat();
+  }, [tokens]);
+
   const _favoriteTokens = useMemo(
     () =>
       favoriteTokens.filter(
@@ -157,6 +168,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
     showImportToken,
     showNoResults,
     filteredTokens,
+    duplicateSymbols,
     onSelect,
     isPending,
     isError,
