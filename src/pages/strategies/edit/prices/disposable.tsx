@@ -22,6 +22,7 @@ import { StrategyChartHistory } from 'components/strategies/common/StrategyChart
 import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
 import { useCallback } from 'react';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export interface EditDisposableStrategySearch {
   editType: 'editPrices' | 'renew';
@@ -59,12 +60,24 @@ export const EditStrategyDisposablePage = () => {
     [navigate]
   );
 
+  // TODO: would be better to set default price reactively instead
   const setDirection = (direction: StrategyDirection) => {
+    const isLimit = search.settings !== 'range';
+    const defaultMin = () => {
+      if (isLimit) return marketPrice?.toString();
+      const multiplier = isBuy ? 0.9 : 1;
+      return new SafeDecimal(marketPrice ?? 0).mul(multiplier).toString();
+    };
+    const defaultMax = () => {
+      if (isLimit) return marketPrice?.toString();
+      const multiplier = isBuy ? 1 : 1.1;
+      return new SafeDecimal(marketPrice ?? 0).mul(multiplier).toString();
+    };
     setSearch({
       direction,
       budget: undefined,
-      min: resetPrice(otherOrder?.startRate),
-      max: resetPrice(otherOrder?.endRate),
+      min: resetPrice(otherOrder?.startRate) || defaultMin(),
+      max: resetPrice(otherOrder?.endRate) || defaultMax(),
     });
   };
 

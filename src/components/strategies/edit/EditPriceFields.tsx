@@ -87,17 +87,13 @@ export const EditStrategyPriceField: FC<Props> = ({
     const sameSetting = initialSettings === settings;
     const defaultMin = () => {
       if (settings === 'limit') return price?.toString();
-      return SafeDecimal.max(
-        new SafeDecimal(price ?? 0).mul(0.9),
-        order0.endRate
-      ).toString();
+      const multiplier = buy ? 0.9 : 1;
+      return new SafeDecimal(price ?? 0).mul(multiplier).toString();
     };
     const defaultMax = () => {
       if (settings === 'limit') return price?.toString();
-      return SafeDecimal.min(
-        new SafeDecimal(price ?? 0).mul(1.1),
-        order1.startRate
-      ).toString();
+      const multiplier = buy ? 1 : 1.1;
+      return new SafeDecimal(price ?? 0).mul(multiplier).toString();
     };
     setOrder({
       settings,
