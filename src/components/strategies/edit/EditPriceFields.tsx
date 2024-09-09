@@ -11,7 +11,7 @@ import { BudgetDistribution } from '../common/BudgetDistribution';
 import { getDeposit, getWithdraw } from './utils';
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategySettings } from 'libs/routing';
-import { isLimitOrder, resetPrice } from '../common/utils';
+import { isLimitOrder, isZero, resetPrice } from '../common/utils';
 import { OverlappingAction } from '../overlapping/OverlappingAction';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -80,21 +80,22 @@ export const EditStrategyPriceField: FC<Props> = ({
   };
   const setSettings = (settings: StrategySettings) => {
     const order = buy ? order0 : order1;
+    const defaultPrice = buy ? order0.startRate : order1.endRate;
+    const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
+
     const initialSettings = isLimitOrder(order) ? 'limit' : 'range';
     const sameSetting = initialSettings === settings;
     const defaultMin = () => {
-      if (buy) return order0.startRate;
-      if (settings === 'limit') return order1.endRate;
+      if (settings === 'limit') return price?.toString();
       return SafeDecimal.max(
-        new SafeDecimal(order1.endRate).mul(0.9),
+        new SafeDecimal(price ?? 0).mul(0.9),
         order0.endRate
       ).toString();
     };
     const defaultMax = () => {
-      if (!buy) return order1.endRate;
-      if (settings === 'limit') return order0.startRate;
+      if (settings === 'limit') return price?.toString();
       return SafeDecimal.min(
-        new SafeDecimal(order0.startRate).mul(1.1),
+        new SafeDecimal(price ?? 0).mul(1.1),
         order1.startRate
       ).toString();
     };
