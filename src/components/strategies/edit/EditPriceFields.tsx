@@ -13,6 +13,8 @@ import { useGetTokenBalance } from 'libs/queries';
 import { StrategySettings } from 'libs/routing';
 import { isLimitOrder, resetPrice } from '../common/utils';
 import { OverlappingAction } from '../overlapping/OverlappingAction';
+import { SafeDecimal } from 'libs/safedecimal';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
   order: EditOrderBlock;
@@ -40,6 +42,7 @@ export const EditStrategyPriceField: FC<Props> = ({
   const { base, quote, order0, order1 } = strategy;
   const token = buy ? quote : base;
   const balance = useGetTokenBalance(token);
+  const { marketPrice } = useMarketPrice({ base, quote });
 
   const titleId = useId();
   const tooltipText = `This section will define the order details in which you are willing to ${
@@ -78,10 +81,27 @@ export const EditStrategyPriceField: FC<Props> = ({
   const setSettings = (settings: StrategySettings) => {
     const order = buy ? order0 : order1;
     const initialSettings = isLimitOrder(order) ? 'limit' : 'range';
+    const sameSetting = initialSettings === settings;
+    const defaultMin = () => {
+      if (buy) return order0.startRate;
+      if (settings === 'limit') return order1.endRate;
+      return SafeDecimal.max(
+        new SafeDecimal(order1.endRate).mul(0.9),
+        order0.endRate
+      ).toString();
+    };
+    const defaultMax = () => {
+      if (!buy) return order1.endRate;
+      if (settings === 'limit') return order0.startRate;
+      return SafeDecimal.min(
+        new SafeDecimal(order0.startRate).mul(1.1),
+        order1.startRate
+      ).toString();
+    };
     setOrder({
       settings,
-      min: initialSettings === settings ? resetPrice(order.startRate) : '',
-      max: initialSettings === settings ? resetPrice(order.endRate) : '',
+      min: sameSetting ? resetPrice(order.startRate) : defaultMin(),
+      max: sameSetting ? resetPrice(order.endRate) : defaultMax(),
     });
   };
 
