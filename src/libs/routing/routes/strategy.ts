@@ -1,15 +1,15 @@
 import { StrategyPage } from 'pages/strategy';
 import { rootRoute } from './root';
 import { Route } from '@tanstack/react-router';
-import { validateSearchParams, validNumber } from '../utils';
+import { validateSearchParams } from '../utils';
 import {
   ActivitySearchParams,
   activityValidators,
 } from 'components/activity/utils';
 
 type StrategySearch = ActivitySearchParams & {
-  priceStart: string;
-  priceEnd: string;
+  // priceStart?: string;
+  // priceEnd?: string;
 };
 
 export const strategyPage = new Route({
@@ -18,7 +18,8 @@ export const strategyPage = new Route({
   component: StrategyPage,
   validateSearch: validateSearchParams<StrategySearch>({
     ...activityValidators,
-    priceStart: validNumber,
-    priceEnd: validNumber,
+    // TODO: fix types
+    // priceStart: validNumber,
+    // priceEnd: validNumber,
   }),
 });

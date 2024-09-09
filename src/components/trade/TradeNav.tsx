@@ -1,10 +1,9 @@
-import { Link, useRouterState } from '@tanstack/react-router';
 import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
 import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { TradeSearch } from 'libs/routing';
+import { Link, TradeSearch, useRouterState } from 'libs/routing';
 
 export const links = [
   {
