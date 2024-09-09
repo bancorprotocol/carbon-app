@@ -17,9 +17,9 @@ export const ModalTokenListDuplicateWarning: FC<Props> = ({ token }) => {
     <>
       It appears there might be multiple tokens with the same symbol. Please
       ensure you select the correct address.
-      <br /> {token.symbol}:
+      <br /> {token.symbol}:<br />
       <div className="flex items-center">
-        <br /> {token.address}
+        {token.address}
         {token.address !== NATIVE_TOKEN_ADDRESS && (
           <NewTabLink to={getExplorerLink('token', token.address)}>
             <IconLink className="ml-6 w-14 text-white/80" />
