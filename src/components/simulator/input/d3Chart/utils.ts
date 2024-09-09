@@ -46,6 +46,7 @@ export const moveBoundary = (selector: string, y: number) => {
   line.attr('y1', y).attr('y2', y);
   handle.attr('y', y);
   label.attr('y', y + 12);
+  if (!readonly.size()) return;
   readonly.attr(
     'transform',
     `translate(${Number(line.attr('x2')) - 20}, ${y - 8})`
