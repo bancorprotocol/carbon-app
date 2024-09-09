@@ -31,41 +31,46 @@ const getBounds = (
   order0: BaseOrder,
   order1: BaseOrder,
   data: CandlestickData[] = [],
-  direction?: 'buy' | 'sell'
+  direction?: 'none' | 'buy' | 'sell'
 ): ChartPrices => {
-  const min = Math.min(...data.map((d) => d.low));
-  const max = Math.max(...data.map((d) => d.high));
-  if (direction === 'buy') {
+  const min = Math.min(...data.map((d) => d.low)).toString();
+  const max = Math.max(...data.map((d) => d.high)).toString();
+  if (direction === 'none') {
+    return {
+      buy: { min, max },
+      sell: { min, max },
+    };
+  } else if (direction === 'buy') {
     return {
       buy: {
         min: order0.min || '0',
-        max: order0.max || max.toString(),
+        max: order0.max || max,
       },
       sell: {
-        min: min.toString(),
-        max: max.toString(),
+        min: min,
+        max: max,
       },
     };
   } else if (direction === 'sell') {
     return {
       buy: {
-        min: min.toString(),
-        max: max.toString(),
+        min: min,
+        max: max,
       },
       sell: {
         min: order1.min || '0',
-        max: order1.max || max.toString(),
+        max: order1.max || max,
       },
     };
   } else {
     return {
       buy: {
-        min: order0.min || min.toString(),
-        max: order0.max || max.toString(),
+        min: order0.min || min,
+        max: order0.max || max,
       },
       sell: {
-        min: order1.min || min.toString(),
-        max: order1.max || max.toString(),
+        min: order1.min || min,
+        max: order1.max || max,
       },
     };
   }
@@ -94,7 +99,11 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   const marketPrice = props.marketPrice
     ? Number(props.marketPrice)
     : externalPrice;
-  const direction = props.direction;
+
+  const direction = (() => {
+    if (type === 'market') return 'none';
+    return props.direction;
+  })();
 
   const [prices, setPrices] = useState({
     buy: { min: order0.min || '0', max: order0.max || '0' },
