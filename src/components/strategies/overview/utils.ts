@@ -56,9 +56,11 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
   return sortFn[sortType] ?? sortFn['roiDesc'];
 };
 export const getSortAndFilterItems = () => {
-  const sortItems = Object.entries(strategySort).map(([item, title]) => {
-    return { item: item as StrategySort, title };
-  });
+  const sortItems = Object.entries(strategySort)
+    .filter(([_item, title]) => !!title)
+    .map(([item, title]) => {
+      return { item: item as StrategySort, title };
+    });
 
   const filterItems = Object.entries(strategyFilter).map(([item, title]) => {
     return { item: item as StrategyFilter, title };

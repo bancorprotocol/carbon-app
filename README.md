@@ -252,6 +252,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `selectedConnectors`: List of connectors to make available by default in the wallet selection modal that will be shown even if the connector is not injected.
 - `blockedConnectors`: List of EIP-6963 injected connectors names to block in the wallet selection modal.
 - `isSimulatorEnabled`: Flag to enable the simulation page.
+- `showStrategyRoi`: Optional flag to show the Strategy ROI in the Strategy Block. ROI is hidden by default.
 - `network`
   - `name`: Network name.
   - `logoUrl`: Network logo URL.

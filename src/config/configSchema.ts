@@ -18,6 +18,7 @@ export const AppConfigSchema = v.object({
   blockedConnectors: v.optional(ConnectorSchema),
   walletConnectProjectId: v.string(),
   isSimulatorEnabled: v.boolean(),
+  showStrategyRoi: v.optional(v.boolean()),
   sentryDSN: v.optional(v.string()),
   policiesLastUpdated: v.optional(v.string()),
   network: v.object({

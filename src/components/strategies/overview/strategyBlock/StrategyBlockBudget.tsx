@@ -6,10 +6,11 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { StrategyWithFiat } from 'libs/queries';
 
 interface Props {
+  fullWidth?: boolean;
   strategy: StrategyWithFiat;
 }
 
-export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
+export const StrategyBlockBudget: FC<Props> = ({ strategy, fullWidth }) => {
   const baseFiat = useFiatCurrency(strategy.base);
   const quoteFiat = useFiatCurrency(strategy.quote);
   const noFiatValue = !baseFiat.hasFiatValue() && !quoteFiat.hasFiatValue();
@@ -22,7 +23,8 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
     <article
       className={cn(
         'rounded-8 border-background-800 flex flex-col border-2 p-16',
-        strategy.status === 'active' ? '' : 'opacity-50'
+        strategy.status === 'active' ? '' : 'opacity-50',
+        !!fullWidth ? 'col-start-1 col-end-3 flex-row justify-between' : ''
       )}
     >
       <Tooltip element={<TooltipContent />}>
