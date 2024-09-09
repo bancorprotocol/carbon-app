@@ -15,10 +15,11 @@ import {
 } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { StrategySubtitle } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { TradingviewChart } from 'components/tradingviewChart';
 import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { BackButton } from 'components/common/BackButton';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { emptyOrder } from 'components/strategies/common/utils';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -92,7 +93,13 @@ export const StrategyPage = () => {
         </article>
         <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 md:flex">
           <h2 className="text-18 font-weight-500">Price graph</h2>
-          <TradingviewChart base={base} quote={quote} />
+          <StrategyChartHistory
+            type="market"
+            base={base}
+            quote={quote}
+            order0={emptyOrder()}
+            order1={emptyOrder()}
+          />
         </article>
       </section>
       <ActivityProvider params={params}>

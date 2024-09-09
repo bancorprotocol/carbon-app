@@ -32,14 +32,6 @@ export const TradeMarket = () => {
     });
   };
 
-  // TODO: remove this and update the code accordingly
-  const onPriceUpdates = () => {};
-
-  const isLimit = {
-    buy: true,
-    sell: true,
-  };
-
   const border = buy
     ? 'border-buy/50 focus-within:border-buy'
     : 'border-sell/50 focus-within:border-sell';
@@ -92,8 +84,6 @@ export const TradeMarket = () => {
           quote={quote}
           order0={emptyOrder()}
           order1={emptyOrder()}
-          isLimit={isLimit}
-          onPriceUpdates={onPriceUpdates}
         />
       </StrategyChartSection>
     </>
