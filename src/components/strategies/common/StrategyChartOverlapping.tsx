@@ -144,6 +144,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
         spread={search.spread ?? initSpread}
         setMin={(min) => set({ min })}
         setMax={(max) => set({ max })}
+        disabled={readonly}
       />
     );
   }

@@ -9,6 +9,7 @@ import { D3ChartSettings } from 'libs/d3/types';
 import { useEffect, useState } from 'react';
 
 interface Props {
+  readonly?: boolean;
   dms: D3ChartSettings;
   onDragStart?: (y: number, y2: number) => void;
   onDrag?: (y: number, y2: number) => void;
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const D3ChartOverlappingRangeGroup = ({
+  readonly,
   dms,
   onDragStart,
   onDrag,
@@ -52,19 +54,21 @@ export const D3ChartOverlappingRangeGroup = ({
     });
 
   useEffect(() => {
-    if (!isSelectable || !onDrag) return;
+    if (readonly || !isSelectable || !onDrag) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  }, [isSelectable, handleDrag, onDrag, selection]);
+  }, [isSelectable, handleDrag, onDrag, selection, readonly]);
 
   return (
     <g className={selector}>
       <D3ChartRect
+        readonly={readonly}
         selector={selectorRectBuy}
         isDragging={isDragging}
         width={dms.boundedWidth}
         fill="var(--buy)"
       />
       <D3ChartRect
+        readonly={readonly}
         selector={selectorRectSell}
         isDragging={isDragging}
         width={dms.boundedWidth}

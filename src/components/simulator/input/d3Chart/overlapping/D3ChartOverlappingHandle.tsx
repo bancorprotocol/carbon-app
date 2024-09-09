@@ -14,6 +14,7 @@ interface Props {
   onDragEnd?: (y: number) => void;
   color: string;
   label?: string;
+  readonly?: boolean;
 }
 
 export const D3ChartOverlappingHandle = ({
@@ -22,21 +23,30 @@ export const D3ChartOverlappingHandle = ({
   onDragEnd,
   ...props
 }: Props) => {
-  const selection = getSelector(props.selector);
   const isSelectable = useSelectable(props.selector);
 
-  const handleDrag = drag()
-    .subject(() => ({
-      y: Number(selection.select('line').attr('y1')),
-    }))
-    .on('start', ({ y }) => onDragStart?.(y))
-    .on('drag', ({ y }) => onDrag?.(y))
-    .on('end', ({ y }) => onDragEnd?.(y));
-
   useEffect(() => {
-    if (!isSelectable) return;
-    handleDrag(selection as Selection<Element, unknown, any, any>);
-  }, [isSelectable, handleDrag, selection]);
+    if (props.readonly) return;
+    const selection = getSelector(props.selector);
+    const handleDrag = drag()
+      .subject(() => ({
+        y: Number(selection.select('line').attr('y1')),
+      }))
+      .on('start', ({ y }) => onDragStart?.(y))
+      .on('drag', ({ y }) => onDrag?.(y))
+      .on('end', ({ y }) => onDragEnd?.(y));
 
-  return <D3ChartHandleLine {...props} isDraggable />;
+    if (!isSelectable) return;
+
+    handleDrag(selection as Selection<Element, unknown, any, any>);
+  }, [
+    isSelectable,
+    onDrag,
+    onDragEnd,
+    onDragStart,
+    props.readonly,
+    props.selector,
+  ]);
+
+  return <D3ChartHandleLine {...props} isDraggable={!props.readonly} />;
 };

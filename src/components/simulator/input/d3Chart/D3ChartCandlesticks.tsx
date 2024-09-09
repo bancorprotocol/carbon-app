@@ -113,6 +113,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
       )}
       {type === 'overlapping' && overlappingSpread !== undefined && (
         <D3ChartOverlapping
+          readonly={readonly}
           yScale={y.scale}
           dms={dms}
           prices={prices}
