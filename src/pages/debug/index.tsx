@@ -10,6 +10,7 @@ import { DebugCreateStrategy } from 'components/debug/DebugCreateStrategy';
 import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
 import { DebugOrderBook } from 'components/debug/DebugOrderBook';
 import { DebugSDKConfig } from 'components/debug/DebugSDKConfig';
+import { DebugConfig } from 'components/debug/DebugConfig';
 
 export const DebugPage = () => {
   return (
@@ -25,6 +26,7 @@ export const DebugPage = () => {
         <DebugCreateStrategy />
         <DebugFiatCurrency />
         <DebugOrderBook />
+        <DebugConfig />
         <DebugSDKConfig />
       </div>
     </Page>
