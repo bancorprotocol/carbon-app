@@ -4,7 +4,7 @@ import {
   SearchParamsValidator,
   validArrayOf,
   validLiteral,
-  validNumberType,
+  validNumber,
   validString,
   validateSearchParams,
 } from 'libs/routing/utils';
@@ -45,10 +45,21 @@ export const activityValidators: SearchParamsValidator<ActivitySearchParams> = {
   pairs: validArrayOf(validString),
   start: validString,
   end: validString,
-  limit: validNumberType,
-  offset: validNumberType,
+  limit: validNumber,
+  offset: validNumber,
 };
-export const validateActivityParams = validateSearchParams(activityValidators);
+export const validateActivityParams = (
+  search: Record<string, string>
+): ActivitySearchParams => {
+  const rawSearch = validateSearchParams(activityValidators)(search);
+  const limit = Number(rawSearch.limit ?? 10);
+  const offset = Number(rawSearch.offset ?? 0);
+  return {
+    ...rawSearch,
+    limit,
+    offset,
+  };
+};
 
 export const activityHasPairs = (activity: Activity, pairs: string[] = []) => {
   if (pairs.length === 0) return true;
