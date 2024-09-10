@@ -76,14 +76,13 @@ export const useModalTokenList = ({ id, data }: Props) => {
   );
 
   const duplicateSymbols = useMemo(() => {
-    return Object.values(
-      tokens.reduce((r: { [symbol: string]: string[] }, v) => {
-        (r[v.symbol] ??= []).push(v.symbol);
-        return r;
-      }, {})
-    )
-      .filter((g) => g.length > 1)
-      .flat();
+    const seenSymbol: Record<string, boolean> = {};
+    const duplicates = new Set<string>();
+    for (const token of tokens) {
+      if (seenSymbol[token.symbol]) duplicates.add(token.symbol);
+      seenSymbol[token.symbol] = true;
+    }
+    return Array.from(duplicates);
   }, [tokens]);
 
   const _favoriteTokens = useMemo(
