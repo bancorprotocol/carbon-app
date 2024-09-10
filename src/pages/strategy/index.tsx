@@ -2,6 +2,7 @@ import {
   useNavigate,
   useParams,
   useRouter,
+  useSearch,
   // useSearch,
 } from '@tanstack/react-router';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
@@ -27,7 +28,7 @@ import {
   defaultStartDate,
   emptyOrder,
 } from 'components/strategies/common/utils';
-import { toUnixUTC } from 'components/simulator/utils';
+import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import {
   DateRangePicker,
@@ -40,7 +41,7 @@ export const StrategyPage = () => {
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
   const navigate = useNavigate({ from: '/strategy/$id' });
-  // const { priceStart, priceEnd } = useSearch({ from: '/strategy/$id' });
+  const { priceStart, priceEnd } = useSearch({ from: '/strategy/$id' });
   const params = { strategyIds: id };
   const query = useGetStrategy(id);
   const [strategy] = useStrategiesWithFiat(query);
@@ -132,8 +133,8 @@ export const StrategyPage = () => {
             <DateRangePicker
               defaultStart={defaultStartDate()}
               defaultEnd={defaultEndDate()}
-              // start={fromUnixUTC(priceStart)}
-              // end={fromUnixUTC(priceEnd)}
+              start={fromUnixUTC(priceStart)}
+              end={fromUnixUTC(priceEnd)}
               onConfirm={onDatePickerConfirm}
               presets={datePickerPresets}
               options={{

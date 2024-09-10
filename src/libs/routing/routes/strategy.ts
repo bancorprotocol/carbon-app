@@ -1,25 +1,19 @@
 import { StrategyPage } from 'pages/strategy';
 import { rootRoute } from './root';
 import { Route } from '@tanstack/react-router';
-import { validateSearchParams } from '../utils';
+import { validNumber, validateSearchParams } from '../utils';
 import {
   ActivitySearchParams,
   activityValidators,
 } from 'components/activity/utils';
 
-type StrategySearch = ActivitySearchParams & {
-  // priceStart?: string;
-  // priceEnd?: string;
-};
-
 export const strategyPage = new Route({
   getParentRoute: () => rootRoute,
   path: 'strategy/$id',
   component: StrategyPage,
-  validateSearch: validateSearchParams<StrategySearch>({
+  validateSearch: validateSearchParams<ActivitySearchParams>({
     ...activityValidators,
-    // TODO: fix types
-    // priceStart: validNumber,
-    // priceEnd: validNumber,
+    priceStart: validNumber,
+    priceEnd: validNumber,
   }),
 });
