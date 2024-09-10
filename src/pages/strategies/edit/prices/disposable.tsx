@@ -9,7 +9,6 @@ import {
   emptyOrder,
   isZero,
   outSideMarketWarning,
-  resetPrice,
 } from 'components/strategies/common/utils';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
@@ -23,19 +22,53 @@ import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
 import { useCallback } from 'react';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { SafeDecimal } from 'libs/safedecimal';
+import { Strategy } from 'libs/queries';
 
 export interface EditDisposableStrategySearch {
   editType: 'editPrices' | 'renew';
-  min: string;
-  max: string;
+  min?: string;
+  max?: string;
   settings: StrategySettings;
   direction: StrategyDirection;
   action?: 'deposit' | 'withdraw';
   budget?: string;
 }
 
-const url = '/strategies/edit/$strategyId/prices/disposable';
+const getOrder = (
+  strategy: Strategy,
+  search: EditDisposableStrategySearch,
+  marketPrice?: number
+): EditOrderBlock => {
+  const { order0, order1 } = strategy;
+  const direction = search.direction ?? 'sell';
+  const settings = search.settings ?? 'limit';
+  const action = search.action ?? 'deposit';
+  const isBuy = direction === 'buy';
+  const order = isBuy ? order0 : order1;
 
+  const defaultPrice = isBuy ? order0.startRate : order1.endRate;
+  const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
+
+  const defaultMin = () => {
+    if (settings === 'limit') return price?.toString();
+    const multiplier = isBuy ? 0.9 : 1;
+    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
+  };
+  const defaultMax = () => {
+    if (settings === 'limit') return price?.toString();
+    const multiplier = isBuy ? 1 : 1.1;
+    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
+  };
+  return {
+    settings,
+    action,
+    min: search.min ?? defaultMin()?.toString() ?? '0',
+    max: search.max ?? defaultMax()?.toString() ?? '0',
+    budget: getTotalBudget(action, order.balance, search.budget),
+  };
+};
+
+const url = '/strategies/edit/$strategyId/prices/disposable';
 export const EditStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
@@ -45,7 +78,6 @@ export const EditStrategyDisposablePage = () => {
   const { marketPrice } = useMarketPrice({ base, quote });
 
   const isBuy = search.direction !== 'sell';
-  const otherOrder = isBuy ? order1 : order0;
   const { setOrder } = useSetDisposableOrder(url);
 
   const setSearch = useCallback(
@@ -60,24 +92,12 @@ export const EditStrategyDisposablePage = () => {
     [navigate]
   );
 
-  // TODO: would be better to set default price reactively instead
   const setDirection = (direction: StrategyDirection) => {
-    const isLimit = search.settings !== 'range';
-    const defaultMin = () => {
-      if (isLimit) return marketPrice?.toString();
-      const multiplier = isBuy ? 0.9 : 1;
-      return new SafeDecimal(marketPrice ?? 0).mul(multiplier).toString();
-    };
-    const defaultMax = () => {
-      if (isLimit) return marketPrice?.toString();
-      const multiplier = isBuy ? 1 : 1.1;
-      return new SafeDecimal(marketPrice ?? 0).mul(multiplier).toString();
-    };
     setSearch({
       direction,
       budget: undefined,
-      min: resetPrice(otherOrder?.startRate) || defaultMin(),
-      max: resetPrice(otherOrder?.endRate) || defaultMax(),
+      min: undefined,
+      max: undefined,
     });
   };
 
@@ -90,19 +110,8 @@ export const EditStrategyDisposablePage = () => {
   );
 
   const initialBudget = isBuy ? order0.balance : order1.balance;
-  const totalBudget = getTotalBudget(
-    search.action ?? 'deposit',
-    initialBudget,
-    search.budget
-  );
-  // TODO: initialize min/max with existing strategy instead of forcing in search
-  const order: EditOrderBlock = {
-    min: search.min ?? '',
-    max: search.max ?? '',
-    budget: totalBudget,
-    settings: search.settings ?? 'limit',
-    action: search.action ?? 'deposit',
-  };
+
+  const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
   const orders = {
     buy: isBuy ? order : emptyOrder(),
     sell: isBuy ? emptyOrder() : order,

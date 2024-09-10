@@ -48,7 +48,7 @@ export const editStrategyLayout = new Route({
 
 // PRICES
 const initInput = (value: string) => {
-  if (isZero(value)) return '';
+  if (isZero(value)) return;
   return value;
 };
 

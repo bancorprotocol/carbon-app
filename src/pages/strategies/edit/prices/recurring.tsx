@@ -1,7 +1,7 @@
 import { useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
-import { StrategySettings } from 'libs/routing';
+import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import {
@@ -20,22 +20,80 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
 import { useCallback } from 'react';
+import { EditOrderBlock } from 'components/strategies/common/types';
+import { Strategy } from 'libs/queries';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export interface EditRecurringStrategySearch {
   editType: 'editPrices' | 'renew';
-  buyMin: string;
-  buyMax: string;
+  buyMin?: string;
+  buyMax?: string;
   buySettings: StrategySettings;
   buyBudget?: string;
   buyAction?: 'deposit' | 'withdraw';
-  sellMin: string;
-  sellMax: string;
+  sellMin?: string;
+  sellMax?: string;
   sellSettings: StrategySettings;
   sellBudget?: string;
   sellAction?: 'deposit' | 'withdraw';
 }
 
 type Search = EditRecurringStrategySearch;
+
+const getOrders = (
+  strategy: Strategy,
+  search: Search,
+  marketPrice?: number
+): { buy: EditOrderBlock; sell: EditOrderBlock } => {
+  const { order0, order1 } = strategy;
+
+  const defaultMin = (
+    direction: StrategyDirection,
+    settings: StrategySettings
+  ) => {
+    const isBuy = direction === 'buy';
+    const defaultPrice = isBuy ? order0.startRate : order1.endRate;
+    const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
+    if (settings === 'limit') return price?.toString();
+    const multiplier = isBuy ? 0.9 : 1;
+    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
+  };
+  const defaultMax = (
+    direction: StrategyDirection,
+    settings: StrategySettings
+  ) => {
+    const isBuy = direction === 'buy';
+    const defaultPrice = isBuy ? order0.startRate : order1.endRate;
+    const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
+    if (settings === 'limit') return price?.toString();
+    const multiplier = isBuy ? 1 : 1.1;
+    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
+  };
+  return {
+    buy: {
+      min: search.buyMin ?? defaultMin('buy', search.buySettings) ?? '',
+      max: search.buyMax ?? defaultMax('buy', search.buySettings) ?? '',
+      settings: search.buySettings,
+      action: search.buyAction ?? 'deposit',
+      budget: getTotalBudget(
+        search.buyAction ?? 'deposit',
+        order0.balance,
+        search.buyBudget
+      ),
+    },
+    sell: {
+      min: search.sellMin ?? defaultMin('sell', search.sellSettings) ?? '',
+      max: search.sellMax ?? defaultMax('sell', search.sellSettings) ?? '',
+      settings: search.sellSettings,
+      action: search.sellAction ?? 'deposit',
+      budget: getTotalBudget(
+        search.sellAction ?? 'deposit',
+        order1.balance,
+        search.sellBudget
+      ),
+    },
+  };
+};
 
 const getWarning = (search: EditRecurringStrategySearch) => {
   const { buyMin, buyMax, sellMin, sellMax } = search;
@@ -72,30 +130,7 @@ export const EditStrategyRecurringPage = () => {
     [setBuyOrder, setSellOrder]
   );
 
-  const orders = {
-    buy: {
-      min: search.buyMin,
-      max: search.buyMax,
-      settings: search.buySettings,
-      action: search.buyAction ?? 'deposit',
-      budget: getTotalBudget(
-        search.buyAction ?? 'deposit',
-        order0.balance,
-        search.buyBudget
-      ),
-    },
-    sell: {
-      min: search.sellMin,
-      max: search.sellMax,
-      settings: search.sellSettings,
-      action: search.sellAction ?? 'deposit',
-      budget: getTotalBudget(
-        search.sellAction ?? 'deposit',
-        order1.balance,
-        search.sellBudget
-      ),
-    },
-  };
+  const orders = getOrders(strategy, search, marketPrice);
   const isLimit = {
     buy: orders.buy.settings === 'limit',
     sell: orders.sell.settings === 'limit',

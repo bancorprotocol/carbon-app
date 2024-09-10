@@ -11,10 +11,7 @@ import { BudgetDistribution } from '../common/BudgetDistribution';
 import { getDeposit, getWithdraw } from './utils';
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategySettings } from 'libs/routing';
-import { isLimitOrder, isZero, resetPrice } from '../common/utils';
 import { OverlappingAction } from '../overlapping/OverlappingAction';
-import { SafeDecimal } from 'libs/safedecimal';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
   order: EditOrderBlock;
@@ -39,10 +36,9 @@ export const EditStrategyPriceField: FC<Props> = ({
   warnings,
 }) => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote } = strategy;
   const token = buy ? quote : base;
   const balance = useGetTokenBalance(token);
-  const { marketPrice } = useMarketPrice({ base, quote });
 
   const titleId = useId();
   const tooltipText = `This section will define the order details in which you are willing to ${
@@ -79,26 +75,10 @@ export const EditStrategyPriceField: FC<Props> = ({
     setOrder({ action, budget: undefined });
   };
   const setSettings = (settings: StrategySettings) => {
-    const order = buy ? order0 : order1;
-    const defaultPrice = buy ? order0.startRate : order1.endRate;
-    const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
-
-    const initialSettings = isLimitOrder(order) ? 'limit' : 'range';
-    const sameSetting = initialSettings === settings;
-    const defaultMin = () => {
-      if (settings === 'limit') return price?.toString();
-      const multiplier = buy ? 0.9 : 1;
-      return new SafeDecimal(price ?? 0).mul(multiplier).toString();
-    };
-    const defaultMax = () => {
-      if (settings === 'limit') return price?.toString();
-      const multiplier = buy ? 1 : 1.1;
-      return new SafeDecimal(price ?? 0).mul(multiplier).toString();
-    };
     setOrder({
       settings,
-      min: sameSetting ? resetPrice(order.startRate) : defaultMin(),
-      max: sameSetting ? resetPrice(order.endRate) : defaultMax(),
+      min: undefined,
+      max: undefined,
     });
   };
 

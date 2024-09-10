@@ -4,6 +4,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyBudgetField } from 'components/strategies/edit/EditBudgetFields';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import {
+  isEmptyOrder,
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
@@ -62,8 +63,7 @@ export const EditBudgetDisposablePage = () => {
     buy: order0.startRate === order0.endRate,
     sell: order1.startRate === order1.endRate,
   };
-  const direction =
-    isZero(order0.startRate) && isZero(order0.endRate) ? 'sell' : 'buy';
+  const direction = isEmptyOrder(order0) ? 'sell' : 'buy';
 
   // Warnings
   const buyOutsideMarket = outSideMarketWarning({
