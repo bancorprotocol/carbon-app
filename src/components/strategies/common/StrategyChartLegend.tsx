@@ -6,17 +6,18 @@ export const StrategyChartLegend = () => {
     <footer className="font-14 flex flex-col gap-16">
       <p className="flex items-center gap-8">
         <IconLock className="size-16 shrink-0" />
-        The interactive features of this chart are available on the edit prices
-        page.
+        Strategy prices can only be modified when selecting "Edit Prices"
+        option.
       </p>
-      <p className="text-warning flex items-center gap-8">
+      <p className="flex items-center gap-8">
         <span
           aria-hidden
-          className="bg-warning/10 size-16 shrink-0 rounded-full p-4"
+          className="size-16 shrink-0 rounded-full bg-white/10 p-4"
         >
           <IconWarning />
         </span>
-        Need a disclaimer for the range of strategy, not from day 1 of strategy
+        The strategy prices shown on the chart reflect the current strategy
+        settings without considering historical price changes"
       </p>
     </footer>
   );

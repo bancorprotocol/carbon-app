@@ -54,8 +54,15 @@ const getOrders = (
     const isBuy = direction === 'buy';
     const defaultPrice = isBuy ? order0.startRate : order1.endRate;
     const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
-    if (settings === 'limit') return price?.toString();
-    const multiplier = isBuy ? 0.9 : 1;
+    const multiplier = (() => {
+      if (isZero(defaultPrice)) {
+        if (isBuy) return settings === 'limit' ? 0.9 : 0.8;
+        else return settings === 'limit' ? 1.1 : 1.1;
+      } else {
+        if (isBuy) return settings === 'limit' ? 1 : 0.9;
+        else return settings === 'limit' ? 1 : 1;
+      }
+    })();
     return new SafeDecimal(price ?? 0).mul(multiplier).toString();
   };
   const defaultMax = (
@@ -65,8 +72,15 @@ const getOrders = (
     const isBuy = direction === 'buy';
     const defaultPrice = isBuy ? order0.startRate : order1.endRate;
     const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
-    if (settings === 'limit') return price?.toString();
-    const multiplier = isBuy ? 1 : 1.1;
+    const multiplier = (() => {
+      if (isZero(defaultPrice)) {
+        if (isBuy) return settings === 'limit' ? 0.9 : 0.9;
+        else return settings === 'limit' ? 1.1 : 1.2;
+      } else {
+        if (isBuy) return settings === 'limit' ? 1 : 1;
+        else return settings === 'limit' ? 1 : 1.1;
+      }
+    })();
     return new SafeDecimal(price ?? 0).mul(multiplier).toString();
   };
   return {
