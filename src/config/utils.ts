@@ -1,3 +1,10 @@
+import { TokenList } from 'libs/tokens';
+import { tokenDragonswapListParser, tokenSeiListParser } from './sei/utils';
+import { lsService } from 'services/localeStorage';
+import { AppConfigSchema } from './configSchema';
+import * as v from 'valibot';
+import { AppConfig } from './types';
+
 export const pairsToExchangeMapping: { [key: string]: string } = {
   ETHUSDT: 'BINANCE:ETHUSDT',
   ETHDAI: 'UNISWAP3ETH:WETHDAI',
@@ -257,4 +264,35 @@ export const pairsToExchangeMapping: { [key: string]: string } = {
   SEIWBTC: 'BINANCE:SEIBTC',
   SEIBNB: 'BINANCE:SEIBNB',
   SEITUSD: 'BINANCE:SEITUSD',
+};
+
+export const tokenParserMapKeys = [
+  'tokenDragonswapListParser',
+  'tokenSeiListParser',
+] as const;
+
+export const tokenParserMap: Record<
+  string,
+  (data: any) => Promise<TokenList> | TokenList
+> = {
+  tokenDragonswapListParser: tokenDragonswapListParser(
+    'dragonswap-app/assets',
+    'logos'
+  ),
+  tokenSeiListParser: tokenSeiListParser('pacific-1'),
+};
+
+export const handleConfigOverrides = (defaultConfig: AppConfig) => {
+  const configOverride = lsService.getItem('configOverride');
+
+  const currentConfig = { ...defaultConfig, ...configOverride };
+  const parseResult = v.safeParse(AppConfigSchema, currentConfig);
+
+  if (parseResult.issues) {
+    console.log("Couldn't load config, clearing config overrides...");
+    lsService.removeItem('configOverride');
+    return defaultConfig;
+  }
+  console.log('Config loaded successfully');
+  return parseResult.output as AppConfig;
 };

@@ -252,6 +252,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `selectedConnectors`: List of connectors to make available by default in the wallet selection modal that will be shown even if the connector is not injected.
 - `blockedConnectors`: List of EIP-6963 injected connectors names to block in the wallet selection modal.
 - `isSimulatorEnabled`: Flag to enable the simulation page.
+- `showStrategyRoi`: Optional flag to show the Strategy ROI in the Strategy Block. ROI is hidden by default.
 - `network`
   - `name`: Network name.
   - `logoUrl`: Network logo URL.
@@ -265,7 +266,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `popularTokens`: List of popular tokens to be used in the app when opening the token selection modal.
 - `addresses`/`carbon` and `addresses/utils`: CarbonController, Voucher and multicall3 contract addresses.
 - `tokenListOverride`: Token list override to be used in the app when fetching the token list. Tokens in the list will override any other token with the same address.
-- `tokenLists`: List of token lists including the uri and the parser to be used to parse the token list.
+- `tokenLists`: List of token lists including the uri and the parser name to be used to parse the token list. Please update the tokenParserMap in the `src/config/utils.ts` file to include the parser name and the parser function.
 - `sdk`/`cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
 
 #### Gas token different than native token

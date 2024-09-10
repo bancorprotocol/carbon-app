@@ -6,6 +6,7 @@ import { StrategyBlockCreate } from 'components/strategies/overview/strategyBloc
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { cn } from 'utils/helpers';
 import styles from './StrategyContent.module.css';
+import config from 'config';
 
 type Props = {
   strategies: StrategyWithFiat[];
@@ -44,7 +45,12 @@ export const _StrategyContent: FC<Props> = ({
       className={cn('xl:gap-25 grid gap-20 lg:gap-10', styles.strategyList)}
     >
       {strategies.map((s) => (
-        <StrategyBlock key={s.id} strategy={s} isExplorer={isExplorer} />
+        <StrategyBlock
+          key={s.id}
+          strategy={s}
+          isExplorer={isExplorer}
+          showStrategyRoi={config.showStrategyRoi}
+        />
       ))}
       {!isExplorer && <StrategyBlockCreate />}
     </ul>

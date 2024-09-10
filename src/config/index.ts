@@ -6,7 +6,7 @@ import celoDev from './celo/development';
 import celoProd from './celo/production';
 import blastDev from './blast/development';
 import blastProd from './blast/production';
-export { pairsToExchangeMapping } from './utils';
+import { handleConfigOverrides } from './utils';
 
 const configs = {
   ethereum: {
@@ -41,6 +41,8 @@ if (!configs[network][mode]) {
   throw new Error(`NODE_ENV should be ${modes}, got "${mode}"`);
 }
 
+export { pairsToExchangeMapping } from './utils';
+
 export const networks = Object.entries(configs)
   .filter(([_id, config]) => config[mode].hidden !== true)
   .map(([id, config]) => {
@@ -54,4 +56,6 @@ export const networks = Object.entries(configs)
     };
   });
 
-export default configs[network][mode];
+export const defaultConfig = configs[network][mode];
+const currentConfig = handleConfigOverrides(defaultConfig);
+export default currentConfig;

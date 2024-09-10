@@ -106,10 +106,10 @@ export const getLastVisitedPair = () => {
 // Validate Search Params //
 
 export type SearchParamsValidator<T> = {
-  [key in keyof T]: v.BaseSchema<any, any>;
+  [key in keyof T]: v.GenericSchema<any, any>;
 };
 
-export const validArrayOf = (schema: v.BaseSchema<string, any>) => {
+export const validArrayOf = (schema: v.GenericSchema<string, any>) => {
   return v.array(schema);
 };
 
@@ -117,28 +117,31 @@ export const validLiteral = (array: string[]) => {
   return v.union(array.map((l) => v.literal(l)));
 };
 
-export const validNumber = v.string([
-  v.custom((value: string) => isNaN(Number(formatNumber(value))) === false),
-]);
+export const validNumber = v.pipe(
+  v.string(),
+  v.check((value: string) => isNaN(Number(formatNumber(value))) === false)
+);
 
 export const validNumberType = v.number();
 
-export const validAddress = v.string([
-  v.custom((value: string) => {
+export const validAddress = v.pipe(
+  v.string(),
+  v.check((value: string) => {
     try {
       utils.getAddress(value.toLocaleLowerCase());
       return true;
     } catch {
       return false;
     }
-  }),
-]);
+  })
+);
 
 export const validString = v.string();
 
-export const validBoolean = v.boolean([
-  v.custom((value) => value === true || value === false),
-]);
+export const validBoolean = v.pipe(
+  v.boolean(),
+  v.check((value) => value === true || value === false)
+);
 
 export const validMarginalPrice = v.union([
   validNumber,
