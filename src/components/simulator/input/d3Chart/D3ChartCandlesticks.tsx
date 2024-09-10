@@ -77,7 +77,9 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
       <D3YAxisRight
         ticks={y.ticks}
         dms={dms}
-        formatter={(value) => prettifyNumber(value)}
+        formatter={(value) => {
+          return prettifyNumber(value, { decimals: 100, abbreviate: true });
+        }}
       />
       <XAxis xScale={xScale} dms={dms} />
       {marketPrice && (
