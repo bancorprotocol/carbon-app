@@ -4,6 +4,7 @@ import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
 import config from 'config';
+import { tokenParserMap } from 'config/utils';
 
 const getLogoByURI = (uri: string | undefined) =>
   uri && uri.startsWith('ipfs') ? buildIpfsUri(uri.split('//')[1]) : uri;
@@ -29,7 +30,9 @@ export const fetchTokenLists = async () => {
         );
       }
 
-      const parsedResult = parser ? await parser(result) : result;
+      const parsedResult = parser
+        ? await tokenParserMap[parser](result)
+        : result;
 
       return {
         ...parsedResult,
