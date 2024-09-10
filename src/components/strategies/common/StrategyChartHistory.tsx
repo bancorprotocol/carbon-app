@@ -139,7 +139,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     setBounds(getBounds(order0, order1, data, direction));
   }, [order0, order1, data, direction]);
 
-  const priceChartType = config.ui?.priceChart ?? 'tradingView';
+  const priceChartType = config.ui.priceChart;
   if (priceChartType === 'tradingView') {
     return <TradingviewChart base={base} quote={quote} />;
   }

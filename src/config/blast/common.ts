@@ -127,4 +127,7 @@ export const commonConfig: AppConfig = {
       },
     ],
   },
+  ui: {
+    priceChart: 'tradingView',
+  },
 };

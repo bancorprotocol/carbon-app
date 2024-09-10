@@ -105,4 +105,8 @@ export const AppConfigSchema = v.object({
       })
     ),
   }),
+  ui: v.object({
+    /** Which chart to use for price history */
+    priceChart: v.union([v.literal('native'), v.literal('tradingView')]),
+  }),
 });
