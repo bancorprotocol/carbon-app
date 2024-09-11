@@ -20,6 +20,11 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
   const activeNetwork = networks.find((network) => network.isCurrentNetwork);
   if (!activeNetwork || networks.length < 2) return;
 
+  const getFullPath = (path: string) => {
+    const firstPathName = window.location.pathname.split('/')[1];
+    return path + '/' + firstPathName;
+  };
+
   return (
     <DropdownMenu
       placement="bottom"
@@ -56,7 +61,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
                 ? 'pointer-events-none bg-black'
                 : 'hover:bg-black'
             )}
-            href={appUrl}
+            href={getFullPath(appUrl)}
             aria-current={isCurrentNetwork}
             aria-disabled={isCurrentNetwork}
           >
