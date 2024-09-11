@@ -1,10 +1,10 @@
-import { D3ChartRect } from 'components/simulator/input/d3Chart/D3ChartRect';
+import { D3ChartRect } from 'components/strategies/common/d3Chart/D3ChartRect';
 import { drag, Selection } from 'd3';
 import {
   getRectSelector,
   getSelector,
   useSelectable,
-} from 'components/simulator/input/d3Chart/utils';
+} from 'components/strategies/common/d3Chart/utils';
 import { D3ChartSettings } from 'libs/d3/types';
 import { useEffect, useState } from 'react';
 

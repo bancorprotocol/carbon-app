@@ -2,7 +2,7 @@ import {
   ChartPrices,
   D3ChartCandlesticks,
   OnPriceUpdates,
-} from 'components/simulator/input/d3Chart';
+} from 'components/strategies/common/d3Chart';
 import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';

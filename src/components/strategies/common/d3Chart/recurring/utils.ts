@@ -4,7 +4,7 @@ import {
   getSelector,
   moveBoundary,
   moveRect,
-} from 'components/simulator/input/d3Chart/utils';
+} from 'components/strategies/common/d3Chart/utils';
 
 export const onDragHandler = ({
   type,

@@ -11,7 +11,7 @@ import { NotFound } from 'components/common/NotFound';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { OverlappingChart } from 'components/strategies/overlapping/OverlappingChart';
 import { StrategyChartHistory } from './StrategyChartHistory';
-import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
+import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import {
   DateRangePicker,
   datePickerPresets,

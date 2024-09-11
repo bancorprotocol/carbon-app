@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
+import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import {
   emptyOrder,
   outSideMarketWarning,

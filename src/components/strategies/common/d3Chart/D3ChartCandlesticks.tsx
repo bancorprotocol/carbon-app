@@ -1,8 +1,8 @@
-import { D3ChartHandleLine } from 'components/simulator/input/d3Chart/D3ChartHandleLine';
-import { D3ChartRecurring } from 'components/simulator/input/d3Chart/recurring/D3ChartRecurring';
-import { D3ChartOverlapping } from 'components/simulator/input/d3Chart/overlapping/D3ChartOverlapping';
-import { getDomain } from 'components/simulator/input/d3Chart/utils';
-import { XAxis } from 'components/simulator/input/d3Chart/xAxis';
+import { D3ChartHandleLine } from 'components/strategies/common/d3Chart/D3ChartHandleLine';
+import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
+import { D3ChartOverlapping } from 'components/strategies/common/d3Chart/overlapping/D3ChartOverlapping';
+import { getDomain } from 'components/strategies/common/d3Chart/utils';
+import { XAxis } from 'components/strategies/common/d3Chart/xAxis';
 import {
   D3YAxisRight,
   useLinearScale,
@@ -12,7 +12,7 @@ import {
 } from 'libs/d3';
 import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
-import { Candlesticks } from 'components/simulator/input/d3Chart/Candlesticks';
+import { Candlesticks } from 'components/strategies/common/d3Chart/Candlesticks';
 import { D3ChartDisposable } from './disposable/D3ChartDisposable';
 import { TradeTypes } from 'libs/routing/routes/trade';
 

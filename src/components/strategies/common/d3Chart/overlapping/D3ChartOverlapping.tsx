@@ -1,18 +1,18 @@
-import { D3ChartCandlesticksProps } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
-import { D3ChartHandleLine } from 'components/simulator/input/d3Chart/D3ChartHandleLine';
-import { D3ChartPriceOutOfScale } from 'components/simulator/input/d3Chart/D3ChartPriceOutOfScale';
-import { D3ChartOverlappingHandle } from 'components/simulator/input/d3Chart/overlapping/D3ChartOverlappingHandle';
-import { D3ChartOverlappingRangeGroup } from 'components/simulator/input/d3Chart/overlapping/D3ChartOverlappingRangeGroup';
+import { D3ChartCandlesticksProps } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
+import { D3ChartHandleLine } from 'components/strategies/common/d3Chart/D3ChartHandleLine';
+import { D3ChartPriceOutOfScale } from 'components/strategies/common/d3Chart/D3ChartPriceOutOfScale';
+import { D3ChartOverlappingHandle } from 'components/strategies/common/d3Chart/overlapping/D3ChartOverlappingHandle';
+import { D3ChartOverlappingRangeGroup } from 'components/strategies/common/d3Chart/overlapping/D3ChartOverlappingRangeGroup';
 import {
   handleStateChange,
   onDragBuyHandler,
   onDragRectHandler,
   onDragSellHandler,
-} from 'components/simulator/input/d3Chart/overlapping/utils';
+} from 'components/strategies/common/d3Chart/overlapping/utils';
 import {
   getHandleSelector,
   getSelector,
-} from 'components/simulator/input/d3Chart/utils';
+} from 'components/strategies/common/d3Chart/utils';
 import {
   getMaxBuyMin,
   getMinSellMax,

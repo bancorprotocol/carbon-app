@@ -18,7 +18,7 @@ import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
-import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
+import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
 import { EditOrderBlock } from 'components/strategies/common/types';
 import { Strategy } from 'libs/queries';

@@ -14,7 +14,7 @@ import { CreateForm } from 'components/strategies/create/CreateForm';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { useCallback } from 'react';
-import { OnPriceUpdates } from 'components/simulator/input/d3Chart';
+import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 
 const url = '/trade/recurring';
 export const TradeRecurring = () => {

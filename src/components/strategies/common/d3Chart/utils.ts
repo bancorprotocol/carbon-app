@@ -1,5 +1,5 @@
 import { max, min, select } from 'd3';
-import { ChartPrices } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
+import { ChartPrices } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
 import { CandlestickData } from 'libs/d3/types';
 import { useEffect, useState } from 'react';
 

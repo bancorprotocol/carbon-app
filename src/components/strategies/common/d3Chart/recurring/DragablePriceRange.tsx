@@ -1,15 +1,15 @@
-import { D3ChartHandle } from 'components/simulator/input/d3Chart/recurring/D3ChartHandle';
-import { D3ChartPriceOutOfScale } from 'components/simulator/input/d3Chart/D3ChartPriceOutOfScale';
-import { D3ChartRectDraggable } from 'components/simulator/input/d3Chart/recurring/D3ChartRectDraggable';
+import { D3ChartHandle } from 'components/strategies/common/d3Chart/recurring/D3ChartHandle';
+import { D3ChartPriceOutOfScale } from 'components/strategies/common/d3Chart/D3ChartPriceOutOfScale';
+import { D3ChartRectDraggable } from 'components/strategies/common/d3Chart/recurring/D3ChartRectDraggable';
 import {
   handleStateChange,
   onDragHandler,
   onDragRectHandler,
-} from 'components/simulator/input/d3Chart/recurring/utils';
+} from 'components/strategies/common/d3Chart/recurring/utils';
 import {
   getHandleSelector,
   getRectSelector,
-} from 'components/simulator/input/d3Chart/utils';
+} from 'components/strategies/common/d3Chart/utils';
 import { D3ChartSettings } from 'libs/d3/types';
 import { useCallback, useEffect, useRef } from 'react';
 

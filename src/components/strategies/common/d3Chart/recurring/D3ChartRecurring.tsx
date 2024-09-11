@@ -1,6 +1,6 @@
-import { D3ChartCandlesticksProps } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
-import { DragablePriceRange } from 'components/simulator/input/d3Chart/recurring/DragablePriceRange';
-import { handleStateChange } from 'components/simulator/input/d3Chart/recurring/utils';
+import { D3ChartCandlesticksProps } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
+import { DragablePriceRange } from 'components/strategies/common/d3Chart/recurring/DragablePriceRange';
+import { handleStateChange } from 'components/strategies/common/d3Chart/recurring/utils';
 import { ScaleLinear } from 'd3';
 import { useCallback, useEffect, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
