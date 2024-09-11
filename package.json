@@ -86,7 +86,7 @@
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^1.6.0",
-    "wagmi": "2.10.9",
+    "wagmi": "2.12.8",
     "web-vitals": "^2.1.0"
   },
   "scripts": {

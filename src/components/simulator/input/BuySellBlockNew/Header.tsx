@@ -78,7 +78,7 @@ export const BuySellHeader: FC<Props> = (props) => {
           sendEventOnMount={{ buy }}
           iconClassName="text-white/60"
           element={
-            <>
+            <p>
               This section will define the order details in which you are
               willing to {buy ? 'buy' : 'sell'} {base.symbol} at.
               <br />
@@ -87,7 +87,7 @@ export const BuySellHeader: FC<Props> = (props) => {
               <br />
               <b>Range</b> will allow you to define a range of prices to{' '}
               {buy ? 'buy' : 'sell'} the token at.
-            </>
+            </p>
           }
         />
       </div>
