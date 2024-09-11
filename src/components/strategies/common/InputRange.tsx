@@ -112,7 +112,7 @@ export const InputRange: FC<InputRangeProps> = ({
 
   const setMinMarket = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    onMinChange(marketPrice?.toString() ?? '');
+    onMinChange(formatNumber(marketPrice?.toString() ?? ''));
   };
 
   const onMaxFocus = (e: FocusEvent<HTMLInputElement>) => {
@@ -134,7 +134,7 @@ export const InputRange: FC<InputRangeProps> = ({
 
   const setMaxMarket = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    onMaxChange(marketPrice?.toString() ?? '');
+    onMaxChange(formatNumber(marketPrice?.toString() ?? ''));
   };
 
   return (

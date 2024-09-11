@@ -214,11 +214,12 @@ const lastZero = new RegExp(/0+$/);
 
 /** Round to 6 decimals after leading zeros */
 export const roundSearchParam = (param?: string | number) => {
-  if (!param || Number(param) === 0 || isNaN(Number(param))) return '';
-  const [radix, decimals] = param.toString().split('.');
+  const value = Number(param);
+  if (!param || value === 0 || isNaN(value)) return '';
+  const [radix, decimals] = value.toFixed(100).split('.');
   if (!decimals) return param.toString();
   let maxDecimals = 6;
-  if (Number(param) < 1) {
+  if (value < 1) {
     maxDecimals += decimals.match(firstZero)?.[0].length ?? 0;
   }
   const roundedDecimals = decimals.slice(0, maxDecimals).replace(lastZero, '');
