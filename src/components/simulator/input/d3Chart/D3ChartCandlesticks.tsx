@@ -13,7 +13,7 @@ import {
 import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from 'components/simulator/input/d3Chart/Candlesticks';
-import { D3ChartDisposable } from './recurring/D3ChartDisposable';
+import { D3ChartDisposable } from './disposable/D3ChartDisposable';
 import { TradeTypes } from 'libs/routing/routes/trade';
 
 export type ChartPrices<T = string> = {
