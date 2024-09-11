@@ -68,7 +68,7 @@ export const parseSearchWith = (parser: (str: string) => any) => {
 
     const formatNumberParam = (value: string): string => {
       const number = /^\d*\.*\d*$/;
-      if (value.match(number)) return `"${formatNumber(value)}"`;
+      if (value.match(number)) return `"${value}"`;
       return value;
     };
 
