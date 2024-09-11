@@ -3,7 +3,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export const StrategyChartLegend = () => {
   return (
-    <footer className="font-14 flex flex-col gap-16">
+    <footer className="text-12 flex flex-col gap-16">
       <p className="flex items-center gap-8">
         <IconLock className="size-16 shrink-0" />
         Strategy prices can only be modified when selecting "Edit Prices"
@@ -12,7 +12,7 @@ export const StrategyChartLegend = () => {
       <p className="flex items-center gap-8">
         <span
           aria-hidden
-          className="size-16 shrink-0 rounded-full bg-white/10 p-4"
+          className="size-16 shrink-0 rounded-full bg-white/20 p-4"
         >
           <IconWarning />
         </span>
