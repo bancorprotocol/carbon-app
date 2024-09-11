@@ -35,6 +35,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
     removeFavoriteToken,
     favoriteTokens,
     popularTokens,
+    duplicateSymbols,
   } = useModalTokenList({ id, data });
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -71,6 +72,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
             favorites: favoriteTokens,
             popular: popularTokens,
           }}
+          duplicateSymbols={duplicateSymbols}
           onSelect={onSelect}
           search={search}
           onAddFavorite={addFavoriteToken}

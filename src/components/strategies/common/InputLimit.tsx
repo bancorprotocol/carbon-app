@@ -89,7 +89,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
 
   const setMarket = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    onChange(marketPrice?.toString() ?? '');
+    onChange(formatNumber(marketPrice?.toString() ?? ''));
   };
 
   return (

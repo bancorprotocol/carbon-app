@@ -59,8 +59,8 @@ type ParamsKey = Extract<keyof QueryActivityParams, string>;
 export const ActivityProvider: FC<Props> = ({ children, params }) => {
   const nav = useNavigate();
   const searchParams: ActivitySearchParams = useSearch({ strict: false });
-  const limit = searchParams.limit ?? 10;
-  const offset = searchParams.offset ?? 0;
+  const limit = searchParams.limit;
+  const offset = searchParams.offset;
 
   const queryParams = getQueryParams(params, searchParams);
   // Query the list

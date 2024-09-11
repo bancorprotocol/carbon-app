@@ -52,7 +52,7 @@ jobs:
     name: 'Commit Screenshots'
     needs: e2e
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false && github.base_ref == 'main'
+    if: github.event.pull_request.draft == false && github.base_ref == 'main' && !startsWith(github.event.head_commit.message, '[CI]')
     permissions:
       contents: write
     steps:
