@@ -14,12 +14,14 @@ import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
+import { ModalTokenListDuplicateWarning } from 'libs/modals/modals/ModalTokenList/ModalTokenListDuplicateWarning';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
 
 type Props = {
   tokens: { [k in ChooseTokenCategory]: Token[] };
+  duplicateSymbols: string[];
   onSelect: (token: Token) => void;
   search: string;
   onAddFavorite: (token: Token) => void;
@@ -28,6 +30,7 @@ type Props = {
 
 export const ModalTokenListContent: FC<Props> = ({
   tokens,
+  duplicateSymbols,
   onSelect,
   search,
   onAddFavorite,
@@ -47,7 +50,7 @@ export const ModalTokenListContent: FC<Props> = ({
   const rowVirtualizer = useVirtualizer({
     count: _tokens.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 55,
+    estimateSize: () => 60,
     overscan: 10,
   });
 
@@ -68,7 +71,7 @@ export const ModalTokenListContent: FC<Props> = ({
   const suspiciousTokenTooltipMsg =
     'This token is not part of any known token list. Always conduct your own research before trading.';
 
-  const selectCatergory = (e: FormEvent<HTMLFieldSetElement>) => {
+  const selectCategory = (e: FormEvent<HTMLFieldSetElement>) => {
     if (e.target instanceof HTMLInputElement) {
       setSelectedList(e.target.value as ChooseTokenCategory);
     }
@@ -79,7 +82,7 @@ export const ModalTokenListContent: FC<Props> = ({
       <fieldset
         aria-label="Filter tokens"
         className="grid grid-cols-3 px-4"
-        onChange={selectCatergory}
+        onChange={selectCategory}
       >
         {categories.map((category) => (
           <CategoryWithCounter
@@ -130,6 +133,9 @@ export const ModalTokenListContent: FC<Props> = ({
                     <div className="text-12 max-w-full truncate text-white/60">
                       {token.name ?? token.symbol}
                     </div>
+                    {duplicateSymbols.includes(token.symbol) && (
+                      <ModalTokenListDuplicateWarning token={token} />
+                    )}
                   </div>
                 </button>
                 <button

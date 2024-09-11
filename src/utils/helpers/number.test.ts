@@ -417,5 +417,8 @@ describe('Test helpers', () => {
       expect(roundSearchParam('0.000000012345600001')).toBe('0.0000000123456');
       expect(roundSearchParam('0.100000012345678901234567890')).toBe('0.1');
     });
+    test('Should remove scientific number price', () => {
+      expect(roundSearchParam('1.1e-6')).toBe('0.0000011');
+    });
   });
 });
