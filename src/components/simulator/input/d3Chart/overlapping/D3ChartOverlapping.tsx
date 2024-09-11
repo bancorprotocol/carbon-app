@@ -210,7 +210,7 @@ export const D3ChartOverlapping = (props: Props) => {
         dms={dms}
         color="var(--sell)"
         lineProps={{ strokeDasharray: 2 }}
-        label={prettifyNumber(prices.sell.min ?? '')}
+        label={prettifyNumber(prices.sell.min ?? '', { decimals: 4 })}
         readonly={readonly}
       />
       <D3ChartHandleLine
@@ -219,7 +219,7 @@ export const D3ChartOverlapping = (props: Props) => {
         dms={dms}
         color="var(--buy)"
         lineProps={{ strokeDasharray: 2 }}
-        label={prettifyNumber(prices.buy.max ?? '')}
+        label={prettifyNumber(prices.buy.max ?? '', { decimals: 4 })}
         readonly={readonly}
       />
       <D3ChartOverlappingHandle
@@ -228,7 +228,7 @@ export const D3ChartOverlapping = (props: Props) => {
         onDrag={onDragBuy}
         onDragEnd={onDragEndBuy}
         color="var(--buy)"
-        label={prettifyNumber(prices.buy.min ?? '')}
+        label={prettifyNumber(prices.buy.min ?? '', { decimals: 4 })}
         readonly={readonly}
       />
       <D3ChartOverlappingHandle
@@ -237,7 +237,7 @@ export const D3ChartOverlapping = (props: Props) => {
         onDrag={onDragSell}
         onDragEnd={onDragEndSell}
         color="var(--sell)"
-        label={prettifyNumber(prices.sell.max ?? '')}
+        label={prettifyNumber(prices.sell.max ?? '', { decimals: 4 })}
         readonly={readonly}
       />
       <D3ChartOverlappingRangeGroup

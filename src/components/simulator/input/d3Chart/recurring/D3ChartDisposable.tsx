@@ -91,12 +91,12 @@ export const D3ChartDisposable = ({
 
   const labels = {
     buy: {
-      min: prettifyNumber(prices.buy.min),
-      max: prettifyNumber(prices.buy.max),
+      min: prettifyNumber(prices.buy.min, { decimals: 4 }),
+      max: prettifyNumber(prices.buy.max, { decimals: 4 }),
     },
     sell: {
-      min: prettifyNumber(prices.sell.min),
-      max: prettifyNumber(prices.sell.max),
+      min: prettifyNumber(prices.sell.min, { decimals: 4 }),
+      max: prettifyNumber(prices.sell.max, { decimals: 4 }),
     },
   };
 

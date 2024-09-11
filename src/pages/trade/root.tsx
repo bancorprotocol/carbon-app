@@ -47,7 +47,7 @@ export const TradeRoot = () => {
   }
   return (
     <TradeProvider base={base} quote={quote}>
-      <div className="flex flex-col gap-20 p-20 md:grid md:grid-cols-[450px_auto]">
+      <div className="m-auto flex w-[1620px] max-w-[100vw] flex-col gap-20 p-20 md:grid md:grid-cols-[450px_auto]">
         <Outlet />
       </div>
     </TradeProvider>

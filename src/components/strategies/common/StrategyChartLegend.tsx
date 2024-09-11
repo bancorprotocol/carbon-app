@@ -17,7 +17,7 @@ export const StrategyChartLegend = () => {
           <IconWarning />
         </span>
         The strategy prices shown on the chart reflect the current strategy
-        settings without considering historical price changes"
+        settings without considering historical price changes
       </p>
     </footer>
   );
