@@ -88,7 +88,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           color="white"
           y={y.scale(marketPrice)}
           lineProps={{ strokeDasharray: 2 }}
-          label={prettifyNumber(marketPrice ?? '')}
+          label={prettifyNumber(marketPrice ?? '', { decimals: 4 })}
         />
       )}
       {type === 'disposable' && isLimit && (
