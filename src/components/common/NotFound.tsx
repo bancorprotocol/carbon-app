@@ -26,7 +26,8 @@ export const NotFound: FC<Props> = ({
     <section
       className={cn(
         'gap-30 py-50 relative flex min-h-[500px] flex-col items-center justify-center px-20 text-center',
-        bordered && 'border-background-800 rounded border-2'
+        bordered && 'border-background-800 rounded border-2',
+        className
       )}
     >
       {showBackButton && (
@@ -38,14 +39,10 @@ export const NotFound: FC<Props> = ({
         </button>
       )}
       <div
-        className={cn(
-          'rounded-full p-20',
-          {
-            'bg-primary/20': variant === 'info',
-            'bg-error/20': variant === 'error',
-          },
-          className
-        )}
+        className={cn('rounded-full p-20', {
+          'bg-primary/20': variant === 'info',
+          'bg-error/20': variant === 'error',
+        })}
       >
         <IconSearch
           className={cn('size-32', {

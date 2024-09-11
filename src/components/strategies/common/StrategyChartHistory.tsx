@@ -156,6 +156,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
         variant="error"
         title="Well, this doesn't happen often..."
         text="Unfortunately, price history for this pair is not available."
+        className="min-h-0 flex-1"
       />
     );
   }
