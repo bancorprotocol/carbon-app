@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { StrategyInputOrder } from 'hooks/useStrategyInput';
-import { ChartPrices } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
+import { ChartPrices } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
 import { useTokens } from 'hooks/useTokens';
 import { SimulatorInputOverlappingSearch } from 'libs/routing/routes/sim';
 import { Token } from 'libs/tokens';

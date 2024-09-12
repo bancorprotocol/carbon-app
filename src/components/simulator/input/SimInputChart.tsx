@@ -16,7 +16,7 @@ import {
   ChartPrices,
   D3ChartCandlesticks,
   OnPriceUpdates,
-} from 'components/simulator/input/d3Chart';
+} from 'components/strategies/common/d3Chart';
 import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useCallback } from 'react';

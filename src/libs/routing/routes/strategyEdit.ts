@@ -4,6 +4,7 @@ import {
   validLiteral,
   validMarginalPrice,
   validNumber,
+  validPositiveNumber,
   validateSearchParams,
 } from '../utils';
 import { EditStrategyPageLayout } from 'pages/strategies/edit/layout';
@@ -48,7 +49,7 @@ export const editStrategyLayout = new Route({
 
 // PRICES
 const initInput = (value: string) => {
-  if (isZero(value)) return '';
+  if (isZero(value)) return;
   return value;
 };
 
@@ -73,9 +74,9 @@ export const editPricesDisposable = new Route({
   component: EditStrategyDisposablePage,
   validateSearch: validateSearchParams<EditDisposableStrategySearch>({
     editType: validLiteral(['editPrices', 'renew']),
-    min: validNumber,
-    max: validNumber,
-    budget: validNumber,
+    min: validPositiveNumber,
+    max: validPositiveNumber,
+    budget: validPositiveNumber,
     settings: validLiteral(['limit', 'range']),
     direction: validLiteral(['buy', 'sell']),
     action: validLiteral(['deposit', 'withdraw']),
@@ -103,14 +104,14 @@ export const editPricesRecurring = new Route({
   component: EditStrategyRecurringPage,
   validateSearch: validateSearchParams<EditRecurringStrategySearch>({
     editType: validLiteral(['editPrices', 'renew']),
-    buyMin: validNumber,
-    buyMax: validNumber,
-    buyBudget: validNumber,
+    buyMin: validPositiveNumber,
+    buyMax: validPositiveNumber,
+    buyBudget: validPositiveNumber,
     buySettings: validLiteral(['limit', 'range']),
     buyAction: validLiteral(['deposit', 'withdraw']),
-    sellMin: validNumber,
-    sellMax: validNumber,
-    sellBudget: validNumber,
+    sellMin: validPositiveNumber,
+    sellMax: validPositiveNumber,
+    sellBudget: validPositiveNumber,
     sellSettings: validLiteral(['limit', 'range']),
     sellAction: validLiteral(['deposit', 'withdraw']),
   }),
@@ -145,9 +146,10 @@ export const editPricesOverlapping = new Route({
   component: EditStrategyOverlappingPage,
   validateSearch: validateSearchParams<EditOverlappingStrategySearch>({
     editType: validLiteral(['editPrices', 'renew']),
+    chartType: validLiteral(['history', 'range']),
     marketPrice: validNumber,
-    min: validNumber,
-    max: validNumber,
+    min: validPositiveNumber,
+    max: validPositiveNumber,
     spread: validNumber,
     budget: validNumber,
     anchor: validLiteral(['buy', 'sell']),
@@ -188,6 +190,7 @@ export const editBudgetOverlapping = new Route({
   component: EditBudgetOverlappingPage,
   validateSearch: validateSearchParams<EditBudgetOverlappingSearch>({
     editType: validLiteral(['deposit', 'withdraw']),
+    chartType: validLiteral(['history', 'range']),
     marketPrice: validNumber,
     budget: validNumber,
     anchor: validLiteral(['buy', 'sell']),

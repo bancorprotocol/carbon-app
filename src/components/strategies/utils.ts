@@ -11,10 +11,6 @@ export const isValidOrder = (order: ValidOrderParams) => {
     : isValidLimit(order.price);
 };
 
-export const isEmptyOrder = (order: ValidOrderParams) => {
-  return !Number(order.price) && !Number(order.min) && !Number(order.max);
-};
-
 export const isValidLimit = (value: string) => {
   const price = Number(value);
   return !isNaN(price) && price > 0;

@@ -89,7 +89,7 @@ export interface StrategyInputSearch extends StrategyInputBase {
   buyIsRange?: boolean;
 }
 
-export type SimulatorType = 'recurring' | 'overlapping';
+export type SimulatorType = 'overlapping' | 'recurring';
 
 export const simulatorInputRecurringRoute = new Route({
   getParentRoute: () => simulatorInputRootRoute,

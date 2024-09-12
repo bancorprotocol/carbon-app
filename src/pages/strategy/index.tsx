@@ -1,4 +1,10 @@
-import { useParams, useRouter } from '@tanstack/react-router';
+import {
+  useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
+  // useSearch,
+} from '@tanstack/react-router';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { Page } from 'components/common/page';
 import { TokensOverlap } from 'components/common/tokensOverlap';
@@ -13,19 +19,47 @@ import {
 } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { StrategySubtitle } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { TradingviewChart } from 'components/tradingviewChart';
 import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { BackButton } from 'components/common/BackButton';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import {
+  defaultEndDate,
+  defaultStartDate,
+  emptyOrder,
+} from 'components/strategies/common/utils';
+import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
+import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
+import {
+  DateRangePicker,
+  datePickerPresets,
+} from 'components/common/datePicker/DateRangePicker';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
+  const navigate = useNavigate({ from: '/strategy/$id' });
+  const { priceStart, priceEnd } = useSearch({ from: '/strategy/$id' });
   const params = { strategyIds: id };
   const query = useGetStrategy(id);
   const [strategy] = useStrategiesWithFiat(query);
+
+  const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {
+    const { start, end } = props;
+    if (!start || !end) return;
+    navigate({
+      params: (params) => params,
+      search: (previous) => ({
+        ...previous,
+        priceStart: toUnixUTC(start),
+        priceEnd: toUnixUTC(end),
+      }),
+      resetScroll: false,
+      replace: true,
+    });
+  };
 
   if (query.isPending) {
     return (
@@ -94,8 +128,28 @@ export const StrategyPage = () => {
           </div>
         </article>
         <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 md:flex">
-          <h2 className="text-18 font-weight-500">Price graph</h2>
-          <TradingviewChart base={base} quote={quote} />
+          <header className="flex items-center">
+            <h2 className="text-18 font-weight-500 mr-auto">Price graph</h2>
+            <DateRangePicker
+              defaultStart={defaultStartDate()}
+              defaultEnd={defaultEndDate()}
+              start={fromUnixUTC(priceStart)}
+              end={fromUnixUTC(priceEnd)}
+              onConfirm={onDatePickerConfirm}
+              presets={datePickerPresets}
+              options={{
+                disabled: datePickerDisabledDays,
+              }}
+              required
+            />
+          </header>
+          <StrategyChartHistory
+            type="market"
+            base={base}
+            quote={quote}
+            order0={emptyOrder()}
+            order1={emptyOrder()}
+          />
         </article>
       </section>
       <ActivityProvider params={params}>

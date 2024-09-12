@@ -121,6 +121,13 @@ export const validNumber = v.pipe(
   v.string(),
   v.check((value: string) => isNaN(Number(formatNumber(value))) === false)
 );
+export const validPositiveNumber = v.fallback(
+  v.pipe(
+    validNumber,
+    v.check((value: string) => Number(value) >= 0)
+  ),
+  '0'
+);
 
 export const validNumberType = v.number();
 
@@ -154,8 +161,11 @@ export const validateSearchParams = <T>(
   return (search: Record<string, string>): T => {
     for (const key in search) {
       const schema = validator[key as keyof T];
-      if (schema && v.is(schema, search[key])) continue;
-      delete search[key];
+      if (schema && v.is(schema, search[key])) {
+        search[key] = v.parse(schema, search[key]);
+      } else {
+        delete search[key];
+      }
     }
     return search as T;
   };

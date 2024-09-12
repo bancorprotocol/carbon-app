@@ -23,6 +23,9 @@ export interface ActivitySearchParams extends Partial<PaginationParams> {
   actions?: ActivityAction[];
   start?: Date;
   end?: Date;
+  // This is only for StrategyPageParams, but if I don't implement it here the build breaks
+  priceStart?: string;
+  priceEnd?: string;
 }
 export const activityActionName: Record<ActivityAction, string> = {
   create: 'Create',

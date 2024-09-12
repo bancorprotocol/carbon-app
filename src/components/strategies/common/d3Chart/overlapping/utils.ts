@@ -1,11 +1,11 @@
-import { ChartPrices } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
+import { ChartPrices } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
 import {
   getHandleSelector,
   getRectSelector,
   getSelector,
   moveBoundary,
   moveRect,
-} from 'components/simulator/input/d3Chart/utils';
+} from 'components/strategies/common/d3Chart/utils';
 
 export const onDragBuyHandler = ({
   y,

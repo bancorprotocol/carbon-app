@@ -1,10 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import {
-  isEmptyOrder,
-  isValidLimit,
-  isValidOrder,
-  isValidRange,
-} from './utils';
+import { isValidLimit, isValidOrder, isValidRange } from './utils';
 
 describe('Test strategy utils', () => {
   test('isValidLimit', () => {
@@ -33,13 +28,5 @@ describe('Test strategy utils', () => {
     expect(isValidOrder(limitInvalid)).toBeFalsy();
     expect(isValidOrder(rangeValid)).toBeTruthy();
     expect(isValidOrder(limitValid)).toBeTruthy();
-  });
-  test('isEmptyOrder', () => {
-    const notEmptyLimit = { isRange: false, min: '', max: '', price: '10' };
-    const notEmptyRange = { isRange: true, min: '1', max: '100', price: '0' };
-    const empty = { isRange: true, min: '', max: '', price: '0' };
-    expect(isEmptyOrder(notEmptyLimit)).toBeFalsy();
-    expect(isEmptyOrder(notEmptyRange)).toBeFalsy();
-    expect(isEmptyOrder(empty)).toBeTruthy();
   });
 });

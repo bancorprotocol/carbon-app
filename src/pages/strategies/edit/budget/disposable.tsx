@@ -4,11 +4,16 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyBudgetField } from 'components/strategies/edit/EditBudgetFields';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import {
+  isEmptyOrder,
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { StrategyChartLegend } from 'components/strategies/common/StrategyChartLegend';
 
 export interface EditBudgetDisposableStrategySearch {
   editType: 'deposit' | 'withdraw';
@@ -54,6 +59,11 @@ export const EditBudgetDisposablePage = () => {
       marginalPrice: search.sellMarginalPrice || order1.marginalRate,
     },
   };
+  const isLimit = {
+    buy: order0.startRate === order0.endRate,
+    sell: order1.startRate === order1.endRate,
+  };
+  const direction = isEmptyOrder(order0) ? 'sell' : 'buy';
 
   // Warnings
   const buyOutsideMarket = outSideMarketWarning({
@@ -77,33 +87,48 @@ export const EditBudgetDisposablePage = () => {
     !buy || (search.editType === 'withdraw' && !isZero(order1.balance));
 
   return (
-    <EditStrategyForm
-      strategyType="disposable"
-      editType={search.editType}
-      orders={orders}
-      hasChanged={!isZero(search.buyBudget) || !isZero(search.sellBudget)}
-    >
-      {showSell && (
-        <EditStrategyBudgetField
-          editType={search.editType}
-          order={orders.sell}
-          budget={search.sellBudget ?? ''}
-          initialBudget={strategy.order1.balance}
-          setOrder={setSellOrder}
-          warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
+    <EditStrategyLayout editType={search.editType}>
+      <EditStrategyForm
+        strategyType="disposable"
+        editType={search.editType}
+        orders={orders}
+        hasChanged={!isZero(search.buyBudget) || !isZero(search.sellBudget)}
+      >
+        {showSell && (
+          <EditStrategyBudgetField
+            editType={search.editType}
+            order={orders.sell}
+            budget={search.sellBudget ?? ''}
+            initialBudget={strategy.order1.balance}
+            setOrder={setSellOrder}
+            warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
+          />
+        )}
+        {showBuy && (
+          <EditStrategyBudgetField
+            editType={search.editType}
+            order={orders.buy}
+            budget={search.buyBudget ?? ''}
+            initialBudget={strategy.order0.balance}
+            setOrder={setBuyOrder}
+            warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
+            buy
+          />
+        )}
+      </EditStrategyForm>
+      <StrategyChartSection>
+        <StrategyChartHistory
+          type="disposable"
+          base={base}
+          quote={quote}
+          order0={orders.buy}
+          order1={orders.sell}
+          isLimit={isLimit}
+          direction={direction}
+          readonly={true}
         />
-      )}
-      {showBuy && (
-        <EditStrategyBudgetField
-          editType={search.editType}
-          order={orders.buy}
-          budget={search.buyBudget ?? ''}
-          initialBudget={strategy.order0.balance}
-          setOrder={setBuyOrder}
-          warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
-          buy
-        />
-      )}
-    </EditStrategyForm>
+        <StrategyChartLegend />
+      </StrategyChartSection>
+    </EditStrategyLayout>
   );
 };

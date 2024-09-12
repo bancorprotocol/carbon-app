@@ -1,15 +1,15 @@
-import { D3ChartHandle } from 'components/simulator/input/d3Chart/recurring/D3ChartHandle';
-import { D3ChartPriceOutOfScale } from 'components/simulator/input/d3Chart/D3ChartPriceOutOfScale';
-import { D3ChartRectDraggable } from 'components/simulator/input/d3Chart/recurring/D3ChartRectDraggable';
+import { D3ChartHandle } from 'components/strategies/common/d3Chart/recurring/D3ChartHandle';
+import { D3ChartPriceOutOfScale } from 'components/strategies/common/d3Chart/D3ChartPriceOutOfScale';
+import { D3ChartRectDraggable } from 'components/strategies/common/d3Chart/recurring/D3ChartRectDraggable';
 import {
   handleStateChange,
   onDragHandler,
   onDragRectHandler,
-} from 'components/simulator/input/d3Chart/recurring/utils';
+} from 'components/strategies/common/d3Chart/recurring/utils';
 import {
   getHandleSelector,
   getRectSelector,
-} from 'components/simulator/input/d3Chart/utils';
+} from 'components/strategies/common/d3Chart/utils';
 import { D3ChartSettings } from 'libs/d3/types';
 import { useCallback, useEffect, useRef } from 'react';
 
@@ -21,6 +21,7 @@ type OrderRangeProps = {
   yPos: { min: number; max: number };
   dms: D3ChartSettings;
   isLimit: boolean;
+  readonly?: boolean;
 };
 
 export const DragablePriceRange = ({
@@ -31,6 +32,7 @@ export const DragablePriceRange = ({
   yPos,
   dms,
   isLimit,
+  readonly,
 }: OrderRangeProps) => {
   const isDragging = useRef(false);
   const color = type === 'buy' ? 'var(--buy)' : 'var(--sell)';
@@ -92,10 +94,7 @@ export const DragablePriceRange = ({
   );
 
   useEffect(() => {
-    if (isDragging.current) {
-      return;
-    }
-
+    if (isDragging.current) return;
     handleStateChange({ type, id: 'line1', y: yPos.max, isLimit });
     !isLimit && handleStateChange({ type, id: 'line2', y: yPos.min });
   }, [isLimit, type, yPos.max, yPos.min]);
@@ -110,6 +109,7 @@ export const DragablePriceRange = ({
           onDrag={onDragRect}
           onDragEnd={onDragEndHandler}
           color={color}
+          readonly={readonly}
         />
       )}
       <D3ChartHandle
@@ -122,6 +122,7 @@ export const DragablePriceRange = ({
         onDragEnd={onDragEndHandler}
         color={color}
         isLimit={isLimit}
+        readonly={readonly}
       />
       {!isLimit && (
         <D3ChartHandle
@@ -134,6 +135,7 @@ export const DragablePriceRange = ({
           onDragEnd={onDragEndHandler}
           color={color}
           isLimit={isLimit}
+          readonly={readonly}
         />
       )}
       <D3ChartPriceOutOfScale

@@ -1,4 +1,4 @@
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { tokenAmount } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
@@ -16,45 +16,123 @@ import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import { getTotalBudget, getWithdraw } from 'components/strategies/edit/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
+import { useCallback } from 'react';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { SafeDecimal } from 'libs/safedecimal';
+import { Strategy } from 'libs/queries';
 
 export interface EditDisposableStrategySearch {
   editType: 'editPrices' | 'renew';
-  min: string;
-  max: string;
+  min?: string;
+  max?: string;
   settings: StrategySettings;
   direction: StrategyDirection;
   action?: 'deposit' | 'withdraw';
   budget?: string;
 }
 
-const url = '/strategies/edit/$strategyId/prices/disposable';
+const getOrder = (
+  strategy: Strategy,
+  search: EditDisposableStrategySearch,
+  marketPrice?: number
+): EditOrderBlock => {
+  const { order0, order1 } = strategy;
+  const direction = search.direction ?? 'sell';
+  const settings = search.settings ?? 'limit';
+  const action = search.action ?? 'deposit';
+  const isBuy = direction === 'buy';
+  const order = isBuy ? order0 : order1;
 
+  const defaultPrice = isBuy ? order0.startRate : order1.endRate;
+  const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
+
+  const defaultMin = () => {
+    const multiplier = (() => {
+      if (isZero(defaultPrice)) {
+        if (isBuy) return settings === 'limit' ? 0.9 : 0.8;
+        else return settings === 'limit' ? 1.1 : 1.1;
+      } else {
+        if (isBuy) return settings === 'limit' ? 1 : 0.9;
+        else return settings === 'limit' ? 1 : 1;
+      }
+    })();
+    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
+  };
+  const defaultMax = () => {
+    const multiplier = (() => {
+      if (isZero(defaultPrice)) {
+        if (isBuy) return settings === 'limit' ? 0.9 : 0.9;
+        else return settings === 'limit' ? 1.1 : 1.2;
+      } else {
+        if (isBuy) return settings === 'limit' ? 1 : 1;
+        else return settings === 'limit' ? 1 : 1.1;
+      }
+    })();
+    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
+  };
+  return {
+    settings,
+    action,
+    min: search.min ?? defaultMin()?.toString() ?? '0',
+    max: search.max ?? defaultMax()?.toString() ?? '0',
+    budget: getTotalBudget(action, order.balance, search.budget),
+  };
+};
+
+const url = '/strategies/edit/$strategyId/prices/disposable';
 export const EditStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
+  const navigate = useNavigate({ from: url });
+
   const { marketPrice } = useMarketPrice({ base, quote });
 
   const isBuy = search.direction !== 'sell';
-  const otherOrder = isBuy ? order1 : order0;
-  const { setOrder, setDirection } = useSetDisposableOrder(url, otherOrder);
+  const { setOrder } = useSetDisposableOrder(url);
+
+  const setSearch = useCallback(
+    (next: Partial<EditDisposableStrategySearch>) => {
+      navigate({
+        params: (params) => params,
+        search: (previous) => ({ ...previous, ...next }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate]
+  );
+
+  const setDirection = (direction: StrategyDirection) => {
+    setSearch({
+      direction,
+      budget: undefined,
+      min: undefined,
+      max: undefined,
+    });
+  };
+
+  const onPriceUpdates: OnPriceUpdates = useCallback(
+    ({ buy, sell }) => {
+      if (isBuy) setSearch({ min: buy.min, max: buy.max });
+      else setSearch({ min: sell.min, max: sell.max });
+    },
+    [setSearch, isBuy]
+  );
 
   const initialBudget = isBuy ? order0.balance : order1.balance;
-  const totalBudget = getTotalBudget(
-    search.action ?? 'deposit',
-    initialBudget,
-    search.budget
-  );
-  const order: EditOrderBlock = {
-    min: search.min ?? '',
-    max: search.max ?? '',
-    budget: totalBudget,
-    settings: search.settings ?? 'limit',
-    action: search.action ?? 'deposit',
-  };
+
+  const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
   const orders = {
     buy: isBuy ? order : emptyOrder(),
     sell: isBuy ? emptyOrder() : order,
+  };
+  const isLimit = {
+    buy: order.settings !== 'range',
+    sell: order.settings !== 'range',
   };
 
   const hasChanged = (() => {
@@ -82,63 +160,77 @@ export const EditStrategyDisposablePage = () => {
   const sellWithdraw = getWithdraw(order1.balance, orders.sell.budget);
 
   return (
-    <EditStrategyForm
-      strategyType="disposable"
-      editType={search.editType}
-      orders={orders}
-      hasChanged={hasChanged}
-    >
-      <EditStrategyPriceField
-        order={order}
-        budget={search.budget ?? ''}
-        initialBudget={initialBudget}
-        setOrder={setOrder}
-        warnings={[outSideMarket]}
-        buy={isBuy}
-        settings={
-          <TabsMenu>
-            <TabsMenuButton
-              onClick={() => setDirection('buy')}
-              variant={isBuy ? 'buy' : 'black'}
-              data-testid="tab-buy"
-            >
-              Buy
-            </TabsMenuButton>
-            <TabsMenuButton
-              onClick={() => setDirection('sell')}
-              variant={!isBuy ? 'sell' : 'black'}
-              data-testid="tab-sell"
-            >
-              Sell
-            </TabsMenuButton>
-          </TabsMenu>
-        }
-      />
-      {(buyBudgetChanges || sellBudgetChanges) && (
-        <article
-          id="budget-changed"
-          className="warning-message border-warning/40 rounded-10 bg-background-900 flex w-full flex-col gap-12 border p-20"
-        >
-          <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
-            <IconWarning className="size-16" />
-            Notice
-          </h3>
-          {buyBudgetChanges && (
-            <p className="text-14 text-white/80">
-              You will withdraw&nbsp;
-              {tokenAmount(buyWithdraw, quote)} from the inactive buy order to
-              your wallet.
-            </p>
-          )}
-          {sellBudgetChanges && (
-            <p className="text-14 text-white/80">
-              You will withdraw&nbsp;
-              {tokenAmount(sellWithdraw, base)} from the inactive sell order to
-              your wallet.
-            </p>
-          )}
-        </article>
-      )}
-    </EditStrategyForm>
+    <EditStrategyLayout editType={search.editType}>
+      <EditStrategyForm
+        strategyType="disposable"
+        editType={search.editType}
+        orders={orders}
+        hasChanged={hasChanged}
+      >
+        <EditStrategyPriceField
+          order={order}
+          budget={search.budget ?? ''}
+          initialBudget={initialBudget}
+          setOrder={setOrder}
+          warnings={[outSideMarket]}
+          buy={isBuy}
+          settings={
+            <TabsMenu>
+              <TabsMenuButton
+                onClick={() => setDirection('buy')}
+                variant={isBuy ? 'buy' : 'black'}
+                data-testid="tab-buy"
+              >
+                Buy
+              </TabsMenuButton>
+              <TabsMenuButton
+                onClick={() => setDirection('sell')}
+                variant={!isBuy ? 'sell' : 'black'}
+                data-testid="tab-sell"
+              >
+                Sell
+              </TabsMenuButton>
+            </TabsMenu>
+          }
+        />
+        {(buyBudgetChanges || sellBudgetChanges) && (
+          <article
+            id="budget-changed"
+            className="warning-message border-warning/40 rounded-10 bg-background-900 flex w-full flex-col gap-12 border p-20"
+          >
+            <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
+              <IconWarning className="size-16" />
+              Notice
+            </h3>
+            {buyBudgetChanges && (
+              <p className="text-14 text-white/80">
+                You will withdraw&nbsp;
+                {tokenAmount(buyWithdraw, quote)} from the inactive buy order to
+                your wallet.
+              </p>
+            )}
+            {sellBudgetChanges && (
+              <p className="text-14 text-white/80">
+                You will withdraw&nbsp;
+                {tokenAmount(sellWithdraw, base)} from the inactive sell order
+                to your wallet.
+              </p>
+            )}
+          </article>
+        )}
+      </EditStrategyForm>
+      <StrategyChartSection>
+        <StrategyChartHistory
+          type="disposable"
+          base={base}
+          quote={quote}
+          order0={orders.buy}
+          order1={orders.sell}
+          isLimit={isLimit}
+          direction={search.direction ?? 'sell'}
+          onPriceUpdates={onPriceUpdates}
+        />
+      </StrategyChartSection>
+    </EditStrategyLayout>
   );
 };

@@ -6,6 +6,9 @@ import {
   toOverlappingPricesSearch,
   toRecurringPricesSearch,
 } from 'libs/routing/routes/strategyEdit';
+import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
+import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
+import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { FC } from 'react';
 
 interface Props {
@@ -24,33 +27,36 @@ export const EditPriceNav: FC<Props> = ({ editType }) => {
       aria-label="Switch between type of strategy"
     >
       <Link
-        className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60 hover:text-white/80"
+        className="aria-current-page:bg-white/10 aria-current-page:text-white flex flex-1 items-center justify-center gap-8 rounded-full bg-transparent py-4 text-center text-white/60 hover:text-white/80"
         to="/strategies/edit/$strategyId/prices/disposable"
         search={toDisposablePricesSearch(strategy, editType)}
         params={params}
         replace={true}
         aria-current={isDisposable ? 'page' : 'false'}
       >
-        Disposable
+        <IconDisposable className="hidden size-14 md:inline" />
+        Limit / Range
       </Link>
       <Link
-        className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60 hover:text-white/80"
+        className="aria-current-page:bg-white/10 aria-current-page:text-white flex flex-1 items-center justify-center gap-8 rounded-full bg-transparent py-4 text-center text-white/60 hover:text-white/80"
         to="/strategies/edit/$strategyId/prices/recurring"
         search={toRecurringPricesSearch(strategy, editType)}
         params={params}
         replace={true}
         aria-current={isRecurring ? 'page' : 'false'}
       >
+        <IconRecurring className="hidden size-14 md:inline" />
         Recurring
       </Link>
       <Link
-        className="aria-current-page:bg-white/10 aria-current-page:text-white flex-1 rounded-full bg-transparent py-4 text-center text-white/60 hover:text-white/80"
+        className="aria-current-page:bg-white/10 aria-current-page:text-white flex flex-1 items-center justify-center gap-8 rounded-full bg-transparent py-4 text-center text-white/60 hover:text-white/80"
         to="/strategies/edit/$strategyId/prices/overlapping"
         search={toOverlappingPricesSearch(strategy, editType)}
         params={params}
         replace={true}
         aria-current={isOverlapping ? 'page' : 'false'}
       >
+        <IconOverlapping className="hidden size-14 md:inline" />
         Concentrated
       </Link>
     </nav>

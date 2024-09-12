@@ -6,7 +6,7 @@ import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { useSimulatorOverlappingInput } from 'hooks/useSimulatorOverlappingInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
-import { defaultEnd, defaultStart } from 'pages/simulator/index';
+import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { FormEvent, useEffect } from 'react';
 import { formatNumber, roundSearchParam } from 'utils/helpers';
 

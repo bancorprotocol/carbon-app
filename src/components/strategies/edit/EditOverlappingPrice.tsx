@@ -17,10 +17,7 @@ import {
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { getDeposit, getWithdraw } from './utils';
 import { OverlappingAction } from 'components/strategies/overlapping/OverlappingAction';
-import { hasNoBudget } from '../overlapping/utils';
-import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { OverlappingMarketPriceProvider } from 'components/strategies/UserMarketPrice';
-import { Warning } from 'components/common/WarningMessageWithIcon';
 import { formatNumber } from 'utils/helpers';
 import { OverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
@@ -33,7 +30,6 @@ import { InputLimit } from '../common/InputLimit';
 import { Button } from 'components/common/button';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
-import { OverlappingChart } from '../overlapping/OverlappingChart';
 
 interface Props {
   marketPrice: string;
@@ -209,37 +205,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
 
   return (
     <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
-        <header className="flex items-center gap-8">
-          <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
-          {displayPrice && (
-            <OverlappingMarketPrice
-              base={base}
-              quote={quote}
-              marketPrice={marketPrice}
-              setMarketPrice={setMarketPrice}
-            />
-          )}
-        </header>
-        <OverlappingChart
-          className="min-h-[250px]"
-          base={base}
-          quote={quote}
-          order0={order0}
-          order1={order1}
-          userMarketPrice={search.marketPrice}
-          spread={spread}
-          setMin={setMin}
-          setMax={setMax}
-          disabled={!displayPrice}
-        />
-        {hasNoBudget(strategy) && (
-          <Warning>
-            Since the strategy had no budget, it will use the current market
-            price to readjust the budget distribution around.
-          </Warning>
-        )}
-      </article>
       {displayPrice && (
         <>
           <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">

@@ -8,40 +8,32 @@ import {
   initSpread,
 } from 'components/strategies/create/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { TradeOverlappingChart } from 'components/trade/TradeOverlappingChart';
+import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOverlappingBudget } from 'components/strategies/create/CreateOverlappingBudget';
 import { useCallback } from 'react';
-import { SetOverlapping } from 'libs/routing/routes/trade';
+import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
 
 const url = '/trade/overlapping';
 export const TradeOverlapping = () => {
-  const navigate = useNavigate({ from: url });
   const { base, quote } = useTradeCtx();
+  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
-
   const orders = getOverlappingOrders(search, base, quote, marketPrice);
-  const set: SetOverlapping = useCallback(
-    (key, value) => {
+
+  const set = useCallback(
+    (next: TradeOverlappingSearch) => {
       navigate({
-        search: (previous) => ({ ...previous, [key]: value }),
+        search: (previous) => ({ ...previous, ...next }),
         replace: true,
         resetScroll: false,
       });
     },
     [navigate]
   );
-
-  const setMarketPrice = (price: string) => {
-    navigate({
-      search: (previous) => ({ ...previous, marketPrice: price }),
-      replace: true,
-      resetScroll: false,
-    });
-  };
 
   if (!marketPrice && marketQuery.isPending) {
     return (
@@ -60,11 +52,13 @@ export const TradeOverlapping = () => {
               base={base}
               quote={quote}
               marketPrice={marketPrice}
-              setMarketPrice={(price) => set('marketPrice', price)}
+              setMarketPrice={(price) => set({ marketPrice: price })}
             />
           </article>
         </TradeLayout>
-        <TradeOverlappingChart
+        <StrategyChartOverlapping
+          base={base}
+          quote={quote}
           marketPrice={marketPrice}
           order0={orders.buy}
           order1={orders.sell}
@@ -104,7 +98,9 @@ export const TradeOverlapping = () => {
           />
         </CreateForm>
       </TradeLayout>
-      <TradeOverlappingChart
+      <StrategyChartOverlapping
+        base={base}
+        quote={quote}
         order0={orders.buy}
         order1={orders.sell}
         set={set}

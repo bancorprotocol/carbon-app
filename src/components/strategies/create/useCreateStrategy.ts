@@ -83,16 +83,16 @@ export const useCreateStrategy = (props: Props) => {
           base: base,
           quote: quote,
           order0: {
-            budget: order0.budget,
-            min: order0.min,
+            budget: order0.budget || '0',
+            min: order0.min || '0',
+            max: order0.max || '0',
             marginalPrice: order0.marginalPrice ?? '',
-            max: order0.max,
           },
           order1: {
-            budget: order1.budget,
-            min: order1.min,
+            budget: order1.budget || '0',
+            min: order1.min || '0',
+            max: order1.max || '0',
             marginalPrice: order1.marginalPrice ?? '',
-            max: order1.max,
           },
         },
         {

@@ -11,7 +11,6 @@ import { BudgetDistribution } from '../common/BudgetDistribution';
 import { getDeposit, getWithdraw } from './utils';
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategySettings } from 'libs/routing';
-import { isLimitOrder, resetPrice } from '../common/utils';
 import { OverlappingAction } from '../overlapping/OverlappingAction';
 
 interface Props {
@@ -37,7 +36,7 @@ export const EditStrategyPriceField: FC<Props> = ({
   warnings,
 }) => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote } = strategy;
   const token = buy ? quote : base;
   const balance = useGetTokenBalance(token);
 
@@ -76,12 +75,10 @@ export const EditStrategyPriceField: FC<Props> = ({
     setOrder({ action, budget: undefined });
   };
   const setSettings = (settings: StrategySettings) => {
-    const order = buy ? order0 : order1;
-    const initialSettings = isLimitOrder(order) ? 'limit' : 'range';
     setOrder({
       settings,
-      min: initialSettings === settings ? resetPrice(order.startRate) : '',
-      max: initialSettings === settings ? resetPrice(order.endRate) : '',
+      min: undefined,
+      max: undefined,
     });
   };
 

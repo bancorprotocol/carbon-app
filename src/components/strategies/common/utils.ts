@@ -3,6 +3,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from './types';
+import { endOfDay, getUnixTime, startOfDay, subDays } from 'date-fns';
 
 type StrategyOrderInput =
   | { min: string; max: string }
@@ -71,7 +72,9 @@ export const isLimitOrder = (order: Order) => {
 };
 
 /** Check if a string value is zero-like value, null or undefined */
-export const isZero = (value?: string): value is '' | '0' | '.' | undefined => {
+export const isZero = (
+  value?: string | null
+): value is '' | '0' | '.' | undefined | null => {
   if (!value) return true;
   return !+formatNumber(value);
 };
@@ -110,3 +113,8 @@ export const outSideMarketWarning = (params: OutsideMarketParams) => {
 export const resetPrice = (price?: string) => {
   return isZero(price) ? '' : price;
 };
+
+export const defaultStartDate = () => startOfDay(subDays(new Date(), 364));
+export const defaultEndDate = () => endOfDay(new Date());
+export const defaultStart = () => getUnixTime(defaultStartDate());
+export const defaultEnd = () => getUnixTime(defaultEndDate());

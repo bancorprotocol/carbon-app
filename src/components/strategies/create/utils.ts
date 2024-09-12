@@ -23,7 +23,7 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
-import { OverlappingOrder } from '../common/types';
+import { OrderBlock, OverlappingOrder } from '../common/types';
 
 export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing: Dispatch<SetStateAction<boolean>>,
@@ -34,6 +34,32 @@ export const handleTxStatusAndRedirectToOverview = (
     navigate?.({ to: '/', params: {}, search: {} });
     setIsProcessing(false);
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
+};
+
+export const getDefaultOrder = (
+  type: 'buy' | 'sell',
+  base: Partial<OrderBlock>,
+  marketPrice: number = 0
+): OrderBlock => {
+  const settings = base.settings ?? 'limit';
+  if (base.settings === 'range') {
+    const multiplierMax = type === 'buy' ? 0.9 : 1.2;
+    const multiplierMin = type === 'buy' ? 0.8 : 1.1;
+    return {
+      min: base.min ?? (marketPrice * multiplierMin).toString(),
+      max: base.max ?? (marketPrice * multiplierMax).toString(),
+      budget: base.budget ?? '',
+      settings,
+    };
+  } else {
+    const multiplier = type === 'buy' ? 0.9 : 1.1;
+    return {
+      min: base.min ?? (marketPrice * multiplier).toString(),
+      max: base.max ?? (marketPrice * multiplier).toString(),
+      budget: base.budget ?? '',
+      settings,
+    };
+  }
 };
 
 export const getRecurringError = (search: TradeRecurringSearch) => {

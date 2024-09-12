@@ -2,19 +2,20 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTradeSettings';
-import { TradeChartSection } from 'components/trade/TradeChartSection';
+import { emptyOrder } from 'components/strategies/common/utils';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategyDirection } from 'libs/routing';
-import { TradeMarketSearch } from 'libs/routing/routes/trade';
 import { cn } from 'utils/helpers';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
   const { base, quote } = useTradeCtx();
-  const search = useSearch({ strict: false }) as TradeMarketSearch;
+  const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
   const buy = search.direction === 'buy';
   const balanceQuery = useGetTokenBalance(buy ? quote : base);
@@ -76,7 +77,15 @@ export const TradeMarket = () => {
           />
         </article>
       </TradeLayout>
-      <TradeChartSection />
+      <StrategyChartSection>
+        <StrategyChartHistory
+          type="market"
+          base={base}
+          quote={quote}
+          order0={emptyOrder()}
+          order1={emptyOrder()}
+        />
+      </StrategyChartSection>
     </>
   );
 };

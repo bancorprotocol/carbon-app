@@ -1,6 +1,7 @@
-import { D3ChartCandlesticksProps } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
-import { DragablePriceRange } from 'components/simulator/input/d3Chart/recurring/DragablePriceRange';
-import { handleStateChange } from 'components/simulator/input/d3Chart/recurring/utils';
+import { D3ChartCandlesticksProps } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
+import { DragablePriceRange } from 'components/strategies/common/d3Chart/recurring/DragablePriceRange';
+import { handleStateChange } from 'components/strategies/common/d3Chart/recurring/utils';
+import { isZero } from 'components/strategies/common/utils';
 import { ScaleLinear } from 'd3';
 import { useCallback, useEffect, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
@@ -11,14 +12,16 @@ type Props = Pick<
 > & {
   yScale: ScaleLinear<number, number>;
   isLimit: { buy: boolean; sell: boolean };
+  readonly?: boolean;
 };
 
-export const D3ChartRecurring = ({
+export const D3ChartDisposable = ({
   prices,
   onPriceUpdates,
   dms,
   yScale,
   isLimit,
+  readonly,
   onDragEnd,
 }: Props) => {
   const onMinMaxChange = useCallback(
@@ -47,6 +50,9 @@ export const D3ChartRecurring = ({
   );
 
   const hasDragEnded = useRef(false);
+
+  const type =
+    isZero(prices.buy.min) && isZero(prices.buy.max) ? 'sell' : 'buy';
 
   const onMinMaxChangeEnd = useCallback(
     (type: 'buy' | 'sell', y1?: number, y2?: number) => {
@@ -85,12 +91,12 @@ export const D3ChartRecurring = ({
 
   const labels = {
     buy: {
-      min: prettifyNumber(prices.buy.min),
-      max: prettifyNumber(prices.buy.max),
+      min: prettifyNumber(prices.buy.min, { decimals: 4 }),
+      max: prettifyNumber(prices.buy.max, { decimals: 4 }),
     },
     sell: {
-      min: prettifyNumber(prices.sell.min),
-      max: prettifyNumber(prices.sell.max),
+      min: prettifyNumber(prices.sell.min, { decimals: 4 }),
+      max: prettifyNumber(prices.sell.max, { decimals: 4 }),
     },
   };
 
@@ -106,65 +112,32 @@ export const D3ChartRecurring = ({
   };
 
   useEffect(() => {
-    if (!hasDragEnded.current) {
-      return;
-    }
-
+    if (!hasDragEnded.current) return;
     handleStateChange({
-      type: 'sell',
+      type,
       id: 'line1',
-      y: yScale(Number(prices.sell.max)),
-      isLimit: isLimit.sell,
+      y: yScale(Number(prices[type].max)),
+      isLimit: isLimit[type],
     });
     handleStateChange({
-      type: 'sell',
+      type,
       id: 'line2',
-      y: yScale(Number(prices.sell.min)),
-      isLimit: isLimit.sell,
-    });
-    handleStateChange({
-      type: 'buy',
-      id: 'line1',
-      y: yScale(Number(prices.buy.max)),
-      isLimit: isLimit.buy,
-    });
-    handleStateChange({
-      type: 'buy',
-      id: 'line2',
-      y: yScale(Number(prices.buy.min)),
-      isLimit: isLimit.buy,
+      y: yScale(Number(prices[type].min)),
+      isLimit: isLimit[type],
     });
     hasDragEnded.current = false;
-  }, [
-    isLimit.buy,
-    isLimit.sell,
-    prices.buy.max,
-    prices.buy.min,
-    prices.sell.max,
-    prices.sell.min,
-    yScale,
-  ]);
+  }, [type, isLimit, yScale, prices]);
 
   return (
-    <>
-      <DragablePriceRange
-        type="buy"
-        onMinMaxChange={onMinMaxChange}
-        labels={labels.buy}
-        yPos={yPos.buy}
-        dms={dms}
-        onDragEnd={onMinMaxChangeEnd}
-        isLimit={isLimit.buy}
-      />
-      <DragablePriceRange
-        type="sell"
-        onMinMaxChange={onMinMaxChange}
-        labels={labels.sell}
-        yPos={yPos.sell}
-        dms={dms}
-        isLimit={isLimit.sell}
-        onDragEnd={onMinMaxChangeEnd}
-      />
-    </>
+    <DragablePriceRange
+      type={type}
+      onMinMaxChange={onMinMaxChange}
+      labels={labels[type]}
+      yPos={yPos[type]}
+      dms={dms}
+      onDragEnd={onMinMaxChangeEnd}
+      isLimit={isLimit[type]}
+      readonly={readonly}
+    />
   );
 };

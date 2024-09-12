@@ -1,10 +1,8 @@
 import { StrategyDirection, useNavigate } from 'libs/routing';
 import { OrderBlock } from './types';
 import { useCallback } from 'react';
-import { Order } from 'libs/queries';
-import { resetPrice } from './utils';
 
-export const useSetDisposableOrder = (url: string, otherOrder?: Order) => {
+export const useSetDisposableOrder = (url: string) => {
   const navigate = useNavigate({ from: url });
   const setOrder = useCallback(
     (order: Partial<OrderBlock>) => {
@@ -17,24 +15,7 @@ export const useSetDisposableOrder = (url: string, otherOrder?: Order) => {
     },
     [navigate]
   );
-  const setDirection = useCallback(
-    (direction: StrategyDirection) => {
-      navigate({
-        params: (params) => params,
-        search: (previous) => ({
-          ...previous,
-          direction,
-          budget: undefined,
-          min: resetPrice(otherOrder?.startRate),
-          max: resetPrice(otherOrder?.endRate),
-        }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate, otherOrder]
-  );
-  return { setOrder, setDirection };
+  return { setOrder };
 };
 
 /** Transform an order into a search params */

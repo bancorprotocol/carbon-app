@@ -1,8 +1,8 @@
-import { D3ChartHandleLine } from 'components/simulator/input/d3Chart/D3ChartHandleLine';
-import { D3ChartRecurring } from 'components/simulator/input/d3Chart/recurring/D3ChartRecurring';
-import { D3ChartOverlapping } from 'components/simulator/input/d3Chart/overlapping/D3ChartOverlapping';
-import { getDomain } from 'components/simulator/input/d3Chart/utils';
-import { XAxis } from 'components/simulator/input/d3Chart/xAxis';
+import { D3ChartHandleLine } from 'components/strategies/common/d3Chart/D3ChartHandleLine';
+import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
+import { D3ChartOverlapping } from 'components/strategies/common/d3Chart/overlapping/D3ChartOverlapping';
+import { getDomain } from 'components/strategies/common/d3Chart/utils';
+import { XAxis } from 'components/strategies/common/d3Chart/xAxis';
 import {
   D3YAxisRight,
   useLinearScale,
@@ -10,10 +10,11 @@ import {
   scaleBand,
   D3ChartSettings,
 } from 'libs/d3';
-import { SimulatorType } from 'libs/routing/routes/sim';
 import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
-import { Candlesticks } from 'components/simulator/input/d3Chart/Candlesticks';
+import { Candlesticks } from 'components/strategies/common/d3Chart/Candlesticks';
+import { D3ChartDisposable } from './disposable/D3ChartDisposable';
+import { TradeTypes } from 'libs/routing/routes/trade';
 
 export type ChartPrices<T = string> = {
   buy: { min: T; max: T };
@@ -32,8 +33,10 @@ export interface D3ChartCandlesticksProps {
   onDragEnd?: OnPriceUpdates;
   isLimit?: { buy: boolean; sell: boolean };
   dms: D3ChartSettings;
-  type: SimulatorType;
+  type: TradeTypes;
   overlappingSpread?: string;
+  overlappingMarketPrice?: number;
+  readonly?: boolean;
 }
 
 export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
@@ -48,6 +51,8 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     dms,
     type,
     overlappingSpread,
+    overlappingMarketPrice,
+    readonly,
   } = props;
 
   const xScale = useMemo(
@@ -72,7 +77,9 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
       <D3YAxisRight
         ticks={y.ticks}
         dms={dms}
-        formatter={(value) => prettifyNumber(value)}
+        formatter={(value) => {
+          return prettifyNumber(value, { decimals: 100, abbreviate: true });
+        }}
       />
       <XAxis xScale={xScale} dms={dms} />
       {marketPrice && (
@@ -81,11 +88,23 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           color="white"
           y={y.scale(marketPrice)}
           lineProps={{ strokeDasharray: 2 }}
-          label={prettifyNumber(marketPrice ?? '')}
+          label={prettifyNumber(marketPrice ?? '', { decimals: 4 })}
+        />
+      )}
+      {type === 'disposable' && isLimit && (
+        <D3ChartDisposable
+          readonly={readonly}
+          yScale={y.scale}
+          isLimit={isLimit}
+          dms={dms}
+          prices={prices}
+          onDragEnd={onDragEnd}
+          onPriceUpdates={onPriceUpdates}
         />
       )}
       {type === 'recurring' && isLimit && (
         <D3ChartRecurring
+          readonly={readonly}
           yScale={y.scale}
           isLimit={isLimit}
           dms={dms}
@@ -96,12 +115,13 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
       )}
       {type === 'overlapping' && overlappingSpread !== undefined && (
         <D3ChartOverlapping
+          readonly={readonly}
           yScale={y.scale}
           dms={dms}
           prices={prices}
           onDragEnd={onDragEnd}
           onPriceUpdates={onPriceUpdates}
-          marketPrice={data[0].open ?? 0}
+          marketPrice={overlappingMarketPrice ?? data[0].open ?? 0}
           spread={Number(overlappingSpread)}
         />
       )}

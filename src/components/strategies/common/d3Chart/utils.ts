@@ -1,5 +1,5 @@
 import { max, min, select } from 'd3';
-import { ChartPrices } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
+import { ChartPrices } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
 import { CandlestickData } from 'libs/d3/types';
 import { useEffect, useState } from 'react';
 
@@ -42,9 +42,15 @@ export const moveBoundary = (selector: string, y: number) => {
   const line = me.select('line');
   const handle = me.select('rect');
   const label = me.select('text');
+  const readonly = me.select('.readonly');
   line.attr('y1', y).attr('y2', y);
   handle.attr('y', y);
   label.attr('y', y + 12);
+  if (!readonly.size()) return;
+  readonly.attr(
+    'transform',
+    `translate(${Number(line.attr('x2')) - 20}, ${y - 8})`
+  );
 };
 
 type GetDomainFn<T extends number | number[]> = (

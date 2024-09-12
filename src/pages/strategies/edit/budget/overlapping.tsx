@@ -21,8 +21,12 @@ import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
+import { useCallback } from 'react';
+import { OverlappingSearch } from 'components/strategies/common/types';
 
-export interface EditBudgetOverlappingSearch {
+export interface EditBudgetOverlappingSearch extends OverlappingSearch {
   editType: 'deposit' | 'withdraw';
   marketPrice?: string;
   anchor?: 'buy' | 'sell';
@@ -125,6 +129,51 @@ const getOrders = (
 const url = '/strategies/edit/$strategyId/budget/overlapping';
 
 export const EditBudgetOverlappingPage = () => {
+  const { strategy } = useEditStrategyCtx();
+  const { base, quote } = strategy;
+  const navigate = useNavigate({ from: url });
+  const search = useSearch({ from: url });
+  const { marketPrice: externalPrice } = useMarketPrice({
+    base,
+    quote,
+  });
+  const displayPrice = externalPrice?.toString() || search.marketPrice;
+  const marketPrice = getOverlappingMarketPrice(
+    strategy,
+    search,
+    externalPrice?.toString()
+  );
+  const orders = getOrders(strategy, search, marketPrice);
+
+  const set = useCallback(
+    (next: Partial<EditBudgetOverlappingSearch>) => {
+      navigate({
+        params: (params) => params,
+        search: (previous) => ({ ...previous, ...next }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate]
+  );
+
+  return (
+    <EditStrategyLayout editType={search.editType}>
+      <OverlappingContent />
+      <StrategyChartOverlapping
+        base={base}
+        quote={quote}
+        order0={orders.buy}
+        order1={orders.sell}
+        set={set}
+        marketPrice={displayPrice}
+        readonly
+      />
+    </EditStrategyLayout>
+  );
+};
+
+const OverlappingContent = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
   const navigate = useNavigate({ from: url });
