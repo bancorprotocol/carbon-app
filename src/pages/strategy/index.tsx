@@ -3,7 +3,6 @@ import {
   useParams,
   useRouter,
   useSearch,
-  // useSearch,
 } from '@tanstack/react-router';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { Page } from 'components/common/page';
@@ -36,6 +35,7 @@ import {
 } from 'components/common/datePicker/DateRangePicker';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
+import { useActivityQuery } from 'components/activity/useActivityQuery';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -61,6 +61,11 @@ export const StrategyPage = () => {
     });
   };
 
+  const { data: activities } = useActivityQuery({
+    strategyIds: id,
+    start: priceStart?.toString() ?? toUnixUTC(defaultStartDate()),
+    end: priceEnd?.toString() ?? toUnixUTC(defaultEndDate()),
+  });
   if (query.isPending) {
     return (
       <Page>
@@ -149,6 +154,7 @@ export const StrategyPage = () => {
             quote={quote}
             order0={emptyOrder()}
             order1={emptyOrder()}
+            activities={activities ?? []}
           />
         </article>
       </section>

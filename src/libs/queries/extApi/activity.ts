@@ -50,8 +50,8 @@ export interface QueryActivityParams {
   actions?: string;
   limit?: number;
   offset?: number;
-  start?: number;
-  end?: number;
+  start?: string | number;
+  end?: string | number;
 }
 
 interface RawActivityMeta<T extends string | Token> {

@@ -7,7 +7,7 @@ import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { TradeSearch } from 'libs/routing';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { BaseOrder } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeTypes } from 'libs/routing/routes/trade';
@@ -16,6 +16,7 @@ import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { Token } from 'libs/tokens';
+import { Activity } from 'libs/queries/extApi/activity';
 import config from 'config';
 
 const chartSettings: D3ChartSettingsProps = {
@@ -87,12 +88,14 @@ interface Props {
   spread?: string; // Only overlapping
   readonly?: boolean;
   marketPrice?: string;
+  activities?: Activity[];
+  children?: (dms: any, data: any) => ReactNode;
   onPriceUpdates?: OnPriceUpdates;
 }
 
 export const StrategyChartHistory: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>();
-  const { base, quote, type, order0, order1 } = props;
+  const { base, quote, type, order0, order1, activities } = props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
 
@@ -167,20 +170,23 @@ export const StrategyChartHistory: FC<Props> = (props) => {
       data-testid="price-chart"
     >
       {(dms) => (
-        <D3ChartCandlesticks
-          readonly={props.readonly}
-          dms={dms}
-          prices={prices}
-          onPriceUpdates={updatePrices}
-          data={data}
-          marketPrice={marketPrice}
-          bounds={bounds}
-          onDragEnd={updatePrices}
-          isLimit={props.isLimit}
-          type={type}
-          overlappingSpread={props.spread}
-          overlappingMarketPrice={marketPrice}
-        />
+        <>
+          <D3ChartCandlesticks
+            readonly={props.readonly}
+            dms={dms}
+            prices={prices}
+            onPriceUpdates={updatePrices}
+            data={data}
+            marketPrice={marketPrice}
+            bounds={bounds}
+            onDragEnd={updatePrices}
+            isLimit={props.isLimit}
+            type={type}
+            overlappingSpread={props.spread}
+            overlappingMarketPrice={marketPrice}
+            activities={activities}
+          />
+        </>
       )}
     </D3ChartWrapper>
   );
