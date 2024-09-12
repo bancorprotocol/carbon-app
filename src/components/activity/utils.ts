@@ -52,15 +52,17 @@ export const activityValidators: SearchParamsValidator<ActivitySearchParams> = {
   offset: validNumber,
 };
 export const validateActivityParams = (
-  search: Record<string, string>
-): ActivitySearchParams => {
-  const rawSearch = validateSearchParams(activityValidators)(search);
-  const limit = Number(rawSearch.limit ?? 10);
-  const offset = Number(rawSearch.offset ?? 0);
-  return {
-    ...rawSearch,
-    limit,
-    offset,
+  activityValidators: SearchParamsValidator<ActivitySearchParams>
+) => {
+  return (search: Record<string, string>): ActivitySearchParams => {
+    const rawSearch = validateSearchParams(activityValidators)(search);
+    const limit = Number(rawSearch.limit ?? 10);
+    const offset = Number(rawSearch.offset ?? 0);
+    return {
+      ...rawSearch,
+      limit,
+      offset,
+    };
   };
 };
 

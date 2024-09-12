@@ -1,5 +1,8 @@
 import { Route, redirect } from '@tanstack/react-router';
-import { validateActivityParams } from 'components/activity/utils';
+import {
+  activityValidators,
+  validateActivityParams,
+} from 'components/activity/utils';
 import { rootRoute } from 'libs/routing/routes/root';
 import { StrategiesPage } from 'pages/strategies';
 import { StrategiesActivityPage } from 'pages/strategies/activity';
@@ -51,7 +54,7 @@ export const strategyActivityPage = new Route({
   getParentRoute: () => myStrategyLayout,
   path: 'strategies/activity',
   component: StrategiesActivityPage,
-  validateSearch: validateActivityParams,
+  validateSearch: validateActivityParams(activityValidators),
 });
 
 // REDIRECT

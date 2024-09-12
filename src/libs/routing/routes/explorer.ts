@@ -7,7 +7,10 @@ import { ExplorerActivityPage } from 'pages/explorer/type/activity';
 import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
 import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
 import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
-import { validateActivityParams } from 'components/activity/utils';
+import {
+  activityValidators,
+  validateActivityParams,
+} from 'components/activity/utils';
 
 // Used for redirecting old explorer route to new explorer route
 // TODO: remove this on May 2024
@@ -89,5 +92,5 @@ export const explorerActivityPage = new Route({
   getParentRoute: () => explorerResultLayout,
   path: '/activity',
   component: ExplorerActivityPage,
-  validateSearch: validateActivityParams,
+  validateSearch: validateActivityParams(activityValidators),
 });
