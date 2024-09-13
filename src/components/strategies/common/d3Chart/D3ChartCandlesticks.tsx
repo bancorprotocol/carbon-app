@@ -133,6 +133,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
         <D3ChartIndicators
           xScale={xScale}
           yScale={y.scale}
+          boundHeight={dms.boundedHeight}
           activities={activities}
         />
       )}

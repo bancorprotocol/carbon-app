@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import { formatRgb } from 'culori';
+import plugin from 'tailwindcss/plugin';
 
 function createTwConfigValues(start: number, end: number, step: number) {
   const remBase = 16;
@@ -113,6 +114,13 @@ export default {
       'weight-800': '800',
       'weight-900': '900',
     },
+    transformBox: {
+      content: { 'transform-box': 'content-box' },
+      border: { 'transform-box': 'border-box' },
+      fill: { 'transform-box': 'fill-box' },
+      stroke: { 'transform-box': 'stroke-box' },
+      view: { 'transform-box': 'view-box' },
+    },
     keyframes: {
       spin: {
         to: {
@@ -178,5 +186,15 @@ export default {
       ...breakpoints(theme('screens')),
     }),
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        '.transformBox-content': { 'transform-box': 'content-box' },
+        '.transformBox-border': { 'transform-box': 'border-box' },
+        '.transformBox-fill': { 'transform-box': 'fill-box' },
+        '.transformBox-stroke': { 'transform-box': 'stroke-box' },
+        '.transformBox-view': { 'transform-box': 'view-box' },
+      });
+    }),
+  ],
 } satisfies Config;
