@@ -15,8 +15,6 @@ import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidge
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
 import { isTouchedZero, isZero } from 'components/strategies/common/utils';
-import { useNavigate, useSearch } from '@tanstack/react-router';
-import { TradeMarketSearch } from 'libs/routing/routes/trade';
 
 export const useBuySell = ({
   source,
@@ -24,9 +22,8 @@ export const useBuySell = ({
   sourceBalanceQuery,
   buy = false,
 }: TradeWidgetBuySellProps) => {
-  const { source: sourceInput = '', target: targetInput = '' } = useSearch({
-    strict: false,
-  }) as TradeMarketSearch;
+  const [sourceInput, setSourceInput] = useState('');
+  const [targetInput, setTargetInput] = useState('');
   const { user, provider } = useWagmi();
   const { openModal } = useModal();
   const { selectedFiatCurrency } = useFiatCurrency();
@@ -52,22 +49,6 @@ export const useBuySell = ({
     source.address,
     target.address
   );
-
-  const navigate = useNavigate({ from: '/trade/market' });
-  const setSourceInput = (value: string) => {
-    navigate({
-      search: (s) => ({ ...s, source: value }),
-      replace: true,
-      resetScroll: false,
-    });
-  };
-  const setTargetInput = (value: string) => {
-    navigate({
-      search: (s) => ({ ...s, target: value }),
-      replace: true,
-      resetScroll: false,
-    });
-  };
 
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
 
@@ -251,8 +232,8 @@ export const useBuySell = ({
         target,
         tradeActions,
         isTradeBySource,
-        sourceInput: sourceInput,
-        targetInput: targetInput,
+        sourceInput,
+        targetInput,
       });
 
     if (approval.approvalRequired) {
