@@ -51,8 +51,10 @@ export const TokenInputField: FC<Props> = (props) => {
   } = props;
   const { user } = useWagmi();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { getFiatValue, getFiatAsString } = useFiatCurrency(token);
+  const { getFiatValue, getFiatAsString, hasFiatValue, selectedFiatCurrency } =
+    useFiatCurrency(token);
   const fiatValueUsd = getFiatValue(value, true);
+  const showFiatValue = fiatValueUsd.gt(0) && hasFiatValue();
 
   const handleChange = ({
     target: { value },
@@ -75,8 +77,6 @@ export const TokenInputField: FC<Props> = (props) => {
     }
     onKeystroke && onKeystroke();
   };
-
-  const showFiatValue = fiatValueUsd.gt(0);
 
   return (
     <div
@@ -117,6 +117,9 @@ export const TokenInputField: FC<Props> = (props) => {
       <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10">
         <p className="flex items-center gap-5 break-all text-white/60">
           {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
+          {!slippage?.isZero() &&
+            !hasFiatValue() &&
+            `Current ${selectedFiatCurrency} value unavailable`}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
         {user && !withoutWallet && isBalanceLoading && (
