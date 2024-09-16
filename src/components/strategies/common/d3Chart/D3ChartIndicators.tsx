@@ -112,7 +112,7 @@ const IndicatorTooltip: FC<TooltipProps> = (props) => {
   return (
     <FloatTooltip>
       <FloatTooltipTrigger>{children}</FloatTooltipTrigger>
-      <FloatTooltipContent className="bg-background-800 max-w-[250px] rounded p-16">
+      <FloatTooltipContent className="bg-background-800 max-h-[300px] max-w-[250px] overflow-auto rounded p-16">
         <h4 className="text-12 font-weight-500 mb-10">Date: {date}</h4>
         <ul className="flex list-disc flex-col gap-10 ps-16">
           {activities.map((activity, j) => (
