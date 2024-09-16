@@ -151,7 +151,7 @@ export const StrategyPage = () => {
         </article>
         <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 md:flex">
           <header className="flex items-center gap-16">
-            <h2 className="text-18 font-weight-500 mr-auto">Price graph</h2>
+            <h2 className="text-18 font-weight-500 mr-auto">Price Chart</h2>
             {isNativeChart && (
               <>
                 <DateRangePicker
