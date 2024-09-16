@@ -36,15 +36,30 @@ import {
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 import { useActivityQuery } from 'components/activity/useActivityQuery';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
   const navigate = useNavigate({ from: '/strategy/$id' });
-  const { priceStart, priceEnd } = useSearch({ from: '/strategy/$id' });
+  const { priceStart, priceEnd, hideIndicators } = useSearch({
+    from: '/strategy/$id',
+  });
   const params = { strategyIds: id };
   const query = useGetStrategy(id);
   const [strategy] = useStrategiesWithFiat(query);
+
+  const showIndicator = (shouldShow: boolean) => {
+    navigate({
+      params: (params) => params,
+      search: (previous) => ({
+        ...previous,
+        hideIndicators: shouldShow,
+      }),
+      resetScroll: false,
+      replace: true,
+    });
+  };
 
   const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {
     const { start, end } = props;
@@ -66,6 +81,7 @@ export const StrategyPage = () => {
     start: priceStart?.toString() ?? toUnixUTC(defaultStartDate()),
     end: priceEnd?.toString() ?? toUnixUTC(defaultEndDate()),
   });
+
   if (query.isPending) {
     return (
       <Page>
@@ -133,7 +149,7 @@ export const StrategyPage = () => {
           </div>
         </article>
         <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 md:flex">
-          <header className="flex items-center">
+          <header className="flex items-center gap-16">
             <h2 className="text-18 font-weight-500 mr-auto">Price graph</h2>
             <DateRangePicker
               defaultStart={defaultStartDate()}
@@ -147,6 +163,20 @@ export const StrategyPage = () => {
               }}
               required
             />
+            <RadioGroup>
+              <Radio
+                checked={!hideIndicators}
+                onChange={() => showIndicator(false)}
+              >
+                Indicator On
+              </Radio>
+              <Radio
+                checked={hideIndicators}
+                onChange={() => showIndicator(true)}
+              >
+                Off
+              </Radio>
+            </RadioGroup>
           </header>
           <StrategyChartHistory
             type="market"
@@ -154,7 +184,7 @@ export const StrategyPage = () => {
             quote={quote}
             order0={emptyOrder()}
             order1={emptyOrder()}
-            activities={activities ?? []}
+            activities={(!hideIndicators && activities) || []}
           />
         </article>
       </section>

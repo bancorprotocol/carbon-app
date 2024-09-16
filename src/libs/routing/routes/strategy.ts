@@ -1,7 +1,7 @@
 import { StrategyPage } from 'pages/strategy';
 import { rootRoute } from './root';
 import { Route } from '@tanstack/react-router';
-import { validNumber } from '../utils';
+import { validBoolean, validNumber } from '../utils';
 import {
   activityValidators,
   validateActivityParams,
@@ -15,5 +15,6 @@ export const strategyPage = new Route({
     ...activityValidators,
     priceStart: validNumber,
     priceEnd: validNumber,
+    hideIndicators: validBoolean,
   }),
 });
