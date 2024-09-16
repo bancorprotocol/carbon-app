@@ -88,9 +88,9 @@ export const D3ChartIndicators = (props: D3ChartIndicatorsProps) => {
         <IndicatorTooltip key={i} timestamp={x} activities={activities}>
           <g transform={`translate(${xScale(x.toString())},${yScale(y)})`}>
             <circle
-              cx={xScale.bandwidth() / 2 - 4}
-              cy={xScale.bandwidth() / 2 - 4}
-              r={8}
+              cx={xScale.bandwidth() / 2 - 5}
+              cy={xScale.bandwidth() / 2 - 5}
+              r={5}
               fill="white"
               stroke="black"
             />
