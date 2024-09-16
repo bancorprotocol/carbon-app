@@ -1,19 +1,20 @@
-import { FC, ReactNode, useId } from 'react';
+import { DetailedHTMLProps, FC, HTMLAttributes, ReactNode, useId } from 'react';
 import { cn } from 'utils/helpers';
 import style from './RadioGroup.module.css';
 
-interface RadioGroupProps {
-  className?: string;
-  children: ReactNode;
-}
+type RadioGroupProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>;
 
-export const RadioGroup: FC<RadioGroupProps> = ({ children, className }) => {
+export const RadioGroup: FC<RadioGroupProps> = ({ children, ...props }) => {
   return (
     <div
       role="group"
+      {...props}
       className={cn(
         'text-14 relative flex items-center rounded-full bg-black p-2',
-        className
+        props.className
       )}
     >
       {children}

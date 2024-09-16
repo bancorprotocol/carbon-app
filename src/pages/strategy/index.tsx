@@ -105,6 +105,7 @@ export const StrategyPage = () => {
   const base = strategy.base;
   const quote = strategy.quote;
   const showStrategyRoi = config.showStrategyRoi;
+  const isNativeChart = config.ui.priceChart === 'native';
 
   return (
     <Page hideTitle={true} className="gap-20">
@@ -163,20 +164,25 @@ export const StrategyPage = () => {
               }}
               required
             />
-            <RadioGroup>
-              <Radio
-                checked={!hideIndicators}
-                onChange={() => showIndicator(false)}
-              >
-                Indicator On
-              </Radio>
-              <Radio
-                checked={hideIndicators}
-                onChange={() => showIndicator(true)}
-              >
-                Off
-              </Radio>
-            </RadioGroup>
+            {isNativeChart && (
+              <>
+                <p id="indicator-label">Indicator</p>
+                <RadioGroup aria-labelledby="indicator-label">
+                  <Radio
+                    checked={!hideIndicators}
+                    onChange={() => showIndicator(false)}
+                  >
+                    On
+                  </Radio>
+                  <Radio
+                    checked={hideIndicators}
+                    onChange={() => showIndicator(true)}
+                  >
+                    Off
+                  </Radio>
+                </RadioGroup>
+              </>
+            )}
           </header>
           <StrategyChartHistory
             type="market"
