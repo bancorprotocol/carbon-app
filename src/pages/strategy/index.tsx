@@ -152,20 +152,20 @@ export const StrategyPage = () => {
         <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 md:flex">
           <header className="flex items-center gap-16">
             <h2 className="text-18 font-weight-500 mr-auto">Price graph</h2>
-            <DateRangePicker
-              defaultStart={defaultStartDate()}
-              defaultEnd={defaultEndDate()}
-              start={fromUnixUTC(priceStart)}
-              end={fromUnixUTC(priceEnd)}
-              onConfirm={onDatePickerConfirm}
-              presets={datePickerPresets}
-              options={{
-                disabled: datePickerDisabledDays,
-              }}
-              required
-            />
             {isNativeChart && (
               <>
+                <DateRangePicker
+                  defaultStart={defaultStartDate()}
+                  defaultEnd={defaultEndDate()}
+                  start={fromUnixUTC(priceStart)}
+                  end={fromUnixUTC(priceEnd)}
+                  onConfirm={onDatePickerConfirm}
+                  presets={datePickerPresets}
+                  options={{
+                    disabled: datePickerDisabledDays,
+                  }}
+                  required
+                />
                 <p id="indicator-label">Indicator</p>
                 <RadioGroup aria-labelledby="indicator-label">
                   <Radio
