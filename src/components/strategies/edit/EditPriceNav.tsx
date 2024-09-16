@@ -71,7 +71,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
       </h2>
       <nav
         aria-labelledby="edit-strategy-nav"
-        className="text-14 grid grid-cols-2 gap-8"
+        className="text-14 grid grid-cols-1 gap-8 md:grid-cols-2"
         aria-label="Switch between type of strategy"
       >
         {links.map((link) => (
