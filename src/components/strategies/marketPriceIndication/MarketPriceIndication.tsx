@@ -20,9 +20,15 @@ export const MarketPriceIndication: FC<Props> = (props) => {
   const query = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? query.marketPrice;
   const marketPercent = marketPricePercent(price, marketPrice);
-  const { getFiatAsString } = useFiatCurrency(quote);
+  const { getFiatAsString, selectedFiatCurrency } = useFiatCurrency(quote);
   const fiatAsString = getFiatAsString(price);
-  if (!marketPrice) return;
+  if (!marketPrice)
+    return (
+      <span className="text-12 text-white/60">
+        Current {selectedFiatCurrency} value unavailable
+      </span>
+    );
+
   return (
     <p className="flex flex-wrap items-center gap-8">
       <span className="text-12 break-all text-white/60">{fiatAsString}</span>
