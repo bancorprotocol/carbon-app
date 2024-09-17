@@ -10,6 +10,11 @@ export const shouldTakeScreenshot = isCI && !isDraft;
 export const screenshot = async (target: Page | Locator, name: string) => {
   if (!shouldTakeScreenshot) return;
 
+  const loadings = await target.locator('.loading-message').all();
+  await Promise.all(
+    loadings.map((loading) => loading.waitFor({ state: 'detached' }))
+  );
+
   const mainMenu = new MainMenuDriver(target);
   const canHideUserWallet = await mainMenu.hideUserWallet();
   return target
