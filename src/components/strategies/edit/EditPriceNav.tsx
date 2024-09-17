@@ -4,10 +4,6 @@ import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
-import { EditDisposableStrategySearch } from 'pages/strategies/edit/prices/disposable';
-import { EditRecurringStrategySearch } from 'pages/strategies/edit/prices/recurring';
-import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
-import { Strategy } from 'libs/queries';
 import {
   EditTypes,
   toDisposablePricesSearch,
@@ -39,27 +35,14 @@ const links = [
   },
 ] as const;
 
-export const toPricesSearch = (
-  strategy: Strategy,
-  editType: 'editPrices' | 'renew',
-  strategyType: 'disposable' | 'recurring' | 'overlapping'
-):
-  | EditDisposableStrategySearch
-  | EditRecurringStrategySearch
-  | EditOverlappingStrategySearch => {
-  switch (strategyType) {
-    case 'disposable':
-      return toDisposablePricesSearch(strategy, editType);
-    case 'recurring':
-      return toRecurringPricesSearch(strategy, editType);
-    case 'overlapping':
-      return toOverlappingPricesSearch(strategy, editType);
-  }
-};
-
 export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
   const params = useParams({ from: '/strategies/edit/$strategyId' });
   const pathName = window.location.pathname;
+  const priceSearchFn = {
+    disposable: toDisposablePricesSearch,
+    recurring: toRecurringPricesSearch,
+    overlapping: toOverlappingPricesSearch,
+  };
 
   const { strategy } = useEditStrategyCtx();
   if (editType !== 'editPrices' && editType !== 'renew') return;
@@ -78,7 +61,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
           <Link
             key={link.id}
             to={link.to}
-            search={toPricesSearch(strategy, editType, link.id)}
+            search={priceSearchFn[link.id](strategy, editType)}
             params={params}
             replace={true}
             aria-current={pathName.includes(link.id) ? 'page' : 'false'}
