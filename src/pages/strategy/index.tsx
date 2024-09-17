@@ -149,20 +149,22 @@ export const StrategyPage = () => {
           <header className="flex items-center gap-16">
             <h2 className="text-18 font-weight-500 mr-auto">Price Chart</h2>
             {isNativeChart && (
-              <>
-                <DateRangePicker
-                  defaultStart={defaultStartDate()}
-                  defaultEnd={defaultEndDate()}
-                  start={fromUnixUTC(priceStart)}
-                  end={fromUnixUTC(priceEnd)}
-                  onConfirm={onDatePickerConfirm}
-                  presets={datePickerPresets}
-                  options={{
-                    disabled: datePickerDisabledDays,
-                  }}
-                  required
-                />
-                <p id="indicator-label">Indicator</p>
+              <DateRangePicker
+                defaultStart={defaultStartDate()}
+                defaultEnd={defaultEndDate()}
+                start={fromUnixUTC(priceStart)}
+                end={fromUnixUTC(priceEnd)}
+                onConfirm={onDatePickerConfirm}
+                presets={datePickerPresets}
+                options={{
+                  disabled: datePickerDisabledDays,
+                }}
+                required
+              />
+            )}
+            {isNativeChart && (
+              <div className="flex items-center gap-8">
+                <p id="indicator-label">Indicators</p>
                 <RadioGroup aria-labelledby="indicator-label">
                   <Radio
                     checked={!hideIndicators}
@@ -177,7 +179,7 @@ export const StrategyPage = () => {
                     Off
                   </Radio>
                 </RadioGroup>
-              </>
+              </div>
             )}
           </header>
           <StrategyChartHistory
