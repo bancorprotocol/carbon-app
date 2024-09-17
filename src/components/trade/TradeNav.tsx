@@ -5,7 +5,7 @@ import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
 
-export const links = [
+const links = [
   {
     label: 'Limit / Range',
     svg: <IconDisposable className="hidden size-14 md:inline" />,
@@ -46,7 +46,7 @@ export const TradeNav = () => {
       </h2>
       <nav
         aria-labelledby="trading-strateg-nav"
-        className="text-14 grid grid-cols-2 gap-8"
+        className="text-14 grid grid-cols-1 gap-8 md:grid-cols-2"
       >
         {links.map((link) => (
           <Link
