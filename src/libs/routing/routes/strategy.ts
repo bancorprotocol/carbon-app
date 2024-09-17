@@ -6,11 +6,16 @@ import {
   activityValidators,
   validateActivityParams,
 } from 'components/activity/utils';
+import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 
 export const strategyPage = new Route({
   getParentRoute: () => rootRoute,
   path: 'strategy/$id',
   component: StrategyPage,
+  beforeLoad: ({ search }) => {
+    search.priceStart ||= defaultStart().toString();
+    search.priceEnd ||= defaultEnd().toString();
+  },
   validateSearch: validateActivityParams({
     ...activityValidators,
     priceStart: validNumber,
