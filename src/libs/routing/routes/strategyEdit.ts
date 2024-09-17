@@ -13,7 +13,12 @@ import {
   EditRecurringStrategySearch,
 } from 'pages/strategies/edit/prices/recurring';
 import { Strategy } from 'libs/queries';
-import { isEmptyOrder, isZero } from 'components/strategies/common/utils';
+import {
+  defaultEnd,
+  defaultStart,
+  isEmptyOrder,
+  isZero,
+} from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import {
@@ -72,7 +77,13 @@ export const editPricesDisposable = new Route({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/disposable',
   component: EditStrategyDisposablePage,
+  beforeLoad: ({ search }) => {
+    search.priceStart ||= defaultStart().toString();
+    search.priceEnd ||= defaultEnd().toString();
+  },
   validateSearch: validateSearchParams<EditDisposableStrategySearch>({
+    priceStart: validNumber,
+    priceEnd: validNumber,
     editType: validLiteral(['editPrices', 'renew']),
     min: validPositiveNumber,
     max: validPositiveNumber,
@@ -102,7 +113,13 @@ export const editPricesRecurring = new Route({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/recurring',
   component: EditStrategyRecurringPage,
+  beforeLoad: ({ search }) => {
+    search.priceStart ||= defaultStart().toString();
+    search.priceEnd ||= defaultEnd().toString();
+  },
   validateSearch: validateSearchParams<EditRecurringStrategySearch>({
+    priceStart: validNumber,
+    priceEnd: validNumber,
     editType: validLiteral(['editPrices', 'renew']),
     buyMin: validPositiveNumber,
     buyMax: validPositiveNumber,
@@ -144,7 +161,13 @@ export const editPricesOverlapping = new Route({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/overlapping',
   component: EditStrategyOverlappingPage,
+  beforeLoad: ({ search }) => {
+    search.priceStart ||= defaultStart().toString();
+    search.priceEnd ||= defaultEnd().toString();
+  },
   validateSearch: validateSearchParams<EditOverlappingStrategySearch>({
+    priceStart: validNumber,
+    priceEnd: validNumber,
     editType: validLiteral(['editPrices', 'renew']),
     chartType: validLiteral(['history', 'range']),
     marketPrice: validNumber,
@@ -162,7 +185,13 @@ export const editBudgetDisposable = new Route({
   getParentRoute: () => editStrategyLayout,
   path: 'budget/disposable',
   component: EditBudgetDisposablePage,
+  beforeLoad: ({ search }) => {
+    search.priceStart ||= defaultStart().toString();
+    search.priceEnd ||= defaultEnd().toString();
+  },
   validateSearch: validateSearchParams<EditBudgetDisposableStrategySearch>({
+    priceStart: validNumber,
+    priceEnd: validNumber,
     editType: validLiteral(['deposit', 'withdraw']),
     buyBudget: validNumber,
     sellBudget: validNumber,
@@ -175,7 +204,13 @@ export const editBudgetRecurring = new Route({
   getParentRoute: () => editStrategyLayout,
   path: 'budget/recurring',
   component: EditBudgetRecurringPage,
+  beforeLoad: ({ search }) => {
+    search.priceStart ||= defaultStart().toString();
+    search.priceEnd ||= defaultEnd().toString();
+  },
   validateSearch: validateSearchParams<EditBudgetRecurringStrategySearch>({
+    priceStart: validNumber,
+    priceEnd: validNumber,
     editType: validLiteral(['deposit', 'withdraw']),
     buyBudget: validNumber,
     buyMarginalPrice: validMarginalPrice,
@@ -188,7 +223,13 @@ export const editBudgetOverlapping = new Route({
   getParentRoute: () => editStrategyLayout,
   path: 'budget/overlapping',
   component: EditBudgetOverlappingPage,
+  beforeLoad: ({ search }) => {
+    search.priceStart ||= defaultStart().toString();
+    search.priceEnd ||= defaultEnd().toString();
+  },
   validateSearch: validateSearchParams<EditBudgetOverlappingSearch>({
+    priceStart: validNumber,
+    priceEnd: validNumber,
     editType: validLiteral(['deposit', 'withdraw']),
     chartType: validLiteral(['history', 'range']),
     marketPrice: validNumber,

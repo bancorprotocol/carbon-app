@@ -7,12 +7,15 @@ export const toUnixUTC = (date: Date) => {
 };
 
 /** Transform the date in UTC into the local timezone */
-export const fromUnixUTC = (timestamp?: string | number) => {
+export function fromUnixUTC(): undefined;
+export function fromUnixUTC(timestamp: string | number): Date;
+export function fromUnixUTC(timestamp?: string | number): Date | undefined;
+export function fromUnixUTC(timestamp?: string | number) {
   if (!timestamp) return;
   const date = fromUnixTime(Number(timestamp));
   const deltaMin = date.getTimezoneOffset();
   return addMinutes(date, deltaMin);
-};
+}
 
 /** Format date to DD/MM/YY */
 export const xAxisFormatter = Intl.DateTimeFormat('en-UK', {
