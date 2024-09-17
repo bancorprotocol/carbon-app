@@ -25,6 +25,7 @@ import { datePickerDisabledDays } from 'components/simulator/result/SimResultCha
 import { useNavigate } from '@tanstack/react-router';
 import { Token } from 'libs/tokens';
 import { StrategyChartLegend } from './StrategyChartLegend';
+import config from 'config';
 
 interface Props {
   marketPrice?: string;
@@ -55,6 +56,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
       replace: true,
     });
   };
+  const isNativeChart = config.ui.priceChart === 'native';
 
   return (
     <section
@@ -81,7 +83,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
             History
           </Radio>
         </RadioGroup>
-        {search.chartType === 'history' && (
+        {isNativeChart && search.chartType === 'history' && (
           <DateRangePicker
             defaultStart={defaultStartDate()}
             defaultEnd={defaultEndDate()}

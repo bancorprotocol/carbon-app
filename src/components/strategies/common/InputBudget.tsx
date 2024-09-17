@@ -63,9 +63,18 @@ export const InputBudget: FC<Props> = (props) => {
   const id = props.id ?? inputId;
   const { user } = useWagmi();
   const [localBudget, setLocalBudget] = useState(roundSearchParam(value));
-  const { getFiatValue, selectedFiatCurrency: currentCurrency } =
-    useFiatCurrency(token);
+  const {
+    getFiatValue,
+    selectedFiatCurrency: currentCurrency,
+    hasFiatValue,
+  } = useFiatCurrency(token);
   const fiatValue = getFiatValue(localBudget ?? '0', true);
+
+  const priceText = () => {
+    if (!hasFiatValue()) return `Current ${currentCurrency} value unavailable`;
+    if (fiatValue.gt(0)) return prettifyNumber(fiatValue, { currentCurrency });
+    return '';
+  };
 
   useEffect(() => {
     if (document.activeElement?.id !== id) {
@@ -144,9 +153,7 @@ export const InputBudget: FC<Props> = (props) => {
           </div>
         </div>
         <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono">
-          <p className="flex items-center gap-5 break-all text-white/60">
-            {fiatValue.gt(0) && prettifyNumber(fiatValue, { currentCurrency })}
-          </p>
+          <p className="flex items-center gap-5 text-white/60">{priceText()}</p>
           {user && max && !maxIsLoading && (
             <button
               disabled={disabled}

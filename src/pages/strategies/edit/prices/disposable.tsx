@@ -25,6 +25,8 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'libs/queries';
 
 export interface EditDisposableStrategySearch {
+  priceStart?: string;
+  priceEnd?: string;
   editType: 'editPrices' | 'renew';
   min?: string;
   max?: string;

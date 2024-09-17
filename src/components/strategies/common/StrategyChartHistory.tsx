@@ -16,6 +16,7 @@ import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { Token } from 'libs/tokens';
+import { Activity } from 'libs/queries/extApi/activity';
 import config from 'config';
 
 const chartSettings: D3ChartSettingsProps = {
@@ -87,12 +88,13 @@ interface Props {
   spread?: string; // Only overlapping
   readonly?: boolean;
   marketPrice?: string;
+  activities?: Activity[];
   onPriceUpdates?: OnPriceUpdates;
 }
 
 export const StrategyChartHistory: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>();
-  const { base, quote, type, order0, order1 } = props;
+  const { base, quote, type, order0, order1, activities } = props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
 
@@ -180,6 +182,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
           type={type}
           overlappingSpread={props.spread}
           overlappingMarketPrice={marketPrice}
+          activities={activities}
         />
       )}
     </D3ChartWrapper>

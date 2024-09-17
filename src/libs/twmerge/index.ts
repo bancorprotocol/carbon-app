@@ -6,7 +6,8 @@ type AdditionalClassGroupIDs =
   | 'bgColors'
   | 'borderColors'
   | 'outlineColors'
-  | 'animation';
+  | 'animation'
+  | 'transformBox';
 
 const colors = [
   'white',
@@ -73,6 +74,11 @@ export const customTwMerge = extendTailwindMerge<AdditionalClassGroupIDs>({
       outlineColors: [
         {
           outline: colors,
+        },
+      ],
+      transformBox: [
+        {
+          transformBox: ['content', 'border', 'fill', 'stroke', 'view'],
         },
       ],
       animation: [
