@@ -29,10 +29,8 @@ const groupByIndicators = (activities: Activity[], domain: string[]) => {
   const isSame = points.length > 60 ? isSameWeek : isSameDay;
   const getLabel = points.length > 60 ? displayWeek : displayDay;
   for (const activity of activities) {
-    const key = (() => {
-      const clostest = points.find((point) => isSame(point, activity.date));
-      return (clostest ?? points.at(-1)!).getTime() / 1000;
-    })();
+    const closest = points.find((point) => isSame(point, activity.date));
+    const key = (closest ?? points.at(-1)!).getTime() / 1000;
     const action = activity.action;
     const list = action === 'buy' || action === 'sell' ? trades : operations;
     list[key] ||= {
@@ -57,13 +55,6 @@ const groupByIndicators = (activities: Activity[], domain: string[]) => {
     trades: Object.values(trades),
   };
 };
-
-export type ChartPrices<T = string> = {
-  buy: { min: T; max: T };
-  sell: { min: T; max: T };
-};
-
-export type OnPriceUpdates = (props: ChartPrices) => void;
 
 export interface D3ChartIndicatorsProps {
   xScale: ScaleBand<string>;
