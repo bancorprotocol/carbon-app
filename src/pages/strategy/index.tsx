@@ -37,6 +37,7 @@ import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 import { useActivityQuery } from 'components/activity/useActivityQuery';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
+import { ActivitySearchParams } from 'components/activity/utils';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -49,30 +50,25 @@ export const StrategyPage = () => {
   const query = useGetStrategy(id);
   const [strategy] = useStrategiesWithFiat(query);
 
-  const showIndicator = (shouldShow: boolean) => {
+  const setSearch = (search: Partial<ActivitySearchParams>) => {
     navigate({
       params: (params) => params,
-      search: (previous) => ({
-        ...previous,
-        hideIndicators: shouldShow,
-      }),
+      search: (previous) => ({ ...previous, ...search }),
       resetScroll: false,
       replace: true,
     });
   };
 
+  const showIndicator = (shouldShow: boolean) => {
+    setSearch({ hideIndicators: shouldShow });
+  };
+
   const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {
     const { start, end } = props;
     if (!start || !end) return;
-    navigate({
-      params: (params) => params,
-      search: (previous) => ({
-        ...previous,
-        priceStart: toUnixUTC(start),
-        priceEnd: toUnixUTC(end),
-      }),
-      resetScroll: false,
-      replace: true,
+    setSearch({
+      priceStart: toUnixUTC(start),
+      priceEnd: toUnixUTC(end),
     });
   };
 

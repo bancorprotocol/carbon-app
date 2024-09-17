@@ -114,13 +114,6 @@ export default {
       'weight-800': '800',
       'weight-900': '900',
     },
-    transformBox: {
-      content: { 'transform-box': 'content-box' },
-      border: { 'transform-box': 'border-box' },
-      fill: { 'transform-box': 'fill-box' },
-      stroke: { 'transform-box': 'stroke-box' },
-      view: { 'transform-box': 'view-box' },
-    },
     keyframes: {
       spin: {
         to: {
