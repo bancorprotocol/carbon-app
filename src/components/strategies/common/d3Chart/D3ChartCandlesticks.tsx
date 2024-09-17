@@ -15,6 +15,8 @@ import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from 'components/strategies/common/d3Chart/Candlesticks';
 import { D3ChartDisposable } from './disposable/D3ChartDisposable';
 import { TradeTypes } from 'libs/routing/routes/trade';
+import { Activity } from 'libs/queries/extApi/activity';
+import { D3ChartIndicators } from './D3ChartIndicators';
 
 export type ChartPrices<T = string> = {
   buy: { min: T; max: T };
@@ -37,6 +39,7 @@ export interface D3ChartCandlesticksProps {
   overlappingSpread?: string;
   overlappingMarketPrice?: number;
   readonly?: boolean;
+  activities?: Activity[];
 }
 
 export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
@@ -53,6 +56,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     overlappingSpread,
     overlappingMarketPrice,
     readonly,
+    activities,
   } = props;
 
   const xScale = useMemo(
@@ -123,6 +127,14 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           onPriceUpdates={onPriceUpdates}
           marketPrice={overlappingMarketPrice ?? data[0].open ?? 0}
           spread={Number(overlappingSpread)}
+        />
+      )}
+      {activities?.length && (
+        <D3ChartIndicators
+          xScale={xScale}
+          yScale={y.scale}
+          boundHeight={dms.boundedHeight}
+          activities={activities}
         />
       )}
     </>

@@ -3,7 +3,6 @@ import {
   useParams,
   useRouter,
   useSearch,
-  // useSearch,
 } from '@tanstack/react-router';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { Page } from 'components/common/page';
@@ -36,30 +35,48 @@ import {
 } from 'components/common/datePicker/DateRangePicker';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
+import { useActivityQuery } from 'components/activity/useActivityQuery';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
+import { ActivitySearchParams } from 'components/activity/utils';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
   const navigate = useNavigate({ from: '/strategy/$id' });
-  const { priceStart, priceEnd } = useSearch({ from: '/strategy/$id' });
+  const { priceStart, priceEnd, hideIndicators } = useSearch({
+    from: '/strategy/$id',
+  });
   const params = { strategyIds: id };
   const query = useGetStrategy(id);
   const [strategy] = useStrategiesWithFiat(query);
 
-  const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {
-    const { start, end } = props;
-    if (!start || !end) return;
+  const setSearch = (search: Partial<ActivitySearchParams>) => {
     navigate({
       params: (params) => params,
-      search: (previous) => ({
-        ...previous,
-        priceStart: toUnixUTC(start),
-        priceEnd: toUnixUTC(end),
-      }),
+      search: (previous) => ({ ...previous, ...search }),
       resetScroll: false,
       replace: true,
     });
   };
+
+  const showIndicator = (shouldShow: boolean) => {
+    setSearch({ hideIndicators: shouldShow });
+  };
+
+  const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {
+    const { start, end } = props;
+    if (!start || !end) return;
+    setSearch({
+      priceStart: toUnixUTC(start),
+      priceEnd: toUnixUTC(end),
+    });
+  };
+
+  const { data: activities } = useActivityQuery({
+    strategyIds: id,
+    start: priceStart?.toString() ?? toUnixUTC(defaultStartDate()),
+    end: priceEnd?.toString() ?? toUnixUTC(defaultEndDate()),
+  });
 
   if (query.isPending) {
     return (
@@ -84,6 +101,7 @@ export const StrategyPage = () => {
   const base = strategy.base;
   const quote = strategy.quote;
   const showStrategyRoi = config.showStrategyRoi;
+  const isNativeChart = config.ui.priceChart === 'native';
 
   return (
     <Page hideTitle={true} className="gap-20">
@@ -128,20 +146,41 @@ export const StrategyPage = () => {
           </div>
         </article>
         <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 md:flex">
-          <header className="flex items-center">
-            <h2 className="text-18 font-weight-500 mr-auto">Price graph</h2>
-            <DateRangePicker
-              defaultStart={defaultStartDate()}
-              defaultEnd={defaultEndDate()}
-              start={fromUnixUTC(priceStart)}
-              end={fromUnixUTC(priceEnd)}
-              onConfirm={onDatePickerConfirm}
-              presets={datePickerPresets}
-              options={{
-                disabled: datePickerDisabledDays,
-              }}
-              required
-            />
+          <header className="flex items-center gap-16">
+            <h2 className="text-18 font-weight-500 mr-auto">Price Chart</h2>
+            {isNativeChart && (
+              <DateRangePicker
+                defaultStart={defaultStartDate()}
+                defaultEnd={defaultEndDate()}
+                start={fromUnixUTC(priceStart)}
+                end={fromUnixUTC(priceEnd)}
+                onConfirm={onDatePickerConfirm}
+                presets={datePickerPresets}
+                options={{
+                  disabled: datePickerDisabledDays,
+                }}
+                required
+              />
+            )}
+            {isNativeChart && (
+              <div className="flex items-center gap-8">
+                <p id="indicator-label">Indicators</p>
+                <RadioGroup aria-labelledby="indicator-label">
+                  <Radio
+                    checked={!hideIndicators}
+                    onChange={() => showIndicator(false)}
+                  >
+                    On
+                  </Radio>
+                  <Radio
+                    checked={hideIndicators}
+                    onChange={() => showIndicator(true)}
+                  >
+                    Off
+                  </Radio>
+                </RadioGroup>
+              </div>
+            )}
           </header>
           <StrategyChartHistory
             type="market"
@@ -149,6 +188,7 @@ export const StrategyPage = () => {
             quote={quote}
             order0={emptyOrder()}
             order1={emptyOrder()}
+            activities={(!hideIndicators && activities) || []}
           />
         </article>
       </section>

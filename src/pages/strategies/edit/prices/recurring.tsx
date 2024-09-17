@@ -25,6 +25,8 @@ import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 
 export interface EditRecurringStrategySearch {
+  priceStart?: string;
+  priceEnd?: string;
   editType: 'editPrices' | 'renew';
   buyMin?: string;
   buyMax?: string;

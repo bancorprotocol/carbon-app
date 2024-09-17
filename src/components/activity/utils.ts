@@ -26,6 +26,7 @@ export interface ActivitySearchParams extends Partial<PaginationParams> {
   // This is only for StrategyPageParams, but if I don't implement it here the build breaks
   priceStart?: string;
   priceEnd?: string;
+  hideIndicators?: boolean;
 }
 export const activityActionName: Record<ActivityAction, string> = {
   create: 'Create',

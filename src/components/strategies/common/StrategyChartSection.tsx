@@ -11,6 +11,7 @@ import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { TradeSearch } from 'libs/routing';
+import config from 'config';
 
 interface Props {
   children: ReactNode;
@@ -32,7 +33,7 @@ export const StrategyChartSection: FC<Props> = ({ children }) => {
       replace: true,
     });
   };
-
+  const isNativeChart = config.ui.priceChart === 'native';
   return (
     <section
       aria-labelledby="price-chart-title"
@@ -42,18 +43,20 @@ export const StrategyChartSection: FC<Props> = ({ children }) => {
         <h2 id="price-chart-title" className="text-18">
           Price Chart
         </h2>
-        <DateRangePicker
-          defaultStart={defaultStartDate()}
-          defaultEnd={defaultEndDate()}
-          start={fromUnixUTC(priceStart)}
-          end={fromUnixUTC(priceEnd)}
-          onConfirm={onDatePickerConfirm}
-          presets={datePickerPresets}
-          options={{
-            disabled: datePickerDisabledDays,
-          }}
-          required
-        />
+        {isNativeChart && (
+          <DateRangePicker
+            defaultStart={defaultStartDate()}
+            defaultEnd={defaultEndDate()}
+            start={fromUnixUTC(priceStart)}
+            end={fromUnixUTC(priceEnd)}
+            onConfirm={onDatePickerConfirm}
+            presets={datePickerPresets}
+            options={{
+              disabled: datePickerDisabledDays,
+            }}
+            required
+          />
+        )}
       </header>
       {children}
     </section>

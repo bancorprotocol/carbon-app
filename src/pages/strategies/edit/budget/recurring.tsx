@@ -15,6 +15,8 @@ import { StrategyChartHistory } from 'components/strategies/common/StrategyChart
 import { StrategyChartLegend } from 'components/strategies/common/StrategyChartLegend';
 
 export interface EditBudgetRecurringStrategySearch {
+  priceStart?: string;
+  priceEnd?: string;
   editType: 'deposit' | 'withdraw';
   buyBudget?: string;
   buyMarginalPrice?: string;
