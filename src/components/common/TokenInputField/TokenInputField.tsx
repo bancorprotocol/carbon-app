@@ -54,7 +54,6 @@ export const TokenInputField: FC<Props> = (props) => {
   const { getFiatValue, getFiatAsString, hasFiatValue, selectedFiatCurrency } =
     useFiatCurrency(token);
   const fiatValueUsd = getFiatValue(value, true);
-  const showFiatValue = fiatValueUsd.gt(0) && hasFiatValue();
 
   const handleChange = ({
     target: { value },
@@ -76,6 +75,13 @@ export const TokenInputField: FC<Props> = (props) => {
       setValue(balanceValue);
     }
     onKeystroke && onKeystroke();
+  };
+
+  const priceText = () => {
+    if (slippage?.isZero()) return;
+    if (!hasFiatValue())
+      return `Current ${selectedFiatCurrency} value unavailable`;
+    if (fiatValueUsd.gt(0)) return getFiatAsString(value);
   };
 
   return (
@@ -115,11 +121,8 @@ export const TokenInputField: FC<Props> = (props) => {
         </div>
       </div>
       <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10">
-        <p className="flex items-center gap-5 break-all text-white/60">
-          {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
-          {!slippage?.isZero() &&
-            !hasFiatValue() &&
-            `Current ${selectedFiatCurrency} value unavailable`}
+        <p className="flex items-center gap-5 text-white/60">
+          {priceText()}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
         {user && !withoutWallet && isBalanceLoading && (

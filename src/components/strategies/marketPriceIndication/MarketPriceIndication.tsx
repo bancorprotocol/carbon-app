@@ -24,7 +24,7 @@ export const MarketPriceIndication: FC<Props> = (props) => {
   const fiatAsString = getFiatAsString(price);
   if (!marketPrice)
     return (
-      <span className="text-12 break-all text-white/60">
+      <span className="text-12 text-white/60">
         Current {selectedFiatCurrency} value unavailable
       </span>
     );

@@ -153,9 +153,7 @@ export const InputBudget: FC<Props> = (props) => {
           </div>
         </div>
         <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono">
-          <p className="flex items-center gap-5 break-all text-white/60">
-            {priceText()}
-          </p>
+          <p className="flex items-center gap-5 text-white/60">{priceText()}</p>
           {user && max && !maxIsLoading && (
             <button
               disabled={disabled}
