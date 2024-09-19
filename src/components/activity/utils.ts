@@ -78,7 +78,7 @@ export const activityKey = (activity: Activity, i: number) => {
   return `${activity.txHash}-${activity.action}-${i}`;
 };
 
-export const activityDateFormatter = new Intl.DateTimeFormat('en', {
+export const activityDateFormatter = new Intl.DateTimeFormat(undefined, {
   month: 'short',
   day: 'numeric',
   year: 'numeric',

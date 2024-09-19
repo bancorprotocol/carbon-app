@@ -237,9 +237,9 @@ const Content = (props: Props) => {
   );
 };
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
   year: 'numeric',
-  month: 'long',
+  month: 'short',
   day: '2-digit',
 });
 
