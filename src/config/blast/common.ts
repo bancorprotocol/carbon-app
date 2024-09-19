@@ -21,7 +21,7 @@ export const commonConfig: AppConfig = {
   mode: 'development',
   appName: 'Carbon DeFi',
   appUrl: 'https://app.carbondefi.xyz',
-  carbonApi: 'https://blast-api.carbondefi.xyz/v1/',
+  carbonApi: 'https://multi.carbondefi.xyz/v1/blast/',
   selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: '',
