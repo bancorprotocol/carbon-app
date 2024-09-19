@@ -69,12 +69,16 @@ const tradePage = createRoute({
   path: '/trade',
   component: TradeRoot,
   beforeLoad: ({ location, search }) => {
-    (search as TradeSearch).priceStart ||= defaultStart().toString();
-    (search as TradeSearch).priceEnd ||= defaultEnd().toString();
     if (location.pathname.endsWith('trade')) {
       throw redirect({ to: '/trade/disposable', search });
     }
   },
+  validateSearch: searchValidator({
+    base: v.optional(validAddress),
+    quote: v.optional(validAddress),
+    priceStart: v.optional(validNumber, defaultStart().toString()),
+    priceEnd: v.optional(validNumber, defaultEnd().toString()),
+  }),
 });
 
 const marketPage = createRoute({
@@ -82,10 +86,6 @@ const marketPage = createRoute({
   path: '/market',
   component: TradeMarket,
   validateSearch: searchValidator({
-    base: v.optional(validAddress),
-    quote: v.optional(validAddress),
-    priceStart: v.optional(validNumber, defaultStart().toString()),
-    priceEnd: v.optional(validNumber, defaultEnd().toString()),
     direction: v.optional(v.picklist(['buy', 'sell'])),
     source: v.optional(validNumber),
     target: v.optional(validNumber),
@@ -97,10 +97,6 @@ const disposablePage = createRoute({
   path: '/disposable',
   component: TradeDisposable,
   validateSearch: searchValidator({
-    base: v.optional(validAddress),
-    quote: v.optional(validAddress),
-    priceStart: v.optional(validNumber, defaultStart().toString()),
-    priceEnd: v.optional(validNumber, defaultEnd().toString()),
     direction: v.optional(v.picklist(['buy', 'sell'])),
     settings: v.optional(v.picklist(['limit', 'range'])),
     min: v.optional(validPositiveNumber),
@@ -114,10 +110,6 @@ const recurringPage = createRoute({
   path: '/recurring',
   component: TradeRecurring,
   validateSearch: searchValidator({
-    base: v.optional(validAddress),
-    quote: v.optional(validAddress),
-    priceStart: v.optional(validNumber, defaultStart().toString()),
-    priceEnd: v.optional(validNumber, defaultEnd().toString()),
     buyMin: v.optional(validPositiveNumber),
     buyMax: v.optional(validPositiveNumber),
     buyBudget: v.optional(validPositiveNumber),
@@ -134,10 +126,6 @@ const overlappingPage = createRoute({
   path: '/overlapping',
   component: TradeOverlapping,
   validateSearch: searchValidator({
-    base: v.optional(validAddress),
-    quote: v.optional(validAddress),
-    priceStart: v.optional(validNumber, defaultStart().toString()),
-    priceEnd: v.optional(validNumber, defaultEnd().toString()),
     marketPrice: v.optional(validNumber),
     min: v.optional(validPositiveNumber),
     max: v.optional(validPositiveNumber),
