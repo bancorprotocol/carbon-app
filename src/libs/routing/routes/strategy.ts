@@ -10,7 +10,7 @@ const schema = {
   ...activityValidators,
   priceStart: v.optional(validNumber, defaultStart().toString()),
   priceEnd: v.optional(validNumber, defaultEnd().toString()),
-  hideIndicators: v.boolean(),
+  hideIndicators: v.optional(v.boolean()),
 };
 
 export type StrategyPageSearch = InferSearch<typeof schema>;

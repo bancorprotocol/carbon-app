@@ -30,12 +30,12 @@ export interface EditRecurringStrategySearch {
   editType: 'editPrices' | 'renew';
   buyMin?: string;
   buyMax?: string;
-  buySettings: StrategySettings;
+  buySettings?: StrategySettings;
   buyBudget?: string;
   buyAction?: 'deposit' | 'withdraw';
   sellMin?: string;
   sellMax?: string;
-  sellSettings: StrategySettings;
+  sellSettings?: StrategySettings;
   sellBudget?: string;
   sellAction?: 'deposit' | 'withdraw';
 }
@@ -51,7 +51,7 @@ const getOrders = (
 
   const defaultMin = (
     direction: StrategyDirection,
-    settings: StrategySettings
+    settings: StrategySettings = 'limit'
   ) => {
     const isBuy = direction === 'buy';
     const defaultPrice = isBuy ? order0.startRate : order1.endRate;
@@ -69,7 +69,7 @@ const getOrders = (
   };
   const defaultMax = (
     direction: StrategyDirection,
-    settings: StrategySettings
+    settings: StrategySettings = 'limit'
   ) => {
     const isBuy = direction === 'buy';
     const defaultPrice = isBuy ? order0.startRate : order1.endRate;
@@ -89,7 +89,7 @@ const getOrders = (
     buy: {
       min: search.buyMin ?? defaultMin('buy', search.buySettings) ?? '',
       max: search.buyMax ?? defaultMax('buy', search.buySettings) ?? '',
-      settings: search.buySettings,
+      settings: search.buySettings ?? 'limit',
       action: search.buyAction ?? 'deposit',
       budget: getTotalBudget(
         search.buyAction ?? 'deposit',
@@ -100,7 +100,7 @@ const getOrders = (
     sell: {
       min: search.sellMin ?? defaultMin('sell', search.sellSettings) ?? '',
       max: search.sellMax ?? defaultMax('sell', search.sellSettings) ?? '',
-      settings: search.sellSettings,
+      settings: search.sellSettings ?? 'limit',
       action: search.sellAction ?? 'deposit',
       budget: getTotalBudget(
         search.sellAction ?? 'deposit',

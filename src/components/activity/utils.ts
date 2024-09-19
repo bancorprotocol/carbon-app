@@ -3,7 +3,6 @@ import {
   InferSearch,
   searchValidator,
   validArrayOf,
-  validLiteral,
   validNumberType,
   validString,
 } from 'libs/routing/utils';
@@ -34,11 +33,11 @@ export const activityActions = Object.keys(
 
 export type ActivitySearchParams = InferSearch<typeof activityValidators>;
 export const activityValidators = {
-  actions: validArrayOf(validLiteral(activityActions)),
-  ids: validArrayOf(validString),
-  pairs: validArrayOf(validString),
-  start: validString,
-  end: validString,
+  actions: v.optional(validArrayOf(v.picklist(activityActions))),
+  ids: v.optional(validArrayOf(validString)),
+  pairs: v.optional(validArrayOf(validString)),
+  start: v.optional(validString),
+  end: v.optional(validString),
   limit: v.optional(validNumberType, 10),
   offset: v.optional(validNumberType, 0),
 };

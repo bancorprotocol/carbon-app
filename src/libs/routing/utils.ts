@@ -23,15 +23,11 @@ export const validArrayOf = (schema: v.GenericSchema<string, any>) => {
   return v.array(schema);
 };
 
-export const validLiteral = (array: string[]) => {
-  return v.union(array.map((l) => v.literal(l)));
-};
-
 export const validNumber = v.pipe(
   v.string(),
   v.check((value: string) => isNaN(Number(formatNumber(value))) === false)
 );
-export const validPositiveNumber = v.fallback(
+export const validPositiveNumber = v.optional(
   v.pipe(
     validNumber,
     v.check((value: string) => Number(value) >= 0)
@@ -62,40 +58,13 @@ export const validBoolean = v.pipe(
 
 export const validMarginalPrice = v.union([
   validNumber,
-  validLiteral([MarginalPriceOptions.maintain, MarginalPriceOptions.reset]),
+  v.picklist([MarginalPriceOptions.maintain, MarginalPriceOptions.reset]),
 ]);
 
-type WithOptional<T extends v.ObjectEntries> = {
-  [key in keyof T]: T[key] extends v.OptionalSchema<infer a, infer b>
-    ? T[key]
-    : v.OptionalSchema<T[key], never>;
-};
 export type InferSearch<T extends v.ObjectEntries> = v.InferOutput<
-  v.ObjectSchema<WithOptional<T>, undefined>
+  v.ObjectSchema<T, undefined>
 >;
 
 export const searchValidator = <T extends v.ObjectEntries>(validators: T) => {
-  const result: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(validators)) {
-    if (value.type === 'optional') result[key] = value;
-    else result[key] = v.optional(value);
-  }
-  return valibotSearchValidator(v.object(result as WithOptional<T>));
-};
-
-export const validateSearchParams = <T>(
-  validator: SearchParamsValidator<T>
-) => {
-  return (search: Record<string, string>): T => {
-    for (const key in search) {
-      const schema = validator[key as keyof T];
-      if (schema && v.is(schema, search[key])) {
-        search[key] = v.parse(schema, search[key]);
-      }
-      if (search[key] === undefined) {
-        delete search[key];
-      }
-    }
-    return search as T;
-  };
+  return valibotSearchValidator(v.object(validators));
 };

@@ -30,8 +30,8 @@ export interface EditDisposableStrategySearch {
   editType: 'editPrices' | 'renew';
   min?: string;
   max?: string;
-  settings: StrategySettings;
-  direction: StrategyDirection;
+  settings?: StrategySettings;
+  direction?: StrategyDirection;
   action?: 'deposit' | 'withdraw';
   budget?: string;
 }

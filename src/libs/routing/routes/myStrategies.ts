@@ -8,6 +8,7 @@ import { StrategiesPortfolioPage } from 'pages/strategies/portfolio';
 import { StrategiesPortfolioTokenPage } from 'pages/strategies/portfolio/token';
 import { searchValidator, validString } from '../utils';
 import { MyStrategiesSearch } from 'hooks/useStrategies';
+import * as v from 'valibot';
 
 export const myStrategyLayout = createRoute({
   getParentRoute: () => rootRoute,
@@ -20,7 +21,7 @@ export const strategyOverviewPage = createRoute({
   path: '/',
   component: StrategiesOverviewPage,
   validateSearch: searchValidator({
-    search: validString,
+    search: v.optional(validString),
   }),
   postSearchFilters: [
     (search: MyStrategiesSearch) => {
