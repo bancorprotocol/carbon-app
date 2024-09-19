@@ -18,7 +18,7 @@ export function fromUnixUTC(timestamp?: string | number) {
 }
 
 /** Format date to DD/MM/YY */
-export const xAxisFormatter = Intl.DateTimeFormat('en-UK', {
+export const xAxisFormatter = Intl.DateTimeFormat(undefined, {
   day: '2-digit',
   month: '2-digit',
   year: '2-digit',
