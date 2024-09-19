@@ -1,4 +1,4 @@
-import { redirect, Route } from '@tanstack/react-router';
+import { redirect, createRoute } from '@tanstack/react-router';
 import { SimulatorProvider } from 'components/simulator/result/SimulatorProvider';
 import { endOfDay, getUnixTime, startOfDay, sub } from 'date-fns';
 import { rootRoute } from 'libs/routing/routes/root';
@@ -16,7 +16,7 @@ import config from 'config';
 import { roundSearchParam } from 'utils/helpers';
 import * as v from 'valibot';
 
-export const simulatorRootRoute = new Route({
+export const simulatorRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/simulate',
 });
@@ -28,7 +28,7 @@ export interface StrategyInputBase {
   end?: string;
 }
 
-export const simulatorInputRootRoute = new Route({
+export const simulatorInputRootRoute = createRoute({
   getParentRoute: () => simulatorRootRoute,
   path: '/',
   component: SimulatorPage,
@@ -91,7 +91,7 @@ export interface StrategyInputSearch extends StrategyInputBase {
 
 export type SimulatorType = 'overlapping' | 'recurring';
 
-export const simulatorInputRecurringRoute = new Route({
+export const simulatorInputRecurringRoute = createRoute({
   getParentRoute: () => simulatorInputRootRoute,
   path: 'recurring',
   component: SimulatorInputRecurringPage,
@@ -138,7 +138,7 @@ export interface SimulatorInputOverlappingSearch extends StrategyInputBase {
   spread?: string;
 }
 
-export const simulatorInputOverlappingRoute = new Route({
+export const simulatorInputOverlappingRoute = createRoute({
   getParentRoute: () => simulatorInputRootRoute,
   path: 'overlapping',
   component: SimulatorInputOverlappingPage,
@@ -168,7 +168,7 @@ export type SimulatorResultSearch = Required<StrategyInputSearch> & {
   spread?: string;
 };
 
-export const simulatorResultRoute = new Route({
+export const simulatorResultRoute = createRoute({
   getParentRoute: () => simulatorRootRoute,
   path: 'result',
   component: () => (

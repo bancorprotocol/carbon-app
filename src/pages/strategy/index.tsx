@@ -37,7 +37,7 @@ import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 import { useActivityQuery } from 'components/activity/useActivityQuery';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
-import { ActivitySearchParams } from 'components/activity/utils';
+import { StrategyPageSearch } from 'libs/routing/routes/strategy';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -50,7 +50,7 @@ export const StrategyPage = () => {
   const query = useGetStrategy(id);
   const [strategy] = useStrategiesWithFiat(query);
 
-  const setSearch = (search: Partial<ActivitySearchParams>) => {
+  const setSearch = (search: Partial<StrategyPageSearch>) => {
     navigate({
       params: (params) => params,
       search: (previous) => ({ ...previous, ...search }),
@@ -192,7 +192,7 @@ export const StrategyPage = () => {
           />
         </article>
       </section>
-      <ActivityProvider params={params}>
+      <ActivityProvider params={params} url="/strategy/$id">
         <ActivityLayout filters={[]} />
       </ActivityProvider>
     </Page>

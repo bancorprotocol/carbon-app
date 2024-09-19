@@ -1,4 +1,4 @@
-import { Route, redirect } from '@tanstack/react-router';
+import { createRoute, redirect } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   validAddress,
@@ -64,7 +64,7 @@ export interface TradeSearch {
   priceStart?: string;
   priceEnd?: string;
 }
-const tradePage = new Route({
+const tradePage = createRoute({
   getParentRoute: () => rootRoute,
   path: '/trade',
   component: TradeRoot,
@@ -77,7 +77,7 @@ const tradePage = new Route({
   },
 });
 
-const marketPage = new Route({
+const marketPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/market',
   component: TradeMarket,
@@ -92,7 +92,7 @@ const marketPage = new Route({
   }),
 });
 
-const disposablePage = new Route({
+const disposablePage = createRoute({
   getParentRoute: () => tradePage,
   path: '/disposable',
   component: TradeDisposable,
@@ -109,7 +109,7 @@ const disposablePage = new Route({
   }),
 });
 
-const recurringPage = new Route({
+const recurringPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/recurring',
   component: TradeRecurring,
@@ -129,7 +129,7 @@ const recurringPage = new Route({
   }),
 });
 
-const overlappingPage = new Route({
+const overlappingPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/overlapping',
   component: TradeOverlapping,

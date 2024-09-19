@@ -19,7 +19,7 @@ interface ActivityContextType {
   status: 'error' | 'pending' | 'success';
   fetchStatus: FetchStatus;
   queryParams: QueryActivityParams;
-  searchParams: ActivitySearchParams;
+  searchParams: Partial<ActivitySearchParams>;
   setSearchParams: (searchParams: Partial<ActivitySearchParams>) => any;
 }
 
@@ -51,13 +51,18 @@ const getQueryParams = (
   return params;
 };
 
+type ActivityUrls =
+  | '/strategies/activity'
+  | '/explore/$type/$slug/activity'
+  | '/strategy/$id';
 interface Props {
+  url: ActivityUrls;
   params: QueryActivityParams;
   children: ReactNode;
 }
 type ParamsKey = Extract<keyof QueryActivityParams, string>;
-export const ActivityProvider: FC<Props> = ({ children, params }) => {
-  const nav = useNavigate();
+export const ActivityProvider: FC<Props> = ({ children, params, url }) => {
+  const nav = useNavigate({ from: url });
   const searchParams: ActivitySearchParams = useSearch({ strict: false });
   const limit = searchParams.limit;
   const offset = searchParams.offset;
@@ -78,17 +83,7 @@ export const ActivityProvider: FC<Props> = ({ children, params }) => {
         replace: true,
         resetScroll: false,
         params: (params) => params,
-        search: (currentSearch) => {
-          const updates = structuredClone(changes);
-          const search = structuredClone(currentSearch);
-          for (const [key, value] of Object.entries(changes)) {
-            if (isEmpty(value)) {
-              delete (updates as any)[key];
-              if (key in search) delete (search as any)[key];
-            }
-          }
-          return { ...search, ...updates };
-        },
+        search: (current) => ({ ...current, ...changes }),
       });
     },
     [nav]

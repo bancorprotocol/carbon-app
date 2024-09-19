@@ -10,7 +10,7 @@ import { Strategy } from 'libs/queries';
 import { prepareGtmStrategyData } from './strategyEvents';
 
 interface ExplorerSearchInput {
-  type: ExplorerType;
+  type?: ExplorerType;
   slug?: string;
   strategies: Strategy[];
   filter: string;

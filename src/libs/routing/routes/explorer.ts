@@ -1,4 +1,4 @@
-import { Route, redirect } from '@tanstack/react-router';
+import { createRoute, redirect } from '@tanstack/react-router';
 import { ExplorerType } from 'components/explorer/utils';
 import { rootRoute } from 'libs/routing/routes/root';
 import { ExplorerPage } from 'pages/explorer';
@@ -7,14 +7,13 @@ import { ExplorerActivityPage } from 'pages/explorer/type/activity';
 import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
 import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
 import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
-import {
-  activityValidators,
-  validateActivityParams,
-} from 'components/activity/utils';
+import { validateActivityParams } from 'components/activity/utils';
+import { getLastVisitedPair } from '../utils';
+import { toPairSlug } from 'utils/pairSearch';
 
 // Used for redirecting old explorer route to new explorer route
 // TODO: remove this on May 2024
-export const oldExplorerLayout = new Route({
+export const oldExplorerLayout = createRoute({
   getParentRoute: () => rootRoute,
   path: '/explorer/*',
   beforeLoad: ({ params }) => {
@@ -27,70 +26,84 @@ export const oldExplorerLayout = new Route({
   },
 });
 
-export const explorerLayout = new Route({
+export const explorerLayout = createRoute({
   getParentRoute: () => rootRoute,
   path: '/explore',
 });
 
-export const explorerRedirect = new Route({
+export const explorerRedirect = createRoute({
   getParentRoute: () => explorerLayout,
   path: '/',
   beforeLoad: () => {
+    const { base, quote } = getLastVisitedPair();
+    const slug = toPairSlug({ address: base }, { address: quote });
     redirect({
-      to: '/explore/$type',
-      params: { type: 'token-pair' },
+      to: '/explore/$type/$slug',
+      params: { type: 'token-pair', slug },
       throw: true,
       replace: true,
     });
   },
 });
 
-export const explorerPage = new Route({
+export const explorerPage = createRoute({
   getParentRoute: () => explorerLayout,
   path: '$type',
+  component: ExplorerPage,
   parseParams: (params: Record<string, string>) => {
     return { type: params.type as ExplorerType };
   },
-  component: ExplorerPage,
+  beforeLoad: ({ location }) => {
+    if (location.pathname.endsWith('token-pair')) {
+      const { base, quote } = getLastVisitedPair();
+      const slug = toPairSlug({ address: base }, { address: quote });
+      redirect({
+        to: '/explore/$type/$slug',
+        params: { type: 'token-pair', slug },
+        throw: true,
+        replace: true,
+      });
+    }
+  },
 });
 
-export const explorerTypePage = new Route({
+export const explorerTypePage = createRoute({
   getParentRoute: () => explorerPage,
   path: '/',
   component: ExplorerTypePage,
 });
 
-export const explorerResultLayout = new Route({
+export const explorerResultLayout = createRoute({
   getParentRoute: () => explorerPage,
   path: '$slug',
 });
 
-export const explorerOverviewPage = new Route({
+export const explorerOverviewPage = createRoute({
   getParentRoute: () => explorerResultLayout,
   path: '/',
   component: ExplorerTypeOverviewPage,
 });
 
-export const explorerPortfolioLayout = new Route({
+export const explorerPortfolioLayout = createRoute({
   getParentRoute: () => explorerResultLayout,
   path: 'portfolio',
 });
 
-export const explorerPortfolioPage = new Route({
+export const explorerPortfolioPage = createRoute({
   getParentRoute: () => explorerPortfolioLayout,
   path: '/',
   component: ExplorerTypePortfolioPage,
 });
 
-export const explorerPortfolioTokenPage = new Route({
+export const explorerPortfolioTokenPage = createRoute({
   getParentRoute: () => explorerPortfolioLayout,
   path: 'token/$address',
   component: ExplorerTypePortfolioTokenPage,
 });
 
-export const explorerActivityPage = new Route({
+export const explorerActivityPage = createRoute({
   getParentRoute: () => explorerResultLayout,
   path: '/activity',
   component: ExplorerActivityPage,
-  validateSearch: validateActivityParams(activityValidators),
+  validateSearch: validateActivityParams,
 });

@@ -28,7 +28,7 @@ import { useDebouncedValue } from 'hooks/useDebouncedValue';
 export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
   const pairs = usePairs();
-  const { type, slug } = useExplorerParams();
+  const { type, slug } = useExplorerParams('/explore/$type');
   const [search, setSearch] = useState(slug ?? '');
   const [debouncedSearch] = useDebouncedValue<string>(search, 300); // Debounce search input for ens query
 

@@ -9,7 +9,7 @@ export const ExplorerSearchDropdownButton = forwardRef<
   HTMLButtonElement,
   MenuButtonProps
 >(function ExplorerSearchDropdownButton(props, ref) {
-  const { type } = useExplorerParams();
+  const { type } = useExplorerParams('/explore/$type');
   return (
     <button
       ref={ref}

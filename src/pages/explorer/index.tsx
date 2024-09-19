@@ -1,10 +1,5 @@
 import { Page } from 'components/common/page';
-import {
-  Outlet,
-  Navigate,
-  useNavigate,
-  getLastVisitedPair,
-} from 'libs/routing';
+import { Outlet, Navigate, useNavigate } from 'libs/routing';
 import {
   ExplorerSearch,
   useExplorer,
@@ -14,12 +9,12 @@ import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { useEffect, useState } from 'react';
 import { explorerEvents } from 'services/events/explorerEvents';
-import { toPairSlug } from 'utils/pairSearch';
 import { lsService } from 'services/localeStorage';
 
+const url = '/explore/$type';
 export const ExplorerPage = () => {
-  const { slug, type } = useExplorerParams();
-  const navigate = useNavigate({ from: '/explore/$type/$slug' });
+  const { slug, type } = useExplorerParams(url);
+  const navigate = useNavigate({ from: url });
 
   useEffect(() => {
     if (slug && type === 'token-pair') {
@@ -28,18 +23,6 @@ export const ExplorerPage = () => {
       lsService.setItem('tradePair', [base, quote]);
       return;
     }
-    if (slug || type !== 'token-pair') return;
-    const defaultPair = getLastVisitedPair();
-    const defaultSlug = toPairSlug(
-      { address: defaultPair.base },
-      { address: defaultPair.quote }
-    );
-
-    navigate({
-      to: '/explore/$type/$slug',
-      params: { type, slug: defaultSlug },
-      replace: true,
-    });
   }, [slug, navigate, type]);
 
   const query = useExplorer();
@@ -63,7 +46,7 @@ export const ExplorerPage = () => {
 
 const ExplorerEvents = () => {
   const [mounted, setMounted] = useState(false);
-  const { slug, type } = useExplorerParams();
+  const { slug, type } = useExplorerParams(url);
   const { filteredStrategies, isPending, filter, sort } = useStrategyCtx();
 
   useEffect(() => {

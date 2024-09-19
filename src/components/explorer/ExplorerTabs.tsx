@@ -12,7 +12,7 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const ExplorerTabs = () => {
   const { filteredStrategies } = useStrategyCtx();
-  const { slug, type } = useExplorerParams();
+  const { slug, type } = useExplorerParams('/explore/$type/$slug');
 
   // To support emojis in ens domains
   const { location } = useRouterState();

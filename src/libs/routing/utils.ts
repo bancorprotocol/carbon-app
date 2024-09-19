@@ -1,100 +1,10 @@
 import { lsService } from 'services/localeStorage';
-import config from 'config';
 import { utils } from 'ethers';
-import * as v from 'valibot';
 import { formatNumber } from 'utils/helpers';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
-import { isAddress } from 'ethers/lib/utils';
-
-function toValue(mix: string | undefined) {
-  if (!mix) return '';
-  var str = decodeURIComponent(mix);
-  if (str === 'false') return false;
-  if (str === 'true') return true;
-  if (str.startsWith('0x')) return str;
-  if (str.startsWith('0X')) return str;
-  return +str * 0 === 0 && +str + '' === str ? str : str;
-}
-
-export function decode(str: string) {
-  let tmp,
-    k,
-    out: any = {},
-    arr = str.split('&');
-
-  while ((tmp = arr.shift())) {
-    tmp = tmp.split('=');
-    k = tmp.shift();
-    if (k && out[k] !== void 0) {
-      // @ts-ignore
-      out[k] = [].concat(out[k], toValue(tmp.shift()));
-    } else {
-      // @ts-ignore
-      out[k] = toValue(tmp.shift());
-    }
-  }
-
-  return out;
-}
-
-const isDate = (date: string) => {
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-  return regex.test(date);
-};
-
-export const parseSearchWith = (parser: (str: string) => any) => {
-  return (searchStr: string): Record<string, any> => {
-    if (searchStr.substring(0, 1) === '?') {
-      searchStr = searchStr.substring(1);
-    }
-
-    let query: Record<string, unknown> = decode(searchStr);
-
-    const keysToSkipParse = [
-      'settings',
-      'type',
-      'anchor',
-      'direction',
-      'buySettings',
-      'sellSettings',
-      'editType',
-      'action',
-      'buyAction',
-      'sellAction',
-      'chartType',
-    ];
-
-    const skipParsing = (key: string) => keysToSkipParse.includes(key);
-
-    const formatNumberParam = (value: string): string => {
-      const number = /^\d*\.*\d*$/;
-      if (value.match(number)) return `"${value}"`;
-      return value;
-    };
-
-    // Try to parse any query params that might be json
-    for (let key in query) {
-      if (
-        !query[key] ||
-        isAddress(String(query[key])) ||
-        isDate(String(query[key])) ||
-        skipParsing(key)
-      )
-        continue;
-
-      const value = query[key];
-      if (typeof value === 'string') {
-        try {
-          query[key] = parser(formatNumberParam(value));
-        } catch (err) {
-          //
-        }
-      }
-    }
-
-    return query;
-  };
-};
+import { valibotSearchValidator } from '@tanstack/router-valibot-adapter';
+import * as v from 'valibot';
+import config from 'config';
 
 export const getLastVisitedPair = () => {
   const [base, quote] =
@@ -155,6 +65,24 @@ export const validMarginalPrice = v.union([
   validLiteral([MarginalPriceOptions.maintain, MarginalPriceOptions.reset]),
 ]);
 
+type WithOptional<T extends v.ObjectEntries> = {
+  [key in keyof T]: T[key] extends v.OptionalSchema<infer a, infer b>
+    ? T[key]
+    : v.OptionalSchema<T[key], never>;
+};
+export type InferSearch<T extends v.ObjectEntries> = v.InferOutput<
+  v.ObjectSchema<WithOptional<T>, undefined>
+>;
+
+export const searchValidator = <T extends v.ObjectEntries>(validators: T) => {
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(validators)) {
+    if (value.type === 'optional') result[key] = value;
+    else result[key] = v.optional(value);
+  }
+  return valibotSearchValidator(v.object(result as WithOptional<T>));
+};
+
 export const validateSearchParams = <T>(
   validator: SearchParamsValidator<T>
 ) => {
@@ -163,7 +91,8 @@ export const validateSearchParams = <T>(
       const schema = validator[key as keyof T];
       if (schema && v.is(schema, search[key])) {
         search[key] = v.parse(schema, search[key]);
-      } else {
+      }
+      if (search[key] === undefined) {
         delete search[key];
       }
     }

@@ -45,51 +45,54 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
         <h2 className="text-18 font-weight-500 m-0">Trading Strategy</h2>
       </header>
       <article role="tablist" className="grid grid-cols-2 gap-8">
-        {items.map(({ title, label, svg, tooltipText }) => (
-          <Link
-            role="tab"
-            id={'tab-' + label}
-            aria-controls={'panel-' + label}
-            key={label}
-            to={`/simulate/${label}`}
-            search={{ baseToken, quoteToken }}
-            className={cn(
-              'rounded-10 text-14 font-weight-500 group flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white',
-              'md:px-12',
-              'focus-visible:outline focus-visible:outline-1'
-            )}
-            inactiveProps={{
-              className:
-                'hover:outline hover:outline-1 hover:outline-background-400',
-            }}
-            activeProps={{ className: 'outline outline-1 outline-white' }}
-            replace={true}
-            resetScroll={false}
-            params={{ simulationType: label }}
-            data-testid={`select-type-${label}`}
-          >
-            {({ isActive }) => {
-              return (
-                <>
-                  {svg}
-                  <span
-                    className={`capitalize ${
-                      isActive
-                        ? 'text-white'
-                        : 'text-white/40 group-hover:text-white/80'
-                    }`}
-                  >
-                    {title}
-                  </span>
-                  <Tooltip
-                    element={<div>{tooltipText}</div>}
-                    iconClassName="size-12 text-white/60"
-                  />
-                </>
-              );
-            }}
-          </Link>
-        ))}
+        {items.map(({ title, label, svg, tooltipText }) => {
+          const to = `/simulate/${label}` as const;
+          return (
+            <Link
+              role="tab"
+              id={'tab-' + label}
+              aria-controls={'panel-' + label}
+              key={label}
+              to={to}
+              search={{ baseToken, quoteToken }}
+              className={cn(
+                'rounded-10 text-14 font-weight-500 group flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white',
+                'md:px-12',
+                'focus-visible:outline focus-visible:outline-1'
+              )}
+              inactiveProps={{
+                className:
+                  'hover:outline hover:outline-1 hover:outline-background-400',
+              }}
+              activeProps={{ className: 'outline outline-1 outline-white' }}
+              replace={true}
+              resetScroll={false}
+              params={{ simulationType: label }}
+              data-testid={`select-type-${label}`}
+            >
+              {({ isActive }) => {
+                return (
+                  <>
+                    {svg}
+                    <span
+                      className={`capitalize ${
+                        isActive
+                          ? 'text-white'
+                          : 'text-white/40 group-hover:text-white/80'
+                      }`}
+                    >
+                      {title}
+                    </span>
+                    <Tooltip
+                      element={<div>{tooltipText}</div>}
+                      iconClassName="size-12 text-white/60"
+                    />
+                  </>
+                );
+              }}
+            </Link>
+          );
+        })}
       </article>
     </section>
   );

@@ -1,4 +1,4 @@
-import { Route } from '@tanstack/react-router';
+import { createRoute } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   validLiteral,
@@ -42,10 +42,11 @@ import {
   EditBudgetOverlappingSearch,
 } from 'pages/strategies/edit/budget/overlapping';
 import { SafeDecimal } from 'libs/safedecimal';
+import * as v from 'valibot';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
-export const editStrategyLayout = new Route({
+export const editStrategyLayout = createRoute({
   getParentRoute: () => rootRoute,
   path: '/strategies/edit/$strategyId',
   component: EditStrategyPageLayout,
@@ -73,7 +74,7 @@ export const toDisposablePricesSearch = (
     direction,
   };
 };
-export const editPricesDisposable = new Route({
+export const editPricesDisposable = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/disposable',
   component: EditStrategyDisposablePage,
@@ -82,8 +83,8 @@ export const editPricesDisposable = new Route({
     search.priceEnd ||= defaultEnd().toString();
   },
   validateSearch: validateSearchParams<EditDisposableStrategySearch>({
-    priceStart: validNumber,
-    priceEnd: validNumber,
+    priceStart: v.optional(validNumber, defaultStart().toString()),
+    priceEnd: v.optional(validNumber, defaultEnd().toString()),
     editType: validLiteral(['editPrices', 'renew']),
     min: validPositiveNumber,
     max: validPositiveNumber,
@@ -109,7 +110,7 @@ export const toRecurringPricesSearch = (
     sellSettings: sell.startRate === sell.endRate ? 'limit' : 'range',
   };
 };
-export const editPricesRecurring = new Route({
+export const editPricesRecurring = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/recurring',
   component: EditStrategyRecurringPage,
@@ -157,7 +158,7 @@ export const toOverlappingPricesSearch = (
     spread: spread ? spread.toString() : undefined,
   };
 };
-export const editPricesOverlapping = new Route({
+export const editPricesOverlapping = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/overlapping',
   component: EditStrategyOverlappingPage,
@@ -181,7 +182,7 @@ export const editPricesOverlapping = new Route({
 });
 
 // BUDGET
-export const editBudgetDisposable = new Route({
+export const editBudgetDisposable = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'budget/disposable',
   component: EditBudgetDisposablePage,
@@ -200,7 +201,7 @@ export const editBudgetDisposable = new Route({
   }),
 });
 
-export const editBudgetRecurring = new Route({
+export const editBudgetRecurring = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'budget/recurring',
   component: EditBudgetRecurringPage,
@@ -219,7 +220,7 @@ export const editBudgetRecurring = new Route({
   }),
 });
 
-export const editBudgetOverlapping = new Route({
+export const editBudgetOverlapping = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'budget/overlapping',
   component: EditBudgetOverlappingPage,

@@ -4,11 +4,11 @@ import { usePairs } from 'hooks/usePairs';
 import { useMemo } from 'react';
 
 export const useExplorer = () => {
-  const { slug, type } = useExplorerParams();
+  const { slug, type } = useExplorerParams('/explore/$type');
   const pairs = usePairs();
 
   // PAIR
-  const exactMatch = useMemo(() => pairs.map.get(slug), [pairs.map, slug]);
+  const exactMatch = useMemo(() => pairs.map.get(slug!), [pairs.map, slug]);
   const pairQuery = useGetPairStrategies({
     token0: exactMatch?.baseToken.address,
     token1: exactMatch?.quoteToken.address,

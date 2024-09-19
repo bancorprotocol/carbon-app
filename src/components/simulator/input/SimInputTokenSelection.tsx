@@ -19,7 +19,7 @@ export const SimInputTokenSelection: FC<Props> = ({
   quoteToken,
   noPriceHistory,
 }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: '/simulate' });
   const { openModal } = useModal();
   const { getTokenById } = useTokens();
   const base = getTokenById(baseToken);

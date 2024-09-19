@@ -8,7 +8,7 @@ import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
 
 export const ExplorerTypePortfolioPage = () => {
   const navigate = useNavigate();
-  const { type, slug } = useExplorerParams();
+  const { type, slug } = useExplorerParams('/explore/$type/$slug/portfolio');
   const { strategies, isPending } = useStrategyCtx();
   const href = '/explore/$type/$slug/portfolio/token/$address';
 

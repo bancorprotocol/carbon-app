@@ -35,18 +35,16 @@ export const useStrategyFilter = (
   isPending: boolean
 ) => {
   const searchParams: Search = useSearch({ strict: false });
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: '/' });
   const search = searchParams.search || '';
 
   const setSearch = useCallback(
-    (value: string) => {
+    (search: string) => {
       navigate({
-        search: (currentSearch: MyStrategiesSearch) => {
-          return { ...currentSearch, search: value };
-        },
+        params: (params) => params,
+        search: () => ({ search }),
         replace: true,
         resetScroll: false,
-        params: (params) => params,
       });
     },
     [navigate]

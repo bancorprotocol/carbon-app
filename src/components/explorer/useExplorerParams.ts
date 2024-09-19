@@ -1,12 +1,18 @@
 import { useParams } from 'libs/routing';
 
-export const useExplorerParams = () => {
-  const params = useParams({
-    from: '/explore/$type/$slug/portfolio/token/$address',
-  });
+type ExplorerUrl =
+  | '/explore/$type'
+  | '/explore/$type/$slug'
+  | '/explore/$type/$slug/activity'
+  | '/explore/$type/$slug/portfolio'
+  | '/explore/$type/$slug/portfolio/token/$address';
 
-  // To support emojis in ens domains
-  const decodedSlug = params.slug && decodeURIComponent(params.slug);
-
-  return { ...params, slug: decodedSlug };
+export const useExplorerParams = <T extends ExplorerUrl>(url: T) => {
+  const params = useParams({ from: url });
+  if ('slug' in params) {
+    // To support emojis in ens domains
+    return { ...params, slug: decodeURIComponent(params.slug) };
+  } else {
+    return { ...params, slug: undefined };
+  }
 };
