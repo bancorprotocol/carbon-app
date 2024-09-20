@@ -3,6 +3,7 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  Outlet,
 } from '@tanstack/react-router';
 import { RouterRenderParams } from './types';
 import { isAddress } from 'ethers/lib/utils';
@@ -52,14 +53,22 @@ export const loadRouter = async ({
   const subPath = encodeParams(search);
   const path = `${replaceParams(basePath, params)}?${subPath}`;
 
-  const componentRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: basePath,
-    component,
-  });
+  const routes: ReturnType<typeof createRoute>[] = [];
+  const paths = basePath.split('/');
+  for (let i = 0; i < paths.length; i++) {
+    const currentPath = paths[i] || '/';
+    const parent = routes.at(-1) ?? rootRoute;
+    const route: ReturnType<typeof createRoute> = createRoute({
+      getParentRoute: () => parent,
+      path: currentPath,
+      component: i === paths.length - 1 ? component : Outlet,
+    });
+    parent.addChildren([route]);
+    routes.push(route);
+  }
 
   const customRouter = createRouter({
-    routeTree: rootRoute.addChildren([componentRoute]),
+    routeTree: rootRoute,
     history: createMemoryHistory({ initialEntries: [path] }),
   });
 
