@@ -73,6 +73,7 @@ export const editPricesDisposable = createRoute({
   path: 'prices/disposable',
   component: EditStrategyDisposablePage,
   validateSearch: searchValidator({
+    editType: v.picklist(['editPrices', 'renew']),
     min: v.optional(validPositiveNumber),
     max: v.optional(validPositiveNumber),
     budget: v.optional(validPositiveNumber),
@@ -102,6 +103,7 @@ export const editPricesRecurring = createRoute({
   path: 'prices/recurring',
   component: EditStrategyRecurringPage,
   validateSearch: searchValidator({
+    editType: v.picklist(['editPrices', 'renew']),
     buyMin: v.optional(validPositiveNumber),
     buyMax: v.optional(validPositiveNumber),
     buyBudget: v.optional(validPositiveNumber),
@@ -143,6 +145,7 @@ export const editPricesOverlapping = createRoute({
   path: 'prices/overlapping',
   component: EditStrategyOverlappingPage,
   validateSearch: searchValidator({
+    editType: v.picklist(['editPrices', 'renew']),
     chartType: v.optional(v.picklist(['history', 'range'])),
     marketPrice: v.optional(validNumber),
     min: v.optional(validPositiveNumber),
@@ -160,6 +163,7 @@ export const editBudgetDisposable = createRoute({
   path: 'budget/disposable',
   component: EditBudgetDisposablePage,
   validateSearch: searchValidator({
+    editType: v.picklist(['deposit', 'withdraw']),
     buyBudget: v.optional(validNumber),
     sellBudget: v.optional(validNumber),
     buyMarginalPrice: v.optional(validMarginalPrice),
@@ -172,6 +176,7 @@ export const editBudgetRecurring = createRoute({
   path: 'budget/recurring',
   component: EditBudgetRecurringPage,
   validateSearch: searchValidator({
+    editType: v.picklist(['deposit', 'withdraw']),
     buyBudget: v.optional(validNumber),
     buyMarginalPrice: v.optional(validMarginalPrice),
     sellBudget: v.optional(validNumber),
@@ -188,6 +193,7 @@ export const editBudgetOverlapping = createRoute({
     search.priceEnd ||= defaultEnd().toString();
   },
   validateSearch: searchValidator({
+    editType: v.picklist(['deposit', 'withdraw']),
     chartType: v.optional(v.picklist(['history', 'range'])),
     marketPrice: v.optional(validNumber),
     budget: v.optional(validNumber),
