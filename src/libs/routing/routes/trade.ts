@@ -53,8 +53,6 @@ export type SetOverlapping = (next: OverlappingSearch) => any;
 // TRADE MARKET
 export interface TradeMarketSearch extends TradeSearch {
   direction?: StrategyDirection;
-  source?: string;
-  target?: string;
 }
 
 // ROUTES
@@ -87,8 +85,6 @@ const marketPage = new Route({
     priceStart: validNumber,
     priceEnd: validNumber,
     direction: validLiteral(['buy', 'sell']),
-    source: validNumber,
-    target: validNumber,
   }),
 });
 
