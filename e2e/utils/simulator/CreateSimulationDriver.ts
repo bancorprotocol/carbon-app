@@ -18,7 +18,7 @@ export class CreateSimulationDriver {
 
   async waitForPriceChart(timeout?: number) {
     const historyPricesRegExp =
-      /.*api\.carbondefi\.xyz\/v1\/history\/prices.*$/;
+      /.*multi\.carbondefi\.xyz\/v1\/ethereum\/history\/prices.*$/;
     await this.page.waitForResponse(historyPricesRegExp);
 
     const btn = this.page.getByTestId('start-simulation-btn');
