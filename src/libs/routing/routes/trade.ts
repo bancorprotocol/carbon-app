@@ -98,6 +98,7 @@ const disposablePage = createRoute({
     min: v.optional(validPositiveNumber),
     max: v.optional(validPositiveNumber),
     budget: v.optional(validPositiveNumber),
+    marginalPrice: v.optional(validPositiveNumber),
   }),
 });
 
@@ -110,10 +111,12 @@ const recurringPage = createRoute({
     buyMax: v.optional(validPositiveNumber),
     buyBudget: v.optional(validPositiveNumber),
     buySettings: v.optional(v.picklist(['limit', 'range'])),
+    buyMarginalPrice: v.optional(validPositiveNumber),
     sellMin: v.optional(validPositiveNumber),
     sellMax: v.optional(validPositiveNumber),
     sellBudget: v.optional(validPositiveNumber),
     sellSettings: v.optional(v.picklist(['limit', 'range'])),
+    sellMarginalPrice: v.optional(validPositiveNumber),
   }),
 });
 
