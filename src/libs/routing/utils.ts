@@ -19,7 +19,7 @@ export type SearchParamsValidator<T> = {
   [key in keyof T]: v.GenericSchema<any, any>;
 };
 
-export const validArrayOf = (schema: v.GenericSchema<string, any>) => {
+export const validArrayOf = <T>(schema: v.GenericSchema<string, T>) => {
   return v.array(schema);
 };
 

@@ -37,9 +37,6 @@ export const MainMenuLeft: FC = () => {
               key={index}
               onClick={() => handleOnItemClick(href)}
               to={href}
-              // TODO: fix this
-              params={{}}
-              search={{}}
               aria-current={isSamePage ? 'page' : 'false'}
               data-testid={testid}
               className={`font-title px-3 py-3 transition-colors duration-300 ${

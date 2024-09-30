@@ -8,7 +8,7 @@ export const ExplorerActivityPage = () => {
   const params: QueryActivityParams = {};
   if (type === 'wallet') params.ownerId = slug;
   if (type === 'token-pair') {
-    const [base, quote] = slug!.split('_');
+    const [base, quote] = slug.split('_');
     params.token0 = base;
     params.token1 = quote;
   }

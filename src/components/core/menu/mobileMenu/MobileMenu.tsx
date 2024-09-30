@@ -26,9 +26,6 @@ export const MobileMenu: FC = () => {
             key={index}
             onClick={() => handleOnItemClick(href)}
             to={href}
-            // TODO: fix this
-            params={{}}
-            search={{}}
             aria-current={isSamePage ? 'page' : 'false'}
             className={`px-3 py-3 ${
               isSamePage ? 'text-white' : 'hover:text-white'

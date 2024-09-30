@@ -25,7 +25,7 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
         const active = match({
           to: href,
           search: {},
-          params: params ?? {},
+          params: params,
           fuzzy:
             currentPathname.includes('/token/') && href.includes('portfolio'),
         });
@@ -33,9 +33,7 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
         return (
           <Link
             to={href}
-            // TODO: fix this
-            params={params ?? {}}
-            search={{}}
+            params={params}
             key={href}
             className={cn(
               'flex w-full items-center justify-center gap-4 rounded-full py-5 md:px-10',
