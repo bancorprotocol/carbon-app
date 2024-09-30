@@ -65,7 +65,9 @@ export const renderWithProviders = (
 export const renderWithRouter = async (params: RouterRenderParams) => {
   const customRouter = await loadRouter(params);
   return {
-    container: renderWithProviders(<RouterProvider router={customRouter} />),
+    container: renderWithProviders(
+      <RouterProvider router={customRouter as any} />
+    ),
     router: customRouter,
   };
 };

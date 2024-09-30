@@ -1,12 +1,10 @@
-import { PaginationParams } from 'hooks/useList';
 import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
 import {
-  SearchParamsValidator,
+  InferSearch,
+  searchValidator,
   validArrayOf,
-  validLiteral,
-  validNumber,
+  validNumberType,
   validString,
-  validateSearchParams,
 } from 'libs/routing/utils';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
@@ -16,18 +14,8 @@ import {
   tokenRange,
 } from 'utils/helpers';
 import { exist } from 'utils/helpers/operators';
+import * as v from 'valibot';
 
-export interface ActivitySearchParams extends Partial<PaginationParams> {
-  pairs?: string[];
-  ids?: string[];
-  actions?: ActivityAction[];
-  start?: Date;
-  end?: Date;
-  // This is only for StrategyPageParams, but if I don't implement it here the build breaks
-  priceStart?: string;
-  priceEnd?: string;
-  hideIndicators?: boolean;
-}
 export const activityActionName: Record<ActivityAction, string> = {
   create: 'Create',
   edit: 'Edit Price',
@@ -43,29 +31,17 @@ export const activityActions = Object.keys(
   activityActionName
 ) as ActivityAction[];
 
-export const activityValidators: SearchParamsValidator<ActivitySearchParams> = {
-  actions: validArrayOf(validLiteral(activityActions)),
-  ids: validArrayOf(validString),
-  pairs: validArrayOf(validString),
-  start: validString,
-  end: validString,
-  limit: validNumber,
-  offset: validNumber,
+export type ActivitySearchParams = InferSearch<typeof activityValidators>;
+export const activityValidators = {
+  actions: v.optional(validArrayOf(v.picklist(activityActions))),
+  ids: v.optional(validArrayOf(validString)),
+  pairs: v.optional(validArrayOf(validString)),
+  start: v.optional(validString),
+  end: v.optional(validString),
+  limit: v.optional(validNumberType, 10),
+  offset: v.optional(validNumberType, 0),
 };
-export const validateActivityParams = (
-  activityValidators: SearchParamsValidator<ActivitySearchParams>
-) => {
-  return (search: Record<string, string>): ActivitySearchParams => {
-    const rawSearch = validateSearchParams(activityValidators)(search);
-    const limit = Number(rawSearch.limit ?? 10);
-    const offset = Number(rawSearch.offset ?? 0);
-    return {
-      ...rawSearch,
-      limit,
-      offset,
-    };
-  };
-};
+export const validateActivityParams = searchValidator(activityValidators);
 
 export const activityHasPairs = (activity: Activity, pairs: string[] = []) => {
   if (pairs.length === 0) return true;

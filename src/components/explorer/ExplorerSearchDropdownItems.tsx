@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
-  const { type: currentType } = useExplorerParams();
+  const { type: currentType } = useExplorerParams('/explore/$type');
   const items = [
     {
       type: 'wallet' as const,

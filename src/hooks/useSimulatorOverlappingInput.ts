@@ -44,7 +44,7 @@ export interface SimulatorInputOverlappingValues {
 
 export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
   const { getTokenById } = useTokens();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: '/simulate/overlapping' });
   const [_state, setState] =
     useState<InternalSimulatorOverlappingInput>(searchState);
 

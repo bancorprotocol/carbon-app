@@ -2,7 +2,8 @@ import { StrategyDirection, useNavigate } from 'libs/routing';
 import { OrderBlock } from './types';
 import { useCallback } from 'react';
 
-export const useSetDisposableOrder = (url: string) => {
+type DisposableUrl = '/strategies/edit/$strategyId/prices/disposable';
+export const useSetDisposableOrder = (url: DisposableUrl) => {
   const navigate = useNavigate({ from: url });
   const setOrder = useCallback(
     (order: Partial<OrderBlock>) => {
@@ -32,7 +33,12 @@ export const toOrderSearch = <T>(
   return search;
 };
 
-export const useSetRecurringOrder = <T>(url: string) => {
+type RecurringUrl =
+  | '/strategies/edit/$strategyId/budget/disposable'
+  | '/strategies/edit/$strategyId/budget/recurring'
+  | '/strategies/edit/$strategyId/prices/recurring'
+  | '/trade/recurring';
+export const useSetRecurringOrder = <T>(url: RecurringUrl) => {
   const navigate = useNavigate({ from: url });
   const setOrder = useCallback(
     (order: Partial<OrderBlock>, direction: StrategyDirection) => {

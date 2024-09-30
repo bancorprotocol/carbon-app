@@ -1,11 +1,11 @@
 import {
-  RootRoute,
-  Route,
-  Router,
   createMemoryHistory,
+  createRootRoute,
+  createRoute,
+  createRouter,
+  Outlet,
 } from '@tanstack/react-router';
 import { RouterRenderParams } from './types';
-import { parseSearchWith } from 'libs/routing/utils';
 import { isAddress } from 'ethers/lib/utils';
 
 const encodeValue = (value: string | number | symbol) => {
@@ -49,19 +49,26 @@ export const loadRouter = async ({
   search = {},
   params = {},
 }: RouterRenderParams) => {
-  const rootRoute = new RootRoute();
+  const rootRoute = createRootRoute();
   const subPath = encodeParams(search);
   const path = `${replaceParams(basePath, params)}?${subPath}`;
 
-  const componentRoute = new Route({
-    getParentRoute: () => rootRoute,
-    path: basePath,
-    component,
-  });
+  const routes: ReturnType<typeof createRoute>[] = [];
+  const paths = basePath.split('/');
+  for (let i = 0; i < paths.length; i++) {
+    const currentPath = paths[i] || '/';
+    const parent = routes.at(-1) ?? rootRoute;
+    const route: ReturnType<typeof createRoute> = createRoute({
+      getParentRoute: () => parent,
+      path: currentPath,
+      component: i === paths.length - 1 ? component : Outlet,
+    });
+    parent.addChildren([route]);
+    routes.push(route);
+  }
 
-  const customRouter = new Router({
-    routeTree: rootRoute.addChildren([componentRoute]),
-    parseSearch: parseSearchWith(JSON.parse),
+  const customRouter = createRouter({
+    routeTree: rootRoute,
     history: createMemoryHistory({ initialEntries: [path] }),
   });
 

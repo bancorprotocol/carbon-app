@@ -54,7 +54,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const { filteredStrategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
   const navigate = useNavigate();
-  const { type, slug } = useParams({ from: '/explore/$type/$slug' });
+  const { type, slug } = useParams({ strict: false });
 
   const isOwn = useIsStrategyOwner(strategy.id);
 

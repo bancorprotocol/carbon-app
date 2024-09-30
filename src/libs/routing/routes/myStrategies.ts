@@ -1,29 +1,27 @@
-import { Route, redirect } from '@tanstack/react-router';
-import {
-  activityValidators,
-  validateActivityParams,
-} from 'components/activity/utils';
+import { createRoute, redirect } from '@tanstack/react-router';
+import { validateActivityParams } from 'components/activity/utils';
 import { rootRoute } from 'libs/routing/routes/root';
 import { StrategiesPage } from 'pages/strategies';
 import { StrategiesActivityPage } from 'pages/strategies/activity';
 import { StrategiesOverviewPage } from 'pages/strategies/overview';
 import { StrategiesPortfolioPage } from 'pages/strategies/portfolio';
 import { StrategiesPortfolioTokenPage } from 'pages/strategies/portfolio/token';
-import { validString, validateSearchParams } from '../utils';
+import { searchValidator, validString } from '../utils';
 import { MyStrategiesSearch } from 'hooks/useStrategies';
+import * as v from 'valibot';
 
-export const myStrategyLayout = new Route({
+export const myStrategyLayout = createRoute({
   getParentRoute: () => rootRoute,
   id: 'my-strategy-layout',
   component: StrategiesPage,
 });
 
-export const strategyOverviewPage = new Route({
+export const strategyOverviewPage = createRoute({
   getParentRoute: () => myStrategyLayout,
   path: '/',
   component: StrategiesOverviewPage,
-  validateSearch: validateSearchParams<MyStrategiesSearch>({
-    search: validString,
+  validateSearch: searchValidator({
+    search: v.optional(validString),
   }),
   postSearchFilters: [
     (search: MyStrategiesSearch) => {
@@ -33,32 +31,32 @@ export const strategyOverviewPage = new Route({
   ],
 });
 
-export const strategyPortfolioLayout = new Route({
+export const strategyPortfolioLayout = createRoute({
   getParentRoute: () => myStrategyLayout,
   path: 'strategies/portfolio',
 });
 
-export const strategyPortfolioPage = new Route({
+export const strategyPortfolioPage = createRoute({
   getParentRoute: () => strategyPortfolioLayout,
   path: '/',
   component: StrategiesPortfolioPage,
 });
 
-export const strategyPortfolioTokenPage = new Route({
+export const strategyPortfolioTokenPage = createRoute({
   getParentRoute: () => strategyPortfolioLayout,
   path: 'token/$address',
   component: StrategiesPortfolioTokenPage,
 });
 
-export const strategyActivityPage = new Route({
+export const strategyActivityPage = createRoute({
   getParentRoute: () => myStrategyLayout,
   path: 'strategies/activity',
   component: StrategiesActivityPage,
-  validateSearch: validateActivityParams(activityValidators),
+  validateSearch: validateActivityParams,
 });
 
 // REDIRECT
-export const oldCreateStrategies = new Route({
+export const oldCreateStrategies = createRoute({
   getParentRoute: () => rootRoute,
   path: '/strategies/create/*',
   beforeLoad: ({ location, params }) => {

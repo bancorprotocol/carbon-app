@@ -45,7 +45,7 @@ interface Props {
 
 export const useStrategyInput = ({ searchState }: Props) => {
   const { getTokenById } = useTokens();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: '/simulate/recurring' });
   const [_state, setState] = useState<InternalStrategyInput>(searchState);
 
   const baseToken = useMemo(

@@ -1,10 +1,8 @@
-import { Router } from '@tanstack/react-router';
+import { createRouter } from '@tanstack/react-router';
 import { routeTree } from 'libs/routing/routes';
-import { parseSearchWith } from 'libs/routing/utils';
 
-export const router = new Router({
+export const router = createRouter({
   routeTree,
-  parseSearch: parseSearchWith(JSON.parse),
 });
 
 declare module '@tanstack/react-router' {

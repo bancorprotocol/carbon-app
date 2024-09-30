@@ -1,11 +1,10 @@
-import { Route, redirect } from '@tanstack/react-router';
+import { createRoute, redirect } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
+  searchValidator,
   validAddress,
-  validLiteral,
   validNumber,
   validPositiveNumber,
-  validateSearchParams,
 } from '../utils';
 import { TradeDisposable } from 'pages/trade/disposable';
 import { TradeRoot } from 'pages/trade/root';
@@ -14,6 +13,7 @@ import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
 import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { OverlappingSearch } from 'components/strategies/common/types';
+import * as v from 'valibot';
 
 // TRADE TYPE
 export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
@@ -62,85 +62,73 @@ export interface TradeSearch {
   priceStart?: string;
   priceEnd?: string;
 }
-const tradePage = new Route({
+const tradePage = createRoute({
   getParentRoute: () => rootRoute,
   path: '/trade',
   component: TradeRoot,
   beforeLoad: ({ location, search }) => {
-    (search as TradeSearch).priceStart ||= defaultStart().toString();
-    (search as TradeSearch).priceEnd ||= defaultEnd().toString();
     if (location.pathname.endsWith('trade')) {
       throw redirect({ to: '/trade/disposable', search });
     }
   },
+  validateSearch: searchValidator({
+    base: v.optional(validAddress),
+    quote: v.optional(validAddress),
+    priceStart: v.optional(validNumber, defaultStart().toString()),
+    priceEnd: v.optional(validNumber, defaultEnd().toString()),
+  }),
 });
 
-const marketPage = new Route({
+const marketPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/market',
   component: TradeMarket,
-  validateSearch: validateSearchParams<TradeMarketSearch>({
-    base: validAddress,
-    quote: validAddress,
-    priceStart: validNumber,
-    priceEnd: validNumber,
-    direction: validLiteral(['buy', 'sell']),
+  validateSearch: searchValidator({
+    direction: v.optional(v.picklist(['buy', 'sell'])),
   }),
 });
 
-const disposablePage = new Route({
+const disposablePage = createRoute({
   getParentRoute: () => tradePage,
   path: '/disposable',
   component: TradeDisposable,
-  validateSearch: validateSearchParams<TradeDisposableSearch>({
-    base: validAddress,
-    quote: validAddress,
-    priceStart: validNumber,
-    priceEnd: validNumber,
-    direction: validLiteral(['buy', 'sell']),
-    settings: validLiteral(['limit', 'range']),
-    min: validPositiveNumber,
-    max: validPositiveNumber,
-    budget: validPositiveNumber,
+  validateSearch: searchValidator({
+    direction: v.optional(v.picklist(['buy', 'sell'])),
+    settings: v.optional(v.picklist(['limit', 'range'])),
+    min: v.optional(validPositiveNumber),
+    max: v.optional(validPositiveNumber),
+    budget: v.optional(validPositiveNumber),
   }),
 });
 
-const recurringPage = new Route({
+const recurringPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/recurring',
   component: TradeRecurring,
-  validateSearch: validateSearchParams<TradeRecurringSearch>({
-    base: validAddress,
-    quote: validAddress,
-    priceStart: validNumber,
-    priceEnd: validNumber,
-    buyMin: validPositiveNumber,
-    buyMax: validPositiveNumber,
-    buyBudget: validPositiveNumber,
-    buySettings: validLiteral(['limit', 'range']),
-    sellMin: validPositiveNumber,
-    sellMax: validPositiveNumber,
-    sellBudget: validPositiveNumber,
-    sellSettings: validLiteral(['limit', 'range']),
+  validateSearch: searchValidator({
+    buyMin: v.optional(validPositiveNumber),
+    buyMax: v.optional(validPositiveNumber),
+    buyBudget: v.optional(validPositiveNumber),
+    buySettings: v.optional(v.picklist(['limit', 'range'])),
+    sellMin: v.optional(validPositiveNumber),
+    sellMax: v.optional(validPositiveNumber),
+    sellBudget: v.optional(validPositiveNumber),
+    sellSettings: v.optional(v.picklist(['limit', 'range'])),
   }),
 });
 
-const overlappingPage = new Route({
+const overlappingPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/overlapping',
   component: TradeOverlapping,
-  validateSearch: validateSearchParams<TradeOverlappingSearch>({
-    base: validAddress,
-    quote: validAddress,
-    priceStart: validNumber,
-    priceEnd: validNumber,
-    marketPrice: validNumber,
-    min: validPositiveNumber,
-    max: validPositiveNumber,
-    spread: validNumber,
-    budget: validNumber,
-    anchor: validLiteral(['buy', 'sell']),
-    chartType: validLiteral(['history', 'range']),
+  validateSearch: searchValidator({
+    marketPrice: v.optional(validNumber),
+    min: v.optional(validPositiveNumber),
+    max: v.optional(validPositiveNumber),
+    spread: v.optional(validNumber),
+    budget: v.optional(validNumber),
+    anchor: v.optional(v.picklist(['buy', 'sell'])),
+    chartType: v.optional(v.picklist(['history', 'range'])),
   }),
 });
 

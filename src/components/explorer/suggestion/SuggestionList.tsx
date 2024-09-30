@@ -29,7 +29,6 @@ export const SuggestionList: FC<Props> = (props) => {
             className="px-30 flex cursor-pointer items-center space-x-10 py-10  hover:bg-white/20 aria-selected:bg-white/10"
             to="/explore/$type/$slug"
             params={params}
-            search={{}}
           >
             <PairLogoName pair={pair} />
           </Link>
