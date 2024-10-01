@@ -32,8 +32,8 @@ export const buttonStyles = cva<ButtonVariants>(
           'hover:border-background-700 hover:disabled:border-background-800',
         ],
         success: [
-          'bg-primary border-2 border-primary text-black',
-          'hover:border-primary-light hover:disabled:border-primary',
+          'transition-[0.5s] bg-[length:200%] bg-gradient-to-r from-[#67D79F] via-[#10BBD8] to-[#3DCABB] text-black',
+          'hover:bg-right hover:disabled:bg-left',
         ],
         buy: [
           'bg-buy border-2 border-buy text-black',
