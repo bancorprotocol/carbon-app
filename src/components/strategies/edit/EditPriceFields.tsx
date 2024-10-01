@@ -183,7 +183,7 @@ export const EditStrategyPriceField: FC<Props> = ({
         initialBudget={initialBudget}
         withdraw={getWithdraw(initialBudget, order.budget)}
         deposit={getDeposit(initialBudget, order.budget)}
-        balance={balance.data ?? '0'}
+        balance={balance.data}
         buy={buy}
       />
       <FullOutcome

@@ -126,7 +126,12 @@ export const TokenInputField: FC<Props> = (props) => {
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
         {user && !withoutWallet && isBalanceLoading && (
-          <button disabled type="button" data-testid="wallet-loading">
+          <button
+            disabled
+            type="button"
+            className="loading-message"
+            data-testid="wallet-loading"
+          >
             Wallet: loading
           </button>
         )}
