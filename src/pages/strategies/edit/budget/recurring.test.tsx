@@ -2,26 +2,23 @@ import { describe, test, expect, beforeAll, afterAll } from 'vitest';
 import {
   MockServer,
   marketRateHandler,
+  mockStrategy,
   renderWithRouter,
   screen,
-  tokenList,
   userEvent,
 } from 'libs/testing-library';
 import { EditStrategyDriver } from 'libs/testing-library/drivers/EditStrategyDriver';
 import { EditBudgetRecurringPage } from './recurring';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
 import { Strategy } from 'libs/queries';
-import { SafeDecimal } from 'libs/safedecimal';
 import { carbonSDK } from 'libs/sdk';
 import { spyOn } from '@vitest/spy';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { mockMarketRate } from 'libs/testing-library/utils/mock';
 
 const basePath = '/strategies/edit/$strategyId/budget/recurring';
 
-const marketRates: Record<string, Record<string, number>> = {
-  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { USD: 1 }, // USDC
-  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { USD: 2.5 }, // ETH
-};
+const marketRates = mockMarketRate({ USDC: 1, ETH: 2.5 });
 
 const mockServer = new MockServer([marketRateHandler(marketRates)]);
 
@@ -45,14 +42,9 @@ const WrappedRecurring = ({ strategy, type }: Props) => {
 
 describe('Create recurring page', () => {
   test('should only send to the SDK what has been changed', async () => {
-    const baseToken = tokenList.ETH;
-    const quoteToken = tokenList.USDC;
-
-    const strategy: Strategy = {
-      id: '1',
-      idDisplay: '1',
-      base: baseToken,
-      quote: quoteToken,
+    const strategy: Strategy = mockStrategy({
+      base: 'ETH',
+      quote: 'USDC',
       order0: {
         balance: '1',
         startRate: '1',
@@ -65,10 +57,7 @@ describe('Create recurring page', () => {
         endRate: '4',
         marginalRate: '3.5',
       },
-      status: 'active',
-      encoded: {} as any,
-      roi: new SafeDecimal('1'),
-    };
+    });
 
     const search = {
       editType: 'deposit',
