@@ -80,7 +80,7 @@ export const EditStrategyPriceField: FC<Props> = ({
     setOrder({ marginalPrice });
   };
   const setAction = (action: 'deposit' | 'withdraw') => {
-    setOrder({ action, budget: undefined });
+    setOrder({ action, budget: undefined, marginalPrice: undefined });
   };
   const setSettings = (settings: StrategySettings) => {
     setOrder({

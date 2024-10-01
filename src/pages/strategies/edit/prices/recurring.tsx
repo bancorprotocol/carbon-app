@@ -201,7 +201,7 @@ export const EditStrategyRecurringPage = () => {
           order={orders.sell}
           budget={search.sellBudget ?? ''}
           initialOrder={order1}
-          hasPriceChanged={hasBuyPriceChanged}
+          hasPriceChanged={hasSellPriceChanged}
           setOrder={setSellOrder}
           warnings={[sellOutsideMarket, getWarning(search)]}
           error={error}
@@ -210,7 +210,7 @@ export const EditStrategyRecurringPage = () => {
           order={orders.buy}
           budget={search.buyBudget ?? ''}
           initialOrder={order0}
-          hasPriceChanged={hasSellPriceChanged}
+          hasPriceChanged={hasBuyPriceChanged}
           setOrder={setBuyOrder}
           warnings={[buyOutsideMarket, getWarning(search)]}
           error={error}
