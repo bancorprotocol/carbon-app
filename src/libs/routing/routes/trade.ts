@@ -4,7 +4,7 @@ import {
   searchValidator,
   validAddress,
   validNumber,
-  validPositiveNumber,
+  validInputNumber,
 } from '../utils';
 import { TradeDisposable } from 'pages/trade/disposable';
 import { TradeRoot } from 'pages/trade/root';
@@ -14,6 +14,7 @@ import { TradeOverlapping } from 'pages/trade/overlapping';
 import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { OverlappingSearch } from 'components/strategies/common/types';
 import * as v from 'valibot';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
 // TRADE TYPE
 export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
@@ -95,10 +96,10 @@ const disposablePage = createRoute({
   validateSearch: searchValidator({
     direction: v.optional(v.picklist(['buy', 'sell'])),
     settings: v.optional(v.picklist(['limit', 'range'])),
-    min: v.optional(validPositiveNumber),
-    max: v.optional(validPositiveNumber),
-    budget: v.optional(validPositiveNumber),
-    marginalPrice: v.optional(validPositiveNumber),
+    min: v.optional(validInputNumber),
+    max: v.optional(validInputNumber),
+    budget: v.optional(validInputNumber),
+    marginalPrice: v.optional(v.enum(MarginalPriceOptions)),
   }),
 });
 
@@ -107,16 +108,16 @@ const recurringPage = createRoute({
   path: '/recurring',
   component: TradeRecurring,
   validateSearch: searchValidator({
-    buyMin: v.optional(validPositiveNumber),
-    buyMax: v.optional(validPositiveNumber),
-    buyBudget: v.optional(validPositiveNumber),
+    buyMin: v.optional(validInputNumber),
+    buyMax: v.optional(validInputNumber),
+    buyBudget: v.optional(validInputNumber),
     buySettings: v.optional(v.picklist(['limit', 'range'])),
-    buyMarginalPrice: v.optional(validPositiveNumber),
-    sellMin: v.optional(validPositiveNumber),
-    sellMax: v.optional(validPositiveNumber),
-    sellBudget: v.optional(validPositiveNumber),
+    buyMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
+    sellMin: v.optional(validInputNumber),
+    sellMax: v.optional(validInputNumber),
+    sellBudget: v.optional(validInputNumber),
     sellSettings: v.optional(v.picklist(['limit', 'range'])),
-    sellMarginalPrice: v.optional(validPositiveNumber),
+    sellMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
   }),
 });
 
@@ -126,8 +127,8 @@ const overlappingPage = createRoute({
   component: TradeOverlapping,
   validateSearch: searchValidator({
     marketPrice: v.optional(validNumber),
-    min: v.optional(validPositiveNumber),
-    max: v.optional(validPositiveNumber),
+    min: v.optional(validInputNumber),
+    max: v.optional(validInputNumber),
     spread: v.optional(validNumber),
     budget: v.optional(validNumber),
     anchor: v.optional(v.picklist(['buy', 'sell'])),

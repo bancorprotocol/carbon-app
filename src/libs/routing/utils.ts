@@ -27,10 +27,10 @@ export const validNumber = v.pipe(
   v.string(),
   v.check((value: string) => isNaN(Number(formatNumber(value))) === false)
 );
-export const validPositiveNumber = v.optional(
+export const validInputNumber = v.optional(
   v.pipe(
     validNumber,
-    v.check((value: string) => Number(value) >= 0)
+    v.check((value: string) => value === '.' || Number(value) >= 0)
   ),
   '0'
 );
