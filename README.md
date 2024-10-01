@@ -298,8 +298,9 @@ The theme is defined in the [`tailwind.config.ts`](./tailwind.config.ts#L36) fil
 You can update these colors:
 
 - **background**: used for surfaces
+- **primaryGradient**: used for the success variant button, with a first, middle and last gradient colors
 - **primary**: used for buttons and other actionable elements
-- **success**: used for positive information like positive ROI.
+- **success**: used for positive information like positive ROI
 - **error**: used for error messages & buttons
 - **warning**: used for warning messages (mainly in forms)
 - **buy**: used for any information related to buy operation
