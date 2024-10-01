@@ -152,3 +152,10 @@ export const mockStrategy = (params: MockStrategyParams): Strategy => ({
   order0: params.order0,
   order1: params.order1,
 });
+
+export const mockEmptyOrder = (balance: string = '0'): Order => ({
+  balance,
+  startRate: '0',
+  endRate: '0',
+  marginalRate: '0',
+});
