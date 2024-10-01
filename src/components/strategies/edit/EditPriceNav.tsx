@@ -1,7 +1,4 @@
 import { Link, useParams } from '@tanstack/react-router';
-import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
-import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
-import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import {
@@ -14,21 +11,18 @@ import {
 const links = [
   {
     label: 'Limit / Range',
-    svg: <IconDisposable className="hidden size-14 md:inline" />,
     to: '/strategies/edit/$strategyId/prices/disposable',
     text: 'Buy or sell at a specific price, or gradually scale in or out of a position.',
     id: 'disposable',
   },
   {
     label: 'Recurring',
-    svg: <IconRecurring className="hidden size-14 md:inline" />,
     to: '/strategies/edit/$strategyId/prices/recurring',
     text: 'Create an automated trading cycle of buy low/sell high with two separate orders.',
     id: 'recurring',
   },
   {
     label: 'Concentrated',
-    svg: <IconOverlapping className="hidden size-14 md:inline" />,
     to: '/strategies/edit/$strategyId/prices/overlapping',
     text: 'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
     id: 'overlapping',
@@ -54,7 +48,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
       </h2>
       <nav
         aria-labelledby="edit-strategy-nav"
-        className="text-14 grid grid-cols-1 gap-8 md:grid-cols-2"
+        className="text-14 grid grid-cols-1 gap-8 md:grid-cols-3"
         aria-label="Switch between type of strategy"
       >
         {links.map((link) => (
@@ -68,7 +62,6 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
             data-testid={`edit-${link.id}`}
             className="rounded-8 hover:border-background-400 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
           >
-            {link.svg}
             {link.label}
             <Tooltip element={link.text} iconClassName="size-14" />
           </Link>
