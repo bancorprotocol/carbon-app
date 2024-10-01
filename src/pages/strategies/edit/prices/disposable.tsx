@@ -23,6 +23,7 @@ import { useCallback } from 'react';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'libs/queries';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
 export interface EditDisposableStrategySearch {
   priceStart?: string;
@@ -34,6 +35,7 @@ export interface EditDisposableStrategySearch {
   direction?: StrategyDirection;
   action?: 'deposit' | 'withdraw';
   budget?: string;
+  marginalPrice?: MarginalPriceOptions;
 }
 
 const getOrder = (
@@ -81,6 +83,7 @@ const getOrder = (
     min: search.min ?? defaultMin()?.toString() ?? '0',
     max: search.max ?? defaultMax()?.toString() ?? '0',
     budget: getTotalBudget(action, order.balance, search.budget),
+    marginalPrice: search.marginalPrice,
   };
 };
 
@@ -114,6 +117,7 @@ export const EditStrategyDisposablePage = () => {
       budget: undefined,
       min: undefined,
       max: undefined,
+      marginalPrice: undefined,
     });
   };
 
@@ -125,7 +129,7 @@ export const EditStrategyDisposablePage = () => {
     [setSearch, isBuy]
   );
 
-  const initialBudget = isBuy ? order0.balance : order1.balance;
+  const initialOrder = isBuy ? order0 : order1;
 
   const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
   const orders = {
@@ -137,14 +141,14 @@ export const EditStrategyDisposablePage = () => {
     sell: order.settings !== 'range',
   };
 
-  const hasChanged = (() => {
+  const hasPriceChanged = (() => {
     if (orders.buy.min !== order0.startRate) return true;
     if (orders.buy.max !== order0.endRate) return true;
     if (orders.sell.min !== order1.startRate) return true;
     if (orders.sell.max !== order1.endRate) return true;
-    if (!isZero(search.budget)) return true;
     return false;
   })();
+  const hasChanged = hasPriceChanged || !isZero(search.budget);
 
   // Warnings
   const outSideMarket = outSideMarketWarning({
@@ -172,10 +176,11 @@ export const EditStrategyDisposablePage = () => {
         <EditStrategyPriceField
           order={order}
           budget={search.budget ?? ''}
-          initialBudget={initialBudget}
+          initialOrder={initialOrder}
           setOrder={setOrder}
           warnings={[outSideMarket]}
           buy={isBuy}
+          hasPriceChanged={hasPriceChanged}
           settings={
             <TabsMenu>
               <TabsMenuButton

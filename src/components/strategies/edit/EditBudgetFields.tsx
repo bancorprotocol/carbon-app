@@ -87,7 +87,10 @@ export const EditStrategyBudgetField: FC<Props> = ({
       <EditStrategyAllocatedBudget token={token} initialBudget={initialBudget}>
         <EditBudgetTokenPrice order={order} buy={buy} />
         {order.min !== order.max && !isZero(budget) && (
-          <EditBudgetDistribution order={order} onChange={setMarginalPrice} />
+          <EditBudgetDistribution
+            marginalPrice={order.marginalPrice}
+            onChange={setMarginalPrice}
+          />
         )}
       </EditStrategyAllocatedBudget>
       <FullOutcome

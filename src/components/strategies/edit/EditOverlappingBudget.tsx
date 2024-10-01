@@ -246,7 +246,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             initialBudget={initialSellBudget}
             withdraw={budgetError ? '0' : withdrawSellBudget}
             deposit={budgetError ? '0' : depositSellBudget}
-            balance={baseBalance ?? '0'}
+            balance={baseBalance}
           />
           <BudgetDescription
             token={base}
@@ -261,7 +261,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             initialBudget={initialBuyBudget}
             withdraw={budgetError ? '0' : withdrawBuyBudget}
             deposit={budgetError ? '0' : depositBuyBudget}
-            balance={quoteBalance ?? '0'}
+            balance={quoteBalance}
             buy
           />
           <BudgetDescription

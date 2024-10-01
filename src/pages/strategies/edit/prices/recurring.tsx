@@ -23,6 +23,7 @@ import { useCallback } from 'react';
 import { EditOrderBlock } from 'components/strategies/common/types';
 import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
 export interface EditRecurringStrategySearch {
   priceStart?: string;
@@ -33,11 +34,13 @@ export interface EditRecurringStrategySearch {
   buySettings?: StrategySettings;
   buyBudget?: string;
   buyAction?: 'deposit' | 'withdraw';
+  buyMarginalPrice?: MarginalPriceOptions;
   sellMin?: string;
   sellMax?: string;
   sellSettings?: StrategySettings;
   sellBudget?: string;
   sellAction?: 'deposit' | 'withdraw';
+  sellMarginalPrice?: MarginalPriceOptions;
 }
 
 type Search = EditRecurringStrategySearch;
@@ -96,6 +99,7 @@ const getOrders = (
         order0.balance,
         search.buyBudget
       ),
+      marginalPrice: search.buyMarginalPrice,
     },
     sell: {
       min: search.sellMin ?? defaultMin('sell', search.sellSettings) ?? '',
@@ -107,6 +111,7 @@ const getOrders = (
         order1.balance,
         search.sellBudget
       ),
+      marginalPrice: search.sellMarginalPrice,
     },
   };
 };
@@ -152,14 +157,16 @@ export const EditStrategyRecurringPage = () => {
     sell: orders.sell.settings === 'limit',
   };
 
+  const hasBuyPriceChanged =
+    search.buyMin !== order0.startRate || search.buyMax !== order0.endRate;
+  const hasSellPriceChanged =
+    search.sellMin !== order1.startRate || search.sellMax !== order1.endRate;
+
   const hasChanged = (() => {
-    const { order0, order1 } = strategy;
     if (isOverlappingStrategy(strategy)) return true;
-    if (search.buyMin !== order0.startRate) return true;
-    if (search.buyMax !== order0.endRate) return true;
+    if (hasBuyPriceChanged) return true;
     if (!isZero(search.buyBudget)) return true;
-    if (search.sellMin !== order1.startRate) return true;
-    if (search.sellMax !== order1.endRate) return true;
+    if (hasSellPriceChanged) return true;
     if (!isZero(search.sellBudget)) return true;
     return false;
   })();
@@ -193,7 +200,8 @@ export const EditStrategyRecurringPage = () => {
         <EditStrategyPriceField
           order={orders.sell}
           budget={search.sellBudget ?? ''}
-          initialBudget={order1.balance}
+          initialOrder={order1}
+          hasPriceChanged={hasSellPriceChanged}
           setOrder={setSellOrder}
           warnings={[sellOutsideMarket, getWarning(search)]}
           error={error}
@@ -201,7 +209,8 @@ export const EditStrategyRecurringPage = () => {
         <EditStrategyPriceField
           order={orders.buy}
           budget={search.buyBudget ?? ''}
-          initialBudget={order0.balance}
+          initialOrder={order0}
+          hasPriceChanged={hasBuyPriceChanged}
           setOrder={setBuyOrder}
           warnings={[buyOutsideMarket, getWarning(search)]}
           error={error}
