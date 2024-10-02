@@ -9,6 +9,12 @@ afterEach(() => {
   cleanup();
 });
 
+global.ResizeObserver = vitest.fn().mockImplementation(() => ({
+  observe: vitest.fn(),
+  unobserve: vitest.fn(),
+  disconnect: vitest.fn(),
+}));
+
 // MOCK STORE PROVIDER CONTEXTS
 vitest.mock('store/useTokensStore.ts', async (importOriginal) => {
   const mod = await importOriginal<typeof import('store/useTokensStore.ts')>();

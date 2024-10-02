@@ -4,19 +4,21 @@ import {
   marketRateHandler,
   mockStrategy,
   renderWithRouter,
+  screen,
   userEvent,
 } from 'libs/testing-library';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
 import { Strategy } from 'libs/queries';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import {
+  MockStrategyParams,
   mockEmptyOrder,
   mockMarketRate,
 } from 'libs/testing-library/utils/mock';
 import { EditBudgetDisposablePage } from './disposable';
+import { EditStrategyDriver } from 'libs/testing-library/drivers/EditStrategyDriver';
 
-const basePath = '/strategies/edit/$strategyId/prices/disposable';
-const getUrl = (id: string) => `/strategies/edit/${id}/prices/disposable`;
+const basePath = '/strategies/edit/$strategyId/budget/disposable';
 
 const marketRates = mockMarketRate({ USDC: 1, ETH: 2.5 });
 
@@ -25,25 +27,32 @@ const mockServer = new MockServer([marketRateHandler(marketRates)]);
 beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());
 
-interface Props {
-  strategy: Strategy;
-  type: 'editPrices' | 'renew' | 'deposit' | 'withdraw';
-}
-
-const WrappedDisposable = ({ strategy, type }: Props) => {
-  return (
-    <EditStrategyProvider strategy={strategy}>
-      <EditStrategyLayout editType={type}>
-        <EditBudgetDisposablePage />
-      </EditStrategyLayout>
-    </EditStrategyProvider>
-  );
+const renderPage = async (
+  type: 'deposit' | 'withdraw',
+  strategyParams: MockStrategyParams,
+  baseSearch: Record<string, string> = {}
+) => {
+  const strategy: Strategy = mockStrategy(strategyParams);
+  const search = { editType: type, ...baseSearch };
+  const { router } = await renderWithRouter({
+    component: () => (
+      <EditStrategyProvider strategy={strategy}>
+        <EditStrategyLayout editType={type}>
+          <EditBudgetDisposablePage />
+        </EditStrategyLayout>
+      </EditStrategyProvider>
+    ),
+    basePath,
+    search,
+    params: { strategyId: strategy.id },
+  });
+  return { strategy, router };
 };
 
-describe('Edit price disposable page', () => {
-  test('should only send to the SDK what has been changed', async () => {
-    const type = 'editPrices';
-    const strategy: Strategy = mockStrategy({
+describe('Edit budget disposable page', () => {
+  const user = userEvent.setup();
+  test('Enable submit only when budget is filled', async () => {
+    await renderPage('deposit', {
       base: 'ETH',
       quote: 'USDC',
       order0: {
@@ -54,23 +63,31 @@ describe('Edit price disposable page', () => {
       },
       order1: mockEmptyOrder(),
     });
-
-    const search = {
-      editType: type,
-      buyBudget: '2',
-    };
-
-    const url = getUrl(strategy.id);
-    const { router } = await renderWithRouter({
-      component: () => <WrappedDisposable strategy={strategy} type={type} />,
-      basePath,
-      search,
-      params: { strategyId: strategy.id },
+    const driver = new EditStrategyDriver(screen);
+    const form = await driver.findDisposableForm();
+    expect(form.submit()).toBeDisabled();
+    await user.type(form.budget(), '1');
+    expect(form.submit()).toBeEnabled();
+  });
+  describe('Budget distribution', () => {
+    test('Show when marginal buy price is above min', async () => {
+      await renderPage('deposit', {
+        base: 'ETH',
+        quote: 'USDC',
+        order0: {
+          balance: '1',
+          startRate: '1',
+          endRate: '2',
+          marginalRate: '1.5',
+        },
+        order1: mockEmptyOrder(),
+      });
+      const driver = new EditStrategyDriver(screen);
+      const form = await driver.findDisposableForm();
+      expect(form.distributeBudget()).toBeNull();
+      await user.type(form.budget(), '1');
+      expect(form.budget()).toHaveValue('1');
+      expect(form.distributeBudget()).toBeVisible();
     });
-    const user = userEvent.setup();
-
-    // Check search params
-    expect(router.state.location.pathname).toBe(url);
-    expect(router.state.location.search).toStrictEqual(search);
   });
 });

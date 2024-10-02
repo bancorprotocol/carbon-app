@@ -134,7 +134,7 @@ export const mockMarketRate = (params: MockMarketRateParams) => {
   return rates;
 };
 
-interface MockStrategyParams {
+export interface MockStrategyParams {
   base: TokenNames;
   quote: TokenNames;
   order0: Order;
