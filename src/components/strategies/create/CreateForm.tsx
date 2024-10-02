@@ -28,7 +28,7 @@ export const CreateForm: FC<FormProps> = (props) => {
   const { user } = useWagmi();
   const search = useSearch({ strict: false }) as any;
   const isSell =
-    type === 'disposable' && (!search.direction || search.direction === 'sell'); // sell is the default direction
+    type === 'disposable' && search.direction !== 'buy';
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
     useCreateStrategy({ type, base, quote, order0, order1 });
