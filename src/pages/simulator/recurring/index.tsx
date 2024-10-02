@@ -41,6 +41,12 @@ export const SimulatorInputRecurringPage = () => {
       if (!init) return;
       setInit(false);
 
+      if (!marketPrice) {
+        dispatch(`${type}Max`, '');
+        dispatch(`${type}Min`, '');
+        return;
+      }
+
       if (!(!state[type].max && !state[type].min)) {
         return;
       }
@@ -50,17 +56,13 @@ export const SimulatorInputRecurringPage = () => {
       const multiplierMax = type === 'buy' ? 0.1 : 0.2;
       const multiplierMin = type === 'buy' ? 0.2 : 0.1;
 
-      const max = marketPrice
-        ? new SafeDecimal(marketPrice)
-            [operation](marketPrice * multiplierMax)
-            .toFixed()
-        : '';
+      const max = new SafeDecimal(marketPrice)
+        [operation](marketPrice * multiplierMax)
+        .toFixed();
 
-      const min = marketPrice
-        ? new SafeDecimal(marketPrice)
-            [operation](marketPrice * multiplierMin)
-            .toFixed()
-        : '';
+      const min = new SafeDecimal(marketPrice)
+        [operation](marketPrice * multiplierMin)
+        .toFixed();
 
       if (state[type].isRange) {
         dispatch(`${type}Max`, max);
