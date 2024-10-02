@@ -4,6 +4,7 @@ import { debugTokens } from '../../../../e2e/utils/types';
 import tokenListsMock from '../../../../e2e/mocks/tokenLists.json';
 import { Order, Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
+import { TokenPriceHistoryResult } from 'libs/queries/extApi/tokenPrice';
 
 /**
  * Creates a handler for fetching market rates based on the provided market rates object.
@@ -29,6 +30,10 @@ export const marketRateHandler = (
       data: marketRates[address],
     });
   });
+};
+
+export const priceHistoryHandler = (data: TokenPriceHistoryResult[]) => {
+  return http.get('**/*/history/prices', () => HttpResponse.json({ data }));
 };
 
 /**

@@ -13,23 +13,21 @@ export class EditStrategyDriver {
 
   async findDisposableForm() {
     const form = await this.findForm();
-    const get = (id: string) => within(form).getByTestId(id);
-    const query = (id: string) => within(form).queryByTestId(id);
     return {
       element: form,
-      min: () => get('input-min'),
-      max: () => get('input-max'),
-      price: () => get('input-price'),
-      tabSell: () => get('tab-sell'),
-      tabBuy: () => get('tab-buy'),
-      limit: () => get('tab-limit'),
-      range: () => get('tab-range'),
-      budget: () => get('input-budget'),
+      min: () => within(form).getByTestId('input-min'),
+      max: () => within(form).getByTestId('input-max'),
+      price: () => within(form).getByTestId('input-price'),
+      tabSell: () => within(form).getByTestId('tab-sell'),
+      tabBuy: () => within(form).getByTestId('tab-buy'),
+      limit: () => within(form).getByTestId('tab-limit'),
+      range: () => within(form).getByTestId('tab-range'),
+      budget: () => within(form).getByTestId('input-budget'),
       marketPriceIndicators: () =>
         within(form).queryAllByTestId('market-price-indication'),
-      approveWarnings: () => query('approve-warnings'),
-      distributeBudget: () => query('distribute-budget'),
-      submit: () => get('edit-submit'),
+      approveWarnings: () => within(form).queryByTestId('approve-warnings'),
+      distributeBudget: () => within(form).queryByTestId('distribute-budget'),
+      submit: () => within(form).getByTestId('edit-submit'),
     };
   }
 

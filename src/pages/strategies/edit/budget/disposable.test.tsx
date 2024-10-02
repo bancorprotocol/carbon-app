@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeAll, afterAll } from 'vitest';
+import { describe, test, expect, beforeAll, afterAll, vitest } from 'vitest';
 import {
   MockServer,
   marketRateHandler,
@@ -14,15 +14,20 @@ import {
   MockStrategyParams,
   mockEmptyOrder,
   mockMarketRate,
+  priceHistoryHandler,
 } from 'libs/testing-library/utils/mock';
 import { EditBudgetDisposablePage } from './disposable';
 import { EditStrategyDriver } from 'libs/testing-library/drivers/EditStrategyDriver';
+import * as balanceQueries from 'libs/queries/chain/balance';
 
 const basePath = '/strategies/edit/$strategyId/budget/disposable';
 
 const marketRates = mockMarketRate({ USDC: 1, ETH: 2.5 });
 
-const mockServer = new MockServer([marketRateHandler(marketRates)]);
+const mockServer = new MockServer([
+  marketRateHandler(marketRates),
+  priceHistoryHandler([]),
+]);
 
 beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());
@@ -51,6 +56,10 @@ const renderPage = async (
 
 describe('Edit budget disposable page', () => {
   const user = userEvent.setup();
+  vitest
+    .spyOn(balanceQueries, 'useGetTokenBalance')
+    .mockImplementation(() => ({ data: '1000' } as any));
+
   test('Enable submit only when budget is filled', async () => {
     await renderPage('deposit', {
       base: 'ETH',
@@ -87,7 +96,59 @@ describe('Edit budget disposable page', () => {
       expect(form.distributeBudget()).toBeNull();
       await user.type(form.budget(), '1');
       expect(form.budget()).toHaveValue('1');
+      screen.debug(form.element);
       expect(form.distributeBudget()).toBeVisible();
+    });
+    test('Do not show when marginal buy price is above max', async () => {
+      await renderPage('deposit', {
+        base: 'ETH',
+        quote: 'USDC',
+        order0: {
+          balance: '1',
+          startRate: '1',
+          endRate: '2',
+          marginalRate: '2',
+        },
+        order1: mockEmptyOrder(),
+      });
+      const driver = new EditStrategyDriver(screen);
+      const form = await driver.findDisposableForm();
+      await user.type(form.budget(), '1');
+      expect(form.distributeBudget()).toBeNull();
+    });
+    test('Do not show when marginal sell price is above min', async () => {
+      await renderPage('deposit', {
+        base: 'ETH',
+        quote: 'USDC',
+        order0: mockEmptyOrder(),
+        order1: {
+          balance: '1',
+          startRate: '1',
+          endRate: '2',
+          marginalRate: '1',
+        },
+      });
+      const driver = new EditStrategyDriver(screen);
+      const form = await driver.findDisposableForm();
+      await user.type(form.budget(), '1');
+      expect(form.distributeBudget()).toBeNull();
+    });
+    test('Do not show when no initial balance', async () => {
+      await renderPage('deposit', {
+        base: 'ETH',
+        quote: 'USDC',
+        order0: mockEmptyOrder(),
+        order1: {
+          balance: '0',
+          startRate: '1',
+          endRate: '2',
+          marginalRate: '1.5',
+        },
+      });
+      const driver = new EditStrategyDriver(screen);
+      const form = await driver.findDisposableForm();
+      await user.type(form.budget(), '1');
+      expect(form.distributeBudget()).toBeNull();
     });
   });
 });

@@ -14,13 +14,18 @@ import { Strategy } from 'libs/queries';
 import { carbonSDK } from 'libs/sdk';
 import { spyOn } from '@vitest/spy';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
-import { mockMarketRate } from 'libs/testing-library/utils/mock';
+import {
+  mockMarketRate,
+  priceHistoryHandler,
+} from 'libs/testing-library/utils/mock';
 
 const basePath = '/strategies/edit/$strategyId/budget/recurring';
 
 const marketRates = mockMarketRate({ USDC: 1, ETH: 2.5 });
-
-const mockServer = new MockServer([marketRateHandler(marketRates)]);
+const mockServer = new MockServer([
+  marketRateHandler(marketRates),
+  priceHistoryHandler([]),
+]);
 
 beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());

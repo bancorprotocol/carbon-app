@@ -101,7 +101,7 @@ export const EditBudgetDisposablePage = () => {
             editType={search.editType}
             order={orders.sell}
             budget={search.sellBudget ?? ''}
-            initialBudget={strategy.order1.balance}
+            initialOrder={strategy.order1}
             setOrder={setSellOrder}
             warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
           />
@@ -111,7 +111,7 @@ export const EditBudgetDisposablePage = () => {
             editType={search.editType}
             order={orders.buy}
             budget={search.buyBudget ?? ''}
-            initialBudget={strategy.order0.balance}
+            initialOrder={strategy.order0}
             setOrder={setBuyOrder}
             warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
             buy
