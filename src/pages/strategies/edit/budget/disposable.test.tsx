@@ -79,7 +79,7 @@ describe('Edit budget disposable page', () => {
     expect(form.submit()).toBeEnabled();
   });
   describe('Budget distribution', () => {
-    test('Show when marginal buy price is above min', async () => {
+    test('Show when marginal buy price is min', async () => {
       await renderPage('deposit', {
         base: 'ETH',
         quote: 'USDC',
@@ -96,10 +96,9 @@ describe('Edit budget disposable page', () => {
       expect(form.distributeBudget()).toBeNull();
       await user.type(form.budget(), '1');
       expect(form.budget()).toHaveValue('1');
-      screen.debug(form.element);
       expect(form.distributeBudget()).toBeVisible();
     });
-    test('Do not show when marginal buy price is above max', async () => {
+    test('Do not show when marginal buy price is max', async () => {
       await renderPage('deposit', {
         base: 'ETH',
         quote: 'USDC',

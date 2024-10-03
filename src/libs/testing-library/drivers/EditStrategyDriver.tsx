@@ -46,6 +46,8 @@ export class EditStrategyDriver {
         budget: () => within(buySection).getByTestId('input-budget'),
         marketPriceIndicators: () =>
           within(buySection).queryAllByTestId('market-price-indication'),
+        distributeBudget: () =>
+          within(buySection).queryByTestId('distribute-budget'),
       },
       sell: {
         min: () => within(sellSection).getByTestId('input-min'),
@@ -56,6 +58,8 @@ export class EditStrategyDriver {
         budget: () => within(sellSection).getByTestId('input-budget'),
         marketPriceIndicators: () =>
           within(sellSection).queryAllByTestId('market-price-indication'),
+        distributeBudget: () =>
+          within(sellSection).queryByTestId('distribute-budget'),
       },
       approveWarnings: () => within(form).queryByTestId('approve-warnings'),
       submit: () => within(form).getByTestId('edit-submit'),
