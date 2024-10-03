@@ -7,6 +7,8 @@ import { EditOrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   emptyOrder,
+  isEmptyOrder,
+  isLimitOrder,
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
@@ -44,11 +46,13 @@ const getOrder = (
   marketPrice?: number
 ): EditOrderBlock => {
   const { order0, order1 } = strategy;
-  const direction = search.direction ?? 'sell';
-  const settings = search.settings ?? 'limit';
-  const action = search.action ?? 'deposit';
+  const defaultDirection = !isEmptyOrder(order0) ? 'buy' : 'sell';
+  const direction = search.direction ?? defaultDirection;
   const isBuy = direction === 'buy';
   const order = isBuy ? order0 : order1;
+  const defaultSettings = isLimitOrder(order) ? 'limit' : 'range';
+  const settings = search.settings ?? defaultSettings;
+  const action = search.action ?? 'deposit';
 
   const defaultPrice = isBuy ? order0.startRate : order1.endRate;
   const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
@@ -88,7 +92,7 @@ const getOrder = (
 };
 
 const url = '/strategies/edit/$strategyId/prices/disposable';
-export const EditStrategyDisposablePage = () => {
+export const EditPricesStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
@@ -142,6 +146,7 @@ export const EditStrategyDisposablePage = () => {
   };
 
   const hasPriceChanged = (() => {
+    console.log(orders, order0, order1);
     if (orders.buy.min !== order0.startRate) return true;
     if (orders.buy.max !== order0.endRate) return true;
     if (orders.sell.min !== order1.startRate) return true;

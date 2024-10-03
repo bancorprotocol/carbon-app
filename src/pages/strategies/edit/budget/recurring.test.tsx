@@ -70,6 +70,7 @@ const renderPage = async (
 
 describe('Edit budget recurring page', () => {
   const user = userEvent.setup();
+  const driver = new EditStrategyDriver(screen);
   vitest
     .spyOn(balanceQueries, 'useGetTokenBalance')
     .mockImplementation(() => ({ data: '1000' } as any));
@@ -92,7 +93,6 @@ describe('Edit budget recurring page', () => {
     expect(router.state.location.pathname).toBe(url);
     expect(router.state.location.search).toStrictEqual(search);
 
-    const driver = new EditStrategyDriver(screen);
     const form = await driver.findRecurringForm();
     expect(form.buy.budget()).toHaveValue('2');
     expect(form.sell.budget()).toHaveValue('');
@@ -106,7 +106,6 @@ describe('Edit budget recurring page', () => {
       order1: baseSell,
     });
 
-    const driver = new EditStrategyDriver(screen);
     const form = await driver.findRecurringForm();
 
     // Check form
@@ -131,7 +130,7 @@ describe('Edit budget recurring page', () => {
         order0: baseBuy,
         order1: baseSell,
       });
-      const driver = new EditStrategyDriver(screen);
+
       const form = await driver.findRecurringForm();
       expect(form.buy.distributeBudget()).toBeNull();
       expect(form.sell.distributeBudget()).toBeNull();
@@ -153,7 +152,7 @@ describe('Edit budget recurring page', () => {
           marginalRate: '3',
         },
       });
-      const driver = new EditStrategyDriver(screen);
+
       const form = await driver.findRecurringForm();
       await user.type(form.buy.budget(), '1');
       await user.type(form.sell.budget(), '1');
@@ -173,7 +172,7 @@ describe('Edit budget recurring page', () => {
           balance: '0',
         },
       });
-      const driver = new EditStrategyDriver(screen);
+
       const form = await driver.findRecurringForm();
       await user.type(form.buy.budget(), '1');
       expect(form.buy.distributeBudget()).toBeNull();

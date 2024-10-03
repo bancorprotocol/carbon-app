@@ -8,6 +8,7 @@ import {
   isZero,
   isOverlappingStrategy,
   outSideMarketWarning,
+  isLimitOrder,
 } from 'components/strategies/common/utils';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import {
@@ -21,7 +22,7 @@ import { StrategyChartHistory } from 'components/strategies/common/StrategyChart
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
 import { EditOrderBlock } from 'components/strategies/common/types';
-import { Strategy } from 'libs/queries';
+import { Order, Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
@@ -88,11 +89,14 @@ const getOrders = (
     })();
     return new SafeDecimal(price ?? 0).mul(multiplier).toString();
   };
+  const defaultSettings = (order: Order) => {
+    return isLimitOrder(order) ? 'limit' : 'range';
+  };
   return {
     buy: {
       min: search.buyMin ?? defaultMin('buy', search.buySettings) ?? '',
       max: search.buyMax ?? defaultMax('buy', search.buySettings) ?? '',
-      settings: search.buySettings ?? 'limit',
+      settings: search.buySettings ?? defaultSettings(order0),
       action: search.buyAction ?? 'deposit',
       budget: getTotalBudget(
         search.buyAction ?? 'deposit',
@@ -104,7 +108,7 @@ const getOrders = (
     sell: {
       min: search.sellMin ?? defaultMin('sell', search.sellSettings) ?? '',
       max: search.sellMax ?? defaultMax('sell', search.sellSettings) ?? '',
-      settings: search.sellSettings ?? 'limit',
+      settings: search.sellSettings ?? defaultSettings(order1),
       action: search.sellAction ?? 'deposit',
       budget: getTotalBudget(
         search.sellAction ?? 'deposit',

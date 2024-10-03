@@ -7,7 +7,7 @@ import {
 export class EditStrategyDriver {
   constructor(private screen: Screen) {}
 
-  async findForm() {
+  findForm() {
     return this.screen.findByTestId('edit-form');
   }
 
@@ -22,11 +22,12 @@ export class EditStrategyDriver {
       tabBuy: () => within(form).getByTestId('tab-buy'),
       limit: () => within(form).getByTestId('tab-limit'),
       range: () => within(form).getByTestId('tab-range'),
+      budgetSummary: () => within(form).getByTestId('budget-summary'),
       budget: () => within(form).getByTestId('input-budget'),
+      distributeBudget: () => within(form).queryByTestId('distribute-budget'),
       marketPriceIndicators: () =>
         within(form).queryAllByTestId('market-price-indication'),
       approveWarnings: () => within(form).queryByTestId('approve-warnings'),
-      distributeBudget: () => within(form).queryByTestId('distribute-budget'),
       submit: () => within(form).getByTestId('edit-submit'),
     };
   }
@@ -44,6 +45,7 @@ export class EditStrategyDriver {
         limit: () => within(buySection).getByTestId('tab-limit'),
         range: () => within(buySection).getByTestId('tab-range'),
         budget: () => within(buySection).getByTestId('input-budget'),
+        budgetSummary: () => within(buySection).getByTestId('budget-summary'),
         marketPriceIndicators: () =>
           within(buySection).queryAllByTestId('market-price-indication'),
         distributeBudget: () =>
@@ -56,10 +58,11 @@ export class EditStrategyDriver {
         limit: () => within(sellSection).getByTestId('tab-limit'),
         range: () => within(sellSection).getByTestId('tab-range'),
         budget: () => within(sellSection).getByTestId('input-budget'),
-        marketPriceIndicators: () =>
-          within(sellSection).queryAllByTestId('market-price-indication'),
+        budgetSummary: () => within(sellSection).getByTestId('budget-summary'),
         distributeBudget: () =>
           within(sellSection).queryByTestId('distribute-budget'),
+        marketPriceIndicators: () =>
+          within(sellSection).queryAllByTestId('market-price-indication'),
       },
       approveWarnings: () => within(form).queryByTestId('approve-warnings'),
       submit: () => within(form).getByTestId('edit-submit'),
