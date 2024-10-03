@@ -53,7 +53,6 @@ const getOrder = (
   const defaultSettings = isLimitOrder(order) ? 'limit' : 'range';
   const settings = search.settings ?? defaultSettings;
   const action = search.action ?? 'deposit';
-
   const defaultPrice = isBuy ? order0.startRate : order1.endRate;
   const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
 
@@ -146,7 +145,6 @@ export const EditPricesStrategyDisposablePage = () => {
   };
 
   const hasPriceChanged = (() => {
-    console.log(orders, order0, order1);
     if (orders.buy.min !== order0.startRate) return true;
     if (orders.buy.max !== order0.endRate) return true;
     if (orders.sell.min !== order1.startRate) return true;

@@ -18,8 +18,8 @@ import {
 } from 'libs/testing-library/utils/mock';
 import { EditPricesStrategyDisposablePage } from './disposable';
 import { EditStrategyDriver } from 'libs/testing-library/drivers/EditStrategyDriver';
+import { toDisposablePricesSearch } from 'libs/routing/routes/strategyEdit';
 import * as balanceQueries from 'libs/queries/chain/balance';
-import { isEmptyOrder } from 'components/strategies/common/utils';
 
 const basePath = '/strategies/edit/$strategyId/prices/disposable';
 
@@ -54,18 +54,9 @@ const baseBuyOrder = {
 
 const renderPage = async (
   type: 'editPrices' | 'renew',
-  strategyParams: MockStrategyParams,
-  baseSearch: Record<string, string> = {}
+  strategyParams: MockStrategyParams
 ) => {
   const strategy: Strategy = mockStrategy(strategyParams);
-  const { order0, order1 } = strategy;
-  const { startRate, endRate } = isEmptyOrder(order0) ? order1 : order0;
-  const search = {
-    editType: type,
-    min: startRate,
-    max: endRate,
-    ...baseSearch,
-  };
   const { router } = await renderWithRouter({
     component: () => (
       <EditStrategyProvider strategy={strategy}>
@@ -75,7 +66,7 @@ const renderPage = async (
       </EditStrategyProvider>
     ),
     basePath,
-    search,
+    search: toDisposablePricesSearch(strategy, type) as any,
     params: { strategyId: strategy.id },
   });
   return { strategy, router };
@@ -96,7 +87,6 @@ describe('Edit price disposable page', () => {
       await user.click(form.budgetSummary());
       await user.type(form.budget(), '1');
       expect(form.budget()).toHaveValue('1');
-      screen.debug(screen.getByTestId('field-range'));
       expect(form.distributeBudget()).toBeVisible();
     });
     test('Do not show when marginal buy price is max', async () => {
@@ -114,14 +104,14 @@ describe('Edit price disposable page', () => {
       await user.type(form.budget(), '1');
       expect(form.distributeBudget()).toBeNull();
     });
-    test('Do not show when marginal sell price is above min', async () => {
+    test('Do not show when marginal sell price is min', async () => {
       await renderPage('editPrices', {
         base: 'ETH',
         quote: 'USDC',
         order0: mockEmptyOrder(),
         order1: {
           ...baseSell,
-          marginalRate: '1',
+          marginalRate: '3',
         },
       });
       const form = await driver.findDisposableForm();
