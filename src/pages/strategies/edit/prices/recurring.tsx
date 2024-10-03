@@ -140,7 +140,7 @@ const getError = (search: EditRecurringStrategySearch) => {
 
 const url = '/strategies/edit/$strategyId/prices/recurring';
 
-export const EditStrategyRecurringPage = () => {
+export const EditPricesStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });

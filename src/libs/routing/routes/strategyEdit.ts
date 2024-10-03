@@ -8,7 +8,7 @@ import {
 } from '../utils';
 import { EditStrategyPageLayout } from 'pages/strategies/edit/layout';
 import {
-  EditStrategyRecurringPage,
+  EditPricesStrategyRecurringPage,
   EditRecurringStrategySearch,
 } from 'pages/strategies/edit/prices/recurring';
 import { Strategy } from 'libs/queries';
@@ -101,7 +101,7 @@ export const toRecurringPricesSearch = (
 export const editPricesRecurring = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/recurring',
-  component: EditStrategyRecurringPage,
+  component: EditPricesStrategyRecurringPage,
   validateSearch: searchValidator({
     editType: v.picklist(['editPrices', 'renew']),
     buyMin: v.optional(validInputNumber),
