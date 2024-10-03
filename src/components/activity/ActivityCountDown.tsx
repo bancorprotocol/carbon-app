@@ -9,7 +9,7 @@ const finishRemainingAnimations = (element: HTMLElement | null) => {
   const animations = element?.getAnimations() ?? [];
   const operations = animations.map(async (a) => {
     await a.finished;
-    if (element?.offsetParent === null) return; // cannot commit style to not rendered element
+    if (element?.offsetParent == null) return; // cannot commit style to not rendered element, check null and undefined
     a.commitStyles();
     a.cancel();
   });
@@ -101,6 +101,8 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         options
       );
     }
+
+    return () => {};
   }, [fetchStatus, time, id]);
 
   return (
