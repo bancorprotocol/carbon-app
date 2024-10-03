@@ -155,10 +155,10 @@ export function prettifyNumber(
 
   if (num.gte(1)) {
     intlOptions.minimumFractionDigits = 2;
-    intlOptions.maximumFractionDigits = options.decimals ?? 2;
+    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 2, 2);
   } else if (num.gte(0.001)) {
     intlOptions.minimumFractionDigits = 2;
-    intlOptions.maximumFractionDigits = options.decimals ?? 6;
+    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 6, 2);
   } else {
     intlOptions.maximumSignificantDigits = 5;
   }
