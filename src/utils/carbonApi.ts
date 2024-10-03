@@ -14,6 +14,10 @@ import {
 } from 'libs/queries/extApi/activity';
 import { lsService } from 'services/localeStorage';
 
+// Only ETH is supported as network currency by the API
+const NETWORK_CURRENCY =
+  config.network.gasToken.symbol === 'ETH' ? ['ETH' as const] : [];
+
 export const AVAILABLE_CURRENCIES = [
   'USD',
   'EUR',
@@ -23,7 +27,7 @@ export const AVAILABLE_CURRENCIES = [
   'CAD',
   'CHF',
   'CNY',
-  config.network.gasToken.symbol,
+  ...NETWORK_CURRENCY,
 ] as const;
 
 export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
