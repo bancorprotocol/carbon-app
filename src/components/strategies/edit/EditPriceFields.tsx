@@ -91,7 +91,7 @@ export const EditStrategyPriceField: FC<Props> = ({
     });
   };
 
-  const showDistribution = (() => {
+  const showDistribution = () => {
     if (hasPriceChanged) return false;
     if (order.min === order.max) return false;
     if (isZero(budget)) return false;
@@ -101,7 +101,7 @@ export const EditStrategyPriceField: FC<Props> = ({
     if (buy && initialOrder.marginalRate === order.max) return false;
     if (!buy && initialOrder.marginalRate === order.min) return false;
     return true;
-  })();
+  };
 
   const headerProps = { titleId, order, base, buy, setSettings };
 
@@ -166,7 +166,7 @@ export const EditStrategyPriceField: FC<Props> = ({
         buyBudget={strategy.order0.balance}
         sellBudget={strategy.order1.balance}
       >
-        {showDistribution && (
+        {showDistribution() && (
           <div
             role="table"
             className="rounded-8 p-15 text-12 font-weight-500 mt-8 flex flex-col gap-10 border-2 border-white/10 text-left"

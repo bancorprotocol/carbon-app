@@ -80,7 +80,7 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
   return (
     <div role="row" className="flex justify-between">
       <p role="columnheader" className="flex items-center">
-        <label htmlFor={id} className="mr-5">
+        <label htmlFor={id} className="mr-5" data-testid="distribute-budget">
           Distribute Across Entire Range
         </label>
         <Tooltip

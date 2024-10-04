@@ -8,7 +8,7 @@ import {
 } from '../utils';
 import { EditStrategyPageLayout } from 'pages/strategies/edit/layout';
 import {
-  EditStrategyRecurringPage,
+  EditPricesStrategyRecurringPage,
   EditRecurringStrategySearch,
 } from 'pages/strategies/edit/prices/recurring';
 import { Strategy } from 'libs/queries';
@@ -22,7 +22,7 @@ import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import {
   EditDisposableStrategySearch,
-  EditStrategyDisposablePage,
+  EditPricesStrategyDisposablePage,
 } from 'pages/strategies/edit/prices/disposable';
 import {
   EditOverlappingStrategySearch,
@@ -71,7 +71,7 @@ export const toDisposablePricesSearch = (
 export const editPricesDisposable = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/disposable',
-  component: EditStrategyDisposablePage,
+  component: EditPricesStrategyDisposablePage,
   validateSearch: searchValidator({
     editType: v.picklist(['editPrices', 'renew']),
     min: v.optional(validInputNumber),
@@ -101,7 +101,7 @@ export const toRecurringPricesSearch = (
 export const editPricesRecurring = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/recurring',
-  component: EditStrategyRecurringPage,
+  component: EditPricesStrategyRecurringPage,
   validateSearch: searchValidator({
     editType: v.picklist(['editPrices', 'renew']),
     buyMin: v.optional(validInputNumber),
