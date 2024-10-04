@@ -151,7 +151,7 @@ const getConfigConnectors = (): CreateConnectorFn[] => {
   );
 
   store.destroy();
-  return missingConnectors.map(getDefaultConnector);
+  return selectedConnectors.map(getDefaultConnector);
 };
 
 export const configConnectors = getConfigConnectors();
