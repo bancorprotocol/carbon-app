@@ -37,6 +37,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         />
         <label
           htmlFor="anchor-sell"
+          data-testid="anchor-sell-label"
           className="rounded-8 text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
         >
           <TokenLogo token={base} size={14} />
@@ -56,6 +57,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         />
         <label
           htmlFor="anchor-buy"
+          data-testid="anchor-buy-label"
           className="rounded-8 text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
         >
           <TokenLogo token={quote} size={14} />
