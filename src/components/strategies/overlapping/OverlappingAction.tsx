@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useId, useRef } from 'react';
+import { FC, ReactNode, SyntheticEvent, useId, useRef } from 'react';
 import { Token } from 'libs/tokens';
 import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
@@ -20,6 +20,7 @@ interface Props {
   action?: BudgetAction;
   setAction: (action: BudgetAction) => void;
   warning?: string;
+  children?: ReactNode;
 }
 
 export const OverlappingAction: FC<Props> = (props) => {
@@ -34,6 +35,7 @@ export const OverlappingAction: FC<Props> = (props) => {
     budget,
     setBudget,
     warning,
+    children,
   } = props;
   const actionName = useId();
   const depositId = useId();
@@ -127,6 +129,7 @@ export const OverlappingAction: FC<Props> = (props) => {
           data-testid="input-budget"
         />
       </div>
+      {children}
     </details>
   );
 };

@@ -9,18 +9,20 @@ import {
   waitFor,
   userEvent,
   tokenList,
+  mockMarketRate,
+  priceHistoryHandler,
 } from 'libs/testing-library';
 import { TradeProvider } from 'components/trade/TradeContext';
 import { Token } from 'libs/tokens';
 
 const basePath = '/trade/overlapping';
 
-const marketRates: Record<string, Record<string, number>> = {
-  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { USD: 1 }, // USDC
-  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { USD: 2800 }, // ETH
-};
+const marketRates = mockMarketRate({ USDC: 1, ETH: 2800 });
 
-const mockServer = new MockServer([marketRateHandler(marketRates)]);
+const mockServer = new MockServer([
+  marketRateHandler(marketRates),
+  priceHistoryHandler([]),
+]);
 
 beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());

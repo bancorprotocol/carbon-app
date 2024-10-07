@@ -2,7 +2,9 @@ import { setupServer } from 'msw/node';
 import { HttpResponse, http, RequestHandler } from 'msw';
 import { debugTokens } from '../../../../e2e/utils/types';
 import tokenListsMock from '../../../../e2e/mocks/tokenLists.json';
-import { Token } from 'libs/tokens';
+import { Order, Strategy } from 'libs/queries';
+import { SafeDecimal } from 'libs/safedecimal';
+import { TokenPriceHistoryResult } from 'libs/queries/extApi/tokenPrice';
 
 /**
  * Creates a handler for fetching market rates based on the provided market rates object.
@@ -28,6 +30,10 @@ export const marketRateHandler = (
       data: marketRates[address],
     });
   });
+};
+
+export const priceHistoryHandler = (data: TokenPriceHistoryResult[]) => {
+  return http.get('**/*/history/prices', () => HttpResponse.json({ data }));
 };
 
 /**
@@ -96,7 +102,7 @@ export class MockServer {
   }
 }
 
-export const tokenList: Record<string, Token> = {
+export const tokenList = {
   USDT: {
     address: debugTokens.USDT,
     decimals: 6,
@@ -118,3 +124,43 @@ export const tokenList: Record<string, Token> = {
     symbol: 'ETH',
   },
 };
+
+type TokenNames = keyof typeof tokenList;
+
+type MockMarketRateParams = Partial<{
+  [token in TokenNames]: number;
+}>;
+export const mockMarketRate = (params: MockMarketRateParams) => {
+  const rates: Record<string, Record<string, number>> = {};
+  for (const [key, value] of Object.entries(params)) {
+    const address = tokenList[key as TokenNames].address.toLowerCase();
+    rates[address] = { USD: value };
+  }
+  return rates;
+};
+
+export interface MockStrategyParams {
+  base: TokenNames;
+  quote: TokenNames;
+  order0: Order;
+  order1: Order;
+}
+
+export const mockStrategy = (params: MockStrategyParams): Strategy => ({
+  id: '1',
+  idDisplay: '1',
+  base: tokenList[params.base],
+  quote: tokenList[params.quote],
+  status: 'active',
+  encoded: {} as any,
+  roi: new SafeDecimal('1'),
+  order0: params.order0,
+  order1: params.order1,
+});
+
+export const mockEmptyOrder = (balance: string = '0'): Order => ({
+  balance,
+  startRate: '0',
+  endRate: '0',
+  marginalRate: '0',
+});

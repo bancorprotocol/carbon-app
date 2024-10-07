@@ -9,7 +9,7 @@ import {
 } from './EditStrategyAllocatedBudget';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { InputBudget } from '../common/InputBudget';
-import { useGetTokenBalance } from 'libs/queries';
+import { Order, useGetTokenBalance } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from '../common/utils';
 
@@ -18,7 +18,7 @@ interface Props {
   order: BaseOrder;
   editType: 'withdraw' | 'deposit';
   buy?: boolean;
-  initialBudget: string;
+  initialOrder: Order;
   setOrder: (order: Partial<OrderBlock>) => void;
   error?: string;
   warning?: string;
@@ -28,7 +28,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
   budget,
   order,
   editType,
-  initialBudget,
+  initialOrder,
   setOrder,
   buy = false,
   error,
@@ -39,6 +39,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
   const titleId = useId();
   const token = buy ? quote : base;
   const balance = useGetTokenBalance(token);
+  const initialBudget = initialOrder.balance;
 
   const max = editType === 'deposit' ? balance.data || '0' : initialBudget;
   const maxIsLoading = editType === 'deposit' && balance.isPending;
@@ -50,6 +51,17 @@ export const EditStrategyBudgetField: FC<Props> = ({
   const setBudget = (budget: string) => setOrder({ budget });
   const setMarginalPrice = (marginalPrice: string) =>
     setOrder({ marginalPrice });
+
+  const showDistribution = () => {
+    if (order.min === order.max) return false;
+    if (isZero(budget)) return false;
+    if (isZero(initialBudget)) return false;
+    if (new SafeDecimal(order.budget).lte(0)) return false;
+    if (!balance.data || new SafeDecimal(budget).gt(balance.data)) return false;
+    if (buy && initialOrder.marginalRate === order.max) return false;
+    if (!buy && initialOrder.marginalRate === order.min) return false;
+    return true;
+  };
 
   return (
     <article
@@ -86,8 +98,11 @@ export const EditStrategyBudgetField: FC<Props> = ({
       />
       <EditStrategyAllocatedBudget token={token} initialBudget={initialBudget}>
         <EditBudgetTokenPrice order={order} buy={buy} />
-        {order.min !== order.max && !isZero(budget) && (
-          <EditBudgetDistribution order={order} onChange={setMarginalPrice} />
+        {showDistribution() && (
+          <EditBudgetDistribution
+            marginalPrice={order.marginalPrice}
+            onChange={setMarginalPrice}
+          />
         )}
       </EditStrategyAllocatedBudget>
       <FullOutcome

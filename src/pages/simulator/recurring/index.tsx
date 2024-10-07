@@ -38,8 +38,14 @@ export const SimulatorInputRecurringPage = () => {
       const init = type === 'buy' ? initBuyRange : initSellRange;
       const setInit = type === 'buy' ? setInitBuyRange : setInitSellRange;
 
-      if (!marketPrice || !init) return;
+      if (!init) return;
       setInit(false);
+
+      if (!marketPrice) {
+        dispatch(`${type}Max`, '');
+        dispatch(`${type}Min`, '');
+        return;
+      }
 
       if (!(!state[type].max && !state[type].min)) {
         return;

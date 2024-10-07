@@ -13,7 +13,7 @@ interface Props {
   initialBudget: string;
   withdraw: string;
   deposit: string;
-  balance: string;
+  balance?: string;
   isSimulator?: boolean;
 }
 
@@ -70,7 +70,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
     Number(initialBudget),
     Number(withdraw),
     Number(deposit),
-    Number(balance),
+    Number(balance ?? '0'),
     isSimulator
   );
   const color = buy ? 'bg-buy' : 'bg-sell';
@@ -81,16 +81,20 @@ export const BudgetDistribution: FC<Props> = (props) => {
       <div className="text-12 flex justify-between text-white/60">
         <label htmlFor={allocatedId}>
           Allocated:&nbsp;
-          <span className="text-white">
-            {tokenAmount(allocated || '0', token)}
-          </span>
+          {allocated ? (
+            <span className="text-white">{tokenAmount(allocated, token)}</span>
+          ) : (
+            <span className="loading-message text-white">Loading</span>
+          )}
         </label>
         {!isSimulator && (
           <label htmlFor={walletId}>
             Wallet:&nbsp;
-            <span className="text-white">
-              {tokenAmount(balance || '0', token)}
-            </span>
+            {balance ? (
+              <span className="text-white">{tokenAmount(balance, token)}</span>
+            ) : (
+              <span className="loading-message text-white">Loading</span>
+            )}
           </label>
         )}
       </div>
@@ -144,7 +148,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
     const balance = Number(props.balance);
     if (deposit > balance) {
       return (
-        <Warning className="text-12" isError>
+        <Warning className="text-12" isError data-testid="insufficient-balance">
           You should&nbsp;
           <b className="font-weight-500">
             deposit {tokenAmount(deposit, token)}
@@ -162,7 +166,10 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
         </span>
         <span>
           You will&nbsp;
-          <b className="font-weight-500">
+          <b
+            className="font-weight-500"
+            data-testid={`deposit-${token.symbol}`}
+          >
             deposit {tokenAmount(deposit, token)}
           </b>
           {depositFiat && <b>&nbsp;({depositFiat})</b>}
@@ -175,7 +182,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
     const initialBudget = Number(props.initialBudget);
     if (withdraw > initialBudget) {
       return (
-        <Warning className="text-12" isError>
+        <Warning className="text-12" isError data-testid="insufficient-funds">
           You should&nbsp;
           <b className="font-weight-500">
             withdraw {tokenAmount(withdraw, token)}
@@ -193,7 +200,10 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
         </span>
         <span>
           You will&nbsp;
-          <b className="font-weight-500">
+          <b
+            className="font-weight-500"
+            data-testid={`withdraw-${token.symbol}`}
+          >
             withdraw {tokenAmount(withdraw, token)}
           </b>
           {withdrawFiat && <b>&nbsp;({withdrawFiat})</b>}

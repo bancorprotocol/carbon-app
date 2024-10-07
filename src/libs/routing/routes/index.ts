@@ -40,14 +40,18 @@ import {
   editBudgetRecurring,
 } from './strategyEdit';
 import tradePage from 'libs/routing/routes/trade';
-import { strategyPage } from 'libs/routing/routes/strategy';
+import {
+  strategyPage,
+  strategyPageRedirect,
+  strategyPageRoot,
+} from 'libs/routing/routes/strategy';
 
 export const routeTree = rootRoute.addChildren([
   termPage,
   privacyPage,
   debugPage,
   tradePage,
-  strategyPage,
+  strategyPageRoot.addChildren([strategyPage, strategyPageRedirect]),
   oldCreateStrategies,
   editStrategyLayout.addChildren([
     editPricesDisposable,

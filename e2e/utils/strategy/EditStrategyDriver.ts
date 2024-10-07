@@ -31,6 +31,13 @@ export class EditStrategyDriver {
     return loading.waitFor({ state: 'detached' });
   }
 
+  async waitForLoading() {
+    const loadings = await this.page.locator('.loading-message').all();
+    return Promise.all(
+      loadings.map((loading) => loading.waitFor({ state: 'detached' }))
+    );
+  }
+
   getPriceSection(direction: Direction) {
     const form = this.page.getByTestId(`${direction}-section`);
     return {
@@ -62,7 +69,8 @@ export class EditStrategyDriver {
       max: () => form.getByTestId('input-max'),
       spread: () => form.getByTestId('spread-input'),
       anchorRequired: () => form.getByTestId('require-anchor'),
-      anchor: (anchor: 'buy' | 'sell') => form.getByTestId(`anchor-${anchor}`),
+      anchor: (anchor: 'buy' | 'sell') =>
+        form.getByTestId(`anchor-${anchor}-label`),
       budgetSummary: () => form.getByTestId(`budget-summary`),
       action: (action: 'deposit' | 'withdraw') =>
         form.getByTestId(`action-${action}`),
@@ -84,6 +92,7 @@ export class EditStrategyDriver {
     }
 
     try {
+      await this.waitForLoading();
       await waitFor(this.page, 'approve-warnings', 2_000);
       if (await this.page.isVisible('[data-testid=approve-warnings]')) {
         await this.page.getByTestId('approve-warnings').click();

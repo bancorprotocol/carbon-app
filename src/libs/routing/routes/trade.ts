@@ -14,6 +14,7 @@ import { TradeOverlapping } from 'pages/trade/overlapping';
 import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { OverlappingSearch } from 'components/strategies/common/types';
 import * as v from 'valibot';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
 // TRADE TYPE
 export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
@@ -98,6 +99,7 @@ const disposablePage = createRoute({
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
     budget: v.optional(validInputNumber),
+    marginalPrice: v.optional(v.enum(MarginalPriceOptions)),
   }),
 });
 
@@ -110,10 +112,12 @@ const recurringPage = createRoute({
     buyMax: v.optional(validInputNumber),
     buyBudget: v.optional(validInputNumber),
     buySettings: v.optional(v.picklist(['limit', 'range'])),
+    buyMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
     sellMin: v.optional(validInputNumber),
     sellMax: v.optional(validInputNumber),
     sellBudget: v.optional(validInputNumber),
     sellSettings: v.optional(v.picklist(['limit', 'range'])),
+    sellMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
   }),
 });
 

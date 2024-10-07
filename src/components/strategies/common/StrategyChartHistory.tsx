@@ -18,6 +18,7 @@ import { TradingviewChart } from 'components/tradingviewChart';
 import { Token } from 'libs/tokens';
 import { Activity } from 'libs/queries/extApi/activity';
 import config from 'config';
+import { SafeDecimal } from 'libs/safedecimal';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -116,10 +117,20 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   );
 
   const updatePrices: OnPriceUpdates = ({ buy, sell }) => {
-    setPrices({ buy, sell });
+    const newPrices = {
+      buy: {
+        min: SafeDecimal.max(buy.min, 0).toString(),
+        max: SafeDecimal.max(buy.max, 0).toString(),
+      },
+      sell: {
+        min: SafeDecimal.max(sell.min, 0).toString(),
+        max: SafeDecimal.max(sell.max, 0).toString(),
+      },
+    };
+    setPrices(newPrices);
     if (timeout.current) clearTimeout(timeout.current);
     timeout.current = setTimeout(() => {
-      props.onPriceUpdates?.({ buy, sell });
+      props.onPriceUpdates?.(newPrices);
     }, 200);
   };
 

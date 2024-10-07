@@ -103,7 +103,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
           initialBudget="0"
           withdraw="0"
           deposit={budgetError ? '0' : order1.budget}
-          balance={baseBalance || '0'}
+          balance={baseBalance}
           isSimulator={!user}
         />
         {!!user && (
@@ -121,7 +121,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
           initialBudget="0"
           withdraw="0"
           deposit={budgetError ? '0' : order0.budget}
-          balance={quoteBalance || '0'}
+          balance={quoteBalance}
           isSimulator={!user}
           buy
         />

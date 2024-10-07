@@ -7,6 +7,8 @@ import { EditOrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   emptyOrder,
+  isEmptyOrder,
+  isLimitOrder,
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
@@ -23,6 +25,7 @@ import { useCallback } from 'react';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'libs/queries';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
 export interface EditDisposableStrategySearch {
   priceStart?: string;
@@ -34,6 +37,7 @@ export interface EditDisposableStrategySearch {
   direction?: StrategyDirection;
   action?: 'deposit' | 'withdraw';
   budget?: string;
+  marginalPrice?: MarginalPriceOptions;
 }
 
 const getOrder = (
@@ -42,12 +46,13 @@ const getOrder = (
   marketPrice?: number
 ): EditOrderBlock => {
   const { order0, order1 } = strategy;
-  const direction = search.direction ?? 'sell';
-  const settings = search.settings ?? 'limit';
-  const action = search.action ?? 'deposit';
+  const defaultDirection = !isEmptyOrder(order0) ? 'buy' : 'sell';
+  const direction = search.direction ?? defaultDirection;
   const isBuy = direction === 'buy';
   const order = isBuy ? order0 : order1;
-
+  const defaultSettings = isLimitOrder(order) ? 'limit' : 'range';
+  const settings = search.settings ?? defaultSettings;
+  const action = search.action ?? 'deposit';
   const defaultPrice = isBuy ? order0.startRate : order1.endRate;
   const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
 
@@ -81,11 +86,12 @@ const getOrder = (
     min: search.min ?? defaultMin()?.toString() ?? '0',
     max: search.max ?? defaultMax()?.toString() ?? '0',
     budget: getTotalBudget(action, order.balance, search.budget),
+    marginalPrice: search.marginalPrice,
   };
 };
 
 const url = '/strategies/edit/$strategyId/prices/disposable';
-export const EditStrategyDisposablePage = () => {
+export const EditPricesStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
@@ -114,6 +120,7 @@ export const EditStrategyDisposablePage = () => {
       budget: undefined,
       min: undefined,
       max: undefined,
+      marginalPrice: undefined,
     });
   };
 
@@ -125,7 +132,7 @@ export const EditStrategyDisposablePage = () => {
     [setSearch, isBuy]
   );
 
-  const initialBudget = isBuy ? order0.balance : order1.balance;
+  const initialOrder = isBuy ? order0 : order1;
 
   const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
   const orders = {
@@ -137,14 +144,14 @@ export const EditStrategyDisposablePage = () => {
     sell: order.settings !== 'range',
   };
 
-  const hasChanged = (() => {
+  const hasPriceChanged = (() => {
     if (orders.buy.min !== order0.startRate) return true;
     if (orders.buy.max !== order0.endRate) return true;
     if (orders.sell.min !== order1.startRate) return true;
     if (orders.sell.max !== order1.endRate) return true;
-    if (!isZero(search.budget)) return true;
     return false;
   })();
+  const hasChanged = hasPriceChanged || !isZero(search.budget);
 
   // Warnings
   const outSideMarket = outSideMarketWarning({
@@ -172,10 +179,11 @@ export const EditStrategyDisposablePage = () => {
         <EditStrategyPriceField
           order={order}
           budget={search.budget ?? ''}
-          initialBudget={initialBudget}
+          initialOrder={initialOrder}
           setOrder={setOrder}
           warnings={[outSideMarket]}
           buy={isBuy}
+          hasPriceChanged={hasPriceChanged}
           settings={
             <TabsMenu>
               <TabsMenuButton

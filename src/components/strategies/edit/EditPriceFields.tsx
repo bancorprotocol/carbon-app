@@ -9,16 +9,20 @@ import { EditOrderBlock } from 'components/strategies/common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { BudgetDistribution } from '../common/BudgetDistribution';
 import { getDeposit, getWithdraw } from './utils';
-import { useGetTokenBalance } from 'libs/queries';
+import { Order, useGetTokenBalance } from 'libs/queries';
 import { StrategySettings } from 'libs/routing';
 import { OverlappingAction } from '../overlapping/OverlappingAction';
+import { EditBudgetDistribution } from './EditStrategyAllocatedBudget';
+import { isZero } from '../common/utils';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   order: EditOrderBlock;
   buy?: boolean;
-  initialBudget: string;
+  initialOrder: Order;
   budget: string;
   action?: 'deposit' | 'withdraw';
+  hasPriceChanged: boolean;
   setOrder: (order: Partial<EditOrderBlock>) => void;
   settings?: ReactNode;
   warnings?: (string | undefined)[];
@@ -27,8 +31,9 @@ interface Props {
 
 export const EditStrategyPriceField: FC<Props> = ({
   order,
-  initialBudget,
+  initialOrder,
   budget,
+  hasPriceChanged,
   setOrder,
   buy = false,
   settings,
@@ -39,7 +44,7 @@ export const EditStrategyPriceField: FC<Props> = ({
   const { base, quote } = strategy;
   const token = buy ? quote : base;
   const balance = useGetTokenBalance(token);
-
+  const initialBudget = initialOrder.balance;
   const titleId = useId();
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
@@ -68,18 +73,34 @@ export const EditStrategyPriceField: FC<Props> = ({
     </>
   );
   const setPrice = (price: string) => setOrder({ min: price, max: price });
-  const setMin = (min: string) => setOrder({ min });
-  const setMax = (max: string) => setOrder({ max });
+  const setMin = (min: string) => setOrder({ min, marginalPrice: undefined });
+  const setMax = (max: string) => setOrder({ max, marginalPrice: undefined });
   const setBudget = (budget: string) => setOrder({ budget });
+  const setMarginalPrice = (marginalPrice: string) => {
+    setOrder({ marginalPrice });
+  };
   const setAction = (action: 'deposit' | 'withdraw') => {
-    setOrder({ action, budget: undefined });
+    setOrder({ action, budget: undefined, marginalPrice: undefined });
   };
   const setSettings = (settings: StrategySettings) => {
     setOrder({
       settings,
       min: undefined,
       max: undefined,
+      marginalPrice: undefined,
     });
+  };
+
+  const showDistribution = () => {
+    if (hasPriceChanged) return false;
+    if (order.min === order.max) return false;
+    if (isZero(budget)) return false;
+    if (isZero(initialBudget)) return false;
+    if (new SafeDecimal(order.budget).lte(0)) return false;
+    if (!balance.data || new SafeDecimal(budget).gt(balance.data)) return false;
+    if (buy && initialOrder.marginalRate === order.max) return false;
+    if (!buy && initialOrder.marginalRate === order.min) return false;
+    return true;
   };
 
   const headerProps = { titleId, order, base, buy, setSettings };
@@ -144,13 +165,25 @@ export const EditStrategyPriceField: FC<Props> = ({
         setBudget={setBudget}
         buyBudget={strategy.order0.balance}
         sellBudget={strategy.order1.balance}
-      />
+      >
+        {showDistribution() && (
+          <div
+            role="table"
+            className="rounded-8 p-15 text-12 font-weight-500 mt-8 flex flex-col gap-10 border-2 border-white/10 text-left"
+          >
+            <EditBudgetDistribution
+              marginalPrice={order.marginalPrice}
+              onChange={setMarginalPrice}
+            />
+          </div>
+        )}
+      </OverlappingAction>
       <BudgetDistribution
         token={token}
         initialBudget={initialBudget}
         withdraw={getWithdraw(initialBudget, order.budget)}
         deposit={getDeposit(initialBudget, order.budget)}
-        balance={balance.data ?? '0'}
+        balance={balance.data}
         buy={buy}
       />
       <FullOutcome

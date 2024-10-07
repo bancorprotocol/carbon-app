@@ -7,7 +7,7 @@ import {
 export class EditStrategyDriver {
   constructor(private screen: Screen) {}
 
-  async findForm() {
+  findForm() {
     return this.screen.findByTestId('edit-form');
   }
 
@@ -22,7 +22,9 @@ export class EditStrategyDriver {
       tabBuy: () => within(form).getByTestId('tab-buy'),
       limit: () => within(form).getByTestId('tab-limit'),
       range: () => within(form).getByTestId('tab-range'),
+      budgetSummary: () => within(form).getByTestId('budget-summary'),
       budget: () => within(form).getByTestId('input-budget'),
+      distributeBudget: () => within(form).queryByTestId('distribute-budget'),
       marketPriceIndicators: () =>
         within(form).queryAllByTestId('market-price-indication'),
       approveWarnings: () => within(form).queryByTestId('approve-warnings'),
@@ -43,8 +45,11 @@ export class EditStrategyDriver {
         limit: () => within(buySection).getByTestId('tab-limit'),
         range: () => within(buySection).getByTestId('tab-range'),
         budget: () => within(buySection).getByTestId('input-budget'),
+        budgetSummary: () => within(buySection).getByTestId('budget-summary'),
         marketPriceIndicators: () =>
           within(buySection).queryAllByTestId('market-price-indication'),
+        distributeBudget: () =>
+          within(buySection).queryByTestId('distribute-budget'),
       },
       sell: {
         min: () => within(sellSection).getByTestId('input-min'),
@@ -53,6 +58,9 @@ export class EditStrategyDriver {
         limit: () => within(sellSection).getByTestId('tab-limit'),
         range: () => within(sellSection).getByTestId('tab-range'),
         budget: () => within(sellSection).getByTestId('input-budget'),
+        budgetSummary: () => within(sellSection).getByTestId('budget-summary'),
+        distributeBudget: () =>
+          within(sellSection).queryByTestId('distribute-budget'),
         marketPriceIndicators: () =>
           within(sellSection).queryAllByTestId('market-price-indication'),
       },
@@ -63,23 +71,28 @@ export class EditStrategyDriver {
 
   async findOverlappingForm() {
     const form = await this.findForm();
+    const getByTestId = (id: string) => within(form).getByTestId(id);
+    const queryByTestId = (id: string) => within(form).queryByTestId(id);
     return {
       element: form,
-      min: () => within(form).getByTestId('input-min'),
-      max: () => within(form).getByTestId('input-max'),
+      min: () => getByTestId('input-min'),
+      minMarketPrice: () => getByTestId('market-price-min'),
+      max: () => getByTestId('input-max'),
+      maxMarketPrice: () => getByTestId('market-price-max'),
       spread: {
-        input: () => within(form).getByTestId('spread-input'),
-        default: () => within(form).getByTestId('spread-0.05'),
-        option: (value: string) => within(form).getByTestId(`spread-${value}`),
+        input: () => getByTestId('spread-input'),
+        default: () => getByTestId('spread-0.05'),
+        option: (value: string) => getByTestId(`spread-${value}`),
       },
       anchorRequired: () => within(form).queryByTestId('require-anchor'),
-      anchor: (anchor: 'buy' | 'sell') =>
-        within(form).getByTestId(`anchor-${anchor}`),
-      budget: () => within(form).getByTestId('input-budget'),
+      anchor: (anchor: 'buy' | 'sell') => getByTestId(`anchor-${anchor}`),
+      budget: () => getByTestId('input-budget'),
       marketPriceIndicators: () =>
         within(form).queryAllByTestId('market-price-indication'),
-      approveWarnings: () => within(form).queryByTestId('approve-warnings'),
-      submit: () => within(form).getByTestId('edit-submit'),
+      deposit: (symbol: string) => queryByTestId(`deposit-${symbol}`),
+      withdraw: (symbol: string) => queryByTestId(`withdraw-${symbol}`),
+      approveWarnings: () => queryByTestId('approve-warnings'),
+      submit: () => getByTestId('edit-submit'),
     };
   }
 

@@ -49,7 +49,8 @@ export class CreateStrategyDriver {
       max: () => form.getByTestId('input-max'),
       spread: () => form.getByTestId('spread-input'),
       anchorRequired: () => form.getByTestId('require-anchor'),
-      anchor: (anchor: 'buy' | 'sell') => form.getByTestId(`anchor-${anchor}`),
+      anchor: (anchor: 'buy' | 'sell') =>
+        form.getByTestId(`anchor-${anchor}-label`),
       budget: () => form.getByTestId('input-budget'),
     };
   }

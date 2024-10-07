@@ -70,17 +70,17 @@ export const EditBudgetTokenPrice: FC<BudgetTokenPriceProps> = (props) => {
 };
 
 interface BudgetDistributionProps {
-  order: BaseOrder;
+  marginalPrice?: string;
   onChange: (marginalPrice: MarginalPriceOptions) => void;
 }
 export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
   const id = useId();
-  const { order, onChange } = props;
-  const checked = order.marginalPrice !== MarginalPriceOptions.maintain;
+  const { marginalPrice, onChange } = props;
+  const checked = marginalPrice !== MarginalPriceOptions.maintain;
   return (
     <div role="row" className="flex justify-between">
       <p role="columnheader" className="flex items-center">
-        <label htmlFor={id} className="mr-5">
+        <label htmlFor={id} className="mr-5" data-testid="distribute-budget">
           Distribute Across Entire Range
         </label>
         <Tooltip

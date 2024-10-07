@@ -8,6 +8,7 @@ import {
   isZero,
   isOverlappingStrategy,
   outSideMarketWarning,
+  isLimitOrder,
 } from 'components/strategies/common/utils';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import {
@@ -21,8 +22,9 @@ import { StrategyChartHistory } from 'components/strategies/common/StrategyChart
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
 import { EditOrderBlock } from 'components/strategies/common/types';
-import { Strategy } from 'libs/queries';
+import { Order, Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
 export interface EditRecurringStrategySearch {
   priceStart?: string;
@@ -33,11 +35,13 @@ export interface EditRecurringStrategySearch {
   buySettings?: StrategySettings;
   buyBudget?: string;
   buyAction?: 'deposit' | 'withdraw';
+  buyMarginalPrice?: MarginalPriceOptions;
   sellMin?: string;
   sellMax?: string;
   sellSettings?: StrategySettings;
   sellBudget?: string;
   sellAction?: 'deposit' | 'withdraw';
+  sellMarginalPrice?: MarginalPriceOptions;
 }
 
 type Search = EditRecurringStrategySearch;
@@ -85,28 +89,33 @@ const getOrders = (
     })();
     return new SafeDecimal(price ?? 0).mul(multiplier).toString();
   };
+  const defaultSettings = (order: Order) => {
+    return isLimitOrder(order) ? 'limit' : 'range';
+  };
   return {
     buy: {
       min: search.buyMin ?? defaultMin('buy', search.buySettings) ?? '',
       max: search.buyMax ?? defaultMax('buy', search.buySettings) ?? '',
-      settings: search.buySettings ?? 'limit',
+      settings: search.buySettings ?? defaultSettings(order0),
       action: search.buyAction ?? 'deposit',
       budget: getTotalBudget(
         search.buyAction ?? 'deposit',
         order0.balance,
         search.buyBudget
       ),
+      marginalPrice: search.buyMarginalPrice,
     },
     sell: {
       min: search.sellMin ?? defaultMin('sell', search.sellSettings) ?? '',
       max: search.sellMax ?? defaultMax('sell', search.sellSettings) ?? '',
-      settings: search.sellSettings ?? 'limit',
+      settings: search.sellSettings ?? defaultSettings(order1),
       action: search.sellAction ?? 'deposit',
       budget: getTotalBudget(
         search.sellAction ?? 'deposit',
         order1.balance,
         search.sellBudget
       ),
+      marginalPrice: search.sellMarginalPrice,
     },
   };
 };
@@ -131,7 +140,7 @@ const getError = (search: EditRecurringStrategySearch) => {
 
 const url = '/strategies/edit/$strategyId/prices/recurring';
 
-export const EditStrategyRecurringPage = () => {
+export const EditPricesStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
@@ -152,14 +161,16 @@ export const EditStrategyRecurringPage = () => {
     sell: orders.sell.settings === 'limit',
   };
 
+  const hasBuyPriceChanged =
+    search.buyMin !== order0.startRate || search.buyMax !== order0.endRate;
+  const hasSellPriceChanged =
+    search.sellMin !== order1.startRate || search.sellMax !== order1.endRate;
+
   const hasChanged = (() => {
-    const { order0, order1 } = strategy;
     if (isOverlappingStrategy(strategy)) return true;
-    if (search.buyMin !== order0.startRate) return true;
-    if (search.buyMax !== order0.endRate) return true;
+    if (hasBuyPriceChanged) return true;
     if (!isZero(search.buyBudget)) return true;
-    if (search.sellMin !== order1.startRate) return true;
-    if (search.sellMax !== order1.endRate) return true;
+    if (hasSellPriceChanged) return true;
     if (!isZero(search.sellBudget)) return true;
     return false;
   })();
@@ -193,7 +204,8 @@ export const EditStrategyRecurringPage = () => {
         <EditStrategyPriceField
           order={orders.sell}
           budget={search.sellBudget ?? ''}
-          initialBudget={order1.balance}
+          initialOrder={order1}
+          hasPriceChanged={hasSellPriceChanged}
           setOrder={setSellOrder}
           warnings={[sellOutsideMarket, getWarning(search)]}
           error={error}
@@ -201,7 +213,8 @@ export const EditStrategyRecurringPage = () => {
         <EditStrategyPriceField
           order={orders.buy}
           budget={search.buyBudget ?? ''}
-          initialBudget={order0.balance}
+          initialOrder={order0}
+          hasPriceChanged={hasBuyPriceChanged}
           setOrder={setBuyOrder}
           warnings={[buyOutsideMarket, getWarning(search)]}
           error={error}

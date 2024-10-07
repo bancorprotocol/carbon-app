@@ -140,7 +140,7 @@ const getOrders = (
 
 const url = '/strategies/edit/$strategyId/prices/overlapping';
 
-export const EditStrategyOverlappingPage = () => {
+export const EditPricesOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
   const navigate = useNavigate({ from: url });
