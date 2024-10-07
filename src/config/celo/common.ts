@@ -23,7 +23,6 @@ export const commonConfig: AppConfig = {
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
-  useGradientBranding: true,
   showStrategyRoi: true,
   policiesLastUpdated: '31 Jul, 2024',
   network: {
@@ -142,5 +141,6 @@ export const commonConfig: AppConfig = {
   },
   ui: {
     priceChart: 'tradingView',
+    useGradientBranding: true,
   },
 };
