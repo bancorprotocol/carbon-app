@@ -69,7 +69,8 @@ export class EditStrategyDriver {
       max: () => form.getByTestId('input-max'),
       spread: () => form.getByTestId('spread-input'),
       anchorRequired: () => form.getByTestId('require-anchor'),
-      anchor: (anchor: 'buy' | 'sell') => form.getByTestId(`anchor-${anchor}`),
+      anchor: (anchor: 'buy' | 'sell') =>
+        form.getByTestId(`anchor-${anchor}-label`),
       budgetSummary: () => form.getByTestId(`budget-summary`),
       action: (action: 'deposit' | 'withdraw') =>
         form.getByTestId(`action-${action}`),

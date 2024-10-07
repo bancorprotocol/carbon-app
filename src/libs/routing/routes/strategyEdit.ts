@@ -26,7 +26,7 @@ import {
 } from 'pages/strategies/edit/prices/disposable';
 import {
   EditOverlappingStrategySearch,
-  EditStrategyOverlappingPage,
+  EditPricesOverlappingPage,
 } from 'pages/strategies/edit/prices/overlapping';
 import { EditBudgetRecurringPage } from 'pages/strategies/edit/budget/recurring';
 import { EditBudgetDisposablePage } from 'pages/strategies/edit/budget/disposable';
@@ -143,7 +143,7 @@ export const toOverlappingPricesSearch = (
 export const editPricesOverlapping = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'prices/overlapping',
-  component: EditStrategyOverlappingPage,
+  component: EditPricesOverlappingPage,
   validateSearch: searchValidator({
     editType: v.picklist(['editPrices', 'renew']),
     chartType: v.optional(v.picklist(['history', 'range'])),
