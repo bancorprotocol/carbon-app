@@ -270,6 +270,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `sdk`/`cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
 - `ui`
   - `priceChart`: use `tradingView` chart or `native` chart for token pair price history. You need to provide a backend with price history endpoint to support `native` view.
+  - `useGradientBranding`: Flag to enable gradient styles for buttons.
 
 #### Gas token different than native token
 
@@ -298,8 +299,9 @@ The theme is defined in the [`tailwind.config.ts`](./tailwind.config.ts#L36) fil
 You can update these colors:
 
 - **background**: used for surfaces
+- **primaryGradient**: used for the success variant button, with a first, middle and last gradient colors. Used when the config flag `useGradientBranding` is set to true
 - **primary**: used for buttons and other actionable elements
-- **success**: used for positive information like positive ROI.
+- **success**: used for positive information like positive ROI
 - **error**: used for error messages & buttons
 - **warning**: used for warning messages (mainly in forms)
 - **buy**: used for any information related to buy operation

@@ -86,7 +86,7 @@ export const SimResultSummary = ({
                   'whitespace-nowrap'
                 )}
               >
-                Create strategy
+                Create Strategy
               </Link>
             ) : (
               <Link
@@ -105,7 +105,7 @@ export const SimResultSummary = ({
                   'whitespace-nowrap'
                 )}
               >
-                Create strategy
+                Create Strategy
               </Link>
             )}
           </>

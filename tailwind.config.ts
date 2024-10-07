@@ -58,6 +58,11 @@ export default {
         },
         white: colors.white,
         transparent: colors.transparent,
+        primaryGradient: {
+          first: lightDark(0.7985, 0.132, 159.5), // #67D79F
+          middle: lightDark(0.7292, 0.127, 214.3), // #10BBD8
+          last: lightDark(0.7617, 0.119, 184.67), // #3DCABB
+        },
         primary: lightDark(0.68, 0.153, 160), // #00B578
         error: lightDark(0.65, 0.147, 15), // #D86371
         sell: lightDark(0.65, 0.147, 15), // #D86371
