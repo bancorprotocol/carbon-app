@@ -252,6 +252,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `selectedConnectors`: List of connectors to make available by default in the wallet selection modal that will be shown even if the connector is not injected.
 - `blockedConnectors`: List of EIP-6963 injected connectors names to block in the wallet selection modal.
 - `isSimulatorEnabled`: Flag to enable the simulation page.
+- `useGradientBranding`: Flag to enable gradient styles for buttons.
 - `showStrategyRoi`: Optional flag to show the Strategy ROI in the Strategy Block. ROI is hidden by default.
 - `network`
   - `name`: Network name.
@@ -298,7 +299,7 @@ The theme is defined in the [`tailwind.config.ts`](./tailwind.config.ts#L36) fil
 You can update these colors:
 
 - **background**: used for surfaces
-- **primaryGradient**: used for the success variant button, with a first, middle and last gradient colors
+- **primaryGradient**: used for the success variant button, with a first, middle and last gradient colors. Used when the config flag `useGradientBranding` is set to true
 - **primary**: used for buttons and other actionable elements
 - **success**: used for positive information like positive ROI
 - **error**: used for error messages & buttons

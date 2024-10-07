@@ -26,6 +26,7 @@ export const commonConfig: AppConfig = {
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
+  useGradientBranding: true,
   policiesLastUpdated: '31 Jul, 2024',
   network: {
     name: 'Blast Network',
