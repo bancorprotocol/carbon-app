@@ -43,11 +43,15 @@ export interface D3ChartCandlesticksProps {
   activities?: Activity[];
 }
 
-const useZoom = () => {
+const useZoom = (dms: D3ChartSettings) => {
   const [transform, setTransform] = useState<ZoomTransform>();
   const selection = select<SVGSVGElement, unknown>('#interactive-chart');
   const zoomHandler = zoom<SVGSVGElement, unknown>()
     .scaleExtent([1, 32])
+    .translateExtent([
+      [0, 0],
+      [dms.width, 0],
+    ])
     .on('zoom', (e: D3ZoomEvent<Element, any>) => setTransform(e.transform));
   selection.call(zoomHandler);
   return transform;
@@ -70,7 +74,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     activities,
   } = props;
 
-  const zoomTransform = useZoom();
+  const zoomTransform = useZoom(dms);
 
   const xScale = useMemo(() => {
     const zoomX = (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d);
