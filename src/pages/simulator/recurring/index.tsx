@@ -160,6 +160,7 @@ export const SimulatorInputRecurringPage = () => {
         <Button
           type="submit"
           data-testid="start-simulation-btn"
+          variant="success"
           fullWidth
           size="lg"
           disabled={btnDisabled}

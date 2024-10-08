@@ -206,7 +206,7 @@ export const ApproveToken: FC<Props> = ({
 
               <Button
                 type="submit"
-                variant="white"
+                variant="success"
                 size="sm"
                 className="text-14 px-10"
                 data-testid={`approve-${token.symbol}`}

@@ -248,7 +248,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
         disabled={!hasChanged}
         loading={isLoading}
         loadingChildren={loadingChildren}
-        variant="white"
+        variant="success"
         size="lg"
         fullWidth
         data-testid="edit-submit"
