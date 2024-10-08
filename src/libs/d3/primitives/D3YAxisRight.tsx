@@ -3,7 +3,7 @@ import { uuid } from 'utils/helpers';
 
 export const D3YAxisRight = ({ ticks, dms, formatter }: D3AxisProps) => {
   return (
-    <g transform={`translate(${dms.boundedWidth},0)`}>
+    <g className="x-axis" transform={`translate(${dms.boundedWidth},0)`}>
       <path
         d={['M', 6, dms.boundedHeight, 'h', -6, 'V', 0, 'h', 6].join(' ')}
         fill="none"

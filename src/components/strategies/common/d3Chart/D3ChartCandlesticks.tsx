@@ -10,13 +10,14 @@ import {
   scaleBand,
   D3ChartSettings,
 } from 'libs/d3';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from 'components/strategies/common/d3Chart/Candlesticks';
 import { D3ChartDisposable } from './disposable/D3ChartDisposable';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { Activity } from 'libs/queries/extApi/activity';
 import { D3ChartIndicators } from './D3ChartIndicators';
+import { D3ZoomEvent, ZoomTransform, select, zoom } from 'd3';
 
 export type ChartPrices<T = string> = {
   buy: { min: T; max: T };
@@ -42,6 +43,16 @@ export interface D3ChartCandlesticksProps {
   activities?: Activity[];
 }
 
+const useZoom = () => {
+  const [transform, setTransform] = useState<ZoomTransform>();
+  const selection = select<SVGSVGElement, unknown>('#interactive-chart');
+  const zoomHandler = zoom<SVGSVGElement, unknown>()
+    .scaleExtent([1, 32])
+    .on('zoom', (e: D3ZoomEvent<Element, any>) => setTransform(e.transform));
+  selection.call(zoomHandler);
+  return transform;
+};
+
 export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
   const {
     data,
@@ -59,14 +70,31 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     activities,
   } = props;
 
-  const xScale = useMemo(
-    () =>
-      scaleBand()
-        .domain(data.map((d) => d.date.toString()))
-        .range([0, dms.boundedWidth])
-        .paddingInner(0.5),
-    [data, dms.boundedWidth]
-  );
+  const zoomTransform = useZoom();
+
+  const xScale = useMemo(() => {
+    const zoomX = (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d);
+    return scaleBand()
+      .domain(data.map((d) => d.date.toString()))
+      .range([0, dms.boundedWidth].map(zoomX))
+      .paddingInner(0.5);
+  }, [data, dms.boundedWidth, zoomTransform]);
+
+  const xTicks = useMemo(() => {
+    const length = xScale.domain().length;
+    // We need to keep even ratio to insert new ticks instead of switching them
+    const ratio = (() => {
+      if (!zoomTransform) return 1;
+      const base = Math.floor(zoomTransform.k);
+      if (base < 2) return 1;
+      if (base % 2 === 0) return base;
+      return base - (base % 2);
+    })();
+    const target = Math.floor((dms.boundedWidth * ratio) / 80);
+    const numberOfTicks = Math.max(1, target);
+    const m = Math.ceil(length / numberOfTicks);
+    return xScale.domain().filter((_, i) => i % m === m - 1);
+  }, [dms.boundedWidth, xScale, zoomTransform]);
 
   const y = useLinearScale({
     domain: getDomain(data, bounds, marketPrice),
@@ -85,7 +113,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           return prettifyNumber(value, { decimals: 100, abbreviate: true });
         }}
       />
-      <XAxis xScale={xScale} dms={dms} />
+      <XAxis xScale={xScale} dms={dms} xTicks={xTicks} />
       {marketPrice && (
         <D3ChartHandleLine
           dms={dms}

@@ -18,9 +18,8 @@ export const D3ChartWrapper: FC<Props> = ({
   ...props
 }) => {
   const [ref, dms] = useChartDimensions(settings);
-
   return (
-    <svg ref={ref} className={className} {...props}>
+    <svg ref={ref} id="interactive-chart" className={className} {...props}>
       <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
         {children(dms)}
       </g>
