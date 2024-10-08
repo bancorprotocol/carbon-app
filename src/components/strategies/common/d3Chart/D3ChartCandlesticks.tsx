@@ -43,18 +43,31 @@ export interface D3ChartCandlesticksProps {
   activities?: Activity[];
 }
 
-const useZoom = (dms: D3ChartSettings) => {
+const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
   const [transform, setTransform] = useState<ZoomTransform>();
   const selection = select<SVGSVGElement, unknown>('#interactive-chart');
   const zoomHandler = zoom<SVGSVGElement, unknown>()
-    .scaleExtent([1, 32])
+    .scaleExtent([0.5, Math.ceil(data.length / 10)])
     .translateExtent([
-      [0, 0],
-      [dms.width, 0],
+      [-0.5 * dms.width, 0],
+      [1.5 * dms.width, 0],
     ])
     .on('zoom', (e: D3ZoomEvent<Element, any>) => setTransform(e.transform));
   selection.call(zoomHandler);
   return transform;
+};
+
+const getDateRange = (range: number[]) => {
+  if (!range.length) return [];
+  const points: string[] = [];
+  const first = range[0];
+  const step = range[1] - first;
+  const start = Math.floor(-0.5 * range.length);
+  const end = Math.ceil(range.length * 1.5);
+  for (let i = start; i < end; i++) {
+    points.push((first + i * step).toString());
+  }
+  return points;
 };
 
 export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
@@ -74,13 +87,13 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     activities,
   } = props;
 
-  const zoomTransform = useZoom(dms);
+  const zoomTransform = useZoom(dms, data);
 
   const xScale = useMemo(() => {
     const zoomX = (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d);
     return scaleBand()
-      .domain(data.map((d) => d.date.toString()))
-      .range([0, dms.boundedWidth].map(zoomX))
+      .domain(getDateRange(data.map((d) => d.date)))
+      .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5].map(zoomX))
       .paddingInner(0.5);
   }, [data, dms.boundedWidth, zoomTransform]);
 
@@ -94,7 +107,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
       if (base % 2 === 0) return base;
       return base - (base % 2);
     })();
-    const target = Math.floor((dms.boundedWidth * ratio) / 80);
+    const target = Math.floor((dms.boundedWidth * ratio) / 50);
     const numberOfTicks = Math.max(1, target);
     const m = Math.ceil(length / numberOfTicks);
     return xScale.domain().filter((_, i) => i % m === m - 1);
