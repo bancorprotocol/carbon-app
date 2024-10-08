@@ -80,7 +80,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       )}
 
       <Button
-        variant="white"
+        variant="success"
         onClick={onClick}
         loading={isPending}
         loadingChildren={loadingChildren}

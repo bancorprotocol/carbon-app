@@ -214,7 +214,7 @@ const Content = (props: Props) => {
         />
         <Button
           type="button"
-          variant="black"
+          variant="white"
           size="sm"
           className="col-span-2 justify-self-start"
           onClick={onReset}
@@ -226,6 +226,7 @@ const Content = (props: Props) => {
           type="button"
           disabled={props.required && !hasDates}
           size="sm"
+          variant="success"
           className="col-span-2 justify-self-end"
           data-testid="date-picker-confirm"
           onClick={onConfirm}
