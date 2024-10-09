@@ -20,7 +20,7 @@ export const WalletConnect = () => {
           to="/trade/disposable"
           className={buttonStyles({ variant: 'success', size: 'lg' })}
         >
-          Create strategy
+          Create Strategy
         </Link>
       </article>
       <hr className="border-background-800 border-t md:h-[300px] md:border-r" />

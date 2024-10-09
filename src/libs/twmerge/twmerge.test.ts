@@ -17,6 +17,9 @@ describe('Custom Tailwind Merge', () => {
       expect(customTwMerge('text-white text-primary')).toEqual(
         customTwMerge('text-primary')
       );
+      expect(
+        customTwMerge('text-background-50 text-primaryGradient-first')
+      ).toEqual(customTwMerge('text-primaryGradient-first'));
     });
     it('should merge different sizes', () => {
       expect(customTwMerge('text-14 text-16')).toEqual(
