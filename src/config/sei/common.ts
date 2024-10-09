@@ -13,7 +13,7 @@ export const commonConfig: AppConfig = {
   mode: 'development',
   appName: 'Carbon DeFi',
   appUrl: 'https://sei.carbondefi.xyz',
-  carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
+  carbonApi: 'https://sei-api.carbondefi.xyz/v1/sei/',
   selectedConnectors: [
     'MetaMask',
     'Coinbase Wallet',
@@ -115,7 +115,7 @@ export const commonConfig: AppConfig = {
     ],
   },
   ui: {
-    priceChart: 'tradingView',
+    priceChart: 'native',
     useGradientBranding: true,
   },
 };
