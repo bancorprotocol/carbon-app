@@ -7,6 +7,9 @@
   /* We use CSS variable for the svg assets (fill & stop-color) */
   --buy: theme('colors.buy.DEFAULT');
   --sell: theme('colors.sell.DEFAULT');
+  --gradientFirst: theme('colors.primaryGradient.first.DEFAULT');
+  --gradientMiddle: theme('colors.primaryGradient.middle.DEFAULT');
+  --gradientLast: theme('colors.primaryGradient.last.DEFAULT');
   color-scheme: dark;
   accent-color: white;
 
@@ -69,8 +72,45 @@
     -moz-appearance: textfield; /* Firefox */
   }
   input[type='checkbox'] {
-    accent-color: var(--primary);
-  }  
+    -webkit-appearance: none;
+    position: relative;
+    border-radius: 4px;
+  }
+  input[type='checkbox']:not(:checked) {
+    border: 1px solid rgb(255 255 255 / 0.6);
+  }
+  input[type='checkbox']:not(:checked):hover {
+    border-color: rgb(255 255 255 / 0.8);
+  }
+  input[type='checkbox']:checked {
+    border: 0px;
+    color: rgba(22, 22, 22, var(--tw-text-opacity));
+    background-image: linear-gradient(
+      90deg,
+      var(--gradientFirst) 0%,
+      var(--gradientMiddle) 100%
+    );
+  }
+  input[type='checkbox']:checked:hover {
+    filter: brightness(1.2);
+  }
+  input[type='checkbox']::before {
+    display: none;
+    content: '';
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 65%;
+    aspect-ratio: 1 / 1;
+    pointer-events: none;
+    background-image: url('assets/icons/check.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  input[type='checkbox']:checked::before {
+    display: block;
+  }
 
   details .toggle {
     transform: rotate(0);
@@ -121,11 +161,11 @@
   background: linear-gradient(
     90deg,
     rgba(0, 181, 120, 0.25) 37.5%,
-    var(--primary) 37.5%,
-    var(--primary) 50%,
+    var(--gradientFirst) 37.5%,
+    var(--gradientMiddle) 50%,
     rgba(0, 181, 120, 0.25) 50%,
     rgba(0, 181, 120, 0.25) 87.5%,
-    var(--primary) 87.5%
+    var(--gradientLast) 87.5%
   );
   animation: 1.3s progress ease infinite;
 }
