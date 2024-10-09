@@ -9,7 +9,7 @@ interface Props {
 
 export const D3XAxis = ({ ticks, dms }: Props) => {
   return (
-    <g transform={`translate(0,${dms.boundedHeight})`}>
+    <g className="x-axis" transform={`translate(0,${dms.boundedHeight})`}>
       {/*<path*/}
       {/*  d={['M', 0, 6, 'v', -6, 'H', dms.boundedWidth, 'v', 6].join(' ')}*/}
       {/*  fill="none"*/}

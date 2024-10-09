@@ -68,7 +68,7 @@ const getDomainMin: GetDomainFn<number> = (data, prices, marketPrice) => {
     Number(prices.buy.max),
     Number(prices.sell.max),
     marketPrice,
-  ];
+  ].filter((v) => !!v);
   return min(values, (d) => d) as number;
 };
 
@@ -81,7 +81,7 @@ const getDomainMax: GetDomainFn<number> = (data, prices, marketPrice) => {
     Number(prices.buy.max),
     Number(prices.sell.max),
     marketPrice,
-  ];
+  ].filter((v) => !!v);
   return max(values, (d) => d) as number;
 };
 

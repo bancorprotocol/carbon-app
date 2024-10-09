@@ -3,7 +3,7 @@ import {
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/strategies/common/d3Chart';
-import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
+import { D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { TradeSearch } from 'libs/routing';
@@ -32,48 +32,27 @@ const chartSettings: D3ChartSettingsProps = {
 const getBounds = (
   order0: BaseOrder,
   order1: BaseOrder,
-  data: CandlestickData[] = [],
   direction?: 'none' | 'buy' | 'sell'
 ): ChartPrices => {
-  const min = Math.min(...data.map((d) => d.low)).toString();
-  const max = Math.max(...data.map((d) => d.high)).toString();
   if (direction === 'none') {
     return {
-      buy: { min, max },
-      sell: { min, max },
+      buy: { min: '', max: '' },
+      sell: { min: '', max: '' },
     };
   } else if (direction === 'buy') {
     return {
-      buy: {
-        min: order0.min || '0',
-        max: order0.max || max,
-      },
-      sell: {
-        min: min,
-        max: max,
-      },
+      buy: { min: order0.min, max: order0.max },
+      sell: { min: '', max: '' },
     };
   } else if (direction === 'sell') {
     return {
-      buy: {
-        min: min,
-        max: max,
-      },
-      sell: {
-        min: order1.min || '0',
-        max: order1.max || max,
-      },
+      buy: { min: '', max: '' },
+      sell: { min: order1.min, max: order1.max },
     };
   } else {
     return {
-      buy: {
-        min: order0.min || min,
-        max: order0.max || max,
-      },
-      sell: {
-        min: order1.min || min,
-        max: order1.max || max,
-      },
+      buy: { min: order0.min, max: order0.max },
+      sell: { min: order1.min, max: order1.max },
     };
   }
 };
@@ -112,9 +91,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     buy: { min: order0.min || '0', max: order0.max || '0' },
     sell: { min: order1.min || '0', max: order1.max || '0' },
   });
-  const [bounds, setBounds] = useState(
-    getBounds(order0, order1, [], direction)
-  );
+  const [bounds, setBounds] = useState(getBounds(order0, order1, direction));
 
   const updatePrices: OnPriceUpdates = ({ buy, sell }) => {
     const newPrices = {
@@ -149,8 +126,8 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   }, [order0.min, order0.max, order1.min, order1.max]);
 
   useEffect(() => {
-    setBounds(getBounds(order0, order1, data, direction));
-  }, [order0, order1, data, direction]);
+    setBounds(getBounds(order0, order1, direction));
+  }, [order0, order1, direction]);
 
   const priceChartType = config.ui.priceChart;
   if (priceChartType === 'tradingView') {
