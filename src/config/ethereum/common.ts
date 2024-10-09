@@ -26,7 +26,7 @@ export const commonConfig: AppConfig = {
   mode: 'development',
   appName: 'Carbon DeFi',
   appUrl: 'https://app.carbondefi.xyz',
-  carbonApi: 'https://api.carbondefi.xyz/v1/ethereum/',
+  carbonApi: 'https://api.carbondefi.xyz/v1/',
   externalLinks: {
     analytics: 'http://analytics.carbondefi.xyz',
     interactiveSim: 'https://simulator.carbondefi.xyz/',

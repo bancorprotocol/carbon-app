@@ -36,6 +36,7 @@ export function Candlesticks({ xScale, yScale, data }: CandlesticksProps) {
               fill={color}
               y={yScale(d.high)}
               x={xScale.bandwidth() / 2 - 0.5}
+              // eslint-disable-next-line prettier/prettier
               height={yScale(d.low) - yScale(d.high) ?? height}
               width={1}
             />

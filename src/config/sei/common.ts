@@ -13,7 +13,7 @@ export const commonConfig: AppConfig = {
   mode: 'development',
   appName: 'Carbon DeFi',
   appUrl: 'https://sei.carbondefi.xyz',
-  carbonApi: 'https://sei-api.carbondefi.xyz/v1/sei/',
+  carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
   selectedConnectors: [
     'MetaMask',
     'Coinbase Wallet',
@@ -23,7 +23,7 @@ export const commonConfig: AppConfig = {
   ],
   blockedConnectors: ['Tailwind'],
   walletConnectProjectId: '',
-  isSimulatorEnabled: false,
+  isSimulatorEnabled: true,
   policiesLastUpdated: '27 May, 2024',
   network: {
     name: 'Sei Network',
