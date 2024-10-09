@@ -43,7 +43,7 @@ export const ModalSimulatorDisclaimer: ModalFC<
       </p>
 
       <Button
-        variant="white"
+        variant="success"
         fullWidth
         onClick={() => {
           onConfirm();

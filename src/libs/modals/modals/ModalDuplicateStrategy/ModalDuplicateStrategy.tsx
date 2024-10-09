@@ -95,7 +95,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
             </div>
             <h3 className="text-14 font-weight-500">{title}</h3>
             <Button
-              variant="white"
+              variant="success"
               onClick={onClick}
               className="row-span-2 self-center"
               data-testid={testId}

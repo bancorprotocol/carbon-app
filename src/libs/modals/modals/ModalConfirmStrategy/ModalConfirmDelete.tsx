@@ -59,7 +59,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       />
       {!isOverlapping && (
         <article className="bg-background-800 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded p-16">
-          <h3 className="text-14 font-weight-500">Did you know ?</h3>
+          <h3 className="text-14 font-weight-500">Did you know?</h3>
           <Link
             onClick={editPrices}
             disabled={isAwaiting || isProcessing}
@@ -68,7 +68,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
             search={{ editType: 'editPrices' }}
             className={cn(
               'row-span-2 self-center',
-              buttonStyles({ variant: 'white' })
+              buttonStyles({ variant: 'success' })
             )}
           >
             Edit Prices
@@ -80,7 +80,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       )}
 
       <Button
-        variant="white"
+        variant="success"
         onClick={onClick}
         loading={isPending}
         loadingChildren={loadingChildren}
