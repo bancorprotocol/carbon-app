@@ -99,22 +99,20 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
 
   const xTicks = useMemo(() => {
     const length = xScale.domain().length;
-    // We need to keep even ratio to insert new ticks instead of switching them
-    const ratio = (() => {
-      if (!zoomTransform) return 1;
-      const base = Math.floor(zoomTransform.k);
-      if (base < 2) return 1;
-      if (base % 2 === 0) return base;
-      return base - (base % 2);
-    })();
-    const target = Math.floor((dms.boundedWidth * ratio) / 50);
+    const ratio = Math.ceil(zoomTransform?.k ?? 1);
+    const target = Math.floor((dms.boundedWidth * ratio) / 80);
     const numberOfTicks = Math.max(1, target);
     const m = Math.ceil(length / numberOfTicks);
     return xScale.domain().filter((_, i) => i % m === m - 1);
   }, [dms.boundedWidth, xScale, zoomTransform]);
 
+  const yDomain = useMemo(() => {
+    const candles = data.filter((point) => xScale(point.date.toString())! > 0);
+    return getDomain(candles, bounds, marketPrice);
+  }, [bounds, data, marketPrice, xScale]);
+
   const y = useLinearScale({
-    domain: getDomain(data, bounds, marketPrice),
+    domain: yDomain,
     range: [dms.boundedHeight, 0],
     domainTolerance: 0.1,
   });
@@ -123,6 +121,15 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
   return (
     <>
       <Candlesticks xScale={xScale} yScale={y.scale} data={data} />
+      {activities?.length && (
+        <D3ChartIndicators
+          xScale={xScale}
+          yScale={y.scale}
+          boundHeight={dms.boundedHeight}
+          activities={activities}
+        />
+      )}
+      <XAxis xScale={xScale} dms={dms} xTicks={xTicks} />
       <D3YAxisRight
         ticks={y.ticks}
         dms={dms}
@@ -130,7 +137,6 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           return prettifyNumber(value, { decimals: 100, abbreviate: true });
         }}
       />
-      <XAxis xScale={xScale} dms={dms} xTicks={xTicks} />
       {marketPrice && (
         <D3ChartHandleLine
           dms={dms}
@@ -172,14 +178,6 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           onPriceUpdates={onPriceUpdates}
           marketPrice={overlappingMarketPrice ?? data[0].open ?? 0}
           spread={Number(overlappingSpread)}
-        />
-      )}
-      {activities?.length && (
-        <D3ChartIndicators
-          xScale={xScale}
-          yScale={y.scale}
-          boundHeight={dms.boundedHeight}
-          activities={activities}
         />
       )}
     </>

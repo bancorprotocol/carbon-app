@@ -4,10 +4,18 @@ import { uuid } from 'utils/helpers';
 export const D3YAxisRight = ({ ticks, dms, formatter }: D3AxisProps) => {
   return (
     <g className="y-axis" transform={`translate(${dms.boundedWidth},0)`}>
-      <rect x="0" y="0" width={100} height={dms.boundedHeight} fill="black" />
-      <path
-        d={['M', 6, dms.boundedHeight, 'h', -6, 'V', 0, 'h', 6].join(' ')}
-        fill="none"
+      <rect
+        x="0"
+        y="0"
+        width={100}
+        height={dms.boundedHeight - 1} // -1 for the x axis line to be visible
+        className="fill-background-black"
+      />
+      <line
+        x1={0}
+        x2={0}
+        y1={0}
+        y2={dms.boundedHeight}
         className="stroke-background-800"
       />
       {ticks.map(({ value, offset }) => (

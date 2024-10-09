@@ -88,14 +88,16 @@ export const D3ChartIndicators = (props: D3ChartIndicatorsProps) => {
       })}
       {trades.map((indicator, i) => {
         const { x, y } = indicator;
+        const isBelowAxix = yScale(y) > height - 10;
+        const translateY = Math.min(yScale(y), height - 10);
         return (
           <IndicatorTooltip key={i} indicator={indicator}>
-            <g transform={`translate(${xScale(x.toString())},${yScale(y)})`}>
+            <g transform={`translate(${xScale(x.toString())},${translateY})`}>
               <circle
                 cx={xScale.bandwidth() / 2}
                 cy={xScale.bandwidth() / 2}
                 r={5}
-                fill="white"
+                fill={isBelowAxix ? 'var(--warning)' : 'white'}
                 stroke="black"
               />
             </g>

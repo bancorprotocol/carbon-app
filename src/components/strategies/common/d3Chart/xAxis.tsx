@@ -38,7 +38,13 @@ export const XAxis = ({ xScale, dms, xTicks }: Props) => {
 
   return (
     <>
-      {ticks}
+      <rect
+        x={-bandwidthOffset}
+        y={dms.boundedHeight}
+        width={dms.width}
+        height="40"
+        className="fill-background-black"
+      />
       <line
         y1={dms.boundedHeight}
         y2={dms.boundedHeight}
@@ -46,6 +52,7 @@ export const XAxis = ({ xScale, dms, xTicks }: Props) => {
         x2={dms.width}
         className="stroke-background-800"
       />
+      {ticks}
     </>
   );
 };
