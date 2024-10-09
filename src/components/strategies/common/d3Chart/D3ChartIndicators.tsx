@@ -97,7 +97,7 @@ export const D3ChartIndicators = (props: D3ChartIndicatorsProps) => {
                 cx={xScale.bandwidth() / 2}
                 cy={xScale.bandwidth() / 2}
                 r={5}
-                fill={isBelowAxix ? 'var(--warning)' : 'white'}
+                fill={isBelowAxix ? 'url(#svg-brand-gradient)' : 'white'}
                 stroke="black"
               />
             </g>
