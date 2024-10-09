@@ -65,7 +65,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         to={withdraw.to}
         search={withdraw.search}
         params={{ strategyId: strategy.id }}
-        className={buttonStyles({ variant: 'white' })}
+        className={buttonStyles({ variant: 'success' })}
         data-testid="withdraw-strategy-btn"
       >
         Withdraw Funds
