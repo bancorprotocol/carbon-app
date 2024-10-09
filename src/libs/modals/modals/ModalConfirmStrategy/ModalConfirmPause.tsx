@@ -47,7 +47,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
         onClick={handleOnActionClick}
         loading={isLoading}
         loadingChildren={loadingChildren}
-        variant="white"
+        variant="success"
         size="lg"
         fullWidth
         data-testid="pause-strategy-btn"

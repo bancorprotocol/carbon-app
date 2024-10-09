@@ -214,7 +214,7 @@ const Content = (props: Props) => {
         />
         <Button
           type="button"
-          variant="white"
+          variant="black"
           size="sm"
           className="col-span-2 justify-self-start"
           onClick={onReset}

@@ -43,7 +43,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         title="Are you sure you would like to withdraw your funds?"
       />
       <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-white/10 p-16">
-        <h3 className="text-14 font-weight-500">Did you know ?</h3>
+        <h3 className="text-14 font-weight-500">Did you know?</h3>
         <Link
           onClick={edit}
           to={editPrices.to}
@@ -51,7 +51,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
           params={{ strategyId: strategy.id }}
           className={cn(
             'row-span-2 self-center',
-            buttonStyles({ variant: 'white' })
+            buttonStyles({ variant: 'success' })
           )}
         >
           Edit Prices

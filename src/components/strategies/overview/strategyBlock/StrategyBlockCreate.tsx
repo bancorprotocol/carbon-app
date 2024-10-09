@@ -3,6 +3,7 @@ import { carbonEvents } from 'services/events';
 import { Link } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { cn } from 'utils/helpers';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 
 type Props = {
   title?: string;
@@ -12,6 +13,7 @@ export const StrategyBlockCreate: FC<Props> = ({
   title = 'Create Strategy',
   className = '',
 }) => {
+  console.log(`DEBUG: ${buttonStyles({ variant: 'success' })}`);
   return (
     <Link
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
@@ -21,8 +23,13 @@ export const StrategyBlockCreate: FC<Props> = ({
         className
       )}
     >
-      <div className="bg-primary/15 group-hover:bg-primary/25 size-72 rounded-full md:size-80">
-        <IconPlus className="text-primary md:p-26 p-24" />
+      <div
+        className={cn(
+          buttonStyles({ variant: 'success' }),
+          'size-72 rounded-full px-0 md:size-80'
+        )}
+      >
+        <IconPlus className="md:p-26 p-24" />
       </div>
       <h1 className="w-[200px] text-center leading-9 md:w-[250px]">{title}</h1>
     </Link>
