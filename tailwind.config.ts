@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 import { formatRgb } from 'culori';
 import plugin from 'tailwindcss/plugin';
+import 'dotenv/config'; // TODO: we can remove this with node@20.6.0
 
 function createTwConfigValues(start: number, end: number, step: number) {
   const remBase = 16;
@@ -43,7 +44,10 @@ export default {
       // Background color variables
       const hue = 0;
       const chroma = 0; // Recommended 0.01, 0.02
-      return {
+
+      const primaryColor = lightDark(0.68, 0.153, 160); // #00B578
+
+      const colorsConfig = {
         background: {
           50: oklch(0.99, chroma, hue),
           100: oklch(0.97, chroma, hue),
@@ -59,11 +63,11 @@ export default {
         white: colors.white,
         transparent: colors.transparent,
         primaryGradient: {
-          first: lightDark(0.7985, 0.132, 159.5), // #67D79F
-          middle: lightDark(0.7292, 0.127, 214.3), // #10BBD8
-          last: lightDark(0.7617, 0.119, 184.67), // #3DCABB
+          first: primaryColor,
+          middle: primaryColor,
+          last: primaryColor,
         },
-        primary: lightDark(0.68, 0.153, 160), // #00B578
+        primary: primaryColor,
         error: lightDark(0.65, 0.147, 15), // #D86371
         sell: lightDark(0.65, 0.147, 15), // #D86371
         buy: lightDark(0.68, 0.153, 160), // #00B578
@@ -71,6 +75,14 @@ export default {
         warning: lightDark(0.747, 0.18, 57.36), // #ff8a00
         black: oklch(0.13, chroma, hue),
       };
+      if (process.env.VITE_USE_GRADIENT_BRANDING) {
+        colorsConfig.primaryGradient = {
+          first: lightDark(0.7985, 0.132, 159.5), // #67D79F
+          middle: lightDark(0.7292, 0.127, 214.3), // #10BBD8
+          last: lightDark(0.7617, 0.119, 184.67), // #3DCABB
+        };
+      }
+      return colorsConfig;
     },
     spacing: createTwConfigValues(0, 100, 1),
     animation: {
