@@ -14,8 +14,13 @@ export function Candlesticks({ xScale, yScale, data }: CandlesticksProps) {
         const isDown = d.open < d.close;
         const color = isUp ? '#AD4F5A' : isDown ? '#009160' : 'white';
 
-        let height = yScale(d.open) - yScale(d.close);
-        let y = yScale(d.close);
+        let height = 5;
+        let y = yScale(d.open);
+
+        if (isDown) {
+          height = yScale(d.open) - yScale(d.close);
+          y = yScale(d.close);
+        }
 
         if (isUp) {
           height = yScale(d.close) - yScale(d.open);

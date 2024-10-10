@@ -3,15 +3,13 @@ import { Button } from 'components/common/button';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
-import {
-  useCompareTokenPrice,
-  useGetTokenPriceHistory,
-} from 'libs/queries/extApi/tokenPrice';
+import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
 import { simulatorInputRecurringRoute } from 'libs/routing/routes/sim';
 import { SafeDecimal } from 'libs/safedecimal';
 import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 export const SimulatorInputRecurringPage = () => {
   const searchState = simulatorInputRecurringRoute.useSearch();
@@ -28,10 +26,10 @@ export const SimulatorInputRecurringPage = () => {
     start: searchState.start,
     end: searchState.end,
   });
-  const marketPrice = useCompareTokenPrice(
-    state.baseToken?.address,
-    state.quoteToken?.address
-  );
+  const { marketPrice, isPending: marketPricePending } = useMarketPrice({
+    base: state.baseToken,
+    quote: state.quoteToken,
+  });
 
   const handleDefaultValues = useCallback(
     (type: StrategyDirection) => {
@@ -85,9 +83,11 @@ export const SimulatorInputRecurringPage = () => {
   );
 
   useEffect(() => {
-    handleDefaultValues('buy');
-    handleDefaultValues('sell');
-  }, [handleDefaultValues]);
+    if (!marketPricePending) {
+      handleDefaultValues('buy');
+      handleDefaultValues('sell');
+    }
+  }, [handleDefaultValues, marketPricePending]);
 
   useEffect(() => {
     if (initBuyRange || initSellRange) return;

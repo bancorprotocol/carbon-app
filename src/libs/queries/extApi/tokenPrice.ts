@@ -5,16 +5,6 @@ import { FIVE_MIN_IN_MS } from 'utils/time';
 import { useStore } from 'store';
 import { FiatPriceDict, carbonApi } from 'utils/carbonApi';
 
-export const useCompareTokenPrice = (
-  baseAddress?: string,
-  quoteAddress?: string
-) => {
-  const basePrice = useGetTokenPrice(baseAddress).data?.USD;
-  const quotePrice = useGetTokenPrice(quoteAddress).data?.USD;
-  if (typeof basePrice !== 'number' || typeof quotePrice !== 'number') return;
-  return basePrice / quotePrice;
-};
-
 export const useGetTokenPrice = (address?: string) => {
   const {
     fiatCurrency: { availableCurrencies },
