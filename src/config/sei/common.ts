@@ -23,7 +23,7 @@ export const commonConfig: AppConfig = {
   ],
   blockedConnectors: ['Tailwind'],
   walletConnectProjectId: '',
-  isSimulatorEnabled: false,
+  isSimulatorEnabled: true,
   policiesLastUpdated: '27 May, 2024',
   network: {
     name: 'Sei Network',
@@ -115,7 +115,7 @@ export const commonConfig: AppConfig = {
     ],
   },
   ui: {
-    priceChart: 'tradingView',
+    priceChart: 'native',
     useGradientBranding: true,
   },
 };

@@ -17,7 +17,6 @@ import {
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/strategies/common/d3Chart';
-import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useCallback } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
@@ -25,6 +24,7 @@ import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { fromUnixUTC, toUnixUTC } from '../utils';
 import { startOfDay, sub } from 'date-fns';
 import { formatNumber } from 'utils/helpers';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
   state: StrategyInputValues | SimulatorInputOverlappingValues;
@@ -58,10 +58,10 @@ export const SimInputChart = ({
   data,
   simulationType,
 }: Props) => {
-  const marketPrice = useCompareTokenPrice(
-    state.baseToken?.address,
-    state.quoteToken?.address
-  );
+  const { marketPrice } = useMarketPrice({
+    base: state.baseToken,
+    quote: state.quoteToken,
+  });
 
   const prices = {
     buy: {
