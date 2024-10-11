@@ -27,8 +27,6 @@ export const CreateForm: FC<FormProps> = (props) => {
   const { openModal } = useModal();
   const { user } = useWagmi();
   const search = useSearch({ strict: false }) as any;
-  const isSell =
-    type === 'disposable' && search.direction !== 'buy';
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
     useCreateStrategy({ type, base, quote, order0, order1 });
@@ -91,7 +89,7 @@ export const CreateForm: FC<FormProps> = (props) => {
         <Button
           className="shrink-0"
           type="submit"
-          variant={isSell ? 'sell' : 'buy'}
+          variant="success"
           size="lg"
           fullWidth
           loading={loading}
