@@ -24,6 +24,7 @@ export const commonConfig: AppConfig = {
   blockedConnectors: ['Tailwind'],
   walletConnectProjectId: '',
   isSimulatorEnabled: true,
+  showStrategyRoi: true,
   policiesLastUpdated: '27 May, 2024',
   network: {
     name: 'Sei Network',
