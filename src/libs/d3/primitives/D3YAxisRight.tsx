@@ -8,7 +8,7 @@ export const D3YAxisRight = ({ ticks, dms, formatter }: D3AxisProps) => {
         x="0"
         y="0"
         width={100}
-        height={dms.boundedHeight - 1} // -1 for the x axis line to be visible
+        height={dms.height}
         className="fill-background-black"
       />
       <line

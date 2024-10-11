@@ -18,6 +18,7 @@ import { TradeTypes } from 'libs/routing/routes/trade';
 import { Activity } from 'libs/queries/extApi/activity';
 import { D3ChartIndicators } from './D3ChartIndicators';
 import { D3ZoomEvent, ZoomTransform, select, zoom } from 'd3';
+import { D3Pointer } from './D3Pointer';
 
 export type ChartPrices<T = string> = {
   buy: { min: T; max: T };
@@ -180,6 +181,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           spread={Number(overlappingSpread)}
         />
       )}
+      <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
     </>
   );
 };
