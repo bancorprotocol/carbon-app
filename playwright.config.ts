@@ -1,5 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import 'dotenv/config'; // TODO: we can remove this with node@20.6.0
 
 const isCI = !!process.env.CI && process.env.CI !== 'false';
 
