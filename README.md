@@ -242,10 +242,6 @@ If VITE_CHAIN_RPC_URL is not set, the app will use the rpc.url and rpc.headers f
 In case the network is using a version of CarbonController older than 5 then there's no support for extended range for trade by source,
 and it is recommended to set VITE_LEGACY_TRADE_BY_SOURCE_RANGE to true in .env to avoid possible reverts.
 
-### Opt-in to gradient branding
-
-To set the gradient branding in the app, the flag `VITE_USE_GRADIENT_BRANDING` must be set to true. The gradient branding colors are set in the `tailwind.config.ts` file under the `theme.colors.primaryGradient` key.
-
 ### Common configuration
 
 The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains important configuration for the app and network. It includes the following:
@@ -274,6 +270,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `sdk`/`cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
 - `ui`
   - `priceChart`: use `tradingView` chart or `native` chart for token pair price history. You need to provide a backend with price history endpoint to support `native` view.
+  - `useGradientBranding`: Flag to enable gradient styles for buttons.
 
 #### Gas token different than native token
 
@@ -302,7 +299,7 @@ The theme is defined in the [`tailwind.config.ts`](./tailwind.config.ts#L36) fil
 You can update these colors:
 
 - **background**: used for surfaces
-- **primaryGradient**: used for the success variant button, with a first, middle and last gradient colors. Used when the environment flag `VITE_USE_GRADIENT_BRANDING` is set to true
+- **primaryGradient**: used for the success variant button, with a first, middle and last gradient colors. Used when the config flag `useGradientBranding` is set to true
 - **primary**: used for buttons and other actionable elements
 - **success**: used for positive information like positive ROI
 - **error**: used for error messages & buttons
@@ -334,6 +331,10 @@ All other colors are defined with l,c,h values (see https://oklch.com), and the 
 ```
 
 You can change the % of the `lighten` & `darken` function with the [`lightDark`](./tailwind.config.ts#L20) function.
+
+### Opt-in to gradient branding
+
+To set the gradient branding in the app, the flag `useGradientBranding` in the network config must be set to true. The gradient branding colors are set in the `tailwind.config.ts` file under the `theme.colors.primaryGradient` key.
 
 ## Change font
 

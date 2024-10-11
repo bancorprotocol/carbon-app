@@ -4,6 +4,7 @@ import {
   VariantSize,
 } from 'components/common/variants';
 import { cva } from 'class-variance-authority';
+import config from 'config';
 
 type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 
@@ -49,9 +50,9 @@ const variants = {
   },
 };
 
-if (import.meta.env.VITE_USE_GRADIENT_BRANDING) {
+if (config.ui.useGradientBranding) {
   variants.variant.success = [
-    'transition-all duration-500! bg-[length:200%] bg-gradient-to-r from-primaryGradient-first via-primaryGradient-middle to-primaryGradient-last text-black',
+    'transition-all duration-500! bg-[length:200%] bg-gradient text-black',
     'hover:bg-right hover:disabled:bg-left',
   ];
 }
