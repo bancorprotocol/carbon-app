@@ -31,6 +31,4 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
       - name: Build
-        env:
-          CI: false
         run: yarn build
