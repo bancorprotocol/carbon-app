@@ -10,9 +10,7 @@ type Props = JSX.IntrinsicElements['button'] & {
 export const Checkbox: FC<Props> = ({ isChecked, setIsChecked, ...attr }) => {
   const classNames =
     'size-18 rounded-4 flex items-center justify-center cursor-pointer';
-  const borderBgColor = isChecked
-    ? 'bg-gradient-to-r from-primaryGradient-first to-primaryGradient-middle'
-    : ' border-2 ';
+  const borderBgColor = isChecked ? 'bg-gradient' : ' border-2 ';
 
   return (
     <button

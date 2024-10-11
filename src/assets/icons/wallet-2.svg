@@ -7,12 +7,12 @@
         fill="url(#paint1_linear_4740_90514)" />
     <defs>
         <linearGradient id="paint0_linear_4740_90514" x1="19" y1="4.5" x2="7" y2="22" gradientUnits="userSpaceOnUse">
-            <stop stop-color="var(--gradientFirst)" />
-            <stop offset="1" stop-color="var(--gradientMiddle)" stop-opacity="0.5" />
+            <stop stop-color="var(--gradient-first)" />
+            <stop offset="1" stop-color="var(--gradient-middle)" stop-opacity="0.5" />
         </linearGradient>
         <linearGradient id="paint1_linear_4740_90514" x1="16" y1="3.5" x2="5" y2="20" gradientUnits="userSpaceOnUse">
-            <stop offset="0.0899131" stop-color="var(--gradientMiddle)" stop-opacity="0.5" />
-            <stop offset="1" stop-color="var(--gradientFirst)" />
+            <stop offset="0.0899131" stop-color="var(--gradient-middle)" stop-opacity="0.5" />
+            <stop offset="1" stop-color="var(--gradient-first)" />
         </linearGradient>
     </defs>
 </svg>
