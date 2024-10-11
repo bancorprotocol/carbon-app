@@ -124,7 +124,7 @@ export const D3Pointer: FC<Props> = ({ dms, xScale, yScale }) => {
         </>
       )}
       <rect
-        className="chart-area"
+        className="chart-area cursor-crosshair"
         x="0"
         y="0"
         width={dms.boundedWidth}
