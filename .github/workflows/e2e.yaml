@@ -25,14 +25,16 @@ jobs:
       - name: Install dependencies
         run: yarn
 
+      - name: Set values in .env
+        run: |
+          echo "TENDERLY_ACCOUNT=bancor" >> .env
+          echo "TENDERLY_PROJECT=carbon-test-forks" >> .env
+          echo "TENDERLY_ACCESS_KEY=${{ secrets.VITE_TENDERLY_ACCESS_KEY }}" >> .env
+          echo "CI=true" >> .env
+          echo "DRAFT=${{ github.event.pull_request.draft || github.base_ref != 'main' }}" >> .env
+
       - name: Install Playwright browsers and run Playwright tests
         run: yarn e2e
-        env:
-          TENDERLY_ACCOUNT: bancor
-          TENDERLY_PROJECT: carbon-test-forks
-          TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
-          CI: true
-          DRAFT: ${{ github.event.pull_request.draft || github.base_ref != 'main' }}
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
