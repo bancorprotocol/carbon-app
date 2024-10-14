@@ -11,6 +11,7 @@ import 'init-sentry';
 import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';
+import 'init-config';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

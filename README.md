@@ -332,6 +332,10 @@ All other colors are defined with l,c,h values (see https://oklch.com), and the 
 
 You can change the % of the `lighten` & `darken` function with the [`lightDark`](./tailwind.config.ts#L20) function.
 
+### Opt-in to gradient branding
+
+To set the gradient branding in the app, the flag `useGradientBranding` in the network config must be set to true. The gradient branding colors are set in the `tailwind.config.ts` file under the `theme.colors.primaryGradient` key.
+
 ## Change font
 
 The application uses two fonts :
