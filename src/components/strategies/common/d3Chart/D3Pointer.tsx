@@ -56,81 +56,69 @@ interface Props {
 
 export const D3Pointer: FC<Props> = ({ dms, xScale, yScale }) => {
   const position = usePointerPosition(xScale, yScale);
-
+  if (!position) return;
   return (
     <>
-      {position && (
-        <>
-          {/* X axis */}
-          <line
-            x1={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2}
-            x2={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2}
-            y1={0}
-            y2={dms.boundedHeight}
-            stroke="white"
-            strokeOpacity="0.5"
-            strokeDasharray="5"
-            strokeDashoffset="5"
-          />
-          <rect
-            x={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2 - rect.w / 2}
-            y={dms.boundedHeight}
-            width={rect.w}
-            height={rect.h}
-            rx="4"
-            ry="4"
-            className="fill-background-700"
-          />
-          <text
-            x={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2}
-            y={dms.boundedHeight + 8}
-            dominantBaseline="hanging"
-            textAnchor="middle"
-            fontSize="12"
-            fill="white"
-          >
-            {xAxisFormatter.format(fromUnixUTC(position.x))}
-          </text>
-          {/* Y axis */}
-          <line
-            x1={0}
-            x2={dms.boundedWidth}
-            y1={yScale(position.y)}
-            y2={yScale(position.y)}
-            stroke="white"
-            strokeOpacity="0.5"
-            strokeDasharray="5"
-            strokeDashoffset="5"
-          />
-          <rect
-            x={dms.boundedWidth}
-            y={yScale(position.y) - rect.h / 2}
-            width={rect.w}
-            height={rect.h}
-            rx="4"
-            ry="4"
-            className="fill-background-700"
-          />
-          <text
-            x={dms.boundedWidth + 8}
-            y={yScale(position.y)}
-            dominantBaseline="middle"
-            textAnchor="start"
-            fontSize="12"
-            fill="white"
-          >
-            {prettifyNumber(position.y)}
-          </text>
-        </>
-      )}
-      <rect
-        className="chart-area cursor-crosshair"
-        x="0"
-        y="0"
-        width={dms.boundedWidth}
-        height={dms.boundedHeight}
-        fillOpacity="0"
+      {/* X axis */}
+      <line
+        x1={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2}
+        x2={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2}
+        y1={0}
+        y2={dms.boundedHeight}
+        stroke="white"
+        strokeOpacity="0.5"
+        strokeDasharray="5"
+        strokeDashoffset="5"
       />
+      <rect
+        x={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2 - rect.w / 2}
+        y={dms.boundedHeight}
+        width={rect.w}
+        height={rect.h}
+        rx="4"
+        ry="4"
+        className="fill-background-700"
+      />
+      <text
+        x={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2}
+        y={dms.boundedHeight + 8}
+        dominantBaseline="hanging"
+        textAnchor="middle"
+        fontSize="12"
+        fill="white"
+      >
+        {xAxisFormatter.format(fromUnixUTC(position.x))}
+      </text>
+      {/* Y axis */}
+      <line
+        x1={0}
+        x2={dms.boundedWidth}
+        y1={yScale(position.y)}
+        y2={yScale(position.y)}
+        stroke="white"
+        strokeOpacity="0.5"
+        strokeDasharray="5"
+        strokeDashoffset="5"
+      />
+      <rect
+        x={dms.boundedWidth}
+        y={yScale(position.y) - rect.h / 2}
+        width={rect.w}
+        height={rect.h}
+        rx="4"
+        ry="4"
+        className="fill-background-700"
+      />
+      <text
+        x={dms.boundedWidth + 8}
+        y={yScale(position.y)}
+        dominantBaseline="middle"
+        textAnchor="start"
+        fontSize="12"
+        fill="white"
+      >
+        {prettifyNumber(position.y)}
+      </text>
     </>
   );
 };

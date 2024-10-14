@@ -46,14 +46,21 @@ export interface D3ChartCandlesticksProps {
 
 const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
   const [transform, setTransform] = useState<ZoomTransform>();
+  let k = 0;
   const selection = select<SVGSVGElement, unknown>('#interactive-chart');
+  const chartArea = select<SVGSVGElement, unknown>('.chart-area');
   const zoomHandler = zoom<SVGSVGElement, unknown>()
     .scaleExtent([0.5, Math.ceil(data.length / 10)])
     .translateExtent([
       [-0.5 * dms.width, 0],
       [1.5 * dms.width, 0],
     ])
-    .on('zoom', (e: D3ZoomEvent<Element, any>) => setTransform(e.transform));
+    .on('start', (e: D3ZoomEvent<Element, any>) => (k = e.transform.k))
+    .on('zoom', (e: D3ZoomEvent<Element, any>) => {
+      if (e.transform.k === k) chartArea.style('cursor', 'grab');
+      setTransform(e.transform);
+    })
+    .on('end', () => chartArea.style('cursor', ''));
   selection.call(zoomHandler);
   return transform;
 };
@@ -138,6 +145,15 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           return prettifyNumber(value, { decimals: 100, abbreviate: true });
         }}
       />
+      <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
+      <rect
+        className="chart-area cursor-crosshair"
+        x="0"
+        y="0"
+        width={dms.boundedWidth}
+        height={dms.boundedHeight}
+        fillOpacity="0"
+      />
       {marketPrice && (
         <D3ChartHandleLine
           dms={dms}
@@ -181,7 +197,6 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           spread={Number(overlappingSpread)}
         />
       )}
-      <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
     </>
   );
 };
