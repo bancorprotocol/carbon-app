@@ -9,16 +9,16 @@ type Props = JSX.IntrinsicElements['button'] & {
 
 export const Checkbox: FC<Props> = ({ isChecked, setIsChecked, ...attr }) => {
   const classNames =
-    'size-18 rounded-4 border-2 flex items-center justify-center cursor-pointer';
-  const borderColor = isChecked
-    ? 'border-primary bg-primary'
-    : 'border-white/60';
+    'size-18 rounded-4 flex items-center justify-center cursor-pointer';
+  const borderBgColor = isChecked ? 'bg-gradient' : ' border-2 ';
 
   return (
     <button
       {...attr}
       type="button"
-      className={cn(`${classNames} ${borderColor}`, attr.className)}
+      role="checkbox"
+      aria-checked={isChecked}
+      className={cn(`${classNames} ${borderBgColor}`, attr.className)}
       onClick={() => setIsChecked(!isChecked)}
     >
       {isChecked && <IconCheck className="text-background-900 size-10" />}

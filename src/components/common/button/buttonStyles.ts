@@ -52,7 +52,7 @@ const variants = {
 
 if (config.ui.useGradientBranding) {
   variants.variant.success = [
-    'transition-all duration-500! bg-[length:200%] bg-gradient-to-r from-primaryGradient-first via-primaryGradient-middle to-primaryGradient-last text-black',
+    'transition-all duration-500! bg-[length:200%] bg-gradient text-black',
     'hover:bg-right hover:disabled:bg-left',
   ];
 }
