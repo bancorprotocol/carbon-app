@@ -24,7 +24,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const onClickConnect = async (c: Connector) => {
     setSelectedConnection(c);
     try {
-      await connect(c);
+      connect(c);
       closeModal(id);
     } catch (e: any) {
       setConnectionError(e.message || 'Unknown connection error.');

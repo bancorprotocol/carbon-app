@@ -9,7 +9,7 @@ import {
   useAccountEffect,
   type Connector,
 } from 'wagmi';
-import { type ConnectErrorType, type DisconnectErrorType } from '@wagmi/core';
+import { type DisconnectErrorType } from '@wagmi/core';
 import { isAccountBlocked } from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
@@ -34,8 +34,8 @@ export const useWagmiUser = ({
   const [isUncheckedSigner, _setIsUncheckedSigner] = useState(
     lsService.getItem('isUncheckedSigner') || false
   );
-  const { connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect();
+  const { connect: _connect } = useConnect();
+  const { disconnect: _disconnect } = useDisconnect();
 
   const setIsUncheckedSigner = (value: boolean) => {
     _setIsUncheckedSigner(value);
@@ -114,39 +114,33 @@ export const useWagmiUser = ({
      * Asynchronously connects to the connector in the input
      * @param {Connector} connector  Connector to connect to
      */
-    async (connector: Connector) => {
+    (connector: Connector) => {
       if (isCountryBlocked || isCountryBlocked === null) {
         throw new Error('Your country is restricted from using this app.');
       }
       isManualConnection.current = true;
       try {
-        await connectAsync(
-          { connector, chainId },
-          {
-            onError: (error: ConnectErrorType) => {
-              isManualConnection.current = false;
-              console.error(`Error connecting ${connector.name}` + error);
-            },
-          }
-        );
+        _connect({ connector, chainId });
       } catch (error: any) {
         // Attempt to disconnect
-        await disconnectAsync({ connector });
+        isManualConnection.current = false;
+        console.error(`Error connecting ${connector.name}` + error);
+        _disconnect();
         const codeErrorMessage = error?.code ? errorMessages[error?.code] : '';
         throw new Error(codeErrorMessage || error.message);
       }
     },
-    [isCountryBlocked, connectAsync, chainId, disconnectAsync]
+    [isCountryBlocked, _connect, chainId, _disconnect]
   );
 
   const disconnect = useCallback(
     /**
      * Asynchronously disconnects from the last connected connector
      */
-    async () => {
+    () => {
       isManualConnection.current = true;
       try {
-        await disconnectAsync(
+        _disconnect(
           {},
           {
             onError: (error: DisconnectErrorType) => {
@@ -163,7 +157,7 @@ export const useWagmiUser = ({
         throw new Error(codeErrorMessage || error.message);
       }
     },
-    [disconnectAsync, setImposterAccount]
+    [_disconnect, setImposterAccount]
   );
 
   return {
