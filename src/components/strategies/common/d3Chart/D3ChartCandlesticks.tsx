@@ -19,6 +19,8 @@ import { Activity } from 'libs/queries/extApi/activity';
 import { D3ChartIndicators } from './D3ChartIndicators';
 import { D3ZoomEvent, ZoomTransform, select, zoom } from 'd3';
 import { D3Pointer } from './D3Pointer';
+import { DrawingMode } from './drawing/DrawingMenu';
+import { D3Drawings } from './drawing/D3Drawings';
 
 export type ChartPrices<T = string> = {
   buy: { min: T; max: T };
@@ -42,6 +44,7 @@ export interface D3ChartCandlesticksProps {
   overlappingMarketPrice?: number;
   readonly?: boolean;
   activities?: Activity[];
+  drawingMode?: DrawingMode;
 }
 
 const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
@@ -93,6 +96,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     overlappingMarketPrice,
     readonly,
     activities,
+    drawingMode,
   } = props;
 
   const zoomTransform = useZoom(dms, data);
@@ -197,6 +201,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
         />
       )}
       <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
+      {!activities && <D3Drawings dms={dms} drawingMode={drawingMode} />}
     </>
   );
 };

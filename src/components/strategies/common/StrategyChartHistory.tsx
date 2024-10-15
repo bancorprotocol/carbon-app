@@ -180,6 +180,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
             overlappingSpread={props.spread}
             overlappingMarketPrice={marketPrice}
             activities={activities}
+            drawingMode={drawingMode}
           />
         )}
       </D3ChartWrapper>
