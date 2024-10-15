@@ -69,6 +69,7 @@ export const D3Pointer: FC<Props> = ({ dms, xScale, yScale }) => {
         strokeOpacity="0.5"
         strokeDasharray="5"
         strokeDashoffset="5"
+        className="pointer-events-none"
       />
       <rect
         x={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2 - rect.w / 2}
@@ -99,6 +100,7 @@ export const D3Pointer: FC<Props> = ({ dms, xScale, yScale }) => {
         strokeOpacity="0.5"
         strokeDasharray="5"
         strokeDashoffset="5"
+        className="pointer-events-none"
       />
       <rect
         x={dms.boundedWidth}
