@@ -153,7 +153,6 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           return prettifyNumber(value, { decimals: 100, abbreviate: true });
         }}
       />
-      <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
       {marketPrice && (
         <D3ChartHandleLine
           dms={dms}
@@ -197,6 +196,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           spread={Number(overlappingSpread)}
         />
       )}
+      <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
     </>
   );
 };
