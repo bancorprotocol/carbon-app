@@ -129,7 +129,6 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
   return (
     <>
       <Candlesticks xScale={xScale} yScale={y.scale} data={data} />
-      <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
       <rect
         className="chart-area cursor-crosshair"
         x="0"
@@ -197,6 +196,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           spread={Number(overlappingSpread)}
         />
       )}
+      <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
     </>
   );
 };
