@@ -129,6 +129,15 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
   return (
     <>
       <Candlesticks xScale={xScale} yScale={y.scale} data={data} />
+      <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
+      <rect
+        className="chart-area cursor-crosshair"
+        x="0"
+        y="0"
+        width={dms.boundedWidth}
+        height={dms.boundedHeight}
+        fillOpacity="0"
+      />
       {activities?.length && (
         <D3ChartIndicators
           xScale={xScale}
@@ -144,15 +153,6 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
         formatter={(value) => {
           return prettifyNumber(value, { decimals: 100, abbreviate: true });
         }}
-      />
-      <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
-      <rect
-        className="chart-area cursor-crosshair"
-        x="0"
-        y="0"
-        width={dms.boundedWidth}
-        height={dms.boundedHeight}
-        fillOpacity="0"
       />
       {marketPrice && (
         <D3ChartHandleLine

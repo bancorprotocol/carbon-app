@@ -88,7 +88,7 @@ export const D3ChartIndicators = (props: D3ChartIndicatorsProps) => {
       })}
       {trades.map((indicator, i) => {
         const { x, y } = indicator;
-        const isBelowAxix = yScale(y) > height - 10;
+        const isBelowAxis = yScale(y) > height - 10;
         const translateY = Math.min(yScale(y), height - 10);
         return (
           <IndicatorTooltip key={i} indicator={indicator}>
@@ -97,7 +97,7 @@ export const D3ChartIndicators = (props: D3ChartIndicatorsProps) => {
                 cx={xScale.bandwidth() / 2}
                 cy={xScale.bandwidth() / 2}
                 r={5}
-                fill={isBelowAxix ? 'url(#svg-brand-gradient)' : 'white'}
+                fill={isBelowAxis ? 'url(#svg-brand-gradient)' : 'white'}
                 stroke="black"
               />
             </g>
