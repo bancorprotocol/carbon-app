@@ -19,6 +19,7 @@ import { Token } from 'libs/tokens';
 import { Activity } from 'libs/queries/extApi/activity';
 import config from 'config';
 import { SafeDecimal } from 'libs/safedecimal';
+import { DrawingMenu, DrawingMode } from './d3Chart/drawing/DrawingMenu';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -77,6 +78,8 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   const { base, quote, type, order0, order1, activities } = props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
+  const [drawingMode, setDrawingMode] = useState<DrawingMode>();
+  const [drawings, setDrawings] = useState<any[]>([]);
 
   const marketPrice = props.marketPrice
     ? Number(props.marketPrice)
@@ -151,28 +154,35 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     );
   }
   return (
-    <D3ChartWrapper
-      settings={chartSettings}
-      className="rounded-12 flex-1 bg-black"
-      data-testid="price-chart"
-    >
-      {(dms) => (
-        <D3ChartCandlesticks
-          readonly={props.readonly}
-          dms={dms}
-          prices={prices}
-          onPriceUpdates={updatePrices}
-          data={data}
-          marketPrice={marketPrice}
-          bounds={bounds}
-          onDragEnd={updatePrices}
-          isLimit={props.isLimit}
-          type={type}
-          overlappingSpread={props.spread}
-          overlappingMarketPrice={marketPrice}
-          activities={activities}
-        />
-      )}
-    </D3ChartWrapper>
+    <div className=" rounded-12 flex flex-1 bg-black">
+      <DrawingMenu
+        drawingMode={drawingMode}
+        setDrawingMode={setDrawingMode}
+        clearDrawings={() => setDrawings([])}
+      />
+      <D3ChartWrapper
+        className="flex-1"
+        settings={chartSettings}
+        data-testid="price-chart"
+      >
+        {(dms) => (
+          <D3ChartCandlesticks
+            readonly={props.readonly}
+            dms={dms}
+            prices={prices}
+            onPriceUpdates={updatePrices}
+            data={data}
+            marketPrice={marketPrice}
+            bounds={bounds}
+            onDragEnd={updatePrices}
+            isLimit={props.isLimit}
+            type={type}
+            overlappingSpread={props.spread}
+            overlappingMarketPrice={marketPrice}
+            activities={activities}
+          />
+        )}
+      </D3ChartWrapper>
+    </div>
   );
 };
