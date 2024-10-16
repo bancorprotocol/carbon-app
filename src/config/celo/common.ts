@@ -22,7 +22,7 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: '',
-  isSimulatorEnabled: false,
+  isSimulatorEnabled: true,
   showStrategyRoi: true,
   policiesLastUpdated: '31 Jul, 2024',
   network: {
@@ -140,7 +140,7 @@ export const commonConfig: AppConfig = {
     ],
   },
   ui: {
-    priceChart: 'tradingView',
+    priceChart: 'native',
     useGradientBranding: true,
   },
 };
