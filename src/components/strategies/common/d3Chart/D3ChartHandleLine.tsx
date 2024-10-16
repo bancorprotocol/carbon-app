@@ -33,7 +33,7 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
   const lineWidth = dms.boundedWidth + 5;
 
   return (
-    <g className={selector}>
+    <g className={cn(selector, isDraggable && !readonly && 'cursor-ns-resize')}>
       <line
         x1={0}
         x2={lineWidth}
@@ -45,10 +45,7 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
       />
       <g
         transform={`translate(${lineWidth},-${handleDms.height / 2})`}
-        className={cn(
-          isDraggable && !readonly && 'cursor-ns-resize',
-          handleClassName
-        )}
+        className={handleClassName}
       >
         <rect y={y} {...handleDms} fill={color} rx={4} />
         {label && (
