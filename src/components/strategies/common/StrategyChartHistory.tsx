@@ -181,6 +181,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
             overlappingMarketPrice={marketPrice}
             activities={activities}
             drawingMode={drawingMode}
+            setDrawingMode={setDrawingMode}
           />
         )}
       </D3ChartWrapper>

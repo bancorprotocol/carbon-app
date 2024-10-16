@@ -1,4 +1,4 @@
-import { max, min, select } from 'd3';
+import { max, min, ScaleBand, select } from 'd3';
 import { ChartPrices } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
 import { CandlestickData } from 'libs/d3/types';
 import { useEffect, useState } from 'react';
@@ -90,4 +90,14 @@ export const getDomain: GetDomainFn<number[]> = (data, prices, marketPrice) => {
   const domainMax = getDomainMax(data, prices, marketPrice);
 
   return [domainMin, domainMax];
+};
+
+export const scaleBandInvert = (scale: ScaleBand<string>) => {
+  var domain = scale.domain();
+  var paddingOuter = scale(domain[0]) ?? 0;
+  var eachBand = scale.step();
+  return function (value: number) {
+    var index = Math.floor((value - paddingOuter) / eachBand);
+    return domain[Math.max(0, Math.min(index, domain.length - 1))];
+  };
 };

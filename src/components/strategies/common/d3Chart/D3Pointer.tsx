@@ -3,6 +3,7 @@ import { ScaleBand, ScaleLinear } from 'd3';
 import { D3ChartSettings } from 'libs/d3';
 import { FC, useEffect, useState } from 'react';
 import { prettifyNumber } from 'utils/helpers';
+import { scaleBandInvert } from './utils';
 
 const rect = {
   w: 72,
@@ -14,15 +15,6 @@ const usePointerPosition = (
   yScale: ScaleLinear<number, number, never>
 ) => {
   const [position, setPosition] = useState<{ x: string; y: number }>();
-  function scaleBandInvert(scale: ScaleBand<string>) {
-    var domain = scale.domain();
-    var paddingOuter = scale(domain[0]) ?? 0;
-    var eachBand = scale.step();
-    return function (value: number) {
-      var index = Math.floor((value - paddingOuter) / eachBand);
-      return domain[Math.max(0, Math.min(index, domain.length - 1))];
-    };
-  }
   useEffect(() => {
     const invert = scaleBandInvert(xScale);
     const chart = document.querySelector<HTMLElement>('.chart-area');

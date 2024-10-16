@@ -10,7 +10,7 @@ import {
   scaleBand,
   D3ChartSettings,
 } from 'libs/d3';
-import { useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from 'components/strategies/common/d3Chart/Candlesticks';
 import { D3ChartDisposable } from './disposable/D3ChartDisposable';
@@ -45,6 +45,7 @@ export interface D3ChartCandlesticksProps {
   readonly?: boolean;
   activities?: Activity[];
   drawingMode?: DrawingMode;
+  setDrawingMode: Dispatch<SetStateAction<DrawingMode>>;
 }
 
 const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
@@ -97,6 +98,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     readonly,
     activities,
     drawingMode,
+    setDrawingMode,
   } = props;
 
   const zoomTransform = useZoom(dms, data);
@@ -201,7 +203,15 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
         />
       )}
       <D3Pointer xScale={xScale} yScale={y.scale} dms={dms} />
-      {!activities && <D3Drawings dms={dms} drawingMode={drawingMode} />}
+      {!activities && (
+        <D3Drawings
+          dms={dms}
+          drawingMode={drawingMode}
+          setDrawingMode={setDrawingMode}
+          xScale={xScale}
+          yScale={y.scale}
+        />
+      )}
     </>
   );
 };
