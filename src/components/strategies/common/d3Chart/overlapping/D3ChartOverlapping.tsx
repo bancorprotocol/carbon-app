@@ -17,33 +17,24 @@ import {
   getMaxBuyMin,
   getMinSellMax,
 } from 'components/strategies/overlapping/utils';
-import { ScaleLinear } from 'd3';
 import { useCallback, useEffect, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { useD3OverlappingChart } from './useD3OverlappingChart';
+import { useD3ChartCtx } from '../D3ChartContext';
 
 type Props = Pick<
   D3ChartCandlesticksProps,
-  'prices' | 'onPriceUpdates' | 'dms' | 'onDragEnd'
+  'prices' | 'onPriceUpdates' | 'onDragEnd'
 > & {
-  yScale: ScaleLinear<number, number>;
   marketPrice?: number;
   spread: number;
   readonly?: boolean;
 };
 
 export const D3ChartOverlapping = (props: Props) => {
-  const {
-    dms,
-    yScale,
-    prices,
-    marketPrice,
-    readonly,
-    onPriceUpdates,
-    onDragEnd,
-    spread,
-  } = props;
-
+  const { prices, marketPrice, readonly, onPriceUpdates, onDragEnd, spread } =
+    props;
+  const { dms, yScale } = useD3ChartCtx();
   const isDragging = useRef(false);
 
   const selectorHandleBuyMin = getHandleSelector('buy', 'line1');
@@ -207,7 +198,6 @@ export const D3ChartOverlapping = (props: Props) => {
       <D3ChartHandleLine
         selector={selectorHandleSellMin}
         handleClassName="opacity-40"
-        dms={dms}
         color="var(--sell)"
         lineProps={{ strokeDasharray: 2 }}
         label={prettifyNumber(prices.sell.min ?? '', { decimals: 4 })}
@@ -216,7 +206,6 @@ export const D3ChartOverlapping = (props: Props) => {
       <D3ChartHandleLine
         selector={selectorHandleBuyMax}
         handleClassName="opacity-40"
-        dms={dms}
         color="var(--buy)"
         lineProps={{ strokeDasharray: 2 }}
         label={prettifyNumber(prices.buy.max ?? '', { decimals: 4 })}
@@ -224,7 +213,6 @@ export const D3ChartOverlapping = (props: Props) => {
       />
       <D3ChartOverlappingHandle
         selector={selectorHandleBuyMin}
-        dms={dms}
         onDrag={onDragBuy}
         onDragEnd={onDragEndBuy}
         color="var(--buy)"
@@ -233,7 +221,6 @@ export const D3ChartOverlapping = (props: Props) => {
       />
       <D3ChartOverlappingHandle
         selector={selectorHandleSellMax}
-        dms={dms}
         onDrag={onDragSell}
         onDragEnd={onDragEndSell}
         color="var(--sell)"
@@ -241,7 +228,6 @@ export const D3ChartOverlapping = (props: Props) => {
         readonly={readonly}
       />
       <D3ChartOverlappingRangeGroup
-        dms={dms}
         onDrag={onDragRect}
         onDragEnd={onDragEndRect}
         readonly={readonly}
@@ -251,14 +237,12 @@ export const D3ChartOverlapping = (props: Props) => {
         minOutOfScale={minIsOutOfScale}
         maxOutOfScale={false}
         color="var(--buy)"
-        dms={dms}
       />
       <D3ChartPriceOutOfScale
         type="sell"
         minOutOfScale={false}
         maxOutOfScale={maxIsOutOfScale}
         color="var(--sell)"
-        dms={dms}
       />
     </>
   );

@@ -1,17 +1,17 @@
-import { D3ChartSettings, ScaleBand, ScaleLinear } from 'libs/d3';
-
+import { ScaleBand, ScaleLinear } from 'libs/d3';
 import { FC, MouseEvent, useState } from 'react';
 import { scaleBandInvert } from '../utils';
 import { ChartPoint } from './D3Drawings';
+import { useD3ChartCtx } from '../D3ChartContext';
 
 interface Props {
-  dms: D3ChartSettings;
   xScale: ScaleBand<string>;
   yScale: ScaleLinear<number, number>;
   onChange: (points: ChartPoint[]) => any;
 }
 
-export const D3DrawLine: FC<Props> = ({ dms, xScale, yScale, onChange }) => {
+export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
+  const { dms } = useD3ChartCtx();
   const [points, setPoints] = useState<ChartPoint[]>([]);
   const invertX = scaleBandInvert(xScale);
   const invertY = yScale.invert;

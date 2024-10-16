@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { FC } from 'react';
 import { ReactComponent as IconIndicator } from 'assets/icons/draw-indicator.svg';
 import { ReactComponent as IconLine } from 'assets/icons/draw-line.svg';
 import { ReactComponent as IconExtendedLine } from 'assets/icons/draw-extended-line.svg';
@@ -6,6 +6,7 @@ import { ReactComponent as IconParallelLine } from 'assets/icons/draw-parallel-l
 import { ReactComponent as IconTriangle } from 'assets/icons/draw-triangle.svg';
 import { ReactComponent as IconRectangle } from 'assets/icons/draw-rectangle.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
+import { useD3ChartCtx } from '../D3ChartContext';
 
 export type DrawingMode = keyof typeof drawings | undefined;
 
@@ -33,16 +34,11 @@ const drawings = {
 };
 
 interface Props {
-  drawingMode: DrawingMode;
-  setDrawingMode: Dispatch<SetStateAction<DrawingMode>>;
   clearDrawings: () => void;
 }
 
-export const DrawingMenu: FC<Props> = ({
-  drawingMode,
-  setDrawingMode,
-  clearDrawings,
-}) => {
+export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
+  const { drawingMode, setDrawingMode } = useD3ChartCtx();
   return (
     <div className="flex flex-col" role="menubar">
       <button

@@ -1,9 +1,7 @@
 import {
   ChartPrices,
-  D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/strategies/common/d3Chart';
-import { D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { TradeSearch } from 'libs/routing';
@@ -17,18 +15,9 @@ import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { Token } from 'libs/tokens';
 import { Activity } from 'libs/queries/extApi/activity';
-import config from 'config';
 import { SafeDecimal } from 'libs/safedecimal';
-import { DrawingMenu, DrawingMode } from './d3Chart/drawing/DrawingMenu';
-
-const chartSettings: D3ChartSettingsProps = {
-  width: 0,
-  height: 0,
-  marginTop: 0,
-  marginBottom: 40,
-  marginLeft: 0,
-  marginRight: 80,
-};
+import { D3PriceHistory } from './d3Chart/D3PriceHistory';
+import config from 'config';
 
 const getBounds = (
   order0: BaseOrder,
@@ -78,8 +67,6 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   const { base, quote, type, order0, order1, activities } = props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
-  const [drawingMode, setDrawingMode] = useState<DrawingMode>();
-  const [drawings, setDrawings] = useState<any[]>([]);
 
   const marketPrice = props.marketPrice
     ? Number(props.marketPrice)
@@ -154,37 +141,18 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     );
   }
   return (
-    <div className=" rounded-12 flex flex-1 bg-black">
-      <DrawingMenu
-        drawingMode={drawingMode}
-        setDrawingMode={setDrawingMode}
-        clearDrawings={() => setDrawings([])}
-      />
-      <D3ChartWrapper
-        className="flex-1"
-        settings={chartSettings}
-        data-testid="price-chart"
-      >
-        {(dms) => (
-          <D3ChartCandlesticks
-            readonly={props.readonly}
-            dms={dms}
-            prices={prices}
-            onPriceUpdates={updatePrices}
-            data={data}
-            marketPrice={marketPrice}
-            bounds={bounds}
-            onDragEnd={updatePrices}
-            isLimit={props.isLimit}
-            type={type}
-            overlappingSpread={props.spread}
-            overlappingMarketPrice={marketPrice}
-            activities={activities}
-            drawingMode={drawingMode}
-            setDrawingMode={setDrawingMode}
-          />
-        )}
-      </D3ChartWrapper>
-    </div>
+    <D3PriceHistory
+      readonly={props.readonly}
+      prices={prices}
+      onPriceUpdates={updatePrices}
+      onDragEnd={updatePrices}
+      data={data}
+      marketPrice={marketPrice}
+      bounds={bounds}
+      isLimit={props.isLimit}
+      type={type}
+      overlappingSpread={props.spread}
+      activities={activities}
+    />
   );
 };

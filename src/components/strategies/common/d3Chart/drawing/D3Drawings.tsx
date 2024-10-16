@@ -1,7 +1,8 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { FC, useState } from 'react';
 import { DrawingMode } from './DrawingMenu';
 import { D3DrawLine } from './D3DrawLine';
-import { D3ChartSettings, ScaleBand, ScaleLinear } from 'libs/d3';
+import { ScaleBand, ScaleLinear } from 'libs/d3';
+import { useD3ChartCtx } from '../D3ChartContext';
 
 export interface ChartPoint {
   x: string;
@@ -13,21 +14,14 @@ interface Drawing {
   points: ChartPoint[];
 }
 
-interface Props {
-  dms: D3ChartSettings;
-  drawingMode?: DrawingMode;
-  setDrawingMode: Dispatch<SetStateAction<DrawingMode>>;
-  xScale: ScaleBand<string>;
-  yScale: ScaleLinear<number, number>;
-}
-export const D3Drawings: FC<Props> = (props) => {
-  const { dms, drawingMode, setDrawingMode, xScale, yScale } = props;
+export const D3Drawings = () => {
+  const { drawingMode, setDrawingMode, xScale, yScale } = useD3ChartCtx();
   const [drawings, setDrawings] = useState<Drawing[]>([]);
   const onChange = (points: ChartPoint[]) => {
-    setDrawings((list) => [...list, { mode: props.drawingMode, points }]);
+    setDrawings((list) => [...list, { mode: drawingMode, points }]);
     setDrawingMode(undefined);
   };
-  const drawProps = { dms, drawingMode, xScale, yScale, onChange };
+  const drawProps = { drawingMode, xScale, yScale, onChange };
   return (
     <>
       {drawings.map((drawing, i) => (

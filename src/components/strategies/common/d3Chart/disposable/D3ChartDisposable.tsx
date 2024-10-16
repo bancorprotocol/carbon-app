@@ -2,15 +2,14 @@ import { D3ChartCandlesticksProps } from 'components/strategies/common/d3Chart/D
 import { DragablePriceRange } from 'components/strategies/common/d3Chart/recurring/DragablePriceRange';
 import { handleStateChange } from 'components/strategies/common/d3Chart/recurring/utils';
 import { isZero } from 'components/strategies/common/utils';
-import { ScaleLinear } from 'd3';
 import { useCallback, useEffect, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
+import { useD3ChartCtx } from '../D3ChartContext';
 
 type Props = Pick<
   D3ChartCandlesticksProps,
-  'prices' | 'onPriceUpdates' | 'dms' | 'onDragEnd'
+  'prices' | 'onPriceUpdates' | 'onDragEnd'
 > & {
-  yScale: ScaleLinear<number, number>;
   isLimit: { buy: boolean; sell: boolean };
   readonly?: boolean;
 };
@@ -18,12 +17,11 @@ type Props = Pick<
 export const D3ChartDisposable = ({
   prices,
   onPriceUpdates,
-  dms,
-  yScale,
   isLimit,
   readonly,
   onDragEnd,
 }: Props) => {
+  const { dms, yScale } = useD3ChartCtx();
   const onMinMaxChange = useCallback(
     (type: 'buy' | 'sell', min: number, max: number) => {
       const minInverted = yScale.invert(min).toString();
