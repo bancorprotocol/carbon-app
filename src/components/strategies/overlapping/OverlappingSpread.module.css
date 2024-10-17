@@ -8,10 +8,6 @@
   opacity: 0;
 }
 .spread-option input:checked + label {
-  outline: 1px solid rgba(255, 255, 255, 0.6);
-  color: white;
-}
-.spread-option input:focus + label {
   outline: 2px solid rgba(255, 255, 255, 0.6);
   color: white;
 }

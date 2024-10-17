@@ -123,7 +123,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
           />
           {!!marketPrice && (
             <button
-              className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+              className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
               type="button"
               onClick={setMarket}
             >

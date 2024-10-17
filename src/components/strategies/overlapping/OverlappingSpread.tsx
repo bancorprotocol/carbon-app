@@ -34,6 +34,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
   const inOptions = options.includes(spread);
   const hasError = spread <= 0 || spread > 100;
   const [warning, setWarning] = useState('');
+  const isCustomSpread = spread && !inOptions;
 
   const selectSpread = (value: number) => {
     const input = document.getElementById('spread-custom') as HTMLInputElement;
@@ -133,9 +134,9 @@ export const OverlappingSpread: FC<Props> = (props) => {
           className={cn(
             styles.spreadCustom,
             'rounded-8 flex min-w-0 flex-1 justify-center bg-black p-16 text-center',
-            'hover:outline hover:outline-1',
             'focus-within:outline focus-within:outline-2',
-            spread && !inOptions && 'outline outline-1 outline-white/60',
+            !isCustomSpread && 'hover:outline hover:outline-1',
+            isCustomSpread && 'outline outline-2 outline-white/60',
             hasError && 'text-error outline-error',
             spread && inOptions && 'text-white/40'
           )}

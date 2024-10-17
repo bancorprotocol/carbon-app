@@ -67,7 +67,7 @@ export const DateRangePicker = memo(function DateRangePicker(
         'text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
         'hover:bg-background-800',
         hasDates
-          ? 'border-primary active:border-primary-light'
+          ? 'border-white/60 active:border-white/80'
           : 'border-background-800 hover:border-background-700 active:border-background-600',
         props.disabled &&
           'border-background-800 hover:border-background-800 active:border-background-800 cursor-not-allowed hover:bg-transparent'
