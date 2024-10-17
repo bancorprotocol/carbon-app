@@ -3,10 +3,19 @@ import { uuid } from 'utils/helpers';
 
 export const D3YAxisRight = ({ ticks, dms, formatter }: D3AxisProps) => {
   return (
-    <g transform={`translate(${dms.boundedWidth},0)`}>
-      <path
-        d={['M', 6, dms.boundedHeight, 'h', -6, 'V', 0, 'h', 6].join(' ')}
-        fill="none"
+    <g className="y-axis" transform={`translate(${dms.boundedWidth},0)`}>
+      <rect
+        x="0"
+        y="0"
+        width={100}
+        height={dms.height}
+        className="fill-background-black"
+      />
+      <line
+        x1={0}
+        x2={0}
+        y1={0}
+        y2={dms.boundedHeight}
         className="stroke-background-800"
       />
       {ticks.map(({ value, offset }) => (
