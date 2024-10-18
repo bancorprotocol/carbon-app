@@ -1,15 +1,14 @@
 import { D3ChartCandlesticksProps } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
 import { DragablePriceRange } from 'components/strategies/common/d3Chart/recurring/DragablePriceRange';
 import { handleStateChange } from 'components/strategies/common/d3Chart/recurring/utils';
-import { ScaleLinear } from 'd3';
 import { useCallback, useEffect, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
+import { useD3ChartCtx } from '../D3ChartContext';
 
 type Props = Pick<
   D3ChartCandlesticksProps,
-  'prices' | 'onPriceUpdates' | 'dms' | 'onDragEnd'
+  'prices' | 'onPriceUpdates' | 'onDragEnd'
 > & {
-  yScale: ScaleLinear<number, number>;
   isLimit: { buy: boolean; sell: boolean };
   readonly?: boolean;
 };
@@ -17,12 +16,11 @@ type Props = Pick<
 export const D3ChartRecurring = ({
   prices,
   onPriceUpdates,
-  dms,
-  yScale,
   isLimit,
   readonly,
   onDragEnd,
 }: Props) => {
+  const { yScale } = useD3ChartCtx();
   const onMinMaxChange = useCallback(
     (type: 'buy' | 'sell', min: number, max: number) => {
       const minInverted = yScale.invert(min).toString();
@@ -154,7 +152,6 @@ export const D3ChartRecurring = ({
         onMinMaxChange={onMinMaxChange}
         labels={labels.buy}
         yPos={yPos.buy}
-        dms={dms}
         onDragEnd={onMinMaxChangeEnd}
         isLimit={isLimit.buy}
         readonly={readonly}
@@ -164,7 +161,6 @@ export const D3ChartRecurring = ({
         onMinMaxChange={onMinMaxChange}
         labels={labels.sell}
         yPos={yPos.sell}
-        dms={dms}
         isLimit={isLimit.sell}
         onDragEnd={onMinMaxChangeEnd}
         readonly={readonly}

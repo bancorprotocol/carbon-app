@@ -14,17 +14,17 @@ import {
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import {
   ChartPrices,
-  D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/strategies/common/d3Chart';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useCallback } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
-import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
+import { CandlestickData } from 'libs/d3';
 import { fromUnixUTC, toUnixUTC } from '../utils';
 import { startOfDay, sub } from 'date-fns';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
 
 interface Props {
   state: StrategyInputValues | SimulatorInputOverlappingValues;
@@ -37,15 +37,6 @@ interface Props {
   isError: boolean;
   simulationType: SimulatorType;
 }
-
-const chartSettings: D3ChartSettingsProps = {
-  width: 0,
-  height: 0,
-  marginTop: 0,
-  marginBottom: 40,
-  marginLeft: 0,
-  marginRight: 80,
-};
 
 export const SimInputChart = ({
   state,
@@ -132,26 +123,18 @@ export const SimInputChart = ({
       )}
 
       {!!data && (
-        <D3ChartWrapper
-          settings={chartSettings}
-          className="rounded-12 self-stretch bg-black"
-          data-testid="price-chart"
-        >
-          {(dms) => (
-            <D3ChartCandlesticks
-              dms={dms}
-              prices={prices}
-              onPriceUpdates={onPriceUpdates}
-              data={data}
-              marketPrice={marketPrice}
-              bounds={bounds}
-              onDragEnd={onPriceUpdatesEnd}
-              isLimit={isLimit}
-              type={simulationType}
-              overlappingSpread={spread}
-            />
-          )}
-        </D3ChartWrapper>
+        <D3PriceHistory
+          className="self-stretch"
+          prices={prices}
+          onPriceUpdates={onPriceUpdates}
+          onDragEnd={onPriceUpdatesEnd}
+          data={data}
+          marketPrice={marketPrice}
+          bounds={bounds}
+          isLimit={isLimit}
+          type={simulationType}
+          overlappingSpread={spread}
+        />
       )}
     </div>
   );
