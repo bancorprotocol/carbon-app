@@ -109,7 +109,7 @@ export const InputRange: FC<InputRangeProps> = ({
             </Tooltip>
             {!!marketPrice && (
               <button
-                className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
                 type="button"
                 onClick={() => setMin(formatNumber(marketPrice.toString()))}
                 data-testid="market-price-min"
@@ -160,7 +160,7 @@ export const InputRange: FC<InputRangeProps> = ({
             </Tooltip>
             {!!marketPrice && (
               <button
-                className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
                 type="button"
                 onClick={() => setMax(formatNumber(marketPrice.toString()))}
                 data-testid="market-price-max"
