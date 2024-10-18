@@ -10,12 +10,24 @@ import {
 } from 'react';
 import { ZoomTransform } from 'd3';
 
+export interface ChartPoint {
+  x: string;
+  y: number;
+}
+
+export interface Drawing {
+  mode: DrawingMode;
+  points: ChartPoint[];
+}
+
 interface D3ChartContext {
   dms: D3ChartSettings;
   xScale: ScaleBand<string>;
   yScale: ScaleLinear<number, number>;
   drawingMode?: DrawingMode;
   setDrawingMode: Dispatch<SetStateAction<DrawingMode>>;
+  drawings: Drawing[];
+  setDrawings: Dispatch<SetStateAction<Drawing[]>>;
   zoom?: ZoomTransform;
 }
 

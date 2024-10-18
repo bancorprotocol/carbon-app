@@ -52,7 +52,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
     yTicks,
   } = props;
 
-  const { dms, xScale, yScale } = useD3ChartCtx();
+  const { dms, yScale } = useD3ChartCtx();
 
   if (!dms.width || !dms.height) return null;
   return (

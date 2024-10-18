@@ -26,3 +26,6 @@ export const isEmpty = (value: any) => {
     (Array.isArray(value) && !value.length)
   );
 };
+
+export const clamp = (min: number, value: number, max: number) =>
+  Math.min(max, Math.max(value, min));

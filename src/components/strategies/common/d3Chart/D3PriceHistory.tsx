@@ -39,6 +39,9 @@ const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
       [-0.5 * dms.width, 0],
       [1.5 * dms.width, 0],
     ])
+    .filter((e: Event) => {
+      return !(e.target as Element).classList.contains('draggable');
+    })
     .on('start', (e: D3ZoomEvent<Element, any>) => (k = e.transform.k))
     .on('zoom', (e: D3ZoomEvent<Element, any>) => {
       if (e.transform.k === k) chartArea.style('cursor', 'grab');
@@ -108,6 +111,8 @@ export const D3PriceHistory: FC<Props> = (props) => {
       dms={dms}
       drawingMode={drawingMode}
       setDrawingMode={setDrawingMode}
+      drawings={drawings}
+      setDrawings={setDrawings}
       xScale={xScale}
       yScale={y.scale}
       zoom={zoomTransform}
