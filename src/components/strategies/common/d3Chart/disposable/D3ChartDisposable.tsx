@@ -21,7 +21,7 @@ export const D3ChartDisposable = ({
   readonly,
   onDragEnd,
 }: Props) => {
-  const { dms, yScale } = useD3ChartCtx();
+  const { yScale } = useD3ChartCtx();
   const onMinMaxChange = useCallback(
     (type: 'buy' | 'sell', min: number, max: number) => {
       const minInverted = yScale.invert(min).toString();
@@ -132,7 +132,6 @@ export const D3ChartDisposable = ({
       onMinMaxChange={onMinMaxChange}
       labels={labels[type]}
       yPos={yPos[type]}
-      dms={dms}
       onDragEnd={onMinMaxChangeEnd}
       isLimit={isLimit[type]}
       readonly={readonly}

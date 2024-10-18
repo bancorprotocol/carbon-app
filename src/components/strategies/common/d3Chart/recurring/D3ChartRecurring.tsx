@@ -20,7 +20,7 @@ export const D3ChartRecurring = ({
   readonly,
   onDragEnd,
 }: Props) => {
-  const { dms, yScale } = useD3ChartCtx();
+  const { yScale } = useD3ChartCtx();
   const onMinMaxChange = useCallback(
     (type: 'buy' | 'sell', min: number, max: number) => {
       const minInverted = yScale.invert(min).toString();
@@ -152,7 +152,6 @@ export const D3ChartRecurring = ({
         onMinMaxChange={onMinMaxChange}
         labels={labels.buy}
         yPos={yPos.buy}
-        dms={dms}
         onDragEnd={onMinMaxChangeEnd}
         isLimit={isLimit.buy}
         readonly={readonly}
@@ -162,7 +161,6 @@ export const D3ChartRecurring = ({
         onMinMaxChange={onMinMaxChange}
         labels={labels.sell}
         yPos={yPos.sell}
-        dms={dms}
         isLimit={isLimit.sell}
         onDragEnd={onMinMaxChangeEnd}
         readonly={readonly}
