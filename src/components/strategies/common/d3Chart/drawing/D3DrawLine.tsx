@@ -101,6 +101,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     const shape = event.currentTarget;
     const area = document.querySelector<SVGElement>('.chart-area')!;
     const root = area.getBoundingClientRect();
+    shape.style.setProperty('cursor', 'grabbing');
     const move = (e: MouseEvent) => {
       if (e.clientX < root.x || e.clientX > root.x + root.width) return;
       if (e.clientY < root.y || e.clientY > root.y + root.height) return;
@@ -120,6 +121,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
         };
       });
       shape.style.removeProperty('transform');
+      shape.style.removeProperty('cursor');
       onChange(points);
     };
     document.addEventListener('mousemove', move);
@@ -132,6 +134,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   ) => {
     event.stopPropagation(); // Prevent mousedown on g
     const circle = event.currentTarget;
+    circle.style.setProperty('cursor', 'grabbing');
     const area = document.querySelector<SVGElement>('.chart-area')!;
     const root = area.getBoundingClientRect();
     const move = (e: MouseEvent) => {
@@ -152,6 +155,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
         x: invertX(x - root.x + width / 2),
         y: invertY(y - root.y + width / 2),
       };
+      circle.style.removeProperty('cursor');
       onChange(points);
     };
     document.addEventListener('mousemove', move);
@@ -170,7 +174,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   ));
   return (
     <g
-      className="draggable group"
+      className="draggable group cursor-grab focus-visible:outline-none"
       onKeyDown={onKeyDown}
       onMouseDown={dragShape}
       tabIndex={0}
