@@ -120,6 +120,12 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       if (e.clientY < root.y || e.clientY > root.y + root.height) return;
       const deltaX = e.clientX - event.clientX;
       const deltaY = e.clientY - event.clientY;
+      for (const { x, y } of initialPoints) {
+        if (x + deltaX < 0) return;
+        if (y + deltaY < 0) return;
+        if (x + deltaX > root.width) return;
+        if (y + deltaY > root.height) return;
+      }
       const points = initialPoints.map(({ x, y }) => ({
         x: invertX(x + deltaX),
         y: invertY(y + deltaY),
