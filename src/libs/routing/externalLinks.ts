@@ -2,7 +2,6 @@ import config from 'config';
 export const externalLinks = {
   analytics: config.externalLinks?.analytics,
   simulatorRepo: config.externalLinks?.simulatorRepo,
-  interactiveSim: config.externalLinks?.interactiveSim,
   duneDashboard: config.externalLinks?.duneDashboard,
   terms: config.appUrl + '/terms',
   privacy: config.appUrl + '/privacy',
