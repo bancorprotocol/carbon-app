@@ -40,7 +40,7 @@ interface Props {
 export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
   const { drawingMode, setDrawingMode } = useD3ChartCtx();
   return (
-    <div className="flex flex-col" role="menubar">
+    <div className="flex flex-col border-e border-white/10" role="menubar">
       <button
         role="menuitemradio"
         aria-checked={!drawingMode}

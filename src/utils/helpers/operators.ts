@@ -1,3 +1,5 @@
+import { SafeDecimal } from 'libs/safedecimal';
+
 /**
  * Utils function used inside a filter for type safety
  * @example
@@ -29,3 +31,7 @@ export const isEmpty = (value: any) => {
 
 export const clamp = (min: number, value: number, max: number) =>
   Math.min(max, Math.max(value, min));
+export const getMin = (...data: (string | number)[]) =>
+  SafeDecimal.min(...data).toNumber();
+export const getMax = (...data: (string | number)[]) =>
+  SafeDecimal.max(...data).toNumber();

@@ -18,7 +18,7 @@ import { getSignedMarketPricePercentage } from '../marketPriceIndication/utils';
 import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import styles from './OverlappingChart.module.css';
-import { clamp } from 'utils/helpers/operators';
+import { clamp, getMax, getMin } from 'utils/helpers/operators';
 
 type Scale = ReturnType<typeof getScale>;
 
@@ -32,8 +32,6 @@ const middle = 40;
 const bottom = 10;
 
 // Utils
-const getMin = (...data: string[]) => SafeDecimal.min(...data).toNumber();
-const getMax = (...data: string[]) => SafeDecimal.max(...data).toNumber();
 const round = (value: number) => Math.round(value * 100) / 100;
 
 const textWidth = (text: string = '') => {
