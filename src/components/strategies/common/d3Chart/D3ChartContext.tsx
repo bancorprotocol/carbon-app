@@ -16,6 +16,7 @@ export interface ChartPoint {
 }
 
 export interface Drawing {
+  id: number;
   mode: DrawingMode;
   points: ChartPoint[];
 }

@@ -6,7 +6,10 @@ export const D3Drawings = () => {
   const { drawings, setDrawings, drawingMode, setDrawingMode, xScale, yScale } =
     useD3ChartCtx();
   const onChange = (points: ChartPoint[]) => {
-    setDrawings((list) => [...list, { mode: drawingMode, points }]);
+    setDrawings((list) => [
+      ...list,
+      { id: Date.now(), mode: drawingMode, points },
+    ]);
     setDrawingMode(undefined);
   };
   const drawProps = { drawingMode, xScale, yScale, onChange };

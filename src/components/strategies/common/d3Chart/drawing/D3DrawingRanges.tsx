@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ChartPoint, useD3ChartCtx } from '../D3ChartContext';
+import { Drawing, useD3ChartCtx } from '../D3ChartContext';
 import { getMax, getMin } from 'utils/helpers/operators';
 import { prettifyNumber } from 'utils/helpers';
 import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
@@ -9,19 +9,24 @@ const rect = {
   h: 24,
 };
 
+export const D3AllDrawingRanges = () => {
+  const { drawings } = useD3ChartCtx();
+  return drawings.map((d, i) => <D3DrawingRanges key={i} drawing={d} />);
+};
+
 interface Props {
-  points: ChartPoint[];
+  drawing: Drawing;
 }
-export const D3DrawingRanges: FC<Props> = ({ points }) => {
-  const xMin = getMin(...points.map((v) => v.x));
-  const xMax = getMax(...points.map((v) => v.x));
-  const yMin = getMin(...points.map((v) => v.y));
-  const yMax = getMax(...points.map((v) => v.y));
+export const D3DrawingRanges: FC<Props> = ({ drawing }) => {
+  const xMin = getMin(...drawing.points.map((v) => v.x));
+  const xMax = getMax(...drawing.points.map((v) => v.x));
+  const yMin = getMin(...drawing.points.map((v) => v.y));
+  const yMax = getMax(...drawing.points.map((v) => v.y));
   return (
-    <>
+    <g id={`ranges-${drawing.id}`} className="hidden">
       <D3DrawingXRange min={xMin.toString()} max={xMax.toString()} />
       <D3DrawingYRange min={yMin} max={yMax} />
-    </>
+    </g>
   );
 };
 
@@ -32,11 +37,11 @@ interface XRangeProps {
 export const D3DrawingXRange: FC<XRangeProps> = ({ min, max }) => {
   const { dms, xScale } = useD3ChartCtx();
   return (
-    <g className="hidden group-focus/drawing:block">
+    <g>
       <rect
         x={xScale(min)}
         y={dms.boundedHeight}
-        height="80"
+        height="40"
         width={xScale(max)! - xScale(min)!}
         fill="var(--primary)"
         fillOpacity="0.3"
@@ -94,11 +99,11 @@ interface YRangeProps {
 export const D3DrawingYRange: FC<YRangeProps> = ({ min, max }) => {
   const { dms, yScale } = useD3ChartCtx();
   return (
-    <g className="hidden group-focus/drawing:block">
+    <g>
       <rect
         x={dms.boundedWidth}
         y={yScale(max)}
-        width="80"
+        width="72"
         height={yScale(min) - yScale(max)}
         fill="var(--primary)"
         fillOpacity="0.3"

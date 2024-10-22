@@ -9,7 +9,6 @@ import {
 } from 'react';
 import { scaleBandInvert } from '../utils';
 import { ChartPoint, Drawing, useD3ChartCtx } from '../D3ChartContext';
-import { D3DrawingRanges } from './D3DrawingRanges';
 
 interface Props {
   xScale: ScaleBand<string>;
@@ -117,17 +116,10 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     });
     shape.style.setProperty('cursor', 'grabbing');
     const move = (e: MouseEvent) => {
-      e.preventDefault(); // Prevent highlight
       if (e.clientX < root.x || e.clientX > root.x + root.width) return;
       if (e.clientY < root.y || e.clientY > root.y + root.height) return;
       const deltaX = e.clientX - event.clientX;
       const deltaY = e.clientY - event.clientY;
-      for (const { x, y } of initialPoints) {
-        if (x + deltaX < 0) return;
-        if (y + deltaY < 0) return;
-        if (x + deltaX > root.width) return;
-        if (y + deltaY > root.height) return;
-      }
       const points = initialPoints.map(({ x, y }) => ({
         x: invertX(x + deltaX),
         y: invertY(y + deltaY),
@@ -191,6 +183,15 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     />
   ));
 
+  const showIndicator = () => {
+    const ranges = document.getElementById(`ranges-${drawing.id}`);
+    ranges?.style.setProperty('display', 'inline');
+  };
+  const hideIndicator = () => {
+    const ranges = document.getElementById(`ranges-${drawing.id}`);
+    ranges?.style.removeProperty('display');
+  };
+
   return (
     <>
       {editing && (
@@ -208,6 +209,8 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
         className="draggable group/drawing cursor-pointer focus-visible:outline-none"
         onKeyDown={onKeyDown}
         onMouseDown={dragShape}
+        onFocus={showIndicator}
+        onBlur={hideIndicator}
         tabIndex={0}
       >
         <line
@@ -221,7 +224,6 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
           strokeWidth="2"
         />
         {circles}
-        <D3DrawingRanges points={drawing.points} />
       </g>
     </>
   );

@@ -12,6 +12,7 @@ import { D3ChartIndicators } from './D3ChartIndicators';
 import { D3Pointer } from './D3Pointer';
 import { D3Drawings } from './drawing/D3Drawings';
 import { useD3ChartCtx } from './D3ChartContext';
+import { D3AllDrawingRanges } from './drawing/D3DrawingRanges';
 
 export type ChartPrices<T = string> = {
   buy: { min: T; max: T };
@@ -67,6 +68,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
         fillOpacity="0"
       />
       {activities?.length && <D3ChartIndicators activities={activities} />}
+      {!activities && <D3Drawings />}
       <XAxis />
       <D3YAxisRight
         ticks={yTicks}
@@ -112,7 +114,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
         />
       )}
       <D3Pointer />
-      {!activities && <D3Drawings />}
+      <D3AllDrawingRanges />
     </>
   );
 };
