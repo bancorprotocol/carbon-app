@@ -4,11 +4,38 @@ import {
   KeyboardEvent,
   MouseEvent as ReactMouseEvent,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import { scaleBandInvert } from '../utils';
 import { ChartPoint, Drawing, useD3ChartCtx } from '../D3ChartContext';
+import { getMax, getMin } from 'utils/helpers/operators';
+
+const getLineProps = (
+  points: ChartPoint[],
+  xScale: ScaleBand<string>,
+  yScale: ScaleLinear<number, number>
+) => {
+  const [a, b] = points;
+  if (a.x === b.x) {
+    return { x1: xScale(a.x), x2: xScale(b.x), y1: 0, y2: 1000 };
+  } else {
+    const xDomain = xScale.domain();
+    const minX = getMin(a.x, b.x);
+    const maxX = getMax(a.x, b.x);
+    const minY = minX === +a.x ? a.y : b.y;
+    const maxY = maxX === +a.x ? a.y : b.y;
+    const coef = (maxY - minY) / (maxX - minX);
+    const fn = (x: string) => (+x - minX) * coef + minY;
+    return {
+      x1: xScale(xDomain[0]),
+      x2: xScale(xDomain.at(-1)!),
+      y1: yScale(fn(xDomain[0])),
+      y2: yScale(fn(xDomain.at(-1)!)),
+    };
+  }
+};
 
 interface Props {
   xScale: ScaleBand<string>;
@@ -16,7 +43,7 @@ interface Props {
   onChange: (points: ChartPoint[]) => any;
 }
 
-export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
+export const D3DrawExtendedLine: FC<Props> = ({ xScale, yScale, onChange }) => {
   const lineRef = useRef<SVGLineElement>(null);
   const { dms } = useD3ChartCtx();
   const [points, setPoints] = useState<ChartPoint[]>([]);
@@ -29,12 +56,17 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
     const root = area!.getBoundingClientRect();
     const handler = (event: MouseEvent) => {
       if (!lineRef.current) return;
-      lineRef.current.setAttribute('x2', `${event.clientX - root.x}`);
-      lineRef.current.setAttribute('y2', `${event.clientY - root.y}`);
+      const x = invertX(event.clientX - root.x);
+      const y = invertY(event.clientY - root.y);
+      const newPoints = [points[0], { x, y }];
+      const props = getLineProps(newPoints, xScale, yScale);
+      for (const [key, value] of Object.entries(props)) {
+        lineRef.current.setAttribute(key, value?.toString() ?? '');
+      }
     };
     area.addEventListener('mousemove', handler as any);
     return () => area.removeEventListener('mousemove', handler as any);
-  }, [points]);
+  }, [invertX, invertY, points, xScale, yScale]);
 
   const addPoint = (event: ReactMouseEvent) => {
     const svg = document.getElementById('interactive-chart')!;
@@ -89,7 +121,7 @@ interface D3ShapeProps {
   onChange: (points: ChartPoint[]) => any;
 }
 
-export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
+export const D3EditExtendedLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   const lineRef = useRef<SVGLineElement>(null);
   const [editing, setEditing] = useState(false);
   const { dms, xScale, yScale } = useD3ChartCtx();
@@ -99,6 +131,11 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   useEffect(() => {
     document.getElementById(`shape-${drawing.id}`)?.focus();
   }, [drawing.id]);
+
+  const lineProps = useMemo(
+    () => getLineProps(drawing.points, xScale, yScale),
+    [drawing.points, xScale, yScale]
+  );
 
   const onKeyDown = (event: KeyboardEvent) => {
     const deleteKeys = ['Delete', 'Backspace', 'Clear'];
@@ -221,12 +258,9 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
         <line
           className="draggable"
           ref={lineRef}
-          x1={xScale(drawing.points[0].x)}
-          x2={xScale(drawing.points[1].x)}
-          y1={yScale(drawing.points[0].y)}
-          y2={yScale(drawing.points[1].y)}
           stroke="var(--primary)"
           strokeWidth="2"
+          {...lineProps}
         />
         {circles}
       </g>

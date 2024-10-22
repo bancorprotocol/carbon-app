@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { D3DrawLine, D3EditLine } from './D3DrawLine';
 import { ChartPoint, Drawing, useD3ChartCtx } from '../D3ChartContext';
+import { D3DrawExtendedLine, D3EditExtendedLine } from './D3DrawExtendedLine';
 
 export const D3Drawings = () => {
   const { drawings, setDrawings, drawingMode, setDrawingMode, xScale, yScale } =
@@ -29,6 +30,7 @@ export const D3Drawings = () => {
         <D3Shape key={i} drawing={drawing} onChange={(p) => editShape(i, p)} />
       ))}
       {drawingMode === 'line' && <D3DrawLine {...drawProps} />}
+      {drawingMode === 'extended-line' && <D3DrawExtendedLine {...drawProps} />}
     </>
   );
 };
@@ -41,5 +43,8 @@ interface D3ShapeProps {
 const D3Shape: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   if (drawing.mode === 'line') {
     return <D3EditLine drawing={drawing} onChange={onChange} />;
+  }
+  if (drawing.mode === 'extended-line') {
+    return <D3EditExtendedLine drawing={drawing} onChange={onChange} />;
   }
 };
