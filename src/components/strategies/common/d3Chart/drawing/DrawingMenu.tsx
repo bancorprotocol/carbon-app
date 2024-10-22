@@ -45,10 +45,10 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
         role="menuitemradio"
         aria-checked={!drawingMode}
         aria-label="selection mode"
-        className="hover:bg-background-700 rounded-8 aria-checked:bg-background-800 p-8"
+        className="hover:bg-background-700 rounded-8 aria-checked:text-primary p-8"
         onClick={() => setDrawingMode(undefined)}
       >
-        <IconIndicator className="size-24" />
+        <IconIndicator className="size-24 " />
       </button>
       {Object.entries(drawings).map(([mode, content]) => (
         <button
@@ -56,7 +56,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
           role="menuitemradio"
           aria-checked={drawingMode === mode}
           aria-label={content.label}
-          className="hover:bg-background-700 rounded-8 aria-checked:bg-background-800 p-8"
+          className="hover:bg-background-700 rounded-8 aria-checked:text-primary p-8"
           onClick={() => setDrawingMode(mode as DrawingMode)}
         >
           {content.icon}
