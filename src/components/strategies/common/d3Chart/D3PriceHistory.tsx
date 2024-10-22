@@ -18,6 +18,7 @@ import { TradeTypes } from 'libs/routing/routes/trade';
 import { Activity } from 'libs/queries/extApi/activity';
 import { getDomain } from './utils';
 import { cn } from 'utils/helpers';
+import style from './D3PriceHistory.module.css';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -119,7 +120,11 @@ export const D3PriceHistory: FC<Props> = (props) => {
     >
       <div className={cn('rounded-12 flex flex-1 bg-black', className)}>
         <DrawingMenu clearDrawings={() => setDrawings([])} />
-        <svg ref={ref} id="interactive-chart" className="flex-1">
+        <svg
+          ref={ref}
+          id="interactive-chart"
+          className={cn(style.historyChart, 'flex-1')}
+        >
           <defs>
             <linearGradient id="svg-brand-gradient" x1="0" x2="0" y1="0" y2="1">
               <stop offset="0%" stopColor="var(--gradient-first)" />

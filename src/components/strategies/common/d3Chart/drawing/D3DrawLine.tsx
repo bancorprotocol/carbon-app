@@ -66,8 +66,10 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
           y1={yScale(points[0].y)}
           x2={xScale(points[0].x)}
           y2={yScale(points[0].y)}
-          stroke="white"
+          stroke="var(--primary)"
           strokeWidth="2"
+          // click event not bubbled in SVG, line was blocking the addPoint
+          className="pointer-events-none"
         />
       )}
       {points.map(({ x, y }) => (
@@ -76,7 +78,7 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
           cx={xScale(x)}
           cy={yScale(y)}
           r="5"
-          fill="white"
+          fill="var(--primary)"
         />
       ))}
     </>
@@ -203,7 +205,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
         />
       )}
       <g
-        className="draggable group/drawing cursor-grab focus-visible:outline-none"
+        className="draggable group/drawing cursor-pointer focus-visible:outline-none"
         onKeyDown={onKeyDown}
         onMouseDown={dragShape}
         tabIndex={0}

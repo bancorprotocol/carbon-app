@@ -48,7 +48,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
         className="hover:bg-background-700 rounded-8 aria-checked:text-primary p-8"
         onClick={() => setDrawingMode(undefined)}
       >
-        <IconIndicator className="size-24 " />
+        <IconIndicator className="size-24" />
       </button>
       {Object.entries(drawings).map(([mode, content]) => (
         <button
