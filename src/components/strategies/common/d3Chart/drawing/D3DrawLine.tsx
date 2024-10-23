@@ -90,7 +90,7 @@ interface D3ShapeProps {
 }
 
 export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
-  const lineRef = useRef<SVGLineElement>(null);
+  const ref = useRef<SVGLineElement>(null);
   const [editing, setEditing] = useState(false);
   const { dms, xScale, yScale } = useD3ChartCtx();
   const invertX = scaleBandInvert(xScale);
@@ -220,7 +220,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       >
         <line
           className="draggable"
-          ref={lineRef}
+          ref={ref}
           x1={xScale(drawing.points[0].x)}
           x2={xScale(drawing.points[1].x)}
           y1={yScale(drawing.points[0].y)}

@@ -4,38 +4,11 @@ import {
   KeyboardEvent,
   MouseEvent as ReactMouseEvent,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
 import { scaleBandInvert } from '../utils';
 import { ChartPoint, Drawing, useD3ChartCtx } from '../D3ChartContext';
-import { getMax, getMin } from 'utils/helpers/operators';
-
-const getLineProps = (
-  points: ChartPoint[],
-  xScale: ScaleBand<string>,
-  yScale: ScaleLinear<number, number>
-) => {
-  const [a, b] = points;
-  if (a.x === b.x) {
-    return { x1: xScale(a.x), x2: xScale(b.x), y1: 0, y2: 1000 };
-  } else {
-    const xDomain = xScale.domain();
-    const minX = getMin(a.x, b.x);
-    const maxX = getMax(a.x, b.x);
-    const minY = minX === +a.x ? a.y : b.y;
-    const maxY = maxX === +a.x ? a.y : b.y;
-    const coef = (maxY - minY) / (maxX - minX);
-    const fn = (x: string) => (+x - minX) * coef + minY;
-    return {
-      x1: xScale(xDomain[0]),
-      x2: xScale(xDomain.at(-1)!),
-      y1: yScale(fn(xDomain[0])),
-      y2: yScale(fn(xDomain.at(-1)!)),
-    };
-  }
-};
 
 interface Props {
   xScale: ScaleBand<string>;
@@ -43,26 +16,31 @@ interface Props {
   onChange: (points: ChartPoint[]) => any;
 }
 
-export const D3DrawExtendedLine: FC<Props> = ({ xScale, yScale, onChange }) => {
-  const ref = useRef<SVGLineElement>(null);
+const polygonPoints = (
+  points: ChartPoint[],
+  xScale: ScaleBand<string>,
+  yScale: ScaleLinear<number, number>
+) => {
+  return points.map(({ x, y }) => `${xScale(x)},${yScale(y)}`).join(' ');
+};
+
+export const D3DrawTriangle: FC<Props> = ({ xScale, yScale, onChange }) => {
+  const ref = useRef<SVGPolygonElement>(null);
   const { dms } = useD3ChartCtx();
   const [points, setPoints] = useState<ChartPoint[]>([]);
   const invertX = scaleBandInvert(xScale);
   const invertY = yScale.invert;
 
   useEffect(() => {
-    if (points.length !== 1) return;
+    if (!points.length) return;
     const area = document.querySelector<SVGElement>('.chart-drawing-canvas')!;
     const root = area!.getBoundingClientRect();
     const handler = (event: MouseEvent) => {
       if (!ref.current) return;
       const x = invertX(event.clientX - root.x);
       const y = invertY(event.clientY - root.y);
-      const newPoints = [points[0], { x, y }];
-      const props = getLineProps(newPoints, xScale, yScale);
-      for (const [key, value] of Object.entries(props)) {
-        ref.current.setAttribute(key, value?.toString() ?? '');
-      }
+      const newPoints = polygonPoints([...points, { x, y }], xScale, yScale);
+      ref.current.setAttribute('points', newPoints);
     };
     area.addEventListener('mousemove', handler as any);
     return () => area.removeEventListener('mousemove', handler as any);
@@ -74,9 +52,11 @@ export const D3DrawExtendedLine: FC<Props> = ({ xScale, yScale, onChange }) => {
     const x = invertX(event.clientX - root.x);
     const y = invertY(event.clientY - root.y);
     const line = [...points, { x, y }];
-    if (line.length === 2) onChange(line);
+    if (line.length === 3) onChange(line);
     setPoints(line);
   };
+
+  const polygon = polygonPoints(points, xScale, yScale);
 
   return (
     <>
@@ -91,14 +71,13 @@ export const D3DrawExtendedLine: FC<Props> = ({ xScale, yScale, onChange }) => {
         onClick={addPoint}
       />
       {!!points.length && (
-        <line
+        <polygon
           ref={ref}
-          x1={xScale(points[0].x)}
-          y1={yScale(points[0].y)}
-          x2={xScale(points[0].x)}
-          y2={yScale(points[0].y)}
+          points={polygon}
           stroke="var(--primary)"
           strokeWidth="2"
+          fill="var(--primary)"
+          fillOpacity="0.4"
           // click event not bubbled in SVG, line was blocking the addPoint
           className="pointer-events-none"
         />
@@ -121,8 +100,8 @@ interface D3ShapeProps {
   onChange: (points: ChartPoint[]) => any;
 }
 
-export const D3EditExtendedLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
-  const lineRef = useRef<SVGLineElement>(null);
+export const D3EditTriangle: FC<D3ShapeProps> = ({ drawing, onChange }) => {
+  const ref = useRef<SVGPolygonElement>(null);
   const [editing, setEditing] = useState(false);
   const { dms, xScale, yScale } = useD3ChartCtx();
   const invertX = scaleBandInvert(xScale);
@@ -131,11 +110,6 @@ export const D3EditExtendedLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   useEffect(() => {
     document.getElementById(`shape-${drawing.id}`)?.focus();
   }, [drawing.id]);
-
-  const lineProps = useMemo(
-    () => getLineProps(drawing.points, xScale, yScale),
-    [drawing.points, xScale, yScale]
-  );
 
   const onKeyDown = (event: KeyboardEvent) => {
     const deleteKeys = ['Delete', 'Backspace', 'Clear'];
@@ -233,6 +207,8 @@ export const D3EditExtendedLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     ranges?.style.removeProperty('display');
   };
 
+  const polygon = polygonPoints(drawing.points, xScale, yScale);
+
   return (
     <>
       {editing && (
@@ -255,12 +231,14 @@ export const D3EditExtendedLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
         onBlur={hideIndicator}
         tabIndex={0}
       >
-        <line
+        <polygon
           className="draggable"
-          ref={lineRef}
+          ref={ref}
+          points={polygon}
           stroke="var(--primary)"
           strokeWidth="2"
-          {...lineProps}
+          fill="var(--primary)"
+          fillOpacity="0.4"
         />
         {circles}
       </g>

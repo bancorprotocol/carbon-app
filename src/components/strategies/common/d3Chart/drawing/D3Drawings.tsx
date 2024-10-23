@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { D3DrawLine, D3EditLine } from './D3DrawLine';
 import { ChartPoint, Drawing, useD3ChartCtx } from '../D3ChartContext';
 import { D3DrawExtendedLine, D3EditExtendedLine } from './D3DrawExtendedLine';
+import { D3DrawTriangle, D3EditTriangle } from './D3DrawTriangle';
 
 export const D3Drawings = () => {
   const { drawings, setDrawings, drawingMode, setDrawingMode, xScale, yScale } =
@@ -30,6 +31,7 @@ export const D3Drawings = () => {
         <D3Shape key={i} drawing={drawing} onChange={(p) => editShape(i, p)} />
       ))}
       {drawingMode === 'line' && <D3DrawLine {...drawProps} />}
+      {drawingMode === 'triangle' && <D3DrawTriangle {...drawProps} />}
       {drawingMode === 'extended-line' && <D3DrawExtendedLine {...drawProps} />}
     </>
   );
@@ -40,11 +42,9 @@ interface D3ShapeProps {
   onChange: (points: ChartPoint[]) => any;
 }
 
-const D3Shape: FC<D3ShapeProps> = ({ drawing, onChange }) => {
-  if (drawing.mode === 'line') {
-    return <D3EditLine drawing={drawing} onChange={onChange} />;
-  }
-  if (drawing.mode === 'extended-line') {
-    return <D3EditExtendedLine drawing={drawing} onChange={onChange} />;
-  }
+const D3Shape: FC<D3ShapeProps> = (props) => {
+  const mode = props.drawing.mode;
+  if (mode === 'line') return <D3EditLine {...props} />;
+  if (mode === 'triangle') return <D3EditTriangle {...props} />;
+  if (mode === 'extended-line') return <D3EditExtendedLine {...props} />;
 };
