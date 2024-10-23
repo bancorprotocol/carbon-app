@@ -147,7 +147,6 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     setEditing(true);
     const circle = event.currentTarget;
     circle.style.setProperty('cursor', 'grabbing');
-    circle.style.setProperty('fill', 'white');
     const box = circle.getBoundingClientRect();
     const area = document.querySelector<SVGElement>('.chart-area')!;
     const root = area.getBoundingClientRect();
@@ -155,7 +154,6 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     const initialY = box.y - root.y + box.width / 2;
     const points = structuredClone(drawing.points);
     const move = (e: MouseEvent) => {
-      e.preventDefault(); // Prevent highlight
       if (e.clientX < root.x || e.clientX > root.x + root.width) return;
       if (e.clientY < root.y || e.clientY > root.y + root.height) return;
       const deltaX = e.clientX - event.clientX;
@@ -169,7 +167,6 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     const dragEnd = () => {
       document.removeEventListener('mousemove', move);
       circle.style.removeProperty('cursor');
-      circle.style.removeProperty('fill');
       setEditing(false);
     };
     document.addEventListener('mousemove', move);

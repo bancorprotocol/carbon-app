@@ -3,6 +3,7 @@ import { D3DrawLine, D3EditLine } from './D3DrawLine';
 import { ChartPoint, Drawing, useD3ChartCtx } from '../D3ChartContext';
 import { D3DrawExtendedLine, D3EditExtendedLine } from './D3DrawExtendedLine';
 import { D3DrawTriangle, D3EditTriangle } from './D3DrawTriangle';
+import { D3DrawRect, D3EditRect } from './D3DrawRect';
 
 export const D3Drawings = () => {
   const { drawings, setDrawings, drawingMode, setDrawingMode, xScale, yScale } =
@@ -32,6 +33,7 @@ export const D3Drawings = () => {
       ))}
       {drawingMode === 'line' && <D3DrawLine {...drawProps} />}
       {drawingMode === 'triangle' && <D3DrawTriangle {...drawProps} />}
+      {drawingMode === 'rectangle' && <D3DrawRect {...drawProps} />}
       {drawingMode === 'extended-line' && <D3DrawExtendedLine {...drawProps} />}
     </>
   );
@@ -46,5 +48,6 @@ const D3Shape: FC<D3ShapeProps> = (props) => {
   const mode = props.drawing.mode;
   if (mode === 'line') return <D3EditLine {...props} />;
   if (mode === 'triangle') return <D3EditTriangle {...props} />;
+  if (mode === 'rectangle') return <D3EditRect {...props} />;
   if (mode === 'extended-line') return <D3EditExtendedLine {...props} />;
 };
