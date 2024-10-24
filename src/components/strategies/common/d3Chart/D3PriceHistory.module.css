@@ -1,0 +1,4 @@
+.history-chart:has(:global(.draggable):focus) text {
+  -webkit-user-select: none;
+  user-select: none;
+}

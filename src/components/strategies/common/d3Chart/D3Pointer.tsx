@@ -1,8 +1,9 @@
 import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
 import { ScaleBand, ScaleLinear } from 'd3';
-import { D3ChartSettings } from 'libs/d3';
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { prettifyNumber } from 'utils/helpers';
+import { scaleBandInvert } from './utils';
+import { useD3ChartCtx } from './D3ChartContext';
 
 const rect = {
   w: 72,
@@ -14,15 +15,6 @@ const usePointerPosition = (
   yScale: ScaleLinear<number, number, never>
 ) => {
   const [position, setPosition] = useState<{ x: string; y: number }>();
-  function scaleBandInvert(scale: ScaleBand<string>) {
-    var domain = scale.domain();
-    var paddingOuter = scale(domain[0]) ?? 0;
-    var eachBand = scale.step();
-    return function (value: number) {
-      var index = Math.floor((value - paddingOuter) / eachBand);
-      return domain[Math.max(0, Math.min(index, domain.length - 1))];
-    };
-  }
   useEffect(() => {
     const invert = scaleBandInvert(xScale);
     const chart = document.querySelector<HTMLElement>('.chart-area');
@@ -48,13 +40,8 @@ const usePointerPosition = (
   return position;
 };
 
-interface Props {
-  dms: D3ChartSettings;
-  xScale: ScaleBand<string>;
-  yScale: ScaleLinear<number, number, never>;
-}
-
-export const D3Pointer: FC<Props> = ({ dms, xScale, yScale }) => {
+export const D3Pointer = () => {
+  const { dms, xScale, yScale } = useD3ChartCtx();
   const position = usePointerPosition(xScale, yScale);
   if (!position) return;
   return (

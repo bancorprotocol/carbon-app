@@ -4,10 +4,10 @@ import {
   FloatTooltipTrigger,
 } from 'components/common/tooltip/FloatTooltip';
 import { endOfWeek, isSameDay, isSameWeek, startOfWeek } from 'date-fns';
-import { ScaleBand, ScaleLinear } from 'libs/d3';
 import { Activity } from 'libs/queries/extApi/activity';
 import { SafeDecimal } from 'libs/safedecimal';
 import { FC, ReactNode } from 'react';
+import { useD3ChartCtx } from './D3ChartContext';
 
 interface Indicator {
   x: number;
@@ -57,14 +57,12 @@ const groupByIndicators = (activities: Activity[], domain: string[]) => {
 };
 
 export interface D3ChartIndicatorsProps {
-  xScale: ScaleBand<string>;
-  yScale: ScaleLinear<number, number>;
-  boundHeight: number;
   activities: Activity[];
 }
 
-export const D3ChartIndicators = (props: D3ChartIndicatorsProps) => {
-  const { xScale, yScale, boundHeight: height, activities } = props;
+export const D3ChartIndicators = ({ activities }: D3ChartIndicatorsProps) => {
+  const { xScale, yScale, dms } = useD3ChartCtx();
+  const height = dms.boundedHeight;
   const { operations, trades } = groupByIndicators(activities, xScale.domain());
   return (
     <>
