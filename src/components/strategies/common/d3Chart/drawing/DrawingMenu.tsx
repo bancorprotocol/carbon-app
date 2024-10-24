@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { ReactComponent as IconIndicator } from 'assets/icons/draw-indicator.svg';
 import { ReactComponent as IconLine } from 'assets/icons/draw-line.svg';
 import { ReactComponent as IconExtendedLine } from 'assets/icons/draw-extended-line.svg';
-// import { ReactComponent as IconChannel } from 'assets/icons/draw-parallel-line.svg';
+import { ReactComponent as IconChannel } from 'assets/icons/draw-channel.svg';
 import { ReactComponent as IconTriangle } from 'assets/icons/draw-triangle.svg';
 import { ReactComponent as IconRectangle } from 'assets/icons/draw-rectangle.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
@@ -19,10 +19,10 @@ const drawings = {
     icon: <IconExtendedLine className="size-24" />,
     label: 'Draw Extended Line',
   },
-  // channel: {
-  //   icon: <IconChannel className="size-24" />,
-  //   label: 'Draw Parallel Line',
-  // },
+  channel: {
+    icon: <IconChannel className="size-24" />,
+    label: 'Draw Parallel Line',
+  },
   triangle: {
     icon: <IconTriangle className="size-24" />,
     label: 'Draw Triangle',

@@ -103,7 +103,7 @@ export const D3DrawingYRange: FC<YRangeProps> = ({ min, max }) => {
       <rect
         x={dms.boundedWidth}
         y={yScale(max)}
-        width="72"
+        width="80"
         height={yScale(min) - yScale(max)}
         fill="var(--primary)"
         fillOpacity="0.3"
