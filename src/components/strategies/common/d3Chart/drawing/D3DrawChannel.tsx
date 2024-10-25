@@ -45,10 +45,7 @@ const toPolygonPoints = (
 };
 
 /** Get the polygon point out of a mouse delta & a base line */
-const getPolygonPoints = (
-  line: SVGLineElement,
-  delta: { x: number; y: number }
-) => {
+const getPolygonPoints = (line: SVGLineElement, deltaY: number) => {
   const x1 = line.x1.baseVal.value;
   const x2 = line.x2.baseVal.value;
   const y1 = line.y1.baseVal.value;
@@ -56,8 +53,8 @@ const getPolygonPoints = (
   const points = [
     [x1, y1],
     [x2, y2],
-    [x2 + delta.x, y2 + delta.y],
-    [x1 + delta.x, y1 + delta.y],
+    [x2, y2 + deltaY],
+    [x1, y1 + deltaY],
   ];
   return points.map(([x, y]) => `${x},${y}`).join(' ');
 };
@@ -109,13 +106,10 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
       const handler = (e: MouseEvent) => {
         if (!secondLineRef.current) return;
         const secondLine = secondLineRef.current;
-        const delta = {
-          x: e.clientX - event.clientX,
-          y: e.clientY - event.clientY,
-        };
-        const translate = `translate(${delta.x}, ${delta.y})`;
+        const deltaY = e.clientY - event.clientY;
+        const translate = `translate(0, ${deltaY})`;
         secondLine.setAttribute('transform', translate);
-        const polygonPoint = getPolygonPoints(secondLine, delta);
+        const polygonPoint = getPolygonPoints(secondLine, deltaY);
         polygonRef.current?.setAttribute('points', polygonPoint);
       };
       document.addEventListener('mousemove', handler);
@@ -312,14 +306,9 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     const move = (e: MouseEvent) => {
       if (e.clientX < root.x || e.clientX > root.x + root.width) return;
       if (e.clientY < root.y || e.clientY > root.y + root.height) return;
-      const deltaX = e.clientX - event.clientX;
       const deltaY = e.clientY - event.clientY;
-      console.log(circleIndexes);
       for (const i of circleIndexes) {
-        newPoints[i] = {
-          x: invertX(initialPoints[i].x + deltaX),
-          y: invertY(initialPoints[i].y + deltaY),
-        };
+        newPoints[i].y = invertY(initialPoints[i].y + deltaY);
       }
       onChange(newPoints);
     };
