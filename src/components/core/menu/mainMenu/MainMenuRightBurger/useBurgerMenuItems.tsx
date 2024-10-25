@@ -164,13 +164,6 @@ export const useBurgerMenuItems = () => {
       ),
     },
     {
-      content: externalLinks.interactiveSim && (
-        <NewTabLink className="flex" to={externalLinks.interactiveSim}>
-          Interactive Simulator
-        </NewTabLink>
-      ),
-    },
-    {
       content: externalLinks.duneDashboard && (
         <NewTabLink className="flex" to={externalLinks.duneDashboard}>
           Dune Dashboard

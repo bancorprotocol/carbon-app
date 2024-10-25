@@ -29,7 +29,6 @@ export const commonConfig: AppConfig = {
   carbonApi: 'https://api.carbondefi.xyz/v1/',
   externalLinks: {
     analytics: 'http://analytics.carbondefi.xyz',
-    interactiveSim: 'https://simulator.carbondefi.xyz/',
     simulatorRepo: 'https://github.com/bancorprotocol/carbon-simulator',
     duneDashboard: 'https://dune.com/bancor/carbon-by-bancor',
   },
