@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { scaleBandInvert } from '../utils';
 import { ChartPoint, Drawing, useD3ChartCtx } from '../D3ChartContext';
+import { getAreaBox, getDelta, getEdges, getInitialPoints } from './utils';
 
 interface Props {
   xScale: ScaleBand<string>;
@@ -217,13 +218,11 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     });
     shape.style.setProperty('cursor', 'grabbing');
     const move = (e: MouseEvent) => {
-      if (e.clientX < root.x || e.clientX > root.x + root.width) return;
-      if (e.clientY < root.y || e.clientY > root.y + root.height) return;
-      const deltaX = e.clientX - event.clientX;
-      const deltaY = e.clientY - event.clientY;
+      const delta = getDelta(root, event, e);
+      if (!delta) return;
       const points = initialPoints.map(({ x, y }) => ({
-        x: invertX(x + deltaX),
-        y: invertY(y + deltaY),
+        x: invertX(x + delta.x),
+        y: invertY(y + delta.y),
       }));
       onChange(points);
     };
@@ -242,36 +241,24 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   ) => {
     event.stopPropagation(); // Prevent mousedown on g
     setEditing(true);
-    const shape = document.getElementById(`shape-${drawing.id}`)!;
-    const allCircles = Array.from(
-      shape.querySelectorAll<SVGElement>('circle.edge')
-    );
+    const allCircles = getEdges(drawing.id);
     const circle = allCircles[index];
     const matchingIndex = (index + 2) % 4;
     circle.style.setProperty('cursor', 'grabbing');
 
-    const area = document.querySelector<SVGElement>('.chart-area')!;
-    const root = area.getBoundingClientRect();
-    const initialPoints = allCircles.map((c) => {
-      const { x, y, width } = c.getBoundingClientRect();
-      return {
-        x: x - root.x + width / 2,
-        y: y - root.y + width / 2,
-      };
-    });
+    const root = getAreaBox();
+    const initialPoints = getInitialPoints(root, allCircles);
     const newPoints = structuredClone(points);
     const move = (e: MouseEvent) => {
-      if (e.clientX < root.x || e.clientX > root.x + root.width) return;
-      if (e.clientY < root.y || e.clientY > root.y + root.height) return;
-      const deltaX = e.clientX - event.clientX;
-      const deltaY = e.clientY - event.clientY;
+      const delta = getDelta(root, event, e);
+      if (!delta) return;
       newPoints[index] = {
-        x: invertX(initialPoints[index].x + deltaX),
-        y: invertY(initialPoints[index].y + deltaY),
+        x: invertX(initialPoints[index].x + delta.x),
+        y: invertY(initialPoints[index].y + delta.y),
       };
       newPoints[matchingIndex] = {
-        x: invertX(initialPoints[matchingIndex].x + deltaX),
-        y: invertY(initialPoints[matchingIndex].y + deltaY),
+        x: invertX(initialPoints[matchingIndex].x + delta.x),
+        y: invertY(initialPoints[matchingIndex].y + delta.y),
       };
       onChange(newPoints);
     };
@@ -287,28 +274,16 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   const dragCenter = (event: ReactMouseEvent, index: number) => {
     event.stopPropagation(); // Prevent mousedown on g
     setEditing(true);
-    const shape = document.getElementById(`shape-${drawing.id}`)!;
-    const allCircles = Array.from(
-      shape.querySelectorAll<SVGElement>('circle.edge')
-    );
+    const allCircles = getEdges(drawing.id);
     const circleIndexes = index === 0 ? [0, 1] : [2, 3];
-
-    const area = document.querySelector<SVGElement>('.chart-area')!;
-    const root = area.getBoundingClientRect();
-    const initialPoints = allCircles.map((c) => {
-      const { x, y, width } = c.getBoundingClientRect();
-      return {
-        x: x - root.x + width / 2,
-        y: y - root.y + width / 2,
-      };
-    });
+    const root = getAreaBox();
+    const initialPoints = getInitialPoints(root, allCircles);
     const newPoints = structuredClone(points);
     const move = (e: MouseEvent) => {
-      if (e.clientX < root.x || e.clientX > root.x + root.width) return;
-      if (e.clientY < root.y || e.clientY > root.y + root.height) return;
-      const deltaY = e.clientY - event.clientY;
+      const delta = getDelta(root, event, e);
+      if (!delta) return;
       for (const i of circleIndexes) {
-        newPoints[i].y = invertY(initialPoints[i].y + deltaY);
+        newPoints[i].y = invertY(initialPoints[i].y + delta.y);
       }
       onChange(newPoints);
     };

@@ -10,6 +10,7 @@ import {
 import { scaleBandInvert } from '../utils';
 import { ChartPoint, Drawing, useD3ChartCtx } from '../D3ChartContext';
 import { getMax, getMin } from 'utils/helpers/operators';
+import { getAreaBox, getDelta, getEdges, getInitialPoints } from './utils';
 
 const getRectPoints = (points: ChartPoint[]) => {
   const minX = getMin(...points.map((p) => p.x)).toString();
@@ -145,25 +146,16 @@ export const D3EditRect: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   const dragShape = (event: ReactMouseEvent<SVGGElement>) => {
     setEditing(true);
     const shape = event.currentTarget;
-    const area = document.querySelector<SVGElement>('.chart-area')!;
-    const circles = Array.from(shape.querySelectorAll('circle'));
-    const root = area.getBoundingClientRect();
-    const initialPoints = circles.map((c) => {
-      const { x, y, width } = c.getBoundingClientRect();
-      return {
-        x: x - root.x + width / 2,
-        y: y - root.y + width / 2,
-      };
-    });
+    const circles = getEdges(drawing.id);
+    const root = getAreaBox();
+    const initialPoints = getInitialPoints(root, circles);
     shape.style.setProperty('cursor', 'grabbing');
     const move = (e: MouseEvent) => {
-      if (e.clientX < root.x || e.clientX > root.x + root.width) return;
-      if (e.clientY < root.y || e.clientY > root.y + root.height) return;
-      const deltaX = e.clientX - event.clientX;
-      const deltaY = e.clientY - event.clientY;
+      const delta = getDelta(root, event, e);
+      if (!delta) return;
       const points = initialPoints.map(({ x, y }) => ({
-        x: invertX(x + deltaX),
-        y: invertY(y + deltaY),
+        x: invertX(x + delta.x),
+        y: invertY(y + delta.y),
       }));
       const [min, , , max] = getRectPoints(points);
       onChange([min, max]);
@@ -186,23 +178,20 @@ export const D3EditRect: FC<D3ShapeProps> = ({ drawing, onChange }) => {
     const circle = event.currentTarget;
     circle.style.setProperty('cursor', 'grabbing');
     const box = circle.getBoundingClientRect();
-    const area = document.querySelector<SVGElement>('.chart-area')!;
-    const root = area.getBoundingClientRect();
+    const root = getAreaBox();
     const initialX = box.x - root.x + box.width / 2;
     const initialY = box.y - root.y + box.width / 2;
     const points = structuredClone(rectPoints);
     const move = (e: MouseEvent) => {
-      if (e.clientX < root.x || e.clientX > root.x + root.width) return;
-      if (e.clientY < root.y || e.clientY > root.y + root.height) return;
-      const deltaX = e.clientX - event.clientX;
-      const deltaY = e.clientY - event.clientY;
+      const delta = getDelta(root, event, e);
+      if (!delta) return;
       const opposite = points.find((p) => {
         return p.x !== points[index].x && p.y !== points[index].y;
       });
       if (!opposite) return;
       const newPoint = {
-        x: invertX(initialX + deltaX),
-        y: invertY(initialY + deltaY),
+        x: invertX(initialX + delta.x),
+        y: invertY(initialY + delta.y),
       };
       onChange([opposite, newPoint]);
     };
@@ -221,7 +210,7 @@ export const D3EditRect: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       cy={yScale(y)}
       r="5"
       fill="var(--primary)"
-      className="draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
+      className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
   ));
