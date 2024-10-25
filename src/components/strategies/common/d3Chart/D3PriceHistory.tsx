@@ -124,6 +124,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
           ref={ref}
           id="interactive-chart"
           className={cn(style.historyChart, 'flex-1')}
+          data-testid="price-chart"
         >
           <defs>
             <linearGradient id="svg-brand-gradient" x1="0" x2="0" y1="0" y2="1">
