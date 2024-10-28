@@ -23,8 +23,13 @@ import {
 } from 'd3';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { Activity } from 'libs/queries/extApi/activity';
-import { getDomain } from './utils';
+import { getDomain, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
+import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
+import { defaultEndDate, defaultStartDate } from '../utils';
+import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
+import { addDays, differenceInDays, startOfDay } from 'date-fns';
+import { toUnixUTC } from 'components/simulator/utils';
 import style from './D3PriceHistory.module.css';
 
 const chartSettings: D3ChartSettingsProps = {
@@ -63,15 +68,15 @@ const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
     .on('end', () => chartArea.style('cursor', ''));
   selection.call(zoomHandler);
 
-  const zoomIn = (days: number) => {
+  const zoomRange = (from: string, days: number) => {
     const scale = data.length / days;
-    const date = data.at(days * -1)!.date.toString();
-    const translateX = baseXScale(date)!;
+    const translateX = baseXScale(from)!;
     const transition = selection.transition().duration(500);
     const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
     zoomHandler.transform(transition, transform);
   };
-  return { transform, zoomIn };
+
+  return { transform, zoomRange };
 };
 
 const getDateRange = (range: number[]) => {
@@ -114,7 +119,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
   const [drawings, setDrawings] = useState<any[]>([]);
   const [ref, dms] = useChartDimensions(chartSettings);
-  const { transform: zoomTransform, zoomIn } = useZoom(dms, data);
+  const { transform: zoomTransform, zoomRange } = useZoom(dms, data);
 
   const xScale = useMemo(() => {
     const zoomX = (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d);
@@ -134,6 +139,18 @@ export const D3PriceHistory: FC<Props> = (props) => {
     range: [dms.boundedHeight, 0],
     domainTolerance: 0.1,
   });
+  const invertX = scaleBandInvert(xScale);
+  const start = new Date(Number(invertX(0) ?? xScale.domain()[0]) * 1000);
+  const end = addDays(start, data.length / (zoomTransform?.k ?? 1));
+
+  const zoomFromTo = ({ start, end }: { start?: Date; end?: Date }) => {
+    if (!start || !end) return;
+    zoomRange(toUnixUTC(startOfDay(start)), differenceInDays(end, start));
+  };
+
+  const zoomIn = (days: number) => {
+    zoomRange(data.at(days * -1)!.date.toString(), days);
+  };
 
   return (
     <D3ChartProvider
@@ -185,10 +202,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               />
             </g>
           </svg>
-          <div
-            role="menubar"
-            className="col-span-2 flex border-t border-white/10"
-          >
+          <div className="col-span-2 flex border-t border-white/10">
             {presetDays.map(({ days, label }) => (
               <button
                 key={days}
@@ -199,6 +213,18 @@ export const D3PriceHistory: FC<Props> = (props) => {
                 {label}
               </button>
             ))}
+            <hr className="h-full border-e border-white/10" />
+            <DateRangePicker
+              className="rounded-8 border-0"
+              defaultStart={defaultStartDate()}
+              defaultEnd={defaultEndDate()}
+              start={start}
+              end={end}
+              onConfirm={zoomFromTo}
+              options={{
+                disabled: datePickerDisabledDays,
+              }}
+            />
           </div>
         </div>
       </div>

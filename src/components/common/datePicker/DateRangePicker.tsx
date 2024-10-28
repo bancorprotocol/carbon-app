@@ -39,11 +39,12 @@ interface Props {
   end?: Date;
   onConfirm: (props: { start?: Date; end?: Date }) => void;
   setIsOpen: Dispatch<boolean>;
-  presets: DatePickerPreset[];
+  presets?: DatePickerPreset[];
   options?: Omit<CalendarProps, 'mode' | 'selected' | 'onSelect'>;
   required?: boolean;
   form?: string;
   disabled?: boolean;
+  className?: string;
 }
 
 const displayRange = (start?: Date, end?: Date) => {
@@ -70,7 +71,8 @@ export const DateRangePicker = memo(function DateRangePicker(
           ? 'border-white/60 active:border-white/80'
           : 'border-background-800 hover:border-background-700 active:border-background-600',
         props.disabled &&
-          'border-background-800 hover:border-background-800 active:border-background-800 cursor-not-allowed hover:bg-transparent'
+          'border-background-800 hover:border-background-800 active:border-background-800 cursor-not-allowed hover:bg-transparent',
+        props.className
       )}
       data-testid="date-picker-button"
       disabled={props.disabled}
@@ -133,7 +135,7 @@ const Content = (props: Props) => {
   );
   const [date, setDate] = useState(baseDate);
   const hasDates = !!(date?.from && date?.to);
-  const selectedPreset = props.presets.find((p) => {
+  const selectedPreset = props.presets?.find((p) => {
     if (!hasDates) return false;
     const from = subDays(now, p.days);
     return isSameDay(from, date?.from!) && isSameDay(date?.to!, now);
@@ -167,25 +169,27 @@ const Content = (props: Props) => {
   return (
     <div className="flex flex-col gap-20 p-20">
       <div className="gap-30 flex">
-        <div
-          role="radiogroup"
-          aria-label="presets"
-          className="hidden w-[200px] flex-col gap-5 md:flex"
-        >
-          {props.presets.map(({ label, days }) => (
-            <button
-              type="button"
-              role="radio"
-              key={days}
-              className="rounded-8 px-30 text-14 font-weight-500 hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start [&[aria-checked=true]]:bg-black"
-              onClick={() => handlePreset(days)}
-              aria-checked={selectedPreset?.days === days}
-              data-testid="date-picker-button"
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        {!!props.presets && (
+          <div
+            role="radiogroup"
+            aria-label="presets"
+            className="hidden w-[200px] flex-col gap-5 md:flex"
+          >
+            {props.presets.map(({ label, days }) => (
+              <button
+                type="button"
+                role="radio"
+                key={days}
+                className="rounded-8 px-30 text-14 font-weight-500 hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start [&[aria-checked=true]]:bg-black"
+                onClick={() => handlePreset(days)}
+                aria-checked={selectedPreset?.days === days}
+                data-testid="date-picker-button"
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
         <Calendar
           defaultMonth={subMonths(date?.to ?? new Date(), 1)}
           numberOfMonths={aboveBreakpoint('sm') ? 2 : 1}
