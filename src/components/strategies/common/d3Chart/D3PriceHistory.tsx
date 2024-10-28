@@ -13,7 +13,14 @@ import {
   OnPriceUpdates,
 } from './D3ChartCandlesticks';
 import { FC, useMemo, useState } from 'react';
-import { D3ZoomEvent, scaleBand, select, zoom, ZoomTransform } from 'd3';
+import {
+  D3ZoomEvent,
+  scaleBand,
+  select,
+  zoom,
+  zoomIdentity,
+  ZoomTransform,
+} from 'd3';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { Activity } from 'libs/queries/extApi/activity';
 import { getDomain } from './utils';
@@ -31,11 +38,16 @@ const chartSettings: D3ChartSettingsProps = {
 
 const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
   const [transform, setTransform] = useState<ZoomTransform>();
+  const baseXScale = scaleBand()
+    .domain(getDateRange(data.map((d) => d.date)))
+    .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5])
+    .paddingInner(0.5);
+
   let k = 0;
   const selection = select<SVGSVGElement, unknown>('#interactive-chart');
   const chartArea = select<SVGSVGElement, unknown>('.chart-area');
   const zoomHandler = zoom<SVGSVGElement, unknown>()
-    .scaleExtent([0.5, Math.ceil(data.length / 10)])
+    .scaleExtent([0.5, Math.ceil(data.length / 7)])
     .translateExtent([
       [-0.5 * dms.width, 0],
       [1.5 * dms.width, 0],
@@ -50,7 +62,16 @@ const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
     })
     .on('end', () => chartArea.style('cursor', ''));
   selection.call(zoomHandler);
-  return transform;
+
+  const zoomIn = (days: number) => {
+    const scale = data.length / days;
+    const date = data.at(days * -1)!.date.toString();
+    const translateX = baseXScale(date)!;
+    const transition = selection.transition().duration(500);
+    const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
+    zoomHandler.transform(transition, transform);
+  };
+  return { transform, zoomIn };
 };
 
 const getDateRange = (range: number[]) => {
@@ -81,12 +102,19 @@ interface Props {
   activities?: Activity[];
 }
 
+const presetDays = [
+  { days: 7, label: '7D' },
+  { days: 30, label: '1M' },
+  { days: 90, label: '3M' },
+  { days: 365, label: '1Y' },
+];
+
 export const D3PriceHistory: FC<Props> = (props) => {
   const { className, data, marketPrice, bounds } = props;
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
   const [drawings, setDrawings] = useState<any[]>([]);
   const [ref, dms] = useChartDimensions(chartSettings);
-  const zoomTransform = useZoom(dms, data);
+  const { transform: zoomTransform, zoomIn } = useZoom(dms, data);
 
   const xScale = useMemo(() => {
     const zoomX = (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d);
@@ -120,36 +148,59 @@ export const D3PriceHistory: FC<Props> = (props) => {
     >
       <div className={cn('rounded-12 flex flex-1 bg-black', className)}>
         <DrawingMenu clearDrawings={() => setDrawings([])} />
-        <svg
-          ref={ref}
-          id="interactive-chart"
-          className={cn(style.historyChart, 'flex-1')}
-          data-testid="price-chart"
-        >
-          <defs>
-            <linearGradient id="svg-brand-gradient" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="var(--gradient-first)" />
-              <stop offset="50%" stopColor="var(--gradient-middle)" />
-              <stop offset="100%" stopColor="var(--gradient-last)" />
-            </linearGradient>
-          </defs>
-          <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
-            <D3ChartCandlesticks
-              readonly={props.readonly}
-              prices={props.prices}
-              onPriceUpdates={props.onPriceUpdates}
-              data={data}
-              marketPrice={marketPrice}
-              onDragEnd={props.onPriceUpdates}
-              isLimit={props.isLimit}
-              type={props.type}
-              overlappingSpread={props.overlappingSpread}
-              overlappingMarketPrice={marketPrice}
-              activities={props.activities}
-              yTicks={y.ticks}
-            />
-          </g>
-        </svg>
+        <div className="flex flex-1 flex-col">
+          <svg
+            ref={ref}
+            id="interactive-chart"
+            className={cn(style.historyChart, 'rounded-tr-12 flex-1')}
+            data-testid="price-chart"
+          >
+            <defs>
+              <linearGradient
+                id="svg-brand-gradient"
+                x1="0"
+                x2="0"
+                y1="0"
+                y2="1"
+              >
+                <stop offset="0%" stopColor="var(--gradient-first)" />
+                <stop offset="50%" stopColor="var(--gradient-middle)" />
+                <stop offset="100%" stopColor="var(--gradient-last)" />
+              </linearGradient>
+            </defs>
+            <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
+              <D3ChartCandlesticks
+                readonly={props.readonly}
+                prices={props.prices}
+                onPriceUpdates={props.onPriceUpdates}
+                data={data}
+                marketPrice={marketPrice}
+                onDragEnd={props.onPriceUpdates}
+                isLimit={props.isLimit}
+                type={props.type}
+                overlappingSpread={props.overlappingSpread}
+                overlappingMarketPrice={marketPrice}
+                activities={props.activities}
+                yTicks={y.ticks}
+              />
+            </g>
+          </svg>
+          <div
+            role="menubar"
+            className="col-span-2 flex border-t border-white/10"
+          >
+            {presetDays.map(({ days, label }) => (
+              <button
+                key={days}
+                role="menuitem"
+                className="duration-preset hover:bg-background-700 rounded-8 p-8"
+                onClick={() => zoomIn(days)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </D3ChartProvider>
   );
