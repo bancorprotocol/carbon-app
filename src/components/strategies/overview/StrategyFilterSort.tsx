@@ -7,7 +7,6 @@ import { ReactComponent as IconFilter } from 'assets/icons/filter.svg';
 import { lsService } from 'services/localeStorage';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { cn } from 'utils/helpers';
-import config from 'config';
 
 // [START] Used for localStorage migration: Remove it after Nov 2023
 export enum EnumStrategySort {
@@ -18,24 +17,24 @@ export enum EnumStrategySort {
   RoiAscending,
   RoiDescending,
 }
+
 export const strategySortMapping: Record<EnumStrategySort, StrategySort> = {
   [EnumStrategySort.Recent]: 'recent',
   [EnumStrategySort.Old]: 'old',
   [EnumStrategySort.PairAscending]: 'pairAsc',
   [EnumStrategySort.PairDescending]: 'pairDesc',
-  [EnumStrategySort.RoiAscending]: 'roiAsc',
-  [EnumStrategySort.RoiDescending]: 'roiDesc',
+  // default to "trades"
+  [EnumStrategySort.RoiAscending]: 'trades',
+  [EnumStrategySort.RoiDescending]: 'trades',
 };
 const isEnumSort = (
   sort: StrategySort | EnumStrategySort
 ): sort is EnumStrategySort => sort in strategySortMapping;
 
 export const getSortFromLS = (): StrategySort => {
-  const sort = lsService.getItem('strategyOverviewSort');
+  const sort = lsService.getItem('strategyOverviewSort') as any;
   const isRoiSort = sort === 'roiDesc' || sort === 'roiAsc';
-  if (!config.showStrategyRoi && (sort === undefined || isRoiSort))
-    return 'recent';
-  if (sort === undefined) return 'roiDesc';
+  if (sort === undefined || isRoiSort) return 'trades';
   return isEnumSort(sort) ? strategySortMapping[sort] : sort;
 };
 
@@ -74,16 +73,9 @@ export const strategySort = {
   old: 'Oldest Created',
   pairAsc: 'Pair (A->Z)',
   pairDesc: 'Pair (Z->A)',
-  roiAsc: 'ROI (Ascending)',
-  roiDesc: 'ROI (Descending)',
   totalBudgetDesc: 'Total Budget',
   trades: 'Trades',
 };
-
-if (config.showStrategyRoi) {
-  strategySort['roiAsc'] = '';
-  strategySort['roiDesc'] = '';
-}
 
 export type StrategySort = keyof typeof strategySort;
 

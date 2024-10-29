@@ -12,14 +12,12 @@ interface Props {
   strategy: StrategyWithFiat;
   className?: string;
   isExplorer?: boolean;
-  showStrategyRoi?: boolean;
 }
 
 export const StrategyBlock: FC<Props> = ({
   strategy,
   className,
   isExplorer,
-  showStrategyRoi,
 }) => {
   return (
     <m.li
@@ -31,10 +29,7 @@ export const StrategyBlock: FC<Props> = ({
       data-testid={`${strategy.base.symbol}/${strategy.quote.symbol}`}
     >
       <StrategyBlockHeader strategy={strategy} isExplorer={isExplorer} />
-      <StrategyBlockInfo
-        strategy={strategy}
-        showStrategyRoi={showStrategyRoi}
-      />
+      <StrategyBlockInfo strategy={strategy} />
       <div
         className={cn(
           'rounded-8 border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',

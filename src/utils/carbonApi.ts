@@ -37,11 +37,6 @@ export type FiatPriceDict = {
   [k in FiatSymbol]: number;
 };
 
-export type RoiRow = {
-  ROI: string;
-  id: string;
-};
-
 const get = async <T>(
   endpoint: string,
   params: Object = {},
@@ -83,9 +78,6 @@ const carbonApi = {
     params: TokenPriceHistorySearch
   ): Promise<TokenPriceHistoryResult[]> => {
     return get<TokenPriceHistoryResult[]>('history/prices', params);
-  },
-  getRoi: async (): Promise<RoiRow[]> => {
-    return get<RoiRow[]>('roi');
   },
   getSimulator: async (
     params: SimulatorAPIParams

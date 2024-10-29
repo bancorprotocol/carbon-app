@@ -100,7 +100,6 @@ export const StrategyPage = () => {
   }
   const base = strategy.base;
   const quote = strategy.quote;
-  const showStrategyRoi = config.showStrategyRoi;
   const isNativeChart = config.ui.priceChart === 'native';
 
   return (
@@ -124,10 +123,7 @@ export const StrategyPage = () => {
       <section className="flex flex-col gap-16 md:flex-row">
         <article className="bg-background-900 grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded p-24 md:w-[400px]">
           <h2 className="text-18 font-weight-500 col-span-2">Strategy Info</h2>
-          <StrategyBlockInfo
-            strategy={strategy}
-            showStrategyRoi={showStrategyRoi}
-          />
+          <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
               'rounded-8 border-background-800 col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] border-2',

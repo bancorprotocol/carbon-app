@@ -5,14 +5,13 @@ import { StrategyBlockBudget } from 'components/strategies/overview/strategyBloc
 
 interface Props {
   strategy: StrategyWithFiat;
-  showStrategyRoi?: boolean;
 }
 
-export const StrategyBlockInfo: FC<Props> = ({ strategy, showStrategyRoi }) => {
+export const StrategyBlockInfo: FC<Props> = ({ strategy }) => {
   return (
     <div className="flex gap-16">
       <StrategyBlockTradeCount strategy={strategy} />
-      <StrategyBlockBudget strategy={strategy} fullWidth={!showStrategyRoi} />
+      <StrategyBlockBudget strategy={strategy} />
     </div>
   );
 };

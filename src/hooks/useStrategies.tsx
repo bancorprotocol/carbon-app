@@ -137,7 +137,7 @@ export const StrategyContext = createContext<StrategyCtx>({
   isPending: true,
   search: '',
   setSearch: () => undefined,
-  sort: 'roiDesc',
+  sort: 'trades',
   setSort: () => undefined,
   filter: 'all',
   setFilter: () => undefined,
