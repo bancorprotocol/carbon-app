@@ -6,6 +6,7 @@ export interface Token {
   symbol: string;
   balance?: string;
   isSuspicious?: boolean;
+  chainId?: number;
 }
 
 export interface TokenList {
