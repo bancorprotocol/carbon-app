@@ -96,7 +96,10 @@ export const SimInputChart = ({
 
   return (
     <div className="align-stretch top-120 rounded-12 bg-background-900 fixed right-20 grid h-[calc(100vh-220px)] min-h-[500px] w-[calc(100%-500px)] flex-1 grid-rows-[auto_1fr] justify-items-stretch p-20">
-      <div className="mb-20 flex items-center justify-between">
+      <header
+        data-testid="simulator-chart-header"
+        className="mb-20 flex items-center justify-between"
+      >
         <h2 className="text-20 font-weight-500 mr-20">Price Chart</h2>
         <DateRangePicker
           defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
@@ -110,7 +113,7 @@ export const SimInputChart = ({
           }}
           required
         />
-      </div>
+      </header>
       {isError && (
         <ErrorMsg
           base={state.baseToken?.address}

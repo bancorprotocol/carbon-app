@@ -97,8 +97,8 @@ export class CreateSimulationDriver {
 
   async fillDates(start: string, end: string) {
     const [from, to] = [dayjs(start).unix(), dayjs(end).unix()].sort();
-
-    await this.page.getByTestId('date-picker-button').click();
+    const header = this.page.getByTestId('simulator-chart-header');
+    await header.getByTestId('date-picker-button').click();
     // Select date twice to force range to be 1 day long
     await this.selectDate(to);
     await this.selectDate(to);
