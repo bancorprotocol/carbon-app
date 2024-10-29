@@ -149,20 +149,28 @@ export function prettifyNumber(
     return Intl.NumberFormat(locale, {
       ...intlOptions,
       minimumFractionDigits: 2,
-      maximumFractionDigits: 3,
+      maximumFractionDigits: 2,
     }).format(0);
   }
 
   if (num.gte(1)) {
     intlOptions.minimumFractionDigits = 2;
-    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 3, 3);
+    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 2, 2);
   } else if (num.gte(0.001)) {
     intlOptions.minimumFractionDigits = 2;
-    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 6, 3);
+    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 6, 2);
   } else {
     intlOptions.maximumSignificantDigits = 5;
   }
-  const formatter = new Intl.NumberFormat(locale, intlOptions);
+  let formatter: Intl.NumberFormat;
+  try {
+    formatter = new Intl.NumberFormat(locale, intlOptions);
+  } catch {
+    if (intlOptions.minimumFractionDigits) {
+      intlOptions.maximumFractionDigits = intlOptions.minimumFractionDigits + 1;
+    }
+    formatter = new Intl.NumberFormat(locale, intlOptions);
+  }
 
   if (options.highPrecision) {
     return highPrecision(num, formatter, options.decimals);
