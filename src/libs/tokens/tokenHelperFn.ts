@@ -34,8 +34,15 @@ export const fetchTokenLists = async () => {
         ? await tokenParserMap[parser](result)
         : result;
 
+      const filteredTokens = parsedResult.tokens.filter(
+        (token) =>
+          token?.chainId === undefined ||
+          token?.chainId === config.network.chainId
+      );
+
       return {
         ...parsedResult,
+        tokens: filteredTokens,
         logoURI: getLogoByURI(parsedResult.logoURI),
       };
     })
