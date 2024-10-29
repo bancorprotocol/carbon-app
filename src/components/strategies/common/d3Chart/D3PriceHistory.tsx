@@ -27,7 +27,6 @@ import { getDomain, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
 import { defaultEndDate, defaultStartDate } from '../utils';
-import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import { addDays, differenceInDays, startOfDay } from 'date-fns';
 import { toUnixUTC } from 'components/simulator/utils';
 import style from './D3PriceHistory.module.css';
@@ -142,6 +141,12 @@ export const D3PriceHistory: FC<Props> = (props) => {
   const invertX = scaleBandInvert(xScale);
   const start = new Date(Number(invertX(0) ?? xScale.domain()[0]) * 1000);
   const end = addDays(start, data.length / (zoomTransform?.k ?? 1));
+  const disabledDates = [
+    {
+      before: new Date(Number(xScale.domain()[0]) * 1000),
+      after: new Date(Number(xScale.domain().at(-1)) * 1000),
+    },
+  ];
 
   const zoomFromTo = ({ start, end }: { start?: Date; end?: Date }) => {
     if (!start || !end) return;
@@ -207,8 +212,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
               <button
                 key={days}
                 role="menuitem"
-                className="duration-preset hover:bg-background-700 rounded-8 p-8"
+                className="duration-preset hover:bg-background-700 rounded-8 p-8 disabled:pointer-events-none disabled:text-white/50"
                 onClick={() => zoomIn(days)}
+                disabled={days > data.length}
               >
                 {label}
               </button>
@@ -222,7 +228,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               end={end}
               onConfirm={zoomFromTo}
               options={{
-                disabled: datePickerDisabledDays,
+                disabled: disabledDates,
               }}
             />
           </div>
