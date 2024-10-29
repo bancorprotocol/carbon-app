@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { StrategyWithFiat } from 'libs/queries';
-import { StrategyBlockRoi } from 'components/strategies/overview/strategyBlock/StrategyBlockRoi';
+import { StrategyBlockTradeCount } from 'components/strategies/overview/strategyBlock/StrategyBlockTradeCount';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
 
 interface Props {
@@ -10,9 +10,9 @@ interface Props {
 
 export const StrategyBlockInfo: FC<Props> = ({ strategy, showStrategyRoi }) => {
   return (
-    <>
-      {!!showStrategyRoi && <StrategyBlockRoi strategy={strategy} />}
+    <div className="flex gap-16">
+      <StrategyBlockTradeCount strategy={strategy} />
       <StrategyBlockBudget strategy={strategy} fullWidth={!showStrategyRoi} />
-    </>
+    </div>
   );
 };

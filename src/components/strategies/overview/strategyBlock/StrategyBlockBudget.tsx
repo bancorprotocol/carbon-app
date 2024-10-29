@@ -22,7 +22,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy, fullWidth }) => {
   return (
     <article
       className={cn(
-        'rounded-8 border-background-800 flex flex-col border-2 p-16',
+        'rounded-8 border-background-800 flex w-2/3 flex-col border-2 p-16',
         strategy.status === 'active' ? '' : 'opacity-50',
         !!fullWidth ? 'col-start-1 col-end-3 flex-row justify-between' : ''
       )}

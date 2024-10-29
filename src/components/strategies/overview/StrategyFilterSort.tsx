@@ -77,6 +77,7 @@ export const strategySort = {
   roiAsc: 'ROI (Ascending)',
   roiDesc: 'ROI (Descending)',
   totalBudgetDesc: 'Total Budget',
+  trades: 'Trades',
 };
 
 if (config.showStrategyRoi) {

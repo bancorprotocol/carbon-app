@@ -50,6 +50,7 @@ const sortFn: Record<StrategySort, SortFn> = {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
     return a.fiatBudget.total.minus(b.fiatBudget.total).times(-1).toNumber();
   },
+  trades: (a, b) => b.tradeCount - a.tradeCount,
 };
 
 export const getCompareFunctionBySortType = (sortType: StrategySort) => {

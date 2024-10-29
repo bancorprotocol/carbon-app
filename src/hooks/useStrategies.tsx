@@ -22,6 +22,7 @@ import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { useStore } from 'store';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useNavigate, useSearch } from 'libs/routing';
+import { useTradeCount } from 'libs/queries/extApi/tradeCount';
 
 export type StrategyFilterOutput = ReturnType<typeof useStrategyFilter>;
 
@@ -110,13 +111,22 @@ export const useStrategiesWithFiat = (
     const price = priceQueries[i].data?.[selectedFiatCurrency];
     prices[address] = price;
   }
+  const tradeCountQuery = useTradeCount();
+  const tradeCount: Record<string, number> = {};
+  for (const item of tradeCountQuery.data ?? []) {
+    tradeCount[item.strategyId] = item.tradeCount;
+  }
   return strategies.map((strategy) => {
     const basePrice = new SafeDecimal(prices[strategy.base.address] ?? 0);
     const quotePrice = new SafeDecimal(prices[strategy.quote.address] ?? 0);
     const base = basePrice.times(strategy.order1.balance);
     const quote = quotePrice.times(strategy.order0.balance);
     const total = base.plus(quote);
-    return { ...strategy, fiatBudget: { base, quote, total } };
+    return {
+      ...strategy,
+      fiatBudget: { base, quote, total },
+      tradeCount: tradeCount[strategy.id] ?? 0,
+    };
   });
 };
 

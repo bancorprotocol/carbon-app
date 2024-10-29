@@ -50,6 +50,7 @@ export interface StrategyWithFiat extends Strategy {
     quote: SafeDecimal;
     base: SafeDecimal;
   };
+  tradeCount: number;
 }
 
 interface StrategiesHelperProps {

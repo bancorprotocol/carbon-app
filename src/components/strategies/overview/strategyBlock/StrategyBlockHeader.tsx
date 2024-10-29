@@ -21,7 +21,7 @@ interface Props {
 export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
   const { base, quote } = strategy;
   return (
-    <header className="col-start-1 col-end-3 flex gap-16">
+    <header className="flex gap-16">
       <TokensOverlap
         // TODO fix token logo classes
         size={40}
