@@ -149,16 +149,16 @@ export function prettifyNumber(
     return Intl.NumberFormat(locale, {
       ...intlOptions,
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      maximumFractionDigits: 3,
     }).format(0);
   }
 
   if (num.gte(1)) {
     intlOptions.minimumFractionDigits = 2;
-    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 2, 2);
+    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 3, 3);
   } else if (num.gte(0.001)) {
     intlOptions.minimumFractionDigits = 2;
-    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 6, 2);
+    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 6, 3);
   } else {
     intlOptions.maximumSignificantDigits = 5;
   }
