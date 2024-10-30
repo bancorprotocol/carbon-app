@@ -146,11 +146,9 @@ export function prettifyNumber(
 
   // Force value to be positive
   if (num.lte(0)) {
-    return Intl.NumberFormat(locale, {
-      ...intlOptions,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(0);
+    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);
+    intlOptions.maximumFractionDigits = Math.min(options.decimals ?? 2, 2);
+    return Intl.NumberFormat(locale, intlOptions).format(0);
   }
 
   if (num.gte(1)) {
