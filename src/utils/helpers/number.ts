@@ -167,7 +167,13 @@ export function prettifyNumber(
   try {
     formatter = new Intl.NumberFormat(locale, intlOptions);
   } catch (e) {
-    setContext('prettifyNumber', intlOptions);
+    const ctx = {
+      value: value.toString(),
+      intlOptions,
+      locale: locale ?? navigator.language,
+    };
+    setContext('prettifyNumber', ctx);
+    console.error('[ERROR] prettifyNumber', ctx);
     captureException(e);
     if (intlOptions.minimumFractionDigits) {
       intlOptions.maximumFractionDigits = intlOptions.minimumFractionDigits + 1;
