@@ -49,16 +49,6 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
 
   return (
     <>
-      <rect
-        className="chart-drawing-canvas"
-        x="0"
-        y="0"
-        width={dms.boundedWidth}
-        height={dms.boundedHeight}
-        fill="transparent"
-        fillOpacity="0"
-        onClick={addPoint}
-      />
       {!!points.length && (
         <line
           ref={lineRef}
@@ -68,8 +58,6 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
           y2={yScale(points[0].y)}
           stroke="var(--primary)"
           strokeWidth="2"
-          // click event not bubbled in SVG, line was blocking the addPoint
-          className="pointer-events-none"
         />
       )}
       {points.map(({ x, y }) => (
@@ -81,6 +69,16 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
           fill="var(--primary)"
         />
       ))}
+      <rect
+        className="chart-drawing-canvas"
+        x="0"
+        y="0"
+        width={dms.boundedWidth}
+        height={dms.boundedHeight}
+        fill="transparent"
+        fillOpacity="0"
+        onClick={addPoint}
+      />
     </>
   );
 };

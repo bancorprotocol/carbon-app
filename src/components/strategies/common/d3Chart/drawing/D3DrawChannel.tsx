@@ -82,6 +82,7 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
   const invertY = yScale.invert;
 
   const addPoint = (event: ReactMouseEvent) => {
+    console.log('CLICK');
     const svg = document.getElementById('interactive-chart')!;
     const root = svg.getBoundingClientRect();
     const x = invertX(event.clientX - root.x);
@@ -122,6 +123,7 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
         );
       });
     } else {
+      console.log('CLICK ENDS');
       const polygon = polygonRef.current!;
       onChange(fromPolygonPoints(polygon, invertX, invertY));
     }
@@ -129,16 +131,6 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
 
   return (
     <>
-      <rect
-        className="chart-drawing-canvas"
-        x="0"
-        y="0"
-        width={dms.boundedWidth}
-        height={dms.boundedHeight}
-        fill="transparent"
-        fillOpacity="0"
-        onClick={addPoint}
-      />
       <polygon ref={polygonRef} fill="var(--primary)" fillOpacity="0.4" />
       {!!points.length && (
         <line
@@ -150,7 +142,6 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
           stroke="var(--primary)"
           strokeWidth="2"
           // click event not bubbled in SVG, line was blocking the addPoint
-          className="pointer-events-none"
         />
       )}
       {points.length === 2 && (
@@ -163,7 +154,6 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
           stroke="var(--primary)"
           strokeWidth="2"
           // click event not bubbled in SVG, line was blocking the addPoint
-          className="pointer-events-none"
         />
       )}
       {points.map(({ x, y }) => (
@@ -175,6 +165,16 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
           fill="var(--primary)"
         />
       ))}
+      <rect
+        className="chart-drawing-canvas"
+        x="0"
+        y="0"
+        width={dms.boundedWidth}
+        height={dms.boundedHeight}
+        fill="transparent"
+        fillOpacity="0"
+        onClick={addPoint}
+      />
     </>
   );
 };
