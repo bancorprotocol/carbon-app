@@ -204,18 +204,10 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
 
   const dragShape = (event: ReactMouseEvent<SVGGElement>) => {
     setEditing(true);
-    console.log('DRAG SHAPE');
     const shape = event.currentTarget;
-    const area = document.querySelector<SVGElement>('.chart-area')!;
-    const circles = Array.from(shape.querySelectorAll('circle'));
-    const root = area.getBoundingClientRect();
-    const initialPoints = circles.map((c) => {
-      const { x, y, width } = c.getBoundingClientRect();
-      return {
-        x: x - root.x + width / 2,
-        y: y - root.y + width / 2,
-      };
-    });
+    const allCircles = getEdges(drawing.id);
+    const root = getAreaBox();
+    const initialPoints = getInitialPoints(root, allCircles);
     shape.style.setProperty('cursor', 'grabbing');
     const move = (e: MouseEvent) => {
       const delta = getDelta(root, event, e);
