@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { scaleBandInvert } from './utils';
 import { useD3ChartCtx } from './D3ChartContext';
+import { getAreaBox } from './drawing/utils';
 
 const rect = {
   w: 72,
@@ -17,12 +18,14 @@ const usePointerPosition = (
   const [position, setPosition] = useState<{ x: string; y: number }>();
   useEffect(() => {
     const invert = scaleBandInvert(xScale);
-    const chart = document.querySelector<HTMLElement>('.chart-area');
+    const chart = document.getElementById('interactive-chart');
+    const box = getAreaBox();
     const move = (event: MouseEvent) => {
-      const rect = chart!.getBoundingClientRect();
+      if (event.clientX > box.x + box.width) return;
+      if (event.clientY > box.y + box.height) return;
       const position = {
-        x: event.clientX - rect.x,
-        y: event.clientY - rect.y,
+        x: event.clientX - box.x,
+        y: event.clientY - box.y,
       };
       setPosition({
         x: invert(position.x),
