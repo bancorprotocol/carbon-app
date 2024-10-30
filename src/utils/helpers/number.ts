@@ -167,11 +167,11 @@ export function prettifyNumber(
   try {
     formatter = new Intl.NumberFormat(locale, intlOptions);
   } catch (e) {
+    setContext('prettifyNumber', intlOptions);
+    captureException(e);
     if (intlOptions.minimumFractionDigits) {
       intlOptions.maximumFractionDigits = intlOptions.minimumFractionDigits + 1;
     }
-    setContext('prettifyNumber', intlOptions);
-    captureException(e);
     formatter = new Intl.NumberFormat(locale, intlOptions);
   }
 
