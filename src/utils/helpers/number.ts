@@ -1,6 +1,7 @@
 import type { FiatSymbol } from 'utils/carbonApi';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
+import { captureException, setContext } from '@sentry/react';
 
 export type NumberLike = number | string | SafeDecimal;
 
@@ -165,10 +166,12 @@ export function prettifyNumber(
   let formatter: Intl.NumberFormat;
   try {
     formatter = new Intl.NumberFormat(locale, intlOptions);
-  } catch {
+  } catch (e) {
     if (intlOptions.minimumFractionDigits) {
       intlOptions.maximumFractionDigits = intlOptions.minimumFractionDigits + 1;
     }
+    setContext('prettifyNumber', intlOptions);
+    captureException(e);
     formatter = new Intl.NumberFormat(locale, intlOptions);
   }
 
