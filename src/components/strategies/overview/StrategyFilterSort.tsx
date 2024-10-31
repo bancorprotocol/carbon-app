@@ -8,58 +8,13 @@ import { lsService } from 'services/localeStorage';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { cn } from 'utils/helpers';
 
-// [START] Used for localStorage migration: Remove it after Nov 2023
-export enum EnumStrategySort {
-  Recent,
-  Old,
-  PairAscending,
-  PairDescending,
-  RoiAscending,
-  RoiDescending,
-}
-
-export const strategySortMapping: Record<EnumStrategySort, StrategySort> = {
-  [EnumStrategySort.Recent]: 'recent',
-  [EnumStrategySort.Old]: 'old',
-  [EnumStrategySort.PairAscending]: 'pairAsc',
-  [EnumStrategySort.PairDescending]: 'pairDesc',
-  // default to "trades"
-  [EnumStrategySort.RoiAscending]: 'trades',
-  [EnumStrategySort.RoiDescending]: 'trades',
-};
-const isEnumSort = (
-  sort: StrategySort | EnumStrategySort
-): sort is EnumStrategySort => sort in strategySortMapping;
-
 export const getSortFromLS = (): StrategySort => {
-  const sort = lsService.getItem('strategyOverviewSort') as any;
-  const isRoiSort = sort === 'roiDesc' || sort === 'roiAsc';
-  if (sort === undefined || isRoiSort) return 'trades';
-  return isEnumSort(sort) ? strategySortMapping[sort] : sort;
+  return lsService.getItem('strategyOverviewSort') || 'trades';
 };
-
-export enum EnumStrategyFilter {
-  All,
-  Active,
-  Inactive,
-}
-export const strategyFilterMapping: Record<EnumStrategyFilter, StrategyFilter> =
-  {
-    [EnumStrategyFilter.All]: 'all',
-    [EnumStrategyFilter.Active]: 'active',
-    [EnumStrategyFilter.Inactive]: 'inactive',
-  };
-
-const isEnumFilter = (
-  filter: StrategyFilter | EnumStrategyFilter
-): filter is EnumStrategyFilter => filter in strategyFilterMapping;
 
 export const getFilterFromLS = (): StrategyFilter => {
-  const filter = lsService.getItem('strategyOverviewFilter');
-  if (filter === undefined) return 'all';
-  return isEnumFilter(filter) ? strategyFilterMapping[filter] : filter;
+  return lsService.getItem('strategyOverviewFilter') || 'all';
 };
-// [END]
 
 export const strategyFilter = {
   all: 'All',
