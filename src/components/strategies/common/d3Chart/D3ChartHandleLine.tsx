@@ -1,11 +1,7 @@
 import { SVGProps } from 'react';
 import { cn } from 'utils/helpers';
 import { useD3ChartCtx } from './D3ChartContext';
-
-const handleDms = {
-  width: 64,
-  height: 16,
-};
+import { handleDms } from './utils';
 
 interface Props {
   selector?: string;

@@ -69,14 +69,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
         fillOpacity="0"
       />
       {activities?.length && <D3ChartIndicators activities={activities} />}
-      {marketPrice && (
-        <D3ChartHandleLine
-          color="white"
-          y={yScale(marketPrice)}
-          lineProps={{ strokeDasharray: 2 }}
-          label={prettifyNumber(marketPrice ?? '', { decimals: 4 })}
-        />
-      )}
+
       {type === 'disposable' && isLimit && (
         <D3ChartDisposable
           readonly={readonly}
@@ -114,6 +107,14 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           return prettifyNumber(value, { decimals: 100, abbreviate: true });
         }}
       />
+      {marketPrice && (
+        <D3ChartHandleLine
+          color="white"
+          y={yScale(marketPrice)}
+          lineProps={{ strokeDasharray: 2 }}
+          label={prettifyNumber(marketPrice ?? '', { decimals: 4 })}
+        />
+      )}
       <D3Pointer />
       <D3PricesAxis prices={prices} />
       <D3AllDrawingRanges />

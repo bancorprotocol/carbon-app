@@ -2,11 +2,7 @@ import { FC } from 'react';
 import { useD3ChartCtx } from './D3ChartContext';
 import { prettifyNumber } from 'utils/helpers';
 import { ChartPrices } from './D3ChartCandlesticks';
-
-const handleDms = {
-  width: 64,
-  height: 16,
-};
+import { handleDms } from './utils';
 
 export const D3PricesAxis = ({ prices }: { prices: ChartPrices<string> }) => {
   const buyMin = Number(prices.buy.min);

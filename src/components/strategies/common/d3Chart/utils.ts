@@ -3,6 +3,15 @@ import { ChartPrices } from 'components/strategies/common/d3Chart/D3ChartCandles
 import { CandlestickData } from 'libs/d3/types';
 import { useEffect, useState } from 'react';
 
+export const axisDms = {
+  xHeight: 40,
+  yWidth: 80,
+};
+export const handleDms = {
+  width: 64,
+  height: 16,
+};
+
 export const getSelector = (selector: string) => select(`.${selector}`);
 
 export const useSelectable = (selector: string) => {

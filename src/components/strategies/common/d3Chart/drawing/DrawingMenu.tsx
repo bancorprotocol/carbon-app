@@ -7,31 +7,46 @@ import { ReactComponent as IconTriangle } from 'assets/icons/draw-triangle.svg';
 import { ReactComponent as IconRectangle } from 'assets/icons/draw-rectangle.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { useD3ChartCtx } from '../D3ChartContext';
+import {
+  FloatTooltip,
+  FloatTooltipContent,
+  FloatTooltipTrigger,
+} from 'components/common/tooltip/FloatTooltip';
 
-export type DrawingMode = keyof typeof drawings | undefined;
+export type DrawingMode = (typeof drawings)[number]['mode'];
 
-const drawings = {
-  line: {
+const drawings = [
+  {
+    mode: undefined,
+    icon: <IconIndicator className="size-24" />,
+    label: 'Cross',
+  },
+  {
+    mode: 'line' as const,
     icon: <IconLine className="size-24" />,
-    label: 'Draw Line',
+    label: 'Trending Line',
   },
-  'extended-line': {
+  {
+    mode: 'extended-line' as const,
     icon: <IconExtendedLine className="size-24" />,
-    label: 'Draw Extended Line',
+    label: 'Extended Line',
   },
-  channel: {
+  {
+    mode: 'channel' as const,
     icon: <IconChannel className="size-24" />,
-    label: 'Draw Parallel Line',
+    label: 'Parallel Channel',
   },
-  triangle: {
+  {
+    mode: 'triangle' as const,
     icon: <IconTriangle className="size-24" />,
-    label: 'Draw Triangle',
+    label: 'Triangle',
   },
-  rectangle: {
+  {
+    mode: 'rectangle' as const,
     icon: <IconRectangle className="size-24" />,
-    label: 'Draw Triangle',
+    label: 'Rectangle',
   },
-};
+];
 
 interface Props {
   clearDrawings: () => void;
@@ -44,35 +59,40 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
       className="bg-background-black flex flex-col border-e border-white/10"
       role="menubar"
     >
-      <button
-        role="menuitemradio"
-        aria-checked={!drawingMode}
-        aria-label="selection mode"
-        className="hover:bg-background-700 rounded-8 aria-checked:text-primary p-8"
-        onClick={() => setDrawingMode(undefined)}
-      >
-        <IconIndicator className="size-24" />
-      </button>
-      {Object.entries(drawings).map(([mode, content]) => (
-        <button
-          key={mode}
-          role="menuitemradio"
-          aria-checked={drawingMode === mode}
-          aria-label={content.label}
-          className="hover:bg-background-700 rounded-8 aria-checked:text-primary p-8"
-          onClick={() => setDrawingMode(mode as DrawingMode)}
-        >
-          {content.icon}
-        </button>
+      {drawings.map(({ mode, label, icon }) => (
+        <FloatTooltip key={label} placement="right">
+          <FloatTooltipTrigger>
+            <button
+              role="menuitemradio"
+              aria-describedby={`${mode}-tooltip`}
+              aria-checked={drawingMode === mode}
+              className="hover:bg-background-700 rounded-8 aria-checked:text-primary p-8"
+              onClick={() => setDrawingMode(mode as DrawingMode)}
+            >
+              {icon}
+            </button>
+          </FloatTooltipTrigger>
+          <FloatTooltipContent id={`${mode}-tooltip`}>
+            {label}
+          </FloatTooltipContent>
+        </FloatTooltip>
       ))}
       <hr className="mx-auto my-8 w-3/4 border-e border-white/40" />
-      <button
-        role="menuitem"
-        className="hover:bg-background-700 rounded-8 p-8"
-        onClick={clearDrawings}
-      >
-        <IconTrash className="size-24" />
-      </button>
+      <FloatTooltip placement="right">
+        <FloatTooltipTrigger>
+          <button
+            role="menuitem"
+            aria-describedby="delete-all-tooltip"
+            className="hover:bg-background-700 rounded-8 p-8"
+            onClick={clearDrawings}
+          >
+            <IconTrash className="size-24" />
+          </button>
+        </FloatTooltipTrigger>
+        <FloatTooltipContent id="delete-all-tooltip">
+          Delete all
+        </FloatTooltipContent>
+      </FloatTooltip>
     </div>
   );
 };

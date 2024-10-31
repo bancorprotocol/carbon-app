@@ -2,14 +2,9 @@ import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
 import { ScaleBand, ScaleLinear } from 'd3';
 import { useEffect, useState } from 'react';
 import { prettifyNumber } from 'utils/helpers';
-import { scaleBandInvert } from './utils';
+import { handleDms, scaleBandInvert } from './utils';
 import { useD3ChartCtx } from './D3ChartContext';
 import { getAreaBox } from './drawing/utils';
-
-const rect = {
-  w: 72,
-  h: 24,
-};
 
 const usePointerPosition = (
   xScale: ScaleBand<string>,
@@ -47,14 +42,17 @@ export const D3Pointer = () => {
   const { dms, xScale, yScale } = useD3ChartCtx();
   const position = usePointerPosition(xScale, yScale);
   if (!position) return;
+  const x = xScale(position.x)!;
+  const y = yScale(position.y);
+  const bandwidth = xScale.bandwidth();
   return (
     <>
       {/* X axis */}
       <line
-        x1={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2}
-        x2={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2}
+        x1={x + bandwidth / 2}
+        x2={x + bandwidth / 2}
         y1={0}
-        y2={dms.boundedHeight}
+        y2={dms.boundedHeight + 5}
         stroke="white"
         strokeOpacity="0.5"
         strokeDasharray="5"
@@ -62,20 +60,20 @@ export const D3Pointer = () => {
         className="pointer-events-none"
       />
       <rect
-        x={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2 - rect.w / 2}
-        y={dms.boundedHeight}
-        width={rect.w}
-        height={rect.h}
+        x={x + bandwidth / 2 - handleDms.width / 2}
+        y={dms.boundedHeight + 5}
+        width={handleDms.width}
+        height={handleDms.height}
         rx="4"
         ry="4"
         className="fill-background-700"
       />
       <text
-        x={(xScale(position.x) ?? 0) + xScale.bandwidth() / 2}
-        y={dms.boundedHeight + 8}
-        dominantBaseline="hanging"
+        x={x + bandwidth / 2}
+        y={dms.boundedHeight + 13}
+        dominantBaseline="middle"
         textAnchor="middle"
-        fontSize="12"
+        fontSize="10"
         fill="white"
       >
         {xAxisFormatter.format(fromUnixUTC(position.x))}
@@ -83,9 +81,9 @@ export const D3Pointer = () => {
       {/* Y axis */}
       <line
         x1={0}
-        x2={dms.boundedWidth}
-        y1={yScale(position.y)}
-        y2={yScale(position.y)}
+        x2={dms.boundedWidth + 5}
+        y1={y}
+        y2={y}
         stroke="white"
         strokeOpacity="0.5"
         strokeDasharray="5"
@@ -93,20 +91,20 @@ export const D3Pointer = () => {
         className="pointer-events-none"
       />
       <rect
-        x={dms.boundedWidth}
-        y={yScale(position.y) - rect.h / 2}
-        width={rect.w}
-        height={rect.h}
+        x={dms.boundedWidth + 5}
+        y={y - handleDms.height / 2}
+        width={handleDms.width}
+        height={handleDms.height}
         rx="4"
         ry="4"
         className="fill-background-700"
       />
       <text
-        x={dms.boundedWidth + 8}
-        y={yScale(position.y)}
+        x={dms.boundedWidth + 13}
+        y={y}
         dominantBaseline="middle"
         textAnchor="start"
-        fontSize="12"
+        fontSize="10"
         fill="white"
       >
         {prettifyNumber(position.y)}

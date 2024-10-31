@@ -3,11 +3,7 @@ import { Drawing, useD3ChartCtx } from '../D3ChartContext';
 import { getMax, getMin } from 'utils/helpers/operators';
 import { prettifyNumber } from 'utils/helpers';
 import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
-
-const rect = {
-  w: 72,
-  h: 24,
-};
+import { axisDms, handleDms } from '../utils';
 
 export const D3AllDrawingRanges = () => {
   const { drawings } = useD3ChartCtx();
@@ -34,55 +30,58 @@ interface XRangeProps {
   min: string;
   max: string;
 }
-export const D3DrawingXRange: FC<XRangeProps> = ({ min, max }) => {
+export const D3DrawingXRange: FC<XRangeProps> = (props) => {
   const { dms, xScale } = useD3ChartCtx();
+  const min = xScale(props.min)!;
+  const max = xScale(props.max)!;
+  const y = dms.boundedHeight + axisDms.xHeight / 2 - handleDms.height / 2;
   return (
     <g>
       <rect
-        x={xScale(min)}
+        x={min}
         y={dms.boundedHeight}
-        height="40"
-        width={xScale(max)! - xScale(min)!}
+        height={axisDms.xHeight}
+        width={max - min}
         fill="var(--primary)"
         fillOpacity="0.3"
       />
-      <g transform={`translate(${xScale(min)}, ${dms.boundedHeight})`}>
+      <g transform={`translate(${min}, ${y})`}>
         <rect
-          x={rect.w / -2}
-          y="8"
-          width={rect.w}
-          height={rect.h}
+          x={handleDms.width / -2}
+          y="0"
+          width={handleDms.width}
+          height={handleDms.height}
           rx="4"
           ry="4"
           fill="var(--primary)"
         />
         <text
           x={xScale.bandwidth() / 2}
-          y="16"
-          dominantBaseline="hanging"
+          y={handleDms.height / 2}
+          dominantBaseline="middle"
           textAnchor="middle"
-          fontSize="12"
+          fontSize="10"
           fill="white"
         >
           {xAxisFormatter.format(fromUnixUTC(min))}
         </text>
       </g>
-      <g transform={`translate(${xScale(max)}, ${dms.boundedHeight})`}>
+      <g transform={`translate(${max}, ${y})`}>
         <rect
-          x={rect.w / -2}
-          y="8"
-          width={rect.w}
-          height={rect.h}
+          x={handleDms.width / -2}
+          y="0"
+          width={handleDms.width}
+          height={handleDms.height}
           rx="4"
           ry="4"
           fill="var(--primary)"
         />
         <text
           x={xScale.bandwidth() / 2}
-          y="16"
-          dominantBaseline="hanging"
+          y={handleDms.height / 2}
+          dominantBaseline="middle"
           textAnchor="middle"
-          fontSize="12"
+          fontSize="10"
           fill="white"
         >
           {xAxisFormatter.format(fromUnixUTC(max))}
@@ -96,55 +95,59 @@ interface YRangeProps {
   min: number;
   max: number;
 }
-export const D3DrawingYRange: FC<YRangeProps> = ({ min, max }) => {
+export const D3DrawingYRange: FC<YRangeProps> = (props) => {
   const { dms, yScale } = useD3ChartCtx();
+  const min = yScale(props.min);
+  const max = yScale(props.max);
+  const x = dms.boundedWidth;
+  const padding = (axisDms.yWidth - handleDms.width) / 2;
   return (
     <g>
       <rect
         x={dms.boundedWidth}
-        y={yScale(max)}
-        width="80"
-        height={yScale(min) - yScale(max)}
+        y={max}
+        width={axisDms.yWidth}
+        height={min - max}
         fill="var(--primary)"
         fillOpacity="0.3"
       />
-      <g transform={`translate(${dms.boundedWidth}, ${yScale(min)})`}>
+      <g transform={`translate(${x}, ${min})`}>
         <rect
-          x="4"
-          y={rect.h / -2}
-          width={rect.w}
-          height={rect.h}
+          x={padding}
+          y={handleDms.height / -2}
+          width={handleDms.width}
+          height={handleDms.height}
           rx="4"
           ry="4"
           fill="var(--primary)"
         />
         <text
-          x="16"
+          x={axisDms.yWidth / 2}
           y="0"
           dominantBaseline="middle"
-          textAnchor="start"
-          fontSize="12"
+          textAnchor="middle"
+          fontSize="10"
           fill="white"
         >
           {prettifyNumber(min)}
         </text>
       </g>
-      <g transform={`translate(${dms.boundedWidth}, ${yScale(max)})`}>
+      <g transform={`translate(${x}, ${max})`}>
         <rect
-          x="4"
-          y={rect.h / -2}
-          width={rect.w}
-          height={rect.h}
+          x={padding}
+          y={handleDms.height / -2}
+          width={handleDms.width}
+          height={handleDms.height}
           rx="4"
           ry="4"
           fill="var(--primary)"
         />
         <text
-          x="16"
+          x={axisDms.yWidth / 2}
           y="0"
           dominantBaseline="middle"
-          textAnchor="start"
-          fontSize="12"
+          textAnchor="middle"
+          fontSize="10"
           fill="white"
         >
           {prettifyNumber(max)}

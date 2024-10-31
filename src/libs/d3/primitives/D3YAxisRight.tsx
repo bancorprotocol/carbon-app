@@ -1,3 +1,4 @@
+import { axisDms } from 'components/strategies/common/d3Chart/utils';
 import { D3AxisProps } from 'libs/d3';
 import { uuid } from 'utils/helpers';
 
@@ -11,7 +12,7 @@ export const D3YAxisRight = ({ ticks, dms, formatter }: D3AxisProps) => {
       <rect
         x="0"
         y="0"
-        width={100}
+        width={axisDms.yWidth}
         height={dms.height}
         className="fill-background-black"
       />

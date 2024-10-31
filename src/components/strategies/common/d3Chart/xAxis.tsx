@@ -1,6 +1,7 @@
 import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
 import { useD3ChartCtx } from './D3ChartContext';
 import { useMemo } from 'react';
+import { axisDms } from './utils';
 
 export const XAxis = () => {
   const { dms, xScale, zoom } = useD3ChartCtx();
@@ -46,7 +47,7 @@ export const XAxis = () => {
         x={-bandwidthOffset}
         y={dms.boundedHeight}
         width={dms.width}
-        height="40"
+        height={axisDms.xHeight}
         className="fill-background-black"
       />
       <line
