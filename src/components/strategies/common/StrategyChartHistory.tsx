@@ -153,6 +153,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
       type={type}
       overlappingSpread={props.spread}
       activities={activities}
+      zoomBehavior={activities ? 'normal' : 'extended'}
     />
   );
 };

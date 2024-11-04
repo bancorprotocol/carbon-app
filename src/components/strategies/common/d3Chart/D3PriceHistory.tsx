@@ -45,7 +45,39 @@ const chartSettings: D3ChartSettingsProps = {
   marginRight: 80,
 };
 
-const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
+type TranslateExtent = [[number, number], [number, number]];
+type ZoomBehavior = 'normal' | 'extended';
+const getExtentConfig = (
+  behavior: ZoomBehavior,
+  datasize: number,
+  width: number
+) => {
+  if (behavior === 'normal') {
+    return {
+      // eslint-disable-next-line prettier/prettier
+      translate: [
+        [0, 0],
+        [width, 0],
+      ] as TranslateExtent,
+      zoom: [1, Math.ceil(datasize / 7)] as [number, number],
+    };
+  } else {
+    return {
+      // eslint-disable-next-line prettier/prettier
+      translate: [
+        [-0.5 * width, 0],
+        [1.5 * width, 0],
+      ] as TranslateExtent,
+      zoom: [0.5, Math.ceil(datasize / 7)] as [number, number],
+    };
+  }
+};
+
+const useZoom = (
+  dms: D3ChartSettings,
+  data: CandlestickData[],
+  behavior: ZoomBehavior = 'normal'
+) => {
   const [transform, setTransform] = useState<ZoomTransform>();
   const baseXScale = scaleBand()
     .domain(getDateRange(data.map((d) => d.date)))
@@ -55,12 +87,10 @@ const useZoom = (dms: D3ChartSettings, data: CandlestickData[]) => {
   let k = 0;
   const selection = select<SVGSVGElement, unknown>('#interactive-chart');
   const chartArea = select<SVGSVGElement, unknown>('.chart-area');
+  const extent = getExtentConfig(behavior, data.length, dms.width);
   const zoomHandler = zoom<SVGSVGElement, unknown>()
-    .scaleExtent([0.5, Math.ceil(data.length / 7)])
-    .translateExtent([
-      [-0.5 * dms.width, 0],
-      [1.5 * dms.width, 0],
-    ])
+    .scaleExtent(extent.zoom)
+    .translateExtent(extent.translate)
     .filter((e: Event) => {
       return !(e.target as Element).classList.contains('draggable');
     })
@@ -110,6 +140,7 @@ interface Props {
   overlappingSpread?: string;
   readonly?: boolean;
   activities?: Activity[];
+  zoomBehavior?: ZoomBehavior;
 }
 
 const presetDays = [
@@ -124,7 +155,11 @@ export const D3PriceHistory: FC<Props> = (props) => {
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
   const [drawings, setDrawings] = useState<any[]>([]);
   const [ref, dms] = useChartDimensions(chartSettings);
-  const { transform: zoomTransform, zoomRange } = useZoom(dms, data);
+  const { transform: zoomTransform, zoomRange } = useZoom(
+    dms,
+    data,
+    props.zoomBehavior
+  );
 
   const xScale = useMemo(() => {
     const zoomX = (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d);
