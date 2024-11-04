@@ -114,7 +114,7 @@ const useZoom = (
           .paddingInner(0.5);
       } else {
         return scaleBand()
-          .domain(getDateRange(data.map((d) => d.date)))
+          .domain(getExtendedRange(data.map((d) => d.date)))
           .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5])
           .paddingInner(0.5);
       }
@@ -130,7 +130,7 @@ const useZoom = (
   return { transform, zoomRange };
 };
 
-const getDateRange = (range: number[]) => {
+const getExtendedRange = (range: number[]) => {
   if (!range.length) return [];
   const points: string[] = [];
   const first = range[0];
@@ -194,7 +194,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
         .paddingInner(0.5);
     } else {
       return scaleBand()
-        .domain(getDateRange(data.map((d) => d.date)))
+        .domain(getExtendedRange(data.map((d) => d.date)))
         .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5].map(zoomX))
         .paddingInner(0.5);
     }
