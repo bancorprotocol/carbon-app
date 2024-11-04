@@ -98,7 +98,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           spread={Number(overlappingSpread)}
         />
       )}
-      {!activities && <D3Drawings />}
+      <D3Drawings />
       <XAxis />
       <D3YAxisRight
         ticks={yTicks}

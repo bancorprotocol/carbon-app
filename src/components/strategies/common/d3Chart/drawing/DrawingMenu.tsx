@@ -18,32 +18,32 @@ export type DrawingMode = (typeof drawings)[number]['mode'];
 const drawings = [
   {
     mode: undefined,
-    icon: <IconIndicator className="size-24" />,
+    icon: <IconIndicator className="size-20" />,
     label: 'Cross',
   },
   {
     mode: 'line' as const,
-    icon: <IconLine className="size-24" />,
+    icon: <IconLine className="size-20" />,
     label: 'Trending Line',
   },
   {
     mode: 'extended-line' as const,
-    icon: <IconExtendedLine className="size-24" />,
+    icon: <IconExtendedLine className="size-20" />,
     label: 'Extended Line',
   },
   {
     mode: 'channel' as const,
-    icon: <IconChannel className="size-24" />,
+    icon: <IconChannel className="size-20" />,
     label: 'Parallel Channel',
   },
   {
     mode: 'triangle' as const,
-    icon: <IconTriangle className="size-24" />,
+    icon: <IconTriangle className="size-20" />,
     label: 'Triangle',
   },
   {
     mode: 'rectangle' as const,
-    icon: <IconRectangle className="size-24" />,
+    icon: <IconRectangle className="size-20" />,
     label: 'Rectangle',
   },
 ];
@@ -72,7 +72,10 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
               {icon}
             </button>
           </FloatTooltipTrigger>
-          <FloatTooltipContent id={`${mode}-tooltip`}>
+          <FloatTooltipContent
+            id={`${mode}-tooltip`}
+            className="text-12 rounded-8 py-8"
+          >
             {label}
           </FloatTooltipContent>
         </FloatTooltip>
@@ -86,10 +89,13 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
             className="hover:bg-background-700 rounded-8 p-8"
             onClick={clearDrawings}
           >
-            <IconTrash className="size-24" />
+            <IconTrash className="size-20" />
           </button>
         </FloatTooltipTrigger>
-        <FloatTooltipContent id="delete-all-tooltip">
+        <FloatTooltipContent
+          id="delete-all-tooltip"
+          className="text-12 rounded-8 py-8"
+        >
           Delete all
         </FloatTooltipContent>
       </FloatTooltip>

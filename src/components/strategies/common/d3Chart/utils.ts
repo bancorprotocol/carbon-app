@@ -102,9 +102,9 @@ export const getDomain: GetDomainFn<number[]> = (data, prices, marketPrice) => {
 };
 
 export const scaleBandInvert = (scale: ScaleBand<string>) => {
-  var domain = scale.domain();
-  var paddingOuter = scale(domain[0]) ?? 0;
-  var eachBand = scale.step();
+  const domain = scale.domain();
+  const paddingOuter = scale(domain[0]) ?? 0;
+  const eachBand = scale.step();
   return (value: number) => {
     const index = Math.floor((value - paddingOuter) / eachBand);
     return domain[Math.max(0, Math.min(index, domain.length - 1))];

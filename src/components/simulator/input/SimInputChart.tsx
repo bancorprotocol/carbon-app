@@ -15,7 +15,6 @@ import { SimulatorType } from 'libs/routing/routes/sim';
 import { useCallback } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData } from 'libs/d3';
-import { toUnixUTC } from '../utils';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
@@ -80,10 +79,10 @@ export const SimInputChart = ({
   );
 
   const onDatePickerConfirm = useCallback(
-    (props: { start?: Date; end?: Date }) => {
+    (props: { start?: string; end?: string }) => {
       if (!props.start || !props.end) return;
-      dispatch('start', toUnixUTC(props.start));
-      dispatch('end', toUnixUTC(props.end));
+      dispatch('start', props.start);
+      dispatch('end', props.end);
     },
     [dispatch]
   );
@@ -120,6 +119,7 @@ export const SimInputChart = ({
           isLimit={isLimit}
           type={simulationType}
           overlappingSpread={spread}
+          zoomBehavior="normal"
         />
       )}
     </div>
