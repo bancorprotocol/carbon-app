@@ -12,7 +12,7 @@ import {
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from './D3ChartCandlesticks';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   D3ZoomEvent,
   scaleBand,
@@ -30,6 +30,11 @@ import { defaultEndDate, defaultStartDate } from '../utils';
 import { addDays, differenceInDays, startOfDay } from 'date-fns';
 import { toUnixUTC } from 'components/simulator/utils';
 import style from './D3PriceHistory.module.css';
+
+export interface RangeUpdate {
+  start?: Date;
+  end?: Date;
+}
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -97,6 +102,7 @@ interface Props {
   prices: ChartPrices;
   onPriceUpdates: OnPriceUpdates;
   onDragEnd: OnPriceUpdates;
+  onRangeUpdates?: (params: RangeUpdate) => void;
   marketPrice?: number;
   bounds: ChartPrices;
   isLimit?: { buy: boolean; sell: boolean };
@@ -114,7 +120,7 @@ const presetDays = [
 ];
 
 export const D3PriceHistory: FC<Props> = (props) => {
-  const { className, data, marketPrice, bounds } = props;
+  const { className, data, marketPrice, bounds, onRangeUpdates } = props;
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
   const [drawings, setDrawings] = useState<any[]>([]);
   const [ref, dms] = useChartDimensions(chartSettings);
@@ -139,14 +145,25 @@ export const D3PriceHistory: FC<Props> = (props) => {
     domainTolerance: 0.1,
   });
   const invertX = scaleBandInvert(xScale);
-  const start = new Date(Number(invertX(0) ?? xScale.domain()[0]) * 1000);
-  const end = addDays(start, data.length / (zoomTransform?.k ?? 1));
+  const start = useMemo(() => {
+    return new Date(Number(invertX(0) ?? xScale.domain()[0]) * 1000);
+  }, [invertX, xScale]);
+  const end = useMemo(() => {
+    return addDays(start, data.length / (zoomTransform?.k ?? 1));
+  }, [data.length, start, zoomTransform?.k]);
+
   const disabledDates = [
     {
       before: new Date(Number(xScale.domain()[0]) * 1000),
       after: new Date(Number(xScale.domain().at(-1)) * 1000),
     },
   ];
+
+  useEffect(() => {
+    if (onRangeUpdates) {
+      onRangeUpdates({ start, end });
+    }
+  }, [onRangeUpdates, start, end]);
 
   const zoomFromTo = ({ start, end }: { start?: Date; end?: Date }) => {
     if (!start || !end) return;
@@ -212,7 +229,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               <button
                 key={days}
                 role="menuitem"
-                className="duration-preset hover:bg-background-700 rounded-8 p-8 disabled:pointer-events-none disabled:text-white/50"
+                className="text-12 duration-preset hover:bg-background-700 rounded-8 p-8 disabled:pointer-events-none disabled:text-white/50"
                 onClick={() => zoomIn(days)}
                 disabled={days > data.length}
               >

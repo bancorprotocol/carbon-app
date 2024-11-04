@@ -1,12 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import {
-  DateRangePicker,
-  datePickerPresets,
-} from 'components/common/datePicker/DateRangePicker';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import {
   SimulatorInputOverlappingValues,
   SimulatorOverlappingInputDispatch,
@@ -20,8 +15,7 @@ import { SimulatorType } from 'libs/routing/routes/sim';
 import { useCallback } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData } from 'libs/d3';
-import { fromUnixUTC, toUnixUTC } from '../utils';
-import { startOfDay, sub } from 'date-fns';
+import { toUnixUTC } from '../utils';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
@@ -101,18 +95,6 @@ export const SimInputChart = ({
         className="mb-20 flex items-center justify-between"
       >
         <h2 className="text-20 font-weight-500 mr-20">Price Chart</h2>
-        <DateRangePicker
-          defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
-          defaultEnd={startOfDay(new Date())}
-          start={fromUnixUTC(state.start)}
-          end={fromUnixUTC(state.end)}
-          onConfirm={onDatePickerConfirm}
-          presets={datePickerPresets}
-          options={{
-            disabled: datePickerDisabledDays,
-          }}
-          required
-        />
       </header>
       {isError && (
         <ErrorMsg
@@ -131,6 +113,7 @@ export const SimInputChart = ({
           prices={prices}
           onPriceUpdates={onPriceUpdates}
           onDragEnd={onPriceUpdatesEnd}
+          onRangeUpdates={onDatePickerConfirm}
           data={data}
           marketPrice={marketPrice}
           bounds={bounds}

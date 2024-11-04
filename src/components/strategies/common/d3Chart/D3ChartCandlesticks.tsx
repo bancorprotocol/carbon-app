@@ -115,9 +115,9 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           label={prettifyNumber(marketPrice ?? '', { decimals: 4 })}
         />
       )}
-      <D3Pointer />
       <D3PricesAxis prices={prices} />
       <D3AllDrawingRanges />
+      <D3Pointer />
     </>
   );
 };

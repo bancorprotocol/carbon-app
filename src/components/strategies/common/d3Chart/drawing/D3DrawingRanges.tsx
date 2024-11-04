@@ -61,7 +61,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="10"
-          fill="white"
+          fill="black"
         >
           {xAxisFormatter.format(fromUnixUTC(min))}
         </text>
@@ -82,7 +82,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="10"
-          fill="white"
+          fill="black"
         >
           {xAxisFormatter.format(fromUnixUTC(max))}
         </text>
@@ -127,7 +127,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="10"
-          fill="white"
+          fill="black"
         >
           {prettifyNumber(min)}
         </text>
@@ -148,7 +148,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="10"
-          fill="white"
+          fill="black"
         >
           {prettifyNumber(max)}
         </text>
