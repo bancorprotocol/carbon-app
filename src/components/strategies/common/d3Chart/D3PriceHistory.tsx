@@ -121,7 +121,8 @@ const useZoom = (
     })();
 
     const scale = data.length / days;
-    const correction = dms.marginRight * (1 - 1 / scale);
+    const correction =
+      behavior === 'normal' ? dms.marginRight * (1 - 1 / scale) : 0;
     const translateX = baseXScale(from)! + correction;
     const transition = selection.transition().duration(500);
     const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
