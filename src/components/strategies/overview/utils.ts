@@ -38,22 +38,18 @@ const sortFn: Record<StrategySort, SortFn> = {
       b.quote.symbol.localeCompare(a.quote.symbol)
     );
   },
-  roiAsc: (a, b) => {
-    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
-    return a.roi.minus(b.roi).toNumber();
-  },
-  roiDesc: (a, b) => {
-    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
-    return a.roi.minus(b.roi).times(-1).toNumber();
-  },
   totalBudgetDesc: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
     return a.fiatBudget.total.minus(b.fiatBudget.total).times(-1).toNumber();
   },
+  trades: (a, b) => {
+    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
+    return b.tradeCount - a.tradeCount;
+  },
 };
 
 export const getCompareFunctionBySortType = (sortType: StrategySort) => {
-  return sortFn[sortType] ?? sortFn['roiDesc'];
+  return sortFn[sortType] ?? sortFn['trades'];
 };
 export const getSortAndFilterItems = () => {
   const sortItems = Object.entries(strategySort)

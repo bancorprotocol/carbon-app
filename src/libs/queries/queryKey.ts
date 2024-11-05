@@ -39,6 +39,7 @@ export namespace QueryKey {
     'token-price-history',
     params,
   ];
+  export const tradeCount = () => [...extAPI, 'trade-count'];
 
   export const strategy = (id: string) => [...sdk, 'strategy', id];
   export const strategies = (user?: string) => [

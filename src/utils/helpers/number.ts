@@ -147,18 +147,16 @@ export function prettifyNumber(
 
   // Force value to be positive
   if (num.lte(0)) {
-    return Intl.NumberFormat(locale, {
-      ...intlOptions,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(0);
+    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);
+    intlOptions.maximumFractionDigits = Math.min(options.decimals ?? 2, 2);
+    return Intl.NumberFormat(locale, intlOptions).format(0);
   }
 
   if (num.gte(1)) {
-    intlOptions.minimumFractionDigits = 2;
+    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);
     intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 2, 2);
   } else if (num.gte(0.001)) {
-    intlOptions.minimumFractionDigits = 2;
+    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);
     intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 6, 2);
   } else {
     intlOptions.maximumSignificantDigits = 5;

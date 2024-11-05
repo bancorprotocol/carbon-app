@@ -13,6 +13,7 @@ import {
   ServerActivityMeta,
 } from 'libs/queries/extApi/activity';
 import { lsService } from 'services/localeStorage';
+import { TradeCount } from 'libs/queries/extApi/tradeCount';
 
 // Only ETH is supported as network currency by the API
 const NETWORK_CURRENCY =
@@ -34,11 +35,6 @@ export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
 
 export type FiatPriceDict = {
   [k in FiatSymbol]: number;
-};
-
-export type RoiRow = {
-  ROI: string;
-  id: string;
 };
 
 const get = async <T>(
@@ -83,9 +79,6 @@ const carbonApi = {
   ): Promise<TokenPriceHistoryResult[]> => {
     return get<TokenPriceHistoryResult[]>('history/prices', params);
   },
-  getRoi: async (): Promise<RoiRow[]> => {
-    return get<RoiRow[]>('roi');
-  },
   getSimulator: async (
     params: SimulatorAPIParams
   ): Promise<SimulatorReturnNew> => {
@@ -100,6 +93,7 @@ const carbonApi = {
   getActivityMeta: async (params: QueryActivityParams) => {
     return get<ServerActivityMeta>('activity/meta', params);
   },
+  getTradeCount: () => get<TradeCount[]>('analytics/trades_count'),
 };
 
 export { carbonApi };
