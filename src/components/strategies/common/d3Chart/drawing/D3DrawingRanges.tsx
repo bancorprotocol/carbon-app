@@ -3,7 +3,7 @@ import { Drawing, useD3ChartCtx } from '../D3ChartContext';
 import { getMax, getMin } from 'utils/helpers/operators';
 import { prettifyNumber } from 'utils/helpers';
 import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
-import { axisDms, handleDms } from '../utils';
+import { handleDms } from '../utils';
 
 export const D3AllDrawingRanges = () => {
   const { drawings } = useD3ChartCtx();
@@ -34,13 +34,13 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
   const { dms, xScale } = useD3ChartCtx();
   const min = xScale(props.min)!;
   const max = xScale(props.max)!;
-  const y = dms.boundedHeight + axisDms.xHeight / 2 - handleDms.height / 2;
+  const y = dms.boundedHeight + dms.marginBottom / 2 - handleDms.height / 2;
   return (
     <g>
       <rect
         x={min}
         y={dms.boundedHeight}
-        height={axisDms.xHeight}
+        height={dms.marginBottom}
         width={max - min}
         fill="var(--primary)"
         fillOpacity="0.3"
@@ -100,13 +100,13 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
   const min = yScale(props.min);
   const max = yScale(props.max);
   const x = dms.boundedWidth;
-  const padding = (axisDms.yWidth - handleDms.width) / 2;
+  const padding = (dms.marginRight - handleDms.width) / 2;
   return (
     <g>
       <rect
         x={dms.boundedWidth}
         y={max}
-        width={axisDms.yWidth}
+        width={dms.marginRight}
         height={min - max}
         fill="var(--primary)"
         fillOpacity="0.3"
@@ -122,7 +122,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           fill="var(--primary)"
         />
         <text
-          x={axisDms.yWidth / 2}
+          x={dms.marginRight / 2}
           y="0"
           dominantBaseline="middle"
           textAnchor="middle"
@@ -143,7 +143,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           fill="var(--primary)"
         />
         <text
-          x={axisDms.yWidth / 2}
+          x={dms.marginRight / 2}
           y="0"
           dominantBaseline="middle"
           textAnchor="middle"
