@@ -3,7 +3,6 @@ import { HttpResponse, http, RequestHandler } from 'msw';
 import { debugTokens } from '../../../../e2e/utils/types';
 import tokenListsMock from '../../../../e2e/mocks/tokenLists.json';
 import { Order, Strategy } from 'libs/queries';
-import { SafeDecimal } from 'libs/safedecimal';
 import { TokenPriceHistoryResult } from 'libs/queries/extApi/tokenPrice';
 
 /**
@@ -153,7 +152,6 @@ export const mockStrategy = (params: MockStrategyParams): Strategy => ({
   quote: tokenList[params.quote],
   status: 'active',
   encoded: {} as any,
-  roi: new SafeDecimal('1'),
   order0: params.order0,
   order1: params.order1,
 });

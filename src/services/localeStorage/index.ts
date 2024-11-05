@@ -5,8 +5,6 @@ import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
 import {
-  EnumStrategyFilter,
-  EnumStrategySort,
   StrategyFilter,
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
@@ -40,8 +38,8 @@ interface LocalStorageSchema {
   tradeMaxOrders: string;
   chooseTokenCategory: ChooseTokenCategory;
   carbonControllerAddress: string;
-  strategyOverviewFilter: StrategyFilter | EnumStrategyFilter;
-  strategyOverviewSort: StrategySort | EnumStrategySort;
+  strategyOverviewFilter: StrategyFilter;
+  strategyOverviewSort: StrategySort;
   voucherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
   sdkCompressedCacheData: string;
@@ -53,6 +51,20 @@ interface LocalStorageSchema {
   lastSdkCache: { timestamp: number; ttl: number };
   notificationPreferences: NotificationPreference;
   configOverride: Partial<AppConfig>;
+}
+
+enum EnumStrategySort {
+  Recent,
+  Old,
+  PairAscending,
+  PairDescending,
+  RoiAscending,
+  RoiDescending,
+}
+enum EnumStrategyFilter {
+  All,
+  Active,
+  Inactive,
 }
 
 // ************************** /
@@ -82,6 +94,27 @@ const migrations: Migration[] = [
       const key = prevFormattedKey.slice(prefix.length);
       if (!key) return;
       const nextFormattedKey = ['carbon', NETWORK, 'v1.1', key].join('-');
+      migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
+    },
+  },
+  {
+    migrate: (prevFormattedKey) => {
+      const prefix = `carbon-${NETWORK}-v1.1-`;
+      if (prevFormattedKey === `${prefix}strategyOverviewSort`) {
+        const current = lsService.getItem('strategyOverviewSort') as any;
+        if (current in EnumStrategySort) removeItem({ prevFormattedKey });
+        if (['roiAsc', 'roiDesc'].includes(current))
+          removeItem({ prevFormattedKey });
+      }
+      if (prevFormattedKey === `${prefix}strategyOverviewFilter`) {
+        const current = lsService.getItem('strategyOverviewFilter') as any;
+        if (current in EnumStrategyFilter) removeItem({ prevFormattedKey });
+      }
+      const isMatch = prevFormattedKey.startsWith(prefix);
+      if (!isMatch) return;
+      const key = prevFormattedKey.slice(prefix.length);
+      if (!key) return;
+      const nextFormattedKey = ['carbon', NETWORK, 'v1.2', key].join('-');
       migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
     },
   },
