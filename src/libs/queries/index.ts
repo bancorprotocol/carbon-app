@@ -17,5 +17,4 @@ export { useGetOrderBook } from 'libs/queries/sdk/orderBook';
 export type { OrderRow } from 'libs/queries/sdk/orderBook';
 export { useGetMaxSourceAmountByPair } from 'libs/queries/sdk/maxSourceAmount';
 export { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
-export { useGetRoi } from 'libs/queries/extApi/roi';
 export * from 'libs/queries/extApi/simulator';
