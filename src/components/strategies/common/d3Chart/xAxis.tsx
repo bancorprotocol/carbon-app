@@ -8,7 +8,7 @@ export const XAxis = () => {
   const xTicks = useMemo(() => {
     const length = xScale.domain().length;
     const ratio = Math.ceil(zoom?.k ?? 1);
-    const target = Math.floor((dms.boundedWidth * ratio) / 100);
+    const target = Math.floor((dms.boundedWidth * ratio) / 110);
     const numberOfTicks = Math.max(1, target);
     const m = Math.ceil(length / numberOfTicks);
     return xScale.domain().filter((_, i) => i % m === m - 1);
