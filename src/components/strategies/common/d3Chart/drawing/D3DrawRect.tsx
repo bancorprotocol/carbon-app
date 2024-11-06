@@ -92,7 +92,7 @@ export const D3DrawRect: FC<Props> = ({ xScale, yScale, onChange }) => {
           stroke="var(--primary)"
           strokeWidth="2"
           fill="var(--primary)"
-          fillOpacity="0.4"
+          fillOpacity="0.2"
         />
       )}
       {points.map(({ x, y }) => (
@@ -251,7 +251,7 @@ export const D3EditRect: FC<D3ShapeProps> = ({ drawing, onChange }) => {
           stroke="var(--primary)"
           strokeWidth="2"
           fill="var(--primary)"
-          fillOpacity="0.4"
+          fillOpacity="0.2"
         />
         {circles}
       </g>

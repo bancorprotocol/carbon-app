@@ -82,7 +82,6 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
   const invertY = yScale.invert;
 
   const addPoint = (event: ReactMouseEvent) => {
-    console.log('CLICK');
     const svg = document.getElementById('interactive-chart')!;
     const root = svg.getBoundingClientRect();
     const x = invertX(event.clientX - root.x);
@@ -123,7 +122,6 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
         );
       });
     } else {
-      console.log('CLICK ENDS');
       const polygon = polygonRef.current!;
       onChange(fromPolygonPoints(polygon, invertX, invertY));
     }
@@ -131,7 +129,7 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
 
   return (
     <>
-      <polygon ref={polygonRef} fill="var(--primary)" fillOpacity="0.4" />
+      <polygon ref={polygonRef} fill="var(--primary)" fillOpacity="0.2" />
       {!!points.length && (
         <line
           ref={lineRef}
@@ -141,7 +139,6 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
           y2={yScale(points[1]?.y ?? points[0].y)}
           stroke="var(--primary)"
           strokeWidth="2"
-          // click event not bubbled in SVG, line was blocking the addPoint
         />
       )}
       {points.length === 2 && (
@@ -153,7 +150,6 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
           y2={yScale(points[1].y)}
           stroke="var(--primary)"
           strokeWidth="2"
-          // click event not bubbled in SVG, line was blocking the addPoint
         />
       )}
       {points.map(({ x, y }) => (
@@ -334,7 +330,7 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
           className="draggable"
           points={toPolygonPoints(points, xScale, yScale)}
           fill="var(--primary)"
-          fillOpacity="0.4"
+          fillOpacity="0.2"
         />
         <line
           className="draggable"

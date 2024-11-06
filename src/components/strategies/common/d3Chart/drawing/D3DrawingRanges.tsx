@@ -43,7 +43,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
         height={dms.marginBottom}
         width={max - min}
         fill="var(--primary)"
-        fillOpacity="0.3"
+        fillOpacity="0.2"
       />
       <g transform={`translate(${min}, ${y})`}>
         <rect
@@ -109,7 +109,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
         width={dms.marginRight}
         height={min - max}
         fill="var(--primary)"
-        fillOpacity="0.3"
+        fillOpacity="0.2"
       />
       <g transform={`translate(${x}, ${min})`}>
         <rect
