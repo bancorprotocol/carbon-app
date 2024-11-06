@@ -122,7 +122,9 @@ const useZoom = (
 
     const scale = data.length / days;
     const correction =
-      behavior === 'normal' ? dms.marginRight * (1 - 1 / scale) : 0;
+      behavior === 'normal'
+        ? dms.marginRight * (1 - 1 / scale) - baseXScale.bandwidth()
+        : 0;
     const translateX = baseXScale(from)! + correction;
     const transition = selection.transition().duration(500);
     const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
@@ -235,7 +237,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   const zoomFromTo = ({ start, end }: { start?: Date; end?: Date }) => {
     if (!start || !end) return;
-    zoomRange(toUnixUTC(startOfDay(start)), differenceInDays(end, start));
+    zoomRange(toUnixUTC(startOfDay(start)), differenceInDays(end, start) + 1);
   };
 
   const zoomIn = (days: number) => {
