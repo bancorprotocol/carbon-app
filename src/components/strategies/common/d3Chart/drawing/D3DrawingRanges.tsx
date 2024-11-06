@@ -20,20 +20,20 @@ export const D3DrawingRanges: FC<Props> = ({ drawing }) => {
   const yMax = getMax(...drawing.points.map((v) => v.y));
   return (
     <g id={`ranges-${drawing.id}`} className="hidden">
-      <D3DrawingXRange min={xMin.toString()} max={xMax.toString()} />
+      <D3DrawingXRange min={xMin} max={xMax} />
       <D3DrawingYRange min={yMin} max={yMax} />
     </g>
   );
 };
 
 interface XRangeProps {
-  min: string;
-  max: string;
+  min: number;
+  max: number;
 }
 export const D3DrawingXRange: FC<XRangeProps> = (props) => {
   const { dms, xScale } = useD3ChartCtx();
-  const min = xScale(props.min)!;
-  const max = xScale(props.max)!;
+  const min = xScale(props.min.toString())!;
+  const max = xScale(props.max.toString())!;
   const y = dms.boundedHeight + dms.marginBottom / 2 - handleDms.height / 2;
   return (
     <g>
@@ -63,7 +63,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
           fontSize="10"
           fill="black"
         >
-          {xAxisFormatter.format(fromUnixUTC(min))}
+          {xAxisFormatter.format(fromUnixUTC(props.min))}
         </text>
       </g>
       <g transform={`translate(${max}, ${y})`}>
@@ -84,7 +84,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
           fontSize="10"
           fill="black"
         >
-          {xAxisFormatter.format(fromUnixUTC(max))}
+          {xAxisFormatter.format(fromUnixUTC(props.max))}
         </text>
       </g>
     </g>
@@ -129,7 +129,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           fontSize="10"
           fill="black"
         >
-          {prettifyNumber(min)}
+          {prettifyNumber(props.min)}
         </text>
       </g>
       <g transform={`translate(${x}, ${max})`}>
@@ -150,7 +150,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           fontSize="10"
           fill="black"
         >
-          {prettifyNumber(max)}
+          {prettifyNumber(props.max)}
         </text>
       </g>
     </g>
