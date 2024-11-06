@@ -129,7 +129,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           fontSize="10"
           fill="black"
         >
-          {prettifyNumber(props.min)}
+          {prettifyNumber(props.min, { abbreviate: true })}
         </text>
       </g>
       <g transform={`translate(${x}, ${max})`}>
@@ -150,7 +150,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           fontSize="10"
           fill="black"
         >
-          {prettifyNumber(props.max)}
+          {prettifyNumber(props.max, { abbreviate: true })}
         </text>
       </g>
     </g>

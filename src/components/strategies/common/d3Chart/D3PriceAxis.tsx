@@ -38,7 +38,7 @@ const D3PriceAxis: FC<Props> = ({ price, color }) => {
     >
       <rect y={y} {...handleDms} fill={color} rx={4} />
       <text y={y + 12} x={6} fill="black" fontSize={10}>
-        {prettifyNumber(price, { decimals: 4 })}
+        {prettifyNumber(price, { abbreviate: true })}
       </text>
     </g>
   );
