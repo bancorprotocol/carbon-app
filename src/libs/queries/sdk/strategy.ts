@@ -19,8 +19,6 @@ import {
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
-import { RoiRow } from 'utils/carbonApi';
-import { useGetRoi } from 'libs/queries/extApi/roi';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
@@ -41,7 +39,6 @@ export interface Strategy {
   order1: Order;
   status: StrategyStatus;
   encoded: EncodedStrategyBNStr;
-  roi: SafeDecimal;
 }
 
 export interface StrategyWithFiat extends Strategy {
@@ -50,6 +47,7 @@ export interface StrategyWithFiat extends Strategy {
     quote: SafeDecimal;
     base: SafeDecimal;
   };
+  tradeCount: number;
 }
 
 interface StrategiesHelperProps {
@@ -57,7 +55,6 @@ interface StrategiesHelperProps {
   getTokenById: (id: string) => Token | undefined;
   importToken: (token: Token) => void;
   Token: (address: string) => { read: TokenContract };
-  roiData: RoiRow[];
 }
 
 const buildStrategiesHelper = async ({
@@ -65,7 +62,6 @@ const buildStrategiesHelper = async ({
   getTokenById,
   importToken,
   Token,
-  roiData,
 }: StrategiesHelperProps) => {
   const _getTknData = async (address: string) => {
     const data = await fetchTokenData(Token, address);
@@ -123,8 +119,6 @@ const buildStrategiesHelper = async ({
       marginalRate: s.sellPriceMarginal,
     };
 
-    const roi = new SafeDecimal(roiData.find((r) => r.id === s.id)?.ROI || 0);
-
     const strategy: Strategy = {
       id: s.id,
       idDisplay: getLowestBits(s.id),
@@ -134,7 +128,6 @@ const buildStrategiesHelper = async ({
       order1,
       status,
       encoded: s.encoded,
-      roi,
     };
 
     return strategy;
@@ -158,8 +151,6 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const isValidAddress = utils.isAddress(address);
   const isZeroAddress = address === config.addresses.tokens.ZERO;
 
-  const roiQuery = useGetRoi();
-
   return useQuery<Strategy[]>({
     queryKey: QueryKey.strategies(address),
     queryFn: async () => {
@@ -171,14 +162,9 @@ export const useGetUserStrategies = ({ user }: Props) => {
         getTokenById,
         importToken,
         Token,
-        roiData: roiQuery.data || [],
       });
     },
-    enabled:
-      tokens.length > 0 &&
-      isInitialized &&
-      roiQuery.isFetched &&
-      ensAddress.isFetched,
+    enabled: tokens.length > 0 && isInitialized && ensAddress.isFetched,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
@@ -188,7 +174,6 @@ export const useGetStrategy = (id: string) => {
   const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
-  const roiQuery = useGetRoi();
 
   return useQuery<Strategy>({
     queryKey: QueryKey.strategy(id),
@@ -199,11 +184,10 @@ export const useGetStrategy = (id: string) => {
         getTokenById,
         importToken,
         Token,
-        roiData: roiQuery.data || [],
       });
       return strategies[0];
     },
-    enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
+    enabled: tokens.length > 0 && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
@@ -219,8 +203,6 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
-  const roiQuery = useGetRoi();
-
   return useQuery<Strategy[]>({
     queryKey: QueryKey.strategiesByPair(token0, token1),
     queryFn: async () => {
@@ -231,10 +213,9 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
         getTokenById,
         importToken,
         Token,
-        roiData: roiQuery.data || [],
       });
     },
-    enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
+    enabled: tokens.length > 0 && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });

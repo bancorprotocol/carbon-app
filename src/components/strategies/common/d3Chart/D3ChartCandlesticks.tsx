@@ -104,7 +104,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
         ticks={yTicks}
         dms={dms}
         formatter={(value) => {
-          return prettifyNumber(value, { decimals: 100, abbreviate: true });
+          return prettifyNumber(value, { abbreviate: true });
         }}
       />
       {marketPrice && (

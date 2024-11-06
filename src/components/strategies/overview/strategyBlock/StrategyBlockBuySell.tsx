@@ -23,8 +23,8 @@ export const StrategyBlockBuySell: FC<{
   const fiatBudget = buy ? strategy.fiatBudget.quote : strategy.fiatBudget.base;
   const fiatBudgetValue = getFiatDisplayValue(fiatBudget, currency);
 
-  const buyTooltip = `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`;
-  const sellTooltip = `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`;
+  const buyTooltip = `${otherToken.symbol} tokens available to buy ${token.symbol}.`;
+  const sellTooltip = `${otherToken.symbol} tokens available for sale.`;
   const noCurrencyTooltip = `There is no ${currency} value for this token.`;
 
   return (
