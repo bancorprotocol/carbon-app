@@ -121,11 +121,7 @@ const useZoom = (
     })();
 
     const scale = data.length / days;
-    const correction =
-      behavior === 'normal'
-        ? dms.marginRight * (1 - 1 / scale) - baseXScale.bandwidth()
-        : 0;
-    const translateX = baseXScale(from)! + correction;
+    const translateX = baseXScale(from)!;
     const transition = selection.transition().duration(500);
     const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
     zoomHandler.current?.transform(transition, transform);
@@ -189,13 +185,12 @@ export const D3PriceHistory: FC<Props> = (props) => {
     zoomBehavior
   );
 
-  const correction = dms.marginRight * (1 - 1 / (zoomTransform?.k ?? 1));
   const xScale = useMemo(() => {
     const zoomX = (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d);
     if (zoomBehavior === 'normal') {
       return scaleBand()
         .domain(data.map((d) => d.date.toString()))
-        .range([0, dms.boundedWidth + correction].map(zoomX))
+        .range([0, dms.boundedWidth].map(zoomX))
         .paddingInner(0.5);
     } else {
       return scaleBand()
@@ -203,7 +198,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
         .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5].map(zoomX))
         .paddingInner(0.5);
     }
-  }, [data, dms.boundedWidth, zoomBehavior, zoomTransform, correction]);
+  }, [data, dms.boundedWidth, zoomBehavior, zoomTransform]);
 
   const yDomain = useMemo(() => {
     const candles = data.filter((point) => xScale(point.date.toString())! > 0);
@@ -218,7 +213,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   const invertX = scaleBandInvert(xScale);
 
-  const start = invertX(0) ?? xScale.domain()[0];
+  const start = invertX(xScale.bandwidth() / 2) ?? xScale.domain()[0];
   const end = invertX(dms.boundedWidth) ?? xScale.domain().at(-1);
 
   const disabledDates = [
