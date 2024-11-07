@@ -10,6 +10,7 @@ import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { useEffect, useState } from 'react';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { lsService } from 'services/localeStorage';
+import { ExplorerHeader } from 'components/explorer/ExplorerHeader';
 
 const url = '/explore/$type';
 export const ExplorerPage = () => {
@@ -34,6 +35,7 @@ export const ExplorerPage = () => {
     <Page hideTitle>
       <StrategyProvider query={query}>
         <ExplorerEvents />
+        <ExplorerHeader />
         <div className="space-y-30 flex flex-grow flex-col">
           <ExplorerSearch />
           {slug && <ExplorerTabs />}

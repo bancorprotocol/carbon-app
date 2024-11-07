@@ -13,7 +13,7 @@ import {
   ServerActivityMeta,
 } from 'libs/queries/extApi/activity';
 import { lsService } from 'services/localeStorage';
-import { TradeCount } from 'libs/queries/extApi/tradeCount';
+import { Trending } from 'libs/queries/extApi/tradeCount';
 
 // Only ETH is supported as network currency by the API
 const NETWORK_CURRENCY =
@@ -93,7 +93,7 @@ const carbonApi = {
   getActivityMeta: async (params: QueryActivityParams) => {
     return get<ServerActivityMeta>('activity/meta', params);
   },
-  getTradeCount: () => get<TradeCount[]>('analytics/trades_count'),
+  getTrending: () => get<Trending>('analytics/trending'),
 };
 
 export { carbonApi };
