@@ -170,6 +170,29 @@ export const useGetUserStrategies = ({ user }: Props) => {
   });
 };
 
+export const useGetStrategList = (ids: string[]) => {
+  const { isInitialized } = useCarbonInit();
+  const { tokens, getTokenById, importToken } = useTokens();
+  const { Token } = useContract();
+
+  return useQuery<Strategy[]>({
+    queryKey: QueryKey.strategy(ids.join()),
+    queryFn: async () => {
+      const getStrategies = ids.map((id) => carbonSDK.getStrategy(id));
+      const strategies = await Promise.all(getStrategies);
+      return buildStrategiesHelper({
+        strategies,
+        getTokenById,
+        importToken,
+        Token,
+      });
+    },
+    enabled: tokens.length > 0 && isInitialized,
+    staleTime: ONE_DAY_IN_MS,
+    retry: false,
+  });
+};
+
 export const useGetStrategy = (id: string) => {
   const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importToken } = useTokens();
