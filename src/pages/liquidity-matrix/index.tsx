@@ -26,7 +26,10 @@ import {
   useGetMultipleTokenPrices,
   useGetTokenPrice,
 } from 'libs/queries/extApi/tokenPrice';
+import { BaseOrder } from 'components/strategies/common/types';
+import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import './index.css';
+import { getMaxSpread } from 'components/strategies/overlapping/utils';
 
 interface GetOrdersParams {
   base: string;
@@ -35,6 +38,8 @@ interface GetOrdersParams {
   concentration: string;
   pairs: PairFormSearch[];
 }
+
+type LocalOrder = ReturnType<typeof getOrders>[number];
 const getOrders = (params: GetOrdersParams) => {
   const { base, basePrice, spread, concentration, pairs } = params;
   const multiplicator = new SafeDecimal(concentration).div(100).add(1);
@@ -86,6 +91,13 @@ const usdPrice = (value: string) => {
   return prettifyNumber(value, { abbreviate: true, currentCurrency: 'USD' });
 };
 
+const getMin = (...data: string[]) => SafeDecimal.min(...data).toString();
+const getMax = (...data: string[]) => SafeDecimal.max(...data).toString();
+const round = (value: number) => Math.round(value * 100) / 100;
+const clamp = (min: string, value: string, max: string) => {
+  return getMin(max, getMax(value, min));
+};
+
 const url = '/liquidity-matrix';
 export const LiquidityMatrixPage = () => {
   const { getTokenById } = useTokens();
@@ -113,7 +125,7 @@ export const LiquidityMatrixPage = () => {
 
   const base = getTokenById(search.base);
   const basePrice = search.basePrice ?? '0';
-  const spread = search.spread ?? '0.01';
+  const spread = search.spread || '0.01';
   const concentration = search.concentration ?? '5';
   const pairs = useMemo(() => search.pairs ?? [], [search.pairs]);
   const quotes = pairs.map((p) => getTokenById(p.quote)!);
@@ -129,6 +141,14 @@ export const LiquidityMatrixPage = () => {
       concentration,
     });
   }, [search.base, basePrice, concentration, pairs, spread]);
+
+  const maxSpread = useMemo(() => {
+    const allMaxSpread = orders.map((order) => {
+      return getMaxSpread(+order.buyMin, +order.sellMax);
+    });
+    const min = round(Math.min(...allMaxSpread));
+    return min.toString();
+  }, [orders]);
 
   // Set base market price
   const { data: baseTokenPrice } = useGetTokenPrice(base?.address);
@@ -149,6 +169,23 @@ export const LiquidityMatrixPage = () => {
     }
     if (changes) set({ pairs: copy });
   }, [pairs, quotePrices, set]);
+
+  // TODO: Batch creation
+  // const approvalTokens = useMemo(() => {
+  //   if (!base) return [];
+  //   const tokens: Record<string, ApprovalToken> = {};
+  //   tokens[base.address] = { ...base, spender, amount: '0' };
+  //   for (const order of orders) {
+  //     const { address, decimals, symbol } = getTokenById(order.quote)!;
+  //     const amount = order.buyBudget;
+  //     tokens[order.quote] = { address, decimals, symbol, spender, amount };
+  //     tokens[base.address].amount = new SafeDecimal(order.sellBudget)
+  //       .add(tokens[base.address].amount)
+  //       .toString();
+  //   }
+  //   return Object.values(tokens);
+  // }, [base, orders, getTokenById]);
+  // const approval = useApproval(approvalTokens);
 
   if (!hasFlag('liquidity-matrix')) {
     return (
@@ -235,10 +272,12 @@ export const LiquidityMatrixPage = () => {
               </label>
               <input
                 id="spread"
-                value={spread}
+                value={clamp('0.01', spread, maxSpread)}
                 onInput={(e) => set({ spread: e.currentTarget.value })}
                 type="number"
                 step="0.01"
+                min="0.01"
+                max={maxSpread}
               />
               <span className="suffix">%</span>
             </div>
@@ -323,34 +362,14 @@ export const LiquidityMatrixPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((order) => {
-                    const quote = getTokenById(order.quote)!;
-                    return (
-                      <tr key={order.quote}>
-                        <td>
-                          <TokensOverlap tokens={[base, quote]} size={24} />
-                        </td>
-                        <td>{spread}</td>
-                        <td>{tokenAmount(order.buyMin, quote)}</td>
-                        <td>{tokenAmount(order.sellMax, quote)}</td>
-                        <td>
-                          {tokenAmount(order.sellBudget, base)}&nbsp;
-                          <span className="usd">
-                            ({usdPrice(order.sellBudgetUSD)})
-                          </span>
-                        </td>
-                        <td>
-                          {tokenAmount(order.buyBudget, quote)}&nbsp;
-                          <span className="usd">
-                            ({usdPrice(order.buyBudgetUSD)})
-                          </span>
-                        </td>
-                        <td>
-                          <button type="button">Create</button>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {orders.map((order) => (
+                    <OrderRow
+                      key={order.quote}
+                      order={order}
+                      spread={spread}
+                      base={base}
+                    />
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -372,21 +391,17 @@ interface PairFormProps {
   update: (params: Partial<PairFormSearch>) => void;
 }
 const PairForm: FC<PairFormProps> = (props) => {
-  const {
-    base,
-    basePrice,
-    quote,
-    pair,
-    spread,
-    concentration,
-    remove,
-    update,
-  } = props;
+  const { base, quote, pair, spread, concentration, remove, update } = props;
   const id = useId();
+  const basePrice = props.basePrice || '0';
+  const baseBudget = pair.baseBudget || '0';
+  const price = pair.price || '0';
+  const quoteBudget = pair.quoteBudget || '0';
+  const baseBudgetUSD = new SafeDecimal(baseBudget).mul(basePrice).toString();
+  const quoteBudgetUSD = new SafeDecimal(quoteBudget).mul(price).toString();
 
   const setBaseBudget = (sellBudget: string) => {
     const multiplicator = new SafeDecimal(concentration).div(100).add(1);
-    const price = pair.price ?? '0';
     const marketPrice = new SafeDecimal(basePrice).div(price).toString();
     const min = new SafeDecimal(marketPrice).div(multiplicator).toString();
     const max = new SafeDecimal(marketPrice).mul(multiplicator).toString();
@@ -397,9 +412,8 @@ const PairForm: FC<PairFormProps> = (props) => {
       max,
       marketPrice,
       spread,
-      sellBudget
+      sellBudget || '0'
     );
-    console.log({ sellBudget, buyBudget, price, marketPrice });
     update({
       baseBudget: sellBudget,
       quoteBudget: buyBudget,
@@ -407,7 +421,6 @@ const PairForm: FC<PairFormProps> = (props) => {
   };
   const setQuoteBudget = (buyBudget: string) => {
     const multiplicator = new SafeDecimal(concentration).div(100).add(1);
-    const price = pair.price ?? '0';
     const marketPrice = new SafeDecimal(basePrice).div(price).toString();
     const min = new SafeDecimal(marketPrice).div(multiplicator).toString();
     const max = new SafeDecimal(marketPrice).mul(multiplicator).toString();
@@ -418,7 +431,7 @@ const PairForm: FC<PairFormProps> = (props) => {
       max,
       marketPrice,
       spread,
-      buyBudget
+      buyBudget || '0'
     );
     update({
       baseBudget: sellBudget,
@@ -427,11 +440,11 @@ const PairForm: FC<PairFormProps> = (props) => {
   };
 
   const setBaseBudgetFromUSD = (e: FormEvent<HTMLInputElement>) => {
-    const budget = e.currentTarget.valueAsNumber / Number(pair.price ?? 1);
+    const budget = new SafeDecimal(e.currentTarget.value || '0').div(basePrice);
     setBaseBudget(budget.toString());
   };
   const setQuoteBudgetFromUSD = (e: FormEvent<HTMLInputElement>) => {
-    const budget = e.currentTarget.valueAsNumber / Number(pair.price ?? 1);
+    const budget = new SafeDecimal(e.currentTarget.value || '0').div(price);
     setQuoteBudget(budget.toString());
   };
 
@@ -455,6 +468,7 @@ const PairForm: FC<PairFormProps> = (props) => {
             type="number"
             value={pair.price}
             onInput={(e) => update({ price: e.currentTarget.value })}
+            min="0"
           />
           <span className="suffix">USD</span>
         </div>
@@ -471,6 +485,7 @@ const PairForm: FC<PairFormProps> = (props) => {
               type="number"
               value={pair.baseBudget}
               onInput={(e) => setBaseBudget(e.currentTarget.value)}
+              min="0"
             />
             <label htmlFor={`${id}-base-budget`}>
               <TokenLogo token={base} size={24} />
@@ -482,9 +497,10 @@ const PairForm: FC<PairFormProps> = (props) => {
             <input
               id={`${id}-base-usd`}
               type="number"
-              value={Number(pair.baseBudget) * Number(basePrice)}
+              value={baseBudgetUSD}
               onInput={setBaseBudgetFromUSD}
               aria-label="budget in USD"
+              min="0"
             />
           </div>
         </div>
@@ -495,6 +511,7 @@ const PairForm: FC<PairFormProps> = (props) => {
               type="number"
               value={pair.quoteBudget}
               onInput={(e) => setQuoteBudget(e.currentTarget.value)}
+              min="0"
             />
             <label htmlFor={`${id}-quote-budget`}>
               <TokenLogo token={quote} size={24} />
@@ -506,13 +523,68 @@ const PairForm: FC<PairFormProps> = (props) => {
             <input
               id={`${id}-quote-usd`}
               type="number"
-              value={Number(pair.quoteBudget) * Number(pair.price)}
+              value={quoteBudgetUSD}
               onInput={setQuoteBudgetFromUSD}
               aria-label="budget in USD"
+              min="0"
             />
           </div>
         </div>
       </div>
     </li>
+  );
+};
+
+interface OrderRowProps {
+  base: Token;
+  spread: string;
+  order: LocalOrder;
+}
+const OrderRow: FC<OrderRowProps> = ({ base, spread, order }) => {
+  const { getTokenById } = useTokens();
+  const quote = getTokenById(order.quote)!;
+  const order0: BaseOrder = {
+    min: order.buyMin,
+    max: order.buyMax,
+    marginalPrice: order.buyMarginal,
+    budget: order.buyBudget,
+  };
+  const order1: BaseOrder = {
+    min: order.sellMin,
+    max: order.sellMax,
+    marginalPrice: order.sellMarginal,
+    budget: order.sellBudget,
+  };
+
+  const { createStrategy } = useCreateStrategy({
+    type: 'overlapping',
+    base,
+    quote,
+    order0,
+    order1,
+  });
+
+  return (
+    <tr key={order.quote}>
+      <td>
+        <TokensOverlap tokens={[base, quote]} size={24} />
+      </td>
+      <td>{spread}</td>
+      <td>{tokenAmount(order.buyMin, quote)}</td>
+      <td>{tokenAmount(order.sellMax, quote)}</td>
+      <td>
+        {tokenAmount(order.sellBudget, base)}&nbsp;
+        <span className="usd">({usdPrice(order.sellBudgetUSD)})</span>
+      </td>
+      <td>
+        {tokenAmount(order.buyBudget, quote)}&nbsp;
+        <span className="usd">({usdPrice(order.buyBudgetUSD)})</span>
+      </td>
+      <td>
+        <button type="button" onClick={createStrategy}>
+          Create
+        </button>
+      </td>
+    </tr>
   );
 };
