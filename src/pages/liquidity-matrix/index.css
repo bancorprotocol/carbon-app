@@ -162,8 +162,8 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.pair-list > li .budget .usd {
-  display: flex;
+ .usd {
+  display: inline-flex;
   align-items: center;
   gap: 4px;
   font-size: 0.8rem;

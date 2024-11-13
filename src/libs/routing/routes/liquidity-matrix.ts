@@ -20,7 +20,7 @@ const entries = {
   concentration: v.optional(validInputNumber),
   spread: v.optional(validInputNumber),
   base: v.optional(validAddress),
-  basePrice: v.optional(validAddress),
+  basePrice: v.optional(validInputNumber),
   pairs: v.optional(v.array(v.object(pairForm))),
 };
 

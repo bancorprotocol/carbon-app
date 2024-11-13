@@ -1,4 +1,3 @@
-import { flushSync } from 'react-dom';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { TokenLogo } from 'components/common/imager/Imager';
@@ -9,7 +8,7 @@ import { hasFlag } from 'utils/featureFlags';
 import { ReactComponent as AddIcon } from 'assets/icons/plus.svg';
 import { ReactComponent as RemoveIcon } from 'assets/icons/X.svg';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
-import { FC, FormEvent, useCallback, useEffect, useId } from 'react';
+import { FC, FormEvent, useCallback, useEffect, useId, useMemo } from 'react';
 import {
   LiquidityMatrixSearch,
   PairFormSearch,
@@ -22,38 +21,44 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { prettifyNumber } from 'utils/helpers';
+import { prettifyNumber, tokenAmount } from 'utils/helpers';
+import {
+  useGetMultipleTokenPrices,
+  useGetTokenPrice,
+} from 'libs/queries/extApi/tokenPrice';
 import './index.css';
 
 interface GetOrdersParams {
   base: string;
+  basePrice: string;
   spread: string;
   concentration: string;
   pairs: PairFormSearch[];
 }
 const getOrders = (params: GetOrdersParams) => {
-  const { base, spread, concentration, pairs } = params;
+  const { base, basePrice, spread, concentration, pairs } = params;
   const multiplicator = new SafeDecimal(concentration).div(100).add(1);
   return pairs.map((pair) => {
-    const { quote, price = '0', baseBudget = '0', quoteBudget = '0' } = pair;
-    const min = new SafeDecimal(price).div(multiplicator).toString();
-    const max = new SafeDecimal(price).mul(multiplicator).toString();
-    const prices = calculateOverlappingPrices(min, max, price, spread);
-    const buyBudgetUSD = new SafeDecimal(quoteBudget).mul(price).toString();
-    const sellBudgetUSD = new SafeDecimal(baseBudget).mul(price).toString();
+    const price = pair.price || '0';
+    const baseBudget = pair.baseBudget || '0';
+    const quoteBudget = pair.quoteBudget || '0';
+    const min = new SafeDecimal(+price).div(multiplicator).toString();
+    const max = new SafeDecimal(+price).mul(multiplicator).toString();
+    const marketPrice = new SafeDecimal(basePrice).div(price).toString();
+    const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
     return {
       base,
-      quote,
+      quote: pair.quote,
       buyMin: prices.buyPriceLow,
       buyMax: prices.buyPriceHigh,
       buyMarginal: prices.buyPriceMarginal,
       buyBudget: quoteBudget,
-      buyBudgetUSD,
+      buyBudgetUSD: new SafeDecimal(+quoteBudget).mul(+price).toString(),
       sellMin: prices.sellPriceLow,
       sellMax: prices.sellPriceHigh,
       sellMarginal: prices.sellPriceMarginal,
       sellBudget: baseBudget,
-      sellBudgetUSD,
+      sellBudgetUSD: new SafeDecimal(+baseBudget).mul(+basePrice).toString(),
     };
   });
 };
@@ -63,10 +68,22 @@ const getRatios = (prices: string[]) => {
   for (let i = 0; i < prices.length; i++) {
     table.push([]);
     for (let j = 0; j < prices.length; j++) {
-      table[i][j] = new SafeDecimal(prices[i]).div(prices[j]).toString();
+      if (prices[j] === '0') table[i][j] = '0';
+      else table[i][j] = new SafeDecimal(prices[i]).div(prices[j]).toString();
     }
   }
   return table;
+};
+
+const createPair = (quote: string) => ({
+  quote,
+  price: '',
+  baseBudget: '',
+  quoteBudget: '',
+});
+
+const usdPrice = (value: string) => {
+  return prettifyNumber(value, { abbreviate: true, currentCurrency: 'USD' });
 };
 
 const url = '/liquidity-matrix';
@@ -90,17 +107,48 @@ export const LiquidityMatrixPage = () => {
   useEffect(() => {
     const { base, quote } = getLastVisitedPair();
     if (!search.base) set({ base });
-    if (!search.pairs) set({ pairs: [{ quote }] });
+    if (!search.pairs) set({ pairs: [createPair(quote)] });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [set]);
 
   const base = getTokenById(search.base);
-  const basePrice = search.basePrice ?? '1';
+  const basePrice = search.basePrice ?? '0';
   const spread = search.spread ?? '0.01';
   const concentration = search.concentration ?? '5';
-  const pairs = search.pairs ?? [];
+  const pairs = useMemo(() => search.pairs ?? [], [search.pairs]);
   const quotes = pairs.map((p) => getTokenById(p.quote)!);
   const ratios = getRatios([basePrice, ...pairs.map((p) => p.price ?? '1')]);
+
+  const orders = useMemo(() => {
+    if (!search.base) return [];
+    return getOrders({
+      base: search.base,
+      basePrice,
+      pairs,
+      spread,
+      concentration,
+    });
+  }, [search.base, basePrice, concentration, pairs, spread]);
+
+  // Set base market price
+  const { data: baseTokenPrice } = useGetTokenPrice(base?.address);
+  useEffect(() => {
+    if (!!Number(basePrice)) return;
+    set({ basePrice: baseTokenPrice?.USD.toString() ?? '0' });
+  }, [basePrice, baseTokenPrice, set]);
+
+  // Set quotes market prices
+  const quotePrices = useGetMultipleTokenPrices(pairs.map((p) => p.quote));
+  useEffect(() => {
+    let changes = false;
+    const copy = structuredClone(pairs);
+    for (let i = 0; i < quotePrices.length; i++) {
+      if (!!Number(copy[i].price)) continue;
+      changes = true;
+      copy[i].price = quotePrices[i].data?.USD.toString() ?? '0';
+    }
+    if (changes) set({ pairs: copy });
+  }, [pairs, quotePrices, set]);
 
   if (!hasFlag('liquidity-matrix')) {
     return (
@@ -122,7 +170,14 @@ export const LiquidityMatrixPage = () => {
   const selectBase = () => {
     openModal('tokenLists', {
       excludedTokens: [base.address, ...pairs.map((p) => p.quote)],
-      onClick: (token) => set({ base: token.address }),
+      onClick: (token) => {
+        const copy = structuredClone(pairs);
+        for (const pair of copy) {
+          pair.baseBudget = '';
+          pair.quoteBudget = '';
+        }
+        set({ base: token.address, basePrice: '', pairs: copy });
+      },
     });
   };
 
@@ -130,33 +185,18 @@ export const LiquidityMatrixPage = () => {
     openModal('tokenLists', {
       excludedTokens: [base.address, ...pairs.map((p) => p.quote)],
       onClick: (t) => {
-        document.startViewTransition(async () => {
-          flushSync(() => {
-            set({ pairs: [...pairs, { quote: t.address }] });
-          });
-        });
+        set({ pairs: [...pairs, createPair(t.address)] });
       },
     });
   };
   const removeQuote = (address: string) => {
-    document.startViewTransition(async () => {
-      flushSync(() => {
-        set({ pairs: pairs.filter((v) => v.quote !== address) });
-      });
-    });
+    set({ pairs: pairs.filter((v) => v.quote !== address) });
   };
   const updatePair = (index: number, params: Partial<PairFormSearch>) => {
     const copy = structuredClone(pairs);
     copy[index] = { ...copy[index], ...params };
     set({ pairs: copy });
   };
-
-  const orders = getOrders({
-    base: base.address,
-    pairs,
-    spread,
-    concentration,
-  });
 
   return (
     <section className="page">
@@ -223,6 +263,7 @@ export const LiquidityMatrixPage = () => {
               <PairForm
                 key={pair.quote}
                 base={base}
+                basePrice={basePrice}
                 quote={getTokenById(pair.quote)!}
                 concentration={concentration}
                 spread={spread}
@@ -287,21 +328,21 @@ export const LiquidityMatrixPage = () => {
                     return (
                       <tr key={order.quote}>
                         <td>
-                          {base.symbol} / {getTokenById(order.quote)?.symbol}
+                          <TokensOverlap tokens={[base, quote]} size={24} />
                         </td>
                         <td>{spread}</td>
-                        <td>{prettifyNumber(order.buyMin)}</td>
-                        <td>{prettifyNumber(order.sellMax)}</td>
+                        <td>{tokenAmount(order.buyMin, quote)}</td>
+                        <td>{tokenAmount(order.sellMax, quote)}</td>
                         <td>
-                          {prettifyNumber(order.sellBudget)} {base.symbol}&nbsp;
-                          <span>
-                            ({prettifyNumber(order.sellBudgetUSD)} USD)
+                          {tokenAmount(order.sellBudget, base)}&nbsp;
+                          <span className="usd">
+                            ({usdPrice(order.sellBudgetUSD)})
                           </span>
                         </td>
                         <td>
-                          {prettifyNumber(order.buyBudget)} {quote.symbol}&nbsp;
-                          <span>
-                            ({prettifyNumber(order.buyBudgetUSD)} USD)
+                          {tokenAmount(order.buyBudget, quote)}&nbsp;
+                          <span className="usd">
+                            ({usdPrice(order.buyBudgetUSD)})
                           </span>
                         </td>
                         <td>
@@ -322,6 +363,7 @@ export const LiquidityMatrixPage = () => {
 
 interface PairFormProps {
   base: Token;
+  basePrice: string;
   quote: Token;
   pair: PairFormSearch;
   concentration: string;
@@ -330,23 +372,34 @@ interface PairFormProps {
   update: (params: Partial<PairFormSearch>) => void;
 }
 const PairForm: FC<PairFormProps> = (props) => {
-  const { base, quote, pair, spread, concentration, remove, update } = props;
+  const {
+    base,
+    basePrice,
+    quote,
+    pair,
+    spread,
+    concentration,
+    remove,
+    update,
+  } = props;
   const id = useId();
 
   const setBaseBudget = (sellBudget: string) => {
     const multiplicator = new SafeDecimal(concentration).div(100).add(1);
     const price = pair.price ?? '0';
-    const min = new SafeDecimal(price).div(multiplicator).toString();
-    const max = new SafeDecimal(price).mul(multiplicator).toString();
+    const marketPrice = new SafeDecimal(basePrice).div(price).toString();
+    const min = new SafeDecimal(marketPrice).div(multiplicator).toString();
+    const max = new SafeDecimal(marketPrice).mul(multiplicator).toString();
     const buyBudget = calculateOverlappingBuyBudget(
       base.decimals,
       quote.decimals,
       min,
       max,
-      price,
+      marketPrice,
       spread,
       sellBudget
     );
+    console.log({ sellBudget, buyBudget, price, marketPrice });
     update({
       baseBudget: sellBudget,
       quoteBudget: buyBudget,
@@ -355,14 +408,15 @@ const PairForm: FC<PairFormProps> = (props) => {
   const setQuoteBudget = (buyBudget: string) => {
     const multiplicator = new SafeDecimal(concentration).div(100).add(1);
     const price = pair.price ?? '0';
-    const min = new SafeDecimal(price).div(multiplicator).toString();
-    const max = new SafeDecimal(price).mul(multiplicator).toString();
+    const marketPrice = new SafeDecimal(basePrice).div(price).toString();
+    const min = new SafeDecimal(marketPrice).div(multiplicator).toString();
+    const max = new SafeDecimal(marketPrice).mul(multiplicator).toString();
     const sellBudget = calculateOverlappingSellBudget(
       base.decimals,
       quote.decimals,
       min,
       max,
-      price,
+      marketPrice,
       spread,
       buyBudget
     );
@@ -428,7 +482,7 @@ const PairForm: FC<PairFormProps> = (props) => {
             <input
               id={`${id}-base-usd`}
               type="number"
-              value={Number(pair.baseBudget) * Number(pair.price)}
+              value={Number(pair.baseBudget) * Number(basePrice)}
               onInput={setBaseBudgetFromUSD}
               aria-label="budget in USD"
             />
