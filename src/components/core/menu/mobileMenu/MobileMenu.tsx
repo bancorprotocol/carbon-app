@@ -3,9 +3,10 @@ import { Link, useRouterState, useMatchRoute } from 'libs/routing';
 import { handleOnItemClick } from '../utils';
 import { ReactComponent as IconDots } from 'assets/icons/three-dots.svg';
 import { useModal } from 'hooks/useModal';
-import { menuItems } from 'components/core/menu';
+import { getMenuItems } from 'components/core/menu';
 
 export const MobileMenu: FC = () => {
+  const menuItems = getMenuItems();
   const { pathname } = useRouterState().location;
   const match = useMatchRoute();
   const { openModal } = useModal();

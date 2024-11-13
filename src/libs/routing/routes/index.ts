@@ -45,6 +45,7 @@ import {
   strategyPageRedirect,
   strategyPageRoot,
 } from 'libs/routing/routes/strategy';
+import { liquidityMatrixPage } from './liquidity-matrix';
 
 export const routeTree = rootRoute.addChildren([
   termPage,
@@ -91,4 +92,5 @@ export const routeTree = rootRoute.addChildren([
     ]),
     simulatorResultRoute,
   ]),
+  liquidityMatrixPage,
 ]);
