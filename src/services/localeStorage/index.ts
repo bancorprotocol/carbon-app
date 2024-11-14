@@ -51,6 +51,7 @@ interface LocalStorageSchema {
   lastSdkCache: { timestamp: number; ttl: number };
   notificationPreferences: NotificationPreference;
   configOverride: Partial<AppConfig>;
+  featureFlags: string[];
 }
 
 enum EnumStrategySort {
