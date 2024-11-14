@@ -12,6 +12,7 @@ interface Props {
   handleClassName?: string;
   readonly?: boolean;
   isDraggable?: boolean;
+  className?: string;
 }
 
 export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
@@ -23,12 +24,19 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
     readonly,
     isDraggable,
     handleClassName,
+    className,
   } = props;
   const { dms } = useD3ChartCtx();
   const lineWidth = dms.boundedWidth + 5;
 
   return (
-    <g className={cn(selector, isDraggable && !readonly && 'cursor-ns-resize')}>
+    <g
+      className={cn(
+        selector,
+        isDraggable && !readonly && 'cursor-ns-resize',
+        className
+      )}
+    >
       <line
         x1={0}
         x2={lineWidth}

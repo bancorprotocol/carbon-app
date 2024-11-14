@@ -113,6 +113,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           y={yScale(marketPrice)}
           lineProps={{ strokeDasharray: 2 }}
           label={prettifyNumber(marketPrice ?? '', { abbreviate: true })}
+          className="pointer-events-none"
         />
       )}
       <D3PricesAxis prices={prices} />

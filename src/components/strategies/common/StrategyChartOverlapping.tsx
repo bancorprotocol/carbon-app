@@ -12,20 +12,8 @@ import { OverlappingMarketPrice } from 'components/strategies/overlapping/Overla
 import { OverlappingChart } from 'components/strategies/overlapping/OverlappingChart';
 import { StrategyChartHistory } from './StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
-import {
-  DateRangePicker,
-  datePickerPresets,
-} from 'components/common/datePicker/DateRangePicker';
-import {
-  defaultEndDate,
-  defaultStartDate,
-} from 'components/strategies/common/utils';
-import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
-import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
-import { useNavigate } from '@tanstack/react-router';
 import { Token } from 'libs/tokens';
 import { StrategyChartLegend } from './StrategyChartLegend';
-import config from 'config';
 
 interface Props {
   marketPrice?: string;
@@ -37,27 +25,9 @@ interface Props {
   set: SetOverlapping;
 }
 
-const url = '/trade/overlapping';
 export const StrategyChartOverlapping: FC<Props> = (props) => {
   const { base, quote, marketPrice, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
-  const navigate = useNavigate({ from: url });
-
-  const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {
-    const { start, end } = props;
-    if (!start || !end) return;
-    navigate({
-      search: (previous) => ({
-        ...previous,
-        priceStart: toUnixUTC(start),
-        priceEnd: toUnixUTC(end),
-      }),
-      resetScroll: false,
-      replace: true,
-    });
-  };
-  const isNativeChart = config.ui.priceChart === 'native';
-
   return (
     <section
       aria-labelledby="price-chart-title"
@@ -83,20 +53,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
             History
           </Radio>
         </RadioGroup>
-        {isNativeChart && search.chartType === 'history' && (
-          <DateRangePicker
-            defaultStart={defaultStartDate()}
-            defaultEnd={defaultEndDate()}
-            start={fromUnixUTC(search.priceStart)}
-            end={fromUnixUTC(search.priceEnd)}
-            onConfirm={onDatePickerConfirm}
-            presets={datePickerPresets}
-            options={{
-              disabled: datePickerDisabledDays,
-            }}
-            required
-          />
-        )}
+
         <OverlappingMarketPrice
           base={base}
           quote={quote}

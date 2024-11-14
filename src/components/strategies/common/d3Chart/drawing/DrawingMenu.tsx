@@ -64,7 +64,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
           <FloatTooltipTrigger>
             <button
               role="menuitemradio"
-              aria-describedby={`${mode}-tooltip`}
+              aria-label={label}
               aria-checked={drawingMode === mode}
               className="hover:bg-background-700 rounded-8 aria-checked:text-primary p-8"
               onClick={() => setDrawingMode(mode as DrawingMode)}
@@ -72,10 +72,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
               {icon}
             </button>
           </FloatTooltipTrigger>
-          <FloatTooltipContent
-            id={`${mode}-tooltip`}
-            className="text-12 rounded-8 py-8"
-          >
+          <FloatTooltipContent className="text-12 rounded-8 py-8">
             {label}
           </FloatTooltipContent>
         </FloatTooltip>
@@ -85,17 +82,14 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
         <FloatTooltipTrigger>
           <button
             role="menuitem"
-            aria-describedby="delete-all-tooltip"
+            aria-label="Delete all"
             className="hover:bg-background-700 rounded-8 p-8"
             onClick={clearDrawings}
           >
             <IconTrash className="size-20" />
           </button>
         </FloatTooltipTrigger>
-        <FloatTooltipContent
-          id="delete-all-tooltip"
-          className="text-12 rounded-8 py-8"
-        >
+        <FloatTooltipContent className="text-12 rounded-8 py-8">
           Delete all
         </FloatTooltipContent>
       </FloatTooltip>
