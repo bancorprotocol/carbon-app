@@ -116,44 +116,50 @@
   align-items: center;
   gap: 8px;
 }
-.pair-list > li .budget-list {
+.budget-list {
   @apply bg-background-700 p-8;
   display: grid;
   gap: 8px;
   border-radius: 8px;
 }
-.pair-list > li .budget-list h3 {
+.budget-list h3 {
   display: flex;
   gap: 8px;
   align-items: center;
 }
-.pair-list > li .budget-list hr {
+.budget-list hr {
   align-self: center;
 }
-.pair-list > li .budget {
+.budget {
   @apply bg-black;
   border-radius: 8px;
   display: grid;
+  grid-template-columns: 1fr auto;
   padding: 8px;
   align-items: center;
-  font-size: 1.3rem;
 }
-.pair-list > li .budget:has(input:focus-visible) {
+.budget:has(input:focus-visible) {
   outline: 1px solid rgba(255, 255, 255, 0.4);
 }
-.pair-list > li .budget input {
+.budget:has(input:invalid) {
+  outline: 1px solid var(--error);
+}
+.budget input {
   background-color: transparent;
   flex: 1;
   width: 0;
+  text-overflow: ellipsis;
 }
-.pair-list > li .budget input:focus-visible {
+.budget input:focus-visible {
   outline: none;
 }
-.pair-list > li .budget .token {
+.budget .token {
+  grid-column: 1 / 3;
   display: flex;
   gap: 8px;
+  font-size: 1.3rem;
 }
-.pair-list > li .budget label {
+.budget label {
   @apply bg-background-800;
   display: flex;
   align-items: center;
@@ -162,16 +168,30 @@
   padding: 4px 8px;
   border-radius: 24px;
 }
-.pair-list > li .budget label span {
+.budget label span {
   text-overflow: ellipsis;
   overflow: hidden;
 }
- .usd {
+.usd {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.6);
+}
+.budget .balance {
+  justify-self: end;
+  font-size: 0.8rem;
+  animation: scalein 0.2s ease-out;
+}
+.budget .budget-error {
+  grid-column: 1/3;
+  display: none;
+  color: var(--error);
+  font-size: 0.8rem;
+}
+.budget:has(input:out-of-range:invalid) .budget-error {
+  display: block;
 }
 
 .add-pair {

@@ -29,6 +29,7 @@ import {
 import { BaseOrder } from 'components/strategies/common/types';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
+import { useGetTokenBalance } from 'libs/queries';
 import './index.css';
 
 const animateLeaving = (quote: string, options: { isLast: boolean }) => {
@@ -463,6 +464,8 @@ interface PairFormProps {
 const PairForm: FC<PairFormProps> = (props) => {
   const { base, quote, pair, spread, concentration, remove, update } = props;
   const id = useId();
+  const { data: baseBalance } = useGetTokenBalance(base);
+  const { data: quoteBalance } = useGetTokenBalance(quote);
   const basePrice = props.basePrice || '0';
   const baseBudget = pair.baseBudget || '0';
   const price = pair.price || '0';
@@ -556,6 +559,8 @@ const PairForm: FC<PairFormProps> = (props) => {
               value={pair.baseBudget}
               onInput={(e) => setBaseBudget(e.currentTarget.value)}
               min="0"
+              max={baseBalance}
+              step="any"
             />
             <label htmlFor={`${id}-base-budget`}>
               <TokenLogo token={base} size={24} />
@@ -571,8 +576,17 @@ const PairForm: FC<PairFormProps> = (props) => {
               onInput={setBaseBudgetFromUSD}
               aria-label="budget in USD"
               min="0"
+              step="any"
             />
           </div>
+          {baseBalance && (
+            <div className="balance">
+              <button type="button" onClick={() => setBaseBudget(baseBalance)}>
+                Use balance: <span>{tokenAmount(baseBalance, base)}</span>
+              </button>
+            </div>
+          )}
+          <output className="budget-error">Insufficient funds</output>
         </div>
         <div className="budget">
           <div className="token">
@@ -582,6 +596,8 @@ const PairForm: FC<PairFormProps> = (props) => {
               value={pair.quoteBudget}
               onInput={(e) => setQuoteBudget(e.currentTarget.value)}
               min="0"
+              max={quoteBalance}
+              step="any"
             />
             <label htmlFor={`${id}-quote-budget`}>
               <TokenLogo token={quote} size={24} />
@@ -597,8 +613,20 @@ const PairForm: FC<PairFormProps> = (props) => {
               onInput={setQuoteBudgetFromUSD}
               aria-label="budget in USD"
               min="0"
+              step="any"
             />
           </div>
+          {quoteBalance && (
+            <div className="balance">
+              <button
+                type="button"
+                onClick={() => setQuoteBudget(quoteBalance)}
+              >
+                Balance: <span>{tokenAmount(quoteBalance, quote)}</span>
+              </button>
+            </div>
+          )}
+          <output className="budget-error">Insufficient funds</output>
         </div>
       </div>
     </li>
