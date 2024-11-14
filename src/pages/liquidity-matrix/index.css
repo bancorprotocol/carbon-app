@@ -1,5 +1,6 @@
+/* FIELD INPUTS */
 .field {
-  @apply bg-black;
+  @apply bg-background-800;
   display: flex;
   align-items: center;
   border-radius: 4px;
@@ -16,7 +17,7 @@
 }
 .field input {
   flex: 1;
-  width: 0;
+  width: 150px;
   padding: 4px 8px;
   border-radius: 8px;
   background-color: transparent;
@@ -28,6 +29,47 @@
 .field input:focus-visible {
   outline: none;
 }
+
+/* PRICE INPUT */
+
+.price {
+  @apply bg-black;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  border-radius: 8px;
+  padding: 8px;
+}
+.price:has(input:focus-visible) {
+  outline: 1px solid rgba(255, 255, 255, 0.4);
+}
+.price > * {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.price input {
+  background-color: transparent;
+  width: 0;
+  flex: 1;
+  text-overflow: ellipsis;
+  text-align: end;
+}
+.price input:focus-visible {
+  outline: none;
+}
+.price label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.price .price-action {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  justify-content: end;
+  animation: scalein 0.2s ease-out;
+}
+
 
 .page {
   width: 100%;
@@ -53,14 +95,17 @@
   gap: 16px;
 }
 
-.base {
+.base, .price-config {
   display: flex;
   justify-content: space-between;
   gap: 16px;
 }
 
+.base .price {
+  @apply bg-background-800;
+}
 
-.base button {
+.base .select {
   @apply bg-background-800;
   border-radius: 8px;
   padding: 8px;
@@ -74,13 +119,13 @@
     "logo title chevron"
     "logo description chevron";
 }
-.base button img {
+.base .select img {
   grid-area: logo;
 }
-.base button svg {
+.base .select svg {
   grid-area: chevron;
 }
-.base button .description {
+.base .select .description {
   font-size: 0.9rem;
   color:rgba(255, 255, 255, 0.6);
 }
@@ -97,25 +142,26 @@
   grid-template-columns: repeat(auto-fill, minmax(var(--pair-width), 1fr));
   gap: 24px;
 }
-.pair-list > li {
+.pair {
   @apply bg-background-800 rounded p-16;
   display: grid;
   gap: 16px;
   min-height: 400px;
 }
 
-.pair-list > li header {
+.pair header {
   display: grid;
   gap: 8px;
 }
-.pair-list > li header h3 {
+.pair header h3 {
   margin-inline-end: auto;
 }
-.pair-list > li .quote-header {
+.pair .quote-header {
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
 .budget-list {
   @apply bg-background-700 p-8;
   display: grid;
@@ -135,6 +181,7 @@
   border-radius: 8px;
   display: grid;
   grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr 1fr;
   padding: 8px;
   align-items: center;
 }
@@ -182,6 +229,7 @@
 .budget .balance {
   justify-self: end;
   font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
   animation: scalein 0.2s ease-out;
 }
 .budget .budget-error {
@@ -299,14 +347,14 @@
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1275px) {
   .page form {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 600px) {
-  .base {
+@media (max-width: 630px) {
+  .base, .price-config {
     flex-direction: column;
   }
   .summary table, .price-ratio {

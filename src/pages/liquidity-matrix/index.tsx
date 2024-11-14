@@ -22,10 +22,7 @@ import {
 } from '@bancor/carbon-sdk/strategy-management';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { prettifyNumber, tokenAmount } from 'utils/helpers';
-import {
-  useGetMultipleTokenPrices,
-  useGetTokenPrice,
-} from 'libs/queries/extApi/tokenPrice';
+import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { BaseOrder } from 'components/strategies/common/types';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
@@ -128,7 +125,7 @@ const getRatios = (prices: string[]) => {
   for (let i = 0; i < prices.length; i++) {
     table.push([]);
     for (let j = 0; j < prices.length; j++) {
-      if (prices[j] === '0') table[i][j] = '0';
+      if (!Number(prices[i]) || !Number(prices[j])) table[i][j] = '0';
       else table[i][j] = new SafeDecimal(prices[i]).div(prices[j]).toString();
     }
   }
@@ -142,7 +139,7 @@ const createPair = (quote: string) => ({
   quoteBudget: '',
 });
 
-const usdPrice = (value: string) => {
+const usdPrice = (value: string | number) => {
   return prettifyNumber(value, { abbreviate: true, currentCurrency: 'USD' });
 };
 
@@ -211,19 +208,6 @@ export const LiquidityMatrixPage = () => {
     if (!!Number(basePrice)) return;
     set({ basePrice: baseTokenPrice?.USD.toString() ?? '0' });
   }, [basePrice, baseTokenPrice, set]);
-
-  // Set quotes market prices
-  const quotePrices = useGetMultipleTokenPrices(pairs.map((p) => p.quote));
-  useEffect(() => {
-    let changes = false;
-    const copy = structuredClone(pairs);
-    for (let i = 0; i < quotePrices.length; i++) {
-      if (!!Number(copy[i].price)) continue;
-      changes = true;
-      copy[i].price = quotePrices[i].data?.USD.toString() ?? '0';
-    }
-    if (changes) set({ pairs: copy });
-  }, [pairs, quotePrices, set]);
 
   // TODO: Batch creation
   // const approvalTokens = useMemo(() => {
@@ -301,30 +285,47 @@ export const LiquidityMatrixPage = () => {
         <article role="group">
           <h2>Base token</h2>
           <div className="base">
-            <button type="button" onClick={selectBase}>
+            <button className="select" type="button" onClick={selectBase}>
               <TokenLogo token={base} size={32} />
               <span>{base.symbol}</span>
               <span className="description">Select your base token</span>
               <ChevronIcon className="size-16" />
             </button>
-            <div className="field">
-              <label className="prefix">
-                <TokenLogo token={base} size={14} />
-                {base.symbol} Price
-              </label>
-              <input
-                type="number"
-                value={basePrice}
-                onInput={(e) => set({ basePrice: e.currentTarget.value })}
-              />
-              <span className="suffix">USD</span>
+            <div className="price">
+              <div className="price-field">
+                <label htmlFor="base-price">
+                  <TokenLogo token={base} size={14} />
+                  {base.symbol} Price
+                </label>
+                <input
+                  id="base-price"
+                  type="number"
+                  value={basePrice}
+                  onInput={(e) => set({ basePrice: e.currentTarget.value })}
+                  min="0"
+                  step="any"
+                />
+                <span className="suffix">USD</span>
+              </div>
+              <div className="price-action">
+                {baseTokenPrice && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      set({ basePrice: baseTokenPrice.USD.toString() })
+                    }
+                  >
+                    Use Market Price: {usdPrice(baseTokenPrice.USD)}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </article>
 
         <article role="group">
           <h2>Price Configuration</h2>
-          <div className="base">
+          <div className="price-config">
             <div className="field">
               <label className="prefix" htmlFor="spread">
                 Fee Tier
@@ -370,7 +371,7 @@ export const LiquidityMatrixPage = () => {
                 update={(p) => updatePair(i, p)}
               />
             ))}
-            <li key="add">
+            <li className="pair" key="add">
               <button className="add-pair" type="button" onClick={addPair}>
                 <AddIcon className="size-32" />
                 Add quote
@@ -464,11 +465,14 @@ interface PairFormProps {
 const PairForm: FC<PairFormProps> = (props) => {
   const { base, quote, pair, spread, concentration, remove, update } = props;
   const id = useId();
+  const { data: quotePrice } = useGetTokenPrice(quote.address);
   const { data: baseBalance } = useGetTokenBalance(base);
   const { data: quoteBalance } = useGetTokenBalance(quote);
   const basePrice = props.basePrice || '0';
   const baseBudget = pair.baseBudget || '0';
-  const price = pair.price || '0';
+  const price = useMemo(() => {
+    return pair.price || quotePrice?.USD || '0';
+  }, [quotePrice, pair.price]);
   const quoteBudget = pair.quoteBudget || '0';
   const baseBudgetUSD = new SafeDecimal(baseBudget).mul(basePrice).toString();
   const quoteBudgetUSD = new SafeDecimal(quoteBudget).mul(price).toString();
@@ -522,7 +526,7 @@ const PairForm: FC<PairFormProps> = (props) => {
   };
 
   return (
-    <li key={quote.address} data-on-leave={quote.address}>
+    <li className="pair" key={quote.address} data-on-leave={quote.address}>
       <header>
         <div className="quote-header">
           <TokenLogo token={quote} size={24} />
@@ -531,19 +535,31 @@ const PairForm: FC<PairFormProps> = (props) => {
             <RemoveIcon className="size-16" />
           </button>
         </div>
-        <div className="field">
-          <label className="prefix" htmlFor={`${id}-price`}>
-            <TokenLogo token={quote} size={14} />
-            {quote.symbol} Price
-          </label>
-          <input
-            id={`${id}-price`}
-            type="number"
-            value={pair.price}
-            onInput={(e) => update({ price: e.currentTarget.value })}
-            min="0"
-          />
-          <span className="suffix">USD</span>
+        <div className="price">
+          <div className="price-field">
+            <label htmlFor={`${id}-price`}>
+              <TokenLogo token={quote} size={14} />
+              {quote.symbol} Price
+            </label>
+            <input
+              id={`${id}-price`}
+              type="number"
+              value={price}
+              onInput={(e) => update({ price: e.currentTarget.value })}
+              min="0"
+            />
+            <span>USD</span>
+          </div>
+          <div className="price-action">
+            {quotePrice && (
+              <button
+                type="button"
+                onClick={() => update({ price: quotePrice.USD.toString() })}
+              >
+                Use Market Price: {usdPrice(quotePrice.USD)}
+              </button>
+            )}
+          </div>
         </div>
       </header>
       <div className="budget-list">
