@@ -309,7 +309,8 @@
   color: black;
 }
 .summary button:disabled {
-  opacity: 0.6;
+  background-color: white;
+  opacity: 0.4;
 }
 
 .summary ul {

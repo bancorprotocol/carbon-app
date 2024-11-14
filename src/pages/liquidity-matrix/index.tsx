@@ -22,7 +22,10 @@ import {
 } from '@bancor/carbon-sdk/strategy-management';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { prettifyNumber, tokenAmount } from 'utils/helpers';
-import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
+import {
+  useGetMultipleTokenPrices,
+  useGetTokenPrice,
+} from 'libs/queries/extApi/tokenPrice';
 import { BaseOrder } from 'components/strategies/common/types';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
@@ -203,11 +206,24 @@ export const LiquidityMatrixPage = () => {
   }, [strategies]);
 
   // Set base market price
-  const { data: baseTokenPrice } = useGetTokenPrice(base?.address);
+  const { data: baseTokenPrice } = useGetTokenPrice(search.base);
   useEffect(() => {
     if (!!Number(basePrice)) return;
     set({ basePrice: baseTokenPrice?.USD.toString() ?? '0' });
   }, [basePrice, baseTokenPrice, set]);
+
+  // Set quotes market prices
+  const quotePrices = useGetMultipleTokenPrices(pairs.map((p) => p.quote));
+  useEffect(() => {
+    let changes = false;
+    const copy = structuredClone(pairs);
+    for (let i = 0; i < quotePrices.length; i++) {
+      if (copy[i].price) continue;
+      changes = true;
+      copy[i].price = quotePrices[i].data?.USD.toString() ?? '0';
+    }
+    if (changes) set({ pairs: copy });
+  }, [pairs, quotePrices, set]);
 
   // TODO: Batch creation
   // const approvalTokens = useMemo(() => {
@@ -470,9 +486,7 @@ const PairForm: FC<PairFormProps> = (props) => {
   const { data: quoteBalance } = useGetTokenBalance(quote);
   const basePrice = props.basePrice || '0';
   const baseBudget = pair.baseBudget || '0';
-  const price = useMemo(() => {
-    return pair.price || quotePrice?.USD || '0';
-  }, [quotePrice, pair.price]);
+  const price = pair.price || '0';
   const quoteBudget = pair.quoteBudget || '0';
   const baseBudgetUSD = new SafeDecimal(baseBudget).mul(basePrice).toString();
   const quoteBudgetUSD = new SafeDecimal(quoteBudget).mul(price).toString();
@@ -658,6 +672,9 @@ interface StrategyProps {
 const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { getTokenById } = useTokens();
   const quote = getTokenById(strategy.quote)!;
+  const { data: baseBalance } = useGetTokenBalance(base);
+  const { data: quoteBalance } = useGetTokenBalance(quote);
+
   const order0: BaseOrder = {
     min: strategy.buyMin,
     max: strategy.buyMax,
@@ -679,7 +696,11 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
       order0,
       order1,
     });
-  const disabled = isLoading || isAwaiting || isProcessing;
+  const disabled = (() => {
+    if (new SafeDecimal(baseBalance || '0').lt(order1.budget)) return true;
+    if (new SafeDecimal(quoteBalance || '0').lt(order0.budget)) return true;
+    return isLoading || isAwaiting || isProcessing;
+  })();
 
   const create = async () => {
     createStrategy({
@@ -715,6 +736,8 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
 const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { getTokenById } = useTokens();
   const quote = getTokenById(strategy.quote)!;
+  const { data: baseBalance } = useGetTokenBalance(base);
+  const { data: quoteBalance } = useGetTokenBalance(quote);
   const order0: BaseOrder = {
     min: strategy.buyMin,
     max: strategy.buyMax,
@@ -736,8 +759,11 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
       order0,
       order1,
     });
-  const disabled = isLoading || isAwaiting || isProcessing;
-
+  const disabled = (() => {
+    if (new SafeDecimal(baseBalance || '0').lt(order1.budget)) return true;
+    if (new SafeDecimal(quoteBalance || '0').lt(order0.budget)) return true;
+    return isLoading || isAwaiting || isProcessing;
+  })();
   const create = async () => {
     createStrategy({
       onSuccess: () => clear(),
