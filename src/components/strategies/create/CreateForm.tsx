@@ -59,8 +59,9 @@ export const CreateForm: FC<FormProps> = (props) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
     createStrategyEvents.submit(type, search);
-    await createStrategy();
-    navigate({ to: '/', search: {}, params: {} });
+    await createStrategy({
+      onSuccess: () => navigate({ to: '/', search: {}, params: {} }),
+    });
   };
 
   return (

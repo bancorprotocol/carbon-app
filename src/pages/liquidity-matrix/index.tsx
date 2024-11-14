@@ -28,8 +28,62 @@ import {
 } from 'libs/queries/extApi/tokenPrice';
 import { BaseOrder } from 'components/strategies/common/types';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
-import './index.css';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
+import './index.css';
+
+const animateLeaving = (quote: string, options: { isLast: boolean }) => {
+  const elements = document.querySelectorAll(`[data-on-leave="${quote}"]`);
+  const keyframes = [
+    { transform: 'scale(1)', opacity: 1 },
+    { transform: 'scale(0.9)', opacity: 0 },
+  ];
+  const animations = Array.from(elements).map((element) => {
+    return element.animate(keyframes, { duration: 100, easing: 'ease-in' });
+  });
+  if (options.isLast) {
+    const summary = document.querySelector('.summary');
+    summary?.animate(keyframes, { duration: 100, easing: 'ease-in' });
+  }
+  return Promise.all(animations.map((a) => a?.finished));
+};
+
+const flip = () => {
+  const selectors = 'article, h2, li, tr';
+  const previous = document.querySelectorAll<HTMLElement>(selectors);
+  const positions = new Map<HTMLElement, DOMRect>();
+  for (const element of previous) {
+    positions.set(element, element.getBoundingClientRect());
+  }
+  requestAnimationFrame(() => {
+    const next = document.querySelectorAll<HTMLElement>(selectors);
+    for (const element of next) {
+      if (positions.has(element)) {
+        const previousRect = positions.get(element)!;
+        const nextRect = element.getBoundingClientRect();
+        if (previousRect.x !== nextRect.x || previousRect.y !== nextRect.y) {
+          const x = previousRect.x - nextRect.x;
+          const y = previousRect.y - nextRect.y;
+          element.animate(
+            [
+              { transform: `translate(${x}px, ${y}px)` },
+              { transform: `translate(0, 0)` },
+            ],
+            { duration: 300, easing: 'ease-in-out' }
+          );
+        }
+      } else {
+        element.animate(
+          [
+            { transform: 'scale(0.9)', opacity: 0 },
+            { transform: 'scale(1)', opacity: 1 },
+          ],
+          { duration: 300, easing: 'ease-out' }
+        );
+      }
+      positions.set(element, element.getBoundingClientRect());
+    }
+  });
+};
 
 interface GetStrategiesParams {
   base: string;
@@ -222,12 +276,15 @@ export const LiquidityMatrixPage = () => {
     openModal('tokenLists', {
       excludedTokens: [base.address, ...pairs.map((p) => p.quote)],
       onClick: (t) => {
+        flip();
         set({ pairs: [...pairs, createPair(t.address)] });
       },
     });
   };
-  const removeQuote = (address: string) => {
+  const removeQuote = async (address: string) => {
     const quote = address.toLowerCase();
+    await animateLeaving(address, { isLast: pairs.length === 1 });
+    flip();
     set({ pairs: pairs.filter((v) => v.quote.toLowerCase() !== quote) });
   };
   const updatePair = (index: number, params: Partial<PairFormSearch>) => {
@@ -462,7 +519,7 @@ const PairForm: FC<PairFormProps> = (props) => {
   };
 
   return (
-    <li key={quote.address}>
+    <li key={quote.address} data-on-leave={quote.address}>
       <header>
         <div className="quote-header">
           <TokenLogo token={quote} size={24} />
@@ -581,12 +638,13 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const disabled = isLoading || isAwaiting || isProcessing;
 
   const create = async () => {
-    await createStrategy();
-    clear();
+    createStrategy({
+      onSuccess: () => clear(),
+    });
   };
 
   return (
-    <tr>
+    <tr data-on-leave={quote.address}>
       <td>
         <TokensOverlap tokens={[base, quote]} size={24} />
       </td>
@@ -637,12 +695,13 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const disabled = isLoading || isAwaiting || isProcessing;
 
   const create = async () => {
-    await createStrategy();
-    clear();
+    createStrategy({
+      onSuccess: () => clear(),
+    });
   };
 
   return (
-    <li className="strategy-card">
+    <li className="strategy-card" data-on-leave={quote.address}>
       <p>
         <TokensOverlap tokens={[base, quote]} size={24} />
         <span>
