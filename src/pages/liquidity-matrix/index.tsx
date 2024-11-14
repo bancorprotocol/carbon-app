@@ -30,6 +30,7 @@ import { BaseOrder } from 'components/strategies/common/types';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import { useGetTokenBalance } from 'libs/queries';
+import { useWagmi } from 'libs/wagmi';
 import './index.css';
 
 const animateLeaving = (quote: string, options: { isLast: boolean }) => {
@@ -209,7 +210,8 @@ export const LiquidityMatrixPage = () => {
   const { data: baseTokenPrice } = useGetTokenPrice(search.base);
   useEffect(() => {
     if (!!Number(basePrice)) return;
-    set({ basePrice: baseTokenPrice?.USD.toString() ?? '0' });
+    if (!baseTokenPrice?.USD) return;
+    set({ basePrice: baseTokenPrice?.USD?.toString() ?? '' });
   }, [basePrice, baseTokenPrice, set]);
 
   // Set quotes market prices
@@ -219,8 +221,9 @@ export const LiquidityMatrixPage = () => {
     const copy = structuredClone(pairs);
     for (let i = 0; i < quotePrices.length; i++) {
       if (copy[i].price) continue;
+      if (!quotePrices[i].data?.USD) continue;
       changes = true;
-      copy[i].price = quotePrices[i].data?.USD.toString() ?? '0';
+      copy[i].price = quotePrices[i].data?.USD.toString() ?? '';
     }
     if (changes) set({ pairs: copy });
   }, [pairs, quotePrices, set]);
@@ -565,7 +568,7 @@ const PairForm: FC<PairFormProps> = (props) => {
             <span>USD</span>
           </div>
           <div className="price-action">
-            {quotePrice && (
+            {!!quotePrice?.USD && (
               <button
                 type="button"
                 onClick={() => update({ price: quotePrice.USD.toString() })}
@@ -652,7 +655,7 @@ const PairForm: FC<PairFormProps> = (props) => {
                 type="button"
                 onClick={() => setQuoteBudget(quoteBalance)}
               >
-                Balance: <span>{tokenAmount(quoteBalance, quote)}</span>
+                Use balance: <span>{tokenAmount(quoteBalance, quote)}</span>
               </button>
             </div>
           )}
@@ -674,6 +677,7 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const quote = getTokenById(strategy.quote)!;
   const { data: baseBalance } = useGetTokenBalance(base);
   const { data: quoteBalance } = useGetTokenBalance(quote);
+  const { user } = useWagmi();
 
   const order0: BaseOrder = {
     min: strategy.buyMin,
@@ -697,6 +701,7 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
       order1,
     });
   const disabled = (() => {
+    if (!user) return true;
     if (new SafeDecimal(baseBalance || '0').lt(order1.budget)) return true;
     if (new SafeDecimal(quoteBalance || '0').lt(order0.budget)) return true;
     return isLoading || isAwaiting || isProcessing;
@@ -738,6 +743,8 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const quote = getTokenById(strategy.quote)!;
   const { data: baseBalance } = useGetTokenBalance(base);
   const { data: quoteBalance } = useGetTokenBalance(quote);
+  const { user } = useWagmi();
+
   const order0: BaseOrder = {
     min: strategy.buyMin,
     max: strategy.buyMax,
@@ -760,6 +767,7 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
       order1,
     });
   const disabled = (() => {
+    if (!user) return true;
     if (new SafeDecimal(baseBalance || '0').lt(order1.budget)) return true;
     if (new SafeDecimal(quoteBalance || '0').lt(order0.budget)) return true;
     return isLoading || isAwaiting || isProcessing;
