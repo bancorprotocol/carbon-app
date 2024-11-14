@@ -227,7 +227,8 @@ export const LiquidityMatrixPage = () => {
     });
   };
   const removeQuote = (address: string) => {
-    set({ pairs: pairs.filter((v) => v.quote !== address) });
+    const quote = address.toLowerCase();
+    set({ pairs: pairs.filter((v) => v.quote.toLowerCase() !== quote) });
   };
   const updatePair = (index: number, params: Partial<PairFormSearch>) => {
     const copy = structuredClone(pairs);
@@ -368,6 +369,7 @@ export const LiquidityMatrixPage = () => {
                       strategy={order}
                       spread={spread}
                       base={base}
+                      clear={() => removeQuote(order.quote)}
                     />
                   ))}
                 </tbody>
@@ -379,6 +381,7 @@ export const LiquidityMatrixPage = () => {
                     strategy={order}
                     spread={spread}
                     base={base}
+                    clear={() => removeQuote(order.quote)}
                   />
                 ))}
               </ul>
@@ -549,8 +552,9 @@ interface StrategyProps {
   base: Token;
   spread: string;
   strategy: LocalStrategy;
+  clear: () => void;
 }
-const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy }) => {
+const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { getTokenById } = useTokens();
   const quote = getTokenById(strategy.quote)!;
   const order0: BaseOrder = {
@@ -575,6 +579,11 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy }) => {
       order1,
     });
   const disabled = isLoading || isAwaiting || isProcessing;
+
+  const create = async () => {
+    await createStrategy();
+    clear();
+  };
 
   return (
     <tr>
@@ -593,15 +602,15 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy }) => {
         <span className="usd">({usdPrice(strategy.buyBudgetUSD)})</span>
       </td>
       <td>
-        <button type="button" disabled={disabled} onClick={createStrategy}>
-          {isProcessing ? 'Processing' : 'Create'}
+        <button type="button" disabled={disabled} onClick={create}>
+          {isProcessing || isAwaiting ? 'Processing' : 'Create'}
         </button>
       </td>
     </tr>
   );
 };
 
-const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy }) => {
+const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { getTokenById } = useTokens();
   const quote = getTokenById(strategy.quote)!;
   const order0: BaseOrder = {
@@ -626,6 +635,11 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy }) => {
       order1,
     });
   const disabled = isLoading || isAwaiting || isProcessing;
+
+  const create = async () => {
+    await createStrategy();
+    clear();
+  };
 
   return (
     <li className="strategy-card">
@@ -657,8 +671,8 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy }) => {
         <span>{tokenAmount(strategy.buyBudget, quote)}</span>
         <span className="usd">({usdPrice(strategy.buyBudgetUSD)})</span>
       </p>
-      <button type="button" disabled={disabled} onClick={createStrategy}>
-        {isProcessing ? 'Processing' : 'Create'}
+      <button type="button" disabled={disabled} onClick={create}>
+        {isProcessing || isAwaiting ? 'Processing' : 'Create'}
       </button>
     </li>
   );

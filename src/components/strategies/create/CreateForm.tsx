@@ -1,7 +1,7 @@
 import { FC, FormEvent, ReactNode, useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { createStrategyEvents } from 'services/events/strategyEvents';
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
 import { useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
@@ -27,6 +27,7 @@ export const CreateForm: FC<FormProps> = (props) => {
   const { openModal } = useModal();
   const { user } = useWagmi();
   const search = useSearch({ strict: false }) as any;
+  const navigate = useNavigate();
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
     useCreateStrategy({ type, base, quote, order0, order1 });
@@ -54,11 +55,12 @@ export const CreateForm: FC<FormProps> = (props) => {
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
   };
 
-  const create = (e: FormEvent<HTMLFormElement>) => {
+  const create = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
     createStrategyEvents.submit(type, search);
-    createStrategy();
+    await createStrategy();
+    navigate({ to: '/', search: {}, params: {} });
   };
 
   return (
