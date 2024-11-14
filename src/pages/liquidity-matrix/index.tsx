@@ -31,7 +31,7 @@ import { useCreateStrategy } from 'components/strategies/create/useCreateStrateg
 import './index.css';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 
-interface GetOrdersParams {
+interface GetStrategiesParams {
   base: string;
   basePrice: string;
   spread: string;
@@ -39,17 +39,17 @@ interface GetOrdersParams {
   pairs: PairFormSearch[];
 }
 
-type LocalOrder = ReturnType<typeof getOrders>[number];
-const getOrders = (params: GetOrdersParams) => {
+type LocalStrategy = ReturnType<typeof getStrategies>[number];
+const getStrategies = (params: GetStrategiesParams) => {
   const { base, basePrice, spread, concentration, pairs } = params;
   const multiplicator = new SafeDecimal(concentration).div(100).add(1);
   return pairs.map((pair) => {
     const price = pair.price || '0';
     const baseBudget = pair.baseBudget || '0';
     const quoteBudget = pair.quoteBudget || '0';
-    const min = new SafeDecimal(+price).div(multiplicator).toString();
-    const max = new SafeDecimal(+price).mul(multiplicator).toString();
     const marketPrice = new SafeDecimal(basePrice).div(price).toString();
+    const min = new SafeDecimal(marketPrice).div(multiplicator).toString();
+    const max = new SafeDecimal(marketPrice).mul(multiplicator).toString();
     const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
     return {
       base,
@@ -131,9 +131,9 @@ export const LiquidityMatrixPage = () => {
   const quotes = pairs.map((p) => getTokenById(p.quote)!);
   const ratios = getRatios([basePrice, ...pairs.map((p) => p.price ?? '1')]);
 
-  const orders = useMemo(() => {
+  const strategies = useMemo(() => {
     if (!search.base) return [];
-    return getOrders({
+    return getStrategies({
       base: search.base,
       basePrice,
       pairs,
@@ -143,12 +143,12 @@ export const LiquidityMatrixPage = () => {
   }, [search.base, basePrice, concentration, pairs, spread]);
 
   const maxSpread = useMemo(() => {
-    const allMaxSpread = orders.map((order) => {
+    const allMaxSpread = strategies.map((order) => {
       return getMaxSpread(+order.buyMin, +order.sellMax);
     });
     const min = round(Math.min(...allMaxSpread));
     return min.toString();
-  }, [orders]);
+  }, [strategies]);
 
   // Set base market price
   const { data: baseTokenPrice } = useGetTokenPrice(base?.address);
@@ -245,7 +245,7 @@ export const LiquidityMatrixPage = () => {
             <button type="button" onClick={selectBase}>
               <TokenLogo token={base} size={32} />
               <span>{base.symbol}</span>
-              <span>Select your base token</span>
+              <span className="description">Select your base token</span>
               <ChevronIcon className="size-16" />
             </button>
             <div className="field">
@@ -322,7 +322,7 @@ export const LiquidityMatrixPage = () => {
         {!!quotes.length && (
           <article className="summary">
             <h2>Summary</h2>
-            <div>
+            <div className="price-ratio">
               <h3>Token Price Ratio</h3>
               <table>
                 <thead>
@@ -347,8 +347,8 @@ export const LiquidityMatrixPage = () => {
                 </tbody>
               </table>
             </div>
-            <div>
-              <h3>Orders</h3>
+            <div className="strategies">
+              <h3>Strategies</h3>
               <table>
                 <thead>
                   <tr>
@@ -362,16 +362,26 @@ export const LiquidityMatrixPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((order) => (
-                    <OrderRow
+                  {strategies.map((order) => (
+                    <StrategyRow
                       key={order.quote}
-                      order={order}
+                      strategy={order}
                       spread={spread}
                       base={base}
                     />
                   ))}
                 </tbody>
               </table>
+              <ul>
+                {strategies.map((order) => (
+                  <StrategyItem
+                    key={order.quote}
+                    strategy={order}
+                    spread={spread}
+                    base={base}
+                  />
+                ))}
+              </ul>
             </div>
           </article>
         )}
@@ -535,56 +545,121 @@ const PairForm: FC<PairFormProps> = (props) => {
   );
 };
 
-interface OrderRowProps {
+interface StrategyProps {
   base: Token;
   spread: string;
-  order: LocalOrder;
+  strategy: LocalStrategy;
 }
-const OrderRow: FC<OrderRowProps> = ({ base, spread, order }) => {
+const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy }) => {
   const { getTokenById } = useTokens();
-  const quote = getTokenById(order.quote)!;
+  const quote = getTokenById(strategy.quote)!;
   const order0: BaseOrder = {
-    min: order.buyMin,
-    max: order.buyMax,
-    marginalPrice: order.buyMarginal,
-    budget: order.buyBudget,
+    min: strategy.buyMin,
+    max: strategy.buyMax,
+    marginalPrice: strategy.buyMarginal,
+    budget: strategy.buyBudget,
   };
   const order1: BaseOrder = {
-    min: order.sellMin,
-    max: order.sellMax,
-    marginalPrice: order.sellMarginal,
-    budget: order.sellBudget,
+    min: strategy.sellMin,
+    max: strategy.sellMax,
+    marginalPrice: strategy.sellMarginal,
+    budget: strategy.sellBudget,
   };
 
-  const { createStrategy } = useCreateStrategy({
-    type: 'overlapping',
-    base,
-    quote,
-    order0,
-    order1,
-  });
+  const { createStrategy, isLoading, isAwaiting, isProcessing } =
+    useCreateStrategy({
+      type: 'overlapping',
+      base,
+      quote,
+      order0,
+      order1,
+    });
+  const disabled = isLoading || isAwaiting || isProcessing;
 
   return (
-    <tr key={order.quote}>
+    <tr>
       <td>
         <TokensOverlap tokens={[base, quote]} size={24} />
       </td>
       <td>{spread}</td>
-      <td>{tokenAmount(order.buyMin, quote)}</td>
-      <td>{tokenAmount(order.sellMax, quote)}</td>
+      <td>{tokenAmount(strategy.buyMin, quote)}</td>
+      <td>{tokenAmount(strategy.sellMax, quote)}</td>
       <td>
-        {tokenAmount(order.sellBudget, base)}&nbsp;
-        <span className="usd">({usdPrice(order.sellBudgetUSD)})</span>
+        {tokenAmount(strategy.sellBudget, base)}&nbsp;
+        <span className="usd">({usdPrice(strategy.sellBudgetUSD)})</span>
       </td>
       <td>
-        {tokenAmount(order.buyBudget, quote)}&nbsp;
-        <span className="usd">({usdPrice(order.buyBudgetUSD)})</span>
+        {tokenAmount(strategy.buyBudget, quote)}&nbsp;
+        <span className="usd">({usdPrice(strategy.buyBudgetUSD)})</span>
       </td>
       <td>
-        <button type="button" onClick={createStrategy}>
-          Create
+        <button type="button" disabled={disabled} onClick={createStrategy}>
+          {isProcessing ? 'Processing' : 'Create'}
         </button>
       </td>
     </tr>
+  );
+};
+
+const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy }) => {
+  const { getTokenById } = useTokens();
+  const quote = getTokenById(strategy.quote)!;
+  const order0: BaseOrder = {
+    min: strategy.buyMin,
+    max: strategy.buyMax,
+    marginalPrice: strategy.buyMarginal,
+    budget: strategy.buyBudget,
+  };
+  const order1: BaseOrder = {
+    min: strategy.sellMin,
+    max: strategy.sellMax,
+    marginalPrice: strategy.sellMarginal,
+    budget: strategy.sellBudget,
+  };
+
+  const { createStrategy, isLoading, isAwaiting, isProcessing } =
+    useCreateStrategy({
+      type: 'overlapping',
+      base,
+      quote,
+      order0,
+      order1,
+    });
+  const disabled = isLoading || isAwaiting || isProcessing;
+
+  return (
+    <li className="strategy-card">
+      <p>
+        <TokensOverlap tokens={[base, quote]} size={24} />
+        <span>
+          {base.symbol} / {quote.symbol}
+        </span>
+      </p>
+      <p>
+        <b>Spead</b>
+        <span>{spread}</span>
+      </p>
+      <p>
+        <b>Min Price</b>
+        <span>{tokenAmount(strategy.buyMin, quote)}</span>
+      </p>
+      <p>
+        <b>Max Price</b>
+        <span>{tokenAmount(strategy.sellMax, quote)}</span>
+      </p>
+      <p>
+        <b>Base Budget</b>
+        <span>{tokenAmount(strategy.sellBudget, base)}</span>
+        <span className="usd">({usdPrice(strategy.sellBudgetUSD)})</span>
+      </p>
+      <p>
+        <b>Quote Budget</b>
+        <span>{tokenAmount(strategy.buyBudget, quote)}</span>
+        <span className="usd">({usdPrice(strategy.buyBudgetUSD)})</span>
+      </p>
+      <button type="button" disabled={disabled} onClick={createStrategy}>
+        {isProcessing ? 'Processing' : 'Create'}
+      </button>
+    </li>
   );
 };
