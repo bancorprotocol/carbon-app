@@ -103,7 +103,7 @@ const useZoom = (
       })
       .on('end', () => chartArea.style('cursor', ''));
     selection.call(zoomHandler.current);
-  });
+  }, [chartArea, extent.translate, extent.zoom, selection]);
 
   const zoomRange = (from: string, days: number) => {
     const baseXScale = (() => {

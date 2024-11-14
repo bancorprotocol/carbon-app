@@ -79,7 +79,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           onPriceUpdates={onPriceUpdates}
         />
       )}
-      {type === 'recurring' && isLimit !== undefined && (
+      {type === 'recurring' && isLimit && (
         <D3ChartRecurring
           readonly={readonly}
           isLimit={isLimit}
