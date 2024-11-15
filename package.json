@@ -68,7 +68,6 @@
     "lint-staged": "^14.0.1",
     "lodash": "^4.17.21",
     "lz-string": "^1.5.0",
-    "mipd": "^0.0.7",
     "msw": "^2.3.1",
     "postcss": "^8.4.31",
     "prettier": "^2.7.1",
@@ -87,7 +86,7 @@
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^1.6.0",
-    "wagmi": "2.12.12",
+    "wagmi": "2.12.32",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
