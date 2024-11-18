@@ -3,7 +3,7 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_HOUR_IN_MS } from 'utils/time';
 import { carbonApi } from 'utils/carbonApi';
 
-interface TradeCount {
+export interface TradeCount {
   id: string;
   strategyTrades: number;
   strategyTrades_24h: number;
