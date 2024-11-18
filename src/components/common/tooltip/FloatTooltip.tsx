@@ -25,6 +25,7 @@ import {
   safePolygon,
 } from '@floating-ui/react';
 import type { Placement } from '@floating-ui/react';
+import { cn } from 'utils/helpers';
 
 interface FloatTooltipOptions {
   initialOpen?: boolean;
@@ -126,13 +127,13 @@ export const FloatTooltipContent = forwardRef<
   return (
     <FloatingPortal>
       <div
-        className="bg-background-800 rounded p-16"
         ref={ref}
         style={{
           ...context.floatingStyles,
           ...style,
         }}
         {...context.getFloatingProps(props)}
+        className={cn('bg-background-800 rounded p-16', props.className)}
       />
     </FloatingPortal>
   );

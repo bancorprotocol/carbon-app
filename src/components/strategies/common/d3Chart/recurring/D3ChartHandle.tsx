@@ -1,4 +1,4 @@
-import { D3ChartSettings, drag, Selection } from 'libs/d3';
+import { drag, Selection } from 'libs/d3';
 import { D3ChartHandleLine } from 'components/strategies/common/d3Chart/D3ChartHandleLine';
 import {
   getSelector,
@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 interface Props {
   selector: string;
   selectorOpposite: string;
-  dms: D3ChartSettings;
   onDragStart?: (y: number) => void;
   onDrag: (y: number) => void;
   onDragEnd?: (y?: number, y2?: number) => void;

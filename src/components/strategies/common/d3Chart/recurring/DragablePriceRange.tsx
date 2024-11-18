@@ -10,8 +10,8 @@ import {
   getHandleSelector,
   getRectSelector,
 } from 'components/strategies/common/d3Chart/utils';
-import { D3ChartSettings } from 'libs/d3/types';
 import { useCallback, useEffect, useRef } from 'react';
+import { useD3ChartCtx } from '../D3ChartContext';
 
 type OrderRangeProps = {
   type: 'buy' | 'sell';
@@ -19,7 +19,6 @@ type OrderRangeProps = {
   onDragEnd?: (type: 'buy' | 'sell', y?: number, y2?: number) => void;
   labels: { min: string; max: string };
   yPos: { min: number; max: number };
-  dms: D3ChartSettings;
   isLimit: boolean;
   readonly?: boolean;
 };
@@ -30,10 +29,10 @@ export const DragablePriceRange = ({
   onDragEnd,
   labels,
   yPos,
-  dms,
   isLimit,
   readonly,
 }: OrderRangeProps) => {
+  const { dms } = useD3ChartCtx();
   const isDragging = useRef(false);
   const color = type === 'buy' ? 'var(--buy)' : 'var(--sell)';
   const maxIsOutOfScale = yPos.max <= 0;
@@ -116,7 +115,6 @@ export const DragablePriceRange = ({
         selector={selectorH1}
         selectorOpposite={selectorH2}
         label={isH1Max.current ? labels.max : labels.min}
-        dms={dms}
         onDragStart={onDragStartHandler}
         onDrag={onDragH1}
         onDragEnd={onDragEndHandler}
@@ -129,7 +127,6 @@ export const DragablePriceRange = ({
           selector={selectorH2}
           selectorOpposite={selectorH1}
           label={isH2Max.current ? labels.max : labels.min}
-          dms={dms}
           onDragStart={onDragStartHandler}
           onDrag={onDragH2}
           onDragEnd={onDragEndHandler}
@@ -143,7 +140,6 @@ export const DragablePriceRange = ({
         minOutOfScale={minIsOutOfScale}
         maxOutOfScale={maxIsOutOfScale}
         color={color}
-        dms={dms}
       />
     </>
   );

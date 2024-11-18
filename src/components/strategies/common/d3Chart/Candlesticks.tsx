@@ -1,12 +1,12 @@
-import { CandlestickData, ScaleBand, ScaleLinear } from 'libs/d3';
+import { CandlestickData } from 'libs/d3';
+import { useD3ChartCtx } from './D3ChartContext';
 
 type CandlesticksProps = {
-  xScale: ScaleBand<string>;
-  yScale: ScaleLinear<number, number>;
   data: CandlestickData[];
 };
 
-export function Candlesticks({ xScale, yScale, data }: CandlesticksProps) {
+export function Candlesticks({ data }: CandlesticksProps) {
+  const { xScale, yScale } = useD3ChartCtx();
   return (
     <>
       {data.map((d) => {

@@ -1,12 +1,11 @@
-import { D3ChartSettings } from 'libs/d3/types';
 import { cn } from 'utils/helpers';
+import { useD3ChartCtx } from './D3ChartContext';
 
 interface Props {
   type: 'buy' | 'sell';
   minOutOfScale: boolean;
   maxOutOfScale: boolean;
   color: string;
-  dms: D3ChartSettings;
 }
 
 export const D3ChartPriceOutOfScale = ({
@@ -14,8 +13,8 @@ export const D3ChartPriceOutOfScale = ({
   minOutOfScale,
   maxOutOfScale,
   color,
-  dms,
 }: Props) => {
+  const { dms } = useD3ChartCtx();
   const msg = type === 'buy' ? 'BUY' : 'SELL';
   const stopColor1 = minOutOfScale ? 'black' : color;
   const stopColor2 = minOutOfScale ? color : 'black';

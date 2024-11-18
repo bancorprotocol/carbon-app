@@ -23,8 +23,8 @@ export const SimulatorInputRecurringPage = () => {
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: searchState.baseToken,
     quoteToken: searchState.quoteToken,
-    start: searchState.start,
-    end: searchState.end,
+    start: defaultStart().toString(),
+    end: defaultEnd().toString(),
   });
   const { marketPrice, isPending: marketPricePending } = useMarketPrice({
     base: state.baseToken,
