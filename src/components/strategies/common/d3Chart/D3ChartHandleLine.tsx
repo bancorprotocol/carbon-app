@@ -1,15 +1,10 @@
-import { D3ChartSettings } from 'libs/d3';
 import { SVGProps } from 'react';
 import { cn } from 'utils/helpers';
-
-const handleDms = {
-  width: 64,
-  height: 16,
-};
+import { useD3ChartCtx } from './D3ChartContext';
+import { handleDms } from './utils';
 
 interface Props {
   selector?: string;
-  dms: D3ChartSettings;
   y?: number;
   color: string;
   label?: string;
@@ -17,23 +12,31 @@ interface Props {
   handleClassName?: string;
   readonly?: boolean;
   isDraggable?: boolean;
+  className?: string;
 }
 
 export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
   const {
     selector,
-    dms,
     color,
     y = 0,
     label,
     readonly,
     isDraggable,
     handleClassName,
+    className,
   } = props;
+  const { dms } = useD3ChartCtx();
   const lineWidth = dms.boundedWidth + 5;
 
   return (
-    <g className={cn(selector, isDraggable && !readonly && 'cursor-ns-resize')}>
+    <g
+      className={cn(
+        selector,
+        isDraggable && !readonly && 'cursor-ns-resize',
+        className
+      )}
+    >
       <line
         x1={0}
         x2={lineWidth}

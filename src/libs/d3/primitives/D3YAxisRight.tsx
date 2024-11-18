@@ -3,11 +3,15 @@ import { uuid } from 'utils/helpers';
 
 export const D3YAxisRight = ({ ticks, dms, formatter }: D3AxisProps) => {
   return (
-    <g className="y-axis" transform={`translate(${dms.boundedWidth},0)`}>
+    <g
+      transform={`translate(${dms.boundedWidth},0)`}
+      // click should target underlying price handler
+      className="y-axis pointer-events-none"
+    >
       <rect
         x="0"
         y="0"
-        width={100}
+        width={dms.marginRight}
         height={dms.height}
         className="fill-background-black"
       />

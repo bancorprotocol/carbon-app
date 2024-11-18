@@ -5,12 +5,11 @@ import {
   getSelector,
   useSelectable,
 } from 'components/strategies/common/d3Chart/utils';
-import { D3ChartSettings } from 'libs/d3/types';
 import { useEffect, useState } from 'react';
+import { useD3ChartCtx } from '../D3ChartContext';
 
 interface Props {
   readonly?: boolean;
-  dms: D3ChartSettings;
   onDragStart?: (y: number, y2: number) => void;
   onDrag?: (y: number, y2: number) => void;
   onDragEnd?: (y: number, y2: number) => void;
@@ -18,11 +17,11 @@ interface Props {
 
 export const D3ChartOverlappingRangeGroup = ({
   readonly,
-  dms,
   onDragStart,
   onDrag,
   onDragEnd,
 }: Props) => {
+  const { dms } = useD3ChartCtx();
   const selector = 'overlapping-range-group';
   const selection = getSelector(selector);
   const selectorRectBuy = getRectSelector('buy');

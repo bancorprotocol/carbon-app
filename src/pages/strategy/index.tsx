@@ -27,12 +27,7 @@ import {
   defaultStartDate,
   emptyOrder,
 } from 'components/strategies/common/utils';
-import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
-import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
-import {
-  DateRangePicker,
-  datePickerPresets,
-} from 'components/common/datePicker/DateRangePicker';
+import { toUnixUTC } from 'components/simulator/utils';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 import { useActivityQuery } from 'components/activity/useActivityQuery';
@@ -61,15 +56,6 @@ export const StrategyPage = () => {
 
   const showIndicator = (shouldShow: boolean) => {
     setSearch({ hideIndicators: shouldShow });
-  };
-
-  const onDatePickerConfirm = (props: { start?: Date; end?: Date }) => {
-    const { start, end } = props;
-    if (!start || !end) return;
-    setSearch({
-      priceStart: toUnixUTC(start),
-      priceEnd: toUnixUTC(end),
-    });
   };
 
   const { data: activities } = useActivityQuery({
@@ -144,20 +130,6 @@ export const StrategyPage = () => {
         <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 md:flex">
           <header className="flex items-center gap-16">
             <h2 className="text-18 font-weight-500 mr-auto">Price Chart</h2>
-            {isNativeChart && (
-              <DateRangePicker
-                defaultStart={defaultStartDate()}
-                defaultEnd={defaultEndDate()}
-                start={fromUnixUTC(priceStart)}
-                end={fromUnixUTC(priceEnd)}
-                onConfirm={onDatePickerConfirm}
-                presets={datePickerPresets}
-                options={{
-                  disabled: datePickerDisabledDays,
-                }}
-                required
-              />
-            )}
             {isNativeChart && (
               <div className="flex items-center gap-8">
                 <p id="indicator-label">Indicators</p>
