@@ -8,7 +8,15 @@ import { hasFlag } from 'utils/featureFlags';
 import { ReactComponent as AddIcon } from 'assets/icons/plus.svg';
 import { ReactComponent as RemoveIcon } from 'assets/icons/X.svg';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
-import { FC, FormEvent, useCallback, useEffect, useId, useMemo } from 'react';
+import {
+  FC,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from 'react';
 import {
   LiquidityMatrixSearch,
   PairFormSearch,
@@ -31,6 +39,7 @@ import { useCreateStrategy } from 'components/strategies/create/useCreateStrateg
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import { useGetTokenBalance } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
+import { lsService } from 'services/localeStorage';
 import './index.css';
 
 const animateLeaving = (quote: string, options: { isLast: boolean }) => {
@@ -298,9 +307,10 @@ export const LiquidityMatrixPage = () => {
   };
 
   return (
-    <section className="page">
+    <section className="page px-32">
       <h1>Liquidity Matrix</h1>
       <form>
+        <SaveLocally />
         <article role="group">
           <h2>Base token</h2>
           <div className="base">
@@ -354,8 +364,8 @@ export const LiquidityMatrixPage = () => {
                 value={clamp('0.01', spread, maxSpread)}
                 onInput={(e) => set({ spread: e.currentTarget.value })}
                 type="number"
-                step="0.01"
-                min="0.01"
+                step="any"
+                min="0.0000001"
                 max={maxSpread}
               />
               <span className="suffix">%</span>
@@ -415,7 +425,7 @@ export const LiquidityMatrixPage = () => {
                 <tbody>
                   {[base, ...quotes].map((token, i) => (
                     <tr key={token.address}>
-                      <th>{token.symbol}</th>
+                      <th>{token.symbol} per</th>
                       {[base, ...quotes].map((otherToken, j) => (
                         <td key={otherToken.address}>
                           {prettifyNumber(ratios[i][j])}
@@ -663,6 +673,79 @@ const PairForm: FC<PairFormProps> = (props) => {
         </div>
       </div>
     </li>
+  );
+};
+
+export const SaveLocally = () => {
+  const { getTokenById } = useTokens();
+  const navigate = useNavigate({ from: url });
+  const search = useSearch({ from: url });
+  const [savedMatrix, setSavedMatrix] = useState(
+    lsService.getItem('flagMatrix') ?? {}
+  );
+
+  const set = (result: Record<string, LiquidityMatrixSearch>) => {
+    setSavedMatrix(result);
+    lsService.setItem('flagMatrix', result);
+  };
+  const add = () => {
+    const base = search.base!;
+    const copy = structuredClone(savedMatrix);
+    copy[base] = search;
+    set(copy);
+  };
+  const remove = (base: string) => {
+    const copy = structuredClone(savedMatrix);
+    delete copy[base];
+    set(copy);
+  };
+
+  return (
+    <article className="save-locally">
+      <ul role="listbox">
+        {Object.values(savedMatrix).map((matrix) => {
+          const base = getTokenById(matrix.base)!;
+          const quotes = matrix.pairs?.map(({ quote }) => getTokenById(quote)!);
+          return (
+            <li
+              key={base.address}
+              role="option"
+              aria-selected={base.address === search.base}
+            >
+              <Link
+                className="select-base"
+                to="."
+                search={savedMatrix[base.address]}
+              >
+                <TokenLogo
+                  className="base-icon"
+                  token={getTokenById(matrix.base)!}
+                  size={32}
+                />
+                <TokensOverlap tokens={quotes ?? []} size={24} />
+                <span className="description">{base.symbol}</span>
+              </Link>
+              <button
+                className="remove"
+                type="button"
+                onClick={() => remove(base.address)}
+              >
+                <RemoveIcon className="size-16" />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <button
+        className="add"
+        type="button"
+        disabled={!search.base}
+        onClick={add}
+      >
+        <AddIcon className="size-24" />
+        Save it for later
+      </button>
+    </article>
   );
 };
 
