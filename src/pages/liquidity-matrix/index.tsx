@@ -303,9 +303,10 @@ export const LiquidityMatrixPage = () => {
   const addPair = () => {
     openModal('tokenLists', {
       excludedTokens: [base.address, ...pairs.map((p) => p.quote)],
-      onClick: (t) => {
+      onClick: (token) => {
+        importToken(token);
         flip('article, h2, li, tr');
-        set({ pairs: [...pairs, createPair(t.address)] });
+        set({ pairs: [...pairs, createPair(token.address)] });
       },
     });
   };
@@ -745,6 +746,7 @@ export const SaveLocally = () => {
                 className="select-base"
                 to="."
                 search={savedMatrix[base.address]}
+                onClick={() => flip('article, h2, li, tr')}
               >
                 <TokenLogo className="main-icon" token={base} size={32} />
                 <TokensOverlap tokens={quotes ?? []} size={24} />
