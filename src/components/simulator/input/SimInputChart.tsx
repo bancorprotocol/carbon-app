@@ -1,12 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import {
-  DateRangePicker,
-  datePickerPresets,
-} from 'components/common/datePicker/DateRangePicker';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import {
   SimulatorInputOverlappingValues,
   SimulatorOverlappingInputDispatch,
@@ -14,17 +9,15 @@ import {
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import {
   ChartPrices,
-  D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/strategies/common/d3Chart';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useCallback } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
-import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
-import { fromUnixUTC, toUnixUTC } from '../utils';
-import { startOfDay, sub } from 'date-fns';
+import { CandlestickData } from 'libs/d3';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
 
 interface Props {
   state: StrategyInputValues | SimulatorInputOverlappingValues;
@@ -37,15 +30,6 @@ interface Props {
   isError: boolean;
   simulationType: SimulatorType;
 }
-
-const chartSettings: D3ChartSettingsProps = {
-  width: 0,
-  height: 0,
-  marginTop: 0,
-  marginBottom: 40,
-  marginLeft: 0,
-  marginRight: 80,
-};
 
 export const SimInputChart = ({
   state,
@@ -95,31 +79,19 @@ export const SimInputChart = ({
   );
 
   const onDatePickerConfirm = useCallback(
-    (props: { start?: Date; end?: Date }) => {
+    (props: { start?: string; end?: string }) => {
       if (!props.start || !props.end) return;
-      dispatch('start', toUnixUTC(props.start));
-      dispatch('end', toUnixUTC(props.end));
+      dispatch('start', props.start);
+      dispatch('end', props.end);
     },
     [dispatch]
   );
 
   return (
     <div className="align-stretch top-120 rounded-12 bg-background-900 fixed right-20 grid h-[calc(100vh-220px)] min-h-[500px] w-[calc(100%-500px)] flex-1 grid-rows-[auto_1fr] justify-items-stretch p-20">
-      <div className="mb-20 flex items-center justify-between">
+      <header className="mb-20 flex items-center justify-between">
         <h2 className="text-20 font-weight-500 mr-20">Price Chart</h2>
-        <DateRangePicker
-          defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
-          defaultEnd={startOfDay(new Date())}
-          start={fromUnixUTC(state.start)}
-          end={fromUnixUTC(state.end)}
-          onConfirm={onDatePickerConfirm}
-          presets={datePickerPresets}
-          options={{
-            disabled: datePickerDisabledDays,
-          }}
-          required
-        />
-      </div>
+      </header>
       {isError && (
         <ErrorMsg
           base={state.baseToken?.address}
@@ -132,26 +104,20 @@ export const SimInputChart = ({
       )}
 
       {!!data && (
-        <D3ChartWrapper
-          settings={chartSettings}
-          className="rounded-12 self-stretch bg-black"
-          data-testid="price-chart"
-        >
-          {(dms) => (
-            <D3ChartCandlesticks
-              dms={dms}
-              prices={prices}
-              onPriceUpdates={onPriceUpdates}
-              data={data}
-              marketPrice={marketPrice}
-              bounds={bounds}
-              onDragEnd={onPriceUpdatesEnd}
-              isLimit={isLimit}
-              type={simulationType}
-              overlappingSpread={spread}
-            />
-          )}
-        </D3ChartWrapper>
+        <D3PriceHistory
+          className="self-stretch"
+          prices={prices}
+          onPriceUpdates={onPriceUpdates}
+          onDragEnd={onPriceUpdatesEnd}
+          onRangeUpdates={onDatePickerConfirm}
+          data={data}
+          marketPrice={marketPrice}
+          bounds={bounds}
+          isLimit={isLimit}
+          type={simulationType}
+          overlappingSpread={spread}
+          zoomBehavior="normal"
+        />
       )}
     </div>
   );

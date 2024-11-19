@@ -11,11 +11,13 @@ import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
 import { DebugOrderBook } from 'components/debug/DebugOrderBook';
 import { DebugSDKConfig } from 'components/debug/DebugSDKConfig';
 import { DebugConfig } from 'components/debug/DebugConfig';
+import { DebugFeatureFlag } from 'components/debug/DebugFeatureFlag';
 
 export const DebugPage = () => {
   return (
     <Page title="Debug">
       <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
+        <DebugFeatureFlag />
         <DebugResetDefault />
         <DebugWagmi />
         <DebugImposter />

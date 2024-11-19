@@ -1,7 +1,6 @@
 import tailwindWalletLogo from 'assets/logos/tailwindWallet.svg';
 import compassWalletLogo from 'assets/logos/compassWallet.svg';
 import seifWalletLogo from 'assets/logos/seifWallet.svg';
-import { createStore } from 'mipd';
 import { Connector, CreateConnectorFn, createConnector } from 'wagmi';
 import {
   metaMask,
@@ -34,10 +33,10 @@ const createPlaceholderConnector = ({
 }) => {
   return createConnector(() => {
     return {
-      id: id,
-      name: name,
+      id,
+      name,
       type: id + PLACEHOLDER_TAG,
-      icon: icon,
+      icon,
       async setup() {},
       async connect() {
         throw Error('Wallet not installed');
@@ -82,7 +81,6 @@ const getDefaultConnector = (connectorType: SelectableConnectionName) => {
       });
     case 'MetaMask':
       return metaMask({
-        extensionOnly: false,
         preferDesktop: true,
         dappMetadata: {
           name: config.appName,
@@ -130,28 +128,11 @@ export const providerRdnsToName = (
 ): string | undefined => providerMapRdnsToName[connectionName];
 
 const getConfigConnectors = (): CreateConnectorFn[] => {
-  const store = createStore();
-
-  const initializedProvidersRdns = store
-    .getProviders()
-    .map((provider) => provider.info.rdns.toLowerCase());
-
   // Safe wallet always runs through an iFrame, the same check as the safe connector's getProvider is performed here.
   // The allowedDomains param in the safe connector is another way to check we're in a safe wallet
-  if (!isIframe()) initializedProvidersRdns.push('safe');
-
-  const initializedProvidersNames = initializedProvidersRdns
-    .map(providerRdnsToName)
-    .filter((c) => c)
-    .map((c) => c!.toLowerCase());
-
-  // Only initialize connectors that are not injected
-  const missingConnectors = selectedConnectors.filter(
-    (name) => !initializedProvidersNames.includes(name.toLowerCase())
-  );
-
-  store.destroy();
-  return missingConnectors.map(getDefaultConnector);
+  const configConnectors = new Set(selectedConnectors);
+  if (!isIframe()) configConnectors.delete('Safe');
+  return Array.from(configConnectors).map(getDefaultConnector);
 };
 
 export const configConnectors = getConfigConnectors();

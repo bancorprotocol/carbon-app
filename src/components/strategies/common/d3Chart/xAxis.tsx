@@ -1,14 +1,18 @@
-import { ScaleBand } from 'd3';
-import { D3ChartSettings } from 'libs/d3';
 import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
+import { useD3ChartCtx } from './D3ChartContext';
+import { useMemo } from 'react';
 
-type Props = {
-  dms: D3ChartSettings;
-  xScale: ScaleBand<string>;
-  xTicks: string[];
-};
+export const XAxis = () => {
+  const { dms, xScale, zoom } = useD3ChartCtx();
+  const xTicks = useMemo(() => {
+    const length = xScale.domain().length;
+    const ratio = Math.ceil(zoom?.k ?? 1);
+    const target = Math.floor((dms.boundedWidth * ratio) / 110);
+    const numberOfTicks = Math.max(1, target);
+    const m = Math.ceil(length / numberOfTicks);
+    return xScale.domain().filter((_, i) => i % m === m - 1);
+  }, [dms.boundedWidth, xScale, zoom]);
 
-export const XAxis = ({ xScale, dms, xTicks }: Props) => {
   const ticks = xTicks.map((tickValue) => {
     const x = (xScale(tickValue) ?? 0) + xScale.bandwidth() / 2;
     return (
@@ -42,7 +46,7 @@ export const XAxis = ({ xScale, dms, xTicks }: Props) => {
         x={-bandwidthOffset}
         y={dms.boundedHeight}
         width={dms.width}
-        height="40"
+        height={dms.marginBottom}
         className="fill-background-black"
       />
       <line

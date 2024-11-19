@@ -29,7 +29,7 @@ export const strategySort = {
   pairAsc: 'Pair (A->Z)',
   pairDesc: 'Pair (Z->A)',
   totalBudgetDesc: 'Total Budget',
-  trades: 'Trades',
+  trades: 'Trade Count',
 };
 
 export type StrategySort = keyof typeof strategySort;

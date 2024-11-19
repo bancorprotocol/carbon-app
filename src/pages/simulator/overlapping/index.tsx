@@ -20,8 +20,8 @@ export const SimulatorInputOverlappingPage = () => {
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: searchState.baseToken,
     quoteToken: searchState.quoteToken,
-    start: searchState.start,
-    end: searchState.end,
+    start: defaultStart().toString(),
+    end: defaultEnd().toString(),
   });
 
   useEffect(() => {
