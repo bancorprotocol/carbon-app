@@ -111,8 +111,10 @@ html:has(.page) {
 .page .save-locally {
   grid-column: 1/3;
   border-radius: 16px;
-  border: 1px dashed rgba(255, 255, 255, 0.4);
   padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .save-locally ul {
   display: grid;
@@ -129,7 +131,7 @@ html:has(.page) {
 }
 .save-locally li[aria-selected="true"] {
   @apply bg-background-700;
-  outline: 1px solid rgba(255, 255, 255, 0.6);
+  outline: 1px solid var(--primary);
 }
 .save-locally li > * {
   padding: 8px;
