@@ -42,6 +42,7 @@ import { useWagmi } from 'libs/wagmi';
 import { lsService } from 'services/localeStorage';
 import { isZero } from 'components/strategies/common/utils';
 import './index.css';
+import { getAddress } from 'ethers/lib/utils';
 
 const animateLeaving = (address: string, options: { isLast: boolean }) => {
   const elements = document.querySelectorAll(`[data-on-leave="${address}"]`);
@@ -168,13 +169,7 @@ const usdPrice = (value?: string | number) => {
   if (!value) return '';
   return prettifyNumber(value, { abbreviate: true, currentCurrency: 'USD' });
 };
-
-const getMin = (...data: string[]) => SafeDecimal.min(...data).toString();
-const getMax = (...data: string[]) => SafeDecimal.max(...data).toString();
 const round = (value: number) => Math.round(value * 100) / 100;
-const clamp = (min: string, value: string, max: string) => {
-  return getMin(max, getMax(value, min));
-};
 
 const url = '/liquidity-matrix';
 export const LiquidityMatrixPage = () => {
@@ -196,8 +191,8 @@ export const LiquidityMatrixPage = () => {
 
   useEffect(() => {
     const { base, quote } = getLastVisitedPair();
-    if (!getTokenById(search.base)) set({ base });
-    if (!search.pairs) set({ pairs: [createPair(quote)] });
+    if (!getTokenById(search.base)) set({ base: getAddress(base) });
+    if (!search.pairs) set({ pairs: [createPair(getAddress(quote))] });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [set]);
 
