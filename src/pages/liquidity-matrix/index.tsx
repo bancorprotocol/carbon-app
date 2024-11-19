@@ -42,14 +42,18 @@ import { useWagmi } from 'libs/wagmi';
 import { lsService } from 'services/localeStorage';
 import './index.css';
 
-const animateLeaving = (quote: string, options: { isLast: boolean }) => {
-  const elements = document.querySelectorAll(`[data-on-leave="${quote}"]`);
+const animateLeaving = (address: string, options: { isLast: boolean }) => {
+  const elements = document.querySelectorAll(`[data-on-leave="${address}"]`);
   const keyframes = [
     { transform: 'scale(1)', opacity: 1 },
     { transform: 'scale(0.9)', opacity: 0 },
   ];
   const animations = Array.from(elements).map((element) => {
-    return element.animate(keyframes, { duration: 100, easing: 'ease-in' });
+    return element.animate(keyframes, {
+      duration: 100,
+      easing: 'ease-in',
+      fill: 'forwards',
+    });
   });
   if (options.isLast) {
     const summary = document.querySelector('.summary');
@@ -58,15 +62,21 @@ const animateLeaving = (quote: string, options: { isLast: boolean }) => {
   return Promise.all(animations.map((a) => a?.finished));
 };
 
-const flip = () => {
-  const selectors = 'article, h2, li, tr';
+const flip = (selectors: string) => {
   const previous = document.querySelectorAll<HTMLElement>(selectors);
   const positions = new Map<HTMLElement, DOMRect>();
   for (const element of previous) {
+    const rect = element.getBoundingClientRect();
+    if (!rect.width) continue;
     positions.set(element, element.getBoundingClientRect());
   }
-  requestAnimationFrame(() => {
+  let frames = 0;
+  const retry = () => {
     const next = document.querySelectorAll<HTMLElement>(selectors);
+    if (next.length === previous.length) {
+      if (++frames > 10) return;
+      else return requestAnimationFrame(retry);
+    }
     for (const element of next) {
       if (positions.has(element)) {
         const previousRect = positions.get(element)!;
@@ -93,7 +103,8 @@ const flip = () => {
       }
       positions.set(element, element.getBoundingClientRect());
     }
-  });
+  };
+  requestAnimationFrame(retry);
 };
 
 interface GetStrategiesParams {
@@ -289,7 +300,7 @@ export const LiquidityMatrixPage = () => {
     openModal('tokenLists', {
       excludedTokens: [base.address, ...pairs.map((p) => p.quote)],
       onClick: (t) => {
-        flip();
+        flip('article, h2, li, tr');
         set({ pairs: [...pairs, createPair(t.address)] });
       },
     });
@@ -297,7 +308,7 @@ export const LiquidityMatrixPage = () => {
   const removeQuote = async (address: string) => {
     const quote = address.toLowerCase();
     await animateLeaving(address, { isLast: pairs.length === 1 });
-    flip();
+    flip('article, h2, li, tr');
     set({ pairs: pairs.filter((v) => v.quote.toLowerCase() !== quote) });
   };
   const updatePair = (index: number, params: Partial<PairFormSearch>) => {
@@ -678,27 +689,39 @@ const PairForm: FC<PairFormProps> = (props) => {
 
 export const SaveLocally = () => {
   const { getTokenById } = useTokens();
-  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const [savedMatrix, setSavedMatrix] = useState(
     lsService.getItem('flagMatrix') ?? {}
   );
+  const currentBase = useMemo(() => {
+    if (!search.base) return;
+    return getTokenById(search.base);
+  }, [getTokenById, search.base]);
 
   const set = (result: Record<string, LiquidityMatrixSearch>) => {
+    flip('.saved-matrix, .add-save');
     setSavedMatrix(result);
     lsService.setItem('flagMatrix', result);
   };
-  const add = () => {
+  const add = useCallback(() => {
     const base = search.base!;
     const copy = structuredClone(savedMatrix);
     copy[base] = search;
     set(copy);
-  };
-  const remove = (base: string) => {
+  }, [savedMatrix, search]);
+
+  const remove = async (base: string) => {
+    await animateLeaving(base, { isLast: false });
     const copy = structuredClone(savedMatrix);
     delete copy[base];
     set(copy);
   };
+
+  useEffect(() => {
+    if (!Object.keys(savedMatrix).includes(search.base || '')) return;
+    const timeout = setTimeout(add, 500);
+    return () => clearTimeout(timeout);
+  }, [add, search, savedMatrix]);
 
   return (
     <article className="save-locally">
@@ -710,6 +733,8 @@ export const SaveLocally = () => {
             <li
               key={base.address}
               role="option"
+              className="saved-matrix"
+              data-on-leave={base.address}
               aria-selected={base.address === search.base}
             >
               <Link
@@ -717,11 +742,7 @@ export const SaveLocally = () => {
                 to="."
                 search={savedMatrix[base.address]}
               >
-                <TokenLogo
-                  className="base-icon"
-                  token={getTokenById(matrix.base)!}
-                  size={32}
-                />
+                <TokenLogo className="main-icon" token={base} size={32} />
                 <TokensOverlap tokens={quotes ?? []} size={24} />
                 <span className="description">{base.symbol}</span>
               </Link>
@@ -737,13 +758,19 @@ export const SaveLocally = () => {
         })}
       </ul>
       <button
-        className="add"
+        className="add-save"
         type="button"
         disabled={!search.base}
         onClick={add}
       >
-        <AddIcon className="size-24" />
-        Save it for later
+        {currentBase && (
+          <div className="flex gap-8">
+            <TokenLogo token={currentBase} size={24} />
+            {currentBase.symbol}
+          </div>
+        )}
+        <span className="description">Save it for later</span>
+        <AddIcon className="main-icon size-24" />
       </button>
     </article>
   );
