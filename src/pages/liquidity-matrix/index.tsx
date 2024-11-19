@@ -756,22 +756,19 @@ export const SaveLocally = () => {
             </li>
           );
         })}
+        <li role="none" className="add-save">
+          <button type="button" disabled={!search.base} onClick={add}>
+            {currentBase && (
+              <div className="flex gap-8">
+                <TokenLogo token={currentBase} size={24} />
+                {currentBase.symbol}
+              </div>
+            )}
+            <span className="description">Save it for later</span>
+            <AddIcon className="main-icon size-24" />
+          </button>
+        </li>
       </ul>
-      <button
-        className="add-save"
-        type="button"
-        disabled={!search.base}
-        onClick={add}
-      >
-        {currentBase && (
-          <div className="flex gap-8">
-            <TokenLogo token={currentBase} size={24} />
-            {currentBase.symbol}
-          </div>
-        )}
-        <span className="description">Save it for later</span>
-        <AddIcon className="main-icon size-24" />
-      </button>
     </article>
   );
 };
