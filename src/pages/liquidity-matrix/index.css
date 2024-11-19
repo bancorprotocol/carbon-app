@@ -30,6 +30,10 @@ html:has(.page) {
 .field:has(input:focus-visible) {
   outline: solid 1px white;
 }
+.field:has(input:user-invalid:not(:focus-visible)) {
+  outline: solid 1px var(--error);
+  color: var(--error);
+}
 .field input:focus-visible {
   outline: none;
 }

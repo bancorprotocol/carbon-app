@@ -377,7 +377,7 @@ export const LiquidityMatrixPage = () => {
               </label>
               <input
                 id="spread"
-                value={clamp('0.01', spread, maxSpread)}
+                value={spread}
                 onInput={(e) => set({ spread: e.currentTarget.value })}
                 type="number"
                 step="any"
@@ -817,6 +817,8 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     if (!user) return true;
     if (new SafeDecimal(baseBalance || '0').lt(order1.budget)) return true;
     if (new SafeDecimal(quoteBalance || '0').lt(order0.budget)) return true;
+    if ('Infinity' === strategy.buyMin) return true;
+    if ('Infinity' === strategy.sellMax) return true;
     if (isZero(strategy.buyMin)) return true;
     if (isZero(strategy.sellMax)) return true;
     return isLoading || isAwaiting || isProcessing;
