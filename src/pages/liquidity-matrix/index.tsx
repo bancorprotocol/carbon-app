@@ -40,6 +40,7 @@ import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import { useGetTokenBalance } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { lsService } from 'services/localeStorage';
+import { isZero } from 'components/strategies/common/utils';
 import './index.css';
 
 const animateLeaving = (address: string, options: { isLast: boolean }) => {
@@ -163,7 +164,8 @@ const createPair = (quote: string) => ({
   quoteBudget: '',
 });
 
-const usdPrice = (value: string | number) => {
+const usdPrice = (value?: string | number) => {
+  if (!value) return '';
   return prettifyNumber(value, { abbreviate: true, currentCurrency: 'USD' });
 };
 
@@ -176,7 +178,7 @@ const clamp = (min: string, value: string, max: string) => {
 
 const url = '/liquidity-matrix';
 export const LiquidityMatrixPage = () => {
-  const { getTokenById } = useTokens();
+  const { getTokenById, importToken } = useTokens();
   const { openModal } = useModal();
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
@@ -194,7 +196,7 @@ export const LiquidityMatrixPage = () => {
 
   useEffect(() => {
     const { base, quote } = getLastVisitedPair();
-    if (!search.base) set({ base });
+    if (!getTokenById(search.base)) set({ base });
     if (!search.pairs) set({ pairs: [createPair(quote)] });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [set]);
@@ -220,6 +222,7 @@ export const LiquidityMatrixPage = () => {
 
   const maxSpread = useMemo(() => {
     const allMaxSpread = strategies.map((order) => {
+      if (!+order.buyMin || !+order.sellMax) return 100;
       return getMaxSpread(+order.buyMin, +order.sellMax);
     });
     const min = round(Math.min(...allMaxSpread));
@@ -285,7 +288,8 @@ export const LiquidityMatrixPage = () => {
   const selectBase = () => {
     openModal('tokenLists', {
       excludedTokens: [base.address, ...pairs.map((p) => p.quote)],
-      onClick: (token) => {
+      onClick: async (token) => {
+        importToken(token);
         const copy = structuredClone(pairs);
         for (const pair of copy) {
           pair.baseBudget = '';
@@ -811,6 +815,8 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     if (!user) return true;
     if (new SafeDecimal(baseBalance || '0').lt(order1.budget)) return true;
     if (new SafeDecimal(quoteBalance || '0').lt(order0.budget)) return true;
+    if (isZero(strategy.buyMin)) return true;
+    if (isZero(strategy.sellMax)) return true;
     return isLoading || isAwaiting || isProcessing;
   })();
 

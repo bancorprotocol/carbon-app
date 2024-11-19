@@ -430,7 +430,7 @@
   }
 }
 
-@media (max-width: 1275px) {
+@media (max-width: 1350px) {
   .page form {
     grid-template-columns: 1fr;
   }
