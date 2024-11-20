@@ -231,6 +231,7 @@ const Trades = ({ trades, className }: TradesProps) => {
       className={className ?? ''}
       from={last}
       to={trades}
+      duration={30}
       formatFn={(v) => formatter.format(v)}
     />
   );
