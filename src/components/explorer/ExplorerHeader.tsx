@@ -3,7 +3,11 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { getStrategyType } from 'components/strategies/common/utils';
 import { useTokens } from 'hooks/useTokens';
 import { Strategy, useGetStrategList } from 'libs/queries';
-import { Trending, useTrending } from 'libs/queries/extApi/tradeCount';
+import {
+  PairTrade,
+  Trending,
+  useTrending,
+} from 'libs/queries/extApi/tradeCount';
 import { Link, StrategyType } from 'libs/routing';
 import { AnimatedNumber } from 'components/common/AnimatedNumber';
 import { useEffect, useState } from 'react';
@@ -17,34 +21,32 @@ const typeLabel = {
 const useTrendingPairs = (trending?: Trending) => {
   const { tokensMap } = useTokens();
   if (!trending) return { isLoading: true, data: [] };
-  const pairs: Record<string, { trades: number; trades_24h: number }> = {};
-  for (const trade of trending?.tradeCount) {
-    pairs[trade.pairAddresses] ||= { trades: 0, trades_24h: 0 };
-    pairs[trade.pairAddresses].trades += trade.strategyTrades;
-    pairs[trade.pairAddresses].trades_24h += trade.strategyTrades_24h;
+  const pairs: Record<string, PairTrade> = {};
+  for (const trade of trending?.pairCount ?? []) {
+    pairs[trade.pairAddresses] ||= trade;
   }
-  const list = Object.entries(pairs)
-    .filter(([, { trades_24h }]) => !!trades_24h)
-    .sort((a, b) => b[1].trades - a[1].trades)
+  const list = Object.values(pairs)
+    .filter((pair) => !!pair.pairTrades_24h)
+    .sort((a, b) => b.pairTrades - a.pairTrades)
     .splice(0, 3);
 
   // If there are less than 3, pick the remaining best
   if (list.length < 3) {
-    const remaining = Object.entries(pairs)
-      .filter(([, { trades_24h }]) => !trades_24h)
-      .sort((a, b) => b[1].trades - a[1].trades)
+    const remaining = Object.values(pairs)
+      .filter((pair) => !!pair.pairTrades_24h)
+      .sort((a, b) => b.pairTrades - a.pairTrades)
       .splice(0, 3 - list.length);
     list.push(...remaining);
   }
 
   // Sort again in case we had to add more
   const data = list
-    .sort((a, b) => b[1].trades - a[1].trades)
-    .map(([pairAddress, { trades }]) => ({
-      pairAddress: pairAddress,
-      base: tokensMap.get(pairAddress.split('/').shift()!.toLowerCase())!,
-      quote: tokensMap.get(pairAddress.split('/').pop()!.toLowerCase())!,
-      trades,
+    .sort((a, b) => b.pairTrades - a.pairTrades)
+    .map((pair) => ({
+      pairAddress: pair.pairAddresses,
+      base: tokensMap.get(pair.token0.toLowerCase())!,
+      quote: tokensMap.get(pair.token1.toLowerCase())!,
+      trades: pair.pairTrades,
     }));
   return { isLoading: false, data };
 };
