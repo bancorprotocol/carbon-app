@@ -39,7 +39,7 @@ const useTrendingPairs = (trending?: Trending) => {
 
   // Sort again in case we had to add more
   const data = list
-    .sort((a, b) => a[1].trades - b[1].trades)
+    .sort((a, b) => b[1].trades - a[1].trades)
     .map(([pairAddress, { trades }]) => ({
       pairAddress: pairAddress,
       base: tokensMap.get(pairAddress.split('/').shift()!.toLowerCase())!,
