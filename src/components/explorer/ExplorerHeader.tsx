@@ -100,7 +100,7 @@ export const ExplorerHeader = () => {
   return (
     <header className="mb-42 flex gap-32">
       <article className="flex flex-1 flex-col items-center justify-around gap-16 md:items-start">
-        <h2>Total Trades</h2>
+        <h2 className="text-24 font-weight-700 font-title">Total Trades</h2>
         <Trades
           trades={trending?.totalTradeCount ?? 0}
           className="text-36 font-weight-700 font-title"
@@ -118,9 +118,9 @@ export const ExplorerHeader = () => {
         </div>
       </article>
       <article className="border-background-800 hidden flex-1 rounded border-2 p-20 md:block">
-        <h2>Popular Pairs</h2>
-        <table className="w-full">
-          <thead>
+        <h2 className="text-24 font-weight-700 font-title">Popular Pairs</h2>
+        <table className="font-weight-500 w-full">
+          <thead className="text-18 text-white/60">
             <tr>
               <td>Token Pair</td>
               <td className="text-end">Trades</td>
@@ -157,9 +157,11 @@ export const ExplorerHeader = () => {
         </table>
       </article>
       <article className="border-background-800 hidden flex-1 rounded border-2 p-20 lg:block">
-        <h2>Trending Strategies</h2>
-        <table className="w-full">
-          <thead>
+        <h2 className="text-24 font-weight-700 font-title">
+          Trending Strategies
+        </h2>
+        <table className="font-weight-500 w-full">
+          <thead className="text-18 text-white/60">
             <tr>
               <td>ID</td>
               <td>Types</td>
