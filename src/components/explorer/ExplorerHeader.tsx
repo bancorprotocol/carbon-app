@@ -147,9 +147,7 @@ export const ExplorerHeader = () => {
                     <span>{quote?.symbol}</span>
                   </div>
                 </td>
-                <td className="text-end">
-                  <Trades trades={trades} />
-                </td>
+                <td className="text-end">{formatter.format(trades)}</td>
               </tr>
             ))}
           </tbody>
@@ -191,9 +189,7 @@ export const ExplorerHeader = () => {
                   </div>
                 </td>
                 <td>{typeLabel[type]}</td>
-                <td className="text-end">
-                  <Trades trades={trades} />
-                </td>
+                <td className="text-end">{formatter.format(trades)}</td>
               </tr>
             ))}
           </tbody>
@@ -217,7 +213,7 @@ interface TradesProps {
   trades: number;
   className?: string;
 }
-const frames = 60 * 60 * 3; // 3min
+const frames = 60 * 60 * 10; // 10min
 const Trades = ({ trades, className }: TradesProps) => {
   const ref = useRef<HTMLParagraphElement>(null);
   const values = useRef<string[]>([]);
@@ -242,7 +238,7 @@ const Trades = ({ trades, className }: TradesProps) => {
     if (!last) {
       const nextValues = new Array(frames);
       for (let i = 0; i < frames; i++) {
-        const percent = Math.pow(i / frames, 1 / 20); // ease-ouy
+        const percent = Math.pow(i / frames, 1 / 200); // ease-ouy
         const v = Math.round(trades * percent);
         nextValues[i] = formatter.format(v);
       }
