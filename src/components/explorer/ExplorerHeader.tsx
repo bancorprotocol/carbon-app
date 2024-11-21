@@ -217,7 +217,7 @@ interface TradesProps {
   trades: number;
   className?: string;
 }
-const frames = 60 * 3; // 3min
+const frames = 60 * 60 * 3; // 3min
 const Trades = ({ trades, className }: TradesProps) => {
   const ref = useRef<HTMLParagraphElement>(null);
   const values = useRef<string[]>([]);
@@ -242,7 +242,7 @@ const Trades = ({ trades, className }: TradesProps) => {
     if (!last) {
       const nextValues = new Array(frames);
       for (let i = 0; i < frames; i++) {
-        const percent = Math.pow(i / frames, 1 / 8); // ease-ouy
+        const percent = Math.pow(i / frames, 1 / 20); // ease-ouy
         const v = Math.round(trades * percent);
         nextValues[i] = formatter.format(v);
       }
