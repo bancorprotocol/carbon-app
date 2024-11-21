@@ -9,8 +9,7 @@ import {
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
 import { Link, StrategyType } from 'libs/routing';
-import { AnimatedNumber } from 'components/common/AnimatedNumber';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 const typeLabel = {
   disposable: 'Limit / Range',
@@ -218,21 +217,58 @@ interface TradesProps {
   trades: number;
   className?: string;
 }
+const frames = 60 * 3; // 3min
 const Trades = ({ trades, className }: TradesProps) => {
-  const [last, setLast] = useState(0);
+  const ref = useRef<HTMLParagraphElement>(null);
+  const values = useRef<string[]>([]);
+  const lastTrades = useRef(0);
+
+  const runAnimation = useCallback(() => {
+    const figure = ref.current;
+    if (!figure) return;
+    const run = () => {
+      const next = values.current.shift();
+      if (next) {
+        figure.textContent = next;
+        if (values.current.length > 0) requestAnimationFrame(run);
+      }
+    };
+    requestAnimationFrame(run);
+  }, []);
+
   useEffect(() => {
-    setTimeout(() => {
-      setLast(trades);
-    }, 2000);
-  }, [trades]);
+    const last = lastTrades.current;
+    if (last === trades) return;
+    if (!last) {
+      const nextValues = new Array(frames);
+      for (let i = 0; i < frames; i++) {
+        const percent = Math.pow(i / frames, 1 / 8); // ease-ouy
+        const v = Math.round(trades * percent);
+        nextValues[i] = formatter.format(v);
+      }
+      values.current = nextValues;
+      runAnimation();
+    } else {
+      const nextValues = new Array(frames);
+      const delta = trades - last;
+      for (let i = 0; i < frames; i++) {
+        const percent = i / frames; // linear
+        const v = Math.round(delta * percent);
+        nextValues[i] = formatter.format(v + last);
+      }
+      if (!values.current.length) {
+        values.current = nextValues;
+        runAnimation();
+      } else {
+        values.current.push(...nextValues);
+      }
+    }
+    lastTrades.current = trades;
+  }, [trades, runAnimation]);
 
   return (
-    <AnimatedNumber
-      className={className ?? ''}
-      from={last}
-      to={trades}
-      duration={120}
-      formatFn={(v) => formatter.format(v)}
-    />
+    <p ref={ref} className={className}>
+      {trades}
+    </p>
   );
 };
