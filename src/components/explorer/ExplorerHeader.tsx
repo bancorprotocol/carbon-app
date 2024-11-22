@@ -107,8 +107,8 @@ export const ExplorerHeader = () => {
           </Link>
         </div>
       </article>
-      <article className="border-background-800 hidden flex-1 rounded border-2 p-20 md:block">
-        <h2 className="text-24 font-weight-700 font-title">Popular Pairs</h2>
+      <article className="border-background-800 grid hidden flex-1 gap-8 rounded border-2 p-20 md:block">
+        <h2 className="text-20 font-weight-700 font-title">Popular Pairs</h2>
         <table className="font-weight-500 text-14 w-full">
           <thead className="text-16 text-white/60">
             <tr>
@@ -138,14 +138,14 @@ export const ExplorerHeader = () => {
                     <span>{quote?.symbol}</span>
                   </div>
                 </td>
-                <td className="text-end">{formatter.format(trades)}</td>
+                <td className="py-8 text-end">{formatter.format(trades)}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </article>
-      <article className="border-background-800 hidden flex-1 rounded border-2 p-20 lg:block">
-        <h2 className="text-24 font-weight-700 font-title">
+      <article className="border-background-800 grid hidden flex-1 gap-8 rounded border-2 p-20 lg:block">
+        <h2 className="text-20 font-weight-700 font-title">
           Trending Strategies
         </h2>
         <table className="font-weight-500 text-14 w-full">
@@ -175,7 +175,7 @@ export const ExplorerHeader = () => {
                     {idDisplay}
                   </div>
                 </td>
-                <td className="w-full py-4 text-end">
+                <td className="w-full py-8 text-end">
                   {formatter.format(trades)}
                 </td>
               </tr>
