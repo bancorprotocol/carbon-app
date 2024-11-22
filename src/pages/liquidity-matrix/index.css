@@ -384,6 +384,9 @@ html:has(.page) {
 .page table tbody tr:last-child :last-child {
   border-bottom-right-radius: 8px;
 }
+.page table button {
+  text-wrap: nowrap;
+}
 
 .summary {
   position: sticky;

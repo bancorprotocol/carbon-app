@@ -436,7 +436,7 @@ export const LiquidityMatrixPage = () => {
                 <tbody>
                   {[base, ...quotes].map((token, i) => (
                     <tr key={token.address}>
-                      <th>{token.symbol} per</th>
+                      <th>per {token.symbol}</th>
                       {[base, ...quotes].map((otherToken, j) => (
                         <td key={otherToken.address}>
                           {prettifyNumber(ratios[i][j])}
@@ -512,8 +512,20 @@ const PairForm: FC<PairFormProps> = (props) => {
   const baseBudget = pair.baseBudget || '0';
   const price = pair.price || '0';
   const quoteBudget = pair.quoteBudget || '0';
-  const baseBudgetUSD = new SafeDecimal(baseBudget).mul(basePrice).toString();
-  const quoteBudgetUSD = new SafeDecimal(quoteBudget).mul(price).toString();
+
+  const [localBaseBudgetUSD, setLocalBaseBudgetUSD] = useState('');
+  const [localQuoteBudgetUSD, setLocalQuoteBudgetUSD] = useState('');
+
+  useEffect(() => {
+    const value = new SafeDecimal(baseBudget).mul(basePrice).toString();
+    setLocalBaseBudgetUSD(value);
+  }, [baseBudget, basePrice]);
+
+  useEffect(() => {
+    const price = quotePrice?.USD ?? '0';
+    const value = new SafeDecimal(quoteBudget).mul(price).toString();
+    setLocalQuoteBudgetUSD(value);
+  }, [quoteBudget, quotePrice]);
 
   const setBaseBudget = (sellBudget: string) => {
     const multiplicator = new SafeDecimal(concentration).div(100).add(1);
@@ -626,8 +638,9 @@ const PairForm: FC<PairFormProps> = (props) => {
             <input
               id={`${id}-base-usd`}
               type="number"
-              value={baseBudgetUSD}
-              onInput={setBaseBudgetFromUSD}
+              value={localBaseBudgetUSD}
+              onInput={(e) => setLocalBaseBudgetUSD(e.currentTarget.value)}
+              onBlur={setBaseBudgetFromUSD}
               aria-label="budget in USD"
               min="0"
               step="any"
@@ -663,8 +676,9 @@ const PairForm: FC<PairFormProps> = (props) => {
             <input
               id={`${id}-quote-usd`}
               type="number"
-              value={quoteBudgetUSD}
-              onInput={setQuoteBudgetFromUSD}
+              value={localQuoteBudgetUSD}
+              onInput={(e) => setLocalQuoteBudgetUSD(e.currentTarget.value)}
+              onBlur={setQuoteBudgetFromUSD}
               aria-label="budget in USD"
               min="0"
               step="any"
@@ -818,6 +832,12 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     if (isZero(strategy.sellMax)) return true;
     return isLoading || isAwaiting || isProcessing;
   })();
+  const createText = (() => {
+    if (!user) return 'Connect Wallet';
+    if (isAwaiting) return 'Waiting...';
+    if (isProcessing) return 'Processing';
+    return 'Create';
+  })();
 
   const create = async () => {
     createStrategy({
@@ -843,7 +863,7 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
       </td>
       <td>
         <button type="button" disabled={disabled} onClick={create}>
-          {isProcessing || isAwaiting ? 'Processing' : 'Create'}
+          {createText}
         </button>
       </td>
     </tr>
@@ -882,7 +902,17 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     if (!user) return true;
     if (new SafeDecimal(baseBalance || '0').lt(order1.budget)) return true;
     if (new SafeDecimal(quoteBalance || '0').lt(order0.budget)) return true;
+    if ('Infinity' === strategy.buyMin) return true;
+    if ('Infinity' === strategy.sellMax) return true;
+    if (isZero(strategy.buyMin)) return true;
+    if (isZero(strategy.sellMax)) return true;
     return isLoading || isAwaiting || isProcessing;
+  })();
+  const createText = (() => {
+    if (!user) return 'Connect Wallet';
+    if (isAwaiting) return 'Waiting...';
+    if (isProcessing) return 'Processing';
+    return 'Create';
   })();
   const create = async () => {
     createStrategy({
@@ -921,7 +951,7 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
         <span className="usd">({usdPrice(strategy.buyBudgetUSD)})</span>
       </p>
       <button type="button" disabled={disabled} onClick={create}>
-        {isProcessing || isAwaiting ? 'Processing' : 'Create'}
+        {createText}
       </button>
     </li>
   );
