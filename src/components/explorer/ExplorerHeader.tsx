@@ -1,6 +1,5 @@
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { getStrategyType } from 'components/strategies/common/utils';
 import { useTokens } from 'hooks/useTokens';
 import { Strategy, useGetStrategList } from 'libs/queries';
 import {
@@ -8,14 +7,8 @@ import {
   Trending,
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
-import { Link, StrategyType } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { useCallback, useEffect, useRef } from 'react';
-
-const typeLabel = {
-  disposable: 'Limit / Range',
-  recurring: 'Recurring',
-  overlapping: 'Concentrated',
-};
 
 const useTrendingPairs = (trending?: Trending) => {
   const { tokensMap } = useTokens();
@@ -52,7 +45,6 @@ const useTrendingPairs = (trending?: Trending) => {
 
 interface StrategyWithTradeCount extends Strategy {
   trades: number;
-  type: StrategyType;
 }
 const useTrendStrategies = (
   trending?: Trending
@@ -84,7 +76,6 @@ const useTrendStrategies = (
 
   const data = (query.data ?? []).map((strategy) => ({
     ...strategy,
-    type: getStrategyType(strategy),
     trades: record[strategy.id],
   }));
   return { isLoading: false, data };
@@ -98,7 +89,7 @@ export const ExplorerHeader = () => {
   const pairs = trendingPairs.data;
   return (
     <header className="mb-42 flex gap-32">
-      <article className="flex flex-1 flex-col items-center justify-around gap-16 md:items-start">
+      <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
         <h2 className="text-24 font-weight-700 font-title">Total Trades</h2>
         <Trades
           trades={trending?.totalTradeCount ?? 0}
@@ -161,7 +152,6 @@ export const ExplorerHeader = () => {
           <thead className="text-18 text-white/60">
             <tr>
               <td>ID</td>
-              <td>Types</td>
               <td className="text-end">Trades</td>
             </tr>
           </thead>
@@ -175,21 +165,19 @@ export const ExplorerHeader = () => {
                   <td>
                     <Loading />
                   </td>
-                  <td>
-                    <Loading />
-                  </td>
                 </tr>
               ))}
-            {strategies.map(({ id, idDisplay, base, quote, type, trades }) => (
+            {strategies.map(({ id, idDisplay, base, quote, trades }) => (
               <tr key={id}>
                 <td>
-                  <div className="bg-background-700 inline-flex gap-8 rounded px-8">
+                  <div className="bg-background-700 flex gap-8 rounded px-8">
                     <TokensOverlap tokens={[base, quote]} size={18} />
                     {idDisplay}
                   </div>
                 </td>
-                <td>{typeLabel[type]}</td>
-                <td className="text-end">{formatter.format(trades)}</td>
+                <td className="w-full py-4 text-end">
+                  {formatter.format(trades)}
+                </td>
               </tr>
             ))}
           </tbody>
