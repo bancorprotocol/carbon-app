@@ -109,8 +109,8 @@ export const ExplorerHeader = () => {
       </article>
       <article className="border-background-800 hidden flex-1 rounded border-2 p-20 md:block">
         <h2 className="text-24 font-weight-700 font-title">Popular Pairs</h2>
-        <table className="font-weight-500 w-full">
-          <thead className="text-18 text-white/60">
+        <table className="font-weight-500 text-14 w-full">
+          <thead className="text-16 text-white/60">
             <tr>
               <td>Token Pair</td>
               <td className="text-end">Trades</td>
@@ -148,8 +148,8 @@ export const ExplorerHeader = () => {
         <h2 className="text-24 font-weight-700 font-title">
           Trending Strategies
         </h2>
-        <table className="font-weight-500 w-full">
-          <thead className="text-18 text-white/60">
+        <table className="font-weight-500 text-14 w-full">
+          <thead className="text-16 text-white/60">
             <tr>
               <td>ID</td>
               <td className="text-end">Trades</td>
