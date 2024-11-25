@@ -201,10 +201,10 @@ interface TradesProps {
   trades: number;
   className?: string;
 }
-const init = 60 * 7;
-const frames = 60 * 60 * 10; // 10min
+
 const Trades = ({ trades, className }: TradesProps) => {
   const ref = useRef<HTMLParagraphElement>(null);
+  const fps = useRef<number>();
   const values = useRef<string[]>([]);
   const lastTrades = useRef(0);
 
@@ -222,44 +222,57 @@ const Trades = ({ trades, className }: TradesProps) => {
   }, []);
 
   useEffect(() => {
-    const last = lastTrades.current;
-    if (last === trades) return;
-    if (!last) {
-      const nextValues = new Array(frames);
-      for (let i = 0; i < init; i++) {
-        const percent = i / init;
-        const v = Math.round(trades * 0.999 * percent);
-        nextValues[i] = formatter.format(v);
-      }
-      const lastPercent = trades * 0.001;
-      for (let i = init; i < frames + init; i++) {
-        const percent = i / (frames + init);
-        const v = Math.round(trades * 0.999 + lastPercent * percent);
-        nextValues[i] = formatter.format(v);
-      }
-      values.current = nextValues;
-      runAnimation();
-    } else {
-      const nextValues = new Array(frames);
-      const delta = trades - last;
-      for (let i = 0; i < frames; i++) {
-        const percent = i / frames; // linear
-        const v = Math.round(delta * percent);
-        nextValues[i] = formatter.format(v + last);
-      }
-      if (!values.current.length) {
-        values.current = nextValues;
+    const getFPS = () => {
+      let i = 0;
+      const next = performance.now() + 1000;
+      return new Promise<number>((res) => {
+        const count = () => {
+          i++;
+          if (performance.now() > next) return res(i);
+          requestAnimationFrame(count);
+        };
+        requestAnimationFrame(count);
+      });
+    };
+
+    const start = async () => {
+      fps.current ||= await getFPS();
+      const last = lastTrades.current;
+      if (last === trades) return;
+      if (!last) {
+        const frames = 10 * fps.current;
+        const nextValues = new Array(frames);
+        for (let i = 0; i <= frames; i++) {
+          const progress = Math.pow(i / frames, 1 / 5); // ease-out
+          const v = Math.round(trades * progress);
+          nextValues[i] = formatter.format(v);
+        }
+        values.current = structuredClone(nextValues);
         runAnimation();
       } else {
-        values.current.push(...nextValues);
+        const frames = 20 * fps.current;
+        const nextValues = new Array(frames);
+        const delta = trades - last;
+        for (let i = 0; i < frames; i++) {
+          const percent = Math.pow(i / frames, 1 / 3); // ease-out
+          const v = Math.round(delta * percent);
+          nextValues[i] = formatter.format(v + last);
+        }
+        if (!values.current.length) {
+          values.current = structuredClone(nextValues);
+          runAnimation();
+        } else {
+          values.current.push(...nextValues);
+        }
       }
-    }
-    lastTrades.current = trades;
+      lastTrades.current = trades;
+    };
+    start();
   }, [trades, runAnimation]);
 
   return (
     <p ref={ref} className={className}>
-      {trades}
+      0
     </p>
   );
 };
