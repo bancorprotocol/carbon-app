@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useCreateStrategyQuery } from 'libs/queries';
-import { StrategyType, useNavigate } from 'libs/routing';
+import { StrategyType } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
-import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
 import { BaseOrder } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { useStrategyEvent } from './useStrategyEventData';
@@ -30,7 +29,6 @@ interface Props {
 export const useCreateStrategy = (props: Props) => {
   const { type, base, quote, order0, order1 } = props;
   const cache = useQueryClient();
-  const navigate = useNavigate();
   const { user, provider } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
@@ -73,7 +71,7 @@ export const useCreateStrategy = (props: Props) => {
   const approval = useApproval(approvalTokens);
   const mutation = useCreateStrategyQuery();
 
-  const createStrategy = async () => {
+  const createStrategy = async ({ onSuccess }: { onSuccess: () => void }) => {
     if (!base || !quote) return;
     if (!user) return openModal('wallet', undefined);
 
@@ -97,7 +95,7 @@ export const useCreateStrategy = (props: Props) => {
         },
         {
           onSuccess: async (tx) => {
-            handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
+            setIsProcessing(true);
             dispatchNotification('createStrategy', { txHash: tx.hash });
             await tx.wait();
             cache.invalidateQueries({
@@ -106,12 +104,16 @@ export const useCreateStrategy = (props: Props) => {
             cache.invalidateQueries({
               queryKey: QueryKey.balance(user, quote.address),
             });
-            navigate({ to: '/', search: {}, params: {} });
             carbonEvents.strategy.strategyCreate({
               ...strategyData,
               buyMarketPricePercentage,
               sellMarketPricePercentage,
             });
+            // Wait a little to see the notification
+            setTimeout(() => {
+              onSuccess();
+              setIsProcessing(false);
+            }, 1500);
           },
           onError: (e: any) => {
             setIsProcessing(false);

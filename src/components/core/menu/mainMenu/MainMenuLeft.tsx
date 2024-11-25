@@ -3,9 +3,10 @@ import { carbonEvents } from 'services/events';
 import { Link, useMatchRoute, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
 import { handleOnItemClick } from 'components/core/menu/utils';
-import { menuItems } from 'components/core/menu';
+import { getMenuItems } from 'components/core/menu';
 
 export const MainMenuLeft: FC = () => {
+  const menuItems = getMenuItems();
   const { pathname } = useRouterState().location;
   const match = useMatchRoute();
 

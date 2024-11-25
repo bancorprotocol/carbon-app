@@ -6,7 +6,13 @@ import { lsService } from 'services/localeStorage';
  * <empty for now>
  */
 
-export const featureFlags = [];
+export const featureFlags = [
+  {
+    value: 'liquidity-matrix' as const,
+    label: 'Liquidity Matrix',
+    description: 'Create a group of concentrated liquidity strategies',
+  },
+];
 
 type CurrentFlags = (typeof featureFlags)[number]['value'];
 

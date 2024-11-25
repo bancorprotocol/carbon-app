@@ -8,6 +8,7 @@
   --buy: theme('colors.buy.DEFAULT');
   --sell: theme('colors.sell.DEFAULT');
   --warning: theme('colors.warning.DEFAULT');
+  --error: theme('colors.error.DEFAULT');
   --gradient-first: theme('colors.primaryGradient.first.DEFAULT');
   --gradient-middle: theme('colors.primaryGradient.middle.DEFAULT');
   --gradient-last: theme('colors.primaryGradient.last.DEFAULT');
