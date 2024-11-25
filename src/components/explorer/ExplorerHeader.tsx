@@ -112,11 +112,11 @@ export const ExplorerHeader = () => {
         <table className="font-weight-500 text-14 w-full">
           <thead className="text-16 text-white/60">
             <tr>
-              <td>Token Pair</td>
-              <td className="text-end">Trades</td>
+              <th className="font-weight-400 text-start">Token Pair</th>
+              <th className="font-weight-400 text-end">Trades</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="font-weight-500">
             {trendingPairs.isLoading &&
               [1, 2, 3].map((id) => (
                 <tr key={id}>
@@ -148,14 +148,14 @@ export const ExplorerHeader = () => {
         <h2 className="text-20 font-weight-700 font-title">
           Trending Strategies
         </h2>
-        <table className="font-weight-500 text-14 w-full">
+        <table className="text-14 w-full">
           <thead className="text-16 text-white/60">
             <tr>
-              <td>ID</td>
-              <td className="text-end">Trades</td>
+              <th className="font-weight-400 text-start">ID</th>
+              <th className="font-weight-400 text-end">Trades</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="font-weight-500">
             {trendingStrategies.isLoading &&
               [1, 2, 3].map((id) => (
                 <tr key={id}>
@@ -201,6 +201,7 @@ interface TradesProps {
   trades: number;
   className?: string;
 }
+const init = 60 * 7;
 const frames = 60 * 60 * 10; // 10min
 const Trades = ({ trades, className }: TradesProps) => {
   const ref = useRef<HTMLParagraphElement>(null);
@@ -225,9 +226,15 @@ const Trades = ({ trades, className }: TradesProps) => {
     if (last === trades) return;
     if (!last) {
       const nextValues = new Array(frames);
-      for (let i = 0; i < frames; i++) {
-        const percent = Math.pow(i / frames, 1 / 200); // ease-ouy
-        const v = Math.round(trades * percent);
+      for (let i = 0; i < init; i++) {
+        const percent = i / init;
+        const v = Math.round(trades * 0.999 * percent);
+        nextValues[i] = formatter.format(v);
+      }
+      const lastPercent = trades * 0.001;
+      for (let i = init; i < frames + init; i++) {
+        const percent = i / (frames + init);
+        const v = Math.round(trades * 0.999 + lastPercent * percent);
         nextValues[i] = formatter.format(v);
       }
       values.current = nextValues;
