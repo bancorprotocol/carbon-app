@@ -37,7 +37,7 @@ export const useTrending = () => {
     queryKey: QueryKey.tradeCount(),
     queryFn: carbonApi.getTrending,
     staleTime: ONE_HOUR_IN_MS,
-    refetchInterval: 30_000,
+    refetchInterval: 120_000,
   });
 };
 

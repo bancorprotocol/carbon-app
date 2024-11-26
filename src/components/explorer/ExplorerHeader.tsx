@@ -207,6 +207,7 @@ const Trades = ({ trades, className }: TradesProps) => {
   const fps = useRef<number>();
   const values = useRef<string[]>([]);
   const lastTrades = useRef(0);
+  const initDelta = 60;
 
   const runAnimation = useCallback(() => {
     const figure = ref.current;
@@ -239,18 +240,17 @@ const Trades = ({ trades, className }: TradesProps) => {
       fps.current ||= await getFPS();
       const last = lastTrades.current;
       if (last === trades) return;
+      const frames = 120 * fps.current;
       if (!last) {
-        const frames = 30 * fps.current;
         const nextValues = new Array(frames);
         for (let i = 0; i <= frames; i++) {
           const progress = Math.pow(i / frames, 1 / 2); // ease-out
-          const v = Math.round(trades - 15 + 15 * progress);
+          const v = Math.round(trades - initDelta + initDelta * progress);
           nextValues[i] = formatter.format(v);
         }
         values.current = structuredClone(nextValues);
         runAnimation();
       } else {
-        const frames = 30 * fps.current;
         const nextValues = new Array(frames);
         const delta = trades - last;
         for (let i = 0; i < frames; i++) {
@@ -270,7 +270,7 @@ const Trades = ({ trades, className }: TradesProps) => {
     start();
   }, [trades, runAnimation]);
 
-  const initial = trades ? formatter.format(trades - 15) : 0;
+  const initial = trades ? formatter.format(trades - initDelta) : 0;
   return (
     <p ref={ref} className={className}>
       {initial}
