@@ -240,11 +240,11 @@ const Trades = ({ trades, className }: TradesProps) => {
       const last = lastTrades.current;
       if (last === trades) return;
       if (!last) {
-        const frames = 10 * fps.current;
+        const frames = 30 * fps.current;
         const nextValues = new Array(frames);
         for (let i = 0; i <= frames; i++) {
-          const progress = Math.pow(i / frames, 1 / 5); // ease-out
-          const v = Math.round(trades * progress);
+          const progress = Math.pow(i / frames, 1 / 2); // ease-out
+          const v = Math.round(trades - 15 + 15 * progress);
           nextValues[i] = formatter.format(v);
         }
         values.current = structuredClone(nextValues);
@@ -270,9 +270,10 @@ const Trades = ({ trades, className }: TradesProps) => {
     start();
   }, [trades, runAnimation]);
 
+  const initial = trades ? formatter.format(trades - 15) : 0;
   return (
     <p ref={ref} className={className}>
-      0
+      {initial}
     </p>
   );
 };
