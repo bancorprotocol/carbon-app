@@ -250,7 +250,7 @@ const Trades = ({ trades, className }: TradesProps) => {
         values.current = structuredClone(nextValues);
         runAnimation();
       } else {
-        const frames = 20 * fps.current;
+        const frames = 30 * fps.current;
         const nextValues = new Array(frames);
         const delta = trades - last;
         for (let i = 0; i < frames; i++) {
