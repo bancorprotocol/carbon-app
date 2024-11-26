@@ -87,14 +87,14 @@ export const ExplorerHeader = () => {
   const trendingPairs = useTrendingPairs(trending);
   const strategies = trendingStrategies.data;
   const pairs = trendingPairs.data;
+  const total = Object.values(trending?.tradeCount ?? {}).reduce((acc, v) => {
+    return acc + v.strategyTrades;
+  }, 0);
   return (
     <header className="mb-42 flex gap-32">
       <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
         <h2 className="text-24 font-weight-700 font-title">Total Trades</h2>
-        <Trades
-          trades={trending?.totalTradeCount ?? 0}
-          className="text-36 font-weight-700 font-title"
-        />
+        <Trades trades={total} className="text-36 font-weight-700 font-title" />
         <div className="flex gap-16">
           <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
             Trade
