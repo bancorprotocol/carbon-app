@@ -223,57 +223,64 @@ const Trades = ({ trades, className }: TradesProps) => {
   }, []);
 
   useEffect(() => {
-    const getFPS = () => {
-      let i = 0;
-      const next = performance.now() + 1000;
-      return new Promise<number>((res) => {
-        const count = () => {
-          i++;
-          if (performance.now() > next) return res(i);
-          requestAnimationFrame(count);
-        };
-        requestAnimationFrame(count);
-      });
-    };
-
     const start = async () => {
-      fps.current ||= await getFPS();
-      const last = lastTrades.current;
-      if (last === trades) return;
-      const frames = 120 * fps.current;
-      if (!last) {
-        const nextValues = new Array(frames);
-        for (let i = 0; i <= frames; i++) {
-          const progress = Math.pow(i / frames, 1 / 2); // ease-out
-          const v = Math.round(trades - initDelta + initDelta * progress);
-          nextValues[i] = formatter.format(v);
+      const from = lastTrades.current || trades - initDelta;
+      const to = trades;
+      const letters = ref.current!.children;
+      let previous = formatter.format(from - 1).split('');
+      for (let value = from; value <= to; value++) {
+        const next = formatter.format(value).split('');
+        const anims: Promise<Animation>[] = [];
+        for (let i = 0; i < next.length; i++) {
+          const v = next[i];
+          if (!'0123456789'.includes(v)) continue;
+          if (previous[i] === next[i]) continue;
+          const anim = letters[i].animate(
+            [{ transform: `translateY(-${v}0%)` }],
+            {
+              duration: 1000,
+              delay: 2000,
+              fill: 'forwards',
+              easing: 'cubic-bezier(1,.11,.55,.79)',
+            }
+          );
+          anims.push(anim.finished);
         }
-        values.current = structuredClone(nextValues);
-        runAnimation();
-      } else {
-        const nextValues = new Array(frames);
-        const delta = trades - last;
-        for (let i = 0; i < frames; i++) {
-          const percent = Math.pow(i / frames, 1 / 3); // ease-out
-          const v = Math.round(delta * percent);
-          nextValues[i] = formatter.format(v + last);
-        }
-        if (!values.current.length) {
-          values.current = structuredClone(nextValues);
-          runAnimation();
-        } else {
-          values.current.push(...nextValues);
-        }
+        previous = next;
+        await Promise.allSettled(anims);
+        lastTrades.current = value;
       }
-      lastTrades.current = trades;
     };
     start();
-  }, [trades, runAnimation]);
+  }, [trades]);
 
-  const initial = trades ? formatter.format(trades - initDelta) : 0;
+  const initial = trades ? formatter.format(trades - initDelta) : '0';
   return (
-    <p ref={ref} className={className}>
-      {initial}
+    <p
+      ref={ref}
+      className="text-36 font-weight-700 font-title flex h-[40px] overflow-hidden"
+    >
+      {initial.split('').map((v, i) => {
+        if (!'0123456789'.includes(v)) return <span key={i}>{v}</span>;
+        return (
+          <span
+            key={i}
+            className="grid h-max"
+            style={{ transform: `translateY(-${v}0%)` }}
+          >
+            <span>0</span>
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>6</span>
+            <span>7</span>
+            <span>8</span>
+            <span>9</span>
+          </span>
+        );
+      })}
     </p>
   );
 };
