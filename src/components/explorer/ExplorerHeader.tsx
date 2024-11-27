@@ -204,7 +204,7 @@ interface TradesProps {
 
 const Trades = ({ trades, className }: TradesProps) => {
   const ref = useRef<HTMLParagraphElement>(null);
-  const fps = useRef<number>();
+  const anims = useRef<Promise<Animation>[]>();
   const values = useRef<string[]>([]);
   const lastTrades = useRef(0);
   const initDelta = 60;
@@ -227,10 +227,30 @@ const Trades = ({ trades, className }: TradesProps) => {
       const from = lastTrades.current || trades - initDelta;
       const to = trades;
       const letters = ref.current!.children;
+      if (!lastTrades.current) {
+        const initAnims: Promise<Animation>[] = [];
+        const next = formatter.format(trades - initDelta).split('');
+        for (let i = 0; i < next.length; i++) {
+          const v = next[i];
+          if (!'0123456789'.includes(v)) continue;
+          const anim = letters[i].animate(
+            [{ transform: `translateY(-${v}0%)` }],
+            {
+              duration: 1000,
+              delay: i * 100,
+              fill: 'forwards',
+              easing: 'cubic-bezier(1,-0.54,.65,1.46)',
+            }
+          );
+          initAnims.push(anim.finished);
+        }
+        await Promise.allSettled(initAnims);
+      }
+      await Promise.allSettled(anims.current ?? []);
+      anims.current = [];
       let previous = formatter.format(from - 1).split('');
       for (let value = from; value <= to; value++) {
         const next = formatter.format(value).split('');
-        const anims: Promise<Animation>[] = [];
         for (let i = 0; i < next.length; i++) {
           const v = next[i];
           if (!'0123456789'.includes(v)) continue;
@@ -244,10 +264,10 @@ const Trades = ({ trades, className }: TradesProps) => {
               easing: 'cubic-bezier(1,.11,.55,.79)',
             }
           );
-          anims.push(anim.finished);
+          anims.current.push(anim.finished);
         }
         previous = next;
-        await Promise.allSettled(anims);
+        await Promise.allSettled(anims.current ?? []);
         lastTrades.current = value;
       }
     };
@@ -263,11 +283,7 @@ const Trades = ({ trades, className }: TradesProps) => {
       {initial.split('').map((v, i) => {
         if (!'0123456789'.includes(v)) return <span key={i}>{v}</span>;
         return (
-          <span
-            key={i}
-            className="grid h-max"
-            style={{ transform: `translateY(-${v}0%)` }}
-          >
+          <span key={i} className="grid h-max text-center">
             <span>0</span>
             <span>1</span>
             <span>2</span>
