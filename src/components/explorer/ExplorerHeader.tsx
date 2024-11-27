@@ -9,6 +9,7 @@ import {
 } from 'libs/queries/extApi/tradeCount';
 import { Link } from 'libs/routing';
 import { useEffect, useRef } from 'react';
+import { toPairSlug } from 'utils/pairSearch';
 
 const useTrendingPairs = (trending?: Trending) => {
   const { tokensMap } = useTokens();
@@ -98,7 +99,10 @@ export const ExplorerHeader = () => {
         <h2 className="text-24 font-weight-700 font-title">Total Trades</h2>
         <Trades trades={total} />
         <div className="flex gap-16">
-          <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
+          <Link
+            to="/trade/market"
+            className={buttonStyles({ variant: 'success' })}
+          >
             Trade
           </Link>
           <Link
@@ -133,14 +137,34 @@ export const ExplorerHeader = () => {
             {pairs.map(({ pairAddress, base, quote, trades }) => (
               <tr key={pairAddress}>
                 <td>
-                  <div className="inline-flex items-center gap-8">
-                    <TokensOverlap tokens={[base, quote]} size={18} />
-                    <span>{base?.symbol}</span>
-                    <span className="text-white/60">/</span>
-                    <span>{quote?.symbol}</span>
-                  </div>
+                  <Link
+                    to="/explore/$type/$slug"
+                    params={{
+                      type: 'token-pair',
+                      slug: toPairSlug(base, quote),
+                    }}
+                    className="block w-full"
+                  >
+                    <div className="inline-flex items-center gap-8">
+                      <TokensOverlap tokens={[base, quote]} size={18} />
+                      <span>{base?.symbol}</span>
+                      <span className="text-white/60">/</span>
+                      <span>{quote?.symbol}</span>
+                    </div>
+                  </Link>
                 </td>
-                <td className="py-8 text-end">{formatter.format(trades)}</td>
+                <td className="py-8 text-end">
+                  <Link
+                    to="/explore/$type/$slug"
+                    params={{
+                      type: 'token-pair',
+                      slug: toPairSlug(base, quote),
+                    }}
+                    className="block w-full"
+                  >
+                    {formatter.format(trades)}
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -172,13 +196,25 @@ export const ExplorerHeader = () => {
             {strategies.map(({ id, idDisplay, base, quote, trades }) => (
               <tr key={id}>
                 <td>
-                  <div className="bg-background-700 flex gap-8 rounded px-8">
-                    <TokensOverlap tokens={[base, quote]} size={18} />
-                    {idDisplay}
-                  </div>
+                  <Link
+                    to="/strategy/$id"
+                    params={{ id }}
+                    className="block w-full"
+                  >
+                    <div className="bg-background-700 flex gap-8 rounded px-8">
+                      <TokensOverlap tokens={[base, quote]} size={18} />
+                      {idDisplay}
+                    </div>
+                  </Link>
                 </td>
                 <td className="w-full py-8 text-end">
-                  {formatter.format(trades)}
+                  <Link
+                    to="/strategy/$id"
+                    params={{ id }}
+                    className="block w-full"
+                  >
+                    {formatter.format(trades)}
+                  </Link>
                 </td>
               </tr>
             ))}
