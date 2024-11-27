@@ -8,7 +8,7 @@ import {
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
 import { Link } from 'libs/routing';
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const useTrendingPairs = (trending?: Trending) => {
   const { tokensMap } = useTokens();
@@ -82,7 +82,7 @@ const useTrendStrategies = (
 };
 
 export const ExplorerHeader = () => {
-  const { data: trending } = useTrending();
+  const { data: trending, isLoading } = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
   const trendingPairs = useTrendingPairs(trending);
   const strategies = trendingStrategies.data;
@@ -90,11 +90,13 @@ export const ExplorerHeader = () => {
   const total = Object.values(trending?.tradeCount ?? {}).reduce((acc, v) => {
     return acc + v.strategyTrades;
   }, 0);
+  const strategiesLoading = trendingStrategies.isLoading || isLoading;
+  const pairLoading = trendingPairs.isLoading || isLoading;
   return (
     <header className="mb-42 flex gap-32">
       <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
         <h2 className="text-24 font-weight-700 font-title">Total Trades</h2>
-        <Trades trades={total} className="text-36 font-weight-700 font-title" />
+        <Trades trades={total} />
         <div className="flex gap-16">
           <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
             Trade
@@ -117,7 +119,7 @@ export const ExplorerHeader = () => {
             </tr>
           </thead>
           <tbody className="font-weight-500">
-            {trendingPairs.isLoading &&
+            {pairLoading &&
               [1, 2, 3].map((id) => (
                 <tr key={id}>
                   <td>
@@ -156,7 +158,7 @@ export const ExplorerHeader = () => {
             </tr>
           </thead>
           <tbody className="font-weight-500">
-            {trendingStrategies.isLoading &&
+            {strategiesLoading &&
               [1, 2, 3].map((id) => (
                 <tr key={id}>
                   <td>
@@ -199,41 +201,28 @@ const formatter = new Intl.NumberFormat(undefined, {
 
 interface TradesProps {
   trades: number;
-  className?: string;
 }
 
-const Trades = ({ trades, className }: TradesProps) => {
+const Trades = ({ trades }: TradesProps) => {
   const ref = useRef<HTMLParagraphElement>(null);
   const anims = useRef<Promise<Animation>[]>();
-  const values = useRef<string[]>([]);
   const lastTrades = useRef(0);
   const initDelta = 60;
 
-  const runAnimation = useCallback(() => {
-    const figure = ref.current;
-    if (!figure) return;
-    const run = () => {
-      const next = values.current.shift();
-      if (next) {
-        figure.textContent = next;
-        if (values.current.length > 0) requestAnimationFrame(run);
-      }
-    };
-    requestAnimationFrame(run);
-  }, []);
-
   useEffect(() => {
+    let tradesChanged = false;
     const start = async () => {
       const from = lastTrades.current || trades - initDelta;
       const to = trades;
       const letters = ref.current!.children;
+      // Initial animation
       if (!lastTrades.current) {
         const initAnims: Promise<Animation>[] = [];
-        const next = formatter.format(trades - initDelta).split('');
+        const next = formatter.format(from).split('');
         for (let i = 0; i < next.length; i++) {
           const v = next[i];
           if (!'0123456789'.includes(v)) continue;
-          const anim = letters[i].animate(
+          const anim = letters[i]?.animate(
             [{ transform: `translateY(-${v}0%)` }],
             {
               duration: 1000,
@@ -246,12 +235,14 @@ const Trades = ({ trades, className }: TradesProps) => {
         }
         await Promise.allSettled(initAnims);
       }
+      // Wait for lingering animations if any
       await Promise.allSettled(anims.current ?? []);
       anims.current = [];
       let previous = formatter.format(from - 1).split('');
       for (let value = from; value <= to; value++) {
         const next = formatter.format(value).split('');
         for (let i = 0; i < next.length; i++) {
+          if (tradesChanged) return;
           const v = next[i];
           if (!'0123456789'.includes(v)) continue;
           if (previous[i] === next[i]) continue;
@@ -272,6 +263,9 @@ const Trades = ({ trades, className }: TradesProps) => {
       }
     };
     start();
+    return () => {
+      tradesChanged = true;
+    };
   }, [trades]);
 
   const initial = trades ? formatter.format(trades - initDelta) : '0';
