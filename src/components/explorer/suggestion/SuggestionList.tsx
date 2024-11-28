@@ -1,6 +1,5 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { suggestionClasses } from './utils';
-import { PairLogoName } from 'components/common/PairLogoName';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useNavigate } from '@tanstack/react-router';
 
@@ -8,6 +7,7 @@ interface Props {
   listboxId: string;
   filteredSlugs: Set<string>;
   pairEntries: [string, TradePair][];
+  open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -19,11 +19,16 @@ export const SuggestionList: FC<Props> = (props) => {
   };
 
   return (
-    <div role="listbox" id={props.listboxId} className={suggestionClasses}>
+    <div
+      role="listbox"
+      id={props.listboxId}
+      hidden={!props.open}
+      className={suggestionClasses}
+    >
       <h3 className="text-14 font-weight-500 mb-8 ml-20 text-white/60">
         {props.filteredSlugs.size} Results
       </h3>
-      {props.pairEntries.map(([slug, pair]) => {
+      {props.pairEntries.map(([slug, { baseToken, quoteToken }]) => {
         return (
           <button
             key={slug}
@@ -35,7 +40,33 @@ export const SuggestionList: FC<Props> = (props) => {
             aria-selected="false"
             hidden={!props.filteredSlugs.has(slug)}
           >
-            <PairLogoName pair={pair} />
+            <span className="isolate flex shrink-0 items-center">
+              <img
+                width="30"
+                height="30"
+                loading="lazy"
+                decoding="async"
+                src={baseToken.logoURI}
+                title={baseToken.symbol}
+                alt={baseToken.symbol + 'token'}
+                className="max-w-none rounded-full border border-black bg-black"
+              />
+              <img
+                width="30"
+                height="30"
+                loading="lazy"
+                decoding="async"
+                src={quoteToken.logoURI}
+                title={quoteToken.symbol}
+                alt={quoteToken.symbol + 'token'}
+                className="z-1 -ml-8 max-w-none rounded-full border border-black bg-black"
+              />
+            </span>
+            <p className="font-weight-500 flex items-center gap-4">
+              {baseToken.symbol}
+              <span className="text-white/60">/</span>
+              {quoteToken.symbol}
+            </p>
           </button>
         );
       })}

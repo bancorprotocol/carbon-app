@@ -12,7 +12,6 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { ExplorerSearchDropdownButton } from 'components/explorer/ExplorerSearchDropdownButton';
 import { ExplorerSearchDropdownItems } from 'components/explorer/ExplorerSearchDropdownItems';
 import { ExplorerSearchInput } from 'components/explorer/ExplorerSearchInput';
-import ExplorerSearchSuggestions from 'components/explorer/suggestion';
 import { utils } from 'ethers';
 import { useNavigate } from 'libs/routing';
 import config from 'config';
@@ -24,6 +23,7 @@ import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
 import { useGetAddressFromEns } from 'libs/queries';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
+import { SuggestionCombobox } from 'components/explorer/suggestion/SuggestionCombobox';
 
 export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
@@ -116,12 +116,12 @@ export const _ExplorerSearch: FC = () => {
             'h-40',
             'w-full',
             'items-center',
-            'space-x-8',
+            'gap-8',
             'rounded-full',
             'border',
             'border-primary',
             'px-16',
-            'md:space-x-16',
+            'md:gap-16',
             isInvalidAddress && 'border-error'
           )}
         >
@@ -137,7 +137,7 @@ export const _ExplorerSearch: FC = () => {
           <div role="separator" className="h-20 w-1 bg-white/40"></div>
           <div className="flex w-full flex-grow items-center md:relative">
             {type === 'token-pair' && (
-              <ExplorerSearchSuggestions {...suggestionProps} />
+              <SuggestionCombobox {...suggestionProps} />
             )}
             {type === 'wallet' && <ExplorerSearchInput {...inputProps} />}
           </div>

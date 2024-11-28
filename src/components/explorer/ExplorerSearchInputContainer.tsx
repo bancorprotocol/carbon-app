@@ -21,11 +21,9 @@ export const ExplorerSearchInputContainer: FC<Props> = (props) => {
         )}
         {...inputProps}
       />
-      {!!search && (
-        <button type="reset" aria-label="Clear">
-          <IconClose className="w-12" />
-        </button>
-      )}
+      <button type="reset" aria-label="Clear" hidden={!search}>
+        <IconClose className="w-12" />
+      </button>
       {children}
     </div>
   );

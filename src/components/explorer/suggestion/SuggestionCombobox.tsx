@@ -67,8 +67,9 @@ export const SuggestionCombobox: FC<Props> = (props) => {
       filteredSlugs: new Set(
         filteredPairs.map((pair) => toPairSlug(pair.baseToken, pair.quoteToken))
       ),
+      open: open && !!filteredPairs.length,
     }),
-    [filteredPairs, listboxId, pairMap]
+    [filteredPairs, listboxId, pairMap, open]
   );
 
   return (
@@ -89,9 +90,7 @@ export const SuggestionCombobox: FC<Props> = (props) => {
       onFocus={() => setOpen(true)}
     >
       {open && !filteredPairs.length && <SuggestionEmpty />}
-      {open && !!filteredPairs.length && (
-        <SuggestionList {...suggestionListProps} />
-      )}
+      <SuggestionList {...suggestionListProps} />
     </ExplorerSearchInputContainer>
   );
 };
