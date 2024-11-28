@@ -7,7 +7,7 @@ if (config.sentryDSN) {
     dsn: config.sentryDSN,
     integrations: [
       Sentry.tanstackRouterBrowserTracingIntegration(router),
-      Sentry.replayIntegration(),
+      // Sentry.replayIntegration(),
       Sentry.captureConsoleIntegration({ levels: ['error'] }),
     ],
     // Performance Monitoring
