@@ -61,12 +61,9 @@ export const SuggestionCombobox: FC<Props> = (props) => {
     () => ({
       setOpen,
       listboxId,
-      pairEntries: pairMap
-        .entries()
-        .toArray()
-        .sort((a, b) => {
-          return a[1].baseToken.symbol.localeCompare(b[1].baseToken.symbol);
-        }),
+      pairEntries: Array.from(pairMap.entries()).sort((a, b) => {
+        return a[1].baseToken.symbol.localeCompare(b[1].baseToken.symbol);
+      }),
       filteredSlugs: new Set(
         filteredPairs.map((pair) => toPairSlug(pair.baseToken, pair.quoteToken))
       ),
