@@ -17,7 +17,7 @@ import {
 import { ExplorerSearchInputContainer } from '../ExplorerSearchInputContainer';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
-import { searchPairTrade } from 'utils/pairSearch';
+import { searchPairTrade, toPairSlug } from 'utils/pairSearch';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 
 interface Props {
@@ -57,11 +57,22 @@ export const SuggestionCombobox: FC<Props> = (props) => {
     if (e.key === 'ArrowUp') selectPreviousSibling(root.current);
   };
 
-  const suggestionListProps = {
-    setOpen,
-    listboxId,
-    filteredPairs,
-  };
+  const suggestionListProps = useMemo(
+    () => ({
+      setOpen,
+      listboxId,
+      pairEntries: pairMap
+        .entries()
+        .toArray()
+        .sort((a, b) => {
+          return a[1].baseToken.symbol.localeCompare(b[1].baseToken.symbol);
+        }),
+      filteredSlugs: new Set(
+        filteredPairs.map((pair) => toPairSlug(pair.baseToken, pair.quoteToken))
+      ),
+    }),
+    [filteredPairs, listboxId, pairMap]
+  );
 
   return (
     <ExplorerSearchInputContainer
