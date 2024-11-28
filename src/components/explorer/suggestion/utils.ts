@@ -1,5 +1,5 @@
 export const suggestionClasses =
-  'absolute left-0 top-[100%] z-30 mt-10 max-h-[300px] w-full overflow-hidden overflow-y-auto rounded-10 bg-background-800 py-10 md:mt-20';
+  'absolute left-0 top-[100%] z-30 mt-10 max-h-[300px] w-full overflow-hidden overflow-y-auto rounded-10 bg-background-800 py-10 md:mt-20 grid';
 
 const isOption = (el?: Element | null): el is HTMLElement => {
   return el instanceof HTMLElement && el.getAttribute('role') === 'option';
