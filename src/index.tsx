@@ -7,6 +7,7 @@ import { WagmiReactWrapper } from 'libs/wagmi';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
+import { Partytown } from '@builder.io/partytown/react';
 import 'init-sentry';
 import 'utils/buffer';
 import 'fonts.css';
@@ -19,6 +20,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
+    <Partytown debug={true} forward={['dataLayer.push']} />
     <QueryProvider>
       <StoreProvider>
         <WagmiReactWrapper>

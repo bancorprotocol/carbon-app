@@ -2,7 +2,9 @@ import { defineConfig, loadEnv, PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
+import { partytownVite } from '@builder.io/partytown/utils';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -10,7 +12,14 @@ export default defineConfig(({ mode }) => {
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
   const env = loadEnv(mode, process.cwd(), '');
 
-  const plugins: PluginOption[] = [react(), viteTsconfigPaths(), svgrPlugin()];
+  const plugins: PluginOption[] = [
+    react(),
+    viteTsconfigPaths(),
+    svgrPlugin(),
+    partytownVite({
+      dest: path.join(__dirname, 'build', '~partytown'),
+    }),
+  ];
 
   // Put the Sentry vite plugin after all other plugins
   if (env.SENTRY_ORG && env.SENTRY_PROJECT && env.SENTRY_AUTH_TOKEN) {
