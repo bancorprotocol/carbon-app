@@ -27,7 +27,7 @@ export const ModalSlideOver: FC<ModalProps> = ({
   const sizeClass = getSize(size);
 
   return (
-    <Overlay onClick={() => closeModal(id)} className="justify-end">
+    <Overlay close={() => closeModal(id)} className="justify-end">
       <m.div
         onClick={(e) => e.stopPropagation()}
         className={`relative w-full ${sizeClass}`}
