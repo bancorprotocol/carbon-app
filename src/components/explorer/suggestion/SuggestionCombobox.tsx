@@ -17,7 +17,7 @@ import {
 import { ExplorerSearchInputContainer } from '../ExplorerSearchInputContainer';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
-import { searchPairTrade, toPairSlug } from 'utils/pairSearch';
+import { fromPairSearch, searchPairTrade, toPairSlug } from 'utils/pairSearch';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 
 interface Props {
@@ -72,6 +72,17 @@ export const SuggestionCombobox: FC<Props> = (props) => {
     [filteredPairs, listboxId, pairMap, open]
   );
 
+  const change = (value: string) => {
+    const slug = fromPairSearch(value);
+    const listbox = document.getElementById(listboxId) as HTMLElement;
+    for (const child of listbox!.children) {
+      if (!(child as HTMLElement).dataset.slug) continue;
+      const show = (child as HTMLElement).dataset.slug!.includes(slug);
+      if (!show) child.setAttribute('hidden', 'true');
+      else child.removeAttribute('hidden');
+    }
+  };
+
   return (
     <ExplorerSearchInputContainer
       containerRef={root}
@@ -81,11 +92,11 @@ export const SuggestionCombobox: FC<Props> = (props) => {
       aria-controls={listboxId}
       aria-autocomplete="both"
       aria-expanded={open}
-      value={search}
+      defaultValue={search}
       placeholder="Search by token pair"
       aria-label="Search by token pair"
-      onChange={(e) => setSearch(e.target.value)}
-      onKeyDown={onKeyDownHandler}
+      // onInput={(e) => change(e.currentTarget.value)}
+      // onKeyDown={onKeyDownHandler}
       onBlur={() => setOpen(false)}
       onFocus={() => setOpen(true)}
     >

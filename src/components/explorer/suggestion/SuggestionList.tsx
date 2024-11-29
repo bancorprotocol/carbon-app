@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, memo, SetStateAction } from 'react';
 import { suggestionClasses } from './utils';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useNavigate } from '@tanstack/react-router';
@@ -11,7 +11,7 @@ interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const SuggestionList: FC<Props> = (props) => {
+const _SuggestionList: FC<Props> = (props) => {
   const nav = useNavigate();
   const click = (params: { type: 'token-pair'; slug: string }) => {
     props.setOpen(false);
@@ -38,7 +38,7 @@ export const SuggestionList: FC<Props> = (props) => {
             onClick={() => click({ type: 'token-pair' as const, slug })}
             className="px-30 flex cursor-pointer items-center gap-10 py-10 hover:bg-white/20 aria-selected:bg-white/10 [&[hidden]]:hidden"
             aria-selected="false"
-            hidden={!props.filteredSlugs.has(slug)}
+            data-slug={slug}
           >
             <span className="isolate flex shrink-0 items-center">
               <img
@@ -73,3 +73,7 @@ export const SuggestionList: FC<Props> = (props) => {
     </div>
   );
 };
+export const SuggestionList = memo(
+  _SuggestionList,
+  (a, b) => a.pairEntries.length !== b.pairEntries.length
+);
