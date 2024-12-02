@@ -1,12 +1,4 @@
-import {
-  Dispatch,
-  FC,
-  KeyboardEvent,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import {
   selectCurrentOption,
   selectFirstOption,
@@ -14,76 +6,132 @@ import {
   selectNextSibling,
   selectPreviousSibling,
 } from './utils';
-import { ExplorerSearchInputContainer } from '../ExplorerSearchInputContainer';
+import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
-import { searchPairTrade } from 'utils/pairSearch';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { fromPairSearch, sortPairNodes, toPairName } from 'utils/pairSearch';
+import { useParams } from '@tanstack/react-router';
+import { usePairs } from 'hooks/usePairs';
+import { cn } from 'utils/helpers';
+import style from './index.module.css';
 
-interface Props {
-  nameMap: Map<string, string>;
-  pairMap: Map<string, TradePair>;
-  search: string;
-  setSearch: Dispatch<string>;
-}
-
-export const SuggestionCombobox: FC<Props> = (props) => {
-  const { pairMap, nameMap, search, setSearch } = props;
+export const SuggestionCombobox = () => {
+  const { map: pairMap } = usePairs();
   const listboxId = useId();
+  const inputId = useId();
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
-  const filteredPairs = useMemo(() => {
-    return searchPairTrade(pairMap, nameMap, search);
-  }, [pairMap, nameMap, search]);
+  const params = useParams({ from: '/explore/$type/$slug' });
 
-  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (!open && e.key === 'Escape') {
-      (e.target as HTMLInputElement).value = '';
-      return setSearch('');
+  const change = useCallback(() => {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    const searchSlug = fromPairSearch(input.value);
+    let amount = 0;
+    const listbox = document.getElementById(listboxId) as HTMLElement;
+    const options = Array.from(listbox.children) as HTMLElement[];
+    const nodes: { slug: string; name: string; node: HTMLElement }[] = [];
+    for (const option of options) {
+      if (option.role !== 'option') continue;
+      const slug = option.dataset.slug;
+      const name = fromPairSearch(option.textContent ?? '');
+      if (!slug) continue;
+      if (slug.includes(searchSlug) || name.includes(searchSlug)) {
+        amount++;
+        nodes.push({ slug, name, node: option });
+        option.removeAttribute('hidden');
+      } else {
+        option.setAttribute('hidden', 'true');
+        option.setAttribute('aria-selected', 'false');
+      }
     }
-    if (!open) return setOpen(true);
+    sortPairNodes(nodes, searchSlug).forEach(({ node }, i) => {
+      node.dataset.order = i.toString();
+      node.style.setProperty('order', i.toString());
+    });
+    const pairAmount = document.getElementById('filtered-pairs-amount');
+    if (pairAmount) pairAmount.textContent = amount.toString();
+  }, [inputId, listboxId]);
 
-    if (e.key === 'Escape') return setOpen(false);
-    if (e.key === 'Enter') return selectCurrentOption(root.current);
+  useEffect(() => {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    const pair = pairMap.get(params.slug);
+    if (!pair) return;
+    input.value = toPairName(pair.baseToken, pair.quoteToken);
+    change();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.slug, inputId]);
 
-    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
-    e.preventDefault();
-    e.stopPropagation();
+  /** Addlistener (19ms) is much more performant than React onInput (92ms) */
+  useEffect(() => {
+    const input = document.getElementById(inputId) as HTMLInputElement;
 
-    if (e.key === 'Home') selectFirstOption(root.current);
-    if (e.key === 'End') selectLastOption(root.current);
-    if (e.key === 'ArrowDown') selectNextSibling(root.current);
-    if (e.key === 'ArrowUp') selectPreviousSibling(root.current);
-  };
+    const keydownHandler = (e: KeyboardEvent) => {
+      if (open && e.key === 'Escape') {
+        (e.target as HTMLInputElement).value = '';
+        return setOpen(false);
+      }
+      if (!open) return setOpen(true);
+
+      if (e.key === 'Escape') return setOpen(false);
+      if (e.key === 'Enter') return selectCurrentOption(root.current);
+
+      if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (e.key === 'Home') selectFirstOption(root.current);
+      if (e.key === 'End') selectLastOption(root.current);
+      if (e.key === 'ArrowDown') selectNextSibling(root.current);
+      if (e.key === 'ArrowUp') selectPreviousSibling(root.current);
+    };
+
+    input?.addEventListener('keydown', keydownHandler);
+    return () => input?.removeEventListener('keydown', keydownHandler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputId, listboxId, open]);
+
+  useEffect(() => {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    input?.addEventListener('input', change);
+    return () => input?.removeEventListener('input', change);
+  }, [change, inputId]);
 
   const suggestionListProps = {
     setOpen,
     listboxId,
-    filteredPairs,
+    filteredPairs: Array.from(pairMap.values()),
   };
 
   return (
-    <ExplorerSearchInputContainer
-      containerRef={root}
-      search={search}
-      role="combobox"
-      autoComplete="off"
-      aria-controls={listboxId}
-      aria-autocomplete="both"
-      aria-expanded={open}
-      value={search}
-      placeholder="Search by token pair"
-      aria-label="Search by token pair"
-      onChange={(e) => setSearch(e.target.value)}
-      onKeyDown={onKeyDownHandler}
-      onBlur={() => setOpen(false)}
-      onFocus={() => setOpen(true)}
-    >
-      {open && !filteredPairs.length && <SuggestionEmpty />}
-      {open && !!filteredPairs.length && (
-        <SuggestionList {...suggestionListProps} />
-      )}
-    </ExplorerSearchInputContainer>
+    <div ref={root} className={cn('flex flex-grow', style.rootSearch)}>
+      <input
+        id={inputId}
+        name="search"
+        type="search"
+        className={cn(
+          'w-full flex-grow bg-transparent outline-none',
+          style.inputSearch
+        )}
+        role="combobox"
+        autoComplete="off"
+        aria-controls={listboxId}
+        aria-autocomplete="both"
+        aria-expanded={open}
+        placeholder="Search by token pair"
+        aria-label="Search by token pair"
+        onBlur={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+      />
+      <button
+        type="reset"
+        aria-label="Clear"
+        onClick={() => setTimeout(change, 100)}
+      >
+        <IconClose className="w-12" />
+      </button>
+      <SuggestionEmpty />
+      <SuggestionList {...suggestionListProps} />
+    </div>
   );
 };

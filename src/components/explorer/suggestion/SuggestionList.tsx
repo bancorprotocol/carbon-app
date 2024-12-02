@@ -4,6 +4,8 @@ import { PairLogoName } from 'components/common/PairLogoName';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useNavigate } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
+import { cn } from 'utils/helpers';
+import style from './index.module.css';
 
 interface Props {
   listboxId: string;
@@ -18,9 +20,14 @@ export const SuggestionList: FC<Props> = (props) => {
     nav({ to: '/explore/$type/$slug', params });
   };
   return (
-    <div role="listbox" id={props.listboxId} className={suggestionClasses}>
+    <div
+      role="listbox"
+      id={props.listboxId}
+      className={cn(suggestionClasses, style.listbox)}
+    >
       <h3 className="text-14 font-weight-500 mb-8 ml-20 text-white/60">
-        {props.filteredPairs.length} Results
+        <span id="filtered-pairs-amount">{props.filteredPairs.length}</span>{' '}
+        Results
       </h3>
       {props.filteredPairs.map((pair) => {
         const slug = toPairSlug(pair.baseToken, pair.quoteToken);
@@ -34,6 +41,7 @@ export const SuggestionList: FC<Props> = (props) => {
             onClick={() => click(params)}
             className="px-30 flex cursor-pointer items-center space-x-10 py-10 hover:bg-white/20 aria-selected:bg-white/10"
             aria-selected="false"
+            data-slug={slug}
           >
             <PairLogoName pair={pair} />
           </button>

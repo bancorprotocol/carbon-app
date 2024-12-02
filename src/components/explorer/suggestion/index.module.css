@@ -1,0 +1,14 @@
+.root-search:has(.input-search[aria-expanded="false"]) .listbox,
+.root-search:has(.input-search[aria-expanded="false"]) .empty,
+.root-search [role="option"][hidden="true"] {
+  display: none;
+}
+.root-search:not(:has([role="option"]:not([hidden="true"]))) .listbox {
+  display: none;
+}
+.root-search:has([role="option"]:not([hidden="true"])) .empty {
+  display: none;
+}
+.input-search:placeholder-shown + button {
+  display: none;
+}
