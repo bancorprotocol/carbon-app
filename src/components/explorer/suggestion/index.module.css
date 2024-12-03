@@ -1,12 +1,26 @@
-.root-search:has(.input-search[aria-expanded="false"]) .listbox,
-.root-search:has(.input-search[aria-expanded="false"]) .empty,
+@starting-style {
+  .root-search:has(.input-search[aria-expanded="true"]) .dialog {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.dialog {
+  transition-behavior: allow-discrete;
+  transition-property: opacity, transform, display;
+  transition-duration: 0.3s;
+}
+.root-search:has(.input-search[aria-expanded="false"]) .dialog {
+  display: none;
+  opacity: 0;
+  transform: scale(0.95);
+}
 .root-search [role="option"][hidden="true"] {
   display: none;
 }
-.root-search:not(:has([role="option"]:not([hidden="true"]))) .listbox {
+.listbox:not(:has([role="option"]:not([hidden="true"]))) {
   display: none;
 }
-.root-search:has([role="option"]:not([hidden="true"])) .empty {
+.listbox:has([role="option"]:not([hidden="true"])) + .empty {
   display: none;
 }
 .input-search:placeholder-shown + button {

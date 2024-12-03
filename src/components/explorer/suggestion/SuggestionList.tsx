@@ -1,11 +1,10 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-import { suggestionClasses } from './utils';
 import { PairLogoName } from 'components/common/PairLogoName';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useNavigate } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
-import { cn } from 'utils/helpers';
 import style from './index.module.css';
+import { cn } from 'utils/helpers';
 
 interface Props {
   listboxId: string;
@@ -23,12 +22,8 @@ export const SuggestionList: FC<Props> = (props) => {
     <div
       role="listbox"
       id={props.listboxId}
-      className={cn(suggestionClasses, style.listbox)}
+      className={cn(style.listbox, 'grid')}
     >
-      <h3 className="text-14 font-weight-500 mb-8 ml-20 text-white/60">
-        <span id="filtered-pairs-amount">{props.filteredPairs.length}</span>{' '}
-        Results
-      </h3>
       {props.filteredPairs.map((pair) => {
         const slug = toPairSlug(pair.baseToken, pair.quoteToken);
         const params = { type: 'token-pair' as const, slug };

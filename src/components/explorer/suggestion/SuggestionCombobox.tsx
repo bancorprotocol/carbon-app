@@ -5,6 +5,7 @@ import {
   selectLastOption,
   selectNextSibling,
   selectPreviousSibling,
+  suggestionClasses,
 } from './utils';
 import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 import { SuggestionList } from './SuggestionList';
@@ -152,8 +153,13 @@ export const SuggestionCombobox = () => {
       >
         <IconClose className="w-12" />
       </button>
-      <SuggestionEmpty />
-      <SuggestionList {...suggestionListProps} />
+      <div className={cn(suggestionClasses, style.dialog)}>
+        <h3 className="text-14 font-weight-500 mb-8 ml-20 text-white/60">
+          <span id="filtered-pairs-amount">{pairMap.size}</span> Results
+        </h3>
+        <SuggestionList {...suggestionListProps} />
+        <SuggestionEmpty />
+      </div>
     </div>
   );
 };
