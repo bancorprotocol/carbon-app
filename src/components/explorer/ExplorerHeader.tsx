@@ -1,7 +1,7 @@
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useTokens } from 'hooks/useTokens';
-import { Strategy, useGetStrategList } from 'libs/queries';
+import { Strategy, useGetStrategyList } from 'libs/queries';
 import {
   PairTrade,
   Trending,
@@ -69,10 +69,8 @@ const useTrendStrategies = (
   for (const item of list) {
     record[item.id] = item.strategyTrades;
   }
-  const ids = list
-    .sort((a, b) => b.strategyTrades - a.strategyTrades)
-    .map((s) => s.id);
-  const query = useGetStrategList(ids);
+  const ids = list.map((s) => s.id);
+  const query = useGetStrategyList(ids);
   if (query.isLoading) return { isLoading: true, data: [] };
 
   const data = (query.data ?? []).map((strategy) => ({
@@ -267,7 +265,7 @@ const Trades = ({ trades }: TradesProps) => {
               easing: 'cubic-bezier(1,-0.54,.65,1.46)',
             }
           );
-          initAnims.push(anim.finished);
+          if (anim) initAnims.push(anim.finished);
         }
         await Promise.allSettled(initAnims);
       }

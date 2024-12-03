@@ -152,7 +152,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const isZeroAddress = address === config.addresses.tokens.ZERO;
 
   return useQuery<Strategy[]>({
-    queryKey: QueryKey.strategies(address),
+    queryKey: QueryKey.strategiesByUser(address),
     queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
 
@@ -170,13 +170,13 @@ export const useGetUserStrategies = ({ user }: Props) => {
   });
 };
 
-export const useGetStrategList = (ids: string[]) => {
+export const useGetStrategyList = (ids: string[]) => {
   const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
   return useQuery<Strategy[]>({
-    queryKey: QueryKey.strategy(ids.join()),
+    queryKey: QueryKey.strategyList(ids),
     queryFn: async () => {
       const getStrategies = ids.map((id) => carbonSDK.getStrategy(id));
       const strategies = await Promise.all(getStrategies);
