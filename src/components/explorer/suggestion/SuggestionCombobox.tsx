@@ -55,9 +55,8 @@ export const SuggestionCombobox = () => {
       // Filter & order options
       for (const option of options) {
         if (option.role !== 'option') continue;
-        const slug = option.dataset.slug;
-        const name = fromPairSearch(option.textContent ?? '');
-        if (!slug) continue;
+        const { slug, name } = option.dataset;
+        if (!slug || !name) continue;
         if (includesPair(searchSlug, slug, name)) {
           amount++;
           nodes.push({ slug, name, node: option });

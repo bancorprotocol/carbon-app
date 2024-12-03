@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import { PairLogoName } from 'components/common/PairLogoName';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useNavigate } from '@tanstack/react-router';
-import { toPairSlug } from 'utils/pairSearch';
+import { fromPairSearch, toPairSlug } from 'utils/pairSearch';
 import style from './index.module.css';
 import { cn } from 'utils/helpers';
 
@@ -26,6 +26,9 @@ export const SuggestionList: FC<Props> = (props) => {
     >
       {props.filteredPairs.map((pair) => {
         const slug = toPairSlug(pair.baseToken, pair.quoteToken);
+        const search = fromPairSearch(
+          `${pair.baseToken.symbol} ${pair.quoteToken.symbol}`
+        );
         const params = { type: 'token-pair' as const, slug };
         return (
           <button
@@ -37,6 +40,7 @@ export const SuggestionList: FC<Props> = (props) => {
             className="px-30 flex cursor-pointer items-center space-x-10 py-10 hover:bg-white/20 aria-selected:bg-white/10"
             aria-selected="false"
             data-slug={slug}
+            data-name={search}
           >
             <PairLogoName pair={pair} />
           </button>
