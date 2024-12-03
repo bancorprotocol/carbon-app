@@ -48,7 +48,7 @@ export const selectNextSibling = (root: HTMLElement | null) => {
     if (options[i] === selected) {
       selected.setAttribute('aria-selected', 'false');
       if (options[i + 1]) selectOption(options[i + 1]);
-      else selectFirstOption(root);
+      else selectOption(options[0]);
       break;
     }
   }
@@ -58,11 +58,11 @@ export const selectPreviousSibling = (root: HTMLElement | null) => {
   const selected = getSelectedOption(root);
   if (!selected) return selectLastOption(root);
   const options = getOptionsInOrder(root);
-  for (let i = options.length; i > 0; i--) {
+  for (let i = 0; i < options.length; i++) {
     if (options[i] === selected) {
       selected.setAttribute('aria-selected', 'false');
       if (options[i - 1]) selectOption(options[i - 1]);
-      else selectFirstOption(root);
+      else selectOption(options[options.length - 1]);
       break;
     }
   }

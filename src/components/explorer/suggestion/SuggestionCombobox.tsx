@@ -13,7 +13,18 @@ import { fromPairSearch, sortPairNodes, toPairName } from 'utils/pairSearch';
 import { useParams } from '@tanstack/react-router';
 import { usePairs } from 'hooks/usePairs';
 import { cn } from 'utils/helpers';
+import { includesGasToken, isDifferentGasToken } from 'utils/tokens';
 import style from './index.module.css';
+
+const includesPair = (searchSlug: string, slug: string, name: string) => {
+  if (
+    isDifferentGasToken &&
+    !includesGasToken(searchSlug) &&
+    includesGasToken(slug)
+  )
+    return false;
+  return slug.includes(searchSlug) || name.includes(searchSlug);
+};
 
 export const SuggestionCombobox = () => {
   const { map: pairMap } = usePairs();
@@ -31,24 +42,35 @@ export const SuggestionCombobox = () => {
     const listbox = document.getElementById(listboxId) as HTMLElement;
     const options = Array.from(listbox.children) as HTMLElement[];
     const nodes: { slug: string; name: string; node: HTMLElement }[] = [];
-    for (const option of options) {
-      if (option.role !== 'option') continue;
-      const slug = option.dataset.slug;
-      const name = fromPairSearch(option.textContent ?? '');
-      if (!slug) continue;
-      if (slug.includes(searchSlug) || name.includes(searchSlug)) {
-        amount++;
-        nodes.push({ slug, name, node: option });
-        option.removeAttribute('hidden');
-      } else {
-        option.setAttribute('hidden', 'true');
-        option.setAttribute('aria-selected', 'false');
+    if (!searchSlug) {
+      // Clear state if no value
+      amount = options.length;
+      for (let i = 0; i < options.length; i++) {
+        options[i].removeAttribute('hidden');
+        options[i].dataset.order = i.toString();
+        options[i].style.removeProperty('order');
       }
+    } else {
+      // Filter & order options
+      for (const option of options) {
+        if (option.role !== 'option') continue;
+        const slug = option.dataset.slug;
+        const name = fromPairSearch(option.textContent ?? '');
+        if (!slug) continue;
+        if (includesPair(searchSlug, slug, name)) {
+          amount++;
+          nodes.push({ slug, name, node: option });
+          option.removeAttribute('hidden');
+        } else {
+          option.setAttribute('hidden', 'true');
+          option.setAttribute('aria-selected', 'false');
+        }
+      }
+      sortPairNodes(nodes, searchSlug).forEach(({ node }, i) => {
+        node.dataset.order = i.toString();
+        node.style.setProperty('order', i.toString());
+      });
     }
-    sortPairNodes(nodes, searchSlug).forEach(({ node }, i) => {
-      node.dataset.order = i.toString();
-      node.style.setProperty('order', i.toString());
-    });
     const pairAmount = document.getElementById('filtered-pairs-amount');
     if (pairAmount) pairAmount.textContent = amount.toString();
   }, [inputId, listboxId]);
@@ -60,7 +82,7 @@ export const SuggestionCombobox = () => {
     input.value = toPairName(pair.baseToken, pair.quoteToken);
     change();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.slug, inputId]);
+  }, [params.slug, inputId, change]);
 
   /** Addlistener (19ms) is much more performant than React onInput (92ms) */
   useEffect(() => {
