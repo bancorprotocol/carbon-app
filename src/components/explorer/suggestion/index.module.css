@@ -12,3 +12,7 @@
 .input-search:placeholder-shown + button {
   display: none;
 }
+.root-search [role="option"] {
+  content-visibility: auto;
+  contain-intrinsic-size: 50px;
+}
