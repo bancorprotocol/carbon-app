@@ -1,7 +1,7 @@
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 const suspiciousTokenTooltipMsg =
   'This token is not part of any known token list. Always conduct your own research before trading.';
@@ -10,9 +10,7 @@ interface Props {
   pair: TradePair;
 }
 
-export const PairLogoName: FC<Props> = ({
-  pair: { baseToken, quoteToken },
-}) => {
+const _PairLogoName: FC<Props> = ({ pair: { baseToken, quoteToken } }) => {
   return (
     <>
       <TokensOverlap tokens={[baseToken, quoteToken]} size={30} />
@@ -30,3 +28,9 @@ export const PairLogoName: FC<Props> = ({
     </>
   );
 };
+export const PairLogoName = memo(_PairLogoName, (a, b) => {
+  return (
+    a.pair.baseToken.address === b.pair.baseToken.address &&
+    a.pair.quoteToken.address === b.pair.quoteToken.address
+  );
+});
