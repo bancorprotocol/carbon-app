@@ -2,9 +2,10 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import { PairLogoName } from 'components/common/PairLogoName';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useNavigate } from '@tanstack/react-router';
-import { fromPairSearch, toPairSlug } from 'utils/pairSearch';
-import style from './index.module.css';
+import { toPairSlug } from 'utils/pairSearch';
 import { cn } from 'utils/helpers';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import style from './index.module.css';
 
 interface Props {
   listboxId: string;
@@ -13,34 +14,46 @@ interface Props {
 }
 
 export const SuggestionList: FC<Props> = (props) => {
+  const { listboxId, filteredPairs, setOpen } = props;
   const nav = useNavigate();
   const click = (params: { type: 'token-pair'; slug: string }) => {
-    props.setOpen(false);
+    setOpen(false);
     nav({ to: '/explore/$type/$slug', params });
   };
+
+  const rowVirtualizer = useVirtualizer({
+    count: filteredPairs.length,
+    getScrollElement: () => document.querySelector(`.${style.dialog}`),
+    estimateSize: () => 50,
+    overscan: 10,
+  });
+
   return (
     <div
       role="listbox"
-      id={props.listboxId}
-      className={cn(style.listbox, 'grid')}
+      id={listboxId}
+      className={cn(style.listbox, 'relative')}
+      style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
     >
-      {props.filteredPairs.map((pair) => {
+      {rowVirtualizer.getVirtualItems().map((row) => {
+        const pair = filteredPairs[row.index];
         const slug = toPairSlug(pair.baseToken, pair.quoteToken);
-        const search = fromPairSearch(
-          `${pair.baseToken.symbol} ${pair.quoteToken.symbol}`
-        );
         const params = { type: 'token-pair' as const, slug };
+        const style = {
+          height: `${row.size}px`,
+          transform: `translateY(${row.start}px)`,
+        } as const;
         return (
           <button
             key={slug}
             type="button"
             role="option"
+            style={style}
             onMouseDown={(e) => e.preventDefault()} // prevent blur on click
             onClick={() => click(params)}
-            className="px-30 flex cursor-pointer items-center space-x-10 py-10 hover:bg-white/20 aria-selected:bg-white/10"
+            className="px-30 absolute flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 aria-selected:bg-white/10"
             aria-selected="false"
-            data-slug={slug}
-            data-name={search}
+            aria-setsize={filteredPairs.length}
           >
             <PairLogoName pair={pair} />
           </button>

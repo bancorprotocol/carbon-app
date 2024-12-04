@@ -3,8 +3,12 @@
     opacity: 0;
     transform: translateY(10px);
   }
+  .listbox:empty + .empty {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
-.dialog {
+.dialog, .listbox:empty + .empty {
   transition-behavior: allow-discrete;
   transition-property: opacity, transform, display;
   transition-duration: 0.3s;
@@ -14,13 +18,10 @@
   opacity: 0;
   transform: scale(0.95);
 }
-.root-search [role="option"][hidden="true"] {
+.listbox:empty {
   display: none;
 }
-.listbox:not(:has([role="option"]:not([hidden="true"]))) {
-  display: none;
-}
-.listbox:has([role="option"]:not([hidden="true"])) + .empty {
+.listbox:not(:empty) + .empty {
   display: none;
 }
 .input-search:placeholder-shown + button {
