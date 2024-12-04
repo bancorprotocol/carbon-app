@@ -20,13 +20,11 @@ export const ExplorerTypeOverviewPage = () => {
   const empty = <NotFound variant="error" bordered {...emptyProps} />;
 
   return (
-    <>
-      <StrategyContent
-        strategies={filteredStrategies}
-        isExplorer
-        isPending={isPending}
-        emptyElement={empty}
-      />
-    </>
+    <StrategyContent
+      strategies={filteredStrategies}
+      isExplorer
+      isPending={isPending}
+      emptyElement={empty}
+    />
   );
 };

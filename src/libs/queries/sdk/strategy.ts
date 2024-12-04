@@ -20,6 +20,8 @@ import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
+import { getAddress } from 'ethers/lib/utils';
+import { usePairs } from 'hooks/usePairs';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
@@ -63,6 +65,7 @@ const buildStrategiesHelper = async ({
   importToken,
   Token,
 }: StrategiesHelperProps) => {
+  console.time('buildStrategiesHelper');
   const _getTknData = async (address: string) => {
     const data = await fetchTokenData(Token, address);
     importToken(data);
@@ -132,8 +135,9 @@ const buildStrategiesHelper = async ({
 
     return strategy;
   });
-
-  return await Promise.all(promises);
+  const result = await Promise.all(promises);
+  console.timeEnd('buildStrategiesHelper');
+  return result;
 };
 
 interface Props {
@@ -155,7 +159,6 @@ export const useGetUserStrategies = ({ user }: Props) => {
     queryKey: QueryKey.strategies(address),
     queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
-
       const strategies = await carbonSDK.getUserStrategies(address);
       return buildStrategiesHelper({
         strategies,
@@ -216,6 +219,47 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
       });
     },
     enabled: tokens.length > 0 && isInitialized,
+    staleTime: ONE_DAY_IN_MS,
+    retry: false,
+  });
+};
+
+interface PropsPair {
+  token0?: string;
+  token1?: string;
+}
+
+export const useTokenStrategies = (token?: string) => {
+  const { getTokenById, importToken } = useTokens();
+  const { Token } = useContract();
+  const { map: pairMap } = usePairs();
+
+  return useQuery<Strategy[]>({
+    queryKey: QueryKey.strategiesByToken(token),
+    queryFn: async () => {
+      console.log('init');
+      const base = getAddress(token!);
+      console.time('strategies');
+      const allQuotes = new Set<string>();
+      for (const { baseToken, quoteToken } of pairMap.values()) {
+        if (baseToken.address === base) allQuotes.add(quoteToken.address);
+        if (quoteToken.address === base) allQuotes.add(baseToken.address);
+      }
+      const getStrategies: Promise<SDKStrategy[]>[] = [];
+      for (const quote of allQuotes) {
+        getStrategies.push(carbonSDK.getStrategiesByPair(base, quote));
+      }
+      const allStrategies = await Promise.all(getStrategies);
+      console.timeEnd('strategies');
+      const result = await buildStrategiesHelper({
+        strategies: allStrategies.flat(),
+        getTokenById,
+        importToken,
+        Token,
+      });
+      return result;
+    },
+    enabled: !!token && !!pairMap.size,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
