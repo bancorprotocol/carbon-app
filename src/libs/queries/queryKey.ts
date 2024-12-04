@@ -55,6 +55,12 @@ export namespace QueryKey {
     token0,
     token1,
   ];
+  export const strategiesByToken = (token?: string) => [
+    ...sdk,
+    'strategies',
+    'token',
+    token,
+  ];
 
   export const approval = (user: string, token: string, spender: string) => [
     ...chain,
