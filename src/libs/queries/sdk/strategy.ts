@@ -10,7 +10,6 @@ import { useContract } from 'hooks/useContract';
 import config from 'config';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
-import { useCarbonInit } from 'hooks/useCarbonInit';
 import {
   EncodedStrategyBNStr,
   StrategyUpdate,
@@ -20,6 +19,8 @@ import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
+import { getAddress } from 'ethers/lib/utils';
+import { usePairs } from 'hooks/usePairs';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
@@ -63,6 +64,7 @@ const buildStrategiesHelper = async ({
   importToken,
   Token,
 }: StrategiesHelperProps) => {
+  console.time('buildStrategiesHelper');
   const _getTknData = async (address: string) => {
     const data = await fetchTokenData(Token, address);
     importToken(data);
@@ -132,8 +134,9 @@ const buildStrategiesHelper = async ({
 
     return strategy;
   });
-
-  return await Promise.all(promises);
+  const result = await Promise.all(promises);
+  console.timeEnd('buildStrategiesHelper');
+  return result;
 };
 
 interface Props {
@@ -141,7 +144,7 @@ interface Props {
 }
 
 export const useGetUserStrategies = ({ user }: Props) => {
-  const { isInitialized } = useCarbonInit();
+  // const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
@@ -155,7 +158,6 @@ export const useGetUserStrategies = ({ user }: Props) => {
     queryKey: QueryKey.strategies(address),
     queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
-
       const strategies = await carbonSDK.getUserStrategies(address);
       return buildStrategiesHelper({
         strategies,
@@ -164,14 +166,13 @@ export const useGetUserStrategies = ({ user }: Props) => {
         Token,
       });
     },
-    enabled: tokens.length > 0 && isInitialized && ensAddress.isFetched,
+    enabled: tokens.length > 0 && ensAddress.isFetched,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
 };
 
 export const useGetStrategy = (id: string) => {
-  const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
@@ -187,7 +188,7 @@ export const useGetStrategy = (id: string) => {
       });
       return strategies[0];
     },
-    enabled: tokens.length > 0 && isInitialized,
+    enabled: tokens.length > 0,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
@@ -199,7 +200,6 @@ interface PropsPair {
 }
 
 export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
-  const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
@@ -215,7 +215,44 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
         Token,
       });
     },
-    enabled: tokens.length > 0 && isInitialized,
+    enabled: tokens.length > 0,
+    staleTime: ONE_DAY_IN_MS,
+    retry: false,
+  });
+};
+
+interface PropsPair {
+  token0?: string;
+  token1?: string;
+}
+
+export const useTokenStrategies = (token?: string) => {
+  const { getTokenById, importToken } = useTokens();
+  const { Token } = useContract();
+  const { map: pairMap } = usePairs();
+  return useQuery<Strategy[]>({
+    queryKey: QueryKey.strategiesByToken(token),
+    queryFn: async () => {
+      const allQuotes = new Set<string>();
+      const base = getAddress(token!);
+      for (const { baseToken, quoteToken } of pairMap.values()) {
+        if (baseToken.address === base) allQuotes.add(quoteToken.address);
+        if (quoteToken.address === base) allQuotes.add(baseToken.address);
+      }
+      const getStrategies: Promise<SDKStrategy[]>[] = [];
+      for (const quote of allQuotes) {
+        getStrategies.push(carbonSDK.getStrategiesByPair(base, quote));
+      }
+      const allStrategies = await Promise.all(getStrategies);
+      const result = await buildStrategiesHelper({
+        strategies: allStrategies.flat(),
+        getTokenById,
+        importToken,
+        Token,
+      });
+      return result;
+    },
+    enabled: !!token && !!pairMap.size,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });

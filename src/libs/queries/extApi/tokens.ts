@@ -8,13 +8,16 @@ export const useTokensQuery = () => {
   return useQuery({
     queryKey: QueryKey.tokens(),
     queryFn: async () => {
+      const local = lsService.getItem('tokenListCache');
+      if (local && local.timestamp > Date.now() - ONE_HOUR_IN_MS) {
+        return local.tokens;
+      }
       const tokens = buildTokenList(await fetchTokenLists());
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
     },
     staleTime: ONE_HOUR_IN_MS,
-    initialData: lsService.getItem('tokenListCache')?.tokens,
-    initialDataUpdatedAt: lsService.getItem('tokenListCache')?.timestamp,
+    placeholderData: (previous) => previous,
     meta: {
       errorMessage: 'useTokensQuery failed with error:',
     },
