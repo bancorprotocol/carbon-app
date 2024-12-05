@@ -4,5 +4,5 @@
 }
 .strategy-list > li {
   /* content-visibility: auto; */ /* to prevent no tooltips when scrolling down */
-  contain-intrinsic-size: auto 410px;
+  contain-intrinsic-size: auto 400px;
 }
