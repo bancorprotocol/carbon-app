@@ -20,8 +20,7 @@ export const ExplorerPage = () => {
     if (slug && type === 'token-pair') {
       // Set last visited pair
       const [base, quote] = slug.split('_');
-      lsService.setItem('tradePair', [base, quote]);
-      return;
+      if (base && quote) lsService.setItem('tradePair', [base, quote]);
     }
   }, [slug, navigate, type]);
 
