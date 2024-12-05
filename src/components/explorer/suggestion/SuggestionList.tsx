@@ -1,9 +1,11 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-import { suggestionClasses } from './utils';
 import { PairLogoName } from 'components/common/PairLogoName';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { Link } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
+import { cn } from 'utils/helpers';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import style from './index.module.css';
 
 interface Props {
   listboxId: string;
@@ -12,26 +14,49 @@ interface Props {
 }
 
 export const SuggestionList: FC<Props> = (props) => {
+  const { listboxId, filteredPairs, setOpen } = props;
+  const nav = useNavigate();
+  const click = (params: { type: 'token-pair'; slug: string }) => {
+    setOpen(false);
+    nav({ to: '/explore/$type/$slug', params });
+  };
+
+  const rowVirtualizer = useVirtualizer({
+    count: filteredPairs.length,
+    getScrollElement: () => document.querySelector(`.${style.dialog}`),
+    estimateSize: () => 50,
+    overscan: 10,
+  });
+
   return (
-    <div role="listbox" id={props.listboxId} className={suggestionClasses}>
-      <h3 className="text-14 font-weight-500 mb-8 ml-20 text-white/60">
-        {props.filteredPairs.length} Results
-      </h3>
-      {props.filteredPairs.map((pair) => {
+    <div
+      role="listbox"
+      id={listboxId}
+      className={cn(style.listbox, 'relative')}
+      style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+    >
+      {rowVirtualizer.getVirtualItems().map((row) => {
+        const pair = filteredPairs[row.index];
         const slug = toPairSlug(pair.baseToken, pair.quoteToken);
         const params = { type: 'token-pair' as const, slug };
+        const style = {
+          height: `${row.size}px`,
+          transform: `translateY(${row.start}px)`,
+        } as const;
         return (
-          <Link
+          <button
             key={slug}
-            onMouseDown={(e) => e.preventDefault()} // prevent blur on click
-            onClick={() => props.setOpen(false)}
+            type="button"
             role="option"
-            className="px-30 flex cursor-pointer items-center space-x-10 py-10  hover:bg-white/20 aria-selected:bg-white/10"
-            to="/explore/$type/$slug"
-            params={params}
+            style={style}
+            onMouseDown={(e) => e.preventDefault()} // prevent blur on click
+            onClick={() => click(params)}
+            className="px-30 absolute flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 aria-selected:bg-white/10"
+            aria-selected="false"
+            aria-setsize={filteredPairs.length}
           >
             <PairLogoName pair={pair} />
-          </Link>
+          </button>
         );
       })}
     </div>

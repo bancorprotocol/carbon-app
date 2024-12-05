@@ -33,10 +33,15 @@ export const selectFirstOption = (root: HTMLElement | null) => {
 };
 
 export const selectLastOption = (root: HTMLElement | null) => {
-  getSelectedOption(root)?.setAttribute('aria-selected', 'false');
-  const selector = '[role="option"]:last-of-type';
-  const lastOption = root?.querySelector<HTMLElement>(selector);
-  selectOption(lastOption);
+  // We are using virtual scroll so we need to scroll to the end to display the options first
+  const dialog = root?.querySelector('[role="dialog"]');
+  dialog?.scroll({ top: dialog.scrollHeight });
+  setTimeout(() => {
+    getSelectedOption(root)?.setAttribute('aria-selected', 'false');
+    const selector = '[role="option"]:last-of-type';
+    const lastOption = root?.querySelector<HTMLElement>(selector);
+    selectOption(lastOption);
+  }, 150);
 };
 
 export const selectNextSibling = (root: HTMLElement | null) => {
