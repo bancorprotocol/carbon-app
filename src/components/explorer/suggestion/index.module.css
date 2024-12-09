@@ -8,6 +8,7 @@
     transform: translateY(-10px);
   }
 }
+
 .dialog, .listbox:empty + .empty {
   transition-behavior: allow-discrete;
   transition-property: opacity, transform, display;
@@ -17,6 +18,9 @@
   display: none;
   opacity: 0;
   transform: scale(0.95);
+}
+.listbox {
+  display: grid;
 }
 .listbox:empty {
   display: none;
@@ -30,4 +34,5 @@
 .root-search [role="option"] {
   content-visibility: auto;
   contain-intrinsic-size: 50px;
+  height: 50px;
 }

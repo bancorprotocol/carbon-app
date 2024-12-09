@@ -3,26 +3,16 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
-import { ONE_DAY_IN_MS } from 'utils/time';
-import { useCarbonInit } from 'hooks/useCarbonInit';
+import { ONE_HOUR_IN_MS } from 'utils/time';
 import { carbonSDK } from 'libs/sdk';
 import { lsService } from 'services/localeStorage';
-import { useEffect, useState } from 'react';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { useState } from 'react';
 import { Token } from 'libs/tokens';
 
 export const useGetTradePairsData = () => {
-  const { isInitialized } = useCarbonInit();
   const { Token } = useContract();
   const { tokens, getTokenById, importTokens } = useTokens();
-  const [cache, setCache] = useState<TradePair[]>();
-
-  useEffect(() => {
-    const cachedPairs = lsService.getItem('tokenPairsCache');
-    if (cachedPairs && cachedPairs.timestamp > Date.now() - 1000 * 60 * 60) {
-      setCache(cachedPairs.pairs);
-    }
-  }, []);
+  const [cache] = useState(lsService.getItem('tokenPairsCache'));
 
   return useQuery({
     queryKey: QueryKey.pairs(),
@@ -71,9 +61,10 @@ export const useGetTradePairsData = () => {
 
       return pairsWithInverse;
     },
-    placeholderData: cache,
-    enabled: !!tokens.length && isInitialized,
+    initialData: cache?.pairs,
+    initialDataUpdatedAt: cache?.timestamp,
+    enabled: !!tokens.length,
     retry: 1,
-    staleTime: ONE_DAY_IN_MS,
+    staleTime: ONE_HOUR_IN_MS,
   });
 };

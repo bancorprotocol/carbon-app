@@ -5,7 +5,7 @@ import style from './index.module.css';
 export const SuggestionEmpty = () => {
   const emptyId = useId();
   return (
-    <div className={cn(style.empty, 'px-20')}>
+    <div className={cn(style.empty, 'px-20 py-16')}>
       <h4 id={emptyId} className="font-weight-500">
         We couldn't find any strategies
       </h4>

@@ -1,16 +1,36 @@
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { Token } from 'libs/tokens';
 import { FC, memo } from 'react';
+import { TokenLogo } from './imager/Imager';
 
 const suspiciousTokenTooltipMsg =
   'This token is not part of any known token list. Always conduct your own research before trading.';
 
-interface Props {
+interface TokenProps {
+  token: Token;
+}
+export const _TokenLogoName: FC<TokenProps> = ({ token }) => {
+  return (
+    <>
+      <TokenLogo token={token} size={30} />
+      {token.symbol}
+      {token.isSuspicious && (
+        <WarningWithTooltip tooltipContent={suspiciousTokenTooltipMsg} />
+      )}
+    </>
+  );
+};
+export const TokenLogoName = memo(_TokenLogoName, (a, b) => {
+  return a.token.address === b.token.address;
+});
+
+interface PairProps {
   pair: TradePair;
 }
 
-const _PairLogoName: FC<Props> = ({ pair: { baseToken, quoteToken } }) => {
+const _PairLogoName: FC<PairProps> = ({ pair: { baseToken, quoteToken } }) => {
   return (
     <>
       <TokensOverlap tokens={[baseToken, quoteToken]} size={30} />
