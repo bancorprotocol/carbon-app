@@ -36,15 +36,22 @@ export const _StrategyContent: FC<Props> = ({
       data-testid="strategy-list"
       className={cn('grid gap-20', styles.strategyList)}
     >
-      {strategies.map((s, i) => (
-        <StrategyBlock
-          key={s.id}
-          className={styles.strategyItem}
-          strategy={s}
-          isExplorer={isExplorer}
-          style={{ ['--delay' as any]: `${i < 10 ? i * 50 : 0}ms` }}
-        />
-      ))}
+      {strategies.map((s, i) => {
+        const animate = i < 12;
+        const style = { ['--delay' as any]: `${i * 50}ms` };
+        return (
+          <StrategyBlock
+            key={s.id}
+            className={cn(
+              styles.strategyItem,
+              animate ? styles.animateItem : ''
+            )}
+            strategy={s}
+            isExplorer={isExplorer}
+            style={animate ? style : undefined}
+          />
+        );
+      })}
       {!isExplorer && <StrategyBlockCreate />}
     </ul>
   );
