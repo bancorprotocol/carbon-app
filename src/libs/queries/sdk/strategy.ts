@@ -252,7 +252,11 @@ export const useTokenStrategies = (token?: string) => {
       for (const quote of allQuotes) {
         getStrategies.push(carbonSDK.getStrategiesByPair(base, quote));
       }
-      const allStrategies = await Promise.all(getStrategies);
+
+      const allResponses = await Promise.allSettled(getStrategies);
+      const allStrategies = allResponses
+        .filter((v) => v.status === 'fulfilled')
+        .map((v) => (v as PromiseFulfilledResult<SDKStrategy[]>).value);
       const result = await buildStrategiesHelper({
         strategies: allStrategies.flat(),
         getTokenById,
