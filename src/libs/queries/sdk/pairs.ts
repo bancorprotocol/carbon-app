@@ -9,11 +9,12 @@ import { carbonSDK } from 'libs/sdk';
 import { lsService } from 'services/localeStorage';
 import { useEffect, useState } from 'react';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { Token } from 'libs/tokens';
 
 export const useGetTradePairsData = () => {
   const { isInitialized } = useCarbonInit();
   const { Token } = useContract();
-  const { tokens, getTokenById, importToken } = useTokens();
+  const { tokens, getTokenById, importTokens } = useTokens();
   const [cache, setCache] = useState<TradePair[]>();
 
   useEffect(() => {
@@ -23,21 +24,37 @@ export const useGetTradePairsData = () => {
     }
   }, []);
 
-  const _getTknData = async (address: string) => {
-    const data = await fetchTokenData(Token, address);
-    importToken(data);
-    return data;
-  };
-
   return useQuery({
     queryKey: QueryKey.pairs(),
     queryFn: async () => {
       const pairs = await carbonSDK.getAllPairs();
-      const promises = pairs.map(async (pair) => ({
-        baseToken: getTokenById(pair[0]) ?? (await _getTknData(pair[0])),
-        quoteToken: getTokenById(pair[1]) ?? (await _getTknData(pair[1])),
+      const tokens = new Map<string, Token>();
+      const missing = new Set<string>();
+
+      const markForMissing = (address: string) => {
+        if (tokens.has(address)) return;
+        const existing = getTokenById(address);
+        if (existing) tokens.set(address, existing);
+        else missing.add(address);
+      };
+
+      for (const pair of pairs) {
+        markForMissing(pair[0]);
+        markForMissing(pair[1]);
+      }
+
+      const getMissing = Array.from(missing).map(async (address) => {
+        const token = await fetchTokenData(Token, address);
+        tokens.set(address, token);
+        return token;
+      });
+      const missingTokens = await Promise.all(getMissing);
+      importTokens(missingTokens);
+
+      const result = pairs.map((pair) => ({
+        baseToken: tokens.get(pair[0])!,
+        quoteToken: tokens.get(pair[1])!,
       }));
-      const result = await Promise.all(promises);
 
       const pairsWithInverse = [
         ...result,

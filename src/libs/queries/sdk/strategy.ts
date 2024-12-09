@@ -54,28 +54,42 @@ export interface StrategyWithFiat extends Strategy {
 interface StrategiesHelperProps {
   strategies: SDKStrategy[];
   getTokenById: (id: string) => Token | undefined;
-  importToken: (token: Token) => void;
+  importTokens: (tokens: Token[]) => void;
   Token: (address: string) => { read: TokenContract };
 }
 
 const buildStrategiesHelper = async ({
   strategies,
   getTokenById,
-  importToken,
+  importTokens,
   Token,
 }: StrategiesHelperProps) => {
-  console.time('buildStrategiesHelper');
-  const _getTknData = async (address: string) => {
-    const data = await fetchTokenData(Token, address);
-    importToken(data);
-    return data;
+  const tokens = new Map<string, Token>();
+  const missing = new Set<string>();
+
+  const markForMissing = (address: string) => {
+    if (tokens.has(address)) return;
+    const existing = getTokenById(address);
+    if (existing) tokens.set(address, existing);
+    else missing.add(address);
   };
 
-  const promises = strategies.map(async (s) => {
-    const base = getTokenById(s.baseToken) || (await _getTknData(s.baseToken));
-    const quote =
-      getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
+  for (const strategy of strategies) {
+    markForMissing(strategy.baseToken);
+    markForMissing(strategy.quoteToken);
+  }
 
+  const getMissing = Array.from(missing).map(async (address) => {
+    const token = await fetchTokenData(Token, address);
+    tokens.set(address, token);
+    return token;
+  });
+  const missingTokens = await Promise.all(getMissing);
+  importTokens(missingTokens);
+
+  return strategies.map((s) => {
+    const base = tokens.get(s.baseToken)!;
+    const quote = tokens.get(s.quoteToken)!;
     const sellLow = new SafeDecimal(s.sellPriceLow);
     const sellHigh = new SafeDecimal(s.sellPriceHigh);
     const sellBudget = new SafeDecimal(s.sellBudget);
@@ -121,7 +135,7 @@ const buildStrategiesHelper = async ({
       marginalRate: s.sellPriceMarginal,
     };
 
-    const strategy: Strategy = {
+    return {
       id: s.id,
       idDisplay: getLowestBits(s.id),
       base,
@@ -130,13 +144,8 @@ const buildStrategiesHelper = async ({
       order1,
       status,
       encoded: s.encoded,
-    };
-
-    return strategy;
+    } as Strategy;
   });
-  const result = await Promise.all(promises);
-  console.timeEnd('buildStrategiesHelper');
-  return result;
 };
 
 interface Props {
@@ -145,7 +154,7 @@ interface Props {
 
 export const useGetUserStrategies = ({ user }: Props) => {
   // const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importToken } = useTokens();
+  const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
   const ensAddress = useGetAddressFromEns(user || '');
@@ -162,7 +171,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
       return buildStrategiesHelper({
         strategies,
         getTokenById,
-        importToken,
+        importTokens,
         Token,
       });
     },
@@ -173,7 +182,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
 };
 
 export const useGetStrategy = (id: string) => {
-  const { tokens, getTokenById, importToken } = useTokens();
+  const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
   return useQuery<Strategy>({
@@ -183,7 +192,7 @@ export const useGetStrategy = (id: string) => {
       const strategies = await buildStrategiesHelper({
         strategies: [strategy],
         getTokenById,
-        importToken,
+        importTokens,
         Token,
       });
       return strategies[0];
@@ -200,7 +209,7 @@ interface PropsPair {
 }
 
 export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
-  const { tokens, getTokenById, importToken } = useTokens();
+  const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
   return useQuery<Strategy[]>({
@@ -211,7 +220,7 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
       return buildStrategiesHelper({
         strategies,
         getTokenById,
-        importToken,
+        importTokens,
         Token,
       });
     },
@@ -227,7 +236,7 @@ interface PropsPair {
 }
 
 export const useTokenStrategies = (token?: string) => {
-  const { getTokenById, importToken } = useTokens();
+  const { getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
   const { map: pairMap } = usePairs();
   return useQuery<Strategy[]>({
@@ -247,7 +256,7 @@ export const useTokenStrategies = (token?: string) => {
       const result = await buildStrategiesHelper({
         strategies: allStrategies.flat(),
         getTokenById,
-        importToken,
+        importTokens,
         Token,
       });
       return result;
