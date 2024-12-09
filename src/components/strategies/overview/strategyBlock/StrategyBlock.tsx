@@ -1,4 +1,4 @@
-import { FC, useEffect, useId, useState } from 'react';
+import { CSSProperties, FC, useEffect, useId, useState } from 'react';
 import { StrategyWithFiat } from 'libs/queries';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 
@@ -11,11 +11,13 @@ interface Props {
   strategy: StrategyWithFiat;
   className?: string;
   isExplorer?: boolean;
+  style?: CSSProperties;
 }
 
 export const StrategyBlock: FC<Props> = ({
   strategy,
   className,
+  style,
   isExplorer,
 }) => {
   const id = useId();
@@ -36,9 +38,10 @@ export const StrategyBlock: FC<Props> = ({
     <li
       id={id}
       className={cn(
-        'rounded-10 bg-background-900 grid h-[400px] grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        'rounded-10 bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className
       )}
+      style={style}
       data-testid={`${strategy.base.symbol}/${strategy.quote.symbol}`}
     >
       {visible && (

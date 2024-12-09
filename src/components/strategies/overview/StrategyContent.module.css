@@ -3,9 +3,20 @@
   grid-template-columns: repeat(auto-fill, 375px);
   justify-content: center;
 }
-.strategy-list > li {
+.strategy-item {
   height: 400px;
   max-width: 375px;
-  /* content-visibility: auto; */ /* to prevent no tooltips when scrolling down */
+  content-visibility: auto; /* to prevent no tooltips when scrolling down */
   contain-intrinsic-size: 375px 400px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .strategy-item {
+    animation: open 200ms var(--delay) backwards;
+  }
+}
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
 }

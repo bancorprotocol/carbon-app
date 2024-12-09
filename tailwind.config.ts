@@ -79,10 +79,11 @@ export default {
       ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
       pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       bounce: 'bounce 1s infinite',
+      fade: 'fade var(--duration, 0) var(--delay, 0)',
       slideUp:
-        'fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) both, translateY 0.4s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'fade var(--duration, 400ms) var(--delay, 0) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both, translateY var(--duration, 400ms) var(--delay, 0) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both',
       scaleUp:
-        'fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) both, scale 0.4s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'fade var(--duration, 400ms) var(--delay, 0) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both, scale var(--duration, 400ms) var(--delay, 0) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both',
     },
     borderColor: ({ theme }) => ({
       ...theme('colors'),
@@ -158,7 +159,7 @@ export default {
       },
       scale: {
         from: {
-          transform: 'scale(0.8)',
+          transform: 'scale(var(--from-scale, 0.8))',
         },
       },
     },

@@ -86,6 +86,11 @@ export const SuggestionCombobox = () => {
     el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
+  const onInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setOpen(true);
+    setSearch(e.currentTarget.value);
+  };
+
   const suggestionListProps = {
     setOpen,
     listboxId,
@@ -166,7 +171,7 @@ export const SuggestionCombobox = () => {
         placeholder="Search by single token or pair"
         aria-label="Search by single token or pair"
         value={search}
-        onInput={(e) => setSearch(e.currentTarget.value)}
+        onInput={onInput}
         onFocus={() => setOpen(true)}
       />
       <button type="reset" aria-label="Clear" onClick={() => setSearch('')}>

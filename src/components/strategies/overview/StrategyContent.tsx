@@ -36,8 +36,14 @@ export const _StrategyContent: FC<Props> = ({
       data-testid="strategy-list"
       className={cn('grid gap-20', styles.strategyList)}
     >
-      {strategies.map((s) => (
-        <StrategyBlock key={s.id} strategy={s} isExplorer={isExplorer} />
+      {strategies.map((s, i) => (
+        <StrategyBlock
+          key={s.id}
+          className={styles.strategyItem}
+          strategy={s}
+          isExplorer={isExplorer}
+          style={{ ['--delay' as any]: `${i < 10 ? i * 50 : 0}ms` }}
+        />
       ))}
       {!isExplorer && <StrategyBlockCreate />}
     </ul>

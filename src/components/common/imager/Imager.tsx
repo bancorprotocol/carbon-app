@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, ImgHTMLAttributes, memo } from 'react';
+import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import genericToken from 'assets/icons/generic_token.svg';
 import { cn } from 'utils/helpers';
@@ -81,7 +81,7 @@ interface TokenLogoProps {
   size: number;
   className?: string;
 }
-const _TokenLogo = ({ token, size, className }: TokenLogoProps) => {
+export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
   return (
     <LogoImager
       width={size}
@@ -93,11 +93,6 @@ const _TokenLogo = ({ token, size, className }: TokenLogoProps) => {
     />
   );
 };
-
-export const TokenLogo = memo(
-  _TokenLogo,
-  (a, b) => a.token.address === b.token.address
-);
 
 export const LogoImager = ({ className, ...props }: ImageProps) => {
   return <Imager {...props} className={cn('rounded-full', className)} />;

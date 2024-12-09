@@ -1,12 +1,13 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { PairLogoName, TokenLogoName } from 'components/common/PairLogoName';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
 import { cn } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import { Button } from 'components/common/button';
 import style from './index.module.css';
+import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
 
 interface Props {
   listboxId: string;
@@ -15,12 +16,30 @@ interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
+const animateLeaving = () => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cards = document.querySelectorAll(`.${strategyStyle.strategyItem}`);
+  const animations: Animation[] = [];
+  const keyframes = [{ opacity: 0, transform: 'scale(0.95)' }];
+  for (let i = 0; i < cards.length; i++) {
+    const { top } = cards[i].getBoundingClientRect();
+    if (top > document.documentElement.clientHeight) break;
+    const options = { duration: 200, fill: 'forwards', delay: i * 50 } as const;
+    const anim = cards[i].animate(keyframes, options);
+    animations.push(anim);
+  }
+  return Promise.all(animations.map((anim) => anim.finished));
+};
+
 export const SuggestionList: FC<Props> = (props) => {
   const { listboxId, filteredPairs, filteredTokens, setOpen } = props;
   const nav = useNavigate();
-  const navigate = (slug: string) => {
+  const { slug } = useParams({ from: '/explore/$type/$slug' });
+  const navigate = async (nextSlug: string) => {
     setOpen(false);
-    const params = { type: 'token-pair' as const, slug };
+    if (slug === nextSlug) return;
+    const params = { type: 'token-pair' as const, slug: nextSlug };
+    await animateLeaving();
     nav({ to: '/explore/$type/$slug', params });
   };
 

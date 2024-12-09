@@ -9,10 +9,12 @@
   }
 }
 
-.dialog, .listbox:empty + .empty {
-  transition-behavior: allow-discrete;
-  transition-property: opacity, transform, display;
-  transition-duration: 0.3s;
+@media (prefers-reduced-motion: no-preference) {
+  .dialog, .listbox:empty + .empty {
+    transition-behavior: allow-discrete;
+    transition-property: opacity, transform, display;
+    transition-duration: 0.3s;
+  }
 }
 .root-search:has(.input-search[aria-expanded="false"]) .dialog {
   display: none;
