@@ -151,8 +151,8 @@ export const SuggestionCombobox = () => {
         aria-controls={listboxId}
         aria-autocomplete="both"
         aria-expanded={open}
-        placeholder="Search by token pair"
-        aria-label="Search by token pair"
+        placeholder="Search by single token or pair"
+        aria-label="Search by single token or pair"
         value={search}
         onInput={(e) => setSearch(e.currentTarget.value)}
         onKeyDown={keydownHandler}
