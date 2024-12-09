@@ -38,15 +38,16 @@ export const SuggestionList: FC<Props> = (props) => {
           <h3 className="text-14 font-weight-500 px-30 text-white/60">
             Tokens
           </h3>
-          {filteredTokens.slice(0, maxTokens).map((token) => (
+          {filteredTokens.slice(0, maxTokens).map((token, index) => (
             <button
               key={token.address}
               type="button"
               role="option"
               onMouseDown={(e) => e.preventDefault()} // prevent blur on click
               onClick={() => navigate(token.address.toLowerCase())}
-              className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 aria-selected:bg-white/10"
+              className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
               aria-selected="false"
+              tabIndex={index ? -1 : 0}
             >
               <TokenLogoName token={token} />
             </button>
@@ -54,7 +55,7 @@ export const SuggestionList: FC<Props> = (props) => {
           {maxTokens <= filteredTokens.length && (
             <footer className="px-30 flex h-[50px] items-center">
               <Button
-                variant="white"
+                variant="secondary"
                 onClick={() => setMaxTokens((v) => v + 5)}
               >
                 View More
@@ -66,7 +67,7 @@ export const SuggestionList: FC<Props> = (props) => {
       {!!filteredPairs.length && (
         <div id="filtered-pair-list" data-tab="pair">
           <h3 className="text-14 font-weight-500 px-30 text-white/60">Pairs</h3>
-          {filteredPairs.slice(0, maxTokens).map((pair) => {
+          {filteredPairs.slice(0, maxPairs).map((pair, index) => {
             const slug = toPairSlug(pair.baseToken, pair.quoteToken);
             return (
               <button
@@ -75,9 +76,10 @@ export const SuggestionList: FC<Props> = (props) => {
                 role="option"
                 onMouseDown={(e) => e.preventDefault()} // prevent blur on click
                 onClick={() => navigate(slug)}
-                className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 aria-selected:bg-white/10"
+                className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
                 aria-selected="false"
                 aria-setsize={filteredPairs.length}
+                tabIndex={index ? -1 : 0}
               >
                 <PairLogoName pair={pair} />
               </button>
@@ -85,7 +87,10 @@ export const SuggestionList: FC<Props> = (props) => {
           })}
           {maxPairs <= filteredPairs.length && (
             <footer className="px-30 flex h-[50px] items-center">
-              <Button variant="white" onClick={() => setMaxPairs((v) => v + 5)}>
+              <Button
+                variant="secondary"
+                onClick={() => setMaxPairs((v) => v + 5)}
+              >
                 View More
               </Button>
             </footer>

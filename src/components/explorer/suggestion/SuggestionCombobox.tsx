@@ -1,6 +1,5 @@
 import {
   ChangeEvent,
-  KeyboardEvent,
   useEffect,
   useId,
   useMemo,
@@ -80,26 +79,6 @@ export const SuggestionCombobox = () => {
     return Object.values(tokens);
   }, [pairMap, search]);
 
-  const keydownHandler = (e: KeyboardEvent) => {
-    if (open && e.key === 'Escape') {
-      (e.target as HTMLInputElement).value = '';
-      return setOpen(false);
-    }
-    if (!open) return setOpen(true);
-
-    if (e.key === 'Escape') return setOpen(false);
-    if (e.key === 'Enter') return selectCurrentOption(root.current);
-
-    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (e.key === 'Home') selectFirstOption(root.current);
-    if (e.key === 'End') selectLastOption(root.current);
-    if (e.key === 'ArrowDown') selectNextSibling(root.current);
-    if (e.key === 'ArrowUp') selectPreviousSibling(root.current);
-  };
-
   const changeTab = (e: ChangeEvent<HTMLInputElement>, tab: FocusTab) => {
     if (!e.target.checked) return;
     setFocusTab(tab as FocusTab);
@@ -136,6 +115,39 @@ export const SuggestionCombobox = () => {
     return () => observer.disconnect();
   }, [open, filteredTokens.length, filteredPairs.length]);
 
+  useEffect(() => {
+    if (!open) return;
+    const keydownHandler = (e: KeyboardEvent) => {
+      if (open && e.key === 'Escape') {
+        (e.target as HTMLInputElement).value = '';
+        return setOpen(false);
+      }
+      if (!open) return setOpen(true);
+
+      if (e.key === 'Escape') return setOpen(false);
+      if (e.key === 'Enter') return selectCurrentOption(root.current);
+
+      if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (e.key === 'Home') selectFirstOption(root.current);
+      if (e.key === 'End') selectLastOption(root.current);
+      if (e.key === 'ArrowDown') selectNextSibling(root.current);
+      if (e.key === 'ArrowUp') selectPreviousSibling(root.current);
+    };
+    const handleSoftExit = (e: MouseEvent) => {
+      if (!root.current || !(e.target instanceof Element)) return;
+      if (!root.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('keydown', keydownHandler);
+    document.addEventListener('mousedown', handleSoftExit);
+    return () => {
+      document.removeEventListener('mousedown', handleSoftExit);
+      document.removeEventListener('keydown', keydownHandler);
+    };
+  });
+
   return (
     <div ref={root} className={cn('flex flex-grow', style.rootSearch)}>
       <input
@@ -155,8 +167,6 @@ export const SuggestionCombobox = () => {
         aria-label="Search by single token or pair"
         value={search}
         onInput={(e) => setSearch(e.currentTarget.value)}
-        onKeyDown={keydownHandler}
-        onBlur={() => setOpen(false)}
         onFocus={() => setOpen(true)}
       />
       <button type="reset" aria-label="Clear" onClick={() => setSearch('')}>
@@ -171,7 +181,7 @@ export const SuggestionCombobox = () => {
       >
         <div
           role="radiogroup"
-          className="bg-background-800 flex gap-8 border-b border-white/60 px-16 py-8"
+          className="flex gap-8 border-b border-white/60 px-16 py-8"
         >
           {Object.entries(tabs).map(([tab, label]) => (
             <div key={tab} className="relative">
@@ -181,11 +191,12 @@ export const SuggestionCombobox = () => {
                 checked={focusTab === tab}
                 onMouseDown={(e) => e.preventDefault()}
                 onChange={(e) => changeTab(e, tab as FocusTab)}
-                className="peer invisible absolute"
+                className="peer absolute opacity-0"
+                tabIndex={focusTab === tab ? 0 : -1}
               />
               <label
                 htmlFor={`filtered-${tab}-radio`}
-                className="text-14 bg-background-700 rounded-full px-8 py-4 peer-checked:bg-black"
+                className="text-14 bg-background-700 rounded-full px-8 py-4 outline-1 peer-checked:bg-black peer-focus-visible:outline"
                 onMouseDown={(e) => e.preventDefault()}
               >
                 {filters[tab as FocusTab].length} {label}
@@ -195,6 +206,17 @@ export const SuggestionCombobox = () => {
         </div>
         <SuggestionList {...suggestionListProps} />
         <SuggestionEmpty />
+        <footer className="flex items-center justify-between border-t border-white/60 px-16 py-8">
+          <p className="flex items-center gap-8">
+            <kbd className="rounded-8 border border-white/10 px-8">↑</kbd>
+            <kbd className="rounded-8 border border-white/10 px-8">↓</kbd>
+            <span>Navigate</span>
+          </p>
+          <p className="flex items-center gap-8">
+            <kbd className="rounded-8 border border-white/10 px-8">ESC</kbd>
+            <span>Exit</span>
+          </p>
+        </footer>
       </div>
     </div>
   );

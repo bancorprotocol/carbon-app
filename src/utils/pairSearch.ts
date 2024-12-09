@@ -120,32 +120,6 @@ export const searchPairKeys = (
   });
 };
 
-interface PairNode {
-  name: string;
-  slug: string;
-}
-
-export const sortPairNodes = <T extends PairNode>(
-  nodes: T[],
-  searchSlug: string
-) => {
-  return nodes.sort((a, b) => {
-    if (a.name.startsWith(searchSlug)) {
-      if (!b.name.startsWith(searchSlug)) return -1;
-    }
-    if (a.slug.startsWith(searchSlug)) {
-      if (!b.slug.startsWith(searchSlug)) return -1;
-    }
-    if (b.name.startsWith(searchSlug)) {
-      if (!a.name.startsWith(searchSlug)) return 1;
-    }
-    if (b.slug.startsWith(searchSlug)) {
-      if (!a.slug.startsWith(searchSlug)) return 1;
-    }
-    return a.name.localeCompare(b.name);
-  });
-};
-
 /** Filter and search PairTrades based on a search input */
 export const searchPairTrade = (
   pairMap: Map<string, TradePair>,
