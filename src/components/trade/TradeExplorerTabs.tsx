@@ -55,7 +55,7 @@ export const TradeExplorerTab: FC<Props> = ({ current }) => {
         >
           {icon}
           <span>{label}</span>
-          {!!badge && (
+          {typeof badge === 'number' && (
             <span className="size-18 text-10 grid place-items-center rounded-full bg-white/10">
               {badge}
             </span>

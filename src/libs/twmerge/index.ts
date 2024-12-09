@@ -92,6 +92,7 @@ export const customTwMerge = extendTailwindMerge<AdditionalClassGroupIDs>({
             'ping',
             'pulse',
             'bounce',
+            'fade',
             'slideUp',
             'scaleUp',
           ],

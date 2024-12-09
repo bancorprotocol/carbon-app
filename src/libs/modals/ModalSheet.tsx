@@ -16,12 +16,13 @@ export const ModalSheet: FC<ModalProps> = ({
 }) => {
   const { closeModal } = useModal();
   const onCloseHandler = (id: string) => {
+    console.log('Close', id);
     onClose && onClose(id);
     closeModal(id);
   };
 
   return (
-    <Overlay onClick={() => onCloseHandler(id)} className="items-end">
+    <Overlay close={() => onCloseHandler(id)} className="items-end">
       <m.div
         data-testid="modal-container"
         onClick={(e) => e.stopPropagation()}

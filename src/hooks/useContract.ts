@@ -1,8 +1,22 @@
 import { useWagmi } from 'libs/wagmi';
 import { Token__factory, Voucher__factory } from 'abis/types';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import config from 'config';
 
+export const useVoucher = () => {
+  const { provider, signer } = useWagmi();
+  return useQuery({
+    queryKey: ['contract', 'voucher'],
+    queryFn: () => ({
+      read: Voucher__factory.connect(
+        config.addresses.carbon.voucher,
+        provider!
+      ),
+      write: Voucher__factory.connect(config.addresses.carbon.voucher, signer!),
+    }),
+  });
+};
 export const useContract = () => {
   const { provider, signer } = useWagmi();
 
@@ -14,16 +28,5 @@ export const useContract = () => {
     [provider, signer]
   );
 
-  const Voucher = useMemo(
-    () => ({
-      read: Voucher__factory.connect(
-        config.addresses.carbon.voucher,
-        provider!
-      ),
-      write: Voucher__factory.connect(config.addresses.carbon.voucher, signer!),
-    }),
-    [provider, signer]
-  );
-
-  return { Token, Voucher };
+  return { Token };
 };

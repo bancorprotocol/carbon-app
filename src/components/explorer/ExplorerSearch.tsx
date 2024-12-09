@@ -94,13 +94,6 @@ export const _ExplorerSearch: FC = () => {
     setSearch,
   };
 
-  const suggestionProps = {
-    pairMap: pairs.map,
-    nameMap: pairs.names,
-    search,
-    setSearch,
-  };
-
   return (
     <div className="relative">
       <form
@@ -136,9 +129,7 @@ export const _ExplorerSearch: FC = () => {
           </div>
           <div role="separator" className="h-20 w-1 bg-white/40"></div>
           <div className="flex w-full flex-grow items-center md:relative">
-            {type === 'token-pair' && (
-              <ExplorerSearchSuggestions {...suggestionProps} />
-            )}
+            {type === 'token-pair' && <ExplorerSearchSuggestions />}
             {type === 'wallet' && <ExplorerSearchInput {...inputProps} />}
           </div>
         </div>

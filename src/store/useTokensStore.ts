@@ -1,7 +1,7 @@
-import { uniqBy } from 'lodash';
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokensQuery } from 'libs/queries';
+import { lsService } from 'services/localeStorage';
 
 export interface TokensStore {
   tokens: Token[];
@@ -15,16 +15,16 @@ export interface TokensStore {
 
 export const useTokensStore = (): TokensStore => {
   const tokensQuery = useTokensQuery();
-  const [importedTokens, setImportedTokens] = useState<Token[]>([]);
+  const [importedTokens, setImportedTokens] = useState<Token[]>(
+    lsService.getItem('importedTokens') ?? []
+  );
 
   const tokens = useMemo(() => {
-    if (tokensQuery.data && tokensQuery.data.length) {
-      return uniqBy(
-        [...tokensQuery.data, ...importedTokens],
-        (token) => token.address
-      );
-    }
-    return [];
+    if (!tokensQuery.data?.length) return [];
+    const result = new Map<string, Token>();
+    for (const token of tokensQuery.data) result.set(token.address, token);
+    for (const token of importedTokens) result.set(token.address, token);
+    return Array.from(result.values());
   }, [tokensQuery.data, importedTokens]);
 
   const tokensMap = useMemo(
