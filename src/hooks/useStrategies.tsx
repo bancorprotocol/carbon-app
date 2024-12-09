@@ -111,11 +111,7 @@ export const useStrategiesWithFiat = (
     const price = priceQueries[i].data?.[selectedFiatCurrency];
     prices[address] = price;
   }
-  const tradeCountQuery = useTradeCount();
-  const tradeCount: Record<string, number> = {};
-  for (const item of tradeCountQuery.data ?? []) {
-    tradeCount[item.strategyId] = item.tradeCount;
-  }
+  const tradeCount = useTradeCount();
   return strategies.map((strategy) => {
     const basePrice = new SafeDecimal(prices[strategy.base.address] ?? 0);
     const quotePrice = new SafeDecimal(prices[strategy.quote.address] ?? 0);

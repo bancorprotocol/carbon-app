@@ -31,7 +31,9 @@ export const DebugTransferNFT = () => {
         inputId
       );
       await tx.wait();
-      await cache.invalidateQueries({ queryKey: QueryKey.strategies(user) });
+      await cache.invalidateQueries({
+        queryKey: QueryKey.strategiesByUser(user),
+      });
       setIsSuccess(true);
     } catch (e) {
       console.error('failed to transfer NFT', e);
