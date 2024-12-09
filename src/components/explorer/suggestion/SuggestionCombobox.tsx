@@ -1,46 +1,47 @@
-import {
-  Dispatch,
-  FC,
-  KeyboardEvent,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
 import {
   selectCurrentOption,
   selectFirstOption,
   selectLastOption,
   selectNextSibling,
   selectPreviousSibling,
+  suggestionClasses,
 } from './utils';
-import { ExplorerSearchInputContainer } from '../ExplorerSearchInputContainer';
+import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
-import { searchPairTrade } from 'utils/pairSearch';
+import { searchPairTrade, toPairName } from 'utils/pairSearch';
+import { useParams } from '@tanstack/react-router';
+import { usePairs } from 'hooks/usePairs';
+import { cn } from 'utils/helpers';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import style from './index.module.css';
 
-interface Props {
-  nameMap: Map<string, string>;
-  pairMap: Map<string, TradePair>;
-  search: string;
-  setSearch: Dispatch<string>;
-}
+const displaySlug = (slug: string, pairMap: Map<string, TradePair>) => {
+  const pair = pairMap.get(slug);
+  if (!pair) return '';
+  return toPairName(pair.baseToken, pair.quoteToken);
+};
 
-export const SuggestionCombobox: FC<Props> = (props) => {
-  const { pairMap, nameMap, search, setSearch } = props;
+export const SuggestionCombobox = () => {
+  const { map: pairMap, names: namesMap } = usePairs();
   const listboxId = useId();
+  const inputId = useId();
   const root = useRef<HTMLDivElement>(null);
+  const params = useParams({ from: '/explore/$type/$slug' });
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState(displaySlug(params.slug, pairMap));
 
-  const filteredPairs = useMemo(() => {
-    return searchPairTrade(pairMap, nameMap, search);
-  }, [pairMap, nameMap, search]);
+  useEffect(() => {
+    setSearch(displaySlug(params.slug, pairMap));
+  }, [pairMap, params.slug, setSearch]);
 
-  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (!open && e.key === 'Escape') {
+  const filteredPairs = searchPairTrade(pairMap, namesMap, search);
+
+  const keydownHandler = (e: KeyboardEvent) => {
+    if (open && e.key === 'Escape') {
       (e.target as HTMLInputElement).value = '';
-      return setSearch('');
+      return setOpen(false);
     }
     if (!open) return setOpen(true);
 
@@ -64,26 +65,38 @@ export const SuggestionCombobox: FC<Props> = (props) => {
   };
 
   return (
-    <ExplorerSearchInputContainer
-      containerRef={root}
-      search={search}
-      role="combobox"
-      autoComplete="off"
-      aria-controls={listboxId}
-      aria-autocomplete="both"
-      aria-expanded={open}
-      value={search}
-      placeholder="Search by token pair"
-      aria-label="Search by token pair"
-      onChange={(e) => setSearch(e.target.value)}
-      onKeyDown={onKeyDownHandler}
-      onBlur={() => setOpen(false)}
-      onFocus={() => setOpen(true)}
-    >
-      {open && !filteredPairs.length && <SuggestionEmpty />}
-      {open && !!filteredPairs.length && (
+    <div ref={root} className={cn('flex flex-grow', style.rootSearch)}>
+      <input
+        id={inputId}
+        name="search"
+        type="search"
+        className={cn(
+          'w-full flex-grow bg-transparent outline-none',
+          style.inputSearch
+        )}
+        role="combobox"
+        autoComplete="off"
+        aria-controls={listboxId}
+        aria-autocomplete="both"
+        aria-expanded={open}
+        placeholder="Search by token pair"
+        aria-label="Search by token pair"
+        value={search}
+        onInput={(e) => setSearch(e.currentTarget.value)}
+        onKeyDown={keydownHandler}
+        onBlur={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+      />
+      <button type="reset" aria-label="Clear">
+        <IconClose className="w-12" />
+      </button>
+      <div role="dialog" className={cn(suggestionClasses, style.dialog)}>
+        <h3 className="text-14 font-weight-500 mb-8 ml-20 text-white/60">
+          {filteredPairs.length} Results
+        </h3>
         <SuggestionList {...suggestionListProps} />
-      )}
-    </ExplorerSearchInputContainer>
+        <SuggestionEmpty />
+      </div>
+    </div>
   );
 };
