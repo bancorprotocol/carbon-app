@@ -1,4 +1,4 @@
-import { StrategyContent } from 'components/strategies/overview';
+import { StrategyContent } from 'components/strategies/overview/StrategyContent';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { NotFound } from 'components/common/NotFound';
 

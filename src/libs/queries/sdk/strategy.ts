@@ -153,7 +153,6 @@ interface Props {
 }
 
 export const useGetUserStrategies = ({ user }: Props) => {
-  // const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
@@ -254,6 +253,9 @@ export const useTokenStrategies = (token?: string) => {
       }
 
       const allResponses = await Promise.allSettled(getStrategies);
+      for (const res of allResponses) {
+        if (res.status === 'rejected') console.error(res.reason);
+      }
       const allStrategies = allResponses
         .filter((v) => v.status === 'fulfilled')
         .map((v) => (v as PromiseFulfilledResult<SDKStrategy[]>).value);
