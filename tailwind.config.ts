@@ -95,8 +95,8 @@ export default {
       full: '9999px',
     },
     fontFamily: {
-      text: ['Carbon-Text', 'sans-serif'],
-      title: ['Carbon-Title', 'sans-serif'],
+      text: ['Carbon-Text', 'system-ui', 'sans-serif'],
+      title: ['Carbon-Title', 'system-ui', 'sans-serif'],
     },
     fontSize: {
       10: ['0.625rem', { lineHeight: '0.875rem' }],
