@@ -8,7 +8,7 @@ import {
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
 import { Link } from 'libs/routing';
-import { useEffect, useRef } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
 import { toPairSlug } from 'utils/pairSearch';
 
 const useTrendingPairs = (trending?: Trending) => {
@@ -81,38 +81,39 @@ const useTrendStrategies = (
 };
 
 export const ExplorerHeader = () => {
-  const { data: trending, isLoading } = useTrending();
+  const { data: trending, isLoading, isError } = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
   const trendingPairs = useTrendingPairs(trending);
   const strategies = trendingStrategies.data;
   const pairs = trendingPairs.data;
-  const total = Object.values(trending?.tradeCount ?? {}).reduce((acc, v) => {
-    return acc + v.strategyTrades;
-  }, 0);
+
   const strategiesLoading = trendingStrategies.isLoading || isLoading;
   const pairLoading = trendingPairs.isLoading || isLoading;
+  if (isError) return;
   return (
     <header className="mb-42 flex gap-32">
       <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
-        <h2 className="text-24 font-weight-700 font-title">Total Trades</h2>
-        <Trades trades={total} />
+        <h2 className="text-24 font-weight-400 font-title my-0">
+          Total Trades
+        </h2>
+        <Trades trades={trending?.totalTradeCount} />
         <div className="flex gap-16">
           <Link
-            to="/trade/market"
+            to="/trade/disposable"
             className={buttonStyles({ variant: 'success' })}
           >
-            Trade
+            Create Strategy
           </Link>
           <Link
-            to="/trade/disposable"
+            to="/trade/market"
             className={buttonStyles({ variant: 'white' })}
           >
-            Create Strategy
+            Trade
           </Link>
         </div>
       </article>
       <article className="border-background-800 grid hidden flex-1 gap-8 rounded border-2 p-20 md:block">
-        <h2 className="text-20 font-weight-700 font-title">Popular Pairs</h2>
+        <h2 className="text-20 font-weight-400 font-title">Popular Pairs</h2>
         <table className="font-weight-500 text-14 w-full">
           <thead className="text-16 text-white/60">
             <tr>
@@ -125,10 +126,10 @@ export const ExplorerHeader = () => {
               [1, 2, 3].map((id) => (
                 <tr key={id}>
                   <td>
-                    <Loading />
+                    <Loading height={34} />
                   </td>
                   <td>
-                    <Loading />
+                    <Loading height={34} />
                   </td>
                 </tr>
               ))}
@@ -169,7 +170,7 @@ export const ExplorerHeader = () => {
         </table>
       </article>
       <article className="border-background-800 grid hidden flex-1 gap-8 rounded border-2 p-20 lg:block">
-        <h2 className="text-20 font-weight-700 font-title">
+        <h2 className="text-20 font-weight-400 font-title">
           Trending Strategies
         </h2>
         <table className="text-14 w-full">
@@ -184,10 +185,10 @@ export const ExplorerHeader = () => {
               [1, 2, 3].map((id) => (
                 <tr key={id}>
                   <td>
-                    <Loading />
+                    <Loading height={34} />
                   </td>
                   <td>
-                    <Loading />
+                    <Loading height={34} />
                   </td>
                 </tr>
               ))}
@@ -223,8 +224,8 @@ export const ExplorerHeader = () => {
   );
 };
 
-const Loading = () => (
-  <div className="h-[30px] animate-pulse p-4">
+const Loading = (style: CSSProperties) => (
+  <div className="animate-pulse p-4" style={style}>
     <div className="bg-background-700 h-full rounded"></div>
   </div>
 );
@@ -234,7 +235,7 @@ const formatter = new Intl.NumberFormat(undefined, {
 });
 
 interface TradesProps {
-  trades: number;
+  trades?: number;
 }
 
 const Trades = ({ trades }: TradesProps) => {
@@ -244,6 +245,7 @@ const Trades = ({ trades }: TradesProps) => {
   const initDelta = 60;
 
   useEffect(() => {
+    if (typeof trades !== 'number') return;
     let tradesChanged = false;
     const start = async () => {
       const from = lastTrades.current || trades - initDelta;
@@ -302,12 +304,13 @@ const Trades = ({ trades }: TradesProps) => {
     };
   }, [trades]);
 
+  if (typeof trades !== 'number') {
+    return <Loading height={40} width="10ch" fontSize="36px" />;
+  }
+
   const initial = trades ? formatter.format(trades - initDelta) : '0';
   return (
-    <p
-      ref={ref}
-      className="text-36 font-weight-700 font-title flex h-[40px] overflow-hidden"
-    >
+    <p ref={ref} className="text-36 font-title flex h-[40px] overflow-hidden">
       {initial.split('').map((v, i) => {
         if (!'0123456789'.includes(v)) return <span key={i}>{v}</span>;
         return (

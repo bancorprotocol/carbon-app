@@ -34,7 +34,7 @@ export interface Trending {
 
 export const useTrending = () => {
   return useQuery({
-    queryKey: QueryKey.tradeCount(),
+    queryKey: QueryKey.trending(),
     queryFn: carbonApi.getTrending,
     staleTime: ONE_HOUR_IN_MS,
     refetchInterval: 120_000,
