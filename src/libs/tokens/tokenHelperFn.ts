@@ -1,4 +1,3 @@
-import { uniqBy } from 'lodash';
 import { utils } from 'ethers';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
@@ -67,9 +66,10 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
   tokens.push(...merged);
 
   const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
-  tokens.push(...lsImportedTokens);
-
-  return uniqBy(tokens, (token: Token) => token.address);
+  const result = new Map<string, Token>();
+  for (const token of tokens) result.set(token.address, token);
+  for (const token of lsImportedTokens) result.set(token.address, token);
+  return Array.from(result.values());
 };
 
 export const fetchTokenData = async (

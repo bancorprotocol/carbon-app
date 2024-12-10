@@ -5,7 +5,6 @@ import {
 import { useTokens } from 'hooks/useTokens';
 import { SimulatorData, SimulatorReturn, useGetSimulator } from 'libs/queries';
 import { SimulatorResultSearch, useSearch } from 'libs/routing';
-import { isNil } from 'lodash';
 import {
   createContext,
   FC,
@@ -45,7 +44,7 @@ const SimulatorCTX = createContext<SimulatorProviderCTX | undefined>(undefined);
 
 export const useSimulator = () => {
   const ctx = useContext(SimulatorCTX);
-  if (isNil(ctx)) {
+  if (ctx === null || ctx === undefined) {
     throw new Error('No context found for simulator provider.');
   }
   return ctx;
