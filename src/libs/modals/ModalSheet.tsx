@@ -16,7 +16,6 @@ export const ModalSheet: FC<ModalProps> = ({
 }) => {
   const { closeModal } = useModal();
   const onCloseHandler = (id: string) => {
-    console.log('Close', id);
     onClose && onClose(id);
     closeModal(id);
   };
