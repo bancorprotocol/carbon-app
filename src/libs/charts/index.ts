@@ -1,9 +1,16 @@
-import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import highchartsAccessibility from 'highcharts/modules/accessibility';
+import type Highcharts from 'highcharts';
 
-highchartsAccessibility(Highcharts);
+export const loadHighchart = async () => {
+  const [{ default: Highcharts }, { default: highchartsAccessibility }] =
+    await Promise.all([
+      import('highcharts'),
+      import('highcharts/modules/accessibility'),
+    ]);
+  highchartsAccessibility(Highcharts);
+  return Highcharts;
+};
 
 //@ts-ignore
-export { Highcharts, HighchartsReact };
+export { HighchartsReact, Highcharts };
 export type { Options } from 'highcharts/highcharts';
