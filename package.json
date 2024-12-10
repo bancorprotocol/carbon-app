@@ -5,6 +5,7 @@
   "dependencies": {
     "@babel/core": "^7.0.0-0",
     "@bancor/carbon-sdk": "0.0.99-DEV",
+    "@binance/w3w-wagmi-connector-v2": "^1.2.4-alpha.0",
     "@cloudflare/workers-types": "^4.20230717.0",
     "@ethersproject/abi": "^5.0.0",
     "@ethersproject/bytes": "^5.0.0",

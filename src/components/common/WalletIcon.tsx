@@ -6,6 +6,7 @@ import { ReactComponent as IconGnosisLogo } from 'assets/logos/gnosis.svg';
 import { ReactComponent as IconImposterLogo } from 'assets/logos/imposter.svg';
 import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
 import { ReactComponent as IconWalletConnectLogo } from 'assets/logos/walletConnect.svg';
+import { ReactComponent as IconBinanceLogo } from 'assets/logos/binanceWallet.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 
 type Props = {
@@ -51,6 +52,8 @@ export const WalletIcon = ({
       return <IconCompassWalletLogo className={className} />;
     case 'Seif Wallet':
       return <IconSeifWalletLogo className={className} />;
+    case 'Binance Web3 Wallet':
+      return <IconBinanceLogo className={className} />;
     default:
       return <IconWallet className={className} />;
   }

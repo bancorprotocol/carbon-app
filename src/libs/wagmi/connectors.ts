@@ -16,6 +16,7 @@ import {
   currentChain,
 } from 'libs/wagmi';
 import { externalLinks } from 'libs/routing';
+import { getWagmiConnectorV2 } from '@binance/w3w-wagmi-connector-v2';
 
 const PLACEHOLDER_TAG = '_placeholder';
 
@@ -61,6 +62,9 @@ const createPlaceholderConnector = ({
 
 const getDefaultConnector = (connectorType: SelectableConnectionName) => {
   switch (connectorType) {
+    case 'Binance':
+      const binanceConnector = getWagmiConnectorV2();
+      return binanceConnector();
     case 'Compass Wallet':
       return createPlaceholderConnector({
         name: 'Compass Wallet',
