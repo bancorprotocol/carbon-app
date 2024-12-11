@@ -1,0 +1,82 @@
+.rdp-root {
+  @apply text-14;
+}
+.rdp-months {
+  display: flex;
+  gap: 30px;
+  position: relative;
+}
+.rdp-nav {
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rdp-nav button {
+  color: rgba(255 255 255 / 0.6);
+}
+.rdp-nav button:hover {
+  color: white;
+}
+.rdp-month {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.rdp-month_caption {
+  text-align: center;
+}
+.rdp-weekday {
+  @apply text-12;
+  font-weight: 400;
+  color: rgba(255 255 255 / 0.2);
+}
+
+.rdp-day {
+  color: rgba(255 255 255 / 0.6);
+  padding-inline: 0;
+}
+.rdp-disabled {
+  opacity: 0.5;
+}
+.rdp-outside {
+  opacity: 0.2;
+}
+.rdp-day_button {
+  width: 36px;
+  height: 32px;
+  border-radius: 8px;
+}
+.rdp-range_middle .rdp-day_button {
+  @apply bg-primary/20;
+  color: white;
+  border-radius: 0;
+}
+.rdp-day_button:hover {
+  @apply bg-black;
+  color: white;
+}
+.rdp-range_start .rdp-day_button {
+  @apply bg-primary;
+  color: black;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.rdp-range_end .rdp-day_button {
+  @apply bg-primary;
+  color: black;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.rdp-range_start.rdp-range_end .rdp-day_button {
+  border-radius: 8px;
+}
+
+.rdp-today .rdp-day_button {
+  border: solid 1px white;
+}
+.rdp-hidden {
+  visibility: hidden;
+}
