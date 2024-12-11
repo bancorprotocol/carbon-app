@@ -76,7 +76,7 @@ interface ChartProps {
 }
 const Chart: FC<ChartProps> = ({ options }) => {
   const [loading, setLoading] = useState(true);
-  const highchart = useRef<typeof Highcharts>();
+  const highchart = useRef<typeof Highcharts>(null);
   useEffect(() => {
     loadHighchart().then((chart) => {
       highchart.current = chart;

@@ -80,7 +80,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const status = useRef<SimulationStatus>('idle');
   const animationFrame = useRef<number>(0);
   const playbackSpeed = useRef<PlaybackSpeed>('1x');
-  const actionAfterBrushEnd = useRef<'run' | 'pause' | undefined>();
+  const actionAfterBrushEnd = useRef<'run' | 'pause' | null>(null);
 
   const setPlaybackSpeed = (speed: PlaybackSpeed) => {
     playbackSpeed.current = speed;
@@ -186,7 +186,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
       status.current = 'running';
       handleAnimationStep();
     }
-    actionAfterBrushEnd.current = undefined;
+    actionAfterBrushEnd.current = null;
   };
 
   useEffect(() => {
