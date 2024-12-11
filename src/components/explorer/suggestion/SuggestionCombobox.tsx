@@ -189,42 +189,47 @@ export const SuggestionCombobox = () => {
           style.dialog
         )}
       >
-        <div
-          role="radiogroup"
-          className="flex gap-8 border-b border-white/60 px-16 py-8"
-        >
-          {Object.entries(tabs).map(([tab, label]) => (
-            <div key={tab} className="relative">
-              <input
-                id={`filtered-${tab}-radio`}
-                type="radio"
-                checked={focusTab === tab}
-                onMouseDown={(e) => e.preventDefault()}
-                onChange={(e) => changeTab(e, tab as FocusTab)}
-                className="peer absolute opacity-0"
-                tabIndex={focusTab === tab ? 0 : -1}
-              />
-              <label
-                htmlFor={`filtered-${tab}-radio`}
-                className="text-14 bg-background-700 rounded-full px-8 py-4 outline-1 peer-checked:bg-black peer-focus-visible:outline"
-                onMouseDown={(e) => e.preventDefault()}
-              >
-                {filters[tab as FocusTab].length} {label}
-              </label>
-            </div>
-          ))}
-        </div>
+        <header className="flex gap-8 border-b border-white/40 p-12">
+          <div
+            role="radiogroup"
+            className="text-14 font-weight-500 flex items-center rounded-full bg-black p-2"
+          >
+            {Object.entries(tabs).map(([tab, label]) => (
+              <div key={tab} className="relative">
+                <input
+                  id={`filtered-${tab}-radio`}
+                  type="radio"
+                  checked={focusTab === tab}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onChange={(e) => changeTab(e, tab as FocusTab)}
+                  className="peer absolute opacity-0"
+                  tabIndex={focusTab === tab ? 0 : -1}
+                />
+                <label
+                  htmlFor={`filtered-${tab}-radio`}
+                  className="peer-checked:bg-background-800 inline-flex cursor-pointer items-center gap-4 rounded-full px-8 py-4 outline-1 peer-focus-visible:outline"
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  {label}
+                  <span className="bg-background-900 text-10 rounded-full px-8 py-4">
+                    {filters[tab as FocusTab].length}
+                  </span>
+                </label>
+              </div>
+            ))}
+          </div>
+        </header>
         <SuggestionList {...suggestionListProps} />
         <SuggestionEmpty />
-        <footer className="flex items-center justify-between border-t border-white/60 px-16 py-8">
+        <footer className="text-14 flex items-center justify-between border-t border-white/40 px-16 py-8">
           <p className="flex items-center gap-8">
-            <kbd className="rounded-8 border border-white/10 px-8">↑</kbd>
-            <kbd className="rounded-8 border border-white/10 px-8">↓</kbd>
-            <span>Navigate</span>
+            <kbd className="rounded-8 border-2 border-white/10 px-8">↑</kbd>
+            <kbd className="rounded-8 border-2 border-white/10 px-8">↓</kbd>
+            <span className="text-white/80">Navigate</span>
           </p>
           <p className="flex items-center gap-8">
-            <kbd className="rounded-8 border border-white/10 px-8">ESC</kbd>
-            <span>Exit</span>
+            <kbd className="rounded-8 border-2 border-white/10 px-8">ESC</kbd>
+            <span className="text-white/80">Exit</span>
           </p>
         </footer>
       </div>

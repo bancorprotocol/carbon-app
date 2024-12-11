@@ -5,7 +5,6 @@ import { useNavigate, useParams } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
 import { cn } from 'utils/helpers';
 import { Token } from 'libs/tokens';
-import { Button } from 'components/common/button';
 import style from './index.module.css';
 import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
 
@@ -73,13 +72,12 @@ export const SuggestionList: FC<Props> = (props) => {
           ))}
           {maxTokens <= filteredTokens.length && (
             <footer className="px-30 flex h-[50px] items-center">
-              <Button
-                variant="secondary"
-                className="aria-selected:bg-white/10"
+              <button
+                className="text-14 font-weight-500 bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
                 onClick={() => setMaxTokens((v) => v + 5)}
               >
                 View More
-              </Button>
+              </button>
             </footer>
           )}
         </div>
@@ -109,13 +107,12 @@ export const SuggestionList: FC<Props> = (props) => {
           })}
           {maxPairs <= filteredPairs.length && (
             <footer className="px-30 flex h-[50px] items-center">
-              <Button
-                variant="secondary"
-                className="aria-selected:bg-white/10"
+              <button
+                className="text-14 font-weight-500 bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
                 onClick={() => setMaxPairs((v) => v + 5)}
               >
                 View More
-              </Button>
+              </button>
             </footer>
           )}
         </div>
