@@ -185,7 +185,7 @@ export const SuggestionCombobox = () => {
       <div
         role="dialog"
         className={cn(
-          'rounded-10 bg-background-800 absolute left-0 top-[100%] z-30 mt-10 flex max-h-[300px] w-full flex-col overflow-hidden md:mt-20',
+          'rounded-10 bg-background-800 absolute left-0 top-[100%] z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
           style.dialog
         )}
       >
@@ -221,7 +221,7 @@ export const SuggestionCombobox = () => {
         </header>
         <SuggestionList {...suggestionListProps} />
         <SuggestionEmpty />
-        <footer className="text-14 flex items-center justify-between border-t border-white/40 px-16 py-8">
+        <footer className="text-14 hidden items-center justify-between border-t border-white/40 px-16 py-8 sm:flex">
           <p className="flex items-center gap-8">
             <kbd className="rounded-8 border-2 border-white/10 px-8">↑</kbd>
             <kbd className="rounded-8 border-2 border-white/10 px-8">↓</kbd>
