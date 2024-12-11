@@ -1,5 +1,5 @@
 const getOptions = (root: HTMLElement | null) => {
-  return root?.querySelectorAll<HTMLElement>('[role="option"]') ?? [];
+  return root?.querySelectorAll<HTMLElement>('button') ?? [];
 };
 
 export const selectCurrentOption = (root: HTMLElement | null) => {
@@ -8,13 +8,13 @@ export const selectCurrentOption = (root: HTMLElement | null) => {
 };
 
 export const getSelectedOption = (root: HTMLElement | null) => {
-  const selector = '[role="option"][aria-selected="true"]';
+  const selector = 'button[aria-selected="true"]';
   return root?.querySelector<HTMLElement>(selector);
 };
 
 export const getFirstOption = (root: HTMLElement | null) => {
   getSelectedOption(root)?.setAttribute('aria-selected', 'false');
-  const selector = '[role="option"]:first-of-type';
+  const selector = 'button:first-of-type';
   return root?.querySelector<HTMLElement>(selector);
 };
 

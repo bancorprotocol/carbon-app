@@ -83,7 +83,11 @@ export const SuggestionCombobox = () => {
     if (!e.target.checked) return;
     setFocusTab(tab as FocusTab);
     const el = document.getElementById(`filtered-${tab}-list`);
-    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const y = window.scrollY;
+    const x = window.scrollX;
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // scrollIntoView move all scroll container, we need to reset main scroll to prevent double scrolling
+    window.scroll(x, y);
   };
 
   const onInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -122,6 +126,7 @@ export const SuggestionCombobox = () => {
 
   useEffect(() => {
     if (!open) return;
+    const listbox = document.getElementById(listboxId);
     const keydownHandler = (e: KeyboardEvent) => {
       if (open && e.key === 'Escape') {
         (e.target as HTMLInputElement).value = '';
@@ -130,16 +135,16 @@ export const SuggestionCombobox = () => {
       if (!open) return setOpen(true);
 
       if (e.key === 'Escape') return setOpen(false);
-      if (e.key === 'Enter') return selectCurrentOption(root.current);
+      if (e.key === 'Enter') return selectCurrentOption(listbox);
 
       if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
       e.preventDefault();
       e.stopPropagation();
 
-      if (e.key === 'Home') selectFirstOption(root.current);
-      if (e.key === 'End') selectLastOption(root.current);
-      if (e.key === 'ArrowDown') selectNextSibling(root.current);
-      if (e.key === 'ArrowUp') selectPreviousSibling(root.current);
+      if (e.key === 'Home') selectFirstOption(listbox);
+      if (e.key === 'End') selectLastOption(listbox);
+      if (e.key === 'ArrowDown') selectNextSibling(listbox);
+      if (e.key === 'ArrowUp') selectPreviousSibling(listbox);
     };
     const handleSoftExit = (e: MouseEvent) => {
       if (!root.current || !(e.target instanceof Element)) return;
@@ -168,8 +173,8 @@ export const SuggestionCombobox = () => {
         aria-controls={listboxId}
         aria-autocomplete="both"
         aria-expanded={open}
-        placeholder="Search by single token or pair"
-        aria-label="Search by single token or pair"
+        placeholder="Search by token or token pair"
+        aria-label="Search by token or token pair"
         value={search}
         onInput={onInput}
         onFocus={() => setOpen(true)}
