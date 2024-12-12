@@ -3,7 +3,7 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 
 export const useChartDimensions = (
   settings: D3ChartSettingsProps
-): [RefObject<SVGSVGElement>, D3ChartSettings] => {
+): [RefObject<SVGSVGElement | null>, D3ChartSettings] => {
   const ref = useRef<SVGSVGElement>(null);
   const dimensions = combineChartDimensions(settings);
   const [width, setWidth] = useState(dimensions.width);

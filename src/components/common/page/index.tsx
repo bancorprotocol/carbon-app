@@ -4,7 +4,7 @@ import { cn } from 'utils/helpers';
 export const Page: FC<{
   children: ReactNode;
   title?: string;
-  widget?: JSX.Element;
+  widget?: ReactNode;
   hideTitle?: boolean;
   className?: string;
 }> = ({ children, title, widget, hideTitle, className }) => {

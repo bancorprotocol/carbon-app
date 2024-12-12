@@ -2,7 +2,6 @@ import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
 import { Pathnames } from 'libs/routing';
 import { customTwMerge } from 'libs/twmerge';
-import Graphemer from 'graphemer';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 export * from './number';
 export * from './schema';
@@ -19,13 +18,20 @@ export const uuid = () => {
   });
 };
 
+const segmentText = (string: string) => {
+  if ('Segmenter' in Intl) {
+    const segmenter = new Intl.Segmenter();
+    return Array.from(segmenter.segment(string)).map((v) => v.segment);
+  } else {
+    return string.split('');
+  }
+};
 export const shortenString = (
   string: string,
   separator = '...',
   toLength = 13
 ): string => {
-  const splitter = new Graphemer();
-  const stringArray = splitter.splitGraphemes(string);
+  const stringArray = segmentText(string);
 
   if (stringArray.length <= toLength) {
     return string;

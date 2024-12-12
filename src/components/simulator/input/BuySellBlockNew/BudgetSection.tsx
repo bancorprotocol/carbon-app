@@ -4,7 +4,6 @@ import {
   StrategyInputOrder,
 } from 'hooks/useStrategyInput';
 import { Token } from 'libs/tokens';
-import { capitalize } from 'lodash';
 import { FC, useEffect, useId } from 'react';
 import { StrategyType } from 'libs/routing';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
@@ -76,7 +75,7 @@ export const BudgetSection: FC<Props> = ({
                 }`
           }
         >
-          <span className="text-white/80">Set {capitalize(type)} Budget</span>
+          <span className="capitalize text-white/80">Set {type} Budget</span>
         </Tooltip>
         {isBudgetOptional && (
           <span className="font-weight-500 ml-8 text-white/60">Optional</span>

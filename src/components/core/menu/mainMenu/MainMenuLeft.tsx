@@ -1,18 +1,21 @@
 import { FC } from 'react';
 import { carbonEvents } from 'services/events';
-import { Link, useMatchRoute, useRouterState } from 'libs/routing';
+import { Link, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
 import { handleOnItemClick } from 'components/core/menu/utils';
 import { menuItems } from 'components/core/menu';
 
 export const MainMenuLeft: FC = () => {
   const { pathname } = useRouterState().location;
-  const match = useMatchRoute();
 
   const isSamePageLink = (to: string) => {
-    if (pathname.startsWith('/strategies') && to === '/') return true;
-    if (pathname.startsWith('/trade') && to.startsWith('/trade')) return true;
-    return !!match({ to, search: {}, params: {}, fuzzy: true });
+    if (to === '/') {
+      return pathname.startsWith('/strategies') || pathname === '/';
+    }
+    if (to.startsWith('/trade')) {
+      return pathname.startsWith('/trade');
+    }
+    return pathname.startsWith(to);
   };
 
   return (

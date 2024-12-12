@@ -1,11 +1,12 @@
 import { Link, Pathnames, PathParams, useMatchRoute } from 'libs/routing';
+import { ReactNode } from 'react';
 import { cn } from 'utils/helpers';
 
 export interface StrategyTab {
   label: string;
   href: Pathnames;
   params?: PathParams;
-  icon: JSX.Element;
+  icon: ReactNode;
   badge?: number;
 }
 

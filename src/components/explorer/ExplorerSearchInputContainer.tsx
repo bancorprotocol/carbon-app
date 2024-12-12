@@ -4,7 +4,7 @@ import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 
 type InputAttributes = JSX.IntrinsicElements['input'];
 interface Props extends Omit<InputAttributes, 'type'> {
-  containerRef?: RefObject<HTMLDivElement>;
+  containerRef?: RefObject<HTMLDivElement | null>;
   search: string;
 }
 

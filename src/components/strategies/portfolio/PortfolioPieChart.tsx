@@ -1,6 +1,11 @@
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { Highcharts, HighchartsReact, Options } from 'libs/charts';
-import { ReactNode } from 'react';
+import {
+  Highcharts,
+  HighchartsReact,
+  Options,
+  loadHighchart,
+} from 'libs/charts';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { cn } from 'utils/helpers';
 
 interface Props {
@@ -61,9 +66,23 @@ export const PortfolioPieChart = ({
         </div>
       )}
 
-      {!isPending && !hideChart && (
-        <HighchartsReact highcharts={Highcharts} options={options} />
-      )}
+      {!isPending && !hideChart && <Chart options={options} />}
     </div>
   );
+};
+
+interface ChartProps {
+  options?: Options;
+}
+const Chart: FC<ChartProps> = ({ options }) => {
+  const [loading, setLoading] = useState(true);
+  const highchart = useRef<typeof Highcharts>(null);
+  useEffect(() => {
+    loadHighchart().then((chart) => {
+      highchart.current = chart;
+      setLoading(false);
+    });
+  }, []);
+  if (loading) return;
+  return <HighchartsReact highcharts={highchart.current} options={options} />;
 };

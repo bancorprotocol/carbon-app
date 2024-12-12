@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { capitalize } from 'lodash';
+import capitalize from 'lodash/capitalize';
 import { mockApi } from '../utils/mock-api';
 import {
   DebugDriver,
