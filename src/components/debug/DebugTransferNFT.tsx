@@ -3,7 +3,7 @@ import { Button } from 'components/common/button';
 import { Input, InputUserAccount, Label } from 'components/common/inputField';
 import { useWagmi } from 'libs/wagmi';
 import { QueryKey, useQueryClient } from 'libs/queries';
-import { useContract, useVoucher } from 'hooks/useContract';
+import { useVoucher } from 'hooks/useContract';
 
 export const DebugTransferNFT = () => {
   const { user } = useWagmi();

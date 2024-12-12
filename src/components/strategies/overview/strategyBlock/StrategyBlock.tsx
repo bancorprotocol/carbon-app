@@ -32,7 +32,7 @@ export const StrategyBlock: FC<Props> = ({
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [id, setVisible]);
+  }, [id]);
 
   return (
     <li

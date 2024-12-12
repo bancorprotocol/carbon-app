@@ -26,8 +26,8 @@ export type StrategyFilter = keyof typeof strategyFilter;
 export const strategySort = {
   recent: 'Recently Created',
   old: 'Oldest Created',
-  pairAsc: 'Pair (A->Z)',
-  pairDesc: 'Pair (Z->A)',
+  pairAsc: 'Pair / Token (A->Z)',
+  pairDesc: 'Pair / Token (Z->A)',
   totalBudgetDesc: 'Total Budget',
   trades: 'Trade Count',
 };

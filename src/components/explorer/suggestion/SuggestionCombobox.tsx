@@ -108,6 +108,14 @@ export const SuggestionCombobox = () => {
   };
 
   useEffect(() => {
+    if (open) return;
+    const selector = '[role="option"][aria-selected="true"]';
+    const listbox = document.getElementById(listboxId)!;
+    const selected = listbox.querySelector<HTMLElement>(selector);
+    selected?.setAttribute('aria-selected', 'false');
+  }, [open, listboxId]);
+
+  useEffect(() => {
     if (!open) return;
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
@@ -156,7 +164,7 @@ export const SuggestionCombobox = () => {
       document.removeEventListener('mousedown', handleSoftExit);
       document.removeEventListener('keydown', keydownHandler);
     };
-  });
+  }, [open, listboxId]);
 
   return (
     <div ref={root} className={cn('flex flex-grow', style.rootSearch)}>

@@ -223,7 +223,7 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
         Token,
       });
     },
-    enabled: tokens.length > 0,
+    enabled: !token0 || !token1 || tokens.length > 0,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });

@@ -15,9 +15,10 @@ interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const animateLeaving = () => {
+const animateLeaving = async () => {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const cards = document.querySelectorAll(`.${strategyStyle.strategyItem}`);
+  const selector = `.${strategyStyle.strategyItem}`;
+  const cards = document.querySelectorAll<HTMLElement>(selector);
   const animations: Animation[] = [];
   const keyframes = [{ opacity: 0, transform: 'scale(0.95)' }];
   for (let i = 0; i < cards.length; i++) {
@@ -27,7 +28,16 @@ const animateLeaving = () => {
     const anim = cards[i].animate(keyframes, options);
     animations.push(anim);
   }
-  return Promise.all(animations.map((anim) => anim.finished));
+  await Promise.all(animations.map((anim) => anim.finished));
+  // Manually display cards that were not removed from the DOM is any
+  setTimeout(() => {
+    const keyframes = [{ opacity: 1, transform: 'scale(1)' }];
+    for (const card of cards) {
+      if (card.isConnected) {
+        card.animate(keyframes, { duration: 200, fill: 'forwards' });
+      }
+    }
+  }, 2000);
 };
 
 export const SuggestionList: FC<Props> = (props) => {

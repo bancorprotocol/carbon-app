@@ -11,7 +11,7 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .animate-item {
-    animation: open 200ms var(--delay) both;
+    animation: open 200ms var(--delay, 0ms) backwards;
   }
 }
 @keyframes open {
