@@ -24,7 +24,7 @@
 @font-face {
     font-family: 'Carbon-Title';
     font-weight: 500;
-    font-display: swap;
+    font-display: block; /* Prevent layout shifting for 100ms. This font is the first to be seen (header) */
     src: url('assets/font/title/medium.woff2') format('woff');
 }
 
@@ -74,7 +74,7 @@
 @font-face {
     font-family: 'Carbon-Text';
     font-weight: 400, normal;
-    font-display: swap;
+    font-display: block;
     src: url('assets/font/text/regular.ttf')
     format('truetype');
 }

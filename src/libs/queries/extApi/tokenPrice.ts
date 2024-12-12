@@ -42,6 +42,7 @@ export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
         refetchInterval: FIVE_MIN_IN_MS,
         staleTime: FIVE_MIN_IN_MS,
         refetchOnWindowFocus: false,
+        retry: 0, // Critical for initial load
       };
     }),
   });

@@ -3,7 +3,7 @@ import { Button } from 'components/common/button';
 import { Input, InputUserAccount, Label } from 'components/common/inputField';
 import { useWagmi } from 'libs/wagmi';
 import { QueryKey, useQueryClient } from 'libs/queries';
-import { useContract } from 'hooks/useContract';
+import { useVoucher } from 'hooks/useContract';
 
 export const DebugTransferNFT = () => {
   const { user } = useWagmi();
@@ -13,7 +13,7 @@ export const DebugTransferNFT = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { Voucher } = useContract();
+  const { data: Voucher } = useVoucher();
 
   const handleOnClick = async () => {
     setIsSuccess(false);
@@ -25,12 +25,12 @@ export const DebugTransferNFT = () => {
     setIsLoading(true);
 
     try {
-      const tx = await Voucher.write.transferFrom(
+      const tx = await Voucher?.write.transferFrom(
         user,
         inputRecipient,
         inputId
       );
-      await tx.wait();
+      await tx?.wait();
       await cache.invalidateQueries({ queryKey: QueryKey.strategies(user) });
       setIsSuccess(true);
     } catch (e) {

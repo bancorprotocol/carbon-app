@@ -4,6 +4,8 @@ import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
 import { ModalProps } from 'libs/modals/modals.types';
+import { cn } from 'utils/helpers';
+import styles from './modal.module.css';
 
 const getSize = (size: 'sm' | 'md' | 'lg') => {
   switch (size) {
@@ -27,7 +29,10 @@ export const ModalSlideOver: FC<ModalProps> = ({
   const sizeClass = getSize(size);
 
   return (
-    <Overlay onClick={() => closeModal(id)} className="justify-end">
+    <Overlay
+      close={() => closeModal(id)}
+      className={cn('justify-end', styles.modalSlider)}
+    >
       <m.div
         onClick={(e) => e.stopPropagation()}
         className={`relative w-full ${sizeClass}`}

@@ -20,8 +20,7 @@ export const ExplorerPage = () => {
     if (slug && type === 'token-pair') {
       // Set last visited pair
       const [base, quote] = slug.split('_');
-      lsService.setItem('tradePair', [base, quote]);
-      return;
+      if (base && quote) lsService.setItem('tradePair', [base, quote]);
     }
   }, [slug, navigate, type]);
 
@@ -34,7 +33,7 @@ export const ExplorerPage = () => {
     <Page hideTitle>
       <StrategyProvider query={query}>
         <ExplorerEvents />
-        <div className="space-y-30 flex flex-grow flex-col">
+        <div className="gap-30 flex flex-grow flex-col">
           <ExplorerSearch />
           {slug && <ExplorerTabs />}
           <Outlet />

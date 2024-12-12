@@ -43,7 +43,8 @@ export const StrategyPage = () => {
   });
   const params = { strategyIds: id };
   const query = useGetStrategy(id);
-  const [strategy] = useStrategiesWithFiat(query);
+  const { strategies, isPending } = useStrategiesWithFiat(query);
+  const [strategy] = strategies;
 
   const setSearch = (search: Partial<StrategyPageSearch>) => {
     navigate({
@@ -64,7 +65,7 @@ export const StrategyPage = () => {
     end: priceEnd?.toString() ?? toUnixUTC(defaultEndDate()),
   });
 
-  if (query.isPending) {
+  if (isPending) {
     return (
       <Page>
         <CarbonLogoLoading className="m-80 h-[100px] self-center justify-self-center" />

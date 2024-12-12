@@ -116,7 +116,7 @@ export const useStrategiesWithFiat = (
   for (const item of tradeCountQuery.data ?? []) {
     tradeCount[item.strategyId] = item.tradeCount;
   }
-  return strategies.map((strategy) => {
+  const result = strategies.map((strategy) => {
     const basePrice = new SafeDecimal(prices[strategy.base.address] ?? 0);
     const quotePrice = new SafeDecimal(prices[strategy.quote.address] ?? 0);
     const base = basePrice.times(strategy.order1.balance);
@@ -128,6 +128,13 @@ export const useStrategiesWithFiat = (
       tradeCount: tradeCount[strategy.id] ?? 0,
     };
   });
+  return {
+    strategies: result,
+    isPending:
+      query.isPending ||
+      priceQueries.some((q) => q.isPending) ||
+      tradeCountQuery.isPending,
+  };
 };
 
 type StrategyCtx = ReturnType<typeof useStrategyFilter>;
@@ -148,8 +155,8 @@ interface StrategyProviderProps {
   children: ReactNode;
 }
 export const StrategyProvider: FC<StrategyProviderProps> = (props) => {
-  const strategies = useStrategiesWithFiat(props.query);
-  const ctx = useStrategyFilter(strategies, props.query.isPending);
+  const { strategies, isPending } = useStrategiesWithFiat(props.query);
+  const ctx = useStrategyFilter(strategies, isPending);
   return (
     <StrategyContext.Provider value={ctx}>
       {props.children}

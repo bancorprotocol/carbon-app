@@ -1,8 +1,5 @@
-export const suggestionClasses =
-  'absolute left-0 top-[100%] z-30 mt-10 max-h-[300px] w-full overflow-hidden overflow-y-auto rounded-10 bg-background-800 py-10 md:mt-20';
-
-const isOption = (el?: Element | null): el is HTMLElement => {
-  return el instanceof HTMLElement && el.getAttribute('role') === 'option';
+const getOptions = (root: HTMLElement | null) => {
+  return root?.querySelectorAll<HTMLElement>('button') ?? [];
 };
 
 export const selectCurrentOption = (root: HTMLElement | null) => {
@@ -11,13 +8,13 @@ export const selectCurrentOption = (root: HTMLElement | null) => {
 };
 
 export const getSelectedOption = (root: HTMLElement | null) => {
-  const selector = '[role="option"][aria-selected="true"]';
+  const selector = 'button[aria-selected="true"]';
   return root?.querySelector<HTMLElement>(selector);
 };
 
 export const getFirstOption = (root: HTMLElement | null) => {
   getSelectedOption(root)?.setAttribute('aria-selected', 'false');
-  const selector = '[role="option"]:first-of-type';
+  const selector = 'button:first-of-type';
   return root?.querySelector<HTMLElement>(selector);
 };
 
@@ -34,25 +31,30 @@ export const selectFirstOption = (root: HTMLElement | null) => {
 
 export const selectLastOption = (root: HTMLElement | null) => {
   getSelectedOption(root)?.setAttribute('aria-selected', 'false');
-  const selector = '[role="option"]:last-of-type';
-  const lastOption = root?.querySelector<HTMLElement>(selector);
-  selectOption(lastOption);
+  const options = getOptions(root);
+  selectOption(options[options.length - 1]);
 };
 
 export const selectNextSibling = (root: HTMLElement | null) => {
+  const options = getOptions(root);
   const selected = getSelectedOption(root);
-  if (!selected) return selectFirstOption(root);
-  const next = selected.nextElementSibling;
-  if (!isOption(next)) return selectFirstOption(root);
+  if (!selected) return selectOption(options[0]);
   selected.setAttribute('aria-selected', 'false');
-  selectOption(next);
+  for (let i = 0; i < options.length; i++) {
+    if (options[i] === selected) {
+      return selectOption(options[i + 1] || options[0]);
+    }
+  }
 };
 
 export const selectPreviousSibling = (root: HTMLElement | null) => {
+  const options = getOptions(root);
   const selected = getSelectedOption(root);
-  if (!selected) return selectLastOption(root);
-  const previous = selected.previousElementSibling;
-  if (!isOption(previous)) return selectLastOption(root);
+  if (!selected) return selectOption(options[options.length - 1]);
   selected.setAttribute('aria-selected', 'false');
-  selectOption(previous);
+  for (let i = 0; i < options.length; i++) {
+    if (options[i] === selected) {
+      return selectOption(options[i - 1] || options[options.length - 1]);
+    }
+  }
 };

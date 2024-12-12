@@ -10,7 +10,6 @@ import { useContract } from 'hooks/useContract';
 import config from 'config';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
-import { useCarbonInit } from 'hooks/useCarbonInit';
 import {
   EncodedStrategyBNStr,
   StrategyUpdate,
@@ -20,6 +19,8 @@ import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
+import { getAddress } from 'ethers/lib/utils';
+import { usePairs } from 'hooks/usePairs';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
@@ -53,27 +54,42 @@ export interface StrategyWithFiat extends Strategy {
 interface StrategiesHelperProps {
   strategies: SDKStrategy[];
   getTokenById: (id: string) => Token | undefined;
-  importToken: (token: Token) => void;
+  importTokens: (tokens: Token[]) => void;
   Token: (address: string) => { read: TokenContract };
 }
 
 const buildStrategiesHelper = async ({
   strategies,
   getTokenById,
-  importToken,
+  importTokens,
   Token,
 }: StrategiesHelperProps) => {
-  const _getTknData = async (address: string) => {
-    const data = await fetchTokenData(Token, address);
-    importToken(data);
-    return data;
+  const tokens = new Map<string, Token>();
+  const missing = new Set<string>();
+
+  const markForMissing = (address: string) => {
+    if (tokens.has(address)) return;
+    const existing = getTokenById(address);
+    if (existing) tokens.set(address, existing);
+    else missing.add(address);
   };
 
-  const promises = strategies.map(async (s) => {
-    const base = getTokenById(s.baseToken) || (await _getTknData(s.baseToken));
-    const quote =
-      getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
+  for (const strategy of strategies) {
+    markForMissing(strategy.baseToken);
+    markForMissing(strategy.quoteToken);
+  }
 
+  const getMissing = Array.from(missing).map(async (address) => {
+    const token = await fetchTokenData(Token, address);
+    tokens.set(address, token);
+    return token;
+  });
+  const missingTokens = await Promise.all(getMissing);
+  importTokens(missingTokens);
+
+  return strategies.map((s) => {
+    const base = tokens.get(s.baseToken)!;
+    const quote = tokens.get(s.quoteToken)!;
     const sellLow = new SafeDecimal(s.sellPriceLow);
     const sellHigh = new SafeDecimal(s.sellPriceHigh);
     const sellBudget = new SafeDecimal(s.sellBudget);
@@ -119,7 +135,7 @@ const buildStrategiesHelper = async ({
       marginalRate: s.sellPriceMarginal,
     };
 
-    const strategy: Strategy = {
+    return {
       id: s.id,
       idDisplay: getLowestBits(s.id),
       base,
@@ -128,12 +144,8 @@ const buildStrategiesHelper = async ({
       order1,
       status,
       encoded: s.encoded,
-    };
-
-    return strategy;
+    } as Strategy;
   });
-
-  return await Promise.all(promises);
 };
 
 interface Props {
@@ -141,8 +153,7 @@ interface Props {
 }
 
 export const useGetUserStrategies = ({ user }: Props) => {
-  const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importToken } = useTokens();
+  const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
   const ensAddress = useGetAddressFromEns(user || '');
@@ -155,24 +166,22 @@ export const useGetUserStrategies = ({ user }: Props) => {
     queryKey: QueryKey.strategies(address),
     queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
-
       const strategies = await carbonSDK.getUserStrategies(address);
       return buildStrategiesHelper({
         strategies,
         getTokenById,
-        importToken,
+        importTokens,
         Token,
       });
     },
-    enabled: tokens.length > 0 && isInitialized && ensAddress.isFetched,
+    enabled: tokens.length > 0 && ensAddress.isFetched,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
 };
 
 export const useGetStrategy = (id: string) => {
-  const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importToken } = useTokens();
+  const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
   return useQuery<Strategy>({
@@ -182,12 +191,12 @@ export const useGetStrategy = (id: string) => {
       const strategies = await buildStrategiesHelper({
         strategies: [strategy],
         getTokenById,
-        importToken,
+        importTokens,
         Token,
       });
       return strategies[0];
     },
-    enabled: tokens.length > 0 && isInitialized,
+    enabled: tokens.length > 0,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
@@ -199,8 +208,7 @@ interface PropsPair {
 }
 
 export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
-  const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importToken } = useTokens();
+  const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
   return useQuery<Strategy[]>({
@@ -211,11 +219,55 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
       return buildStrategiesHelper({
         strategies,
         getTokenById,
-        importToken,
+        importTokens,
         Token,
       });
     },
-    enabled: tokens.length > 0 && isInitialized,
+    enabled: !token0 || !token1 || tokens.length > 0,
+    staleTime: ONE_DAY_IN_MS,
+    retry: false,
+  });
+};
+
+interface PropsPair {
+  token0?: string;
+  token1?: string;
+}
+
+export const useTokenStrategies = (token?: string) => {
+  const { getTokenById, importTokens } = useTokens();
+  const { Token } = useContract();
+  const { map: pairMap } = usePairs();
+  return useQuery<Strategy[]>({
+    queryKey: QueryKey.strategiesByToken(token),
+    queryFn: async () => {
+      const allQuotes = new Set<string>();
+      const base = getAddress(token!);
+      for (const { baseToken, quoteToken } of pairMap.values()) {
+        if (baseToken.address === base) allQuotes.add(quoteToken.address);
+        if (quoteToken.address === base) allQuotes.add(baseToken.address);
+      }
+      const getStrategies: Promise<SDKStrategy[]>[] = [];
+      for (const quote of allQuotes) {
+        getStrategies.push(carbonSDK.getStrategiesByPair(base, quote));
+      }
+
+      const allResponses = await Promise.allSettled(getStrategies);
+      for (const res of allResponses) {
+        if (res.status === 'rejected') console.error(res.reason);
+      }
+      const allStrategies = allResponses
+        .filter((v) => v.status === 'fulfilled')
+        .map((v) => (v as PromiseFulfilledResult<SDKStrategy[]>).value);
+      const result = await buildStrategiesHelper({
+        strategies: allStrategies.flat(),
+        getTokenById,
+        importTokens,
+        Token,
+      });
+      return result;
+    },
+    enabled: !!token && !!pairMap.size,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });

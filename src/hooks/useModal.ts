@@ -1,9 +1,8 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { ModalKey } from 'libs/modals/modals.types';
 import { uuid } from 'utils/helpers';
 import { useStore } from 'store';
 import { ModalSchema } from 'libs/modals/modals';
-import { useKeyPress } from './useKeyPress';
 
 export const useModal = () => {
   const {
@@ -11,8 +10,6 @@ export const useModal = () => {
     modals: { setModalsOpen, modals, setModalsMinimized, activeModalId },
   } = useStore();
   const { open: modalsOpen, minimized: modalsMinimized } = modals;
-
-  const { keyPressed } = useKeyPress();
 
   const openModal = useCallback(
     <T extends ModalKey>(key: T, data: ModalSchema[T]) => {
@@ -41,11 +38,6 @@ export const useModal = () => {
     },
     [modalsOpen, setModalsOpen]
   );
-
-  useEffect(() => {
-    keyPressed === 'Escape' && closeModal(activeModalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keyPressed]);
 
   const minimizeModal = (id: string) => {
     const index = modalsOpen.findIndex((modal) => modal.id === id);

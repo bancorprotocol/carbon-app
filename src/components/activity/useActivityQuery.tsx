@@ -82,7 +82,7 @@ export const useActivityQuery = (
   params: QueryActivityParams = {},
   config: ActivityQueryConfig = {}
 ) => {
-  const { tokensMap, isPending, importToken } = useTokens();
+  const { tokensMap, isPending, importTokens } = useTokens();
   const { Token } = useContract();
   const validParams = isValidParams(params);
 
@@ -100,7 +100,7 @@ export const useActivityQuery = (
       return fetchTokenData(Token, address);
     });
     const tokens = await Promise.all(getTokens);
-    tokens.forEach((data) => importToken(data));
+    importTokens(tokens);
   };
 
   return useQuery({

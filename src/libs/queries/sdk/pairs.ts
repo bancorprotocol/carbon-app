@@ -3,39 +3,48 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
-import { ONE_DAY_IN_MS } from 'utils/time';
-import { useCarbonInit } from 'hooks/useCarbonInit';
+import { ONE_HOUR_IN_MS } from 'utils/time';
 import { carbonSDK } from 'libs/sdk';
 import { lsService } from 'services/localeStorage';
-
-const getCachedData = () => {
-  const cachedPairs = lsService.getItem('tokenPairsCache');
-  if (cachedPairs && cachedPairs.timestamp > Date.now() - 1000 * 60 * 60) {
-    return cachedPairs.pairs;
-  }
-  return undefined;
-};
+import { useState } from 'react';
+import { Token } from 'libs/tokens';
 
 export const useGetTradePairsData = () => {
-  const { isInitialized } = useCarbonInit();
   const { Token } = useContract();
-  const { tokens, getTokenById, importToken } = useTokens();
-
-  const _getTknData = async (address: string) => {
-    const data = await fetchTokenData(Token, address);
-    importToken(data);
-    return data;
-  };
+  const { tokens, getTokenById, importTokens } = useTokens();
+  const [cache] = useState(lsService.getItem('tokenPairsCache'));
 
   return useQuery({
     queryKey: QueryKey.pairs(),
     queryFn: async () => {
       const pairs = await carbonSDK.getAllPairs();
-      const promises = pairs.map(async (pair) => ({
-        baseToken: getTokenById(pair[0]) ?? (await _getTknData(pair[0])),
-        quoteToken: getTokenById(pair[1]) ?? (await _getTknData(pair[1])),
+      const tokens = new Map<string, Token>();
+      const missing = new Set<string>();
+
+      const markForMissing = (address: string) => {
+        if (tokens.has(address)) return;
+        const existing = getTokenById(address);
+        if (existing) tokens.set(address, existing);
+        else missing.add(address);
+      };
+
+      for (const pair of pairs) {
+        markForMissing(pair[0]);
+        markForMissing(pair[1]);
+      }
+
+      const getMissing = Array.from(missing).map(async (address) => {
+        const token = await fetchTokenData(Token, address);
+        tokens.set(address, token);
+        return token;
+      });
+      const missingTokens = await Promise.all(getMissing);
+      importTokens(missingTokens);
+
+      const result = pairs.map((pair) => ({
+        baseToken: tokens.get(pair[0])!,
+        quoteToken: tokens.get(pair[1])!,
       }));
-      const result = await Promise.all(promises);
 
       const pairsWithInverse = [
         ...result,
@@ -52,9 +61,10 @@ export const useGetTradePairsData = () => {
 
       return pairsWithInverse;
     },
-    placeholderData: getCachedData(),
-    enabled: !!tokens.length && isInitialized,
+    initialData: cache?.pairs,
+    initialDataUpdatedAt: cache?.timestamp,
+    enabled: !!tokens.length,
     retry: 1,
-    staleTime: ONE_DAY_IN_MS,
+    staleTime: ONE_HOUR_IN_MS,
   });
 };

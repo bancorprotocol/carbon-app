@@ -18,7 +18,7 @@ export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
     },
     {
       type: 'token-pair' as const,
-      label: 'Token Pair',
+      label: 'Token / Pair',
       active: currentType === 'token-pair',
     },
   ];
@@ -36,7 +36,7 @@ export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
             active && 'flex items-center justify-between'
           )}
         >
-          <span> {label}</span>
+          <span>{label}</span>
           <IconCheck className={cn('w-14', !active && 'hidden')} />
         </Link>
       ))}

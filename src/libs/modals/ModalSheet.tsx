@@ -21,7 +21,7 @@ export const ModalSheet: FC<ModalProps> = ({
   };
 
   return (
-    <Overlay onClick={() => onCloseHandler(id)} className="items-end">
+    <Overlay close={() => onCloseHandler(id)} className="items-end">
       <m.div
         data-testid="modal-container"
         onClick={(e) => e.stopPropagation()}
