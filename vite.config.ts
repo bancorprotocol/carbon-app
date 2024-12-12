@@ -13,7 +13,8 @@ export default defineConfig(({ mode }) => {
   const plugins: PluginOption[] = [
     react({
       babel: {
-        plugins: [['babel-plugin-react-compiler', {}]],
+        // Uncomment to enable compiler
+        // plugins: [['babel-plugin-react-compiler', {}]],
       },
     }),
     viteTsconfigPaths(),
