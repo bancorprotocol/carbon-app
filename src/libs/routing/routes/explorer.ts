@@ -84,7 +84,7 @@ export const explorerOverviewPage = createRoute({
   path: '/',
   component: ExplorerTypeOverviewPage,
   validateSearch: searchValidator({
-    layout: v.optional(v.picklist(['list', 'table'])),
+    layout: v.optional(v.picklist(['grid', 'table'])),
   }),
 });
 

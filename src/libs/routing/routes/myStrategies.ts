@@ -22,7 +22,7 @@ export const strategyOverviewPage = createRoute({
   component: StrategiesOverviewPage,
   validateSearch: searchValidator({
     search: v.optional(validString),
-    layout: v.optional(v.picklist(['list', 'table'])),
+    layout: v.optional(v.picklist(['grid', 'table'])),
   }),
   postSearchFilters: [
     (search: MyStrategiesSearch) => {
