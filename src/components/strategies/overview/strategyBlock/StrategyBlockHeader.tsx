@@ -15,10 +15,9 @@ import { getLowestBits } from 'utils/helpers';
 
 interface Props {
   strategy: Strategy;
-  isExplorer?: boolean;
 }
 
-export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
+export const StrategyBlockHeader: FC<Props> = ({ strategy }) => {
   const { base, quote } = strategy;
   return (
     <header className="flex gap-16">
@@ -81,22 +80,33 @@ export const StrategySubtitle: FC<StrategySubtitleProps> = (props) => {
       <svg width="4" height="4" role="separator">
         <circle cx="2" cy="2" r="2" fill="currentcolor" />
       </svg>
-      {status === 'active' && (
-        <span data-testid="status" className="text-success">
-          {statusText.active}
-        </span>
-      )}
-      {status !== 'active' && (
-        <Tooltip element={getTooltipTextByStatus(isExplorer, status)}>
-          <span
-            className="text-error inline-flex items-center gap-4"
-            data-testid="status"
-          >
-            {statusText.inactive}
-            <TooltipIcon className="text-error size-10" />
-          </span>
-        </Tooltip>
-      )}
+      <StrategyStatusTag status={status} isExplorer={isExplorer} />
     </p>
   );
+};
+
+export const StrategyStatusTag: FC<{
+  status: StrategyStatus;
+  isExplorer?: boolean;
+}> = (props) => {
+  const { status, isExplorer } = props;
+  if (status === 'active') {
+    return (
+      <span data-testid="status" className="text-success">
+        {statusText.active}
+      </span>
+    );
+  } else {
+    return (
+      <Tooltip element={getTooltipTextByStatus(isExplorer, status)}>
+        <span
+          className="text-error inline-flex items-center gap-4"
+          data-testid="status"
+        >
+          {statusText.inactive}
+          <TooltipIcon className="text-error size-10" />
+        </span>
+      </Tooltip>
+    );
+  }
 };

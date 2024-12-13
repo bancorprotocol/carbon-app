@@ -11,14 +11,9 @@ import { StrategyBlockInfo } from './StrategyBlockInfo';
 interface Props {
   strategy: StrategyWithFiat;
   className?: string;
-  isExplorer?: boolean;
 }
 
-export const StrategyBlock: FC<Props> = ({
-  strategy,
-  className,
-  isExplorer,
-}) => {
+export const StrategyBlock: FC<Props> = ({ strategy, className }) => {
   return (
     <m.li
       variants={mItemVariant}
@@ -28,7 +23,7 @@ export const StrategyBlock: FC<Props> = ({
       )}
       data-testid={`${strategy.base.symbol}/${strategy.quote.symbol}`}
     >
-      <StrategyBlockHeader strategy={strategy} isExplorer={isExplorer} />
+      <StrategyBlockHeader strategy={strategy} />
       <StrategyBlockInfo strategy={strategy} />
       <div
         className={cn(

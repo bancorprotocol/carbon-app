@@ -6,12 +6,14 @@ import { StrategyBlockCreate } from 'components/strategies/overview/strategyBloc
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { cn } from 'utils/helpers';
 import styles from './StrategyContent.module.css';
+import { StrategyTable } from './StrategyTable';
 
 type Props = {
   strategies: StrategyWithFiat[];
   isPending: boolean;
   emptyElement: ReactElement;
   isExplorer?: boolean;
+  layout?: 'list' | 'table';
 };
 
 export const _StrategyContent: FC<Props> = ({
@@ -19,6 +21,7 @@ export const _StrategyContent: FC<Props> = ({
   isExplorer,
   isPending,
   emptyElement,
+  layout = 'list',
 }) => {
   if (isPending) {
     return (
@@ -38,22 +41,23 @@ export const _StrategyContent: FC<Props> = ({
 
   if (!strategies?.length) return emptyElement;
 
+  if (layout === 'table') return <StrategyTable strategies={strategies} />;
+
   return (
     <ul
       data-testid="strategy-list"
       className={cn('xl:gap-25 grid gap-20 lg:gap-10', styles.strategyList)}
     >
       {strategies.map((s) => (
-        <StrategyBlock key={s.id} strategy={s} isExplorer={isExplorer} />
+        <StrategyBlock key={s.id} strategy={s} />
       ))}
       {!isExplorer && <StrategyBlockCreate />}
     </ul>
   );
 };
 
-export const StrategyContent = memo(
-  _StrategyContent,
-  (prev, next) =>
-    prev.isPending === next.isPending &&
-    JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
-);
+export const StrategyContent = memo(_StrategyContent, (prev, next) => {
+  if (prev.isPending && next.isPending) return true;
+  if (prev.layout !== next.layout) return false;
+  return JSON.stringify(prev.strategies) === JSON.stringify(next.strategies);
+});

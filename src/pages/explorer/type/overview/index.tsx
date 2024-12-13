@@ -1,9 +1,11 @@
 import { StrategyContent } from 'components/strategies/overview';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { NotFound } from 'components/common/NotFound';
+import { useSearch } from '@tanstack/react-router';
 
 export const ExplorerTypeOverviewPage = () => {
   const { strategies, filteredStrategies, isPending } = useStrategyCtx();
+  const search = useSearch({ from: '/explore/$type/$slug/' });
   const isFilterTooNarrow =
     strategies.length > 0 && filteredStrategies.length === 0;
 
@@ -26,6 +28,7 @@ export const ExplorerTypeOverviewPage = () => {
         isExplorer
         isPending={isPending}
         emptyElement={empty}
+        layout={search.layout}
       />
     </>
   );

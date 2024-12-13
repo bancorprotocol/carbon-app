@@ -6,3 +6,50 @@
   /* content-visibility: auto; */ /* to prevent no tooltips when scrolling down */
   contain-intrinsic-size: auto 410px;
 }
+.strategy-table {
+  @apply bg-background-900 text-14;
+  border-radius: 8px;
+  animation: open 300ms ease-out;
+}
+.strategy-table th {
+  font-weight: 400;
+  color: rgba(255 255 255 / .6);
+  padding: 16px;
+  border-bottom: solid 1px rgba(255 255 255 / .4);
+  text-align: start;
+  text-wrap: nowrap;
+}
+.strategy-table tbody td {
+  animation: open 100ms ease-out;
+}
+.strategy-table td {
+  padding: 8px 16px;
+}
+.strategy-table td:first-child {
+  padding-left: 24px;
+}
+.strategy-table td:last-child {
+  padding-right: 24px;
+}
+.strategy-table th:first-child {
+  border-top-left-radius: 8px;
+}
+.strategy-table th:last-child {
+  border-top-right-radius: 8px;
+}
+.strategy-table tr:not(:last-child) td {
+  border-bottom: solid 1px rgba(255 255 255 / .4);
+}
+.strategy-table tr:last-child td:first-child {
+  border-bottom-left-radius: 8px;
+}
+.strategy-table tr:last-child td:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}

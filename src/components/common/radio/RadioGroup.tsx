@@ -13,7 +13,7 @@ export const RadioGroup: FC<RadioGroupProps> = ({ children, ...props }) => {
       role="group"
       {...props}
       className={cn(
-        'text-14 relative flex items-center rounded-full bg-black p-2',
+        'text-14 relative flex items-center rounded-full bg-black px-6 py-4',
         props.className
       )}
     >
@@ -30,6 +30,7 @@ interface RadioProps {
   onChange?: (value?: string) => any;
   className?: string;
   'data-testid'?: string;
+  'aria-label'?: string;
 }
 
 export const Radio: FC<RadioProps> = (props) => {
@@ -45,6 +46,7 @@ export const Radio: FC<RadioProps> = (props) => {
         onChange={() => props.onChange?.(props.value)}
         className={style.radio}
         data-testid={props['data-testid']}
+        aria-label={props['aria-label']}
       />
       <label
         htmlFor={id}

@@ -17,6 +17,7 @@ import style from './StrategyGraph.module.css';
 
 interface Props {
   strategy: Strategy;
+  className?: string;
 }
 
 const isSmallRange = ({ order0, order1 }: Strategy) => {
@@ -49,7 +50,7 @@ const highest = width - 10;
 const fontSize = 16;
 const fontWidth = fontSize / 2;
 
-export const StrategyGraph: FC<Props> = ({ strategy }) => {
+export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
   const { base, quote, order0: buyOrder, order1: sellOrder } = strategy;
   const { marketPrice: currentPrice } = useMarketPrice({ base, quote });
   const buy = {
@@ -161,7 +162,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
 
   return (
     <svg
-      className={style.strategyGraph}
+      className={cn(style.strategyGraph, className)}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}

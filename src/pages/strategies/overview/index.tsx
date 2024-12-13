@@ -1,3 +1,4 @@
+import { useSearch } from '@tanstack/react-router';
 import { NotFound } from 'components/common/NotFound';
 import { StrategyContent } from 'components/strategies/overview';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
@@ -5,6 +6,7 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const StrategiesOverviewPage = () => {
   const { strategies, filteredStrategies, isPending } = useStrategyCtx();
+  const search = useSearch({ from: '/my-strategy-layout/' });
   const isFilterTooNarrow =
     strategies.length > 0 && filteredStrategies.length === 0;
 
@@ -24,6 +26,7 @@ export const StrategiesOverviewPage = () => {
       strategies={filteredStrategies}
       isPending={isPending}
       emptyElement={emptyElement}
+      layout={search.layout}
     />
   );
 };

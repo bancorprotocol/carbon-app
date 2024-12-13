@@ -8,8 +8,9 @@ import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
 import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
 import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
 import { validateActivityParams } from 'components/activity/utils';
-import { getLastVisitedPair } from '../utils';
+import { getLastVisitedPair, searchValidator } from '../utils';
 import { toPairSlug } from 'utils/pairSearch';
+import * as v from 'valibot';
 
 // Used for redirecting old explorer route to new explorer route
 // TODO: remove this on May 2024
@@ -82,6 +83,9 @@ export const explorerOverviewPage = createRoute({
   getParentRoute: () => explorerResultLayout,
   path: '/',
   component: ExplorerTypeOverviewPage,
+  validateSearch: searchValidator({
+    layout: v.optional(v.picklist(['list', 'table'])),
+  }),
 });
 
 export const explorerPortfolioLayout = createRoute({

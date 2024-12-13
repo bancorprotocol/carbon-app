@@ -9,6 +9,7 @@ import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
 import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
 import { useStrategyCtx } from 'hooks/useStrategies';
+import { StrategySelectLayout } from 'components/strategies/StrategySelectLayout';
 
 export const ExplorerTabs = () => {
   const { filteredStrategies } = useStrategyCtx();
@@ -51,6 +52,7 @@ export const ExplorerTabs = () => {
     <div className="flex items-center justify-between gap-16">
       <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
       {isOverview && <StrategyFilterSort />}
+      {isOverview && <StrategySelectLayout from="explorer" />}
     </div>
   );
 };
