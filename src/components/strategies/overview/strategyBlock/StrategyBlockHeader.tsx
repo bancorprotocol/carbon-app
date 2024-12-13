@@ -27,11 +27,11 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
         size={40}
         tokens={[base, quote]}
       />
-      <div className="flex flex-1 flex-col">
-        <h3 className="text-18 flex gap-6" data-testid="token-pair">
-          <span>{base.symbol}</span>
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <h3 className="text-18 flex gap-6 truncate" data-testid="token-pair">
+          <span className="truncate">{base.symbol}</span>
           <span className="self-align-center text-16 text-white/60">/</span>
-          <span>{quote.symbol}</span>
+          <span className="truncate">{quote.symbol}</span>
         </h3>
         <StrategySubtitle {...strategy} />
       </div>
