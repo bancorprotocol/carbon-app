@@ -229,17 +229,6 @@ export const SuggestionCombobox = () => {
         </header>
         <SuggestionList {...suggestionListProps} />
         <SuggestionEmpty />
-        <footer className="text-14 hidden items-center justify-between border-t border-white/40 px-16 py-8 sm:flex">
-          <p className="flex items-center gap-8">
-            <kbd className="rounded-8 border-2 border-white/10 px-8">↑</kbd>
-            <kbd className="rounded-8 border-2 border-white/10 px-8">↓</kbd>
-            <span className="text-white/80">Navigate</span>
-          </p>
-          <p className="flex items-center gap-8">
-            <kbd className="rounded-8 border-2 border-white/10 px-8">ESC</kbd>
-            <span className="text-white/80">Exit</span>
-          </p>
-        </footer>
       </div>
     </div>
   );
