@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useId } from 'react';
 import { Strategy } from 'libs/queries';
 import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
 import {
@@ -51,6 +51,7 @@ const fontSize = 16;
 const fontWidth = fontSize / 2;
 
 export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
+  const clipPathId = useId();
   const { base, quote, order0: buyOrder, order1: sellOrder } = strategy;
   const { marketPrice: currentPrice } = useMarketPrice({ base, quote });
   const buy = {
@@ -213,7 +214,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
             fillOpacity="0.05"
           />
         </pattern>
-        <clipPath id="left-to-right">
+        <clipPath id={clipPathId}>
           <rect x="0" y="0" width={width} height={height}>
             <animate
               attributeName="width"
@@ -231,7 +232,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
 
       <CurrentPrice currentPrice={currentPrice} x={x} token={strategy.quote} />
 
-      <g className={style.buySellAreas} clipPath="url(#left-to-right)">
+      <g className={style.buySellAreas} clipPath={`url(#${clipPathId})`}>
         {buyOrderExists && (
           <FloatTooltip>
             <FloatTooltipTrigger>
