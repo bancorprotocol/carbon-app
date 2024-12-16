@@ -26,7 +26,7 @@ export const ExplorerSearchDropdownButton = forwardRef<
       {type === 'token-pair' && (
         <>
           <IconTokenPair className="size-18 text-primary" />
-          <span className="hidden md:inline">Token Pair</span>
+          <span className="hidden md:inline">Token / Pair</span>
         </>
       )}
       <IconChevron className="size-16 text-white/40" />

@@ -21,13 +21,13 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
 }) => {
   const { closeModal } = useModal();
   const { data, isPending, isError } = useGetTokenData(address);
-  const { importToken } = useTokens();
+  const { importTokens } = useTokens();
 
   const onClick = () => {
     if (!data) {
       return;
     }
-    importToken(data);
+    importTokens([data]);
     closeModal(id);
   };
 
