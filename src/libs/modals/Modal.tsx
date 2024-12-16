@@ -37,7 +37,7 @@ export const Modal: FC<ModalProps> = ({
 
   return (
     <Overlay
-      onClick={() => onCloseHandler(id)}
+      close={() => onCloseHandler(id)}
       className="px-content items-center justify-center"
     >
       <m.div

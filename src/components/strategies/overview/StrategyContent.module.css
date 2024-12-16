@@ -1,8 +1,26 @@
 .strategy-list {
   contain: content;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, 375px);
+  justify-content: center;
 }
-.strategy-list > li {
-  /* content-visibility: auto; */ /* to prevent no tooltips when scrolling down */
-  contain-intrinsic-size: auto 410px;
+.strategy-item {
+  height: 400px;
+  max-width: 375px;
+  content-visibility: auto; /* to prevent no tooltips when scrolling down */
+  contain-intrinsic-size: 375px 400px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .animate-item {
+    animation: open 200ms var(--delay, 0ms) backwards;
+  }
+}
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

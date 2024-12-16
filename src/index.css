@@ -23,7 +23,11 @@
   html,
   body,
   #root {
-    @apply text-white bg-black font-text w-full min-h-screen;
+    @apply text-white bg-black font-text min-h-screen;
+  }
+
+  html {
+    scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
   }
 
   h1, h2, th {
