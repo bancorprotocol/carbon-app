@@ -24,6 +24,11 @@ export const SimulatorInputOverlappingPage = () => {
     end: defaultEnd().toString(),
   });
 
+  const marketPrice = (() => {
+    if (!state.start) return data?.[0].open;
+    return data?.find((d) => d.date.toString() === state.start)?.open;
+  })();
+
   useEffect(() => {
     if (searchState.sellMax || searchState.buyMin) return;
     dispatch('baseToken', searchState.baseToken);
@@ -61,10 +66,6 @@ export const SimulatorInputOverlappingPage = () => {
     if (isPending || isError || noBudget) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
-    const marketPrice = (() => {
-      if (!state.start) return data[0].open;
-      return data.find((d) => d.date.toString() === state.start)?.open;
-    })();
 
     const { buyPriceMarginal, sellPriceMarginal } = calculateOverlappingPrices(
       formatNumber(state.buy.min),
@@ -106,7 +107,7 @@ export const SimulatorInputOverlappingPage = () => {
         <CreateOverlappingStrategy
           state={state}
           dispatch={dispatch}
-          marketPrice={data?.[0].open ?? 0}
+          marketPrice={marketPrice ?? 0}
           spread={state.spread}
           setSpread={(v) => dispatch('spread', v)}
         />
