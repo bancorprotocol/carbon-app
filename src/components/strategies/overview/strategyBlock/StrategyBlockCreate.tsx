@@ -13,7 +13,6 @@ export const StrategyBlockCreate: FC<Props> = ({
   title = 'Create Strategy',
   className = '',
 }) => {
-  console.log(`DEBUG: ${buttonStyles({ variant: 'success' })}`);
   return (
     <Link
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
