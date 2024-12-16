@@ -47,6 +47,13 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const [touched, setTouched] = useState(false);
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
 
+  useEffect(() => {
+    // Hack: on focus from input while scrolling as it prevents reactive state to behave correctly
+    if (document.activeElement instanceof HTMLInputElement) {
+      document.activeElement.blur();
+    }
+  }, [state.start]);
+
   const { buyMarginal, sellMarginal } = useMemo(() => {
     const min = state.buy.min;
     const max = state.sell.max;
