@@ -2,8 +2,8 @@ import { utils } from 'ethers';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
-import config from 'config';
 import { tokenParserMap } from 'config/utils';
+import config from 'config';
 
 const getLogoByURI = (uri: string | undefined) =>
   uri && uri.startsWith('ipfs') ? buildIpfsUri(uri.split('//')[1]) : uri;

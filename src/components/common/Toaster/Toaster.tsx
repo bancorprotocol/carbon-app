@@ -8,7 +8,7 @@ export const Toaster: FC = () => {
   return (
     <ul
       id="toaster"
-      className="fixed bottom-16 right-16 z-10 flex min-w-[250px] flex-col gap-8"
+      className="fixed bottom-16 right-24 z-10 flex min-w-[250px] flex-col gap-8"
     >
       {toaster.toasts.map((toast) => (
         <ToastItem key={toast.id} {...toast} />
