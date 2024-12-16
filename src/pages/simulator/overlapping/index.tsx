@@ -61,11 +61,15 @@ export const SimulatorInputOverlappingPage = () => {
     if (isPending || isError || noBudget) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
+    const marketPrice = (() => {
+      if (!state.start) return data[0].open;
+      return data.find((d) => d.date.toString() === state.start)?.open;
+    })();
 
     const { buyPriceMarginal, sellPriceMarginal } = calculateOverlappingPrices(
       formatNumber(state.buy.min),
       formatNumber(state.sell.max),
-      data[0].open.toString(),
+      marketPrice!.toString(),
       state.spread
     );
 
