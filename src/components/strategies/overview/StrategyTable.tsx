@@ -60,6 +60,7 @@ const StrategyRow: FC<RowProps> = ({ strategy, initVisible }) => {
   const [visible, setVisible] = useState(initVisible);
 
   useEffect(() => {
+    if (visible) return;
     const el = document.getElementById(id);
     if (!el) return;
     const observer = new IntersectionObserver((entries) => {
@@ -69,7 +70,7 @@ const StrategyRow: FC<RowProps> = ({ strategy, initVisible }) => {
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [id]);
+  }, [id, visible]);
 
   if (!visible) return <tr id={id} key={id} className="h-[85px]"></tr>;
 
@@ -89,7 +90,7 @@ const StrategyRow: FC<RowProps> = ({ strategy, initVisible }) => {
       <td>
         <div className="grid">
           <span className="text-nowrap">
-            {tokenAmount(order0.balance, quote)}
+            {tokenAmount(order0.balance, quote, { abbreviate: true })}
           </span>
           <FiatPrice
             token={quote}
@@ -101,7 +102,7 @@ const StrategyRow: FC<RowProps> = ({ strategy, initVisible }) => {
       <td>
         <div className="grid">
           <span className="text-nowrap">
-            {tokenAmount(order1.balance, base)}
+            {tokenAmount(order1.balance, base, { abbreviate: true })}
           </span>
           <FiatPrice
             token={base}
