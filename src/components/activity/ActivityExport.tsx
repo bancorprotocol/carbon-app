@@ -7,6 +7,7 @@ import { carbonApi } from 'utils/carbonApi';
 import { useTokens } from 'hooks/useTokens';
 import { toActivities } from './useActivityQuery';
 import { MouseEvent, useRef, useState } from 'react';
+import { Button } from 'components/common/button';
 
 export const getActivityCSV = (activities: Activity[]) => {
   const header = [
@@ -76,12 +77,10 @@ export const ActivityExport = () => {
   const close = (e: MouseEvent<HTMLDialogElement>) => {
     if (e.target !== e.currentTarget) return;
     e.currentTarget.close();
-    setLoading(false);
   };
 
   const download = async () => {
     setLoading(true);
-    if (size && size > limit) ref.current?.showModal();
     const data = await carbonApi.getActivity({
       ...queryParams,
       offset: 0,
@@ -94,11 +93,17 @@ export const ActivityExport = () => {
     anchor.click();
     setLoading(false);
   };
+
+  const shouldDownload = () => {
+    if (size && size > limit) ref.current?.showModal();
+    else download();
+  };
+
   return (
     <>
       <button
         type="button"
-        onClick={download}
+        onClick={shouldDownload}
         disabled={loading}
         className="border-background-800 text-12 hover:border-background-700 hover:bg-background-800 flex items-center gap-8 rounded-full border-2 px-12 py-8 disabled:pointer-events-none disabled:opacity-60"
       >
@@ -109,14 +114,20 @@ export const ActivityExport = () => {
         <dialog className="modal" ref={ref} onClick={close}>
           <form method="dialog" className="grid gap-16">
             <p>
-              The Export is limited to 10.000 transactions.
-              <br />
-              Consider changing the filters
+              This request exceeds the maximum export limit of 10,000.&nbps;
+              <b>Only the first 10,000 records</b> in the selected range will be
+              exported.
             </p>
-            <hr className="border-1 border-t-white/60" />
-            <button type="submit" value="">
-              Ok
-            </button>
+            <p>
+              Consider adjusting the filters to only include specific dates or
+              trade activity.
+            </p>
+            <footer className="flex gap-16">
+              <Button variant="success" onClick={download}>
+                Proceed
+              </Button>
+              <Button variant="secondary">Cancel</Button>
+            </footer>
           </form>
         </dialog>
       )}

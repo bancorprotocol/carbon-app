@@ -301,6 +301,7 @@ dialog.modal form {
   @apply bg-background-900;
   border-radius: 8px;
   padding: 16px;
+  max-width: 390px;
   transition: transform 0.3s var(--ease-out);
 }
 dialog.modal::backdrop {
