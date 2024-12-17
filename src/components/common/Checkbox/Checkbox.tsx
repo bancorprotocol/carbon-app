@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC, HTMLAttributes } from 'react';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { cn } from 'utils/helpers';
 
-type Props = JSX.IntrinsicElements['button'] & {
+type Props = HTMLAttributes<HTMLButtonElement> & {
   isChecked: boolean;
   setIsChecked: (isChecked: boolean) => void;
 };
