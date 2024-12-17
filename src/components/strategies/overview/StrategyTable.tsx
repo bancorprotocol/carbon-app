@@ -4,7 +4,7 @@ import { StrategyWithFiat } from 'libs/queries';
 import { FC, useEffect, useId, useState } from 'react';
 import { StrategyStatusTag } from './strategyBlock/StrategyBlockHeader';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { getFiatDisplayValue, tokenAmount } from 'utils/helpers';
+import { prettifyNumber, tokenAmount } from 'utils/helpers';
 import { StrategyGraph } from './strategyBlock/StrategyGraph';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import {
@@ -13,6 +13,7 @@ import {
 } from './strategyBlock/StrategyBlockManage';
 import styles from './StrategyContent.module.css';
 import { FiatPrice } from 'components/common/FiatPrice';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 interface Props {
   strategies: StrategyWithFiat[];
@@ -86,12 +87,23 @@ const StrategyRow: FC<RowProps> = ({ strategy, initVisible }) => {
         <StrategyStatusTag status={status} isExplorer={isExplorer} />
       </td>
       <td>{strategy.tradeCount}</td>
-      <td>{getFiatDisplayValue(totalBalance, currentCurrency)}</td>
+      <td>
+        <Tooltip element={prettifyNumber(totalBalance, { currentCurrency })}>
+          <p>
+            {prettifyNumber(totalBalance, {
+              currentCurrency,
+              abbreviate: true,
+            })}
+          </p>
+        </Tooltip>
+      </td>
       <td>
         <div className="grid">
-          <span className="text-nowrap">
-            {tokenAmount(order0.balance, quote, { abbreviate: true })}
-          </span>
+          <Tooltip element={tokenAmount(order0.balance, quote)}>
+            <span className="text-nowrap">
+              {tokenAmount(order0.balance, quote, { abbreviate: true })}
+            </span>
+          </Tooltip>
           <FiatPrice
             token={quote}
             amount={order0.balance}
@@ -101,9 +113,11 @@ const StrategyRow: FC<RowProps> = ({ strategy, initVisible }) => {
       </td>
       <td>
         <div className="grid">
-          <span className="text-nowrap">
-            {tokenAmount(order1.balance, base, { abbreviate: true })}
-          </span>
+          <Tooltip element={tokenAmount(order1.balance, base)}>
+            <span className="text-nowrap">
+              {tokenAmount(order1.balance, base, { abbreviate: true })}
+            </span>
+          </Tooltip>
           <FiatPrice
             token={base}
             amount={order1.balance}
