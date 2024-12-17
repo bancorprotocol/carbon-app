@@ -67,7 +67,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
 };
 
 const OverlappingChartContent: FC<Props> = (props) => {
-  const timeout = useRef<NodeJS.Timeout>();
+  const timeout = useRef<NodeJS.Timeout>(null);
   const { base, quote, marketPrice, order0, order1, readonly, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
 
