@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping.svg';
@@ -9,7 +9,7 @@ import { Link } from 'libs/routing';
 interface ItemProps {
   title: string;
   label: SimulatorType;
-  svg: JSX.Element;
+  svg: ReactNode;
   tooltipText: string;
 }
 

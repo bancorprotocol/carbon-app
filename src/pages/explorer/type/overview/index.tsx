@@ -1,4 +1,4 @@
-import { StrategyContent } from 'components/strategies/overview';
+import { StrategyContent } from 'components/strategies/overview/StrategyContent';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { NotFound } from 'components/common/NotFound';
 import { useSearch } from '@tanstack/react-router';
@@ -22,14 +22,12 @@ export const ExplorerTypeOverviewPage = () => {
   const empty = <NotFound variant="error" bordered {...emptyProps} />;
 
   return (
-    <>
-      <StrategyContent
-        strategies={filteredStrategies}
-        isExplorer
-        isPending={isPending}
-        emptyElement={empty}
-        layout={search.layout}
-      />
-    </>
+    <StrategyContent
+      strategies={filteredStrategies}
+      isExplorer
+      isPending={isPending}
+      emptyElement={empty}
+      layout={search.layout}
+    />
   );
 };

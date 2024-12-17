@@ -65,7 +65,6 @@ export const Imager = ({
   ...props
 }: ImageProps) => {
   const { source } = useImager(src, fallbackSrc);
-
   return (
     <img
       {...props}
@@ -90,7 +89,7 @@ export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
       src={token.logoURI}
       alt={token.name ?? token.symbol}
       title={token.symbol}
-      className={className}
+      className={cn(className, 'border border-black bg-black')}
     />
   );
 };

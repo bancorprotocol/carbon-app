@@ -1,17 +1,20 @@
 import { m, Variants } from 'libs/motion';
-import { FC, MouseEventHandler, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import { cn } from 'utils/helpers';
 
 type Props = {
   className?: string;
-  onClick?: MouseEventHandler<HTMLDivElement> | undefined;
+  close?: () => void | undefined;
   children: ReactNode;
 };
 
-export const Overlay: FC<Props> = ({ children, onClick, className }) => {
+export const Overlay: FC<Props> = ({ children, close, className }) => {
   return (
     <m.div
-      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape' && close) close();
+      }}
+      onClick={close}
       variants={fadeIn}
       initial="hidden"
       animate="visible"

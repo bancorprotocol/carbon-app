@@ -1,6 +1,6 @@
 import { useSearch } from '@tanstack/react-router';
 import { NotFound } from 'components/common/NotFound';
-import { StrategyContent } from 'components/strategies/overview';
+import { StrategyContent } from 'components/strategies/overview/StrategyContent';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { useStrategyCtx } from 'hooks/useStrategies';
 

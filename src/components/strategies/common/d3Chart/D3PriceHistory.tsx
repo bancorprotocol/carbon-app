@@ -79,7 +79,7 @@ const useZoom = (
   data: CandlestickData[],
   behavior: TransformBehavior
 ) => {
-  const zoomHandler = useRef<ZoomBehavior<SVGSVGElement, unknown>>();
+  const zoomHandler = useRef<ZoomBehavior<SVGSVGElement, unknown>>(null);
   const [transform, setTransform] = useState<ZoomTransform>();
 
   const selection = select<SVGSVGElement, unknown>('#interactive-chart');
