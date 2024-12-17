@@ -15,9 +15,10 @@ import { getLowestBits } from 'utils/helpers';
 
 interface Props {
   strategy: Strategy;
+  isExplorer?: boolean;
 }
 
-export const StrategyBlockHeader: FC<Props> = ({ strategy }) => {
+export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
   const { base, quote } = strategy;
   return (
     <header className="flex gap-16">
@@ -32,7 +33,7 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy }) => {
           <span className="self-align-center text-16 text-white/60">/</span>
           <span>{quote.symbol}</span>
         </h3>
-        <StrategySubtitle {...strategy} />
+        <StrategySubtitle {...strategy} isExplorer={isExplorer} />
       </div>
       <div role="menubar" className="flex gap-8">
         <Link

@@ -46,7 +46,7 @@ export const StrategyBlock: FC<Props> = ({
     >
       {visible && (
         <>
-          <StrategyBlockHeader strategy={strategy} />
+          <StrategyBlockHeader strategy={strategy} isExplorer={isExplorer} />
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
