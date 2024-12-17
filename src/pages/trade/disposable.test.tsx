@@ -8,6 +8,7 @@ import {
   tokenList,
   mockMarketRate,
   priceHistoryHandler,
+  waitFor,
 } from 'libs/testing-library';
 import { TradeProvider } from 'components/trade/TradeContext';
 import { Token } from 'libs/tokens';
@@ -69,9 +70,12 @@ describe('Create disposable page', () => {
     expect(form.budget()).toHaveValue(search.budget);
 
     // Check price range input and market price indication
-    const marketPriceIndications = form.marketPriceIndicators();
-    expect(marketPriceIndications[0]).toHaveTextContent('25.00% below market');
-
+    await waitFor(() => {
+      const marketPriceIndications = form.marketPriceIndicators();
+      expect(marketPriceIndications[0]).toHaveTextContent(
+        '25.00% below market'
+      );
+    });
     // Check warning to approve deposit exists
     expect(form.approveWarnings()).toBeInTheDocument();
   });

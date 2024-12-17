@@ -1,11 +1,12 @@
 import { Link, Pathnames, PathParams, useMatchRoute } from 'libs/routing';
+import { ReactNode } from 'react';
 import { cn } from 'utils/helpers';
 
 export interface StrategyTab {
   label: string;
   href: Pathnames;
   params?: PathParams;
-  icon: JSX.Element;
+  icon: ReactNode;
   badge?: number;
 }
 
@@ -45,7 +46,7 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
           >
             {icon}
             <span>{label}</span>
-            {!!badge && (
+            {typeof badge === 'number' && (
               <span className="size-18 text-10 grid place-items-center rounded-full bg-white/10">
                 {badge}
               </span>

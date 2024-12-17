@@ -50,7 +50,7 @@ export const App = () => {
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className="mb-16 mt-80 grid flex-grow">
+      <main className="mb-16 grid flex-grow">
         <MainContent />
       </main>
       <Footer />

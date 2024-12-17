@@ -8,6 +8,7 @@ import {
   tokenList,
   mockMarketRate,
   priceHistoryHandler,
+  waitFor,
 } from 'libs/testing-library';
 import { TradeProvider } from 'components/trade/TradeContext';
 import { Token } from 'libs/tokens';
@@ -71,10 +72,12 @@ describe('Create recurring page', () => {
     expect(form.sell.budget()).toHaveValue(search.sellBudget);
 
     // Check price range input and market price indication
-    const buyMarketPriceIndications = form.buy.marketPriceIndicators();
-    expect(buyMarketPriceIndications[0]).toHaveTextContent(
-      '20.00% below market'
-    );
+    await waitFor(() => {
+      const buyMarketPriceIndications = form.buy.marketPriceIndicators();
+      expect(buyMarketPriceIndications[0]).toHaveTextContent(
+        '20.00% below market'
+      );
+    });
     const sellMarketPriceIndications = form.sell.marketPriceIndicators();
     expect(sellMarketPriceIndications[0]).toHaveTextContent(
       '10.00% below market'
