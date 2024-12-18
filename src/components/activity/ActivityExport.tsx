@@ -8,6 +8,7 @@ import { useTokens } from 'hooks/useTokens';
 import { toActivities } from './useActivityQuery';
 import { MouseEvent, useRef, useState } from 'react';
 import { Button } from 'components/common/button';
+import styles from './ActivityExport.module.css';
 
 export const getActivityCSV = (activities: Activity[]) => {
   const header = [
@@ -105,23 +106,40 @@ export const ActivityExport = () => {
         type="button"
         onClick={shouldDownload}
         disabled={loading}
-        className="border-background-800 text-12 hover:border-background-700 hover:bg-background-800 flex items-center gap-8 rounded-full border-2 px-12 py-8 disabled:pointer-events-none disabled:opacity-60"
+        className={styles.exportButton}
       >
         <IconDownloadFile className="text-primary size-14" />
-        <span>{loading ? 'Exporting' : 'Export'}</span>
+        <span className={styles.export}>Export Activities</span>
+        <span className={styles.exporting}>Exporting</span>
+        <svg
+          className={styles.loading}
+          width="18"
+          height="18"
+          viewBox="0 0 50 50"
+        >
+          <path
+            fill="currentColor"
+            d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
+          >
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              from="0 25 25"
+              to="360 25 25"
+              dur="0.6s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </svg>
       </button>
       {!!size && size > limit && (
         <dialog className="modal" ref={ref} onClick={close}>
           <form method="dialog" className="text-14 grid gap-16">
             <p>
-              This request exceeds the maximum export limit of 10,000.&nbsp;
-              <b>Only the last 10,000 records</b> in the selected range will be
-              exported.
+              The export limit is 10,000 rows.&nbsp;
+              <b>Only the most recent 10,000 records will be exported.</b>
             </p>
-            <p>
-              Consider adjusting the filters to only include specific dates or
-              trade activity.
-            </p>
+            <p>To include older data, adjust the date range and try again.</p>
             <footer className="flex gap-16">
               <Button variant="success" onClick={download}>
                 Proceed
