@@ -48,3 +48,16 @@
 .export-button:disabled .loading {
   transition-delay: 200ms;
 }
+.export-button:disabled .loading path {
+  transform-origin: center;
+  animation: rotate 0.6s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: 0;
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
