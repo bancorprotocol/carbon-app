@@ -112,10 +112,10 @@ export const ActivityExport = () => {
       </button>
       {!!size && size > limit && (
         <dialog className="modal" ref={ref} onClick={close}>
-          <form method="dialog" className="grid gap-16">
+          <form method="dialog" className="text-14 grid gap-16">
             <p>
-              This request exceeds the maximum export limit of 10,000.&nbps;
-              <b>Only the first 10,000 records</b> in the selected range will be
+              This request exceeds the maximum export limit of 10,000.&nbsp;
+              <b>Only the last 10,000 records</b> in the selected range will be
               exported.
             </p>
             <p>
