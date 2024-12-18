@@ -18,6 +18,7 @@ import { cn } from 'utils/helpers';
 import { carbonEvents } from 'services/events';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
+import { StrategySelectLayout } from 'components/strategies/StrategySelectLayout';
 
 export const StrategiesPage = () => {
   const { pathname } = useRouterState().location;
@@ -30,7 +31,7 @@ export const StrategiesPage = () => {
 
   const showFilter = useMemo(() => {
     if (!isStrategiesPage) return false;
-    if (belowBreakpoint('md')) return false;
+    if (belowBreakpoint('lg')) return false;
     return !!(query.data && query.data.length > 2);
   }, [belowBreakpoint, isStrategiesPage, query.data]);
 
@@ -63,6 +64,7 @@ export const StrategiesPage = () => {
               <>
                 <StrategySearch />
                 <StrategyFilterSort />
+                <StrategySelectLayout from="myStrategy" />
               </>
             )}
             <Link

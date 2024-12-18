@@ -23,6 +23,7 @@ export const StrategyBlock: FC<Props> = ({
   const id = useId();
   const [visible, setVisible] = useState(false);
   useEffect(() => {
+    if (visible) return;
     const el = document.getElementById(id);
     if (!el) return;
     const observer = new IntersectionObserver((entries) => {
@@ -32,7 +33,7 @@ export const StrategyBlock: FC<Props> = ({
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [id]);
+  }, [id, visible]);
 
   return (
     <li
