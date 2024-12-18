@@ -17,6 +17,7 @@ import {
 } from 'utils/migrateLocalStorage';
 import { NotificationPreference } from 'libs/notifications/NotificationPreferences';
 import { AppConfig } from 'config/types';
+import { StrategyLayout } from 'components/strategies/StrategySelectLayout';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
@@ -52,6 +53,7 @@ interface LocalStorageSchema {
   notificationPreferences: NotificationPreference;
   configOverride: Partial<AppConfig>;
   featureFlags: string[];
+  strategyLayout: StrategyLayout;
 }
 
 enum EnumStrategySort {

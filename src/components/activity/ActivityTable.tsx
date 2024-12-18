@@ -181,7 +181,7 @@ export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
 };
 
 interface ActivityIconProps {
-  activity: Activity;
+  activity: { action: ActivityAction };
   size: number;
   className?: string;
 }
@@ -317,7 +317,7 @@ interface ActionIconProps {
   action: ActivityAction;
   size: string | number;
 }
-const iconColor = (action: ActivityAction) => {
+export const iconColor = (action: ActivityAction) => {
   if (action === 'buy') return `bg-buy/10 text-buy`;
   if (action === 'sell') return `bg-sell/10 text-sell`;
   if (action === 'create') return `bg-success/10 text-success`;
@@ -325,7 +325,7 @@ const iconColor = (action: ActivityAction) => {
   return `bg-white/10 text-white`;
 };
 
-const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
+export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
   const className = `size-${size}`;
   if (action === 'create') return <IconCheck className={className} />;
   if (action === 'transfer') return <IconTransfer className={className} />;
