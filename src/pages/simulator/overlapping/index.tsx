@@ -7,7 +7,7 @@ import { useSimulatorOverlappingInput } from 'hooks/useSimulatorOverlappingInput
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
 import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useMemo } from 'react';
 import { formatNumber, roundSearchParam } from 'utils/helpers';
 
 export const SimulatorInputOverlappingPage = () => {
@@ -23,6 +23,11 @@ export const SimulatorInputOverlappingPage = () => {
     start: defaultStart().toString(),
     end: defaultEnd().toString(),
   });
+
+  const marketPrice = useMemo(() => {
+    if (!state.start) return data?.[0].open;
+    return data?.find((d) => d.date.toString() === state.start)?.open;
+  }, [data, state.start]);
 
   useEffect(() => {
     if (searchState.sellMax || searchState.buyMin) return;
@@ -65,7 +70,7 @@ export const SimulatorInputOverlappingPage = () => {
     const { buyPriceMarginal, sellPriceMarginal } = calculateOverlappingPrices(
       formatNumber(state.buy.min),
       formatNumber(state.sell.max),
-      data[0].open.toString(),
+      marketPrice!.toString(),
       state.spread
     );
 
@@ -102,7 +107,7 @@ export const SimulatorInputOverlappingPage = () => {
         <CreateOverlappingStrategy
           state={state}
           dispatch={dispatch}
-          marketPrice={data?.[0].open ?? 0}
+          marketPrice={marketPrice ?? 0}
           spread={state.spread}
           setSpread={(v) => dispatch('spread', v)}
         />

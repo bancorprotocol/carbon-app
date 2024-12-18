@@ -67,8 +67,8 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
 
   const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
   const result = new Map<string, Token>();
-  for (const token of tokens) result.set(token.address, token);
   for (const token of lsImportedTokens) result.set(token.address, token);
+  for (const token of tokens) result.set(token.address, token);
   return Array.from(result.values());
 };
 
