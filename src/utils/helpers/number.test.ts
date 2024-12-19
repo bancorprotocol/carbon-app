@@ -326,7 +326,7 @@ describe('Test helpers', () => {
 
       // Very large numbers
       test('should return "100.00E18" for input 1e20', () => {
-        expect(prettifyNumber(1e20)).toEqual('100.00E18');
+        expect(prettifyNumber(1e20)).toEqual('100.00e¹⁸');
       });
     });
   });
