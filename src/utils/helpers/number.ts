@@ -101,30 +101,8 @@ const subscript = (num: number, formatter: Intl.NumberFormat) => {
   return formatter.formatToParts(num).map(transform).join('');
 };
 
-const superscriptMap: Record<string, string> = {
-  '0': '⁰',
-  '1': '¹',
-  '2': '²',
-  '3': '³',
-  '4': '⁴',
-  '5': '⁵',
-  '6': '⁶',
-  '7': '⁷',
-  '8': '⁸',
-  '9': '⁹',
-};
-
-export const superscript = (num: number, formatter: Intl.NumberFormat) => {
-  const transform = (part: Intl.NumberFormatPart) => {
-    if (part.type === 'exponentSeparator') return 'e';
-    if (part.type !== 'exponentInteger') return part.value;
-    let sup = '';
-    for (let char of part.value) {
-      sup += superscriptMap[char];
-    }
-    return sup;
-  };
-  return formatter.formatToParts(num).map(transform).join('');
+export const largeNumbers = (num: number, formatter: Intl.NumberFormat) => {
+  return formatter.format(num).replace('E', 'e+');
 };
 
 interface PrettifyNumberOptions {
@@ -161,7 +139,7 @@ const getIntlOptions = (value: SafeDecimal, options: PrettifyNumberOptions) => {
     intlOptions.notation = 'compact';
   }
   // When ludicrous numbers, use 1E16 notation
-  if (value.gt(1e17)) {
+  if (value.gt(1e16)) {
     intlOptions.notation = 'engineering';
   }
   return intlOptions;
@@ -216,8 +194,8 @@ export function prettifyNumber(
   if (!options.noSubscript && num.lt(0.001)) {
     return subscript(num.toNumber(), formatter);
   }
-  if (!options.noSubscript && num.gte(1e16)) {
-    return superscript(num.toNumber(), formatter);
+  if (num.gte(1e16)) {
+    return largeNumbers(num.toNumber(), formatter);
   }
 
   return formatter.format(num.toNumber());
