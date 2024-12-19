@@ -5,7 +5,6 @@ import { useModal } from 'hooks/useModal';
 import Fuse from 'fuse.js';
 import { utils } from 'ethers';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/ModalTokenList';
-import { orderBy } from 'lodash';
 import config from 'config';
 import {
   NATIVE_TOKEN_ADDRESS,
@@ -114,7 +113,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
 
   const filteredTokens = useMemo(() => {
     if (search.length === 0) {
-      return orderBy(sanitizedTokens, 'symbol', 'asc');
+      return sanitizedTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
     }
 
     const isAddress = utils.isAddress(search.toLowerCase());

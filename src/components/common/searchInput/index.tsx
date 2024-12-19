@@ -1,9 +1,9 @@
-import { KeyboardEventHandler } from 'react';
+import { HTMLAttributes, KeyboardEventHandler } from 'react';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 import { cn } from 'utils/helpers';
 
-type InputProps = JSX.IntrinsicElements['input'];
+type InputProps = HTMLAttributes<HTMLInputElement>;
 interface Props extends InputProps {
   value: string;
   setValue: (value: string) => void;

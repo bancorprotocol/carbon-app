@@ -2,7 +2,7 @@ import {
   isOverlappingStrategy,
   isPaused,
 } from 'components/strategies/common/utils';
-import { FC, forwardRef, useState } from 'react';
+import { FC, forwardRef, ReactNode, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { useNavigate, useParams } from 'libs/routing';
@@ -45,7 +45,7 @@ type separatorCounterType = number;
 
 interface Props {
   strategy: Strategy;
-  button: (props: ManageButtonProps) => JSX.Element;
+  button: (props: ManageButtonProps) => ReactNode;
 }
 
 export const StrategyBlockManage: FC<Props> = (props) => {

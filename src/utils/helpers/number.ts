@@ -101,6 +101,10 @@ const subscript = (num: number, formatter: Intl.NumberFormat) => {
   return formatter.formatToParts(num).map(transform).join('');
 };
 
+export const largeNumbers = (num: number, formatter: Intl.NumberFormat) => {
+  return formatter.format(num).replace('E', 'e+');
+};
+
 interface PrettifyNumberOptions {
   abbreviate?: boolean;
   currentCurrency?: FiatSymbol;
@@ -133,6 +137,10 @@ const getIntlOptions = (value: SafeDecimal, options: PrettifyNumberOptions) => {
 
   if (options.abbreviate && value.gte(1_000_000)) {
     intlOptions.notation = 'compact';
+  }
+  // When ludicrous numbers, use 1E16 notation
+  if (value.gt(1e16)) {
+    intlOptions.notation = 'engineering';
   }
   return intlOptions;
 };
@@ -185,6 +193,9 @@ export function prettifyNumber(
 
   if (!options.noSubscript && num.lt(0.001)) {
     return subscript(num.toNumber(), formatter);
+  }
+  if (num.gte(1e16)) {
+    return largeNumbers(num.toNumber(), formatter);
   }
 
   return formatter.format(num.toNumber());
