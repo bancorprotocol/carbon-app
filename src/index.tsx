@@ -8,6 +8,7 @@ import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
 import 'init-sentry';
+import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';
 import 'init-config';
