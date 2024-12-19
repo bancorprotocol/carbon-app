@@ -20,10 +20,10 @@
   animation: open 300ms ease-out;
 }
 .strategy-table th {
+  @apply border-b border-background-800;
   font-weight: 400;
   color: rgba(255 255 255 / .6);
   padding: 16px;
-  border-bottom: solid 1px rgba(255 255 255 / .4);
   text-align: start;
   text-wrap: nowrap;
 }
@@ -43,7 +43,7 @@
   border-top-right-radius: 8px;
 }
 .strategy-table tr:not(:last-child) td {
-  border-bottom: solid 1px rgba(255 255 255 / .4);
+  @apply border-b border-background-800;
 }
 .strategy-table tr:last-child td:first-child {
   border-bottom-left-radius: 8px;
