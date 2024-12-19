@@ -70,7 +70,7 @@ export const _StrategyContent: FC<Props> = ({
 };
 
 export const StrategyContent = memo(_StrategyContent, (prev, next) => {
-  if (prev.isPending && next.isPending) return true;
+  if (prev.isPending !== next.isPending) return false;
   if (prev.layout !== next.layout) return false;
   return JSON.stringify(prev.strategies) === JSON.stringify(next.strategies);
 });
