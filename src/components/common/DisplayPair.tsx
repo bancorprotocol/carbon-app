@@ -5,9 +5,6 @@ import { Token } from 'libs/tokens';
 import { FC, memo } from 'react';
 import { TokenLogo } from './imager/Imager';
 
-const suspiciousTokenTooltipMsg =
-  'This token is not part of any known token list. Always conduct your own research before trading.';
-
 interface TokenProps {
   token: Token;
 }
@@ -16,9 +13,7 @@ export const _TokenLogoName: FC<TokenProps> = ({ token }) => {
     <>
       <TokenLogo token={token} size={30} />
       {token.symbol}
-      {token.isSuspicious && (
-        <WarningWithTooltip tooltipContent={suspiciousTokenTooltipMsg} />
-      )}
+      {token.isSuspicious && <SuspiciousToken />}
     </>
   );
 };
@@ -34,17 +29,7 @@ const _PairLogoName: FC<PairProps> = ({ pair: { baseToken, quoteToken } }) => {
   return (
     <>
       <TokensOverlap tokens={[baseToken, quoteToken]} size={30} />
-      <span className="font-weight-500 inline-flex items-center gap-4">
-        {baseToken.symbol}
-        {baseToken.isSuspicious && (
-          <WarningWithTooltip tooltipContent={suspiciousTokenTooltipMsg} />
-        )}
-        <span className="text-white/60">/</span>
-        {quoteToken.symbol}
-        {quoteToken.isSuspicious && (
-          <WarningWithTooltip tooltipContent={suspiciousTokenTooltipMsg} />
-        )}
-      </span>
+      <PairName baseToken={baseToken} quoteToken={quoteToken} />
     </>
   );
 };
@@ -54,3 +39,19 @@ export const PairLogoName = memo(_PairLogoName, (a, b) => {
     a.pair.quoteToken.address === b.pair.quoteToken.address
   );
 });
+
+export const PairName: FC<TradePair> = ({ baseToken, quoteToken }) => (
+  <>
+    <span className="font-weight-500 inline-flex items-center gap-4">
+      {baseToken.symbol}
+      {baseToken.isSuspicious && <SuspiciousToken />}
+      <span className="text-white/60">/</span>
+      {quoteToken.symbol}
+      {quoteToken.isSuspicious && <SuspiciousToken />}
+    </span>
+  </>
+);
+
+export const SuspiciousToken = () => (
+  <WarningWithTooltip tooltipContent="This token is not part of any known token list. Always conduct your own research before trading." />
+);
