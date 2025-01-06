@@ -33,6 +33,7 @@ import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/
 import { useActivityQuery } from 'components/activity/useActivityQuery';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { StrategyPageSearch } from 'libs/routing/routes/strategy';
+import { PairName } from 'components/common/DisplayPair';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -96,9 +97,7 @@ export const StrategyPage = () => {
         <TokensOverlap tokens={[base, quote]} size={40} />
         <div className="flex-1 flex-col gap-8">
           <h1 className="text-18 font-weight-500 flex gap-8">
-            <span>{base.symbol}</span>
-            <span className="text-white/25">/</span>
-            <span>{quote.symbol}</span>
+            <PairName baseToken={base} quoteToken={quote} />
           </h1>
           <StrategySubtitle {...strategy} />
         </div>
