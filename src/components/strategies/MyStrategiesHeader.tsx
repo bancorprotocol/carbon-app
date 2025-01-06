@@ -23,18 +23,18 @@ export const MyStrategiesHeader = () => {
     const total = strategies.reduce((acc, strategy) => {
       return acc.add(strategy.tradeCount);
     }, new SafeDecimal(0));
-    return prettifyNumber(total, { round: true });
+    return prettifyNumber(total, { isInteger: true });
   }, [strategies]);
 
   const totalTrade24h = useMemo(() => {
     const total = strategies.reduce((acc, strategy) => {
       return acc.add(strategy.tradeCount24h);
     }, new SafeDecimal(0));
-    return prettifyNumber(total, { round: true });
+    return prettifyNumber(total, { isInteger: true });
   }, [strategies]);
 
   return (
-    <div className="mb-20 flex flex-col justify-between gap-16 rounded border border-white/20 p-16 md:flex-row md:items-center md:p-24">
+    <div className="bg-content rounded-10 flex flex-col justify-between gap-16 p-16 md:flex-row md:items-center md:p-24">
       <div role="table" className="flex flex-col gap-16 md:flex-row md:gap-24">
         <div role="row" className="flex justify-between gap-8 md:flex-col">
           <p role="rowheader" className="flex items-center gap-4 text-white/60">
