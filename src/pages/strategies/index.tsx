@@ -55,18 +55,20 @@ export const StrategiesPage = () => {
   return (
     <Page hideTitle={true}>
       <StrategyProvider query={query}>
-        <MyStrategiesHeader />
         {user && (
-          <header role="toolbar" className="mb-20 flex items-center gap-20">
-            <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-            {showFilter && (
-              <>
-                <StrategySearch />
-                <StrategyFilterSort />
-                <StrategySelectLayout from="myStrategy" />
-              </>
-            )}
-          </header>
+          <>
+            <MyStrategiesHeader />
+            <header role="toolbar" className="mb-20 flex items-center gap-20">
+              <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
+              {showFilter && (
+                <>
+                  <StrategySearch />
+                  <StrategyFilterSort />
+                  <StrategySelectLayout from="myStrategy" />
+                </>
+              )}
+            </header>
+          </>
         )}
         {/* Hidden tag to target in E2E */}
         {query.isFetching && (
