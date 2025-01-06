@@ -155,13 +155,15 @@ export function prettifyNumber(
 
   // Force value to be positive
   if (num.lte(0)) {
-    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);
+    const min = options.round ? 0 : 2;
+    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? min, min);
     intlOptions.maximumFractionDigits = Math.min(options.decimals ?? 2, 2);
     return Intl.NumberFormat(locale, intlOptions).format(0);
   }
 
   if (num.gte(1)) {
-    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);
+    const min = options.round ? 0 : 2;
+    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? min, min);
     intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 2, 2);
   } else if (num.gte(0.001)) {
     intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);

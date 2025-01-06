@@ -9,16 +9,14 @@ import { StrategySearch } from 'components/strategies/overview/StrategySearch';
 import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
-import { Outlet, useRouterState, useMatchRoute, Link } from 'libs/routing';
+import { Outlet, useRouterState, useMatchRoute } from 'libs/routing';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
 import { StrategyProvider } from 'hooks/useStrategies';
-import { cn } from 'utils/helpers';
-import { carbonEvents } from 'services/events';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
 import { StrategySelectLayout } from 'components/strategies/StrategySelectLayout';
+import { MyStrategiesHeader } from 'components/strategies/MyStrategiesHeader';
 
 export const StrategiesPage = () => {
   const { pathname } = useRouterState().location;
@@ -57,6 +55,7 @@ export const StrategiesPage = () => {
   return (
     <Page hideTitle={true}>
       <StrategyProvider query={query}>
+        <MyStrategiesHeader />
         {user && (
           <header role="toolbar" className="mb-20 flex items-center gap-20">
             <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
@@ -67,19 +66,6 @@ export const StrategiesPage = () => {
                 <StrategySelectLayout from="myStrategy" />
               </>
             )}
-            <Link
-              to="/trade"
-              className={cn(
-                buttonStyles({ variant: 'success' }),
-                'hidden md:flex'
-              )}
-              data-testid="create-strategy-desktop"
-              onClick={() =>
-                carbonEvents.strategy.newStrategyCreateClick(undefined)
-              }
-            >
-              Create Strategy
-            </Link>
           </header>
         )}
         {/* Hidden tag to target in E2E */}

@@ -41,11 +41,19 @@ export const useTrending = () => {
   });
 };
 
+interface StrategyTradeCount {
+  tradeCount: number;
+  tradeCount24h: number;
+}
+
 export const useTradeCount = () => {
   const query = useTrending();
-  const tradeCount: Record<string, number> = {};
+  const tradeCount: Record<string, StrategyTradeCount> = {};
   for (const item of query.data?.tradeCount ?? []) {
-    tradeCount[item.id] = item.strategyTrades;
+    tradeCount[item.id] = {
+      tradeCount: item.strategyTrades,
+      tradeCount24h: item.strategyTrades_24h,
+    };
   }
   return { data: tradeCount, isPending: query.isPending };
 };

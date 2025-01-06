@@ -119,10 +119,12 @@ export const useStrategiesWithFiat = (
     const base = basePrice.times(strategy.order1.balance);
     const quote = quotePrice.times(strategy.order0.balance);
     const total = base.plus(quote);
+    const trades = tradeCountQuery.data[strategy.id];
     return {
       ...strategy,
       fiatBudget: { base, quote, total },
-      tradeCount: tradeCountQuery.data[strategy.id] ?? 0,
+      tradeCount: trades?.tradeCount ?? 0,
+      tradeCount24h: trades?.tradeCount24h ?? 0,
     };
   });
   return {
