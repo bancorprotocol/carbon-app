@@ -52,25 +52,29 @@ export const StrategiesPage = () => {
     },
   ];
 
+  if (!user) {
+    return (
+      <Page hideTitle={true}>
+        <WalletConnect />
+      </Page>
+    );
+  }
+
   return (
     <Page hideTitle={true}>
       <StrategyProvider query={query}>
         <div className="grid gap-20">
-          {user && (
-            <>
-              <MyStrategiesHeader />
-              <header role="toolbar" className="flex items-center gap-20">
-                <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-                {showFilter && (
-                  <>
-                    <StrategySearch />
-                    <StrategyFilterSort />
-                    <StrategySelectLayout from="myStrategy" />
-                  </>
-                )}
-              </header>
-            </>
-          )}
+          <MyStrategiesHeader />
+          <header role="toolbar" className="flex items-center gap-20">
+            <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
+            {showFilter && (
+              <>
+                <StrategySearch />
+                <StrategyFilterSort />
+                <StrategySelectLayout from="myStrategy" />
+              </>
+            )}
+          </header>
           {/* Hidden tag to target in E2E */}
           {query.isFetching && (
             <div
@@ -79,7 +83,7 @@ export const StrategiesPage = () => {
               data-testid="fetch-strategies"
             ></div>
           )}
-          {user ? <Outlet /> : <WalletConnect />}
+          <Outlet />
         </div>
       </StrategyProvider>
     </Page>
