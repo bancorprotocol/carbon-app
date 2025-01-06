@@ -105,13 +105,13 @@ export const FloatTooltipTrigger = forwardRef<
   if (!isValidElement(children)) {
     throw new Error('Child of TootipTrigger should be a valid element');
   }
+  const allProps =
+    typeof children.props === 'object'
+      ? { ...props, ...children.props }
+      : props;
   return cloneElement(
     children,
-    context.getReferenceProps({
-      ref,
-      ...props,
-      ...children.props,
-    })
+    context.getReferenceProps({ ref, ...allProps })
   );
 });
 

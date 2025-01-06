@@ -323,6 +323,11 @@ describe('Test helpers', () => {
           '0.00000012345'
         );
       });
+
+      // Very large numbers
+      test('should return "100.00e+18" for input 1e20', () => {
+        expect(prettifyNumber(1e20)).toEqual('100.00e+18');
+      });
     });
   });
 

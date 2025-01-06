@@ -16,6 +16,12 @@
 
   --main-menu-height: 80px;
   --mobile-menu-height: 80px;
+
+  --ease-in: cubic-bezier(.55, 0, 1, .45);
+  --ease-out: cubic-bezier(0, .55, .45, 1);
+  --ease-in-out: cubic-bezier(.85, 0, .15, 1);
+  --ease-back-in-out: cubic-bezier(.68, -.6, .32, 1.6);
+  --ease-back-out: cubic-bezier(.34, 1.56, .64, 1);
 }
 
 
@@ -23,7 +29,11 @@
   html,
   body,
   #root {
-    @apply text-white bg-black font-text w-full min-h-screen;
+    @apply text-white bg-black font-text min-h-screen;
+  }
+
+  html {
+    scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
   }
 
   h1, h2, th {
@@ -263,4 +273,38 @@
 
 input[type='search']::-webkit-search-cancel-button {
   display: none;
+}
+
+dialog.modal, dialog.modal::backdrop {
+  transition-behavior: allow-discrete;
+  transition-property: display, overlay, opacity, transform;
+  transition-duration: 0.5s;
+  transition-timing-function: var(--ease-back-in-out);
+}
+@starting-style {
+  dialog.modal[open] {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  dialog.modal[open]::backdrop {
+    opacity: 0;
+  }
+}
+dialog.modal:not([open]) {
+  opacity: 0;
+  transform: scale(0.8);
+}
+dialog.modal:not([open])::backdrop {
+  opacity: 0;
+}
+dialog.modal form {
+  @apply bg-background-900;
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 390px;
+  transition: transform 0.3s var(--ease-out);
+}
+dialog.modal::backdrop {
+  @apply bg-black/40;
+  backdrop-filter: blur(8px);
 }

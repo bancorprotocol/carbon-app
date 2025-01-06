@@ -18,9 +18,7 @@ export const StrategyBlockTradeCount: FC<Props> = ({ strategy }) => {
         strategy.status === 'active' ? '' : 'opacity-50'
       )}
     >
-      <h4 className="text-12 flex items-center gap-4 text-white/60">
-        Trade Count
-      </h4>
+      <h4 className="text-12 flex items-center gap-4 text-white/60">Trades</h4>
       <p className="text-18 font-weight-500 truncate">{count}</p>
     </article>
   );

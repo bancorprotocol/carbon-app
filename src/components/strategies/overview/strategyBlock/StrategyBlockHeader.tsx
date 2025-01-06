@@ -27,13 +27,15 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
         size={40}
         tokens={[base, quote]}
       />
-      <div className="flex flex-1 flex-col">
-        <h3 className="text-18 flex gap-6" data-testid="token-pair">
-          <span>{base.symbol}</span>
-          <span className="self-align-center text-16 text-white/60">/</span>
-          <span>{quote.symbol}</span>
-        </h3>
-        <StrategySubtitle {...strategy} />
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <Tooltip element={base.symbol + '/' + quote.symbol}>
+          <h3 className="text-18 flex gap-6" data-testid="token-pair">
+            <span>{base.symbol}</span>
+            <span className="self-align-center text-16 text-white/60">/</span>
+            <span className="truncate">{quote.symbol}</span>
+          </h3>
+        </Tooltip>
+        <StrategySubtitle {...strategy} isExplorer={isExplorer} />
       </div>
       <div role="menubar" className="flex gap-8">
         <Link
@@ -81,22 +83,33 @@ export const StrategySubtitle: FC<StrategySubtitleProps> = (props) => {
       <svg width="4" height="4" role="separator">
         <circle cx="2" cy="2" r="2" fill="currentcolor" />
       </svg>
-      {status === 'active' && (
-        <span data-testid="status" className="text-success">
-          {statusText.active}
-        </span>
-      )}
-      {status !== 'active' && (
-        <Tooltip element={getTooltipTextByStatus(isExplorer, status)}>
-          <span
-            className="text-error inline-flex items-center gap-4"
-            data-testid="status"
-          >
-            {statusText.inactive}
-            <TooltipIcon className="text-error size-10" />
-          </span>
-        </Tooltip>
-      )}
+      <StrategyStatusTag status={status} isExplorer={isExplorer} />
     </p>
   );
+};
+
+export const StrategyStatusTag: FC<{
+  status: StrategyStatus;
+  isExplorer?: boolean;
+}> = (props) => {
+  const { status, isExplorer } = props;
+  if (status === 'active') {
+    return (
+      <span data-testid="status" className="text-success">
+        {statusText.active}
+      </span>
+    );
+  } else {
+    return (
+      <Tooltip element={getTooltipTextByStatus(isExplorer, status)}>
+        <span
+          className="text-error inline-flex items-center gap-4"
+          data-testid="status"
+        >
+          {statusText.inactive}
+          <TooltipIcon className="text-error size-10" />
+        </span>
+      </Tooltip>
+    );
+  }
 };

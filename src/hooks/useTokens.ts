@@ -8,7 +8,7 @@ import { useWagmi } from 'libs/wagmi';
 export const useTokens = () => {
   const { user } = useWagmi();
   const {
-    tokens: { tokensMap, importedTokens, setImportedTokens, ...props },
+    tokens: { tokensMap, setImportedTokens, ...props },
   } = useStore();
 
   const getTokenById = useCallback(
@@ -16,23 +16,21 @@ export const useTokens = () => {
     [tokensMap]
   );
 
-  const importToken = useCallback(
-    (token: Token) => {
-      const normalizedAddress = utils.getAddress(token.address);
-      const exists =
-        tokensMap.has(normalizedAddress) ||
-        !!importedTokens.find((tkn) => tkn.address === normalizedAddress);
-      if (exists) return;
+  const importTokens = useCallback(
+    (tokens: Token[]) => {
+      const missing: Token[] = [];
+      for (const token of tokens) {
+        if (getTokenById(token.address)) continue;
+        const normalizedAddress = utils.getAddress(token.address);
+        missing.push({ ...token, address: normalizedAddress });
+      }
 
       const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
-      const newTokens = [
-        ...lsImportedTokens,
-        { ...token, address: normalizedAddress },
-      ];
+      const newTokens = [...lsImportedTokens, ...missing];
       setImportedTokens(newTokens);
       lsService.setItem('importedTokens', newTokens);
     },
-    [tokensMap, importedTokens, setImportedTokens]
+    [getTokenById, setImportedTokens]
   );
 
   const [favoriteTokens, _setFavoriteTokens] = useState<Token[]>(
@@ -66,7 +64,7 @@ export const useTokens = () => {
   return {
     ...props,
     getTokenById,
-    importToken,
+    importTokens,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
