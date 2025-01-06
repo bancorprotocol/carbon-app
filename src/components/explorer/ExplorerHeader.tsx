@@ -240,7 +240,7 @@ interface TradesProps {
 
 const Trades = ({ trades }: TradesProps) => {
   const ref = useRef<HTMLParagraphElement>(null);
-  const anims = useRef<Promise<Animation>[]>();
+  const anims = useRef<Promise<Animation>[]>(null);
   const lastTrades = useRef(0);
   const initDelta = 60;
 

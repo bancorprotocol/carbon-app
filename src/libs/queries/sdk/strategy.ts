@@ -181,8 +181,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
 };
 
 export const useGetStrategyList = (ids: string[]) => {
-  const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importToken } = useTokens();
+  const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
   return useQuery<Strategy[]>({
@@ -193,11 +192,11 @@ export const useGetStrategyList = (ids: string[]) => {
       return buildStrategiesHelper({
         strategies,
         getTokenById,
-        importToken,
+        importTokens,
         Token,
       });
     },
-    enabled: tokens.length > 0 && isInitialized,
+    enabled: tokens.length > 0,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
