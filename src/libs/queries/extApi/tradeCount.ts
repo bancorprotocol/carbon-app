@@ -47,5 +47,5 @@ export const useTradeCount = () => {
   for (const item of query.data?.tradeCount ?? []) {
     tradeCount[item.id] = item.strategyTrades;
   }
-  return tradeCount;
+  return { data: tradeCount, isPending: query.isPending };
 };
