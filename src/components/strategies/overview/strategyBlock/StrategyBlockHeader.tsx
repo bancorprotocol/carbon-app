@@ -28,11 +28,9 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
         tokens={[base, quote]}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Tooltip element={base.symbol + '/' + quote.symbol}>
-          <h3 className="text-18 flex gap-6" data-testid="token-pair">
-            <PairName baseToken={base} quoteToken={quote} />
-          </h3>
-        </Tooltip>
+        <h3 className="text-18 flex gap-6" data-testid="token-pair">
+          <PairName baseToken={base} quoteToken={quote} />
+        </h3>
         <StrategySubtitle {...strategy} isExplorer={isExplorer} />
       </div>
       <div role="menubar" className="flex gap-8">

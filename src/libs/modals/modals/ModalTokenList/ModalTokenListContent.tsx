@@ -120,8 +120,8 @@ export const ModalTokenListContent: FC<Props> = ({
                   />
                   <div className="ml-15 grid justify-items-start">
                     <div className="flex gap-4">
-                      {token.symbol}
                       {token.isSuspicious && <SuspiciousToken />}
+                      {token.symbol}
                     </div>
                     <div className="text-12 max-w-full truncate text-white/60">
                       {token.name ?? token.symbol}

@@ -115,8 +115,8 @@ export const TokenSelection = () => {
               Buy or Sell
             </span>
             <span className="inline-flex items-center gap-4 break-all">
-              {base.symbol}
               {base.isSuspicious && <SuspiciousToken />}
+              {base.symbol}
             </span>
           </p>
           <ChevronIcon className="ml-auto size-16" />
@@ -139,8 +139,8 @@ export const TokenSelection = () => {
           <p className="grid flex-1 text-start">
             <span className="font-weight-500 text-12 text-white/60">With</span>
             <span className="inline-flex items-center gap-4 break-all">
-              {quote.symbol}
               {quote.isSuspicious && <SuspiciousToken />}
+              {quote.symbol}
             </span>
           </p>
           <ChevronIcon className="ml-auto size-16" />

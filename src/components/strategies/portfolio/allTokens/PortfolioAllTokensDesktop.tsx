@@ -33,8 +33,8 @@ const CellToken = (info: CellContext<PortfolioData, Token>) => {
       />
       <TokenLogo token={token} size={32} />
       <span className="inline-flex items-center gap-4">
-        {token.symbol}
         {token.isSuspicious && <SuspiciousToken />}
+        {token.symbol}
       </span>
     </div>
   );

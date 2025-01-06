@@ -51,8 +51,8 @@ export const SelectTokenButton: FC<Props> = ({
       <div className="flex-1 text-left">
         {description && <p className="text-12 opacity-90">{description}</p>}
         <p className="flex items-center gap-4">
-          {token?.symbol ?? text}
           {token?.isSuspicious && <SuspiciousToken />}
+          {token?.symbol ?? text}
         </p>
       </div>
       <IconChevron className={cn('size-20', chevronClassName)} />
