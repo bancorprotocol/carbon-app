@@ -34,7 +34,7 @@ export const MyStrategiesHeader = () => {
   }, [strategies]);
 
   return (
-    <div className="mb-20 flex flex-col justify-between gap-16 rounded border border-white/20 p-24 md:flex-row md:items-center">
+    <div className="mb-20 flex flex-col justify-between gap-16 rounded border border-white/20 p-16 md:flex-row md:items-center md:p-24">
       <div role="table" className="flex flex-col gap-16 md:flex-row md:gap-24">
         <div role="row" className="flex justify-between gap-8 md:flex-col">
           <p role="rowheader" className="flex items-center gap-4 text-white/60">
