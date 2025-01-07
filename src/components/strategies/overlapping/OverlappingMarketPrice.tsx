@@ -42,6 +42,7 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
       isOpen={open}
       setIsOpen={setOpen}
       placement="bottom-end"
+      initialFocus={-1}
       button={Trigger}
     >
       <OverlappingInitMarketPrice
