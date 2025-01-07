@@ -111,6 +111,7 @@ interface PrettifyNumberOptions {
   highPrecision?: boolean;
   locale?: string;
   round?: boolean;
+  isInteger?: boolean;
   decimals?: number;
   noSubscript?: boolean;
 }
@@ -124,6 +125,10 @@ const getIntlOptions = (value: SafeDecimal, options: PrettifyNumberOptions) => {
   if (options.round) {
     // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
     intlOptions.roundingMode = 'halfExpand';
+  }
+  if (options.isInteger) {
+    // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
+    intlOptions.roundingMode = 'trunc';
   }
 
   // Currency
@@ -155,14 +160,18 @@ export function prettifyNumber(
 
   // Force value to be positive
   if (num.lte(0)) {
-    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);
-    intlOptions.maximumFractionDigits = Math.min(options.decimals ?? 2, 2);
+    const min = options.isInteger ? 0 : 2;
+    const max = options.isInteger ? 0 : 2;
+    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? min, min);
+    intlOptions.maximumFractionDigits = Math.min(options.decimals ?? max, max);
     return Intl.NumberFormat(locale, intlOptions).format(0);
   }
 
   if (num.gte(1)) {
-    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);
-    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 2, 2);
+    const min = options.isInteger ? 0 : 2;
+    const max = options.isInteger ? 0 : 2;
+    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? min, min);
+    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? max, max);
   } else if (num.gte(0.001)) {
     intlOptions.minimumFractionDigits = Math.min(options.decimals ?? 2, 2);
     intlOptions.maximumFractionDigits = Math.max(options.decimals ?? 6, 2);

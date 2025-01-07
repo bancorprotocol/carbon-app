@@ -130,5 +130,6 @@ export const commonConfig: AppConfig = {
   ui: {
     priceChart: 'tradingView',
     useGradientBranding: true,
+    tradeCount: false,
   },
 };

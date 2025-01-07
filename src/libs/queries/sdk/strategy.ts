@@ -49,6 +49,7 @@ export interface StrategyWithFiat extends Strategy {
     base: SafeDecimal;
   };
   tradeCount: number;
+  tradeCount24h: number;
 }
 
 interface StrategiesHelperProps {
@@ -163,7 +164,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const isZeroAddress = address === config.addresses.tokens.ZERO;
 
   return useQuery<Strategy[]>({
-    queryKey: QueryKey.strategies(address),
+    queryKey: QueryKey.strategiesByUser(address),
     queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
       const strategies = await carbonSDK.getUserStrategies(address);
@@ -175,6 +176,28 @@ export const useGetUserStrategies = ({ user }: Props) => {
       });
     },
     enabled: tokens.length > 0 && ensAddress.isFetched,
+    staleTime: ONE_DAY_IN_MS,
+    retry: false,
+  });
+};
+
+export const useGetStrategyList = (ids: string[]) => {
+  const { tokens, getTokenById, importTokens } = useTokens();
+  const { Token } = useContract();
+
+  return useQuery<Strategy[]>({
+    queryKey: QueryKey.strategyList(ids),
+    queryFn: async () => {
+      const getStrategies = ids.map((id) => carbonSDK.getStrategy(id));
+      const strategies = await Promise.all(getStrategies);
+      return buildStrategiesHelper({
+        strategies,
+        getTokenById,
+        importTokens,
+        Token,
+      });
+    },
+    enabled: tokens.length > 0,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });

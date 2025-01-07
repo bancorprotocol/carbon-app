@@ -7,9 +7,11 @@ import {
 } from 'components/explorer';
 import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
+import { ExplorerHeader } from 'components/explorer/ExplorerHeader';
 import { useEffect, useState } from 'react';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { lsService } from 'services/localeStorage';
+import config from 'config';
 
 const url = '/explore/$type';
 export const ExplorerPage = () => {
@@ -33,6 +35,7 @@ export const ExplorerPage = () => {
     <Page hideTitle>
       <StrategyProvider query={query}>
         <ExplorerEvents />
+        {config.ui.tradeCount && <ExplorerHeader />}
         <div className="gap-30 flex flex-grow flex-col">
           <ExplorerSearch />
           {slug && <ExplorerTabs />}

@@ -4,6 +4,7 @@ import { Token } from 'libs/tokens';
 import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from './types';
 import { endOfDay, getUnixTime, startOfDay, subDays } from 'date-fns';
+import { StrategyType } from 'libs/routing';
 
 type StrategyOrderInput =
   | { min: string; max: string }
@@ -35,7 +36,7 @@ export const isDisposableStrategy = (strategy: Strategy) => {
   return false;
 };
 
-export const getStrategyType = (strategy: Strategy) => {
+export const getStrategyType = (strategy: Strategy): StrategyType => {
   if (isOverlappingStrategy(strategy)) return 'overlapping';
   if (isDisposableStrategy(strategy)) return 'disposable';
   return 'recurring';
