@@ -8,19 +8,19 @@
   --delay: 50ms;
 }
 .header [role="row"]:nth-child(2) [role="rowheader"] {
-  --delay: 150ms;
+  --delay: 100ms;
 }
 .header [role="row"]:nth-child(2) [role="cell"] {
-  --delay: 200ms;
+  --delay: 150ms;
 }
 .header [role="row"]:nth-child(3) [role="rowheader"] {
-  --delay: 300ms;
+  --delay: 200ms;
 }
 .header [role="row"]:nth-child(3) [role="cell"] {
-  --delay: 350ms;
+  --delay: 250ms;
 }
 .header a {
-  --delay: 400ms;
+  --delay: 300ms;
 }
 
 @keyframes slideup {
