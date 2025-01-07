@@ -26,10 +26,11 @@ import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/over
 import { InputRange } from '../common/InputRange';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TokenLogo } from 'components/common/imager/Imager';
-import { InputLimit } from '../common/InputLimit';
 import { Button } from 'components/common/button';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
+import { decimalNumberValidationRegex } from 'utils/inputsValidations';
+import { geoMean } from 'utils/fullOutcome';
 
 interface Props {
   marketPrice: string;
@@ -161,6 +162,12 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     }
   }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
 
+  const setGeoMean = () => {
+    const { order0, order1 } = strategy;
+    const price = geoMean(order1.marginalRate, order0.marginalRate)?.toString();
+    setLocalPrice(price ?? '');
+  };
+
   const setMarketPrice = (price: string) => set('marketPrice', price);
   const setMin = (min: string) => set('min', min);
   const setMax = (max: string) => set('max', max);
@@ -271,14 +278,30 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
               price ({quote.symbol} per 1 {base.symbol})
             </label>
           </Tooltip>
-          <InputLimit
-            id="market-price-input"
-            price={localPrice}
-            setPrice={setLocalPrice}
-            base={base}
-            quote={quote}
-            ignoreMarketPriceWarning
-          />
+          <div className="rounded-16 border-warning flex cursor-text gap-5 border bg-black p-16">
+            <input
+              id="market-price-input"
+              type="text"
+              pattern={decimalNumberValidationRegex}
+              inputMode="decimal"
+              value={localPrice}
+              onChange={(e) => setLocalPrice(e.target.value)}
+              aria-label="Enter Market Price"
+              placeholder="Enter Market Price"
+              className="text-18 font-weight-500 w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-none"
+              data-testid="input-price"
+              required
+            />
+            <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
+              <button
+                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                type="button"
+                onClick={setGeoMean}
+              >
+                Use Strategy
+              </button>
+            </Tooltip>
+          </div>
           <Button
             type="button"
             disabled={!localPrice}
