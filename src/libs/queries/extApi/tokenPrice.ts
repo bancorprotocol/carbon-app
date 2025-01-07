@@ -37,7 +37,15 @@ export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
     queries: addresses.map((address) => {
       return {
         queryKey: QueryKey.tokenPrice(address),
-        queryFn: () => carbonApi.getMarketRate(address, availableCurrencies),
+        queryFn: () => {
+          return carbonApi
+            .getMarketRate(address, availableCurrencies)
+            .catch((err) => {
+              // See comment above
+              console.error(err);
+              return {} as FiatPriceDict;
+            });
+        },
         enabled: !!address && availableCurrencies.length > 0,
         refetchInterval: FIVE_MIN_IN_MS,
         staleTime: FIVE_MIN_IN_MS,
