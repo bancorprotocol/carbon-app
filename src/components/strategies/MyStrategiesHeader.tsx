@@ -6,7 +6,8 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useMemo } from 'react';
 import { carbonEvents } from 'services/events';
-import { prettifyNumber } from 'utils/helpers';
+import { cn, prettifyNumber } from 'utils/helpers';
+import style from './MyStrategiesHeader.module.css';
 
 export const MyStrategiesHeader = () => {
   const { strategies } = useStrategyCtx();
@@ -34,7 +35,12 @@ export const MyStrategiesHeader = () => {
   }, [strategies]);
 
   return (
-    <div className="bg-content rounded-10 flex flex-col justify-between gap-16 p-16 md:flex-row md:items-center md:p-24">
+    <div
+      className={cn(
+        'flex flex-col justify-between gap-16 md:flex-row md:items-center',
+        style.header
+      )}
+    >
       <div role="table" className="flex flex-col gap-16 md:flex-row md:gap-24">
         <div role="row" className="flex justify-between gap-8 md:flex-col">
           <p role="rowheader" className="flex items-center gap-4 text-white/60">

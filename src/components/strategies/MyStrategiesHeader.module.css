@@ -1,0 +1,31 @@
+.header [role="rowheader"], .header [role="cell"], .header a {
+  animation: slideup 200ms var(--delay, 0ms) var(--ease-out) backwards;
+}
+.header [role="row"]:nth-child(1) [role="rowheader"] {
+  --delay: 0ms;
+}
+.header [role="row"]:nth-child(1) [role="cell"] {
+  --delay: 50ms;
+}
+.header [role="row"]:nth-child(2) [role="rowheader"] {
+  --delay: 150ms;
+}
+.header [role="row"]:nth-child(2) [role="cell"] {
+  --delay: 200ms;
+}
+.header [role="row"]:nth-child(3) [role="rowheader"] {
+  --delay: 300ms;
+}
+.header [role="row"]:nth-child(3) [role="cell"] {
+  --delay: 350ms;
+}
+.header a {
+  --delay: 400ms;
+}
+
+@keyframes slideup {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
