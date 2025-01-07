@@ -9,6 +9,7 @@ import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { SuspiciousToken } from 'components/common/DisplayPair';
 
 export const TokenSelectionTooltip = () => {
   return (
@@ -113,7 +114,10 @@ export const TokenSelection = () => {
             <span className="font-weight-500 text-12 text-white/60">
               Buy or Sell
             </span>
-            <span className="break-all">{base.symbol}</span>
+            <span className="inline-flex items-center gap-4 break-all">
+              {base.isSuspicious && <SuspiciousToken />}
+              {base.symbol}
+            </span>
           </p>
           <ChevronIcon className="ml-auto size-16" />
         </button>
@@ -134,7 +138,10 @@ export const TokenSelection = () => {
           <TokenLogo token={quote} size={30} className="hidden md:inline" />
           <p className="grid flex-1 text-start">
             <span className="font-weight-500 text-12 text-white/60">With</span>
-            <span className="break-all">{quote.symbol}</span>
+            <span className="inline-flex items-center gap-4 break-all">
+              {quote.isSuspicious && <SuspiciousToken />}
+              {quote.symbol}
+            </span>
           </p>
           <ChevronIcon className="ml-auto size-16" />
         </button>

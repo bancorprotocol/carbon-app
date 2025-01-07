@@ -10,8 +10,8 @@ import {
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Link } from '@tanstack/react-router';
-import { Token } from 'libs/tokens';
 import { getLowestBits } from 'utils/helpers';
+import { PairName } from 'components/common/DisplayPair';
 
 interface Props {
   strategy: Strategy;
@@ -28,13 +28,9 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
         tokens={[base, quote]}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Tooltip element={base.symbol + '/' + quote.symbol}>
-          <h3 className="text-18 flex gap-6" data-testid="token-pair">
-            <span>{base.symbol}</span>
-            <span className="self-align-center text-16 text-white/60">/</span>
-            <span className="truncate">{quote.symbol}</span>
-          </h3>
-        </Tooltip>
+        <h3 className="text-18 flex gap-6" data-testid="token-pair">
+          <PairName baseToken={base} quoteToken={quote} />
+        </h3>
         <StrategySubtitle {...strategy} isExplorer={isExplorer} />
       </div>
       <div role="menubar" className="flex gap-8">
@@ -52,21 +48,6 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
         />
       </div>
     </header>
-  );
-};
-
-interface StrategyTitleProps {
-  base: Token;
-  quote: Token;
-}
-
-export const StrategyTitle: FC<StrategyTitleProps> = ({ base, quote }) => {
-  return (
-    <>
-      <span>{base.symbol}</span>
-      <span className="self-align-center text-16 text-white/60">/</span>
-      <span>{quote.symbol}</span>
-    </>
   );
 };
 
