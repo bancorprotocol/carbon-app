@@ -1,5 +1,5 @@
 import { Link, useMatch } from '@tanstack/react-router';
-import { PairLogoName } from 'components/common/PairLogoName';
+import { PairLogoName } from 'components/common/DisplayPair';
 import { StrategyWithFiat } from 'libs/queries';
 import { FC, useEffect, useId, useState } from 'react';
 import { StrategyStatusTag } from './strategyBlock/StrategyBlockHeader';
