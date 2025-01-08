@@ -36,7 +36,13 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: {
+          width: 1270, // Prevent Date picker to go below scrollbar
+          height: 720,
+        },
+      },
     },
     // {
     //   name: 'firefox',
