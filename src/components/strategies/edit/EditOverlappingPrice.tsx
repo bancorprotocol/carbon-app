@@ -290,7 +290,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
               placeholder="Enter Market Price"
               className="text-18 font-weight-500 w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-none"
               data-testid="input-price"
-              required
             />
             <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
               <button
