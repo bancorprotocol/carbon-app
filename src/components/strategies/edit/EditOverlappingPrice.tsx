@@ -1,6 +1,7 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useGetTokenBalance } from 'libs/queries';
 import {
+  getCalculatedPrice,
   getMaxBuyMin,
   getMinSellMax,
   isMaxBelowMarket,
@@ -25,12 +26,9 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { InputRange } from '../common/InputRange';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { TokenLogo } from 'components/common/imager/Imager';
-import { Button } from 'components/common/button';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
-import { decimalNumberValidationRegex } from 'utils/inputsValidations';
-import { geoMean } from 'utils/fullOutcome';
+import { EditOverlappingMarketPrice } from '../overlapping/OverlappingMarketPrice';
 
 interface Props {
   marketPrice: string;
@@ -93,7 +91,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
 
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
-  const [localPrice, setLocalPrice] = useState('');
 
   const initialBuyBudget = strategy.order0.balance;
   const initialSellBudget = strategy.order1.balance;
@@ -161,12 +158,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       set('budget', undefined);
     }
   }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
-
-  const setGeoMean = () => {
-    const { order0, order1 } = strategy;
-    const price = geoMean(order1.marginalRate, order0.marginalRate)?.toString();
-    setLocalPrice(price ?? '');
-  };
 
   const setMarketPrice = (price: string) => set('marketPrice', price);
   const setMin = (min: string) => set('min', min);
@@ -262,52 +253,12 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       )}
       {!displayPrice && (
         <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
-          <hgroup>
-            <h2 className="text-18 font-weight-500 flex-1">Market Price</h2>
-            <p className="text-12 text-white/80">
-              {base.symbol} market price is missing. Please provide the market
-              price to enable price editing.
-            </p>
-          </hgroup>
-          <Tooltip element="Price used to calculate concentrated liquidity strategy params">
-            <label
-              htmlFor="market-price-input"
-              className="text-14 font-weight-500 flex items-center gap-4 text-white/80"
-            >
-              Enter <TokenLogo token={base} size={14} /> {base.symbol} market
-              price ({quote.symbol} per 1 {base.symbol})
-            </label>
-          </Tooltip>
-          <div className="rounded-16 border-warning flex cursor-text gap-5 border bg-black p-16">
-            <input
-              id="market-price-input"
-              type="text"
-              pattern={decimalNumberValidationRegex}
-              inputMode="decimal"
-              value={localPrice}
-              onChange={(e) => setLocalPrice(e.target.value)}
-              aria-label="Enter Market Price"
-              placeholder="Enter Market Price"
-              className="text-18 font-weight-500 w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-none"
-              data-testid="input-price"
-            />
-            <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
-              <button
-                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
-                type="button"
-                onClick={setGeoMean}
-              >
-                Use Strategy
-              </button>
-            </Tooltip>
-          </div>
-          <Button
-            type="button"
-            disabled={!localPrice}
-            onClick={() => setMarketPrice(localPrice)}
-          >
-            Confirm
-          </Button>
+          <EditOverlappingMarketPrice
+            base={base}
+            quote={quote}
+            calculatedPrice={getCalculatedPrice(strategy)}
+            setMarketPrice={setMarketPrice}
+          />
         </article>
       )}
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
