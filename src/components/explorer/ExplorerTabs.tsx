@@ -49,7 +49,7 @@ export const ExplorerTabs = () => {
   ];
 
   return (
-    <div className="flex items-center justify-between gap-16">
+    <div className="flex flex-col flex-wrap justify-between gap-16 md:flex-row md:items-center">
       <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
       {isOverview && <StrategyFilterSort />}
       {isOverview && <StrategySelectLayout from="explorer" />}
