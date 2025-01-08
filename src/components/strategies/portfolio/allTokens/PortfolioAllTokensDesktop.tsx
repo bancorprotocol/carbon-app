@@ -8,9 +8,10 @@ import { createColumnHelper, Table } from 'libs/table';
 import { CellContext, Row } from '@tanstack/react-table';
 import { Token } from 'libs/tokens';
 import { useStore } from 'store';
-import { cn, getFiatDisplayValue } from 'utils/helpers';
-import { LogoImager } from 'components/common/imager/Imager';
+import { getFiatDisplayValue } from 'utils/helpers';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { getColorByIndex } from 'utils/colorPalettes';
+import { SuspiciousToken } from 'components/common/DisplayPair';
 
 type Props = {
   data: PortfolioData[];
@@ -22,16 +23,19 @@ const columnHelper = createColumnHelper<PortfolioData>();
 
 const CellToken = (info: CellContext<PortfolioData, Token>) => {
   const i = info.table.getSortedRowModel().flatRows.indexOf(info.row);
-  const { symbol, logoURI } = info.getValue();
+  const token = info.getValue();
 
   return (
-    <div className={cn('flex', 'items-center', 'space-x-16')}>
+    <div className="flex items-center gap-16">
       <div
-        className={cn('h-32', 'w-4', 'rounded-r-2')}
+        className="round-r-2 h-32 w-4"
         style={{ backgroundColor: getColorByIndex(i) }}
       />
-      <LogoImager alt="Token Logo" src={logoURI} className="size-32" />
-      <div>{symbol}</div>
+      <TokenLogo token={token} size={32} />
+      <span className="inline-flex items-center gap-4">
+        {token.isSuspicious && <SuspiciousToken />}
+        {token.symbol}
+      </span>
     </div>
   );
 };

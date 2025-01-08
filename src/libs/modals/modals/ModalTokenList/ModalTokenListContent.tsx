@@ -12,9 +12,9 @@ import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
-import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
 import { ModalTokenListDuplicateWarning } from 'libs/modals/modals/ModalTokenList/ModalTokenListDuplicateWarning';
+import { SuspiciousToken } from 'components/common/DisplayPair';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -68,8 +68,6 @@ export const ModalTokenListContent: FC<Props> = ({
     (token: Token) => favoritesMap.has(token.address),
     [favoritesMap]
   );
-  const suspiciousTokenTooltipMsg =
-    'This token is not part of any known token list. Always conduct your own research before trading.';
 
   const selectCategory = (e: FormEvent<HTMLFieldSetElement>) => {
     if (e.target instanceof HTMLInputElement) {
@@ -121,14 +119,9 @@ export const ModalTokenListContent: FC<Props> = ({
                     className="size-32"
                   />
                   <div className="ml-15 grid justify-items-start">
-                    <div className="flex">
+                    <div className="flex gap-4">
+                      {token.isSuspicious && <SuspiciousToken />}
                       {token.symbol}
-                      {token.isSuspicious && (
-                        <WarningWithTooltip
-                          className="ml-5"
-                          tooltipContent={suspiciousTokenTooltipMsg}
-                        />
-                      )}
                     </div>
                     <div className="text-12 max-w-full truncate text-white/60">
                       {token.name ?? token.symbol}

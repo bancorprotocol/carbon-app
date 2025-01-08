@@ -1,4 +1,4 @@
-import { PairLogoName } from 'components/common/PairLogoName';
+import { PairLogoName } from 'components/common/DisplayPair';
 import {
   FC,
   FormEvent,
