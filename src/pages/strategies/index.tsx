@@ -2,7 +2,6 @@ import {
   StrategyPageTabs,
   StrategyTab,
 } from 'components/strategies/StrategyPageTabs';
-import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useWagmi } from 'libs/wagmi';
 import { WalletConnect } from 'components/common/walletConnect';
 import { StrategySearch } from 'components/strategies/overview/StrategySearch';
@@ -22,7 +21,6 @@ import { StrategySelectLayout } from 'components/strategies/StrategySelectLayout
 
 export const StrategiesPage = () => {
   const { pathname } = useRouterState().location;
-  const { belowBreakpoint } = useBreakpoints();
   const { user } = useWagmi();
   const query = useGetUserStrategies({ user });
   const match = useMatchRoute();
@@ -31,9 +29,8 @@ export const StrategiesPage = () => {
 
   const showFilter = useMemo(() => {
     if (!isStrategiesPage) return false;
-    if (belowBreakpoint('lg')) return false;
     return !!(query.data && query.data.length > 2);
-  }, [belowBreakpoint, isStrategiesPage, query.data]);
+  }, [isStrategiesPage, query.data]);
 
   const tabs: StrategyTab[] = [
     {
@@ -58,7 +55,10 @@ export const StrategiesPage = () => {
     <Page hideTitle={true}>
       <StrategyProvider query={query}>
         {user && (
-          <header role="toolbar" className="mb-20 flex items-center gap-20">
+          <header
+            role="toolbar"
+            className="mb-20 flex flex-col flex-wrap gap-20 md:flex-row md:items-center"
+          >
             <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
             {showFilter && (
               <>
