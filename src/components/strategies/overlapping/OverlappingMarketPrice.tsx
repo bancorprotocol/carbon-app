@@ -12,6 +12,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { InputLimit } from '../common/InputLimit';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import style from 'components/strategies/common/form.module.css';
+import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 interface Props {
   base: Token;
@@ -42,6 +43,7 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
       isOpen={open}
       setIsOpen={setOpen}
       placement="bottom-end"
+      initialFocus={-1}
       button={Trigger}
     >
       <OverlappingInitMarketPrice
@@ -170,3 +172,68 @@ const EditPriceText = () => (
     </NewTabLink>
   </span>
 );
+
+interface EditMarketPriceProps {
+  base: Token;
+  quote: Token;
+  calculatedPrice?: string;
+  setMarketPrice: (price: string) => any;
+}
+
+/** Market price input for edit price when there is no external market price or form is untouched  */
+export const EditOverlappingMarketPrice: FC<EditMarketPriceProps> = (props) => {
+  const { base, quote, calculatedPrice, setMarketPrice } = props;
+  const [price, setPrice] = useState<string>();
+  return (
+    <>
+      <hgroup>
+        <h2 className="text-18 font-weight-500 flex-1">Market Price</h2>
+        <p className="text-12 text-white/80">
+          {base.symbol} market price is missing. Please provide the market price
+          to enable price editing.
+        </p>
+      </hgroup>
+      <Tooltip element="Price used to calculate concentrated liquidity strategy params">
+        <label
+          htmlFor="market-price-input"
+          className="text-14 font-weight-500 flex items-center gap-4 text-white/80"
+        >
+          Enter <TokenLogo token={base} size={14} /> {base.symbol} market price
+          ({quote.symbol} per 1 {base.symbol})
+        </label>
+      </Tooltip>
+      <div className="rounded-16 border-warning flex cursor-text gap-5 border bg-black p-16">
+        <input
+          id="market-price-input"
+          type="text"
+          pattern={decimalNumberValidationRegex}
+          inputMode="decimal"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          aria-label="Enter Market Price"
+          placeholder="Enter Market Price"
+          className="text-18 font-weight-500 w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-none"
+          data-testid="input-price"
+        />
+        {calculatedPrice && (
+          <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
+            <button
+              className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+              type="button"
+              onClick={() => setPrice(calculatedPrice)}
+            >
+              Use Strategy
+            </button>
+          </Tooltip>
+        )}
+      </div>
+      <Button
+        type="button"
+        disabled={!price}
+        onClick={() => price && setMarketPrice(price)}
+      >
+        Confirm
+      </Button>
+    </>
+  );
+};
