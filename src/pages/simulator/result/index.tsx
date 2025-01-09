@@ -32,9 +32,9 @@ export const SimulatorResultPage = () => {
   if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   return (
-    <div className="p-20">
+    <div className="mx-auto flex w-full max-w-[1920px] flex-col gap-16 p-20">
       {simulationType === 'recurring' && (
-        <div className="text-24 font-weight-500 mb-16 flex items-center gap-16">
+        <header className="flex items-center gap-16">
           <Link
             to="/simulate/recurring"
             search={{
@@ -55,11 +55,11 @@ export const SimulatorResultPage = () => {
           >
             <BackIcon />
           </Link>
-          Simulate Strategy
-        </div>
+          <h1 className="text-24">Simulate Strategy</h1>
+        </header>
       )}
       {simulationType === 'overlapping' && (
-        <div className="text-24 font-weight-500 mb-16 flex items-center gap-16">
+        <header className="flex items-center gap-16">
           <Link
             to="/simulate/overlapping"
             search={{
@@ -76,7 +76,7 @@ export const SimulatorResultPage = () => {
             <BackIcon />
           </Link>
           Simulate Strategy
-        </div>
+        </header>
       )}
 
       <div className="rounded-20 bg-background-900 p-20">
