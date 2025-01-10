@@ -61,15 +61,12 @@ export const CreateForm: FC<FormProps> = (props) => {
     if (!form.checkValidity()) return;
     if (!!form.querySelector('.loading-message')) return;
     if (!!form.querySelector('.error-message')) return;
-    const current = lsService.getItem('cart') ?? [];
-    const next = [
-      ...current,
-      toCreateStrategyParams(base, quote, order0, order1),
-    ];
-    lsService.setItem('cart', next);
-    // Dispatch event to cart
-    const event = new CustomEvent('storage:cart', { detail: next });
-    document.dispatchEvent(event);
+    const list = lsService.getItem('cart') ?? [];
+    list.push({
+      id: crypto.randomUUID(),
+      ...toCreateStrategyParams(base, quote, order0, order1),
+    });
+    lsService.setItem('cart', list);
     // Remove budget
     nav({
       to: '.',

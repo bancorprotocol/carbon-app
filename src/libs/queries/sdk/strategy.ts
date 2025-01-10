@@ -31,13 +31,17 @@ export interface Order {
   marginalRate: string;
 }
 
-export interface Strategy {
+export interface BaseStrategy {
   id: string;
-  idDisplay: string;
   base: Token;
   quote: Token;
   order0: Order;
   order1: Order;
+}
+
+export interface Strategy extends BaseStrategy {
+  id: string;
+  idDisplay: string;
   status: StrategyStatus;
   encoded: EncodedStrategyBNStr;
 }
@@ -49,6 +53,14 @@ export interface StrategyWithFiat extends Strategy {
     base: SafeDecimal;
   };
   tradeCount: number;
+}
+
+export interface CartStrategy extends BaseStrategy {
+  fiatBudget: {
+    total: SafeDecimal;
+    quote: SafeDecimal;
+    base: SafeDecimal;
+  };
 }
 
 interface StrategiesHelperProps {
@@ -273,7 +285,7 @@ export const useTokenStrategies = (token?: string) => {
   });
 };
 
-interface CreateStrategyOrder {
+export interface CreateStrategyOrder {
   budget: string;
   min: string;
   max: string;

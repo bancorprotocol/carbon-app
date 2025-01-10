@@ -37,13 +37,15 @@ const runAnimation = () => {
 };
 
 export const MainMenuCart = () => {
-  const [cart, setCart] = useState(lsService.getItem('cart') ?? []);
+  const [cartSize, setCartsize] = useState(
+    lsService.getItem('cart')?.length ?? 0
+  );
   useEffect(() => {
     const handler = (event: StorageEvent) => {
       if (event.key !== lsService.keyFormatter('cart')) return;
       const next = JSON.parse(event.newValue ?? '[]');
-      if (next.length > cart.length) runAnimation();
-      setCart(next);
+      if (next.length > cartSize) runAnimation();
+      setCartsize(next.length);
     };
     window.addEventListener('storage', handler);
     return () => window.removeEventListener('storage', handler);
@@ -55,10 +57,10 @@ export const MainMenuCart = () => {
       to="/cart"
       className="bg-background-800 grid size-40 rounded-full p-10 [grid-template-areas:'stack']"
     >
-      <CartIcon className="size-20 place-self-center [grid-area:stack]" />
-      {!!cart.length && (
+      <CartIcon className="size-20 place-self-center text-white [grid-area:stack]" />
+      {!!cartSize && (
         <span className="bg-success-light grid size-10 place-items-center justify-self-end rounded-full text-[8px] leading-[1.4] text-black [grid-area:stack]">
-          {cart.length}
+          {cartSize}
         </span>
       )}
       <div
