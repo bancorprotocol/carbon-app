@@ -43,6 +43,7 @@ interface LocalStorageSchema {
   strategyOverviewFilter: StrategyFilter;
   strategyOverviewSort: StrategySort;
   voucherContractAddress: string;
+  batcherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
   sdkCompressedCacheData: string;
   tokenPairsCache: { pairs: TradePair[]; timestamp: number };

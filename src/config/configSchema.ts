@@ -75,6 +75,7 @@ export const AppConfigSchema = v.object({
     carbon: v.object({
       carbonController: v.string(),
       voucher: v.string(),
+      batcher: v.optional(v.string()),
     }),
   }),
   utils: v.union([
