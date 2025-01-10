@@ -280,11 +280,9 @@ interface CreateStrategyOrder {
   marginalPrice: string;
 }
 
-type TokenAddressDecimals = Pick<Token, 'address' | 'decimals'>;
-
 export interface CreateStrategyParams {
-  base: TokenAddressDecimals;
-  quote: TokenAddressDecimals;
+  base: string;
+  quote: string;
   order0: CreateStrategyOrder;
   order1: CreateStrategyOrder;
   encoded?: EncodedStrategyBNStr;
@@ -313,8 +311,8 @@ export const useCreateStrategyQuery = () => {
       order1,
     }: CreateStrategyParams) => {
       const unsignedTx = await carbonSDK.createBuySellStrategy(
-        base.address,
-        quote.address,
+        base,
+        quote,
         order0.min,
         order0.marginalPrice || order0.max,
         order0.max,

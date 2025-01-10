@@ -1,15 +1,16 @@
-import { FC, FormEvent, ReactNode, useEffect } from 'react';
+import { FC, FormEvent, MouseEvent, ReactNode, useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { createStrategyEvents } from 'services/events/strategyEvents';
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
-import { useCreateStrategy } from './useCreateStrategy';
+import { toCreateStrategyParams, useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
 import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
 import { useWagmi } from 'libs/wagmi';
 import { BaseOrder } from 'components/strategies/common/types';
 import { StrategyType } from 'libs/routing';
+import { lsService } from 'services/localeStorage';
 import style from 'components/strategies/common/form.module.css';
 
 interface FormProps {
@@ -27,6 +28,7 @@ export const CreateForm: FC<FormProps> = (props) => {
   const { openModal } = useModal();
   const { user } = useWagmi();
   const search = useSearch({ strict: false }) as any;
+  const nav = useNavigate();
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
     useCreateStrategy({ type, base, quote, order0, order1 });
@@ -52,6 +54,34 @@ export const CreateForm: FC<FormProps> = (props) => {
     const warnings = form.querySelector('.warning-message');
     if (!warnings) return false;
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
+  };
+
+  const addToCart = (e: MouseEvent<HTMLButtonElement>) => {
+    const form = e.currentTarget.form!;
+    if (!form.checkValidity()) return;
+    if (!!form.querySelector('.loading-message')) return;
+    if (!!form.querySelector('.error-message')) return;
+    const current = lsService.getItem('cart') ?? [];
+    const next = [
+      ...current,
+      toCreateStrategyParams(base, quote, order0, order1),
+    ];
+    lsService.setItem('cart', next);
+    // Dispatch event to cart
+    const event = new CustomEvent('storage:cart', { detail: next });
+    document.dispatchEvent(event);
+    // Remove budget
+    nav({
+      to: '.',
+      search: (s) => {
+        delete s.budget;
+        delete s.buyBudget;
+        delete s.sellBudget;
+        return s;
+      },
+      replace: false,
+      resetScroll: false,
+    });
   };
 
   const create = (e: FormEvent<HTMLFormElement>) => {
@@ -84,6 +114,20 @@ export const CreateForm: FC<FormProps> = (props) => {
         {props.approvalText ??
           "I've reviewed the warning(s) but choose to proceed."}
       </label>
+
+      <Button
+        className={cn(style.addCart, 'shrink-0')}
+        type="button"
+        variant="white"
+        size="lg"
+        fullWidth
+        loading={loading}
+        loadingChildren={loadingChildren}
+        onClick={addToCart}
+        data-testid="add-strategy-to-cart"
+      >
+        Add to cart
+      </Button>
 
       {user ? (
         <Button
