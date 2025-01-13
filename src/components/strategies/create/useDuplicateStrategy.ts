@@ -1,14 +1,19 @@
-import { StrategyType, useNavigate } from 'libs/routing';
-import { Strategy } from 'libs/queries';
+import { useNavigate } from 'libs/routing';
+import { BaseStrategy } from 'libs/queries';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
-import { isLimitOrder } from 'components/strategies/common/utils';
+import {
+  getStrategyType,
+  isLimitOrder,
+} from 'components/strategies/common/utils';
 import { NATIVE_TOKEN_ADDRESS, isGasTokenToHide } from 'utils/tokens';
 
-export const useDuplicate = (type: StrategyType) => {
+export const useDuplicate = () => {
   const navigate = useNavigate();
-  return ({ base: rawBase, quote: rawQuote, order0, order1 }: Strategy) => {
-    let baseAddress = rawBase.address;
-    let quoteAddress = rawQuote.address;
+  return (strategy: BaseStrategy) => {
+    const type = getStrategyType(strategy);
+    const { base, quote, order0, order1 } = strategy;
+    let baseAddress = base.address;
+    let quoteAddress = quote.address;
 
     // Force native token address if gas token is different
     if (isGasTokenToHide(baseAddress)) baseAddress = NATIVE_TOKEN_ADDRESS;

@@ -8,7 +8,7 @@ import { ReactComponent as EditIcon } from 'assets/icons/edit.svg';
 import { CartStrategy } from 'libs/queries';
 import { CSSProperties, FC, useId } from 'react';
 import { cn } from 'utils/helpers';
-import { Link } from '@tanstack/react-router';
+import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 
 interface Props {
   onRemove: () => void;
@@ -20,6 +20,7 @@ interface Props {
 export const CartStrategyItems: FC<Props> = (props) => {
   const { strategy, style, className, onRemove } = props;
   const { base, quote } = strategy;
+  const duplicate = useDuplicate();
   const id = useId();
 
   const remove = async () => {
@@ -56,13 +57,13 @@ export const CartStrategyItems: FC<Props> = (props) => {
           >
             <DeleteIcon className="size-16" />
           </button>
-          {/* TODO: create link based on strategy params */}
-          <Link
-            to="/trade"
+          <button
+            aria-label="Edit strategy"
+            onClick={() => duplicate(strategy)}
             className="size-38 rounded-6 border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
           >
             <EditIcon className="size-16" />
-          </Link>
+          </button>
         </div>
       </header>
       <StrategyBlockBudget strategy={strategy} />
