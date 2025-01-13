@@ -29,10 +29,10 @@ import { getDeposit } from './utils';
 import { useApproval } from 'hooks/useApproval';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useDeleteStrategy } from '../useDeleteStrategy';
-import style from 'components/strategies/common/form.module.css';
-import config from 'config';
 import { hasNoBudget } from '../overlapping/utils';
 import { StrategyUpdate } from '@bancor/carbon-sdk';
+import style from 'components/strategies/common/form.module.css';
+import config from 'config';
 
 interface EditOrders {
   buy: BaseOrder;

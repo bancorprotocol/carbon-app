@@ -61,24 +61,29 @@ export const CreateForm: FC<FormProps> = (props) => {
     if (!form.checkValidity()) return;
     if (!!form.querySelector('.loading-message')) return;
     if (!!form.querySelector('.error-message')) return;
+    const id = search.strategyCartId || crypto.randomUUID();
+    const strategy = toCreateStrategyParams(base, quote, order0, order1);
     const list = lsService.getItem('cart') ?? [];
-    list.push({
-      id: crypto.randomUUID(),
-      ...toCreateStrategyParams(base, quote, order0, order1),
-    });
+    const index = list.findIndex((s) => s.id === id);
+    if (index === -1) {
+      list.push({ id, ...strategy });
+      // Remove budget
+      nav({
+        to: '.',
+        search: (s) => {
+          delete s.budget;
+          delete s.buyBudget;
+          delete s.sellBudget;
+          return s;
+        },
+        replace: false,
+        resetScroll: false,
+      });
+    } else {
+      list[index] = { id, ...strategy };
+      nav({ to: '/cart' });
+    }
     lsService.setItem('cart', list);
-    // Remove budget
-    nav({
-      to: '.',
-      search: (s) => {
-        delete s.budget;
-        delete s.buyBudget;
-        delete s.sellBudget;
-        return s;
-      },
-      replace: false,
-      resetScroll: false,
-    });
   };
 
   const create = (e: FormEvent<HTMLFormElement>) => {

@@ -8,7 +8,7 @@ import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { cn } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import { lsService } from 'services/localeStorage';
-import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
+import { useCartDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import styles from 'components/strategies/overview/StrategyContent.module.css';
 
 export interface ModalCartConfirmDeleteData {
@@ -56,7 +56,7 @@ export const ModalCartConfirmDelete: ModalFC<ModalCartConfirmDeleteData> = ({
 }) => {
   const { closeModal } = useModal();
   const { strategy } = data;
-  const duplicate = useDuplicate();
+  const duplicate = useCartDuplicate();
 
   const onClick = async () => {
     closeModal(id);
