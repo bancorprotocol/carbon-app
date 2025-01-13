@@ -39,11 +39,9 @@ const getWarning = (strategy: CartStrategy, marketPrice?: number) => {
     buy: false,
   });
   if (sellOutsideMarket) return sellOutsideMarket;
-};
-const getError = (strategy: CartStrategy) => {
-  if (!isZero(strategy.order0.balance)) return '';
-  if (!isZero(strategy.order1.balance)) return '';
-  return 'Please note that your strategy will be inactive as it will not have any budget.';
+  if (!isZero(order0.balance) && isZero(order1.balance)) {
+    return 'Please note that your strategy will be inactive as it will not have any budget.';
+  }
 };
 
 export const CartStrategyItems: FC<Props> = (props) => {
@@ -52,7 +50,6 @@ export const CartStrategyItems: FC<Props> = (props) => {
   const { marketPrice } = useMarketPrice({ base, quote });
 
   const warningMsg = getWarning(strategy, marketPrice);
-  const errorMsg = getError(strategy);
 
   const remove = async () => {
     removeStrategyFromCart(strategy);
@@ -86,14 +83,9 @@ export const CartStrategyItems: FC<Props> = (props) => {
       </header>
       <div className="relative">
         <StrategyBlockBudget strategy={strategy} />
-        {!errorMsg && warningMsg && (
+        {warningMsg && (
           <div className="rounded-8 border-warning absolute inset-0 grid place-items-center border-2 bg-black/60 p-8 backdrop-blur-sm">
             <Warning message={warningMsg} />
-          </div>
-        )}
-        {errorMsg && (
-          <div className="rounded-8 border-error absolute inset-0 grid place-items-center border-2 bg-black/60 p-8 backdrop-blur-sm">
-            <Warning message={errorMsg} isError />
           </div>
         )}
       </div>
