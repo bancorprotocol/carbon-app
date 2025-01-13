@@ -57,7 +57,7 @@ export const simulatorInputRootRoute = createRoute({
         ? (search.end as string)
         : getUnixTime(endOfDay(new Date())).toString();
 
-    if (Number(start) >= Number(end)) {
+    if (Number(start) > Number(end)) {
       throw new Error('Invalid date range');
     }
 
@@ -183,7 +183,7 @@ export const simulatorResultRoute = createRoute({
     if (Number(search.end) <= 0) {
       throw new Error('Invalid end date');
     }
-    if (Number(search.start) >= Number(search.end)) {
+    if (Number(search.start) > Number(search.end)) {
       throw new Error('Invalid date range');
     }
     if (!v.is(validAddress, search.baseToken)) {
