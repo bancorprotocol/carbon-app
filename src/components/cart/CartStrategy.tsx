@@ -39,7 +39,7 @@ const getWarning = (strategy: CartStrategy, marketPrice?: number) => {
     buy: false,
   });
   if (sellOutsideMarket) return sellOutsideMarket;
-  if (!isZero(order0.balance) && isZero(order1.balance)) {
+  if (isZero(order0.balance) && isZero(order1.balance)) {
     return 'Please note that your strategy will be inactive as it will not have any budget.';
   }
 };
