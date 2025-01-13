@@ -3,7 +3,7 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
-import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
+import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { CartStrategy } from 'libs/queries';
 import { CSSProperties, FC } from 'react';
 import { cn } from 'utils/helpers';
@@ -80,7 +80,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
             aria-label="Delete strategy"
             onClick={remove}
           >
-            <IconDelete className="size-16" />
+            <IconTrash className="size-16" />
           </button>
         </div>
       </header>
