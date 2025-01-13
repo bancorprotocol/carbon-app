@@ -1,54 +1,18 @@
 import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { CartStrategy } from 'libs/queries';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
-import { cn } from 'utils/helpers';
 import { Button } from 'components/common/button';
-import { lsService } from 'services/localeStorage';
 import { useCartDuplicate } from 'components/strategies/create/useDuplicateStrategy';
-import styles from 'components/strategies/overview/StrategyContent.module.css';
+import { cn } from 'utils/helpers';
+import { buttonStyles } from 'components/common/button/buttonStyles';
+import { removeStrategyFromCart } from 'components/cart/utils';
 
 export interface ModalCartConfirmDeleteData {
   strategy: CartStrategy;
 }
-
-const flip = (selector: string) => {
-  const elements = document.querySelectorAll<HTMLElement>(selector);
-  const boxes = new Map<HTMLElement, DOMRect>();
-  for (const el of elements) {
-    boxes.set(el, el.getBoundingClientRect());
-  }
-  let attempts = 0;
-  const checkChange = () => {
-    if (attempts > 10) return;
-    attempts++;
-    const updated = document.querySelectorAll<HTMLElement>(selector);
-    if (elements.length === updated.length) {
-      return requestAnimationFrame(checkChange);
-    }
-    for (const [el, box] of boxes.entries()) {
-      const newBox = el.getBoundingClientRect();
-      if (box.top === newBox.top && box.left === newBox.left) continue;
-      const keyframes = [
-        // eslint-disable-next-line prettier/prettier
-        {
-          transform: `translate(${box.left - newBox.left}px, ${
-            box.top - newBox.top
-          }px)`,
-        },
-        { transform: `translate(0px, 0px)` },
-      ];
-      el.animate(keyframes, {
-        duration: 300,
-        easing: 'cubic-bezier(.85, 0, .15, 1)',
-      });
-    }
-  };
-  requestAnimationFrame(checkChange);
-};
 
 export const ModalCartConfirmDelete: ModalFC<ModalCartConfirmDeleteData> = ({
   id,
@@ -60,23 +24,7 @@ export const ModalCartConfirmDelete: ModalFC<ModalCartConfirmDeleteData> = ({
 
   const onClick = async () => {
     closeModal(id);
-
-    // Animate leaving strategy
-    const keyframes = { opacity: 0, transform: 'scale(0.9)' };
-    const option = {
-      duration: 200,
-      easing: 'cubic-bezier(.55, 0, 1, .45)',
-      fill: 'forwards' as const,
-    };
-    await document.getElementById(id)?.animate(keyframes, option).finished;
-
-    // Delete from localstorage
-    const current = lsService.getItem('cart') ?? [];
-    const next = current.filter(({ id }) => id !== strategy.id);
-    lsService.setItem('cart', next);
-
-    // Animate remaining strategies
-    flip(`.${styles.strategyList} > li`);
+    removeStrategyFromCart(strategy);
   };
 
   const edit = () => {

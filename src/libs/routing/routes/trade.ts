@@ -100,7 +100,6 @@ const disposablePage = createRoute({
     max: v.optional(validInputNumber),
     budget: v.optional(validInputNumber),
     marginalPrice: v.optional(v.enum(MarginalPriceOptions)),
-    strategyCartId: v.optional(v.string()),
   }),
 });
 
@@ -119,7 +118,6 @@ const recurringPage = createRoute({
     sellBudget: v.optional(validInputNumber),
     sellSettings: v.optional(v.picklist(['limit', 'range'])),
     sellMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
-    strategyCartId: v.optional(v.string()),
   }),
 });
 
@@ -135,7 +133,6 @@ const overlappingPage = createRoute({
     budget: v.optional(validNumber),
     anchor: v.optional(v.picklist(['buy', 'sell'])),
     chartType: v.optional(v.picklist(['history', 'range'])),
-    strategyCartId: v.optional(v.string()),
   }),
 });
 

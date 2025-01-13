@@ -4,18 +4,16 @@ import { StrategyBlockBudget } from 'components/strategies/overview/strategyBloc
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import { ReactComponent as DeleteIcon } from 'assets/icons/delete.svg';
-import { ReactComponent as EditIcon } from 'assets/icons/edit.svg';
 import { CartStrategy } from 'libs/queries';
 import { CSSProperties, FC } from 'react';
 import { cn } from 'utils/helpers';
-import { useCartDuplicate } from 'components/strategies/create/useDuplicateStrategy';
-import { useModal } from 'hooks/useModal';
 import {
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { removeStrategyFromCart } from './utils';
 
 interface Props {
   strategy: CartStrategy;
@@ -51,15 +49,13 @@ const getError = (strategy: CartStrategy) => {
 export const CartStrategyItems: FC<Props> = (props) => {
   const { strategy, style, className } = props;
   const { base, quote } = strategy;
-  const { openModal } = useModal();
-  const duplicate = useCartDuplicate();
   const { marketPrice } = useMarketPrice({ base, quote });
 
   const warningMsg = getWarning(strategy, marketPrice);
   const errorMsg = getError(strategy);
 
   const remove = async () => {
-    openModal('confirmDeleteCartStrategy', { strategy });
+    removeStrategyFromCart(strategy);
   };
 
   return (
@@ -85,14 +81,6 @@ export const CartStrategyItems: FC<Props> = (props) => {
             onClick={remove}
           >
             <DeleteIcon className="size-16" />
-          </button>
-          <button
-            type="button"
-            className="size-38 rounded-6 border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
-            aria-label="Edit strategy"
-            onClick={() => duplicate(strategy)}
-          >
-            <EditIcon className="size-16" />
           </button>
         </div>
       </header>

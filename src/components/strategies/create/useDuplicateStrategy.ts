@@ -95,7 +95,6 @@ export const useCartDuplicate = () => {
             budget: order.balance,
             settings: isLimitOrder(order) ? 'limit' : 'range',
             direction: isBuyEmpty ? 'sell' : 'buy',
-            strategyCartId: strategy.id,
           },
         });
       }
@@ -108,7 +107,6 @@ export const useCartDuplicate = () => {
             min: order0.startRate,
             max: order1.endRate,
             spread: getRoundedSpread({ order0, order1 }).toString(),
-            strategyCartId: strategy.id,
           },
         });
       }
@@ -126,7 +124,6 @@ export const useCartDuplicate = () => {
             sellMax: order1.endRate,
             sellBudget: order1.balance,
             sellSettings: isLimitOrder(order1) ? 'limit' : 'range',
-            strategyCartId: strategy.id,
           },
         });
       }

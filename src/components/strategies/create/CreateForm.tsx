@@ -1,7 +1,7 @@
 import { FC, FormEvent, MouseEvent, ReactNode, useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { createStrategyEvents } from 'services/events/strategyEvents';
-import { Link, useNavigate, useSearch } from 'libs/routing';
+import { useNavigate, useSearch } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { toCreateStrategyParams, useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
@@ -12,7 +12,6 @@ import { BaseOrder } from 'components/strategies/common/types';
 import { StrategyType } from 'libs/routing';
 import { lsService } from 'services/localeStorage';
 import style from 'components/strategies/common/form.module.css';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 
 interface FormProps {
   type: StrategyType;
@@ -28,7 +27,7 @@ export const CreateForm: FC<FormProps> = (props) => {
   const { base, quote, order0, order1, type, children } = props;
   const { openModal } = useModal();
   const { user } = useWagmi();
-  const search = useSearch({ strict: false }) as { strategyCartId?: string };
+  const search = useSearch({ from: '/trade' });
   const nav = useNavigate();
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
@@ -62,29 +61,23 @@ export const CreateForm: FC<FormProps> = (props) => {
     if (!form.checkValidity()) return;
     if (!!form.querySelector('.loading-message')) return;
     if (!!form.querySelector('.error-message')) return;
-    const id = search.strategyCartId || crypto.randomUUID();
+    const id = crypto.randomUUID();
     const strategy = toCreateStrategyParams(base, quote, order0, order1);
     const list = lsService.getItem('cart') ?? [];
-    const index = list.findIndex((s) => s.id === id);
-    if (index === -1) {
-      list.push({ id, ...strategy });
-      // Remove budget
-      nav({
-        to: '.',
-        search: (s) => {
-          delete s.budget;
-          delete s.buyBudget;
-          delete s.sellBudget;
-          return s;
-        },
-        replace: false,
-        resetScroll: false,
-      });
-    } else {
-      list[index] = { id, ...strategy };
-      nav({ to: '/cart' });
-    }
+    list.push({ id, ...strategy });
     lsService.setItem('cart', list);
+    // Remove budget
+    nav({
+      to: '.',
+      search: (s) => {
+        delete s.budget;
+        delete s.buyBudget;
+        delete s.sellBudget;
+        return s;
+      },
+      replace: false,
+      resetScroll: false,
+    });
   };
 
   const create = (e: FormEvent<HTMLFormElement>) => {
@@ -118,43 +111,20 @@ export const CreateForm: FC<FormProps> = (props) => {
           "I've reviewed the warning(s) but choose to proceed."}
       </label>
 
-      {!search.strategyCartId && (
-        <Button
-          className={cn(style.addCart, 'shrink-0')}
-          type="button"
-          variant="white"
-          size="lg"
-          fullWidth
-          loading={loading}
-          loadingChildren={loadingChildren}
-          onClick={addToCart}
-          data-testid="add-strategy-to-cart"
-        >
-          Add to cart
-        </Button>
-      )}
-      {search.strategyCartId && (
-        <>
-          <Button
-            className={cn(style.addCart, 'shrink-0')}
-            type="button"
-            variant="success"
-            size="lg"
-            fullWidth
-            onClick={addToCart}
-            data-testid="add-strategy-to-cart"
-          >
-            Confirm Changes
-          </Button>
-          <Link
-            className={cn(buttonStyles({ variant: 'secondary' }), 'shrink-0')}
-            to="/cart"
-          >
-            Cancel
-          </Link>
-        </>
-      )}
-      {user && !search.strategyCartId && (
+      <Button
+        className={cn(style.addCart, 'shrink-0')}
+        type="button"
+        variant="white"
+        size="lg"
+        fullWidth
+        loading={loading}
+        loadingChildren={loadingChildren}
+        onClick={addToCart}
+        data-testid="add-strategy-to-cart"
+      >
+        Add to cart
+      </Button>
+      {user && (
         <Button
           className="shrink-0"
           type="submit"

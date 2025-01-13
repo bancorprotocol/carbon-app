@@ -9,6 +9,7 @@ import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
+import style from 'components/strategies/overview/StrategyContent.module.css';
 
 export type Cart = (CreateStrategyParams & { id: string })[];
 
@@ -63,4 +64,56 @@ export const useStrategyCart = () => {
       };
     });
   }, [addresses, cart, getTokenById, priceQueries, selectedFiatCurrency]);
+};
+
+export const removeStrategyFromCart = async (strategy: CartStrategy) => {
+  // Animate leaving strategy
+  const keyframes = { opacity: 0, transform: 'scale(0.9)' };
+  const option = {
+    duration: 200,
+    easing: 'cubic-bezier(.55, 0, 1, .45)',
+    fill: 'forwards' as const,
+  };
+  await document.getElementById(strategy.id)?.animate(keyframes, option)
+    .finished;
+
+  // Delete from localstorage
+  const current = lsService.getItem('cart') ?? [];
+  const next = current.filter(({ id }) => id !== strategy.id);
+  lsService.setItem('cart', next);
+
+  // Animate remaining strategies
+  const selector = `.${style.strategyList} > li`;
+  const elements = document.querySelectorAll<HTMLElement>(selector);
+  const boxes = new Map<HTMLElement, DOMRect>();
+  for (const el of elements) {
+    boxes.set(el, el.getBoundingClientRect());
+  }
+  let attempts = 0;
+  const checkChange = () => {
+    if (attempts > 10) return;
+    attempts++;
+    const updated = document.querySelectorAll<HTMLElement>(selector);
+    if (elements.length === updated.length) {
+      return requestAnimationFrame(checkChange);
+    }
+    for (const [el, box] of boxes.entries()) {
+      const newBox = el.getBoundingClientRect();
+      if (box.top === newBox.top && box.left === newBox.left) continue;
+      const keyframes = [
+        // eslint-disable-next-line prettier/prettier
+        {
+          transform: `translate(${box.left - newBox.left}px, ${
+            box.top - newBox.top
+          }px)`,
+        },
+        { transform: `translate(0px, 0px)` },
+      ];
+      el.animate(keyframes, {
+        duration: 300,
+        easing: 'cubic-bezier(.85, 0, .15, 1)',
+      });
+    }
+  };
+  requestAnimationFrame(checkChange);
 };
