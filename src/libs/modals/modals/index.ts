@@ -56,6 +56,10 @@ import {
   ModalSimulatorDisclaimer,
   ModalSimulatorDisclaimerData,
 } from 'libs/modals/modals/ModalSimulatorDisclaimer';
+import {
+  ModalCartConfirmDelete,
+  ModalCartConfirmDeleteData,
+} from './ModalCart/ModalCartConfirmDelete';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -76,6 +80,7 @@ export interface ModalSchema {
   confirmDeleteStrategy: ModalConfirmDeleteData;
   simulatorDisclaimer: ModalSimulatorDisclaimerData;
   withdrawOrDelete: ModalWithdrawOrDeleteData;
+  confirmDeleteCartStrategy: ModalCartConfirmDeleteData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -99,4 +104,5 @@ export const MODAL_COMPONENTS: TModals = {
   confirmDeleteStrategy: (props) => ModalConfirmDelete(props),
   simulatorDisclaimer: (props) => ModalSimulatorDisclaimer(props),
   withdrawOrDelete: (props) => ModalWithdrawOrDelete(props),
+  confirmDeleteCartStrategy: (props) => ModalCartConfirmDelete(props),
 };

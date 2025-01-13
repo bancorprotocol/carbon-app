@@ -6,37 +6,30 @@ import { StrategyGraph } from 'components/strategies/overview/strategyBlock/Stra
 import { ReactComponent as DeleteIcon } from 'assets/icons/delete.svg';
 import { ReactComponent as EditIcon } from 'assets/icons/edit.svg';
 import { CartStrategy } from 'libs/queries';
-import { CSSProperties, FC, useId } from 'react';
+import { CSSProperties, FC } from 'react';
 import { cn } from 'utils/helpers';
 import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
+import { useModal } from 'hooks/useModal';
 
 interface Props {
-  onRemove: () => void;
   strategy: CartStrategy;
   className?: string;
   style?: CSSProperties;
 }
 
 export const CartStrategyItems: FC<Props> = (props) => {
-  const { strategy, style, className, onRemove } = props;
+  const { strategy, style, className } = props;
   const { base, quote } = strategy;
+  const { openModal } = useModal();
   const duplicate = useDuplicate();
-  const id = useId();
 
   const remove = async () => {
-    const keyframes = { opacity: 0, transform: 'scale(0.9)' };
-    const option = {
-      duration: 200,
-      easing: 'cubic-bezier(.55, 0, 1, .45)',
-      fill: 'forwards' as const,
-    };
-    await document.getElementById(id)?.animate(keyframes, option).finished;
-    onRemove();
+    openModal('confirmDeleteCartStrategy', { strategy });
   };
 
   return (
     <li
-      id={id}
+      id={strategy.id}
       style={style}
       className={cn(
         'rounded-10 bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
