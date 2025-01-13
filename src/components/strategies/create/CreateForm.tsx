@@ -1,7 +1,7 @@
 import { FC, FormEvent, MouseEvent, ReactNode, useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { createStrategyEvents } from 'services/events/strategyEvents';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { toCreateStrategyParams, useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
@@ -12,6 +12,7 @@ import { BaseOrder } from 'components/strategies/common/types';
 import { StrategyType } from 'libs/routing';
 import { lsService } from 'services/localeStorage';
 import style from 'components/strategies/common/form.module.css';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 
 interface FormProps {
   type: StrategyType;
@@ -27,7 +28,7 @@ export const CreateForm: FC<FormProps> = (props) => {
   const { base, quote, order0, order1, type, children } = props;
   const { openModal } = useModal();
   const { user } = useWagmi();
-  const search = useSearch({ strict: false }) as any;
+  const search = useSearch({ strict: false }) as { strategyCartId?: string };
   const nav = useNavigate();
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
@@ -35,7 +36,7 @@ export const CreateForm: FC<FormProps> = (props) => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      createStrategyEvents.change(type, search);
+      createStrategyEvents.change(type, search as any);
     }, 1000);
     return () => clearTimeout(timeout);
   }, [type, search]);
@@ -89,7 +90,7 @@ export const CreateForm: FC<FormProps> = (props) => {
   const create = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
-    createStrategyEvents.submit(type, search);
+    createStrategyEvents.submit(type, search as any);
     createStrategy();
   };
 
@@ -117,21 +118,43 @@ export const CreateForm: FC<FormProps> = (props) => {
           "I've reviewed the warning(s) but choose to proceed."}
       </label>
 
-      <Button
-        className={cn(style.addCart, 'shrink-0')}
-        type="button"
-        variant="white"
-        size="lg"
-        fullWidth
-        loading={loading}
-        loadingChildren={loadingChildren}
-        onClick={addToCart}
-        data-testid="add-strategy-to-cart"
-      >
-        Add to cart
-      </Button>
-
-      {user ? (
+      {!search.strategyCartId && (
+        <Button
+          className={cn(style.addCart, 'shrink-0')}
+          type="button"
+          variant="white"
+          size="lg"
+          fullWidth
+          loading={loading}
+          loadingChildren={loadingChildren}
+          onClick={addToCart}
+          data-testid="add-strategy-to-cart"
+        >
+          Add to cart
+        </Button>
+      )}
+      {search.strategyCartId && (
+        <>
+          <Button
+            className={cn(style.addCart, 'shrink-0')}
+            type="button"
+            variant="success"
+            size="lg"
+            fullWidth
+            onClick={addToCart}
+            data-testid="add-strategy-to-cart"
+          >
+            Confirm Changes
+          </Button>
+          <Link
+            className={cn(buttonStyles({ variant: 'secondary' }), 'shrink-0')}
+            to="/cart"
+          >
+            Cancel
+          </Link>
+        </>
+      )}
+      {user && !search.strategyCartId && (
         <Button
           className="shrink-0"
           type="submit"
@@ -144,7 +167,8 @@ export const CreateForm: FC<FormProps> = (props) => {
         >
           Create Strategy
         </Button>
-      ) : (
+      )}
+      {!user && (
         <Button
           className="shrink-0"
           type="button"
