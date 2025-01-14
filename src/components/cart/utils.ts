@@ -9,7 +9,8 @@ import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
-import style from 'components/strategies/overview/StrategyContent.module.css';
+import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
+import formStyle from 'components/strategies/common/form.module.css';
 
 export type Cart = (CreateStrategyParams & { id: string })[];
 
@@ -66,6 +67,44 @@ export const useStrategyCart = () => {
   }, [addresses, cart, getTokenById, priceQueries, selectedFiatCurrency]);
 };
 
+export const addStrategyToCart = (params: CreateStrategyParams) => {
+  const id = crypto.randomUUID();
+  const list = lsService.getItem('cart') ?? [];
+  list.push({ id, ...params });
+  lsService.setItem('cart', list);
+
+  // Animation
+  const getTranslate = (target: HTMLElement, elRect: DOMRect) => {
+    const { top, height, left, width } = target.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+    const radius = elRect.width / 2;
+    const translateX = centerX - elRect.left - radius;
+    const translateY = centerY - elRect.top - radius;
+    return `translate(${translateX}px, ${translateY}px)`;
+  };
+  const source = document.querySelector<HTMLElement>(`.${formStyle.addCart}`);
+  const target = document.getElementById('menu-cart-link');
+  const el = document.getElementById('animate-cart-indicator');
+  if (!source || !target || !el) return;
+  const currentRect = el.getBoundingClientRect();
+  const sourceTranslate = getTranslate(source, currentRect);
+  const targetTranslate = getTranslate(target, currentRect);
+  const animation = el.animate(
+    [
+      { opacity: 0, transform: `${sourceTranslate} scale(15)` },
+      { opacity: 1, transform: sourceTranslate },
+      { opacity: 1, transform: targetTranslate },
+      { opacity: 0, transform: `${targetTranslate} scale(5)` },
+    ],
+    {
+      duration: 1000,
+      easing: 'cubic-bezier(0,.6,1,.4)',
+    }
+  );
+  return animation.finished;
+};
+
 export const removeStrategyFromCart = async (strategy: CartStrategy) => {
   // Animate leaving strategy
   const keyframes = { opacity: 0, transform: 'scale(0.9)' };
@@ -83,7 +122,7 @@ export const removeStrategyFromCart = async (strategy: CartStrategy) => {
   lsService.setItem('cart', next);
 
   // Animate remaining strategies
-  const selector = `.${style.strategyList} > li`;
+  const selector = `.${strategyStyle.strategyList} > li`;
   const elements = document.querySelectorAll<HTMLElement>(selector);
   const boxes = new Map<HTMLElement, DOMRect>();
   for (const el of elements) {

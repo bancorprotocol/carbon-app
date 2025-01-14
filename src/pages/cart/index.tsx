@@ -13,6 +13,7 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useModal } from 'hooks/useModal';
 import { carbonSDK } from 'libs/sdk';
 import { useNavigate } from '@tanstack/react-router';
+import { lsService } from 'services/localeStorage';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
@@ -90,9 +91,9 @@ export const CartPage = () => {
           sellPriceHigh: order1.endRate,
           sellBudget: order1.balance,
         }));
-        console.log('batchCreateBuySellStrategies', params);
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
         await signer!.sendTransaction(unsignedTx);
+        lsService.setItem('cart', []);
         nav({ to: '/' });
       } finally {
         setPending(false);

@@ -1,4 +1,11 @@
-import { FC, FormEvent, MouseEvent, ReactNode, useEffect } from 'react';
+import {
+  FC,
+  FormEvent,
+  MouseEvent,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import { Token } from 'libs/tokens';
 import { createStrategyEvents } from 'services/events/strategyEvents';
 import { useNavigate, useSearch } from 'libs/routing';
@@ -10,7 +17,7 @@ import { cn } from 'utils/helpers';
 import { useWagmi } from 'libs/wagmi';
 import { BaseOrder } from 'components/strategies/common/types';
 import { StrategyType } from 'libs/routing';
-import { lsService } from 'services/localeStorage';
+import { addStrategyToCart } from 'components/cart/utils';
 import style from 'components/strategies/common/form.module.css';
 
 interface FormProps {
@@ -29,6 +36,8 @@ export const CreateForm: FC<FormProps> = (props) => {
   const { user } = useWagmi();
   const search = useSearch({ from: '/trade' });
   const nav = useNavigate();
+
+  const [animating, setAnimating] = useState(false);
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
     useCreateStrategy({ type, base, quote, order0, order1 });
@@ -56,16 +65,16 @@ export const CreateForm: FC<FormProps> = (props) => {
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
   };
 
-  const addToCart = (e: MouseEvent<HTMLButtonElement>) => {
+  const addToCart = async (e: MouseEvent<HTMLButtonElement>) => {
     const form = e.currentTarget.form!;
     if (!form.checkValidity()) return;
     if (!!form.querySelector('.loading-message')) return;
     if (!!form.querySelector('.error-message')) return;
-    const id = crypto.randomUUID();
-    const strategy = toCreateStrategyParams(base, quote, order0, order1);
-    const list = lsService.getItem('cart') ?? [];
-    list.push({ id, ...strategy });
-    lsService.setItem('cart', list);
+
+    setAnimating(true);
+    const params = toCreateStrategyParams(base, quote, order0, order1);
+    await addStrategyToCart(params);
+    setAnimating(false);
     // Remove budget
     nav({
       to: '.',
@@ -111,32 +120,33 @@ export const CreateForm: FC<FormProps> = (props) => {
           "I've reviewed the warning(s) but choose to proceed."}
       </label>
 
-      <Button
-        className={cn(style.addCart, 'shrink-0')}
-        type="button"
-        variant="white"
-        size="lg"
-        fullWidth
-        loading={loading}
-        loadingChildren={loadingChildren}
-        onClick={addToCart}
-        data-testid="add-strategy-to-cart"
-      >
-        Add to cart
-      </Button>
       {user && (
-        <Button
-          className="shrink-0"
-          type="submit"
-          variant="success"
-          size="lg"
-          fullWidth
-          loading={loading}
-          loadingChildren={loadingChildren}
-          data-testid="create-strategy"
-        >
-          Create Strategy
-        </Button>
+        <>
+          <Button
+            className={cn(style.addCart, 'shrink-0')}
+            type="button"
+            variant="white"
+            size="lg"
+            fullWidth
+            disabled={loading || animating}
+            onClick={addToCart}
+            data-testid="add-strategy-to-cart"
+          >
+            Add to cart
+          </Button>
+          <Button
+            className="shrink-0"
+            type="submit"
+            variant="success"
+            size="lg"
+            fullWidth
+            loading={loading}
+            loadingChildren={loadingChildren}
+            data-testid="create-strategy"
+          >
+            Create Strategy
+          </Button>
+        </>
       )}
       {!user && (
         <Button
