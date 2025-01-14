@@ -2,18 +2,19 @@ import { CartList } from 'components/cart/CartList';
 import { EmptyCart } from 'components/cart/EmptyCart';
 import { useStrategyCart } from 'components/cart/utils';
 import { Button } from 'components/common/button';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useWagmi } from 'libs/wagmi';
 import { cn } from 'utils/helpers';
-import { FormEvent, useMemo } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { CartStrategy, useGetTokenBalances } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { Warning } from 'components/common/WarningMessageWithIcon';
+import { useModal } from 'hooks/useModal';
+import { carbonSDK } from 'libs/sdk';
+import { useNavigate } from '@tanstack/react-router';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
-import { useModal } from 'hooks/useModal';
 
 const spenderAddress = config.addresses.carbon.carbonController;
 const getApproveTokens = (strategies: CartStrategy[]) => {
@@ -52,8 +53,11 @@ const useHasInsufficientFunds = (approvalTokens: ApprovalToken[]) => {
 
 export const CartPage = () => {
   const strategies = useStrategyCart();
-  const { user } = useWagmi();
+  const { user, signer } = useWagmi();
   const { openModal } = useModal();
+  const nav = useNavigate({ from: '/cart' });
+  const [pending, setPending] = useState(false);
+
   const approvalTokens = useMemo(() => {
     return getApproveTokens(strategies);
   }, [strategies]);
@@ -61,7 +65,7 @@ export const CartPage = () => {
   const approval = useApproval(approvalTokens);
   const funds = useHasInsufficientFunds(approvalTokens);
 
-  const submit = async (e: FormEvent<HTMLFormElement>) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     if (!!form.querySelector('.error-message')) return;
@@ -71,7 +75,29 @@ export const CartPage = () => {
       if (approve && !approve.checked) return;
     }
 
-    const create = () => {};
+    const create = async () => {
+      setPending(true);
+      try {
+        const params = strategies.map(({ base, quote, order0, order1 }) => ({
+          baseToken: base.address,
+          quoteToken: quote.address,
+          buyPriceLow: order0.startRate,
+          buyPriceMarginal: order0.marginalRate || order0.endRate,
+          buyPriceHigh: order0.endRate,
+          buyBudget: order0.balance,
+          sellPriceLow: order1.startRate,
+          sellPriceMarginal: order1.marginalRate || order1.startRate,
+          sellPriceHigh: order1.endRate,
+          sellBudget: order1.balance,
+        }));
+        console.log('batchCreateBuySellStrategies', params);
+        const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
+        await signer!.sendTransaction(unsignedTx);
+        nav({ to: '/' });
+      } finally {
+        setPending(false);
+      }
+    };
 
     if (approval.approvalRequired) {
       return openModal('txConfirm', {
@@ -80,10 +106,9 @@ export const CartPage = () => {
         buttonLabel: 'Create Strategy',
         context: 'createStrategy',
       });
+    } else {
+      create();
     }
-    // const strategiesData = toStrategyData(strategies);
-    // const tx = await contract?.write.batchCreate(strategiesData);
-    // await tx?.wait();
   };
 
   if (!strategies.length) {
@@ -91,7 +116,6 @@ export const CartPage = () => {
       <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] flex-grow content-start gap-16 pt-20">
         <h1 className="text-18 flex items-center gap-8">
           Create multiple strategies
-          <Tooltip iconClassName="size-18 text-white/60" element="" />
         </h1>
         <EmptyCart />
       </section>
@@ -108,7 +132,6 @@ export const CartPage = () => {
     >
       <h1 className="text-18 flex items-center gap-8">
         Create multiple strategies
-        <Tooltip iconClassName="size-18 text-white/60" element="" />
       </h1>
       <CartList strategies={strategies} />
       {funds.isInsufficient && (
@@ -136,7 +159,7 @@ export const CartPage = () => {
       </label>
       <Button
         type="submit"
-        disabled={!user || approval.isPending || funds.isPending}
+        disabled={!user || approval.isPending || funds.isPending || pending}
         variant="success"
         className="place-self-center"
       >

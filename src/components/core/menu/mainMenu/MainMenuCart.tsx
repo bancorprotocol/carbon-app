@@ -56,6 +56,7 @@ export const MainMenuCart = () => {
       id="menu-cart-link"
       to="/cart"
       className="bg-background-800 grid size-40 rounded-full p-10 [grid-template-areas:'stack']"
+      aria-label="Cart page"
     >
       <CartIcon className="size-20 place-self-center text-white [grid-area:stack]" />
       {!!cartSize && (
