@@ -117,7 +117,7 @@ export const CartPage = () => {
     return (
       <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] flex-grow content-start gap-16 pt-20">
         <h1 className="text-18 flex items-center gap-8">
-          Create multiple strategies
+          Create Multiple Strategies
         </h1>
         <EmptyCart />
       </section>
@@ -133,7 +133,7 @@ export const CartPage = () => {
       onSubmit={submit}
     >
       <h1 className="text-18 flex items-center gap-8">
-        Create multiple strategies
+        Create Multiple Strategies
       </h1>
       <CartList strategies={strategies} />
       {funds.isInsufficient && (
