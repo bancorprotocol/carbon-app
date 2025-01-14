@@ -67,6 +67,7 @@ export const CreateForm: FC<FormProps> = (props) => {
   };
 
   const addToCart = async (e: MouseEvent<HTMLButtonElement>) => {
+    if (!user) return;
     const form = e.currentTarget.form!;
     if (!form.checkValidity()) return;
     if (!!form.querySelector('.loading-message')) return;
@@ -74,7 +75,7 @@ export const CreateForm: FC<FormProps> = (props) => {
 
     setAnimating(true);
     const params = toCreateStrategyParams(base, quote, order0, order1);
-    await addStrategyToCart(params);
+    await addStrategyToCart(user, params);
     setAnimating(false);
     // Remove budget
     nav({

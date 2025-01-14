@@ -14,6 +14,7 @@ import {
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { removeStrategyFromCart } from './utils';
+import { useWagmi } from 'libs/wagmi';
 
 interface Props {
   strategy: CartStrategy;
@@ -48,11 +49,13 @@ export const CartStrategyItems: FC<Props> = (props) => {
   const { strategy, style, className } = props;
   const { base, quote } = strategy;
   const { marketPrice } = useMarketPrice({ base, quote });
+  const { user } = useWagmi();
 
   const warningMsg = getWarning(strategy, marketPrice);
 
   const remove = async () => {
-    removeStrategyFromCart(strategy);
+    if (!user) return;
+    removeStrategyFromCart(user, strategy);
   };
 
   return (

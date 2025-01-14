@@ -56,7 +56,7 @@ interface LocalStorageSchema {
   configOverride: Partial<AppConfig>;
   featureFlags: string[];
   strategyLayout: StrategyLayout;
-  cart: Cart;
+  carts: Record<string, Cart>;
 }
 
 enum EnumStrategySort {

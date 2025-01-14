@@ -1,17 +1,24 @@
 import { Link } from '@tanstack/react-router';
 import { ReactComponent as CartIcon } from 'assets/icons/cart.svg';
+import { useWagmi } from 'libs/wagmi';
 import { useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 
 export const MainMenuCart = () => {
-  const [cartSize, setCartsize] = useState(
-    lsService.getItem('cart')?.length ?? 0
-  );
+  const { user } = useWagmi();
+  const [cartSize, setCartsize] = useState(0);
+  useEffect(() => {
+    if (!user) return setCartsize(0);
+    const carts = lsService.getItem('carts') ?? {};
+    setCartsize((carts[user] ?? []).length);
+  }, [user]);
+
   useEffect(() => {
     const handler = (event: StorageEvent) => {
-      if (event.key !== lsService.keyFormatter('cart')) return;
-      const next = JSON.parse(event.newValue ?? '[]');
-      setCartsize(next.length);
+      if (event.key !== lsService.keyFormatter('carts')) return;
+      if (!user) return;
+      const next = JSON.parse(event.newValue ?? '{}');
+      setCartsize((next[user] ?? []).length);
     };
     window.addEventListener('storage', handler);
     return () => window.removeEventListener('storage', handler);

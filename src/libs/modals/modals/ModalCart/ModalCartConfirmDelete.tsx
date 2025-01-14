@@ -9,6 +9,7 @@ import { useCartDuplicate } from 'components/strategies/create/useDuplicateStrat
 import { cn } from 'utils/helpers';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { removeStrategyFromCart } from 'components/cart/utils';
+import { useWagmi } from 'libs/wagmi';
 
 export interface ModalCartConfirmDeleteData {
   strategy: CartStrategy;
@@ -18,13 +19,14 @@ export const ModalCartConfirmDelete: ModalFC<ModalCartConfirmDeleteData> = ({
   id,
   data,
 }) => {
+  const { user } = useWagmi();
   const { closeModal } = useModal();
   const { strategy } = data;
   const duplicate = useCartDuplicate();
 
   const onClick = async () => {
     closeModal(id);
-    removeStrategyFromCart(strategy);
+    removeStrategyFromCart(user!, strategy);
   };
 
   const edit = () => {

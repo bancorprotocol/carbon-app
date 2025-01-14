@@ -9,6 +9,7 @@ import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
+import { useWagmi } from 'libs/wagmi';
 import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
 import formStyle from 'components/strategies/common/form.module.css';
 
@@ -22,7 +23,8 @@ const toOrder = (sdkOrder: CreateStrategyOrder) => ({
 });
 
 export const useStrategyCart = () => {
-  const [cart, setCart] = useState(lsService.getItem('cart') ?? []);
+  const [cart, setCart] = useState<Cart>([]);
+  const { user } = useWagmi();
   const { getTokenById } = useTokens();
   const { selectedFiatCurrency } = useFiatCurrency();
 
@@ -31,10 +33,17 @@ export const useStrategyCart = () => {
   const priceQueries = useGetMultipleTokenPrices(addresses);
 
   useEffect(() => {
+    if (!user) return setCart([]);
+    const carts = lsService.getItem('carts') ?? {};
+    setCart(carts[user] ?? []);
+  }, [user]);
+
+  useEffect(() => {
     const handler = (event: StorageEvent) => {
-      if (event.key !== lsService.keyFormatter('cart')) return;
-      const next = JSON.parse(event.newValue ?? '[]');
-      setCart(next);
+      if (event.key !== lsService.keyFormatter('carts')) return;
+      if (!user) return;
+      const next = JSON.parse(event.newValue ?? '{}');
+      setCart(next[user] ?? []);
     };
     window.addEventListener('storage', handler);
     return () => window.removeEventListener('storage', handler);
@@ -67,11 +76,15 @@ export const useStrategyCart = () => {
   }, [addresses, cart, getTokenById, priceQueries, selectedFiatCurrency]);
 };
 
-export const addStrategyToCart = (params: CreateStrategyParams) => {
+export const addStrategyToCart = (
+  user: string,
+  params: CreateStrategyParams
+) => {
   const id = crypto.randomUUID();
-  const list = lsService.getItem('cart') ?? [];
-  list.push({ id, ...params });
-  lsService.setItem('cart', list);
+  const carts = lsService.getItem('carts') ?? {};
+  carts[user] ||= [];
+  carts[user].push({ id, ...params });
+  lsService.setItem('carts', carts);
 
   // Animation
   const getTranslate = (target: HTMLElement, elRect: DOMRect) => {
@@ -105,7 +118,10 @@ export const addStrategyToCart = (params: CreateStrategyParams) => {
   return animation.finished;
 };
 
-export const removeStrategyFromCart = async (strategy: CartStrategy) => {
+export const removeStrategyFromCart = async (
+  user: string,
+  strategy: CartStrategy
+) => {
   // Animate leaving strategy
   const keyframes = { opacity: 0, transform: 'scale(0.9)' };
   const option = {
@@ -117,9 +133,10 @@ export const removeStrategyFromCart = async (strategy: CartStrategy) => {
     .finished;
 
   // Delete from localstorage
-  const current = lsService.getItem('cart') ?? [];
-  const next = current.filter(({ id }) => id !== strategy.id);
-  lsService.setItem('cart', next);
+  const current = lsService.getItem('carts') ?? {};
+  if (!current[user]?.length) return;
+  current[user] = current[user].filter(({ id }) => id !== strategy.id);
+  lsService.setItem('carts', current);
 
   // Animate remaining strategies
   const selector = `.${strategyStyle.strategyList} > li`;
@@ -155,4 +172,10 @@ export const removeStrategyFromCart = async (strategy: CartStrategy) => {
     }
   };
   requestAnimationFrame(checkChange);
+};
+
+export const clearCart = (user: string) => {
+  const current = lsService.getItem('carts') ?? {};
+  current[user] = [];
+  lsService.setItem('carts', current);
 };

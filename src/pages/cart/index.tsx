@@ -1,6 +1,6 @@
 import { CartList } from 'components/cart/CartList';
 import { EmptyCart } from 'components/cart/EmptyCart';
-import { useStrategyCart } from 'components/cart/utils';
+import { clearCart, useStrategyCart } from 'components/cart/utils';
 import { Button } from 'components/common/button';
 import { useWagmi } from 'libs/wagmi';
 import { cn } from 'utils/helpers';
@@ -13,7 +13,6 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useModal } from 'hooks/useModal';
 import { carbonSDK } from 'libs/sdk';
 import { useNavigate } from '@tanstack/react-router';
-import { lsService } from 'services/localeStorage';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
@@ -94,7 +93,7 @@ export const CartPage = () => {
         }));
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
         await signer!.sendTransaction(unsignedTx);
-        lsService.setItem('cart', []);
+        clearCart(user!);
         nav({ to: '/' });
       } finally {
         setPending(false);
