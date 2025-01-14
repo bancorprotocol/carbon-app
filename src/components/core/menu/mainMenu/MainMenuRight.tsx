@@ -9,6 +9,7 @@ import { useBurgerMenuItems } from './MainMenuRightBurger/useBurgerMenuItems';
 import { MainMenuRightChainSelector } from './MainMenuRightChainSelector';
 import { networks } from 'config';
 import { MainMenuCart } from './MainMenuCart';
+import config from 'config';
 
 const TenderlyForkAlert = () => {
   return IS_TENDERLY_FORK ? (
@@ -25,7 +26,7 @@ export const MainMenuRight: FC = () => {
   return (
     <div className="flex items-center gap-10 sm:gap-20">
       <TenderlyForkAlert />
-      <MainMenuCart />
+      {config.addresses.carbon.batcher && <MainMenuCart />}
       <MainMenuRightNotifications />
       <MainMenuRightChainSelector networks={networks} />
       {aboveBreakpoint('md') && (

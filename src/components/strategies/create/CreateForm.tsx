@@ -19,6 +19,7 @@ import { BaseOrder } from 'components/strategies/common/types';
 import { StrategyType } from 'libs/routing';
 import { addStrategyToCart } from 'components/cart/utils';
 import style from 'components/strategies/common/form.module.css';
+import config from 'config';
 
 interface FormProps {
   type: StrategyType;
@@ -122,18 +123,20 @@ export const CreateForm: FC<FormProps> = (props) => {
 
       {user && (
         <>
-          <Button
-            className={cn(style.addCart, 'shrink-0')}
-            type="button"
-            variant="white"
-            size="lg"
-            fullWidth
-            disabled={loading || animating}
-            onClick={addToCart}
-            data-testid="add-strategy-to-cart"
-          >
-            Add to cart
-          </Button>
+          {config.addresses.carbon.batcher && (
+            <Button
+              className={cn(style.addCart, 'shrink-0')}
+              type="button"
+              variant="white"
+              size="lg"
+              fullWidth
+              disabled={loading || animating}
+              onClick={addToCart}
+              data-testid="add-strategy-to-cart"
+            >
+              Add to cart
+            </Button>
+          )}
           <Button
             className="shrink-0"
             type="submit"

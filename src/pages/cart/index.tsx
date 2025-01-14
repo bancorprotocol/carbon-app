@@ -17,8 +17,9 @@ import { lsService } from 'services/localeStorage';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
-const spenderAddress = config.addresses.carbon.carbonController;
+const batcher = config.addresses.carbon.batcher;
 const getApproveTokens = (strategies: CartStrategy[]) => {
+  if (!batcher) throw new Error('Batcher address not provided');
   const tokens: Record<string, Token> = {};
   const amount: Record<string, SafeDecimal> = {};
   for (const strategy of strategies) {
@@ -33,7 +34,7 @@ const getApproveTokens = (strategies: CartStrategy[]) => {
   }
   return Object.values(tokens).map((token) => ({
     ...token,
-    spender: spenderAddress,
+    spender: batcher,
     amount: amount[token.address].toString(),
   }));
 };
