@@ -104,7 +104,7 @@ export const CartPage = () => {
       return openModal('txConfirm', {
         approvalTokens,
         onConfirm: create,
-        buttonLabel: 'Create Strategy',
+        buttonLabel: 'Create all Strategies',
         context: 'createStrategy',
       });
     } else {
