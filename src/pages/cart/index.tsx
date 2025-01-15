@@ -13,6 +13,7 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useModal } from 'hooks/useModal';
 import { carbonSDK } from 'libs/sdk';
 import { useNavigate } from '@tanstack/react-router';
+import { useNotifications } from 'hooks/useNotifications';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
@@ -56,8 +57,11 @@ export const CartPage = () => {
   const strategies = useStrategyCart();
   const { user, signer } = useWagmi();
   const { openModal } = useModal();
+  const { dispatchNotification } = useNotifications();
+
   const nav = useNavigate({ from: '/cart' });
-  const [pending, setPending] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
   const approvalTokens = useMemo(() => {
     return getApproveTokens(strategies);
@@ -77,7 +81,7 @@ export const CartPage = () => {
     }
 
     const create = async () => {
-      setPending(true);
+      setConfirmation(true);
       try {
         const params = strategies.map(({ base, quote, order0, order1 }) => ({
           baseToken: base.address,
@@ -92,11 +96,16 @@ export const CartPage = () => {
           sellBudget: order1.balance,
         }));
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
-        await signer!.sendTransaction(unsignedTx);
+        const tx = await signer!.sendTransaction(unsignedTx);
+        setConfirmation(false);
+        setProcessing(true);
+        dispatchNotification('createBatchStrategy', { txHash: tx.hash });
+        await tx.wait();
         clearCart(user!);
         nav({ to: '/' });
       } finally {
-        setPending(false);
+        setConfirmation(false);
+        setProcessing(false);
       }
     };
 
@@ -160,9 +169,13 @@ export const CartPage = () => {
       </label>
       <Button
         type="submit"
-        disabled={!user || approval.isPending || funds.isPending || pending}
+        disabled={!user || approval.isPending || funds.isPending}
+        loading={confirmation || processing}
+        loadingChildren={
+          confirmation ? 'Waiting for Confirmation' : 'Processing'
+        }
         variant="success"
-        className="place-self-center"
+        className="mt-20 place-self-center"
       >
         Sign all strategies
       </Button>
