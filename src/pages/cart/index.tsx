@@ -124,9 +124,6 @@ export const CartPage = () => {
   if (!strategies.length) {
     return (
       <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] flex-grow content-start gap-16 pt-20">
-        <h1 className="text-18 flex items-center gap-8">
-          Create Multiple Strategies
-        </h1>
         <EmptyCart />
       </section>
     );
@@ -175,7 +172,7 @@ export const CartPage = () => {
           confirmation ? 'Waiting for Confirmation' : 'Processing'
         }
         variant="success"
-        className="mt-20 place-self-center"
+        className="mt-10 place-self-center"
       >
         Sign all strategies
       </Button>
