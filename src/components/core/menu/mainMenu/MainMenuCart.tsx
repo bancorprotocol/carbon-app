@@ -1,10 +1,11 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useRouterState } from '@tanstack/react-router';
 import { ReactComponent as CartIcon } from 'assets/icons/cart.svg';
 import { useWagmi } from 'libs/wagmi';
 import { useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 
 export const MainMenuCart = () => {
+  const { pathname } = useRouterState().location;
   const { user } = useWagmi();
   const [cartSize, setCartsize] = useState(0);
   useEffect(() => {
@@ -28,8 +29,9 @@ export const MainMenuCart = () => {
     <Link
       id="menu-cart-link"
       to="/cart"
-      className="bg-background-800 hover:border-background-700 grid size-40 rounded-full border-2 border-transparent p-8 [grid-template-areas:'stack']"
+      className="bg-background-800 hover:border-background-700 grid size-40 rounded-full border-2 border-transparent p-8 [grid-template-areas:'stack'] aria-[current=page]:border-white"
       aria-label="Cart page"
+      aria-current={pathname.startsWith('/cart') ? 'page' : 'false'}
     >
       <CartIcon className="size-20 place-self-center text-white [grid-area:stack]" />
       {!!cartSize && (
