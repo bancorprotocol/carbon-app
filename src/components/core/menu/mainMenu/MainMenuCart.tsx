@@ -28,7 +28,7 @@ export const MainMenuCart = () => {
     <Link
       id="menu-cart-link"
       to="/cart"
-      className="bg-background-800 grid size-40 rounded-full p-10 [grid-template-areas:'stack']"
+      className="bg-background-800 hover:border-background-700 grid size-40 rounded-full border-2 border-transparent p-8 [grid-template-areas:'stack']"
       aria-label="Cart page"
     >
       <CartIcon className="size-20 place-self-center text-white [grid-area:stack]" />
