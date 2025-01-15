@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { QueryKey, useQueryClient } from 'libs/queries';
+import { CreateStrategyParams, QueryKey, useQueryClient } from 'libs/queries';
 import { useCreateStrategyQuery } from 'libs/queries';
 import { StrategyType, useNavigate } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
@@ -18,6 +18,28 @@ import config from 'config';
 const spenderAddress = config.addresses.carbon.carbonController;
 
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
+
+export const toCreateStrategyParams = (
+  base: Token,
+  quote: Token,
+  order0: BaseOrder,
+  order1: BaseOrder
+): CreateStrategyParams => ({
+  base: base.address,
+  quote: quote.address,
+  order0: {
+    budget: order0.budget || '0',
+    min: order0.min || '0',
+    max: order0.max || '0',
+    marginalPrice: order0.marginalPrice ?? '',
+  },
+  order1: {
+    budget: order1.budget || '0',
+    min: order1.min || '0',
+    max: order1.max || '0',
+    marginalPrice: order1.marginalPrice ?? '',
+  },
+});
 
 interface Props {
   type: StrategyType;
@@ -79,22 +101,7 @@ export const useCreateStrategy = (props: Props) => {
 
     const onConfirm = () => {
       return mutation.mutate(
-        {
-          base: base,
-          quote: quote,
-          order0: {
-            budget: order0.budget || '0',
-            min: order0.min || '0',
-            max: order0.max || '0',
-            marginalPrice: order0.marginalPrice ?? '',
-          },
-          order1: {
-            budget: order1.budget || '0',
-            min: order1.min || '0',
-            max: order1.max || '0',
-            marginalPrice: order1.marginalPrice ?? '',
-          },
-        },
+        toCreateStrategyParams(base, quote, order0, order1),
         {
           onSuccess: async (tx) => {
             handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);

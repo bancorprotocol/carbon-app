@@ -18,6 +18,7 @@ import {
 import { NotificationPreference } from 'libs/notifications/NotificationPreferences';
 import { AppConfig } from 'config/types';
 import { StrategyLayout } from 'components/strategies/StrategySelectLayout';
+import { Cart } from 'components/cart/utils';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
@@ -42,6 +43,7 @@ interface LocalStorageSchema {
   strategyOverviewFilter: StrategyFilter;
   strategyOverviewSort: StrategySort;
   voucherContractAddress: string;
+  batcherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
   sdkCompressedCacheData: string;
   tokenPairsCache: { pairs: TradePair[]; timestamp: number };
@@ -54,6 +56,7 @@ interface LocalStorageSchema {
   configOverride: Partial<AppConfig>;
   featureFlags: string[];
   strategyLayout: StrategyLayout;
+  carts: Record<string, Cart>;
 }
 
 enum EnumStrategySort {

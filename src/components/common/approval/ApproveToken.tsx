@@ -49,6 +49,7 @@ export const ApproveToken: FC<Props> = ({
 
   const onApprove = async (e: FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     if (!data || !token) {
       return console.error('No data loaded');
     }

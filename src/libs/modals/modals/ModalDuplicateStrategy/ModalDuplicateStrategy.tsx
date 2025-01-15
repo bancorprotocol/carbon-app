@@ -22,7 +22,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
 }) => {
   const navigate = useNavigate();
   const strategyType = getStrategyType(strategy);
-  const duplicate = useDuplicate(strategyType);
+  const duplicate = useDuplicate();
   const { closeModal } = useModal();
   const undercutDifference = 0.001;
 

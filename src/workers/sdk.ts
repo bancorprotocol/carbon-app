@@ -312,6 +312,9 @@ const sdkExposed = {
       sellBudget,
       overrides
     ),
+  batchCreateBuySellStrategies: (
+    ...args: Parameters<(typeof carbonSDK)['batchCreateBuySellStrategies']>
+  ) => carbonSDK.batchCreateBuySellStrategies(...args),
   updateStrategy: (
     strategyId: string,
     encoded: EncodedStrategyBNStr,

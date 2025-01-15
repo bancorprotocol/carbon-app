@@ -66,6 +66,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
         ))}
       </ul>
       <Button
+        type="button"
         size="lg"
         variant="success"
         fullWidth

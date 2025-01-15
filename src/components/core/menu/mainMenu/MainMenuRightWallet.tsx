@@ -14,7 +14,7 @@ import { cn, shortenString } from 'utils/helpers';
 import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
 import { WalletIcon } from 'components/common/WalletIcon';
 
-const iconProps = { className: 'w-20' };
+const iconProps = { className: 'w-20 hidden lg:block' };
 
 export const MainMenuRightWallet: FC = () => {
   const {
@@ -78,7 +78,7 @@ export const MainMenuRightWallet: FC = () => {
             {...attr}
             className={cn(
               buttonStyles({ variant: buttonVariant }),
-              'flex items-center space-x-10 pl-20'
+              'flex items-center gap-10 px-12'
             )}
             onClick={(e) => {
               carbonEvents.navigation.navWalletClick(undefined);
@@ -100,7 +100,7 @@ export const MainMenuRightWallet: FC = () => {
     <Button
       variant={buttonVariant}
       onClick={onClickOpenModal}
-      className="flex items-center space-x-10"
+      className="flex items-center gap-10 px-12"
     >
       {buttonIcon}
       <span>{buttonText}</span>

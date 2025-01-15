@@ -9,6 +9,7 @@ export interface NotificationSchema {
   approveError: { symbol: string };
   trade: { txHash: string; amount: string; from: string; to: string };
   createStrategy: { txHash: string };
+  createBatchStrategy: { txHash: string };
   pauseStrategy: { txHash: string };
   renewStrategy: { txHash: string };
   editStrategyName: { txHash: string };
@@ -81,6 +82,19 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     txHash: data.txHash,
     showAlert: true,
     testid: 'create-strategy',
+  }),
+  createBatchStrategy: (data) => ({
+    type: 'tx',
+    status: 'pending',
+    title: 'Pending Confirmation',
+    description: 'New batch of strategies are being created.',
+    successTitle: 'Success',
+    successDesc: 'New batch of strategies were successfully created.',
+    failedTitle: 'Transaction Failed',
+    failedDesc: 'New batch of strategy creation has failed.',
+    txHash: data.txHash,
+    showAlert: true,
+    testid: 'create-batch-strategy',
   }),
   pauseStrategy: (data) => ({
     type: 'tx',

@@ -4,8 +4,8 @@ import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
-import config from 'config';
 import { tenderlyRpc } from 'utils/tenderly';
+import config from 'config';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC, isUncheckedSigner, setIsUncheckedSigner } =
@@ -17,14 +17,21 @@ export const DebugTenderlyRPC = () => {
   const [carbonControllerInput, setCarbonControllerInput] = useState(
     config.addresses.carbon.carbonController
   );
-
   const [voucherAddressInput, setVoucherAddressInput] = useState(
     config.addresses.carbon.voucher
+  );
+  const [batcherAddressInput, setBatcherAddressInput] = useState(
+    config.addresses.carbon.batcher
   );
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    handleTenderlyRPC(urlInput, carbonControllerInput, voucherAddressInput);
+    handleTenderlyRPC(
+      urlInput,
+      carbonControllerInput,
+      voucherAddressInput,
+      batcherAddressInput
+    );
     lsService.setItem('carbonApi', backendUrl);
   };
 
@@ -56,6 +63,14 @@ export const DebugTenderlyRPC = () => {
             <Input
               value={voucherAddressInput}
               onChange={(e) => setVoucherAddressInput(e.target.value)}
+              fullWidth
+            />
+          </Label>
+
+          <Label label="Carbon Batcher Contract">
+            <Input
+              value={batcherAddressInput}
+              onChange={(e) => setBatcherAddressInput(e.target.value)}
               fullWidth
             />
           </Label>

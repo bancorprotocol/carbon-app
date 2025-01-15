@@ -12,7 +12,8 @@ export const useWagmiTenderly = () => {
   const handleTenderlyRPC = (
     url?: string,
     carbonController?: string,
-    voucherAddress?: string
+    voucherAddress?: string,
+    batcherAddress?: string
   ) => {
     url
       ? lsService.setItem('tenderlyRpc', url)
@@ -25,6 +26,10 @@ export const useWagmiTenderly = () => {
     voucherAddress
       ? lsService.setItem('voucherContractAddress', voucherAddress)
       : lsService.removeItem('voucherContractAddress');
+
+    batcherAddress
+      ? lsService.setItem('batcherContractAddress', batcherAddress)
+      : lsService.removeItem('batcherContractAddress');
 
     lsService.removeItem('sdkCompressedCacheData');
     lsService.removeItem('tokenPairsCache');
