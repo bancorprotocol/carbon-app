@@ -140,7 +140,7 @@ export const commonConfig: AppConfig = {
   tokenLists: [
     // Bancor
     {
-      uri: 'https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens.json',
+      uri: '/tokens/ethereum/list.json',
     },
     // CoinGecko
     {
