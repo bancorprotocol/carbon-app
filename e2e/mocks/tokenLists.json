@@ -1,5 +1,5 @@
 {
-    "https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens.json": {
+    "/tokens/ethereum/list.json": {
         "name": "Bancor",
         "logoURI": "https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens/0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c.svg",
         "keywords": [
