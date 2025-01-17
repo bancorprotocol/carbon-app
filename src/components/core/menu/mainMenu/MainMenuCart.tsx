@@ -29,13 +29,13 @@ export const MainMenuCart = () => {
     <Link
       id="menu-cart-link"
       to="/cart"
-      className="bg-background-800 hover:border-background-700 grid size-40 rounded-full border-2 border-transparent p-8 [grid-template-areas:'stack'] aria-[current=page]:border-white"
+      className="bg-background-800 hover:border-background-700 grid size-40 rounded-full border-2 border-transparent p-6 [grid-template-areas:'stack'] aria-[current=page]:border-white"
       aria-label="Cart page"
       aria-current={pathname.startsWith('/cart') ? 'page' : 'false'}
     >
       <CartIcon className="size-20 place-self-center text-white [grid-area:stack]" />
       {!!cartSize && (
-        <span className="bg-success-light grid size-10 place-items-center justify-self-end rounded-full text-[10px] leading-tight text-black [grid-area:stack]">
+        <span className="bg-success-light grid size-12 place-items-center justify-self-end rounded-full text-[10px] leading-tight text-black [grid-area:stack]">
           {cartSize}
         </span>
       )}
