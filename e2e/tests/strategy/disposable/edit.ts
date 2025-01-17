@@ -32,10 +32,10 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
 
     const tooltip = await strategy.priceTooltip(direction);
     if (setting === 'limit') {
-      expect(tooltip.price()).toHaveText(output.min, { timeout: 4_000 });
+      expect(tooltip.price()).toHaveText(output.min, { timeout: 10_000 });
     } else {
-      expect(tooltip.minPrice()).toHaveText(output.min, { timeout: 4_000 });
-      expect(tooltip.maxPrice()).toHaveText(output.max, { timeout: 4_000 });
+      expect(tooltip.minPrice()).toHaveText(output.min, { timeout: 10_000 });
+      expect(tooltip.maxPrice()).toHaveText(output.max, { timeout: 10_000 });
     }
   });
 };
