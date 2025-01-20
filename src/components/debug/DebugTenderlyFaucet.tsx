@@ -44,14 +44,14 @@ export const DebugTenderlyFaucet = () => {
 
     for (const tkn of FAUCET_TOKENS) {
       console.log('Token', tkn);
-      try {
-        // tenderly setStorage must be sequential
-        await tenderlyFaucetTransferTKN(tkn, user);
-        const queryKey = QueryKey.balance(user, tkn.tokenContract);
-        queryClient.invalidateQueries({ queryKey });
-      } catch (err) {
-        console.error('faucet failed for ', tkn.tokenContract, err);
-      }
+      tenderlyFaucetTransferTKN(tkn, user)
+        .then(() => {
+          const queryKey = QueryKey.balance(user, tkn.tokenContract);
+          queryClient.invalidateQueries({ queryKey });
+        })
+        .catch((err) => {
+          console.error('faucet failed for ', tkn.tokenContract, err);
+        });
     }
   };
 

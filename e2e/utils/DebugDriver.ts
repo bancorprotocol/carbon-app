@@ -1,38 +1,48 @@
 import { Page, TestInfo } from '@playwright/test';
 import { waitFor } from './../utils/operators';
 import {
-  CreateForkBody,
-  createFork,
-  forkRpcUrl,
-  deleteFork,
+  createVirtualNetwork,
+  deleteVirtualNetwork,
+  CreateVirtualNetworkBody,
 } from './../utils/tenderly';
 import { Wallet } from 'ethers';
 import { CreateStrategyTestCase, toDebugStrategy } from './strategy';
 import { TokenApprovalDriver } from './TokenApprovalDriver';
 import mockLocalStorage from '../mocks/localstorage.json';
 
-const forkConfig: CreateForkBody = {
-  network_id: '1',
-  alias: 'E2E-CI',
-  // Sep-12-2023
-  block_number: 18120000,
+const vNetConfig: CreateVirtualNetworkBody = {
+  slug: 'e2e-ci',
+  display_name: 'E2E-CI',
+  fork_config: {
+    network_id: 1,
+    block_number: '18120000',
+  },
+  virtual_network_config: {
+    chain_config: {
+      chain_id: 1,
+    },
+  },
+  sync_state_config: {
+    enabled: false,
+  },
+  explorer_page_config: {
+    enabled: false,
+    verification_visibility: 'bytecode',
+  },
 };
 
-export const setupFork = async (testInfo: TestInfo) => {
-  const fork = await createFork(forkConfig);
-  process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`] = fork.id;
+export const setupVirtualNetwork = async (testInfo: TestInfo) => {
+  const vNet = await createVirtualNetwork(vNetConfig);
+  process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`] = vNet.id;
+  return vNet;
 };
 
-export const setupLocalStorage = async (page: Page, testInfo: TestInfo) => {
-  const forkId = process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`];
-  if (!forkId)
-    throw new Error('Fork should be created before setting the RPC URL');
-  const tenderlyRpc = forkRpcUrl(forkId);
+export const setupLocalStorage = async (page: Page, tenderlyRpc: string) => {
   // We need to be on a page to set localstorage so we create an empty page
-  await page.route(testInfo.testId, (route) => {
+  await page.route('empty', (route) => {
     return route.fulfill({ status: 200, contentType: 'text/plain', body: '' });
   });
-  await page.goto(testInfo.testId);
+  await page.goto('empty');
   const storage = { ...mockLocalStorage, tenderlyRpc };
   return page.evaluate((storage) => {
     // each value is stringified to match lsservice
@@ -46,8 +56,8 @@ export const setupLocalStorage = async (page: Page, testInfo: TestInfo) => {
 };
 
 export const removeFork = async (testInfo: TestInfo) => {
-  const forkId = process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`];
-  if (forkId) await deleteFork(forkId);
+  const id = process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`];
+  if (id) await deleteVirtualNetwork(id);
 };
 
 interface ImposterConfig {
