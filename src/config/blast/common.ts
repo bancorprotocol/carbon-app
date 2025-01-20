@@ -45,7 +45,7 @@ export const commonConfig: AppConfig = {
       decimals: 18,
       address: addresses.ETH,
       logoURI:
-        'https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg',
+        '/tokens/ethereum/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg',
     },
   },
   sdk: {
