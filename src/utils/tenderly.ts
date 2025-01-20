@@ -1,3 +1,5 @@
+import { hexValue } from '@ethersproject/bytes';
+import { parseUnits } from '@ethersproject/units';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { Token__factory } from 'abis/types/factories/Token__factory';
 import config from 'config';
@@ -16,18 +18,16 @@ export const tenderlyRpc = lsService.getItem('tenderlyRpc');
 export const getUncheckedSigner = (user: string, rpcUrl = tenderlyRpc) =>
   new StaticJsonRpcProvider(rpcUrl).getUncheckedSigner(user);
 
-const NATIVE_TOKEN_DONOR_ACCOUNT = config.tenderly.nativeTokenDonorAccount;
-
 export const FAUCET_TOKENS: FaucetToken[] = config.tenderly.faucetTokens;
 
 const FAUCET_AMOUNT = config.tenderly.faucetAmount;
 
 export const tenderlyFaucetTransferNativeToken = async (user: string) => {
-  const ethSigner = getUncheckedSigner(NATIVE_TOKEN_DONOR_ACCOUNT);
-  await ethSigner.sendTransaction({
-    to: user,
-    value: expandToken(FAUCET_AMOUNT, 18),
-  });
+  const provider = new StaticJsonRpcProvider(tenderlyRpc);
+  await provider.send('tenderly_setBalance', [
+    [user],
+    hexValue(parseUnits('1000', 'ether').toHexString()),
+  ]);
 };
 
 export const tenderlyFaucetTransferTKN = async (
