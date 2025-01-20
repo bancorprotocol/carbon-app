@@ -657,7 +657,6 @@ test.describe('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     await mockApi(page);
     const vNet = await setupVirtualNetwork(testInfo);
-    console.log(vNet);
     await setupLocalStorage(page, vNet.rpcs[0].url);
     const debug = new DebugDriver(page);
     await debug.visit();
