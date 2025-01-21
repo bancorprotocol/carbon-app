@@ -142,7 +142,7 @@ interface TenderlyErrorResponse {
 const tenderlyError = async (req: Request, res: Response) => {
   const { status, statusText } = res;
   const { error }: TenderlyErrorResponse = await res.json();
-  const body = await req.text();
+  const body = await req.clone().text();
   const message = {
     res: `[${status} ${statusText}] ${error?.message}`,
     req: `[${req.url}] ${body}`,
