@@ -23,6 +23,7 @@ import {
   useTransitionStyles,
   autoUpdate,
   Strategy as FloatingStrategy,
+  FloatingFocusManagerProps,
 } from '@floating-ui/react';
 import { cn } from 'utils/helpers';
 
@@ -30,7 +31,7 @@ export interface MenuButtonProps {
   onClick: (e: MouseEvent) => void;
 }
 
-type Props = {
+interface Props {
   button: (attr: MenuButtonProps) => ReactNode;
   children: ReactNode;
   isOpen?: boolean;
@@ -39,7 +40,8 @@ type Props = {
   placement?: Placement;
   offset?: number;
   strategy?: FloatingStrategy;
-};
+  initialFocus?: FloatingFocusManagerProps['initialFocus'];
+}
 
 interface MenuCtx {
   setMenuOpen: Dispatch<boolean>;
@@ -59,6 +61,7 @@ export const DropdownMenu: FC<Props> = ({
   strategy = 'absolute',
   className = '',
   offset: offsetValue = 8,
+  initialFocus,
 }) => {
   const tooltipId = useId();
 
@@ -94,7 +97,11 @@ export const DropdownMenu: FC<Props> = ({
       {button(buttonProps)}
       <FloatingPortal>
         {isMounted && menuOpen && (
-          <FloatingFocusManager context={context} modal={false}>
+          <FloatingFocusManager
+            context={context}
+            modal={false}
+            initialFocus={initialFocus}
+          >
             <div
               id={tooltipId}
               ref={refs.setFloating}

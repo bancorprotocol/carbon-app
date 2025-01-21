@@ -1,6 +1,7 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useGetTokenBalance } from 'libs/queries';
 import {
+  getCalculatedPrice,
   getMaxBuyMin,
   getMinSellMax,
   isMaxBelowMarket,
@@ -25,11 +26,9 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { InputRange } from '../common/InputRange';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { TokenLogo } from 'components/common/imager/Imager';
-import { InputLimit } from '../common/InputLimit';
-import { Button } from 'components/common/button';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
+import { EditOverlappingMarketPrice } from '../overlapping/OverlappingMarketPrice';
 
 interface Props {
   marketPrice: string;
@@ -92,7 +91,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
 
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
-  const [localPrice, setLocalPrice] = useState('');
 
   const initialBuyBudget = strategy.order0.balance;
   const initialSellBudget = strategy.order1.balance;
@@ -255,37 +253,12 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       )}
       {!displayPrice && (
         <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
-          <hgroup>
-            <h2 className="text-18 font-weight-500 flex-1">Market Price</h2>
-            <p className="text-12 text-white/80">
-              {base.symbol} market price is missing. Please provide the market
-              price to enable price editing.
-            </p>
-          </hgroup>
-          <Tooltip element="Price used to calculate concentrated liquidity strategy params">
-            <label
-              htmlFor="market-price-input"
-              className="text-14 font-weight-500 flex items-center gap-4 text-white/80"
-            >
-              Enter <TokenLogo token={base} size={14} /> {base.symbol} market
-              price ({quote.symbol} per 1 {base.symbol})
-            </label>
-          </Tooltip>
-          <InputLimit
-            id="market-price-input"
-            price={localPrice}
-            setPrice={setLocalPrice}
+          <EditOverlappingMarketPrice
             base={base}
             quote={quote}
-            ignoreMarketPriceWarning
+            calculatedPrice={getCalculatedPrice(strategy)}
+            setMarketPrice={setMarketPrice}
           />
-          <Button
-            type="button"
-            disabled={!localPrice}
-            onClick={() => setMarketPrice(localPrice)}
-          >
-            Confirm
-          </Button>
         </article>
       )}
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">

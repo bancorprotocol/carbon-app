@@ -21,7 +21,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
   const { history } = useRouter();
 
   return (
-    <div className="m-auto flex w-full max-w-[1920px] flex-col gap-20 p-20 ">
+    <div className="mx-auto flex w-full max-w-[1920px] flex-col gap-20 p-20">
       <header className="flex items-center gap-16">
         <BackButton onClick={() => history.back()} />
         <h1 className="text-24 font-weight-500 flex-1">

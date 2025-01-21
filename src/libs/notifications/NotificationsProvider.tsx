@@ -1,6 +1,6 @@
 import { useWagmi } from 'libs/wagmi';
 import { FC, useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { getLSUserNotifications } from 'libs/notifications/utils';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
@@ -28,7 +28,10 @@ export const NotificationAlerts: FC = () => {
   }, [user, setNotifications]);
 
   return (
-    <ul className="fixed right-10 top-80 z-50" data-testid="notification-list">
+    <ul
+      className="fixed right-[34px] top-80 z-50"
+      data-testid="notification-list"
+    >
       <AnimatePresence mode="popLayout">
         {alerts.map((n) => (
           <NotificationItem notification={n} key={n.id} />
@@ -50,7 +53,7 @@ const NotificationItem: FC<{ notification: Notification }> = (props) => {
   }, [delay, dismissAlert, id]);
 
   return (
-    <motion.li
+    <m.li
       layout
       variants={notificationVariants}
       onMouseEnter={() => setDelay(1_000_000)} // Infinity doesn't work with timeout
@@ -67,7 +70,7 @@ const NotificationItem: FC<{ notification: Notification }> = (props) => {
         close={() => dismissAlert(id)}
         onClick={() => dismissAlert(id)}
       />
-    </motion.li>
+    </m.li>
   );
 };
 

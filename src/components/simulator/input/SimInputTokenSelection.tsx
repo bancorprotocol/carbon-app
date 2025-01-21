@@ -50,8 +50,7 @@ export const SimInputTokenSelection: FC<Props> = ({
       <article className="font-weight-500 flex flex-row items-center -space-x-10">
         <SelectTokenButton
           chevronClassName="h-7.5 w-13"
-          symbol={base?.symbol}
-          imgUrl={base?.logoURI}
+          token={base}
           description={
             <span
               className={`${
@@ -94,8 +93,7 @@ export const SimInputTokenSelection: FC<Props> = ({
         </button>
         <SelectTokenButton
           chevronClassName="h-7.5 w-13"
-          symbol={quote?.symbol}
-          imgUrl={quote?.logoURI}
+          token={quote}
           description={
             <span
               className={`${
