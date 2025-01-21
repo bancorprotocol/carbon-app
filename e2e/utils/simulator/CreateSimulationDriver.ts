@@ -179,15 +179,6 @@ export class CreateSimulationDriver {
     const btn = this.page.getByTestId('start-simulation-btn');
     await expect(btn).toHaveText('Start Simulation');
     await expect(btn).toBeEnabled();
-    // if (shouldTakeScreenshot) {
-    //   const mainMenu = new MainMenuDriver(this.page);
-    //   await mainMenu.hide();
-    //   await waitTooltipsClose(this.page);
-    //   const form = this.getForm();
-    //   const path = screenshotPath(this.testCase, 'form');
-    //   await screenshot(form, path);
-    //   await mainMenu.show();
-    // }
     return btn.click();
   }
 }
