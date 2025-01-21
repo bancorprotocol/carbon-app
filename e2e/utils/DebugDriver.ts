@@ -32,7 +32,7 @@ const vNetConfig: CreateVirtualNetworkBody = {
 };
 
 export const setupVirtualNetwork = async (testInfo: TestInfo) => {
-  const vNet = await createVirtualNetwork(vNetConfig);
+  const vNet = await createVirtualNetwork(structuredClone(vNetConfig));
   process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`] = vNet.id;
   return vNet;
 };
