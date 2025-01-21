@@ -112,7 +112,7 @@ export const ExplorerHeader = () => {
           </Link>
         </div>
       </article>
-      <article className="border-background-800 grid hidden flex-1 gap-8 rounded border-2 p-20 md:block">
+      <article className="border-background-800 hidden flex-1 gap-8 rounded border-2 p-20 md:block">
         <h2 className="text-20 font-weight-400 font-title">Popular Pairs</h2>
         <table className="font-weight-500 text-14 w-full">
           <thead className="text-16 text-white/60">
@@ -169,7 +169,7 @@ export const ExplorerHeader = () => {
           </tbody>
         </table>
       </article>
-      <article className="border-background-800 grid hidden flex-1 gap-8 rounded border-2 p-20 lg:block">
+      <article className="border-background-800 hidden flex-1 gap-8 rounded border-2 p-20 lg:block">
         <h2 className="text-20 font-weight-400 font-title">
           Trending Strategies
         </h2>
