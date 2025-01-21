@@ -97,8 +97,9 @@ export const createVirtualNetwork = async (body: CreateVirtualNetworkBody) => {
     body: JSON.stringify(body),
     headers,
   });
+  const clone = req.clone();
   const res = await fetch(req);
-  if (!res.ok) return tenderlyError(req, res);
+  if (!res.ok) return tenderlyError(clone, res);
   return res.json() as Promise<CreateVirtualNetworkResponse>;
 };
 
@@ -116,8 +117,9 @@ export const getVirtualNetwork = async (id: string) => {
     method: 'GET',
     headers,
   });
+  const clone = req.clone();
   const res = await fetch(req);
-  if (!res.ok) return tenderlyError(req, res);
+  if (!res.ok) return tenderlyError(clone, res);
   return res.json();
 };
 
@@ -126,8 +128,9 @@ export const deleteVirtualNetwork = async (id: string) => {
     method: 'DELETE',
     headers,
   });
+  const clone = req.clone();
   const res = await fetch(req);
-  if (!res.ok) return tenderlyError(req, res);
+  if (!res.ok) return tenderlyError(clone, res);
   // Delete returns No Content
 };
 
@@ -142,7 +145,7 @@ interface TenderlyErrorResponse {
 const tenderlyError = async (req: Request, res: Response) => {
   const { status, statusText } = res;
   const { error }: TenderlyErrorResponse = await res.json();
-  const body = await req.clone().text();
+  const body = await req.text();
   const message = {
     res: `[${status} ${statusText}] ${error?.message}`,
     req: `[${req.url}] ${body}`,
