@@ -92,12 +92,13 @@ export interface CreateVirtualNetworkResponse {
 
 export const createVirtualNetwork = async (body: CreateVirtualNetworkBody) => {
   body.slug += `-${crypto.randomUUID()}`;
-  const res = await fetch(baseUrl, {
+  const req = new Request(baseUrl, {
     method: 'POST',
     body: JSON.stringify(body),
     headers,
   });
-  if (!res.ok) return tenderlyError(res);
+  const res = await fetch(req);
+  if (!res.ok) return tenderlyError(req, res);
   return res.json() as Promise<CreateVirtualNetworkResponse>;
 };
 
@@ -111,20 +112,22 @@ export const waitForTenderlyRpc = (page: Page, timeout?: number) => {
 };
 
 export const getVirtualNetwork = async (id: string) => {
-  const res = await fetch(`${baseUrl}/${id}`, {
+  const req = new Request(`${baseUrl}/${id}`, {
     method: 'GET',
     headers,
   });
-  if (!res.ok) return tenderlyError(res);
+  const res = await fetch(req);
+  if (!res.ok) return tenderlyError(req, res);
   return res.json();
 };
 
 export const deleteVirtualNetwork = async (id: string) => {
-  const res = await fetch(`${baseUrl}/${id}`, {
+  const req = new Request(`${baseUrl}/${id}`, {
     method: 'DELETE',
     headers,
   });
-  if (!res.ok) return tenderlyError(res);
+  const res = await fetch(req);
+  if (!res.ok) return tenderlyError(req, res);
   // Delete returns No Content
 };
 
@@ -136,8 +139,13 @@ interface TenderlyError {
 interface TenderlyErrorResponse {
   error: TenderlyError;
 }
-const tenderlyError = async (res: Response) => {
+const tenderlyError = async (req: Request, res: Response) => {
   const { status, statusText } = res;
   const { error }: TenderlyErrorResponse = await res.json();
-  throw new Error(`[${status} ${statusText}] ${error?.message}`);
+  const body = await req.text();
+  const message = {
+    res: `[${status} ${statusText}] ${error?.message}`,
+    req: `[${req.url}] ${body}`,
+  };
+  throw new Error(JSON.stringify(message));
 };
