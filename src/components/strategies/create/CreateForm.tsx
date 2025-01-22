@@ -135,7 +135,7 @@ export const CreateForm: FC<FormProps> = (props) => {
               onClick={addToCart}
               data-testid="add-strategy-to-cart"
             >
-              Add to cart
+              Add to Cart
             </Button>
           )}
           <Button

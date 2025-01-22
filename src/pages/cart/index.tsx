@@ -174,7 +174,7 @@ export const CartPage = () => {
         variant="success"
         className="mt-10 place-self-center"
       >
-        Sign all strategies
+        Sign {strategies.length} Strategies
       </Button>
     </form>
   );
