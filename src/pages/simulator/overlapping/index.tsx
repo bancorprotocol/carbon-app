@@ -13,6 +13,8 @@ import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
 import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { FormEvent, useEffect, useMemo } from 'react';
 import { formatNumber, roundSearchParam } from 'utils/helpers';
+import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
+import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 
 export const SimulatorInputOverlappingPage = () => {
   const searchState = simulatorInputOverlappingRoute.useSearch();
@@ -128,9 +130,18 @@ export const SimulatorInputOverlappingPage = () => {
     <>
       <form
         onSubmit={submit}
-        className="flex flex-col gap-y-20"
+        className="flex flex-col gap-20"
         data-testid="create-simulation-form"
       >
+        <SimInputTokenSelection
+          baseToken={searchState.baseToken}
+          quoteToken={searchState.quoteToken}
+          noPriceHistory={isError}
+        />
+        <SimInputStrategyType
+          baseToken={searchState.baseToken}
+          quoteToken={searchState.quoteToken}
+        />
         <CreateOverlappingStrategy
           state={state}
           dispatch={dispatch}

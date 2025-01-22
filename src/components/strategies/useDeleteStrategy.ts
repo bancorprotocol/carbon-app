@@ -46,7 +46,7 @@ export const useDeleteStrategy = () => {
           await tx.wait();
 
           void cache.invalidateQueries({
-            queryKey: QueryKey.strategies(user),
+            queryKey: QueryKey.strategiesByUser(user),
           });
           console.log('tx confirmed');
           successEventsCb?.();

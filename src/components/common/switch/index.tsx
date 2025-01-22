@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { BaseHTMLAttributes, DetailedHTMLProps, FC } from 'react';
 import { VariantProps } from 'class-variance-authority';
 import { switchStyles } from 'components/common/switch/switchStyles';
@@ -40,7 +40,7 @@ export const Switch: FC<SwitchProps> = ({
           id={id}
           onChange={(e) => setIsOn(e.target.checked)}
         />
-        <motion.div
+        <m.div
           className={cn(
             'aspect-square h-10 rounded-full outline-2',
             isOn ? 'bg-black outline-black' : 'bg-white/60 outline-white/60',

@@ -36,7 +36,13 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: {
+          width: 1270, // Prevent Date picker to go below scrollbar
+          height: 720,
+        },
+      },
     },
     // {
     //   name: 'firefox',
@@ -50,7 +56,7 @@ export default defineConfig({
 
   expect: {
     // Maximum time expect() should wait for the condition to be met.
-    timeout: 10000,
+    timeout: 10_000,
   },
 
   /* Run your local dev server before starting the tests */

@@ -10,6 +10,8 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
+import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 
 export const SimulatorInputRecurringPage = () => {
   const searchState = simulatorInputRecurringRoute.useSearch();
@@ -152,6 +154,15 @@ export const SimulatorInputRecurringPage = () => {
         className="flex flex-col gap-y-20"
         data-testid="create-simulation-form"
       >
+        <SimInputTokenSelection
+          baseToken={searchState.baseToken}
+          quoteToken={searchState.quoteToken}
+          noPriceHistory={isError}
+        />
+        <SimInputStrategyType
+          baseToken={searchState.baseToken}
+          quoteToken={searchState.quoteToken}
+        />
         <SimInputRecurring
           state={state}
           dispatch={dispatch}
@@ -168,7 +179,6 @@ export const SimulatorInputRecurringPage = () => {
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>
       </form>
-
       <SimInputChart
         state={state}
         dispatch={dispatch}

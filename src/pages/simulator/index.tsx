@@ -1,23 +1,14 @@
 import { Outlet } from '@tanstack/react-router';
-import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
-import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { useSimDisclaimer } from 'components/simulator/input/useSimDisclaimer';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { simulatorInputRootRoute } from 'libs/routing/routes/sim';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
-import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 
 export const SimulatorPage = () => {
   useSimDisclaimer();
   const searchState = simulatorInputRootRoute.useSearch();
-  const { isError } = useGetTokenPriceHistory({
-    baseToken: searchState.baseToken,
-    quoteToken: searchState.quoteToken,
-    start: searchState.start,
-    end: searchState.end,
-  });
 
   useEffect(() => {
     if (!searchState.baseToken || !searchState.quoteToken) return;
@@ -32,22 +23,11 @@ export const SimulatorPage = () => {
   if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   return (
-    <>
-      <h1 className="text-24 font-weight-500 mb-16 px-20">Simulate Strategy</h1>
-      <div className="flex gap-20 px-20">
-        <div className="flex w-[440px] flex-col gap-20">
-          <SimInputTokenSelection
-            baseToken={searchState.baseToken}
-            quoteToken={searchState.quoteToken}
-            noPriceHistory={isError}
-          />
-          <SimInputStrategyType
-            baseToken={searchState.baseToken}
-            quoteToken={searchState.quoteToken}
-          />
-          <Outlet />
-        </div>
+    <div className="mx-auto flex w-full max-w-[1920px] flex-col gap-16 p-20">
+      <h1 className="text-24">Simulate Strategy</h1>
+      <div className="flex flex-col gap-20 md:grid md:grid-cols-[450px_auto]">
+        <Outlet />
       </div>
-    </>
+    </div>
   );
 };

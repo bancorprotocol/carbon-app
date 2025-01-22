@@ -38,7 +38,7 @@ export const DebugTenderlyFaucet = () => {
     }
 
     await tenderlyFaucetTransferNativeToken(user);
-    await queryClient.invalidateQueries({
+    queryClient.invalidateQueries({
       queryKey: QueryKey.balance(user, NATIVE_TOKEN_ADDRESS),
     });
 
@@ -47,11 +47,11 @@ export const DebugTenderlyFaucet = () => {
       tenderlyFaucetTransferTKN(tkn, user)
         .then(() => {
           const queryKey = QueryKey.balance(user, tkn.tokenContract);
-          return queryClient.invalidateQueries({ queryKey });
+          queryClient.invalidateQueries({ queryKey });
         })
-        .catch((e) =>
-          console.error('faucet failed for ', tkn.tokenContract, e)
-        );
+        .catch((err) => {
+          console.error('faucet failed for ', tkn.tokenContract, err);
+        });
     }
   };
 

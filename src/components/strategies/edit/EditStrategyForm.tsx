@@ -158,7 +158,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
           console.log('tx hash', tx.hash);
           await tx.wait();
           cache.invalidateQueries({
-            queryKey: QueryKey.strategies(user),
+            queryKey: QueryKey.strategiesByUser(user),
           });
           carbonEvents.strategyEdit.strategyEditPrices({
             ...strategyEventData,

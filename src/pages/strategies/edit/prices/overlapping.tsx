@@ -11,6 +11,7 @@ import {
 import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
+  getCalculatedPrice,
   getOverlappingMarketPrice,
   getRoundedSpread,
   isMaxBelowMarket,
@@ -19,7 +20,7 @@ import {
 } from 'components/strategies/overlapping/utils';
 import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
 import { isOverlappingTouched } from 'components/strategies/overlapping/utils';
-import { OverlappingInitMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { EditOverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
@@ -232,11 +233,11 @@ const OverlappingContent = () => {
       <div className="flex flex-col gap-20">
         <EditPriceNav editType={search.editType} />
         <EditStrategyOverlapTokens />
-        <article className="rounded-10 bg-background-900 flex flex-col">
-          <OverlappingInitMarketPrice
+        <article className="rounded-10 bg-background-900 flex flex-col gap-16 p-20">
+          <EditOverlappingMarketPrice
             base={base}
             quote={quote}
-            marketPrice={marketPrice}
+            calculatedPrice={getCalculatedPrice(strategy)}
             setMarketPrice={setMarketPrice}
           />
         </article>
