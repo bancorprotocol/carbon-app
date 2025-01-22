@@ -235,13 +235,19 @@ describe('Test helpers', () => {
         expect(prettifyNumber(19999.999999999986138278)).toEqual('19,999.99');
       });
 
-      test('Check rounding is correct - math.round', () => {
+      test('Check rounding is correct - option.round', () => {
         expect(
           prettifyNumber(18999.999999999851769955, { round: true })
         ).toEqual('19,000.00');
         expect(
           prettifyNumber(19999.999999999986138278, { round: true })
         ).toEqual('20,000.00');
+      });
+      test('Check trunc is correct - option.isInteger', () => {
+        expect(
+          prettifyNumber(18999.999999999851769955, { isInteger: true })
+        ).toEqual('18,999');
+        expect(prettifyNumber(0, { isInteger: true })).toEqual('0');
       });
 
       test('Check rounding is correct - currentCurrency is USD', () => {
