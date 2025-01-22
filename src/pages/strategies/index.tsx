@@ -62,7 +62,10 @@ export const StrategiesPage = () => {
       <StrategyProvider query={query}>
         <div className="grid gap-20">
           <MyStrategiesHeader />
-          <header role="toolbar" className="flex items-center gap-20">
+          <header
+            role="toolbar"
+            className="mb-20 flex flex-col flex-wrap gap-20 md:flex-row md:items-center"
+          >
             <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
             {showFilter && (
               <>
