@@ -8,14 +8,10 @@ const TENDERLY_ACCESS_KEY = process.env['TENDERLY_ACCESS_KEY'];
 if (!TENDERLY_ACCESS_KEY)
   throw new Error('No TENDERLY_ACCESS_KEY provided in .env');
 
-const baseUrl = `https://api.tenderly.co/api/v1/account/${TENDERLY_ACCOUNT}/project/${TENDERLY_PROJECT}/fork`;
+const baseUrl = `https://api.tenderly.co/api/v1/account/${TENDERLY_ACCOUNT}/project/${TENDERLY_PROJECT}/vnets`;
 const headers = {
   'Content-Type': 'application/json',
   'X-Access-Key': TENDERLY_ACCESS_KEY,
-};
-
-export const forkRpcUrl = (forkId: string) => {
-  return `https://rpc.tenderly.co/fork/${forkId}`;
 };
 
 interface ChainConfig {
@@ -61,28 +57,50 @@ interface Fork {
   shared: boolean;
 }
 
-export interface CreateForkBody {
-  /** ChainID in decimal: "1" for mainnet */
-  network_id: string;
-  alias?: string;
-  block_number?: number;
-  chain_config?: Partial<ChainConfig>;
+/** See https://docs.tenderly.co/reference/api#/operations/createVnet */
+export interface CreateVirtualNetworkBody {
+  slug: string;
+  display_name?: string;
+  description?: string;
+  fork_config: {
+    network_id: number;
+    block_number: string;
+  };
+  virtual_network_config: {
+    chain_config: {
+      chain_id: number;
+    };
+  };
+  sync_state_config?: {
+    enabled?: boolean;
+  };
+  explorer_page_config?: {
+    enabled?: boolean;
+    verification_visibility?: 'bytecode' | 'src' | 'abi';
+  };
 }
 
-export interface CreateForkResponse {
-  simulation_fork: Fork;
-  root_transaction: any;
+/** See https://docs.tenderly.co/reference/api#/operations/createVnet#Responses */
+export interface CreateVirtualNetworkResponse {
+  id: string;
+  slug: string;
+  rpcs: {
+    url: string;
+    name: string;
+  }[];
 }
 
-export const createFork = async (body: CreateForkBody) => {
-  const res = await fetch(baseUrl, {
+export const createVirtualNetwork = async (body: CreateVirtualNetworkBody) => {
+  body.slug += `-${crypto.randomUUID()}`;
+  const req = new Request(baseUrl, {
     method: 'POST',
     body: JSON.stringify(body),
     headers,
   });
-  if (!res.ok) return tenderlyError(res);
-  const result: CreateForkResponse = await res.json();
-  return result.simulation_fork;
+  const clone = req.clone();
+  const res = await fetch(req);
+  if (!res.ok) return tenderlyError(clone, res);
+  return res.json() as Promise<CreateVirtualNetworkResponse>;
 };
 
 export interface GetForkResponse {
@@ -90,26 +108,29 @@ export interface GetForkResponse {
 }
 
 export const waitForTenderlyRpc = (page: Page, timeout?: number) => {
-  const tenderlyRegExp = /.*rpc\.tenderly\.co\/fork.*$/;
+  const tenderlyRegExp = /.*rpc\.tenderly\.co.*$/;
   return page.waitForResponse(tenderlyRegExp, { timeout });
 };
 
-export const getFork = async (forkId: string) => {
-  const res = await fetch(`${baseUrl}/${forkId}`, {
+export const getVirtualNetwork = async (id: string) => {
+  const req = new Request(`${baseUrl}/${id}`, {
     method: 'GET',
     headers,
   });
-  if (!res.ok) return tenderlyError(res);
-  const result: GetForkResponse = await res.json();
-  return result.simulation_fork;
+  const clone = req.clone();
+  const res = await fetch(req);
+  if (!res.ok) return tenderlyError(clone, res);
+  return res.json();
 };
 
-export const deleteFork = async (forkId: string) => {
-  const res = await fetch(`${baseUrl}/${forkId}`, {
+export const deleteVirtualNetwork = async (id: string) => {
+  const req = new Request(`${baseUrl}/${id}`, {
     method: 'DELETE',
     headers,
   });
-  if (!res.ok) return tenderlyError(res);
+  const clone = req.clone();
+  const res = await fetch(req);
+  if (!res.ok) return tenderlyError(clone, res);
   // Delete returns No Content
 };
 
@@ -121,8 +142,13 @@ interface TenderlyError {
 interface TenderlyErrorResponse {
   error: TenderlyError;
 }
-const tenderlyError = async (res: Response) => {
+const tenderlyError = async (req: Request, res: Response) => {
   const { status, statusText } = res;
   const { error }: TenderlyErrorResponse = await res.json();
-  throw new Error(`[${status} ${statusText}] ${error?.message}`);
+  const body = await req.text();
+  const message = {
+    res: `[${status} ${statusText}] ${error?.message}`,
+    req: `[${req.url}] ${body}`,
+  };
+  throw new Error(JSON.stringify(message));
 };

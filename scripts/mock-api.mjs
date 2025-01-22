@@ -21,7 +21,7 @@ import dayjs from 'dayjs';
 
 export const tokenListsToMock = [
   // Bancor
-  'https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens.json',
+  '/tokens/ethereum/list.json',
   // CoinGecko
   'https://tokens.coingecko.com/ethereum/all.json',
 ];
