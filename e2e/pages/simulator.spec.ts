@@ -4,7 +4,7 @@ import { mockApi } from '../utils/mock-api';
 import {
   DebugDriver,
   removeFork,
-  setupFork,
+  setupVirtualNetwork,
   setupLocalStorage,
 } from '../utils/DebugDriver';
 import { CreateStrategyTestCase } from '../utils/simulator';
@@ -196,8 +196,8 @@ test.describe('Simulator', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     await mockApi(page);
     await mockDate(page, '2024-02-26T00:00:00.000Z');
-    await setupFork(testInfo);
-    await setupLocalStorage(page, testInfo);
+    const vNet = await setupVirtualNetwork(testInfo);
+    await setupLocalStorage(page, vNet.rpcs[0].url);
     const debug = new DebugDriver(page);
     await debug.visit();
   });

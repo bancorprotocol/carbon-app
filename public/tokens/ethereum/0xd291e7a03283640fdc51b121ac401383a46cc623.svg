@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="none" viewBox="0 0 200 200">
+  <g clip-path="url(#a)">
+    <path fill="#000" fill-rule="evenodd" d="M100 199.998c55.08 0 100-44.92 100-100 0-55.07-44.92-100-100-100-55.07 0-100 44.93-100 100-.01 55.08 44.92 100 100 100Z" clip-rule="evenodd"/>
+    <circle cx="100" cy="100" r="67.5" stroke="url(#b)" stroke-width="5"/>
+    <circle cx="100" cy="100" r="53.5" stroke="url(#c)" stroke-width="5" transform="rotate(-180 100 100)"/>
+    <path stroke="url(#d)" stroke-width="5" d="M139.5 100c0 21.815-17.685 39.5-39.5 39.5S60.5 121.815 60.5 100 78.185 60.5 100 60.5s39.5 17.685 39.5 39.5Z"/>
+  </g>
+  <defs>
+    <linearGradient id="b" x1="30" x2="170" y1="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EFEFEF"/>
+      <stop offset="1" stop-color="#EFEFEF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="c" x1="44" x2="156" y1="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EFEFEF"/>
+      <stop offset="1" stop-color="#EFEFEF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="d" x1="58" x2="142" y1="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EFEFEF"/>
+      <stop offset="1" stop-color="#EFEFEF" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="a">
+      <path fill="#fff" d="M0 0h200v200H0z"/>
+    </clipPath>
+  </defs>
+</svg>
