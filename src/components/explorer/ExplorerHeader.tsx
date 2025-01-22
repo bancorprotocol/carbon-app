@@ -8,11 +8,14 @@ import {
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
 import { Link } from 'libs/routing';
+import { Token } from 'libs/tokens';
 import { CSSProperties, useEffect, useRef } from 'react';
 import { toPairSlug } from 'utils/pairSearch';
 
-const useTrendingPairs = (trending?: Trending) => {
-  const { tokensMap } = useTokens();
+const getTrendingPairs = (
+  tokensMap: Map<string, Token>,
+  trending?: Trending
+) => {
   if (!trending) return { isLoading: true, data: [] };
   const pairs: Record<string, PairTrade> = {};
   for (const trade of trending?.pairCount ?? []) {
@@ -81,9 +84,10 @@ const useTrendStrategies = (
 };
 
 export const ExplorerHeader = () => {
+  const { tokensMap } = useTokens();
   const { data: trending, isLoading, isError } = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
-  const trendingPairs = useTrendingPairs(trending);
+  const trendingPairs = getTrendingPairs(tokensMap, trending);
   const strategies = trendingStrategies.data;
   const pairs = trendingPairs.data;
 
