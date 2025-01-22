@@ -8,6 +8,7 @@ import { CartStrategy } from 'libs/queries';
 import { CSSProperties, FC } from 'react';
 import { cn } from 'utils/helpers';
 import {
+  isOverlappingStrategy,
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
@@ -15,6 +16,10 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { removeStrategyFromCart } from './utils';
 import { useWagmi } from 'libs/wagmi';
+import {
+  isMaxBelowMarket,
+  isMinAboveMarket,
+} from 'components/strategies/overlapping/utils';
 
 interface Props {
   strategy: CartStrategy;
@@ -24,24 +29,32 @@ interface Props {
 
 const getWarning = (strategy: CartStrategy, marketPrice?: number) => {
   const { base, order0, order1 } = strategy;
-  const buyOutsideMarket = outSideMarketWarning({
-    base,
-    marketPrice,
-    min: order0.startRate,
-    max: order0.endRate,
-    buy: true,
-  });
-  if (buyOutsideMarket) return buyOutsideMarket;
-  const sellOutsideMarket = outSideMarketWarning({
-    base,
-    marketPrice,
-    min: order1.startRate,
-    max: order1.endRate,
-    buy: false,
-  });
-  if (sellOutsideMarket) return sellOutsideMarket;
   if (isZero(order0.balance) && isZero(order1.balance)) {
     return 'Please note that your strategy will be inactive as it will not have any budget.';
+  }
+  if (isOverlappingStrategy(strategy)) {
+    const aboveMarket = isMinAboveMarket(order0);
+    const belowMarket = isMaxBelowMarket(order1);
+    if (aboveMarket || belowMarket) {
+      return 'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
+    }
+  } else {
+    const buyOutsideMarket = outSideMarketWarning({
+      base,
+      marketPrice,
+      min: order0.startRate,
+      max: order0.endRate,
+      buy: true,
+    });
+    if (buyOutsideMarket) return buyOutsideMarket;
+    const sellOutsideMarket = outSideMarketWarning({
+      base,
+      marketPrice,
+      min: order1.startRate,
+      max: order1.endRate,
+      buy: false,
+    });
+    if (sellOutsideMarket) return sellOutsideMarket;
   }
 };
 
