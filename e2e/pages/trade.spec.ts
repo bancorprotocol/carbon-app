@@ -4,7 +4,7 @@ import { mockApi } from '../utils/mock-api';
 import {
   DebugDriver,
   removeFork,
-  setupFork,
+  setupVirtualNetwork,
   setupLocalStorage,
 } from '../utils/DebugDriver';
 import { TradeDriver } from '../utils/TradeDriver';
@@ -90,8 +90,8 @@ test.describe('Trade', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     testInfo.setTimeout(90_000);
     await mockApi(page);
-    await setupFork(testInfo);
-    await setupLocalStorage(page, testInfo);
+    const vNet = await setupVirtualNetwork(testInfo);
+    await setupLocalStorage(page, vNet.rpcs[0].url);
     const debug = new DebugDriver(page);
     await debug.visit();
     await debug.setupImposter();
