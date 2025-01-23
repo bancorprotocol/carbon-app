@@ -121,6 +121,20 @@ const migrations: Migration[] = [
       migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
     },
   },
+  {
+    migrate: (prevFormattedKey) => {
+      const prefix = `carbon-${NETWORK}-v1.2-`;
+      if (prevFormattedKey === `${prefix}currentCurrency`) {
+        if (NETWORK !== 'ethereum') removeItem({ prevFormattedKey });
+      }
+      const isMatch = prevFormattedKey.startsWith(prefix);
+      if (!isMatch) return;
+      const key = prevFormattedKey.slice(prefix.length);
+      if (!key) return;
+      const nextFormattedKey = ['carbon', NETWORK, 'v1.3', key].join('-');
+      migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
+    },
+  },
 ];
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>(
