@@ -137,10 +137,12 @@ export const useBurgerMenuItems = () => {
     ],
     [availableCurrencies, selectedFiatCurrency, setSelectedFiatCurrency]
   );
-  menuMap.set('currency', {
-    items: currencyItems,
-    title: 'Currency',
-  });
+  if (config.ui.currencyMenu) {
+    menuMap.set('currency', {
+      items: currencyItems,
+      title: 'Currency',
+    });
+  }
 
   const resourcesItems: MenuItemType[] = [
     {
