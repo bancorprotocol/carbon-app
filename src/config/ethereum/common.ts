@@ -217,5 +217,6 @@ export const commonConfig: AppConfig = {
     priceChart: 'native',
     useGradientBranding: true,
     tradeCount: false,
+    currencyMenu: true,
   },
 };

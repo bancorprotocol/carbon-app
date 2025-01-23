@@ -7,6 +7,7 @@ import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
 import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
 import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ReactComponent as IconV } from 'assets/icons/v.svg';
+import config from 'config';
 
 export type MenuItemType = {
   subMenu?: MenuType;
@@ -27,10 +28,6 @@ export const useBurgerMenuItems = () => {
   const menuMap = new Map<MenuType, Menu>();
 
   const mainItems: MenuItemType[] = [
-    {
-      subMenu: 'currency',
-      content: <CurrencyMenuItemContent />,
-    },
     {
       subMenu: 'resources',
       content: 'Resources',
@@ -101,6 +98,13 @@ export const useBurgerMenuItems = () => {
       ),
     },
   ];
+  if (config.ui.currencyMenu) {
+    mainItems.unshift({
+      subMenu: 'currency',
+      content: <CurrencyMenuItemContent />,
+    });
+  }
+  menuMap.set('main', { items: mainItems });
 
   const currencyItems = useMemo(
     (): MenuItemType[] => [
@@ -133,6 +137,10 @@ export const useBurgerMenuItems = () => {
     ],
     [availableCurrencies, selectedFiatCurrency, setSelectedFiatCurrency]
   );
+  menuMap.set('currency', {
+    items: currencyItems,
+    title: 'Currency',
+  });
 
   const resourcesItems: MenuItemType[] = [
     {
@@ -171,12 +179,6 @@ export const useBurgerMenuItems = () => {
       ),
     },
   ];
-
-  menuMap.set('main', { items: mainItems });
-  menuMap.set('currency', {
-    items: currencyItems,
-    title: 'Currency',
-  });
   menuMap.set('resources', {
     items: resourcesItems,
     title: 'Resources',
