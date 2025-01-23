@@ -271,6 +271,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `priceChart`: use `tradingView` chart or `native` chart for token pair price history. You need to provide a backend with price history endpoint to support `native` view.
   - `useGradientBranding`: Flag to enable gradient styles for buttons.
   - `tradeCount`: Display the amount of trades in the explorer page.
+  - `currencyMenu`: Display the currency menu to switch between currencies.
 
 #### Gas token different than native token
 
