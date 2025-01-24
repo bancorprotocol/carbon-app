@@ -94,7 +94,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
           priceEnd: range.end,
         }),
         resetScroll: false,
-        replace: false,
+        replace: true,
       });
     },
     [nav]
