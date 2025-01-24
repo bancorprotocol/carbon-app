@@ -48,7 +48,7 @@ export const setupLocalStorage = async (page: Page, tenderlyRpc: string) => {
     // each value is stringified to match lsservice
     for (const [key, value] of Object.entries(storage)) {
       localStorage.setItem(
-        `carbon-ethereum-v1.2-${key}`,
+        `carbon-ethereum-v1.3-${key}`,
         JSON.stringify(value)
       );
     }
