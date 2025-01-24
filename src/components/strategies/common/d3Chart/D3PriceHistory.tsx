@@ -1,3 +1,4 @@
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   CandlestickData,
   D3ChartSettings,
@@ -12,13 +13,11 @@ import {
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from './D3ChartCandlesticks';
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import {
   D3ZoomEvent,
   scaleBand,
   select,
   zoom,
-  ZoomBehavior,
   zoomIdentity,
   ZoomTransform,
 } from 'd3';
@@ -79,16 +78,13 @@ const useZoom = (
   data: CandlestickData[],
   behavior: TransformBehavior
 ) => {
-  const zoomHandler = useRef<ZoomBehavior<SVGSVGElement, unknown>>(null);
   const [transform, setTransform] = useState<ZoomTransform>();
 
-  const selection = select<SVGSVGElement, unknown>('#interactive-chart');
-  const chartArea = select<SVGSVGElement, unknown>('.chart-area');
-  const extent = getExtentConfig(behavior, data.length, dms.width);
-
-  useEffect(() => {
+  const zoomHandler = useMemo(() => {
     let k = 0;
-    zoomHandler.current = zoom<SVGSVGElement, unknown>()
+    const extent = getExtentConfig(behavior, data.length, dms.width);
+    const chartArea = select<SVGSVGElement, unknown>('.chart-area');
+    const handler = zoom<SVGSVGElement, unknown>()
       .scaleExtent(extent.zoom)
       .translateExtent(extent.translate)
       .filter((e: Event) => {
@@ -101,33 +97,44 @@ const useZoom = (
         if (e.transform.k === k) chartArea.style('cursor', 'grab');
         setTransform(e.transform);
       })
-      .on('end', () => chartArea.style('cursor', ''));
-    selection.call(zoomHandler.current);
-  }, [chartArea, extent.translate, extent.zoom, selection]);
+      .on('end', () => {
+        chartArea.style('cursor', '');
+      });
+    return handler;
+  }, [behavior, data.length, dms.width]);
 
-  const zoomRange = (from: string, days: number) => {
-    const baseXScale = (() => {
-      if (behavior === 'normal') {
-        return scaleBand()
-          .domain(data.map((d) => d.date.toString()))
-          .range([0, dms.boundedWidth])
-          .paddingInner(0.5);
-      } else {
-        return scaleBand()
-          .domain(getExtendedRange(data.map((d) => d.date)))
-          .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5])
-          .paddingInner(0.5);
-      }
-    })();
+  useEffect(() => {
+    select<SVGSVGElement, unknown>('#interactive-chart').call(zoomHandler);
+  }, [zoomHandler]);
 
-    const scale = data.length / days;
-    const translateX = baseXScale(from)!;
-    const transition = selection.transition().duration(500);
-    const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
-    zoomHandler.current?.transform(transition, transform);
-  };
+  const zoomRange = useCallback(
+    (from: string, days: number, duration = 500) => {
+      const baseXScale = (() => {
+        if (behavior === 'normal') {
+          return scaleBand()
+            .domain(data.map((d) => d.date.toString()))
+            .range([0, dms.boundedWidth])
+            .paddingInner(0.5);
+        } else {
+          return scaleBand()
+            .domain(getExtendedRange(data.map((d) => d.date)))
+            .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5])
+            .paddingInner(0.5);
+        }
+      })();
 
-  return { transform, zoomRange };
+      const selection = select<SVGSVGElement, unknown>('#interactive-chart');
+      const scale = data.length / days;
+      const translateX = baseXScale(from)!;
+      const transition = selection.transition().duration(duration);
+      const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
+      zoomHandler?.transform(transition, transform);
+      return new Promise((res) => setTimeout(res, duration));
+    },
+    [behavior, data, dms.boundedWidth, zoomHandler]
+  );
+
+  return { transform, zoomRange, zoomHandler };
 };
 
 const getExtendedRange = (range: number[]) => {
@@ -149,7 +156,7 @@ interface Props {
   prices: ChartPrices;
   onPriceUpdates: OnPriceUpdates;
   onDragEnd: OnPriceUpdates;
-  onRangeUpdates?: (params: RangeUpdate) => void;
+  onRangeUpdates: (params: RangeUpdate) => void;
   marketPrice?: number;
   bounds: ChartPrices;
   isLimit?: { buy: boolean; sell: boolean };
@@ -158,6 +165,8 @@ interface Props {
   readonly?: boolean;
   activities?: Activity[];
   zoomBehavior?: TransformBehavior;
+  start?: string;
+  end?: string;
 }
 
 const presetDays = [
@@ -176,17 +185,22 @@ export const D3PriceHistory: FC<Props> = (props) => {
     zoomBehavior = 'normal',
     onRangeUpdates,
   } = props;
+  const init = useRef<boolean>(false);
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
   const [drawings, setDrawings] = useState<any[]>([]);
   const [ref, dms] = useChartDimensions(chartSettings);
-  const { transform: zoomTransform, zoomRange } = useZoom(
-    dms,
-    data,
-    zoomBehavior
+  const {
+    transform: zoomTransform,
+    zoomRange,
+    zoomHandler,
+  } = useZoom(dms, data, zoomBehavior);
+
+  const zoomX = useCallback(
+    (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d),
+    [zoomTransform]
   );
 
   const xScale = useMemo(() => {
-    const zoomX = (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d);
     if (zoomBehavior === 'normal') {
       return scaleBand()
         .domain(data.map((d) => d.date.toString()))
@@ -198,7 +212,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
         .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5].map(zoomX))
         .paddingInner(0.5);
     }
-  }, [data, dms.boundedWidth, zoomBehavior, zoomTransform]);
+  }, [data, dms.boundedWidth, zoomBehavior, zoomX]);
 
   const yDomain = useMemo(() => {
     const candles = data.filter((point) => xScale(point.date.toString())! > 0);
@@ -211,10 +225,16 @@ export const D3PriceHistory: FC<Props> = (props) => {
     domainTolerance: 0.1,
   });
 
-  const invertX = scaleBandInvert(xScale);
+  const invertX = useMemo(() => scaleBandInvert(xScale), [xScale]);
 
-  const start = invertX(xScale.bandwidth() / 2) ?? xScale.domain()[0];
-  const end = invertX(dms.boundedWidth) ?? xScale.domain().at(-1);
+  const start = useMemo(
+    () => invertX(xScale.bandwidth() / 2) ?? xScale.domain()[0],
+    [invertX, xScale]
+  );
+  const end = useMemo(
+    () => invertX(dms.boundedWidth) ?? xScale.domain().at(-1),
+    [dms.boundedWidth, invertX, xScale]
+  );
 
   const disabledDates = [
     {
@@ -222,13 +242,6 @@ export const D3PriceHistory: FC<Props> = (props) => {
       after: new Date(Number(xScale.domain().at(-1)!) * 1000),
     },
   ];
-
-  useEffect(() => {
-    const id = setTimeout(() => {
-      if (onRangeUpdates) onRangeUpdates({ start, end });
-    }, 100);
-    return () => clearTimeout(id);
-  }, [onRangeUpdates, start, end]);
 
   const zoomFromTo = ({ start, end }: { start?: Date; end?: Date }) => {
     if (!start || !end) return;
@@ -238,6 +251,31 @@ export const D3PriceHistory: FC<Props> = (props) => {
   const zoomIn = (days: number) => {
     zoomRange(data.at(days * -1)!.date.toString(), days);
   };
+
+  useEffect(() => {
+    if (!init.current) return;
+    // Need custom event else it override existing one
+    zoomHandler.on('end.update', () => {
+      onRangeUpdates({ start, end });
+    });
+    return () => {
+      zoomHandler.on('end.update', null);
+    };
+  }, [onRangeUpdates, zoomHandler, end, start]);
+
+  useEffect(() => {
+    // We need a timeout somehow
+    if (!zoomRange) return;
+    if (!init.current) {
+      if (props.start && props.end) {
+        const from = fromUnixUTC(props.start);
+        const to = fromUnixUTC(props.end);
+        zoomRange(props.start, differenceInDays(to, from) + 1, 0);
+      }
+      // Prevent zoom end event to update range on init
+      setTimeout(() => (init.current = true), 100);
+    }
+  }, [props.start, props.end, zoomRange]);
 
   return (
     <D3ChartProvider

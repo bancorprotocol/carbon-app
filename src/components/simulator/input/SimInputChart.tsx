@@ -117,6 +117,8 @@ export const SimInputChart = ({
           type={simulationType}
           overlappingSpread={spread}
           zoomBehavior="normal"
+          start={state.start}
+          end={state.end}
         />
       )}
     </div>
