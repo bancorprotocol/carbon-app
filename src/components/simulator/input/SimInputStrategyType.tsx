@@ -1,10 +1,10 @@
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping.svg';
 import { cn } from 'utils/helpers';
 import { SimulatorType } from 'libs/routing/routes/sim';
-import { Link } from 'libs/routing';
+import { Link, useSearch } from 'libs/routing';
 
 interface ItemProps {
   title: string;
@@ -13,12 +13,10 @@ interface ItemProps {
   tooltipText: string;
 }
 
-interface Props {
-  baseToken?: string;
-  quoteToken?: string;
-}
-
-export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
+export const SimInputStrategyType = () => {
+  const { baseToken, quoteToken, start, end } = useSearch({
+    from: '/simulate/',
+  });
   const items: ItemProps[] = [
     {
       title: 'Recurring',
@@ -54,7 +52,7 @@ export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
               aria-controls={'panel-' + label}
               key={label}
               to={to}
-              search={{ baseToken, quoteToken }}
+              search={{ baseToken, quoteToken, start, end }}
               className={cn(
                 'rounded-10 text-14 font-weight-500 group flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white',
                 'md:px-12',
