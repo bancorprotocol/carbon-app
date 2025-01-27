@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   CandlestickData,
   D3ChartSettings,
@@ -185,7 +185,8 @@ export const D3PriceHistory: FC<Props> = (props) => {
     zoomBehavior = 'normal',
     onRangeUpdates,
   } = props;
-  const init = useRef<boolean>(false);
+  // const init = useRef<boolean>(false);
+  const [listenOnZoom, setListenOnZoom] = useState(false);
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
   const [drawings, setDrawings] = useState<any[]>([]);
   const [ref, dms] = useChartDimensions(chartSettings);
@@ -225,17 +226,6 @@ export const D3PriceHistory: FC<Props> = (props) => {
     domainTolerance: 0.1,
   });
 
-  const invertX = useMemo(() => scaleBandInvert(xScale), [xScale]);
-
-  const start = useMemo(
-    () => invertX(xScale.bandwidth() / 2) ?? xScale.domain()[0],
-    [invertX, xScale]
-  );
-  const end = useMemo(
-    () => invertX(dms.boundedWidth) ?? xScale.domain().at(-1),
-    [dms.boundedWidth, invertX, xScale]
-  );
-
   const disabledDates = [
     {
       before: new Date(Number(xScale.domain()[0]) * 1000),
@@ -243,38 +233,52 @@ export const D3PriceHistory: FC<Props> = (props) => {
     },
   ];
 
-  const zoomFromTo = ({ start, end }: { start?: Date; end?: Date }) => {
+  const zoomFromTo = async ({ start, end }: { start?: Date; end?: Date }) => {
     if (!start || !end) return;
-    zoomRange(toUnixUTC(startOfDay(start)), differenceInDays(end, start) + 1);
+    setListenOnZoom(false);
+    const from = toUnixUTC(startOfDay(start));
+    const to = toUnixUTC(startOfDay(end));
+    await zoomRange(from, differenceInDays(end, start) + 1);
+    onRangeUpdates({ start: from, end: to });
+    setListenOnZoom(true);
   };
 
-  const zoomIn = (days: number) => {
-    zoomRange(data.at(days * -1)!.date.toString(), days);
+  const zoomIn = async (days: number) => {
+    setListenOnZoom(false);
+    await zoomRange(data.at(days * -1)!.date.toString(), days);
+    setListenOnZoom(true);
   };
 
+  // Update range only on manual zoom update
   useEffect(() => {
-    if (!init.current) return;
+    if (!listenOnZoom) return;
     // Need custom event else it override existing one
     zoomHandler.on('end.update', () => {
+      const invertX = scaleBandInvert(xScale);
+      const start = invertX(xScale.bandwidth() / 2);
+      const end = invertX(dms.boundedWidth);
+      console.log('END', {
+        start: fromUnixUTC(start),
+        end: fromUnixUTC(end),
+      });
       onRangeUpdates({ start, end });
     });
     return () => {
       zoomHandler.on('end.update', null);
     };
-  }, [onRangeUpdates, zoomHandler, end, start]);
+  }, [dms.boundedWidth, onRangeUpdates, xScale, zoomHandler, listenOnZoom]);
 
   useEffect(() => {
-    // We need a timeout somehow
-    if (!zoomRange) return;
-    if (!init.current) {
-      if (props.start && props.end) {
-        const from = fromUnixUTC(props.start);
-        const to = fromUnixUTC(props.end);
-        zoomRange(props.start, differenceInDays(to, from) + 1, 0);
-      }
-      // Prevent zoom end event to update range on init
-      setTimeout(() => (init.current = true), 100);
+    if (!zoomRange || listenOnZoom) return;
+    if (props.start && props.end) {
+      const from = fromUnixUTC(props.start);
+      const to = fromUnixUTC(props.end);
+      zoomRange(props.start, differenceInDays(to, from) + 1, 0);
     }
+    // Prevent zoom end event to update range on init
+    setTimeout(() => setListenOnZoom(true), 100);
+    // This effect should happens only once, when start, end and zoomRange are ready
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.start, props.end, zoomRange]);
 
   return (
@@ -344,8 +348,8 @@ export const D3PriceHistory: FC<Props> = (props) => {
               className="rounded-8 border-0"
               defaultStart={defaultStartDate()}
               defaultEnd={defaultEndDate()}
-              start={fromUnixUTC(start)}
-              end={fromUnixUTC(end)}
+              start={fromUnixUTC(props.start) || defaultStartDate()}
+              end={fromUnixUTC(props.end) || defaultEndDate()}
               onConfirm={zoomFromTo}
               options={{
                 disabled: disabledDates,
