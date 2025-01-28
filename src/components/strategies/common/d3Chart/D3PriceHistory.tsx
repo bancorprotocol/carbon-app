@@ -259,10 +259,6 @@ export const D3PriceHistory: FC<Props> = (props) => {
       const invertX = scaleBandInvert(xScale);
       const start = invertX(xScale.bandwidth() / 2);
       const end = invertX(dms.boundedWidth);
-      console.log('END', {
-        start: fromUnixUTC(start),
-        end: fromUnixUTC(end),
-      });
       onRangeUpdates({ start, end });
     });
     return () => {
