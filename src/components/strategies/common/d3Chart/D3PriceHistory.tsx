@@ -185,7 +185,6 @@ export const D3PriceHistory: FC<Props> = (props) => {
     zoomBehavior = 'normal',
     onRangeUpdates,
   } = props;
-  // const init = useRef<boolean>(false);
   const [listenOnZoom, setListenOnZoom] = useState(false);
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
   const [drawings, setDrawings] = useState<any[]>([]);
