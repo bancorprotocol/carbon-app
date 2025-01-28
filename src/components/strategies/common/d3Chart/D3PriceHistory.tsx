@@ -232,19 +232,22 @@ export const D3PriceHistory: FC<Props> = (props) => {
     },
   ];
 
-  const zoomFromTo = async ({ start, end }: { start?: Date; end?: Date }) => {
-    if (!start || !end) return;
+  const zoomFromTo = async (range: { start?: Date; end?: Date }) => {
+    if (!range.start || !range.end) return;
     setListenOnZoom(false);
-    const from = toUnixUTC(startOfDay(start));
-    const to = toUnixUTC(startOfDay(end));
-    await zoomRange(from, differenceInDays(end, start) + 1);
-    onRangeUpdates({ start: from, end: to });
+    const start = toUnixUTC(startOfDay(range.start));
+    const end = toUnixUTC(startOfDay(range.end));
+    await zoomRange(start, differenceInDays(range.end, range.start) + 1);
+    onRangeUpdates({ start, end });
     setListenOnZoom(true);
   };
 
   const zoomIn = async (days: number) => {
     setListenOnZoom(false);
-    await zoomRange(data.at(days * -1)!.date.toString(), days);
+    const start = data.at(days * -1)!.date.toString();
+    const end = data.at(-1)!.date.toString();
+    await zoomRange(start, days);
+    onRangeUpdates({ start, end });
     setListenOnZoom(true);
   };
 
