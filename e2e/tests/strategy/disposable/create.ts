@@ -57,10 +57,10 @@ export const create = (testCase: CreateStrategyTestCase) => {
 
     const tooltip = await strategy.priceTooltip(direction);
     if (setting === 'limit') {
-      expect(tooltip.price()).toHaveText(output.min);
+      await expect(tooltip.price()).toHaveText(output.min);
     } else {
-      expect(tooltip.minPrice()).toHaveText(output.min);
-      expect(tooltip.maxPrice()).toHaveText(output.max);
+      await expect(tooltip.minPrice()).toHaveText(output.min);
+      await expect(tooltip.maxPrice()).toHaveText(output.max);
     }
     await tooltip.waitForDetached();
 
