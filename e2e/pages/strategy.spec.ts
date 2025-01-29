@@ -662,6 +662,7 @@ test.describe('Strategies', () => {
     await debug.visit();
     await debug.setupImposter();
   });
+  // eslint-disable-next-line no-empty-pattern
   test.afterEach(async ({}, testInfo) => {
     await removeFork(testInfo);
   });
