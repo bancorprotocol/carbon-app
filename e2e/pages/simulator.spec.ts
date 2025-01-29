@@ -201,6 +201,7 @@ test.describe('Simulator', () => {
     const debug = new DebugDriver(page);
     await debug.visit();
   });
+  // Need an empty object else the tests don't run
   // eslint-disable-next-line no-empty-pattern
   test.afterEach(async ({}, testInfo) => {
     await removeFork(testInfo);
