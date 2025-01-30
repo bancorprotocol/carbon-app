@@ -108,6 +108,7 @@ export const useModalTradeRouting = ({
     } else {
       void tradeFn();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     user,
     approval.isPending,

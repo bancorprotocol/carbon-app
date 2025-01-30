@@ -33,6 +33,7 @@ export const TradeSettingsRow: FC<{
     if (item.presets.includes(item.value) && isAllSettingsDefault) {
       internalValue && setInternalValue('');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item.value]);
 
   const updateItemAndInternalState = (value: string) => {
