@@ -17,7 +17,6 @@ export const AppConfigSchema = v.object({
   selectedConnectors: ConnectorSchema,
   blockedConnectors: v.optional(ConnectorSchema),
   walletConnectProjectId: v.string(),
-  isSimulatorEnabled: v.boolean(),
   sentryDSN: v.optional(v.string()),
   policiesLastUpdated: v.optional(v.string()),
   network: v.object({
@@ -93,8 +92,6 @@ export const AppConfigSchema = v.object({
     ),
   ]),
   tenderly: v.object({
-    nativeTokenDonorAccount: v.string(),
-    faucetAmount: v.number(),
     faucetTokens: v.array(
       v.object({
         decimals: v.number(),
@@ -105,6 +102,7 @@ export const AppConfigSchema = v.object({
     ),
   }),
   ui: v.object({
+    showSimulator: v.boolean(),
     priceChart: v.union([v.literal('native'), v.literal('tradingView')]),
     useGradientBranding: v.optional(v.boolean()),
     tradeCount: v.optional(v.boolean()),

@@ -23,7 +23,6 @@ export const commonConfig: AppConfig = {
   ],
   blockedConnectors: ['Tailwind'],
   walletConnectProjectId: '',
-  isSimulatorEnabled: true,
   policiesLastUpdated: '27 May, 2024',
   network: {
     name: 'Sei Network',
@@ -91,8 +90,6 @@ export const commonConfig: AppConfig = {
     },
   ],
   tenderly: {
-    nativeTokenDonorAccount: '0x3a7AB16485770c21B7543058De545E986284d0D3',
-    faucetAmount: 1000,
     faucetTokens: [
       {
         donorAccount: '0x06b49C508f278a9219a6e45A7bcEbBC0aA1E2e7b',
@@ -115,6 +112,7 @@ export const commonConfig: AppConfig = {
     ],
   },
   ui: {
+    showSimulator: true,
     priceChart: 'native',
     useGradientBranding: true,
     tradeCount: true,

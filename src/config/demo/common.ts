@@ -1,11 +1,6 @@
 import { AppConfig } from 'config/types';
 
-const addresses = {
-  ZERO: '0x0000000000000000000000000000000000000000',
-};
-
 export const commonConfig: AppConfig = {
-  hidden: true,
   mode: 'development',
   appName: '',
   appUrl: '',
@@ -13,7 +8,6 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask'],
   blockedConnectors: [],
   walletConnectProjectId: '',
-  isSimulatorEnabled: false,
   policiesLastUpdated: '',
   network: {
     name: 'Demo Network',
@@ -24,7 +18,7 @@ export const commonConfig: AppConfig = {
       url: '',
     },
     rpc: {
-      url: import.meta.env.VITE_CHAIN_RPC_URL,
+      url: import.meta.env.VITE_CHAIN_RPC_URL ?? '',
     },
     defaultLimitedApproval: true,
     gasToken: {
@@ -45,7 +39,9 @@ export const commonConfig: AppConfig = {
     quote: [],
   },
   addresses: {
-    tokens: addresses,
+    tokens: {
+      ZERO: '0x0000000000000000000000000000000000000000',
+    },
     carbon: {
       carbonController: '',
       voucher: '',
@@ -60,30 +56,10 @@ export const commonConfig: AppConfig = {
   tokenListOverride: [],
   tokenLists: [],
   tenderly: {
-    nativeTokenDonorAccount: '',
-    faucetAmount: 1000,
-    faucetTokens: [
-      {
-        donorAccount: '',
-        tokenContract: '',
-        decimals: 18,
-        symbol: '',
-      },
-      {
-        donorAccount: '',
-        tokenContract: '',
-        decimals: 6,
-        symbol: '',
-      },
-      {
-        donorAccount: '',
-        tokenContract: '',
-        decimals: 6,
-        symbol: '',
-      },
-    ],
+    faucetTokens: [],
   },
   ui: {
+    showSimulator: false,
     priceChart: 'tradingView',
     useGradientBranding: false,
     tradeCount: false,

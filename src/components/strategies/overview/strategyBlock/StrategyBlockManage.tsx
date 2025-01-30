@@ -83,7 +83,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
   const isDisposable = isDisposableStrategy(strategy);
 
-  if (!isDisposable && config.isSimulatorEnabled) {
+  if (!isDisposable && config.ui.showSimulator) {
     items.push({
       id: 'simulate',
       name: 'Simulate Strategy',

@@ -24,7 +24,7 @@ export const menuItems: MenuItem[] = [
     href: '/explore',
     testid: 'explore-page',
   },
-  ...(!config.isSimulatorEnabled
+  ...(!config.ui.showSimulator
     ? []
     : [
         {
