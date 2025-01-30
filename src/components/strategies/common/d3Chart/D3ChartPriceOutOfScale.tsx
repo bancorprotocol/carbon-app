@@ -15,12 +15,10 @@ export const D3ChartPriceOutOfScale = ({
   color,
 }: Props) => {
   const { dms } = useD3ChartCtx();
-  const msg = type === 'buy' ? 'BUY' : 'SELL';
   const stopColor1 = minOutOfScale ? 'black' : color;
   const stopColor2 = minOutOfScale ? color : 'black';
   const stopOpacity1 = minOutOfScale ? 0 : undefined;
   const stopOpacity2 = minOutOfScale ? undefined : 0;
-  const yText = minOutOfScale ? dms.boundedHeight - 10 : 23;
   const yRect = minOutOfScale ? dms.boundedHeight - 30 : -1;
 
   return (
@@ -55,14 +53,6 @@ export const D3ChartPriceOutOfScale = ({
           fill={`url(#gradient-out-of-range-${type})`}
           opacity={0.5}
         />
-        {/*<text*/}
-        {/*  x={dms.boundedWidth / 2}*/}
-        {/*  y={yText}*/}
-        {/*  textAnchor="middle"*/}
-        {/*  fill="white"*/}
-        {/*>*/}
-        {/*  {msg} PRICE IS OUT OF SCALE*/}
-        {/*</text>*/}
       </g>
     </>
   );

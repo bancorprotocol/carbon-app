@@ -85,6 +85,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         sellToken: source,
         message: 'No Liquidity Available',
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     buy,
     errorMsgSource,
