@@ -109,5 +109,7 @@ export const AppConfigSchema = v.object({
     useGradientBranding: v.optional(v.boolean()),
     tradeCount: v.optional(v.boolean()),
     currencyMenu: v.optional(v.boolean()),
+    showTerms: v.optional(v.boolean()),
+    showPrivacy: v.optional(v.boolean()),
   }),
 });

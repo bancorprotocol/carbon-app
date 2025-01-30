@@ -143,5 +143,7 @@ export const commonConfig: AppConfig = {
     useGradientBranding: true,
     tradeCount: true,
     currencyMenu: false,
+    showTerms: true,
+    showPrivacy: true,
   },
 };
