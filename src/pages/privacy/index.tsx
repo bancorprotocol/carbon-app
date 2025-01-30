@@ -573,6 +573,7 @@ const content = [
 ];
 
 export const PrivacyPage = () => {
+  if (!config.ui.showPrivacy) return;
   return (
     <Page title={'Privacy Policy'}>
       <>
