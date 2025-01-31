@@ -9,6 +9,7 @@ function useInitEffect(effect: () => void, deps: any[]) {
     } else {
       return effect();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }
 

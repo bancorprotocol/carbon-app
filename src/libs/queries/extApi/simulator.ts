@@ -94,6 +94,7 @@ export const useGetSimulator = (search: SimulatorResultSearch) => {
     queryKey: QueryKey.simulator(search),
     queryFn: async () => {
       try {
+        // eslint-disable-next-line unused-imports/no-unused-vars
         const { buyIsRange, sellIsRange, type, spread, ...params } = search;
         const res = await carbonApi.getSimulator(params);
 

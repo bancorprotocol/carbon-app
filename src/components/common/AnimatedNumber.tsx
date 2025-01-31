@@ -34,6 +34,7 @@ export const AnimatedNumber = ({
     });
 
     return () => controls.stop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [to]);
 
   return <m.p ref={nodeRef} className={className ?? ''} data-testid={testid} />;

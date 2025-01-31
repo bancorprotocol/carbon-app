@@ -53,57 +53,62 @@ export const useBurgerMenuItems = () => {
         </NewTabLink>
       ),
     },
-    {
+  ];
+  if (config.ui.showTerms) {
+    mainItems.push({
       content: (
         <Link className="flex" to="/terms">
           Terms of Use
         </Link>
       ),
-    },
-    {
+    });
+  }
+  if (config.ui.showPrivacy) {
+    mainItems.push({
       content: (
         <Link className="flex" to="/privacy">
           Privacy Policy
         </Link>
       ),
-    },
-    {
-      content: (
-        <div className="flex w-full items-center justify-between">
-          <NewTabLink
-            to={externalLinks.x}
-            className="rounded-6 p-6 md:hover:bg-black"
-          >
-            <IconX className={iconStyles} />
-          </NewTabLink>
-          <NewTabLink
-            to={externalLinks.youtube}
-            className="rounded-6 p-6 md:hover:bg-black"
-          >
-            <IconYoutube className={iconStyles} />
-          </NewTabLink>
-          <NewTabLink
-            to={externalLinks.discord}
-            className="rounded-6 p-6 md:hover:bg-black"
-          >
-            <IconDiscord className={iconStyles} />
-          </NewTabLink>
-          <NewTabLink
-            to={externalLinks.telegram}
-            className="rounded-6 p-6 md:hover:bg-black"
-          >
-            <IconTelegram className={iconStyles} />
-          </NewTabLink>
-        </div>
-      ),
-    },
-  ];
+    });
+  }
+  mainItems.push({
+    content: (
+      <div className="flex w-full items-center justify-between">
+        <NewTabLink
+          to={externalLinks.x}
+          className="rounded-6 p-6 md:hover:bg-black"
+        >
+          <IconX className={iconStyles} />
+        </NewTabLink>
+        <NewTabLink
+          to={externalLinks.youtube}
+          className="rounded-6 p-6 md:hover:bg-black"
+        >
+          <IconYoutube className={iconStyles} />
+        </NewTabLink>
+        <NewTabLink
+          to={externalLinks.discord}
+          className="rounded-6 p-6 md:hover:bg-black"
+        >
+          <IconDiscord className={iconStyles} />
+        </NewTabLink>
+        <NewTabLink
+          to={externalLinks.telegram}
+          className="rounded-6 p-6 md:hover:bg-black"
+        >
+          <IconTelegram className={iconStyles} />
+        </NewTabLink>
+      </div>
+    ),
+  });
   if (config.ui.currencyMenu) {
     mainItems.unshift({
       subMenu: 'currency',
       content: <CurrencyMenuItemContent />,
     });
   }
+
   menuMap.set('main', { items: mainItems });
 
   const currencyItems = useMemo(

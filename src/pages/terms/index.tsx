@@ -1052,6 +1052,7 @@ const content = [
 ];
 
 export const TermsPage = () => {
+  if (!config.ui.showTerms) return;
   return (
     <Page title="Terms of Use">
       <>
