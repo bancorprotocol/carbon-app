@@ -138,10 +138,7 @@ export const SimulatorInputOverlappingPage = () => {
           quoteToken={searchState.quoteToken}
           noPriceHistory={isError}
         />
-        <SimInputStrategyType
-          baseToken={searchState.baseToken}
-          quoteToken={searchState.quoteToken}
-        />
+        <SimInputStrategyType />
         <CreateOverlappingStrategy
           state={state}
           dispatch={dispatch}

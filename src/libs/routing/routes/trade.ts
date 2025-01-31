@@ -11,10 +11,9 @@ import { TradeRoot } from 'pages/trade/root';
 import { TradeMarket } from 'pages/trade/market';
 import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
-import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import { OverlappingSearch } from 'components/strategies/common/types';
-import * as v from 'valibot';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import * as v from 'valibot';
 
 // TRADE TYPE
 export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
@@ -75,8 +74,8 @@ const tradePage = createRoute({
   validateSearch: searchValidator({
     base: v.optional(v.fallback(validAddress, '')),
     quote: v.optional(v.fallback(validAddress, '')),
-    priceStart: v.optional(validNumber, defaultStart().toString()),
-    priceEnd: v.optional(validNumber, defaultEnd().toString()),
+    priceStart: v.optional(validNumber),
+    priceEnd: v.optional(validNumber),
   }),
 });
 
