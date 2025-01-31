@@ -73,8 +73,8 @@ const tradePage = createRoute({
     }
   },
   validateSearch: searchValidator({
-    base: v.optional(validAddress),
-    quote: v.optional(validAddress),
+    base: v.optional(v.fallback(validAddress, '')),
+    quote: v.optional(v.fallback(validAddress, '')),
     priceStart: v.optional(validNumber, defaultStart().toString()),
     priceEnd: v.optional(validNumber, defaultEnd().toString()),
   }),
