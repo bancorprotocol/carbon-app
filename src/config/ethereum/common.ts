@@ -112,7 +112,7 @@ export const commonConfig: AppConfig = {
     carbon: {
       carbonController: '0xC537e898CD774e2dCBa3B14Ea6f34C93d5eA45e1',
       voucher: '0x3660F04B79751e31128f6378eAC70807e38f554E',
-      batcher: '0x03ede52e1174bE0956f3d3e0e86E05626974Bee2',
+      batcher: '0x0199f3A6C4B192B9f9C3eBE31FBC535CdD4B7D4e',
     },
   },
   utils: {
@@ -221,5 +221,6 @@ export const commonConfig: AppConfig = {
     currencyMenu: true,
     showTerms: true,
     showPrivacy: true,
+    showCart: true,
   },
 };

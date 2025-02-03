@@ -124,7 +124,7 @@ export const CreateForm: FC<FormProps> = (props) => {
 
       {user && (
         <>
-          {config.addresses.carbon.batcher && (
+          {config.ui.showCart && (
             <Button
               className={cn(style.addCart, 'shrink-0')}
               type="button"

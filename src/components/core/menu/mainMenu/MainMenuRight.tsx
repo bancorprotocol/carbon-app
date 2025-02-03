@@ -26,7 +26,7 @@ export const MainMenuRight: FC = () => {
   return (
     <div className="flex items-center gap-10 sm:gap-20">
       <TenderlyForkAlert />
-      {config.addresses.carbon.batcher && <MainMenuCart />}
+      {config.ui.showCart && <MainMenuCart />}
       <MainMenuRightNotifications />
       <MainMenuRightChainSelector networks={networks} />
       {aboveBreakpoint('md') && (
