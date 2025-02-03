@@ -55,7 +55,11 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
           <Link
             key={link.id}
             to={link.to}
-            search={priceSearchFn[link.id](strategy, editType)}
+            search={({ priceStart, priceEnd }) => ({
+              ...priceSearchFn[link.id](strategy, editType),
+              priceStart,
+              priceEnd,
+            })}
             params={params}
             replace={true}
             aria-current={pathName.includes(link.id) ? 'page' : 'false'}

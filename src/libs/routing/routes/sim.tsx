@@ -1,6 +1,5 @@
 import { redirect, createRoute } from '@tanstack/react-router';
 import { SimulatorProvider } from 'components/simulator/result/SimulatorProvider';
-import { endOfDay, getUnixTime, startOfDay, sub } from 'date-fns';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   getLastVisitedPair,
@@ -48,16 +47,9 @@ export const simulatorInputRootRoute = createRoute({
     }
   },
   validateSearch: (search: Record<string, unknown>): StrategyInputBase => {
-    const start =
-      Number(search.start) > 0
-        ? (search.start as string)
-        : getUnixTime(startOfDay(sub(new Date(), { days: 364 }))).toString();
-    const end =
-      Number(search.end) > 0
-        ? (search.end as string)
-        : getUnixTime(endOfDay(new Date())).toString();
+    const { start, end } = search;
 
-    if (Number(start) > Number(end)) {
+    if (start && end && Number(start) > Number(end)) {
       throw new Error('Invalid date range');
     }
 
@@ -72,8 +64,8 @@ export const simulatorInputRootRoute = createRoute({
     return {
       baseToken,
       quoteToken,
-      start,
-      end,
+      start: start as string | undefined,
+      end: end as string | undefined,
     };
   },
 });

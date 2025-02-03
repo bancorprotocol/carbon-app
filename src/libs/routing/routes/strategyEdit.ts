@@ -41,8 +41,8 @@ export const editStrategyLayout = createRoute({
   path: '/strategies/edit/$strategyId',
   component: EditStrategyPageLayout,
   validateSearch: searchValidator({
-    priceStart: v.optional(validNumber, defaultStart().toString()),
-    priceEnd: v.optional(validNumber, defaultEnd().toString()),
+    priceStart: v.optional(validNumber),
+    priceEnd: v.optional(validNumber),
     editType: v.picklist(['editPrices', 'renew', 'deposit', 'withdraw']),
   }),
 });

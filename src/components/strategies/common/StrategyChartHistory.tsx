@@ -2,10 +2,10 @@ import {
   ChartPrices,
   OnPriceUpdates,
 } from 'components/strategies/common/d3Chart';
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { TradeSearch } from 'libs/routing';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { BaseOrder } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeTypes } from 'libs/routing/routes/trade';
@@ -67,6 +67,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   const { base, quote, type, order0, order1, activities } = props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
+  const nav = useNavigate();
 
   const marketPrice = props.marketPrice
     ? Number(props.marketPrice)
@@ -82,6 +83,22 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     sell: { min: order1.min || '0', max: order1.max || '0' },
   });
   const [bounds, setBounds] = useState(getBounds(order0, order1, direction));
+
+  const updatePriceRange = useCallback(
+    (range: { start?: string; end?: string }) => {
+      nav({
+        to: '.',
+        search: (s) => ({
+          ...s,
+          priceStart: range.start,
+          priceEnd: range.end,
+        }),
+        resetScroll: false,
+        replace: true,
+      });
+    },
+    [nav]
+  );
 
   const updatePrices: OnPriceUpdates = ({ buy, sell }) => {
     const newPrices = {
@@ -104,8 +121,8 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: base.address,
     quoteToken: quote.address,
-    start: priceStart ?? defaultStart().toString(),
-    end: priceEnd ?? defaultEnd().toString(),
+    start: defaultStart().toString(),
+    end: defaultEnd().toString(),
   });
 
   useEffect(() => {
@@ -154,6 +171,9 @@ export const StrategyChartHistory: FC<Props> = (props) => {
       overlappingSpread={props.spread}
       activities={activities}
       zoomBehavior={activities ? 'normal' : 'extended'}
+      start={priceStart}
+      end={priceEnd}
+      onRangeUpdates={updatePriceRange}
     />
   );
 };

@@ -159,10 +159,7 @@ export const SimulatorInputRecurringPage = () => {
           quoteToken={searchState.quoteToken}
           noPriceHistory={isError}
         />
-        <SimInputStrategyType
-          baseToken={searchState.baseToken}
-          quoteToken={searchState.quoteToken}
-        />
+        <SimInputStrategyType />
         <SimInputRecurring
           state={state}
           dispatch={dispatch}
