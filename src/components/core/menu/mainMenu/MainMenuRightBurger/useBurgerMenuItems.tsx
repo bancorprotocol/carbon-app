@@ -7,6 +7,7 @@ import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
 import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
 import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ReactComponent as IconV } from 'assets/icons/v.svg';
+import config from 'config';
 
 export type MenuItemType = {
   subMenu?: MenuType;
@@ -27,10 +28,6 @@ export const useBurgerMenuItems = () => {
   const menuMap = new Map<MenuType, Menu>();
 
   const mainItems: MenuItemType[] = [
-    {
-      subMenu: 'currency',
-      content: <CurrencyMenuItemContent />,
-    },
     {
       subMenu: 'resources',
       content: 'Resources',
@@ -56,51 +53,63 @@ export const useBurgerMenuItems = () => {
         </NewTabLink>
       ),
     },
-    {
+  ];
+  if (config.ui.showTerms) {
+    mainItems.push({
       content: (
         <Link className="flex" to="/terms">
           Terms of Use
         </Link>
       ),
-    },
-    {
+    });
+  }
+  if (config.ui.showPrivacy) {
+    mainItems.push({
       content: (
         <Link className="flex" to="/privacy">
           Privacy Policy
         </Link>
       ),
-    },
-    {
-      content: (
-        <div className="flex w-full items-center justify-between">
-          <NewTabLink
-            to={externalLinks.x}
-            className="rounded-6 p-6 md:hover:bg-black"
-          >
-            <IconX className={iconStyles} />
-          </NewTabLink>
-          <NewTabLink
-            to={externalLinks.youtube}
-            className="rounded-6 p-6 md:hover:bg-black"
-          >
-            <IconYoutube className={iconStyles} />
-          </NewTabLink>
-          <NewTabLink
-            to={externalLinks.discord}
-            className="rounded-6 p-6 md:hover:bg-black"
-          >
-            <IconDiscord className={iconStyles} />
-          </NewTabLink>
-          <NewTabLink
-            to={externalLinks.telegram}
-            className="rounded-6 p-6 md:hover:bg-black"
-          >
-            <IconTelegram className={iconStyles} />
-          </NewTabLink>
-        </div>
-      ),
-    },
-  ];
+    });
+  }
+  mainItems.push({
+    content: (
+      <div className="flex w-full items-center justify-between">
+        <NewTabLink
+          to={externalLinks.x}
+          className="rounded-6 p-6 md:hover:bg-black"
+        >
+          <IconX className={iconStyles} />
+        </NewTabLink>
+        <NewTabLink
+          to={externalLinks.youtube}
+          className="rounded-6 p-6 md:hover:bg-black"
+        >
+          <IconYoutube className={iconStyles} />
+        </NewTabLink>
+        <NewTabLink
+          to={externalLinks.discord}
+          className="rounded-6 p-6 md:hover:bg-black"
+        >
+          <IconDiscord className={iconStyles} />
+        </NewTabLink>
+        <NewTabLink
+          to={externalLinks.telegram}
+          className="rounded-6 p-6 md:hover:bg-black"
+        >
+          <IconTelegram className={iconStyles} />
+        </NewTabLink>
+      </div>
+    ),
+  });
+  if (config.ui.currencyMenu) {
+    mainItems.unshift({
+      subMenu: 'currency',
+      content: <CurrencyMenuItemContent />,
+    });
+  }
+
+  menuMap.set('main', { items: mainItems });
 
   const currencyItems = useMemo(
     (): MenuItemType[] => [
@@ -133,6 +142,12 @@ export const useBurgerMenuItems = () => {
     ],
     [availableCurrencies, selectedFiatCurrency, setSelectedFiatCurrency]
   );
+  if (config.ui.currencyMenu) {
+    menuMap.set('currency', {
+      items: currencyItems,
+      title: 'Currency',
+    });
+  }
 
   const resourcesItems: MenuItemType[] = [
     {
@@ -171,12 +186,6 @@ export const useBurgerMenuItems = () => {
       ),
     },
   ];
-
-  menuMap.set('main', { items: mainItems });
-  menuMap.set('currency', {
-    items: currencyItems,
-    title: 'Currency',
-  });
   menuMap.set('resources', {
     items: resourcesItems,
     title: 'Resources',

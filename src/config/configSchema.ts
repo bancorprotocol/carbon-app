@@ -109,5 +109,8 @@ export const AppConfigSchema = v.object({
     priceChart: v.union([v.literal('native'), v.literal('tradingView')]),
     useGradientBranding: v.optional(v.boolean()),
     tradeCount: v.optional(v.boolean()),
+    currencyMenu: v.optional(v.boolean()),
+    showTerms: v.optional(v.boolean()),
+    showPrivacy: v.optional(v.boolean()),
   }),
 });

@@ -193,10 +193,10 @@ where `spread` (fee tier in the UI) is in percentage, and `value` is the number 
 
 ## Change Network
 
-1. Create a new folder under `src/config` with the name of the network (ex: "polygon")
-2. Copy and paste the files from `src/config/ethereum` into your folder
+1. Create a new folder under [`src/config`](src/config) with the name of the network (ex: "polygon")
+2. Copy and paste the files from [`src/config/demo`](src/config/demo) into your folder
 3. Update the `common.ts`, `production.ts` & `development.ts` files with your config, pointing to the CarbonDeFi contracts in that network, as well as setting the rpc.url and rpc.headers (rpc.url must match the one found in [Chain Lists](https://chainlist.org/)).
-4. Update the `src/config/index.ts` files to import your files
+4. Update the [`src/config/index.ts`](src/config/index.ts) files to import your files
    `index.ts`
 
 As an example on adding Polygon network:
@@ -271,6 +271,9 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `priceChart`: use `tradingView` chart or `native` chart for token pair price history. You need to provide a backend with price history endpoint to support `native` view.
   - `useGradientBranding`: Flag to enable gradient styles for buttons.
   - `tradeCount`: Display the amount of trades in the explorer page.
+  - `currencyMenu`: Display the currency menu to switch between currencies.
+  - `showTerms`: Display the terms page & links. ⚠️ If you set it to true, you need to change the content of the page ⚠️
+  - `showPrivacy`: Display the privacy page & links. ⚠️ If you set it to true, you need to change the content of the page ⚠️
 
 #### Gas token different than native token
 
