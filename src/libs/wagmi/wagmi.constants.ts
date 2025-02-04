@@ -1,17 +1,11 @@
 import { SelectableConnectionName } from 'libs/wagmi/wagmi.types';
 import config from 'config';
 import { tenderlyRpc } from 'utils/tenderly';
-import { lsService } from 'services/localeStorage';
-
-const configOverride = lsService.getItem('configOverride');
 
 const IS_ENV_RPC = !!import.meta.env.VITE_CHAIN_RPC_URL;
 
 const CHAIN_RPC_URL =
-  tenderlyRpc ||
-  configOverride?.network?.rpc.url ||
-  import.meta.env.VITE_CHAIN_RPC_URL ||
-  config.network.rpc.url;
+  tenderlyRpc || config.network.rpc.url || import.meta.env.VITE_CHAIN_RPC_URL;
 
 const CHAIN_RPC_HEADERS =
   tenderlyRpc || IS_ENV_RPC ? {} : config.network.rpc?.headers || {};
