@@ -24,12 +24,28 @@ export const DebugConfig = () => {
         lsService.removeItem('configOverride');
       } else {
         const parsedConfig = JSON.parse(configOverride || '');
-        v.parse(v.partial(AppConfigSchema), parsedConfig);
-        lsService.setItem('configOverride', parsedConfig);
+        const result = v.safeParse(v.partial(AppConfigSchema), parsedConfig);
+        if (result.success) {
+          for (let i = 0; i < localStorage.length; i++) {
+            localStorage.removeItem(localStorage.key(i)!);
+          }
+          lsService.setItem('configOverride', parsedConfig);
+          window?.location.reload();
+        } else {
+          const errors = result.issues
+            .map((issue) => {
+              const path = issue.path
+                ?.map((p) => p.type === 'object' && p.key)
+                .join('.');
+              return `[${path}]: ${issue.message}`;
+            })
+            .join('\n');
+          console.error(result.issues);
+          setError(errors);
+        }
       }
-      setError('');
-      window?.location.reload();
     } catch (error) {
+      console.log(error);
       setError(errorMessage);
     }
   };
