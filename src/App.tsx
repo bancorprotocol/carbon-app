@@ -9,6 +9,7 @@ import { MainContent } from 'components/core/MainContent';
 import { useStore } from 'store';
 import { Toaster } from 'components/common/Toaster/Toaster';
 import { Footer } from 'components/common/Footer/Footer';
+import { SVGCarbonLogo } from 'components/common/SVGCarbonLogo';
 
 let didInitCheck = false;
 let didInitSDK = false;
@@ -58,6 +59,7 @@ export const App = () => {
       <ModalProvider />
       <Toaster />
       <CreateStrategyCTAMobile />
+      <SVGCarbonLogo />
     </>
   );
 };
