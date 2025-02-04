@@ -248,10 +248,9 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 
 - `appUrl`: The URL of the app.
 - `carbonApi`: The URL of the API.
-- `walletConnectProjectId`: The WalletConnect project ID If you wish to add walletConnect, make sure to add it to `selectableConnectionTypes` as well.
-- `selectedConnectors`: List of connectors to make available by default in the wallet selection modal that will be shown even if the connector is not injected.
+- `selectedConnectors`: List of connectors to make available by default in the wallet selection modal that will be shown even if the connector is not injected. ex ['MetaMask', 'WalletConnect', 'Coinbase Wallet', 'Safe']
 - `blockedConnectors`: List of EIP-6963 injected connectors names to block in the wallet selection modal.
-- `isSimulatorEnabled`: Flag to enable the simulation page.
+- `walletConnectProjectId`: The WalletConnect project ID If you wish to add walletConnect, make sure to add it to `selectableConnectionTypes` as well.
 - `network`
   - `name`: Network name.
   - `logoUrl`: Network logo URL.
@@ -263,11 +262,24 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade, explore, and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
 - `popularTokens`: List of popular tokens to be used in the app when opening the token selection modal.
-- `addresses`/`carbon` and `addresses/utils`: CarbonController, Voucher and multicall3 contract addresses.
+- `addresses`
+  - `tokens`:
+    - `ZERO`: Address of the zero token
+  - `carbon`:
+     - `carbonController`: Address of CarbonController contract
+     - `voucher`: Address of Voucher contract 
+  - `utils`: 
+    - `multicall3`
+      - `address`: Address of the multicall3 contract
+      - `blockCreated`: Block of the creation of the multicall3
 - `tokenListOverride`: Token list override to be used in the app when fetching the token list. Tokens in the list will override any other token with the same address.
 - `tokenLists`: List of token lists including the uri and the parser name to be used to parse the token list. Please update the tokenParserMap in the `src/config/utils.ts` file to include the parser name and the parser function.
-- `sdk`/`cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
+- `sdk`:
+  - `cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
+- `tenderly`
+  - `faucetTokens`: List of address to get tokens from in the debug page
 - `ui`
+  - `showSimulator`: Flag to enable the simulation page.
   - `priceChart`: use `tradingView` chart or `native` chart for token pair price history. You need to provide a backend with price history endpoint to support `native` view.
   - `useGradientBranding`: Flag to enable gradient styles for buttons.
   - `tradeCount`: Display the amount of trades in the explorer page.

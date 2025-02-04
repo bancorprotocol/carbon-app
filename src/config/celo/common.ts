@@ -22,7 +22,6 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe', 'WalletConnect'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
-  isSimulatorEnabled: true,
   policiesLastUpdated: '31 Jul, 2024',
   network: {
     name: 'Celo Network',
@@ -115,8 +114,6 @@ export const commonConfig: AppConfig = {
     },
   ],
   tenderly: {
-    nativeTokenDonorAccount: '0xf89d7b9c864f589bbF53a82105107622B35EaA40',
-    faucetAmount: 1000,
     faucetTokens: [
       {
         donorAccount: '0xD533Ca259b330c7A88f74E000a3FaEa2d63B7972',
@@ -139,6 +136,7 @@ export const commonConfig: AppConfig = {
     ],
   },
   ui: {
+    showSimulator: true,
     priceChart: 'native',
     useGradientBranding: true,
     tradeCount: true,

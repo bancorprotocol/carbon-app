@@ -32,7 +32,7 @@ export const simulatorInputRootRoute = createRoute({
   path: '/',
   component: SimulatorPage,
   beforeLoad: ({ location }) => {
-    if (!config.isSimulatorEnabled) {
+    if (!config.ui.showSimulator) {
       throw redirect({ to: '/', replace: true });
     }
     if (

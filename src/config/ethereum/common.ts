@@ -35,7 +35,6 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask', 'WalletConnect', 'Coinbase Wallet', 'Safe'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
-  isSimulatorEnabled: true,
   policiesLastUpdated: '18 April, 2023',
   network: {
     name: 'Ethereum Network',
@@ -149,8 +148,6 @@ export const commonConfig: AppConfig = {
     },
   ],
   tenderly: {
-    nativeTokenDonorAccount: '0x00000000219ab540356cbb839cbe05303d7705fa',
-    faucetAmount: 1000,
     faucetTokens: [
       {
         donorAccount: '0x0a59649758aa4d66e25f08dd01271e891fe52199',
@@ -215,6 +212,7 @@ export const commonConfig: AppConfig = {
     ],
   },
   ui: {
+    showSimulator: true,
     priceChart: 'native',
     useGradientBranding: true,
     tradeCount: false,
