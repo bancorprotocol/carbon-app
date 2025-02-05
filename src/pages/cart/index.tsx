@@ -145,27 +145,34 @@ export const CartPage = () => {
       <CartList strategies={strategies} />
       {funds.isInsufficient && (
         <Warning
-          className="place-self-center"
+          className="place-self-center p-20"
           message="Insufficient budget to create all strategies"
           isError
         />
       )}
-      <label
-        htmlFor="approve-warnings"
-        className={cn(
-          style.approveWarnings,
-          'text-14 font-weight-500 flex items-center gap-8 place-self-center p-20 text-white/60'
-        )}
-      >
-        <input
-          id="approve-warnings"
-          type="checkbox"
-          name="approval"
-          className="size-18"
-          data-testid="approve-warnings"
-        />
-        I've reviewed the warning(s) but choose to proceed
-      </label>
+      {!funds.isInsufficient && (
+        <div className="grid place-items-center gap-20 p-20">
+          <span className="warning-message text-14 text-center text-white/60">
+            Please check the checkbox to proceed.
+          </span>
+          <label
+            htmlFor="approve-warnings"
+            className={cn(
+              style.approveWarnings,
+              'text-14 font-weight-500 flex items-center gap-8 place-self-center text-white/60'
+            )}
+          >
+            <input
+              id="approve-warnings"
+              type="checkbox"
+              name="approval"
+              className="size-18"
+              data-testid="approve-warnings"
+            />
+            I've reviewed all strategies prices and deposit amounts
+          </label>
+        </div>
+      )}
       <Button
         type="submit"
         disabled={!user || approval.isPending || funds.isPending}
