@@ -1,6 +1,6 @@
 export const SVGCarbonLogo = () => {
   return (
-    <svg>
+    <svg width="0" height="0">
       <defs>
         <symbol
           id="carbonLogo"
