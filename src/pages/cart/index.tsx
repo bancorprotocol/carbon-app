@@ -153,7 +153,7 @@ export const CartPage = () => {
       {!funds.isInsufficient && (
         <div className="grid place-items-center gap-20 p-20">
           <span className="warning-message text-14 text-center text-white/60">
-            Please check the checkbox to proceed.
+            Please confirm before proceeding
           </span>
           <label
             htmlFor="approve-warnings"
