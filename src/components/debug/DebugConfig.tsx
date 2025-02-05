@@ -21,14 +21,14 @@ export const DebugConfig = () => {
     try {
       if (!configOverride) {
         setConfigOverride('');
+        localStorage.clear();
         lsService.removeItem('configOverride');
+        window?.location.reload();
       } else {
         const parsedConfig = JSON.parse(configOverride || '');
         const result = v.safeParse(v.partial(AppConfigSchema), parsedConfig);
         if (result.success) {
-          for (let i = 0; i < localStorage.length; i++) {
-            localStorage.removeItem(localStorage.key(i)!);
-          }
+          localStorage.clear();
           lsService.setItem('configOverride', parsedConfig);
           window?.location.reload();
         } else {
