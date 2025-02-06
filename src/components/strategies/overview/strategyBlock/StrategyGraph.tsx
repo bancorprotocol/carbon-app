@@ -1,5 +1,5 @@
 import { FC, useId } from 'react';
-import { Strategy } from 'libs/queries';
+import { BaseStrategy } from 'libs/queries';
 import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
 import {
   FloatTooltip,
@@ -16,11 +16,11 @@ import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import style from './StrategyGraph.module.css';
 
 interface Props {
-  strategy: Strategy;
+  strategy: BaseStrategy;
   className?: string;
 }
 
-const isSmallRange = ({ order0, order1 }: Strategy) => {
+const isSmallRange = ({ order0, order1 }: BaseStrategy) => {
   const allPrices = new Set([
     order0.startRate,
     order0.endRate,
@@ -528,7 +528,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
 };
 
 interface OrderTooltipProps {
-  strategy: Strategy;
+  strategy: BaseStrategy;
   buy?: boolean;
 }
 
