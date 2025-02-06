@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { StrategyWithFiat } from 'libs/queries';
+import { CartStrategy } from 'libs/queries';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -7,7 +7,7 @@ import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
 import { cn, getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
 
 export const StrategyBlockBuySell: FC<{
-  strategy: StrategyWithFiat;
+  strategy: CartStrategy;
   buy?: boolean;
   className?: string;
 }> = ({ strategy, buy = false, className }) => {
@@ -15,7 +15,6 @@ export const StrategyBlockBuySell: FC<{
   const otherToken = buy ? strategy.quote : strategy.base;
   const order = buy ? strategy.order0 : strategy.order1;
   const testIdPrefix = `${buy ? 'buy' : 'sell'}`;
-  const active = strategy.status === 'active';
   const otherTokenFiat = useFiatCurrency(otherToken);
   const currency = otherTokenFiat.selectedFiatCurrency;
   const prettifiedBudget = prettifyNumber(order.balance, { abbreviate: true });
@@ -28,13 +27,7 @@ export const StrategyBlockBuySell: FC<{
   const noCurrencyTooltip = `There is no ${currency} value for this token.`;
 
   return (
-    <article
-      className={cn(
-        'flex flex-col gap-4 p-16',
-        active ? '' : 'opacity-50',
-        className
-      )}
-    >
+    <article className={cn('flex flex-col gap-4 p-16', className)}>
       {buy ? (
         <header className="flex items-center gap-4">
           <h4 className="text-12 text-buy">Buy {token.symbol}</h4>

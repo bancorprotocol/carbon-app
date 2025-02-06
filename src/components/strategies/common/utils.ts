@@ -1,10 +1,9 @@
-import { Order, Strategy } from 'libs/queries';
+import { BaseStrategy, Order, Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from './types';
 import { endOfDay, getUnixTime, startOfDay, subDays } from 'date-fns';
-import { StrategyType } from 'libs/routing';
 
 type StrategyOrderInput =
   | { min: string; max: string }
@@ -24,7 +23,7 @@ export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
   return buyMax.gte(sellMin);
 };
 
-export const isDisposableStrategy = (strategy: Strategy) => {
+export const isDisposableStrategy = (strategy: BaseStrategy) => {
   // If strategy is inactive, consider it as a recurring
   if (isEmptyOrder(strategy.order0) && isEmptyOrder(strategy.order1)) {
     return false;
@@ -36,7 +35,7 @@ export const isDisposableStrategy = (strategy: Strategy) => {
   return false;
 };
 
-export const getStrategyType = (strategy: Strategy): StrategyType => {
+export const getStrategyType = (strategy: BaseStrategy) => {
   if (isOverlappingStrategy(strategy)) return 'overlapping';
   if (isDisposableStrategy(strategy)) return 'disposable';
   return 'recurring';

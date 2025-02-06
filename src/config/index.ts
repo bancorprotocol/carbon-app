@@ -58,4 +58,11 @@ export const networks = Object.entries(configs)
 
 export const defaultConfig = configs[network][mode];
 const currentConfig = handleConfigOverrides(defaultConfig);
+// Force showCart to false if no batcher address
+if (!!currentConfig.ui.showCart && !currentConfig.addresses.carbon.batcher) {
+  console.error(
+    '[Config] config.ui.showCart is true but the address of the batcher contract is not set.'
+  );
+  currentConfig.ui.showCart = false;
+}
 export default currentConfig;

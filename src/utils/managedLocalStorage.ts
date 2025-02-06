@@ -2,7 +2,7 @@ import LZString from 'lz-string';
 import { Migration } from './migrateLocalStorage';
 
 export class ManagedLocalStorage<T> {
-  private readonly keyFormatter = (key: keyof T) => key as string;
+  readonly keyFormatter = (key: keyof T) => key as string;
 
   constructor(
     keyFormatter?: (key: keyof T) => string,
@@ -11,6 +11,19 @@ export class ManagedLocalStorage<T> {
     if (keyFormatter) {
       this.keyFormatter = keyFormatter;
     }
+  }
+
+  private emit(formattedId: string, newValue: string | null) {
+    // Reproduce "storage" event so it run also within the context of the same document
+    const event = new StorageEvent('storage', {
+      key: formattedId,
+      newValue: newValue,
+      // If this become needed in the app we can send oldValue too, but it requires an additional getItem() call
+      oldValue: null,
+      // eslint-disable-next-line no-restricted-globals
+      url: location.href,
+    });
+    window.dispatchEvent(event);
   }
 
   getItem = <K extends keyof T>(key: K): T[K] | undefined => {
@@ -47,11 +60,14 @@ export class ManagedLocalStorage<T> {
     }
 
     localStorage.setItem(formattedId, stringValue);
+
+    this.emit(formattedId, stringValue);
   };
 
   removeItem = <K extends keyof T>(key: K) => {
     const formattedId = this.keyFormatter(key);
     localStorage.removeItem(formattedId);
+    this.emit(formattedId, null);
   };
 
   migrateItems = () => {
