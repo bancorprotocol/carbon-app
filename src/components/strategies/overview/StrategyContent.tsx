@@ -7,8 +7,8 @@ import { cn } from 'utils/helpers';
 import { StrategyTable } from './StrategyTable';
 import { StrategyLayout } from '../StrategySelectLayout';
 import { lsService } from 'services/localeStorage';
-import styles from './StrategyContent.module.css';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import styles from './StrategyContent.module.css';
 
 type Props = {
   strategies: StrategyWithFiat[];

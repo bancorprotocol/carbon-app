@@ -45,12 +45,14 @@ import {
   strategyPageRedirect,
   strategyPageRoot,
 } from 'libs/routing/routes/strategy';
+import { cartPage } from './cart';
 
 export const routeTree = rootRoute.addChildren([
   termPage,
   privacyPage,
   debugPage,
   tradePage,
+  cartPage,
   strategyPageRoot.addChildren([strategyPage, strategyPageRedirect]),
   oldCreateStrategies,
   editStrategyLayout.addChildren([

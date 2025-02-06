@@ -1,16 +1,25 @@
-import { FC, FormEvent, ReactNode, useEffect } from 'react';
+import {
+  FC,
+  FormEvent,
+  MouseEvent,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import { Token } from 'libs/tokens';
 import { createStrategyEvents } from 'services/events/strategyEvents';
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from 'libs/routing';
 import { Button } from 'components/common/button';
-import { useCreateStrategy } from './useCreateStrategy';
+import { toCreateStrategyParams, useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
 import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
 import { useWagmi } from 'libs/wagmi';
 import { BaseOrder } from 'components/strategies/common/types';
 import { StrategyType } from 'libs/routing';
+import { addStrategyToCart } from 'components/cart/utils';
 import style from 'components/strategies/common/form.module.css';
+import config from 'config';
 
 interface FormProps {
   type: StrategyType;
@@ -26,14 +35,17 @@ export const CreateForm: FC<FormProps> = (props) => {
   const { base, quote, order0, order1, type, children } = props;
   const { openModal } = useModal();
   const { user } = useWagmi();
-  const search = useSearch({ strict: false }) as any;
+  const search = useSearch({ from: '/trade' });
+  const nav = useNavigate();
+
+  const [animating, setAnimating] = useState(false);
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
     useCreateStrategy({ type, base, quote, order0, order1 });
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      createStrategyEvents.change(type, search);
+      createStrategyEvents.change(type, search as any);
     }, 1000);
     return () => clearTimeout(timeout);
   }, [type, search]);
@@ -54,10 +66,35 @@ export const CreateForm: FC<FormProps> = (props) => {
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
   };
 
+  const addToCart = async (e: MouseEvent<HTMLButtonElement>) => {
+    if (!user) return;
+    const form = e.currentTarget.form!;
+    if (!form.checkValidity()) return;
+    if (!!form.querySelector('.loading-message')) return;
+    if (!!form.querySelector('.error-message')) return;
+
+    setAnimating(true);
+    const params = toCreateStrategyParams(base, quote, order0, order1);
+    await addStrategyToCart(user, params);
+    setAnimating(false);
+    // Remove budget
+    nav({
+      to: '.',
+      search: (s) => {
+        delete s.budget;
+        delete s.buyBudget;
+        delete s.sellBudget;
+        return s;
+      },
+      replace: false,
+      resetScroll: false,
+    });
+  };
+
   const create = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
-    createStrategyEvents.submit(type, search);
+    createStrategyEvents.submit(type, search as any);
     createStrategy();
   };
 
@@ -85,20 +122,37 @@ export const CreateForm: FC<FormProps> = (props) => {
           "I've reviewed the warning(s) but choose to proceed."}
       </label>
 
-      {user ? (
-        <Button
-          className="shrink-0"
-          type="submit"
-          variant="success"
-          size="lg"
-          fullWidth
-          loading={loading}
-          loadingChildren={loadingChildren}
-          data-testid="create-strategy"
-        >
-          Create Strategy
-        </Button>
-      ) : (
+      {user && (
+        <>
+          {config.ui.showCart && (
+            <Button
+              className={cn(style.addCart, 'shrink-0')}
+              type="button"
+              variant="white"
+              size="lg"
+              fullWidth
+              disabled={loading || animating}
+              onClick={addToCart}
+              data-testid="add-strategy-to-cart"
+            >
+              Add to Cart
+            </Button>
+          )}
+          <Button
+            className="shrink-0"
+            type="submit"
+            variant="success"
+            size="lg"
+            fullWidth
+            loading={loading}
+            loadingChildren={loadingChildren}
+            data-testid="create-strategy"
+          >
+            Create Strategy
+          </Button>
+        </>
+      )}
+      {!user && (
         <Button
           className="shrink-0"
           type="button"

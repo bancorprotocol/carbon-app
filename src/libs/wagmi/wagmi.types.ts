@@ -32,7 +32,8 @@ export interface CarbonWagmiProviderContext {
   handleTenderlyRPC: (
     url?: string,
     carbonController?: string,
-    voucherAddress?: string
+    voucherAddress?: string,
+    batcherAddress?: string
   ) => void;
   setImposterAccount: (account?: string) => void;
   disconnect: () => Promise<void>;
