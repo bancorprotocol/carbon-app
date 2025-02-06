@@ -3,13 +3,12 @@ import { rootRoute } from './root';
 import { createRoute, redirect } from '@tanstack/react-router';
 import { InferSearch, searchValidator, validNumber } from '../utils';
 import { activityValidators } from 'components/activity/utils';
-import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
 import * as v from 'valibot';
 
 const schema = {
   ...activityValidators,
-  priceStart: v.optional(validNumber, defaultStart().toString()),
-  priceEnd: v.optional(validNumber, defaultEnd().toString()),
+  priceStart: v.optional(validNumber),
+  priceEnd: v.optional(validNumber),
   hideIndicators: v.optional(v.boolean()),
 };
 
