@@ -121,8 +121,6 @@ export const CartPage = () => {
     }
   };
 
-  if (!config.ui.showCart) return;
-
   if (!strategies.length) {
     return (
       <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] flex-grow content-start gap-16 pt-20">
