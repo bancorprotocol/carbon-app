@@ -119,8 +119,8 @@ export const DebugCreateStrategy = () => {
     const base = selectedTokens[0];
     const quote = selectedTokens[1];
     const strategy: CreateStrategyParams = {
-      base,
-      quote,
+      base: base.address,
+      quote: quote.address,
       order0: {
         max: buyMax,
         min: buyMin,
@@ -160,11 +160,7 @@ export const DebugCreateStrategy = () => {
         await queryClient.invalidateQueries({
           queryKey: QueryKey.balance(user, quote.address),
         });
-        console.log(
-          'created strategy',
-          strategy.base.address,
-          strategy.quote.address
-        );
+        console.log('created strategy', strategy.base, strategy.quote);
       } catch (e) {
         console.error(
           'create strategy failed for ',
