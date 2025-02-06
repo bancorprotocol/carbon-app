@@ -1,7 +1,7 @@
 import { Link, useMatch } from '@tanstack/react-router';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { StrategyWithFiat } from 'libs/queries';
-import { FC, useEffect, useId, useState } from 'react';
+import { FC, useId } from 'react';
 import { StrategyStatusTag } from './strategyBlock/StrategyBlockHeader';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { prettifyNumber, tokenAmount } from 'utils/helpers';
@@ -11,9 +11,9 @@ import {
   ManageButtonIcon,
   StrategyBlockManage,
 } from './strategyBlock/StrategyBlockManage';
-import styles from './StrategyContent.module.css';
 import { FiatPrice } from 'components/common/FiatPrice';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import styles from './StrategyContent.module.css';
 
 interface Props {
   strategies: StrategyWithFiat[];
@@ -35,12 +35,8 @@ export const StrategyTable: FC<Props> = ({ strategies }) => {
         </tr>
       </thead>
       <tbody>
-        {strategies.map((strategy, index) => (
-          <StrategyRow
-            strategy={strategy}
-            key={strategy.id}
-            initVisible={index < 10}
-          />
+        {strategies.map((strategy) => (
+          <StrategyRow strategy={strategy} key={strategy.id} />
         ))}
       </tbody>
     </table>
@@ -49,31 +45,13 @@ export const StrategyTable: FC<Props> = ({ strategies }) => {
 
 interface RowProps {
   strategy: StrategyWithFiat;
-  initVisible: boolean;
 }
-const StrategyRow: FC<RowProps> = ({ strategy, initVisible }) => {
+const StrategyRow: FC<RowProps> = ({ strategy }) => {
   const id = useId();
   const { base, quote, status, order0, order1 } = strategy;
   const isExplorer = !!useMatch({ from: '/explore', shouldThrow: false });
   const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
   const totalBalance = strategy.fiatBudget.total;
-
-  const [visible, setVisible] = useState(initVisible);
-
-  useEffect(() => {
-    if (visible) return;
-    const el = document.getElementById(id);
-    if (!el) return;
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        setVisible(entry.intersectionRatio > 0);
-      }
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [id, visible]);
-
-  if (!visible) return <tr id={id} key={id} className="h-[85px]"></tr>;
 
   return (
     <tr key={id} id={id} className="h-[85px]">
