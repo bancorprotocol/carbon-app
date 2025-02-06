@@ -25,6 +25,8 @@ export const MainMenuCart = () => {
     return () => window.removeEventListener('storage', handler);
   });
 
+  if (!user) return;
+
   return (
     <Link
       id="menu-cart-link"
