@@ -33,18 +33,25 @@ export const useGetTradePairsData = () => {
         markForMissing(pair[1]);
       }
 
+      const missingTokens: Token[] = [];
       const getMissing = Array.from(missing).map(async (address) => {
         const token = await fetchTokenData(Token, address);
+        missingTokens.push(token);
         tokens.set(address, token);
         return token;
       });
-      const missingTokens = await Promise.all(getMissing);
+      const responses = await Promise.allSettled(getMissing);
+      for (const response of responses) {
+        if (response.status === 'rejected') console.error(response.reason);
+      }
       importTokens(missingTokens);
 
-      const result = pairs.map((pair) => ({
-        baseToken: tokens.get(pair[0])!,
-        quoteToken: tokens.get(pair[1])!,
-      }));
+      const result: { baseToken: Token; quoteToken: Token }[] = [];
+      for (const pair of pairs) {
+        const baseToken = tokens.get(pair[0]);
+        const quoteToken = tokens.get(pair[1]);
+        if (baseToken && quoteToken) result.push({ baseToken, quoteToken });
+      }
 
       const pairsWithInverse = [
         ...result,
