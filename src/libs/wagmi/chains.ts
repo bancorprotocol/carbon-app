@@ -41,8 +41,8 @@ export const configTransports = {
       headers: RPC_HEADERS[CHAIN_ID],
     },
     batch: {
-      batchSize: config.sdk.batchSize,
-      wait: config.sdk.throttleTimeout,
+      batchSize: config.network.rpc.batchSize,
+      wait: config.network.rpc.wait,
     },
   }),
 };

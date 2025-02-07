@@ -101,7 +101,8 @@ export const useCarbonInit = () => {
           getTokenDecimalMap(),
           {
             cache: cacheData,
-            batchSize: config.sdk.batchSize,
+            batchPairSize: config.sdk.batchPairSize,
+            batchBlockSize: config.sdk.batchBlockSize,
             throttleTimeout: config.sdk.throttleTimeout,
           }
         ),
