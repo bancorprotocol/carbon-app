@@ -40,6 +40,9 @@ export const configTransports = {
     fetchOptions: {
       headers: RPC_HEADERS[CHAIN_ID],
     },
-    batch: true,
+    batch: {
+      batchSize: config.sdk.batchSize,
+      wait: config.sdk.throttleTimeout,
+    },
   }),
 };
