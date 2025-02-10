@@ -42,7 +42,12 @@ const init = async (
   },
   config: ContractsConfig,
   decimalsMap?: Map<string, number>,
-  cachedData?: string
+  sdkConfig?: {
+    cache?: string;
+    pairBatchSize?: number;
+    blockRangeSize?: number;
+    refreshInterval?: number;
+  }
 ) => {
   if (isInitialized || isInitializing) return;
   isInitializing = true;
@@ -54,7 +59,13 @@ const init = async (
     chainId
   );
   api = new ContractsApi(provider, config);
-  const { cache, startDataSync } = initSyncedCache(api.reader, cachedData);
+  const { cache, startDataSync } = initSyncedCache(
+    api.reader,
+    sdkConfig?.cache,
+    sdkConfig?.pairBatchSize,
+    sdkConfig?.refreshInterval,
+    sdkConfig?.blockRangeSize
+  );
   sdkCache = cache;
   carbonSDK = new Toolkit(
     api,

@@ -26,6 +26,8 @@ export const AppConfigSchema = v.object({
     rpc: v.object({
       url: v.string(),
       headers: v.optional(v.record(v.string(), v.string())),
+      batchSize: v.optional(v.number()),
+      wait: v.optional(v.number()),
     }),
     blockExplorer: v.object({
       name: v.string(),
@@ -42,6 +44,9 @@ export const AppConfigSchema = v.object({
   }),
   sdk: v.object({
     cacheTTL: v.number(),
+    pairBatchSize: v.optional(v.number()),
+    blockRangeSize: v.optional(v.number()),
+    refreshInterval: v.optional(v.number()),
   }),
   defaultTokenPair: v.tuple([v.string(), v.string()]),
   popularPairs: v.array(v.tuple([v.string(), v.string()])),

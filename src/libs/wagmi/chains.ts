@@ -40,5 +40,9 @@ export const configTransports = {
     fetchOptions: {
       headers: RPC_HEADERS[CHAIN_ID],
     },
+    batch: {
+      batchSize: config.network.rpc.batchSize,
+      wait: config.network.rpc.wait,
+    },
   }),
 };

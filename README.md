@@ -258,7 +258,11 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `defaultLimitedApproval`: Optional flag to set the default ERC-20 approval to limited approval. For chains where gas is low, it is recommended to set this flag to true.
   - `gasToken`: Gas token name, symbol, decimals, address and logoURI. This parameter will take priority over the `tokenListOverride`.
   - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
-  - `rpc`: The RPC url and headers of the network, used to add the network to the injected wallet and to fetch data from the chain.
+  - `rpc`: 
+    - `url`: RPC url of the network
+    - `headers`: Headers append to each request to the RPC network
+    - `batchSize`: The maximum number of JSON-RPC requests to send in a batch
+    - `wait`: The maximum number of milliseconds to wait before sending a batch
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade, explore, and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
 - `popularTokens`: List of popular tokens to be used in the app when opening the token selection modal.
@@ -276,6 +280,9 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `tokenLists`: List of token lists including the uri and the parser name to be used to parse the token list. Please update the tokenParserMap in the `src/config/utils.ts` file to include the parser name and the parser function.
 - `sdk`:
   - `cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
+  - `pairBatchSize`: Amount of pairs batched together in the same multicall when calling strategiesByPair
+  - `blockRangeSize`: Max number of blocks to read logs from in a single call. Each time the SDK reads logs since last processed block it will split the total range into smaller ranges according to this configuration. This should be determined according to the RPC limitations.
+  - `refreshInterval`: interval in millisecond between each cycle of reading latest events from the chain.
 - `tenderly`
   - `faucetTokens`: List of address to get tokens from in the debug page
 - `ui`

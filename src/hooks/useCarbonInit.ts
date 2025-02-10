@@ -99,7 +99,12 @@ export const useCarbonInit = () => {
           },
           contractsConfig,
           getTokenDecimalMap(),
-          cacheData
+          {
+            cache: cacheData,
+            pairBatchSize: config.sdk.pairBatchSize,
+            blockRangeSize: config.sdk.blockRangeSize,
+            refreshInterval: config.sdk.refreshInterval,
+          }
         ),
         carbonSDK.setOnChangeHandlers(
           Comlink.proxy(onPairDataChangedCallback),
