@@ -281,8 +281,8 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `sdk`:
   - `cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
   - `pairBatchSize`: Amount of pairs batched together in the same multicall when calling strategiesByPair
-  - `blockRangeSize`: Amount of blocks since last call when syncing to latest logs
-  - `refreshInterval`: interval in millisecond between each request when syncing the logs
+  - `blockRangeSize`: Max number of blocks to read logs from in a single call. Each time the SDK reads logs since last processed block it will split the total range into smaller ranges according to this configuration. This should be determined according to the RPC limitations.
+  - `refreshInterval`: interval in millisecond between each cycle of reading latest events from the chain.
 - `tenderly`
   - `faucetTokens`: List of address to get tokens from in the debug page
 - `ui`
