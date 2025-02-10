@@ -44,9 +44,9 @@ const init = async (
   decimalsMap?: Map<string, number>,
   sdkConfig?: {
     cache?: string;
-    batchPairSize?: number;
-    batchBlockSize?: number;
-    throttleTimeout?: number;
+    pairBatchSize?: number;
+    blockRangeSize?: number;
+    refreshInterval?: number;
   }
 ) => {
   if (isInitialized || isInitializing) return;
@@ -62,9 +62,9 @@ const init = async (
   const { cache, startDataSync } = initSyncedCache(
     api.reader,
     sdkConfig?.cache,
-    sdkConfig?.batchPairSize,
-    sdkConfig?.throttleTimeout,
-    sdkConfig?.batchBlockSize
+    sdkConfig?.pairBatchSize,
+    sdkConfig?.refreshInterval,
+    sdkConfig?.blockRangeSize
   );
   sdkCache = cache;
   carbonSDK = new Toolkit(

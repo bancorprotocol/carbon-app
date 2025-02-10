@@ -44,9 +44,9 @@ export const AppConfigSchema = v.object({
   }),
   sdk: v.object({
     cacheTTL: v.number(),
-    batchPairSize: v.optional(v.number()),
-    batchBlockSize: v.optional(v.number()),
-    throttleTimeout: v.optional(v.number()),
+    pairBatchSize: v.optional(v.number()),
+    blockRangeSize: v.optional(v.number()),
+    refreshInterval: v.optional(v.number()),
   }),
   defaultTokenPair: v.tuple([v.string(), v.string()]),
   popularPairs: v.array(v.tuple([v.string(), v.string()])),

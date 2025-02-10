@@ -280,9 +280,9 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
 - `tokenLists`: List of token lists including the uri and the parser name to be used to parse the token list. Please update the tokenParserMap in the `src/config/utils.ts` file to include the parser name and the parser function.
 - `sdk`:
   - `cacheTTL`: When the app loads, it will ignore any cached data if it is older than the cacheTTL time in milliseconds. If set to 0, the app will always ignore the cache data and fetch new data on load.
-  - `batchPairSize`: Amount of pairs batched together when reading initial strategies
-  - `batchBlockSize`: Amount of block batched together when syncing to latest logs
-  - `throttleTimeout`: timeout in millisecond between each request when syncing the logs
+  - `pairBatchSize`: Amount of pairs batched together in the same multicall when calling strategiesByPair
+  - `blockRangeSize`: Amount of blocks since last call when syncing to latest logs
+  - `refreshInterval`: interval in millisecond between each request when syncing the logs
 - `tenderly`
   - `faucetTokens`: List of address to get tokens from in the debug page
 - `ui`

@@ -101,9 +101,9 @@ export const useCarbonInit = () => {
           getTokenDecimalMap(),
           {
             cache: cacheData,
-            batchPairSize: config.sdk.batchPairSize,
-            batchBlockSize: config.sdk.batchBlockSize,
-            throttleTimeout: config.sdk.throttleTimeout,
+            pairBatchSize: config.sdk.pairBatchSize,
+            blockRangeSize: config.sdk.blockRangeSize,
+            refreshInterval: config.sdk.refreshInterval,
           }
         ),
         carbonSDK.setOnChangeHandlers(
