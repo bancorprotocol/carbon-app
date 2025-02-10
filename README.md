@@ -261,7 +261,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `rpc`: 
     - `url`: RPC url of the network
     - `headers`: Headers append to each request to the RPC network
-    - `batchSize`: TThe maximum number of JSON-RPC requests to send in a batch
+    - `batchSize`: The maximum number of JSON-RPC requests to send in a batch
     - `wait`: The maximum number of milliseconds to wait before sending a batch
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade, explore, and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
