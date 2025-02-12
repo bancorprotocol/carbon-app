@@ -88,10 +88,10 @@ const carbonApi = {
     params: QueryActivityParams,
     abortSignal?: AbortSignal
   ) => {
-    return get<ServerActivity[]>('activity/v2', params, abortSignal);
+    return get<ServerActivity[]>('activity', params, abortSignal);
   },
   getActivityMeta: async (params: QueryActivityParams) => {
-    return get<ServerActivityMeta>('activity/v2/meta', params);
+    return get<ServerActivityMeta>('activity/meta', params);
   },
   getTrending: () => get<Trending>('analytics/trending'),
 };
