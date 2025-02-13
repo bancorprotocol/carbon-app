@@ -17,6 +17,7 @@ import config from 'config';
 const contractsConfig: ContractsConfig = {
   carbonControllerAddress: config.addresses.carbon.carbonController,
   voucherAddress: config.addresses.carbon.voucher,
+  carbonBatcherAddress: config.addresses.carbon.batcher,
   multiCallAddress: config.utils.multicall3.address,
 };
 
