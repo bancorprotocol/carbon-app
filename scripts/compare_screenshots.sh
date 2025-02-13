@@ -1,23 +1,37 @@
 #!/bin/bash
 set -e
 
-# Function to compare images
+# Function to compare images, ignoring isolated pixel differences
 compare_images() {
   local img1="$1"
   local img2="$2"
   local diff_img="$3"
+  local temp_mask="/tmp/diff_mask.png"
+  local filtered_mask="/tmp/filtered_mask.png"
 
-  # Use ImageMagick compare with AE metric to count different pixels
+  # Create initial diff mask with white pixels where differences exist
+  compare -metric AE "$img1" "$img2" -compose src -threshold 1 "$temp_mask" 2>/dev/null
+
+  # Remove isolated pixels using morphological opening
+  convert "$temp_mask" -morphology Open Diamond "$filtered_mask"
+
+  # Count remaining differences after filtering
   local diff_pixels
-  diff_pixels=$(compare -metric AE "$img1" "$img2" "$diff_img" 2>&1 >/dev/null)
+  diff_pixels=$(identify -format "%[fx:mean*w*h]" "$filtered_mask")
+  
+  # Create visual diff for remaining differences
+  convert "$temp_mask" "$filtered_mask" -alpha Off -compose CopyOpacity -composite "$diff_img"
 
-  echo "diff pixels for $img1, $img2: $diff_pixels"
+  echo "Non-isolated diff pixels for $img1, $img2: $diff_pixels"
 
-  # Check if the number of different pixels is less than 11
-  if [ "$diff_pixels" -lt 11 ]; then
-    return 0  # Images are considered identical
-  else
+  # Clean up temporary files
+  rm -f "$temp_mask" "$filtered_mask"
+
+  # If there are any remaining differences after filtering
+  if [ $(echo "$diff_pixels > 0" | bc -l) -eq 1 ]; then
     return 1  # Images are different
+  else
+    return 0  # Images are considered identical
   fi
 }
 
