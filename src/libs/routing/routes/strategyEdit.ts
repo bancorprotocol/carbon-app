@@ -12,12 +12,7 @@ import {
   EditRecurringStrategySearch,
 } from 'pages/strategies/edit/prices/recurring';
 import { Strategy } from 'libs/queries';
-import {
-  defaultEnd,
-  defaultStart,
-  isEmptyOrder,
-  isZero,
-} from 'components/strategies/common/utils';
+import { isEmptyOrder, isZero } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import {
@@ -188,10 +183,6 @@ export const editBudgetOverlapping = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'budget/overlapping',
   component: EditBudgetOverlappingPage,
-  beforeLoad: ({ search }) => {
-    search.priceStart ||= defaultStart().toString();
-    search.priceEnd ||= defaultEnd().toString();
-  },
   validateSearch: searchValidator({
     editType: v.picklist(['deposit', 'withdraw']),
     chartType: v.optional(v.picklist(['history', 'range'])),

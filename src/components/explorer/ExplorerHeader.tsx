@@ -43,7 +43,8 @@ const getTrendingPairs = (
       base: tokensMap.get(pair.token0.toLowerCase())!,
       quote: tokensMap.get(pair.token1.toLowerCase())!,
       trades: pair.pairTrades,
-    }));
+    }))
+    .filter((pair) => !!pair.base && !!pair.quote);
   return { isLoading: false, data };
 };
 
