@@ -9,18 +9,22 @@ compare_images() {
   local temp_mask="/tmp/diff_mask.png"
   local filtered_mask="/tmp/filtered_mask.png"
 
+  which convert
+  which identify
+  which compare
+
   # Create initial diff mask with white pixels where differences exist
-  compare -metric AE "$img1" "$img2" -compose src -threshold 1 "$temp_mask" 2>/dev/null
+  /usr/bin/compare -metric AE "$img1" "$img2" -compose src -threshold 1 "$temp_mask" 2>/dev/null
 
   # Remove isolated pixels using morphological opening
-  convert "$temp_mask" -morphology Open Diamond "$filtered_mask"
+  /usr/bin/convert "$temp_mask" -morphology Open Diamond "$filtered_mask"
 
   # Count remaining differences after filtering
   local diff_pixels
-  diff_pixels=$(identify -format "%[fx:mean*w*h]" "$filtered_mask")
+  diff_pixels=$(/usr/bin/identify -format "%[fx:mean*w*h]" "$filtered_mask")
   
   # Create visual diff for remaining differences
-  convert "$temp_mask" "$filtered_mask" -alpha Off -compose CopyOpacity -composite "$diff_img"
+  /usr/bin/convert "$temp_mask" "$filtered_mask" -alpha Off -compose CopyOpacity -composite "$diff_img"
 
   echo "Non-isolated diff pixels for $img1, $img2: $diff_pixels"
 
