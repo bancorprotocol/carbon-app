@@ -1,10 +1,21 @@
 #!/bin/bash
 set -e
 
-# Find ImageMagick commands
-CONVERT=$(which convert)
-IDENTIFY=$(which identify)
-COMPARE=$(which compare)
+# Find ImageMagick commands and print their locations
+echo "Finding ImageMagick commands..."
+CONVERT=$(which convert || echo "convert not found")
+IDENTIFY=$(which identify || echo "identify not found")
+COMPARE=$(which compare || echo "compare not found")
+
+echo "convert path: $CONVERT"
+echo "identify path: $IDENTIFY"
+echo "compare path: $COMPARE"
+
+# Check if commands were found
+if [[ "$CONVERT" == "convert not found" ]] || [[ "$IDENTIFY" == "identify not found" ]] || [[ "$COMPARE" == "compare not found" ]]; then
+    echo "Error: One or more ImageMagick commands not found"
+    exit 1
+fi
 
 # Function to compare images, ignoring isolated pixel differences
 compare_images() {
@@ -14,17 +25,23 @@ compare_images() {
   local temp_mask="/tmp/diff_mask.png"
   local filtered_mask="/tmp/filtered_mask.png"
 
+  echo "Comparing images: $img1 and $img2"
+  
   # Create initial diff mask with white pixels where differences exist
+  echo "Running initial comparison..."
   $COMPARE -metric AE "$img1" "$img2" -compose src -threshold 1 "$temp_mask" 2>/dev/null
-
+  
   # Remove isolated pixels using morphological opening
+  echo "Applying morphological opening..."
   $CONVERT "$temp_mask" -morphology Open Diamond "$filtered_mask"
 
   # Count remaining differences after filtering
+  echo "Counting remaining differences..."
   local diff_pixels
   diff_pixels=$($IDENTIFY -format "%[fx:mean*w*h]" "$filtered_mask")
   
   # Create visual diff for remaining differences
+  echo "Creating final diff image..."
   $CONVERT "$temp_mask" "$filtered_mask" -alpha Off -compose CopyOpacity -composite "$diff_img"
 
   echo "Non-isolated diff pixels for $img1, $img2: $diff_pixels"
@@ -60,10 +77,14 @@ fi
 
 # Process each modified screenshot
 for screenshot in $modified_files; do
+  echo "Processing screenshot: $screenshot"
+  
   # Full path to the modified screenshot
   current_screenshot="${GITHUB_WORKSPACE}/${screenshot}"
+  echo "Current screenshot path: $current_screenshot"
 
   # Retrieve the original version of the file from the previous commit
+  echo "Retrieving original version..."
   git show HEAD~1:"$screenshot" > original_screenshot.png
   baseline_screenshot="original_screenshot.png"
 
@@ -76,6 +97,7 @@ for screenshot in $modified_files; do
 
   # Compare with the baseline version
   diff_file="${current_screenshot}.diff.png"
+  echo "Comparing with baseline version..."
   # Temporarily disable 'set -e' to handle non-zero exit status
   set +e
   compare_images "$baseline_screenshot" "$current_screenshot" "$diff_file"
