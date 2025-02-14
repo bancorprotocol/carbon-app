@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# Find ImageMagick commands
+CONVERT=$(which convert)
+IDENTIFY=$(which identify)
+COMPARE=$(which compare)
+
 # Function to compare images, ignoring isolated pixel differences
 compare_images() {
   local img1="$1"
@@ -9,22 +14,18 @@ compare_images() {
   local temp_mask="/tmp/diff_mask.png"
   local filtered_mask="/tmp/filtered_mask.png"
 
-  which convert
-  which identify
-  which compare
-
   # Create initial diff mask with white pixels where differences exist
-  /usr/bin/compare -metric AE "$img1" "$img2" -compose src -threshold 1 "$temp_mask" 2>/dev/null
+  $COMPARE -metric AE "$img1" "$img2" -compose src -threshold 1 "$temp_mask" 2>/dev/null
 
   # Remove isolated pixels using morphological opening
-  /usr/bin/convert "$temp_mask" -morphology Open Diamond "$filtered_mask"
+  $CONVERT "$temp_mask" -morphology Open Diamond "$filtered_mask"
 
   # Count remaining differences after filtering
   local diff_pixels
-  diff_pixels=$(/usr/bin/identify -format "%[fx:mean*w*h]" "$filtered_mask")
+  diff_pixels=$($IDENTIFY -format "%[fx:mean*w*h]" "$filtered_mask")
   
   # Create visual diff for remaining differences
-  /usr/bin/convert "$temp_mask" "$filtered_mask" -alpha Off -compose CopyOpacity -composite "$diff_img"
+  $CONVERT "$temp_mask" "$filtered_mask" -alpha Off -compose CopyOpacity -composite "$diff_img"
 
   echo "Non-isolated diff pixels for $img1, $img2: $diff_pixels"
 
