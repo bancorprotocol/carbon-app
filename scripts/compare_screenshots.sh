@@ -1,6 +1,18 @@
 #!/bin/bash
 set -e
 
+# Debug: Print environment information
+echo "Current PATH: $PATH"
+echo "Listing /usr/bin contents related to ImageMagick:"
+ls -l /usr/bin/*magick* || echo "No magick files found in /usr/bin"
+echo "Listing /usr/local/bin contents related to ImageMagick:"
+ls -l /usr/local/bin/*magick* || echo "No magick files found in /usr/local/bin"
+
+# Try to find ImageMagick installation
+find / -name "convert" 2>/dev/null || echo "convert not found in filesystem"
+find / -name "identify" 2>/dev/null || echo "identify not found in filesystem"
+find / -name "compare" 2>/dev/null || echo "compare not found in filesystem"
+
 # Find ImageMagick commands and print their locations
 echo "Finding ImageMagick commands..."
 CONVERT=$(which convert || echo "convert not found")
