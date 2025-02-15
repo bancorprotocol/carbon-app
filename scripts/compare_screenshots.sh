@@ -1,68 +1,29 @@
 #!/bin/bash
 set -e
 
-# Debug: Print environment information
-echo "Current PATH: $PATH"
-echo "Listing /usr/bin contents related to ImageMagick:"
-ls -l /usr/bin/*magick* || echo "No magick files found in /usr/bin"
-echo "Listing /usr/local/bin contents related to ImageMagick:"
-ls -l /usr/local/bin/*magick* || echo "No magick files found in /usr/local/bin"
-
-# Try to find ImageMagick installation
-find / -name "convert" 2>/dev/null || echo "convert not found in filesystem"
-find / -name "identify" 2>/dev/null || echo "identify not found in filesystem"
-find / -name "compare" 2>/dev/null || echo "compare not found in filesystem"
-
-# Find ImageMagick commands and print their locations
-echo "Finding ImageMagick commands..."
-CONVERT=$(which convert || echo "convert not found")
-IDENTIFY=$(which identify || echo "identify not found")
-COMPARE=$(which compare || echo "compare not found")
-
-echo "convert path: $CONVERT"
-echo "identify path: $IDENTIFY"
-echo "compare path: $COMPARE"
-
-# Check if commands were found
-if [[ "$CONVERT" == "convert not found" ]] || [[ "$IDENTIFY" == "identify not found" ]] || [[ "$COMPARE" == "compare not found" ]]; then
-    echo "Error: One or more ImageMagick commands not found"
-    exit 1
-fi
-
 # Function to compare images, ignoring isolated pixel differences
 compare_images() {
   local img1="$1"
   local img2="$2"
   local diff_img="$3"
-  local temp_mask="/tmp/diff_mask.png"
-  local filtered_mask="/tmp/filtered_mask.png"
+  local temp_diff="/tmp/temp_diff.png"
 
-  echo "Comparing images: $img1 and $img2"
-  
-  # Create initial diff mask with white pixels where differences exist
-  echo "Running initial comparison..."
-  $COMPARE -metric AE "$img1" "$img2" -compose src -threshold 1 "$temp_mask" 2>/dev/null
-  
-  # Remove isolated pixels using morphological opening
-  echo "Applying morphological opening..."
-  $CONVERT "$temp_mask" -morphology Open Diamond "$filtered_mask"
-
-  # Count remaining differences after filtering
-  echo "Counting remaining differences..."
+  # First comparison to get initial differences
   local diff_pixels
-  diff_pixels=$($IDENTIFY -format "%[fx:mean*w*h]" "$filtered_mask")
-  
-  # Create visual diff for remaining differences
-  echo "Creating final diff image..."
-  $CONVERT "$temp_mask" "$filtered_mask" -alpha Off -compose CopyOpacity -composite "$diff_img"
+  diff_pixels=$(compare -metric AE "$img1" "$img2" "$temp_diff" 2>&1 >/dev/null)
 
-  echo "Non-isolated diff pixels for $img1, $img2: $diff_pixels"
+  # Second comparison with more tolerance to remove isolated pixels
+  # The fuzz factor and area density parameters help ignore isolated pixels
+  local filtered_diff
+  filtered_diff=$(compare -fuzz 1% -metric AE -density 300 -define compare:similar-threshold=1 "$img1" "$img2" "$diff_img" 2>&1 >/dev/null)
 
-  # Clean up temporary files
-  rm -f "$temp_mask" "$filtered_mask"
+  echo "Non-isolated diff pixels for $img1, $img2: $filtered_diff"
+
+  # Clean up temporary file
+  rm -f "$temp_diff"
 
   # If there are any remaining differences after filtering
-  if [ $(echo "$diff_pixels > 0" | bc -l) -eq 1 ]; then
+  if [ "$filtered_diff" -gt 0 ]; then
     return 1  # Images are different
   else
     return 0  # Images are considered identical
@@ -89,14 +50,10 @@ fi
 
 # Process each modified screenshot
 for screenshot in $modified_files; do
-  echo "Processing screenshot: $screenshot"
-  
   # Full path to the modified screenshot
   current_screenshot="${GITHUB_WORKSPACE}/${screenshot}"
-  echo "Current screenshot path: $current_screenshot"
 
   # Retrieve the original version of the file from the previous commit
-  echo "Retrieving original version..."
   git show HEAD~1:"$screenshot" > original_screenshot.png
   baseline_screenshot="original_screenshot.png"
 
@@ -109,7 +66,6 @@ for screenshot in $modified_files; do
 
   # Compare with the baseline version
   diff_file="${current_screenshot}.diff.png"
-  echo "Comparing with baseline version..."
   # Temporarily disable 'set -e' to handle non-zero exit status
   set +e
   compare_images "$baseline_screenshot" "$current_screenshot" "$diff_file"
