@@ -71,3 +71,5 @@ jobs:
           commit_message: '[CI] Update Screenshots'
           commit_user_name: ${{ steps.import-gpg.outputs.name }}
           commit_user_email: ${{ steps.import-gpg.outputs.email }}
+          skip_fetch: true
+          skip_checkout: true
