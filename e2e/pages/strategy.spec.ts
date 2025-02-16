@@ -39,8 +39,8 @@ const testCases: CreateStrategyTestCase[] = [
         fiat: '$10.00',
       },
       undercut: {
-        min: '1,501.50 DAI',
-        max: '1,501.50 DAI',
+        min: '1,500.00 DAI',
+        max: '1,500.00 DAI',
       },
       editPrices: {
         min: '1,600.00 DAI',
@@ -112,7 +112,7 @@ const testCases: CreateStrategyTestCase[] = [
         fiat: '$10.00',
       },
       undercut: {
-        min: '1,501.50 DAI',
+        min: '1,500.00 DAI',
         max: '1,701.70 DAI',
       },
       editPrices: {
@@ -152,7 +152,7 @@ const testCases: CreateStrategyTestCase[] = [
         fiat: '$3,334.42',
       },
       undercut: {
-        min: '1,498.50 DAI',
+        min: '1,500.00 DAI',
         max: '1,698.30 DAI',
       },
       editPrices: {
@@ -224,8 +224,8 @@ const testCases: CreateStrategyTestCase[] = [
       undercut: {
         totalFiat: '$3,344.42',
         buy: {
-          min: '1,501.50 DAI',
-          max: '1,501.50 DAI',
+          min: '1,500.00 DAI',
+          max: '1,500.00 DAI',
           budget: '10.00 DAI',
           fiat: '$10.00',
         },
@@ -316,7 +316,7 @@ const testCases: CreateStrategyTestCase[] = [
       undercut: {
         totalFiat: '$3,344.42',
         buy: {
-          min: '1,501.50 DAI',
+          min: '1,500.00 DAI',
           max: '1,601.60 DAI',
           budget: '10.00 DAI',
           fiat: '$10.00',
@@ -408,8 +408,8 @@ const testCases: CreateStrategyTestCase[] = [
       undercut: {
         totalFiat: '$3,344.42',
         buy: {
-          min: '1,501.50 DAI',
-          max: '1,501.50 DAI',
+          min: '1,500.00 DAI',
+          max: '1,500.00 DAI',
           budget: '10.00 DAI',
           fiat: '$10.00',
         },
@@ -500,7 +500,7 @@ const testCases: CreateStrategyTestCase[] = [
       undercut: {
         totalFiat: '$3,344.42',
         buy: {
-          min: '1,501.50 DAI',
+          min: '1,500.00 DAI',
           max: '1,601.60 DAI',
           budget: '10.00 DAI',
           fiat: '$10.00',
