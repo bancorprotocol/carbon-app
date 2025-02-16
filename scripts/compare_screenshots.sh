@@ -31,7 +31,7 @@ fi
 SCREENSHOT_DIR="${GITHUB_WORKSPACE}/e2e/screenshots"
 
 # Get a list of modified screenshots
-modified_files=$(git diff --name-only | grep '.png$' || true)
+modified_files=$(git -C "${GITHUB_WORKSPACE}" diff --name-only | grep '.png$' || true)
 
 # Check if any modified files are found
 if [[ -z "$modified_files" ]]; then

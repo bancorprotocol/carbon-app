@@ -43,6 +43,12 @@ jobs:
           path: playwright-report/
           retention-days: 3
 
+      - name: Debug workspace
+        run: |
+          echo "PWD: $(pwd)"
+          ls -la
+          git status || true
+
       - name: Compare Modified Screenshots
         if: github.event.pull_request.draft == false && github.base_ref == 'main' && !startsWith(github.event.head_commit.message, '[CI]')
         id: compare-screenshots
