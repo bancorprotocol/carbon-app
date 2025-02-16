@@ -127,7 +127,6 @@ export interface OverlappingStrategyTestCase {
   output: {
     create: OverlappingOutput;
     editPrices: OverlappingOutput;
-    undercut: OverlappingOutput;
     withdraw: { buy: string; sell: string };
     deposit: { buy: string; sell: string };
   };
