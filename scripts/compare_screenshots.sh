@@ -1,32 +1,23 @@
 #!/bin/bash
 set -e
 
-# Function to compare images, ignoring isolated pixel differences
+# Function to compare images
 compare_images() {
   local img1="$1"
   local img2="$2"
   local diff_img="$3"
-  local temp_diff="/tmp/temp_diff.png"
 
-  # First comparison to get initial differences
+  # Use ImageMagick compare with AE metric to count different pixels
   local diff_pixels
-  diff_pixels=$(compare -metric AE "$img1" "$img2" "$temp_diff" 2>&1 >/dev/null)
+  diff_pixels=$(compare -metric AE "$img1" "$img2" "$diff_img" 2>&1 >/dev/null)
 
-  # Second comparison with more tolerance to remove isolated pixels
-  # The fuzz factor and area density parameters help ignore isolated pixels
-  local filtered_diff
-  filtered_diff=$(compare -fuzz "1%" -metric AE -density 300 -define compare:similar-threshold=1 "$img1" "$img2" "$diff_img" 2>&1 >/dev/null)
+  echo "diff pixels for $img1, $img2: $diff_pixels"
 
-  echo "Non-isolated diff pixels for $img1, $img2: $filtered_diff"
-
-  # Clean up temporary file
-  rm -f "$temp_diff"
-
-  # If there are any remaining differences after filtering
-  if [ "$filtered_diff" -gt 0 ]; then
-    return 1  # Images are different
-  else
+  # Check if the number of different pixels is less than 11
+  if [ "$diff_pixels" -lt 11 ]; then
     return 0  # Images are considered identical
+  else
+    return 1  # Images are different
   fi
 }
 
