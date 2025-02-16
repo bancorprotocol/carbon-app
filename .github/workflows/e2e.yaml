@@ -43,11 +43,9 @@ jobs:
           path: playwright-report/
           retention-days: 3
 
-      - name: Debug workspace
+      - name: Configure safe directory
         run: |
-          echo "PWD: $(pwd)"
-          ls -la
-          git status || true
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
       - name: Compare Modified Screenshots
         if: github.event.pull_request.draft == false && github.base_ref == 'main' && !startsWith(github.event.head_commit.message, '[CI]')
