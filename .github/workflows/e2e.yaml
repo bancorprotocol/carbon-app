@@ -52,6 +52,9 @@ jobs:
     name: 'Commit Screenshots'
     needs: e2e
     runs-on: ubuntu-latest
+    container:
+      image: docker://doronbancor/playwright-imagemagick:latest # Updated to use your Docker image
+      options: --platform linux/amd64 # Specify platform
     if: github.event.pull_request.draft == false && github.base_ref == 'main' && !startsWith(github.event.head_commit.message, '[CI]')
     permissions:
       contents: write
