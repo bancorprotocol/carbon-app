@@ -10,6 +10,8 @@ jobs:
     container:
       image: docker://doronbancor/playwright-imagemagick:latest # Updated to use your Docker image
       options: --platform linux/amd64 # Specify platform
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,40 +43,15 @@ jobs:
           path: playwright-report/
           retention-days: 3
 
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: screenshots
-          path: e2e/screenshots
-          retention-days: 3
-
-  commit-screenshots:
-    name: 'Commit Screenshots'
-    needs: e2e
-    runs-on: ubuntu-latest
-    container:
-      image: docker://doronbancor/playwright-imagemagick:latest # Updated to use your Docker image
-      options: --platform linux/amd64 # Specify platform
-    if: github.event.pull_request.draft == false && github.base_ref == 'main' && !startsWith(github.event.head_commit.message, '[CI]')
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2 # Ensure the last 2 commits are fetched for diff
-
-      - uses: actions/download-artifact@master
-        with:
-          name: screenshots
-          path: e2e/screenshots
-
       - name: Compare Modified Screenshots
+        if: github.event.pull_request.draft == false && github.base_ref == 'main' && !startsWith(github.event.head_commit.message, '[CI]')
         id: compare-screenshots
         run: |
           chmod +x $GITHUB_WORKSPACE/scripts/compare_screenshots.sh  # Add execute permissions
           $GITHUB_WORKSPACE/scripts/compare_screenshots.sh  # Execute the script
 
       - name: Import GPG key
+        if: github.event.pull_request.draft == false && github.base_ref == 'main' && !startsWith(github.event.head_commit.message, '[CI]')
         id: import-gpg
         uses: crazy-max/ghaction-import-gpg@v6
         with:
@@ -84,12 +61,9 @@ jobs:
           git_commit_gpgsign: true
 
       - name: Commit changes
+        if: github.event.pull_request.draft == false && github.base_ref == 'main' && !startsWith(github.event.head_commit.message, '[CI]')
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: '[CI] Update Screenshots'
           commit_user_name: ${{ steps.import-gpg.outputs.name }}
           commit_user_email: ${{ steps.import-gpg.outputs.email }}
-
-      - uses: geekyeggo/delete-artifact@v5
-        with:
-          name: screenshots
