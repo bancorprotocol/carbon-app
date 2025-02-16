@@ -15,7 +15,7 @@ compare_images() {
   # Second comparison with more tolerance to remove isolated pixels
   # The fuzz factor and area density parameters help ignore isolated pixels
   local filtered_diff
-  filtered_diff=$(compare -fuzz 1% -metric AE -density 300 -define compare:similar-threshold=1 "$img1" "$img2" "$diff_img" 2>&1 >/dev/null)
+  filtered_diff=$(compare -fuzz "1%" -metric AE -density 300 -define compare:similar-threshold=1 "$img1" "$img2" "$diff_img" 2>&1 >/dev/null)
 
   echo "Non-isolated diff pixels for $img1, $img2: $filtered_diff"
 
