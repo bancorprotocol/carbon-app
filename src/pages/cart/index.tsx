@@ -32,11 +32,13 @@ const getApproveTokens = (strategies: CartStrategy[]) => {
     amount[quote] ||= new SafeDecimal(0);
     amount[quote] = amount[quote].add(strategy.order0.balance);
   }
-  return Object.values(tokens).map((token) => ({
-    ...token,
-    spender: batcher,
-    amount: amount[token.address].toString(),
-  }));
+  return Object.values(tokens)
+    .map((token) => ({
+      ...token,
+      spender: batcher,
+      amount: amount[token.address].toString(),
+    }))
+    .filter((token) => new SafeDecimal(token.amount).gt(0));
 };
 
 const useHasInsufficientFunds = (approvalTokens: ApprovalToken[]) => {
