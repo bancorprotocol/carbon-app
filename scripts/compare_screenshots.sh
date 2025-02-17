@@ -48,20 +48,24 @@ compare_images() {
   # 3. Count the number of white pixels in the cleaned mask.
   #    - %[fx:mean] gives the average brightness of the image
   #      in the range [0..1].
-  #    - Multiply by w*h to get total white pixels.
+  #    - Multiply by w*h to get total white pixels (float).
+  #    - Convert that float to an integer.
   # -----------------------------------------------------------
+  local pixel_diff_float
+  pixel_diff_float=$(convert "$diff_mask_clean" -format "%[fx:mean*w*h]" info:)
+
+  # Convert floating-point value to integer (rounded to nearest whole number).
   local pixel_diff_count
-  pixel_diff_count=$(convert "$diff_mask_clean" -format "%[fx:mean*w*h]" info:)
+  pixel_diff_count=$(printf "%.0f" "$pixel_diff_float")
 
   echo "[DEBUG] Number of differing pixels after cleaning: $pixel_diff_count"
 
   # -----------------------------------------------------------
-  # 4. Decide if the difference is acceptable. We keep the same
-  #    numeric threshold (10) used in your original script,
-  #    but you can adjust as needed.
+  # 4. Decide if the difference is acceptable.
+  #    You can change the threshold (10) as needed.
   # -----------------------------------------------------------
   local threshold=10
-  if (( $(bc <<< "$pixel_diff_count < $threshold") == 1 )); then
+  if [ "$pixel_diff_count" -lt "$threshold" ]; then
     echo "[DEBUG] Differences ($pixel_diff_count) are under threshold ($threshold)."
     # Save the final cleaned mask as the "diff image" for reference.
     mv "$diff_mask_clean" "$diff_img"
