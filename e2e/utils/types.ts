@@ -20,7 +20,6 @@ export type StrategyCase =
   | 'editPrices'
   | 'pause'
   | 'renew'
-  | 'undercut'
   | 'withdraw';
 export type DebugTokens = keyof typeof debugTokens;
 
