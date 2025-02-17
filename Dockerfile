@@ -1,5 +1,5 @@
 # Use the official Playwright Docker image as a base
-FROM mcr.microsoft.com/playwright:v1.50.1-jammy
+FROM mcr.microsoft.com/playwright:v1.43.1-jammy
 
 # Install extra packages
 RUN apt-get update && apt-get install -y \

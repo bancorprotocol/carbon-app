@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container:
-      image: docker://doronbancor/playwright-imagemagick:1.50.1 # Updated to use your Docker image
+      image: docker://doronbancor/playwright-imagemagick:1.43.1 # Updated to use your Docker image
       options: --platform linux/amd64 # Specify platform
     permissions:
       contents: write
