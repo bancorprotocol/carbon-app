@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container:
-      image: docker://doronbancor/playwright-imagemagick:latest # Updated to use your Docker image
+      image: docker://doronbancor/playwright-imagemagick:1.50.1 # Updated to use your Docker image
       options: --platform linux/amd64 # Specify platform
     permissions:
       contents: write
@@ -17,17 +17,10 @@ jobs:
         with:
           fetch-depth: 2 # Fetch the last 2 commits for comparison
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install build-essential
-        run: apt-get update && apt-get install -y build-essential
-
       - name: Install dependencies
         run: yarn
 
-      - name: Install Playwright browsers and run Playwright tests
+      - name: Run e2e tests
         run: yarn e2e
         env:
           TENDERLY_ACCOUNT: bancor
