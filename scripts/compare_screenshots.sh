@@ -140,11 +140,10 @@ for screenshot in $modified_files; do
   if [ $comparison_result -eq 0 ]; then
     echo "[INFO] $screenshot: No significant visual difference. Reverting changes."
     git restore "$screenshot"
-    rm -f "$diff_file"
   else
     echo "[INFO] $screenshot: Visual difference detected above threshold. Keeping changes."
   fi
 
   # Clean up temporary files
-  rm -f "$baseline_screenshot"
+  rm -f "$baseline_screenshot" "$diff_file"
 done
