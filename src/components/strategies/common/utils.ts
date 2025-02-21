@@ -3,7 +3,8 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from './types';
-import { endOfDay, getUnixTime, startOfDay, subDays } from 'date-fns';
+import { startOfDay, subDays } from 'date-fns';
+import { toUnixUTC } from 'components/simulator/utils';
 
 type StrategyOrderInput =
   | { min: string; max: string }
@@ -115,6 +116,6 @@ export const resetPrice = (price?: string) => {
 };
 
 export const defaultStartDate = () => startOfDay(subDays(new Date(), 364));
-export const defaultEndDate = () => endOfDay(new Date());
-export const defaultStart = () => getUnixTime(defaultStartDate());
-export const defaultEnd = () => getUnixTime(defaultEndDate());
+export const defaultEndDate = () => startOfDay(new Date());
+export const defaultStart = () => toUnixUTC(defaultStartDate());
+export const defaultEnd = () => toUnixUTC(defaultEndDate());

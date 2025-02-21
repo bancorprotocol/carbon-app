@@ -23,11 +23,10 @@ import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { BackButton } from 'components/common/BackButton';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import {
-  defaultEndDate,
-  defaultStartDate,
+  defaultEnd,
+  defaultStart,
   emptyOrder,
 } from 'components/strategies/common/utils';
-import { toUnixUTC } from 'components/simulator/utils';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 import { useActivityQuery } from 'components/activity/useActivityQuery';
@@ -62,8 +61,8 @@ export const StrategyPage = () => {
 
   const { data: activities } = useActivityQuery({
     strategyIds: id,
-    start: priceStart?.toString() ?? toUnixUTC(defaultStartDate()),
-    end: priceEnd?.toString() ?? toUnixUTC(defaultEndDate()),
+    start: priceStart?.toString() ?? defaultStart(),
+    end: priceEnd?.toString() ?? defaultEnd(),
   });
 
   if (isPending) {
