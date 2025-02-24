@@ -145,8 +145,8 @@ const Content = (props: Props) => {
 
   const handlePreset = (days: number) => {
     setDate({
-      from: subDays(now, days),
-      to: now,
+      from: subDays(startOfDay(now), days),
+      to: startOfDay(now),
     });
   };
 
