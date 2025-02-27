@@ -1,4 +1,4 @@
-import { utils } from 'ethers';
+import { getAddress } from '@ethersproject/address';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
@@ -56,14 +56,15 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
     ...config.tokenListOverride,
   ];
 
-  const merged = tokenList
-    .flatMap((list) => list.tokens)
-    .filter((token) => !!token.address && !!token.symbol)
-    .map((token) => ({
-      ...token,
-      address: utils.getAddress(token.address),
-    }));
-  tokens.push(...merged);
+  const record: Record<string, Token> = {};
+  for (const list of tokenList) {
+    for (const token of list.tokens) {
+      if (!token.address || !token.symbol) continue;
+      const address = getAddress(token.address);
+      record[address] ||= { ...token, address };
+    }
+  }
+  tokens.push(...Object.values(record));
 
   const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
   const result = new Map<string, Token>();
