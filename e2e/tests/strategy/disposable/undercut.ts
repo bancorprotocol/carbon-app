@@ -39,7 +39,7 @@ export const undercut = (testCase: CreateStrategyTestCase) => {
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
 
-    const duplicate = await myStrategies.getStrategy(2);
+    const duplicate = await myStrategies.getStrategy(1);
     await expect(duplicate.pair()).toHaveText(`${base}/${quote}`);
     await expect(duplicate.status()).toHaveText('Active');
     await expect(duplicate.totalBudget()).toHaveText(createOutput.fiat);

@@ -43,7 +43,7 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
 
-    const strategyDuplicate = await myStrategies.getStrategy(2);
+    const strategyDuplicate = await myStrategies.getStrategy(1);
     await expect(strategyDuplicate.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategyDuplicate.status()).toHaveText('Active');
     await expect(strategyDuplicate.totalBudget()).toHaveText(totalFiat);
