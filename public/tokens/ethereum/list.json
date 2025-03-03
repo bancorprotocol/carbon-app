@@ -653,14 +653,6 @@
     },
     {
       "chainId": 1,
-      "address": "0x6f40d4a6237c257fff2db00fa0510deeecd303eb",
-      "name": "Instadapp",
-      "symbol": "INST",
-      "decimals": 18,
-      "logoURI": "/tokens/ethereum/0x6f40d4a6237c257fff2db00fa0510deeecd303eb.svg"
-    },
-    {
-      "chainId": 1,
       "address": "0x3155ba85d5f96b2d030a4966af206230e46849cb",
       "name": "THORChain  ERC20 ",
       "symbol": "RUNE",
