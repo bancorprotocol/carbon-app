@@ -35,19 +35,19 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
 
-    const strategyUndercut = await myStrategies.getStrategy(2);
-    await expect(strategyUndercut.pair()).toHaveText(`${base}/${quote}`);
-    await expect(strategyUndercut.status()).toHaveText('Active');
-    await expect(strategyUndercut.totalBudget()).toHaveText(totalFiat);
-    await expect(strategyUndercut.budget('buy')).toHaveText(buy.budget);
-    await expect(strategyUndercut.budgetFiat('buy')).toHaveText(buy.fiat);
-    await expect(strategyUndercut.budget('sell')).toHaveText(sell.budget);
-    await expect(strategyUndercut.budgetFiat('sell')).toHaveText(sell.fiat);
+    const undercut = await myStrategies.getStrategy(1);
+    await expect(undercut.pair()).toHaveText(`${base}/${quote}`);
+    await expect(undercut.status()).toHaveText('Active');
+    await expect(undercut.totalBudget()).toHaveText(totalFiat);
+    await expect(undercut.budget('buy')).toHaveText(buy.budget);
+    await expect(undercut.budgetFiat('buy')).toHaveText(buy.fiat);
+    await expect(undercut.budget('sell')).toHaveText(sell.budget);
+    await expect(undercut.budgetFiat('sell')).toHaveText(sell.fiat);
 
     // Check range
     const [buySetting, sellSetting] = getRecurringSettings(testCase);
 
-    const buyTooltip = await strategyUndercut.priceTooltip('buy');
+    const buyTooltip = await undercut.priceTooltip('buy');
     if (buySetting === 'limit') {
       await expect(buyTooltip.price()).toHaveText(buy.min);
     } else {
@@ -56,7 +56,7 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     }
     await buyTooltip.waitForDetached();
 
-    const sellTooltip = await strategyUndercut.priceTooltip('sell');
+    const sellTooltip = await undercut.priceTooltip('sell');
     if (sellSetting === 'limit') {
       await expect(sellTooltip.price()).toHaveText(sell.min);
     } else {

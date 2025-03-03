@@ -43,13 +43,13 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
 
-    const strategyDuplicate = await myStrategies.getStrategy(2);
-    await expect(strategyDuplicate.pair()).toHaveText(`${base}/${quote}`);
-    await expect(strategyDuplicate.status()).toHaveText('Active');
-    await expect(strategyDuplicate.totalBudget()).toHaveText(totalFiat);
-    await expect(strategyDuplicate.budget('buy')).toHaveText(buy.budget);
-    await expect(strategyDuplicate.budgetFiat('buy')).toHaveText(buy.fiat);
-    await expect(strategyDuplicate.budget('sell')).toHaveText(sell.budget);
-    await expect(strategyDuplicate.budgetFiat('sell')).toHaveText(sell.fiat);
+    const duplicate = await myStrategies.getStrategy(1);
+    await expect(duplicate.pair()).toHaveText(`${base}/${quote}`);
+    await expect(duplicate.status()).toHaveText('Active');
+    await expect(duplicate.totalBudget()).toHaveText(totalFiat);
+    await expect(duplicate.budget('buy')).toHaveText(buy.budget);
+    await expect(duplicate.budgetFiat('buy')).toHaveText(buy.fiat);
+    await expect(duplicate.budget('sell')).toHaveText(sell.budget);
+    await expect(duplicate.budgetFiat('sell')).toHaveText(sell.fiat);
   });
 };
