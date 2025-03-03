@@ -78,7 +78,10 @@ export const useStrategyFilter = (
 
     // Sort
     const compareFunction = getCompareFunctionBySortType(sort);
-    return filtered?.sort(compareFunction);
+    return filtered?.sort((a, b) => {
+      const order = compareFunction(a, b);
+      return order || getCompareFunctionBySortType('recent')(a, b);
+    });
   }, [search, strategies, filter, sort]);
 
   return {
