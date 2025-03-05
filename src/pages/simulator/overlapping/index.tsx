@@ -130,7 +130,7 @@ export const SimulatorInputOverlappingPage = () => {
     <>
       <form
         onSubmit={submit}
-        className="flex flex-col gap-20"
+        className="grid"
         data-testid="create-simulation-form"
       >
         <SimInputTokenSelection
@@ -153,6 +153,7 @@ export const SimulatorInputOverlappingPage = () => {
           fullWidth
           size="lg"
           disabled={btnDisabled}
+          className="mt-16"
         >
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>

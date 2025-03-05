@@ -217,7 +217,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
     <form
       onSubmit={submit}
       onReset={() => history.back()}
-      className={cn('flex flex-col gap-20', style.form, {
+      className={cn('grid', style.form, {
         [style.overlapping]: strategyType === 'overlapping',
       })}
       data-testid="edit-form"
@@ -225,45 +225,46 @@ export const EditStrategyForm: FC<Props> = (props) => {
       <EditStrategyOverlapTokens />
       <EditPriceNav editType={editType} />
 
-      {children}
-
-      <label
-        htmlFor="approve-warnings"
-        className={cn(
-          style.approveWarnings,
-          'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
-        )}
-      >
-        <input
-          id="approve-warnings"
-          type="checkbox"
-          name="approval"
-          className="size-18"
-          data-testid="approve-warnings"
-        />
-        {approveText}
-      </label>
-      <Button
-        type="submit"
-        disabled={!hasChanged}
-        loading={isLoading}
-        loadingChildren={loadingChildren}
-        variant="success"
-        size="lg"
-        fullWidth
-        data-testid="edit-submit"
-      >
-        {submitText[editType]}
-      </Button>
-      <Button
-        type="reset"
-        disabled={isLoading}
-        variant="secondary"
-        size="lg"
-        fullWidth
-      >
-        Cancel
-      </Button>
+      <div className="overflow-hidden rounded-ee rounded-es">{children}</div>
+      <footer className="mt-16 grid gap-16">
+        <label
+          htmlFor="approve-warnings"
+          className={cn(
+            style.approveWarnings,
+            'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+          )}
+        >
+          <input
+            id="approve-warnings"
+            type="checkbox"
+            name="approval"
+            className="size-18"
+            data-testid="approve-warnings"
+          />
+          {approveText}
+        </label>
+        <Button
+          type="submit"
+          disabled={!hasChanged}
+          loading={isLoading}
+          loadingChildren={loadingChildren}
+          variant="success"
+          size="lg"
+          fullWidth
+          data-testid="edit-submit"
+        >
+          {submitText[editType]}
+        </Button>
+        <Button
+          type="reset"
+          disabled={isLoading}
+          variant="secondary"
+          size="lg"
+          fullWidth
+        >
+          Cancel
+        </Button>
+      </footer>
     </form>
   );
 };

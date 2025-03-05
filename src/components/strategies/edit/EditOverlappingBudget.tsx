@@ -187,7 +187,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
           />
         </article>
       )}
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+      <article className="bg-background-900 grid gap-16 p-16">
         <header className="flex items-center justify-between">
           <h2 className="text-18">Budget</h2>
           <Tooltip
@@ -208,7 +208,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
         />
       </article>
       {anchor && editType && (
-        <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+        <article className="bg-background-900 grid gap-16 p-16">
           <OverlappingBudget
             base={base}
             quote={quote}
@@ -226,7 +226,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
       {anchor && (
         <article
           id="overlapping-distribution"
-          className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+          className="bg-background-900 grid gap-16 p-16"
         >
           <hgroup>
             <h3 className="text-16 font-weight-500 flex items-center gap-8">

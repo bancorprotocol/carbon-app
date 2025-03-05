@@ -35,10 +35,7 @@ export const SimInputStrategyType = () => {
   ];
 
   return (
-    <section
-      className="rounded-10 bg-background-900 p-16"
-      key="simulatorTypeSelection"
-    >
+    <section className="bg-background-900 p-16" key="simulatorTypeSelection">
       <header className="mb-16 flex items-center justify-between">
         <h2 className="text-18 font-weight-500 m-0">Trading Strategy</h2>
       </header>

@@ -151,7 +151,7 @@ export const SimulatorInputRecurringPage = () => {
     <>
       <form
         onSubmit={submit}
-        className="flex flex-col gap-y-20"
+        className="grid"
         data-testid="create-simulation-form"
       >
         <SimInputTokenSelection
@@ -172,6 +172,7 @@ export const SimulatorInputRecurringPage = () => {
           fullWidth
           size="lg"
           disabled={btnDisabled}
+          className="mt-16"
         >
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>

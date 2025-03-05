@@ -15,6 +15,8 @@ import { OverlappingAction } from '../overlapping/OverlappingAction';
 import { EditBudgetDistribution } from './EditStrategyAllocatedBudget';
 import { isZero } from '../common/utils';
 import { SafeDecimal } from 'libs/safedecimal';
+import style from 'components/strategies/common/order.module.css';
+import { cn } from 'utils/helpers';
 
 interface Props {
   order: EditOrderBlock;
@@ -108,12 +110,12 @@ export const EditStrategyPriceField: FC<Props> = ({
   return (
     <article
       aria-labelledby={titleId}
-      className={`rounded-6 bg-background-900 flex flex-col gap-20 border-l-2 p-20 text-left ${
-        buy
-          ? 'border-buy/50 focus-within:border-buy'
-          : 'border-sell/50 focus-within:border-sell'
-      }`}
+      className={cn(
+        style.order,
+        'bg-background-900 grid gap-16 p-16 text-left'
+      )}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
+      data-direction={buy ? 'buy' : 'sell'}
     >
       {settings}
       <OrderHeader {...headerProps}>
