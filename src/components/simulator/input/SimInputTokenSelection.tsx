@@ -25,10 +25,7 @@ export const SimInputTokenSelection: FC<Props> = ({
   const quote = getTokenById(quoteToken);
 
   return (
-    <section
-      className="bg-background-900 flex flex-col gap-16 rounded-se rounded-ss p-16"
-      key="simulatorTokenSelection"
-    >
+    <section className="grid gap-16 p-16" key="simulatorTokenSelection">
       <article className="font-weight-500 flex flex-row items-center -space-x-10">
         <SelectTokenButton
           chevronClassName="h-7.5 w-13"

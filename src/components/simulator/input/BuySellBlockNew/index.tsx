@@ -96,11 +96,7 @@ export const BuySellBlock: FC<Props> = ({
   return (
     <section
       aria-labelledby={titleId}
-      className={cn(
-        style.order,
-        className,
-        'bg-background-900 grid gap-16 p-16'
-      )}
+      className={cn(style.order, className, 'grid gap-16 p-16')}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
       data-direction={buy ? 'buy' : 'sell'}
     >

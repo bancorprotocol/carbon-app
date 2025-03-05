@@ -151,20 +151,22 @@ export const SimulatorInputRecurringPage = () => {
     <>
       <form
         onSubmit={submit}
-        className="grid"
+        className="grid gap-16"
         data-testid="create-simulation-form"
       >
-        <SimInputTokenSelection
-          baseToken={searchState.baseToken}
-          quoteToken={searchState.quoteToken}
-          noPriceHistory={isError}
-        />
-        <SimInputStrategyType />
-        <SimInputRecurring
-          state={state}
-          dispatch={dispatch}
-          firstHistoricPricePoint={data?.[0]}
-        />
+        <div className="bg-background-900 rounded">
+          <SimInputTokenSelection
+            baseToken={searchState.baseToken}
+            quoteToken={searchState.quoteToken}
+            noPriceHistory={isError}
+          />
+          <SimInputStrategyType />
+          <SimInputRecurring
+            state={state}
+            dispatch={dispatch}
+            firstHistoricPricePoint={data?.[0]}
+          />
+        </div>
         <Button
           type="submit"
           data-testid="start-simulation-btn"

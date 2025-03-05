@@ -130,22 +130,24 @@ export const SimulatorInputOverlappingPage = () => {
     <>
       <form
         onSubmit={submit}
-        className="grid"
+        className="grid gap-16"
         data-testid="create-simulation-form"
       >
-        <SimInputTokenSelection
-          baseToken={searchState.baseToken}
-          quoteToken={searchState.quoteToken}
-          noPriceHistory={isError}
-        />
-        <SimInputStrategyType />
-        <CreateOverlappingStrategy
-          state={state}
-          dispatch={dispatch}
-          marketPrice={marketPrice ?? 0}
-          spread={state.spread}
-          setSpread={(v) => dispatch('spread', v)}
-        />
+        <div className="bg-background-900 grid rounded">
+          <SimInputTokenSelection
+            baseToken={searchState.baseToken}
+            quoteToken={searchState.quoteToken}
+            noPriceHistory={isError}
+          />
+          <SimInputStrategyType />
+          <CreateOverlappingStrategy
+            state={state}
+            dispatch={dispatch}
+            marketPrice={marketPrice ?? 0}
+            spread={state.spread}
+            setSpread={(v) => dispatch('spread', v)}
+          />
+        </div>
         <Button
           type="submit"
           data-testid="start-simulation-btn"
