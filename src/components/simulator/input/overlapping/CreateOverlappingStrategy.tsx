@@ -353,16 +353,18 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
         />
       </article>
       <article className="bg-background-900 grid gap-16 p-16">
-        <header className="flex items-center justify-between">
-          <h2 className="text-18">Budget</h2>
+        <header className="flex items-start justify-between">
+          <hgroup>
+            <h2 className="text-18">Budget</h2>
+            <p className="text-14 text-white/80">
+              Please select a token to proceed.
+            </p>
+          </hgroup>
           <Tooltip
-            iconClassName="size-18 text-white/60"
+            iconClassName="size-14 text-white/60"
             element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
           />
         </header>
-        <p className="text-14 text-white/80">
-          Please select a token to proceed.
-        </p>
         <OverlappingAnchor
           base={base}
           quote={quote}
@@ -397,7 +399,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       {anchor && (
         <article
           id="overlapping-distribution"
-          className="bg-background-900 grid gap-16 rounded-ee rounded-es p-16"
+          className="bg-background-900 grid gap-16 rounded-ee rounded-es p-20"
         >
           <hgroup>
             <h3 className="text-16 font-weight-500 flex items-center gap-8">

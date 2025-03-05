@@ -217,9 +217,11 @@ export const EditStrategyForm: FC<Props> = (props) => {
     <form
       onSubmit={submit}
       onReset={() => history.back()}
-      className={cn('grid', style.form, {
-        [style.overlapping]: strategyType === 'overlapping',
-      })}
+      className={cn(
+        'grid content-start',
+        style.form,
+        strategyType === 'overlapping' ? style.overlapping : ''
+      )}
       data-testid="edit-form"
     >
       <EditStrategyOverlapTokens />
