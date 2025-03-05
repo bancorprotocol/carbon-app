@@ -70,7 +70,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
 
   return (
     <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
-      <article className="bg-background-900 grid gap-16 rounded p-20">
+      <article className="bg-background-900 grid gap-16 p-16">
         <OverlappingBudget
           base={base}
           quote={quote}
@@ -83,7 +83,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
       </article>
       <article
         id="overlapping-distribution"
-        className="bg-background-900 grid gap-16 rounded p-20"
+        className="bg-background-900 grid gap-16 p-16"
       >
         <hgroup>
           <h3 className="text-16 font-weight-500 flex items-center gap-8">

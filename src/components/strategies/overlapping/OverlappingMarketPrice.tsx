@@ -94,7 +94,7 @@ export const OverlappingInitMarketPrice = (props: FieldProps) => {
 
   return (
     <form
-      className={cn(props.className, style.form, 'flex flex-col gap-16 p-16')}
+      className={cn(props.className, style.form, 'grid gap-16 p-16')}
       data-testid="user-price-form"
       onSubmit={setPrice}
     >

@@ -14,6 +14,7 @@ import { cn } from 'utils/helpers';
 import { LogoImager } from 'components/common/imager/Imager';
 import { getDefaultOrder } from './utils';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import style from 'components/strategies/common/order.module.css';
 
 interface Props {
   base: Token;
@@ -101,17 +102,13 @@ export const CreateOrder: FC<Props> = ({
   };
 
   const headerProps = { titleId, order, base, buy, setSettings };
-  const border = buy
-    ? 'border-buy/50 focus-within:border-buy'
-    : 'border-sell/50 focus-within:border-sell';
+
   return (
     <article
       aria-labelledby={titleId}
-      className={cn(
-        'bg-background-900 flex flex-col gap-20 rounded border-s p-20',
-        border
-      )}
+      className={cn('bg-background-900 grid gap-16 p-16', style.order)}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
+      data-direction={buy ? 'buy' : 'sell'}
     >
       {settings}
       <OrderHeader {...headerProps}>

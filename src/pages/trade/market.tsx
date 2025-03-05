@@ -11,6 +11,7 @@ import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuyS
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategyDirection } from 'libs/routing';
 import { cn } from 'utils/helpers';
+import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
@@ -32,18 +33,15 @@ export const TradeMarket = () => {
     });
   };
 
-  const border = buy
-    ? 'border-buy/50 focus-within:border-buy'
-    : 'border-sell/50 focus-within:border-sell';
-
   return (
     <>
       <TradeLayout>
         <article
           className={cn(
-            'bg-background-900 grid gap-20 rounded border-s p-20',
-            border
+            'bg-background-900 grid gap-16 rounded-ee rounded-es p-16',
+            style.order
           )}
+          data-direction={buy ? 'buy' : 'sell'}
         >
           <TabsMenu>
             <TabsMenuButton

@@ -1,0 +1,26 @@
+.order {
+  position: relative;
+}
+.order[data-direction="buy"] {
+  --direction-color: var(--buy);
+}
+.order[data-direction="sell"] {
+  --direction-color: var(--sell);
+}
+.order::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  transform: scaleY(0.8);
+  opacity: 0.6;
+  width: 2px;
+  border-radius: 4px;
+  background-color: var(--direction-color);
+  transition: all 0.1s ease-in;
+}
+.order:focus-within::after {
+  transform: scaleY(1);
+  opacity: 1;
+}

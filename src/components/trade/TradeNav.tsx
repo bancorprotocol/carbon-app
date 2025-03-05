@@ -40,8 +40,8 @@ export const TradeNav = () => {
   const { location } = useRouterState();
   const current = location.pathname.split('/').pop();
   return (
-    <article className="bg-background-900 grid gap-20 rounded p-20">
-      <h2 id="trading-strateg-nav" className="text-18">
+    <article className="bg-background-900 grid gap-16 p-16">
+      <h2 id="trading-strateg-nav" className="text-16">
         Trading Strategy
       </h2>
       <nav

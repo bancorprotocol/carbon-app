@@ -6,7 +6,6 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useModal } from 'hooks/useModal';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { cn } from 'utils/helpers';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 interface Props {
   baseToken?: string;
@@ -26,27 +25,7 @@ export const SimInputTokenSelection: FC<Props> = ({
   const quote = getTokenById(quoteToken);
 
   return (
-    <section
-      className="rounded-10 bg-background-900 flex flex-col gap-16 p-16"
-      key="simulatorTokenSelection"
-    >
-      <header className="flex items-center justify-between">
-        <h2 className="text-18 font-weight-500 m-0">Token Pair</h2>
-        <Tooltip
-          iconClassName="size-18 text-white/60"
-          element={
-            <p>
-              Selecting the tokens you would like to create a simulation for.
-              <br />
-              <b>Buy or Sell</b> token (also called <b>Base</b> token) is the
-              token you would like to buy or sell in the strategy.
-              <br />
-              <b>With</b> token (also called <b>Quote</b> token) is the token
-              you would denominate the rates in.
-            </p>
-          }
-        />
-      </header>
+    <section className="grid gap-16 p-16" key="simulatorTokenSelection">
       <article className="font-weight-500 flex flex-row items-center -space-x-10">
         <SelectTokenButton
           chevronClassName="h-7.5 w-13"
