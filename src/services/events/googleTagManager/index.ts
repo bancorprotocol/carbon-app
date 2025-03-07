@@ -1,4 +1,5 @@
-import { GTMData, SendEventFn } from './types';
+import { carbonEvents } from '..';
+import { GTMData } from './types';
 import { convertCase } from 'utils/helpers';
 
 declare global {
@@ -14,7 +15,16 @@ const sendGTM = (data: GTMData) => {
   }
 };
 
-export const sendGTMEvent: SendEventFn = (type, event, data) => {
+type CarbonEvents = typeof carbonEvents;
+
+export const sendGTMEvent = <
+  T extends Extract<keyof CarbonEvents, string>,
+  D extends Extract<keyof CarbonEvents[T], string>
+>(
+  type: T,
+  event: D,
+  data: Record<string, string | undefined | null>
+) => {
   const snakeCaseEvent = convertCase(event, true);
   const dataObj = data ? data : {};
 

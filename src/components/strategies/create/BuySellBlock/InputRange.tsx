@@ -2,7 +2,6 @@ import { ChangeEvent, FocusEvent, FC, useId, useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { carbonEvents } from 'services/events';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { Warning } from 'components/common/WarningMessageWithIcon';
@@ -61,12 +60,6 @@ export const InputRange: FC<InputRangeProps> = ({
     if (minValue >= maxValue) errorMessage = errorMinMax;
     if (minValue <= 0 || maxValue <= 0) errorMessage = errorAboveZero;
     setRangeError(errorMessage);
-    if (errorMessage) {
-      carbonEvents.strategy.strategyErrorShow({
-        buy,
-        message: errorMessage,
-      });
-    }
   }, [min, max, setRangeError, isOrdersReversed, buy]);
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +93,6 @@ export const InputRange: FC<InputRangeProps> = ({
         >
           <header className="text-12 mb-5 flex justify-between text-white/60">
             <Tooltip
-              sendEventOnMount={{ buy }}
               element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
                 base.symbol
               } at.`}
@@ -151,7 +143,6 @@ export const InputRange: FC<InputRangeProps> = ({
         >
           <header className="text-12 mb-5 flex justify-between text-white/60">
             <Tooltip
-              sendEventOnMount={{ buy }}
               element={`The highest price to ${buy ? 'buy' : 'sell'} ${
                 base.symbol
               } at.`}

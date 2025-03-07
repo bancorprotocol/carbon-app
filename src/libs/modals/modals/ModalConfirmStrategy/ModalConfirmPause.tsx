@@ -1,4 +1,3 @@
-import { carbonEvents } from 'services/events';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Strategy } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
@@ -7,19 +6,17 @@ import { usePauseStrategy } from 'components/strategies/usePauseStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
-import { StrategyEditEventType } from 'services/events/types';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 
 export type ModalConfirmPauseData = {
   strategy: Strategy;
-  strategyEvent: StrategyEditEventType;
 };
 
 export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
   id,
   data,
 }) => {
-  const { strategy, strategyEvent } = data;
+  const { strategy } = data;
   const { closeModal } = useModal();
   const { pauseStrategy, isProcessing, updateMutation } = usePauseStrategy();
 
@@ -29,7 +26,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
   const handleOnActionClick = () => {
     pauseStrategy(
       strategy,
-      () => carbonEvents.strategyEdit.strategyPause(strategyEvent),
+      () => {},
       () => closeModal(id)
     );
   };

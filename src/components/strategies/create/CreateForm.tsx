@@ -1,14 +1,6 @@
-import {
-  FC,
-  FormEvent,
-  MouseEvent,
-  ReactNode,
-  useEffect,
-  useState,
-} from 'react';
+import { FC, FormEvent, MouseEvent, ReactNode, useState } from 'react';
 import { Token } from 'libs/tokens';
-import { createStrategyEvents } from 'services/events/strategyEvents';
-import { useNavigate, useSearch } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { toCreateStrategyParams, useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
@@ -16,13 +8,11 @@ import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
 import { useWagmi } from 'libs/wagmi';
 import { BaseOrder } from 'components/strategies/common/types';
-import { StrategyType } from 'libs/routing';
 import { addStrategyToCart } from 'components/cart/utils';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
 interface FormProps {
-  type: StrategyType;
   base: Token;
   quote: Token;
   order0: BaseOrder;
@@ -32,23 +22,15 @@ interface FormProps {
 }
 
 export const CreateForm: FC<FormProps> = (props) => {
-  const { base, quote, order0, order1, type, children } = props;
+  const { base, quote, order0, order1, children } = props;
   const { openModal } = useModal();
   const { user } = useWagmi();
-  const search = useSearch({ from: '/trade' });
   const nav = useNavigate();
 
   const [animating, setAnimating] = useState(false);
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
-    useCreateStrategy({ type, base, quote, order0, order1 });
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      createStrategyEvents.change(type, search as any);
-    }, 1000);
-    return () => clearTimeout(timeout);
-  }, [type, search]);
+    useCreateStrategy({ base, quote, order0, order1 });
 
   const loading = isLoading || isProcessing || isAwaiting;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
@@ -94,7 +76,6 @@ export const CreateForm: FC<FormProps> = (props) => {
   const create = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
-    createStrategyEvents.submit(type, search as any);
     createStrategy();
   };
 

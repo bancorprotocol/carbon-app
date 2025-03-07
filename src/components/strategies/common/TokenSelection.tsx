@@ -1,5 +1,4 @@
 import { useNavigate } from 'libs/routing';
-import { carbonEvents } from 'services/events';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { ReactComponent as ForwardArrowIcon } from 'assets/icons/arrow.svg';
@@ -35,22 +34,10 @@ export const TokenSelection = () => {
   const navigate = useNavigate({ from: '/trade' });
   const { openModal } = useModal();
 
-  const tokenEvent = (isSource = false, token: Token) => {
-    const events = carbonEvents.strategy;
-    if (isSource) {
-      if (!base) events.newStrategyBaseTokenSelect({ token });
-      else events.strategyBaseTokenChange({ token });
-    } else {
-      if (!quote) events.newStrategyQuoteTokenSelect({ token });
-      else events.strategyQuoteTokenChange({ token });
-    }
-  };
-
   const openTokenListModal = (type: 'base' | 'quote') => {
     const isBase = type === 'base';
     const onClick = (token: Token) => {
       const search: { base?: string; quote?: string } = {};
-      tokenEvent(isBase, token);
 
       if (isBase) {
         search.base = token.address;
@@ -77,10 +64,6 @@ export const TokenSelection = () => {
 
   const swapTokens = () => {
     if (base && quote) {
-      carbonEvents.strategy.strategyTokenSwap({
-        updatedBase: quote.symbol,
-        updatedQuote: base.symbol,
-      });
       navigate({
         search: () => ({
           base: quote.address,
