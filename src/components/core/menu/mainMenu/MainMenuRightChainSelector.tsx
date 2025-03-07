@@ -2,7 +2,6 @@ import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { FC } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { buttonStyles } from 'components/common/button/buttonStyles';
-import { carbonEvents } from 'services/events';
 import { cn } from 'utils/helpers';
 
 interface Props {
@@ -36,10 +35,6 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
             buttonStyles({ variant: 'secondary' }),
             'relative flex size-40 items-center justify-center p-0'
           )}
-          onClick={(e) => {
-            carbonEvents.navigation.navNetworkClick(undefined);
-            attr.onClick(e);
-          }}
         >
           <img
             alt={`Select ${activeNetwork.name}`}

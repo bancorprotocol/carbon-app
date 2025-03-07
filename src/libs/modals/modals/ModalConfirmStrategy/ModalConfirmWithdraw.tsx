@@ -7,8 +7,6 @@ import { Strategy } from 'libs/queries';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { cn } from 'utils/helpers';
-import { carbonEvents } from 'services/events';
-import { StrategyEditEventType } from 'services/events/types';
 import {
   getEditBudgetPage,
   getEditPricesPage,
@@ -16,7 +14,6 @@ import {
 
 export interface ModalConfirmWithdrawData {
   strategy: Strategy;
-  strategyEvent: StrategyEditEventType;
 }
 
 export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
@@ -24,17 +21,11 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
   data,
 }) => {
   const { closeModal } = useModal();
-  const { strategyEvent, strategy } = data;
+  const { strategy } = data;
   const editPrices = getEditPricesPage(strategy, 'editPrices');
   const withdraw = getEditBudgetPage(strategy, 'withdraw');
 
-  const edit = () => {
-    carbonEvents.strategyEdit.strategyEditPricesClick({
-      origin: 'withdraw',
-      ...strategyEvent,
-    });
-    closeModal(id);
-  };
+  const edit = () => closeModal(id);
 
   return (
     <ModalOrMobileSheet id={id} title="Withdraw Funds">

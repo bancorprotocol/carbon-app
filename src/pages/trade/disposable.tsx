@@ -69,13 +69,7 @@ export const TradeDisposable = () => {
   return (
     <>
       <TradeLayout>
-        <CreateForm
-          type="disposable"
-          base={base}
-          quote={quote}
-          order0={order0}
-          order1={order1}
-        >
+        <CreateForm base={base} quote={quote} order0={order0} order1={order1}>
           <CreateOrder
             type="disposable"
             base={base}

@@ -1,5 +1,4 @@
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
-import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import {
   isValidValue,
@@ -53,11 +52,6 @@ export const TradeSettingsRow: FC<{
       isError && setIsError(false);
       internalValue && setInternalValue('');
       item.setValue(item.presets[1]);
-      carbonEvents.trade.tradeErrorShow({
-        message: warningMessageIfOutOfRange(item.id, value),
-        buyToken: base,
-        sellToken: quote,
-      });
     }
 
     if (item.presets.includes(item.value)) {
@@ -79,11 +73,6 @@ export const TradeSettingsRow: FC<{
     () => warningMessageIfOutOfRange(item.id, internalValue || item.value),
     [internalValue, item.id, item.value]
   );
-
-  useEffect(() => {
-    warningMessage &&
-      carbonEvents.trade.tradeWarningShow({ message: warningMessage });
-  }, [warningMessage]);
 
   return (
     <div>

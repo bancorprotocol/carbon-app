@@ -8,13 +8,6 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
-import { carbonEvents } from 'services/events';
-import {
-  TokenApprovalType,
-  StrategyEventOrTradeEvent,
-  StrategyEventType,
-  TradeEventType,
-} from 'services/events/types';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import config from 'config';
 
@@ -22,17 +15,9 @@ type Props = {
   data?: ApprovalTokenResult;
   isPending: boolean;
   error: Error | null;
-  eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
-  context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
 };
 
-export const ApproveToken: FC<Props> = ({
-  data,
-  isPending,
-  error,
-  eventData,
-  context,
-}) => {
+export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
   const inputId = useId();
   const { dispatchNotification } = useNotifications();
   const { user } = useWagmi();
@@ -75,7 +60,6 @@ export const ApproveToken: FC<Props> = ({
           });
           setTxBusy(false);
           setTxSuccess(true);
-          handleTokenConfirmationApproveEvent();
         },
         onError: async () => {
           dispatchNotification('approveError', { symbol: token.symbol });
@@ -91,76 +75,6 @@ export const ApproveToken: FC<Props> = ({
 
   const handleLimitChange = (value: boolean) => {
     setIsLimited(!value);
-    handleTokenConfirmationEvent(value);
-  };
-
-  const handleTokenConfirmationApproveEvent = () => {
-    if (eventData && token) {
-      switch (context) {
-        case 'createStrategy':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveStrategyCreate(
-            {
-              ...eventData,
-              approvalTokens: [token],
-              isLimited,
-            } as StrategyEventType & TokenApprovalType
-          );
-          break;
-        case 'depositStrategyFunds':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveDepositStrategyFunds(
-            {
-              ...eventData,
-              approvalTokens: [token],
-              isLimited,
-            } as StrategyEventType & TokenApprovalType
-          );
-          break;
-        case 'trade':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveTrade({
-            ...eventData,
-            approvalTokens: [token],
-            isLimited,
-          } as TradeEventType & TokenApprovalType);
-          break;
-        default:
-          break;
-      }
-    }
-  };
-
-  const handleTokenConfirmationEvent = (value: boolean) => {
-    if (eventData) {
-      switch (context) {
-        case 'createStrategy':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeStrategyCreate(
-            {
-              ...eventData,
-              isLimited: !value,
-            } as StrategyEventType & TokenApprovalType
-          );
-          break;
-        case 'depositStrategyFunds':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeDepositStrategyFunds(
-            {
-              ...eventData,
-              isLimited: !value,
-            } as StrategyEventType & TokenApprovalType
-          );
-
-          break;
-        case 'trade':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeTrade(
-            {
-              ...eventData,
-              isLimited: !value,
-            } as TradeEventType & TokenApprovalType
-          );
-
-          break;
-        default:
-          break;
-      }
-    }
   };
 
   if (!data || !token) {

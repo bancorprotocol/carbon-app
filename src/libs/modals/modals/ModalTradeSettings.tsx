@@ -1,5 +1,4 @@
 import { useStore } from 'store';
-import { carbonEvents } from 'services/events';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { Token } from 'libs/tokens';
@@ -20,12 +19,7 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
     },
   } = useStore();
 
-  const handleReset = () => {
-    resetAll();
-    carbonEvents.trade.tradeSettingsResetAllClick({
-      ...data,
-    });
-  };
+  const handleReset = () => resetAll();
 
   return (
     <ModalSlideOver

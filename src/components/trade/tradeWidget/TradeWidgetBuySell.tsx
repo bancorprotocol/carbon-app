@@ -1,11 +1,8 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { FormEvent, useEffect, useId, JSX } from 'react';
-import { carbonEvents } from 'services/events';
+import { FormEvent, useId, JSX } from 'react';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWagmi } from 'libs/wagmi';
 import { UseQueryResult } from 'libs/queries';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import useInitEffect from 'hooks/useInitEffect';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -43,7 +40,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     errorMsgTarget,
     openTradeRouteModal,
     calcSlippage,
-    isTradeBySource,
     maxSourceAmountQuery,
     isAwaiting,
   } = useBuySell(props);
@@ -56,89 +52,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
-  const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
-
-  useEffect(() => {
-    errorMsgSource &&
-      carbonEvents.trade.tradeErrorShow({
-        buy,
-        buyToken: target,
-        sellToken: source,
-        valueUsd: getFiatValueSource(sourceInput, true).toString(),
-        message: errorMsgSource || '',
-      });
-
-    errorMsgTarget &&
-      carbonEvents.trade.tradeErrorShow({
-        buy,
-        buyToken: target,
-        sellToken: source,
-        valueUsd: getFiatValueSource(sourceInput, true).toString(),
-        message: errorMsgTarget || '',
-      });
-
-    !hasEnoughLiquidity &&
-      !liquidityQuery.isPending &&
-      carbonEvents.trade.tradeErrorShow({
-        buy,
-        buyToken: target,
-        sellToken: source,
-        message: 'No Liquidity Available',
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    buy,
-    errorMsgSource,
-    errorMsgTarget,
-    getFiatValueSource,
-    liquidityQuery.isPending,
-  ]);
-
-  useInitEffect(() => {
-    const tradeData = {
-      buy,
-      buyToken: target,
-      sellToken: source,
-      valueUsd: getFiatValueSource(sourceInput, true).toString(),
-    };
-    if (isTradeBySource) {
-      buy
-        ? carbonEvents.trade.tradeBuyPaySet(tradeData)
-        : carbonEvents.trade.tradeSellPaySet(tradeData);
-    }
-  }, [buy, sourceInput]);
-
-  useInitEffect(() => {
-    const tradeData = {
-      buy,
-      buyToken: target,
-      sellToken: source,
-      valueUsd: getFiatValueSource(targetInput, true).toString(),
-    };
-
-    if (!isTradeBySource) {
-      buy
-        ? carbonEvents.trade.tradeBuyReceiveSet(tradeData)
-        : carbonEvents.trade.tradeSellReceiveSet(tradeData);
-    }
-  }, [buy, targetInput]);
-
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleCTAClick();
-    buy
-      ? carbonEvents.trade.tradeBuyClick({
-          buy,
-          buyToken: target,
-          sellToken: source,
-          valueUsd: getFiatValueSource(sourceInput, true).toString(),
-        })
-      : carbonEvents.trade.tradeSellClick({
-          buy,
-          buyToken: target,
-          sellToken: source,
-          valueUsd: getFiatValueSource(sourceInput, true).toString(),
-        });
   };
 
   const ctaButtonText = (() => {

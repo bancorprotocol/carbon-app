@@ -1,5 +1,4 @@
 import { ChangeEvent, FC, FocusEvent, useEffect, useId } from 'react';
-import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
@@ -50,12 +49,6 @@ export const InputLimit: FC<InputLimitProps> = ({
     if (isOrdersReversed) errorMessage = errorReversedOrders;
     if (+price <= 0) errorMessage = errorAboveZero;
     if (setPriceError) setPriceError(errorMessage);
-    if (errorMessage) {
-      carbonEvents.strategy.strategyErrorShow({
-        buy,
-        message: errorMessage,
-      });
-    }
   }, [price, setPriceError, buy, isOrdersReversed]);
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {

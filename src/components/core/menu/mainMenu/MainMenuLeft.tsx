@@ -1,8 +1,6 @@
 import { FC } from 'react';
-import { carbonEvents } from 'services/events';
 import { Link, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
-import { handleOnItemClick } from 'components/core/menu/utils';
 import { menuItems } from 'components/core/menu';
 
 export const MainMenuLeft: FC = () => {
@@ -24,10 +22,7 @@ export const MainMenuLeft: FC = () => {
       aria-label="Main"
       data-testid="main-nav"
     >
-      <Link
-        to="/"
-        onClick={() => carbonEvents.navigation.navHomeClick(undefined)}
-      >
+      <Link to="/">
         <LogoCarbon className="w-34" />
       </Link>
 
@@ -38,7 +33,6 @@ export const MainMenuLeft: FC = () => {
           return (
             <Link
               key={index}
-              onClick={() => handleOnItemClick(href)}
               to={href}
               aria-current={isSamePage ? 'page' : 'false'}
               data-testid={testid}

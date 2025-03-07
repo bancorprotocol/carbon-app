@@ -1,17 +1,14 @@
 import { sendGTMEvent } from './googleTagManager';
-import { CarbonEvents, EventCategory } from './googleTagManager/types';
+import { CarbonEventsInput } from './googleTagManager/types';
 
-export interface EventGeneralSchema extends EventCategory {
+export interface Props {
   changePage: {
-    input: { referrer: string | null };
-    gtmData: {
-      page_referrer_spa: string | null;
-    };
+    referrer: string | null;
   };
 }
 
-export const generalEvents: CarbonEvents['general'] = {
-  changePage: ({ referrer }) => {
+export const generalEvents: CarbonEventsInput<Props> = {
+  changePage: ({ referrer }: { referrer: string | null }) => {
     sendGTMEvent('general', 'changePage', {
       page_referrer_spa: referrer ? referrer : null,
     });

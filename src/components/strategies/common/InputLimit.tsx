@@ -1,5 +1,4 @@
 import { FC, FocusEvent, MouseEvent, useEffect, useId, useState } from 'react';
-import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import {
   cn,
@@ -53,16 +52,6 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
     : '';
   const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
   const showWarning = !displayError && !!displayWarnings?.length;
-
-  useEffect(() => {
-    if (!price) return;
-    if (displayError) {
-      carbonEvents.strategy.strategyErrorShow({
-        buy,
-        message: displayError,
-      });
-    }
-  }, [displayError, buy, price]);
 
   useEffect(() => {
     if (document.activeElement?.id !== id) {

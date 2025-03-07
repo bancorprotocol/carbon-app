@@ -60,7 +60,6 @@ export const OrderHeader: FC<Props> = (props) => {
         </button>
       </div>
       <Tooltip
-        sendEventOnMount={{ buy }}
         iconClassName="text-white/60"
         element={
           <p>

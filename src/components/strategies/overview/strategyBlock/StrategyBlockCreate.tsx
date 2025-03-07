@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { carbonEvents } from 'services/events';
 import { Link } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { cn } from 'utils/helpers';
@@ -15,7 +14,6 @@ export const StrategyBlockCreate: FC<Props> = ({
 }) => {
   return (
     <Link
-      onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
       to="/trade/disposable"
       className={cn(
         'bg-content rounded-10 py-50 text-24 font-weight-500 group flex flex-col items-center justify-center gap-24 md:text-[32px]',

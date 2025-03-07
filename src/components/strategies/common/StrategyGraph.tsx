@@ -2,7 +2,6 @@ import { m } from 'libs/motion';
 import { items } from 'components/strategies/common/variants';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
-import { carbonEvents } from 'services/events';
 import { FC, ReactNode } from 'react';
 
 interface Props {
@@ -24,10 +23,7 @@ export const StrategyGraph: FC<Props> = ({ setShowGraph, children }) => {
           variant="secondary"
           size="md"
           data-testid="close-chart"
-          onClick={() => {
-            carbonEvents.strategy.strategyChartClose(undefined);
-            setShowGraph(false);
-          }}
+          onClick={() => setShowGraph(false)}
         >
           <IconX className="w-10" />
           <span className="hidden md:block">Close Chart</span>

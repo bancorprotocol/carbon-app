@@ -3,7 +3,6 @@ import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconBell } from 'assets/icons/bell.svg';
 import { useNotifications } from 'hooks/useNotifications';
 import { Button } from 'components/common/button';
-import { carbonEvents } from 'services/events';
 
 export const MainMenuRightNotifications: FC = () => {
   const { openModal } = useModal();
@@ -13,10 +12,7 @@ export const MainMenuRightNotifications: FC = () => {
     <Button
       variant="secondary"
       className="relative p-0"
-      onClick={() => {
-        carbonEvents.navigation.navNotificationClick(undefined);
-        openModal('notifications', undefined);
-      }}
+      onClick={() => openModal('notifications', undefined)}
     >
       <span className="flex size-36 items-center justify-center">
         {hasPendingTx && (

@@ -1,7 +1,6 @@
 import { FocusEvent, FC, useId, useEffect, useState, MouseEvent } from 'react';
 import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { carbonEvents } from 'services/events';
 import {
   cn,
   formatNumber,
@@ -72,16 +71,6 @@ export const InputRange: FC<InputRangeProps> = ({
   const showWarning = !displayError && !!displayWarnings.length;
 
   useEffect(() => {
-    if (!min || !max) return;
-    if (displayError) {
-      carbonEvents.strategy.strategyErrorShow({
-        buy,
-        message: displayError,
-      });
-    }
-  }, [min, max, displayError, buy]);
-
-  useEffect(() => {
     if (document.activeElement !== document.getElementById(inputMinId)) {
       setLocalMin(roundSearchParam(min));
     }
@@ -150,7 +139,6 @@ export const InputRange: FC<InputRangeProps> = ({
         >
           <header className="text-12 mb-5 flex justify-between text-white/60">
             <Tooltip
-              sendEventOnMount={{ buy }}
               element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
                 base.symbol
               } at.`}
@@ -203,7 +191,6 @@ export const InputRange: FC<InputRangeProps> = ({
         >
           <header className="text-12 mb-5 flex justify-between text-white/60">
             <Tooltip
-              sendEventOnMount={{ buy }}
               element={`The highest price to ${buy ? 'buy' : 'sell'} ${
                 base.symbol
               } at.`}

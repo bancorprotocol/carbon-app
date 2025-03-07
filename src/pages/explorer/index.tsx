@@ -5,11 +5,10 @@ import {
   useExplorer,
   useExplorerParams,
 } from 'components/explorer';
-import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
+import { StrategyProvider } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { ExplorerHeader } from 'components/explorer/ExplorerHeader';
-import { useEffect, useState } from 'react';
-import { explorerEvents } from 'services/events/explorerEvents';
+import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import config from 'config';
 
@@ -34,7 +33,6 @@ export const ExplorerPage = () => {
   return (
     <Page hideTitle>
       <StrategyProvider query={query}>
-        <ExplorerEvents />
         {config.ui.tradeCount && <ExplorerHeader />}
         <div className="gap-30 flex flex-grow flex-col">
           <ExplorerSearch />
@@ -44,56 +42,4 @@ export const ExplorerPage = () => {
       </StrategyProvider>
     </Page>
   );
-};
-
-const ExplorerEvents = () => {
-  const [mounted, setMounted] = useState(false);
-  const { slug, type } = useExplorerParams(url);
-  const { filteredStrategies, isPending, filter, sort } = useStrategyCtx();
-
-  useEffect(() => {
-    if (!mounted) return;
-    explorerEvents.typeChange(type);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type]);
-
-  useEffect(() => {
-    if (!slug || isPending) return;
-    explorerEvents.search({
-      type,
-      slug,
-      strategies: filteredStrategies,
-      filter,
-      sort,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, isPending]);
-
-  useEffect(() => {
-    if (!mounted || !slug) return;
-    explorerEvents.resultsFilter({
-      type,
-      slug,
-      strategies: filteredStrategies,
-      filter,
-      sort,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
-
-  useEffect(() => {
-    if (!mounted || !slug) return;
-    explorerEvents.resultsSort({
-      type,
-      slug,
-      strategies: filteredStrategies,
-      filter,
-      sort,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort]);
-
-  // This ensure all useEffect have been triggered once before setting mounted to true
-  useEffect(() => setMounted(true), [setMounted]);
-  return <></>;
 };

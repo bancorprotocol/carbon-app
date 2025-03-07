@@ -116,7 +116,6 @@ export const CartPage = () => {
         approvalTokens,
         onConfirm: create,
         buttonLabel: 'Create all Strategies',
-        context: 'createStrategy',
       });
     } else {
       create();

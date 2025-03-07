@@ -5,7 +5,6 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useMemo } from 'react';
-import { carbonEvents } from 'services/events';
 import { cn, prettifyNumber } from 'utils/helpers';
 import style from './MyStrategiesHeader.module.css';
 
@@ -75,7 +74,6 @@ export const MyStrategiesHeader = () => {
         to="/trade"
         className={buttonStyles({ variant: 'success' })}
         data-testid="create-strategy-desktop"
-        onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
       >
         Create Strategy
       </Link>

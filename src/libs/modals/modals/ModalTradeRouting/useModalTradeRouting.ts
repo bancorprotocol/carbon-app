@@ -92,18 +92,6 @@ export const useModalTradeRouting = ({
           tradeFn();
         },
         buttonLabel: 'Confirm Trade',
-        eventData: {
-          productType: 'trade',
-          buy,
-          buyToken: target,
-          sellToken: source,
-          valueUsd: getFiatValueSource(
-            data?.totalSourceAmount,
-            true
-          ).toString(),
-          approvalTokens: approval.tokens,
-          blockchainNetwork: provider?.network?.name || '',
-        },
       });
     } else {
       void tradeFn();
