@@ -107,7 +107,9 @@ export const activityDescription = (activity: Activity) => {
       return `${sold} was sold for ${bought}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
     }
     case 'transfer': {
-      return `Strategy was transferred to a ${shortenString(changes!.owner!)}.`;
+      const from = shortenString(strategy.owner);
+      const to = shortenString(changes!.owner!);
+      return `Strategy was transferred from ${from} to ${to}.`;
     }
     case 'delete': {
       return 'Strategy was deleted.';
