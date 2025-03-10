@@ -27,7 +27,7 @@ export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
 
 export const isFullRangeStrategy = (order0: BaseOrder, order1: BaseOrder) => {
   if (!isOverlappingStrategy({ order0, order1 })) return false;
-  return isFullRange(order1.max, order0.min);
+  return isFullRange(order0.min, order1.max);
 };
 export const isFullRange = (min: string | number, max: string | number) => {
   return new SafeDecimal(max).div(min).gte(100_000);
@@ -150,6 +150,7 @@ export const getBounds = (
       sell: { min: order1.min, max: order1.max },
     };
   } else if (isFullRangeStrategy(order0, order1)) {
+    console.log('IS FULL RANGE');
     return {
       buy: { min: '', max: '' },
       sell: { min: '', max: '' },
