@@ -5,6 +5,7 @@ import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from './types';
 import { startOfDay, subDays } from 'date-fns';
 import { toUnixUTC } from 'components/simulator/utils';
+import { ChartPrices } from './d3Chart';
 
 type StrategyOrderInput =
   | { min: string; max: string }
@@ -22,6 +23,14 @@ export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
   if (sellMin.eq(0)) return false; // Limit strategy with only buy
   if (buyMax.eq(0)) return false;
   return buyMax.gte(sellMin);
+};
+
+export const isFullRangeStrategy = (order0: BaseOrder, order1: BaseOrder) => {
+  if (!isOverlappingStrategy({ order0, order1 })) return false;
+  return isFullRange(order1.max, order0.min);
+};
+export const isFullRange = (min: string | number, max: string | number) => {
+  return new SafeDecimal(max).div(min).gte(100_000);
 };
 
 export const isDisposableStrategy = (strategy: BaseStrategy) => {
@@ -119,3 +128,36 @@ export const defaultStartDate = () => startOfDay(subDays(new Date(), 364));
 export const defaultEndDate = () => startOfDay(new Date());
 export const defaultStart = () => toUnixUTC(defaultStartDate());
 export const defaultEnd = () => toUnixUTC(defaultEndDate());
+
+export const getBounds = (
+  order0: BaseOrder,
+  order1: BaseOrder,
+  direction?: 'none' | 'buy' | 'sell'
+): ChartPrices => {
+  if (direction === 'none') {
+    return {
+      buy: { min: '', max: '' },
+      sell: { min: '', max: '' },
+    };
+  } else if (direction === 'buy') {
+    return {
+      buy: { min: order0.min, max: order0.max },
+      sell: { min: '', max: '' },
+    };
+  } else if (direction === 'sell') {
+    return {
+      buy: { min: '', max: '' },
+      sell: { min: order1.min, max: order1.max },
+    };
+  } else if (isFullRangeStrategy(order0, order1)) {
+    return {
+      buy: { min: '', max: '' },
+      sell: { min: '', max: '' },
+    };
+  } else {
+    return {
+      buy: { min: order0.min, max: order0.max },
+      sell: { min: order1.min, max: order1.max },
+    };
+  }
+};

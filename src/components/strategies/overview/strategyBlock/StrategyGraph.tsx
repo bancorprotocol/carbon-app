@@ -10,7 +10,7 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
-import { isZero } from 'components/strategies/common/utils';
+import { isFullRange, isZero } from 'components/strategies/common/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import style from './StrategyGraph.module.css';
@@ -345,29 +345,54 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
         )}
       </g>
       <g className={style.pricePoints}>
-        {pricePoints.map((point, i) => (
-          <g key={i}>
-            <line
-              x1={x(point)}
-              x2={x(point)}
-              y1={tick}
-              y2={baseline + 5}
-              stroke="white"
-              opacity="60%"
-            />
-            <text
-              fill="white"
-              x={x(point)}
-              y={baseline + 10}
-              dominantBaseline="hanging"
-              textAnchor="middle"
-              fontSize={fontSize}
-              opacity="60%"
-            >
-              {prettifyNumber(point, priceIntlOption)}
-            </text>
-          </g>
-        ))}
+        {isFullRange(min, max) &&
+          [min, max].map((point, i) => (
+            <g key={i}>
+              <line
+                x1={x(point)}
+                x2={x(point)}
+                y1={tick}
+                y2={baseline + 5}
+                stroke="white"
+                opacity="60%"
+              />
+              <text
+                fill="white"
+                x={x(point)}
+                y={baseline + 10}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fontSize={fontSize}
+                opacity="60%"
+              >
+                {point === min ? '0' : '∞'}
+              </text>
+            </g>
+          ))}
+        {!isFullRange(min, max) &&
+          pricePoints.map((point, i) => (
+            <g key={i}>
+              <line
+                x1={x(point)}
+                x2={x(point)}
+                y1={tick}
+                y2={baseline + 5}
+                stroke="white"
+                opacity="60%"
+              />
+              <text
+                fill="white"
+                x={x(point)}
+                y={baseline + 10}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fontSize={fontSize}
+                opacity="60%"
+              >
+                {prettifyNumber(point, priceIntlOption)}
+              </text>
+            </g>
+          ))}
       </g>
     </svg>
   );
@@ -543,8 +568,9 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
     round: !smallRange,
     decimals: smallRange ? 6 : undefined,
   };
-  const startPrice = prettifyNumber(startRate, priceOption);
-  const endPrice = prettifyNumber(endRate, priceOption);
+  const fullRange = isFullRange(startRate, endRate);
+  const startPrice = fullRange ? '0' : prettifyNumber(startRate, priceOption);
+  const endPrice = fullRange ? '∞' : prettifyNumber(endRate, priceOption);
   const marginalPrice = prettifyNumber(marginalRate, priceOption);
   const { quote, base } = strategy;
   const color = buy ? 'text-buy' : 'text-sell';

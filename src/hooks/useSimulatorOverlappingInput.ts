@@ -2,11 +2,11 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { StrategyInputOrder } from 'hooks/useStrategyInput';
-import { ChartPrices } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
 import { useTokens } from 'hooks/useTokens';
 import { SimulatorInputOverlappingSearch } from 'libs/routing/routes/sim';
 import { Token } from 'libs/tokens';
 import { useCallback, useMemo, useState } from 'react';
+import { getBounds } from 'components/strategies/common/utils';
 
 export interface InternalSimulatorOverlappingInput
   extends SimulatorInputOverlappingSearch {
@@ -25,8 +25,7 @@ export type SimulatorOverlappingInputDispatch = <
   K extends keyof T
 >(
   key: K,
-  value: T[K],
-  setBounds?: boolean
+  value: T[K]
 ) => void;
 
 interface Props {
@@ -86,46 +85,13 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
 
   useDebouncedValue(_state, 300, { cb: setSearch });
 
-  const [bounds, setBounds] = useState<ChartPrices>({
-    buy: { min: searchState.buyMin || '', max: '' },
-    sell: { min: '', max: searchState.sellMax || '' },
-  });
+  const bounds = useMemo(
+    () => getBounds(state.buy, state.sell),
+    [state.buy, state.sell]
+  );
 
   const dispatch: SimulatorOverlappingInputDispatch = useCallback(
-    (key, value, updateBounds = true) => {
-      setState((state) => ({ ...state, [key]: value }));
-
-      if (!updateBounds) {
-        return;
-      }
-
-      switch (key) {
-        case 'buyMin':
-          setBounds((bounds) => ({
-            ...bounds,
-            buy: { ...bounds.buy, min: value as string },
-          }));
-          break;
-        case 'buyMax':
-          setBounds((bounds) => ({
-            ...bounds,
-            buy: { ...bounds.buy, max: value as string },
-          }));
-          break;
-        case 'sellMin':
-          setBounds((bounds) => ({
-            ...bounds,
-            sell: { ...bounds.sell, min: value as string },
-          }));
-          break;
-        case 'sellMax':
-          setBounds((bounds) => ({
-            ...bounds,
-            sell: { ...bounds.sell, max: value as string },
-          }));
-          break;
-      }
-    },
+    (key, value) => setState((state) => ({ ...state, [key]: value })),
     []
   );
 

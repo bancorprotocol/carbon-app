@@ -60,10 +60,10 @@ export const SimInputChart = ({
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
-      dispatch('buyMin', formatNumber(buy.min), false);
-      dispatch('buyMax', formatNumber(buy.max), false);
-      dispatch('sellMin', formatNumber(sell.min), false);
-      dispatch('sellMax', formatNumber(sell.max), false);
+      dispatch('buyMin', formatNumber(buy.min));
+      dispatch('buyMax', formatNumber(buy.max));
+      dispatch('sellMin', formatNumber(sell.min));
+      dispatch('sellMax', formatNumber(sell.max));
     },
     [dispatch]
   );

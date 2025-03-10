@@ -40,10 +40,10 @@ export const SimulatorInputOverlappingPage = () => {
     dispatch('baseToken', searchState.baseToken);
     dispatch('quoteToken', searchState.quoteToken);
     dispatch('spread', '1');
-    dispatch('buyMax', '', true);
-    dispatch('buyMin', '', true);
-    dispatch('sellMax', '', true);
-    dispatch('sellMin', '', true);
+    dispatch('buyMax', '');
+    dispatch('buyMin', '');
+    dispatch('sellMax', '');
+    dispatch('sellMin', '');
     dispatch('sellBudget', '');
     dispatch('sellBudgetError', '');
     dispatch('sellPriceError', '');
