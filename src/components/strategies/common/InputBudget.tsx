@@ -136,7 +136,7 @@ export const InputBudget: FC<Props> = (props) => {
             size={1}
             placeholder={placeholder}
             className={`
-              text-18 font-weight-500 grow text-ellipsis bg-transparent focus:outline-none
+              text-16 font-weight-500 grow text-ellipsis bg-transparent focus:outline-none
               ${error ? 'text-error' : ''}
               ${disabled ? 'text-white/40' : ''}
               ${disabled ? 'cursor-not-allowed' : ''}

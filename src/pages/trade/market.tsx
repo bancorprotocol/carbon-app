@@ -36,43 +36,44 @@ export const TradeMarket = () => {
   return (
     <>
       <TradeLayout>
-        <article
-          className={cn(
-            'bg-background-900 grid gap-16 rounded-ee rounded-es p-16',
-            style.order
-          )}
-          data-direction={buy ? 'buy' : 'sell'}
-        >
-          <TabsMenu>
-            <TabsMenuButton
-              onClick={() => setDirection('sell')}
-              variant={buy ? 'black' : 'sell'}
-              data-testid="tab-sell"
-            >
-              Sell
-            </TabsMenuButton>
-            <TabsMenuButton
-              onClick={() => setDirection('buy')}
-              variant={!buy ? 'black' : 'buy'}
-              data-testid="tab-buy"
-            >
-              Buy
-            </TabsMenuButton>
-          </TabsMenu>
-          <div className="flex items-center justify-between">
-            <h2 className="text-18 flex items-center gap-8">
-              {buy ? 'Buy' : 'Sell'} {base.symbol} {buy ? 'with' : 'for'}&nbsp;
-              {quote.symbol}
-            </h2>
-            <MainMenuTradeSettings base={base} quote={quote} />
+        <article className="bg-background-900 grid rounded-ee rounded-es">
+          <div className="p-16 pb-0">
+            <TabsMenu>
+              <TabsMenuButton
+                onClick={() => setDirection('sell')}
+                variant={buy ? 'black' : 'sell'}
+                data-testid="tab-sell"
+              >
+                Sell
+              </TabsMenuButton>
+              <TabsMenuButton
+                onClick={() => setDirection('buy')}
+                variant={!buy ? 'black' : 'buy'}
+                data-testid="tab-buy"
+              >
+                Buy
+              </TabsMenuButton>
+            </TabsMenu>
           </div>
-          <TradeWidgetBuySell
-            source={buy ? quote : base}
-            target={buy ? base : quote}
-            sourceBalanceQuery={balanceQuery}
-            buy={buy}
-            data-testid={buy ? 'buy-form' : 'sell-form'}
-          />
+          <div
+            className={cn(style.order, 'p-16')}
+            data-direction={buy ? 'buy' : 'sell'}
+          >
+            <header className="flex items-center justify-between">
+              <h2 className="text-18 flex items-center gap-8">
+                {buy ? 'Buy' : 'Sell'} {base.symbol}&nbsp;
+                {buy ? 'with' : 'for'} {quote.symbol}
+              </h2>
+              <MainMenuTradeSettings base={base} quote={quote} />
+            </header>
+            <TradeWidgetBuySell
+              source={buy ? quote : base}
+              target={buy ? base : quote}
+              sourceBalanceQuery={balanceQuery}
+              buy={buy}
+              data-testid={buy ? 'buy-form' : 'sell-form'}
+            />
+          </div>
         </article>
       </TradeLayout>
       <StrategyChartSection>

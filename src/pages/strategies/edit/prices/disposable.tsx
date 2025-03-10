@@ -185,22 +185,24 @@ export const EditPricesStrategyDisposablePage = () => {
           buy={isBuy}
           hasPriceChanged={hasPriceChanged}
           settings={
-            <TabsMenu>
-              <TabsMenuButton
-                onClick={() => setDirection('buy')}
-                variant={isBuy ? 'buy' : 'black'}
-                data-testid="tab-buy"
-              >
-                Buy
-              </TabsMenuButton>
-              <TabsMenuButton
-                onClick={() => setDirection('sell')}
-                variant={!isBuy ? 'sell' : 'black'}
-                data-testid="tab-sell"
-              >
-                Sell
-              </TabsMenuButton>
-            </TabsMenu>
+            <div className="p-16 pb-0">
+              <TabsMenu>
+                <TabsMenuButton
+                  onClick={() => setDirection('buy')}
+                  variant={isBuy ? 'buy' : 'black'}
+                  data-testid="tab-buy"
+                >
+                  Buy
+                </TabsMenuButton>
+                <TabsMenuButton
+                  onClick={() => setDirection('sell')}
+                  variant={!isBuy ? 'sell' : 'black'}
+                  data-testid="tab-sell"
+                >
+                  Sell
+                </TabsMenuButton>
+              </TabsMenu>
+            </div>
           }
         />
         {(buyBudgetChanges || sellBudgetChanges) && (

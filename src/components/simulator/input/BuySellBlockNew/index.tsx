@@ -101,7 +101,7 @@ export const BuySellBlock: FC<Props> = ({
       data-direction={buy ? 'buy' : 'sell'}
     >
       <BuySellHeader {...headerProps}>
-        <h2 className="text-18 flex items-center gap-8" id={titleId}>
+        <h2 className="text-16 flex items-center gap-8" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
           </Tooltip>

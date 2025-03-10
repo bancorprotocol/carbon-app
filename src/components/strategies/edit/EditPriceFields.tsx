@@ -110,92 +110,93 @@ export const EditStrategyPriceField: FC<Props> = ({
   return (
     <article
       aria-labelledby={titleId}
-      className={cn(
-        style.order,
-        'bg-background-900 grid gap-16 p-16 text-left'
-      )}
+      className="bg-background-900 grid text-left"
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
-      data-direction={buy ? 'buy' : 'sell'}
     >
       {settings}
-      <OrderHeader {...headerProps}>
-        <h2 className="text-18 flex items-center gap-8" id={titleId}>
-          <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
-            <span>{buy ? 'Buy Low' : 'Sell High'}</span>
-          </Tooltip>
-          <LogoImager alt="Token" src={base.logoURI} className="size-18" />
-          <span>{base.symbol}</span>
-        </h2>
-      </OrderHeader>
-      <fieldset className="flex flex-col gap-8">
-        <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
-          {inputTitle}
-        </legend>
-        {order.settings === 'range' ? (
-          <InputRange
-            base={base}
-            quote={quote}
-            min={order.min}
-            setMin={setMin}
-            max={order.max}
-            setMax={setMax}
-            buy={buy}
-            error={error}
-            warnings={warnings}
-            required
-          />
-        ) : (
-          <InputLimit
-            base={base}
-            quote={quote}
-            price={order.min}
-            setPrice={setPrice}
-            buy={buy}
-            error={error}
-            warnings={warnings}
-            required
-          />
-        )}
-      </fieldset>
-      <OverlappingAction
-        base={base}
-        quote={quote}
-        anchor={buy ? 'buy' : 'sell'}
-        action={order.action}
-        setAction={setAction}
-        budget={budget}
-        setBudget={setBudget}
-        buyBudget={strategy.order0.balance}
-        sellBudget={strategy.order1.balance}
+      <div
+        className={cn(style.order, 'grid gap-16 p-16')}
+        data-direction={buy ? 'buy' : 'sell'}
       >
-        {showDistribution() && (
-          <div
-            role="table"
-            className="rounded-8 p-15 text-12 font-weight-500 mt-8 flex flex-col gap-10 border-2 border-white/10 text-left"
-          >
-            <EditBudgetDistribution
-              marginalPrice={order.marginalPrice}
-              onChange={setMarginalPrice}
+        <OrderHeader {...headerProps}>
+          <h2 className="text-16 flex items-center gap-8" id={titleId}>
+            <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
+              <span>{buy ? 'Buy Low' : 'Sell High'}</span>
+            </Tooltip>
+            <LogoImager alt="Token" src={base.logoURI} className="size-18" />
+            <span>{base.symbol}</span>
+          </h2>
+        </OrderHeader>
+        <fieldset className="flex flex-col gap-8">
+          <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
+            {inputTitle}
+          </legend>
+          {order.settings === 'range' ? (
+            <InputRange
+              base={base}
+              quote={quote}
+              min={order.min}
+              setMin={setMin}
+              max={order.max}
+              setMax={setMax}
+              buy={buy}
+              error={error}
+              warnings={warnings}
+              required
             />
-          </div>
-        )}
-      </OverlappingAction>
-      <BudgetDistribution
-        token={token}
-        initialBudget={initialBudget}
-        withdraw={getWithdraw(initialBudget, order.budget)}
-        deposit={getDeposit(initialBudget, order.budget)}
-        balance={balance.data}
-        buy={buy}
-      />
-      <FullOutcome
-        min={order.min}
-        max={order.max}
-        budget={order.budget}
-        buy={buy}
-        base={base}
-        quote={quote}
-      />
+          ) : (
+            <InputLimit
+              base={base}
+              quote={quote}
+              price={order.min}
+              setPrice={setPrice}
+              buy={buy}
+              error={error}
+              warnings={warnings}
+              required
+            />
+          )}
+        </fieldset>
+        <OverlappingAction
+          base={base}
+          quote={quote}
+          anchor={buy ? 'buy' : 'sell'}
+          action={order.action}
+          setAction={setAction}
+          budget={budget}
+          setBudget={setBudget}
+          buyBudget={strategy.order0.balance}
+          sellBudget={strategy.order1.balance}
+        >
+          {showDistribution() && (
+            <div
+              role="table"
+              className="rounded-8 p-15 text-12 font-weight-500 mt-8 flex flex-col gap-10 border-2 border-white/10 text-left"
+            >
+              <EditBudgetDistribution
+                marginalPrice={order.marginalPrice}
+                onChange={setMarginalPrice}
+              />
+            </div>
+          )}
+        </OverlappingAction>
+        <BudgetDistribution
+          token={token}
+          initialBudget={initialBudget}
+          withdraw={getWithdraw(initialBudget, order.budget)}
+          deposit={getDeposit(initialBudget, order.budget)}
+          balance={balance.data}
+          buy={buy}
+        />
+        <FullOutcome
+          min={order.min}
+          max={order.max}
+          budget={order.budget}
+          buy={buy}
+          base={base}
+          quote={quote}
+        />
+      </div>
     </article>
   );
 };
