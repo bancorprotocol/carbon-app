@@ -1,4 +1,5 @@
 import {
+  isFullRange,
   isOverlappingStrategy,
   isPaused,
 } from 'components/strategies/common/utils';
@@ -33,6 +34,7 @@ import {
 } from 'components/strategies/edit/utils';
 import config from 'config';
 import { toPairSlug } from 'utils/pairSearch';
+import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -55,6 +57,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const { openModal } = useModal();
   const navigate = useNavigate();
   const { type, slug } = useParams({ strict: false });
+  const duplicate = useDuplicate();
 
   const isOwn = useIsStrategyOwner(strategy.id);
 
@@ -76,7 +79,11 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       name: 'Duplicate Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
-        openModal('duplicateStrategy', { strategy });
+        if (isFullRange(strategy.order0.startRate, strategy.order1.endRate)) {
+          duplicate(strategy);
+        } else {
+          openModal('duplicateStrategy', { strategy });
+        }
       },
     });
   }

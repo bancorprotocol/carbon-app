@@ -14,7 +14,7 @@ import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice
 import { isTouchedZero } from 'components/strategies/common/utils';
 import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
 
-type InputRangeProps = {
+export interface InputRangeProps {
   min: string;
   minLabel?: string;
   setMin: (value: string) => void;
@@ -28,7 +28,8 @@ type InputRangeProps = {
   warnings?: (string | undefined)[];
   isOverlapping?: boolean;
   required?: boolean;
-};
+  hideMarketIndicator?: boolean;
+}
 
 export const InputRange: FC<InputRangeProps> = ({
   min,
@@ -44,6 +45,7 @@ export const InputRange: FC<InputRangeProps> = ({
   warnings = [],
   isOverlapping,
   required,
+  hideMarketIndicator = false,
 }) => {
   const [localMin, setLocalMin] = useState(roundSearchParam(min));
   const [localMax, setLocalMax] = useState(roundSearchParam(max));
@@ -185,13 +187,15 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-min"
             required={required}
           />
-          <MarketPriceIndication
-            base={base}
-            quote={quote}
-            price={min}
-            buy={buy || isOverlapping === true}
-            isRange
-          />
+          {!hideMarketIndicator && (
+            <MarketPriceIndication
+              base={base}
+              quote={quote}
+              price={min}
+              buy={buy || isOverlapping === true}
+              isRange
+            />
+          )}
         </div>
         <div
           className={cn(
@@ -238,13 +242,15 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-max"
             required={required}
           />
-          <MarketPriceIndication
-            base={base}
-            quote={quote}
-            price={max}
-            buy={buy || isOverlapping === false}
-            isRange
-          />
+          {!hideMarketIndicator && (
+            <MarketPriceIndication
+              base={base}
+              quote={quote}
+              price={max}
+              buy={buy || isOverlapping === false}
+              isRange
+            />
+          )}
         </div>
       </div>
       {!!displayError && (

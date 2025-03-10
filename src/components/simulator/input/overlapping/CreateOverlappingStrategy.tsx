@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   getMaxBuyMin,
   getMinSellMax,
@@ -21,9 +21,9 @@ import {
   SimulatorInputOverlappingValues,
   SimulatorOverlappingInputDispatch,
 } from 'hooks/useSimulatorOverlappingInput';
-import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { InputBudget } from 'components/strategies/common/InputBudget';
 import { formatNumber } from 'utils/helpers';
+import { OverlappingPriceRange } from 'components/strategies/overlapping/OverlappingPriceRange';
 
 interface Props {
   state: SimulatorInputOverlappingValues;
@@ -226,11 +226,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     else dispatch('sellBudget', amount);
   };
 
-  const setRangeError = useCallback(
-    (value: string) => dispatch('buyPriceError', value),
-    [dispatch]
-  );
-
   const disabledAnchor = useMemo(() => {
     if (!buy.min || !sell.max || !marketPrice || !spread) return;
     const prices = calculateOverlappingPrices(
@@ -322,7 +317,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
             iconClassName="h-14 w-14 text-white/60"
           />
         </header>
-        <InputRange
+        <OverlappingPriceRange
           minLabel="Min Buy Price"
           maxLabel="Max Sell Price"
           base={base}
@@ -332,7 +327,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           setMin={setMin}
           setMax={setMax}
           error={state.buy.priceError}
-          setRangeError={setRangeError}
         />
       </article>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">

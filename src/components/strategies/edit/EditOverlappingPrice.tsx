@@ -24,11 +24,11 @@ import { OverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
-import { InputRange } from '../common/InputRange';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
 import { EditOverlappingMarketPrice } from '../overlapping/OverlappingMarketPrice';
+import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
 
 interface Props {
   marketPrice: string;
@@ -218,7 +218,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
                 iconClassName="size-18 text-white/60"
               />
             </header>
-            <InputRange
+            <OverlappingPriceRange
               base={base}
               quote={quote}
               min={order0.min}

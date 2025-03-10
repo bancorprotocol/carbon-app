@@ -11,11 +11,11 @@ import { OverlappingAnchor } from 'components/strategies/overlapping/Overlapping
 import { Token } from 'libs/tokens';
 import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
 import { useSearch } from '@tanstack/react-router';
-import { InputRange } from '../common/InputRange';
 import { OverlappingOrder } from 'components/strategies/common/types';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
 import { SetOverlapping } from 'libs/routing/routes/trade';
+import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
 
 interface Props {
   base: Token;
@@ -102,7 +102,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
             iconClassName="size-18 text-white/60"
           />
         </header>
-        <InputRange
+        <OverlappingPriceRange
           base={base}
           quote={quote}
           min={order0.min}

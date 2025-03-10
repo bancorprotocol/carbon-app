@@ -19,6 +19,7 @@ import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import styles from './OverlappingChart.module.css';
 import { clamp, getMax, getMin } from 'utils/helpers/operators';
+import { isFullRange } from '../common/utils';
 
 type Scale = ReturnType<typeof getScale>;
 
@@ -581,20 +582,47 @@ export const OverlappingChart: FC<Props> = (props) => {
               y2={y(bottom + 3)}
             />
           ))}
-          {prices.map((price, i) => (
-            <text
-              key={`${price}-${i}`}
-              x={x(price)}
-              y={y(5)}
-              fontSize={fontSize}
-              dominantBaseline="hanging"
-              textAnchor="middle"
-              fill="white"
-              fillOpacity="0.8"
-            >
-              {prettifySignedNumber(price, { abbreviate: true })}
-            </text>
-          ))}
+          {isFullRange(min, max) && (
+            <>
+              <text
+                x={x(min)}
+                y={y(5)}
+                fontSize={fontSize}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fill="white"
+                fillOpacity="0.8"
+              >
+                0
+              </text>
+              <text
+                x={x(max)}
+                y={y(5)}
+                fontSize={fontSize}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fill="white"
+                fillOpacity="0.8"
+              >
+                ∞
+              </text>
+            </>
+          )}
+          {!isFullRange(min, max) &&
+            prices.map((price, i) => (
+              <text
+                key={`${price}-${i}`}
+                x={x(price)}
+                y={y(5)}
+                fontSize={fontSize}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fill="white"
+                fillOpacity="0.8"
+              >
+                {prettifySignedNumber(price, { abbreviate: true })}
+              </text>
+            ))}
         </g>
 
         {marketPrice && (
