@@ -205,7 +205,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
       {displayPrice && (
         <>
-          <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+          <article className="bg-background-900 grid gap-16 p-16">
             <header className="flex items-center gap-8">
               <h2 className="text-18 font-weight-500 flex-1">
                 Edit Price Range&nbsp;
@@ -232,7 +232,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
               required
             />
           </article>
-          <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
+          <article className="bg-background-900 grid gap-16 p-16">
             <header className="mb-10 flex items-center gap-8 ">
               <h2 className="text-18 font-weight-500 flex-1">Edit Fee Tier</h2>
               <Tooltip
@@ -252,7 +252,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
         </>
       )}
       {!displayPrice && (
-        <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+        <article className="bg-background-900 grid gap-16 p-16">
           <EditOverlappingMarketPrice
             base={base}
             quote={quote}
@@ -261,7 +261,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           />
         </article>
       )}
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+      <article className="bg-background-900 grid gap-16 p-16">
         <header className="flex items-center justify-between">
           <h2 className="text-18">Budget</h2>
           <Tooltip
@@ -282,7 +282,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
         />
       </article>
       {anchor && (
-        <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+        <article className="bg-background-900 grid gap-16 p-16">
           <OverlappingAction
             base={base}
             quote={quote}
@@ -300,7 +300,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       {anchor && (
         <article
           id="overlapping-distribution"
-          className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+          className="bg-background-900 grid gap-16 p-16"
         >
           <hgroup>
             <h3 className="text-16 font-weight-500 flex items-center gap-8">

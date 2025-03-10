@@ -230,10 +230,10 @@ const OverlappingContent = () => {
       });
     };
     return (
-      <div className="flex flex-col gap-20">
-        <EditPriceNav editType={search.editType} />
+      <div className="grid content-start rounded">
         <EditStrategyOverlapTokens />
-        <article className="rounded-10 bg-background-900 flex flex-col gap-16 p-20">
+        <EditPriceNav editType={search.editType} />
+        <article className="bg-background-900 grid gap-16 p-16">
           <EditOverlappingMarketPrice
             base={base}
             quote={quote}

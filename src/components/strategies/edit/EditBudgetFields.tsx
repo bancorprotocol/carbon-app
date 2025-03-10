@@ -12,6 +12,8 @@ import { InputBudget } from '../common/InputBudget';
 import { Order, useGetTokenBalance } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from '../common/utils';
+import { cn } from 'utils/helpers';
+import style from 'components/strategies/common/order.module.css';
 
 interface Props {
   budget: string;
@@ -66,12 +68,9 @@ export const EditStrategyBudgetField: FC<Props> = ({
   return (
     <article
       aria-labelledby={titleId}
-      className={`rounded-10 bg-background-900 flex flex-col gap-20 border-l-2 p-20 ${
-        buy
-          ? 'border-buy/50 focus-within:border-buy'
-          : 'border-sell/50 focus-within:border-sell'
-      }`}
+      className={cn(style.order, 'bg-background-900 grid gap-16 p-16')}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
+      data-direction={buy ? 'buy' : 'sell'}
     >
       <header className="flex items-center justify-between">
         <h3 id={titleId} className="text-18 flex items-center gap-8">

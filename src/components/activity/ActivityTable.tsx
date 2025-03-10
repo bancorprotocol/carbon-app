@@ -29,7 +29,7 @@ import { useActivity, useActivityPagination } from './ActivityProvider';
 import style from './ActivityTable.module.css';
 
 const thStyle = cn(
-  'text-start font-weight-400 py-16 pl-8 whitespace-nowrap',
+  'text-14 text-start font-weight-400 py-16 pl-8 whitespace-nowrap',
   'first:pl-24',
   'last:pr-24 last:text-end'
 );

@@ -70,6 +70,7 @@ export const SimInputRecurring = ({
         strategyType="recurring"
         isBudgetOptional={+state.buy.budget === 0 && +state.sell.budget > 0}
         warningMsg={warningMsg.buy}
+        className="rounded-ee rounded-es"
       />
     </>
   );
