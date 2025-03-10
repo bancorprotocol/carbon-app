@@ -167,7 +167,7 @@ const Content = (props: Props) => {
   };
 
   return (
-    <div className="flex flex-col gap-20 p-20">
+    <div className="grid min-h-[375px] gap-20 p-20">
       <div className="gap-30 flex">
         {!!props.presets && (
           <div
@@ -199,7 +199,7 @@ const Content = (props: Props) => {
           onSelect={setDate}
         />
       </div>
-      <footer className="flex justify-end gap-16">
+      <footer className="flex justify-end gap-16 self-end">
         <input
           ref={startRef}
           form={props.form}
