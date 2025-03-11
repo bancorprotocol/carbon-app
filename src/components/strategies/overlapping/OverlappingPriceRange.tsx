@@ -1,5 +1,5 @@
 import { InputRange, InputRangeProps } from '../common/InputRange';
-import { ChangeEvent, FC, useMemo } from 'react';
+import { ChangeEvent, FC, useId, useMemo } from 'react';
 import { useOverlappingMarketPrice } from '../UserMarketPrice';
 import style from './OverlappingPriceRange.module.css';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -7,19 +7,19 @@ import { isFullRange } from '../common/utils';
 
 const options = [
   {
-    label: '±0.5',
+    label: '±0.5%',
     value: 0.5,
   },
   {
-    label: '±1',
+    label: '±1%',
     value: 1,
   },
   {
-    label: '±5',
+    label: '±5%',
     value: 5,
   },
   {
-    label: '±10',
+    label: '±10%',
     value: 10,
   },
   {
@@ -31,6 +31,8 @@ const options = [
 export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
   const { base, quote, min, max, setMin, setMax, warnings } = props;
   const marketPrice = useOverlappingMarketPrice({ base, quote });
+  const minId = useId();
+  const maxId = useId();
 
   const range = useMemo(() => {
     if (!marketPrice) return;
@@ -57,22 +59,69 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
     }
   };
 
+  const reset = (id: string) => {
+    const price = new SafeDecimal(marketPrice!);
+    setMin(price.mul(0.99).toString());
+    setMax(price.mul(1.01).toString());
+    setTimeout(() => document.getElementById(id)?.focus(), 10);
+  };
+
   return (
     <>
-      <InputRange
-        base={base}
-        quote={quote}
-        min={min}
-        max={max}
-        setMin={setMin}
-        setMax={setMax}
-        minLabel="Min Buy Price"
-        maxLabel="Max Sell Price"
-        warnings={warnings}
-        isOverlapping
-        required
-        hideMarketIndicator={range === Infinity}
-      />
+      {range === Infinity ? (
+        <div className="grid grid-cols-2 gap-6">
+          <div className="rounded-r-4 rounded-l-16 grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
+            <header className="text-12 mb-5 flex justify-between text-white/60">
+              <span>{props.minLabel || 'Min'}</span>
+              {!!marketPrice && (
+                <button
+                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  type="button"
+                  onClick={() => setMin(marketPrice.toString())}
+                  data-testid="market-price-min"
+                >
+                  Use Market
+                </button>
+              )}
+            </header>
+            <p onClick={() => reset(minId)}>0</p>
+            <p aria-hidden className="h-[22px]"></p>
+          </div>
+          <div className="rounded-l-4 rounded-r-16 grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
+            <header className="text-12 mb-5 flex justify-between text-white/60">
+              <span>{props.maxLabel || 'Max'}</span>
+              {!!marketPrice && (
+                <button
+                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  type="button"
+                  onClick={() => setMax(marketPrice.toString())}
+                  data-testid="market-price-max"
+                >
+                  Use Market
+                </button>
+              )}
+            </header>
+            <p onClick={() => reset(maxId)}>∞</p>
+            <p aria-hidden className="h-[22px]"></p>
+          </div>
+        </div>
+      ) : (
+        <InputRange
+          base={base}
+          quote={quote}
+          min={min}
+          max={max}
+          setMin={setMin}
+          setMax={setMax}
+          minLabel="Min Buy Price"
+          maxLabel="Max Sell Price"
+          minId={minId}
+          maxId={maxId}
+          warnings={warnings}
+          isOverlapping
+          required
+        />
+      )}
       {!!marketPrice && (
         <div role="radiogroup" className="flex gap-8">
           {options.map(({ label, value }, i) => (

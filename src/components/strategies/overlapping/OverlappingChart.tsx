@@ -17,9 +17,9 @@ import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-manageme
 import { getSignedMarketPricePercentage } from '../marketPriceIndication/utils';
 import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import styles from './OverlappingChart.module.css';
 import { clamp, getMax, getMin } from 'utils/helpers/operators';
 import { isFullRange } from '../common/utils';
+import styles from './OverlappingChart.module.css';
 
 type Scale = ReturnType<typeof getScale>;
 
@@ -221,16 +221,8 @@ interface Props {
   setMax: (max: string) => any;
 }
 export const OverlappingChart: FC<Props> = (props) => {
-  const {
-    base,
-    quote,
-    order0,
-    order1,
-    userMarketPrice,
-    spread,
-    disabled,
-    className,
-  } = props;
+  const { base, quote, order0, order1, userMarketPrice, spread, className } =
+    props;
   const id = useId();
   const [zoom, setZoom] = useState(1);
   const [dragging, setDragging] = useState('');
@@ -245,6 +237,8 @@ export const OverlappingChart: FC<Props> = (props) => {
   const highest = getMax(order1.max, marketPrice ?? order1.max);
   const prices = getPrices(lowest, highest, box.width);
   const { left, right } = getBoundaries(lowest, highest);
+  const fullRange = isFullRange(min, max);
+  const disabled = props.disabled || fullRange;
 
   const scaleConfig = {
     left,
@@ -257,17 +251,25 @@ export const OverlappingChart: FC<Props> = (props) => {
   const viewBox = `0 0 ${box.width} ${box.height}`;
 
   // Texts
+  const marketPriceText = tokenAmount(marketPrice, quote);
   const marketPercent = {
     min: marketPricePercent(order0.min, marketPrice),
     max: marketPricePercent(order1.max, marketPrice),
   };
-  const minText = tokenAmount(min, quote);
-  const minPrecent = getSignedMarketPricePercentage(marketPercent.min);
+  const minText = fullRange ? tokenAmount(0, quote) : tokenAmount(min, quote);
+  const minPrecent = fullRange
+    ? null
+    : getSignedMarketPricePercentage(marketPercent.min);
   const minPercentText = minPrecent ? `${minPrecent}%` : '...';
-  const maxText = tokenAmount(max, quote);
-  const maxPercent = getSignedMarketPricePercentage(marketPercent.max);
+
+  const maxText = fullRange
+    ? tokenAmount(Infinity, quote)
+    : tokenAmount(max, quote);
+  const maxPercent = fullRange
+    ? null
+    : getSignedMarketPricePercentage(marketPercent.max);
   const maxPercentText = maxPercent ? `${maxPercent}%` : '...';
-  const marketPriceText = tokenAmount(marketPrice, quote);
+
   const title = (() => {
     const feeTier = `Fee Tier ${spread || 0}%`;
     if (userMarketPrice) {

@@ -17,9 +17,11 @@ import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndic
 export interface InputRangeProps {
   min: string;
   minLabel?: string;
+  minId?: string;
   setMin: (value: string) => void;
   max: string;
   maxLabel?: string;
+  maxId?: string;
   setMax: (value: string) => void;
   quote: Token;
   base: Token;
@@ -28,14 +30,15 @@ export interface InputRangeProps {
   warnings?: (string | undefined)[];
   isOverlapping?: boolean;
   required?: boolean;
-  hideMarketIndicator?: boolean;
 }
 
 export const InputRange: FC<InputRangeProps> = ({
   min,
   minLabel = 'Min',
+  minId,
   setMin,
   max,
+  maxId,
   maxLabel = 'Max',
   setMax,
   quote,
@@ -45,13 +48,14 @@ export const InputRange: FC<InputRangeProps> = ({
   warnings = [],
   isOverlapping,
   required,
-  hideMarketIndicator = false,
 }) => {
   const [localMin, setLocalMin] = useState(roundSearchParam(min));
   const [localMax, setLocalMax] = useState(roundSearchParam(max));
   const marketPrice = useOverlappingMarketPrice({ base, quote });
-  const inputMinId = useId();
-  const inputMaxId = useId();
+  const _inputMinId = useId();
+  const _inputMaxId = useId();
+  const inputMinId = minId || _inputMinId;
+  const inputMaxId = maxId || _inputMaxId;
 
   // Errors
   const minError = isTouchedZero(min) && 'Min must be greater than 0';
@@ -187,15 +191,13 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-min"
             required={required}
           />
-          {!hideMarketIndicator && (
-            <MarketPriceIndication
-              base={base}
-              quote={quote}
-              price={min}
-              buy={buy || isOverlapping === true}
-              isRange
-            />
-          )}
+          <MarketPriceIndication
+            base={base}
+            quote={quote}
+            price={min}
+            buy={buy || isOverlapping === true}
+            isRange
+          />
         </div>
         <div
           className={cn(
@@ -242,15 +244,13 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-max"
             required={required}
           />
-          {!hideMarketIndicator && (
-            <MarketPriceIndication
-              base={base}
-              quote={quote}
-              price={max}
-              buy={buy || isOverlapping === false}
-              isRange
-            />
-          )}
+          <MarketPriceIndication
+            base={base}
+            quote={quote}
+            price={max}
+            buy={buy || isOverlapping === false}
+            isRange
+          />
         </div>
       </div>
       {!!displayError && (
