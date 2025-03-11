@@ -76,6 +76,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
       ? Math.min(buy.from, sell.from)
       : Math.max(buy.from, sell.from);
 
+  const fullRange = isFullRange(min, max);
   const center = min && max ? (min + max) / 2 : currentPrice ?? 1000;
   const delta = min !== max ? (max - min) / 2 : center / 30;
 
@@ -185,7 +186,12 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
         <line x1="0" y1={baseline} x2={width} y2={baseline} />
       </g>
 
-      <CurrentPrice currentPrice={currentPrice} x={x} token={strategy.quote} />
+      <CurrentPrice
+        position={fullRange ? center : currentPrice}
+        currentPrice={currentPrice}
+        x={x}
+        token={strategy.quote}
+      />
 
       <g className={style.buySellAreas} clipPath={`url(#${clipPathId})`}>
         {buyOrderExists && (
@@ -345,7 +351,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
         )}
       </g>
       <g className={style.pricePoints}>
-        {isFullRange(min, max) &&
+        {fullRange &&
           [min, max].map((point, i) => (
             <g key={i}>
               <line
@@ -369,7 +375,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
               </text>
             </g>
           ))}
-        {!isFullRange(min, max) &&
+        {!fullRange &&
           pricePoints.map((point, i) => (
             <g key={i}>
               <line
@@ -399,6 +405,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
 };
 
 interface CurrentPriceProps {
+  position?: number;
   currentPrice?: number;
   token: Token;
   x: (value: number) => number;
@@ -408,9 +415,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
   currentPrice,
   token,
   x,
+  position,
 }) => {
-  if (!currentPrice) return <></>;
-  const price = x(currentPrice);
+  if (!currentPrice || !position) return <></>;
+  const price = x(position);
   const tooLow = price < lowest;
   const tooHigh = price > highest;
   const inRange = !tooLow && !tooHigh;

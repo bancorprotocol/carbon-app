@@ -30,7 +30,7 @@ export const isFullRangeStrategy = (order0: BaseOrder, order1: BaseOrder) => {
   return isFullRange(order0.min, order1.max);
 };
 export const isFullRange = (min: string | number, max: string | number) => {
-  return new SafeDecimal(max).div(min).gte(999_990);
+  return new SafeDecimal(max).div(min).gte(999_000);
 };
 
 export const isDisposableStrategy = (strategy: BaseStrategy) => {
