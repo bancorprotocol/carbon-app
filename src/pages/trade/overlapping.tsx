@@ -3,10 +3,7 @@ import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { CreateOverlappingPrice } from 'components/strategies/create/CreateOverlappingPrice';
 import { OverlappingInitMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
-import {
-  getOverlappingOrders,
-  initSpread,
-} from 'components/strategies/create/utils';
+import { getOverlappingOrders } from 'components/strategies/create/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
 import { TradeLayout } from 'components/trade/TradeLayout';
@@ -14,6 +11,7 @@ import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOverlappingBudget } from 'components/strategies/create/CreateOverlappingBudget';
 import { useCallback } from 'react';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
+import { defaultSpread } from 'components/strategies/overlapping/utils';
 
 const url = '/trade/overlapping';
 export const TradeOverlapping = () => {
@@ -85,7 +83,7 @@ export const TradeOverlapping = () => {
             marketPrice={marketPrice}
             order0={orders.buy}
             order1={orders.sell}
-            spread={search.spread || initSpread}
+            spread={search.spread || defaultSpread}
             set={set}
           />
           <CreateOverlappingBudget

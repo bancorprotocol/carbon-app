@@ -36,7 +36,7 @@ export interface EditOverlappingStrategySearch extends OverlappingSearch {
   action?: 'deposit' | 'withdraw';
 }
 
-const initSpread = '0.05';
+const defaultSpread = '0.05';
 
 const initMin = (marketPrice: string) => {
   return new SafeDecimal(marketPrice).times(0.99).toString();
@@ -64,7 +64,7 @@ const getOrders = (
     anchor,
     min = initMin(marketPrice),
     max = initMax(marketPrice),
-    spread = initSpread,
+    spread = defaultSpread,
     budget = '0',
     action = 'deposit',
   } = search;
@@ -201,7 +201,7 @@ const OverlappingContent = () => {
   );
 
   const orders = getOrders(strategy, search, marketPrice);
-  const spread = isValidSpread(search.spread) ? search.spread! : initSpread;
+  const spread = isValidSpread(search.spread) ? search.spread! : defaultSpread;
 
   const hasChanged = (() => {
     if (search.min !== order0.startRate) return true;

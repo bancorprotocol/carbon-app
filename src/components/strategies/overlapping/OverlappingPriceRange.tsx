@@ -1,9 +1,15 @@
 import { InputRange, InputRangeProps } from '../common/InputRange';
 import { ChangeEvent, FC, useId, useMemo } from 'react';
 import { useOverlappingMarketPrice } from '../UserMarketPrice';
-import style from './OverlappingPriceRange.module.css';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isFullRange } from '../common/utils';
+import { defaultSpread, getMaxSpread } from './utils';
+import style from './OverlappingPriceRange.module.css';
+
+interface Props extends InputRangeProps {
+  spread: string;
+  setSpread: (spread: string) => void;
+}
 
 const options = [
   {
@@ -28,8 +34,9 @@ const options = [
   },
 ];
 
-export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
-  const { base, quote, min, max, setMin, setMax, warnings } = props;
+export const OverlappingPriceRange: FC<Props> = (props) => {
+  const { base, quote, min, max, setMin, setMax, warnings, spread, setSpread } =
+    props;
   const marketPrice = useOverlappingMarketPrice({ base, quote });
   const minId = useId();
   const maxId = useId();
@@ -54,8 +61,15 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
       setMin(price.div(1000).toString());
       setMax(price.mul(1000).toString());
     } else {
-      setMin(price.mul(1 - value / 100).toString());
-      setMax(price.mul(1 + value / 100).toString());
+      const nextMin = price.mul(1 - value / 100);
+      const nextMax = price.mul(1 + value / 100);
+      setMin(nextMin.toString());
+      setMax(nextMax.toString());
+
+      const maxSpread = getMaxSpread(nextMin.toNumber(), nextMax.toNumber());
+      if (new SafeDecimal(maxSpread).lt(spread)) {
+        setSpread(defaultSpread);
+      }
     }
   };
 

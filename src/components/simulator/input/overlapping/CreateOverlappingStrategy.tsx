@@ -327,6 +327,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           setMin={setMin}
           setMax={setMax}
           error={state.buy.priceError}
+          spread={spread}
+          setSpread={setSpread}
         />
       </article>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
@@ -340,8 +342,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
         <OverlappingSpread
           buyMin={Number(buy.min)}
           sellMax={Number(sell.max)}
-          defaultValue={0.05}
-          options={[0.01, 0.05, 0.1]}
+          options={['0.01', '0.05', '0.1']}
           spread={spread}
           setSpread={setSpreadValue}
         />

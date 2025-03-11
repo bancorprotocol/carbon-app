@@ -111,6 +111,8 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           setMax={setMax}
           minLabel="Min Buy Price"
           maxLabel="Max Sell Price"
+          spread={spread}
+          setSpread={setSpread}
           warnings={[priceWarning]}
           isOverlapping
           required
@@ -127,8 +129,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
         <OverlappingSpread
           buyMin={Number(order0.min)}
           sellMax={Number(order1.max)}
-          defaultValue={0.05}
-          options={[0.01, 0.05, 0.1]}
+          options={['0.01', '0.05', '0.1']}
           spread={spread}
           setSpread={setSpread}
         />
