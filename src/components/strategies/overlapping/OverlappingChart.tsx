@@ -71,6 +71,7 @@ const getBuyPoint = ({ order0, order1 }: Orders, scale: Scale) => {
   const min = +order0.min;
   const maxTop = getMin(order1.min, order0.marginalPrice);
   const maxBottom = getMin(order0.max, order0.marginalPrice);
+  if (min > +order0.max || min > +order0.marginalPrice) return '';
   return [
     [x(min), y(top)].join(','),
     [x(maxTop), y(top)].join(','),
@@ -82,7 +83,9 @@ const getBuyPoint = ({ order0, order1 }: Orders, scale: Scale) => {
 };
 const getMarginalBuyPoint = ({ order0, order1 }: Orders, scale: Scale) => {
   const { x, y } = scale;
-
+  if (+order0.min > +order0.max || +order0.min > +order0.marginalPrice) {
+    return '';
+  }
   if (+order1.min >= +order0.marginalPrice) {
     return [
       [x(order0.marginalPrice), y(top)].join(','),
@@ -105,6 +108,9 @@ const getSellPoint = ({ order0, order1 }: Orders, scale: Scale) => {
   const { x, y } = scale;
   const minTop = getMax(order1.min, order1.marginalPrice);
   const minBottom = getMax(order0.max, order1.marginalPrice);
+  if (+order1.max < +order1.min || +order1.max < +order1.marginalPrice) {
+    return '';
+  }
   return [
     [x(minTop), y(top)].join(','),
     [x(order1.max), y(top)].join(','),
@@ -116,7 +122,10 @@ const getSellPoint = ({ order0, order1 }: Orders, scale: Scale) => {
 };
 const getMarginalSellPoint = ({ order0, order1 }: Orders, scale: Scale) => {
   const { x, y } = scale;
-  if (order1.marginalPrice >= order0.max) {
+  if (+order1.max < +order1.min || +order1.max < +order1.marginalPrice) {
+    return '';
+  }
+  if (+order1.marginalPrice >= +order0.max) {
     return [
       [x(order1.min), y(top)].join(','),
       [x(order1.marginalPrice), y(top)].join(','),
