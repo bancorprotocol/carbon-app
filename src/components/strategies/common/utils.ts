@@ -25,9 +25,14 @@ export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
   return buyMax.gte(sellMin);
 };
 
-export const isFullRangeStrategy = (order0: BaseOrder, order1: BaseOrder) => {
+export const isFullRangeStrategy = (
+  order0: BaseOrder | Order,
+  order1: BaseOrder | Order
+) => {
   if (!isOverlappingStrategy({ order0, order1 })) return false;
-  return isFullRange(order0.min, order1.max);
+  const min = 'min' in order0 ? order0.min : order0.startRate;
+  const max = 'max' in order1 ? order1.max : order1.endRate;
+  return isFullRange(min, max);
 };
 export const isFullRange = (min: string | number, max: string | number) => {
   return new SafeDecimal(max).div(min).gte(999_000);

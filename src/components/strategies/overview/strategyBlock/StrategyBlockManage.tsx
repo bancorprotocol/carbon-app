@@ -1,5 +1,5 @@
 import {
-  isFullRange,
+  isFullRangeStrategy,
   isOverlappingStrategy,
   isPaused,
 } from 'components/strategies/common/utils';
@@ -79,7 +79,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       name: 'Duplicate Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
-        if (isFullRange(strategy.order0.startRate, strategy.order1.endRate)) {
+        if (isFullRangeStrategy(strategy.order0, strategy.order1)) {
           duplicate(strategy);
         } else {
           openModal('duplicateStrategy', { strategy });
