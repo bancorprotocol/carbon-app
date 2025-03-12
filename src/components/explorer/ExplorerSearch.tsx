@@ -1,84 +1,65 @@
-import {
-  FC,
-  FormEvent,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { Button } from 'components/common/button';
-import { DropdownMenu } from 'components/common/dropdownMenu';
-import { ExplorerSearchDropdownButton } from 'components/explorer/ExplorerSearchDropdownButton';
-import { ExplorerSearchDropdownItems } from 'components/explorer/ExplorerSearchDropdownItems';
-import { ExplorerSearchInput } from 'components/explorer/ExplorerSearchInput';
+import { FC, FormEvent, memo, useEffect, useState } from 'react';
 import ExplorerSearchSuggestions from 'components/explorer/suggestion';
-import { utils } from 'ethers';
-import { useNavigate } from 'libs/routing';
-import config from 'config';
-import { cn } from 'utils/helpers';
+import { useNavigate, useParams } from 'libs/routing';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { fromPairSearch } from 'utils/pairSearch';
-import { useExplorerParams } from './useExplorerParams';
+import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
+import { searchPairTrade, searchTokens, toPairSlug } from 'utils/pairSearch';
 import { usePairs } from 'hooks/usePairs';
-import { useGetAddressFromEns } from 'libs/queries';
+import { getEnsAddressIfAny, useGetAddressFromEns } from 'libs/queries';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
+import { useWagmi } from 'libs/wagmi';
+import style from './ExplorerSearch.module.css';
 
 export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
   const pairs = usePairs();
-  const { type, slug } = useExplorerParams('/explore/$type');
+  const [open, setOpen] = useState(false);
+  const { provider } = useWagmi();
+  const { slug } = useParams({ from: '/explore/$slug' });
   const [search, setSearch] = useState(slug ?? '');
   const [debouncedSearch] = useDebouncedValue<string>(search, 300); // Debounce search input for ens query
 
   const ensAddressQuery = useGetAddressFromEns(debouncedSearch.toLowerCase());
 
-  const isInvalidEnsAddress = !ensAddressQuery.data;
-
   const waitingToFetchEns =
     debouncedSearch !== search || !ensAddressQuery.isSuccess;
 
-  const isInvalidAddress = useMemo(() => {
-    if (type !== 'wallet' || !search.length) return false;
-    if (search === config.addresses.tokens.ZERO) return true;
-
-    return (
-      !utils.isAddress(search.toLowerCase()) &&
-      isInvalidEnsAddress &&
-      !waitingToFetchEns
-    );
-  }, [type, search, isInvalidEnsAddress, waitingToFetchEns]);
-
   useEffect(() => {
     if (!slug) return setSearch('');
-    if (type === 'wallet') return setSearch(slug);
-    if (type === 'token-pair') {
-      const name = pairs.names.get(slug);
-      const displayName = name?.replace('_', '/').toUpperCase();
-      return setSearch(displayName || '');
-    }
-  }, [slug, type, pairs.names]);
+    const name = pairs.names.get(slug);
+    const displayName = name?.replace('_', '/').toUpperCase();
+    return setSearch(displayName || '');
+  }, [slug, pairs.names]);
 
-  const onSearchHandler = useCallback(
-    (value: string) => {
-      if (value.length === 0) return;
-      const slug = fromPairSearch(value);
-      if (type === 'token-pair' && !pairs.names.has(slug)) return;
-      if (type === 'wallet' && (waitingToFetchEns || isInvalidAddress)) return;
-      navigate({
-        to: '/explore/$type/$slug',
-        params: { type, slug },
-      });
-    },
-    [waitingToFetchEns, isInvalidAddress, navigate, pairs.names, type]
-  );
+  const onSearchHandler = async (value: string) => {
+    if (value.length === 0) return;
+    let slug = value;
+    const filteredPairs = searchPairTrade(pairs.map, pairs.names, value);
+    const filteredTokens = searchTokens(pairs.map, value);
+    if (filteredPairs[0]) {
+      const { baseToken, quoteToken } = filteredPairs[0];
+      slug = toPairSlug(baseToken, quoteToken);
+    }
+    if (filteredTokens[0]) {
+      slug = filteredTokens[0].address.toLowerCase();
+    }
+    if (value === slug) {
+      slug = await getEnsAddressIfAny(provider, value);
+    }
+    console.log({ value, slug, filteredPairs, filteredTokens });
+    navigate({
+      to: '/explore/$slug',
+      params: { slug },
+    });
+  };
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.target as HTMLFormElement);
     const value = data.get('search')?.toString();
-    if (value) onSearchHandler(value);
+    if (!value) return;
+    onSearchHandler(value);
+    setOpen(false);
   };
 
   const resetHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -88,68 +69,22 @@ export const _ExplorerSearch: FC = () => {
     input?.focus();
   };
 
-  const inputProps = {
-    invalid: isInvalidAddress,
-    search,
-    setSearch,
-  };
-
   return (
-    <div className="relative">
+    <div className={style.searchContainer}>
       <form
+        className={style.search}
         role="search"
         onSubmit={submitHandler}
         onReset={resetHandler}
-        className="flex gap-16"
       >
-        <div
-          className={cn(
-            'relative',
-            'flex',
-            'h-40',
-            'w-full',
-            'items-center',
-            'space-x-8',
-            'rounded-full',
-            'border',
-            'border-primary',
-            'px-16',
-            'md:space-x-16',
-            isInvalidAddress && 'border-error'
-          )}
-        >
-          <div className="shrink-0">
-            <DropdownMenu
-              placement="bottom-start"
-              className="-ml-17 mt-10 p-10"
-              button={(attr) => <ExplorerSearchDropdownButton {...attr} />}
-            >
-              <ExplorerSearchDropdownItems setSearch={setSearch} />
-            </DropdownMenu>
-          </div>
-          <div role="separator" className="h-20 w-1 bg-white/40"></div>
-          <div className="flex w-full flex-grow items-center md:relative">
-            {type === 'token-pair' && <ExplorerSearchSuggestions />}
-            {type === 'wallet' && <ExplorerSearchInput {...inputProps} />}
-          </div>
+        <IconSearch className="size-18" />
+        <div className="flex items-center md:relative">
+          <ExplorerSearchSuggestions open={open} setOpen={setOpen} />
         </div>
-
-        <Button
-          type="submit"
-          variant="success"
-          size="md"
-          className="w-40 shrink-0 px-0 md:w-[180px]"
-        >
-          <IconSearch className="size-16 md:mr-8" />
-          <span className="hidden md:block">Search</span>
-        </Button>
+        <button type="submit">
+          <IconArrow className="size-14" />
+        </button>
       </form>
-      {isInvalidAddress && (
-        <div className="text-14 text-error absolute mt-4 flex items-center">
-          <IconWarning className="mr-10 size-16" />
-          Invalid Wallet Address
-        </div>
-      )}
     </div>
   );
 };
