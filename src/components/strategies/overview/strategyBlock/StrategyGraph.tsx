@@ -10,7 +10,11 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
-import { isFullRange, isZero } from 'components/strategies/common/utils';
+import {
+  isFullRange,
+  isFullRangeStrategy,
+  isZero,
+} from 'components/strategies/common/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import style from './StrategyGraph.module.css';
@@ -54,15 +58,21 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
   const clipPathId = useId();
   const { base, quote, order0: buyOrder, order1: sellOrder } = strategy;
   const { marketPrice: currentPrice } = useMarketPrice({ base, quote });
+  const fullRange = isFullRangeStrategy(buyOrder, sellOrder);
+
   const buy = {
     from: Number(sanitizeNumber(buyOrder.startRate)),
     to: Number(sanitizeNumber(buyOrder.endRate)),
-    marginalPrice: Number(sanitizeNumber(buyOrder.marginalRate)),
+    marginalPrice: fullRange
+      ? Number(sanitizeNumber(buyOrder.endRate))
+      : Number(sanitizeNumber(buyOrder.marginalRate)),
   };
   const sell = {
     from: Number(sanitizeNumber(sellOrder.startRate)),
     to: Number(sanitizeNumber(sellOrder.endRate)),
-    marginalPrice: Number(sanitizeNumber(sellOrder.marginalRate)),
+    marginalPrice: fullRange
+      ? Number(sanitizeNumber(sellOrder.startRate))
+      : Number(sanitizeNumber(sellOrder.marginalRate)),
   };
 
   const buyOrderExists = buy.from !== 0 && buy.to !== 0;
@@ -76,7 +86,6 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
       ? Math.min(buy.from, sell.from)
       : Math.max(buy.from, sell.from);
 
-  const fullRange = isFullRange(min, max);
   const center = min && max ? (min + max) / 2 : currentPrice ?? 1000;
   const delta = min !== max ? (max - min) / 2 : center / 30;
 
@@ -456,6 +465,33 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
       };
     }
   };
+
+  if (position !== currentPrice) {
+    return (
+      <g className={style.currentPrice}>
+        <rect
+          fill="#404040"
+          x={price}
+          y="12"
+          width={inRangeWidth}
+          height="22"
+          rx="4"
+          style={{
+            transform: translateRect,
+          }}
+        />
+        <text
+          fill="white"
+          y="18"
+          dominantBaseline="hanging"
+          fontSize={fontSize}
+          {...getTextAttr()}
+        >
+          {formattedPrice}
+        </text>
+      </g>
+    );
+  }
 
   return (
     <g className={style.currentPrice}>
