@@ -1,35 +1,30 @@
 import { Page } from 'components/common/page';
-import { Outlet, Navigate, useNavigate } from 'libs/routing';
-import {
-  ExplorerSearch,
-  useExplorer,
-  useExplorerParams,
-} from 'components/explorer';
+import { Outlet, useNavigate, useParams } from 'libs/routing';
+
 import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { ExplorerHeader } from 'components/explorer/ExplorerHeader';
 import { useEffect, useState } from 'react';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { lsService } from 'services/localeStorage';
+import { ExplorerSearch } from 'components/explorer/ExplorerSearch';
+import { useExplorer } from 'components/explorer/useExplorer';
 import config from 'config';
 
-const url = '/explore/$type';
+const url = '/explore/$slug';
 export const ExplorerPage = () => {
-  const { slug, type } = useExplorerParams(url);
+  const { slug } = useParams({ from: url });
   const navigate = useNavigate({ from: url });
 
   useEffect(() => {
-    if (slug && type === 'token-pair') {
+    if (slug) {
       // Set last visited pair
       const [base, quote] = slug.split('_');
       if (base && quote) lsService.setItem('tradePair', [base, quote]);
     }
-  }, [slug, navigate, type]);
+  }, [slug, navigate]);
 
   const query = useExplorer();
-  if (type !== 'wallet' && type !== 'token-pair') {
-    return <Navigate to="/explore/$type" params={{ type: 'token-pair' }} />;
-  }
 
   return (
     <Page hideTitle>
@@ -48,19 +43,12 @@ export const ExplorerPage = () => {
 
 const ExplorerEvents = () => {
   const [mounted, setMounted] = useState(false);
-  const { slug, type } = useExplorerParams(url);
+  const { slug } = useParams({ from: url });
   const { filteredStrategies, isPending, filter, sort } = useStrategyCtx();
-
-  useEffect(() => {
-    if (!mounted) return;
-    explorerEvents.typeChange(type);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type]);
 
   useEffect(() => {
     if (!slug || isPending) return;
     explorerEvents.search({
-      type,
       slug,
       strategies: filteredStrategies,
       filter,
@@ -72,7 +60,6 @@ const ExplorerEvents = () => {
   useEffect(() => {
     if (!mounted || !slug) return;
     explorerEvents.resultsFilter({
-      type,
       slug,
       strategies: filteredStrategies,
       filter,
@@ -84,7 +71,6 @@ const ExplorerEvents = () => {
   useEffect(() => {
     if (!mounted || !slug) return;
     explorerEvents.resultsSort({
-      type,
       slug,
       strategies: filteredStrategies,
       filter,

@@ -1,8 +1,6 @@
 import { createRoute, redirect } from '@tanstack/react-router';
-import { ExplorerType } from 'components/explorer/utils';
 import { rootRoute } from 'libs/routing/routes/root';
 import { ExplorerPage } from 'pages/explorer';
-import { ExplorerTypePage } from 'pages/explorer/type';
 import { ExplorerActivityPage } from 'pages/explorer/type/activity';
 import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
 import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
@@ -12,11 +10,21 @@ import { getLastVisitedPair, searchValidator } from '../utils';
 import { toPairSlug } from 'utils/pairSearch';
 import * as v from 'valibot';
 
-// Used for redirecting old explorer route to new explorer route
-// TODO: remove this on May 2024
-export const oldExplorerLayout = createRoute({
+export const oldTradePairExplorer = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/explorer/*',
+  path: '/explore/token-pair/*',
+  beforeLoad: ({ params }) => {
+    const allParams = (params as any)['*'];
+    redirect({
+      to: `/explore/${allParams}`,
+      throw: true,
+      replace: true,
+    } as any);
+  },
+});
+export const oldWalletExplorer = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/explore/wallet/*',
   beforeLoad: ({ params }) => {
     const allParams = (params as any)['*'];
     redirect({
@@ -35,32 +43,13 @@ export const explorerLayout = createRoute({
 export const explorerRedirect = createRoute({
   getParentRoute: () => explorerLayout,
   path: '/',
-  beforeLoad: () => {
-    const { base, quote } = getLastVisitedPair();
-    const slug = toPairSlug({ address: base }, { address: quote });
-    redirect({
-      to: '/explore/$type/$slug',
-      params: { type: 'token-pair', slug },
-      throw: true,
-      replace: true,
-    });
-  },
-});
-
-export const explorerPage = createRoute({
-  getParentRoute: () => explorerLayout,
-  path: '$type',
-  component: ExplorerPage,
-  parseParams: (params: Record<string, string>) => {
-    return { type: params.type as ExplorerType };
-  },
   beforeLoad: ({ location }) => {
-    if (location.pathname.endsWith('token-pair')) {
+    if (location.pathname === '/explore' || location.pathname === '/explore/') {
       const { base, quote } = getLastVisitedPair();
       const slug = toPairSlug({ address: base }, { address: quote });
       redirect({
-        to: '/explore/$type/$slug',
-        params: { type: 'token-pair', slug },
+        to: '/explore/$slug',
+        params: { slug },
         throw: true,
         replace: true,
       });
@@ -68,15 +57,10 @@ export const explorerPage = createRoute({
   },
 });
 
-export const explorerTypePage = createRoute({
-  getParentRoute: () => explorerPage,
-  path: '/',
-  component: ExplorerTypePage,
-});
-
 export const explorerResultLayout = createRoute({
-  getParentRoute: () => explorerPage,
+  getParentRoute: () => explorerLayout,
   path: '$slug',
+  component: ExplorerPage,
 });
 
 export const explorerOverviewPage = createRoute({

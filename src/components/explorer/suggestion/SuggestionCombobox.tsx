@@ -1,5 +1,8 @@
 import {
   ChangeEvent,
+  Dispatch,
+  FC,
+  SetStateAction,
   useEffect,
   useId,
   useMemo,
@@ -7,7 +10,7 @@ import {
   useState,
 } from 'react';
 import {
-  selectCurrentOption,
+  getSelectedOption,
   selectFirstOption,
   selectLastOption,
   selectNextSibling,
@@ -16,34 +19,43 @@ import {
 import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
-import { searchPairTrade, toPairName } from 'utils/pairSearch';
+import { searchPairTrade, searchTokens, toPairName } from 'utils/pairSearch';
 import { useParams } from '@tanstack/react-router';
 import { usePairs } from 'hooks/usePairs';
 import { cn } from 'utils/helpers';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { Token } from 'libs/tokens';
-import style from './index.module.css';
 import { useTokens } from 'hooks/useTokens';
+import { useEnsName } from 'wagmi';
+import { getAddress } from 'ethers/lib/utils';
+import style from './index.module.css';
+
+interface Props {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
 
 const displaySlug = (
   slug: string,
   pairMap: Map<string, TradePair>,
   tokensMap: Map<string, Token>
 ) => {
-  if (slug.split('_').length === 1) {
+  if (tokensMap.has(slug)) {
     return tokensMap.get(slug)?.symbol ?? '';
-  } else {
-    const pair = pairMap.get(slug);
-    if (!pair) return '';
+  } else if (pairMap.has(slug)) {
+    const pair = pairMap.get(slug)!;
     return toPairName(pair.baseToken, pair.quoteToken);
+  } else {
+    return slug;
   }
 };
 
-const includeToken = ({ address, symbol }: Token, search: string) => {
-  return (
-    address.toLowerCase().includes(search) ||
-    symbol.toLowerCase().includes(search)
-  );
+const tryEthAddress = (slug: string) => {
+  try {
+    return getAddress(slug) as `0x${string}`;
+  } catch {
+    return;
+  }
 };
 
 const tabs = {
@@ -51,32 +63,37 @@ const tabs = {
   pair: 'Pairs',
 };
 type FocusTab = keyof typeof tabs;
-export const SuggestionCombobox = () => {
+export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   const { tokensMap } = useTokens();
   const { map: pairMap, names: namesMap } = usePairs();
   const listboxId = useId();
   const inputId = useId();
   const root = useRef<HTMLDivElement>(null);
-  const params = useParams({ from: '/explore/$type/$slug' });
-  const [open, setOpen] = useState(false);
+  const params = useParams({ from: '/explore/$slug' });
+  const ensName = useEnsName({
+    address: tryEthAddress(params.slug),
+  });
+
   const [search, setSearch] = useState(
     displaySlug(params.slug, pairMap, tokensMap)
   );
   const [focusTab, setFocusTab] = useState<FocusTab>('token');
 
   useEffect(() => {
-    setSearch(displaySlug(params.slug, pairMap, tokensMap));
+    if (ensName.data) setSearch(ensName.data);
+  }, [ensName.data]);
+
+  useEffect(() => {
+    const display = displaySlug(params.slug, pairMap, tokensMap);
+    if (display !== params.slug) setSearch(display);
   }, [tokensMap, pairMap, params.slug, setSearch]);
 
-  const filteredPairs = searchPairTrade(pairMap, namesMap, search);
+  const filteredPairs = useMemo(
+    () => searchPairTrade(pairMap, namesMap, search),
+    [namesMap, pairMap, search]
+  );
   const filteredTokens = useMemo(() => {
-    const tokens: Record<string, Token> = {};
-    const value = search.toLowerCase();
-    for (const { baseToken: base, quoteToken: quote } of pairMap.values()) {
-      if (includeToken(base, value)) tokens[base.address] ||= base;
-      if (includeToken(quote, value)) tokens[quote.address] ||= quote;
-    }
-    return Object.values(tokens);
+    return searchTokens(pairMap, search);
   }, [pairMap, search]);
 
   const changeTab = (e: ChangeEvent<HTMLInputElement>, tab: FocusTab) => {
@@ -143,7 +160,11 @@ export const SuggestionCombobox = () => {
       if (!open) return setOpen(true);
 
       if (e.key === 'Escape') return setOpen(false);
-      if (e.key === 'Enter') return selectCurrentOption(listbox);
+      if (e.key === 'Enter') {
+        const option = getSelectedOption(listbox);
+        if (option) e.preventDefault();
+        return option?.click();
+      }
 
       if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
       e.preventDefault();
@@ -173,7 +194,7 @@ export const SuggestionCombobox = () => {
         name="search"
         type="search"
         className={cn(
-          'w-full flex-grow bg-transparent outline-none',
+          'flex-grow bg-transparent outline-none',
           style.inputSearch
         )}
         role="combobox"
@@ -181,14 +202,14 @@ export const SuggestionCombobox = () => {
         aria-controls={listboxId}
         aria-autocomplete="both"
         aria-expanded={open}
-        placeholder="Search by token or token pair"
-        aria-label="Search by token or token pair"
+        placeholder="Search by Token / Pair / Wallet Address"
+        aria-label="Search by Token / Pair / Wallet Address"
         value={search}
         onInput={onInput}
         onFocus={() => setOpen(true)}
       />
       <button type="reset" aria-label="Clear" onClick={() => setSearch('')}>
-        <IconClose className="w-12" />
+        <IconClose className="size-12 opacity-60" />
       </button>
       <div
         role="dialog"
@@ -228,7 +249,7 @@ export const SuggestionCombobox = () => {
           </div>
         </header>
         <SuggestionList {...suggestionListProps} />
-        <SuggestionEmpty />
+        <SuggestionEmpty search={search} />
       </div>
     </div>
   );

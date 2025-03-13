@@ -3,13 +3,15 @@ import {
   useGetUserStrategies,
   useTokenStrategies,
 } from 'libs/queries';
-import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
 import { useMemo } from 'react';
+import { useParams } from '@tanstack/react-router';
 
 export const useExplorer = () => {
-  const { slug, type } = useExplorerParams('/explore/$type');
+  const { slug } = useParams({ from: '/explore/$slug' });
   const pairs = usePairs();
+
+  const type = pairs.getType(slug);
 
   // SINGLE TOKEN
   const singleToken = (() => {

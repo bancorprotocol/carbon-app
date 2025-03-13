@@ -1,18 +1,38 @@
 import { useGetTradePairsData } from 'libs/queries';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { createPairMaps } from 'utils/pairSearch';
 
 export type PairStore = ReturnType<typeof usePairs>;
 
 export const usePairs = () => {
   const { data, isError, isPending } = useGetTradePairsData();
-  const { pairMap, nameMap } = useMemo(() => createPairMaps(data), [data]);
+  const tokens = useMemo(() => {
+    const set = new Set<string>();
+    if (!data) return set;
+    for (const { baseToken, quoteToken } of data) {
+      set.add(baseToken.address.toLowerCase());
+      set.add(quoteToken.address.toLowerCase());
+    }
+    return set;
+  }, [data]);
+
+  const maps = useMemo(() => createPairMaps(data), [data]);
+
+  const getType = useCallback(
+    (slug: string) => {
+      if (maps.pairMap.has(slug)) return 'pair';
+      if (tokens.has(slug)) return 'token';
+      return 'wallet';
+    },
+    [maps.pairMap, tokens]
+  );
 
   return {
-    map: pairMap,
-    names: nameMap,
+    map: maps.pairMap,
+    names: maps.nameMap,
     isError,
     isPending,
+    getType,
   };
 };
 
@@ -21,4 +41,5 @@ export const defaultPairs: PairStore = {
   names: new Map(),
   isError: false,
   isPending: false,
+  getType: () => 'pair',
 };

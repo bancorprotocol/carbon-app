@@ -8,7 +8,7 @@ import { lsService } from 'services/localeStorage';
 export type StrategyLayout = 'grid' | 'table';
 
 const urls = {
-  explorer: '/explore/$type/$slug/' as const,
+  explorer: '/explore/$slug/' as const,
   myStrategy: '/my-strategy-layout/' as const,
 };
 interface Props {

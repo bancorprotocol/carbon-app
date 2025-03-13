@@ -1,6 +1,7 @@
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { exist } from './helpers/operators';
 import { includesGasToken, isDifferentGasToken } from './tokens';
+import { Token } from 'libs/tokens';
 
 /**
  * Remove " ", "-", "/" from a string
@@ -53,18 +54,21 @@ export const createPairMaps = (
   pairs: TradePair[] = [],
   transformSlugExp: RegExp = pairSearchExp
 ) => {
+  const tokens = new Set<string>();
   const pairMap = new Map<string, TradePair>();
   const nameMap = new Map<string, string>();
   for (const pair of pairs) {
     const { baseToken: base, quoteToken: quote } = pair;
     const slug = toPairSlug(base, quote);
+    tokens.add(base.address.toLowerCase());
+    tokens.add(quote.address.toLowerCase());
     pairMap.set(slug, pair);
     const displayName = toPairName(base, quote);
     const nameRaw = fromPairSearch(displayName, transformSlugExp);
     const name = replaceSpecialCharacters(nameRaw);
     nameMap.set(slug, name);
   }
-  return { pairMap, nameMap };
+  return { pairMap, nameMap, tokens };
 };
 
 export const replaceSpecialCharacters = (value: string) => {
@@ -130,4 +134,25 @@ export const searchPairTrade = (
   if (!search && !isDifferentGasToken) return Array.from(pairMap.values());
   const result = searchPairKeys(nameMap, search, transformSlugExp);
   return result.map(({ key }) => pairMap.get(key)).filter(exist);
+};
+
+const includeToken = ({ address, symbol }: Token, search: string) => {
+  return (
+    address.toLowerCase().includes(search) ||
+    symbol.toLowerCase().includes(search)
+  );
+};
+
+/** Filter and search Tokens from the list of pairs based on a search input */
+export const searchTokens = (
+  pairMap: Map<string, TradePair>,
+  search: string
+) => {
+  const tokens: Record<string, Token> = {};
+  const value = search.toLowerCase();
+  for (const { baseToken: base, quoteToken: quote } of pairMap.values()) {
+    if (includeToken(base, value)) tokens[base.address] ||= base;
+    if (includeToken(quote, value)) tokens[quote.address] ||= quote;
+  }
+  return Object.values(tokens);
 };

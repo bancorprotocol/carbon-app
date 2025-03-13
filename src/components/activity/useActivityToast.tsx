@@ -42,8 +42,8 @@ export const useActivityToast = () => {
         toaster.addToast((id) => (
           <BaseToast id={id}>
             <Link
-              to="/explore/$type/$slug/activity"
-              params={{ type: 'token-pair', slug: toPairSlug(base, quote) }}
+              to="/explore/$slug/activity"
+              params={{ slug: toPairSlug(base, quote) }}
               className="flex flex-1 gap-4 p-16"
               onClick={() => toaster.removeToast(id)}
             >

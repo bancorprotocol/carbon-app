@@ -142,9 +142,8 @@ export const ExplorerHeader = () => {
               <tr key={pairAddress}>
                 <td>
                   <Link
-                    to="/explore/$type/$slug"
+                    to="/explore/$slug"
                     params={{
-                      type: 'token-pair',
                       slug: toPairSlug(base, quote),
                     }}
                     className="block w-full"
@@ -159,9 +158,8 @@ export const ExplorerHeader = () => {
                 </td>
                 <td className="py-8 text-end">
                   <Link
-                    to="/explore/$type/$slug"
+                    to="/explore/$slug"
                     params={{
-                      type: 'token-pair',
                       slug: toPairSlug(base, quote),
                     }}
                     className="block w-full"

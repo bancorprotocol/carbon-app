@@ -43,13 +43,13 @@ const animateLeaving = async () => {
 export const SuggestionList: FC<Props> = (props) => {
   const { listboxId, filteredPairs, filteredTokens, setOpen } = props;
   const nav = useNavigate();
-  const { slug } = useParams({ from: '/explore/$type/$slug' });
+  const { slug } = useParams({ from: '/explore/$slug' });
   const navigate = async (nextSlug: string) => {
     setOpen(false);
     if (slug === nextSlug) return;
     const params = { type: 'token-pair' as const, slug: nextSlug };
     await animateLeaving();
-    nav({ to: '/explore/$type/$slug', params });
+    nav({ to: '/explore/$slug', params });
   };
 
   const [maxTokens, setMaxTokens] = useState(5);
