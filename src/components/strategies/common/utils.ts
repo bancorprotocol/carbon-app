@@ -34,8 +34,25 @@ export const isFullRangeStrategy = (
   const max = 'max' in order1 ? order1.max : order1.endRate;
   return isFullRange(min, max);
 };
+
+/** Check if an existing strategy is full range. For create & update use isFullRangeCreation instead to check the marketprice */
 export const isFullRange = (min: string | number, max: string | number) => {
-  return new SafeDecimal(max).div(min).gte(900_000);
+  const range = new SafeDecimal(max).div(min);
+  // These values are based on the 1000 factor we use to create full range
+  return range.gte(999_000) && range.lte(1_000_100);
+};
+
+export const isFullRangeCreation = (
+  min: string | number,
+  max: string | number,
+  marketPrice?: string | number
+) => {
+  if (!marketPrice) return false;
+  const minRatio = new SafeDecimal(marketPrice).div(min);
+  if (minRatio.lt(990) || minRatio.gt(1010)) return false;
+  const maxRatio = new SafeDecimal(max).div(marketPrice);
+  if (maxRatio.lt(990) || maxRatio.gt(1010)) return false;
+  return true;
 };
 
 export const isDisposableStrategy = (strategy: BaseStrategy) => {

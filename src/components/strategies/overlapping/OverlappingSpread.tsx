@@ -1,17 +1,11 @@
-import {
-  useRef,
-  FC,
-  KeyboardEvent,
-  useState,
-  FocusEvent,
-  ChangeEvent,
-} from 'react';
+import { useRef, FC, KeyboardEvent, FocusEvent, ChangeEvent } from 'react';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import {
   defaultSpread,
   getMaxSpread,
 } from 'components/strategies/overlapping/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
+import { useStore } from 'store';
 import styles from './OverlappingSpread.module.css';
 
 interface Props {
@@ -23,7 +17,7 @@ interface Props {
 }
 
 const getWarning = (maxSpread: number) => {
-  return `Given price range, max fee tier cannot exceed ${maxSpread}%`;
+  return `⚠️ Given price range, max fee tier cannot exceed ${maxSpread}%`;
 };
 
 const round = (value: number) => Math.round(value * 100) / 100;
@@ -35,19 +29,21 @@ export const OverlappingSpread: FC<Props> = (props) => {
   const tooLow = +spread <= 0;
   const tooHigh = +spread > 100;
   const hasError = tooLow || tooHigh;
-  const [warning, setWarning] = useState('');
   const isCustomSpread = spread && !inOptions;
+  const { toaster } = useStore();
 
   const selectSpread = (value: string) => {
     const input = document.getElementById('spread-custom') as HTMLInputElement;
     const maxSpread = round(getMaxSpread(buyMin, sellMax));
     if (+value > maxSpread) {
-      setWarning(getWarning(maxSpread));
+      toaster.addToast(getWarning(maxSpread), {
+        color: 'warning',
+        duration: 3000,
+      });
       setSpread(maxSpread.toString());
       input.value = maxSpread.toFixed(2);
       input.focus();
     } else {
-      setWarning('');
       setSpread(sanitizeNumber(value));
     }
   };
@@ -71,7 +67,6 @@ export const OverlappingSpread: FC<Props> = (props) => {
 
   const onCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value) {
-      setWarning('');
       return setSpread(defaultSpread.toString());
     }
     selectSpread(e.currentTarget.value);
@@ -149,9 +144,6 @@ export const OverlappingSpread: FC<Props> = (props) => {
           <span className={styles.suffix}>%</span>
         </div>
       </div>
-      {warning && spread && (
-        <Warning htmlFor="spread-custom">{warning}</Warning>
-      )}
       {tooLow && (
         <Warning htmlFor="spread-custom" isError>
           The fee tier should be above 0%

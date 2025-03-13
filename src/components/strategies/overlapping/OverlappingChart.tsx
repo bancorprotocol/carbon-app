@@ -18,7 +18,7 @@ import { getSignedMarketPricePercentage } from '../marketPriceIndication/utils';
 import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { clamp, getMax, getMin } from 'utils/helpers/operators';
-import { isFullRange } from '../common/utils';
+import { isFullRangeCreation } from '../common/utils';
 import styles from './OverlappingChart.module.css';
 
 type Scale = ReturnType<typeof getScale>;
@@ -247,7 +247,7 @@ export const OverlappingChart: FC<Props> = (props) => {
   const highest = getMax(order1.max, marketPrice ?? order1.max);
   const prices = getPrices(lowest, highest, box.width);
   const { left, mean, right } = getBoundaries(lowest, highest);
-  const fullRange = isFullRange(min, max);
+  const fullRange = isFullRangeCreation(min, max, marketPrice);
   const marketPosition = fullRange ? mean : marketPrice;
   const disabled = props.disabled || fullRange;
 
@@ -595,7 +595,7 @@ export const OverlappingChart: FC<Props> = (props) => {
               y2={y(bottom + 3)}
             />
           ))}
-          {isFullRange(min, max) && (
+          {fullRange && (
             <>
               <text
                 x={x(min)}
@@ -621,7 +621,7 @@ export const OverlappingChart: FC<Props> = (props) => {
               </text>
             </>
           )}
-          {!isFullRange(min, max) &&
+          {!fullRange &&
             prices.map((price, i) => (
               <text
                 key={`${price}-${i}`}

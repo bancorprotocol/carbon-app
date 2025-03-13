@@ -2,7 +2,7 @@ import { InputRange, InputRangeProps } from '../common/InputRange';
 import { ChangeEvent, FC, useId, useMemo } from 'react';
 import { useOverlappingMarketPrice } from '../UserMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
-import { isFullRange } from '../common/utils';
+import { isFullRangeCreation } from '../common/utils';
 import { defaultSpread, getMaxSpread } from './utils';
 import style from './OverlappingPriceRange.module.css';
 
@@ -43,7 +43,7 @@ export const OverlappingPriceRange: FC<Props> = (props) => {
 
   const range = useMemo(() => {
     if (!marketPrice) return;
-    if (isFullRange(min, max)) {
+    if (isFullRangeCreation(min, max, marketPrice)) {
       return Infinity;
     } else {
       const low = new SafeDecimal(min).div(marketPrice).sub(1).abs();
