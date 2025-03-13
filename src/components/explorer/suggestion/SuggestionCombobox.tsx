@@ -26,6 +26,8 @@ import { cn } from 'utils/helpers';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
+import { useEnsName } from 'wagmi';
+import { getAddress } from 'ethers/lib/utils';
 import style from './index.module.css';
 
 interface Props {
@@ -48,6 +50,14 @@ const displaySlug = (
   }
 };
 
+const tryEthAddress = (slug: string) => {
+  try {
+    return getAddress(slug) as `0x${string}`;
+  } catch {
+    return;
+  }
+};
+
 const tabs = {
   token: 'Tokens',
   pair: 'Pairs',
@@ -60,6 +70,9 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   const inputId = useId();
   const root = useRef<HTMLDivElement>(null);
   const params = useParams({ from: '/explore/$slug' });
+  const ensName = useEnsName({
+    address: tryEthAddress(params.slug),
+  });
 
   const [search, setSearch] = useState(
     displaySlug(params.slug, pairMap, tokensMap)
@@ -67,7 +80,12 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   const [focusTab, setFocusTab] = useState<FocusTab>('token');
 
   useEffect(() => {
-    setSearch(displaySlug(params.slug, pairMap, tokensMap));
+    if (ensName.data) setSearch(ensName.data);
+  }, [ensName.data]);
+
+  useEffect(() => {
+    const display = displaySlug(params.slug, pairMap, tokensMap);
+    if (display !== params.slug) setSearch(display);
   }, [tokensMap, pairMap, params.slug, setSearch]);
 
   const filteredPairs = useMemo(

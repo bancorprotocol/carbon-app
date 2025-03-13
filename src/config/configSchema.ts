@@ -83,12 +83,22 @@ export const AppConfigSchema = v.object({
     }),
   }),
   utils: v.union([
-    v.object({
-      multicall3: v.object({
-        address: AddressSchema,
-        blockCreated: v.optional(v.number()),
-      }),
-    }),
+    v.partial(
+      v.object({
+        multicall3: v.object({
+          address: AddressSchema,
+          blockCreated: v.optional(v.number()),
+        }),
+        ensUniversalResolver: v.object({
+          address: AddressSchema,
+          blockCreated: v.optional(v.number()),
+        }),
+        ensRegistry: v.object({
+          address: AddressSchema,
+          blockCreated: v.optional(v.number()),
+        }),
+      })
+    ),
     v.record(
       v.string(),
       v.object({
