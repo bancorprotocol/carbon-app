@@ -11,11 +11,11 @@ import { OverlappingAnchor } from 'components/strategies/overlapping/Overlapping
 import { Token } from 'libs/tokens';
 import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
 import { useSearch } from '@tanstack/react-router';
-import { InputRange } from '../common/InputRange';
 import { OverlappingOrder } from 'components/strategies/common/types';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
 import { SetOverlapping } from 'libs/routing/routes/trade';
+import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
 
 interface Props {
   base: Token;
@@ -102,7 +102,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
             iconClassName="size-18 text-white/60"
           />
         </header>
-        <InputRange
+        <OverlappingPriceRange
           base={base}
           quote={quote}
           min={order0.min}
@@ -111,6 +111,8 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           setMax={setMax}
           minLabel="Min Buy Price"
           maxLabel="Max Sell Price"
+          spread={spread}
+          setSpread={setSpread}
           warnings={[priceWarning]}
           isOverlapping
           required
@@ -127,8 +129,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
         <OverlappingSpread
           buyMin={Number(order0.min)}
           sellMax={Number(order1.max)}
-          defaultValue={0.05}
-          options={[0.01, 0.05, 0.1]}
+          options={['0.01', '0.05', '0.1']}
           spread={spread}
           setSpread={setSpread}
         />

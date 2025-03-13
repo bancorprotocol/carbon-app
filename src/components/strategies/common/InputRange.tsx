@@ -14,12 +14,14 @@ import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice
 import { isTouchedZero } from 'components/strategies/common/utils';
 import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
 
-type InputRangeProps = {
+export interface InputRangeProps {
   min: string;
   minLabel?: string;
+  minId?: string;
   setMin: (value: string) => void;
   max: string;
   maxLabel?: string;
+  maxId?: string;
   setMax: (value: string) => void;
   quote: Token;
   base: Token;
@@ -28,13 +30,15 @@ type InputRangeProps = {
   warnings?: (string | undefined)[];
   isOverlapping?: boolean;
   required?: boolean;
-};
+}
 
 export const InputRange: FC<InputRangeProps> = ({
   min,
   minLabel = 'Min',
+  minId,
   setMin,
   max,
+  maxId,
   maxLabel = 'Max',
   setMax,
   quote,
@@ -48,8 +52,10 @@ export const InputRange: FC<InputRangeProps> = ({
   const [localMin, setLocalMin] = useState(roundSearchParam(min));
   const [localMax, setLocalMax] = useState(roundSearchParam(max));
   const marketPrice = useOverlappingMarketPrice({ base, quote });
-  const inputMinId = useId();
-  const inputMaxId = useId();
+  const _inputMinId = useId();
+  const _inputMaxId = useId();
+  const inputMinId = minId || _inputMinId;
+  const inputMaxId = maxId || _inputMaxId;
 
   // Errors
   const minError = isTouchedZero(min) && 'Min must be greater than 0';

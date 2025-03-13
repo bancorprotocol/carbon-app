@@ -15,6 +15,8 @@ export interface OverlappingSearch {
   spread?: string;
 }
 
+export const defaultSpread = '0.05';
+
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
 };
