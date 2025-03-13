@@ -11,7 +11,6 @@ import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
-  isFullRange,
   isFullRangeStrategy,
   isZero,
 } from 'components/strategies/common/utils';
@@ -64,14 +63,16 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
     from: Number(sanitizeNumber(buyOrder.startRate)),
     to: Number(sanitizeNumber(buyOrder.endRate)),
     marginalPrice: fullRange
-      ? Number(sanitizeNumber(buyOrder.endRate))
+      ? Number(sanitizeNumber(sellOrder.endRate))
       : Number(sanitizeNumber(buyOrder.marginalRate)),
   };
   const sell = {
     from: Number(sanitizeNumber(sellOrder.startRate)),
-    to: Number(sanitizeNumber(sellOrder.endRate)),
+    to: fullRange
+      ? Number(sanitizeNumber(buyOrder.endRate))
+      : Number(sanitizeNumber(sellOrder.endRate)),
     marginalPrice: fullRange
-      ? Number(sanitizeNumber(sellOrder.startRate))
+      ? Number(sanitizeNumber(buyOrder.startRate))
       : Number(sanitizeNumber(sellOrder.marginalRate)),
   };
 
@@ -466,33 +467,6 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
     }
   };
 
-  if (position !== currentPrice) {
-    return (
-      <g className={style.currentPrice}>
-        <rect
-          fill="#404040"
-          x={price}
-          y="12"
-          width={inRangeWidth}
-          height="22"
-          rx="4"
-          style={{
-            transform: translateRect,
-          }}
-        />
-        <text
-          fill="white"
-          y="18"
-          dominantBaseline="hanging"
-          fontSize={fontSize}
-          {...getTextAttr()}
-        >
-          {formattedPrice}
-        </text>
-      </g>
-    );
-  }
-
   return (
     <g className={style.currentPrice}>
       <path
@@ -612,7 +586,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
     round: !smallRange,
     decimals: smallRange ? 6 : undefined,
   };
-  const fullRange = isFullRange(startRate, endRate);
+  const fullRange = isFullRangeStrategy(strategy.order0, strategy.order1);
   const startPrice = fullRange ? '0' : prettifyNumber(startRate, priceOption);
   const endPrice = fullRange ? '∞' : prettifyNumber(endRate, priceOption);
   const marginalPrice = prettifyNumber(marginalRate, priceOption);

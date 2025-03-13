@@ -35,7 +35,7 @@ export const isFullRangeStrategy = (
   return isFullRange(min, max);
 };
 export const isFullRange = (min: string | number, max: string | number) => {
-  return new SafeDecimal(max).div(min).gte(999_000);
+  return new SafeDecimal(max).div(min).gte(900_000);
 };
 
 export const isDisposableStrategy = (strategy: BaseStrategy) => {

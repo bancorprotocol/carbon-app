@@ -186,6 +186,7 @@ const getBoundaries = (lowest: number, highest: number) => {
   const mean = (highest + lowest) / 2;
   return {
     left: mean - delta * 1.2,
+    mean,
     right: mean + delta * 1.2,
   };
 };
@@ -245,8 +246,9 @@ export const OverlappingChart: FC<Props> = (props) => {
   const lowest = getMin(order0.min, marketPrice ?? order0.min);
   const highest = getMax(order1.max, marketPrice ?? order1.max);
   const prices = getPrices(lowest, highest, box.width);
-  const { left, right } = getBoundaries(lowest, highest);
+  const { left, mean, right } = getBoundaries(lowest, highest);
   const fullRange = isFullRange(min, max);
+  const marketPosition = fullRange ? mean : marketPrice;
   const disabled = props.disabled || fullRange;
 
   const scaleConfig = {
@@ -637,7 +639,10 @@ export const OverlappingChart: FC<Props> = (props) => {
         </g>
 
         {marketPrice && (
-          <g id="market-price" transform={`translate(${x(marketPrice)}, 0)`}>
+          <g
+            id="market-price"
+            transform={`translate(${x(marketPosition!)}, 0)`}
+          >
             <line
               stroke={outline}
               x1={0}
