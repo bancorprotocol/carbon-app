@@ -184,8 +184,8 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
         aria-controls={listboxId}
         aria-autocomplete="both"
         aria-expanded={open}
-        placeholder="Search by token or token pair"
-        aria-label="Search by token or token pair"
+        placeholder="Search by Token / Pair / Wallet Address"
+        aria-label="Search by Token / Pair / Wallet Address"
         value={search}
         onInput={onInput}
         onFocus={() => setOpen(true)}
