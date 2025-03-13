@@ -25,6 +25,7 @@
   place-items: center;
   isolation: isolate;
   transition: color 0.2s 0.1s var(--ease-out);
+  overflow: hidden;
 }
 
 .search:active button[type="submit"] svg {
@@ -46,13 +47,14 @@
 .search:active button[type="submit"] svg {
   transform: scale(0.8);
 }
-
+.search button[type="submit"]:hover ,
 .search:focus-within button[type="submit"] {
   color: black;
 }
 .search:focus-within button[type="submit"] svg {
   animation: enter 0.6s var(--ease-out);
 }
+.search button[type="submit"]:hover::before,
 .search:focus-within button[type="submit"]::before {
   transform: scale(1);
   opacity: 1;

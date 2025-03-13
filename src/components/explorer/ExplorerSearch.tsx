@@ -2,7 +2,7 @@ import { FC, FormEvent, memo, useEffect, useState } from 'react';
 import ExplorerSearchSuggestions from 'components/explorer/suggestion';
 import { useNavigate, useParams } from 'libs/routing';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
-import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron-right.svg';
 import { searchPairTrade, searchTokens, toPairSlug } from 'utils/pairSearch';
 import { usePairs } from 'hooks/usePairs';
 import { getEnsAddressIfAny, useGetAddressFromEns } from 'libs/queries';
@@ -35,18 +35,17 @@ export const _ExplorerSearch: FC = () => {
     if (value.length === 0) return;
     let slug = value;
     const filteredPairs = searchPairTrade(pairs.map, pairs.names, value);
-    const filteredTokens = searchTokens(pairs.map, value);
     if (filteredPairs[0]) {
       const { baseToken, quoteToken } = filteredPairs[0];
       slug = toPairSlug(baseToken, quoteToken);
     }
+    const filteredTokens = searchTokens(pairs.map, value);
     if (filteredTokens[0]) {
       slug = filteredTokens[0].address.toLowerCase();
     }
     if (value === slug) {
       slug = await getEnsAddressIfAny(provider, value);
     }
-    console.log({ value, slug, filteredPairs, filteredTokens });
     navigate({
       to: '/explore/$slug',
       params: { slug },
@@ -82,7 +81,7 @@ export const _ExplorerSearch: FC = () => {
           <ExplorerSearchSuggestions open={open} setOpen={setOpen} />
         </div>
         <button type="submit">
-          <IconArrow className="size-14" />
+          <IconChevron className="size-24" />
         </button>
       </form>
     </div>
