@@ -172,7 +172,6 @@ export const getBounds = (
       sell: { min: order1.min, max: order1.max },
     };
   } else if (isFullRangeStrategy(order0, order1)) {
-    console.log('IS FULL RANGE');
     return {
       buy: { min: '', max: '' },
       sell: { min: '', max: '' },

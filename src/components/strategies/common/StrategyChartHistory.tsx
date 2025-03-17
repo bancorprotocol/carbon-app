@@ -131,6 +131,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
       />
     );
   }
+
   return (
     <D3PriceHistory
       readonly={props.readonly || isFullRangeStrategy(order0, order1)}

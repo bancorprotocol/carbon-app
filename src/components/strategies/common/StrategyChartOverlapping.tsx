@@ -14,6 +14,8 @@ import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { Token } from 'libs/tokens';
 import { StrategyChartLegend } from './StrategyChartLegend';
 import { defaultSpread } from '../overlapping/utils';
+import { isFullRangeStrategy } from './utils';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   marketPrice?: string;
@@ -28,6 +30,19 @@ interface Props {
 export const StrategyChartOverlapping: FC<Props> = (props) => {
   const { base, quote, marketPrice, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
+
+  const resetMarketPrice = (marketPrice: string) => {
+    if (isFullRangeStrategy(props.order0, props.order1)) {
+      set({
+        marketPrice,
+        min: new SafeDecimal(marketPrice).div(1000).toString(),
+        max: new SafeDecimal(marketPrice).mul(1000).toString(),
+      });
+    } else {
+      set({ marketPrice });
+    }
+  };
+
   return (
     <section
       aria-labelledby="price-chart-title"
@@ -58,7 +73,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
           base={base}
           quote={quote}
           marketPrice={marketPrice}
-          setMarketPrice={(price) => set({ marketPrice: price })}
+          setMarketPrice={resetMarketPrice}
         />
       </header>
       <OverlappingChartContent {...props} />
