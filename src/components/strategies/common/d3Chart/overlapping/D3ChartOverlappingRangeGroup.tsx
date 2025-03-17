@@ -5,7 +5,7 @@ import {
   getSelector,
   useSelectable,
 } from 'components/strategies/common/d3Chart/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useD3ChartCtx } from '../D3ChartContext';
 
 interface Props {
@@ -29,28 +29,30 @@ export const D3ChartOverlappingRangeGroup = ({
   const [isDragging, setIsDragging] = useState(false);
   const isSelectable = useSelectable(selector);
 
-  const handleDrag = drag()
-    .subject(() => {
-      const y = Number(getSelector(selectorRectSell).attr('y'));
-      const heightSell = Number(getSelector(selectorRectSell).attr('height'));
-      const heightBuy = Number(getSelector(selectorRectBuy).attr('height'));
-      const height = heightSell + heightBuy;
-      return {
-        y,
-        height,
-      };
-    })
-    .on('start', ({ y, subject: { height } }) => {
-      setIsDragging(true);
-      onDragStart?.(y, y + height);
-    })
-    .on('drag', ({ y, subject: { height } }) => {
-      onDrag?.(y, y + height);
-    })
-    .on('end', ({ y, subject: { height } }) => {
-      setIsDragging(false);
-      onDragEnd?.(y, y + height);
-    });
+  const handleDrag = useMemo(() => {
+    return drag()
+      .subject(() => {
+        const y = Number(getSelector(selectorRectSell).attr('y'));
+        const heightSell = Number(getSelector(selectorRectSell).attr('height'));
+        const heightBuy = Number(getSelector(selectorRectBuy).attr('height'));
+        const height = heightSell + heightBuy;
+        return {
+          y,
+          height,
+        };
+      })
+      .on('start', ({ y, subject: { height } }) => {
+        setIsDragging(true);
+        onDragStart?.(y, y + height);
+      })
+      .on('drag', ({ y, subject: { height } }) => {
+        onDrag?.(y, y + height);
+      })
+      .on('end', ({ y, subject: { height } }) => {
+        setIsDragging(false);
+        onDragEnd?.(y, y + height);
+      });
+  }, [onDrag, onDragEnd, onDragStart, selectorRectBuy, selectorRectSell]);
 
   useEffect(() => {
     if (readonly || !isSelectable || !onDrag) return;

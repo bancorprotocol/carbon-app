@@ -11,7 +11,6 @@ import {
   defaultEnd,
   defaultStart,
   getBounds,
-  isFullRangeStrategy,
 } from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
@@ -38,7 +37,8 @@ interface Props {
 
 export const StrategyChartHistory: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>(null);
-  const { base, quote, type, order0, order1, activities } = props;
+  const { base, quote, type, order0, order1, activities, onPriceUpdates } =
+    props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const nav = useNavigate();
@@ -74,23 +74,26 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     [nav]
   );
 
-  const updatePrices: OnPriceUpdates = ({ buy, sell }) => {
-    const newPrices = {
-      buy: {
-        min: SafeDecimal.max(buy.min, 0).toString(),
-        max: SafeDecimal.max(buy.max, 0).toString(),
-      },
-      sell: {
-        min: SafeDecimal.max(sell.min, 0).toString(),
-        max: SafeDecimal.max(sell.max, 0).toString(),
-      },
-    };
-    setPrices(newPrices);
-    if (timeout.current) clearTimeout(timeout.current);
-    timeout.current = setTimeout(() => {
-      props.onPriceUpdates?.(newPrices);
-    }, 200);
-  };
+  const updatePrices: OnPriceUpdates = useCallback(
+    ({ buy, sell }) => {
+      const newPrices = {
+        buy: {
+          min: SafeDecimal.max(buy.min, 0).toString(),
+          max: SafeDecimal.max(buy.max, 0).toString(),
+        },
+        sell: {
+          min: SafeDecimal.max(sell.min, 0).toString(),
+          max: SafeDecimal.max(sell.max, 0).toString(),
+        },
+      };
+      setPrices(newPrices);
+      if (timeout.current) clearTimeout(timeout.current);
+      timeout.current = setTimeout(() => {
+        onPriceUpdates?.(newPrices);
+      }, 200);
+    },
+    [onPriceUpdates]
+  );
 
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: base.address,
@@ -134,7 +137,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
 
   return (
     <D3PriceHistory
-      readonly={props.readonly || isFullRangeStrategy(order0, order1)}
+      readonly={props.readonly}
       prices={prices}
       onPriceUpdates={updatePrices}
       onDragEnd={updatePrices}

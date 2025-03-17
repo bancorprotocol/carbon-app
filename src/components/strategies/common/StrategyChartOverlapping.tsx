@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef } from 'react';
+import { FC, useCallback, useMemo, useRef } from 'react';
 import { useSearch } from '@tanstack/react-router';
 import {
   OverlappingOrder,
@@ -85,6 +85,9 @@ const OverlappingChartContent: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>(null);
   const { base, quote, marketPrice, order0, order1, readonly, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
+  const fullRange = useMemo(() => {
+    return isFullRangeStrategy(order0, order1);
+  }, [order0, order1]);
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
@@ -118,7 +121,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
         spread={search.spread ?? defaultSpread}
         setMin={(min) => set({ min })}
         setMax={(max) => set({ max })}
-        disabled={readonly}
+        disabled={readonly || fullRange}
       />
     );
   }
@@ -132,7 +135,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
         order1={order1}
         spread={search.spread || defaultSpread}
         marketPrice={search.marketPrice}
-        readonly={readonly}
+        readonly={readonly || fullRange}
         onPriceUpdates={onPriceUpdates}
       />
       {readonly && <StrategyChartLegend />}

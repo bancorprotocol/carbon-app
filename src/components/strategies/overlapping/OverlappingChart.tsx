@@ -249,7 +249,7 @@ export const OverlappingChart: FC<Props> = (props) => {
   const { left, mean, right } = getBoundaries(lowest, highest);
   const fullRange = isFullRangeCreation(min, max, marketPrice);
   const marketPosition = fullRange ? mean : marketPrice;
-  const disabled = props.disabled || fullRange;
+  const disabled = props.disabled;
 
   const scaleConfig = {
     left,
