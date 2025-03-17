@@ -18,6 +18,7 @@ import { CandlestickData } from 'libs/d3';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
+import { isFullRange } from 'components/strategies/common/utils';
 
 interface Props {
   state: StrategyInputValues | SimulatorInputOverlappingValues;
@@ -119,6 +120,7 @@ export const SimInputChart = ({
           zoomBehavior="normal"
           start={state.start}
           end={state.end}
+          readonly={isFullRange(prices.buy.min, prices.sell.max)}
         />
       )}
     </div>
