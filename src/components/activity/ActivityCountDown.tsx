@@ -107,8 +107,8 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
 
   return (
     <svg
-      width="45"
-      height="45"
+      width="30"
+      height="30"
       viewBox="0 0 100 100"
       fill="none"
       aria-label={`${count}seconds until next refresh`}

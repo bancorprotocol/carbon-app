@@ -304,7 +304,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+      <article className="grid gap-16 p-16">
         <header className="flex items-center gap-8">
           <h3 className="text-18 font-weight-500 flex-1">
             Set Price Range&nbsp;
@@ -331,7 +331,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           setSpread={setSpread}
         />
       </article>
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
+      <article className="grid gap-10 p-16">
         <header className="mb-10 flex items-center gap-8 ">
           <h3 className="text-18 font-weight-500 flex-1">Set Fee Tier</h3>
           <Tooltip
@@ -347,17 +347,19 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           setSpread={setSpreadValue}
         />
       </article>
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
-        <header className="flex items-center justify-between">
-          <h2 className="text-18">Budget</h2>
+      <article className="grid gap-16 p-16">
+        <header className="flex items-start justify-between">
+          <hgroup>
+            <h2 className="text-18">Budget</h2>
+            <p className="text-14 text-white/80">
+              Please select a token to proceed.
+            </p>
+          </hgroup>
           <Tooltip
-            iconClassName="size-18 text-white/60"
+            iconClassName="size-14 text-white/60"
             element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
           />
         </header>
-        <p className="text-14 text-white/80">
-          Please select a token to proceed.
-        </p>
         <OverlappingAnchor
           base={base}
           quote={quote}
@@ -368,7 +370,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
         />
       </article>
       {anchor && (
-        <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+        <article className="grid gap-16 p-16">
           <hgroup>
             <h3 className="text-16 font-weight-500 flex items-center gap-6">
               <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
@@ -392,7 +394,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       {anchor && (
         <article
           id="overlapping-distribution"
-          className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+          className="grid gap-16 rounded-ee rounded-es p-20"
         >
           <hgroup>
             <h3 className="text-16 font-weight-500 flex items-center gap-8">

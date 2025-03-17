@@ -38,6 +38,9 @@
     scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
   }
 
+  h1, h2, h3, h4, h5, h6, p {
+    margin-block: unset;
+  }
   h1, h2, th {
     @apply font-title;
   }

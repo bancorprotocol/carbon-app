@@ -107,7 +107,6 @@ export const StrategyPage = () => {
       </header>
       <section className="flex flex-col gap-16 md:flex-row">
         <article className="bg-background-900 grid gap-16 rounded p-24 md:w-[400px]">
-          <h2 className="text-18 font-weight-500">Strategy Info</h2>
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(

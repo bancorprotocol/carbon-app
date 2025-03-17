@@ -3,14 +3,13 @@ import {
   explorerActivityPage,
   explorerLayout,
   explorerOverviewPage,
-  explorerPage,
   explorerPortfolioLayout,
   explorerPortfolioPage,
   explorerPortfolioTokenPage,
   explorerRedirect,
   explorerResultLayout,
-  explorerTypePage,
-  oldExplorerLayout,
+  oldTradePairExplorer,
+  oldWalletExplorer,
 } from 'libs/routing/routes/explorer';
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
@@ -63,20 +62,18 @@ export const routeTree = rootRoute.addChildren([
     editBudgetOverlapping,
     editBudgetRecurring,
   ]),
-  oldExplorerLayout,
+  oldTradePairExplorer,
+  oldWalletExplorer,
   explorerLayout.addChildren([
-    explorerRedirect,
-    explorerPage.addChildren([
-      explorerTypePage,
-      explorerResultLayout.addChildren([
-        explorerOverviewPage,
-        explorerPortfolioLayout.addChildren([
-          explorerPortfolioPage,
-          explorerPortfolioTokenPage,
-        ]),
-        explorerActivityPage,
+    explorerResultLayout.addChildren([
+      explorerOverviewPage,
+      explorerPortfolioLayout.addChildren([
+        explorerPortfolioPage,
+        explorerPortfolioTokenPage,
       ]),
+      explorerActivityPage,
     ]),
+    explorerRedirect,
   ]),
   myStrategyLayout.addChildren([
     strategyOverviewPage,

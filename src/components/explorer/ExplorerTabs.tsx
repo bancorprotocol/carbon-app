@@ -1,5 +1,4 @@
-import { useExplorerParams } from './useExplorerParams';
-import { useRouterState, useMatchRoute } from 'libs/routing';
+import { useRouterState, useMatchRoute, useParams } from 'libs/routing';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -13,7 +12,7 @@ import { StrategySelectLayout } from 'components/strategies/StrategySelectLayout
 
 export const ExplorerTabs = () => {
   const { filteredStrategies } = useStrategyCtx();
-  const { slug, type } = useExplorerParams('/explore/$type/$slug');
+  const { slug } = useParams({ from: '/explore/$slug' });
 
   // To support emojis in ens domains
   const { location } = useRouterState();
@@ -22,28 +21,28 @@ export const ExplorerTabs = () => {
   const match = useMatchRoute();
 
   const isOverview = !!match({
-    to: '/explore/$type/$slug',
-    params: { type, slug },
+    to: '/explore/$slug',
+    params: { slug },
   });
 
   const tabs: StrategyTab[] = [
     {
       label: 'Strategies',
-      href: '/explore/$type/$slug',
-      params: { type, slug },
+      href: '/explore/$slug',
+      params: { slug },
       icon: <IconOverview className="size-18" />,
       badge: filteredStrategies?.length || 0,
     },
     {
       label: 'Distribution',
-      href: '/explore/$type/$slug/portfolio',
-      params: { type, slug },
+      href: '/explore/$slug/portfolio',
+      params: { slug },
       icon: <IconPieChart className="size-18" />,
     },
     {
       label: 'Activity',
-      href: '/explore/$type/$slug/activity',
-      params: { type, slug },
+      href: '/explore/$slug/activity',
+      params: { slug },
       icon: <IconActivity className="size-18" />,
     },
   ];
