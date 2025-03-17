@@ -8,7 +8,7 @@ interface Props {
 
 export const TradeLayout: FC<Props> = ({ children }) => {
   return (
-    <section className="flex flex-col gap-20">
+    <section className="grid content-start">
       <TokenSelection />
       <TradeNav />
       {children}

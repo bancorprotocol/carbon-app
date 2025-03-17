@@ -101,71 +101,73 @@ export const CreateForm: FC<FormProps> = (props) => {
   return (
     <form
       onSubmit={create}
-      className={cn(style.form, 'flex flex-1 flex-col gap-20')}
+      className={cn(style.form, 'grid')}
       data-testid="create-strategy-form"
     >
-      {children}
-      <label
-        htmlFor="approve-warnings"
-        className={cn(
-          style.approveWarnings,
-          'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
-        )}
-      >
-        <input
-          id="approve-warnings"
-          type="checkbox"
-          className="size-18"
-          data-testid="approve-warnings"
-        />
-        {props.approvalText ??
-          "I've reviewed the warning(s) but choose to proceed."}
-      </label>
+      <div className="overflow-hidden rounded-ee rounded-es">{children}</div>
+      <footer className="mt-16 grid gap-16">
+        <label
+          htmlFor="approve-warnings"
+          className={cn(
+            style.approveWarnings,
+            'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+          )}
+        >
+          <input
+            id="approve-warnings"
+            type="checkbox"
+            className="size-18"
+            data-testid="approve-warnings"
+          />
+          {props.approvalText ??
+            "I've reviewed the warning(s) but choose to proceed."}
+        </label>
 
-      {user && (
-        <>
-          {config.ui.showCart && (
+        {user && (
+          <>
+            {config.ui.showCart && (
+              <Button
+                className={cn(style.addCart, 'shrink-0')}
+                type="button"
+                variant="white"
+                size="lg"
+                fullWidth
+                disabled={loading || animating}
+                onClick={addToCart}
+                data-testid="add-strategy-to-cart"
+              >
+                Add to Cart
+              </Button>
+            )}
             <Button
-              className={cn(style.addCart, 'shrink-0')}
-              type="button"
-              variant="white"
+              className="shrink-0"
+              type="submit"
+              variant="success"
               size="lg"
               fullWidth
-              disabled={loading || animating}
-              onClick={addToCart}
-              data-testid="add-strategy-to-cart"
+              loading={loading}
+              loadingChildren={loadingChildren}
+              data-testid="create-strategy"
             >
-              Add to Cart
+              Create Strategy
             </Button>
-          )}
+          </>
+        )}
+        {!user && (
           <Button
             className="shrink-0"
-            type="submit"
+            type="button"
             variant="success"
             size="lg"
             fullWidth
             loading={loading}
             loadingChildren={loadingChildren}
-            data-testid="create-strategy"
+            onClick={connectWallet}
           >
-            Create Strategy
+            Connect Wallet
           </Button>
-        </>
-      )}
-      {!user && (
-        <Button
-          className="shrink-0"
-          type="button"
-          variant="success"
-          size="lg"
-          fullWidth
-          loading={loading}
-          loadingChildren={loadingChildren}
-          onClick={connectWallet}
-        >
-          Connect Wallet
-        </Button>
-      )}
+        )}
+      </footer>
     </form>
   );
 };
