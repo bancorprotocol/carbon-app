@@ -167,9 +167,14 @@ export function prettifyNumber(
     return Intl.NumberFormat(locale, intlOptions).format(0);
   }
 
-  if (num.gte(1)) {
+  if (num.gte(10)) {
     const min = options.isInteger ? 0 : 2;
     const max = options.isInteger ? 0 : 2;
+    intlOptions.minimumFractionDigits = Math.min(options.decimals ?? min, min);
+    intlOptions.maximumFractionDigits = Math.max(options.decimals ?? max, max);
+  } else if (num.gte(1)) {
+    const min = options.isInteger ? 0 : 2;
+    const max = options.isInteger ? 0 : 4;
     intlOptions.minimumFractionDigits = Math.min(options.decimals ?? min, min);
     intlOptions.maximumFractionDigits = Math.max(options.decimals ?? max, max);
   } else if (num.gte(0.001)) {

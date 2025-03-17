@@ -639,7 +639,7 @@ const testCases: CreateStrategyTestCase[] = [
           fiat: '$16.67',
         },
       },
-      withdraw: { buy: '8.33 USDC', sell: '20.00 BNT' },
+      withdraw: { buy: '8.3343 USDC', sell: '20.00 BNT' },
       deposit: { buy: '16.66 USDC', sell: '40.00 BNT' },
     },
   },
