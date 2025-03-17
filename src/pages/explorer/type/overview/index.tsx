@@ -5,7 +5,7 @@ import { useSearch } from '@tanstack/react-router';
 
 export const ExplorerTypeOverviewPage = () => {
   const { strategies, filteredStrategies, isPending } = useStrategyCtx();
-  const search = useSearch({ from: '/explore/$type/$slug/' });
+  const search = useSearch({ from: '/explore/$slug/' });
   const isFilterTooNarrow =
     strategies.length > 0 && filteredStrategies.length === 0;
 

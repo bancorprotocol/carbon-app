@@ -123,8 +123,8 @@ export const commonConfig: AppConfig = {
       address: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
     },
     ensUniversalResolver: {
-      address: '0xE4Acdd618deED4e6d2f03b9bf62dc6118FC9A4da',
-      blockCreated: 16773775,
+      address: '0xce01f8eee7E479C928F8919abD53E553a36CeF67',
+      blockCreated: 19_258_213,
     },
   },
   tokenListOverride: [
