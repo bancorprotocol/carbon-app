@@ -89,9 +89,18 @@ const tradeEvents: CarbonEventsInput<TradeProps> = {
     sendGTMEvent('trade', 'tradeWarningShow', params),
 };
 
+// Explore
+interface ExploreProps {
+  search: { explore_search: string };
+}
+const exploreEvents: CarbonEventsInput<ExploreProps> = {
+  search: (params) => sendGTMEvent('explore', 'search', params),
+};
+
 export const carbonEvents = {
   general: generalEvents,
   wallet: walletEvents,
   strategy: strategyEvents,
   trade: tradeEvents,
+  explore: exploreEvents,
 };
