@@ -79,22 +79,24 @@ export const TradeDisposable = () => {
             setOrder={setSearch}
             warnings={[outSideMarket]}
             settings={
-              <TabsMenu>
-                <TabsMenuButton
-                  onClick={() => setDirection('sell')}
-                  variant={isBuy ? 'black' : 'sell'}
-                  data-testid="tab-sell"
-                >
-                  Sell
-                </TabsMenuButton>
-                <TabsMenuButton
-                  onClick={() => setDirection('buy')}
-                  variant={!isBuy ? 'black' : 'buy'}
-                  data-testid="tab-buy"
-                >
-                  Buy
-                </TabsMenuButton>
-              </TabsMenu>
+              <div className="p-16 pb-0">
+                <TabsMenu>
+                  <TabsMenuButton
+                    onClick={() => setDirection('sell')}
+                    variant={isBuy ? 'black' : 'sell'}
+                    data-testid="tab-sell"
+                  >
+                    Sell
+                  </TabsMenuButton>
+                  <TabsMenuButton
+                    onClick={() => setDirection('buy')}
+                    variant={!isBuy ? 'black' : 'buy'}
+                    data-testid="tab-buy"
+                  >
+                    Buy
+                  </TabsMenuButton>
+                </TabsMenu>
+              </div>
             }
           />
         </CreateForm>

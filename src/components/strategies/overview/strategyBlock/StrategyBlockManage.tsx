@@ -25,6 +25,7 @@ import {
 } from 'components/strategies/edit/utils';
 import config from 'config';
 import { toPairSlug } from 'utils/pairSearch';
+import { usePairs } from 'hooks/usePairs';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -45,7 +46,9 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const [manage, setManage] = useState(false);
   const { openModal } = useModal();
   const navigate = useNavigate();
-  const { type } = useParams({ strict: false });
+  const { slug } = useParams({ strict: false });
+  const { getType } = usePairs();
+  const type = getType(slug ?? '');
 
   const isOwn = useIsStrategyOwner(strategy.id);
 
@@ -110,23 +113,23 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       name: "View Owner's Strategies",
       action: () => {
         navigate({
-          to: '/explore/$type/$slug',
-          params: { type: 'wallet', slug: owner.data ?? '' },
+          to: '/explore/$slug',
+          params: { slug: owner.data ?? '' },
         });
       },
       disabled: !owner.data,
     });
   }
 
-  if (type !== 'token-pair') {
+  if (type === 'wallet') {
     items.push({
       id: 'explorePair',
       name: 'Explore Pair',
       action: () => {
         const slug = toPairSlug(strategy.base, strategy.quote);
         navigate({
-          to: '/explore/$type/$slug',
-          params: { type: 'token-pair', slug },
+          to: '/explore/$slug',
+          params: { slug },
         });
       },
     });

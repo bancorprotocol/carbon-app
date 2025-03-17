@@ -168,7 +168,7 @@ export const InputRange: FC<InputRangeProps> = ({
             value={max}
             placeholder="Enter Price"
             className={cn(
-              'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+              'text-16 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
               error && 'text-error'
             )}
             onChange={handleChangeMax}

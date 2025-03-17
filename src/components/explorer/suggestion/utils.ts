@@ -2,11 +2,6 @@ const getOptions = (root: HTMLElement | null) => {
   return root?.querySelectorAll<HTMLElement>('button') ?? [];
 };
 
-export const selectCurrentOption = (root: HTMLElement | null) => {
-  const option = getSelectedOption(root) || getFirstOption(root);
-  option?.click();
-};
-
 export const getSelectedOption = (root: HTMLElement | null) => {
   const selector = 'button[aria-selected="true"]';
   return root?.querySelector<HTMLElement>(selector);

@@ -7,27 +7,7 @@ import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SuspiciousToken } from 'components/common/DisplayPair';
-
-export const TokenSelectionTooltip = () => {
-  return (
-    <Tooltip
-      iconClassName="size-18 text-white/60"
-      element={
-        <p>
-          Selecting the tokens you would like to create a strategy for.
-          <br />
-          <b>Buy or Sell</b> token (also called <b>Base</b> token) is the token
-          you would like to buy or sell in the strategy.
-          <br />
-          <b>With</b> token (also called <b>Quote</b> token) is the token you
-          would denominate the rates in.
-        </p>
-      }
-    />
-  );
-};
 
 export const TokenSelection = () => {
   const { base, quote } = useTradeCtx();
@@ -76,11 +56,7 @@ export const TokenSelection = () => {
   };
 
   return (
-    <article className="bg-background-900 grid gap-20 rounded p-20">
-      <header className="flex items-center justify-between">
-        <h2 className="text-18">Token Pair</h2>
-        <TokenSelectionTooltip />
-      </header>
+    <article className="bg-background-900 grid gap-16 rounded-se rounded-ss p-16">
       <div
         role="menu"
         className="relative grid grid-cols-2 place-items-center gap-20"

@@ -185,47 +185,51 @@ export const EditPricesStrategyDisposablePage = () => {
           buy={isBuy}
           hasPriceChanged={hasPriceChanged}
           settings={
-            <TabsMenu>
-              <TabsMenuButton
-                onClick={() => setDirection('buy')}
-                variant={isBuy ? 'buy' : 'black'}
-                data-testid="tab-buy"
-              >
-                Buy
-              </TabsMenuButton>
-              <TabsMenuButton
-                onClick={() => setDirection('sell')}
-                variant={!isBuy ? 'sell' : 'black'}
-                data-testid="tab-sell"
-              >
-                Sell
-              </TabsMenuButton>
-            </TabsMenu>
+            <div className="p-16 pb-0">
+              <TabsMenu>
+                <TabsMenuButton
+                  onClick={() => setDirection('buy')}
+                  variant={isBuy ? 'buy' : 'black'}
+                  data-testid="tab-buy"
+                >
+                  Buy
+                </TabsMenuButton>
+                <TabsMenuButton
+                  onClick={() => setDirection('sell')}
+                  variant={!isBuy ? 'sell' : 'black'}
+                  data-testid="tab-sell"
+                >
+                  Sell
+                </TabsMenuButton>
+              </TabsMenu>
+            </div>
           }
         />
         {(buyBudgetChanges || sellBudgetChanges) && (
           <article
             id="budget-changed"
-            className="warning-message border-warning/40 rounded-10 bg-background-900 flex w-full flex-col gap-12 border p-20"
+            className="warning-message bg-background-900 p-16"
           >
-            <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
-              <IconWarning className="size-16" />
-              Notice
-            </h3>
-            {buyBudgetChanges && (
-              <p className="text-14 text-white/80">
-                You will withdraw&nbsp;
-                {tokenAmount(buyWithdraw, quote)} from the inactive buy order to
-                your wallet.
-              </p>
-            )}
-            {sellBudgetChanges && (
-              <p className="text-14 text-white/80">
-                You will withdraw&nbsp;
-                {tokenAmount(sellWithdraw, base)} from the inactive sell order
-                to your wallet.
-              </p>
-            )}
+            <div className="border-warning/40 rounded-10 grid gap-16 border p-16">
+              <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
+                <IconWarning className="size-16" />
+                Notice
+              </h3>
+              {buyBudgetChanges && (
+                <p className="text-14 text-white/80">
+                  You will withdraw&nbsp;
+                  {tokenAmount(buyWithdraw, quote)} from the inactive buy order
+                  to your wallet.
+                </p>
+              )}
+              {sellBudgetChanges && (
+                <p className="text-14 text-white/80">
+                  You will withdraw&nbsp;
+                  {tokenAmount(sellWithdraw, base)} from the inactive sell order
+                  to your wallet.
+                </p>
+              )}
+            </div>
           </article>
         )}
       </EditStrategyForm>
