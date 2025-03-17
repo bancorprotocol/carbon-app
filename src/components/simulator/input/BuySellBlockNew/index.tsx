@@ -12,6 +12,8 @@ import {
   StrategyInputDispatch,
   StrategyInputOrder,
 } from 'hooks/useStrategyInput';
+import style from 'components/strategies/common/order.module.css';
+import { cn } from 'utils/helpers';
 
 type Props = {
   base: Token;
@@ -25,6 +27,7 @@ type Props = {
   isOrdersOverlap: boolean;
   isOrdersReversed: boolean;
   warningMsg?: string;
+  className?: string;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -39,6 +42,7 @@ export const BuySellBlock: FC<Props> = ({
   isOrdersOverlap,
   isOrdersReversed,
   warningMsg,
+  className,
 }) => {
   const titleId = useId();
 
@@ -92,15 +96,12 @@ export const BuySellBlock: FC<Props> = ({
   return (
     <section
       aria-labelledby={titleId}
-      className={`rounded-10 bg-background-900 flex flex-col gap-20 border-l-2 p-20 ${
-        buy
-          ? 'border-buy/50 focus-within:border-buy'
-          : 'border-sell/50 focus-within:border-sell'
-      }`}
+      className={cn(style.order, className, 'grid gap-16 p-16')}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
+      data-direction={buy ? 'buy' : 'sell'}
     >
       <BuySellHeader {...headerProps}>
-        <h2 className="text-18 flex items-center gap-8" id={titleId}>
+        <h2 className="text-16 flex items-center gap-8" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
           </Tooltip>
