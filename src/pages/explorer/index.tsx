@@ -17,7 +17,7 @@ export const ExplorerPage = () => {
 
   useEffect(() => {
     if (!slug) return;
-    carbonEvents.explore.search({
+    carbonEvents.explore.exploreSearch({
       explore_search: slug,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

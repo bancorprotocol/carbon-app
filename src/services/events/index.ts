@@ -91,10 +91,10 @@ const tradeEvents: CarbonEventsInput<TradeProps> = {
 
 // Explore
 interface ExploreProps {
-  search: { explore_search: string };
+  exploreSearch: { explore_search: string };
 }
 const exploreEvents: CarbonEventsInput<ExploreProps> = {
-  search: (params) => sendGTMEvent('explore', 'search', params),
+  exploreSearch: (params) => sendGTMEvent('explore', 'exploreSearch', params),
 };
 
 export const carbonEvents = {
