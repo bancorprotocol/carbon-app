@@ -8,6 +8,7 @@ import {
 import { cn, sanitizeNumber } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { carbonEvents } from 'services/events';
 
 const buttonClasses = 'rounded-8 text-white/60 hover:border-primary px-5';
 const buttonActiveClasses = 'border-primary';
@@ -52,6 +53,11 @@ export const TradeSettingsRow: FC<{
       isError && setIsError(false);
       internalValue && setInternalValue('');
       item.setValue(item.presets[1]);
+      carbonEvents.trade.tradeErrorShow({
+        message: warningMessageIfOutOfRange(item.id, value),
+        buy_token: base.symbol,
+        sell_token: quote.symbol,
+      });
     }
 
     if (item.presets.includes(item.value)) {
@@ -73,6 +79,11 @@ export const TradeSettingsRow: FC<{
     () => warningMessageIfOutOfRange(item.id, internalValue || item.value),
     [internalValue, item.id, item.value]
   );
+
+  useEffect(() => {
+    warningMessage &&
+      carbonEvents.trade.tradeWarningShow({ message: warningMessage });
+  }, [warningMessage]);
 
   return (
     <div>

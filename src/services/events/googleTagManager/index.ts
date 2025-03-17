@@ -23,7 +23,7 @@ export const sendGTMEvent = <
 >(
   type: T,
   event: D,
-  data: Record<string, string | undefined | null>
+  data: any
 ) => {
   const snakeCaseEvent = convertCase(event, true);
   const dataObj = data ? data : {};

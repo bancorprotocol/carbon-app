@@ -80,6 +80,10 @@ export const useWagmiUser = ({
           name: data.connector.name,
         });
       } else {
+        carbonEvents.wallet.walletConnected({
+          address: data.address,
+          name: data.connector.name,
+        });
         redirectSafeWallet(chainId, accountChainId);
       }
       if (window?.OneTrust) {
@@ -90,7 +94,12 @@ export const useWagmiUser = ({
     },
     onDisconnect() {
       if (isManualConnection.current) {
+        carbonEvents.wallet.walletDisconnect({
+          address: user,
+        });
         isManualConnection.current = false;
+      } else {
+        carbonEvents.wallet.walletDisconnected(undefined);
       }
       oldUser.current = undefined;
     },

@@ -24,7 +24,9 @@ export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
   return buyMax.gte(sellMin);
 };
 
-export const isDisposableStrategy = (strategy: BaseStrategy) => {
+export const isDisposableStrategy = (
+  strategy: Pick<BaseStrategy, 'order0' | 'order1'>
+) => {
   // If strategy is inactive, consider it as a recurring
   if (isEmptyOrder(strategy.order0) && isEmptyOrder(strategy.order1)) {
     return false;
@@ -36,7 +38,9 @@ export const isDisposableStrategy = (strategy: BaseStrategy) => {
   return false;
 };
 
-export const getStrategyType = (strategy: BaseStrategy) => {
+export const getStrategyType = (
+  strategy: Pick<BaseStrategy, 'order0' | 'order1'>
+) => {
   if (isOverlappingStrategy(strategy)) return 'overlapping';
   if (isDisposableStrategy(strategy)) return 'disposable';
   return 'recurring';
@@ -63,6 +67,13 @@ export const toBaseOrder = (order: Order): BaseOrder => ({
   min: order.startRate,
   max: order.endRate,
   budget: order.balance,
+});
+
+export const toOrder = (order: BaseOrder): Order => ({
+  balance: order.budget,
+  startRate: order.min,
+  endRate: order.max,
+  marginalRate: order.marginalPrice ?? '',
 });
 
 export const isEmptyOrder = (order: Order) => {

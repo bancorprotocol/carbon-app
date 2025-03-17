@@ -14,6 +14,7 @@ import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidge
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
 import { isTouchedZero, isZero } from 'components/strategies/common/utils';
+import { carbonEvents } from 'services/events';
 
 export const useBuySell = ({
   source,
@@ -38,6 +39,8 @@ export const useBuySell = ({
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
+  const { provider } = useWagmi();
+  const { getFiatValue } = useFiatCurrency(source);
 
   const { calcMaxInput } = useTradeAction({
     source,
@@ -58,7 +61,20 @@ export const useBuySell = ({
     source,
     sourceInput,
     isTradeBySource,
-    onSuccess: () => clearInputs(),
+    onSuccess: (transactionHash: string) => {
+      clearInputs();
+      const event = {
+        trade_direction: buy ? ('buy' as const) : ('sell' as const),
+        token_pair: `${target.symbol}/${source.symbol}`,
+        buy_token: target.symbol,
+        sell_token: source.symbol,
+        value_usd: getFiatValue(sourceInput, true).toString(),
+        transaction_hash: transactionHash,
+        blockchain_network: provider?.network?.name || '',
+      };
+      if (buy) carbonEvents.trade.tradeBuy(event);
+      else carbonEvents.trade.tradeSell(event);
+    },
   });
 
   const bySourceQuery = useGetTradeData({

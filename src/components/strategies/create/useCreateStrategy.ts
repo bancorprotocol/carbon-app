@@ -10,6 +10,8 @@ import { handleTxStatusAndRedirectToOverview } from 'components/strategies/creat
 import { BaseOrder } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import config from 'config';
+import { carbonEvents } from 'services/events';
+import { getStrategyType, toOrder } from '../common/utils';
 
 const spenderAddress = config.addresses.carbon.carbonController;
 
@@ -89,6 +91,16 @@ export const useCreateStrategy = (props: Props) => {
           onSuccess: async (tx) => {
             handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
             dispatchNotification('createStrategy', { txHash: tx.hash });
+            carbonEvents.strategy.createStrategy({
+              token_pair: `${base.symbol}/${quote.symbol}`,
+              strategy_base_token: base.symbol,
+              strategy_quote_token: quote.symbol,
+              strategy_category: 'static',
+              strategy_type: getStrategyType({
+                order0: toOrder(order0),
+                order1: toOrder(order1),
+              }),
+            });
             await tx.wait();
             cache.invalidateQueries({
               queryKey: QueryKey.balance(user, base.address),
