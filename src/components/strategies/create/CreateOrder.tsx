@@ -14,6 +14,7 @@ import { cn } from 'utils/helpers';
 import { LogoImager } from 'components/common/imager/Imager';
 import { getDefaultOrder } from './utils';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import style from 'components/strategies/common/order.module.css';
 
 interface Props {
   base: Token;
@@ -101,91 +102,93 @@ export const CreateOrder: FC<Props> = ({
   };
 
   const headerProps = { titleId, order, base, buy, setSettings };
-  const border = buy
-    ? 'border-buy/50 focus-within:border-buy'
-    : 'border-sell/50 focus-within:border-sell';
+
   return (
     <article
       aria-labelledby={titleId}
-      className={cn(
-        'bg-background-900 flex flex-col gap-20 rounded border-s p-20',
-        border
-      )}
+      className="bg-background-900 grid"
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {settings}
-      <OrderHeader {...headerProps}>
-        <h2 className="text-18 flex items-center gap-8" id={titleId}>
-          <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
-            <span>{buy ? 'Buy Low' : 'Sell High'}</span>
-          </Tooltip>
-          <LogoImager alt="Token" src={base.logoURI} className="size-18" />
-          <span>{base.symbol}</span>
-        </h2>
-      </OrderHeader>
-      <fieldset className="flex flex-col gap-8">
-        <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
-          {inputTitle}
-        </legend>
-        {order.settings === 'range' ? (
-          <InputRange
-            base={base}
-            quote={quote}
-            min={order.min}
-            setMin={setMin}
-            max={order.max}
-            setMax={setMax}
-            buy={buy}
-            error={error}
-            warnings={warnings}
-            required
-          />
-        ) : (
-          <InputLimit
-            base={base}
-            quote={quote}
-            price={order.min}
-            setPrice={setPrice}
-            buy={buy}
-            error={error}
-            warnings={warnings}
-            required
-          />
-        )}
-      </fieldset>
-      <fieldset className="flex flex-col gap-8">
-        <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
-          <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-            2
-          </span>
-          <Tooltip sendEventOnMount={{ buy }} element={budgetTooltip()}>
-            <span className="text-white/80">
-              Set {buy ? 'Buy' : 'Sell'} Budget&nbsp;
-            </span>
-          </Tooltip>
-          {optionalBudget && (
-            <span className="font-weight-500 ml-8 text-white/60">Optional</span>
+      <div
+        className={cn(style.order, 'grid gap-16 p-16')}
+        data-direction={buy ? 'buy' : 'sell'}
+      >
+        <OrderHeader {...headerProps}>
+          <h2 className="text-16 flex items-center gap-8" id={titleId}>
+            <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
+              <span>{buy ? 'Buy Low' : 'Sell High'}</span>
+            </Tooltip>
+            <LogoImager alt="Token" src={base.logoURI} className="size-18" />
+            <span>{base.symbol}</span>
+          </h2>
+        </OrderHeader>
+        <fieldset className="flex flex-col gap-8">
+          <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
+            {inputTitle}
+          </legend>
+          {order.settings === 'range' ? (
+            <InputRange
+              base={base}
+              quote={quote}
+              min={order.min}
+              setMin={setMin}
+              max={order.max}
+              setMax={setMax}
+              buy={buy}
+              error={error}
+              warnings={warnings}
+              required
+            />
+          ) : (
+            <InputLimit
+              base={base}
+              quote={quote}
+              price={order.min}
+              setPrice={setPrice}
+              buy={buy}
+              error={error}
+              warnings={warnings}
+              required
+            />
           )}
-        </legend>
-        <InputBudget
-          editType="deposit"
-          token={budgetToken}
-          value={order.budget}
-          onChange={setBudget}
-          max={balance.data || '0'}
-          maxIsLoading={balance.isPending}
-          error={insufficientBalance}
-          data-testid="input-budget"
+        </fieldset>
+        <fieldset className="flex flex-col gap-8">
+          <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
+            <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+              2
+            </span>
+            <Tooltip sendEventOnMount={{ buy }} element={budgetTooltip()}>
+              <span className="text-white/80">
+                Set {buy ? 'Buy' : 'Sell'} Budget&nbsp;
+              </span>
+            </Tooltip>
+            {optionalBudget && (
+              <span className="font-weight-500 ml-8 text-white/60">
+                Optional
+              </span>
+            )}
+          </legend>
+          <InputBudget
+            editType="deposit"
+            token={budgetToken}
+            value={order.budget}
+            onChange={setBudget}
+            max={balance.data || '0'}
+            maxIsLoading={balance.isPending}
+            error={insufficientBalance}
+            data-testid="input-budget"
+          />
+        </fieldset>
+        <FullOutcome
+          min={order.min}
+          max={order.max}
+          budget={order.budget}
+          buy={buy}
+          base={base}
+          quote={quote}
         />
-      </fieldset>
-      <FullOutcome
-        min={order.min}
-        max={order.max}
-        budget={order.budget}
-        buy={buy}
-        base={base}
-        quote={quote}
-      />
+      </div>
     </article>
   );
 };
