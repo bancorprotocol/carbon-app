@@ -11,6 +11,7 @@ import {
   defaultEnd,
   defaultStart,
   getBounds,
+  isFullRangeStrategy,
 } from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
@@ -132,7 +133,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   }
   return (
     <D3PriceHistory
-      readonly={props.readonly}
+      readonly={props.readonly || isFullRangeStrategy(order0, order1)}
       prices={prices}
       onPriceUpdates={updatePrices}
       onDragEnd={updatePrices}
