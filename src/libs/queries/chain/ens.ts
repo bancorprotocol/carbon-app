@@ -3,6 +3,7 @@ import { useWagmi } from 'libs/wagmi';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { utils } from 'ethers';
+import { StaticJsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 
 export const useGetEnsFromAddress = (address: string) => {
   const { provider } = useWagmi();
@@ -56,3 +57,20 @@ try {
 }
 
 export const isValidEnsName = (ens?: string) => !!ens && ensRegex.test(ens);
+
+export const getEnsAddressIfAny = async (
+  provider: Web3Provider | StaticJsonRpcProvider | undefined,
+  value: string
+): Promise<string> => {
+  if (!provider) return value;
+  try {
+    if (isValidEnsName(value)) {
+      const address = await provider?.resolveName(value);
+      return address || value;
+    }
+  } catch (err) {
+    console.error(err);
+    return value; // return initial value if provider doesn't support ens
+  }
+  return value;
+};

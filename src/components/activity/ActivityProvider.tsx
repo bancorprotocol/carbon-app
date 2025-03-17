@@ -53,7 +53,7 @@ const getQueryParams = (
 
 type ActivityUrls =
   | '/strategies/activity'
-  | '/explore/$type/$slug/activity'
+  | '/explore/$slug/activity'
   | '/strategy/$id';
 interface Props {
   url: ActivityUrls;
