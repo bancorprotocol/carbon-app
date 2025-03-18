@@ -27,6 +27,8 @@ describe('useYPos', () => {
       })
     );
     const yScale = linearScaleResult.current.scale;
+    const max = Math.max(...yScale.domain());
+    const min = Math.min(...yScale.domain());
 
     const { result } = renderHook(() =>
       useD3OverlappingChart({ prices, yScale, spread, marketPrice })
@@ -42,12 +44,12 @@ describe('useYPos', () => {
 
     expect(result.current.yPos).toStrictEqual({
       buy: {
-        min: yScale(Number(prices.buy.min)),
-        max: yScale(Number(buyPriceHigh)),
+        min: yScale(Math.max(min, Number(prices.buy.min))),
+        max: yScale(Math.min(max, Number(buyPriceHigh))),
       },
       sell: {
-        min: yScale(Number(sellPriceLow)),
-        max: yScale(Number(prices.sell.max)),
+        min: yScale(Math.max(min, Number(sellPriceLow))),
+        max: yScale(Math.min(max, Number(prices.sell.max))),
       },
       marketPrice: yScale(marketPrice),
     });
@@ -73,6 +75,8 @@ describe('useYPos', () => {
       })
     );
     const yScale = linearScaleResult.current.scale;
+    const max = Math.max(...yScale.domain());
+    const min = Math.min(...yScale.domain());
 
     const { result } = renderHook(() =>
       useD3OverlappingChart({ prices, yScale, spread, marketPrice })
@@ -85,12 +89,12 @@ describe('useYPos', () => {
 
     expect(result.current.yPos).toStrictEqual({
       buy: {
-        min: yScale(Number(prices.buy.min)),
-        max: yScale(Number(buyPriceHigh)),
+        min: yScale(Math.max(min, Number(prices.buy.min))),
+        max: yScale(Math.min(max, Number(buyPriceHigh))),
       },
       sell: {
-        min: yScale(Number(sellPriceLow)),
-        max: yScale(Number(prices.sell.max)),
+        min: yScale(Math.max(min, Number(sellPriceLow))),
+        max: yScale(Math.min(max, Number(prices.sell.max))),
       },
       marketPrice: yScale(marketPrice),
     });
