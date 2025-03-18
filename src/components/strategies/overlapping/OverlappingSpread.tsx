@@ -1,20 +1,15 @@
-import {
-  useRef,
-  FC,
-  KeyboardEvent,
-  useState,
-  FocusEvent,
-  ChangeEvent,
-} from 'react';
+import { useRef, FC, KeyboardEvent, FocusEvent, ChangeEvent } from 'react';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
-import { getMaxSpread } from 'components/strategies/overlapping/utils';
+import {
+  defaultSpread,
+  getMaxSpread,
+} from 'components/strategies/overlapping/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
+import { useStore } from 'store';
 import styles from './OverlappingSpread.module.css';
 
 interface Props {
-  /** Value used to fallback to when custom input is empty */
-  defaultValue: number;
-  options: number[];
+  options: string[];
   spread: string;
   buyMin: number;
   sellMax: number;
@@ -22,32 +17,34 @@ interface Props {
 }
 
 const getWarning = (maxSpread: number) => {
-  return `Given price range, max fee tier cannot exceed ${maxSpread}%`;
+  return `⚠️ Given price range, max fee tier cannot exceed ${maxSpread}%`;
 };
 
 const round = (value: number) => Math.round(value * 100) / 100;
 
 export const OverlappingSpread: FC<Props> = (props) => {
-  const { defaultValue, options, setSpread, buyMin, sellMax } = props;
-  const spread = Number(props.spread);
+  const { options, setSpread, buyMin, sellMax, spread } = props;
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spread);
-  const hasError = spread <= 0 || spread > 100;
-  const [warning, setWarning] = useState('');
+  const tooLow = +spread <= 0;
+  const tooHigh = +spread > 100;
+  const hasError = tooLow || tooHigh;
   const isCustomSpread = spread && !inOptions;
+  const { toaster } = useStore();
 
-  const selectSpread = (value: number) => {
+  const selectSpread = (value: string) => {
     const input = document.getElementById('spread-custom') as HTMLInputElement;
     const maxSpread = round(getMaxSpread(buyMin, sellMax));
-    if (value > maxSpread) {
-      setWarning(getWarning(maxSpread));
+    if (+value > maxSpread) {
+      toaster.addToast(getWarning(maxSpread), {
+        color: 'warning',
+        duration: 3000,
+      });
       setSpread(maxSpread.toString());
       input.value = maxSpread.toFixed(2);
       input.focus();
     } else {
-      setWarning('');
-      setSpread(value.toString());
-      input.value = '';
+      setSpread(sanitizeNumber(value));
     }
   };
 
@@ -69,31 +66,19 @@ export const OverlappingSpread: FC<Props> = (props) => {
   };
 
   const onCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.value) return;
-    const value = Number(e.target.value);
-    const maxSpread = round(getMaxSpread(buyMin, sellMax));
-    if (isNaN(value)) {
-      e.target.value = sanitizeNumber(e.target.value, 6);
-    } else if (value > maxSpread) {
-      const max = sanitizeNumber(maxSpread.toString(), 6);
-      setWarning(getWarning(maxSpread));
-      setSpread(max);
-      e.target.value = max;
-    } else {
-      const value = sanitizeNumber(e.target.value, 6);
-      setWarning('');
-      setSpread(value);
-      e.target.value = value;
+    if (!e.target.value) {
+      return setSpread(defaultSpread.toString());
     }
+    selectSpread(e.currentTarget.value);
   };
 
   const onCustomBlur = (e: FocusEvent<HTMLInputElement>) => {
-    if (options.includes(e.target.valueAsNumber)) {
+    if (options.includes(e.target.value)) {
       e.target.value = '';
     } else {
       const value = formatNumber(e.target.value);
       if (!value || !Number(value)) {
-        setSpread(defaultValue.toString());
+        setSpread(defaultSpread.toString());
         e.target.value = '';
       } else {
         e.target.value = Number(Number(value).toFixed(6)).toString();
@@ -144,7 +129,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
           <input
             id="spread-custom"
             className="w-full bg-transparent text-center outline-none placeholder:text-white/40"
-            defaultValue={options.includes(spread) ? '' : spread}
+            value={options.includes(spread) ? '' : spread}
             name="spread"
             type="text"
             inputMode="decimal"
@@ -159,15 +144,12 @@ export const OverlappingSpread: FC<Props> = (props) => {
           <span className={styles.suffix}>%</span>
         </div>
       </div>
-      {warning && spread && (
-        <Warning htmlFor="spread-custom">{warning}</Warning>
-      )}
-      {spread <= 0 && (
+      {tooLow && (
         <Warning htmlFor="spread-custom" isError>
           The fee tier should be above 0%
         </Warning>
       )}
-      {spread > 100 && (
+      {tooHigh && (
         <Warning htmlFor="spread-custom" isError>
           The fee tier should be equal or below 100%
         </Warning>

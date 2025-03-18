@@ -10,7 +10,10 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
-import { isZero } from 'components/strategies/common/utils';
+import {
+  isFullRangeStrategy,
+  isZero,
+} from 'components/strategies/common/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import style from './StrategyGraph.module.css';
@@ -54,15 +57,23 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
   const clipPathId = useId();
   const { base, quote, order0: buyOrder, order1: sellOrder } = strategy;
   const { marketPrice: currentPrice } = useMarketPrice({ base, quote });
+  const fullRange = isFullRangeStrategy(buyOrder, sellOrder);
+
   const buy = {
     from: Number(sanitizeNumber(buyOrder.startRate)),
     to: Number(sanitizeNumber(buyOrder.endRate)),
-    marginalPrice: Number(sanitizeNumber(buyOrder.marginalRate)),
+    marginalPrice: fullRange
+      ? Number(sanitizeNumber(sellOrder.endRate))
+      : Number(sanitizeNumber(buyOrder.marginalRate)),
   };
   const sell = {
     from: Number(sanitizeNumber(sellOrder.startRate)),
-    to: Number(sanitizeNumber(sellOrder.endRate)),
-    marginalPrice: Number(sanitizeNumber(sellOrder.marginalRate)),
+    to: fullRange
+      ? Number(sanitizeNumber(buyOrder.endRate))
+      : Number(sanitizeNumber(sellOrder.endRate)),
+    marginalPrice: fullRange
+      ? Number(sanitizeNumber(buyOrder.startRate))
+      : Number(sanitizeNumber(sellOrder.marginalRate)),
   };
 
   const buyOrderExists = buy.from !== 0 && buy.to !== 0;
@@ -185,7 +196,12 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
         <line x1="0" y1={baseline} x2={width} y2={baseline} />
       </g>
 
-      <CurrentPrice currentPrice={currentPrice} x={x} token={strategy.quote} />
+      <CurrentPrice
+        position={fullRange ? center : currentPrice}
+        currentPrice={currentPrice}
+        x={x}
+        token={strategy.quote}
+      />
 
       <g className={style.buySellAreas} clipPath={`url(#${clipPathId})`}>
         {buyOrderExists && (
@@ -345,35 +361,61 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
         )}
       </g>
       <g className={style.pricePoints}>
-        {pricePoints.map((point, i) => (
-          <g key={i}>
-            <line
-              x1={x(point)}
-              x2={x(point)}
-              y1={tick}
-              y2={baseline + 5}
-              stroke="white"
-              opacity="60%"
-            />
-            <text
-              fill="white"
-              x={x(point)}
-              y={baseline + 10}
-              dominantBaseline="hanging"
-              textAnchor="middle"
-              fontSize={fontSize}
-              opacity="60%"
-            >
-              {prettifyNumber(point, priceIntlOption)}
-            </text>
-          </g>
-        ))}
+        {fullRange &&
+          [min, max].map((point, i) => (
+            <g key={i}>
+              <line
+                x1={x(point)}
+                x2={x(point)}
+                y1={tick}
+                y2={baseline + 5}
+                stroke="white"
+                opacity="60%"
+              />
+              <text
+                fill="white"
+                x={x(point)}
+                y={baseline + 10}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fontSize={fontSize}
+                opacity="60%"
+              >
+                {point === min ? '0' : '∞'}
+              </text>
+            </g>
+          ))}
+        {!fullRange &&
+          pricePoints.map((point, i) => (
+            <g key={i}>
+              <line
+                x1={x(point)}
+                x2={x(point)}
+                y1={tick}
+                y2={baseline + 5}
+                stroke="white"
+                opacity="60%"
+              />
+              <text
+                fill="white"
+                x={x(point)}
+                y={baseline + 10}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fontSize={fontSize}
+                opacity="60%"
+              >
+                {prettifyNumber(point, priceIntlOption)}
+              </text>
+            </g>
+          ))}
       </g>
     </svg>
   );
 };
 
 interface CurrentPriceProps {
+  position?: number;
   currentPrice?: number;
   token: Token;
   x: (value: number) => number;
@@ -383,9 +425,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
   currentPrice,
   token,
   x,
+  position,
 }) => {
-  if (!currentPrice) return <></>;
-  const price = x(currentPrice);
+  if (!currentPrice || !position) return <></>;
+  const price = x(position);
   const tooLow = price < lowest;
   const tooHigh = price > highest;
   const inRange = !tooLow && !tooHigh;
@@ -543,8 +586,9 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
     round: !smallRange,
     decimals: smallRange ? 6 : undefined,
   };
-  const startPrice = prettifyNumber(startRate, priceOption);
-  const endPrice = prettifyNumber(endRate, priceOption);
+  const fullRange = isFullRangeStrategy(strategy.order0, strategy.order1);
+  const startPrice = fullRange ? '0' : prettifyNumber(startRate, priceOption);
+  const endPrice = fullRange ? '∞' : prettifyNumber(endRate, priceOption);
   const marginalPrice = prettifyNumber(marginalRate, priceOption);
   const { quote, base } = strategy;
   const color = buy ? 'text-buy' : 'text-sell';

@@ -354,6 +354,12 @@ describe('Test helpers', () => {
       test('should return "100.00e+18" for input 1e20', () => {
         expect(prettifyNumber(1e20)).toEqual('100.00e+18');
       });
+
+      // Infinity
+      test('should return "∞" for Infinity', () => {
+        expect(prettifyNumber(Infinity)).toEqual('∞');
+        expect(prettifyNumber('Infinity')).toEqual('∞');
+      });
     });
   });
 

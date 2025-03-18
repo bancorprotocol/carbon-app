@@ -158,6 +158,8 @@ export function prettifyNumber(
   const { locale = 'en-US' } = options;
   const intlOptions = getIntlOptions(num, options);
 
+  if (!num.isFinite()) return '∞';
+
   // Force value to be positive
   if (num.lte(0)) {
     const min = options.isInteger ? 0 : 2;

@@ -17,13 +17,13 @@ export const Toaster: FC = () => {
   );
 };
 
-const ToastItem: FC<Toast> = ({ id, content }) => {
-  switch (typeof content) {
+const ToastItem: FC<Toast> = (toast) => {
+  switch (typeof toast.content) {
     case 'function':
-      return content(id);
+      return toast.content(toast.id);
     case 'string':
-      return <DefaultToast id={id}>{content}</DefaultToast>;
+      return <DefaultToast {...toast}>{toast.content}</DefaultToast>;
     default:
-      return content;
+      return toast.content;
   }
 };

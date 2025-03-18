@@ -13,6 +13,7 @@ import {
 import { Token } from 'libs/tokens';
 import { isZero } from '../common/utils';
 import {
+  defaultSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
@@ -80,7 +81,6 @@ export const getRecurringWarning = (search: TradeRecurringSearch) => {
   }
 };
 
-export const initSpread = '0.05';
 const initMin = (marketPrice: string) => {
   return new SafeDecimal(marketPrice).times(0.99).toString();
 };
@@ -104,7 +104,7 @@ export const getOverlappingOrders = (
     anchor,
     min = initMin(marketPrice),
     max = initMax(marketPrice),
-    spread = initSpread,
+    spread = defaultSpread,
     budget,
   } = search;
   if (!isValidRange(min, max) || !isValidSpread(spread)) {

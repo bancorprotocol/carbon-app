@@ -29,33 +29,38 @@ export const D3ChartOverlappingRangeGroup = ({
   const [isDragging, setIsDragging] = useState(false);
   const isSelectable = useSelectable(selector);
 
-  const handleDrag = drag()
-    .subject(() => {
-      const y = Number(getSelector(selectorRectSell).attr('y'));
-      const heightSell = Number(getSelector(selectorRectSell).attr('height'));
-      const heightBuy = Number(getSelector(selectorRectBuy).attr('height'));
-      const height = heightSell + heightBuy;
-      return {
-        y,
-        height,
-      };
-    })
-    .on('start', ({ y, subject: { height } }) => {
-      setIsDragging(true);
-      onDragStart?.(y, y + height);
-    })
-    .on('drag', ({ y, subject: { height } }) => {
-      onDrag?.(y, y + height);
-    })
-    .on('end', ({ y, subject: { height } }) => {
-      setIsDragging(false);
-      onDragEnd?.(y, y + height);
-    });
-
   useEffect(() => {
     if (readonly || !isSelectable || !onDrag) return;
+    const handleDrag = drag()
+      .subject(() => {
+        const y = Number(getSelector(selectorRectSell).attr('y'));
+        const heightSell = Number(getSelector(selectorRectSell).attr('height'));
+        const heightBuy = Number(getSelector(selectorRectBuy).attr('height'));
+        const height = heightSell + heightBuy;
+        return { y, height };
+      })
+      .on('start', ({ y, subject: { height } }) => {
+        setIsDragging(true);
+        onDragStart?.(y, y + height);
+      })
+      .on('drag', ({ y, subject: { height } }) => {
+        onDrag?.(y, y + height);
+      })
+      .on('end', ({ y, subject: { height } }) => {
+        setIsDragging(false);
+        onDragEnd?.(y, y + height);
+      });
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  }, [isSelectable, handleDrag, onDrag, selection, readonly]);
+  }, [
+    isSelectable,
+    onDrag,
+    selection,
+    readonly,
+    selectorRectSell,
+    selectorRectBuy,
+    onDragStart,
+    onDragEnd,
+  ]);
 
   return (
     <g className={selector}>
