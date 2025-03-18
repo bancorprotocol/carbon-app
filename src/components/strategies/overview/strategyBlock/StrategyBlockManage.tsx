@@ -1,4 +1,5 @@
 import {
+  isFullRangeStrategy,
   isOverlappingStrategy,
   isPaused,
 } from 'components/strategies/common/utils';
@@ -25,6 +26,7 @@ import {
 } from 'components/strategies/edit/utils';
 import config from 'config';
 import { toPairSlug } from 'utils/pairSearch';
+import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { usePairs } from 'hooks/usePairs';
 
 type itemsType = {
@@ -49,6 +51,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const { slug } = useParams({ strict: false });
   const { getType } = usePairs();
   const type = getType(slug ?? '');
+  const duplicate = useDuplicate();
 
   const isOwn = useIsStrategyOwner(strategy.id);
 
@@ -63,7 +66,11 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
-        openModal('duplicateStrategy', { strategy });
+        if (isFullRangeStrategy(strategy.order0, strategy.order1)) {
+          duplicate(strategy);
+        } else {
+          openModal('duplicateStrategy', { strategy });
+        }
       },
     });
   }

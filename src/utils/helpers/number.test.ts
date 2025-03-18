@@ -81,6 +81,7 @@ describe('Test helpers', () => {
         expect(prettifyNumber(0, { currentCurrency: 'JPY' })).toEqual('¥0.00');
       });
 
+      // < 1
       test('should return "$0.001" for input 0.001 and currentCurrency is USD', () => {
         expect(prettifyNumber(0.001, { currentCurrency: 'USD' })).toEqual(
           '$0.001'
@@ -117,31 +118,35 @@ describe('Test helpers', () => {
         );
       });
 
-      test('should return "1,000" for input 1000 and no currentCurrency selected', () => {
-        expect(prettifyNumber(1000, {})).toEqual('1,000.00');
-      });
-
-      test('should return "$1.23" for input 1.2345 and currentCurrency is USD', () => {
+      // 1 -> 10
+      test('should return "$1.2345" for input 1.23456 and currentCurrency is USD', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'USD' })).toEqual(
-          '$1.23'
+          '$1.2345'
         );
       });
 
-      test('should return "€1.23" for input 1.2345 and currentCurrency is EUR', () => {
+      test('should return "€1.2346" for input 1.23456 and currentCurrency is EUR', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'EUR' })).toEqual(
-          '€1.23'
+          '€1.2345'
         );
       });
 
-      test('should return "1.23 ETH" for input 1.2345 and currentCurrency is ETH', () => {
+      test('should return "1.23 ETH" for input 1.23456 and currentCurrency is ETH', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'ETH' })).toEqual(
-          '1.23 ETH'
+          '1.2345 ETH'
         );
       });
 
-      test('should return "¥1.23" for input 1.2345 and currentCurrency is JPY', () => {
+      test('should return "¥1.23" for input 1.23456 and currentCurrency is JPY', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'JPY' })).toEqual(
-          '¥1.23'
+          '¥1.2345'
+        );
+      });
+
+      // > 10
+      test('should return "$1,321,965,595.00" for large number and currentCurrency is USD', () => {
+        expect(prettifyNumber(1321965595, { currentCurrency: 'USD' })).toEqual(
+          '$1,321,965,595.00'
         );
       });
 
@@ -167,6 +172,10 @@ describe('Test helpers', () => {
         expect(prettifyNumber(123456789, { currentCurrency: 'JPY' })).toEqual(
           '¥123,456,789.00'
         );
+      });
+
+      test('should return "1,000" for input 1000 and no currentCurrency selected', () => {
+        expect(prettifyNumber(1000, {})).toEqual('1,000.00');
       });
 
       ////////////////
@@ -216,18 +225,29 @@ describe('Test helpers', () => {
     });
 
     describe('Numbers', () => {
+      // 0
       test('should return "0.00" for input 0 and no currentCurrency selected', () => {
         expect(prettifyNumber(0)).toEqual('0.00');
       });
 
+      // 1 -> 10
+      test('should return "1.0001" for input 1.00012', () => {
+        expect(prettifyNumber(1.00012)).toEqual('1.0001');
+      });
+      test('should return "1.00" for input 1.00001', () => {
+        expect(prettifyNumber(1.00001)).toEqual('1.00');
+      });
+      test('should return "6.5432" for input 6.54321', () => {
+        expect(prettifyNumber(6.54321)).toEqual('6.5432');
+      });
+
+      // > 10
       test('should return "1,321,965,595.00" for large number', () => {
         expect(prettifyNumber(1321965595)).toEqual('1,321,965,595.00');
       });
 
-      test('should return "$1,321,965,595.00" for large number and currentCurrency is USD', () => {
-        expect(prettifyNumber(1321965595, { currentCurrency: 'USD' })).toEqual(
-          '$1,321,965,595.00'
-        );
+      test('should return "1,321,965,595.00" for large number', () => {
+        expect(prettifyNumber(1321965595)).toEqual('1,321,965,595.00');
       });
 
       test('Check rounding is correct - default = math.floor', () => {
@@ -333,6 +353,12 @@ describe('Test helpers', () => {
       // Very large numbers
       test('should return "100.00e+18" for input 1e20', () => {
         expect(prettifyNumber(1e20)).toEqual('100.00e+18');
+      });
+
+      // Infinity
+      test('should return "∞" for Infinity', () => {
+        expect(prettifyNumber(Infinity)).toEqual('∞');
+        expect(prettifyNumber('Infinity')).toEqual('∞');
       });
     });
   });

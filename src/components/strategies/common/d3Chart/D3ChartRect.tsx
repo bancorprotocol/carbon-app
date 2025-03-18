@@ -13,7 +13,7 @@ export const D3ChartRect = (props: RectProps) => {
       className={cn(selector, {
         'cursor-grab': !isDragging,
         'cursor-grabbing': isDragging,
-        'cursor-auto': readonly,
+        'pointer-events-none cursor-auto': readonly,
       })}
       fillOpacity={0.15}
       {...attr}

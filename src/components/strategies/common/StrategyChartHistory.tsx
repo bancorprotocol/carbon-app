@@ -1,7 +1,4 @@
-import {
-  ChartPrices,
-  OnPriceUpdates,
-} from 'components/strategies/common/d3Chart';
+import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { TradeSearch } from 'libs/routing';
@@ -10,7 +7,11 @@ import { BaseOrder } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
+import {
+  defaultEnd,
+  defaultStart,
+  getBounds,
+} from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { Token } from 'libs/tokens';
@@ -18,34 +19,6 @@ import { Activity } from 'libs/queries/extApi/activity';
 import { SafeDecimal } from 'libs/safedecimal';
 import { D3PriceHistory } from './d3Chart/D3PriceHistory';
 import config from 'config';
-
-const getBounds = (
-  order0: BaseOrder,
-  order1: BaseOrder,
-  direction?: 'none' | 'buy' | 'sell'
-): ChartPrices => {
-  if (direction === 'none') {
-    return {
-      buy: { min: '', max: '' },
-      sell: { min: '', max: '' },
-    };
-  } else if (direction === 'buy') {
-    return {
-      buy: { min: order0.min, max: order0.max },
-      sell: { min: '', max: '' },
-    };
-  } else if (direction === 'sell') {
-    return {
-      buy: { min: '', max: '' },
-      sell: { min: order1.min, max: order1.max },
-    };
-  } else {
-    return {
-      buy: { min: order0.min, max: order0.max },
-      sell: { min: order1.min, max: order1.max },
-    };
-  }
-};
 
 interface Props {
   type: TradeTypes;
@@ -64,7 +37,8 @@ interface Props {
 
 export const StrategyChartHistory: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>(null);
-  const { base, quote, type, order0, order1, activities } = props;
+  const { base, quote, type, order0, order1, activities, onPriceUpdates } =
+    props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const nav = useNavigate();
@@ -100,23 +74,26 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     [nav]
   );
 
-  const updatePrices: OnPriceUpdates = ({ buy, sell }) => {
-    const newPrices = {
-      buy: {
-        min: SafeDecimal.max(buy.min, 0).toString(),
-        max: SafeDecimal.max(buy.max, 0).toString(),
-      },
-      sell: {
-        min: SafeDecimal.max(sell.min, 0).toString(),
-        max: SafeDecimal.max(sell.max, 0).toString(),
-      },
-    };
-    setPrices(newPrices);
-    if (timeout.current) clearTimeout(timeout.current);
-    timeout.current = setTimeout(() => {
-      props.onPriceUpdates?.(newPrices);
-    }, 200);
-  };
+  const updatePrices: OnPriceUpdates = useCallback(
+    ({ buy, sell }) => {
+      const newPrices = {
+        buy: {
+          min: SafeDecimal.max(buy.min, 0).toString(),
+          max: SafeDecimal.max(buy.max, 0).toString(),
+        },
+        sell: {
+          min: SafeDecimal.max(sell.min, 0).toString(),
+          max: SafeDecimal.max(sell.max, 0).toString(),
+        },
+      };
+      setPrices(newPrices);
+      if (timeout.current) clearTimeout(timeout.current);
+      timeout.current = setTimeout(() => {
+        onPriceUpdates?.(newPrices);
+      }, 200);
+    },
+    [onPriceUpdates]
+  );
 
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: base.address,
@@ -157,6 +134,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
       />
     );
   }
+
   return (
     <D3PriceHistory
       readonly={props.readonly}

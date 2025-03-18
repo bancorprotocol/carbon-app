@@ -1,11 +1,10 @@
-import { FC, useCallback, useRef } from 'react';
+import { FC, useCallback, useMemo, useRef } from 'react';
 import { useSearch } from '@tanstack/react-router';
 import {
   OverlappingOrder,
   OverlappingSearch,
 } from 'components/strategies/common/types';
 import { SetOverlapping } from 'libs/routing/routes/trade';
-import { initSpread } from 'components/strategies/create/utils';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { NotFound } from 'components/common/NotFound';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
@@ -14,6 +13,9 @@ import { StrategyChartHistory } from './StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { Token } from 'libs/tokens';
 import { StrategyChartLegend } from './StrategyChartLegend';
+import { defaultSpread } from '../overlapping/utils';
+import { isFullRangeStrategy } from './utils';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   marketPrice?: string;
@@ -28,6 +30,19 @@ interface Props {
 export const StrategyChartOverlapping: FC<Props> = (props) => {
   const { base, quote, marketPrice, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
+
+  const resetMarketPrice = (marketPrice: string) => {
+    if (isFullRangeStrategy(props.order0, props.order1)) {
+      set({
+        marketPrice,
+        min: new SafeDecimal(marketPrice).div(1000).toString(),
+        max: new SafeDecimal(marketPrice).mul(1000).toString(),
+      });
+    } else {
+      set({ marketPrice });
+    }
+  };
+
   return (
     <section
       aria-labelledby="price-chart-title"
@@ -58,7 +73,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
           base={base}
           quote={quote}
           marketPrice={marketPrice}
-          setMarketPrice={(price) => set({ marketPrice: price })}
+          setMarketPrice={resetMarketPrice}
         />
       </header>
       <OverlappingChartContent {...props} />
@@ -70,6 +85,9 @@ const OverlappingChartContent: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>(null);
   const { base, quote, marketPrice, order0, order1, readonly, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
+  const fullRange = useMemo(() => {
+    return isFullRangeStrategy(order0, order1);
+  }, [order0, order1]);
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
@@ -100,10 +118,10 @@ const OverlappingChartContent: FC<Props> = (props) => {
         order0={order0}
         order1={order1}
         userMarketPrice={search.marketPrice}
-        spread={search.spread ?? initSpread}
+        spread={search.spread ?? defaultSpread}
         setMin={(min) => set({ min })}
         setMax={(max) => set({ max })}
-        disabled={readonly}
+        disabled={readonly || fullRange}
       />
     );
   }
@@ -115,9 +133,9 @@ const OverlappingChartContent: FC<Props> = (props) => {
         quote={quote}
         order0={order0}
         order1={order1}
-        spread={search.spread || initSpread}
+        spread={search.spread || defaultSpread}
         marketPrice={search.marketPrice}
-        readonly={readonly}
+        readonly={readonly || fullRange}
         onPriceUpdates={onPriceUpdates}
       />
       {readonly && <StrategyChartLegend />}

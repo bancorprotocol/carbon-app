@@ -22,6 +22,7 @@ export const MarketPriceIndication: FC<Props> = (props) => {
   const marketPercent = marketPricePercent(price, marketPrice);
   const { getFiatAsString, selectedFiatCurrency } = useFiatCurrency(quote);
   const fiatAsString = getFiatAsString(price);
+
   if (!marketPrice)
     return (
       <span className="text-12 text-white/60">

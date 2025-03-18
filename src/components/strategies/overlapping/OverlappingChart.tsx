@@ -17,8 +17,9 @@ import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-manageme
 import { getSignedMarketPricePercentage } from '../marketPriceIndication/utils';
 import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import styles from './OverlappingChart.module.css';
 import { clamp, getMax, getMin } from 'utils/helpers/operators';
+import { isFullRangeCreation } from '../common/utils';
+import styles from './OverlappingChart.module.css';
 
 type Scale = ReturnType<typeof getScale>;
 
@@ -70,6 +71,7 @@ const getBuyPoint = ({ order0, order1 }: Orders, scale: Scale) => {
   const min = +order0.min;
   const maxTop = getMin(order1.min, order0.marginalPrice);
   const maxBottom = getMin(order0.max, order0.marginalPrice);
+  if (min > +order0.max || min > +order0.marginalPrice) return '';
   return [
     [x(min), y(top)].join(','),
     [x(maxTop), y(top)].join(','),
@@ -81,7 +83,9 @@ const getBuyPoint = ({ order0, order1 }: Orders, scale: Scale) => {
 };
 const getMarginalBuyPoint = ({ order0, order1 }: Orders, scale: Scale) => {
   const { x, y } = scale;
-
+  if (+order0.min > +order0.max || +order0.min > +order0.marginalPrice) {
+    return '';
+  }
   if (+order1.min >= +order0.marginalPrice) {
     return [
       [x(order0.marginalPrice), y(top)].join(','),
@@ -104,6 +108,9 @@ const getSellPoint = ({ order0, order1 }: Orders, scale: Scale) => {
   const { x, y } = scale;
   const minTop = getMax(order1.min, order1.marginalPrice);
   const minBottom = getMax(order0.max, order1.marginalPrice);
+  if (+order1.max < +order1.min || +order1.max < +order1.marginalPrice) {
+    return '';
+  }
   return [
     [x(minTop), y(top)].join(','),
     [x(order1.max), y(top)].join(','),
@@ -115,7 +122,10 @@ const getSellPoint = ({ order0, order1 }: Orders, scale: Scale) => {
 };
 const getMarginalSellPoint = ({ order0, order1 }: Orders, scale: Scale) => {
   const { x, y } = scale;
-  if (order1.marginalPrice >= order0.max) {
+  if (+order1.max < +order1.min || +order1.max < +order1.marginalPrice) {
+    return '';
+  }
+  if (+order1.marginalPrice >= +order0.max) {
     return [
       [x(order1.min), y(top)].join(','),
       [x(order1.marginalPrice), y(top)].join(','),
@@ -176,6 +186,7 @@ const getBoundaries = (lowest: number, highest: number) => {
   const mean = (highest + lowest) / 2;
   return {
     left: mean - delta * 1.2,
+    mean,
     right: mean + delta * 1.2,
   };
 };
@@ -220,16 +231,8 @@ interface Props {
   setMax: (max: string) => any;
 }
 export const OverlappingChart: FC<Props> = (props) => {
-  const {
-    base,
-    quote,
-    order0,
-    order1,
-    userMarketPrice,
-    spread,
-    disabled,
-    className,
-  } = props;
+  const { base, quote, order0, order1, userMarketPrice, spread, className } =
+    props;
   const id = useId();
   const [zoom, setZoom] = useState(1);
   const [dragging, setDragging] = useState('');
@@ -243,7 +246,10 @@ export const OverlappingChart: FC<Props> = (props) => {
   const lowest = getMin(order0.min, marketPrice ?? order0.min);
   const highest = getMax(order1.max, marketPrice ?? order1.max);
   const prices = getPrices(lowest, highest, box.width);
-  const { left, right } = getBoundaries(lowest, highest);
+  const { left, mean, right } = getBoundaries(lowest, highest);
+  const fullRange = isFullRangeCreation(min, max, marketPrice);
+  const marketPosition = fullRange ? mean : marketPrice;
+  const disabled = props.disabled;
 
   const scaleConfig = {
     left,
@@ -256,17 +262,25 @@ export const OverlappingChart: FC<Props> = (props) => {
   const viewBox = `0 0 ${box.width} ${box.height}`;
 
   // Texts
+  const marketPriceText = tokenAmount(marketPrice, quote);
   const marketPercent = {
     min: marketPricePercent(order0.min, marketPrice),
     max: marketPricePercent(order1.max, marketPrice),
   };
-  const minText = tokenAmount(min, quote);
-  const minPrecent = getSignedMarketPricePercentage(marketPercent.min);
+  const minText = fullRange ? tokenAmount(0, quote) : tokenAmount(min, quote);
+  const minPrecent = fullRange
+    ? null
+    : getSignedMarketPricePercentage(marketPercent.min);
   const minPercentText = minPrecent ? `${minPrecent}%` : '...';
-  const maxText = tokenAmount(max, quote);
-  const maxPercent = getSignedMarketPricePercentage(marketPercent.max);
+
+  const maxText = fullRange
+    ? tokenAmount(Infinity, quote)
+    : tokenAmount(max, quote);
+  const maxPercent = fullRange
+    ? null
+    : getSignedMarketPricePercentage(marketPercent.max);
   const maxPercentText = maxPercent ? `${maxPercent}%` : '...';
-  const marketPriceText = tokenAmount(marketPrice, quote);
+
   const title = (() => {
     const feeTier = `Fee Tier ${spread || 0}%`;
     if (userMarketPrice) {
@@ -581,24 +595,54 @@ export const OverlappingChart: FC<Props> = (props) => {
               y2={y(bottom + 3)}
             />
           ))}
-          {prices.map((price, i) => (
-            <text
-              key={`${price}-${i}`}
-              x={x(price)}
-              y={y(5)}
-              fontSize={fontSize}
-              dominantBaseline="hanging"
-              textAnchor="middle"
-              fill="white"
-              fillOpacity="0.8"
-            >
-              {prettifySignedNumber(price, { abbreviate: true })}
-            </text>
-          ))}
+          {fullRange && (
+            <>
+              <text
+                x={x(min)}
+                y={y(5)}
+                fontSize={fontSize}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fill="white"
+                fillOpacity="0.8"
+              >
+                0
+              </text>
+              <text
+                x={x(max)}
+                y={y(5)}
+                fontSize={fontSize}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fill="white"
+                fillOpacity="0.8"
+              >
+                ∞
+              </text>
+            </>
+          )}
+          {!fullRange &&
+            prices.map((price, i) => (
+              <text
+                key={`${price}-${i}`}
+                x={x(price)}
+                y={y(5)}
+                fontSize={fontSize}
+                dominantBaseline="hanging"
+                textAnchor="middle"
+                fill="white"
+                fillOpacity="0.8"
+              >
+                {prettifySignedNumber(price, { abbreviate: true })}
+              </text>
+            ))}
         </g>
 
         {marketPrice && (
-          <g id="market-price" transform={`translate(${x(marketPrice)}, 0)`}>
+          <g
+            id="market-price"
+            transform={`translate(${x(marketPosition!)}, 0)`}
+          >
             <line
               stroke={outline}
               x1={0}

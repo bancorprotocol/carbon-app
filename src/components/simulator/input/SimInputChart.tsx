@@ -18,6 +18,7 @@ import { CandlestickData } from 'libs/d3';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
+import { isFullRange } from 'components/strategies/common/utils';
 
 interface Props {
   state: StrategyInputValues | SimulatorInputOverlappingValues;
@@ -60,10 +61,10 @@ export const SimInputChart = ({
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
-      dispatch('buyMin', formatNumber(buy.min), false);
-      dispatch('buyMax', formatNumber(buy.max), false);
-      dispatch('sellMin', formatNumber(sell.min), false);
-      dispatch('sellMax', formatNumber(sell.max), false);
+      dispatch('buyMin', formatNumber(buy.min));
+      dispatch('buyMax', formatNumber(buy.max));
+      dispatch('sellMin', formatNumber(sell.min));
+      dispatch('sellMax', formatNumber(sell.max));
     },
     [dispatch]
   );
@@ -119,6 +120,7 @@ export const SimInputChart = ({
           zoomBehavior="normal"
           start={state.start}
           end={state.end}
+          readonly={isFullRange(prices.buy.min, prices.sell.max)}
         />
       )}
     </div>
