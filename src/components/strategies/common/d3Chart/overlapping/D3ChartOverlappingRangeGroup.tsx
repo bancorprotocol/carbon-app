@@ -5,7 +5,7 @@ import {
   getSelector,
   useSelectable,
 } from 'components/strategies/common/d3Chart/utils';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useD3ChartCtx } from '../D3ChartContext';
 
 interface Props {
@@ -29,17 +29,15 @@ export const D3ChartOverlappingRangeGroup = ({
   const [isDragging, setIsDragging] = useState(false);
   const isSelectable = useSelectable(selector);
 
-  const handleDrag = useMemo(() => {
-    return drag()
+  useEffect(() => {
+    if (readonly || !isSelectable || !onDrag) return;
+    const handleDrag = drag()
       .subject(() => {
         const y = Number(getSelector(selectorRectSell).attr('y'));
         const heightSell = Number(getSelector(selectorRectSell).attr('height'));
         const heightBuy = Number(getSelector(selectorRectBuy).attr('height'));
         const height = heightSell + heightBuy;
-        return {
-          y,
-          height,
-        };
+        return { y, height };
       })
       .on('start', ({ y, subject: { height } }) => {
         setIsDragging(true);
@@ -52,12 +50,17 @@ export const D3ChartOverlappingRangeGroup = ({
         setIsDragging(false);
         onDragEnd?.(y, y + height);
       });
-  }, [onDrag, onDragEnd, onDragStart, selectorRectBuy, selectorRectSell]);
-
-  useEffect(() => {
-    if (readonly || !isSelectable || !onDrag) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  }, [isSelectable, handleDrag, onDrag, selection, readonly]);
+  }, [
+    isSelectable,
+    onDrag,
+    selection,
+    readonly,
+    selectorRectSell,
+    selectorRectBuy,
+    onDragStart,
+    onDragEnd,
+  ]);
 
   return (
     <g className={selector}>

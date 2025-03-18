@@ -39,14 +39,18 @@ export const useD3OverlappingChart = (props: Props) => {
       sellMin = calculatedPrices.sellPriceLow;
     }
 
+    // clamp with domain to prevent negative values in full range
+    const max = Math.max(...yScale.domain());
+    const min = Math.min(...yScale.domain());
+
     return {
       buy: {
-        min: yScale(Number(prices.buy.min)),
-        max: yScale(Number(buyMax)),
+        min: yScale(Math.max(min, Number(prices.buy.min))),
+        max: yScale(Math.min(max, Number(buyMax))),
       },
       sell: {
-        min: yScale(Number(sellMin)),
-        max: yScale(Number(prices.sell.max)),
+        min: yScale(Math.max(min, Number(sellMin))),
+        max: yScale(Math.min(max, Number(prices.sell.max))),
       },
       marketPrice: marketPrice ? yScale(marketPrice) : 0,
     };
