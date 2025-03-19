@@ -159,34 +159,30 @@ export const CartStrategyItems: FC<Props> = (props) => {
           popover="auto"
           onBeforeToggle={setSize}
           className={cn(
-            'rounded-8 bg-background-900/90 m-0 overflow-hidden p-24',
+            'rounded-8 bg-background-900 m-0 overflow-hidden p-24',
             styles.warnings
           )}
         >
-          <article className="grid h-full content-end">
-            <button
-              type="button"
-              popoverTarget={popoverId}
-              popoverTargetAction="hide"
-              aria-label="close warnings"
-              className="hover:bg-background-900 justify-self-end rounded-full p-8"
-            >
-              <IconClose className="size-16" />
-            </button>
-            <ul className="grid gap-8">
+          <article className="grid h-full content-start gap-16">
+            <header className="flex items-center gap-16">
+              <div className="bg-warning/25 text-warning rounded-full p-8">
+                <IconWarning className="size-18" />
+              </div>
+              <h3 className="text-16 text-warning font-weight-700">Warnings</h3>
+              <button
+                type="button"
+                popoverTarget={popoverId}
+                popoverTargetAction="hide"
+                aria-label="close warnings"
+                className="hover:bg-background-900 ml-auto rounded-full p-8"
+              >
+                <IconClose className="size-16" />
+              </button>
+            </header>
+            <ul className="text-14 grid list-disc gap-8 pl-16	text-white/80">
               {warnings.map((warning, i) => (
-                <li
-                  key={i}
-                  style={{ ['--delay' as any]: `${(i + 1) * 50}ms` }}
-                  className="bg-background-900 grid gap-8"
-                >
-                  <header className="flex items-center gap-16">
-                    <div className="bg-warning/25 text-warning rounded-full p-8">
-                      <IconWarning className="size-18" />
-                    </div>
-                    <h3 className="text-16">Budget Warning</h3>
-                  </header>
-                  <p className="text-14 text-white/80">{warning}</p>
+                <li key={i} style={{ ['--delay' as any]: `${(i + 1) * 50}ms` }}>
+                  {warning}
                 </li>
               ))}
             </ul>
