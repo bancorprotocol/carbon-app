@@ -115,7 +115,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           <h3 className="text-18 flex gap-6" data-testid="token-pair">
             <PairName baseToken={base} quoteToken={quote} />
           </h3>
-          {warnings.length && (
+          {!!warnings.length && (
             <button
               type="button"
               popoverTarget={popoverId}
@@ -153,7 +153,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           <StrategyGraph strategy={strategy} />
         </div>
       </div>
-      {warnings.length && (
+      {!!warnings.length && (
         <div
           id={popoverId}
           popover="auto"
