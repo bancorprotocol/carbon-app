@@ -10,7 +10,11 @@ import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { useSimulatorOverlappingInput } from 'hooks/useSimulatorOverlappingInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
-import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
+import {
+  defaultEnd,
+  defaultStart,
+  oneYearAgo,
+} from 'components/strategies/common/utils';
 import { FormEvent, useEffect, useMemo } from 'react';
 import { formatNumber, roundSearchParam } from 'utils/helpers';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
@@ -26,8 +30,8 @@ export const SimulatorInputOverlappingPage = () => {
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: searchState.baseToken,
     quoteToken: searchState.quoteToken,
-    start: defaultStart().toString(),
-    end: defaultEnd().toString(),
+    start: oneYearAgo(),
+    end: defaultEnd(),
   });
 
   const marketPrice = useMemo(() => {

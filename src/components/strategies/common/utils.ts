@@ -3,7 +3,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { formatNumber } from 'utils/helpers';
 import { BaseOrder } from './types';
-import { startOfDay, subDays } from 'date-fns';
+import { startOfDay, subMonths, subYears } from 'date-fns';
 import { toUnixUTC } from 'components/simulator/utils';
 import { ChartPrices } from './d3Chart';
 
@@ -157,10 +157,11 @@ export const resetPrice = (price?: string) => {
   return isZero(price) ? '' : price;
 };
 
-export const defaultStartDate = () => startOfDay(subDays(new Date(), 364));
+export const defaultStartDate = () => startOfDay(subMonths(new Date(), 3));
 export const defaultEndDate = () => startOfDay(new Date());
 export const defaultStart = () => toUnixUTC(defaultStartDate());
 export const defaultEnd = () => toUnixUTC(defaultEndDate());
+export const oneYearAgo = () => toUnixUTC(startOfDay(subYears(new Date(), 1)));
 
 export const getBounds = (
   order0: BaseOrder,

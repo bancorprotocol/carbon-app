@@ -26,7 +26,12 @@ import { Activity } from 'libs/queries/extApi/activity';
 import { getDomain, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
-import { defaultEndDate, defaultStartDate } from '../utils';
+import {
+  defaultEnd,
+  defaultEndDate,
+  defaultStart,
+  defaultStartDate,
+} from '../utils';
 import { differenceInDays, startOfDay } from 'date-fns';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import style from './D3PriceHistory.module.css';
@@ -268,11 +273,10 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   useEffect(() => {
     if (!zoomRange || listenOnZoom) return;
-    if (props.start && props.end) {
-      const from = fromUnixUTC(props.start);
-      const to = fromUnixUTC(props.end);
-      zoomRange(props.start, differenceInDays(to, from) + 1, 0);
-    }
+    const start = props.start || defaultStart();
+    const from = fromUnixUTC(props.start || defaultStart());
+    const to = fromUnixUTC(props.end || defaultEnd());
+    zoomRange(start, differenceInDays(to, from) + 1, 0);
     // Prevent zoom end event to update range on init
     setTimeout(() => setListenOnZoom(true), 100);
     // This effect should happens only once, when start, end and zoomRange are ready
