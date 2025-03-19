@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { Link, useRouterState, useMatchRoute } from 'libs/routing';
-import { handleOnItemClick } from '../utils';
 import { ReactComponent as IconDots } from 'assets/icons/three-dots.svg';
 import { useModal } from 'hooks/useModal';
 import { menuItems } from 'components/core/menu';
@@ -24,7 +23,6 @@ export const MobileMenu: FC = () => {
         return (
           <Link
             key={index}
-            onClick={() => handleOnItemClick(href)}
             to={href}
             aria-current={isSamePage ? 'page' : 'false'}
             className={`px-3 py-3 ${

@@ -1,20 +1,27 @@
 import { Page } from 'components/common/page';
 import { Outlet, useNavigate, useParams } from 'libs/routing';
-
-import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
+import { StrategyProvider } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { ExplorerHeader } from 'components/explorer/ExplorerHeader';
-import { useEffect, useState } from 'react';
-import { explorerEvents } from 'services/events/explorerEvents';
+import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { ExplorerSearch } from 'components/explorer/ExplorerSearch';
 import { useExplorer } from 'components/explorer/useExplorer';
 import config from 'config';
+import { carbonEvents } from 'services/events';
 
 const url = '/explore/$slug';
 export const ExplorerPage = () => {
   const { slug } = useParams({ from: url });
   const navigate = useNavigate({ from: url });
+
+  useEffect(() => {
+    if (!slug) return;
+    carbonEvents.explore.exploreSearch({
+      explore_search: slug,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
 
   useEffect(() => {
     if (slug) {
@@ -29,7 +36,6 @@ export const ExplorerPage = () => {
   return (
     <Page hideTitle>
       <StrategyProvider query={query}>
-        <ExplorerEvents />
         {config.ui.tradeCount && <ExplorerHeader />}
         <div className="gap-30 flex flex-grow flex-col">
           <ExplorerSearch />
@@ -39,47 +45,4 @@ export const ExplorerPage = () => {
       </StrategyProvider>
     </Page>
   );
-};
-
-const ExplorerEvents = () => {
-  const [mounted, setMounted] = useState(false);
-  const { slug } = useParams({ from: url });
-  const { filteredStrategies, isPending, filter, sort } = useStrategyCtx();
-
-  useEffect(() => {
-    if (!slug || isPending) return;
-    explorerEvents.search({
-      slug,
-      strategies: filteredStrategies,
-      filter,
-      sort,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, isPending]);
-
-  useEffect(() => {
-    if (!mounted || !slug) return;
-    explorerEvents.resultsFilter({
-      slug,
-      strategies: filteredStrategies,
-      filter,
-      sort,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
-
-  useEffect(() => {
-    if (!mounted || !slug) return;
-    explorerEvents.resultsSort({
-      slug,
-      strategies: filteredStrategies,
-      filter,
-      sort,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort]);
-
-  // This ensure all useEffect have been triggered once before setting mounted to true
-  useEffect(() => setMounted(true), [setMounted]);
-  return <></>;
 };

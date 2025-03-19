@@ -73,7 +73,6 @@ export const TradeOverlapping = () => {
     <>
       <TradeLayout>
         <CreateForm
-          type="overlapping"
           base={base}
           quote={quote}
           order0={orders.buy}

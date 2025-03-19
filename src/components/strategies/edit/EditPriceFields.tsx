@@ -58,7 +58,6 @@ export const EditStrategyPriceField: FC<Props> = ({
         1
       </span>
       <Tooltip
-        sendEventOnMount={{ buy }}
         element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
           base.symbol
         } at. Make sure the price is in ${quote.symbol} tokens.`}
@@ -120,7 +119,7 @@ export const EditStrategyPriceField: FC<Props> = ({
       >
         <OrderHeader {...headerProps}>
           <h2 className="text-16 flex items-center gap-8" id={titleId}>
-            <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
+            <Tooltip element={tooltipText}>
               <span>{buy ? 'Buy Low' : 'Sell High'}</span>
             </Tooltip>
             <LogoImager alt="Token" src={base.logoURI} className="size-18" />

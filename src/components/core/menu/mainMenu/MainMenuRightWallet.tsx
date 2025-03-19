@@ -8,7 +8,6 @@ import { DropdownMenu, useMenuCtx } from 'components/common/dropdownMenu';
 import { useModal } from 'hooks/useModal';
 import { useWagmi } from 'libs/wagmi';
 import { FC, useMemo } from 'react';
-import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
 import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
@@ -27,10 +26,7 @@ export const MainMenuRightWallet: FC = () => {
   const { openModal } = useModal();
   const selectedWallet = currentConnector?.name;
 
-  const onClickOpenModal = () => {
-    carbonEvents.navigation.navWalletConnectClick(undefined);
-    openModal('wallet', undefined);
-  };
+  const onClickOpenModal = () => openModal('wallet', undefined);
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
 
@@ -80,10 +76,6 @@ export const MainMenuRightWallet: FC = () => {
               buttonStyles({ variant: buttonVariant }),
               'flex items-center gap-10 px-12'
             )}
-            onClick={(e) => {
-              carbonEvents.navigation.navWalletClick(undefined);
-              attr.onClick(e);
-            }}
             data-testid="user-wallet"
           >
             {buttonIcon}

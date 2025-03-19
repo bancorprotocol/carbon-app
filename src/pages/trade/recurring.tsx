@@ -75,7 +75,6 @@ export const TradeRecurring = () => {
     <>
       <TradeLayout>
         <CreateForm
-          type="recurring"
           base={base!}
           quote={quote!}
           order0={buyOrder}

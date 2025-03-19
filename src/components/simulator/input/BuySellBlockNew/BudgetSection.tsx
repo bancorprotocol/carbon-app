@@ -56,7 +56,6 @@ export const BudgetSection: FC<Props> = ({
           2
         </span>
         <Tooltip
-          sendEventOnMount={{ buy }}
           element={
             buy
               ? `The amount of ${

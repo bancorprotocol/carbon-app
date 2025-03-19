@@ -52,7 +52,6 @@ export const CreateOrder: FC<Props> = ({
         1
       </span>
       <Tooltip
-        sendEventOnMount={{ buy }}
         element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
           base.symbol
         } at. Make sure the price is in ${quote.symbol} tokens.`}
@@ -116,7 +115,7 @@ export const CreateOrder: FC<Props> = ({
       >
         <OrderHeader {...headerProps}>
           <h2 className="text-16 flex items-center gap-8" id={titleId}>
-            <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
+            <Tooltip element={tooltipText}>
               <span>{buy ? 'Buy Low' : 'Sell High'}</span>
             </Tooltip>
             <LogoImager alt="Token" src={base.logoURI} className="size-18" />
@@ -158,7 +157,7 @@ export const CreateOrder: FC<Props> = ({
             <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
               2
             </span>
-            <Tooltip sendEventOnMount={{ buy }} element={budgetTooltip()}>
+            <Tooltip element={budgetTooltip()}>
               <span className="text-white/80">
                 Set {buy ? 'Buy' : 'Sell'} Budget&nbsp;
               </span>

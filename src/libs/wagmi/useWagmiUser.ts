@@ -69,10 +69,6 @@ export const useWagmiUser = ({
     if (user !== oldUser.current && !!user) {
       // User changed current address
       oldUser.current = user;
-      carbonEvents.wallet.walletConnected({
-        address: user,
-        name: currentConnector?.name || '',
-      });
     }
   }, [user, currentConnector?.name]);
   useAccountEffect({
