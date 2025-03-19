@@ -1,8 +1,7 @@
-import { Button } from 'components/common/button';
 import { Link, useRouterState } from 'libs/routing';
-import { carbonEvents } from 'services/events';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
-import { isPathnameMatch } from 'utils/helpers';
+import { cn, isPathnameMatch } from 'utils/helpers';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 
 export const CreateStrategyCTAMobile = () => {
   const { pathname } = useRouterState().location;
@@ -13,24 +12,19 @@ export const CreateStrategyCTAMobile = () => {
     '/strategies/portfolio/token/$address',
   ]);
 
-  if (!showCTA) {
-    return null;
-  }
+  if (!showCTA) return;
 
   return (
     <Link
+      aria-label="Create Strategy"
       to="/trade/disposable"
-      className="bottom-100 right-30 fixed md:hidden"
+      className={cn(
+        buttonStyles({ variant: 'success' }),
+        'bottom-100 right-30 place-center fixed grid size-56 rounded-full p-0 md:hidden'
+      )}
       data-testid="create-strategy-mobile"
     >
-      <Button
-        aria-label="Create Strategy"
-        variant="success"
-        className="flex size-56 items-center justify-center rounded-full p-0"
-        onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
-      >
-        <IconPlus className="size-14" />
-      </Button>
+      <IconPlus className="size-14" />
     </Link>
   );
 };

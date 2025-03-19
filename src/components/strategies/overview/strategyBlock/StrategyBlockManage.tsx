@@ -15,16 +15,8 @@ import {
   getTooltipTextByStrategyEditOptionsId,
 } from './utils';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import {
-  toStrategyEventParams,
-  useStrategyEvent,
-} from 'components/strategies/create/useStrategyEventData';
-import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
-import { explorerEvents } from 'services/events/explorerEvents';
-import { useStrategyCtx } from 'hooks/useStrategies';
-import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
 import { isDisposableStrategy } from 'components/strategies/common/utils';
@@ -54,7 +46,6 @@ interface Props {
 export const StrategyBlockManage: FC<Props> = (props) => {
   const { strategy } = props;
   const [manage, setManage] = useState(false);
-  const { filteredStrategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
   const navigate = useNavigate();
   const { slug } = useParams({ strict: false });
@@ -68,12 +59,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
   const isOverlapping = isOverlappingStrategy(strategy);
 
-  const strategyEventData = useStrategyEvent(toStrategyEventParams(strategy));
-  const strategyEvent = {
-    ...strategyEventData,
-    strategyId: strategy.id,
-  };
-
   const items: (itemsType | separatorCounterType)[] = [];
 
   if (!isPaused(strategy)) {
@@ -81,7 +66,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
-        carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
         if (isFullRangeStrategy(strategy.order0, strategy.order1)) {
           duplicate(strategy);
         } else {
@@ -135,15 +119,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       id: 'walletOwner',
       name: "View Owner's Strategies",
       action: () => {
-        const event = {
-          type,
-          slug,
-          strategyEvent,
-          strategies: filteredStrategies,
-          sort,
-          filter,
-        };
-        explorerEvents.viewOwnersStrategiesClick(event);
         navigate({
           to: '/explore/$slug',
           params: { slug: owner.data ?? '' },
@@ -159,14 +134,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       name: 'Explore Pair',
       action: () => {
         const slug = toPairSlug(strategy.base, strategy.quote);
-        const event = {
-          type,
-          slug,
-          strategies: filteredStrategies,
-          filter,
-          sort,
-        };
-        explorerEvents.search(event);
         navigate({
           to: '/explore/$slug',
           params: { slug },
@@ -182,10 +149,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       id: 'editPrices',
       name: 'Edit Prices',
       action: () => {
-        carbonEvents.strategyEdit.strategyEditPricesClick({
-          origin: 'manage',
-          ...strategyEvent,
-        });
         navigate({
           to: editPrices.to,
           search: editPrices.search,
@@ -202,7 +165,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       id: 'depositFunds',
       name: 'Deposit Funds',
       action: () => {
-        carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
         navigate({
           to: deposit.to,
           search: deposit.search,
@@ -217,8 +179,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
         action: () => {
-          carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
-
           if (isOverlapping) {
             navigate({
               to: withdraw.to,
@@ -226,7 +186,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
               params: { strategyId: strategy.id },
             });
           } else {
-            openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
+            openModal('confirmWithdrawStrategy', { strategy });
           }
         },
       });
@@ -240,8 +200,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         id: 'pauseStrategy',
         name: 'Pause Strategy',
         action: () => {
-          carbonEvents.strategyEdit.strategyPauseClick(strategyEvent);
-          openModal('confirmPauseStrategy', { strategy, strategyEvent });
+          openModal('confirmPauseStrategy', { strategy });
         },
       });
     }
@@ -252,7 +211,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         id: 'renewStrategy',
         name: 'Renew Strategy',
         action: () => {
-          carbonEvents.strategyEdit.strategyRenewClick(strategyEvent);
           navigate({
             to: renew.to,
             search: renew.search,
@@ -266,8 +224,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       id: 'deleteStrategy',
       name: 'Delete Strategy',
       action: () => {
-        carbonEvents.strategyEdit.strategyDeleteClick(strategyEvent);
-        openModal('confirmDeleteStrategy', { strategy, strategyEvent });
+        openModal('confirmDeleteStrategy', { strategy });
       },
     });
   }
@@ -280,21 +237,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       button={(attr) => {
         return props.button({
           ...attr,
-          onClick: (e) => {
-            attr.onClick(e);
-            if (!isOwn) {
-              const baseEvent = {
-                type,
-                slug,
-                strategies: filteredStrategies,
-                sort,
-                filter,
-              };
-              explorerEvents.manageClick({ ...baseEvent, strategyEvent });
-            } else {
-              strategyEditEvents.strategyManageClick(strategyEvent);
-            }
-          },
           role: 'menuitem',
           'aria-label': 'Manage strategy',
           'data-testid': 'manage-strategy-btn',

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
-import { carbonEvents } from 'services/events';
 import { useWagmi } from 'libs/wagmi';
 import {
   useGetTradeLiquidity,
@@ -15,6 +14,7 @@ import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidge
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
 import { isTouchedZero, isZero } from 'components/strategies/common/utils';
+import { carbonEvents } from 'services/events';
 
 export const useBuySell = ({
   source,
@@ -24,7 +24,7 @@ export const useBuySell = ({
 }: TradeWidgetBuySellProps) => {
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
-  const { user, provider } = useWagmi();
+  const { user } = useWagmi();
   const { openModal } = useModal();
   const { selectedFiatCurrency } = useFiatCurrency();
   const sourceTokenPriceQuery = useGetTokenPrice(source.address);
@@ -39,6 +39,8 @@ export const useBuySell = ({
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
+  const { provider } = useWagmi();
+  const { getFiatValue } = useFiatCurrency(source);
 
   const { calcMaxInput } = useTradeAction({
     source,
@@ -50,45 +52,28 @@ export const useBuySell = ({
     target.address
   );
 
-  const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
-
   const clearInputs = useCallback(() => {
     setSourceInput('');
     setTargetInput('');
   }, []);
 
-  const eventData = useMemo(() => {
-    return {
-      buy,
-      buyToken: target,
-      sellToken: source,
-      blockchainNetwork: provider?.network?.name || '',
-      valueUsd: getFiatValueSource(sourceInput, true).toString(),
-    };
-  }, [
-    buy,
-    getFiatValueSource,
-    provider?.network?.name,
-    source,
-    sourceInput,
-    target,
-  ]);
-
   const { trade, isAwaiting, approval } = useTradeAction({
     source,
     sourceInput,
     isTradeBySource,
-    onSuccess: (txHash: string) => {
+    onSuccess: (transactionHash: string) => {
       clearInputs();
-      buy
-        ? carbonEvents.trade.tradeBuy({
-            ...eventData,
-            transactionHash: txHash,
-          })
-        : carbonEvents.trade.tradeSell({
-            ...eventData,
-            transactionHash: txHash,
-          });
+      const event = {
+        trade_direction: buy ? ('buy' as const) : ('sell' as const),
+        token_pair: `${target.symbol}/${source.symbol}`,
+        buy_token: target.symbol,
+        sell_token: source.symbol,
+        value_usd: getFiatValue(sourceInput, true).toString(),
+        transaction_hash: transactionHash,
+        blockchain_network: provider?.network?.name || '',
+      };
+      if (buy) carbonEvents.trade.tradeBuy(event);
+      else carbonEvents.trade.tradeSell(event);
     },
   });
 
@@ -243,13 +228,6 @@ export const useBuySell = ({
           tradeFn();
         },
         buttonLabel: 'Confirm Trade',
-        eventData: {
-          ...eventData,
-          productType: 'trade',
-          approvalTokens: approval.tokens,
-          blockchainNetwork: provider?.network?.name || '',
-        },
-        context: 'trade',
       });
     } else {
       void tradeFn();
@@ -261,10 +239,8 @@ export const useBuySell = ({
     bySourceQuery.isFetching,
     byTargetQuery.isFetching,
     errorBaseBalanceSufficient,
-    eventData,
     isLiquidityError,
     isTradeBySource,
-    provider?.network?.name,
     maxSourceAmountQuery.isFetching,
     openModal,
     source,

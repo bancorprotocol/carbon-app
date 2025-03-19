@@ -10,13 +10,10 @@ import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { cn } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
-import { StrategyEditEventType } from 'services/events/types';
-import { carbonEvents } from 'services/events';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 
 export interface ModalConfirmDeleteData {
   strategy: Strategy;
-  strategyEvent: StrategyEditEventType;
 }
 
 export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
@@ -24,7 +21,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   data,
 }) => {
   const { closeModal } = useModal();
-  const { strategy, strategyEvent } = data;
+  const { strategy } = data;
   const { deleteStrategy, deleteMutation, isProcessing } = useDeleteStrategy();
   const isAwaiting = deleteMutation.isPending;
 
@@ -36,18 +33,12 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   const onClick = () => {
     deleteStrategy(
       strategy,
-      () => carbonEvents.strategyEdit.strategyDelete(strategyEvent),
+      () => {},
       () => closeModal(id)
     );
   };
 
-  const editPrices = () => {
-    carbonEvents.strategyEdit.strategyEditPricesClick({
-      origin: 'delete',
-      ...strategyEvent,
-    });
-    closeModal(id);
-  };
+  const editPrices = () => closeModal(id);
 
   return (
     <ModalOrMobileSheet id={id} title="Delete Strategy">

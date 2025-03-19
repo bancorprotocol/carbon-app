@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { CreateStrategyParams, QueryKey, useQueryClient } from 'libs/queries';
 import { useCreateStrategyQuery } from 'libs/queries';
-import { StrategyType, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
@@ -9,11 +9,9 @@ import { useNotifications } from 'hooks/useNotifications';
 import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
 import { BaseOrder } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
-import { useStrategyEvent } from './useStrategyEventData';
-import { carbonEvents } from 'services/events';
-import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import config from 'config';
+import { carbonEvents } from 'services/events';
+import { getStrategyType, toOrder } from '../common/utils';
 
 const spenderAddress = config.addresses.carbon.carbonController;
 
@@ -42,7 +40,6 @@ export const toCreateStrategyParams = (
 });
 
 interface Props {
-  type: StrategyType;
   base?: Token;
   quote?: Token;
   order0: BaseOrder;
@@ -50,13 +47,12 @@ interface Props {
 }
 
 export const useCreateStrategy = (props: Props) => {
-  const { type, base, quote, order0, order1 } = props;
+  const { base, quote, order0, order1 } = props;
   const cache = useQueryClient();
   const navigate = useNavigate();
-  const { user, provider } = useWagmi();
+  const { user } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
-  const { marketPrice } = useMarketPrice({ base, quote });
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
@@ -81,17 +77,6 @@ export const useCreateStrategy = (props: Props) => {
     return arr;
   }, [base, quote, order0.budget, order1.budget]);
 
-  const strategyData = useStrategyEvent({ type, base, quote, order0, order1 });
-  const buyMarketPricePercentage = {
-    min: marketPricePercent(order0.min, marketPrice),
-    max: marketPricePercent(order0.max, marketPrice),
-    price: marketPricePercent('', marketPrice),
-  };
-  const sellMarketPricePercentage = {
-    min: marketPricePercent(order1.min, marketPrice),
-    max: marketPricePercent(order1.max, marketPrice),
-    price: marketPricePercent('', marketPrice),
-  };
   const approval = useApproval(approvalTokens);
   const mutation = useCreateStrategyQuery();
 
@@ -106,6 +91,16 @@ export const useCreateStrategy = (props: Props) => {
           onSuccess: async (tx) => {
             handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
             dispatchNotification('createStrategy', { txHash: tx.hash });
+            carbonEvents.strategy.createStrategy({
+              token_pair: `${base.symbol}/${quote.symbol}`,
+              strategy_base_token: base.symbol,
+              strategy_quote_token: quote.symbol,
+              strategy_category: 'static',
+              strategy_type: getStrategyType({
+                order0: toOrder(order0),
+                order1: toOrder(order1),
+              }),
+            });
             await tx.wait();
             cache.invalidateQueries({
               queryKey: QueryKey.balance(user, base.address),
@@ -114,11 +109,6 @@ export const useCreateStrategy = (props: Props) => {
               queryKey: QueryKey.balance(user, quote.address),
             });
             navigate({ to: '/', search: {}, params: {} });
-            carbonEvents.strategy.strategyCreate({
-              ...strategyData,
-              buyMarketPricePercentage,
-              sellMarketPricePercentage,
-            });
           },
           onError: (e: any) => {
             setIsProcessing(false);
@@ -151,15 +141,6 @@ export const useCreateStrategy = (props: Props) => {
         approvalTokens,
         onConfirm,
         buttonLabel: 'Create Strategy',
-        eventData: {
-          ...strategyData,
-          productType: 'strategy',
-          approvalTokens,
-          buyToken: base,
-          sellToken: quote,
-          blockchainNetwork: provider?.network?.name || '',
-        },
-        context: 'createStrategy',
       });
     }
     return onConfirm();

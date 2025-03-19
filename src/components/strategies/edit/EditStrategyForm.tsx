@@ -13,16 +13,11 @@ import {
 } from 'libs/queries';
 import { getStatusTextByTxStatus } from '../utils';
 import { isZero } from '../common/utils';
-import { carbonEvents } from 'services/events';
 import { BaseOrder } from '../common/types';
 import { handleTxStatusAndRedirectToOverview } from '../create/utils';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { NotificationSchema } from 'libs/notifications/data';
-import {
-  toStrategyEventParams,
-  useStrategyEvent,
-} from '../create/useStrategyEventData';
 import { StrategyType } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
 import { getDeposit } from './utils';
@@ -92,10 +87,6 @@ export const EditStrategyForm: FC<Props> = (props) => {
   const { isProcessing: isDeleting, deleteStrategy } = useDeleteStrategy();
   const navigate = useNavigate({ from: '/strategies/edit/$strategyId' });
 
-  const strategyEventData = useStrategyEvent(
-    toStrategyEventParams(strategy, strategyType)
-  );
-
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
 
@@ -160,10 +151,6 @@ export const EditStrategyForm: FC<Props> = (props) => {
           cache.invalidateQueries({
             queryKey: QueryKey.strategiesByUser(user),
           });
-          carbonEvents.strategyEdit.strategyEditPrices({
-            ...strategyEventData,
-            strategyId: strategy.id,
-          });
           console.log('tx confirmed');
         },
         onError: (e) => {
@@ -184,13 +171,7 @@ export const EditStrategyForm: FC<Props> = (props) => {
     ) {
       return openModal('withdrawOrDelete', {
         onWithdraw: update,
-        onDelete: () =>
-          deleteStrategy(strategy, () =>
-            carbonEvents.strategyEdit.strategyDelete({
-              strategyId: strategy.id,
-              ...strategyEventData,
-            })
-          ),
+        onDelete: () => deleteStrategy(strategy),
       });
     }
 
@@ -199,15 +180,6 @@ export const EditStrategyForm: FC<Props> = (props) => {
         approvalTokens,
         onConfirm: update,
         buttonLabel: 'Confirm Deposit',
-        eventData: {
-          ...strategyEventData,
-          productType: 'strategy',
-          approvalTokens,
-          buyToken: strategy.base,
-          sellToken: strategy.quote,
-          blockchainNetwork: config.network.name,
-        },
-        context: 'depositStrategyFunds',
       });
     }
     return update();

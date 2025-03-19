@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useWagmi, Connector } from 'libs/wagmi';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
-import { carbonEvents } from 'services/events';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
@@ -13,10 +12,6 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const [selectedConnection, setSelectedConnection] =
     useState<Connector | null>(null);
   const [connectionError, setConnectionError] = useState('');
-
-  useEffect(() => {
-    carbonEvents.wallet.walletConnectPopupView(undefined);
-  }, []);
 
   const isPending = selectedConnection !== null && !connectionError;
   const isError = selectedConnection !== null && connectionError;
