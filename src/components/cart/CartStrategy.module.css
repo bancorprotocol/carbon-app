@@ -1,0 +1,30 @@
+.warnings:not(:popover-open) {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.warnings:popover-open {
+  opacity: 1;
+  transform: translateY(0);
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+.warnings {
+  transition-property: opacity, display, overlay, transform;
+  transition-duration: 0.3s;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+}
+
+.warnings:popover-open li {
+  animation: open 200ms var(--delay) var(--ease-out) backwards;
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
