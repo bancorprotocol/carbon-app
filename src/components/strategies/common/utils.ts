@@ -15,14 +15,24 @@ export interface StrategyInput {
   order1: StrategyOrderInput;
 }
 export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
+  const buyLow = 'startRate' in order0 ? order0.startRate : order0.min;
   const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
   const sellLow = 'startRate' in order1 ? order1.startRate : order1.min;
-  if (!buyHigh || !sellLow) return false;
-  const buyMax = new SafeDecimal(buyHigh);
-  const sellMin = new SafeDecimal(sellLow);
-  if (sellMin.eq(0)) return false; // Limit strategy with only buy
-  if (buyMax.eq(0)) return false;
-  return buyMax.gte(sellMin);
+  const sellHigh = 'endRate' in order1 ? order1.endRate : order1.max;
+  if (isZero(buyHigh) || isZero(sellLow)) return false;
+
+  return (
+    new SafeDecimal(buyLow)
+      .div(sellLow)
+      .toDecimalPlaces(2) // Round to 2 decimal places
+      .times(1 + 0.01) // Apply 1% buffer above
+      .gte(new SafeDecimal(buyHigh).div(sellHigh).toDecimalPlaces(2)) &&
+    new SafeDecimal(buyLow)
+      .div(new SafeDecimal(sellLow))
+      .toDecimalPlaces(2) // Round to 2 decimal places
+      .times(1 - 0.01) // Apply 1% buffer below
+      .lte(new SafeDecimal(buyHigh).div(sellHigh).toDecimalPlaces(2))
+  );
 };
 
 export const isFullRangeStrategy = (
