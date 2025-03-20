@@ -2738,6 +2738,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@oddbird/popover-polyfill@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@oddbird/popover-polyfill/-/popover-polyfill-0.5.2.tgz#9a142cae54b6e48824bec61e94e39541c9746b69"
+  integrity sha512-iFrvar5SOMtKFOSjYvs4z9UlLqDdJbMx0mgISLcPedv+g0ac5sgeETLGtipHCVIae6HJPclNEH5aCyD1RZaEHw==
+
 "@open-draft/deferred-promise@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@open-draft/deferred-promise/-/deferred-promise-2.2.0.tgz#4a822d10f6f0e316be4d67b4d4f8c9a124b073bd"

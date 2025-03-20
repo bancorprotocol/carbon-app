@@ -1,0 +1,42 @@
+.warnings:not(:popover-open) {
+  opacity: 0;
+  transition-delay: 300ms;
+}
+.warnings:popover-open {
+  opacity: 1;
+  transform: translateY(0);
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+.warnings {
+  transition-property: opacity, display, overlay, transform;
+  transition-timing-function: var(--ease-out);
+  transition-duration: 300ms;
+  transition-behavior: allow-discrete;
+}
+
+.warnings:popover-open li {
+  animation: open 200ms var(--delay) var(--ease-out) backwards;
+}
+.warnings:not(:popover-open) article {
+  animation: close 200ms var(--ease-in) forwards;
+}
+.warnings:not(:popover-open) li {
+  animation: close 200ms var(--ease-in) forwards;
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+@keyframes close {
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
