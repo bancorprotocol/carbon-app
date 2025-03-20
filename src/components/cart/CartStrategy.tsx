@@ -86,13 +86,16 @@ export const CartStrategyItems: FC<Props> = (props) => {
 
   const setSize = (event: ToggleEvent<HTMLDivElement>) => {
     if (!event.currentTarget.parentElement) return;
+    const el = event.currentTarget;
     const htmlRect = document.documentElement.getBoundingClientRect();
     const gutter = (window.innerWidth - htmlRect.width) / 2;
     const rect = event.currentTarget.parentElement.getBoundingClientRect();
-    event.currentTarget.style.setProperty('top', `${rect.top}px`);
-    event.currentTarget.style.setProperty('left', `${rect.left - gutter}px`);
-    event.currentTarget.style.setProperty('width', `${rect.width}px`);
-    event.currentTarget.style.setProperty('height', `${rect.height}px`);
+    const scroll = window.scrollY;
+    el.style.setProperty('top', `${rect.top + scroll}px`);
+    el.style.setProperty('left', `${rect.left - gutter}px`);
+    el.style.setProperty('width', `${rect.width}px`);
+    el.style.setProperty('height', `${rect.height}px`);
+    document.addEventListener('scroll', () => el.hidePopover(), { once: true });
   };
 
   const remove = async () => {
@@ -159,7 +162,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           popover="auto"
           onBeforeToggle={setSize}
           className={cn(
-            'rounded-8 bg-background-900 m-0 overflow-hidden p-24',
+            'rounded-8 bg-background-900 absolute m-0 overflow-hidden p-24',
             styles.warnings
           )}
         >
