@@ -9,7 +9,14 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { CartStrategy } from 'libs/queries';
-import { CSSProperties, FC, ToggleEvent, useEffect, useId } from 'react';
+import {
+  CSSProperties,
+  FC,
+  ToggleEvent,
+  useEffect,
+  useId,
+  useRef,
+} from 'react';
 import { cn } from 'utils/helpers';
 import {
   isOverlappingStrategy,
@@ -70,10 +77,11 @@ const getWarnings = (strategy: CartStrategy, marketPrice?: number) => {
 
 export const CartStrategyItems: FC<Props> = (props) => {
   const { strategy, style, className } = props;
-  const popoverId = useId();
   const { base, quote } = strategy;
   const { marketPrice } = useMarketPrice({ base, quote });
   const { user } = useWagmi();
+  const popoverId = useId();
+  const close = useRef(() => document.getElementById(popoverId)?.hidePopover());
 
   const warnings = getWarnings(strategy, marketPrice);
 
@@ -86,16 +94,22 @@ export const CartStrategyItems: FC<Props> = (props) => {
 
   const setSize = (event: ToggleEvent<HTMLDivElement>) => {
     if (!event.currentTarget.parentElement) return;
-    const el = event.currentTarget;
-    const htmlRect = document.documentElement.getBoundingClientRect();
-    const gutter = (window.innerWidth - htmlRect.width) / 2;
-    const rect = event.currentTarget.parentElement.getBoundingClientRect();
-    const scroll = window.scrollY;
-    el.style.setProperty('top', `${rect.top + scroll}px`);
-    el.style.setProperty('left', `${rect.left - gutter}px`);
-    el.style.setProperty('width', `${rect.width}px`);
-    el.style.setProperty('height', `${rect.height}px`);
-    document.addEventListener('scroll', () => el.hidePopover(), { once: true });
+    if (event.newState === 'closed') {
+      document.removeEventListener('scroll', close.current);
+      window.removeEventListener('resize', close.current);
+    } else {
+      const el = event.currentTarget;
+      const htmlRect = document.documentElement.getBoundingClientRect();
+      const gutter = (window.innerWidth - htmlRect.width) / 2;
+      const rect = event.currentTarget.parentElement.getBoundingClientRect();
+      const scroll = window.scrollY;
+      el.style.setProperty('top', `${rect.top + scroll}px`);
+      el.style.setProperty('left', `${rect.left - gutter}px`);
+      el.style.setProperty('width', `${rect.width}px`);
+      el.style.setProperty('height', `${rect.height}px`);
+      document.addEventListener('scroll', close.current, { once: true });
+      window.addEventListener('resize', close.current, { once: true });
+    }
   };
 
   const remove = async () => {
