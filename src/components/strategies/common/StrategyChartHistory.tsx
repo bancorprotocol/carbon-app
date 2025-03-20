@@ -9,8 +9,8 @@ import { TradeTypes } from 'libs/routing/routes/trade';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import {
   defaultEnd,
-  defaultStart,
   getBounds,
+  oneYearAgo,
 } from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
@@ -98,8 +98,8 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: base.address,
     quoteToken: quote.address,
-    start: defaultStart().toString(),
-    end: defaultEnd().toString(),
+    start: oneYearAgo(),
+    end: defaultEnd(),
   });
 
   useEffect(() => {

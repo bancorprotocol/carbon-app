@@ -7,7 +7,11 @@ import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
 import { simulatorInputRecurringRoute } from 'libs/routing/routes/sim';
 import { SafeDecimal } from 'libs/safedecimal';
-import { defaultEnd, defaultStart } from 'components/strategies/common/utils';
+import {
+  defaultEnd,
+  defaultStart,
+  oneYearAgo,
+} from 'components/strategies/common/utils';
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
@@ -25,8 +29,8 @@ export const SimulatorInputRecurringPage = () => {
   const { data, isPending, isError } = useGetTokenPriceHistory({
     baseToken: searchState.baseToken,
     quoteToken: searchState.quoteToken,
-    start: defaultStart().toString(),
-    end: defaultEnd().toString(),
+    start: oneYearAgo(),
+    end: defaultEnd(),
   });
   const { marketPrice, isPending: marketPricePending } = useMarketPrice({
     base: state.baseToken,

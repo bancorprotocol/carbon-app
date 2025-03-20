@@ -24,8 +24,8 @@ import { BackButton } from 'components/common/BackButton';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import {
   defaultEnd,
-  defaultStart,
   emptyOrder,
+  oneYearAgo,
 } from 'components/strategies/common/utils';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
@@ -61,8 +61,8 @@ export const StrategyPage = () => {
 
   const { data: activities } = useActivityQuery({
     strategyIds: id,
-    start: priceStart?.toString() ?? defaultStart(),
-    end: priceEnd?.toString() ?? defaultEnd(),
+    start: priceStart ?? oneYearAgo(),
+    end: priceEnd ?? defaultEnd(),
   });
 
   if (isPending) {
