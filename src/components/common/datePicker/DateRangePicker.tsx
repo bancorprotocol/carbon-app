@@ -2,12 +2,13 @@ import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import {
-  subDays,
   isSameDay,
   subMonths,
   startOfDay,
   endOfDay,
   format,
+  sub,
+  Duration,
 } from 'date-fns';
 import { Dispatch, memo, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
@@ -17,15 +18,18 @@ import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 
 export const datePickerPresets: DatePickerPreset[] = [
-  { label: 'Last 7 days', days: 6 },
-  { label: 'Last 30 days', days: 29 },
-  { label: 'Last 90 days', days: 89 },
-  { label: 'Last 365 days', days: 364 },
+  { label: 'Last 7 days', duration: { days: 6 } },
+  { label: 'Last 30 days', duration: { days: 29 } },
+  { label: 'Last 90 days', duration: { days: 89 } },
+  { label: 'Last 365 days', duration: { days: 364 } },
 ];
 
 export type DatePickerPreset = {
   label: string;
-  days: number;
+  duration: Duration;
+  days?: number;
+  months?: number;
+  years?: number;
 };
 
 interface Props {
@@ -137,15 +141,15 @@ const Content = (props: Props) => {
   const hasDates = !!(date?.from && date?.to);
   const selectedPreset = props.presets?.find((p) => {
     if (!hasDates) return false;
-    const from = subDays(now, p.days);
+    const from = sub(now, p.duration);
     return isSameDay(from, date?.from!) && isSameDay(date?.to!, now);
   });
 
   const { aboveBreakpoint } = useBreakpoints();
 
-  const handlePreset = (days: number) => {
+  const handlePreset = (duration: Duration) => {
     setDate({
-      from: subDays(startOfDay(now), days),
+      from: sub(startOfDay(now), duration),
       to: startOfDay(now),
     });
   };
@@ -175,14 +179,14 @@ const Content = (props: Props) => {
             aria-label="presets"
             className="hidden w-[200px] flex-col gap-5 md:flex"
           >
-            {props.presets.map(({ label, days }) => (
+            {props.presets.map(({ label, duration }, i) => (
               <button
                 type="button"
                 role="radio"
-                key={days}
+                key={i}
                 className="rounded-8 px-30 text-14 font-weight-500 hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start [&[aria-checked=true]]:bg-black"
-                onClick={() => handlePreset(days)}
-                aria-checked={selectedPreset?.days === days}
+                onClick={() => handlePreset(duration)}
+                aria-checked={selectedPreset?.label === label}
                 data-testid="date-picker-button"
               >
                 {label}

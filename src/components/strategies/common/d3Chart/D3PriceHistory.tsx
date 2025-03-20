@@ -32,7 +32,7 @@ import {
   defaultStart,
   defaultStartDate,
 } from '../utils';
-import { differenceInDays, startOfDay } from 'date-fns';
+import { differenceInDays, Duration, startOfDay, sub } from 'date-fns';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import style from './D3PriceHistory.module.css';
 
@@ -174,12 +174,16 @@ interface Props {
   end?: string;
 }
 
-const presetDays = [
-  { days: 7, label: '7D' },
-  { days: 30, label: '1M' },
-  { days: 90, label: '3M' },
-  { days: 365, label: '1Y' },
+const presets = [
+  { label: '7D', duration: { weeks: 1 } },
+  { label: '1M', duration: { months: 1 } },
+  { label: '3M', duration: { months: 3 } },
+  { label: '1Y', duration: { years: 1 } },
 ];
+
+const durationToDays = (duration: Duration) => {
+  return differenceInDays(new Date(), sub(new Date(), duration));
+};
 
 export const D3PriceHistory: FC<Props> = (props) => {
   const {
@@ -334,17 +338,20 @@ export const D3PriceHistory: FC<Props> = (props) => {
             </g>
           </svg>
           <div className="col-span-2 flex border-t border-white/10">
-            {presetDays.map(({ days, label }) => (
-              <button
-                key={days}
-                role="menuitem"
-                className="text-12 duration-preset hover:bg-background-700 rounded-8 p-8 disabled:pointer-events-none disabled:text-white/50"
-                onClick={() => zoomIn(days)}
-                disabled={days > data.length}
-              >
-                {label}
-              </button>
-            ))}
+            {presets.map(({ duration, label }) => {
+              const days = durationToDays(duration);
+              return (
+                <button
+                  key={label}
+                  role="menuitem"
+                  className="text-12 duration-preset hover:bg-background-700 rounded-8 p-8 disabled:pointer-events-none disabled:text-white/50"
+                  onClick={() => zoomIn(days)}
+                  disabled={days > data.length}
+                >
+                  {label}
+                </button>
+              );
+            })}
             <hr className="h-full border-e border-white/10" />
             <DateRangePicker
               className="rounded-8 border-0"
