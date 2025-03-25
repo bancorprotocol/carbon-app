@@ -39,11 +39,11 @@ export const commonConfig: AppConfig = {
   sdk: {
     cacheTTL: 0,
   },
-  defaultTokenPair: [addresses.COTI, addresses.ZERO],
-  popularPairs: [[addresses.COTI, addresses.ZERO]],
+  defaultTokenPair: [addresses.COTI, addresses.COTI],
+  popularPairs: [[addresses.COTI, addresses.COTI]],
   popularTokens: {
     base: [addresses.COTI],
-    quote: [addresses.ZERO],
+    quote: [addresses.COTI],
   },
   addresses: {
     tokens: addresses,
