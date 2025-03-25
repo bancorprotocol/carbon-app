@@ -4,6 +4,8 @@ import seiDev from './sei/development';
 import seiProd from './sei/production';
 import celoDev from './celo/development';
 import celoProd from './celo/production';
+import cotiDev from './coti/development';
+import cotiProd from './coti/production';
 import blastDev from './blast/development';
 import blastProd from './blast/production';
 import { handleConfigOverrides } from './utils';
@@ -20,6 +22,10 @@ const configs = {
   celo: {
     development: celoDev,
     production: celoProd,
+  },
+  coti: {
+    development: cotiDev,
+    production: cotiProd,
   },
   blast: {
     development: blastDev,

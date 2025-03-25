@@ -2,6 +2,7 @@ const BLOCKED_HOSTS = [
   'carbon-app-csq.pages.dev',
   'carbon-app-sei.pages.dev',
   'carbon-app-celo.pages.dev',
+  'carbon-app-coti.pages.dev',
   'carbon-app-blast.pages.dev',
 ];
 
