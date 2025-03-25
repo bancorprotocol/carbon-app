@@ -55,8 +55,8 @@ export const commonConfig: AppConfig = {
   },
   utils: {
     multicall3: {
-      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
-      blockCreated: 13112599,
+      address: '0x773B75CfB146bd5d1095fa9d6d45637f02B05119',
+      blockCreated: 1742915034,
     },
   },
   tokenListOverride: [],
