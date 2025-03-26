@@ -3,6 +3,7 @@ import IconCotiLogo from 'assets/logos/cotilogo.svg';
 
 const addresses = {
   COTI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+  GCOTI: '0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1',
   ZERO: '0x0000000000000000000000000000000000000000',
 };
 
@@ -32,18 +33,17 @@ export const commonConfig: AppConfig = {
       symbol: 'COTI',
       decimals: 18,
       address: addresses.COTI,
-      logoURI:
-        'https://assets.coingecko.com/coins/images/2962/standard/Coti.png',
+      logoURI: '/tokens/coti/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg',
     },
   },
   sdk: {
     cacheTTL: 0,
   },
-  defaultTokenPair: [addresses.COTI, addresses.COTI],
-  popularPairs: [[addresses.COTI, addresses.COTI]],
+  defaultTokenPair: [addresses.COTI, addresses.GCOTI],
+  popularPairs: [[addresses.COTI, addresses.GCOTI]],
   popularTokens: {
-    base: [addresses.COTI],
-    quote: [addresses.COTI],
+    base: [addresses.COTI, addresses.GCOTI],
+    quote: [addresses.COTI, addresses.GCOTI],
   },
   addresses: {
     tokens: addresses,
@@ -60,18 +60,23 @@ export const commonConfig: AppConfig = {
     },
   },
   tokenListOverride: [],
-  tokenLists: [],
+  tokenLists: [
+    // Bancor
+    {
+      uri: '/tokens/coti/list.json',
+    },
+  ],
   tenderly: {
     faucetTokens: [],
   },
   ui: {
     showSimulator: false,
-    priceChart: 'tradingView',
-    useGradientBranding: false,
+    priceChart: 'native',
+    useGradientBranding: true,
     tradeCount: false,
     currencyMenu: false,
-    showTerms: false,
-    showPrivacy: false,
-    showCart: false,
+    showTerms: true,
+    showPrivacy: true,
+    showCart: true,
   },
 };
