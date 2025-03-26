@@ -1,0 +1,28 @@
+{
+  "name": "Bancor",
+  "logoURI": "/tokens/coti/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg",
+  "keywords": ["bancor"],
+  "tokens": [
+    {
+      "chainId": 2632500,
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "name": "COTI",
+      "symbol": "COTI",
+      "decimals": 18,
+      "logoURI": "/tokens/coti/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0x7637c7838ec4ec6b85080f28a678f8e234bb83d1",
+      "name": "gCoti",
+      "symbol": "GCOTI",
+      "decimals": 18,
+      "logoURI": "/tokens/coti/0x7637c7838ec4ec6b85080f28a678f8e234bb83d1.svg"
+    }
+  ],
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  }
+}
