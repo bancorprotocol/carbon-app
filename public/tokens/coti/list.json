@@ -9,7 +9,7 @@
       "name": "COTI",
       "symbol": "COTI",
       "decimals": 18,
-      "logoURI": "/tokens/ethereum/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg"
+      "logoURI": "/tokens/coti/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg"
     },
     {
       "chainId": 2632500,
@@ -17,7 +17,7 @@
       "name": "gCoti",
       "symbol": "GCOTI",
       "decimals": 18,
-      "logoURI": "/tokens/ethereum/0x7637c7838ec4ec6b85080f28a678f8e234bb83d1.svg"
+      "logoURI": "/tokens/coti/0x7637c7838ec4ec6b85080f28a678f8e234bb83d1.svg"
     }
   ],
   "version": {
