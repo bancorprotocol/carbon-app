@@ -89,17 +89,6 @@ As the same network was used for all tests, mutating a strategy in one test migh
 
 If you need to mock data, you can use the [mock-api.mjs script](../scripts/mock-api.mjs). Please modify the script to return the desired data. If no data is available, the mocked routes will continue fetching.
 
-### Mock date
-
-If you need to mock the date, you can use the `mockDate` function. This function will mock the Date constructor and Date.now(). It must be be called before the page is navigated to.
-
-```typescript
-import { mockDate } from '../utils/mock-date';
-test.beforeEach(async ({ page }) => {
-  await mockDate(page, '2024-03-01T00:00:00.000Z')
-});
-```
-
 ### Wait for network
 
 When getting data from an external source, even if mocked, you may use `waitForResponse` to make sure the next test step is executed after the data is loaded.
