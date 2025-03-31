@@ -21,17 +21,21 @@ export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
   const sellHigh = 'endRate' in order1 ? order1.endRate : order1.max;
   if (isZero(buyHigh) || isZero(sellLow)) return false;
 
+  const buyMin = new SafeDecimal(buyLow);
+  const buyMax = new SafeDecimal(buyHigh);
+  if (buyMax.lt(sellLow)) return false;
+
   return (
-    new SafeDecimal(buyLow)
+    buyMin
       .div(sellLow)
       .toDecimalPlaces(2) // Round to 2 decimal places
       .times(1 + 0.01) // Apply 1% buffer above
-      .gte(new SafeDecimal(buyHigh).div(sellHigh).toDecimalPlaces(2)) &&
-    new SafeDecimal(buyLow)
+      .gte(buyMax.div(sellHigh).toDecimalPlaces(2)) &&
+    buyMin
       .div(new SafeDecimal(sellLow))
       .toDecimalPlaces(2) // Round to 2 decimal places
       .times(1 - 0.01) // Apply 1% buffer below
-      .lte(new SafeDecimal(buyHigh).div(sellHigh).toDecimalPlaces(2))
+      .lte(buyMax.div(sellHigh).toDecimalPlaces(2))
   );
 };
 
