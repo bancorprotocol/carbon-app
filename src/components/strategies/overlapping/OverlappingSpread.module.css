@@ -12,9 +12,31 @@
   color: white;
 }
 
+.spread-custom {
+  display: grid;
+  grid-template-areas: "stack";
+}
+.spread-custom > * {
+  grid-area: stack;
+}
+.spread-custom label {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .spread-custom input:placeholder-shown {
   flex: 1;
 }
 .spread-custom input:placeholder-shown + .suffix {
   display: none;
+}
+
+.spread-custom[data-in-options="true"] input {
+  opacity: 0;
+}
+.spread-custom[data-in-options="true"]:not(:focus-within) label {
+  opacity: 1;
+}
+.spread-custom[data-in-options="true"]:focus-within input:focus-visible {
+  opacity: 1;
 }

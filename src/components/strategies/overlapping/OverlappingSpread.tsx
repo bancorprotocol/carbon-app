@@ -6,6 +6,7 @@ import {
 } from 'components/strategies/overlapping/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useStore } from 'store';
+import { isZero } from '../common/utils';
 import styles from './OverlappingSpread.module.css';
 
 interface Props {
@@ -74,12 +75,10 @@ export const OverlappingSpread: FC<Props> = (props) => {
 
   const onCustomBlur = (e: FocusEvent<HTMLInputElement>) => {
     if (options.includes(e.target.value)) {
-      e.target.value = '';
     } else {
       const value = formatNumber(e.target.value);
-      if (!value || !Number(value)) {
+      if (isZero(value)) {
         setSpread(defaultSpread.toString());
-        e.target.value = '';
       } else {
         e.target.value = Number(Number(value).toFixed(6)).toString();
       }
@@ -118,30 +117,34 @@ export const OverlappingSpread: FC<Props> = (props) => {
         <div
           className={cn(
             styles.spreadCustom,
-            'rounded-8 flex min-w-0 flex-1 justify-center bg-black p-16 text-center',
+            'rounded-8 min-w-0 flex-1 bg-black p-16 text-center',
             'focus-within:outline focus-within:outline-2',
             !isCustomSpread && 'hover:outline hover:outline-1',
             isCustomSpread && 'outline outline-2 outline-white/60',
             hasError && 'text-error outline-error',
             spread && inOptions && 'text-white/40'
           )}
+          data-in-options={inOptions}
         >
-          <input
-            id="spread-custom"
-            className="w-full bg-transparent text-center outline-none placeholder:text-white/40"
-            value={options.includes(spread) ? '' : spread}
-            name="spread"
-            type="text"
-            inputMode="decimal"
-            aria-label="Set custom"
-            placeholder="Set custom"
-            tabIndex={inOptions ? -1 : 0}
-            onChange={onCustomChange}
-            onFocus={(e) => e.target.select()}
-            onBlur={onCustomBlur}
-            data-testid="spread-input"
-          />
-          <span className={styles.suffix}>%</span>
+          <label htmlFor="spread-custom">Custom</label>
+          <div className="justify-centers flex">
+            <input
+              id="spread-custom"
+              className="w-full bg-transparent text-center outline-none placeholder:text-white/40 "
+              value={spread}
+              name="spread"
+              type="text"
+              inputMode="decimal"
+              aria-label="Set custom"
+              placeholder="Custom"
+              tabIndex={inOptions ? -1 : 0}
+              onChange={onCustomChange}
+              onFocus={(e) => e.target.select()}
+              onBlur={onCustomBlur}
+              data-testid="spread-input"
+            />
+            <span className={styles.suffix}>%</span>
+          </div>
         </div>
       </div>
       {tooLow && (
