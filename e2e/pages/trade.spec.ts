@@ -91,7 +91,8 @@ test.describe('Trade', () => {
     testInfo.setTimeout(90_000);
     await mockApi(page);
     const vNet = await setupVirtualNetwork(testInfo);
-    await setupLocalStorage(page, vNet.rpcs[0].url);
+    const rpc = vNet.rpcs.find(({ url }) => url.startsWith('https'))!.url;
+    await setupLocalStorage(page, rpc);
     const debug = new DebugDriver(page);
     await debug.visit();
     await debug.setupImposter();

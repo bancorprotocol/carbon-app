@@ -196,7 +196,8 @@ test.describe('Simulator', () => {
     await mockApi(page);
     await page.clock.setFixedTime(new Date('2024-02-26T00:00:00.000Z'));
     const vNet = await setupVirtualNetwork(testInfo);
-    await setupLocalStorage(page, vNet.rpcs[0].url);
+    const rpc = vNet.rpcs.find(({ url }) => url.startsWith('https'))!.url;
+    await setupLocalStorage(page, rpc);
     const debug = new DebugDriver(page);
     await debug.visit();
   });
