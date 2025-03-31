@@ -34,10 +34,7 @@ export const mockApi = async (page: Page) => {
     if (!baseToken || !quoteToken || !start || !end || !data) {
       return route.continue();
     }
-    const filteredData = historyPrices[historyPricesId].filter(
-      (item) => item.timestamp >= start && item.timestamp <= end
-    );
-    return route.fulfill({ json: filteredData });
+    return route.fulfill({ json: data });
   });
   await page.route('**/*/simulator/create?*', (route) => {
     const url = new URL(route.request().url());
