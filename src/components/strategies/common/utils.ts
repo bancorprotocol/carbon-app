@@ -15,28 +15,29 @@ export interface StrategyInput {
   order1: StrategyOrderInput;
 }
 export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
-  const buyLow = 'startRate' in order0 ? order0.startRate : order0.min;
+  // const buyLow = 'startRate' in order0 ? order0.startRate : order0.min;
   const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
   const sellLow = 'startRate' in order1 ? order1.startRate : order1.min;
-  const sellHigh = 'endRate' in order1 ? order1.endRate : order1.max;
+  // const sellHigh = 'endRate' in order1 ? order1.endRate : order1.max;
   if (isZero(buyHigh) || isZero(sellLow)) return false;
+  return new SafeDecimal(buyHigh).gte(sellLow);
 
-  const buyMin = new SafeDecimal(buyLow);
-  const buyMax = new SafeDecimal(buyHigh);
-  if (buyMax.lt(sellLow)) return false;
+  // const buyMin = new SafeDecimal(buyLow);
+  // const buyMax = new SafeDecimal(buyHigh);
+  // if (buyMax.lt(sellLow)) return false;
 
-  return (
-    buyMin
-      .div(sellLow)
-      .toDecimalPlaces(2) // Round to 2 decimal places
-      .times(1 + 0.01) // Apply 1% buffer above
-      .gte(buyMax.div(sellHigh).toDecimalPlaces(2)) &&
-    buyMin
-      .div(new SafeDecimal(sellLow))
-      .toDecimalPlaces(2) // Round to 2 decimal places
-      .times(1 - 0.01) // Apply 1% buffer below
-      .lte(buyMax.div(sellHigh).toDecimalPlaces(2))
-  );
+  // return (
+  //   buyMin
+  //     .div(sellLow)
+  //     .toDecimalPlaces(2) // Round to 2 decimal places
+  //     .times(1 + 0.01) // Apply 1% buffer above
+  //     .gte(buyMax.div(sellHigh).toDecimalPlaces(2)) &&
+  //   buyMin
+  //     .div(new SafeDecimal(sellLow))
+  //     .toDecimalPlaces(2) // Round to 2 decimal places
+  //     .times(1 - 0.01) // Apply 1% buffer below
+  //     .lte(buyMax.div(sellHigh).toDecimalPlaces(2))
+  // );
 };
 
 export const isFullRangeStrategy = (
