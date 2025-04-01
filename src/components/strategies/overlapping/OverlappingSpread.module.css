@@ -31,12 +31,12 @@
   display: none;
 }
 
-.spread-custom[data-in-options="true"] input {
+.spread-custom[data-in-options="true"] div {
   opacity: 0;
 }
 .spread-custom[data-in-options="true"]:not(:focus-within) label {
   opacity: 1;
 }
-.spread-custom[data-in-options="true"]:focus-within input:focus-visible {
+.spread-custom[data-in-options="true"]:focus-within > div {
   opacity: 1;
 }

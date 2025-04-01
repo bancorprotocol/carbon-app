@@ -67,21 +67,15 @@ export const OverlappingSpread: FC<Props> = (props) => {
   };
 
   const onCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.value) {
-      return setSpread(defaultSpread.toString());
-    }
+    if (!e.target.value) return setSpread('');
     selectSpread(e.currentTarget.value);
   };
 
   const onCustomBlur = (e: FocusEvent<HTMLInputElement>) => {
-    if (options.includes(e.target.value)) {
-    } else {
-      const value = formatNumber(e.target.value);
-      if (isZero(value)) {
-        setSpread(defaultSpread.toString());
-      } else {
-        e.target.value = Number(Number(value).toFixed(6)).toString();
-      }
+    const value = formatNumber(e.target.value);
+    if (isZero(value)) return setSpread(defaultSpread.toString());
+    if (!options.includes(e.target.value)) {
+      e.target.value = Number(Number(value).toFixed(6)).toString();
     }
   };
 
