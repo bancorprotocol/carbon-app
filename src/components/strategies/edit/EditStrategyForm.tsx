@@ -133,11 +133,12 @@ export const EditStrategyForm: FC<Props> = (props) => {
   };
 
   const update = () => {
+    const fieldsToUpdate = getFieldsToUpdate(orders, strategy);
     updateMutation.mutate(
       {
         id: strategy.id,
         encoded: strategy.encoded,
-        fieldsToUpdate: getFieldsToUpdate(orders, strategy),
+        fieldsToUpdate: fieldsToUpdate,
         buyMarginalPrice: orders.buy.marginalPrice,
         sellMarginalPrice: orders.sell.marginalPrice,
       },
@@ -151,6 +152,16 @@ export const EditStrategyForm: FC<Props> = (props) => {
           cache.invalidateQueries({
             queryKey: QueryKey.strategiesByUser(user),
           });
+          if (fieldsToUpdate.sellBudget) {
+            cache.invalidateQueries({
+              queryKey: QueryKey.balance(user!, strategy.base.address),
+            });
+          }
+          if (fieldsToUpdate.buyBudget) {
+            cache.invalidateQueries({
+              queryKey: QueryKey.balance(user!, strategy.quote.address),
+            });
+          }
           console.log('tx confirmed');
         },
         onError: (e) => {

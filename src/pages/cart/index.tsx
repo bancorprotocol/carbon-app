@@ -6,7 +6,12 @@ import { useWagmi } from 'libs/wagmi';
 import { cn } from 'utils/helpers';
 import { FormEvent, useMemo, useState } from 'react';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { CartStrategy, useGetTokenBalances } from 'libs/queries';
+import {
+  CartStrategy,
+  QueryKey,
+  useGetTokenBalances,
+  useQueryClient,
+} from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { Warning } from 'components/common/WarningMessageWithIcon';
@@ -60,6 +65,7 @@ export const CartPage = () => {
   const { user, signer } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
+  const cache = useQueryClient();
 
   const nav = useNavigate({ from: '/cart' });
   const [confirmation, setConfirmation] = useState(false);
@@ -103,6 +109,19 @@ export const CartPage = () => {
         setProcessing(true);
         dispatchNotification('createBatchStrategy', { txHash: tx.hash });
         await tx.wait();
+        cache.invalidateQueries({
+          queryKey: QueryKey.strategiesByUser(user),
+        });
+        const tokens = new Set<string>();
+        for (const param of params) {
+          tokens.add(param.baseToken);
+          tokens.add(param.quoteToken);
+        }
+        for (const token of tokens) {
+          cache.invalidateQueries({
+            queryKey: QueryKey.balance(user!, token),
+          });
+        }
         clearCart(user!);
         nav({ to: '/' });
       } finally {

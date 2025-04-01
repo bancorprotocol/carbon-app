@@ -47,7 +47,7 @@ export namespace QueryKey {
     ...sdk,
     'strategies',
     'user',
-    user,
+    user?.toLowerCase(),
   ];
   export const strategiesByPair = (token0?: string, token1?: string) => [
     ...sdk,
@@ -84,7 +84,7 @@ export namespace QueryKey {
     ...chain,
     'balance',
     user,
-    token,
+    token.toLowerCase(),
   ];
 
   export const voucherOwner = (id?: string) => [...chain, 'voucherOwner', id];

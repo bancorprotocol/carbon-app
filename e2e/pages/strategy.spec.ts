@@ -657,7 +657,8 @@ test.describe('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     await mockApi(page);
     const vNet = await setupVirtualNetwork(testInfo);
-    await setupLocalStorage(page, vNet.rpcs[0].url);
+    const rpc = vNet.rpcs.find(({ name }) => name === 'Admin RPC')!.url;
+    await setupLocalStorage(page, rpc);
     const debug = new DebugDriver(page);
     await debug.visit();
     await debug.setupImposter();

@@ -24,6 +24,7 @@ import {
 import { InputBudget } from 'components/strategies/common/InputBudget';
 import { formatNumber } from 'utils/helpers';
 import { OverlappingPriceRange } from 'components/strategies/overlapping/OverlappingPriceRange';
+import { isZero } from 'components/strategies/common/utils';
 
 interface Props {
   state: SimulatorInputOverlappingValues;
@@ -227,7 +228,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const disabledAnchor = useMemo(() => {
-    if (!buy.min || !sell.max || !marketPrice || !spread) return;
+    if (!buy.min || !sell.max || !marketPrice || isZero(spread)) return;
     const prices = calculateOverlappingPrices(
       formatNumber(buy.min),
       formatNumber(sell.max),
