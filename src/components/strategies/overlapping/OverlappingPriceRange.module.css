@@ -8,6 +8,9 @@
   inset: 0;
   opacity: 0;
 }
+.price-option:focus-within {
+  outline: 1px solid rgba(255, 255, 255, 0.4);
+}
 .price-option:has(input:checked) {
   outline: 2px solid rgba(255, 255, 255, 0.6);
   color: white;
