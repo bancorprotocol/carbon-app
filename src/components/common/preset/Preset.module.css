@@ -1,0 +1,14 @@
+.preset {
+  position: relative;
+  @apply bg-black rounded-10 text-12 font-weight-500 flex-1 text-center py-8 text-white/60 cursor-pointer;
+}
+.preset input {
+  z-index: -1;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.preset:has(input:checked) {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  color: white;
+}

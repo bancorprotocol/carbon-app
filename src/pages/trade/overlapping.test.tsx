@@ -71,8 +71,8 @@ describe('Create overlapping page', () => {
     const marketPriceIndications = form.marketPriceIndicators();
     expect(form.min()).toHaveValue(search.min);
     expect(form.max()).toHaveValue(search.max);
-    expect(marketPriceIndications[0]).toHaveTextContent('20.00% below');
-    expect(marketPriceIndications[1]).toHaveTextContent('20.00% above');
+    expect(marketPriceIndications[0]).toHaveTextContent('-20.00%');
+    expect(marketPriceIndications[1]).toHaveTextContent('+20.00%');
 
     // Check budget
     expect(form.budget()).toHaveValue(search.budget);
@@ -154,8 +154,8 @@ describe('Create overlapping page', () => {
     expect(form.min()).toHaveValue(search.min);
     expect(form.max()).toHaveValue(search.max);
     const marketPriceIndications = form.marketPriceIndicators();
-    expect(marketPriceIndications[0]).toHaveTextContent('28.57% below');
-    expect(marketPriceIndications[1]).toHaveTextContent('7.14% above');
+    expect(marketPriceIndications[0]).toHaveTextContent('-28.57%');
+    expect(marketPriceIndications[1]).toHaveTextContent('+7.14%');
   });
 
   test('should set default spread with spread unset in the search params', async () => {
@@ -222,8 +222,8 @@ describe('Create overlapping page', () => {
     const marketPriceIndications = form.marketPriceIndicators();
     expect(form.min()).toHaveValue(search.min);
     expect(form.max()).toHaveValue(search.max);
-    expect(marketPriceIndications[0]).toHaveTextContent('33.33% above');
-    expect(marketPriceIndications[1]).toHaveTextContent('>99.99% above');
+    expect(marketPriceIndications[0]).toHaveTextContent('+33.33%');
+    expect(marketPriceIndications[1]).toHaveTextContent('>+99.99%');
   });
 
   test('should populate form with user market price above max price', async () => {
@@ -265,8 +265,8 @@ describe('Create overlapping page', () => {
     const marketPriceIndications = form.marketPriceIndicators();
     expect(form.min()).toHaveValue(search.min);
     expect(form.max()).toHaveValue(search.max);
-    expect(marketPriceIndications[0]).toHaveTextContent('37.50% below');
-    expect(marketPriceIndications[1]).toHaveTextContent('6.25% below');
+    expect(marketPriceIndications[0]).toHaveTextContent('-37.50%');
+    expect(marketPriceIndications[1]).toHaveTextContent('-6.25%');
   });
 
   test('should populate form without min and max defined and with user market price', async () => {
@@ -297,8 +297,8 @@ describe('Create overlapping page', () => {
     const marketPriceIndications = form.marketPriceIndicators();
     expect(form.min()).toHaveValue('2970');
     expect(form.max()).toHaveValue('3030');
-    expect(marketPriceIndications[0]).toHaveTextContent('1.00% below');
-    expect(marketPriceIndications[1]).toHaveTextContent('1.00% above');
+    expect(marketPriceIndications[0]).toHaveTextContent('-1.00%');
+    expect(marketPriceIndications[1]).toHaveTextContent('+1.00%');
   });
 
   test('should populate form with invalid range in search (min>max)', async () => {
