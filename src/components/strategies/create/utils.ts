@@ -124,6 +124,7 @@ export const getOverlappingOrders = (
       sell: { min: '', max: '', marginalPrice: '', budget: '' },
     };
   }
+
   const {
     anchor,
     min = initMin(marketPrice),
@@ -131,10 +132,11 @@ export const getOverlappingOrders = (
     spread = defaultSpread,
     budget,
   } = search;
+
   if (!isValidRange(min, max) || !isValidSpread(spread)) {
     return {
-      buy: { min, max: min, marginalPrice: max, budget: '' },
-      sell: { min: max, max: max, marginalPrice: min, budget: '' },
+      buy: { min: min, max: max, marginalPrice: marketPrice, budget: '' },
+      sell: { min: min, max: max, marginalPrice: marketPrice, budget: '' },
     };
   }
   const prices = calculateOverlappingPrices(min, max, marketPrice, spread);

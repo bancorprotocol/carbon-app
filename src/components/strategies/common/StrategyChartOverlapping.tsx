@@ -118,7 +118,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
         order0={order0}
         order1={order1}
         userMarketPrice={search.marketPrice}
-        spread={search.spread ?? defaultSpread}
+        spread={search.spread}
         setMin={(min) => set({ min })}
         setMax={(max) => set({ max })}
         disabled={readonly || fullRange}

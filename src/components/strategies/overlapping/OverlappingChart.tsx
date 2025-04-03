@@ -44,13 +44,13 @@ const getOrders = (
   min: number,
   max: number,
   marketPrice: string,
-  spread: string
+  spread?: string
 ) => {
   const params = calculateOverlappingPrices(
     min.toString(),
     max.toString(),
     marketPrice,
-    spread
+    spread || Number.MIN_VALUE.toString()
   );
   return {
     order0: {
@@ -223,7 +223,7 @@ interface Props {
   quote: Token;
   order0: OverlappingOrder;
   order1: OverlappingOrder;
-  spread: string;
+  spread?: string;
   userMarketPrice?: string;
   disabled?: boolean;
   className?: string;
@@ -360,8 +360,9 @@ export const OverlappingChart: FC<Props> = (props) => {
     const delta = fromDelta(x - initialPosition);
     const distance = max - min;
     const lowest = Math.max(0, left);
-    const minSellMax = getMinSellMax(min, +spread);
-    const maxBuyMin = getMaxBuyMin(max, +spread);
+    const safeSpread = spread ? +spread : Number.MIN_VALUE;
+    const minSellMax = getMinSellMax(min, safeSpread);
+    const maxBuyMin = getMaxBuyMin(max, safeSpread);
     if (draggedHandler === 'buy') {
       return {
         newMin: clamp(lowest, min + delta, maxBuyMin),

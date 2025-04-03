@@ -67,7 +67,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
             styles.spreadCustom,
             'rounded-10 flex min-w-0 flex-1 justify-center border border-white/60 bg-black p-16 text-center',
             'focus-within:outline focus-within:outline-1',
-            hasError && 'text-error outline-error'
+            hasError && 'text-error border-error'
           )}
         >
           <input
