@@ -14,6 +14,7 @@ import { TradeOverlapping } from 'pages/trade/overlapping';
 import { OverlappingSearch } from 'components/strategies/common/types';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import * as v from 'valibot';
+import { defaultSpread } from 'components/strategies/overlapping/utils';
 
 // TRADE TYPE
 export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
@@ -124,6 +125,11 @@ const overlappingPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/overlapping',
   component: TradeOverlapping,
+  beforeLoad: ({ search }) => {
+    if (!('spread' in search)) {
+      search.spread = defaultSpread;
+    }
+  },
   validateSearch: searchValidator({
     marketPrice: v.optional(validNumber),
     min: v.optional(validInputNumber),

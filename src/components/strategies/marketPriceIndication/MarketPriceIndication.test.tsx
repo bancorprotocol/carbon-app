@@ -10,7 +10,7 @@ describe('MarketPricePercent', () => {
       <MarketPricePercent marketPricePercentage={marketPricePercentage} />
     );
 
-    screen.findByText('5.00% above market');
+    screen.findByText('+5.00%');
   });
 
   test('renders the market price indication correctly for positive percentage - greater than 99.99', () => {
@@ -19,7 +19,7 @@ describe('MarketPricePercent', () => {
       <MarketPricePercent marketPricePercentage={marketPricePercentage} />
     );
 
-    screen.findByText('>99.99% above market');
+    screen.findByText('>+99.99%');
   });
 
   test('renders the market price indication correctly for positive percentage - smaller than 0.01', () => {
@@ -28,7 +28,7 @@ describe('MarketPricePercent', () => {
       <MarketPricePercent marketPricePercentage={marketPricePercentage} />
     );
 
-    screen.findByText('<0.01% above market');
+    screen.findByText('+<0.01%');
   });
 
   test('renders the market price indication correctly for negative percentage', () => {
@@ -37,7 +37,7 @@ describe('MarketPricePercent', () => {
       <MarketPricePercent marketPricePercentage={marketPricePercentage} />
     );
 
-    screen.findByText('6.00% below market');
+    screen.findByText('-6.00%');
   });
 
   test('renders the market price indication correctly for negative percentage - lower than 99.99', () => {
@@ -46,7 +46,7 @@ describe('MarketPricePercent', () => {
       <MarketPricePercent marketPricePercentage={marketPricePercentage} />
     );
 
-    screen.findByText('99.99% below market');
+    screen.findByText('<-99.99%');
   });
 
   test('renders the market price indication correctly for zero percentage', async () => {
@@ -57,29 +57,5 @@ describe('MarketPricePercent', () => {
 
     const component = screen.queryByTestId('market-price-indication');
     expect(component).not.toBeInTheDocument();
-  });
-
-  test('renders the market price indication with range text when isRange = true & positive', () => {
-    const marketPricePercentage = new SafeDecimal(3.1);
-    render(
-      <MarketPricePercent
-        marketPricePercentage={marketPricePercentage}
-        isRange={true}
-      />
-    );
-
-    screen.findByText('3.10% above');
-  });
-
-  test('renders the market price indication with range text when isRange = true & negative', () => {
-    const marketPricePercentage = new SafeDecimal(-3.12345);
-    render(
-      <MarketPricePercent
-        marketPricePercentage={marketPricePercentage}
-        isRange={true}
-      />
-    );
-
-    screen.findByText('3.12% below');
   });
 });

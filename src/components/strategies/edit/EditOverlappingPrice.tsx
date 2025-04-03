@@ -245,7 +245,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
             <OverlappingSpread
               buyMin={Number(order0.min)}
               sellMax={Number(order1.max)}
-              options={['0.01', '0.05', '0.1']}
               spread={spread}
               setSpread={setSpread}
             />

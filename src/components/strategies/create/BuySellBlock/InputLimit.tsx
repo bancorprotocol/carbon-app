@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FocusEvent, useEffect, useId } from 'react';
+import { ChangeEvent, FC, FocusEvent, useId } from 'react';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
@@ -14,8 +14,6 @@ type InputLimitProps = {
   quote: Token;
   error?: string;
   warnings?: string[];
-  setPriceError?: (error: string) => void;
-  buy?: boolean;
   isOrdersReversed: boolean;
 };
 
@@ -27,29 +25,15 @@ export const InputLimit: FC<InputLimitProps> = ({
   quote,
   error,
   warnings,
-  setPriceError,
-  buy = false,
-  isOrdersReversed,
 }) => {
   const inputId = useId();
   const { marketPrice } = useMarketPrice({ base, quote });
 
-  const errorAboveZero = 'Price must be greater than 0';
-  const errorReversedOrders =
-    'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
   const showWarning = !error && warnings?.length;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPrice(sanitizeNumber(e.target.value));
   };
-
-  useEffect(() => {
-    if (!price) return;
-    let errorMessage = '';
-    if (isOrdersReversed) errorMessage = errorReversedOrders;
-    if (+price <= 0) errorMessage = errorAboveZero;
-    if (setPriceError) setPriceError(errorMessage);
-  }, [price, setPriceError, buy, isOrdersReversed]);
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     const formatted = formatNumber(e.target.value);

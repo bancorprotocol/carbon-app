@@ -1,17 +1,3 @@
-.spread-option {
-  position: relative;
-}
-.spread-option input {
-  z-index: -1;
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-}
-.spread-option input:checked + label {
-  outline: 2px solid rgba(255, 255, 255, 0.6);
-  color: white;
-}
-
 .spread-custom input:placeholder-shown {
   flex: 1;
 }

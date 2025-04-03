@@ -16,8 +16,6 @@ export interface InternalSimulatorOverlappingInput
   sellBudget?: string;
   sellBudgetError?: string;
   buyBudgetError?: string;
-  buyPriceError?: string;
-  sellPriceError?: string;
 }
 
 export type SimulatorOverlappingInputDispatch = <
@@ -68,8 +66,6 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
         sellBudget,
         buyBudgetError,
         sellBudgetError,
-        buyPriceError,
-        sellPriceError,
         ...newSearch
       } = search;
 
@@ -111,14 +107,12 @@ export const buildStrategyInputState = (
       max: state.buyMax || '',
       budget: state.buyBudget || '',
       budgetError: state.buyBudgetError,
-      priceError: state.buyPriceError,
     },
     sell: {
       min: state.sellMin || '',
       max: state.sellMax || '',
       budget: state.sellBudget || '',
       budgetError: state.sellBudgetError,
-      priceError: state.sellPriceError,
     },
     start: state.start || undefined,
     end: state.end || undefined,

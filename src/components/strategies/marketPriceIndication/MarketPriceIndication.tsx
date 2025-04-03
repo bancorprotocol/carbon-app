@@ -12,10 +12,9 @@ interface Props {
   price: string;
   ignoreMarketPriceWarning?: boolean;
   buy?: boolean;
-  isRange?: boolean;
 }
 export const MarketPriceIndication: FC<Props> = (props) => {
-  const { base, quote, price, ignoreMarketPriceWarning, buy, isRange } = props;
+  const { base, quote, price, ignoreMarketPriceWarning, buy } = props;
   const search = useSearch({ strict: false }) as { marketPrice?: string };
   const query = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? query.marketPrice;
@@ -37,7 +36,6 @@ export const MarketPriceIndication: FC<Props> = (props) => {
         ignoreMarketPriceWarning={ignoreMarketPriceWarning}
         marketPricePercentage={marketPercent}
         buy={buy}
-        isRange={isRange}
       />
     </p>
   );

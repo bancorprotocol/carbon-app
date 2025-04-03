@@ -9,8 +9,6 @@ import { useCallback, useMemo, useState } from 'react';
 export interface InternalStrategyInput extends StrategyInputSearch {
   sellBudgetError?: string;
   buyBudgetError?: string;
-  buyPriceError?: string;
-  sellPriceError?: string;
 }
 
 export type StrategyInputDispatch = <
@@ -26,7 +24,6 @@ export interface StrategyInputOrder {
   max: string;
   budget: string;
   budgetError?: string;
-  priceError?: string;
   isRange: boolean;
 }
 
@@ -62,13 +59,7 @@ export const useStrategyInput = ({ searchState }: Props) => {
 
   const setSearch = useCallback(
     (search: InternalStrategyInput) => {
-      const {
-        buyBudgetError,
-        sellBudgetError,
-        buyPriceError,
-        sellPriceError,
-        ...newSearch
-      } = search;
+      const { buyBudgetError, sellBudgetError, ...newSearch } = search;
 
       void navigate({
         search: newSearch,
@@ -108,7 +99,6 @@ export const buildStrategyInputState = (
         budget: state.buyBudget || '',
         budgetError: state.buyBudgetError,
         isRange: !!state.buyIsRange,
-        priceError: state.buyPriceError,
       },
       sell: {
         min: state.sellMin || '',
@@ -116,7 +106,6 @@ export const buildStrategyInputState = (
         budget: state.sellBudget || '',
         budgetError: state.sellBudgetError,
         isRange: !!state.sellIsRange,
-        priceError: state.sellPriceError,
       },
       start: state.start || undefined,
       end: state.end || undefined,
@@ -131,7 +120,6 @@ export const buildStrategyInputState = (
         budget: state.buyBudget || '',
         budgetError: '',
         isRange: !!state.buyIsRange,
-        priceError: '',
       },
       sell: {
         min: state.sellMin || '',
@@ -139,7 +127,6 @@ export const buildStrategyInputState = (
         budget: state.sellBudget || '',
         budgetError: '',
         isRange: !!state.sellIsRange,
-        priceError: '',
       },
       start: state.start || undefined,
       end: state.end || undefined,
