@@ -1,12 +1,4 @@
-import {
-  FC,
-  FocusEvent,
-  MouseEvent,
-  useEffect,
-  useId,
-  useMemo,
-  useState,
-} from 'react';
+import { FC, FocusEvent, MouseEvent, useEffect, useId, useState } from 'react';
 import { Token } from 'libs/tokens';
 import {
   cn,
@@ -63,11 +55,6 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
     : '';
   const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
   const showWarning = !displayError && !!displayWarnings?.length;
-
-  const percent = useMemo(() => {
-    if (!marketPrice) return;
-    return new SafeDecimal(price).div(marketPrice).sub(1).mul(100).toString();
-  }, [marketPrice, price]);
 
   useEffect(() => {
     if (document.activeElement?.id !== id) {
@@ -160,11 +147,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
           <Warning key={i} message={warning} htmlFor={id} />
         ))}
       {!!marketPrice && (
-        <Presets
-          value={percent}
-          presets={limitPreset(buy)}
-          onChange={setPreset}
-        />
+        <Presets presets={limitPreset(buy)} onChange={setPreset} />
       )}
     </>
   );

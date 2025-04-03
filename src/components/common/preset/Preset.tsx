@@ -1,5 +1,5 @@
-import { ChangeEvent, FC, useId } from 'react';
-import style from './Preset.module.css';
+import { FC } from 'react';
+import { cn } from 'utils/helpers';
 
 export interface Preset {
   label: string;
@@ -7,29 +7,24 @@ export interface Preset {
 }
 interface Props {
   presets: Preset[];
-  value?: string;
   onChange: (value: string) => void;
+  className?: string;
 }
 
 export const Presets: FC<Props> = (props) => {
-  const { presets, value, onChange } = props;
-  const name = useId();
-  const change = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event.currentTarget.value);
-  };
+  const { presets, onChange, className } = props;
   return (
-    <div role="radiogroup" className="flex gap-8">
-      {presets.map((preset, i) => (
-        <label key={i} className={style.preset}>
-          <input
-            type="radio"
-            name={name}
-            value={preset.value}
-            onChange={change}
-            checked={value === preset.value}
-          />
-          {preset.label}
-        </label>
+    <div role="menu" className={cn('text-12 flex gap-8', className)}>
+      {presets.map(({ label, value }, i) => (
+        <button
+          key={i}
+          type="button"
+          role="menuitem"
+          className="rounded-10 font-weight-500 grid flex-1 cursor-pointer place-items-center bg-black py-8 text-center text-white/60"
+          onClick={() => onChange(value)}
+        >
+          {label}
+        </button>
       ))}
     </div>
   );

@@ -115,7 +115,7 @@ export const OverlappingPriceRange: FC<Props> = (props) => {
         />
       )}
       {marketPrice && (
-        <Presets presets={overlappingPresets} value={range} onChange={change} />
+        <Presets presets={overlappingPresets} onChange={change} />
       )}
     </>
   );

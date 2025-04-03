@@ -225,11 +225,7 @@ export const InputRange: FC<InputRangeProps> = ({
             />
           </div>
           {!!marketPrice && !isOverlapping && (
-            <Presets
-              value={minPercent}
-              presets={limitPreset(buy)}
-              onChange={setMinPreset}
-            />
+            <Presets presets={limitPreset(buy)} onChange={setMinPreset} />
           )}
         </div>
         <div className="grid gap-8">
@@ -285,11 +281,7 @@ export const InputRange: FC<InputRangeProps> = ({
             />
           </div>
           {!!marketPrice && !isOverlapping && (
-            <Presets
-              value={maxPercent}
-              presets={limitPreset(buy)}
-              onChange={setMaxPreset}
-            />
+            <Presets presets={limitPreset(buy)} onChange={setMaxPreset} />
           )}
         </div>
       </div>
