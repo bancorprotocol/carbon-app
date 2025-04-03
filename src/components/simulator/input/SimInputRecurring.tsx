@@ -20,23 +20,20 @@ const sellWarningMsg = (base: Token) => {
 interface Props {
   state: StrategyInputValues;
   dispatch: StrategyInputDispatch;
-  marketPricePoint?: CandlestickData;
+  startPrice?: CandlestickData;
 }
 
-export const SimInputRecurring = ({
-  state,
-  dispatch,
-  marketPricePoint,
-}: Props) => {
+export const SimInputRecurring = (props: Props) => {
+  const { state, dispatch, startPrice } = props;
   if (!state.baseToken || !state.quoteToken) {
     return <p>error no tokens found</p>;
   }
 
-  const showBuyWarning = marketPricePoint?.low
-    ? marketPricePoint.high < +state.buy.min
+  const showBuyWarning = startPrice?.low
+    ? startPrice.high < +state.buy.min
     : false;
-  const showSellWarning = marketPricePoint?.high
-    ? marketPricePoint.low > +state.sell.max
+  const showSellWarning = startPrice?.high
+    ? startPrice.low > +state.sell.max
     : false;
 
   const warningMsg = {

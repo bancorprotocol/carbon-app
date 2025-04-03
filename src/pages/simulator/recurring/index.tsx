@@ -35,11 +35,10 @@ export const SimulatorInputRecurringPage = () => {
     start: oneYearAgo(),
     end: defaultEnd(),
   });
-  const { marketPrice: currentMarketPrice, isPending: marketPricePending } =
-    useMarketPrice({
-      base: state.baseToken,
-      quote: state.quoteToken,
-    });
+  const { marketPrice, isPending: marketPricePending } = useMarketPrice({
+    base: state.baseToken,
+    quote: state.quoteToken,
+  });
 
   const handleDefaultValues = useCallback(
     (direction: StrategyDirection) => {
@@ -49,7 +48,7 @@ export const SimulatorInputRecurringPage = () => {
       if (!init) return;
       setInit(false);
 
-      if (!currentMarketPrice) {
+      if (!marketPrice) {
         dispatch(`${direction}Max`, '');
         dispatch(`${direction}Min`, '');
         return;
@@ -59,7 +58,7 @@ export const SimulatorInputRecurringPage = () => {
         return;
       }
       const multiplier = getRecurringPriceMultiplier(direction, 'range');
-      const price = new SafeDecimal(currentMarketPrice);
+      const price = new SafeDecimal(marketPrice);
       const min = price.mul(multiplier.min).toFixed();
       const max = price.mul(multiplier.max).toFixed();
 
@@ -76,7 +75,7 @@ export const SimulatorInputRecurringPage = () => {
       dispatch,
       initBuyRange,
       initSellRange,
-      currentMarketPrice,
+      marketPrice,
       setInitBuyRange,
       setInitSellRange,
       state,
@@ -144,7 +143,7 @@ export const SimulatorInputRecurringPage = () => {
     });
   };
 
-  const marketPricePoint = useMemo(() => {
+  const startPrice = useMemo(() => {
     const start = Number(state.start ?? defaultStart());
     return data?.find((v) => v.date === start);
   }, [data, state.start]);
@@ -166,7 +165,7 @@ export const SimulatorInputRecurringPage = () => {
           <SimInputRecurring
             state={state}
             dispatch={dispatch}
-            marketPricePoint={marketPricePoint}
+            startPrice={startPrice}
           />
         </div>
         <input className="approve-warnings hidden" defaultChecked />

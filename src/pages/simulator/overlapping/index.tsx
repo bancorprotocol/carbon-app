@@ -15,10 +15,11 @@ import {
   defaultStart,
   oneYearAgo,
 } from 'components/strategies/common/utils';
-import { FormEvent, useEffect, useMemo } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { cn, formatNumber, roundSearchParam } from 'utils/helpers';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 import style from 'components/strategies/common/form.module.css';
 
 export const SimulatorInputOverlappingPage = () => {
@@ -35,10 +36,10 @@ export const SimulatorInputOverlappingPage = () => {
     end: defaultEnd(),
   });
 
-  const marketPrice = useMemo(() => {
-    const start = Number(state.start ?? defaultStart());
-    return data?.find((v) => v.date === start)?.open;
-  }, [data, state.start]);
+  const { marketPrice, isPending: marketPricePending } = useMarketPrice({
+    base: state.baseToken,
+    quote: state.quoteToken,
+  });
 
   useEffect(() => {
     if (searchState.sellMax || searchState.buyMin) return;
@@ -65,7 +66,7 @@ export const SimulatorInputOverlappingPage = () => {
   const noBudgetText =
     !isError && noBudget && 'Please add Sell and/or Buy budgets';
   const loadingText = isPending && 'Loading price history...';
-  const btnDisabled = isPending || isError || noBudget;
+  const btnDisabled = isPending || isError || noBudget || marketPricePending;
 
   const navigate = useNavigate();
 
