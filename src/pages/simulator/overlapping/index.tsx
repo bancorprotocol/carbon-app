@@ -16,9 +16,10 @@ import {
   oneYearAgo,
 } from 'components/strategies/common/utils';
 import { FormEvent, useEffect, useMemo } from 'react';
-import { formatNumber, roundSearchParam } from 'utils/helpers';
+import { cn, formatNumber, roundSearchParam } from 'utils/helpers';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import style from 'components/strategies/common/form.module.css';
 
 export const SimulatorInputOverlappingPage = () => {
   const searchState = simulatorInputOverlappingRoute.useSearch();
@@ -35,8 +36,8 @@ export const SimulatorInputOverlappingPage = () => {
   });
 
   const marketPrice = useMemo(() => {
-    if (!state.start) return data?.[0].open;
-    return data?.find((d) => d.date.toString() === state.start)?.open;
+    const start = Number(state.start ?? defaultStart());
+    return data?.find((v) => v.date === start)?.open;
   }, [data, state.start]);
 
   useEffect(() => {
@@ -50,10 +51,8 @@ export const SimulatorInputOverlappingPage = () => {
     dispatch('sellMin', '');
     dispatch('sellBudget', '');
     dispatch('sellBudgetError', '');
-    dispatch('sellPriceError', '');
     dispatch('buyBudget', '');
     dispatch('buyBudgetError', '');
-    dispatch('buyPriceError', '');
   }, [
     dispatch,
     searchState.baseToken,
@@ -66,15 +65,15 @@ export const SimulatorInputOverlappingPage = () => {
   const noBudgetText =
     !isError && noBudget && 'Please add Sell and/or Buy budgets';
   const loadingText = isPending && 'Loading price history...';
-  const priceError = state.buy.priceError || state.sell.priceError;
-  const btnDisabled = isPending || isError || noBudget || !!priceError;
+  const btnDisabled = isPending || isError || noBudget;
 
   const navigate = useNavigate();
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isPending || isError || noBudget) return;
+    if (btnDisabled) return;
     if (!state.baseToken || !state.quoteToken) return;
+    if (!!e.currentTarget.querySelector('.error-message')) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
 
@@ -134,7 +133,7 @@ export const SimulatorInputOverlappingPage = () => {
     <>
       <form
         onSubmit={submit}
-        className="grid gap-16"
+        className={cn(style.form, 'grid gap-16')}
         data-testid="create-simulation-form"
       >
         <div className="bg-background-900 grid rounded">
@@ -152,6 +151,7 @@ export const SimulatorInputOverlappingPage = () => {
             setSpread={(v) => dispatch('spread', v)}
           />
         </div>
+        <input className="approve-warnings hidden" defaultChecked />
         <Button
           type="submit"
           data-testid="start-simulation-btn"

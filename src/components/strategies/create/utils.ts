@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { NavigateOptions } from 'libs/routing';
 import {
+  StrategyDirection,
+  StrategySettings,
   TradeOverlappingSearch,
   TradeRecurringSearch,
 } from 'libs/routing/routes/trade';
@@ -37,28 +39,43 @@ export const handleTxStatusAndRedirectToOverview = (
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 
+export const getRecurringPriceMultiplier = (
+  direction: StrategyDirection,
+  settings: StrategySettings
+) => {
+  if (settings === 'range') {
+    return {
+      min: direction === 'buy' ? 0.95 : 1.01,
+      max: direction === 'buy' ? 0.99 : 1.05,
+    };
+  } else {
+    return {
+      min: direction === 'buy' ? 0.99 : 1.01,
+      max: direction === 'buy' ? 0.99 : 1.01,
+    };
+  }
+};
+
 export const getDefaultOrder = (
-  type: 'buy' | 'sell',
-  base: Partial<OrderBlock>,
+  direction: StrategyDirection,
+  order: Partial<OrderBlock>,
   marketPrice: number = 0
 ): OrderBlock => {
   const market = new SafeDecimal(marketPrice);
-  const settings = base.settings ?? 'limit';
+  const settings = order.settings ?? 'limit';
+  const multiplier = getRecurringPriceMultiplier(direction, settings);
   if (settings === 'range') {
-    const multiplierMin = type === 'buy' ? 0.95 : 1.01;
-    const multiplierMax = type === 'buy' ? 0.99 : 1.05;
     return {
-      min: base.min ?? market.mul(multiplierMin).toString(),
-      max: base.max ?? market.mul(multiplierMax).toString(),
-      budget: base.budget ?? '',
+      min: order.min ?? market.mul(multiplier.min).toString(),
+      max: order.max ?? market.mul(multiplier.max).toString(),
+      budget: order.budget ?? '',
       settings,
     };
   } else {
-    const multiplier = type === 'buy' ? 0.99 : 1.01;
     return {
-      min: base.min ?? market.mul(multiplier).toString(),
-      max: base.max ?? market.mul(multiplier).toString(),
-      budget: base.budget ?? '',
+      min: order.min ?? market.mul(multiplier.min).toString(),
+      max: order.max ?? market.mul(multiplier.max).toString(),
+      budget: order.budget ?? '',
       settings,
     };
   }
@@ -82,11 +99,17 @@ export const getRecurringWarning = (search: TradeRecurringSearch) => {
   }
 };
 
+export const overlappingMultiplier = {
+  min: 0.99,
+  max: 1.01,
+};
 const initMin = (marketPrice: string) => {
-  return new SafeDecimal(marketPrice).times(0.99).toString();
+  const multiplier = overlappingMultiplier.min;
+  return new SafeDecimal(marketPrice).times(multiplier).toString();
 };
 const initMax = (marketPrice: string) => {
-  return new SafeDecimal(marketPrice).times(1.01).toString();
+  const multiplier = overlappingMultiplier.max;
+  return new SafeDecimal(marketPrice).times(multiplier).toString();
 };
 /** Create the orders out of the search params */
 export const getOverlappingOrders = (

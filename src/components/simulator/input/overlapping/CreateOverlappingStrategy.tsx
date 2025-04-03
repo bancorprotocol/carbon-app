@@ -25,6 +25,7 @@ import { InputBudget } from 'components/strategies/common/InputBudget';
 import { formatNumber } from 'utils/helpers';
 import { OverlappingPriceRange } from 'components/strategies/overlapping/OverlappingPriceRange';
 import { isZero } from 'components/strategies/common/utils';
+import { overlappingMultiplier } from 'components/strategies/create/utils';
 
 interface Props {
   state: SimulatorInputOverlappingValues;
@@ -37,8 +38,8 @@ interface Props {
 const getInitialPrices = (marketPrice: string | number) => {
   const currentPrice = new SafeDecimal(marketPrice);
   return {
-    min: currentPrice.times(0.9).toString(),
-    max: currentPrice.times(1.1).toString(),
+    min: currentPrice.times(overlappingMultiplier.min).toString(),
+    max: currentPrice.times(overlappingMultiplier.max).toString(),
   };
 };
 
@@ -204,21 +205,11 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const setMin = (min: string) => {
     setTouched(true);
     dispatch('buyMin', min);
-    if (!+formatNumber(min)) {
-      dispatch('buyPriceError', 'Min should be greater than 0');
-    } else {
-      dispatch('buyPriceError', '');
-    }
   };
 
   const setMax = (max: string) => {
     setTouched(true);
     dispatch('sellMax', max);
-    if (!+formatNumber(max)) {
-      dispatch('buyPriceError', 'Max should be greater than 0');
-    } else {
-      dispatch('buyPriceError', '');
-    }
   };
 
   const setBudget = (amount: string) => {
@@ -327,7 +318,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           max={sell.max}
           setMin={setMin}
           setMax={setMax}
-          error={state.buy.priceError}
           spread={spread}
           setSpread={setSpread}
         />

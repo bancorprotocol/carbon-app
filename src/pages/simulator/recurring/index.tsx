@@ -12,10 +12,13 @@ import {
   defaultStart,
   oneYearAgo,
 } from 'components/strategies/common/utils';
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { cn } from 'utils/helpers';
+import { getRecurringPriceMultiplier } from 'components/strategies/create/utils';
+import style from 'components/strategies/common/form.module.css';
 
 export const SimulatorInputRecurringPage = () => {
   const searchState = simulatorInputRecurringRoute.useSearch();
@@ -32,56 +35,48 @@ export const SimulatorInputRecurringPage = () => {
     start: oneYearAgo(),
     end: defaultEnd(),
   });
-  const { marketPrice, isPending: marketPricePending } = useMarketPrice({
-    base: state.baseToken,
-    quote: state.quoteToken,
-  });
+  const { marketPrice: currentMarketPrice, isPending: marketPricePending } =
+    useMarketPrice({
+      base: state.baseToken,
+      quote: state.quoteToken,
+    });
 
   const handleDefaultValues = useCallback(
-    (type: StrategyDirection) => {
-      const init = type === 'buy' ? initBuyRange : initSellRange;
-      const setInit = type === 'buy' ? setInitBuyRange : setInitSellRange;
+    (direction: StrategyDirection) => {
+      const init = direction === 'buy' ? initBuyRange : initSellRange;
+      const setInit = direction === 'buy' ? setInitBuyRange : setInitSellRange;
 
       if (!init) return;
       setInit(false);
 
-      if (!marketPrice) {
-        dispatch(`${type}Max`, '');
-        dispatch(`${type}Min`, '');
+      if (!currentMarketPrice) {
+        dispatch(`${direction}Max`, '');
+        dispatch(`${direction}Min`, '');
         return;
       }
 
-      if (!(!state[type].max && !state[type].min)) {
+      if (!(!state[direction].max && !state[direction].min)) {
         return;
       }
+      const multiplier = getRecurringPriceMultiplier(direction, 'range');
+      const price = new SafeDecimal(currentMarketPrice);
+      const min = price.mul(multiplier.min).toFixed();
+      const max = price.mul(multiplier.max).toFixed();
 
-      const operation = type === 'buy' ? 'minus' : 'plus';
-
-      const multiplierMax = type === 'buy' ? 0.1 : 0.2;
-      const multiplierMin = type === 'buy' ? 0.2 : 0.1;
-
-      const max = new SafeDecimal(marketPrice)
-        [operation](marketPrice * multiplierMax)
-        .toFixed();
-
-      const min = new SafeDecimal(marketPrice)
-        [operation](marketPrice * multiplierMin)
-        .toFixed();
-
-      if (state[type].isRange) {
-        dispatch(`${type}Max`, max);
-        dispatch(`${type}Min`, min);
+      if (state[direction].isRange) {
+        dispatch(`${direction}Max`, max);
+        dispatch(`${direction}Min`, min);
       } else {
-        const value = type === 'buy' ? max : min;
-        dispatch(`${type}Max`, value);
-        dispatch(`${type}Min`, value);
+        const value = direction === 'buy' ? max : min;
+        dispatch(`${direction}Max`, value);
+        dispatch(`${direction}Min`, value);
       }
     },
     [
       dispatch,
       initBuyRange,
       initSellRange,
-      marketPrice,
+      currentMarketPrice,
       setInitBuyRange,
       setInitSellRange,
       state,
@@ -103,13 +98,11 @@ export const SimulatorInputRecurringPage = () => {
     dispatch('sellMin', '');
     dispatch('sellBudget', '');
     dispatch('sellBudgetError', '');
-    dispatch('sellPriceError', '');
     dispatch('sellIsRange', true);
     dispatch('buyMax', '');
     dispatch('buyMin', '');
     dispatch('buyBudget', '');
     dispatch('buyBudgetError', '');
-    dispatch('buyPriceError', '');
     dispatch('buyIsRange', true);
     setInitBuyRange(true);
     setInitSellRange(true);
@@ -120,14 +113,14 @@ export const SimulatorInputRecurringPage = () => {
   const noBudgetText =
     !isError && noBudget && 'Please add Sell and/or Buy budgets';
   const loadingText = isPending && 'Loading price history...';
-  const priceError = state.buy.priceError || state.sell.priceError;
-  const btnDisabled = isPending || isError || noBudget || !!priceError;
+  const btnDisabled = isPending || isError || noBudget;
 
   const navigate = useNavigate();
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isPending || isError || noBudget) return;
+    if (btnDisabled) return;
+    if (!!e.currentTarget.querySelector('.error-message')) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
 
@@ -151,11 +144,16 @@ export const SimulatorInputRecurringPage = () => {
     });
   };
 
+  const marketPricePoint = useMemo(() => {
+    const start = Number(state.start ?? defaultStart());
+    return data?.find((v) => v.date === start);
+  }, [data, state.start]);
+
   return (
     <>
       <form
         onSubmit={submit}
-        className="grid gap-16"
+        className={cn(style.form, 'grid gap-16')}
         data-testid="create-simulation-form"
       >
         <div className="bg-background-900 rounded">
@@ -168,9 +166,10 @@ export const SimulatorInputRecurringPage = () => {
           <SimInputRecurring
             state={state}
             dispatch={dispatch}
-            firstHistoricPricePoint={data?.[0]}
+            marketPricePoint={marketPricePoint}
           />
         </div>
+        <input className="approve-warnings hidden" defaultChecked />
         <Button
           type="submit"
           data-testid="start-simulation-btn"

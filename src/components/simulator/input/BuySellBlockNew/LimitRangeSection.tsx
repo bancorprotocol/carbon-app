@@ -2,10 +2,10 @@ import {
   StrategyInputDispatch,
   StrategyInputOrder,
 } from 'hooks/useStrategyInput';
-import { FC, ReactNode, useCallback } from 'react';
+import { FC, ReactNode } from 'react';
 import { Token } from 'libs/tokens';
-import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
-import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
+import { InputLimit } from 'components/strategies/common/InputLimit';
+import { InputRange } from 'components/strategies/common/InputRange';
 
 type Props = {
   base: Token;
@@ -31,13 +31,6 @@ export const LimitRangeSection: FC<Props> = ({
   const { isRange } = order;
   const type = buy ? 'buy' : 'sell';
 
-  const setPriceError = useCallback(
-    (value: string) => {
-      dispatch(`${type}PriceError`, value);
-    },
-    [dispatch, type]
-  );
-
   const getWarnings = () => {
     let warnings = [];
     if (isOrdersOverlap && !isOrdersReversed)
@@ -52,16 +45,13 @@ export const LimitRangeSection: FC<Props> = ({
       </legend>
       {isRange ? (
         <InputRange
+          quote={quote}
+          base={base}
           min={order.min}
           setMin={(value) => dispatch(`${type}Min`, value)}
           max={order.max}
           setMax={(value) => dispatch(`${type}Max`, value)}
-          error={order.priceError}
-          setRangeError={setPriceError}
-          quote={quote}
-          base={base}
           buy={buy}
-          isOrdersReversed={isOrdersReversed}
           warnings={getWarnings()}
         />
       ) : (
@@ -73,10 +63,7 @@ export const LimitRangeSection: FC<Props> = ({
             dispatch(`${type}Min`, value);
             dispatch(`${type}Max`, value);
           }}
-          error={order.priceError}
-          setPriceError={setPriceError}
           buy={buy}
-          isOrdersReversed={isOrdersReversed}
           warnings={getWarnings()}
         />
       )}
