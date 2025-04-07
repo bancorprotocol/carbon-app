@@ -52,6 +52,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
           value={spread}
           presets={presets}
           onChange={onPresetChange}
+          testid="spread"
         />
         <div
           className={cn(

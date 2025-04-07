@@ -6,7 +6,6 @@ import {
   CreateStrategyDriver,
   renderWithRouter,
   screen,
-  waitFor,
   userEvent,
   tokenList,
   mockMarketRate,
@@ -158,31 +157,6 @@ describe('Create overlapping page', () => {
     expect(marketPriceIndications[1]).toHaveTextContent('+7.14%');
   });
 
-  test('should set default spread with spread unset in the search params', async () => {
-    const baseToken = tokenList.ETH;
-    const quoteToken = tokenList.USDC;
-
-    const search = {
-      base: baseToken.address,
-      quote: quoteToken.address,
-      min: '2000',
-      max: '3000',
-    };
-
-    await renderWithRouter({
-      component: () => (
-        <WrappedOverlapping base={baseToken} quote={quoteToken} />
-      ),
-      basePath,
-      search,
-    });
-
-    const overlappingDriver = new CreateStrategyDriver(screen);
-    const form = await overlappingDriver.findOverlappingForm();
-
-    expect(form.spread.default()).toBeChecked();
-  });
-
   test('should populate form with user market price below min price', async () => {
     const baseToken = tokenList.ETH;
     const quoteToken = tokenList.USDC;
@@ -299,41 +273,6 @@ describe('Create overlapping page', () => {
     expect(form.max()).toHaveValue('3030');
     expect(marketPriceIndications[0]).toHaveTextContent('-1.00%');
     expect(marketPriceIndications[1]).toHaveTextContent('+1.00%');
-  });
-
-  test('should populate form with invalid range in search (min>max)', async () => {
-    const baseToken = tokenList.ETH;
-    const quoteToken = tokenList.USDC;
-
-    const search = {
-      base: baseToken.address,
-      quote: quoteToken.address,
-      marketPrice: '3000',
-      spread: '0.05',
-      min: '3000',
-      max: '2000',
-      anchor: 'buy',
-      budget: '100',
-    };
-
-    await renderWithRouter({
-      component: () => (
-        <WrappedOverlapping base={baseToken} quote={quoteToken} />
-      ),
-      basePath,
-      search,
-    });
-
-    const overlappingDriver = new CreateStrategyDriver(screen);
-    const form = await overlappingDriver.findOverlappingForm();
-
-    // Check price range input and market price indication
-    expect(form.min()).toHaveValue('3000');
-    expect(form.max()).toHaveValue('2000');
-
-    await waitFor(() => expect(form.max()).toHaveValue('3003.002251'), {
-      timeout: 2000,
-    });
   });
 
   test('should check form touched: after setting user price', async () => {

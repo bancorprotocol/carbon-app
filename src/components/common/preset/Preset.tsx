@@ -11,10 +11,11 @@ interface Props {
   presets: Preset[];
   onChange: (value: string) => void;
   className?: string;
+  testid?: string;
 }
 
 export const Presets: FC<Props> = (props) => {
-  const { value, presets, onChange, className } = props;
+  const { value, presets, onChange, className, testid } = props;
   const id = useId();
   const name = useId();
   return (
@@ -28,6 +29,7 @@ export const Presets: FC<Props> = (props) => {
             value={preset.value}
             checked={preset.value === value}
             onChange={(e) => onChange(e.target.value)}
+            data-testid={`${testid}-${preset.value}`}
           />
           <label htmlFor={`${id}-${preset.value}`}>{preset.label}</label>
         </div>
