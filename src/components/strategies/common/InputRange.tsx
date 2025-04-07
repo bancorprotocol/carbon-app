@@ -88,12 +88,12 @@ export const InputRange: FC<InputRangeProps> = ({
   const showWarning = !displayError && !!displayWarnings.length;
 
   const minPercent = useMemo(() => {
-    if (!marketPrice) return;
+    if (!marketPrice) return '';
     return new SafeDecimal(min).div(marketPrice).sub(1).mul(100).toString();
   }, [marketPrice, min]);
 
   const maxPercent = useMemo(() => {
-    if (!marketPrice) return;
+    if (!marketPrice) return '';
     return new SafeDecimal(max).div(marketPrice).sub(1).mul(100).toString();
   }, [marketPrice, max]);
 
@@ -225,7 +225,11 @@ export const InputRange: FC<InputRangeProps> = ({
             />
           </div>
           {!!marketPrice && !isOverlapping && (
-            <Presets presets={limitPreset(buy)} onChange={setMinPreset} />
+            <Presets
+              value={minPercent}
+              presets={limitPreset(buy)}
+              onChange={setMinPreset}
+            />
           )}
         </div>
         <div className="grid gap-8">
@@ -281,7 +285,11 @@ export const InputRange: FC<InputRangeProps> = ({
             />
           </div>
           {!!marketPrice && !isOverlapping && (
-            <Presets presets={limitPreset(buy)} onChange={setMaxPreset} />
+            <Presets
+              value={maxPercent}
+              presets={limitPreset(buy)}
+              onChange={setMaxPreset}
+            />
           )}
         </div>
       </div>

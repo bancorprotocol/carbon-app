@@ -20,13 +20,13 @@ export const OverlappingPriceRange: FC<Props> = (props) => {
   const maxId = useId();
 
   const range = useMemo(() => {
-    if (!marketPrice) return;
+    if (!marketPrice) return '';
     if (isFullRangeCreation(min, max, marketPrice)) {
       return 'Infinity';
     } else {
       const low = new SafeDecimal(min).div(marketPrice).sub(1).abs();
       const high = new SafeDecimal(max).div(marketPrice).sub(1).abs();
-      if (!low.eq(high)) return;
+      if (!low.eq(high)) return '';
       return low.mul(100).toString();
     }
   }, [marketPrice, max, min]);
@@ -115,7 +115,7 @@ export const OverlappingPriceRange: FC<Props> = (props) => {
         />
       )}
       {marketPrice && (
-        <Presets presets={overlappingPresets} onChange={change} />
+        <Presets value={range} presets={overlappingPresets} onChange={change} />
       )}
     </>
   );

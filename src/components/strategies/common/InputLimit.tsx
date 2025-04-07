@@ -1,4 +1,12 @@
-import { FC, FocusEvent, MouseEvent, useEffect, useId, useState } from 'react';
+import {
+  FC,
+  FocusEvent,
+  MouseEvent,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from 'react';
 import { Token } from 'libs/tokens';
 import {
   cn,
@@ -44,6 +52,11 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
   const inputId = useId();
   const id = props.id ?? inputId;
   const { marketPrice } = useMarketPrice({ base, quote });
+
+  const percent = useMemo(() => {
+    if (!marketPrice) return '';
+    return new SafeDecimal(price).div(marketPrice).sub(1).mul(100).toString();
+  }, [price, marketPrice]);
 
   // Errors
   const priceError = isTouchedZero(price) && 'Price must be greater than 0';
@@ -147,7 +160,11 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
           <Warning key={i} message={warning} htmlFor={id} />
         ))}
       {!!marketPrice && (
-        <Presets presets={limitPreset(buy)} onChange={setPreset} />
+        <Presets
+          value={percent}
+          presets={limitPreset(buy)}
+          onChange={setPreset}
+        />
       )}
     </>
   );

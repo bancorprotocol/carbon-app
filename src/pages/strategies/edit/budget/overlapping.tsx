@@ -9,6 +9,7 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import {
+  getMaxSpread,
   getOverlappingMarketPrice,
   getRoundedSpread,
   isMaxBelowMarket,
@@ -58,9 +59,10 @@ const getOrders = (
   const min = strategy.order0.startRate;
   const max = strategy.order1.endRate;
   const spread = getRoundedSpread(strategy).toString();
+  const aboveMaxSpread = +spread > getMaxSpread(+min, +max);
   const { anchor, budget = '0', editType = 'deposit' } = search;
 
-  if (!isValidRange(min, max) || !isValidSpread(spread)) {
+  if (!isValidRange(min, max) || !isValidSpread(spread) || aboveMaxSpread) {
     return {
       buy: { min: min, max: max, marginalPrice: marketPrice, budget: '' },
       sell: { min: min, max: max, marginalPrice: marketPrice, budget: '' },

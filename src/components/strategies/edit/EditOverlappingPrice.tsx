@@ -2,8 +2,6 @@ import { FC, useCallback, useEffect } from 'react';
 import { useGetTokenBalance } from 'libs/queries';
 import {
   getCalculatedPrice,
-  getMaxBuyMin,
-  getMinSellMax,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
@@ -25,7 +23,6 @@ import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
 import { EditOverlappingMarketPrice } from '../overlapping/OverlappingMarketPrice';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
@@ -178,28 +175,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   const setBudget = async (value: string) => {
     set('budget', value);
   };
-
-  // Update on buyMin changes
-  useEffect(() => {
-    if (isZero(order0.min)) return;
-    const timeout = setTimeout(async () => {
-      const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
-      if (Number(order1.max) < minSellMax) set('max', minSellMax.toString());
-    }, 1000);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order0.min]);
-
-  // Update on sellMax changes
-  useEffect(() => {
-    if (isZero(order1.max)) return;
-    const timeout = setTimeout(async () => {
-      const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
-      if (Number(order0.min) > maxBuyMin) set('min', maxBuyMin.toString());
-    }, 1000);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order1.max]);
 
   return (
     <OverlappingMarketPriceProvider marketPrice={+marketPrice}>

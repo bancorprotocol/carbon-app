@@ -12,6 +12,7 @@ import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   getCalculatedPrice,
+  getMaxSpread,
   getOverlappingMarketPrice,
   getRoundedSpread,
   isMaxBelowMarket,
@@ -68,8 +69,9 @@ const getOrders = (
     budget = '0',
     action = 'deposit',
   } = search;
+  const aboveMaxSpread = +spread > getMaxSpread(+min, +max);
 
-  if (!isValidRange(min, max) || !isValidSpread(spread)) {
+  if (!isValidRange(min, max) || !isValidSpread(spread) || aboveMaxSpread) {
     return {
       buy: { min: min, max: max, marginalPrice: marketPrice, budget: '' },
       sell: { min: min, max: max, marginalPrice: marketPrice, budget: '' },

@@ -2,9 +2,8 @@ import { FC, ChangeEvent } from 'react';
 import { cn, sanitizeNumber } from 'utils/helpers';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { useStore } from 'store';
-import styles from './OverlappingSpread.module.css';
 import { Preset, Presets } from 'components/common/preset/Preset';
+import styles from './OverlappingSpread.module.css';
 
 interface Props {
   spread: string;
@@ -12,10 +11,6 @@ interface Props {
   sellMax: number;
   setSpread: (value: string) => void;
 }
-
-const getWarning = (maxSpread: number) => {
-  return `⚠️ Given price range, max fee tier cannot exceed ${maxSpread}%`;
-};
 
 const round = (value: number) => Math.round(value * 100) / 100;
 
@@ -36,32 +31,28 @@ const presets: Preset[] = [
 
 export const OverlappingSpread: FC<Props> = (props) => {
   const { setSpread, buyMin, sellMax, spread } = props;
+  const maxSpread = round(getMaxSpread(buyMin, sellMax));
   const tooLow = +spread <= 0;
-  const tooHigh = +spread > 100;
+  const tooHigh = maxSpread > 0 && +spread > maxSpread;
   const hasError = tooLow || tooHigh;
-  const { toaster } = useStore();
 
-  const selectSpread = (value: string) => {
-    const maxSpread = round(getMaxSpread(buyMin, sellMax));
-    if (+value > maxSpread) {
-      toaster.addToast(getWarning(maxSpread), {
-        color: 'warning',
-        duration: 3000,
-      });
-      setSpread(maxSpread.toFixed(2));
-    } else {
-      setSpread(sanitizeNumber(value));
-    }
+  const onPresetChange = (value: string) => {
+    setSpread(value);
   };
 
   const onCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
-    selectSpread(e.currentTarget.value);
+    setSpread(sanitizeNumber(e.currentTarget.value));
   };
 
   return (
     <>
-      <div role="group" className="flex gap-8">
-        <Presets className="flex-grow" presets={presets} onChange={setSpread} />
+      <div className={cn(styles.spread, 'flex gap-8')} role="group">
+        <Presets
+          className="flex-grow"
+          value={spread}
+          presets={presets}
+          onChange={onPresetChange}
+        />
         <div
           className={cn(
             styles.spreadCustom,
@@ -76,22 +67,29 @@ export const OverlappingSpread: FC<Props> = (props) => {
             value={spread}
             type="text"
             inputMode="decimal"
-            aria-label="Set spread"
-            placeholder="Set spread"
+            aria-label="Set fee tier"
+            placeholder="Set Fee Tier"
             onChange={onCustomChange}
             data-testid="spread-input"
           />
           <span className={styles.suffix}>%</span>
         </div>
       </div>
+      {tooHigh && (
+        <Warning htmlFor="spread-custom" isError>
+          Given price range, max fee tier cannot exceed&nbsp;
+          <button
+            type="button"
+            className="font-weight-700"
+            onClick={() => setSpread(maxSpread.toFixed(2))}
+          >
+            {maxSpread}%
+          </button>
+        </Warning>
+      )}
       {tooLow && (
         <Warning htmlFor="spread-custom" isError>
           The fee tier should be above 0%
-        </Warning>
-      )}
-      {tooHigh && (
-        <Warning htmlFor="spread-custom" isError>
-          The fee tier should be equal or below 100%
         </Warning>
       )}
     </>

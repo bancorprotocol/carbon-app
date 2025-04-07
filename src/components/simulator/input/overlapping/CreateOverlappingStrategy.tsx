@@ -1,7 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import {
-  getMaxBuyMin,
-  getMinSellMax,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
@@ -269,28 +267,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [touched, anchor, marketPrice, buy.min, sell.max]);
-
-  // Update on buyMin changes
-  useEffect(() => {
-    if (!+formatNumber(buy.min)) return;
-    const timeout = setTimeout(async () => {
-      const minSellMax = getMinSellMax(Number(buy.min), +spread);
-      if (Number(sell.max) < minSellMax) setMax(minSellMax.toString());
-    }, 1500);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buy.min]);
-
-  // Update on sellMax changes
-  useEffect(() => {
-    if (!+formatNumber(sell.max)) return;
-    const timeout = setTimeout(async () => {
-      const maxBuyMin = getMaxBuyMin(Number(sell.max), +spread);
-      if (Number(buy.min) > maxBuyMin) setMin(maxBuyMin.toString());
-    }, 1500);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sell.max]);
 
   if (!base || !quote) return null;
 
