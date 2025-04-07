@@ -253,14 +253,12 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
         </>
       )}
       {!displayPrice && (
-        <article className="bg-background-900 grid gap-16 p-16">
-          <EditOverlappingMarketPrice
-            base={base}
-            quote={quote}
-            calculatedPrice={getCalculatedPrice(strategy)}
-            setMarketPrice={setMarketPrice}
-          />
-        </article>
+        <EditOverlappingMarketPrice
+          base={base}
+          quote={quote}
+          calculatedPrice={getCalculatedPrice(strategy)}
+          setMarketPrice={setMarketPrice}
+        />
       )}
       <article className="bg-background-900 grid gap-16 p-16">
         <header className="flex items-center justify-between">

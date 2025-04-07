@@ -233,14 +233,12 @@ const OverlappingContent = () => {
       <div className="grid content-start rounded">
         <EditStrategyOverlapTokens />
         <EditPriceNav editType={search.editType} />
-        <article className="bg-background-900 grid gap-16 p-16">
-          <EditOverlappingMarketPrice
-            base={base}
-            quote={quote}
-            calculatedPrice={getCalculatedPrice(strategy)}
-            setMarketPrice={setMarketPrice}
-          />
-        </article>
+        <EditOverlappingMarketPrice
+          base={base}
+          quote={quote}
+          calculatedPrice={getCalculatedPrice(strategy)}
+          setMarketPrice={setMarketPrice}
+        />
       </div>
     );
   }
