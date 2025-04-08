@@ -1,6 +1,9 @@
 .spread:has(input[type="radio"]:checked) .spread-custom {
-  color: rgba(255 255 255 / 0.6);
-  border-color: transparent;
+  @apply text-white/60 border-transparent;
+
+}
+.spread:has(input[type="number"]:invalid) .spread-custom {
+  @apply text-error border-error;
 }
 
 .spread-custom input:placeholder-shown {
