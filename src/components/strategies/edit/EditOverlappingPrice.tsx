@@ -182,7 +182,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
         <>
           <article className="bg-background-900 grid gap-16 p-16">
             <header className="flex items-center gap-8">
-              <h2 className="text-18 font-weight-500 flex-1">
+              <h2 className="text-16 font-weight-500 flex-1">
                 Edit Price Range&nbsp;
                 <span className="text-white/40">
                   ({quote?.symbol} per 1 {base?.symbol})
@@ -227,7 +227,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
       )}
       <article className="bg-background-900 grid gap-16 p-16">
         <header className="flex items-center justify-between">
-          <h2 className="text-18">Budget</h2>
+          <h2 className="text-16">Budget</h2>
           <Tooltip
             iconClassName="size-18 text-white/60"
             element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
