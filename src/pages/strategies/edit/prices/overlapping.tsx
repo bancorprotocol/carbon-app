@@ -26,7 +26,6 @@ import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
-import { EditPriceLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
 import { useCallback } from 'react';
 import { OverlappingSearch } from 'components/strategies/common/types';
@@ -140,7 +139,6 @@ const getOrders = (
 };
 
 const url = '/strategies/edit/$strategyId/prices/overlapping';
-
 export const EditPricesOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
@@ -171,7 +169,7 @@ export const EditPricesOverlappingPage = () => {
 
   const orders = getOrders(strategy, search, marketPrice);
   return (
-    <EditPriceLayout editType={search.editType}>
+    <>
       <OverlappingContent />
       <StrategyChartOverlapping
         base={base}
@@ -181,7 +179,7 @@ export const EditPricesOverlappingPage = () => {
         set={set}
         marketPrice={displayPrice}
       />
-    </EditPriceLayout>
+    </>
   );
 };
 

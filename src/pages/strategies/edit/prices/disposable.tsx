@@ -22,7 +22,6 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
-import { EditPriceLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'libs/queries';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
@@ -43,7 +42,7 @@ export interface EditDisposableStrategySearch {
 const getOrder = (
   strategy: Strategy,
   search: EditDisposableStrategySearch,
-  marketPrice?: number
+  marketPrice?: string
 ): EditOrderBlock => {
   const { order0, order1 } = strategy;
   const defaultDirection = !isEmptyOrder(order0) ? 'buy' : 'sell';
@@ -96,8 +95,8 @@ export const EditPricesStrategyDisposablePage = () => {
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
-
-  const { marketPrice } = useMarketPrice({ base, quote });
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
   const isBuy = search.direction !== 'sell';
   const { setOrder } = useSetDisposableOrder(url);
@@ -169,7 +168,7 @@ export const EditPricesStrategyDisposablePage = () => {
   const sellWithdraw = getWithdraw(order1.balance, orders.sell.budget);
 
   return (
-    <EditPriceLayout editType={search.editType}>
+    <>
       <EditStrategyForm
         strategyType="disposable"
         editType={search.editType}
@@ -245,6 +244,6 @@ export const EditPricesStrategyDisposablePage = () => {
           onPriceUpdates={onPriceUpdates}
         />
       </StrategyChartSection>
-    </EditPriceLayout>
+    </>
   );
 };

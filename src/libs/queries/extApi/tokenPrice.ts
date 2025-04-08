@@ -9,9 +9,8 @@ export const useGetTokenPrice = (address?: string) => {
   const {
     fiatCurrency: { availableCurrencies },
   } = useStore();
-
   return useQuery({
-    queryKey: QueryKey.tokenPrice(address!),
+    queryKey: QueryKey.tokenPrice(address?.toLowerCase()),
     queryFn: () => {
       return carbonApi
         .getMarketRate(address!, availableCurrencies)

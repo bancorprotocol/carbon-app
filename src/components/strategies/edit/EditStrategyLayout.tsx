@@ -1,16 +1,10 @@
-import { FC, ReactNode, useCallback } from 'react';
+import { FC, ReactNode } from 'react';
 import { useRouter } from '@tanstack/react-router';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { BackButton } from 'components/common/BackButton';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { InitMarketPrice } from '../common/InitMarketPrice';
-import { useTradeCtx } from 'components/trade/TradeContext';
-import { useNavigate, useSearch } from '@tanstack/react-router';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
   editType: EditTypes;
-  graph?: ReactNode;
   children: ReactNode;
 }
 
@@ -39,50 +33,4 @@ export const EditStrategyLayout: FC<Props> = (props) => {
       </div>
     </div>
   );
-};
-
-export const EditPriceLayout: FC<Props> = (props) => {
-  const { base, quote } = useTradeCtx();
-  const search = useSearch({ from: '/strategies/edit/$strategyId/prices' });
-  const navigate = useNavigate({ from: '/strategies/edit/$strategyId/prices' });
-  const marketQuery = useMarketPrice({ base, quote });
-  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
-  const setMarketPrice = useCallback(
-    (marketPrice: string) => {
-      navigate({
-        search: (previous) => ({ ...previous, marketPrice }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate]
-  );
-
-  console.log(marketPrice, marketQuery);
-
-  if (!marketPrice && marketQuery.isPending) {
-    return (
-      <EditStrategyLayout {...props}>
-        <CarbonLogoLoading className="h-[80px] place-self-center" />
-      </EditStrategyLayout>
-    );
-  }
-
-  if (!marketPrice) {
-    return (
-      <EditStrategyLayout {...props}>
-        <article
-          key="marketPrice"
-          className="bg-background-900 rounded-ee rounded-es"
-        >
-          <InitMarketPrice
-            base={base}
-            quote={quote}
-            setMarketPrice={(price) => setMarketPrice(price)}
-          />
-        </article>
-      </EditStrategyLayout>
-    );
-  }
-  return <EditStrategyLayout {...props} />;
 };

@@ -16,7 +16,6 @@ import {
   checkIfOrdersReversed,
 } from 'components/strategies/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-import { EditPriceLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
@@ -49,7 +48,7 @@ type Search = EditRecurringStrategySearch;
 const getOrders = (
   strategy: Strategy,
   search: Search,
-  marketPrice?: number
+  marketPrice?: string
 ): { buy: EditOrderBlock; sell: EditOrderBlock } => {
   const { order0, order1 } = strategy;
 
@@ -144,7 +143,8 @@ export const EditPricesStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
-  const { marketPrice } = useMarketPrice({ base, quote });
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
@@ -194,7 +194,7 @@ export const EditPricesStrategyRecurringPage = () => {
   const error = getError(search);
 
   return (
-    <EditPriceLayout editType={search.editType}>
+    <>
       <EditStrategyForm
         strategyType="recurring"
         editType={search.editType}
@@ -232,6 +232,6 @@ export const EditPricesStrategyRecurringPage = () => {
           onPriceUpdates={onPriceUpdates}
         />
       </StrategyChartSection>
-    </EditPriceLayout>
+    </>
   );
 };

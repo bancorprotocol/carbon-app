@@ -28,7 +28,7 @@ export namespace QueryKey {
   ];
 
   export const tokens = () => [...extAPI, 'tokens'];
-  export const tokenPrice = (address: string) => [
+  export const tokenPrice = (address: string = '') => [
     ...extAPI,
     'token-price',
     address,
