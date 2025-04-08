@@ -283,7 +283,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           </h3>
           <Tooltip
             element="Indicate the strategy exact buy and sell prices."
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-18 text-white/60"
           />
         </header>
         <OverlappingPriceRange
@@ -312,7 +312,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
             </p>
           </hgroup>
           <Tooltip
-            iconClassName="size-14 text-white/60"
+            iconClassName="size-18 text-white/60"
             element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
           />
         </header>
