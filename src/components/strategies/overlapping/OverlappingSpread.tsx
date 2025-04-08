@@ -45,19 +45,16 @@ export const OverlappingSpread: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <div className={cn(styles.spread, 'flex gap-8')} role="group">
-        <Presets
-          className="flex-grow"
-          value={spread}
-          presets={presets}
-          onChange={onPresetChange}
-          testid="spread"
-        />
+    <article
+      role="group"
+      className={cn(styles.spread, 'bg-background-900 grid gap-16 p-16')}
+    >
+      <header className="mb-10 flex items-center gap-8 ">
+        <h2 className="text-16 font-weight-500 flex-1">Edit Fee Tier</h2>
         <div
           className={cn(
             styles.spreadCustom,
-            'rounded-10 flex min-w-0 flex-1 justify-center border border-white/60 bg-black p-16 text-center',
+            'rounded-10 text-14 flex min-w-0 flex-1 justify-center border border-white/60 bg-black p-8 text-center',
             'focus-within:outline focus-within:outline-1',
             hasError && 'text-error border-error'
           )}
@@ -75,7 +72,14 @@ export const OverlappingSpread: FC<Props> = (props) => {
           />
           <span className={styles.suffix}>%</span>
         </div>
-      </div>
+      </header>
+      <Presets
+        className="flex-grow"
+        value={spread}
+        presets={presets}
+        onChange={onPresetChange}
+        testid="spread"
+      />
       {tooHigh && (
         <Warning htmlFor="spread-custom" isError>
           Given price range, max fee tier cannot exceed&nbsp;
@@ -93,6 +97,6 @@ export const OverlappingSpread: FC<Props> = (props) => {
           The fee tier should be above 0%
         </Warning>
       )}
-    </>
+    </article>
   );
 };

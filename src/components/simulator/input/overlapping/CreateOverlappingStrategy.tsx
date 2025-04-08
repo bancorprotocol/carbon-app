@@ -274,7 +274,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     <>
       <article className="grid gap-16 p-16">
         <header className="flex items-center gap-8">
-          <h3 className="text-18 font-weight-500 flex-1">
+          <h3 className="text-16 font-weight-500 flex-1">
             Set Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
@@ -298,25 +298,16 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           setSpread={setSpread}
         />
       </article>
-      <article className="grid gap-10 p-16">
-        <header className="mb-10 flex items-center gap-8 ">
-          <h3 className="text-18 font-weight-500 flex-1">Set Fee Tier</h3>
-          <Tooltip
-            element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="h-14 w-14 text-white/60"
-          />
-        </header>
-        <OverlappingSpread
-          buyMin={Number(buy.min)}
-          sellMax={Number(sell.max)}
-          spread={spread}
-          setSpread={setSpreadValue}
-        />
-      </article>
+      <OverlappingSpread
+        buyMin={Number(buy.min)}
+        sellMax={Number(sell.max)}
+        spread={spread}
+        setSpread={setSpreadValue}
+      />
       <article className="grid gap-16 p-16">
         <header className="flex items-start justify-between">
           <hgroup>
-            <h2 className="text-18">Budget</h2>
+            <h2 className="text-16">Budget</h2>
             <p className="text-14 text-white/80">
               Please select a token to proceed.
             </p>

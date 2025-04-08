@@ -90,21 +90,12 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           required
         />
       </article>
-      <article className="bg-background-900 grid gap-10 p-16">
-        <header className="flex items-center gap-8 ">
-          <h3 className="text-16 font-weight-500 flex-1">Set Fee Tier</h3>
-          <Tooltip
-            element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="size-18 text-white/60"
-          />
-        </header>
-        <OverlappingSpread
-          buyMin={Number(order0.min)}
-          sellMax={Number(order1.max)}
-          spread={spread}
-          setSpread={setSpread}
-        />
-      </article>
+      <OverlappingSpread
+        buyMin={Number(order0.min)}
+        sellMax={Number(order1.max)}
+        spread={spread}
+        setSpread={setSpread}
+      />
       <article className="bg-background-900 grid gap-16 p-16">
         <hgroup>
           <h3 className="text-16 font-weight-500 flex items-center justify-between">
