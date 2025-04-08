@@ -79,8 +79,7 @@ export const TokenInputField: FC<Props> = (props) => {
 
   const priceText = () => {
     if (slippage?.isZero()) return;
-    if (!hasFiatValue())
-      return `Current ${selectedFiatCurrency} value unavailable`;
+    if (!hasFiatValue()) return `${selectedFiatCurrency} value unavailable`;
     if (fiatValueUsd.gt(0)) return getFiatAsString(value);
   };
 

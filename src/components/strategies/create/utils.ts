@@ -40,23 +40,24 @@ export const handleTxStatusAndRedirectToOverview = (
 export const getDefaultOrder = (
   type: 'buy' | 'sell',
   base: Partial<OrderBlock>,
-  marketPrice: number = 0
+  marketPrice: string = '0'
 ): OrderBlock => {
+  const market = new SafeDecimal(marketPrice);
   const settings = base.settings ?? 'limit';
   if (base.settings === 'range') {
     const multiplierMax = type === 'buy' ? 0.9 : 1.2;
     const multiplierMin = type === 'buy' ? 0.8 : 1.1;
     return {
-      min: base.min ?? (marketPrice * multiplierMin).toString(),
-      max: base.max ?? (marketPrice * multiplierMax).toString(),
+      min: base.min ?? market.mul(multiplierMin).toString(),
+      max: base.max ?? market.mul(multiplierMax).toString(),
       budget: base.budget ?? '',
       settings,
     };
   } else {
     const multiplier = type === 'buy' ? 0.9 : 1.1;
     return {
-      min: base.min ?? (marketPrice * multiplier).toString(),
-      max: base.max ?? (marketPrice * multiplier).toString(),
+      min: base.min ?? market.mul(multiplier).toString(),
+      max: base.max ?? market.mul(multiplier).toString(),
       budget: base.budget ?? '',
       settings,
     };

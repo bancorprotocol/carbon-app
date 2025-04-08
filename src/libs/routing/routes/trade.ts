@@ -61,6 +61,7 @@ export interface TradeSearch {
   quote?: string;
   priceStart?: string;
   priceEnd?: string;
+  marketPrice?: string;
 }
 const tradePage = createRoute({
   getParentRoute: () => rootRoute,
@@ -93,6 +94,7 @@ const disposablePage = createRoute({
   path: '/disposable',
   component: TradeDisposable,
   validateSearch: searchValidator({
+    marketPrice: v.optional(validNumber),
     direction: v.optional(v.picklist(['buy', 'sell'])),
     settings: v.optional(v.picklist(['limit', 'range'])),
     min: v.optional(validInputNumber),
@@ -107,6 +109,7 @@ const recurringPage = createRoute({
   path: '/recurring',
   component: TradeRecurring,
   validateSearch: searchValidator({
+    marketPrice: v.optional(validNumber),
     buyMin: v.optional(validInputNumber),
     buyMax: v.optional(validInputNumber),
     buyBudget: v.optional(validInputNumber),

@@ -17,13 +17,16 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing';
 import { TradeDisposableSearch } from 'libs/routing/routes/trade';
 import { useCallback } from 'react';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { OverlappingInitMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
   const { base, quote } = useTradeCtx();
-  const { marketPrice } = useMarketPrice({ base, quote });
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
   const isBuy = search.direction === 'buy';
   const order = getDefaultOrder(isBuy ? 'buy' : 'sell', search, marketPrice);
@@ -66,6 +69,56 @@ export const TradeDisposable = () => {
     buy: order.settings !== 'range',
     sell: order.settings !== 'range',
   };
+
+  const setMarketPrice = useCallback(
+    (marketPrice: string) => {
+      navigate({
+        search: (previous) => ({ ...previous, marketPrice }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate]
+  );
+
+  if (!marketPrice && marketQuery.isPending) {
+    return (
+      <TradeLayout>
+        <CarbonLogoLoading className="h-[80px] place-self-center" />
+      </TradeLayout>
+    );
+  }
+
+  if (!marketPrice) {
+    return (
+      <>
+        <TradeLayout>
+          <article
+            key="marketPrice"
+            className="bg-background-900 rounded-ee rounded-es"
+          >
+            <OverlappingInitMarketPrice
+              base={base}
+              quote={quote}
+              setMarketPrice={(price) => setMarketPrice(price)}
+            />
+          </article>
+        </TradeLayout>
+        <StrategyChartSection>
+          <StrategyChartHistory
+            type="recurring"
+            base={base}
+            quote={quote}
+            order0={order0}
+            order1={order1}
+            isLimit={isLimit}
+            onPriceUpdates={onPriceUpdates}
+          />
+        </StrategyChartSection>
+      </>
+    );
+  }
+
   return (
     <>
       <TradeLayout>

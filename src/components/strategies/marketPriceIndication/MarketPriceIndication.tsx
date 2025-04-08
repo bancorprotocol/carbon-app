@@ -26,7 +26,7 @@ export const MarketPriceIndication: FC<Props> = (props) => {
   if (!marketPrice)
     return (
       <span className="text-12 text-white/60">
-        Current {selectedFiatCurrency} value unavailable
+        {selectedFiatCurrency} value unavailable
       </span>
     );
 
