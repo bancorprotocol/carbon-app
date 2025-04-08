@@ -22,7 +22,7 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
-import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { EditPriceLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'libs/queries';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
@@ -169,7 +169,7 @@ export const EditPricesStrategyDisposablePage = () => {
   const sellWithdraw = getWithdraw(order1.balance, orders.sell.budget);
 
   return (
-    <EditStrategyLayout editType={search.editType}>
+    <EditPriceLayout editType={search.editType}>
       <EditStrategyForm
         strategyType="disposable"
         editType={search.editType}
@@ -245,6 +245,6 @@ export const EditPricesStrategyDisposablePage = () => {
           onPriceUpdates={onPriceUpdates}
         />
       </StrategyChartSection>
-    </EditStrategyLayout>
+    </EditPriceLayout>
   );
 };

@@ -16,7 +16,7 @@ import {
   checkIfOrdersReversed,
 } from 'components/strategies/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { EditPriceLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
@@ -194,7 +194,7 @@ export const EditPricesStrategyRecurringPage = () => {
   const error = getError(search);
 
   return (
-    <EditStrategyLayout editType={search.editType}>
+    <EditPriceLayout editType={search.editType}>
       <EditStrategyForm
         strategyType="recurring"
         editType={search.editType}
@@ -232,6 +232,6 @@ export const EditPricesStrategyRecurringPage = () => {
           onPriceUpdates={onPriceUpdates}
         />
       </StrategyChartSection>
-    </EditStrategyLayout>
+    </EditPriceLayout>
   );
 };
