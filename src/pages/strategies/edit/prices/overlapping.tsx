@@ -20,7 +20,7 @@ import {
 } from 'components/strategies/overlapping/utils';
 import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
 import { isOverlappingTouched } from 'components/strategies/overlapping/utils';
-import { EditOverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { EditOverlappingMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';

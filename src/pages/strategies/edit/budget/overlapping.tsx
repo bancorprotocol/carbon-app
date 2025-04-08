@@ -15,7 +15,7 @@ import {
   isMinAboveMarket,
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
-import { OverlappingInitMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { InitMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
@@ -210,7 +210,7 @@ const OverlappingContent = () => {
       <div className="flex flex-col gap-20 md:w-[440px]">
         <EditStrategyOverlapTokens />
         <article className="rounded-10 bg-background-900 flex flex-col">
-          <OverlappingInitMarketPrice
+          <InitMarketPrice
             base={base}
             quote={quote}
             marketPrice={marketPrice}

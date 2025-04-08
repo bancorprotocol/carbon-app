@@ -27,7 +27,7 @@ import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/over
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
-import { EditOverlappingMarketPrice } from '../overlapping/OverlappingMarketPrice';
+import { EditOverlappingMarketPrice } from '../common/InitMarketPrice';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
 
 interface Props {

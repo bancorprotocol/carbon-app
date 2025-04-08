@@ -15,7 +15,7 @@ import {
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { getDeposit, getWithdraw } from './utils';
 import { hasNoBudget } from '../overlapping/utils';
-import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { OverlappingMarketPriceProvider } from 'components/strategies/UserMarketPrice';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { formatNumber, tokenAmount } from 'utils/helpers';
@@ -178,7 +178,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             Since the strategy had no budget, it will use the current market
             price to readjust the budget distribution around.
           </Warning>
-          <OverlappingMarketPrice
+          <EditMarketPrice
             base={base}
             quote={quote}
             marketPrice={marketPrice}

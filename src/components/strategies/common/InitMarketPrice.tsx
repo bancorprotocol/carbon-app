@@ -7,7 +7,7 @@ import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { InputLimit } from '../common/InputLimit';
+import { InputLimit } from './InputLimit';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import style from 'components/strategies/common/form.module.css';
@@ -19,7 +19,7 @@ interface Props {
   setMarketPrice: (price: string) => void;
   className?: string;
 }
-export const OverlappingMarketPrice: FC<Props> = (props) => {
+export const EditMarketPrice: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
   const Trigger = (attr: MenuButtonProps) => (
     <button
@@ -44,7 +44,7 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
       initialFocus={-1}
       button={Trigger}
     >
-      <OverlappingInitMarketPrice
+      <InitMarketPrice
         {...props}
         className="w-[400px] max-w-[80vw]"
         close={() => setOpen(false)}
@@ -58,7 +58,7 @@ interface FieldProps extends Props {
   close?: () => void;
 }
 
-export const OverlappingInitMarketPrice = (props: FieldProps) => {
+export const InitMarketPrice = (props: FieldProps) => {
   const { base, quote, marketPrice } = props;
   const inputId = useId();
   const checkboxId = useId();

@@ -7,7 +7,7 @@ import {
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { NotFound } from 'components/common/NotFound';
-import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { OverlappingChart } from 'components/strategies/overlapping/OverlappingChart';
 import { StrategyChartHistory } from './StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
@@ -69,7 +69,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
           </Radio>
         </RadioGroup>
 
-        <OverlappingMarketPrice
+        <EditMarketPrice
           base={base}
           quote={quote}
           marketPrice={marketPrice}
