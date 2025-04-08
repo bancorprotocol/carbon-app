@@ -21,6 +21,7 @@ import { SimInputTokenSelection } from 'components/simulator/input/SimInputToken
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import style from 'components/strategies/common/form.module.css';
+import { defaultSpread } from 'components/strategies/overlapping/utils';
 
 export const SimulatorInputOverlappingPage = () => {
   const searchState = simulatorInputOverlappingRoute.useSearch();
@@ -45,7 +46,7 @@ export const SimulatorInputOverlappingPage = () => {
     if (searchState.sellMax || searchState.buyMin) return;
     dispatch('baseToken', searchState.baseToken);
     dispatch('quoteToken', searchState.quoteToken);
-    dispatch('spread', '1');
+    dispatch('spread', defaultSpread);
     dispatch('buyMax', '');
     dispatch('buyMin', '');
     dispatch('sellMax', '');

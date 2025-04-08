@@ -67,7 +67,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
         <div
           className={cn(
             styles.spreadCustom,
-            'rounded-10 text-14 flex justify-center border border-white/60 bg-black p-8 text-center',
+            'rounded-10 text-12 flex justify-center border border-white/60 bg-black p-8 text-center',
             'focus-within:outline focus-within:outline-1'
           )}
         >
