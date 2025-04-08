@@ -25,6 +25,7 @@ import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayou
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
 import { useCallback } from 'react';
 import { OverlappingSearch } from 'components/strategies/common/types';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export interface EditBudgetOverlappingSearch extends OverlappingSearch {
   editType: 'deposit' | 'withdraw';
@@ -61,9 +62,12 @@ const getOrders = (
   const { anchor, budget = '0', editType = 'deposit' } = search;
 
   if (!isValidRange(min, max) || !isValidSpread(min, max, spread)) {
+    let marginalPrice = marketPrice;
+    if (new SafeDecimal(marketPrice).gt(max)) marginalPrice = max;
+    if (new SafeDecimal(marketPrice).lt(min)) marginalPrice = min;
     return {
-      buy: { min: min, max: max, marginalPrice: marketPrice, budget: '' },
-      sell: { min: min, max: max, marginalPrice: marketPrice, budget: '' },
+      buy: { min: min, max: max, marginalPrice, budget: '' },
+      sell: { min: min, max: max, marginalPrice, budget: '' },
     };
   }
 
