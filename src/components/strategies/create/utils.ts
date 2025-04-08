@@ -16,7 +16,6 @@ import { Token } from 'libs/tokens';
 import { isZero } from '../common/utils';
 import {
   defaultSpread,
-  getMaxSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
@@ -133,9 +132,8 @@ export const getOverlappingOrders = (
     spread = defaultSpread,
     budget,
   } = search;
-  const aboveMaxSpread = +spread > getMaxSpread(+min, +max);
 
-  if (!isValidRange(min, max) || !isValidSpread(spread) || aboveMaxSpread) {
+  if (!isValidRange(min, max) || !isValidSpread(min, max, spread)) {
     return {
       buy: { min: min, max: max, marginalPrice: marketPrice, budget: '' },
       sell: { min: min, max: max, marginalPrice: marketPrice, budget: '' },

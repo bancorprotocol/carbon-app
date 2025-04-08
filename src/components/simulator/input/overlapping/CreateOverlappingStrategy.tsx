@@ -57,7 +57,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const { buyMarginal, sellMarginal } = useMemo(() => {
     const min = state.buy.min;
     const max = state.sell.max;
-    if (!base || !quote || !isValidRange(min, max) || !isValidSpread(spread)) {
+    const validSpread = isValidSpread(min, max, spread);
+    if (!base || !quote || !isValidRange(min, max) || !validSpread) {
       return {
         buyMarginal: '',
         sellMarginal: '',
@@ -167,7 +168,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     spreadValue: string = spread.toString()
   ) => {
     if (!base || !quote) return;
-    if (!isValidRange(min, max) || !isValidSpread(spread)) return;
+    if (!isValidRange(min, max) || !isValidSpread(min, max, spread)) return;
     const prices = calculateOverlappingPrices(
       formatNumber(min),
       formatNumber(max),
@@ -294,8 +295,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           max={sell.max}
           setMin={setMin}
           setMax={setMax}
-          spread={spread}
-          setSpread={setSpread}
         />
       </article>
       <OverlappingSpread
