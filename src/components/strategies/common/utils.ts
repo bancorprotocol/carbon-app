@@ -146,7 +146,7 @@ interface OutsideMarketParams {
   base?: Token;
   min?: string;
   max?: string;
-  marketPrice?: string;
+  marketPrice?: string | number;
   buy?: boolean;
 }
 export const outSideMarketWarning = (params: OutsideMarketParams) => {

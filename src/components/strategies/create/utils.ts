@@ -40,7 +40,7 @@ export const handleTxStatusAndRedirectToOverview = (
 export const getDefaultOrder = (
   type: 'buy' | 'sell',
   base: Partial<OrderBlock>,
-  marketPrice: string = '0'
+  marketPrice: string | number = '0'
 ): OrderBlock => {
   const market = new SafeDecimal(marketPrice);
   const settings = base.settings ?? 'limit';
