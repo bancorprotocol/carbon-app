@@ -23,7 +23,7 @@ import {
 } from 'd3';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { Activity } from 'libs/queries/extApi/activity';
-import { getDomain, scaleBandInvert } from './utils';
+import { getDomain, isEmptyHistory, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
 import {
@@ -224,8 +224,13 @@ export const D3PriceHistory: FC<Props> = (props) => {
   }, [data, dms.boundedWidth, zoomBehavior, zoomX]);
 
   const yDomain = useMemo(() => {
-    const candles = data.filter((point) => xScale(point.date.toString())! > 0);
-    return getDomain(candles, bounds, marketPrice);
+    if (isEmptyHistory(data)) {
+      if (!marketPrice) return [];
+      return [marketPrice * 0.5, marketPrice * 2];
+    } else {
+      const candles = data.filter((p) => xScale(p.date.toString())! > 0);
+      return getDomain(candles, bounds, marketPrice);
+    }
   }, [bounds, data, marketPrice, xScale]);
 
   const y = useLinearScale({

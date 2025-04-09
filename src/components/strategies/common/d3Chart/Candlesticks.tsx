@@ -1,5 +1,6 @@
 import { CandlestickData } from 'libs/d3';
 import { useD3ChartCtx } from './D3ChartContext';
+import { isEmptyHistory } from './utils';
 
 type CandlesticksProps = {
   data: CandlestickData[];
@@ -7,6 +8,7 @@ type CandlesticksProps = {
 
 export function Candlesticks({ data }: CandlesticksProps) {
   const { xScale, yScale } = useD3ChartCtx();
+  if (isEmptyHistory(data)) return;
   return (
     <>
       {data.map((d) => {

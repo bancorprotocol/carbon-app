@@ -30,7 +30,6 @@ interface Props {
   direction?: 'buy' | 'sell'; // Only for disposable
   spread?: string; // Only overlapping
   readonly?: boolean;
-  marketPrice?: string;
   activities?: Activity[];
   onPriceUpdates?: OnPriceUpdates;
 }
@@ -40,11 +39,12 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   const { base, quote, type, order0, order1, activities, onPriceUpdates } =
     props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
+  const search = useSearch({ strict: false });
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const nav = useNavigate();
 
-  const marketPrice = props.marketPrice
-    ? Number(props.marketPrice)
+  const marketPrice = search.marketPrice
+    ? Number(search.marketPrice)
     : externalPrice;
 
   const direction = (() => {
