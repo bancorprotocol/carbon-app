@@ -1,4 +1,4 @@
-import { FC, FormEvent, ReactNode, useCallback, useState } from 'react';
+import { FC, FormEvent, ReactNode, useState } from 'react';
 import { EditPriceNav } from './EditPriceNav';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
@@ -102,16 +102,6 @@ export const EditPricesForm: FC<Props> = (props) => {
   const { base, quote } = strategy;
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
-  const setMarketPrice = useCallback(
-    (marketPrice: string) => {
-      navigate({
-        search: (previous) => ({ ...previous, marketPrice }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate]
-  );
 
   const approvalTokens = (() => {
     const arr = [];
@@ -226,11 +216,7 @@ export const EditPricesForm: FC<Props> = (props) => {
       >
         <EditStrategyOverlapTokens />
         <EditPriceNav editType={editType} />
-        <InitMarketPrice
-          base={base}
-          quote={quote}
-          setMarketPrice={(price) => setMarketPrice(price)}
-        />
+        <InitMarketPrice base={base} quote={quote} />
       </article>
     );
   }

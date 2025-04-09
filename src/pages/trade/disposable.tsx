@@ -17,6 +17,7 @@ import { StrategyDirection } from 'libs/routing';
 import { TradeDisposableSearch } from 'libs/routing/routes/trade';
 import { useCallback } from 'react';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
@@ -103,7 +104,9 @@ export const TradeDisposable = () => {
           />
         </CreateForm>
       </CreateLayout>
-      <StrategyChartSection>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
         <StrategyChartHistory
           type="disposable"
           base={base}

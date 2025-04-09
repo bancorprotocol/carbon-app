@@ -43,11 +43,7 @@ export const CreateLayout: FC<Props> = ({ children, url }) => {
           key="marketPrice"
           className="bg-background-900 rounded-ee rounded-es"
         >
-          <InitMarketPrice
-            base={base}
-            quote={quote}
-            setMarketPrice={(price) => setMarketPrice(price)}
-          />
+          <InitMarketPrice base={base} quote={quote} />
         </article>
       </TradeLayout>
     );

@@ -176,7 +176,6 @@ export const EditBudgetOverlappingPage = () => {
 const OverlappingContent = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
-  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
 
   const { marketPrice: externalPrice } = useMarketPrice({
@@ -198,24 +197,11 @@ const OverlappingContent = () => {
   })();
 
   if (!marketPrice) {
-    const setMarketPrice = (price: string) => {
-      navigate({
-        params: (params) => params,
-        search: (previous) => ({ ...previous, marketPrice: price }),
-        replace: true,
-        resetScroll: false,
-      });
-    };
     return (
       <div className="flex flex-col gap-20 md:w-[440px]">
         <EditStrategyOverlapTokens />
         <article className="rounded-10 bg-background-900 flex flex-col">
-          <InitMarketPrice
-            base={base}
-            quote={quote}
-            marketPrice={marketPrice}
-            setMarketPrice={setMarketPrice}
-          />
+          <InitMarketPrice base={base} quote={quote} />
         </article>
       </div>
     );

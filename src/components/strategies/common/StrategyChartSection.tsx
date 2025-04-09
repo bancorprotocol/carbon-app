@@ -2,9 +2,11 @@ import { FC, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
+  editMarketPrice?: ReactNode;
 }
 
-export const StrategyChartSection: FC<Props> = ({ children }) => {
+export const StrategyChartSection: FC<Props> = (props) => {
+  const { editMarketPrice, children } = props;
   return (
     <section
       aria-labelledby="price-chart-title"
@@ -14,6 +16,7 @@ export const StrategyChartSection: FC<Props> = ({ children }) => {
         <h2 id="price-chart-title" className="text-18">
           Price Chart
         </h2>
+        {editMarketPrice}
       </header>
       {children}
     </section>

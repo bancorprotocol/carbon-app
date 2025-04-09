@@ -26,6 +26,7 @@ import { Strategy } from 'libs/queries';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 export interface EditDisposableStrategySearch {
   marketPrice?: string;
@@ -234,7 +235,9 @@ export const EditPricesStrategyDisposablePage = () => {
           </article>
         )}
       </EditPricesForm>
-      <StrategyChartSection>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
         <StrategyChartHistory
           type="disposable"
           base={base}

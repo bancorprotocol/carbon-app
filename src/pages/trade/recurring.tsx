@@ -15,6 +15,7 @@ import { TradeLayout } from 'components/trade/TradeLayout';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { useCallback } from 'react';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 const url = '/trade/recurring';
 export const TradeRecurring = () => {
@@ -102,7 +103,9 @@ export const TradeRecurring = () => {
           />
         </CreateForm>
       </TradeLayout>
-      <StrategyChartSection>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
         <StrategyChartHistory
           type="recurring"
           base={base}

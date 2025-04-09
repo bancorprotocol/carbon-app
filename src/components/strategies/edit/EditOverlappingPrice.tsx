@@ -1,7 +1,6 @@
 import { FC, useCallback, useEffect } from 'react';
 import { useGetTokenBalance } from 'libs/queries';
 import {
-  getCalculatedPrice,
   getMaxBuyMin,
   getMinSellMax,
   isMaxBelowMarket,
@@ -27,7 +26,7 @@ import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/over
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
-import { EditOverlappingMarketPrice } from '../common/InitMarketPrice';
+import { InitMarketPrice } from '../common/InitMarketPrice';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
 
 interface Props {
@@ -252,14 +251,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           </article>
         </>
       )}
-      {!displayPrice && (
-        <EditOverlappingMarketPrice
-          base={base}
-          quote={quote}
-          calculatedPrice={getCalculatedPrice(strategy)}
-          setMarketPrice={setMarketPrice}
-        />
-      )}
+      {!displayPrice && <InitMarketPrice base={base} quote={quote} />}
       <article className="bg-background-900 grid gap-16 p-16">
         <header className="flex items-center justify-between">
           <h2 className="text-18">Budget</h2>

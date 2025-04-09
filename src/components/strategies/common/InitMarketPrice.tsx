@@ -1,22 +1,22 @@
 import { Token } from 'libs/tokens';
-import { FC, FormEvent, useId, useState } from 'react';
+import { FC, FormEvent, useId, useMemo, useState } from 'react';
 import { cn, roundSearchParam } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { Button } from 'components/common/button';
-import { NewTabLink } from 'libs/routing';
+import { NewTabLink, useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { InputLimit } from './InputLimit';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import style from 'components/strategies/common/form.module.css';
+import { useEditStrategyCtx } from '../edit/EditStrategyContext';
+import { isOverlappingStrategy } from './utils';
+import { getCalculatedPrice } from '../overlapping/utils';
 
 interface Props {
   base: Token;
   quote: Token;
-  marketPrice?: string;
-  setMarketPrice: (price: string) => void;
   className?: string;
 }
 export const EditMarketPrice: FC<Props> = (props) => {
@@ -59,12 +59,30 @@ interface FieldProps extends Props {
 }
 
 export const InitMarketPrice = (props: FieldProps) => {
-  const { base, quote, marketPrice } = props;
+  const { base, quote } = props;
+  const strategy = useEditStrategyCtx()?.strategy;
   const inputId = useId();
   const checkboxId = useId();
-  const [localPrice, setLocalPrice] = useState(roundSearchParam(marketPrice));
-  const [approved, setApproved] = useState(false);
+  const navigate = useNavigate();
+  const search = useSearch({ strict: false });
+  const marketPrice = search.marketPrice;
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
+  const initPrice = roundSearchParam(marketPrice) || externalPrice?.toString();
+  const [localPrice, setLocalPrice] = useState(initPrice);
+  const [approved, setApproved] = useState(false);
+
+  const calculatedPrice = useMemo(() => {
+    if (!strategy || !isOverlappingStrategy(strategy)) return;
+    return getCalculatedPrice(strategy);
+  }, [strategy]);
+
+  const setMarketPrice = (marketPrice?: string) => {
+    navigate({
+      search: (current: any) => ({ ...current, marketPrice }),
+      replace: true,
+      resetScroll: false,
+    } as any);
+  };
 
   const changePrice = (value: string) => {
     setLocalPrice(value);
@@ -84,7 +102,7 @@ export const InitMarketPrice = (props: FieldProps) => {
     e.preventDefault();
     e.stopPropagation();
     if (isDisabled(e.currentTarget)) return;
-    props.setMarketPrice(localPrice);
+    setMarketPrice(localPrice);
     if (props.close) props.close();
   };
 
@@ -102,13 +120,24 @@ export const InitMarketPrice = (props: FieldProps) => {
         {!externalPrice && <SetPriceText base={base} quote={quote} />}
         <InputLimit
           id={inputId}
-          price={localPrice}
+          price={localPrice || ''}
           setPrice={changePrice}
           base={base}
           quote={quote}
           ignoreMarketPriceWarning
           required
         />
+        {!!calculatedPrice && (
+          <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
+            <button
+              className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+              type="button"
+              onClick={() => setMarketPrice(calculatedPrice)}
+            >
+              Use Strategy
+            </button>
+          </Tooltip>
+        )}
         <p className="text-12 warning-message text-white/60">
           Updating the market price will automatically adjust all related data
           in the app.
@@ -164,56 +193,3 @@ const EditPriceText = () => (
     </NewTabLink>
   </span>
 );
-
-interface EditMarketPriceProps {
-  base: Token;
-  quote: Token;
-  calculatedPrice?: string;
-  setMarketPrice: (price: string) => any;
-}
-
-/** Market price input for edit price when there is no external market price or form is untouched  */
-export const EditOverlappingMarketPrice: FC<EditMarketPriceProps> = (props) => {
-  const { base, quote, calculatedPrice, setMarketPrice } = props;
-  const [price, setPrice] = useState<string>();
-  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
-  return (
-    <div className="bg-gradient rounded-10 p-2 shadow-[0_0_12px_#A3A3A3] shadow-white">
-      <div className="bg-background-900 rounded-10 grid gap-16 p-16">
-        {!externalPrice && <SetPriceText base={base} quote={quote} />}
-        <div className="rounded-16 border-warning flex cursor-text gap-5 border bg-black p-16">
-          <input
-            id="market-price-input"
-            type="text"
-            pattern={decimalNumberValidationRegex}
-            inputMode="decimal"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            aria-label="Enter Market Price"
-            placeholder="Enter Market Price"
-            className="text-18 font-weight-500 w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-none"
-            data-testid="input-price"
-          />
-          {calculatedPrice && (
-            <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
-              <button
-                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
-                type="button"
-                onClick={() => setPrice(calculatedPrice)}
-              >
-                Use Strategy
-              </button>
-            </Tooltip>
-          )}
-        </div>
-        <Button
-          type="button"
-          disabled={!price}
-          onClick={() => price && setMarketPrice(price)}
-        >
-          Set New Market Price
-        </Button>
-      </div>
-    </div>
-  );
-};
