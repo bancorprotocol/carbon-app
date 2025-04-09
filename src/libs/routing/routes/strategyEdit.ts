@@ -28,7 +28,6 @@ import { EditBudgetDisposablePage } from 'pages/strategies/edit/budget/disposabl
 import { EditBudgetOverlappingPage } from 'pages/strategies/edit/budget/overlapping';
 import { SafeDecimal } from 'libs/safedecimal';
 import * as v from 'valibot';
-import { EditPriceLayout } from 'pages/strategies/edit/prices/layout';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
@@ -67,7 +66,6 @@ export const toDisposablePricesSearch = (
 export const editPrice = createRoute({
   getParentRoute: () => editStrategyLayout,
   path: 'prices',
-  component: EditPriceLayout,
   validateSearch: searchValidator({
     marketPrice: v.optional(validNumber),
   }),

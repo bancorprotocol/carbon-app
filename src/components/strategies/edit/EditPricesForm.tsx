@@ -1,9 +1,9 @@
-import { FC, FormEvent, ReactNode, useState } from 'react';
+import { FC, FormEvent, ReactNode, useCallback, useState } from 'react';
 import { EditPriceNav } from './EditPriceNav';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { Button } from 'components/common/button';
-import { useNavigate, useRouter } from '@tanstack/react-router';
+import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
 import {
   QueryKey,
@@ -26,6 +26,9 @@ import { useEditStrategyCtx } from './EditStrategyContext';
 import { useDeleteStrategy } from '../useDeleteStrategy';
 import { hasNoBudget } from '../overlapping/utils';
 import { StrategyUpdate } from '@bancor/carbon-sdk';
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { InitMarketPrice } from '../common/InitMarketPrice';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
@@ -72,7 +75,7 @@ const getFieldsToUpdate = (orders: EditOrders, strategy: Strategy) => {
   return fieldsToUpdate as StrategyUpdate;
 };
 
-export const EditStrategyForm: FC<Props> = (props) => {
+export const EditPricesForm: FC<Props> = (props) => {
   const {
     orders,
     strategyType,
@@ -85,7 +88,8 @@ export const EditStrategyForm: FC<Props> = (props) => {
   const { strategy } = useEditStrategyCtx();
   const { history } = useRouter();
   const { isProcessing: isDeleting, deleteStrategy } = useDeleteStrategy();
-  const navigate = useNavigate({ from: '/strategies/edit/$strategyId' });
+  const search = useSearch({ from: '/strategies/edit/$strategyId/prices' });
+  const navigate = useNavigate({ from: '/strategies/edit/$strategyId/prices' });
 
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
@@ -94,6 +98,20 @@ export const EditStrategyForm: FC<Props> = (props) => {
   const cache = useQueryClient();
   const [isProcessing, setIsProcessing] = useState(false);
   const isPending = updateMutation.isPending;
+
+  const { base, quote } = strategy;
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
+  const setMarketPrice = useCallback(
+    (marketPrice: string) => {
+      navigate({
+        search: (previous) => ({ ...previous, marketPrice }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate]
+  );
 
   const approvalTokens = (() => {
     const arr = [];
@@ -195,6 +213,27 @@ export const EditStrategyForm: FC<Props> = (props) => {
     }
     return update();
   };
+
+  if (!marketPrice && marketQuery.isPending) {
+    return <CarbonLogoLoading className="h-[80px] place-self-center" />;
+  }
+
+  if (!marketPrice) {
+    return (
+      <article
+        key="marketPrice"
+        className="bg-background-900 grid content-start rounded"
+      >
+        <EditStrategyOverlapTokens />
+        <EditPriceNav editType={editType} />
+        <InitMarketPrice
+          base={base}
+          quote={quote}
+          setMarketPrice={(price) => setMarketPrice(price)}
+        />
+      </article>
+    );
+  }
 
   return (
     <form

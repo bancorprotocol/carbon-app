@@ -7,7 +7,7 @@ import {
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
-import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { EditBudgetForm } from 'components/strategies/edit/EditBudgetForm';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
@@ -83,7 +83,7 @@ export const EditBudgetRecurringPage = () => {
 
   return (
     <EditStrategyLayout editType={search.editType}>
-      <EditStrategyForm
+      <EditBudgetForm
         strategyType="recurring"
         editType={search.editType}
         orders={orders}
@@ -106,7 +106,7 @@ export const EditBudgetRecurringPage = () => {
           warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
           buy
         />
-      </EditStrategyForm>
+      </EditBudgetForm>
       <StrategyChartSection>
         <StrategyChartHistory
           type="recurring"

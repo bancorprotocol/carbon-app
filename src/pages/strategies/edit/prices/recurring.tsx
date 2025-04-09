@@ -3,7 +3,6 @@ import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyConte
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import {
   isZero,
   isOverlappingStrategy,
@@ -24,6 +23,8 @@ import { EditOrderBlock } from 'components/strategies/common/types';
 import { Order, Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 
 export interface EditRecurringStrategySearch {
   priceStart?: string;
@@ -194,8 +195,8 @@ export const EditPricesStrategyRecurringPage = () => {
   const error = getError(search);
 
   return (
-    <>
-      <EditStrategyForm
+    <EditStrategyLayout editType={search.editType}>
+      <EditPricesForm
         strategyType="recurring"
         editType={search.editType}
         orders={orders}
@@ -220,7 +221,7 @@ export const EditPricesStrategyRecurringPage = () => {
           error={error}
           buy
         />
-      </EditStrategyForm>
+      </EditPricesForm>
       <StrategyChartSection>
         <StrategyChartHistory
           type="recurring"
@@ -232,6 +233,6 @@ export const EditPricesStrategyRecurringPage = () => {
           onPriceUpdates={onPriceUpdates}
         />
       </StrategyChartSection>
-    </>
+    </EditStrategyLayout>
   );
 };

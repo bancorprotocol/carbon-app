@@ -19,7 +19,7 @@ import { InitMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
-import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { EditBudgetForm } from 'components/strategies/edit/EditBudgetForm';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
@@ -222,7 +222,7 @@ const OverlappingContent = () => {
   }
 
   return (
-    <EditStrategyForm
+    <EditBudgetForm
       strategyType="overlapping"
       editType={search.editType}
       orders={orders}
@@ -238,6 +238,6 @@ const OverlappingContent = () => {
         order0={orders.buy}
         order1={orders.sell}
       />
-    </EditStrategyForm>
+    </EditBudgetForm>
   );
 };

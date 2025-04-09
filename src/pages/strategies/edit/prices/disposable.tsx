@@ -14,7 +14,6 @@ import {
 } from 'components/strategies/common/utils';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import { getTotalBudget, getWithdraw } from 'components/strategies/edit/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -25,8 +24,11 @@ import { useCallback } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'libs/queries';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 
 export interface EditDisposableStrategySearch {
+  marketPrice?: string;
   priceStart?: string;
   priceEnd?: string;
   editType: 'editPrices' | 'renew';
@@ -168,8 +170,8 @@ export const EditPricesStrategyDisposablePage = () => {
   const sellWithdraw = getWithdraw(order1.balance, orders.sell.budget);
 
   return (
-    <>
-      <EditStrategyForm
+    <EditStrategyLayout editType={search.editType}>
+      <EditPricesForm
         strategyType="disposable"
         editType={search.editType}
         orders={orders}
@@ -231,7 +233,7 @@ export const EditPricesStrategyDisposablePage = () => {
             </div>
           </article>
         )}
-      </EditStrategyForm>
+      </EditPricesForm>
       <StrategyChartSection>
         <StrategyChartHistory
           type="disposable"
@@ -244,6 +246,6 @@ export const EditPricesStrategyDisposablePage = () => {
           onPriceUpdates={onPriceUpdates}
         />
       </StrategyChartSection>
-    </>
+    </EditStrategyLayout>
   );
 };

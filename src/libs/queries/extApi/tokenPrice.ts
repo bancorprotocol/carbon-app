@@ -13,7 +13,7 @@ export const useGetTokenPrice = (address?: string) => {
     queryKey: QueryKey.tokenPrice(address?.toLowerCase()),
     queryFn: () => {
       return carbonApi
-        .getMarketRate(address!, availableCurrencies)
+        .getMarketRate(address!.toLowerCase(), availableCurrencies)
         .catch((err) => {
           console.error(err);
           // Return an empty object to prevent refetch on error from child component
