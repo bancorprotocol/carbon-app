@@ -1,4 +1,12 @@
-import { FocusEvent, FC, useId, useEffect, useState, MouseEvent } from 'react';
+import {
+  FocusEvent,
+  FC,
+  useId,
+  useEffect,
+  useState,
+  MouseEvent,
+  useMemo,
+} from 'react';
 import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import {
@@ -12,6 +20,9 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice';
 import { isTouchedZero } from 'components/strategies/common/utils';
 import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
+import { Presets } from 'components/common/preset/Preset';
+import { limitPreset } from './price-presets';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export interface InputRangeProps {
   min: string;
@@ -76,6 +87,16 @@ export const InputRange: FC<InputRangeProps> = ({
   const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
   const showWarning = !displayError && !!displayWarnings.length;
 
+  const minPercent = useMemo(() => {
+    if (!marketPrice) return '';
+    return new SafeDecimal(min).div(marketPrice).sub(1).mul(100).toString();
+  }, [marketPrice, min]);
+
+  const maxPercent = useMemo(() => {
+    if (!marketPrice) return '';
+    return new SafeDecimal(max).div(marketPrice).sub(1).mul(100).toString();
+  }, [marketPrice, max]);
+
   useEffect(() => {
     if (document.activeElement !== document.getElementById(inputMinId)) {
       setLocalMin(roundSearchParam(min));
@@ -110,6 +131,14 @@ export const InputRange: FC<InputRangeProps> = ({
     onMinChange(formatNumber(marketPrice?.toString() ?? ''));
   };
 
+  const setMinPreset = (preset: string) => {
+    if (!marketPrice) return;
+    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
+    const next = new SafeDecimal(marketPrice).mul(percent).toString();
+    setLocalMin(roundSearchParam(next));
+    setMin(next);
+  };
+
   const onMaxFocus = (e: FocusEvent<HTMLInputElement>) => {
     setLocalMax(max);
     e.target.select();
@@ -132,112 +161,136 @@ export const InputRange: FC<InputRangeProps> = ({
     onMaxChange(formatNumber(marketPrice?.toString() ?? ''));
   };
 
+  const setMaxPreset = (preset: string) => {
+    if (!marketPrice) return;
+    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
+    const next = new SafeDecimal(marketPrice).mul(percent).toString();
+    setLocalMax(roundSearchParam(next));
+    setMax(next);
+  };
+
   return (
     <>
       <div className="grid grid-cols-2 gap-6">
-        <div
-          className={cn(
-            'rounded-r-4 rounded-l-16 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
-            showWarning && 'border-warning focus-within:border-warning',
-            hasMinError && 'border-error/50 focus-within:border-error'
-          )}
-          onClick={() => document.getElementById(inputMinId)?.focus()}
-        >
-          <header className="text-12 mb-5 flex justify-between text-white/60">
-            <Tooltip
-              element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
-                base.symbol
-              } at.`}
-            >
-              <label htmlFor={inputMinId}>{minLabel}</label>
-            </Tooltip>
-            {!!marketPrice && (
-              <button
-                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
-                type="button"
-                onClick={setMinMarket}
-                data-testid="market-price-min"
-              >
-                Use Market
-              </button>
-            )}
-          </header>
-          <input
-            id={inputMinId}
-            type="text"
-            pattern={decimalNumberValidationRegex}
-            inputMode="decimal"
-            value={localMin}
-            placeholder="Enter Price"
+        <div className="grid gap-8">
+          <div
             className={cn(
-              'text-16 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
-              hasMinError && 'text-error'
+              'rounded-r-4 rounded-l-16 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
+              showWarning && 'border-warning focus-within:border-warning',
+              hasMinError && 'border-error/50 focus-within:border-error'
             )}
-            onChange={(e) => onMinChange(e.target.value)}
-            onFocus={onMinFocus}
-            onBlur={onMinBlur}
-            data-testid="input-min"
-            required={required}
-          />
-          <MarketPriceIndication
-            base={base}
-            quote={quote}
-            price={min}
-            buy={buy || isOverlapping === true}
-            isRange
-          />
+            onClick={() => document.getElementById(inputMinId)?.focus()}
+          >
+            <header className="text-12 mb-5 flex justify-between text-white/60">
+              <Tooltip
+                element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
+                  base.symbol
+                } at.`}
+              >
+                <label htmlFor={inputMinId}>{minLabel}</label>
+              </Tooltip>
+              {!!marketPrice && (
+                <button
+                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  type="button"
+                  onClick={setMinMarket}
+                  data-testid="market-price-min"
+                >
+                  Use Market
+                </button>
+              )}
+            </header>
+            <input
+              id={inputMinId}
+              type="text"
+              pattern={decimalNumberValidationRegex}
+              inputMode="decimal"
+              value={localMin}
+              placeholder="Enter Price"
+              className={cn(
+                'text-16 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+                hasMinError && 'text-error'
+              )}
+              onChange={(e) => onMinChange(e.target.value)}
+              onFocus={onMinFocus}
+              onBlur={onMinBlur}
+              data-testid="input-min"
+              required={required}
+            />
+            <MarketPriceIndication
+              base={base}
+              quote={quote}
+              price={min}
+              buy={buy || isOverlapping === true}
+            />
+          </div>
+          {!!marketPrice && !isOverlapping && (
+            <Presets
+              value={minPercent}
+              presets={limitPreset(buy)}
+              onChange={setMinPreset}
+            />
+          )}
         </div>
-        <div
-          className={cn(
-            'rounded-r-16 rounded-l-4 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
-            showWarning && 'border-warning focus-within:border-warning',
-            hasMaxError && 'border-error/50 focus-within:border-error'
-          )}
-          onClick={() => document.getElementById(inputMaxId)?.focus()}
-        >
-          <header className="text-12 mb-5 flex justify-between text-white/60">
-            <Tooltip
-              element={`The highest price to ${buy ? 'buy' : 'sell'} ${
-                base.symbol
-              } at.`}
-            >
-              <label htmlFor={inputMaxId}>{maxLabel}</label>
-            </Tooltip>
-            {!!marketPrice && (
-              <button
-                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
-                type="button"
-                onClick={setMaxMarket}
-                data-testid="market-price-max"
-              >
-                Use Market
-              </button>
-            )}
-          </header>
-          <input
-            id={inputMaxId}
-            type="text"
-            pattern={decimalNumberValidationRegex}
-            inputMode="decimal"
-            value={localMax}
-            placeholder="Enter Price"
+        <div className="grid gap-8">
+          <div
             className={cn(
-              'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
-              hasMaxError && 'text-error'
+              'rounded-r-16 rounded-l-4 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
+              showWarning && 'border-warning focus-within:border-warning',
+              hasMaxError && 'border-error/50 focus-within:border-error'
             )}
-            onChange={(e) => onMaxChange(e.target.value)}
-            onFocus={onMaxFocus}
-            onBlur={onMaxBlur}
-            data-testid="input-max"
-            required={required}
-          />
-          <MarketPriceIndication
-            base={base}
-            quote={quote}
-            price={max}
-            buy={buy || isOverlapping === false}
-            isRange
-          />
+            onClick={() => document.getElementById(inputMaxId)?.focus()}
+          >
+            <header className="text-12 mb-5 flex justify-between text-white/60">
+              <Tooltip
+                element={`The highest price to ${buy ? 'buy' : 'sell'} ${
+                  base.symbol
+                } at.`}
+              >
+                <label htmlFor={inputMaxId}>{maxLabel}</label>
+              </Tooltip>
+              {!!marketPrice && (
+                <button
+                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  type="button"
+                  onClick={setMaxMarket}
+                  data-testid="market-price-max"
+                >
+                  Use Market
+                </button>
+              )}
+            </header>
+            <input
+              id={inputMaxId}
+              type="text"
+              pattern={decimalNumberValidationRegex}
+              inputMode="decimal"
+              value={localMax}
+              placeholder="Enter Price"
+              className={cn(
+                'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+                hasMaxError && 'text-error'
+              )}
+              onChange={(e) => onMaxChange(e.target.value)}
+              onFocus={onMaxFocus}
+              onBlur={onMaxBlur}
+              data-testid="input-max"
+              required={required}
+            />
+            <MarketPriceIndication
+              base={base}
+              quote={quote}
+              price={max}
+              buy={buy || isOverlapping === false}
+            />
+          </div>
+          {!!marketPrice && !isOverlapping && (
+            <Presets
+              value={maxPercent}
+              presets={limitPreset(buy)}
+              onChange={setMaxPreset}
+            />
+          )}
         </div>
       </div>
       {!!displayError && (

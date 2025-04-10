@@ -69,10 +69,13 @@ const getOrders = (
     action = 'deposit',
   } = search;
 
-  if (!isValidRange(min, max) || !isValidSpread(spread)) {
+  if (!isValidRange(min, max) || !isValidSpread(min, max, spread)) {
+    let marginalPrice = marketPrice;
+    if (new SafeDecimal(marketPrice).gt(max)) marginalPrice = max;
+    if (new SafeDecimal(marketPrice).lt(min)) marginalPrice = min;
     return {
-      buy: { min: min, max: min, marginalPrice: max, budget },
-      sell: { min: max, max: max, marginalPrice: min, budget },
+      buy: { min: min, max: max, marginalPrice, budget: '' },
+      sell: { min: min, max: max, marginalPrice, budget: '' },
     };
   }
 
@@ -201,7 +204,7 @@ const OverlappingContent = () => {
   );
 
   const orders = getOrders(strategy, search, marketPrice);
-  const spread = isValidSpread(search.spread) ? search.spread! : defaultSpread;
+  const spread = search.spread || defaultSpread;
 
   const hasChanged = (() => {
     if (search.min !== order0.startRate) return true;

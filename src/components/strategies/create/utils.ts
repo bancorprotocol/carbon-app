@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { NavigateOptions } from 'libs/routing';
 import {
+  StrategyDirection,
+  StrategySettings,
   TradeOverlappingSearch,
   TradeRecurringSearch,
 } from 'libs/routing/routes/trade';
@@ -37,27 +39,43 @@ export const handleTxStatusAndRedirectToOverview = (
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 
+export const getRecurringPriceMultiplier = (
+  direction: StrategyDirection,
+  settings: StrategySettings
+) => {
+  if (settings === 'range') {
+    return {
+      min: direction === 'buy' ? 0.95 : 1.01,
+      max: direction === 'buy' ? 0.99 : 1.05,
+    };
+  } else {
+    return {
+      min: direction === 'buy' ? 0.99 : 1.01,
+      max: direction === 'buy' ? 0.99 : 1.01,
+    };
+  }
+};
+
 export const getDefaultOrder = (
-  type: 'buy' | 'sell',
-  base: Partial<OrderBlock>,
+  direction: StrategyDirection,
+  order: Partial<OrderBlock>,
   marketPrice: number = 0
 ): OrderBlock => {
-  const settings = base.settings ?? 'limit';
-  if (base.settings === 'range') {
-    const multiplierMax = type === 'buy' ? 0.9 : 1.2;
-    const multiplierMin = type === 'buy' ? 0.8 : 1.1;
+  const market = new SafeDecimal(marketPrice);
+  const settings = order.settings ?? 'limit';
+  const multiplier = getRecurringPriceMultiplier(direction, settings);
+  if (settings === 'range') {
     return {
-      min: base.min ?? (marketPrice * multiplierMin).toString(),
-      max: base.max ?? (marketPrice * multiplierMax).toString(),
-      budget: base.budget ?? '',
+      min: order.min ?? market.mul(multiplier.min).toString(),
+      max: order.max ?? market.mul(multiplier.max).toString(),
+      budget: order.budget ?? '',
       settings,
     };
   } else {
-    const multiplier = type === 'buy' ? 0.9 : 1.1;
     return {
-      min: base.min ?? (marketPrice * multiplier).toString(),
-      max: base.max ?? (marketPrice * multiplier).toString(),
-      budget: base.budget ?? '',
+      min: order.min ?? market.mul(multiplier.min).toString(),
+      max: order.max ?? market.mul(multiplier.max).toString(),
+      budget: order.budget ?? '',
       settings,
     };
   }
@@ -81,11 +99,17 @@ export const getRecurringWarning = (search: TradeRecurringSearch) => {
   }
 };
 
+export const overlappingMultiplier = {
+  min: 0.99,
+  max: 1.01,
+};
 const initMin = (marketPrice: string) => {
-  return new SafeDecimal(marketPrice).times(0.99).toString();
+  const multiplier = overlappingMultiplier.min;
+  return new SafeDecimal(marketPrice).times(multiplier).toString();
 };
 const initMax = (marketPrice: string) => {
-  return new SafeDecimal(marketPrice).times(1.01).toString();
+  const multiplier = overlappingMultiplier.max;
+  return new SafeDecimal(marketPrice).times(multiplier).toString();
 };
 /** Create the orders out of the search params */
 export const getOverlappingOrders = (
@@ -100,6 +124,7 @@ export const getOverlappingOrders = (
       sell: { min: '', max: '', marginalPrice: '', budget: '' },
     };
   }
+
   const {
     anchor,
     min = initMin(marketPrice),
@@ -107,10 +132,14 @@ export const getOverlappingOrders = (
     spread = defaultSpread,
     budget,
   } = search;
-  if (!isValidRange(min, max) || !isValidSpread(spread)) {
+
+  if (!isValidRange(min, max) || !isValidSpread(min, max, spread)) {
+    let marginalPrice = marketPrice;
+    if (new SafeDecimal(marketPrice).gt(max)) marginalPrice = max;
+    if (new SafeDecimal(marketPrice).lt(min)) marginalPrice = min;
     return {
-      buy: { min, max: min, marginalPrice: max, budget: '' },
-      sell: { min: max, max: max, marginalPrice: min, budget: '' },
+      buy: { min: min, max: max, marginalPrice, budget: '' },
+      sell: { min: min, max: max, marginalPrice, budget: '' },
     };
   }
   const prices = calculateOverlappingPrices(min, max, marketPrice, spread);

@@ -1,7 +1,5 @@
 import { FC, useEffect } from 'react';
 import {
-  getMaxBuyMin,
-  getMinSellMax,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
@@ -12,7 +10,6 @@ import { Token } from 'libs/tokens';
 import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
 import { useSearch } from '@tanstack/react-router';
 import { OverlappingOrder } from 'components/strategies/common/types';
-import { isZero } from '../common/utils';
 import { isValidRange } from '../utils';
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
@@ -60,28 +57,6 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
     set({ anchor: value, budget: undefined });
   };
 
-  // Update on buyMin changes
-  useEffect(() => {
-    if (isZero(order0.min)) return;
-    const timeout = setTimeout(async () => {
-      const minSellMax = getMinSellMax(Number(order0.min), Number(spread));
-      if (Number(order1.max) < minSellMax) set({ max: minSellMax.toString() });
-    }, 1000);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order0.min]);
-
-  // Update on sellMax changes
-  useEffect(() => {
-    if (isZero(order1.max)) return;
-    const timeout = setTimeout(async () => {
-      const maxBuyMin = getMaxBuyMin(Number(order1.max), Number(spread));
-      if (Number(order0.min) > maxBuyMin) set({ min: maxBuyMin.toString() });
-    }, 1000);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order1.max]);
-
   if (!base || !quote) return null;
 
   return (
@@ -108,29 +83,17 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           setMax={setMax}
           minLabel="Min Buy Price"
           maxLabel="Max Sell Price"
-          spread={spread}
-          setSpread={setSpread}
           warnings={[priceWarning]}
           isOverlapping
           required
         />
       </article>
-      <article className="bg-background-900 grid gap-10 p-16">
-        <header className="flex items-center gap-8 ">
-          <h3 className="text-16 font-weight-500 flex-1">Set Fee Tier</h3>
-          <Tooltip
-            element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="size-18 text-white/60"
-          />
-        </header>
-        <OverlappingSpread
-          buyMin={Number(order0.min)}
-          sellMax={Number(order1.max)}
-          options={['0.01', '0.05', '0.1']}
-          spread={spread}
-          setSpread={setSpread}
-        />
-      </article>
+      <OverlappingSpread
+        buyMin={Number(order0.min)}
+        sellMax={Number(order1.max)}
+        spread={spread}
+        setSpread={setSpread}
+      />
       <article className="bg-background-900 grid gap-16 p-16">
         <hgroup>
           <h3 className="text-16 font-weight-500 flex items-center justify-between">
