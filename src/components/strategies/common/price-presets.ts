@@ -1,15 +1,15 @@
 export const buyPresets = [
   {
-    label: '-5%',
-    value: '-5',
+    label: '-0.1%',
+    value: '-0.1',
   },
   {
     label: '-1%',
     value: '-1',
   },
   {
-    label: '-0.1%',
-    value: '-0.1',
+    label: '-5%',
+    value: '-5',
   },
 ];
 
