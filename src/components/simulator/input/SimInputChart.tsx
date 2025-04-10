@@ -12,13 +12,15 @@ import {
   OnPriceUpdates,
 } from 'components/strategies/common/d3Chart';
 import { SimulatorType } from 'libs/routing/routes/sim';
-import { useCallback } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData } from 'libs/d3';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
 import { isFullRange } from 'components/strategies/common/utils';
+import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
+import { NotFound } from 'components/common/NotFound';
 
 interface Props {
   state: StrategyInputValues | SimulatorInputOverlappingValues;
@@ -59,6 +61,8 @@ export const SimInputChart = ({
     },
   };
 
+  const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
+
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
       dispatch('buyMin', formatNumber(buy.min));
@@ -88,44 +92,65 @@ export const SimInputChart = ({
     [dispatch]
   );
 
-  return (
-    <div className="bg-background-900 sticky top-[80px] flex h-[600px] flex-col gap-20 rounded p-20">
-      <header className="mb-20 flex items-center justify-between">
-        <h2 className="text-20 font-weight-500 mr-20">Price Chart</h2>
-      </header>
-      {isError && (
+  if (isError) {
+    return (
+      <Layout>
         <ErrorMsg
           base={state.baseToken?.address}
           quote={state.quoteToken?.address}
         />
-      )}
-
-      {isPending && (
-        <CarbonLogoLoading className="h-[100px] self-center justify-self-center" />
-      )}
-
-      {!!data && (
-        <D3PriceHistory
-          className="self-stretch"
-          prices={prices}
-          onPriceUpdates={onPriceUpdates}
-          onDragEnd={onPriceUpdatesEnd}
-          onRangeUpdates={onDatePickerConfirm}
-          data={data}
-          marketPrice={marketPrice}
-          bounds={bounds}
-          isLimit={isLimit}
-          type={simulationType}
-          overlappingSpread={spread}
-          zoomBehavior="normal"
-          start={state.start}
-          end={state.end}
-          readonly={isFullRange(prices.buy.min, prices.sell.max)}
+      </Layout>
+    );
+  }
+  if (isPending || !data) {
+    return (
+      <Layout>
+        <CarbonLogoLoading className="h-[80px] self-center justify-self-center" />
+      </Layout>
+    );
+  }
+  if (emptyHistory && !marketPrice) {
+    return (
+      <Layout>
+        <NotFound
+          variant="info"
+          title="Market Price Unavailable"
+          text="Please provide a price."
         />
-      )}
-    </div>
+      </Layout>
+    );
+  }
+  return (
+    <Layout>
+      <D3PriceHistory
+        className="self-stretch"
+        prices={prices}
+        onPriceUpdates={onPriceUpdates}
+        onDragEnd={onPriceUpdatesEnd}
+        onRangeUpdates={onDatePickerConfirm}
+        data={data}
+        marketPrice={marketPrice}
+        bounds={bounds}
+        isLimit={isLimit}
+        type={simulationType}
+        overlappingSpread={spread}
+        zoomBehavior="normal"
+        start={state.start}
+        end={state.end}
+        readonly={isFullRange(prices.buy.min, prices.sell.max)}
+      />
+    </Layout>
   );
 };
+
+const Layout = ({ children }: { children: ReactNode }) => (
+  <div className="bg-background-900 sticky top-[80px] flex h-[600px] flex-col gap-20 rounded p-20">
+    <header className="mb-20 flex items-center justify-between">
+      <h2 className="text-20 font-weight-500 mr-20">Price Chart</h2>
+    </header>
+    {children}
+  </div>
+);
 
 const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
   return (

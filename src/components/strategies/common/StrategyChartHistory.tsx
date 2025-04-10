@@ -2,7 +2,7 @@ import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { TradeSearch } from 'libs/routing';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BaseOrder } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { TradeTypes } from 'libs/routing/routes/trade';
@@ -19,6 +19,7 @@ import { Activity } from 'libs/queries/extApi/activity';
 import { SafeDecimal } from 'libs/safedecimal';
 import { D3PriceHistory } from './d3Chart/D3PriceHistory';
 import config from 'config';
+import { isEmptyHistory } from './d3Chart/utils';
 
 interface Props {
   type: TradeTypes;
@@ -102,6 +103,8 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     end: defaultEnd(),
   });
 
+  const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
+
   useEffect(() => {
     setPrices({
       buy: { min: order0.min || '0', max: order0.max || '0' },
@@ -131,6 +134,16 @@ export const StrategyChartHistory: FC<Props> = (props) => {
         title="Well, this doesn't happen often..."
         text="Unfortunately, price history for this pair is not available."
         className="min-h-0 flex-1"
+      />
+    );
+  }
+
+  if (!marketPrice && emptyHistory) {
+    return (
+      <NotFound
+        variant="info"
+        title="Market Price Unavailable"
+        text="Please provide a price."
       />
     );
   }

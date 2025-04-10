@@ -107,6 +107,7 @@ export const scaleBandInvert = (scale: ScaleBand<string>) => {
   };
 };
 
-export const isEmptyHistory = (data: CandlestickData[]) => {
+export const isEmptyHistory = (data?: CandlestickData[]) => {
+  if (!data) return true;
   return data.every((d) => isNaN(d.open) && isNaN(d.close));
 };
