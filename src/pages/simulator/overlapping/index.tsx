@@ -16,7 +16,7 @@ import {
   oneYearAgo,
 } from 'components/strategies/common/utils';
 import { FormEvent, useEffect } from 'react';
-import { cn, formatNumber, roundSearchParam } from 'utils/helpers';
+import { cn } from 'utils/helpers';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -74,23 +74,30 @@ export const SimulatorInputOverlappingPage = () => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (btnDisabled) return;
-    if (!state.baseToken || !state.quoteToken) return;
+    if (!state.baseToken || !state.quoteToken || !marketPrice) return;
     if (!!e.currentTarget.querySelector('.error-message')) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
 
+    const prices = calculateOverlappingPrices(
+      state.buy.min,
+      state.sell.max,
+      marketPrice.toString(),
+      state.spread
+    );
+
     const search = {
       baseToken: state.baseToken.address,
       quoteToken: state.quoteToken.address,
-      buyMin: roundSearchParam(state.buy.min),
-      buyMax: roundSearchParam(state.buy.max),
-      buyBudget: roundSearchParam(state.buy.budget),
-      buyMarginal: '',
+      buyMin: prices.buyPriceLow,
+      buyMax: prices.buyPriceHigh,
+      buyBudget: state.buy.budget,
+      buyMarginal: prices.buyPriceMarginal,
       buyIsRange: true,
-      sellMin: roundSearchParam(state.sell.min),
-      sellMax: roundSearchParam(state.sell.max),
-      sellBudget: roundSearchParam(state.sell.budget),
-      sellMarginal: '',
+      sellMin: prices.sellPriceLow,
+      sellMax: prices.sellPriceHigh,
+      sellBudget: state.sell.budget,
+      sellMarginal: prices.sellPriceMarginal,
       sellIsRange: true,
       start: start.toString(),
       end: end.toString(),
@@ -120,14 +127,6 @@ export const SimulatorInputOverlappingPage = () => {
       );
     }
 
-    const { buyPriceMarginal, sellPriceMarginal } = calculateOverlappingPrices(
-      formatNumber(state.buy.min),
-      formatNumber(state.sell.max),
-      marketPrice!.toString(),
-      state.spread
-    );
-    search.buyMarginal = buyPriceMarginal;
-    search.sellMarginal = sellPriceMarginal;
     navigate({ to: '/simulate/result', search });
   };
 
