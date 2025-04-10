@@ -8,11 +8,15 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { cn } from 'utils/helpers';
 
 export const getSortFromLS = (): StrategySort => {
-  return lsService.getItem('strategyOverviewSort') || 'trades';
+  const sort = lsService.getItem('strategyOverviewSort');
+  if (!sort || !(sort in strategySort)) return 'trades';
+  return sort;
 };
 
 export const getFilterFromLS = (): StrategyFilter => {
-  return lsService.getItem('strategyOverviewFilter') || 'all';
+  const filter = lsService.getItem('strategyOverviewFilter');
+  if (!filter || !(filter in strategyFilter)) return 'all';
+  return filter;
 };
 
 export const strategyFilter = {
