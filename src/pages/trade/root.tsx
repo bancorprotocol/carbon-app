@@ -2,18 +2,17 @@ import { Outlet } from '@tanstack/react-router';
 import { NotFound } from 'components/common/NotFound';
 import { TradeProvider } from 'components/trade/TradeContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { useTokens } from 'hooks/useTokens';
+import { useToken } from 'hooks/useTokens';
 import { TradeSearch } from 'libs/routing';
 import { getLastVisitedPair } from 'libs/routing/utils';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 
 export const usePersistLastPair = (from: '/trade') => {
-  const { getTokenById } = useTokens();
   const search = useSearch({ strict: false }) as TradeSearch;
   const defaultPair = getLastVisitedPair();
-  const base = getTokenById(search.base ?? defaultPair.base);
-  const quote = getTokenById(search.quote ?? defaultPair.quote);
+  const base = useToken(search.base ?? defaultPair.base);
+  const quote = useToken(search.quote ?? defaultPair.quote);
 
   useEffect(() => {
     if (!base || !quote) return;
