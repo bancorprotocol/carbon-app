@@ -2,7 +2,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { StrategyInputOrder } from 'hooks/useStrategyInput';
-import { useTokens } from 'hooks/useTokens';
+import { useToken } from 'hooks/useTokens';
 import { SimulatorInputOverlappingSearch } from 'libs/routing/routes/sim';
 import { Token } from 'libs/tokens';
 import { useCallback, useMemo, useState } from 'react';
@@ -41,19 +41,12 @@ export interface SimulatorInputOverlappingValues {
 }
 
 export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
-  const { getTokenById } = useTokens();
   const navigate = useNavigate({ from: '/simulate/overlapping' });
   const [_state, setState] =
     useState<InternalSimulatorOverlappingInput>(searchState);
 
-  const baseToken = useMemo(
-    () => getTokenById(_state.baseToken),
-    [_state.baseToken, getTokenById]
-  );
-  const quoteToken = useMemo(
-    () => getTokenById(_state.quoteToken),
-    [_state.quoteToken, getTokenById]
-  );
+  const baseToken = useToken(_state.baseToken);
+  const quoteToken = useToken(_state.quoteToken);
 
   const state = buildStrategyInputState(_state, baseToken, quoteToken);
 
