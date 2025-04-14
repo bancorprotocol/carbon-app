@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokensQuery } from 'libs/queries';
 import { lsService } from 'services/localeStorage';
@@ -18,6 +18,10 @@ export const useTokensStore = (): TokensStore => {
   const [importedTokens, setImportedTokens] = useState<Token[]>(
     lsService.getItem('importedTokens') ?? []
   );
+
+  useEffect(() => {
+    lsService.setItem('importedTokens', importedTokens);
+  }, [importedTokens]);
 
   const tokens = useMemo(() => {
     if (!tokensQuery.data?.length) return [];
