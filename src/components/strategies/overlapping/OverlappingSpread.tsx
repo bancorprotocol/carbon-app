@@ -1,159 +1,110 @@
-import { useRef, FC, KeyboardEvent, FocusEvent, ChangeEvent } from 'react';
-import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
-import {
-  defaultSpread,
-  getMaxSpread,
-} from 'components/strategies/overlapping/utils';
+import { FC, ChangeEvent } from 'react';
+import { cn, sanitizeNumber } from 'utils/helpers';
+import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { useStore } from 'store';
+import { Preset, Presets } from 'components/common/preset/Preset';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 import styles from './OverlappingSpread.module.css';
 
 interface Props {
-  options: string[];
   spread: string;
   buyMin: number;
   sellMax: number;
   setSpread: (value: string) => void;
 }
 
-const getWarning = (maxSpread: number) => {
-  return `⚠️ Given price range, max fee tier cannot exceed ${maxSpread}%`;
-};
-
 const round = (value: number) => Math.round(value * 100) / 100;
 
+const presets: Preset[] = [
+  {
+    label: '0.01%',
+    value: '0.01',
+  },
+  {
+    label: '0.05%',
+    value: '0.05',
+  },
+  {
+    label: '0.1%',
+    value: '0.1',
+  },
+];
+
 export const OverlappingSpread: FC<Props> = (props) => {
-  const { options, setSpread, buyMin, sellMax, spread } = props;
-  const root = useRef<HTMLDivElement>(null);
-  const inOptions = options.includes(spread);
+  const { setSpread, buyMin, sellMax, spread } = props;
+  const maxSpread = round(getMaxSpread(buyMin, sellMax));
   const tooLow = +spread <= 0;
-  const tooHigh = +spread > 100;
-  const hasError = tooLow || tooHigh;
-  const isCustomSpread = spread && !inOptions;
-  const { toaster } = useStore();
+  const tooHigh = maxSpread > 0 && +spread > maxSpread;
 
-  const selectSpread = (value: string) => {
-    const input = document.getElementById('spread-custom') as HTMLInputElement;
-    const maxSpread = round(getMaxSpread(buyMin, sellMax));
-    if (+value > maxSpread) {
-      toaster.addToast(getWarning(maxSpread), {
-        color: 'warning',
-        duration: 3000,
-      });
-      setSpread(maxSpread.toString());
-      input.value = maxSpread.toFixed(2);
-      input.focus();
-    } else {
-      setSpread(sanitizeNumber(value));
-    }
-  };
-
-  const onKeyDown = (e: KeyboardEvent) => {
-    const fieldset = root.current!;
-    const inputs = fieldset.querySelectorAll('input');
-    if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
-      e.preventDefault();
-      for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i] === document.activeElement) {
-          const nextIndex =
-            e.key === 'ArrowRight'
-              ? (i + 1) % inputs.length
-              : (inputs.length + i - 1) % inputs.length;
-          return inputs[nextIndex].focus();
-        }
-      }
-    }
+  const onPresetChange = (value: string) => {
+    setSpread(value);
   };
 
   const onCustomChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.value) {
-      return setSpread(defaultSpread.toString());
-    }
-    selectSpread(e.currentTarget.value);
-  };
-
-  const onCustomBlur = (e: FocusEvent<HTMLInputElement>) => {
-    if (options.includes(e.target.value)) {
-      e.target.value = '';
-    } else {
-      const value = formatNumber(e.target.value);
-      if (!value || !Number(value)) {
-        setSpread(defaultSpread.toString());
-        e.target.value = '';
-      } else {
-        e.target.value = Number(Number(value).toFixed(6)).toString();
-      }
-    }
+    setSpread(sanitizeNumber(e.currentTarget.value));
   };
 
   return (
-    <>
-      <div
-        role="group"
-        className="flex items-center gap-10"
-        ref={root}
-        onKeyDown={onKeyDown}
-      >
-        {options.map((option) => (
-          <div key={option} className={styles.spreadOption}>
-            <input
-              id={'spread-' + option}
-              name="spread"
-              type="radio"
-              value={option}
-              checked={spread === option}
-              tabIndex={spread === option ? 0 : -1}
-              onChange={() => selectSpread(option)}
-              onFocus={() => selectSpread(option)}
-              data-testid={'spread-' + option}
-            />
-            <label
-              htmlFor={'spread-' + option}
-              className="rounded-8 block cursor-pointer bg-black p-16 text-center text-white/40 hover:outline hover:outline-1"
-            >
-              {option}%
-            </label>
-          </div>
-        ))}
+    <article
+      role="group"
+      className={cn(styles.spread, 'bg-background-900 mb-16 grid gap-8 p-16')}
+    >
+      <header className="flex items-center gap-8 ">
+        <h2 className="text-16 font-weight-500 flex-1">Set Fee Tier</h2>
+        <Tooltip
+          element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
+          iconClassName="size-18 text-white/60"
+        />
+      </header>
+      <div className="flex gap-8">
+        <Presets
+          className="flex-grow"
+          value={spread}
+          presets={presets}
+          onChange={onPresetChange}
+          testid="spread"
+        />
         <div
           className={cn(
             styles.spreadCustom,
-            'rounded-8 flex min-w-0 flex-1 justify-center bg-black p-16 text-center',
-            'focus-within:outline focus-within:outline-2',
-            !isCustomSpread && 'hover:outline hover:outline-1',
-            isCustomSpread && 'outline outline-2 outline-white/60',
-            hasError && 'text-error outline-error',
-            spread && inOptions && 'text-white/40'
+            'rounded-10 text-12 flex justify-center border border-white bg-black p-8 text-center',
+            'focus-within:outline focus-within:outline-1'
           )}
         >
           <input
             id="spread-custom"
             className="w-full bg-transparent text-center outline-none placeholder:text-white/40"
-            value={options.includes(spread) ? '' : spread}
-            name="spread"
-            type="text"
+            value={spread}
+            type="number"
             inputMode="decimal"
-            aria-label="Set custom"
-            placeholder="Set custom"
-            tabIndex={inOptions ? -1 : 0}
+            aria-label="Set fee tier"
+            placeholder="Set Fee Tier"
             onChange={onCustomChange}
-            onFocus={(e) => e.target.select()}
-            onBlur={onCustomBlur}
+            min="0.00000000001"
+            max={maxSpread}
+            step="any"
             data-testid="spread-input"
           />
           <span className={styles.suffix}>%</span>
         </div>
       </div>
+      {tooHigh && (
+        <Warning htmlFor="spread-custom" isError>
+          Given price range, max fee tier cannot exceed&nbsp;
+          <button
+            type="button"
+            className="font-weight-700"
+            onClick={() => setSpread(maxSpread.toFixed(2))}
+          >
+            {maxSpread}%
+          </button>
+        </Warning>
+      )}
       {tooLow && (
         <Warning htmlFor="spread-custom" isError>
           The fee tier should be above 0%
         </Warning>
       )}
-      {tooHigh && (
-        <Warning htmlFor="spread-custom" isError>
-          The fee tier should be equal or below 100%
-        </Warning>
-      )}
-    </>
+    </article>
   );
 };

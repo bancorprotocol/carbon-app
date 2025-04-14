@@ -5,14 +5,12 @@ import { getMarketPricePercentage } from './utils';
 
 interface Props {
   marketPricePercentage: SafeDecimal;
-  isRange?: boolean;
   buy?: boolean;
   ignoreMarketPriceWarning?: boolean;
 }
 
 export const MarketPricePercent: FC<Props> = ({
   marketPricePercentage,
-  isRange = false,
   buy,
   ignoreMarketPriceWarning = false,
 }) => {
@@ -24,19 +22,18 @@ export const MarketPricePercent: FC<Props> = ({
     !ignoreMarketPriceWarning && isOrderAboveOrBelowMarketPrice;
 
   return (
-    <span
-      className={`rounded-6 bg-background-800 flex items-center gap-5 px-6 py-4 ${
-        marketPriceWarning ? 'text-warning' : 'text-white/60'
-      }`}
-      data-testid="market-price-indication"
+    <Tooltip
+      iconClassName="size-10"
+      element="The percentage difference between the input price and the current market price of the token"
     >
-      <span className="text-10">
-        {percentage}% {isAbove ? 'above' : 'below'} {isRange ? '' : 'market'}
+      <span
+        className={`rounded-6 bg-background-800 flex items-center gap-5 px-6 py-4 ${
+          marketPriceWarning ? 'text-warning' : 'text-white/60'
+        }`}
+        data-testid="market-price-indication"
+      >
+        <span className="text-10">{percentage}%</span>
       </span>
-      <Tooltip
-        iconClassName="size-10"
-        element="The percentage difference between the input price and the current market price of the token"
-      />
-    </span>
+    </Tooltip>
   );
 };

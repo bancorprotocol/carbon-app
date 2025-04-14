@@ -11,7 +11,6 @@ import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOverlappingBudget } from 'components/strategies/create/CreateOverlappingBudget';
 import { useCallback } from 'react';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
-import { defaultSpread } from 'components/strategies/overlapping/utils';
 
 const url = '/trade/overlapping';
 export const TradeOverlapping = () => {
@@ -85,7 +84,7 @@ export const TradeOverlapping = () => {
             marketPrice={marketPrice}
             order0={orders.buy}
             order1={orders.sell}
-            spread={search.spread || defaultSpread}
+            spread={search.spread || ''}
             set={set}
           />
           <CreateOverlappingBudget

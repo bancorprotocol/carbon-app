@@ -1,4 +1,12 @@
-import { FC, FocusEvent, MouseEvent, useEffect, useId, useState } from 'react';
+import {
+  FC,
+  FocusEvent,
+  MouseEvent,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from 'react';
 import { Token } from 'libs/tokens';
 import {
   cn,
@@ -11,6 +19,9 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { isTouchedZero } from './utils';
 import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
+import { Presets } from 'components/common/preset/Preset';
+import { SafeDecimal } from 'libs/safedecimal';
+import { limitPreset } from './price-presets';
 
 type InputLimitProps = {
   id?: string;
@@ -41,6 +52,11 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
   const inputId = useId();
   const id = props.id ?? inputId;
   const { marketPrice } = useMarketPrice({ base, quote });
+
+  const percent = useMemo(() => {
+    if (!marketPrice) return '';
+    return new SafeDecimal(price).div(marketPrice).sub(1).mul(100).toString();
+  }, [price, marketPrice]);
 
   // Errors
   const priceError = isTouchedZero(price) && 'Price must be greater than 0';
@@ -79,6 +95,14 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
   const setMarket = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     onChange(formatNumber(marketPrice?.toString() ?? ''));
+  };
+
+  const setPreset = (preset: string) => {
+    if (!marketPrice) return;
+    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
+    const next = new SafeDecimal(marketPrice).mul(percent).toString();
+    setLocalPrice(roundSearchParam(next));
+    setPrice(next);
   };
 
   return (
@@ -135,6 +159,13 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
         displayWarnings.map((warning, i) => (
           <Warning key={i} message={warning} htmlFor={id} />
         ))}
+      {!!marketPrice && (
+        <Presets
+          value={percent}
+          presets={limitPreset(buy)}
+          onChange={setPreset}
+        />
+      )}
     </>
   );
 };

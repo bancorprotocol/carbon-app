@@ -71,7 +71,7 @@ export const InputBudget: FC<Props> = (props) => {
   const fiatValue = getFiatValue(localBudget ?? '0', true);
 
   const priceText = () => {
-    if (!hasFiatValue()) return `Current ${currentCurrency} value unavailable`;
+    if (!hasFiatValue()) return `${currentCurrency} value unavailable`;
     if (fiatValue.gt(0)) return prettifyNumber(fiatValue, { currentCurrency });
     return '';
   };
