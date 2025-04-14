@@ -78,7 +78,7 @@ export const useTokens = () => {
 export const useToken = (address?: string) => {
   const { getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
-  const [token, setToken] = useState<Token | undefined>();
+  const [token, setToken] = useState<Token | undefined>(getTokenById(address));
   useEffect(() => {
     if (!address) return;
     const existing = getTokenById(address);

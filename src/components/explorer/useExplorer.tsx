@@ -15,14 +15,19 @@ export const useExplorer = () => {
 
   // SINGLE TOKEN
   const singleToken = (() => {
-    if (type === 'wallet') return;
+    if (type !== 'token') return;
     if (slug?.split('_').length !== 1) return;
     return slug;
   })();
   const tokenQuery = useTokenStrategies(singleToken);
 
   // PAIR
-  const exactMatch = useMemo(() => pairs.map.get(slug!), [pairs.map, slug]);
+  const exactMatch = useMemo(() => {
+    if (type !== 'pair') return;
+    const [base, quote] = slug.split('_');
+    if (!base || !quote) return;
+    return pairs.map.get(`${base}_${quote}`);
+  }, [pairs.map, slug, type]);
   const pairQuery = useGetPairStrategies({
     token0: exactMatch?.baseToken.address,
     token1: exactMatch?.quoteToken.address,
@@ -34,5 +39,6 @@ export const useExplorer = () => {
   });
 
   if (type === 'wallet') return walletQuery;
-  return singleToken ? tokenQuery : pairQuery;
+  if (type === 'pair') return pairQuery;
+  return tokenQuery;
 };
