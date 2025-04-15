@@ -1,3 +1,5 @@
+import { Preset } from 'components/common/preset/Preset';
+
 type TradeSettingsDataId =
   | 'slippageTolerance'
   | 'transactionExpiration'
@@ -10,7 +12,9 @@ export type TradeSettingsData = {
   prepend: string;
   append: string;
   setValue: (value: string) => void;
-  presets: string[];
+  presets: Preset[];
+  min?: number;
+  max?: number;
 };
 
 export const warningMessageIfOutOfRange = (

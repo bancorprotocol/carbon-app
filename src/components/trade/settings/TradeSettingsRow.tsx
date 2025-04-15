@@ -1,133 +1,71 @@
-import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
-import { Token } from 'libs/tokens';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   isValidValue,
   TradeSettingsData,
   warningMessageIfOutOfRange,
 } from './utils';
 import { cn, sanitizeNumber } from 'utils/helpers';
-import { Button } from 'components/common/button';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { carbonEvents } from 'services/events';
-
-const buttonClasses = 'rounded-8 text-white/60 hover:border-primary px-5';
-const buttonActiveClasses = 'border-primary';
-const buttonErrorClasses =
-  'border-error text-error hover:border-error focus:text-error';
-const inputClasses =
-  'border-2 border-black bg-black text-center placeholder-white/25 focus:outline-none';
+import { Presets } from 'components/common/preset/Preset';
+import { Warning } from 'components/common/WarningMessageWithIcon';
+import style from 'components/common/preset/Preset.module.css';
 
 export const TradeSettingsRow: FC<{
-  base: Token;
-  quote: Token;
   item: TradeSettingsData;
-  isAllSettingsDefault: boolean;
-}> = ({ base, quote, item, isAllSettingsDefault }) => {
-  const [internalValue, setInternalValue] = useState(
-    item.presets.includes(item.value) ? '' : item.value
-  );
+}> = ({ item }) => {
+  const [internalValue, setInternalValue] = useState(item.value);
   const [isError, setIsError] = useState(!isValidValue(item.id, item.value));
 
   useEffect(() => {
-    // clean up input in case of reset
-    if (item.presets.includes(item.value) && isAllSettingsDefault) {
-      internalValue && setInternalValue('');
-    }
+    if (item.value !== internalValue) setInternalValue(item.value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item.value]);
 
-  const updateItemAndInternalState = (value: string) => {
-    setInternalValue(value);
-    if (isValidValue(item.id, value)) {
-      item.setValue(value);
-      isError && setIsError(false);
+  useEffect(() => {
+    if (isValidValue(item.id, internalValue)) {
+      setIsError(false);
+      if (!!internalValue && item.value !== internalValue) {
+        item.setValue(internalValue);
+      }
     } else {
       setIsError(true);
     }
-  };
-
-  const handleOnBlur = ({
-    target: { value },
-  }: ChangeEvent<HTMLInputElement>) => {
-    if (!isValidValue(item.id, value)) {
-      isError && setIsError(false);
-      internalValue && setInternalValue('');
-      item.setValue(item.presets[1]);
-      carbonEvents.trade.tradeErrorShow({
-        message: warningMessageIfOutOfRange(item.id, value),
-        buy_token: base.symbol,
-        sell_token: quote.symbol,
-      });
-    }
-
-    if (item.presets.includes(item.value)) {
-      internalValue && setInternalValue('');
-    }
-  };
-
-  const handleOnInputChange = ({
-    target: { value },
-  }: ChangeEvent<HTMLInputElement>) => {
-    if (item.id === 'slippageTolerance') {
-      updateItemAndInternalState(sanitizeNumber(value));
-    } else {
-      updateItemAndInternalState(value.replace(/\D/g, ''));
-    }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [internalValue]);
 
   const warningMessage = useMemo(
-    () => warningMessageIfOutOfRange(item.id, internalValue || item.value),
-    [internalValue, item.id, item.value]
+    () => warningMessageIfOutOfRange(item.id, internalValue),
+    [item.id, internalValue]
   );
 
-  useEffect(() => {
-    warningMessage &&
-      carbonEvents.trade.tradeWarningShow({ message: warningMessage });
-  }, [warningMessage]);
-
   return (
-    <div>
-      <div className="text-white/60">{item.title}</div>
-      <div className="mt-10 grid grid-cols-4 gap-10">
-        {item.presets.map((value) => (
-          <Button
-            key={value}
-            variant="black"
-            onClick={() => {
-              setInternalValue('');
-              item.setValue(value);
-            }}
-            className={cn(
-              buttonClasses,
-              item.value === value && buttonActiveClasses
-            )}
-          >
-            {item.prepend}
-            {value}
-            {item.append}
-          </Button>
-        ))}
-        <input
-          placeholder="Custom"
+    <fieldset className={cn(style.presetContainer, 'grid gap-8 p-8')}>
+      <legend className="mb-8 text-white/60">{item.title}</legend>
+      <div className="flex gap-8">
+        <Presets
+          className="flex-1"
+          presets={item.presets}
           value={internalValue}
-          onBlur={handleOnBlur}
-          onChange={handleOnInputChange}
+          onChange={(v) => setInternalValue(v)}
+        />
+        <input
+          id={item.id}
           className={cn(
-            buttonClasses,
-            inputClasses,
-            !item.presets.includes(item.value) && buttonActiveClasses,
-            isError && buttonErrorClasses
+            style.presetCustom,
+            'text-12 rounded-10 bg-black text-center placeholder:text-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white'
           )}
+          value={internalValue}
+          type="number"
+          inputMode="decimal"
+          aria-label="Set custom"
+          placeholder="Set Fee Tier"
+          onChange={(v) => setInternalValue(sanitizeNumber(v.target.value))}
+          min="0.00000000001"
+          max={item.max}
+          step="any"
+          data-testid="spread-input"
         />
       </div>
-      {warningMessage && (
-        <div className="mt-15 text-12 font-weight-500 text-warning flex">
-          <IconWarning className={`w-14 ${isError ? 'text-error' : ''}`} />
-          <span className={`ml-5 ${isError ? 'text-error' : ''}`}>
-            {warningMessage}
-          </span>
-        </div>
-      )}
-    </div>
+      {warningMessage && <Warning isError={isError} message={warningMessage} />}
+    </fieldset>
   );
 };

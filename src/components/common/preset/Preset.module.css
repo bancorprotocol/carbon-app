@@ -19,3 +19,14 @@
   border-color: white;
   color: white;
 }
+
+.preset-container:has(input[type="radio"]:checked) .preset-custom {
+  @apply text-white/60 border-transparent;
+}
+.preset-container:not(:has(input[type="radio"]:checked)) .preset-custom {
+  @apply border border-white;
+}
+
+.preset-container:has(input[type="number"]:invalid) .preset-custom {
+  @apply text-error border-error outline-error;
+}
