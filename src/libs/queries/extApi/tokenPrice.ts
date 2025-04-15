@@ -15,6 +15,12 @@ export const useGetTokenPrice = (address?: string) => {
     queryFn: () => {
       return carbonApi
         .getMarketRate(address!, availableCurrencies)
+        .then((res) => {
+          for (const value of Object.values(res)) {
+            if (value < 0) throw new Error('Negative market rate from backend');
+          }
+          return res;
+        })
         .catch((err) => {
           console.error(err);
           // Return an empty object to prevent refetch on error from child component
