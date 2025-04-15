@@ -16,8 +16,8 @@ export const useGetTokenPrice = (address?: string) => {
       return carbonApi
         .getMarketRate(address!, availableCurrencies)
         .then((res) => {
-          for (const value of Object.values(res)) {
-            if (value < 0) throw new Error('Negative market rate from backend');
+          if (Object.values(res).some((rate) => rate < 0)) {
+            throw new Error('Negative market rate from backend');
           }
           return res;
         })
