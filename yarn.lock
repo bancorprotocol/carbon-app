@@ -1618,10 +1618,10 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
-"@bancor/carbon-sdk@0.0.113-DEV":
-  version "0.0.113-DEV"
-  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.113-DEV.tgz#2cf9db321cb65a71059a70c06c3796c6997247a2"
-  integrity sha512-mt57ur/P22qyviPDxcoNV7U2R2Jd54F/Zy9eUmJPCTum1oihAXyDuu5L/LwC0IsYvdzzxAfmKgy/wvwX/4G97g==
+"@bancor/carbon-sdk@^0.0.115-DEV":
+  version "0.0.115-DEV"
+  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.115-DEV.tgz#adf921ba942a17ba136264c88ec49d5a178ef7ba"
+  integrity sha512-QL/eAVPjNCAyUyWiKpUR4GV402BsFTDNmLf2pZQ2BzK4Gs4Q6lW+4Vgbf1R2AJbSaLe8L461f09akXnlXLo/Aw==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
