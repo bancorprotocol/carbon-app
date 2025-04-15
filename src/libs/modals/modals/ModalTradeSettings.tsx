@@ -3,7 +3,7 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { TradeSettings } from 'components/trade/settings/TradeSettings';
 
-export const ModalTradeSettings: ModalFC<{}> = ({ id }) => {
+export const ModalTradeSettings: ModalFC<undefined> = ({ id }) => {
   const {
     trade: {
       settings: { resetAll, isAllSettingsDefault },

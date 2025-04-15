@@ -10,7 +10,7 @@ export const MainMenuTradeSettings = () => {
       className="hover:bg-background-800 grid size-40 place-items-center rounded-full"
       aria-label="trade settings"
       aria-haspopup="dialog"
-      onClick={() => openModal('tradeSettings', {})}
+      onClick={() => openModal('tradeSettings', undefined)}
     >
       <IconCog className="size-20" />
     </button>

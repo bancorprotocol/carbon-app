@@ -21,10 +21,7 @@ import {
   ModalTradeTokenList,
   ModalTradeTokenListData,
 } from 'libs/modals/modals/ModalTradeTokenList';
-import {
-  ModalTradeSettings,
-  ModalTradeSettingsData,
-} from 'libs/modals/modals/ModalTradeSettings';
+import { ModalTradeSettings } from 'libs/modals/modals/ModalTradeSettings';
 
 import {
   ModalTradeRouting,
@@ -65,7 +62,7 @@ export interface ModalSchema {
   txConfirm: ModalCreateConfirmData;
   importToken: ModalImportTokenData;
   notifications: undefined;
-  tradeSettings: ModalTradeSettingsData;
+  tradeSettings: undefined;
   tradeRouting: ModalTradeRoutingData;
   burgerMenu: undefined;
   restrictedCountry: undefined;
