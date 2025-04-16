@@ -64,7 +64,7 @@ export const TradeMarket = () => {
                 {buy ? 'Buy' : 'Sell'} {base.symbol}&nbsp;
                 {buy ? 'with' : 'for'} {quote.symbol}
               </h2>
-              <MainMenuTradeSettings base={base} quote={quote} />
+              <MainMenuTradeSettings />
             </header>
             <TradeWidgetBuySell
               source={buy ? quote : base}

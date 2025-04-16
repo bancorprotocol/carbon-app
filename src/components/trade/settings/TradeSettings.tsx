@@ -1,18 +1,13 @@
 import { Fragment } from 'react';
 import { useStore } from 'store';
-import { Token } from 'libs/tokens';
 import { TradeSettingsRow } from './TradeSettingsRow';
 import { TradeSettingsData } from './utils';
 
-export const TradeSettings = ({
-  base,
-  quote,
-  isAllSettingsDefault,
-}: {
-  base: Token;
-  quote: Token;
-  isAllSettingsDefault: boolean;
-}) => {
+const toPreset = (values: string[]) => {
+  return values.map((value) => ({ label: value, value }));
+};
+
+export const TradeSettings = () => {
   const {
     trade: {
       settings: { slippage, setSlippage, deadline, setDeadline, presets },
@@ -27,7 +22,8 @@ export const TradeSettings = ({
       prepend: '+',
       append: '%',
       setValue: (value) => setSlippage(value),
-      presets: presets.slippage,
+      presets: toPreset(presets.slippage),
+      max: 5,
     },
     {
       id: 'transactionExpiration',
@@ -36,7 +32,7 @@ export const TradeSettings = ({
       prepend: '',
       append: '',
       setValue: (value) => setDeadline(value),
-      presets: presets.deadline,
+      presets: toPreset(presets.deadline),
     },
   ];
 
@@ -44,12 +40,7 @@ export const TradeSettings = ({
     <div className="mt-30">
       {settingsData.map((item) => (
         <Fragment key={item.id}>
-          <TradeSettingsRow
-            isAllSettingsDefault={isAllSettingsDefault}
-            item={item}
-            base={base}
-            quote={quote}
-          />
+          <TradeSettingsRow item={item} />
           <hr className="border-background-700 my-20 border-b-2 last:hidden" />
         </Fragment>
       ))}
