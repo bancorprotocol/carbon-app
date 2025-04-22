@@ -158,7 +158,7 @@ export const InitMarketPrice = (props: FieldProps) => {
             checked={approved}
             onChange={(e) => setApproved(e.target.checked)}
           />
-          I've reviewed the warning(s) but choose to proceed.
+          I've reviewed the new market price and chosen to proceed.
         </label>
         <Button type="submit" data-testid="set-overlapping-price">
           Set New Market Price

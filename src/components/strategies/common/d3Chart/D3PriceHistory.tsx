@@ -365,7 +365,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
                 >
                   <span className="text-warning text-[8px]">N/A</span>
                 </div>
-                <p>No Historical data available</p>
+                <p>No historical price data available</p>
               </div>
             )}
           </div>
