@@ -22,6 +22,7 @@ export type NetworkDataType = {
     address: string;
     type_asset: string;
   };
+  type_asset: 'erc20' | 'erc721';
 };
 
 type DragonSwapToken = {
