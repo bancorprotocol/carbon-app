@@ -74,14 +74,10 @@ describe('Create recurring page', () => {
     // Check price range input and market price indication
     await waitFor(() => {
       const buyMarketPriceIndications = form.buy.marketPriceIndicators();
-      expect(buyMarketPriceIndications[0]).toHaveTextContent(
-        '20.00% below market'
-      );
+      expect(buyMarketPriceIndications[0]).toHaveTextContent('-20.00%');
     });
     const sellMarketPriceIndications = form.sell.marketPriceIndicators();
-    expect(sellMarketPriceIndications[0]).toHaveTextContent(
-      '10.00% below market'
-    );
+    expect(sellMarketPriceIndications[0]).toHaveTextContent('-10.00%');
 
     // Check warning to approve deposit exists
     expect(form.approveWarnings()).toBeInTheDocument();
@@ -127,11 +123,11 @@ describe('Create recurring page', () => {
 
     // Check price range input and market price indication
     const buyMarketPriceIndications = form.buy.marketPriceIndicators();
-    expect(buyMarketPriceIndications[0]).toHaveTextContent('5.00% above');
-    expect(buyMarketPriceIndications[1]).toHaveTextContent('10.00% above');
+    expect(buyMarketPriceIndications[0]).toHaveTextContent('+5.00%');
+    expect(buyMarketPriceIndications[1]).toHaveTextContent('+10.00%');
     const sellMarketPriceIndications = form.sell.marketPriceIndicators();
-    expect(sellMarketPriceIndications[0]).toHaveTextContent('15.00% above');
-    expect(sellMarketPriceIndications[1]).toHaveTextContent('20.00% above');
+    expect(sellMarketPriceIndications[0]).toHaveTextContent('+15.00%');
+    expect(sellMarketPriceIndications[1]).toHaveTextContent('+20.00%');
 
     // Check warning to approve deposit exists
     expect(form.approveWarnings()).toBeInTheDocument();

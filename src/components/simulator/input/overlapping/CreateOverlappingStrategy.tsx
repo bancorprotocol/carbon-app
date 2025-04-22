@@ -1,7 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import {
-  getMaxBuyMin,
-  getMinSellMax,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
@@ -25,6 +23,7 @@ import { InputBudget } from 'components/strategies/common/InputBudget';
 import { formatNumber } from 'utils/helpers';
 import { OverlappingPriceRange } from 'components/strategies/overlapping/OverlappingPriceRange';
 import { isZero } from 'components/strategies/common/utils';
+import { overlappingMultiplier } from 'components/strategies/create/utils';
 
 interface Props {
   state: SimulatorInputOverlappingValues;
@@ -37,8 +36,8 @@ interface Props {
 const getInitialPrices = (marketPrice: string | number) => {
   const currentPrice = new SafeDecimal(marketPrice);
   return {
-    min: currentPrice.times(0.9).toString(),
-    max: currentPrice.times(1.1).toString(),
+    min: currentPrice.times(overlappingMultiplier.min).toString(),
+    max: currentPrice.times(overlappingMultiplier.max).toString(),
   };
 };
 
@@ -58,7 +57,8 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const { buyMarginal, sellMarginal } = useMemo(() => {
     const min = state.buy.min;
     const max = state.sell.max;
-    if (!base || !quote || !isValidRange(min, max) || !isValidSpread(spread)) {
+    const validSpread = isValidSpread(min, max, spread);
+    if (!base || !quote || !isValidRange(min, max) || !validSpread) {
       return {
         buyMarginal: '',
         sellMarginal: '',
@@ -168,7 +168,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     spreadValue: string = spread.toString()
   ) => {
     if (!base || !quote) return;
-    if (!isValidRange(min, max) || !isValidSpread(spread)) return;
+    if (!isValidRange(min, max) || !isValidSpread(min, max, spread)) return;
     const prices = calculateOverlappingPrices(
       formatNumber(min),
       formatNumber(max),
@@ -204,21 +204,11 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const setMin = (min: string) => {
     setTouched(true);
     dispatch('buyMin', min);
-    if (!+formatNumber(min)) {
-      dispatch('buyPriceError', 'Min should be greater than 0');
-    } else {
-      dispatch('buyPriceError', '');
-    }
   };
 
   const setMax = (max: string) => {
     setTouched(true);
     dispatch('sellMax', max);
-    if (!+formatNumber(max)) {
-      dispatch('buyPriceError', 'Max should be greater than 0');
-    } else {
-      dispatch('buyPriceError', '');
-    }
   };
 
   const setBudget = (amount: string) => {
@@ -279,35 +269,13 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [touched, anchor, marketPrice, buy.min, sell.max]);
 
-  // Update on buyMin changes
-  useEffect(() => {
-    if (!+formatNumber(buy.min)) return;
-    const timeout = setTimeout(async () => {
-      const minSellMax = getMinSellMax(Number(buy.min), +spread);
-      if (Number(sell.max) < minSellMax) setMax(minSellMax.toString());
-    }, 1500);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buy.min]);
-
-  // Update on sellMax changes
-  useEffect(() => {
-    if (!+formatNumber(sell.max)) return;
-    const timeout = setTimeout(async () => {
-      const maxBuyMin = getMaxBuyMin(Number(sell.max), +spread);
-      if (Number(buy.min) > maxBuyMin) setMin(maxBuyMin.toString());
-    }, 1500);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sell.max]);
-
   if (!base || !quote) return null;
 
   return (
     <>
       <article className="grid gap-16 p-16">
         <header className="flex items-center gap-8">
-          <h3 className="text-18 font-weight-500 flex-1">
+          <h3 className="text-16 font-weight-500 flex-1">
             Set Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
@@ -315,7 +283,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           </h3>
           <Tooltip
             element="Indicate the strategy exact buy and sell prices."
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-18 text-white/60"
           />
         </header>
         <OverlappingPriceRange
@@ -327,37 +295,24 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           max={sell.max}
           setMin={setMin}
           setMax={setMax}
-          error={state.buy.priceError}
-          spread={spread}
-          setSpread={setSpread}
         />
       </article>
-      <article className="grid gap-10 p-16">
-        <header className="mb-10 flex items-center gap-8 ">
-          <h3 className="text-18 font-weight-500 flex-1">Set Fee Tier</h3>
-          <Tooltip
-            element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="h-14 w-14 text-white/60"
-          />
-        </header>
-        <OverlappingSpread
-          buyMin={Number(buy.min)}
-          sellMax={Number(sell.max)}
-          options={['0.01', '0.05', '0.1']}
-          spread={spread}
-          setSpread={setSpreadValue}
-        />
-      </article>
+      <OverlappingSpread
+        buyMin={Number(buy.min)}
+        sellMax={Number(sell.max)}
+        spread={spread}
+        setSpread={setSpreadValue}
+      />
       <article className="grid gap-16 p-16">
         <header className="flex items-start justify-between">
           <hgroup>
-            <h2 className="text-18">Budget</h2>
+            <h2 className="text-16">Budget</h2>
             <p className="text-14 text-white/80">
               Please select a token to proceed.
             </p>
           </hgroup>
           <Tooltip
-            iconClassName="size-14 text-white/60"
+            iconClassName="size-18 text-white/60"
             element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
           />
         </header>

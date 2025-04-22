@@ -1,9 +1,11 @@
-import { utils } from 'ethers';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
 import { useWagmi } from 'libs/wagmi';
+import { useContract } from './useContract';
+import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
+import { utils } from 'ethers';
 
 export const useTokens = () => {
   const { user } = useWagmi();
@@ -18,19 +20,20 @@ export const useTokens = () => {
 
   const importTokens = useCallback(
     (tokens: Token[]) => {
-      const missing: Token[] = [];
-      for (const token of tokens) {
-        if (getTokenById(token.address)) continue;
-        const normalizedAddress = utils.getAddress(token.address);
-        missing.push({ ...token, address: normalizedAddress });
-      }
-
-      const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
-      const newTokens = [...lsImportedTokens, ...missing];
-      setImportedTokens(newTokens);
-      lsService.setItem('importedTokens', newTokens);
+      setImportedTokens((existing) => {
+        const map = new Map();
+        for (const item of existing) map.set(item.address, item);
+        const missing: Token[] = [];
+        for (const token of tokens) {
+          const normalizedAddress = utils.getAddress(token.address);
+          if (map.has(normalizedAddress)) continue;
+          missing.push({ ...token, address: normalizedAddress });
+        }
+        if (!missing.length) return existing;
+        return [...existing, ...missing];
+      });
     },
-    [getTokenById, setImportedTokens]
+    [setImportedTokens]
   );
 
   const [favoriteTokens, _setFavoriteTokens] = useState<Token[]>(
@@ -70,4 +73,20 @@ export const useTokens = () => {
     favoriteTokens,
     tokensMap,
   };
+};
+
+export const useToken = (address?: string) => {
+  const { getTokenById, importTokens } = useTokens();
+  const { Token } = useContract();
+  const [token, setToken] = useState<Token | undefined>(getTokenById(address));
+  useEffect(() => {
+    if (!address) return;
+    const existing = getTokenById(address);
+    if (existing) return setToken(existing);
+    fetchTokenData(Token, address).then((token) => {
+      setToken(token);
+      importTokens([token]);
+    });
+  }, [getTokenById, address, Token, importTokens]);
+  return token;
 };

@@ -23,11 +23,8 @@ export const SimulatorPage = () => {
   if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   return (
-    <div className="mx-auto flex w-full max-w-[1920px] flex-col gap-16 p-20">
-      <h1 className="text-24">Simulate Strategy</h1>
-      <div className="flex flex-col gap-20 md:grid md:grid-cols-[450px_auto]">
-        <Outlet />
-      </div>
+    <div className="mx-auto flex w-full max-w-[1920px] flex-col content-start gap-20 p-20 md:grid md:grid-cols-[450px_auto]">
+      <Outlet />
     </div>
   );
 };

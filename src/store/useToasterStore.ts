@@ -74,7 +74,6 @@ export const useToastStore = () => {
     ) => {
       const id: string = crypto.randomUUID();
       const newToast: Toast = { id, content, duration: 2000, ...toast };
-      console.log(newToast);
       setToasts((toasts) => [...toasts, newToast]);
       toastFlip();
       setTimeout(() => removeToast(id), newToast.duration);

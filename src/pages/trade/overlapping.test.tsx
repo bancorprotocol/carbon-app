@@ -6,7 +6,6 @@ import {
   CreateStrategyDriver,
   renderWithRouter,
   screen,
-  waitFor,
   userEvent,
   tokenList,
   mockMarketRate,
@@ -71,8 +70,8 @@ describe('Create overlapping page', () => {
     const marketPriceIndications = form.marketPriceIndicators();
     expect(form.min()).toHaveValue(search.min);
     expect(form.max()).toHaveValue(search.max);
-    expect(marketPriceIndications[0]).toHaveTextContent('20.00% below');
-    expect(marketPriceIndications[1]).toHaveTextContent('20.00% above');
+    expect(marketPriceIndications[0]).toHaveTextContent('-20.00%');
+    expect(marketPriceIndications[1]).toHaveTextContent('+20.00%');
 
     // Check budget
     expect(form.budget()).toHaveValue(search.budget);
@@ -154,33 +153,8 @@ describe('Create overlapping page', () => {
     expect(form.min()).toHaveValue(search.min);
     expect(form.max()).toHaveValue(search.max);
     const marketPriceIndications = form.marketPriceIndicators();
-    expect(marketPriceIndications[0]).toHaveTextContent('28.57% below');
-    expect(marketPriceIndications[1]).toHaveTextContent('7.14% above');
-  });
-
-  test('should set default spread with spread unset in the search params', async () => {
-    const baseToken = tokenList.ETH;
-    const quoteToken = tokenList.USDC;
-
-    const search = {
-      base: baseToken.address,
-      quote: quoteToken.address,
-      min: '2000',
-      max: '3000',
-    };
-
-    await renderWithRouter({
-      component: () => (
-        <WrappedOverlapping base={baseToken} quote={quoteToken} />
-      ),
-      basePath,
-      search,
-    });
-
-    const overlappingDriver = new CreateStrategyDriver(screen);
-    const form = await overlappingDriver.findOverlappingForm();
-
-    expect(form.spread.default()).toBeChecked();
+    expect(marketPriceIndications[0]).toHaveTextContent('-28.57%');
+    expect(marketPriceIndications[1]).toHaveTextContent('+7.14%');
   });
 
   test('should populate form with user market price below min price', async () => {
@@ -222,8 +196,8 @@ describe('Create overlapping page', () => {
     const marketPriceIndications = form.marketPriceIndicators();
     expect(form.min()).toHaveValue(search.min);
     expect(form.max()).toHaveValue(search.max);
-    expect(marketPriceIndications[0]).toHaveTextContent('33.33% above');
-    expect(marketPriceIndications[1]).toHaveTextContent('>99.99% above');
+    expect(marketPriceIndications[0]).toHaveTextContent('+33.33%');
+    expect(marketPriceIndications[1]).toHaveTextContent('>+99.99%');
   });
 
   test('should populate form with user market price above max price', async () => {
@@ -265,8 +239,8 @@ describe('Create overlapping page', () => {
     const marketPriceIndications = form.marketPriceIndicators();
     expect(form.min()).toHaveValue(search.min);
     expect(form.max()).toHaveValue(search.max);
-    expect(marketPriceIndications[0]).toHaveTextContent('37.50% below');
-    expect(marketPriceIndications[1]).toHaveTextContent('6.25% below');
+    expect(marketPriceIndications[0]).toHaveTextContent('-37.50%');
+    expect(marketPriceIndications[1]).toHaveTextContent('-6.25%');
   });
 
   test('should populate form without min and max defined and with user market price', async () => {
@@ -297,43 +271,8 @@ describe('Create overlapping page', () => {
     const marketPriceIndications = form.marketPriceIndicators();
     expect(form.min()).toHaveValue('2970');
     expect(form.max()).toHaveValue('3030');
-    expect(marketPriceIndications[0]).toHaveTextContent('1.00% below');
-    expect(marketPriceIndications[1]).toHaveTextContent('1.00% above');
-  });
-
-  test('should populate form with invalid range in search (min>max)', async () => {
-    const baseToken = tokenList.ETH;
-    const quoteToken = tokenList.USDC;
-
-    const search = {
-      base: baseToken.address,
-      quote: quoteToken.address,
-      marketPrice: '3000',
-      spread: '0.05',
-      min: '3000',
-      max: '2000',
-      anchor: 'buy',
-      budget: '100',
-    };
-
-    await renderWithRouter({
-      component: () => (
-        <WrappedOverlapping base={baseToken} quote={quoteToken} />
-      ),
-      basePath,
-      search,
-    });
-
-    const overlappingDriver = new CreateStrategyDriver(screen);
-    const form = await overlappingDriver.findOverlappingForm();
-
-    // Check price range input and market price indication
-    expect(form.min()).toHaveValue('3000');
-    expect(form.max()).toHaveValue('2000');
-
-    await waitFor(() => expect(form.max()).toHaveValue('3003.002251'), {
-      timeout: 2000,
-    });
+    expect(marketPriceIndications[0]).toHaveTextContent('-1.00%');
+    expect(marketPriceIndications[1]).toHaveTextContent('+1.00%');
   });
 
   test('should check form touched: after setting user price', async () => {

@@ -72,9 +72,7 @@ describe('Create disposable page', () => {
     // Check price range input and market price indication
     await waitFor(() => {
       const marketPriceIndications = form.marketPriceIndicators();
-      expect(marketPriceIndications[0]).toHaveTextContent(
-        '25.00% below market'
-      );
+      expect(marketPriceIndications[0]).toHaveTextContent('-25.00%');
     });
     // Check warning to approve deposit exists
     expect(form.approveWarnings()).toBeInTheDocument();
@@ -115,8 +113,8 @@ describe('Create disposable page', () => {
 
     // Check price range input and market price indication
     const marketPriceIndications = form.marketPriceIndicators();
-    expect(marketPriceIndications[0]).toHaveTextContent('5.00% above');
-    expect(marketPriceIndications[1]).toHaveTextContent('10.00% above');
+    expect(marketPriceIndications[0]).toHaveTextContent('+5.00%');
+    expect(marketPriceIndications[1]).toHaveTextContent('+10.00%');
 
     // Check warning to approve deposit exists
     expect(form.approveWarnings()).toBeInTheDocument();
