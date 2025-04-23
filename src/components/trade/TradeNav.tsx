@@ -59,6 +59,7 @@ export const TradeNav = () => {
               quote: search.quote,
               priceStart: search.priceStart,
               priceEnd: search.priceEnd,
+              marketPrice: search.marketPrice,
             })}
             aria-current={current === link.id ? 'page' : 'false'}
             data-testid={link.id}

@@ -72,7 +72,7 @@ const getFieldsToUpdate = (orders: EditOrders, strategy: Strategy) => {
   return fieldsToUpdate as StrategyUpdate;
 };
 
-export const EditStrategyForm: FC<Props> = (props) => {
+export const EditBudgetForm: FC<Props> = (props) => {
   const {
     orders,
     strategyType,

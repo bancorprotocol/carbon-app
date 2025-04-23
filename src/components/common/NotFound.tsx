@@ -1,5 +1,5 @@
 import { cn } from 'utils/helpers';
-import { ReactComponent as IconSearch } from 'assets/icons/search-eye.svg';
+import { ReactComponent as IconQuestion } from 'assets/icons/question.svg';
 import { ReactComponent as ForwardArrow } from 'assets/icons/arrow.svg';
 import { useRouter } from '@tanstack/react-router';
 import { FC } from 'react';
@@ -39,13 +39,13 @@ export const NotFound: FC<Props> = ({
         </button>
       )}
       <div
-        className={cn('rounded-full p-20', {
+        className={cn('rounded-full p-12', {
           'bg-primary/20': variant === 'info',
           'bg-error/20': variant === 'error',
         })}
       >
-        <IconSearch
-          className={cn('size-32', {
+        <IconQuestion
+          className={cn('size-48', {
             'text-primary': variant === 'info',
             'text-error': variant === 'error',
           })}

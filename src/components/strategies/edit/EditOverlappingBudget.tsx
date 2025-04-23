@@ -15,7 +15,7 @@ import {
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { getDeposit, getWithdraw } from './utils';
 import { hasNoBudget } from '../overlapping/utils';
-import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { OverlappingMarketPriceProvider } from 'components/strategies/UserMarketPrice';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { formatNumber, tokenAmount } from 'utils/helpers';
@@ -153,10 +153,6 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
     }
   }, [anchor, aboveMarket, belowMarket, set]);
 
-  const setMarketPrice = (price: string) => {
-    set('marketPrice', price);
-  };
-
   const setAnchor = (value: 'buy' | 'sell') => {
     set('budget', undefined);
     set('anchor', value);
@@ -178,13 +174,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             Since the strategy had no budget, it will use the current market
             price to readjust the budget distribution around.
           </Warning>
-          <OverlappingMarketPrice
-            base={base}
-            quote={quote}
-            marketPrice={marketPrice}
-            setMarketPrice={setMarketPrice}
-            className="self-start"
-          />
+          <EditMarketPrice base={base} quote={quote} className="self-start" />
         </article>
       )}
       <article className="bg-background-900 grid gap-8 p-16">

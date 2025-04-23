@@ -3,7 +3,6 @@ import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyConte
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import {
   isZero,
   isOverlappingStrategy,
@@ -16,7 +15,6 @@ import {
   checkIfOrdersReversed,
 } from 'components/strategies/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
@@ -25,6 +23,9 @@ import { EditOrderBlock } from 'components/strategies/common/types';
 import { Order, Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 export interface EditRecurringStrategySearch {
   priceStart?: string;
@@ -49,7 +50,7 @@ type Search = EditRecurringStrategySearch;
 const getOrders = (
   strategy: Strategy,
   search: Search,
-  marketPrice?: number
+  marketPrice?: string
 ): { buy: EditOrderBlock; sell: EditOrderBlock } => {
   const { order0, order1 } = strategy;
 
@@ -144,7 +145,8 @@ export const EditPricesStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
-  const { marketPrice } = useMarketPrice({ base, quote });
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
@@ -195,7 +197,7 @@ export const EditPricesStrategyRecurringPage = () => {
 
   return (
     <EditStrategyLayout editType={search.editType}>
-      <EditStrategyForm
+      <EditPricesForm
         strategyType="recurring"
         editType={search.editType}
         orders={orders}
@@ -220,8 +222,10 @@ export const EditPricesStrategyRecurringPage = () => {
           error={error}
           buy
         />
-      </EditStrategyForm>
-      <StrategyChartSection>
+      </EditPricesForm>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
         <StrategyChartHistory
           type="recurring"
           base={base}

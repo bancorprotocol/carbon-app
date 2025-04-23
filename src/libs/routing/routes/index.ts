@@ -37,6 +37,7 @@ import {
   editBudgetDisposable,
   editBudgetOverlapping,
   editBudgetRecurring,
+  editPrice,
 } from './strategyEdit';
 import tradePage from 'libs/routing/routes/trade';
 import {
@@ -55,9 +56,11 @@ export const routeTree = rootRoute.addChildren([
   strategyPageRoot.addChildren([strategyPage, strategyPageRedirect]),
   oldCreateStrategies,
   editStrategyLayout.addChildren([
-    editPricesDisposable,
-    editPricesOverlapping,
-    editPricesRecurring,
+    editPrice.addChildren([
+      editPricesDisposable,
+      editPricesOverlapping,
+      editPricesRecurring,
+    ]),
     editBudgetDisposable,
     editBudgetOverlapping,
     editBudgetRecurring,

@@ -15,11 +15,11 @@ import {
   isMinAboveMarket,
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
-import { OverlappingInitMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { InitMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { EditOverlappingBudget } from 'components/strategies/edit/EditOverlappingBudget';
-import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
+import { EditBudgetForm } from 'components/strategies/edit/EditBudgetForm';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
@@ -180,7 +180,6 @@ export const EditBudgetOverlappingPage = () => {
 const OverlappingContent = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
-  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
 
   const { marketPrice: externalPrice } = useMarketPrice({
@@ -202,31 +201,18 @@ const OverlappingContent = () => {
   })();
 
   if (!marketPrice) {
-    const setMarketPrice = (price: string) => {
-      navigate({
-        params: (params) => params,
-        search: (previous) => ({ ...previous, marketPrice: price }),
-        replace: true,
-        resetScroll: false,
-      });
-    };
     return (
       <div className="flex flex-col gap-20 md:w-[440px]">
         <EditStrategyOverlapTokens />
         <article className="rounded-10 bg-background-900 flex flex-col">
-          <OverlappingInitMarketPrice
-            base={base}
-            quote={quote}
-            marketPrice={marketPrice}
-            setMarketPrice={setMarketPrice}
-          />
+          <InitMarketPrice base={base} quote={quote} />
         </article>
       </div>
     );
   }
 
   return (
-    <EditStrategyForm
+    <EditBudgetForm
       strategyType="overlapping"
       editType={search.editType}
       orders={orders}
@@ -242,6 +228,6 @@ const OverlappingContent = () => {
         order0={orders.buy}
         order1={orders.sell}
       />
-    </EditStrategyForm>
+    </EditBudgetForm>
   );
 };
