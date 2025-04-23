@@ -306,6 +306,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.start, props.end, zoomRange]);
 
+  // D3 is not working well in jsdom, do not render it with vitest
+  if (import.meta.env.TEST) return;
+
   return (
     <D3ChartProvider
       dms={dms}

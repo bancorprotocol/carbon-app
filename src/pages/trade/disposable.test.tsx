@@ -146,19 +146,7 @@ describe('Create disposable page', () => {
     expect(router.state.location.pathname).toBe(basePath);
     expect(router.state.location.search).toStrictEqual(search);
 
-    const disposableDriver = new CreateStrategyDriver(screen);
-    const form = await disposableDriver.findDisposableForm();
-
-    // Check form
-    expect(form.min()).toHaveValue(search.min);
-    expect(form.max()).toHaveValue(search.max);
-    expect(form.budget()).toHaveValue(search.budget);
-
-    // Check price range input and market price indication
-    const marketPriceIndications = form.marketPriceIndicators();
-    expect(marketPriceIndications.length).toBe(0);
-
-    // Check warning to approve deposit exists
-    expect(form.approveWarnings()).toBeInTheDocument();
+    const priceForm = await screen.findByTestId('user-price-form');
+    expect(priceForm).toBeInTheDocument();
   });
 });

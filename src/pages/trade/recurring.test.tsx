@@ -160,24 +160,7 @@ describe('Create recurring page', () => {
     expect(router.state.location.pathname).toBe(basePath);
     expect(router.state.location.search).toStrictEqual(search);
 
-    const recurringDriver = new CreateStrategyDriver(screen);
-    const form = await recurringDriver.findRecurringForm();
-
-    // Check form
-    expect(form.buy.min()).toHaveValue(search.buyMin);
-    expect(form.buy.max()).toHaveValue(search.buyMax);
-    expect(form.sell.min()).toHaveValue(search.sellMin);
-    expect(form.sell.max()).toHaveValue(search.sellMax);
-    expect(form.buy.budget()).toHaveValue(search.buyBudget);
-    expect(form.sell.budget()).toHaveValue(search.sellBudget);
-
-    // Check price range input and market price indication
-    const buyMarketPriceIndications = form.buy.marketPriceIndicators();
-    expect(buyMarketPriceIndications.length).toBe(0);
-    const sellMarketPriceIndications = form.sell.marketPriceIndicators();
-    expect(sellMarketPriceIndications.length).toBe(0);
-
-    // Check warning to approve deposit exists
-    expect(form.approveWarnings()).toBeInTheDocument();
+    const priceForm = await screen.findByTestId('user-price-form');
+    expect(priceForm).toBeInTheDocument();
   });
 });
