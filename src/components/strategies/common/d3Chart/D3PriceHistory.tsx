@@ -26,15 +26,11 @@ import { Activity } from 'libs/queries/extApi/activity';
 import { getDomain, isEmptyHistory, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
-import {
-  defaultEnd,
-  defaultEndDate,
-  defaultStart,
-  defaultStartDate,
-} from '../utils';
+import { defaultEnd, defaultEndDate, defaultStart } from '../utils';
 import { differenceInDays, Duration, startOfDay, sub } from 'date-fns';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import style from './D3PriceHistory.module.css';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export interface RangeUpdate {
   start?: string;
@@ -212,6 +208,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
     zoomHandler,
   } = useZoom(dms, data, zoomBehavior);
 
+  const defaultHistoryStart = useMemo(() => {
+    return SafeDecimal.max(defaultStart(), data[0].date).toString();
+  }, [data]);
   const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
 
   const zoomX = useCallback(
@@ -296,15 +295,15 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   useEffect(() => {
     if (!zoomRange || listenOnZoom) return;
-    const start = props.start || defaultStart();
-    const from = fromUnixUTC(props.start || defaultStart());
+    const start = props.start || defaultHistoryStart;
+    const from = fromUnixUTC(start);
     const to = fromUnixUTC(props.end || defaultEnd());
     zoomRange(start, differenceInDays(to, from) + 1, 0);
     // Prevent zoom end event to update range on init
     setTimeout(() => setListenOnZoom(true), 100);
     // This effect should happens only once, when start, end and zoomRange are ready
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.start, props.end, zoomRange]);
+  }, [defaultHistoryStart, props.start, props.end, zoomRange]);
 
   // D3 is not working well in jsdom, do not render it with vitest
   // eslint-disable-next-line prettier/prettier
@@ -396,9 +395,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
             <hr className="h-full border-e border-white/10" />
             <DateRangePicker
               className="rounded-8 border-0"
-              defaultStart={defaultStartDate()}
+              defaultStart={fromUnixUTC(defaultHistoryStart)}
               defaultEnd={defaultEndDate()}
-              start={fromUnixUTC(props.start) || defaultStartDate()}
+              start={fromUnixUTC(props.start || defaultHistoryStart)}
               end={fromUnixUTC(props.end) || defaultEndDate()}
               onConfirm={zoomFromTo}
               options={{
