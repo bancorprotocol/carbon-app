@@ -55,10 +55,11 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
           <Link
             key={link.id}
             to={link.to}
-            search={({ priceStart, priceEnd }) => ({
+            search={({ priceStart, priceEnd, marketPrice }) => ({
               ...priceSearchFn[link.id](strategy, editType),
               priceStart,
               priceEnd,
+              marketPrice,
             })}
             params={params}
             replace={true}

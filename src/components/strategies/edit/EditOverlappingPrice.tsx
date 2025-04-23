@@ -1,7 +1,6 @@
 import { FC, useCallback, useEffect } from 'react';
 import { useGetTokenBalance } from 'libs/queries';
 import {
-  getCalculatedPrice,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
@@ -24,7 +23,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { isValidRange } from '../utils';
-import { EditOverlappingMarketPrice } from '../overlapping/OverlappingMarketPrice';
+import { InitMarketPrice } from '../common/InitMarketPrice';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
 
 interface Props {
@@ -156,7 +155,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
     }
   }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
 
-  const setMarketPrice = (price: string) => set('marketPrice', price);
   const setMin = (min: string) => set('min', min);
   const setMax = (max: string) => set('max', max);
   const setSpread = (value: string) => set('spread', value);
@@ -215,16 +213,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           />
         </>
       )}
-      {!displayPrice && (
-        <article className="bg-background-900 grid gap-16 p-16">
-          <EditOverlappingMarketPrice
-            base={base}
-            quote={quote}
-            calculatedPrice={getCalculatedPrice(strategy)}
-            setMarketPrice={setMarketPrice}
-          />
-        </article>
-      )}
+      {!displayPrice && <InitMarketPrice base={base} quote={quote} />}
       <article className="bg-background-900 grid gap-16 p-16">
         <header className="flex items-center justify-between">
           <h2 className="text-16">Budget</h2>

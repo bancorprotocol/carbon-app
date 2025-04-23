@@ -59,7 +59,7 @@ export const getRecurringPriceMultiplier = (
 export const getDefaultOrder = (
   direction: StrategyDirection,
   order: Partial<OrderBlock>,
-  marketPrice: number = 0
+  marketPrice: number | string = 0
 ): OrderBlock => {
   const market = new SafeDecimal(marketPrice);
   const settings = order.settings ?? 'limit';

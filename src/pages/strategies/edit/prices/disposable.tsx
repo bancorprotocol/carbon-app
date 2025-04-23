@@ -14,7 +14,6 @@ import {
 } from 'components/strategies/common/utils';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import { getTotalBudget, getWithdraw } from 'components/strategies/edit/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -22,12 +21,15 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
-import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'libs/queries';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 export interface EditDisposableStrategySearch {
+  marketPrice?: string;
   priceStart?: string;
   priceEnd?: string;
   editType: 'editPrices' | 'renew';
@@ -43,7 +45,7 @@ export interface EditDisposableStrategySearch {
 const getOrder = (
   strategy: Strategy,
   search: EditDisposableStrategySearch,
-  marketPrice?: number
+  marketPrice?: string
 ): EditOrderBlock => {
   const { order0, order1 } = strategy;
   const defaultDirection = !isEmptyOrder(order0) ? 'buy' : 'sell';
@@ -96,8 +98,8 @@ export const EditPricesStrategyDisposablePage = () => {
   const { base, quote, order0, order1 } = strategy;
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
-
-  const { marketPrice } = useMarketPrice({ base, quote });
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
   const isBuy = search.direction !== 'sell';
   const { setOrder } = useSetDisposableOrder(url);
@@ -170,7 +172,7 @@ export const EditPricesStrategyDisposablePage = () => {
 
   return (
     <EditStrategyLayout editType={search.editType}>
-      <EditStrategyForm
+      <EditPricesForm
         strategyType="disposable"
         editType={search.editType}
         orders={orders}
@@ -232,8 +234,10 @@ export const EditPricesStrategyDisposablePage = () => {
             </div>
           </article>
         )}
-      </EditStrategyForm>
-      <StrategyChartSection>
+      </EditPricesForm>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
         <StrategyChartHistory
           type="disposable"
           base={base}

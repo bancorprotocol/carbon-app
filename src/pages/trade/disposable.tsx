@@ -12,18 +12,20 @@ import { getDefaultOrder } from 'components/strategies/create/utils';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
-import { TradeLayout } from 'components/trade/TradeLayout';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing';
 import { TradeDisposableSearch } from 'libs/routing/routes/trade';
 import { useCallback } from 'react';
+import { CreateLayout } from 'components/strategies/create/CreateLayout';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
   const { base, quote } = useTradeCtx();
-  const { marketPrice } = useMarketPrice({ base, quote });
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
   const isBuy = search.direction === 'buy';
   const order = getDefaultOrder(isBuy ? 'buy' : 'sell', search, marketPrice);
@@ -66,9 +68,10 @@ export const TradeDisposable = () => {
     buy: order.settings !== 'range',
     sell: order.settings !== 'range',
   };
+
   return (
     <>
-      <TradeLayout>
+      <CreateLayout url={url}>
         <CreateForm base={base} quote={quote} order0={order0} order1={order1}>
           <CreateOrder
             type="disposable"
@@ -100,8 +103,10 @@ export const TradeDisposable = () => {
             }
           />
         </CreateForm>
-      </TradeLayout>
-      <StrategyChartSection>
+      </CreateLayout>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
         <StrategyChartHistory
           type="disposable"
           base={base}

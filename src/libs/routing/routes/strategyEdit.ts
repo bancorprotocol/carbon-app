@@ -63,9 +63,16 @@ export const toDisposablePricesSearch = (
     direction,
   };
 };
-export const editPricesDisposable = createRoute({
+export const editPrice = createRoute({
   getParentRoute: () => editStrategyLayout,
-  path: 'prices/disposable',
+  path: 'prices',
+  validateSearch: searchValidator({
+    marketPrice: v.optional(validNumber),
+  }),
+});
+export const editPricesDisposable = createRoute({
+  getParentRoute: () => editPrice,
+  path: 'disposable',
   component: EditPricesStrategyDisposablePage,
   validateSearch: searchValidator({
     editType: v.picklist(['editPrices', 'renew']),
@@ -94,8 +101,8 @@ export const toRecurringPricesSearch = (
   };
 };
 export const editPricesRecurring = createRoute({
-  getParentRoute: () => editStrategyLayout,
-  path: 'prices/recurring',
+  getParentRoute: () => editPrice,
+  path: 'recurring',
   component: EditPricesStrategyRecurringPage,
   validateSearch: searchValidator({
     editType: v.picklist(['editPrices', 'renew']),
@@ -136,8 +143,8 @@ export const toOverlappingPricesSearch = (
   };
 };
 export const editPricesOverlapping = createRoute({
-  getParentRoute: () => editStrategyLayout,
-  path: 'prices/overlapping',
+  getParentRoute: () => editPrice,
+  path: 'overlapping',
   component: EditPricesOverlappingPage,
   validateSearch: searchValidator({
     editType: v.picklist(['editPrices', 'renew']),

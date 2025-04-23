@@ -23,7 +23,7 @@ import {
 } from 'd3';
 import { TradeTypes } from 'libs/routing/routes/trade';
 import { Activity } from 'libs/queries/extApi/activity';
-import { getDomain, scaleBandInvert } from './utils';
+import { getDomain, isEmptyHistory, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
 import { defaultEnd, defaultEndDate, defaultStart } from '../utils';
@@ -181,6 +181,14 @@ const durationToDays = (duration: Duration) => {
   return differenceInDays(new Date(), sub(new Date(), duration));
 };
 
+const mockCandle = (value: number) => ({
+  date: Date.now() / 1000,
+  open: value,
+  close: value,
+  high: value,
+  low: value,
+});
+
 export const D3PriceHistory: FC<Props> = (props) => {
   const {
     className,
@@ -203,6 +211,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
   const defaultHistoryStart = useMemo(() => {
     return SafeDecimal.max(defaultStart(), data[0].date).toString();
   }, [data]);
+  const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
 
   const zoomX = useCallback(
     (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d),
@@ -224,9 +233,18 @@ export const D3PriceHistory: FC<Props> = (props) => {
   }, [data, dms.boundedWidth, zoomBehavior, zoomX]);
 
   const yDomain = useMemo(() => {
-    const candles = data.filter((point) => xScale(point.date.toString())! > 0);
-    return getDomain(candles, bounds, marketPrice);
-  }, [bounds, data, marketPrice, xScale]);
+    if (emptyHistory) {
+      if (!marketPrice) return [];
+      const mockedCandles = [
+        mockCandle(marketPrice / 2),
+        mockCandle(marketPrice * 2),
+      ];
+      return getDomain(mockedCandles, bounds, marketPrice);
+    } else {
+      const candles = data.filter((p) => xScale(p.date.toString())! > 0);
+      return getDomain(candles, bounds, marketPrice);
+    }
+  }, [bounds, data, marketPrice, xScale, emptyHistory]);
 
   const y = useLinearScale({
     domain: yDomain,
@@ -287,6 +305,15 @@ export const D3PriceHistory: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultHistoryStart, props.start, props.end, zoomRange]);
 
+  // D3 is not working well in jsdom, do not render it with vitest
+  // eslint-disable-next-line prettier/prettier
+  if (
+    !Object.getOwnPropertyDescriptor(globalThis, 'window')
+      ?.get?.toString()
+      .includes('[native code]')
+  )
+    return;
+
   return (
     <D3ChartProvider
       dms={dms}
@@ -301,42 +328,55 @@ export const D3PriceHistory: FC<Props> = (props) => {
       <div className={cn('rounded-12 flex flex-1 bg-black', className)}>
         <DrawingMenu clearDrawings={() => setDrawings([])} />
         <div className="flex flex-1 flex-col">
-          <svg
-            ref={ref}
-            id="interactive-chart"
-            className={cn(style.historyChart, 'rounded-tr-12 flex-1')}
-            data-testid="price-chart"
-          >
-            <defs>
-              <linearGradient
-                id="svg-brand-gradient"
-                x1="0"
-                x2="0"
-                y1="0"
-                y2="1"
-              >
-                <stop offset="0%" stopColor="var(--gradient-first)" />
-                <stop offset="50%" stopColor="var(--gradient-middle)" />
-                <stop offset="100%" stopColor="var(--gradient-last)" />
-              </linearGradient>
-            </defs>
-            <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
-              <D3ChartCandlesticks
-                readonly={props.readonly}
-                prices={props.prices}
-                onPriceUpdates={props.onPriceUpdates}
-                data={data}
-                marketPrice={marketPrice}
-                onDragEnd={props.onPriceUpdates}
-                isLimit={props.isLimit}
-                type={props.type}
-                overlappingSpread={props.overlappingSpread}
-                overlappingMarketPrice={marketPrice}
-                activities={props.activities}
-                yTicks={y.ticks}
-              />
-            </g>
-          </svg>
+          <div className="relative grid flex-1 items-stretch justify-items-stretch">
+            <svg
+              ref={ref}
+              id="interactive-chart"
+              className={cn(style.historyChart, 'rounded-tr-12 flex-1')}
+              data-testid="price-chart"
+            >
+              <defs>
+                <linearGradient
+                  id="svg-brand-gradient"
+                  x1="0"
+                  x2="0"
+                  y1="0"
+                  y2="1"
+                >
+                  <stop offset="0%" stopColor="var(--gradient-first)" />
+                  <stop offset="50%" stopColor="var(--gradient-middle)" />
+                  <stop offset="100%" stopColor="var(--gradient-last)" />
+                </linearGradient>
+              </defs>
+              <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
+                <D3ChartCandlesticks
+                  readonly={props.readonly}
+                  prices={props.prices}
+                  onPriceUpdates={props.onPriceUpdates}
+                  data={data}
+                  marketPrice={marketPrice}
+                  onDragEnd={props.onPriceUpdates}
+                  isLimit={props.isLimit}
+                  type={props.type}
+                  overlappingSpread={props.overlappingSpread}
+                  overlappingMarketPrice={marketPrice}
+                  activities={props.activities}
+                  yTicks={y.ticks}
+                />
+              </g>
+            </svg>
+            {emptyHistory && (
+              <div className="text-12 rounded-8 bg-background-800 absolute bottom-[60px] left-[16px] flex items-center gap-8 border-white/60 px-16 py-8">
+                <div
+                  aria-hidden="true"
+                  className="bg-warning/20 grid size-24 place-items-center rounded-full"
+                >
+                  <span className="text-warning text-[8px]">N/A</span>
+                </div>
+                <p>No historical price data available</p>
+              </div>
+            )}
+          </div>
           <div className="col-span-2 flex border-t border-white/10">
             {presets.map(({ duration, label }) => {
               const days = durationToDays(duration);

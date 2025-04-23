@@ -106,3 +106,8 @@ export const scaleBandInvert = (scale: ScaleBand<string>) => {
     return domain[Math.max(0, Math.min(index, domain.length - 1))];
   };
 };
+
+export const isEmptyHistory = (data?: CandlestickData[]) => {
+  if (!data) return true;
+  return data.every((d) => isNaN(d.open) && isNaN(d.close));
+};

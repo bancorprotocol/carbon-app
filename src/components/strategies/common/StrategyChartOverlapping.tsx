@@ -7,7 +7,7 @@ import {
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { NotFound } from 'components/common/NotFound';
-import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { OverlappingChart } from 'components/strategies/overlapping/OverlappingChart';
 import { StrategyChartHistory } from './StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
@@ -15,7 +15,6 @@ import { Token } from 'libs/tokens';
 import { StrategyChartLegend } from './StrategyChartLegend';
 import { defaultSpread } from '../overlapping/utils';
 import { isFullRangeStrategy } from './utils';
-import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   marketPrice?: string;
@@ -28,20 +27,8 @@ interface Props {
 }
 
 export const StrategyChartOverlapping: FC<Props> = (props) => {
-  const { base, quote, marketPrice, set } = props;
+  const { base, quote, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
-
-  const resetMarketPrice = (marketPrice: string) => {
-    if (isFullRangeStrategy(props.order0, props.order1)) {
-      set({
-        marketPrice,
-        min: new SafeDecimal(marketPrice).div(1000).toString(),
-        max: new SafeDecimal(marketPrice).mul(1000).toString(),
-      });
-    } else {
-      set({ marketPrice });
-    }
-  };
 
   return (
     <section
@@ -69,12 +56,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
           </Radio>
         </RadioGroup>
 
-        <OverlappingMarketPrice
-          base={base}
-          quote={quote}
-          marketPrice={marketPrice}
-          setMarketPrice={resetMarketPrice}
-        />
+        <EditMarketPrice base={base} quote={quote} />
       </header>
       <OverlappingChartContent {...props} />
     </section>
@@ -134,7 +116,6 @@ const OverlappingChartContent: FC<Props> = (props) => {
         order0={order0}
         order1={order1}
         spread={search.spread || defaultSpread}
-        marketPrice={search.marketPrice}
         readonly={readonly || fullRange}
         onPriceUpdates={onPriceUpdates}
       />
