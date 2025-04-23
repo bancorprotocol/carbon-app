@@ -307,7 +307,13 @@ export const D3PriceHistory: FC<Props> = (props) => {
   }, [props.start, props.end, zoomRange]);
 
   // D3 is not working well in jsdom, do not render it with vitest
-  if (import.meta.env.TEST) return;
+  // eslint-disable-next-line prettier/prettier
+  if (
+    !Object.getOwnPropertyDescriptor(globalThis, 'window')
+      ?.get?.toString()
+      .includes('[native code]')
+  )
+    return;
 
   return (
     <D3ChartProvider
