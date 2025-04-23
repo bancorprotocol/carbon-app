@@ -10,7 +10,7 @@ export const tokenSeiListParser =
   (networkId: string) => (data: Record<string, NetworkDataType[]>) => {
     const networkTokens: Token[] = data[networkId]
       .filter((networkData) => {
-        if (networkData.type_asset && networkData.type_asset !== 'erc20') {
+        if (networkData.type_asset === 'erc721') {
           return false;
         }
         const hasBaseAddress = isAddress(networkData.base);
