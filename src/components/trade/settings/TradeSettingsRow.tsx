@@ -57,9 +57,9 @@ export const TradeSettingsRow: FC<{
           type="number"
           inputMode="decimal"
           aria-label="Set custom"
-          placeholder="Set Fee Tier"
+          placeholder="Custom"
           onChange={(v) => setInternalValue(sanitizeNumber(v.target.value))}
-          min="0.00000000001"
+          min="0"
           max={item.max}
           step="any"
           data-testid="spread-input"
