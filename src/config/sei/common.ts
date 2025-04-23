@@ -86,6 +86,10 @@ export const commonConfig: AppConfig = {
       parser: 'tokenSeiListParser',
     },
     {
+      uri: 'https://raw.githubusercontent.com/Sei-Public-Goods/sei-assetlist/main/assetlist.json',
+      parser: 'tokenSeiListParser',
+    },
+    {
       uri: 'https://raw.githubusercontent.com/dragonswap-app/assets/main/tokenlist-sei-mainnet.json',
       parser: 'tokenDragonswapListParser',
     },
