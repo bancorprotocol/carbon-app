@@ -11,7 +11,6 @@ import {
   getRecurringWarning,
 } from 'components/strategies/create/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';
-import { TradeLayout } from 'components/trade/TradeLayout';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { useCallback } from 'react';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
@@ -77,34 +76,32 @@ export const TradeRecurring = () => {
   return (
     <>
       <CreateLayout url={url}>
-        <TradeLayout>
-          <CreateForm
-            base={base!}
-            quote={quote!}
-            order0={buyOrder}
-            order1={sellOrder}
-          >
-            <CreateOrder
-              type="recurring"
-              base={base}
-              quote={quote}
-              order={sellOrder}
-              setOrder={setSellOrder}
-              error={getRecurringError(search)}
-              warnings={[sellOutsideMarket, getRecurringWarning(search)]}
-            />
-            <CreateOrder
-              type="recurring"
-              base={base}
-              quote={quote}
-              order={buyOrder}
-              setOrder={setBuyOrder}
-              error={getRecurringError(search)}
-              warnings={[buyOutsideMarket, getRecurringWarning(search)]}
-              buy
-            />
-          </CreateForm>
-        </TradeLayout>
+        <CreateForm
+          base={base!}
+          quote={quote!}
+          order0={buyOrder}
+          order1={sellOrder}
+        >
+          <CreateOrder
+            type="recurring"
+            base={base}
+            quote={quote}
+            order={sellOrder}
+            setOrder={setSellOrder}
+            error={getRecurringError(search)}
+            warnings={[sellOutsideMarket, getRecurringWarning(search)]}
+          />
+          <CreateOrder
+            type="recurring"
+            base={base}
+            quote={quote}
+            order={buyOrder}
+            setOrder={setBuyOrder}
+            error={getRecurringError(search)}
+            warnings={[buyOutsideMarket, getRecurringWarning(search)]}
+            buy
+          />
+        </CreateForm>
       </CreateLayout>
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
