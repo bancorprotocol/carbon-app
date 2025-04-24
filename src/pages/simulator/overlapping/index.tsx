@@ -15,13 +15,14 @@ import {
   defaultStart,
   oneYearAgo,
 } from 'components/strategies/common/utils';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useMemo } from 'react';
 import { cn } from 'utils/helpers';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import style from 'components/strategies/common/form.module.css';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
+import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
+import style from 'components/strategies/common/form.module.css';
 
 export const SimulatorInputOverlappingPage = () => {
   const searchState = simulatorInputOverlappingRoute.useSearch();
@@ -30,7 +31,7 @@ export const SimulatorInputOverlappingPage = () => {
     searchState,
   });
 
-  const { data, isPending, isError } = useGetTokenPriceHistory({
+  const { data, isPending } = useGetTokenPriceHistory({
     baseToken: searchState.baseToken,
     quoteToken: searchState.quoteToken,
     start: oneYearAgo(),
@@ -63,11 +64,13 @@ export const SimulatorInputOverlappingPage = () => {
     searchState.buyMin,
   ]);
 
+  const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
   const noBudgetText =
-    !isError && noBudget && 'Please add Sell and/or Buy budgets';
+    !emptyHistory && noBudget && 'Please add Sell and/or Buy budgets';
   const loadingText = isPending && 'Loading price history...';
-  const btnDisabled = isPending || isError || noBudget || marketPricePending;
+  const btnDisabled =
+    isPending || emptyHistory || noBudget || marketPricePending;
 
   const navigate = useNavigate();
 
@@ -141,7 +144,7 @@ export const SimulatorInputOverlappingPage = () => {
           <SimInputTokenSelection
             baseToken={searchState.baseToken}
             quoteToken={searchState.quoteToken}
-            noPriceHistory={isError}
+            noPriceHistory={emptyHistory}
           />
           <SimInputStrategyType />
           <CreateOverlappingStrategy
@@ -172,7 +175,7 @@ export const SimulatorInputOverlappingPage = () => {
         bounds={bounds}
         data={data}
         isPending={isPending}
-        isError={isError}
+        isError={emptyHistory}
         spread={state.spread}
         simulationType="overlapping"
       />

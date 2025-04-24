@@ -92,7 +92,7 @@ export const SimInputChart = ({
     [dispatch]
   );
 
-  if (isError) {
+  if (isError || emptyHistory) {
     return (
       <Layout>
         <ErrorMsg
@@ -109,7 +109,7 @@ export const SimInputChart = ({
       </Layout>
     );
   }
-  if (emptyHistory && !marketPrice) {
+  if (!marketPrice) {
     return (
       <Layout>
         <NotFound

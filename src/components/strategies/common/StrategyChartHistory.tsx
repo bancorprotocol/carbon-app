@@ -127,7 +127,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
       </section>
     );
   }
-  if (isError) {
+  if (isError || emptyHistory) {
     return (
       <NotFound
         variant="error"
@@ -138,7 +138,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     );
   }
 
-  if (!marketPrice && emptyHistory) {
+  if (!marketPrice) {
     return (
       <NotFound
         variant="info"

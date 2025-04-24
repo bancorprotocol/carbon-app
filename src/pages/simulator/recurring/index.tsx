@@ -18,6 +18,7 @@ import { SimInputTokenSelection } from 'components/simulator/input/SimInputToken
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { cn } from 'utils/helpers';
 import { getRecurringPriceMultiplier } from 'components/strategies/create/utils';
+import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
 import style from 'components/strategies/common/form.module.css';
 
 export const SimulatorInputRecurringPage = () => {
@@ -29,7 +30,7 @@ export const SimulatorInputRecurringPage = () => {
 
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
-  const { data, isPending, isError } = useGetTokenPriceHistory({
+  const { data, isPending } = useGetTokenPriceHistory({
     baseToken: searchState.baseToken,
     quoteToken: searchState.quoteToken,
     start: oneYearAgo(),
@@ -108,11 +109,12 @@ export const SimulatorInputRecurringPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, searchState.baseToken, searchState.quoteToken]);
 
+  const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
   const noBudgetText =
-    !isError && noBudget && 'Please add Sell and/or Buy budgets';
+    !emptyHistory && noBudget && 'Please add Sell and/or Buy budgets';
   const loadingText = isPending && 'Loading price history...';
-  const btnDisabled = isPending || isError || noBudget;
+  const btnDisabled = isPending || emptyHistory || noBudget;
 
   const navigate = useNavigate();
 
@@ -159,7 +161,7 @@ export const SimulatorInputRecurringPage = () => {
           <SimInputTokenSelection
             baseToken={searchState.baseToken}
             quoteToken={searchState.quoteToken}
-            noPriceHistory={isError}
+            noPriceHistory={emptyHistory}
           />
           <SimInputStrategyType />
           <SimInputRecurring
@@ -188,7 +190,7 @@ export const SimulatorInputRecurringPage = () => {
         bounds={bounds}
         data={data}
         isPending={isPending}
-        isError={isError}
+        isError={emptyHistory}
         simulationType="recurring"
       />
     </>
