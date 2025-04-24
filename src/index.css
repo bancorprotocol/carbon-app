@@ -138,6 +138,16 @@
       var(--gradient-last)
     );
   }
+  .text-gradient {
+    background-image: linear-gradient(
+      to top,
+      var(--gradient-first),
+      var(--gradient-middle),
+      var(--gradient-last)
+    );
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 @layer components {

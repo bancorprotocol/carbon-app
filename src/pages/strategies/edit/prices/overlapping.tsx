@@ -1,6 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
-import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
 import { isValidRange } from 'components/strategies/utils';
 import { Strategy } from 'libs/queries';
 import {
@@ -8,10 +7,8 @@ import {
   calculateOverlappingPrices,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
-import { EditPriceNav } from 'components/strategies/edit/EditPriceNav';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
-  getCalculatedPrice,
   getOverlappingMarketPrice,
   getRoundedSpread,
   isMaxBelowMarket,
@@ -20,16 +17,14 @@ import {
 } from 'components/strategies/overlapping/utils';
 import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
 import { isOverlappingTouched } from 'components/strategies/overlapping/utils';
-import { EditOverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isZero } from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { EditStrategyForm } from 'components/strategies/edit/EditStrategyForm';
-import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
 import { useCallback } from 'react';
 import { OverlappingSearch } from 'components/strategies/common/types';
+import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
+import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 
 export interface EditOverlappingStrategySearch extends OverlappingSearch {
   editType: 'editPrices' | 'renew';
@@ -143,7 +138,6 @@ const getOrders = (
 };
 
 const url = '/strategies/edit/$strategyId/prices/overlapping';
-
 export const EditPricesOverlappingPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
@@ -191,9 +185,8 @@ export const EditPricesOverlappingPage = () => {
 const OverlappingContent = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, order0, order1 } = strategy;
-  const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const { marketPrice: externalPrice, isPending } = useMarketPrice({
+  const { marketPrice: externalPrice } = useMarketPrice({
     base,
     quote,
   });
@@ -215,41 +208,8 @@ const OverlappingContent = () => {
     return false;
   })();
 
-  if (isPending) {
-    return (
-      <div className="grid">
-        <CarbonLogoLoading className="h-80 place-self-center" />
-      </div>
-    );
-  }
-
-  if (!marketPrice) {
-    const setMarketPrice = (price: string) => {
-      navigate({
-        params: (params) => params,
-        search: (previous) => ({ ...previous, marketPrice: price }),
-        replace: true,
-        resetScroll: false,
-      });
-    };
-    return (
-      <div className="grid content-start rounded">
-        <EditStrategyOverlapTokens />
-        <EditPriceNav editType={search.editType} />
-        <article className="bg-background-900 grid gap-16 p-16">
-          <EditOverlappingMarketPrice
-            base={base}
-            quote={quote}
-            calculatedPrice={getCalculatedPrice(strategy)}
-            setMarketPrice={setMarketPrice}
-          />
-        </article>
-      </div>
-    );
-  }
-
   return (
-    <EditStrategyForm
+    <EditPricesForm
       strategyType="overlapping"
       editType={search.editType}
       orders={orders}
@@ -261,11 +221,11 @@ const OverlappingContent = () => {
       }
     >
       <EditOverlappingPrice
-        marketPrice={marketPrice}
+        marketPrice={marketPrice!}
         order0={orders.buy}
         order1={orders.sell}
         spread={spread}
       />
-    </EditStrategyForm>
+    </EditPricesForm>
   );
 };

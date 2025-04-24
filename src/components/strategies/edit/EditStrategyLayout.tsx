@@ -5,7 +5,6 @@ import { BackButton } from 'components/common/BackButton';
 
 interface Props {
   editType: EditTypes;
-  graph?: ReactNode;
   children: ReactNode;
 }
 
@@ -29,7 +28,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
         </h1>
       </header>
 
-      <div className="flex flex-col gap-20 md:grid md:grid-cols-[450px_auto]">
+      <div className="flex flex-col gap-20 md:grid md:grid-cols-[450px_auto] md:items-start">
         {children}
       </div>
     </div>

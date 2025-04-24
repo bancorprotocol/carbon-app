@@ -15,13 +15,16 @@ import { TradeLayout } from 'components/trade/TradeLayout';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { useCallback } from 'react';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
+import { CreateLayout } from 'components/strategies/create/CreateLayout';
 
 const url = '/trade/recurring';
 export const TradeRecurring = () => {
   const search = useSearch({ from: url });
   const { base, quote } = useTradeCtx();
-  const { marketPrice } = useMarketPrice({ base, quote });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder(url);
+  const marketQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
@@ -73,35 +76,39 @@ export const TradeRecurring = () => {
 
   return (
     <>
-      <TradeLayout>
-        <CreateForm
-          base={base!}
-          quote={quote!}
-          order0={buyOrder}
-          order1={sellOrder}
-        >
-          <CreateOrder
-            type="recurring"
-            base={base}
-            quote={quote}
-            order={sellOrder}
-            setOrder={setSellOrder}
-            error={getRecurringError(search)}
-            warnings={[sellOutsideMarket, getRecurringWarning(search)]}
-          />
-          <CreateOrder
-            type="recurring"
-            base={base}
-            quote={quote}
-            order={buyOrder}
-            setOrder={setBuyOrder}
-            error={getRecurringError(search)}
-            warnings={[buyOutsideMarket, getRecurringWarning(search)]}
-            buy
-          />
-        </CreateForm>
-      </TradeLayout>
-      <StrategyChartSection>
+      <CreateLayout url={url}>
+        <TradeLayout>
+          <CreateForm
+            base={base!}
+            quote={quote!}
+            order0={buyOrder}
+            order1={sellOrder}
+          >
+            <CreateOrder
+              type="recurring"
+              base={base}
+              quote={quote}
+              order={sellOrder}
+              setOrder={setSellOrder}
+              error={getRecurringError(search)}
+              warnings={[sellOutsideMarket, getRecurringWarning(search)]}
+            />
+            <CreateOrder
+              type="recurring"
+              base={base}
+              quote={quote}
+              order={buyOrder}
+              setOrder={setBuyOrder}
+              error={getRecurringError(search)}
+              warnings={[buyOutsideMarket, getRecurringWarning(search)]}
+              buy
+            />
+          </CreateForm>
+        </TradeLayout>
+      </CreateLayout>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
         <StrategyChartHistory
           type="recurring"
           base={base}
