@@ -24,11 +24,14 @@ export const warningMessageIfOutOfRange = (
   const numberedValue = +value;
   switch (id) {
     case 'slippageTolerance':
-      if (numberedValue > 5) {
-        return 'Please select a value that is smaller than 5%';
+      if (numberedValue > 50) {
+        return 'Please select a value that is smaller than 50%';
       }
       if (numberedValue < 0.01) {
         return 'Low tolerance might result in failed trades';
+      }
+      if (numberedValue > 1) {
+        return 'Slippage tolerance above 1% may result in a less favorable rate';
       }
       return '';
     case 'transactionExpiration':
@@ -56,7 +59,7 @@ export const isValidValue = (
   const numberedValue = +value;
   switch (id) {
     case 'slippageTolerance':
-      return numberedValue >= 0 && numberedValue <= 5;
+      return numberedValue >= 0 && numberedValue <= 50;
     default:
       return true;
   }

@@ -27,7 +27,7 @@
   @apply text-white/60 border-transparent;
 }
 .preset-container:has(:global(.warning-message)) .preset-custom {
-  @apply border border-warning outline-error;
+  @apply border border-warning outline-warning;
 }
 .preset-container:has(input[type="number"]:invalid) .preset-custom {
   @apply text-error border-error outline-error;
