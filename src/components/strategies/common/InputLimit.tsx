@@ -63,11 +63,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
   const displayError = priceError || error;
 
   // Warnings
-  const noMarketPrice =
-    !!marketPrice || ignoreMarketPriceWarning
-      ? ''
-      : 'Difference from current market price cannot be calculated.';
-  const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
+  const displayWarnings = warnings.filter((v) => !!v);
   const showWarning = !displayError && !!displayWarnings?.length;
 
   useEffect(() => {

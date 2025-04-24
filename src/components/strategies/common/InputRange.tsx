@@ -81,10 +81,7 @@ export const InputRange: FC<InputRangeProps> = ({
   const displayError = minError || maxError || error || rangeError;
 
   // Warnings
-  const noMarketPrice = !marketPrice
-    ? 'Difference from current market price cannot be calculated.'
-    : '';
-  const displayWarnings = [...warnings, noMarketPrice].filter((v) => !!v);
+  const displayWarnings = warnings.filter((v) => !!v);
   const showWarning = !displayError && !!displayWarnings.length;
 
   const minPercent = useMemo(() => {
