@@ -130,7 +130,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   if (isError || emptyHistory) {
     return (
       <NotFound
-        variant="error"
+        variant="info"
         title="Well, this doesn't happen often..."
         text="Unfortunately, price history for this pair is not available."
         className="min-h-0 flex-1"
