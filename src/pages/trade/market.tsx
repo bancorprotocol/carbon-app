@@ -2,8 +2,6 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTradeSettings';
-import { emptyOrder } from 'components/strategies/common/utils';
-import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { TradeLayout } from 'components/trade/TradeLayout';
@@ -12,6 +10,7 @@ import { useGetTokenBalance } from 'libs/queries';
 import { StrategyDirection } from 'libs/routing';
 import { cn } from 'utils/helpers';
 import style from 'components/strategies/common/order.module.css';
+import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
@@ -77,13 +76,7 @@ export const TradeMarket = () => {
         </article>
       </TradeLayout>
       <StrategyChartSection>
-        <StrategyChartHistory
-          type="market"
-          base={base}
-          quote={quote}
-          order0={emptyOrder()}
-          order1={emptyOrder()}
-        />
+        <PairChartHistory base={base} quote={quote} />
       </StrategyChartSection>
     </>
   );

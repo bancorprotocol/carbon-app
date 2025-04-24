@@ -21,18 +21,14 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { BackButton } from 'components/common/BackButton';
-import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
-import {
-  defaultEnd,
-  emptyOrder,
-  oneYearAgo,
-} from 'components/strategies/common/utils';
+import { defaultEnd, oneYearAgo } from 'components/strategies/common/utils';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 import { useActivityQuery } from 'components/activity/useActivityQuery';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { StrategyPageSearch } from 'libs/routing/routes/strategy';
 import { PairName } from 'components/common/DisplayPair';
+import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -148,12 +144,9 @@ export const StrategyPage = () => {
               </div>
             )}
           </header>
-          <StrategyChartHistory
-            type="market"
+          <PairChartHistory
             base={base}
             quote={quote}
-            order0={emptyOrder()}
-            order1={emptyOrder()}
             activities={(!hideIndicators && activities) || []}
           />
         </article>

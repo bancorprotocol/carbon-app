@@ -26,7 +26,7 @@ export interface D3ChartCandlesticksProps {
   className?: string;
   data: CandlestickData[];
   prices: ChartPrices;
-  onPriceUpdates: OnPriceUpdates;
+  onPriceUpdates?: OnPriceUpdates;
   marketPrice?: number;
   onDragEnd?: OnPriceUpdates;
   isLimit?: { buy: boolean; sell: boolean };
