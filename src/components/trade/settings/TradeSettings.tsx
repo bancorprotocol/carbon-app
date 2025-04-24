@@ -23,7 +23,7 @@ export const TradeSettings = () => {
       append: '%',
       setValue: (value) => setSlippage(value),
       presets: toPreset(presets.slippage),
-      max: 5,
+      max: 50,
     },
     {
       id: 'transactionExpiration',
