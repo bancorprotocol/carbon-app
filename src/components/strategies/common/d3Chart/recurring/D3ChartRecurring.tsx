@@ -23,6 +23,7 @@ export const D3ChartRecurring = ({
   const { yScale } = useD3ChartCtx();
   const onMinMaxChange = useCallback(
     (type: 'buy' | 'sell', min: number, max: number) => {
+      if (!onPriceUpdates) return;
       const minInverted = yScale.invert(min).toString();
       const maxInverted = yScale.invert(max).toString();
 

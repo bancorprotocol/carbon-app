@@ -52,6 +52,7 @@ export const D3ChartOverlapping = (props: Props) => {
 
   const onDragBuy = useCallback(
     (y: number) => {
+      if (!onPriceUpdates) return;
       isDragging.current = true;
 
       const maximumBuyMin = getMaxBuyMin(Number(prices.sell.max), spread);
@@ -98,6 +99,7 @@ export const D3ChartOverlapping = (props: Props) => {
 
   const onDragSell = useCallback(
     (y: number) => {
+      if (!onPriceUpdates) return;
       isDragging.current = true;
 
       const minimumSellMax = getMinSellMax(Number(prices.buy.min), spread);
@@ -144,6 +146,7 @@ export const D3ChartOverlapping = (props: Props) => {
 
   const onDragRect = useCallback(
     (y: number, y2: number) => {
+      if (!onPriceUpdates) return;
       isDragging.current = true;
 
       const sellMax = yScale.invert(y).toString();
