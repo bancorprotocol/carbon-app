@@ -18,6 +18,14 @@
       "symbol": "GCOTI",
       "decimals": 18,
       "logoURI": "/tokens/coti/0x7637c7838ec4ec6b85080f28a678f8e234bb83d1.svg"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0xf1Feebc4376c68B7003450ae66343Ae59AB37D3C",
+      "name": "USDC.e",
+      "symbol": "USDC.e",
+      "decimals": 6,
+      "logoURI": "/tokens/ethereum/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.svg"
     }
   ],
   "version": {
