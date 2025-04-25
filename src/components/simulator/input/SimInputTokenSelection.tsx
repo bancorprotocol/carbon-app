@@ -102,7 +102,7 @@ export const SimInputTokenSelection: FC<Props> = ({
       </article>
       {noPriceHistory && (
         <Warning className="font-weight-500">
-          The pair lacks price history and cannot be simulated.
+          The pair lacks price data and cannot be simulated
         </Warning>
       )}
     </section>

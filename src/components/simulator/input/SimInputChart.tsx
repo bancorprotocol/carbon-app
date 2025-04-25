@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import {
   SimulatorInputOverlappingValues,
   SimulatorOverlappingInputDispatch,
@@ -13,7 +12,7 @@ import {
 } from 'components/strategies/common/d3Chart';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { ReactNode, useCallback, useMemo } from 'react';
-import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import { ReactComponent as IconQuestion } from 'assets/icons/question.svg';
 import { CandlestickData } from 'libs/d3';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -92,7 +91,7 @@ export const SimInputChart = ({
     [dispatch]
   );
 
-  if (isError) {
+  if (isError || emptyHistory) {
     return (
       <Layout>
         <ErrorMsg
@@ -109,7 +108,7 @@ export const SimInputChart = ({
       </Layout>
     );
   }
-  if (emptyHistory && !marketPrice) {
+  if (!marketPrice) {
     return (
       <Layout>
         <NotFound
@@ -144,9 +143,9 @@ export const SimInputChart = ({
 };
 
 const Layout = ({ children }: { children: ReactNode }) => (
-  <div className="bg-background-900 sticky top-[80px] flex h-[600px] flex-col gap-20 rounded p-20">
-    <header className="mb-20 flex items-center justify-between">
-      <h2 className="text-20 font-weight-500 mr-20">Price Chart</h2>
+  <div className="bg-background-900 sticky top-[80px] grid h-[600px] grid-rows-[auto_1fr] gap-20 rounded p-20">
+    <header className="flex items-center justify-between">
+      <h2 className="text-20 font-weight-500">Price Chart</h2>
     </header>
     {children}
   </div>
@@ -154,18 +153,16 @@ const Layout = ({ children }: { children: ReactNode }) => (
 
 const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
   return (
-    <div className="max-w-[340px] self-center justify-self-center">
-      <IconTitleText
-        icon={<IconPlus />}
-        title="Well, this doesn’t happen often..."
-        text="Unfortunately, price history for this pair is not available and cannot be simulated."
-        variant="success"
-      />
-      <p className="text-14 my-20 text-center text-white/60">
-        However, you can{' '}
-        <span className="font-weight-500 text-white">Create a Strategy</span>
+    <div className="grid max-w-[340px] gap-20 place-self-center">
+      <div className="size-75 text-primary bg-primary/25 flex grid place-items-center justify-self-center rounded-full">
+        <IconQuestion className="size-48" />
+      </div>
+      <h2 className="text-center">Well, this doesn't happen often...</h2>
+      <p className="text-14 font-weight-400 text-center text-white/60">
+        Unfortunately, price data for this pair is currently unavailable, so
+        simulation isn't possible. However, you can still go ahead and create a
+        strategy.
       </p>
-
       <Link
         to="/trade/disposable"
         search={{ base, quote }}

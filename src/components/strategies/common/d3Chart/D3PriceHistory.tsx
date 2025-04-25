@@ -155,8 +155,8 @@ interface Props {
   className?: string;
   data: CandlestickData[];
   prices: ChartPrices;
-  onPriceUpdates: OnPriceUpdates;
-  onDragEnd: OnPriceUpdates;
+  onPriceUpdates?: OnPriceUpdates;
+  onDragEnd?: OnPriceUpdates;
   onRangeUpdates: (params: RangeUpdate) => void;
   marketPrice?: number;
   bounds: ChartPrices;
