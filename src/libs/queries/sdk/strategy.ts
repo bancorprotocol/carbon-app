@@ -21,6 +21,7 @@ import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 import { getAddress } from 'ethers/lib/utils';
 import { usePairs } from 'hooks/usePairs';
+import { useCarbonInit } from 'hooks/useCarbonInit';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
@@ -166,6 +167,7 @@ interface Props {
 }
 
 export const useGetUserStrategies = ({ user }: Props) => {
+  const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
@@ -187,13 +189,14 @@ export const useGetUserStrategies = ({ user }: Props) => {
         Token,
       });
     },
-    enabled: tokens.length > 0 && ensAddress.isFetched,
+    enabled: tokens.length > 0 && ensAddress.isFetched && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
 };
 
 export const useGetStrategyList = (ids: string[]) => {
+  const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
@@ -209,13 +212,14 @@ export const useGetStrategyList = (ids: string[]) => {
         Token,
       });
     },
-    enabled: tokens.length > 0,
+    enabled: tokens.length > 0 && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
 };
 
 export const useGetStrategy = (id: string) => {
+  const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
@@ -231,7 +235,7 @@ export const useGetStrategy = (id: string) => {
       });
       return strategies[0];
     },
-    enabled: tokens.length > 0,
+    enabled: tokens.length > 0 && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
@@ -243,6 +247,7 @@ interface PropsPair {
 }
 
 export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
+  const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
@@ -258,7 +263,7 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
         Token,
       });
     },
-    enabled: !token0 || !token1 || tokens.length > 0,
+    enabled: (!token0 || !token1 || tokens.length > 0) && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
@@ -270,6 +275,7 @@ interface PropsPair {
 }
 
 export const useTokenStrategies = (token?: string) => {
+  const { isInitialized } = useCarbonInit();
   const { getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
   const { map: pairMap } = usePairs();
@@ -302,7 +308,7 @@ export const useTokenStrategies = (token?: string) => {
       });
       return result;
     },
-    enabled: !!token && !!pairMap.size,
+    enabled: !!token && !!pairMap.size && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });

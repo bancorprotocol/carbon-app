@@ -8,8 +8,10 @@ import { carbonSDK } from 'libs/sdk';
 import { lsService } from 'services/localeStorage';
 import { useState } from 'react';
 import { Token } from 'libs/tokens';
+import { useCarbonInit } from 'hooks/useCarbonInit';
 
 export const useGetTradePairsData = () => {
+  const { isInitialized } = useCarbonInit();
   const { Token } = useContract();
   const { tokens, getTokenById, importTokens } = useTokens();
   const [cache] = useState(lsService.getItem('tokenPairsCache'));
@@ -70,7 +72,7 @@ export const useGetTradePairsData = () => {
     },
     initialData: cache?.pairs,
     initialDataUpdatedAt: cache?.timestamp,
-    enabled: !!tokens.length,
+    enabled: !!tokens.length && !!isInitialized,
     retry: 1,
     staleTime: ONE_HOUR_IN_MS,
   });
