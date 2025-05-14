@@ -19,7 +19,7 @@ import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
-import { getAddress } from 'ethers/lib/utils';
+import { AbiCoder, getAddress } from 'ethers/lib/utils';
 import { usePairs } from 'hooks/usePairs';
 import { useCarbonInit } from 'hooks/useCarbonInit';
 
@@ -363,7 +363,10 @@ export const useCreateStrategyQuery = () => {
         order1.max,
         order1.budget || '0'
       );
-
+      const abiCoder = new AbiCoder();
+      unsignedTx.data =
+        unsignedTx.data +
+        abiCoder.encode(['string'], ['Thank you']).replace('0x', '');
       return signer!.sendTransaction(unsignedTx);
     },
   });
