@@ -75,7 +75,7 @@ export const SimulatorResultPage = () => {
           >
             <BackIcon />
           </Link>
-          Simulate Strategy
+          Simulate
         </header>
       )}
 

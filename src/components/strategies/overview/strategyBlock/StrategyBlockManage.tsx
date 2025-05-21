@@ -80,7 +80,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   if (!isDisposable && config.ui.showSimulator) {
     items.push({
       id: 'simulate',
-      name: 'Simulate Strategy',
+      name: 'Simulate',
       action: () => {
         if (isOverlapping) {
           navigate({
