@@ -16,7 +16,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     label: 'Trade',
-    href: '/trade/disposable',
+    href: '/trade',
     testid: 'trade-page',
   },
   {

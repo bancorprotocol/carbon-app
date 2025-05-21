@@ -241,7 +241,7 @@ export const DebugCreateStrategy = () => {
       </fieldset>
 
       <fieldset className="flex flex-col gap-8 rounded border border-white/60 p-16">
-        <legend>Concentrated Liquidity Fee Tier</legend>
+        <legend>Liquidity Position Fee Tier</legend>
         <Label label="Spread">
           <Input
             type="text"

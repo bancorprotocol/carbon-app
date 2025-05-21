@@ -9,7 +9,7 @@ interface Props {
 
 const title = {
   recurring: 'Recurring',
-  overlapping: 'Concentrated Liquidity',
+  overlapping: 'Liquidity Position',
 };
 
 export const SimResultSummaryTokens = ({

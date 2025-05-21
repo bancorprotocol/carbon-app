@@ -19,25 +19,25 @@ export const SimInputStrategyType = () => {
   });
   const items: ItemProps[] = [
     {
+      title: 'Liquidity Position',
+      label: 'overlapping',
+      svg: <IconOverlappingStrategy className="size-14" />,
+      tooltipText:
+        'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
+    },
+    {
       title: 'Recurring',
       label: 'recurring',
       svg: <IconTwoRanges className="size-14" />,
       tooltipText:
         'Create an automated trading cycle of buy low/sell high with two separate orders.',
     },
-    {
-      title: 'Concentrated',
-      label: 'overlapping',
-      svg: <IconOverlappingStrategy className="size-14" />,
-      tooltipText:
-        'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
-    },
   ];
 
   return (
     <section className="p-16" key="simulatorTypeSelection">
       <header className="mb-16 flex items-center justify-between">
-        <h2 className="text-18 font-weight-500 m-0">Trading Strategy</h2>
+        <h2 className="text-18 font-weight-500 m-0">Type</h2>
       </header>
       <article role="tablist" className="grid grid-cols-2 gap-8">
         {items.map(({ title, label, svg, tooltipText }) => {

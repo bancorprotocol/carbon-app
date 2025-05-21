@@ -164,11 +164,11 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
         strategy.
       </p>
       <Link
-        to="/trade/disposable"
+        to="/trade"
         search={{ base, quote }}
         className={buttonStyles({ variant: 'success' })}
       >
-        Create Strategy
+        Create
       </Link>
     </div>
   );

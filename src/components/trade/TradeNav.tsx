@@ -7,6 +7,13 @@ import { Link, TradeSearch, useRouterState } from 'libs/routing';
 
 const links = [
   {
+    label: 'Liquidity Position',
+    svg: <IconOverlapping className="hidden size-14 md:inline" />,
+    to: '/trade/overlapping',
+    text: 'Create a Concentrated or Full Range liquidity position',
+    id: 'overlapping',
+  },
+  {
     label: 'Limit / Range',
     svg: <IconDisposable className="hidden size-14 md:inline" />,
     to: '/trade/disposable',
@@ -21,14 +28,7 @@ const links = [
     id: 'recurring',
   },
   {
-    label: 'Concentrated',
-    svg: <IconOverlapping className="hidden size-14 md:inline" />,
-    to: '/trade/overlapping',
-    text: 'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
-    id: 'overlapping',
-  },
-  {
-    label: 'Spot',
+    label: 'Swap',
     svg: <IconMarket className="hidden size-14 md:inline" />,
     to: '/trade/market',
     text: 'Instantly execute trades by directly trading against available strategies, with prices determined by current liquidity.',
@@ -42,7 +42,7 @@ export const TradeNav = () => {
   return (
     <article className="bg-background-900 grid gap-16 p-16">
       <h2 id="trading-strateg-nav" className="text-16">
-        Trading Strategy
+        Type
       </h2>
       <nav
         aria-labelledby="trading-strateg-nav"

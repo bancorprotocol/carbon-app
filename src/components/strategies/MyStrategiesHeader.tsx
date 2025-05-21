@@ -75,7 +75,7 @@ export const MyStrategiesHeader = () => {
         className={buttonStyles({ variant: 'success' })}
         data-testid="create-strategy-desktop"
       >
-        Create Strategy
+        Create
       </Link>
     </div>
   );
