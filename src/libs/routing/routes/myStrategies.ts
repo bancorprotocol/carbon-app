@@ -12,7 +12,7 @@ import * as v from 'valibot';
 
 export const myStrategyLayout = createRoute({
   getParentRoute: () => rootRoute,
-  id: 'my-strategy-layout',
+  path: '/portfolio',
   component: StrategiesPage,
 });
 

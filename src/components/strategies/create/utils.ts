@@ -34,7 +34,7 @@ export const handleTxStatusAndRedirectToOverview = (
 ) => {
   setIsProcessing(true);
   setTimeout(() => {
-    navigate?.({ to: '/', params: {}, search: {} });
+    navigate?.({ to: '/portfolio', params: {}, search: {} });
     setIsProcessing(false);
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };

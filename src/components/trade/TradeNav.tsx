@@ -10,7 +10,7 @@ const links = [
     label: 'Liquidity Position',
     svg: <IconOverlapping className="hidden size-14 md:inline" />,
     to: '/trade/overlapping',
-    text: 'Create a Concentrated or Full Range liquidity position',
+    text: 'Choose between a Concentrated and a Full-Range liquidity position.',
     id: 'overlapping',
   },
   {

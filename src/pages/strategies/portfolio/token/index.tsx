@@ -5,7 +5,7 @@ import { useParams } from 'libs/routing';
 export const StrategiesPortfolioTokenPage = () => {
   const { strategies, isPending } = useStrategyCtx();
   const { address } = useParams({
-    from: '/my-strategy-layout/strategies/portfolio/token/$address',
+    from: '/portfolio/strategies/portfolio/token/$address',
   });
 
   return (
@@ -13,7 +13,7 @@ export const StrategiesPortfolioTokenPage = () => {
       strategies={strategies}
       isPending={isPending}
       address={address}
-      backLinkHref="/strategies/portfolio"
+      backLinkHref="/portfolio/strategies/portfolio"
     />
   );
 };

@@ -11,7 +11,7 @@ export interface MenuItem {
 export const menuItems: MenuItem[] = [
   {
     label: 'Portfolio',
-    href: '/',
+    href: '/portfolio',
     testid: 'my-strategies-page',
   },
   {

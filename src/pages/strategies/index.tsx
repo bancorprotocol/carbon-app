@@ -23,7 +23,7 @@ export const StrategiesPage = () => {
   const query = useGetUserStrategies({ user });
   const match = useMatchRoute();
 
-  const isStrategiesPage = match({ to: '/', includeSearch: false });
+  const isStrategiesPage = match({ to: '/portfolio', includeSearch: false });
 
   const showFilter = useMemo(() => {
     if (!isStrategiesPage) return false;
@@ -33,18 +33,18 @@ export const StrategiesPage = () => {
   const tabs: StrategyTab[] = [
     {
       label: 'Strategies',
-      href: '/',
+      href: '/portfolio',
       icon: <IconOverview className="size-18" />,
       badge: query.data?.length,
     },
     {
       label: 'Distribution',
-      href: '/strategies/portfolio',
+      href: '/portfolio/strategies/portfolio',
       icon: <IconPieChart className="size-18" />,
     },
     {
       label: 'Activity',
-      href: '/strategies/activity',
+      href: '/portfolio/strategies/activity',
       icon: <IconActivity className="size-18" />,
     },
   ];

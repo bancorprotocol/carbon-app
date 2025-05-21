@@ -7,9 +7,9 @@ export const CreateStrategyCTAMobile = () => {
   const { pathname } = useRouterState().location;
 
   const showCTA = isPathnameMatch(pathname, '/', [
-    '/',
-    '/strategies/portfolio',
-    '/strategies/portfolio/token/$address',
+    '/portfolio',
+    '/portfolio/strategies/portfolio',
+    '/portfolio/strategies/portfolio/token/$address',
   ]);
 
   if (!showCTA) return;

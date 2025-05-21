@@ -111,7 +111,7 @@ export const useCreateStrategy = (props: Props) => {
             cache.invalidateQueries({
               queryKey: QueryKey.balance(user, quote.address),
             });
-            navigate({ to: '/', search: {}, params: {} });
+            navigate({ to: '/portfolio', search: {}, params: {} });
           },
           onError: (e: any) => {
             setIsProcessing(false);

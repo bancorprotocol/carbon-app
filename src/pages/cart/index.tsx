@@ -123,7 +123,7 @@ export const CartPage = () => {
           });
         }
         clearCart(user!);
-        nav({ to: '/' });
+        nav({ to: '/portfolio' });
       } finally {
         setConfirmation(false);
         setProcessing(false);

@@ -9,7 +9,7 @@ export type StrategyLayout = 'grid' | 'table';
 
 const urls = {
   explorer: '/explore/$slug/' as const,
-  myStrategy: '/my-strategy-layout/' as const,
+  myStrategy: '/portfolio/' as const,
 };
 interface Props {
   from: keyof typeof urls;

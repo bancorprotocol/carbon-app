@@ -52,7 +52,7 @@ const getQueryParams = (
 };
 
 type ActivityUrls =
-  | '/strategies/activity'
+  | '/portfolio/strategies/activity'
   | '/explore/$slug/activity'
   | '/strategy/$id';
 interface Props {

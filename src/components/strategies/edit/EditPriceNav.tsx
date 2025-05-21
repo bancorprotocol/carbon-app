@@ -12,7 +12,7 @@ const links = [
   {
     label: 'Liq. Position',
     to: '/strategies/edit/$strategyId/prices/overlapping',
-    text: 'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
+    text: 'Choose between a Concentrated and a Full-Range liquidity position.',
     id: 'overlapping',
   },
   {
