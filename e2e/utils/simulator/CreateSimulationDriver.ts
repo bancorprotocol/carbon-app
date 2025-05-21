@@ -156,8 +156,8 @@ export class CreateSimulationDriver {
     assertRecurringTestCase(this.testCase);
     const { buy, sell } = this.testCase.input;
     const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
-    const buyForm = await this.fillFormSection('buy', buySetting, buy);
     const sellForm = await this.fillFormSection('sell', sellSetting, sell);
+    const buyForm = await this.fillFormSection('buy', buySetting, buy);
     return { buyForm, sellForm };
   }
 
