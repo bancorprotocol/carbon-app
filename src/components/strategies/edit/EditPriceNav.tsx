@@ -10,7 +10,7 @@ import {
 
 const links = [
   {
-    label: 'Liquidity Position',
+    label: 'Liq. Position',
     to: '/strategies/edit/$strategyId/prices/overlapping',
     text: 'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
     id: 'overlapping',

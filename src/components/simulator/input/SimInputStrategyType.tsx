@@ -22,8 +22,7 @@ export const SimInputStrategyType = () => {
       title: 'Liquidity Position',
       label: 'overlapping',
       svg: <IconOverlappingStrategy className="size-14" />,
-      tooltipText:
-        'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
+      tooltipText: 'Create a Concentrated or Full Range liquidity position.',
     },
     {
       title: 'Recurring',
