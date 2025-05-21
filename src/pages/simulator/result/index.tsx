@@ -55,7 +55,7 @@ export const SimulatorResultPage = () => {
           >
             <BackIcon />
           </Link>
-          <h1 className="text-24">Simulate Strategy</h1>
+          <h1 className="text-24">Simulate</h1>
         </header>
       )}
       {simulationType === 'overlapping' && (
