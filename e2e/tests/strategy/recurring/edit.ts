@@ -23,7 +23,7 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
     await edit.waitForPage('recurring', 'editPrices');
     await edit.fillRecurringPrice('editPrices');
     await edit.submit('editPrices');
-    await page.waitForURL('/', { timeout: 10_000 });
+    await page.waitForURL('/portfolio', { timeout: 10_000 });
     await waitForTenderlyRpc(page);
 
     const myStrategies = new MyStrategyDriver(page);

@@ -19,7 +19,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
   return test(`Create`, async ({ page }) => {
     await waitFor(page, `balance-${quote}`, 30_000);
 
-    await navigateTo(page, '/');
+    await navigateTo(page, '/portfolio');
     const myStrategies = new MyStrategyDriver(page);
     const createForm = new CreateStrategyDriver(page, testCase);
     await myStrategies.createStrategy();
@@ -42,7 +42,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
       await tokenApproval.checkApproval([base]);
     }
 
-    await page.waitForURL('/', { timeout: 10_000 });
+    await page.waitForURL('/portfolio', { timeout: 10_000 });
     await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
     // Verify strategy data

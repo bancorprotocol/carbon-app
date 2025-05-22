@@ -16,7 +16,7 @@ export class ManageStrategyDriver {
   ) {
     const debug = new DebugDriver(this.page);
     await debug.createStrategy(testCase, deps);
-    await navigateTo(this.page, '/');
+    await navigateTo(this.page, '/portfolio');
     const myStrategies = new MyStrategyDriver(this.page);
     return myStrategies.getStrategy(1);
   }
