@@ -46,6 +46,15 @@ import {
   strategyPageRoot,
 } from 'libs/routing/routes/strategy';
 import { cartPage } from './cart';
+import { createRoute, redirect } from '@tanstack/react-router';
+
+const rootRedict = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  beforeLoad: () => {
+    redirect({ to: '/trade', throw: true });
+  },
+});
 
 export const routeTree = rootRoute.addChildren([
   termPage,
@@ -93,4 +102,5 @@ export const routeTree = rootRoute.addChildren([
     ]),
     simulatorResultRoute,
   ]),
+  rootRedict,
 ]);

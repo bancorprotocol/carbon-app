@@ -6,7 +6,7 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const StrategiesOverviewPage = () => {
   const { strategies, filteredStrategies, isPending } = useStrategyCtx();
-  const search = useSearch({ from: '/my-strategy-layout/' });
+  const search = useSearch({ from: '/portfolio/' });
   const isFilterTooNarrow =
     strategies.length > 0 && filteredStrategies.length === 0;
 

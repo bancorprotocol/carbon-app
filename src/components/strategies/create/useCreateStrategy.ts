@@ -111,7 +111,7 @@ export const useCreateStrategy = (props: Props) => {
             cache.invalidateQueries({
               queryKey: QueryKey.balance(user, quote.address),
             });
-            navigate({ to: '/', search: {}, params: {} });
+            navigate({ to: '/portfolio', search: {}, params: {} });
           },
           onError: (e: any) => {
             setIsProcessing(false);
@@ -143,7 +143,7 @@ export const useCreateStrategy = (props: Props) => {
       return openModal('txConfirm', {
         approvalTokens,
         onConfirm,
-        buttonLabel: 'Create Strategy',
+        buttonLabel: 'Create',
       });
     }
     return onConfirm();

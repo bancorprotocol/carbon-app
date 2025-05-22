@@ -29,7 +29,7 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
     await edit.fillDisposableBudget('withdraw');
     await edit.submit('withdraw');
 
-    await page.waitForURL('/', { timeout: 20_000 });
+    await page.waitForURL('/portfolio', { timeout: 20_000 });
     const myStrategies = new MyStrategyDriver(page);
     await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);

@@ -20,7 +20,7 @@ export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
     await edit.fillRecurringPrice('renew');
     await edit.submit('renew');
 
-    await page.waitForURL('/', { timeout: 10_000 });
+    await page.waitForURL('/portfolio', { timeout: 10_000 });
     const myStrategies = new MyStrategyDriver(page);
     await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);

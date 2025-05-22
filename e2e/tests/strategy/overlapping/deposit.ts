@@ -28,7 +28,7 @@ export const deposit = (testCase: CreateStrategyTestCase) => {
     await edit.submit('deposit');
 
     await tokenApproval.checkApproval([base, quote]);
-    await page.waitForURL('/', { timeout: 10_000 });
+    await page.waitForURL('/portfolio', { timeout: 10_000 });
     await page.mouse.move(0, 0); // Prevent mouse to open tooltip
 
     // Verify strategy data

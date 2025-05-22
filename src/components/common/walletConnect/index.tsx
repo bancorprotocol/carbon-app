@@ -17,10 +17,10 @@ export const WalletConnect = () => {
         </p>
 
         <Link
-          to="/trade/disposable"
+          to="/trade"
           className={buttonStyles({ variant: 'success', size: 'lg' })}
         >
-          Create Strategy
+          Create
         </Link>
       </article>
       <hr className="border-background-800 border-t md:h-[300px] md:border-r" />

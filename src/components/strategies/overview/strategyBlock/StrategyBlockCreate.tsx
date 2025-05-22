@@ -9,12 +9,12 @@ type Props = {
   className?: string;
 };
 export const StrategyBlockCreate: FC<Props> = ({
-  title = 'Create Strategy',
+  title = 'Create',
   className = '',
 }) => {
   return (
     <Link
-      to="/trade/disposable"
+      to="/trade"
       className={cn(
         'bg-content rounded-10 py-50 text-24 font-weight-500 group flex flex-col items-center justify-center gap-24 md:text-[32px]',
         className

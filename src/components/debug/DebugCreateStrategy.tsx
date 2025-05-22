@@ -197,7 +197,7 @@ export const DebugCreateStrategy = () => {
       onSubmit={createStrategies}
       className="rounded-18 bg-background-900 flex flex-col space-y-20 p-20"
     >
-      <h2 className="text-center">Create Strategy</h2>
+      <h2 className="text-center">Create</h2>
 
       <div className="flex flex-col gap-8">
         <label htmlFor="strategy-json-shortcut">JSON Shortcut</label>
@@ -241,7 +241,7 @@ export const DebugCreateStrategy = () => {
       </fieldset>
 
       <fieldset className="flex flex-col gap-8 rounded border border-white/60 p-16">
-        <legend>Concentrated Liquidity Fee Tier</legend>
+        <legend>Liquidity Position Fee Tier</legend>
         <Label label="Spread">
           <Input
             type="text"

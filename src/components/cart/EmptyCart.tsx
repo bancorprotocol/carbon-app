@@ -14,11 +14,8 @@ export const EmptyCart = () => {
       <h2 className="max-w-[440px] text-[32px] leading-[36px]">
         Your Cart is Empty
       </h2>
-      <Link
-        to="/trade/disposable"
-        className={buttonStyles({ variant: 'success' })}
-      >
-        Create Strategy
+      <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
+        Create
       </Link>
     </section>
   );

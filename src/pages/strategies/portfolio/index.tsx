@@ -8,7 +8,7 @@ import { useNavigate } from 'libs/routing';
 export const StrategiesPortfolioPage = () => {
   const { strategies, isPending } = useStrategyCtx();
   const navigate = useNavigate();
-  const href = '/strategies/portfolio/token/$address';
+  const href = '/portfolio/strategies/portfolio/token/$address';
 
   const getPortfolioTokenHref: GetPortfolioTokenHref = (row) => ({
     href,

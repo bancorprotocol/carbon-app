@@ -70,7 +70,7 @@ const tradePage = createRoute({
   component: TradeRoot,
   beforeLoad: ({ location, search }) => {
     if (location.pathname.endsWith('trade')) {
-      throw redirect({ to: '/trade/disposable', search });
+      throw redirect({ to: '/trade/overlapping', search });
     }
   },
   validateSearch: searchValidator({

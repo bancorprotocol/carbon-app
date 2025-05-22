@@ -28,7 +28,7 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
     await edit.submit('withdraw');
 
     await tokenApproval.checkApproval([base, quote]);
-    await page.waitForURL('/', { timeout: 10_000 });
+    await page.waitForURL('/portfolio', { timeout: 10_000 });
     await page.mouse.move(0, 0); // Prevent mouse to open tooltip
 
     // Verify strategy data

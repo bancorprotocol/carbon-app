@@ -6,7 +6,7 @@ export const StrategiesActivityPage = () => {
   const { user } = useWagmi();
   const params = { ownerId: user };
   return (
-    <ActivityProvider params={params} url="/strategies/activity">
+    <ActivityProvider params={params} url="/portfolio/strategies/activity">
       <ActivityLayout filters={['ids', 'pairs']} />
     </ActivityProvider>
   );

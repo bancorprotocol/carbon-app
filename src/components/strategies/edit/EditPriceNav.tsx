@@ -10,6 +10,12 @@ import {
 
 const links = [
   {
+    label: 'Liq. Position',
+    to: '/strategies/edit/$strategyId/prices/overlapping',
+    text: 'Choose between a Concentrated and a Full-Range liquidity position.',
+    id: 'overlapping',
+  },
+  {
     label: 'Limit / Range',
     to: '/strategies/edit/$strategyId/prices/disposable',
     text: 'Buy or sell at a specific price, or gradually scale in or out of a position.',
@@ -20,12 +26,6 @@ const links = [
     to: '/strategies/edit/$strategyId/prices/recurring',
     text: 'Create an automated trading cycle of buy low/sell high with two separate orders.',
     id: 'recurring',
-  },
-  {
-    label: 'Concentrated',
-    to: '/strategies/edit/$strategyId/prices/overlapping',
-    text: 'Buy and sell within custom parameters with custom fee tier and auto-compounding fees.',
-    id: 'overlapping',
   },
 ] as const;
 
@@ -44,7 +44,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
   return (
     <article className="bg-background-900 grid gap-16 p-16">
       <h2 id="edit-strategy-nav" className="text-16">
-        Trading Strategy
+        Type
       </h2>
       <nav
         aria-labelledby="edit-strategy-nav"

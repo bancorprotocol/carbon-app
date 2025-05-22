@@ -103,11 +103,8 @@ export const ExplorerHeader = () => {
         </h2>
         <Trades trades={trending?.totalTradeCount} />
         <div className="flex gap-16">
-          <Link
-            to="/trade/disposable"
-            className={buttonStyles({ variant: 'success' })}
-          >
-            Create Strategy
+          <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
+            Create
           </Link>
           <Link
             to="/trade/market"

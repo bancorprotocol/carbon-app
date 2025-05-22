@@ -40,7 +40,7 @@ export const simulatorInputRootRoute = createRoute({
       location.pathname === '/simulate/'
     ) {
       redirect({
-        to: '/simulate/recurring',
+        to: '/simulate/overlapping',
         throw: true,
         replace: true,
       });

@@ -25,7 +25,7 @@ export const deposit = (testCase: CreateStrategyTestCase) => {
     await edit.fillDisposableBudget('deposit');
     await edit.submit('deposit');
 
-    await page.waitForURL('/', { timeout: 20_000 });
+    await page.waitForURL('/portfolio', { timeout: 20_000 });
     const myStrategies = new MyStrategyDriver(page);
     await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
