@@ -6,6 +6,7 @@ import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { EditOrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
+  getStrategyType,
   isEmptyOrder,
   isLimitOrder,
   isZero,
@@ -140,8 +141,10 @@ export const EditPricesStrategyDisposablePage = () => {
     [setSearch, isBuy]
   );
 
+  const initialType = getStrategyType(strategy);
   const initialDirection = isEmptyOrder(order0) ? 'sell' : 'buy';
-  const resetBudget = initialDirection !== direction;
+  const resetBudget =
+    initialType !== 'disposable' || initialDirection !== direction;
   const initialOrder = isBuy ? order0 : order1;
 
   const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
