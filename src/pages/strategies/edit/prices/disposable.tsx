@@ -6,7 +6,6 @@ import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { EditOrderBlock } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
-  emptyOrder,
   isEmptyOrder,
   isLimitOrder,
   isZero,
@@ -15,14 +14,14 @@ import {
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
-import { getTotalBudget, getWithdraw } from 'components/strategies/edit/utils';
+import { getTotalBudget } from 'components/strategies/edit/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
-import { Strategy } from 'libs/queries';
+import { Order, Strategy } from 'libs/queries';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
@@ -92,6 +91,12 @@ const getOrder = (
   };
 };
 
+const resetOrder = (order: Order, resetBudget: boolean) => ({
+  min: '0',
+  max: '0',
+  budget: resetBudget ? '0' : order.balance,
+});
+
 const url = '/strategies/edit/$strategyId/prices/disposable';
 export const EditPricesStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
@@ -101,6 +106,7 @@ export const EditPricesStrategyDisposablePage = () => {
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
+  const direction = search.direction ?? 'sell';
   const isBuy = search.direction !== 'sell';
   const { setOrder } = useSetDisposableOrder(url);
 
@@ -134,12 +140,14 @@ export const EditPricesStrategyDisposablePage = () => {
     [setSearch, isBuy]
   );
 
+  const initialDirection = isEmptyOrder(order0) ? 'sell' : 'buy';
+  const resetBudget = initialDirection !== direction;
   const initialOrder = isBuy ? order0 : order1;
 
   const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
   const orders = {
-    buy: isBuy ? order : emptyOrder(),
-    sell: isBuy ? emptyOrder() : order,
+    buy: isBuy ? order : resetOrder(order0, resetBudget),
+    sell: isBuy ? resetOrder(order1, resetBudget) : order,
   };
   const isLimit = {
     buy: order.settings !== 'range',
@@ -165,10 +173,8 @@ export const EditPricesStrategyDisposablePage = () => {
   });
 
   // Check if inactive budget changed
-  const buyBudgetChanges = !isBuy && orders.buy.budget !== order0.balance;
-  const buyWithdraw = getWithdraw(order0.balance, orders.buy.budget);
-  const sellBudgetChanges = isBuy && orders.sell.budget !== order1.balance;
-  const sellWithdraw = getWithdraw(order1.balance, orders.sell.budget);
+  const buyBudgetChanges = resetBudget && !isBuy && !isZero(order0.balance);
+  const sellBudgetChanges = resetBudget && isBuy && !isZero(order1.balance);
 
   return (
     <EditStrategyLayout editType={search.editType}>
@@ -220,15 +226,15 @@ export const EditPricesStrategyDisposablePage = () => {
               {buyBudgetChanges && (
                 <p className="text-14 text-white/80">
                   You will withdraw&nbsp;
-                  {tokenAmount(buyWithdraw, quote)} from the inactive buy order
-                  to your wallet.
+                  {tokenAmount(order0.balance, quote)} from the inactive buy
+                  order to your wallet.
                 </p>
               )}
               {sellBudgetChanges && (
                 <p className="text-14 text-white/80">
                   You will withdraw&nbsp;
-                  {tokenAmount(sellWithdraw, base)} from the inactive sell order
-                  to your wallet.
+                  {tokenAmount(order1.balance, base)} from the inactive sell
+                  order to your wallet.
                 </p>
               )}
             </div>
