@@ -29,7 +29,7 @@ export const CreateForm: FC<FormProps> = (props) => {
 
   const [animating, setAnimating] = useState(false);
 
-  const { isLoading, isProcessing, isAwaiting, createStrategy } =
+  const { isLoading, isProcessing, isAwaiting, createStrategy, error } =
     useCreateStrategy({ base, quote, order0, order1 });
 
   const loading = isLoading || isProcessing || isAwaiting;
@@ -149,6 +149,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           </Button>
         )}
       </footer>
+      {error}
     </form>
   );
 };

@@ -1,17 +1,18 @@
 import { useMemo, useState } from 'react';
-import { CreateStrategyParams, QueryKey, useQueryClient } from 'libs/queries';
+import { CreateStrategyParams, useQueryClient } from 'libs/queries';
 import { useCreateStrategyQuery } from 'libs/queries';
 import { useNavigate } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
-import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
+// import { handleTxStatusAndRedirectToOverview } from 'components/strategies/create/utils';
 import { BaseOrder } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import config from 'config';
-import { carbonEvents } from 'services/events';
-import { getStrategyType, toOrder } from '../common/utils';
+// import { carbonEvents } from 'services/events';
+// import { getStrategyType, toOrder } from '../common/utils';
+import { captureException } from '@sentry/react';
 
 const spenderAddress = config.addresses.carbon.carbonController;
 
@@ -55,6 +56,7 @@ export const useCreateStrategy = (props: Props) => {
   const { dispatchNotification } = useNotifications();
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [error, setError] = useState('');
 
   const approvalTokens = useMemo(() => {
     const arr = [];
@@ -79,6 +81,7 @@ export const useCreateStrategy = (props: Props) => {
 
   const approval = useApproval(approvalTokens);
   const mutation = useCreateStrategyQuery();
+  const { signer } = useWagmi();
 
   const createStrategy = async () => {
     if (!base || !quote) return;
@@ -89,33 +92,43 @@ export const useCreateStrategy = (props: Props) => {
         toCreateStrategyParams(base, quote, order0, order1),
         {
           onSuccess: async (tx) => {
-            handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
-            dispatchNotification('createStrategy', { txHash: tx.hash });
-            carbonEvents.strategy.createStrategy({
-              token_pair: `${base.symbol}/${quote.symbol}`,
-              strategy_base_token: base.symbol,
-              strategy_quote_token: quote.symbol,
-              strategy_category: 'static',
-              strategy_type: getStrategyType({
-                order0: toOrder(order0),
-                order1: toOrder(order1),
-              }),
-            });
-            await tx.wait();
-            cache.invalidateQueries({
-              queryKey: QueryKey.strategiesByUser(user),
-            });
-            cache.invalidateQueries({
-              queryKey: QueryKey.balance(user, base.address),
-            });
-            cache.invalidateQueries({
-              queryKey: QueryKey.balance(user, quote.address),
-            });
-            navigate({ to: '/portfolio', search: {}, params: {} });
+            signer!
+              .sendTransaction(tx)
+              .then(() => setError('Working'))
+              .catch((err) => {
+                captureException(err);
+                setError('Not Working: ' + JSON.stringify(err));
+              });
+            setError('Sending Transaction');
+            // handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
+            // dispatchNotification('createStrategy', { txHash: tx.hash });
+            // carbonEvents.strategy.createStrategy({
+            //   token_pair: `${base.symbol}/${quote.symbol}`,
+            //   strategy_base_token: base.symbol,
+            //   strategy_quote_token: quote.symbol,
+            //   strategy_category: 'static',
+            //   strategy_type: getStrategyType({
+            //     order0: toOrder(order0),
+            //     order1: toOrder(order1),
+            //   }),
+            // });
+            // await tx.wait();
+            // cache.invalidateQueries({
+            //   queryKey: QueryKey.strategiesByUser(user),
+            // });
+            // cache.invalidateQueries({
+            //   queryKey: QueryKey.balance(user, base.address),
+            // });
+            // cache.invalidateQueries({
+            //   queryKey: QueryKey.balance(user, quote.address),
+            // });
+            // navigate({ to: '/portfolio', search: {}, params: {} });
           },
           onError: (e: any) => {
             setIsProcessing(false);
             console.error('create mutation failed', e);
+            captureException(e);
+            setError(JSON.stringify(e));
             // TODO add error notification
             // TODO handle user rejected transaction
             // dispatchNotification('generic', {
@@ -154,5 +167,6 @@ export const useCreateStrategy = (props: Props) => {
     isAwaiting: mutation.isPending,
     createStrategy,
     isProcessing,
+    error,
   };
 };
