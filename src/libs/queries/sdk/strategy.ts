@@ -22,6 +22,7 @@ import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 import { getAddress } from 'ethers/lib/utils';
 import { usePairs } from 'hooks/usePairs';
 import { useCarbonInit } from 'hooks/useCarbonInit';
+import { captureException } from '@sentry/react';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
@@ -363,6 +364,8 @@ export const useCreateStrategyQuery = () => {
         order1.max,
         order1.budget || '0'
       );
+      const populated = await signer!.populateTransaction(unsignedTx);
+      captureException(new Error(JSON.stringify(populated)));
       return signer!.sendTransaction(unsignedTx);
     },
   });
