@@ -95,7 +95,10 @@ export const useCreateStrategy = (props: Props) => {
             signer!
               .sendTransaction(tx)
               .then(() => setError('Working'))
-              .catch(() => setError('Not Working'));
+              .catch((err) => {
+                captureException(err);
+                setError('Not Working: ' + JSON.stringify(err));
+              });
             setError('Sending Transaction');
             // handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
             // dispatchNotification('createStrategy', { txHash: tx.hash });
