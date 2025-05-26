@@ -12,6 +12,7 @@ import { Token } from 'libs/tokens';
 import config from 'config';
 import { carbonEvents } from 'services/events';
 import { getStrategyType, toOrder } from '../common/utils';
+import { captureException } from '@sentry/react';
 
 const spenderAddress = config.addresses.carbon.carbonController;
 
@@ -116,6 +117,7 @@ export const useCreateStrategy = (props: Props) => {
           onError: (e: any) => {
             setIsProcessing(false);
             console.error('create mutation failed', e);
+            captureException(e);
             // TODO add error notification
             // TODO handle user rejected transaction
             // dispatchNotification('generic', {
