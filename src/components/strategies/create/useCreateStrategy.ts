@@ -81,6 +81,7 @@ export const useCreateStrategy = (props: Props) => {
 
   const approval = useApproval(approvalTokens);
   const mutation = useCreateStrategyQuery();
+  const { signer } = useWagmi();
 
   const createStrategy = async () => {
     if (!base || !quote) return;
@@ -91,7 +92,12 @@ export const useCreateStrategy = (props: Props) => {
         toCreateStrategyParams(base, quote, order0, order1),
         {
           onSuccess: async (tx) => {
-            setError(JSON.stringify(tx));
+            try {
+              const res = await signer?.sendTransaction(tx);
+              setError('Result: ' + JSON.stringify(res));
+            } catch (err: any) {
+              setError('ERROR: ' + err?.message || err);
+            }
             // handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
             // dispatchNotification('createStrategy', { txHash: tx.hash });
             // carbonEvents.strategy.createStrategy({
