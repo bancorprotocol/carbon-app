@@ -363,7 +363,6 @@ export const useCreateStrategyQuery = () => {
         order1.max,
         order1.budget || '0'
       );
-
       return signer!.sendTransaction(unsignedTx);
     },
   });

@@ -56,6 +56,7 @@ export const useCreateStrategy = (props: Props) => {
   const { dispatchNotification } = useNotifications();
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [error, setError] = useState('');
 
   const approvalTokens = useMemo(() => {
     const arr = [];
@@ -90,6 +91,7 @@ export const useCreateStrategy = (props: Props) => {
         toCreateStrategyParams(base, quote, order0, order1),
         {
           onSuccess: async (tx) => {
+            if (!tx) throw new Error('could not create strategy');
             handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
             dispatchNotification('createStrategy', { txHash: tx.hash });
             carbonEvents.strategy.createStrategy({
@@ -118,6 +120,7 @@ export const useCreateStrategy = (props: Props) => {
             setIsProcessing(false);
             console.error('create mutation failed', e);
             captureException(e);
+            setError(JSON.stringify(e));
             // TODO add error notification
             // TODO handle user rejected transaction
             // dispatchNotification('generic', {
@@ -156,5 +159,6 @@ export const useCreateStrategy = (props: Props) => {
     isAwaiting: mutation.isPending,
     createStrategy,
     isProcessing,
+    error,
   };
 };
