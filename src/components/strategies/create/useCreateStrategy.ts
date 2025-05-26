@@ -92,12 +92,11 @@ export const useCreateStrategy = (props: Props) => {
         toCreateStrategyParams(base, quote, order0, order1),
         {
           onSuccess: async (tx) => {
-            try {
-              const res = await signer?.sendTransaction(tx);
-              setError('Result: ' + JSON.stringify(res));
-            } catch (err: any) {
-              setError('ERROR: ' + err?.message || err);
-            }
+            signer!
+              .sendTransaction(tx)
+              .then(() => setError('Working'))
+              .catch(() => setError('Not Working'));
+            setError('Sending Transaction');
             // handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
             // dispatchNotification('createStrategy', { txHash: tx.hash });
             // carbonEvents.strategy.createStrategy({
