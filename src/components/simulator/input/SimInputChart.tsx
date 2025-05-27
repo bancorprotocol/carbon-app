@@ -44,7 +44,7 @@ export const SimInputChart = ({
   data,
   simulationType,
 }: Props) => {
-  const { marketPrice } = useMarketPrice({
+  const { marketPrice, isPending: marketIsPending } = useMarketPrice({
     base: state.baseToken,
     quote: state.quoteToken,
   });
@@ -91,20 +91,20 @@ export const SimInputChart = ({
     [dispatch]
   );
 
-  if (isError || emptyHistory) {
+  if (isPending || marketIsPending) {
+    return (
+      <Layout>
+        <CarbonLogoLoading className="h-[80px] self-center justify-self-center" />
+      </Layout>
+    );
+  }
+  if (isError || emptyHistory || !data) {
     return (
       <Layout>
         <ErrorMsg
           base={state.baseToken?.address}
           quote={state.quoteToken?.address}
         />
-      </Layout>
-    );
-  }
-  if (isPending || !data) {
-    return (
-      <Layout>
-        <CarbonLogoLoading className="h-[80px] self-center justify-self-center" />
       </Layout>
     );
   }
@@ -154,7 +154,7 @@ const Layout = ({ children }: { children: ReactNode }) => (
 const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
   return (
     <div className="grid max-w-[340px] gap-20 place-self-center">
-      <div className="size-75 text-primary bg-primary/25 flex grid place-items-center justify-self-center rounded-full">
+      <div className="size-75 text-primary bg-primary/25 grid place-items-center justify-self-center rounded-full">
         <IconQuestion className="size-48" />
       </div>
       <h2 className="text-center">Well, this doesn't happen often...</h2>

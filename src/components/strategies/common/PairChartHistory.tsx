@@ -32,7 +32,10 @@ const prices = {
 export const PairChartHistory: FC<Props> = (props) => {
   const { base, quote, activities } = props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
-  const { marketPrice } = useMarketPrice({ base, quote });
+  const { marketPrice, isPending: marketIsPending } = useMarketPrice({
+    base,
+    quote,
+  });
   const nav = useNavigate();
 
   const updatePriceRange = useCallback(
@@ -64,7 +67,7 @@ export const PairChartHistory: FC<Props> = (props) => {
     return <TradingviewChart base={base} quote={quote} />;
   }
 
-  if (isPending) {
+  if (isPending || marketIsPending) {
     return (
       <section className="rounded-12 grid flex-1 items-center bg-black">
         <CarbonLogoLoading className="h-[80px]" />
