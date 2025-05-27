@@ -119,7 +119,7 @@ test.describe('Trade', () => {
       };
 
       // Test Trade
-      await navigateTo(page, '/trade?*');
+      await navigateTo(page, '/trade/*?*');
       await page.getByTestId('market').click();
       const driver = new TradeDriver(page, testCase);
       const tokenApproval = new TokenApprovalDriver(page);
