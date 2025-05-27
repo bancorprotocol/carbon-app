@@ -31,7 +31,7 @@ const urlNames = {
   '/portfolio': 'Portfolio',
   '/trade/*?*': 'Trade',
   '/explore': 'Explore',
-  '/simulate?*': 'Simulate',
+  '/simulate/*?*': 'Simulate',
   '/debug': 'Debug',
 };
 
