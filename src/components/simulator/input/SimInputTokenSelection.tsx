@@ -4,19 +4,15 @@ import { FC } from 'react';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useModal } from 'hooks/useModal';
-import { Warning } from 'components/common/WarningMessageWithIcon';
-import { cn } from 'utils/helpers';
 
 interface Props {
   baseToken?: string;
   quoteToken?: string;
-  noPriceHistory: boolean;
 }
 
 export const SimInputTokenSelection: FC<Props> = ({
   baseToken,
   quoteToken,
-  noPriceHistory,
 }) => {
   const navigate = useNavigate({ from: '/simulate' });
   const { openModal } = useModal();
@@ -39,10 +35,7 @@ export const SimInputTokenSelection: FC<Props> = ({
               Buy or Sell
             </span>
           }
-          className={cn(
-            'h-[50px] flex-1 pl-10 pr-20',
-            noPriceHistory && 'border-warning border-2'
-          )}
+          className="h-[50px] flex-1 pl-10 pr-20"
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
@@ -82,10 +75,7 @@ export const SimInputTokenSelection: FC<Props> = ({
               With
             </span>
           }
-          className={cn(
-            'h-[50px] flex-1 pl-16 pr-16',
-            noPriceHistory && 'border-warning border-2'
-          )}
+          className="h-[50px] flex-1 pl-16 pr-16"
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
@@ -100,11 +90,6 @@ export const SimInputTokenSelection: FC<Props> = ({
           }}
         />
       </article>
-      {noPriceHistory && (
-        <Warning className="font-weight-500">
-          The pair lacks price data and cannot be simulated
-        </Warning>
-      )}
     </section>
   );
 };

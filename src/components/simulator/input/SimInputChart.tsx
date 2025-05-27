@@ -11,14 +11,13 @@ import {
   OnPriceUpdates,
 } from 'components/strategies/common/d3Chart';
 import { SimulatorType } from 'libs/routing/routes/sim';
-import { ReactNode, useCallback, useMemo } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { ReactComponent as IconQuestion } from 'assets/icons/question.svg';
 import { CandlestickData } from 'libs/d3';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
 import { isFullRange } from 'components/strategies/common/utils';
-import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
 import { NotFound } from 'components/common/NotFound';
 
 interface Props {
@@ -60,8 +59,6 @@ export const SimInputChart = ({
     },
   };
 
-  const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
-
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
       dispatch('buyMin', formatNumber(buy.min));
@@ -98,7 +95,7 @@ export const SimInputChart = ({
       </Layout>
     );
   }
-  if (isError || emptyHistory || !data) {
+  if (isError || !data) {
     return (
       <Layout>
         <ErrorMsg
