@@ -25,6 +25,9 @@ export const depositStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     await edit.submit('deposit');
     await page.waitForURL('/portfolio', { timeout: 20_000 });
+    if (!page.url().endsWith('/portfolio')) {
+      throw new Error('Page should be /portfolio, got ' + page.url());
+    }
     await waitForTenderlyRpc(page);
 
     const myStrategies = new MyStrategyDriver(page);

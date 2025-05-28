@@ -27,6 +27,9 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
 
     const myStrategies = new MyStrategyDriver(page);
     await page.waitForURL('/portfolio', { timeout: 10_000 });
+    if (!page.url().endsWith('/portfolio')) {
+      throw new Error('Page should be /portfolio, got ' + page.url());
+    }
     await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
 
