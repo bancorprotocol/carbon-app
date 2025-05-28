@@ -12,6 +12,15 @@ import { waitModalClose, waitModalOpen } from '../modal';
 import { screenshot, waitFor } from '../operators';
 import { dayjs } from '../../../src/libs/dayjs';
 
+const displayRange = (start?: Date, end?: Date) => {
+  const dateFormatter = new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  });
+  return `${dateFormatter.format(start)} - ${dateFormatter.format(end)}`;
+};
+
 export class CreateSimulationDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
@@ -98,6 +107,9 @@ export class CreateSimulationDriver {
     await this.selectDate(to);
     await this.selectDate(from);
     await this.page.getByTestId('date-picker-confirm').click();
+    const dates = this.page.getByTestId('simulation-dates');
+    const expectedDates = displayRange(new Date(start), new Date(end));
+    await expect(dates).toHaveText(expectedDates);
   }
 
   clearSimulatorDisclaimer() {
