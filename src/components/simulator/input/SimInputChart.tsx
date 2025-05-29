@@ -11,14 +11,13 @@ import {
   OnPriceUpdates,
 } from 'components/strategies/common/d3Chart';
 import { SimulatorType } from 'libs/routing/routes/sim';
-import { ReactNode, useCallback, useMemo } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { ReactComponent as IconQuestion } from 'assets/icons/question.svg';
 import { CandlestickData } from 'libs/d3';
 import { formatNumber } from 'utils/helpers';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
 import { isFullRange } from 'components/strategies/common/utils';
-import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
 import { NotFound } from 'components/common/NotFound';
 
 interface Props {
@@ -44,7 +43,7 @@ export const SimInputChart = ({
   data,
   simulationType,
 }: Props) => {
-  const { marketPrice } = useMarketPrice({
+  const { marketPrice, isPending: marketIsPending } = useMarketPrice({
     base: state.baseToken,
     quote: state.quoteToken,
   });
@@ -59,8 +58,6 @@ export const SimInputChart = ({
       max: state.sell.max,
     },
   };
-
-  const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
@@ -91,20 +88,20 @@ export const SimInputChart = ({
     [dispatch]
   );
 
-  if (isError || emptyHistory) {
+  if (isPending || marketIsPending) {
+    return (
+      <Layout>
+        <CarbonLogoLoading className="h-[80px] self-center justify-self-center" />
+      </Layout>
+    );
+  }
+  if (isError || !data) {
     return (
       <Layout>
         <ErrorMsg
           base={state.baseToken?.address}
           quote={state.quoteToken?.address}
         />
-      </Layout>
-    );
-  }
-  if (isPending || !data) {
-    return (
-      <Layout>
-        <CarbonLogoLoading className="h-[80px] self-center justify-self-center" />
       </Layout>
     );
   }
@@ -154,7 +151,7 @@ const Layout = ({ children }: { children: ReactNode }) => (
 const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
   return (
     <div className="grid max-w-[340px] gap-20 place-self-center">
-      <div className="size-75 text-primary bg-primary/25 flex grid place-items-center justify-self-center rounded-full">
+      <div className="size-75 text-primary bg-primary/25 grid place-items-center justify-self-center rounded-full">
         <IconQuestion className="size-48" />
       </div>
       <h2 className="text-center">Well, this doesn't happen often...</h2>

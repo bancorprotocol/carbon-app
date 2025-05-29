@@ -41,7 +41,8 @@ export const SimInputTokenSelection: FC<Props> = ({
           }
           className={cn(
             'h-[50px] flex-1 pl-10 pr-20',
-            noPriceHistory && 'border-warning border-2'
+            noPriceHistory &&
+              'outline-warning outline outline-2 md:outline-none'
           )}
           onClick={() => {
             openModal('tokenLists', {
@@ -84,7 +85,8 @@ export const SimInputTokenSelection: FC<Props> = ({
           }
           className={cn(
             'h-[50px] flex-1 pl-16 pr-16',
-            noPriceHistory && 'border-warning border-2'
+            noPriceHistory &&
+              'outline-warning outline outline-2 md:outline-none'
           )}
           onClick={() => {
             openModal('tokenLists', {
@@ -101,7 +103,7 @@ export const SimInputTokenSelection: FC<Props> = ({
         />
       </article>
       {noPriceHistory && (
-        <Warning className="font-weight-500">
+        <Warning className="font-weight-500 md:hidden">
           The pair lacks price data and cannot be simulated
         </Warning>
       )}

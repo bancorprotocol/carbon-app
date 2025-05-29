@@ -69,9 +69,14 @@ export const mockApi = async (page: Page) => {
     ];
 
     const simulateCreateStrategyId = keyValues.join('-');
+
     // If unexpected behavior, let the real server handle that
-    if (keyValues.some((v) => !v) || !simulatorResult[simulateCreateStrategyId])
-      return route.continue();
+    if (
+      keyValues.some((v) => !v) ||
+      !simulatorResult[simulateCreateStrategyId]
+    ) {
+      throw new Error(`Could not access ${url} in mocked simulator result`);
+    }
 
     const data = simulatorResult[simulateCreateStrategyId];
     return route.fulfill({ json: data });

@@ -23,10 +23,10 @@ export const EditStrategyPageLayout = () => {
   useEffect(() => {
     if (isPending) return;
     if (!user || !strategyId) {
-      navigate({ to: '/' });
+      navigate({ to: '/portfolio' });
     } else {
       const strategy = strategies?.find(({ id }) => id === strategyId);
-      if (!strategy) navigate({ to: '/' });
+      if (!strategy) navigate({ to: '/portfolio' });
       else setStrategy(strategy);
     }
   }, [user, strategyId, strategies, isPending, navigate]);
@@ -36,7 +36,7 @@ export const EditStrategyPageLayout = () => {
     if (window.location.href.match('/prices|/budget')) return;
     const type = 'type' in search && (search.type as EditTypes);
     if (!type) {
-      navigate({ to: '/' });
+      navigate({ to: '/portfolio' });
       return;
     }
     if (!strategy) return;
