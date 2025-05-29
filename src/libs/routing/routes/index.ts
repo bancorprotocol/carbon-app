@@ -48,7 +48,7 @@ import {
 import { cartPage } from './cart';
 import { createRoute, redirect } from '@tanstack/react-router';
 
-const rootRedict = createRoute({
+const rootRedirect = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   beforeLoad: () => {
@@ -102,5 +102,5 @@ export const routeTree = rootRoute.addChildren([
     ]),
     simulatorResultRoute,
   ]),
-  rootRedict,
+  rootRedirect,
 ]);
