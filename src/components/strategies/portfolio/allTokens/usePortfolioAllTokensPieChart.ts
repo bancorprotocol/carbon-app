@@ -66,14 +66,14 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
             '<span class="text-white/60">Amount</span>' +
             buildAmountString(
               data[this.colorIndex].amount,
-              data[this.colorIndex].token
+              data[this.colorIndex].token,
             ) +
             '</div>' +
             '<div class="flex justify-between">' +
             '<span class="text-white/60">Value</span>' +
             getFiatDisplayValue(
               data[this.colorIndex].value,
-              selectedFiatCurrency
+              selectedFiatCurrency,
             ) +
             '</div>' +
             '</div>'
@@ -98,7 +98,7 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
         },
       ],
     }),
-    [belowBreakpoint, data, selectedFiatCurrency]
+    [belowBreakpoint, data, selectedFiatCurrency],
   );
 
   return { pieChartOptions };

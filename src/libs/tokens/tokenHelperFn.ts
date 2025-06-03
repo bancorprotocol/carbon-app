@@ -25,7 +25,7 @@ export const fetchTokenLists = async () => {
         const error = (result as { error?: string }).error;
         throw new Error(
           error ||
-            `Failed to fetch token list. ${response.statusText} response received.`
+            `Failed to fetch token list. ${response.statusText} response received.`,
         );
       }
 
@@ -36,7 +36,7 @@ export const fetchTokenLists = async () => {
       const filteredTokens = parsedResult.tokens.filter(
         (token) =>
           token?.chainId === undefined ||
-          token?.chainId === config.network.chainId
+          token?.chainId === config.network.chainId,
       );
 
       return {
@@ -44,7 +44,7 @@ export const fetchTokenLists = async () => {
         tokens: filteredTokens,
         logoURI: getLogoByURI(parsedResult.logoURI),
       };
-    })
+    }),
   );
 
   return res.filter((x) => !!x) as TokenList[];
@@ -75,7 +75,7 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
 
 export const fetchTokenData = async (
   Token: (address: string) => { read: TokenContract },
-  address: string
+  address: string,
 ): Promise<Token> => {
   const [symbol, decimals, name] = await Promise.all([
     Token(address).read.symbol(),

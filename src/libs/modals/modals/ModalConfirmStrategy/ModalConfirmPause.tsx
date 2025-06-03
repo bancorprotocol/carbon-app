@@ -27,7 +27,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
     pauseStrategy(
       strategy,
       () => {},
-      () => closeModal(id)
+      () => closeModal(id),
     );
   };
 

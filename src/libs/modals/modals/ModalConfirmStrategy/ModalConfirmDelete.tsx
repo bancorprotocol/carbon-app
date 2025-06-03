@@ -34,7 +34,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
     deleteStrategy(
       strategy,
       () => {},
-      () => closeModal(id)
+      () => closeModal(id),
     );
   };
 
@@ -59,7 +59,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
             search={{ editType: 'editPrices' }}
             className={cn(
               'row-span-2 self-center',
-              buttonStyles({ variant: 'success' })
+              buttonStyles({ variant: 'success' }),
             )}
           >
             Edit Prices

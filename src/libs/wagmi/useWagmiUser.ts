@@ -32,7 +32,7 @@ export const useWagmiUser = ({
 
   const { isCountryBlocked } = useStore();
   const [isUncheckedSigner, _setIsUncheckedSigner] = useState(
-    lsService.getItem('isUncheckedSigner') || false
+    lsService.getItem('isUncheckedSigner') || false,
   );
   const { connectAsync } = useConnect();
   const { disconnectAsync } = useDisconnect();
@@ -123,7 +123,7 @@ export const useWagmiUser = ({
               isManualConnection.current = false;
               console.error(`Error connecting ${connector.name}` + error);
             },
-          }
+          },
         );
       } catch (error: any) {
         // Attempt to disconnect
@@ -132,7 +132,7 @@ export const useWagmiUser = ({
         throw new Error(codeErrorMessage || error.message);
       }
     },
-    [isCountryBlocked, connectAsync, chainId, disconnectAsync]
+    [isCountryBlocked, connectAsync, chainId, disconnectAsync],
   );
 
   const disconnect = useCallback(
@@ -152,14 +152,14 @@ export const useWagmiUser = ({
             onSettled: () => {
               setImposterAccount();
             },
-          }
+          },
         );
       } catch (error: any) {
         const codeErrorMessage = error?.code ? errorMessages[error?.code] : '';
         throw new Error(codeErrorMessage || error.message);
       }
     },
-    [disconnectAsync, setImposterAccount]
+    [disconnectAsync, setImposterAccount],
   );
 
   return {

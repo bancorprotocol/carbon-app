@@ -11,7 +11,7 @@ export const TFoot = <D extends object>({ table }: { table: Table<D> }) => {
                 ? null
                 : flexRender(
                     header.column.columnDef.footer,
-                    header.getContext()
+                    header.getContext(),
                   )}
             </th>
           ))}

@@ -45,7 +45,7 @@ const baseOrder = ({
     min,
     max,
     marketPrice,
-    spread
+    spread,
   );
   const baseBuy = {
     balance: '1',
@@ -73,7 +73,7 @@ afterAll(() => mockServer.close());
 const renderPage = async (
   type: 'editPrices' | 'renew',
   strategyParams: MockStrategyParams,
-  baseSearch: Record<string, string> = {}
+  baseSearch: Record<string, string> = {},
 ) => {
   const strategy: Strategy = mockStrategy(strategyParams);
   const search = { editType: type, ...baseSearch };
@@ -97,7 +97,7 @@ describe('Edit price overlapping page', () => {
   const driver = new EditStrategyDriver(screen);
   vitest
     .spyOn(balanceQueries, 'useGetTokenBalance')
-    .mockImplementation(() => ({ data: '1000' } as any));
+    .mockImplementation(() => ({ data: '1000' }) as any);
 
   describe('Market within order', () => {
     const order = baseOrder();
@@ -113,7 +113,7 @@ describe('Edit price overlapping page', () => {
       await user.type(form.min(), '3');
       await user.click(form.anchor('sell'));
       expect(form.withdraw(order.quote)).toHaveTextContent(
-        'withdraw 1.00 USDC'
+        'withdraw 1.00 USDC',
       );
     });
     test('Move below market should withdraw all sell balance', async () => {

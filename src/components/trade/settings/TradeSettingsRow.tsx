@@ -34,7 +34,7 @@ export const TradeSettingsRow: FC<{
 
   const warningMessage = useMemo(
     () => warningMessageIfOutOfRange(item.id, internalValue),
-    [item.id, internalValue]
+    [item.id, internalValue],
   );
 
   return (
@@ -51,7 +51,7 @@ export const TradeSettingsRow: FC<{
           id={item.id}
           className={cn(
             style.presetCustom,
-            'text-12 rounded-10 bg-black text-center placeholder:text-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white'
+            'text-12 rounded-10 bg-black text-center placeholder:text-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white',
           )}
           value={internalValue}
           type="number"

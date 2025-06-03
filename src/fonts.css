@@ -1,88 +1,84 @@
-
 /* In carbon app: BW */
 @font-face {
-    font-family: 'Carbon-Title';
-    font-weight: 900;
-    font-display: swap;
-    src: url('assets/font/title/black.woff2')
-    format('woff');
+  font-family: 'Carbon-Title';
+  font-weight: 900;
+  font-display: swap;
+  src: url('assets/font/title/black.woff2') format('woff');
 }
 
 @font-face {
-    font-family: 'Carbon-Title';
-    font-weight: 800;
-    font-display: swap;
-    src: url('assets/font/title/extra-bold.woff2') format('woff');
+  font-family: 'Carbon-Title';
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/font/title/extra-bold.woff2') format('woff');
 }
 @font-face {
-    font-family: 'Carbon-Title';
-    font-weight: 700, bold;
-    font-display: swap;
-    src: url('assets/font/title/bold.woff2') format('woff');
-}
-
-@font-face {
-    font-family: 'Carbon-Title';
-    font-weight: 500;
-    font-display: block; /* Prevent layout shifting for 100ms. This font is the first to be seen (header) */
-    src: url('assets/font/title/medium.woff2') format('woff');
+  font-family: 'Carbon-Title';
+  font-weight: 700, bold;
+  font-display: swap;
+  src: url('assets/font/title/bold.woff2') format('woff');
 }
 
 @font-face {
-    font-family: 'Carbon-Title';
-    font-weight: 400, normal;
-    font-display: swap;
-    src: url('assets/font/title/regular.woff2') format('woff');
+  font-family: 'Carbon-Title';
+  font-weight: 500;
+  font-display: block; /* Prevent layout shifting for 100ms. This font is the first to be seen (header) */
+  src: url('assets/font/title/medium.woff2') format('woff');
 }
 
 @font-face {
-    font-family: 'Carbon-Title';
-    font-weight: 300;
-    font-display: swap;
-    src: url('assets/font/title/light.woff2') format('woff');
+  font-family: 'Carbon-Title';
+  font-weight: 400, normal;
+  font-display: swap;
+  src: url('assets/font/title/regular.woff2') format('woff');
 }
 
 @font-face {
-    font-family: 'Carbon-Title';
-    font-weight: 100;
-    font-display: swap;
-    src: url('assets/font/title/thin.woff2') format('woff');
+  font-family: 'Carbon-Title';
+  font-weight: 300;
+  font-display: swap;
+  src: url('assets/font/title/light.woff2') format('woff');
+}
+
+@font-face {
+  font-family: 'Carbon-Title';
+  font-weight: 100;
+  font-display: swap;
+  src: url('assets/font/title/thin.woff2') format('woff');
 }
 
 /* In carbon app: Euclid Circular A */
 @font-face {
-    font-family: 'Carbon-Text';
-    font-weight: 700, bold;
-    font-display: swap;
-    src: url('assets/font/text/bold.ttf') format('truetype');
+  font-family: 'Carbon-Text';
+  font-weight: 700, bold;
+  font-display: swap;
+  src: url('assets/font/text/bold.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'Carbon-Text';
-    font-weight: 600;
-    font-display: swap;
-    src: url('assets/font/text/semi-bold.ttf') format('truetype');
+  font-family: 'Carbon-Text';
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/font/text/semi-bold.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'Carbon-Text';
-    font-weight: 500;
-    font-display: swap;
-    src: url('assets/font/text/medium.ttf') format('truetype');
+  font-family: 'Carbon-Text';
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/font/text/medium.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'Carbon-Text';
-    font-weight: 400, normal;
-    font-display: block;
-    src: url('assets/font/text/regular.ttf')
-    format('truetype');
+  font-family: 'Carbon-Text';
+  font-weight: 400, normal;
+  font-display: block;
+  src: url('assets/font/text/regular.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'Carbon-Text';
-    font-weight: 300;
-    font-display: swap;
-    src: url('assets/font/text/light.ttf')
-    format('truetype');
+  font-family: 'Carbon-Text';
+  font-weight: 300;
+  font-display: swap;
+  src: url('assets/font/text/light.ttf') format('truetype');
 }

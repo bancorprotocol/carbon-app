@@ -6,14 +6,14 @@ import { Token } from 'libs/tokens';
 
 export const useImager = (
   src: string = genericToken,
-  fallbackSrc: string = genericToken
+  fallbackSrc: string = genericToken,
 ) => {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   const source = useMemo(
     () => (src && !hasError ? src : fallbackSrc),
-    [fallbackSrc, hasError, src]
+    [fallbackSrc, hasError, src],
   );
 
   useEffect(() => {

@@ -37,7 +37,7 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
             onClick={click}
             className={cn(
               'flex w-full items-center justify-center gap-4 rounded-full px-16 py-5',
-              active ? 'bg-white/10' : 'bg-transparent text-white/60'
+              active ? 'bg-white/10' : 'bg-transparent text-white/60',
             )}
             data-testid={`chart-tab-${label}`}
           >

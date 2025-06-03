@@ -45,7 +45,7 @@ export const DebugCreateStrategy = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [interval, setInterval] = useState(0);
   const [allTokens, setAllTokens] = useState(
-    TOKENS.map((t) => ({ ...t, selected: false, count: -1 }))
+    TOKENS.map((t) => ({ ...t, selected: false, count: -1 })),
   );
   const [buyMin, setBuyMin] = useState('0');
   const [buyMax, setBuyMax] = useState('0');
@@ -86,7 +86,7 @@ export const DebugCreateStrategy = () => {
 
   const balancesMap = useMemo(() => {
     return new Map(
-      balanceQueries.map((t, i) => [selectedTokens[i].address, t.data])
+      balanceQueries.map((t, i) => [selectedTokens[i].address, t.data]),
     );
   }, [balanceQueries, selectedTokens]);
 
@@ -141,7 +141,7 @@ export const DebugCreateStrategy = () => {
         formatNumber(buyMin),
         formatNumber(sellMax),
         price.toString(),
-        spread
+        spread,
       );
       console.log(params);
       strategy.order0.max = params.buyPriceHigh;
@@ -168,7 +168,7 @@ export const DebugCreateStrategy = () => {
           base.address,
           'quote',
           quote.address,
-          e
+          e,
         );
       }
     }

@@ -10,7 +10,7 @@ export interface FiatCurrencyStore {
 
 export const useFiatCurrencyStore = (): FiatCurrencyStore => {
   const [selectedFiatCurrency, _setSelectedFiatCurrency] = useState<FiatSymbol>(
-    lsService.getItem('currentCurrency') || 'USD'
+    lsService.getItem('currentCurrency') || 'USD',
   );
 
   const setSelectedFiatCurrency = (currency: FiatSymbol) => {

@@ -22,7 +22,7 @@ export type PairMaps = ReturnType<typeof createPairMaps>;
  */
 export const toPairSlug = (
   base: { address: string },
-  quote: { address: string }
+  quote: { address: string },
 ) => {
   return `${base.address}_${quote.address}`.toLowerCase();
 };
@@ -33,7 +33,7 @@ export const toPairSlug = (
  */
 export const toPairName = (
   base: { symbol: string },
-  quote: { symbol: string }
+  quote: { symbol: string },
 ) => {
   return `${base.symbol}/${quote.symbol}`;
 };
@@ -44,7 +44,7 @@ export const toPairName = (
  */
 export const fromPairSearch = (
   value: string,
-  regex: RegExp = pairSearchExp
+  regex: RegExp = pairSearchExp,
 ) => {
   const pairKey = value.toLowerCase().replaceAll(regex, '_');
   return replaceSpecialCharacters(pairKey);
@@ -52,7 +52,7 @@ export const fromPairSearch = (
 
 export const createPairMaps = (
   pairs: TradePair[] = [],
-  transformSlugExp: RegExp = pairSearchExp
+  transformSlugExp: RegExp = pairSearchExp,
 ) => {
   const tokens = new Set<string>();
   const pairMap = new Map<string, TradePair>();
@@ -91,7 +91,7 @@ export const replaceSpecialCharacters = (value: string) => {
 export const searchPairKeys = (
   nameMap: Map<string, string>,
   search: string,
-  transformSlugExp: RegExp = pairSearchExp
+  transformSlugExp: RegExp = pairSearchExp,
 ) => {
   // Transform search into pair
   const searchSlug = fromPairSearch(search, transformSlugExp);
@@ -129,7 +129,7 @@ export const searchPairTrade = (
   pairMap: Map<string, TradePair>,
   nameMap: Map<string, string>,
   search: string,
-  transformSlugExp: RegExp = pairSearchExp
+  transformSlugExp: RegExp = pairSearchExp,
 ) => {
   if (!search && !isDifferentGasToken) return Array.from(pairMap.values());
   const result = searchPairKeys(nameMap, search, transformSlugExp);
@@ -146,7 +146,7 @@ const includeToken = ({ address, symbol }: Token, search: string) => {
 /** Filter and search Tokens from the list of pairs based on a search input */
 export const searchTokens = (
   pairMap: Map<string, TradePair>,
-  search: string
+  search: string,
 ) => {
   const tokens: Record<string, Token> = {};
   const value = search.toLowerCase();

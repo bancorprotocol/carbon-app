@@ -20,10 +20,10 @@ export const useD3OverlappingChart = (props: Props) => {
         formatNumber(buyMin),
         formatNumber(sellMax),
         marketPrice?.toString() ?? '0',
-        spread.toString()
+        spread.toString(),
       );
     },
-    [marketPrice, spread]
+    [marketPrice, spread],
   );
 
   const yPos = useMemo(() => {
@@ -33,7 +33,7 @@ export const useD3OverlappingChart = (props: Props) => {
     if (prices.buy.min && prices.sell.max) {
       const calculatedPrices = calcPrices(
         formatNumber(prices.buy.min),
-        formatNumber(prices.sell.max)
+        formatNumber(prices.sell.max),
       );
       buyMax = calculatedPrices.buyPriceHigh;
       sellMin = calculatedPrices.sellPriceLow;

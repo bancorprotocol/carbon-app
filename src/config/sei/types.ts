@@ -12,7 +12,7 @@ export type NetworkDataType = {
     {
       denom: string;
       exponent: number;
-    }
+    },
   ];
   images: {
     svg?: string;

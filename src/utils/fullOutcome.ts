@@ -56,7 +56,7 @@ export const getFullOutcome = ({
 export const getUpdatedBudget = (
   type: 'deposit' | 'withdraw',
   balance?: string,
-  update?: string
+  update?: string,
 ) => {
   const base = new SafeDecimal(balance || '0');
   const delta = new SafeDecimal(update || '0');

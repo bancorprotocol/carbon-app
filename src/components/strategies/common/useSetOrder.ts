@@ -14,7 +14,7 @@ export const useSetDisposableOrder = (url: DisposableUrl) => {
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
   return { setOrder };
 };
@@ -22,7 +22,7 @@ export const useSetDisposableOrder = (url: DisposableUrl) => {
 /** Transform an order into a search params */
 export const toOrderSearch = <T>(
   order: Partial<OrderBlock>,
-  direction: 'buy' | 'sell'
+  direction: 'buy' | 'sell',
 ) => {
   const search: Partial<T> = {};
   for (const [key, value] of Object.entries(order)) {
@@ -52,17 +52,17 @@ export const useSetRecurringOrder = <T>(url: RecurringUrl) => {
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const setSellOrder = useCallback(
     (order: Partial<OrderBlock>) => setOrder(order, 'sell'),
-    [setOrder]
+    [setOrder],
   );
 
   const setBuyOrder = useCallback(
     (order: Partial<OrderBlock>) => setOrder(order, 'buy'),
-    [setOrder]
+    [setOrder],
   );
   return { setSellOrder, setBuyOrder };
 };

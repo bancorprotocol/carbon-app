@@ -44,7 +44,7 @@ const initMax = (marketPrice: string) => {
 const getOrders = (
   strategy: Strategy,
   search: EditOverlappingStrategySearch,
-  marketPrice?: string
+  marketPrice?: string,
 ) => {
   const { base, quote, order0, order1 } = strategy;
 
@@ -118,7 +118,7 @@ const getOrders = (
       max,
       marketPrice,
       spread,
-      buyBudget
+      buyBudget,
     );
   } else {
     if (isMaxBelowMarket(orders.sell)) return orders;
@@ -131,7 +131,7 @@ const getOrders = (
       max,
       marketPrice,
       spread,
-      sellBudget
+      sellBudget,
     );
   }
   return orders;
@@ -151,7 +151,7 @@ export const EditPricesOverlappingPage = () => {
   const marketPrice = getOverlappingMarketPrice(
     strategy,
     search,
-    externalPrice?.toString()
+    externalPrice?.toString(),
   );
 
   const set = useCallback(
@@ -163,7 +163,7 @@ export const EditPricesOverlappingPage = () => {
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const orders = getOrders(strategy, search, marketPrice);
@@ -193,7 +193,7 @@ const OverlappingContent = () => {
   const marketPrice = getOverlappingMarketPrice(
     strategy,
     search,
-    externalPrice?.toString()
+    externalPrice?.toString(),
   );
 
   const orders = getOrders(strategy, search, marketPrice);

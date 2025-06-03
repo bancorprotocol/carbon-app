@@ -19,11 +19,11 @@ type CarbonEvents = typeof carbonEvents;
 
 export const sendGTMEvent = <
   T extends Extract<keyof CarbonEvents, string>,
-  D extends Extract<keyof CarbonEvents[T], string>
+  D extends Extract<keyof CarbonEvents[T], string>,
 >(
   type: T,
   event: D,
-  data: any
+  data: any,
 ) => {
   const snakeCaseEvent = convertCase(event, true);
   const dataObj = data ? data : {};

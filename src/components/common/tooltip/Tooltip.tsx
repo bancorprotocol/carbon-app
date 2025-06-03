@@ -68,7 +68,7 @@ export const Tooltip: FC<Props> = ({
         <m.div
           className={cn(
             'border-background-800 bg-background-800/30 text-14 rounded border px-24 py-16 text-white shadow-lg backdrop-blur-2xl',
-            className
+            className,
           )}
           style={{ scale, opacity, maxWidth }}
           data-testid="tippy-tooltip"

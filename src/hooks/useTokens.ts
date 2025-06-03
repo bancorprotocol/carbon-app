@@ -15,7 +15,7 @@ export const useTokens = () => {
 
   const getTokenById = useCallback(
     (id?: string) => (id ? tokensMap.get(id.toLowerCase()) : undefined),
-    [tokensMap]
+    [tokensMap],
   );
 
   const importTokens = useCallback(
@@ -33,11 +33,11 @@ export const useTokens = () => {
         return [...existing, ...missing];
       });
     },
-    [setImportedTokens]
+    [setImportedTokens],
   );
 
   const [favoriteTokens, _setFavoriteTokens] = useState<Token[]>(
-    lsService.getItem(`favoriteTokens-${user}`) || []
+    lsService.getItem(`favoriteTokens-${user}`) || [],
   );
 
   const addFavoriteToken = useCallback(
@@ -48,20 +48,20 @@ export const useTokens = () => {
         return updatedFavoriteTokens;
       });
     },
-    [user]
+    [user],
   );
 
   const removeFavoriteToken = useCallback(
     (token: Token) => {
       _setFavoriteTokens((prev) => {
         const updatedFavoriteTokens = prev.filter(
-          (p) => p.address.toLowerCase() !== token.address.toLowerCase()
+          (p) => p.address.toLowerCase() !== token.address.toLowerCase(),
         );
         lsService.setItem(`favoriteTokens-${user}`, updatedFavoriteTokens);
         return updatedFavoriteTokens;
       });
     },
-    [user]
+    [user],
   );
 
   return {

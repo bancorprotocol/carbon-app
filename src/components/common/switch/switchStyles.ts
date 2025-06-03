@@ -35,5 +35,5 @@ export const switchStyles = cva<SwitchVariants>(
       size: 'md',
       isOn: false,
     },
-  }
+  },
 );

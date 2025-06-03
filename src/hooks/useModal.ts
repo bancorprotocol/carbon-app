@@ -24,7 +24,7 @@ export const useModal = () => {
       }
       setModalsOpen((prevState) => [...prevState, { id: uuid(), key, data }]);
     },
-    [isCountryBlocked, setModalsOpen]
+    [isCountryBlocked, setModalsOpen],
   );
 
   const closeModal = useCallback(
@@ -36,7 +36,7 @@ export const useModal = () => {
         setModalsOpen(newModals);
       }
     },
-    [modalsOpen, setModalsOpen]
+    [modalsOpen, setModalsOpen],
   );
 
   const minimizeModal = (id: string) => {

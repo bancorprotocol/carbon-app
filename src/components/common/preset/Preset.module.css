@@ -23,12 +23,12 @@
   @apply border border-white;
 }
 
-.preset-container:has(input[type="radio"]:checked) .preset-custom {
+.preset-container:has(input[type='radio']:checked) .preset-custom {
   @apply text-white/60 border-transparent;
 }
 .preset-container:has(:global(.warning-message)) .preset-custom {
   @apply border border-warning outline-warning;
 }
-.preset-container:has(input[type="number"]:invalid) .preset-custom {
+.preset-container:has(input[type='number']:invalid) .preset-custom {
   @apply text-error border-error outline-error;
 }

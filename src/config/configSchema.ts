@@ -2,7 +2,7 @@ import { selectableConnectionNames } from 'libs/wagmi/wagmi.types';
 import * as v from 'valibot';
 
 const ConnectorSchema = v.array(
-  v.union(selectableConnectionNames.map((name) => v.literal(name)))
+  v.union(selectableConnectionNames.map((name) => v.literal(name))),
 );
 
 const AddressSchema = v.pipe(v.string(), v.regex<`0x${string}`>(/^0x(.*)$/));
@@ -61,13 +61,13 @@ export const AppConfigSchema = v.object({
       decimals: v.number(),
       address: v.string(),
       logoURI: v.string(),
-    })
+    }),
   ),
   tokenLists: v.array(
     v.object({
       uri: v.string(),
       parser: v.optional(v.string()),
-    })
+    }),
   ),
   addresses: v.object({
     tokens: v.intersect([
@@ -97,14 +97,14 @@ export const AppConfigSchema = v.object({
           address: AddressSchema,
           blockCreated: v.optional(v.number()),
         }),
-      })
+      }),
     ),
     v.record(
       v.string(),
       v.object({
         address: AddressSchema,
         blockCreated: v.optional(v.number()),
-      })
+      }),
     ),
   ]),
   tenderly: v.object({
@@ -114,7 +114,7 @@ export const AppConfigSchema = v.object({
         tokenContract: v.string(),
         donorAccount: v.string(),
         symbol: v.string(),
-      })
+      }),
     ),
   }),
   ui: v.object({

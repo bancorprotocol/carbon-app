@@ -28,7 +28,7 @@ export const DebugTransferNFT = () => {
       const tx = await Voucher?.write.transferFrom(
         user,
         inputRecipient,
-        inputId
+        inputId,
       );
       await tx?.wait();
       await cache.invalidateQueries({

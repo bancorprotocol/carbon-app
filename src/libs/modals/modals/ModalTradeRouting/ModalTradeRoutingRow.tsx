@@ -32,11 +32,11 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
   const { selectedFiatCurrency } = useFiatCurrency();
 
   const sourceAmountFiat = new SafeDecimal(sourceAmount).times(
-    sourceFiatPrice?.[selectedFiatCurrency] || 0
+    sourceFiatPrice?.[selectedFiatCurrency] || 0,
   );
 
   const targetAmountFiat = new SafeDecimal(targetAmount).times(
-    targetFiatPrice?.[selectedFiatCurrency] || 0
+    targetFiatPrice?.[selectedFiatCurrency] || 0,
   );
 
   const averageToken = buy ? source : target;
@@ -46,7 +46,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
     : new SafeDecimal(targetAmount).div(sourceAmount);
 
   const averagePriceFiat = averageAmount.times(
-    averageFiatPrice?.[selectedFiatCurrency] || 0
+    averageFiatPrice?.[selectedFiatCurrency] || 0,
   );
 
   const onCheckboxClick = () => {

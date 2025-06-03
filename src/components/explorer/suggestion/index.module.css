@@ -1,5 +1,5 @@
 @starting-style {
-  .root-search:has(.input-search[aria-expanded="true"]) .dialog {
+  .root-search:has(.input-search[aria-expanded='true']) .dialog {
     opacity: 0;
     transform: translateY(10px);
   }
@@ -10,7 +10,8 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .dialog, .listbox:empty + .empty {
+  .dialog,
+  .listbox:empty + .empty {
     transition-behavior: allow-discrete;
     transition-property: opacity, transform, display;
     transition-duration: 0.3s;
@@ -21,7 +22,7 @@
   display: none;
 }
 
-.root-search:has(.input-search[aria-expanded="false"]) .dialog {
+.root-search:has(.input-search[aria-expanded='false']) .dialog {
   display: none;
   opacity: 0;
   transform: scale(0.95);
@@ -38,7 +39,7 @@
 .input-search:placeholder-shown + button {
   display: none;
 }
-.root-search [role="option"] {
+.root-search [role='option'] {
   content-visibility: auto;
   contain-intrinsic-size: 50px;
   height: 50px;

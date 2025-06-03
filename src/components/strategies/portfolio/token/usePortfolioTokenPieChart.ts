@@ -14,7 +14,7 @@ import { getColorByIndex } from 'utils/colorPalettes';
 
 export const usePortfolioTokenPieChart = (
   data: PortfolioTokenData[],
-  token: Token
+  token: Token,
 ) => {
   const { belowBreakpoint } = useBreakpoints();
 
@@ -71,7 +71,7 @@ export const usePortfolioTokenPieChart = (
             '<span class="text-white/60">Value</span>' +
             getFiatDisplayValue(
               data[this.point.index].value,
-              selectedFiatCurrency
+              selectedFiatCurrency,
             ) +
             '</div>' +
             '</div>'
@@ -97,7 +97,7 @@ export const usePortfolioTokenPieChart = (
         },
       ],
     }),
-    [belowBreakpoint, data, selectedFiatCurrency, token]
+    [belowBreakpoint, data, selectedFiatCurrency, token],
   );
 
   return { pieChartOptions };

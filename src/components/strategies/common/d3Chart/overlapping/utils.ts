@@ -17,7 +17,7 @@ export const onDragBuyHandler = ({
   marketPriceY: number;
 }) => {
   const yOpposite = Number(
-    getSelector(getHandleSelector('sell', 'line1')).select('line').attr('y1')
+    getSelector(getHandleSelector('sell', 'line1')).select('line').attr('y1'),
   );
 
   // SellMin is dragged below BuyMin
@@ -60,7 +60,7 @@ export const onDragSellHandler = ({
   marketPriceY: number;
 }) => {
   const yOpposite = Number(
-    getSelector(getHandleSelector('buy', 'line1')).select('line').attr('y1')
+    getSelector(getHandleSelector('buy', 'line1')).select('line').attr('y1'),
   );
   // SellMin is dragged below BuyMin
   if (y > yOpposite) {

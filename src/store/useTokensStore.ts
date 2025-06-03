@@ -16,7 +16,7 @@ export interface TokensStore {
 export const useTokensStore = (): TokensStore => {
   const tokensQuery = useTokensQuery();
   const [importedTokens, setImportedTokens] = useState<Token[]>(
-    lsService.getItem('importedTokens') ?? []
+    lsService.getItem('importedTokens') ?? [],
   );
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export const useTokensStore = (): TokensStore => {
 
   const tokensMap = useMemo(
     () => new Map(tokens.map((token) => [token.address.toLowerCase(), token])),
-    [tokens]
+    [tokens],
   );
 
   const isPending = tokensQuery.isPending;

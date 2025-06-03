@@ -30,7 +30,7 @@ import { OrderBlock, OverlappingOrder } from '../common/types';
 
 export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing: Dispatch<SetStateAction<boolean>>,
-  navigate?: (opts: NavigateOptions) => Promise<void>
+  navigate?: (opts: NavigateOptions) => Promise<void>,
 ) => {
   setIsProcessing(true);
   setTimeout(() => {
@@ -41,7 +41,7 @@ export const handleTxStatusAndRedirectToOverview = (
 
 export const getRecurringPriceMultiplier = (
   direction: StrategyDirection,
-  settings: StrategySettings
+  settings: StrategySettings,
 ) => {
   if (settings === 'range') {
     return {
@@ -59,7 +59,7 @@ export const getRecurringPriceMultiplier = (
 export const getDefaultOrder = (
   direction: StrategyDirection,
   order: Partial<OrderBlock>,
-  marketPrice: number | string = 0
+  marketPrice: number | string = 0,
 ): OrderBlock => {
   const market = new SafeDecimal(marketPrice);
   const settings = order.settings ?? 'limit';
@@ -116,7 +116,7 @@ export const getOverlappingOrders = (
   search: TradeOverlappingSearch,
   base?: Token,
   quote?: Token,
-  marketPrice?: string
+  marketPrice?: string,
 ): { buy: OverlappingOrder; sell: OverlappingOrder } => {
   if (!base || !quote || !marketPrice) {
     return {
@@ -168,7 +168,7 @@ export const getOverlappingOrders = (
       max,
       marketPrice,
       spread,
-      budget
+      budget,
     );
   } else {
     if (isMaxBelowMarket(orders.sell)) return orders;
@@ -180,7 +180,7 @@ export const getOverlappingOrders = (
       max,
       marketPrice,
       spread,
-      budget
+      budget,
     );
   }
   return orders;

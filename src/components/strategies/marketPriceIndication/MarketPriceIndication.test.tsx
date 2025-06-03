@@ -7,7 +7,7 @@ describe('MarketPricePercent', () => {
   test('renders the market price indication correctly for positive percentage', () => {
     const marketPricePercentage = new SafeDecimal(5);
     render(
-      <MarketPricePercent marketPricePercentage={marketPricePercentage} />
+      <MarketPricePercent marketPricePercentage={marketPricePercentage} />,
     );
 
     screen.findByText('+5.00%');
@@ -16,7 +16,7 @@ describe('MarketPricePercent', () => {
   test('renders the market price indication correctly for positive percentage - greater than 99.99', () => {
     const marketPricePercentage = new SafeDecimal(100);
     render(
-      <MarketPricePercent marketPricePercentage={marketPricePercentage} />
+      <MarketPricePercent marketPricePercentage={marketPricePercentage} />,
     );
 
     screen.findByText('>+99.99%');
@@ -25,7 +25,7 @@ describe('MarketPricePercent', () => {
   test('renders the market price indication correctly for positive percentage - smaller than 0.01', () => {
     const marketPricePercentage = new SafeDecimal(0.001);
     render(
-      <MarketPricePercent marketPricePercentage={marketPricePercentage} />
+      <MarketPricePercent marketPricePercentage={marketPricePercentage} />,
     );
 
     screen.findByText('+<0.01%');
@@ -34,7 +34,7 @@ describe('MarketPricePercent', () => {
   test('renders the market price indication correctly for negative percentage', () => {
     const marketPricePercentage = new SafeDecimal(-6);
     render(
-      <MarketPricePercent marketPricePercentage={marketPricePercentage} />
+      <MarketPricePercent marketPricePercentage={marketPricePercentage} />,
     );
 
     screen.findByText('-6.00%');
@@ -43,7 +43,7 @@ describe('MarketPricePercent', () => {
   test('renders the market price indication correctly for negative percentage - lower than 99.99', () => {
     const marketPricePercentage = new SafeDecimal(-100);
     render(
-      <MarketPricePercent marketPricePercentage={marketPricePercentage} />
+      <MarketPricePercent marketPricePercentage={marketPricePercentage} />,
     );
 
     screen.findByText('<-99.99%');
@@ -52,7 +52,7 @@ describe('MarketPricePercent', () => {
   test('renders the market price indication correctly for zero percentage', async () => {
     const marketPricePercentage = new SafeDecimal(0);
     render(
-      <MarketPricePercent marketPricePercentage={marketPricePercentage} />
+      <MarketPricePercent marketPricePercentage={marketPricePercentage} />,
     );
 
     const component = screen.queryByTestId('market-price-indication');

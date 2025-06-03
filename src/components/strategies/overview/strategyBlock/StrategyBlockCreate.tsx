@@ -17,13 +17,13 @@ export const StrategyBlockCreate: FC<Props> = ({
       to="/trade"
       className={cn(
         'bg-content rounded-10 py-50 text-24 font-weight-500 group flex flex-col items-center justify-center gap-24 md:text-[32px]',
-        className
+        className,
       )}
     >
       <div
         className={cn(
           buttonStyles({ variant: 'success' }),
-          'size-72 rounded-full px-0 md:size-80'
+          'size-72 rounded-full px-0 md:size-80',
         )}
       >
         <IconPlus className="md:p-26 p-24" />

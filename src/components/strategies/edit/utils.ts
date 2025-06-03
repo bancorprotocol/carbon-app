@@ -21,7 +21,7 @@ export const getWithdraw = (initialBudget?: string, newBudget?: string) => {
 export const getTotalBudget = (
   editType: 'deposit' | 'withdraw',
   initialBudget: string = '0',
-  budget: string = '0'
+  budget: string = '0',
 ) => {
   if (isZero(budget)) return initialBudget;
   if (editType === 'deposit') {
@@ -33,7 +33,7 @@ export const getTotalBudget = (
 
 export const getEditPricesPage = (
   strategy: Strategy,
-  editType: 'editPrices' | 'renew'
+  editType: 'editPrices' | 'renew',
 ) => {
   const type = getStrategyType(strategy);
   if (type === 'disposable') {
@@ -55,7 +55,7 @@ export const getEditPricesPage = (
 };
 export const getEditBudgetPage = (
   strategy: Strategy,
-  editType: 'withdraw' | 'deposit'
+  editType: 'withdraw' | 'deposit',
 ) => {
   const type = getStrategyType(strategy);
 

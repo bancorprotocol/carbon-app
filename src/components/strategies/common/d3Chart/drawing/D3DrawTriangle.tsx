@@ -20,7 +20,7 @@ interface Props {
 const polygonPoints = (
   points: ChartPoint[],
   xScale: ScaleBand<string>,
-  yScale: ScaleLinear<number, number>
+  yScale: ScaleLinear<number, number>,
 ) => {
   return points.map(({ x, y }) => `${xScale(x)},${yScale(y)}`).join(' ');
 };
@@ -142,7 +142,7 @@ export const D3EditTriangle: FC<D3ShapeProps> = ({ drawing, onChange }) => {
 
   const dragPoint = (
     event: ReactMouseEvent<SVGCircleElement>,
-    index: number
+    index: number,
   ) => {
     event.stopPropagation(); // Prevent mousedown on g
     setEditing(true);

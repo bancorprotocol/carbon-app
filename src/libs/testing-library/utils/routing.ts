@@ -15,7 +15,7 @@ const encodeValue = (value: string | number | symbol) => {
 };
 
 const encodeParams = (
-  searchParams: Record<string, string | number | symbol>
+  searchParams: Record<string, string | number | symbol>,
 ): string => {
   return Object.entries(searchParams)
     .map(([key, value]) => `${key}=${encodeValue(value)}`)

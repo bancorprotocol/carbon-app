@@ -36,7 +36,7 @@ const colors = [
 
 const createConfigValues = (start: number, end: number, step: number) =>
   Array.from({ length: Math.ceil((end - start) / step) + 1 }, (_, i) =>
-    (start + i * step).toString()
+    (start + i * step).toString(),
   );
 
 export const customTwMerge = extendTailwindMerge<AdditionalClassGroupIDs>({

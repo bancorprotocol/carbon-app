@@ -30,7 +30,7 @@ export const SimResultSummary = ({
           'rounded-10 flex min-h-[72px] items-center justify-between gap-8 bg-black px-16 py-10',
           {
             'animate-pulse': isPending,
-          }
+          },
         )}
       >
         {!isPending && !!state.baseToken && !!state.quoteToken && (
@@ -54,7 +54,7 @@ export const SimResultSummary = ({
           'rounded-10 grid min-h-[72px] grid-cols-4 items-center gap-8 bg-black px-16 py-10',
           {
             'animate-pulse': isPending,
-          }
+          },
         )}
       >
         {!isPending && !!state.baseToken && !!state.quoteToken && (
@@ -83,7 +83,7 @@ export const SimResultSummary = ({
                 }}
                 className={cn(
                   buttonStyles({ variant: 'success', size: 'md' }),
-                  'whitespace-nowrap'
+                  'whitespace-nowrap',
                 )}
               >
                 Create
@@ -102,7 +102,7 @@ export const SimResultSummary = ({
                 }}
                 className={cn(
                   buttonStyles({ variant: 'success', size: 'md' }),
-                  'whitespace-nowrap'
+                  'whitespace-nowrap',
                 )}
               >
                 Create

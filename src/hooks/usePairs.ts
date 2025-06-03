@@ -25,7 +25,7 @@ export const usePairs = () => {
       if (tokens.has(slug)) return 'token';
       return 'wallet';
     },
-    [maps.pairMap, tokens]
+    [maps.pairMap, tokens],
   );
 
   return {

@@ -31,16 +31,16 @@ import style from './ActivityTable.module.css';
 const thStyle = cn(
   'text-14 text-start font-weight-400 py-16 pl-8 whitespace-nowrap',
   'first:pl-24',
-  'last:pr-24 last:text-end'
+  'last:pr-24 last:text-end',
 );
 const tdFirstLine = cn(
   'pt-12 align-bottom whitespace-nowrap pl-8',
   'first:pl-24',
-  'last:pr-24 last:text-end'
+  'last:pr-24 last:text-end',
 );
 const tdSecondLine = cn(
   'pb-12 align-top whitespace-nowrap pl-8',
-  'last:pr-24 last:text-end'
+  'last:pr-24 last:text-end',
 );
 
 export const ActivityTable: FC<ActivityListProps> = (props) => {
@@ -191,7 +191,7 @@ export const ActivityIcon: FC<ActivityIconProps> = (props) => {
     'grid place-items-center rounded-full',
     iconColor(activity.action),
     `size-${size}`,
-    className
+    className,
   );
   return (
     <div className={classes}>

@@ -17,7 +17,7 @@ import { THIRTY_SEC_IN_MS } from 'utils/time';
 
 export const toActivities = (
   data: ServerActivity[],
-  tokensMap: Map<string, Token>
+  tokensMap: Map<string, Token>,
 ): Activity[] => {
   return data.map((activity) => {
     const { strategy } = activity;
@@ -25,12 +25,12 @@ export const toActivities = (
     const quote = tokensMap.get(strategy.quote.toLowerCase());
     if (!base) {
       throw new Error(
-        `Base "${strategy.base}" not found for activity with txhash "${activity.txHash}"`
+        `Base "${strategy.base}" not found for activity with txhash "${activity.txHash}"`,
       );
     }
     if (!quote) {
       throw new Error(
-        `Quote "${strategy.quote}" not found for activity with txhash "${activity.txHash}"`
+        `Quote "${strategy.quote}" not found for activity with txhash "${activity.txHash}"`,
       );
     }
     return {
@@ -52,7 +52,7 @@ const isValidParams = (params: QueryActivityParams) => {
 
 const toMetaActivities = (
   meta: ServerActivityMeta,
-  tokenMap: Map<string, Token>
+  tokenMap: Map<string, Token>,
 ) => {
   const result: ActivityMeta = {
     size: meta.size,
@@ -80,7 +80,7 @@ interface ActivityQueryConfig {
 }
 export const useActivityQuery = (
   params: QueryActivityParams = {},
-  config: ActivityQueryConfig = {}
+  config: ActivityQueryConfig = {},
 ) => {
   const { tokensMap, isPending, importTokens } = useTokens();
   const { Token } = useContract();

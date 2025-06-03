@@ -111,7 +111,7 @@ export const FloatTooltipTrigger = forwardRef<
       : props;
   return cloneElement(
     children,
-    context.getReferenceProps({ ref, ...allProps })
+    context.getReferenceProps({ ref, ...allProps }),
   );
 });
 

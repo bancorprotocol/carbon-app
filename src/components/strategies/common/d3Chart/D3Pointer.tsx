@@ -8,7 +8,7 @@ import { getAreaBox } from './drawing/utils';
 
 const usePointerPosition = (
   xScale: ScaleBand<string>,
-  yScale: ScaleLinear<number, number, never>
+  yScale: ScaleLinear<number, number, never>,
 ) => {
   const [position, setPosition] = useState<{ x: string; y: number }>();
   useEffect(() => {

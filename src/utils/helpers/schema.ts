@@ -40,7 +40,7 @@ export type SearchParams<T> = Partial<{
 
 export const parseSchema = <T>(
   schema: GroupSchema<T>,
-  params: SearchParams<T>
+  params: SearchParams<T>,
 ) => {
   const result: Partial<T> = {};
   for (const key in schema) {

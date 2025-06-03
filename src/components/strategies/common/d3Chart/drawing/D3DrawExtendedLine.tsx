@@ -16,7 +16,7 @@ import { getAreaBox, getDelta, getEdges, getInitialPoints } from './utils';
 const getLineProps = (
   points: ChartPoint[],
   xScale: ScaleBand<string>,
-  yScale: ScaleLinear<number, number>
+  yScale: ScaleLinear<number, number>,
 ) => {
   const [a, b] = points;
   if (a.x === b.x) {
@@ -133,7 +133,7 @@ export const D3EditExtendedLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
 
   const lineProps = useMemo(
     () => getLineProps(drawing.points, xScale, yScale),
-    [drawing.points, xScale, yScale]
+    [drawing.points, xScale, yScale],
   );
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -168,7 +168,7 @@ export const D3EditExtendedLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
 
   const dragPoint = (
     event: ReactMouseEvent<SVGCircleElement>,
-    index: number
+    index: number,
   ) => {
     event.stopPropagation(); // Prevent mousedown on g
     setEditing(true);

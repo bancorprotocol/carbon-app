@@ -8,7 +8,7 @@ type Props = InputProps & Pick<LabelProps, 'label' | 'msg'>;
 export const InputUserAccount = ({ label, msg, ...props }: Props) => {
   const isValid = useMemo(
     () => utils.isAddress(typeof props.value === 'string' ? props.value : ''),
-    [props.value]
+    [props.value],
   );
 
   const labelMsg = useMemo(() => {

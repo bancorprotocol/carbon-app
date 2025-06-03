@@ -43,7 +43,7 @@ export const D3ChartHandle = ({
         }
 
         const oppositeY = Number(
-          getSelector(props.selectorOpposite).select('line').attr('y1')
+          getSelector(props.selectorOpposite).select('line').attr('y1'),
         );
 
         if (oppositeY < y) {

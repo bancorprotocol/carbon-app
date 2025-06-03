@@ -40,7 +40,7 @@ export const PortfolioPieChart = ({
             'justify-center',
             'items-center',
             'w-full',
-            'h-full'
+            'h-full',
           )}
         >
           <div
@@ -51,7 +51,7 @@ export const PortfolioPieChart = ({
               'w-4/5',
               'rounded-full',
               'h-4/5',
-              'bg-background-800'
+              'bg-background-800',
             )}
           >
             <div
@@ -59,7 +59,7 @@ export const PortfolioPieChart = ({
                 'w-4/5',
                 'rounded-full',
                 'h-4/5',
-                'bg-background-900'
+                'bg-background-900',
               )}
             ></div>
           </div>

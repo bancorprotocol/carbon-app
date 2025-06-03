@@ -8,11 +8,11 @@ import { getBounds } from 'components/strategies/common/utils';
 
 export type SimulatorInputDispatch = <
   T extends InternalStrategyInput,
-  K extends keyof T
+  K extends keyof T,
 >(
   key: K,
   value: T[K],
-  setBounds?: boolean
+  setBounds?: boolean,
 ) => void;
 
 interface Props {
@@ -24,14 +24,14 @@ export const useSimulatorInput = ({ searchState }: Props) => {
 
   const bounds = useMemo(
     () => getBounds(state.buy, state.sell),
-    [state.buy, state.sell]
+    [state.buy, state.sell],
   );
 
   const dispatch: SimulatorInputDispatch = useCallback(
     (key, value) => {
       _dispatch(key, value);
     },
-    [_dispatch]
+    [_dispatch],
   );
 
   return { dispatch, state, bounds, searchState };

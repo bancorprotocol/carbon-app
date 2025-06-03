@@ -12,16 +12,16 @@ export const DebugTenderlyRPC = () => {
     useWagmi();
   const [urlInput, setUrlInput] = useState(tenderlyRpc || '');
   const [backendUrl, setBackendUrl] = useState(
-    lsService.getItem('carbonApi') || config.carbonApi
+    lsService.getItem('carbonApi') || config.carbonApi,
   );
   const [carbonControllerInput, setCarbonControllerInput] = useState(
-    config.addresses.carbon.carbonController
+    config.addresses.carbon.carbonController,
   );
   const [voucherAddressInput, setVoucherAddressInput] = useState(
-    config.addresses.carbon.voucher
+    config.addresses.carbon.voucher,
   );
   const [batcherAddressInput, setBatcherAddressInput] = useState(
-    config.addresses.carbon.batcher
+    config.addresses.carbon.batcher,
   );
 
   const submit = (e: FormEvent) => {
@@ -30,7 +30,7 @@ export const DebugTenderlyRPC = () => {
       urlInput,
       carbonControllerInput,
       voucherAddressInput,
-      batcherAddressInput
+      batcherAddressInput,
     );
     lsService.setItem('carbonApi', backendUrl);
   };

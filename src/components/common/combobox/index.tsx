@@ -192,7 +192,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
           'hover:bg-background-800',
           selected.length
             ? 'active:border-white-80 border-white/60'
-            : 'border-background-800 hover:border-background-700 active:border-background-600'
+            : 'border-background-800 hover:border-background-700 active:border-background-600',
         )}
         aria-controls={rootId}
       >

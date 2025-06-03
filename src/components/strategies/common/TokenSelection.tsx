@@ -36,7 +36,7 @@ export const TokenSelection = () => {
 
     const data: ModalTokenListData = {
       onClick,
-      excludedTokens: [isBase ? quote?.address ?? '' : base?.address ?? ''],
+      excludedTokens: [isBase ? (quote?.address ?? '') : (base?.address ?? '')],
       isBaseToken: isBase,
     };
     openModal('tokenLists', data);

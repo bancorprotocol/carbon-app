@@ -68,7 +68,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
         formatNumber(state.buy.min),
         formatNumber(state.sell.max),
         marketPrice.toString(),
-        state.spread
+        state.spread,
       );
       return {
         buyMarginal: prices.buyPriceMarginal,
@@ -114,7 +114,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       formatNumber(state.sell.max),
       marketPrice.toString(),
       state.spread,
-      formatNumber(state.sell.budget)
+      formatNumber(state.sell.budget),
     );
   }, [
     anchor,
@@ -142,7 +142,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       formatNumber(state.sell.max),
       marketPrice.toString(),
       state.spread,
-      formatNumber(state.buy.budget)
+      formatNumber(state.buy.budget),
     );
   }, [
     anchor,
@@ -165,7 +165,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const setOverlappingPrices = (
     min: string,
     max: string,
-    spreadValue: string = spread.toString()
+    spreadValue: string = spread.toString(),
   ) => {
     if (!base || !quote) return;
     if (!isValidRange(min, max) || !isValidSpread(min, max, spread)) return;
@@ -173,7 +173,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       formatNumber(min),
       formatNumber(max),
       marketPrice.toString(),
-      spreadValue
+      spreadValue,
     );
     dispatch('buyMax', prices.buyPriceHigh);
     dispatch('sellMin', prices.sellPriceLow);
@@ -223,7 +223,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       formatNumber(buy.min),
       formatNumber(sell.max),
       marketPrice.toString(),
-      spread.toString()
+      spread.toString(),
     );
     const buyOrder = {
       min: prices.buyPriceLow,

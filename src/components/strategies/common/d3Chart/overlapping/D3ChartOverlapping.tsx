@@ -80,14 +80,14 @@ export const D3ChartOverlapping = (props: Props) => {
       spread,
       yPos.marketPrice,
       yScale,
-    ]
+    ],
   );
 
   const onDragEndBuy = useCallback(() => {
     isDragging.current = false;
 
     const y = Number(
-      getSelector(getHandleSelector('buy', 'line1')).select('line').attr('y1')
+      getSelector(getHandleSelector('buy', 'line1')).select('line').attr('y1'),
     );
     const buyMin = yScale.invert(y).toString();
     const { sellPriceLow } = calcPrices(buyMin, prices.sell.max);
@@ -127,14 +127,14 @@ export const D3ChartOverlapping = (props: Props) => {
       spread,
       yPos.marketPrice,
       yScale,
-    ]
+    ],
   );
 
   const onDragEndSell = useCallback(() => {
     isDragging.current = false;
 
     const y = Number(
-      getSelector(getHandleSelector('sell', 'line1')).select('line').attr('y1')
+      getSelector(getHandleSelector('sell', 'line1')).select('line').attr('y1'),
     );
     const sellMax = yScale.invert(y).toString();
     const { buyPriceHigh } = calcPrices(prices.buy.min, sellMax);
@@ -164,7 +164,7 @@ export const D3ChartOverlapping = (props: Props) => {
         sell: { min: sellPriceLow, max: sellMax },
       });
     },
-    [calcPrices, onPriceUpdates, yPos.marketPrice, yScale]
+    [calcPrices, onPriceUpdates, yPos.marketPrice, yScale],
   );
 
   const onDragEndRect = useCallback(
@@ -179,7 +179,7 @@ export const D3ChartOverlapping = (props: Props) => {
         sell: { min: sellPriceLow, max: sellMax },
       });
     },
-    [calcPrices, onDragEnd, yScale]
+    [calcPrices, onDragEnd, yScale],
   );
 
   useEffect(() => {

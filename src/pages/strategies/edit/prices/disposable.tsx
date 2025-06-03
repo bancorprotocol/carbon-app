@@ -45,7 +45,7 @@ export interface EditDisposableStrategySearch {
 const getOrder = (
   strategy: Strategy,
   search: EditDisposableStrategySearch,
-  marketPrice?: string
+  marketPrice?: string,
 ): EditOrderBlock => {
   const { order0, order1 } = strategy;
   const defaultDirection = !isEmptyOrder(order0) ? 'buy' : 'sell';
@@ -120,7 +120,7 @@ export const EditPricesStrategyDisposablePage = () => {
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const setDirection = (direction: StrategyDirection) => {
@@ -138,7 +138,7 @@ export const EditPricesStrategyDisposablePage = () => {
       if (isBuy) setSearch({ min: buy.min, max: buy.max });
       else setSearch({ min: sell.min, max: sell.max });
     },
-    [setSearch, isBuy]
+    [setSearch, isBuy],
   );
 
   const initialType = getStrategyType(strategy);

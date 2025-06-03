@@ -50,13 +50,13 @@ type Search = EditRecurringStrategySearch;
 const getOrders = (
   strategy: Strategy,
   search: Search,
-  marketPrice?: string
+  marketPrice?: string,
 ): { buy: EditOrderBlock; sell: EditOrderBlock } => {
   const { order0, order1 } = strategy;
 
   const defaultMin = (
     direction: StrategyDirection,
-    settings: StrategySettings = 'limit'
+    settings: StrategySettings = 'limit',
   ) => {
     const isBuy = direction === 'buy';
     const defaultPrice = isBuy ? order0.startRate : order1.endRate;
@@ -74,7 +74,7 @@ const getOrders = (
   };
   const defaultMax = (
     direction: StrategyDirection,
-    settings: StrategySettings = 'limit'
+    settings: StrategySettings = 'limit',
   ) => {
     const isBuy = direction === 'buy';
     const defaultPrice = isBuy ? order0.startRate : order1.endRate;
@@ -102,7 +102,7 @@ const getOrders = (
       budget: getTotalBudget(
         search.buyAction ?? 'deposit',
         order0.balance,
-        search.buyBudget
+        search.buyBudget,
       ),
       marginalPrice: search.buyMarginalPrice,
     },
@@ -114,7 +114,7 @@ const getOrders = (
       budget: getTotalBudget(
         search.sellAction ?? 'deposit',
         order1.balance,
-        search.sellBudget
+        search.sellBudget,
       ),
       marginalPrice: search.sellMarginalPrice,
     },
@@ -154,7 +154,7 @@ export const EditPricesStrategyRecurringPage = () => {
       setBuyOrder({ min: buy.min, max: buy.max });
       setSellOrder({ min: sell.min, max: sell.max });
     },
-    [setBuyOrder, setSellOrder]
+    [setBuyOrder, setSellOrder],
   );
 
   const orders = getOrders(strategy, search, marketPrice);

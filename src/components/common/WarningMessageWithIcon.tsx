@@ -22,7 +22,7 @@ export const Warning: FC<Props> = (props) => {
       className={cn(
         'animate-scaleUp text-12 flex items-center gap-10',
         isError ? 'error-message text-error' : 'warning-message text-warning',
-        className
+        className,
       )}
       data-testid={props['data-testid']}
     >
@@ -43,7 +43,7 @@ export const WarningTooltip: FC<Props> = (props) => {
             isError
               ? 'error-message text-error'
               : 'warning-message text-warning',
-            className
+            className,
           )}
         />
       </span>

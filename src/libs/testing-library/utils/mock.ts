@@ -17,7 +17,7 @@ import { TokenPriceHistoryResult } from 'libs/queries/extApi/tokenPrice';
  * @returns An HTTP handler function that can be passed to the MockServer handlers
  */
 export const marketRateHandler = (
-  marketRates: Record<string, Record<string, number>>
+  marketRates: Record<string, Record<string, number>>,
 ) => {
   return http.get('**/*/market-rate', ({ request }) => {
     const queryParams = new URL(request.url).searchParams;
@@ -50,7 +50,7 @@ export const tokenListHandlers = Object.keys(tokenListsMock).map(
         data: json,
       });
     });
-  }
+  },
 );
 
 /**

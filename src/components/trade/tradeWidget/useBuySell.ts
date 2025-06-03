@@ -33,7 +33,7 @@ export const useBuySell = ({
   const [tradeActions, setTradeActions] = useState<TradeActionBNStr[]>([]);
   const [tradeActionsRes, setTradeActionsRes] = useState<Action[]>([]);
   const [tradeActionsWei, setTradeActionsWei] = useState<MatchActionBNStr[]>(
-    []
+    [],
   );
   const [rate, setRate] = useState('');
   const [isLiquidityError, setIsLiquidityError] = useState(false);
@@ -49,7 +49,7 @@ export const useBuySell = ({
   });
   const maxSourceAmountQuery = useGetMaxSourceAmountByPair(
     source.address,
-    target.address
+    target.address,
   );
 
   const clearInputs = useCallback(() => {
@@ -184,7 +184,7 @@ export const useBuySell = ({
   const errorBaseBalanceSufficient =
     !!user &&
     new SafeDecimal(sourceBalanceQuery.data || 0).lt(
-      isTradeBySource ? sourceInput : calcMaxInput(sourceInput)
+      isTradeBySource ? sourceInput : calcMaxInput(sourceInput),
     );
 
   const handleCTAClick = useCallback(() => {
@@ -274,7 +274,7 @@ export const useBuySell = ({
     }
     if (isLiquidityError) {
       return `Available liquidity: ${prettifyNumber(
-        liquidityQuery.data || '0'
+        liquidityQuery.data || '0',
       )} ${target.symbol}`;
     }
   }, [
@@ -310,10 +310,10 @@ export const useBuySell = ({
   const getTokenFiat = useCallback(
     (value: string, query: any) => {
       return new SafeDecimal(value || 0).times(
-        query.data?.[selectedFiatCurrency] || 0
+        query.data?.[selectedFiatCurrency] || 0,
       );
     },
-    [selectedFiatCurrency]
+    [selectedFiatCurrency],
   );
 
   const calcSlippage = useCallback((): SafeDecimal | null => {

@@ -9,7 +9,7 @@ import { TEN_SEC_IN_MS } from 'utils/time';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 
 export const useGetTokenBalance = (
-  token?: Pick<Token, 'address' | 'decimals'>
+  token?: Pick<Token, 'address' | 'decimals'>,
 ) => {
   const address = token?.address;
   const decimals = token?.decimals;
@@ -49,7 +49,7 @@ export const useGetTokenBalance = (
 };
 
 export const useGetTokenBalances = (
-  tokens: Pick<Token, 'address' | 'decimals'>[]
+  tokens: Pick<Token, 'address' | 'decimals'>[],
 ) => {
   const { user, provider } = useWagmi();
   const { Token } = useContract();

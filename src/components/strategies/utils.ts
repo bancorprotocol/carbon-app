@@ -24,7 +24,7 @@ export const isValidRange = (minStr: string, maxStr: string) => {
 
 export const checkIfOrdersOverlap = (
   buy: { min: string; max: string },
-  sell: { min: string; max: string }
+  sell: { min: string; max: string },
 ): boolean => {
   const isSellMinInBuyRange =
     +sell.min < +buy.max &&
@@ -38,7 +38,7 @@ export const checkIfOrdersOverlap = (
 
 export const checkIfOrdersReversed = (
   buyRaw: { min: string; max: string },
-  sellRaw: { min: string; max: string }
+  sellRaw: { min: string; max: string },
 ): boolean => {
   const translateOrder = (order: { min: string; max: string }) => {
     const orderPrice = order.min === order.max ? +order.min : 0;
@@ -78,7 +78,7 @@ export const checkIfOrdersReversed = (
 
 export const getStatusTextByTxStatus = (
   isAwaiting: boolean,
-  isProcessing: boolean
+  isProcessing: boolean,
 ): string | undefined => {
   if (isAwaiting) return 'Waiting for Confirmation';
   if (isProcessing) return 'Processing';

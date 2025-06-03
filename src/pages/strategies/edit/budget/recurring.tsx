@@ -38,12 +38,12 @@ export const EditBudgetRecurringPage = () => {
   const totalBuyBudget = getTotalBudget(
     search.editType,
     order0.balance,
-    search.buyBudget
+    search.buyBudget,
   );
   const totalSellBudget = getTotalBudget(
     search.editType,
     order1.balance,
-    search.sellBudget
+    search.sellBudget,
   );
 
   const orders = {

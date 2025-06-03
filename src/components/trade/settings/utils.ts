@@ -19,7 +19,7 @@ export type TradeSettingsData = {
 
 export const warningMessageIfOutOfRange = (
   id: TradeSettingsDataId,
-  value: string
+  value: string,
 ): string => {
   const numberedValue = +value;
   switch (id) {
@@ -54,7 +54,7 @@ export const warningMessageIfOutOfRange = (
 
 export const isValidValue = (
   id: TradeSettingsDataId,
-  value: string
+  value: string,
 ): boolean => {
   const numberedValue = +value;
   switch (id) {

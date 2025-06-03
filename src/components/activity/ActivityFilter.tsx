@@ -77,7 +77,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
       id={formId}
       className={cn(
         'flex flex-wrap items-center justify-start gap-8 md:justify-end md:gap-16',
-        className
+        className,
       )}
       role="search"
       onChange={updateParams}

@@ -277,7 +277,7 @@ export const tokenParserMap: Record<
 > = {
   tokenDragonswapListParser: tokenDragonswapListParser(
     'dragonswap-app/assets',
-    'logos'
+    'logos',
   ),
   tokenSeiListParser: tokenSeiListParser('pacific-1'),
 };

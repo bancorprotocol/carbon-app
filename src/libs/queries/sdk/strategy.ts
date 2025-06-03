@@ -124,10 +124,10 @@ const buildStrategiesHelper = async ({
       noBudget && offCurve
         ? 'inactive'
         : offCurve
-        ? 'paused'
-        : noBudget
-        ? 'noBudget'
-        : 'active';
+          ? 'paused'
+          : noBudget
+            ? 'noBudget'
+            : 'active';
 
     // ATTENTION *****************************
     // This is the buy order | UI order 0 and CONTRACT order 1
@@ -361,7 +361,7 @@ export const useCreateStrategyQuery = () => {
         order1.min,
         order1.marginalPrice || order1.min,
         order1.max,
-        order1.budget || '0'
+        order1.budget || '0',
       );
 
       return signer!.sendTransaction(unsignedTx);
@@ -387,7 +387,7 @@ export const useUpdateStrategyQuery = () => {
           ...fieldsToUpdate,
         },
         buyMarginalPrice,
-        sellMarginalPrice
+        sellMarginalPrice,
       );
 
       return signer!.sendTransaction(unsignedTx);

@@ -22,7 +22,7 @@
 .strategy-table th {
   @apply border-b border-background-800;
   font-weight: 400;
-  color: rgba(255 255 255 / .6);
+  color: rgba(255 255 255 / 0.6);
   padding: 16px;
   text-align: start;
   text-wrap: nowrap;

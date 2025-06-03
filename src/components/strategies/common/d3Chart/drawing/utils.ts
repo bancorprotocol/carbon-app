@@ -12,7 +12,7 @@ export const getAreaBox = () => {
 
 export const getInitialPoints = (
   root: DOMRect,
-  circles: SVGCircleElement[]
+  circles: SVGCircleElement[],
 ) => {
   return circles.map((c) => {
     const { x, y, width } = c.getBoundingClientRect();
@@ -26,7 +26,7 @@ export const getInitialPoints = (
 export const getDelta = (
   root: DOMRect,
   mouseDown: ReactMouseEvent,
-  moveMove: MouseEvent
+  moveMove: MouseEvent,
 ) => {
   if (moveMove.clientX < root.x || moveMove.clientX > root.x + root.width)
     return;

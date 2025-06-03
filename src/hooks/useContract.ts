@@ -24,7 +24,7 @@ export const useContract = () => {
       read: Token__factory.connect(address, provider!),
       write: Token__factory.connect(address, signer!),
     }),
-    [provider, signer]
+    [provider, signer],
   );
 
   return { Token };

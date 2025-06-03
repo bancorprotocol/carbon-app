@@ -54,17 +54,17 @@ describe('managedLocalStorage', () => {
     ];
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
-      ['v1', key].join('-')
+      ['v1', key].join('-'),
     );
     const v11LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
-      ['v1.1', key].join('-')
+      ['v1.1', key].join('-'),
     );
     const v12LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
-      ['v1.2', key].join('-')
+      ['v1.2', key].join('-'),
     );
     const v13LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.3', key].join('-'),
-      migrations
+      migrations,
     );
 
     // To migrate
@@ -132,11 +132,11 @@ describe('managedLocalStorage', () => {
     ];
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
-      ['v1', key].join('-')
+      ['v1', key].join('-'),
     );
     const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.1', key].join('-'),
-      migrations
+      migrations,
     );
 
     // To migrate
@@ -191,11 +191,11 @@ describe('managedLocalStorage', () => {
     ];
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
-      ['v1', key].join('-')
+      ['v1', key].join('-'),
     );
     const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.1', key].join('-'),
-      migrations
+      migrations,
     );
 
     // To migrate
@@ -240,11 +240,11 @@ describe('managedLocalStorage', () => {
     ];
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
-      ['v1', key].join('-')
+      ['v1', key].join('-'),
     );
     const v11LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.1', key].join('-'),
-      migrations
+      migrations,
     );
 
     // To migrate

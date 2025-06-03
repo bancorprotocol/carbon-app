@@ -24,7 +24,7 @@ export const useApproval = (data: ApprovalToken[]) => {
     return approvalQuery.map((q, i) => {
       const amount = sanitizeNumber(data[i].amount, data[i].decimals);
       const isNullApprovalToken = NULL_APPROVAL_CONTRACTS.includes(
-        data[i].address.toLowerCase()
+        data[i].address.toLowerCase(),
       );
       const newData: ApprovalTokenResult | undefined = q.data && {
         ...data[i],
@@ -43,7 +43,7 @@ export const useApproval = (data: ApprovalToken[]) => {
 
   const approvalRequired = useMemo(
     () => result.some((x) => x.data?.approvalRequired),
-    [result]
+    [result],
   );
 
   const isPending = useMemo(() => result.some((x) => x.isPending), [result]);

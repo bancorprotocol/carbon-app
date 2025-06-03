@@ -33,7 +33,7 @@ const persistSdkCacheDump = async () => {
 const getTokenDecimalMap = () => {
   const tokens = lsService.getItem('tokenListCache')?.tokens || [];
   return new Map(
-    tokens.map((token) => [token.address.toLowerCase(), token.decimals])
+    tokens.map((token) => [token.address.toLowerCase(), token.decimals]),
   );
 };
 
@@ -61,7 +61,7 @@ export const useCarbonInit = () => {
           query.queryKey[1] === 'strategies',
       });
     },
-    [cache]
+    [cache],
   );
 
   const onPairDataChangedCallback = useCallback(
@@ -70,7 +70,7 @@ export const useCarbonInit = () => {
       if (pairs.length === 0) return;
       pairs.forEach((pair) => invalidateQueriesByPair(pair));
     },
-    [invalidateQueriesByPair]
+    [invalidateQueriesByPair],
   );
 
   const onPairAddedToCacheCallback = useCallback(
@@ -80,7 +80,7 @@ export const useCarbonInit = () => {
       void invalidateQueriesByPair(pair);
       void cache.invalidateQueries({ queryKey: QueryKey.pairs() });
     },
-    [cache, invalidateQueriesByPair]
+    [cache, invalidateQueriesByPair],
   );
 
   const initSDK = useCallback(async () => {
@@ -105,11 +105,11 @@ export const useCarbonInit = () => {
             pairBatchSize: config.sdk.pairBatchSize,
             blockRangeSize: config.sdk.blockRangeSize,
             refreshInterval: config.sdk.refreshInterval,
-          }
+          },
         ),
         carbonSDK.setOnChangeHandlers(
           Comlink.proxy(onPairDataChangedCallback),
-          Comlink.proxy(onPairAddedToCacheCallback)
+          Comlink.proxy(onPairAddedToCacheCallback),
         ),
       ]);
 

@@ -24,7 +24,7 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
       <h3
         className={cn(
           'text-14 font-weight-600',
-          buy ? 'text-buy' : 'text-sell'
+          buy ? 'text-buy' : 'text-sell',
         )}
       >
         {buy ? 'Buy' : 'Sell'} Overview

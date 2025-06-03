@@ -10,7 +10,7 @@ export const statusText: Record<StrategyStatus, string> = {
 
 export const getTooltipTextByStatus = (
   isExplorer: boolean | undefined,
-  status: StrategyStatus
+  status: StrategyStatus,
 ) => {
   if (status === 'active') {
     return isExplorer
@@ -49,7 +49,7 @@ const tooltipTextByStrategyEditOptionsId = {
 };
 
 export const getTooltipTextByStrategyEditOptionsId = (
-  isOwn: boolean | undefined
+  isOwn: boolean | undefined,
 ) => {
   return {
     ...tooltipTextByStrategyEditOptionsId,

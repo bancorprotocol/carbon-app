@@ -21,7 +21,7 @@ export const toCreateStrategyParams = (
   base: Token,
   quote: Token,
   order0: BaseOrder,
-  order1: BaseOrder
+  order1: BaseOrder,
 ): CreateStrategyParams => ({
   base: base.address,
   quote: quote.address,
@@ -126,7 +126,7 @@ export const useCreateStrategy = (props: Props) => {
             //   showAlert: true,
             // });
           },
-        }
+        },
       );
     };
 

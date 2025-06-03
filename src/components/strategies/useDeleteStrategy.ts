@@ -20,7 +20,7 @@ export const useDeleteStrategy = () => {
   const deleteStrategy = async (
     strategy: Strategy,
     successEventsCb?: () => void,
-    closeModalCb?: () => void
+    closeModalCb?: () => void,
   ) => {
     const { base, quote, id } = strategy;
 
@@ -54,7 +54,7 @@ export const useDeleteStrategy = () => {
           setIsProcessing(false);
           console.error('delete mutation failed', e);
         },
-      }
+      },
     );
   };
 

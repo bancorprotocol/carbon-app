@@ -28,7 +28,7 @@ const getRectPoints = (points: ChartPoint[]) => {
 const getRectProps = (
   points: ChartPoint[],
   xScale: ScaleBand<string>,
-  yScale: ScaleLinear<number, number>
+  yScale: ScaleLinear<number, number>,
 ) => ({
   x: xScale(points[0].x)!,
   y: yScale(points[0].y),
@@ -169,7 +169,7 @@ export const D3EditRect: FC<D3ShapeProps> = ({ drawing, onChange }) => {
 
   const dragPoint = (
     event: ReactMouseEvent<SVGCircleElement>,
-    index: number
+    index: number,
   ) => {
     event.stopPropagation(); // Prevent mousedown on g
     setEditing(true);

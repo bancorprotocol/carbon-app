@@ -64,7 +64,7 @@ export const tokenDragonswapListParser =
     const assetLogoPath = `https://raw.githubusercontent.com/${repo}/main/${logoPath}`;
 
     const logosFolder = (await getGitFolderContent(
-      gitRepoInfoApi
+      gitRepoInfoApi,
     )) as GitRepoResponse[];
     const logos: string[] = logosFolder
       .filter((r) => isAddress(r.name))

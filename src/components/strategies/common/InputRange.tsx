@@ -174,7 +174,7 @@ export const InputRange: FC<InputRangeProps> = ({
             className={cn(
               'rounded-r-4 rounded-l-16 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
               showWarning && 'border-warning focus-within:border-warning',
-              hasMinError && 'border-error/50 focus-within:border-error'
+              hasMinError && 'border-error/50 focus-within:border-error',
             )}
             onClick={() => document.getElementById(inputMinId)?.focus()}
           >
@@ -206,7 +206,7 @@ export const InputRange: FC<InputRangeProps> = ({
               placeholder="Enter Price"
               className={cn(
                 'text-16 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
-                hasMinError && 'text-error'
+                hasMinError && 'text-error',
               )}
               onChange={(e) => onMinChange(e.target.value)}
               onFocus={onMinFocus}
@@ -234,7 +234,7 @@ export const InputRange: FC<InputRangeProps> = ({
             className={cn(
               'rounded-r-16 rounded-l-4 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
               showWarning && 'border-warning focus-within:border-warning',
-              hasMaxError && 'border-error/50 focus-within:border-error'
+              hasMaxError && 'border-error/50 focus-within:border-error',
             )}
             onClick={() => document.getElementById(inputMaxId)?.focus()}
           >
@@ -266,7 +266,7 @@ export const InputRange: FC<InputRangeProps> = ({
               placeholder="Enter Price"
               className={cn(
                 'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
-                hasMaxError && 'text-error'
+                hasMaxError && 'text-error',
               )}
               onChange={(e) => onMaxChange(e.target.value)}
               onFocus={onMaxFocus}

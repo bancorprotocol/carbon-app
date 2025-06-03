@@ -13,10 +13,10 @@ export interface InternalStrategyInput extends StrategyInputSearch {
 
 export type StrategyInputDispatch = <
   T extends InternalStrategyInput,
-  K extends keyof T
+  K extends keyof T,
 >(
   key: K,
-  value: T[K]
+  value: T[K],
 ) => void;
 
 export interface StrategyInputOrder {
@@ -61,7 +61,7 @@ export const useStrategyInput = ({ searchState }: Props) => {
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   useDebouncedValue(_state, 300, { cb: setSearch });
@@ -80,7 +80,7 @@ function isInternalState(object: any): object is InternalStrategyInput {
 export const buildStrategyInputState = (
   state: InternalStrategyInput | StrategyInputSearch,
   baseToken?: Token,
-  quoteToken?: Token
+  quoteToken?: Token,
 ): StrategyInputValues => {
   if (isInternalState(state)) {
     return {

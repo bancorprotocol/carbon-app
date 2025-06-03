@@ -108,7 +108,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
         className={cn(
           'rounded-16 flex cursor-text flex-col gap-5 border border-black bg-black p-16 focus-within:border-white/50',
           showWarning && 'border-warning focus-within:border-warning',
-          displayError && 'border-error/50 focus-within:border-error/50'
+          displayError && 'border-error/50 focus-within:border-error/50',
         )}
         onClick={() => document.getElementById(id)?.focus()}
       >
@@ -126,7 +126,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
             placeholder="Enter Price"
             className={cn(
               'text-16 font-weight-500 w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-none',
-              displayError && 'text-error'
+              displayError && 'text-error',
             )}
             data-testid="input-price"
             required={required}

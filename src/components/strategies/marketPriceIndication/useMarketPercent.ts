@@ -49,7 +49,7 @@ export const useMarketPercent = ({
       max: marketPricePercent(order.max, marketPrice),
       price: marketPricePercent(order.price, marketPrice),
     }),
-    [order.max, order.min, order.price, marketPrice]
+    [order.max, order.min, order.price, marketPrice],
   );
 
   return {
@@ -60,7 +60,7 @@ export const useMarketPercent = ({
 
 export const marketPricePercent = (
   price?: string,
-  marketPrice?: string | number
+  marketPrice?: string | number,
 ) => {
   const value = new SafeDecimal(formatNumber(price ?? '') || 0);
   if (value.eq(0)) return value;

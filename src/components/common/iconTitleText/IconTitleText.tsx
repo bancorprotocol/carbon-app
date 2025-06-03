@@ -34,7 +34,7 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
       <div
         className={cn(
           'p-18 flex size-60 items-center justify-center rounded-full',
-          variantClass
+          variantClass,
         )}
       >
         {icon}

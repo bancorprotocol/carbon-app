@@ -39,20 +39,20 @@ export const useLinearScale = ({
       ticks.push({
         value,
         offset: scale(value),
-      })
+      }),
     );
   } else {
     scale.ticks().forEach((value) =>
       ticks.push({
         value,
         offset: scale(value),
-      })
+      }),
     );
   }
 
   const accessor = useCallback(
     (key: keyof SimulatorData) => getAccessor(key, scale),
-    [scale]
+    [scale],
   );
 
   return { scale, ticks, accessor };

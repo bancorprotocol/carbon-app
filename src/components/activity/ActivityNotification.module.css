@@ -1,5 +1,5 @@
 .icon::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: 50%;
@@ -34,7 +34,8 @@
 }
 
 @keyframes enter {
-  0%, 30% {
+  0%,
+  30% {
     transform: translateX(-100%);
   }
   100% {
@@ -43,7 +44,8 @@
 }
 
 @keyframes scale {
-  0%, 60% {
+  0%,
+  60% {
     transform: scale(0.3);
   }
   100% {

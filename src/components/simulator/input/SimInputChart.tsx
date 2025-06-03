@@ -66,7 +66,7 @@ export const SimInputChart = ({
       dispatch('sellMin', formatNumber(sell.min));
       dispatch('sellMax', formatNumber(sell.max));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const onPriceUpdatesEnd: OnPriceUpdates = useCallback(
@@ -76,7 +76,7 @@ export const SimInputChart = ({
       dispatch('sellMin', formatNumber(sell.min));
       dispatch('sellMax', formatNumber(sell.max));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const onDatePickerConfirm = useCallback(
@@ -85,7 +85,7 @@ export const SimInputChart = ({
       dispatch('start', props.start);
       dispatch('end', props.end);
     },
-    [dispatch]
+    [dispatch],
   );
 
   if (isPending || marketIsPending) {

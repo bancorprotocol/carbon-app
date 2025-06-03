@@ -33,7 +33,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
           {...attr}
           className={cn(
             buttonStyles({ variant: 'secondary' }),
-            'relative flex size-40 items-center justify-center p-0'
+            'relative flex size-40 items-center justify-center p-0',
           )}
         >
           <img
@@ -54,7 +54,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
               'rounded-6 flex w-full items-center gap-x-10 p-12',
               isCurrentNetwork
                 ? 'pointer-events-none bg-black'
-                : 'hover:bg-black'
+                : 'hover:bg-black',
             )}
             href={getFullPath(appUrl)}
             aria-current={isCurrentNetwork}

@@ -44,13 +44,13 @@ const getOrders = (
   min: number,
   max: number,
   marketPrice: string,
-  spread?: string
+  spread?: string,
 ) => {
   const params = calculateOverlappingPrices(
     min.toString(),
     max.toString(),
     marketPrice,
-    spread || Number.MIN_VALUE.toString()
+    spread || Number.MIN_VALUE.toString(),
   );
   return {
     order0: {
@@ -378,7 +378,7 @@ export const OverlappingChart: FC<Props> = (props) => {
 
   const dragStart = (
     e: ReactMouseEvent | ReactTouchEvent,
-    mode: 'buy' | 'sell'
+    mode: 'buy' | 'sell',
   ) => {
     e.preventDefault();
     if (disabled) return;
@@ -429,7 +429,7 @@ export const OverlappingChart: FC<Props> = (props) => {
         const percentSelector = `#${mode}-handler .tooltip-percent`;
         const tooltipPercent = document.querySelector(percentSelector);
         const percentValue = getSignedMarketPricePercentage(
-          new SafeDecimal((100 * (priceValue - +marketPrice)) / +marketPrice)
+          new SafeDecimal((100 * (priceValue - +marketPrice)) / +marketPrice),
         );
         if (tooltipPercent) tooltipPercent.textContent = `${percentValue}%`;
       }

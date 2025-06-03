@@ -30,7 +30,7 @@ const AllTheProviders = ({ children }: { children: ReactNode }) => {
  */
 export const renderWithProviders = (
   ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>
+  options?: Omit<RenderOptions, 'wrapper'>,
 ) =>
   render(ui, {
     wrapper: AllTheProviders,
@@ -66,7 +66,7 @@ export const renderWithRouter = async (params: RouterRenderParams) => {
   const customRouter = await loadRouter(params);
   return {
     container: renderWithProviders(
-      <RouterProvider router={customRouter as any} />
+      <RouterProvider router={customRouter as any} />,
     ),
     router: customRouter,
   };

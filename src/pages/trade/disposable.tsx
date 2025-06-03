@@ -39,7 +39,7 @@ export const TradeDisposable = () => {
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const setDirection = (direction: StrategyDirection) => {
@@ -51,7 +51,7 @@ export const TradeDisposable = () => {
       if (isBuy) setSearch({ min: buy.min, max: buy.max });
       else setSearch({ min: sell.min, max: sell.max });
     },
-    [setSearch, isBuy]
+    [setSearch, isBuy],
   );
 
   // Warnings

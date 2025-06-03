@@ -24,14 +24,14 @@ export const useGetTradeActionsQuery = ({
     queryKey: QueryKey.tradeActions(
       [sourceToken, targetToken],
       isTradeBySource,
-      actionsWei
+      actionsWei,
     ),
     queryFn: async () => {
       return carbonSDK.getTradeDataFromActions(
         sourceToken,
         targetToken,
         !isTradeBySource,
-        actionsWei
+        actionsWei,
       );
     },
     enabled: isInitialized,

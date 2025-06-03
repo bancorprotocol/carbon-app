@@ -50,7 +50,7 @@ const initInput = (value: string) => {
 
 export const toDisposablePricesSearch = (
   strategy: Strategy,
-  editType: 'editPrices' | 'renew'
+  editType: 'editPrices' | 'renew',
 ): EditDisposableStrategySearch => {
   const { order0, order1 } = strategy;
   const direction = isEmptyOrder(order0) ? 'sell' : 'buy';
@@ -87,7 +87,7 @@ export const editPricesDisposable = createRoute({
 
 export const toRecurringPricesSearch = (
   strategy: Strategy,
-  editType: 'editPrices' | 'renew'
+  editType: 'editPrices' | 'renew',
 ): EditRecurringStrategySearch => {
   const { order0: buy, order1: sell } = strategy;
   return {
@@ -121,7 +121,7 @@ export const editPricesRecurring = createRoute({
 
 export const toOverlappingPricesSearch = (
   strategy: Strategy,
-  editType: 'editPrices' | 'renew'
+  editType: 'editPrices' | 'renew',
 ): EditOverlappingStrategySearch => {
   const { order0: buy, order1: sell } = strategy;
 

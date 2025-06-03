@@ -21,7 +21,7 @@ interface Props {
 const fromPolygonPoints = (
   polygon: SVGPolygonElement,
   invertX: (value: number) => string,
-  invertY: (value: number) => number
+  invertY: (value: number) => number,
 ) => {
   return [
     polygon.points.getItem(0), // line1 x1,y1
@@ -38,7 +38,7 @@ const fromPolygonPoints = (
 const toPolygonPoints = (
   points: ChartPoint[],
   xScale: ScaleBand<string>,
-  yScale: ScaleLinear<number, number>
+  yScale: ScaleLinear<number, number>,
 ) => {
   return [points[0], points[1], points[3], points[2]]
     .map(({ x, y }) => `${xScale(x)},${yScale(y)}`)
@@ -63,7 +63,7 @@ const getPolygonPoints = (line: SVGLineElement, deltaY: number) => {
 const getLineCenter = (
   points: ChartPoint[],
   xScale: ScaleBand<string>,
-  yScale: ScaleLinear<number, number>
+  yScale: ScaleLinear<number, number>,
 ) => {
   const [a, b] = points;
   return {
@@ -99,7 +99,7 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
         document.addEventListener(
           'click',
           () => document.removeEventListener('mousemove', handler),
-          { once: true }
+          { once: true },
         );
       });
     } else if (points.length === 1) {
@@ -118,7 +118,7 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
         document.addEventListener(
           'click',
           () => document.removeEventListener('mousemove', handler),
-          { once: true }
+          { once: true },
         );
       });
     } else {
@@ -225,7 +225,7 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
 
   const dragPoint = (
     event: ReactMouseEvent<SVGCircleElement>,
-    index: number
+    index: number,
   ) => {
     event.stopPropagation(); // Prevent mousedown on g
     setEditing(true);
