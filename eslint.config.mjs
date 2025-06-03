@@ -28,9 +28,8 @@ export default tseslint.config(
     },
     rules: {
       "react/prop-types": "off",
-      "@typescript-eslint/no-unused-vars": 0,
+      "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "react/no-unescaped-entities": 0,
       "react/jsx-curly-brace-presence": [
         "warn",
         { "props": "never", "children": "never" }

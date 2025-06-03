@@ -53,7 +53,7 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
 };
 export const getSortAndFilterItems = () => {
   const sortItems = Object.entries(strategySort)
-    .filter(([_item, title]) => !!title)
+    .filter(([, title]) => !!title)
     .map(([item, title]) => {
       return { item: item as StrategySort, title };
     });

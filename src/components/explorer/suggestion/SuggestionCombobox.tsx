@@ -38,7 +38,7 @@ interface Props {
 const displaySlug = (
   slug: string,
   pairMap: Map<string, TradePair>,
-  tokensMap: Map<string, Token>
+  tokensMap: Map<string, Token>,
 ) => {
   if (tokensMap.has(slug)) {
     return tokensMap.get(slug)?.symbol ?? '';
@@ -75,7 +75,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   });
 
   const [search, setSearch] = useState(
-    displaySlug(params.slug, pairMap, tokensMap)
+    displaySlug(params.slug, pairMap, tokensMap),
   );
   const [focusTab, setFocusTab] = useState<FocusTab>('token');
 
@@ -90,7 +90,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
 
   const filteredPairs = useMemo(
     () => searchPairTrade(pairMap, namesMap, search),
-    [namesMap, pairMap, search]
+    [namesMap, pairMap, search],
   );
   const filteredTokens = useMemo(() => {
     return searchTokens(pairMap, search);
@@ -185,6 +185,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
       document.removeEventListener('mousedown', handleSoftExit);
       document.removeEventListener('keydown', keydownHandler);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, listboxId]);
 
   return (
@@ -195,7 +196,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
         type="search"
         className={cn(
           'flex-grow bg-transparent outline-none',
-          style.inputSearch
+          style.inputSearch,
         )}
         role="combobox"
         autoComplete="off"
@@ -215,7 +216,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
         role="dialog"
         className={cn(
           'rounded-10 bg-background-800 absolute left-0 top-[100%] z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
-          style.dialog
+          style.dialog,
         )}
       >
         <header className="flex gap-8 border-b border-white/40 p-12">
