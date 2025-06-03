@@ -78,7 +78,7 @@ export const useStrategyCart = () => {
 
 export const addStrategyToCart = (
   user: string,
-  params: CreateStrategyParams
+  params: CreateStrategyParams,
 ) => {
   const id = crypto.randomUUID();
   const carts = lsService.getItem('carts') ?? {};
@@ -113,14 +113,14 @@ export const addStrategyToCart = (
     {
       duration: 1000,
       easing: 'cubic-bezier(0,.6,1,.4)',
-    }
+    },
   );
   return animation.finished;
 };
 
 export const removeStrategyFromCart = async (
   user: string,
-  strategy: CartStrategy
+  strategy: CartStrategy,
 ) => {
   // Animate leaving strategy
   const keyframes = { opacity: 0, transform: 'scale(0.9)' };
@@ -157,7 +157,6 @@ export const removeStrategyFromCart = async (
       const newBox = el.getBoundingClientRect();
       if (box.top === newBox.top && box.left === newBox.left) continue;
       const keyframes = [
-        // eslint-disable-next-line prettier/prettier
         {
           transform: `translate(${box.left - newBox.left}px, ${
             box.top - newBox.top

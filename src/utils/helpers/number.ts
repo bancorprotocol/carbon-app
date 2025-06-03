@@ -7,7 +7,7 @@ export type NumberLike = number | string | SafeDecimal;
 
 export const getFiatDisplayValue = (
   fiatValue: SafeDecimal | string | number,
-  currentCurrency: FiatSymbol
+  currentCurrency: FiatSymbol,
 ) => {
   return prettifyNumber(fiatValue, { currentCurrency });
 };
@@ -37,9 +37,7 @@ export const formatNumber = (value: string) => {
 };
 
 const getDisplayCurrency = (currency: string) => {
-  // @ts-ignore: TS52072 supportedValuesOf is not yet supported in TypeScript 5.2
   if (!Intl.supportedValuesOf) return 'symbol';
-  // @ts-ignore: TS52072 supportedValuesOf is not yet supported in TypeScript 5.2
   if (Intl.supportedValuesOf('currency').includes(currency)) return 'symbol';
   return 'name';
 };
@@ -51,7 +49,7 @@ const getDisplayCurrency = (currency: string) => {
 const highPrecision = (
   num: SafeDecimal,
   formatter: Intl.NumberFormat,
-  maxDecimals: number = 6
+  maxDecimals: number = 6,
 ) => {
   if (num.lt(1)) return formatter.format(num.toNumber());
   // 12.12345678 -> 123456 (if maxDecimals is 6)
@@ -118,16 +116,13 @@ interface PrettifyNumberOptions {
 
 const getIntlOptions = (value: SafeDecimal, options: PrettifyNumberOptions) => {
   const intlOptions: Intl.NumberFormatOptions = {
-    // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
     roundingMode: 'trunc',
   };
 
   if (options.round) {
-    // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
     intlOptions.roundingMode = 'halfExpand';
   }
   if (options.isInteger) {
-    // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
     intlOptions.roundingMode = 'trunc';
   }
 
@@ -152,7 +147,7 @@ const getIntlOptions = (value: SafeDecimal, options: PrettifyNumberOptions) => {
 
 export function prettifyNumber(
   value: NumberLike,
-  options: PrettifyNumberOptions = {}
+  options: PrettifyNumberOptions = {},
 ): string {
   const num = new SafeDecimal(value);
   const { locale = 'en-US' } = options;
@@ -224,7 +219,7 @@ export function prettifyNumber(
  */
 export const prettifySignedNumber = (
   num: number | string | SafeDecimal,
-  options?: PrettifyNumberOptions
+  options?: PrettifyNumberOptions,
 ) => {
   const bigNum = new SafeDecimal(num);
   return bigNum.lt(0)
@@ -234,7 +229,7 @@ export const prettifySignedNumber = (
 
 export const formatNumberWithApproximation = (
   num: SafeDecimal,
-  { isPercentage = false, approximateBelow = 0.01 } = {}
+  { isPercentage = false, approximateBelow = 0.01 } = {},
 ): { value: string; negative: boolean } => {
   const addPercentage = (value: string) => (isPercentage ? value + '%' : value);
 
@@ -271,7 +266,7 @@ export const roundSearchParam = (param?: string | number) => {
 export const tokenAmount = (
   amount: NumberLike | undefined,
   token: Token,
-  options?: PrettifyNumberOptions
+  options?: PrettifyNumberOptions,
 ) => {
   if (amount === undefined || isNaN(Number(amount))) return;
   return `${prettifySignedNumber(Number(amount), options)} ${token.symbol}`;
@@ -281,7 +276,7 @@ export const tokenRange = (
   min: NumberLike,
   max: NumberLike,
   token: Token,
-  options?: PrettifyNumberOptions
+  options?: PrettifyNumberOptions,
 ) => {
   if (min === max) return tokenAmount(min, token);
   const from = tokenAmount(min, token, options);

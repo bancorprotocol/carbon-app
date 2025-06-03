@@ -36,7 +36,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
         },
       };
     },
-    [back]
+    [back],
   );
 
   const forward = useCallback(
@@ -56,13 +56,13 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
                 const originalClick = item.onClick?.bind(item);
                 if (item.postClickAction === 'back') {
                   item.onClick = () => {
-                    originalClick && originalClick();
+                    if (originalClick) originalClick();
                     setMenuContext(updatedStack.pop());
                     closeMenu();
                   };
                 } else {
                   item.onClick = () => {
-                    originalClick && originalClick();
+                    if (originalClick) originalClick();
                     closeMenu();
                   };
                 }
@@ -81,7 +81,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
         return prev;
       });
     },
-    [getTopSubMenuItem, menuMapping]
+    [getTopSubMenuItem, menuMapping],
   );
 
   const closeMenu = () => setIsOpen(false);
@@ -103,7 +103,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
     }) || [];
 
   const [menuContext, setMenuContext] = useState(
-    stack.push({ items: mainItemsWithNavigationEvents })
+    stack.push({ items: mainItemsWithNavigationEvents }),
   );
 
   useEffect(() => {

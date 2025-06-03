@@ -19,7 +19,7 @@ const finishRemainingAnimations = (element: HTMLElement | null) => {
 const commitAnimationStyle = (element: HTMLElement | null) => {
   const animations = element?.getAnimations() ?? [];
   animations.forEach((a) => {
-    if (!element?.offsetParent === null) return;
+    if (element?.offsetParent == null) return;
     a.commitStyles();
     a.cancel();
   });
@@ -98,7 +98,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
           { opacity: 0, transform: 'scale(0.5)' },
           { opacity: 1, transform: 'scale(1)' },
         ],
-        options
+        options,
       );
     }
 

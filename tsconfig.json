@@ -20,5 +20,5 @@
     "noUnusedParameters": false,
     "baseUrl": "src"
   },
-  "include": ["src", "functions"],
+  "include": ["src", "functions", "eslint.config.mjs"],
 }

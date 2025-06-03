@@ -47,7 +47,7 @@ const init = async (
     pairBatchSize?: number;
     blockRangeSize?: number;
     refreshInterval?: number;
-  }
+  },
 ) => {
   if (isInitialized || isInitializing) return;
   isInitializing = true;
@@ -56,7 +56,7 @@ const init = async (
       ...rpc,
       skipFetchSetup: true,
     },
-    chainId
+    chainId,
   );
   api = new ContractsApi(provider, config);
   const { cache, startDataSync } = initSyncedCache(
@@ -64,7 +64,7 @@ const init = async (
     sdkConfig?.cache,
     sdkConfig?.pairBatchSize,
     sdkConfig?.refreshInterval,
-    sdkConfig?.blockRangeSize
+    sdkConfig?.blockRangeSize,
   );
   sdkCache = cache;
   carbonSDK = new Toolkit(
@@ -72,7 +72,7 @@ const init = async (
     sdkCache,
     decimalsMap
       ? (address) => decimalsMap.get(address.toLowerCase())
-      : undefined
+      : undefined,
   );
   await startDataSync();
   isInitialized = true;
@@ -87,7 +87,7 @@ const buildOrderBook = async (
   step: Decimal,
   min: Decimal,
   max: Decimal,
-  steps: number
+  steps: number,
 ): Promise<OrderRow[]> => {
   const orders: OrderRow[] = [];
   const rates: string[] = [];
@@ -101,10 +101,10 @@ const buildOrderBook = async (
     }
   }
 
-  let results = await carbonSDK.getRateLiquidityDepthsByPair(
+  const results = await carbonSDK.getRateLiquidityDepthsByPair(
     baseToken,
     quoteToken,
-    rates
+    rates,
   );
 
   results.forEach((liquidity, i) => {
@@ -143,7 +143,7 @@ const buildOrderBook = async (
   });
 
   const sortedOrders = orders.sort(
-    (a, b) => +new Decimal(a.rate).sub(b.rate).toNumber()
+    (a, b) => +new Decimal(a.rate).sub(b.rate).toNumber(),
   );
 
   return sortedOrders;
@@ -156,7 +156,7 @@ const getStep = (
   maxBuy: Decimal,
   steps: number,
   minSell: Decimal,
-  maxSell: Decimal
+  maxSell: Decimal,
 ): Decimal => {
   if (stepBuy.isFinite() && stepBuy.gt(0)) {
     if (stepSell.isFinite() && stepSell.gt(0)) {
@@ -198,22 +198,22 @@ const getMiddleRate = (maxBuy: Decimal, maxSell: Decimal): Decimal => {
 const getOrderBook = async (
   base: string,
   quote: string,
-  steps: number
+  steps: number,
 ): Promise<OrderBook> => {
   const buyHasLiq = await carbonSDK.hasLiquidityByPair(base, quote);
   const sellHasLiq = await carbonSDK.hasLiquidityByPair(quote, base);
 
   const minBuy = new Decimal(
-    buyHasLiq ? await carbonSDK.getMinRateByPair(base, quote) : 0
+    buyHasLiq ? await carbonSDK.getMinRateByPair(base, quote) : 0,
   );
   const maxBuy = new Decimal(
-    buyHasLiq ? await carbonSDK.getMaxRateByPair(base, quote) : 0
+    buyHasLiq ? await carbonSDK.getMaxRateByPair(base, quote) : 0,
   );
   const minSell = new Decimal(
-    sellHasLiq ? await carbonSDK.getMinRateByPair(quote, base) : 0
+    sellHasLiq ? await carbonSDK.getMinRateByPair(quote, base) : 0,
   );
   const maxSell = new Decimal(
-    sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
+    sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0,
   );
 
   const minSellNormalized = ONE.div(maxSell);
@@ -232,7 +232,7 @@ const getOrderBook = async (
     maxBuy,
     steps,
     minSell,
-    maxSell
+    maxSell,
   );
 
   const middleRate = getMiddleRate(maxBuy, maxSell);
@@ -250,7 +250,7 @@ const getOrderBook = async (
         step,
         minBuy,
         maxBuy,
-        steps
+        steps,
       )
     : [];
 
@@ -263,7 +263,7 @@ const getOrderBook = async (
         step,
         minSell,
         maxSell,
-        steps
+        steps,
       )
     : [];
 
@@ -281,13 +281,13 @@ const sdkExposed = {
   getAllPairs: () => api.reader.pairs(),
   setOnChangeHandlers: (
     onPairDataChanged: (affectedPairs: TokenPair[]) => void,
-    onPairAddedToCache: (affectedPairs: TokenPair) => void
+    onPairAddedToCache: (affectedPairs: TokenPair) => void,
   ) => {
     sdkCache.on('onPairDataChanged', (affectedPairs) =>
-      onPairDataChanged(affectedPairs)
+      onPairDataChanged(affectedPairs),
     );
     sdkCache.on('onPairAddedToCache', (affectedPairs) =>
-      onPairAddedToCache(affectedPairs)
+      onPairAddedToCache(affectedPairs),
     );
     return;
   },
@@ -308,7 +308,7 @@ const sdkExposed = {
     sellPriceMarginal: string,
     sellPriceHigh: string,
     sellBudget: string,
-    overrides?: PayableOverrides | undefined
+    overrides?: PayableOverrides | undefined,
   ) =>
     carbonSDK.createBuySellStrategy(
       baseToken,
@@ -321,7 +321,7 @@ const sdkExposed = {
       sellPriceMarginal,
       sellPriceHigh,
       sellBudget,
-      overrides
+      overrides,
     ),
   batchCreateBuySellStrategies: (
     ...args: Parameters<(typeof carbonSDK)['batchCreateBuySellStrategies']>
@@ -332,7 +332,7 @@ const sdkExposed = {
     data: StrategyUpdate,
     buyMarginalPrice?: string | undefined,
     sellMarginalPrice?: string | undefined,
-    overrides?: PayableOverrides | undefined
+    overrides?: PayableOverrides | undefined,
   ) =>
     carbonSDK.updateStrategy(
       strategyId,
@@ -340,27 +340,27 @@ const sdkExposed = {
       data,
       buyMarginalPrice,
       sellMarginalPrice,
-      overrides
+      overrides,
     ),
   deleteStrategy: (strategyId: string) => carbonSDK.deleteStrategy(strategyId),
   getTradeData: (
     sourceToken: string,
     targetToken: string,
     amount: string,
-    isTradeBySource: boolean
+    isTradeBySource: boolean,
   ) =>
     carbonSDK.getTradeData(sourceToken, targetToken, amount, isTradeBySource),
   getTradeDataFromActions: (
     sourceToken: string,
     targetToken: string,
     isTradeBySource: boolean,
-    actionsWei: MatchActionBNStr[]
+    actionsWei: MatchActionBNStr[],
   ) =>
     carbonSDK.getTradeDataFromActions(
       sourceToken,
       targetToken,
       isTradeBySource,
-      actionsWei
+      actionsWei,
     ),
   getLiquidityByPair: (baseToken: string, quoteToken: string) =>
     carbonSDK.getLiquidityByPair(baseToken, quoteToken),
@@ -370,7 +370,7 @@ const sdkExposed = {
     actions: TradeActionBNStr[],
     deadline: string,
     minReturn: string,
-    overrides?: PayableOverrides | undefined
+    overrides?: PayableOverrides | undefined,
   ) =>
     carbonSDK.composeTradeBySourceTransaction(
       sourceToken,
@@ -378,7 +378,7 @@ const sdkExposed = {
       actions,
       deadline,
       minReturn,
-      overrides
+      overrides,
     ),
   composeTradeByTargetTransaction: (
     sourceToken: string,
@@ -386,7 +386,7 @@ const sdkExposed = {
     actions: TradeActionBNStr[],
     deadline: string,
     maxInput: string,
-    overrides?: PayableOverrides | undefined
+    overrides?: PayableOverrides | undefined,
   ) =>
     carbonSDK.composeTradeByTargetTransaction(
       sourceToken,
@@ -394,7 +394,7 @@ const sdkExposed = {
       actions,
       deadline,
       maxInput,
-      overrides
+      overrides,
     ),
   getOrderBook,
   getCacheDump: () => sdkCache.serialize(),

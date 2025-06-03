@@ -51,11 +51,10 @@ type TransformBehavior = 'normal' | 'extended';
 const getExtentConfig = (
   behavior: TransformBehavior,
   datasize: number,
-  width: number
+  width: number,
 ) => {
   if (behavior === 'normal') {
     return {
-      // eslint-disable-next-line prettier/prettier
       translate: [
         [0, 0],
         [width, 0],
@@ -64,7 +63,6 @@ const getExtentConfig = (
     };
   } else {
     return {
-      // eslint-disable-next-line prettier/prettier
       translate: [
         [-0.5 * width, 0],
         [1.5 * width, 0],
@@ -77,7 +75,7 @@ const getExtentConfig = (
 const useZoom = (
   dms: D3ChartSettings,
   data: CandlestickData[],
-  behavior: TransformBehavior
+  behavior: TransformBehavior,
 ) => {
   const [transform, setTransform] = useState<ZoomTransform>();
 
@@ -132,7 +130,7 @@ const useZoom = (
       zoomHandler?.transform(transition, transform);
       return new Promise((res) => setTimeout(res, duration));
     },
-    [behavior, data, dms.boundedWidth, zoomHandler]
+    [behavior, data, dms.boundedWidth, zoomHandler],
   );
 
   return { transform, zoomRange, zoomHandler };
@@ -215,7 +213,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   const zoomX = useCallback(
     (d: number) => (zoomTransform ? zoomTransform.applyX(d) : d),
-    [zoomTransform]
+    [zoomTransform],
   );
 
   const xScale = useMemo(() => {
@@ -306,7 +304,6 @@ export const D3PriceHistory: FC<Props> = (props) => {
   }, [defaultHistoryStart, props.start, props.end, zoomRange]);
 
   // D3 is not working well in jsdom, do not render it with vitest
-  // eslint-disable-next-line prettier/prettier
   if (
     !Object.getOwnPropertyDescriptor(globalThis, 'window')
       ?.get?.toString()

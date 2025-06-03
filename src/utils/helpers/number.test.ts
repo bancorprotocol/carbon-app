@@ -1,3 +1,4 @@
+/* eslint-disable no-loss-of-precision */
 import { describe, test, expect } from 'vitest';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
@@ -41,25 +42,25 @@ describe('Test helpers', () => {
     describe('Currency', () => {
       test('should return $0.00 for input lower then 0 and currentCurrency is USD', () => {
         expect(prettifyNumber(-10, { currentCurrency: 'USD' })).toEqual(
-          '$0.00'
+          '$0.00',
         );
       });
 
       test('should return €0.00 for input lower then 0 and currentCurrency is EUR', () => {
         expect(prettifyNumber(-10, { currentCurrency: 'EUR' })).toEqual(
-          '€0.00'
+          '€0.00',
         );
       });
 
       test('should return 0.00 ETH for input lower then 0 and currentCurrency is ETH', () => {
         expect(prettifyNumber(-10, { currentCurrency: 'ETH' })).toEqual(
-          '0.00 ETH'
+          '0.00 ETH',
         );
       });
 
       test('should return ¥0.00 for input lower then 0 and currentCurrency is JPY', () => {
         expect(prettifyNumber(-10, { currentCurrency: 'JPY' })).toEqual(
-          '¥0.00'
+          '¥0.00',
         );
       });
 
@@ -73,7 +74,7 @@ describe('Test helpers', () => {
 
       test('should return "0.00 ETH" for input 0 and currentCurrency is ETH', () => {
         expect(prettifyNumber(0, { currentCurrency: 'ETH' })).toEqual(
-          '0.00 ETH'
+          '0.00 ETH',
         );
       });
 
@@ -84,93 +85,93 @@ describe('Test helpers', () => {
       // < 1
       test('should return "$0.001" for input 0.001 and currentCurrency is USD', () => {
         expect(prettifyNumber(0.001, { currentCurrency: 'USD' })).toEqual(
-          '$0.001'
+          '$0.001',
         );
       });
 
       test('should return "€0.001" for input 0.001 and currentCurrency is EUR', () => {
         expect(prettifyNumber(0.001, { currentCurrency: 'EUR' })).toEqual(
-          '€0.001'
+          '€0.001',
         );
       });
 
       test('should return "0.001 ETH" for input 0.001 and currentCurrency is ETH', () => {
         expect(prettifyNumber(0.001, { currentCurrency: 'ETH' })).toEqual(
-          '0.001 ETH'
+          '0.001 ETH',
         );
       });
 
       test('should return "0.0₃1 ETH" for input 0.0001 and currentCurrency is ETH', () => {
         expect(prettifyNumber(0.0001, { currentCurrency: 'ETH' })).toEqual(
-          '0.0₃1 ETH'
+          '0.0₃1 ETH',
         );
       });
 
       test('should return "0.0₄1 ETH" for input 0.00001 and currentCurrency is ETH', () => {
         expect(prettifyNumber(0.00001, { currentCurrency: 'ETH' })).toEqual(
-          '0.0₄1 ETH'
+          '0.0₄1 ETH',
         );
       });
 
       test('should return "¥0.001" for input 0.001 and currentCurrency is JPY', () => {
         expect(prettifyNumber(0.001, { currentCurrency: 'JPY' })).toEqual(
-          '¥0.001'
+          '¥0.001',
         );
       });
 
       // 1 -> 10
       test('should return "$1.2345" for input 1.23456 and currentCurrency is USD', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'USD' })).toEqual(
-          '$1.2345'
+          '$1.2345',
         );
       });
 
       test('should return "€1.2346" for input 1.23456 and currentCurrency is EUR', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'EUR' })).toEqual(
-          '€1.2345'
+          '€1.2345',
         );
       });
 
       test('should return "1.23 ETH" for input 1.23456 and currentCurrency is ETH', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'ETH' })).toEqual(
-          '1.2345 ETH'
+          '1.2345 ETH',
         );
       });
 
       test('should return "¥1.23" for input 1.23456 and currentCurrency is JPY', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'JPY' })).toEqual(
-          '¥1.2345'
+          '¥1.2345',
         );
       });
 
       // > 10
       test('should return "$1,321,965,595.00" for large number and currentCurrency is USD', () => {
         expect(prettifyNumber(1321965595, { currentCurrency: 'USD' })).toEqual(
-          '$1,321,965,595.00'
+          '$1,321,965,595.00',
         );
       });
 
       test('should return "$123,456,789.00" for input 123456789 and currentCurrency is USD', () => {
         expect(prettifyNumber(123456789, { currentCurrency: 'USD' })).toEqual(
-          '$123,456,789.00'
+          '$123,456,789.00',
         );
       });
 
       test('should return "€123,456,789.00" for input 123456789 and currentCurrency is EUR', () => {
         expect(prettifyNumber(123456789, { currentCurrency: 'EUR' })).toEqual(
-          '€123,456,789.00'
+          '€123,456,789.00',
         );
       });
 
       test('should return "123,456,789.00 ETH" for input 123456789 and currentCurrency is ETH', () => {
         expect(prettifyNumber(123456789, { currentCurrency: 'ETH' })).toEqual(
-          '123,456,789.00 ETH'
+          '123,456,789.00 ETH',
         );
       });
 
       test('should return "¥123,456,789.00" for input 123456789 and currentCurrency is JPY', () => {
         expect(prettifyNumber(123456789, { currentCurrency: 'JPY' })).toEqual(
-          '¥123,456,789.00'
+          '¥123,456,789.00',
         );
       });
 
@@ -183,19 +184,19 @@ describe('Test helpers', () => {
       ////////////////
       test('should return "$1.23M" for input 1234567, with abbreviate true, and currentCurrency is USD', () => {
         expect(
-          prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'USD' })
+          prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'USD' }),
         ).toEqual('$1.23M');
       });
 
       test('should return "1.23M ETH" for input 1234567, with abbreviate true, and currentCurrency is ETH', () => {
         expect(
-          prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'ETH' })
+          prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'ETH' }),
         ).toEqual('1.23M ETH');
       });
 
       test('should return "¥1.23M" for input 1234567, with abbreviate true, and currentCurrency is JPY', () => {
         expect(
-          prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'JPY' })
+          prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'JPY' }),
         ).toEqual('¥1.23M');
       });
 
@@ -219,7 +220,7 @@ describe('Test helpers', () => {
       test('should display 5 significant numbers when there is at least 6 zeros in a row', () => {
         const option = { highPrecision: true, currentCurrency: 'JPY' } as const;
         expect(prettifyNumber(0.000000123456789, option)).toEqual(
-          '¥0.00000012345'
+          '¥0.00000012345',
         );
       });
     });
@@ -257,28 +258,28 @@ describe('Test helpers', () => {
 
       test('Check rounding is correct - option.round', () => {
         expect(
-          prettifyNumber(18999.999999999851769955, { round: true })
+          prettifyNumber(18999.999999999851769955, { round: true }),
         ).toEqual('19,000.00');
         expect(
-          prettifyNumber(19999.999999999986138278, { round: true })
+          prettifyNumber(19999.999999999986138278, { round: true }),
         ).toEqual('20,000.00');
       });
       test('Check trunc is correct - option.isInteger', () => {
         expect(
-          prettifyNumber(18999.999999999851769955, { isInteger: true })
+          prettifyNumber(18999.999999999851769955, { isInteger: true }),
         ).toEqual('18,999');
         expect(prettifyNumber(0, { isInteger: true })).toEqual('0');
       });
 
       test('Check rounding is correct - currentCurrency is USD', () => {
         expect(
-          prettifyNumber(18999.999999999851769955, { currentCurrency: 'USD' })
+          prettifyNumber(18999.999999999851769955, { currentCurrency: 'USD' }),
         ).toEqual('$18,999.99');
         expect(
           prettifyNumber(19999.999999999986138278, {
             round: true,
             currentCurrency: 'USD',
-          })
+          }),
         ).toEqual('$20,000.00');
       });
 
@@ -304,7 +305,7 @@ describe('Test helpers', () => {
       ////////////////
       test('Abbreviate should not display K for thousands', () => {
         expect(prettifyNumber(123456, { abbreviate: true })).toEqual(
-          '123,456.00'
+          '123,456.00',
         );
       });
       test('Abbreviate should display M for millions', () => {
@@ -312,12 +313,12 @@ describe('Test helpers', () => {
       });
       test('Abbreviate should display B for billions', () => {
         expect(prettifyNumber(1234567890, { abbreviate: true })).toEqual(
-          '1.23B'
+          '1.23B',
         );
       });
       test('Abbreviate should display T for trillions', () => {
         expect(prettifyNumber(1234567890000, { abbreviate: true })).toEqual(
-          '1.23T'
+          '1.23T',
         );
       });
 
@@ -336,17 +337,17 @@ describe('Test helpers', () => {
       test('High precision should has 5 significant digits if there is 6 zeros', () => {
         const option = { highPrecision: true };
         expect(prettifyNumber(0.0000001234567, option)).toEqual(
-          '0.00000012345'
+          '0.00000012345',
         );
         expect(prettifyNumber(0.000000000001234567, option)).toEqual(
-          '0.0000000000012345'
+          '0.0000000000012345',
         );
       });
       test('High precision should has 5 significant digits if decimals is 4 & there is at least 4 zeros', () => {
         const option = { highPrecision: true, decimals: 4 };
         expect(prettifyNumber(0.00001234567, option)).toEqual('0.000012345');
         expect(prettifyNumber(0.0000001234567, option)).toEqual(
-          '0.00000012345'
+          '0.00000012345',
         );
       });
 
@@ -367,7 +368,7 @@ describe('Test helpers', () => {
     const testCases: [
       SafeDecimal,
       { isPercentage?: boolean; approximateBelow?: number },
-      { value: string; negative: boolean }
+      { value: string; negative: boolean },
     ][] = [
       [new SafeDecimal(0), {}, { value: '0.00', negative: false }],
       [
@@ -442,7 +443,7 @@ describe('Test helpers', () => {
     });
     test('If inputValue >= 1, apply 6 decimal accuracy', () => {
       expect(roundSearchParam('12345.12345678901234567890')).toBe(
-        '12345.123456'
+        '12345.123456',
       );
       expect(roundSearchParam('123.12345678901234567890')).toBe('123.123456');
       expect(roundSearchParam('1.12345678901234567890')).toBe('1.123456');

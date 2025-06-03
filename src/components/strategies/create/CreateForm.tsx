@@ -41,8 +41,8 @@ export const CreateForm: FC<FormProps> = (props) => {
 
   const isDisabled = (form: HTMLFormElement) => {
     if (!form.checkValidity()) return true;
-    if (!!form.querySelector('.loading-message')) return true;
-    if (!!form.querySelector('.error-message')) return true;
+    if (form.querySelector('.loading-message')) return true;
+    if (form.querySelector('.error-message')) return true;
     const warnings = form.querySelector('.warning-message');
     if (!warnings) return false;
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
@@ -52,8 +52,8 @@ export const CreateForm: FC<FormProps> = (props) => {
     if (!user) return;
     const form = e.currentTarget.form!;
     if (!form.checkValidity()) return;
-    if (!!form.querySelector('.loading-message')) return;
-    if (!!form.querySelector('.error-message')) return;
+    if (form.querySelector('.loading-message')) return;
+    if (form.querySelector('.error-message')) return;
 
     setAnimating(true);
     const params = toCreateStrategyParams(base, quote, order0, order1);
@@ -91,7 +91,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+            'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input

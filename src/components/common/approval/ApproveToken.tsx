@@ -26,7 +26,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
   const mutation = useSetUserApproval();
   // When gasprice is cheap, best practice is to use exact amount approval
   const [isLimited, setIsLimited] = useState(
-    !!config.network.defaultLimitedApproval
+    !!config.network.defaultLimitedApproval,
   );
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
@@ -43,10 +43,11 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
       { ...data, isLimited },
       {
         onSuccess: async ([approve, revoke]) => {
-          revoke &&
+          if (revoke) {
             dispatchNotification('revoke', {
               txHash: revoke.hash,
             });
+          }
 
           dispatchNotification('approve', {
             symbol: token.symbol,
@@ -69,7 +70,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
           });
           setTxBusy(false);
         },
-      }
+      },
     );
   };
 

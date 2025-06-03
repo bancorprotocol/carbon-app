@@ -19,7 +19,7 @@ type TradeProps = {
 };
 
 type Props = Pick<TradeProps, 'source' | 'isTradeBySource' | 'sourceInput'> & {
-  onSuccess?: Function;
+  onSuccess?: (hash: string) => any;
 };
 
 export const useTradeAction = ({
@@ -42,7 +42,7 @@ export const useTradeAction = ({
       const slippageBn = new SafeDecimal(slippage).div(100);
       return new SafeDecimal(1).minus(slippageBn).times(amount).toString();
     },
-    [slippage]
+    [slippage],
   );
 
   const calcMaxInput = useCallback(
@@ -50,7 +50,7 @@ export const useTradeAction = ({
       const slippageBn = new SafeDecimal(slippage).div(100);
       return new SafeDecimal(1).plus(slippageBn).times(amount).toString();
     },
-    [slippage]
+    [slippage],
   );
 
   const calcDeadline = useCallback((value: string) => {
@@ -106,14 +106,14 @@ export const useTradeAction = ({
             queryKey: QueryKey.approval(
               user,
               source.address,
-              config.addresses.carbon.carbonController
+              config.addresses.carbon.carbonController,
             ),
           });
         },
         onError: (e: any) => {
           console.error(e);
         },
-      }
+      },
     );
   };
 
@@ -125,7 +125,7 @@ export const useTradeAction = ({
         amount: isTradeBySource ? sourceInput : calcMaxInput(sourceInput),
       },
     ],
-    [calcMaxInput, sourceInput, isTradeBySource, source]
+    [calcMaxInput, sourceInput, isTradeBySource, source],
   );
 
   const approval = useApproval(approvalTokens);

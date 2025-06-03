@@ -7,9 +7,7 @@ interface Dates {
   end: string;
 }
 
-const STRATEGY_TYPES = ['recurring', 'overlapping'] as const;
-
-export type StrategyType = (typeof STRATEGY_TYPES)[number];
+export type StrategyType = 'recurring' | 'overlapping';
 
 export interface CreateStrategyInput {
   buy: RangeOrder;

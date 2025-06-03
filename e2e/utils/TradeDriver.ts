@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Page } from '@playwright/test';
 import { waitFor } from './operators';
 import { closeModal, waitModalClose, waitModalOpen } from './modal';
@@ -9,7 +8,10 @@ import { assertDebugToken } from './strategy/utils';
 export class TradeDriver {
   public form = this.page.getByTestId(`${this.testCase.mode}-form`);
 
-  constructor(private page: Page, private testCase: TradeTestCase) {}
+  constructor(
+    private page: Page,
+    private testCase: TradeTestCase,
+  ) {}
 
   getPayInput() {
     return this.form.getByLabel('You Pay');

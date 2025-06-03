@@ -18,7 +18,7 @@ type Props = {
   layout?: StrategyLayout;
 };
 
-export const _StrategyContent: FC<Props> = ({
+export const LocalStrategyContent: FC<Props> = ({
   strategies,
   isExplorer,
   isPending,
@@ -64,7 +64,7 @@ export const _StrategyContent: FC<Props> = ({
               key={s.id}
               className={cn(
                 styles.strategyItem,
-                animate ? styles.animateItem : ''
+                animate ? styles.animateItem : '',
               )}
               strategy={s}
               isExplorer={isExplorer}
@@ -88,7 +88,7 @@ const Paginator = ({ increase }: { increase: () => any }) => {
       ([entry]) => {
         if (entry.intersectionRatio > 0) increase();
       },
-      { rootMargin: '500px' }
+      { rootMargin: '500px' },
     );
     observer.observe(ref.current!);
     return () => observer.disconnect();
@@ -96,7 +96,7 @@ const Paginator = ({ increase }: { increase: () => any }) => {
   return <div ref={ref} className="invisible"></div>;
 };
 
-export const StrategyContent = memo(_StrategyContent, (prev, next) => {
+export const StrategyContent = memo(LocalStrategyContent, (prev, next) => {
   if (prev.isPending !== next.isPending) return false;
   if (prev.layout !== next.layout) return false;
   return JSON.stringify(prev.strategies) === JSON.stringify(next.strategies);

@@ -12,7 +12,7 @@ import config from 'config';
 export type MenuItemType = {
   subMenu?: MenuType;
   content?: string | ReactElement;
-  onClick?: Function;
+  onClick?: () => any;
   postClickAction?: MenuItemActions;
 };
 
@@ -140,7 +140,7 @@ export const useBurgerMenuItems = () => {
         };
       }),
     ],
-    [availableCurrencies, selectedFiatCurrency, setSelectedFiatCurrency]
+    [availableCurrencies, selectedFiatCurrency, setSelectedFiatCurrency],
   );
   if (config.ui.currencyMenu) {
     menuMap.set('currency', {

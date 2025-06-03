@@ -128,13 +128,13 @@ export const EditPricesForm: FC<Props> = (props) => {
     (approval.isPending && !!user) || isPending || isProcessing || isDeleting;
   const loadingChildren = getStatusTextByTxStatus(
     isPending,
-    isProcessing || isDeleting
+    isProcessing || isDeleting,
   );
 
   const isDisabled = (form: HTMLFormElement) => {
     if (!form.checkValidity()) return true;
-    if (!!form.querySelector('.loading-message')) return true;
-    if (!!form.querySelector('.error-message')) return true;
+    if (form.querySelector('.loading-message')) return true;
+    if (form.querySelector('.error-message')) return true;
     const warnings = form.querySelector('.warning-message');
     if (!warnings) return false;
     return !form.querySelector<HTMLInputElement>('#approve-warnings')?.checked;
@@ -176,7 +176,7 @@ export const EditPricesForm: FC<Props> = (props) => {
           setIsProcessing(false);
           console.error('update mutation failed', e);
         },
-      }
+      },
     );
   };
 
@@ -228,7 +228,7 @@ export const EditPricesForm: FC<Props> = (props) => {
       className={cn(
         'grid content-start',
         style.form,
-        strategyType === 'overlapping' ? style.overlapping : ''
+        strategyType === 'overlapping' ? style.overlapping : '',
       )}
       data-testid="edit-form"
     >
@@ -241,7 +241,7 @@ export const EditPricesForm: FC<Props> = (props) => {
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+            'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input

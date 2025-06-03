@@ -135,7 +135,7 @@ export const simulatorInputOverlappingRoute = createRoute({
   path: 'overlapping',
   component: SimulatorInputOverlappingPage,
   validateSearch: (
-    search: Record<string, unknown>
+    search: Record<string, unknown>,
   ): SimulatorInputOverlappingSearch => {
     const sellMax = v.is(validNumber, search.sellMax)
       ? roundSearchParam(search.sellMax)
@@ -233,6 +233,5 @@ export const simulatorResultRoute = createRoute({
       type,
     };
   },
-  // @ts-ignore
   errorComponent: (e) => <div>Invalid search: {e.error.message}</div>,
 });

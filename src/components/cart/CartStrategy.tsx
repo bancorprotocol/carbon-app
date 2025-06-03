@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unknown-property */
 import { PairName } from 'components/common/DisplayPair';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
@@ -43,7 +42,7 @@ const getWarnings = (strategy: CartStrategy, marketPrice?: number) => {
   const warnings: string[] = [];
   if (isZero(order0.balance) && isZero(order1.balance)) {
     warnings.push(
-      'Please note that your strategy will be inactive as it will not have any budget.'
+      'Please note that your strategy will be inactive as it will not have any budget.',
     );
   }
   if (isOverlappingStrategy(strategy)) {
@@ -51,7 +50,7 @@ const getWarnings = (strategy: CartStrategy, marketPrice?: number) => {
     const belowMarket = isMaxBelowMarket(order1);
     if (aboveMarket || belowMarket) {
       warnings.push(
-        'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.'
+        'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.',
       );
     }
   } else {
@@ -123,7 +122,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       style={style}
       className={cn(
         'rounded-10 bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
-        className
+        className,
       )}
     >
       <header className="flex items-center gap-16">
@@ -177,7 +176,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           onBeforeToggle={setSize}
           className={cn(
             'rounded-8 bg-background-900 absolute m-0 overflow-hidden p-24',
-            styles.warnings
+            styles.warnings,
           )}
         >
           <article className="grid h-full content-start gap-16">

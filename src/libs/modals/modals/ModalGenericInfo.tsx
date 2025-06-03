@@ -11,7 +11,7 @@ export type ModalGenericInfoData = {
   title: string;
   text?: string | ReactNode;
   variant?: 'warning' | 'error';
-  onConfirm: Function;
+  onConfirm: () => any;
   buttonLabel?: string;
 };
 

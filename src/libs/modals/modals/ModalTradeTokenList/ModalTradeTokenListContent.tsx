@@ -36,14 +36,14 @@ export const ModalTradeTokenListContent: FC<Props> = ({
 }) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [selectedList, _setSelectedList] = useState<TradePairCategory>(
-    lsService.getItem('tradePairsCategory') || 'popular'
+    lsService.getItem('tradePairsCategory') || 'popular',
   );
 
   const setSelectedList = (category: TradePairCategory) => {
     _setSelectedList(category);
     lsService.setItem('tradePairsCategory', category);
   };
-  const pairs = !!search ? tradePairs.all : tradePairs[selectedList];
+  const pairs = search ? tradePairs.all : tradePairs[selectedList];
 
   const rowVirtualizer = useVirtualizer({
     count: pairs.length,
@@ -54,17 +54,17 @@ export const ModalTradeTokenListContent: FC<Props> = ({
 
   useEffect(() => {
     if (parentRef.current) parentRef.current.scrollTop = 0;
-    if (!!search) setSelectedList('all');
+    if (search) setSelectedList('all');
   }, [search]);
 
   const favoritesMap = useMemo(
     () => new Set(tradePairs.favorites.map((pair) => buildPairKey(pair))),
-    [tradePairs.favorites]
+    [tradePairs.favorites],
   );
 
   const isFavorite = useCallback(
     (tradePair: TradePair) => favoritesMap.has(buildPairKey(tradePair)),
-    [favoritesMap]
+    [favoritesMap],
   );
 
   const selectCategory = (e: FormEvent<HTMLFieldSetElement>) => {
@@ -128,7 +128,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                       'w-20 transition hover:fill-white/80 hover:text-white/80',
                       isFavorite(tradePair)
                         ? 'fill-primary text-primary'
-                        : 'text-white/40'
+                        : 'text-white/40',
                     )}
                   />
                 </button>

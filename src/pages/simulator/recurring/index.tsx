@@ -80,7 +80,7 @@ export const SimulatorInputRecurringPage = () => {
       setInitBuyRange,
       setInitSellRange,
       state,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -121,7 +121,7 @@ export const SimulatorInputRecurringPage = () => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (btnDisabled) return;
-    if (!!e.currentTarget.querySelector('.error-message')) return;
+    if (e.currentTarget.querySelector('.error-message')) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
 

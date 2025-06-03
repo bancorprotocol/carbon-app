@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { test, expect } from '@playwright/test';
 import { mockApi } from '../utils/mock-api';
 import {
@@ -165,7 +164,7 @@ test.describe('Trade', () => {
         {
           sourceValue: 0,
           targetValue: 0,
-        }
+        },
       );
       const sourceDelta = Number(initialBalance.base) - Number(sourceValue);
       const nextSource = new RegExp(sourceDelta.toString());

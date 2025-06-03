@@ -26,7 +26,7 @@ export const EditMarketPrice: FC<Props> = (props) => {
       {...attr}
       className={cn(
         'text-12 font-weight-500 bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8',
-        props.className
+        props.className,
       )}
       data-testid="edit-market-price"
       type="button"
@@ -91,8 +91,8 @@ export const InitMarketPrice = (props: FieldProps) => {
 
   const isDisabled = (form: HTMLFormElement) => {
     if (!form.checkValidity()) return true;
-    if (!!form.querySelector('.loading-message')) return true;
-    if (!!form.querySelector('.error-message')) return true;
+    if (form.querySelector('.loading-message')) return true;
+    if (form.querySelector('.error-message')) return true;
     const warnings = form.querySelector('.warning-message');
     if (!warnings) return false;
     return !(document.getElementById(checkboxId) as HTMLInputElement)?.checked;
@@ -112,7 +112,7 @@ export const InitMarketPrice = (props: FieldProps) => {
         className={cn(
           props.className,
           style.form,
-          'bg-background-900 rounded-10 grid gap-16 p-16'
+          'bg-background-900 rounded-10 grid gap-16 p-16',
         )}
         data-testid="user-price-form"
         onSubmit={setPrice}
@@ -147,7 +147,7 @@ export const InitMarketPrice = (props: FieldProps) => {
           htmlFor={checkboxId}
           className={cn(
             style.approveWarnings,
-            'rounded-10 text-12 font-weight-500 flex items-center gap-8 text-white/60'
+            'rounded-10 text-12 font-weight-500 flex items-center gap-8 text-white/60',
           )}
         >
           <input

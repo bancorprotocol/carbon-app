@@ -29,7 +29,7 @@ const segmentText = (string: string) => {
 export const shortenString = (
   string: string,
   separator = '...',
-  toLength = 13
+  toLength = 13,
 ): string => {
   const stringArray = segmentText(string);
 
@@ -62,8 +62,8 @@ export const buildTokenPairKey = (pair: TokenPair) =>
   pair.join('-').toLowerCase();
 
 export const setIntervalUsingTimeout = (
-  callback: Function,
-  interval: number
+  callback: () => any,
+  interval: number,
 ): NodeJS.Timeout => {
   let intervalId: NodeJS.Timeout;
 
@@ -81,7 +81,7 @@ export const convertCase = (input: string, toSnakeCase: boolean): string => {
     return input.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`);
   } else {
     return input.replace(/(_[a-z])/g, (match) =>
-      match.toUpperCase().replace('_', '')
+      match.toUpperCase().replace('_', ''),
     );
   }
 };
@@ -106,7 +106,7 @@ export const cn = (...inputs: ClassValue[]) => {
 export const sortObjectArray = <D extends object>(
   array: D[],
   property: keyof D,
-  customSort?: (a: D, b: D) => 1 | -1 | 0
+  customSort?: (a: D, b: D) => 1 | -1 | 0,
 ): D[] => {
   return array.sort(
     customSort
@@ -118,14 +118,14 @@ export const sortObjectArray = <D extends object>(
             return -1;
           }
           return 0;
-        }
+        },
   );
 };
 
 export const isPathnameMatch = (
   currentPath: string,
   href: Pathnames,
-  hrefMatches: Pathnames[]
+  hrefMatches: Pathnames[],
 ) => {
   // Remove trailing /
   const current =
@@ -140,7 +140,7 @@ export const isPathnameMatch = (
 
 export const stringToBoolean = (
   string: string,
-  fallback: boolean | undefined = false
+  fallback: boolean | undefined = false,
 ) => {
   if (string === 'true') return true;
   if (string === 'false') return false;

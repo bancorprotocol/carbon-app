@@ -7,14 +7,11 @@ import {
   Direction,
 } from '../types';
 
-const STRATEGY_TYPES = [
-  'market',
-  'recurring',
-  'disposable',
-  'overlapping',
-] as const;
-
-export type StrategyType = (typeof STRATEGY_TYPES)[number];
+export type StrategyType =
+  | 'market'
+  | 'recurring'
+  | 'disposable'
+  | 'overlapping';
 
 export interface CreateStrategyInput {
   buy: RangeOrder;

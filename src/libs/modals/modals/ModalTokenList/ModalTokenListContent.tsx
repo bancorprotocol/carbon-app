@@ -38,9 +38,9 @@ export const ModalTokenListContent: FC<Props> = ({
 }) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [selectedList, _setSelectedList] = useState<ChooseTokenCategory>(
-    lsService.getItem('chooseTokenCategory') || 'popular'
+    lsService.getItem('chooseTokenCategory') || 'popular',
   );
-  const _tokens = !!search ? tokens.all : tokens[selectedList];
+  const _tokens = search ? tokens.all : tokens[selectedList];
 
   const setSelectedList = (category: ChooseTokenCategory) => {
     _setSelectedList(category);
@@ -56,17 +56,17 @@ export const ModalTokenListContent: FC<Props> = ({
 
   useEffect(() => {
     if (parentRef.current) parentRef.current.scrollTop = 0;
-    if (!!search) setSelectedList('all');
+    if (search) setSelectedList('all');
   }, [search]);
 
   const favoritesMap = useMemo(
     () => new Set(tokens.favorites.map((token) => token.address)),
-    [tokens.favorites]
+    [tokens.favorites],
   );
 
   const isFavorite = useCallback(
     (token: Token) => favoritesMap.has(token.address),
-    [favoritesMap]
+    [favoritesMap],
   );
 
   const selectCategory = (e: FormEvent<HTMLFieldSetElement>) => {

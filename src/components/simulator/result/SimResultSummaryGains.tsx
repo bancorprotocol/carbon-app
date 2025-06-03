@@ -19,7 +19,7 @@ export const SimResultSummaryGains: FC<Props> = ({
       const value = prettifySignedNumber(gains, { round: true });
       return `${quoteToken.symbol} ${value}`;
     },
-    [quoteToken.symbol]
+    [quoteToken.symbol],
   );
 
   return (
@@ -42,7 +42,7 @@ export const SimResultSummaryGains: FC<Props> = ({
   );
 };
 
-const TooltipContent: FC<{}> = () => (
+const TooltipContent: FC = () => (
   <>
     <p className="align-middle">
       Estimated gains your trading strategy might have generated over the

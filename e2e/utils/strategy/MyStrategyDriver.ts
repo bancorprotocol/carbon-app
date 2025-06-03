@@ -22,7 +22,9 @@ export class MyStrategyDriver {
       const indicator = this.page.getByTestId('fetch-strategies');
       await indicator.waitFor({ state: 'attached', timeout });
       return indicator.waitFor({ state: 'detached' });
-    } catch {}
+    } catch {
+      // Do nothing
+    }
   }
 
   firstStrategy() {
@@ -48,7 +50,7 @@ export class MyStrategyDriver {
       },
       priceTooltip: async (
         direction: Direction,
-        options: { isOverlapping: boolean } = { isOverlapping: false }
+        options: { isOverlapping: boolean } = { isOverlapping: false },
       ) => {
         // Note: locator.hover() doesn't work because of polygon form I think
         if (options.isOverlapping) {

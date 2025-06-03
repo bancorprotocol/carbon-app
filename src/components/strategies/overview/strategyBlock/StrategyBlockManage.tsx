@@ -283,7 +283,7 @@ export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
   function ManageButton(props, ref) {
     const style = cn(
       buttonStyles({ variant: 'secondary' }),
-      'max-md:p-8 gap-8'
+      'max-md:p-8 gap-8',
     );
     const { aboveBreakpoint } = useBreakpoints();
     return (
@@ -292,7 +292,7 @@ export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
         {aboveBreakpoint('md') && 'Manage'}
       </button>
     );
-  }
+  },
 );
 
 export const ManageButtonIcon = forwardRef<
@@ -331,7 +331,7 @@ const ManageItem: FC<{
         role="menuitem"
         type="button"
         onClick={() => {
-          action && action();
+          if (action) action();
           setManage(false);
         }}
         disabled={disabled}

@@ -40,9 +40,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
           variant="warning"
           icon={<IconWarning />}
           title="Use at your own risk"
-          text={
-            "This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
-          }
+          text="This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
         />
       </div>
 
@@ -53,7 +51,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         <div
           className={cn(
             blockClasses,
-            'bg-error/30 flex items-center justify-center'
+            'bg-error/30 flex items-center justify-center',
           )}
         >
           Error: No token found for this address

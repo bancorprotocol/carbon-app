@@ -40,12 +40,12 @@ export const useModalTradeRouting = ({
   const selectedIDs = useMemo(
     () =>
       selected.filter((action) => action.isSelected).map((action) => action.id),
-    [selected]
+    [selected],
   );
 
   const selectedActionsWei = useMemo(
     () => tradeActionsWei.filter((x) => selectedIDs.includes(x.id)),
-    [selectedIDs, tradeActionsWei]
+    [selectedIDs, tradeActionsWei],
   );
 
   const { data, isPending, isError } = useGetTradeActionsQuery({
@@ -122,8 +122,8 @@ export const useModalTradeRouting = ({
       prev.map((action) =>
         action.id === id
           ? { ...action, isSelected: !action.isSelected }
-          : action
-      )
+          : action,
+      ),
     );
   };
 
@@ -132,7 +132,7 @@ export const useModalTradeRouting = ({
   const insufficientBalance =
     !!user &&
     new SafeDecimal(sourceBalance).lt(
-      isTradeBySource ? sourceInput : calcMaxInput(sourceInput)
+      isTradeBySource ? sourceInput : calcMaxInput(sourceInput),
     );
   const errorMsg = insufficientBalance ? 'Insufficient Balance' : '';
   const onCancel = useCallback(() => {
@@ -142,7 +142,7 @@ export const useModalTradeRouting = ({
   const disabledCTA =
     !selectedIDs.length || isPending || isError || insufficientBalance;
 
-  const buttonText = !!user ? 'Confirm' : 'Connect Wallet';
+  const buttonText = user ? 'Confirm' : 'Connect Wallet';
 
   return {
     selected,

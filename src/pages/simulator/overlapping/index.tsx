@@ -78,7 +78,7 @@ export const SimulatorInputOverlappingPage = () => {
     e.preventDefault();
     if (btnDisabled) return;
     if (!state.baseToken || !state.quoteToken || !marketPrice) return;
-    if (!!e.currentTarget.querySelector('.error-message')) return;
+    if (e.currentTarget.querySelector('.error-message')) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
 
@@ -86,7 +86,7 @@ export const SimulatorInputOverlappingPage = () => {
       state.buy.min,
       state.sell.max,
       marketPrice.toString(),
-      state.spread
+      state.spread,
     );
 
     const search = {
@@ -116,7 +116,7 @@ export const SimulatorInputOverlappingPage = () => {
         state.sell.max,
         marketPrice!.toString(),
         state.spread,
-        search.buyBudget
+        search.buyBudget,
       );
     } else {
       search.buyBudget = calculateOverlappingBuyBudget(
@@ -126,7 +126,7 @@ export const SimulatorInputOverlappingPage = () => {
         state.sell.max,
         marketPrice!.toString(),
         state.spread,
-        search.sellBudget
+        search.sellBudget,
       );
     }
 

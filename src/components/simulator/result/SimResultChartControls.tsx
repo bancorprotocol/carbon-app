@@ -40,7 +40,8 @@ export const SimResultChartControls = () => {
     if (isStopped) {
       start();
     } else {
-      isPaused ? unpause() : pause();
+      if (isPaused) unpause();
+      else pause();
     }
   };
 
