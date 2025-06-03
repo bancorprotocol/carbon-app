@@ -24,7 +24,7 @@
     "@tippyjs/react": "4.2.6",
     "@typechain/ethers-v5": "10.1.0",
     "@types/body-scroll-lock": "3.1.0",
-    "@types/lodash": "4.14.191",
+    "@types/d3": "7.4.3",
     "@types/node": "20.0.0",
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.2",
@@ -46,9 +46,11 @@
     "dotenv": "16.3.1",
     "eslint": "9.28.0",
     "eslint-config-prettier": "10.1.5",
+    "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-prettier": "5.4.1",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-tailwindcss": "3.18.0",
     "eslint-plugin-unused-imports": "4.1.4",
     "ethers": "5.8.0",
     "framer-motion": "11.13.5",
@@ -58,8 +60,7 @@
     "highcharts-react-official": "3.2.0",
     "husky": "8.0.3",
     "jsdom": "21.1.1",
-    "lint-staged": "14.0.1",
-    "lodash": "4.17.21",
+    "lint-staged": "16.1.0",
     "lz-string": "1.5.0",
     "msw": "2.3.1",
     "postcss": "8.4.31",
@@ -76,6 +77,7 @@
     "valibot": "0.34.0",
     "viem": "2.x",
     "vite": "5.3.6",
+    "vite-bundle-analyzer": "0.15.2",
     "vite-plugin-svgr": "2.4.0",
     "vite-tsconfig-paths": "4.2.1",
     "vitest": "1.6.0",
@@ -121,12 +123,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/d3": "7.4.3",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-tailwindcss": "^3.18.0",
-    "vite-bundle-analyzer": "0.15.2"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

@@ -6,6 +6,7 @@ import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import unusedImports from "eslint-plugin-unused-imports";
 import prettier from "eslint-config-prettier/flat";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 import globals from "globals";
 
 export default tseslint.config(
@@ -18,13 +19,13 @@ export default tseslint.config(
     "e2e/playwright-report/**/*",
     "build"
   ]),
+  react.configs.flat.recommended,
+  react.configs.flat['jsx-runtime'], 
+  reactHooks.configs['recommended-latest'],
   {
-    ...react.configs.flat.recommended,
-    languageOptions: {
-      ...react.configs.flat.recommended.languageOptions,
-      globals: {
-        ...globals.browser,
-      },
+    plugins: {
+      'unused-imports': unusedImports,
+      'jsx-a11y': jsxA11y,
     },
     rules: {
       "react/prop-types": "off",
@@ -33,16 +34,7 @@ export default tseslint.config(
       "react/jsx-curly-brace-presence": [
         "warn",
         { "props": "never", "children": "never" }
-      ]
-    }
-  },
-  react.configs.flat['jsx-runtime'], 
-  reactHooks.configs['recommended-latest'],
-  {
-    plugins: {
-      'unused-imports': unusedImports
-    },
-    rules: {
+      ],
 			"unused-imports/no-unused-imports": "error",
 			"unused-imports/no-unused-vars": ["warn", {
 				vars: "all",
