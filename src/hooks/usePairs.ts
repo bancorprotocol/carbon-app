@@ -21,6 +21,7 @@ export const usePairs = () => {
   const getType = useCallback(
     (slug: string) => {
       if (maps.pairMap.has(slug)) return 'pair';
+      if (slug.split('_').length === 2) return 'pair';
       if (tokens.has(slug)) return 'token';
       return 'wallet';
     },
