@@ -3,6 +3,7 @@ import { SimulatorProvider } from 'components/simulator/result/SimulatorProvider
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   getLastVisitedPair,
+  searchValidator,
   validAddress,
   validBoolean,
   validNumber,
@@ -18,6 +19,12 @@ import * as v from 'valibot';
 export const simulatorRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/simulate',
+  validateSearch: searchValidator({
+    baseToken: v.optional(validNumber),
+    quoteToken: v.optional(validNumber),
+    start: v.optional(validNumber),
+    end: v.optional(validNumber),
+  }),
 });
 
 export interface StrategyInputBase {

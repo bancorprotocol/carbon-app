@@ -24,6 +24,17 @@ export const SimInputTokenSelection: FC<Props> = ({
   const base = getTokenById(baseToken);
   const quote = getTokenById(quoteToken);
 
+  const invertTokens = () => {
+    navigate({
+      search: (s) => ({
+        baseToken: s.quoteToken,
+        quoteToken: s.baseToken,
+        start: s.start,
+        end: s.end,
+      }),
+    });
+  };
+
   return (
     <section className="grid gap-16 p-16" key="simulatorTokenSelection">
       <article className="font-weight-500 flex flex-row items-center -space-x-10">
@@ -61,12 +72,7 @@ export const SimInputTokenSelection: FC<Props> = ({
         <button
           type="button"
           className="border-background-900 hover:bg-background-800 relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] bg-black"
-          onClick={() => {
-            navigate({
-              search: { baseToken: quoteToken, quoteToken: baseToken },
-              params: {},
-            });
-          }}
+          onClick={invertTokens}
           disabled={!base || !quote}
         >
           <IconArrow className="h-10.8 w-12" />
