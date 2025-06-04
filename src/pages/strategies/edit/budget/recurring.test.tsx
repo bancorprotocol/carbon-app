@@ -49,7 +49,7 @@ const baseSell = {
 const renderPage = async (
   type: 'deposit' | 'withdraw',
   strategyParams: MockStrategyParams,
-  baseSearch: Record<string, string> = {}
+  baseSearch: Record<string, string> = {},
 ) => {
   const strategy: Strategy = mockStrategy(strategyParams);
   const search = { editType: type, ...baseSearch };
@@ -73,7 +73,7 @@ describe('Edit budget recurring page', () => {
   const driver = new EditStrategyDriver(screen);
   vitest
     .spyOn(balanceQueries, 'useGetTokenBalance')
-    .mockImplementation(() => ({ data: '1000' } as any));
+    .mockImplementation(() => ({ data: '1000' }) as any);
 
   test('Form should have the value from the search', async () => {
     const search = { editType: 'deposit', buyBudget: '2' };
@@ -85,7 +85,7 @@ describe('Edit budget recurring page', () => {
         order0: baseBuy,
         order1: baseSell,
       },
-      search
+      search,
     );
     const url = getUrl(strategy.id);
 
@@ -118,7 +118,7 @@ describe('Edit budget recurring page', () => {
       strategy.encoded,
       { buyBudget: '3' },
       undefined,
-      undefined
+      undefined,
     );
   });
 

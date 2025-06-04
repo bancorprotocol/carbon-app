@@ -35,7 +35,7 @@ afterAll(() => mockServer.close());
 const renderPage = async (
   type: 'deposit' | 'withdraw',
   strategyParams: MockStrategyParams,
-  baseSearch: Record<string, string> = {}
+  baseSearch: Record<string, string> = {},
 ) => {
   const strategy: Strategy = mockStrategy(strategyParams);
   const search = { editType: type, ...baseSearch };
@@ -59,7 +59,7 @@ describe('Edit budget disposable page', () => {
   const driver = new EditStrategyDriver(screen);
   vitest
     .spyOn(balanceQueries, 'useGetTokenBalance')
-    .mockImplementation(() => ({ data: '1000' } as any));
+    .mockImplementation(() => ({ data: '1000' }) as any);
 
   test('Enable submit only when budget is filled', async () => {
     await renderPage('deposit', {

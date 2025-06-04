@@ -1,13 +1,14 @@
-.form:invalid button[type="submit"],
-.form:has(:global(.error-message)) button[type="submit"],
-.form:has(:global(.loading-message)) button[type="submit"],
-.form:has(:global(.warning-message)):has(.approve-warnings input:not(:checked)) button[type="submit"] {
+.form:invalid button[type='submit'],
+.form:has(:global(.error-message)) button[type='submit'],
+.form:has(:global(.loading-message)) button[type='submit'],
+.form:has(:global(.warning-message)):has(.approve-warnings input:not(:checked))
+  button[type='submit'] {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.form:invalid button[type="submit"]:hover,
-.form:has(:global(.error-message)) button[type="submit"]:hover {
+.form:invalid button[type='submit']:hover,
+.form:has(:global(.error-message)) button[type='submit']:hover {
   border: none;
 }
 
@@ -22,4 +23,3 @@
 .form:not(:has(:global(.warning-message))) .approve-warnings {
   display: none;
 }
-

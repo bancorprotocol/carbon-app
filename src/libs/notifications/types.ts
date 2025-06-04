@@ -32,7 +32,7 @@ export type Notification = NotificationTx | NotificationActivity;
 
 export type DispatchNotification = <T extends keyof NotificationSchema>(
   key: T,
-  data: NotificationSchema[T]
+  data: NotificationSchema[T],
 ) => void;
 
 export interface NotificationsContext {
@@ -48,7 +48,7 @@ export interface NotificationsContext {
 
 export type NotificationsMap = {
   [key in keyof NotificationSchema]: (
-    data: NotificationSchema[key]
+    data: NotificationSchema[key],
   ) =>
     | Omit<NotificationTx, 'id' | 'timestamp'>
     | Omit<NotificationActivity, 'id' | 'timestamp'>;

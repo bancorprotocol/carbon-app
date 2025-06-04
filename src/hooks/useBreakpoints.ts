@@ -24,7 +24,7 @@ export const useBreakpoints = () => {
   const currentBreakpoint = useMemo(() => {
     return Object.keys(screens).reduce(
       (acc, key) => (width >= screens[key as Breakpoint] ? key : acc),
-      'sm'
+      'sm',
     ) as Breakpoint;
   }, [width]);
 
@@ -32,14 +32,14 @@ export const useBreakpoints = () => {
     (breakpoint: Breakpoint) => {
       return width >= screens[breakpoint];
     },
-    [width]
+    [width],
   );
 
   const belowBreakpoint = useCallback(
     (breakpoint: Breakpoint) => {
       return width < screens[breakpoint];
     },
-    [width]
+    [width],
   );
 
   const track = useCallback(() => {

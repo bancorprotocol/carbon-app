@@ -7,7 +7,6 @@ import {
 } from 'react';
 import { VariantProps } from 'class-variance-authority';
 import { buttonStyles } from 'components/common/button/buttonStyles';
-import { m } from 'libs/motion';
 import { cn } from 'utils/helpers';
 
 export type ButtonHTMLProps = DetailedHTMLProps<
@@ -32,10 +31,9 @@ export const Button: FC<ButtonProps> = ({
   ...props
 }) => {
   return (
-    // @ts-ignore
-    <m.button
+    <button
       className={cn(
-        buttonStyles({ variant, size, fullWidth, class: className })
+        buttonStyles({ variant, size, fullWidth, class: className }),
       )}
       {...props}
       disabled={props.disabled || loading}
@@ -48,6 +46,6 @@ export const Button: FC<ButtonProps> = ({
       ) : (
         props.children
       )}
-    </m.button>
+    </button>
   );
 };

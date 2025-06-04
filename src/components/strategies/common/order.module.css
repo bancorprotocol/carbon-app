@@ -1,10 +1,10 @@
 .order {
   position: relative;
 }
-.order[data-direction="buy"] {
+.order[data-direction='buy'] {
   --direction-color: var(--buy);
 }
-.order[data-direction="sell"] {
+.order[data-direction='sell'] {
   --direction-color: var(--sell);
 }
 .order::after {

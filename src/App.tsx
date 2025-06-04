@@ -21,7 +21,7 @@ export const App = () => {
   const match = useMatchRoute();
   // Add more routes here to skip SDK init
   const skipSDKInit = [match({ to: '/simulate', fuzzy: true })].some(
-    (x) => !!x
+    (x) => !!x,
   );
 
   useEffect(() => {
@@ -39,12 +39,12 @@ export const App = () => {
   }, [initSDK, skipSDKInit]);
 
   useEffect(() => {
-    window.addEventListener('resize', (e) => {
-      // @ts-ignore
-      const h = e.target?.innerHeight || 0;
+    const handler = (e: UIEvent) => {
+      const h = (e.target as Window)?.innerHeight || 0;
       setInnerHeight(h);
-    });
-    return () => window.removeEventListener('resize', () => {});
+    };
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
   }, [setInnerHeight]);
 
   return (

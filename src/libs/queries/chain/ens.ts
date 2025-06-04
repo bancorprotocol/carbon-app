@@ -50,8 +50,8 @@ export const useGetAddressFromEns = (ens: string) => {
 let ensRegex: RegExp;
 try {
   // Support emojis
-  ensRegex = new RegExp(/[\w\p{RGI_Emoji}]+\.\w+/, 'v');
-} catch (err) {
+  ensRegex = new RegExp(/[\w\p{RGI_Emoji}]+\.\w+/v, 'v');
+} catch {
   // If no support, fallback to "any string with at least one dot and no whitespace"
   ensRegex = new RegExp(/^[^ ]*\.[^ ]*$/);
 }
@@ -60,7 +60,7 @@ export const isValidEnsName = (ens?: string) => !!ens && ensRegex.test(ens);
 
 export const getEnsAddressIfAny = async (
   provider: Web3Provider | StaticJsonRpcProvider | undefined,
-  value: string
+  value: string,
 ): Promise<string> => {
   if (!provider) return value;
   try {

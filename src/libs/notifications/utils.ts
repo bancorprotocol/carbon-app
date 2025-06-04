@@ -4,7 +4,7 @@ import { lsService } from 'services/localeStorage';
 // TODO: Remove this migration after July 2024
 type OldNotification = Omit<NotificationTx, 'type'>;
 const migrateNotification = (
-  n: Notification | OldNotification
+  n: Notification | OldNotification,
 ): Notification => {
   if (!('type' in n)) return { ...n, type: 'tx' };
   return n;
@@ -18,7 +18,7 @@ export const getLSUserNotifications = (user?: string): Notification[] => {
 
 export const setLSUserNotifications = (
   user: string | undefined,
-  data: Notification[]
+  data: Notification[],
 ) => {
   if (!user) return;
   const persisted = data.filter((n) => !n.nonPersistent);

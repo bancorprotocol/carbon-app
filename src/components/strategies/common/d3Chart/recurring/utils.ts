@@ -31,7 +31,7 @@ export const onDragHandler = ({
   const selectorOpposite = getHandleSelector(type, oppositeId);
 
   const oppositeY = Number(
-    getSelector(selectorOpposite).select('line').attr('y1')
+    getSelector(selectorOpposite).select('line').attr('y1'),
   );
 
   const rect = getSelector(getRectSelector(type));
@@ -84,7 +84,7 @@ export const handleStateChange = ({
 
   const oppositeId = id === 'line1' ? 'line2' : 'line1';
   const oppositeY = Number(
-    getSelector(getHandleSelector(type, oppositeId)).select('line').attr('y1')
+    getSelector(getHandleSelector(type, oppositeId)).select('line').attr('y1'),
   );
 
   moveRect(getRectSelector(type), y, oppositeY);

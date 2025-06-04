@@ -71,7 +71,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
         replace: true,
       });
     },
-    [nav]
+    [nav],
   );
 
   const updatePrices: OnPriceUpdates = useCallback(
@@ -92,7 +92,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
         onPriceUpdates?.(newPrices);
       }, 200);
     },
-    [onPriceUpdates]
+    [onPriceUpdates],
   );
 
   const { data, isPending, isError } = useGetTokenPriceHistory({

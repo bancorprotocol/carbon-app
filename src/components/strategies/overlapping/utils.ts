@@ -32,7 +32,7 @@ export const getMaxBuyMin = (sellMax: number, spread: number) => {
 export const isValidSpread = (
   min: string,
   max: string,
-  spread?: string | number
+  spread?: string | number,
 ) => {
   if (!spread) return false;
   const _spread = new SafeDecimal(spread);
@@ -93,7 +93,7 @@ export const getCalculatedPrice = (strategy: Strategy) => {
 export const getOverlappingMarketPrice = (
   strategy: Strategy,
   search: OverlappingSearch,
-  externalPrice?: string
+  externalPrice?: string,
 ) => {
   const calculatedPrice = getCalculatedPrice(strategy);
   const touched = isOverlappingTouched(strategy, search);
@@ -107,7 +107,7 @@ export const getOverlappingMarketPrice = (
 export function hasArbOpportunity(
   buyMarginal: string,
   spread: string,
-  marketPrice?: string
+  marketPrice?: string,
 ) {
   if (!marketPrice) return false;
   const spreadPPM = new SafeDecimal(spread).div(100);
@@ -117,7 +117,7 @@ export function hasArbOpportunity(
 
 export const isOverlappingTouched = (
   strategy: Strategy,
-  search: OverlappingSearch
+  search: OverlappingSearch,
 ) => {
   const { order0, order1 } = strategy;
   const { min, max, spread, marketPrice } = search;

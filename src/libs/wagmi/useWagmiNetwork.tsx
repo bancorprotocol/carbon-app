@@ -26,7 +26,7 @@ export const useWagmiNetwork = () => {
         headers: RPC_HEADERS[CHAIN_ID],
         skipFetchSetup: true,
       },
-      chainId
+      chainId,
     );
   }, [chainId]);
 
@@ -58,17 +58,17 @@ export const useWagmiNetwork = () => {
       .map((name) => name.toLowerCase());
 
     const duplicatedConnectorNames = wagmiConnectorsNames.filter(
-      (e, i, a) => a.indexOf(e) !== i
+      (e, i, a) => a.indexOf(e) !== i,
     );
     const unsortedConnectors = wagmiConnectors.filter(
       (c) =>
         !(
           duplicatedConnectorNames.includes(c.name.toLowerCase()) &&
           isPlaceHolderConnector(c)
-        ) && !blocklistConnectors.includes(c.name.toLowerCase())
+        ) && !blocklistConnectors.includes(c.name.toLowerCase()),
     );
     const connectionOrder = (selectedConnectors as string[]).map((c) =>
-      c.toLowerCase()
+      c.toLowerCase(),
     );
     return [...unsortedConnectors].sort((a, b) => {
       const nameA = a.name.toLowerCase();

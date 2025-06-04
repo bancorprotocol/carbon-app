@@ -14,7 +14,7 @@ import { toPairSlug } from 'utils/pairSearch';
 
 const getTrendingPairs = (
   tokensMap: Map<string, Token>,
-  trending?: Trending
+  trending?: Trending,
 ) => {
   if (!trending) return { isLoading: true, data: [] };
   const pairs: Record<string, PairTrade> = {};
@@ -52,7 +52,7 @@ interface StrategyWithTradeCount extends Strategy {
   trades: number;
 }
 const useTrendStrategies = (
-  trending?: Trending
+  trending?: Trending,
 ): { isLoading: boolean; data: StrategyWithTradeCount[] } => {
   const trades = trending?.tradeCount ?? [];
   const list = trades
@@ -265,7 +265,7 @@ const Trades = ({ trades }: TradesProps) => {
               delay: i * 100,
               fill: 'forwards',
               easing: 'cubic-bezier(1,-0.54,.65,1.46)',
-            }
+            },
           );
           if (anim) initAnims.push(anim.finished);
         }
@@ -289,7 +289,7 @@ const Trades = ({ trades }: TradesProps) => {
               delay: 2000,
               fill: 'forwards',
               easing: 'cubic-bezier(1,.11,.55,.79)',
-            }
+            },
           );
           anims.current.push(anim.finished);
         }

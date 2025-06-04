@@ -7,7 +7,7 @@ import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
-  onConfirm: Function;
+  onConfirm: () => any;
   buttonLabel?: string;
 };
 

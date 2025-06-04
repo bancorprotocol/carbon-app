@@ -47,7 +47,7 @@ export const migrateAndRemoveItem: MigrationActionWithFormatter = ({
     localStorage.removeItem(nextFormattedKey);
     console.error(
       `Migration from ${prevFormattedKey} to ${nextFormattedKey} has failed`,
-      e
+      e,
     );
   }
 };

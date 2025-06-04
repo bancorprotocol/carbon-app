@@ -14,7 +14,7 @@ export const THead = <D extends object>({ table }: { table: Table<D> }) => {
                 'text-left',
                 'first:pl-20',
                 'last:text-right',
-                'last:pr-20'
+                'last:pr-20',
               )}
             >
               {header.isPlaceholder ? null : (
@@ -28,14 +28,14 @@ export const THead = <D extends object>({ table }: { table: Table<D> }) => {
                       {
                         'cursor-pointer': header.column.getCanSort(),
                         'select-none': header.column.getCanSort(),
-                      }
+                      },
                     ),
                     onClick: header.column.getToggleSortingHandler(),
                   }}
                 >
                   {flexRender(
                     header.column.columnDef.header,
-                    header.getContext()
+                    header.getContext(),
                   )}
                   {{
                     asc: ' 🔼',

@@ -8,9 +8,7 @@ type InputHTMLProps = DetailedHTMLProps<
   HTMLInputElement
 >;
 
-interface InputCustomProps extends Omit<InputHTMLProps, 'size'> {
-  // status?: string;
-}
+type InputCustomProps = Omit<InputHTMLProps, 'size'>;
 
 export type InputProps = InputCustomProps & VariantProps<typeof inputStyles>;
 
@@ -45,7 +43,7 @@ export const Input: FC<InputProps> = ({
       </div>
       <input
         className={cn(
-          inputStyles({ variant, size, fullWidth, class: className })
+          inputStyles({ variant, size, fullWidth, class: className }),
         )}
         {...props}
       />

@@ -26,7 +26,7 @@ export const ModalProvider: FC = () => {
     <AnimatePresence initial={false}>
       {open.map(({ id, key, data }) => {
         const Modal = MODAL_COMPONENTS[key];
-        // @ts-ignore
+        // @ts-expect-error no need for strong typing
         return <Modal key={id} id={id} data={data} />;
       })}
     </AnimatePresence>

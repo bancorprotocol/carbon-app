@@ -112,11 +112,11 @@ const isIframe = () =>
 
 export const redirectSafeWallet = (
   currentId: number,
-  redirectToId?: number
+  redirectToId?: number,
 ) => {
   if (isIframe() && redirectToId && currentId !== redirectToId) {
     const networkToRedirect = networks.find(
-      (network) => network.chainId === redirectToId
+      (network) => network.chainId === redirectToId,
     );
     if (!networkToRedirect) return;
     window.location.href = networkToRedirect.appUrl;
@@ -124,7 +124,7 @@ export const redirectSafeWallet = (
 };
 
 export const providerRdnsToName = (
-  connectionName: string
+  connectionName: string,
 ): string | undefined => providerMapRdnsToName[connectionName];
 
 const getConfigConnectors = (): CreateConnectorFn[] => {

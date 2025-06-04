@@ -72,5 +72,5 @@ export const buttonStyles = cva<ButtonVariants>(
       variant: 'white',
       size: 'md',
     },
-  }
+  },
 );

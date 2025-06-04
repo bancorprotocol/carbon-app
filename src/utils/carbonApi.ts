@@ -39,8 +39,8 @@ export type FiatPriceDict = {
 
 const get = async <T>(
   endpoint: string,
-  params: Object = {},
-  abortSignal?: AbortSignal
+  params: object = {},
+  abortSignal?: AbortSignal,
 ): Promise<T> => {
   const api = lsService.getItem('carbonApi') || config.carbonApi;
   const url = new URL(api + endpoint);
@@ -53,7 +53,7 @@ const get = async <T>(
     const error = (result as { error?: string }).error;
     throw new Error(
       error ||
-        `Response was not okay. ${response.statusText} response received.`
+        `Response was not okay. ${response.statusText} response received.`,
     );
   }
   return result as T;
@@ -66,7 +66,7 @@ const carbonApi = {
   },
   getMarketRate: async (
     address: string,
-    convert: readonly FiatSymbol[]
+    convert: readonly FiatSymbol[],
   ): Promise<FiatPriceDict> => {
     const { data } = await get<{ data: FiatPriceDict }>('market-rate', {
       address,
@@ -75,18 +75,18 @@ const carbonApi = {
     return data;
   },
   getMarketRateHistory: async (
-    params: TokenPriceHistorySearch
+    params: TokenPriceHistorySearch,
   ): Promise<TokenPriceHistoryResult[]> => {
     return get<TokenPriceHistoryResult[]>('history/prices', params);
   },
   getSimulator: async (
-    params: SimulatorAPIParams
+    params: SimulatorAPIParams,
   ): Promise<SimulatorReturnNew> => {
     return get<SimulatorReturnNew>('simulator/create', params);
   },
   getActivity: async (
     params: QueryActivityParams,
-    abortSignal?: AbortSignal
+    abortSignal?: AbortSignal,
   ) => {
     return get<ServerActivity[]>('activity', params, abortSignal);
   },

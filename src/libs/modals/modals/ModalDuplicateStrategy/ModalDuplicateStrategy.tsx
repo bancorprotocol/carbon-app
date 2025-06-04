@@ -106,7 +106,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
               {description}
             </p>
           </article>
-        )
+        ),
       )}
     </ModalOrMobileSheet>
   );

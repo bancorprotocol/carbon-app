@@ -37,14 +37,14 @@ export function isEditAboveMarket(
   min: string,
   max: string,
   marketPrice: number | undefined,
-  spread: number
+  spread: number,
 ) {
   if (!marketPrice) return false;
   const prices = calculateOverlappingPrices(
     formatNumber(min || '0'),
     formatNumber(max || '0'),
     marketPrice.toString(),
-    spread.toString()
+    spread.toString(),
   );
   return isMinAboveMarket({
     min: prices.buyPriceLow,
@@ -55,14 +55,14 @@ export function isEditBelowMarket(
   min: string,
   max: string,
   marketPrice: number | undefined,
-  spread: number
+  spread: number,
 ) {
   if (!marketPrice) return false;
   const prices = calculateOverlappingPrices(
     formatNumber(min || '0'),
     formatNumber(max || '0'),
     marketPrice.toString(),
-    spread.toString()
+    spread.toString(),
   );
   return isMaxBelowMarket({
     max: prices.sellPriceHigh,
@@ -100,7 +100,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const aboveMarket = isMinAboveMarket(order0);

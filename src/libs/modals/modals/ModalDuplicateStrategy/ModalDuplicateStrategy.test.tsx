@@ -50,7 +50,7 @@ const baseStrategy = {
   roi: new SafeDecimal('0'),
 };
 
-let undercutStrategy = deepCopy(baseStrategy);
+const undercutStrategy = deepCopy(baseStrategy);
 
 describe('Test undercut strategy', () => {
   test('getUndercutStrategy with 0.1% rate', () => {
@@ -66,7 +66,7 @@ describe('Test undercut strategy', () => {
     undercutStrategy.order1.endRate = '1898.1';
 
     expect(getUndercutStrategy(baseStrategy, undercutDifference)).toStrictEqual(
-      undercutStrategy
+      undercutStrategy,
     );
   });
 
@@ -83,7 +83,7 @@ describe('Test undercut strategy', () => {
     undercutStrategy.order1.endRate = '1898.1';
 
     expect(getUndercutStrategy(baseStrategy, undercutDifference)).toStrictEqual(
-      undercutStrategy
+      undercutStrategy,
     );
   });
 
@@ -100,7 +100,7 @@ describe('Test undercut strategy', () => {
     undercutStrategy.order1.endRate = '1881';
 
     expect(getUndercutStrategy(baseStrategy, undercutDifference)).toStrictEqual(
-      undercutStrategy
+      undercutStrategy,
     );
   });
 
@@ -117,7 +117,7 @@ describe('Test undercut strategy', () => {
     undercutStrategy.order1.endRate = '1881';
 
     expect(() =>
-      getUndercutStrategy(baseStrategy, undercutDifference)
+      getUndercutStrategy(baseStrategy, undercutDifference),
     ).toThrow();
   });
 
@@ -134,7 +134,7 @@ describe('Test undercut strategy', () => {
     undercutStrategy.order1.endRate = '1881';
 
     expect(() =>
-      getUndercutStrategy(baseStrategy, undercutDifference)
+      getUndercutStrategy(baseStrategy, undercutDifference),
     ).toThrow();
   });
 });

@@ -15,9 +15,9 @@ const TenderlyForkAlert = () => {
   const [isDebugMode, setIsDebugMode] = useState(false);
   useEffect(() => {
     const checkDebugMode = () => {
-      if (!!lsService.getItem('imposterAccount')) return setIsDebugMode(true);
-      if (!!lsService.getItem('tenderlyRpc')) return setIsDebugMode(true);
-      if (!!lsService.getItem('configOverride')) return setIsDebugMode(true);
+      if (lsService.getItem('imposterAccount')) return setIsDebugMode(true);
+      if (lsService.getItem('tenderlyRpc')) return setIsDebugMode(true);
+      if (lsService.getItem('configOverride')) return setIsDebugMode(true);
       const api = lsService.getItem('carbonApi');
       if (api && api !== config.carbonApi) return setIsDebugMode(true);
       setIsDebugMode(false);

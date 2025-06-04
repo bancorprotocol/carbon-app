@@ -20,10 +20,10 @@ export interface InternalSimulatorOverlappingInput
 
 export type SimulatorOverlappingInputDispatch = <
   T extends InternalSimulatorOverlappingInput,
-  K extends keyof T
+  K extends keyof T,
 >(
   key: K,
-  value: T[K]
+  value: T[K],
 ) => void;
 
 interface Props {
@@ -69,19 +69,19 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   useDebouncedValue(_state, 300, { cb: setSearch });
 
   const bounds = useMemo(
     () => getBounds(state.buy, state.sell),
-    [state.buy, state.sell]
+    [state.buy, state.sell],
   );
 
   const dispatch: SimulatorOverlappingInputDispatch = useCallback(
     (key, value) => setState((state) => ({ ...state, [key]: value })),
-    []
+    [],
   );
 
   return { dispatch, state, bounds, searchState };
@@ -90,7 +90,7 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
 export const buildStrategyInputState = (
   state: InternalSimulatorOverlappingInput,
   baseToken?: Token,
-  quoteToken?: Token
+  quoteToken?: Token,
 ): SimulatorInputOverlappingValues => {
   return {
     baseToken,

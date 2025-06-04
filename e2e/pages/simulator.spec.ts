@@ -1,5 +1,4 @@
 import { test } from '@playwright/test';
-import capitalize from 'lodash/capitalize';
 import { mockApi } from '../utils/mock-api';
 import {
   DebugDriver,
@@ -213,7 +212,7 @@ test.describe('Simulator', () => {
   };
 
   for (const testCase of testCases) {
-    test.describe(capitalize(testCase.type), () => {
+    test.describe(testCase.type, () => {
       const testSuite = testStrategies[testCase.type];
       for (const testFn of Object.values(testSuite)) {
         testFn(testCase);

@@ -60,7 +60,7 @@ export const TokenInputField: FC<Props> = (props) => {
   }: ChangeEvent<HTMLInputElement>) => {
     const sanitized = sanitizeNumber(value, token.decimals);
     setValue(sanitized);
-    onKeystroke && onKeystroke();
+    if (onKeystroke) onKeystroke();
   };
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
@@ -74,7 +74,7 @@ export const TokenInputField: FC<Props> = (props) => {
       const balanceValue = new SafeDecimal(balance).toFixed(token.decimals);
       setValue(balanceValue);
     }
-    onKeystroke && onKeystroke();
+    if (onKeystroke) onKeystroke();
   };
 
   const priceText = () => {
@@ -88,7 +88,7 @@ export const TokenInputField: FC<Props> = (props) => {
       className={cn(
         'flex cursor-text flex-col gap-8 border border-black p-16 focus-within:border-white/50',
         className,
-        isError && 'border-error/50 focus-within:border-error/50'
+        isError && 'border-error/50 focus-within:border-error/50',
       )}
       onClick={() => inputRef.current?.focus()}
     >
@@ -108,7 +108,7 @@ export const TokenInputField: FC<Props> = (props) => {
           className={cn(
             'text-16 font-weight-500 grow text-ellipsis bg-transparent focus:outline-none',
             disabled && 'cursor-not-allowed text-white/40',
-            isError && 'text-error'
+            isError && 'text-error',
           )}
           disabled={disabled}
           data-testid={testid}

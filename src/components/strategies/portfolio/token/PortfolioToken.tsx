@@ -19,7 +19,7 @@ interface Props {
   backLinkHrefParams?: PathParams;
 }
 
-const _PortfolioToken = ({
+const LocalPortfolioToken = ({
   strategies,
   isPending: _isPending,
   address,
@@ -35,7 +35,7 @@ const _PortfolioToken = ({
   const { pieChartOptions } = usePortfolioTokenPieChart(
     tableData,
     // TODO fix undefined token
-    selectedToken?.token!
+    selectedToken!.token,
   );
 
   if (!selectedToken && !isPending) {
@@ -63,7 +63,7 @@ const _PortfolioToken = ({
           data={tableData}
           isPending={isPending}
           // TODO selectedToken should not be undefined
-          selectedToken={selectedToken?.token!}
+          selectedToken={selectedToken!.token}
         />
       }
       mobileView={
@@ -71,7 +71,7 @@ const _PortfolioToken = ({
           data={tableData}
           isPending={isPending}
           // TODO selectedToken should not be undefined
-          selectedToken={selectedToken?.token!}
+          selectedToken={selectedToken!.token}
         />
       }
       pieChartElement={
@@ -87,8 +87,8 @@ const _PortfolioToken = ({
 };
 
 export const PortfolioToken = memo(
-  _PortfolioToken,
+  LocalPortfolioToken,
   (prev, next) =>
     prev.isPending === next.isPending &&
-    JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
+    JSON.stringify(prev.strategies) === JSON.stringify(next.strategies),
 );

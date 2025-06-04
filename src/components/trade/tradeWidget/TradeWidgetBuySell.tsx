@@ -50,7 +50,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     buy = false,
     ...formProps
   } = props;
-  const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
+  const hasEnoughLiquidity = +liquidityQuery.data! > 0;
 
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

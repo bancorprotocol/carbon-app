@@ -131,7 +131,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
 
   const dragPoint = (
     event: ReactMouseEvent<SVGCircleElement>,
-    index: number
+    index: number,
   ) => {
     event.stopPropagation(); // Prevent mousedown on g
     setEditing(true);

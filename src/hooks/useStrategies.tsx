@@ -33,7 +33,7 @@ type Search = MyStrategiesSearch;
 
 export const useStrategyFilter = (
   strategies: StrategyWithFiat[],
-  isPending: boolean
+  isPending: boolean,
 ) => {
   const searchParams: Search = useSearch({ strict: false });
   const navigate = useNavigate({ from: '/' });
@@ -48,7 +48,7 @@ export const useStrategyFilter = (
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const [sort, setSort] = useState<StrategySort>(getSortFromLS());
@@ -98,7 +98,7 @@ export const useStrategyFilter = (
 };
 
 export const useStrategiesWithFiat = (
-  query: UseQueryResult<Strategy[] | Strategy, unknown>
+  query: UseQueryResult<Strategy[] | Strategy, unknown>,
 ) => {
   const {
     fiatCurrency: { selectedFiatCurrency },

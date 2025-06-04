@@ -79,7 +79,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
         if (sell.max !== search.max) set({ max: sell.max });
       }, 200);
     },
-    [set, search.min, search.max]
+    [set, search.min, search.max],
   );
 
   if (search.chartType !== 'history') {

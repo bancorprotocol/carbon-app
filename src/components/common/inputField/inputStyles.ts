@@ -67,5 +67,5 @@ export const inputStyles = cva<InputVariants>(
     defaultVariants: {
       size: 'md',
     },
-  }
+  },
 );

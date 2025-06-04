@@ -42,7 +42,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
         const allowance = await Token(t.address).read.allowance(
           user,
-          t.spender
+          t.spender,
         );
 
         return new SafeDecimal(shrinkToken(allowance.toString(), t.decimals));
@@ -99,7 +99,7 @@ export const useSetUserApproval = () => {
         : UNLIMITED_WEI;
 
       const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(
-        address.toLowerCase()
+        address.toLowerCase(),
       );
 
       let revokeTx = undefined;

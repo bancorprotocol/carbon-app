@@ -27,7 +27,7 @@ export const StrategyBlock: FC<Props> = ({
       id={id}
       className={cn(
         'rounded-10 bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
-        className
+        className,
       )}
       style={style}
       data-testid={`${strategy.base.symbol}/${strategy.quote.symbol}`}
@@ -37,7 +37,7 @@ export const StrategyBlock: FC<Props> = ({
       <div
         className={cn(
           'rounded-8 border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
-          strategy.status === 'active' ? '' : 'opacity-50'
+          strategy.status === 'active' ? '' : 'opacity-50',
         )}
       >
         <StrategyBlockBuySell

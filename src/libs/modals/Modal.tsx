@@ -29,7 +29,7 @@ export const Modal: FC<ModalProps> = ({
   const { closeModal } = useModal();
 
   const onCloseHandler = (id: string) => {
-    onClose && onClose(id);
+    if (onClose) onClose(id);
     closeModal(id);
   };
 

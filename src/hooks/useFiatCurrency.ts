@@ -23,7 +23,7 @@ export const useFiatCurrency = (token?: Token) => {
       return new SafeDecimal(v || 0).times(
         tokenPriceQuery.data?.[
           usd ? availableCurrencies[0] : selectedFiatCurrency
-        ] || 0
+        ] || 0,
       );
     };
   }, [availableCurrencies, selectedFiatCurrency, tokenPriceQuery.data]);

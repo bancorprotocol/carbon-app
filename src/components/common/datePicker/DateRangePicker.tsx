@@ -58,7 +58,7 @@ const displayRange = (start?: Date, end?: Date) => {
 };
 
 export const DateRangePicker = memo(function DateRangePicker(
-  props: Omit<Props, 'setIsOpen'>
+  props: Omit<Props, 'setIsOpen'>,
 ) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -76,7 +76,7 @@ export const DateRangePicker = memo(function DateRangePicker(
           : 'border-background-800 hover:border-background-700 active:border-background-600',
         props.disabled &&
           'border-background-800 hover:border-background-800 active:border-background-800 cursor-not-allowed hover:bg-transparent',
-        props.className
+        props.className,
       )}
       data-testid="date-picker-button"
       disabled={props.disabled}
@@ -114,7 +114,7 @@ export const DateRangePicker = memo(function DateRangePicker(
 
 const getDefaultDateRange = (
   start?: Date,
-  end?: Date
+  end?: Date,
 ): DateRange | undefined => {
   if (!start || !end) return undefined;
   return {
@@ -135,14 +135,14 @@ const Content = (props: Props) => {
   const now = new Date();
   const baseDate = getDefaultDateRange(
     props.start ?? props.defaultStart,
-    props.end ?? props.defaultEnd
+    props.end ?? props.defaultEnd,
   );
   const [date, setDate] = useState(baseDate);
   const hasDates = !!(date?.from && date?.to);
   const selectedPreset = props.presets?.find((p) => {
     if (!hasDates) return false;
     const from = sub(now, p.duration);
-    return isSameDay(from, date?.from!) && isSameDay(date?.to!, now);
+    return isSameDay(from, date.from!) && isSameDay(date.to!, now);
   });
 
   const { aboveBreakpoint } = useBreakpoints();

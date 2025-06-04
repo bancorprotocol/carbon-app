@@ -27,7 +27,7 @@ export const NotFound: FC<Props> = ({
       className={cn(
         'gap-30 py-50 relative flex min-h-[500px] flex-col items-center justify-center px-20 text-center',
         bordered && 'border-background-800 rounded border-2',
-        className
+        className,
       )}
     >
       {showBackButton && (

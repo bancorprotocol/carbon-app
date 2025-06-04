@@ -30,7 +30,7 @@ export const TradeRecurring = () => {
       setBuyOrder({ min: buy.min, max: buy.max });
       setSellOrder({ min: sell.min, max: sell.max });
     },
-    [setBuyOrder, setSellOrder]
+    [setBuyOrder, setSellOrder],
   );
 
   const sellOrder = getDefaultOrder(
@@ -41,7 +41,7 @@ export const TradeRecurring = () => {
       budget: search.sellBudget,
       settings: search.sellSettings,
     },
-    marketPrice
+    marketPrice,
   );
   const buyOrder = getDefaultOrder(
     'buy',
@@ -51,7 +51,7 @@ export const TradeRecurring = () => {
       budget: search.buyBudget,
       settings: search.buySettings,
     },
-    marketPrice
+    marketPrice,
   );
 
   const sellOutsideMarket = outSideMarketWarning({

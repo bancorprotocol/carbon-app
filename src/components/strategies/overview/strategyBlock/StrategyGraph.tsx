@@ -87,7 +87,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
       ? Math.min(buy.from, sell.from)
       : Math.max(buy.from, sell.from);
 
-  const center = min && max ? (min + max) / 2 : currentPrice ?? 1000;
+  const center = min && max ? (min + max) / 2 : (currentPrice ?? 1000);
   const delta = min !== max ? (max - min) / 2 : center / 30;
 
   // Graph zoom
@@ -221,8 +221,8 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                             buy.marginalPrice >= buy.from &&
                               buy.marginalPrice < buy.to
                               ? buy.marginalPrice
-                              : buy.to
-                          )
+                              : buy.to,
+                          ),
                         ).join(' ')}
                       />
                       {buy.marginalPrice < buy.to &&
@@ -230,7 +230,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                           <polygon
                             fill="url(#buy-pattern)"
                             points={Array.from(
-                              getBuyPoints(buy.marginalPrice, buy.to)
+                              getBuyPoints(buy.marginalPrice, buy.to),
                             ).join(' ')}
                           />
                         )}
@@ -299,8 +299,8 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                               sell.marginalPrice <= sell.to
                               ? sell.marginalPrice
                               : sell.from,
-                            sell.to
-                          )
+                            sell.to,
+                          ),
                         ).join(' ')}
                       />
                       {sell.marginalPrice <= sell.to &&
@@ -308,7 +308,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                           <polygon
                             fill="url(#sell-pattern)"
                             points={Array.from(
-                              getSellPoints(sell.from, sell.marginalPrice)
+                              getSellPoints(sell.from, sell.marginalPrice),
                             ).join(' ')}
                           />
                         )}

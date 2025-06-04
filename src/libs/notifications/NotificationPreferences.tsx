@@ -8,7 +8,7 @@ export interface NotificationPreference {
 
 export const NotificationPreferences = () => {
   const [preferences, setPreferences] = useState(
-    lsService.getItem('notificationPreferences')
+    lsService.getItem('notificationPreferences'),
   );
 
   const onChange = (e: FormEvent<HTMLFormElement>) => {

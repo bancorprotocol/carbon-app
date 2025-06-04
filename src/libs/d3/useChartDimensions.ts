@@ -2,7 +2,7 @@ import { D3ChartSettings, D3ChartSettingsProps } from './types';
 import { RefObject, useEffect, useRef, useState } from 'react';
 
 export const useChartDimensions = (
-  settings: D3ChartSettingsProps
+  settings: D3ChartSettingsProps,
 ): [RefObject<SVGSVGElement | null>, D3ChartSettings] => {
   const ref = useRef<SVGSVGElement>(null);
   const dimensions = combineChartDimensions(settings);
@@ -46,13 +46,13 @@ const combineChartDimensions = (dimensions: D3ChartSettingsProps) => {
       parsedDimensions.height -
         parsedDimensions.marginTop -
         parsedDimensions.marginBottom,
-      0
+      0,
     ),
     boundedWidth: Math.max(
       parsedDimensions.width -
         parsedDimensions.marginLeft -
         parsedDimensions.marginRight,
-      0
+      0,
     ),
   };
 };

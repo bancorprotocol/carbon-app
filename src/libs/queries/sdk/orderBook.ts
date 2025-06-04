@@ -21,7 +21,7 @@ export type OrderBook = {
 export const useGetOrderBook = (
   steps: number,
   base?: string,
-  quote?: string
+  quote?: string,
 ) => {
   const { isInitialized } = useCarbonInit();
 

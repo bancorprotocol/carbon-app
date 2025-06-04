@@ -52,7 +52,7 @@ export const SimResultChartHeader = ({
         replace: true,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   // has to be memorized to work while animation is running

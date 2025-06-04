@@ -51,7 +51,7 @@ export const PairChartHistory: FC<Props> = (props) => {
         replace: true,
       });
     },
-    [nav]
+    [nav],
   );
 
   const { data, isPending, isError } = useGetTokenPriceHistory({

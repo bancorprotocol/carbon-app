@@ -51,7 +51,7 @@ export const DragablePriceRange = ({
       isH2Max.current = false;
       onDragRectHandler({ type, y, y2, onMinMaxChange });
     },
-    [onMinMaxChange, type]
+    [onMinMaxChange, type],
   );
 
   const onDragEndHandler = useCallback(
@@ -61,7 +61,7 @@ export const DragablePriceRange = ({
       isH2Max.current = false;
       isDragging.current = false;
     },
-    [onDragEnd, type]
+    [onDragEnd, type],
   );
 
   const onDragStartHandler = useCallback(() => {
@@ -80,7 +80,7 @@ export const DragablePriceRange = ({
       isH1Max.current = !!isFlipped;
       isH2Max.current = !isFlipped;
     },
-    [isLimit, onMinMaxChange, type]
+    [isLimit, onMinMaxChange, type],
   );
 
   const onDragH2 = useCallback(
@@ -89,13 +89,13 @@ export const DragablePriceRange = ({
       isH2Max.current = !!isFlipped;
       isH1Max.current = !isFlipped;
     },
-    [onMinMaxChange, type]
+    [onMinMaxChange, type],
   );
 
   useEffect(() => {
     if (isDragging.current) return;
     handleStateChange({ type, id: 'line1', y: yPos.max, isLimit });
-    !isLimit && handleStateChange({ type, id: 'line2', y: yPos.min });
+    if (!isLimit) handleStateChange({ type, id: 'line2', y: yPos.min });
   }, [isLimit, type, yPos.max, yPos.min]);
 
   return (

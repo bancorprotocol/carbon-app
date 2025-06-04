@@ -32,7 +32,7 @@ export const useTradePairs = () => {
       const key = toPairSlug({ address: base }, { address: quote });
       return pairs.map.get(key);
     },
-    [pairs.map]
+    [pairs.map],
   );
 
   const tradePairsPopular = useMemo(() => {
@@ -42,7 +42,7 @@ export const useTradePairs = () => {
   }, [getTradePair]);
 
   const [favoritePairs, _setFavoritePairs] = useState<TradePair[]>(
-    lsService.getItem(`favoriteTradePairs-${user}`) || []
+    lsService.getItem(`favoriteTradePairs-${user}`) || [],
   );
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export const useTradePairs = () => {
         return newValue;
       });
     },
-    [user]
+    [user],
   );
 
   const removeFavoritePair = useCallback(
@@ -70,19 +70,19 @@ export const useTradePairs = () => {
             p.baseToken.address.toLowerCase() !==
               pair.baseToken.address.toLowerCase() ||
             p.quoteToken.address.toLowerCase() !==
-              pair.quoteToken.address.toLowerCase()
+              pair.quoteToken.address.toLowerCase(),
         );
         lsService.setItem(`favoriteTradePairs-${user}`, newValue);
         return newValue;
       });
     },
-    [user]
+    [user],
   );
 
   const isTradePairError = !Array.from(pairs.map.values()).some(
     (item) =>
       item.baseToken.address.toLowerCase() === search.base?.toLowerCase() &&
-      item.quoteToken.address.toLowerCase() === search.quote?.toLowerCase()
+      item.quoteToken.address.toLowerCase() === search.quote?.toLowerCase(),
   );
 
   const openTradePairList = () => {

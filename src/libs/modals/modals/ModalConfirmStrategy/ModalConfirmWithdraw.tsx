@@ -42,7 +42,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
           params={{ strategyId: strategy.id }}
           className={cn(
             'row-span-2 self-center',
-            buttonStyles({ variant: 'success' })
+            buttonStyles({ variant: 'success' }),
           )}
         >
           Edit Prices

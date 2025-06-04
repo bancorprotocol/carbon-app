@@ -19,7 +19,7 @@ export const usePauseStrategy = () => {
   const pauseStrategy = async (
     strategy: Strategy,
     successEventsCb?: () => void,
-    closeModalCb?: () => void
+    closeModalCb?: () => void,
   ) => {
     const { base, quote, encoded, id } = strategy;
 
@@ -61,7 +61,7 @@ export const usePauseStrategy = () => {
           setIsProcessing(false);
           console.error('update mutation failed', e);
         },
-      }
+      },
     );
   };
 

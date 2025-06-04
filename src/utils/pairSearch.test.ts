@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { describe, it, expect } from 'vitest';
 import { searchPairKeys } from 'utils/pairSearch';
 

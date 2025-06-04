@@ -23,7 +23,7 @@ export const SearchInput = ({
     <div
       className={cn(
         'flex items-center gap-16 border border-transparent bg-black px-16 py-8 focus-within:border-white',
-        className
+        className,
       )}
     >
       <IconSearch className="text-white-disabled w-16" />

@@ -14,7 +14,7 @@ export type MutateModalContentData = {
 };
 
 export const getModalDataByType = (
-  type: 'pause' | 'delete'
+  type: 'pause' | 'delete',
 ): MutateModalContentData => {
   switch (type) {
     case 'pause':

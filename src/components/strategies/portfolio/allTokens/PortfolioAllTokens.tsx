@@ -23,7 +23,7 @@ interface Props {
   getHref: GetPortfolioTokenHref;
 }
 
-const _PortfolioAllTokens = ({
+const LocalPortfolioAllTokens = ({
   strategies,
   isPending: _isPending,
   isExplorer,
@@ -83,8 +83,8 @@ const _PortfolioAllTokens = ({
 };
 
 export const PortfolioAllTokens = memo(
-  _PortfolioAllTokens,
+  LocalPortfolioAllTokens,
   (prev, next) =>
     prev.isPending === next.isPending &&
-    JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
+    JSON.stringify(prev.strategies) === JSON.stringify(next.strategies),
 );

@@ -19,11 +19,11 @@ export const useNotifications = () => {
 
   const _updateNotificationStatus = (
     id: string,
-    status: NotificationStatus
+    status: NotificationStatus,
   ) => {
     setNotifications((prev) => {
       const newNotifications = prev.map((n) =>
-        n.id === id ? { ...n, status } : n
+        n.id === id ? { ...n, status } : n,
       );
       setLSUserNotifications(user, newNotifications);
       return newNotifications;
@@ -61,7 +61,7 @@ export const useNotifications = () => {
         return newNotifications;
       });
     },
-    [setNotifications, user]
+    [setNotifications, user],
   );
 
   const removeNotification = useCallback(
@@ -72,20 +72,20 @@ export const useNotifications = () => {
         return newNotifications;
       });
     },
-    [setNotifications, user]
+    [setNotifications, user],
   );
 
   const dismissAlert = useCallback(
     (id: string) => {
       setNotifications((prev) => {
         const newNotifications = prev.map((n) =>
-          n.id === id ? { ...n, showAlert: false } : n
+          n.id === id ? { ...n, showAlert: false } : n,
         );
         setLSUserNotifications(user, newNotifications);
         return newNotifications;
       });
     },
-    [setNotifications, user]
+    [setNotifications, user],
   );
 
   const clearNotifications = useCallback(() => {

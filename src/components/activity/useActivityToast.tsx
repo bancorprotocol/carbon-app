@@ -15,7 +15,7 @@ const refetchInterval = 5 * 60 * 1_000;
 export const useActivityToast = () => {
   const { user } = useWagmi();
   const [lastFetch, setLastFetch] = useState<number>(
-    getUnixTime(subMilliseconds(new Date(), refetchInterval))
+    getUnixTime(subMilliseconds(new Date(), refetchInterval)),
   );
   const params = {
     start: lastFetch,
@@ -35,24 +35,27 @@ export const useActivityToast = () => {
     if (query.fetchStatus !== 'idle') return;
     setLastFetch(getUnixTime(new Date()));
     for (let i = 0; i < activities.length; i++) {
-      setTimeout(() => {
-        const preferences = lsService.getItem('notificationPreferences');
-        if (preferences?.global === false) return;
-        const { base, quote } = activities[i].strategy;
-        toaster.addToast((id) => (
-          <BaseToast id={id}>
-            <Link
-              to="/explore/$slug/activity"
-              params={{ slug: toPairSlug(base, quote) }}
-              className="flex flex-1 gap-4 p-16"
-              onClick={() => toaster.removeToast(id)}
-            >
-              <TokensOverlap tokens={[base, quote]} size={18} />
-              {base.symbol}/{quote.symbol} Trade
-            </Link>
-          </BaseToast>
-        ));
-      }, (refetchInterval * (Math.random() + i)) / max);
+      setTimeout(
+        () => {
+          const preferences = lsService.getItem('notificationPreferences');
+          if (preferences?.global === false) return;
+          const { base, quote } = activities[i].strategy;
+          toaster.addToast((id) => (
+            <BaseToast id={id}>
+              <Link
+                to="/explore/$slug/activity"
+                params={{ slug: toPairSlug(base, quote) }}
+                className="flex flex-1 gap-4 p-16"
+                onClick={() => toaster.removeToast(id)}
+              >
+                <TokensOverlap tokens={[base, quote]} size={18} />
+                {base.symbol}/{quote.symbol} Trade
+              </Link>
+            </BaseToast>
+          ));
+        },
+        (refetchInterval * (Math.random() + i)) / max,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query.fetchStatus, toaster.addToast, toaster.removeToast]);

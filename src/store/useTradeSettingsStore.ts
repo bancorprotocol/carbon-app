@@ -25,15 +25,15 @@ const presets: TradeSettingsStore['presets'] = {
 
 export const useTradeSettingsStore = (): TradeSettingsStore => {
   const [slippage, _setSlippage] = useState(
-    lsService.getItem('tradeSlippage') || presets.slippage[0]
+    lsService.getItem('tradeSlippage') || presets.slippage[0],
   );
 
   const [deadline, _setDeadline] = useState(
-    lsService.getItem('tradeDeadline') || presets.deadline[1]
+    lsService.getItem('tradeDeadline') || presets.deadline[1],
   );
 
   const [maxOrders, _setMaxOrders] = useState(
-    lsService.getItem('tradeMaxOrders') || presets.maxOrders[1]
+    lsService.getItem('tradeMaxOrders') || presets.maxOrders[1],
   );
 
   const setSlippage = (value: string) => {

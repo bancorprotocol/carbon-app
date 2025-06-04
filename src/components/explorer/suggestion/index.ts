@@ -3,5 +3,5 @@ import { SuggestionCombobox } from './SuggestionCombobox';
 
 export default memo(
   SuggestionCombobox,
-  (prev, next) => prev.open === next.open
+  (prev, next) => prev.open === next.open,
 );

@@ -26,7 +26,7 @@ const toastFlip = () => {
           {
             duration: 200,
             easing: 'ease-out',
-          }
+          },
         );
       } else {
         item.animate(
@@ -37,7 +37,7 @@ const toastFlip = () => {
           {
             duration: 200,
             easing: 'ease-out',
-          }
+          },
         );
       }
     }
@@ -56,7 +56,7 @@ export const useToastStore = () => {
         .getElementById(id)
         ?.animate(
           { scale: '0.8', opacity: 0 },
-          { duration: 200, easing: 'ease-in', fill: 'forwards' }
+          { duration: 200, easing: 'ease-in', fill: 'forwards' },
         ).finished;
       toastFlip();
       setToasts((toasts) => {
@@ -64,13 +64,13 @@ export const useToastStore = () => {
         return [...toasts.slice(0, index), ...toasts.slice(index + 1)];
       });
     },
-    [setToasts]
+    [setToasts],
   );
 
   const addToast = useCallback(
     (
       content: string | ReactNode | ((id: string) => ReactNode),
-      toast: Partial<Omit<Toast, 'content'>> = {}
+      toast: Partial<Omit<Toast, 'content'>> = {},
     ) => {
       const id: string = crypto.randomUUID();
       const newToast: Toast = { id, content, duration: 2000, ...toast };
@@ -79,7 +79,7 @@ export const useToastStore = () => {
       setTimeout(() => removeToast(id), newToast.duration);
       return id;
     },
-    [setToasts, removeToast]
+    [setToasts, removeToast],
   );
 
   return {

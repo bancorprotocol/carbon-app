@@ -45,7 +45,7 @@ export const D3ChartDisposable = ({
       prices.sell.max,
       prices.sell.min,
       yScale,
-    ]
+    ],
   );
 
   const hasDragEnded = useRef(false);
@@ -58,14 +58,14 @@ export const D3ChartDisposable = ({
       const minInverted = y1
         ? yScale.invert(y1).toString()
         : type === 'buy'
-        ? prices.buy.min
-        : prices.sell.min;
+          ? prices.buy.min
+          : prices.sell.min;
 
       const maxInverted = y2
         ? yScale.invert(y2).toString()
         : type === 'buy'
-        ? prices.buy.max
-        : prices.sell.max;
+          ? prices.buy.max
+          : prices.sell.max;
 
       const buy = {
         min: type === 'buy' ? minInverted : prices.buy.min,
@@ -85,7 +85,7 @@ export const D3ChartDisposable = ({
       prices.sell.max,
       prices.sell.min,
       yScale,
-    ]
+    ],
   );
 
   const labels = {

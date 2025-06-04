@@ -13,12 +13,12 @@ export const useNotificationsStore = (): NotificationsStore => {
 
   const hasPendingTx = useMemo(
     () => notifications.some((n) => n.type === 'tx' && n.status === 'pending'),
-    [notifications]
+    [notifications],
   );
 
   const alerts = useMemo(
     () => notifications.filter((n) => !!n.showAlert),
-    [notifications]
+    [notifications],
   );
 
   return {

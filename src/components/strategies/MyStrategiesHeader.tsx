@@ -37,7 +37,7 @@ export const MyStrategiesHeader = () => {
     <div
       className={cn(
         'flex flex-col justify-between gap-16 md:flex-row md:items-center',
-        style.header
+        style.header,
       )}
     >
       <div role="table" className="flex flex-col gap-16 md:flex-row md:gap-24">

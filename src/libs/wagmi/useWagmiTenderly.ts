@@ -13,27 +13,26 @@ export const useWagmiTenderly = () => {
     url?: string,
     carbonController?: string,
     voucherAddress?: string,
-    batcherAddress?: string
+    batcherAddress?: string,
   ) => {
-    url
-      ? lsService.setItem('tenderlyRpc', url)
-      : lsService.removeItem('tenderlyRpc');
+    if (url) lsService.setItem('tenderlyRpc', url);
+    else lsService.removeItem('tenderlyRpc');
 
-    carbonController
-      ? lsService.setItem('carbonControllerAddress', carbonController)
-      : lsService.removeItem('carbonControllerAddress');
+    if (carbonController)
+      lsService.setItem('carbonControllerAddress', carbonController);
+    else lsService.removeItem('carbonControllerAddress');
 
-    voucherAddress
-      ? lsService.setItem('voucherContractAddress', voucherAddress)
-      : lsService.removeItem('voucherContractAddress');
+    if (voucherAddress)
+      lsService.setItem('voucherContractAddress', voucherAddress);
+    else lsService.removeItem('voucherContractAddress');
 
-    batcherAddress
-      ? lsService.setItem('batcherContractAddress', batcherAddress)
-      : lsService.removeItem('batcherContractAddress');
+    if (batcherAddress)
+      lsService.setItem('batcherContractAddress', batcherAddress);
+    else lsService.removeItem('batcherContractAddress');
 
     lsService.removeItem('sdkCompressedCacheData');
     lsService.removeItem('tokenPairsCache');
-    !url && lsService.removeItem('isUncheckedSigner');
+    if (!url) lsService.removeItem('isUncheckedSigner');
 
     window?.location.reload();
   };

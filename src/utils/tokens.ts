@@ -11,7 +11,7 @@ export const expandToken = (amount: string | number, precision: number) => {
 export const shrinkToken = (
   amount: string | number | SafeDecimal,
   precision: number,
-  chopZeros = false
+  chopZeros = false,
 ) => {
   const bigNumAmount = new SafeDecimal(amount);
   if (bigNumAmount.isZero()) return '0';

@@ -19,7 +19,7 @@ export type ModalTradeRoutingData = {
   tradeActionsRes: Action[];
   tradeActionsWei: MatchActionBNStr[];
   isTradeBySource: boolean;
-  onSuccess: Function;
+  onSuccess: () => any;
   sourceBalance: string;
   buy?: boolean;
 };
@@ -71,7 +71,6 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
         if (select.isSelected) onSelect(select.id);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {

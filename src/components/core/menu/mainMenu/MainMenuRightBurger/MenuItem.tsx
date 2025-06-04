@@ -4,7 +4,7 @@ import { cn } from 'utils/helpers';
 
 type MenuItemProps = {
   item: {
-    onClick?: Function;
+    onClick?: () => any;
     content?: string | ReactElement;
     hasSubMenu?: boolean;
     disableHoverEffect?: boolean;
@@ -27,7 +27,7 @@ export const MenuItem: FC<MenuItemProps> = ({ item }) => {
         'text-18 md:text-16',
         disableHoverEffect ? 'p-4' : 'p-10 md:hover:bg-black',
         'rounded-6 block cursor-pointer md:hover:text-white',
-        className
+        className,
       )}
     >
       <div

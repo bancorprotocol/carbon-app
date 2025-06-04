@@ -48,6 +48,6 @@ const BLOCKED_ACCOUNTS = [
 
 export const isAccountBlocked = (account?: string): boolean => {
   return BLOCKED_ACCOUNTS.map((x) => x.toLowerCase()).includes(
-    account?.toLowerCase() || ''
+    account?.toLowerCase() || '',
   );
 };

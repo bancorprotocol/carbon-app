@@ -25,14 +25,14 @@ export const validArrayOf = <T>(schema: v.GenericSchema<string, T>) => {
 
 export const validNumber = v.pipe(
   v.string(),
-  v.check((value: string) => isNaN(Number(formatNumber(value))) === false)
+  v.check((value: string) => isNaN(Number(formatNumber(value))) === false),
 );
 export const validInputNumber = v.optional(
   v.pipe(
     validNumber,
-    v.check((value: string) => value === '.' || Number(value) >= 0)
+    v.check((value: string) => value === '.' || Number(value) >= 0),
   ),
-  '0'
+  '0',
 );
 
 export const validNumberType = v.number();
@@ -46,14 +46,14 @@ export const validAddress = v.pipe(
     } catch {
       return false;
     }
-  })
+  }),
 );
 
 export const validString = v.string();
 
 export const validBoolean = v.pipe(
   v.boolean(),
-  v.check((value) => value === true || value === false)
+  v.check((value) => value === true || value === false),
 );
 
 export const validMarginalPrice = v.union([

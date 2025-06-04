@@ -5,7 +5,7 @@ describe('SafeDecimal', () => {
   describe('valid input', () => {
     it('should return a valid output if input is valid string', () => {
       expect(new SafeDecimal('4321123122321')).toEqual(
-        new SafeDecimal('4321123122321')
+        new SafeDecimal('4321123122321'),
       );
       expect(new SafeDecimal('42.5').toString()).toEqual('42.5');
       expect(new SafeDecimal('0.425').toString()).toEqual('0.425');
@@ -13,7 +13,7 @@ describe('SafeDecimal', () => {
     });
     it('should return a valid output if input is valid number', () => {
       expect(new SafeDecimal(4321123122321).toString()).toEqual(
-        '4321123122321'
+        '4321123122321',
       );
       expect(new SafeDecimal(42.5).toString()).toEqual('42.5');
       expect(new SafeDecimal(0.0425).toString()).toEqual('0.0425');
@@ -22,7 +22,7 @@ describe('SafeDecimal', () => {
       expect(new SafeDecimal('1E-5').toString()).toEqual('0.00001');
       expect(new SafeDecimal('10E0').toString()).toEqual('10');
       expect(new SafeDecimal('10E20').toString()).toEqual(
-        '1000000000000000000000'
+        '1000000000000000000000',
       );
       expect(new SafeDecimal('10E101').toString()).toEqual('1e+102');
     });
@@ -54,7 +54,7 @@ describe('SafeDecimal', () => {
   describe('operations', () => {
     it('should return valid operation output with valid input', () => {
       expect(new SafeDecimal('123123').add('12321').toString()).toEqual(
-        '135444'
+        '135444',
       );
     });
     it('should return NaN when using invalid input', () => {

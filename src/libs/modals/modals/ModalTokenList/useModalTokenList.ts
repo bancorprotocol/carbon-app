@@ -59,7 +59,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
       onClick(token);
       closeModal(id);
     },
-    [onClick, closeModal, id]
+    [onClick, closeModal, id],
   );
 
   const sanitizedTokens = useMemo(
@@ -69,9 +69,9 @@ export const useModalTokenList = ({ id, data }: Props) => {
           (includedTokens.length === 0 ||
             includedTokens.includes(token.address)) &&
           !excludedTokens.includes(token.address) &&
-          !isGasTokenToHide(token.address)
+          !isGasTokenToHide(token.address),
       ),
-    [tokens, excludedTokens, includedTokens]
+    [tokens, excludedTokens, includedTokens],
   );
 
   const duplicateSymbols = useMemo(() => {
@@ -87,14 +87,14 @@ export const useModalTokenList = ({ id, data }: Props) => {
   const _favoriteTokens = useMemo(
     () =>
       favoriteTokens.filter(
-        (token) => !excludedTokens.includes(token?.address || '')
+        (token) => !excludedTokens.includes(token?.address || ''),
       ),
-    [excludedTokens, favoriteTokens]
+    [excludedTokens, favoriteTokens],
   );
 
   const fuseIndex = useMemo(
     () => Fuse.createIndex(SEARCH_KEYS, sanitizedTokens),
-    [sanitizedTokens]
+    [sanitizedTokens],
   );
 
   const fuse = useMemo(
@@ -106,9 +106,9 @@ export const useModalTokenList = ({ id, data }: Props) => {
           threshold: 0.3,
           distance: 50,
         },
-        fuseIndex
+        fuseIndex,
       ),
-    [sanitizedTokens, fuseIndex]
+    [sanitizedTokens, fuseIndex],
   );
 
   const filteredTokens = useMemo(() => {
@@ -124,7 +124,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
       )
         return [nativeToken];
       const found = sanitizedTokens.find(
-        (token) => token.address.toLowerCase() === search.toLowerCase()
+        (token) => token.address.toLowerCase() === search.toLowerCase(),
       );
       if (found) {
         return [found];
@@ -142,21 +142,21 @@ export const useModalTokenList = ({ id, data }: Props) => {
     return (
       isValidAddress &&
       !filteredTokens.find(
-        (token) => token.address.toLowerCase() === search.toLowerCase()
+        (token) => token.address.toLowerCase() === search.toLowerCase(),
       )
     );
   }, [search, filteredTokens]);
 
   const showNoResults = useMemo(
     () => !showImportToken && filteredTokens.length === 0,
-    [showImportToken, filteredTokens]
+    [showImportToken, filteredTokens],
   );
 
   const popularTokens = useMemo(() => {
     return defaultPopularTokens
       .map((tokenAddress) => tokensMap.get(tokenAddress.toLowerCase()))
       .filter(
-        (token) => !excludedTokens.includes(token?.address || '')
+        (token) => !excludedTokens.includes(token?.address || ''),
       ) as Token[];
   }, [defaultPopularTokens, excludedTokens, tokensMap]);
 

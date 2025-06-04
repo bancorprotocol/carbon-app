@@ -142,5 +142,5 @@ const migrations: Migration[] = [
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>(
   (key) => [APP_ID, NETWORK, APP_VERSION, key].join('-'),
-  migrations
+  migrations,
 );

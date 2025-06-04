@@ -64,7 +64,7 @@ const LegendItem = ({
       transform={`translate(0,${index * 25})`}
       onClick={onClick}
       onKeyDown={onKeyDown}
-      // @ts-ignore
+      // @ts-expect-error this is a svg specific style
       style={{ pointerEvents: 'bounding-box' }}
       className="cursor-pointer"
       aria-checked={!isDisabled}

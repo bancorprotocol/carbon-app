@@ -34,7 +34,7 @@ const ActivityContext = createContext<ActivityContextType>({
 
 const getQueryParams = (
   baseParams: QueryActivityParams,
-  searchParams: ActivitySearchParams
+  searchParams: ActivitySearchParams,
 ) => {
   const params = { ...baseParams };
   if (searchParams.actions) params.actions = searchParams.actions.join(',');
@@ -86,7 +86,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, url }) => {
         search: (current) => ({ ...current, ...changes }),
       });
     },
-    [nav]
+    [nav],
   );
 
   if (activityMetaQuery.isPending) {

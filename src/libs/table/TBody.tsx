@@ -34,10 +34,10 @@ export const TBody = <D extends object>({
               'text-16',
               'hover:bg-background-800',
               'hover:text-white',
-              onRowClick && 'cursor-pointer'
+              onRowClick && 'cursor-pointer',
             )}
             onClick={() => {
-              onRowClick && onRowClick(row);
+              if (onRowClick) onRowClick(row);
             }}
           >
             {row.getVisibleCells().map((cell) => (

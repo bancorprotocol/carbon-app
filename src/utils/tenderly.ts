@@ -28,7 +28,7 @@ export const tenderlyFaucetTransferNativeToken = async (user: string) => {
 
 export const tenderlyFaucetTransferTKN = async (
   token: FaucetToken,
-  user: string
+  user: string,
 ) => {
   const provider = new StaticJsonRpcProvider(tenderlyRpc);
   return provider.send('tenderly_setErc20Balance', [

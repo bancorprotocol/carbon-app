@@ -9,9 +9,9 @@ interface Props {
   symbol1?: string;
   imgUrl0?: string;
   imgUrl1?: string;
-  onClick0: Function;
-  onClick1: Function;
-  onMiddleClick?: Function;
+  onClick0: () => any;
+  onClick1: () => any;
+  onMiddleClick?: () => any;
   middleDisabled?: boolean;
 }
 

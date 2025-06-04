@@ -6,22 +6,18 @@ type NewVariant<T extends { [key in string]: ReadonlyArray<string> }> = {
   [key in keyof T]: ObjectFromList<T[key], string | string[]>;
 };
 
-const Variant = {
-  variant: ['black', 'white', 'success', 'error', 'secondary', 'buy', 'sell'],
-} as const;
-export type VariantColor = NewVariant<typeof Variant>;
+export type VariantColor = NewVariant<{
+  variant: ['black', 'white', 'success', 'error', 'secondary', 'buy', 'sell'];
+}>;
 
-const SIZE = {
-  size: ['sm', 'md', 'lg'],
-} as const;
-export type VariantSize = NewVariant<typeof SIZE>;
+export type VariantSize = NewVariant<{
+  size: ['sm', 'md', 'lg'];
+}>;
 
-const FULL_WIDTH = {
-  fullWidth: ['true', 'false'],
-} as const;
-export type VariantFullWidth = NewVariant<typeof FULL_WIDTH>;
+export type VariantFullWidth = NewVariant<{
+  fullWidth: ['true', 'false'];
+}>;
 
-const IS_ON = {
-  isOn: ['true', 'false'],
-} as const;
-export type VariantIsOn = NewVariant<typeof IS_ON>;
+export type VariantIsOn = NewVariant<{
+  isOn: ['true', 'false'];
+}>;

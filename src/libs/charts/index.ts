@@ -11,6 +11,6 @@ export const loadHighchart = async () => {
   return Highcharts;
 };
 
-//@ts-ignore
+// @ts-expect-error Highchart react is namespace and used as a component
 export { HighchartsReact, Highcharts };
 export type { Options } from 'highcharts/highcharts';

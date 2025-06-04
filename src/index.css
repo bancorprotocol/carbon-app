@@ -19,13 +19,12 @@
   --main-menu-height: 80px;
   --mobile-menu-height: 80px;
 
-  --ease-in: cubic-bezier(.55, 0, 1, .45);
-  --ease-out: cubic-bezier(0, .55, .45, 1);
-  --ease-in-out: cubic-bezier(.85, 0, .15, 1);
-  --ease-back-in-out: cubic-bezier(.68, -.6, .32, 1.6);
-  --ease-back-out: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-out: cubic-bezier(0, 0.55, 0.45, 1);
+  --ease-in-out: cubic-bezier(0.85, 0, 0.15, 1);
+  --ease-back-in-out: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  --ease-back-out: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 
 @layer base {
   html,
@@ -38,10 +37,18 @@
     scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
   }
 
-  h1, h2, h3, h4, h5, h6, p {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
     margin-block: unset;
   }
-  h1, h2, th {
+  h1,
+  h2,
+  th {
     @apply font-title;
   }
 
@@ -290,7 +297,8 @@ input[type='search']::-webkit-search-cancel-button {
   display: none;
 }
 
-dialog.modal, dialog.modal::backdrop {
+dialog.modal,
+dialog.modal::backdrop {
   transition-behavior: allow-discrete;
   transition-property: display, overlay, opacity, transform;
   transition-duration: 0.5s;

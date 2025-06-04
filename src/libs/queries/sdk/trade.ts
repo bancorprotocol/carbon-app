@@ -50,7 +50,7 @@ export const useTradeQuery = () => {
           params.targetAddress,
           params.tradeActions,
           calcDeadline(params.deadline),
-          calcMinReturn(params.targetInput)
+          calcMinReturn(params.targetInput),
         );
       } else {
         unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
@@ -58,7 +58,7 @@ export const useTradeQuery = () => {
           params.targetAddress,
           params.tradeActions,
           calcDeadline(params.deadline),
-          calcMaxInput(params.sourceInput)
+          calcMaxInput(params.sourceInput),
         );
       }
       return signer!.sendTransaction(unsignedTx);
@@ -79,7 +79,7 @@ export const useGetTradeData = ({
     queryKey: QueryKey.tradeData(
       [sourceToken, targetToken],
       isTradeBySource,
-      input
+      input,
     ),
 
     queryFn: async () => {
@@ -101,7 +101,7 @@ export const useGetTradeData = ({
         sourceToken,
         targetToken,
         input,
-        !isTradeBySource
+        !isTradeBySource,
       );
     },
     enabled: !!enabled && isInitialized && input !== '...',

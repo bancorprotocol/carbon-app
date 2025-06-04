@@ -24,5 +24,5 @@ export const TradingviewChart: FC<TradingviewChartProps> = memo(
         <Copyright symbol={symbol} />
       </div>
     );
-  }
+  },
 );

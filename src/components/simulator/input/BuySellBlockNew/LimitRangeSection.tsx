@@ -32,9 +32,10 @@ export const LimitRangeSection: FC<Props> = ({
   const type = buy ? 'buy' : 'sell';
 
   const getWarnings = () => {
-    let warnings = [];
-    if (isOrdersOverlap && !isOrdersReversed)
+    const warnings = [];
+    if (isOrdersOverlap && !isOrdersReversed) {
       warnings.push('Notice: your Buy and Sell orders overlap');
+    }
     return warnings;
   };
 

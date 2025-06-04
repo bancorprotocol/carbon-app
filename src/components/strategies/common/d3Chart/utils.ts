@@ -21,7 +21,7 @@ export const useSelectable = (selector: string) => {
 
 export const getHandleSelector = (
   type: 'buy' | 'sell',
-  id: 'line1' | 'line2'
+  id: 'line1' | 'line2',
 ) => {
   const base = `range-boundary`;
   return `${base}-${type}-${id}`;
@@ -54,18 +54,18 @@ export const moveBoundary = (selector: string, y: number) => {
   if (!readonly.size()) return;
   readonly.attr(
     'transform',
-    `translate(${Number(line.attr('x2')) - 20}, ${y - 8})`
+    `translate(${Number(line.attr('x2')) - 20}, ${y - 8})`,
   );
 };
 
 type GetDomainFn<T extends number | number[]> = (
   data: CandlestickData[],
   prices: ChartPrices,
-  marketPrice?: number
+  marketPrice?: number,
 ) => T;
 
 const getDomainMin: GetDomainFn<number> = (data, prices, marketPrice) => {
-  let dataMin = min(data, (d) => d.low) as number;
+  const dataMin = min(data, (d) => d.low) as number;
   const values = [
     dataMin,
     Number(prices.buy.min),
@@ -78,7 +78,7 @@ const getDomainMin: GetDomainFn<number> = (data, prices, marketPrice) => {
 };
 
 const getDomainMax: GetDomainFn<number> = (data, prices, marketPrice) => {
-  let dataMax = max(data, (d) => d.high) as number;
+  const dataMax = max(data, (d) => d.high) as number;
   const values = [
     dataMax,
     Number(prices.buy.min),

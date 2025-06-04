@@ -33,7 +33,7 @@ export interface CarbonWagmiProviderContext {
     url?: string,
     carbonController?: string,
     voucherAddress?: string,
-    batcherAddress?: string
+    batcherAddress?: string,
   ) => void;
   setImposterAccount: (account?: string) => void;
   disconnect: () => Promise<void>;

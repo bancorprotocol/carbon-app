@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 export const useDebouncedValue = <T = any>(
   value: T,
   wait: number,
-  options: { leading?: boolean; cb?: (v: T) => unknown } = { leading: false }
+  options: { leading?: boolean; cb?: (v: T) => unknown } = { leading: false },
 ) => {
   const [_value, _setValue] = useState(value);
   const mountedRef = useRef(false);
@@ -15,7 +15,7 @@ export const useDebouncedValue = <T = any>(
       _setValue(v);
       options.cb?.(v);
     },
-    [options]
+    [options],
   );
 
   const cancel = () => window.clearTimeout(timeoutRef.current);

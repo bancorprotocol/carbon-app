@@ -3,7 +3,7 @@ import { lsService } from 'services/localeStorage';
 
 export const useWagmiImposter = () => {
   const [imposterAccount, setImposterAccount] = useState<string | undefined>(
-    lsService.getItem('imposterAccount')
+    lsService.getItem('imposterAccount'),
   );
 
   useEffect(() => {

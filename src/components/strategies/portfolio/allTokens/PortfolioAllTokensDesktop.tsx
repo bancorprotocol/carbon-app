@@ -70,7 +70,7 @@ export const PortfolioAllTokensDesktop: FC<Props> = ({
           getFiatDisplayValue(info.getValue(), selectedFiatCurrency),
       }),
     ],
-    [selectedFiatCurrency]
+    [selectedFiatCurrency],
   );
 
   return (

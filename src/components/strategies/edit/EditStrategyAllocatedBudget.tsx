@@ -127,7 +127,7 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
         isOn={checked}
         setIsOn={(isOn) =>
           onChange(
-            isOn ? MarginalPriceOptions.reset : MarginalPriceOptions.maintain
+            isOn ? MarginalPriceOptions.reset : MarginalPriceOptions.maintain,
           )
         }
       />

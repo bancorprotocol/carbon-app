@@ -10,7 +10,7 @@ import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { useWagmi } from 'libs/wagmi';
 import style from './ExplorerSearch.module.css';
 
-export const _ExplorerSearch: FC = () => {
+export const LocalExplorerSearch: FC = () => {
   const navigate = useNavigate();
   const pairs = usePairs();
   const [open, setOpen] = useState(false);
@@ -88,4 +88,4 @@ export const _ExplorerSearch: FC = () => {
   );
 };
 
-export const ExplorerSearch = memo(_ExplorerSearch);
+export const ExplorerSearch = memo(LocalExplorerSearch);

@@ -34,7 +34,7 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
       className={cn(
         selector,
         isDraggable && !readonly && 'cursor-ns-resize',
-        className
+        className,
       )}
     >
       <line

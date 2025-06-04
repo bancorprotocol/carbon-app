@@ -54,7 +54,7 @@ const baseBuyOrder = {
 
 const renderPage = async (
   type: 'editPrices' | 'renew',
-  strategyParams: MockStrategyParams
+  strategyParams: MockStrategyParams,
 ) => {
   const strategy: Strategy = mockStrategy(strategyParams);
   const { router } = await renderWithRouter({
@@ -77,7 +77,7 @@ describe('Edit price disposable page', () => {
   const driver = new EditStrategyDriver(screen);
   vitest
     .spyOn(balanceQueries, 'useGetTokenBalance')
-    .mockImplementation(() => ({ data: '1000' } as any));
+    .mockImplementation(() => ({ data: '1000' }) as any);
 
   describe('Budget distribution', () => {
     test('Show when marginal buy price is min', async () => {

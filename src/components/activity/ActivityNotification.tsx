@@ -70,7 +70,7 @@ export const AnimatedActionIcon = (props: { action: ActivityAction }) => {
         {
           'bg-buy/20 text-buy': props.action === 'buy',
           'bg-sell/20 text-sell': props.action === 'sell',
-        }
+        },
       )}
     >
       <svg width="24" height="24" viewBox="0 0 100 100" style={{ transform }}>

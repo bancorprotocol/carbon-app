@@ -15,7 +15,7 @@ vitest.stubGlobal(
     observe: vitest.fn(),
     unobserve: vitest.fn(),
     disconnect: vitest.fn(),
-  }))
+  })),
 );
 
 // MOCK STORE PROVIDER CONTEXTS
@@ -23,7 +23,7 @@ vitest.mock('store/useTokensStore.ts', async (importOriginal) => {
   const mod = await importOriginal<typeof import('store/useTokensStore.ts')>();
   const tokens = Object.values(tokenList);
   const tokensMap = new Map(
-    tokens.map((token) => [token.address.toLowerCase(), token])
+    tokens.map((token) => [token.address.toLowerCase(), token]),
   );
   return {
     ...mod,

@@ -27,7 +27,7 @@ export const TradeOverlapping = () => {
         resetScroll: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   return (

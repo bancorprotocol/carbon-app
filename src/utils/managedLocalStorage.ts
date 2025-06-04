@@ -6,7 +6,7 @@ export class ManagedLocalStorage<T> {
 
   constructor(
     keyFormatter?: (key: keyof T) => string,
-    private migrations?: Migration[]
+    private migrations?: Migration[],
   ) {
     if (keyFormatter) {
       this.keyFormatter = keyFormatter;
@@ -20,7 +20,6 @@ export class ManagedLocalStorage<T> {
       newValue: newValue,
       // If this become needed in the app we can send oldValue too, but it requires an additional getItem() call
       oldValue: null,
-      // eslint-disable-next-line no-restricted-globals
       url: location.href,
     });
     window.dispatchEvent(event);

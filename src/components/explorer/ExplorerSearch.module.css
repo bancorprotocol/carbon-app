@@ -1,5 +1,10 @@
 .search-container {
-  background-image: linear-gradient(to bottom, var(--gradient-first, var(--primary)), var(--gradient-middle, var(--primary)), var(--gradient-last, var(--primary)));
+  background-image: linear-gradient(
+    to bottom,
+    var(--gradient-first, var(--primary)),
+    var(--gradient-middle, var(--primary)),
+    var(--gradient-last, var(--primary))
+  );
   padding: 2px;
   border-radius: 48px;
 }
@@ -16,7 +21,7 @@
   @apply bg-black;
 }
 
-.search button[type="submit"] {
+.search button[type='submit'] {
   position: relative;
   border-radius: 50%;
   width: 24px;
@@ -28,12 +33,12 @@
   overflow: hidden;
 }
 
-.search:active button[type="submit"] svg {
+.search:active button[type='submit'] svg {
   transition: transform 0.2s var(--ease-out);
 }
 
-.search button[type="submit"]::before {
-  content: "";
+.search button[type='submit']::before {
+  content: '';
   position: absolute;
   inset: 0;
   opacity: 0;
@@ -41,21 +46,26 @@
   z-index: -1;
   transform: scale(0.7);
   transition: all 0.2s 0.1s var(--ease-out);
-  background-image: linear-gradient(to bottom, var(--gradient-first, var(--primary)), var(--gradient-middle, var(--primary)), var(--gradient-last, var(--primary)));
+  background-image: linear-gradient(
+    to bottom,
+    var(--gradient-first, var(--primary)),
+    var(--gradient-middle, var(--primary)),
+    var(--gradient-last, var(--primary))
+  );
 }
 
-.search:active button[type="submit"] svg {
+.search:active button[type='submit'] svg {
   transform: scale(0.8);
 }
-.search button[type="submit"]:hover ,
-.search:focus-within button[type="submit"] {
+.search button[type='submit']:hover,
+.search:focus-within button[type='submit'] {
   color: black;
 }
-.search:focus-within button[type="submit"] svg {
+.search:focus-within button[type='submit'] svg {
   animation: enter 0.6s var(--ease-out);
 }
-.search button[type="submit"]:hover::before,
-.search:focus-within button[type="submit"]::before {
+.search button[type='submit']:hover::before,
+.search:focus-within button[type='submit']::before {
   transform: scale(1);
   opacity: 1;
 }

@@ -41,7 +41,7 @@ export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
 
 export const isFullRangeStrategy = (
   order0: BaseOrder | Order,
-  order1: BaseOrder | Order
+  order1: BaseOrder | Order,
 ) => {
   if (!isOverlappingStrategy({ order0, order1 })) return false;
   const min = 'min' in order0 ? order0.min : order0.startRate;
@@ -59,7 +59,7 @@ export const isFullRange = (min: string | number, max: string | number) => {
 export const isFullRangeCreation = (
   min: string | number,
   max: string | number,
-  marketPrice?: string | number
+  marketPrice?: string | number,
 ) => {
   if (!marketPrice) return false;
   const minRatio = new SafeDecimal(marketPrice).div(min);
@@ -70,7 +70,7 @@ export const isFullRangeCreation = (
 };
 
 export const isDisposableStrategy = (
-  strategy: Pick<BaseStrategy, 'order0' | 'order1'>
+  strategy: Pick<BaseStrategy, 'order0' | 'order1'>,
 ) => {
   // If strategy is inactive, consider it as a recurring
   if (isEmptyOrder(strategy.order0) && isEmptyOrder(strategy.order1)) {
@@ -84,7 +84,7 @@ export const isDisposableStrategy = (
 };
 
 export const getStrategyType = (
-  strategy: Pick<BaseStrategy, 'order0' | 'order1'>
+  strategy: Pick<BaseStrategy, 'order0' | 'order1'>,
 ) => {
   if (isOverlappingStrategy(strategy)) return 'overlapping';
   if (isDisposableStrategy(strategy)) return 'disposable';
@@ -130,7 +130,7 @@ export const isLimitOrder = (order: Order) => {
 
 /** Check if a string value is zero-like value, null or undefined */
 export const isZero = (
-  value?: string | null
+  value?: string | null,
 ): value is '' | '0' | '.' | undefined | null => {
   if (!value) return true;
   return !+formatNumber(value);
@@ -180,7 +180,7 @@ export const oneYearAgo = () => toUnixUTC(startOfDay(subYears(new Date(), 1)));
 export const getBounds = (
   order0: BaseOrder,
   order1: BaseOrder,
-  direction?: 'none' | 'buy' | 'sell'
+  direction?: 'none' | 'buy' | 'sell',
 ): ChartPrices => {
   if (direction === 'none') {
     return {

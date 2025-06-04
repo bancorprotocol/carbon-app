@@ -81,7 +81,7 @@ export const CartPage = () => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    if (!!form.querySelector('.error-message')) return;
+    if (form.querySelector('.error-message')) return;
     const warnings = form.querySelector('.warning-message');
     if (warnings) {
       const approve = form.querySelector<HTMLInputElement>('#approve-warnings');
@@ -153,7 +153,7 @@ export const CartPage = () => {
     <form
       className={cn(
         'px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] flex-grow content-start gap-16 pt-20',
-        style.form
+        style.form,
       )}
       onSubmit={submit}
     >
@@ -177,7 +177,7 @@ export const CartPage = () => {
             htmlFor="approve-warnings"
             className={cn(
               style.approveWarnings,
-              'text-14 font-weight-500 flex items-center gap-8 place-self-center text-white/60'
+              'text-14 font-weight-500 flex items-center gap-8 place-self-center text-white/60',
             )}
           >
             <input

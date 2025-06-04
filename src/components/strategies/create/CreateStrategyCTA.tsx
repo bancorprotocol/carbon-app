@@ -20,7 +20,7 @@ export const CreateStrategyCTAMobile = () => {
       to="/trade"
       className={cn(
         buttonStyles({ variant: 'success' }),
-        'bottom-100 right-30 place-center fixed grid size-56 rounded-full p-0 md:hidden'
+        'bottom-100 right-30 place-center fixed grid size-56 rounded-full p-0 md:hidden',
       )}
       data-testid="create-strategy-mobile"
     >

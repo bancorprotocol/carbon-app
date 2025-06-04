@@ -21,7 +21,7 @@ export const Overlay: FC<Props> = ({ children, close, className }) => {
       exit="exit"
       className={cn(
         'fixed inset-0 z-40 flex overflow-hidden bg-black/70 outline-none backdrop-blur focus:outline-none',
-        className
+        className,
       )}
     >
       {children}

@@ -29,7 +29,7 @@ export const usePortfolioToken = ({
 
   const selectedToken = useMemo(() => {
     return sourceData.find(
-      ({ token }) => token.address.toLowerCase() === address.toLowerCase()
+      ({ token }) => token.address.toLowerCase() === address.toLowerCase(),
     );
   }, [sourceData, address]);
 
@@ -67,7 +67,7 @@ export const usePortfolioToken = ({
     });
 
     return sortObjectArray(unsorted, 'share', (a, b) =>
-      a.share.gt(b.share) ? -1 : 1
+      a.share.gt(b.share) ? -1 : 1,
     );
   }, [address, selectedToken]);
 

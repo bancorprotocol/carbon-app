@@ -28,7 +28,7 @@ export const activityActionName: Record<ActivityAction, string> = {
   pause: 'Pause',
 };
 export const activityActions = Object.keys(
-  activityActionName
+  activityActionName,
 ) as ActivityAction[];
 
 export type ActivitySearchParams = InferSearch<typeof activityValidators>;

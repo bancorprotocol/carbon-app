@@ -22,7 +22,7 @@ function getBudgetDistribution(
   withdraw: number,
   deposit: number,
   balance: number,
-  isSimulator: boolean
+  isSimulator: boolean,
 ) {
   const total = initial + balance;
   const delta = deposit || withdraw;
@@ -71,7 +71,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
     Number(withdraw),
     Number(deposit),
     Number(balance ?? '0'),
-    isSimulator
+    isSimulator,
   );
   const color = buy ? 'bg-buy' : 'bg-sell';
   const allocated = isSimulator ? deposit : initialBudget;
@@ -103,7 +103,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
           aria-valuenow={dist.allocationPercent}
           className={cn(
             color,
-            'transition-[flex-grow] duration-200 aria-[valuenow="0"]:-ml-4'
+            'transition-[flex-grow] duration-200 aria-[valuenow="0"]:-ml-4',
           )}
           style={{ flexGrow: dist.allocationPercent }}
         ></div>
@@ -111,7 +111,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
           aria-valuenow={dist.deltaPercent}
           className={cn(
             color,
-            'transition-[flex-grow] duration-200 aria-[valuenow="0"]:-mx-2'
+            'transition-[flex-grow] duration-200 aria-[valuenow="0"]:-mx-2',
           )}
           style={{
             flexGrow: dist.deltaPercent,
@@ -122,7 +122,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
           aria-valuenow={dist.balancePercent}
           className={cn(
             color,
-            'opacity-40 transition-[flex-grow] duration-200 aria-[valuenow="0"]:-mr-4'
+            'opacity-40 transition-[flex-grow] duration-200 aria-[valuenow="0"]:-mr-4',
           )}
           style={{ flexGrow: dist.balancePercent }}
         ></div>

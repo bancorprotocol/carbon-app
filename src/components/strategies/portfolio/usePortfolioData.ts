@@ -48,7 +48,7 @@ export const usePortfolioData = ({
     const map = new Map<string, FiatPriceDict>();
 
     tokenPriceQueries.forEach((query, index) => {
-      query.data && map.set(uniqueTokens[index], query.data);
+      if (query.data) map.set(uniqueTokens[index], query.data);
     });
 
     return map;
@@ -107,7 +107,7 @@ export const usePortfolioData = ({
             acc.push(item);
           } else {
             item.share = item.share.plus(
-              amount.times(tokenPrice).dividedBy(totalValue).times(100)
+              amount.times(tokenPrice).dividedBy(totalValue).times(100),
             );
             item.amount = item.amount.plus(order.balance);
             item.value = item.value.plus(amount.times(tokenPrice));
@@ -120,12 +120,12 @@ export const usePortfolioData = ({
 
         return acc;
       })(new Map<string, PortfolioData>()),
-      []
+      [],
     );
 
     // TODO cleanup sort function
     return sortObjectArray(unsorted, 'share', (a, b) =>
-      a.share.gt(b.share) ? -1 : 1
+      a.share.gt(b.share) ? -1 : 1,
     );
   }, [selectedFiatCurrency, strategies, tokenPriceMap, totalValue]);
 

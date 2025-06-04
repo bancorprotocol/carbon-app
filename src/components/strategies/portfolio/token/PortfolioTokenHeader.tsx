@@ -28,7 +28,7 @@ export const PortfolioTokenHeader: FC<Props> = ({
         'px-20',
         'md:mb-20',
         'lg:-mb-15',
-        'lg:pb-15'
+        'lg:pb-15',
       )}
     >
       <Link
@@ -42,7 +42,7 @@ export const PortfolioTokenHeader: FC<Props> = ({
           'items-center',
           'bg-background-900',
           'rounded-full',
-          'size-32'
+          'size-32',
         )}
       >
         <IconBack className="h-10" />

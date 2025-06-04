@@ -17,7 +17,7 @@ export const TPagination = <D extends object>({
         'justify-between',
         'px-32',
         'text-14',
-        'text-white/60'
+        'text-white/60',
       )}
     >
       <div>
@@ -58,7 +58,7 @@ export const TPagination = <D extends object>({
             'text-white',
             'border',
             'border-background-800',
-            'rounded-full'
+            'rounded-full',
           )}
         >
           {table.getState().pagination.pageIndex + 1}{' '}

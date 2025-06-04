@@ -18,7 +18,7 @@ const wrapperClasses = cn(
   'bg-background-900',
   'h-[120px]',
   'rounded-10',
-  'space-x-20'
+  'space-x-20',
 );
 
 export const PortfolioMobileCard: FC<Props> = ({

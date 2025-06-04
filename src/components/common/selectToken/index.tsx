@@ -32,7 +32,7 @@ export const SelectTokenButton: FC<Props> = ({
       className={cn(
         'rounded-12 hover:outline-background-400 flex items-center gap-8 p-10 hover:outline hover:outline-1',
         token?.symbol ? 'bg-black text-white' : 'bg-primary text-black',
-        className
+        className,
       )}
       {...props}
     >
