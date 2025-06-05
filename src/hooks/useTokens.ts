@@ -84,11 +84,13 @@ export const useToken = (address?: string) => {
     if (!address) return;
     const existing = getTokenById(address);
     if (existing) return setToken(existing);
-    fetchTokenData(Token, address).then((token) => {
-      setToken(token);
-      importTokens([token]);
-      setIsPending(false);
-    });
+    fetchTokenData(Token, address)
+      .then((token) => {
+        setToken(token);
+        importTokens([token]);
+        setIsPending(false);
+      })
+      .catch(() => setIsPending(false));
   }, [getTokenById, address, Token, importTokens]);
   return { token, isPending };
 };
