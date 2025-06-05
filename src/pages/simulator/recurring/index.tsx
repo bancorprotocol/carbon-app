@@ -42,24 +42,18 @@ export const SimulatorInputRecurringPage = () => {
   });
 
   const handleDefaultValues = useCallback(
-    (direction: StrategyDirection) => {
+    (direction: StrategyDirection, startPrice: number) => {
       const init = direction === 'buy' ? initBuyRange : initSellRange;
       const setInit = direction === 'buy' ? setInitBuyRange : setInitSellRange;
 
       if (!init) return;
       setInit(false);
 
-      if (!marketPrice) {
-        dispatch(`${direction}Max`, '');
-        dispatch(`${direction}Min`, '');
-        return;
-      }
-
-      if (!(!state[direction].max && !state[direction].min)) {
+      if (state[direction].max || state[direction].min) {
         return;
       }
       const multiplier = getRecurringPriceMultiplier(direction, 'range');
-      const price = new SafeDecimal(marketPrice);
+      const price = new SafeDecimal(startPrice);
       const min = price.mul(multiplier.min).toFixed();
       const max = price.mul(multiplier.max).toFixed();
 
@@ -84,11 +78,13 @@ export const SimulatorInputRecurringPage = () => {
   );
 
   useEffect(() => {
-    if (!marketPricePending) {
-      handleDefaultValues('buy');
-      handleDefaultValues('sell');
+    const startDate = Number(searchState.start || defaultStart());
+    const startPrice = data?.find(({ date }) => date === startDate)?.open;
+    if (startPrice) {
+      handleDefaultValues('buy', startPrice);
+      handleDefaultValues('sell', startPrice);
     }
-  }, [handleDefaultValues, marketPricePending]);
+  }, [handleDefaultValues, data]);
 
   useEffect(() => {
     if (initBuyRange || initSellRange) return;
