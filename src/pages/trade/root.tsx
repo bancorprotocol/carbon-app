@@ -7,6 +7,7 @@ import { TradeSearch } from 'libs/routing';
 import { getLastVisitedPair } from 'libs/routing/utils';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 export const usePersistLastPair = (from: '/trade') => {
   const search = useSearch({ strict: false }) as TradeSearch;
@@ -15,9 +16,9 @@ export const usePersistLastPair = (from: '/trade') => {
   const quote = useToken(search.quote ?? defaultPair.quote);
 
   useEffect(() => {
-    if (!base || !quote) return;
-    lsService.setItem('tradePair', [base.address, quote.address]);
-  }, [base, quote]);
+    if (!base.token || !quote.token) return;
+    lsService.setItem('tradePair', [base.token.address, quote.token.address]);
+  }, [base.token, quote.token]);
 
   const navigate = useNavigate({ from });
   useEffect(() => {
@@ -29,12 +30,20 @@ export const usePersistLastPair = (from: '/trade') => {
     });
   }, [search, navigate]);
 
-  return { base, quote };
+  return {
+    base: base.token,
+    quote: quote.token,
+    isPending: base.isPending || quote.isPending,
+  };
 };
 
 const url = '/trade';
 export const TradeRoot = () => {
-  const { base, quote } = usePersistLastPair(url);
+  const { base, quote, isPending } = usePersistLastPair(url);
+
+  if (isPending) {
+    return <CarbonLogoLoading className="h-80 place-self-center" />;
+  }
   if (!base || !quote) {
     return (
       <NotFound
