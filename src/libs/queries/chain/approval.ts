@@ -6,7 +6,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { QueryKey } from 'libs/queries/queryKey';
 import { useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
-import { ContractTransaction } from 'ethers';
+import { ContractTransactionResponse } from 'ethers';
 import config from 'config';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 
@@ -73,7 +73,7 @@ export const useSetUserApproval = () => {
       decimals,
       isLimited,
     }: SetUserApprovalProps): Promise<
-      [ContractTransaction, ContractTransaction | undefined]
+      [ContractTransactionResponse, ContractTransactionResponse | undefined]
     > => {
       const gasToken = config.network.gasToken;
       const isGasToken = address === NATIVE_TOKEN_ADDRESS;
@@ -106,7 +106,7 @@ export const useSetUserApproval = () => {
 
       if (isNullApprovalContract) {
         const allowanceWei = await Token(address).read.allowance(user, spender);
-        if (allowanceWei.gt(0)) {
+        if (allowanceWei > 0) {
           revokeTx = await Token(address).write.approve(spender, '0');
           await revokeTx.wait();
         }

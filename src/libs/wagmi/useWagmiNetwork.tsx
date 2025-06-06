@@ -1,7 +1,7 @@
 import { useSwitchChain } from 'wagmi';
 import { getEthersProvider } from 'libs/wagmi/ethers';
 import { wagmiConfig } from 'libs/wagmi/config';
-import { StaticJsonRpcProvider } from '@ethersproject/providers';
+import { FetchRequest, JsonRpcProvider } from 'ethers';
 import { getConnectors } from '@wagmi/core';
 import { RPC_URLS, RPC_HEADERS, CHAIN_ID } from 'libs/wagmi';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -20,14 +20,11 @@ export const useWagmiNetwork = () => {
   const [networkError, setNetworkError] = useState<string>();
 
   const networkProvider = useMemo(() => {
-    return new StaticJsonRpcProvider(
-      {
-        url: RPC_URLS[CHAIN_ID],
-        headers: RPC_HEADERS[CHAIN_ID],
-        skipFetchSetup: true,
-      },
-      chainId,
-    );
+    // TODO: move elsewhere
+    FetchRequest.createGetUrlFunc({
+      headers: RPC_HEADERS[CHAIN_ID],
+    });
+    return new JsonRpcProvider(RPC_URLS[CHAIN_ID], chainId);
   }, [chainId]);
 
   const switchNetwork = () => switchChain({ chainId });

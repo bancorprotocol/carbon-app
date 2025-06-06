@@ -70,7 +70,7 @@ export const useBuySell = ({
         sell_token: source.symbol,
         value_usd: getFiatValue(sourceInput, true).toString(),
         transaction_hash: transactionHash,
-        blockchain_network: provider?.network?.name || '',
+        blockchain_network: provider?._network?.name || '',
       };
       if (buy) carbonEvents.trade.tradeBuy(event);
       else carbonEvents.trade.tradeSell(event);

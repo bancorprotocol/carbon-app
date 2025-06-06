@@ -9,6 +9,7 @@ import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import {
   CartStrategy,
   QueryKey,
+  toTransactionRequest,
   useGetTokenBalances,
   useQueryClient,
 } from 'libs/queries';
@@ -104,7 +105,9 @@ export const CartPage = () => {
           sellBudget: order1.balance,
         }));
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
-        const tx = await signer!.sendTransaction(unsignedTx);
+        const tx = await signer!.sendTransaction(
+          toTransactionRequest(unsignedTx),
+        );
         setConfirmation(false);
         setProcessing(true);
         dispatchNotification('createBatchStrategy', { txHash: tx.hash });
