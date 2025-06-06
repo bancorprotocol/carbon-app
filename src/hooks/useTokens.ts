@@ -5,7 +5,7 @@ import { useStore } from 'store';
 import { useWagmi } from 'libs/wagmi';
 import { useContract } from './useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
-import { utils } from 'ethers';
+import { getAddress } from 'ethers';
 
 export const useTokens = () => {
   const { user } = useWagmi();
@@ -25,7 +25,7 @@ export const useTokens = () => {
         for (const item of existing) map.set(item.address, item);
         const missing: Token[] = [];
         for (const token of tokens) {
-          const normalizedAddress = utils.getAddress(token.address);
+          const normalizedAddress = getAddress(token.address);
           if (map.has(normalizedAddress)) continue;
           missing.push({ ...token, address: normalizedAddress });
         }

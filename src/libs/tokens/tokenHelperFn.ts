@@ -1,4 +1,4 @@
-import { getAddress } from '@ethersproject/address';
+import { getAddress } from 'ethers';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
@@ -85,7 +85,7 @@ export const fetchTokenData = async (
   return {
     address,
     symbol,
-    decimals,
+    decimals: Number(decimals),
     name,
     isSuspicious: true,
   };

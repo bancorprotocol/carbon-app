@@ -1,5 +1,5 @@
 import { lsService } from 'services/localeStorage';
-import { utils } from 'ethers';
+import { getAddress } from 'ethers';
 import { formatNumber } from 'utils/helpers';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { valibotSearchValidator } from '@tanstack/router-valibot-adapter';
@@ -41,7 +41,7 @@ export const validAddress = v.pipe(
   v.string(),
   v.check((value: string) => {
     try {
-      utils.getAddress(value.toLocaleLowerCase());
+      getAddress(value.toLocaleLowerCase());
       return true;
     } catch {
       return false;
