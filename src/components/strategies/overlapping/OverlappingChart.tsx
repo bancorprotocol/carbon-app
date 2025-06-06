@@ -19,6 +19,8 @@ import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { clamp, getMax, getMin } from 'utils/helpers/operators';
 import { isFullRangeCreation } from '../common/utils';
+import { NotFound } from 'components/common/NotFound';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import styles from './OverlappingChart.module.css';
 
 type Scale = ReturnType<typeof getScale>;
@@ -238,7 +240,10 @@ export const OverlappingChart: FC<Props> = (props) => {
   const [dragging, setDragging] = useState('');
   const box = useResize(id);
   const isValid = isValidRange(order0.min, order1.max);
-  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
+  const { marketPrice: externalPrice, isPending } = useMarketPrice({
+    base,
+    quote,
+  });
   const marketPrice = userMarketPrice ?? externalPrice?.toString();
 
   const min = +order0.min;
@@ -455,6 +460,22 @@ export const OverlappingChart: FC<Props> = (props) => {
     document.removeEventListener('touchmove', drag);
     document.removeEventListener('touchend', dragEnd);
   };
+
+  if (!userMarketPrice && isPending) {
+    return (
+      <div className="flex-1 grid">
+        <CarbonLogoLoading className="h-80 place-self-center" />
+      </div>
+    );
+  }
+
+  if (!marketPrice) {
+    <NotFound
+      variant="info"
+      title="Market Price Unavailable"
+      text="Please provide a price."
+    />;
+  }
 
   return (
     <svg

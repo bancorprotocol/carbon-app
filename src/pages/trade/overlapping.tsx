@@ -65,7 +65,6 @@ export const TradeOverlapping = () => {
         order0={orders.buy}
         order1={orders.sell}
         set={set}
-        marketPrice={marketPrice}
       />
     </>
   );

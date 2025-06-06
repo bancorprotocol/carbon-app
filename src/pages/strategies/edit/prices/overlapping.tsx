@@ -147,7 +147,6 @@ export const EditPricesOverlappingPage = () => {
     base,
     quote,
   });
-  const displayPrice = externalPrice?.toString() || search.marketPrice;
   const marketPrice = getOverlappingMarketPrice(
     strategy,
     search,
@@ -176,7 +175,6 @@ export const EditPricesOverlappingPage = () => {
         order0={orders.buy}
         order1={orders.sell}
         set={set}
-        marketPrice={displayPrice}
       />
     </EditStrategyLayout>
   );

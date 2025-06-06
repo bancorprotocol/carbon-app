@@ -79,7 +79,7 @@ export const SimulatorInputOverlappingPage = () => {
     const end = state.end ?? defaultEnd();
 
     if (!state.baseToken || !state.quoteToken || !startPrice) return;
-    if (!!e.currentTarget.querySelector('.error-message')) return;
+    if (e.currentTarget.querySelector('.error-message')) return;
 
     const prices = calculateOverlappingPrices(
       state.buy.min,
