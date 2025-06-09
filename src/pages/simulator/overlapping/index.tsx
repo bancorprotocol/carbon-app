@@ -69,7 +69,7 @@ export const SimulatorInputOverlappingPage = () => {
 
   const startPrice = useMemo(() => {
     const start = Number(state.start ?? defaultStart());
-    return data?.find(({ date }) => date === start)?.open;
+    return data?.find(({ date }) => date === start)?.close;
   }, [data, state.start]);
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
@@ -79,7 +79,7 @@ export const SimulatorInputOverlappingPage = () => {
     const end = state.end ?? defaultEnd();
 
     if (!state.baseToken || !state.quoteToken || !startPrice) return;
-    if (!!e.currentTarget.querySelector('.error-message')) return;
+    if (e.currentTarget.querySelector('.error-message')) return;
 
     const prices = calculateOverlappingPrices(
       state.buy.min,

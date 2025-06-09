@@ -79,7 +79,7 @@ export const SimulatorInputRecurringPage = () => {
 
   useEffect(() => {
     const startDate = Number(searchState.start || defaultStart());
-    const startPrice = data?.find(({ date }) => date === startDate)?.open;
+    const startPrice = data?.find(({ date }) => date === startDate)?.close;
     if (startPrice) {
       handleDefaultValues('buy', startPrice);
       handleDefaultValues('sell', startPrice);
