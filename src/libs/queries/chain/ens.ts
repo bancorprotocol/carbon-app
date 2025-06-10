@@ -14,12 +14,11 @@ export const useGetEnsFromAddress = (address: string) => {
         throw new Error('useGetEnsFromAddress no provider provided');
       }
       if (isAddress(address.toLowerCase())) {
-        // TODO: implement
-        // const ensAddr = (await provider.getNetwork()).ensAddress;
-        // if (ensAddr) {
-        //   // Already checks reverse resolution
-        //   return await provider.lookupAddress(address);
-        // }
+        try {
+          return provider.lookupAddress(address);
+        } catch {
+          return ''; // if provider doesn't support ens
+        }
       }
       return '';
     },
@@ -66,10 +65,10 @@ export const getEnsAddressIfAny = async (
   try {
     if (isValidEnsName(value)) {
       const address = await provider?.resolveName(value);
+      console.log({ value, address });
       return address || value;
     }
-  } catch (err) {
-    console.error(err);
+  } catch {
     return value; // return initial value if provider doesn't support ens
   }
   return value;
