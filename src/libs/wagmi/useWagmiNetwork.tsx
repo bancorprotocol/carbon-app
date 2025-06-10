@@ -19,10 +19,6 @@ export const useWagmiNetwork = () => {
 
   const [networkError, setNetworkError] = useState<string>();
 
-  const networkProvider = useMemo(() => {
-    return new JsonRpcProvider(RPC_URLS[CHAIN_ID], chainId);
-  }, [chainId]);
-
   const switchNetwork = () => switchChain({ chainId });
 
   const activateNetwork = useCallback(async () => {
@@ -31,6 +27,8 @@ export const useWagmiNetwork = () => {
     }
 
     try {
+      const networkProvider =
+        provider || new JsonRpcProvider(RPC_URLS[CHAIN_ID], chainId);
       await networkProvider.getNetwork();
       setIsNetworkActive(true);
     } catch (e: any) {
@@ -38,7 +36,7 @@ export const useWagmiNetwork = () => {
       console.error('activateNetwork failed.', msg);
       setNetworkError(msg);
     }
-  }, [isNetworkActive, networkError, networkProvider]);
+  }, [chainId, isNetworkActive, networkError, provider]);
 
   useEffect(() => {
     activateNetwork();
