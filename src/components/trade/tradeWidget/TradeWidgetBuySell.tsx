@@ -12,6 +12,7 @@ import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 import { useTradePairs } from '../useTradePairs';
 import { NoTrade } from '../NoTrade';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
@@ -24,7 +25,7 @@ export interface TradeWidgetBuySellProps extends FormAttributes {
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
   const { user } = useWagmi();
-  const { isTradePairError } = useTradePairs();
+  const { isTradePairError, isPending: isTradePairPending } = useTradePairs();
   const {
     sourceInput,
     setSourceInput,
@@ -62,6 +63,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
   })();
 
+  if (isTradePairPending || liquidityQuery.isPending) {
+    return <CarbonLogoLoading className="h-80 m-20" />;
+  }
   if (isTradePairError) return <NoTrade />;
   if (liquidityQuery?.isError) return <div>Error</div>;
 
