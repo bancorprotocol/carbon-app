@@ -49,7 +49,7 @@ export const setupLocalStorage = async (page: Page, tenderlyRpc: string) => {
     for (const [key, value] of Object.entries(storage)) {
       localStorage.setItem(
         `carbon-ethereum-v1.3-${key}`,
-        JSON.stringify(value)
+        JSON.stringify(value),
       );
     }
   }, storage);
@@ -82,35 +82,36 @@ export class DebugDriver {
     const address = config.address ?? Wallet.createRandom().address;
     await this.page.getByLabel('Imposter Account').fill(address);
     await this.page.getByTestId('save-imposter').click();
-    if (!config.noMoney) {
-      await this.page.getByText('Get money').click();
-      // Note: we are not waiting for fund to arrive to speed up test.
-      // Wait for it at the beginning of the test if it relies on fund right away
-      // Example: await waitFor(page, 'balance-DAI');
-    }
+  }
+
+  async getFaucetToken(token: string) {
+    await this.page.getByTestId(`add-${token}`).click();
+    await waitFor(this.page, `balance-${token}`, 30_000);
+  }
+
+  getBalanceLocator(token: string) {
+    return this.page.getByTestId(`balance-${token}`);
   }
 
   getBalance(token: string) {
-    return this.page.getByTestId(`balance-${token}`);
+    return this.getBalanceLocator(token).textContent();
   }
 
   async createStrategy(
     testCase: CreateStrategyTestCase,
-    deps: CreateStrategyDependencies
+    deps: CreateStrategyDependencies,
   ) {
     const { base, quote } = testCase;
     const { buy, sell, spread } = toDebugStrategy(testCase);
-    for (const token of [base, quote]) {
-      await waitFor(this.page, `balance-${token}`, 30_000);
-    }
+    await Promise.all([
+      await this.getFaucetToken(base),
+      await this.getFaucetToken(quote),
+    ]);
     const template = { base, quote, buy, sell, spread };
     await this.page
       .getByTestId('strategy-json-shortcut')
       .fill(JSON.stringify(template));
     await this.page.getByTestId('create-strategies').click();
     await deps.tokenApproval.checkApproval([base, quote]);
-    await this.page.getByTestId('creating-strategies').waitFor({
-      state: 'detached',
-    });
   }
 }
