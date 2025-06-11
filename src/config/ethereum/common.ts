@@ -22,7 +22,7 @@ const addresses = {
   CRV: '0xD533a949740bb3306d119CC777fa900bA034cd52',
 };
 
-const popularBase = [
+const popularTokens = [
   '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
   '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c',
@@ -529,14 +529,8 @@ export const commonConfig: AppConfig = {
     [addresses.SHIB, addresses.ETH],
   ],
   popularTokens: {
-    base: popularBase,
-    quote: [
-      addresses.DAI,
-      addresses.USDC,
-      addresses.USDT,
-      addresses.ETH,
-      addresses.WBTC,
-    ],
+    base: popularTokens,
+    quote: popularTokens,
   },
   addresses: {
     tokens: addresses,

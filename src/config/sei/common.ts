@@ -9,7 +9,7 @@ const addresses = {
   USDT: '0xB75D0B03c06A926e488e2659DF1A861F860bD3d1',
 };
 
-const popularBase = [
+const popularTokens = [
   '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   '0xe30fedd158a2e3b13e9badaeabafc5516e95e8c7',
   '0x3894085Ef7Ff0f0aeDf52E2A2704928d1Ec074F1',
@@ -72,8 +72,8 @@ export const commonConfig: AppConfig = {
     [addresses.SEI, addresses.USDT],
   ],
   popularTokens: {
-    base: popularBase,
-    quote: [addresses.SEI, addresses.WSEI, addresses.USDT, addresses.USDC],
+    base: popularTokens,
+    quote: popularTokens,
   },
   addresses: {
     tokens: addresses,

@@ -14,7 +14,7 @@ const addresses = {
   WETH: '0x66803FB87aBd4aaC3cbB3fAd7C3aa01f6F3FB207',
 };
 
-const popularBase = [
+const popularTokens = [
   '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   '0x765de816845861e75a25fca122bb6898b8b1282a',
   '0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73',
@@ -78,16 +78,8 @@ export const commonConfig: AppConfig = {
     [addresses.CELO, addresses.WETH],
   ],
   popularTokens: {
-    base: popularBase,
-    quote: [
-      addresses.CELO,
-      addresses.CUSD,
-      addresses.CEUR,
-      addresses.CETH,
-      addresses.USDT,
-      addresses.USDC,
-      addresses.WETH,
-    ],
+    base: popularTokens,
+    quote: popularTokens,
   },
   addresses: {
     tokens: addresses,
