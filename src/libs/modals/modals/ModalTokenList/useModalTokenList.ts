@@ -170,9 +170,10 @@ export const useModalTokenList = ({ id, data }: Props) => {
   const popularTokens = useMemo(() => {
     return defaultPopularTokens
       .map((tokenAddress) => tokensMap.get(tokenAddress.toLowerCase()))
-      .filter(
-        (token) => !excludedTokens.includes(token?.address || ''),
-      ) as Token[];
+      .filter((token) => {
+        if (!token) return false;
+        return !excludedTokens.includes(token?.address || '');
+      }) as Token[];
   }, [defaultPopularTokens, excludedTokens, tokensMap]);
 
   return {
