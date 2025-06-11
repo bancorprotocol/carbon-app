@@ -61,8 +61,9 @@ export const useBuySell = ({
     source,
     sourceInput,
     isTradeBySource,
-    onSuccess: (transactionHash: string) => {
+    onSuccess: async (transactionHash: string) => {
       clearInputs();
+      const network = await provider?.getNetwork();
       const event = {
         trade_direction: buy ? ('buy' as const) : ('sell' as const),
         token_pair: `${target.symbol}/${source.symbol}`,
@@ -70,7 +71,7 @@ export const useBuySell = ({
         sell_token: source.symbol,
         value_usd: getFiatValue(sourceInput, true).toString(),
         transaction_hash: transactionHash,
-        blockchain_network: provider?._network?.name || '',
+        blockchain_network: network?.name ?? '',
       };
       if (buy) carbonEvents.trade.tradeBuy(event);
       else carbonEvents.trade.tradeSell(event);
