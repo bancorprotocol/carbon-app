@@ -19,7 +19,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
 
   return test(`Create`, async ({ page }) => {
     const debug = new DebugDriver(page);
-    await debug.getFaucetToken(quote);
+    await debug.waitForBalance(quote);
 
     await navigateTo(page, '/portfolio');
     const myStrategies = new MyStrategyDriver(page);

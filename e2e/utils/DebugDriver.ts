@@ -84,17 +84,16 @@ export class DebugDriver {
     await this.page.getByTestId('save-imposter').click();
   }
 
-  async getFaucetToken(token: string) {
-    await this.page.getByTestId(`add-${token}`).click();
-    await waitFor(this.page, `balance-${token}`, 30_000);
+  waitForBalance(token: string) {
+    return waitFor(this.page, `balance-${token}`, 30_000);
   }
 
-  getBalanceLocator(token: string) {
+  balanceLocator(token: string) {
     return this.page.getByTestId(`balance-${token}`);
   }
 
   getBalance(token: string) {
-    return this.getBalanceLocator(token).textContent();
+    return this.balanceLocator(token).textContent();
   }
 
   async createStrategy(
@@ -103,10 +102,7 @@ export class DebugDriver {
   ) {
     const { base, quote } = testCase;
     const { buy, sell, spread } = toDebugStrategy(testCase);
-    await Promise.all([
-      await this.getFaucetToken(base),
-      await this.getFaucetToken(quote),
-    ]);
+    await Promise.all([this.waitForBalance(base), this.waitForBalance(quote)]);
     const template = { base, quote, buy, sell, spread };
     await this.page
       .getByTestId('strategy-json-shortcut')

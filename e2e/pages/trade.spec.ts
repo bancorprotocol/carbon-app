@@ -169,10 +169,10 @@ test.describe('Trade', () => {
       );
       const sourceDelta = Number(initialBalance[0]) - Number(sourceValue);
       const nextSource = new RegExp(sourceDelta.toString());
-      await expect(debug.getBalanceLocator(source)).toHaveText(nextSource);
+      await expect(debug.balanceLocator(source)).toHaveText(nextSource);
       const targetDelta = Number(initialBalance[1]) + Number(targetValue);
       const nextTarget = new RegExp(targetDelta.toString());
-      await expect(debug.getBalanceLocator(target)).toHaveText(nextTarget);
+      await expect(debug.balanceLocator(target)).toHaveText(nextTarget);
     });
   }
 });
