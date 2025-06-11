@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { NotificationDriver } from '../../../utils/NotificationDriver';
-import { navigateTo, screenshot, waitFor } from '../../../utils/operators';
+import { navigateTo, screenshot } from '../../../utils/operators';
 import {
   CreateStrategyDriver,
   CreateStrategyTestCase,
@@ -10,6 +10,7 @@ import {
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 import { waitForTenderlyRpc } from '../../../utils/tenderly';
+import { DebugDriver } from '../../../utils/DebugDriver';
 
 export const create = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -17,7 +18,8 @@ export const create = (testCase: CreateStrategyTestCase) => {
   const output = testCase.output.create;
 
   return test(`Create`, async ({ page }) => {
-    await waitFor(page, `balance-${quote}`, 30_000);
+    const debug = new DebugDriver(page);
+    await debug.waitForBalance(quote);
 
     await navigateTo(page, '/portfolio');
     const myStrategies = new MyStrategyDriver(page);

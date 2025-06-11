@@ -1,5 +1,6 @@
 import {
   FAUCET_TOKENS,
+  FaucetToken,
   tenderlyFaucetTransferNativeToken,
   tenderlyFaucetTransferTKN,
 } from 'utils/tenderly';
@@ -37,21 +38,27 @@ export const DebugTenderlyFaucet = () => {
       return;
     }
 
-    await tenderlyFaucetTransferNativeToken(user);
-    queryClient.invalidateQueries({
-      queryKey: QueryKey.balance(user, NATIVE_TOKEN_ADDRESS),
-    });
-
-    for (const tkn of FAUCET_TOKENS) {
+    for (const tkn of TOKENS) {
       console.log('Token', tkn);
       tenderlyFaucetTransferTKN(tkn, user)
         .then(() => {
-          const queryKey = QueryKey.balance(user, tkn.tokenContract);
+          const queryKey = QueryKey.balance(user, tkn.address);
           queryClient.invalidateQueries({ queryKey });
         })
         .catch((err) => {
-          console.error('faucet failed for ', tkn.tokenContract, err);
+          console.error('faucet failed for ', tkn.address, err);
         });
+    }
+  };
+
+  const addOne = async (tkn: (typeof TOKENS)[number]) => {
+    if (!user) return console.error('user is undefined');
+    try {
+      await tenderlyFaucetTransferTKN(tkn, user);
+      const queryKey = QueryKey.balance(user, tkn.address);
+      queryClient.invalidateQueries({ queryKey });
+    } catch (err) {
+      console.error('faucet failed for ', tkn.address, err);
     }
   };
 
@@ -62,15 +69,27 @@ export const DebugTenderlyFaucet = () => {
     >
       <h2>Tenderly Faucet</h2>
 
-      <ul>
-        {queries.map((t, i) => (
-          <li key={i}>
-            {!!t.data && t.data !== '0' && (
-              <span data-testid={`balance-${TOKENS[i].symbol}`}>{t.data}</span>
-            )}
-            <span> {TOKENS[i].symbol}</span>
-          </li>
-        ))}
+      <ul className="grid gap-8">
+        {queries.map((t, i) => {
+          const symbol = TOKENS[i].symbol;
+          return (
+            <li className="flex gap-8 items-center" key={i}>
+              {!!t.data && t.data !== '0' && (
+                <span data-testid={`balance-${symbol}`}>{t.data}</span>
+              )}
+              <span>{symbol}</span>
+              <button
+                className="text-12 border border-white/60 rounded px-8 py-4 cursor-pointer disabled:text-white/60"
+                type="button"
+                disabled={!user}
+                onClick={() => addOne(TOKENS[i])}
+                data-testid={`add-${symbol}`}
+              >
+                Add
+              </button>
+            </li>
+          );
+        })}
       </ul>
 
       <Button type="submit">Get money</Button>

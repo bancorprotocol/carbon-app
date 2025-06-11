@@ -45,10 +45,10 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
   const [_state, setState] =
     useState<InternalSimulatorOverlappingInput>(searchState);
 
-  const baseToken = useToken(_state.baseToken);
-  const quoteToken = useToken(_state.quoteToken);
+  const base = useToken(_state.baseToken);
+  const quote = useToken(_state.quoteToken);
 
-  const state = buildStrategyInputState(_state, baseToken, quoteToken);
+  const state = buildStrategyInputState(_state, base.token, quote.token);
 
   const setSearch = useCallback(
     (search: InternalSimulatorOverlappingInput) => {
