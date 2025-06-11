@@ -14,6 +14,26 @@ const addresses = {
   WETH: '0x66803FB87aBd4aaC3cbB3fAd7C3aa01f6F3FB207',
 };
 
+const popularBase = [
+  '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+  '0x765de816845861e75a25fca122bb6898b8b1282a',
+  '0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73',
+  '0x2DEf4285787d58a2f811AF24755A8150622f4361',
+  '0x48065fbbe25f71c9282ddf5e1cd6d6a887483d5e',
+  '0xceba9300f2b948710d2653dd7b07f33a8b32118c',
+  '0x66803fb87abd4aac3cbb3fad7c3aa01f6f3fb207',
+  '0x62b8b11039fcfe5ab0c56e502b1c372a3d2a9c7a',
+  '0x1d18d0386f51ab03e7e84e71bda1681eba865f1f',
+  '0xd629eb00deced2a080b7ec630ef6ac117e614f1b',
+  '0x27cd006548df7c8c8e9fdc4a67fa05c2e3ca5cf9',
+  '0x17700282592d6917f6a73d0bf8accf4d578c131e',
+  '0xe8537a3d056da446677b9e9d6c5db704eaab4787',
+  '0x6e512bfc33be36f2666754e996ff103ad1680cc9',
+  '0xef4229c8c3250c675f21bcefa42f58efbff6002a',
+  '0x37f750b7cc259a2f741af45294f6a16572cf5cad',
+  '0x29dfce9c22003a4999930382fd00f9fd6133acd1',
+];
+
 export const commonConfig: AppConfig = {
   mode: 'development',
   appName: 'Carbon DeFi',
@@ -58,15 +78,7 @@ export const commonConfig: AppConfig = {
     [addresses.CELO, addresses.WETH],
   ],
   popularTokens: {
-    base: [
-      addresses.CELO,
-      addresses.CUSD,
-      addresses.CEUR,
-      addresses.CETH,
-      addresses.USDT,
-      addresses.USDC,
-      addresses.WETH,
-    ],
+    base: popularBase,
     quote: [
       addresses.CELO,
       addresses.CUSD,

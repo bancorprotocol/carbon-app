@@ -83,10 +83,12 @@ export const useToken = (address?: string) => {
     if (!address) return;
     const existing = getTokenById(address);
     if (existing) return setToken(existing);
-    fetchTokenData(Token, address).then((token) => {
-      setToken(token);
-      importTokens([token]);
-    });
+    fetchTokenData(Token, address)
+      .then((token) => {
+        setToken(token);
+        importTokens([token]);
+      })
+      .catch((err) => console.error(err));
   }, [getTokenById, address, Token, importTokens]);
   return token;
 };

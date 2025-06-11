@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
@@ -11,6 +11,8 @@ import {
   isGasTokenToHide,
   nativeToken,
 } from 'utils/tokens';
+import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
+import { useContract } from 'hooks/useContract';
 
 const SEARCH_KEYS = [
   {
@@ -38,6 +40,8 @@ export const useModalTokenList = ({ id, data }: Props) => {
     removeFavoriteToken,
     favoriteTokens,
     tokensMap,
+    importTokens,
+    getTokenById,
   } = useTokens();
   const {
     onClick,
@@ -47,12 +51,23 @@ export const useModalTokenList = ({ id, data }: Props) => {
   } = data;
   const { closeModal } = useModal();
   const [search, setSearch] = useState('');
+  const { Token } = useContract();
 
   const basePopularTokens = config.popularTokens.base;
   const quotePopularTokens = config.popularTokens.quote;
   const defaultPopularTokens = isBaseToken
     ? basePopularTokens
     : quotePopularTokens;
+
+  useEffect(() => {
+    const getMissingToken: Promise<Token>[] = [];
+    for (const token of defaultPopularTokens) {
+      if (!getTokenById(token)) {
+        getMissingToken.push(fetchTokenData(Token, token));
+      }
+    }
+    Promise.all(getMissingToken).then(importTokens);
+  }, [Token, defaultPopularTokens, getTokenById, importTokens]);
 
   const onSelect = useCallback(
     (token: Token) => {
