@@ -40,9 +40,12 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     props;
   const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
   const search = useSearch({ strict: false });
-  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const nav = useNavigate();
 
+  const { marketPrice: externalPrice, isPending: pendingMarketPrice } =
+    useMarketPrice({ base, quote });
+
+  const isMarketPricePending = !search.marketPrice && pendingMarketPrice;
   const marketPrice = search.marketPrice
     ? Number(search.marketPrice)
     : externalPrice;
@@ -119,7 +122,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     return <TradingviewChart base={base} quote={quote} />;
   }
 
-  if (isPending) {
+  if (isPending || isMarketPricePending) {
     return (
       <section className="rounded-12 grid flex-1 items-center bg-black">
         <CarbonLogoLoading className="h-[80px]" />

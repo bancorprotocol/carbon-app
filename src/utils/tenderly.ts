@@ -3,6 +3,7 @@ import { parseUnits } from '@ethersproject/units';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { lsService } from 'services/localeStorage';
 import config from 'config';
+import { NATIVE_TOKEN_ADDRESS } from './tokens';
 
 export interface FaucetToken {
   decimals: number;
@@ -27,13 +28,20 @@ export const tenderlyFaucetTransferNativeToken = async (user: string) => {
 };
 
 export const tenderlyFaucetTransferTKN = async (
-  token: FaucetToken,
+  token: { address: string; decimals: number },
   user: string,
 ) => {
   const provider = new StaticJsonRpcProvider(tenderlyRpc);
-  return provider.send('tenderly_setErc20Balance', [
-    token.tokenContract,
-    user,
-    hexValue(parseUnits('1000', token.decimals)),
-  ]);
+  if (token.address === NATIVE_TOKEN_ADDRESS) {
+    return provider.send('tenderly_setBalance', [
+      [user],
+      hexValue(parseUnits('1000', 'ether').toHexString()),
+    ]);
+  } else {
+    return provider.send('tenderly_setErc20Balance', [
+      token.address,
+      user,
+      hexValue(parseUnits('1000', token.decimals)),
+    ]);
+  }
 };

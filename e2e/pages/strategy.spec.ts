@@ -662,6 +662,7 @@ test.describe('Strategies', () => {
     const debug = new DebugDriver(page);
     await debug.visit();
     await debug.setupImposter();
+    await page.getByText('Get money').click();
   });
   // Need an empty object else the tests don't run
   // eslint-disable-next-line no-empty-pattern
