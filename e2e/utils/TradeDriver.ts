@@ -21,7 +21,11 @@ export class TradeDriver {
     return this.form.getByLabel('You Receive');
   }
 
-  setMode(mode: 'buy' | 'sell') {
+  setType(type: 'overlapping' | 'disposable' | 'recurring' | 'market') {
+    return this.page.getByTestId(type).click();
+  }
+
+  setDirection(mode: 'buy' | 'sell') {
     return this.page.getByTestId(`tab-${mode}`).click();
   }
 
