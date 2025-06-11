@@ -6,7 +6,6 @@ import {
 } from 'components/strategies/common/types';
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
-import { NotFound } from 'components/common/NotFound';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { OverlappingChart } from 'components/strategies/overlapping/OverlappingChart';
 import { StrategyChartHistory } from './StrategyChartHistory';
@@ -17,7 +16,6 @@ import { defaultSpread } from '../overlapping/utils';
 import { isFullRangeStrategy } from './utils';
 
 interface Props {
-  marketPrice?: string;
   base: Token;
   quote: Token;
   order0: OverlappingOrder;
@@ -65,7 +63,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
 
 const OverlappingChartContent: FC<Props> = (props) => {
   const timeout = useRef<NodeJS.Timeout>(null);
-  const { base, quote, marketPrice, order0, order1, readonly, set } = props;
+  const { base, quote, order0, order1, readonly, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
   const fullRange = useMemo(() => {
     return isFullRangeStrategy(order0, order1);
@@ -83,15 +81,6 @@ const OverlappingChartContent: FC<Props> = (props) => {
   );
 
   if (search.chartType !== 'history') {
-    if (!marketPrice) {
-      return (
-        <NotFound
-          variant="info"
-          title="Market Price Unavailable"
-          text="Please provide a price."
-        />
-      );
-    }
     return (
       <OverlappingChart
         className="flex-1"

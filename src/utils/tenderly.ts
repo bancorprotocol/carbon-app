@@ -8,6 +8,7 @@ import {
 } from 'ethers';
 import { lsService } from 'services/localeStorage';
 import config from 'config';
+import { NATIVE_TOKEN_ADDRESS } from './tokens';
 
 class UncheckedJsonRpcSigner extends JsonRpcSigner {
   async sendTransaction(
@@ -56,13 +57,20 @@ export const tenderlyFaucetTransferNativeToken = async (user: string) => {
 };
 
 export const tenderlyFaucetTransferTKN = async (
-  token: FaucetToken,
+  token: { address: string; decimals: number },
   user: string,
 ) => {
   const provider = new JsonRpcProvider(tenderlyRpc);
-  return provider.send('tenderly_setErc20Balance', [
-    token.tokenContract,
-    user,
-    toQuantity(parseUnits('1000', token.decimals)),
-  ]);
+  if (token.address === NATIVE_TOKEN_ADDRESS) {
+    return provider.send('tenderly_setBalance', [
+      [user],
+      toQuantity(parseUnits('1000', 'ether')),
+    ]);
+  } else {
+    return provider.send('tenderly_setErc20Balance', [
+      token.address,
+      user,
+      toQuantity(parseUnits('1000', token.decimals)),
+    ]);
+  }
 };

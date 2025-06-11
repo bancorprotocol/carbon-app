@@ -45,10 +45,10 @@ export const useStrategyInput = ({ searchState }: Props) => {
   const navigate = useNavigate({ from: '/simulate/recurring' });
   const [_state, setState] = useState<InternalStrategyInput>(searchState);
 
-  const baseToken = useToken(_state.baseToken);
-  const quoteToken = useToken(_state.quoteToken);
+  const base = useToken(_state.baseToken);
+  const quote = useToken(_state.quoteToken);
 
-  const state = buildStrategyInputState(_state, baseToken, quoteToken);
+  const state = buildStrategyInputState(_state, base.token, quote.token);
 
   const setSearch = useCallback(
     (search: InternalStrategyInput) => {

@@ -95,6 +95,7 @@ test.describe('Trade', () => {
     const debug = new DebugDriver(page);
     await debug.visit();
     await debug.setupImposter();
+    await page.getByText('Get money').click();
   });
 
   // Need an empty object else the tests don't run
@@ -112,20 +113,20 @@ test.describe('Trade', () => {
     test(testName, async ({ page }) => {
       // Store current balance
       const debug = new DebugDriver(page);
-      const initialBalance = {
-        base: await debug.getBalance(base).textContent(),
-        quote: await debug.getBalance(quote).textContent(),
-      };
+      const initialBalance = await Promise.all([
+        debug.getBalance(base),
+        debug.getBalance(quote),
+      ]);
 
       // Test Trade
       await navigateTo(page, '/trade/*?*');
-      await page.getByTestId('market').click();
       const driver = new TradeDriver(page, testCase);
       const tokenApproval = new TokenApprovalDriver(page);
 
       await driver.selectToken('base');
       await driver.selectToken('quote');
-      await driver.setMode(mode);
+      await driver.setType('market');
+      await driver.setDirection(mode);
 
       for (const swap of swaps) {
         const { sourceValue, targetValue } = swap;
@@ -166,12 +167,12 @@ test.describe('Trade', () => {
           targetValue: 0,
         },
       );
-      const sourceDelta = Number(initialBalance.base) - Number(sourceValue);
+      const sourceDelta = Number(initialBalance[0]) - Number(sourceValue);
       const nextSource = new RegExp(sourceDelta.toString());
-      await expect(debug.getBalance(source)).toHaveText(nextSource);
-      const targetDelta = Number(initialBalance.quote) + Number(targetValue);
+      await expect(debug.balanceLocator(source)).toHaveText(nextSource);
+      const targetDelta = Number(initialBalance[1]) + Number(targetValue);
       const nextTarget = new RegExp(targetDelta.toString());
-      await expect(debug.getBalance(target)).toHaveText(nextTarget);
+      await expect(debug.balanceLocator(target)).toHaveText(nextTarget);
     });
   }
 });
