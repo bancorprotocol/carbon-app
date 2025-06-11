@@ -1,9 +1,17 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { ReactComponent as IconInfo } from 'assets/icons/tooltip.svg';
 import { Button } from 'components/common/button';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { lsService } from 'services/localeStorage';
 
 export const MainMenuRightWalkthrough: FC = () => {
+  useEffect(() => {
+    const hasWalkthrough = lsService.getItem('hasWalkthrough');
+    if (!hasWalkthrough) {
+      start();
+    }
+  }, []);
+
   const start = () => {
     (globalThis as any).Storylane.Play({
       type: 'popup',
@@ -14,6 +22,7 @@ export const MainMenuRightWalkthrough: FC = () => {
       demo_url: 'https://app.storylane.io/demo/i2ok96zcpzqw?embed=popup',
       padding_bottom: 'calc(50.46% + 25px)',
     });
+    lsService.setItem('hasWalkthrough', true);
   };
 
   return (
