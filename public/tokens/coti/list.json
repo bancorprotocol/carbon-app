@@ -26,6 +26,22 @@
       "symbol": "USDC.e",
       "decimals": 6,
       "logoURI": "/tokens/ethereum/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.svg"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0x639aCc80569c5FC83c6FBf2319A6Cc38bBfe26d1",
+      "name": "WETH",
+      "symbol": "WETH",
+      "decimals": 18,
+      "logoURI": "/tokens/ethereum/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.svg"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0x8C39B1fD0e6260fdf20652Fc436d25026832bfEA",
+      "name": "WBTC",
+      "symbol": "WBTC",
+      "decimals": 8,
+      "logoURI": "/tokens/ethereum/0x2260fac5e5542a773aa44fbcfedf7c193bc2c599.svg"
     }
   ],
   "version": {
