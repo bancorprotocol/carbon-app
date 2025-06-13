@@ -27,7 +27,7 @@ import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
 import { useEnsName } from 'wagmi';
-import { getAddress } from 'ethers/lib/utils';
+import { getAddress } from 'ethers';
 import style from './index.module.css';
 
 interface Props {
