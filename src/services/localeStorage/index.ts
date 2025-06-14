@@ -57,6 +57,7 @@ interface LocalStorageSchema {
   featureFlags: string[];
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
+  hasWalkthrough: boolean;
 }
 
 enum EnumStrategySort {
