@@ -9,7 +9,14 @@ export const useGetTradeLiquidity = (base?: string, quote?: string) => {
 
   return useQuery({
     queryKey: QueryKey.tradeLiquidity([base!, quote!]),
-    queryFn: async () => carbonSDK.getLiquidityByPair(base!, quote!),
+    queryFn: () => {
+      try {
+        return carbonSDK.getLiquidityByPair(base!, quote!);
+      } catch (err) {
+        console.error('Cannot find ');
+        return '0';
+      }
+    },
     enabled: !!base && !!quote && isInitialized,
     staleTime: ONE_DAY_IN_MS,
   });
