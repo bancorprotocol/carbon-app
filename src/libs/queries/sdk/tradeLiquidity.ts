@@ -13,7 +13,7 @@ export const useGetTradeLiquidity = (base?: string, quote?: string) => {
       try {
         return carbonSDK.getLiquidityByPair(base!, quote!);
       } catch (err) {
-        console.error('Cannot find ');
+        console.error('Cannot find liquidity', err);
         return '0';
       }
     },
