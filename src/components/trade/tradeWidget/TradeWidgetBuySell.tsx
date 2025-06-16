@@ -1,5 +1,5 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { FormEvent, useId, JSX, useEffect } from 'react';
+import { FormEvent, useId, JSX } from 'react';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWagmi } from 'libs/wagmi';
 import { UseQueryResult } from 'libs/queries';
@@ -52,10 +52,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     ...formProps
   } = props;
   const hasEnoughLiquidity = +liquidityQuery.data! > 0;
-
-  useEffect(() => {
-    console.log(liquidityQuery);
-  }, [liquidityQuery]);
 
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -196,6 +192,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         <NotEnoughLiquidity
           source={buy ? target : source}
           target={buy ? source : target}
+          query={liquidityQuery}
         />
       )}
       <Button
