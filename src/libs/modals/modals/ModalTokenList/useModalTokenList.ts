@@ -60,6 +60,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
     : quotePopularTokens;
 
   useEffect(() => {
+    if (isPending) return;
     const getMissingToken: Promise<Token>[] = [];
     for (const token of defaultPopularTokens) {
       if (!getTokenById(token)) {
@@ -78,7 +79,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
         console.error(error);
       }
     });
-  }, [Token, defaultPopularTokens, getTokenById, importTokens]);
+  }, [Token, defaultPopularTokens, getTokenById, importTokens, isPending]);
 
   const onSelect = useCallback(
     (token: Token) => {
