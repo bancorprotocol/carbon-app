@@ -87,7 +87,10 @@ export const useToken = (address?: string) => {
   useEffect(() => {
     if (!address) return;
     const existing = getTokenById(address);
-    if (existing) return setToken(existing);
+    if (existing) {
+      setIsPending(false);
+      return setToken(existing);
+    }
     if (tokenQueryIsPending) return;
     fetchTokenData(Token, address)
       .then((token) => {
