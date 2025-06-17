@@ -44,6 +44,7 @@ export const TradeRoot = () => {
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center" />;
   }
+  console.log({ base, quote });
   if (!base || !quote) {
     return (
       <NotFound
