@@ -76,7 +76,11 @@ export const useTokens = () => {
 };
 
 export const useToken = (address?: string) => {
-  const { getTokenById, importTokens } = useTokens();
+  const {
+    getTokenById,
+    importTokens,
+    isPending: tokenQueryIsPending,
+  } = useTokens();
   const { Token } = useContract();
   const [isPending, setIsPending] = useState(!getTokenById(address));
   const [token, setToken] = useState<Token | undefined>(getTokenById(address));
@@ -84,12 +88,13 @@ export const useToken = (address?: string) => {
     if (!address) return;
     const existing = getTokenById(address);
     if (existing) return setToken(existing);
+    if (tokenQueryIsPending) return;
     fetchTokenData(Token, address)
       .then((token) => {
         setToken(token);
         importTokens([token]);
       })
       .finally(() => setIsPending(false));
-  }, [getTokenById, address, Token, importTokens]);
+  }, [getTokenById, address, Token, importTokens, tokenQueryIsPending]);
   return { token, isPending };
 };
