@@ -66,7 +66,18 @@ export const useModalTokenList = ({ id, data }: Props) => {
         getMissingToken.push(fetchTokenData(Token, token));
       }
     }
-    Promise.all(getMissingToken).then(importTokens);
+    Promise.allSettled(getMissingToken).then((res) => {
+      const success = res
+        .filter((r) => r.status === 'fulfilled')
+        .map((r) => r.value);
+      const errors = res
+        .filter((r) => r.status === 'rejected')
+        .map((r) => r.reason);
+      importTokens(success);
+      for (const error of errors) {
+        console.error(error);
+      }
+    });
   }, [Token, defaultPopularTokens, getTokenById, importTokens]);
 
   const onSelect = useCallback(

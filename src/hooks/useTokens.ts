@@ -88,9 +88,8 @@ export const useToken = (address?: string) => {
       .then((token) => {
         setToken(token);
         importTokens([token]);
-        setIsPending(false);
       })
-      .catch(() => setIsPending(false));
+      .finally(() => setIsPending(false));
   }, [getTokenById, address, Token, importTokens]);
   return { token, isPending };
 };
