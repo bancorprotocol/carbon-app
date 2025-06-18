@@ -114,7 +114,6 @@ export const useModalTradeRouting = ({
     isTradeBySource,
     buy,
     getFiatValueSource,
-    provider?.network?.name,
   ]);
 
   const onSelect = (id: string) => {

@@ -6,7 +6,7 @@ import {
   Outlet,
 } from '@tanstack/react-router';
 import { RouterRenderParams } from './types';
-import { isAddress } from 'ethers/lib/utils';
+import { isAddress } from 'ethers';
 
 const encodeValue = (value: string | number | symbol) => {
   if (typeof value == 'string' && isAddress(value)) return value;

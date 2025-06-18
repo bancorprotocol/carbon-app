@@ -1,8 +1,4 @@
-import {
-  JsonRpcSigner,
-  StaticJsonRpcProvider,
-  Web3Provider,
-} from '@ethersproject/providers';
+import { JsonRpcSigner, JsonRpcProvider, BrowserProvider } from 'ethers';
 import { Connector } from 'libs/wagmi';
 
 export const selectableConnectionNames = [
@@ -25,7 +21,7 @@ export interface CarbonWagmiProviderContext {
   chainId: number;
   isNetworkActive: boolean;
   networkError: string | undefined;
-  provider?: Web3Provider | StaticJsonRpcProvider;
+  provider?: BrowserProvider | JsonRpcProvider;
   signer: JsonRpcSigner | undefined;
   currentConnector: Connector | undefined;
   connectors: readonly Connector[];
