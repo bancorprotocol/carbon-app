@@ -102,7 +102,6 @@ export const ModalTokenListContent: FC<Props> = ({
               height: `${row.size}px`,
               transform: `translateY(${row.start}px)`,
             } as const;
-            console.log(_tokens);
             return (
               <li
                 key={token.address}
