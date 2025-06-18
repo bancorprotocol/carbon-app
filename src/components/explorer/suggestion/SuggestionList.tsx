@@ -83,6 +83,7 @@ export const SuggestionList: FC<Props> = (props) => {
           {maxTokens <= filteredTokens.length && (
             <footer className="px-30 flex h-[50px] items-center">
               <button
+                type="button"
                 className="text-14 font-weight-500 bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
                 onClick={() => setMaxTokens((v) => v + 5)}
               >
@@ -116,6 +117,7 @@ export const SuggestionList: FC<Props> = (props) => {
           {maxPairs <= filteredPairs.length && (
             <footer className="px-30 flex h-[50px] items-center">
               <button
+                type="button"
                 className="text-14 font-weight-500 bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
                 onClick={() => setMaxPairs((v) => v + 5)}
               >
