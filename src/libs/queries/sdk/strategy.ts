@@ -242,20 +242,21 @@ export const useGetStrategy = (id: string) => {
 };
 
 interface PropsPair {
-  token0?: string;
-  token1?: string;
+  base?: string;
+  quote?: string;
 }
 
-export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
+export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
   const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importTokens } = useTokens();
+  const { getTokenById, importTokens, isPending } = useTokens();
+  const pair = usePairs();
   const { Token } = useContract();
 
   return useQuery<Strategy[]>({
-    queryKey: QueryKey.strategiesByPair(token0, token1),
+    queryKey: QueryKey.strategiesByPair(base, quote),
     queryFn: async () => {
-      if (!token0 || !token1) return [];
-      const strategies = await carbonSDK.getStrategiesByPair(token0, token1);
+      if (!base || !quote) return [];
+      const strategies = await carbonSDK.getStrategiesByPair(base, quote);
       return buildStrategiesHelper({
         strategies,
         getTokenById,
@@ -263,16 +264,11 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
         Token,
       });
     },
-    enabled: (!token0 || !token1 || tokens.length > 0) && isInitialized,
+    enabled: !pair.isPending && !isPending && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
 };
-
-interface PropsPair {
-  token0?: string;
-  token1?: string;
-}
 
 export const useTokenStrategies = (token?: string) => {
   const { isInitialized } = useCarbonInit();
