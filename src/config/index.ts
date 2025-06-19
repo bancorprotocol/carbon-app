@@ -8,6 +8,8 @@ import cotiDev from './coti/development';
 import cotiProd from './coti/production';
 import blastDev from './blast/development';
 import blastProd from './blast/production';
+import baseDev from './base/development';
+import baseProd from './base/production';
 import { handleConfigOverrides } from './utils';
 
 const configs = {
@@ -31,6 +33,10 @@ const configs = {
     development: blastDev,
     production: blastProd,
   },
+  base: {
+    development: baseDev,
+    production: baseProd,
+  },
 };
 type Network = keyof typeof configs;
 type Mode = 'development' | 'production';
@@ -49,18 +55,9 @@ if (!configs[network][mode]) {
 
 export { pairsToExchangeMapping } from './utils';
 
-export const networks = Object.entries(configs)
-  .filter(([, config]) => config[mode].hidden !== true)
-  .map(([id, config]) => {
-    return {
-      id,
-      name: config[mode].network.name,
-      logoUrl: config[mode].network.logoUrl,
-      chainId: config[mode].network.chainId,
-      isCurrentNetwork: network === id,
-      appUrl: config[mode].appUrl,
-    };
-  });
+export const networks = Object.values(configs)
+  .filter((config) => config[mode].hidden !== true)
+  .map((config) => config[mode]);
 
 export const defaultConfig = configs[network][mode];
 const currentConfig = handleConfigOverrides(defaultConfig);

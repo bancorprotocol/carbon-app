@@ -7,7 +7,7 @@ import {
   useId,
   useState,
 } from 'react';
-import { OverlappingOrder } from '../common/types';
+import { CreateOverlappingOrder } from '../common/types';
 import { SafeDecimal } from 'libs/safedecimal';
 import { cn, prettifySignedNumber, tokenAmount } from 'utils/helpers';
 import { Token } from 'libs/tokens';
@@ -55,12 +55,12 @@ const getOrders = (
     spread || Number.MIN_VALUE.toString(),
   );
   return {
-    order0: {
+    buy: {
       min: params.buyPriceLow,
       max: params.buyPriceHigh,
       marginalPrice: params.buyPriceMarginal,
     },
-    order1: {
+    sell: {
       min: params.sellPriceLow,
       max: params.sellPriceHigh,
       marginalPrice: params.sellPriceMarginal,
@@ -68,12 +68,12 @@ const getOrders = (
   };
 };
 type Orders = ReturnType<typeof getOrders>;
-const getBuyPoint = ({ order0, order1 }: Orders, scale: Scale) => {
+const getBuyPoint = ({ buy, sell }: Orders, scale: Scale) => {
   const { x, y } = scale;
-  const min = +order0.min;
-  const maxTop = getMin(order1.min, order0.marginalPrice);
-  const maxBottom = getMin(order0.max, order0.marginalPrice);
-  if (min > +order0.max || min > +order0.marginalPrice) return '';
+  const min = +buy.min;
+  const maxTop = getMin(sell.min, buy.marginalPrice);
+  const maxBottom = getMin(buy.max, buy.marginalPrice);
+  if (min > +buy.max || min > +buy.marginalPrice) return '';
   return [
     [x(min), y(top)].join(','),
     [x(maxTop), y(top)].join(','),
@@ -83,65 +83,65 @@ const getBuyPoint = ({ order0, order1 }: Orders, scale: Scale) => {
     [x(min), y(bottom)].join(','),
   ].join(' ');
 };
-const getMarginalBuyPoint = ({ order0, order1 }: Orders, scale: Scale) => {
+const getMarginalBuyPoint = ({ buy, sell }: Orders, scale: Scale) => {
   const { x, y } = scale;
-  if (+order0.min > +order0.max || +order0.min > +order0.marginalPrice) {
+  if (+buy.min > +buy.max || +buy.min > +buy.marginalPrice) {
     return '';
   }
-  if (+order1.min >= +order0.marginalPrice) {
+  if (+sell.min >= +buy.marginalPrice) {
     return [
-      [x(order0.marginalPrice), y(top)].join(','),
-      [x(order1.min), y(top)].join(','),
-      [x(order1.min), y(middle)].join(','),
-      [x(order0.max), y(middle)].join(','),
-      [x(order0.max), y(bottom)].join(','),
-      [x(order0.marginalPrice), y(bottom)].join(','),
+      [x(buy.marginalPrice), y(top)].join(','),
+      [x(sell.min), y(top)].join(','),
+      [x(sell.min), y(middle)].join(','),
+      [x(buy.max), y(middle)].join(','),
+      [x(buy.max), y(bottom)].join(','),
+      [x(buy.marginalPrice), y(bottom)].join(','),
     ].join(' ');
   } else {
     return [
-      [x(order0.marginalPrice), y(middle)].join(','),
-      [x(order0.max), y(middle)].join(','),
-      [x(order0.max), y(bottom)].join(','),
-      [x(order0.marginalPrice), y(bottom)].join(','),
+      [x(buy.marginalPrice), y(middle)].join(','),
+      [x(buy.max), y(middle)].join(','),
+      [x(buy.max), y(bottom)].join(','),
+      [x(buy.marginalPrice), y(bottom)].join(','),
     ].join(' ');
   }
 };
-const getSellPoint = ({ order0, order1 }: Orders, scale: Scale) => {
+const getSellPoint = ({ buy, sell }: Orders, scale: Scale) => {
   const { x, y } = scale;
-  const minTop = getMax(order1.min, order1.marginalPrice);
-  const minBottom = getMax(order0.max, order1.marginalPrice);
-  if (+order1.max < +order1.min || +order1.max < +order1.marginalPrice) {
+  const minTop = getMax(sell.min, sell.marginalPrice);
+  const minBottom = getMax(buy.max, sell.marginalPrice);
+  if (+sell.max < +sell.min || +sell.max < +sell.marginalPrice) {
     return '';
   }
   return [
     [x(minTop), y(top)].join(','),
-    [x(order1.max), y(top)].join(','),
-    [x(order1.max), y(bottom)].join(','),
+    [x(sell.max), y(top)].join(','),
+    [x(sell.max), y(bottom)].join(','),
     [x(minBottom), y(bottom)].join(','),
     [x(minBottom), y(middle)].join(','),
     [x(minTop), y(middle)].join(','),
   ].join(' ');
 };
-const getMarginalSellPoint = ({ order0, order1 }: Orders, scale: Scale) => {
+const getMarginalSellPoint = ({ buy, sell }: Orders, scale: Scale) => {
   const { x, y } = scale;
-  if (+order1.max < +order1.min || +order1.max < +order1.marginalPrice) {
+  if (+sell.max < +sell.min || +sell.max < +sell.marginalPrice) {
     return '';
   }
-  if (+order1.marginalPrice >= +order0.max) {
+  if (+sell.marginalPrice >= +buy.max) {
     return [
-      [x(order1.min), y(top)].join(','),
-      [x(order1.marginalPrice), y(top)].join(','),
-      [x(order1.marginalPrice), y(bottom)].join(','),
-      [x(order0.max), y(bottom)].join(','),
-      [x(order0.max), y(middle)].join(','),
-      [x(order1.min), y(middle)].join(','),
+      [x(sell.min), y(top)].join(','),
+      [x(sell.marginalPrice), y(top)].join(','),
+      [x(sell.marginalPrice), y(bottom)].join(','),
+      [x(buy.max), y(bottom)].join(','),
+      [x(buy.max), y(middle)].join(','),
+      [x(sell.min), y(middle)].join(','),
     ].join(' ');
   } else {
     return [
-      [x(order1.min), y(top)].join(','),
-      [x(order1.marginalPrice), y(top)].join(','),
-      [x(order1.marginalPrice), y(middle)].join(','),
-      [x(order1.min), y(middle)].join(','),
+      [x(sell.min), y(top)].join(','),
+      [x(sell.marginalPrice), y(top)].join(','),
+      [x(sell.marginalPrice), y(middle)].join(','),
+      [x(sell.min), y(middle)].join(','),
     ].join(' ');
   }
 };
@@ -223,8 +223,8 @@ const getPrices = (lowest: number, highest: number, width: number) => {
 interface Props {
   base: Token;
   quote: Token;
-  order0: OverlappingOrder;
-  order1: OverlappingOrder;
+  buy: CreateOverlappingOrder;
+  sell: CreateOverlappingOrder;
   spread?: string;
   userMarketPrice?: string;
   disabled?: boolean;
@@ -233,23 +233,22 @@ interface Props {
   setMax: (max: string) => any;
 }
 export const OverlappingChart: FC<Props> = (props) => {
-  const { base, quote, order0, order1, userMarketPrice, spread, className } =
-    props;
+  const { base, quote, buy, sell, userMarketPrice, spread, className } = props;
   const id = useId();
   const [zoom, setZoom] = useState(1);
   const [dragging, setDragging] = useState('');
   const box = useResize(id);
-  const isValid = isValidRange(order0.min, order1.max);
+  const isValid = isValidRange(buy.min, sell.max);
   const { marketPrice: externalPrice, isPending } = useMarketPrice({
     base,
     quote,
   });
   const marketPrice = userMarketPrice ?? externalPrice?.toString();
 
-  const min = +order0.min;
-  const max = +order1.max;
-  const lowest = getMin(order0.min, marketPrice ?? order0.min);
-  const highest = getMax(order1.max, marketPrice ?? order1.max);
+  const min = +buy.min;
+  const max = +sell.max;
+  const lowest = getMin(buy.min, marketPrice ?? buy.min);
+  const highest = getMax(sell.max, marketPrice ?? sell.max);
   const prices = getPrices(lowest, highest, box.width);
   const { left, mean, right } = getBoundaries(lowest, highest);
   const fullRange = isFullRangeCreation(min, max, marketPrice);
@@ -269,8 +268,8 @@ export const OverlappingChart: FC<Props> = (props) => {
   // Texts
   const marketPriceText = tokenAmount(marketPrice, quote);
   const marketPercent = {
-    min: marketPricePercent(order0.min, marketPrice),
-    max: marketPricePercent(order1.max, marketPrice),
+    min: marketPricePercent(buy.min, marketPrice),
+    max: marketPricePercent(sell.max, marketPrice),
   };
   const minText = fullRange ? tokenAmount(0, quote) : tokenAmount(min, quote);
   const minPrecent = fullRange
@@ -416,11 +415,11 @@ export const OverlappingChart: FC<Props> = (props) => {
 
     // Update lines
     const buyMaxLine = document.getElementById('buy-max-line');
-    buyMaxLine?.setAttribute('x1', x(orders.order0.max).toString());
-    buyMaxLine?.setAttribute('x2', x(orders.order0.max).toString());
+    buyMaxLine?.setAttribute('x1', x(orders.buy.max).toString());
+    buyMaxLine?.setAttribute('x2', x(orders.buy.max).toString());
     const sellMinLine = document.getElementById('sell-min-line');
-    sellMinLine?.setAttribute('x1', x(orders.order1.min).toString());
-    sellMinLine?.setAttribute('x2', x(orders.order1.min).toString());
+    sellMinLine?.setAttribute('x1', x(orders.sell.min).toString());
+    sellMinLine?.setAttribute('x2', x(orders.sell.min).toString());
 
     // Update tooltip
     const updateTooltip = (mode: 'buy' | 'sell') => {
@@ -568,8 +567,8 @@ export const OverlappingChart: FC<Props> = (props) => {
           />
           <line
             id="buy-max-line"
-            x1={x(order0.max)}
-            x2={x(order0.max)}
+            x1={x(buy.max)}
+            x2={x(buy.max)}
             y1={y(bottom)}
             y2={y(middle)}
             stroke="var(--buy)"
@@ -590,8 +589,8 @@ export const OverlappingChart: FC<Props> = (props) => {
           />
           <line
             id="sell-min-line"
-            x1={x(order1.min)}
-            x2={x(order1.min)}
+            x1={x(sell.min)}
+            x2={x(sell.min)}
             y1={y(middle)}
             y2={y(top)}
             stroke="var(--sell)"
@@ -743,7 +742,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           {!disabled && (
             <g id="buy-handler-rect" transform="translate(-20, 0)">
               <rect
-                x={x(order0.min)}
+                x={x(buy.min)}
                 y={y(top)}
                 width={20}
                 height={30}
@@ -751,7 +750,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 rx="4"
               />
               <rect
-                x={x(order0.min) + 7}
+                x={x(buy.min) + 7}
                 y={y(top) + 10}
                 width={1}
                 height={10}
@@ -759,7 +758,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 fillOpacity="0.5"
               />
               <rect
-                x={x(order0.min) + 13}
+                x={x(buy.min) + 13}
                 y={y(top) + 10}
                 width={1}
                 height={10}
@@ -769,8 +768,8 @@ export const OverlappingChart: FC<Props> = (props) => {
             </g>
           )}
           <line
-            x1={x(order0.min) - 1}
-            x2={x(order0.min) - 1}
+            x1={x(buy.min) - 1}
+            x2={x(buy.min) - 1}
             y1={y(top)}
             y2={y(bottom)}
             stroke="var(--buy)"
@@ -827,7 +826,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           {!disabled && (
             <g id="sell-handler-rect">
               <rect
-                x={x(order1.max)}
+                x={x(sell.max)}
                 y={y(top)}
                 width={20}
                 height={30}
@@ -835,7 +834,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 rx="4"
               />
               <rect
-                x={x(order1.max) + 7}
+                x={x(sell.max) + 7}
                 y={y(top) + 10}
                 width={1}
                 height={10}
@@ -843,7 +842,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 fillOpacity="0.5"
               />
               <rect
-                x={x(order1.max) + 13}
+                x={x(sell.max) + 13}
                 y={y(top) + 10}
                 width={1}
                 height={10}
@@ -853,8 +852,8 @@ export const OverlappingChart: FC<Props> = (props) => {
             </g>
           )}
           <line
-            x1={x(order1.max) + 1}
-            x2={x(order1.max) + 1}
+            x1={x(sell.max) + 1}
+            x2={x(sell.max) + 1}
             y1={y(top)}
             y2={y(bottom)}
             stroke="var(--sell)"

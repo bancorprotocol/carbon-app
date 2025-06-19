@@ -16,7 +16,7 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
   const result = useMemo(() => getFullOutcome(props), [props]);
   if (!result) return <></>;
   const { amount, mean } = result;
-  const token = props.buy ? props.base : props.quote;
+  const token = props.isBuy ? props.base : props.quote;
   const hasBudgetUpdate = props.budgetUpdate && Number(props.budgetUpdate) > 0;
 
   return (

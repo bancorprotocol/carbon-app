@@ -21,7 +21,7 @@ export type ModalTradeRoutingData = {
   isTradeBySource: boolean;
   onSuccess: () => any;
   sourceBalance: string;
-  buy?: boolean;
+  isBuy?: boolean;
 };
 
 export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
@@ -49,10 +49,10 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   });
 
   const selectedSorted = selected.sort((a, b) => {
-    const averageAmountA = data.buy
+    const averageAmountA = data.isBuy
       ? new SafeDecimal(a.sourceAmount).div(a.targetAmount)
       : new SafeDecimal(a.targetAmount).div(a.sourceAmount);
-    const averageAmountB = data.buy
+    const averageAmountB = data.isBuy
       ? new SafeDecimal(b.sourceAmount).div(b.targetAmount)
       : new SafeDecimal(b.targetAmount).div(b.sourceAmount);
 
@@ -158,7 +158,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                     targetFiatPrice={targetFiatPrice.data}
                     isSelected={action.isSelected}
                     handleClick={onSelect}
-                    buy={data.buy}
+                    isBuy={data.isBuy}
                   />
                 ))}
               </tbody>

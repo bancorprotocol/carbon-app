@@ -12,29 +12,29 @@ interface Props {
   order: StrategyInputOrder;
   dispatch: StrategyInputDispatch;
   base: Token;
-  buy?: boolean;
+  isBuy?: boolean;
 }
 
 export const BuySellHeader: FC<Props> = (props) => {
-  const { order, buy, children, base, dispatch } = props;
+  const { order, isBuy, children, base, dispatch } = props;
   const { isRange } = order;
 
-  const type = buy ? 'buy' : 'sell';
+  const type = isBuy ? 'buy' : 'sell';
 
   const setLimit = () => {
     if (!isRange) return;
     dispatch(`${type}IsRange`, false);
 
-    const value = buy ? order.max : order.min;
-    const attr = buy ? 'Min' : 'Max';
+    const value = isBuy ? order.max : order.min;
+    const attr = isBuy ? 'Min' : 'Max';
     dispatch(`${type}${attr}`, value);
   };
   const setRange = () => {
     if (isRange) return;
     dispatch(`${type}IsRange`, true);
 
-    const attr = buy ? 'Min' : 'Max';
-    const multiplier = buy ? 0.9 : 1.1;
+    const attr = isBuy ? 'Min' : 'Max';
+    const multiplier = isBuy ? 0.9 : 1.1;
     dispatch(`${type}${attr}`, (Number(order.min) * multiplier).toString());
   };
 
@@ -79,13 +79,13 @@ export const BuySellHeader: FC<Props> = (props) => {
           element={
             <p>
               This section will define the order details in which you are
-              willing to {buy ? 'buy' : 'sell'} {base.symbol} at.
+              willing to {isBuy ? 'buy' : 'sell'} {base.symbol} at.
               <br />
               <b>Limit</b> will allow you to define a specific price point to{' '}
-              {buy ? 'buy' : 'sell'} the token at.
+              {isBuy ? 'buy' : 'sell'} the token at.
               <br />
               <b>Range</b> will allow you to define a range of prices to{' '}
-              {buy ? 'buy' : 'sell'} the token at.
+              {isBuy ? 'buy' : 'sell'} the token at.
             </p>
           }
         />

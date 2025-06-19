@@ -14,8 +14,13 @@ import { CreateForm } from 'components/strategies/create/CreateForm';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { useCallback } from 'react';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
-import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
+import { StrategySettings } from 'libs/routing';
+import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
+import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
+import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
+import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 const url = '/trade/recurring';
 export const TradeRecurring = () => {
@@ -25,7 +30,7 @@ export const TradeRecurring = () => {
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
-  const onPriceUpdates: OnPriceUpdates = useCallback(
+  const updatePrices: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
       setBuyOrder({ min: buy.min, max: buy.max });
       setSellOrder({ min: sell.min, max: sell.max });
@@ -54,68 +59,91 @@ export const TradeRecurring = () => {
     marketPrice,
   );
 
+  const setSellSetting = useCallback(
+    (settings: StrategySettings) => {
+      const { min, max } = getDefaultOrder('sell', { settings }, marketPrice);
+      setSellOrder({ settings, min, max });
+    },
+    [marketPrice, setSellOrder],
+  );
+  const setBuySetting = useCallback(
+    (settings: StrategySettings) => {
+      const { min, max } = getDefaultOrder('buy', { settings }, marketPrice);
+      setBuyOrder({ settings, min, max });
+    },
+    [marketPrice, setBuyOrder],
+  );
+
   const sellOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
     min: sellOrder.min,
     max: sellOrder.max,
-    buy: false,
+    isBuy: false,
   });
   const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
     min: buyOrder.min,
     max: buyOrder.max,
-    buy: true,
+    isBuy: true,
   });
   const isLimit = {
     buy: buyOrder.settings === 'limit',
     sell: sellOrder.settings === 'limit',
   };
+  const { prices, setPrices } = useDebouncePrices(
+    buyOrder,
+    sellOrder,
+    updatePrices,
+  );
 
   return (
     <>
-      <CreateLayout url={url}>
-        <CreateForm
-          base={base!}
-          quote={quote!}
-          order0={buyOrder}
-          order1={sellOrder}
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
+        <StrategyChartHistory
+          base={base}
+          quote={quote}
+          buy={buyOrder}
+          sell={sellOrder}
         >
+          <D3ChartRecurring
+            isLimit={isLimit}
+            prices={prices}
+            onChange={setPrices}
+          />
+          <TradeChartContent />
+          <D3PricesAxis prices={prices} />
+        </StrategyChartHistory>
+      </StrategyChartSection>
+      <CreateLayout url={url}>
+        <CreateForm base={base!} quote={quote!} buy={buyOrder} sell={sellOrder}>
           <CreateOrder
             type="recurring"
+            direction="sell"
             base={base}
             quote={quote}
             order={sellOrder}
             setOrder={setSellOrder}
+            setSettings={setSellSetting}
             error={getRecurringError(search)}
             warnings={[sellOutsideMarket, getRecurringWarning(search)]}
           />
           <CreateOrder
             type="recurring"
+            direction="buy"
             base={base}
             quote={quote}
             order={buyOrder}
             setOrder={setBuyOrder}
+            setSettings={setBuySetting}
             error={getRecurringError(search)}
             warnings={[buyOutsideMarket, getRecurringWarning(search)]}
-            buy
           />
         </CreateForm>
       </CreateLayout>
-      <StrategyChartSection
-        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
-      >
-        <StrategyChartHistory
-          type="recurring"
-          base={base}
-          quote={quote}
-          order0={buyOrder}
-          order1={sellOrder}
-          isLimit={isLimit}
-          onPriceUpdates={onPriceUpdates}
-        />
-      </StrategyChartSection>
     </>
   );
 };

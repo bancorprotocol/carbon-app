@@ -2,27 +2,27 @@ import { FC, FormEvent, MouseEvent, ReactNode, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useNavigate } from 'libs/routing';
 import { Button } from 'components/common/button';
-import { toCreateStrategyParams, useCreateStrategy } from './useCreateStrategy';
+import { useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
 import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
 import { useWagmi } from 'libs/wagmi';
-import { BaseOrder } from 'components/strategies/common/types';
-import { addStrategyToCart } from 'components/cart/utils';
+import { FormStaticOrder } from 'components/strategies/common/types';
+import { addStrategyToCart, toStaticCartStorage } from 'components/cart/utils';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
 interface FormProps {
   base: Token;
   quote: Token;
-  order0: BaseOrder;
-  order1: BaseOrder;
+  buy: FormStaticOrder;
+  sell: FormStaticOrder;
   approvalText?: string;
   children: ReactNode;
 }
 
 export const CreateForm: FC<FormProps> = (props) => {
-  const { base, quote, order0, order1, children } = props;
+  const { base, quote, buy, sell, children } = props;
   const { openModal } = useModal();
   const { user } = useWagmi();
   const nav = useNavigate();
@@ -30,7 +30,7 @@ export const CreateForm: FC<FormProps> = (props) => {
   const [animating, setAnimating] = useState(false);
 
   const { isLoading, isProcessing, isAwaiting, createStrategy } =
-    useCreateStrategy({ base, quote, order0, order1 });
+    useCreateStrategy({ base, quote, buy, sell });
 
   const loading = isLoading || isProcessing || isAwaiting;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
@@ -56,18 +56,18 @@ export const CreateForm: FC<FormProps> = (props) => {
     if (form.querySelector('.error-message')) return;
 
     setAnimating(true);
-    const params = toCreateStrategyParams(base, quote, order0, order1);
+    const params = toStaticCartStorage(base, quote, buy, sell);
     await addStrategyToCart(user, params);
     setAnimating(false);
     // Remove budget
     nav({
       to: '.',
-      search: (s) => {
-        delete s.budget;
-        delete s.buyBudget;
-        delete s.sellBudget;
-        return s;
-      },
+      search: (s) => ({
+        ...s,
+        budget: undefined,
+        sellBudget: undefined,
+        buyBudget: undefined,
+      }),
       replace: false,
       resetScroll: false,
     });

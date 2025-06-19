@@ -296,3 +296,47 @@ export const handleConfigOverrides = (defaultConfig: AppConfig) => {
   console.log('Config loaded successfully');
   return parseResult.output as AppConfig;
 };
+
+/** set the config into localstorage */
+export const setNetworkConfig = (configOverride?: string) => {
+  if (!configOverride) {
+    localStorage.clear();
+    lsService.removeItem('configOverride');
+    window.location.search = '';
+  } else {
+    const parsedConfig = JSON.parse(configOverride || '');
+    const result = v.safeParse(v.partial(AppConfigSchema), parsedConfig);
+    if (result.success) {
+      localStorage.clear();
+      lsService.setItem('configOverride', parsedConfig);
+      const redirect = {
+        strategy: '',
+        simulate: '',
+        'strategies/edit': '',
+        'explore/token-pair': 'explore/token-pair',
+      };
+      for (const [input, output] of Object.entries(redirect)) {
+        if (window.location.pathname.includes(input)) {
+          const url = new URL(window.location.href);
+          url.search = '';
+          url.pathname = output;
+          window.location.href = url.href;
+          return;
+        }
+      }
+      // Clear search and reload the page
+      window.location.search = '';
+    } else {
+      const errors = result.issues
+        .map((issue) => {
+          const path = issue.path
+            ?.map((p) => p.type === 'object' && p.key)
+            .join('.');
+          return `[${path}]: ${issue.message}`;
+        })
+        .join('\n');
+      console.error(result.issues);
+      throw errors;
+    }
+  }
+};

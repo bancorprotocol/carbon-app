@@ -52,21 +52,21 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
       {!!points.length && (
         <line
           ref={lineRef}
-          x1={xScale(points[0].x)}
+          x1={xScale(points[0].x)! + xScale.bandwidth() / 2}
           y1={yScale(points[0].y)}
-          x2={xScale(points[0].x)}
+          x2={xScale(points[0].x)! + xScale.bandwidth() / 2}
           y2={yScale(points[0].y)}
-          stroke="var(--primary)"
+          stroke="var(--secondary)"
           strokeWidth="2"
         />
       )}
       {points.map(({ x, y }) => (
         <circle
           key={x + '-' + y}
-          cx={xScale(x)}
+          cx={xScale(x)! + xScale.bandwidth() / 2}
           cy={yScale(y)}
           r="5"
-          fill="var(--primary)"
+          fill="var(--secondary)"
         />
       ))}
       <rect
@@ -85,10 +85,15 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
 
 interface D3ShapeProps {
   drawing: Drawing;
+  color?: 'primary' | 'seconary' | 'sell' | 'buy';
   onChange: (points: ChartPoint[]) => any;
 }
 
-export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
+export const D3EditLine: FC<D3ShapeProps> = ({
+  drawing,
+  onChange,
+  color = 'secondary',
+}) => {
   const ref = useRef<SVGLineElement>(null);
   const [editing, setEditing] = useState(false);
   const { dms, xScale, yScale } = useD3ChartCtx();
@@ -162,10 +167,10 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   const circles = drawing.points.map(({ x, y }, i) => (
     <circle
       key={i}
-      cx={xScale(x)}
+      cx={xScale(x)! + xScale.bandwidth() / 2}
       cy={yScale(y)}
       r="5"
-      fill="var(--primary)"
+      fill={`var(--${color})`}
       className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
@@ -205,11 +210,11 @@ export const D3EditLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
         <line
           className="draggable"
           ref={ref}
-          x1={xScale(drawing.points[0].x)}
-          x2={xScale(drawing.points[1].x)}
+          x1={xScale(drawing.points[0].x)! + xScale.bandwidth() / 2}
+          x2={xScale(drawing.points[1].x)! + xScale.bandwidth() / 2}
           y1={yScale(drawing.points[0].y)}
           y2={yScale(drawing.points[1].y)}
-          stroke="var(--primary)"
+          stroke={`var(--${color})`}
           strokeWidth="2"
         />
         {circles}

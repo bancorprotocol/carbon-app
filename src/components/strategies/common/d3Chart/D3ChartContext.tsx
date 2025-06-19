@@ -1,4 +1,4 @@
-import { D3ChartSettings, ScaleBand, ScaleLinear } from 'libs/d3';
+import { D3AxisTick, D3ChartSettings, ScaleBand, ScaleLinear } from 'libs/d3';
 import { DrawingMode } from './drawing/DrawingMenu';
 import {
   createContext,
@@ -16,7 +16,7 @@ export interface ChartPoint {
 }
 
 export interface Drawing {
-  id: number;
+  id: number | string;
   mode: DrawingMode;
   points: ChartPoint[];
 }
@@ -25,6 +25,7 @@ interface D3ChartContext {
   dms: D3ChartSettings;
   xScale: ScaleBand<string>;
   yScale: ScaleLinear<number, number>;
+  yTicks: D3AxisTick[];
   drawingMode?: DrawingMode;
   setDrawingMode: Dispatch<SetStateAction<DrawingMode>>;
   drawings: Drawing[];

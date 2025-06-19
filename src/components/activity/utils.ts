@@ -1,4 +1,13 @@
-import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
+import {
+  isEmptyGradientOrder,
+  isEmptyOrder,
+} from 'components/strategies/common/utils';
+import {
+  Activity,
+  ActivityAction,
+  ActivityGradientOrder,
+  ActivityStaticOrder,
+} from 'libs/queries/extApi/activity';
 import {
   InferSearch,
   searchValidator,
@@ -73,10 +82,25 @@ export const activityDescription = (activity: Activity) => {
   switch (activity.action) {
     case 'create':
     case 'edit': {
-      const { buy, sell } = strategy;
-      const buyRange = tokenRange(buy.min, buy.max, quote);
-      const sellRange = tokenRange(sell.min, sell.max, quote);
-      return `Buy ${base.symbol}: ${buyRange} / Sell ${base.symbol}: ${sellRange}.`;
+      if (strategy.type === 'gradient') {
+        const order = (prefix: string, order: ActivityGradientOrder) => {
+          if (isEmptyGradientOrder(order)) return '';
+          const prices = tokenRange(order._sP_, order._eP_, quote);
+          return `${prefix} ${base.symbol}: ${prices}`;
+        };
+        const buy = order('Buy', strategy.buy);
+        const sell = order('Sell', strategy.sell);
+        return [buy, sell].filter((v) => !!v).join(' / ');
+      } else {
+        const order = (prefix: string, order: ActivityStaticOrder) => {
+          if (isEmptyOrder(order)) return '';
+          const prices = tokenRange(order.min, order.max, quote);
+          return `${prefix} ${base.symbol}: ${prices}`;
+        };
+        const buy = order('Buy', strategy.buy);
+        const sell = order('Sell', strategy.sell);
+        return [buy, sell].filter((v) => !!v).join(' / ');
+      }
     }
     case 'deposit': {
       const buy = tokenAmount(abs(changes?.buy?.budget ?? 0), quote);

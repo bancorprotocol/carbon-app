@@ -5,29 +5,54 @@ import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy'
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
-import { Strategy } from 'libs/queries';
+import { StaticOrder, Strategy } from 'components/strategies/common/types';
 import { getUndercutStrategy } from './utils';
-import { getStrategyType } from 'components/strategies/common/utils';
+import {
+  isEmptyGradientOrder,
+  isGradientStrategy,
+  isOverlappingStrategy,
+} from 'components/strategies/common/utils';
 import { useNavigate } from '@tanstack/react-router';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import { NATIVE_TOKEN_ADDRESS, isGasTokenToHide } from 'utils/tokens';
+import { StrategyDirection } from 'libs/routing';
 
-export type ModalDuplicateStrategyData = {
-  strategy: Strategy;
-};
+export interface ModalDuplicateStrategyData {
+  strategy: Strategy<StaticOrder>;
+}
 
 export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
   id,
   data: { strategy },
 }) => {
   const navigate = useNavigate();
-  const strategyType = getStrategyType(strategy);
   const duplicate = useDuplicate();
   const { closeModal } = useModal();
   const undercutDifference = 0.001;
 
   const undercutStrategy = () => {
-    if (strategyType === 'overlapping') {
+    if (isGradientStrategy(strategy)) {
+      // TODO: implement gradient undercut
+      const directions: StrategyDirection[] = [];
+      if (!isEmptyGradientOrder(strategy.buy)) directions.push('buy');
+      if (!isEmptyGradientOrder(strategy.sell)) directions.push('sell');
+      navigate({
+        to: '/trade/custom',
+        search: {
+          base: strategy.base.address,
+          quote: strategy.quote.address,
+          directions,
+          buy_SD_: strategy.buy._sD_,
+          buy_ED_: strategy.buy._eD_,
+          buy_SP_: strategy.buy._sP_,
+          buy_EP_: strategy.buy._eP_,
+          sell_SD_: strategy.sell._sD_,
+          sell_ED_: strategy.sell._eD_,
+          sell_SP_: strategy.sell._sP_,
+          sell_EP_: strategy.sell._eP_,
+        },
+      });
+    } else if (isOverlappingStrategy(strategy)) {
       // Reduce spread by 0.1% for overlapping strategies
       const spread = getRoundedSpread(strategy) * 0.99;
       // Force native token address if gas token is different
@@ -41,8 +66,8 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
         search: {
           base: baseAddress,
           quote: quoteAddress,
-          min: strategy.order0.startRate,
-          max: strategy.order1.endRate,
+          min: strategy.buy.min,
+          max: strategy.sell.max,
           spread: spread.toString(),
         },
       });

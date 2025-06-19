@@ -20,16 +20,20 @@ import { StrategyChartHistory } from 'components/strategies/common/StrategyChart
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
 import { EditOrderBlock } from 'components/strategies/common/types';
-import { Order, Strategy } from 'libs/queries';
+import { StaticOrder, Strategy } from 'components/strategies/common/types';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
+import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
+import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
+import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 export interface EditRecurringStrategySearch {
-  priceStart?: string;
-  priceEnd?: string;
+  chartStart?: string;
+  chartEnd?: string;
   editType: 'editPrices' | 'renew';
   buyMin?: string;
   buyMax?: string;
@@ -52,14 +56,14 @@ const getOrders = (
   search: Search,
   marketPrice?: string,
 ): { buy: EditOrderBlock; sell: EditOrderBlock } => {
-  const { order0, order1 } = strategy;
+  const { buy, sell } = strategy;
 
   const defaultMin = (
     direction: StrategyDirection,
     settings: StrategySettings = 'limit',
   ) => {
     const isBuy = direction === 'buy';
-    const defaultPrice = isBuy ? order0.startRate : order1.endRate;
+    const defaultPrice = isBuy ? buy.min : sell.max;
     const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
     const multiplier = (() => {
       if (isZero(defaultPrice)) {
@@ -77,7 +81,7 @@ const getOrders = (
     settings: StrategySettings = 'limit',
   ) => {
     const isBuy = direction === 'buy';
-    const defaultPrice = isBuy ? order0.startRate : order1.endRate;
+    const defaultPrice = isBuy ? buy.min : sell.max;
     const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
     const multiplier = (() => {
       if (isZero(defaultPrice)) {
@@ -90,18 +94,18 @@ const getOrders = (
     })();
     return new SafeDecimal(price ?? 0).mul(multiplier).toString();
   };
-  const defaultSettings = (order: Order) => {
+  const defaultSettings = (order: StaticOrder) => {
     return isLimitOrder(order) ? 'limit' : 'range';
   };
   return {
     buy: {
       min: search.buyMin ?? defaultMin('buy', search.buySettings) ?? '',
       max: search.buyMax ?? defaultMax('buy', search.buySettings) ?? '',
-      settings: search.buySettings ?? defaultSettings(order0),
+      settings: search.buySettings ?? defaultSettings(buy),
       action: search.buyAction ?? 'deposit',
       budget: getTotalBudget(
         search.buyAction ?? 'deposit',
-        order0.balance,
+        buy.budget,
         search.buyBudget,
       ),
       marginalPrice: search.buyMarginalPrice,
@@ -109,11 +113,11 @@ const getOrders = (
     sell: {
       min: search.sellMin ?? defaultMin('sell', search.sellSettings) ?? '',
       max: search.sellMax ?? defaultMax('sell', search.sellSettings) ?? '',
-      settings: search.sellSettings ?? defaultSettings(order1),
+      settings: search.sellSettings ?? defaultSettings(sell),
       action: search.sellAction ?? 'deposit',
       budget: getTotalBudget(
         search.sellAction ?? 'deposit',
-        order1.balance,
+        sell.budget,
         search.sellBudget,
       ),
       marginalPrice: search.sellMarginalPrice,
@@ -143,13 +147,13 @@ const url = '/strategies/edit/$strategyId/prices/recurring';
 
 export const EditPricesStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote, buy, sell } = strategy;
   const search = useSearch({ from: url });
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
-  const onPriceUpdates: OnPriceUpdates = useCallback(
+  const updatePrices: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
       setBuyOrder({ min: buy.min, max: buy.max });
       setSellOrder({ min: sell.min, max: sell.max });
@@ -164,9 +168,9 @@ export const EditPricesStrategyRecurringPage = () => {
   };
 
   const hasBuyPriceChanged =
-    search.buyMin !== order0.startRate || search.buyMax !== order0.endRate;
+    search.buyMin !== buy.min || search.buyMax !== buy.max;
   const hasSellPriceChanged =
-    search.sellMin !== order1.startRate || search.sellMax !== order1.endRate;
+    search.sellMin !== sell.min || search.sellMax !== sell.max;
 
   const hasChanged = (() => {
     if (isOverlappingStrategy(strategy)) return true;
@@ -183,20 +187,43 @@ export const EditPricesStrategyRecurringPage = () => {
     marketPrice,
     min: search.sellMin,
     max: search.sellMax,
-    buy: false,
+    isBuy: false,
   });
   const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
     min: search.buyMin,
     max: search.buyMax,
-    buy: true,
+    isBuy: true,
   });
+  const { prices, setPrices } = useDebouncePrices(
+    orders.buy,
+    orders.sell,
+    updatePrices,
+  );
 
   const error = getError(search);
 
   return (
     <EditStrategyLayout editType={search.editType}>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
+        <StrategyChartHistory
+          base={base}
+          quote={quote}
+          buy={orders.buy}
+          sell={orders.sell}
+        >
+          <D3ChartRecurring
+            isLimit={isLimit}
+            prices={prices}
+            onChange={setPrices}
+          />
+          <TradeChartContent />
+          <D3PricesAxis prices={prices} />
+        </StrategyChartHistory>
+      </StrategyChartSection>
       <EditPricesForm
         strategyType="recurring"
         editType={search.editType}
@@ -204,38 +231,26 @@ export const EditPricesStrategyRecurringPage = () => {
         hasChanged={hasChanged}
       >
         <EditStrategyPriceField
+          direction="sell"
           order={orders.sell}
           budget={search.sellBudget ?? ''}
-          initialOrder={order1}
+          initialOrder={sell}
           hasPriceChanged={hasSellPriceChanged}
           setOrder={setSellOrder}
           warnings={[sellOutsideMarket, getWarning(search)]}
           error={error}
         />
         <EditStrategyPriceField
+          direction="buy"
           order={orders.buy}
           budget={search.buyBudget ?? ''}
-          initialOrder={order0}
+          initialOrder={buy}
           hasPriceChanged={hasBuyPriceChanged}
           setOrder={setBuyOrder}
           warnings={[buyOutsideMarket, getWarning(search)]}
           error={error}
-          buy
         />
       </EditPricesForm>
-      <StrategyChartSection
-        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
-      >
-        <StrategyChartHistory
-          type="recurring"
-          base={base}
-          quote={quote}
-          order0={orders.buy}
-          order1={orders.sell}
-          isLimit={isLimit}
-          onPriceUpdates={onPriceUpdates}
-        />
-      </StrategyChartSection>
     </EditStrategyLayout>
   );
 };

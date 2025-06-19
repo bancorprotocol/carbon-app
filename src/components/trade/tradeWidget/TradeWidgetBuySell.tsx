@@ -18,7 +18,7 @@ type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
   source: Token;
   target: Token;
-  buy?: boolean;
+  isBuy?: boolean;
   sourceBalanceQuery: UseQueryResult<string>;
 }
 
@@ -48,7 +48,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     source,
     target,
     sourceBalanceQuery,
-    buy = false,
+    isBuy = false,
     ...formProps
   } = props;
   const hasEnoughLiquidity = +liquidityQuery.data! > 0;
@@ -60,7 +60,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   const ctaButtonText = (() => {
     if (!user) return 'Connect Wallet';
-    return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
+    return isBuy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
   })();
 
   if (isTradePairPending || liquidityQuery.isPending) {
@@ -75,7 +75,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const getRate = () => {
     if (!rate) return '...';
 
-    if (buy) {
+    if (isBuy) {
       return `1 ${target.symbol} = ${
         rate && rate !== '0'
           ? prettifyNumber(new SafeDecimal(1).div(rate), { decimals: 6 })
@@ -190,8 +190,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         </>
       ) : (
         <NotEnoughLiquidity
-          source={buy ? target : source}
-          target={buy ? source : target}
+          source={isBuy ? target : source}
+          target={isBuy ? source : target}
         />
       )}
       <Button
@@ -199,7 +199,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         disabled={disabledCTA}
         loading={isAwaiting}
         loadingChildren="Waiting for Confirmation"
-        variant={buy ? 'buy' : 'sell'}
+        variant={isBuy ? 'buy' : 'sell'}
         fullWidth
         className="mt-20"
         data-testid="submit"

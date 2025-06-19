@@ -380,7 +380,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
             withdraw="0"
             deposit={buyBudget || '0'}
             balance="0"
-            buy
+            isBuy
             isSimulator
           />
         </article>

@@ -50,6 +50,8 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
       <thead>
         <tr className="border-background-800 text-14 border-y text-white/60">
           {!hideIds && <th className={thStyle}>ID</th>}
+          {/* @todo(gradient) */}
+          {/* <th className={thStyle}>Type</th> */}
           <th className={thStyle} colSpan={2}>
             Action
           </th>
@@ -114,6 +116,13 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
             <ActivityId activity={activity} size={14} />
           </td>
         )}
+        {/* @todo(gradient) */}
+        {/* <td rowSpan={2} className="px-8 py-12 first:pl-24">
+          <StrategyTypeIcon
+            className="place-self-center"
+            isGradient={isGradientStrategy(strategy)}
+          />
+        </td> */}
         <td rowSpan={2} className="py-12 pl-8 first:pl-24">
           <button onClick={setAction}>
             <ActivityIcon activity={activity} size={32} />
@@ -139,6 +148,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
         style={{ animationDelay: `${index * 50}ms` }}
       >
         {/* ID */}
+        {/* Type Icon */}
         {/* Action Icon */}
         <td className={cn(tdSecondLine, 'w-full')}>
           <button onClick={setAction} className="w-full text-start">

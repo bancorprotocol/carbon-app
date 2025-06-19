@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { StrategyWithFiat } from 'libs/queries';
 import { StrategyBlockTradeCount } from 'components/strategies/overview/strategyBlock/StrategyBlockTradeCount';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
 import { cn } from 'utils/helpers';
+import { Order, StrategyWithFiat } from 'components/strategies/common/types';
 
 interface Props {
-  strategy: StrategyWithFiat;
+  strategy: StrategyWithFiat<Order>;
 }
 
 export const StrategyBlockInfo: FC<Props> = ({ strategy }) => {

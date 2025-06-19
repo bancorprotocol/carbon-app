@@ -10,7 +10,7 @@ import {
 import { EditStrategyDriver } from 'libs/testing-library/drivers/EditStrategyDriver';
 import { EditBudgetRecurringPage } from './recurring';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
-import { Strategy } from 'libs/queries';
+import { Strategy } from 'components/strategies/common/types';
 import { carbonSDK } from 'libs/sdk';
 import { spyOn } from '@vitest/spy';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
@@ -34,16 +34,16 @@ beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());
 
 const baseBuy = {
-  balance: '1',
-  startRate: '1',
-  endRate: '2',
-  marginalRate: '1.5',
+  budget: '1',
+  min: '1',
+  max: '2',
+  marginalPrice: '1.5',
 };
 const baseSell = {
-  balance: '1',
-  startRate: '3',
-  endRate: '4',
-  marginalRate: '3.5',
+  budget: '1',
+  min: '3',
+  max: '4',
+  marginalPrice: '3.5',
 };
 
 const renderPage = async (
@@ -82,8 +82,8 @@ describe('Edit budget recurring page', () => {
       {
         base: 'ETH',
         quote: 'USDC',
-        order0: baseBuy,
-        order1: baseSell,
+        buy: baseBuy,
+        sell: baseSell,
       },
       search,
     );
@@ -102,8 +102,8 @@ describe('Edit budget recurring page', () => {
     const { strategy } = await renderPage('deposit', {
       base: 'ETH',
       quote: 'USDC',
-      order0: baseBuy,
-      order1: baseSell,
+      buy: baseBuy,
+      sell: baseSell,
     });
 
     const form = await driver.findRecurringForm();
@@ -127,8 +127,8 @@ describe('Edit budget recurring page', () => {
       await renderPage('deposit', {
         base: 'ETH',
         quote: 'USDC',
-        order0: baseBuy,
-        order1: baseSell,
+        buy: baseBuy,
+        sell: baseSell,
       });
 
       const form = await driver.findRecurringForm();
@@ -143,13 +143,13 @@ describe('Edit budget recurring page', () => {
       await renderPage('deposit', {
         base: 'ETH',
         quote: 'USDC',
-        order0: {
+        buy: {
           ...baseBuy,
-          marginalRate: '2',
+          marginalPrice: '2',
         },
-        order1: {
+        sell: {
           ...baseSell,
-          marginalRate: '3',
+          marginalPrice: '3',
         },
       });
 
@@ -163,13 +163,13 @@ describe('Edit budget recurring page', () => {
       await renderPage('deposit', {
         base: 'ETH',
         quote: 'USDC',
-        order0: {
+        buy: {
           ...baseBuy,
-          balance: '0',
+          budget: '0',
         },
-        order1: {
+        sell: {
           ...baseSell,
-          balance: '0',
+          budget: '0',
         },
       });
 

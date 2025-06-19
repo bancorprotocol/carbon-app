@@ -4,11 +4,13 @@ import { createRoute, redirect } from '@tanstack/react-router';
 import { InferSearch, searchValidator, validNumber } from '../utils';
 import { activityValidators } from 'components/activity/utils';
 import * as v from 'valibot';
+import { toUnixUTCDay } from 'components/simulator/utils';
+import { addMonths, subMonths } from 'date-fns';
 
 const schema = {
   ...activityValidators,
-  priceStart: v.optional(validNumber),
-  priceEnd: v.optional(validNumber),
+  chartStart: v.optional(validNumber),
+  chartEnd: v.optional(validNumber),
   hideIndicators: v.optional(v.boolean()),
 };
 
@@ -23,6 +25,10 @@ export const strategyPage = createRoute({
   getParentRoute: () => strategyPageRoot,
   path: '$id',
   component: StrategyPage,
+  beforeLoad({ search }) {
+    search.chartStart ||= toUnixUTCDay(subMonths(new Date(), 3));
+    search.chartEnd ||= toUnixUTCDay(addMonths(new Date(), 1));
+  },
   validateSearch: searchValidator(schema),
 });
 
@@ -30,7 +36,11 @@ export const strategyPageRedirect = createRoute({
   getParentRoute: () => strategyPageRoot,
   path: '/',
   beforeLoad: ({ location }) => {
-    if (location.pathname === '/strategy' || location.pathname === '/strategy/')
-      redirect({ to: '/', throw: true, replace: true });
+    if (
+      location.pathname === '/strategy' ||
+      location.pathname === '/strategy/'
+    ) {
+      throw redirect({ to: '/', throw: true, replace: true });
+    }
   },
 });

@@ -13,7 +13,7 @@ type Props = {
   order: StrategyInputOrder;
   dispatch: StrategyInputDispatch;
   inputTitle: ReactNode | string;
-  buy?: boolean;
+  isBuy?: boolean;
   isOrdersOverlap: boolean;
   isOrdersReversed: boolean;
 };
@@ -24,12 +24,12 @@ export const LimitRangeSection: FC<Props> = ({
   order,
   dispatch,
   inputTitle,
-  buy = false,
+  isBuy = false,
   isOrdersOverlap,
   isOrdersReversed,
 }) => {
   const { isRange } = order;
-  const type = buy ? 'buy' : 'sell';
+  const type = isBuy ? 'buy' : 'sell';
 
   const getWarnings = () => {
     const warnings = [];
@@ -52,7 +52,7 @@ export const LimitRangeSection: FC<Props> = ({
           setMin={(value) => dispatch(`${type}Min`, value)}
           max={order.max}
           setMax={(value) => dispatch(`${type}Max`, value)}
-          buy={buy}
+          isBuy={isBuy}
           warnings={getWarnings()}
         />
       ) : (
@@ -64,7 +64,7 @@ export const LimitRangeSection: FC<Props> = ({
             dispatch(`${type}Min`, value);
             dispatch(`${type}Max`, value);
           }}
-          buy={buy}
+          isBuy={isBuy}
           warnings={getWarnings()}
         />
       )}

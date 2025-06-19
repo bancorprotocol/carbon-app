@@ -14,7 +14,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { Strategy, StrategyWithFiat, UseQueryResult } from 'libs/queries';
+import { UseQueryResult } from 'libs/queries';
 import { lsService } from 'services/localeStorage';
 import { toPairName, fromPairSearch } from 'utils/pairSearch';
 import { getCompareFunctionBySortType } from 'components/strategies/overview/utils';
@@ -23,6 +23,10 @@ import { useStore } from 'store';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useNavigate, useSearch } from 'libs/routing';
 import { useTradeCount } from 'libs/queries/extApi/tradeCount';
+import {
+  AnyStrategy,
+  AnyStrategyWithFiat,
+} from 'components/strategies/common/types';
 
 export type StrategyFilterOutput = ReturnType<typeof useStrategyFilter>;
 
@@ -32,7 +36,7 @@ export interface MyStrategiesSearch {
 type Search = MyStrategiesSearch;
 
 export const useStrategyFilter = (
-  strategies: StrategyWithFiat[],
+  strategies: AnyStrategyWithFiat[],
   isPending: boolean,
 ) => {
   const searchParams: Search = useSearch({ strict: false });
@@ -65,12 +69,19 @@ export const useStrategyFilter = (
     const pairSearch = fromPairSearch(search);
     // Filter
     const filtered = strategies.filter((strategy) => {
-      if (filter === 'active' && strategy.status !== 'active') {
+      if (filter.status === 'active' && strategy.status !== 'active') {
         return false;
       }
-      if (filter === 'inactive' && strategy.status === 'active') {
+      if (filter.status === 'inactive' && strategy.status === 'active') {
         return false;
       }
+      // @todo(gradient)
+      // if (filter.type === 'gradient' && !isGradientStrategy(strategy)) {
+      //   return false;
+      // }
+      // if (filter.type === 'static' && isGradientStrategy(strategy)) {
+      //   return false;
+      // }
       if (!search) return true;
       const name = toPairName(strategy.base, strategy.quote);
       return fromPairSearch(name).includes(pairSearch);
@@ -98,7 +109,7 @@ export const useStrategyFilter = (
 };
 
 export const useStrategiesWithFiat = (
-  query: UseQueryResult<Strategy[] | Strategy, unknown>,
+  query: UseQueryResult<AnyStrategy[] | AnyStrategy, unknown>,
 ) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
@@ -119,8 +130,8 @@ export const useStrategiesWithFiat = (
   const result = strategies.map((strategy) => {
     const basePrice = new SafeDecimal(prices[strategy.base.address] ?? 0);
     const quotePrice = new SafeDecimal(prices[strategy.quote.address] ?? 0);
-    const base = basePrice.times(strategy.order1.balance);
-    const quote = quotePrice.times(strategy.order0.balance);
+    const base = basePrice.times(strategy.sell.budget);
+    const quote = quotePrice.times(strategy.buy.budget);
     const total = base.plus(quote);
     const trades = tradeCountQuery.data[strategy.id];
     return {
@@ -148,12 +159,16 @@ export const StrategyContext = createContext<StrategyCtx>({
   setSearch: () => undefined,
   sort: 'trades',
   setSort: () => undefined,
-  filter: 'all',
+  filter: {
+    status: 'all',
+    // @todo(gradient)
+    // type: 'all',
+  },
   setFilter: () => undefined,
 });
 
 interface StrategyProviderProps {
-  query: UseQueryResult<Strategy[], unknown>;
+  query: UseQueryResult<AnyStrategy[], unknown>;
   children: ReactNode;
 }
 export const StrategyProvider: FC<StrategyProviderProps> = (props) => {

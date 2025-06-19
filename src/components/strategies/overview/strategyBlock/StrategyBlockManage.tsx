@@ -1,11 +1,11 @@
 import {
+  isGradientStrategy,
   isFullRangeStrategy,
   isOverlappingStrategy,
   isPaused,
 } from 'components/strategies/common/utils';
 import { FC, forwardRef, ReactNode, useState } from 'react';
 import { useModal } from 'hooks/useModal';
-import { Strategy } from 'libs/queries';
 import { useNavigate, useParams } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -26,6 +26,7 @@ import {
 } from 'components/strategies/edit/utils';
 import config from 'config';
 import { toPairSlug } from 'utils/pairSearch';
+import { AnyStrategy } from 'components/strategies/common/types';
 import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { usePairs } from 'hooks/usePairs';
 
@@ -39,7 +40,7 @@ type itemsType = {
 type separatorCounterType = number;
 
 interface Props {
-  strategy: Strategy;
+  strategy: AnyStrategy;
   button: (props: ManageButtonProps) => ReactNode;
 }
 
@@ -58,15 +59,17 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const owner = useGetVoucherOwner(manage ? strategy.id : undefined);
 
   const isOverlapping = isOverlappingStrategy(strategy);
+  const isDisposable = isDisposableStrategy(strategy);
+  const isGradient = isGradientStrategy(strategy);
 
   const items: (itemsType | separatorCounterType)[] = [];
 
-  if (!isPaused(strategy)) {
+  if (!isGradient && !isPaused(strategy)) {
     items.push({
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
-        if (isFullRangeStrategy(strategy.order0, strategy.order1)) {
+        if (isFullRangeStrategy(strategy.buy, strategy.sell)) {
           duplicate(strategy);
         } else {
           openModal('duplicateStrategy', { strategy });
@@ -75,9 +78,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     });
   }
 
-  const isDisposable = isDisposableStrategy(strategy);
-
-  if (!isDisposable && config.ui.showSimulator) {
+  if (config.ui.showSimulator && !isGradient && !isDisposable) {
     items.push({
       id: 'simulate',
       name: 'Simulate',
@@ -88,8 +89,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
             search: {
               baseToken: strategy.base.address,
               quoteToken: strategy.quote.address,
-              buyMin: strategy.order0.startRate,
-              sellMax: strategy.order1.endRate,
+              buyMin: strategy.buy.min,
+              sellMax: strategy.sell.max,
             },
           });
         } else {
@@ -98,15 +99,14 @@ export const StrategyBlockManage: FC<Props> = (props) => {
             search: {
               baseToken: strategy.base.address,
               quoteToken: strategy.quote.address,
-              buyMin: strategy.order0.startRate,
-              buyMax: strategy.order0.endRate,
-              buyBudget: strategy.order0.balance,
-              buyIsRange: strategy.order0.endRate !== strategy.order0.startRate,
-              sellMin: strategy.order1.startRate,
-              sellMax: strategy.order1.endRate,
-              sellBudget: strategy.order1.balance,
-              sellIsRange:
-                strategy.order1.endRate !== strategy.order1.startRate,
+              buyMin: strategy.buy.min,
+              buyMax: strategy.buy.max,
+              buyBudget: strategy.buy.budget,
+              buyIsRange: strategy.buy.max !== strategy.buy.min,
+              sellMin: strategy.sell.min,
+              sellMax: strategy.sell.max,
+              sellBudget: strategy.sell.budget,
+              sellIsRange: strategy.sell.max !== strategy.sell.min,
             },
           });
         }
@@ -143,53 +143,54 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   }
 
   if (isOwn) {
-    const editPrices = getEditPricesPage(strategy, 'editPrices');
+    if (!isGradientStrategy(strategy)) {
+      const editPrices = getEditPricesPage(strategy, 'editPrices');
 
-    items.push({
-      id: 'editPrices',
-      name: 'Edit Prices',
-      action: () => {
-        navigate({
-          to: editPrices.to,
-          search: editPrices.search,
-          params: { strategyId: strategy.id },
-        });
-      },
-    });
-
-    const deposit = getEditBudgetPage(strategy, 'deposit');
-
-    // separator
-    items.push(0);
-    items.push({
-      id: 'depositFunds',
-      name: 'Deposit Funds',
-      action: () => {
-        navigate({
-          to: deposit.to,
-          search: deposit.search,
-          params: { strategyId: strategy.id },
-        });
-      },
-    });
-
-    if (strategy.status !== 'noBudget') {
-      const withdraw = getEditBudgetPage(strategy, 'withdraw');
       items.push({
-        id: 'withdrawFunds',
-        name: 'Withdraw Funds',
+        id: 'editPrices',
+        name: 'Edit Prices',
         action: () => {
-          if (isOverlapping) {
-            navigate({
-              to: withdraw.to,
-              search: withdraw.search,
-              params: { strategyId: strategy.id },
-            });
-          } else {
-            openModal('confirmWithdrawStrategy', { strategy });
-          }
+          navigate({
+            to: editPrices.to,
+            search: editPrices.search,
+            params: { strategyId: strategy.id },
+          });
         },
       });
+
+      const deposit = getEditBudgetPage(strategy, 'deposit');
+      // separator
+      items.push(0);
+      items.push({
+        id: 'depositFunds',
+        name: 'Deposit Funds',
+        action: () => {
+          navigate({
+            to: deposit.to,
+            search: deposit.search,
+            params: { strategyId: strategy.id },
+          });
+        },
+      });
+
+      if (strategy.status !== 'noBudget') {
+        const withdraw = getEditBudgetPage(strategy, 'withdraw');
+        items.push({
+          id: 'withdrawFunds',
+          name: 'Withdraw Funds',
+          action: () => {
+            if (isOverlapping) {
+              navigate({
+                to: withdraw.to,
+                search: withdraw.search,
+                params: { strategyId: strategy.id },
+              });
+            } else {
+              openModal('confirmWithdrawStrategy', { strategy });
+            }
+          },
+        });
+      }
     }
 
     // separator
@@ -205,7 +206,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       });
     }
 
-    if (strategy.status === 'paused') {
+    if (!isGradient && strategy.status === 'paused') {
       const renew = getEditPricesPage(strategy, 'renew');
       items.push({
         id: 'renewStrategy',
@@ -222,7 +223,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 
     items.push({
       id: 'deleteStrategy',
-      name: 'Delete Strategy',
+      name: 'Withdraw & Delete',
       action: () => {
         openModal('confirmDeleteStrategy', { strategy });
       },

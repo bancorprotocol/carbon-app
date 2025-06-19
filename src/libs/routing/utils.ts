@@ -35,6 +35,9 @@ export const validInputNumber = v.optional(
   '0',
 );
 
+/** yyyy-mm-dd */
+export const validDay = v.pipe(v.string(), v.regex(/\d{4}-\d{2}-\d{2}/));
+
 export const validNumberType = v.number();
 
 export const validAddress = v.pipe(

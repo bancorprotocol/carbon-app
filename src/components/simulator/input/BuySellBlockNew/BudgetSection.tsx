@@ -19,11 +19,11 @@ interface Props {
   strategyType?: StrategyType;
   tokenBalanceQuery?: UseQueryResult<string>;
   isBudgetOptional?: boolean;
-  buy?: boolean;
+  isBuy?: boolean;
 }
 
 export const BudgetSection: FC<Props> = ({
-  buy,
+  isBuy,
   quote,
   base,
   strategyType,
@@ -33,8 +33,8 @@ export const BudgetSection: FC<Props> = ({
   tokenBalanceQuery,
 }) => {
   const inputId = useId();
-  const type = buy ? 'buy' : 'sell';
-  const budgetToken = buy ? quote : base;
+  const type = isBuy ? 'buy' : 'sell';
+  const budgetToken = isBuy ? quote : base;
   const insufficientBalance =
     tokenBalanceQuery &&
     !tokenBalanceQuery?.isPending &&
@@ -57,7 +57,7 @@ export const BudgetSection: FC<Props> = ({
         </span>
         <Tooltip
           element={
-            buy
+            isBuy
               ? `The amount of ${
                   quote.symbol
                 } tokens you would like to use in order to buy ${

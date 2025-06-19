@@ -15,16 +15,35 @@ export const getSortFromLS = (): StrategySort => {
 
 export const getFilterFromLS = (): StrategyFilter => {
   const filter = lsService.getItem('strategyOverviewFilter');
-  if (!filter || !(filter in strategyFilter)) return 'all';
+  if (typeof filter !== 'object') {
+    return {
+      status: 'all',
+      // type: 'all',
+    };
+  }
   return filter;
 };
 
 export const strategyFilter = {
-  all: 'All',
-  active: 'Active',
-  inactive: 'Inactive',
+  status: {
+    all: 'All',
+    active: 'Active',
+    inactive: 'Inactive',
+  },
+  // @todo(gradient)
+  // type: {
+  //   all: 'All',
+  //   static: 'Static',
+  //   gradient: 'Gradient',
+  // },
 };
-export type StrategyFilter = keyof typeof strategyFilter;
+export type FilterStatus = keyof (typeof strategyFilter)['status'];
+// export type FilterType = keyof (typeof strategyFilter)['type'];
+export type AllFilter = FilterStatus; // | FilterType;
+export type StrategyFilter = {
+  status: FilterStatus;
+  // type: FilterType;
+};
 
 export const strategySort = {
   recent: 'Recently Created',
@@ -50,11 +69,29 @@ export const StrategyFilterSort: FC<Props> = (props) => {
       setSort(event.target.value as StrategySort);
     }
   };
-  const onFilterChange = (event: FormEvent<HTMLFieldSetElement>) => {
+  const onFilterStatusChange = (event: FormEvent<HTMLFieldSetElement>) => {
     if (event.target instanceof HTMLInputElement) {
-      setFilter(event.target.value as StrategyFilter);
+      const status = event.target.value as FilterStatus;
+      setFilter((filter) => ({ ...filter, status }));
     }
   };
+  // const onFilterTypeChange = (event: FormEvent<HTMLFieldSetElement>) => {
+  //   if (event.target instanceof HTMLInputElement) {
+  //     const type = event.target.value as FilterType;
+  //     setFilter((filter) => ({ ...filter, type }));
+  //   }
+  // };
+
+  // @todo(gradient)
+  const displayFilter = strategyFilter.status[filter.status];
+  // const displayFilter = useMemo(() => {
+  //   if (filter.status === 'all' && filter.type === 'all') return 'All';
+  //   const typeLabel = strategyFilter.type[filter.type];
+  //   const statusLabel = strategyFilter.status[filter.status];
+  //   if (filter.status === 'all') return typeLabel;
+  //   if (filter.type === 'all') return statusLabel;
+  //   return `${typeLabel}, ${statusLabel}`;
+  // }, [filter.status, filter.type]);
 
   return (
     <div className="flex gap-8">
@@ -73,24 +110,36 @@ export const StrategyFilterSort: FC<Props> = (props) => {
             {...attr}
           >
             <span className="text-14 truncate">
-              <b>View</b>: {strategyFilter[filter]}
+              <b>View:</b> {displayFilter}
             </span>
             <IconChevron className="w-14 shrink-0" />
           </button>
         )}
       >
-        <fieldset onChange={onFilterChange}>
-          <legend className="text-14 px-16 py-8 text-white/60">View</legend>
-          {filterItems.map((filterItem) => (
+        <fieldset onChange={onFilterStatusChange}>
+          <legend className="text-14 px-16 py-8 text-white/60">Status</legend>
+          {Object.entries(filterItems.status).map(([key, label]) => (
             <FilterSortItem
               name="filter"
-              key={filterItem.title}
-              item={filterItem.item}
-              selectedItem={filter}
-              title={filterItem.title}
+              key={key}
+              item={key as FilterStatus}
+              title={label}
+              selectedItem={filter.status}
             />
           ))}
         </fieldset>
+        {/* <fieldset onChange={onFilterTypeChange}>
+          <legend className="text-14 px-16 py-8 text-white/60">Type</legend>
+          {Object.entries(filterItems.type).map(([key, label]) => (
+            <FilterSortItem
+              name="filter"
+              key={key}
+              item={key as FilterType}
+              title={label}
+              selectedItem={filter.type}
+            />
+          ))}
+        </fieldset> */}
       </DropdownMenu>
       <DropdownMenu
         placement="bottom-end"
@@ -133,8 +182,8 @@ export const StrategyFilterSort: FC<Props> = (props) => {
 const FilterSortItem: FC<{
   name: string;
   title: string;
-  item: StrategyFilter | StrategySort;
-  selectedItem: StrategyFilter | StrategySort;
+  item: AllFilter | StrategySort;
+  selectedItem: AllFilter | StrategySort;
 }> = ({ title, item, selectedItem, name }) => {
   const id = useId();
   return (

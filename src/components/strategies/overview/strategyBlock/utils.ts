@@ -1,4 +1,7 @@
-import { Order, StrategyStatus } from 'libs/queries';
+import {
+  StaticOrder,
+  StrategyStatus,
+} from 'components/strategies/common/types';
 import { prettifyNumber, sanitizeNumber } from 'utils/helpers';
 
 export const statusText: Record<StrategyStatus, string> = {
@@ -32,6 +35,7 @@ export const getTooltipTextByStatus = (
 };
 
 const tooltipTextByStrategyEditOptionsId = {
+  viewStrategy: 'Explore strategy activity',
   duplicateStrategy:
     'Create a new strategy with the same details or undercut it',
   deleteStrategy:
@@ -66,7 +70,7 @@ export type StrategyEditOptionId = keyof StrategyEditOption;
 type getPriceParams = {
   prettified?: boolean;
   limit?: boolean;
-  order: Order;
+  order: StaticOrder;
   decimals: number;
 };
 
@@ -77,19 +81,19 @@ export const getPrice = ({
   decimals,
 }: getPriceParams) => {
   if (prettified) {
-    return `${prettifyNumber(order.startRate, {
+    return `${prettifyNumber(order.min, {
       abbreviate: true,
       round: true,
     })} ${
       !limit
-        ? ` - ${prettifyNumber(order.endRate, {
+        ? ` - ${prettifyNumber(order.max, {
             abbreviate: true,
             round: true,
           })}`
         : ''
     }`;
   }
-  return `${sanitizeNumber(order.startRate, decimals)} ${
-    !limit ? ` - ${sanitizeNumber(order.endRate, decimals)}` : ''
+  return `${sanitizeNumber(order.min, decimals)} ${
+    !limit ? ` - ${sanitizeNumber(order.max, decimals)}` : ''
   }`;
 };

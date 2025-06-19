@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { CartStrategy } from 'libs/queries';
 import { CartStrategyItems } from './CartStrategy';
 import { cn } from 'utils/helpers';
+import { AnyCartStrategy } from 'components/strategies/common/types';
 import styles from 'components/strategies/overview/StrategyContent.module.css';
 
 interface Props {
-  strategies: CartStrategy[];
+  strategies: AnyCartStrategy[];
 }
 
 export const CartList: FC<Props> = ({ strategies }) => {

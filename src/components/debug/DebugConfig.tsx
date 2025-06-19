@@ -3,9 +3,8 @@ import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { defaultConfig } from 'config';
-import { AppConfigSchema } from 'config/configSchema';
 import { AppConfig } from 'config/types';
-import * as v from 'valibot';
+import { setNetworkConfig } from 'config/utils';
 
 const formatConfig = (config?: Partial<AppConfig>) =>
   JSON.stringify(config, undefined, 4);
@@ -19,31 +18,8 @@ export const DebugConfig = () => {
   const errorMessage = 'Failed parsing JSON file';
   const saveConfigOverride = (configOverride?: string) => {
     try {
-      if (!configOverride) {
-        setConfigOverride('');
-        localStorage.clear();
-        lsService.removeItem('configOverride');
-        window?.location.reload();
-      } else {
-        const parsedConfig = JSON.parse(configOverride || '');
-        const result = v.safeParse(v.partial(AppConfigSchema), parsedConfig);
-        if (result.success) {
-          localStorage.clear();
-          lsService.setItem('configOverride', parsedConfig);
-          window?.location.reload();
-        } else {
-          const errors = result.issues
-            .map((issue) => {
-              const path = issue.path
-                ?.map((p) => p.type === 'object' && p.key)
-                .join('.');
-              return `[${path}]: ${issue.message}`;
-            })
-            .join('\n');
-          console.error(result.issues);
-          setError(errors);
-        }
-      }
+      if (!configOverride) setConfigOverride('');
+      setNetworkConfig(configOverride);
     } catch (error) {
       console.log(error);
       setError(errorMessage);

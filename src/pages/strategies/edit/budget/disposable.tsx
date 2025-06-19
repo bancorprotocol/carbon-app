@@ -14,11 +14,14 @@ import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayou
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartLegend } from 'components/strategies/common/StrategyChartLegend';
+import { D3ChartDisposable } from 'components/strategies/common/d3Chart/disposable/D3ChartDisposable';
+import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
+import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 
 export interface EditBudgetDisposableStrategySearch {
+  chartStart?: string;
+  chartEnd?: string;
   marketPrice?: string;
-  priceStart?: string;
-  priceEnd?: string;
   editType: 'deposit' | 'withdraw';
   buyBudget?: string;
   sellBudget?: string;
@@ -30,67 +33,81 @@ type Search = EditBudgetDisposableStrategySearch;
 const url = '/strategies/edit/$strategyId/budget/disposable';
 export const EditBudgetDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote, buy, sell } = strategy;
   const search = useSearch({ from: url });
   const { marketPrice } = useMarketPrice({ base, quote });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
-  const buy = isZero(strategy.order1.startRate);
+  const isBuy = isZero(strategy.sell.min);
 
   const totalBuyBudget = getTotalBudget(
     search.editType,
-    order0.balance,
+    buy.budget,
     search.buyBudget,
   );
   const totalSellBudget = getTotalBudget(
     search.editType,
-    order1.balance,
+    sell.budget,
     search.sellBudget,
   );
 
   const orders = {
     buy: {
-      min: order0.startRate,
-      max: order0.endRate,
+      min: buy.min,
+      max: buy.max,
       budget: totalBuyBudget,
-      marginalPrice: search.buyMarginalPrice || order0.marginalRate,
+      marginalPrice: search.buyMarginalPrice || buy.marginalPrice,
     },
     sell: {
-      min: order1.startRate,
-      max: order1.endRate,
+      min: sell.min,
+      max: sell.max,
       budget: totalSellBudget,
-      marginalPrice: search.sellMarginalPrice || order1.marginalRate,
+      marginalPrice: search.sellMarginalPrice || sell.marginalPrice,
     },
   };
   const isLimit = {
-    buy: order0.startRate === order0.endRate,
-    sell: order1.startRate === order1.endRate,
+    buy: buy.min === buy.max,
+    sell: sell.min === sell.max,
   };
-  const direction = isEmptyOrder(order0) ? 'sell' : 'buy';
+  const direction = isEmptyOrder(buy) ? 'sell' : 'buy';
 
   // Warnings
   const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: order0.startRate,
-    max: order0.endRate,
-    buy: true,
+    min: buy.min,
+    max: buy.max,
+    isBuy: true,
   });
   const sellOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: order1.startRate,
-    max: order1.endRate,
-    buy: false,
+    min: sell.min,
+    max: sell.max,
+    isBuy: false,
   });
 
   const showBuy =
-    buy || (search.editType === 'withdraw' && !isZero(order0.balance));
+    isBuy || (search.editType === 'withdraw' && !isZero(buy.budget));
   const showSell =
-    !buy || (search.editType === 'withdraw' && !isZero(order1.balance));
+    !isBuy || (search.editType === 'withdraw' && !isZero(sell.budget));
 
   return (
     <EditStrategyLayout editType={search.editType}>
+      <StrategyChartSection>
+        <StrategyChartHistory
+          base={base}
+          quote={quote}
+          buy={orders.buy}
+          sell={orders.sell}
+          direction={direction}
+        >
+          <D3ChartDisposable isLimit={isLimit} prices={orders} />
+          <TradeChartContent />
+          <D3PricesAxis prices={orders} />
+        </StrategyChartHistory>
+        <StrategyChartLegend />
+      </StrategyChartSection>
       <EditBudgetForm
         strategyType="disposable"
         editType={search.editType}
@@ -102,7 +119,7 @@ export const EditBudgetDisposablePage = () => {
             editType={search.editType}
             order={orders.sell}
             budget={search.sellBudget ?? ''}
-            initialOrder={strategy.order1}
+            initialOrder={strategy.sell}
             setOrder={setSellOrder}
             warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
           />
@@ -112,26 +129,13 @@ export const EditBudgetDisposablePage = () => {
             editType={search.editType}
             order={orders.buy}
             budget={search.buyBudget ?? ''}
-            initialOrder={strategy.order0}
+            initialOrder={strategy.buy}
             setOrder={setBuyOrder}
             warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
-            buy
+            isBuy
           />
         )}
       </EditBudgetForm>
-      <StrategyChartSection>
-        <StrategyChartHistory
-          type="disposable"
-          base={base}
-          quote={quote}
-          order0={orders.buy}
-          order1={orders.sell}
-          isLimit={isLimit}
-          direction={direction}
-          readonly={true}
-        />
-        <StrategyChartLegend />
-      </StrategyChartSection>
     </EditStrategyLayout>
   );
 };

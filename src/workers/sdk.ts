@@ -80,7 +80,7 @@ const init = async (
 };
 
 const buildOrderBook = async (
-  buy: boolean,
+  isBuy: boolean,
   baseToken: string,
   quoteToken: string,
   startRate: Decimal,
@@ -94,8 +94,8 @@ const buildOrderBook = async (
 
   for (let i = 0; i <= steps + 1; i++) {
     const incrementBy = step.times(i);
-    let rate = startRate[buy ? 'minus' : 'plus'](incrementBy);
-    rate = buy ? rate : ONE.div(rate);
+    let rate = startRate[isBuy ? 'minus' : 'plus'](incrementBy);
+    rate = isBuy ? rate : ONE.div(rate);
     if (rate.gt(0)) {
       rates.push(rate.toString());
     }
@@ -117,7 +117,7 @@ const buildOrderBook = async (
       console.warn('order book getRateLiquidityDepthsByPair returns 0');
       return;
     }
-    if (buy) {
+    if (isBuy) {
       if (length === 0) {
         liquidityBn = liquidityBn.div(rate);
       } else {

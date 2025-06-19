@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { CartStrategy } from 'libs/queries';
+import { CartStrategy, Order } from 'components/strategies/common/types';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -7,19 +7,21 @@ import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
 import { cn, getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
 
 export const StrategyBlockBuySell: FC<{
-  strategy: CartStrategy;
-  buy?: boolean;
+  strategy: CartStrategy<Order>;
+  isBuy?: boolean;
   className?: string;
-}> = ({ strategy, buy = false, className }) => {
-  const token = buy ? strategy.base : strategy.quote;
-  const otherToken = buy ? strategy.quote : strategy.base;
-  const order = buy ? strategy.order0 : strategy.order1;
-  const testIdPrefix = `${buy ? 'buy' : 'sell'}`;
+}> = ({ strategy, isBuy = false, className }) => {
+  const token = isBuy ? strategy.base : strategy.quote;
+  const otherToken = isBuy ? strategy.quote : strategy.base;
+  const order = isBuy ? strategy.buy : strategy.sell;
+  const testIdPrefix = `${isBuy ? 'buy' : 'sell'}`;
   const otherTokenFiat = useFiatCurrency(otherToken);
   const currency = otherTokenFiat.selectedFiatCurrency;
-  const prettifiedBudget = prettifyNumber(order.balance, { abbreviate: true });
+  const prettifiedBudget = prettifyNumber(order.budget, { abbreviate: true });
   const hasFiatValue = otherTokenFiat.hasFiatValue();
-  const fiatBudget = buy ? strategy.fiatBudget.quote : strategy.fiatBudget.base;
+  const fiatBudget = isBuy
+    ? strategy.fiatBudget.quote
+    : strategy.fiatBudget.base;
   const fiatBudgetValue = getFiatDisplayValue(fiatBudget, currency);
 
   const buyTooltip = `${otherToken.symbol} tokens available to buy ${token.symbol}.`;
@@ -28,7 +30,7 @@ export const StrategyBlockBuySell: FC<{
 
   return (
     <article className={cn('flex flex-col gap-4 p-16', className)}>
-      {buy ? (
+      {isBuy ? (
         <header className="flex items-center gap-4">
           <h4 className="text-12 text-buy">Buy {token.symbol}</h4>
           {hasFiatValue && (
@@ -87,7 +89,7 @@ export const StrategyBlockBuySell: FC<{
               src={otherToken.logoURI}
               alt="token"
             />
-            {prettifyNumber(order.balance, { highPrecision: true })}
+            {prettifyNumber(order.budget, { highPrecision: true })}
           </span>
         }
       >

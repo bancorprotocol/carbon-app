@@ -29,7 +29,7 @@ const popularTokens = [
 
 export const commonConfig: AppConfig = {
   mode: 'development',
-  appName: 'Carbon DeFi',
+  appName: 'Sei - Carbon DeFi',
   appUrl: 'https://sei.carbondefi.xyz',
   carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
   selectedConnectors: [

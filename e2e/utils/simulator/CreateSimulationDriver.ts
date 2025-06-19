@@ -22,7 +22,10 @@ const displayRange = (start?: Date, end?: Date) => {
 };
 
 export class CreateSimulationDriver {
-  constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
+  constructor(
+    private page: Page,
+    private testCase: CreateStrategyTestCase,
+  ) {}
 
   async waitForPriceChart(timeout?: number) {
     const btn = this.page.getByTestId('start-simulation-btn');
@@ -35,7 +38,7 @@ export class CreateSimulationDriver {
     await priceChart.scrollIntoViewIfNeeded();
     await screenshot(
       priceChart,
-      screenshotPath(this.testCase, 'simulator-input-price')
+      screenshotPath(this.testCase, 'simulator-input-price'),
     );
   }
 
@@ -146,7 +149,7 @@ export class CreateSimulationDriver {
   async fillFormSection(
     direction: Direction,
     setting: Setting,
-    order: RangeOrder
+    order: RangeOrder,
   ) {
     const form = this.getFormSection(direction);
     await form.setting(setting).click();

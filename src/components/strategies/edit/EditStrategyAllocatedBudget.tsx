@@ -7,7 +7,7 @@ import { ReactComponent as IconDistributedEntireRange } from 'assets/distributed
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
 import { TooltipTokenAmount } from 'components/strategies/edit/tooltip/TooltipTokenAmount';
 import { TooltipTokenRange } from 'components/strategies/edit/tooltip/TooltipTokenRange';
-import { BaseOrder } from 'components/strategies/common/types';
+import { FormStaticOrder } from 'components/strategies/common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 
 interface Props {
@@ -43,16 +43,16 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
 };
 
 interface BudgetTokenPriceProps {
-  order: BaseOrder;
-  buy?: boolean;
+  order: FormStaticOrder;
+  isBuy?: boolean;
 }
 export const EditBudgetTokenPrice: FC<BudgetTokenPriceProps> = (props) => {
   const { strategy } = useEditStrategyCtx();
-  const { buy, order } = props;
+  const { isBuy, order } = props;
   const isRange = order.min !== order.max;
   return (
     <div role="row" className="flex items-center justify-between gap-16">
-      <p role="columnheader">{buy ? 'Buy' : 'Sell'} Price</p>
+      <p role="columnheader">{isBuy ? 'Buy' : 'Sell'} Price</p>
       <div role="cell" className="flex flex-1 justify-end gap-8">
         <div className="flex items-center">
           {/* Limit Strategy Price */}

@@ -37,11 +37,11 @@ describe('fullOutcome', () => {
       budget: '1',
       min: '',
       max: '',
-      buy: true,
+      isBuy: true,
     };
     it('should return undefined if no budget, 0 or a negative value', () => {
-      const input = {
-        buy: true,
+      const input: FullOutcomeParams = {
+        isBuy: true,
         min: '100',
         max: '10',
         budget: '',
@@ -72,9 +72,9 @@ describe('fullOutcome', () => {
         expect(getFullOutcome(input)?.amount).toBe('3');
       });
       it('[Sell] should return 3260 with price 1630 & budget 2', () => {
-        const input = {
+        const input: FullOutcomeParams = {
           ...base,
-          buy: false,
+          isBuy: false,
           min: '1630',
           max: '1630',
           budget: '2',
@@ -95,9 +95,9 @@ describe('fullOutcome', () => {
         );
       });
       it('[Sell] should return 4623.31050222673233768764428609068316892671801758343090865592905434379973769774815972504734939917496 with min 1800, max 1900 & budget 2.5', () => {
-        const input = {
+        const input: FullOutcomeParams = {
           ...base,
-          buy: false,
+          isBuy: false,
           min: '1800',
           max: '1900',
           budget: '2.5',

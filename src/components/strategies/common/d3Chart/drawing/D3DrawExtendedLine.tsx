@@ -20,7 +20,12 @@ const getLineProps = (
 ) => {
   const [a, b] = points;
   if (a.x === b.x) {
-    return { x1: xScale(a.x), x2: xScale(b.x), y1: 0, y2: 1000 };
+    return {
+      x1: xScale(a.x)! + xScale.bandwidth() / 2,
+      x2: xScale(b.x)! + xScale.bandwidth() / 2,
+      y1: 0,
+      y2: 1000,
+    };
   } else {
     const xDomain = xScale.domain();
     const minX = getMin(a.x, b.x);
@@ -30,8 +35,8 @@ const getLineProps = (
     const coef = (maxY - minY) / (maxX - minX);
     const fn = (x: string) => (+x - minX) * coef + minY;
     return {
-      x1: xScale(xDomain[0]),
-      x2: xScale(xDomain.at(-1)!),
+      x1: xScale(xDomain[0])! + xScale.bandwidth() / 2,
+      x2: xScale(xDomain.at(-1)!)! + xScale.bandwidth() / 2,
       y1: yScale(fn(xDomain[0])),
       y2: yScale(fn(xDomain.at(-1)!)),
     };
@@ -88,17 +93,17 @@ export const D3DrawExtendedLine: FC<Props> = ({ xScale, yScale, onChange }) => {
           y1={yScale(points[0].y)}
           x2={xScale(points[0].x)}
           y2={yScale(points[0].y)}
-          stroke="var(--primary)"
+          stroke="var(--secondary)"
           strokeWidth="2"
         />
       )}
       {points.map(({ x, y }) => (
         <circle
           key={x + '-' + y}
-          cx={xScale(x)}
+          cx={xScale(x)! + xScale.bandwidth() / 2}
           cy={yScale(y)}
           r="5"
-          fill="var(--primary)"
+          fill="var(--secondary)"
         />
       ))}
       <rect
@@ -199,10 +204,10 @@ export const D3EditExtendedLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   const circles = drawing.points.map(({ x, y }, i) => (
     <circle
       key={i}
-      cx={xScale(x)}
+      cx={xScale(x)! + xScale.bandwidth() / 2}
       cy={yScale(y)}
       r="5"
-      fill="var(--primary)"
+      fill="var(--secondary)"
       className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
@@ -242,7 +247,7 @@ export const D3EditExtendedLine: FC<D3ShapeProps> = ({ drawing, onChange }) => {
         <line
           className="draggable"
           ref={lineRef}
-          stroke="var(--primary)"
+          stroke="var(--secondary)"
           strokeWidth="2"
           {...lineProps}
         />

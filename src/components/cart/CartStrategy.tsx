@@ -1,3 +1,11 @@
+import {
+  CSSProperties,
+  FC,
+  ToggleEvent,
+  useEffect,
+  useId,
+  useRef,
+} from 'react';
 import { PairName } from 'components/common/DisplayPair';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
@@ -7,17 +15,10 @@ import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { CartStrategy } from 'libs/queries';
-import {
-  CSSProperties,
-  FC,
-  ToggleEvent,
-  useEffect,
-  useId,
-  useRef,
-} from 'react';
 import { cn } from 'utils/helpers';
 import {
+  isEmptyGradientOrder,
+  isGradientStrategy,
   isOverlappingStrategy,
   isZero,
   outSideMarketWarning,
@@ -29,49 +30,83 @@ import {
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
+import { AnyCartStrategy } from 'components/strategies/common/types';
+import {
+  gradientDateError,
+  gradientDateWarning,
+  gradientPriceWarning,
+} from 'components/strategies/common/gradient/utils';
 import styles from './CartStrategy.module.css';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
-  strategy: CartStrategy;
+  strategy: AnyCartStrategy;
   className?: string;
   style?: CSSProperties;
 }
 
-const getWarnings = (strategy: CartStrategy, marketPrice?: number) => {
-  const { base, order0, order1 } = strategy;
+const getWarnings = (strategy: AnyCartStrategy, marketPrice?: number) => {
   const warnings: string[] = [];
-  if (isZero(order0.balance) && isZero(order1.balance)) {
+  if (isZero(strategy.buy.budget) && isZero(strategy.sell.budget)) {
     warnings.push(
       'Please note that your strategy will be inactive as it will not have any budget.',
     );
   }
-  if (isOverlappingStrategy(strategy)) {
-    const aboveMarket = isMinAboveMarket(order0);
-    const belowMarket = isMaxBelowMarket(order1);
-    if (aboveMarket || belowMarket) {
-      warnings.push(
-        'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.',
+  if (isGradientStrategy(strategy)) {
+    const { buy, sell } = strategy;
+    for (const order of [buy, sell]) {
+      if (isEmptyGradientOrder(order)) continue;
+      const direction = buy === order ? 'buy' : 'sell';
+      const priceWarning = gradientPriceWarning(
+        direction,
+        order,
+        strategy.base,
+        marketPrice,
       );
+      if (priceWarning) warnings.push(priceWarning);
+      const dateWarning = gradientDateWarning(order);
+      if (dateWarning) warnings.push(dateWarning);
     }
   } else {
-    const buyOutsideMarket = outSideMarketWarning({
-      base,
-      marketPrice,
-      min: order0.startRate,
-      max: order0.endRate,
-      buy: true,
-    });
-    if (buyOutsideMarket) warnings.push(buyOutsideMarket);
-    const sellOutsideMarket = outSideMarketWarning({
-      base,
-      marketPrice,
-      min: order1.startRate,
-      max: order1.endRate,
-      buy: false,
-    });
-    if (sellOutsideMarket) warnings.push(sellOutsideMarket);
+    const { base, buy, sell } = strategy;
+    if (isOverlappingStrategy(strategy)) {
+      const aboveMarket = isMinAboveMarket(buy);
+      const belowMarket = isMaxBelowMarket(sell);
+      if (aboveMarket || belowMarket) {
+        warnings.push(
+          'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.',
+        );
+      }
+    } else {
+      const buyOutsideMarket = outSideMarketWarning({
+        base,
+        marketPrice,
+        min: buy.min,
+        max: buy.max,
+        isBuy: true,
+      });
+      if (buyOutsideMarket) warnings.push(buyOutsideMarket);
+      const sellOutsideMarket = outSideMarketWarning({
+        base,
+        marketPrice,
+        min: sell.min,
+        max: sell.max,
+        isBuy: false,
+      });
+      if (sellOutsideMarket) warnings.push(sellOutsideMarket);
+    }
   }
   return warnings;
+};
+
+export const getError = (strategy: AnyCartStrategy) => {
+  if (isGradientStrategy(strategy)) {
+    for (const order of [strategy.buy, strategy.sell]) {
+      if (isEmptyGradientOrder(order)) return;
+      const error = gradientDateError(order);
+      if (error) return error;
+    }
+  }
 };
 
 export const CartStrategyItems: FC<Props> = (props) => {
@@ -83,6 +118,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
   const close = useRef(() => document.getElementById(popoverId)?.hidePopover());
 
   const warnings = getWarnings(strategy, marketPrice);
+  const error = getError(strategy);
 
   useEffect(() => {
     import('@oddbird/popover-polyfill/fn').then((res) => {
@@ -113,7 +149,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
 
   const remove = async () => {
     if (!user) return;
-    removeStrategyFromCart(user, strategy);
+    removeStrategyFromCart(user, strategy.id);
   };
 
   return (
@@ -148,7 +184,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
             role="menuitem"
             type="button"
             className="size-38 rounded-6 border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
-            aria-label="Delete strategy"
+            aria-label="Withdraw & Delete"
             onClick={remove}
           >
             <IconTrash className="size-16" />
@@ -161,7 +197,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       <div className="rounded-8 border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
         <StrategyBlockBuySell
           strategy={strategy}
-          buy
+          isBuy
           className="border-background-800 border-r-2"
         />
         <StrategyBlockBuySell strategy={strategy} />
@@ -195,13 +231,23 @@ export const CartStrategyItems: FC<Props> = (props) => {
                 <IconClose className="size-16" />
               </button>
             </header>
-            <ul className="text-14 grid list-disc gap-8 pl-16	text-white/80">
-              {warnings.map((warning, i) => (
-                <li key={i} style={{ ['--delay' as any]: `${(i + 1) * 50}ms` }}>
-                  {warning}
-                </li>
-              ))}
-            </ul>
+            {error && (
+              <div className="rounded-8 border-error absolute inset-0 grid place-items-center border-2 bg-black/60 p-8 backdrop-blur-sm">
+                <Warning message={error} isError />
+              </div>
+            )}
+            {!error && !!warnings.length && (
+              <ul className="text-14 grid list-disc gap-8 pl-16	text-white/80">
+                {warnings.map((warning, i) => (
+                  <li
+                    key={i}
+                    style={{ ['--delay' as any]: `${(i + 1) * 50}ms` }}
+                  >
+                    {warning}
+                  </li>
+                ))}
+              </ul>
+            )}
           </article>
         </div>
       )}

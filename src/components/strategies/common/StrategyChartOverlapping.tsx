@@ -1,7 +1,7 @@
-import { FC, useCallback, useMemo, useRef } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { useSearch } from '@tanstack/react-router';
 import {
-  OverlappingOrder,
+  CreateOverlappingOrder,
   OverlappingSearch,
 } from 'components/strategies/common/types';
 import { SetOverlapping } from 'libs/routing/routes/trade';
@@ -12,14 +12,18 @@ import { StrategyChartHistory } from './StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { Token } from 'libs/tokens';
 import { StrategyChartLegend } from './StrategyChartLegend';
+import { useDebouncePrices } from './d3Chart/useDebouncePrices';
+import { D3ChartOverlapping } from './d3Chart/overlapping/D3ChartOverlapping';
+import { TradeChartContent } from './d3Chart/TradeChartContent';
+import { D3PricesAxis } from './d3Chart/D3PriceAxis';
 import { defaultSpread } from '../overlapping/utils';
 import { isFullRangeStrategy } from './utils';
 
 interface Props {
   base: Token;
   quote: Token;
-  order0: OverlappingOrder;
-  order1: OverlappingOrder;
+  buy: CreateOverlappingOrder;
+  sell: CreateOverlappingOrder;
   readonly?: boolean;
   set: SetOverlapping;
 }
@@ -62,23 +66,24 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
 };
 
 const OverlappingChartContent: FC<Props> = (props) => {
-  const timeout = useRef<NodeJS.Timeout>(null);
-  const { base, quote, order0, order1, readonly, set } = props;
+  const { base, quote, buy, sell, set } = props;
   const search = useSearch({ strict: false }) as OverlappingSearch;
-  const fullRange = useMemo(() => {
-    return isFullRangeStrategy(order0, order1);
-  }, [order0, order1]);
 
-  const onPriceUpdates: OnPriceUpdates = useCallback(
+  const fullRange = useMemo(() => {
+    return isFullRangeStrategy(buy, sell);
+  }, [buy, sell]);
+
+  const readonly = props.readonly || fullRange;
+
+  const updatePrices: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
-      if (timeout.current) clearTimeout(timeout.current);
-      timeout.current = setTimeout(() => {
-        if (buy.min !== search.min) set({ min: buy.min });
-        if (sell.max !== search.max) set({ max: sell.max });
-      }, 200);
+      if (buy.min !== search.min) set({ min: buy.min });
+      if (sell.max !== search.max) set({ max: sell.max });
     },
-    [set, search.min, search.max],
+    [search.max, search.min, set],
   );
+
+  const { prices, setPrices } = useDebouncePrices(buy, sell, updatePrices);
 
   if (search.chartType !== 'history') {
     return (
@@ -86,8 +91,8 @@ const OverlappingChartContent: FC<Props> = (props) => {
         className="flex-1"
         base={base}
         quote={quote}
-        order0={order0}
-        order1={order1}
+        buy={buy}
+        sell={sell}
         userMarketPrice={search.marketPrice}
         spread={search.spread}
         setMin={(min) => set({ min })}
@@ -99,16 +104,21 @@ const OverlappingChartContent: FC<Props> = (props) => {
   return (
     <>
       <StrategyChartHistory
-        type="overlapping"
         base={base}
         quote={quote}
-        order0={order0}
-        order1={order1}
-        spread={search.spread || defaultSpread}
-        readonly={readonly || fullRange}
-        onPriceUpdates={onPriceUpdates}
-      />
-      {readonly && <StrategyChartLegend />}
+        buy={buy}
+        sell={sell}
+        marketPrice={search.marketPrice}
+      >
+        <D3ChartOverlapping
+          prices={prices}
+          onChange={readonly ? undefined : setPrices}
+          spread={Number(search.spread || defaultSpread)}
+        />
+        <TradeChartContent />
+        <D3PricesAxis prices={prices} />
+      </StrategyChartHistory>
+      {props.readonly && <StrategyChartLegend />}
     </>
   );
 };

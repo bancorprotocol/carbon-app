@@ -11,25 +11,23 @@ import {
   BudgetDistribution,
 } from 'components/strategies/common/BudgetDistribution';
 import { Token } from 'libs/tokens';
-import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
 import { useWagmi } from 'libs/wagmi';
 import { useSearch } from '@tanstack/react-router';
-import { OverlappingOrder } from 'components/strategies/common/types';
+import { CreateOverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
 import { SetOverlapping } from 'libs/routing/routes/trade';
 
 interface Props {
   base: Token;
   quote: Token;
-  marketPrice: string;
-  order0: OverlappingOrder;
-  order1: OverlappingOrder;
+  buy: CreateOverlappingOrder;
+  sell: CreateOverlappingOrder;
   set: SetOverlapping;
 }
 
 const url = '/trade/overlapping';
 export const CreateOverlappingBudget: FC<Props> = (props) => {
-  const { base, quote, order0, order1, marketPrice, set } = props;
+  const { base, quote, buy, sell, set } = props;
   const search = useSearch({ from: url });
   const { anchor, budget } = search;
   const { user } = useWagmi();
@@ -37,8 +35,8 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
 
-  const aboveMarket = isMinAboveMarket(order0);
-  const belowMarket = isMaxBelowMarket(order1);
+  const aboveMarket = isMinAboveMarket(buy);
+  const belowMarket = isMaxBelowMarket(sell);
 
   // ERROR
   const budgetError = (() => {
@@ -53,14 +51,14 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
   })();
 
   useEffect(() => {
-    if (!isValidRange(order0.min, order1.max)) return;
+    if (!isValidRange(buy.min, sell.max)) return;
     if (anchor === 'buy' && aboveMarket) {
       set({ anchor: 'sell', budget: undefined });
     }
     if (anchor === 'sell' && belowMarket) {
       set({ anchor: 'buy', budget: undefined });
     }
-  }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
+  }, [anchor, aboveMarket, belowMarket, set, buy.min, sell.max]);
 
   const setBudget = async (budget: string) => set({ budget });
 
@@ -69,7 +67,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
   if (!base || !quote) return null;
 
   return (
-    <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
+    <>
       <article className="bg-background-900 grid gap-16 p-16">
         <OverlappingBudget
           base={base}
@@ -102,7 +100,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
           token={base}
           initialBudget="0"
           withdraw="0"
-          deposit={budgetError ? '0' : order1.budget}
+          deposit={budgetError ? '0' : sell.budget}
           balance={baseBalance}
           isSimulator={!user}
         />
@@ -111,7 +109,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
             token={base}
             initialBudget="0"
             withdraw="0"
-            deposit={budgetError ? '0' : order1.budget}
+            deposit={budgetError ? '0' : sell.budget}
             balance={baseBalance || '0'}
           />
         )}
@@ -120,21 +118,21 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
           token={quote}
           initialBudget="0"
           withdraw="0"
-          deposit={budgetError ? '0' : order0.budget}
+          deposit={budgetError ? '0' : buy.budget}
           balance={quoteBalance}
           isSimulator={!user}
-          buy
+          isBuy
         />
         {!!user && (
           <BudgetDescription
             token={quote}
             initialBudget="0"
             withdraw="0"
-            deposit={budgetError ? '0' : order0.budget}
+            deposit={budgetError ? '0' : buy.budget}
             balance={quoteBalance || '0'}
           />
         )}
       </article>
-    </OverlappingMarketPriceProvider>
+    </>
   );
 };

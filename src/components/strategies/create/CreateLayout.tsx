@@ -7,7 +7,14 @@ import { useSearch } from '@tanstack/react-router';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
-  url: '/trade/disposable' | '/trade/recurring' | '/trade/overlapping';
+  url:
+    | '/trade/disposable'
+    | '/trade/recurring'
+    | '/trade/overlapping'
+    | '/trade/custom'
+    | '/trade/auction'
+    | '/trade/quick-auction'
+    | '/trade/quick-custom';
   children: ReactNode;
 }
 

@@ -17,7 +17,7 @@ import {
 } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice';
+import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 import { isTouchedZero } from 'components/strategies/common/utils';
 import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
 import { Presets } from 'components/common/preset/Preset';
@@ -35,7 +35,7 @@ export interface InputRangeProps {
   setMax: (value: string) => void;
   quote: Token;
   base: Token;
-  buy?: boolean;
+  isBuy?: boolean;
   error?: string;
   warnings?: (string | undefined)[];
   isOverlapping?: boolean;
@@ -54,14 +54,14 @@ export const InputRange: FC<InputRangeProps> = ({
   quote,
   base,
   error,
-  buy = false,
+  isBuy = false,
   warnings = [],
   isOverlapping,
   required,
 }) => {
   const [localMin, setLocalMin] = useState(roundSearchParam(min));
   const [localMax, setLocalMax] = useState(roundSearchParam(max));
-  const marketPrice = useOverlappingMarketPrice({ base, quote });
+  const { marketPrice } = useStrategyMarketPrice({ base, quote });
   const _inputMinId = useId();
   const _inputMaxId = useId();
   const inputMinId = minId || _inputMinId;
@@ -180,7 +180,7 @@ export const InputRange: FC<InputRangeProps> = ({
           >
             <header className="text-12 mb-5 flex justify-between text-white/60">
               <Tooltip
-                element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
+                element={`The lowest price to ${isBuy ? 'buy' : 'sell'} ${
                   base.symbol
                 } at.`}
               >
@@ -218,13 +218,13 @@ export const InputRange: FC<InputRangeProps> = ({
               base={base}
               quote={quote}
               price={min}
-              buy={buy || isOverlapping === true}
+              isBuy={isBuy || isOverlapping === true}
             />
           </div>
           {!!marketPrice && !isOverlapping && (
             <Presets
               value={minPercent}
-              presets={limitPreset(buy)}
+              presets={limitPreset(isBuy)}
               onChange={setMinPreset}
             />
           )}
@@ -240,7 +240,7 @@ export const InputRange: FC<InputRangeProps> = ({
           >
             <header className="text-12 mb-5 flex justify-between text-white/60">
               <Tooltip
-                element={`The highest price to ${buy ? 'buy' : 'sell'} ${
+                element={`The highest price to ${isBuy ? 'buy' : 'sell'} ${
                   base.symbol
                 } at.`}
               >
@@ -278,13 +278,13 @@ export const InputRange: FC<InputRangeProps> = ({
               base={base}
               quote={quote}
               price={max}
-              buy={buy || isOverlapping === false}
+              isBuy={isBuy || isOverlapping === false}
             />
           </div>
           {!!marketPrice && !isOverlapping && (
             <Presets
               value={maxPercent}
-              presets={limitPreset(buy)}
+              presets={limitPreset(isBuy)}
               onChange={setMaxPreset}
             />
           )}

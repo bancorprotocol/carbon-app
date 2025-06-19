@@ -1,5 +1,5 @@
 import { FC, memo, ReactElement, useEffect, useRef, useState } from 'react';
-import { StrategyWithFiat } from 'libs/queries';
+import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
@@ -10,13 +10,13 @@ import { lsService } from 'services/localeStorage';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import styles from './StrategyContent.module.css';
 
-type Props = {
-  strategies: StrategyWithFiat[];
+interface Props {
+  strategies: AnyStrategyWithFiat[];
   isPending: boolean;
   emptyElement: ReactElement;
   isExplorer?: boolean;
   layout?: StrategyLayout;
-};
+}
 
 export const LocalStrategyContent: FC<Props> = ({
   strategies,

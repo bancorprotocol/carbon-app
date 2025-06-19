@@ -45,11 +45,11 @@ export const Radio: FC<RadioProps> = (props) => {
         name={props.name}
         onChange={() => props.onChange?.(props.value)}
         className={style.radio}
-        data-testid={props['data-testid']}
         aria-label={props['aria-label']}
       />
       <label
         htmlFor={id}
+        data-testid={props['data-testid']}
         className="rounded-40 font-weight-500 cursor-pointer px-10 py-4 text-white/60 hover:text-white/80"
       >
         {props.children}

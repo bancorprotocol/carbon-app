@@ -1,4 +1,4 @@
-import { Order, Strategy } from 'libs/queries';
+import { AnyStrategy, Order } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -12,11 +12,11 @@ export interface PortfolioData {
   share: SafeDecimal;
   amount: SafeDecimal;
   value: SafeDecimal;
-  strategies: Strategy[];
+  strategies: AnyStrategy[];
   fiatPrice: number;
 }
 interface Props {
-  strategies?: Strategy[];
+  strategies?: AnyStrategy[];
   isPending?: boolean;
 }
 
@@ -62,13 +62,13 @@ export const usePortfolioData = ({
       const fiatPriceDictQuote = tokenPriceMap.get(strategy.quote.address);
       const tokenPriceQuote = fiatPriceDictQuote?.[selectedFiatCurrency] || 0;
 
-      const amountQuote = new SafeDecimal(strategy.order0.balance);
+      const amountQuote = new SafeDecimal(strategy.buy.budget);
       const fiatAmountQuote = amountQuote.times(tokenPriceQuote);
 
       const fiatPriceDictBase = tokenPriceMap.get(strategy.base.address);
       const tokenPriceBase = fiatPriceDictBase?.[selectedFiatCurrency] || 0;
 
-      const amountBase = new SafeDecimal(strategy.order1.balance);
+      const amountBase = new SafeDecimal(strategy.sell.budget);
       const fiatAmountBase = amountBase.times(tokenPriceBase);
 
       const fiatAmount = fiatAmountQuote.plus(fiatAmountBase);
@@ -86,7 +86,7 @@ export const usePortfolioData = ({
           const fiatPriceDict = tokenPriceMap.get(token.address);
           const tokenPrice = fiatPriceDict?.[selectedFiatCurrency] || 0;
 
-          const amount = new SafeDecimal(order.balance);
+          const amount = new SafeDecimal(order.budget);
 
           let item = map.get(token.symbol);
 
@@ -109,14 +109,14 @@ export const usePortfolioData = ({
             item.share = item.share.plus(
               amount.times(tokenPrice).dividedBy(totalValue).times(100),
             );
-            item.amount = item.amount.plus(order.balance);
+            item.amount = item.amount.plus(order.budget);
             item.value = item.value.plus(amount.times(tokenPrice));
             item.strategies.push(strategy);
           }
         };
 
-        handleData(strategy.quote, strategy.order0);
-        handleData(strategy.base, strategy.order1);
+        handleData(strategy.quote, strategy.buy);
+        handleData(strategy.base, strategy.sell);
 
         return acc;
       })(new Map<string, PortfolioData>()),

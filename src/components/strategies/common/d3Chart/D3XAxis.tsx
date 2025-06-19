@@ -1,8 +1,8 @@
-import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
+import { fromUnixUTC, dayFormatter } from 'components/simulator/utils';
 import { useD3ChartCtx } from './D3ChartContext';
 import { useMemo } from 'react';
 
-export const XAxis = () => {
+export const D3XAxis = () => {
   const { dms, xScale, zoom } = useD3ChartCtx();
   const xTicks = useMemo(() => {
     const length = xScale.domain().length;
@@ -32,7 +32,7 @@ export const XAxis = () => {
           fill="currentColor"
           opacity={0.6}
         >
-          {xAxisFormatter.format(fromUnixUTC(tickValue))}
+          {dayFormatter.format(fromUnixUTC(tickValue))}
         </text>
       </g>
     );

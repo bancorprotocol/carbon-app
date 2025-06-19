@@ -21,7 +21,7 @@ type Props = {
   tokenBalanceQuery?: UseQueryResult<string>;
   order: StrategyInputOrder;
   dispatch: StrategyInputDispatch;
-  buy?: boolean;
+  isBuy?: boolean;
   isBudgetOptional?: boolean;
   strategyType?: StrategyType;
   isOrdersOverlap: boolean;
@@ -38,7 +38,7 @@ export const BuySellBlock: FC<Props> = ({
   dispatch,
   isBudgetOptional,
   strategyType,
-  buy = false,
+  isBuy = false,
   isOrdersOverlap,
   isOrdersReversed,
   warningMsg,
@@ -46,7 +46,7 @@ export const BuySellBlock: FC<Props> = ({
 }) => {
   const titleId = useId();
 
-  const type = buy ? 'buy' : 'sell';
+  const type = isBuy ? 'buy' : 'sell';
 
   const tooltipText = `This section will define the order details in which you are willing to ${type} ${base.symbol} at.`;
 
@@ -70,19 +70,19 @@ export const BuySellBlock: FC<Props> = ({
     </>
   );
 
-  const headerProps = { titleId, order, dispatch, base, buy };
+  const headerProps = { titleId, order, dispatch, base, isBuy };
   const limitRangeProps = {
     base,
     quote,
     order,
     dispatch,
-    buy,
+    isBuy,
     inputTitle,
     isOrdersOverlap,
     isOrdersReversed,
   };
   const budgetProps = {
-    buy,
+    isBuy,
     quote,
     base,
     strategyType,
@@ -96,13 +96,13 @@ export const BuySellBlock: FC<Props> = ({
     <section
       aria-labelledby={titleId}
       className={cn(style.order, className, 'grid gap-16 p-16')}
-      data-testid={`${buy ? 'buy' : 'sell'}-section`}
-      data-direction={buy ? 'buy' : 'sell'}
+      data-testid={`${isBuy ? 'buy' : 'sell'}-section`}
+      data-direction={isBuy ? 'buy' : 'sell'}
     >
       <BuySellHeader {...headerProps}>
         <h2 className="text-16 flex items-center gap-8" id={titleId}>
           <Tooltip element={tooltipText}>
-            <span>{buy ? 'Buy Low' : 'Sell High'}</span>
+            <span>{isBuy ? 'Buy Low' : 'Sell High'}</span>
           </Tooltip>
           <LogoImager alt="Token" src={base.logoURI} className="size-18" />
           <span>{base.symbol}</span>

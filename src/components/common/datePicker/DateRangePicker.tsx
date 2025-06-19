@@ -261,8 +261,8 @@ export const DatePickerButton = memo(function DatePickerButton({
   start,
   end,
 }: DatePickerButtonProps) {
-  const startDate = dateFormatter.format(start);
-  const endDate = dateFormatter.format(end);
+  const _sD_ = dateFormatter.format(start);
+  const _eD_ = dateFormatter.format(end);
 
   const hasDates = !!(start && end);
 
@@ -273,7 +273,7 @@ export const DatePickerButton = memo(function DatePickerButton({
         className="justify-self-end text-white/60"
         data-testid="simulation-dates"
       >
-        {hasDates ? `${startDate} - ${endDate}` : 'Select Date Range'}
+        {hasDates ? `${_sD_} - ${_eD_}` : 'Select Date Range'}
       </span>
       <ChevronIcon className="size-12 rotate-180 text-white/80" />
     </>

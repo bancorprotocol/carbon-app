@@ -5,6 +5,7 @@ import { deepCopy, getUndercutStrategy } from './utils';
 type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
 const baseStrategy = {
+  type: 'static' as const,
   id: '',
   idDisplay: '',
   base: {
@@ -17,17 +18,17 @@ const baseStrategy = {
     decimals: 6,
     symbol: 'USDC',
   },
-  order0: {
-    balance: '',
-    startRate: '',
-    endRate: '',
-    marginalRate: '',
+  buy: {
+    budget: '',
+    min: '',
+    max: '',
+    marginalPrice: '',
   },
-  order1: {
-    balance: '',
-    startRate: '',
-    endRate: '',
-    marginalRate: '',
+  sell: {
+    budget: '',
+    min: '',
+    max: '',
+    marginalPrice: '',
   },
   status: 'active' as StrategyStatus,
   encoded: {
@@ -56,14 +57,14 @@ describe('Test undercut strategy', () => {
   test('getUndercutStrategy with 0.1% rate', () => {
     const undercutDifference = 0.001;
 
-    baseStrategy.order0.startRate = '0';
-    baseStrategy.order0.endRate = '1700';
-    baseStrategy.order1.startRate = '1800';
-    baseStrategy.order1.endRate = '1900';
-    undercutStrategy.order0.startRate = '0';
-    undercutStrategy.order0.endRate = '1701.7';
-    undercutStrategy.order1.startRate = '1798.2';
-    undercutStrategy.order1.endRate = '1898.1';
+    baseStrategy.buy.min = '0';
+    baseStrategy.buy.max = '1700';
+    baseStrategy.sell.min = '1800';
+    baseStrategy.sell.max = '1900';
+    undercutStrategy.buy.min = '0';
+    undercutStrategy.buy.max = '1701.7';
+    undercutStrategy.sell.min = '1798.2';
+    undercutStrategy.sell.max = '1898.1';
 
     expect(getUndercutStrategy(baseStrategy, undercutDifference)).toStrictEqual(
       undercutStrategy,
@@ -73,14 +74,14 @@ describe('Test undercut strategy', () => {
   test('getUndercutStrategy with 0.1% rate and a strategy with one limit order', () => {
     const undercutDifference = 0.001;
 
-    baseStrategy.order0.startRate = '0';
-    baseStrategy.order0.endRate = '0';
-    baseStrategy.order1.startRate = '1900';
-    baseStrategy.order1.endRate = '1900';
-    undercutStrategy.order0.startRate = '0';
-    undercutStrategy.order0.endRate = '0';
-    undercutStrategy.order1.startRate = '1898.1';
-    undercutStrategy.order1.endRate = '1898.1';
+    baseStrategy.buy.min = '0';
+    baseStrategy.buy.max = '0';
+    baseStrategy.sell.min = '1900';
+    baseStrategy.sell.max = '1900';
+    undercutStrategy.buy.min = '0';
+    undercutStrategy.buy.max = '0';
+    undercutStrategy.sell.min = '1898.1';
+    undercutStrategy.sell.max = '1898.1';
 
     expect(getUndercutStrategy(baseStrategy, undercutDifference)).toStrictEqual(
       undercutStrategy,
@@ -90,14 +91,14 @@ describe('Test undercut strategy', () => {
   test('getUndercutStrategy with 1% rate', () => {
     const undercutDifference = 0.01;
 
-    baseStrategy.order0.startRate = '1600';
-    baseStrategy.order0.endRate = '1700';
-    baseStrategy.order1.startRate = '1800';
-    baseStrategy.order1.endRate = '1900';
-    undercutStrategy.order0.startRate = '1616';
-    undercutStrategy.order0.endRate = '1717';
-    undercutStrategy.order1.startRate = '1782';
-    undercutStrategy.order1.endRate = '1881';
+    baseStrategy.buy.min = '1600';
+    baseStrategy.buy.max = '1700';
+    baseStrategy.sell.min = '1800';
+    baseStrategy.sell.max = '1900';
+    undercutStrategy.buy.min = '1616';
+    undercutStrategy.buy.max = '1717';
+    undercutStrategy.sell.min = '1782';
+    undercutStrategy.sell.max = '1881';
 
     expect(getUndercutStrategy(baseStrategy, undercutDifference)).toStrictEqual(
       undercutStrategy,
@@ -107,14 +108,14 @@ describe('Test undercut strategy', () => {
   test('getUndercutStrategy with negative rate', () => {
     const undercutDifference = -1;
 
-    baseStrategy.order0.startRate = '1600';
-    baseStrategy.order0.endRate = '1700';
-    baseStrategy.order1.startRate = '1800';
-    baseStrategy.order1.endRate = '1900';
-    undercutStrategy.order0.startRate = '1616';
-    undercutStrategy.order0.endRate = '1717';
-    undercutStrategy.order1.startRate = '1782';
-    undercutStrategy.order1.endRate = '1881';
+    baseStrategy.buy.min = '1600';
+    baseStrategy.buy.max = '1700';
+    baseStrategy.sell.min = '1800';
+    baseStrategy.sell.max = '1900';
+    undercutStrategy.buy.min = '1616';
+    undercutStrategy.buy.max = '1717';
+    undercutStrategy.sell.min = '1782';
+    undercutStrategy.sell.max = '1881';
 
     expect(() =>
       getUndercutStrategy(baseStrategy, undercutDifference),
@@ -124,14 +125,14 @@ describe('Test undercut strategy', () => {
   test('getUndercutStrategy with rate higher than 100%', () => {
     const undercutDifference = 1.01;
 
-    baseStrategy.order0.startRate = '1600';
-    baseStrategy.order0.endRate = '1700';
-    baseStrategy.order1.startRate = '1800';
-    baseStrategy.order1.endRate = '1900';
-    undercutStrategy.order0.startRate = '1616';
-    undercutStrategy.order0.endRate = '1717';
-    undercutStrategy.order1.startRate = '1782';
-    undercutStrategy.order1.endRate = '1881';
+    baseStrategy.buy.min = '1600';
+    baseStrategy.buy.max = '1700';
+    baseStrategy.sell.min = '1800';
+    baseStrategy.sell.max = '1900';
+    undercutStrategy.buy.min = '1616';
+    undercutStrategy.buy.max = '1717';
+    undercutStrategy.sell.min = '1782';
+    undercutStrategy.sell.max = '1881';
 
     expect(() =>
       getUndercutStrategy(baseStrategy, undercutDifference),

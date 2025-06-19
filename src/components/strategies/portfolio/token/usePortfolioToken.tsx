@@ -1,19 +1,19 @@
 import { usePortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
-import { Order, Strategy } from 'libs/queries';
+import { AnyStrategy, Order } from 'components/strategies/common/types';
 import { sortObjectArray } from 'utils/helpers';
 
 export interface PortfolioTokenData {
   amount: SafeDecimal;
   value: SafeDecimal;
   share: SafeDecimal;
-  strategy: Strategy;
+  strategy: AnyStrategy;
 }
 
 interface Props {
   address: string;
-  strategies?: Strategy[];
+  strategies?: AnyStrategy[];
   isPending?: boolean;
 }
 
@@ -42,20 +42,20 @@ export const usePortfolioToken = ({
       let value = new SafeDecimal(0);
       let share = new SafeDecimal(0);
 
-      const handleOrder = ({ balance }: Order) => {
-        amount = new SafeDecimal(balance);
-        value = new SafeDecimal(balance).times(selectedToken.fiatPrice);
+      const handleOrder = ({ budget }: Order) => {
+        amount = new SafeDecimal(budget);
+        value = new SafeDecimal(budget).times(selectedToken.fiatPrice);
         share = new SafeDecimal(value)
           .dividedBy(selectedToken.value)
           .times(100);
       };
 
       if (strategy.base.address.toLowerCase() === address.toLowerCase()) {
-        handleOrder(strategy.order1);
+        handleOrder(strategy.sell);
       }
 
       if (strategy.quote.address.toLowerCase() === address.toLowerCase()) {
-        handleOrder(strategy.order0);
+        handleOrder(strategy.buy);
       }
 
       return {

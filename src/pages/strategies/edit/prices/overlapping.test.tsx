@@ -8,7 +8,7 @@ import {
   userEvent,
 } from 'libs/testing-library';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
-import { Strategy } from 'libs/queries';
+import { Strategy } from 'components/strategies/common/types';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import {
   MockStrategyParams,
@@ -48,22 +48,22 @@ const baseOrder = ({
     spread,
   );
   const baseBuy = {
-    balance: '1',
-    startRate: overlappingParams.buyPriceLow,
-    endRate: overlappingParams.buyPriceHigh,
-    marginalRate: overlappingParams.buyPriceMarginal,
+    budget: '1',
+    min: overlappingParams.buyPriceLow,
+    max: overlappingParams.buyPriceHigh,
+    marginalPrice: overlappingParams.buyPriceMarginal,
   };
   const baseSell = {
-    balance: '1',
-    startRate: overlappingParams.sellPriceLow,
-    endRate: overlappingParams.sellPriceHigh,
-    marginalRate: overlappingParams.sellPriceMarginal,
+    budget: '1',
+    min: overlappingParams.sellPriceLow,
+    max: overlappingParams.sellPriceHigh,
+    marginalPrice: overlappingParams.sellPriceMarginal,
   };
   return {
     base: 'ETH' as const,
     quote: 'USDC' as const,
-    order0: baseBuy,
-    order1: baseSell,
+    buy: baseBuy,
+    sell: baseSell,
   };
 };
 

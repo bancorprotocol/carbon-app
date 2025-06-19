@@ -7,9 +7,8 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { Token } from 'libs/tokens';
-import { OverlappingMarketPriceProvider } from '../UserMarketPrice';
 import { useSearch } from '@tanstack/react-router';
-import { OverlappingOrder } from 'components/strategies/common/types';
+import { CreateOverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
@@ -17,21 +16,20 @@ import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
 interface Props {
   base: Token;
   quote: Token;
-  marketPrice: string;
-  order0: OverlappingOrder;
-  order1: OverlappingOrder;
+  buy: CreateOverlappingOrder;
+  sell: CreateOverlappingOrder;
   spread: string;
   set: SetOverlapping;
 }
 
 const url = '/trade/overlapping';
 export const CreateOverlappingPrice: FC<Props> = (props) => {
-  const { base, quote, order0, order1, marketPrice, spread, set } = props;
+  const { base, quote, buy, sell, spread, set } = props;
   const search = useSearch({ from: url });
   const { anchor } = search;
 
-  const aboveMarket = isMinAboveMarket(order0);
-  const belowMarket = isMaxBelowMarket(order1);
+  const aboveMarket = isMinAboveMarket(buy);
+  const belowMarket = isMaxBelowMarket(sell);
 
   // WARNING
   const priceWarning = (() => {
@@ -40,14 +38,14 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
   })();
 
   useEffect(() => {
-    if (!isValidRange(order0.min, order1.max)) return;
+    if (!isValidRange(buy.min, sell.max)) return;
     if (anchor === 'buy' && aboveMarket) {
       set({ anchor: 'sell', budget: undefined });
     }
     if (anchor === 'sell' && belowMarket) {
       set({ anchor: 'buy', budget: undefined });
     }
-  }, [anchor, aboveMarket, belowMarket, set, order0.min, order1.max]);
+  }, [anchor, aboveMarket, belowMarket, set, buy.min, sell.max]);
 
   const setMin = (min: string) => set({ min });
   const setMax = (max: string) => set({ max });
@@ -60,7 +58,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
   if (!base || !quote) return null;
 
   return (
-    <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
+    <>
       <article key="price-range" className="bg-background-900 grid gap-16 p-16">
         <header className="flex items-center gap-8">
           <h3 className="text-16 font-weight-500 flex-1">
@@ -77,8 +75,8 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
         <OverlappingPriceRange
           base={base}
           quote={quote}
-          min={order0.min}
-          max={order1.max}
+          min={buy.min}
+          max={sell.max}
           setMin={setMin}
           setMax={setMax}
           minLabel="Min Buy Price"
@@ -89,8 +87,8 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
         />
       </article>
       <OverlappingSpread
-        buyMin={Number(order0.min)}
-        sellMax={Number(order1.max)}
+        buyMin={Number(buy.min)}
+        sellMax={Number(sell.max)}
         spread={spread}
         setSpread={setSpread}
       />
@@ -116,6 +114,6 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           disableSell={belowMarket}
         />
       </article>
-    </OverlappingMarketPriceProvider>
+    </>
   );
 };

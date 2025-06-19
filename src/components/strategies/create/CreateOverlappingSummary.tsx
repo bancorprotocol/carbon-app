@@ -1,7 +1,7 @@
 import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
 import { tokenAmount } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
-import { OverlappingOrder } from '../common/types';
+import { CreateOverlappingOrder } from '../common/types';
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -11,8 +11,8 @@ import { WarningTooltip } from 'components/common/WarningMessageWithIcon';
 interface Props {
   base: Token;
   quote: Token;
-  order0: OverlappingOrder;
-  order1: OverlappingOrder;
+  buy: CreateOverlappingOrder;
+  sell: CreateOverlappingOrder;
   spread: string;
 }
 
@@ -20,11 +20,11 @@ const warningText =
   'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
 
 export const CreateOverlappingSummary: FC<Props> = (props) => {
-  const { base, quote, order0, order1, spread } = props;
+  const { base, quote, buy, sell, spread } = props;
   const { getFiatAsString: getQuoteFiat } = useFiatCurrency(quote);
   const { getFiatAsString: getBaseFiat } = useFiatCurrency(base);
-  const aboveMarket = isMinAboveMarket(order0);
-  const belowMarket = isMaxBelowMarket(order1);
+  const aboveMarket = isMinAboveMarket(buy);
+  const belowMarket = isMaxBelowMarket(sell);
 
   const indicationProps = { base, quote, isRange: true, isOverlapping: true };
   return (
@@ -36,9 +36,9 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
             Min Price
           </h4>
           <p className="font-weight-500 text-white/80">
-            {tokenAmount(order0.min, quote)}
+            {tokenAmount(buy.min, quote)}
           </p>
-          <MarketPriceIndication {...indicationProps} price={order0.min!} buy />
+          <MarketPriceIndication {...indicationProps} price={buy.min!} isBuy />
         </div>
         <div className="grid gap-4">
           <h4 className="font-weight-600 flex items-center gap-8">
@@ -46,9 +46,9 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
             Max Price
           </h4>
           <p className="font-weight-500 text-white/80">
-            {tokenAmount(order1.max, quote)}
+            {tokenAmount(sell.max, quote)}
           </p>
-          <MarketPriceIndication {...indicationProps} price={order1.max!} />
+          <MarketPriceIndication {...indicationProps} price={sell.max!} />
         </div>
       </div>
       <div className="grid gap-4">
@@ -62,11 +62,9 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
             {base.symbol} Budget
           </h4>
           <p className="font-weight-500 text-white/80">
-            {tokenAmount(order1.budget, base)}
+            {tokenAmount(sell.budget, base)}
           </p>
-          <p className="break-all text-white/60">
-            {getBaseFiat(order1.budget)}
-          </p>
+          <p className="break-all text-white/60">{getBaseFiat(sell.budget)}</p>
         </div>
         <div className="grid gap-4">
           <h4 className="font-weight-600 flex items-center gap-4">
@@ -74,11 +72,9 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
             {quote.symbol} Budget
           </h4>
           <p className="font-weight-500 text-white/80">
-            {tokenAmount(order0.budget, quote)}
+            {tokenAmount(buy.budget, quote)}
           </p>
-          <p className="break-all text-white/60">
-            {getQuoteFiat(order0.budget)}
-          </p>
+          <p className="break-all text-white/60">{getQuoteFiat(buy.budget)}</p>
         </div>
       </div>
     </article>

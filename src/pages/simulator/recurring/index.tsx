@@ -13,9 +13,11 @@ import {
   oneYearAgo,
 } from 'components/strategies/common/utils';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
+import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
+import { formatNumber } from 'utils/helpers';
 import { cn } from 'utils/helpers';
 import { getRecurringPriceMultiplier } from 'components/strategies/create/utils';
 import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
@@ -36,13 +38,9 @@ export const SimulatorInputRecurringPage = () => {
     start: oneYearAgo(),
     end: defaultEnd(),
   });
-  const { marketPrice, isPending: marketPricePending } = useMarketPrice({
-    base: state.baseToken,
-    quote: state.quoteToken,
-  });
 
   const handleDefaultValues = useCallback(
-    (direction: StrategyDirection, startPrice: number) => {
+    (direction: StrategyDirection, _sP_: number) => {
       const init = direction === 'buy' ? initBuyRange : initSellRange;
       const setInit = direction === 'buy' ? setInitBuyRange : setInitSellRange;
 
@@ -53,7 +51,7 @@ export const SimulatorInputRecurringPage = () => {
         return;
       }
       const multiplier = getRecurringPriceMultiplier(direction, 'range');
-      const price = new SafeDecimal(startPrice);
+      const price = new SafeDecimal(_sP_);
       const min = price.mul(multiplier.min).toFixed();
       const max = price.mul(multiplier.max).toFixed();
 
@@ -70,7 +68,6 @@ export const SimulatorInputRecurringPage = () => {
       dispatch,
       initBuyRange,
       initSellRange,
-      marketPrice,
       setInitBuyRange,
       setInitSellRange,
       state,
@@ -78,13 +75,13 @@ export const SimulatorInputRecurringPage = () => {
   );
 
   useEffect(() => {
-    const startDate = Number(searchState.start || defaultStart());
-    const startPrice = data?.find(({ date }) => date === startDate)?.close;
-    if (startPrice) {
-      handleDefaultValues('buy', startPrice);
-      handleDefaultValues('sell', startPrice);
+    const _sD_ = Number(searchState.start || defaultStart());
+    const _sP_ = data?.find(({ date }) => date === _sD_)?.close;
+    if (_sP_) {
+      handleDefaultValues('buy', _sP_);
+      handleDefaultValues('sell', _sP_);
     }
-  }, [handleDefaultValues, data]);
+  }, [handleDefaultValues, data, searchState.start]);
 
   useEffect(() => {
     if (initBuyRange || initSellRange) return;
@@ -140,14 +137,49 @@ export const SimulatorInputRecurringPage = () => {
       },
     });
   };
+  const isLimit = { buy: !state.buy.isRange, sell: !state.sell.isRange };
+  const onPriceUpdates: OnPriceUpdates = useCallback(
+    ({ buy, sell }) => {
+      dispatch('buyMin', formatNumber(buy.min), false);
+      dispatch('buyMax', formatNumber(buy.max), false);
+      dispatch('sellMin', formatNumber(sell.min), false);
+      dispatch('sellMax', formatNumber(sell.max), false);
+    },
+    [dispatch],
+  );
+  const prices = {
+    buy: {
+      min: state.buy.min,
+      max: state.buy.max,
+    },
+    sell: {
+      min: state.sell.min,
+      max: state.sell.max,
+    },
+  };
 
-  const startPrice = useMemo(() => {
+  const _sP_ = useMemo(() => {
     const start = Number(state.start ?? defaultStart());
     return data?.find((v) => v.date === start);
   }, [data, state.start]);
 
   return (
     <>
+      <SimInputChart
+        state={state}
+        dispatch={dispatch}
+        bounds={bounds}
+        data={data}
+        isPending={isPending}
+        isError={emptyHistory}
+        prices={prices}
+      >
+        <D3ChartRecurring
+          isLimit={isLimit}
+          prices={prices}
+          onChange={onPriceUpdates}
+        />
+      </SimInputChart>
       <form
         onSubmit={submit}
         className={cn(style.form, 'grid gap-16')}
@@ -160,11 +192,7 @@ export const SimulatorInputRecurringPage = () => {
             noPriceHistory={emptyHistory}
           />
           <SimInputStrategyType />
-          <SimInputRecurring
-            state={state}
-            dispatch={dispatch}
-            startPrice={startPrice}
-          />
+          <SimInputRecurring state={state} dispatch={dispatch} _sP_={_sP_} />
         </div>
         <input className="approve-warnings hidden" defaultChecked />
         <Button
@@ -179,16 +207,6 @@ export const SimulatorInputRecurringPage = () => {
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>
       </form>
-      <SimInputChart
-        state={state}
-        dispatch={dispatch}
-        isLimit={{ buy: !state.buy.isRange, sell: !state.sell.isRange }}
-        bounds={bounds}
-        data={data}
-        isPending={isPending}
-        isError={emptyHistory}
-        simulationType="recurring"
-      />
     </>
   );
 };

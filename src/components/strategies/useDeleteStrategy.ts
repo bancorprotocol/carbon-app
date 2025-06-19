@@ -1,14 +1,11 @@
 import { useNotifications } from 'hooks/useNotifications';
-import {
-  QueryKey,
-  Strategy,
-  useDeleteStrategyQuery,
-  useQueryClient,
-} from 'libs/queries';
+import { QueryKey, useDeleteStrategyQuery, useQueryClient } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { useState } from 'react';
 
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
+import { AnyStrategy } from './common/types';
+import { isGradientStrategy } from './common/utils';
 
 export const useDeleteStrategy = () => {
   const { user } = useWagmi();
@@ -18,7 +15,7 @@ export const useDeleteStrategy = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const deleteStrategy = async (
-    strategy: Strategy,
+    strategy: AnyStrategy,
     successEventsCb?: () => void,
     closeModalCb?: () => void,
   ) => {
@@ -26,6 +23,11 @@ export const useDeleteStrategy = () => {
 
     if (!base || !quote || !user) {
       throw new Error('error in delete strategy: missing data ');
+    }
+
+    // TODO: support gradient
+    if (isGradientStrategy(strategy)) {
+      throw new Error('Cannot pause gradient strategy for now');
     }
 
     deleteMutation.mutate(

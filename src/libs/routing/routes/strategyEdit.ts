@@ -11,7 +11,7 @@ import {
   EditPricesStrategyRecurringPage,
   EditRecurringStrategySearch,
 } from 'pages/strategies/edit/prices/recurring';
-import { Strategy } from 'libs/queries';
+import { Strategy } from 'components/strategies/common/types';
 import { isEmptyOrder, isZero } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
@@ -28,6 +28,8 @@ import { EditBudgetDisposablePage } from 'pages/strategies/edit/budget/disposabl
 import { EditBudgetOverlappingPage } from 'pages/strategies/edit/budget/overlapping';
 import { SafeDecimal } from 'libs/safedecimal';
 import * as v from 'valibot';
+import { toUnixUTCDay } from 'components/simulator/utils';
+import { addMonths, subMonths } from 'date-fns';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
@@ -35,9 +37,13 @@ export const editStrategyLayout = createRoute({
   getParentRoute: () => rootRoute,
   path: '/strategies/edit/$strategyId',
   component: EditStrategyPageLayout,
+  beforeLoad({ search }) {
+    search.chartStart ||= toUnixUTCDay(subMonths(new Date(), 3));
+    search.chartEnd ||= toUnixUTCDay(addMonths(new Date(), 1));
+  },
   validateSearch: searchValidator({
-    priceStart: v.optional(validNumber),
-    priceEnd: v.optional(validNumber),
+    chartStart: v.optional(validNumber),
+    chartEnd: v.optional(validNumber),
     editType: v.picklist(['editPrices', 'renew', 'deposit', 'withdraw']),
   }),
 });
@@ -52,14 +58,14 @@ export const toDisposablePricesSearch = (
   strategy: Strategy,
   editType: 'editPrices' | 'renew',
 ): EditDisposableStrategySearch => {
-  const { order0, order1 } = strategy;
-  const direction = isEmptyOrder(order0) ? 'sell' : 'buy';
-  const order = direction === 'sell' ? order1 : order0;
+  const { buy, sell } = strategy;
+  const direction = isEmptyOrder(buy) ? 'sell' : 'buy';
+  const order = direction === 'sell' ? sell : buy;
   return {
     editType,
-    min: initInput(order.startRate),
-    max: initInput(order.endRate),
-    settings: order.startRate === order.endRate ? 'limit' : 'range',
+    min: initInput(order.min),
+    max: initInput(order.max),
+    settings: order.min === order.max ? 'limit' : 'range',
     direction,
   };
 };
@@ -89,15 +95,15 @@ export const toRecurringPricesSearch = (
   strategy: Strategy,
   editType: 'editPrices' | 'renew',
 ): EditRecurringStrategySearch => {
-  const { order0: buy, order1: sell } = strategy;
+  const { buy, sell } = strategy;
   return {
     editType,
-    buyMin: initInput(buy.startRate),
-    buyMax: initInput(buy.endRate),
-    buySettings: buy.startRate === buy.endRate ? 'limit' : 'range',
-    sellMin: initInput(sell.startRate),
-    sellMax: initInput(sell.endRate),
-    sellSettings: sell.startRate === sell.endRate ? 'limit' : 'range',
+    buyMin: initInput(buy.min),
+    buyMax: initInput(buy.max),
+    buySettings: buy.min === buy.max ? 'limit' : 'range',
+    sellMin: initInput(sell.min),
+    sellMax: initInput(sell.max),
+    sellSettings: sell.min === sell.max ? 'limit' : 'range',
   };
 };
 export const editPricesRecurring = createRoute({
@@ -123,11 +129,11 @@ export const toOverlappingPricesSearch = (
   strategy: Strategy,
   editType: 'editPrices' | 'renew',
 ): EditOverlappingStrategySearch => {
-  const { order0: buy, order1: sell } = strategy;
+  const { buy, sell } = strategy;
 
   // If come from disposable, prevent setting 0
-  const lowRates = [buy.startRate, sell.startRate].filter((v) => !isZero(v));
-  const highRates = [buy.endRate, sell.endRate].filter((v) => !isZero(v));
+  const lowRates = [buy.min, sell.min].filter((v) => !isZero(v));
+  const highRates = [buy.max, sell.max].filter((v) => !isZero(v));
   const min = lowRates.length ? SafeDecimal.min(...lowRates).toString() : '';
   const max = highRates.length ? SafeDecimal.max(...highRates).toString() : '';
 

@@ -1,7 +1,9 @@
-import { Strategy, StrategyStatus } from 'libs/queries';
+import {
+  AnyStrategy,
+  StrategyStatus,
+} from 'components/strategies/common/types';
 import { FC } from 'react';
 import { getTooltipTextByStatus, statusText } from './utils';
-import { ReactComponent as TooltipIcon } from 'assets/icons/tooltip.svg';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import {
   ManageButtonIcon,
@@ -9,12 +11,12 @@ import {
 } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { Link } from '@tanstack/react-router';
-import { getLowestBits } from 'utils/helpers';
 import { PairName } from 'components/common/DisplayPair';
+import { isGradientStrategy } from 'components/strategies/common/utils';
+import { Link } from '@tanstack/react-router';
 
 interface Props {
-  strategy: Strategy;
+  strategy: AnyStrategy;
   isExplorer?: boolean;
 }
 
@@ -31,7 +33,12 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
         <h3 className="text-18 flex gap-6" data-testid="token-pair">
           <PairName baseToken={base} quoteToken={quote} />
         </h3>
-        <StrategySubtitle {...strategy} isExplorer={isExplorer} />
+        <StrategySubtitle
+          id={strategy.idDisplay}
+          status={strategy.status}
+          isExplorer={isExplorer}
+          isGradient={isGradientStrategy(strategy)}
+        />
       </div>
       <div role="menubar" className="flex gap-8">
         <Link
@@ -54,16 +61,22 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
 interface StrategySubtitleProps {
   id: string;
   status: StrategyStatus;
+  isGradient: boolean;
   isExplorer?: boolean;
 }
 export const StrategySubtitle: FC<StrategySubtitleProps> = (props) => {
   const { id, status, isExplorer } = props;
   return (
     <p className="text-12 flex items-center gap-8 text-white/60">
-      <span>ID: {getLowestBits(id)}</span>
+      {id}
       <svg width="4" height="4" role="separator">
         <circle cx="2" cy="2" r="2" fill="currentcolor" />
       </svg>
+      {/* @todo(gradient) */}
+      {/* <StrategyTypeIcon isGradient={isGradient} />
+      <svg width="4" height="4" role="separator">
+        <circle cx="2" cy="2" r="2" fill="currentcolor" />
+      </svg> */}
       <StrategyStatusTag status={status} isExplorer={isExplorer} />
     </p>
   );
@@ -88,7 +101,6 @@ export const StrategyStatusTag: FC<{
           data-testid="status"
         >
           {statusText.inactive}
-          <TooltipIcon className="text-error size-10" />
         </span>
       </Tooltip>
     );

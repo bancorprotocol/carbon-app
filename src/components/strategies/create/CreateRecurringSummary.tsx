@@ -10,13 +10,13 @@ interface Props {
   base: Token;
   quote: Token;
   order: OrderBlock;
-  buy?: boolean;
+  isBuy?: boolean;
   warnings: string[];
 }
 export const CreateRecurringSummary: FC<Props> = (props) => {
-  const { base, quote, order, buy, warnings } = props;
+  const { base, quote, order, isBuy, warnings } = props;
   const isRange = order.min !== order.max;
-  const indicationProps = { base, quote, buy, isRange };
+  const indicationProps = { base, quote, buy: isBuy, isRange };
   const { getFiatAsString } = useFiatCurrency(quote);
 
   return (
@@ -24,10 +24,10 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
       <h3
         className={cn(
           'text-14 font-weight-600',
-          buy ? 'text-buy' : 'text-sell',
+          isBuy ? 'text-buy' : 'text-sell',
         )}
       >
-        {buy ? 'Buy' : 'Sell'} Overview
+        {isBuy ? 'Buy' : 'Sell'} Overview
       </h3>
       {isRange ? (
         <div className="grid grid-flow-col gap-20">
@@ -52,7 +52,7 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
         </div>
       ) : (
         <div className="grid gap-4">
-          <h4 className="font-weight-600">{buy ? 'Buy' : 'Sell'} Price</h4>
+          <h4 className="font-weight-600">{isBuy ? 'Buy' : 'Sell'} Price</h4>
           <p className="font-weight-500 text-white/80">
             {tokenAmount(order.min, quote)}
           </p>
@@ -62,7 +62,7 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
       <div className="grid gap-4">
         <h4 className="font-weight-600">Budget</h4>
         <p className="font-weight-500 text-white/80">
-          {tokenAmount(order.budget, buy ? quote : base)}
+          {tokenAmount(order.budget, isBuy ? quote : base)}
         </p>
         <p className="break-all text-white/60">
           {getFiatAsString(order.budget)}

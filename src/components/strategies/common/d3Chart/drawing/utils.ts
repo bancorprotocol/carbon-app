@@ -1,5 +1,5 @@
 import { MouseEvent as ReactMouseEvent } from 'react';
-export const getEdges = (id: number) => {
+export const getEdges = (id: number | string) => {
   const shape = document.getElementById(`shape-${id}`)!;
   const circles = shape.querySelectorAll<SVGCircleElement>('circle.edge');
   return Array.from(circles);

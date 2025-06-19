@@ -1,6 +1,6 @@
 import { InputRange, InputRangeProps } from '../common/InputRange';
 import { FC, useId, useMemo } from 'react';
-import { useOverlappingMarketPrice } from '../UserMarketPrice';
+import { useStrategyMarketPrice } from '../UserMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isFullRangeCreation } from '../common/utils';
 import { Presets } from '../../common/preset/Preset';
@@ -8,7 +8,7 @@ import { overlappingPresets } from '../common/price-presets';
 
 export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
   const { base, quote, min, max, setMin, setMax, warnings } = props;
-  const marketPrice = useOverlappingMarketPrice({ base, quote });
+  const { marketPrice } = useStrategyMarketPrice({ base, quote });
   const minId = useId();
   const maxId = useId();
 

@@ -1,6 +1,6 @@
 import { Link, useMatch } from '@tanstack/react-router';
 import { PairLogoName } from 'components/common/DisplayPair';
-import { StrategyWithFiat } from 'libs/queries';
+import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { FC, useId } from 'react';
 import { StrategyStatusTag } from './strategyBlock/StrategyBlockHeader';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -13,10 +13,13 @@ import {
 } from './strategyBlock/StrategyBlockManage';
 import { FiatPrice } from 'components/common/FiatPrice';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { useEditToDisposableSell } from '../edit/utils';
+import { isDisposableStrategy } from '../common/utils';
+import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
 import styles from './StrategyContent.module.css';
 
 interface Props {
-  strategies: StrategyWithFiat[];
+  strategies: AnyStrategyWithFiat[];
 }
 export const StrategyTable: FC<Props> = ({ strategies }) => {
   return (
@@ -25,6 +28,8 @@ export const StrategyTable: FC<Props> = ({ strategies }) => {
         <tr>
           <th>ID</th>
           <th>Token Pair</th>
+          {/* @todo(gradient) */}
+          {/* <th>Type</th> */}
           <th>Status</th>
           <th>Trades</th>
           <th>Total Budget</th>
@@ -44,14 +49,18 @@ export const StrategyTable: FC<Props> = ({ strategies }) => {
 };
 
 interface RowProps {
-  strategy: StrategyWithFiat;
+  strategy: AnyStrategyWithFiat;
 }
 const StrategyRow: FC<RowProps> = ({ strategy }) => {
   const id = useId();
-  const { base, quote, status, order0, order1 } = strategy;
+  const { base, quote, status, buy, sell } = strategy;
+  const toDisposableSell = useEditToDisposableSell(strategy);
+  const isOwn = useIsStrategyOwner(strategy.id);
   const isExplorer = !!useMatch({ from: '/explore', shouldThrow: false });
   const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
   const totalBalance = strategy.fiatBudget.total;
+  const disableEdit =
+    !isOwn || isDisposableStrategy(strategy) || strategy.status !== 'active';
 
   return (
     <tr key={id} id={id} className="h-[85px]">
@@ -61,6 +70,10 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
           <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
         </p>
       </td>
+      {/* @todo(gradient) */}
+      {/* <td>
+        <StrategyTypeIcon isGradient={isGradientStrategy(strategy)} />
+      </td> */}
       <td>
         <StrategyStatusTag status={status} isExplorer={isExplorer} />
       </td>
@@ -77,28 +90,28 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
       </td>
       <td>
         <div className="grid">
-          <Tooltip element={tokenAmount(order0.balance, quote)}>
+          <Tooltip element={tokenAmount(buy.budget, quote)}>
             <span className="text-nowrap">
-              {tokenAmount(order0.balance, quote, { abbreviate: true })}
+              {tokenAmount(buy.budget, quote, { abbreviate: true })}
             </span>
           </Tooltip>
           <FiatPrice
             token={quote}
-            amount={order0.balance}
+            amount={buy.budget}
             className="text-12 text-white/60"
           />
         </div>
       </td>
       <td>
         <div className="grid">
-          <Tooltip element={tokenAmount(order1.balance, base)}>
+          <Tooltip element={tokenAmount(sell.budget, base)}>
             <span className="text-nowrap">
-              {tokenAmount(order1.balance, base, { abbreviate: true })}
+              {tokenAmount(sell.budget, base, { abbreviate: true })}
             </span>
           </Tooltip>
           <FiatPrice
             token={base}
-            amount={order1.balance}
+            amount={sell.budget}
             className="text-12 text-white/60"
           />
         </div>

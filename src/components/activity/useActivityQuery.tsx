@@ -14,11 +14,11 @@ import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { carbonApi } from 'utils/carbonApi';
 import { THIRTY_SEC_IN_MS } from 'utils/time';
-
+import { fromUnixUTC } from 'components/simulator/utils';
 export const toActivities = (
   data: ServerActivity[],
   tokensMap: Map<string, Token>,
-): Activity[] => {
+) => {
   return data.map((activity) => {
     const { strategy } = activity;
     const base = tokensMap.get(strategy.base.toLowerCase());
@@ -33,15 +33,17 @@ export const toActivities = (
         `Quote "${strategy.quote}" not found for activity with txhash "${activity.txHash}"`,
       );
     }
+    const type = '_sP_' in strategy.buy ? 'gradient' : 'static';
     return {
       ...activity,
-      date: new Date(activity.timestamp * 1000),
+      date: fromUnixUTC(activity.timestamp),
       strategy: {
         ...strategy,
         base,
         quote,
+        type,
       },
-    };
+    } as Activity; // needed to force type because it was too difficult to deal with deep types
   });
 };
 

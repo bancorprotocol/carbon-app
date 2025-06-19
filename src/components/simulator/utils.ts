@@ -17,9 +17,21 @@ export function fromUnixUTC(timestamp?: string | number) {
   return addMinutes(date, deltaMin);
 }
 
+/** Transform date to 00:00 UTC timestamp string*/
+export const toUnixUTCDay = (date: Date) => {
+  return getUnixTime(new Date(date.toISOString().split('T')[0])).toString();
+};
+
 /** Format date to DD/MM/YY */
-export const xAxisFormatter = Intl.DateTimeFormat(undefined, {
+export const dayFormatter = Intl.DateTimeFormat(undefined, {
   day: '2-digit',
   month: '2-digit',
   year: '2-digit',
+});
+
+/** Format date to HH:MIN PM */
+export const hourFormatter = Intl.DateTimeFormat(undefined, {
+  hour12: true,
+  hour: '2-digit',
+  minute: '2-digit',
 });

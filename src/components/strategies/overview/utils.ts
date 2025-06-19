@@ -1,20 +1,22 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { StrategyWithFiat } from 'libs/queries';
 import {
-  StrategyFilter,
+  AnyStrategy,
+  AnyStrategyWithFiat,
+} from 'components/strategies/common/types';
+import {
   StrategySort,
   strategyFilter,
   strategySort,
 } from './StrategyFilterSort';
 
 /** There are multiple inactive status, so we cannot just do a.status !== b.status */
-const differentStatus = (a: StrategyWithFiat, b: StrategyWithFiat) => {
+const differentStatus = (a: AnyStrategy, b: AnyStrategy) => {
   if (a.status === 'active' && b.status !== 'active') return true;
   if (b.status === 'active' && a.status !== 'active') return true;
   return false;
 };
 
-type SortFn = (a: StrategyWithFiat, b: StrategyWithFiat) => number;
+type SortFn = (a: AnyStrategyWithFiat, b: AnyStrategyWithFiat) => number;
 const sortFn: Record<StrategySort, SortFn> = {
   recent: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
@@ -58,9 +60,5 @@ export const getSortAndFilterItems = () => {
       return { item: item as StrategySort, title };
     });
 
-  const filterItems = Object.entries(strategyFilter).map(([item, title]) => {
-    return { item: item as StrategyFilter, title };
-  });
-
-  return { sortItems, filterItems };
+  return { sortItems, filterItems: strategyFilter };
 };

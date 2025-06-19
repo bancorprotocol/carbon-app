@@ -2,7 +2,7 @@ import { setupServer } from 'msw/node';
 import { HttpResponse, http, RequestHandler } from 'msw';
 import { debugTokens } from '../../../../e2e/utils/types';
 import tokenListsMock from '../../../../e2e/mocks/tokenLists.json';
-import { Order, Strategy } from 'libs/queries';
+import { StaticOrder, Strategy } from 'components/strategies/common/types';
 import { TokenPriceHistoryResult } from 'libs/queries/extApi/tokenPrice';
 
 /**
@@ -141,24 +141,25 @@ export const mockMarketRate = (params: MockMarketRateParams) => {
 export interface MockStrategyParams {
   base: TokenNames;
   quote: TokenNames;
-  order0: Order;
-  order1: Order;
+  buy: StaticOrder;
+  sell: StaticOrder;
 }
 
 export const mockStrategy = (params: MockStrategyParams): Strategy => ({
+  type: 'static',
   id: '1',
   idDisplay: '1',
   base: tokenList[params.base],
   quote: tokenList[params.quote],
   status: 'active',
   encoded: {} as any,
-  order0: params.order0,
-  order1: params.order1,
+  buy: params.buy,
+  sell: params.sell,
 });
 
-export const mockEmptyOrder = (balance: string = '0'): Order => ({
-  balance,
-  startRate: '0',
-  endRate: '0',
-  marginalRate: '0',
+export const mockEmptyOrder = (budget: string = '0'): StaticOrder => ({
+  budget,
+  min: '0',
+  max: '0',
+  marginalPrice: '0',
 });

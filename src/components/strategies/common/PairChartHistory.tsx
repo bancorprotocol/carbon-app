@@ -1,22 +1,20 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { TradeSearch } from 'libs/routing';
-import { FC, useCallback } from 'react';
+import { FC, ReactNode, useCallback } from 'react';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { defaultEnd, oneYearAgo } from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { Token } from 'libs/tokens';
-import { Activity } from 'libs/queries/extApi/activity';
 import { D3PriceHistory } from './d3Chart/D3PriceHistory';
 import config from 'config';
 
 interface Props {
   base: Token;
   quote: Token;
-  readonly?: boolean;
-  activities?: Activity[];
+  children?: ReactNode;
 }
 
 const bounds = {
@@ -24,14 +22,9 @@ const bounds = {
   sell: { min: '', max: '' },
 };
 
-const prices = {
-  buy: { min: '0', max: '0' },
-  sell: { min: '0', max: '0' },
-};
-
 export const PairChartHistory: FC<Props> = (props) => {
-  const { base, quote, activities } = props;
-  const { priceStart, priceEnd } = useSearch({ strict: false }) as TradeSearch;
+  const { base, quote, children } = props;
+  const { chartStart, chartEnd } = useSearch({ strict: false }) as TradeSearch;
   const { marketPrice, isPending: marketIsPending } = useMarketPrice({
     base,
     quote,
@@ -88,17 +81,15 @@ export const PairChartHistory: FC<Props> = (props) => {
 
   return (
     <D3PriceHistory
-      type="market"
-      readonly={props.readonly}
-      prices={prices}
       data={data}
       marketPrice={marketPrice}
       bounds={bounds}
-      activities={activities}
-      zoomBehavior={activities ? 'normal' : 'extended'}
-      start={priceStart}
-      end={priceEnd}
+      zoomBehavior="extended"
+      start={chartStart}
+      end={chartEnd}
       onRangeUpdates={updatePriceRange}
-    />
+    >
+      {children}
+    </D3PriceHistory>
   );
 };

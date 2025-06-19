@@ -1,6 +1,6 @@
-import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
+import { fromUnixUTC, dayFormatter } from 'components/simulator/utils';
 import { ScaleBand, ScaleLinear } from 'd3';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { handleDms, scaleBandInvert } from './utils';
 import { useD3ChartCtx } from './D3ChartContext';
@@ -38,7 +38,15 @@ const usePointerPosition = (
   return position;
 };
 
-export const D3Pointer = () => {
+interface Props {
+  formatX?: (x: string) => string;
+  formatY?: (y: number) => string;
+}
+
+export const D3Pointer: FC<Props> = ({
+  formatX = (x: string) => dayFormatter.format(fromUnixUTC(x)),
+  formatY = (y: number) => prettifyNumber(y),
+}) => {
   const { dms, xScale, yScale } = useD3ChartCtx();
   const position = usePointerPosition(xScale, yScale);
   if (!position) return;
@@ -76,7 +84,7 @@ export const D3Pointer = () => {
         fontSize="10"
         fill="white"
       >
-        {xAxisFormatter.format(fromUnixUTC(position.x))}
+        {formatX(position.x)}
       </text>
       {/* Y axis */}
       <line
@@ -107,7 +115,7 @@ export const D3Pointer = () => {
         fontSize="10"
         fill="white"
       >
-        {prettifyNumber(position.y)}
+        {formatY(position.y)}
       </text>
     </>
   );

@@ -1,7 +1,8 @@
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { TokensOverlap } from 'components/common/tokensOverlap';
+import { AnyStrategy } from 'components/strategies/common/types';
 import { useTokens } from 'hooks/useTokens';
-import { Strategy, useGetStrategyList } from 'libs/queries';
+import { useGetStrategyList } from 'libs/queries';
 import {
   PairTrade,
   Trending,
@@ -48,9 +49,9 @@ const getTrendingPairs = (
   return { isLoading: false, data };
 };
 
-interface StrategyWithTradeCount extends Strategy {
+type StrategyWithTradeCount = AnyStrategy & {
   trades: number;
-}
+};
 const useTrendStrategies = (
   trending?: Trending,
 ): { isLoading: boolean; data: StrategyWithTradeCount[] } => {

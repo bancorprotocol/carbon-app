@@ -1,16 +1,18 @@
 import { FC, ReactNode, useId } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { LogoImager } from 'components/common/imager/Imager';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/common/OrderHeader';
 import { InputRange } from 'components/strategies/common/InputRange';
 import { InputLimit } from 'components/strategies/common/InputLimit';
-import { EditOrderBlock } from 'components/strategies/common/types';
+import {
+  EditOrderBlock,
+  StaticOrder,
+} from 'components/strategies/common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { BudgetDistribution } from '../common/BudgetDistribution';
 import { getDeposit, getWithdraw } from './utils';
-import { Order, useGetTokenBalance } from 'libs/queries';
-import { StrategySettings } from 'libs/routing';
+import { useGetTokenBalance } from 'libs/queries';
+import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { OverlappingAction } from '../overlapping/OverlappingAction';
 import { EditBudgetDistribution } from './EditStrategyAllocatedBudget';
 import { isZero } from '../common/utils';
@@ -20,8 +22,8 @@ import { cn } from 'utils/helpers';
 
 interface Props {
   order: EditOrderBlock;
-  buy?: boolean;
-  initialOrder: Order;
+  direction?: StrategyDirection;
+  initialOrder: StaticOrder;
   budget: string;
   action?: 'deposit' | 'withdraw';
   hasPriceChanged: boolean;
@@ -37,20 +39,18 @@ export const EditStrategyPriceField: FC<Props> = ({
   budget,
   hasPriceChanged,
   setOrder,
-  buy = false,
+  direction = 'sell',
   settings,
   error,
   warnings,
 }) => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
-  const token = buy ? quote : base;
+  const isBuy = direction === 'buy';
+  const token = isBuy ? quote : base;
   const balance = useGetTokenBalance(token);
-  const initialBudget = initialOrder.balance;
+  const initialBudget = initialOrder.budget;
   const titleId = useId();
-  const tooltipText = `This section will define the order details in which you are willing to ${
-    buy ? 'buy' : 'sell'
-  } ${base.symbol} at.`;
 
   const inputTitle = (
     <>
@@ -58,13 +58,13 @@ export const EditStrategyPriceField: FC<Props> = ({
         1
       </span>
       <Tooltip
-        element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
-          base.symbol
-        } at. Make sure the price is in ${quote.symbol} tokens.`}
+        element={`Define the price you are willing to ${
+          isBuy ? 'buy' : 'sell'
+        } ${base.symbol} at. Make sure the price is in ${quote.symbol} tokens.`}
       >
         <p>
           <span className="text-white/80">
-            Set {buy ? 'Buy' : 'Sell'} Price&nbsp;
+            Set {isBuy ? 'Buy' : 'Sell'} Price&nbsp;
           </span>
           <span className="text-white/60">
             ({quote.symbol} per 1 {base.symbol})
@@ -99,33 +99,32 @@ export const EditStrategyPriceField: FC<Props> = ({
     if (isZero(initialBudget)) return false;
     if (new SafeDecimal(order.budget).lte(0)) return false;
     if (!balance.data || new SafeDecimal(budget).gt(balance.data)) return false;
-    if (buy && initialOrder.marginalRate === order.max) return false;
-    if (!buy && initialOrder.marginalRate === order.min) return false;
+    if (isBuy && initialOrder.marginalPrice === order.max) return false;
+    if (!isBuy && initialOrder.marginalPrice === order.min) return false;
     return true;
   };
 
-  const headerProps = { titleId, order, base, buy, setSettings };
+  const headerProps = {
+    titleId,
+    order,
+    base,
+    buy: isBuy,
+    direction,
+    setSettings,
+  };
 
   return (
     <article
       aria-labelledby={titleId}
       className="bg-background-900 grid text-left"
-      data-testid={`${buy ? 'buy' : 'sell'}-section`}
+      data-testid={`${isBuy ? 'buy' : 'sell'}-section`}
     >
       {settings}
       <div
         className={cn(style.order, 'grid gap-16 p-16')}
-        data-direction={buy ? 'buy' : 'sell'}
+        data-direction={isBuy ? 'buy' : 'sell'}
       >
-        <OrderHeader {...headerProps}>
-          <h2 className="text-16 flex items-center gap-8" id={titleId}>
-            <Tooltip element={tooltipText}>
-              <span>{buy ? 'Buy Low' : 'Sell High'}</span>
-            </Tooltip>
-            <LogoImager alt="Token" src={base.logoURI} className="size-18" />
-            <span>{base.symbol}</span>
-          </h2>
-        </OrderHeader>
+        <OrderHeader {...headerProps} />
         <fieldset className="flex flex-col gap-8">
           <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
             {inputTitle}
@@ -138,7 +137,7 @@ export const EditStrategyPriceField: FC<Props> = ({
               setMin={setMin}
               max={order.max}
               setMax={setMax}
-              buy={buy}
+              isBuy={isBuy}
               error={error}
               warnings={warnings}
               required
@@ -149,7 +148,7 @@ export const EditStrategyPriceField: FC<Props> = ({
               quote={quote}
               price={order.min}
               setPrice={setPrice}
-              buy={buy}
+              isBuy={isBuy}
               error={error}
               warnings={warnings}
               required
@@ -159,13 +158,13 @@ export const EditStrategyPriceField: FC<Props> = ({
         <OverlappingAction
           base={base}
           quote={quote}
-          anchor={buy ? 'buy' : 'sell'}
+          anchor={isBuy ? 'buy' : 'sell'}
           action={order.action}
           setAction={setAction}
           budget={budget}
           setBudget={setBudget}
-          buyBudget={strategy.order0.balance}
-          sellBudget={strategy.order1.balance}
+          buyBudget={strategy.buy.budget}
+          sellBudget={strategy.sell.budget}
         >
           {showDistribution() && (
             <div
@@ -185,13 +184,13 @@ export const EditStrategyPriceField: FC<Props> = ({
           withdraw={getWithdraw(initialBudget, order.budget)}
           deposit={getDeposit(initialBudget, order.budget)}
           balance={balance.data}
-          buy={buy}
+          isBuy={isBuy}
         />
         <FullOutcome
           min={order.min}
           max={order.max}
           budget={order.budget}
-          buy={buy}
+          isBuy={isBuy}
           base={base}
           quote={quote}
         />
