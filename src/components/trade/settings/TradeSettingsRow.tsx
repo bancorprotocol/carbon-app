@@ -47,23 +47,29 @@ export const TradeSettingsRow: FC<{
           value={internalValue}
           onChange={(v) => setInternalValue(v)}
         />
-        <input
-          id={item.id}
+        <div
           className={cn(
             style.presetCustom,
-            'text-12 rounded-10 bg-black text-center placeholder:text-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white',
+            'rounded-10 text-12 flex gap-8 border border-white bg-black py-8 px-16 text-center',
+            'focus-within:outline focus-within:outline-1',
           )}
-          value={internalValue}
-          type="number"
-          inputMode="decimal"
-          aria-label="Set custom"
-          placeholder="Custom"
-          onChange={(v) => setInternalValue(sanitizeNumber(v.target.value))}
-          min="0"
-          max={item.max}
-          step="any"
-          data-testid="spread-input"
-        />
+        >
+          <label className="text-white/60" htmlFor={item.id}>
+            Custom
+          </label>
+          <input
+            id={item.id}
+            className={cn('bg-transparent text-center outline-none w-[80px]')}
+            value={internalValue}
+            type="number"
+            inputMode="decimal"
+            onChange={(v) => setInternalValue(sanitizeNumber(v.target.value))}
+            min="0"
+            max={item.max}
+            step="any"
+            data-testid="spread-input"
+          />
+        </div>
       </div>
       {warningMessage && <Warning isError={isError} message={warningMessage} />}
     </fieldset>
