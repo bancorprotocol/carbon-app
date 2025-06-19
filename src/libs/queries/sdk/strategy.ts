@@ -22,6 +22,7 @@ import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 import { getAddress } from 'ethers/lib/utils';
 import { usePairs } from 'hooks/usePairs';
 import { useCarbonInit } from 'hooks/useCarbonInit';
+import { isZero } from 'components/strategies/common/utils';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
@@ -246,6 +247,39 @@ interface PropsPair {
   quote?: string;
 }
 
+/** Inverse a base/quote strategy to quote/base */
+const reverseStrategy = (strategy: SDKStrategy): SDKStrategy => {
+  const invert = (value: string) => {
+    if (isZero(value)) return '0';
+    return new SafeDecimal(1).div(value).toString();
+  };
+  return {
+    id: strategy.id,
+    baseToken: strategy.quoteToken,
+    quoteToken: strategy.baseToken,
+    buyPriceLow: invert(strategy.sellPriceHigh),
+    buyPriceMarginal: invert(strategy.sellPriceMarginal),
+    buyPriceHigh: invert(strategy.sellPriceLow),
+    buyBudget: strategy.sellBudget,
+    sellPriceLow: invert(strategy.buyPriceHigh),
+    sellPriceMarginal: invert(strategy.buyPriceMarginal),
+    sellPriceHigh: invert(strategy.buyPriceLow),
+    sellBudget: strategy.buyBudget,
+    encoded: strategy.encoded,
+  };
+};
+const normalizeStrategy = (
+  base: string,
+  quote: string,
+  strategy: SDKStrategy,
+) => {
+  if (base === strategy.quoteToken && quote === strategy.baseToken) {
+    return reverseStrategy(strategy);
+  } else {
+    return strategy;
+  }
+};
+
 export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
   const { isInitialized } = useCarbonInit();
   const { getTokenById, importTokens, isPending } = useTokens();
@@ -258,7 +292,7 @@ export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
       if (!base || !quote) return [];
       const strategies = await carbonSDK.getStrategiesByPair(base, quote);
       return buildStrategiesHelper({
-        strategies,
+        strategies: strategies.map((s) => normalizeStrategy(base, quote, s)),
         getTokenById,
         importTokens,
         Token,
