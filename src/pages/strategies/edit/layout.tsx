@@ -2,7 +2,7 @@ import { Outlet, useNavigate, useParams, useSearch } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
 import { useEffect, useState } from 'react';
 import { StrategiesPage } from 'pages/strategies/index';
-import { Strategy, useGetUserStrategies } from 'libs/queries';
+import { useGetUserStrategies } from 'libs/queries';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
 import {
@@ -10,6 +10,8 @@ import {
   getEditPricesPage,
 } from 'components/strategies/edit/utils';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
+import { AnyStrategy } from 'components/strategies/common/types';
+import { isGradientStrategy } from 'components/strategies/common/utils';
 
 const url = '/strategies/edit/$strategyId';
 export const EditStrategyPageLayout = () => {
@@ -17,7 +19,7 @@ export const EditStrategyPageLayout = () => {
   const { data: strategies, isPending } = useGetUserStrategies({ user });
   const { strategyId } = useParams({ from: url });
   const search = useSearch({ from: url });
-  const [strategy, setStrategy] = useState<Strategy | undefined>();
+  const [strategy, setStrategy] = useState<AnyStrategy | undefined>();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,7 +41,7 @@ export const EditStrategyPageLayout = () => {
       navigate({ to: '/portfolio' });
       return;
     }
-    if (!strategy) return;
+    if (!strategy || isGradientStrategy(strategy)) return;
     if (type === 'editPrices' || type === 'renew') {
       const prices = getEditPricesPage(strategy, type);
       navigate({ to: prices.to, search: prices.search, params: (p) => p });
@@ -54,7 +56,8 @@ export const EditStrategyPageLayout = () => {
   if (isPending) {
     return <CarbonLogoLoading className="h-100 place-self-center" />;
   }
-  if (!strategy) return;
+  // TODO: support gradient
+  if (!strategy || isGradientStrategy(strategy)) return;
   return (
     <EditStrategyProvider strategy={strategy}>
       <Outlet />

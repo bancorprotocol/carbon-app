@@ -3,7 +3,7 @@ import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyConte
 import { tokenAmount } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
-import { EditOrderBlock } from 'components/strategies/common/types';
+import { EditOrderBlock, Order } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   getStrategyType,
@@ -22,16 +22,20 @@ import { StrategyChartHistory } from 'components/strategies/common/StrategyChart
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
-import { Order, Strategy } from 'libs/queries';
+import { Strategy } from 'components/strategies/common/types';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
+import { D3ChartDisposable } from 'components/strategies/common/d3Chart/disposable/D3ChartDisposable';
+import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
+import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 export interface EditDisposableStrategySearch {
   marketPrice?: string;
-  priceStart?: string;
-  priceEnd?: string;
+  chartStart?: string;
+  chartEnd?: string;
   editType: 'editPrices' | 'renew';
   min?: string;
   max?: string;
@@ -47,15 +51,15 @@ const getOrder = (
   search: EditDisposableStrategySearch,
   marketPrice?: string,
 ): EditOrderBlock => {
-  const { order0, order1 } = strategy;
-  const defaultDirection = !isEmptyOrder(order0) ? 'buy' : 'sell';
+  const { buy, sell } = strategy;
+  const defaultDirection = !isEmptyOrder(buy) ? 'buy' : 'sell';
   const direction = search.direction ?? defaultDirection;
   const isBuy = direction === 'buy';
-  const order = isBuy ? order0 : order1;
+  const order = isBuy ? buy : sell;
   const defaultSettings = isLimitOrder(order) ? 'limit' : 'range';
   const settings = search.settings ?? defaultSettings;
   const action = search.action ?? 'deposit';
-  const defaultPrice = isBuy ? order0.startRate : order1.endRate;
+  const defaultPrice = isBuy ? buy.min : sell.max;
   const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
 
   const defaultMin = () => {
@@ -87,7 +91,7 @@ const getOrder = (
     action,
     min: search.min ?? defaultMin()?.toString() ?? '0',
     max: search.max ?? defaultMax()?.toString() ?? '0',
-    budget: getTotalBudget(action, order.balance, search.budget),
+    budget: getTotalBudget(action, order.budget, search.budget),
     marginalPrice: search.marginalPrice,
   };
 };
@@ -95,13 +99,13 @@ const getOrder = (
 const resetOrder = (order: Order, resetBudget: boolean) => ({
   min: '0',
   max: '0',
-  budget: resetBudget ? '0' : order.balance,
+  budget: resetBudget ? '0' : order.budget,
 });
 
 const url = '/strategies/edit/$strategyId/prices/disposable';
 export const EditPricesStrategyDisposablePage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote, buy, sell } = strategy;
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
   const marketQuery = useMarketPrice({ base, quote });
@@ -133,7 +137,7 @@ export const EditPricesStrategyDisposablePage = () => {
     });
   };
 
-  const onPriceUpdates: OnPriceUpdates = useCallback(
+  const updatePrices: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
       if (isBuy) setSearch({ min: buy.min, max: buy.max });
       else setSearch({ min: sell.min, max: sell.max });
@@ -142,26 +146,31 @@ export const EditPricesStrategyDisposablePage = () => {
   );
 
   const initialType = getStrategyType(strategy);
-  const initialDirection = isEmptyOrder(order0) ? 'sell' : 'buy';
+  const initialDirection = isEmptyOrder(buy) ? 'sell' : 'buy';
   const resetBudget =
     initialType !== 'disposable' || initialDirection !== direction;
-  const initialOrder = isBuy ? order0 : order1;
+  const initialOrder = isBuy ? buy : sell;
 
   const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
   const orders = {
-    buy: isBuy ? order : resetOrder(order0, resetBudget),
-    sell: isBuy ? resetOrder(order1, resetBudget) : order,
+    buy: isBuy ? order : resetOrder(buy, resetBudget),
+    sell: isBuy ? resetOrder(sell, resetBudget) : order,
   };
   const isLimit = {
     buy: order.settings !== 'range',
     sell: order.settings !== 'range',
   };
+  const { prices, setPrices } = useDebouncePrices(
+    orders.buy,
+    orders.sell,
+    updatePrices,
+  );
 
   const hasPriceChanged = (() => {
-    if (orders.buy.min !== order0.startRate) return true;
-    if (orders.buy.max !== order0.endRate) return true;
-    if (orders.sell.min !== order1.startRate) return true;
-    if (orders.sell.max !== order1.endRate) return true;
+    if (orders.buy.min !== buy.min) return true;
+    if (orders.buy.max !== buy.max) return true;
+    if (orders.sell.min !== sell.min) return true;
+    if (orders.sell.max !== sell.max) return true;
     return false;
   })();
   const hasChanged = hasPriceChanged || !isZero(search.budget);
@@ -172,15 +181,34 @@ export const EditPricesStrategyDisposablePage = () => {
     marketPrice,
     min: search.min,
     max: search.max,
-    buy: isBuy,
+    isBuy,
   });
 
   // Check if inactive budget changed
-  const buyBudgetChanges = resetBudget && !isBuy && !isZero(order0.balance);
-  const sellBudgetChanges = resetBudget && isBuy && !isZero(order1.balance);
+  const buyBudgetChanges = resetBudget && !isBuy && !isZero(buy.budget);
+  const sellBudgetChanges = resetBudget && isBuy && !isZero(sell.budget);
 
   return (
     <EditStrategyLayout editType={search.editType}>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
+        <StrategyChartHistory
+          base={base}
+          quote={quote}
+          buy={orders.buy}
+          sell={orders.sell}
+          direction={search.direction ?? 'sell'}
+        >
+          <D3ChartDisposable
+            isLimit={isLimit}
+            prices={prices}
+            onChange={setPrices}
+          />
+          <TradeChartContent />
+          <D3PricesAxis prices={prices} />
+        </StrategyChartHistory>
+      </StrategyChartSection>
       <EditPricesForm
         strategyType="disposable"
         editType={search.editType}
@@ -193,7 +221,7 @@ export const EditPricesStrategyDisposablePage = () => {
           initialOrder={initialOrder}
           setOrder={setOrder}
           warnings={[outSideMarket]}
-          buy={isBuy}
+          direction={search.direction}
           hasPriceChanged={hasPriceChanged}
           settings={
             <div className="p-16 pb-0">
@@ -229,35 +257,21 @@ export const EditPricesStrategyDisposablePage = () => {
               {buyBudgetChanges && (
                 <p className="text-14 text-white/80">
                   You will withdraw&nbsp;
-                  {tokenAmount(order0.balance, quote)} from the inactive buy
-                  order to your wallet.
+                  {tokenAmount(buy.budget, quote)} from the inactive buy order
+                  to your wallet.
                 </p>
               )}
               {sellBudgetChanges && (
                 <p className="text-14 text-white/80">
                   You will withdraw&nbsp;
-                  {tokenAmount(order1.balance, base)} from the inactive sell
-                  order to your wallet.
+                  {tokenAmount(sell.budget, base)} from the inactive sell order
+                  to your wallet.
                 </p>
               )}
             </div>
           </article>
         )}
       </EditPricesForm>
-      <StrategyChartSection
-        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
-      >
-        <StrategyChartHistory
-          type="disposable"
-          base={base}
-          quote={quote}
-          order0={orders.buy}
-          order1={orders.sell}
-          isLimit={isLimit}
-          direction={search.direction ?? 'sell'}
-          onPriceUpdates={onPriceUpdates}
-        />
-      </StrategyChartSection>
     </EditStrategyLayout>
   );
 };

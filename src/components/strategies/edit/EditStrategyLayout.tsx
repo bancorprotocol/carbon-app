@@ -28,7 +28,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
         </h1>
       </header>
 
-      <div className="flex flex-col gap-20 md:grid md:grid-cols-[450px_auto] md:items-start">
+      <div className="flex flex-col-reverse gap-20 md:grid md:grid-cols-[auto_450px] md:items-start">
         {children}
       </div>
     </div>

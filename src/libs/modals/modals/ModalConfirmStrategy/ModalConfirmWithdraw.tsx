@@ -3,7 +3,7 @@ import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
 import { buttonStyles } from 'components/common/button/buttonStyles';
-import { Strategy } from 'libs/queries';
+import { Strategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { cn } from 'utils/helpers';

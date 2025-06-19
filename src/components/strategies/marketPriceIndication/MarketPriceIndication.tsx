@@ -1,23 +1,20 @@
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { MarketPricePercent } from './MarketPricePercent';
 import { marketPricePercent } from './useMarketPercent';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useSearch } from '@tanstack/react-router';
+import { useStrategyMarketPrice } from '../UserMarketPrice';
 
 interface Props {
   base: Token;
   quote: Token;
   price: string;
   ignoreMarketPriceWarning?: boolean;
-  buy?: boolean;
+  isBuy?: boolean;
 }
 export const MarketPriceIndication: FC<Props> = (props) => {
-  const { base, quote, price, ignoreMarketPriceWarning, buy } = props;
-  const search = useSearch({ strict: false }) as { marketPrice?: string };
-  const query = useMarketPrice({ base, quote });
-  const marketPrice = search.marketPrice ?? query.marketPrice;
+  const { base, quote, price, ignoreMarketPriceWarning, isBuy } = props;
+  const { marketPrice } = useStrategyMarketPrice({ base, quote });
   const marketPercent = marketPricePercent(price, marketPrice);
   const { getFiatAsString, selectedFiatCurrency } = useFiatCurrency(quote);
   const fiatAsString = getFiatAsString(price);
@@ -35,7 +32,7 @@ export const MarketPriceIndication: FC<Props> = (props) => {
       <MarketPricePercent
         ignoreMarketPriceWarning={ignoreMarketPriceWarning}
         marketPricePercentage={marketPercent}
-        buy={buy}
+        isBuy={isBuy}
       />
     </p>
   );

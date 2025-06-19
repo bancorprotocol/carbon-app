@@ -467,7 +467,7 @@ const popularTokens = [
 
 export const commonConfig: AppConfig = {
   mode: 'development',
-  appName: 'Carbon DeFi',
+  appName: 'Ethereum - Carbon DeFi',
   appUrl: 'https://app.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/',
   externalLinks: {

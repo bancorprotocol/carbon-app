@@ -5,19 +5,20 @@ import { getMarketPricePercentage } from './utils';
 
 interface Props {
   marketPricePercentage: SafeDecimal;
-  buy?: boolean;
+  isBuy?: boolean;
   ignoreMarketPriceWarning?: boolean;
 }
 
 export const MarketPricePercent: FC<Props> = ({
   marketPricePercentage,
-  buy,
+  isBuy,
   ignoreMarketPriceWarning = false,
 }) => {
   if (marketPricePercentage.eq(0)) return null;
   const isAbove = marketPricePercentage.gt(0);
   const percentage = getMarketPricePercentage(marketPricePercentage);
-  const isOrderAboveOrBelowMarketPrice = (isAbove && buy) || (!isAbove && !buy);
+  const isOrderAboveOrBelowMarketPrice =
+    (isAbove && isBuy) || (!isAbove && !isBuy);
   const marketPriceWarning =
     !ignoreMarketPriceWarning && isOrderAboveOrBelowMarketPrice;
 

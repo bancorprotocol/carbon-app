@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { CartStrategy } from 'libs/queries';
+import { CartStrategy, Order } from 'components/strategies/common/types';
 
 interface Props {
-  strategy: CartStrategy;
+  strategy: CartStrategy<Order>;
 }
 
 export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {

@@ -1,5 +1,5 @@
-import { Strategy } from 'libs/queries';
 import { FC, ReactNode, createContext, useContext } from 'react';
+import { Strategy } from '../common/types';
 
 interface EditStrategyCtx {
   strategy: Strategy;

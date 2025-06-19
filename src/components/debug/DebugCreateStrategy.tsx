@@ -121,13 +121,13 @@ export const DebugCreateStrategy = () => {
     const strategy: CreateStrategyParams = {
       base: base.address,
       quote: quote.address,
-      order0: {
+      buy: {
         max: buyMax,
         min: buyMin,
         marginalPrice: '',
         budget: buyBudget,
       },
-      order1: {
+      sell: {
         max: sellMax,
         min: sellMin,
         marginalPrice: '',
@@ -144,10 +144,10 @@ export const DebugCreateStrategy = () => {
         spread,
       );
       console.log(params);
-      strategy.order0.max = params.buyPriceHigh;
-      strategy.order0.marginalPrice = params.buyPriceMarginal;
-      strategy.order1.min = params.sellPriceLow;
-      strategy.order1.marginalPrice = params.sellPriceMarginal;
+      strategy.buy.max = params.buyPriceHigh;
+      strategy.buy.marginalPrice = params.buyPriceMarginal;
+      strategy.sell.min = params.sellPriceLow;
+      strategy.sell.marginalPrice = params.sellPriceMarginal;
     }
     for (let i = 0; i <= rounds - 1; i++) {
       setIndex(i);

@@ -1,14 +1,14 @@
 import { CSSProperties, FC, useId } from 'react';
-import { StrategyWithFiat } from 'libs/queries';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 
 import { cn } from 'utils/helpers';
 import { StrategyBlockHeader } from './StrategyBlockHeader';
 import { StrategyGraph } from './StrategyGraph';
 import { StrategyBlockInfo } from './StrategyBlockInfo';
+import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 
 interface Props {
-  strategy: StrategyWithFiat;
+  strategy: AnyStrategyWithFiat;
   className?: string;
   isExplorer?: boolean;
   style?: CSSProperties;
@@ -42,7 +42,7 @@ export const StrategyBlock: FC<Props> = ({
       >
         <StrategyBlockBuySell
           strategy={strategy}
-          buy
+          isBuy
           className="border-background-800 border-r-2"
         />
         <StrategyBlockBuySell strategy={strategy} />

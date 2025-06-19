@@ -21,26 +21,41 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { BackButton } from 'components/common/BackButton';
-import { defaultEnd, oneYearAgo } from 'components/strategies/common/utils';
+import {
+  defaultEnd,
+  isGradientStrategy,
+  oneYearAgo,
+} from 'components/strategies/common/utils';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 import { useActivityQuery } from 'components/activity/useActivityQuery';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { StrategyPageSearch } from 'libs/routing/routes/strategy';
 import { PairName } from 'components/common/DisplayPair';
+import { D3ChartIndicators } from 'components/strategies/common/d3Chart/D3ChartIndicators';
+import { D3Drawings } from 'components/strategies/common/d3Chart/drawing/D3Drawings';
+import { D3XAxis } from 'components/strategies/common/d3Chart/D3XAxis';
+import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
+import { D3YAxis } from 'components/strategies/common/d3Chart/D3YAxis';
+import { D3ChartMarketPrice } from 'components/strategies/common/d3Chart/D3ChartMarketPrice';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
   const navigate = useNavigate({ from: '/strategy/$id' });
-  const { priceStart, priceEnd, hideIndicators } = useSearch({
+  const { chartStart, chartEnd, hideIndicators } = useSearch({
     from: '/strategy/$id',
   });
   const params = { strategyIds: id };
   const query = useGetStrategy(id);
   const { strategies, isPending } = useStrategiesWithFiat(query);
   const [strategy] = strategies;
+  const { marketPrice } = useMarketPrice({
+    base: strategy?.base,
+    quote: strategy?.quote,
+  });
 
   const setSearch = (search: Partial<StrategyPageSearch>) => {
     navigate({
@@ -57,8 +72,8 @@ export const StrategyPage = () => {
 
   const { data: activities } = useActivityQuery({
     strategyIds: id,
-    start: priceStart ?? oneYearAgo(),
-    end: priceEnd ?? defaultEnd(),
+    start: chartStart ?? oneYearAgo(),
+    end: chartEnd ?? defaultEnd(),
   });
 
   if (isPending) {
@@ -94,7 +109,11 @@ export const StrategyPage = () => {
           <h1 className="text-18 font-weight-500 flex gap-8">
             <PairName baseToken={base} quoteToken={quote} />
           </h1>
-          <StrategySubtitle {...strategy} />
+          <StrategySubtitle
+            id={strategy.idDisplay}
+            status={strategy.status}
+            isGradient={isGradientStrategy(strategy)}
+          />
         </div>
         <StrategyBlockManage
           strategy={strategy}
@@ -112,7 +131,7 @@ export const StrategyPage = () => {
           >
             <StrategyBlockBuySell
               strategy={strategy}
-              buy
+              isBuy
               className="border-background-800 border-r-2"
             />
             <StrategyBlockBuySell strategy={strategy} />
@@ -144,11 +163,16 @@ export const StrategyPage = () => {
               </div>
             )}
           </header>
-          <PairChartHistory
-            base={base}
-            quote={quote}
-            activities={(!hideIndicators && activities) || []}
-          />
+          <PairChartHistory base={base} quote={quote}>
+            <D3ChartIndicators
+              activities={(!hideIndicators && activities) || []}
+            />
+            <D3Drawings />
+            <D3XAxis />
+            <D3ChartToday />
+            <D3YAxis />
+            <D3ChartMarketPrice marketPrice={marketPrice} />
+          </PairChartHistory>
         </article>
       </section>
       <ActivityProvider params={params} url="/strategy/$id">
