@@ -320,14 +320,39 @@ dialog.modal:not([open]) {
 dialog.modal:not([open])::backdrop {
   opacity: 0;
 }
-dialog.modal form {
-  @apply bg-background-900;
-  border-radius: 8px;
-  padding: 16px;
+dialog.modal > form {
+  @apply bg-background-800;
+  border-radius: 16px;
+  padding: 24px;
   max-width: 390px;
   transition: transform 0.3s var(--ease-out);
 }
 dialog.modal::backdrop {
   @apply bg-black/40;
   backdrop-filter: blur(8px);
+}
+
+@media (max-width: 600px) {
+  dialog.modal {
+    transition-timing-function: var(--ease-in-out);
+  }
+  @starting-style {
+    dialog.modal[open] {
+      transform: translateY(100%);
+    }
+    dialog.modal[open]::backdrop {
+      opacity: 0;
+    }
+  }
+  dialog.modal:not([open]) {
+    transform: translateY(100%);
+  }
+  dialog.modal {
+    margin-bottom: 0;
+    background-color: unset;
+  }
+  dialog.modal > form  {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }
