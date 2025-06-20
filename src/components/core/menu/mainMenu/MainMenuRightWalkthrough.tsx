@@ -8,6 +8,8 @@ import { lsService } from 'services/localeStorage';
 export const MainMenuRightWalkthrough: FC = () => {
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
+    // Prevent displaying walkthrough in devmode or E2E
+    if (import.meta.env.DEV || import.meta.env.VITE_CI) return;
     const hasWalkthrough = lsService.getItem('hasWalkthrough');
     if (!hasWalkthrough) {
       dialog.current?.showModal();

@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import 'dotenv/config'; // TODO: we can remove this with node@20.6.0
 
-const isCI = !!process.env.CI && process.env.CI !== 'false';
+const isCI = !!process.env.VITE_CI && process.env.VITE_CI !== 'false';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -20,7 +20,7 @@ export default defineConfig({
   /* See https://playwright.dev/docs/test-reporters */
   reporter: isCI ? 'html' : 'list',
   // Limit the number of failures on CI to save resources
-  maxFailures: process.env.CI ? 10 : undefined,
+  maxFailures: isCI ? 10 : undefined,
   // Set each test's default timeout
   timeout: 150_000,
 
