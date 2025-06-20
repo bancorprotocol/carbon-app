@@ -2,7 +2,7 @@ import { Locator, Page } from 'playwright-core';
 import { MainMenuDriver } from './MainMenuDriver';
 export { prettifyNumber as pn } from '../../src/utils/helpers/number';
 
-export const isCI = !!process.env.CI && process.env.CI !== 'false';
+export const isCI = !!process.env.VITE_CI && process.env.VITE_CI !== 'false';
 export const isDraft = !!process.env.DRAFT && process.env.DRAFT !== 'false';
 export const shouldTakeScreenshot = isCI && !isDraft;
 
@@ -12,7 +12,7 @@ export const screenshot = async (target: Page | Locator, name: string) => {
 
   const loadings = await target.locator('.loading-message').all();
   await Promise.all(
-    loadings.map((loading) => loading.waitFor({ state: 'detached' }))
+    loadings.map((loading) => loading.waitFor({ state: 'detached' })),
   );
 
   const mainMenu = new MainMenuDriver(target);
