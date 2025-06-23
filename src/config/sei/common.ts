@@ -125,5 +125,6 @@ export const commonConfig: AppConfig = {
     showTerms: true,
     showPrivacy: true,
     showCart: true,
+    showWalkthrough: false,
   },
 };

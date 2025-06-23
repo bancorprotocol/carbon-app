@@ -126,5 +126,6 @@ export const AppConfigSchema = v.object({
     showTerms: v.optional(v.boolean()),
     showPrivacy: v.optional(v.boolean()),
     showCart: v.optional(v.boolean()),
+    showWalkthrough: v.optional(v.boolean()),
   }),
 });
