@@ -1,22 +1,30 @@
 import { Token } from 'libs/tokens';
 
-interface OrderState {
+export interface ActivityStaticOrder {
   min: string;
   max: string;
   budget: string;
 }
+export interface ActivityGradientOrder {
+  _sD_: string;
+  _eD_: string;
+  _sP_: string;
+  _eP_: string;
+  budget: string;
+}
+
+export type ActivityOrder = ActivityStaticOrder | ActivityGradientOrder;
+
 interface StrategyChanges {
   owner?: string;
-  buy?: Partial<OrderState>;
-  sell?: Partial<OrderState>;
+  buy?: Partial<ActivityStaticOrder>;
+  sell?: Partial<ActivityStaticOrder>;
 }
-interface StrategyState<T extends 'server' | 'app'> {
+interface BaseActivityStrategy<Order extends ActivityOrder> {
   id: string;
-  base: T extends 'server' ? string : Token;
-  quote: T extends 'server' ? string : Token;
   owner: string;
-  buy: OrderState;
-  sell: OrderState;
+  buy: Order;
+  sell: Order;
 }
 export type ActivityAction =
   | 'create'
@@ -28,18 +36,35 @@ export type ActivityAction =
   | 'buy'
   | 'sell'
   | 'pause';
-export interface RawActivity<T extends 'server' | 'app'> {
+export interface BaseRawActivity {
   action: ActivityAction;
-  strategy: StrategyState<T>;
   changes?: StrategyChanges;
   blockNumber: number;
   txHash: string;
   timestamp: number;
-  date: T extends 'server' ? undefined : Date;
+}
+interface RawServerActivity<Order extends ActivityOrder>
+  extends BaseRawActivity {
+  strategy: BaseActivityStrategy<Order> & {
+    base: string;
+    quote: string;
+  };
+}
+interface RawAppActivity<Order extends ActivityOrder> extends BaseRawActivity {
+  date: Date;
+  strategy: BaseActivityStrategy<Order> & {
+    type: Order extends ActivityGradientOrder ? 'gradient' : 'static';
+    base: Token;
+    quote: Token;
+  };
 }
 
-export type ServerActivity = RawActivity<'server'>;
-export type Activity = RawActivity<'app'>;
+export type ServerActivity =
+  | RawServerActivity<ActivityStaticOrder>
+  | RawServerActivity<ActivityGradientOrder>;
+export type Activity =
+  | RawAppActivity<ActivityStaticOrder>
+  | RawAppActivity<ActivityGradientOrder>;
 
 export interface QueryActivityParams {
   ownerId?: string;

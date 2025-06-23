@@ -6,78 +6,44 @@ import {
   SimulatorOverlappingInputDispatch,
 } from 'hooks/useSimulatorOverlappingInput';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
-import {
-  ChartPrices,
-  OnPriceUpdates,
-} from 'components/strategies/common/d3Chart';
-import { SimulatorType } from 'libs/routing/routes/sim';
+import { ChartPrices } from 'components/strategies/common/d3Chart';
 import { ReactNode, useCallback } from 'react';
 import { ReactComponent as IconQuestion } from 'assets/icons/question.svg';
 import { CandlestickData } from 'libs/d3';
-import { formatNumber } from 'utils/helpers';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
-import { isFullRange } from 'components/strategies/common/utils';
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { D3Drawings } from 'components/strategies/common/d3Chart/drawing/D3Drawings';
+import { D3XAxis } from 'components/strategies/common/d3Chart/D3XAxis';
+import { D3YAxis } from 'components/strategies/common/d3Chart/D3YAxis';
+import { D3ChartMarketPrice } from 'components/strategies/common/d3Chart/D3ChartMarketPrice';
+import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { NotFound } from 'components/common/NotFound';
 
 interface Props {
   state: StrategyInputValues | SimulatorInputOverlappingValues;
   dispatch: SimulatorOverlappingInputDispatch;
-  isLimit?: { buy: boolean; sell: boolean };
-  spread?: string;
   bounds: ChartPrices;
   data?: CandlestickData[];
   isPending: boolean;
   isError: boolean;
-  simulationType: SimulatorType;
+  prices: ChartPrices;
+  children: ReactNode;
 }
 
 export const SimInputChart = ({
   state,
   dispatch,
-  isLimit,
-  spread,
   bounds,
   isPending,
   isError,
   data,
-  simulationType,
+  prices,
+  children,
 }: Props) => {
   const { marketPrice, isPending: marketIsPending } = useMarketPrice({
     base: state.baseToken,
     quote: state.quoteToken,
   });
-
-  const prices = {
-    buy: {
-      min: state.buy.min,
-      max: state.buy.max,
-    },
-    sell: {
-      min: state.sell.min,
-      max: state.sell.max,
-    },
-  };
-
-  const onPriceUpdates: OnPriceUpdates = useCallback(
-    ({ buy, sell }) => {
-      dispatch('buyMin', formatNumber(buy.min));
-      dispatch('buyMax', formatNumber(buy.max));
-      dispatch('sellMin', formatNumber(sell.min));
-      dispatch('sellMax', formatNumber(sell.max));
-    },
-    [dispatch],
-  );
-
-  const onPriceUpdatesEnd: OnPriceUpdates = useCallback(
-    ({ buy, sell }) => {
-      dispatch('buyMin', formatNumber(buy.min));
-      dispatch('buyMax', formatNumber(buy.max));
-      dispatch('sellMin', formatNumber(sell.min));
-      dispatch('sellMax', formatNumber(sell.max));
-    },
-    [dispatch],
-  );
 
   const onDatePickerConfirm = useCallback(
     (props: { start?: string; end?: string }) => {
@@ -120,21 +86,21 @@ export const SimInputChart = ({
     <Layout>
       <D3PriceHistory
         className="self-stretch"
-        prices={prices}
-        onPriceUpdates={onPriceUpdates}
-        onDragEnd={onPriceUpdatesEnd}
         onRangeUpdates={onDatePickerConfirm}
         data={data}
         marketPrice={marketPrice}
         bounds={bounds}
-        isLimit={isLimit}
-        type={simulationType}
-        overlappingSpread={spread}
         zoomBehavior="normal"
         start={state.start}
         end={state.end}
-        readonly={isFullRange(prices.buy.min, prices.sell.max)}
-      />
+      >
+        {children}
+        <D3Drawings />
+        <D3XAxis />
+        <D3YAxis />
+        <D3ChartMarketPrice marketPrice={marketPrice} />
+        <D3PricesAxis prices={prices} />
+      </D3PriceHistory>
     </Layout>
   );
 };

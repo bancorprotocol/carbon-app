@@ -1,4 +1,4 @@
-import { D3ChartCandlesticksProps } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
+import { ChartPrices } from 'components/strategies/common/d3Chart/D3ChartCandlesticks';
 import { DragablePriceRange } from 'components/strategies/common/d3Chart/recurring/DragablePriceRange';
 import { handleStateChange } from 'components/strategies/common/d3Chart/recurring/utils';
 import { isZero } from 'components/strategies/common/utils';
@@ -6,25 +6,18 @@ import { useCallback, useEffect, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { useD3ChartCtx } from '../D3ChartContext';
 
-type Props = Pick<
-  D3ChartCandlesticksProps,
-  'prices' | 'onPriceUpdates' | 'onDragEnd'
-> & {
+interface Props {
+  prices: ChartPrices;
   isLimit: { buy: boolean; sell: boolean };
-  readonly?: boolean;
-};
+  onChange?: (prices: ChartPrices) => any;
+}
 
-export const D3ChartDisposable = ({
-  prices,
-  onPriceUpdates,
-  isLimit,
-  readonly,
-  onDragEnd,
-}: Props) => {
+export const D3ChartDisposable = ({ prices, onChange, isLimit }: Props) => {
   const { yScale } = useD3ChartCtx();
+  const readonly = !onChange;
   const onMinMaxChange = useCallback(
     (type: 'buy' | 'sell', min: number, max: number) => {
-      if (!onPriceUpdates) return;
+      if (!onChange) return;
       const minInverted = yScale.invert(min).toString();
       const maxInverted = yScale.invert(max).toString();
 
@@ -36,10 +29,10 @@ export const D3ChartDisposable = ({
         min: type === 'sell' ? minInverted : prices.sell.min,
         max: type === 'sell' ? maxInverted : prices.sell.max,
       };
-      onPriceUpdates({ buy, sell });
+      onChange({ buy, sell });
     },
     [
-      onPriceUpdates,
+      onChange,
       prices.buy.max,
       prices.buy.min,
       prices.sell.max,
@@ -55,6 +48,7 @@ export const D3ChartDisposable = ({
 
   const onMinMaxChangeEnd = useCallback(
     (type: 'buy' | 'sell', y1?: number, y2?: number) => {
+      if (!onChange) return;
       const minInverted = y1
         ? yScale.invert(y1).toString()
         : type === 'buy'
@@ -75,11 +69,11 @@ export const D3ChartDisposable = ({
         min: type === 'sell' ? minInverted : prices.sell.min,
         max: type === 'sell' ? maxInverted : prices.sell.max,
       };
-      onDragEnd?.({ buy, sell });
+      onChange({ buy, sell });
       hasDragEnded.current = true;
     },
     [
-      onDragEnd,
+      onChange,
       prices.buy.max,
       prices.buy.min,
       prices.sell.max,

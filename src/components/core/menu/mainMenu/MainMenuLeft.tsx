@@ -1,9 +1,10 @@
 import { FC } from 'react';
 import { Link, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
-import { menuItems } from 'components/core/menu';
+import { getMenuItems } from 'components/core/menu';
 
 export const MainMenuLeft: FC = () => {
+  const menuItems = getMenuItems();
   const { pathname } = useRouterState().location;
 
   const isSamePageLink = (to: string) => {

@@ -8,7 +8,7 @@ import {
   userEvent,
 } from 'libs/testing-library';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
-import { Strategy } from 'libs/queries';
+import { Strategy } from 'components/strategies/common/types';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import {
   MockStrategyParams,
@@ -65,13 +65,13 @@ describe('Edit budget disposable page', () => {
     await renderPage('deposit', {
       base: 'ETH',
       quote: 'USDC',
-      order0: {
-        balance: '1',
-        startRate: '1',
-        endRate: '2',
-        marginalRate: '1.5',
+      buy: {
+        budget: '1',
+        min: '1',
+        max: '2',
+        marginalPrice: '1.5',
       },
-      order1: mockEmptyOrder(),
+      sell: mockEmptyOrder(),
     });
     const form = await driver.findDisposableForm();
     expect(form.submit()).toBeDisabled();
@@ -83,13 +83,13 @@ describe('Edit budget disposable page', () => {
       await renderPage('deposit', {
         base: 'ETH',
         quote: 'USDC',
-        order0: {
-          balance: '1',
-          startRate: '1',
-          endRate: '2',
-          marginalRate: '1.5',
+        buy: {
+          budget: '1',
+          min: '1',
+          max: '2',
+          marginalPrice: '1.5',
         },
-        order1: mockEmptyOrder(),
+        sell: mockEmptyOrder(),
       });
       const form = await driver.findDisposableForm();
       expect(form.distributeBudget()).toBeNull();
@@ -101,13 +101,13 @@ describe('Edit budget disposable page', () => {
       await renderPage('deposit', {
         base: 'ETH',
         quote: 'USDC',
-        order0: {
-          balance: '1',
-          startRate: '1',
-          endRate: '2',
-          marginalRate: '2',
+        buy: {
+          budget: '1',
+          min: '1',
+          max: '2',
+          marginalPrice: '2',
         },
-        order1: mockEmptyOrder(),
+        sell: mockEmptyOrder(),
       });
       const form = await driver.findDisposableForm();
       await user.type(form.budget(), '1');
@@ -117,12 +117,12 @@ describe('Edit budget disposable page', () => {
       await renderPage('deposit', {
         base: 'ETH',
         quote: 'USDC',
-        order0: mockEmptyOrder(),
-        order1: {
-          balance: '1',
-          startRate: '1',
-          endRate: '2',
-          marginalRate: '1',
+        buy: mockEmptyOrder(),
+        sell: {
+          budget: '1',
+          min: '1',
+          max: '2',
+          marginalPrice: '1',
         },
       });
       const form = await driver.findDisposableForm();
@@ -133,12 +133,12 @@ describe('Edit budget disposable page', () => {
       await renderPage('deposit', {
         base: 'ETH',
         quote: 'USDC',
-        order0: mockEmptyOrder(),
-        order1: {
-          balance: '0',
-          startRate: '1',
-          endRate: '2',
-          marginalRate: '1.5',
+        buy: mockEmptyOrder(),
+        sell: {
+          budget: '0',
+          min: '1',
+          max: '2',
+          marginalPrice: '1.5',
         },
       });
       const form = await driver.findDisposableForm();

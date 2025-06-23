@@ -10,6 +10,8 @@ export const TradeLayout: FC<Props> = ({ children }) => {
   return (
     <section className="grid content-start">
       <TokenSelection />
+      {/* @todo(gradient) */}
+      {/* <TradeType /> */}
       <TradeNav />
       {children}
     </section>

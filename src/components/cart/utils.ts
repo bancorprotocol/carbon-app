@@ -1,10 +1,5 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTokens } from 'hooks/useTokens';
-import {
-  CartStrategy,
-  CreateStrategyOrder,
-  CreateStrategyParams,
-} from 'libs/queries';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useEffect, useMemo, useState } from 'react';
@@ -12,14 +7,62 @@ import { lsService } from 'services/localeStorage';
 import { useWagmi } from 'libs/wagmi';
 import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
 import formStyle from 'components/strategies/common/form.module.css';
+import {
+  AnyCartStrategy,
+  AnyCartStrategyStorage,
+  FormGradientOrder,
+  FormStaticOrder,
+} from 'components/strategies/common/types';
+import { Token } from 'libs/tokens';
+import { isGradientStrategy } from 'components/strategies/common/utils';
+import {
+  gradientMarginalPrice,
+  order_ED_,
+  order_SD_,
+} from 'components/strategies/common/gradient/utils';
+import { toUnixUTC } from 'components/simulator/utils';
 
-export type Cart = (CreateStrategyParams & { id: string })[];
+export type Cart = AnyCartStrategyStorage[];
 
-const toOrder = (sdkOrder: CreateStrategyOrder) => ({
-  balance: sdkOrder.budget,
-  startRate: sdkOrder.min,
-  endRate: sdkOrder.max,
-  marginalRate: sdkOrder.marginalPrice,
+export const toStaticCartStorage = (
+  base: Token,
+  quote: Token,
+  buy: FormStaticOrder,
+  sell: FormStaticOrder,
+) => ({
+  id: crypto.randomUUID(),
+  base: base.address,
+  quote: quote.address,
+  buy: {
+    budget: buy.budget || '0',
+    min: buy.min || '0',
+    max: buy.max || '0',
+    marginalPrice: buy.marginalPrice ?? '',
+  },
+  sell: {
+    budget: sell.budget || '0',
+    min: sell.min || '0',
+    max: sell.max || '0',
+    marginalPrice: sell.marginalPrice ?? '',
+  },
+});
+export const toGradientCartStorage = (
+  base: Token,
+  quote: Token,
+  buy: FormGradientOrder,
+  sell: FormGradientOrder,
+) => ({
+  id: crypto.randomUUID(),
+  base: base.address,
+  quote: quote.address,
+  buy: {
+    ...buy,
+    marginalPrice: buy.marginalPrice ?? '',
+  },
+  sell: {
+    ...sell,
+    marginalPrice: sell.marginalPrice ?? '',
+  },
 });
 
 export const useStrategyCart = () => {
@@ -56,34 +99,45 @@ export const useStrategyCart = () => {
       const price = priceQueries[i].data?.[selectedFiatCurrency];
       prices[address] = price;
     }
-    return cart.map((strategy): CartStrategy => {
+    return cart.map((strategy) => {
       const basePrice = new SafeDecimal(prices[strategy.base] ?? 0);
       const quotePrice = new SafeDecimal(prices[strategy.quote] ?? 0);
-      const base = basePrice.times(strategy.order1.budget);
-      const quote = quotePrice.times(strategy.order0.budget);
+      const base = basePrice.times(strategy.sell.budget);
+      const quote = quotePrice.times(strategy.buy.budget);
       const total = base.plus(quote);
-      return {
+      const cartStrategy = {
         // temporary id for react key
         id: strategy.id,
         // We know the tokens are imported because cart comes from localstorage
         base: getTokenById(strategy.base)!,
         quote: getTokenById(strategy.quote)!,
-        order0: toOrder(strategy.order0),
-        order1: toOrder(strategy.order1),
+        buy: strategy.buy,
+        sell: strategy.sell,
         fiatBudget: { base, quote, total },
-      };
+      } as AnyCartStrategy;
+
+      // update strategy with today value
+      if (isGradientStrategy(cartStrategy)) {
+        const { buy, sell } = cartStrategy;
+        cartStrategy.buy._sD_ = toUnixUTC(order_SD_(buy._sD_));
+        cartStrategy.buy._eD_ = toUnixUTC(order_ED_(buy._eD_));
+        cartStrategy.buy.marginalPrice = gradientMarginalPrice(buy);
+        cartStrategy.sell._sD_ = toUnixUTC(order_SD_(sell._sD_));
+        cartStrategy.sell._eD_ = toUnixUTC(order_ED_(sell._eD_));
+        cartStrategy.sell.marginalPrice = gradientMarginalPrice(sell);
+      }
+      return cartStrategy;
     });
   }, [addresses, cart, getTokenById, priceQueries, selectedFiatCurrency]);
 };
 
 export const addStrategyToCart = (
   user: string,
-  params: CreateStrategyParams,
+  params: AnyCartStrategyStorage,
 ) => {
-  const id = crypto.randomUUID();
   const carts = lsService.getItem('carts') ?? {};
   carts[user] ||= [];
-  carts[user].push({ id, ...params });
+  carts[user].push(params);
   lsService.setItem('carts', carts);
 
   // Animation
@@ -120,7 +174,7 @@ export const addStrategyToCart = (
 
 export const removeStrategyFromCart = async (
   user: string,
-  strategy: CartStrategy,
+  strategyId: string,
 ) => {
   // Animate leaving strategy
   const keyframes = { opacity: 0, transform: 'scale(0.9)' };
@@ -129,13 +183,13 @@ export const removeStrategyFromCart = async (
     easing: 'cubic-bezier(.55, 0, 1, .45)',
     fill: 'forwards' as const,
   };
-  await document.getElementById(strategy.id)?.animate(keyframes, option)
+  await document.getElementById(strategyId)?.animate(keyframes, option)
     .finished;
 
   // Delete from localstorage
   const current = lsService.getItem('carts') ?? {};
   if (!current[user]?.length) return;
-  current[user] = current[user].filter(({ id }) => id !== strategy.id);
+  current[user] = current[user].filter(({ id }) => id !== strategyId);
   lsService.setItem('carts', current);
 
   // Animate remaining strategies

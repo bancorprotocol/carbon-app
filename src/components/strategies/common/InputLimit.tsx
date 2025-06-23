@@ -31,7 +31,7 @@ type InputLimitProps = {
   quote: Token;
   error?: string;
   warnings?: (string | undefined)[];
-  buy?: boolean;
+  isBuy?: boolean;
   ignoreMarketPriceWarning?: boolean;
   required?: boolean;
 };
@@ -44,7 +44,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
     quote,
     error,
     warnings = [],
-    buy = false,
+    isBuy = false,
     ignoreMarketPriceWarning = false,
     required,
   } = props;
@@ -145,7 +145,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
           base={base}
           quote={quote}
           price={price}
-          buy={buy}
+          isBuy={isBuy}
           ignoreMarketPriceWarning={ignoreMarketPriceWarning}
         />
       </div>
@@ -159,7 +159,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
       {!!marketPrice && (
         <Presets
           value={percent}
-          presets={limitPreset(buy)}
+          presets={limitPreset(isBuy)}
           onChange={setPreset}
         />
       )}

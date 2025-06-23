@@ -36,7 +36,7 @@ const popularTokens = [
 
 export const commonConfig: AppConfig = {
   mode: 'development',
-  appName: 'Carbon DeFi',
+  appName: 'Celo - Carbon DeFi',
   appUrl: 'https://celo.carbondefi.xyz',
   carbonApi: 'https://celo-api.carbondefi.xyz/v1/',
   selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe', 'WalletConnect'],

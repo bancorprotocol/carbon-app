@@ -4,7 +4,7 @@ export interface FullOutcomeParams {
   budget: string;
   min: string;
   max: string;
-  buy?: boolean;
+  isBuy?: boolean;
 }
 
 const isStringNumber = (value: string) => {
@@ -33,7 +33,7 @@ export const getFullOutcome = ({
   budget,
   min,
   max,
-  buy,
+  isBuy,
 }: FullOutcomeParams) => {
   if (!isStringNumber(budget)) return;
 
@@ -43,7 +43,7 @@ export const getFullOutcome = ({
   const mean = geoMean(min, max);
   if (!mean) return;
 
-  const amount = buy
+  const amount = isBuy
     ? new SafeDecimal(_budget).div(mean).toString()
     : new SafeDecimal(_budget).times(mean).toString();
   return {

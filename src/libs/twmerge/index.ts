@@ -13,6 +13,7 @@ const colors = [
   'white',
   'transparent',
   'primary',
+  'secondary',
   'error',
   'sell',
   'buy',

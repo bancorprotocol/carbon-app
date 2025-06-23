@@ -22,7 +22,9 @@ const polygonPoints = (
   xScale: ScaleBand<string>,
   yScale: ScaleLinear<number, number>,
 ) => {
-  return points.map(({ x, y }) => `${xScale(x)},${yScale(y)}`).join(' ');
+  return points
+    .map(({ x, y }) => `${xScale(x)! + xScale.bandwidth() / 2},${yScale(y)}`)
+    .join(' ');
 };
 
 export const D3DrawTriangle: FC<Props> = ({ xScale, yScale, onChange }) => {
@@ -65,19 +67,19 @@ export const D3DrawTriangle: FC<Props> = ({ xScale, yScale, onChange }) => {
         <polygon
           ref={ref}
           points={polygon}
-          stroke="var(--primary)"
+          stroke="var(--secondary)"
           strokeWidth="2"
-          fill="var(--primary)"
+          fill="var(--secondary)"
           fillOpacity="0.2"
         />
       )}
       {points.map(({ x, y }) => (
         <circle
           key={x + '-' + y}
-          cx={xScale(x)}
+          cx={xScale(x)! + xScale.bandwidth() / 2}
           cy={yScale(y)}
           r="5"
-          fill="var(--primary)"
+          fill="var(--secondary)"
         />
       ))}
       <rect
@@ -173,10 +175,10 @@ export const D3EditTriangle: FC<D3ShapeProps> = ({ drawing, onChange }) => {
   const circles = drawing.points.map(({ x, y }, i) => (
     <circle
       key={i}
-      cx={xScale(x)}
+      cx={xScale(x)! + xScale.bandwidth() / 2}
       cy={yScale(y)}
       r="5"
-      fill="var(--primary)"
+      fill="var(--secondary)"
       className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
@@ -219,9 +221,9 @@ export const D3EditTriangle: FC<D3ShapeProps> = ({ drawing, onChange }) => {
           className="draggable"
           ref={ref}
           points={polygon}
-          stroke="var(--primary)"
+          stroke="var(--secondary)"
           strokeWidth="2"
-          fill="var(--primary)"
+          fill="var(--secondary)"
           fillOpacity="0.2"
         />
         {circles}
