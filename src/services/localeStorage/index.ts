@@ -50,7 +50,7 @@ interface LocalStorageSchema {
   isUncheckedSigner: boolean;
   hasSeenRestrictedCountryModal: boolean;
   hasSeenCreateStratExpertMode: boolean;
-  simDisclaimerLastSeen: number;
+  simDisclaimerLastSeen: string;
   lastSdkCache: { timestamp: number; ttl: number };
   notificationPreferences: NotificationPreference;
   configOverride: Partial<AppConfig>;
