@@ -1,6 +1,7 @@
 .radio {
   position: absolute;
   opacity: 0;
+  pointer-events: none;
 }
 .radio:checked + label {
   @apply bg-background-800 text-white/80;

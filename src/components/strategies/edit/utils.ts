@@ -1,11 +1,19 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { Strategy } from 'libs/queries';
-import { getStrategyType, isZero } from 'components/strategies/common/utils';
+import { QueryKey, useQueryClient, useUpdateStrategyQuery } from 'libs/queries';
+import {
+  getStrategyType,
+  isGradientStrategy,
+  isZero,
+} from 'components/strategies/common/utils';
 import {
   toDisposablePricesSearch,
   toOverlappingPricesSearch,
   toRecurringPricesSearch,
 } from 'libs/routing/routes/strategyEdit';
+import { AnyStrategy, EditOrders, Strategy } from '../common/types';
+import { StrategyUpdate } from '@bancor/carbon-sdk';
+import { useNotifications } from 'hooks/useNotifications';
+import { useWagmi } from 'libs/wagmi';
 
 export const getDeposit = (initialBudget?: string, newBudget?: string) => {
   const value = new SafeDecimal(newBudget || '0').sub(initialBudget || '0');
@@ -74,5 +82,62 @@ export const getEditBudgetPage = (
   return {
     to: '/strategies/edit/$strategyId/budget/recurring',
     search: { editType },
+  };
+};
+
+export const getFieldsToUpdate = (orders: EditOrders, strategy: Strategy) => {
+  const { buy, sell } = orders;
+  const fields: Partial<StrategyUpdate> = {};
+  if (buy.min !== strategy.buy.min) fields.buyPriceLow = buy.min;
+  if (buy.max !== strategy.buy.max) fields.buyPriceHigh = buy.max;
+  if (buy.budget !== strategy.buy.budget) fields.buyBudget = buy.budget;
+  if (sell.min !== strategy.sell.min) fields.sellPriceLow = sell.min;
+  if (sell.max !== strategy.sell.max) fields.sellPriceHigh = sell.max;
+  if (sell.budget !== strategy.sell.budget) fields.sellBudget = sell.budget;
+  return fields as StrategyUpdate;
+};
+
+/** Transform a strategy into Disposable Sell */
+export const useEditToDisposableSell = (strategy: AnyStrategy) => {
+  const updateMutation = useUpdateStrategyQuery();
+  const { dispatchNotification } = useNotifications();
+  const { user } = useWagmi();
+  const cache = useQueryClient();
+  return () => {
+    if (isGradientStrategy(strategy)) {
+      return console.error('Cannot change a gradient strategy into disposable');
+    }
+    const orders = {
+      buy: {
+        min: '0',
+        max: '0',
+        marginalPrice: '0',
+        budget: '0',
+      },
+      sell: strategy.sell,
+    };
+    updateMutation.mutate(
+      {
+        id: strategy.id,
+        encoded: strategy.encoded,
+        fieldsToUpdate: getFieldsToUpdate(orders, strategy),
+        buyMarginalPrice: orders.buy.marginalPrice,
+        sellMarginalPrice: orders.sell.marginalPrice,
+      },
+      {
+        onSuccess: async (tx) => {
+          dispatchNotification('changeRatesStrategy', { txHash: tx.hash });
+          if (!tx) return;
+          console.log('tx hash', tx.hash);
+          await tx.wait();
+          cache.invalidateQueries({
+            queryKey: QueryKey.strategiesByUser(user),
+          });
+        },
+        onError: (e) => {
+          console.error('update mutation failed', e);
+        },
+      },
+    );
   };
 };

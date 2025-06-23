@@ -1,5 +1,5 @@
+import { Strategy } from 'components/strategies/common/types';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
-import type { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 
 const replaceDecimal = (key: string, value: any) => {
@@ -34,20 +34,20 @@ export const getUndercutStrategy = (
 
   const undercutStrategy = deepCopy(strategy);
 
-  undercutStrategy.order0.startRate = multiplyByRate(
-    strategy.order0.startRate,
+  undercutStrategy.buy.min = multiplyByRate(
+    strategy.buy.min,
     1 + undercutDifference,
   );
-  undercutStrategy.order0.endRate = multiplyByRate(
-    strategy.order0.endRate,
+  undercutStrategy.buy.max = multiplyByRate(
+    strategy.buy.max,
     1 + undercutDifference,
   );
-  undercutStrategy.order1.startRate = multiplyByRate(
-    strategy.order1.startRate,
+  undercutStrategy.sell.min = multiplyByRate(
+    strategy.sell.min,
     1 - undercutDifference,
   );
-  undercutStrategy.order1.endRate = multiplyByRate(
-    strategy.order1.endRate,
+  undercutStrategy.sell.max = multiplyByRate(
+    strategy.sell.max,
     1 - undercutDifference,
   );
 

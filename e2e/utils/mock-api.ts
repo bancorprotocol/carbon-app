@@ -26,7 +26,7 @@ export const mockApi = async (page: Page) => {
   await page.route('**/*/history/prices?*', (route) => {
     const url = new URL(route.request().url());
     const { baseToken, quoteToken, start, end } = Object.fromEntries(
-      url.searchParams.entries()
+      url.searchParams.entries(),
     );
     const historyPricesId = [baseToken, quoteToken].join('-').toLowerCase();
     const data = historyPrices[historyPricesId];

@@ -13,10 +13,14 @@ import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayou
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartLegend } from 'components/strategies/common/StrategyChartLegend';
+import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
+import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
+import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
+import { EditOrders } from 'components/strategies/common/types';
 
 export interface EditBudgetRecurringStrategySearch {
-  priceStart?: string;
-  priceEnd?: string;
+  chartStart?: string;
+  chartEnd?: string;
   editType: 'deposit' | 'withdraw';
   buyBudget?: string;
   buyMarginalPrice?: string;
@@ -30,59 +34,72 @@ const url = '/strategies/edit/$strategyId/budget/recurring';
 
 export const EditBudgetRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote, buy, sell } = strategy;
   const search = useSearch({ from: url });
   const { marketPrice } = useMarketPrice({ base, quote });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const totalBuyBudget = getTotalBudget(
     search.editType,
-    order0.balance,
+    buy.budget,
     search.buyBudget,
   );
   const totalSellBudget = getTotalBudget(
     search.editType,
-    order1.balance,
+    sell.budget,
     search.sellBudget,
   );
 
-  const orders = {
+  const orders: EditOrders = {
     buy: {
-      min: order0.startRate,
-      max: order0.endRate,
+      min: buy.min,
+      max: buy.max,
       budget: totalBuyBudget,
       marginalPrice: search.buyMarginalPrice,
     },
     sell: {
-      min: order1.startRate,
-      max: order1.endRate,
+      min: sell.min,
+      max: sell.max,
       budget: totalSellBudget,
       marginalPrice: search.sellMarginalPrice,
     },
   };
   const isLimit = {
-    buy: order0.startRate === order0.endRate,
-    sell: order1.startRate === order1.endRate,
+    buy: buy.min === buy.max,
+    sell: sell.min === sell.max,
   };
 
   // Warnings
   const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: order0.startRate,
-    max: order0.endRate,
-    buy: true,
+    min: buy.min,
+    max: buy.max,
+    isBuy: true,
   });
   const sellOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: order1.startRate,
-    max: order1.endRate,
-    buy: false,
+    min: sell.min,
+    max: sell.max,
+    isBuy: false,
   });
 
   return (
     <EditStrategyLayout editType={search.editType}>
+      <StrategyChartSection>
+        <StrategyChartHistory
+          base={base}
+          quote={quote}
+          buy={orders.buy}
+          sell={orders.sell}
+        >
+          <D3ChartRecurring isLimit={isLimit} prices={orders} />
+          <TradeChartContent />
+          <D3PricesAxis prices={orders} />
+        </StrategyChartHistory>
+        <StrategyChartLegend />
+      </StrategyChartSection>
       <EditBudgetForm
         strategyType="recurring"
         editType={search.editType}
@@ -93,7 +110,7 @@ export const EditBudgetRecurringPage = () => {
           editType={search.editType}
           order={orders.sell}
           budget={search.sellBudget ?? ''}
-          initialOrder={strategy.order1}
+          initialOrder={strategy.sell}
           setOrder={setSellOrder}
           warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
         />
@@ -101,24 +118,12 @@ export const EditBudgetRecurringPage = () => {
           editType={search.editType}
           order={orders.buy}
           budget={search.buyBudget ?? ''}
-          initialOrder={strategy.order0}
+          initialOrder={strategy.buy}
           setOrder={setBuyOrder}
           warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
-          buy
+          isBuy
         />
       </EditBudgetForm>
-      <StrategyChartSection>
-        <StrategyChartHistory
-          type="recurring"
-          base={base}
-          quote={quote}
-          order0={orders.buy}
-          order1={orders.sell}
-          isLimit={isLimit}
-          readonly
-        />
-        <StrategyChartLegend />
-      </StrategyChartSection>
     </EditStrategyLayout>
   );
 };

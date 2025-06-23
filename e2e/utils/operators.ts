@@ -12,7 +12,7 @@ export const screenshot = async (target: Page | Locator, name: string) => {
 
   const loadings = await target.locator('.loading-message').all();
   await Promise.all(
-    loadings.map((loading) => loading.waitFor({ state: 'detached' }))
+    loadings.map((loading) => loading.waitFor({ state: 'detached' })),
   );
 
   const mainMenu = new MainMenuDriver(target);

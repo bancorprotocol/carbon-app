@@ -12,7 +12,7 @@ export class ManageStrategyDriver {
 
   async createStrategy(
     testCase: CreateStrategyTestCase,
-    deps: CreateStrategyDependencies
+    deps: CreateStrategyDependencies,
   ) {
     const debug = new DebugDriver(this.page);
     await debug.createStrategy(testCase, deps);

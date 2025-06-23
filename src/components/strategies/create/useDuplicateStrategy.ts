@@ -1,17 +1,17 @@
 import { useNavigate } from 'libs/routing';
-import { BaseStrategy, CartStrategy } from 'libs/queries';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import {
   getStrategyType,
   isLimitOrder,
 } from 'components/strategies/common/utils';
 import { NATIVE_TOKEN_ADDRESS, isGasTokenToHide } from 'utils/tokens';
+import { BaseStrategy, CartStrategy } from '../common/types';
 
 export const useDuplicate = () => {
   const navigate = useNavigate();
   return (strategy: BaseStrategy) => {
     const type = getStrategyType(strategy);
-    const { base, quote, order0, order1 } = strategy;
+    const { base, quote, buy, sell } = strategy;
     let baseAddress = base.address;
     let quoteAddress = quote.address;
 
@@ -21,16 +21,16 @@ export const useDuplicate = () => {
 
     switch (type) {
       case 'disposable': {
-        const isBuyEmpty = !+order0.endRate;
-        const order = isBuyEmpty ? order1 : order0;
+        const isBuyEmpty = !+buy.max;
+        const order = isBuyEmpty ? sell : buy;
         return navigate({
           to: '/trade/disposable',
           search: {
             base: baseAddress,
             quote: quoteAddress,
-            min: order.startRate,
-            max: order.endRate,
-            budget: order.balance,
+            min: order.min,
+            max: order.max,
+            budget: order.budget,
             settings: isLimitOrder(order) ? 'limit' : 'range',
             direction: isBuyEmpty ? 'sell' : 'buy',
           },
@@ -42,9 +42,9 @@ export const useDuplicate = () => {
           search: {
             base: baseAddress,
             quote: quoteAddress,
-            min: order0.startRate,
-            max: order1.endRate,
-            spread: getRoundedSpread({ order0, order1 }).toString(),
+            min: buy.min,
+            max: sell.max,
+            spread: getRoundedSpread({ buy, sell }).toString(),
           },
         });
       }
@@ -54,14 +54,14 @@ export const useDuplicate = () => {
           search: {
             base: baseAddress,
             quote: quoteAddress,
-            buyMin: order0.startRate,
-            buyMax: order0.endRate,
-            buyBudget: order0.balance,
-            buySettings: isLimitOrder(order0) ? 'limit' : 'range',
-            sellMin: order1.startRate,
-            sellMax: order1.endRate,
-            sellBudget: order1.balance,
-            sellSettings: isLimitOrder(order1) ? 'limit' : 'range',
+            buyMin: buy.min,
+            buyMax: buy.max,
+            buyBudget: buy.budget,
+            buySettings: isLimitOrder(buy) ? 'limit' : 'range',
+            sellMin: sell.min,
+            sellMax: sell.max,
+            sellBudget: sell.budget,
+            sellSettings: isLimitOrder(sell) ? 'limit' : 'range',
           },
         });
       }
@@ -73,7 +73,7 @@ export const useCartDuplicate = () => {
   const navigate = useNavigate();
   return (strategy: CartStrategy) => {
     const type = getStrategyType(strategy);
-    const { base, quote, order0, order1 } = strategy;
+    const { base, quote, buy, sell } = strategy;
     let baseAddress = base.address;
     let quoteAddress = quote.address;
 
@@ -83,16 +83,16 @@ export const useCartDuplicate = () => {
 
     switch (type) {
       case 'disposable': {
-        const isBuyEmpty = !+order0.endRate;
-        const order = isBuyEmpty ? order1 : order0;
+        const isBuyEmpty = !+buy.max;
+        const order = isBuyEmpty ? sell : buy;
         return navigate({
           to: '/trade/disposable',
           search: {
             base: baseAddress,
             quote: quoteAddress,
-            min: order.startRate,
-            max: order.endRate,
-            budget: order.balance,
+            min: order.min,
+            max: order.max,
+            budget: order.budget,
             settings: isLimitOrder(order) ? 'limit' : 'range',
             direction: isBuyEmpty ? 'sell' : 'buy',
           },
@@ -104,9 +104,9 @@ export const useCartDuplicate = () => {
           search: {
             base: baseAddress,
             quote: quoteAddress,
-            min: order0.startRate,
-            max: order1.endRate,
-            spread: getRoundedSpread({ order0, order1 }).toString(),
+            min: buy.min,
+            max: sell.max,
+            spread: getRoundedSpread({ buy, sell }).toString(),
           },
         });
       }
@@ -116,14 +116,14 @@ export const useCartDuplicate = () => {
           search: {
             base: baseAddress,
             quote: quoteAddress,
-            buyMin: order0.startRate,
-            buyMax: order0.endRate,
-            buyBudget: order0.balance,
-            buySettings: isLimitOrder(order0) ? 'limit' : 'range',
-            sellMin: order1.startRate,
-            sellMax: order1.endRate,
-            sellBudget: order1.balance,
-            sellSettings: isLimitOrder(order1) ? 'limit' : 'range',
+            buyMin: buy.min,
+            buyMax: buy.max,
+            buyBudget: buy.budget,
+            buySettings: isLimitOrder(buy) ? 'limit' : 'range',
+            sellMin: sell.min,
+            sellMax: sell.max,
+            sellBudget: sell.budget,
+            sellSettings: isLimitOrder(sell) ? 'limit' : 'range',
           },
         });
       }

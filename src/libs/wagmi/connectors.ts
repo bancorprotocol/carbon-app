@@ -116,7 +116,7 @@ export const redirectSafeWallet = (
 ) => {
   if (isIframe() && redirectToId && currentId !== redirectToId) {
     const networkToRedirect = networks.find(
-      (network) => network.chainId === redirectToId,
+      (config) => config.network.chainId === redirectToId,
     );
     if (!networkToRedirect) return;
     window.location.href = networkToRedirect.appUrl;
