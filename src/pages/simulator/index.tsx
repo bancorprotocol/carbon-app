@@ -4,7 +4,7 @@ import { simulatorInputRootRoute } from 'libs/routing/routes/sim';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 import { ReactComponent as IconBookmark } from 'assets/icons/bookmark.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';
 
@@ -24,12 +24,10 @@ export const SimulatorPage = () => {
   if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   return (
-    <>
-      <div className="mx-auto flex w-full max-w-[1920px] flex-col content-start gap-20 p-20 md:grid md:grid-cols-[450px_auto]">
-        <SimulatorDisclaimer />
-        <Outlet />
-      </div>
-    </>
+    <div className="mx-auto flex w-full max-w-[1920px] flex-col content-start gap-20 p-20 md:grid md:grid-cols-[450px_auto]">
+      <SimulatorDisclaimer />
+      <Outlet />
+    </div>
   );
 };
 
@@ -43,7 +41,8 @@ const SimulatorDisclaimer = () => {
     }
   }, []);
 
-  const dismiss = () => {
+  const dismiss = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const now = new Date().toISOString();
     lsService.setItem('simDisclaimerLastSeen', now);
     setShowDisclaimer(false);
@@ -52,7 +51,10 @@ const SimulatorDisclaimer = () => {
   if (!showDisclaimer) return;
 
   return (
-    <div className="flex gap-16 items-start border border-warning rounded bg-warning/10 px-24 py-16 md:col-span-2">
+    <form
+      onSubmit={dismiss}
+      className="flex gap-16 items-start border border-warning rounded bg-warning/10 px-24 py-16 md:col-span-2"
+    >
       <div className="self-center bg-warning/40 size-48 grid place-items-center rounded-full flex-shrink-0">
         <IconBookmark className="size-24 text-warning" />
       </div>
@@ -68,13 +70,13 @@ const SimulatorDisclaimer = () => {
       </hgroup>
 
       <button
+        type="submit"
         aria-label="accept disclaimer"
         className="p-8 rounded-full"
-        onClick={dismiss}
         data-testid="clear-sim-disclaimer"
       >
         <IconClose className="size-18" />
       </button>
-    </div>
+    </form>
   );
 };

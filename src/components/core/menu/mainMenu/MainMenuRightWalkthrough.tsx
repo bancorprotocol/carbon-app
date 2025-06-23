@@ -18,19 +18,16 @@ export const MainMenuRightWalkthrough: FC = () => {
     if (!hasWalkthrough) {
       dialog.current?.showModal();
       // Need to force focus to prevent race focus on browser start
-      dialog.current
-        ?.querySelector<HTMLElement>('button[type="submit"]')
-        ?.focus();
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const start = async () => {
-    if (
-      !document.querySelector(
-        'script[src="https://js.storylane.io/js/v2/storylane.js"]',
-      )
-    ) {
+    const selector = 'script[src="https://js.storylane.io/js/v2/storylane.js"]';
+    if (!document.querySelector(selector)) {
       const script = document.createElement('script');
       script.src = 'https://js.storylane.io/js/v2/storylane.js';
       document.head.appendChild(script);
