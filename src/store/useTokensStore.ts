@@ -36,8 +36,8 @@ export const useTokensStore = (): TokensStore => {
     [tokens],
   );
 
-  const isPending = tokensQuery.isPending;
-  const isError = tokensQuery.isError;
+  const isPending = tokensQuery.status === 'pending';
+  const isError = tokensQuery.status === 'error';
   const error = tokensQuery.error;
 
   return {

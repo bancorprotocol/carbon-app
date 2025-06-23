@@ -47,6 +47,7 @@ import {
 } from 'libs/routing/routes/strategy';
 import { cartPage } from './cart';
 import { createRoute, redirect } from '@tanstack/react-router';
+import { liquidityMatrixPage } from './liquidity-matrix';
 
 const rootRedirect = createRoute({
   getParentRoute: () => rootRoute,
@@ -103,4 +104,5 @@ export const routeTree = rootRoute.addChildren([
     simulatorResultRoute,
   ]),
   rootRedirect,
+  liquidityMatrixPage,
 ]);

@@ -29,8 +29,8 @@ export const useExplorer = () => {
     return pairs.map.get(`${base}_${quote}`);
   }, [pairs.map, slug, type]);
   const pairQuery = useGetPairStrategies({
-    token0: exactMatch?.baseToken.address,
-    token1: exactMatch?.quoteToken.address,
+    base: exactMatch?.baseToken.address,
+    quote: exactMatch?.quoteToken.address,
   });
 
   // WALLET

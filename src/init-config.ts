@@ -7,7 +7,7 @@ if (!config.ui.useGradientBranding) {
   );
   document.documentElement.style.setProperty(
     '--gradient-middle',
-    'var(--primary)',
+    'var(--secondary)',
   );
   document.documentElement.style.setProperty(
     '--gradient-last',

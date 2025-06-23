@@ -7,6 +7,14 @@ const addresses = {
   ZERO: '0x0000000000000000000000000000000000000000',
 };
 
+const popularTokens = [
+  '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+  '0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1',
+  '0xf1Feebc4376c68B7003450ae66343Ae59AB37D3C',
+  '0x639aCc80569c5FC83c6FBf2319A6Cc38bBfe26d1',
+  '0x8C39B1fD0e6260fdf20652Fc436d25026832bfEA',
+];
+
 export const commonConfig: AppConfig = {
   mode: 'development',
   appName: 'Carbon DeFi (Coti)',
@@ -42,8 +50,8 @@ export const commonConfig: AppConfig = {
   defaultTokenPair: [addresses.COTI, addresses.GCOTI],
   popularPairs: [[addresses.COTI, addresses.GCOTI]],
   popularTokens: {
-    base: [addresses.COTI, addresses.GCOTI],
-    quote: [addresses.COTI, addresses.GCOTI],
+    base: popularTokens,
+    quote: popularTokens,
   },
   addresses: {
     tokens: addresses,

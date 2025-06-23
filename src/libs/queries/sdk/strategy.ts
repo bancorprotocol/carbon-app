@@ -21,52 +21,21 @@ import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 import { getAddress } from 'ethers/lib/utils';
 import { usePairs } from 'hooks/usePairs';
+import {
+  AnyStrategy,
+  GradientOrder,
+  StaticOrder,
+  Strategy,
+} from 'components/strategies/common/types';
+import { isInPast, isPaused } from 'components/strategies/common/utils';
+import { SDKGradientStrategy } from './gradient-mock';
 import { useCarbonInit } from 'hooks/useCarbonInit';
+import { isZero } from 'components/strategies/common/utils';
 
-export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
-
-export interface Order {
-  balance: string;
-  startRate: string;
-  endRate: string;
-  marginalRate: string;
-}
-
-export interface BaseStrategy {
-  id: string;
-  base: Token;
-  quote: Token;
-  order0: Order;
-  order1: Order;
-}
-
-export interface Strategy extends BaseStrategy {
-  id: string;
-  idDisplay: string;
-  status: StrategyStatus;
-  encoded: EncodedStrategyBNStr;
-}
-
-export interface StrategyWithFiat extends Strategy {
-  fiatBudget: {
-    total: SafeDecimal;
-    quote: SafeDecimal;
-    base: SafeDecimal;
-  };
-  tradeCount: number;
-  tradeCount24h: number;
-}
-
-export interface CartStrategy extends BaseStrategy {
-  fiatBudget: {
-    total: SafeDecimal;
-    quote: SafeDecimal;
-    base: SafeDecimal;
-  };
-}
+type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
 interface StrategiesHelperProps {
-  strategies: SDKStrategy[];
+  strategies: AnySDKStrategy[];
   getTokenById: (id: string) => Token | undefined;
   importTokens: (tokens: Token[]) => void;
   Token: (address: string) => { read: TokenContract };
@@ -104,61 +73,103 @@ const buildStrategiesHelper = async ({
   return strategies.map((s) => {
     const base = tokens.get(s.baseToken)!;
     const quote = tokens.get(s.quoteToken)!;
-    const sellLow = new SafeDecimal(s.sellPriceLow);
-    const sellHigh = new SafeDecimal(s.sellPriceHigh);
-    const sellBudget = new SafeDecimal(s.sellBudget);
+    if ('sellPriceLow' in s) {
+      const sellLow = new SafeDecimal(s.sellPriceLow);
+      const sellHigh = new SafeDecimal(s.sellPriceHigh);
+      const sellBudget = new SafeDecimal(s.sellBudget);
 
-    const buyLow = new SafeDecimal(s.buyPriceLow);
-    const buyHight = new SafeDecimal(s.buyPriceHigh);
-    const buyBudget = new SafeDecimal(s.buyBudget);
+      const buyLow = new SafeDecimal(s.buyPriceLow);
+      const buyHight = new SafeDecimal(s.buyPriceHigh);
+      const buyBudget = new SafeDecimal(s.buyBudget);
 
-    const offCurve =
-      sellLow.isZero() &&
-      sellHigh.isZero() &&
-      buyLow.isZero() &&
-      buyHight.isZero();
+      const offCurve =
+        sellLow.isZero() &&
+        sellHigh.isZero() &&
+        buyLow.isZero() &&
+        buyHight.isZero();
 
-    const noBudget = sellBudget.isZero() && buyBudget.isZero();
+      const noBudget = sellBudget.isZero() && buyBudget.isZero();
 
-    const status =
-      noBudget && offCurve
-        ? 'inactive'
-        : offCurve
-          ? 'paused'
-          : noBudget
-            ? 'noBudget'
-            : 'active';
+      const status =
+        noBudget && offCurve
+          ? 'inactive'
+          : offCurve
+            ? 'paused'
+            : noBudget
+              ? 'noBudget'
+              : 'active';
 
-    // ATTENTION *****************************
-    // This is the buy order | UI order 0 and CONTRACT order 1
-    // ATTENTION *****************************
-    const order0: Order = {
-      balance: s.buyBudget,
-      startRate: s.buyPriceLow,
-      endRate: s.buyPriceHigh,
-      marginalRate: s.buyPriceMarginal,
-    };
+      // ATTENTION *****************************
+      // This is the buy order | UI order 0 and CONTRACT order 1
+      // ATTENTION *****************************
+      const buy: StaticOrder = {
+        budget: s.buyBudget,
+        min: s.buyPriceLow,
+        max: s.buyPriceHigh,
+        marginalPrice: s.buyPriceMarginal,
+      };
 
-    // ATTENTION *****************************
-    // This is the sell order | UI order 1 and CONTRACT order 0
-    // ATTENTION *****************************
-    const order1: Order = {
-      balance: s.sellBudget,
-      startRate: s.sellPriceLow,
-      endRate: s.sellPriceHigh,
-      marginalRate: s.sellPriceMarginal,
-    };
+      // ATTENTION *****************************
+      // This is the sell order | UI order 1 and CONTRACT order 0
+      // ATTENTION *****************************
+      const sell: StaticOrder = {
+        budget: s.sellBudget,
+        min: s.sellPriceLow,
+        max: s.sellPriceHigh,
+        marginalPrice: s.sellPriceMarginal,
+      };
 
-    return {
-      id: s.id,
-      idDisplay: getLowestBits(s.id),
-      base,
-      quote,
-      order0,
-      order1,
-      status,
-      encoded: s.encoded,
-    } as Strategy;
+      return {
+        type: 'static',
+        id: s.id,
+        idDisplay: getLowestBits(s.id),
+        base,
+        quote,
+        buy,
+        sell,
+        status,
+        encoded: s.encoded,
+      } as Strategy;
+    } else {
+      const buy: GradientOrder = {
+        budget: s.buyBudget,
+        _sP_: s.buy_SP_,
+        _eP_: s.buy_EP_,
+        _sD_: s.buy_SD_,
+        _eD_: s.buy_ED_,
+        marginalPrice: s.buyPriceMarginal,
+      };
+
+      const sell: GradientOrder = {
+        budget: s.sellBudget,
+        _sP_: s.sell_SP_,
+        _eP_: s.sell_EP_,
+        _sD_: s.sell_SD_,
+        _eD_: s.sell_ED_,
+        marginalPrice: s.sellPriceMarginal,
+      };
+
+      const strategy: Strategy<GradientOrder> = {
+        type: 'gradient',
+        id: s.id,
+        idDisplay: getLowestBits(s.id),
+        base,
+        quote,
+        buy,
+        sell,
+        status: 'active',
+        encoded: s.encoded,
+      };
+
+      if (isPaused(strategy) || isInPast(strategy)) {
+        strategy.status = 'paused';
+      }
+      if (!Number(strategy.buy.budget) && !Number(strategy.sell.budget)) {
+        strategy.status =
+          strategy.status === 'paused' ? 'inactive' : 'noBudget';
+      }
+      return strategy;
+    }
   });
 };
 
@@ -177,7 +188,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const isValidAddress = utils.isAddress(address);
   const isZeroAddress = address === config.addresses.tokens.ZERO;
 
-  return useQuery<Strategy[]>({
+  return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategiesByUser(address),
     queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
@@ -200,7 +211,7 @@ export const useGetStrategyList = (ids: string[]) => {
   const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
-  return useQuery<Strategy[]>({
+  return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategyList(ids),
     queryFn: async () => {
       const getStrategies = ids.map((id) => carbonSDK.getStrategy(id));
@@ -223,7 +234,7 @@ export const useGetStrategy = (id: string) => {
   const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
 
-  return useQuery<Strategy>({
+  return useQuery<AnyStrategy>({
     queryKey: QueryKey.strategy(id),
     queryFn: async () => {
       const strategy = await carbonSDK.getStrategy(id);
@@ -242,44 +253,73 @@ export const useGetStrategy = (id: string) => {
 };
 
 interface PropsPair {
-  token0?: string;
-  token1?: string;
+  base?: string;
+  quote?: string;
 }
 
-export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
+/** Inverse a base/quote strategy to quote/base */
+const reverseStrategy = (strategy: SDKStrategy): SDKStrategy => {
+  const invert = (value: string) => {
+    if (isZero(value)) return '0';
+    return new SafeDecimal(1).div(value).toString();
+  };
+  return {
+    id: strategy.id,
+    baseToken: strategy.quoteToken,
+    quoteToken: strategy.baseToken,
+    buyPriceLow: invert(strategy.sellPriceHigh),
+    buyPriceMarginal: invert(strategy.sellPriceMarginal),
+    buyPriceHigh: invert(strategy.sellPriceLow),
+    buyBudget: strategy.sellBudget,
+    sellPriceLow: invert(strategy.buyPriceHigh),
+    sellPriceMarginal: invert(strategy.buyPriceMarginal),
+    sellPriceHigh: invert(strategy.buyPriceLow),
+    sellBudget: strategy.buyBudget,
+    encoded: strategy.encoded,
+  };
+};
+const normalizeStrategy = (
+  base: string,
+  quote: string,
+  strategy: SDKStrategy,
+) => {
+  if (base === strategy.quoteToken && quote === strategy.baseToken) {
+    return reverseStrategy(strategy);
+  } else {
+    return strategy;
+  }
+};
+
+export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
   const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importTokens } = useTokens();
+  const { getTokenById, importTokens, isPending } = useTokens();
+  const pair = usePairs();
   const { Token } = useContract();
 
-  return useQuery<Strategy[]>({
-    queryKey: QueryKey.strategiesByPair(token0, token1),
+  return useQuery<AnyStrategy[]>({
+    queryKey: QueryKey.strategiesByPair(base, quote),
     queryFn: async () => {
-      if (!token0 || !token1) return [];
-      const strategies = await carbonSDK.getStrategiesByPair(token0, token1);
+      if (!base || !quote) return [];
+      const strategies = await carbonSDK.getStrategiesByPair(base, quote);
       return buildStrategiesHelper({
-        strategies,
+        strategies: strategies.map((s) => normalizeStrategy(base, quote, s)),
         getTokenById,
         importTokens,
         Token,
       });
     },
-    enabled: (!token0 || !token1 || tokens.length > 0) && isInitialized,
+    enabled: !pair.isPending && !isPending && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
 };
-
-interface PropsPair {
-  token0?: string;
-  token1?: string;
-}
 
 export const useTokenStrategies = (token?: string) => {
   const { isInitialized } = useCarbonInit();
   const { getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
   const { map: pairMap } = usePairs();
-  return useQuery<Strategy[]>({
+  return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategiesByToken(token),
     queryFn: async () => {
       const allQuotes = new Set<string>();
@@ -314,18 +354,11 @@ export const useTokenStrategies = (token?: string) => {
   });
 };
 
-export interface CreateStrategyOrder {
-  budget: string;
-  min: string;
-  max: string;
-  marginalPrice: string;
-}
-
 export interface CreateStrategyParams {
   base: string;
   quote: string;
-  order0: CreateStrategyOrder;
-  order1: CreateStrategyOrder;
+  buy: StaticOrder;
+  sell: StaticOrder;
   encoded?: EncodedStrategyBNStr;
 }
 
@@ -345,23 +378,18 @@ export const useCreateStrategyQuery = () => {
   const { signer } = useWagmi();
 
   return useMutation({
-    mutationFn: async ({
-      base,
-      quote,
-      order0,
-      order1,
-    }: CreateStrategyParams) => {
+    mutationFn: async ({ base, quote, buy, sell }: CreateStrategyParams) => {
       const unsignedTx = await carbonSDK.createBuySellStrategy(
         base,
         quote,
-        order0.min,
-        order0.marginalPrice || order0.max,
-        order0.max,
-        order0.budget || '0',
-        order1.min,
-        order1.marginalPrice || order1.min,
-        order1.max,
-        order1.budget || '0',
+        buy.min,
+        buy.marginalPrice || buy.max,
+        buy.max,
+        buy.budget || '0',
+        sell.min,
+        sell.marginalPrice || sell.min,
+        sell.max,
+        sell.budget || '0',
       );
 
       return signer!.sendTransaction(unsignedTx);

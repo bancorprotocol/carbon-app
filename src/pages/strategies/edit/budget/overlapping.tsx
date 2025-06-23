@@ -2,7 +2,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
 import { isValidRange } from 'components/strategies/utils';
-import { Strategy } from 'libs/queries';
+import { Strategy } from 'components/strategies/common/types';
 import {
   calculateOverlappingBuyBudget,
   calculateOverlappingPrices,
@@ -35,8 +35,8 @@ export interface EditBudgetOverlappingSearch extends OverlappingSearch {
 }
 
 const isTouched = (strategy: Strategy, search: EditBudgetOverlappingSearch) => {
-  const { order0, order1 } = strategy;
-  if (isZero(order0.balance) && isZero(order1.balance)) return true;
+  const { buy, sell } = strategy;
+  if (isZero(buy.budget) && isZero(sell.budget)) return true;
   if (search.marketPrice) return true;
   return false;
 };
@@ -47,7 +47,7 @@ const getOrders = (
   search: EditBudgetOverlappingSearch,
   marketPrice?: string,
 ) => {
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote, buy, sell } = strategy;
 
   if (!marketPrice) {
     return {
@@ -56,8 +56,8 @@ const getOrders = (
     };
   }
 
-  const min = strategy.order0.startRate;
-  const max = strategy.order1.endRate;
+  const min = strategy.buy.min;
+  const max = strategy.sell.max;
   const spread = getRoundedSpread(strategy).toString();
   const { anchor, budget = '0', editType = 'deposit' } = search;
 
@@ -73,16 +73,16 @@ const getOrders = (
 
   const orders = {
     buy: {
-      min: order0.startRate,
-      max: order0.endRate,
-      marginalPrice: order0.marginalRate,
-      budget: order0.balance,
+      min: buy.min,
+      max: buy.max,
+      marginalPrice: buy.marginalPrice,
+      budget: buy.budget,
     },
     sell: {
-      min: order1.startRate,
-      max: order1.endRate,
-      marginalPrice: order1.marginalRate,
-      budget: order1.balance,
+      min: sell.min,
+      max: sell.max,
+      marginalPrice: sell.marginalPrice,
+      budget: sell.budget,
     },
   };
 
@@ -102,7 +102,7 @@ const getOrders = (
   // BUDGET
   if (anchor === 'buy') {
     if (isMinAboveMarket(orders.buy)) return orders;
-    const buyBudget = getTotalBudget(editType, order0.balance, budget);
+    const buyBudget = getTotalBudget(editType, buy.budget, budget);
     orders.buy.budget = buyBudget;
     orders.sell.budget = calculateOverlappingSellBudget(
       base.decimals,
@@ -115,7 +115,7 @@ const getOrders = (
     );
   } else {
     if (isMaxBelowMarket(orders.sell)) return orders;
-    const sellBudget = getTotalBudget(editType, order1.balance, budget);
+    const sellBudget = getTotalBudget(editType, sell.budget, budget);
     orders.sell.budget = sellBudget;
     orders.buy.budget = calculateOverlappingBuyBudget(
       base.decimals,
@@ -162,15 +162,15 @@ export const EditBudgetOverlappingPage = () => {
 
   return (
     <EditStrategyLayout editType={search.editType}>
-      <OverlappingContent />
       <StrategyChartOverlapping
         base={base}
         quote={quote}
-        order0={orders.buy}
-        order1={orders.sell}
+        buy={orders.buy}
+        sell={orders.sell}
         set={set}
         readonly
       />
+      <OverlappingContent />
     </EditStrategyLayout>
   );
 };
@@ -223,8 +223,8 @@ const OverlappingContent = () => {
     >
       <EditOverlappingBudget
         marketPrice={marketPrice}
-        order0={orders.buy}
-        order1={orders.sell}
+        buy={orders.buy}
+        sell={orders.sell}
       />
     </EditBudgetForm>
   );

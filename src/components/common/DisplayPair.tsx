@@ -16,8 +16,13 @@ export const _TokenLogoName: FC<TokenProps> = ({ token }) => {
   return (
     <>
       <TokenLogo token={token} size={30} />
-      {token.isSuspicious && <SuspiciousToken />}
-      {token.symbol}
+      <div>
+        <p className="flex gap-8">
+          {token.isSuspicious && <SuspiciousToken />}
+          {token.symbol}
+        </p>
+        <p className="text-white/60 text-12">{token.address}</p>
+      </div>
     </>
   );
 };

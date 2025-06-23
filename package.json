@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "dependencies": {
-    "@bancor/carbon-sdk": "^0.0.115-DEV",
+    "@bancor/carbon-sdk": "0.0.120-DEV",
     "@cloudflare/workers-types": "4.20230717.0",
     "@floating-ui/react": "0.25.4",
     "@oddbird/popover-polyfill": "0.5.2",

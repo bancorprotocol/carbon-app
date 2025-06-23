@@ -2,7 +2,7 @@ import { Pathnames, PathParams } from 'libs/routing';
 import { PortfolioTokenHeader } from 'components/strategies/portfolio/token/PortfolioTokenHeader';
 import { PortfolioTokenPieChartCenter } from 'components/strategies/portfolio/token/PortfolioTokenPieChartCenter';
 import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
-import { Strategy } from 'libs/queries';
+import { AnyStrategy } from 'components/strategies/common/types';
 import { memo } from 'react';
 import { PortfolioLayout } from './../PortfolioLayout';
 import { PortfolioPieChart } from './../PortfolioPieChart';
@@ -13,7 +13,7 @@ import { NotFound } from 'components/common/NotFound';
 
 interface Props {
   address: string;
-  strategies?: Strategy[];
+  strategies?: AnyStrategy[];
   isPending?: boolean;
   backLinkHref: Pathnames;
   backLinkHrefParams?: PathParams;

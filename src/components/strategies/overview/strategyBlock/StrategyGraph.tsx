@@ -1,5 +1,4 @@
 import { FC, useId } from 'react';
-import { BaseStrategy } from 'libs/queries';
 import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
 import {
   FloatTooltip,
@@ -11,25 +10,52 @@ import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
-  isFullRangeStrategy,
+  isGradientStrategy,
   isZero,
+  isFullRangeStrategy,
 } from 'components/strategies/common/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
+import {
+  AnyBaseStrategy,
+  BaseStrategy,
+  GradientOrder,
+  Order,
+  StaticOrder,
+} from 'components/strategies/common/types';
+import { fromUnixUTC } from 'components/simulator/utils';
+import { isToday } from 'date-fns';
+import { useLocation } from '@tanstack/react-router';
+import { gradientMarginalPrice } from 'components/strategies/common/gradient/utils';
 import style from './StrategyGraph.module.css';
 
 interface Props {
-  strategy: BaseStrategy;
+  strategy: AnyBaseStrategy;
   className?: string;
 }
 
-const isSmallRange = ({ order0, order1 }: BaseStrategy) => {
-  const allPrices = new Set([
-    order0.startRate,
-    order0.endRate,
-    order1.startRate,
-    order1.endRate,
-  ]);
+const toMinMax = (order: Order) => {
+  if ('min' in order) return order;
+  const marginalPrice = gradientMarginalPrice(order);
+  return {
+    min: marginalPrice,
+    max: marginalPrice,
+    budget: order.budget,
+    marginalPrice: marginalPrice,
+  };
+};
+
+const isSmallRange = (strategy: AnyBaseStrategy) => {
+  const strategyPrices = (() => {
+    if (isGradientStrategy(strategy)) {
+      const { buy, sell } = strategy;
+      return [buy._sP_, buy._eP_, sell._sP_, sell._eP_];
+    } else {
+      const { buy, sell } = strategy;
+      return [buy.min, buy.max, sell.min, sell.max];
+    }
+  })();
+  const allPrices = new Set(strategyPrices);
   const prices = Array.from(allPrices).filter((v) => !isZero(v));
   if (prices.length < 2) return false;
   const min = SafeDecimal.min(...prices);
@@ -55,26 +81,25 @@ const fontWidth = fontSize / 2;
 
 export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
   const clipPathId = useId();
-  const { base, quote, order0: buyOrder, order1: sellOrder } = strategy;
+  const { base, quote } = strategy;
   const { marketPrice: currentPrice } = useMarketPrice({ base, quote });
-  const fullRange = isFullRangeStrategy(buyOrder, sellOrder);
+
+  // Transform gradient strategy into a static strategy
+  const buyOrder = toMinMax(strategy.buy);
+  const sellOrder = toMinMax(strategy.sell);
+  const staticStrategy = { ...strategy, buy: buyOrder, sell: sellOrder };
 
   const buy = {
-    from: Number(sanitizeNumber(buyOrder.startRate)),
-    to: Number(sanitizeNumber(buyOrder.endRate)),
-    marginalPrice: fullRange
-      ? Number(sanitizeNumber(sellOrder.endRate))
-      : Number(sanitizeNumber(buyOrder.marginalRate)),
+    from: Number(sanitizeNumber(buyOrder.min)),
+    to: Number(sanitizeNumber(buyOrder.max)),
+    marginalPrice: Number(sanitizeNumber(buyOrder.marginalPrice)),
   };
   const sell = {
-    from: Number(sanitizeNumber(sellOrder.startRate)),
-    to: fullRange
-      ? Number(sanitizeNumber(buyOrder.endRate))
-      : Number(sanitizeNumber(sellOrder.endRate)),
-    marginalPrice: fullRange
-      ? Number(sanitizeNumber(buyOrder.startRate))
-      : Number(sanitizeNumber(sellOrder.marginalRate)),
+    from: Number(sanitizeNumber(sellOrder.min)),
+    to: Number(sanitizeNumber(sellOrder.max)),
+    marginalPrice: Number(sanitizeNumber(sellOrder.marginalPrice)),
   };
+  const fullRange = isFullRangeStrategy(buyOrder, sellOrder);
 
   const buyOrderExists = buy.from !== 0 && buy.to !== 0;
   const sellOrderExists = sell.from !== 0 && sell.to !== 0;
@@ -100,7 +125,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
     to - (3 / 4) * (to - center),
     to - (1 / 4) * (to - center),
   ];
-  const smallRange = isSmallRange(strategy);
+  const smallRange = isSmallRange(staticStrategy);
   const priceIntlOption = {
     abbreviate: true,
     round: !smallRange,
@@ -277,7 +302,11 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
               </g>
             </FloatTooltipTrigger>
             <FloatTooltipContent>
-              <OrderTooltip strategy={strategy} buy />
+              {isGradientStrategy(strategy) ? (
+                <GradientOrderTooltip strategy={strategy} isBuy />
+              ) : (
+                <StaticOrderTooltip strategy={strategy} isBuy />
+              )}
             </FloatTooltipContent>
           </FloatTooltip>
         )}
@@ -355,7 +384,11 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
               </g>
             </FloatTooltipTrigger>
             <FloatTooltipContent>
-              <OrderTooltip strategy={strategy} />
+              {isGradientStrategy(strategy) ? (
+                <GradientOrderTooltip strategy={strategy} />
+              ) : (
+                <StaticOrderTooltip strategy={strategy} />
+              )}
             </FloatTooltipContent>
           </FloatTooltip>
         )}
@@ -570,15 +603,18 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
   );
 };
 
-interface OrderTooltipProps {
-  strategy: BaseStrategy;
-  buy?: boolean;
+interface OrderTooltipProps<O extends Order> {
+  strategy: BaseStrategy<O>;
+  isBuy?: boolean;
 }
 
-const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
-  const order = buy ? strategy.order0 : strategy.order1;
-  const { startRate, endRate, marginalRate } = order;
-  const limit = startRate === endRate;
+const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
+  strategy,
+  isBuy,
+}) => {
+  const order = isBuy ? strategy.buy : strategy.sell;
+  const { min, max } = order;
+  const limit = min === max;
   const smallRange = isSmallRange(strategy);
   const spread = isOverlappingStrategy(strategy) && getRoundedSpread(strategy);
   const priceOption = {
@@ -586,19 +622,19 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
     round: !smallRange,
     decimals: smallRange ? 6 : undefined,
   };
-  const fullRange = isFullRangeStrategy(strategy.order0, strategy.order1);
-  const startPrice = fullRange ? '0' : prettifyNumber(startRate, priceOption);
-  const endPrice = fullRange ? '∞' : prettifyNumber(endRate, priceOption);
-  const marginalPrice = prettifyNumber(marginalRate, priceOption);
+  const fullRange = isFullRangeStrategy(strategy.buy, strategy.sell);
+  const _sP_ = fullRange ? '0' : prettifyNumber(min, priceOption);
+  const _eP_ = fullRange ? '∞' : prettifyNumber(max, priceOption);
+  const marginalPrice = prettifyNumber(order.marginalPrice, priceOption);
   const { quote, base } = strategy;
-  const color = buy ? 'text-buy' : 'text-sell';
+  const color = isBuy ? 'text-buy' : 'text-sell';
   return (
     <article
       className="text-14 flex flex-col gap-16"
       data-testid="order-tooltip"
     >
       <h3 className={cn('text-16 font-weight-500', color)}>
-        {buy ? 'Buy' : 'Sell'} {base.symbol}
+        {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
       {limit && (
         <table className="rounded-8 border-separate border border-white/40">
@@ -608,7 +644,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Price
               </th>
               <td className="p-8 text-end" data-testid="price">
-                {startPrice} {quote.symbol}
+                {_sP_} {quote.symbol}
               </td>
             </tr>
           </tbody>
@@ -622,7 +658,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Min Price
               </th>
               <td className="text-end" data-testid="min-price">
-                {startPrice} {quote.symbol}
+                {_sP_} {quote.symbol}
               </td>
             </tr>
             <tr>
@@ -630,7 +666,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Max Price
               </th>
               <td className="text-end" data-testid="max-price">
-                {endPrice} {quote.symbol}
+                {_eP_} {quote.symbol}
               </td>
             </tr>
             {!!spread && (
@@ -649,7 +685,85 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
       <p className="text-white/60">
         Current marginal price is&nbsp;
         <span data-testid="marginal-price">
-          {marginalPrice} {quote.symbol}
+          {prettifyNumber(marginalPrice, priceOption)} {quote.symbol}
+        </span>
+        &nbsp;per 1&nbsp;
+        {base.symbol}
+      </p>
+      <a
+        href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
+        target="_blank"
+        rel="noreferrer"
+        className="font-weight-500 text-primary inline-flex items-center gap-4"
+      >
+        <span>Learn more about marginal price</span>
+        <IconLink className="inline size-12" />
+      </a>
+    </article>
+  );
+};
+
+const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
+  strategy,
+  isBuy,
+}) => {
+  const location = useLocation();
+  const order = isBuy ? strategy.buy : strategy.sell;
+  const { _sD_, _eD_, _sP_, _eP_, marginalPrice } = order;
+
+  const smallRange = isSmallRange(strategy);
+  const priceOptions = {
+    abbreviate: true,
+    round: !smallRange,
+    decimals: smallRange ? 6 : undefined,
+  };
+  const { quote, base } = strategy;
+  const color = isBuy ? 'text-buy' : 'text-sell';
+  const _sD_Text =
+    location.pathname.includes('cart') && isToday(fromUnixUTC(_sD_))
+      ? 'Now'
+      : fromUnixUTC(_sD_).toLocaleString();
+
+  return (
+    <article
+      className="text-14 flex flex-col gap-16"
+      data-testid="order-tooltip"
+    >
+      <h3 className={cn('text-16 font-weight-500', color)}>
+        {isBuy ? 'Buy' : 'Sell'} {base.symbol}
+      </h3>
+      <table className="rounded-8 border-separate border border-white/40 p-8">
+        <tbody>
+          <tr>
+            <th className="font-weight-400 text-start text-white/60">_S P_</th>
+            <td className="text-end" data-testid="start-price">
+              {prettifyNumber(_sP_, priceOptions)} {quote.symbol}
+            </td>
+          </tr>
+          <tr>
+            <th className="font-weight-400 text-start text-white/60">_E P_</th>
+            <td className="text-end" data-testid="end-price">
+              {prettifyNumber(_eP_, priceOptions)} {quote.symbol}
+            </td>
+          </tr>
+          <tr>
+            <th className="font-weight-400 text-start text-white/60">_S D_</th>
+            <td className="text-end" data-testid="start-date">
+              {_sD_Text}
+            </td>
+          </tr>
+          <tr>
+            <th className="font-weight-400 text-start text-white/60">_E D_</th>
+            <td className="text-end" data-testid="end-date">
+              {fromUnixUTC(_eD_).toLocaleString()}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p className="text-white/60">
+        Current marginal price is&nbsp;
+        <span data-testid="marginal-price">
+          {prettifyNumber(marginalPrice, priceOptions)} {quote.symbol}
         </span>
         &nbsp;per 1&nbsp;
         {base.symbol}

@@ -325,6 +325,7 @@ You can update these colors:
 - **background**: used for surfaces
 - **primaryGradient**: used for the success variant button, with a first, middle and last gradient colors. Used when the config flag `useGradientBranding` is set to true
 - **primary**: used for buttons and other actionable elements
+- **secondary**: used as an alternative for primary & for gradient
 - **success**: used for positive information like positive ROI
 - **error**: used for error messages & buttons
 - **warning**: used for warning messages (mainly in forms)

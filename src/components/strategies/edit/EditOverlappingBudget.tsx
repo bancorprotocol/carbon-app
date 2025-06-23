@@ -16,10 +16,9 @@ import { OverlappingAnchor } from 'components/strategies/overlapping/Overlapping
 import { getDeposit, getWithdraw } from './utils';
 import { hasNoBudget } from '../overlapping/utils';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
-import { OverlappingMarketPriceProvider } from 'components/strategies/UserMarketPrice';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { formatNumber, tokenAmount } from 'utils/helpers';
-import { OverlappingOrder } from '../common/types';
+import { CreateOverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditBudgetOverlappingSearch } from 'pages/strategies/edit/budget/overlapping';
@@ -28,8 +27,8 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 interface Props {
   marketPrice: string;
-  order0: OverlappingOrder;
-  order1: OverlappingOrder;
+  buy: CreateOverlappingOrder;
+  sell: CreateOverlappingOrder;
 }
 
 // When working with edit overlapping we can't trust marginal price when budget was 0, so we need to recalculate
@@ -74,7 +73,7 @@ type Search = EditBudgetOverlappingSearch;
 
 const url = '/strategies/edit/$strategyId/budget/overlapping';
 export const EditOverlappingBudget: FC<Props> = (props) => {
-  const { marketPrice, order0, order1 } = props;
+  const { marketPrice, buy, sell } = props;
   const { strategy } = useEditStrategyCtx();
   const { base, quote } = strategy;
 
@@ -84,12 +83,12 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
 
-  const initialBuyBudget = strategy.order0.balance;
-  const initialSellBudget = strategy.order1.balance;
-  const depositBuyBudget = getDeposit(initialBuyBudget, order0.budget);
-  const withdrawBuyBudget = getWithdraw(initialBuyBudget, order0.budget);
-  const depositSellBudget = getDeposit(initialSellBudget, order1.budget);
-  const withdrawSellBudget = getWithdraw(initialSellBudget, order1.budget);
+  const initialBuyBudget = strategy.buy.budget;
+  const initialSellBudget = strategy.sell.budget;
+  const depositBuyBudget = getDeposit(initialBuyBudget, buy.budget);
+  const withdrawBuyBudget = getWithdraw(initialBuyBudget, buy.budget);
+  const depositSellBudget = getDeposit(initialSellBudget, sell.budget);
+  const withdrawSellBudget = getWithdraw(initialSellBudget, sell.budget);
 
   const set = useCallback(
     <T extends keyof Search>(key: T, value: Search[T]) => {
@@ -103,11 +102,11 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
     [navigate],
   );
 
-  const aboveMarket = isMinAboveMarket(order0);
-  const belowMarket = isMaxBelowMarket(order1);
+  const aboveMarket = isMinAboveMarket(buy);
+  const belowMarket = isMaxBelowMarket(sell);
 
   const budgetError = (() => {
-    const value = anchor === 'buy' ? order0.budget : order1.budget;
+    const value = anchor === 'buy' ? buy.budget : sell.budget;
     const budget = new SafeDecimal(value);
     if (editType === 'deposit' && anchor === 'buy' && quoteBalance) {
       const delta = budget.sub(initialBuyBudget);
@@ -135,9 +134,9 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
   const budgetWarning = (() => {
     if (editType !== 'deposit') return;
     const spread = getRoundedSpread(strategy).toString();
-    if (hasArbOpportunity(order0.marginalPrice, spread, marketPrice)) {
-      const buyBudgetChanged = strategy.order0.balance !== order0.budget;
-      const sellBudgetChanged = strategy.order1.balance !== order1.budget;
+    if (hasArbOpportunity(buy.marginalPrice, spread, marketPrice)) {
+      const buyBudgetChanged = strategy.buy.budget !== buy.budget;
+      const sellBudgetChanged = strategy.sell.budget !== sell.budget;
       if (!buyBudgetChanged && !sellBudgetChanged) return;
       return 'Please note that the deposit might create an arb opportunity.';
     }
@@ -163,7 +162,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
   };
 
   return (
-    <OverlappingMarketPriceProvider marketPrice={+marketPrice}>
+    <>
       {hasNoBudget(strategy) && (
         <article className="bg-background-900 grid gap-16 p-20">
           <header className="text-14 flex items-center justify-between">
@@ -180,7 +179,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
       <article className="bg-background-900 grid gap-8 p-16">
         <header className="flex items-center justify-between">
           <hgroup>
-            <h2 className="text-18">Budget</h2>
+            <h2 className="text-16">Budget</h2>
             <p className="text-14 text-white/80">
               Please select a token to proceed.
             </p>
@@ -254,7 +253,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             withdraw={budgetError ? '0' : withdrawBuyBudget}
             deposit={budgetError ? '0' : depositBuyBudget}
             balance={quoteBalance}
-            buy
+            isBuy
           />
           <BudgetDescription
             token={quote}
@@ -265,6 +264,6 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
           />
         </article>
       )}
-    </OverlappingMarketPriceProvider>
+    </>
   );
 };
