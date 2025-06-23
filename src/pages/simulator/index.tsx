@@ -53,27 +53,19 @@ const SimulatorDisclaimer = () => {
 
   return (
     <div className="flex gap-16 items-start border border-warning rounded bg-warning/10 px-24 py-16 md:col-span-2">
-      <div className="bg-warning/40 size-48 grid place-items-center rounded-full flex-shrink-0">
+      <div className="self-center bg-warning/40 size-48 grid place-items-center rounded-full flex-shrink-0">
         <IconBookmark className="size-24 text-warning" />
       </div>
-      <div className="grid gap-8 text-14">
+      <hgroup className="grid gap-8 text-14">
+        <h2>Simulator Disclaimer</h2>
         <p>
-          This tool analyzes historical market data under artificial conditions,
-          and is <b>not indicative of future results</b>.
+          This tool uses historical price data under simplified conditions and
+          does not predict future results. It excludes gas fees, may lack
+          accuracy or completeness, and is for informational purposes only. We
+          accept no liability for its use. Tax and rebase tokens are not
+          supported.
         </p>
-        <p>
-          The simulator relies on a historical price API as to which we cannot
-          assure accuracy or completeness, and it assumes no gas fees. It is
-          offered for informational purposes only. Future trading outcomes may
-          deviate from historical or simulated results for a variety of reasons.
-        </p>
-        <p>
-          We disclaim any responsibility or liability whatsoever for the
-          quality, accuracy or completeness of the information herein, and for
-          any reliance on, or use of this material in any way.
-        </p>
-        <p>Tax and rebase tokens are not supported.</p>
-      </div>
+      </hgroup>
 
       <button
         aria-label="accept disclaimer"
