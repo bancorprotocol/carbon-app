@@ -25,7 +25,7 @@ export const commonConfig: AppConfig = {
   walletConnectProjectId: '',
   policiesLastUpdated: '31 Jul, 2024',
   network: {
-    name: 'Coti',
+    name: 'Coti Network',
     logoUrl: IconCotiLogo,
     chainId: 2632500,
     blockExplorer: {
