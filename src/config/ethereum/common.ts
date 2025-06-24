@@ -480,7 +480,7 @@ export const commonConfig: AppConfig = {
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   policiesLastUpdated: '18 April, 2023',
   network: {
-    name: 'Ethereum Network',
+    name: 'Ethereum',
     logoUrl: IconETHLogo,
     chainId: 1,
     blockExplorer: { name: 'Etherscan', url: 'https://etherscan.io' },
