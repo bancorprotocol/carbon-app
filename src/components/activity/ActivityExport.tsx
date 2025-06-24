@@ -1,4 +1,4 @@
-import { Activity } from 'libs/queries/extApi/activity';
+import { Activity, ActivityOrder } from 'libs/queries/extApi/activity';
 import { activityActionName } from './utils';
 import { getLowestBits } from 'utils/helpers';
 import { ReactComponent as IconDownloadFile } from 'assets/icons/download-file.svg';
@@ -8,6 +8,8 @@ import { useTokens } from 'hooks/useTokens';
 import { toActivities } from './useActivityQuery';
 import { MouseEvent, useRef, useState } from 'react';
 import { Button } from 'components/common/button';
+import { SafeDecimal } from 'libs/safedecimal';
+import { fromUnixUTC } from 'components/simulator/utils';
 import styles from './ActivityExport.module.css';
 
 export const getActivityCSV = (activities: Activity[]) => {
@@ -32,23 +34,50 @@ export const getActivityCSV = (activities: Activity[]) => {
     'Block Number',
     'Transaction Hash',
     'Date',
+    // @todo(gradient)
+    // 'Strategy Type',
+    // 'Buy _S P_',
+    // 'Buy _E P_',
+    // 'Buy _S D_',
+    // 'Buy _E D_',
+    // 'Sell _S P_',
+    // 'Sell _E P_',
+    // 'Sell _S D_',
+    // 'Sell _E D_',
   ].join(',');
 
   const body = activities.map((activity) => {
     const { strategy, changes, blockNumber, txHash } = activity;
     const { base, quote } = strategy;
     const date = new Date(activity.date).toLocaleDateString();
+    const min = (order: ActivityOrder) => {
+      if ('min' in order) return order.min;
+      return SafeDecimal.min(order._sP_, order._eP_).toString();
+    };
+    const max = (order: ActivityOrder) => {
+      if ('max' in order) return order.max;
+      return SafeDecimal.max(order._sP_, order._eP_).toString();
+    };
+    const gradientPrices = (order: ActivityOrder) => {
+      if ('min' in order) return ['', '', '', ''];
+      return [
+        order._sP_,
+        order._eP_,
+        fromUnixUTC(order._sD_).toLocaleDateString(),
+        fromUnixUTC(order._eD_).toLocaleDateString(),
+      ];
+    };
     return [
       getLowestBits(strategy.id),
       strategy.id,
       base.symbol,
       quote.symbol,
       activityActionName[activity.action],
-      strategy.buy.min,
-      strategy.buy.max,
+      min(strategy.buy),
+      max(strategy.buy),
       strategy.buy.budget,
-      strategy.sell.min,
-      strategy.sell.max,
+      min(strategy.sell),
+      max(strategy.sell),
       strategy.sell.budget,
       changes?.buy?.min ?? '',
       changes?.buy?.max ?? '',
@@ -59,6 +88,10 @@ export const getActivityCSV = (activities: Activity[]) => {
       blockNumber,
       txHash,
       date,
+      // @todo(gradient)
+      // strategy.type === 'gradient' ? 'Gradient' : 'Static',
+      // ...gradientPrices(strategy.buy),
+      // ...gradientPrices(strategy.sell),
     ]
       .map((v) => `"${v}"`) // Ignore inner comma
       .join(',');

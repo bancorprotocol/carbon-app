@@ -1,4 +1,11 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   CandlestickData,
   D3ChartSettings,
@@ -6,13 +13,9 @@ import {
   useChartDimensions,
   useLinearScale,
 } from 'libs/d3';
-import { D3ChartProvider } from './D3ChartContext';
+import { D3ChartProvider, Drawing } from './D3ChartContext';
 import { DrawingMenu, DrawingMode } from './drawing/DrawingMenu';
-import {
-  ChartPrices,
-  D3ChartCandlesticks,
-  OnPriceUpdates,
-} from './D3ChartCandlesticks';
+import { ChartPrices, D3ChartCandlesticks } from './D3ChartCandlesticks';
 import {
   D3ZoomEvent,
   scaleBand,
@@ -21,12 +24,10 @@ import {
   zoomIdentity,
   ZoomTransform,
 } from 'd3';
-import { TradeTypes } from 'libs/routing/routes/trade';
-import { Activity } from 'libs/queries/extApi/activity';
 import { getDomain, isEmptyHistory, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
-import { defaultEnd, defaultEndDate, defaultStart } from '../utils';
+import { defaultEnd, default_ED_, defaultStart } from '../utils';
 import { differenceInDays, Duration, startOfDay, sub } from 'date-fns';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import style from './D3PriceHistory.module.css';
@@ -65,7 +66,7 @@ const getExtentConfig = (
     return {
       translate: [
         [-0.5 * width, 0],
-        [1.5 * width, 0],
+        [2 * width, 0],
       ] as TranslateExtent,
       zoom: [0.5, Math.ceil(datasize / 7)] as [number, number],
     };
@@ -117,7 +118,7 @@ const useZoom = (
         } else {
           return scaleBand()
             .domain(getExtendedRange(data.map((d) => d.date)))
-            .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5])
+            .range([dms.boundedWidth * -0.5, dms.boundedWidth * 2])
             .paddingInner(0.5);
         }
       })();
@@ -142,7 +143,7 @@ const getExtendedRange = (range: number[]) => {
   const first = range[0];
   const step = range[1] - first;
   const start = Math.floor(-0.5 * range.length);
-  const end = Math.ceil(range.length * 1.5);
+  const end = Math.ceil(range.length * 2);
   for (let i = start; i < end; i++) {
     points.push((first + i * step).toString());
   }
@@ -152,17 +153,10 @@ const getExtendedRange = (range: number[]) => {
 interface Props {
   className?: string;
   data: CandlestickData[];
-  prices: ChartPrices;
-  onPriceUpdates?: OnPriceUpdates;
-  onDragEnd?: OnPriceUpdates;
   onRangeUpdates: (params: RangeUpdate) => void;
   marketPrice?: number;
   bounds: ChartPrices;
-  isLimit?: { buy: boolean; sell: boolean };
-  type: TradeTypes;
-  overlappingSpread?: string;
-  readonly?: boolean;
-  activities?: Activity[];
+  children: ReactNode;
   zoomBehavior?: TransformBehavior;
   start?: string;
   end?: string;
@@ -198,7 +192,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
   } = props;
   const [listenOnZoom, setListenOnZoom] = useState(false);
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
-  const [drawings, setDrawings] = useState<any[]>([]);
+  const [drawings, setDrawings] = useState<Drawing[]>([]);
   const [ref, dms] = useChartDimensions(chartSettings);
   const {
     transform: zoomTransform,
@@ -225,7 +219,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
     } else {
       return scaleBand()
         .domain(getExtendedRange(data.map((d) => d.date)))
-        .range([dms.boundedWidth * -0.5, dms.boundedWidth * 1.5].map(zoomX))
+        .range([dms.boundedWidth * -0.5, dms.boundedWidth * 2].map(zoomX))
         .paddingInner(0.5);
     }
   }, [data, dms.boundedWidth, zoomBehavior, zoomX]);
@@ -320,6 +314,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
       setDrawings={setDrawings}
       xScale={xScale}
       yScale={y.scale}
+      yTicks={y.ticks}
       zoom={zoomTransform}
     >
       <div className={cn('rounded-12 flex flex-1 bg-black', className)}>
@@ -346,20 +341,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
                 </linearGradient>
               </defs>
               <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
-                <D3ChartCandlesticks
-                  readonly={props.readonly}
-                  prices={props.prices}
-                  onPriceUpdates={props.onPriceUpdates}
-                  data={data}
-                  marketPrice={marketPrice}
-                  onDragEnd={props.onPriceUpdates}
-                  isLimit={props.isLimit}
-                  type={props.type}
-                  overlappingSpread={props.overlappingSpread}
-                  overlappingMarketPrice={marketPrice}
-                  activities={props.activities}
-                  yTicks={y.ticks}
-                />
+                <D3ChartCandlesticks data={data}>
+                  {props.children}
+                </D3ChartCandlesticks>
               </g>
             </svg>
             {emptyHistory && (
@@ -393,9 +377,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
             <DateRangePicker
               className="rounded-8 border-0"
               defaultStart={fromUnixUTC(defaultHistoryStart)}
-              defaultEnd={defaultEndDate()}
+              defaultEnd={default_ED_()}
               start={fromUnixUTC(props.start || defaultHistoryStart)}
-              end={fromUnixUTC(props.end) || defaultEndDate()}
+              end={fromUnixUTC(props.end) || default_ED_()}
               onConfirm={zoomFromTo}
               options={{
                 disabled: disabledDates,

@@ -17,6 +17,7 @@ import {
 } from 'utils/migrateLocalStorage';
 import { NotificationPreference } from 'libs/notifications/NotificationPreferences';
 import { AppConfig } from 'config/types';
+import { LiquidityMatrixSearch } from 'libs/routing/routes/liquidity-matrix';
 import { StrategyLayout } from 'components/strategies/StrategySelectLayout';
 import { Cart } from 'components/cart/utils';
 
@@ -55,6 +56,7 @@ interface LocalStorageSchema {
   notificationPreferences: NotificationPreference;
   configOverride: Partial<AppConfig>;
   featureFlags: string[];
+  liquidityMatrix: Record<string, LiquidityMatrixSearch>;
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
 }

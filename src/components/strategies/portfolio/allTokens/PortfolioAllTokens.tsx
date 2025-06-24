@@ -1,6 +1,6 @@
 import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokensPieChartCenter } from 'components/strategies/portfolio/allTokens/PortfolioAllTokensPieChartCenter';
-import { Strategy } from 'libs/queries';
+import { AnyStrategy } from 'components/strategies/common/types';
 import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
 import { memo } from 'react';
 import { PortfolioAllTokensDesktop } from './PortfolioAllTokensDesktop';
@@ -16,7 +16,7 @@ import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCrea
 import { NotFound } from 'components/common/NotFound';
 
 interface Props {
-  strategies?: Strategy[];
+  strategies?: AnyStrategy[];
   isPending?: boolean;
   isExplorer?: boolean;
   onRowClick: (row: Row<PortfolioData>) => void;

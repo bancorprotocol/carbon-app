@@ -19,29 +19,29 @@ type UseMarketIndicationProps = {
     max: string;
     price: string;
   };
-  buy?: boolean;
+  isBuy?: boolean;
 };
 
 export const useMarketPercent = ({
   base,
   quote,
   order,
-  buy = false,
+  isBuy = false,
 }: UseMarketIndicationProps) => {
   const { marketPrice } = useMarketPrice({ base, quote });
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
     if (order.isRange) {
       const min = new SafeDecimal(order.min);
       const max = new SafeDecimal(order.max);
-      const isInputNotZero = buy ? max.gt(0) : min.gt(0);
+      const isInputNotZero = isBuy ? max.gt(0) : min.gt(0);
       if (!isInputNotZero || !marketPrice) return false;
-      return buy ? max.gt(marketPrice) : min.lt(marketPrice);
+      return isBuy ? max.gt(marketPrice) : min.lt(marketPrice);
     } else {
       const price = new SafeDecimal(order.price);
       if (!price.gt(0) || !marketPrice) return false;
-      return buy ? price.gt(marketPrice) : price.lt(marketPrice);
+      return isBuy ? price.gt(marketPrice) : price.lt(marketPrice);
     }
-  }, [order.isRange, order.price, order.max, order.min, buy, marketPrice]);
+  }, [order.isRange, order.price, order.max, order.min, isBuy, marketPrice]);
 
   const marketPricePercentage = useMemo(
     () => ({

@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { isValidRange } from 'components/strategies/utils';
-import { Strategy } from 'libs/queries';
+import { Strategy } from 'components/strategies/common/types';
 import {
   calculateOverlappingBuyBudget,
   calculateOverlappingPrices,
@@ -46,7 +46,7 @@ const getOrders = (
   search: EditOverlappingStrategySearch,
   marketPrice?: string,
 ) => {
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote, buy, sell } = strategy;
 
   if (!marketPrice) {
     return {
@@ -76,16 +76,16 @@ const getOrders = (
 
   const orders = {
     buy: {
-      min: order0.startRate,
-      max: order0.endRate,
-      marginalPrice: order0.marginalRate,
-      budget: order0.balance,
+      min: buy.min,
+      max: buy.max,
+      marginalPrice: buy.marginalPrice,
+      budget: buy.budget,
     },
     sell: {
-      min: order1.startRate,
-      max: order1.endRate,
-      marginalPrice: order1.marginalRate,
-      budget: order1.balance,
+      min: sell.min,
+      max: sell.max,
+      marginalPrice: sell.marginalPrice,
+      budget: sell.budget,
     },
   };
 
@@ -109,7 +109,7 @@ const getOrders = (
   // BUDGET
   if (anchor === 'buy') {
     if (isMinAboveMarket(orders.buy)) return orders;
-    const buyBudget = getTotalBudget(action, order0.balance, budget);
+    const buyBudget = getTotalBudget(action, buy.budget, budget);
     orders.buy.budget = buyBudget;
     orders.sell.budget = calculateOverlappingSellBudget(
       base.decimals,
@@ -122,7 +122,7 @@ const getOrders = (
     );
   } else {
     if (isMaxBelowMarket(orders.sell)) return orders;
-    const sellBudget = getTotalBudget(action, order1.balance, budget);
+    const sellBudget = getTotalBudget(action, sell.budget, budget);
     orders.sell.budget = sellBudget;
     orders.buy.budget = calculateOverlappingBuyBudget(
       base.decimals,
@@ -168,21 +168,21 @@ export const EditPricesOverlappingPage = () => {
   const orders = getOrders(strategy, search, marketPrice);
   return (
     <EditStrategyLayout editType={search.editType}>
-      <OverlappingContent />
       <StrategyChartOverlapping
         base={base}
         quote={quote}
-        order0={orders.buy}
-        order1={orders.sell}
+        buy={orders.buy}
+        sell={orders.sell}
         set={set}
       />
+      <OverlappingContent />
     </EditStrategyLayout>
   );
 };
 
 const OverlappingContent = () => {
   const { strategy } = useEditStrategyCtx();
-  const { base, quote, order0, order1 } = strategy;
+  const { base, quote, buy, sell } = strategy;
   const search = useSearch({ from: url });
   const { marketPrice: externalPrice } = useMarketPrice({
     base,
@@ -198,8 +198,8 @@ const OverlappingContent = () => {
   const spread = search.spread || defaultSpread;
 
   const hasChanged = (() => {
-    if (search.min !== order0.startRate) return true;
-    if (search.max !== order1.endRate) return true;
+    if (search.min !== buy.min) return true;
+    if (search.max !== sell.max) return true;
     if (search.spread !== getRoundedSpread(strategy).toString()) return true;
     if (search.marketPrice) return true;
     if (!isZero(search.budget)) return true;
@@ -219,9 +219,8 @@ const OverlappingContent = () => {
       }
     >
       <EditOverlappingPrice
-        marketPrice={marketPrice!}
-        order0={orders.buy}
-        order1={orders.sell}
+        buy={orders.buy}
+        sell={orders.sell}
         spread={spread}
       />
     </EditPricesForm>

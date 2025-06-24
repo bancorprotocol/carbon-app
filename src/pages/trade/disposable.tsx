@@ -1,6 +1,4 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { TabsMenu } from 'components/common/tabs/TabsMenu';
-import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import {
   emptyOrder,
@@ -14,8 +12,15 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing';
-import { TradeDisposableSearch } from 'libs/routing/routes/trade';
+import {
+  StrategySettings,
+  TradeDisposableSearch,
+} from 'libs/routing/routes/trade';
 import { useCallback } from 'react';
+import { D3ChartDisposable } from 'components/strategies/common/d3Chart/disposable/D3ChartDisposable';
+import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
+import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
+import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
@@ -27,9 +32,8 @@ export const TradeDisposable = () => {
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
-  const isBuy = search.direction === 'buy';
-  const order = getDefaultOrder(isBuy ? 'buy' : 'sell', search, marketPrice);
-
+  const direction = search.direction || 'sell';
+  const order = getDefaultOrder(direction, search, marketPrice);
   const setSearch = useCallback(
     (next: TradeDisposableSearch) => {
       navigate({
@@ -45,13 +49,17 @@ export const TradeDisposable = () => {
   const setDirection = (direction: StrategyDirection) => {
     setSearch({ direction, budget: undefined, min: undefined, max: undefined });
   };
+  const setSettings = (settings: StrategySettings) => {
+    const { min, max } = getDefaultOrder(direction, { settings }, marketPrice);
+    setSearch({ settings, min, max });
+  };
 
-  const onPriceUpdates: OnPriceUpdates = useCallback(
+  const updatePrices: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
-      if (isBuy) setSearch({ min: buy.min, max: buy.max });
+      if (direction === 'buy') setSearch({ min: buy.min, max: buy.max });
       else setSearch({ min: sell.min, max: sell.max });
     },
-    [setSearch, isBuy],
+    [setSearch, direction],
   );
 
   // Warnings
@@ -60,64 +68,53 @@ export const TradeDisposable = () => {
     marketPrice,
     min: order.min,
     max: order.max,
-    buy: isBuy,
+    isBuy: direction === 'buy',
   });
-  const order0 = isBuy ? order : emptyOrder();
-  const order1 = isBuy ? emptyOrder() : order;
+  const buy = direction === 'buy' ? order : emptyOrder();
+  const sell = direction === 'sell' ? order : emptyOrder();
   const isLimit = {
     buy: order.settings !== 'range',
     sell: order.settings !== 'range',
   };
 
+  const { prices, setPrices } = useDebouncePrices(buy, sell, updatePrices);
+
   return (
     <>
-      <CreateLayout url={url}>
-        <CreateForm base={base} quote={quote} order0={order0} order1={order1}>
-          <CreateOrder
-            type="disposable"
-            base={base}
-            quote={quote}
-            buy={isBuy}
-            order={order}
-            setOrder={setSearch}
-            warnings={[outSideMarket]}
-            settings={
-              <div className="p-16 pb-0">
-                <TabsMenu>
-                  <TabsMenuButton
-                    onClick={() => setDirection('sell')}
-                    variant={isBuy ? 'black' : 'sell'}
-                    data-testid="tab-sell"
-                  >
-                    Sell
-                  </TabsMenuButton>
-                  <TabsMenuButton
-                    onClick={() => setDirection('buy')}
-                    variant={!isBuy ? 'black' : 'buy'}
-                    data-testid="tab-buy"
-                  >
-                    Buy
-                  </TabsMenuButton>
-                </TabsMenu>
-              </div>
-            }
-          />
-        </CreateForm>
-      </CreateLayout>
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
         <StrategyChartHistory
-          type="disposable"
           base={base}
           quote={quote}
-          order0={order0}
-          order1={order1}
-          isLimit={isLimit}
+          buy={buy}
+          sell={sell}
           direction={search.direction ?? 'sell'}
-          onPriceUpdates={onPriceUpdates}
-        />
+        >
+          <D3ChartDisposable
+            isLimit={isLimit}
+            prices={prices}
+            onChange={setPrices}
+          />
+          <TradeChartContent />
+          <D3PricesAxis prices={prices} />
+        </StrategyChartHistory>
       </StrategyChartSection>
+      <CreateLayout url={url}>
+        <CreateForm base={base} quote={quote} buy={buy} sell={sell}>
+          <CreateOrder
+            type="disposable"
+            base={base}
+            quote={quote}
+            direction={search.direction}
+            order={order}
+            setOrder={setSearch}
+            warnings={[outSideMarket]}
+            setDirection={setDirection}
+            setSettings={setSettings}
+          />
+        </CreateForm>
+      </CreateLayout>
     </>
   );
 };

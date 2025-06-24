@@ -1,7 +1,6 @@
-import { FC, ReactNode, useId } from 'react';
+import { FC, useId } from 'react';
 import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { StrategySettings, StrategyType } from 'libs/routing';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/common/OrderHeader';
 import { InputRange } from 'components/strategies/common/InputRange';
@@ -11,20 +10,26 @@ import { InputBudget } from 'components/strategies/common/InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { cn } from 'utils/helpers';
-import { LogoImager } from 'components/common/imager/Imager';
-import { getDefaultOrder } from './utils';
-import { useMarketPrice } from 'hooks/useMarketPrice';
+import { OrderDirection } from '../common/OrderDirection';
+import {
+  StrategyDirection,
+  StrategySettings,
+  StrategyType,
+} from 'libs/routing';
 import style from 'components/strategies/common/order.module.css';
 
 interface Props {
   base: Token;
   quote: Token;
   order: OrderBlock;
-  buy?: boolean;
+  direction?: StrategyDirection;
   optionalBudget?: boolean;
   type: StrategyType;
-  setOrder: (order: Partial<OrderBlock>) => void;
-  settings?: ReactNode;
+  setOrder: (order: Partial<OrderBlock>) => any;
+  /** If provided, display the direction tabs */
+  setDirection?: (direction: StrategyDirection) => any;
+  /** If provided, display the settings tabs */
+  setSettings?: (settings: StrategySettings) => any;
   warnings?: (string | undefined)[];
   error?: string;
 }
@@ -36,29 +41,29 @@ export const CreateOrder: FC<Props> = ({
   optionalBudget,
   type,
   setOrder,
-  buy = false,
-  settings,
+  direction = 'sell',
+  setDirection,
+  setSettings,
   error,
   warnings,
 }) => {
   const titleId = useId();
-  const { marketPrice } = useMarketPrice({ base, quote });
 
+  const isBuy = direction === 'buy';
   // PRICES
-  const tooltipText = `This section will define the order details in which you are willing to ${type} ${base.symbol} at.`;
   const inputTitle = (
     <>
       <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
         1
       </span>
       <Tooltip
-        element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
-          base.symbol
-        } at. Make sure the price is in ${quote.symbol} tokens.`}
+        element={`Define the price you are willing to ${
+          isBuy ? 'buy' : 'sell'
+        } ${base.symbol} at. Make sure the price is in ${quote.symbol} tokens.`}
       >
         <p>
           <span className="text-white/80">
-            Set {buy ? 'Buy' : 'Sell'} Price&nbsp;
+            Set {isBuy ? 'Buy' : 'Sell'} Price&nbsp;
           </span>
           <span className="text-white/60">
             ({quote.symbol} per 1 {base.symbol})
@@ -72,14 +77,14 @@ export const CreateOrder: FC<Props> = ({
   const setMax = (max: string) => setOrder({ max });
 
   // BUDGET
-  const budgetToken = buy ? quote : base;
+  const budgetToken = isBuy ? quote : base;
   const balance = useGetTokenBalance(budgetToken);
   const insufficientBalance =
     balance.data && new SafeDecimal(balance.data).lt(order.budget)
       ? 'Insufficient balance'
       : '';
   const budgetTooltip = () => {
-    if (buy) {
+    if (isBuy) {
       const note =
         type === 'recurring'
           ? 'Note: this amount will re-fill once the "Sell" order is used by traders.'
@@ -94,34 +99,30 @@ export const CreateOrder: FC<Props> = ({
     }
   };
   const setBudget = (budget: string) => setOrder({ budget });
-  const setSettings = (settings: StrategySettings) => {
-    const direction = buy ? 'buy' : 'sell';
-    const { min, max } = getDefaultOrder(direction, { settings }, marketPrice);
-    setOrder({ settings, min, max });
-  };
 
-  const headerProps = { titleId, order, base, buy, setSettings };
+  const headerProps = {
+    titleId,
+    order,
+    base,
+    buy: isBuy,
+    direction,
+    setSettings,
+  };
 
   return (
     <article
       aria-labelledby={titleId}
       className="bg-background-900 grid"
-      data-testid={`${buy ? 'buy' : 'sell'}-section`}
+      data-testid={`${direction}-section`}
     >
-      {settings}
+      {!!setDirection && (
+        <OrderDirection direction={direction} setDirection={setDirection} />
+      )}
       <div
         className={cn(style.order, 'grid gap-16 p-16')}
-        data-direction={buy ? 'buy' : 'sell'}
+        data-direction={direction}
       >
-        <OrderHeader {...headerProps}>
-          <h2 className="text-16 flex items-center gap-8" id={titleId}>
-            <Tooltip element={tooltipText}>
-              <span>{buy ? 'Buy Low' : 'Sell High'}</span>
-            </Tooltip>
-            <LogoImager alt="Token" src={base.logoURI} className="size-18" />
-            <span>{base.symbol}</span>
-          </h2>
-        </OrderHeader>
+        <OrderHeader {...headerProps} />
         <fieldset className="flex flex-col gap-8">
           <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
             {inputTitle}
@@ -134,7 +135,7 @@ export const CreateOrder: FC<Props> = ({
               setMin={setMin}
               max={order.max}
               setMax={setMax}
-              buy={buy}
+              isBuy={isBuy}
               error={error}
               warnings={warnings}
               required
@@ -145,7 +146,7 @@ export const CreateOrder: FC<Props> = ({
               quote={quote}
               price={order.min}
               setPrice={setPrice}
-              buy={buy}
+              isBuy={isBuy}
               error={error}
               warnings={warnings}
               required
@@ -159,7 +160,7 @@ export const CreateOrder: FC<Props> = ({
             </span>
             <Tooltip element={budgetTooltip()}>
               <span className="text-white/80">
-                Set {buy ? 'Buy' : 'Sell'} Budget&nbsp;
+                Set {isBuy ? 'Buy' : 'Sell'} Budget&nbsp;
               </span>
             </Tooltip>
             {optionalBudget && (
@@ -183,7 +184,7 @@ export const CreateOrder: FC<Props> = ({
           min={order.min}
           max={order.max}
           budget={order.budget}
-          buy={buy}
+          isBuy={isBuy}
           base={base}
           quote={quote}
         />

@@ -14,7 +14,6 @@ interface Props {
     isCurrentNetwork: boolean;
   }[];
 }
-
 export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
   const activeNetwork = networks.find((network) => network.isCurrentNetwork);
   if (!activeNetwork || networks.length < 2) return;

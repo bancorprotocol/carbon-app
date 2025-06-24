@@ -9,6 +9,7 @@ import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuyS
 import { useGetTokenBalance } from 'libs/queries';
 import { StrategyDirection } from 'libs/routing';
 import { cn } from 'utils/helpers';
+import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import style from 'components/strategies/common/order.module.css';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 
@@ -17,8 +18,8 @@ export const TradeMarket = () => {
   const { base, quote } = useTradeCtx();
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
-  const buy = search.direction === 'buy';
-  const balanceQuery = useGetTokenBalance(buy ? quote : base);
+  const isBuy = search.direction === 'buy';
+  const balanceQuery = useGetTokenBalance(isBuy ? quote : base);
 
   const setDirection = (direction: StrategyDirection) => {
     navigate({
@@ -34,20 +35,25 @@ export const TradeMarket = () => {
 
   return (
     <>
+      <StrategyChartSection>
+        <PairChartHistory base={base} quote={quote}>
+          <TradeChartContent />
+        </PairChartHistory>
+      </StrategyChartSection>
       <TradeLayout>
         <article className="bg-background-900 grid rounded-ee rounded-es">
           <div className="p-16 pb-0">
             <TabsMenu>
               <TabsMenuButton
                 onClick={() => setDirection('sell')}
-                variant={buy ? 'black' : 'sell'}
+                variant={isBuy ? 'black' : 'sell'}
                 data-testid="tab-sell"
               >
                 Sell
               </TabsMenuButton>
               <TabsMenuButton
                 onClick={() => setDirection('buy')}
-                variant={!buy ? 'black' : 'buy'}
+                variant={!isBuy ? 'black' : 'buy'}
                 data-testid="tab-buy"
               >
                 Buy
@@ -56,28 +62,25 @@ export const TradeMarket = () => {
           </div>
           <div
             className={cn(style.order, 'p-16')}
-            data-direction={buy ? 'buy' : 'sell'}
+            data-direction={isBuy ? 'buy' : 'sell'}
           >
             <header className="flex items-center justify-between">
               <h2 className="text-18 flex items-center gap-8">
-                {buy ? 'Buy' : 'Sell'} {base.symbol}&nbsp;
-                {buy ? 'with' : 'for'} {quote.symbol}
+                {isBuy ? 'Buy' : 'Sell'} {base.symbol}&nbsp;
+                {isBuy ? 'with' : 'for'} {quote.symbol}
               </h2>
               <MainMenuTradeSettings />
             </header>
             <TradeWidgetBuySell
-              source={buy ? quote : base}
-              target={buy ? base : quote}
+              source={isBuy ? quote : base}
+              target={isBuy ? base : quote}
               sourceBalanceQuery={balanceQuery}
-              buy={buy}
-              data-testid={buy ? 'buy-form' : 'sell-form'}
+              isBuy={isBuy}
+              data-testid={isBuy ? 'buy-form' : 'sell-form'}
             />
           </div>
         </article>
       </TradeLayout>
-      <StrategyChartSection>
-        <PairChartHistory base={base} quote={quote} />
-      </StrategyChartSection>
     </>
   );
 };

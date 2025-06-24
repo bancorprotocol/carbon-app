@@ -1,5 +1,5 @@
 import { ModalFC } from 'libs/modals/modals.types';
-import { Strategy } from 'libs/queries';
+import { AnyStrategy } from 'components/strategies/common/types';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { usePauseStrategy } from 'components/strategies/usePauseStrategy';
@@ -9,7 +9,7 @@ import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 
 export type ModalConfirmPauseData = {
-  strategy: Strategy;
+  strategy: AnyStrategy;
 };
 
 export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({

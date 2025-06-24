@@ -5,11 +5,12 @@
 :root {
   --primary: theme('colors.primary.DEFAULT');
   --primary-dark: theme('colors.primary.dark');
+  --secondary: theme('colors.secondary.DEFAULT');
   /* We use CSS variable for the svg assets (fill & stop-color) */
   --buy: theme('colors.buy.DEFAULT');
   --sell: theme('colors.sell.DEFAULT');
   --warning: theme('colors.warning.DEFAULT');
-  --warning-dark: theme('colors.warning.dark');
+  --error: theme('colors.error.DEFAULT');
   --gradient-first: theme('colors.primaryGradient.first.DEFAULT');
   --gradient-middle: theme('colors.primaryGradient.middle.DEFAULT');
   --gradient-last: theme('colors.primaryGradient.last.DEFAULT');

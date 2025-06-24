@@ -8,7 +8,7 @@ import { useFiatValue } from 'hooks/useFiatValue';
 
 interface Props {
   title?: string;
-  buy?: boolean;
+  isBuy?: boolean;
   token: Token;
   initialBudget: string;
   withdraw: string;
@@ -63,7 +63,7 @@ function getBudgetDistribution(
 export const BudgetDistribution: FC<Props> = (props) => {
   const allocatedId = useId();
   const walletId = useId();
-  const { title, buy, token, initialBudget, withdraw, deposit, balance } =
+  const { title, isBuy, token, initialBudget, withdraw, deposit, balance } =
     props;
   const isSimulator = !!props.isSimulator;
   const dist = getBudgetDistribution(
@@ -73,7 +73,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
     Number(balance ?? '0'),
     isSimulator,
   );
-  const color = buy ? 'bg-buy' : 'bg-sell';
+  const color = isBuy ? 'bg-buy' : 'bg-sell';
   const allocated = isSimulator ? deposit : initialBudget;
   return (
     <div className="flex flex-col gap-4">

@@ -20,7 +20,7 @@ export const useBuySell = ({
   source,
   target,
   sourceBalanceQuery,
-  buy = false,
+  isBuy = false,
 }: TradeWidgetBuySellProps) => {
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
@@ -65,7 +65,7 @@ export const useBuySell = ({
       clearInputs();
       const network = await provider?.getNetwork();
       const event = {
-        trade_direction: buy ? ('buy' as const) : ('sell' as const),
+        trade_direction: isBuy ? ('buy' as const) : ('sell' as const),
         token_pair: `${target.symbol}/${source.symbol}`,
         buy_token: target.symbol,
         sell_token: source.symbol,
@@ -73,7 +73,7 @@ export const useBuySell = ({
         transaction_hash: transactionHash,
         blockchain_network: network?.name ?? '',
       };
-      if (buy) carbonEvents.trade.tradeBuy(event);
+      if (isBuy) carbonEvents.trade.tradeBuy(event);
       else carbonEvents.trade.tradeSell(event);
     },
   });
@@ -294,10 +294,10 @@ export const useBuySell = ({
       target,
       isTradeBySource,
       onSuccess: clearInputs,
-      buy,
+      isBuy,
     });
   }, [
-    buy,
+    isBuy,
     clearInputs,
     isTradeBySource,
     openModal,

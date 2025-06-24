@@ -5,7 +5,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { useOverlappingMarketPrice } from 'components/strategies/UserMarketPrice';
+import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 
 type InputRangeProps = {
   min: string;
@@ -16,7 +16,7 @@ type InputRangeProps = {
   setMax: (value: string) => void;
   quote: Token;
   base: Token;
-  buy?: boolean;
+  isBuy?: boolean;
   error?: string;
   warnings?: string[];
   setRangeError: (error: string) => void;
@@ -37,11 +37,11 @@ export const InputRange: FC<InputRangeProps> = ({
   base,
   error,
   setRangeError,
-  buy = false,
+  isBuy = false,
   warnings,
   isOrdersReversed,
 }) => {
-  const marketPrice = useOverlappingMarketPrice({ base, quote });
+  const { marketPrice } = useStrategyMarketPrice({ base, quote });
   const inputMinId = useId();
   const inputMaxId = useId();
   const errorMinMax = 'Maximum price must be higher than the minimum price';
@@ -60,7 +60,7 @@ export const InputRange: FC<InputRangeProps> = ({
     if (minValue >= maxValue) errorMessage = errorMinMax;
     if (minValue <= 0 || maxValue <= 0) errorMessage = errorAboveZero;
     setRangeError(errorMessage);
-  }, [min, max, setRangeError, isOrdersReversed, buy]);
+  }, [min, max, setRangeError, isOrdersReversed, isBuy]);
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumber(e.target.value));
@@ -93,7 +93,7 @@ export const InputRange: FC<InputRangeProps> = ({
         >
           <header className="text-12 mb-5 flex justify-between text-white/60">
             <Tooltip
-              element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
+              element={`The lowest price to ${isBuy ? 'buy' : 'sell'} ${
                 base.symbol
               } at.`}
             >
@@ -143,7 +143,7 @@ export const InputRange: FC<InputRangeProps> = ({
         >
           <header className="text-12 mb-5 flex justify-between text-white/60">
             <Tooltip
-              element={`The highest price to ${buy ? 'buy' : 'sell'} ${
+              element={`The highest price to ${isBuy ? 'buy' : 'sell'} ${
                 base.symbol
               } at.`}
             >

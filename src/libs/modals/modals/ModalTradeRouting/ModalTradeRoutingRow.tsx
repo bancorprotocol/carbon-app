@@ -16,7 +16,7 @@ type ModalTradeRoutingRowProps = {
   targetFiatPrice?: FiatPriceDict;
   isSelected: boolean;
   handleClick: (id: string) => void;
-  buy?: boolean;
+  isBuy?: boolean;
 };
 
 export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
@@ -26,7 +26,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
   sourceFiatPrice,
   targetFiatPrice,
   isSelected,
-  buy,
+  isBuy,
   handleClick,
 }) => {
   const { selectedFiatCurrency } = useFiatCurrency();
@@ -39,9 +39,9 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
     targetFiatPrice?.[selectedFiatCurrency] || 0,
   );
 
-  const averageToken = buy ? source : target;
-  const averageFiatPrice = buy ? sourceFiatPrice : targetFiatPrice;
-  const averageAmount = buy
+  const averageToken = isBuy ? source : target;
+  const averageFiatPrice = isBuy ? sourceFiatPrice : targetFiatPrice;
+  const averageAmount = isBuy
     ? new SafeDecimal(sourceAmount).div(targetAmount)
     : new SafeDecimal(targetAmount).div(sourceAmount);
 

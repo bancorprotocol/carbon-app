@@ -7,7 +7,6 @@ import { cn } from 'utils/helpers';
 import { FormEvent, useMemo, useState } from 'react';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import {
-  CartStrategy,
   QueryKey,
   toTransactionRequest,
   useGetTokenBalances,
@@ -20,11 +19,13 @@ import { useModal } from 'hooks/useModal';
 import { carbonSDK } from 'libs/sdk';
 import { useNavigate } from '@tanstack/react-router';
 import { useNotifications } from 'hooks/useNotifications';
+import { AnyCartStrategy } from 'components/strategies/common/types';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
+import { isGradientStrategy } from 'components/strategies/common/utils';
 
 const batcher = config.addresses.carbon.batcher;
-const getApproveTokens = (strategies: CartStrategy[]) => {
+const getApproveTokens = (strategies: AnyCartStrategy[]) => {
   if (!batcher) throw new Error('Batcher address not provided');
   const tokens: Record<string, Token> = {};
   const amount: Record<string, SafeDecimal> = {};
@@ -33,10 +34,10 @@ const getApproveTokens = (strategies: CartStrategy[]) => {
     const quote = strategy.quote.address;
     tokens[base] ||= strategy.base;
     amount[base] ||= new SafeDecimal(0);
-    amount[base] = amount[base].add(strategy.order1.balance);
+    amount[base] = amount[base].add(strategy.sell.budget);
     tokens[quote] ||= strategy.quote;
     amount[quote] ||= new SafeDecimal(0);
-    amount[quote] = amount[quote].add(strategy.order0.balance);
+    amount[quote] = amount[quote].add(strategy.buy.budget);
   }
   return Object.values(tokens)
     .map((token) => ({
@@ -92,18 +93,26 @@ export const CartPage = () => {
     const create = async () => {
       setConfirmation(true);
       try {
-        const params = strategies.map(({ base, quote, order0, order1 }) => ({
-          baseToken: base.address,
-          quoteToken: quote.address,
-          buyPriceLow: order0.startRate,
-          buyPriceMarginal: order0.marginalRate || order0.endRate,
-          buyPriceHigh: order0.endRate,
-          buyBudget: order0.balance,
-          sellPriceLow: order1.startRate,
-          sellPriceMarginal: order1.marginalRate || order1.startRate,
-          sellPriceHigh: order1.endRate,
-          sellBudget: order1.balance,
-        }));
+        // TODO: support gradient
+        const params: Parameters<
+          typeof carbonSDK.batchCreateBuySellStrategies
+        >[0] = [];
+        for (const strategy of strategies) {
+          if (isGradientStrategy(strategy)) continue;
+          const { base, quote, buy, sell } = strategy;
+          params.push({
+            baseToken: base.address,
+            quoteToken: quote.address,
+            buyPriceLow: buy.min,
+            buyPriceMarginal: buy.marginalPrice || buy.max,
+            buyPriceHigh: buy.max,
+            buyBudget: buy.budget,
+            sellPriceLow: sell.min,
+            sellPriceMarginal: sell.marginalPrice || sell.min,
+            sellPriceHigh: sell.max,
+            sellBudget: sell.budget,
+          });
+        }
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
         const tx = await signer!.sendTransaction(
           toTransactionRequest(unsignedTx),

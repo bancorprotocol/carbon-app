@@ -22,7 +22,7 @@ export const useModalTradeRouting = ({
     tradeActionsWei,
     tradeActionsRes,
     onSuccess,
-    buy = false,
+    isBuy = false,
     sourceBalance,
   },
 }: Props) => {
@@ -112,7 +112,7 @@ export const useModalTradeRouting = ({
     data?.totalSourceAmount,
     data?.totalTargetAmount,
     isTradeBySource,
-    buy,
+    isBuy,
     getFiatValueSource,
   ]);
 

@@ -1,9 +1,9 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { Strategy } from 'libs/queries';
+import { AnyBaseStrategy } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { prettifyNumber } from 'utils/helpers';
 
-export const buildPairNameByStrategy = ({ base, quote }: Strategy) => {
+export const buildPairNameByStrategy = ({ base, quote }: AnyBaseStrategy) => {
   return `${base.symbol}/${quote.symbol}`;
 };
 

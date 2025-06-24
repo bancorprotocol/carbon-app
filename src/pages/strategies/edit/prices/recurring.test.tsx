@@ -8,7 +8,7 @@ import {
   userEvent,
 } from 'libs/testing-library';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
-import { Strategy } from 'libs/queries';
+import { Strategy } from 'components/strategies/common/types';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import {
   MockStrategyParams,
@@ -33,22 +33,22 @@ beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());
 
 const baseBuy = {
-  balance: '1',
-  startRate: '1',
-  endRate: '2',
-  marginalRate: '1.5',
+  budget: '1',
+  min: '1',
+  max: '2',
+  marginalPrice: '1.5',
 };
 const baseSell = {
-  balance: '1',
-  startRate: '3',
-  endRate: '4',
-  marginalRate: '3.5',
+  budget: '1',
+  min: '3',
+  max: '4',
+  marginalPrice: '3.5',
 };
 const baseBuyOrder = {
   base: 'ETH' as const,
   quote: 'USDC' as const,
-  order0: baseBuy,
-  order1: baseSell,
+  buy: baseBuy,
+  sell: baseSell,
 };
 
 const renderPage = async (
@@ -97,11 +97,11 @@ describe('Edit price recurring page', () => {
       await renderPage('editPrices', {
         base: 'ETH',
         quote: 'USDC',
-        order0: {
+        buy: {
           ...baseBuy,
-          marginalRate: '2',
+          marginalPrice: '2',
         },
-        order1: baseSell,
+        sell: baseSell,
       });
       const form = await driver.findRecurringForm();
       await user.click(form.buy.budgetSummary());
@@ -112,10 +112,10 @@ describe('Edit price recurring page', () => {
       await renderPage('editPrices', {
         base: 'ETH',
         quote: 'USDC',
-        order0: baseBuy,
-        order1: {
+        buy: baseBuy,
+        sell: {
           ...baseSell,
-          marginalRate: '3',
+          marginalPrice: '3',
         },
       });
       const form = await driver.findRecurringForm();
@@ -127,11 +127,11 @@ describe('Edit price recurring page', () => {
       await renderPage('editPrices', {
         base: 'ETH',
         quote: 'USDC',
-        order0: {
+        buy: {
           ...baseBuy,
-          balance: '0',
+          budget: '0',
         },
-        order1: baseSell,
+        sell: baseSell,
       });
       const form = await driver.findRecurringForm();
       await user.click(form.buy.budgetSummary());

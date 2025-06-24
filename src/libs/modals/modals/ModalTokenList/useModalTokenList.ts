@@ -60,14 +60,26 @@ export const useModalTokenList = ({ id, data }: Props) => {
     : quotePopularTokens;
 
   useEffect(() => {
+    if (isPending) return;
     const getMissingToken: Promise<Token>[] = [];
     for (const token of defaultPopularTokens) {
       if (!getTokenById(token)) {
         getMissingToken.push(fetchTokenData(Token, token));
       }
     }
-    Promise.all(getMissingToken).then(importTokens);
-  }, [Token, defaultPopularTokens, getTokenById, importTokens]);
+    Promise.allSettled(getMissingToken).then((res) => {
+      const success = res
+        .filter((r) => r.status === 'fulfilled')
+        .map((r) => r.value);
+      const errors = res
+        .filter((r) => r.status === 'rejected')
+        .map((r) => r.reason);
+      importTokens(success);
+      for (const error of errors) {
+        console.error(error);
+      }
+    });
+  }, [Token, defaultPopularTokens, getTokenById, importTokens, isPending]);
 
   const onSelect = useCallback(
     (token: Token) => {

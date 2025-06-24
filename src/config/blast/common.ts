@@ -19,7 +19,7 @@ const addresses = {
 export const commonConfig: AppConfig = {
   hidden: true,
   mode: 'development',
-  appName: 'Carbon DeFi',
+  appName: 'Blast - Carbon DeFi',
   appUrl: 'https://app.carbondefi.xyz',
   carbonApi: 'https://blast-api.carbondefi.xyz/v1/',
   selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe'],
@@ -35,7 +35,7 @@ export const commonConfig: AppConfig = {
       url: 'https://blastscan.io',
     },
     rpc: {
-      url: import.meta.env.VITE_CHAIN_RPC_URL || 'https://rpc.blast.io',
+      url: 'https://rpc.blast.io',
     },
     defaultLimitedApproval: true,
     gasToken: {
@@ -50,7 +50,7 @@ export const commonConfig: AppConfig = {
   sdk: {
     cacheTTL: 0,
   },
-  defaultTokenPair: [addresses.BLAST, addresses.USDB],
+  defaultTokenPair: [addresses.WETH, addresses.USDB],
   popularPairs: [
     [addresses.BLAST, addresses.BAG],
     [addresses.BLAST, addresses.USDB],

@@ -1,4 +1,4 @@
-import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
+import { fromUnixUTC, dayFormatter } from 'components/simulator/utils';
 import { D3AxisTick, D3ChartSettings } from 'libs/d3/types';
 import { uuid } from 'utils/helpers';
 
@@ -37,7 +37,7 @@ export const D3XAxis = ({ ticks, dms }: Props) => {
             fill="currentColor"
             opacity={0.6}
           >
-            {xAxisFormatter.format(fromUnixUTC(value))}
+            {dayFormatter.format(fromUnixUTC(value))}
           </text>
         </g>
       ))}

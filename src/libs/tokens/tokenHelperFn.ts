@@ -14,9 +14,7 @@ export const fetchTokenLists = async () => {
   const res = await Promise.all(
     config.tokenLists.map(async ({ uri, parser }) => {
       const controller = new AbortController();
-      const abort = setTimeout(() => {
-        controller.abort();
-      }, 10000);
+      const abort = setTimeout(() => controller.abort(), 10_000);
       const response = await fetch(uri, { signal: controller.signal });
       clearTimeout(abort);
       const result: TokenList = await response.json();
