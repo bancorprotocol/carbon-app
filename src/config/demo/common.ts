@@ -10,7 +10,7 @@ export const commonConfig: AppConfig = {
   walletConnectProjectId: '',
   policiesLastUpdated: '',
   network: {
-    name: 'Demo Network',
+    name: 'Demo',
     logoUrl: '',
     chainId: 0,
     blockExplorer: {
