@@ -44,7 +44,7 @@ export const commonConfig: AppConfig = {
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   policiesLastUpdated: '31 Jul, 2024',
   network: {
-    name: 'Celo Network',
+    name: 'Celo',
     logoUrl: IconCeloLogo,
     chainId: 42220,
     blockExplorer: {
