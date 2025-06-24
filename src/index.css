@@ -336,9 +336,6 @@ dialog.modal::backdrop {
 }
 
 @media (max-width: 640px) {
-  dialog.modal {
-    transition-timing-function: var(--ease-in-out);
-  }
   @starting-style {
     dialog.modal[open] {
       transform: translateY(100%);
@@ -351,11 +348,15 @@ dialog.modal::backdrop {
     transform: translateY(100%);
   }
   dialog.modal {
+    width: 100dvw;
+    transition-timing-function: var(--ease-in-out);
     margin-bottom: 0;
     background-color: unset;
   }
   dialog.modal > form  {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    padding: 16px;
+    padding-bottom: 24px;
   }
 }

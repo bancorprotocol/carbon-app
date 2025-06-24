@@ -8,7 +8,10 @@ import { TradeSettingsRow } from 'components/trade/settings/TradeSettingsRow';
 import { cn } from 'utils/helpers';
 import style from 'components/strategies/common/form.module.css';
 
-const toPreset = (values: string[]) => {
+const toSlippagePreset = (values: string[]) => {
+  return values.map((value) => ({ label: `${value}%`, value }));
+};
+const toDeadlinePreset = (values: string[]) => {
   return values.map((value) => ({ label: value, value }));
 };
 
@@ -43,7 +46,7 @@ export const MainMenuTradeSettings = () => {
   };
 
   const resetAll = () => {
-    setInternalSlippage(presets.slippage[1]);
+    setInternalSlippage(presets.slippage[0]);
     setInternalDeadline(presets.deadline[1]);
   };
 
@@ -62,20 +65,18 @@ export const MainMenuTradeSettings = () => {
       id: 'slippageTolerance',
       title: 'Slippage Tolerance',
       value: internalSlippage,
-      prepend: '+',
       append: '%',
       setValue: setInternalSlippage,
-      presets: toPreset(presets.slippage),
+      presets: toSlippagePreset(presets.slippage),
       max: 50,
     },
     {
       id: 'transactionExpiration',
       title: 'Transaction Expiration Time (min)',
       value: internalDeadline,
-      prepend: '',
       append: '',
       setValue: setInternalDeadline,
-      presets: toPreset(presets.deadline),
+      presets: toDeadlinePreset(presets.deadline),
     },
   ];
 
@@ -95,7 +96,7 @@ export const MainMenuTradeSettings = () => {
       <dialog id={dialogId} className="modal" onClick={lightDismiss}>
         <form
           method="dialog"
-          className={cn(style.form, 'grid gap-40 min-w-[440px]')}
+          className={cn(style.form, 'grid gap-40 md:min-w-[440px]')}
           onSubmit={submit}
           onReset={resetAll}
         >

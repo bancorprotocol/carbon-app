@@ -32,11 +32,12 @@ export const TradeSettingsRow: FC<{
           presets={item.presets}
           value={item.value}
           onChange={(v) => item.setValue(v)}
+          testid={item.id}
         />
         <div
           className={cn(
             style.presetCustom,
-            'rounded-10 text-12 flex gap-8 border border-white bg-black py-8 px-16 text-center',
+            'flex-1 rounded-10 text-12 flex gap-8 border border-white bg-black py-8 px-16 text-center',
             'focus-within:outline focus-within:outline-1',
           )}
         >
@@ -46,7 +47,7 @@ export const TradeSettingsRow: FC<{
           <input
             id={item.id}
             name={item.id}
-            className={cn('bg-transparent text-center outline-none w-[80px]')}
+            className="bg-transparent w-full text-center outline-none"
             value={item.value}
             type="number"
             inputMode="decimal"
@@ -56,6 +57,7 @@ export const TradeSettingsRow: FC<{
             step="any"
             data-testid="spread-input"
           />
+          {item.append && <span>{item.append}</span>}
         </div>
       </div>
       {warningMessage && <Warning isError={isError} message={warningMessage} />}
