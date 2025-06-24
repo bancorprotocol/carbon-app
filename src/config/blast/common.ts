@@ -17,7 +17,7 @@ const addresses = {
 };
 
 export const commonConfig: AppConfig = {
-  hidden: false,
+  hidden: true,
   mode: 'development',
   appName: 'Blast - Carbon DeFi',
   appUrl: 'https://app.carbondefi.xyz',

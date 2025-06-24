@@ -48,7 +48,7 @@ export const MainMenuRight: FC = () => {
       <TenderlyForkAlert />
       {config.ui.showCart && <MainMenuCart />}
       <MainMenuRightNotifications />
-      <MainMenuRightChainSelector configs={networks} />
+      <MainMenuRightChainSelector networks={networks} />
       {aboveBreakpoint('md') && (
         <MainMenuRightBurger menuMapping={menuMapping} />
       )}
