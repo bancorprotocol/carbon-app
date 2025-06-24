@@ -37,7 +37,7 @@ export const SimInputStrategyType = () => {
   return (
     <section className="p-16" key="simulatorTypeSelection">
       <header className="mb-16 flex items-center justify-between">
-        <h2 className="text-18 font-weight-500 m-0">Type</h2>
+        <h2 className="text-16 font-weight-500 m-0">Type</h2>
       </header>
       <article role="tablist" className="grid grid-cols-2 gap-8">
         {items.map(({ title, label, svg, tooltipText }) => {
