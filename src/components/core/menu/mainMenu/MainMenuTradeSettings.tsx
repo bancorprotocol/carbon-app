@@ -15,15 +15,8 @@ const toPreset = (values: string[]) => {
 export const MainMenuTradeSettings = () => {
   const dialogId = useId();
   const { trade } = useStore();
-  const {
-    slippage,
-    setSlippage,
-    deadline,
-    setDeadline,
-    presets,
-    resetAll,
-    isAllSettingsDefault,
-  } = trade.settings;
+  const { slippage, setSlippage, deadline, setDeadline, presets } =
+    trade.settings;
   const [internalSlippage, setInternalSlippage] = useState(slippage);
   const [internalDeadline, setInternalDeadline] = useState(deadline);
 
@@ -31,18 +24,38 @@ export const MainMenuTradeSettings = () => {
     const dialog = document.getElementById(dialogId) as HTMLDialogElement;
     dialog.showModal();
   };
+
   const close = () => {
     const dialog = document.getElementById(dialogId) as HTMLDialogElement;
     dialog.close();
   };
-  const lightDismiss = (e: MouseEvent<HTMLDialogElement>) => {
-    if (e.target === e.currentTarget) close();
+
+  const dismiss = () => {
+    close();
+    setTimeout(() => {
+      setInternalSlippage(slippage);
+      setInternalDeadline(deadline);
+    }, 300); // Wait for animation to end
   };
+
+  const lightDismiss = (e: MouseEvent<HTMLDialogElement>) => {
+    if (e.target === e.currentTarget) dismiss();
+  };
+
+  const resetAll = () => {
+    setInternalSlippage(presets.slippage[1]);
+    setInternalDeadline(presets.deadline[1]);
+  };
+
   const submit = () => {
     setSlippage(settingsData[0].value);
     setDeadline(settingsData[1].value);
     close();
   };
+
+  const isAllSettingsDefault =
+    internalSlippage === presets.slippage[1] &&
+    internalDeadline === presets.deadline[1];
 
   const settingsData: TradeSettingsData[] = [
     {
@@ -84,19 +97,21 @@ export const MainMenuTradeSettings = () => {
           method="dialog"
           className={cn(style.form, 'grid gap-40 min-w-[440px]')}
           onSubmit={submit}
+          onReset={resetAll}
         >
           <header className="flex items-center gap-16">
             <h2 className="mr-auto text-18">Trade Settings</h2>
             {!isAllSettingsDefault && (
-              <button
-                type="button"
-                className="text-14 text-white p-8 rounded-8"
-                onClick={resetAll}
-              >
+              <button type="reset" className="text-14 text-white p-8 rounded-8">
                 Reset All
               </button>
             )}
-            <button type="button" className="p-8 rounded-full" onClick={close}>
+            <button
+              aria-label="Dismiss"
+              type="button"
+              className="p-8 rounded-full"
+              onClick={dismiss}
+            >
               <IconClose className="size-18" />
             </button>
           </header>
