@@ -25,7 +25,7 @@ import { Cart } from 'components/cart/utils';
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
 // ************************** /
 
-interface LocalStorageSchema {
+export interface LocalStorageSchema {
   tenderlyRpc: string;
   carbonApi: string;
   imposterAccount: string;
