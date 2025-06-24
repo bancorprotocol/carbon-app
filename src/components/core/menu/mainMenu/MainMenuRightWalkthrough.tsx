@@ -11,7 +11,7 @@ export const MainMenuRightWalkthrough: FC = () => {
   const { currentBreakpoint } = useBreakpoints();
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    if (currentBreakpoint === 'sm' || !config.ui.showWalkthrough) return;
+    if (currentBreakpoint === 'sm' || !config.ui.walkthroughId) return;
     const hasWalkthrough = lsService.getItem('hasWalkthrough');
     if (!hasWalkthrough) {
       dialog.current?.showModal();
@@ -24,6 +24,7 @@ export const MainMenuRightWalkthrough: FC = () => {
   }, []);
 
   const start = async () => {
+    if (!config.ui.walkthroughId) return;
     const selector = 'script[src="https://js.storylane.io/js/v2/storylane.js"]';
     if (!document.querySelector(selector)) {
       const script = document.createElement('script');
@@ -38,7 +39,7 @@ export const MainMenuRightWalkthrough: FC = () => {
       width: 2560,
       height: 1291,
       scale: '0.95',
-      demo_url: 'https://app.storylane.io/demo/i2ok96zcpzqw?embed=popup',
+      demo_url: `https://app.storylane.io/demo/${config.ui.walkthroughId}?embed=popup`,
       padding_bottom: 'calc(50.46% + 25px)',
     });
     lsService.setItem('hasWalkthrough', true);
@@ -54,7 +55,7 @@ export const MainMenuRightWalkthrough: FC = () => {
   };
 
   if (currentBreakpoint === 'sm') return;
-  if (!config.ui.showWalkthrough) return;
+  if (!config.ui.walkthroughId) return;
 
   return (
     <>

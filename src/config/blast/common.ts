@@ -132,6 +132,5 @@ export const commonConfig: AppConfig = {
     currencyMenu: false,
     showTerms: true,
     showPrivacy: true,
-    showWalkthrough: false,
   },
 };
