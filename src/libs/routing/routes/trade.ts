@@ -15,7 +15,7 @@ import { TradeOverlapping } from 'pages/trade/overlapping';
 import { OverlappingSearch } from 'components/strategies/common/types';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { toUnixUTCDay } from 'components/simulator/utils';
-import { addMonths, subMonths } from 'date-fns';
+import { subMonths } from 'date-fns';
 import * as v from 'valibot';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
 
@@ -96,7 +96,7 @@ const tradePage = createRoute({
     base: v.optional(v.fallback(validAddress, defaultPair.base)),
     quote: v.optional(v.fallback(validAddress, defaultPair.quote)),
     chartStart: v.optional(validNumber, toUnixUTCDay(subMonths(new Date(), 3))),
-    chartEnd: v.optional(validNumber, toUnixUTCDay(addMonths(new Date(), 1))),
+    chartEnd: v.optional(validNumber, toUnixUTCDay(new Date())),
   }),
 });
 
