@@ -94,6 +94,7 @@ test.describe('Trade', () => {
     await setupLocalStorage(page, rpc);
     const debug = new DebugDriver(page);
     await debug.visit();
+    await page.getByTestId('close-walkthrough').click();
     await debug.setupImposter();
     await page.getByText('Get money').click();
   });

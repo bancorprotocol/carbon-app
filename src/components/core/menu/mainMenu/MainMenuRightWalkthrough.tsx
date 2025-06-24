@@ -11,8 +11,6 @@ export const MainMenuRightWalkthrough: FC = () => {
   const { currentBreakpoint } = useBreakpoints();
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    // Prevent displaying walkthrough in devmode or E2E
-    if (import.meta.env.VITE_CI) return;
     if (currentBreakpoint === 'sm' || !config.ui.showWalkthrough) return;
     const hasWalkthrough = lsService.getItem('hasWalkthrough');
     if (!hasWalkthrough) {
@@ -81,6 +79,7 @@ export const MainMenuRightWalkthrough: FC = () => {
               className="p-8 rounded-full"
               type="button"
               onClick={dismiss}
+              data-testid="close-walkthrough"
             >
               <IconClose className="size-18" />
             </button>
