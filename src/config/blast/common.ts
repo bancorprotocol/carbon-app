@@ -27,7 +27,7 @@ export const commonConfig: AppConfig = {
   walletConnectProjectId: '',
   policiesLastUpdated: '31 Jul, 2024',
   network: {
-    name: 'Blast Network',
+    name: 'Blast',
     logoUrl: IconBlastLogo,
     chainId: 81457,
     blockExplorer: {
