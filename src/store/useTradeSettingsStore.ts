@@ -13,8 +13,6 @@ export interface TradeSettingsStore {
     deadline: string[];
     maxOrders: string[];
   };
-  resetAll: () => void;
-  isAllSettingsDefault: boolean;
 }
 
 const presets: TradeSettingsStore['presets'] = {
@@ -54,17 +52,6 @@ export const useTradeSettingsStore = (): TradeSettingsStore => {
     lsService.setItem('tradeMaxOrders', maxOrders);
   };
 
-  const resetAll = () => {
-    setSlippage(presets.slippage[1]);
-    setDeadline(presets.deadline[1]);
-    setMaxOrders(presets.maxOrders[1]);
-  };
-
-  const isAllSettingsDefault =
-    slippage === presets.slippage[1] &&
-    deadline === presets.deadline[1] &&
-    maxOrders === presets.maxOrders[1];
-
   return {
     slippage,
     setSlippage,
@@ -73,8 +60,6 @@ export const useTradeSettingsStore = (): TradeSettingsStore => {
     maxOrders,
     setMaxOrders,
     presets,
-    resetAll,
-    isAllSettingsDefault,
   };
 };
 
@@ -86,6 +71,4 @@ export const defaultTradeSettingsStore: TradeSettingsStore = {
   maxOrders: '',
   setMaxOrders: () => {},
   presets,
-  resetAll: () => {},
-  isAllSettingsDefault: true,
 };

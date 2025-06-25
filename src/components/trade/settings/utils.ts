@@ -9,7 +9,6 @@ export type TradeSettingsData = {
   id: TradeSettingsDataId;
   title: string;
   value: string;
-  prepend: string;
   append: string;
   setValue: (value: string) => void;
   presets: Preset[];

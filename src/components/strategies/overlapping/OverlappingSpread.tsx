@@ -58,7 +58,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
       </header>
       <div className="flex gap-8">
         <Presets
-          className="flex-grow"
+          className="flex-1"
           value={spread}
           presets={presets}
           onChange={onPresetChange}
@@ -67,18 +67,20 @@ export const OverlappingSpread: FC<Props> = (props) => {
         <div
           className={cn(
             styles.spreadCustom,
-            'rounded-10 text-12 flex justify-center border border-white bg-black p-8 text-center',
+            'rounded-10 text-12 flex gap-8 border border-white bg-black py-8 px-16 text-center',
             'focus-within:outline focus-within:outline-1',
           )}
         >
+          <label className="text-white/60" htmlFor="spread-custom">
+            Custom
+          </label>
           <input
             id="spread-custom"
-            className="w-full bg-transparent text-center outline-none placeholder:text-white/40"
+            className="bg-transparent text-center outline-none w-[80px]"
             value={spread}
             type="number"
             inputMode="decimal"
-            aria-label="Set fee tier"
-            placeholder="Set Fee Tier"
+            placeholder="Fee Tier"
             onChange={onCustomChange}
             min="0.00000000001"
             max={maxSpread}
