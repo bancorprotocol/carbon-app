@@ -47,10 +47,6 @@ import {
   ModalConfirmDelete,
   ModalConfirmDeleteData,
 } from 'libs/modals/modals/ModalConfirmStrategy/ModalConfirmDelete';
-import {
-  ModalSimulatorDisclaimer,
-  ModalSimulatorDisclaimerData,
-} from 'libs/modals/modals/ModalSimulatorDisclaimer';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -68,7 +64,6 @@ export interface ModalSchema {
   confirmPauseStrategy: ModalConfirmPauseData;
   confirmWithdrawStrategy: ModalConfirmWithdrawData;
   confirmDeleteStrategy: ModalConfirmDeleteData;
-  simulatorDisclaimer: ModalSimulatorDisclaimerData;
   withdrawOrDelete: ModalWithdrawOrDeleteData;
 }
 
@@ -90,6 +85,5 @@ export const MODAL_COMPONENTS: TModals = {
   confirmPauseStrategy: (props) => ModalConfirmPause(props),
   confirmWithdrawStrategy: (props) => ModalConfirmWithdraw(props),
   confirmDeleteStrategy: (props) => ModalConfirmDelete(props),
-  simulatorDisclaimer: (props) => ModalSimulatorDisclaimer(props),
   withdrawOrDelete: (props) => ModalWithdrawOrDelete(props),
 };
