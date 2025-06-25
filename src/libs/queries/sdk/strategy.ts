@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Token as TokenContract } from 'abis/types';
-import { utils } from 'ethers';
+import { isAddress, getAddress, TransactionRequest } from 'ethers';
 import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
@@ -14,12 +14,12 @@ import {
   EncodedStrategyBNStr,
   StrategyUpdate,
   Strategy as SDKStrategy,
+  PopulatedTransaction,
 } from '@bancor/carbon-sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
-import { getAddress } from 'ethers/lib/utils';
 import { usePairs } from 'hooks/usePairs';
 import {
   AnyStrategy,
@@ -40,6 +40,18 @@ interface StrategiesHelperProps {
   importTokens: (tokens: Token[]) => void;
   Token: (address: string) => { read: TokenContract };
 }
+
+// TODO: remove when sdk is using ethers v6
+export const toTransactionRequest = (tx: PopulatedTransaction) => {
+  const next: TransactionRequest = structuredClone(tx) as any;
+  if (tx.gasLimit) next.gasLimit = BigInt(tx.gasLimit._hex);
+  if (tx.gasPrice) next.gasPrice = BigInt(tx.gasPrice._hex);
+  if (tx.value) next.value = BigInt(tx.value._hex);
+  if (tx.maxFeePerGas) next.maxFeePerGas = BigInt(tx.maxFeePerGas._hex);
+  if (tx.maxPriorityFeePerGas)
+    next.maxFeePerGas = BigInt(tx.maxPriorityFeePerGas._hex);
+  return next;
+};
 
 const buildStrategiesHelper = async ({
   strategies,
@@ -185,7 +197,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const ensAddress = useGetAddressFromEns(user || '');
   const address: string = (ensAddress?.data || user || '').toLowerCase();
 
-  const isValidAddress = utils.isAddress(address);
+  const isValidAddress = isAddress(address);
   const isZeroAddress = address === config.addresses.tokens.ZERO;
 
   return useQuery<AnyStrategy[]>({
@@ -392,7 +404,7 @@ export const useCreateStrategyQuery = () => {
         sell.budget || '0',
       );
 
-      return signer!.sendTransaction(unsignedTx);
+      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };
@@ -418,7 +430,7 @@ export const useUpdateStrategyQuery = () => {
         sellMarginalPrice,
       );
 
-      return signer!.sendTransaction(unsignedTx);
+      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };
@@ -430,7 +442,7 @@ export const useDeleteStrategyQuery = () => {
     mutationFn: async ({ id }: DeleteStrategyParams) => {
       const unsignedTx = await carbonSDK.deleteStrategy(id);
 
-      return signer!.sendTransaction(unsignedTx);
+      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };
