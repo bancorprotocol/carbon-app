@@ -82,6 +82,7 @@ export const Tooltip: FC<Props> = ({
       animation={true}
       onMount={onMount}
       onHide={onHide}
+      placement="auto"
       {...props}
     >
       {children}

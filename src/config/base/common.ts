@@ -10,7 +10,7 @@ export const commonConfig: AppConfig = {
   walletConnectProjectId: '',
   policiesLastUpdated: '',
   network: {
-    name: 'Base Network',
+    name: 'Base',
     logoUrl:
       'https://basescan.org/assets/base/images/svg/logos/chain-light.svg?v=25.1.4.0',
     chainId: 8453,
