@@ -5,7 +5,7 @@ import { InferSearch, searchValidator, validNumber } from '../utils';
 import { activityValidators } from 'components/activity/utils';
 import * as v from 'valibot';
 import { toUnixUTCDay } from 'components/simulator/utils';
-import { addMonths, subMonths } from 'date-fns';
+import { subMonths } from 'date-fns';
 
 const schema = {
   ...activityValidators,
@@ -27,7 +27,7 @@ export const strategyPage = createRoute({
   component: StrategyPage,
   beforeLoad({ search }) {
     search.chartStart ||= toUnixUTCDay(subMonths(new Date(), 3));
-    search.chartEnd ||= toUnixUTCDay(addMonths(new Date(), 1));
+    search.chartEnd ||= toUnixUTCDay(new Date());
   },
   validateSearch: searchValidator(schema),
 });

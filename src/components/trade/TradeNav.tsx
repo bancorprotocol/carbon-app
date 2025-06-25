@@ -79,10 +79,9 @@ export const TradeNav = () => {
 
   return (
     <article className="bg-background-900 grid gap-16 p-16">
-      {/* @todo(gradient) */}
-      {/* <h2 id="trading-strateg-nav" className="text-16">
+      <h2 id="trading-strateg-nav" className="text-16">
         Type
-      </h2> */}
+      </h2>
       <nav
         aria-labelledby="trading-strateg-nav"
         className="text-14 grid grid-cols-1 gap-8 md:grid-cols-2"

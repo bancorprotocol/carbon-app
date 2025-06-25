@@ -35,7 +35,6 @@ import { PairName } from 'components/common/DisplayPair';
 import { D3ChartIndicators } from 'components/strategies/common/d3Chart/D3ChartIndicators';
 import { D3Drawings } from 'components/strategies/common/d3Chart/drawing/D3Drawings';
 import { D3XAxis } from 'components/strategies/common/d3Chart/D3XAxis';
-import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
 import { D3YAxis } from 'components/strategies/common/d3Chart/D3YAxis';
 import { D3ChartMarketPrice } from 'components/strategies/common/d3Chart/D3ChartMarketPrice';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -169,7 +168,8 @@ export const StrategyPage = () => {
             />
             <D3Drawings />
             <D3XAxis />
-            <D3ChartToday />
+            {/* @todo(gradient) */}
+            {/* <D3ChartToday /> */}
             <D3YAxis />
             <D3ChartMarketPrice marketPrice={marketPrice} />
           </PairChartHistory>

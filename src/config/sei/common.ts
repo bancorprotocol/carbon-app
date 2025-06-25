@@ -43,7 +43,7 @@ export const commonConfig: AppConfig = {
   walletConnectProjectId: '',
   policiesLastUpdated: '27 May, 2024',
   network: {
-    name: 'Sei Network',
+    name: 'Sei',
     logoUrl: IconSeiLogo,
     chainId: 1329,
     blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },

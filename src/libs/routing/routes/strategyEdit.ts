@@ -29,7 +29,7 @@ import { EditBudgetOverlappingPage } from 'pages/strategies/edit/budget/overlapp
 import { SafeDecimal } from 'libs/safedecimal';
 import * as v from 'valibot';
 import { toUnixUTCDay } from 'components/simulator/utils';
-import { addMonths, subMonths } from 'date-fns';
+import { subMonths } from 'date-fns';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
@@ -39,7 +39,7 @@ export const editStrategyLayout = createRoute({
   component: EditStrategyPageLayout,
   beforeLoad({ search }) {
     search.chartStart ||= toUnixUTCDay(subMonths(new Date(), 3));
-    search.chartEnd ||= toUnixUTCDay(addMonths(new Date(), 1));
+    search.chartEnd ||= toUnixUTCDay(new Date());
   },
   validateSearch: searchValidator({
     chartStart: v.optional(validNumber),
