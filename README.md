@@ -294,6 +294,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `showTerms`: Display the terms page & links. ⚠️ If you set it to true, you need to change the content of the page ⚠️
   - `showPrivacy`: Display the privacy page & links. ⚠️ If you set it to true, you need to change the content of the page ⚠️
   - `showCart`: Allow to use the cart page to batch create strategies. You need to set the batcher contract address under `addresses.carbon.batcher`.
+  - `walkthroughId`: If provided, it displays a walkthrough message when user arrives on the app for the first time. The id is the one provided by storylane.
 
 #### Gas token different than native token
 

@@ -51,7 +51,7 @@ export interface LocalStorageSchema {
   isUncheckedSigner: boolean;
   hasSeenRestrictedCountryModal: boolean;
   hasSeenCreateStratExpertMode: boolean;
-  simDisclaimerLastSeen: number;
+  simDisclaimerLastSeen: string;
   lastSdkCache: { timestamp: number; ttl: number };
   notificationPreferences: NotificationPreference;
   configOverride: Partial<AppConfig>;
@@ -59,6 +59,7 @@ export interface LocalStorageSchema {
   liquidityMatrix: Record<string, LiquidityMatrixSearch>;
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
+  hasWalkthrough: boolean;
 }
 
 enum EnumStrategySort {

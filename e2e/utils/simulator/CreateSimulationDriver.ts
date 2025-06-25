@@ -42,10 +42,6 @@ export class CreateSimulationDriver {
     );
   }
 
-  waitForDisclaimerModal(timeout?: number) {
-    return waitFor(this.page, 'sim-disclaimer-modal', timeout);
-  }
-
   getForm() {
     return this.page.getByTestId('create-simulation-form');
   }

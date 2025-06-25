@@ -9,6 +9,7 @@ import { networks } from 'config';
 import { MainMenuCart } from './MainMenuCart';
 import { lsService } from 'services/localeStorage';
 import { Link } from '@tanstack/react-router';
+import { MainMenuRightWalkthrough } from './MainMenuRightWalkthrough';
 import config from 'config';
 
 const TenderlyForkAlert = () => {
@@ -46,6 +47,7 @@ export const MainMenuRight: FC = () => {
   return (
     <div className="flex items-center gap-10 sm:gap-20">
       <TenderlyForkAlert />
+      <MainMenuRightWalkthrough />
       {config.ui.showCart && <MainMenuCart />}
       <MainMenuRightNotifications />
       <MainMenuRightChainSelector networks={networks} />

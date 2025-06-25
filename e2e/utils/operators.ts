@@ -2,7 +2,7 @@ import { Locator, Page } from 'playwright-core';
 import { MainMenuDriver } from './MainMenuDriver';
 export { prettifyNumber as pn } from '../../src/utils/helpers/number';
 
-export const isCI = !!process.env.CI && process.env.CI !== 'false';
+export const isCI = !!process.env.VITE_CI && process.env.VITE_CI !== 'false';
 export const isDraft = !!process.env.DRAFT && process.env.DRAFT !== 'false';
 export const shouldTakeScreenshot = isCI && !isDraft;
 

@@ -1,12 +1,4 @@
-import {
-  createContext,
-  FC,
-  ReactNode,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
-import { lsService } from 'services/localeStorage';
+import { createContext, FC, ReactNode, useContext, useState } from 'react';
 import {
   defaultTradeSettingsStore,
   TradeSettingsStore,
@@ -65,8 +57,6 @@ interface StoreContext {
   innerHeight: number;
   setInnerHeight: (value: number) => void;
   toaster: ToastStore;
-  simDisclaimerLastSeen?: number;
-  setSimDisclaimerLastSeen: (value?: number) => void;
 }
 
 const defaultValue: StoreContext = {
@@ -86,8 +76,6 @@ const defaultValue: StoreContext = {
   innerHeight: 0,
   setInnerHeight: () => {},
   toaster: defaultToastStore,
-  simDisclaimerLastSeen: undefined,
-  setSimDisclaimerLastSeen: () => {},
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -112,19 +100,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const fiatCurrency = useFiatCurrencyStore();
   const toaster = useToastStore();
 
-  const [simDisclaimerLastSeen, _setSimDisclaimerLastSeen] = useState<
-    number | undefined
-  >(lsService.getItem('simDisclaimerLastSeen'));
-
-  const setSimDisclaimerLastSeen = useCallback((value?: number) => {
-    _setSimDisclaimerLastSeen(value);
-    if (value) {
-      lsService.setItem('simDisclaimerLastSeen', value);
-    } else {
-      lsService.removeItem('simDisclaimerLastSeen');
-    }
-  }, []);
-
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
     setCountryBlocked,
@@ -142,8 +117,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     innerHeight,
     setInnerHeight,
     toaster,
-    simDisclaimerLastSeen,
-    setSimDisclaimerLastSeen,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;

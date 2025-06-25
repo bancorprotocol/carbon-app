@@ -31,7 +31,7 @@ jobs:
           TENDERLY_ACCOUNT: bancor
           TENDERLY_PROJECT: carbon-test-forks
           TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
-          CI: true
+          VITE_CI: true
           DRAFT: ${{ github.event.pull_request.draft || github.base_ref != 'main' }}
 
       - uses: actions/upload-artifact@v4
