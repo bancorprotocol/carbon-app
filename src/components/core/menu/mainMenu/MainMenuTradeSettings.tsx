@@ -1,7 +1,7 @@
 import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { useStore } from 'store';
-import { MouseEvent, useId, useState } from 'react';
+import { FormEvent, MouseEvent, useId, useState } from 'react';
 import { Button } from 'components/common/button';
 import { TradeSettingsData } from 'components/trade/settings/utils';
 import { TradeSettingsRow } from 'components/trade/settings/TradeSettingsRow';
@@ -45,7 +45,8 @@ export const MainMenuTradeSettings = () => {
     if (e.target === e.currentTarget) dismiss();
   };
 
-  const resetAll = () => {
+  const resetAll = (e: FormEvent) => {
+    e.preventDefault();
     setInternalSlippage(presets.slippage[0]);
     setInternalDeadline(presets.deadline[1]);
   };
