@@ -1,0 +1,44 @@
+{
+  "name": "Bancor",
+  "logoURI": "/tokens/tac/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg",
+  "keywords": ["bancor"],
+  "tokens": [
+    {
+      "chainId": 239,
+      "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "name": "TAC",
+      "symbol": "TAC",
+      "decimals": 18,
+      "logoURI": "/tokens/tac/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg"
+    },
+    {
+      "chainId": 239,
+      "address": "0xB63B9f0eb4A6E6f191529D71d4D88cc8900Df2C9",
+      "name": "wTAC",
+      "symbol": "wTAC",
+      "decimals": 18,
+      "logoURI": "/tokens/tac/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg"
+    },
+    {
+      "chainId": 239,
+      "address": "0xb76d91340F5CE3577f0a056D29f6e3Eb4E88B140",
+      "name": "TON",
+      "symbol": "TON",
+      "decimals": 9,
+      "logoURI": "/tokens/tac/0xb76d91340F5CE3577f0a056D29f6e3Eb4E88B140.svg"
+    },
+    {
+      "chainId": 239,
+      "address": "0xAF988C3f7CB2AceAbB15f96b19388a259b6C438f",
+      "name": "USDT",
+      "symbol": "USDT",
+      "decimals": 6,
+      "logoURI": "/tokens/tac/0xAF988C3f7CB2AceAbB15f96b19388a259b6C438f.svg"
+    }
+  ],
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  }
+}
