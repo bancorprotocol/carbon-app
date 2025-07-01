@@ -141,6 +141,27 @@ const migrations: Migration[] = [
       migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
     },
   },
+  {
+    migrate: (prevFormattedKey) => {
+      const prefix = `carbon-${NETWORK}-v1.3-`;
+      // if one of the config override keys - just remove it and return - this is a bruteforce fix for the debug mode indication
+      if (
+        prevFormattedKey === `${prefix}imposterAccount` ||
+        prevFormattedKey === `${prefix}tenderlyRpc` ||
+        prevFormattedKey === `${prefix}configOverride` ||
+        prevFormattedKey === `${prefix}carbonApi`
+      ) {
+        removeItem({ prevFormattedKey });
+        return;
+      }
+      const isMatch = prevFormattedKey.startsWith(prefix);
+      if (!isMatch) return;
+      const key = prevFormattedKey.slice(prefix.length);
+      if (!key) return;
+      const nextFormattedKey = ['carbon', NETWORK, 'v1.4', key].join('-');
+      migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
+    },
+  },
 ];
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>(
