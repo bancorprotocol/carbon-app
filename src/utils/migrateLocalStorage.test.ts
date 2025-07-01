@@ -18,6 +18,7 @@ describe('managedLocalStorage', () => {
       item2: { data: string };
       item3: { data: string };
       item4: { data: string };
+      item5: { data: string };
     }
 
     const migrations: Migration[] = [
@@ -51,6 +52,17 @@ describe('managedLocalStorage', () => {
           migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
         },
       },
+      {
+        migrate: (prevFormattedKey) => {
+          const prefix = 'v1.3-';
+          const isMatch = prevFormattedKey.startsWith(prefix);
+          if (!isMatch) return;
+          const key = prevFormattedKey.slice(prefix.length);
+          if (!key) return;
+          const nextFormattedKey = ['v1.4', key].join('-');
+          migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
+        },
+      },
     ];
 
     const v1LS = new ManagedLocalStorage<Record<any, any>>((key: string) =>
@@ -64,6 +76,10 @@ describe('managedLocalStorage', () => {
     );
     const v13LS = new ManagedLocalStorage<TestLocalStorageSchema>(
       (key: string) => ['v1.3', key].join('-'),
+      migrations,
+    );
+    const v14LS = new ManagedLocalStorage<TestLocalStorageSchema>(
+      (key: string) => ['v1.4', key].join('-'),
       migrations,
     );
 
@@ -80,11 +96,14 @@ describe('managedLocalStorage', () => {
     v12LS.setItem('item1', { data: 'v12LS-item1' });
     v12LS.setItem('item3', { data: 'v12LS-item3' });
 
-    // Already exist
+    // To migrate
     v13LS.setItem('item4', { data: 'v13LS-item4' });
 
+    // Already exist
+    v14LS.setItem('item5', { data: 'v14LS-item5' });
+
     // ACT
-    v13LS.migrateItems();
+    v14LS.migrateItems();
 
     // ASSERT
     // All migrated items have been deleted
@@ -95,17 +114,21 @@ describe('managedLocalStorage', () => {
     expect(localStorage.getItem('v1.1-item3')).toBeNull();
     expect(localStorage.getItem('v1.2-item1')).toBeNull();
     expect(localStorage.getItem('v1.2-item3')).toBeNull();
+    expect(localStorage.getItem('v1.3-item4')).toBeNull();
 
     // Migration is done properly
-    expect(v13LS.getItem('item1')).toStrictEqual({
+    expect(v14LS.getItem('item1')).toStrictEqual({
       data: 'v12LS-item1',
     });
-    expect(v13LS.getItem('item2')).toBeUndefined(); // ManagedLocalStorage getItem for key not found has a different output than localStorage (null vs undefined)
-    expect(v13LS.getItem('item3')).toStrictEqual({
+    expect(v14LS.getItem('item2')).toBeUndefined(); // ManagedLocalStorage getItem for key not found has a different output than localStorage (null vs undefined)
+    expect(v14LS.getItem('item3')).toStrictEqual({
       data: 'v12LS-item3',
     });
-    expect(v13LS.getItem('item4')).toStrictEqual({
+    expect(v14LS.getItem('item4')).toStrictEqual({
       data: 'v13LS-item4',
+    });
+    expect(v14LS.getItem('item5')).toStrictEqual({
+      data: 'v14LS-item5',
     });
   });
 
