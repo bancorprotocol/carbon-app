@@ -39,7 +39,7 @@ const configs = {
     development: tacDev,
     production: tacProd,
   },
-  ton: {
+  'ton-tg': {
     development: tonDev,
     production: tonProd,
   },
