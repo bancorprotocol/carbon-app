@@ -10,6 +10,8 @@ import blastDev from './blast/development';
 import blastProd from './blast/production';
 import tacDev from './tac/development';
 import tacProd from './tac/production';
+import tonDev from './ton-tg/development';
+import tonProd from './ton-tg/production';
 import { handleConfigOverrides } from './utils';
 
 const configs = {
@@ -36,6 +38,10 @@ const configs = {
   tac: {
     development: tacDev,
     production: tacProd,
+  },
+  ton: {
+    development: tonDev,
+    production: tonProd,
   },
 };
 type Network = keyof typeof configs;
