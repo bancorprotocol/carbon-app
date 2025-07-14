@@ -58,7 +58,8 @@ export const commonConfig: AppConfig = {
       symbol: 'TAC',
       decimals: 18,
       address: addresses.TAC,
-      logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/37338.png',
+      logoURI:
+        'https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png',
     },
   },
   sdk: {
