@@ -17,6 +17,7 @@ const popularTokens = [
 ];
 
 export const commonConfig: AppConfig = {
+  hidden: true,
   mode: 'development',
   appName: 'TAC - Carbon DeFi',
   appUrl: 'https://tac.carbondefi.xyz',
@@ -42,7 +43,7 @@ export const commonConfig: AppConfig = {
       symbol: 'TAC',
       decimals: 18,
       address: addresses.TAC,
-      logoURI: '/tokens/tac/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg',
+      logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/37338.png',
     },
   },
   sdk: {
@@ -76,7 +77,7 @@ export const commonConfig: AppConfig = {
   tokenLists: [
     // Bancor
     {
-      uri: '/tokens/tac/list.json',
+      uri: 'https://raw.githubusercontent.com/TacBuild/tokenlist/refs/heads/main/src/tokens/tac.json',
     },
   ],
   tenderly: {

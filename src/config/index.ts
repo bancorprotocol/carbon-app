@@ -56,7 +56,7 @@ if (!configs[network][mode]) {
 export { pairsToExchangeMapping } from './utils';
 
 export const networks = Object.entries(configs)
-  .filter(([, config]) => config[mode].hidden !== true)
+  .filter(([id, config]) => config[mode].hidden !== true || network === id)
   .map(([id, config]) => {
     return {
       id,
