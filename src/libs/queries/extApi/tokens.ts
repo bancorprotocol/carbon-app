@@ -12,6 +12,8 @@ export const useTokensQuery = () => {
       if (local && local.timestamp > Date.now() - ONE_HOUR_IN_MS) {
         return local.tokens;
       }
+      // eslint-disable-next-line no-debugger
+      debugger;
       const tokens = buildTokenList(await fetchTokenLists());
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
