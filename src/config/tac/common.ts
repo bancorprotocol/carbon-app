@@ -101,13 +101,13 @@ export const commonConfig: AppConfig = {
   },
   ui: {
     showSimulator: false,
-    priceChart: 'tradingView',
+    priceChart: 'native',
     useGradientBranding: false,
     tradeCount: false,
     currencyMenu: false,
-    showTerms: false,
-    showPrivacy: false,
-    showCart: false,
+    showTerms: true,
+    showPrivacy: true,
+    showCart: true,
     walkthroughId: 'vjbcftqceykr',
   },
 };
