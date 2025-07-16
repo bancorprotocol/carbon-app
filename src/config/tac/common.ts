@@ -32,7 +32,6 @@ const popularTokens = [
 ];
 
 export const commonConfig: AppConfig = {
-  hidden: true,
   mode: 'development',
   appName: 'TAC - Carbon DeFi',
   appUrl: 'https://tac.carbondefi.xyz',
