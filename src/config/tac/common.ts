@@ -49,7 +49,7 @@ export const commonConfig: AppConfig = {
       url: 'https://explorer.tac.build/',
     },
     rpc: {
-      url: 'https://rpc.ankr.com/tac/fa8610ec591a5bec6d5a4412d00b3892c774b8f3cfba3dae4be715aaaf64bdc4',
+      url: 'https://rpc.tac.build',
     },
     defaultLimitedApproval: true,
     gasToken: {
