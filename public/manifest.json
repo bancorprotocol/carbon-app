@@ -1,6 +1,6 @@
 {
-  "short_name": "Carbon",
-  "name": "Carbon",
+  "short_name": "Carbon DeFi",
+  "name": "Carbon DeFi",
   "icons": [
     {
       "src": "favicon.ico",
@@ -23,7 +23,7 @@
   "theme_color": "#000000",
   "background_color": "#ffffff",
   "providedBy": {
-    "name": "Carbon",
+    "name": "Carbon DeFi",
     "url": "https://carbondefi.xyz"
   },
   "description": "Carbon is a decentralized finance protocol developed by Bancor.",
