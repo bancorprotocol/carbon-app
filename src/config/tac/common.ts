@@ -36,7 +36,7 @@ export const commonConfig: AppConfig = {
   appName: 'TAC - Carbon DeFi',
   appUrl: 'https://tac.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/tac/',
-  selectedConnectors: ['MetaMask'],
+  selectedConnectors: ['MetaMask', 'Safe'],
   blockedConnectors: [],
   walletConnectProjectId: '',
   policiesLastUpdated: '26 June, 2025',
