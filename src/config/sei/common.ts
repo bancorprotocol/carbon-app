@@ -99,10 +99,10 @@ export const commonConfig: AppConfig = {
     },
   ],
   tokenLists: [
-    {
-      uri: 'https://raw.githubusercontent.com/Seitrace/sei-assetlist/refs/heads/main/assetlist.json',
-      parser: 'tokenSeiListParser',
-    },
+    // {
+    //   uri: 'https://raw.githubusercontent.com/Seitrace/sei-assetlist/refs/heads/main/assetlist.json',
+    //   parser: 'tokenSeiListParser',
+    // },
     {
       uri: 'https://raw.githubusercontent.com/Sei-Public-Goods/sei-assetlist/main/assetlist.json',
       parser: 'tokenSeiListParser',
