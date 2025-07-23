@@ -7,7 +7,7 @@ import { useInterval } from 'hooks/useInterval';
 import { NotificationLine } from './NotificationLine';
 import { Notification } from './types';
 
-const hackToHidePortfolioNotifications = true;
+const hackToHidePopupNotifications = true;
 
 export const NotificationAlerts: FC = () => {
   const { user } = useWagmi();
@@ -29,7 +29,7 @@ export const NotificationAlerts: FC = () => {
     }
   }, [user, setNotifications]);
 
-  if (hackToHidePortfolioNotifications) {
+  if (hackToHidePopupNotifications) {
     return null;
   }
 
