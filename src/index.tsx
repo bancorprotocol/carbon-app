@@ -7,6 +7,8 @@ import { WagmiReactWrapper } from 'libs/wagmi';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import config from 'config';
 import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
@@ -16,15 +18,24 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
+const WalletProvider =
+  config.network.name === 'TON' ? TonConnectUIProvider : WagmiReactWrapper;
+
 root.render(
   <React.StrictMode>
     <QueryProvider>
       <StoreProvider>
-        <WagmiReactWrapper>
+        <WalletProvider
+          manifestUrl={
+            config.network.name === 'TON'
+              ? `${config.appUrl}/tonconnect-manifest.json`
+              : undefined
+          }
+        >
           <LazyMotion>
             <RouterProvider router={router} />
           </LazyMotion>
-        </WagmiReactWrapper>
+        </WalletProvider>
       </StoreProvider>
     </QueryProvider>
   </React.StrictMode>,
