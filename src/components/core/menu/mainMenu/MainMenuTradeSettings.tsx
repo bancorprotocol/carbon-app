@@ -1,11 +1,12 @@
 import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { useStore } from 'store';
-import { FormEvent, MouseEvent, useId, useState } from 'react';
+import { FormEvent, useId, useState } from 'react';
 import { Button } from 'components/common/button';
 import { TradeSettingsData } from 'components/trade/settings/utils';
 import { TradeSettingsRow } from 'components/trade/settings/TradeSettingsRow';
 import { cn } from 'utils/helpers';
+import { useDialog, useOnDialogClose } from 'hooks/useDialog';
 import style from 'components/strategies/common/form.module.css';
 
 const toSlippagePreset = (values: string[]) => {
@@ -17,38 +18,27 @@ const toDeadlinePreset = (values: string[]) => {
 
 export const MainMenuTradeSettings = () => {
   const dialogId = useId();
+  const { ref, open, close, lightDismiss } = useDialog();
   const { trade } = useStore();
   const { slippage, setSlippage, deadline, setDeadline, presets } =
     trade.settings;
   const [internalSlippage, setInternalSlippage] = useState(slippage);
   const [internalDeadline, setInternalDeadline] = useState(deadline);
 
-  const open = () => {
-    const dialog = document.getElementById(dialogId) as HTMLDialogElement;
-    dialog.showModal();
-  };
+  const defaultSlippage = presets.slippage[0];
+  const defaultDeadline = presets.deadline[1];
 
-  const close = () => {
-    const dialog = document.getElementById(dialogId) as HTMLDialogElement;
-    dialog.close();
-  };
-
-  const dismiss = () => {
-    close();
+  useOnDialogClose(ref, () => {
     setTimeout(() => {
       setInternalSlippage(slippage);
       setInternalDeadline(deadline);
-    }, 300); // Wait for animation to end
-  };
-
-  const lightDismiss = (e: MouseEvent<HTMLDialogElement>) => {
-    if (e.target === e.currentTarget) dismiss();
-  };
+    }, 500); // Wait for animation to stop
+  });
 
   const resetAll = (e: FormEvent) => {
     e.preventDefault();
-    setInternalSlippage(presets.slippage[0]);
-    setInternalDeadline(presets.deadline[1]);
+    setInternalSlippage(defaultSlippage);
+    setInternalDeadline(defaultDeadline);
   };
 
   const submit = () => {
@@ -58,8 +48,8 @@ export const MainMenuTradeSettings = () => {
   };
 
   const isAllSettingsDefault =
-    internalSlippage === presets.slippage[1] &&
-    internalDeadline === presets.deadline[1];
+    internalSlippage === defaultSlippage &&
+    internalDeadline === defaultDeadline;
 
   const settingsData: TradeSettingsData[] = [
     {
@@ -94,7 +84,7 @@ export const MainMenuTradeSettings = () => {
         <span className="text-white/60 text-14">{slippage}%</span>
         <IconCog className="size-18" />
       </button>
-      <dialog id={dialogId} className="modal" onClick={lightDismiss}>
+      <dialog ref={ref} id={dialogId} className="modal" onClick={lightDismiss}>
         <form
           method="dialog"
           className={cn(style.form, 'grid gap-40 md:min-w-[440px]')}
@@ -112,7 +102,7 @@ export const MainMenuTradeSettings = () => {
               aria-label="Dismiss"
               type="button"
               className="p-8 rounded-full"
-              onClick={dismiss}
+              onClick={close}
             >
               <IconClose className="size-18" />
             </button>
