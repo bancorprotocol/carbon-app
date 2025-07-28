@@ -20,7 +20,7 @@ const links = [
   {
     label: 'Price Based',
     svg: <IconPriceBased className="hidden size-16 md:inline" />,
-    to: '/trade/disposable' as const,
+    to: '/trade/overlapping' as const,
     text: '',
     testId: 'strategy-type-static',
     pages: staticTypePages,

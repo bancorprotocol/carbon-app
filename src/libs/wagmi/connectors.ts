@@ -102,7 +102,12 @@ const getDefaultConnector = (connectorType: SelectableConnectionName) => {
       });
     case 'Safe':
       return safe({
-        allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/],
+        allowedDomains: [
+          /gnosis-safe.io$/,
+          /app.safe.global$/,
+          /safe.tac.build$/,
+          /staging.safe.tac.build$/,
+        ],
       });
   }
 };

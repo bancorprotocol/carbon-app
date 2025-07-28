@@ -57,7 +57,12 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
   const record: Record<string, Token> = {};
   for (const list of tokenList) {
     for (const token of list.tokens) {
-      if (!token.address || !token.symbol) continue;
+      if (
+        !token.address ||
+        !token.symbol ||
+        token.address === config.addresses.tokens.ZERO
+      )
+        continue;
       const address = getAddress(token.address);
       record[address] ||= { ...token, address };
     }

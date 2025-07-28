@@ -8,6 +8,8 @@ import cotiDev from './coti/development';
 import cotiProd from './coti/production';
 import blastDev from './blast/development';
 import blastProd from './blast/production';
+import tacDev from './tac/development';
+import tacProd from './tac/production';
 import { handleConfigOverrides } from './utils';
 
 const configs = {
@@ -31,6 +33,10 @@ const configs = {
     development: blastDev,
     production: blastProd,
   },
+  tac: {
+    development: tacDev,
+    production: tacProd,
+  },
 };
 type Network = keyof typeof configs;
 type Mode = 'development' | 'production';
@@ -50,7 +56,7 @@ if (!configs[network][mode]) {
 export { pairsToExchangeMapping } from './utils';
 
 export const networks = Object.entries(configs)
-  .filter(([, config]) => config[mode].hidden !== true)
+  .filter(([id, config]) => config[mode].hidden !== true || network === id)
   .map(([id, config]) => {
     return {
       id,
