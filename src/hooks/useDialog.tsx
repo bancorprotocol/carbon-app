@@ -11,20 +11,12 @@ export const useDialog = () => {
   };
   const close = async () => {
     if (!ref.current) return;
-    // old browser or safari: use regular animation
-    if (
-      CSS.supports(
-        '(not (transition-behavior: allow-discrete)) or (overflow:-webkit-marquee))',
-      )
-    ) {
-      ref.current.classList.add('closing');
-      const all = ref.current.getAnimations({ subtree: true });
-      await Promise.all(all.map((t) => t.finished));
-      ref.current.close();
-      ref.current?.classList.remove('closing');
-    } else {
-      return ref.current.close();
-    }
+    // Because of Safari we cannot use native transition
+    ref.current.classList.add('closing');
+    const all = ref.current.getAnimations({ subtree: true });
+    await Promise.all(all.map((t) => t.finished));
+    ref.current.close();
+    ref.current?.classList.remove('closing');
   };
   const lightDismiss = (e: MouseEvent<HTMLDialogElement>) => {
     if (e.target === e.currentTarget) close();

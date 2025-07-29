@@ -330,101 +330,64 @@ dialog.modal::backdrop {
   }
 }
 
-@supports (transition-behavior: allow-discrete) {
+/* Because Safari doesn't support transition on close we have to rely on animation */
+dialog.modal,
+dialog.modal::backdrop {
+  animation-duration: 0.5s;
+  animation-timing-function: var(--ease-back-in-out);
+}
+dialog.modal[open] {
+  animation-name: modal-entry;
+}
+dialog.modal[open]::backdrop {
+  animation-name: fade;
+}
+dialog.modal.closing::backdrop {
+  animation-name: fadeout;
+}
+dialog.modal.closing {
+  animation-name: modal-leave;
+}
+@media (max-width: 640px) {
   dialog.modal,
   dialog.modal::backdrop {
-    transition-behavior: allow-discrete;
-    transition-property: display, overlay, opacity, transform;
-    transition-duration: 0.5s;
-    transition-timing-function: var(--ease-back-in-out);
+    animation-timing-function: var(--ease-in-out);
   }
-  @starting-style {
-    dialog.modal[open] {
-      opacity: 0;
-      transform: translateY(100px);
-    }
-    dialog.modal[open]::backdrop {
-      opacity: 0;
-    }
+  dialog.modal[open] {
+    animation-name: modal-sm-entry;
   }
-  dialog.modal:not([open])::backdrop {
+  dialog.modal.closing {
+    animation-name: modal-sm-leave;
+  }
+}
+@keyframes modal-entry {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+}
+@keyframes modal-sm-entry {
+  0% {
+    transform: translateY(100%);
+  }
+}
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
     opacity: 0;
   }
-  dialog.modal:not([open]) {
+}
+@keyframes modal-leave {
+  100% {
     opacity: 0;
     transform: scale(0.8);
   }
-  @media (max-width: 640px) {
-    dialog.modal,
-    dialog.modal::backdrop {
-      transition-timing-function: var(--ease-in-out);
-    }
-    @starting-style {
-      dialog.modal[open] {
-        transform: translateY(100%);
-      }
-      dialog.modal[open]::backdrop {
-        opacity: 0;
-      }
-    }
-    dialog.modal:not([open]) {
-      transform: translateY(100%);
-    }
+}
+@keyframes modal-sm-leave {
+  100% {
+    transform: translateY(100%);
   }
 }
 
-/* Either old browser or Safari */
-@supports (not (transition-behavior: allow-discrete)) or (overflow:-webkit-marquee) {
-  dialog.modal,
-  dialog.modal::backdrop {
-    animation-duration: 0.5s;
-    animation-timing-function: var(--ease-back-in-out);
-  }
-  dialog.modal[open] {
-    animation-name: modal-entry;
-  }
-  dialog.modal[open]::backdrop {
-    animation-name: fade;
-  }
-  dialog.modal.closing::backdrop {
-    animation-name: fade;
-    animation-direction: reverse;
-  }
-  dialog.modal.closing {
-    animation-name: modal-leave;
-  }
-  @media (max-width: 640px) {
-    dialog.modal,
-    dialog.modal::backdrop {
-      animation-timing-function: var(--ease-in-out);
-    }
-    dialog.modal[open] {
-      animation-name: modal-sm-entry;
-    }
-    dialog.modal.closing {
-      animation-name: modal-sm-leave;
-    }
-  }
-  @keyframes modal-entry {
-    0% {
-      opacity: 0;
-      transform: translateY(100px);
-    }
-  }
-  @keyframes modal-sm-entry {
-    0% {
-      transform: translateY(100%);
-    }
-  }
-  @keyframes modal-leave {
-    100% {
-      opacity: 0;
-      transform: scale(0.8);
-    }
-  }
-  @keyframes modal-sm-leave {
-    100% {
-      transform: translateY(100%);
-    }
-  }
-}
