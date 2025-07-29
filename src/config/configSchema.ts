@@ -8,7 +8,7 @@ const ConnectorSchema = v.array(
 const AddressSchema = v.pipe(v.string(), v.regex<`0x${string}`>(/^0x(.*)$/));
 
 export const AppConfigSchema = v.object({
-  hidden: v.optional(v.boolean()),
+  hidden: v.optional(v.boolean()), // hidden: true will hide the network in the dropdown - unless it's the current network
   mode: v.union([v.literal('development'), v.literal('production')]),
   appName: v.string(),
   appUrl: v.string(),
@@ -126,5 +126,6 @@ export const AppConfigSchema = v.object({
     showTerms: v.optional(v.boolean()),
     showPrivacy: v.optional(v.boolean()),
     showCart: v.optional(v.boolean()),
+    walkthroughId: v.optional(v.string()),
   }),
 });

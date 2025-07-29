@@ -1,14 +1,10 @@
 import { Button } from 'components/common/button';
-import { lsService } from 'services/localeStorage';
 import config from 'config';
+import { setNetworkConfig } from 'config/utils';
 
 export const DebugResetDefault = () => {
   const deactivateOne = () => {
-    lsService.removeItem('imposterAccount');
-    lsService.removeItem('tenderlyRpc');
-    lsService.removeItem('configOverride');
-    lsService.removeItem('carbonApi');
-    location.href = location.href;
+    setNetworkConfig();
   };
 
   return (

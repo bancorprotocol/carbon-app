@@ -149,5 +149,6 @@ export const commonConfig: AppConfig = {
     showTerms: true,
     showPrivacy: true,
     showCart: true,
+    walkthroughId: 'uouygtywoj3c',
   },
 };

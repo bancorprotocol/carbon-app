@@ -86,5 +86,6 @@ export const commonConfig: AppConfig = {
     showTerms: true,
     showPrivacy: true,
     showCart: true,
+    walkthroughId: 'd2a5isof88vg',
   },
 };

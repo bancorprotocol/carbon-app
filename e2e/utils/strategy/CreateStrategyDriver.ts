@@ -19,7 +19,10 @@ import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
 import { MainMenuDriver } from '../MainMenuDriver';
 
 export class CreateStrategyDriver {
-  constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
+  constructor(
+    private page: Page,
+    private testCase: CreateStrategyTestCase,
+  ) {}
 
   getForm() {
     return this.page.getByTestId('create-strategy-form');
@@ -58,7 +61,7 @@ export class CreateStrategyDriver {
   async waitForLoading() {
     const loadings = await this.page.locator('.loading-message').all();
     return Promise.all(
-      loadings.map((loading) => loading.waitFor({ state: 'detached' }))
+      loadings.map((loading) => loading.waitFor({ state: 'detached' })),
     );
   }
 
@@ -80,7 +83,7 @@ export class CreateStrategyDriver {
   async fillFormSection(
     direction: Direction,
     setting: Setting,
-    order: RangeOrder
+    order: RangeOrder,
   ) {
     const form = this.getFormSection(direction);
     await form.setting(setting).click();
@@ -133,7 +136,7 @@ export class CreateStrategyDriver {
       }
       await btn.click();
     } catch {
-      await btn.click({ timeout: 5_000 });
+      await btn.click({ timeout: 10_000 });
     }
   }
 }

@@ -51,7 +51,7 @@ export interface LocalStorageSchema {
   isUncheckedSigner: boolean;
   hasSeenRestrictedCountryModal: boolean;
   hasSeenCreateStratExpertMode: boolean;
-  simDisclaimerLastSeen: number;
+  simDisclaimerLastSeen: string;
   lastSdkCache: { timestamp: number; ttl: number };
   notificationPreferences: NotificationPreference;
   configOverride: Partial<AppConfig>;
@@ -59,6 +59,7 @@ export interface LocalStorageSchema {
   liquidityMatrix: Record<string, LiquidityMatrixSearch>;
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
+  hasWalkthrough: boolean;
 }
 
 enum EnumStrategySort {
@@ -137,6 +138,27 @@ const migrations: Migration[] = [
       const key = prevFormattedKey.slice(prefix.length);
       if (!key) return;
       const nextFormattedKey = ['carbon', NETWORK, 'v1.3', key].join('-');
+      migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
+    },
+  },
+  {
+    migrate: (prevFormattedKey) => {
+      const prefix = `carbon-${NETWORK}-v1.3-`;
+      // if one of the config override keys - just remove it and return - this is a bruteforce fix for the debug mode indication
+      if (
+        prevFormattedKey === `${prefix}imposterAccount` ||
+        prevFormattedKey === `${prefix}tenderlyRpc` ||
+        prevFormattedKey === `${prefix}configOverride` ||
+        prevFormattedKey === `${prefix}carbonApi`
+      ) {
+        removeItem({ prevFormattedKey });
+        return;
+      }
+      const isMatch = prevFormattedKey.startsWith(prefix);
+      if (!isMatch) return;
+      const key = prevFormattedKey.slice(prefix.length);
+      if (!key) return;
+      const nextFormattedKey = ['carbon', NETWORK, 'v1.4', key].join('-');
       migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
     },
   },
