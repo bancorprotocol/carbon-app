@@ -318,6 +318,7 @@ dialog.modal::backdrop {
 @media (max-width: 640px) {
   dialog.modal {
     width: 100dvw;
+    margin: auto; /* Force margin for Safari */
     margin-bottom: 0;
     background-color: unset;
   }
