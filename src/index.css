@@ -373,7 +373,8 @@ dialog.modal::backdrop {
   }
 }
 
-@supports not (transition-behavior: allow-discrete) {
+/* Either old browser or Safari */
+@supports (not (transition-behavior: allow-discrete)) or (overflow:-webkit-marquee) {
   dialog.modal,
   dialog.modal::backdrop {
     animation-duration: 0.5s;
