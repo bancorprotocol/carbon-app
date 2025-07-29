@@ -106,6 +106,7 @@ const getDefaultConnector = (connectorType: SelectableConnectionName) => {
           /gnosis-safe.io$/,
           /app.safe.global$/,
           /safe.tac.build$/,
+          /staging.safe.tac.build$/,
         ],
       });
   }
