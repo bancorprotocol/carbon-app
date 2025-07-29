@@ -9,5 +9,5 @@
   flex: 1;
 }
 .spread-custom input:placeholder-shown + .suffix {
-  display: none;
+  opacity: 0;
 }
