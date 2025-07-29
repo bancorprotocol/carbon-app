@@ -84,8 +84,14 @@ export class DebugDriver {
     await this.page.getByTestId('save-imposter').click();
   }
 
-  waitForBalance(token: string) {
-    return waitFor(this.page, `balance-${token}`, 30_000);
+  async waitForBalance(token: string) {
+    try {
+      return waitFor(this.page, `balance-${token}`, 5_000);
+    } catch {
+      // If balance if not loaded, try again with add
+      await this.page.getByTestId(`add-${token}`).click();
+      return waitFor(this.page, `balance-${token}`, 10_000);
+    }
   }
 
   balanceLocator(token: string) {
