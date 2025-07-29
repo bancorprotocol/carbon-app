@@ -41,7 +41,9 @@ export const MainMenuTradeSettings = () => {
     setInternalDeadline(defaultDeadline);
   };
 
-  const submit = () => {
+  const submit = (e: FormEvent) => {
+    // On old browser: prevent closing without animation
+    e.preventDefault();
     setSlippage(settingsData[0].value);
     setDeadline(settingsData[1].value);
     close();
