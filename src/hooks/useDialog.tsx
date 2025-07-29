@@ -11,6 +11,7 @@ export const useDialog = () => {
   };
   const close = async () => {
     if (!ref.current) return;
+    if (navigator.webdriver) return ref.current.close();
     // Because of Safari we cannot use native transition
     ref.current.classList.add('closing');
     const all = ref.current.getAnimations({ subtree: true });
