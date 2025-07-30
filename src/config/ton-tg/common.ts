@@ -14,7 +14,7 @@ export const commonConfig: AppConfig = {
   mode: 'development',
   appName: 'TON - Carbon DeFi Mini-App',
   appUrl: 'https://ton.tg.carbondefi.xyz',
-  carbonApi: 'https://api.carbondefi.xyz/v1/ton/',
+  carbonApi: 'https://api.carbondefi.xyz/v1/tac/',
   selectedConnectors: ['MetaMask'],
   blockedConnectors: [],
   walletConnectProjectId: '',
@@ -28,7 +28,7 @@ export const commonConfig: AppConfig = {
       url: 'https://testnet.tonscan.org/',
     },
     rpc: {
-      url: 'https://rpc.ankr.com/premium-http/ton_api_v2/',
+      url: 'https://rpc.tac.build', // 'https://rpc.ankr.com/premium-http/ton_api_v2/',
     },
     defaultLimitedApproval: true,
     gasToken: {

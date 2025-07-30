@@ -10,8 +10,8 @@ import { MainMenuCart } from './MainMenuCart';
 import { lsService } from 'services/localeStorage';
 import { Link } from '@tanstack/react-router';
 import { MainMenuRightWalkthrough } from './MainMenuRightWalkthrough';
+import { TonConnectBtn } from 'libs/ton-tg/TonConnect';
 import config from 'config';
-import { TonConnectButton } from '@tonconnect/ui-react';
 
 const TenderlyForkAlert = () => {
   const [isDebugMode, setIsDebugMode] = useState(false);
@@ -56,7 +56,7 @@ export const MainMenuRight: FC = () => {
         <MainMenuRightBurger menuMapping={menuMapping} />
       )}
       {config.network.name === 'TON' ? (
-        <TonConnectButton />
+        <TonConnectBtn />
       ) : (
         <MainMenuRightWallet />
       )}

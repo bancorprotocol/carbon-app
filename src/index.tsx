@@ -1,5 +1,5 @@
 import 'global-shim';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
 import { StoreProvider } from 'store';
@@ -7,7 +7,7 @@ import { WagmiReactWrapper } from 'libs/wagmi';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
-import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import { TonProvider } from 'libs/ton-tg/TonProvider';
 import config from 'config';
 import 'init-sentry';
 import 'fonts.css';
@@ -18,20 +18,19 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
-const WalletProvider =
-  config.network.name === 'TON' ? TonConnectUIProvider : WagmiReactWrapper;
+const WalletProvider = ({ children }: { children: ReactNode }) => {
+  if (config.network.name === 'TON') {
+    return <TonProvider>{children}</TonProvider>;
+  } else {
+    <WagmiReactWrapper>{children}</WagmiReactWrapper>;
+  }
+};
 
 root.render(
   <React.StrictMode>
     <QueryProvider>
       <StoreProvider>
-        <WalletProvider
-          manifestUrl={
-            config.network.name === 'TON'
-              ? `${config.appUrl}/tonconnect-manifest.json`
-              : undefined
-          }
-        >
+        <WalletProvider>
           <LazyMotion>
             <RouterProvider router={router} />
           </LazyMotion>
