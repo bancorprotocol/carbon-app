@@ -54,10 +54,8 @@ vitest.mock('libs/sdk/index.ts', () => {
 // MOCK WAGMI WALLET
 const mockedWallet = await vitest.hoisted(async () => {
   const { mock } = await import('wagmi/connectors');
-  const { Wallet } = await import('ethers');
-  const randomWalletAddress = Wallet.createRandom().address as `0x${string}`;
   return mock({
-    accounts: [randomWalletAddress],
+    accounts: ['0x0123456789012345678901234567890123456789'],
   });
 });
 vitest.mock('libs/wagmi/connectors', async (importOriginal) => {
