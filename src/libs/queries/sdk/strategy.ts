@@ -227,7 +227,15 @@ export const useGetStrategyList = (ids: string[]) => {
     queryKey: QueryKey.strategyList(ids),
     queryFn: async () => {
       const getStrategies = ids.map((id) => carbonSDK.getStrategy(id));
-      const strategies = await Promise.all(getStrategies);
+      const responses = await Promise.allSettled(getStrategies);
+      const strategies = [];
+      for (const res of responses) {
+        if (res.status === 'fulfilled') {
+          strategies.push(res.value);
+        } else {
+          console.error(res.reason);
+        }
+      }
       return buildStrategiesHelper({
         strategies,
         getTokenById,
@@ -250,6 +258,7 @@ export const useGetStrategy = (id: string) => {
     queryKey: QueryKey.strategy(id),
     queryFn: async () => {
       const strategy = await carbonSDK.getStrategy(id);
+
       const strategies = await buildStrategiesHelper({
         strategies: [strategy],
         getTokenById,
