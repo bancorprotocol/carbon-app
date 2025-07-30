@@ -1,9 +1,4 @@
-import {
-  FAUCET_TOKENS,
-  FaucetToken,
-  tenderlyFaucetTransferNativeToken,
-  tenderlyFaucetTransferTKN,
-} from 'utils/tenderly';
+import { FAUCET_TOKENS, tenderlyFaucetTransferTKN } from 'utils/tenderly';
 import { useWagmi } from 'libs/wagmi';
 import { useGetTokenBalances } from 'libs/queries/chain/balance';
 import { useQueryClient } from '@tanstack/react-query';
@@ -43,7 +38,7 @@ export const DebugTenderlyFaucet = () => {
       tenderlyFaucetTransferTKN(tkn, user)
         .then(() => {
           const queryKey = QueryKey.balance(user, tkn.address);
-          queryClient.invalidateQueries({ queryKey });
+          queryClient.refetchQueries({ queryKey });
         })
         .catch((err) => {
           console.error('faucet failed for ', tkn.address, err);
@@ -56,7 +51,7 @@ export const DebugTenderlyFaucet = () => {
     try {
       await tenderlyFaucetTransferTKN(tkn, user);
       const queryKey = QueryKey.balance(user, tkn.address);
-      queryClient.invalidateQueries({ queryKey });
+      queryClient.refetchQueries({ queryKey });
     } catch (err) {
       console.error('faucet failed for ', tkn.address, err);
     }
@@ -64,7 +59,7 @@ export const DebugTenderlyFaucet = () => {
 
   return (
     <form
-      className="rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20"
+      className="rounded-18 bg-background-900 flex flex-col items-center gap-20 p-20"
       onSubmit={handleOnSubmit}
     >
       <h2>Tenderly Faucet</h2>
