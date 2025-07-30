@@ -85,13 +85,10 @@ export class DebugDriver {
   }
 
   async waitForBalance(token: string) {
-    try {
-      return waitFor(this.page, `balance-${token}`, 5_000);
-    } catch {
-      // If balance if not loaded, try again with add
+    return waitFor(this.page, `balance-${token}`, 5_000).catch(async () => {
       await this.page.getByTestId(`add-${token}`).click();
       return waitFor(this.page, `balance-${token}`, 10_000);
-    }
+    });
   }
 
   balanceLocator(token: string) {

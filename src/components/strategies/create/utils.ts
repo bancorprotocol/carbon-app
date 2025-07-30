@@ -5,13 +5,8 @@ import {
   StrategyDirection,
   StrategySettings,
   TradeOverlappingSearch,
-  TradeRecurringSearch,
 } from 'libs/routing/routes/trade';
-import {
-  checkIfOrdersOverlap,
-  checkIfOrdersReversed,
-  isValidRange,
-} from '../utils';
+import { isValidRange } from '../utils';
 import { Token } from 'libs/tokens';
 import { isZero } from '../common/utils';
 import {
@@ -78,24 +73,6 @@ export const getDefaultOrder = (
       budget: order.budget ?? '',
       settings,
     };
-  }
-};
-
-export const getRecurringError = (search: TradeRecurringSearch) => {
-  const { buyMin, buyMax, sellMin, sellMax } = search;
-  const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
-  const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
-  if (checkIfOrdersReversed(buyOrder, sellOrder)) {
-    return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
-  }
-};
-
-export const getRecurringWarning = (search: TradeRecurringSearch) => {
-  const { buyMin, buyMax, sellMin, sellMax } = search;
-  const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
-  const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
-  if (checkIfOrdersOverlap(buyOrder, sellOrder)) {
-    return 'Notice: your Buy and Sell orders overlap';
   }
 };
 

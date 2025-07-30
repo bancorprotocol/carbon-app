@@ -5,11 +5,7 @@ import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import {
-  getDefaultOrder,
-  getRecurringError,
-  getRecurringWarning,
-} from 'components/strategies/create/utils';
+import { getDefaultOrder } from 'components/strategies/create/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { useCallback } from 'react';
@@ -21,6 +17,23 @@ import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeCha
 import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
+import {
+  checkIfOrdersOverlap,
+  checkIfOrdersReversed,
+} from 'components/strategies/utils';
+import { OrderBlock } from 'components/strategies/common/types';
+
+const getRecurringError = (buy: OrderBlock, sell: OrderBlock) => {
+  if (checkIfOrdersReversed(buy, sell)) {
+    return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
+  }
+};
+
+const getRecurringWarning = (buy: OrderBlock, sell: OrderBlock) => {
+  if (checkIfOrdersOverlap(buy, sell)) {
+    return 'Notice: your Buy and Sell orders overlap';
+  }
+};
 
 const url = '/trade/recurring';
 export const TradeRecurring = () => {
@@ -98,6 +111,9 @@ export const TradeRecurring = () => {
     updatePrices,
   );
 
+  const error = getRecurringError(buyOrder, sellOrder);
+  const warning = getRecurringWarning(buyOrder, sellOrder);
+
   return (
     <>
       <StrategyChartSection
@@ -128,8 +144,8 @@ export const TradeRecurring = () => {
             order={sellOrder}
             setOrder={setSellOrder}
             setSettings={setSellSetting}
-            error={getRecurringError(search)}
-            warnings={[sellOutsideMarket, getRecurringWarning(search)]}
+            error={error}
+            warnings={[sellOutsideMarket, warning]}
           />
           <CreateOrder
             type="recurring"
@@ -139,8 +155,8 @@ export const TradeRecurring = () => {
             order={buyOrder}
             setOrder={setBuyOrder}
             setSettings={setBuySetting}
-            error={getRecurringError(search)}
-            warnings={[buyOutsideMarket, getRecurringWarning(search)]}
+            error={error}
+            warnings={[buyOutsideMarket, warning]}
           />
         </CreateForm>
       </CreateLayout>
