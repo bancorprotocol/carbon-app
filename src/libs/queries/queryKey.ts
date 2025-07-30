@@ -70,6 +70,7 @@ export const QueryKey = {
 
   voucherOwner: (id?: string) => [...chain, 'voucherOwner', id],
 
+  missingTokens: (tokens: string[]) => [...chain, 'missing-token', ...tokens],
   token: (token: string) => [...chain, 'token', token],
   pairs: () => [...sdk, 'pairs'],
 

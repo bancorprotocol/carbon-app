@@ -1,8 +1,7 @@
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { AnyStrategy } from 'components/strategies/common/types';
 import { useTokens } from 'hooks/useTokens';
-import { useGetStrategyList } from 'libs/queries';
+import { useGetMissingTokens } from 'libs/queries/chain/token';
 import {
   PairTrade,
   Trending,
@@ -11,6 +10,7 @@ import {
 import { Link } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { CSSProperties, useEffect, useRef } from 'react';
+import { getLowestBits } from 'utils/helpers';
 import { toPairSlug } from 'utils/pairSearch';
 
 const getTrendingPairs = (
@@ -49,12 +49,8 @@ const getTrendingPairs = (
   return { isLoading: false, data };
 };
 
-type StrategyWithTradeCount = AnyStrategy & {
-  trades: number;
-};
-const useTrendStrategies = (
-  trending?: Trending,
-): { isLoading: boolean; data: StrategyWithTradeCount[] } => {
+const useTrendStrategies = (trending?: Trending) => {
+  const { getTokenById } = useTokens();
   const trades = trending?.tradeCount ?? [];
   const list = trades
     .filter((t) => !!t.strategyTrades_24h)
@@ -70,19 +66,21 @@ const useTrendStrategies = (
     list.push(...remaining);
   }
 
-  const record: Record<string, number> = {};
-  for (const item of list) {
-    record[item.id] = item.strategyTrades;
-  }
-  const ids = list.map((s) => s.id);
-  const query = useGetStrategyList(ids);
-  if (query.isLoading) return { isLoading: true, data: [] };
+  const tokens = list.map((item) => [item.token0, item.token1]).flat();
+  const { isLoading } = useGetMissingTokens(tokens);
 
-  const data = (query.data ?? []).map((strategy) => ({
-    ...strategy,
-    trades: record[strategy.id],
-  }));
-  return { isLoading: false, data };
+  if (isLoading) return { isLoading, data: [] };
+
+  return {
+    isLoading: false,
+    data: list.map((item) => ({
+      id: item.id,
+      idDisplay: getLowestBits(item.id),
+      base: getTokenById(item.token0),
+      quote: getTokenById(item.token1),
+      trades: item.strategyTrades,
+    })),
+  };
 };
 
 export const ExplorerHeader = () => {
@@ -202,7 +200,7 @@ export const ExplorerHeader = () => {
                     className="block w-full"
                   >
                     <div className="bg-background-700 flex gap-8 rounded px-8">
-                      <TokensOverlap tokens={[base, quote]} size={18} />
+                      <TokensOverlap tokens={[base!, quote!]} size={18} />
                       {idDisplay}
                     </div>
                   </Link>
