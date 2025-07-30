@@ -1,6 +1,7 @@
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useTokens } from 'hooks/useTokens';
+import { useGetMissingTokens } from 'libs/queries/chain/token';
 import {
   PairTrade,
   Trending,
@@ -65,14 +66,21 @@ const useTrendStrategies = (trending?: Trending) => {
     list.push(...remaining);
   }
 
-  // TODO: load missing tokens if any
-  return list.map((item) => ({
-    id: item.id,
-    idDisplay: getLowestBits(item.id),
-    base: getTokenById(item.token0),
-    quote: getTokenById(item.token1),
-    trades: item.strategyTrades,
-  }));
+  const tokens = list.map((item) => [item.token0, item.token1]).flat();
+  const { isLoading } = useGetMissingTokens(tokens);
+
+  if (isLoading) return { isLoading, data: [] };
+
+  return {
+    isLoading: false,
+    data: list.map((item) => ({
+      id: item.id,
+      idDisplay: getLowestBits(item.id),
+      base: getTokenById(item.token0),
+      quote: getTokenById(item.token1),
+      trades: item.strategyTrades,
+    })),
+  };
 };
 
 export const ExplorerHeader = () => {
@@ -80,10 +88,10 @@ export const ExplorerHeader = () => {
   const { data: trending, isLoading, isError } = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
   const trendingPairs = getTrendingPairs(tokensMap, trending);
-  const strategies = trendingStrategies;
+  const strategies = trendingStrategies.data;
   const pairs = trendingPairs.data;
 
-  const strategiesLoading = isLoading;
+  const strategiesLoading = trendingStrategies.isLoading || isLoading;
   const pairLoading = trendingPairs.isLoading || isLoading;
   if (isError) return;
   return (
