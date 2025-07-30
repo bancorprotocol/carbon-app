@@ -4,6 +4,9 @@ import { commonConfig } from './common';
 const config: AppConfig = {
   ...commonConfig,
   mode: 'production',
+  network: {
+    ...commonConfig.network,
+  },
   sentryDSN:
     'https://1aaa1b99875949cdb08089743dcc1ec5@o1249488.ingest.us.sentry.io/4505074572197888',
 };

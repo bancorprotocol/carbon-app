@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useEffect, useRef } from 'react';
+import { FC, useEffect } from 'react';
 import { ReactComponent as IconWalkthrough } from 'assets/icons/walkthrough.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { Button } from 'components/common/button';
@@ -6,15 +6,16 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { lsService } from 'services/localeStorage';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import config from 'config';
+import { useDialog } from 'hooks/useDialog';
 
 export const MainMenuRightWalkthrough: FC = () => {
   const { currentBreakpoint } = useBreakpoints();
-  const dialog = useRef<HTMLDialogElement>(null);
+  const { ref, open, close, lightDismiss } = useDialog();
   useEffect(() => {
     if (currentBreakpoint === 'sm' || !config.ui.walkthroughId) return;
     const hasWalkthrough = lsService.getItem('hasWalkthrough');
     if (!hasWalkthrough) {
-      dialog.current?.showModal();
+      open();
       // Need to force focus to prevent race focus on browser start
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
@@ -32,7 +33,7 @@ export const MainMenuRightWalkthrough: FC = () => {
       document.head.appendChild(script);
       await new Promise((res) => (script.onload = res));
     }
-    dialog.current?.close();
+    await close();
     (globalThis as any).Storylane.Play({
       type: 'popup',
       demo_type: 'image',
@@ -46,12 +47,8 @@ export const MainMenuRightWalkthrough: FC = () => {
   };
 
   const dismiss = () => {
-    dialog.current?.close();
+    close();
     lsService.setItem('hasWalkthrough', true);
-  };
-
-  const lightDismiss = (e: MouseEvent<HTMLDialogElement>) => {
-    if (e.target === e.currentTarget) dismiss();
   };
 
   if (currentBreakpoint === 'sm') return;
@@ -68,7 +65,7 @@ export const MainMenuRightWalkthrough: FC = () => {
           <IconWalkthrough className="place-self-center size-20" />
         </Button>
       </Tooltip>
-      <dialog ref={dialog} className="modal" onClick={lightDismiss}>
+      <dialog ref={ref} className="modal" onClick={lightDismiss}>
         <form
           method="dialog"
           className="grid gap-24 place-items-center"

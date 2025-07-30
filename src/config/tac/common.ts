@@ -14,6 +14,21 @@ const popularTokens = [
   addresses.wTAC,
   addresses.TON,
   addresses.USDT,
+  '0x61D66bC21fED820938021B06e9b2291f3FB91945',
+  '0xAf368c91793CB22739386DFCbBb2F1A9e4bCBeBf',
+  '0x7048c9e4aBD0cf0219E95a17A8C6908dfC4f0Ee4',
+  '0xD44F691aeD69fe43180B95b6F82f89c18Fb93094',
+  '0x20512cF15E60242aB5237E0A76c873a338281397',
+  '0x27e4Ade13d78Aad45bea31D448f5504031e4871E',
+  '0xecAc9C5F704e954931349Da37F60E39f515c11c1',
+  '0x51A30E647D33A044967FA3DBb04d6ED6F45455F6',
+  '0x5Ced7F73B76A555CCB372cc0F0137bEc5665F81E',
+  '0x9bB6983Ca454320BD8691409690B4FCCD489EE96',
+  '0x1791BAff6a5e2F2A1340e8B7C1EA2B0c1E2DD1ea',
+  '0xb1b385542B6E80F77B94393Ba8342c3Af699f15c',
+  '0x35533f54740F1F1aA4179E57bA37039dfa16868B',
+  '0x2a52B289bA68bBd02676640aA9F605700c9e5699',
+  '0xe82dbD543FD729418613d68Cd1E8FC67b0f46E31',
 ];
 
 export const commonConfig: AppConfig = {
@@ -21,7 +36,7 @@ export const commonConfig: AppConfig = {
   appName: 'TAC - Carbon DeFi',
   appUrl: 'https://tac.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/tac/',
-  selectedConnectors: ['MetaMask'],
+  selectedConnectors: ['MetaMask', 'Safe'],
   blockedConnectors: [],
   walletConnectProjectId: '',
   policiesLastUpdated: '26 June, 2025',
@@ -42,7 +57,8 @@ export const commonConfig: AppConfig = {
       symbol: 'TAC',
       decimals: 18,
       address: addresses.TAC,
-      logoURI: '/tokens/tac/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.svg',
+      logoURI:
+        'https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png',
     },
   },
   sdk: {
@@ -76,7 +92,7 @@ export const commonConfig: AppConfig = {
   tokenLists: [
     // Bancor
     {
-      uri: '/tokens/tac/list.json',
+      uri: 'https://raw.githubusercontent.com/TacBuild/tokenlist/refs/heads/main/src/tokens/tac.json',
     },
   ],
   tenderly: {
@@ -84,13 +100,13 @@ export const commonConfig: AppConfig = {
   },
   ui: {
     showSimulator: false,
-    priceChart: 'tradingView',
+    priceChart: 'native',
     useGradientBranding: false,
-    tradeCount: false,
+    tradeCount: true,
     currencyMenu: false,
-    showTerms: false,
-    showPrivacy: false,
-    showCart: false,
+    showTerms: true,
+    showPrivacy: true,
+    showCart: true,
     walkthroughId: 'vjbcftqceykr',
   },
 };

@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useWagmi } from 'libs/wagmi';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
-import { utils } from 'ethers';
-import { StaticJsonRpcProvider, Web3Provider } from '@ethersproject/providers';
+import { isAddress, BrowserProvider, JsonRpcProvider } from 'ethers';
 
 export const useGetEnsFromAddress = (address: string) => {
   const { provider } = useWagmi();
@@ -14,11 +13,11 @@ export const useGetEnsFromAddress = (address: string) => {
       if (!provider) {
         throw new Error('useGetEnsFromAddress no provider provided');
       }
-      if (utils.isAddress(address.toLowerCase())) {
-        const ensAddr = (await provider.getNetwork()).ensAddress;
-        if (ensAddr) {
-          // Already checks reverse resolution
-          return await provider.lookupAddress(address);
+      if (isAddress(address.toLowerCase())) {
+        try {
+          return provider.lookupAddress(address);
+        } catch {
+          return ''; // if provider doesn't support ens
         }
       }
       return '';
@@ -59,17 +58,17 @@ try {
 export const isValidEnsName = (ens?: string) => !!ens && ensRegex.test(ens);
 
 export const getEnsAddressIfAny = async (
-  provider: Web3Provider | StaticJsonRpcProvider | undefined,
+  provider: BrowserProvider | JsonRpcProvider | undefined,
   value: string,
 ): Promise<string> => {
   if (!provider) return value;
   try {
     if (isValidEnsName(value)) {
       const address = await provider?.resolveName(value);
+      console.log({ value, address });
       return address || value;
     }
-  } catch (err) {
-    console.error(err);
+  } catch {
     return value; // return initial value if provider doesn't support ens
   }
   return value;

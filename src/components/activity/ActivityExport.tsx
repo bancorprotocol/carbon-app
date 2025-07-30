@@ -6,11 +6,12 @@ import { useActivity } from './ActivityProvider';
 import { carbonApi } from 'utils/carbonApi';
 import { useTokens } from 'hooks/useTokens';
 import { toActivities } from './useActivityQuery';
-import { MouseEvent, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Button } from 'components/common/button';
 import { SafeDecimal } from 'libs/safedecimal';
 import { fromUnixUTC } from 'components/simulator/utils';
 import styles from './ActivityExport.module.css';
+import { useDialog } from 'hooks/useDialog';
 
 export const getActivityCSV = (activities: Activity[]) => {
   const header = [
@@ -103,15 +104,10 @@ export const getActivityCSV = (activities: Activity[]) => {
 
 const limit = 10_000;
 export const ActivityExport = () => {
-  const ref = useRef<HTMLDialogElement>(null);
+  const { ref, open, lightDismiss } = useDialog();
   const [loading, setLoading] = useState(false);
   const { queryParams, size } = useActivity();
   const { tokensMap } = useTokens();
-
-  const close = (e: MouseEvent<HTMLDialogElement>) => {
-    if (e.target !== e.currentTarget) return;
-    e.currentTarget.close();
-  };
 
   const download = async () => {
     setLoading(true);
@@ -129,7 +125,7 @@ export const ActivityExport = () => {
   };
 
   const shouldDownload = () => {
-    if (size && size > limit) ref.current?.showModal();
+    if (size && size > limit) open();
     else download();
   };
 
@@ -157,7 +153,7 @@ export const ActivityExport = () => {
         </svg>
       </button>
       {!!size && size > limit && (
-        <dialog className="modal" ref={ref} onClick={close}>
+        <dialog className="modal" ref={ref} onClick={lightDismiss}>
           <form method="dialog" className="text-14 grid gap-16">
             <p>
               The export limit is 10,000 rows.&nbsp;

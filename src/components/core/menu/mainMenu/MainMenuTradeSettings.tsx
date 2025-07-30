@@ -1,18 +1,122 @@
-import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
+import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import { useStore } from 'store';
+import { FormEvent, useId, useState } from 'react';
+import { Button } from 'components/common/button';
+import { TradeSettingsData } from 'components/trade/settings/utils';
+import { TradeSettingsRow } from 'components/trade/settings/TradeSettingsRow';
+import { cn } from 'utils/helpers';
+import { useDialog, useOnDialogClose } from 'hooks/useDialog';
+import style from 'components/strategies/common/form.module.css';
+
+const toSlippagePreset = (values: string[]) => {
+  return values.map((value) => ({ label: `${value}%`, value }));
+};
+const toDeadlinePreset = (values: string[]) => {
+  return values.map((value) => ({ label: value, value }));
+};
 
 export const MainMenuTradeSettings = () => {
-  const { openModal } = useModal();
+  const dialogId = useId();
+  const { ref, open, close, lightDismiss } = useDialog();
+  const { trade } = useStore();
+  const { slippage, setSlippage, deadline, setDeadline, presets } =
+    trade.settings;
+  const [internalSlippage, setInternalSlippage] = useState(slippage);
+  const [internalDeadline, setInternalDeadline] = useState(deadline);
+
+  const defaultSlippage = presets.slippage[0];
+  const defaultDeadline = presets.deadline[1];
+
+  useOnDialogClose(ref, () => {
+    setTimeout(() => {
+      setInternalSlippage(slippage);
+      setInternalDeadline(deadline);
+    }, 500); // Wait for animation to stop
+  });
+
+  const resetAll = (e: FormEvent) => {
+    e.preventDefault();
+    setInternalSlippage(defaultSlippage);
+    setInternalDeadline(defaultDeadline);
+  };
+
+  const submit = (e: FormEvent) => {
+    // On old browser: prevent closing without animation
+    e.preventDefault();
+    setSlippage(settingsData[0].value);
+    setDeadline(settingsData[1].value);
+    close();
+  };
+
+  const isAllSettingsDefault =
+    internalSlippage === defaultSlippage &&
+    internalDeadline === defaultDeadline;
+
+  const settingsData: TradeSettingsData[] = [
+    {
+      id: 'slippageTolerance',
+      title: 'Slippage Tolerance',
+      value: internalSlippage,
+      append: '%',
+      setValue: setInternalSlippage,
+      presets: toSlippagePreset(presets.slippage),
+      max: 50,
+    },
+    {
+      id: 'transactionExpiration',
+      title: 'Transaction Expiration Time (min)',
+      value: internalDeadline,
+      append: '',
+      setValue: setInternalDeadline,
+      presets: toDeadlinePreset(presets.deadline),
+    },
+  ];
 
   return (
-    <button
-      type="button"
-      className="hover:bg-background-800 grid size-40 place-items-center rounded-full"
-      aria-label="trade settings"
-      aria-haspopup="dialog"
-      onClick={() => openModal('tradeSettings', undefined)}
-    >
-      <IconCog className="size-20" />
-    </button>
+    <>
+      <button
+        type="button"
+        className="bg-black hover:border-white/80 border border-transparent flex gap-8 items-center px-8 py-4 rounded-full"
+        aria-label="Trade settings"
+        aria-haspopup="dialog"
+        aria-controls={dialogId}
+        onClick={open}
+      >
+        <span className="text-white/60 text-14">{slippage}%</span>
+        <IconCog className="size-18" />
+      </button>
+      <dialog ref={ref} id={dialogId} className="modal" onClick={lightDismiss}>
+        <form
+          method="dialog"
+          className={cn(style.form, 'grid gap-40 md:min-w-[440px]')}
+          onSubmit={submit}
+          onReset={resetAll}
+        >
+          <header className="flex items-center gap-16">
+            <h2 className="mr-auto text-18">Trade Settings</h2>
+            {!isAllSettingsDefault && (
+              <button type="reset" className="text-14 text-white p-8 rounded-8">
+                Reset All
+              </button>
+            )}
+            <button
+              aria-label="Dismiss"
+              type="button"
+              className="p-8 rounded-full"
+              onClick={close}
+            >
+              <IconClose className="size-18" />
+            </button>
+          </header>
+          {settingsData.map((item) => (
+            <TradeSettingsRow key={item.id} item={item} />
+          ))}
+          <Button variant="success" type="submit">
+            Save Changes
+          </Button>
+        </form>
+      </dialog>
+    </>
   );
 };

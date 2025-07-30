@@ -1,4 +1,4 @@
-import { getAddress } from '@ethersproject/address';
+import { getAddress } from 'ethers';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
@@ -57,7 +57,12 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
   const record: Record<string, Token> = {};
   for (const list of tokenList) {
     for (const token of list.tokens) {
-      if (!token.address || !token.symbol) continue;
+      if (
+        !token.address ||
+        !token.symbol ||
+        token.address === config.addresses.tokens.ZERO
+      )
+        continue;
       const address = getAddress(token.address);
       record[address] ||= { ...token, address };
     }
@@ -83,7 +88,7 @@ export const fetchTokenData = async (
   return {
     address,
     symbol,
-    decimals,
+    decimals: Number(decimals),
     name,
     isSuspicious: true,
   };

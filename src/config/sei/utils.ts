@@ -1,4 +1,4 @@
-import { isAddress } from 'ethers/lib/utils';
+import { isAddress } from 'ethers';
 import { Token, TokenList } from 'libs/tokens';
 import {
   DragonSwapTokenList,

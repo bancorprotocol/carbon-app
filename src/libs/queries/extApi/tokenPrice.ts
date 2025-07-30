@@ -84,6 +84,11 @@ export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
     queryFn: async () => {
       try {
         const data = await carbonApi.getMarketRateHistory(params);
+        if (!data || data.length < 2) {
+          throw new Error(
+            'Not enough data returned from backend, defaulting to placeholder data',
+          );
+        }
         return data.map((item) => ({
           date: item.timestamp,
           open: Number(item.open),
