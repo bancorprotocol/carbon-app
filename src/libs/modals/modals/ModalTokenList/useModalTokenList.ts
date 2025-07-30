@@ -3,7 +3,7 @@ import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
 import Fuse from 'fuse.js';
-import { utils } from 'ethers';
+import { isAddress } from 'ethers';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/ModalTokenList';
 import config from 'config';
 import {
@@ -143,8 +143,8 @@ export const useModalTokenList = ({ id, data }: Props) => {
       return sanitizedTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
     }
 
-    const isAddress = utils.isAddress(search.toLowerCase());
-    if (isAddress) {
+    const isValidAddress = isAddress(search.toLowerCase());
+    if (isValidAddress) {
       if (
         isGasTokenToHide(search.toLowerCase()) &&
         !excludedTokens.includes(NATIVE_TOKEN_ADDRESS)
@@ -164,7 +164,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
   }, [search, fuse, sanitizedTokens, excludedTokens]);
 
   const showImportToken = useMemo(() => {
-    const isValidAddress = utils.isAddress(search.toLowerCase());
+    const isValidAddress = isAddress(search.toLowerCase());
     if (isGasTokenToHide(search.toLowerCase())) return false;
     return (
       isValidAddress &&

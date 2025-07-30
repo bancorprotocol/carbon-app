@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { CHAIN_ID, IS_TENDERLY_FORK } from 'libs/wagmi/wagmi.constants';
 import {
   useConnect,
@@ -18,6 +18,7 @@ import { clientToSigner } from './ethers';
 import { getUncheckedSigner } from 'utils/tenderly';
 import { carbonEvents } from 'services/events';
 import { redirectSafeWallet } from './connectors';
+import { JsonRpcSigner } from 'ethers';
 
 type Props = {
   imposterAccount?: string;
@@ -54,14 +55,15 @@ export const useWagmiUser = ({
 
   const { data: client } = useConnectorClient<Config>({ chainId });
 
-  const signer = useMemo(() => {
+  const [signer, setSigner] = useState<JsonRpcSigner>();
+  useEffect(() => {
     if (!IS_TENDERLY_FORK || !isUncheckedSigner) {
-      return clientToSigner(client);
-    } else {
-      if (user) return getUncheckedSigner(user);
+      if (!client) return;
+      clientToSigner(client).then(setSigner);
+    } else if (user) {
+      setSigner(getUncheckedSigner(user));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client, IS_TENDERLY_FORK, user, isUncheckedSigner]);
+  }, [client, user, isUncheckedSigner]);
 
   const isManualConnection = useRef(false);
   const oldUser = useRef(user);

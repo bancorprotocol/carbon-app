@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { QueryKey } from 'libs/queries';
+import { QueryKey, toTransactionRequest } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useCarbonInit } from 'hooks/useCarbonInit';
 import { Action, TradeActionBNStr } from 'libs/sdk';
@@ -61,7 +61,7 @@ export const useTradeQuery = () => {
           calcMaxInput(params.sourceInput),
         );
       }
-      return signer!.sendTransaction(unsignedTx);
+      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };
