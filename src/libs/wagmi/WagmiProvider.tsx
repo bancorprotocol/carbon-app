@@ -32,7 +32,7 @@ const defaultValue: CarbonWagmiProviderContext = {
   setIsUncheckedSigner: () => {},
 };
 
-const CarbonWagmiCTX = createContext(defaultValue);
+export const CarbonWagmiCTX = createContext(defaultValue);
 
 export const useWagmi = () => useContext(CarbonWagmiCTX);
 

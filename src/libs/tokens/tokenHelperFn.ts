@@ -1,8 +1,9 @@
-import { getAddress } from 'ethers';
+import { getAddress } from 'libs/ton-tg/address';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
 import { tokenParserMap } from 'config/utils';
+import { getEvmAddress } from 'libs/ton-tg/tokenMap';
 import config from 'config';
 
 const getLogoByURI = (uri: string | undefined) =>
@@ -80,10 +81,12 @@ export const fetchTokenData = async (
   Token: (address: string) => { read: TokenContract },
   address: string,
 ): Promise<Token> => {
+  const evmAddress = await getEvmAddress(address);
+  console.log({ ton: address, tac: evmAddress });
   const [symbol, decimals, name] = await Promise.all([
-    Token(address).read.symbol(),
-    Token(address).read.decimals(),
-    Token(address).read.name(),
+    Token(evmAddress).read.symbol(),
+    Token(evmAddress).read.decimals(),
+    Token(evmAddress).read.name(),
   ]);
   return {
     address,

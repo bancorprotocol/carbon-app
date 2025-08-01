@@ -3,7 +3,7 @@ import {
   useGetUserStrategies,
   useTokenStrategies,
 } from 'libs/queries';
-import { usePairs } from 'hooks/usePairs';
+import { extractExplorerPair, usePairs } from 'hooks/usePairs';
 import { useMemo } from 'react';
 import { useParams } from '@tanstack/react-router';
 
@@ -16,7 +16,7 @@ export const useExplorer = () => {
   // SINGLE TOKEN
   const singleToken = (() => {
     if (type !== 'token') return;
-    if (slug?.split('_').length !== 1) return;
+    if (slug?.length !== 48 * 2 + 1) return;
     return slug;
   })();
   const tokenQuery = useTokenStrategies(singleToken);
@@ -24,10 +24,11 @@ export const useExplorer = () => {
   // PAIR
   const exactMatch = useMemo(() => {
     if (type !== 'pair') return;
-    const [base, quote] = slug.split('_');
+    const [base, quote] = extractExplorerPair(slug);
     if (!base || !quote) return;
     return pairs.map.get(`${base}_${quote}`);
   }, [pairs.map, slug, type]);
+
   const pairQuery = useGetPairStrategies({
     base: exactMatch?.baseToken.address,
     quote: exactMatch?.quoteToken.address,
