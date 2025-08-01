@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Token as TokenContract } from 'abis/types';
-import { isAddress, getAddress, TransactionRequest } from 'ethers';
+import { isAddress, TransactionRequest } from 'ethers';
+import { getAddress } from 'libs/ton-tg/address';
 import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';

@@ -2,13 +2,12 @@ import { AppConfig } from 'config/types';
 import IconTonLogo from 'assets/logos/tonlogo.svg';
 
 const addresses = {
-  GEM: 'EQB8O0JJ-hqeDAqDC1OG6zPYBfpV-QzwPed0kpcbILXsmAxG',
   TON: 'EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c',
   USDT: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
   ZERO: '000000000000000000000000000000000000000000000000',
 };
 
-const popularTokens = [addresses.GEM, addresses.TON, addresses.USDT];
+const popularTokens = [addresses.TON, addresses.USDT];
 
 export const commonConfig: AppConfig = {
   mode: 'development',
@@ -43,11 +42,7 @@ export const commonConfig: AppConfig = {
     cacheTTL: 0,
   },
   defaultTokenPair: [addresses.TON, addresses.USDT],
-  popularPairs: [
-    [addresses.TON, addresses.USDT],
-    [addresses.GEM, addresses.USDT],
-    [addresses.TON, addresses.GEM],
-  ],
+  popularPairs: [[addresses.TON, addresses.USDT]],
   popularTokens: {
     base: popularTokens,
     quote: popularTokens,
@@ -70,7 +65,8 @@ export const commonConfig: AppConfig = {
   tokenLists: [
     // Bancor
     {
-      uri: '/tokens/tac/list.json',
+      uri: 'https://raw.githubusercontent.com/TacBuild/tokenlist/refs/heads/main/src/tokens/tac.json',
+      parser: 'tokenTonToTacParser',
     },
   ],
   tenderly: {

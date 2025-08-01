@@ -4,6 +4,7 @@ import { lsService } from 'services/localeStorage';
 import { AppConfigSchema } from './configSchema';
 import * as v from 'valibot';
 import { AppConfig } from './types';
+import { tokenTonToTacParser } from './ton-tg/utils';
 
 export const pairsToExchangeMapping: { [key: string]: string } = {
   ETHUSDT: 'BINANCE:ETHUSDT',
@@ -269,6 +270,7 @@ export const pairsToExchangeMapping: { [key: string]: string } = {
 export const tokenParserMapKeys = [
   'tokenDragonswapListParser',
   'tokenSeiListParser',
+  'tokenTonToTacParser',
 ] as const;
 
 export const tokenParserMap: Record<
@@ -280,6 +282,7 @@ export const tokenParserMap: Record<
     'logos',
   ),
   tokenSeiListParser: tokenSeiListParser('pacific-1'),
+  tokenTonToTacParser: tokenTonToTacParser,
 };
 
 export const handleConfigOverrides = (defaultConfig: AppConfig) => {

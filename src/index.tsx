@@ -22,7 +22,7 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
   if (config.network.name === 'TON') {
     return <TonProvider>{children}</TonProvider>;
   } else {
-    <WagmiReactWrapper>{children}</WagmiReactWrapper>;
+    return <WagmiReactWrapper>{children}</WagmiReactWrapper>;
   }
 };
 

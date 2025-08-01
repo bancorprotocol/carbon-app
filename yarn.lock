@@ -3023,6 +3023,13 @@
   dependencies:
     tippy.js "^6.3.1"
 
+"@ton/core@^0.61.0":
+  version "0.61.0"
+  resolved "https://registry.yarnpkg.com/@ton/core/-/core-0.61.0.tgz#09b37801cb2f5a942020fcc992be1e99f4b16689"
+  integrity sha512-0qyVfP2dDue2bq80ydXggo2MlufcmzuFk6G94qRrZxvyQ3NSe4UeBTeRf1gQmN7tywgTsX2gS61e4yvJrlUu4Q==
+  dependencies:
+    symbol.inspect "1.0.1"
+
 "@ton/crypto-primitives@2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@ton/crypto-primitives/-/crypto-primitives-2.1.0.tgz#8c9277c250b59aae3c819e0d6bd61e44d998e9ca"
@@ -3050,7 +3057,7 @@
     teslabot "^1.3.0"
     zod "^3.21.4"
 
-"@ton/ton@^15.2.1":
+"@ton/ton@^15.2.1", "@ton/ton@^15.3.1":
   version "15.3.1"
   resolved "https://registry.yarnpkg.com/@ton/ton/-/ton-15.3.1.tgz#c20688b27eb8ce8474610843804a7599679c38a2"
   integrity sha512-+UuvbE0o0VIU/0W90STO+emRIDr3Vs39LdbX5ySm/Ra+RQJSiH0KX6TDOFqWDmD2Wzk4/zw21KwSiZ6Xjk8zlw==
@@ -3143,7 +3150,7 @@
     "@tonconnect/isomorphic-fetch" "^0.0.3"
     "@tonconnect/protocol" "^2.3.0"
 
-"@tonconnect/ui-react@^2.2.0":
+"@tonconnect/ui-react@2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@tonconnect/ui-react/-/ui-react-2.2.0.tgz#20ea95aa8a44c82cb4705c4e865c5f3959fbb6ae"
   integrity sha512-n6R0uxuOdDw6HEnJ7OZfkBV9d4B9+jF8TGz9zbSQE9EKs57J4c7eqyOJJyzT4jHjnKVbj8yWzQpvr4x9ZWw8QA==
