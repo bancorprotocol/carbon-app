@@ -4,8 +4,6 @@ import { createRoute, redirect } from '@tanstack/react-router';
 import { InferSearch, searchValidator, validNumber } from '../utils';
 import { activityValidators } from 'components/activity/utils';
 import * as v from 'valibot';
-import { toUnixUTCDay } from 'components/simulator/utils';
-import { subMonths } from 'date-fns';
 
 const schema = {
   ...activityValidators,
@@ -25,10 +23,6 @@ export const strategyPage = createRoute({
   getParentRoute: () => strategyPageRoot,
   path: '$id',
   component: StrategyPage,
-  beforeLoad({ search }) {
-    search.chartStart ||= toUnixUTCDay(subMonths(new Date(), 3));
-    search.chartEnd ||= toUnixUTCDay(new Date());
-  },
   validateSearch: searchValidator(schema),
 });
 

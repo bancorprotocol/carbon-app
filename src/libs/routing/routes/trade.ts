@@ -14,10 +14,8 @@ import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
 import { OverlappingSearch } from 'components/strategies/common/types';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
-import { toUnixUTCDay } from 'components/simulator/utils';
-import { subMonths } from 'date-fns';
-import * as v from 'valibot';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
+import * as v from 'valibot';
 
 // TRADE TYPE
 export type StrategyType =
@@ -95,8 +93,8 @@ const tradePage = createRoute({
     marketPrice: v.optional(validNumber),
     base: v.optional(v.fallback(validAddress, defaultPair.base)),
     quote: v.optional(v.fallback(validAddress, defaultPair.quote)),
-    chartStart: v.optional(validNumber, toUnixUTCDay(subMonths(new Date(), 3))),
-    chartEnd: v.optional(validNumber, toUnixUTCDay(new Date())),
+    chartStart: v.optional(validNumber),
+    chartEnd: v.optional(validNumber),
   }),
 });
 
