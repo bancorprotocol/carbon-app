@@ -287,7 +287,12 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   useEffect(() => {
     if (!zoomRange || listenOnZoom) return;
-    const start = props.start || defaultHistoryStart;
+    // We need to query the Search Params directly because useSearch default to a value if not included
+    // TODO: do not default chartStart in the page config
+    const searchParams = new URLSearchParams(location.search) as {
+      chartStart?: string;
+    };
+    const start = searchParams.chartStart || defaultHistoryStart;
     const from = fromUnixUTC(start);
     const to = fromUnixUTC(props.end || defaultEnd());
     zoomRange(start, differenceInDays(to, from) + 1, 0);
