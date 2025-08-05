@@ -20,12 +20,14 @@ export const getMenuItems = () => {
       href: '/trade',
       testid: 'trade-page',
     },
-    {
+  ];
+  if (config.network.name !== 'TON') {
+    items.push({
       label: 'Explore',
       href: '/explore',
       testid: 'explore-page',
-    },
-  ];
+    });
+  }
   if (config.ui.showSimulator) {
     items.push({
       label: 'Simulate',

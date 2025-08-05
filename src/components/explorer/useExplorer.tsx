@@ -23,16 +23,12 @@ export const useExplorer = () => {
 
   // PAIR
   const exactMatch = useMemo(() => {
-    if (type !== 'pair') return;
+    if (type !== 'pair') return {};
     const [base, quote] = extractExplorerPair(slug);
-    if (!base || !quote) return;
-    return pairs.map.get(`${base}_${quote}`);
-  }, [pairs.map, slug, type]);
+    return { base, quote };
+  }, [slug, type]);
 
-  const pairQuery = useGetPairStrategies({
-    base: exactMatch?.baseToken.address,
-    quote: exactMatch?.quoteToken.address,
-  });
+  const pairQuery = useGetPairStrategies(exactMatch);
 
   // WALLET
   const walletQuery = useGetUserStrategies({

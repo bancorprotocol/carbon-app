@@ -52,28 +52,12 @@ export const fromPairSearch = (
 
 export const createPairMaps = (
   pairs: TradePair[] = [],
-  tokenList: Token[],
   transformSlugExp: RegExp = pairSearchExp,
 ) => {
   const tokens = new Set<string>();
   const pairMap = new Map<string, TradePair>();
   const nameMap = new Map<string, string>();
-  for (let i = 0; i < tokenList.length; i++) {
-    const base = tokenList[i];
-    for (let j = i + 1; j < tokenList.length; j++) {
-      const quote = tokenList[j];
-      const slug = toPairSlug(base, quote);
-      tokens.add(base.address.toLowerCase());
-      tokens.add(quote.address.toLowerCase());
-      pairMap.set(slug, { baseToken: base, quoteToken: quote });
-      const displayName = toPairName(base, quote);
-      const nameRaw = fromPairSearch(displayName, transformSlugExp);
-      const name = replaceSpecialCharacters(nameRaw);
-      nameMap.set(slug, name);
-    }
-  }
 
-  // TODO: remove this since we already use token list above
   for (const pair of pairs) {
     const { baseToken: base, quoteToken: quote } = pair;
     const slug = toPairSlug(base, quote);

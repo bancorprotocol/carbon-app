@@ -6,6 +6,10 @@ import { CarbonWagmiCTX } from 'libs/wagmi/WagmiProvider';
 import { wagmiConfig } from 'libs/wagmi/config';
 import config from 'config';
 import { WagmiProvider } from 'wagmi';
+import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
+import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
+import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
+import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
 
 export const TonProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
@@ -39,28 +43,59 @@ export const TonProvider = ({ children }: { children: ReactNode }) => {
 /** Use to override wagmi to use TON instead */
 const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   const address = useTonAddress();
-  const data = {
-    user: address,
-    imposterAccount: undefined,
-    setImposterAccount: () => {},
-    isNetworkActive: false,
-    provider: undefined,
-    signer: undefined,
-    currentConnector: undefined,
-    connectors: [],
-    chainId: config.network.chainId,
-    accountChainId: undefined,
-    handleTenderlyRPC: () => {},
-    disconnect: async () => {},
-    connect: async () => {},
-    networkError: undefined,
-    isSupportedNetwork: true,
-    switchNetwork: () => {},
-    isUserBlocked: false,
-    isUncheckedSigner: false,
-    setIsUncheckedSigner: () => {},
-  };
+  const {
+    chainId,
+    provider,
+    connectors,
+    isNetworkActive,
+    networkError,
+    switchNetwork,
+  } = useWagmiNetwork();
+
+  const { imposterAccount, setImposterAccount } = useWagmiImposter();
+
+  const { handleTenderlyRPC } = useWagmiTenderly();
+
+  const {
+    signer,
+    currentConnector,
+    connect,
+    disconnect,
+    isUserBlocked,
+    isUncheckedSigner,
+    setIsUncheckedSigner,
+    isSupportedNetwork,
+    accountChainId,
+  } = useWagmiUser({
+    imposterAccount,
+    setImposterAccount,
+  });
+
   return (
-    <CarbonWagmiCTX.Provider value={data}>{children}</CarbonWagmiCTX.Provider>
+    <CarbonWagmiCTX.Provider
+      value={{
+        user: address,
+        isNetworkActive,
+        provider,
+        signer,
+        currentConnector,
+        connectors,
+        chainId,
+        accountChainId,
+        handleTenderlyRPC,
+        imposterAccount,
+        setImposterAccount,
+        connect,
+        disconnect,
+        networkError,
+        isSupportedNetwork,
+        switchNetwork,
+        isUserBlocked,
+        isUncheckedSigner,
+        setIsUncheckedSigner,
+      }}
+    >
+      {children}
+    </CarbonWagmiCTX.Provider>
   );
 };

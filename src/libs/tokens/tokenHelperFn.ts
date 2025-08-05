@@ -82,7 +82,6 @@ export const fetchTokenData = async (
   address: string,
 ): Promise<Token> => {
   const evmAddress = await getEvmAddress(address);
-  console.log({ ton: address, tac: evmAddress });
   const [symbol, decimals, name] = await Promise.all([
     Token(evmAddress).read.symbol(),
     Token(evmAddress).read.decimals(),

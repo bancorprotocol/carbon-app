@@ -2,7 +2,6 @@ import { useGetTradePairsData } from 'libs/queries';
 import { useCallback, useMemo } from 'react';
 import { createPairMaps } from 'utils/pairSearch';
 import config from 'config';
-import { useTokens } from './useTokens';
 
 export type PairStore = ReturnType<typeof usePairs>;
 
@@ -20,7 +19,6 @@ export const extractExplorerPair = (slug: string) => {
 };
 
 export const usePairs = () => {
-  const { tokensMap } = useTokens();
   const { data, isError, isPending } = useGetTradePairsData();
   const tokens = useMemo(() => {
     const set = new Set<string>();
@@ -32,10 +30,7 @@ export const usePairs = () => {
     return set;
   }, [data]);
 
-  const maps = useMemo(
-    () => createPairMaps(data, Array.from(tokensMap.values())),
-    [data, tokensMap],
-  );
+  const maps = useMemo(() => createPairMaps(data), [data]);
 
   const getType = useCallback(
     (slug: string) => {
@@ -46,8 +41,6 @@ export const usePairs = () => {
     },
     [maps.pairMap, tokens],
   );
-
-  console.log(maps);
 
   return {
     map: maps.pairMap,
