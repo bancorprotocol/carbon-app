@@ -28,7 +28,10 @@ export const useWagmiNetwork = () => {
 
     try {
       const networkProvider =
-        provider || new JsonRpcProvider(RPC_URLS[CHAIN_ID], chainId);
+        provider ||
+        new JsonRpcProvider(RPC_URLS[CHAIN_ID], chainId, {
+          staticNetwork: true,
+        });
       await networkProvider.getNetwork();
       setIsNetworkActive(true);
     } catch (e: any) {
