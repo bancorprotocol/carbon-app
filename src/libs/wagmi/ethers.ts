@@ -9,7 +9,7 @@ const clientToProvider = (client: Client<Transport, Chain>) => {
     name: chain.name,
     ensAddress: chain.contracts?.ensRegistry?.address,
   };
-  return new BrowserProvider(transport, network);
+  return new BrowserProvider(transport, network, { staticNetwork: true });
 };
 
 /**
