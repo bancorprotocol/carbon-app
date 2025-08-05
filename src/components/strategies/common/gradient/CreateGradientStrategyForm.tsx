@@ -1,7 +1,6 @@
 import { FC, FormEvent, MouseEvent, ReactNode, useState } from 'react';
 import { useNavigate } from 'libs/routing';
 import { Button } from 'components/common/button';
-import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
 import { useWagmi } from 'libs/wagmi';
 import {
@@ -22,16 +21,11 @@ interface FormProps {
 export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
   const { base, quote } = useTradeCtx();
   const { children, buy, sell } = props;
-  const { openModal } = useModal();
-  const { user } = useWagmi();
+  const { user, openConnect } = useWagmi();
   const nav = useNavigate();
 
   const [animating, setAnimating] = useState(false);
   const [loadingText, setLoadingText] = useState('');
-
-  const connectWallet = () => {
-    openModal('wallet', undefined);
-  };
 
   const isDisabled = (form: HTMLFormElement) => {
     if (!form.checkValidity()) return true;
@@ -145,7 +139,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
           fullWidth
           loading={!!loadingText}
           loadingChildren={loadingText}
-          onClick={connectWallet}
+          onClick={openConnect}
         >
           Connect Wallet
         </Button>

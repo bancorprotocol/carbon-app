@@ -60,6 +60,7 @@ export interface LocalStorageSchema {
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
   hasWalkthrough: boolean;
+  tacToTonAddress: Record<string, string>;
 }
 
 enum EnumStrategySort {

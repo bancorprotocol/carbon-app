@@ -34,7 +34,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   return (
     <ModalOrMobileSheet id={id} title="Connect Wallet" isPending={isPending}>
       {isError ? (
-        <div className="flex flex-col items-center space-y-20">
+        <div className="flex flex-col items-center gap-20">
           <ModalWalletError
             logoUrl={selectedConnection.icon}
             walletName={selectedConnection.name}

@@ -34,6 +34,7 @@ export interface CarbonWagmiProviderContext {
   setImposterAccount: (account?: string) => void;
   disconnect: () => Promise<void>;
   connect: (type: Connector) => Promise<void>;
+  openConnect: () => void;
   isSupportedNetwork: boolean;
   switchNetwork: () => void;
   isUserBlocked: boolean;

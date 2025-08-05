@@ -1,18 +1,31 @@
-import { TonConnectUIProvider, useTonAddress } from '@tonconnect/ui-react';
-import { ReactNode, useEffect } from 'react';
-import { setTonTokenMap, TonToken } from './tokenMap';
+import {
+  TonConnectUIProvider,
+  useTonAddress,
+  useTonConnectUI,
+} from '@tonconnect/ui-react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
+import {
+  getEvmAddress,
+  initTonAddresses,
+  setTonAddress,
+  setTonTokenMap,
+  TonToken,
+} from './tokenMap';
 import { tokenParserMap } from 'config/utils';
 import { CarbonWagmiCTX } from 'libs/wagmi/WagmiProvider';
 import { wagmiConfig } from 'libs/wagmi/config';
-import config from 'config';
 import { WagmiProvider } from 'wagmi';
 import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
+import { lsService } from 'services/localeStorage';
+import config from 'config';
 
 export const TonProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
+    const tacToTon = lsService.getItem('tacToTonAddress');
+    initTonAddresses(tacToTon || {});
     const importTokens = async () => {
       const tokens: TonToken[] = [];
       // Static list
@@ -42,7 +55,9 @@ export const TonProvider = ({ children }: { children: ReactNode }) => {
 
 /** Use to override wagmi to use TON instead */
 const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
-  const address = useTonAddress();
+  const [tonConnectUI] = useTonConnectUI();
+  const tonAddress = useTonAddress();
+  const [user, setUser] = useState<string>();
   const {
     chainId,
     provider,
@@ -71,10 +86,25 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
     setImposterAccount,
   });
 
+  const openConnect = useCallback(() => {
+    return tonConnectUI.openModal();
+  }, [tonConnectUI]);
+
+  useEffect(() => {
+    if (tonAddress) {
+      getEvmAddress(tonAddress).then((tacAddress) => {
+        setUser(tacAddress);
+        setTonAddress(tacAddress, tonAddress);
+      });
+    } else {
+      setUser('');
+    }
+  }, [tonAddress]);
+
   return (
     <CarbonWagmiCTX.Provider
       value={{
-        user: address,
+        user,
         isNetworkActive,
         provider,
         signer,
@@ -86,6 +116,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
         imposterAccount,
         setImposterAccount,
         connect,
+        openConnect,
         disconnect,
         networkError,
         isSupportedNetwork,

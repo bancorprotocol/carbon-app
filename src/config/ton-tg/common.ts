@@ -2,9 +2,10 @@ import { AppConfig } from 'config/types';
 import IconTonLogo from 'assets/logos/tonlogo.svg';
 
 const addresses = {
-  TON: 'EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c',
-  USDT: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
-  ZERO: '000000000000000000000000000000000000000000000000',
+  TAC: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+  TON: '0xb76d91340F5CE3577f0a056D29f6e3Eb4E88B140',
+  USDT: '0xAF988C3f7CB2AceAbB15f96b19388a259b6C438f',
+  ZERO: '0x0000000000000000000000000000000000000000',
 };
 
 const popularTokens = [addresses.TON, addresses.USDT];
@@ -24,7 +25,7 @@ export const commonConfig: AppConfig = {
     chainId: 239,
     blockExplorer: {
       name: 'Tonscan',
-      url: 'https://testnet.tonscan.org/',
+      url: 'https://tonscan.org/',
     },
     rpc: {
       url: 'https://rpc.tac.build', // 'https://rpc.ankr.com/premium-http/ton_api_v2/',
@@ -74,12 +75,12 @@ export const commonConfig: AppConfig = {
   },
   ui: {
     showSimulator: false,
-    priceChart: 'tradingView',
-    useGradientBranding: false,
+    priceChart: 'native',
+    useGradientBranding: true,
     tradeCount: false,
     currencyMenu: false,
     showTerms: false,
     showPrivacy: false,
-    showCart: false,
+    showCart: true,
   },
 };

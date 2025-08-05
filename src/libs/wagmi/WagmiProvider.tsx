@@ -1,10 +1,11 @@
-import { createContext, FC, ReactNode, useContext } from 'react';
+import { createContext, FC, ReactNode, useCallback, useContext } from 'react';
 import { CarbonWagmiProviderContext } from 'libs/wagmi/wagmi.types';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
 import { currentChain } from './chains';
+import { useModal } from 'hooks/useModal';
 
 // ********************************** //
 // WAGMI CONTEXT
@@ -23,6 +24,7 @@ const defaultValue: CarbonWagmiProviderContext = {
   accountChainId: undefined,
   handleTenderlyRPC: () => {},
   disconnect: async () => {},
+  openConnect: async () => {},
   connect: async () => {},
   networkError: undefined,
   isSupportedNetwork: true,
@@ -43,6 +45,7 @@ export const useWagmi = () => useContext(CarbonWagmiCTX);
 export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const { openModal } = useModal();
   const {
     chainId,
     provider,
@@ -55,6 +58,10 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
   const { imposterAccount, setImposterAccount } = useWagmiImposter();
 
   const { handleTenderlyRPC } = useWagmiTenderly();
+
+  const openConnect = useCallback(() => {
+    return openModal('wallet', undefined);
+  }, [openModal]);
 
   const {
     user,
@@ -87,6 +94,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         imposterAccount,
         setImposterAccount,
         connect,
+        openConnect,
         disconnect,
         networkError,
         isSupportedNetwork,
