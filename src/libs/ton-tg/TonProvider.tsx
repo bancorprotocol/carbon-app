@@ -58,7 +58,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
       setTonTokens(tokens);
     };
     importTokens();
-  }, []);
+  }, [setTonTokens]);
 
   const [tonConnectUI] = useTonConnectUI();
   const tonUser = useTonAddress();
@@ -95,13 +95,14 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (tonUser) {
       getEvmAddress(tonUser).then((tacAddress) => {
+        if (user === tacAddress) return;
         setUser(tacAddress);
         setTonAddress(tacAddress, tonUser);
       });
     } else {
       setUser('');
     }
-  }, [getEvmAddress, setTonAddress, tonUser]);
+  }, [getEvmAddress, setTonAddress, tonUser, user]);
 
   const openConnect = useCallback(
     () => tonConnectUI.openModal(),
@@ -157,14 +158,14 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
             tonUser,
             tvmAddress,
           );
-          return BigInt(res.exists ? res.amount : 0);
+          return BigInt(res.exists ? res.rawAmount : 0);
         }
       } catch (e) {
         console.error(e);
         return BigInt(0);
       }
     },
-    [tonUser],
+    [getTVMAddress, tonUser],
   );
 
   return (
