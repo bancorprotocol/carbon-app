@@ -104,6 +104,7 @@ export const CreateOrder: FC<Props> = ({
     titleId,
     order,
     base,
+    quote,
     buy: isBuy,
     direction,
     setSettings,

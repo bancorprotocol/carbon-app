@@ -92,6 +92,8 @@ export const BuySellBlock: FC<Props> = ({
     tokenBalanceQuery,
   };
 
+  const token = isBuy ? quote : base;
+
   return (
     <section
       aria-labelledby={titleId}
@@ -104,8 +106,8 @@ export const BuySellBlock: FC<Props> = ({
           <Tooltip element={tooltipText}>
             <span>{isBuy ? 'Buy Low' : 'Sell High'}</span>
           </Tooltip>
-          <LogoImager alt="Token" src={base.logoURI} className="size-18" />
-          <span>{base.symbol}</span>
+          <LogoImager alt="Token" src={token.logoURI} className="size-18" />
+          <span>{token.symbol}</span>
         </h2>
       </BuySellHeader>
       <LimitRangeSection {...limitRangeProps} />

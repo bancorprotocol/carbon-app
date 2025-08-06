@@ -10,23 +10,25 @@ interface Props {
   titleId: string;
   order: OrderBlock;
   base: Token;
+  quote: Token;
   direction: StrategyDirection;
   setSettings?: (value: StrategySettings) => any;
 }
 
 export const OrderHeader: FC<Props> = (props) => {
-  const { titleId, order, direction, base, setSettings } = props;
+  const { titleId, order, direction, base, quote, setSettings } = props;
   const settingName = useId();
   const tooltipText = `This section will define the order details in which you are willing to ${direction} ${base.symbol} at.`;
   const isBuy = direction === 'buy';
+  const token = isBuy ? quote : base;
   return (
     <header className="flex items-center gap-10">
       <h2 className="text-18 me-auto flex items-center gap-8" id={titleId}>
         <Tooltip element={tooltipText}>
           <span>{isBuy ? 'Buy Low' : 'Sell High'}</span>
         </Tooltip>
-        <LogoImager alt="Token" src={base.logoURI} className="size-18" />
-        <span>{base.symbol}</span>
+        <LogoImager alt="Token" src={token.logoURI} className="size-18" />
+        <span>{token.symbol}</span>
       </h2>
       {setSettings && (
         <RadioGroup aria-label="Change strategy settings">
