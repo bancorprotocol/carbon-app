@@ -1,58 +1,83 @@
 import config from 'config';
 import { Token } from 'libs/tokens';
-import { getEVMTokenAddress } from './address';
+import { getEVMTokenAddress, getTVMTokenAddress } from './address';
 import { isAddress } from 'ethers';
 import { lsService } from 'services/localeStorage';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface TonToken extends Token {
   tonAddress: string;
 }
 
-// TODO: move this into context if possible
-const tacToTonMap = new Map<string, string>();
-const tonToTacMap = new Map<string, string>();
-
-export const isEvmAddress = (value: string): boolean => {
-  return isAddress(value);
-};
-
-/** Get the TAC address if the network is TON, else return the address as it */
-export const getEvmAddress = async (address: string) => {
-  if (config.network.name !== 'TON') return address;
-  if (isEvmAddress(address)) return address;
-  if (!tonToTacMap.has(address)) {
-    const evmAddress = await getEVMTokenAddress(address);
-    tonToTacMap.set(address, evmAddress);
-    tacToTonMap.set(evmAddress, address);
-  }
-  return tonToTacMap.get(address)!;
-};
-
-export const setTonTokenMap = (tokens: TonToken[]) => {
-  if (config.network.name !== 'TON') return;
-  for (const token of tokens) {
-    tacToTonMap.set(token.address, token.tonAddress);
-    tonToTacMap.set(token.tonAddress, token.address);
-  }
-};
-
-export const initTonAddresses = (tacToTon: Record<string, string>) => {
-  for (const [tac, ton] of Object.entries(tacToTon)) {
-    tacToTonMap.set(tac, ton);
-    tonToTacMap.set(ton, tac);
-  }
-};
-
-export const setTonAddress = (tacAddress: string, tonAddress: string) => {
-  tacToTonMap.set(tacAddress, tonAddress);
-  tonToTacMap.set(tonAddress, tacAddress);
-  lsService.setItem(
-    'tacToTonAddress',
-    Object.fromEntries(tacToTonMap.entries()),
+export const isEvmAddress = (value: string): boolean => isAddress(value);
+export const useTonTokenMapping = () => {
+  const [tacToTon, setTacToTon] = useState<Record<string, string>>(
+    lsService.getItem('tacToTonAddress') || {},
   );
-};
+  const [tonToTac, setTonToTac] = useState<Record<string, string>>({});
 
-/** Check if address is a known TON address */
-export const isKnownTonAddress = (address: string) => {
-  return tonToTacMap.has(address);
+  useEffect(() => {
+    if (Object.keys(tacToTon).length) {
+      lsService.setItem('tacToTonAddress', tacToTon);
+      setTonToTac((copy) => {
+        for (const [tac, ton] of Object.entries(tacToTon)) {
+          copy[ton] ||= tac;
+        }
+        return copy;
+      });
+    }
+  }, [tacToTon]);
+
+  /** Get the TAC address if the network is TON, else return the address as it */
+  const getEvmAddress = useCallback(
+    async (address: string) => {
+      if (config.network.name !== 'TON') return address;
+      if (isEvmAddress(address)) return address;
+      if (!tonToTac[address]) {
+        const evmAddress = await getEVMTokenAddress(address);
+        setTacToTon((copy) => {
+          copy[evmAddress] ||= address;
+          return copy;
+        });
+      }
+      return tonToTac[address];
+    },
+    [tonToTac],
+  );
+
+  const getTVMAddress = useCallback(
+    async (address: string) => {
+      if (!tacToTon[address]) {
+        const tvmAddress = await getTVMTokenAddress(address);
+        setTacToTon((copy) => {
+          copy[address] ||= tvmAddress;
+          return copy;
+        });
+      }
+      return tacToTon[address];
+    },
+    [tacToTon],
+  );
+
+  const setTonTokens = useCallback((tokens: TonToken[]) => {
+    if (config.network.name !== 'TON') return;
+    setTacToTon((copy) => {
+      for (const token of tokens) {
+        copy[token.address] ||= token.tonAddress;
+      }
+      return copy;
+    });
+  }, []);
+
+  const setTonAddress = useCallback(
+    (tacAddress: string, tonAddress: string) => {
+      setTacToTon((copy) => {
+        copy[tacAddress] ||= tonAddress;
+        return copy;
+      });
+    },
+    [],
+  );
+
+  return { getTVMAddress, getEvmAddress, setTonTokens, setTonAddress };
 };

@@ -1,4 +1,9 @@
-import { JsonRpcSigner, JsonRpcProvider, BrowserProvider } from 'ethers';
+import {
+  JsonRpcSigner,
+  JsonRpcProvider,
+  BrowserProvider,
+  TransactionRequest,
+} from 'ethers';
 import { Connector } from 'libs/wagmi';
 
 export const selectableConnectionNames = [
@@ -23,6 +28,9 @@ export interface CarbonWagmiProviderContext {
   networkError: string | undefined;
   provider?: BrowserProvider | JsonRpcProvider;
   signer: JsonRpcSigner | undefined;
+  sendTransaction: (
+    tx: TransactionRequest,
+  ) => Promise<{ hash: string; wait: () => Promise<any> }>;
   currentConnector: Connector | undefined;
   connectors: readonly Connector[];
   handleTenderlyRPC: (
@@ -40,4 +48,5 @@ export interface CarbonWagmiProviderContext {
   isUserBlocked: boolean;
   isUncheckedSigner: boolean;
   setIsUncheckedSigner: (value: boolean) => void;
+  getBalance: (address: string) => Promise<bigint>;
 }

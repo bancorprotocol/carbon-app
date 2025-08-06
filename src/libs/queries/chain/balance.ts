@@ -13,8 +13,7 @@ export const useGetTokenBalance = (
 ) => {
   const address = token?.address;
   const decimals = token?.decimals;
-  const { Token } = useContract();
-  const { user, provider } = useWagmi();
+  const { user, provider, getBalance } = useWagmi();
 
   return useQuery({
     queryKey: QueryKey.balance(user!, address!),
@@ -31,14 +30,8 @@ export const useGetTokenBalance = (
       if (!decimals) {
         throw new Error('useGetTokenBalance no token decimals provided');
       }
-
-      if (address === NATIVE_TOKEN_ADDRESS) {
-        const res = await provider.getBalance(user!);
-        return shrinkToken(res.toString(), decimals, true);
-      } else {
-        const res = await Token(address).read.balanceOf(user);
-        return shrinkToken(res.toString(), decimals, true);
-      }
+      const res = await getBalance(address);
+      return shrinkToken(res.toString(), decimals, true);
     },
     meta: {
       errorMessage: 'useGetTokenBalances failed with error:',

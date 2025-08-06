@@ -3081,23 +3081,23 @@
     isomorphic-ws "^5.0.0"
     ws "^8.8.1"
 
-"@tonappchain/artifacts@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@tonappchain/artifacts/-/artifacts-0.0.18.tgz#4304a387fbbb0b98bb8d4fc24d5a402f38b67be9"
-  integrity sha512-w1zAk/OJSD7XsO1ljqPrJcyDnSsmxaf5BrMYJr2zLtDR6iHWF2weSWv5vvncbWt0b/I7oWlDla85qBVI0FQYEQ==
+"@tonappchain/artifacts@0.0.19-mainnet-rc2":
+  version "0.0.19-mainnet-rc2"
+  resolved "https://registry.yarnpkg.com/@tonappchain/artifacts/-/artifacts-0.0.19-mainnet-rc2.tgz#1ebf9211f9ec7b13d0f61b06537eb76d126d2ff7"
+  integrity sha512-H1ka1ERviaXXUjz1IZ1+A/4APqLkIVvW2ik1XwGMkWMCcBUVanrvZLqn5Xx8Ebk5SZmb71wCobcxKSKVt7vRrA==
   dependencies:
     "@ton/crypto" "3.3.0"
     "@ton/ton" "15.1.0"
 
-"@tonappchain/sdk@^0.6.4":
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/@tonappchain/sdk/-/sdk-0.6.4.tgz#6377ccfdcf8179880a467936f45bb2fb8bd7256c"
-  integrity sha512-MWwK7wwe7fA/PB0wEk67zuXvCUPDGlJke8vhOkLnksbMSA11IKDgGZPnQxU46T2PWmK8nldrPa9JnUF79KDyIg==
+"@tonappchain/sdk@^0.6.5-mainnet-alpha":
+  version "0.6.5-mainnet-alpha"
+  resolved "https://registry.yarnpkg.com/@tonappchain/sdk/-/sdk-0.6.5-mainnet-alpha.tgz#2793f6b40cf7cf75371dfb42671fe8bec88058d1"
+  integrity sha512-DPstynQOEO6DooEwEna71tftLZEqqihThs5VlKlz62rli/ttI6tVPlGcWrwCtRYqbCqPbhROzCnL+Cm1nioYMA==
   dependencies:
     "@aws-crypto/sha256-js" "^5.2.0"
     "@orbs-network/ton-access" "^2.3.3"
     "@ton/ton" "15.1.0"
-    "@tonappchain/artifacts" "0.0.18"
+    "@tonappchain/artifacts" "0.0.19-mainnet-rc2"
     "@tonappchain/ton-lite-client" "3.0.6"
     "@tonconnect/ui" "^2.0.11"
     bn.js "^5.2.1"

@@ -413,6 +413,18 @@ export const useCreateStrategyQuery = () => {
         sell.max,
         sell.budget || '0',
       );
+      unsignedTx.customData = {
+        assets: [
+          {
+            address: base,
+            amount: buy.budget,
+          },
+          {
+            address: quote,
+            amount: sell.budget,
+          },
+        ],
+      };
 
       return signer!.sendTransaction(toTransactionRequest(unsignedTx));
     },

@@ -14,7 +14,6 @@ import {
 } from 'libs/queries/extApi/activity';
 import { lsService } from 'services/localeStorage';
 import { Trending } from 'libs/queries/extApi/tradeCount';
-import { getEvmAddress, isKnownTonAddress } from 'libs/ton-tg/tokenMap';
 
 // Only ETH is supported as network currency by the API
 const NETWORK_CURRENCY =
@@ -47,12 +46,7 @@ const get = async <T>(
   const url = new URL(api + endpoint);
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined) {
-      if (config.network.name === 'TON' && isKnownTonAddress(value)) {
-        const address = await getEvmAddress(value);
-        url.searchParams.set(key, address);
-      } else {
-        url.searchParams.set(key, value);
-      }
+      url.searchParams.set(key, value);
     }
   }
   const response = await fetch(url, { signal: abortSignal });

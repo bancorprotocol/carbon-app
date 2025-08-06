@@ -6,6 +6,8 @@ import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
 import { currentChain } from './chains';
 import { useModal } from 'hooks/useModal';
+import { Contract, TransactionRequest } from 'ethers';
+import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 
 // ********************************** //
 // WAGMI CONTEXT
@@ -18,6 +20,7 @@ const defaultValue: CarbonWagmiProviderContext = {
   isNetworkActive: false,
   provider: undefined,
   signer: undefined,
+  sendTransaction: async () => undefined as any,
   currentConnector: undefined,
   connectors: [],
   chainId: currentChain.id,
@@ -32,6 +35,7 @@ const defaultValue: CarbonWagmiProviderContext = {
   isUserBlocked: false,
   isUncheckedSigner: false,
   setIsUncheckedSigner: () => {},
+  getBalance: async () => BigInt(0),
 };
 
 export const CarbonWagmiCTX = createContext(defaultValue);
@@ -59,10 +63,6 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
 
   const { handleTenderlyRPC } = useWagmiTenderly();
 
-  const openConnect = useCallback(() => {
-    return openModal('wallet', undefined);
-  }, [openModal]);
-
   const {
     user,
     signer,
@@ -79,6 +79,32 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
     setImposterAccount,
   });
 
+  const openConnect = useCallback(
+    () => openModal('wallet', undefined),
+    [openModal],
+  );
+  const sendTransaction = useCallback(
+    (tx: TransactionRequest) => signer!.sendTransaction(tx),
+    [signer],
+  );
+  const getBalance = useCallback(
+    (address: string) => {
+      if (!provider) throw new Error('No provider found');
+      if (!user) throw new Error('No user provided');
+      if (address === NATIVE_TOKEN_ADDRESS) {
+        return provider.getBalance(user);
+      } else {
+        const contract = new Contract(
+          address,
+          ['function balanceOf(address owner) view returns (uint256)'],
+          provider,
+        );
+        return contract.balanceOf(user);
+      }
+    },
+    [user, provider],
+  );
+
   return (
     <CarbonWagmiCTX.Provider
       value={{
@@ -86,6 +112,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         isNetworkActive,
         provider,
         signer,
+        sendTransaction,
         currentConnector,
         connectors,
         chainId,
@@ -102,6 +129,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         isUserBlocked,
         isUncheckedSigner,
         setIsUncheckedSigner,
+        getBalance,
       }}
     >
       {children}

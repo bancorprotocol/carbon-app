@@ -14,16 +14,20 @@ export const getAddress = (address: string) => {
 // With SDK
 
 let sdk: Promise<TacSdk>;
-const getSDK = async () => {
+export const getTacSDK = async () => {
   if (!sdk) {
     sdk = TacSdk.create({
-      network: Network.TESTNET,
+      network: Network.MAINNET,
     });
   }
   return sdk;
 };
 
 export const getEVMTokenAddress = async (tvmTokenAddress: string) => {
-  const sdk = await getSDK();
+  const sdk = await getTacSDK();
   return sdk.getEVMTokenAddress(tvmTokenAddress);
+};
+export const getTVMTokenAddress = async (evmTokenAddress: string) => {
+  const sdk = await getTacSDK();
+  return sdk.getTVMTokenAddress(evmTokenAddress);
 };
