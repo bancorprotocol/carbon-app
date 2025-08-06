@@ -288,8 +288,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
   useEffect(() => {
     if (!zoomRange || listenOnZoom) return;
     const start = props.start || defaultHistoryStart;
+    const end = props.end || defaultEnd();
     const from = fromUnixUTC(start);
-    const to = fromUnixUTC(props.end || defaultEnd());
+    const to = fromUnixUTC(end);
     zoomRange(start, differenceInDays(to, from) + 1, 0);
     // Prevent zoom end event to update range on init
     setTimeout(() => setListenOnZoom(true), 100);

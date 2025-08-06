@@ -1,4 +1,4 @@
-import { FC, useId } from 'react';
+import { FC, useId, useMemo } from 'react';
 import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
 import {
   FloatTooltip,
@@ -617,15 +617,25 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
   const limit = min === max;
   const smallRange = isSmallRange(strategy);
   const spread = isOverlappingStrategy(strategy) && getRoundedSpread(strategy);
-  const priceOption = {
-    abbreviate: true,
-    round: !smallRange,
-    decimals: smallRange ? 6 : undefined,
-  };
+  const priceOption = useMemo(
+    () => ({
+      abbreviate: true,
+      round: !smallRange,
+      decimals: smallRange ? 6 : undefined,
+    }),
+    [smallRange],
+  );
   const fullRange = isFullRangeStrategy(strategy.buy, strategy.sell);
-  const _sP_ = fullRange ? '0' : prettifyNumber(min, priceOption);
-  const _eP_ = fullRange ? '∞' : prettifyNumber(max, priceOption);
-  const marginalPrice = prettifyNumber(order.marginalPrice, priceOption);
+  const _sP_ = useMemo(() => {
+    return fullRange ? '0' : prettifyNumber(min, priceOption);
+  }, [fullRange, min, priceOption]);
+  const _eP_ = useMemo(() => {
+    return fullRange ? '∞' : prettifyNumber(max, priceOption);
+  }, [fullRange, max, priceOption]);
+  const marginalPrice = useMemo(
+    () => prettifyNumber(order.marginalPrice, priceOption),
+    [order.marginalPrice, priceOption],
+  );
   const { quote, base } = strategy;
   const color = isBuy ? 'text-buy' : 'text-sell';
   return (
@@ -685,7 +695,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
       <p className="text-white/60">
         Current marginal price is&nbsp;
         <span data-testid="marginal-price">
-          {prettifyNumber(marginalPrice, priceOption)} {quote.symbol}
+          {marginalPrice} {quote.symbol}
         </span>
         &nbsp;per 1&nbsp;
         {base.symbol}
@@ -709,14 +719,27 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
 }) => {
   const location = useLocation();
   const order = isBuy ? strategy.buy : strategy.sell;
-  const { _sD_, _eD_, _sP_, _eP_, marginalPrice } = order;
+  const { _sD_, _eD_ } = order;
 
   const smallRange = isSmallRange(strategy);
-  const priceOptions = {
-    abbreviate: true,
-    round: !smallRange,
-    decimals: smallRange ? 6 : undefined,
-  };
+  const priceOption = useMemo(
+    () => ({
+      abbreviate: true,
+      round: !smallRange,
+      decimals: smallRange ? 6 : undefined,
+    }),
+    [smallRange],
+  );
+  const _sP_ = useMemo(() => {
+    return prettifyNumber(order._sP_, priceOption);
+  }, [order._sP_, priceOption]);
+  const _eP_ = useMemo(() => {
+    return prettifyNumber(order._eP_, priceOption);
+  }, [order._eP_, priceOption]);
+  const marginalPrice = useMemo(
+    () => prettifyNumber(order.marginalPrice, priceOption),
+    [order.marginalPrice, priceOption],
+  );
   const { quote, base } = strategy;
   const color = isBuy ? 'text-buy' : 'text-sell';
   const _sD_Text =
@@ -737,13 +760,13 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
           <tr>
             <th className="font-weight-400 text-start text-white/60">_S P_</th>
             <td className="text-end" data-testid="start-price">
-              {prettifyNumber(_sP_, priceOptions)} {quote.symbol}
+              {_sP_} {quote.symbol}
             </td>
           </tr>
           <tr>
             <th className="font-weight-400 text-start text-white/60">_E P_</th>
             <td className="text-end" data-testid="end-price">
-              {prettifyNumber(_eP_, priceOptions)} {quote.symbol}
+              {_eP_} {quote.symbol}
             </td>
           </tr>
           <tr>
@@ -763,7 +786,7 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
       <p className="text-white/60">
         Current marginal price is&nbsp;
         <span data-testid="marginal-price">
-          {prettifyNumber(marginalPrice, priceOptions)} {quote.symbol}
+          {marginalPrice} {quote.symbol}
         </span>
         &nbsp;per 1&nbsp;
         {base.symbol}
