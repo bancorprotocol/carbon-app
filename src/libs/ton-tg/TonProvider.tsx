@@ -19,9 +19,15 @@ import { TonClient, Address } from '@ton/ton';
 import { getTacSDK } from './address';
 import config from 'config';
 
+// TODO: update with production URL once deployed
+const manifestUrl =
+  config.mode === 'development'
+    ? 'https://ton-connect.github.io/demo-dapp-with-wallet/tonconnect-manifest.json'
+    : 'https://add-ton-tg.carbon-app-ton-tg.pages.dev/tonconnect-manifest.json';
+
 export const TonProvider = ({ children }: { children: ReactNode }) => {
   return (
-    <TonConnectUIProvider manifestUrl="https://ton-connect.github.io/demo-dapp-with-wallet/tonconnect-manifest.json">
+    <TonConnectUIProvider manifestUrl={manifestUrl}>
       <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
         <CarbonTonWagmiProvider>{children}</CarbonTonWagmiProvider>
       </WagmiProvider>
