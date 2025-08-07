@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss';
 import { formatRgb } from 'culori';
-import plugin from 'tailwindcss/plugin';
 
 function createTwConfigValues(start: number, end: number, step: number) {
   const remBase = 16;
@@ -165,15 +164,4 @@ export default {
       },
     },
   },
-  plugins: [
-    plugin(({ addUtilities }) => {
-      addUtilities({
-        '.transformBox-content': { 'transform-box': 'content-box' },
-        '.transformBox-border': { 'transform-box': 'border-box' },
-        '.transformBox-fill': { 'transform-box': 'fill-box' },
-        '.transformBox-stroke': { 'transform-box': 'stroke-box' },
-        '.transformBox-view': { 'transform-box': 'view-box' },
-      });
-    }),
-  ],
 } as Config;
