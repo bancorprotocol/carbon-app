@@ -52,8 +52,9 @@ import { liquidityMatrixPage } from './liquidity-matrix';
 const rootRedirect = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  beforeLoad: () => {
-    redirect({ to: '/trade', throw: true });
+  beforeLoad: (ctx) => {
+    console.log(ctx);
+    redirect({ to: '/trade', throw: true, search: ctx.search });
   },
 });
 
