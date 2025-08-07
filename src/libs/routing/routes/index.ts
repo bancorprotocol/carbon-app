@@ -53,7 +53,6 @@ const rootRedirect = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   beforeLoad: (ctx) => {
-    console.log(ctx);
     redirect({ to: '/trade', throw: true, search: ctx.search });
   },
 });
