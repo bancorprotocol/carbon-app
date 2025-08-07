@@ -1,4 +1,4 @@
-import { getAddress } from 'ethers';
+import { getAddress } from 'libs/ton-tg/address';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
