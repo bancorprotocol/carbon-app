@@ -204,7 +204,7 @@ export const TradeCustom = () => {
                     key={direction}
                     className={cn(
                       style.order,
-                      'animate-scaleUp relative grid gap-16 p-16',
+                      'animate-scale-up relative grid gap-16 p-16',
                     )}
                     data-direction={order.direction}
                   >

@@ -232,7 +232,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
               </button>
             </header>
             {error && (
-              <div className="rounded-8 border-error absolute inset-0 grid place-items-center border-2 bg-black/60 p-8 backdrop-blur-sm">
+              <div className="rounded-8 border-error absolute inset-0 grid place-items-center border-2 bg-black/60 p-8 backdrop-blur-xs">
                 <Warning message={error} isError />
               </div>
             )}

@@ -220,7 +220,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
                 <input
                   id={inputId}
                   type="search"
-                  className="text-14 border-none bg-transparent outline-none"
+                  className="text-14 border-none bg-transparent outline-hidden"
                   aria-label={filterLabel}
                   placeholder={filterLabel}
                   onChange={(e) => filter(e.target.value)}

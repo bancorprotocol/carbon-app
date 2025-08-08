@@ -31,7 +31,7 @@ export const ModalSheet: FC<ModalProps> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="rounded-t-10 bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-none focus:outline-none">
+        <div className="rounded-t-10 bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-hidden focus:outline-hidden">
           {isPending && (
             <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
           )}

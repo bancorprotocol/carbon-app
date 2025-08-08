@@ -188,7 +188,7 @@ export const InputRange: FC<InputRangeProps> = ({
               </Tooltip>
               {!!marketPrice && (
                 <button
-                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
                   type="button"
                   onClick={setMinMarket}
                   data-testid="market-price-min"
@@ -205,7 +205,7 @@ export const InputRange: FC<InputRangeProps> = ({
               value={localMin}
               placeholder="Enter Price"
               className={cn(
-                'text-16 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+                'text-16 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-hidden',
                 hasMinError && 'text-error',
               )}
               onChange={(e) => onMinChange(e.target.value)}
@@ -248,7 +248,7 @@ export const InputRange: FC<InputRangeProps> = ({
               </Tooltip>
               {!!marketPrice && (
                 <button
-                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
                   type="button"
                   onClick={setMaxMarket}
                   data-testid="market-price-max"
@@ -265,7 +265,7 @@ export const InputRange: FC<InputRangeProps> = ({
               value={localMax}
               placeholder="Enter Price"
               className={cn(
-                'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+                'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-hidden',
                 hasMaxError && 'text-error',
               )}
               onChange={(e) => onMaxChange(e.target.value)}

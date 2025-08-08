@@ -74,7 +74,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
             <span>Start Time</span>
             <span>On Execution</span>
           </div>
-          <div className="rounded-s-8 rounded-e-16 has-[input:invalid]:outline-error has-[input:invalid]:border-error flex flex-1 items-center gap-4 border border-transparent bg-black px-16 py-8 has-[input:focus-visible]:outline">
+          <div className="rounded-s-8 rounded-e-16 has-[input:invalid]:outline-error has-[input:invalid]:border-error flex flex-1 items-center gap-4 border border-transparent bg-black px-16 py-8 has-[input:focus-visible]:outline-solid">
             <label htmlFor={endTimeId}>End Time</label>
             <button
               type="button"
@@ -86,7 +86,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
             </button>
             <input
               id={endTimeId}
-              className="invalid:text-error w-[2ch] bg-transparent text-center text-white focus-visible:outline-none"
+              className="invalid:text-error w-[2ch] bg-transparent text-center text-white focus-visible:outline-hidden"
               value={localDelta}
               onChange={(e) => setDeltaTime(e.currentTarget.value)}
               type="number"

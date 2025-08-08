@@ -66,7 +66,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             aria-label="Enter Price"
             placeholder="Enter Price"
             className={cn(
-              'text-16 font-weight-500 flex-1 text-ellipsis bg-transparent text-start focus:outline-none',
+              'text-16 font-weight-500 flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
               error && 'text-error',
             )}
             data-testid="input-price"
@@ -74,7 +74,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           />
           {!!marketPrice && (
             <button
-              className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+              className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
               type="button"
               onClick={() => setPrice(formatNumber(marketPrice.toString()))}
             >

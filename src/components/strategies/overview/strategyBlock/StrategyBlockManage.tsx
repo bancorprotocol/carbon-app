@@ -248,10 +248,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         {items.map((item) => {
           if (typeof item === 'number') {
             return (
-              <hr
-                key={item}
-                className="border-1  border-background-700 my-10"
-              />
+              <hr key={item} className="border  border-background-700 my-10" />
             );
           }
 

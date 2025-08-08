@@ -200,7 +200,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({
       )}
       <g
         id={`shape-${drawing.id}`}
-        className="draggable group/drawing cursor-pointer focus-visible:outline-none"
+        className="draggable group/drawing cursor-pointer focus-visible:outline-hidden"
         onKeyDown={onKeyDown}
         onMouseDown={dragShape}
         onFocus={showIndicator}

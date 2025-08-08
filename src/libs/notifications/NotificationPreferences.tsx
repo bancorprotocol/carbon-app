@@ -47,7 +47,7 @@ export const NotificationPreferences = () => {
             />
             <label
               htmlFor="global-notif-on"
-              className="cursor-pointer rounded-full px-10 py-4 outline-1 peer-checked/notif-on:bg-white/10 peer-checked/notif-on:text-white peer-focus-visible/notif-on:outline"
+              className="cursor-pointer rounded-full px-10 py-4 outline-1 peer-checked/notif-on:bg-white/10 peer-checked/notif-on:text-white peer-focus-visible/notif-on:outline-solid"
             >
               On
             </label>
@@ -63,7 +63,7 @@ export const NotificationPreferences = () => {
             />
             <label
               htmlFor="global-notif-off"
-              className="cursor-pointer rounded-full px-10 py-4 outline-1 peer-checked/notif-off:bg-white/10 peer-checked/notif-off:text-white peer-focus-visible/notif-off:outline"
+              className="cursor-pointer rounded-full px-10 py-4 outline-1 peer-checked/notif-off:bg-white/10 peer-checked/notif-off:text-white peer-focus-visible/notif-off:outline-solid"
             >
               Off
             </label>

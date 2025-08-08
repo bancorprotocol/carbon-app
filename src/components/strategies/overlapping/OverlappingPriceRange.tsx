@@ -55,7 +55,7 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
               <span>{props.minLabel || 'Min'}</span>
               {!!marketPrice && (
                 <button
-                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
                   type="button"
                   onClick={() => setMin(marketPrice.toString())}
                   data-testid="market-price-min"
@@ -72,7 +72,7 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
               <span>{props.maxLabel || 'Max'}</span>
               {!!marketPrice && (
                 <button
-                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
                   type="button"
                   onClick={() => setMax(marketPrice.toString())}
                   data-testid="market-price-max"

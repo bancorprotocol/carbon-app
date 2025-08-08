@@ -120,7 +120,7 @@ export const InputBudget: FC<Props> = (props) => {
         className={`
           flex cursor-text flex-col gap-8 rounded border border-black bg-black p-16
           focus-within:border-white/50
-          ${error ? '!border-error/50' : ''}
+          ${error ? 'border-error/50!' : ''}
           ${className}
         `}
         onClick={() => inputRef.current?.focus()}
@@ -136,7 +136,7 @@ export const InputBudget: FC<Props> = (props) => {
             size={1}
             placeholder={placeholder}
             className={`
-              text-16 font-weight-500 grow text-ellipsis bg-transparent focus:outline-none
+              text-16 font-weight-500 grow text-ellipsis bg-transparent focus:outline-hidden
               ${error ? 'text-error' : ''}
               ${disabled ? 'text-white/40' : ''}
               ${disabled ? 'cursor-not-allowed' : ''}

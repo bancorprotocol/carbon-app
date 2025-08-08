@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 .strategy-list {
   contain: content;
   grid-template-columns: repeat(auto-fill, 375px);

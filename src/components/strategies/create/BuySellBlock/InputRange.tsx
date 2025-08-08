@@ -101,7 +101,7 @@ export const InputRange: FC<InputRangeProps> = ({
             </Tooltip>
             {!!marketPrice && (
               <button
-                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
                 type="button"
                 onClick={() => setMin(formatNumber(marketPrice.toString()))}
                 data-testid="market-price-min"
@@ -118,7 +118,7 @@ export const InputRange: FC<InputRangeProps> = ({
             value={min}
             placeholder="Enter Price"
             className={cn(
-              'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+              'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-hidden',
               error && 'text-error',
             )}
             onChange={handleChangeMin}
@@ -151,7 +151,7 @@ export const InputRange: FC<InputRangeProps> = ({
             </Tooltip>
             {!!marketPrice && (
               <button
-                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
                 type="button"
                 onClick={() => setMax(formatNumber(marketPrice.toString()))}
                 data-testid="market-price-max"
@@ -168,7 +168,7 @@ export const InputRange: FC<InputRangeProps> = ({
             value={max}
             placeholder="Enter Price"
             className={cn(
-              'text-16 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+              'text-16 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-hidden',
               error && 'text-error',
             )}
             onChange={handleChangeMax}

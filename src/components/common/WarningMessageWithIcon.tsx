@@ -20,7 +20,7 @@ export const Warning: FC<Props> = (props) => {
       role="alert"
       aria-live="polite"
       className={cn(
-        'animate-scaleUp text-12 flex items-center gap-10',
+        'animate-scale-up text-12 flex items-center gap-10',
         isError ? 'error-message text-error' : 'warning-message text-warning',
         className,
       )}

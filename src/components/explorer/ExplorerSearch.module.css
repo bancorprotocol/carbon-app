@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 .search-container {
   background-image: linear-gradient(
     to bottom,

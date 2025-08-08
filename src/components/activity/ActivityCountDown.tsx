@@ -145,7 +145,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
       </g>
       <circle
         id={id('circle')}
-        className="origin-center -rotate-[90deg]"
+        className="origin-center -rotate-90"
         cx="50"
         cy="50"
         r={radius}

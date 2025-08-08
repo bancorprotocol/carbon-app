@@ -130,7 +130,7 @@ export const InitMarketPrice = (props: FieldProps) => {
         {!externalPrice && !!calculatedPrice && (
           <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
             <button
-              className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+              className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
               type="button"
               onClick={() => setLocalPrice(calculatedPrice)}
             >

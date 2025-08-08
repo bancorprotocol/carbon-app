@@ -18,8 +18,8 @@ describe('Custom Tailwind Merge', () => {
         customTwMerge('text-primary'),
       );
       expect(
-        customTwMerge('text-background-50 text-primaryGradient-first'),
-      ).toEqual(customTwMerge('text-primaryGradient-first'));
+        customTwMerge('text-background-50 text-primary-gradient-first'),
+      ).toEqual(customTwMerge('text-primary-gradient-first'));
     });
     it('should merge different sizes', () => {
       expect(customTwMerge('text-14 text-16')).toEqual(
@@ -186,8 +186,8 @@ describe('Custom Tailwind Merge', () => {
       );
     });
     it('should merge different non-default animations', () => {
-      expect(customTwMerge('animate-spin animate-slideUp')).toEqual(
-        customTwMerge('animate-slideUp'),
+      expect(customTwMerge('animate-spin animate-slide-up')).toEqual(
+        customTwMerge('animate-slide-up'),
       );
     });
   });

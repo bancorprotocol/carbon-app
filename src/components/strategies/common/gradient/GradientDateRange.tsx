@@ -61,7 +61,7 @@ export const GradientDateRange = memo(function TimeRange(
       aria-label="Pick date range"
       className={cn(
         'text-12 flex items-center gap-8 rounded-full border border-transparent bg-black px-12 py-8',
-        'hover:bg-background-900 active:bg-background-800 outline-1 outline-white/60 focus-visible:outline',
+        'hover:bg-background-900 active:bg-background-800 outline-1 outline-white/60 focus-visible:outline-solid',
         props.className,
       )}
       data-testid="date-picker-button"
@@ -162,7 +162,7 @@ const Content = (props: Props) => {
             type="button"
             role="radio"
             key={days}
-            className="rounded-8 px-30 text-14 font-weight-500 hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start [&[aria-checked=true]]:bg-black"
+            className="rounded-8 px-30 text-14 font-weight-500 hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black"
             onClick={() => handlePreset(days)}
             aria-checked={selectedPreset?.days === days}
             data-testid="date-picker-button"
