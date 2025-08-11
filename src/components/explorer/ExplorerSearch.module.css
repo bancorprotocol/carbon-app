@@ -1,4 +1,5 @@
 @reference "tailwindcss";
+@reference "../../theme.css";
 
 .search-container {
   background-image: linear-gradient(

@@ -1,4 +1,5 @@
 @reference "tailwindcss";
+@reference "../../theme.css";
 
 html:has(.page) {
   scrollbar-gutter: stable;

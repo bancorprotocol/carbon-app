@@ -38,20 +38,20 @@ export default {
       xl: '1280px',
       '2xl': '1536px',
     },
-    colors: ({ colors }) => {
-      // Background color variables
-      const hue = 0;
-      const chroma = 0; // Recommended 0.01, 0.02
-      return {
-        white: colors.white,
-        transparent: colors.transparent,
-        primaryGradient: {
-          first: lightDark(0.7985, 0.132, 159.5), // #67D79F
-          middle: lightDark(0.7292, 0.127, 214.3), // #10BBD8
-          last: lightDark(0.7617, 0.119, 184.67), // #3DCABB
-        },
-      };
-    },
+    // colors: ({ colors }) => {
+    //   // Background color variables
+    //   const hue = 0;
+    //   const chroma = 0; // Recommended 0.01, 0.02
+    //   return {
+    //     white: colors.white,
+    //     transparent: colors.transparent,
+    //     primaryGradient: {
+    //       first: lightDark(0.7985, 0.132, 159.5), // #67D79F
+    //       middle: lightDark(0.7292, 0.127, 214.3), // #10BBD8
+    //       last: lightDark(0.7617, 0.119, 184.67), // #3DCABB
+    //     },
+    //   };
+    // },
     spacing: createTwConfigValues(0, 100, 1),
     animation: {
       none: 'none',
@@ -78,17 +78,17 @@ export default {
       text: ['Carbon-Text', 'system-ui', 'sans-serif'],
       title: ['Carbon-Title', 'system-ui', 'sans-serif'],
     },
-    fontSize: {
-      10: ['0.625rem', { lineHeight: '0.875rem' }],
-      12: ['0.75rem', { lineHeight: '1rem' }],
-      14: ['0.875rem', { lineHeight: '1.25rem' }],
-      16: ['1rem', { lineHeight: '1.5rem' }],
-      18: ['1.125rem', { lineHeight: '1.75rem' }],
-      20: ['1.25rem', { lineHeight: '1.75rem' }],
-      24: ['1.5rem', { lineHeight: '2rem' }],
-      30: ['1.875rem', { lineHeight: '2.25rem' }],
-      36: ['2.25rem', { lineHeight: '2.5rem' }],
-    },
+    // fontSize: {
+    //   10: ['0.625rem', { lineHeight: '0.875rem' }],
+    //   12: ['0.75rem', { lineHeight: '1rem' }],
+    //   14: ['0.875rem', { lineHeight: '1.25rem' }],
+    //   16: ['1rem', { lineHeight: '1.5rem' }],
+    //   18: ['1.125rem', { lineHeight: '1.75rem' }],
+    //   20: ['1.25rem', { lineHeight: '1.75rem' }],
+    //   24: ['1.5rem', { lineHeight: '2rem' }],
+    //   30: ['1.875rem', { lineHeight: '2.25rem' }],
+    //   36: ['2.25rem', { lineHeight: '2.5rem' }],
+    // },
     fontWeight: {
       'weight-100': '100',
       'weight-200': '200',

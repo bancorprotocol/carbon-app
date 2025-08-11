@@ -1,4 +1,5 @@
 @reference "tailwindcss";
+@reference "../../../theme.css";
 
 .radio {
   position: absolute;
