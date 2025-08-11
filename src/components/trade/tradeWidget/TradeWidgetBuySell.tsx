@@ -66,7 +66,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return <CarbonLogoLoading className="h-80 m-20" />;
   }
   if (liquidityQuery?.isError) return <div>Error</div>;
-  if (isTradePairError || hasEnoughLiquidity || liquidityQuery.isPending) {
+  if (isTradePairError) return <NoLiquidity />;
+  if (!hasEnoughLiquidity && !liquidityQuery.isPending) {
     return <NoLiquidity />;
   }
 
