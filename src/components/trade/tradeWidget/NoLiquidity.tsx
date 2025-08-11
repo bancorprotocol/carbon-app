@@ -5,8 +5,8 @@ export const NoLiquidity = () => {
         Swapping at market price is not available - yet!
       </h3>
       <p className="text-14">
-        Create a limit/range strategy and let our solver find the best time to
-        fill it using chain-wide liquidity
+        Create a limit/range strategy and let the built-in solver find the best
+        time to fill it using chain-wide liquidity
       </p>
     </div>
   );
