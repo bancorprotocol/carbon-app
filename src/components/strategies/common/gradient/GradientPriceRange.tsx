@@ -138,7 +138,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             </label>
             {!!marketPrice && (
               <button
-                className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
+                className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
                 type="button"
                 onClick={setStartMarket}
                 data-testid="market-start-price"
@@ -154,7 +154,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             inputMode="decimal"
             value={localStart}
             placeholder="Enter Price"
-            className="text-18 font-weight-500 w-full text-ellipsis bg-transparent focus:outline-hidden"
+            className="text-18 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
             onChange={(e) => onStartChange(e.target.value)}
             onFocus={onStartFocus}
             onBlur={onStartBlur}
@@ -181,7 +181,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             </label>
             {!!marketPrice && (
               <button
-                className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
+                className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
                 type="button"
                 onClick={setEndMarket}
                 data-testid="market-end-price"
@@ -197,7 +197,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             inputMode="decimal"
             value={localEnd}
             placeholder="Enter Price"
-            className="text-18 font-weight-500 w-full text-ellipsis bg-transparent focus:outline-hidden"
+            className="text-18 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
             onChange={(e) => onEndChange(e.target.value)}
             onFocus={onEndFocus}
             onBlur={onEndBlur}

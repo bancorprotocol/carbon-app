@@ -201,7 +201,7 @@ const CurrencyMenuItemContent = () => {
   return (
     <div className="flex w-full items-center justify-between">
       <span>Currency</span>
-      <span className="font-weight-500 mr-10">{selectedFiatCurrency}</span>
+      <span className="font-medium mr-10">{selectedFiatCurrency}</span>
     </div>
   );
 };

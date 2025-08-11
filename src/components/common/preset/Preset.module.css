@@ -1,11 +1,12 @@
 @reference "tailwindcss";
+@reference "../../../theme.css";
 
 .preset {
   position: relative;
   flex: 1;
 }
 .preset:has(:focus-visible) {
-  @apply rounded-10;
+  border-radius: 10px;
   outline: solid 2px white;
 }
 .preset input {
@@ -15,7 +16,8 @@
   z-index: -1;
 }
 .preset label {
-  @apply h-full rounded-10 font-weight-500 grid flex-1 cursor-pointer place-items-center bg-black py-8 text-center text-white/60 border border-transparent;
+  border-radius: 10px;
+  @apply h-full font-medium grid cursor-pointer place-items-center bg-black py-8 text-center text-white/60 border border-transparent;
 }
 .preset input:checked + label {
   border-color: white;

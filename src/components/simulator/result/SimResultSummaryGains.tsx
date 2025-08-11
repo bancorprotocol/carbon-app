@@ -31,7 +31,7 @@ export const SimResultSummaryGains: FC<Props> = ({
         </h4>
       </Tooltip>
       <AnimatedNumber
-        className="text-24 font-weight-500"
+        className="text-24 font-medium"
         from={0.0}
         to={portfolioGains}
         formatFn={formatGain}

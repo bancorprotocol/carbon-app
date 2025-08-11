@@ -105,7 +105,7 @@ export const StrategyPage = () => {
         <BackButton onClick={() => history.back()} />
         <TokensOverlap tokens={[base, quote]} size={40} />
         <div className="flex-1 flex-col gap-8">
-          <h1 className="text-18 font-weight-500 flex gap-8">
+          <h1 className="text-18 font-medium flex gap-8">
             <PairName baseToken={base} quoteToken={quote} />
           </h1>
           <StrategySubtitle
@@ -120,7 +120,7 @@ export const StrategyPage = () => {
         />
       </header>
       <section className="flex flex-col gap-16 md:flex-row">
-        <article className="bg-background-900 grid gap-16 rounded p-24 md:w-[400px]">
+        <article className="bg-background-900 grid gap-16 rounded-16 p-24 md:w-[400px]">
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
@@ -139,9 +139,9 @@ export const StrategyPage = () => {
             </div>
           </div>
         </article>
-        <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 md:flex">
+        <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded-16 p-16 md:flex">
           <header className="flex items-center gap-16">
-            <h2 className="text-18 font-weight-500 mr-auto">Price Chart</h2>
+            <h2 className="text-18 font-medium mr-auto">Price Chart</h2>
             {isNativeChart && (
               <div className="flex items-center gap-8">
                 <p id="indicator-label">Indicators</p>

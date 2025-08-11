@@ -42,7 +42,7 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
             data-testid={`chart-tab-${label}`}
           >
             {icon}
-            <span className="text-14 font-weight-500 capitalize">{label}</span>
+            <span className="text-14 font-medium capitalize">{label}</span>
           </button>
         );
       })}

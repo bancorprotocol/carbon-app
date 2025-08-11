@@ -220,7 +220,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
               <div className="bg-warning/25 text-warning rounded-full p-8">
                 <IconWarning className="size-18" />
               </div>
-              <h3 className="text-16 text-warning font-weight-700">Warnings</h3>
+              <h3 className="text-16 text-warning font-bold">Warnings</h3>
               <button
                 type="button"
                 popoverTarget={popoverId}

@@ -23,7 +23,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
       </h4>
       <p
         className={cn(
-          'text-18 font-weight-500',
+          'text-18 font-medium',
           noFiatValue ? 'text-white/60' : '',
         )}
         data-testid="total-budget"

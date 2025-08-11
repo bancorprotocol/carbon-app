@@ -2,25 +2,25 @@
 <path d="M0 8.18996C0 7.33304 1.00736 6.87305 1.65493 7.43427L27.9742 30.2443C28.6737 30.8506 28.245 32 27.3193 32H1C0.447716 32 0 31.5523 0 31V8.18996Z" fill="url(#paint0_radial_4704_89827)" fill-opacity="0.35"/>
 <path d="M59 8.18996C59 7.33304 57.9926 6.87305 57.3451 7.43427L31.0258 30.2443C30.3263 30.8506 30.755 32 31.6807 32H58C58.5523 32 59 31.5523 59 31V8.18996Z" fill="url(#paint1_radial_4704_89827)" fill-opacity="0.35"/>
 <path d="M18.5 32C18.7761 32 19 31.7761 19 31.5L19 7.5C19 7.22386 18.7761 7 18.5 7C18.2239 7 18 7.22386 18 7.5L18 31.5C18 31.7761 18.2239 32 18.5 32Z" fill="url(#paint2_linear_4704_89827)"/>
-<path d="M20.7682 5.27813C20.918 5.09842 21 4.87189 21 4.63795L21 2C21 0.895431 20.1046 -3.91405e-08 19 -8.74228e-08L18 -1.31134e-07C16.8954 -1.79416e-07 16 0.89543 16 2L16 4.63795C16 4.87189 16.082 5.09842 16.2318 5.27813L17.7318 7.07814C18.1316 7.55789 18.8684 7.55789 19.2682 7.07813L20.7682 5.27813Z" fill="var(--buy)"/>
+<path d="M20.7682 5.27813C20.918 5.09842 21 4.87189 21 4.63795L21 2C21 0.895431 20.1046 -3.91405e-08 19 -8.74228e-08L18 -1.31134e-07C16.8954 -1.79416e-07 16 0.89543 16 2L16 4.63795C16 4.87189 16.082 5.09842 16.2318 5.27813L17.7318 7.07814C18.1316 7.55789 18.8684 7.55789 19.2682 7.07813L20.7682 5.27813Z" fill="var(--color-buy)"/>
 <path d="M41.5 32C41.7761 32 42 31.7761 42 31.5L42 7.5C42 7.22386 41.7761 7 41.5 7C41.2239 7 41 7.22386 41 7.5L41 31.5C41 31.7761 41.2239 32 41.5 32Z" fill="url(#paint3_linear_4704_89827)"/>
-<path d="M43.7682 5.27813C43.918 5.09842 44 4.87189 44 4.63795L44 2C44 0.895431 43.1046 -3.91405e-08 42 -8.74228e-08L41 -1.31134e-07C39.8954 -1.79416e-07 39 0.89543 39 2L39 4.63795C39 4.87189 39.082 5.09842 39.2318 5.27813L40.7318 7.07814C41.1316 7.55789 41.8684 7.55789 42.2682 7.07813L43.7682 5.27813Z" fill="var(--sell)"/>
+<path d="M43.7682 5.27813C43.918 5.09842 44 4.87189 44 4.63795L44 2C44 0.895431 43.1046 -3.91405e-08 42 -8.74228e-08L41 -1.31134e-07C39.8954 -1.79416e-07 39 0.89543 39 2L39 4.63795C39 4.87189 39.082 5.09842 39.2318 5.27813L40.7318 7.07814C41.1316 7.55789 41.8684 7.55789 42.2682 7.07813L43.7682 5.27813Z" fill="var(--color-sell)"/>
 <defs>
 <radialGradient id="paint0_radial_4704_89827" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0.500001 8.5) rotate(44.3969) scale(33.5894 24.0501)">
-<stop stop-color="var(--buy)"/>
-<stop offset="1" stop-color="var(--buy)" stop-opacity="0.2"/>
+<stop stop-color="var(--color-buy)"/>
+<stop offset="1" stop-color="var(--color-buy)" stop-opacity="0.2"/>
 </radialGradient>
 <radialGradient id="paint1_radial_4704_89827" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(60.5 6) rotate(136.606) scale(37.8451 27.5747)">
-<stop stop-color="var(--sell)"/>
-<stop offset="1" stop-color="var(--sell)" stop-opacity="0.2"/>
+<stop stop-color="var(--color-sell)"/>
+<stop offset="1" stop-color="var(--color-sell)" stop-opacity="0.2"/>
 </radialGradient>
 <linearGradient id="paint2_linear_4704_89827" x1="18.0001" y1="7.76087" x2="18.0001" y2="28" gradientUnits="userSpaceOnUse">
-<stop stop-color="var(--buy)"/>
-<stop offset="1" stop-color="var(--buy)" stop-opacity="0.3"/>
+<stop stop-color="var(--color-buy)"/>
+<stop offset="1" stop-color="var(--color-buy)" stop-opacity="0.3"/>
 </linearGradient>
 <linearGradient id="paint3_linear_4704_89827" x1="41.0001" y1="7.76087" x2="41.0001" y2="28" gradientUnits="userSpaceOnUse">
-<stop stop-color="var(--sell)"/>
-<stop offset="1" stop-color="var(--sell)" stop-opacity="0.3"/>
+<stop stop-color="var(--color-sell)"/>
+<stop offset="1" stop-color="var(--color-sell)" stop-opacity="0.3"/>
 </linearGradient>
 </defs>
 </svg>

@@ -25,7 +25,7 @@ export const EditMarketPrice: FC<Props> = (props) => {
     <button
       {...attr}
       className={cn(
-        'text-12 font-weight-500 bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8',
+        'text-12 font-medium bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8',
         props.className,
       )}
       data-testid="edit-market-price"
@@ -130,7 +130,7 @@ export const InitMarketPrice = (props: FieldProps) => {
         {!externalPrice && !!calculatedPrice && (
           <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
             <button
-              className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
+              className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
               type="button"
               onClick={() => setLocalPrice(calculatedPrice)}
             >
@@ -147,7 +147,7 @@ export const InitMarketPrice = (props: FieldProps) => {
           htmlFor={checkboxId}
           className={cn(
             style.approveWarnings,
-            'rounded-10 text-12 font-weight-500 flex items-center gap-8 text-white/60',
+            'rounded-10 text-12 font-medium flex items-center gap-8 text-white/60',
           )}
         >
           <input

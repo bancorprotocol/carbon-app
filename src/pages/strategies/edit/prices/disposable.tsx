@@ -250,7 +250,7 @@ export const EditPricesStrategyDisposablePage = () => {
             className="warning-message bg-background-900 p-16"
           >
             <div className="border-warning/40 rounded-10 grid gap-16 border p-16">
-              <h3 className="text-16 text-warning font-weight-500 flex items-center gap-8">
+              <h3 className="text-16 text-warning font-medium flex items-center gap-8">
                 <IconWarning className="size-16" />
                 Notice
               </h3>

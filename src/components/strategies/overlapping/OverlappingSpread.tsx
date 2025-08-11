@@ -50,7 +50,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
       className={cn(styles.spread, 'bg-background-900 grid gap-8 p-16')}
     >
       <header className="flex items-center gap-8 ">
-        <h2 className="text-16 font-weight-500 flex-1">Set Fee Tier</h2>
+        <h2 className="text-16 font-medium flex-1">Set Fee Tier</h2>
         <Tooltip
           element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
           iconClassName="size-18 text-white/60"
@@ -95,7 +95,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
           Given price range, max fee tier cannot exceed&nbsp;
           <button
             type="button"
-            className="font-weight-700"
+            className="font-bold"
             onClick={() => setSpread(maxSpread.toFixed(2))}
           >
             {maxSpread}%

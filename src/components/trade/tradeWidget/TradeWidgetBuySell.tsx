@@ -112,7 +112,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {errorMsgSource && (
               <output
                 htmlFor={`${id}-pay`}
-                className="text-12 font-weight-500 text-error"
+                className="text-12 font-medium text-error"
               >
                 {errorMsgSource}
               </output>
@@ -140,7 +140,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {errorMsgTarget && (
               <button
                 type="button"
-                className="font-weight-500 text-error cursor-pointer"
+                className="font-medium text-error cursor-pointer"
                 onClick={() => {
                   onInputChange(false);
                   setTargetInput(liquidityQuery.data || '0');

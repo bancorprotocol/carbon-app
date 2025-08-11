@@ -56,7 +56,7 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
           y1={yScale(points[0].y)}
           x2={xScale(points[0].x)! + xScale.bandwidth() / 2}
           y2={yScale(points[0].y)}
-          stroke="var(--secondary)"
+          stroke="var(--color-secondary)"
           strokeWidth="2"
         />
       )}
@@ -66,7 +66,7 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
           cx={xScale(x)! + xScale.bandwidth() / 2}
           cy={yScale(y)}
           r="5"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
         />
       ))}
       <rect

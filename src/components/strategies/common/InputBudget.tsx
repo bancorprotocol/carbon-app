@@ -110,7 +110,7 @@ export const InputBudget: FC<Props> = (props) => {
   return (
     <div className="flex flex-col gap-16">
       {title && (
-        <label htmlFor={id} className="text-14 font-weight-500 flex">
+        <label htmlFor={id} className="text-14 font-medium flex">
           <Tooltip element={titleTooltip}>
             <span className="text-white/80">{title}</span>
           </Tooltip>
@@ -118,7 +118,7 @@ export const InputBudget: FC<Props> = (props) => {
       )}
       <div
         className={`
-          flex cursor-text flex-col gap-8 rounded border border-black bg-black p-16
+          flex cursor-text flex-col gap-8 rounded-16 border border-black bg-black p-16
           focus-within:border-white/50
           ${error ? 'border-error/50!' : ''}
           ${className}
@@ -136,7 +136,7 @@ export const InputBudget: FC<Props> = (props) => {
             size={1}
             placeholder={placeholder}
             className={`
-              text-16 font-weight-500 grow text-ellipsis bg-transparent focus:outline-hidden
+              text-16 font-medium grow text-ellipsis bg-transparent focus:outline-hidden
               ${error ? 'text-error' : ''}
               ${disabled ? 'text-white/40' : ''}
               ${disabled ? 'cursor-not-allowed' : ''}
@@ -149,10 +149,10 @@ export const InputBudget: FC<Props> = (props) => {
           />
           <div className="bg-background-800 flex items-center gap-6 rounded-[20px] px-8 py-6">
             <TokenLogo token={token} size={20} />
-            <span className="font-weight-500">{token.symbol}</span>
+            <span className="font-medium">{token.symbol}</span>
           </div>
         </div>
-        <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono">
+        <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono">
           <p className="flex items-center gap-5 text-white/60">{priceText()}</p>
           {user && max && !maxIsLoading && (
             <button
@@ -169,7 +169,7 @@ export const InputBudget: FC<Props> = (props) => {
                 className={
                   disabled
                     ? 'text-primary/40'
-                    : 'text-primary group-hover/budget-input:text-white'
+                    : 'text-primary group-hover/budget-input:text-tertiary'
                 }
               >
                 MAX

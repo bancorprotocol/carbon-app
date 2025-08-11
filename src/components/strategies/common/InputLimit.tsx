@@ -125,7 +125,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
             aria-label="Enter Price"
             placeholder="Enter Price"
             className={cn(
-              'text-16 font-weight-500 w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
+              'text-16 font-medium w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
               displayError && 'text-error',
             )}
             data-testid="input-price"
@@ -133,7 +133,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
           />
           {!!marketPrice && (
             <button
-              className="text-12 font-weight-500 text-primary-gradient-first hover:text-primary focus:text-primary active:text-primary-gradient-first"
+              className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
               type="button"
               onClick={setMarket}
             >

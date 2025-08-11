@@ -66,10 +66,10 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
         {order.direction} Overview
       </h2>
       <fieldset className="grid gap-8">
-        <legend className="text-14 font-weight-500 mb-8 flex items-center gap-6 capitalize text-white/60">
+        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
           Duration
         </legend>
-        <div className="text-12 font-weight-500 flex gap-8 text-nowrap text-white/60">
+        <div className="text-12 font-medium flex gap-8 text-nowrap text-white/60">
           <div className="rounded-s-16 rounded-e-8 flex flex-1 items-center gap-8 bg-black px-16 py-8">
             <span>Start Time</span>
             <span>On Execution</span>
@@ -112,7 +112,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
         {dateError && <Warning message={dateError} isError />}
       </fieldset>
       <fieldset className="grid gap-8">
-        <legend className="text-14 font-weight-500 mb-8 flex items-center gap-6 capitalize text-white/60">
+        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
           Set {order.direction} Price
         </legend>
         <GradientPriceRange
@@ -130,7 +130,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
         )}
       </fieldset>
       <fieldset className="grid gap-8">
-        <legend className="text-14 font-weight-500 mb-8 flex items-center gap-6 capitalize text-white/60">
+        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
           Set {order.direction} Budget
         </legend>
         <InputBudget

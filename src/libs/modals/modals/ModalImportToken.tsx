@@ -60,10 +60,10 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       {data && (
         <div className={cn(blockClasses, 'bg-background-900 p-16')}>
           <div className="flex items-center justify-between">
-            <div className="font-weight-500">{data.symbol}</div>
+            <div className="font-medium">{data.symbol}</div>
             <NewTabLink
               to={getExplorerLink('token', data.address)}
-              className="text-14 font-weight-500 text-warning flex items-center"
+              className="text-14 font-medium text-warning flex items-center"
             >
               <span className="whitespace-nowrap">View on Explorer</span>
               <IconLink className="ml-4 inline-flex h-14" />

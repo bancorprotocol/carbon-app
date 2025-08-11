@@ -37,15 +37,13 @@ export const SimInputTokenSelection: FC<Props> = ({
 
   return (
     <section className="grid gap-16 p-16" key="simulatorTokenSelection">
-      <article className="font-weight-500 flex flex-row items-center -space-x-10">
+      <article className="font-medium flex flex-row items-center -space-x-10">
         <SelectTokenButton
           chevronClassName="h-7.5 w-13"
           token={base}
           description={
             <span
-              className={`${
-                base ? 'text-white/60' : 'text-black'
-              } font-weight-500`}
+              className={`${base ? 'text-white/60' : 'text-black'} font-medium`}
             >
               Buy or Sell
             </span>
@@ -84,7 +82,7 @@ export const SimInputTokenSelection: FC<Props> = ({
             <span
               className={`${
                 quote ? 'text-white/60' : 'text-black'
-              } font-weight-500`}
+              } font-medium`}
             >
               With
             </span>
@@ -109,7 +107,7 @@ export const SimInputTokenSelection: FC<Props> = ({
         />
       </article>
       {noPriceHistory && (
-        <Warning className="font-weight-500 md:hidden">
+        <Warning className="font-medium md:hidden">
           The pair lacks price data and cannot be simulated
         </Warning>
       )}

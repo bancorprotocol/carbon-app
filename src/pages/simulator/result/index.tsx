@@ -79,7 +79,7 @@ export const SimulatorResultPage = () => {
         </header>
       )}
 
-      <div className="rounded-20 bg-background-900 p-20">
+      <div className="rounded-18 bg-background-900 p-20">
         <SimResultSummary
           roi={ctx.roi}
           gains={ctx.gains}

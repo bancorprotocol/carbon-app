@@ -106,7 +106,7 @@ export const TokenInputField: FC<Props> = (props) => {
           onFocus={(e) => e.target.select()}
           onBlur={handleBlur}
           className={cn(
-            'text-16 font-weight-500 grow text-ellipsis bg-transparent focus:outline-hidden',
+            'text-16 font-medium grow text-ellipsis bg-transparent focus:outline-hidden',
             disabled && 'cursor-not-allowed text-white/40',
             isError && 'text-error',
           )}
@@ -116,10 +116,10 @@ export const TokenInputField: FC<Props> = (props) => {
         />
         <div className="bg-background-800 flex items-center gap-6 rounded-[20px] px-8 py-6">
           <LogoImager alt="Token" src={token.logoURI} className="size-20" />
-          <span className="font-weight-500">{token.symbol}</span>
+          <span className="font-medium">{token.symbol}</span>
         </div>
       </div>
-      <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10">
+      <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10">
         <p className="flex items-center gap-5 text-white/60">
           {priceText()}
           {slippage && value && <Slippage slippage={slippage} />}

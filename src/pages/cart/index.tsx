@@ -189,7 +189,7 @@ export const CartPage = () => {
             htmlFor="approve-warnings"
             className={cn(
               style.approveWarnings,
-              'text-14 font-weight-500 flex items-center gap-8 place-self-center text-white/60',
+              'text-14 font-medium flex items-center gap-8 place-self-center text-white/60',
             )}
           >
             <input

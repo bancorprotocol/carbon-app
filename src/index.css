@@ -7,24 +7,15 @@
   --chroma: 0; /* Recommended 0.01, 0.02 */
 }
 
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: oklch(92.8% 0.006 264.531);
-  }
-}
 
 @utility main-menu {
   height: var(--main-menu-height);
-  @apply px-content font-weight-500 flex w-full items-center justify-between bg-black text-white/50;
+  @apply px-content font-medium flex w-full items-center justify-between bg-black text-white/50;
 }
 
 @utility mobile-menu {
   height: var(--mobile-menu-height);
-  @apply font-weight-500 border-background-800 fixed bottom-0 z-40 flex w-full flex-shrink-0 items-center justify-around border-t bg-black px-10 text-white/50 md:hidden;
+  @apply font-medium border-background-800 fixed bottom-0 z-40 flex w-full flex-shrink-0 items-center justify-around border-t bg-black px-10 text-white/50 md:hidden;
 }
 
 @utility bg-content {
@@ -38,6 +29,7 @@
 @utility loading-skeleton {
   @apply rounded-10 bg-background-900 animate-pulse;
 }
+
 
 @layer utilities {
   :root {
@@ -56,6 +48,14 @@
 }
 
 @layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: oklch(92.8% 0.006 264.531);
+  }
+
   html,
   body,
   #root {
@@ -81,6 +81,10 @@
     @apply font-title;
   }
 
+  button {
+    cursor: pointer;
+  }
+
   /** Some Browsers set outline on :focus instead of :focus-visible for svg element */
   svg *:focus {
     outline: none;
@@ -101,15 +105,15 @@
   }
 
   h1 {
-    @apply text-36 font-weight-500 my-3;
+    @apply text-36 font-medium my-3;
   }
 
   h2 {
-    @apply text-20 font-weight-500 my-2;
+    @apply text-20 font-medium my-2;
   }
 
   h3 {
-    @apply text-18 font-weight-500;
+    @apply text-18 font-medium;
   }
 
   /* Remove number input arrows */
@@ -140,8 +144,8 @@
     color: rgba(22, 22, 22, var(--tw-text-opacity));
     background-image: linear-gradient(
       90deg,
-      var(--gradient-first) 0%,
-      var(--gradient-middle) 100%
+      var(--color-primary) 0%,
+      var(--color-secondary) 100%
     );
   }
   input[type='checkbox']:checked:hover {
@@ -166,20 +170,13 @@
   details[open] .toggle {
     transform: rotate(-180deg);
   }
-  .bg-gradient {
-    background-image: linear-gradient(
-      90deg,
-      var(--gradient-first),
-      var(--gradient-middle),
-      var(--gradient-last)
-    );
-  }
+
   .text-gradient {
     background-image: linear-gradient(
       to top,
-      var(--gradient-first),
-      var(--gradient-middle),
-      var(--gradient-last)
+      var(--color-primary),
+      var(--color-secondary),
+      var(--color-tertiary)
     );
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -200,11 +197,11 @@
   background: linear-gradient(
     90deg,
     rgba(0, 181, 120, 0.25) 37.5%,
-    var(--gradient-first) 37.5%,
-    var(--gradient-middle) 50%,
+    var(--color-primary) 37.5%,
+    var(--color-secondary) 50%,
     rgba(0, 181, 120, 0.25) 50%,
     rgba(0, 181, 120, 0.25) 87.5%,
-    var(--gradient-last) 87.5%
+    var(--color-tertiary) 87.5%
   );
   animation: 1.3s progress ease infinite;
 }
@@ -303,6 +300,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 /* Modal */
 dialog.modal {
+  margin: auto;
   background-color: transparent;
 }
 

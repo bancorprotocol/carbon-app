@@ -16,7 +16,7 @@ export const StrategyBlockCreate: FC<Props> = ({
     <Link
       to="/trade"
       className={cn(
-        'bg-content rounded-10 py-50 text-24 font-weight-500 group flex flex-col items-center justify-center gap-24 md:text-[32px]',
+        'bg-content rounded-10 py-50 text-24 font-medium group flex flex-col items-center justify-center gap-24 md:text-[32px]',
         className,
       )}
     >
@@ -28,7 +28,7 @@ export const StrategyBlockCreate: FC<Props> = ({
       >
         <IconPlus className="md:p-26 p-24" />
       </div>
-      <h1 className="w-[200px] text-center leading-9 md:w-[250px]">{title}</h1>
+      <h1 className="w-[200px] text-center md:w-[250px]">{title}</h1>
     </Link>
   );
 };

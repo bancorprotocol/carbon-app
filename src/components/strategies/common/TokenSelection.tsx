@@ -70,7 +70,7 @@ export const TokenSelection = () => {
         >
           <TokenLogo token={base} size={30} className="hidden md:inline" />
           <p className="grid flex-1 text-start">
-            <span className="font-weight-500 text-12 text-white/60">
+            <span className="font-medium text-12 text-white/60">
               Buy or Sell
             </span>
             <span className="inline-flex items-center gap-4 break-all">
@@ -96,7 +96,7 @@ export const TokenSelection = () => {
         >
           <TokenLogo token={quote} size={30} className="hidden md:inline" />
           <p className="grid flex-1 text-start">
-            <span className="font-weight-500 text-12 text-white/60">With</span>
+            <span className="font-medium text-12 text-white/60">With</span>
             <span className="inline-flex items-center gap-4 break-all">
               {quote.isSuspicious && <SuspiciousToken />}
               {quote.symbol}

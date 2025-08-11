@@ -112,7 +112,7 @@ const ConnectedMenu: FC = () => {
   };
 
   return (
-    <div role="menu" className="font-weight-400 space-y-10 text-white">
+    <div role="menu" className="font-normal space-y-10 text-white">
       {isSupportedNetwork ? (
         <>
           <button

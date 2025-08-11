@@ -105,20 +105,18 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
 
   return (
     <ModalOrMobileSheet id={id} title="Duplicate Strategy">
-      <h2 className="text-14 font-weight-400 text-white/60">
-        Select your option.
-      </h2>
+      <h2 className="text-14 font-normal text-white/60">Select your option.</h2>
 
       {duplicateOptions.map(
         ({ icon: Icon, title, onClick, description, testId }) => (
           <article
             key={title}
-            className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-black/90 p-16"
+            className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded-16 bg-black/90 p-16"
           >
             <div className="bg-primary/25 row-span-2 flex size-32 items-center justify-center self-center rounded-full">
               <Icon className="text-primary size-16" />
             </div>
-            <h3 className="text-14 font-weight-500">{title}</h3>
+            <h3 className="text-14 font-medium">{title}</h3>
             <Button
               variant="success"
               onClick={onClick}
@@ -127,9 +125,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
             >
               Select
             </Button>
-            <p className="text-12 font-weight-400 text-white/60">
-              {description}
-            </p>
+            <p className="text-12 font-normal text-white/60">{description}</p>
           </article>
         ),
       )}

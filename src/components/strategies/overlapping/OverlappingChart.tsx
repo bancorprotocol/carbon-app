@@ -479,7 +479,7 @@ export const OverlappingChart: FC<Props> = (props) => {
   return (
     <svg
       id={id}
-      className={cn(styles.graph, dragging, 'rounded bg-black', className)}
+      className={cn(styles.graph, dragging, 'rounded-16 bg-black', className)}
       viewBox={viewBox}
       onWheel={updateZoom}
     >
@@ -492,7 +492,7 @@ export const OverlappingChart: FC<Props> = (props) => {
             y="6"
             width="12"
             height="12"
-            fill="var(--buy)"
+            fill="var(--color-buy)"
           />
           <use
             href="#carbonLogo"
@@ -500,14 +500,14 @@ export const OverlappingChart: FC<Props> = (props) => {
             y="24"
             width="12"
             height="12"
-            fill="var(--buy)"
+            fill="var(--color-buy)"
           />
           <rect
             x="0"
             y="0"
             width="15"
             height="25"
-            fill="var(--buy)"
+            fill="var(--color-buy)"
             fillOpacity="0.05"
           />
         </pattern>
@@ -518,7 +518,7 @@ export const OverlappingChart: FC<Props> = (props) => {
             y="6"
             width="12"
             height="12"
-            fill="var(--sell)"
+            fill="var(--color-sell)"
           />
           <use
             href="#carbonLogo"
@@ -526,14 +526,14 @@ export const OverlappingChart: FC<Props> = (props) => {
             y="24"
             width="12"
             height="12"
-            fill="var(--sell)"
+            fill="var(--color-sell)"
           />
           <rect
             x="0"
             y="0"
             width="15"
             height="25"
-            fill="var(--sell)"
+            fill="var(--color-sell)"
             fillOpacity="0.05"
           />
         </pattern>
@@ -557,7 +557,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           <polygon
             id="buy-polygon"
             points={getBuyPoint(props, { x, y })}
-            fill="var(--buy)"
+            fill="var(--color-buy)"
             fillOpacity="0.35"
           />
           <polygon
@@ -571,7 +571,7 @@ export const OverlappingChart: FC<Props> = (props) => {
             x2={x(buy.max)}
             y1={y(bottom)}
             y2={y(middle)}
-            stroke="var(--buy)"
+            stroke="var(--color-buy)"
             strokeWidth={2}
           />
         </g>
@@ -579,7 +579,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           <polygon
             id="sell-polygon"
             points={getSellPoint(props, { x, y })}
-            fill="var(--sell)"
+            fill="var(--color-sell)"
             fillOpacity="0.35"
           />
           <polygon
@@ -593,7 +593,7 @@ export const OverlappingChart: FC<Props> = (props) => {
             x2={x(sell.min)}
             y1={y(middle)}
             y2={y(top)}
-            stroke="var(--sell)"
+            stroke="var(--color-sell)"
             strokeWidth={2}
           />
         </g>
@@ -746,7 +746,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top)}
                 width={20}
                 height={30}
-                fill="var(--buy)"
+                fill="var(--color-buy)"
                 rx="4"
               />
               <rect
@@ -772,7 +772,7 @@ export const OverlappingChart: FC<Props> = (props) => {
             x2={x(buy.min) - 1}
             y1={y(top)}
             y2={y(bottom)}
-            stroke="var(--buy)"
+            stroke="var(--color-buy)"
             strokeWidth="3"
           />
         </g>
@@ -830,7 +830,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top)}
                 width={20}
                 height={30}
-                fill="var(--sell)"
+                fill="var(--color-sell)"
                 rx="4"
               />
               <rect
@@ -856,7 +856,7 @@ export const OverlappingChart: FC<Props> = (props) => {
             x2={x(sell.max) + 1}
             y1={y(top)}
             y2={y(bottom)}
-            stroke="var(--sell)"
+            stroke="var(--color-sell)"
             strokeWidth="3"
           />
         </g>

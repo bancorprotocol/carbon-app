@@ -129,7 +129,11 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
 
   return (
     <>
-      <polygon ref={polygonRef} fill="var(--secondary)" fillOpacity="0.2" />
+      <polygon
+        ref={polygonRef}
+        fill="var(--color-secondary)"
+        fillOpacity="0.2"
+      />
       {!!points.length && (
         <line
           ref={lineRef}
@@ -137,7 +141,7 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
           y1={yScale(points[0].y)}
           x2={xScale(points[1]?.x ?? points[0].x)}
           y2={yScale(points[1]?.y ?? points[0].y)}
-          stroke="var(--secondary)"
+          stroke="var(--color-secondary)"
           strokeWidth="2"
         />
       )}
@@ -148,7 +152,7 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
           y1={yScale(points[0].y)}
           x2={xScale(points[1].x)}
           y2={yScale(points[1].y)}
-          stroke="var(--secondary)"
+          stroke="var(--color-secondary)"
           strokeWidth="2"
         />
       )}
@@ -158,7 +162,7 @@ export const D3DrawChannel: FC<Props> = ({ xScale, yScale, onChange }) => {
           cx={xScale(x)! + xScale.bandwidth() / 2}
           cy={yScale(y)}
           r="5"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
         />
       ))}
       <rect
@@ -289,7 +293,7 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       cx={xScale(x)! + xScale.bandwidth() / 2}
       cy={yScale(y)}
       r="5"
-      fill="var(--secondary)"
+      fill="var(--color-secondary)"
       className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
@@ -329,7 +333,7 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
         <polygon
           className="draggable"
           points={toPolygonPoints(points, xScale, yScale)}
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
           fillOpacity="0.2"
         />
         <line
@@ -339,7 +343,7 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
           x2={xScale(points[1].x)}
           y1={yScale(points[0].y)}
           y2={yScale(points[1].y)}
-          stroke="var(--secondary)"
+          stroke="var(--color-secondary)"
           strokeWidth="2"
         />
         <line
@@ -348,21 +352,21 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
           x2={xScale(points[3].x)}
           y1={yScale(points[2].y)}
           y2={yScale(points[3].y)}
-          stroke="var(--secondary)"
+          stroke="var(--color-secondary)"
           strokeWidth="2"
         />
         {circles}
         <circle
           {...getLineCenter([points[0], points[1]], xScale, yScale)}
           r="5"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
           className="draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
           onMouseDown={(e) => dragCenter(e, 0)}
         />
         <circle
           {...getLineCenter([points[2], points[3]], xScale, yScale)}
           r="5"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
           className="draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
           onMouseDown={(e) => dragCenter(e, 1)}
         />

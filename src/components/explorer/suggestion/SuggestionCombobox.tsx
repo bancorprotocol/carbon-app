@@ -219,7 +219,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
         <header className="flex gap-8 border-b border-white/40 p-12">
           <div
             role="radiogroup"
-            className="text-14 font-weight-500 flex items-center rounded-full bg-black p-2"
+            className="text-14 font-medium flex items-center rounded-full bg-black p-2"
           >
             {Object.entries(tabs).map(([tab, label]) => (
               <div key={tab} className="relative">
@@ -234,7 +234,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
                 />
                 <label
                   htmlFor={`filtered-${tab}-radio`}
-                  className="peer-checked:bg-background-800 inline-flex cursor-pointer items-center gap-4 rounded-full px-8 py-4 outline-1 peer-focus-visible:outline-solid"
+                  className="peer-checked:bg-background-800 inline-flex cursor-pointer items-center gap-4 rounded-full px-8 py-4 peer-focus-visible:outline-solid"
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   {label}

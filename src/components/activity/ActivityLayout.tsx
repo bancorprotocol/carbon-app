@@ -7,7 +7,7 @@ import { ActivitySection } from './ActivitySection';
 export const ActivityLayout: FC<ActivityFilterProps> = (props) => {
   const { filters = [] } = props;
   return (
-    <section className="bg-background-900 rounded">
+    <section className="bg-background-900 rounded-16">
       <header className="grid grid-cols-[auto_1fr] gap-16 px-20 pb-12 pt-16 md:grid-cols-[auto_1fr_auto]">
         <h2 className="text-16 row-start-1 m-0 self-center">Activity</h2>
         <ActivityFilter

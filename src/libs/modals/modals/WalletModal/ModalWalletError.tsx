@@ -19,7 +19,7 @@ export const ModalWalletError: FC<Props> = ({
     <>
       <WalletIcon selectedWallet={walletName} icon={logoUrl} className="w-60" />
       <span>{walletName} Error:</span>
-      <output className="rounded-10 bg-error/20 font-weight-500 text-error px-20 py-10">
+      <output className="rounded-10 bg-error/20 font-medium text-error px-20 py-10">
         {error}
       </output>
       <Button variant="success" onClick={onClick} fullWidth>

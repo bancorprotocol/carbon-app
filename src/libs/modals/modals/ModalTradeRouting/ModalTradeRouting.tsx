@@ -118,8 +118,8 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
               Routing Table
             </h3>
           </Tooltip>
-          {/* Wrap table to keep rounded visual on overflow */}
-          <div className="overflow-auto rounded">
+          {/* Wrap table to keep rounded-16 visual on overflow */}
+          <div className="overflow-auto rounded-16">
             <table
               ref={table}
               className="w-full bg-black text-left"
@@ -135,14 +135,14 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                       aria-label="toggle all orders"
                     />
                   </th>
-                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 text-white/60">
+                  <th className="text-14 font-medium sticky top-0 bg-black py-8 text-white/60">
                     {source.symbol}
                   </th>
                   <th className="sticky top-0 bg-black">{/* Arrow */}</th>
-                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 text-white/60">
+                  <th className="text-14 font-medium sticky top-0 bg-black py-8 text-white/60">
                     {target.symbol}
                   </th>
-                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 text-white/60">
+                  <th className="text-14 font-medium sticky top-0 bg-black py-8 text-white/60">
                     Avg Price
                   </th>
                 </tr>
@@ -180,7 +180,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             {errorMsg && (
               <output
                 htmlFor={sourceInputId}
-                className="text-12 font-weight-500 text-error"
+                className="text-12 font-medium text-error"
               >
                 {errorMsg}
               </output>

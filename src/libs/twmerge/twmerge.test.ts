@@ -17,9 +17,9 @@ describe('Custom Tailwind Merge', () => {
       expect(customTwMerge('text-white text-primary')).toEqual(
         customTwMerge('text-primary'),
       );
-      expect(
-        customTwMerge('text-background-50 text-primary-gradient-first'),
-      ).toEqual(customTwMerge('text-primary-gradient-first'));
+      expect(customTwMerge('text-background-50 text-primary')).toEqual(
+        customTwMerge('text-primary'),
+      );
     });
     it('should merge different sizes', () => {
       expect(customTwMerge('text-14 text-16')).toEqual(
@@ -193,14 +193,14 @@ describe('Custom Tailwind Merge', () => {
   });
   describe('font weight', () => {
     it('should merge different sizes', () => {
-      expect(customTwMerge('font-weight-300 font-weight-500')).toEqual(
-        customTwMerge('font-weight-500'),
+      expect(customTwMerge('font-light font-medium')).toEqual(
+        customTwMerge('font-medium'),
       );
     });
     it('should not merge size with family', () => {
-      expect(
-        customTwMerge('font-weight-300 font-weight-500 font-mono'),
-      ).toEqual(customTwMerge('font-weight-500 font-mono'));
+      expect(customTwMerge('font-light font-medium font-mono')).toEqual(
+        customTwMerge('font-medium font-mono'),
+      );
     });
   });
   describe('size and height/width', () => {

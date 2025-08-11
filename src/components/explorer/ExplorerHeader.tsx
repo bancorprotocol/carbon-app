@@ -97,9 +97,7 @@ export const ExplorerHeader = () => {
   return (
     <header className="mb-42 flex gap-32">
       <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
-        <h2 className="text-24 font-weight-400 font-title my-0">
-          Total Trades
-        </h2>
+        <h2 className="text-24 font-normal font-title my-0">Total Trades</h2>
         <Trades trades={trending?.totalTradeCount} />
         <div className="flex gap-16">
           <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
@@ -113,16 +111,16 @@ export const ExplorerHeader = () => {
           </Link>
         </div>
       </article>
-      <article className="border-background-800 hidden flex-1 gap-8 rounded border-2 p-20 md:block">
-        <h2 className="text-20 font-weight-400 font-title">Popular Pairs</h2>
-        <table className="font-weight-500 text-14 w-full">
+      <article className="border-background-800 hidden flex-1 gap-8 rounded-16 border-2 p-20 md:block">
+        <h2 className="text-20 font-normal font-title">Popular Pairs</h2>
+        <table className="font-medium text-14 w-full">
           <thead className="text-16 text-white/60">
             <tr>
-              <th className="font-weight-400 text-start">Token Pair</th>
-              <th className="font-weight-400 text-end">Trades</th>
+              <th className="font-normal text-start">Token Pair</th>
+              <th className="font-normal text-end">Trades</th>
             </tr>
           </thead>
-          <tbody className="font-weight-500">
+          <tbody className="font-medium">
             {pairLoading &&
               [1, 2, 3].map((id) => (
                 <tr key={id}>
@@ -168,18 +166,16 @@ export const ExplorerHeader = () => {
           </tbody>
         </table>
       </article>
-      <article className="border-background-800 hidden flex-1 gap-8 rounded border-2 p-20 lg:block">
-        <h2 className="text-20 font-weight-400 font-title">
-          Trending Strategies
-        </h2>
+      <article className="border-background-800 hidden flex-1 gap-8 rounded-16 border-2 p-20 lg:block">
+        <h2 className="text-20 font-normal font-title">Trending Strategies</h2>
         <table className="text-14 w-full">
           <thead className="text-16 text-white/60">
             <tr>
-              <th className="font-weight-400 text-start">ID</th>
-              <th className="font-weight-400 text-end">Trades</th>
+              <th className="font-normal text-start">ID</th>
+              <th className="font-normal text-end">Trades</th>
             </tr>
           </thead>
-          <tbody className="font-weight-500">
+          <tbody className="font-medium">
             {strategiesLoading &&
               [1, 2, 3].map((id) => (
                 <tr key={id}>
@@ -199,7 +195,7 @@ export const ExplorerHeader = () => {
                     params={{ id }}
                     className="block w-full"
                   >
-                    <div className="bg-background-700 flex gap-8 rounded px-8">
+                    <div className="bg-background-700 flex gap-8 rounded-16 px-8">
                       <TokensOverlap tokens={[base!, quote!]} size={18} />
                       {idDisplay}
                     </div>
@@ -225,7 +221,7 @@ export const ExplorerHeader = () => {
 
 const Loading = (style: CSSProperties) => (
   <div className="animate-pulse p-4" style={style}>
-    <div className="bg-background-700 h-full rounded"></div>
+    <div className="bg-background-700 h-full rounded-16"></div>
   </div>
 );
 
@@ -309,7 +305,10 @@ const Trades = ({ trades }: TradesProps) => {
 
   const initial = trades ? formatter.format(trades - initDelta) : '0';
   return (
-    <p ref={ref} className="text-36 font-title flex h-[40px] overflow-hidden">
+    <p
+      ref={ref}
+      className="text-36 font-title flex h-[40px] overflow-hidden leading-none"
+    >
       {initial.split('').map((v, i) => {
         if (!'0123456789'.includes(v)) return <span key={i}>{v}</span>;
         return (

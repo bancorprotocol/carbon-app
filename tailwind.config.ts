@@ -69,11 +69,11 @@ export default {
       ...theme('colors'),
       DEFAULT: theme('colors.gray.200', 'currentColor'),
     }),
-    borderRadius: {
-      ...createTwConfigValues(0, 50, 2),
-      DEFAULT: '16px',
-      full: '9999px',
-    },
+    // borderRadius: {
+    //   ...createTwConfigValues(0, 50, 2),
+    //   DEFAULT: '16px',
+    //   full: '9999px',
+    // },
     fontFamily: {
       text: ['Carbon-Text', 'system-ui', 'sans-serif'],
       title: ['Carbon-Title', 'system-ui', 'sans-serif'],
@@ -89,17 +89,17 @@ export default {
     //   30: ['1.875rem', { lineHeight: '2.25rem' }],
     //   36: ['2.25rem', { lineHeight: '2.5rem' }],
     // },
-    fontWeight: {
-      'weight-100': '100',
-      'weight-200': '200',
-      'weight-300': '300',
-      'weight-400': '400',
-      'weight-500': '500',
-      'weight-600': '600',
-      'weight-700': '700',
-      'weight-800': '800',
-      'weight-900': '900',
-    },
+    // fontWeight: {
+    //   'weight-100': '100',
+    //   'weight-200': '200',
+    //   'weight-300': '300',
+    //   'weight-400': '400',
+    //   'weight-500': '500',
+    //   'weight-600': '600',
+    //   'weight-700': '700',
+    //   'weight-800': '800',
+    //   'weight-900': '900',
+    // },
     keyframes: {
       spin: {
         to: {

@@ -336,9 +336,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
                   y1="0"
                   y2="1"
                 >
-                  <stop offset="0%" stopColor="var(--gradient-first)" />
-                  <stop offset="50%" stopColor="var(--gradient-middle)" />
-                  <stop offset="100%" stopColor="var(--gradient-last)" />
+                  <stop offset="0%" stopColor="var(--color-primary)" />
+                  <stop offset="50%" stopColor="var(--color-secondary)" />
+                  <stop offset="100%" stopColor="var(--color-tertiary)" />
                 </linearGradient>
               </defs>
               <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>

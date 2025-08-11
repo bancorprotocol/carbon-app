@@ -69,14 +69,14 @@ export const D3ChartOverlappingRangeGroup = ({
         selector={selectorRectBuy}
         isDragging={isDragging}
         width={dms.boundedWidth}
-        fill="var(--buy)"
+        fill="var(--color-buy)"
       />
       <D3ChartRect
         readonly={readonly}
         selector={selectorRectSell}
         isDragging={isDragging}
         width={dms.boundedWidth}
-        fill="var(--sell)"
+        fill="var(--color-sell)"
       />
     </g>
   );

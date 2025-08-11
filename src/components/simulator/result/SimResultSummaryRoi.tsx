@@ -32,7 +32,7 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
         </h4>
       </Tooltip>
       <AnimatedNumber
-        className={`text-24 font-weight-500 ${color}`}
+        className={`text-24 font-medium ${color}`}
         from={0.0}
         to={portfolioRoi}
         formatFn={portfolioRoiFormatter}

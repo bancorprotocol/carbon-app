@@ -94,7 +94,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
         </p>
         <label
           htmlFor="approve-warnings"
-          className="font-weight-500 flex items-center gap-8"
+          className="font-medium flex items-center gap-8"
         >
           <input
             id="approve-warnings"
