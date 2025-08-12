@@ -350,7 +350,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       {anchor && (
         <article
           id="overlapping-distribution"
-          className="grid gap-16 rounded-ee rounded-es p-20"
+          className="grid gap-16 rounded-ee-16 rounded-es-16 p-20"
         >
           <hgroup>
             <h3 className="text-16 font-medium flex items-center gap-8">

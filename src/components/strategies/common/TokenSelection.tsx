@@ -56,7 +56,7 @@ export const TokenSelection = () => {
   };
 
   return (
-    <article className="bg-background-900 grid gap-16 rounded-se rounded-ss p-16">
+    <article className="bg-background-900 grid gap-16 rounded-se-16 rounded-ss-16 p-16">
       <div
         role="menu"
         className="relative grid grid-cols-2 place-items-center gap-20"

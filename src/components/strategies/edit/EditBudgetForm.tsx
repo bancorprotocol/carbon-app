@@ -186,7 +186,9 @@ export const EditBudgetForm: FC<Props> = (props) => {
       <EditStrategyOverlapTokens />
       <EditPriceNav editType={editType} />
 
-      <div className="overflow-hidden rounded-ee rounded-es">{children}</div>
+      <div className="overflow-hidden rounded-ee-16 rounded-es-16">
+        {children}
+      </div>
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"

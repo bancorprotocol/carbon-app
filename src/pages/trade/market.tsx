@@ -41,7 +41,7 @@ export const TradeMarket = () => {
         </PairChartHistory>
       </StrategyChartSection>
       <TradeLayout>
-        <article className="bg-background-900 grid rounded-ee rounded-es">
+        <article className="bg-background-900 grid rounded-ee-16 rounded-es-16">
           <div className="p-16 pb-0">
             <TabsMenu>
               <TabsMenuButton
