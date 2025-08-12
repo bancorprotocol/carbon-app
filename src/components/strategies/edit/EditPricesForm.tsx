@@ -220,7 +220,7 @@ export const EditPricesForm: FC<Props> = (props) => {
     return (
       <article
         key="marketPrice"
-        className="bg-background-900 grid content-start rounded-16"
+        className="bg-background-900 grid content-start rounded-2xl"
       >
         <EditStrategyOverlapTokens />
         <EditPriceNav editType={editType} />
@@ -243,7 +243,7 @@ export const EditPricesForm: FC<Props> = (props) => {
       <EditStrategyOverlapTokens />
       <EditPriceNav editType={editType} />
 
-      <div className="overflow-hidden rounded-ee-16 rounded-es-16">
+      <div className="overflow-hidden rounded-ee-2xl rounded-es-2xl">
         {children}
       </div>
       <footer className="mt-16 grid gap-16">
@@ -251,7 +251,7 @@ export const EditPricesForm: FC<Props> = (props) => {
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-10 bg-background-900 text-14 font-medium flex items-center gap-8 p-20 text-white/60',
+            'rounded-lg bg-background-900 text-14 font-medium flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input

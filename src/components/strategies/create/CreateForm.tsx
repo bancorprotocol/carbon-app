@@ -85,7 +85,7 @@ export const CreateForm: FC<FormProps> = (props) => {
       className={cn(style.form, 'grid')}
       data-testid="create-strategy-form"
     >
-      <div className="overflow-hidden rounded-ee-16 rounded-es-16">
+      <div className="overflow-hidden rounded-ee-2xl rounded-es-2xl">
         {children}
       </div>
       <footer className="mt-16 grid gap-16">
@@ -93,7 +93,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-10 bg-background-900 text-14 font-medium flex items-center gap-8 p-20 text-white/60',
+            'rounded-lg bg-background-900 text-14 font-medium flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input

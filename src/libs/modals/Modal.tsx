@@ -51,7 +51,7 @@ export const Modal: FC<ModalProps> = ({
       >
         <div
           data-testid={testId}
-          className="rounded-10 bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-hidden focus:outline-hidden"
+          className="rounded-lg bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-hidden focus:outline-hidden"
         >
           {isPending && (
             <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />

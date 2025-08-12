@@ -9,7 +9,7 @@ type Props = HTMLAttributes<HTMLButtonElement> & {
 
 export const Checkbox: FC<Props> = ({ isChecked, setIsChecked, ...attr }) => {
   const classNames =
-    'size-18 rounded-4 flex items-center justify-center cursor-pointer';
+    'size-18 rounded-xs flex items-center justify-center cursor-pointer';
   const borderBgColor = isChecked ? 'bg-gradient' : ' border-2 ';
 
   return (

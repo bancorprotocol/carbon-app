@@ -27,7 +27,7 @@
 }
 
 @utility loading-skeleton {
-  @apply rounded-10 bg-background-900 animate-pulse;
+  @apply rounded-lg bg-background-900 animate-pulse;
 }
 
 

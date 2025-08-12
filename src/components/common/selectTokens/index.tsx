@@ -29,7 +29,7 @@ export const SelectTokens: FC<Props> = ({
     <div className="flex items-center justify-between">
       <button
         onClick={() => onClick0()}
-        className="-mr-13 rounded-12 px-18 flex w-[140px] grow items-center bg-black py-10"
+        className="-mr-13 rounded-xl px-18 flex w-[140px] grow items-center bg-black py-10"
       >
         <LogoImager alt="" src={imgUrl0} className="h-30 w-30 mr-8" />
         <div className="text-16 font-medium mr-auto">
@@ -46,7 +46,7 @@ export const SelectTokens: FC<Props> = ({
       </button>
       <button
         onClick={() => onClick1()}
-        className="-ml-13 rounded-12 px-18 flex w-[140px] grow items-center bg-black py-10"
+        className="-ml-13 rounded-xl px-18 flex w-[140px] grow items-center bg-black py-10"
       >
         <LogoImager
           alt=""

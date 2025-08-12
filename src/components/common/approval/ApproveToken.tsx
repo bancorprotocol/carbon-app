@@ -87,7 +87,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
   return (
     <>
-      <div className="bg-content min-h-85 flex items-center justify-between rounded-16 px-20">
+      <div className="bg-content min-h-85 flex items-center justify-between rounded-2xl px-20">
         <div className="flex items-center gap-10">
           <LogoImager alt="Token" src={token.logoURI} className="size-30" />
           <p className="font-medium">{token.symbol}</p>

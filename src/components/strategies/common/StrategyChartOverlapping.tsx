@@ -35,7 +35,7 @@ export const StrategyChartOverlapping: FC<Props> = (props) => {
   return (
     <section
       aria-labelledby="price-chart-title"
-      className="bg-background-900 sticky top-[80px] flex max-h-[600px] min-h-[500px] flex-col gap-20 rounded-16 p-20"
+      className="bg-background-900 sticky top-[80px] flex max-h-[600px] min-h-[500px] flex-col gap-20 rounded-2xl p-20"
     >
       <header className="flex flex-wrap items-center gap-20">
         <h2 id="price-chart-title" className="text-18">

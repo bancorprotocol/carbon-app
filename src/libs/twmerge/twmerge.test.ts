@@ -29,8 +29,8 @@ describe('Custom Tailwind Merge', () => {
   });
   describe('borderRadius', () => {
     it('should merge different sizes', () => {
-      expect(customTwMerge('rounded-14 rounded-16')).toEqual(
-        customTwMerge('rounded-16'),
+      expect(customTwMerge('rounded-14 rounded-2xl')).toEqual(
+        customTwMerge('rounded-2xl'),
       );
     });
     it('should merge sizes with numbers and names', () => {

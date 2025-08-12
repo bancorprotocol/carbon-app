@@ -51,7 +51,7 @@ export const SimInputStrategyType = () => {
               to={to}
               search={{ baseToken, quoteToken, start, end }}
               className={cn(
-                'rounded-10 text-14 font-medium group flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white',
+                'rounded-lg text-14 font-medium group flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white',
                 'md:px-12',
                 'focus-visible:outline-solid focus-visible:outline-1',
               )}

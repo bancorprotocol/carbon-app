@@ -118,8 +118,8 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
               Routing Table
             </h3>
           </Tooltip>
-          {/* Wrap table to keep rounded-16 visual on overflow */}
-          <div className="overflow-auto rounded-16">
+          {/* Wrap table to keep rounded-2xl visual on overflow */}
+          <div className="overflow-auto rounded-2xl">
             <table
               ref={table}
               className="w-full bg-black text-left"
@@ -193,7 +193,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             isError={!!errorMsg}
             disabled
             data-testid="confirm-source"
-            className="rounded-12 -mb-16 bg-black"
+            className="rounded-xl -mb-16 bg-black"
           />
           <IconArrow className="bg-background-900 z-10 mx-auto size-24 rounded-full p-5" />
           <TokenInputField
@@ -201,7 +201,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             token={data.target}
             disabled
             data-testid="confirm-target"
-            className="rounded-12 -mt-16 bg-black"
+            className="rounded-xl -mt-16 bg-black"
           />
         </div>
 

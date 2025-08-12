@@ -195,7 +195,7 @@ export const DebugCreateStrategy = () => {
   return (
     <form
       onSubmit={createStrategies}
-      className="rounded-18 bg-background-900 flex flex-col space-y-20 p-20"
+      className="rounded-3xl bg-background-900 flex flex-col space-y-20 p-20"
     >
       <h2 className="text-center">Create</h2>
 
@@ -203,7 +203,7 @@ export const DebugCreateStrategy = () => {
         <label htmlFor="strategy-json-shortcut">JSON Shortcut</label>
         <textarea
           id="strategy-json-shortcut"
-          className="rounded-18 bg-black px-16 py-8"
+          className="rounded-3xl bg-black px-16 py-8"
           placeholder="Enter a Strategy template in JSON format"
           onChange={onShortcutChange}
           aria-describedby="strategy-json-shortcut-description"
@@ -217,13 +217,13 @@ export const DebugCreateStrategy = () => {
         </p>
       </div>
 
-      <fieldset className="flex flex-col gap-16 rounded-16 border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-16 rounded-2xl border border-white/60 p-16">
         <legend>Tokens</legend>
         <ul className="flex flex-col gap-8">
           {allTokens.map((t) => (
             <li
               key={t.address}
-              className="rounded-18 flex items-center gap-8 bg-black px-16 py-8"
+              className="rounded-3xl flex items-center gap-8 bg-black px-16 py-8"
             >
               <Checkbox
                 isChecked={t.selected}
@@ -240,7 +240,7 @@ export const DebugCreateStrategy = () => {
         </footer>
       </fieldset>
 
-      <fieldset className="flex flex-col gap-8 rounded-16 border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded-2xl border border-white/60 p-16">
         <legend>Liquidity Position Fee Tier</legend>
         <Label label="Spread">
           <Input
@@ -258,7 +258,7 @@ export const DebugCreateStrategy = () => {
         </p>
       </fieldset>
 
-      <fieldset className="flex flex-col gap-8 rounded-16 border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded-2xl border border-white/60 p-16">
         <legend>Buy Low {baseSymbol}</legend>
         <Label label="Min">
           <Input
@@ -289,7 +289,7 @@ export const DebugCreateStrategy = () => {
           />
         </Label>
       </fieldset>
-      <fieldset className="flex flex-col gap-8 rounded-16 border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded-2xl border border-white/60 p-16">
         <legend>Sell High {baseSymbol}</legend>
         <Label label={`Min ${spread ? '(Disabled)' : ''}`}>
           <Input

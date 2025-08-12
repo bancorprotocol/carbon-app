@@ -157,7 +157,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       id={strategy.id}
       style={style}
       className={cn(
-        'rounded-10 bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        'rounded-lg bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className,
       )}
     >
@@ -183,7 +183,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           <button
             role="menuitem"
             type="button"
-            className="size-38 rounded-6 border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
+            className="size-38 rounded-sm border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
             aria-label="Withdraw & Delete"
             onClick={remove}
           >

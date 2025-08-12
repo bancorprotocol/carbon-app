@@ -15,7 +15,7 @@ export const DebugImposter = () => {
   return (
     <div
       className={
-        'rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20'
+        'rounded-3xl bg-background-900 flex flex-col items-center space-y-20 p-20'
       }
     >
       <h2>Set Imposter Account</h2>

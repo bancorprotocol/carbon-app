@@ -33,7 +33,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         icon={<IconWallet className="size-24" />}
         title="Are you sure you would like to withdraw your funds?"
       />
-      <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-16 bg-white/10 p-16">
+      <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl bg-white/10 p-16">
         <h3 className="text-14 font-medium">Did you know?</h3>
         <Link
           onClick={edit}

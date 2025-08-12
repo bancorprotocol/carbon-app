@@ -318,7 +318,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
       yTicks={y.ticks}
       zoom={zoomTransform}
     >
-      <div className={cn('rounded-12 flex flex-1 bg-black', className)}>
+      <div className={cn('rounded-xl flex flex-1 bg-black', className)}>
         <DrawingMenu clearDrawings={() => setDrawings([])} />
         <div className="flex flex-1 flex-col">
           <div className="relative grid flex-1 items-stretch justify-items-stretch">

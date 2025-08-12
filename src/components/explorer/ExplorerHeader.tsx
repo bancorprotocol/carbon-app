@@ -111,7 +111,7 @@ export const ExplorerHeader = () => {
           </Link>
         </div>
       </article>
-      <article className="border-background-800 hidden flex-1 gap-8 rounded-16 border-2 p-20 md:block">
+      <article className="border-background-800 hidden flex-1 gap-8 rounded-2xl border-2 p-20 md:block">
         <h2 className="text-20 font-normal font-title">Popular Pairs</h2>
         <table className="font-medium text-14 w-full">
           <thead className="text-16 text-white/60">
@@ -166,7 +166,7 @@ export const ExplorerHeader = () => {
           </tbody>
         </table>
       </article>
-      <article className="border-background-800 hidden flex-1 gap-8 rounded-16 border-2 p-20 lg:block">
+      <article className="border-background-800 hidden flex-1 gap-8 rounded-2xl border-2 p-20 lg:block">
         <h2 className="text-20 font-normal font-title">Trending Strategies</h2>
         <table className="text-14 w-full">
           <thead className="text-16 text-white/60">
@@ -195,7 +195,7 @@ export const ExplorerHeader = () => {
                     params={{ id }}
                     className="block w-full"
                   >
-                    <div className="bg-background-700 flex gap-8 rounded-16 px-8">
+                    <div className="bg-background-700 flex gap-8 rounded-2xl px-8">
                       <TokensOverlap tokens={[base!, quote!]} size={18} />
                       {idDisplay}
                     </div>
@@ -221,7 +221,7 @@ export const ExplorerHeader = () => {
 
 const Loading = (style: CSSProperties) => (
   <div className="animate-pulse p-4" style={style}>
-    <div className="bg-background-700 h-full rounded-16"></div>
+    <div className="bg-background-700 h-full rounded-2xl"></div>
   </div>
 );
 

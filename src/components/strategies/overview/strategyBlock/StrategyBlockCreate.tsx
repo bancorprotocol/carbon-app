@@ -16,7 +16,7 @@ export const StrategyBlockCreate: FC<Props> = ({
     <Link
       to="/trade"
       className={cn(
-        'bg-content rounded-10 py-50 text-24 font-medium group flex flex-col items-center justify-center gap-24 md:text-[32px]',
+        'bg-content rounded-lg py-50 text-24 font-medium group flex flex-col items-center justify-center gap-24 md:text-[32px]',
         className,
       )}
     >

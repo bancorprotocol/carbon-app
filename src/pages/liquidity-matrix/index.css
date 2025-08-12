@@ -106,7 +106,7 @@ html:has(.page) {
 }
 
 .page article {
-  @apply bg-background-900 rounded-16 p-16;
+  @apply bg-background-900 rounded-2xl p-16;
   display: grid;
   gap: 16px;
 }
@@ -242,7 +242,7 @@ html:has(.page) {
   gap: 24px;
 }
 .pair {
-  @apply bg-background-800 rounded-16 p-16;
+  @apply bg-background-800 rounded-2xl p-16;
   display: grid;
   gap: 16px;
   min-height: 400px;
@@ -342,7 +342,7 @@ html:has(.page) {
 }
 
 .add-pair {
-  @apply rounded-16;
+  @apply rounded-2xl;
   display: grid;
   align-items: start;
   justify-items: center;

@@ -77,25 +77,25 @@ export const useBurgerMenuItems = () => {
       <div className="flex w-full items-center justify-between">
         <NewTabLink
           to={externalLinks.x}
-          className="rounded-6 p-6 md:hover:bg-black"
+          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconX className={iconStyles} />
         </NewTabLink>
         <NewTabLink
           to={externalLinks.youtube}
-          className="rounded-6 p-6 md:hover:bg-black"
+          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconYoutube className={iconStyles} />
         </NewTabLink>
         <NewTabLink
           to={externalLinks.discord}
-          className="rounded-6 p-6 md:hover:bg-black"
+          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconDiscord className={iconStyles} />
         </NewTabLink>
         <NewTabLink
           to={externalLinks.telegram}
-          className="rounded-6 p-6 md:hover:bg-black"
+          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconTelegram className={iconStyles} />
         </NewTabLink>

@@ -212,10 +212,10 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               style={{ ...floatingStyles, ...transition }}
               {...getFloatingProps()}
               id={rootId}
-              className="bg-background-800 z-50 flex flex-col gap-8 rounded-16 p-16"
+              className="bg-background-800 z-50 flex flex-col gap-8 rounded-2xl p-16"
               onChange={onChange}
             >
-              <div className="flex gap-8 rounded-16 bg-black p-10 focus-within:outline-1">
+              <div className="flex gap-8 rounded-2xl bg-black p-10 focus-within:outline-1">
                 <IconSearch className="w-14 self-center" />
                 <input
                   id={inputId}
@@ -229,7 +229,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               <button
                 type="button"
                 onClick={reset}
-                className="bg-background-900 text-12 font-medium rounded-16 p-10"
+                className="bg-background-900 text-12 font-medium rounded-2xl p-10"
               >
                 Reset Filter
               </button>

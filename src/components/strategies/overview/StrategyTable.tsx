@@ -125,7 +125,7 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
             role="menuitem"
             to="/strategy/$id"
             params={{ id: strategy.id }}
-            className="size-38 rounded-6 border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
+            className="size-38 rounded-sm border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
           >
             <DashboardIcon className="size-16" />
           </Link>

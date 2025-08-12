@@ -120,7 +120,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       </header>
       <TokenInputField
         id={`${id}-pay`}
-        className="rounded-12 mb-20 mt-5 bg-black p-16"
+        className="rounded-xl mb-20 mt-5 bg-black p-16"
         token={source}
         isBalanceLoading={sourceBalanceQuery.isPending}
         value={sourceInput}

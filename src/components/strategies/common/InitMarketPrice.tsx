@@ -107,12 +107,12 @@ export const InitMarketPrice = (props: FieldProps) => {
   };
 
   return (
-    <div className="bg-gradient rounded-10 p-2 shadow-[0_0_12px_#A3A3A3] shadow-white">
+    <div className="bg-gradient rounded-lg p-2 shadow-[0_0_12px_#A3A3A3] shadow-white">
       <form
         className={cn(
           props.className,
           style.form,
-          'bg-background-900 rounded-10 grid gap-16 p-16',
+          'bg-background-900 rounded-lg grid gap-16 p-16',
         )}
         data-testid="user-price-form"
         onSubmit={setPrice}
@@ -147,7 +147,7 @@ export const InitMarketPrice = (props: FieldProps) => {
           htmlFor={checkboxId}
           className={cn(
             style.approveWarnings,
-            'rounded-10 text-12 font-medium flex items-center gap-8 text-white/60',
+            'rounded-lg text-12 font-medium flex items-center gap-8 text-white/60',
           )}
         >
           <input

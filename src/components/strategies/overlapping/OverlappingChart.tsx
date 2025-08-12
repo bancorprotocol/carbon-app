@@ -479,7 +479,7 @@ export const OverlappingChart: FC<Props> = (props) => {
   return (
     <svg
       id={id}
-      className={cn(styles.graph, dragging, 'rounded-16 bg-black', className)}
+      className={cn(styles.graph, dragging, 'rounded-2xl bg-black', className)}
       viewBox={viewBox}
       onWheel={updateZoom}
     >
