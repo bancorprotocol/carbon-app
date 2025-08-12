@@ -52,7 +52,7 @@ const variants = {
 
 if (config.ui.useGradientBranding) {
   variants.variant.success = [
-    'transition-all duration-500 bg-size-[200%] bg-gradient text-black',
+    'transition-[background-position] duration-500 bg-size-[200%] bg-gradient text-black',
     'hover:bg-right hover:disabled:bg-left',
   ];
 }
@@ -61,7 +61,7 @@ export const buttonStyles = cva<ButtonVariants>(
   [
     'font-title font-medium',
     'rounded-full px-30',
-    'transition duration-300 ease-in-out',
+    'transition-[border-color,opacity] duration-300 ease-in-out',
     'disabled:cursor-not-allowed',
     'disabled:opacity-40',
     'flex justify-center items-center',

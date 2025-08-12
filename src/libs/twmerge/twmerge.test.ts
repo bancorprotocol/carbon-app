@@ -246,4 +246,14 @@ describe('Custom Tailwind Merge', () => {
       );
     });
   });
+  describe('bg-size', () => {
+    it('should merge different transform-box', () => {
+      expect(customTwMerge('transformBox-fill transformBox-stroke')).toEqual(
+        'transformBox-stroke',
+      );
+      expect(customTwMerge('transformBox-content transformBox-fill')).toEqual(
+        'transformBox-fill',
+      );
+    });
+  });
 });

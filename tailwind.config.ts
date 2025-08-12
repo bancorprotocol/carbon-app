@@ -52,7 +52,7 @@ export default {
     //     },
     //   };
     // },
-    spacing: createTwConfigValues(0, 100, 1),
+    // spacing: createTwConfigValues(0, 100, 1),
     animation: {
       none: 'none',
       spin: 'spin 1s linear infinite',
@@ -65,19 +65,19 @@ export default {
       scaleUp:
         'fade var(--duration, 400ms) var(--delay, 0s) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both, scale var(--duration, 400ms) var(--delay, 0s) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both',
     },
-    borderColor: ({ theme }) => ({
-      ...theme('colors'),
-      DEFAULT: theme('colors.gray.200', 'currentColor'),
-    }),
+    // borderColor: ({ theme }) => ({
+    //   ...theme('colors'),
+    //   DEFAULT: theme('colors.gray.200', 'currentColor'),
+    // }),
     // borderRadius: {
     //   ...createTwConfigValues(0, 50, 2),
     //   DEFAULT: '16px',
     //   full: '9999px',
     // },
-    fontFamily: {
-      text: ['Carbon-Text', 'system-ui', 'sans-serif'],
-      title: ['Carbon-Title', 'system-ui', 'sans-serif'],
-    },
+    // fontFamily: {
+    //   text: ['Carbon-Text', 'system-ui', 'sans-serif'],
+    //   title: ['Carbon-Title', 'system-ui', 'sans-serif'],
+    // },
     // fontSize: {
     //   10: ['0.625rem', { lineHeight: '0.875rem' }],
     //   12: ['0.75rem', { lineHeight: '1rem' }],

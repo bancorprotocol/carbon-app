@@ -108,11 +108,10 @@ export const CreateForm: FC<FormProps> = (props) => {
           <>
             {config.ui.showCart && (
               <Button
-                className={cn(style.addCart, 'shrink-0')}
+                className={style.addCart}
                 type="button"
                 variant="white"
                 size="lg"
-                fullWidth
                 disabled={loading || animating}
                 onClick={addToCart}
                 data-testid="add-strategy-to-cart"
@@ -121,11 +120,9 @@ export const CreateForm: FC<FormProps> = (props) => {
               </Button>
             )}
             <Button
-              className="shrink-0"
               type="submit"
               variant="success"
               size="lg"
-              fullWidth
               loading={loading}
               loadingChildren={loadingChildren}
               data-testid="create-strategy"
@@ -136,11 +133,9 @@ export const CreateForm: FC<FormProps> = (props) => {
         )}
         {!user && (
           <Button
-            className="shrink-0"
             type="button"
             variant="success"
             size="lg"
-            fullWidth
             loading={loading}
             loadingChildren={loadingChildren}
             onClick={connectWallet}
