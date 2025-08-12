@@ -61,7 +61,7 @@ export const TradeMarket = () => {
             </TabsMenu>
           </div>
           <div
-            className={cn(style.order, 'p-16')}
+            className={cn(style.order, 'grid gap-16 p-16')}
             data-direction={isBuy ? 'buy' : 'sell'}
           >
             <header className="flex items-center justify-between">
