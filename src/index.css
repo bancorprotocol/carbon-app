@@ -62,19 +62,15 @@
     @apply text-white font-text min-h-screen;
   }
 
-  #root {
-    background-image: radial-gradient(100% 100% at 0% 0%, rgba(102, 255, 173, 0.4) 0%, rgba(16, 187, 213, 0.2) 47.3958%, rgb(0, 0, 0) 100%);
-  }
-  /* #root::before {
+  #root::before {
     content: '';
     position: fixed;
     z-index: -1;
     top: 0;
     width: 100dvw;
     height: 100dvh;
-    background-image: radial-gradient(100% 100% at 0% 0%, var(--color-primary) 0%, var(--color-secondary) 47%, transparent 100%);
-    opacity: 0.4;
-  } */
+    background-image: radial-gradient(100% 100% at 0% 0%, rgba(102, 255, 173, 0.4) 0%, rgba(16, 187, 213, 0.2) 47.3958%, rgb(0, 0, 0) 100%);
+  }
 
   html {
     scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
