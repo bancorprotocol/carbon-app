@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 @import './theme.css';
-@config '../tailwind.config.ts';
+/* @config '../tailwind.config.ts'; */
 
 :root {
   --hue: 0;
