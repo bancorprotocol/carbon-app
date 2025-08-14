@@ -9,6 +9,8 @@ import { useCallback } from 'react';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
 import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
+import { TokenSelection } from 'components/strategies/common/TokenSelection';
+import { TradeNav } from 'components/trade/TradeNav';
 
 const url = '/trade/overlapping';
 export const TradeOverlapping = () => {
@@ -31,6 +33,8 @@ export const TradeOverlapping = () => {
 
   return (
     <>
+      <TokenSelection />
+      <TradeNav />
       <StrategyChartOverlapping
         base={base}
         quote={quote}

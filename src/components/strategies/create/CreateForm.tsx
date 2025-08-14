@@ -85,7 +85,7 @@ export const CreateForm: FC<FormProps> = (props) => {
       className={cn(style.form, 'grid')}
       data-testid="create-strategy-form"
     >
-      <div className="overflow-hidden rounded-ee-2xl rounded-es-2xl">
+      <div className="overflow-hidden rounded-2xl bg-white-gradient">
         {children}
       </div>
       <footer className="mt-16 grid gap-16">

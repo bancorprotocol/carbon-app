@@ -3,14 +3,14 @@
 /* @config '../tailwind.config.ts'; */
 
 :root {
-  --hue: 0;
-  --chroma: 0; /* Recommended 0.01, 0.02 */
+  --hue: 215;
+  --chroma: 0.01; /* Recommended 0.01, 0.02 */
 }
 
 
 @utility main-menu {
   height: var(--main-menu-height);
-  @apply px-content font-medium flex w-full items-center justify-between bg-black text-white/50;
+  @apply px-content font-medium flex w-full items-center justify-between text-white/50;
 }
 
 @utility mobile-menu {
@@ -59,8 +59,22 @@
   html,
   body,
   #root {
-    @apply text-white bg-black font-text min-h-screen;
+    @apply text-white font-text min-h-screen;
   }
+
+  #root {
+    background-image: radial-gradient(100% 100% at 0% 0%, rgba(102, 255, 173, 0.4) 0%, rgba(16, 187, 213, 0.2) 47.3958%, rgb(0, 0, 0) 100%);
+  }
+  /* #root::before {
+    content: '';
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    width: 100dvw;
+    height: 100dvh;
+    background-image: radial-gradient(100% 100% at 0% 0%, var(--color-primary) 0%, var(--color-secondary) 47%, transparent 100%);
+    opacity: 0.4;
+  } */
 
   html {
     scrollbar-gutter: stable both-edges; /* Prevent layout shifting */

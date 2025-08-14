@@ -112,7 +112,7 @@ export const CreateOrder: FC<Props> = ({
   return (
     <article
       aria-labelledby={titleId}
-      className="bg-background-900 grid"
+      className="grid"
       data-testid={`${direction}-section`}
     >
       {!!setDirection && (

@@ -39,7 +39,7 @@ export const TradeType = () => {
   const { location } = useRouterState();
   const current = location.pathname;
   return (
-    <article className="bg-background-900 grid gap-16 p-16">
+    <article className="grid gap-16 p-16">
       <h2 id="trading-strateg-nav" className="text-16">
         Strategy Types
       </h2>
@@ -59,7 +59,7 @@ export const TradeType = () => {
             })}
             aria-current={link.pages.includes(current) ? 'page' : 'false'}
             data-testid={link.testId}
-            className="rounded-md hover:border-background-400 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
+            className="rounded-md hover:border-background-400 flex items-center justify-center gap-8 border border-transparent p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
           >
             {link.svg}
             {link.label}

@@ -6,7 +6,6 @@ import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useTradeCtx } from 'components/trade/TradeContext';
-import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
 import { SuspiciousToken } from 'components/common/DisplayPair';
 
 export const TokenSelection = () => {
@@ -56,59 +55,51 @@ export const TokenSelection = () => {
   };
 
   return (
-    <article className="bg-background-900 grid gap-16 rounded-se-2xl rounded-ss-2xl p-16">
-      <div
-        role="menu"
-        className="relative grid grid-cols-2 place-items-center gap-20"
+    <article
+      role="menu"
+      className="relative grid grid-cols-2 place-items-center gap-20 col-span-2 place-self-center rounded-full bg-white-gradient"
+    >
+      <button
+        role="menuitem"
+        className="rounded-xl pe-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 ps-10 hover:border-white"
+        aria-haspopup="dialog"
+        data-testid="select-base-token"
+        onClick={() => openTokenListModal('base')}
       >
-        <button
-          role="menuitem"
-          className="rounded-xl pe-15 flex items-center gap-8 place-self-stretch border border-transparent bg-black py-5 ps-10 hover:border-white"
-          aria-haspopup="dialog"
-          data-testid="select-base-token"
-          onClick={() => openTokenListModal('base')}
-        >
-          <TokenLogo token={base} size={30} className="hidden md:inline" />
-          <p className="grid flex-1 text-start">
-            <span className="font-medium text-12 text-white/60">
-              Buy or Sell
-            </span>
-            <span className="inline-flex items-center gap-4 break-all">
-              {base.isSuspicious && <SuspiciousToken />}
-              {base.symbol}
-            </span>
-          </p>
-          <ChevronIcon className="ml-auto size-16" />
-        </button>
-        <button
-          role="menuitem"
-          className="border-background-900 hover:bg-background-800 absolute grid size-40 place-items-center rounded-full border-4 bg-black"
-          onClick={swapTokens}
-        >
-          <ForwardArrowIcon className="size-14" />
-        </button>
-        <button
-          role="menuitem"
-          aria-haspopup="dialog"
-          className="rounded-xl ps-15 flex items-center gap-8 place-self-stretch border border-transparent bg-black py-5 pe-10 hover:border-white"
-          data-testid="select-quote-token"
-          onClick={() => openTokenListModal('quote')}
-        >
-          <TokenLogo token={quote} size={30} className="hidden md:inline" />
-          <p className="grid flex-1 text-start">
-            <span className="font-medium text-12 text-white/60">With</span>
-            <span className="inline-flex items-center gap-4 break-all">
-              {quote.isSuspicious && <SuspiciousToken />}
-              {quote.symbol}
-            </span>
-          </p>
-          <ChevronIcon className="ml-auto size-16" />
-        </button>
-      </div>
-      <p className="text-14 flex items-center gap-8 text-white/60">
-        <WarningIcon className="size-14" />
-        Rebasing and fee-on-transfer tokens are not supported.
-      </p>
+        <TokenLogo token={base} size={30} className="hidden md:inline" />
+        <p className="grid flex-1 text-start">
+          <span className="font-medium text-12 text-white/60">Buy or Sell</span>
+          <span className="inline-flex items-center gap-4 break-all">
+            {base.isSuspicious && <SuspiciousToken />}
+            {base.symbol}
+          </span>
+        </p>
+        <ChevronIcon className="ml-auto size-16" />
+      </button>
+      <button
+        role="menuitem"
+        className="border-background-900 hover:bg-background-800 absolute grid size-40 place-items-center rounded-full border-4 bg-black"
+        onClick={swapTokens}
+      >
+        <ForwardArrowIcon className="size-14" />
+      </button>
+      <button
+        role="menuitem"
+        aria-haspopup="dialog"
+        className="rounded-xl ps-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 pe-10 hover:border-white"
+        data-testid="select-quote-token"
+        onClick={() => openTokenListModal('quote')}
+      >
+        <TokenLogo token={quote} size={30} className="hidden md:inline" />
+        <p className="grid flex-1 text-start">
+          <span className="font-medium text-12 text-white/60">With</span>
+          <span className="inline-flex items-center gap-4 break-all">
+            {quote.isSuspicious && <SuspiciousToken />}
+            {quote.symbol}
+          </span>
+        </p>
+        <ChevronIcon className="ml-auto size-16" />
+      </button>
     </article>
   );
 };

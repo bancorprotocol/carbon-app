@@ -22,6 +22,8 @@ import {
   checkIfOrdersReversed,
 } from 'components/strategies/utils';
 import { OrderBlock } from 'components/strategies/common/types';
+import { TokenSelection } from 'components/strategies/common/TokenSelection';
+import { TradeNav } from 'components/trade/TradeNav';
 
 const getRecurringError = (buy: OrderBlock, sell: OrderBlock) => {
   if (checkIfOrdersReversed(buy, sell)) {
@@ -116,6 +118,8 @@ export const TradeRecurring = () => {
 
   return (
     <>
+      <TokenSelection />
+      <TradeNav />
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
