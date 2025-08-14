@@ -172,7 +172,7 @@ export const InputRange: FC<InputRangeProps> = ({
         <div className="grid gap-8">
           <div
             className={cn(
-              'rounded-e-xs rounded-s-2xl w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
+              'rounded-e-xs rounded-s-2xl w-full cursor-text border border-black bg-black-gradient p-16 focus-within:border-white/50',
               showWarning && 'border-warning focus-within:border-warning',
               hasMinError && 'border-error/50 focus-within:border-error',
             )}
@@ -232,7 +232,7 @@ export const InputRange: FC<InputRangeProps> = ({
         <div className="grid gap-8">
           <div
             className={cn(
-              'rounded-e-2xl rounded-s-xs w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
+              'rounded-e-2xl rounded-s-xs w-full cursor-text border border-black bg-black-gradient p-16 focus-within:border-white/50',
               showWarning && 'border-warning focus-within:border-warning',
               hasMaxError && 'border-error/50 focus-within:border-error',
             )}

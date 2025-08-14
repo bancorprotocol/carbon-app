@@ -219,7 +219,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
         <header className="flex gap-8 border-b border-white/40 p-12">
           <div
             role="radiogroup"
-            className="text-14 font-medium flex items-center rounded-full bg-black p-2"
+            className="text-14 font-medium flex items-center rounded-full bg-black-gradient p-2"
           >
             {Object.entries(tabs).map(([tab, label]) => (
               <div key={tab} className="relative">

@@ -122,12 +122,12 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           <div className="overflow-auto rounded-2xl">
             <table
               ref={table}
-              className="w-full bg-black text-left"
+              className="w-full bg-black-gradient text-left"
               onKeyDown={onKeyDown}
             >
               <thead>
                 <tr>
-                  <th className="sticky top-0 bg-black p-8">
+                  <th className="sticky top-0 bg-black-gradient p-8">
                     <Checkbox
                       className="m-auto"
                       isChecked={allSelected}
@@ -135,14 +135,16 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                       aria-label="toggle all orders"
                     />
                   </th>
-                  <th className="text-14 font-medium sticky top-0 bg-black py-8 text-white/60">
+                  <th className="text-14 font-medium sticky top-0 bg-black-gradient py-8 text-white/60">
                     {source.symbol}
                   </th>
-                  <th className="sticky top-0 bg-black">{/* Arrow */}</th>
-                  <th className="text-14 font-medium sticky top-0 bg-black py-8 text-white/60">
+                  <th className="sticky top-0 bg-black-gradient">
+                    {/* Arrow */}
+                  </th>
+                  <th className="text-14 font-medium sticky top-0 bg-black-gradient py-8 text-white/60">
                     {target.symbol}
                   </th>
-                  <th className="text-14 font-medium sticky top-0 bg-black py-8 text-white/60">
+                  <th className="text-14 font-medium sticky top-0 bg-black-gradient py-8 text-white/60">
                     Avg Price
                   </th>
                 </tr>
@@ -193,7 +195,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             isError={!!errorMsg}
             disabled
             data-testid="confirm-source"
-            className="rounded-xl -mb-16 bg-black"
+            className="rounded-xl -mb-16 bg-black-gradient"
           />
           <IconArrow className="bg-background-900 z-10 mx-auto size-24 rounded-full p-5" />
           <TokenInputField
@@ -201,7 +203,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             token={data.target}
             disabled
             data-testid="confirm-target"
-            className="rounded-xl -mt-16 bg-black"
+            className="rounded-xl -mt-16 bg-black-gradient"
           />
         </div>
 

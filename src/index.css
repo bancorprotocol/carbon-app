@@ -15,7 +15,7 @@
 
 @utility mobile-menu {
   height: var(--mobile-menu-height);
-  @apply font-medium border-background-800 fixed bottom-0 z-40 flex w-full flex-shrink-0 items-center justify-around border-t bg-black px-10 text-white/50 md:hidden;
+  @apply font-medium border-background-800 fixed bottom-0 z-40 flex w-full flex-shrink-0 items-center justify-around border-t bg-black-gradient px-10 text-white/50 md:hidden;
 }
 
 @utility bg-content {

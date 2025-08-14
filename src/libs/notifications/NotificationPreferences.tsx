@@ -34,7 +34,7 @@ export const NotificationPreferences = () => {
         <div
           role="radiogroup"
           aria-labelledby="global-notif-label"
-          className="text-14 font-medium flex items-center rounded-full bg-black p-4 text-white/60"
+          className="text-14 font-medium flex items-center rounded-full bg-black-gradient p-4 text-white/60"
         >
           <div className="relative">
             <input

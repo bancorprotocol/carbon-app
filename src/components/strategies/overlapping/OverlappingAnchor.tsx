@@ -17,7 +17,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
   return (
     <>
       <h3 className="text-16 font-medium flex items-center gap-8">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black-gradient text-[10px] text-white/60">
           1
         </span>
         Select Token
@@ -38,7 +38,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <label
           htmlFor="anchor-sell"
           data-testid="anchor-sell-label"
-          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
+          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black-gradient p-16"
         >
           <TokenLogo token={base} size={14} />
           {base.symbol}
@@ -58,7 +58,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <label
           htmlFor="anchor-buy"
           data-testid="anchor-buy-label"
-          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
+          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black-gradient p-16"
         >
           <TokenLogo token={quote} size={14} />
           {quote.symbol}

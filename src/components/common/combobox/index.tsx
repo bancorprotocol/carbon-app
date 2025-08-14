@@ -215,7 +215,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               className="bg-background-800 z-50 flex flex-col gap-8 rounded-2xl p-16"
               onChange={onChange}
             >
-              <div className="flex gap-8 rounded-2xl bg-black p-10 focus-within:outline-1">
+              <div className="flex gap-8 rounded-2xl bg-black-gradient p-10 focus-within:outline-1">
                 <IconSearch className="w-14 self-center" />
                 <input
                   id={inputId}

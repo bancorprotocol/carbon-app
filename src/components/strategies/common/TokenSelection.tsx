@@ -78,7 +78,7 @@ export const TokenSelection = () => {
       </button>
       <button
         role="menuitem"
-        className="border-background-900 hover:bg-background-800 absolute grid size-40 place-items-center rounded-full border-4 bg-black"
+        className="border-background-900 hover:bg-background-800 absolute grid size-40 place-items-center rounded-full border-4 bg-black-gradient"
         onClick={swapTokens}
       >
         <ForwardArrowIcon className="size-14" />

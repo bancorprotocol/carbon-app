@@ -11,12 +11,12 @@ type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 const variants = {
   variant: {
     black: [
-      'bg-black border-2 border-black text-white',
+      'bg-black-gradient border-2 border-black text-white',
       'hover:border-background-700 hover:disabled:black',
     ],
     white: [
-      'bg-white border-2 border-white text-black',
-      'hover:border-background-400 hover:disabled:border-white',
+      'bg-white-gradient border-2 border-transparent text-white',
+      'hover:opacity-40 hover:disabled:border-white',
     ],
     secondary: [
       'bg-background-800 border-2 border-background-800 text-white',
