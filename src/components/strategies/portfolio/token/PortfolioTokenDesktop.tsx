@@ -1,15 +1,13 @@
 import {
-  buildAmountString,
   buildPairNameByStrategy,
   buildPercentageString,
-  previewAmount,
 } from 'components/strategies/portfolio/utils';
 import { Token } from 'libs/tokens';
 import { useStore } from 'store';
 import { getColorByIndex } from 'utils/colorPalettes';
 import { PortfolioTokenData } from './usePortfolioToken';
 import { FC, useState } from 'react';
-import { getFiatDisplayValue } from 'utils/helpers';
+import { getFiatDisplayValue, tokenAmount } from 'utils/helpers';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -171,9 +169,17 @@ const Rows = ({
         {buildPercentageString(item.share)}
       </td>
       <td className="last:text-right last:pr-20">
-        <Tooltip element={previewAmount(item.amount, selectedToken)}>
-          <span>{buildAmountString(item.amount, selectedToken)}</span>
-        </Tooltip>
+        {selectedToken && (
+          <Tooltip
+            element={tokenAmount(item.amount, selectedToken, {
+              highPrecision: true,
+            })}
+          >
+            <span>
+              {tokenAmount(item.amount, selectedToken, { abbreviate: true })}
+            </span>
+          </Tooltip>
+        )}
       </td>
       <td className="last:text-right last:pr-20">
         {getFiatDisplayValue(item.value, selectedFiatCurrency)}

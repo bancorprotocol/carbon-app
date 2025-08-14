@@ -1,8 +1,5 @@
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
-import {
-  buildPercentageString,
-  previewAmount,
-} from 'components/strategies/portfolio/utils';
+import { buildPercentageString } from 'components/strategies/portfolio/utils';
 import { FC, useState } from 'react';
 import { useStore } from 'store';
 import { getFiatDisplayValue, tokenAmount } from 'utils/helpers';
@@ -166,11 +163,17 @@ const Rows = ({ data, onRowClick }: Omit<Props, 'isPending'>) => {
         </div>
       </td>
       <td className="last:text-right last:pr-20">
-        {buildPercentageString(item.amount)}
+        {buildPercentageString(item.share)}
       </td>
       <td className="last:text-right last:pr-20">
-        <Tooltip element={previewAmount(item.amount, item.token)}>
-          <span>{tokenAmount(item.amount, item.token)}</span>
+        <Tooltip
+          element={tokenAmount(item.amount, item.token, {
+            highPrecision: true,
+          })}
+        >
+          <span>
+            {tokenAmount(item.amount, item.token, { abbreviate: true })}
+          </span>
         </Tooltip>
       </td>
       <td className="last:text-right last:pr-20">
