@@ -186,8 +186,8 @@ describe('Custom Tailwind Merge', () => {
       );
     });
     it('should merge different non-default animations', () => {
-      expect(customTwMerge('animate-spin animate-slide-up')).toEqual(
-        customTwMerge('animate-slide-up'),
+      expect(customTwMerge('animate-spin animate-scale-up')).toEqual(
+        customTwMerge('animate-scale-up'),
       );
     });
   });

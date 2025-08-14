@@ -54,11 +54,11 @@ export default {
     // },
     // spacing: createTwConfigValues(0, 100, 1),
     animation: {
-      none: 'none',
-      spin: 'spin 1s linear infinite',
-      ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
-      pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-      bounce: 'bounce 1s infinite',
+      // none: 'none',
+      // spin: 'spin 1s linear infinite',
+      // ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
+      // pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      // bounce: 'bounce 1s infinite',
       fade: 'fade var(--duration, 200ms) var(--delay, 0s)',
       slideUp:
         'fade var(--duration, 400ms) var(--delay, 0s) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both, translateY var(--duration, 400ms) var(--delay, 0s) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both',
