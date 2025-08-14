@@ -8,7 +8,7 @@ import {
 import { Wallet } from 'ethers';
 import { CreateStrategyTestCase, toDebugStrategy } from './strategy';
 import { TokenApprovalDriver } from './TokenApprovalDriver';
-import mockLocalStorage from '../mocks/localstorage.json';
+import mockLocalStorage from '../mocks/localstorage.json' with { type: 'json' };
 
 const vNetConfig: CreateVirtualNetworkBody = {
   slug: 'e2e-ci',

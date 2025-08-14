@@ -38,7 +38,7 @@ export const ActivityNotification: FC<Props> = ({
           to="/strategy/$id"
           onClick={onClick}
           params={{ id: activity.strategy.id }}
-          className="font-weight-500 flex items-center"
+          className="font-medium flex items-center"
         >
           View Activity
         </Link>
@@ -52,7 +52,7 @@ export const ActivityNotification: FC<Props> = ({
           <IconClose className="size-14 text-white/80" />
         </button>
 
-        <p className="text-12 font-weight-500 whitespace-nowrap text-white/60">
+        <p className="text-12 font-medium whitespace-nowrap text-white/60">
           {unix(notification.timestamp).fromNow(true)}
         </p>
       </div>

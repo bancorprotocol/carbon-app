@@ -20,10 +20,10 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
   const { getFiatAsString } = useFiatCurrency(quote);
 
   return (
-    <article className="rounded-8 text-12 grid gap-4 bg-black px-16 py-12">
+    <article className="rounded-md text-12 grid gap-4 bg-black px-16 py-12">
       <h3
         className={cn(
-          'text-14 font-weight-600',
+          'text-14 font-semibold',
           isBuy ? 'text-buy' : 'text-sell',
         )}
       >
@@ -32,19 +32,15 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
       {isRange ? (
         <div className="grid grid-flow-col gap-20">
           <div className="grid gap-4">
-            <h4 className="font-weight-600 flex items-center gap-8">
-              Min Price
-            </h4>
-            <p className="font-weight-500 text-white/80">
+            <h4 className="font-semibold flex items-center gap-8">Min Price</h4>
+            <p className="font-medium text-white/80">
               {tokenAmount(order.min, quote)}
             </p>
             <MarketPriceIndication {...indicationProps} price={order.min} />
           </div>
           <div className="grid gap-4">
-            <h4 className="font-weight-600 flex items-center gap-8">
-              Max Price
-            </h4>
-            <p className="font-weight-500 text-white/80">
+            <h4 className="font-semibold flex items-center gap-8">Max Price</h4>
+            <p className="font-medium text-white/80">
               {tokenAmount(order.max, quote)}
             </p>
             <MarketPriceIndication {...indicationProps} price={order.max} />
@@ -52,16 +48,16 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
         </div>
       ) : (
         <div className="grid gap-4">
-          <h4 className="font-weight-600">{isBuy ? 'Buy' : 'Sell'} Price</h4>
-          <p className="font-weight-500 text-white/80">
+          <h4 className="font-semibold">{isBuy ? 'Buy' : 'Sell'} Price</h4>
+          <p className="font-medium text-white/80">
             {tokenAmount(order.min, quote)}
           </p>
           <MarketPriceIndication {...indicationProps} price={order.min} />
         </div>
       )}
       <div className="grid gap-4">
-        <h4 className="font-weight-600">Budget</h4>
-        <p className="font-weight-500 text-white/80">
+        <h4 className="font-semibold">Budget</h4>
+        <p className="font-medium text-white/80">
           {tokenAmount(order.budget, isBuy ? quote : base)}
         </p>
         <p className="break-all text-white/60">

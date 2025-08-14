@@ -57,7 +57,7 @@ export const DebugConfig = () => {
     <form
       onSubmit={submit}
       onReset={reset}
-      className="rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20"
+      className="rounded-3xl bg-background-900 flex flex-col items-center space-y-20 p-20"
     >
       <h2 className="text-center">Set Config</h2>
       <label htmlFor="custom-config-json">Config Override</label>
@@ -69,7 +69,7 @@ export const DebugConfig = () => {
           placeholder="Enter config file overrides in JSON format"
           value={configOverride}
           onChange={handleConfigChange}
-          className="rounded-18 w-full break-all bg-black px-16 py-8"
+          className="rounded-3xl w-full break-all bg-black px-16 py-8"
         />
       </div>
       {!!error && (

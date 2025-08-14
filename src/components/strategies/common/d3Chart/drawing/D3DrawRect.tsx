@@ -89,9 +89,9 @@ export const D3DrawRect: FC<Props> = ({ xScale, yScale, onChange }) => {
           y={yScale(points[0].y)}
           width="0"
           height="0"
-          stroke="var(--secondary)"
+          stroke="var(--color-secondary)"
           strokeWidth="2"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
           fillOpacity="0.2"
         />
       )}
@@ -101,7 +101,7 @@ export const D3DrawRect: FC<Props> = ({ xScale, yScale, onChange }) => {
           cx={xScale(x)! + xScale.bandwidth() / 2}
           cy={yScale(y)}
           r="5"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
         />
       ))}
       <rect
@@ -207,7 +207,7 @@ export const D3EditRect: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       cx={xScale(x)! + xScale.bandwidth() / 2}
       cy={yScale(y)}
       r="5"
-      fill="var(--secondary)"
+      fill="var(--color-secondary)"
       className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
@@ -237,7 +237,7 @@ export const D3EditRect: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       )}
       <g
         id={`shape-${drawing.id}`}
-        className="draggable group/drawing cursor-pointer focus-visible:outline-none"
+        className="draggable group/drawing cursor-pointer focus-visible:outline-hidden"
         onKeyDown={onKeyDown}
         onMouseDown={dragShape}
         onFocus={showIndicator}
@@ -248,9 +248,9 @@ export const D3EditRect: FC<D3ShapeProps> = ({ drawing, onChange }) => {
           className="draggable"
           ref={ref}
           {...rectProps}
-          stroke="var(--secondary)"
+          stroke="var(--color-secondary)"
           strokeWidth="2"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
           fillOpacity="0.2"
         />
         {circles}

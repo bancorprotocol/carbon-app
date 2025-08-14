@@ -128,7 +128,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
             x2="48"
             y1="15"
             y2="1"
-            stroke="var(--primary)"
+            stroke="var(--color-primary)"
             strokeWidth="6"
             strokeLinecap="round"
           />
@@ -137,7 +137,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
             x2="48"
             y1="15"
             y2="29"
-            stroke="var(--primary)"
+            stroke="var(--color-primary)"
             strokeWidth="6"
             strokeLinecap="round"
           />
@@ -145,11 +145,11 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
       </g>
       <circle
         id={id('circle')}
-        className="origin-center -rotate-[90deg]"
+        className="origin-center -rotate-90"
         cx="50"
         cy="50"
         r={radius}
-        stroke="var(--primary)"
+        stroke="var(--color-primary)"
         strokeWidth="6"
         strokeLinecap="round"
         strokeDasharray={perimeter}

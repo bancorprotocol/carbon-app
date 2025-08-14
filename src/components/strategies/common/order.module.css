@@ -2,10 +2,10 @@
   position: relative;
 }
 .order[data-direction='buy'] {
-  --direction-color: var(--buy);
+  --direction-color: var(--color-buy);
 }
 .order[data-direction='sell'] {
-  --direction-color: var(--sell);
+  --direction-color: var(--color-sell);
 }
 .order::after {
   content: '';

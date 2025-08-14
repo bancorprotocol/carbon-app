@@ -6,7 +6,7 @@ export const WalletConnect = () => {
   return (
     <section
       aria-labelledby="wallet-connect-title"
-      className="rounded-10 border-background-800 flex flex-1 flex-col justify-evenly gap-32 border px-32 py-24 md:mt-32 md:flex-row md:items-center"
+      className="rounded-lg border-background-800 flex flex-1 flex-col justify-evenly gap-32 border px-32 py-24 md:mt-32 md:flex-row md:items-center"
     >
       <article className="flex flex-col justify-center md:w-[360px] md:items-start">
         <h1 id="wallet-connect-title" className="text-30 md:text-36">

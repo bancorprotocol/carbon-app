@@ -29,7 +29,7 @@ export const LocalStrategyContent: FC<Props> = ({
   const [max, setMax] = useState(21);
   if (isPending) {
     return (
-      <div key="loading" className="flex flex-grow items-center justify-center">
+      <div key="loading" className="flex grow items-center justify-center">
         <div className="h-80">
           <CarbonLogoLoading />
         </div>

@@ -8,7 +8,7 @@ export const DebugResetDefault = () => {
   };
 
   return (
-    <article className="rounded-18 bg-background-900 grid place-items-center gap-40 p-20">
+    <article className="rounded-3xl bg-background-900 grid place-items-center gap-40 p-20">
       <h2>Deactivate Debug Mode</h2>
       <Button variant="success" onClick={deactivateOne}>
         Deactive for {config.network.name}

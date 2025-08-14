@@ -14,7 +14,11 @@ export function Candlesticks({ data }: CandlesticksProps) {
       {data.map((d) => {
         const isUp = d.open > d.close;
         const isDown = d.open < d.close;
-        const color = isUp ? '#AD4F5A' : isDown ? '#009160' : 'white';
+        const color = isUp
+          ? 'var(--color-sell)'
+          : isDown
+            ? 'var(--color-buy)'
+            : 'white';
 
         let height = 5;
         let y = yScale(d.open);

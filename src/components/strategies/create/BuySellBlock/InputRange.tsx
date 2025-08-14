@@ -85,7 +85,7 @@ export const InputRange: FC<InputRangeProps> = ({
       <div className="grid grid-cols-2 gap-6">
         <div
           className={cn(
-            'rounded-r-4 rounded-l-16 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
+            'rounded-e-xs rounded-s-2xl w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
             showWarning && 'border-warning focus-within:border-warning',
             error && 'border-error/50 focus-within:border-error',
           )}
@@ -101,7 +101,7 @@ export const InputRange: FC<InputRangeProps> = ({
             </Tooltip>
             {!!marketPrice && (
               <button
-                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
                 type="button"
                 onClick={() => setMin(formatNumber(marketPrice.toString()))}
                 data-testid="market-price-min"
@@ -118,7 +118,7 @@ export const InputRange: FC<InputRangeProps> = ({
             value={min}
             placeholder="Enter Price"
             className={cn(
-              'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+              'text-18 font-medium mb-5 w-full text-ellipsis bg-transparent focus:outline-hidden',
               error && 'text-error',
             )}
             onChange={handleChangeMin}
@@ -135,7 +135,7 @@ export const InputRange: FC<InputRangeProps> = ({
         </div>
         <div
           className={cn(
-            'rounded-r-16 rounded-l-4 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
+            'rounded-e-2xl rounded-s-xs w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
             showWarning && 'border-warning focus-within:border-warning',
             error && 'border-error/50 focus-within:border-error',
           )}
@@ -151,7 +151,7 @@ export const InputRange: FC<InputRangeProps> = ({
             </Tooltip>
             {!!marketPrice && (
               <button
-                className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
                 type="button"
                 onClick={() => setMax(formatNumber(marketPrice.toString()))}
                 data-testid="market-price-max"
@@ -168,7 +168,7 @@ export const InputRange: FC<InputRangeProps> = ({
             value={max}
             placeholder="Enter Price"
             className={cn(
-              'text-16 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+              'text-16 font-medium mb-5 w-full text-ellipsis bg-transparent focus:outline-hidden',
               error && 'text-error',
             )}
             onChange={handleChangeMax}

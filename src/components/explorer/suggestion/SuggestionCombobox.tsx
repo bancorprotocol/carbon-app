@@ -189,15 +189,12 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   }, [open, listboxId]);
 
   return (
-    <div ref={root} className={cn('flex flex-grow', style.rootSearch)}>
+    <div ref={root} className={cn('flex grow', style.rootSearch)}>
       <input
         id={inputId}
         name="search"
         type="search"
-        className={cn(
-          'flex-grow bg-transparent outline-none',
-          style.inputSearch,
-        )}
+        className={cn('grow bg-transparent outline-hidden', style.inputSearch)}
         role="combobox"
         autoComplete="off"
         aria-controls={listboxId}
@@ -215,14 +212,14 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
       <div
         role="dialog"
         className={cn(
-          'rounded-10 bg-background-800 absolute left-0 top-[100%] z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
+          'rounded-lg bg-background-800 absolute left-0 top-full z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
           style.dialog,
         )}
       >
         <header className="flex gap-8 border-b border-white/40 p-12">
           <div
             role="radiogroup"
-            className="text-14 font-weight-500 flex items-center rounded-full bg-black p-2"
+            className="text-14 font-medium flex items-center rounded-full bg-black p-2"
           >
             {Object.entries(tabs).map(([tab, label]) => (
               <div key={tab} className="relative">
@@ -237,7 +234,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
                 />
                 <label
                   htmlFor={`filtered-${tab}-radio`}
-                  className="peer-checked:bg-background-800 inline-flex cursor-pointer items-center gap-4 rounded-full px-8 py-4 outline-1 peer-focus-visible:outline"
+                  className="peer-checked:bg-background-800 inline-flex cursor-pointer items-center gap-4 rounded-full px-8 py-4 peer-focus-visible:outline-solid"
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   {label}

@@ -190,7 +190,7 @@ export const TradeCustom = () => {
           buy={orders.buy.order}
           sell={orders.sell.order}
         >
-          <article className="bg-background-900 grid gap-16 rounded-b">
+          <article className="bg-background-900 grid gap-16 rounded-b-2xl">
             {!search.directions?.length && (
               <h2 className="error-message text-16 m-0 px-16">
                 Please select an order
@@ -204,7 +204,7 @@ export const TradeCustom = () => {
                     key={direction}
                     className={cn(
                       style.order,
-                      'animate-scaleUp relative grid gap-16 p-16',
+                      'animate-scale-up relative grid gap-16 p-16',
                     )}
                     data-direction={order.direction}
                   >
@@ -232,7 +232,7 @@ export const TradeCustom = () => {
                       type="button"
                       onClick={() => addDirection(direction)}
                       className={cn([
-                        'rounded-8 grid justify-items-center gap-16 border border-dashed p-20 text-center',
+                        'rounded-md grid justify-items-center gap-16 border border-dashed p-20 text-center',
                         direction === 'buy'
                           ? 'hover:bg-buy/10 text-buy border-buy'
                           : 'hover:bg-sell/10 text-sell border-sell',
