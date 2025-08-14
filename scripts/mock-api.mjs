@@ -17,7 +17,7 @@
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { cwd } from 'process';
-import dayjs from 'dayjs';
+import { getUnixTime } from 'date-fns';
 
 export const tokenListsToMock = [
   // Bancor
@@ -248,8 +248,6 @@ const get = async (url) => {
   throw new Error(`[${res.status} ${res.statusText}] ${err.message ?? ''}`);
 };
 
-const convertToUnix = (date) => dayjs(date).unix();
-
 const getMarketRate = async (address) => {
   const url = new URL(`${baseUrl}/market-rate`);
   url.searchParams.set('address', address);
@@ -260,8 +258,8 @@ const getMarketRate = async (address) => {
 const getRoi = () => get(`${baseUrl}/roi`);
 
 const getHistoryPrices = async (baseToken, quoteToken, start, end) => {
-  const startTimestamp = convertToUnix(start);
-  const endTimestamp = convertToUnix(end);
+  const startTimestamp = getUnixTime(start);
+  const endTimestamp = getUnixTime(end);
   const url = new URL(`${baseUrl}/history/prices`);
   url.searchParams.set('baseToken', baseToken);
   url.searchParams.set('quoteToken', quoteToken);
@@ -272,8 +270,8 @@ const getHistoryPrices = async (baseToken, quoteToken, start, end) => {
 
 const getSimulatorData = async (simulatorData) => {
   const url = new URL(`${baseUrl}/simulator/create`);
-  const startTimestamp = convertToUnix(simulatorData.start);
-  const endTimestamp = convertToUnix(simulatorData.end);
+  const startTimestamp = getUnixTime(simulatorData.start);
+  const endTimestamp = getUnixTime(simulatorData.end);
 
   for (const key in simulatorData) {
     url.searchParams.set(key, simulatorData[key]);
@@ -322,8 +320,8 @@ async function main() {
       c.sellMax,
       c.sellMarginal,
       c.sellBudget,
-      convertToUnix(c.start),
-      convertToUnix(c.end),
+      getUnixTime(c.start),
+      getUnixTime(c.end),
     ]
       .join('-')
       .toLowerCase();

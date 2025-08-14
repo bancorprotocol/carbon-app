@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
-import { cn } from 'utils/helpers';
 import { ReactComponent as IconAnimation } from 'assets/icons/movie.svg';
 import { ReactComponent as IconSummary } from 'assets/icons/image.svg';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 interface Props {
   showSummary: boolean;
@@ -25,27 +25,27 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
   ];
 
   return (
-    <nav
+    <RadioGroup
       aria-label="Simulation Tabs"
-      className="border-background-900 text-14 flex h-40 w-full max-w-40 gap-2 rounded-full border-2 p-4 md:w-auto"
+      className="border-2 border-background-900"
     >
       {tabs.map(({ label, icon, isActive, click }) => {
         const active = isActive();
         return (
-          <button
+          <Radio
             key={label}
-            onClick={click}
-            className={cn(
-              'flex w-full items-center justify-center gap-4 rounded-full px-16 py-5',
-              active ? 'bg-white/10' : 'bg-transparent text-white/60',
-            )}
+            name="sim-tab"
+            value={label}
+            checked={active}
+            onChange={click}
+            className="inline-flex items-center gap-8"
             data-testid={`chart-tab-${label}`}
           >
             {icon}
             <span className="text-14 font-medium capitalize">{label}</span>
-          </button>
+          </Radio>
         );
       })}
-    </nav>
+    </RadioGroup>
   );
 };
