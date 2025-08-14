@@ -32,10 +32,10 @@ const LocalPortfolioToken = ({
     isPending: _isPending,
   });
 
+  console.log({ selectedToken });
   const { pieChartOptions } = usePortfolioTokenPieChart(
     tableData,
-    // TODO fix undefined token
-    selectedToken!.token,
+    selectedToken?.token,
   );
 
   if (!selectedToken && !isPending) {
@@ -62,16 +62,14 @@ const LocalPortfolioToken = ({
         <PortfolioTokenDesktop
           data={tableData}
           isPending={isPending}
-          // TODO selectedToken should not be undefined
-          selectedToken={selectedToken!.token}
+          selectedToken={selectedToken?.token}
         />
       }
       mobileView={
         <PortfolioTokenMobile
           data={tableData}
           isPending={isPending}
-          // TODO selectedToken should not be undefined
-          selectedToken={selectedToken!.token}
+          selectedToken={selectedToken?.token}
         />
       }
       pieChartElement={

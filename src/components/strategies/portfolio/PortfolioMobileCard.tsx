@@ -46,9 +46,8 @@ export const PortfolioMobileCard: FC<Props> = ({
     return (
       <Link
         to={href}
-        // TODO: fix this
-        params={params ?? {}}
-        search={search ?? {}}
+        params={params}
+        search={search}
         resetScroll={false}
         className={wrapperClasses}
       >
@@ -60,7 +59,7 @@ export const PortfolioMobileCard: FC<Props> = ({
   return <div className={wrapperClasses}>{content}</div>;
 };
 
-export const CardSection: FC<{ title: string; value: string }> = ({
+export const CardSection: FC<{ title: string; value?: string }> = ({
   title,
   value,
 }) => {

@@ -1,7 +1,7 @@
 import { SafeDecimal } from 'libs/safedecimal';
 import { AnyBaseStrategy } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
-import { prettifyNumber } from 'utils/helpers';
+import { tokenAmount } from 'utils/helpers';
 
 export const buildPairNameByStrategy = ({ base, quote }: AnyBaseStrategy) => {
   return `${base.symbol}/${quote.symbol}`;
@@ -14,6 +14,7 @@ export const buildPercentageString = (percentage: SafeDecimal) => {
   return `${percentage.toFixed(2)}%`;
 };
 
-export const buildAmountString = (amount: SafeDecimal, { symbol }: Token) => {
-  return `${prettifyNumber(amount)} ${symbol}`;
+export const buildAmountString = (amount: SafeDecimal, token?: Token) => {
+  if (!token) return '';
+  return tokenAmount(amount, token);
 };

@@ -1,7 +1,5 @@
-import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
-import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { useNavigate } from 'libs/routing';
 
@@ -15,10 +13,10 @@ export const StrategiesPortfolioPage = () => {
     params: { address: row.token.address },
   });
 
-  const onRowClick = (row: Row<PortfolioData>) =>
+  const onRowClick = (address: string) =>
     navigate({
       to: href,
-      params: { address: row.original.token.address },
+      params: { address },
     });
 
   return (
