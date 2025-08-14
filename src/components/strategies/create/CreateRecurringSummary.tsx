@@ -20,7 +20,7 @@ export const CreateRecurringSummary: FC<Props> = (props) => {
   const { getFiatAsString } = useFiatCurrency(quote);
 
   return (
-    <article className="rounded-8 text-12 grid gap-4 bg-black px-16 py-12">
+    <article className="rounded-md text-12 grid gap-4 bg-black px-16 py-12">
       <h3
         className={cn(
           'text-14 font-semibold',

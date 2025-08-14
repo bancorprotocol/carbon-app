@@ -23,7 +23,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
   return (
     <div
       role="table"
-      className="rounded-8 p-15 text-12 font-medium flex flex-col gap-10 border-2 border-white/10 text-left"
+      className="rounded-md p-15 text-12 font-medium flex flex-col gap-10 border-2 border-white/10 text-left"
     >
       <div role="row" className="flex items-center justify-between gap-16">
         <p role="columnheader" className="flex w-auto items-center gap-6">

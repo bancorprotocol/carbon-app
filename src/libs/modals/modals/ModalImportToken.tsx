@@ -31,7 +31,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
     closeModal(id);
   };
 
-  const blockClasses = 'my-20 h-80 rounded-8';
+  const blockClasses = 'my-20 h-80 rounded-md';
 
   return (
     <ModalOrMobileSheet id={id} title="Import Token">

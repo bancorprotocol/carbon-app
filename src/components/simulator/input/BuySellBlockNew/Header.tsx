@@ -48,7 +48,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             tabIndex={!isRange ? -1 : 0}
             onClick={setLimit}
             className={cn(
-              'rounded-4xl font-medium',
+              'rounded-full font-medium',
               !isRange
                 ? 'bg-background-900'
                 : 'text-white/60 hover:text-white/80',
@@ -63,7 +63,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             tabIndex={isRange ? -1 : 0}
             onClick={setRange}
             className={cn(
-              'rounded-4xl font-medium',
+              'rounded-full font-medium',
               isRange
                 ? 'bg-background-900'
                 : 'text-white/60 hover:text-white/80',

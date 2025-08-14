@@ -17,7 +17,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   });
 
   return (
-    <article className="rounded-8 border-background-800 flex flex-1 flex-col border-2 p-16">
+    <article className="rounded-md border-background-800 flex flex-1 flex-col border-2 p-16">
       <h4 className="text-12 flex items-center gap-4 text-white/60">
         Total Budget
       </h4>

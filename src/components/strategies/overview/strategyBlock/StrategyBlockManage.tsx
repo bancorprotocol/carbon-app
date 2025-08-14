@@ -302,7 +302,7 @@ export const ManageButtonIcon = forwardRef<
       {...props}
       ref={ref}
       className={`
-        size-38 rounded-8 border-background-800 grid place-items-center border-2
+        size-38 rounded-md border-background-800 grid place-items-center border-2
         hover:bg-white/10
         active:bg-white/20
       `}

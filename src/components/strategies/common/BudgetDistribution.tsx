@@ -98,7 +98,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
           </label>
         )}
       </div>
-      <div className="rounded-8 flex h-[24px] gap-4 overflow-hidden transition-[gap] duration-200">
+      <div className="rounded-md flex h-[24px] gap-4 overflow-hidden transition-[gap] duration-200">
         <div
           aria-valuenow={dist.allocationPercent}
           className={cn(

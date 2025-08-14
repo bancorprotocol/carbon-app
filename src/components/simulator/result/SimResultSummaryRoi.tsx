@@ -24,7 +24,7 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
   const color = portfolioRoi >= 0 ? 'text-success' : 'text-error';
 
   return (
-    <article className="rounded-8 border-background-800 flex flex-col">
+    <article className="rounded-md border-background-800 flex flex-col">
       <Tooltip element={<TooltipContent />}>
         <h4 className="text-12 flex items-center gap-4 text-white/60">
           ROI

@@ -240,7 +240,7 @@ export const TradeQuickCustom = () => {
                       type="button"
                       onClick={() => addDirection(direction)}
                       className={cn([
-                        'rounded-8 grid justify-items-center gap-16 border border-dashed p-16 text-center',
+                        'rounded-md grid justify-items-center gap-16 border border-dashed p-16 text-center',
                         direction === 'buy'
                           ? 'hover:bg-buy/10 text-buy border-buy'
                           : 'hover:bg-sell/10 text-sell border-sell',

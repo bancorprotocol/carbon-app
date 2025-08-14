@@ -49,7 +49,7 @@ const FeatureRadioGroup = () => {
         {featureFlags.map(({ value, label, description }) => (
           <div
             key={value}
-            className="rounded-8 bg-background-700 flex gap-16 p-16"
+            className="rounded-md bg-background-700 flex gap-16 p-16"
           >
             <input
               className="h-24 w-24 self-center"

@@ -1,6 +1,6 @@
 export const NoLiquidity = () => {
   return (
-    <div className="grid gap-8 border-gradient rounded-8 p-16">
+    <div className="grid gap-8 border-gradient rounded-md p-16">
       <h3 className="text-gradient text-16">
         Swapping at market price is not available - yet!
       </h3>
