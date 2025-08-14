@@ -325,7 +325,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
             <svg
               ref={ref}
               id="interactive-chart"
-              className={cn(style.historyChart, 'rounded-tr-12 flex-1')}
+              className={cn(style.historyChart, 'rounded-tr-xl flex-1')}
               data-testid="price-chart"
             >
               <defs>
