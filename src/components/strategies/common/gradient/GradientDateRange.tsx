@@ -61,7 +61,7 @@ export const GradientDateRange = memo(function TimeRange(
       aria-label="Pick date range"
       className={cn(
         'text-12 flex items-center gap-8 rounded-full border border-transparent bg-black-gradient px-12 py-8',
-        'hover:bg-background-900 active:bg-background-800 outline-1 outline-white/60 focus-visible:outline-solid',
+        'hover:bg-black-gradient active:bg-background-800 outline-1 outline-white/60 focus-visible:outline-solid',
         props.className,
       )}
       data-testid="date-picker-button"
@@ -182,13 +182,13 @@ const Content = (props: Props) => {
         />
         <div className="flex gap-20">
           {startTime && (
-            <p className="bg-background-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
+            <p className="bg-black-gradient flex flex-1 items-center gap-8 rounded-full px-16 py-8">
               <span className="text-10 text-white/60">Start Time</span>
               <time className="text-12 font-medium">{startTime}</time>
             </p>
           )}
           {range?.to && (
-            <p className="bg-background-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
+            <p className="bg-black-gradient flex flex-1 items-center gap-8 rounded-full px-16 py-8">
               <span className="text-10 text-white/60">End Time</span>
               <time className="text-12 font-medium">23:59:59</time>
             </p>

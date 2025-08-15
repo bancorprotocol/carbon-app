@@ -96,7 +96,7 @@ export const TradeQuickAuction = () => {
       </StrategyChartSection>
       <CreateLayout url={url}>
         <CreateGradientStrategyForm buy={orders.buy} sell={orders.sell}>
-          <article className="bg-background-900 rounded-b-2xl grid">
+          <article className="bg-black-gradient rounded-b-2xl grid">
             <OrderDirection direction={direction} setDirection={setDirection} />
             <div
               className={cn(style.order, 'grid gap-16 p-16')}

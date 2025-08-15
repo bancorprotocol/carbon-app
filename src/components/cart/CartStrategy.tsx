@@ -157,7 +157,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       id={strategy.id}
       style={style}
       className={cn(
-        'rounded-lg bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        'rounded-lg bg-black-gradient grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className,
       )}
     >
@@ -211,7 +211,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           popover="auto"
           onBeforeToggle={setSize}
           className={cn(
-            'rounded-md bg-background-900 absolute m-0 overflow-hidden p-24',
+            'rounded-md bg-black-gradient absolute m-0 overflow-hidden p-24',
             styles.warnings,
           )}
         >
@@ -226,7 +226,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
                 popoverTarget={popoverId}
                 popoverTargetAction="hide"
                 aria-label="close warnings"
-                className="hover:bg-background-900 ml-auto rounded-full p-8"
+                className="hover:bg-black-gradient ml-auto rounded-full p-8"
               >
                 <IconClose className="size-16" />
               </button>

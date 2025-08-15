@@ -22,7 +22,7 @@ const DefaultChildren = () => (
 
 export const ErrorWrapper: FC<Props> = ({ children, ...props }) => {
   return (
-    <div className="rounded-lg bg-background-900 w-[385px] grid gap-16 place-self-center p-20">
+    <div className="rounded-lg bg-black-gradient w-[385px] grid gap-16 place-self-center p-20">
       <IconTitleText {...props} />
       {children ? children : <DefaultChildren />}
     </div>

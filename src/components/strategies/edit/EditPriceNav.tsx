@@ -42,7 +42,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
   if (editType !== 'editPrices' && editType !== 'renew') return;
 
   return (
-    <article className="bg-background-900 grid gap-16 p-16">
+    <article className="bg-black-gradient grid gap-16 p-16">
       <h2 id="edit-strategy-nav" className="text-16">
         Type
       </h2>

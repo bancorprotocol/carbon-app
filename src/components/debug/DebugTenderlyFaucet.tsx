@@ -59,7 +59,7 @@ export const DebugTenderlyFaucet = () => {
 
   return (
     <form
-      className="rounded-3xl bg-background-900 flex flex-col items-center gap-20 p-20"
+      className="rounded-3xl bg-black-gradient flex flex-col items-center gap-20 p-20"
       onSubmit={handleOnSubmit}
     >
       <h2>Tenderly Faucet</h2>

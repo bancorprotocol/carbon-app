@@ -40,7 +40,7 @@ export const SelectTokens: FC<Props> = ({
       <button
         onClick={() => onMiddleClick?.()}
         disabled={middleDisabled}
-        className="size-30 bg-background-900 z-20 flex grow-0 items-center justify-center rounded-full disabled:cursor-not-allowed"
+        className="size-30 bg-black-gradient z-20 flex grow-0 items-center justify-center rounded-full disabled:cursor-not-allowed"
       >
         <IconArrow className={`${middleDisabled && 'opacity-25'}`} />
       </button>

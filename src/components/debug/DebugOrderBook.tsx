@@ -18,7 +18,7 @@ export const DebugOrderBook = () => {
   return (
     <div
       className={
-        'rounded-3xl bg-background-900 flex flex-col items-center space-y-20 p-20'
+        'rounded-3xl bg-black-gradient flex flex-col items-center space-y-20 p-20'
       }
     >
       <h2>Reset to defaults</h2>

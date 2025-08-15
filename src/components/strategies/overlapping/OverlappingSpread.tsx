@@ -52,7 +52,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
   // return (
   //   <article
   //     role="group"
-  //     className={cn(styles.spread, 'bg-background-900 grid gap-8 p-16')}
+  //     className={cn(styles.spread, 'bg-black-gradient grid gap-8 p-16')}
   //   >
   //     <header className="flex items-center gap-8 ">
   //       <h2 className="text-16 font-medium flex-1">Set Fee Tier</h2>

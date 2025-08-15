@@ -247,7 +247,7 @@ export const EditPricesStrategyDisposablePage = () => {
         {(buyBudgetChanges || sellBudgetChanges) && (
           <article
             id="budget-changed"
-            className="warning-message bg-background-900 p-16"
+            className="warning-message bg-black-gradient p-16"
           >
             <div className="border-warning/40 rounded-lg grid gap-16 border p-16">
               <h3 className="text-16 text-warning font-medium flex items-center gap-8">

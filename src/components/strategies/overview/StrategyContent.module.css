@@ -18,7 +18,7 @@
   }
 }
 .strategy-table {
-  @apply bg-background-900 text-14;
+  @apply bg-black-gradient text-14;
   border-radius: 8px;
   animation: open 300ms ease-out;
 }

@@ -12,7 +12,7 @@ export const StrategySearch: FC<Props> = (props) => {
     <SearchInput
       value={search}
       setValue={setSearch}
-      className={cn('bg-background-900 rounded-full', props.className)}
+      className={cn('bg-black-gradient rounded-full', props.className)}
     />
   );
 };

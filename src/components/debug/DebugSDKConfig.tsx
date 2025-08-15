@@ -23,7 +23,7 @@ export const DebugSDKConfig = () => {
 
   return (
     <form
-      className="rounded-3xl bg-background-900 flex flex-col gap-20 p-20"
+      className="rounded-3xl bg-black-gradient flex flex-col gap-20 p-20"
       onSubmit={save}
     >
       <h2>SDK Config</h2>

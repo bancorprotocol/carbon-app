@@ -238,7 +238,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   {label}
-                  <span className="bg-background-900 text-10 rounded-full px-8 py-4">
+                  <span className="bg-black-gradient text-10 rounded-full px-8 py-4">
                     {filters[tab as FocusTab].length}
                   </span>
                 </label>

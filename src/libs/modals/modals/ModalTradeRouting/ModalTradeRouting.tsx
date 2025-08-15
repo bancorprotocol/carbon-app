@@ -197,7 +197,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             data-testid="confirm-source"
             className="rounded-xl -mb-16 bg-black-gradient"
           />
-          <IconArrow className="bg-background-900 z-10 mx-auto size-24 rounded-full p-5" />
+          <IconArrow className="bg-black-gradient z-10 mx-auto size-24 rounded-full p-5" />
           <TokenInputField
             value={totalTargetAmount}
             token={data.target}

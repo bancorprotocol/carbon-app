@@ -48,7 +48,7 @@ export const Table = <D extends object>({
   });
 
   return (
-    <div className={cn('flex', 'flex-col', 'rounded-lg', 'bg-background-900')}>
+    <div className={cn('flex', 'flex-col', 'rounded-lg', 'bg-black-gradient')}>
       <table>
         <THead table={table} />
         <TBody table={table} onRowClick={onRowClick} isPending={isPending} />

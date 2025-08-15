@@ -50,7 +50,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             className={cn(
               'rounded-full font-medium',
               !isRange
-                ? 'bg-background-900'
+                ? 'bg-black-gradient'
                 : 'text-white/60 hover:text-white/80',
               'px-10 py-4',
             )}
@@ -65,7 +65,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             className={cn(
               'rounded-full font-medium',
               isRange
-                ? 'bg-background-900'
+                ? 'bg-black-gradient'
                 : 'text-white/60 hover:text-white/80',
               'px-10 py-4',
             )}

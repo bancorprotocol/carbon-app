@@ -15,7 +15,7 @@ type Props = {
 const wrapperClasses = cn(
   'flex',
   'items-center',
-  'bg-background-900',
+  'bg-black-gradient',
   'h-[120px]',
   'rounded-lg',
   'space-x-20',

@@ -112,7 +112,7 @@ export const InitMarketPrice = (props: FieldProps) => {
         className={cn(
           props.className,
           style.form,
-          'bg-background-900 rounded-lg grid gap-16 p-16',
+          'bg-black-gradient rounded-lg grid gap-16 p-16',
         )}
         data-testid="user-price-form"
         onSubmit={setPrice}

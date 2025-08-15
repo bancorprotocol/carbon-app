@@ -194,7 +194,7 @@ export const EditBudgetForm: FC<Props> = (props) => {
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-lg bg-background-900 text-14 font-medium flex items-center gap-8 p-20 text-white/60',
+            'rounded-lg bg-black-gradient text-14 font-medium flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input
