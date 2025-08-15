@@ -125,7 +125,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
             aria-label="Enter Price"
             placeholder="Enter Price"
             className={cn(
-              'text-16 font-medium w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
+              'text-24 font-medium w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
               displayError && 'text-error',
             )}
             data-testid="input-price"

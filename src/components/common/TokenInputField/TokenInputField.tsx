@@ -106,7 +106,7 @@ export const TokenInputField: FC<Props> = (props) => {
           onFocus={(e) => e.target.select()}
           onBlur={handleBlur}
           className={cn(
-            'text-16 font-medium grow text-ellipsis bg-transparent focus:outline-hidden',
+            'text-24 font-medium grow text-ellipsis bg-transparent focus:outline-hidden',
             disabled && 'cursor-not-allowed text-white/40',
             isError && 'text-error',
           )}

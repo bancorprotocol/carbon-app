@@ -10,10 +10,8 @@ import { useGetTokenBalance } from 'libs/queries';
 import { StrategyDirection } from 'libs/routing';
 import { cn } from 'utils/helpers';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
-import style from 'components/strategies/common/order.module.css';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
-import { TokenSelection } from 'components/strategies/common/TokenSelection';
-import { TradeNav } from 'components/trade/TradeNav';
+import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
@@ -37,8 +35,6 @@ export const TradeMarket = () => {
 
   return (
     <>
-      <TokenSelection />
-      <TradeNav />
       <StrategyChartSection>
         <PairChartHistory base={base} quote={quote}>
           <TradeChartContent />

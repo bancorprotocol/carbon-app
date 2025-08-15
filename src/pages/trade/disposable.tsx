@@ -23,8 +23,6 @@ import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeCha
 import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
-import { TokenSelection } from 'components/strategies/common/TokenSelection';
-import { TradeNav } from 'components/trade/TradeNav';
 
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
@@ -83,8 +81,6 @@ export const TradeDisposable = () => {
 
   return (
     <>
-      <TokenSelection />
-      <TradeNav />
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >

@@ -76,6 +76,8 @@ export const TradeNav = () => {
   const current = location.pathname;
   const links = staticTypePages.includes(current) ? staticLinks : gradientLinks;
 
+  if (current === '/trade') return;
+
   return (
     <nav
       aria-labelledby="trading-strateg-nav"
