@@ -13,36 +13,36 @@ const items = [
     icon: <IconOverlapping className="size-24" />,
     title: 'Liquidity Position',
     preview: (
-      <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0"></div>
+      <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
+        An animated chart later
+      </div>
     ),
-    values: [
-      '100% Price Certainty',
-      'Zero risk of sandwich attacks',
-      'Built-in solver to fill your order using chain-wide liquidity',
-    ],
+    values: ['100% Price Certainty', 'Zero risk of sandwich attacks'],
   },
   {
     to: '/trade/disposable',
     icon: <IconDisposable className="size-24" />,
     title: 'Limit / Range',
     preview: <PreviewRangeStrategy />,
-    values: [],
+    values: ['Some value for this Disposable'],
   },
   {
     to: '/trade/recurring',
     icon: <IconRecurring className="size-24" />,
     title: 'Recurring',
     preview: <PreviewRecurringStrategy />,
-    values: [],
+    values: ['Some value for this Recurring'],
   },
   {
     to: '/trade/market',
     icon: <IconMarket className="size-24" />,
     title: 'Swap',
     preview: (
-      <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0"></div>
+      <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
+        Something here later
+      </div>
     ),
-    values: [],
+    values: ['The original Swap !'],
   },
 ];
 
@@ -65,7 +65,25 @@ export const TradeList = () => {
               {item.preview}
               <ul>
                 {item.values.map((value, i) => (
-                  <li key={i}>{value}</li>
+                  <li key={i} className="flex items-center gap-8">
+                    <svg
+                      viewBox="0 0 100 100"
+                      width="16"
+                      height="16"
+                      className="shrink-0"
+                    >
+                      <polygon
+                        points="0,50 50,0 100,50 50,100"
+                        fill="none"
+                        stroke="var(--color-primary)"
+                      />
+                      <polygon
+                        points="25,50 50,25 75,50 50,75"
+                        fill="var(--color-primary)"
+                      />
+                    </svg>
+                    {value}
+                  </li>
                 ))}
               </ul>
             </div>

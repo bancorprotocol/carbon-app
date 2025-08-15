@@ -1,5 +1,6 @@
 .order {
   position: relative;
+  overflow: hidden;
 }
 .order[data-direction='buy'] {
   --direction-color: oklch(0.5 0.2 var(--buy-hue) / 0.4);

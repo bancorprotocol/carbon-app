@@ -42,7 +42,7 @@ export const TradeMarket = () => {
       </StrategyChartSection>
       <TradeLayout>
         <article className="bg-white-gradient grid rounded-2xl">
-          <div className="p-16 pb-0">
+          <div className="p-16">
             <TabsMenu>
               <TabsMenuButton
                 onClick={() => setDirection('sell')}

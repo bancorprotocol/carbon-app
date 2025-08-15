@@ -224,7 +224,7 @@ export const EditPricesStrategyDisposablePage = () => {
           direction={search.direction}
           hasPriceChanged={hasPriceChanged}
           settings={
-            <div className="p-16 pb-0">
+            <div className="p-16">
               <TabsMenu>
                 <TabsMenuButton
                   onClick={() => setDirection('buy')}
