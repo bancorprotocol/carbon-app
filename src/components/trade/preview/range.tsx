@@ -10,17 +10,14 @@ export const PreviewRangeStrategy = () => {
       )}
     >
       <svg id="limit_limit" viewBox="0 0 1000 1000" width="500" height="500">
-        <line
-          x1="50"
-          x2="950"
-          y1="450"
-          y2="450"
-          strokeWidth="3"
-          stroke="var(--color-sell)"
+        <rect
+          x="50"
+          y="650"
+          width="900"
+          height="150"
+          fill="var(--color-buy)"
+          fillOpacity="0.4"
         />
-        <g transform="translate(950, 450)">
-          <use href="#sell-indicator" />
-        </g>
         <line
           x1="50"
           x2="950"
@@ -30,6 +27,17 @@ export const PreviewRangeStrategy = () => {
           stroke="var(--color-buy)"
         />
         <g transform="translate(950, 650)">
+          <use href="#buy-indicator" />
+        </g>
+        <line
+          x1="50"
+          x2="950"
+          y1="800"
+          y2="800"
+          strokeWidth="3"
+          stroke="var(--color-buy)"
+        />
+        <g transform="translate(950, 800)">
           <use href="#buy-indicator" />
         </g>
 
