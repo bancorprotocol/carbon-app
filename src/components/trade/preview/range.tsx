@@ -36,10 +36,10 @@ export const PreviewRangeStrategy = () => {
         <use href="#path-stroke" />
 
         <g transform="translate(238, 700) rotate(78) scale(0.9)">
-          <use id="buy-1" href="#buy-range" />
+          <use className={style.buy1} href="#buy-range" />
         </g>
         <g transform="translate(622, 750) rotate(78) scale(0.8)">
-          <use id="buy-2" href="#buy-range" />
+          <use className={style.buy2} href="#buy-range" />
         </g>
 
         <line
