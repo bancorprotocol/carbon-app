@@ -51,10 +51,11 @@ export const TradeList = () => {
     <>
       <PreviewCommonStrategyType />
       <nav className="grid grid-cols-2 gap-16 col-span-2">
-        {items.map((item) => (
+        {items.map((item, i) => (
           <Link
             key={item.to}
-            className="grid gap-16 rounded-2xl bg-white-gradient p-16"
+            style={{ animationDelay: `${i * 50}ms` }}
+            className="grid gap-16 rounded-2xl bg-white-gradient p-16 animate-scale-up"
             to={item.to}
           >
             <header className="flex items-center gap-16">
