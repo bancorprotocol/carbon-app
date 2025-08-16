@@ -23,7 +23,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
   return (
     <div
       role="table"
-      className="rounded-8 p-15 text-12 font-weight-500 flex flex-col gap-10 border-2 border-white/10 text-left"
+      className="rounded-md p-15 text-12 font-medium flex flex-col gap-10 border-2 border-white/10 text-left"
     >
       <div role="row" className="flex items-center justify-between gap-16">
         <p role="columnheader" className="flex w-auto items-center gap-6">
@@ -92,7 +92,7 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
                   <IconDistributedEntireRange />
                 </div>
                 <div>
-                  <div className="text-12 font-weight-500 text-white">
+                  <div className="text-12 font-medium text-white">
                     Distribute Across Entire Range
                   </div>
                   <div className="text-10 text-white/60">
@@ -106,7 +106,7 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
                   <IconDistributedUnusedRange />
                 </div>
                 <div>
-                  <div className="text-12 font-weight-500 text-white">
+                  <div className="text-12 font-medium text-white">
                     Distribute To Unused Range
                   </div>
                   <div className="text-10 text-white/60">

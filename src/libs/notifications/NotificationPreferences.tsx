@@ -23,7 +23,7 @@ export const NotificationPreferences = () => {
 
   return (
     <form onChange={onChange} className="mt-24">
-      <div className="rounded-6 flex border-2 border-white/10 px-16 py-8">
+      <div className="rounded-sm flex border-2 border-white/10 px-16 py-8">
         <h3
           id="global-notif-label"
           className="text-16 flex flex-1 items-center gap-8"
@@ -34,7 +34,7 @@ export const NotificationPreferences = () => {
         <div
           role="radiogroup"
           aria-labelledby="global-notif-label"
-          className="text-14 font-weight-500 flex items-center rounded-full bg-black p-4 text-white/60"
+          className="text-14 font-medium flex items-center rounded-full bg-black-gradient p-4 text-white/60"
         >
           <div className="relative">
             <input
@@ -47,7 +47,7 @@ export const NotificationPreferences = () => {
             />
             <label
               htmlFor="global-notif-on"
-              className="cursor-pointer rounded-full px-10 py-4 outline-1 peer-checked/notif-on:bg-white/10 peer-checked/notif-on:text-white peer-focus-visible/notif-on:outline"
+              className="cursor-pointer rounded-full px-10 py-4 outline-1 peer-checked/notif-on:bg-white/10 peer-checked/notif-on:text-white peer-focus-visible/notif-on:outline-solid"
             >
               On
             </label>
@@ -63,7 +63,7 @@ export const NotificationPreferences = () => {
             />
             <label
               htmlFor="global-notif-off"
-              className="cursor-pointer rounded-full px-10 py-4 outline-1 peer-checked/notif-off:bg-white/10 peer-checked/notif-off:text-white peer-focus-visible/notif-off:outline"
+              className="cursor-pointer rounded-full px-10 py-4 outline-1 peer-checked/notif-off:bg-white/10 peer-checked/notif-off:text-white peer-focus-visible/notif-off:outline-solid"
             >
               Off
             </label>

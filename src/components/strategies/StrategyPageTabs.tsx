@@ -20,7 +20,7 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
   return (
     <nav
       aria-label="Strategy Panels"
-      className="border-background-900 text-14 mr-auto flex w-full gap-2 rounded-full border-2 p-6 md:w-auto"
+      className="bg-black-gradient text-14 mr-auto flex w-full gap-2 rounded-full p-6 md:w-auto"
     >
       {tabs.map(({ label, href, params, icon, badge }) => {
         const active = match({
@@ -39,7 +39,7 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
             className={cn(
               'flex w-full items-center justify-center gap-4 rounded-full py-5 md:px-10',
               active
-                ? 'bg-white/10'
+                ? 'bg-white-gradient'
                 : 'bg-transparent text-white/60 hover:text-white/80',
             )}
             aria-current={active ? 'location' : 'false'}

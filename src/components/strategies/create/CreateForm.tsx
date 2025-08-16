@@ -82,16 +82,19 @@ export const CreateForm: FC<FormProps> = (props) => {
   return (
     <form
       onSubmit={create}
-      className={cn(style.form, 'grid')}
+      style={{ animationDelay: '100ms' }}
+      className={cn(style.form, 'grid animate-scale-up')}
       data-testid="create-strategy-form"
     >
-      <div className="overflow-hidden rounded-ee rounded-es">{children}</div>
+      <div className="overflow-hidden rounded-2xl bg-white-gradient">
+        {children}
+      </div>
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60',
+            'rounded-lg bg-black-gradient text-14 font-medium flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input
@@ -108,11 +111,10 @@ export const CreateForm: FC<FormProps> = (props) => {
           <>
             {config.ui.showCart && (
               <Button
-                className={cn(style.addCart, 'shrink-0')}
+                className={style.addCart}
                 type="button"
                 variant="white"
                 size="lg"
-                fullWidth
                 disabled={loading || animating}
                 onClick={addToCart}
                 data-testid="add-strategy-to-cart"
@@ -121,11 +123,9 @@ export const CreateForm: FC<FormProps> = (props) => {
               </Button>
             )}
             <Button
-              className="shrink-0"
               type="submit"
               variant="success"
               size="lg"
-              fullWidth
               loading={loading}
               loadingChildren={loadingChildren}
               data-testid="create-strategy"
@@ -136,11 +136,9 @@ export const CreateForm: FC<FormProps> = (props) => {
         )}
         {!user && (
           <Button
-            className="shrink-0"
             type="button"
             variant="success"
             size="lg"
-            fullWidth
             loading={loading}
             loadingChildren={loadingChildren}
             onClick={connectWallet}

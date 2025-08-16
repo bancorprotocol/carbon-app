@@ -34,7 +34,7 @@ export const DragablePriceRange = ({
 }: OrderRangeProps) => {
   const { dms } = useD3ChartCtx();
   const isDragging = useRef(false);
-  const color = type === 'buy' ? 'var(--buy)' : 'var(--sell)';
+  const color = type === 'buy' ? 'var(--color-buy)' : 'var(--color-sell)';
   const maxIsOutOfScale = yPos.max <= 0;
   const minIsOutOfScale = yPos.min >= dms.boundedHeight;
 

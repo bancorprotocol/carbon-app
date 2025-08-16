@@ -22,7 +22,7 @@ export const SearchInput = ({
   return (
     <div
       className={cn(
-        'flex items-center gap-16 border border-transparent bg-black px-16 py-8 focus-within:border-white',
+        'flex items-center gap-16 border border-transparent bg-black-gradient px-16 py-8 focus-within:border-white',
         className,
       )}
     >
@@ -34,7 +34,7 @@ export const SearchInput = ({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Search"
-        className="placeholder-white-disabled flex-1 bg-transparent focus:outline-none"
+        className="placeholder-white-disabled flex-1 bg-transparent focus:outline-hidden"
         onKeyDown={(e) => {
           if (e.key === 'Escape' && !!value) {
             e.stopPropagation();

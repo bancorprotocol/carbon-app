@@ -43,8 +43,10 @@ export const Switch: FC<SwitchProps> = ({
         <m.div
           className={cn(
             'aspect-square h-10 rounded-full outline-2',
-            isOn ? 'bg-black outline-black' : 'bg-white/60 outline-white/60',
-            'peer-focus-visible:outline',
+            isOn
+              ? 'bg-black-gradient outline-black'
+              : 'bg-white/60 outline-white/60',
+            'peer-focus-visible:outline-solid',
           )}
           layout
           transition={spring}

@@ -7,7 +7,7 @@ export const BuySellPriceRangeIndicator = ({ isBuy, limit }: Props) => {
   const background = isBuy ? 'bg-buy' : 'bg-sell';
   return (
     <div
-      className={`rounded-b-6 flex w-full justify-center bg-gradient-to-t ${
+      className={`rounded-b-md flex w-full justify-center bg-linear-to-t ${
         isBuy ? 'from-buy/10' : 'from-sell/10'
       }`}
     >

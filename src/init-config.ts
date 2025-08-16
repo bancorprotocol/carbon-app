@@ -2,16 +2,16 @@ import config from 'config';
 
 if (!config.ui.useGradientBranding) {
   document.documentElement.style.setProperty(
-    '--gradient-first',
-    'var(--primary)',
+    '--color-primary',
+    'var(--color-primary)',
   );
   document.documentElement.style.setProperty(
-    '--gradient-middle',
-    'var(--secondary)',
+    '--color-secondary',
+    'var(--color-secondary)',
   );
   document.documentElement.style.setProperty(
-    '--gradient-last',
-    'var(--primary)',
+    '--color-tertiary',
+    'var(--color-primary)',
   );
 }
 

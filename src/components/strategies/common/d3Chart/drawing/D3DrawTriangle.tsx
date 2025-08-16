@@ -67,9 +67,9 @@ export const D3DrawTriangle: FC<Props> = ({ xScale, yScale, onChange }) => {
         <polygon
           ref={ref}
           points={polygon}
-          stroke="var(--secondary)"
+          stroke="var(--color-secondary)"
           strokeWidth="2"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
           fillOpacity="0.2"
         />
       )}
@@ -79,7 +79,7 @@ export const D3DrawTriangle: FC<Props> = ({ xScale, yScale, onChange }) => {
           cx={xScale(x)! + xScale.bandwidth() / 2}
           cy={yScale(y)}
           r="5"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
         />
       ))}
       <rect
@@ -178,7 +178,7 @@ export const D3EditTriangle: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       cx={xScale(x)! + xScale.bandwidth() / 2}
       cy={yScale(y)}
       r="5"
-      fill="var(--secondary)"
+      fill="var(--color-secondary)"
       className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
@@ -210,7 +210,7 @@ export const D3EditTriangle: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       )}
       <g
         id={`shape-${drawing.id}`}
-        className="draggable group/drawing cursor-pointer focus-visible:outline-none"
+        className="draggable group/drawing cursor-pointer focus-visible:outline-hidden"
         onKeyDown={onKeyDown}
         onMouseDown={dragShape}
         onFocus={showIndicator}
@@ -221,9 +221,9 @@ export const D3EditTriangle: FC<D3ShapeProps> = ({ drawing, onChange }) => {
           className="draggable"
           ref={ref}
           points={polygon}
-          stroke="var(--secondary)"
+          stroke="var(--color-secondary)"
           strokeWidth="2"
-          fill="var(--secondary)"
+          fill="var(--color-secondary)"
           fillOpacity="0.2"
         />
         {circles}

@@ -17,9 +17,9 @@ describe('Custom Tailwind Merge', () => {
       expect(customTwMerge('text-white text-primary')).toEqual(
         customTwMerge('text-primary'),
       );
-      expect(
-        customTwMerge('text-background-50 text-primaryGradient-first'),
-      ).toEqual(customTwMerge('text-primaryGradient-first'));
+      expect(customTwMerge('text-background-50 text-primary')).toEqual(
+        customTwMerge('text-primary'),
+      );
     });
     it('should merge different sizes', () => {
       expect(customTwMerge('text-14 text-16')).toEqual(
@@ -29,8 +29,8 @@ describe('Custom Tailwind Merge', () => {
   });
   describe('borderRadius', () => {
     it('should merge different sizes', () => {
-      expect(customTwMerge('rounded-14 rounded-16')).toEqual(
-        customTwMerge('rounded-16'),
+      expect(customTwMerge('rounded-14 rounded-2xl')).toEqual(
+        customTwMerge('rounded-2xl'),
       );
     });
     it('should merge sizes with numbers and names', () => {
@@ -186,21 +186,21 @@ describe('Custom Tailwind Merge', () => {
       );
     });
     it('should merge different non-default animations', () => {
-      expect(customTwMerge('animate-spin animate-slideUp')).toEqual(
-        customTwMerge('animate-slideUp'),
+      expect(customTwMerge('animate-spin animate-scale-up')).toEqual(
+        customTwMerge('animate-scale-up'),
       );
     });
   });
   describe('font weight', () => {
     it('should merge different sizes', () => {
-      expect(customTwMerge('font-weight-300 font-weight-500')).toEqual(
-        customTwMerge('font-weight-500'),
+      expect(customTwMerge('font-light font-medium')).toEqual(
+        customTwMerge('font-medium'),
       );
     });
     it('should not merge size with family', () => {
-      expect(
-        customTwMerge('font-weight-300 font-weight-500 font-mono'),
-      ).toEqual(customTwMerge('font-weight-500 font-mono'));
+      expect(customTwMerge('font-light font-medium font-mono')).toEqual(
+        customTwMerge('font-medium font-mono'),
+      );
     });
   });
   describe('size and height/width', () => {
@@ -237,6 +237,16 @@ describe('Custom Tailwind Merge', () => {
     });
   });
   describe('transformBox', () => {
+    it('should merge different transform-box', () => {
+      expect(customTwMerge('transformBox-fill transformBox-stroke')).toEqual(
+        'transformBox-stroke',
+      );
+      expect(customTwMerge('transformBox-content transformBox-fill')).toEqual(
+        'transformBox-fill',
+      );
+    });
+  });
+  describe('bg-size', () => {
     it('should merge different transform-box', () => {
       expect(customTwMerge('transformBox-fill transformBox-stroke')).toEqual(
         'transformBox-stroke',

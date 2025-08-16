@@ -54,7 +54,7 @@ export const EditStrategyPriceField: FC<Props> = ({
 
   const inputTitle = (
     <>
-      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
+      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black-gradient text-[10px] text-white/60">
         1
       </span>
       <Tooltip
@@ -116,7 +116,7 @@ export const EditStrategyPriceField: FC<Props> = ({
   return (
     <article
       aria-labelledby={titleId}
-      className="bg-background-900 grid text-left"
+      className="bg-black-gradient grid text-left"
       data-testid={`${isBuy ? 'buy' : 'sell'}-section`}
     >
       {settings}
@@ -126,7 +126,7 @@ export const EditStrategyPriceField: FC<Props> = ({
       >
         <OrderHeader {...headerProps} />
         <fieldset className="flex flex-col gap-8">
-          <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
+          <legend className="text-14 font-medium mb-11 flex items-center gap-6">
             {inputTitle}
           </legend>
           {order.settings === 'range' ? (
@@ -169,7 +169,7 @@ export const EditStrategyPriceField: FC<Props> = ({
           {showDistribution() && (
             <div
               role="table"
-              className="rounded-8 p-15 text-12 font-weight-500 mt-8 flex flex-col gap-10 border-2 border-white/10 text-left"
+              className="rounded-md p-15 text-12 font-medium mt-8 flex flex-col gap-10 border-2 border-white/10 text-left"
             >
               <EditBudgetDistribution
                 marginalPrice={order.marginalPrice}

@@ -42,7 +42,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
   if (editType !== 'editPrices' && editType !== 'renew') return;
 
   return (
-    <article className="bg-background-900 grid gap-16 p-16">
+    <article className="bg-black-gradient grid gap-16 p-16">
       <h2 id="edit-strategy-nav" className="text-16">
         Type
       </h2>
@@ -65,7 +65,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
             replace={true}
             aria-current={pathName.includes(link.id) ? 'page' : 'false'}
             data-testid={`edit-${link.id}`}
-            className="rounded-8 hover:border-background-400 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
+            className="rounded-md hover:border-background-400 flex items-center justify-center gap-8 border border-transparent bg-black-gradient p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
           >
             {link.label}
             <Tooltip element={link.text} iconClassName="size-14" />

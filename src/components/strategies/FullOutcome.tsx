@@ -23,21 +23,21 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
     <p className="text-12 text-white/60" data-testid="full-outcome">
       {hasBudgetUpdate && 'Based on updated budget, '}
       If the order is 100% filled, you will receive&nbsp;
-      <b className="font-weight-600 break-words" data-testid="outcome-value">
+      <b className="font-semibold break-words" data-testid="outcome-value">
         {prettifyNumber(amount)}&nbsp;
         {token.symbol}
       </b>
       &nbsp;at an average price of&nbsp;
-      <b className="font-weight-600 break-words" data-testid="outcome-quote">
+      <b className="font-semibold break-words" data-testid="outcome-quote">
         {prettifyNumber(mean)}&nbsp;
         {props.quote.symbol}
       </b>
-      &nbsp;per <b className="font-weight-500">1 {props.base.symbol}</b>.&nbsp;
+      &nbsp;per <b className="font-medium">1 {props.base.symbol}</b>.&nbsp;
       <a
         href="https://faq.carbondefi.xyz/order-execution/100-fill-estimation"
         target="_blank"
         rel="noreferrer"
-        className="font-weight-500 text-primary inline-flex items-center gap-4"
+        className="font-medium text-primary inline-flex items-center gap-4"
       >
         <span>Learn More</span>
         <IconLink className="inline size-12" />

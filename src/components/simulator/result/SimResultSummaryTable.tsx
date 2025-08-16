@@ -29,7 +29,7 @@ export const SimResultSummaryTable = ({
   const isSellLimitOrder = sell.min === sell.max;
 
   return (
-    <article className="grid grid-cols-[auto,auto,auto,auto] grid-rows-2 items-center justify-evenly gap-x-8 gap-y-4">
+    <article className="grid grid-cols-[auto_auto_auto_auto] grid-rows-2 items-center justify-evenly gap-x-8 gap-y-4">
       <Arrow className="text-sell size-16 -rotate-90" />
       <span data-testid="table-sell-order-rates">
         {isSellLimitOrder ? sellMin : `${sellMin} - ${sellMax}`} {quoteSymbol}{' '}
