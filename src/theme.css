@@ -52,8 +52,10 @@
   --animate-ping: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
   --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-fade: fade var(--duration, 200ms) var(--delay, 0s);
-  --animate-scale-up: fade var(--duration, 400ms) var(--delay, 0s) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both,
-    scale var(--duration, 400ms) var(--delay, 0s) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both
+  --animate-scale-up: fade var(--duration, 400ms) var(--delay, 0s) var(--easing, var(--ease-out)) both,
+    scale var(--duration, 400ms) var(--delay, 0s) var(--easing, var(--ease-out)) both;
+  --animate-slide-up: fade var(--duration, 400ms) var(--delay, 0s) var(--easing, var(--ease-out)) both,
+    slideY var(--duration, 400ms) var(--delay, 0s) var(--easing, var(--ease-out)) both;
 }
 
 @keyframes spin {
@@ -80,6 +82,11 @@
 @keyframes scale {
   from {
     transform: scale(var(--from-scale, 0.8));
+  }
+}
+@keyframes slideY {
+  from {
+    transform: translateY(var(--from-translate, 100px));
   }
 }
 
