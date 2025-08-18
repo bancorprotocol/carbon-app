@@ -152,7 +152,7 @@ export const InputBudget: FC<Props> = (props) => {
             <span className="font-medium">{token.symbol}</span>
           </div>
         </div>
-        <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono">
+        <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10">
           <p className="flex items-center gap-5 text-white/60">{priceText()}</p>
           {user && max && !maxIsLoading && (
             <button
