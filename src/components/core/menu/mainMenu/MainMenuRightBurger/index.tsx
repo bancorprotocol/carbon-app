@@ -24,7 +24,7 @@ export const MainMenuRightBurger: FC<{
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       placement="bottom"
-      className="text-16 font-weight-400 rounded-[10px] p-8 text-white"
+      className="text-16 font-normal rounded-[10px] p-8 text-white"
       button={(attr) => (
         <button
           {...attr}

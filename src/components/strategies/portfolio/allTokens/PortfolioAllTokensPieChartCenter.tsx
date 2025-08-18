@@ -18,10 +18,10 @@ export const PortfolioAllTokensPieChartCenter: FC<Props> = ({
 
   return (
     <div className={cn('flex', 'flex-col', 'items-center', 'space-y-6')}>
-      <div className={cn('text-24', 'font-weight-500')}>
+      <div className={cn('text-24', 'font-medium')}>
         {getFiatDisplayValue(totalValue, selectedFiatCurrency)}
       </div>
-      <div className={cn('text-white/60', 'font-weight-500')}>
+      <div className={cn('text-white/60', 'font-medium')}>
         {assetsCount} Assets
       </div>
     </div>

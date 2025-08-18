@@ -45,7 +45,7 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
         style: { fontFamily: 'Carbon-Text' },
         formatter: function () {
           return (
-            '<div class="p-10 text-14 text-white font-weight-500 space-y-12">' +
+            '<div class="p-10 text-14 text-white font-medium space-y-12">' +
             '<div class="flex items-center w-[230px] space-x-10">' +
             '<img alt="Token Logo" width="30" height="30" src="' +
             data[this.colorIndex].token.logoURI +

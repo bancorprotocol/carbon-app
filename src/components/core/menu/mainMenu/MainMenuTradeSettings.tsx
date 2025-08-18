@@ -96,7 +96,10 @@ export const MainMenuTradeSettings = () => {
           <header className="flex items-center gap-16">
             <h2 className="mr-auto text-18">Trade Settings</h2>
             {!isAllSettingsDefault && (
-              <button type="reset" className="text-14 text-white p-8 rounded-8">
+              <button
+                type="reset"
+                className="text-14 text-white p-8 rounded-md"
+              >
                 Reset All
               </button>
             )}

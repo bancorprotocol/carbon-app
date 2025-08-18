@@ -59,7 +59,7 @@ export const DebugTenderlyFaucet = () => {
 
   return (
     <form
-      className="rounded-18 bg-background-900 flex flex-col items-center gap-20 p-20"
+      className="rounded-3xl bg-background-900 flex flex-col items-center gap-20 p-20"
       onSubmit={handleOnSubmit}
     >
       <h2>Tenderly Faucet</h2>
@@ -74,7 +74,7 @@ export const DebugTenderlyFaucet = () => {
               )}
               <span>{symbol}</span>
               <button
-                className="text-12 border border-white/60 rounded px-8 py-4 cursor-pointer disabled:text-white/60"
+                className="text-12 border border-white/60 rounded-2xl px-8 py-4 cursor-pointer disabled:text-white/60"
                 type="button"
                 disabled={!user}
                 onClick={() => addOne(TOKENS[i])}

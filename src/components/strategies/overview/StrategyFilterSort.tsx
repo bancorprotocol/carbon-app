@@ -198,9 +198,9 @@ const FilterSortItem: FC<{
       <label
         htmlFor={id}
         className="
-          rounded-6 flex cursor-pointer items-center justify-between px-16
+          rounded-sm flex cursor-pointer items-center justify-between px-16
           py-8 hover:bg-black/90
-          peer-focus-visible:outline peer-focus-visible:outline-1
+          peer-focus-visible:outline-solid peer-focus-visible:outline-1
         "
       >
         {title}

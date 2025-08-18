@@ -56,21 +56,21 @@ export const TokenSelection = () => {
   };
 
   return (
-    <article className="bg-background-900 grid gap-16 rounded-se rounded-ss p-16">
+    <article className="bg-background-900 grid gap-16 rounded-se-2xl rounded-ss-2xl p-16">
       <div
         role="menu"
         className="relative grid grid-cols-2 place-items-center gap-20"
       >
         <button
           role="menuitem"
-          className="rounded-12 pe-15 flex items-center gap-8 place-self-stretch border border-transparent bg-black py-5 ps-10 hover:border-white"
+          className="rounded-xl pe-15 flex items-center gap-8 place-self-stretch border border-transparent bg-black py-5 ps-10 hover:border-white"
           aria-haspopup="dialog"
           data-testid="select-base-token"
           onClick={() => openTokenListModal('base')}
         >
           <TokenLogo token={base} size={30} className="hidden md:inline" />
           <p className="grid flex-1 text-start">
-            <span className="font-weight-500 text-12 text-white/60">
+            <span className="font-medium text-12 text-white/60">
               Buy or Sell
             </span>
             <span className="inline-flex items-center gap-4 break-all">
@@ -90,13 +90,13 @@ export const TokenSelection = () => {
         <button
           role="menuitem"
           aria-haspopup="dialog"
-          className="rounded-12 ps-15 flex items-center gap-8 place-self-stretch border border-transparent bg-black py-5 pe-10 hover:border-white"
+          className="rounded-xl ps-15 flex items-center gap-8 place-self-stretch border border-transparent bg-black py-5 pe-10 hover:border-white"
           data-testid="select-quote-token"
           onClick={() => openTokenListModal('quote')}
         >
           <TokenLogo token={quote} size={30} className="hidden md:inline" />
           <p className="grid flex-1 text-start">
-            <span className="font-weight-500 text-12 text-white/60">With</span>
+            <span className="font-medium text-12 text-white/60">With</span>
             <span className="inline-flex items-center gap-4 break-all">
               {quote.isSuspicious && <SuspiciousToken />}
               {quote.symbol}

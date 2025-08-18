@@ -24,19 +24,19 @@ const variants = {
     ],
     success: [
       'bg-primary border-2 border-primary text-black',
-      'hover:border-primary-light hover:disabled:border-primary',
+      'hover:border-white/60 hover:disabled:border-primary',
     ],
     buy: [
       'bg-buy border-2 border-buy text-black',
-      'hover:border-buy-light hover:text-black hover:bg-buy hover:disabled:border-buy',
+      'hover:border-white/60 hover:text-black hover:bg-buy hover:disabled:border-buy',
     ],
     sell: [
       'bg-sell border-2 border-sell text-black',
-      'hover:border-sell-light hover:text-black hover:bg-sell hover:disabled:border-sell',
+      'hover:border-white/60 hover:text-black hover:bg-sell hover:disabled:border-sell',
     ],
     error: [
       'bg-error border-2 border-error text-black',
-      'hover:border-error-light hover:disabled:border-error',
+      'hover:border-white/60 hover:disabled:border-error',
     ],
   },
   size: {
@@ -52,16 +52,16 @@ const variants = {
 
 if (config.ui.useGradientBranding) {
   variants.variant.success = [
-    'transition-all duration-500! bg-[length:200%] bg-gradient text-black',
+    'transition-[background-position] duration-500 bg-size-[200%] bg-gradient text-black',
     'hover:bg-right hover:disabled:bg-left',
   ];
 }
 
 export const buttonStyles = cva<ButtonVariants>(
   [
-    'font-title font-weight-500',
+    'font-title font-medium',
     'rounded-full px-30',
-    'transition duration-300 ease-in-out',
+    'transition-[border-color,opacity] duration-300 ease-in-out',
     'disabled:cursor-not-allowed',
     'disabled:opacity-40',
     'flex justify-center items-center',

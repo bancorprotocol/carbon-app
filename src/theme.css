@@ -1,0 +1,96 @@
+@theme {
+  --color-background-50: oklch(0.99 var(--chroma) var(--hue));
+  --color-background-100: oklch(0.97 var(--chroma) var(--hue));
+  --color-background-200: oklch(0.92 var(--chroma) var(--hue));
+  --color-background-300: oklch(0.87 var(--chroma) var(--hue));
+  --color-background-400: oklch(0.72 var(--chroma) var(--hue));
+  --color-background-500: oklch(0.56 var(--chroma) var(--hue));
+  --color-background-600: oklch(0.44 var(--chroma) var(--hue));
+  --color-background-700: oklch(0.37 var(--chroma) var(--hue));
+  --color-background-800: oklch(0.27 var(--chroma) var(--hue));
+  --color-background-900: oklch(0.2 var(--chroma) var(--hue));
+
+  --color-primary: oklch(0.7985 0.132 159.5); /* #67D79F */
+  --color-secondary: oklch(0.7292 0.127 214.3); /* #10BBD8 */
+  --color-tertiary: oklch(0.76 0.12 184.63); /* #3bcaba */
+
+  --color-error: oklch(0.65 0.147 15); /* #D86371 */
+  --color-sell: oklch(0.65 0.147 15); /* #D86371 */
+  --color-buy: oklch(0.68 0.153 160); /* #00B578 */
+  --color-success: oklch(0.68 0.153 160); /* #00B578 */
+  --color-warning: oklch(0.747 0.18 57.36); /* #ff8a00 */
+
+  --color-black: oklch(0.13 var(--chroma) var(--hue));
+  --color-white: oklch(1 var(--chroma) var(--hue));
+
+
+  --text-10: 0.625rem;
+  --text-12: 0.75rem;
+  --text-14: 0.875rem;
+  --text-16: 1rem;
+  --text-18: 1.125rem;
+  --text-20: 1.25rem;
+  --text-24: 1.5rem;
+  --text-30: 1.875rem;
+  --text-36: 2.25rem;
+
+  --spacing: 1px;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 18px;
+
+  --animate-spin: spin 1s linear infinite;
+  --animate-ping: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade: fade var(--duration, 200ms) var(--delay, 0s);
+  --animate-scale-up: fade var(--duration, 400ms) var(--delay, 0s) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both,
+    scale var(--duration, 400ms) var(--delay, 0s) var(--easing, cubic-bezier(0.16, 1, 0.3, 1)) both
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes scale {
+  from {
+    transform: scale(var(--from-scale, 0.8));
+  }
+}
+
+@utility font-title {
+  font-family: Carbon-Title, system-ui, sans-serif;
+}
+@utility font-text {
+  font-family: Carbon-Text, system-ui, sans-serif;
+}
+
+@utility bg-gradient {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-secondary),
+    var(--color-tertiary)
+  );
+}

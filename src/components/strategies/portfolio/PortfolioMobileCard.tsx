@@ -17,7 +17,7 @@ const wrapperClasses = cn(
   'items-center',
   'bg-background-900',
   'h-[120px]',
-  'rounded-10',
+  'rounded-lg',
   'space-x-20',
 );
 

@@ -37,13 +37,13 @@ export const MainMenuCart = () => {
     >
       <CartIcon className="size-20 place-self-center text-white [grid-area:stack]" />
       {!!cartSize && (
-        <span className="bg-success-light grid size-12 place-items-center justify-self-end rounded-full text-[10px] leading-tight text-black [grid-area:stack]">
+        <span className="bg-primary grid size-12 place-items-center justify-self-end rounded-full text-[10px] leading-none text-black [grid-area:stack]">
           {cartSize}
         </span>
       )}
       <div
         id="animate-cart-indicator"
-        className="bg-success-light pointer-events-none fixed size-20 rounded-full opacity-0"
+        className="bg-primary pointer-events-none fixed size-20 rounded-full opacity-0"
       ></div>
     </Link>
   );
