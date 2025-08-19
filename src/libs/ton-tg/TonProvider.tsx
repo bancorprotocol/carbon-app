@@ -13,11 +13,16 @@ import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
-import { TransactionRequest } from 'ethers';
+import { Contract, Interface, TransactionRequest } from 'ethers';
 import { AssetType, SenderFactory, startTracking } from '@tonappchain/sdk';
 import { TonClient, Address } from '@ton/ton';
 import { getTacSDK } from './address';
+import { abi } from 'abis/controller.json' with { type: 'json' };
 import config from 'config';
+
+const TON = '0xb76d91340F5CE3577f0a056D29f6e3Eb4E88B140';
+const smartAccountFactory = '0x070820Ed658860f77138d71f74EfbE173775895b';
+const proxyContract = '0xd68eFC6C132315123634777F5BA52aAD6B0292C1';
 
 // TODO: update with production URL once deployed
 const manifestUrl =
@@ -94,15 +99,24 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   // TODO: close SDK connection oncleanup
   useEffect(() => {
     if (tonUser) {
-      getEvmAddress(tonUser).then((tacAddress) => {
-        if (user === tacAddress) return;
-        setUser(tacAddress);
-        setTonAddress(tacAddress, tonUser);
-      });
+      const factory = new Contract(
+        smartAccountFactory,
+        [
+          'function getSmartAccountForApplication(string, address) view returns (address)',
+        ],
+        provider,
+      );
+      factory
+        .getSmartAccountForApplication(tonUser, proxyContract)
+        .then((tacAddress) => {
+          if (user === tacAddress) return;
+          setUser(tacAddress);
+          setTonAddress(tacAddress, tonUser);
+        });
     } else {
       setUser('');
     }
-  }, [getEvmAddress, setTonAddress, tonUser, user]);
+  }, [getEvmAddress, setTonAddress, tonUser, user, provider]);
 
   const openConnect = useCallback(
     () => tonConnectUI.openModal(),
@@ -111,29 +125,51 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
 
   const sendTransaction = useCallback(
     async (tx: TransactionRequest) => {
-      const toAsset = async (asset: { address: string; amount: string }) => ({
-        type: AssetType.FT,
-        address: await getTVMAddress(asset.address),
-        amount: Number(asset.amount),
-      });
-      const [sdk, sender, assets] = await Promise.all([
-        getTacSDK(),
-        SenderFactory.getSender({ tonConnect: tonConnectUI }),
-        Promise.all(tx.customData.assets.map(toAsset)),
-      ]);
-      const evmProxyMsg = {
-        evmTargetAddress: tx.to!.toString(),
-        encodedParameters: tx.data!,
-      };
-      const linker = await sdk.sendCrossChainTransaction(
-        evmProxyMsg,
-        sender,
-        assets,
-      );
-      return {
-        hash: linker.shardsKey,
-        wait: () => startTracking(linker, sdk.network),
-      };
+      try {
+        const toAsset = async (asset: {
+          address: string;
+          rawAmount: number;
+        }) => ({
+          type: AssetType.FT,
+          address:
+            asset.address === TON
+              ? undefined
+              : await getTVMAddress(asset.address),
+          rawAmount: BigInt(asset.rawAmount),
+        });
+        const [sdk, sender, allAssets] = await Promise.all([
+          getTacSDK(),
+          SenderFactory.getSender({ tonConnect: tonConnectUI }),
+          Promise.all(tx.customData?.assets?.map(toAsset) || []),
+        ]);
+        const parsed = new Interface(abi).parseTransaction({ data: tx.data! });
+        const evmProxyMsg = {
+          evmTargetAddress: proxyContract,
+          methodName: `${parsed?.name}(bytes,bytes)`,
+          encodedParameters: tx.data!.replace(parsed!.selector, '0x'),
+        };
+        const assets = allAssets.filter((asset) => !!asset.rawAmount);
+        const linker = await sdk.sendCrossChainTransaction(
+          evmProxyMsg,
+          sender,
+          assets,
+        );
+        return {
+          hash: linker.shardsKey,
+          wait: async () => {
+            const stages = await startTracking(linker, sdk.network);
+            if (!stages) return;
+            return stages.collectedInTAC.stageData?.transactions;
+          },
+        };
+      } catch (e: any) {
+        if (e.debugInfo) {
+          console.warn(
+            `cast call --trace -r ${config.network.rpc.url} --block ${e.debugInfo.blockNumber} --from ${e.debugInfo.from} --data ${e.debugInfo.callData} ${e.debugInfo.to}`,
+          );
+        }
+        throw e;
+      }
     },
     [getTVMAddress, tonConnectUI],
   );
@@ -143,8 +179,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
       if (!tonUser) throw new Error('No TON account found');
 
       try {
-        // TODO: find a better way to prevent hardcoding
-        if (evmAddress === '0xb76d91340F5CE3577f0a056D29f6e3Eb4E88B140') {
+        if (evmAddress === TON) {
           const client = new TonClient({
             endpoint:
               import.meta.env.VITE_TON_RPC ??

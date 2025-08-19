@@ -28,7 +28,7 @@ export const commonConfig: AppConfig = {
       url: 'https://tonscan.org/',
     },
     rpc: {
-      url: 'https://rpc.tac.build', // 'https://rpc.ankr.com/premium-http/ton_api_v2/',
+      url: 'https://rpc.tac.build',
     },
     defaultLimitedApproval: true,
     gasToken: {

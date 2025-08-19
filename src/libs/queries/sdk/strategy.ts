@@ -397,7 +397,8 @@ export interface DeleteStrategyParams {
 }
 
 export const useCreateStrategyQuery = () => {
-  const { signer } = useWagmi();
+  const { getTokenById } = useTokens();
+  const { sendTransaction } = useWagmi();
 
   return useMutation({
     mutationFn: async ({ base, quote, buy, sell }: CreateStrategyParams) => {
@@ -413,26 +414,30 @@ export const useCreateStrategyQuery = () => {
         sell.max,
         sell.budget || '0',
       );
+      const getRawAmount = (address: string, amount: string) => {
+        const token = getTokenById(address)!;
+        return new SafeDecimal(amount).mul(10 ** token.decimals).toNumber();
+      };
       unsignedTx.customData = {
         assets: [
           {
             address: base,
-            amount: buy.budget,
+            rawAmount: getRawAmount(base, sell.budget),
           },
           {
             address: quote,
-            amount: sell.budget,
+            rawAmount: getRawAmount(quote, buy.budget),
           },
         ],
       };
 
-      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };
 
 export const useUpdateStrategyQuery = () => {
-  const { signer } = useWagmi();
+  const { sendTransaction } = useWagmi();
 
   return useMutation({
     mutationFn: async ({
@@ -452,19 +457,19 @@ export const useUpdateStrategyQuery = () => {
         sellMarginalPrice,
       );
 
-      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };
 
 export const useDeleteStrategyQuery = () => {
-  const { signer } = useWagmi();
+  const { sendTransaction } = useWagmi();
 
   return useMutation({
     mutationFn: async ({ id }: DeleteStrategyParams) => {
       const unsignedTx = await carbonSDK.deleteStrategy(id);
 
-      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };
