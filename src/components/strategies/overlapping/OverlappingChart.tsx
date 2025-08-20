@@ -557,7 +557,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           <polygon
             id="buy-polygon"
             points={getBuyPoint(props, { x, y })}
-            fill="var(--color-buy)"
+            fill="url(#svg-buy-gradient)"
             fillOpacity="0.35"
           />
           <polygon
@@ -579,7 +579,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           <polygon
             id="sell-polygon"
             points={getSellPoint(props, { x, y })}
-            fill="var(--color-sell)"
+            fill="url(#svg-sell-gradient)"
             fillOpacity="0.35"
           />
           <polygon

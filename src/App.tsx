@@ -10,6 +10,7 @@ import { useStore } from 'store';
 import { Toaster } from 'components/common/Toaster/Toaster';
 import { Footer } from 'components/common/Footer/Footer';
 import { SVGCarbonLogo } from 'components/common/SVGCarbonLogo';
+import { SVGGradient } from 'components/common/SVGGradient';
 
 let didInitCheck = false;
 let didInitSDK = false;
@@ -60,6 +61,7 @@ export const App = () => {
       <Toaster />
       <CreateStrategyCTAMobile />
       <SVGCarbonLogo />
+      <SVGGradient />
     </>
   );
 };
