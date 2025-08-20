@@ -12,8 +12,6 @@ import {
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
-import { TabsMenu } from 'components/common/tabs/TabsMenu';
-import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -31,6 +29,7 @@ import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
+import { OrderDirection } from 'components/strategies/common/OrderDirection';
 
 export interface EditDisposableStrategySearch {
   marketPrice?: string;
@@ -224,24 +223,7 @@ export const EditPricesStrategyDisposablePage = () => {
           direction={search.direction}
           hasPriceChanged={hasPriceChanged}
           settings={
-            <div className="p-16">
-              <TabsMenu>
-                <TabsMenuButton
-                  onClick={() => setDirection('buy')}
-                  variant={isBuy ? 'buy' : 'black'}
-                  data-testid="tab-buy"
-                >
-                  Buy
-                </TabsMenuButton>
-                <TabsMenuButton
-                  onClick={() => setDirection('sell')}
-                  variant={!isBuy ? 'sell' : 'black'}
-                  data-testid="tab-sell"
-                >
-                  Sell
-                </TabsMenuButton>
-              </TabsMenu>
-            </div>
+            <OrderDirection direction={direction} setDirection={setDirection} />
           }
         />
         {(buyBudgetChanges || sellBudgetChanges) && (

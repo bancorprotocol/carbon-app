@@ -1,6 +1,4 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { TabsMenu } from 'components/common/tabs/TabsMenu';
-import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTradeSettings';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useTradeCtx } from 'components/trade/TradeContext';
@@ -12,6 +10,7 @@ import { cn } from 'utils/helpers';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 import style from 'components/strategies/common/order.module.css';
+import { OrderDirection } from 'components/strategies/common/OrderDirection';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
@@ -42,24 +41,10 @@ export const TradeMarket = () => {
       </StrategyChartSection>
       <TradeLayout>
         <article className="bg-white-gradient grid rounded-2xl">
-          <div className="p-16">
-            <TabsMenu>
-              <TabsMenuButton
-                onClick={() => setDirection('sell')}
-                variant={isBuy ? 'black' : 'sell'}
-                data-testid="tab-sell"
-              >
-                Sell
-              </TabsMenuButton>
-              <TabsMenuButton
-                onClick={() => setDirection('buy')}
-                variant={!isBuy ? 'black' : 'buy'}
-                data-testid="tab-buy"
-              >
-                Buy
-              </TabsMenuButton>
-            </TabsMenu>
-          </div>
+          <OrderDirection
+            direction={search.direction || 'sell'}
+            setDirection={setDirection}
+          />
           <div
             className={cn(style.order, 'grid gap-16 p-16')}
             data-direction={isBuy ? 'buy' : 'sell'}

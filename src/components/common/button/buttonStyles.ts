@@ -27,11 +27,11 @@ const variants = {
       'hover:border-white/60 hover:disabled:border-primary',
     ],
     buy: [
-      'bg-buy border-2 border-buy text-black',
+      'bg-buy-gradient border-2 border-buy text-black',
       'hover:border-white/60 hover:text-black hover:bg-buy hover:disabled:border-buy',
     ],
     sell: [
-      'bg-sell border-2 border-sell text-black',
+      'bg-sell-gradient border-2 border-sell text-black',
       'hover:border-white/60 hover:text-black hover:bg-sell hover:disabled:border-sell',
     ],
     error: [

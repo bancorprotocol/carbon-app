@@ -11,7 +11,7 @@ export const TabsMenuButton: FC<Props> = ({ children, variant, ...props }) => {
       type="button"
       variant={variant}
       size="sm"
-      className="flex-1 text-14 rounded-none first:rounded-s-full last:rounded-e-full"
+      className="text-14 rounded-none first:rounded-s-full last:rounded-e-full"
       {...props}
     >
       {children}

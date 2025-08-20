@@ -10,7 +10,7 @@ interface Props {
 export const OrderDirection: FC<Props> = (props) => {
   const { direction, setDirection } = props;
   return (
-    <TabsMenu className="p-16 bg-transparent">
+    <TabsMenu>
       <TabsMenuButton
         onClick={() => setDirection('sell')}
         variant={direction === 'buy' ? 'black' : 'sell'}

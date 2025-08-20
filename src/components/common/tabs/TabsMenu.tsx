@@ -7,5 +7,7 @@ type TabsMenuProps = {
 };
 
 export const TabsMenu: FC<TabsMenuProps> = ({ children, className }) => {
-  return <div className={cn('flex gap-2 p-2', className)}>{children}</div>;
+  return (
+    <div className={cn('grid grid-cols-2 p-16', className)}>{children}</div>
+  );
 };
