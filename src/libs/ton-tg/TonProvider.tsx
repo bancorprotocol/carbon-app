@@ -106,8 +106,11 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
         ],
         provider,
       );
+      const bouncedAddress = Address.parse(tonUser).toString({
+        bounceable: true,
+      });
       factory
-        .getSmartAccountForApplication(tonUser, proxyContract)
+        .getSmartAccountForApplication(bouncedAddress, proxyContract)
         .then((tacAddress) => {
           if (user === tacAddress) return;
           setUser(tacAddress);
@@ -126,15 +129,16 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   const sendTransaction = useCallback(
     async (tx: TransactionRequest) => {
       try {
+        const getAssetAddress = (address: string) => {
+          if (address === TON) return;
+          return getTVMAddress(address);
+        };
         const toAsset = async (asset: {
           address: string;
           rawAmount: number;
         }) => ({
           type: AssetType.FT,
-          address:
-            asset.address === TON
-              ? undefined
-              : await getTVMAddress(asset.address),
+          address: await getAssetAddress(asset.address),
           rawAmount: BigInt(asset.rawAmount),
         });
         const [sdk, sender, allAssets] = await Promise.all([
@@ -143,6 +147,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           Promise.all(tx.customData?.assets?.map(toAsset) || []),
         ]);
         const parsed = new Interface(abi).parseTransaction({ data: tx.data! });
+
         const evmProxyMsg = {
           evmTargetAddress: proxyContract,
           methodName: `${parsed?.name}(bytes,bytes)`,
@@ -154,13 +159,16 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           sender,
           assets,
         );
+
+        // Pull every 5sec up until 5mins
+        const stage = await startTracking(linker, sdk.network, {
+          delay: 5000,
+          maxIterationCount: 60,
+        });
+        const hash = stage!.collectedInTAC.stageData?.transactions?.[0].hash;
         return {
-          hash: linker.shardsKey,
-          wait: async () => {
-            const stages = await startTracking(linker, sdk.network);
-            if (!stages) return;
-            return stages.collectedInTAC.stageData?.transactions;
-          },
+          hash: hash!,
+          wait: async () => true,
         };
       } catch (e: any) {
         if (e.debugInfo) {

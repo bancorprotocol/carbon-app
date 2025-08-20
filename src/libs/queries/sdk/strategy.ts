@@ -17,18 +17,22 @@ import {
   Strategy as SDKStrategy,
   PopulatedTransaction,
 } from '@bancor/carbon-sdk';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 import { usePairs } from 'hooks/usePairs';
 import {
   AnyStrategy,
+  EditOrders,
   GradientOrder,
   StaticOrder,
   Strategy,
 } from 'components/strategies/common/types';
-import { isInPast, isPaused } from 'components/strategies/common/utils';
+import {
+  isGradientStrategy,
+  isInPast,
+  isPaused,
+} from 'components/strategies/common/utils';
 import { SDKGradientStrategy } from './gradient-mock';
 import { useCarbonInit } from 'hooks/useCarbonInit';
 import { isZero } from 'components/strategies/common/utils';
@@ -312,6 +316,22 @@ const normalizeStrategy = (
   }
 };
 
+const getFieldsToUpdate = (orders: EditOrders, strategy: AnyStrategy) => {
+  const { buy, sell } = orders;
+  const fields: Partial<StrategyUpdate> = {};
+  if (isGradientStrategy(strategy)) {
+    // @todo(gradient) implement edit fields for gradient
+  } else {
+    if (buy.min !== strategy.buy.min) fields.buyPriceLow = buy.min;
+    if (buy.max !== strategy.buy.max) fields.buyPriceHigh = buy.max;
+    if (sell.min !== strategy.sell.min) fields.sellPriceLow = sell.min;
+    if (sell.max !== strategy.sell.max) fields.sellPriceHigh = sell.max;
+  }
+  if (buy.budget !== strategy.buy.budget) fields.buyBudget = buy.budget;
+  if (sell.budget !== strategy.sell.budget) fields.sellBudget = sell.budget;
+  return fields as StrategyUpdate;
+};
+
 export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
   const { isInitialized } = useCarbonInit();
   const { getTokenById, importTokens, isPending } = useTokens();
@@ -384,14 +404,6 @@ export interface CreateStrategyParams {
   encoded?: EncodedStrategyBNStr;
 }
 
-export interface UpdateStrategyParams {
-  id: string;
-  encoded: EncodedStrategyBNStr;
-  fieldsToUpdate: StrategyUpdate;
-  buyMarginalPrice?: MarginalPriceOptions | string;
-  sellMarginalPrice?: MarginalPriceOptions | string;
-}
-
 export interface DeleteStrategyParams {
   id: string;
 }
@@ -436,25 +448,64 @@ export const useCreateStrategyQuery = () => {
   });
 };
 
-export const useUpdateStrategyQuery = () => {
+export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
   const { sendTransaction } = useWagmi();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      encoded,
-      fieldsToUpdate,
-      buyMarginalPrice,
-      sellMarginalPrice,
-    }: UpdateStrategyParams) => {
+    mutationFn: async (orders: EditOrders) => {
+      const updates = getFieldsToUpdate(orders, strategy);
       const unsignedTx = await carbonSDK.updateStrategy(
-        id,
-        encoded,
+        strategy.id,
+        strategy.encoded,
+        updates,
+        orders.buy.marginalPrice,
+        orders.sell.marginalPrice,
+      );
+      const getRawAmount = (token: Token, previous: string, next?: string) => {
+        const delta = new SafeDecimal(next ?? 0).minus(previous);
+        if (delta.lte(0)) return 0;
+        return new SafeDecimal(delta).mul(10 ** token.decimals).toNumber();
+      };
+      unsignedTx.customData = {
+        assets: [
+          {
+            address: strategy.base.address,
+            rawAmount: getRawAmount(
+              strategy.base,
+              strategy.sell.budget,
+              updates.sellBudget,
+            ),
+          },
+          {
+            address: strategy.quote.address,
+            rawAmount: getRawAmount(
+              strategy.quote,
+              strategy.buy.budget,
+              updates.buyBudget,
+            ),
+          },
+        ],
+      };
+
+      return sendTransaction(toTransactionRequest(unsignedTx));
+    },
+  });
+};
+
+export const usePauseStrategyQuery = () => {
+  const { sendTransaction } = useWagmi();
+
+  return useMutation({
+    mutationFn: async (strategy: AnyStrategy) => {
+      const unsignedTx = await carbonSDK.updateStrategy(
+        strategy.id,
+        strategy.encoded,
         {
-          ...fieldsToUpdate,
+          buyPriceLow: '0',
+          buyPriceHigh: '0',
+          sellPriceLow: '0',
+          sellPriceHigh: '0',
         },
-        buyMarginalPrice,
-        sellMarginalPrice,
       );
 
       return sendTransaction(toTransactionRequest(unsignedTx));
