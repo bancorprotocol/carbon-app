@@ -24,26 +24,26 @@ export const SVGCarbonLogo = () => {
           patternUnits="userSpaceOnUse"
         />
         <pattern href="#base-pattern" id="buy-pattern">
-          <use href="#carbonLogo" x="0" y="4" fill="var(--buy)" />
-          <use href="#carbonLogo" x="8" y="16" fill="var(--buy)" />
+          <use href="#carbonLogo" x="0" y="4" fill="var(--color-buy)" />
+          <use href="#carbonLogo" x="8" y="16" fill="var(--color-buy)" />
           <rect
             x="0"
             y="0"
             width="15"
             height="25"
-            fill="var(--buy)"
+            fill="var(--color-buy)"
             fillOpacity="0.05"
           />
         </pattern>
         <pattern href="#base-pattern" id="sell-pattern">
-          <use href="#carbonLogo" x="0" y="4" fill="var(--sell)" />
-          <use href="#carbonLogo" x="8" y="16" fill="var(--sell)" />
+          <use href="#carbonLogo" x="0" y="4" fill="var(--color-sell)" />
+          <use href="#carbonLogo" x="8" y="16" fill="var(--color-sell)" />
           <rect
             x="0"
             y="0"
             width="15"
             height="25"
-            fill="var(--sell)"
+            fill="var(--color-sell)"
             fillOpacity="0.05"
           />
         </pattern>

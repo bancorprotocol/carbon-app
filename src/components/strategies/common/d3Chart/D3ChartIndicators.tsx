@@ -115,9 +115,9 @@ const IndicatorTooltip: FC<TooltipProps> = (props) => {
   return (
     <FloatTooltip>
       <FloatTooltipTrigger>{children}</FloatTooltipTrigger>
-      <FloatTooltipContent className="bg-background-800 text-12 font-weight-500 flex max-h-[300px] flex-col items-center gap-8 overflow-auto rounded p-16 text-white/80">
+      <FloatTooltipContent className="bg-background-800 text-12 font-medium flex max-h-[300px] flex-col items-center gap-8 overflow-auto rounded-2xl p-16 text-white/80">
         <span>{indicator.label}</span>
-        <span className="rounded-8 border border-white/80 px-8 py-4">
+        <span className="rounded-md border border-white/80 px-8 py-4">
           {indicator.activities.length}&nbsp;
           {indicator.y ? 'Trade(s)' : 'Actions(s)'}
         </span>

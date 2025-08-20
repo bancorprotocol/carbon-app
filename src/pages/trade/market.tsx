@@ -10,8 +10,8 @@ import { useGetTokenBalance } from 'libs/queries';
 import { StrategyDirection } from 'libs/routing';
 import { cn } from 'utils/helpers';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
-import style from 'components/strategies/common/order.module.css';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
+import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
@@ -41,8 +41,8 @@ export const TradeMarket = () => {
         </PairChartHistory>
       </StrategyChartSection>
       <TradeLayout>
-        <article className="bg-background-900 grid rounded-ee rounded-es">
-          <div className="p-16 pb-0">
+        <article className="bg-white-gradient grid rounded-2xl">
+          <div className="p-16">
             <TabsMenu>
               <TabsMenuButton
                 onClick={() => setDirection('sell')}

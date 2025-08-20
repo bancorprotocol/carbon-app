@@ -5,21 +5,21 @@
 <path opacity="0.4" fill-rule="evenodd" clip-rule="evenodd" d="M80.9953 48.9544C83.4839 48.2876 86.0439 49.7656 86.7108 52.2543L92.146 72.5388C92.3001 73.114 92.2386 73.7532 91.9105 74.313C91.2703 75.4218 89.8382 75.8056 88.7293 75.1654L77.6183 68.7504C75.5862 72.4592 73.0853 75.8973 70.1208 78.9437C69.8132 79.3218 69.4429 79.6537 69.0303 79.9216C63.5521 85.208 56.7459 89.2712 48.881 91.3786C47.2615 91.8377 45.5176 91.3865 44.3258 90.2023C43.1283 89.0197 42.6627 87.2824 43.1086 85.6595C43.5485 84.0381 44.8332 82.7754 46.4653 82.3632C56.7778 79.6 64.8939 72.7953 69.6032 64.1229L60.1518 58.6661C59.0355 58.0216 58.6518 56.5895 59.2963 55.4732C59.6201 54.9209 60.1355 54.5438 60.7107 54.3896L80.9953 48.9544Z" fill="url(#paint3_linear_16275_80069)"/>
 <defs>
 <linearGradient id="paint0_linear_16275_80069" x1="37.4835" y1="60.4409" x2="-7.67311" y2="23.7512" gradientUnits="userSpaceOnUse">
-<stop stop-color="var(--secondary)"/>
-<stop offset="1" stop-color="var(--primary)"/>
+<stop stop-color="var(--color-secondary)"/>
+<stop offset="1" stop-color="var(--color-primary)"/>
 </linearGradient>
 <linearGradient id="paint1_linear_16275_80069" x1="98.0317" y1="70.5338" x2="42.6622" y2="25.8873" gradientUnits="userSpaceOnUse">
-<stop stop-color="var(--secondary)"/>
-<stop offset="1" stop-color="var(--primary)"/>
+<stop stop-color="var(--color-secondary)"/>
+<stop offset="1" stop-color="var(--color-primary)"/>
 </linearGradient>
 <linearGradient id="paint2_linear_16275_80069" x1="89.4161" y1="19.9179" x2="47.9539" y2="70.5331" gradientUnits="userSpaceOnUse">
-<stop stop-color="var(--secondary)"/>
-<stop offset="0.51" stop-color="var(--primary)"/>
+<stop stop-color="var(--color-secondary)"/>
+<stop offset="0.51" stop-color="var(--color-primary)"/>
 <stop offset="1" stop-color="white"/>
 </linearGradient>
 <linearGradient id="paint3_linear_16275_80069" x1="22.2211" y1="71.5477" x2="69.7946" y2="-10.8509" gradientUnits="userSpaceOnUse">
-<stop stop-color="var(--secondary)"/>
-<stop offset="1" stop-color="var(--primary)"/>
+<stop stop-color="var(--color-secondary)"/>
+<stop offset="1" stop-color="var(--color-primary)"/>
 </linearGradient>
 </defs>
 </svg>

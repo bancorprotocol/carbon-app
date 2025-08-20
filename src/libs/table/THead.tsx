@@ -22,7 +22,7 @@ export const THead = <D extends object>({ table }: { table: Table<D> }) => {
                   {...{
                     className: cn(
                       'text-16',
-                      'font-weight-500',
+                      'font-medium',
                       'font-mono',
                       'text-white/60',
                       {

@@ -59,9 +59,9 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
 
   return (
     <>
-      <article key="price-range" className="bg-background-900 grid gap-16 p-16">
+      <article key="price-range" className="grid gap-16 p-16">
         <header className="flex items-center gap-8">
-          <h3 className="text-16 font-weight-500 flex-1">
+          <h3 className="text-16 font-medium flex-1">
             Set Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
@@ -92,9 +92,9 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
         spread={spread}
         setSpread={setSpread}
       />
-      <article className="bg-background-900 grid gap-16 p-16">
+      <article className="grid gap-16 p-16">
         <hgroup>
-          <h3 className="text-16 font-weight-500 flex items-center justify-between">
+          <h3 className="text-16 font-medium flex items-center justify-between">
             Budget
             <Tooltip
               iconClassName="size-18 text-white/60"

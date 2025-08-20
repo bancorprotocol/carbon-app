@@ -28,7 +28,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
             <span className="rotate-180">
               <ForwardArrow />
             </span>
-            <span className="font-weight-500">{title}</span>
+            <span className="font-medium">{title}</span>
           </div>
         ),
         onClick: () => {

@@ -78,7 +78,7 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
         {notification.txHash && (
           <NewTabLink
             to={getExplorerLink('tx', notification.txHash)}
-            className="font-weight-500 flex items-center"
+            className="font-medium flex items-center"
           >
             View on {blockExplorer}
             <IconLink className="ml-6 w-14" />
@@ -88,14 +88,14 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
 
       <div className="flex flex-col items-end justify-between">
         <button
-          className="text-12 font-weight-500"
+          className="text-12 font-medium"
           onClick={close}
           data-testid="notif-close"
           aria-label="Remove notification"
         >
           <IconClose className="size-14 text-white/80" />
         </button>
-        <p className="text-12 font-weight-500 whitespace-nowrap text-white/60">
+        <p className="text-12 font-medium whitespace-nowrap text-white/60">
           {unix(notification.timestamp).fromNow(true)}
         </p>
       </div>

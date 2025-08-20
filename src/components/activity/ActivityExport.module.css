@@ -1,3 +1,6 @@
+@reference "tailwindcss";
+@reference "../../theme.css";
+
 .export-button {
   @apply border-background-800 text-12 gap-8 rounded-full border-2 px-12 py-8;
   display: grid;

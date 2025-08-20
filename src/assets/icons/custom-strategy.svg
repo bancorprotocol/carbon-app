@@ -4,12 +4,12 @@
 <path d="M30 1V13M36 7H24" stroke="url(#paint2_linear_4772_92042)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <defs>
 <radialGradient id="paint0_radial_4772_92042" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0.500001 6.5) rotate(44.3969) scale(33.5894 24.0501)">
-<stop stop-color="var(--buy)"/>
-<stop offset="1" stop-color="var(--buy)" stop-opacity="0.2"/>
+<stop stop-color="var(--color-buy)"/>
+<stop offset="1" stop-color="var(--color-buy)" stop-opacity="0.2"/>
 </radialGradient>
 <radialGradient id="paint1_radial_4772_92042" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(60.5 4) rotate(136.606) scale(37.8451 27.5747)">
-<stop stop-color="var(--sell)"/>
-<stop offset="1" stop-color="var(--sell)" stop-opacity="0.2"/>
+<stop stop-color="var(--color-sell)"/>
+<stop offset="1" stop-color="var(--color-sell)" stop-opacity="0.2"/>
 </radialGradient>
 <linearGradient id="paint2_linear_4772_92042" x1="49.3846" y1="-13.3077" x2="17.5" y2="21.5" gradientUnits="userSpaceOnUse">
 <stop stop-color="currentColor" stop-opacity="0"/>

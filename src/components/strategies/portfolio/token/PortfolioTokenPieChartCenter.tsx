@@ -19,7 +19,7 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
 
   return (
     <div className="flex flex-col items-center space-y-6">
-      <div className="font-weight-500 text-18 flex items-center">
+      <div className="font-medium text-18 flex items-center">
         <LogoImager
           alt="Token Logo"
           src={data.token.logoURI}
@@ -27,13 +27,13 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
         />
         {data.token.symbol}
       </div>
-      <div className="text-20 font-weight-500">
+      <div className="text-20 font-medium">
         {getFiatDisplayValue(data.value, selectedFiatCurrency)}
       </div>
-      <div className="font-weight-500 text-white/60">
+      <div className="font-medium text-white/60">
         {buildAmountString(data.amount, data.token)}
       </div>
-      <div className="font-weight-500 text-white/60">
+      <div className="font-medium text-white/60">
         {getStrategyText(data.strategies.length)}
       </div>
     </div>

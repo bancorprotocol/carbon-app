@@ -14,8 +14,8 @@ import { prettifyNumber } from 'utils/helpers';
 import { ToggleEye } from './EyeIcon';
 
 const colors = {
-  base: 'var(--sell)',
-  quote: 'var(--buy)',
+  base: 'var(--color-sell)',
+  quote: 'var(--color-buy)',
 };
 
 interface Props {
@@ -178,7 +178,7 @@ const Bar = ({
         y={y - 30}
         fill="currentColor"
         style={{ textAnchor: 'middle' }}
-        className="text-16 font-weight-500"
+        className="text-16 font-medium"
       >
         {percentage.toFixed(2)}%
       </text>

@@ -1,3 +1,6 @@
+@reference "tailwindcss";
+@reference "../../../theme.css";
+
 .spread:has(input[type='radio']:checked) .spread-custom {
   @apply text-white/60 border-transparent;
 }
