@@ -1,16 +1,4 @@
-import { useEffect } from 'react';
-import './common.css';
-
 export const PreviewCommonStrategyType = () => {
-  useEffect(() => {
-    const path = document.getElementById(
-      'path-stroke',
-    ) as any as SVGPathElement;
-    document.documentElement.style.setProperty(
-      '--path-length',
-      path.getTotalLength().toString(),
-    );
-  }, []);
   return (
     <svg width="0" height="0" className="fixed">
       <defs>
@@ -105,14 +93,6 @@ export const PreviewCommonStrategyType = () => {
             Buy
           </text>
         </g>
-        <path
-          id="path-stroke"
-          fill="none"
-          stroke="white"
-          strokeLinejoin="round"
-          strokeWidth="5"
-          d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
-        />
       </defs>
     </svg>
   );

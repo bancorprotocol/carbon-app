@@ -1,15 +1,25 @@
 import { cn } from 'utils/helpers';
+import { useEffect, useRef } from 'react';
 import style from './preview.module.css';
 
 export const PreviewRangeStrategy = () => {
+  const path = useRef<SVGPathElement>(null);
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    root.current!.style.setProperty(
+      '--path-length',
+      path.current!.getTotalLength().toString(),
+    );
+  }, []);
   return (
     <div
+      ref={root}
       className={cn(
         style.graphWrapper,
         'bg-black-gradient rounded-2xl p-16 shrink-0',
       )}
     >
-      <svg id="limit_limit" viewBox="0 0 1000 1000" width="500" height="500">
+      <svg viewBox="0 0 1000 1000" width="500" height="500">
         <rect
           x="50"
           y="650"
@@ -41,7 +51,15 @@ export const PreviewRangeStrategy = () => {
           <use href="#buy-indicator" />
         </g>
 
-        <use href="#path-stroke" />
+        <path
+          ref={path}
+          className={style.pathStroke}
+          fill="none"
+          stroke="white"
+          strokeLinejoin="round"
+          strokeWidth="5"
+          d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
+        />
 
         <g transform="translate(238, 700) rotate(78) scale(0.9)">
           <use className={style.buy1} href="#buy-range" />

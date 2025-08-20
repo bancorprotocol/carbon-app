@@ -1,15 +1,25 @@
 import { cn } from 'utils/helpers';
+import { useEffect, useRef } from 'react';
 import style from './preview.module.css';
 
 export const PreviewRecurringStrategy = () => {
+  const path = useRef<SVGPathElement>(null);
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    root.current!.style.setProperty(
+      '--path-length',
+      path.current!.getTotalLength().toString(),
+    );
+  }, []);
   return (
     <div
+      ref={root}
       className={cn(
         style.graphWrapper,
         'bg-black-gradient rounded-2xl p-16 shrink-0',
       )}
     >
-      <svg id="limit_limit" viewBox="0 0 1000 1000">
+      <svg viewBox="0 0 1000 1000">
         <line
           x1="50"
           x2="950"
@@ -33,7 +43,15 @@ export const PreviewRecurringStrategy = () => {
           <use href="#buy-indicator" />
         </g>
 
-        <use href="#path-stroke" />
+        <path
+          ref={path}
+          className={style.pathStroke}
+          fill="none"
+          stroke="white"
+          strokeLinejoin="round"
+          strokeWidth="5"
+          d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
+        />
 
         <g transform="translate(375, 450)">
           <use className={style.sell1} href="#sell-box" />

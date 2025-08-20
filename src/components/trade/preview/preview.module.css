@@ -1,5 +1,5 @@
 .graph-wrapper {
-  --duration: 3s;
+  --duration: 8s;
   width: 300px;
   height: 300px;
 }
@@ -11,10 +11,16 @@
   transform-box: fill-box;
   transform-origin: center;
   animation-duration: var(--duration);
-  animation-timing-function: var(--ease-back-out);
   animation-iteration-count: infinite;
+  animation-play-state: paused;
 }
 
+a:has(.graph-wrapper):hover svg * {
+  animation-play-state: running;
+}
+a:has(.graph-wrapper):hover .budget p > span {
+  animation-play-state: running;
+}
 
 @keyframes move {
   from {
@@ -31,28 +37,47 @@
   animation-timing-function: linear;
 }
 
+.path-stroke {
+  stroke-dashoffset: var(--path-length);
+  stroke-dasharray: var(--path-length);
+  animation-name: draw;
+  animation-timing-function: linear;
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: var(--path-length);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+
 
 @keyframes jump-sell-1 {
-  0%, 37% {
+  0%, 34% {
     transform: translateY(50px) scale(0);
   }
-  42% {
+  39% {
     transform: translateY(0) scale(1);
   }
 }
 @keyframes jump-sell-2 {
-  0%, 88% {
+  0%, 85% {
     transform: translateY(50px) scale(0);
   }
-  93% {
+  90% {
     transform: translateY(0) scale(1);
   }
 }
 .sell-1 {
   animation-name: jump-sell-1;
+  animation-timing-function: var(--ease-back-out);
 }
 .sell-2 {
   animation-name: jump-sell-2;
+  animation-timing-function: var(--ease-back-out);
 }
 
 @keyframes jump-buy-1 {
@@ -64,18 +89,20 @@
   }
 }
 @keyframes jump-buy-2 {
-  0%, 60% {
+  0%, 55% {
     transform: translateY(-50px) scale(0);
   }
-  65% {
+  60% {
     transform: translateY(0) scale(1);
   }
 }
 .buy-1 {
   animation-name: jump-buy-1;
+  animation-timing-function: var(--ease-back-out);
 }
 .buy-2 {
   animation-name: jump-buy-2;
+  animation-timing-function: var(--ease-back-out);
 }
 
 
@@ -117,6 +144,7 @@
   animation-duration: var(--duration);
   animation-timing-function: var(--ease-back-out);
   animation-iteration-count: infinite;
+  animation-play-state: paused;
 }
 .graph-wrapper .budget .token {
   font-size: 1rem;
@@ -149,54 +177,57 @@
     opacity: 0;
     transform: translateY(50px);
   }
-  20%, 37% {
+  20%, 34% {
     opacity: 1;
     transform: translateY(0);
   }
-  42%, 100% {
+  39%, 100% {
     opacity: 0;
     transform: translateY(50px);
   }
 }
 @keyframes budget-tx-3 {
-  0%, 37% {
+  0%, 34% {
     opacity: 0;
     transform: translateY(-50px);
   }
-  42%, 60% {
+  39%, 55% {
     opacity: 1;
     transform: translateY(0);
   }
-  65%, 100% {
+  60%, 100% {
     opacity: 0;
     transform: translateY(-50px);
   }
 }
 @keyframes budget-tx-4 {
-  0%, 60% {
+  0%, 55% {
     opacity: 0;
     transform: translateY(50px);
   }
-  65%, 88% {
+  60%, 85% {
     opacity: 1;
     transform: translateY(0);
   }
-  93%, 100% {
+  90%, 100% {
     opacity: 0;
     transform: translateY(50px);
   }
 }
 @keyframes budget-tx-5 {
-  0%, 88% {
+  0%, 85% {
     opacity: 0;
     transform: translateY(-50px);
   }
-  93%, 100% {
+  90%, 100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+.budget.limit p > span {
+  animation-timing-function: var(--ease-back-out);
+}
 .budget.limit p > span:nth-child(1) {
   animation-name: budget-tx-1;
 }
@@ -225,7 +256,7 @@
   0%, 15% {
     transform: translateY(0);
   }
-  30%, 60% {
+  30%, 55% {
     transform: translateY(calc(6 * var(--font-size) * -1));
   }
   75%, 100% {
