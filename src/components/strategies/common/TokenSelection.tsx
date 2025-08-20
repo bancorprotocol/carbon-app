@@ -57,11 +57,11 @@ export const TokenSelection = () => {
   return (
     <article
       role="menu"
-      className="relative grid grid-cols-2 place-items-center gap-20 col-span-2 place-self-center rounded-full bg-white-gradient"
+      className="relative grid grid-cols-[1fr_auto_1fr] place-items-center gap-4 col-span-2 place-self-center rounded-full bg-white-gradient overflow-hidden p-4"
     >
       <button
         role="menuitem"
-        className="rounded-xl pe-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 ps-10 hover:border-white"
+        className="rounded-full pe-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 ps-10 hover:bg-black-gradient"
         aria-haspopup="dialog"
         data-testid="select-base-token"
         onClick={() => openTokenListModal('base')}
@@ -78,7 +78,7 @@ export const TokenSelection = () => {
       </button>
       <button
         role="menuitem"
-        className="border-background-900 hover:bg-background-800 absolute grid size-40 place-items-center rounded-full border-4 bg-black-gradient"
+        className="border-background-900 hover:bg-background-600 grid size-40 place-items-center rounded-full border-4 bg-black-gradient"
         onClick={swapTokens}
       >
         <ForwardArrowIcon className="size-14" />
@@ -86,7 +86,7 @@ export const TokenSelection = () => {
       <button
         role="menuitem"
         aria-haspopup="dialog"
-        className="rounded-xl ps-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 pe-10 hover:border-white"
+        className="rounded-full ps-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 pe-10 hover:bg-black-gradient"
         data-testid="select-quote-token"
         onClick={() => openTokenListModal('quote')}
       >
