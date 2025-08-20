@@ -7,7 +7,7 @@
   pointer-events: none;
 }
 .radio:checked + label {
-  @apply bg-background-800 text-white/80;
+  @apply bg-white-gradient text-white;
 }
 .radio:checked + label:hover {
   @apply text-white;

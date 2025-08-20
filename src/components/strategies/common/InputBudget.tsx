@@ -55,7 +55,7 @@ export const InputBudget: FC<Props> = (props) => {
     disabled,
     error,
     warning,
-    title,
+    title = 'Set Budget',
     titleTooltip,
   } = props;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -109,13 +109,6 @@ export const InputBudget: FC<Props> = (props) => {
 
   return (
     <div className="flex flex-col gap-16">
-      {title && (
-        <label htmlFor={id} className="text-14 font-medium flex">
-          <Tooltip element={titleTooltip}>
-            <span className="text-white/80">{title}</span>
-          </Tooltip>
-        </label>
-      )}
       <div
         className={`
           flex cursor-text flex-col gap-8 rounded-2xl border border-black bg-black-gradient p-16
@@ -125,6 +118,13 @@ export const InputBudget: FC<Props> = (props) => {
         `}
         onClick={() => inputRef.current?.focus()}
       >
+        {title && (
+          <label htmlFor={id} className="text-12 text-white/60">
+            <Tooltip element={titleTooltip}>
+              <span>{title}</span>
+            </Tooltip>
+          </label>
+        )}
         <div className="flex items-center justify-between">
           <input
             id={id}
@@ -152,7 +152,7 @@ export const InputBudget: FC<Props> = (props) => {
             <span className="font-medium">{token.symbol}</span>
           </div>
         </div>
-        <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono">
+        <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10">
           <p className="flex items-center gap-5 text-white/60">{priceText()}</p>
           {user && max && !maxIsLoading && (
             <button

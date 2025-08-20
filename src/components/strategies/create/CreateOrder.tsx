@@ -123,10 +123,7 @@ export const CreateOrder: FC<Props> = ({
         data-direction={direction}
       >
         <OrderHeader {...headerProps} />
-        <fieldset className="flex flex-col gap-8">
-          <legend className="text-14 font-medium mb-11 flex items-center gap-6">
-            {inputTitle}
-          </legend>
+        <div className="flex flex-col gap-8" role="group">
           {order.settings === 'range' ? (
             <InputRange
               base={base}
@@ -152,21 +149,11 @@ export const CreateOrder: FC<Props> = ({
               required
             />
           )}
-        </fieldset>
-        <fieldset className="flex flex-col gap-8">
-          <legend className="text-14 font-medium mb-11 flex items-center gap-6">
-            <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-              2
-            </span>
-            <Tooltip element={budgetTooltip()}>
-              <span className="text-white/80">
-                Set {isBuy ? 'Buy' : 'Sell'} Budget&nbsp;
-              </span>
-            </Tooltip>
-            {optionalBudget && (
-              <span className="font-medium ml-8 text-white/60">Optional</span>
-            )}
-          </legend>
+        </div>
+        <div
+          className="flex flex-col gap-8"
+          aria-label={`Set ${isBuy ? 'Buy' : 'Sell'} Budget`}
+        >
           <InputBudget
             editType="deposit"
             token={budgetToken}
@@ -177,7 +164,7 @@ export const CreateOrder: FC<Props> = ({
             error={insufficientBalance}
             data-testid="input-budget"
           />
-        </fieldset>
+        </div>
         <FullOutcome
           min={order.min}
           max={order.max}
