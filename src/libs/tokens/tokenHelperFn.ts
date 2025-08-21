@@ -1,8 +1,14 @@
-import { getAddress } from 'libs/ton-tg/address';
+import {
+  getAddress,
+  getEVMTokenAddress,
+  getTVMTokenAddress,
+} from 'libs/ton-tg/address';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
 import { tokenParserMap } from 'config/utils';
+import { TonToken } from 'libs/ton-tg/tokenMap';
+import { getTonTokenData } from 'libs/ton-tg/Jetton';
 import config from 'config';
 
 const getLogoByURI = (uri: string | undefined) =>
@@ -80,16 +86,30 @@ export const fetchTokenData = async (
   Token: (address: string) => { read: TokenContract },
   address: string,
 ): Promise<Token> => {
-  const [symbol, decimals, name] = await Promise.all([
-    Token(address).read.symbol(),
-    Token(address).read.decimals(),
-    Token(address).read.name(),
-  ]);
-  return {
-    address,
-    symbol,
-    decimals: Number(decimals),
-    name,
-    isSuspicious: true,
-  };
+  if (config.network.name === 'TON') {
+    const tonAddress = await getTVMTokenAddress(address);
+    const [token, evmAddress] = await Promise.all([
+      getTonTokenData(address),
+      getEVMTokenAddress(tonAddress),
+    ]);
+    return {
+      ...token,
+      address: evmAddress,
+      tonAddress: tonAddress,
+      isSuspicious: true,
+    } as TonToken;
+  } else {
+    const [symbol, decimals, name] = await Promise.all([
+      Token(address).read.symbol(),
+      Token(address).read.decimals(),
+      Token(address).read.name(),
+    ]);
+    return {
+      address,
+      symbol,
+      decimals: Number(decimals),
+      name,
+      isSuspicious: true,
+    };
+  }
 };
