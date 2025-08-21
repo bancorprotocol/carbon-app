@@ -96,7 +96,7 @@ export const TradeList = () => {
               <ul className="flex gap-8 text-14">
                 {item.targets.map((target) => (
                   <li
-                    className="px-8 py-4 rounded-sm border border-secondary/50 bg-black-gradient"
+                    className="px-8 py-4 rounded-sm border border-secondary/50 bg-secondary/5"
                     key={target}
                   >
                     {target}
