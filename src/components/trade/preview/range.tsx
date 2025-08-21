@@ -24,10 +24,30 @@ export const PreviewRangeStrategy = () => {
           x="50"
           y="650"
           width="900"
-          height="150"
+          height="200"
           fill="var(--color-buy)"
           fillOpacity="0.4"
         />
+
+        <g className={style.marginalPrice} transform="translate(50, 650)">
+          <line
+            x1="0"
+            x2="900"
+            y1="0"
+            y2="0"
+            strokeWidth="3"
+            stroke="var(--color-buy)"
+          />
+          <rect
+            x="0"
+            y="0"
+            width="900"
+            height="1"
+            fill="black"
+            fillOpacity="0.4"
+          />
+        </g>
+
         <line
           x1="50"
           x2="950"
@@ -42,12 +62,12 @@ export const PreviewRangeStrategy = () => {
         <line
           x1="50"
           x2="950"
-          y1="800"
-          y2="800"
+          y1="850"
+          y2="850"
           strokeWidth="3"
           stroke="var(--color-buy)"
         />
-        <g transform="translate(950, 800)">
+        <g transform="translate(950, 850)">
           <use href="#buy-indicator" />
         </g>
 
@@ -64,7 +84,7 @@ export const PreviewRangeStrategy = () => {
         <g transform="translate(238, 700) rotate(78) scale(0.9)">
           <use className={style.buy1} href="#buy-range" />
         </g>
-        <g transform="translate(622, 750) rotate(78) scale(0.8)">
+        <g transform="translate(627, 795) rotate(78) scale(0.9)">
           <use className={style.buy2} href="#buy-range" />
         </g>
 
