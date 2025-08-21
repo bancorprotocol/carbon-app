@@ -18,6 +18,7 @@ const items = [
       </div>
     ),
     values: ['100% Price Certainty', 'Zero risk of sandwich attacks'],
+    targets: ['Liquidity Providers', 'Token Projects'],
   },
   {
     to: '/trade/disposable',
@@ -25,6 +26,7 @@ const items = [
     title: 'Limit / Range',
     preview: <PreviewRangeStrategy />,
     values: ['Some value for this Disposable'],
+    targets: ['Traders', 'Institutions'],
   },
   {
     to: '/trade/recurring',
@@ -32,6 +34,7 @@ const items = [
     title: 'Recurring',
     preview: <PreviewRecurringStrategy />,
     values: ['Some value for this Recurring'],
+    targets: ['Market Makers', 'Stablecoin Projects', 'Advance Traders'],
   },
   {
     to: '/trade/market',
@@ -43,6 +46,7 @@ const items = [
       </div>
     ),
     values: ['The original Swap !'],
+    targets: ['Swappers'],
   },
 ];
 
@@ -88,6 +92,18 @@ export const TradeList = () => {
                 ))}
               </ul>
             </div>
+            <footer>
+              <ul className="flex gap-8 text-14">
+                {item.targets.map((target) => (
+                  <li
+                    className="px-8 py-4 rounded-sm border border-secondary/50 bg-black-gradient"
+                    key={target}
+                  >
+                    {target}
+                  </li>
+                ))}
+              </ul>
+            </footer>
           </Link>
         ))}
       </nav>
