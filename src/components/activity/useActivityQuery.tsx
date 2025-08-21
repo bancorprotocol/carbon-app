@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { isAddress } from 'ethers';
-import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
 import { QueryKey } from 'libs/queries';
 import {
@@ -11,7 +10,6 @@ import {
   ServerActivityMeta,
 } from 'libs/queries/extApi/activity';
 import { Token } from 'libs/tokens';
-import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { carbonApi } from 'utils/carbonApi';
 import { THIRTY_SEC_IN_MS } from 'utils/time';
 import { fromUnixUTC } from 'components/simulator/utils';
@@ -84,32 +82,25 @@ export const useActivityQuery = (
   params: QueryActivityParams = {},
   config: ActivityQueryConfig = {},
 ) => {
-  const { tokensMap, isPending, importTokens } = useTokens();
-  const { Token } = useContract();
+  const { tokensMap, isPending, getAllTokens } = useTokens();
   const validParams = isValidParams(params);
 
   const { refetchInterval = THIRTY_SEC_IN_MS } = config;
 
-  const importMissingTokens = async (activities: ServerActivity[]) => {
-    const missingTokens = new Set<string>();
+  const importMissing = async (activities: ServerActivity[]) => {
+    const addresses = new Set<string>();
     for (const activity of activities) {
-      const { base, quote } = activity.strategy;
-      if (!tokensMap.has(base.toLowerCase())) missingTokens.add(base);
-      if (!tokensMap.has(quote.toLowerCase())) missingTokens.add(quote);
+      addresses.add(activity.strategy.base);
+      addresses.add(activity.strategy.quote);
     }
-    if (!missingTokens.size) return;
-    const getTokens = Array.from(missingTokens).map((address) => {
-      return fetchTokenData(Token, address);
-    });
-    const tokens = await Promise.all(getTokens);
-    importTokens(tokens);
+    getAllTokens(addresses);
   };
 
   return useQuery({
     queryKey: QueryKey.activities(params),
     queryFn: async () => {
       const activities = await carbonApi.getActivity(params);
-      await importMissingTokens(activities);
+      await importMissing(activities);
       return toActivities(activities, tokensMap);
     },
     enabled: !isPending && validParams,

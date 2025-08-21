@@ -1,13 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Token as TokenContract } from 'abis/types';
 import { isAddress, TransactionRequest } from 'ethers';
 import { getAddress } from 'libs/ton-tg/address';
 import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
-import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import { SafeDecimal } from 'libs/safedecimal';
-import { useContract } from 'hooks/useContract';
 import config from 'config';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
@@ -39,13 +36,6 @@ import { isZero } from 'components/strategies/common/utils';
 
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
-interface StrategiesHelperProps {
-  strategies: AnySDKStrategy[];
-  getTokenById: (id: string) => Token | undefined;
-  importTokens: (tokens: Token[]) => void;
-  Token: (address: string) => { read: TokenContract };
-}
-
 // TODO: remove when sdk is using ethers v6
 export const toTransactionRequest = (tx: PopulatedTransaction) => {
   const next: TransactionRequest = structuredClone(tx) as any;
@@ -58,38 +48,21 @@ export const toTransactionRequest = (tx: PopulatedTransaction) => {
   return next;
 };
 
-const buildStrategiesHelper = async ({
-  strategies,
-  getTokenById,
-  importTokens,
-  Token,
-}: StrategiesHelperProps) => {
-  const tokens = new Map<string, Token>();
-  const missing = new Set<string>();
-
-  const markForMissing = (address: string) => {
-    if (tokens.has(address)) return;
-    const existing = getTokenById(address);
-    if (existing) tokens.set(address, existing);
-    else missing.add(address);
-  };
+const buildStrategiesHelper = async (
+  strategies: AnySDKStrategy[],
+  getAllTokens: (addresses: Iterable<string>) => Promise<Map<string, Token>>,
+) => {
+  const tokenAddresses = new Set<string>();
 
   for (const strategy of strategies) {
-    markForMissing(strategy.baseToken);
-    markForMissing(strategy.quoteToken);
+    tokenAddresses.add(strategy.baseToken);
+    tokenAddresses.add(strategy.quoteToken);
   }
-
-  const getMissing = Array.from(missing).map(async (address) => {
-    const token = await fetchTokenData(Token, address);
-    tokens.set(address, token);
-    return token;
-  });
-  const missingTokens = await Promise.all(getMissing);
-  importTokens(missingTokens);
+  const allTokenMap = await getAllTokens(tokenAddresses);
 
   return strategies.map((s) => {
-    const base = tokens.get(s.baseToken)!;
-    const quote = tokens.get(s.quoteToken)!;
+    const base = allTokenMap.get(s.baseToken)!;
+    const quote = allTokenMap.get(s.quoteToken)!;
     if ('sellPriceLow' in s) {
       const sellLow = new SafeDecimal(s.sellPriceLow);
       const sellHigh = new SafeDecimal(s.sellPriceHigh);
@@ -196,8 +169,7 @@ interface Props {
 
 export const useGetUserStrategies = ({ user }: Props) => {
   const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importTokens } = useTokens();
-  const { Token } = useContract();
+  const { tokens, getAllTokens } = useTokens();
 
   const ensAddress = useGetAddressFromEns(user || '');
   const address: string = (ensAddress?.data || user || '').toLowerCase();
@@ -210,12 +182,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
     queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
       const strategies = await carbonSDK.getUserStrategies(address);
-      return buildStrategiesHelper({
-        strategies,
-        getTokenById,
-        importTokens,
-        Token,
-      });
+      return buildStrategiesHelper(strategies, getAllTokens);
     },
     enabled: tokens.length > 0 && ensAddress.isFetched && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -225,8 +192,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
 
 export const useGetStrategyList = (ids: string[]) => {
   const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importTokens } = useTokens();
-  const { Token } = useContract();
+  const { tokens, getAllTokens } = useTokens();
 
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategyList(ids),
@@ -241,12 +207,7 @@ export const useGetStrategyList = (ids: string[]) => {
           console.error(res.reason);
         }
       }
-      return buildStrategiesHelper({
-        strategies,
-        getTokenById,
-        importTokens,
-        Token,
-      });
+      return buildStrategiesHelper(strategies, getAllTokens);
     },
     enabled: tokens.length > 0 && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -256,20 +217,13 @@ export const useGetStrategyList = (ids: string[]) => {
 
 export const useGetStrategy = (id: string) => {
   const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importTokens } = useTokens();
-  const { Token } = useContract();
+  const { tokens, getAllTokens } = useTokens();
 
   return useQuery<AnyStrategy>({
     queryKey: QueryKey.strategy(id),
     queryFn: async () => {
       const strategy = await carbonSDK.getStrategy(id);
-
-      const strategies = await buildStrategiesHelper({
-        strategies: [strategy],
-        getTokenById,
-        importTokens,
-        Token,
-      });
+      const strategies = await buildStrategiesHelper([strategy], getAllTokens);
       return strategies[0];
     },
     enabled: tokens.length > 0 && isInitialized,
@@ -334,21 +288,16 @@ const getFieldsToUpdate = (orders: EditOrders, strategy: AnyStrategy) => {
 
 export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
   const { isInitialized } = useCarbonInit();
-  const { getTokenById, importTokens, isPending } = useTokens();
+  const { getAllTokens, isPending } = useTokens();
   const pair = usePairs();
-  const { Token } = useContract();
 
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategiesByPair(base, quote),
     queryFn: async () => {
       if (!base || !quote) return [];
       const strategies = await carbonSDK.getStrategiesByPair(base, quote);
-      return buildStrategiesHelper({
-        strategies: strategies.map((s) => normalizeStrategy(base, quote, s)),
-        getTokenById,
-        importTokens,
-        Token,
-      });
+      const list = strategies.map((s) => normalizeStrategy(base, quote, s));
+      return buildStrategiesHelper(list, getAllTokens);
     },
     enabled: !pair.isPending && !isPending && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -358,8 +307,7 @@ export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
 
 export const useTokenStrategies = (token?: string) => {
   const { isInitialized } = useCarbonInit();
-  const { getTokenById, importTokens } = useTokens();
-  const { Token } = useContract();
+  const { getAllTokens } = useTokens();
   const { map: pairMap } = usePairs();
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategiesByToken(token),
@@ -382,13 +330,7 @@ export const useTokenStrategies = (token?: string) => {
       const allStrategies = allResponses
         .filter((v) => v.status === 'fulfilled')
         .map((v) => (v as PromiseFulfilledResult<SDKStrategy[]>).value);
-      const result = await buildStrategiesHelper({
-        strategies: allStrategies.flat(),
-        getTokenById,
-        importTokens,
-        Token,
-      });
-      return result;
+      return buildStrategiesHelper(allStrategies.flat(), getAllTokens);
     },
     enabled: !!token && !!pairMap.size && isInitialized,
     staleTime: ONE_DAY_IN_MS,

@@ -12,6 +12,7 @@ export const useTokens = () => {
   const {
     tokens: { tokensMap, setImportedTokens, ...props },
   } = useStore();
+  const { Token } = useContract();
 
   const getTokenById = useCallback(
     (id?: string) => (id ? tokensMap.get(id.toLowerCase()) : undefined),
@@ -35,6 +36,33 @@ export const useTokens = () => {
     },
     [setImportedTokens],
   );
+
+  /** Get tokens and import missing one */
+  const getAllTokens = async (addresses: Iterable<string>) => {
+    const missingTokens = new Set<string>();
+    const tokens = new Map<string, Token>();
+    for (const address of addresses) {
+      const token = getTokenById(address);
+      if (token) tokens.set(address, token);
+      else missingTokens.add(address);
+    }
+    if (missingTokens.size) {
+      const getTokens = Array.from(missingTokens).map((address) => {
+        return fetchTokenData(Token, address);
+      });
+      const responses = await Promise.allSettled(getTokens);
+      for (const res of responses) {
+        if (res.status === 'fulfilled') {
+          tokens.set(res.value.address, res.value);
+        } else {
+          console.error(res.reason);
+        }
+      }
+      // importTokens will filter out existing tokens
+      importTokens(Object.values(tokens));
+    }
+    return tokens;
+  };
 
   const [favoriteTokens, _setFavoriteTokens] = useState<Token[]>(
     lsService.getItem(`favoriteTokens-${user}`) || [],
@@ -72,6 +100,7 @@ export const useTokens = () => {
     removeFavoriteToken,
     favoriteTokens,
     tokensMap,
+    getAllTokens,
   };
 };
 

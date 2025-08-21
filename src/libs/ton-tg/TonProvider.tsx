@@ -14,7 +14,12 @@ import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
 import { Contract, Interface, TransactionRequest } from 'ethers';
-import { AssetType, SenderFactory, startTracking } from '@tonappchain/sdk';
+import {
+  AssetType,
+  SenderFactory,
+  TransactionLinker,
+  OperationTracker,
+} from '@tonappchain/sdk';
 import { TonClient, Address } from '@ton/ton';
 import { getTacSDK } from './address';
 import { abi } from 'abis/controller.json' with { type: 'json' };
@@ -38,6 +43,50 @@ export const TonProvider = ({ children }: { children: ReactNode }) => {
       </WagmiProvider>
     </TonConnectUIProvider>
   );
+};
+
+async function repeat<T>(cb: () => Promise<T>): Promise<T> {
+  let remaining = 30;
+  while (remaining) {
+    try {
+      const value = await cb();
+      if (value) return value;
+    } catch {
+      // Do nothing
+    } finally {
+      --remaining;
+      await new Promise((res) => setTimeout(res, 1000));
+    }
+  }
+  throw new Error('Too many attempt to get operationID');
+}
+
+const awaitOperationId = async (
+  tracker: OperationTracker,
+  linker: TransactionLinker,
+) => {
+  return repeat(() => tracker.getOperationId(linker));
+};
+
+const awaitTransactionHash = async (
+  tracker: OperationTracker,
+  operationId: string,
+) => {
+  return repeat(async () => {
+    const stage = await tracker.getStageProfiling(operationId);
+    if (stage.collectedInTAC.exists) {
+      return stage.collectedInTAC.stageData!.transactions![0].hash;
+    }
+  });
+};
+const awaitTransactionExecuted = async (
+  tracker: OperationTracker,
+  operationId: string,
+) => {
+  return repeat(async () => {
+    const stage = await tracker.getStageProfiling(operationId);
+    if (stage.executedInTAC) return true;
+  });
 };
 
 /** Use to override wagmi to use TON instead */
@@ -159,16 +208,12 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           sender,
           assets,
         );
-
-        // Pull every 5sec up until 5mins
-        const stage = await startTracking(linker, sdk.network, {
-          delay: 5000,
-          maxIterationCount: 60,
-        });
-        const hash = stage!.collectedInTAC.stageData?.transactions?.[0].hash;
+        const tracker = new OperationTracker(sdk.network);
+        const operationId = await awaitOperationId(tracker, linker);
+        const hash = await awaitTransactionHash(tracker, operationId);
         return {
           hash: hash!,
-          wait: async () => true,
+          wait: () => awaitTransactionExecuted(tracker, operationId),
         };
       } catch (e: any) {
         if (e.debugInfo) {
