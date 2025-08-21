@@ -1,0 +1,45 @@
+{
+  "tokens": [
+    {
+      "chainId": 2391,
+      "address": "0xe3a2296bE422768a630eb35014978A808D106899",
+      "symbol": "TON",
+      "name": "TON Token",
+      "decimals": 18,
+      "logoURI": "https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png"
+    },
+    {
+      "chainId": 2391,
+      "address": "0x19dd649b2132c6e66afC00717714ab831A60C00F",
+      "symbol": "USDT",
+      "name": "USDT Token",
+      "decimals": 18,
+      "logoURI": "https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png",
+      "extensions": {
+        "jetton": "kQD5l75tbhYoCcYMAPzlD1GRTAIdJZ9y-fgI-5xTnEeVIitl"
+      }
+    },
+    {
+      "chainId": 2391,
+      "address": "0xCa0399fF49526D38D54d201ED50521C9201C1ef7",
+      "symbol": "AIOTX",
+      "name": "AIOTX Token",
+      "decimals": 18,
+      "logoURI": "https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png",
+      "extensions": {
+        "jetton": "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di"
+      }
+    },
+    {
+      "chainId": 2391,
+      "address": "0xc59574dB4Ef6533c522b0509CAF9486A70C32002",
+      "symbol": "ELO",
+      "name": "ELO Token",
+      "decimals": 18,
+      "logoURI": "https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png",
+      "extensions": {
+        "jetton": "kQBCC7simSdyRQDRCDfa_os-UOQSwQqbZ0hYpnCP_slfd59w"
+      }
+    }
+  ]
+}
