@@ -33,7 +33,7 @@ const config: AppConfig = {
     },
     tac: {
       proxy: '0x6D66139b6D31b1B8fFdf27fB725415585DeaCc78',
-      smartAccountFactory: '0x510ee99eD721107851D692f761198E3dE4e9310D',
+      smartAccountFactory: '0x5919D1D0D1b36F08018d7C9650BF914AEbC6BAd6',
     },
   },
   network: {

@@ -19,6 +19,7 @@ import {
   SenderFactory,
   TransactionLinker,
   OperationTracker,
+  OperationType,
 } from '@tonappchain/sdk';
 import { TonClient, Address } from '@ton/ton';
 import { getTacSDK } from './address';
@@ -76,15 +77,15 @@ const awaitOperationId = async (
   return repeat(() => tracker.getOperationId(linker));
 };
 
-const awaitTransactionHash = async (
+const awaitTransactionIsDone = async (
   tracker: OperationTracker,
   operationId: string,
 ) => {
   return repeat(async () => {
     const stage = await tracker.getStageProfiling(operationId);
-    console.log(stage);
-    if (stage.collectedInTAC.exists) {
-      return stage.collectedInTAC.stageData!.transactions![0].hash;
+    if (stage.operationType !== OperationType.PENDING) {
+      if (stage.operationType !== OperationType.UNKNOWN) return;
+      throw new Error('Unknown state of transaction');
     }
   });
 };
@@ -94,8 +95,9 @@ const awaitTransactionExecuted = async (
 ) => {
   return repeat(async () => {
     const stage = await tracker.getStageProfiling(operationId);
-    console.log(stage);
-    if (stage.executedInTAC.exists) return true;
+    if (stage.executedInTAC.exists) {
+      return stage.executedInTAC.stageData?.transactions?.[0].hash;
+    }
   });
 };
 
@@ -158,13 +160,10 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   // TODO: close SDK connection oncleanup
   useEffect(() => {
     if (tonUser) {
-      const factory = new Contract(
-        smartAccountFactory,
-        [
-          'function getSmartAccountForApplication(string, address) view returns (address)',
-        ],
-        provider,
-      );
+      const abi = [
+        'function getSmartAccountForApplication(string, address) view returns (address)',
+      ];
+      const factory = new Contract(smartAccountFactory, abi, provider);
       const bouncedAddress = Address.parse(tonUser).toString({
         bounceable: true,
       });
@@ -223,10 +222,10 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
 
         const tracker = new OperationTracker(sdk.network);
         const operationId = await awaitOperationId(tracker, linker);
-        const hash = await awaitTransactionHash(tracker, operationId);
+        const hash = await awaitTransactionExecuted(tracker, operationId);
         return {
           hash: hash!,
-          wait: () => awaitTransactionExecuted(tracker, operationId),
+          wait: () => awaitTransactionIsDone(tracker, operationId),
         };
       } catch (e: any) {
         console.log(e);
