@@ -24,7 +24,6 @@ export const fetchTokenLists = async () => {
       const response = await fetch(uri, { signal: controller.signal });
       clearTimeout(abort);
       const result: TokenList = await response.json();
-
       if (!response.ok) {
         const error = (result as { error?: string }).error;
         throw new Error(
@@ -89,8 +88,8 @@ export const fetchTokenData = async (
   if (config.network.name === 'TON') {
     const tonAddress = await getTVMTokenAddress(address);
     const [token, evmAddress] = await Promise.all([
-      getTonTokenData(address),
-      getEVMTokenAddress(tonAddress),
+      getTonTokenData(tonAddress),
+      getEVMTokenAddress(address),
     ]);
     return {
       ...token,

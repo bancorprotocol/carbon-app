@@ -24,8 +24,8 @@ export const commonConfig: AppConfig = {
     logoUrl: IconTonLogo,
     chainId: 239,
     blockExplorer: {
-      name: 'Tonscan',
-      url: 'https://tonscan.org/',
+      name: 'TAC Explorer',
+      url: 'https://explorer.tac.build/',
     },
     rpc: {
       url: 'https://rpc.tac.build',
@@ -54,6 +54,10 @@ export const commonConfig: AppConfig = {
       carbonController: '0xA4682A2A5Fe02feFF8Bd200240A41AD0E6EaF8d5',
       voucher: '0xb0d39990E1C38B50D0b7f6911525535Fbacb4C26',
       batcher: '0x0f54099D787e26c90c487625B4dE819eC5A9BDAA',
+    },
+    tac: {
+      proxy: '0x6D66139b6D31b1B8fFdf27fB725415585DeaCc78',
+      smartAccountFactory: '0x070820Ed658860f77138d71f74EfbE173775895b',
     },
   },
   utils: {

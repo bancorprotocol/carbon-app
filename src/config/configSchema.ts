@@ -81,6 +81,12 @@ export const AppConfigSchema = v.object({
       voucher: v.string(),
       batcher: v.optional(v.string()),
     }),
+    tac: v.optional(
+      v.object({
+        proxy: v.string(),
+        smartAccountFactory: v.string(),
+      }),
+    ),
   }),
   utils: v.union([
     v.partial(

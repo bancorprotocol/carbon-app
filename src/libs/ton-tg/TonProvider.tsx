@@ -25,9 +25,12 @@ import { getTacSDK } from './address';
 import { abi } from 'abis/controller.json' with { type: 'json' };
 import config from 'config';
 
-const TON = '0xb76d91340F5CE3577f0a056D29f6e3Eb4E88B140';
-const smartAccountFactory = '0x070820Ed658860f77138d71f74EfbE173775895b';
-const proxyContract = '0xd68eFC6C132315123634777F5BA52aAD6B0292C1';
+if (!config.addresses.tac) {
+  throw new Error('config.addresses.tac is not defined');
+}
+const TON = config.addresses.tokens.TON;
+const smartAccountFactory = config.addresses.tac.smartAccountFactory;
+const proxyContract = config.addresses.tac.proxy;
 
 // TODO: update with production URL once deployed
 const manifestUrl =
@@ -234,9 +237,8 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
       try {
         if (evmAddress === TON) {
           const client = new TonClient({
-            endpoint:
-              import.meta.env.VITE_TON_RPC ??
-              'https://rp.mainnet.tac.build/api/v2/jsonRPC',
+            // We can use TAC rpc because it calls also TON
+            endpoint: config.network.rpc.url,
           });
           return client.getBalance(Address.parse(tonUser));
         } else {

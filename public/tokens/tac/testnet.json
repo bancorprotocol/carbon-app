@@ -5,40 +5,65 @@
       "address": "0xe3a2296bE422768a630eb35014978A808D106899",
       "symbol": "TON",
       "name": "TON Token",
-      "decimals": 18,
-      "logoURI": "https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png"
-    },
-    {
-      "chainId": 2391,
-      "address": "0x19dd649b2132c6e66afC00717714ab831A60C00F",
-      "symbol": "USDT",
-      "name": "USDT Token",
-      "decimals": 18,
-      "logoURI": "https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png",
+      "decimals": 9,
+      "logoURI": "https://assets.coingecko.com/coins/images/17980/large/photo_2024-09-10_17.09.00.jpeg?1725963446",
       "extensions": {
-        "jetton": "kQD5l75tbhYoCcYMAPzlD1GRTAIdJZ9y-fgI-5xTnEeVIitl"
+        "jetton": "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"
       }
     },
     {
       "chainId": 2391,
-      "address": "0xCa0399fF49526D38D54d201ED50521C9201C1ef7",
-      "symbol": "AIOTX",
-      "name": "AIOTX Token",
-      "decimals": 18,
-      "logoURI": "https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png",
+      "address": "0x6988C476CA404d59e9F368F0d14D1a74b49D0443",
+      "symbol": "JFK",
+      "name": "JFK Token",
+      "decimals": 9,
+      "logoURI": "https://m.media-amazon.com/images/I/41RF4DWgb9L._AC_UF894,1000_QL80_.jpg",
       "extensions": {
-        "jetton": "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di"
+        "jetton": "EQCwxFMdtcS7On7Bx1Ve6wxPogjDDFOh1sY_6DH6vlH_3X5T"
       }
     },
     {
       "chainId": 2391,
-      "address": "0xc59574dB4Ef6533c522b0509CAF9486A70C32002",
-      "symbol": "ELO",
-      "name": "ELO Token",
-      "decimals": 18,
-      "logoURI": "https://res.cloudinary.com/dqz8o8js4/image/upload/v1752369223/Copy_of_TAC-logo-symbol-purple_xx17mf.png",
+      "name": "Tether USD",
+      "symbol": "USD₮",
+      "logoURI": "https://tether.to/images/logoCircle.png",
+      "decimals": 6,
+      "address": "0xbA7EbAC1D2bB8a68F808cd235BB6A50E7B9F9220",
       "extensions": {
-        "jetton": "kQBCC7simSdyRQDRCDfa_os-UOQSwQqbZ0hYpnCP_slfd59w"
+        "jetton": "EQA7Gc3mE2DhKWvg5UNOJcH_8OE-LVc7dVsNm-JuLDNeQFOK"
+      }
+    },
+    {
+      "chainId": 2391,
+      "name": "TVM TOKEN2",
+      "symbol": "TT2",
+      "logoURI": "https://i.pinimg.com/736x/a1/4a/5c/a14a5ca7114274cffb24869667399be4.jpg",
+      "decimals": 9,
+      "address": "0x49677c2625D5c371a17e5e1174B9725a4553be86",
+      "extensions": {
+        "jetton": "EQCsQSo54ajAorOfDUAM-RPdDJgs0obqyrNSEtvbjB7hh2oK"
+      }
+    },
+    {
+      "chainId": 2391,
+      "name": "TVM TOKEN1",
+      "symbol": "TT1",
+      "logoURI": "https://avatars.mds.yandex.net/i?id=51faea11f33975e546167a63836fc321e09b4b8d-13197814-images-thumbs&n=13",
+      "decimals": 9,
+      "address": "0xFA7a767664F2C9B27F5DB0F882ec46941c3db3F4",
+      "extensions": {
+        "jetton": "EQBLi0v_y-KiLlT1VzQJmmMbaoZnLcMAHrIEmzur13dwOmM1"
+      }
+    },
+    {
+      "chainId": 2391,
+      "name": "TAC Token",
+      "symbol": "TAC",
+      "logoURI": "",
+      "decimals": 18,
+      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "extensions": {
+        "jetton": "EQB3j4RtzlF8pIgZuhMIvP6rFclGHJI1-XeQ8f7I2YhdxzzB"
       }
     }
   ]

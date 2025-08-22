@@ -27,7 +27,7 @@ let sdk: Promise<TacSdk>;
 export const getTacSDK = async () => {
   if (!sdk) {
     sdk = TacSdk.create({
-      network: Network.MAINNET,
+      network: Network.TESTNET,
     });
   }
   return sdk;
@@ -36,7 +36,8 @@ export const getTacSDK = async () => {
 export const getEVMTokenAddress = async (tvmTokenAddress: string) => {
   if (isAddress(tvmTokenAddress)) return tvmTokenAddress;
   const sdk = await getTacSDK();
-  return sdk.getEVMTokenAddress(tvmTokenAddress);
+  const ton = Address.parse(tvmTokenAddress).toString({ bounceable: true });
+  return sdk.getEVMTokenAddress(ton);
 };
 export const getTVMTokenAddress = async (evmTokenAddress: string) => {
   if (isTONAddress(evmTokenAddress)) return evmTokenAddress;
