@@ -25,6 +25,11 @@ import { getTacSDK } from './address';
 import { abi } from 'abis/controller.json' with { type: 'json' };
 import config from 'config';
 
+interface TxResult {
+  success: boolean;
+  error?: string;
+}
+
 if (!config.addresses.tac) {
   throw new Error('config.addresses.tac is not defined');
 }
@@ -58,7 +63,7 @@ async function repeat<T>(cb: () => Promise<T>): Promise<T> {
       // Do nothing
     } finally {
       --remaining;
-      await new Promise((res) => setTimeout(res, 1000));
+      await new Promise((res) => setTimeout(res, 5_000));
     }
   }
   throw new Error('Too many attempt to get operationID');
@@ -77,6 +82,7 @@ const awaitTransactionHash = async (
 ) => {
   return repeat(async () => {
     const stage = await tracker.getStageProfiling(operationId);
+    console.log(stage);
     if (stage.collectedInTAC.exists) {
       return stage.collectedInTAC.stageData!.transactions![0].hash;
     }
@@ -88,7 +94,8 @@ const awaitTransactionExecuted = async (
 ) => {
   return repeat(async () => {
     const stage = await tracker.getStageProfiling(operationId);
-    if (stage.executedInTAC) return true;
+    console.log(stage);
+    if (stage.executedInTAC.exists) return true;
   });
 };
 
@@ -211,6 +218,9 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           sender,
           assets,
         );
+        const txResult = linker.sendTransactionResult as TxResult;
+        if (txResult.error) throw txResult.error;
+
         const tracker = new OperationTracker(sdk.network);
         const operationId = await awaitOperationId(tracker, linker);
         const hash = await awaitTransactionHash(tracker, operationId);
@@ -219,6 +229,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           wait: () => awaitTransactionExecuted(tracker, operationId),
         };
       } catch (e: any) {
+        console.log(e);
         if (e.debugInfo) {
           console.warn(
             `cast call --trace -r ${config.network.rpc.url} --block ${e.debugInfo.blockNumber} --from ${e.debugInfo.from} --data ${e.debugInfo.callData} ${e.debugInfo.to}`,
@@ -238,7 +249,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
         if (evmAddress === TON) {
           const client = new TonClient({
             // We can use TAC rpc because it calls also TON
-            endpoint: config.network.rpc.url,
+            endpoint: `${config.network.rpc.url}/api/v2/jsonRPC`,
           });
           return client.getBalance(Address.parse(tonUser));
         } else {
