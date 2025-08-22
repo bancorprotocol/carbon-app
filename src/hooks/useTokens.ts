@@ -5,7 +5,7 @@ import { useStore } from 'store';
 import { useWagmi } from 'libs/wagmi';
 import { useContract } from './useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
-import { getAddress } from 'libs/ton-tg/address';
+import { getAddress } from 'ethers';
 
 export const useTokens = () => {
   const { user } = useWagmi();

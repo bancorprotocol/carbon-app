@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { isAddress, TransactionRequest } from 'ethers';
-import { getAddress } from 'libs/ton-tg/address';
+import { getAddress } from 'ethers';
 import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
@@ -319,6 +319,7 @@ export const useTokenStrategies = (token?: string) => {
         if (quoteToken.address === base) allQuotes.add(baseToken.address);
       }
       const getStrategies: Promise<SDKStrategy[]>[] = [];
+      console.log({ allQuotes });
       for (const quote of allQuotes) {
         getStrategies.push(carbonSDK.getStrategiesByPair(base, quote));
       }

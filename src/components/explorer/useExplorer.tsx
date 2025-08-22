@@ -3,7 +3,7 @@ import {
   useGetUserStrategies,
   useTokenStrategies,
 } from 'libs/queries';
-import { extractExplorerPair, usePairs } from 'hooks/usePairs';
+import { extractExplorerPair, isTokenSlug, usePairs } from 'hooks/usePairs';
 import { useMemo } from 'react';
 import { useParams } from '@tanstack/react-router';
 
@@ -16,7 +16,7 @@ export const useExplorer = () => {
   // SINGLE TOKEN
   const singleToken = (() => {
     if (type !== 'token') return;
-    if (slug?.length !== 48 * 2 + 1) return;
+    if (!isTokenSlug(slug)) return;
     return slug;
   })();
   const tokenQuery = useTokenStrategies(singleToken);

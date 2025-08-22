@@ -1,8 +1,5 @@
-import {
-  getAddress,
-  getEVMTokenAddress,
-  getTVMTokenAddress,
-} from 'libs/ton-tg/address';
+import { getEVMTokenAddress, getTVMTokenAddress } from 'libs/ton-tg/address';
+import { getAddress } from 'ethers';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';

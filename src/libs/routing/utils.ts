@@ -1,5 +1,5 @@
 import { lsService } from 'services/localeStorage';
-import { getAddress } from 'libs/ton-tg/address';
+import { getAddress } from 'ethers';
 import { formatNumber } from 'utils/helpers';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { valibotSearchValidator } from '@tanstack/router-valibot-adapter';

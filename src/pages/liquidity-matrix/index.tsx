@@ -40,7 +40,7 @@ import { useWagmi } from 'libs/wagmi';
 import { lsService } from 'services/localeStorage';
 import { isZero } from 'components/strategies/common/utils';
 import './index.css';
-import { getAddress } from 'libs/ton-tg/address';
+import { getAddress } from 'ethers';
 import { useApproval } from 'hooks/useApproval';
 import { carbonSDK } from 'libs/sdk';
 import config from 'config';

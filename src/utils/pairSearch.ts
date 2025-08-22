@@ -4,15 +4,15 @@ import { includesGasToken, isDifferentGasToken } from './tokens';
 import { Token } from 'libs/tokens';
 
 /**
- * Remove " ", "/" from a string
+ * Remove " ", "-", "/" from a string
  * If you need another separator add it between |
  * @example
  * ```typescript
- * // to support "&", "-" "<->"separator do
+ * // support "&" and "<->"separator
  * const pairSearchExp = new RegExp('(\\s|&|<->||-|/){1,}', 'g');
  * ```
  */
-const pairSearchExp = new RegExp('(\\s|/){1,}', 'g');
+const pairSearchExp = new RegExp('(\\s|-|/){1,}', 'g');
 
 export type PairMaps = ReturnType<typeof createPairMaps>;
 

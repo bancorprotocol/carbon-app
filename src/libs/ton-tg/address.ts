@@ -13,9 +13,9 @@ export const isTONAddress = (address: string) => {
   }
 };
 
-export const getAddress = (address: string) => {
+export const getNetworkAddress = (address: string) => {
   if (config.network.name === 'TON') {
-    return address;
+    return Address.parse(address).toString({ bounceable: true });
   } else {
     return getEthersAddress(address);
   }

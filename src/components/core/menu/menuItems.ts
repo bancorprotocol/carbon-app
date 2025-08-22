@@ -21,13 +21,11 @@ export const getMenuItems = () => {
       testid: 'trade-page',
     },
   ];
-  if (config.network.name !== 'TON') {
-    items.push({
-      label: 'Explore',
-      href: '/explore',
-      testid: 'explore-page',
-    });
-  }
+  items.push({
+    label: 'Explore',
+    href: '/explore',
+    testid: 'explore-page',
+  });
   if (config.ui.showSimulator) {
     items.push({
       label: 'Simulate',
