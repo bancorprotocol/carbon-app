@@ -32,7 +32,7 @@ export const getNetworkAddress = (address: string) => {
 
 export const getTokenAddress = (token: Token) => {
   if (config.network.name === 'TON' && 'tonAddress' in token) {
-    return token.tonAddress;
+    return token.tonAddress as string;
   } else {
     return token.address;
   }
