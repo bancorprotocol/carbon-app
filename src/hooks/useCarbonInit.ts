@@ -83,6 +83,12 @@ export const useCarbonInit = () => {
     [cache, invalidateQueriesByPair],
   );
 
+  const onCacheClearedCallback = useCallback(async () => {
+    cache.invalidateQueries({
+      predicate: (key) => key.queryKey.includes('sdk'),
+    });
+  }, [cache]);
+
   const initSDK = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -110,6 +116,7 @@ export const useCarbonInit = () => {
         carbonSDK.setOnChangeHandlers(
           Comlink.proxy(onPairDataChangedCallback),
           Comlink.proxy(onPairAddedToCacheCallback),
+          Comlink.proxy(onCacheClearedCallback),
         ),
       ]);
 
