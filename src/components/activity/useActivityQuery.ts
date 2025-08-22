@@ -13,6 +13,7 @@ import { Token } from 'libs/tokens';
 import { carbonApi } from 'utils/carbonApi';
 import { THIRTY_SEC_IN_MS } from 'utils/time';
 import { fromUnixUTC } from 'components/simulator/utils';
+
 export const toActivities = (
   data: ServerActivity[],
   tokensMap: Map<string, Token>,
