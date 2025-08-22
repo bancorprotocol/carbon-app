@@ -3,6 +3,7 @@ import { getAddress as getEthersAddress, isAddress } from 'ethers';
 
 import { TacSdk, Network } from '@tonappchain/sdk';
 import { Address } from '@ton/core';
+import { Token } from 'libs/tokens';
 
 export const isTONAddress = (address: string) => {
   try {
@@ -13,11 +14,27 @@ export const isTONAddress = (address: string) => {
   }
 };
 
+export const isNetworkAddress = (address: string) => {
+  if (config.network.name === 'TON') {
+    return isTONAddress(address);
+  } else {
+    return isAddress(address);
+  }
+};
+
 export const getNetworkAddress = (address: string) => {
   if (config.network.name === 'TON') {
     return Address.parse(address).toString({ bounceable: true });
   } else {
     return getEthersAddress(address);
+  }
+};
+
+export const getTokenAddress = (token: Token) => {
+  if (config.network.name === 'TON' && 'tonAddress' in token) {
+    return token.tonAddress;
+  } else {
+    return token.address;
   }
 };
 
