@@ -7,11 +7,10 @@ import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
-import { NotEnoughLiquidity } from './NotEnoughLiquidity';
+import { NoLiquidity } from './NoLiquidity';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 import { useTradePairs } from '../useTradePairs';
-import { NoTrade } from '../NoTrade';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
@@ -66,8 +65,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   if (isTradePairPending || liquidityQuery.isPending) {
     return <CarbonLogoLoading className="h-80 m-20" />;
   }
-  if (isTradePairError) return <NoTrade />;
   if (liquidityQuery?.isError) return <div>Error</div>;
+  if (isTradePairError) return <NoLiquidity />;
+  if (!hasEnoughLiquidity && !liquidityQuery.isPending) {
+    return <NoLiquidity />;
+  }
 
   if (!source || !target) return null;
 
@@ -103,97 +105,89 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   return (
     <form {...formProps} onSubmit={handleTrade} className="flex flex-col">
-      {hasEnoughLiquidity || liquidityQuery.isPending ? (
-        <>
-          <header className="text-14 flex justify-between">
-            <label htmlFor={`${id}-pay`} className="text-white/50">
-              You pay
-            </label>
-            {errorMsgSource && (
-              <output
-                htmlFor={`${id}-pay`}
-                className="text-12 font-weight-500 text-error"
-              >
-                {errorMsgSource}
-              </output>
-            )}
-          </header>
-          <TokenInputField
-            id={`${id}-pay`}
-            className="rounded-12 mb-20 mt-5 bg-black p-16"
-            token={source}
-            isBalanceLoading={sourceBalanceQuery.isPending}
-            value={sourceInput}
-            setValue={(value) => {
-              setSourceInput(value);
+      <header className="text-14 flex justify-between">
+        <label htmlFor={`${id}-pay`} className="text-white/50">
+          You pay
+        </label>
+        {errorMsgSource && (
+          <output
+            htmlFor={`${id}-pay`}
+            className="text-12 font-weight-500 text-error"
+          >
+            {errorMsgSource}
+          </output>
+        )}
+      </header>
+      <TokenInputField
+        id={`${id}-pay`}
+        className="rounded-12 mb-20 mt-5 bg-black p-16"
+        token={source}
+        isBalanceLoading={sourceBalanceQuery.isPending}
+        value={sourceInput}
+        setValue={(value) => {
+          setSourceInput(value);
+        }}
+        balance={sourceBalanceQuery.data}
+        onKeystroke={() => onInputChange(true)}
+        isLoading={byTargetQuery.isFetching}
+        isError={!!errorMsgSource}
+        disabled={!hasEnoughLiquidity}
+      />
+      <header className="text-14 flex justify-between">
+        <label htmlFor={`${id}-receive`} className="text-white/50">
+          You receive
+        </label>
+        {errorMsgTarget && (
+          <button
+            type="button"
+            className="font-weight-500 text-error cursor-pointer"
+            onClick={() => {
+              onInputChange(false);
+              setTargetInput(liquidityQuery.data || '0');
             }}
-            balance={sourceBalanceQuery.data}
-            onKeystroke={() => onInputChange(true)}
-            isLoading={byTargetQuery.isFetching}
-            isError={!!errorMsgSource}
-            disabled={!hasEnoughLiquidity}
-          />
-          <header className="text-14 flex justify-between">
-            <label htmlFor={`${id}-receive`} className="text-white/50">
-              You receive
-            </label>
-            {errorMsgTarget && (
-              <button
-                type="button"
-                className="font-weight-500 text-error cursor-pointer"
-                onClick={() => {
-                  onInputChange(false);
-                  setTargetInput(liquidityQuery.data || '0');
-                }}
-              >
-                {errorMsgTarget}
-              </button>
-            )}
-          </header>
-          <TokenInputField
-            id={`${id}-receive`}
-            className="rounded-b-4 rounded-t-12 mt-5 bg-black p-16"
-            token={target}
-            value={targetInput}
-            setValue={(value) => setTargetInput(value)}
-            placeholder="Total Amount"
-            onKeystroke={() => onInputChange(false)}
-            isLoading={bySourceQuery.isFetching}
-            isError={!!errorMsgTarget}
-            slippage={slippage}
-            disabled={!hasEnoughLiquidity}
-          />
-          <footer className="rounded-b-12 rounded-t-4 text-14 mt-5 flex justify-between bg-black p-16 text-white/80">
-            <p>{getRate()}</p>
-            {showRouting && (
-              <button
-                type="button"
-                onClick={openTradeRouteModal}
-                className="flex space-x-10 text-left hover:text-white md:flex"
-                data-testid="routing"
-              >
-                <IconRouting className="w-12" />
-                <Tooltip
-                  placement="left"
-                  element="You can view and manage the orders that are included in the trade."
-                >
-                  <span>Routing</span>
-                </Tooltip>
-              </button>
-            )}
-          </footer>
-          {IS_TENDERLY_FORK && (
-            <div className="text-14 mt-5 text-right text-white/60">
-              DEBUG: {getLiquidity()}
-            </div>
-          )}
-        </>
-      ) : (
-        <NotEnoughLiquidity
-          source={isBuy ? target : source}
-          target={isBuy ? source : target}
-        />
+          >
+            {errorMsgTarget}
+          </button>
+        )}
+      </header>
+      <TokenInputField
+        id={`${id}-receive`}
+        className="rounded-b-4 rounded-t-12 mt-5 bg-black p-16"
+        token={target}
+        value={targetInput}
+        setValue={(value) => setTargetInput(value)}
+        placeholder="Total Amount"
+        onKeystroke={() => onInputChange(false)}
+        isLoading={bySourceQuery.isFetching}
+        isError={!!errorMsgTarget}
+        slippage={slippage}
+        disabled={!hasEnoughLiquidity}
+      />
+      <footer className="rounded-b-12 rounded-t-4 text-14 mt-5 flex justify-between bg-black p-16 text-white/80">
+        <p>{getRate()}</p>
+        {showRouting && (
+          <button
+            type="button"
+            onClick={openTradeRouteModal}
+            className="flex space-x-10 text-left hover:text-white md:flex"
+            data-testid="routing"
+          >
+            <IconRouting className="w-12" />
+            <Tooltip
+              placement="left"
+              element="You can view and manage the orders that are included in the trade."
+            >
+              <span>Routing</span>
+            </Tooltip>
+          </button>
+        )}
+      </footer>
+      {IS_TENDERLY_FORK && (
+        <div className="text-14 mt-5 text-right text-white/60">
+          DEBUG: {getLiquidity()}
+        </div>
       )}
+
       <Button
         type="submit"
         disabled={disabledCTA}
