@@ -139,7 +139,7 @@ const getIntlOptions = (value: SafeDecimal, options: PrettifyNumberOptions) => {
     intlOptions.notation = 'compact';
   }
   // When ludicrous numbers, use 1E16 notation
-  if (value.gt(1e16)) {
+  if (!options.highPrecision && value.gt(1e16)) {
     intlOptions.notation = 'engineering';
   }
   return intlOptions;
