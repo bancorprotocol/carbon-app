@@ -64,7 +64,7 @@ const useHasInsufficientFunds = (approvalTokens: ApprovalToken[]) => {
 
 export const CartPage = () => {
   const strategies = useStrategyCart();
-  const { user, signer } = useWagmi();
+  const { user, sendTransaction } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
@@ -114,9 +114,7 @@ export const CartPage = () => {
           });
         }
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
-        const tx = await signer!.sendTransaction(
-          toTransactionRequest(unsignedTx),
-        );
+        const tx = await sendTransaction(toTransactionRequest(unsignedTx));
         setConfirmation(false);
         setProcessing(true);
         dispatchNotification('createBatchStrategy', { txHash: tx.hash });

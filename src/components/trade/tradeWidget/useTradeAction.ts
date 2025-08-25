@@ -35,7 +35,7 @@ export const useTradeAction = ({
   } = useStore();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
-  const { user, signer } = useWagmi();
+  const { user } = useWagmi();
 
   const calcMinReturn = useCallback(
     (amount: string) => {
@@ -68,8 +68,8 @@ export const useTradeAction = ({
     targetInput,
     tradeActions,
   }: TradeProps) => {
-    if (!user || !signer) {
-      throw new Error('No user or signer');
+    if (!user) {
+      throw new Error('No user');
     }
 
     return mutation.mutate(

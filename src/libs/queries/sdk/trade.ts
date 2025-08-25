@@ -38,11 +38,15 @@ export interface TradeParams {
 }
 
 export const useTradeQuery = () => {
-  const { signer } = useWagmi();
+  const { sendTransaction } = useWagmi();
 
   return useMutation({
     mutationFn: async (params: TradeParams) => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
+      const rawAmount = params.tradeActions.reduce(
+        (acc, { amount }) => Number(amount) + acc,
+        0,
+      );
       let unsignedTx: PopulatedTransaction;
       if (params.isTradeBySource) {
         unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
@@ -52,6 +56,14 @@ export const useTradeQuery = () => {
           calcDeadline(params.deadline),
           calcMinReturn(params.targetInput),
         );
+        unsignedTx.customData = {
+          assets: [
+            {
+              address: params.sourceAddress,
+              rawAmount,
+            },
+          ],
+        };
       } else {
         unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
           params.sourceAddress,
@@ -60,8 +72,16 @@ export const useTradeQuery = () => {
           calcDeadline(params.deadline),
           calcMaxInput(params.sourceInput),
         );
+        unsignedTx.customData = {
+          assets: [
+            {
+              address: params.targetAddress,
+              rawAmount,
+            },
+          ],
+        };
       }
-      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };

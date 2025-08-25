@@ -8,11 +8,12 @@ import { Tooltip } from './tooltip/Tooltip';
 import { shortenString } from 'utils/helpers';
 import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
 import { useStore } from 'store';
+import { getTokenAddress } from 'libs/ton-tg/address';
 
 interface TokenProps {
   token: Token;
 }
-export const _TokenLogoName: FC<TokenProps> = ({ token }) => {
+const _TokenLogoName: FC<TokenProps> = ({ token }) => {
   return (
     <>
       <TokenLogo token={token} size={30} />
@@ -21,7 +22,7 @@ export const _TokenLogoName: FC<TokenProps> = ({ token }) => {
           {token.isSuspicious && <SuspiciousToken />}
           {token.symbol}
         </p>
-        <p className="text-white/60 text-12">{token.address}</p>
+        <p className="text-white/60 text-12">{getTokenAddress(token)}</p>
       </div>
     </>
   );

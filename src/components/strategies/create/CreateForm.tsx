@@ -4,7 +4,6 @@ import { useNavigate } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
-import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
 import { useWagmi } from 'libs/wagmi';
 import { FormStaticOrder } from 'components/strategies/common/types';
@@ -23,8 +22,7 @@ interface FormProps {
 
 export const CreateForm: FC<FormProps> = (props) => {
   const { base, quote, buy, sell, children } = props;
-  const { openModal } = useModal();
-  const { user } = useWagmi();
+  const { user, openConnect } = useWagmi();
   const nav = useNavigate();
 
   const [animating, setAnimating] = useState(false);
@@ -34,10 +32,6 @@ export const CreateForm: FC<FormProps> = (props) => {
 
   const loading = isLoading || isProcessing || isAwaiting;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
-
-  const connectWallet = () => {
-    openModal('wallet', undefined);
-  };
 
   const isDisabled = (form: HTMLFormElement) => {
     if (!form.checkValidity()) return true;
@@ -143,7 +137,7 @@ export const CreateForm: FC<FormProps> = (props) => {
             fullWidth
             loading={loading}
             loadingChildren={loadingChildren}
-            onClick={connectWallet}
+            onClick={openConnect}
           >
             Connect Wallet
           </Button>

@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
 
         // Optionally uncomment the line below to override automatic release name detection
         // release: env.RELEASE,
-      })
+      }),
     );
   }
 
@@ -67,15 +67,15 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        process: 'process/browser',
+        // process: 'process/browser',
         buffer: 'buffer',
-        crypto: 'crypto-browserify',
-        assert: 'assert',
-        http: 'stream-http',
-        https: 'https-browserify',
-        os: 'os-browserify',
-        url: 'url',
-        util: 'util',
+        // crypto: 'crypto-browserify',
+        // assert: 'assert',
+        // http: 'stream-http',
+        // https: 'https-browserify',
+        // os: 'os-browserify',
+        // url: 'url',
+        // util: 'util',
       },
     },
     server: {
