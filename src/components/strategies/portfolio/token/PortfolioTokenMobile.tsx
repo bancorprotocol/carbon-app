@@ -22,6 +22,8 @@ export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
     fiatCurrency: { selectedFiatCurrency },
   } = useStore();
 
+  if (!selectedToken) return;
+
   return (
     <div className={cn('space-y-20')}>
       {isPending
