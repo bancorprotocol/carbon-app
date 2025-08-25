@@ -7,7 +7,7 @@ import { WagmiReactWrapper } from 'libs/wagmi';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
-import { TonProvider } from 'libs/ton-tg/TonProvider';
+import { TonProvider } from 'libs/ton/TonProvider';
 import config from 'config';
 import 'init-sentry';
 import 'fonts.css';

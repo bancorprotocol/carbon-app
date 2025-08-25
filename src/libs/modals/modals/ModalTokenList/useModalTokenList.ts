@@ -11,8 +11,8 @@ import {
   isGasTokenToHide,
   nativeToken,
 } from 'utils/tokens';
-import { isTONAddress } from 'libs/ton-tg/address';
-import { TonToken } from 'libs/ton-tg/tokenMap';
+import { isTONAddress } from 'libs/ton/address';
+import { TonToken } from 'libs/ton/tokenMap';
 
 const SEARCH_KEYS = [
   {

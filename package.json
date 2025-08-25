@@ -98,7 +98,7 @@
     "start:coti": "cross-env VITE_NETWORK=coti vite",
     "start:blast": "cross-env VITE_NETWORK=blast vite",
     "start:tac": "cross-env VITE_NETWORK=tac vite",
-    "start:ton-tg": "cross-env VITE_NETWORK=ton-tg vite",
+    "start:ton": "cross-env VITE_NETWORK=ton vite",
     "prebuild": "yarn compile-abis",
     "build": "tsc && vite build",
     "serve": "vite preview",

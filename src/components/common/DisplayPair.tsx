@@ -8,7 +8,7 @@ import { Tooltip } from './tooltip/Tooltip';
 import { shortenString } from 'utils/helpers';
 import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
 import { useStore } from 'store';
-import { getTokenAddress } from 'libs/ton-tg/address';
+import { getTokenAddress } from 'libs/ton/address';
 
 interface TokenProps {
   token: Token;

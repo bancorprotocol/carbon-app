@@ -4,7 +4,7 @@ import { lsService } from 'services/localeStorage';
 import { AppConfigSchema } from './configSchema';
 import * as v from 'valibot';
 import { AppConfig } from './types';
-import { tokenTonToTacParser } from './ton-tg/utils';
+import { tokenTonToTacParser } from './ton/utils';
 
 export const pairsToExchangeMapping: { [key: string]: string } = {
   ETHUSDT: 'BINANCE:ETHUSDT',

@@ -1,11 +1,11 @@
-import { getEVMTokenAddress, getTVMTokenAddress } from 'libs/ton-tg/address';
+import { getEVMTokenAddress, getTVMTokenAddress } from 'libs/ton/address';
 import { getAddress } from 'ethers';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
 import { tokenParserMap } from 'config/utils';
-import { TonToken } from 'libs/ton-tg/tokenMap';
-import { getTonTokenData } from 'libs/ton-tg/api';
+import { TonToken } from 'libs/ton/tokenMap';
+import { getTonTokenData } from 'libs/ton/api';
 import config from 'config';
 
 const getLogoByURI = (uri: string | undefined) =>
