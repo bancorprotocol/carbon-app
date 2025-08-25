@@ -28,7 +28,7 @@ export const commonConfig: AppConfig = {
       url: 'https://explorer.tac.build/',
     },
     rpc: {
-      url: 'https://rp.mainnet.tac.build',
+      url: 'https://rpc.tac.build',
     },
     defaultLimitedApproval: true,
     gasToken: {

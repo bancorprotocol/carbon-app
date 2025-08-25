@@ -1,4 +1,4 @@
-import config from 'config';
+import { tonCenter } from './utils';
 interface TokenInfo {
   valid: boolean;
   type: 'jetton_masters';
@@ -16,7 +16,7 @@ interface Metadata {
 }
 
 export const getTonTokenData = async (address: string) => {
-  const url = new URL(`${config.network.rpc.url}/api/v3/metadata`);
+  const url = new URL(`${tonCenter}/api/v3/metadata`);
   url.searchParams.append('address', address);
   const res = await fetch(url);
   const data = await res.json<Record<string, Metadata>>();

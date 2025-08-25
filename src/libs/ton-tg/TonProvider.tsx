@@ -25,6 +25,7 @@ import { TonClient, Address } from '@ton/ton';
 import { getTacSDK } from './address';
 import { abi } from 'abis/controller.json' with { type: 'json' };
 import config from 'config';
+import { tonCenter } from './utils';
 
 interface TxResult {
   success: boolean;
@@ -247,8 +248,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
       try {
         if (evmAddress === TON) {
           const client = new TonClient({
-            // We can use TAC rpc because it calls also TON
-            endpoint: `${config.network.rpc.url}/api/v2/jsonRPC`,
+            endpoint: `${tonCenter}/api/v2/jsonRPC`,
           });
           return client.getBalance(Address.parse(tonUser));
         } else {
