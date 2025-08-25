@@ -5,7 +5,7 @@ import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
 import { tokenParserMap } from 'config/utils';
 import { TonToken } from 'libs/ton-tg/tokenMap';
-import { getTonTokenData } from 'libs/ton-tg/Jetton';
+import { getTonTokenData } from 'libs/ton-tg/api';
 import config from 'config';
 
 const getLogoByURI = (uri: string | undefined) =>

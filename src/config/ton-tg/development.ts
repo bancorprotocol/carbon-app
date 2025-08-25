@@ -4,22 +4,23 @@ import { commonConfig } from './common';
 const addresses = {
   TAC: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
   TON: '0xe3a2296bE422768a630eb35014978A808D106899',
-  JFK: '0x6988C476CA404d59e9F368F0d14D1a74b49D0443',
+  USDT: '0xbA7EbAC1D2bB8a68F808cd235BB6A50E7B9F9220',
   ZERO: '0x0000000000000000000000000000000000000000',
 };
-const popularTokens = [addresses.TON, addresses.JFK];
+const popularTokens = [addresses.TON, addresses.USDT];
 
 const config: AppConfig = {
   ...commonConfig,
   mode: 'development',
+  tonApi: 'https://rp-testnet.turin.tac.build/api/v3',
   tokenLists: [
     {
       uri: '/tokens/tac/testnet.json',
       parser: 'tokenTonToTacParser',
     },
   ],
-  defaultTokenPair: [addresses.TON, addresses.JFK],
-  popularPairs: [[addresses.TON, addresses.JFK]],
+  defaultTokenPair: [addresses.TON, addresses.USDT],
+  popularPairs: [[addresses.TON, addresses.USDT]],
   popularTokens: {
     base: popularTokens,
     quote: popularTokens,
@@ -44,7 +45,7 @@ const config: AppConfig = {
       url: 'https://spb.explorer.tac.build/',
     },
     rpc: {
-      url: 'https://rp-testnet.turin.tac.build',
+      url: 'https://spb.rpc.tac.build',
     },
   },
 };

@@ -15,6 +15,7 @@ export const commonConfig: AppConfig = {
   appName: 'TON - Carbon DeFi Mini-App',
   appUrl: 'https://ton.tg.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/tac/',
+  tonApi: 'https://rp.mainnet.tac.build/api/v3',
   selectedConnectors: ['MetaMask'],
   blockedConnectors: [],
   walletConnectProjectId: '',

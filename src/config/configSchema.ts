@@ -13,6 +13,7 @@ export const AppConfigSchema = v.object({
   appName: v.string(),
   appUrl: v.string(),
   carbonApi: v.string(),
+  tonApi: v.optional(v.string()),
   externalLinks: v.optional(v.record(v.string(), v.string())),
   selectedConnectors: ConnectorSchema,
   blockedConnectors: v.optional(ConnectorSchema),

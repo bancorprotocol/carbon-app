@@ -1,4 +1,5 @@
-import { tonCenter } from './utils';
+import config from 'config';
+
 interface TokenInfo {
   valid: boolean;
   type: 'jetton_masters';
@@ -16,7 +17,7 @@ interface Metadata {
 }
 
 export const getTonTokenData = async (address: string) => {
-  const url = new URL(`${tonCenter}/api/v3/metadata`);
+  const url = new URL(`${config.tonApi!}/metadata`);
   url.searchParams.append('address', address);
   const res = await fetch(url);
   const data = await res.json<Record<string, Metadata>>();
@@ -30,4 +31,19 @@ export const getTonTokenData = async (address: string) => {
       decimals: Number(info.extra.decimals),
     };
   }
+};
+
+interface AccountState {
+  balance: string;
+}
+interface AccountStateResponse {
+  accounts: AccountState[];
+}
+
+export const getTonBalance = async (address: string) => {
+  const url = new URL(`${config.tonApi!}/accountStates`);
+  url.searchParams.append('address', address);
+  const res = await fetch(url);
+  const data = await res.json<AccountStateResponse>();
+  return data.accounts[0].balance;
 };

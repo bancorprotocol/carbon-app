@@ -1,9 +1,9 @@
 import config from 'config';
 import { getAddress as getEthersAddress, isAddress } from 'ethers';
 
-import { TacSdk, Network } from '@tonappchain/sdk';
 import { Address } from '@ton/core';
 import { Token } from 'libs/tokens';
+import { getTacSDK } from './sdk';
 
 export const isTONAddress = (address: string) => {
   try {
@@ -39,16 +39,6 @@ export const getTokenAddress = (token: Token) => {
 };
 
 // With SDK
-
-let sdk: Promise<TacSdk>;
-export const getTacSDK = async () => {
-  if (!sdk) {
-    const network =
-      config.mode === 'development' ? Network.TESTNET : Network.MAINNET;
-    sdk = TacSdk.create({ network });
-  }
-  return sdk;
-};
 
 export const getEVMTokenAddress = async (tvmTokenAddress: string) => {
   if (isAddress(tvmTokenAddress)) return tvmTokenAddress;

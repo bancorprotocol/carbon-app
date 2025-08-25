@@ -21,11 +21,11 @@ import {
   OperationTracker,
   OperationType,
 } from '@tonappchain/sdk';
-import { TonClient, Address } from '@ton/ton';
-import { getTacSDK } from './address';
+import { Address } from '@ton/ton';
+import { getTacSDK } from './sdk';
 import { abi } from 'abis/controller.json' with { type: 'json' };
+import { getTonBalance } from './api';
 import config from 'config';
-import { tonCenter } from './utils';
 
 interface TxResult {
   success: boolean;
@@ -247,10 +247,8 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
 
       try {
         if (evmAddress === TON) {
-          const client = new TonClient({
-            endpoint: `${tonCenter}/api/v2/jsonRPC`,
-          });
-          return client.getBalance(Address.parse(tonUser));
+          const balance = await getTonBalance(tonUser);
+          return BigInt(balance);
         } else {
           const sdk = await getTacSDK();
           const tvmAddress = await getTVMAddress(evmAddress);
