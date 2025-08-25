@@ -32,12 +32,9 @@ interface TxResult {
   error?: string;
 }
 
-if (!config.addresses.tac) {
-  throw new Error('config.addresses.tac is not defined');
-}
 const TON = config.addresses.tokens.TON;
-const smartAccountFactory = config.addresses.tac.smartAccountFactory;
-const proxyContract = config.addresses.tac.proxy;
+const smartAccountFactory = config.addresses.tac?.smartAccountFactory;
+const proxyContract = config.addresses.tac?.proxy;
 
 // TODO: update with production URL once deployed
 const manifestUrl =
@@ -104,6 +101,10 @@ const awaitTransactionExecuted = async (
 
 /** Use to override wagmi to use TON instead */
 const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
+  if (!config.addresses.tac) {
+    throw new Error('config.addresses.tac is not defined');
+  }
+
   const { getTVMAddress, getEvmAddress, setTonAddress, setTonTokens } =
     useTonTokenMapping();
 
@@ -158,9 +159,11 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
     setImposterAccount,
   });
 
-  // TODO: close SDK connection oncleanup
   useEffect(() => {
     if (tonUser) {
+      if (!smartAccountFactory) {
+        throw new Error('config.addresses.tac is not defined');
+      }
       const abi = [
         'function getSmartAccountForApplication(string, address) view returns (address)',
       ];
@@ -188,6 +191,9 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   const sendTransaction = useCallback(
     async (tx: TransactionRequest) => {
       try {
+        if (!proxyContract) {
+          throw new Error('config.addresses.tac is not defined');
+        }
         const getAssetAddress = (address: string) => {
           if (address === TON) return;
           return getTVMAddress(address);
@@ -229,7 +235,6 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           wait: () => awaitTransactionIsDone(tracker, operationId),
         };
       } catch (e: any) {
-        console.log(e);
         if (e.debugInfo) {
           console.warn(
             `cast call --trace -r ${config.network.rpc.url} --block ${e.debugInfo.blockNumber} --from ${e.debugInfo.from} --data ${e.debugInfo.callData} ${e.debugInfo.to}`,
@@ -246,6 +251,9 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
       if (!tonUser) throw new Error('No TON account found');
 
       try {
+        if (!TON) {
+          throw new Error('config.addresses.tac is not defined');
+        }
         if (evmAddress === TON) {
           const balance = await getTonBalance(tonUser);
           return BigInt(balance);
