@@ -43,9 +43,9 @@ export const getTokenAddress = (token: Token) => {
 let sdk: Promise<TacSdk>;
 export const getTacSDK = async () => {
   if (!sdk) {
-    sdk = TacSdk.create({
-      network: Network.TESTNET,
-    });
+    const network =
+      config.mode === 'development' ? Network.TESTNET : Network.MAINNET;
+    sdk = TacSdk.create({ network });
   }
   return sdk;
 };
