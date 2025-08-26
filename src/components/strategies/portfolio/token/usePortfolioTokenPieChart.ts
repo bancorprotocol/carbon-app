@@ -14,7 +14,7 @@ import { getColorByIndex } from 'utils/colorPalettes';
 
 export const usePortfolioTokenPieChart = (
   data: PortfolioTokenData[],
-  token: Token,
+  token?: Token,
 ) => {
   const { belowBreakpoint } = useBreakpoints();
 

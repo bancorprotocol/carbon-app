@@ -48,22 +48,15 @@
 }
 
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: oklch(92.8% 0.006 264.531);
-  }
-
-  html,
-  body,
-  #root {
-    @apply text-white bg-black font-text min-h-screen;
-  }
-
+  
   html {
+    @apply text-white font-text;
     scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
+  }
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
   }
 
   h1,
@@ -94,14 +87,10 @@
   }
 
   .h-screen-mobile {
-    @apply h-screen;
+    height: 100dvh;
     height: -moz-available;
     height: -webkit-fill-available;
     height: stretch;
-  }
-
-  #root {
-    @apply flex flex-col;
   }
 
   h1 {

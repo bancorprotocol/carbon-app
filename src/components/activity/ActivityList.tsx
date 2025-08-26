@@ -12,7 +12,7 @@ import {
   BudgetChange,
   TransactionLink,
 } from './ActivityTable';
-import { tokenAmount } from 'utils/helpers';
+import { shortenString, tokenAmount } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import { useActivity, useActivityPagination } from './ActivityProvider';
 
@@ -68,43 +68,51 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
     setSearchParams({ actions });
   };
   return (
-    <li className="border-background-800 flex flex-col gap-16 rounded-2xl border-2">
-      <header className="flex px-16 pt-16">
+    <li className="border-background-800 flex flex-col gap-16 rounded-2xl border">
+      <header className="flex px-16 pt-16 items-center">
         {!hideIds && <ActivityId activity={activity} size={12} />}
-        <p className="text-12 flex flex-1 items-center justify-end gap-8 text-white/60">
-          {activityDateFormatter.format(activity.date)}
-          <TransactionLink txHash={activity.txHash} className="h-16" />
-        </p>
+        <div className="grid text-12 ml-auto">
+          <p className="text-white/80">
+            {activityDateFormatter.format(activity.date)}
+          </p>
+          <p className="flex gap-8 items-center text-white/60">
+            <span>{shortenString(activity.txHash)}</span>
+            <TransactionLink txHash={activity.txHash} className="h-16" />
+          </p>
+        </div>
       </header>
       <section className="px-16">
-        <button onClick={setAction} className="text-start">
-          <h3 className="mb-8 flex items-center gap-8">
-            <ActivityIcon activity={activity} size={24} />
-            {activityActionName[activity.action]}
-          </h3>
-          <p className="text-12 text-white/60">
-            {activityDescription(activity)}
-          </p>
+        <button
+          onClick={setAction}
+          className="text-start flex gap-8 items-center"
+        >
+          <ActivityIcon activity={activity} size={36} className="p-8" />
+          <hgroup className="grid">
+            <h3>{activityActionName[activity.action]}</h3>
+            <p className="text-12 text-white/60">
+              {activityDescription(activity)}
+            </p>
+          </hgroup>
         </button>
       </section>
-      <hr className="border-background-800" />
+      <hr className="border-background-700 mx-8" />
       <table className="w-full table-fixed">
         <thead>
           <tr className="text-12 text-white/60">
-            <th className="font-normal px-16">Buy Budget</th>
-            <th className="font-normal px-16">Sell Budget</th>
+            <th className="font-normal px-24">Buy Budget</th>
+            <th className="font-normal px-24">Sell Budget</th>
           </tr>
         </thead>
         <tbody>
           <tr className="text-14">
-            <td className="px-16">{tokenAmount(strategy.buy.budget, quote)}</td>
-            <td className="px-16">{tokenAmount(strategy.sell.budget, base)}</td>
+            <td className="px-24">{tokenAmount(strategy.buy.budget, quote)}</td>
+            <td className="px-24">{tokenAmount(strategy.sell.budget, base)}</td>
           </tr>
           <tr className="text-12">
-            <td className="px-16 pb-16">
+            <td className="px-24 pb-24">
               <BudgetChange budget={changes?.buy?.budget} token={quote} />
             </td>
-            <td className="px-16 pb-16">
+            <td className="px-24 pb-24">
               <BudgetChange budget={changes?.sell?.budget} token={base} />
             </td>
           </tr>
