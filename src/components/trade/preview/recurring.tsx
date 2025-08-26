@@ -84,7 +84,7 @@ export const PreviewRecurringStrategy = () => {
         />
       </svg>
 
-      <div className={cn(style.budget, style.limit)}>
+      <div className={cn(style.budget, style.recurring, style.limit)}>
         <div className={cn(style.price, style.sell)}>
           <p>
             <span>0</span>

@@ -154,7 +154,7 @@ a:has(.graph-wrapper):hover .budget p > span {
 
 
 
-/* LIMIT */
+/* RECURRING LIMIT */
 
 .graph-wrapper .budget.limit .price p {
   grid-template-areas: 'stack';
@@ -226,31 +226,63 @@ a:has(.graph-wrapper):hover .budget p > span {
   }
 }
 
-.budget.limit p > span {
+.budget.recurring.limit p > span {
   animation-timing-function: var(--ease-back-out);
 }
-.budget.limit p > span:nth-child(1) {
+.budget.recurring.limit p > span:nth-child(1) {
   animation-name: budget-tx-1;
 }
-.budget.limit p > span:nth-child(2) {
+.budget.recurring.limit p > span:nth-child(2) {
   animation-name: budget-tx-2;
 }
-.budget.limit p > span:nth-child(3) {
+.budget.recurring.limit p > span:nth-child(3) {
   animation-name: budget-tx-3;
 }
-.budget.limit p > span:nth-child(4) {
+.budget.recurring.limit p > span:nth-child(4) {
   animation-name: budget-tx-4;
 }
-.budget.limit p > span:nth-child(5) {
+.budget.recurring.limit p > span:nth-child(5) {
   animation-name: budget-tx-5;
 }
 
 
-/* RANGE */
-.budget.range p {
+/* DISPOSABLE LIMIT */
+@keyframes budget-limit-tx-1 {
+  0%, 15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  20%, 100% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+@keyframes budget-limit-tx-2 {
+  0%, 15% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  20%, 34% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.budget.disposable.limit p > span {
+  animation-timing-function: var(--ease-back-out);
+}
+.budget.disposable.limit p > span:nth-child(1) {
+  animation-name: budget-limit-tx-1;
+}
+.budget.disposable.limit p > span:nth-child(2) {
+  animation-name: budget-limit-tx-2;
+}
+
+/* DISPOSABLE RANGE */
+.budget.disposable.range p {
   overflow: hidden;
 }
-.budget.range p > span {
+.budget.disposable.range p > span {
   animation-timing-function: var(--ease-out);
 }
 @keyframes budget-range-tx-1 {
@@ -264,7 +296,7 @@ a:has(.graph-wrapper):hover .budget p > span {
     transform: translateY(calc(10 * var(--font-size) * -1));
   }
 }
-.budget.range p > span {
+.budget.disposable.range p > span {
   animation-name: budget-range-tx-1;
 }
 

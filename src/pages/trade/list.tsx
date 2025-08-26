@@ -6,47 +6,78 @@ import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { PreviewRecurringStrategy } from 'components/trade/preview/recurring';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { PreviewRangeStrategy } from 'components/trade/preview/range';
+import { PreviewLimitStrategy } from 'components/trade/preview/limit';
 
-const items = [
+const sections = [
   {
-    to: '/trade/overlapping',
-    icon: <IconOverlapping className="size-24" />,
-    title: 'Liquidity Position',
-    preview: (
-      <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
-        An animated chart later
-      </div>
-    ),
-    values: ['100% Price Certainty', 'Zero risk of sandwich attacks'],
-    targets: ['Liquidity Providers', 'Token Projects'],
+    title: 'Exclusive to Carbon DeFi',
+    items: [
+      {
+        to: '/trade/disposable',
+        search: {},
+        icon: <IconDisposable className="size-24" />,
+        title: 'Limit',
+        preview: <PreviewLimitStrategy />,
+        targets: ['Traders', 'Institutions'],
+      },
+      {
+        to: '/trade/disposable',
+        search: { settings: 'range' as const },
+        icon: <IconDisposable className="size-24" />,
+        title: 'Range',
+        preview: <PreviewRangeStrategy />,
+        targets: ['Traders', 'Institutions'],
+      },
+      {
+        to: '/trade/recurring',
+        search: {},
+        icon: <IconRecurring className="size-24" />,
+        title: 'Recurring',
+        preview: <PreviewRecurringStrategy />,
+        targets: ['Stablecoin Projects', 'Advance Traders'],
+      },
+    ],
   },
   {
-    to: '/trade/disposable',
-    icon: <IconDisposable className="size-24" />,
-    title: 'Limit / Range',
-    preview: <PreviewRangeStrategy />,
-    values: ['Some value for this Disposable'],
-    targets: ['Traders', 'Institutions'],
-  },
-  {
-    to: '/trade/recurring',
-    icon: <IconRecurring className="size-24" />,
-    title: 'Recurring',
-    preview: <PreviewRecurringStrategy />,
-    values: ['Some value for this Recurring'],
-    targets: ['Market Makers', 'Stablecoin Projects', 'Advance Traders'],
-  },
-  {
-    to: '/trade/market',
-    icon: <IconMarket className="size-24" />,
-    title: 'Swap',
-    preview: (
-      <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
-        Something here later
-      </div>
-    ),
-    values: ['The original Swap !'],
-    targets: ['Swappers'],
+    title: 'AMM Features',
+    items: [
+      {
+        to: '/trade/overlapping',
+        icon: <IconOverlapping className="size-24" />,
+        title: 'Liquidity Position',
+        search: {},
+        preview: (
+          <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
+            An animated chart later
+          </div>
+        ),
+        targets: ['Liquidity Providers', 'Token Projects'],
+      },
+      {
+        to: '/trade/overlapping',
+        icon: <IconOverlapping className="size-24" />,
+        title: 'Full Range',
+        search: {},
+        preview: (
+          <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
+            An animated chart later
+          </div>
+        ),
+        targets: ['Liquidity Providers', 'Token Projects'],
+      },
+      {
+        to: '/trade/market',
+        icon: <IconMarket className="size-24" />,
+        title: 'Swap',
+        search: {},
+        preview: (
+          <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
+            Something here later
+          </div>
+        ),
+        targets: ['Swappers'],
+      },
+    ],
   },
 ];
 
@@ -54,59 +85,40 @@ export const TradeList = () => {
   return (
     <>
       <PreviewCommonStrategyType />
-      <nav className="grid grid-cols-2 gap-16 col-span-2">
-        {items.map((item, i) => (
-          <Link
-            key={item.to}
-            style={{ animationDelay: `${i * 50}ms` }}
-            className="grid gap-16 rounded-2xl bg-white-gradient p-16 animate-scale-up"
-            to={item.to}
-          >
-            <header className="flex items-center gap-16">
-              {item.icon}
-              <h3>{item.title}</h3>
-            </header>
-            <div className="flex gap-16">
-              {item.preview}
-              <ul>
-                {item.values.map((value, i) => (
-                  <li key={i} className="flex items-center gap-8">
-                    <svg
-                      viewBox="0 0 100 100"
-                      width="16"
-                      height="16"
-                      className="shrink-0"
-                    >
-                      <polygon
-                        points="0,50 50,0 100,50 50,100"
-                        fill="none"
-                        stroke="var(--color-primary)"
-                      />
-                      <polygon
-                        points="25,50 50,25 75,50 50,75"
-                        fill="var(--color-primary)"
-                      />
-                    </svg>
-                    {value}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <footer>
-              <ul className="flex gap-8 text-14">
-                {item.targets.map((target) => (
-                  <li
-                    className="px-8 py-4 rounded-sm border border-secondary/50 bg-secondary/5"
-                    key={target}
-                  >
-                    {target}
-                  </li>
-                ))}
-              </ul>
-            </footer>
-          </Link>
-        ))}
-      </nav>
+      {sections.map((section, i) => (
+        <section key={i} className="grid gap-24 col-span-2">
+          <h2>{section.title}</h2>
+          <nav className="grid grid-cols-3 gap-16 place-items-center">
+            {section.items.map((item, i) => (
+              <Link
+                key={item.to}
+                style={{ animationDelay: `${i * 50}ms` }}
+                className="grid gap-16 rounded-2xl bg-white-gradient p-16 animate-scale-up"
+                to={item.to}
+                search={item.search}
+              >
+                <header className="flex items-center gap-16">
+                  {item.icon}
+                  <h3>{item.title}</h3>
+                </header>
+                {item.preview}
+                <footer>
+                  <ul className="flex gap-8 text-14">
+                    {item.targets.map((target) => (
+                      <li
+                        className="px-8 py-4 rounded-sm border border-secondary/50 bg-secondary/5"
+                        key={target}
+                      >
+                        {target}
+                      </li>
+                    ))}
+                  </ul>
+                </footer>
+              </Link>
+            ))}
+          </nav>
+        </section>
+      ))}
     </>
   );
 };
