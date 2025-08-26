@@ -114,6 +114,28 @@ export const CartPage = () => {
           });
         }
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
+        const getRawAmount = (token: Token, amount: string) => {
+          return new SafeDecimal(amount).mul(10 ** token.decimals).toNumber();
+        };
+        const amounts: Record<string, SafeDecimal> = {};
+        for (const strategy of strategies) {
+          const base = strategy.base.address;
+          const quote = strategy.quote.address;
+          amounts[base] ||= new SafeDecimal(0);
+          const sellAmount = getRawAmount(strategy.base, strategy.sell.budget);
+          amounts[base] = amounts[base].add(sellAmount);
+
+          amounts[quote] ||= new SafeDecimal(0);
+          const buyAmount = getRawAmount(strategy.quote, strategy.buy.budget);
+          amounts[quote] = amounts[quote].add(buyAmount);
+        }
+        unsignedTx.customData = {
+          assets: Object.entries(amounts).map(([address, amount]) => ({
+            address,
+            rawAmount: amount.toString(),
+          })),
+        };
+
         const tx = await sendTransaction(toTransactionRequest(unsignedTx));
         setConfirmation(false);
         setProcessing(true);

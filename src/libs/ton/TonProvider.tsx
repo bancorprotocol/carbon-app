@@ -13,7 +13,7 @@ import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
-import { Contract, Interface, TransactionRequest } from 'ethers';
+import { Contract, getAddress, Interface, TransactionRequest } from 'ethers';
 import {
   AssetType,
   SenderFactory,
@@ -23,7 +23,8 @@ import {
 } from '@tonappchain/sdk';
 import { Address } from '@ton/ton';
 import { getTacSDK } from './sdk';
-import { abi } from 'abis/controller.json' with { type: 'json' };
+import controller from 'abis/controller.json' with { type: 'json' };
+import batcher from 'abis/batcher.json' with { type: 'json' };
 import { getTonBalance } from './api';
 import config from 'config';
 
@@ -97,6 +98,16 @@ const awaitTransactionExecuted = async (
       return stage.executedInTAC.stageData?.transactions?.[0].hash;
     }
   });
+};
+
+const parseTransaction = (tx: TransactionRequest) => {
+  if (tx.to === config.addresses.carbon.carbonController) {
+    const abi = controller.abi;
+    return new Interface(abi).parseTransaction({ data: tx.data! });
+  } else {
+    const abi = batcher.abi;
+    return new Interface(abi).parseTransaction({ data: tx.data! });
+  }
 };
 
 /** Use to override wagmi to use TON instead */
@@ -211,7 +222,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           SenderFactory.getSender({ tonConnect: tonConnectUI }),
           Promise.all(tx.customData?.assets?.map(toAsset) || []),
         ]);
-        const parsed = new Interface(abi).parseTransaction({ data: tx.data! });
+        const parsed = parseTransaction(tx);
 
         const evmProxyMsg = {
           evmTargetAddress: proxyContract,
@@ -247,9 +258,9 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const getBalance = useCallback(
-    async (evmAddress: string) => {
+    async (address: string) => {
       if (!tonUser) throw new Error('No TON account found');
-
+      const evmAddress = getAddress(address);
       try {
         if (!TON) {
           throw new Error('config.addresses.tac is not defined');

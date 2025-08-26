@@ -49,5 +49,6 @@ export const getEVMTokenAddress = async (tvmTokenAddress: string) => {
 export const getTVMTokenAddress = async (evmTokenAddress: string) => {
   if (isTONAddress(evmTokenAddress)) return evmTokenAddress;
   const sdk = await getTacSDK();
-  return sdk.getTVMTokenAddress(evmTokenAddress);
+  const tvmAddress = await sdk.getTVMTokenAddress(evmTokenAddress);
+  return Address.parse(tvmAddress).toString({ bounceable: true });
 };

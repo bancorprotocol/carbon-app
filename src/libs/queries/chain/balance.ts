@@ -2,11 +2,8 @@ import { useQueries, useQuery } from '@tanstack/react-query';
 import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { shrinkToken } from 'utils/tokens';
-import config from 'config';
 import { QueryKey } from 'libs/queries/queryKey';
-import { useContract } from 'hooks/useContract';
 import { TEN_SEC_IN_MS } from 'utils/time';
-import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 
 export const useGetTokenBalance = (
   token?: Pick<Token, 'address' | 'decimals'>,
@@ -44,8 +41,7 @@ export const useGetTokenBalance = (
 export const useGetTokenBalances = (
   tokens: Pick<Token, 'address' | 'decimals'>[],
 ) => {
-  const { user, provider } = useWagmi();
-  const { Token } = useContract();
+  const { user, provider, getBalance } = useWagmi();
 
   return useQueries({
     queries: tokens.map(({ address, decimals }) => ({
@@ -57,14 +53,8 @@ export const useGetTokenBalances = (
         if (!provider) {
           throw new Error('useGetTokenBalances no provider provided');
         }
-
-        if (address === NATIVE_TOKEN_ADDRESS) {
-          const res = await provider.getBalance(user);
-          return shrinkToken(res.toString(), config.network.gasToken.decimals);
-        } else {
-          const res = await Token(address).read.balanceOf(user);
-          return shrinkToken(res.toString(), decimals);
-        }
+        const res = await getBalance(address);
+        return shrinkToken(res.toString(), decimals);
       },
       meta: {
         errorMessage: 'useGetTokenBalances failed with error:',

@@ -57,7 +57,7 @@ export const commonConfig: AppConfig = {
       batcher: '0x0f54099D787e26c90c487625B4dE819eC5A9BDAA',
     },
     tac: {
-      proxy: '0x6D66139b6D31b1B8fFdf27fB725415585DeaCc78',
+      proxy: '0x188F6e49FC62c0D73173b11e7BD39C36cD3d730f',
       smartAccountFactory: '0x070820Ed658860f77138d71f74EfbE173775895b',
     },
   },

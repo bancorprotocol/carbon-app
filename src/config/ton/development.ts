@@ -33,7 +33,7 @@ const config: AppConfig = {
       batcher: '0x5E994Ac7d65d81f51a76e0bB5a236C6fDA8dBF9A',
     },
     tac: {
-      proxy: '0x6D66139b6D31b1B8fFdf27fB725415585DeaCc78',
+      proxy: '0xfa60E12747D719baDBe3B67dEd3f128B20EDd058',
       smartAccountFactory: '0x5919D1D0D1b36F08018d7C9650BF914AEbC6BAd6',
     },
   },
