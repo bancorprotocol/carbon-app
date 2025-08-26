@@ -88,7 +88,7 @@ export const TradeList = () => {
       {sections.map((section, i) => (
         <section key={i} className="grid gap-24 col-span-2">
           <h2>{section.title}</h2>
-          <nav className="grid grid-cols-3 gap-16 place-items-center">
+          <nav className="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-16">
             {section.items.map((item, i) => (
               <Link
                 key={item.to}
