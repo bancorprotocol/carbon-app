@@ -78,6 +78,22 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     });
   }
 
+  if (!isPaused(strategy)) {
+    items.push({
+      id: 'trade',
+      name: 'Trade this pair',
+      action: () => {
+        navigate({
+          to: '/trade/market',
+          search: {
+            base: strategy.base.address,
+            quote: strategy.quote.address,
+          },
+        });
+      },
+    });
+  }
+
   if (config.ui.showSimulator && !isGradient && !isDisposable) {
     items.push({
       id: 'simulate',

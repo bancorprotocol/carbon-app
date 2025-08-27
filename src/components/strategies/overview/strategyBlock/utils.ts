@@ -36,6 +36,7 @@ export const getTooltipTextByStatus = (
 
 const tooltipTextByStrategyEditOptionsId = {
   viewStrategy: 'Explore strategy activity',
+  trade: 'Trade against the tokens of this strategy',
   duplicateStrategy:
     'Create a new strategy with the same details or undercut it',
   deleteStrategy:
