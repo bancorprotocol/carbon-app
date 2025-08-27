@@ -37,16 +37,16 @@ export const PortfolioAllTokensDesktop: FC<Props> = ({
     <table className="w-full rounded-10 bg-background-900 table-fixed">
       <thead>
         <tr className="border-background-800 text-14 border-b text-white/60">
-          <th className="text-start font-weight-400 py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
+          <th className="text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
             Token
           </th>
-          <th className="text-start font-weight-400 py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
+          <th className="text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
             Share
           </th>
-          <th className="text-start font-weight-400 py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
+          <th className="text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
             Amount
           </th>
-          <th className="text-start font-weight-400 py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
+          <th className="text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
             Value
           </th>
         </tr>

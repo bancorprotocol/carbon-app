@@ -124,7 +124,7 @@ export const CreateOrder: FC<Props> = ({
       >
         <OrderHeader {...headerProps} />
         <fieldset className="flex flex-col gap-8">
-          <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
+          <legend className="text-14 font-medium mb-11 flex items-center gap-6">
             {inputTitle}
           </legend>
           {order.settings === 'range' ? (
@@ -154,7 +154,7 @@ export const CreateOrder: FC<Props> = ({
           )}
         </fieldset>
         <fieldset className="flex flex-col gap-8">
-          <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
+          <legend className="text-14 font-medium mb-11 flex items-center gap-6">
             <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
               2
             </span>
@@ -164,9 +164,7 @@ export const CreateOrder: FC<Props> = ({
               </span>
             </Tooltip>
             {optionalBudget && (
-              <span className="font-weight-500 ml-8 text-white/60">
-                Optional
-              </span>
+              <span className="font-medium ml-8 text-white/60">Optional</span>
             )}
           </legend>
           <InputBudget

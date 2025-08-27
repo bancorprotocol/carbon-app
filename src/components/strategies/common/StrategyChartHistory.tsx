@@ -89,7 +89,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
 
   if (isPending || isMarketPricePending) {
     return (
-      <section className="rounded-12 grid flex-1 items-center bg-black">
+      <section className="rounded-xl grid flex-1 items-center bg-black">
         <CarbonLogoLoading className="h-[80px]" />
       </section>
     );

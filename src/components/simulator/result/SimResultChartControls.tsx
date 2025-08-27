@@ -74,7 +74,7 @@ export const SimResultChartControls = () => {
               key={`${index}_${speed}`}
               role="menuitem"
               aria-label={`Playback Speed: ${speed}`}
-              className="rounded-6 text-14 flex w-full px-12 py-8 text-left text-white/80 hover:bg-black"
+              className="rounded-sm text-14 flex w-full px-12 py-8 text-left text-white/80 hover:bg-black"
               onClick={() => setSpeed(speed)}
               data-testid={`set-speed-${speed}`}
             >

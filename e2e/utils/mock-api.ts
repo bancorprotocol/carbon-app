@@ -1,9 +1,9 @@
 import { Page } from 'playwright-core';
-import marketRate from '../mocks/market-rates.json';
-import roi from '../mocks/roi.json';
-import historyPrices from '../mocks/history-prices.json';
-import simulatorResult from '../mocks/simulator-result.json';
-import tokenListsMock from '../mocks/tokenLists.json';
+import marketRate from '../mocks/market-rates.json' with { type: 'json' };
+import roi from '../mocks/roi.json' with { type: 'json' };
+import historyPrices from '../mocks/history-prices.json' with { type: 'json' };
+import simulatorResult from '../mocks/simulator-result.json' with { type: 'json' };
+import tokenListsMock from '../mocks/tokenLists.json' with { type: 'json' };
 
 export const mockApi = async (page: Page) => {
   await page.route('**/*/roi', (route) => {

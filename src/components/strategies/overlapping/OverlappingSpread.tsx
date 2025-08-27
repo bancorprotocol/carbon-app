@@ -50,7 +50,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
       className={cn(styles.spread, 'bg-background-900 grid gap-8 p-16')}
     >
       <header className="flex items-center gap-8 ">
-        <h2 className="text-16 font-weight-500 flex-1">Set Fee Tier</h2>
+        <h2 className="text-16 font-medium flex-1">Set Fee Tier</h2>
         <Tooltip
           element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
           iconClassName="size-18 text-white/60"
@@ -67,8 +67,8 @@ export const OverlappingSpread: FC<Props> = (props) => {
         <div
           className={cn(
             styles.spreadCustom,
-            'rounded-10 text-12 flex gap-8 border border-white bg-black py-8 px-16 text-center',
-            'focus-within:outline focus-within:outline-1',
+            'rounded-lg text-12 flex gap-8 border border-white bg-black py-8 px-16 text-center',
+            'focus-within:outline-solid focus-within:outline-1',
           )}
         >
           <label className="text-white/60" htmlFor="spread-custom">
@@ -76,7 +76,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
           </label>
           <input
             id="spread-custom"
-            className="bg-transparent text-center outline-none w-[80px]"
+            className="bg-transparent text-center outline-hidden w-[80px]"
             value={spread}
             type="number"
             inputMode="decimal"
@@ -95,7 +95,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
           Given price range, max fee tier cannot exceed&nbsp;
           <button
             type="button"
-            className="font-weight-700"
+            className="font-bold"
             onClick={() => setSpread(maxSpread.toFixed(2))}
           >
             {maxSpread}%

@@ -8,13 +8,13 @@
     <defs>
         <linearGradient id="paint0_linear_4740_90503" x1="4.71741" y1="8.14539" x2="4.71741" y2="25.1281"
             gradientUnits="userSpaceOnUse">
-            <stop stop-color="var(--gradient-middle)" />
-            <stop offset="1" stop-color="var(--gradient-first)" />
+            <stop stop-color="var(--color-secondary)" />
+            <stop offset="1" stop-color="var(--color-primary)" />
         </linearGradient>
         <linearGradient id="paint1_linear_4740_90503" x1="18.7174" y1="-0.312012" x2="18.7174" y2="23.0392"
             gradientUnits="userSpaceOnUse">
-            <stop stop-color="var(--gradient-first)" />
-            <stop offset="1" stop-color="var(--gradient-middle)" />
+            <stop stop-color="var(--color-primary)" />
+            <stop offset="1" stop-color="var(--color-secondary)" />
         </linearGradient>
     </defs>
 </svg>

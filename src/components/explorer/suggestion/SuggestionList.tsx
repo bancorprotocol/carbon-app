@@ -63,9 +63,7 @@ export const SuggestionList: FC<Props> = (props) => {
     >
       {!!filteredTokens.length && (
         <div id="filtered-token-list" data-tab="token">
-          <h3 className="text-14 font-weight-500 px-30 text-white/60">
-            Tokens
-          </h3>
+          <h3 className="text-14 font-medium px-30 text-white/60">Tokens</h3>
           {filteredTokens.slice(0, maxTokens).map((token, index) => (
             <button
               key={token.address}
@@ -84,7 +82,7 @@ export const SuggestionList: FC<Props> = (props) => {
             <footer className="px-30 flex h-[50px] items-center">
               <button
                 type="button"
-                className="text-14 font-weight-500 bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
+                className="text-14 font-medium bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
                 onClick={() => setMaxTokens((v) => v + 5)}
               >
                 View More
@@ -95,7 +93,7 @@ export const SuggestionList: FC<Props> = (props) => {
       )}
       {!!filteredPairs.length && (
         <div id="filtered-pair-list" data-tab="pair">
-          <h3 className="text-14 font-weight-500 px-30 text-white/60">Pairs</h3>
+          <h3 className="text-14 font-medium px-30 text-white/60">Pairs</h3>
           {filteredPairs.slice(0, maxPairs).map((pair, index) => {
             const slug = toPairSlug(pair.baseToken, pair.quoteToken);
             return (
@@ -118,7 +116,7 @@ export const SuggestionList: FC<Props> = (props) => {
             <footer className="px-30 flex h-[50px] items-center">
               <button
                 type="button"
-                className="text-14 font-weight-500 bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
+                className="text-14 font-medium bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
                 onClick={() => setMaxPairs((v) => v + 5)}
               >
                 View More

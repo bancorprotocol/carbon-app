@@ -105,7 +105,7 @@ export const ModalTokenListContent: FC<Props> = ({
             return (
               <li
                 key={token.address}
-                className="rounded-12 absolute inset-0 flex items-center justify-between hover:bg-black"
+                className="rounded-xl absolute inset-0 flex items-center justify-between hover:bg-black"
                 style={style}
               >
                 <button

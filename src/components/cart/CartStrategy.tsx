@@ -157,7 +157,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       id={strategy.id}
       style={style}
       className={cn(
-        'rounded-10 bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        'rounded-lg bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className,
       )}
     >
@@ -171,7 +171,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
             <button
               type="button"
               popoverTarget={popoverId}
-              className="warning-message border-warning rounded-8 text-14 text-warning hover:bg-background-800 active:bg-background-700 flex items-center gap-8 border px-8 py-2 text-start"
+              className="warning-message border-warning rounded-md text-14 text-warning hover:bg-background-800 active:bg-background-700 flex items-center gap-8 border px-8 py-2 text-start"
             >
               <IconWarning className="size-14" />
               <span>Warnings</span>
@@ -183,7 +183,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           <button
             role="menuitem"
             type="button"
-            className="size-38 rounded-6 border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
+            className="size-38 rounded-sm border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
             aria-label="Withdraw & Delete"
             onClick={remove}
           >
@@ -194,7 +194,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       <div>
         <StrategyBlockBudget strategy={strategy} />
       </div>
-      <div className="rounded-8 border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
+      <div className="rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
         <StrategyBlockBuySell
           strategy={strategy}
           isBuy
@@ -211,7 +211,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           popover="auto"
           onBeforeToggle={setSize}
           className={cn(
-            'rounded-8 bg-background-900 absolute m-0 overflow-hidden p-24',
+            'rounded-md bg-background-900 absolute m-0 overflow-hidden p-24',
             styles.warnings,
           )}
         >
@@ -220,7 +220,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
               <div className="bg-warning/25 text-warning rounded-full p-8">
                 <IconWarning className="size-18" />
               </div>
-              <h3 className="text-16 text-warning font-weight-700">Warnings</h3>
+              <h3 className="text-16 text-warning font-bold">Warnings</h3>
               <button
                 type="button"
                 popoverTarget={popoverId}
@@ -232,7 +232,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
               </button>
             </header>
             {error && (
-              <div className="rounded-8 border-error absolute inset-0 grid place-items-center border-2 bg-black/60 p-8 backdrop-blur-sm">
+              <div className="rounded-md border-error absolute inset-0 grid place-items-center border-2 bg-black/60 p-8 backdrop-blur-xs">
                 <Warning message={error} isError />
               </div>
             )}
