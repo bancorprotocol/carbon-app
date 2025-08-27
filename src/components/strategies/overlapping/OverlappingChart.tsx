@@ -18,7 +18,7 @@ import { getSignedMarketPricePercentage } from '../marketPriceIndication/utils';
 import { marketPricePercent } from '../marketPriceIndication/useMarketPercent';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { clamp, getMax, getMin } from 'utils/helpers/operators';
-import { isFullRangeCreation } from '../common/utils';
+import { isFullRange } from '../common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import styles from './OverlappingChart.module.css';
@@ -251,7 +251,7 @@ export const OverlappingChart: FC<Props> = (props) => {
   const highest = getMax(sell.max, marketPrice ?? sell.max);
   const prices = getPrices(lowest, highest, box.width);
   const { left, mean, right } = getBoundaries(lowest, highest);
-  const fullRange = isFullRangeCreation(min, max, marketPrice);
+  const fullRange = isFullRange(base, quote, buy.min, sell.max);
   const marketPosition = fullRange ? mean : marketPrice;
   const disabled = props.disabled;
 

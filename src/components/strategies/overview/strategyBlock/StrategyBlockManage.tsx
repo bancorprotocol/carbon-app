@@ -53,6 +53,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const { getType } = usePairs();
   const type = getType(slug ?? '');
   const duplicate = useDuplicate();
+  const { base, quote, buy, sell } = strategy;
 
   const isOwn = useIsStrategyOwner(strategy.id);
 
@@ -69,7 +70,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
-        if (isFullRangeStrategy(strategy.buy, strategy.sell)) {
+        if (isFullRangeStrategy(base, quote, buy, sell)) {
           duplicate(strategy);
         } else {
           openModal('duplicateStrategy', { strategy });

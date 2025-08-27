@@ -126,6 +126,8 @@ export const TradeRecurring = () => {
           sell={sellOrder}
         >
           <D3ChartRecurring
+            base={base}
+            quote={quote}
             isLimit={isLimit}
             prices={prices}
             onChange={setPrices}
