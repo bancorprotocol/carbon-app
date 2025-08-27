@@ -129,23 +129,11 @@ export const isFullRange = (
     new SafeDecimal(maxSellPrice).div(mean),
     1000,
   );
+
   return (
     new SafeDecimal(min).lte(mean.div(factor).mul(1.01)) &&
     new SafeDecimal(max).gte(mean.mul(factor).mul(0.99))
   );
-};
-
-export const isFullRangeCreation = (
-  min: string | number,
-  max: string | number,
-  marketPrice?: string | number,
-) => {
-  if (!marketPrice) return false;
-  const minRatio = new SafeDecimal(marketPrice).div(min);
-  if (minRatio.lt(990) || minRatio.gt(1010)) return false;
-  const maxRatio = new SafeDecimal(max).div(marketPrice);
-  if (maxRatio.lt(990) || maxRatio.gt(1010)) return false;
-  return true;
 };
 
 export const getStrategyType = (strategy: OrdersInput) => {
