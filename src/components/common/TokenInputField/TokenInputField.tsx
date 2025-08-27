@@ -12,6 +12,7 @@ import {
   cn,
 } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
+import { isZero } from 'components/strategies/common/utils';
 
 type Props = {
   id?: string;
@@ -122,7 +123,7 @@ export const TokenInputField: FC<Props> = (props) => {
       <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10">
         <p className="flex items-center gap-5 text-white/60">
           {priceText()}
-          {slippage && value && <Slippage slippage={slippage} />}
+          {slippage && !isZero(value) && <Slippage slippage={slippage} />}
         </p>
         {user && !withoutWallet && isBalanceLoading && (
           <button
