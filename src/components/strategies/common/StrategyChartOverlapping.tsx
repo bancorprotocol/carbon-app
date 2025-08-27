@@ -70,7 +70,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
   const search = useSearch({ strict: false }) as OverlappingSearch;
 
   const fullRange = useMemo(() => {
-    return isFullRangeStrategy(buy, sell);
+    return isFullRangeStrategy(base, quote, buy, sell);
   }, [buy, sell]);
 
   const readonly = props.readonly || fullRange;
@@ -111,6 +111,8 @@ const OverlappingChartContent: FC<Props> = (props) => {
         marketPrice={search.marketPrice}
       >
         <D3ChartOverlapping
+          base={base}
+          quote={quote}
           prices={prices}
           onChange={readonly ? undefined : setPrices}
           spread={Number(search.spread || defaultSpread)}

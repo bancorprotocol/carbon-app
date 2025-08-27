@@ -75,8 +75,8 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
   useDebouncedValue(_state, 300, { cb: setSearch });
 
   const bounds = useMemo(
-    () => getBounds(state.buy, state.sell),
-    [state.buy, state.sell],
+    () => getBounds(state.baseToken!, state.quoteToken!, state.buy, state.sell),
+    [state.baseToken, state.buy, state.quoteToken, state.sell],
   );
 
   const dispatch: SimulatorOverlappingInputDispatch = useCallback(

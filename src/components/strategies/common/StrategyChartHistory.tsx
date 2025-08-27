@@ -45,7 +45,9 @@ export const StrategyChartHistory: FC<Props> = (props) => {
 
   const direction = props.direction;
 
-  const [bounds, setBounds] = useState(getBounds(buy, sell, direction));
+  const [bounds, setBounds] = useState(
+    getBounds(base, quote, buy, sell, direction),
+  );
 
   const updatePriceRange = useCallback(
     (range: { start?: string; end?: string }) => {
@@ -78,8 +80,8 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   }, [data, marketPrice]);
 
   useEffect(() => {
-    setBounds(getBounds(buy, sell, direction));
-  }, [buy, sell, direction]);
+    setBounds(getBounds(base, quote, buy, sell, direction));
+  }, [buy, sell, direction, base, quote]);
 
   const priceChartType = config.ui.priceChart;
 
