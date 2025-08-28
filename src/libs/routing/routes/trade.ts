@@ -1,4 +1,4 @@
-import { createRoute } from '@tanstack/react-router';
+import { createRoute, redirect } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   searchValidator,
@@ -16,7 +16,6 @@ import { OverlappingSearch } from 'components/strategies/common/types';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
 import * as v from 'valibot';
-import { TradeList } from 'pages/trade/list';
 
 // TRADE TYPE
 export type StrategyType =
@@ -85,11 +84,11 @@ const tradePage = createRoute({
   getParentRoute: () => rootRoute,
   path: '/trade',
   component: TradeRoot,
-  // beforeLoad: ({ location, search }) => {
-  //   if (location.pathname.endsWith('trade')) {
-  //     throw redirect({ to: '/trade/overlapping', search });
-  //   }
-  // },
+  beforeLoad: ({ location, search }) => {
+    if (location.pathname.endsWith('trade')) {
+      throw redirect({ to: '/trade/overlapping', search });
+    }
+  },
   validateSearch: searchValidator({
     marketPrice: v.optional(validNumber),
     base: v.optional(v.fallback(validAddress, defaultPair.base)),
@@ -97,12 +96,6 @@ const tradePage = createRoute({
     chartStart: v.optional(validNumber),
     chartEnd: v.optional(validNumber),
   }),
-});
-
-const tradeListPage = createRoute({
-  getParentRoute: () => tradePage,
-  path: '/',
-  component: TradeList,
 });
 
 const marketPage = createRoute({
@@ -237,7 +230,6 @@ const quickCustomPage = createRoute({
 });
 
 export default tradePage.addChildren([
-  tradeListPage,
   marketPage,
   disposablePage,
   recurringPage,

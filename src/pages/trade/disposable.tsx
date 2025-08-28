@@ -80,7 +80,7 @@ export const TradeDisposable = () => {
   const { prices, setPrices } = useDebouncePrices(buy, sell, updatePrices);
 
   return (
-    <div className="lg:grid lg:grid-cols-[800px_450px]">
+    <>
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
@@ -115,6 +115,6 @@ export const TradeDisposable = () => {
           />
         </CreateForm>
       </CreateLayout>
-    </div>
+    </>
   );
 };

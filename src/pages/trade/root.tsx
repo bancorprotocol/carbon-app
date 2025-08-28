@@ -57,10 +57,12 @@ export const TradeRoot = () => {
   }
   return (
     <TradeProvider base={base} quote={quote}>
-      <div className="mx-auto flex w-full max-w-[1920px] flex-col content-start justify-center gap-16 p-16">
+      <div className="mx-auto grid w-full max-w-[1920px] content-start justify-center gap-16 p-16">
         <TokenSelection />
         <TradeNav />
-        <Outlet />
+        <div className="lg:grid lg:grid-cols-[800px_450px] gap-16">
+          <Outlet />
+        </div>
       </div>
     </TradeProvider>
   );

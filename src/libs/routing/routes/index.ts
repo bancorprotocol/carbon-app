@@ -46,15 +46,14 @@ import {
   strategyPageRoot,
 } from 'libs/routing/routes/strategy';
 import { cartPage } from './cart';
-import { createRoute, redirect } from '@tanstack/react-router';
+import { createRoute } from '@tanstack/react-router';
 import { liquidityMatrixPage } from './liquidity-matrix';
+import { TradeList } from 'pages/trade/list';
 
 const rootRedirect = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  beforeLoad: (ctx) => {
-    redirect({ to: '/trade', throw: true, search: ctx.search });
-  },
+  component: TradeList,
 });
 
 export const routeTree = rootRoute.addChildren([

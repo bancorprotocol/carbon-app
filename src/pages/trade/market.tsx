@@ -33,7 +33,7 @@ export const TradeMarket = () => {
   };
 
   return (
-    <div className="lg:grid lg:grid-cols-[800px_450px]">
+    <>
       <StrategyChartSection>
         <PairChartHistory base={base} quote={quote}>
           <TradeChartContent />
@@ -66,6 +66,6 @@ export const TradeMarket = () => {
           </div>
         </article>
       </TradeLayout>
-    </div>
+    </>
   );
 };

@@ -4,46 +4,41 @@ import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { PreviewRecurringStrategy } from 'components/trade/preview/recurring';
-import { PreviewRangeStrategy } from 'components/trade/preview/range';
 import { PreviewLimitStrategy } from 'components/trade/preview/limit';
 import { PreviewOverlappingStrategy } from 'components/trade/preview/overlapping';
 import { PreviewFullRangeStrategy } from 'components/trade/preview/full-range';
 import { AllPreview } from 'components/trade/preview/all/all';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
+import { WalletConnect } from 'components/common/walletConnect';
+import { RecurringRangeRangePreview } from 'components/trade/preview/all/recurring-range-range';
 
 const sections = [
   {
-    title: 'Exclusive to Carbon DeFi',
+    title: 'Auto Compounding Strategies',
     items: [
-      {
-        to: '/trade/disposable',
-        search: {},
-        icon: <IconDisposable className="size-24" />,
-        title: 'Limit',
-        preview: <PreviewLimitStrategy />,
-        targets: ['Traders', 'Institutions'],
-      },
-      {
-        to: '/trade/disposable',
-        search: { settings: 'range' as const },
-        icon: <IconDisposable className="size-24" />,
-        title: 'Range',
-        preview: <PreviewRangeStrategy />,
-        targets: ['Traders', 'Institutions'],
-      },
       {
         to: '/trade/recurring',
         search: {},
         icon: <IconRecurring className="size-24" />,
-        title: 'Recurring',
+        title: 'Recurring Limit',
         preview: <PreviewRecurringStrategy />,
         targets: ['Stablecoin Projects', 'Advance Traders'],
       },
-    ],
-  },
-  {
-    title: 'AMM Features',
-    items: [
+      {
+        to: '/trade/recurring',
+        search: {
+          buySettings: 'range' as const,
+          sellSettings: 'range' as const,
+        },
+        icon: <IconRecurring className="size-24" />,
+        title: 'Recurring Range',
+        preview: (
+          <div className="bg-black-gradient rounded-2xl p-8">
+            <RecurringRangeRangePreview />
+          </div>
+        ),
+        targets: ['Stablecoin Projects', 'Advance Traders'],
+      },
       {
         to: '/trade/overlapping',
         icon: <IconOverlapping className="size-24" />,
@@ -52,14 +47,11 @@ const sections = [
         preview: <PreviewOverlappingStrategy />,
         targets: ['Liquidity Providers', 'Token Projects'],
       },
-      {
-        to: '/trade/overlapping',
-        icon: <IconOverlapping className="size-24" />,
-        title: 'Full Range',
-        search: {},
-        preview: <PreviewFullRangeStrategy />,
-        targets: ['Liquidity Providers', 'Token Projects'],
-      },
+    ],
+  },
+  {
+    title: 'AMM Features',
+    items: [
       {
         to: '/trade/market',
         icon: <IconMarket className="size-24" />,
@@ -72,18 +64,43 @@ const sections = [
         ),
         targets: ['Swappers'],
       },
+      {
+        to: '/trade/disposable',
+        search: {},
+        icon: <IconDisposable className="size-24" />,
+        title: 'Limit',
+        preview: <PreviewLimitStrategy />,
+        targets: ['Traders', 'Institutions'],
+      },
+      // {
+      //   to: '/trade/disposable',
+      //   search: { settings: 'range' as const },
+      //   icon: <IconDisposable className="size-24" />,
+      //   title: 'Range',
+      //   preview: <PreviewRangeStrategy />,
+      //   targets: ['Traders', 'Institutions'],
+      // },
+      {
+        to: '/trade/overlapping',
+        icon: <IconOverlapping className="size-24" />,
+        title: 'Full Range',
+        search: {},
+        preview: <PreviewFullRangeStrategy />,
+        targets: ['Liquidity Providers', 'Token Projects'],
+      },
     ],
   },
 ];
 
 export const TradeList = () => {
   return (
-    <>
+    <div className="grid gap-40 justify-items-center">
       <PreviewCommonStrategyType />
+      <WalletConnect />
       {sections.map((section, i) => (
-        <section key={i} className="grid gap-24">
+        <section key={i} className="grid gap-16 justify-self-center">
           <h2>{section.title}</h2>
-          <nav className="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-16">
+          <nav className="grid grid-cols-3 gap-16">
             {section.items.map((item, i) => (
               <Link
                 key={i}
@@ -114,10 +131,11 @@ export const TradeList = () => {
           </nav>
         </section>
       ))}
-      <section className="grid gap-24">
-        <h2>All strategies</h2>
+      <hr className="w-[50%]" />
+      <section className="grid gap-32">
+        <h2 className="text-center">Discover All strategies</h2>
         <AllPreview />
       </section>
-    </>
+    </div>
   );
 };

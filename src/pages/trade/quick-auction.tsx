@@ -77,7 +77,7 @@ export const TradeQuickAuction = () => {
   );
 
   return (
-    <div className="lg:grid lg:grid-cols-[800px_450px]">
+    <>
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
@@ -107,6 +107,6 @@ export const TradeQuickAuction = () => {
           </article>
         </CreateGradientStrategyForm>
       </CreateLayout>
-    </div>
+    </>
   );
 };
