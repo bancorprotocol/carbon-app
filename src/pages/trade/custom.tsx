@@ -156,7 +156,7 @@ export const TradeCustom = () => {
   }, [buy.order, search.directions?.length, sell.order]);
 
   return (
-    <>
+    <div className="lg:grid lg:grid-cols-[800px_450px]">
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
@@ -248,6 +248,6 @@ export const TradeCustom = () => {
           </article>
         </CreateGradientStrategyForm>
       </CreateLayout>
-    </>
+    </div>
   );
 };

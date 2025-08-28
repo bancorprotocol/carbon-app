@@ -39,6 +39,19 @@ export const PreviewCommonStrategyType = () => {
             Sell
           </text>
         </g>
+        <g id="svg-sell-line">
+          <line
+            x1="50"
+            x2="950"
+            y1="0"
+            y2="0"
+            strokeWidth="3"
+            stroke="var(--color-sell)"
+          />
+          <g transform="translate(950, 0)">
+            <use href="#sell-indicator" />
+          </g>
+        </g>
 
         <g id="buy-box">
           <rect
@@ -77,6 +90,20 @@ export const PreviewCommonStrategyType = () => {
             Buy
           </text>
         </g>
+        <g id="svg-buy-line">
+          <line
+            x1="50"
+            x2="950"
+            y1="0"
+            y2="0"
+            strokeWidth="3"
+            stroke="var(--color-buy)"
+          />
+          <g transform="translate(950, 0)">
+            <use href="#buy-indicator" />
+          </g>
+        </g>
+
         <g id="buy-range">
           <polyline
             points="-60,0 -40,-20 40,-20 60,0 40,20 -40,20"
@@ -95,6 +122,32 @@ export const PreviewCommonStrategyType = () => {
         </g>
         <g id="trade-icon">
           <polygon points="-20,0 0,20 20,0 0,-20" fill="white" />
+        </g>
+        <path
+          id="svg-price-path"
+          fill="none"
+          stroke="white"
+          strokeLinejoin="round"
+          strokeWidth="5"
+          d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
+        />
+        <g id="svg-axis-lines">
+          <line
+            x1="50"
+            x2="950"
+            y1="950"
+            y2="950"
+            strokeWidth="3"
+            stroke="white"
+          />
+          <line
+            x1="50"
+            x2="50"
+            y1="50"
+            y2="950"
+            strokeWidth="3"
+            stroke="white"
+          />
         </g>
         <pattern
           id="circle-pattern"

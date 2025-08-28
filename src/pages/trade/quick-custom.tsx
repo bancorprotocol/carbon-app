@@ -166,7 +166,7 @@ export const TradeQuickCustom = () => {
   }, [buy.gradientOrder, search.directions?.length, sell.gradientOrder]);
 
   return (
-    <>
+    <div className="lg:grid lg:grid-cols-[800px_450px]">
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
@@ -256,6 +256,6 @@ export const TradeQuickCustom = () => {
           </article>
         </CreateGradientStrategyForm>
       </CreateLayout>
-    </>
+    </div>
   );
 };

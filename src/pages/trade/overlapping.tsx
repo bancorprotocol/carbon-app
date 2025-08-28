@@ -30,7 +30,7 @@ export const TradeOverlapping = () => {
   );
 
   return (
-    <>
+    <div className="lg:grid lg:grid-cols-[800px_450px]">
       <StrategyChartOverlapping
         base={base}
         quote={quote}
@@ -63,6 +63,6 @@ export const TradeOverlapping = () => {
           />
         </CreateForm>
       </CreateLayout>
-    </>
+    </div>
   );
 };

@@ -4,11 +4,12 @@ import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { PreviewRecurringStrategy } from 'components/trade/preview/recurring';
-import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { PreviewRangeStrategy } from 'components/trade/preview/range';
 import { PreviewLimitStrategy } from 'components/trade/preview/limit';
 import { PreviewOverlappingStrategy } from 'components/trade/preview/overlapping';
 import { PreviewFullRangeStrategy } from 'components/trade/preview/full-range';
+import { AllPreview } from 'components/trade/preview/all/all';
+import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 
 const sections = [
   {
@@ -80,7 +81,7 @@ export const TradeList = () => {
     <>
       <PreviewCommonStrategyType />
       {sections.map((section, i) => (
-        <section key={i} className="grid gap-24 col-span-2">
+        <section key={i} className="grid gap-24">
           <h2>{section.title}</h2>
           <nav className="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-16">
             {section.items.map((item, i) => (
@@ -113,6 +114,10 @@ export const TradeList = () => {
           </nav>
         </section>
       ))}
+      <section className="grid gap-24">
+        <h2>All strategies</h2>
+        <AllPreview />
+      </section>
     </>
   );
 };
