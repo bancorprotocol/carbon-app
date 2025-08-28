@@ -4,6 +4,24 @@ import { createPairMaps } from 'utils/pairSearch';
 
 export type PairStore = ReturnType<typeof usePairs>;
 
+// Change length if different address format that evm
+const addressLength = 42;
+
+export const isPairSlug = (slug: string) => {
+  // ${address}_${address}
+  return slug.length === addressLength * 2 + 1;
+};
+
+export const isTokenSlug = (slug?: string) => {
+  return slug?.length === addressLength;
+};
+
+export const extractExplorerPair = (slug: string) => {
+  const base = slug.slice(0, addressLength);
+  const quote = slug.slice(addressLength * -1);
+  return [base, quote];
+};
+
 export const usePairs = () => {
   const { data, isError, isPending } = useGetTradePairsData();
   const tokens = useMemo(() => {
@@ -21,7 +39,7 @@ export const usePairs = () => {
   const getType = useCallback(
     (slug: string) => {
       if (maps.pairMap.has(slug)) return 'pair';
-      if (slug.split('_').length === 2) return 'pair';
+      if (isPairSlug(slug)) return 'pair';
       if (tokens.has(slug)) return 'token';
       return 'wallet';
     },

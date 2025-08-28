@@ -37,8 +37,8 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
   const isDisabled = isPending || !checked;
 
   return (
-    <div className="space-y-10">
-      <div className="text-14 mb-20 space-y-10 text-white/80">
+    <div className="grid gap-8">
+      <div className="grid text-14 mb-20 gap-8 text-white/80">
         <p>
           By connecting my wallet, I agree to the{' '}
           <Link
@@ -58,7 +58,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
           </Link>{' '}
           of this site.{' '}
         </p>
-        <div className="flex items-center space-x-10">
+        <div className="flex items-center gap-8">
           <Checkbox isChecked={checked} setIsChecked={setChecked} />
           <button onClick={() => setChecked((prev) => !prev)}>
             I read and accept

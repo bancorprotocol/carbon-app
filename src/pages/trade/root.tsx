@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
-export const usePersistLastPair = (from: '/trade') => {
+const usePersistLastPair = (from: '/trade') => {
   const search = useSearch({ strict: false }) as TradeSearch;
   const defaultPair = getLastVisitedPair();
   const base = useToken(search.base ?? defaultPair.base);

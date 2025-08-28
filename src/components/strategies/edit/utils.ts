@@ -10,8 +10,7 @@ import {
   toOverlappingPricesSearch,
   toRecurringPricesSearch,
 } from 'libs/routing/routes/strategyEdit';
-import { AnyStrategy, EditOrders, Strategy } from '../common/types';
-import { StrategyUpdate } from '@bancor/carbon-sdk';
+import { AnyStrategy, Strategy } from '../common/types';
 import { useNotifications } from 'hooks/useNotifications';
 import { useWagmi } from 'libs/wagmi';
 
@@ -85,21 +84,9 @@ export const getEditBudgetPage = (
   };
 };
 
-export const getFieldsToUpdate = (orders: EditOrders, strategy: Strategy) => {
-  const { buy, sell } = orders;
-  const fields: Partial<StrategyUpdate> = {};
-  if (buy.min !== strategy.buy.min) fields.buyPriceLow = buy.min;
-  if (buy.max !== strategy.buy.max) fields.buyPriceHigh = buy.max;
-  if (buy.budget !== strategy.buy.budget) fields.buyBudget = buy.budget;
-  if (sell.min !== strategy.sell.min) fields.sellPriceLow = sell.min;
-  if (sell.max !== strategy.sell.max) fields.sellPriceHigh = sell.max;
-  if (sell.budget !== strategy.sell.budget) fields.sellBudget = sell.budget;
-  return fields as StrategyUpdate;
-};
-
 /** Transform a strategy into Disposable Sell */
 export const useEditToDisposableSell = (strategy: AnyStrategy) => {
-  const updateMutation = useUpdateStrategyQuery();
+  const updateMutation = useUpdateStrategyQuery(strategy);
   const { dispatchNotification } = useNotifications();
   const { user } = useWagmi();
   const cache = useQueryClient();
@@ -116,28 +103,19 @@ export const useEditToDisposableSell = (strategy: AnyStrategy) => {
       },
       sell: strategy.sell,
     };
-    updateMutation.mutate(
-      {
-        id: strategy.id,
-        encoded: strategy.encoded,
-        fieldsToUpdate: getFieldsToUpdate(orders, strategy),
-        buyMarginalPrice: orders.buy.marginalPrice,
-        sellMarginalPrice: orders.sell.marginalPrice,
+    updateMutation.mutate(orders, {
+      onSuccess: async (tx) => {
+        dispatchNotification('changeRatesStrategy', { txHash: tx.hash });
+        if (!tx) return;
+        console.log('tx hash', tx.hash);
+        await tx.wait();
+        cache.invalidateQueries({
+          queryKey: QueryKey.strategiesByUser(user),
+        });
       },
-      {
-        onSuccess: async (tx) => {
-          dispatchNotification('changeRatesStrategy', { txHash: tx.hash });
-          if (!tx) return;
-          console.log('tx hash', tx.hash);
-          await tx.wait();
-          cache.invalidateQueries({
-            queryKey: QueryKey.strategiesByUser(user),
-          });
-        },
-        onError: (e) => {
-          console.error('update mutation failed', e);
-        },
+      onError: (e) => {
+        console.error('update mutation failed', e);
       },
-    );
+    });
   };
 };

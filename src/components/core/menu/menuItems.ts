@@ -20,12 +20,12 @@ export const getMenuItems = () => {
       href: '/trade',
       testid: 'trade-page',
     },
-    {
-      label: 'Explore',
-      href: '/explore',
-      testid: 'explore-page',
-    },
   ];
+  items.push({
+    label: 'Explore',
+    href: '/explore',
+    testid: 'explore-page',
+  });
   if (config.ui.showSimulator) {
     items.push({
       label: 'Simulate',
