@@ -51,7 +51,9 @@ export const MainMenuRight: FC = () => {
       <MainMenuRightWalkthrough />
       {config.ui.showCart && <MainMenuCart />}
       <MainMenuRightNotifications />
-      <MainMenuRightChainSelector networks={networks} />
+      {config.network.name !== 'TON' && (
+        <MainMenuRightChainSelector networks={networks} />
+      )}
       {aboveBreakpoint('md') && (
         <MainMenuRightBurger menuMapping={menuMapping} />
       )}
