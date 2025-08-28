@@ -93,6 +93,25 @@ export const PreviewCommonStrategyType = () => {
             Buy
           </text>
         </g>
+        <g id="trade-icon">
+          <polygon points="-20,0 0,20 20,0 0,-20" fill="white" />
+        </g>
+        <pattern
+          id="circle-pattern"
+          patternUnits="userSpaceOnUse"
+          width="50"
+          height="50"
+        >
+          <circle
+            cx="25"
+            cy="25"
+            r="20"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            strokeOpacity="0.2"
+          />
+        </pattern>
       </defs>
     </svg>
   );

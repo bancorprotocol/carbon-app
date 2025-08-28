@@ -18,7 +18,8 @@
 a:has(.graph-wrapper):hover svg * {
   animation-play-state: running;
 }
-a:has(.graph-wrapper):hover .budget p > span {
+a:has(.graph-wrapper):hover .budget p > span,
+a:has(.graph-wrapper):hover .trades p > span {
   animation-play-state: running;
 }
 
@@ -110,29 +111,35 @@ a:has(.graph-wrapper):hover .budget p > span {
   display: grid;
   grid-template-areas: 'stack';
 }
-.graph-wrapper svg,
-.graph-wrapper .budget {
+.graph-wrapper > svg,
+.budget,
+.trades {
   grid-area: stack;
 }
-.graph-wrapper .budget {
+.trades {
+  place-self: start start;
+}
+.budget {
   place-self: start end;
   display: grid;
-  gap: 16px;
+  gap: 8px;
 }
-.graph-wrapper .budget .price {
+.budget .price,
+.trades {
   --font-size: 1.2rem;
   display: grid;
   gap: 8px;
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
 }
-.graph-wrapper .price.buy {
+.price.buy {
   color: var(--color-buy);
 }
-.graph-wrapper .price.sell {
+.price.sell {
   color: var(--color-sell);
 }
-.graph-wrapper .price p {
+.price p,
+.trades p {
   display: grid;
   text-align: end;
   height: var(--font-size);
@@ -141,13 +148,14 @@ a:has(.graph-wrapper):hover .budget p > span {
   margin: 0;
   align-items: center;
 }
-.budget p > span {
+.budget p > span,
+.trades p > span {
   animation-duration: var(--duration);
   animation-timing-function: var(--ease-back-out);
   animation-iteration-count: infinite;
   animation-play-state: paused;
 }
-.graph-wrapper .budget .token {
+.budget .token {
   font-size: 1rem;
   align-self: end;
 }
@@ -331,3 +339,157 @@ a:has(.graph-wrapper):hover .budget p > span {
   animation-name: marginalRect;
   animation-timing-function: linear;
 }
+
+/** TRADES */
+@keyframes trade-amount {
+  0%, 5% {
+    transform: translateY(0);
+  }
+  10%, 15% {
+    transform: translateY(-100%);
+  }
+  20%, 25% {
+    transform: translateY(-200%);
+  }
+  30%, 35% {
+    transform: translateY(-300%);
+  }
+  40%, 45% {
+    transform: translateY(-400%);
+  }
+  50%, 55% {
+    transform: translateY(-500%);
+  }
+  60%, 65% {
+    transform: translateY(-600%);
+  }
+  70%, 75% {
+    transform: translateY(-700%);
+  }
+  80%, 85% {
+    transform: translateY(-800%);
+  }
+  90%, 100% {
+    transform: translateY(-900%);
+  }
+}
+.trades p {
+  overflow: hidden;
+}
+.trades p span {
+  animation-name: trade-amount;
+}
+
+/* FULL RANGE */
+@keyframes marginal-range {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.full-range .marginal {
+  animation-name: marginal-range;
+  animation-duration: calc(var(--duration) / 10);
+}
+.full-range .marginal.sell {
+  animation-direction: alternate;
+}
+.full-range .marginal.buy {
+  animation-direction: alternate-reverse;
+}
+
+/* OVERLAPPING */
+/* Keyframes for inside and outside marginal range */
+/* @keyframes overlapping-marginal-buy {
+  0%, 5% {
+    opacity: 0;
+  }
+  6%, 15% {
+    opacity: 1;
+  }
+  16%, 24% {
+    opacity: 0;
+  }
+  25%, 35% {
+    opacity: 1;
+  }
+  36%, 43% {
+    opacity: 0;
+  }
+  44%, 55% {
+    opacity: 1;
+  }
+  56%, 75% {
+    opacity: 0;
+  }
+  76%, 100% {
+    opacity: 1;
+  }
+} */
+@keyframes overlapping-marginal-buy {
+  0%, 5% {
+    opacity: 0;
+  }
+  6%, 10% {
+    opacity: 1;
+  }
+  11%, 24% {
+    opacity: 0;
+  }
+  25%, 30% {
+    opacity: 1;
+  }
+  36%, 43% {
+    opacity: 0;
+  }
+  44%, 50% {
+    opacity: 1;
+  }
+  56%, 75% {
+    opacity: 0;
+  }
+  76%, 85% {
+    opacity: 1;
+  }
+  86%, 100% {
+    opacity: 0;
+  }
+}
+@keyframes overlapping-marginal-sell {
+  0%, 10% {
+    opacity: 0;
+  }
+  11%, 15% {
+    opacity: 1;
+  }
+  16%, 29% {
+    opacity: 0;
+  }
+  30%, 35% {
+    opacity: 1;
+  }
+  36%, 50% {
+    opacity: 0;
+  }
+  51%, 55% {
+    opacity: 1;
+  }
+  56%, 85% {
+    opacity: 0;
+  }
+  86%, 100% {
+    opacity: 1;
+  }
+}
+
+.overlapping .marginal.sell {
+  animation-name: overlapping-marginal-sell;
+  animation-timing-function: linear;
+}
+.overlapping .marginal.buy {
+  animation-name: overlapping-marginal-buy;
+  animation-timing-function: linear;
+}
+

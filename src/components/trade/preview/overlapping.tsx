@@ -2,7 +2,7 @@ import { cn } from 'utils/helpers';
 import { useEffect, useRef } from 'react';
 import style from './preview.module.css';
 
-export const PreviewRangeStrategy = () => {
+export const PreviewOverlappingStrategy = () => {
   const path = useRef<SVGPathElement>(null);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -16,59 +16,106 @@ export const PreviewRangeStrategy = () => {
       ref={root}
       className={cn(
         style.graphWrapper,
+        style.overlapping,
         'bg-black-gradient rounded-2xl p-16 shrink-0',
       )}
     >
       <svg viewBox="0 0 1000 1000" width="500" height="500">
-        <rect
-          x="50"
-          y="650"
-          width="900"
-          height="200"
-          fill="url(#svg-buy-gradient)"
-          fillOpacity="0.4"
-        />
-
-        <g className={style.marginalPrice} transform="translate(50, 650)">
-          <line
-            x1="0"
-            x2="900"
-            y1="0"
-            y2="0"
-            strokeWidth="3"
-            stroke="var(--color-buy)"
+        <g className="rect-ranges">
+          {/* Marginal */}
+          <rect
+            className={cn(style.marginal, style.sell)}
+            x="50"
+            y="350"
+            width="900"
+            height="300"
+            fill="url(#svg-sell-gradient)"
+            fillOpacity="0.1"
           />
           <rect
-            x="0"
-            y="0"
+            className={cn(style.marginal, style.buy)}
+            x="50"
+            y="350"
             width="900"
-            height="1"
-            fill="black"
+            height="300"
+            fill="url(#svg-buy-gradient)"
+            fillOpacity="0.1"
+          />
+          <rect
+            x="50"
+            y="350"
+            width="900"
+            height="300"
+            fill="url(#circle-pattern)"
+          />
+
+          {/* Sell */}
+          <rect
+            x="50"
+            y="250"
+            height="100"
+            width="900"
+            fill="url(#svg-sell-gradient)"
+            fillOpacity="0.4"
+          />
+          {/* Buy */}
+          <rect
+            x="50"
+            y="650"
+            height="100"
+            width="900"
+            fill="url(#svg-buy-gradient)"
             fillOpacity="0.4"
           />
         </g>
-
-        <line
-          x1="50"
-          x2="950"
-          y1="650"
-          y2="650"
-          strokeWidth="3"
-          stroke="var(--color-buy)"
-        />
-        <g transform="translate(950, 650)">
-          <use href="#buy-indicator" />
+        <g className="sell-range">
+          <line
+            x1="50"
+            x2="950"
+            y1="250"
+            y2="250"
+            strokeWidth="3"
+            stroke="var(--color-sell)"
+          />
+          <g transform="translate(950, 250)">
+            <use href="#sell-indicator" />
+          </g>
+          <line
+            x1="50"
+            x2="950"
+            y1="650"
+            y2="650"
+            strokeWidth="3"
+            stroke="var(--color-sell)"
+          />
+          <g transform="translate(950, 650)">
+            <use href="#sell-indicator" />
+          </g>
         </g>
-        <line
-          x1="50"
-          x2="950"
-          y1="850"
-          y2="850"
-          strokeWidth="3"
-          stroke="var(--color-buy)"
-        />
-        <g transform="translate(950, 850)">
-          <use href="#buy-indicator" />
+
+        <g className="buy-range">
+          <line
+            x1="50"
+            x2="950"
+            y1="350"
+            y2="350"
+            strokeWidth="3"
+            stroke="var(--color-buy)"
+          />
+          <g transform="translate(950, 350)">
+            <use href="#buy-indicator" />
+          </g>
+          <line
+            x1="50"
+            x2="950"
+            y1="750"
+            y2="750"
+            strokeWidth="3"
+            stroke="var(--color-buy)"
+          />
+          <g transform="translate(950, 750)">
+            <use href="#buy-indicator" />
+          </g>
         </g>
 
         <path
@@ -80,13 +127,6 @@ export const PreviewRangeStrategy = () => {
           strokeWidth="5"
           d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
         />
-
-        <g transform="translate(238, 700) rotate(78) scale(0.9)">
-          <use className={style.buy1} href="#buy-range" />
-        </g>
-        <g transform="translate(627, 795) rotate(78) scale(0.9)">
-          <use className={style.buy2} href="#buy-range" />
-        </g>
 
         <line
           x1="50"

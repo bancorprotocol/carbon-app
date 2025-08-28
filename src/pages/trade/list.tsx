@@ -7,6 +7,8 @@ import { PreviewRecurringStrategy } from 'components/trade/preview/recurring';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { PreviewRangeStrategy } from 'components/trade/preview/range';
 import { PreviewLimitStrategy } from 'components/trade/preview/limit';
+import { PreviewOverlappingStrategy } from 'components/trade/preview/overlapping';
+import { PreviewFullRangeStrategy } from 'components/trade/preview/full-range';
 
 const sections = [
   {
@@ -46,11 +48,7 @@ const sections = [
         icon: <IconOverlapping className="size-24" />,
         title: 'Liquidity Position',
         search: {},
-        preview: (
-          <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
-            An animated chart later
-          </div>
-        ),
+        preview: <PreviewOverlappingStrategy />,
         targets: ['Liquidity Providers', 'Token Projects'],
       },
       {
@@ -58,11 +56,7 @@ const sections = [
         icon: <IconOverlapping className="size-24" />,
         title: 'Full Range',
         search: {},
-        preview: (
-          <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
-            An animated chart later
-          </div>
-        ),
+        preview: <PreviewFullRangeStrategy />,
         targets: ['Liquidity Providers', 'Token Projects'],
       },
       {
@@ -91,7 +85,7 @@ export const TradeList = () => {
           <nav className="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-16">
             {section.items.map((item, i) => (
               <Link
-                key={item.to}
+                key={i}
                 style={{ animationDelay: `${i * 50}ms` }}
                 className="grid gap-16 rounded-2xl bg-white-gradient p-16 animate-scale-up"
                 to={item.to}
