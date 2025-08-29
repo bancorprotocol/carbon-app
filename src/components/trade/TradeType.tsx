@@ -41,7 +41,8 @@ export const TradeType = () => {
   return (
     <nav
       aria-label="select strategy type"
-      className="bg-white-gradient text-14 grid grid-flow-col gap-8 rounded-md overflow-clip"
+      className="bg-white-gradient text-14 grid grid-flow-col gap-8 rounded-md overflow-clip animate-slide-up"
+      style={{ animationDelay: '50ms' }}
     >
       {links.map((link, i) => (
         <Link
