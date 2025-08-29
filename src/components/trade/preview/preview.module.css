@@ -308,37 +308,6 @@ a:has(.graph-wrapper):hover .trades p > span {
   animation-name: budget-range-tx-1;
 }
 
-@keyframes marginalLine {
-  0%, 15% {
-    transform: translateY(0);
-  }
-  20%, 60% {
-    transform: translateY(100px);
-  }
-  62.5%, 100% {
-    transform: translateY(200px);
-  }
-}
-@keyframes marginalRect {
-  0%, 15% {
-    transform: scaleY(0);
-  }
-  20%, 60% {
-    transform: scaleY(100);
-  }
-  62.5%, 100% {
-    transform: scaleY(200);
-  }
-}
-.marginal-price line {
-  animation-name: marginalLine;
-  animation-timing-function: linear;
-}
-.marginal-price rect {
-  transform-origin: top;
-  animation-name: marginalRect;
-  animation-timing-function: linear;
-}
 
 /** TRADES */
 @keyframes trade-amount {

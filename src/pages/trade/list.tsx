@@ -3,14 +3,14 @@ import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
 import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
-import { PreviewRecurringStrategy } from 'components/trade/preview/recurring';
+import { PreviewRecurringLimitStrategy } from 'components/trade/preview/recurring-limit';
 import { PreviewLimitStrategy } from 'components/trade/preview/limit';
 import { PreviewOverlappingStrategy } from 'components/trade/preview/overlapping';
 import { PreviewFullRangeStrategy } from 'components/trade/preview/full-range';
 import { AllPreview } from 'components/trade/preview/all/all';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { WalletConnect } from 'components/common/walletConnect';
-import { RecurringRangeRangePreview } from 'components/trade/preview/all/recurring-range-range';
+import { PreviewRecurringRangeStrategy } from 'components/trade/preview/recurring-range';
 
 const sections = [
   {
@@ -21,7 +21,7 @@ const sections = [
         search: {},
         icon: <IconRecurring className="size-24" />,
         title: 'Recurring Limit',
-        preview: <PreviewRecurringStrategy />,
+        preview: <PreviewRecurringLimitStrategy />,
         targets: ['Stablecoin Projects', 'Advance Traders'],
       },
       {
@@ -32,11 +32,7 @@ const sections = [
         },
         icon: <IconRecurring className="size-24" />,
         title: 'Recurring Range',
-        preview: (
-          <div className="bg-black-gradient rounded-2xl p-8">
-            <RecurringRangeRangePreview />
-          </div>
-        ),
+        preview: <PreviewRecurringRangeStrategy />,
         targets: ['Stablecoin Projects', 'Advance Traders'],
       },
       {

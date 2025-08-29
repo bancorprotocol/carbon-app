@@ -19,7 +19,7 @@ export const PreviewRangeStrategy = () => {
         'bg-black-gradient rounded-2xl p-16 shrink-0',
       )}
     >
-      <svg viewBox="0 0 1000 1000" width="500" height="500">
+      <svg viewBox="0 0 1000 1000">
         <rect
           x="50"
           y="650"
@@ -29,7 +29,7 @@ export const PreviewRangeStrategy = () => {
           fillOpacity="0.4"
         />
 
-        <g className={style.marginalPrice} transform="translate(50, 650)">
+        <g className={style.marginalBuy} transform="translate(50, 650)">
           <line
             x1="0"
             x2="900"
@@ -48,27 +48,11 @@ export const PreviewRangeStrategy = () => {
           />
         </g>
 
-        <line
-          x1="50"
-          x2="950"
-          y1="650"
-          y2="650"
-          strokeWidth="3"
-          stroke="var(--color-buy)"
-        />
-        <g transform="translate(950, 650)">
-          <use href="#buy-indicator" />
+        <g transform="translate(0, 650)">
+          <use href="#svg-buy-line" />
         </g>
-        <line
-          x1="50"
-          x2="950"
-          y1="850"
-          y2="850"
-          strokeWidth="3"
-          stroke="var(--color-buy)"
-        />
-        <g transform="translate(950, 850)">
-          <use href="#buy-indicator" />
+        <g transform="translate(0, 850)">
+          <use href="#svg-buy-line" />
         </g>
 
         <path
@@ -88,15 +72,7 @@ export const PreviewRangeStrategy = () => {
           <use className={style.buy2} href="#buy-range" />
         </g>
 
-        <line
-          x1="50"
-          x2="950"
-          y1="950"
-          y2="950"
-          strokeWidth="3"
-          stroke="white"
-        />
-        <line x1="50" x2="50" y1="50" y2="950" strokeWidth="3" stroke="white" />
+        <use href="#svg-axis-lines" />
         <circle
           className={style.pathMotion}
           cx="0"

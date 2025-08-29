@@ -20,16 +20,8 @@ export const PreviewLimitStrategy = () => {
       )}
     >
       <svg viewBox="0 0 1000 1000">
-        <line
-          x1="50"
-          x2="950"
-          y1="650"
-          y2="650"
-          strokeWidth="3"
-          stroke="var(--color-buy)"
-        />
-        <g transform="translate(950, 650)">
-          <use href="#buy-indicator" />
+        <g transform="translate(0, 650)">
+          <use href="#svg-buy-line" />
         </g>
 
         <path
@@ -46,15 +38,7 @@ export const PreviewLimitStrategy = () => {
           <use className={style.buy1} href="#buy-box" />
         </g>
 
-        <line
-          x1="50"
-          x2="950"
-          y1="950"
-          y2="950"
-          strokeWidth="3"
-          stroke="white"
-        />
-        <line x1="50" x2="50" y1="50" y2="950" strokeWidth="3" stroke="white" />
+        <use href="#svg-axis-lines" />
         <circle
           className={style.pathMotion}
           cx="0"

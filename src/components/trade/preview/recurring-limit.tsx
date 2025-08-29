@@ -1,8 +1,8 @@
 import { cn } from 'utils/helpers';
 import { useEffect, useRef } from 'react';
-import style from './preview.module.css';
+import common from './preview.module.css';
 
-export const PreviewRecurringStrategy = () => {
+export const PreviewRecurringLimitStrategy = () => {
   const path = useRef<SVGPathElement>(null);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -15,37 +15,22 @@ export const PreviewRecurringStrategy = () => {
     <div
       ref={root}
       className={cn(
-        style.graphWrapper,
+        common.graphWrapper,
+        common.recurringRange,
         'bg-black-gradient rounded-2xl p-16 shrink-0',
       )}
     >
       <svg viewBox="0 0 1000 1000">
-        <line
-          x1="50"
-          x2="950"
-          y1="450"
-          y2="450"
-          strokeWidth="3"
-          stroke="var(--color-sell)"
-        />
-        <g transform="translate(950, 450)">
-          <use href="#sell-indicator" />
+        <g transform="translate(0, 450)">
+          <use href="#svg-sell-line" />
         </g>
-        <line
-          x1="50"
-          x2="950"
-          y1="650"
-          y2="650"
-          strokeWidth="3"
-          stroke="var(--color-buy)"
-        />
-        <g transform="translate(950, 650)">
-          <use href="#buy-indicator" />
+        <g transform="translate(0, 650)">
+          <use href="#svg-buy-line" />
         </g>
 
         <path
           ref={path}
-          className={style.pathStroke}
+          className={common.pathStroke}
           fill="none"
           stroke="white"
           strokeLinejoin="round"
@@ -54,29 +39,21 @@ export const PreviewRecurringStrategy = () => {
         />
 
         <g transform="translate(375, 450)">
-          <use className={style.sell1} href="#sell-box" />
+          <use className={common.sell1} href="#sell-box" />
         </g>
         <g transform="translate(825, 450)">
-          <use className={style.sell2} href="#sell-box" />
+          <use className={common.sell2} href="#sell-box" />
         </g>
         <g transform="translate(211, 650)">
-          <use className={style.buy1} href="#buy-box" />
+          <use className={common.buy1} href="#buy-box" />
         </g>
         <g transform="translate(600, 650)">
-          <use className={style.buy2} href="#buy-box" />
+          <use className={common.buy2} href="#buy-box" />
         </g>
 
-        <line
-          x1="50"
-          x2="950"
-          y1="950"
-          y2="950"
-          strokeWidth="3"
-          stroke="white"
-        />
-        <line x1="50" x2="50" y1="50" y2="950" strokeWidth="3" stroke="white" />
+        <use href="#svg-axis-lines" />
         <circle
-          className={style.pathMotion}
+          className={common.pathMotion}
           cx="0"
           cy="0"
           r="10"
@@ -84,8 +61,8 @@ export const PreviewRecurringStrategy = () => {
         />
       </svg>
 
-      <div className={cn(style.budget, style.recurring, style.limit)}>
-        <div className={cn(style.price, style.sell)}>
+      <div className={cn(common.budget, common.recurring, common.limit)}>
+        <div className={cn(common.price, common.sell)}>
           <p>
             <span>0</span>
             <span>1000</span>
@@ -93,10 +70,10 @@ export const PreviewRecurringStrategy = () => {
             <span>1100</span>
             <span>0</span>
           </p>
-          <span className={style.token}>USDC</span>
+          <span className={common.token}>USDC</span>
         </div>
 
-        <div className={cn(style.price, style.buy)}>
+        <div className={cn(common.price, common.buy)}>
           <p>
             <span>100</span>
             <span>0</span>
@@ -104,7 +81,7 @@ export const PreviewRecurringStrategy = () => {
             <span>0</span>
             <span>130</span>
           </p>
-          <span className={style.token}>ETH</span>
+          <span className={common.token}>ETH</span>
         </div>
       </div>
     </div>

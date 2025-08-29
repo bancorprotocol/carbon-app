@@ -20,7 +20,7 @@ export const PreviewOverlappingStrategy = () => {
         'bg-black-gradient rounded-2xl p-16 shrink-0',
       )}
     >
-      <svg viewBox="0 0 1000 1000" width="500" height="500">
+      <svg viewBox="0 0 1000 1000">
         <g className="rect-ranges">
           {/* Marginal */}
           <rect
@@ -69,52 +69,20 @@ export const PreviewOverlappingStrategy = () => {
           />
         </g>
         <g className="sell-range">
-          <line
-            x1="50"
-            x2="950"
-            y1="250"
-            y2="250"
-            strokeWidth="3"
-            stroke="var(--color-sell)"
-          />
-          <g transform="translate(950, 250)">
-            <use href="#sell-indicator" />
+          <g transform="translate(0, 250)">
+            <use href="#svg-sell-line" />
           </g>
-          <line
-            x1="50"
-            x2="950"
-            y1="650"
-            y2="650"
-            strokeWidth="3"
-            stroke="var(--color-sell)"
-          />
-          <g transform="translate(950, 650)">
-            <use href="#sell-indicator" />
+          <g transform="translate(0, 650)">
+            <use href="#svg-sell-line" />
           </g>
         </g>
 
         <g className="buy-range">
-          <line
-            x1="50"
-            x2="950"
-            y1="350"
-            y2="350"
-            strokeWidth="3"
-            stroke="var(--color-buy)"
-          />
-          <g transform="translate(950, 350)">
-            <use href="#buy-indicator" />
+          <g transform="translate(0, 350)">
+            <use href="#svg-buy-line" />
           </g>
-          <line
-            x1="50"
-            x2="950"
-            y1="750"
-            y2="750"
-            strokeWidth="3"
-            stroke="var(--color-buy)"
-          />
-          <g transform="translate(950, 750)">
-            <use href="#buy-indicator" />
+          <g transform="translate(0, 750)">
+            <use href="#svg-buy-line" />
           </g>
         </g>
 
@@ -128,15 +96,7 @@ export const PreviewOverlappingStrategy = () => {
           d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
         />
 
-        <line
-          x1="50"
-          x2="950"
-          y1="950"
-          y2="950"
-          strokeWidth="3"
-          stroke="white"
-        />
-        <line x1="50" x2="50" y1="50" y2="950" strokeWidth="3" stroke="white" />
+        <use href="#svg-axis-lines" />
         <circle
           className={style.pathMotion}
           cx="0"

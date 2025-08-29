@@ -20,7 +20,7 @@ export const PreviewFullRangeStrategy = () => {
         'bg-black-gradient rounded-2xl p-16 shrink-0',
       )}
     >
-      <svg viewBox="0 0 1000 1000" width="500" height="500">
+      <svg viewBox="0 0 1000 1000">
         <g className="marginal-range">
           <rect
             className={cn(style.marginal, style.sell)}
@@ -76,15 +76,7 @@ export const PreviewFullRangeStrategy = () => {
           d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
         />
 
-        <line
-          x1="50"
-          x2="950"
-          y1="950"
-          y2="950"
-          strokeWidth="3"
-          stroke="white"
-        />
-        <line x1="50" x2="50" y1="50" y2="950" strokeWidth="3" stroke="white" />
+        <use href="#svg-axis-lines" />
         <circle
           className={style.pathMotion}
           cx="0"
