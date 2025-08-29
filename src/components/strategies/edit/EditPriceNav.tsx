@@ -42,36 +42,30 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
   if (editType !== 'editPrices' && editType !== 'renew') return;
 
   return (
-    <article className="bg-black-gradient grid gap-16 p-16">
-      <h2 id="edit-strategy-nav" className="text-16">
-        Type
-      </h2>
-      <nav
-        aria-labelledby="edit-strategy-nav"
-        className="text-14 grid grid-cols-1 gap-8 md:grid-cols-3"
-        aria-label="Switch between type of strategy"
-      >
-        {links.map((link) => (
-          <Link
-            key={link.id}
-            to={link.to}
-            search={({ chartStart, chartEnd, marketPrice }) => ({
-              ...priceSearchFn[link.id](strategy, editType),
-              chartStart,
-              chartEnd,
-              marketPrice,
-            })}
-            params={params}
-            replace={true}
-            aria-current={pathName.includes(link.id) ? 'page' : 'false'}
-            data-testid={`edit-${link.id}`}
-            className="rounded-md hover:border-background-400 flex items-center justify-center gap-8 border border-transparent bg-black-gradient p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
-          >
-            {link.label}
-            <Tooltip element={link.text} iconClassName="size-14" />
-          </Link>
-        ))}
-      </nav>
-    </article>
+    <nav
+      className="bg-white-gradient rounded-e-full rounded-s-8 px-16 py-8 text-14 grid grid-cols-1 gap-8 md:grid-cols-3"
+      aria-label="Switch between type of strategy"
+    >
+      {links.map((link) => (
+        <Link
+          key={link.id}
+          to={link.to}
+          search={({ chartStart, chartEnd, marketPrice }) => ({
+            ...priceSearchFn[link.id](strategy, editType),
+            chartStart,
+            chartEnd,
+            marketPrice,
+          })}
+          params={params}
+          replace={true}
+          aria-current={pathName.includes(link.id) ? 'page' : 'false'}
+          data-testid={`edit-${link.id}`}
+          className="rounded-full hover:border-background-400 flex items-center justify-center gap-8 border border-transparent px-8 py-4 text-white/60 aria-[current=page]:bg-black-gradient aria-[current=page]:text-white"
+        >
+          {link.label}
+          <Tooltip element={link.text} iconClassName="size-14" />
+        </Link>
+      ))}
+    </nav>
   );
 };

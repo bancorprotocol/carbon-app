@@ -39,34 +39,29 @@ export const TradeType = () => {
   const { location } = useRouterState();
   const current = location.pathname;
   return (
-    <article className="grid gap-16 p-16">
-      <h2 id="trading-strateg-nav" className="text-16">
-        Strategy Types
-      </h2>
-      <nav
-        aria-labelledby="trading-strateg-nav"
-        className="text-14 grid grid-cols-1 gap-8 md:grid-cols-2"
-      >
-        {links.map((link, i) => (
-          <Link
-            key={i}
-            to={link.to}
-            from="/trade"
-            search={(search: TradeSearch) => ({
-              base: search.base,
-              quote: search.quote,
-              marketPrice: search.marketPrice,
-            })}
-            aria-current={link.pages.includes(current) ? 'page' : 'false'}
-            data-testid={link.testId}
-            className="rounded-md hover:border-background-400 flex items-center justify-center gap-8 border border-transparent p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
-          >
-            {link.svg}
-            {link.label}
-            <Tooltip element={link.text} iconClassName="size-14" />
-          </Link>
-        ))}
-      </nav>
-    </article>
+    <nav
+      aria-label="select strategy type"
+      className="bg-white-gradient text-14 grid grid-flow-col gap-8 rounded-md overflow-clip"
+    >
+      {links.map((link, i) => (
+        <Link
+          key={i}
+          to={link.to}
+          from="/trade"
+          search={(search: TradeSearch) => ({
+            base: search.base,
+            quote: search.quote,
+            marketPrice: search.marketPrice,
+          })}
+          aria-current={link.pages.includes(current) ? 'page' : 'false'}
+          data-testid={link.testId}
+          className="rounded-md hover:border-background-400 flex items-center justify-center gap-8 border border-transparent p-8 text-white/60 aria-[current=page]:bg-black-gradient aria-[current=page]:text-white"
+        >
+          {link.svg}
+          {link.label}
+          <Tooltip element={link.text} iconClassName="size-14" />
+        </Link>
+      ))}
+    </nav>
   );
 };

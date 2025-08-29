@@ -240,10 +240,7 @@ export const EditPricesForm: FC<Props> = (props) => {
       )}
       data-testid="edit-form"
     >
-      <EditStrategyOverlapTokens />
-      <EditPriceNav editType={editType} />
-
-      <div className="overflow-hidden rounded-ee-2xl rounded-es-2xl">
+      <div className="bg-white-gradient overflow-hidden rounded-2xl">
         {children}
       </div>
       <footer className="mt-16 grid gap-16">

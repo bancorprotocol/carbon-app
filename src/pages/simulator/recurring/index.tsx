@@ -185,7 +185,7 @@ export const SimulatorInputRecurringPage = () => {
         className={cn(style.form, 'grid gap-16')}
         data-testid="create-simulation-form"
       >
-        <div className="bg-black-gradient rounded-2xl">
+        <div className="bg-white-gradient rounded-2xl">
           <SimInputTokenSelection
             baseToken={searchState.baseToken}
             quoteToken={searchState.quoteToken}

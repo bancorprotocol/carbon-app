@@ -5,7 +5,7 @@ import { PairName } from 'components/common/DisplayPair';
 export const EditStrategyOverlapTokens = () => {
   const { strategy } = useEditStrategyCtx();
   return (
-    <header className="bg-black-gradient flex items-center gap-16 rounded-se-2xl rounded-ss-2xl p-16">
+    <header className="bg-black-gradient flex items-center gap-16 rounded-s-full rounded-e-8 px-16 py-8">
       <TokensOverlap tokens={[strategy.base, strategy.quote]} size={32} />
       <div>
         <h2 className="text-14">

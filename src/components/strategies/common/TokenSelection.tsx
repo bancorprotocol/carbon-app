@@ -57,7 +57,7 @@ export const TokenSelection = () => {
   return (
     <article
       role="menu"
-      className="relative grid grid-cols-[1fr_auto_1fr] place-items-center gap-4 col-span-2 place-self-center rounded-full bg-white-gradient overflow-hidden p-4"
+      className="relative grid grid-cols-[1fr_auto_1fr] place-items-center gap-4 place-self-center rounded-full bg-white-gradient overflow-hidden p-4 xl:max-2xl:rounded-e-md"
     >
       <button
         role="menuitem"

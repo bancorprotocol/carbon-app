@@ -1,7 +1,5 @@
 import { FC, FormEvent, ReactNode, useState } from 'react';
-import { EditPriceNav } from './EditPriceNav';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
-import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { Button } from 'components/common/button';
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
@@ -183,10 +181,7 @@ export const EditBudgetForm: FC<Props> = (props) => {
       )}
       data-testid="edit-form"
     >
-      <EditStrategyOverlapTokens />
-      <EditPriceNav editType={editType} />
-
-      <div className="overflow-hidden rounded-ee-2xl rounded-es-2xl">
+      <div className="bg-white-gradient overflow-hidden rounded-2xl">
         {children}
       </div>
       <footer className="mt-16 grid gap-16">

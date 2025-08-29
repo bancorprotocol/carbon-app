@@ -69,7 +69,7 @@ export const DateRangePicker = memo(function DateRangePicker(
       type="button"
       aria-label="Pick date range"
       className={cn(
-        'text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
+        'bg-black-gradient text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
         'hover:bg-background-800',
         hasDates
           ? 'border-white/60 active:border-white/80'
