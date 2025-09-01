@@ -54,7 +54,7 @@ export const TonProvider = ({ children }: { children: ReactNode }) => {
 };
 
 async function repeat<T>(cb: () => Promise<T>): Promise<T> {
-  let remaining = 30;
+  let remaining = 60;
   while (remaining) {
     try {
       const value = await cb();
@@ -66,7 +66,7 @@ async function repeat<T>(cb: () => Promise<T>): Promise<T> {
       await new Promise((res) => setTimeout(res, 5_000));
     }
   }
-  throw new Error('Too many attempt to get operationID');
+  throw new Error('Too many attempts');
 }
 
 const awaitOperationId = async (
