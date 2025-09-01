@@ -71,7 +71,7 @@ const sections = [
   },
 
   {
-    title: 'Expert',
+    title: 'Professional',
     items: [
       {
         to: '/trade/disposable',

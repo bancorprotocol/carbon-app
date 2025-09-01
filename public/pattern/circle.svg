@@ -1,3 +1,14 @@
-<svg viewBox="0 0 50 50" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+<!-- <svg viewBox="0 0 50 50" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
 <circle cx="25" cy="25" r="20" fill="none" stroke="white" stroke-width="3" stroke-opacity="0.2"></circle>
+</svg> -->
+<svg viewBox="0 0 50 50" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+   <filter id="blurMe">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+  </filter>
+  <mask id="myMask" mask-type="luminance">
+    <rect fill="white" x="0" y="0" width="50" height="50" />
+    <circle cx="25" cy="25" r="20" fill="none" stroke="black" stroke-width="3" filter="url(#blurMe)"></circle>
+  </mask>
+
+  <rect x="0" y="0" width="50" height="50" mask="url(#myMask)" fill="black" fill-opacity="0.9" />
 </svg>
