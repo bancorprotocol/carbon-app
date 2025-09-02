@@ -87,10 +87,10 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
   return (
     <>
-      <div className="bg-content min-h-85 flex items-center justify-between rounded px-20">
+      <div className="bg-content min-h-85 flex items-center justify-between rounded-2xl px-20">
         <div className="flex items-center gap-10">
           <LogoImager alt="Token" src={token.logoURI} className="size-30" />
-          <p className="font-weight-500">{token.symbol}</p>
+          <p className="font-medium">{token.symbol}</p>
         </div>
 
         {data.approvalRequired ? (
@@ -104,7 +104,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
               <div className="flex items-center gap-10">
                 <label
                   htmlFor={inputId}
-                  className={`text-12 font-weight-500 transition-all ${
+                  className={`text-12 font-medium transition-all ${
                     isLimited ? 'text-white/60' : 'text-white/85'
                   }`}
                 >

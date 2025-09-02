@@ -132,7 +132,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       </header>
       <TokenInputField
         id={`${id}-pay`}
-        className="rounded-12 mb-20 mt-5 bg-black p-16"
+        className="rounded-xl mb-20 mt-5 bg-black p-16"
         token={source}
         isBalanceLoading={sourceBalanceQuery.isPending}
         value={sourceInput}
@@ -164,7 +164,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       </header>
       <TokenInputField
         id={`${id}-receive`}
-        className="rounded-b-4 rounded-t-12 mt-5 bg-black p-16"
+        className="rounded-b-xs rounded-t-xl mt-5 bg-black p-16"
         token={target}
         value={targetInput}
         setValue={(value) => setTargetInput(value)}
@@ -175,7 +175,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         slippage={slippage}
         disabled={!hasEnoughLiquidity}
       />
-      <footer className="rounded-b-12 rounded-t-4 text-14 mt-5 flex justify-between bg-black p-16 text-white/80">
+      <footer className="rounded-b-xl rounded-t-xs text-14 mt-5 flex justify-between bg-black p-16 text-white/80">
         {warning && <Warning className="text-14" message={warning} />}
         {rateMessage && <p>{rateMessage}</p>}
         {showRouting && (

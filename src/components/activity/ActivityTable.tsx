@@ -29,7 +29,7 @@ import { useActivity, useActivityPagination } from './ActivityProvider';
 import style from './ActivityTable.module.css';
 
 const thStyle = cn(
-  'text-14 text-start font-weight-400 py-16 pl-8 whitespace-nowrap',
+  'text-14 text-start font-normal py-16 pl-8 whitespace-nowrap',
   'first:pl-24',
   'last:pr-24 last:text-end',
 );
@@ -128,7 +128,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
             <ActivityIcon activity={activity} size={32} />
           </button>
         </td>
-        <td className={cn(tdFirstLine, 'font-weight-500')}>
+        <td className={cn(tdFirstLine, 'font-medium')}>
           <button onClick={setAction} className="w-full text-start">
             {activityActionName[activity.action]}
           </button>

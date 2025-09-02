@@ -101,7 +101,7 @@ export const TradeNav = () => {
             })}
             aria-current={current === link.to ? 'page' : 'false'}
             data-testid={link.id}
-            className="rounded-8 hover:border-background-400 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
+            className="rounded-md hover:border-background-400 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
           >
             {link.svg}
             {link.label}

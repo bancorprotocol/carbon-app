@@ -90,7 +90,7 @@ export const TradeAuction = () => {
       </StrategyChartSection>
       <CreateLayout url={url}>
         <CreateGradientStrategyForm buy={orders.buy} sell={orders.sell}>
-          <article className="bg-background-900 grid rounded-b">
+          <article className="bg-background-900 grid rounded-b-2xl">
             <OrderDirection direction={direction} setDirection={setDirection} />
             <div
               className={cn(style.order, 'grid gap-16 p-16')}

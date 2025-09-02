@@ -77,25 +77,25 @@ export const useBurgerMenuItems = () => {
       <div className="flex w-full items-center justify-between">
         <NewTabLink
           to={externalLinks.x}
-          className="rounded-6 p-6 md:hover:bg-black"
+          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconX className={iconStyles} />
         </NewTabLink>
         <NewTabLink
           to={externalLinks.youtube}
-          className="rounded-6 p-6 md:hover:bg-black"
+          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconYoutube className={iconStyles} />
         </NewTabLink>
         <NewTabLink
           to={externalLinks.discord}
-          className="rounded-6 p-6 md:hover:bg-black"
+          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconDiscord className={iconStyles} />
         </NewTabLink>
         <NewTabLink
           to={externalLinks.telegram}
-          className="rounded-6 p-6 md:hover:bg-black"
+          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconTelegram className={iconStyles} />
         </NewTabLink>
@@ -127,7 +127,7 @@ export const useBurgerMenuItems = () => {
               <span className="flex items-center">
                 <IconV
                   className={`invisible size-12 ${
-                    isCurrencySelected ? '!visible' : ''
+                    isCurrencySelected ? 'visible!' : ''
                   }`}
                 />
               </span>
@@ -201,7 +201,7 @@ const CurrencyMenuItemContent = () => {
   return (
     <div className="flex w-full items-center justify-between">
       <span>Currency</span>
-      <span className="font-weight-500 mr-10">{selectedFiatCurrency}</span>
+      <span className="font-medium mr-10">{selectedFiatCurrency}</span>
     </div>
   );
 };

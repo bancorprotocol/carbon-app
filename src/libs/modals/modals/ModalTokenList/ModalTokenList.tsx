@@ -52,7 +52,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
         autoFocus={!belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
-        className="rounded-8"
+        className="rounded-md"
         onKeyDown={handleKeyDown}
       />
       {!showNoResults && !showImportToken && <ModalTokenImportNotification />}

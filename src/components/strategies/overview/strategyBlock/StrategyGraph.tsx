@@ -238,7 +238,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                     <>
                       <polygon
                         className={style.buyArea}
-                        fill="var(--buy)"
+                        fill="var(--color-buy)"
                         fillOpacity="0.25"
                         points={Array.from(
                           getBuyPoints(
@@ -261,7 +261,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                         )}
                       <line
                         className={style.lineBuySell}
-                        stroke="var(--buy)"
+                        stroke="var(--color-buy)"
                         strokeWidth="2"
                         x1={x(buy.from)}
                         y1={baseline}
@@ -270,7 +270,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                       />
                       <line
                         className={style.lineBuySell}
-                        stroke="var(--buy)"
+                        stroke="var(--color-buy)"
                         strokeWidth="2"
                         x1={x(buy.to)}
                         y1={baseline}
@@ -289,7 +289,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                         fill="transparent"
                       />
                       <line
-                        stroke="var(--buy)"
+                        stroke="var(--color-buy)"
                         strokeWidth="2"
                         x1={x(buy.to)}
                         y1={baseline}
@@ -320,7 +320,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                     <>
                       <polygon
                         className={style.sellArea}
-                        fill="var(--sell)"
+                        fill="var(--color-sell)"
                         fillOpacity="0.25"
                         points={Array.from(
                           getSellPoints(
@@ -343,7 +343,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                         )}
                       <line
                         className={style.lineBuySell}
-                        stroke="var(--sell)"
+                        stroke="var(--color-sell)"
                         strokeWidth="2"
                         x1={x(sell.from)}
                         x2={x(sell.from)}
@@ -352,7 +352,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                       />
                       <line
                         className={style.lineBuySell}
-                        stroke="var(--sell)"
+                        stroke="var(--color-sell)"
                         strokeWidth="2"
                         x1={x(sell.to)}
                         x2={x(sell.to)}
@@ -371,7 +371,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                         fill="transparent"
                       />
                       <line
-                        stroke="var(--sell)"
+                        stroke="var(--color-sell)"
                         strokeWidth="2"
                         x1={x(sell.to)}
                         x2={x(sell.to)}
@@ -648,14 +648,14 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
       className="text-14 flex flex-col gap-16"
       data-testid="order-tooltip"
     >
-      <h3 className={cn('text-16 font-weight-500', color)}>
+      <h3 className={cn('text-16 font-medium', color)}>
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
       {limit && (
-        <table className="rounded-8 border-separate border border-white/40">
+        <table className="rounded-md border-separate border border-white/40">
           <tbody>
             <tr>
-              <th className="font-weight-400 p-8 text-start text-white/60">
+              <th className="font-normal p-8 text-start text-white/60">
                 Price
               </th>
               <td className="p-8 text-end" data-testid="price">
@@ -666,10 +666,10 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         </table>
       )}
       {!limit && (
-        <table className="rounded-8 border-separate border border-white/40 p-8">
+        <table className="rounded-md border-separate border border-white/40 p-8">
           <tbody>
             <tr>
-              <th className="font-weight-400 text-start text-white/60">
+              <th className="font-normal text-start text-white/60">
                 Min Price
               </th>
               <td className="text-end" data-testid="min-price">
@@ -677,7 +677,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
               </td>
             </tr>
             <tr>
-              <th className="font-weight-400 text-start text-white/60">
+              <th className="font-normal text-start text-white/60">
                 Max Price
               </th>
               <td className="text-end" data-testid="max-price">
@@ -686,9 +686,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
             </tr>
             {!!spread && (
               <tr>
-                <th className="font-weight-400 text-start text-white/60">
-                  Spread
-                </th>
+                <th className="font-normal text-start text-white/60">Spread</th>
                 <td className="text-end" data-testid="spread">
                   {spread}%
                 </td>
@@ -709,7 +707,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
         target="_blank"
         rel="noreferrer"
-        className="font-weight-500 text-primary inline-flex items-center gap-4"
+        className="font-medium text-primary inline-flex items-center gap-4"
       >
         <span>Learn more about marginal price</span>
         <IconLink className="inline size-12" />
@@ -757,31 +755,31 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
       className="text-14 flex flex-col gap-16"
       data-testid="order-tooltip"
     >
-      <h3 className={cn('text-16 font-weight-500', color)}>
+      <h3 className={cn('text-16 font-medium', color)}>
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
-      <table className="rounded-8 border-separate border border-white/40 p-8">
+      <table className="rounded-md border-separate border border-white/40 p-8">
         <tbody>
           <tr>
-            <th className="font-weight-400 text-start text-white/60">_S P_</th>
+            <th className="font-normal text-start text-white/60">_S P_</th>
             <td className="text-end" data-testid="start-price">
               {_sP_} {quote.symbol}
             </td>
           </tr>
           <tr>
-            <th className="font-weight-400 text-start text-white/60">_E P_</th>
+            <th className="font-normal text-start text-white/60">_E P_</th>
             <td className="text-end" data-testid="end-price">
               {_eP_} {quote.symbol}
             </td>
           </tr>
           <tr>
-            <th className="font-weight-400 text-start text-white/60">_S D_</th>
+            <th className="font-normal text-start text-white/60">_S D_</th>
             <td className="text-end" data-testid="start-date">
               {_sD_Text}
             </td>
           </tr>
           <tr>
-            <th className="font-weight-400 text-start text-white/60">_E D_</th>
+            <th className="font-normal text-start text-white/60">_E D_</th>
             <td className="text-end" data-testid="end-date">
               {fromUnixUTC(_eD_).toLocaleString()}
             </td>
@@ -800,7 +798,7 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
         href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
         target="_blank"
         rel="noreferrer"
-        className="font-weight-500 text-primary inline-flex items-center gap-4"
+        className="font-medium text-primary inline-flex items-center gap-4"
       >
         <span>Learn more about marginal price</span>
         <IconLink className="inline size-12" />

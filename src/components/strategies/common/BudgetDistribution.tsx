@@ -77,7 +77,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
   const allocated = isSimulator ? deposit : initialBudget;
   return (
     <div className="flex flex-col gap-4">
-      {title && <h4 className="text-14 font-weight-500">{title}</h4>}
+      {title && <h4 className="text-14 font-medium">{title}</h4>}
       <div className="text-12 flex justify-between text-white/60">
         <label htmlFor={allocatedId}>
           Allocated:&nbsp;
@@ -98,7 +98,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
           </label>
         )}
       </div>
-      <div className="rounded-8 flex h-[24px] gap-4 overflow-hidden transition-[gap] duration-200">
+      <div className="rounded-md flex h-[24px] gap-4 overflow-hidden transition-[gap] duration-200">
         <div
           aria-valuenow={dist.allocationPercent}
           className={cn(
@@ -150,9 +150,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
       return (
         <Warning className="text-12" isError data-testid="insufficient-balance">
           You should&nbsp;
-          <b className="font-weight-500">
-            deposit {tokenAmount(deposit, token)}
-          </b>
+          <b className="font-medium">deposit {tokenAmount(deposit, token)}</b>
           {depositFiat && <b>&nbsp;({depositFiat})</b>}
           &nbsp;from your wallet, but your wallet has insufficient balance.
           Consider changing token deposit amount or prices.
@@ -160,16 +158,13 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="warning-message animate-scaleUp text-12 flex items-start gap-8 text-white/60">
+      <p className="warning-message animate-scale-up text-12 flex items-start gap-8 text-white/60">
         <span className="bg-buy/10 text-buy rounded-full p-4">
           <IconDeposit className="h-12 w-12" />
         </span>
         <span>
           You will&nbsp;
-          <b
-            className="font-weight-500"
-            data-testid={`deposit-${token.symbol}`}
-          >
+          <b className="font-medium" data-testid={`deposit-${token.symbol}`}>
             deposit {tokenAmount(deposit, token)}
           </b>
           {depositFiat && <b>&nbsp;({depositFiat})</b>}
@@ -184,9 +179,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
       return (
         <Warning className="text-12" isError data-testid="insufficient-funds">
           You should&nbsp;
-          <b className="font-weight-500">
-            withdraw {tokenAmount(withdraw, token)}
-          </b>
+          <b className="font-medium">withdraw {tokenAmount(withdraw, token)}</b>
           {withdrawFiat && <b>&nbsp;({withdrawFiat})</b>}
           &nbsp;from the strategy, but the strategy has insufficient funds.
           Consider changing token deposit amount or prices.
@@ -194,16 +187,13 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="warning-message animate-scaleUp text-12 flex items-start gap-8 text-white/60">
+      <p className="warning-message animate-scale-up text-12 flex items-start gap-8 text-white/60">
         <span className="bg-sell/10 text-sell rounded-full p-4">
           <IconWithdraw className="h-12 w-12" />
         </span>
         <span>
           You will&nbsp;
-          <b
-            className="font-weight-500"
-            data-testid={`withdraw-${token.symbol}`}
-          >
+          <b className="font-medium" data-testid={`withdraw-${token.symbol}`}>
             withdraw {tokenAmount(withdraw, token)}
           </b>
           {withdrawFiat && <b>&nbsp;({withdrawFiat})</b>}

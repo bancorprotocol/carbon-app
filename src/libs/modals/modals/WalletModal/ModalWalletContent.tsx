@@ -12,9 +12,9 @@ type Props = {
   isPending?: boolean;
 };
 
-const textClasses = 'text-16 font-weight-500';
+const textClasses = 'text-16 font-medium';
 const buttonClasses =
-  'flex h-44 w-full items-center space-x-16 rounded-8 px-10 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
+  'flex h-44 w-full items-center space-x-16 rounded-md px-10 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
 
 const EXT_LINKS = [
   {
@@ -41,18 +41,14 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
       <div className="text-14 mb-20 space-y-10 text-white/80">
         <p>
           By connecting my wallet, I agree to the{' '}
-          <Link
-            to="/terms"
-            target="_blank"
-            className="font-weight-500 text-white"
-          >
+          <Link to="/terms" target="_blank" className="font-medium text-white">
             terms & conditions
           </Link>{' '}
           and{' '}
           <Link
             target="_blank"
             to="/privacy"
-            className="font-weight-500 text-white"
+            className="font-medium text-white"
           >
             cookie & privacy policy
           </Link>{' '}

@@ -1,9 +1,12 @@
+@reference "tailwindcss";
+@reference "../../theme.css";
+
 .search-container {
   background-image: linear-gradient(
     to bottom,
-    var(--gradient-first, var(--primary)),
-    var(--gradient-middle, var(--secondary)),
-    var(--gradient-last, var(--primary))
+    var(--color-primary, var(--color-primary)),
+    var(--color-secondary, var(--color-secondary)),
+    var(--color-tertiary, var(--color-primary))
   );
   padding: 2px;
   border-radius: 48px;
@@ -48,9 +51,9 @@
   transition: all 0.2s 0.1s var(--ease-out);
   background-image: linear-gradient(
     to bottom,
-    var(--gradient-first, var(--primary)),
-    var(--gradient-middle, var(--secondary)),
-    var(--gradient-last, var(--primary))
+    var(--color-primary, var(--color-primary)),
+    var(--color-secondary, var(--color-secondary)),
+    var(--color-tertiary, var(--color-primary))
   );
 }
 

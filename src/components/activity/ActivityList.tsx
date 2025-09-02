@@ -68,7 +68,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
     setSearchParams({ actions });
   };
   return (
-    <li className="border-background-800 bg-background-900 flex flex-col gap-16 rounded border">
+    <li className="border-background-800 flex flex-col gap-16 rounded-2xl border">
       <header className="flex px-16 pt-16 items-center">
         {!hideIds && <ActivityId activity={activity} size={12} />}
         <div className="grid text-12 ml-auto">
@@ -99,8 +99,8 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
       <table className="w-full table-fixed">
         <thead>
           <tr className="text-12 text-white/60">
-            <th className="font-weight-400 px-24">Buy Budget</th>
-            <th className="font-weight-400 px-24">Sell Budget</th>
+            <th className="font-normal px-24">Buy Budget</th>
+            <th className="font-normal px-24">Sell Budget</th>
           </tr>
         </thead>
         <tbody>
