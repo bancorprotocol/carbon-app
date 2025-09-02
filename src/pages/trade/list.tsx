@@ -9,9 +9,11 @@ import { PreviewOverlappingStrategy } from 'components/trade/preview/overlapping
 import { PreviewFullRangeStrategy } from 'components/trade/preview/full-range';
 import { AllPreview } from 'components/trade/preview/all/all';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
-import { WalletConnect } from 'components/common/walletConnect';
 import { PreviewRecurringRangeStrategy } from 'components/trade/preview/recurring-range';
 import { PreviewRangeStrategy } from 'components/trade/preview/range';
+import { useState } from 'react';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
+import { Button } from 'components/common/button';
 import style from './list.module.css';
 
 const sections = [
@@ -97,11 +99,49 @@ const sections = [
 ];
 
 export const TradeList = () => {
+  const [type, setType] = useState('recurring');
   return (
     <div className="grid gap-200">
-      <div className="grid gap-24">
-        <PreviewCommonStrategyType />
-        <WalletConnect />
+      <PreviewCommonStrategyType />
+      <div className={style.main}>
+        <section className={style.mainChart}>
+          <header className="flex items-center justify-between">
+            <RadioGroup className="text-20">
+              <Radio
+                checked={type === 'recurring'}
+                onChange={() => setType('recurring')}
+              >
+                Orders
+              </Radio>
+              <Radio
+                checked={type === 'full-range'}
+                onChange={() => setType('full-range')}
+              >
+                Liquidity
+              </Radio>
+            </RadioGroup>
+            <Button variant="success" className="px-16 py-8 flex gap-8">
+              Create
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+              >
+                <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+              </svg>
+            </Button>
+          </header>
+          <div className="self-start w-[500px] h-[500px] me-[300px]">
+            {type === 'recurring' && <PreviewRecurringRangeStrategy />}
+            {type === 'full-range' && <PreviewFullRangeStrategy />}
+          </div>
+          <p className="text-18">
+            <b className="text-buy">Buy</b> low,{' '}
+            <b className="text-sell">Sell</b> High, earn{' '}
+            <b className="text-gradient">more</b> with CarbonDefi
+          </p>
+        </section>
       </div>
       <div className="grid gap-120">
         {sections.map((section, i) => (

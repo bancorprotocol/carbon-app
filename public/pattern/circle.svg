@@ -10,5 +10,5 @@
     <circle cx="25" cy="25" r="20" fill="none" stroke="black" stroke-width="3" filter="url(#blurMe)"></circle>
   </mask>
 
-  <rect x="0" y="0" width="50" height="50" mask="url(#myMask)" fill="black" fill-opacity="0.9" />
+  <rect x="0" y="0" width="50" height="50" mask="url(#myMask)" fill="black" fill-opacity="0.3" />
 </svg>
