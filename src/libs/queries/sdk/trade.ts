@@ -6,6 +6,7 @@ import { Action, TradeActionBNStr } from 'libs/sdk';
 import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
 import { useWagmi } from 'libs/wagmi';
+import { useTokens } from 'hooks/useTokens';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionBNStr[];
@@ -38,11 +39,13 @@ export interface TradeParams {
 }
 
 export const useTradeQuery = () => {
-  const { signer } = useWagmi();
+  const { sendTransaction } = useWagmi();
+  const { getTokenById } = useTokens();
 
   return useMutation({
     mutationFn: async (params: TradeParams) => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
+
       let unsignedTx: PopulatedTransaction;
       if (params.isTradeBySource) {
         unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
@@ -61,7 +64,17 @@ export const useTradeQuery = () => {
           calcMaxInput(params.sourceInput),
         );
       }
-      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
+      const source = getTokenById(params.sourceAddress);
+      const powerDecimal = new SafeDecimal(10).pow(source!.decimals);
+      const amount = new SafeDecimal(params.sourceInput).mul(powerDecimal);
+      const assets = [
+        {
+          address: params.sourceAddress,
+          rawAmount: amount.toNumber(),
+        },
+      ];
+      unsignedTx.customData = { assets };
+      return sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };

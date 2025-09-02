@@ -13,7 +13,7 @@ import { fromUnixUTC } from 'components/simulator/utils';
 import styles from './ActivityExport.module.css';
 import { useDialog } from 'hooks/useDialog';
 
-export const getActivityCSV = (activities: Activity[]) => {
+const getActivityCSV = (activities: Activity[]) => {
   const header = [
     'ID',
     'Strategy NFT ID',
