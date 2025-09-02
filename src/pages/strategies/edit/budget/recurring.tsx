@@ -94,7 +94,12 @@ export const EditBudgetRecurringPage = () => {
           buy={orders.buy}
           sell={orders.sell}
         >
-          <D3ChartRecurring isLimit={isLimit} prices={orders} />
+          <D3ChartRecurring
+            base={base}
+            quote={quote}
+            isLimit={isLimit}
+            prices={orders}
+          />
           <TradeChartContent />
           <D3PricesAxis prices={orders} />
         </StrategyChartHistory>

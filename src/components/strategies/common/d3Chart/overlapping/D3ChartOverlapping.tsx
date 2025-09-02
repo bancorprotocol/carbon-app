@@ -22,8 +22,11 @@ import { prettifyNumber } from 'utils/helpers';
 import { useD3OverlappingChart } from './useD3OverlappingChart';
 import { useD3ChartCtx } from '../D3ChartContext';
 import { isFullRange } from '../../utils';
+import { Token } from 'libs/tokens';
 
 interface Props {
+  base: Token;
+  quote: Token;
   prices: ChartPrices;
   marketPrice?: number;
   spread: number;
@@ -31,10 +34,13 @@ interface Props {
 }
 
 export const D3ChartOverlapping = (props: Props) => {
-  const { prices, marketPrice, onChange, spread } = props;
+  const { base, quote, prices, marketPrice, onChange, spread } = props;
   const { dms, yScale } = useD3ChartCtx();
   const isDragging = useRef(false);
-  const readonly = !onChange || isFullRange(prices.buy.min, prices.sell.max);
+  const readonly = (() => {
+    if (!onChange) return true;
+    return isFullRange(base, quote, prices.buy.min, prices.sell.max);
+  })();
 
   const selectorHandleBuyMin = getHandleSelector('buy', 'line1');
   const selectorHandleBuyMax = getHandleSelector('buy', 'line2');

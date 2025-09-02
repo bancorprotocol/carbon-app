@@ -14,6 +14,8 @@ import { fromUnixUTC } from 'components/simulator/utils';
 import { startOfDay, subMonths, subYears } from 'date-fns';
 import { toUnixUTC } from 'components/simulator/utils';
 import { ChartPrices } from './d3Chart';
+import { getMinMaxPricesByDecimals } from '@bancor/carbon-sdk/strategy-management';
+import { geoMean } from 'utils/fullOutcome';
 
 export interface StrategyInput {
   buy: { min: string; max: string };
@@ -75,31 +77,63 @@ export const isDisposableStrategy = (strategy: OrdersInput) => {
   return false;
 };
 
-export const isFullRangeStrategy = (buy?: FormOrder, sell?: FormOrder) => {
+/** Get the full range min & max price for a specific pair */
+export const getFullRangesPrices = (
+  currentPrice: string,
+  baseDecimals: number,
+  quoteDecimals: number,
+) => {
+  const { minBuyPrice, maxSellPrice } = getMinMaxPricesByDecimals(
+    baseDecimals,
+    quoteDecimals,
+  );
+  const price = new SafeDecimal(currentPrice);
+  const factor = SafeDecimal.min(
+    price.div(minBuyPrice),
+    new SafeDecimal(maxSellPrice).div(currentPrice),
+    1000,
+  );
+  return {
+    min: price.div(factor).toString(),
+    max: price.mul(factor).toString(),
+  };
+};
+
+export const isFullRangeStrategy = (
+  base: Token,
+  quote: Token,
+  buy?: FormOrder,
+  sell?: FormOrder,
+) => {
   if (!buy || !sell) return false;
   if (isGradientOrder(buy) || isGradientOrder(sell)) return false;
   if (!isOverlappingOrders(buy, sell)) return false;
-  return isFullRange(buy.min, sell.max);
+  return isFullRange(base, quote, buy.min, sell.max);
 };
 
 /** Check if an existing strategy is full range. For create & update use isFullRangeCreation instead to check the marketprice */
-export const isFullRange = (min: string | number, max: string | number) => {
-  const range = new SafeDecimal(max).div(min);
-  // These values are based on the 1000 factor we use to create full range
-  return range.gte(999_000) && range.lte(1_000_100);
-};
-
-export const isFullRangeCreation = (
-  min: string | number,
-  max: string | number,
-  marketPrice?: string | number,
+export const isFullRange = (
+  base: Token,
+  quote: Token,
+  min: string,
+  max: string,
 ) => {
-  if (!marketPrice) return false;
-  const minRatio = new SafeDecimal(marketPrice).div(min);
-  if (minRatio.lt(990) || minRatio.gt(1010)) return false;
-  const maxRatio = new SafeDecimal(max).div(marketPrice);
-  if (maxRatio.lt(990) || maxRatio.gt(1010)) return false;
-  return true;
+  const mean = geoMean(min, max); // current price at creation time
+  if (!mean) return false;
+  const { minBuyPrice, maxSellPrice } = getMinMaxPricesByDecimals(
+    base.decimals,
+    quote.decimals,
+  );
+  const factor = SafeDecimal.min(
+    mean.div(minBuyPrice),
+    new SafeDecimal(maxSellPrice).div(mean),
+    1000,
+  );
+
+  return (
+    new SafeDecimal(min).lte(mean.div(factor).mul(1.01)) &&
+    new SafeDecimal(max).gte(mean.mul(factor).mul(0.99))
+  );
 };
 
 export const getStrategyType = (strategy: OrdersInput) => {
@@ -218,6 +252,8 @@ export const defaultEnd = () => toUnixUTC(default_ED_());
 export const oneYearAgo = () => toUnixUTC(startOfDay(subYears(new Date(), 1)));
 
 export const getBounds = (
+  base: Token,
+  quote: Token,
   buyOrder?: FormOrder,
   sellOrder?: FormOrder,
   direction?: 'none' | 'buy' | 'sell',
@@ -247,7 +283,7 @@ export const getBounds = (
       buy: { min: '', max: '' },
       sell: { min: sell?.min || '', max: sell?.max || '' },
     };
-  } else if (isFullRangeStrategy(buyOrder, sellOrder)) {
+  } else if (isFullRangeStrategy(base, quote, buyOrder, sellOrder)) {
     return {
       buy: { min: '', max: '' },
       sell: { min: '', max: '' },

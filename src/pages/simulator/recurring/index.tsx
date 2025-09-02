@@ -175,6 +175,8 @@ export const SimulatorInputRecurringPage = () => {
         prices={prices}
       >
         <D3ChartRecurring
+          base={state.baseToken!}
+          quote={state.quoteToken!}
           isLimit={isLimit}
           prices={prices}
           onChange={onPriceUpdates}

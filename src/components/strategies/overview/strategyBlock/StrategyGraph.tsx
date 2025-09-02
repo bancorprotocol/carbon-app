@@ -99,7 +99,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
     to: Number(sanitizeNumber(sellOrder.max)),
     marginalPrice: Number(sanitizeNumber(sellOrder.marginalPrice)),
   };
-  const fullRange = isFullRangeStrategy(buyOrder, sellOrder);
+  const fullRange = isFullRangeStrategy(base, quote, buyOrder, sellOrder);
 
   const buyOrderExists = buy.from !== 0 && buy.to !== 0;
   const sellOrderExists = sell.from !== 0 && sell.to !== 0;
@@ -612,6 +612,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
   strategy,
   isBuy,
 }) => {
+  const { quote, base } = strategy;
   const order = isBuy ? strategy.buy : strategy.sell;
   const { min, max } = order;
   const limit = min === max;
@@ -625,7 +626,12 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
     }),
     [smallRange],
   );
-  const fullRange = isFullRangeStrategy(strategy.buy, strategy.sell);
+  const fullRange = isFullRangeStrategy(
+    base,
+    quote,
+    strategy.buy,
+    strategy.sell,
+  );
   const _sP_ = useMemo(() => {
     return fullRange ? '0' : prettifyNumber(min, priceOption);
   }, [fullRange, min, priceOption]);
@@ -636,7 +642,6 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
     () => prettifyNumber(order.marginalPrice, priceOption),
     [order.marginalPrice, priceOption],
   );
-  const { quote, base } = strategy;
   const color = isBuy ? 'text-buy' : 'text-sell';
   return (
     <article

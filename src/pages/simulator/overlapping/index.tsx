@@ -172,6 +172,8 @@ export const SimulatorInputOverlappingPage = () => {
         prices={prices}
       >
         <D3ChartOverlapping
+          base={state.baseToken!}
+          quote={state.quoteToken!}
           prices={prices}
           onChange={onPriceUpdates}
           marketPrice={marketPrice ?? 0}
