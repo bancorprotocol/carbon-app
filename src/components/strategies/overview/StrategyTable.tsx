@@ -116,8 +116,8 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
           />
         </div>
       </td>
-      <td>
-        <StrategyGraph strategy={strategy} className="w-[200px]" />
+      <td className="w-[250px]">
+        <StrategyGraph strategy={strategy} />
       </td>
       <td>
         <div role="menubar" className="flex gap-8">
