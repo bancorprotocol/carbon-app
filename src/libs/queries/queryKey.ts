@@ -34,6 +34,7 @@ export const QueryKey = {
 
   strategy: (id: string) => [...sdk, 'strategy', id],
   strategyList: (ids: string[]) => [...sdk, 'strategy', ...ids],
+  strategyAll: () => [...sdk, 'strategy', 'all'],
   strategiesByUser: (user?: string) => [
     ...sdk,
     'strategies',
@@ -73,6 +74,7 @@ export const QueryKey = {
   missingTokens: (tokens: string[]) => [...chain, 'missing-token', ...tokens],
   token: (token: string) => [...chain, 'token', token],
   pairs: () => [...sdk, 'pairs'],
+  pairTokens: () => [...sdk, 'pairs', 'tokens'],
 
   tradeData: (pair: TokenPair, isTradeBySource: boolean, amount: string) => [
     ...sdk,

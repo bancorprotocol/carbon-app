@@ -59,7 +59,7 @@ export const StrategiesPage = () => {
 
   return (
     <Page hideTitle={true}>
-      <StrategyProvider query={query}>
+      <StrategyProvider url="/portfolio" query={query}>
         <div className="grid gap-20">
           <MyStrategiesHeader />
           <header

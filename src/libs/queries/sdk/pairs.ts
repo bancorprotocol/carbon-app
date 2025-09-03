@@ -10,16 +10,26 @@ import { useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useCarbonInit } from 'hooks/useCarbonInit';
 
+export const useGetAllPairs = () => {
+  return useQuery({
+    queryKey: QueryKey.pairs(),
+    queryFn: () => carbonSDK.getAllPairs(),
+  });
+};
+
 export const useGetTradePairsData = () => {
   const { isInitialized } = useCarbonInit();
   const { Token } = useContract();
   const { tokens, getTokenById, importTokens } = useTokens();
   const [cache] = useState(lsService.getItem('tokenPairsCache'));
 
+  const pairQuery = useGetAllPairs();
+
   return useQuery({
     queryKey: QueryKey.pairs(),
     queryFn: async () => {
-      const pairs = await carbonSDK.getAllPairs();
+      const pairs = pairQuery.data!;
+
       const tokens = new Map<string, Token>();
       const missing = new Set<string>();
 
@@ -72,7 +82,7 @@ export const useGetTradePairsData = () => {
     },
     initialData: cache?.pairs,
     initialDataUpdatedAt: cache?.timestamp,
-    enabled: !!tokens.length && !!isInitialized,
+    enabled: !!tokens.length && !!isInitialized && !!pairQuery.data,
     retry: 1,
     staleTime: ONE_HOUR_IN_MS,
   });

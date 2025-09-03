@@ -7,13 +7,15 @@ import { StrategiesOverviewPage } from 'pages/strategies/overview';
 import { StrategiesPortfolioPage } from 'pages/strategies/portfolio';
 import { StrategiesPortfolioTokenPage } from 'pages/strategies/portfolio/token';
 import { searchValidator, validString } from '../utils';
-import { MyStrategiesSearch } from 'hooks/useStrategies';
 import * as v from 'valibot';
 
 export const myStrategyLayout = createRoute({
   getParentRoute: () => rootRoute,
   path: '/portfolio',
   component: StrategiesPage,
+  validateSearch: searchValidator({
+    search: v.optional(validString),
+  }),
 });
 
 export const strategyOverviewPage = createRoute({
@@ -21,15 +23,8 @@ export const strategyOverviewPage = createRoute({
   path: '/',
   component: StrategiesOverviewPage,
   validateSearch: searchValidator({
-    search: v.optional(validString),
     layout: v.optional(v.picklist(['grid', 'table'])),
   }),
-  postSearchFilters: [
-    (search: MyStrategiesSearch) => {
-      if (!search.search) delete search.search;
-      return search;
-    },
-  ],
 });
 
 export const strategyPortfolioLayout = createRoute({

@@ -13,7 +13,6 @@ import { NotFound } from 'components/common/NotFound';
 
 interface Props {
   strategies?: AnyStrategy[];
-  isPending?: boolean;
   isExplorer?: boolean;
   onRowClick: (address: string) => void;
   getHref: GetPortfolioTokenHref;
@@ -21,14 +20,12 @@ interface Props {
 
 const LocalPortfolioAllTokens = ({
   strategies,
-  isPending: _isPending,
   isExplorer,
   onRowClick,
   getHref,
 }: Props) => {
   const { tableData, totalValue, isPending } = usePortfolioData({
     strategies,
-    isPending: _isPending,
   });
   const { pieChartOptions } = usePortfolioAllTokensPieChart(tableData);
 
@@ -81,6 +78,5 @@ const LocalPortfolioAllTokens = ({
 export const PortfolioAllTokens = memo(
   LocalPortfolioAllTokens,
   (prev, next) =>
-    prev.isPending === next.isPending &&
     JSON.stringify(prev.strategies) === JSON.stringify(next.strategies),
 );

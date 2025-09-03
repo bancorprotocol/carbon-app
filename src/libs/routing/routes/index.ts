@@ -2,14 +2,9 @@ import { debugPage } from 'libs/routing/routes/debug';
 import {
   explorerActivityPage,
   explorerLayout,
-  explorerOverviewPage,
-  explorerPortfolioLayout,
   explorerPortfolioPage,
-  explorerPortfolioTokenPage,
-  explorerRedirect,
-  explorerResultLayout,
-  oldTradePairExplorer,
-  oldWalletExplorer,
+  explorerDistributionPage,
+  explorerDistributionTokenPage,
 } from 'libs/routing/routes/explorer';
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
@@ -75,18 +70,10 @@ export const routeTree = rootRoute.addChildren([
     editBudgetOverlapping,
     editBudgetRecurring,
   ]),
-  oldTradePairExplorer,
-  oldWalletExplorer,
   explorerLayout.addChildren([
-    explorerResultLayout.addChildren([
-      explorerOverviewPage,
-      explorerPortfolioLayout.addChildren([
-        explorerPortfolioPage,
-        explorerPortfolioTokenPage,
-      ]),
-      explorerActivityPage,
-    ]),
-    explorerRedirect,
+    explorerPortfolioPage,
+    explorerDistributionPage.addChildren([explorerDistributionTokenPage]),
+    explorerActivityPage,
   ]),
   myStrategyLayout.addChildren([
     strategyOverviewPage,

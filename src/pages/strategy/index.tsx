@@ -9,7 +9,7 @@ import { Page } from 'components/common/page';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { cn } from 'utils/helpers';
 import { useGetStrategy } from 'libs/queries';
-import { useStrategiesWithFiat } from 'hooks/useStrategies';
+import { useGetEnrichedStrategies } from 'hooks/useStrategies';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import {
@@ -49,8 +49,8 @@ export const StrategyPage = () => {
   });
   const params = { strategyIds: id };
   const query = useGetStrategy(id);
-  const { strategies, isPending } = useStrategiesWithFiat(query);
-  const [strategy] = strategies;
+  const { data, isPending } = useGetEnrichedStrategies(query);
+  const [strategy] = data;
   const { marketPrice } = useMarketPrice({
     base: strategy?.base,
     quote: strategy?.quote,

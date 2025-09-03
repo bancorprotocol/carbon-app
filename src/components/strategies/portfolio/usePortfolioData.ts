@@ -17,13 +17,9 @@ export interface PortfolioData {
 }
 interface Props {
   strategies?: AnyStrategy[];
-  isPending?: boolean;
 }
 
-export const usePortfolioData = ({
-  strategies,
-  isPending: _isPending,
-}: Props) => {
+export const usePortfolioData = ({ strategies }: Props) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
   } = useStore();
@@ -130,8 +126,8 @@ export const usePortfolioData = ({
   }, [selectedFiatCurrency, strategies, tokenPriceMap, totalValue]);
 
   const isPending = useMemo(() => {
-    return _isPending || tokenPriceQueries.some((query) => query.isPending);
-  }, [_isPending, tokenPriceQueries]);
+    return tokenPriceQueries.some((query) => query.isPending);
+  }, [tokenPriceQueries]);
 
   return { tableData, totalValue, isPending };
 };

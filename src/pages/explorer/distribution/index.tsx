@@ -1,34 +1,34 @@
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
-import { useNavigate, useParams } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
+import { useCallback } from 'react';
 
-export const ExplorerTypePortfolioPage = () => {
+const href = '/explore/distribution/token/$address';
+export const ExplorerDistribution = () => {
   const navigate = useNavigate();
-  const { slug } = useParams({ from: '/explore/$slug/portfolio' });
-  const { strategies, isPending } = useStrategyCtx();
-  const href = '/explore/$slug/portfolio/token/$address';
+  const strategies = useStrategyCtx();
 
   const getPortfolioTokenHref: GetPortfolioTokenHref = (row) => ({
     href,
     params: {
-      slug: slug || '',
       address: row.token.address,
     },
   });
-  const onRowClick = (address: string) =>
-    navigate({
-      to: href,
-      params: {
-        slug: slug || '',
-        address,
-      },
-    });
+
+  const onRowClick = useCallback(
+    (address: string) => {
+      navigate({
+        to: href,
+        params: { address },
+      });
+    },
+    [navigate],
+  );
 
   return (
     <PortfolioAllTokens
       strategies={strategies}
-      isPending={isPending}
       getHref={getPortfolioTokenHref}
       onRowClick={onRowClick}
       isExplorer

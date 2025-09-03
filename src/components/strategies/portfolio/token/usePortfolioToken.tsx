@@ -14,17 +14,11 @@ export interface PortfolioTokenData {
 interface Props {
   address: string;
   strategies?: AnyStrategy[];
-  isPending?: boolean;
 }
 
-export const usePortfolioToken = ({
-  address,
-  strategies,
-  isPending: _isPending,
-}: Props) => {
+export const usePortfolioToken = ({ address, strategies }: Props) => {
   const { tableData: sourceData, isPending } = usePortfolioData({
     strategies,
-    isPending: _isPending,
   });
 
   const selectedToken = useMemo(() => {

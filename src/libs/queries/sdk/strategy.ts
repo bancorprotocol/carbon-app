@@ -249,6 +249,28 @@ export const useGetStrategyList = (ids: string[]) => {
   });
 };
 
+export const useGetAllStrategies = () => {
+  const { isInitialized } = useCarbonInit();
+  const { tokens, getTokenById, importTokens } = useTokens();
+  const { Token } = useContract();
+  return useQuery<AnyStrategy[]>({
+    queryKey: QueryKey.strategyAll(),
+    queryFn: async () => {
+      const all = await carbonSDK.getAllStrategiesByPairs();
+      const strategies = all.map((item) => item.strategies).flat();
+      return buildStrategiesHelper({
+        strategies,
+        getTokenById,
+        importTokens,
+        Token,
+      });
+    },
+    enabled: tokens.length > 0 && isInitialized,
+    staleTime: ONE_DAY_IN_MS,
+    retry: false,
+  });
+};
+
 export const useGetStrategy = (id: string) => {
   const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importTokens } = useTokens();
