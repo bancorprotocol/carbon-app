@@ -47,6 +47,7 @@ export const useTradeQuery = () => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
 
       let unsignedTx: PopulatedTransaction;
+      let baseAmount: string;
       if (params.isTradeBySource) {
         unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
           params.sourceAddress,
@@ -55,6 +56,7 @@ export const useTradeQuery = () => {
           calcDeadline(params.deadline),
           calcMinReturn(params.targetInput),
         );
+        baseAmount = params.sourceInput;
       } else {
         unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
           params.sourceAddress,
@@ -63,10 +65,11 @@ export const useTradeQuery = () => {
           calcDeadline(params.deadline),
           calcMaxInput(params.sourceInput),
         );
+        baseAmount = calcMaxInput(params.sourceInput);
       }
       const source = getTokenById(params.sourceAddress);
       const powerDecimal = new SafeDecimal(10).pow(source!.decimals);
-      const amount = new SafeDecimal(params.sourceInput).mul(powerDecimal);
+      const amount = new SafeDecimal(baseAmount).mul(powerDecimal);
       const assets = [
         {
           address: params.sourceAddress,
