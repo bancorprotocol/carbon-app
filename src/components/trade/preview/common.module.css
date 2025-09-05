@@ -12,10 +12,17 @@
   transform-origin: center;
   animation-duration: var(--duration);
   animation-iteration-count: infinite;
+  animation-play-state: paused;
+}
+.graph-wrapper.running svg *,
+.graph-wrapper.running .budget p > span,
+.graph-wrapper.running .trades p > span {
   animation-play-state: running;
 }
 
-a:has(.graph-wrapper):hover svg * {
+a:has(.graph-wrapper):hover svg *,
+a:has(.graph-wrapper):hover .budget p > span,
+a:has(.graph-wrapper):hover .trades p > span {
   animation-play-state: running;
 }
 a:has(.graph-wrapper):hover .budget p > span,
@@ -110,6 +117,8 @@ a:has(.graph-wrapper):hover .trades p > span {
 .graph-wrapper {
   display: grid;
   grid-template-areas: 'stack';
+  grid-auto-flow: column;
+  gap: 24px;
 }
 .graph-wrapper > svg,
 .budget,

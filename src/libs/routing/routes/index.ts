@@ -48,12 +48,18 @@ import {
 import { cartPage } from './cart';
 import { createRoute } from '@tanstack/react-router';
 import { liquidityMatrixPage } from './liquidity-matrix';
-import { TradeList } from 'pages/trade/list';
+import { TradeList } from 'pages/home';
+import { searchValidator } from '../utils';
+import * as v from 'valibot';
 
 const rootRedirect = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: TradeList,
+  validateSearch: searchValidator({
+    type: v.optional(v.picklist(['orders', 'liquidity'])),
+    level: v.optional(v.picklist(['basic', 'advanced', 'professional'])),
+  }),
 });
 
 export const routeTree = rootRoute.addChildren([

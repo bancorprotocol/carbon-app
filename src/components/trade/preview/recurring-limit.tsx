@@ -1,6 +1,6 @@
 import { cn } from 'utils/helpers';
 import { useEffect, useRef } from 'react';
-import common from './preview.module.css';
+import common from './common.module.css';
 
 export const PreviewRecurringLimitStrategy = () => {
   const path = useRef<SVGPathElement>(null);
@@ -17,7 +17,7 @@ export const PreviewRecurringLimitStrategy = () => {
       className={cn(
         common.graphWrapper,
         common.recurringRange,
-        'bg-black-gradient rounded-2xl p-16 shrink-0',
+        'rounded-2xl p-16 shrink-0',
       )}
     >
       <svg viewBox="0 0 1000 1000">

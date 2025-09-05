@@ -1,6 +1,6 @@
 import { cn } from 'utils/helpers';
 import { useEffect, useRef } from 'react';
-import style from './preview.module.css';
+import style from './common.module.css';
 
 export const PreviewRangeStrategy = () => {
   const path = useRef<SVGPathElement>(null);
@@ -14,10 +14,7 @@ export const PreviewRangeStrategy = () => {
   return (
     <div
       ref={root}
-      className={cn(
-        style.graphWrapper,
-        'bg-black-gradient rounded-2xl p-16 shrink-0',
-      )}
+      className={cn(style.graphWrapper, 'rounded-2xl p-16 shrink-0')}
     >
       <svg viewBox="0 0 1000 1000">
         <rect

@@ -1,4 +1,4 @@
-import { FullRange } from './full-range';
+import { FullRangePreview } from './full-range';
 import { LimitBuyPreview } from './limit-buy';
 import { LimitSellPreview } from './limit-sell';
 import { OverlappingPreview } from './overlapping';
@@ -67,7 +67,7 @@ const items = [
       },
       {
         name: 'Full Range',
-        svg: <FullRange />,
+        svg: <FullRangePreview />,
       },
     ],
   },

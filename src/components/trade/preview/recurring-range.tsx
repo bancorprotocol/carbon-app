@@ -1,9 +1,12 @@
 import { cn } from 'utils/helpers';
 import { useEffect, useRef } from 'react';
-import common from './preview.module.css';
+import common from './common.module.css';
 import style from './recurring-range.module.css';
 
-export const PreviewRecurringRangeStrategy = () => {
+interface Props {
+  running?: boolean;
+}
+export const PreviewRecurringRangeStrategy = ({ running }: Props) => {
   const path = useRef<SVGPathElement>(null);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -16,8 +19,9 @@ export const PreviewRecurringRangeStrategy = () => {
     <div
       ref={root}
       className={cn(
+        { [common.running]: running },
         common.graphWrapper,
-        'bg-black-gradient rounded-2xl p-16 shrink-0',
+        'rounded-2xl p-16 shrink-0',
       )}
     >
       <svg viewBox="0 0 1000 1000">
@@ -112,40 +116,28 @@ export const PreviewRecurringRangeStrategy = () => {
         />
       </svg>
 
-      {/* <div className={cn(common.budget, common.recurring)}>
-        <div className={cn(common.price, common.sell, style.budgetSell)}>
-          <p>
-            <span>0</span>
-            <span>100</span>
-            <span>200</span>
-            <span>300</span>
-            <span>400</span>
-            <span>500</span>
-            <span>600</span>
-            <span>700</span>
-            <span>800</span>
-            <span>900</span>
-            <span>1000</span>
-          </p>
-          <p>
-            <span>1000</span>
-            <span>900</span>
-            <span>800</span>
-            <span>700</span>
-            <span>600</span>
-            <span>500</span>
-            <span>400</span>
-            <span>300</span>
-            <span>200</span>
-          </p>
-          <span className={common.token}>USDC</span>
+      <aside className={style.budget}>
+        <div className={style.initialSell}></div>
+        <div className={style.initialBuy}>↓ 3000 USDC</div>
+
+        <div className={style.currentSell}>
+          <div
+            style={{ transform: 'scaleY(0.3)' }}
+            className={style.range}
+          ></div>
+          <span className="text-16">0.3 ETH</span>
+        </div>
+        <div className={style.currentBuy}>
+          <div
+            style={{ transform: 'scaleY(0.7)' }}
+            className={style.range}
+          ></div>
+          <span className="text-16">1000 USDC</span>
         </div>
 
-        <div className={cn(common.price, common.buy, style.budgetBuy)}>
-
-          <span className={common.token}>ETH</span>
-        </div>
-      </div> */}
+        <div className={style.finalSell}>1 ETH</div>
+        <div className={style.finalBuy}>1300 USDC</div>
+      </aside>
     </div>
   );
 };

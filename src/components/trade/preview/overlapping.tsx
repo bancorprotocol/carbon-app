@@ -1,6 +1,6 @@
 import { cn } from 'utils/helpers';
 import { useEffect, useRef } from 'react';
-import style from './preview.module.css';
+import style from './common.module.css';
 
 export const PreviewOverlappingStrategy = () => {
   const path = useRef<SVGPathElement>(null);
@@ -17,7 +17,7 @@ export const PreviewOverlappingStrategy = () => {
       className={cn(
         style.graphWrapper,
         style.overlapping,
-        'bg-black-gradient rounded-2xl p-16 shrink-0',
+        'rounded-2xl p-16 shrink-0',
       )}
     >
       <svg viewBox="0 0 1000 1000">

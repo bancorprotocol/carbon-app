@@ -22,7 +22,7 @@
   --color-sell: oklch(0.70 0.2 var(--sell-hue)); /* #D86371 */
   --color-sell-dark: oklch(0.70 0.28 var(--sell-hue));
   --color-buy: oklch(0.80 0.2 var(--buy-hue)); /* #00B578 */
-  --color-buy-dark: oklch(0.70 0.2 var(--buy-hue));
+  --color-buy-dark: oklch(0.60 0.3 var(--buy-hue));
   --color-success: oklch(0.70 0.2 160); /* #00B578 */
   --color-warning: oklch(0.747 0.2 57.36); /* #ff8a00 */
 

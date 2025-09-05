@@ -1,24 +1,27 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
 import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
-import { PreviewRecurringLimitStrategy } from 'components/trade/preview/recurring-limit';
-import { PreviewLimitStrategy } from 'components/trade/preview/limit';
-import { PreviewOverlappingStrategy } from 'components/trade/preview/overlapping';
 import { PreviewFullRangeStrategy } from 'components/trade/preview/full-range';
-import { AllPreview } from 'components/trade/preview/all/all';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { PreviewRecurringRangeStrategy } from 'components/trade/preview/recurring-range';
-import { PreviewRangeStrategy } from 'components/trade/preview/range';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { Button } from 'components/common/button';
-import style from './list.module.css';
+import style from './index.module.css';
+import { OverlappingPreview } from 'components/trade/preview/all/overlapping';
+import { FullRangePreview } from 'components/trade/preview/all/full-range';
+import { LimitSellPreview } from 'components/trade/preview/all/limit-sell';
+import { RecurringLimitLimitPreview } from 'components/trade/preview/all/recurring-limit-limit';
+import { RangeSellPreview } from 'components/trade/preview/all/range-sell';
+import { RecurringRangeRangePreview } from 'components/trade/preview/all/recurring-range-range';
+import { AllPreview } from 'components/trade/preview/all/all';
 
 const sections = [
   {
     title: 'Basic',
+    id: 'basic' as const,
     items: [
       {
         to: '/trade/market',
@@ -37,7 +40,7 @@ const sections = [
         icon: <IconOverlapping className="size-24" />,
         title: 'Liquidity Position',
         search: {},
-        preview: <PreviewOverlappingStrategy />,
+        preview: <OverlappingPreview />,
         targets: ['Liquidity Providers', 'Token Projects'],
       },
       {
@@ -45,20 +48,21 @@ const sections = [
         icon: <IconOverlapping className="size-24" />,
         title: 'Full Range',
         search: {},
-        preview: <PreviewFullRangeStrategy />,
+        preview: <FullRangePreview />,
         targets: ['Liquidity Providers', 'Token Projects'],
       },
     ],
   },
   {
     title: 'Advanced',
+    id: 'advanced' as const,
     items: [
       {
         to: '/trade/disposable',
         search: {},
         icon: <IconDisposable className="size-24" />,
         title: 'Limit',
-        preview: <PreviewLimitStrategy />,
+        preview: <LimitSellPreview />,
         targets: ['Traders', 'Institutions'],
       },
       {
@@ -66,7 +70,7 @@ const sections = [
         search: {},
         icon: <IconRecurring className="size-24" />,
         title: 'Recurring Limit',
-        preview: <PreviewRecurringLimitStrategy />,
+        preview: <RecurringLimitLimitPreview />,
         targets: ['Stablecoin Projects', 'Advance Traders'],
       },
     ],
@@ -74,13 +78,14 @@ const sections = [
 
   {
     title: 'Professional',
+    id: 'professional' as const,
     items: [
       {
         to: '/trade/disposable',
         search: { settings: 'range' as const },
         icon: <IconDisposable className="size-24" />,
         title: 'Range',
-        preview: <PreviewRangeStrategy />,
+        preview: <RangeSellPreview />,
         targets: ['Traders', 'Institutions'],
       },
       {
@@ -91,7 +96,7 @@ const sections = [
         },
         icon: <IconRecurring className="size-24" />,
         title: 'Recurring Range',
-        preview: <PreviewRecurringRangeStrategy />,
+        preview: <RecurringRangeRangePreview />,
         targets: ['Stablecoin Projects', 'Advance Traders'],
       },
     ],
@@ -99,23 +104,51 @@ const sections = [
 ];
 
 export const TradeList = () => {
-  const [type, setType] = useState('recurring');
+  const { type = 'orders', level = 'basic' } = useSearch({ from: '/' });
+  const navigate = useNavigate({ from: '/' });
+  const setType = (type: 'orders' | 'liquidity') => {
+    navigate({ search: { type }, replace: true, resetScroll: false });
+  };
+  const setLevel = (level: 'basic' | 'advanced' | 'professional') => {
+    navigate({ search: { level }, replace: true, resetScroll: false });
+  };
+  useEffect(() => {
+    const root = document.getElementById('root')!;
+    root.classList.add('hide-bg');
+    let top = true;
+    const handler = () => {
+      if (top !== window.scrollY < 100) {
+        top = window.scrollY < 100;
+        if (window.scrollY > 100) {
+          root.classList.remove('hide-bg');
+        } else {
+          root.classList.add('hide-bg');
+        }
+      }
+    };
+    document.addEventListener('scroll', handler);
+    return () => {
+      root.classList.remove('hide-bg');
+      document.removeEventListener('scroll', handler);
+    };
+  }, []);
+
   return (
-    <div className="grid gap-200">
+    <div className="grid gap-100">
       <PreviewCommonStrategyType />
       <div className={style.main}>
         <section className={style.mainChart}>
           <header className="flex items-center justify-between">
             <RadioGroup className="text-20">
               <Radio
-                checked={type === 'recurring'}
-                onChange={() => setType('recurring')}
+                checked={type === 'orders'}
+                onChange={() => setType('orders')}
               >
                 Orders
               </Radio>
               <Radio
-                checked={type === 'full-range'}
-                onChange={() => setType('full-range')}
+                checked={type === 'liquidity'}
+                onChange={() => setType('liquidity')}
               >
                 Liquidity
               </Radio>
@@ -132,21 +165,43 @@ export const TradeList = () => {
               </svg>
             </Button>
           </header>
-          <div className="self-start w-[500px] h-[500px] me-[300px]">
-            {type === 'recurring' && <PreviewRecurringRangeStrategy />}
-            {type === 'full-range' && <PreviewFullRangeStrategy />}
-          </div>
-          <p className="text-18">
-            <b className="text-buy">Buy</b> low,{' '}
-            <b className="text-sell">Sell</b> High, earn{' '}
-            <b className="text-gradient">more</b> with CarbonDefi
-          </p>
+          {type === 'orders' && (
+            <>
+              <div className="h-[500px]">
+                <PreviewRecurringRangeStrategy running />
+              </div>
+              <p className="text-18">
+                <b className="text-buy">Buy</b> low,{' '}
+                <b className="text-sell">Sell</b> High, earn{' '}
+                <b className="text-gradient">more</b> with CarbonDefi
+              </p>
+            </>
+          )}
+          {type === 'liquidity' && (
+            <>
+              <div className="h-[500px]">
+                <PreviewFullRangeStrategy running />
+              </div>
+              <p className="text-18">Ensure Liquidity for your community</p>
+            </>
+          )}
         </section>
       </div>
-      <div className="grid gap-120">
+      <div className="grid gap-40 max-w-[1920px] mx-auto">
+        <RadioGroup className="place-self-center text-20 p-8 gap-24">
+          {sections.map(({ id, title }) => (
+            <Radio
+              key={id}
+              checked={level === id}
+              onChange={() => setLevel(id)}
+              className="py-12 px-24"
+            >
+              {title}
+            </Radio>
+          ))}
+        </RadioGroup>
         {sections.map((section, i) => (
-          <section key={i} className={style.section}>
-            <h2>{section.title}</h2>
+          <section key={i} hidden={section.id !== level}>
             <nav className="grid grid-cols-3 gap-16">
               {section.items.map((item, i) => (
                 <Link
@@ -179,7 +234,7 @@ export const TradeList = () => {
           </section>
         ))}
       </div>
-      <section className="grid gap-32">
+      <section className="grid gap-32 max-w-[1920px] mx-auto mt-[150px]">
         <h2 className="text-center">Discover All strategies</h2>
         <AllPreview />
       </section>

@@ -62,6 +62,10 @@
     @apply text-white font-text min-h-screen;
   }
 
+  #root {
+    position: relative;
+  }
+
   #root::before {
     content: '';
     position: fixed;
@@ -69,14 +73,28 @@
     top: -25dvh;
     left: -25dvw;
     width: 125dvw;
-    height: 125dvh;
+    height: 125dvh; 
     background-image: radial-gradient(100% 100% at 0% 0%, rgba(102, 255, 173, 0.4) 0%, rgba(16, 187, 213, 0.2) 47.3958%, rgb(0, 0, 0) 100%);
     animation: move-gradient 30s infinite alternate;
+    transition: opacity 0.5s ease-in-out;
+  }
+  #root::after {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    inset-inline: 0;
+    height: 100%;
+    background-image: url("/pattern/lines.svg");
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  #root.hide-bg::before {
+    opacity: 0;
   }
 
   @keyframes move-gradient {
     from {
-      transform: translate(0, 0)
+      transform: translate(0, 0);
     }
     to {
       transform: translate(25dvw, 25dvh)

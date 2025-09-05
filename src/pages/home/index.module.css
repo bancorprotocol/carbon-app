@@ -1,25 +1,39 @@
+@reference "../../theme.css";
+
 .main {
   display: grid;
   place-items: center;
   height: 80dvh;
   position: relative;
+  overflow-x: clip;
 }
 .main::before {
   content: "";
   position: absolute;
-  border-right: solid 1px oklch(90% var(--chroma) var(--hue) / 0.5);
-  height: 100dvh;
-  top: 80%;
-  left: 50%;
+  pointer-events: none;
+  inset: 0;
   z-index: -1;
+  background-image: radial-gradient(circle closest-side at center, rgba(102, 255, 173, 0.4) 0%, rgba(16, 187, 213, 0.2) 60%, transparent 100%);
+  animation: scale-radial 5s infinite alternate;
 }
+
+@keyframes scale-radial {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(2);
+  }
+}
+
 .main-chart {
   display: grid;
   gap: 24px;
   border: solid 1px oklch(90% var(--chroma) var(--hue) / 0.5);
   padding: 24px;
   border-radius: 24px;
-  background: url('/pattern/circle.svg');
+  @apply bg-black-gradient;
+  position: relative;
 }
 .main-chart p {
   text-align: end;

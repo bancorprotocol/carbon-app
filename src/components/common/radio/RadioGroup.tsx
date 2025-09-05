@@ -51,8 +51,8 @@ export const Radio: FC<RadioProps> = (props) => {
         htmlFor={id}
         data-testid={props['data-testid']}
         className={cn(
-          props.className,
           'rounded-full font-medium cursor-pointer px-10 py-4 text-white/60 hover:text-white/80',
+          props.className,
         )}
       >
         {props.children}
