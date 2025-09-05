@@ -1,3 +1,4 @@
+import { isAddress } from 'ethers';
 import { useGetTradePairsData } from 'libs/queries';
 import { useCallback, useMemo } from 'react';
 import { createPairMaps } from 'utils/pairSearch';
@@ -20,10 +21,12 @@ export const usePairs = () => {
 
   const getType = useCallback(
     (slug: string) => {
+      if (!slug) return 'full';
       if (maps.pairMap.has(slug)) return 'pair';
       if (slug.split('_').length === 2) return 'pair';
       if (tokens.has(slug)) return 'token';
-      return 'wallet';
+      if (isAddress(slug)) return 'wallet';
+      return 'full';
     },
     [maps.pairMap, tokens],
   );

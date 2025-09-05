@@ -4,7 +4,6 @@ import {
 } from 'components/strategies/StrategyPageTabs';
 import { useWagmi } from 'libs/wagmi';
 import { WalletConnect } from 'components/common/walletConnect';
-import { StrategySearch } from 'components/strategies/overview/StrategySearch';
 import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
@@ -13,8 +12,6 @@ import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
 import { StrategyProvider } from 'hooks/useStrategies';
-import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
-import { StrategySelectLayout } from 'components/strategies/StrategySelectLayout';
 import { MyStrategiesHeader } from 'components/strategies/MyStrategiesHeader';
 
 export const StrategiesPage = () => {
@@ -62,19 +59,7 @@ export const StrategiesPage = () => {
       <StrategyProvider url="/portfolio" query={query}>
         <div className="grid gap-20">
           <MyStrategiesHeader />
-          <header
-            role="toolbar"
-            className="mb-20 flex flex-col flex-wrap gap-20 md:flex-row md:items-center"
-          >
-            <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-            {showFilter && (
-              <>
-                <StrategySearch />
-                <StrategyFilterSort />
-                <StrategySelectLayout from="myStrategy" />
-              </>
-            )}
-          </header>
+          <StrategyPageTabs />
           {/* Hidden tag to target in E2E */}
           {query.isFetching && (
             <div

@@ -1,4 +1,4 @@
-import { useRouterState, useMatchRoute, useParams } from 'libs/routing';
+import { useRouterState, useMatchRoute, useSearch } from 'libs/routing';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -11,8 +11,8 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { StrategySelectLayout } from 'components/strategies/StrategySelectLayout';
 
 export const ExplorerTabs = () => {
-  const { filteredStrategies } = useStrategyCtx();
-  const { slug } = useParams({ from: '/explore/$slug' });
+  const strategies = useStrategyCtx();
+  const { search } = useSearch({ from: '/explore' });
 
   // To support emojis in ens domains
   const { location } = useRouterState();
@@ -21,35 +21,34 @@ export const ExplorerTabs = () => {
   const match = useMatchRoute();
 
   const isOverview = !!match({
-    to: '/explore/$slug',
-    params: { slug },
+    to: '/explore',
   });
 
   const tabs: StrategyTab[] = [
     {
       label: 'Strategies',
-      href: '/explore/$slug',
-      params: { slug },
+      href: '/explore',
+      search: { search },
       icon: <IconOverview className="size-18" />,
-      badge: filteredStrategies?.length || 0,
+      badge: strategies?.length || 0,
     },
     {
       label: 'Distribution',
-      href: '/explore/$slug/portfolio',
-      params: { slug },
+      href: '/explore/strategies',
+      search: { search },
       icon: <IconPieChart className="size-18" />,
     },
     {
       label: 'Activity',
-      href: '/explore/$slug/activity',
-      params: { slug },
+      href: '/explore/activity',
+      search: { search },
       icon: <IconActivity className="size-18" />,
     },
   ];
 
   return (
     <div className="flex flex-col flex-wrap justify-between gap-16 md:flex-row md:items-center">
-      <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
+      <StrategyPageTabs />
       {isOverview && <StrategyFilterSort />}
       {isOverview && <StrategySelectLayout from="explorer" />}
     </div>

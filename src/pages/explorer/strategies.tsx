@@ -1,5 +1,5 @@
 import { StrategyContent } from 'components/strategies/overview/StrategyContent';
 
-export const StrategiesOverviewPage = () => {
+export const ExplorerStrategies = () => {
   return <StrategyContent />;
 };

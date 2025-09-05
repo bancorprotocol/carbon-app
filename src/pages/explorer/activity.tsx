@@ -17,7 +17,7 @@ export const ExplorerActivityPage = () => {
       params.token1 = quote;
     } else if (type === 'token') {
       params.token0 = search;
-    } else {
+    } else if (type === 'wallet') {
       params.ownerId = search;
     }
     return params;

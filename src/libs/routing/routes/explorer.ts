@@ -1,8 +1,8 @@
-import { createRoute } from '@tanstack/react-router';
+import { createRoute, redirect } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
 import { ExplorerPage } from 'pages/explorer/root';
 import { ExplorerActivityPage } from 'pages/explorer/activity';
-import { ExplorerPortfolio } from 'pages/explorer/portfolio';
+import { ExplorerStrategies } from 'pages/explorer/strategies';
 import { ExplorerDistribution } from 'pages/explorer/distribution';
 import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/distribution/token';
 import { validateActivityParams } from 'components/activity/utils';
@@ -30,12 +30,23 @@ export const explorerLayout = createRoute({
   validateSearch: searchValidator({
     search: v.optional(v.string()),
   }),
+  beforeLoad: ({ location }) => {
+    const ends = ['/explore', '/explore/'];
+    for (const end of ends) {
+      if (location.pathname.endsWith(end)) {
+        throw redirect({
+          to: '/explore/strategies',
+          replace: true,
+        } as any);
+      }
+    }
+  },
 });
 
 export const explorerPortfolioPage = createRoute({
   getParentRoute: () => explorerLayout,
-  path: 'portfolio',
-  component: ExplorerPortfolio,
+  path: 'strategies',
+  component: ExplorerStrategies,
   validateSearch: searchValidator({
     layout: v.optional(v.picklist(['grid', 'table'])),
   }),

@@ -94,3 +94,22 @@
     var(--color-tertiary)
   );
 }
+@utility  text-gradient {
+  background-image: linear-gradient(
+    to top,
+    var(--color-primary),
+    var(--color-secondary),
+    var(--color-tertiary)
+  );
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+@utility  fill-gradient {
+  fill: url("#svg-brand-gradient");
+}
+@utility  stroke-gradient {
+  stroke: url("#svg-brand-gradient");
+}
+
+@custom-variant aria-page (&[aria-current="page"]);
+@custom-variant aria-location (&[aria-current="location"]);

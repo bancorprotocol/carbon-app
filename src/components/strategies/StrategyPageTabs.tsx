@@ -1,51 +1,62 @@
-import { Link, Pathnames, PathParams, useMatchRoute } from 'libs/routing';
+import { Link, Pathnames, useMatchRoute, useRouterState } from 'libs/routing';
 import { ReactNode } from 'react';
-import { cn } from 'utils/helpers';
+import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
+import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
+import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
 
 export interface StrategyTab {
   label: string;
   href: Pathnames;
-  params?: PathParams;
+  search?: { search?: string };
   icon: ReactNode;
   badge?: number;
 }
 
-interface Props {
-  tabs: StrategyTab[];
-  currentPathname: string;
-}
+const tabs: StrategyTab[] = [
+  {
+    label: 'Strategies',
+    href: '/explore/strategies',
+    icon: <IconOverview className="size-24 group-aria-page:stroke-gradient" />,
+  },
+  {
+    label: 'Distribution',
+    href: '/explore/distribution',
+    icon: <IconPieChart className="size-24 group-aria-page:stroke-gradient" />,
+  },
+  {
+    label: 'Activity',
+    href: '/explore/activity',
+    icon: <IconActivity className="size-24 group-aria-page:stroke-gradient" />,
+  },
+];
 
-export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
+export const StrategyPageTabs = () => {
+  // To support emojis in ens domains
+  const { location } = useRouterState();
+  const pathname = decodeURIComponent(location.pathname);
   const match = useMatchRoute();
   return (
     <nav
       aria-label="Strategy Panels"
-      className="border-background-900 text-14 mr-auto flex w-full gap-2 rounded-full border-2 p-6 md:w-auto"
+      className="border-background-900 text-20 mr-auto flex w-full gap-16 rounded-full border-2 p-6 md:w-auto"
     >
-      {tabs.map(({ label, href, params, icon, badge }) => {
+      {tabs.map(({ label, href, search, icon, badge }) => {
         const active = match({
           to: href,
-          search: {},
-          params: params,
-          fuzzy:
-            currentPathname.includes('/token/') && href.includes('portfolio'),
+          search,
+          fuzzy: pathname.includes('/token/') && href.includes('portfolio'),
         });
 
         return (
           <Link
             to={href}
-            params={params}
+            search={(s) => s}
             key={href}
-            className={cn(
-              'flex w-full items-center justify-center gap-4 rounded-full py-5 md:px-10',
-              active
-                ? 'bg-white/10'
-                : 'bg-transparent text-white/60 hover:text-white/80',
-            )}
-            aria-current={active ? 'location' : 'false'}
+            className="group font-title font-bold leading-none bg-transparent text-white/60 hover:bg-background-900 flex gap-8 w-full items-center justify-center rounded-full px-16 py-8 aria-page:bg-background-800"
+            aria-current={active ? 'page' : 'false'}
           >
             {icon}
-            <span>{label}</span>
+            <span className="group-aria-page:text-gradient">{label}</span>
             {typeof badge === 'number' && (
               <span className="size-18 text-10 grid place-items-center rounded-full bg-white/10">
                 {badge}

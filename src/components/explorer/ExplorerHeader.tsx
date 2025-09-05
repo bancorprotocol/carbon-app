@@ -1,7 +1,6 @@
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useTokens } from 'hooks/useTokens';
-import { useGetMissingTokens } from 'libs/queries/chain/token';
 import {
   PairTrade,
   Trending,
@@ -65,11 +64,6 @@ const useTrendStrategies = (trending?: Trending) => {
       .splice(0, 3 - list.length);
     list.push(...remaining);
   }
-
-  const tokens = list.map((item) => [item.token0, item.token1]).flat();
-  const { isLoading } = useGetMissingTokens(tokens);
-
-  if (isLoading) return { isLoading, data: [] };
 
   return {
     isLoading: false,
@@ -136,9 +130,9 @@ export const ExplorerHeader = () => {
               <tr key={pairAddress}>
                 <td>
                   <Link
-                    to="/explore/$slug"
-                    params={{
-                      slug: toPairSlug(base, quote),
+                    to="/explore"
+                    search={{
+                      search: toPairSlug(base, quote),
                     }}
                     className="block w-full"
                   >
@@ -152,9 +146,9 @@ export const ExplorerHeader = () => {
                 </td>
                 <td className="py-8 text-end">
                   <Link
-                    to="/explore/$slug"
-                    params={{
-                      slug: toPairSlug(base, quote),
+                    to="/explore"
+                    search={{
+                      search: toPairSlug(base, quote),
                     }}
                     className="block w-full"
                   >

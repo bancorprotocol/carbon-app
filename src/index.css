@@ -159,17 +159,6 @@
   details[open] .toggle {
     transform: rotate(-180deg);
   }
-
-  .text-gradient {
-    background-image: linear-gradient(
-      to top,
-      var(--color-primary),
-      var(--color-secondary),
-      var(--color-tertiary)
-    );
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
   .border-gradient {
     position: relative;
     isolation: isolate;

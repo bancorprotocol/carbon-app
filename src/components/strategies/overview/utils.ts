@@ -3,11 +3,56 @@ import {
   AnyStrategy,
   AnyStrategyWithFiat,
 } from 'components/strategies/common/types';
-import {
-  StrategySort,
-  strategyFilter,
-  strategySort,
-} from './StrategyFilterSort';
+import { lsService } from 'services/localeStorage';
+
+export const strategyFilter = {
+  status: {
+    all: 'All',
+    active: 'Active',
+    inactive: 'Inactive',
+  },
+  // @todo(gradient)
+  // type: {
+  //   all: 'All',
+  //   static: 'Static',
+  //   gradient: 'Gradient',
+  // },
+};
+export type FilterStatus = keyof (typeof strategyFilter)['status'];
+// export type FilterType = keyof (typeof strategyFilter)['type'];
+export type AllFilter = FilterStatus; // | FilterType;
+export type StrategyFilter = {
+  status: FilterStatus;
+  // type: FilterType;
+};
+
+export const strategySort = {
+  recent: 'Recently Created',
+  old: 'Oldest Created',
+  pairAsc: 'Pair (A->Z)',
+  pairDesc: 'Pair (Z->A)',
+  totalBudgetDesc: 'Total Budget',
+  trades: 'Trades',
+};
+
+export type StrategySort = keyof typeof strategySort;
+
+export const getSortFromLS = (): StrategySort => {
+  const sort = lsService.getItem('strategyOverviewSort');
+  if (!sort || !(sort in strategySort)) return 'trades';
+  return sort;
+};
+
+export const getFilterFromLS = (): StrategyFilter => {
+  const filter = lsService.getItem('strategyOverviewFilter');
+  if (typeof filter !== 'object') {
+    return {
+      status: 'all',
+      // type: 'all',
+    };
+  }
+  return filter;
+};
 
 /** There are multiple inactive status, so we cannot just do a.status !== b.status */
 const differentStatus = (a: AnyStrategy, b: AnyStrategy) => {
@@ -52,13 +97,4 @@ const sortFn: Record<StrategySort, SortFn> = {
 
 export const getCompareFunctionBySortType = (sortType: StrategySort) => {
   return sortFn[sortType] ?? sortFn['trades'];
-};
-export const getSortAndFilterItems = () => {
-  const sortItems = Object.entries(strategySort)
-    .filter(([, title]) => !!title)
-    .map(([item, title]) => {
-      return { item: item as StrategySort, title };
-    });
-
-  return { sortItems, filterItems: strategyFilter };
 };

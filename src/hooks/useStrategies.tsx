@@ -103,6 +103,7 @@ export const useGetEnrichedStrategies = (
   const isPending = useMemo(() => {
     if (allStrategies.isPending) return true;
     if (trending.isPending) return true;
+    if (!allPrices.length) return true;
     return allPrices.some((query) => query.isPending);
   }, [allPrices, allStrategies.isPending, trending.isPending]);
 

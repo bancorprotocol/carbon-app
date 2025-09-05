@@ -71,7 +71,7 @@ export const QueryKey = {
 
   voucherOwner: (id?: string) => [...chain, 'voucherOwner', id],
 
-  missingTokens: (tokens: string[]) => [...chain, 'missing-token', ...tokens],
+  missingTokens: () => [...chain, 'missing-token'],
   token: (token: string) => [...chain, 'token', token],
   pairs: () => [...sdk, 'pairs'],
   pairTokens: () => [...sdk, 'pairs', 'tokens'],

@@ -34,14 +34,13 @@ export const useModalTokenList = ({ id, data }: Props) => {
   const {
     tokens,
     isPending,
-    isError,
-    error,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
     tokensMap,
     importTokens,
     getTokenById,
+    isError,
   } = useTokens();
   const {
     onClick,
@@ -198,7 +197,6 @@ export const useModalTokenList = ({ id, data }: Props) => {
     onSelect,
     isPending,
     isError,
-    error,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens: _favoriteTokens,

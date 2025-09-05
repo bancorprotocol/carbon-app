@@ -1,27 +1,15 @@
-import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { ReactComponent as IconGrid } from 'assets/icons/grid.svg';
 import { ReactComponent as IconTable } from 'assets/icons/table.svg';
-import { FC } from 'react';
-import { lsService } from 'services/localeStorage';
+import { Dispatch, FC, SetStateAction } from 'react';
 
 export type StrategyLayout = 'grid' | 'table';
 
-const urls = {
-  explorer: '/explore/$slug/' as const,
-  myStrategy: '/portfolio/' as const,
-};
 interface Props {
-  from: keyof typeof urls;
+  layout: StrategyLayout;
+  setLayout: Dispatch<SetStateAction<StrategyLayout>>;
 }
-export const StrategySelectLayout: FC<Props> = ({ from }) => {
-  const config = { from: urls[from] };
-  const { layout = lsService.getItem('strategyLayout') } = useSearch(config);
-  const nav = useNavigate(config);
-  const set = (layout: StrategyLayout) => {
-    lsService.setItem('strategyLayout', layout);
-    nav({ search: (s) => ({ ...s, layout }) });
-  };
+export const StrategySelectLayout: FC<Props> = ({ layout, setLayout }) => {
   return (
     <RadioGroup
       aria-label="Select strategy list layout"
@@ -30,7 +18,7 @@ export const StrategySelectLayout: FC<Props> = ({ from }) => {
       <Radio
         name="layout"
         checked={layout !== 'table'}
-        onChange={() => set('grid')}
+        onChange={() => setLayout('grid')}
         aria-label="List"
       >
         <IconGrid className="size-20" />
@@ -38,7 +26,7 @@ export const StrategySelectLayout: FC<Props> = ({ from }) => {
       <Radio
         name="layout"
         checked={layout === 'table'}
-        onChange={() => set('table')}
+        onChange={() => setLayout('table')}
         aria-label="Table"
       >
         <IconTable className="size-20" />

@@ -26,7 +26,7 @@ export const useGetTradePairsData = () => {
   const pairQuery = useGetAllPairs();
 
   return useQuery({
-    queryKey: QueryKey.pairs(),
+    queryKey: QueryKey.pairTokens(),
     queryFn: async () => {
       const pairs = pairQuery.data!;
 
