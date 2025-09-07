@@ -3,9 +3,8 @@
 .main {
   display: grid;
   place-items: center;
-  height: 80dvh;
+  min-height: 60dvh;
   position: relative;
-  overflow-x: clip;
 }
 .main::before {
   content: "";
@@ -13,16 +12,20 @@
   pointer-events: none;
   inset: 0;
   z-index: -1;
-  background-image: radial-gradient(circle closest-side at center, rgba(102, 255, 173, 0.4) 0%, rgba(16, 187, 213, 0.2) 60%, transparent 100%);
+  background-image: radial-gradient(circle at center, rgba(102, 255, 173, 0.4) 0%, rgba(16, 187, 213, 0.2) 25%, transparent 55%);
   animation: scale-radial 5s infinite alternate;
+  transition: opacity 0.2s var(--ease-out);
+}
+.main[data-hidden="true"]::before {
+  opacity: 0;
 }
 
 @keyframes scale-radial {
   from {
-    transform: scale(1);
+    transform: scale(2);
   }
   to {
-    transform: scale(2);
+    transform: scale(3);
   }
 }
 

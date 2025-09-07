@@ -6,7 +6,7 @@ import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { PreviewFullRangeStrategy } from 'components/trade/preview/full-range';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { PreviewRecurringRangeStrategy } from 'components/trade/preview/recurring-range';
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { Button } from 'components/common/button';
 import style from './index.module.css';
@@ -104,6 +104,7 @@ const sections = [
 ];
 
 export const TradeList = () => {
+  const widgetId = useId();
   const { type = 'orders', level = 'basic' } = useSearch({ from: '/' });
   const navigate = useNavigate({ from: '/' });
   const setType = (type: 'orders' | 'liquidity') => {
@@ -114,6 +115,7 @@ export const TradeList = () => {
   };
   useEffect(() => {
     const root = document.getElementById('root')!;
+    const widget = document.getElementById(widgetId)!;
     root.classList.add('hide-bg');
     let top = true;
     const handler = () => {
@@ -121,8 +123,10 @@ export const TradeList = () => {
         top = window.scrollY < 100;
         if (window.scrollY > 100) {
           root.classList.remove('hide-bg');
+          widget.dataset.hidden = 'true';
         } else {
           root.classList.add('hide-bg');
+          widget.dataset.hidden = 'false';
         }
       }
     };
@@ -131,12 +135,22 @@ export const TradeList = () => {
       root.classList.remove('hide-bg');
       document.removeEventListener('scroll', handler);
     };
-  }, []);
+  }, [widgetId]);
 
   return (
-    <div className="grid gap-100">
+    <div className="grid gap-80 py-80 overflow-x-clip">
+      <hgroup className="grid gap-8 place-self-center">
+        <h1 className="flex items-center justify-center">
+          <span className="text-[60px]">CARBON</span>
+          <span className="text-24 text-gradient writing-sideways">DEFI</span>
+        </h1>
+        <p className="text-18">
+          The future of <span className="text-gradient">DEFI</span> is already
+          here
+        </p>
+      </hgroup>
       <PreviewCommonStrategyType />
-      <div className={style.main}>
+      <div id={widgetId} className={style.main}>
         <section className={style.mainChart}>
           <header className="flex items-center justify-between">
             <RadioGroup className="text-20">
