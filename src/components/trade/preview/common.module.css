@@ -117,7 +117,6 @@ a:has(.graph-wrapper):hover .trades p > span {
 .graph-wrapper {
   display: grid;
   grid-template-areas: 'stack';
-  grid-auto-flow: column;
   gap: 24px;
 }
 .graph-wrapper > svg,

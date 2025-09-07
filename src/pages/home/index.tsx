@@ -29,7 +29,7 @@ const sections = [
         title: 'Swap',
         search: {},
         preview: (
-          <div className="size-[300px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
+          <div className="size-[250px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
             Something here later
           </div>
         ),
@@ -181,9 +181,10 @@ export const TradeList = () => {
           </header>
           {type === 'orders' && (
             <>
-              <div className="h-[500px]">
-                <PreviewRecurringRangeStrategy running />
-              </div>
+              <PreviewRecurringRangeStrategy
+                running
+                className="grid-flow-row md:grid-flow-col h-[250px] lg:h-[300px] xl:h-[500px]"
+              />
               <p className="text-18">
                 <b className="text-buy">Buy</b> low,{' '}
                 <b className="text-sell">Sell</b> High, earn{' '}
@@ -193,15 +194,16 @@ export const TradeList = () => {
           )}
           {type === 'liquidity' && (
             <>
-              <div className="h-[500px]">
-                <PreviewFullRangeStrategy running />
-              </div>
+              <PreviewFullRangeStrategy
+                running
+                className="grid-flow-row md:grid-flow-col h-[250px] lg:h-[300px] xl:h-[500px]"
+              />
               <p className="text-18">Ensure Liquidity for your community</p>
             </>
           )}
         </section>
       </div>
-      <div className="grid gap-40 max-w-[1920px] mx-auto">
+      <div className="grid gap-40 max-w-[1920px] w-full">
         <RadioGroup className="place-self-center text-20 p-8 gap-24">
           {sections.map(({ id, title }) => (
             <Radio
@@ -216,7 +218,7 @@ export const TradeList = () => {
         </RadioGroup>
         {sections.map((section, i) => (
           <section key={i} hidden={section.id !== level}>
-            <nav className="grid grid-cols-3 gap-16">
+            <nav className="flex flex-wrap place-self-center gap-16">
               {section.items.map((item, i) => (
                 <Link
                   key={i}
@@ -248,7 +250,7 @@ export const TradeList = () => {
           </section>
         ))}
       </div>
-      <section className="grid gap-32 max-w-[1920px] mx-auto mt-[150px]">
+      <section className="grid gap-32 w-full max-w-[1920px] mx-auto mt-[150px] px-24">
         <h2 className="text-center">Discover All strategies</h2>
         <AllPreview />
       </section>

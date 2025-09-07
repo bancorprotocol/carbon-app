@@ -37,6 +37,7 @@
   border-radius: 24px;
   @apply bg-black-gradient;
   position: relative;
+  max-width: 80%;
 }
 .main-chart p {
   text-align: end;

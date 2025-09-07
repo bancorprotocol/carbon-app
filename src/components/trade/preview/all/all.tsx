@@ -82,11 +82,11 @@ export const AllPreview = () => {
             {item.icon}
             <h3>{item.title}</h3>
           </header>
-          <ul className="grid gap-16 grid-cols-4">
+          <ul className="grid gap-16 grid-cols-[repeat(auto-fill,minmax(335px,1fr))]">
             {item.list.map(({ name, svg }) => (
               <li
                 key={name}
-                className="grid gap-16 rounded-2xl bg-white-gradient p-16 animate-scale-up"
+                className="grid gap-16 rounded-2xl bg-white-gradient w-fit p-16 animate-scale-up"
               >
                 <h4 className="font-normal">{name}</h4>
                 <div className="bg-black-gradient rounded-2xl p-8 w-300">

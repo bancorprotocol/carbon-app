@@ -4,9 +4,13 @@ import common from './common.module.css';
 import style from './recurring-range.module.css';
 
 interface Props {
+  className?: string;
   running?: boolean;
 }
-export const PreviewRecurringRangeStrategy = ({ running }: Props) => {
+export const PreviewRecurringRangeStrategy = ({
+  running,
+  className,
+}: Props) => {
   const path = useRef<SVGPathElement>(null);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -22,6 +26,7 @@ export const PreviewRecurringRangeStrategy = ({ running }: Props) => {
         { [common.running]: running },
         common.graphWrapper,
         'rounded-2xl p-16 shrink-0',
+        className,
       )}
     >
       <svg viewBox="0 0 1000 1000">

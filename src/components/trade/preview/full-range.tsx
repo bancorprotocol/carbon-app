@@ -4,9 +4,10 @@ import common from './common.module.css';
 import style from './full-range.module.css';
 
 interface Props {
+  className?: string;
   running?: boolean;
 }
-export const PreviewFullRangeStrategy = ({ running }: Props) => {
+export const PreviewFullRangeStrategy = ({ running, className }: Props) => {
   const path = useRef<SVGPathElement>(null);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -24,6 +25,7 @@ export const PreviewFullRangeStrategy = ({ running }: Props) => {
         common.graphWrapper,
         common.fullRange,
         'rounded-2xl p-16 shrink-0',
+        className,
       )}
     >
       <svg viewBox="0 0 1000 1000">
