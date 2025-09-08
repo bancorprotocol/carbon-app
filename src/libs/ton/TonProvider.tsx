@@ -20,6 +20,7 @@ import {
   TransactionLinker,
   OperationTracker,
   OperationType,
+  StageName,
 } from '@tonappchain/sdk';
 import { Address } from '@ton/ton';
 import { getTacSDK } from './sdk';
@@ -27,6 +28,7 @@ import controller from 'abis/controller.json' with { type: 'json' };
 import batcher from 'abis/batcher.json' with { type: 'json' };
 import { getTonBalance } from './api';
 import config from 'config';
+import { TrackerDialog } from './TrackerDialog';
 
 interface TxResult {
   success: boolean;
@@ -75,6 +77,16 @@ const awaitOperationId = async (
 ) => {
   return repeat(() => tracker.getOperationId(linker));
 };
+const awaitStage = async (
+  tracker: OperationTracker,
+  operationId: string,
+  step: StageName,
+) => {
+  return repeat(async () => {
+    const stage = await tracker.getStageProfiling(operationId);
+    if (stage[step].exists) return stage;
+  });
+};
 
 const awaitTransactionIsDone = async (
   tracker: OperationTracker,
@@ -85,17 +97,6 @@ const awaitTransactionIsDone = async (
     if (stage.operationType !== OperationType.PENDING) {
       if (stage.operationType !== OperationType.UNKNOWN) return;
       throw new Error('Unknown state of transaction');
-    }
-  });
-};
-const awaitTransactionExecuted = async (
-  tracker: OperationTracker,
-  operationId: string,
-) => {
-  return repeat(async () => {
-    const stage = await tracker.getStageProfiling(operationId);
-    if (stage.executedInTAC.exists) {
-      return stage.executedInTAC.stageData?.transactions?.[0].hash;
     }
   });
 };
@@ -115,7 +116,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   if (!config.addresses.tac) {
     throw new Error('config.addresses.tac is not defined');
   }
-
+  const [progress, setProgress] = useState(0);
   const { getTVMAddress, getEvmAddress, setTonAddress, setTonTokens } =
     useTonTokenMapping();
 
@@ -239,11 +240,30 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
         if (txResult.error) throw txResult.error;
 
         const tracker = new OperationTracker(sdk.network);
+        setProgress(1);
         const operationId = await awaitOperationId(tracker, linker);
-        const hash = await awaitTransactionExecuted(tracker, operationId);
+        setProgress(2);
+        await awaitStage(tracker, operationId, StageName.COLLECTED_IN_TAC);
+        setProgress(3);
+        await awaitStage(
+          tracker,
+          operationId,
+          StageName.INCLUDED_IN_TAC_CONSENSUS,
+        );
+        setProgress(4);
+        const stage = await awaitStage(
+          tracker,
+          operationId,
+          StageName.EXECUTED_IN_TAC,
+        );
+        const hash = stage?.executedInTAC.stageData?.transactions?.[0].hash;
+        setProgress(5);
         return {
           hash: hash!,
-          wait: () => awaitTransactionIsDone(tracker, operationId),
+          wait: async () => {
+            setTimeout(() => setProgress(0), 1_000);
+            return awaitTransactionIsDone(tracker, operationId);
+          },
         };
       } catch (e: any) {
         if (e.debugInfo) {
@@ -286,33 +306,36 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   );
 
   return (
-    <CarbonWagmiCTX.Provider
-      value={{
-        user,
-        isNetworkActive,
-        provider,
-        signer,
-        sendTransaction,
-        currentConnector,
-        connectors,
-        chainId,
-        accountChainId,
-        handleTenderlyRPC,
-        imposterAccount,
-        setImposterAccount,
-        connect,
-        openConnect,
-        disconnect,
-        networkError,
-        isSupportedNetwork,
-        switchNetwork,
-        isUserBlocked,
-        isUncheckedSigner,
-        setIsUncheckedSigner,
-        getBalance,
-      }}
-    >
-      {children}
-    </CarbonWagmiCTX.Provider>
+    <>
+      <CarbonWagmiCTX.Provider
+        value={{
+          user,
+          isNetworkActive,
+          provider,
+          signer,
+          sendTransaction,
+          currentConnector,
+          connectors,
+          chainId,
+          accountChainId,
+          handleTenderlyRPC,
+          imposterAccount,
+          setImposterAccount,
+          connect,
+          openConnect,
+          disconnect,
+          networkError,
+          isSupportedNetwork,
+          switchNetwork,
+          isUserBlocked,
+          isUncheckedSigner,
+          setIsUncheckedSigner,
+          getBalance,
+        }}
+      >
+        {children}
+      </CarbonWagmiCTX.Provider>
+      <TrackerDialog progress={progress} />
+    </>
   );
 };
