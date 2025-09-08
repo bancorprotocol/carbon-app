@@ -5,7 +5,6 @@ import { StrategyBlockCreate } from 'components/strategies/overview/strategyBloc
 import { cn } from 'utils/helpers';
 import { StrategyTable } from './StrategyTable';
 import { StrategyLayout, StrategySelectLayout } from '../StrategySelectLayout';
-import { lsService } from 'services/localeStorage';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { NotFound } from 'components/common/NotFound';
 import {
@@ -16,27 +15,15 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { useRouterState } from '@tanstack/react-router';
 import {
   getCompareFunctionBySortType,
-  getFilterFromLS,
-  getSortFromLS,
+  StrategyFilter,
+  StrategySort,
 } from './utils';
 import styles from './StrategyContent.module.css';
 
 export const StrategyContent = () => {
-  const [layout, setLayout] = useState(
-    lsService.getItem('strategyLayout') || 'grid',
-  );
-  const [filter, setFilter] = useState(getFilterFromLS());
-  const [sort, setSort] = useState(getSortFromLS());
-
-  useEffect(() => {
-    lsService.setItem('strategyLayout', layout);
-  }, [layout]);
-  useEffect(() => {
-    lsService.setItem('strategyOverviewFilter', filter);
-  }, [filter]);
-  useEffect(() => {
-    lsService.setItem('strategyOverviewSort', sort);
-  }, [sort]);
+  const [layout, setLayout] = useState<StrategyLayout>('grid');
+  const [filter, setFilter] = useState<StrategyFilter>({ status: 'all' });
+  const [sort, setSort] = useState<StrategySort>('trades');
 
   const strategies = useStrategyCtx();
 
@@ -69,11 +56,14 @@ export const StrategyContent = () => {
 
   return (
     <>
-      <header role="toolbar" className="flex justify-end gap-16">
+      <div
+        role="toolbar"
+        className="flex items-center justify-end gap-16 grid-area-[filters]"
+      >
         <StrategyFilterDropdown filter={filter} setFilter={setFilter} />
         <StrategySortDropdown sort={sort} setSort={setSort} />
         <StrategySelectLayout layout={layout} setLayout={setLayout} />
-      </header>
+      </div>
       <StrategyList strategies={sortedStrategies} layout={layout} />
     </>
   );

@@ -94,9 +94,9 @@
     var(--color-tertiary)
   );
 }
-@utility  text-gradient {
+@utility text-gradient {
   background-image: linear-gradient(
-    to top,
+    to bottom,
     var(--color-primary),
     var(--color-secondary),
     var(--color-tertiary)
@@ -104,11 +104,15 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-@utility  fill-gradient {
+@utility fill-gradient {
   fill: url("#svg-brand-gradient");
 }
 @utility  stroke-gradient {
   stroke: url("#svg-brand-gradient");
+}
+
+@utility grid-area-* {
+  grid-area: --value([*]);
 }
 
 @custom-variant aria-page (&[aria-current="page"]);

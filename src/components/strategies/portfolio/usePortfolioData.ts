@@ -1,10 +1,9 @@
-import { AnyStrategy, Order } from 'components/strategies/common/types';
+import { AnyStrategyWithFiat, Order } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { useStore } from 'store';
-import { sortObjectArray } from 'utils/helpers';
 import { FiatPriceDict } from 'utils/carbonApi';
 
 export interface PortfolioData {
@@ -12,11 +11,11 @@ export interface PortfolioData {
   share: SafeDecimal;
   amount: SafeDecimal;
   value: SafeDecimal;
-  strategies: AnyStrategy[];
+  strategies: AnyStrategyWithFiat[];
   fiatPrice: number;
 }
 interface Props {
-  strategies?: AnyStrategy[];
+  strategies?: AnyStrategyWithFiat[];
 }
 
 export const usePortfolioData = ({ strategies }: Props) => {
@@ -25,12 +24,11 @@ export const usePortfolioData = ({ strategies }: Props) => {
   } = useStore();
 
   const uniqueTokens = useMemo(() => {
-    const data = strategies;
-    if (!data) return [];
+    if (!strategies) return [];
 
     const tokens = new Set<string>();
 
-    data.forEach((strategy) => {
+    strategies.forEach((strategy) => {
       tokens.add(strategy.quote.address);
       tokens.add(strategy.base.address);
     });
@@ -51,32 +49,15 @@ export const usePortfolioData = ({ strategies }: Props) => {
   }, [tokenPriceQueries, uniqueTokens]);
 
   const totalValue = useMemo(() => {
-    const data = strategies;
-    if (!data) return new SafeDecimal(0);
-
-    return data.reduce((acc, strategy) => {
-      const fiatPriceDictQuote = tokenPriceMap.get(strategy.quote.address);
-      const tokenPriceQuote = fiatPriceDictQuote?.[selectedFiatCurrency] || 0;
-
-      const amountQuote = new SafeDecimal(strategy.buy.budget);
-      const fiatAmountQuote = amountQuote.times(tokenPriceQuote);
-
-      const fiatPriceDictBase = tokenPriceMap.get(strategy.base.address);
-      const tokenPriceBase = fiatPriceDictBase?.[selectedFiatCurrency] || 0;
-
-      const amountBase = new SafeDecimal(strategy.sell.budget);
-      const fiatAmountBase = amountBase.times(tokenPriceBase);
-
-      const fiatAmount = fiatAmountQuote.plus(fiatAmountBase);
-      return acc.plus(fiatAmount);
+    if (!strategies?.length) return new SafeDecimal(0);
+    return strategies.reduce((acc, strategy) => {
+      return acc.plus(strategy.fiatBudget.total);
     }, new SafeDecimal(0));
-  }, [selectedFiatCurrency, strategies, tokenPriceMap]);
+  }, [strategies]);
 
   const tableData: PortfolioData[] = useMemo(() => {
-    const data = strategies;
-    if (!data) return [];
-
-    const unsorted = data.reduce(
+    if (!strategies?.length) return [];
+    const unsorted = strategies.reduce(
       ((map) => (acc: PortfolioData[], strategy) => {
         const handleData = (token: Token, order: Order) => {
           const fiatPriceDict = tokenPriceMap.get(token.address);
@@ -119,10 +100,7 @@ export const usePortfolioData = ({ strategies }: Props) => {
       [],
     );
 
-    // TODO cleanup sort function
-    return sortObjectArray(unsorted, 'share', (a, b) =>
-      a.share.gt(b.share) ? -1 : 1,
-    );
+    return unsorted.sort((a, b) => (a.share.gt(b.share) ? -1 : 1));
   }, [selectedFiatCurrency, strategies, tokenPriceMap, totalValue]);
 
   const isPending = useMemo(() => {

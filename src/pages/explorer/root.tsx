@@ -2,20 +2,21 @@ import { Outlet } from 'libs/routing';
 import { StrategyProvider } from 'hooks/useStrategies';
 import { ExplorerHeader } from 'components/explorer/ExplorerHeader';
 import { useGetAllStrategies } from 'libs/queries';
-import config from 'config';
 import { StrategyPageTabs } from 'components/strategies/StrategyPageTabs';
+import { ExplorerSearch } from 'components/explorer/ExplorerSearch';
+import style from './root.module.css';
+import config from 'config';
 
 export const ExplorerPage = () => {
   const query = useGetAllStrategies();
 
   return (
-    <div className="grid gap-24 mx-auto max-w-[1280px] w-full content-start">
+    <div className={style.root}>
       {config.ui.tradeCount && <ExplorerHeader />}
-      <StrategyPageTabs />
+      <ExplorerSearch />
       <StrategyProvider url="/explore" query={query}>
-        <div className="gap-30 grid">
-          <Outlet />
-        </div>
+        <StrategyPageTabs />
+        <Outlet />
       </StrategyProvider>
     </div>
   );

@@ -8,6 +8,7 @@ import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/distribution/toke
 import { validateActivityParams } from 'components/activity/utils';
 import { searchValidator } from '../utils';
 import * as v from 'valibot';
+import { ExplorerPairs } from 'pages/explorer/pairs';
 
 // TODO: implement a redirect
 // export const oldExplorer = createRoute({
@@ -50,6 +51,12 @@ export const explorerPortfolioPage = createRoute({
   validateSearch: searchValidator({
     layout: v.optional(v.picklist(['grid', 'table'])),
   }),
+});
+
+export const explorerPairsPage = createRoute({
+  getParentRoute: () => explorerLayout,
+  path: 'pairs',
+  component: ExplorerPairs,
 });
 
 export const explorerDistributionPage = createRoute({

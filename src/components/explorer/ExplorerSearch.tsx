@@ -1,6 +1,6 @@
 import { FC, FormEvent, memo, useEffect, useState } from 'react';
 import ExplorerSearchSuggestions from 'components/explorer/suggestion';
-import { useNavigate, useParams } from 'libs/routing';
+import { useNavigate, useSearch } from 'libs/routing';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron-right.svg';
 import { searchPairTrade, searchTokens, toPairSlug } from 'utils/pairSearch';
@@ -10,13 +10,13 @@ import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { useWagmi } from 'libs/wagmi';
 import style from './ExplorerSearch.module.css';
 
-export const LocalExplorerSearch: FC = () => {
+const LocalExplorerSearch: FC = () => {
   const navigate = useNavigate();
   const pairs = usePairs();
   const [open, setOpen] = useState(false);
   const { provider } = useWagmi();
-  const { slug } = useParams({ from: '/explore/$slug' });
-  const [search, setSearch] = useState(slug ?? '');
+  const params = useSearch({ from: '/explore' });
+  const [search, setSearch] = useState(params.search ?? '');
   const [debouncedSearch] = useDebouncedValue<string>(search, 300); // Debounce search input for ens query
 
   const ensAddressQuery = useGetAddressFromEns(debouncedSearch.toLowerCase());
@@ -25,11 +25,11 @@ export const LocalExplorerSearch: FC = () => {
     debouncedSearch !== search || !ensAddressQuery.isSuccess;
 
   useEffect(() => {
-    if (!slug) return setSearch('');
-    const name = pairs.names.get(slug);
+    if (!search) return setSearch('');
+    const name = pairs.names.get(search);
     const displayName = name?.replace('_', '/').toUpperCase();
     return setSearch(displayName || '');
-  }, [slug, pairs.names]);
+  }, [search, pairs.names]);
 
   const onSearchHandler = async (value: string) => {
     if (value.length === 0) return;
@@ -47,8 +47,8 @@ export const LocalExplorerSearch: FC = () => {
       slug = await getEnsAddressIfAny(provider, value);
     }
     navigate({
-      to: '/explore/$slug',
-      params: { slug },
+      to: '/explore',
+      search: { search },
     });
   };
 

@@ -24,10 +24,12 @@ export const ExplorerActivityPage = () => {
   }, [type, search]);
 
   return (
-    <ActivityProvider params={params} url="/explore/$slug/activity">
-      <ActivityLayout
-        filters={type === 'wallet' ? ['ids', 'pairs'] : ['ids']}
-      />
-    </ActivityProvider>
+    <div className="grid-area-[list]">
+      <ActivityProvider params={params} url="/explore/activity">
+        <ActivityLayout
+          filters={type === 'wallet' ? ['ids', 'pairs'] : ['ids']}
+        />
+      </ActivityProvider>
+    </div>
   );
 };

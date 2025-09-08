@@ -5,6 +5,7 @@ import {
   explorerPortfolioPage,
   explorerDistributionPage,
   explorerDistributionTokenPage,
+  explorerPairsPage,
 } from 'libs/routing/routes/explorer';
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
@@ -71,6 +72,7 @@ export const routeTree = rootRoute.addChildren([
     editBudgetRecurring,
   ]),
   explorerLayout.addChildren([
+    explorerPairsPage,
     explorerPortfolioPage,
     explorerDistributionPage.addChildren([explorerDistributionTokenPage]),
     explorerActivityPage,

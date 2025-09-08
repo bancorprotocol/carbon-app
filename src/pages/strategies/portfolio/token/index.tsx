@@ -1,9 +1,9 @@
-import { PortfolioToken } from 'components/strategies/portfolio';
+import { PortfolioToken } from 'components/strategies/portfolio/token/PortfolioToken';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { useParams } from 'libs/routing';
 
 export const StrategiesPortfolioTokenPage = () => {
-  const { strategies, isPending } = useStrategyCtx();
+  const strategies = useStrategyCtx();
   const { address } = useParams({
     from: '/portfolio/strategies/portfolio/token/$address',
   });
@@ -11,7 +11,6 @@ export const StrategiesPortfolioTokenPage = () => {
   return (
     <PortfolioToken
       strategies={strategies}
-      isPending={isPending}
       address={address}
       backLinkHref="/portfolio/strategies/portfolio"
     />

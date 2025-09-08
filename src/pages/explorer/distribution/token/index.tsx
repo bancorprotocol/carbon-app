@@ -1,21 +1,19 @@
-import { PortfolioToken } from 'components/strategies/portfolio';
+import { PortfolioToken } from 'components/strategies/portfolio/token/PortfolioToken';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { useParams } from '@tanstack/react-router';
 
-const url = '/explore/$slug/portfolio/token/$address';
+const url = '/explore/distribution/token/$address';
 export const ExplorerTypePortfolioTokenPage = () => {
-  const { address, slug } = useParams({ from: url });
-  const { strategies, isPending } = useStrategyCtx();
+  const { address } = useParams({ from: url });
+  const strategies = useStrategyCtx();
 
   if (!address) return <div>error no address provided</div>;
 
   return (
     <PortfolioToken
       strategies={strategies}
-      isPending={isPending}
       address={address}
-      backLinkHref="/explore/$slug/portfolio"
-      backLinkHrefParams={{ slug }}
+      backLinkHref="/explore/distribution"
     />
   );
 };

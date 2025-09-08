@@ -20,7 +20,7 @@ import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
 import { searchPairTrade, searchTokens, toPairName } from 'utils/pairSearch';
-import { useParams } from '@tanstack/react-router';
+import { useSearch } from '@tanstack/react-router';
 import { usePairs } from 'hooks/usePairs';
 import { cn } from 'utils/helpers';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
@@ -69,13 +69,13 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   const listboxId = useId();
   const inputId = useId();
   const root = useRef<HTMLDivElement>(null);
-  const params = useParams({ from: '/explore/$slug' });
+  const params = useSearch({ from: '/explore' });
   const ensName = useEnsName({
-    address: tryEthAddress(params.slug),
+    address: tryEthAddress(params.search || ''),
   });
 
   const [search, setSearch] = useState(
-    displaySlug(params.slug, pairMap, tokensMap),
+    displaySlug(params.search || '', pairMap, tokensMap),
   );
   const [focusTab, setFocusTab] = useState<FocusTab>('token');
 
@@ -84,9 +84,9 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   }, [ensName.data]);
 
   useEffect(() => {
-    const display = displaySlug(params.slug, pairMap, tokensMap);
-    if (display !== params.slug) setSearch(display);
-  }, [tokensMap, pairMap, params.slug, setSearch]);
+    const display = displaySlug(params.search || '', pairMap, tokensMap);
+    if (display !== params.search) setSearch(display);
+  }, [tokensMap, pairMap, params.search, setSearch]);
 
   const filteredPairs = useMemo(
     () => searchPairTrade(pairMap, namesMap, search),

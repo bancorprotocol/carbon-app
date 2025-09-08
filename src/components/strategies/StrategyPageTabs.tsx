@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
+import { ReactComponent as IconPairs } from 'assets/icons/pairs.svg';
 
 export interface StrategyTab {
   label: string;
@@ -13,6 +14,11 @@ export interface StrategyTab {
 }
 
 const tabs: StrategyTab[] = [
+  {
+    label: 'Pairs',
+    href: '/explore/pairs',
+    icon: <IconPairs className="size-24 group-aria-page:fill-gradient" />,
+  },
   {
     label: 'Strategies',
     href: '/explore/strategies',
@@ -38,7 +44,7 @@ export const StrategyPageTabs = () => {
   return (
     <nav
       aria-label="Strategy Panels"
-      className="border-background-900 text-20 mr-auto flex w-full gap-16 rounded-full border-2 p-6 md:w-auto"
+      className="border-background-900 text-20 mr-auto flex w-full gap-16 rounded-full border-2 p-6 md:w-auto grid-area-[tabs]"
     >
       {tabs.map(({ label, href, search, icon, badge }) => {
         const active = match({
@@ -52,7 +58,7 @@ export const StrategyPageTabs = () => {
             to={href}
             search={(s) => s}
             key={href}
-            className="group font-title font-bold leading-none bg-transparent text-white/60 hover:bg-background-900 flex gap-8 w-full items-center justify-center rounded-full px-16 py-8 aria-page:bg-background-800"
+            className="group font-title font-bold bg-transparent text-white/60 hover:bg-background-900 flex gap-8 w-full items-center justify-center rounded-full px-16 py-8 aria-page:bg-background-800"
             aria-current={active ? 'page' : 'false'}
           >
             {icon}

@@ -1,4 +1,4 @@
-import { PortfolioAllTokens } from 'components/strategies/portfolio';
+import { PortfolioAllTokens } from 'components/strategies/portfolio/allTokens/PortfolioAllTokens';
 import { useNavigate } from 'libs/routing';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
@@ -27,11 +27,13 @@ export const ExplorerDistribution = () => {
   );
 
   return (
-    <PortfolioAllTokens
-      strategies={strategies}
-      getHref={getPortfolioTokenHref}
-      onRowClick={onRowClick}
-      isExplorer
-    />
+    <div className="grid-area-[list]">
+      <PortfolioAllTokens
+        strategies={strategies}
+        getHref={getPortfolioTokenHref}
+        onRowClick={onRowClick}
+        isExplorer
+      />
+    </div>
   );
 };

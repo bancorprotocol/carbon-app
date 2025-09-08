@@ -3,7 +3,6 @@ import {
   AnyStrategy,
   AnyStrategyWithFiat,
 } from 'components/strategies/common/types';
-import { lsService } from 'services/localeStorage';
 
 export const strategyFilter = {
   status: {
@@ -36,23 +35,6 @@ export const strategySort = {
 };
 
 export type StrategySort = keyof typeof strategySort;
-
-export const getSortFromLS = (): StrategySort => {
-  const sort = lsService.getItem('strategyOverviewSort');
-  if (!sort || !(sort in strategySort)) return 'trades';
-  return sort;
-};
-
-export const getFilterFromLS = (): StrategyFilter => {
-  const filter = lsService.getItem('strategyOverviewFilter');
-  if (typeof filter !== 'object') {
-    return {
-      status: 'all',
-      // type: 'all',
-    };
-  }
-  return filter;
-};
 
 /** There are multiple inactive status, so we cannot just do a.status !== b.status */
 const differentStatus = (a: AnyStrategy, b: AnyStrategy) => {

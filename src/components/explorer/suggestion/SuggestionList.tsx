@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { PairLogoName, TokenLogoName } from 'components/common/DisplayPair';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { useNavigate, useParams } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
 import { cn } from 'utils/helpers';
 import { Token } from 'libs/tokens';
@@ -43,13 +43,12 @@ const animateLeaving = async () => {
 export const SuggestionList: FC<Props> = (props) => {
   const { listboxId, filteredPairs, filteredTokens, setOpen } = props;
   const nav = useNavigate();
-  const { slug } = useParams({ from: '/explore/$slug' });
+  const { search } = useSearch({ from: '/explore' });
   const navigate = async (nextSlug: string) => {
     setOpen(false);
-    if (slug === nextSlug) return;
-    const params = { type: 'token-pair' as const, slug: nextSlug };
+    if (search === nextSlug) return;
     await animateLeaving();
-    nav({ to: '/explore/$slug', params });
+    nav({ to: '/explore', search: { search: nextSlug } });
   };
 
   const [maxTokens, setMaxTokens] = useState(5);

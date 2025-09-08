@@ -50,7 +50,7 @@ export const ExplorerTabs = () => {
     <div className="flex flex-col flex-wrap justify-between gap-16 md:flex-row md:items-center">
       <StrategyPageTabs />
       {isOverview && <StrategyFilterSort />}
-      {isOverview && <StrategySelectLayout from="explorer" />}
+      {isOverview && <StrategySelectLayout />}
     </div>
   );
 };

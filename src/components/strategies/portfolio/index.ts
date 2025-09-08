@@ -1,2 +1,2 @@
-export { PortfolioAllTokens } from './allTokens';
+export { PortfolioAllTokens } from './allTokens/PortfolioAllTokens';
 export { PortfolioToken } from './token';

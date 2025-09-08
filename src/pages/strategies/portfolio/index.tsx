@@ -1,10 +1,10 @@
-import { PortfolioAllTokens } from 'components/strategies/portfolio';
+import { PortfolioAllTokens } from 'components/strategies/portfolio/allTokens/PortfolioAllTokens';
 import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { useNavigate } from 'libs/routing';
 
 export const StrategiesPortfolioPage = () => {
-  const { strategies, isPending } = useStrategyCtx();
+  const strategies = useStrategyCtx();
   const navigate = useNavigate();
   const href = '/portfolio/strategies/portfolio/token/$address';
 
@@ -22,7 +22,6 @@ export const StrategiesPortfolioPage = () => {
   return (
     <PortfolioAllTokens
       strategies={strategies}
-      isPending={isPending}
       getHref={getPortfolioTokenHref}
       onRowClick={onRowClick}
     />
