@@ -203,7 +203,7 @@ export const TradeList = () => {
           )}
         </section>
       </div>
-      <div className="grid gap-40 max-w-[1920px] w-full">
+      <div className="grid gap-40 max-w-[1920px] w-full mx-auto">
         <RadioGroup className="place-self-center text-20 p-8 gap-24">
           {sections.map(({ id, title }) => (
             <Radio

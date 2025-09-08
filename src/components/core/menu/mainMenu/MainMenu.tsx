@@ -10,9 +10,12 @@ export const MainMenu: FC = () => {
       if (top !== window.scrollY < 80) {
         top = window.scrollY < 80;
         if (window.scrollY > 80) {
-          ref.current!.style.backgroundColor = 'black';
+          ref.current!.style.backgroundColor =
+            'oklch(20% var(--chroma) var(--hue) / 0.5)';
+          ref.current!.style.backdropFilter = 'blur(20px) saturate(150%)';
         } else {
           ref.current!.style.backgroundColor = 'transparent';
+          ref.current!.style.backdropFilter = 'none';
         }
       }
     };
@@ -22,7 +25,7 @@ export const MainMenu: FC = () => {
   return (
     <header
       ref={ref}
-      className="sticky top-0 z-40 w-full h-[80px] px-content font-medium flex items-center justify-between text-white/50"
+      className="sticky top-0 z-40 w-full h-[80px] px-content font-medium flex items-center justify-between text-white/50 backdrop-mix"
       data-testid="main-menu"
     >
       <MainMenuLeft />
