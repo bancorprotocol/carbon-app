@@ -26,7 +26,7 @@ export const StrategyBlock: FC<Props> = ({
     <li
       id={id}
       className={cn(
-        'rounded-lg bg-black-gradient grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        'rounded-lg bg-white-gradient grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className,
       )}
       style={style}
@@ -36,7 +36,7 @@ export const StrategyBlock: FC<Props> = ({
       <StrategyBlockInfo strategy={strategy} />
       <div
         className={cn(
-          'rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
+          'bg-black-gradient rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
           strategy.status === 'active' ? '' : 'opacity-50',
         )}
       >

@@ -157,7 +157,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       id={strategy.id}
       style={style}
       className={cn(
-        'rounded-lg bg-black-gradient grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        'rounded-lg bg-white-gradient grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className,
       )}
     >
@@ -183,7 +183,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           <button
             role="menuitem"
             type="button"
-            className="size-38 rounded-sm border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
+            className="bg-black-gradient size-38 rounded-sm border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
             aria-label="Withdraw & Delete"
             onClick={remove}
           >
@@ -194,14 +194,14 @@ export const CartStrategyItems: FC<Props> = (props) => {
       <div>
         <StrategyBlockBudget strategy={strategy} />
       </div>
-      <div className="rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
+      <div className="bg-black-gradient rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
         <StrategyBlockBuySell
           strategy={strategy}
           isBuy
           className="border-background-800 border-r-2"
         />
         <StrategyBlockBuySell strategy={strategy} />
-        <div className="border-background-800 col-start-1 col-end-3 border-t-2">
+        <div className="bg-black-gradient border-background-800 col-start-1 col-end-3 border-t-2">
           <StrategyGraph strategy={strategy} />
         </div>
       </div>

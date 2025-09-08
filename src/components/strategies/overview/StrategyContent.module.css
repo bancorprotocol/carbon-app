@@ -11,6 +11,29 @@
   max-width: 375px;
   content-visibility: auto; /* to prevent no tooltips when scrolling down */
   contain-intrinsic-size: 375px 400px;
+  position: relative;
+}
+.strategy-item:hover::before,
+.strategy-item:hover::after {
+  transform: translate(0);
+}
+.strategy-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, oklch(0.5 0.2 var(--sell-hue) / 0.4), transparent 30%);
+  transform: translateY(-30%);
+  transition: transform 200ms var(--ease-out);
+}
+.strategy-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, oklch(0.5 0.2 var(--buy-hue) / 0.4), transparent 30%);
+  transform: translateY(30%);
+  transition: transform 200ms var(--ease-out);
 }
 @media (prefers-reduced-motion: no-preference) {
   .animate-item {

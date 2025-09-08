@@ -120,11 +120,11 @@ export const StrategyPage = () => {
         />
       </header>
       <section className="flex flex-col gap-16 md:flex-row">
-        <article className="bg-black-gradient grid gap-16 rounded-2xl p-24 md:w-[400px]">
+        <article className="bg-white-gradient grid gap-16 rounded-2xl p-24 md:w-[400px]">
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
-              'rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
+              'bg-black-gradient rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
               strategy.status === 'active' ? '' : 'opacity-50',
             )}
           >
@@ -139,7 +139,7 @@ export const StrategyPage = () => {
             </div>
           </div>
         </article>
-        <article className="bg-black-gradient hidden flex-1 flex-col gap-20 rounded-2xl p-16 md:flex">
+        <article className="bg-white-gradient hidden flex-1 flex-col gap-20 rounded-2xl p-16 md:flex">
           <header className="flex items-center gap-16">
             <h2 className="text-18 font-medium mr-auto">Price Chart</h2>
             {isNativeChart && (

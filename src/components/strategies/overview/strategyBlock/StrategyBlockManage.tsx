@@ -281,7 +281,7 @@ export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
   function ManageButton(props, ref) {
     const style = cn(
       buttonStyles({ variant: 'secondary' }),
-      'max-md:p-8 gap-8',
+      'bg-black-gradient max-md:p-8 gap-8',
     );
     const { aboveBreakpoint } = useBreakpoints();
     return (
@@ -302,7 +302,7 @@ export const ManageButtonIcon = forwardRef<
       {...props}
       ref={ref}
       className={`
-        size-38 rounded-md border-background-800 grid place-items-center border-2
+        bg-black-gradient size-38 rounded-md border-background-800 grid place-items-center border-2
         hover:bg-white/10
         active:bg-white/20
       `}
