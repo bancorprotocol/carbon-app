@@ -45,7 +45,7 @@ export const TrackerDialog = ({ progress }: Props) => {
                     aria-hidden="true"
                   >
                     <path
-                      className="transition-[stroke-dashoffset]"
+                      className="transition-[stroke-dashoffset] transition-duration-300"
                       fill="none"
                       stroke="black"
                       d="M 2 13 L 8 19 L 23 5"
