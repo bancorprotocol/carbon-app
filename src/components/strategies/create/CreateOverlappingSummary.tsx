@@ -28,50 +28,50 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
 
   const indicationProps = { base, quote, isRange: true, isOverlapping: true };
   return (
-    <article className="rounded-8 text-12 grid gap-12 bg-black px-16 py-12">
+    <article className="rounded-md text-12 grid gap-12 bg-black px-16 py-12">
       <div className="grid grid-flow-col gap-20">
         <div className="grid gap-4">
-          <h4 className="font-weight-600 flex items-center gap-8">
+          <h4 className="font-semibold flex items-center gap-8">
             {aboveMarket && <WarningTooltip message={warningText} />}
             Min Price
           </h4>
-          <p className="font-weight-500 text-white/80">
+          <p className="font-medium text-white/80">
             {tokenAmount(buy.min, quote)}
           </p>
           <MarketPriceIndication {...indicationProps} price={buy.min!} isBuy />
         </div>
         <div className="grid gap-4">
-          <h4 className="font-weight-600 flex items-center gap-8">
+          <h4 className="font-semibold flex items-center gap-8">
             {belowMarket && <WarningTooltip message={warningText} />}
             Max Price
           </h4>
-          <p className="font-weight-500 text-white/80">
+          <p className="font-medium text-white/80">
             {tokenAmount(sell.max, quote)}
           </p>
           <MarketPriceIndication {...indicationProps} price={sell.max!} />
         </div>
       </div>
       <div className="grid gap-4">
-        <h4 className="font-weight-600">Fee Tier</h4>
-        <p className="font-weight-500 text-white/80">{spread}%</p>
+        <h4 className="font-semibold">Fee Tier</h4>
+        <p className="font-medium text-white/80">{spread}%</p>
       </div>
       <div className="grid grid-flow-col gap-20">
         <div className="grid gap-4">
-          <h4 className="font-weight-600 flex items-center gap-4">
+          <h4 className="font-semibold flex items-center gap-4">
             <TokenLogo token={base} size={16} />
             {base.symbol} Budget
           </h4>
-          <p className="font-weight-500 text-white/80">
+          <p className="font-medium text-white/80">
             {tokenAmount(sell.budget, base)}
           </p>
           <p className="break-all text-white/60">{getBaseFiat(sell.budget)}</p>
         </div>
         <div className="grid gap-4">
-          <h4 className="font-weight-600 flex items-center gap-4">
+          <h4 className="font-semibold flex items-center gap-4">
             <TokenLogo token={quote} size={16} />
             {quote.symbol} Budget
           </h4>
-          <p className="font-weight-500 text-white/80">
+          <p className="font-medium text-white/80">
             {tokenAmount(buy.budget, quote)}
           </p>
           <p className="break-all text-white/60">{getQuoteFiat(buy.budget)}</p>

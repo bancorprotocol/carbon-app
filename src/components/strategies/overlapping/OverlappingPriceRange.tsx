@@ -55,12 +55,12 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
     <>
       {range === 'Infinity' ? (
         <div className="grid grid-cols-2 gap-6">
-          <div className="rounded-r-4 rounded-l-16 grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
+          <div className="rounded-e-xs rounded-s-2xl grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
             <header className="text-12 mb-5 flex justify-between text-white/60">
               <span>{props.minLabel || 'Min'}</span>
               {!!marketPrice && (
                 <button
-                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
                   type="button"
                   onClick={() => setMin(marketPrice.toString())}
                   data-testid="market-price-min"
@@ -72,12 +72,12 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
             <p onClick={() => reset(minId)}>0</p>
             <p aria-hidden className="h-[22px]"></p>
           </div>
-          <div className="rounded-l-4 rounded-r-16 grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
+          <div className="rounded-s-xs rounded-e-2xl grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
             <header className="text-12 mb-5 flex justify-between text-white/60">
               <span>{props.maxLabel || 'Max'}</span>
               {!!marketPrice && (
                 <button
-                  className="text-12 font-weight-500 text-primaryGradient-first hover:text-primary focus:text-primary active:text-primaryGradient-first"
+                  className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
                   type="button"
                   onClick={() => setMax(marketPrice.toString())}
                   data-testid="market-price-max"

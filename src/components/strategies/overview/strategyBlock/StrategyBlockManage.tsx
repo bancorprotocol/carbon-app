@@ -265,10 +265,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         {items.map((item) => {
           if (typeof item === 'number') {
             return (
-              <hr
-                key={item}
-                className="border-1  border-background-700 my-10"
-              />
+              <hr key={item} className="border  border-background-700 my-10" />
             );
           }
 
@@ -322,7 +319,7 @@ export const ManageButtonIcon = forwardRef<
       {...props}
       ref={ref}
       className={`
-        size-38 rounded-8 border-background-800 grid place-items-center border-2
+        size-38 rounded-md border-background-800 grid place-items-center border-2
         hover:bg-white/10
         active:bg-white/20
       `}
@@ -353,7 +350,7 @@ const ManageItem: FC<{
           setManage(false);
         }}
         disabled={disabled}
-        className={cn('rounded-6 w-full p-12 text-left', {
+        className={cn('rounded-sm w-full p-12 text-left', {
           'cursor-not-allowed': disabled,
           'opacity-60': disabled,
           'hover:bg-black': !disabled,

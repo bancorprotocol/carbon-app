@@ -23,11 +23,11 @@ export const GradientFullOutcome: FC<Props> = (props) => {
   return (
     <p className="text-12 text-white/60" data-testid="full-outcome">
       If the order is 100% filled, you will receive between&nbsp;
-      <b className="font-weight-600 break-words" data-testid="outcome-value">
+      <b className="font-semibold break-words" data-testid="outcome-value">
         {tokenAmount(min, token)}&nbsp;
       </b>
       &nbsp;and&nbsp;
-      <b className="font-weight-600 break-words" data-testid="outcome-quote">
+      <b className="font-semibold break-words" data-testid="outcome-quote">
         {tokenAmount(max, token)}&nbsp;
       </b>
     </p>

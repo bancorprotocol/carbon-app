@@ -18,7 +18,7 @@ export const D3ChartTitle = ({ dms, title, width, marginTop = 20 }: Props) => {
         y={16}
         fill="currentColor"
         style={{ textAnchor: 'middle' }}
-        className="text-12 font-weight-500"
+        className="text-12 font-medium"
       >
         {title}
       </text>

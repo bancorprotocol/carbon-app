@@ -14,10 +14,10 @@ export const StrategyGraph: FC<Props> = ({ setShowGraph, children }) => {
       variants={items}
       key="createStrategyGraph"
       data-testid="strategy-chart"
-      className="rounded-10 bg-background-900 flex h-[550px] flex-col gap-20 p-20 md:sticky md:top-80 md:flex-1"
+      className="rounded-lg bg-background-900 flex h-[550px] flex-col gap-20 p-20 md:sticky md:top-80 md:flex-1"
     >
       <header className="flex items-center justify-between">
-        <h2 className="font-weight-500">Price Chart</h2>
+        <h2 className="font-medium">Price Chart</h2>
         <Button
           className="bg-background-800 hover:border-background-600 gap-12 self-end"
           variant="secondary"

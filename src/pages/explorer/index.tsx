@@ -37,7 +37,7 @@ export const ExplorerPage = () => {
     <Page hideTitle>
       <StrategyProvider query={query}>
         {config.ui.tradeCount && <ExplorerHeader />}
-        <div className="gap-30 flex flex-grow flex-col">
+        <div className="gap-30 flex grow flex-col">
           <ExplorerSearch />
           {slug && <ExplorerTabs />}
           <Outlet />

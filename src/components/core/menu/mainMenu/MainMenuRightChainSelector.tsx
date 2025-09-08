@@ -50,7 +50,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
             key={id}
             role="menuitem"
             className={cn(
-              'rounded-6 flex w-full items-center gap-x-10 p-12',
+              'rounded-sm flex w-full items-center gap-x-10 p-12',
               isCurrentNetwork
                 ? 'pointer-events-none bg-black'
                 : 'hover:bg-black',

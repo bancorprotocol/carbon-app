@@ -175,7 +175,7 @@ export const CartPage = () => {
 
   if (!strategies.length) {
     return (
-      <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] flex-grow content-start gap-16 pt-20">
+      <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] grow content-start gap-16 pt-20">
         <EmptyCart />
       </section>
     );
@@ -184,7 +184,7 @@ export const CartPage = () => {
   return (
     <form
       className={cn(
-        'px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] flex-grow content-start gap-16 pt-20',
+        'px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] grow content-start gap-16 pt-20',
         style.form,
       )}
       onSubmit={submit}
@@ -209,7 +209,7 @@ export const CartPage = () => {
             htmlFor="approve-warnings"
             className={cn(
               style.approveWarnings,
-              'text-14 font-weight-500 flex items-center gap-8 place-self-center text-white/60',
+              'text-14 font-medium flex items-center gap-8 place-self-center text-white/60',
             )}
           >
             <input

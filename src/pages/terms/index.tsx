@@ -1130,7 +1130,7 @@ export const TermsPage = () => {
 
         {content.map((item, index) => (
           <div key={index} className="legal pt-10">
-            <h2 className="mb-10 text-[20px] font-semibold">
+            <h2 className="mb-10 text-[20px]">
               {item.id}. {item.subtitle}
             </h2>
             <div className="mb-20 text-[16px]">{item.html}</div>

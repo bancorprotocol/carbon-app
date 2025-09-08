@@ -37,8 +37,8 @@ export const TradeSettingsRow: FC<{
         <div
           className={cn(
             style.presetCustom,
-            'flex-1 rounded-10 text-12 flex gap-8 border border-white bg-black py-8 px-16 text-center',
-            'focus-within:outline focus-within:outline-1',
+            'flex-1 rounded-lg text-12 flex gap-8 border border-white bg-black py-8 px-16 text-center',
+            'focus-within:outline-solid focus-within:outline-1',
           )}
         >
           <label className="text-white/60" htmlFor={item.id}>
@@ -47,7 +47,7 @@ export const TradeSettingsRow: FC<{
           <input
             id={item.id}
             name={item.id}
-            className="bg-transparent w-full text-center outline-none"
+            className="bg-transparent w-full text-center outline-hidden"
             value={item.value}
             type="number"
             inputMode="decimal"

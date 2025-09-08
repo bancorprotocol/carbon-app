@@ -23,7 +23,7 @@ export const PortfolioTokenHeader: FC<Props> = ({
         'items-center',
         'w-full',
         'bg-background-800',
-        'rounded-10',
+        'rounded-lg',
         'lg:h-95 h-64',
         'px-20',
         'md:mb-20',

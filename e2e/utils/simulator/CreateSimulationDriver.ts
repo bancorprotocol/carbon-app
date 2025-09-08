@@ -10,7 +10,7 @@ import { CreateStrategyTestCase, StrategyType } from './types';
 import { RangeOrder, debugTokens, Direction, Setting } from '../types';
 import { waitModalClose, waitModalOpen } from '../modal';
 import { screenshot, waitFor } from '../operators';
-import { dayjs } from '../../../src/libs/dayjs';
+import { getUnixTime } from 'date-fns';
 
 const displayRange = (start?: Date, end?: Date) => {
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
@@ -87,8 +87,11 @@ export class CreateSimulationDriver {
 
   parseTimestamp(timestamp: number) {
     return {
-      day: dayjs(timestamp * 1000).format('D'),
-      monthYear: dayjs(timestamp * 1000).format('MMMM YYYY'),
+      day: new Date(timestamp * 1000).getDate().toString(),
+      monthYear: new Date(timestamp * 1000).toLocaleDateString(undefined, {
+        month: 'long',
+        year: 'numeric',
+      }),
     };
   }
 
@@ -99,7 +102,7 @@ export class CreateSimulationDriver {
   }
 
   async fillDates(start: string, end: string) {
-    const [from, to] = [dayjs(start).unix(), dayjs(end).unix()].sort();
+    const [from, to] = [getUnixTime(start), getUnixTime(end)].sort();
     await this.page.getByTestId('date-picker-button').click();
     // Select date twice to force range to be 1 day long
     await this.selectDate(to);

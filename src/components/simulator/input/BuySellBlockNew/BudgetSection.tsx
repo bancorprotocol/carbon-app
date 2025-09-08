@@ -51,7 +51,7 @@ export const BudgetSection: FC<Props> = ({
 
   return (
     <fieldset className="flex flex-col gap-8">
-      <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
+      <legend className="text-14 font-medium mb-11 flex items-center gap-6">
         <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
           2
         </span>
@@ -77,12 +77,12 @@ export const BudgetSection: FC<Props> = ({
           <span className="capitalize text-white/80">Set {type} Budget</span>
         </Tooltip>
         {isBudgetOptional && (
-          <span className="font-weight-500 ml-8 text-white/60">Optional</span>
+          <span className="font-medium ml-8 text-white/60">Optional</span>
         )}
       </legend>
       <TokenInputField
         id={inputId}
-        className="rounded-16 bg-black p-16"
+        className="rounded-2xl bg-black p-16"
         value={order.budget}
         setValue={(value) => dispatch(`${type}Budget`, value)}
         token={budgetToken}

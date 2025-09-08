@@ -80,7 +80,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
       <div
         className={cn(
           style.approveWarnings,
-          'rounded-10 bg-background-900 text-14 grid gap-16 p-20 text-white/60',
+          'rounded-lg bg-background-900 text-14 grid gap-16 p-20 text-white/60',
         )}
       >
         <p className="warning-message text-12 text-white/60">
@@ -88,7 +88,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
         </p>
         <label
           htmlFor="approve-warnings"
-          className="font-weight-500 flex items-center gap-8"
+          className="font-medium flex items-center gap-8"
         >
           <input
             id="approve-warnings"

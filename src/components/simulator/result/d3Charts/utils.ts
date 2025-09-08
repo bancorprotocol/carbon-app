@@ -5,14 +5,14 @@ export const defaultLegend: D3SimLegendType = {
     index: 0,
     label: 'Sell high',
     labelSecondary: 'LHS',
-    color: 'var(--sell)',
+    color: 'var(--color-sell)',
     isDisabled: false,
   },
   bid: {
     index: 1,
     label: 'Buy low',
     labelSecondary: 'LHS',
-    color: 'var(--buy)',
+    color: 'var(--color-buy)',
     isDisabled: false,
   },
   price: {

@@ -19,7 +19,7 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
         Unfortunately we couldn't find a token for the address you entered, try
         to
       </span>
-      <span className="font-weight-500 text-white"> import a new token.</span>
+      <span className="font-medium text-white"> import a new token.</span>
     </>
   );
 

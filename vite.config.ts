@@ -2,6 +2,7 @@ import { defineConfig, loadEnv, PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
+import tailwindcss from '@tailwindcss/vite';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 // https://vitejs.dev/config/
@@ -19,6 +20,7 @@ export default defineConfig(({ mode }) => {
     }),
     viteTsconfigPaths(),
     svgrPlugin(),
+    tailwindcss(),
   ];
 
   // Put the Sentry vite plugin after all other plugins

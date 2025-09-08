@@ -23,7 +23,7 @@ export const DebugSDKConfig = () => {
 
   return (
     <form
-      className="rounded-18 bg-background-900 flex flex-col gap-20 p-20"
+      className="rounded-3xl bg-background-900 flex flex-col gap-20 p-20"
       onSubmit={save}
     >
       <h2>SDK Config</h2>
@@ -34,7 +34,7 @@ export const DebugSDKConfig = () => {
             id="sdk-timestamp"
             name="timestamp"
             type="number"
-            className="flex-1 rounded bg-black px-16 py-8"
+            className="flex-1 rounded-2xl bg-black px-16 py-8"
             value={timestamp}
             onChange={(e) => setTimestamp(e.target.valueAsNumber)}
           />
@@ -49,7 +49,7 @@ export const DebugSDKConfig = () => {
           id="sdk-ttl"
           name="ttl"
           type="number"
-          className="flex-1 rounded bg-black px-16 py-8"
+          className="flex-1 rounded-2xl bg-black px-16 py-8"
           value={ttl}
           onChange={(e) => setTTL(e.target.valueAsNumber)}
         />

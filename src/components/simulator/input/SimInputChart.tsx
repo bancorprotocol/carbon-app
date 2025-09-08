@@ -106,9 +106,9 @@ export const SimInputChart = ({
 };
 
 const Layout = ({ children }: { children: ReactNode }) => (
-  <div className="bg-background-900 sticky top-[80px] grid h-[600px] grid-rows-[auto_1fr] gap-20 rounded p-20">
+  <div className="bg-background-900 sticky top-[80px] grid h-[600px] grid-rows-[auto_1fr] gap-20 rounded-2xl p-20">
     <header className="flex items-center justify-between">
-      <h2 className="text-20 font-weight-500">Price Chart</h2>
+      <h2 className="text-20 font-medium">Price Chart</h2>
     </header>
     {children}
   </div>
@@ -121,7 +121,7 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
         <IconQuestion className="size-48" />
       </div>
       <h2 className="text-center">Well, this doesn't happen often...</h2>
-      <p className="text-14 font-weight-400 text-center text-white/60">
+      <p className="text-14 font-normal text-center text-white/60">
         Unfortunately, price data for this pair is currently unavailable, so
         simulation isn't possible. However, you can still go ahead and create a
         strategy.

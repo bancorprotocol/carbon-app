@@ -18,7 +18,7 @@ export const DebugFeatureFlag = () => {
   return (
     <form
       onSubmit={setFeatureFlags}
-      className="rounded-18 bg-background-800 flex flex-col gap-20 border border-white/60 p-20 md:col-span-2"
+      className="rounded-3xl bg-background-800 flex flex-col gap-20 border border-white/60 p-20 md:col-span-2"
     >
       <h2>🧪 Feature Flags</h2>
       {!!featureFlags.length ? <FeatureRadioGroup /> : <EmptyFlags />}
@@ -49,7 +49,7 @@ const FeatureRadioGroup = () => {
         {featureFlags.map(({ value, label, description }) => (
           <div
             key={value}
-            className="rounded-8 bg-background-700 flex gap-16 p-16"
+            className="rounded-md bg-background-700 flex gap-16 p-16"
           >
             <input
               className="h-24 w-24 self-center"

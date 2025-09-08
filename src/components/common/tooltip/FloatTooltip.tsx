@@ -133,7 +133,7 @@ export const FloatTooltipContent = forwardRef<
           ...style,
         }}
         {...context.getFloatingProps(props)}
-        className={cn('bg-background-800 rounded p-16', props.className)}
+        className={cn('bg-background-800 rounded-2xl p-16', props.className)}
       />
     </FloatingPortal>
   );
