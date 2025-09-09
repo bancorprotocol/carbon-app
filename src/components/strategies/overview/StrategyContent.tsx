@@ -96,7 +96,10 @@ const StrategyList: FC<StrategyListProps> = ({ strategies, layout }) => {
   if (layout === 'table' && !belowBreakpoint('xl')) {
     return (
       <>
-        <StrategyTable strategies={strategies.slice(0, max)} />
+        <StrategyTable
+          className="grid-area-[list]"
+          strategies={strategies.slice(0, max)}
+        />
         {max < strategies.length && (
           <Paginator increase={() => setMax((v) => v + 21)} />
         )}
@@ -108,7 +111,7 @@ const StrategyList: FC<StrategyListProps> = ({ strategies, layout }) => {
     <>
       <ul
         data-testid="strategy-list"
-        className={cn('grid gap-20', styles.strategyList)}
+        className={cn('grid gap-20 grid-area-[list]', styles.strategyList)}
       >
         {strategies.slice(0, max).map((s, i) => {
           const animate = i < 21;

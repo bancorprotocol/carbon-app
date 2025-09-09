@@ -4,10 +4,6 @@ import { Notification } from 'libs/notifications';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
-import {
-  StrategyFilter,
-  StrategySort,
-} from 'components/strategies/overview/StrategyFilterSort';
 import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
 import { FiatSymbol } from 'utils/carbonApi';
 import {
@@ -41,8 +37,6 @@ export interface LocalStorageSchema {
   tradeMaxOrders: string;
   chooseTokenCategory: ChooseTokenCategory;
   carbonControllerAddress: string;
-  strategyOverviewFilter: StrategyFilter;
-  strategyOverviewSort: StrategySort;
   voucherContractAddress: string;
   batcherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
@@ -60,6 +54,10 @@ export interface LocalStorageSchema {
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
   hasWalkthrough: boolean;
+
+  /* @deprecated */
+  strategyOverviewFilter?: void;
+  strategyOverviewSort?: void;
 }
 
 enum EnumStrategySort {

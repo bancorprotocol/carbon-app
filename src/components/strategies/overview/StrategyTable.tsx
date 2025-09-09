@@ -4,7 +4,7 @@ import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { FC, useId } from 'react';
 import { StrategyStatusTag } from './strategyBlock/StrategyBlockHeader';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { prettifyNumber, tokenAmount } from 'utils/helpers';
+import { cn, prettifyNumber, tokenAmount } from 'utils/helpers';
 import { StrategyGraph } from './strategyBlock/StrategyGraph';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import {
@@ -19,11 +19,12 @@ import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
 import styles from './StrategyContent.module.css';
 
 interface Props {
+  className?: string;
   strategies: AnyStrategyWithFiat[];
 }
-export const StrategyTable: FC<Props> = ({ strategies }) => {
+export const StrategyTable: FC<Props> = ({ strategies, className }) => {
   return (
-    <table className={styles.strategyTable}>
+    <table className={cn(styles.strategyTable, className)}>
       <thead>
         <tr>
           <th>ID</th>
