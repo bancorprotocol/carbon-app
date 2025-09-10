@@ -16,22 +16,30 @@ const tabs: ExplorerTab[] = [
   {
     label: 'Pairs',
     href: '/explore/pairs',
-    icon: <IconPairs className="size-24 group-aria-page:fill-gradient" />,
+    icon: (
+      <IconPairs className="hidden md:block size-24 group-aria-page:fill-gradient" />
+    ),
   },
   {
     label: 'Strategies',
     href: '/explore/strategies',
-    icon: <IconOverview className="size-24 group-aria-page:stroke-gradient" />,
+    icon: (
+      <IconOverview className="hidden md:block size-24 group-aria-page:stroke-gradient" />
+    ),
   },
   {
     label: 'Distribution',
     href: '/explore/distribution',
-    icon: <IconPieChart className="size-24 group-aria-page:stroke-gradient" />,
+    icon: (
+      <IconPieChart className="hidden md:block size-24 group-aria-page:stroke-gradient" />
+    ),
   },
   {
     label: 'Activity',
     href: '/explore/activity',
-    icon: <IconActivity className="size-24 group-aria-page:stroke-gradient" />,
+    icon: (
+      <IconActivity className="hidden md:block size-24 group-aria-page:stroke-gradient" />
+    ),
   },
 ];
 
@@ -44,7 +52,7 @@ export const ExplorerTabs = () => {
   return (
     <nav
       aria-label="Strategy Panels"
-      className="text-20 flex gap-16 rounded-full grid-area-[tabs]"
+      className="text-14 sm:text-20 flex place-self-start gap-8 md:gap-16 rounded-full grid-area-[tabs]"
     >
       {tabs.map(({ label, href, search, icon }) => {
         const active = match({
@@ -58,7 +66,7 @@ export const ExplorerTabs = () => {
             to={href}
             search={(s) => s}
             key={href}
-            className="group font-title font-medium bg-transparent text-white/60 hover:bg-background-900 flex gap-8 w-full items-center justify-center rounded-full px-16 py-8 aria-page:bg-background-800"
+            className="px-8 py-4 group font-title font-medium bg-transparent text-white/60 hover:bg-background-900 flex gap-8 w-full items-center justify-center rounded-full sm:px-16 sm:py-8 aria-page:bg-background-800"
             aria-current={active ? 'page' : 'false'}
           >
             {icon}

@@ -114,6 +114,9 @@
 @utility grid-area-* {
   grid-area: --value([*]);
 }
+@utility grid-fill-* {
+  grid-template-columns: repeat(auto-fill, minmax(calc(--value(integer) * 1px), 1fr))
+}
 
 @custom-variant aria-page (&[aria-current="page"]);
 @custom-variant aria-location (&[aria-current="location"]);
