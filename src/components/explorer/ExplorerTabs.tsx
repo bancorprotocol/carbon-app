@@ -52,7 +52,7 @@ export const ExplorerTabs = () => {
   return (
     <nav
       aria-label="Strategy Panels"
-      className="text-14 sm:text-20 flex place-self-start gap-8 md:gap-16 rounded-full grid-area-[tabs]"
+      className="text-16 sm:text-20 flex sm:place-self-start gap-8 md:gap-16 rounded-full grid-area-[tabs]"
     >
       {tabs.map(({ label, href, search, icon }) => {
         const active = match({

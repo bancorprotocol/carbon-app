@@ -40,6 +40,7 @@ const LocalPortfolioToken = ({
         variant="error"
         title="Token information not found"
         text="Please search the portfolio by a different token."
+        className="grid-area-[list]"
       />
     );
   }

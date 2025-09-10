@@ -47,8 +47,8 @@ const LocalExplorerSearch: FC = () => {
       slug = await getEnsAddressIfAny(provider, value);
     }
     navigate({
-      to: '/explore',
-      search: { search },
+      to: '.',
+      search: { search: slug },
     });
   };
 

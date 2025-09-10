@@ -14,3 +14,17 @@
   width: 100%;
   padding: 16px;
 }
+
+/* Below SM */
+@media (max-width: 40rem) {
+  .root {
+    grid-template-columns: 1fr; 
+    gap: 16px;
+    grid-template-areas:
+      "search"
+      "tabs"
+      "filters"
+      "amount"
+      "list";
+  }
+}

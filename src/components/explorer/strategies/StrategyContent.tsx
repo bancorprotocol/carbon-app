@@ -119,6 +119,7 @@ const StrategyList: FC<StrategyListProps> = ({ strategies, layout }) => {
         variant="info"
         title="No results found"
         text="Try changing the search term"
+        className="grid-area-[list]"
       />
     );
   }

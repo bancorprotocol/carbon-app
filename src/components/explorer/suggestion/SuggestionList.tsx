@@ -48,7 +48,7 @@ export const SuggestionList: FC<Props> = (props) => {
     setOpen(false);
     if (search === nextSlug) return;
     await animateLeaving();
-    nav({ to: '/explore', search: { search: nextSlug } });
+    nav({ to: '.', search: { search: nextSlug } });
   };
 
   const [maxTokens, setMaxTokens] = useState(5);
