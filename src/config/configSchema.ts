@@ -13,6 +13,7 @@ export const AppConfigSchema = v.object({
   appName: v.string(),
   appUrl: v.string(),
   carbonApi: v.string(),
+  tonApi: v.optional(v.string()),
   externalLinks: v.optional(v.record(v.string(), v.string())),
   selectedConnectors: ConnectorSchema,
   blockedConnectors: v.optional(ConnectorSchema),
@@ -81,6 +82,12 @@ export const AppConfigSchema = v.object({
       voucher: v.string(),
       batcher: v.optional(v.string()),
     }),
+    tac: v.optional(
+      v.object({
+        proxy: v.string(),
+        smartAccountFactory: v.string(),
+      }),
+    ),
   }),
   utils: v.union([
     v.partial(

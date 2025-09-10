@@ -1,12 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Token as TokenContract } from 'abis/types';
-import { isAddress, getAddress, TransactionRequest } from 'ethers';
+import { isAddress, TransactionRequest } from 'ethers';
+import { getAddress } from 'ethers';
 import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
-import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import { SafeDecimal } from 'libs/safedecimal';
-import { useContract } from 'hooks/useContract';
 import config from 'config';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
@@ -16,30 +14,27 @@ import {
   Strategy as SDKStrategy,
   PopulatedTransaction,
 } from '@bancor/carbon-sdk';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 import { usePairs } from 'hooks/usePairs';
 import {
   AnyStrategy,
+  EditOrders,
   GradientOrder,
   StaticOrder,
   Strategy,
 } from 'components/strategies/common/types';
-import { isInPast, isPaused } from 'components/strategies/common/utils';
+import {
+  isGradientStrategy,
+  isInPast,
+  isPaused,
+} from 'components/strategies/common/utils';
 import { SDKGradientStrategy } from './gradient-mock';
 import { useCarbonInit } from 'hooks/useCarbonInit';
 import { isZero } from 'components/strategies/common/utils';
 
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
-
-interface StrategiesHelperProps {
-  strategies: AnySDKStrategy[];
-  getTokenById: (id: string) => Token | undefined;
-  importTokens: (tokens: Token[]) => void;
-  Token: (address: string) => { read: TokenContract };
-}
 
 // TODO: remove when sdk is using ethers v6
 export const toTransactionRequest = (tx: PopulatedTransaction) => {
@@ -53,38 +48,21 @@ export const toTransactionRequest = (tx: PopulatedTransaction) => {
   return next;
 };
 
-const buildStrategiesHelper = async ({
-  strategies,
-  getTokenById,
-  importTokens,
-  Token,
-}: StrategiesHelperProps) => {
-  const tokens = new Map<string, Token>();
-  const missing = new Set<string>();
-
-  const markForMissing = (address: string) => {
-    if (tokens.has(address)) return;
-    const existing = getTokenById(address);
-    if (existing) tokens.set(address, existing);
-    else missing.add(address);
-  };
+const buildStrategiesHelper = async (
+  strategies: AnySDKStrategy[],
+  getAllTokens: (addresses: Iterable<string>) => Promise<Map<string, Token>>,
+) => {
+  const tokenAddresses = new Set<string>();
 
   for (const strategy of strategies) {
-    markForMissing(strategy.baseToken);
-    markForMissing(strategy.quoteToken);
+    tokenAddresses.add(strategy.baseToken);
+    tokenAddresses.add(strategy.quoteToken);
   }
-
-  const getMissing = Array.from(missing).map(async (address) => {
-    const token = await fetchTokenData(Token, address);
-    tokens.set(address, token);
-    return token;
-  });
-  const missingTokens = await Promise.all(getMissing);
-  importTokens(missingTokens);
+  const allTokenMap = await getAllTokens(tokenAddresses);
 
   return strategies.map((s) => {
-    const base = tokens.get(s.baseToken)!;
-    const quote = tokens.get(s.quoteToken)!;
+    const base = allTokenMap.get(s.baseToken)!;
+    const quote = allTokenMap.get(s.quoteToken)!;
     if ('sellPriceLow' in s) {
       const sellLow = new SafeDecimal(s.sellPriceLow);
       const sellHigh = new SafeDecimal(s.sellPriceHigh);
@@ -191,8 +169,7 @@ interface Props {
 
 export const useGetUserStrategies = ({ user }: Props) => {
   const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importTokens } = useTokens();
-  const { Token } = useContract();
+  const { tokens, getAllTokens } = useTokens();
 
   const ensAddress = useGetAddressFromEns(user || '');
   const address: string = (ensAddress?.data || user || '').toLowerCase();
@@ -205,12 +182,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
     queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
       const strategies = await carbonSDK.getUserStrategies(address);
-      return buildStrategiesHelper({
-        strategies,
-        getTokenById,
-        importTokens,
-        Token,
-      });
+      return buildStrategiesHelper(strategies, getAllTokens);
     },
     enabled: tokens.length > 0 && ensAddress.isFetched && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -220,8 +192,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
 
 export const useGetStrategyList = (ids: string[]) => {
   const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importTokens } = useTokens();
-  const { Token } = useContract();
+  const { tokens, getAllTokens } = useTokens();
 
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategyList(ids),
@@ -236,12 +207,7 @@ export const useGetStrategyList = (ids: string[]) => {
           console.error(res.reason);
         }
       }
-      return buildStrategiesHelper({
-        strategies,
-        getTokenById,
-        importTokens,
-        Token,
-      });
+      return buildStrategiesHelper(strategies, getAllTokens);
     },
     enabled: tokens.length > 0 && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -251,20 +217,13 @@ export const useGetStrategyList = (ids: string[]) => {
 
 export const useGetStrategy = (id: string) => {
   const { isInitialized } = useCarbonInit();
-  const { tokens, getTokenById, importTokens } = useTokens();
-  const { Token } = useContract();
+  const { tokens, getAllTokens } = useTokens();
 
   return useQuery<AnyStrategy>({
     queryKey: QueryKey.strategy(id),
     queryFn: async () => {
       const strategy = await carbonSDK.getStrategy(id);
-
-      const strategies = await buildStrategiesHelper({
-        strategies: [strategy],
-        getTokenById,
-        importTokens,
-        Token,
-      });
+      const strategies = await buildStrategiesHelper([strategy], getAllTokens);
       return strategies[0];
     },
     enabled: tokens.length > 0 && isInitialized,
@@ -311,23 +270,34 @@ const normalizeStrategy = (
   }
 };
 
+const getFieldsToUpdate = (orders: EditOrders, strategy: AnyStrategy) => {
+  const { buy, sell } = orders;
+  const fields: Partial<StrategyUpdate> = {};
+  if (isGradientStrategy(strategy)) {
+    // @todo(gradient) implement edit fields for gradient
+  } else {
+    if (buy.min !== strategy.buy.min) fields.buyPriceLow = buy.min;
+    if (buy.max !== strategy.buy.max) fields.buyPriceHigh = buy.max;
+    if (sell.min !== strategy.sell.min) fields.sellPriceLow = sell.min;
+    if (sell.max !== strategy.sell.max) fields.sellPriceHigh = sell.max;
+  }
+  if (buy.budget !== strategy.buy.budget) fields.buyBudget = buy.budget;
+  if (sell.budget !== strategy.sell.budget) fields.sellBudget = sell.budget;
+  return fields as StrategyUpdate;
+};
+
 export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
   const { isInitialized } = useCarbonInit();
-  const { getTokenById, importTokens, isPending } = useTokens();
+  const { getAllTokens, isPending } = useTokens();
   const pair = usePairs();
-  const { Token } = useContract();
 
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategiesByPair(base, quote),
     queryFn: async () => {
       if (!base || !quote) return [];
       const strategies = await carbonSDK.getStrategiesByPair(base, quote);
-      return buildStrategiesHelper({
-        strategies: strategies.map((s) => normalizeStrategy(base, quote, s)),
-        getTokenById,
-        importTokens,
-        Token,
-      });
+      const list = strategies.map((s) => normalizeStrategy(base, quote, s));
+      return buildStrategiesHelper(list, getAllTokens);
     },
     enabled: !pair.isPending && !isPending && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -337,8 +307,7 @@ export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
 
 export const useTokenStrategies = (token?: string) => {
   const { isInitialized } = useCarbonInit();
-  const { getTokenById, importTokens } = useTokens();
-  const { Token } = useContract();
+  const { getAllTokens } = useTokens();
   const { map: pairMap } = usePairs();
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategiesByToken(token),
@@ -350,6 +319,7 @@ export const useTokenStrategies = (token?: string) => {
         if (quoteToken.address === base) allQuotes.add(baseToken.address);
       }
       const getStrategies: Promise<SDKStrategy[]>[] = [];
+      console.log({ allQuotes });
       for (const quote of allQuotes) {
         getStrategies.push(carbonSDK.getStrategiesByPair(base, quote));
       }
@@ -361,13 +331,7 @@ export const useTokenStrategies = (token?: string) => {
       const allStrategies = allResponses
         .filter((v) => v.status === 'fulfilled')
         .map((v) => (v as PromiseFulfilledResult<SDKStrategy[]>).value);
-      const result = await buildStrategiesHelper({
-        strategies: allStrategies.flat(),
-        getTokenById,
-        importTokens,
-        Token,
-      });
-      return result;
+      return buildStrategiesHelper(allStrategies.flat(), getAllTokens);
     },
     enabled: !!token && !!pairMap.size && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -383,20 +347,13 @@ export interface CreateStrategyParams {
   encoded?: EncodedStrategyBNStr;
 }
 
-export interface UpdateStrategyParams {
-  id: string;
-  encoded: EncodedStrategyBNStr;
-  fieldsToUpdate: StrategyUpdate;
-  buyMarginalPrice?: MarginalPriceOptions | string;
-  sellMarginalPrice?: MarginalPriceOptions | string;
-}
-
 export interface DeleteStrategyParams {
   id: string;
 }
 
 export const useCreateStrategyQuery = () => {
-  const { signer } = useWagmi();
+  const { getTokenById } = useTokens();
+  const { sendTransaction } = useWagmi();
 
   return useMutation({
     mutationFn: async ({ base, quote, buy, sell }: CreateStrategyParams) => {
@@ -412,46 +369,101 @@ export const useCreateStrategyQuery = () => {
         sell.max,
         sell.budget || '0',
       );
+      const getRawAmount = (address: string, amount: string) => {
+        const token = getTokenById(address)!;
+        return new SafeDecimal(amount).mul(10 ** token.decimals).toString();
+      };
+      unsignedTx.customData = {
+        assets: [
+          {
+            address: base,
+            rawAmount: getRawAmount(base, sell.budget),
+          },
+          {
+            address: quote,
+            rawAmount: getRawAmount(quote, buy.budget),
+          },
+        ],
+      };
 
-      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };
 
-export const useUpdateStrategyQuery = () => {
-  const { signer } = useWagmi();
+export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
+  const { sendTransaction } = useWagmi();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      encoded,
-      fieldsToUpdate,
-      buyMarginalPrice,
-      sellMarginalPrice,
-    }: UpdateStrategyParams) => {
+    mutationFn: async (orders: EditOrders) => {
+      const updates = getFieldsToUpdate(orders, strategy);
       const unsignedTx = await carbonSDK.updateStrategy(
-        id,
-        encoded,
+        strategy.id,
+        strategy.encoded,
+        updates,
+        orders.buy.marginalPrice,
+        orders.sell.marginalPrice,
+      );
+      const getRawAmount = (token: Token, previous: string, next?: string) => {
+        const delta = new SafeDecimal(next ?? 0).minus(previous);
+        if (delta.lte(0)) return 0;
+        return new SafeDecimal(delta).mul(10 ** token.decimals).toString();
+      };
+      unsignedTx.customData = {
+        assets: [
+          {
+            address: strategy.base.address,
+            rawAmount: getRawAmount(
+              strategy.base,
+              strategy.sell.budget,
+              updates.sellBudget,
+            ),
+          },
+          {
+            address: strategy.quote.address,
+            rawAmount: getRawAmount(
+              strategy.quote,
+              strategy.buy.budget,
+              updates.buyBudget,
+            ),
+          },
+        ],
+      };
+
+      return sendTransaction(toTransactionRequest(unsignedTx));
+    },
+  });
+};
+
+export const usePauseStrategyQuery = () => {
+  const { sendTransaction } = useWagmi();
+
+  return useMutation({
+    mutationFn: async (strategy: AnyStrategy) => {
+      const unsignedTx = await carbonSDK.updateStrategy(
+        strategy.id,
+        strategy.encoded,
         {
-          ...fieldsToUpdate,
+          buyPriceLow: '0',
+          buyPriceHigh: '0',
+          sellPriceLow: '0',
+          sellPriceHigh: '0',
         },
-        buyMarginalPrice,
-        sellMarginalPrice,
       );
 
-      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };
 
 export const useDeleteStrategyQuery = () => {
-  const { signer } = useWagmi();
+  const { sendTransaction } = useWagmi();
 
   return useMutation({
     mutationFn: async ({ id }: DeleteStrategyParams) => {
       const unsignedTx = await carbonSDK.deleteStrategy(id);
 
-      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };

@@ -2,27 +2,27 @@ import { useWagmi } from 'libs/wagmi';
 import { useCallback, useEffect, useState } from 'react';
 
 export const DebugBalance = () => {
-  const { provider, user } = useWagmi();
+  const { getBalance, user } = useWagmi();
   const [balance, setBalance] = useState('');
 
   const fetchGasToken = useCallback(async () => {
-    if (!provider || !user) return;
+    if (!user) return;
 
     try {
-      const res = await provider.getBalance(user);
+      const res = await getBalance(user);
       setBalance(res.toString());
     } catch (e) {
       console.error(e);
     }
-  }, [provider, user]);
+  }, [user]);
 
   useEffect(() => {
-    if (provider && user) {
+    if (user) {
       fetchGasToken();
     } else {
       setBalance('');
     }
-  }, [fetchGasToken, provider, user]);
+  }, [fetchGasToken, user]);
 
   return <div>{balance}</div>;
 };

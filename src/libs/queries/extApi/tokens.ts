@@ -12,7 +12,8 @@ export const useTokensQuery = () => {
       if (local && local.timestamp > Date.now() - ONE_HOUR_IN_MS) {
         return local.tokens;
       }
-      const tokens = buildTokenList(await fetchTokenLists());
+      const list = await fetchTokenLists();
+      const tokens = buildTokenList(list);
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
     },

@@ -7,8 +7,9 @@ import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { ExplorerSearch } from 'components/explorer/ExplorerSearch';
 import { useExplorer } from 'components/explorer/useExplorer';
-import config from 'config';
 import { carbonEvents } from 'services/events';
+import { extractExplorerPair } from 'hooks/usePairs';
+import config from 'config';
 
 const url = '/explore/$slug';
 export const ExplorerPage = () => {
@@ -25,7 +26,7 @@ export const ExplorerPage = () => {
   useEffect(() => {
     if (slug) {
       // Set last visited pair
-      const [base, quote] = slug.split('_');
+      const [base, quote] = extractExplorerPair(slug);
       if (base && quote) lsService.setItem('tradePair', [base, quote]);
     }
   }, [slug, navigate]);

@@ -26,7 +26,7 @@ export const useModalTradeRouting = ({
     sourceBalance,
   },
 }: Props) => {
-  const { user, provider } = useWagmi();
+  const { user } = useWagmi();
   const { openModal, closeModal } = useModal();
   const { useGetTokenPrice } = useFiatCurrency();
   const sourceFiatPrice = useGetTokenPrice(source.address);
