@@ -7,8 +7,8 @@ import { ExplorerDistribution } from 'pages/explorer/distribution';
 import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/distribution/token';
 import { validateActivityParams } from 'components/activity/utils';
 import { searchValidator } from '../utils';
-import * as v from 'valibot';
 import { ExplorerPairs } from 'pages/explorer/pairs';
+import * as v from 'valibot';
 
 // TODO: implement a redirect
 // export const oldExplorer = createRoute({

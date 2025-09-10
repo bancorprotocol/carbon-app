@@ -14,7 +14,7 @@ import {
 import { NotificationPreference } from 'libs/notifications/NotificationPreferences';
 import { AppConfig } from 'config/types';
 import { LiquidityMatrixSearch } from 'libs/routing/routes/liquidity-matrix';
-import { StrategyLayout } from 'components/strategies/StrategySelectLayout';
+import { StrategyLayout } from 'components/explorer/strategies/StrategySelectLayout';
 import { Cart } from 'components/cart/utils';
 
 // ************************** /

@@ -10,7 +10,6 @@ import {
   AnyStrategy,
   AnyStrategyWithFiat,
 } from 'components/strategies/common/types';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 // export type StrategyFilterOutput = ReturnType<typeof useStrategyFilter>;
 
@@ -158,7 +157,14 @@ const useFilterStrategies = (
   });
 };
 
-const StrategyContext = createContext<AnyStrategyWithFiat[]>([]);
+interface StrategyCtx {
+  strategies: AnyStrategyWithFiat[];
+  isPending: boolean;
+}
+const StrategyContext = createContext<StrategyCtx>({
+  strategies: [],
+  isPending: true,
+});
 
 interface StrategyProviderProps {
   url: '/explore' | '/portfolio';
@@ -169,19 +175,8 @@ export const StrategyProvider: FC<StrategyProviderProps> = (props) => {
   const { data, isPending } = useGetEnrichedStrategies(props.query);
   const strategies = useFilterStrategies(props.url, data);
 
-  if (isPending) {
-    return (
-      <div
-        key="loading"
-        className="grid place-items-center grow grid-area-[list]"
-      >
-        <CarbonLogoLoading className="h-80" />
-      </div>
-    );
-  }
-
   return (
-    <StrategyContext.Provider value={strategies}>
+    <StrategyContext.Provider value={{ strategies, isPending }}>
       {props.children}
     </StrategyContext.Provider>
   );

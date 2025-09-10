@@ -3,14 +3,14 @@
 
 .strategy-list {
   contain: content;
-  grid-template-columns: repeat(auto-fill, 375px);
+  grid-template-columns: repeat(auto-fill, 410px);
   justify-content: center;
 }
 .strategy-item {
-  height: 400px;
-  max-width: 375px;
+  height: 425px;
+  max-width: 410px;
   content-visibility: auto; /* to prevent no tooltips when scrolling down */
-  contain-intrinsic-size: 375px 400px;
+  contain-intrinsic-size: 410px 425px;
 }
 @media (prefers-reduced-motion: no-preference) {
   .animate-item {

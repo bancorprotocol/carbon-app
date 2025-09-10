@@ -1,19 +1,18 @@
 import { Link, Pathnames, useMatchRoute, useRouterState } from 'libs/routing';
-import { ReactNode } from 'react';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
 import { ReactComponent as IconPairs } from 'assets/icons/pairs.svg';
+import { ReactNode } from 'react';
 
-export interface StrategyTab {
+export interface ExplorerTab {
   label: string;
   href: Pathnames;
   search?: { search?: string };
   icon: ReactNode;
-  badge?: number;
 }
 
-const tabs: StrategyTab[] = [
+const tabs: ExplorerTab[] = [
   {
     label: 'Pairs',
     href: '/explore/pairs',
@@ -36,17 +35,18 @@ const tabs: StrategyTab[] = [
   },
 ];
 
-export const StrategyPageTabs = () => {
+export const ExplorerTabs = () => {
   // To support emojis in ens domains
   const { location } = useRouterState();
   const pathname = decodeURIComponent(location.pathname);
   const match = useMatchRoute();
+
   return (
     <nav
       aria-label="Strategy Panels"
-      className="border-background-900 text-20 mr-auto flex w-full gap-16 rounded-full border-2 p-6 md:w-auto grid-area-[tabs]"
+      className="text-20 flex gap-16 rounded-full grid-area-[tabs]"
     >
-      {tabs.map(({ label, href, search, icon, badge }) => {
+      {tabs.map(({ label, href, search, icon }) => {
         const active = match({
           to: href,
           search,
@@ -58,16 +58,11 @@ export const StrategyPageTabs = () => {
             to={href}
             search={(s) => s}
             key={href}
-            className="group font-title font-bold bg-transparent text-white/60 hover:bg-background-900 flex gap-8 w-full items-center justify-center rounded-full px-16 py-8 aria-page:bg-background-800"
+            className="group font-title font-medium bg-transparent text-white/60 hover:bg-background-900 flex gap-8 w-full items-center justify-center rounded-full px-16 py-8 aria-page:bg-background-800"
             aria-current={active ? 'page' : 'false'}
           >
             {icon}
             <span className="group-aria-page:text-gradient">{label}</span>
-            {typeof badge === 'number' && (
-              <span className="size-18 text-10 grid place-items-center rounded-full bg-white/10">
-                {badge}
-              </span>
-            )}
           </Link>
         );
       })}

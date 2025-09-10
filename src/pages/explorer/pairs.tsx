@@ -1,28 +1,30 @@
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { PairContent } from 'components/explorer/pairs/PairContent';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
-import { Token } from 'libs/tokens';
-import { useMemo } from 'react';
-import { useStore } from 'store';
+import { useMemo, useState } from 'react';
 import { prettifyNumber } from 'utils/helpers';
-
-interface PairRow {
-  id: string;
-  base: Token;
-  quote: Token;
-  tradeCount: number;
-  tradeCount24h: number;
-  strategyAmount: number;
-  liquidity: SafeDecimal;
-}
+import { RawPairRow } from 'components/explorer/pairs/types';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import {
+  PairFilter,
+  PairSort,
+  sortPairFn,
+} from 'components/explorer/pairs/utils';
+import {
+  PairFilterDropdown,
+  PairSortDropdown,
+} from 'components/explorer/pairs/PairFilterSort';
 
 export const ExplorerPairs = () => {
-  const strategies = useStrategyCtx();
-  const {
-    fiatCurrency: { selectedFiatCurrency },
-  } = useStore();
+  const { strategies, isPending } = useStrategyCtx();
+  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
 
-  const pairs = useMemo(() => {
-    const map: Record<string, PairRow> = {};
+  const [filter, setFilter] = useState<PairFilter>('all');
+  const [sort, setSort] = useState<PairSort>('trades');
+
+  const allPairs = useMemo(() => {
+    const map: Record<string, RawPairRow> = {};
     for (const strategy of strategies) {
       const { base, quote, tradeCount, tradeCount24h, fiatBudget } = strategy;
       const pairKey = `${base.address}_${quote.address}`;
@@ -41,13 +43,39 @@ export const ExplorerPairs = () => {
       map[pairKey].strategyAmount++;
       map[pairKey].liquidity = liquidity;
     }
-    return Object.values(map).map((row) => ({
+    return Object.values(map);
+  }, [strategies]);
+
+  const filtered = useMemo(() => {
+    return allPairs.filter((pair) => {
+      if (filter === 'all') return true;
+      // TODO: What's low liquidity pool
+      return pair.liquidity.gte(100);
+    });
+  }, [allPairs, filter]);
+
+  const sorted = useMemo(() => {
+    const sortFn = sortPairFn[sort];
+    return filtered.sort(sortFn);
+  }, [filtered, sort]);
+
+  const pairs = useMemo(() => {
+    return sorted.map((row) => ({
       ...row,
-      liquidity: prettifyNumber(row.liquidity, {
-        currentCurrency: selectedFiatCurrency,
-      }),
+      tradeCount: prettifyNumber(row.tradeCount, { isInteger: true }),
+      tradeCount24h: prettifyNumber(row.tradeCount24h, { isInteger: true }),
+      strategyAmount: prettifyNumber(row.strategyAmount, { isInteger: true }),
+      liquidity: prettifyNumber(row.liquidity, { currentCurrency }),
     }));
-  }, [selectedFiatCurrency, strategies]);
+  }, [sorted, currentCurrency]);
+
+  if (isPending) {
+    return (
+      <div className="grid place-items-center grow grid-area-[list]">
+        <CarbonLogoLoading className="h-80" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -55,40 +83,10 @@ export const ExplorerPairs = () => {
         role="toolbar"
         className="flex items-center justify-end gap-16 grid-area-[filters]"
       >
-        {/* TODO: add filter & sort */}
+        <PairFilterDropdown filter={filter} setFilter={setFilter} />
+        <PairSortDropdown sort={sort} setSort={setSort} />
       </div>
-      <table className="w-full border-collapse md:bg-background-900 rounded-2xl grid-area-[list]">
-        <thead>
-          <tr className="border-background-800 text-14 border-b text-white/60">
-            <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-              Token Pair
-            </th>
-            <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-              Trades
-            </th>
-            <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-              24h Trades
-            </th>
-            <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-              # of Sthategies
-            </th>
-            <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-              Liquidity
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {pairs.map((pair) => (
-            <tr key={pair.id}>
-              <td className="py-12 pl-8 first:pl-24"></td>
-              <td className="py-12 pl-8 first:pl-24">{pair.tradeCount}</td>
-              <td className="py-12 pl-8 first:pl-24">{pair.tradeCount24h}</td>
-              <td className="py-12 pl-8 first:pl-24">{pair.strategyAmount}</td>
-              <td className="py-12 pl-8 first:pl-24">{pair.liquidity}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <PairContent pairs={pairs} />
     </>
   );
 };

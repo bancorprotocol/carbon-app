@@ -9,7 +9,7 @@ import { cn, prettifyNumber } from 'utils/helpers';
 import style from './MyStrategiesHeader.module.css';
 
 export const MyStrategiesHeader = () => {
-  const strategies = useStrategyCtx();
+  const { strategies } = useStrategyCtx();
   const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
 
   const netWorth = useMemo(() => {

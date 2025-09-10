@@ -2,21 +2,21 @@ import { Link, useMatch } from '@tanstack/react-router';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { FC, useId } from 'react';
-import { StrategyStatusTag } from './strategyBlock/StrategyBlockHeader';
+import { StrategyStatusTag } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { cn, prettifyNumber, tokenAmount } from 'utils/helpers';
-import { StrategyGraph } from './strategyBlock/StrategyGraph';
+import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import {
   ManageButtonIcon,
   StrategyBlockManage,
-} from './strategyBlock/StrategyBlockManage';
+} from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { FiatPrice } from 'components/common/FiatPrice';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { useEditToDisposableSell } from '../edit/utils';
-import { isDisposableStrategy } from '../common/utils';
+import { useEditToDisposableSell } from 'components/strategies/edit/utils';
+import { isDisposableStrategy } from 'components/strategies/common/utils';
 import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
-import styles from './StrategyContent.module.css';
+import styles from 'components/strategies/overview/StrategyContent.module.css';
 
 interface Props {
   className?: string;

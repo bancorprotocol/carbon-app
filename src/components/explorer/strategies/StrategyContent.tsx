@@ -2,9 +2,12 @@ import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
-import { cn } from 'utils/helpers';
+import { cn, prettifyNumber } from 'utils/helpers';
 import { StrategyTable } from './StrategyTable';
-import { StrategyLayout, StrategySelectLayout } from '../StrategySelectLayout';
+import {
+  StrategyLayout,
+  StrategySelectLayout,
+} from 'components/explorer/strategies/StrategySelectLayout';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { NotFound } from 'components/common/NotFound';
 import {
@@ -18,14 +21,17 @@ import {
   StrategyFilter,
   StrategySort,
 } from './utils';
-import styles from './StrategyContent.module.css';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { SafeDecimal } from 'libs/safedecimal';
+import styles from 'components/strategies/overview/StrategyContent.module.css';
 
 export const StrategyContent = () => {
+  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
   const [layout, setLayout] = useState<StrategyLayout>('grid');
   const [filter, setFilter] = useState<StrategyFilter>({ status: 'all' });
   const [sort, setSort] = useState<StrategySort>('trades');
-
-  const strategies = useStrategyCtx();
+  const { strategies, isPending } = useStrategyCtx();
 
   const filteredStrategies = useMemo(() => {
     return strategies.filter((strategy) => {
@@ -54,8 +60,32 @@ export const StrategyContent = () => {
     });
   }, [filteredStrategies, sort]);
 
+  const liquidityAmount = useMemo(() => {
+    const amount = filteredStrategies.reduce(
+      (acc, s) => acc.add(s.fiatBudget.total),
+      new SafeDecimal(0),
+    );
+    return prettifyNumber(amount, { currentCurrency });
+  }, [filteredStrategies, currentCurrency]);
+
+  if (isPending) {
+    return (
+      <div className="grid place-items-center grow grid-area-[list]">
+        <CarbonLogoLoading className="h-80" />
+      </div>
+    );
+  }
+
   return (
     <>
+      <div className="flex gap-24 grid-area-[amount]">
+        <span className="bg-background-900 rounded-2xl px-16 py-8">
+          Total Amount: {filteredStrategies.length}
+        </span>
+        <span className="bg-background-900 rounded-2xl px-16 py-8">
+          Total Liquidity: {liquidityAmount}
+        </span>
+      </div>
       <div
         role="toolbar"
         className="flex items-center justify-end gap-16 grid-area-[filters]"

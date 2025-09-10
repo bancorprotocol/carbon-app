@@ -5,7 +5,8 @@
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
     "search search"
-    "tabs filters"
+    "tabs tabs"
+    "amount filters"
     "list list";
   place-items: stretch;
   margin-inline: auto;
