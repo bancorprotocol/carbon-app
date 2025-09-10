@@ -371,7 +371,7 @@ export const useCreateStrategyQuery = () => {
       );
       const getRawAmount = (address: string, amount: string) => {
         const token = getTokenById(address)!;
-        return new SafeDecimal(amount).mul(10 ** token.decimals).toNumber();
+        return new SafeDecimal(amount).mul(10 ** token.decimals).toString();
       };
       unsignedTx.customData = {
         assets: [
@@ -407,7 +407,7 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
       const getRawAmount = (token: Token, previous: string, next?: string) => {
         const delta = new SafeDecimal(next ?? 0).minus(previous);
         if (delta.lte(0)) return 0;
-        return new SafeDecimal(delta).mul(10 ** token.decimals).toNumber();
+        return new SafeDecimal(delta).mul(10 ** token.decimals).toString();
       };
       unsignedTx.customData = {
         assets: [

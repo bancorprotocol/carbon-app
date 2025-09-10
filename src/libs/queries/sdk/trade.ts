@@ -69,11 +69,11 @@ export const useTradeQuery = () => {
       }
       const source = getTokenById(params.sourceAddress);
       const powerDecimal = new SafeDecimal(10).pow(source!.decimals);
-      const amount = new SafeDecimal(baseAmount).mul(powerDecimal);
+      const amount = new SafeDecimal(baseAmount).mul(powerDecimal).toFixed(0);
       const assets = [
         {
           address: params.sourceAddress,
-          rawAmount: amount.toNumber(),
+          rawAmount: amount,
         },
       ];
       unsignedTx.customData = { assets };

@@ -212,7 +212,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
         };
         const toAsset = async (asset: {
           address: string;
-          rawAmount: number;
+          rawAmount: number | string;
         }) => ({
           type: AssetType.FT,
           address: await getAssetAddress(asset.address),
