@@ -50,6 +50,14 @@
       "symbol": "PENGO",
       "decimals": 18,
       "logoURI": "/tokens/coti/0x659AD6d1F7353Df13Dec552cc05c9c15AfdD04e8.webp"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0xcf1a40eff1a4d4c56dc4042a1ae93013d13c3217",
+      "name": "stCOTI",
+      "symbol": "stCOTI",
+      "decimals": 18,
+      "logoURI": "/tokens/coti/0xcf1a40eff1a4d4c56dc4042a1ae93013d13c3217.webp"
     }
   ],
   "version": {
