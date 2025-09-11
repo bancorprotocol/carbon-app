@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { AnyStrategyWithFiat } from 'components/strategies/common/types';
-import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
-import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
+import { StrategyBlock } from 'components/strategies/overview/strategyBlock/StrategyBlock';
+import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock/StrategyBlockCreate';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { StrategyTable } from './StrategyTable';
 import {
@@ -88,7 +88,7 @@ export const StrategyContent = () => {
       </div>
       <div
         role="toolbar"
-        className="flex items-center justify-end gap-16 grid-area-[filters]"
+        className="grid grid-flow-col sm:justify-end gap-16 grid-area-[filters]"
       >
         <StrategyFilterDropdown filter={filter} setFilter={setFilter} />
         <StrategySortDropdown sort={sort} setSort={setSort} />
@@ -161,10 +161,10 @@ const StrategyList: FC<StrategyListProps> = ({ strategies, layout }) => {
           );
         })}
         {!isExplorer && <StrategyBlockCreate />}
+        {max < strategies.length && (
+          <Paginator increase={() => setMax((v) => v + 21)} />
+        )}
       </ul>
-      {max < strategies.length && (
-        <Paginator increase={() => setMax((v) => v + 21)} />
-      )}
     </>
   );
 };

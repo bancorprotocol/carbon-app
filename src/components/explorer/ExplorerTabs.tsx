@@ -66,7 +66,7 @@ export const ExplorerTabs = () => {
             to={href}
             search={(s) => s}
             key={href}
-            className="px-8 py-4 group font-title font-medium bg-transparent text-white/60 hover:bg-background-900 flex gap-8 w-full items-center justify-center rounded-full sm:px-16 sm:py-8 aria-page:bg-background-800"
+            className="grow sm:grow-0 px-8 py-4 group font-title font-medium bg-transparent text-white/60 hover:bg-background-900 flex gap-8 items-center justify-center rounded-full sm:px-16 sm:py-8 aria-page:bg-background-800"
             aria-current={active ? 'page' : 'false'}
           >
             {icon}

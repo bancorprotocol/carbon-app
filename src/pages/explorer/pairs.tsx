@@ -81,7 +81,7 @@ export const ExplorerPairs = () => {
     <>
       <div
         role="toolbar"
-        className="flex items-center justify-end gap-16 grid-area-[filters]"
+        className="flex items-center sm:justify-end gap-16 grid-area-[filters]"
       >
         <PairFilterDropdown filter={filter} setFilter={setFilter} />
         <PairSortDropdown sort={sort} setSort={setSort} />
