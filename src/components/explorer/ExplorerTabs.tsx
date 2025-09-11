@@ -1,4 +1,4 @@
-import { Link, Pathnames, useMatchRoute, useRouterState } from 'libs/routing';
+import { Link, useMatchRoute, useRouterState } from 'libs/routing';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
@@ -7,7 +7,7 @@ import { ReactNode } from 'react';
 
 export interface ExplorerTab {
   label: string;
-  href: Pathnames;
+  href: 'pairs' | 'strategies' | 'distribution' | 'activity';
   search?: { search?: string };
   icon: ReactNode;
 }
@@ -15,35 +15,38 @@ export interface ExplorerTab {
 const tabs: ExplorerTab[] = [
   {
     label: 'Pairs',
-    href: '/explore/pairs',
+    href: 'pairs',
     icon: (
       <IconPairs className="hidden md:block size-24 group-aria-page:fill-gradient" />
     ),
   },
   {
     label: 'Strategies',
-    href: '/explore/strategies',
+    href: 'strategies',
     icon: (
       <IconOverview className="hidden md:block size-24 group-aria-page:stroke-gradient" />
     ),
   },
   {
     label: 'Distribution',
-    href: '/explore/distribution',
+    href: 'distribution',
     icon: (
       <IconPieChart className="hidden md:block size-24 group-aria-page:stroke-gradient" />
     ),
   },
   {
     label: 'Activity',
-    href: '/explore/activity',
+    href: 'activity',
     icon: (
       <IconActivity className="hidden md:block size-24 group-aria-page:stroke-gradient" />
     ),
   },
 ];
 
-export const ExplorerTabs = () => {
+interface Props {
+  url: '/explore' | '/portfolio';
+}
+export const ExplorerTabs = ({ url }: Props) => {
   // To support emojis in ens domains
   const { location } = useRouterState();
   const pathname = decodeURIComponent(location.pathname);
@@ -56,13 +59,14 @@ export const ExplorerTabs = () => {
     >
       {tabs.map(({ label, href, search, icon }) => {
         const active = match({
-          to: href,
+          to: `${url}/${href}`,
           search,
           fuzzy: pathname.includes('/token/') && href.includes('portfolio'),
         });
 
         return (
           <Link
+            from={url}
             to={href}
             search={(s) => s}
             key={href}

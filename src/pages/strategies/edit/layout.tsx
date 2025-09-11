@@ -1,7 +1,7 @@
 import { Outlet, useNavigate, useParams, useSearch } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
 import { useEffect, useState } from 'react';
-import { StrategiesPage } from 'pages/strategies/index';
+import { PortfolioLayout } from 'pages/strategies/layout';
 import { useGetUserStrategies } from 'libs/queries';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
@@ -52,7 +52,7 @@ export const EditStrategyPageLayout = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate, strategy]);
 
-  if (!user) return <StrategiesPage />;
+  if (!user) return <PortfolioLayout />;
   if (isPending) {
     return <CarbonLogoLoading className="h-100 place-self-center" />;
   }

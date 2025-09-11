@@ -17,7 +17,7 @@ export const PortfolioLayout: FC<Props> = ({
   const { belowBreakpoint, currentBreakpoint } = useBreakpoints();
 
   return (
-    <div className="flex flex-col gap-20 md:flex-row">
+    <div className="flex flex-col gap-20 md:flex-row grid-area-[list]">
       {!!headerElement && belowBreakpoint('md') && headerElement}
 
       {pieChartElement}

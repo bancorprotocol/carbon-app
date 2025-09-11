@@ -4,10 +4,10 @@ import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { useNavigate } from 'libs/routing';
 
-export const StrategiesPortfolioPage = () => {
+export const PortfolioDistributionPage = () => {
   const { strategies, isPending } = useStrategyCtx();
   const navigate = useNavigate();
-  const href = '/portfolio/strategies/portfolio/token/$address';
+  const href = '/portfolio/distribution/token/$address';
 
   const getPortfolioTokenHref: GetPortfolioTokenHref = (row) => ({
     href,

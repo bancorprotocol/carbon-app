@@ -2,7 +2,7 @@ import { StrategyBlockCreate } from 'components/strategies/overview/strategyBloc
 
 export const StrategyCreateFirst = () => {
   return (
-    <div className="h-full" data-testid="first-strategy">
+    <div className="h-full grid-area-[list]" data-testid="first-strategy">
       <StrategyBlockCreate
         title="Create Your First Strategy"
         className="text-36 h-[600px] text-center"

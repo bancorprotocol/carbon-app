@@ -1,6 +1,6 @@
 import { createRoute, redirect } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
-import { ExplorerPage } from 'pages/explorer/root';
+import { ExplorerLayout } from 'pages/explorer/layout';
 import { ExplorerActivityPage } from 'pages/explorer/activity';
 import { ExplorerStrategies } from 'pages/explorer/strategies';
 import { ExplorerDistribution } from 'pages/explorer/distribution';
@@ -27,7 +27,7 @@ import * as v from 'valibot';
 export const explorerLayout = createRoute({
   getParentRoute: () => rootRoute,
   path: '/explore',
-  component: ExplorerPage,
+  component: ExplorerLayout,
   validateSearch: searchValidator({
     search: v.optional(v.string()),
   }),
@@ -67,7 +67,7 @@ export const explorerDistributionPage = createRoute({
 
 export const explorerDistributionTokenPage = createRoute({
   getParentRoute: () => explorerDistributionPage,
-  path: 'token/$address',
+  path: 'distribution/token/$address',
   component: ExplorerTypePortfolioTokenPage,
 });
 

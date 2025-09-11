@@ -9,7 +9,11 @@ import { useTrending } from 'libs/queries/extApi/tradeCount';
 import {
   AnyStrategy,
   AnyStrategyWithFiat,
+  StaticOrder,
+  StrategyWithFiat,
 } from 'components/strategies/common/types';
+import { usePairs } from './usePairs';
+import { isGradientStrategy, isZero } from 'components/strategies/common/utils';
 
 export const useGetEnrichedStrategies = (
   allStrategies: UseQueryResult<AnyStrategy[] | AnyStrategy, any>,
@@ -70,18 +74,78 @@ export const useGetEnrichedStrategies = (
   return { data: allEnrichedStrategies, isPending };
 };
 
+/** Inverse a base/quote strategy to quote/base */
+const reverseStrategy = (
+  strategy: StrategyWithFiat<StaticOrder>,
+): StrategyWithFiat<StaticOrder> | undefined => {
+  const invert = (value: string) => {
+    if (isZero(value)) return '0';
+    return new SafeDecimal(1).div(value).toString();
+  };
+  return {
+    ...strategy,
+    base: strategy.quote,
+    quote: strategy.base,
+    buy: {
+      min: invert(strategy.sell.max),
+      max: invert(strategy.sell.max),
+      marginalPrice: invert(strategy.sell.marginalPrice),
+      budget: invert(strategy.sell.budget),
+    },
+    sell: {
+      min: invert(strategy.buy.max),
+      max: invert(strategy.buy.max),
+      marginalPrice: invert(strategy.buy.marginalPrice),
+      budget: invert(strategy.buy.budget),
+    },
+    fiatBudget: {
+      total: strategy.fiatBudget.total,
+      base: strategy.fiatBudget.quote,
+      quote: strategy.fiatBudget.base,
+    },
+  };
+};
+
+const isStaticStrategy = (
+  strategy: AnyStrategyWithFiat,
+): strategy is StrategyWithFiat<StaticOrder> => {
+  return !isGradientStrategy(strategy);
+};
+
 export const useFilterStrategies = (
   url: '/explore' | '/portfolio',
   strategies?: AnyStrategyWithFiat[],
 ) => {
+  const pairs = usePairs();
   const { search } = useSearch({ from: url });
   if (!search || !strategies) return strategies ?? [];
   const pairSearch = fromPairSearch(search);
-  return strategies.filter((strategy) => {
-    const pairSlug = toPairSlug(strategy.base, strategy.quote);
-    return pairSlug.includes(pairSearch);
-    // TODO: implement filter by owner
-  });
+
+  const type = pairs.getType(search);
+  if (type === 'full') {
+    return strategies;
+  }
+  if (type === 'token') {
+    return strategies.filter((strategy) => {
+      const pairSlug = toPairSlug(strategy.base, strategy.quote);
+      return pairSlug.includes(pairSearch);
+    });
+  }
+  if (type === 'pair') {
+    const sameDirection = strategies.filter((strategy) => {
+      const pairSlug = toPairSlug(strategy.base, strategy.quote);
+      return pairSlug.includes(pairSearch);
+    });
+    const oppositeDirection = strategies.filter((strategy) => {
+      const pairSlug = toPairSlug(strategy.quote, strategy.base);
+      return pairSlug.includes(pairSearch);
+    });
+    const inverted = oppositeDirection
+      .filter(isStaticStrategy)
+      .map(reverseStrategy);
+    return [...sameDirection, ...inverted];
+  }
+  // TODO: implement filter by owner
 };
 
 interface StrategyCtx {

@@ -36,7 +36,7 @@ export const MyStrategiesHeader = () => {
   return (
     <div
       className={cn(
-        'flex flex-col justify-between gap-16 md:flex-row md:items-center',
+        'flex flex-col justify-between gap-16 md:flex-row md:items-center w-full max-w-[1280px] mx-auto p-16',
         style.header,
       )}
     >

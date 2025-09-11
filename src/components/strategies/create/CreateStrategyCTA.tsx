@@ -8,8 +8,8 @@ export const CreateStrategyCTAMobile = () => {
 
   const showCTA = isPathnameMatch(pathname, '/', [
     '/portfolio',
-    '/portfolio/strategies/portfolio',
-    '/portfolio/strategies/portfolio/token/$address',
+    '/portfolio/distribution',
+    '/portfolio/distribution/token/$address',
   ]);
 
   if (!showCTA) return;

@@ -9,14 +9,15 @@ import {
 } from 'libs/routing/routes/explorer';
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
-  myStrategyLayout,
+  portfolioLayout,
   oldCreateStrategies,
+  portfolioPairsPage,
   strategyActivityPage,
   strategyOverviewPage,
   strategyPortfolioLayout,
   strategyPortfolioPage,
   strategyPortfolioTokenPage,
-} from 'libs/routing/routes/myStrategies';
+} from 'libs/routing/routes/portfolio';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   simulatorInputOverlappingRoute,
@@ -77,7 +78,8 @@ export const routeTree = rootRoute.addChildren([
     explorerDistributionPage.addChildren([explorerDistributionTokenPage]),
     explorerActivityPage,
   ]),
-  myStrategyLayout.addChildren([
+  portfolioLayout.addChildren([
+    portfolioPairsPage,
     strategyOverviewPage,
     strategyPortfolioLayout.addChildren([
       strategyPortfolioPage,

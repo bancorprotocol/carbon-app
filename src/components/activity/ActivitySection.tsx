@@ -42,6 +42,7 @@ export const ActivitySection: FC<SectionProps> = ({ hideIds }) => {
         variant="error"
         title="We couldn't find any activities"
         text={getEmptyText(location.pathname)}
+        className="grid-area-[list]"
       />
     );
   }

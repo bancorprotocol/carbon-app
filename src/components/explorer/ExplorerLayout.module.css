@@ -1,4 +1,4 @@
-.root {
+.layout {
   display: grid;
   place-content: start;
   gap: 32px;
@@ -17,7 +17,7 @@
 
 /* Below SM */
 @media (max-width: 40rem) {
-  .root {
+  .layout {
     grid-template-columns: 1fr; 
     gap: 16px;
     grid-template-areas:

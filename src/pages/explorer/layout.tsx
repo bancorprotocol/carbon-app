@@ -4,17 +4,17 @@ import { useGetAllStrategies } from 'libs/queries';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { ExplorerSearch } from 'components/explorer/ExplorerSearch';
 import { StrategyProvider } from 'components/strategies/StrategyProvider';
-import style from './root.module.css';
+import style from 'components/explorer/ExplorerLayout.module.css';
 import config from 'config';
 
-export const ExplorerPage = () => {
+export const ExplorerLayout = () => {
   const query = useGetAllStrategies();
 
   return (
-    <div className={style.root}>
+    <div className={style.layout}>
       {config.ui.tradeCount && <ExplorerHeader />}
       <ExplorerSearch />
-      <ExplorerTabs />
+      <ExplorerTabs url="/explore" />
       <StrategyProvider url="/explore" query={query}>
         <Outlet />
       </StrategyProvider>
