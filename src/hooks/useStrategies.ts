@@ -88,13 +88,13 @@ const reverseStrategy = (
     quote: strategy.base,
     buy: {
       min: invert(strategy.sell.max),
-      max: invert(strategy.sell.max),
+      max: invert(strategy.sell.min),
       marginalPrice: invert(strategy.sell.marginalPrice),
       budget: invert(strategy.sell.budget),
     },
     sell: {
       min: invert(strategy.buy.max),
-      max: invert(strategy.buy.max),
+      max: invert(strategy.buy.min),
       marginalPrice: invert(strategy.buy.marginalPrice),
       budget: invert(strategy.buy.budget),
     },
