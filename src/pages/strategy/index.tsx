@@ -50,7 +50,7 @@ export const StrategyPage = () => {
   const params = { strategyIds: id };
   const query = useGetStrategy(id);
   const { data, isPending } = useGetEnrichedStrategies(query);
-  const [strategy] = data;
+  const strategy = data?.[0];
   const { marketPrice } = useMarketPrice({
     base: strategy?.base,
     quote: strategy?.quote,

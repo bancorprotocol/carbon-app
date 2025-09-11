@@ -16,11 +16,7 @@ import {
 } from './StrategyFilterSort';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { useRouterState } from '@tanstack/react-router';
-import {
-  getCompareFunctionBySortType,
-  StrategyFilter,
-  StrategySort,
-} from './utils';
+import { sortStrategyFn, StrategyFilter, StrategySort } from './utils';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -53,11 +49,8 @@ export const StrategyContent = () => {
   }, [strategies, filter]);
 
   const sortedStrategies = useMemo(() => {
-    const compareFunction = getCompareFunctionBySortType(sort);
-    return filteredStrategies.sort((a, b) => {
-      const order = compareFunction(a, b);
-      return order || getCompareFunctionBySortType('recent')(a, b);
-    });
+    const sortFn = sortStrategyFn[sort];
+    return filteredStrategies.sort(sortFn);
   }, [filteredStrategies, sort]);
 
   const liquidityAmount = useMemo(() => {

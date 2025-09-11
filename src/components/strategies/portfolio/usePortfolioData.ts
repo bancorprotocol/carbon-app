@@ -41,8 +41,8 @@ export const usePortfolioData = ({ strategies }: Props) => {
   const tokenPriceMap = useMemo(() => {
     const map = new Map<string, FiatPriceDict>();
 
-    tokenPriceQueries.forEach((query, index) => {
-      if (query.data) map.set(uniqueTokens[index], query.data);
+    tokenPriceQueries.data.forEach((data, index) => {
+      if (data) map.set(uniqueTokens[index], data);
     });
 
     return map;
@@ -103,9 +103,5 @@ export const usePortfolioData = ({ strategies }: Props) => {
     return unsorted.sort((a, b) => (a.share.gt(b.share) ? -1 : 1));
   }, [selectedFiatCurrency, strategies, tokenPriceMap, totalValue]);
 
-  const isPending = useMemo(() => {
-    return tokenPriceQueries.some((query) => query.isPending);
-  }, [tokenPriceQueries]);
-
-  return { tableData, totalValue, isPending };
+  return { tableData, totalValue, isPending: tokenPriceQueries.isPending };
 };

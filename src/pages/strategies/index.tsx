@@ -4,9 +4,9 @@ import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
 import { Outlet, useRouterState, useMatchRoute } from 'libs/routing';
-import { StrategyProvider } from 'hooks/useStrategies';
 import { MyStrategiesHeader } from 'components/strategies/MyStrategiesHeader';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
+import { StrategyProvider } from 'components/strategies/StrategyProvider';
 
 export const StrategiesPage = () => {
   const { pathname } = useRouterState().location;

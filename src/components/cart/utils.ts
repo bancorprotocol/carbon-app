@@ -94,9 +94,9 @@ export const useStrategyCart = () => {
 
   return useMemo(() => {
     const prices: Record<string, number | undefined> = {};
-    for (let i = 0; i < priceQueries.length; i++) {
+    for (let i = 0; i < priceQueries.data.length; i++) {
       const address = addresses[i];
-      const price = priceQueries[i].data?.[selectedFiatCurrency];
+      const price = priceQueries.data[i]?.[selectedFiatCurrency];
       prices[address] = price;
     }
     return cart.map((strategy) => {

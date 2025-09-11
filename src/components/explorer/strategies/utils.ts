@@ -44,7 +44,7 @@ const differentStatus = (a: AnyStrategy, b: AnyStrategy) => {
 };
 
 type SortFn = (a: AnyStrategyWithFiat, b: AnyStrategyWithFiat) => number;
-const sortFn: Record<StrategySort, SortFn> = {
+export const sortStrategyFn: Record<StrategySort, SortFn> = {
   recent: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
     return new SafeDecimal(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
@@ -75,8 +75,4 @@ const sortFn: Record<StrategySort, SortFn> = {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
     return b.tradeCount - a.tradeCount;
   },
-};
-
-export const getCompareFunctionBySortType = (sortType: StrategySort) => {
-  return sortFn[sortType] ?? sortFn['trades'];
 };
