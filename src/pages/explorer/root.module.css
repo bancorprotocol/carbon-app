@@ -2,7 +2,7 @@
   display: grid;
   place-content: start;
   gap: 32px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto 1fr;
   grid-template-areas:
     "search search"
     "tabs tabs"

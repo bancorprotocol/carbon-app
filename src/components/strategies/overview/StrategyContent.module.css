@@ -2,9 +2,9 @@
 @reference "../../../theme.css";
 
 .strategy-list {
-  --items-width: 410px;
+  --items-width: 400px;
   contain: content;
-  grid-template-columns: repeat(auto-fill, var(--items-width));
+  grid-template-columns: repeat(auto-fill, minmax(350px, var(--items-width)));
   justify-content: center;
 }
 .strategy-item {

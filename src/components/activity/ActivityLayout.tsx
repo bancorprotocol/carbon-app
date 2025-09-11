@@ -7,8 +7,8 @@ import { ActivitySection } from './ActivitySection';
 export const ActivityLayout: FC<ActivityFilterProps> = (props) => {
   const { filters = [] } = props;
   return (
-    <section>
-      <header className="grid grid-cols-[auto_1fr] gap-16 px-20 pb-12 pt-16 md:grid-cols-[1fr_auto]">
+    <>
+      <header className="grid-area-[filters] grid grid-cols-[auto_1fr] gap-16 px-20 pb-12 pt-16 md:grid-cols-[1fr_auto]">
         <ActivityFilter
           filters={filters}
           className="col-span-2 row-start-2 md:col-auto md:row-start-1"
@@ -19,6 +19,6 @@ export const ActivityLayout: FC<ActivityFilterProps> = (props) => {
         </div>
       </header>
       <ActivitySection hideIds={!filters.includes('ids')} />
-    </section>
+    </>
   );
 };

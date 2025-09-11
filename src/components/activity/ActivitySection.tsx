@@ -31,7 +31,7 @@ export const ActivitySection: FC<SectionProps> = ({ hideIds }) => {
   const { aboveBreakpoint } = useBreakpoints();
   if (status === 'pending') {
     return (
-      <div className="grid place-items-center md:min-h-[600px]">
+      <div className="grid place-items-center md:min-h-[600px] grid-area-[list]">
         <CarbonLogoLoading className="h-[80px]" />
       </div>
     );
