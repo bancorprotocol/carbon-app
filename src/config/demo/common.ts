@@ -68,5 +68,6 @@ export const commonConfig: AppConfig = {
     showTerms: false,
     /* ⚠️ If you set it to true, you need to change the content of the page 'src/pages/privacy/index.tsx' ⚠️ */
     showPrivacy: false,
+    showRewards: false,
   },
 };

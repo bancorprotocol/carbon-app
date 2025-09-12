@@ -16,6 +16,8 @@ import {
   PairSortDropdown,
 } from 'components/explorer/pairs/PairFilterSort';
 import { NotFound } from 'components/common/NotFound';
+import { toPairSlug } from 'utils/pairSearch';
+import { useRewards } from 'libs/queries/extApi/rewards';
 
 export const PairLayout = () => {
   const { strategies, isPending } = useStrategyCtx();
@@ -24,12 +26,19 @@ export const PairLayout = () => {
   const [filter, setFilter] = useState<PairFilter>('all');
   const [sort, setSort] = useState<PairSort>('trades');
 
+  const allPairKeys = useMemo(() => {
+    if (!strategies) return [];
+    const all = strategies.map((s) => toPairSlug(s.base, s.quote));
+    return Array.from(new Set(all));
+  }, [strategies]);
+  const rewards = useRewards(allPairKeys);
+
   const allPairs = useMemo(() => {
     if (!strategies) return [];
     const map: Record<string, RawPairRow> = {};
     for (const strategy of strategies) {
       const { base, quote, tradeCount, tradeCount24h, fiatBudget } = strategy;
-      const pairKey = `${base.address}_${quote.address}`;
+      const pairKey = toPairSlug(base, quote);
       map[pairKey] ||= {
         id: pairKey,
         base,
@@ -38,6 +47,7 @@ export const PairLayout = () => {
         tradeCount24h: 0,
         strategyAmount: 0,
         liquidity: new SafeDecimal(0),
+        reward: !!rewards.data?.[pairKey],
       };
       const liquidity = map[pairKey].liquidity.add(fiatBudget.total);
       map[pairKey].tradeCount += tradeCount;
@@ -46,7 +56,7 @@ export const PairLayout = () => {
       map[pairKey].liquidity = liquidity;
     }
     return Object.values(map);
-  }, [strategies]);
+  }, [strategies, rewards.data]);
 
   const filtered = useMemo(() => {
     return allPairs.filter((pair) => {

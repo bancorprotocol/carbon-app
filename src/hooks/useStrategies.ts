@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo } from 'react';
 import { UseQueryResult } from 'libs/queries';
 import { fromPairSearch, toPairSlug } from 'utils/pairSearch';
-import { useGetAllTokenPrices } from 'libs/queries/extApi/tokenPrice';
+import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { useStore } from 'store';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useSearch } from 'libs/routing';
@@ -19,10 +19,23 @@ export const useGetEnrichedStrategies = (
   allStrategies: UseQueryResult<AnyStrategy[] | AnyStrategy, any>,
 ) => {
   const { fiatCurrency } = useStore();
-  const allPrices = useGetAllTokenPrices();
   const trending = useTrending();
   const currency = fiatCurrency.selectedFiatCurrency;
   const isPending = allStrategies.isPending;
+
+  const tokens = useMemo(() => {
+    if (!allStrategies.data) return [];
+    const data = allStrategies.data ?? [];
+    const strategies = Array.isArray(data) ? data : [data];
+    const all = strategies.map(({ base, quote }) => [
+      base.address,
+      quote.address,
+    ]);
+    const unique = new Set(all.flat());
+    return Array.from(unique);
+  }, [allStrategies.data]);
+
+  const allPrices = useGetMultipleTokenPrices(tokens);
 
   const allEnrichedStrategies = useMemo(() => {
     if (isPending) return;

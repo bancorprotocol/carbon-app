@@ -5,6 +5,7 @@ interface BasePairRow {
   id: string;
   base: Token;
   quote: Token;
+  reward?: boolean;
 }
 export interface RawPairRow extends BasePairRow {
   tradeCount: number;

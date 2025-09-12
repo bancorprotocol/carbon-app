@@ -7,16 +7,13 @@ import {
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
 import { Link } from 'libs/routing';
-import { Token } from 'libs/tokens';
 import { CSSProperties, useEffect, useRef } from 'react';
 import { getLowestBits } from 'utils/helpers';
 import { toPairSlug } from 'utils/pairSearch';
 
-const getTrendingPairs = (
-  tokensMap: Map<string, Token>,
-  trending?: Trending,
-) => {
-  if (!trending) return { isLoading: true, data: [] };
+const useTrendingPairs = (trending?: Trending) => {
+  const { getTokenById, isPending } = useTokens();
+  if (!trending) return { isPending: true, data: [] };
   const pairs: Record<string, PairTrade> = {};
   for (const trade of trending?.pairCount ?? []) {
     pairs[trade.pairAddresses] ||= trade;
@@ -40,16 +37,16 @@ const getTrendingPairs = (
     .sort((a, b) => b.pairTrades - a.pairTrades)
     .map((pair) => ({
       pairAddress: pair.pairAddresses,
-      base: tokensMap.get(pair.token0.toLowerCase())!,
-      quote: tokensMap.get(pair.token1.toLowerCase())!,
+      base: getTokenById(pair.token0)!,
+      quote: getTokenById(pair.token1)!,
       trades: pair.pairTrades,
     }))
     .filter((pair) => !!pair.base && !!pair.quote);
-  return { isLoading: false, data };
+  return { isPending, data };
 };
 
 const useTrendStrategies = (trending?: Trending) => {
-  const { getTokenById } = useTokens();
+  const { getTokenById, isPending } = useTokens();
   const trades = trending?.tradeCount ?? [];
   const list = trades
     .filter((t) => !!t.strategyTrades_24h)
@@ -66,7 +63,7 @@ const useTrendStrategies = (trending?: Trending) => {
   }
 
   return {
-    isLoading: false,
+    isPending: isPending,
     data: list.map((item) => ({
       id: item.id,
       idDisplay: getLowestBits(item.id),
@@ -78,16 +75,14 @@ const useTrendStrategies = (trending?: Trending) => {
 };
 
 export const ExplorerHeader = () => {
-  const { tokensMap, isPending } = useTokens();
-  const { data: trending, isLoading, isError } = useTrending();
+  const { data: trending, isPending, isError } = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
-  const trendingPairs = getTrendingPairs(tokensMap, trending);
+  const trendingPairs = useTrendingPairs(trending);
   const strategies = trendingStrategies.data;
   const pairs = trendingPairs.data;
 
-  const queriesPending = isLoading || isPending;
-  const strategiesLoading = trendingStrategies.isLoading || queriesPending;
-  const pairLoading = trendingPairs.isLoading || queriesPending;
+  const strategiesLoading = trendingStrategies.isPending || isPending;
+  const pairLoading = trendingPairs.isPending || isPending;
   if (isError) return;
   return (
     <header className="bg-transparent-gradient">
