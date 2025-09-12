@@ -1,62 +1,45 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { PairRow } from './types';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
+import { Paginator } from 'components/common/table/Paginator';
 
 interface Props {
   pairs: PairRow[];
 }
 
 export const PairTable: FC<Props> = ({ pairs }) => {
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(0);
   return (
-    <table className="w-full border-collapse md:bg-background-900 rounded-2xl grid-area-[list]">
+    <table className="table grid-area-[list]">
       <thead>
-        <tr className="border-background-800 text-14 border-b text-white/60">
-          <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-            Token Pair
-          </th>
-          <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-            Trades
-          </th>
-          <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-            24h Trades
-          </th>
-          <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-            # of Strategies
-          </th>
-          <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-            Liquidity
-          </th>
-          <th className="text-14 text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">
-            {/* Actions */}
-          </th>
+        <tr>
+          <th>Token Pair</th>
+          <th>Trades</th>
+          <th>24h Trades</th>
+          <th># of Strategies</th>
+          <th>Liquidity</th>
+          <th>{/* Actions */}</th>
         </tr>
       </thead>
       <tbody>
-        {pairs.map((pair) => {
+        {pairs.slice(offset, offset + limit).map((pair) => {
           const base = pair.base;
           const quote = pair.quote;
           return (
             <tr key={pair.id}>
-              <td className="py-12 pl-8 first:pl-24">
+              <td>
                 <div className="inline-flex gap-16">
                   <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
                 </div>
               </td>
-              <td className="py-12 pl-8 first:pl-24 last:pr-24 last:text-end">
-                {pair.tradeCount}
-              </td>
-              <td className="py-12 pl-8 first:pl-24 last:pr-24 last:text-end">
-                {pair.tradeCount24h}
-              </td>
-              <td className="py-12 pl-8 first:pl-24 last:pr-24 last:text-end">
-                {pair.strategyAmount}
-              </td>
-              <td className="py-12 pl-8 first:pl-24 last:pr-24 last:text-end">
-                {pair.liquidity}
-              </td>
-              <td className="py-12 pl-8 first:pl-24  last:pr-24 last:text-end">
+              <td>{pair.tradeCount}</td>
+              <td>{pair.tradeCount24h}</td>
+              <td>{pair.strategyAmount}</td>
+              <td>{pair.liquidity}</td>
+              <td>
                 <div className="inline-flex gap-8">
                   <Link
                     className={buttonStyles({ variant: 'success' })}
@@ -78,6 +61,13 @@ export const PairTable: FC<Props> = ({ pairs }) => {
           );
         })}
       </tbody>
+      <Paginator
+        size={pairs.length}
+        offset={offset}
+        setOffset={setOffset}
+        limit={limit}
+        setLimit={setLimit}
+      />
     </table>
   );
 };

@@ -53,7 +53,7 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
       )}
     >
       <thead>
-        <tr className="border-background-800 text-14 border-b text-white/60">
+        <tr>
           {!hideIds && <th className={thStyle}>ID</th>}
           {/* @todo(gradient) */}
           {/* <th className={thStyle}>Type</th> */}

@@ -119,6 +119,10 @@
   stroke: url("#svg-brand-gradient");
 }
 
+@utility table-col-span-all {
+  column-span: all;
+}
+
 @utility grid-area-* {
   grid-area: --value([*]);
 }

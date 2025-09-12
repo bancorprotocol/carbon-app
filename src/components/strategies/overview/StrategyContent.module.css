@@ -17,43 +17,6 @@
     animation: open-item 200ms var(--delay, 0ms) backwards;
   }
 }
-.strategy-table {
-  @apply bg-background-900 text-14;
-  border-radius: 8px;
-  animation: open 300ms ease-out;
-}
-.strategy-table th {
-  @apply border-b border-background-800;
-  font-weight: 400;
-  color: rgba(255 255 255 / 0.6);
-  padding: 16px;
-  text-align: start;
-  text-wrap: nowrap;
-}
-.strategy-table td {
-  padding: 8px 16px;
-}
-.strategy-table td:first-child {
-  padding-left: 24px;
-}
-.strategy-table td:last-child {
-  padding-right: 24px;
-}
-.strategy-table th:first-child {
-  border-top-left-radius: 8px;
-}
-.strategy-table th:last-child {
-  border-top-right-radius: 8px;
-}
-.strategy-table tr:not(:last-child) td {
-  @apply border-b border-background-800;
-}
-.strategy-table tr:last-child td:first-child {
-  border-bottom-left-radius: 8px;
-}
-.strategy-table tr:last-child td:last-child {
-  border-bottom-right-radius: 8px;
-}
 
 @keyframes open {
   from {
