@@ -100,7 +100,7 @@ export const StrategyPage = () => {
   const isNativeChart = config.ui.priceChart === 'native';
 
   return (
-    <Page hideTitle={true} className="gap-20">
+    <Page className="gap-20">
       <header className="flex items-center gap-8">
         <BackButton onClick={() => history.back()} />
         <TokensOverlap tokens={[base, quote]} size={40} />

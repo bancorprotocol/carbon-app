@@ -6,18 +6,19 @@ import { ExplorerSearch } from 'components/explorer/ExplorerSearch';
 import { StrategyProvider } from 'components/strategies/StrategyProvider';
 import style from 'components/explorer/ExplorerLayout.module.css';
 import config from 'config';
+import { Page } from 'components/common/page';
 
 export const ExplorerLayout = () => {
   const query = useGetAllStrategies();
 
   return (
-    <div className={style.layout}>
+    <Page className={style.layout}>
       {config.ui.tradeCount && <ExplorerHeader />}
       <ExplorerSearch />
       <ExplorerTabs url="/explore" />
       <StrategyProvider url="/explore" query={query}>
         <Outlet />
       </StrategyProvider>
-    </div>
+    </Page>
   );
 };

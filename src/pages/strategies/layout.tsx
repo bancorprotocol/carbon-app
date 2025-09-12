@@ -14,27 +14,29 @@ export const PortfolioLayout = () => {
 
   if (!user) {
     return (
-      <Page hideTitle={true}>
+      <Page>
         <WalletConnect />
       </Page>
     );
   }
 
   return (
-    <StrategyProvider url="/portfolio" query={query}>
-      <MyStrategiesHeader />
-      <div className={style.layout}>
-        <ExplorerTabs url="/portfolio" />
-        {/* Hidden tag to target in E2E */}
-        <Outlet />
-      </div>
-      {query.isFetching && (
-        <div
-          className="pointer-events-none fixed opacity-0"
-          aria-hidden="true"
-          data-testid="fetch-strategies"
-        ></div>
-      )}
-    </StrategyProvider>
+    <Page>
+      <StrategyProvider url="/portfolio" query={query}>
+        <MyStrategiesHeader />
+        <div className={style.layout}>
+          <ExplorerTabs url="/portfolio" />
+          {/* Hidden tag to target in E2E */}
+          <Outlet />
+        </div>
+        {query.isFetching && (
+          <div
+            className="pointer-events-none fixed opacity-0"
+            aria-hidden="true"
+            data-testid="fetch-strategies"
+          ></div>
+        )}
+      </StrategyProvider>
+    </Page>
   );
 };

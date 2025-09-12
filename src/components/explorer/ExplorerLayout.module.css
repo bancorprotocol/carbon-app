@@ -9,10 +9,6 @@
     "amount filters"
     "list list";
   place-items: stretch;
-  margin-inline: auto;
-  max-width: 1280px;
-  width: 100%;
-  padding: 16px;
 }
 
 /* Below SM */

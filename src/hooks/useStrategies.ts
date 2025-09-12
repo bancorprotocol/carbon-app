@@ -22,13 +22,7 @@ export const useGetEnrichedStrategies = (
   const allPrices = useGetAllTokenPrices();
   const trending = useTrending();
   const currency = fiatCurrency.selectedFiatCurrency;
-
-  const isPending = useMemo(() => {
-    if (allStrategies.isPending) return true;
-    if (trending.isPending) return true;
-    if (!allPrices.data) return true;
-    return allPrices.isPending;
-  }, [allPrices, allStrategies.isPending, trending.isPending]);
+  const isPending = allStrategies.isPending;
 
   const allEnrichedStrategies = useMemo(() => {
     if (isPending) return;
