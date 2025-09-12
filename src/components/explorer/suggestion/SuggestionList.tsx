@@ -9,6 +9,7 @@ import style from './index.module.css';
 import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
 
 interface Props {
+  url: '/explore' | '/portfolio';
   listboxId: string;
   filteredPairs: TradePair[];
   filteredTokens: Token[];
@@ -42,13 +43,13 @@ const animateLeaving = async () => {
 
 export const SuggestionList: FC<Props> = (props) => {
   const { listboxId, filteredPairs, filteredTokens, setOpen } = props;
-  const nav = useNavigate();
-  const { search } = useSearch({ from: '/explore' });
+  const nav = useNavigate({ from: props.url });
+  const { search } = useSearch({ from: props.url });
   const navigate = async (nextSlug: string) => {
     setOpen(false);
     if (search === nextSlug) return;
     await animateLeaving();
-    nav({ to: '.', search: { search: nextSlug } });
+    nav({ search: { search: nextSlug } });
   };
 
   const [maxTokens, setMaxTokens] = useState(5);

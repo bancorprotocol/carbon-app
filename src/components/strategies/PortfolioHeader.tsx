@@ -6,9 +6,9 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useMemo } from 'react';
 import { cn, prettifyNumber } from 'utils/helpers';
-import style from './MyStrategiesHeader.module.css';
+import style from './PortfolioHeader.module.css';
 
-export const MyStrategiesHeader = () => {
+export const PortfolioHeader = () => {
   const { strategies = [] } = useStrategyCtx();
   const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
 
@@ -34,8 +34,8 @@ export const MyStrategiesHeader = () => {
   }, [strategies]);
 
   return (
-    <div className={cn('bg-transparent-gradient p-16', style.header)}>
-      <div className="flex flex-col justify-between gap-16 md:flex-row md:items-center w-full max-w-[1280px] mx-auto">
+    <header className={cn('bg-transparent-gradient', style.header)}>
+      <div className="flex flex-col justify-between gap-16 md:flex-row md:items-center w-full max-w-[1280px] mx-auto py-24 px-16">
         <div
           role="table"
           className="flex flex-col gap-16 md:flex-row md:gap-24"
@@ -80,6 +80,6 @@ export const MyStrategiesHeader = () => {
           Create
         </Link>
       </div>
-    </div>
+    </header>
   );
 };

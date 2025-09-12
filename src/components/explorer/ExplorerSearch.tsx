@@ -10,12 +10,15 @@ import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { useWagmi } from 'libs/wagmi';
 import style from './ExplorerSearch.module.css';
 
-const LocalExplorerSearch: FC = () => {
-  const navigate = useNavigate();
+interface Props {
+  url: '/explore' | '/portfolio';
+}
+const LocalExplorerSearch: FC<Props> = ({ url }) => {
+  const navigate = useNavigate({ from: url });
   const pairs = usePairs();
   const [open, setOpen] = useState(false);
   const { provider } = useWagmi();
-  const params = useSearch({ from: '/explore' });
+  const params = useSearch({ from: url });
   const [search, setSearch] = useState(params.search ?? '');
   const [debouncedSearch] = useDebouncedValue<string>(search, 300); // Debounce search input for ens query
 
@@ -78,7 +81,7 @@ const LocalExplorerSearch: FC = () => {
       >
         <IconSearch className="size-18" />
         <div className="flex items-center md:relative">
-          <SuggestionCombobox open={open} setOpen={setOpen} />
+          <SuggestionCombobox url={url} open={open} setOpen={setOpen} />
         </div>
         <button type="submit">
           <IconChevron className="size-24" />

@@ -85,13 +85,13 @@ export const ExplorerHeader = () => {
   const strategies = trendingStrategies.data;
   const pairs = trendingPairs.data;
 
-  const strategiesLoading =
-    trendingStrategies.isLoading || isLoading || isPending;
-  const pairLoading = trendingPairs.isLoading || isLoading || isPending;
+  const queriesPending = isLoading || isPending;
+  const strategiesLoading = trendingStrategies.isLoading || queriesPending;
+  const pairLoading = trendingPairs.isLoading || queriesPending;
   if (isError) return;
   return (
     <header className="bg-transparent-gradient">
-      <div className="mb-42 flex gap-32 max-w-[1280px] mx-auto p-16">
+      <div className="flex gap-32 max-w-[1280px] mx-auto px-16 py-24">
         <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
           <h2 className="text-24 font-normal font-title my-0">Total Trades</h2>
           <Trades trades={trending?.totalTradeCount} />
@@ -220,7 +220,7 @@ export const ExplorerHeader = () => {
 
 const Loading = (style: CSSProperties) => (
   <div className="animate-pulse p-4" style={style}>
-    <div className="bg-background-700 h-full rounded-2xl"></div>
+    <div className="bg-white/30 h-full rounded-2xl"></div>
   </div>
 );
 

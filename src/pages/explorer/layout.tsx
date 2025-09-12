@@ -15,7 +15,7 @@ export const ExplorerLayout = () => {
     <div className="grid content-start">
       {config.ui.tradeCount && <ExplorerHeader />}
       <Page className={style.layout}>
-        <ExplorerSearch />
+        <ExplorerSearch url="/explore" />
         <ExplorerTabs url="/explore" />
         <StrategyProvider url="/explore" query={query}>
           <Outlet />

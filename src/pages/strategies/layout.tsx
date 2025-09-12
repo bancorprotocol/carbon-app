@@ -3,10 +3,11 @@ import { WalletConnect } from 'components/common/walletConnect';
 import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { Outlet } from 'libs/routing';
-import { MyStrategiesHeader } from 'components/strategies/MyStrategiesHeader';
+import { PortfolioHeader } from 'components/strategies/PortfolioHeader';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { StrategyProvider } from 'components/strategies/StrategyProvider';
 import style from 'components/explorer/ExplorerLayout.module.css';
+import { ExplorerSearch } from 'components/explorer/ExplorerSearch';
 
 export const PortfolioLayout = () => {
   const { user } = useWagmi();
@@ -23,8 +24,9 @@ export const PortfolioLayout = () => {
   return (
     <div className="grid content-start">
       <StrategyProvider url="/portfolio" query={query}>
-        <MyStrategiesHeader />
+        <PortfolioHeader />
         <Page className={style.layout}>
+          <ExplorerSearch url="/portfolio" />
           <ExplorerTabs url="/portfolio" />
           {/* Hidden tag to target in E2E */}
           <Outlet />

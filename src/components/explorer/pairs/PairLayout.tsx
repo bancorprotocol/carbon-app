@@ -15,6 +15,7 @@ import {
   PairFilterDropdown,
   PairSortDropdown,
 } from 'components/explorer/pairs/PairFilterSort';
+import { NotFound } from 'components/common/NotFound';
 
 export const PairLayout = () => {
   const { strategies, isPending } = useStrategyCtx();
@@ -75,6 +76,15 @@ export const PairLayout = () => {
         <CarbonLogoLoading className="h-80" />
       </div>
     );
+  }
+
+  if (!pairs.length) {
+    <NotFound
+      variant="info"
+      title="No results found"
+      text="Try changing the search term"
+      className="grid-area-[list]"
+    />;
   }
 
   return (

@@ -32,6 +32,7 @@ import { getAddress } from 'ethers';
 import style from './index.module.css';
 
 interface Props {
+  url: '/explore' | '/portfolio';
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -64,13 +65,13 @@ const tabs = {
   pair: 'Pairs',
 };
 type FocusTab = keyof typeof tabs;
-export const LocalSuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
+export const LocalSuggestionCombobox: FC<Props> = ({ url, open, setOpen }) => {
   const { tokensMap } = useTokens();
   const { map: pairMap, names: namesMap } = usePairs();
   const listboxId = useId();
   const inputId = useId();
   const root = useRef<HTMLDivElement>(null);
-  const params = useSearch({ from: '/explore' });
+  const params = useSearch({ from: url });
   const ensName = useEnsName({
     address: tryEthAddress(params.search || ''),
   });
@@ -114,6 +115,7 @@ export const LocalSuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   };
 
   const suggestionListProps = {
+    url,
     setOpen,
     listboxId,
     filteredPairs,
