@@ -22,7 +22,7 @@ export const portfolioLayout = createRoute({
     for (const end of ends) {
       if (location.pathname.endsWith(end)) {
         throw redirect({
-          to: '/portfolio/strategies',
+          to: `/portfolio/strategies${location.searchStr}`,
           replace: true,
         } as any);
       }
@@ -39,7 +39,7 @@ export const portfolioPairsPage = createRoute({
   }),
 });
 
-export const strategyOverviewPage = createRoute({
+export const portfolioStrategiesPage = createRoute({
   getParentRoute: () => portfolioLayout,
   path: 'strategies',
   component: PortfolioStrategiesPage,
@@ -49,24 +49,20 @@ export const strategyOverviewPage = createRoute({
 });
 
 // TODO: add redirect for old urls
-export const strategyPortfolioLayout = createRoute({
+
+export const portfolioDistributionPage = createRoute({
   getParentRoute: () => portfolioLayout,
   path: 'distribution',
-});
-
-export const strategyPortfolioPage = createRoute({
-  getParentRoute: () => strategyPortfolioLayout,
-  path: '/',
   component: PortfolioDistributionPage,
 });
 
-export const strategyPortfolioTokenPage = createRoute({
-  getParentRoute: () => strategyPortfolioLayout,
-  path: 'token/$address',
+export const portfolioDistributionTokenPage = createRoute({
+  getParentRoute: () => portfolioLayout,
+  path: 'distribution/token/$address',
   component: PortfolioDistributionTokenPage,
 });
 
-export const strategyActivityPage = createRoute({
+export const portfolioActivityPage = createRoute({
   getParentRoute: () => portfolioLayout,
   path: 'activity',
   component: PortfolioActivityPage,

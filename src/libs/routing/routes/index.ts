@@ -12,11 +12,10 @@ import {
   portfolioLayout,
   oldCreateStrategies,
   portfolioPairsPage,
-  strategyActivityPage,
-  strategyOverviewPage,
-  strategyPortfolioLayout,
-  strategyPortfolioPage,
-  strategyPortfolioTokenPage,
+  portfolioActivityPage,
+  portfolioStrategiesPage,
+  portfolioDistributionPage,
+  portfolioDistributionTokenPage,
 } from 'libs/routing/routes/portfolio';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
@@ -80,12 +79,10 @@ export const routeTree = rootRoute.addChildren([
   ]),
   portfolioLayout.addChildren([
     portfolioPairsPage,
-    strategyOverviewPage,
-    strategyPortfolioLayout.addChildren([
-      strategyPortfolioPage,
-      strategyPortfolioTokenPage,
-    ]),
-    strategyActivityPage,
+    portfolioStrategiesPage,
+    portfolioDistributionPage,
+    portfolioDistributionTokenPage,
+    portfolioActivityPage,
   ]),
   simulatorRootRoute.addChildren([
     simulatorInputRootRoute.addChildren([

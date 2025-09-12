@@ -36,7 +36,7 @@ export const explorerLayout = createRoute({
     for (const end of ends) {
       if (location.pathname.endsWith(end)) {
         throw redirect({
-          to: '/explore/strategies',
+          to: `/explore/strategies${location.searchStr}`,
           replace: true,
         } as any);
       }
