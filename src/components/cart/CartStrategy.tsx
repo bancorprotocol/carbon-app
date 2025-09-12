@@ -99,7 +99,7 @@ const getWarnings = (strategy: AnyCartStrategy, marketPrice?: number) => {
   return warnings;
 };
 
-export const getError = (strategy: AnyCartStrategy) => {
+const getError = (strategy: AnyCartStrategy) => {
   if (isGradientStrategy(strategy)) {
     for (const order of [strategy.buy, strategy.sell]) {
       if (isEmptyGradientOrder(order)) return;

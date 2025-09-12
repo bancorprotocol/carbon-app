@@ -34,49 +34,52 @@ export const MyStrategiesHeader = () => {
   }, [strategies]);
 
   return (
-    <div
-      className={cn(
-        'flex flex-col justify-between gap-16 md:flex-row md:items-center w-full',
-        style.header,
-      )}
-    >
-      <div role="table" className="flex flex-col gap-16 md:flex-row md:gap-24">
-        <div role="row" className="flex justify-between gap-8 md:flex-col">
-          <p role="rowheader" className="flex items-center gap-4 text-white/60">
-            <span>Net Worth</span>
-            <Tooltip
-              iconClassName="size-14"
-              element="The sum of the budgets from all strategies in the portfolio."
-            />
-          </p>
-          <p role="cell" className="md:text-[32px]">
-            {netWorth}
-          </p>
+    <div className={cn('bg-transparent-gradient p-16', style.header)}>
+      <div className="flex flex-col justify-between gap-16 md:flex-row md:items-center w-full max-w-[1280px] mx-auto">
+        <div
+          role="table"
+          className="flex flex-col gap-16 md:flex-row md:gap-24"
+        >
+          <div role="row" className="flex justify-between gap-8 md:flex-col">
+            <p
+              role="rowheader"
+              className="flex items-center gap-4 text-white/60"
+            >
+              <span>Net Worth</span>
+              <Tooltip
+                iconClassName="size-14"
+                element="The sum of the budgets from all strategies in the portfolio."
+              />
+            </p>
+            <p role="cell" className="md:text-[32px]">
+              {netWorth}
+            </p>
+          </div>
+          <div role="row" className="flex justify-between gap-8 md:flex-col">
+            <p role="rowheader" className="text-white/60">
+              Total Trades
+            </p>
+            <p role="cell" className="md:text-[32px]">
+              {totalTrade}
+            </p>
+          </div>
+          <div role="row" className="flex justify-between gap-8 md:flex-col">
+            <p role="rowheader" className="text-white/60">
+              Trades (Last 24h)
+            </p>
+            <p role="cell" className="md:text-[32px]">
+              {totalTrade24h}
+            </p>
+          </div>
         </div>
-        <div role="row" className="flex justify-between gap-8 md:flex-col">
-          <p role="rowheader" className="text-white/60">
-            Total Trades
-          </p>
-          <p role="cell" className="md:text-[32px]">
-            {totalTrade}
-          </p>
-        </div>
-        <div role="row" className="flex justify-between gap-8 md:flex-col">
-          <p role="rowheader" className="text-white/60">
-            Trades (Last 24h)
-          </p>
-          <p role="cell" className="md:text-[32px]">
-            {totalTrade24h}
-          </p>
-        </div>
+        <Link
+          to="/trade"
+          className={buttonStyles({ variant: 'success' })}
+          data-testid="create-strategy-desktop"
+        >
+          Create
+        </Link>
       </div>
-      <Link
-        to="/trade"
-        className={buttonStyles({ variant: 'success' })}
-        data-testid="create-strategy-desktop"
-      >
-        Create
-      </Link>
     </div>
   );
 };

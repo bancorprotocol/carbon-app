@@ -21,14 +21,14 @@ export const PortfolioLayout = () => {
   }
 
   return (
-    <Page>
+    <div className="grid content-start">
       <StrategyProvider url="/portfolio" query={query}>
         <MyStrategiesHeader />
-        <div className={style.layout}>
+        <Page className={style.layout}>
           <ExplorerTabs url="/portfolio" />
           {/* Hidden tag to target in E2E */}
           <Outlet />
-        </div>
+        </Page>
         {query.isFetching && (
           <div
             className="pointer-events-none fixed opacity-0"
@@ -37,6 +37,6 @@ export const PortfolioLayout = () => {
           ></div>
         )}
       </StrategyProvider>
-    </Page>
+    </div>
   );
 };

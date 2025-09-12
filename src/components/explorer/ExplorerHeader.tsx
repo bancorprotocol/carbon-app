@@ -78,137 +78,142 @@ const useTrendStrategies = (trending?: Trending) => {
 };
 
 export const ExplorerHeader = () => {
-  const { tokensMap } = useTokens();
+  const { tokensMap, isPending } = useTokens();
   const { data: trending, isLoading, isError } = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
   const trendingPairs = getTrendingPairs(tokensMap, trending);
   const strategies = trendingStrategies.data;
   const pairs = trendingPairs.data;
 
-  const strategiesLoading = trendingStrategies.isLoading || isLoading;
-  const pairLoading = trendingPairs.isLoading || isLoading;
+  const strategiesLoading =
+    trendingStrategies.isLoading || isLoading || isPending;
+  const pairLoading = trendingPairs.isLoading || isLoading || isPending;
   if (isError) return;
   return (
-    <header className="mb-42 flex gap-32">
-      <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
-        <h2 className="text-24 font-normal font-title my-0">Total Trades</h2>
-        <Trades trades={trending?.totalTradeCount} />
-        <div className="flex gap-16">
-          <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
-            Create
-          </Link>
-          <Link
-            to="/trade/market"
-            className={buttonStyles({ variant: 'white' })}
-          >
-            Trade
-          </Link>
-        </div>
-      </article>
-      <article className="border-background-800 hidden flex-1 gap-8 rounded-2xl border-2 p-20 md:block">
-        <h2 className="text-20 font-normal font-title">Popular Pairs</h2>
-        <table className="font-medium text-14 w-full">
-          <thead className="text-16 text-white/60">
-            <tr>
-              <th className="font-normal text-start">Token Pair</th>
-              <th className="font-normal text-end">Trades</th>
-            </tr>
-          </thead>
-          <tbody className="font-medium">
-            {pairLoading &&
-              [1, 2, 3].map((id) => (
-                <tr key={id}>
+    <header className="bg-transparent-gradient">
+      <div className="mb-42 flex gap-32 max-w-[1280px] mx-auto p-16">
+        <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
+          <h2 className="text-24 font-normal font-title my-0">Total Trades</h2>
+          <Trades trades={trending?.totalTradeCount} />
+          <div className="flex gap-16">
+            <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
+              Create
+            </Link>
+            <Link
+              to="/trade/market"
+              className={buttonStyles({ variant: 'white' })}
+            >
+              Trade
+            </Link>
+          </div>
+        </article>
+        <article className="bg-secondary/20 border-background-800 hidden flex-1 gap-8 rounded-2xl border-2 p-20 md:block">
+          <h2 className="text-20 font-normal font-title">Popular Pairs</h2>
+          <table className="font-medium text-14 w-full">
+            <thead className="text-16 text-white/60">
+              <tr>
+                <th className="font-normal text-start">Token Pair</th>
+                <th className="font-normal text-end">Trades</th>
+              </tr>
+            </thead>
+            <tbody className="font-medium">
+              {pairLoading &&
+                [1, 2, 3].map((id) => (
+                  <tr key={id}>
+                    <td>
+                      <Loading height={34} />
+                    </td>
+                    <td>
+                      <Loading height={34} />
+                    </td>
+                  </tr>
+                ))}
+              {pairs.map(({ pairAddress, base, quote, trades }) => (
+                <tr key={pairAddress}>
                   <td>
-                    <Loading height={34} />
+                    <Link
+                      to="/explore"
+                      search={{
+                        search: toPairSlug(base, quote),
+                      }}
+                      className="block w-full"
+                    >
+                      <div className="inline-flex items-center gap-8">
+                        <TokensOverlap tokens={[base, quote]} size={18} />
+                        <span>{base?.symbol}</span>
+                        <span className="text-white/60">/</span>
+                        <span>{quote?.symbol}</span>
+                      </div>
+                    </Link>
                   </td>
-                  <td>
-                    <Loading height={34} />
+                  <td className="py-8 text-end">
+                    <Link
+                      to="/explore"
+                      search={{
+                        search: toPairSlug(base, quote),
+                      }}
+                      className="block w-full"
+                    >
+                      {formatter.format(trades)}
+                    </Link>
                   </td>
                 </tr>
               ))}
-            {pairs.map(({ pairAddress, base, quote, trades }) => (
-              <tr key={pairAddress}>
-                <td>
-                  <Link
-                    to="/explore"
-                    search={{
-                      search: toPairSlug(base, quote),
-                    }}
-                    className="block w-full"
-                  >
-                    <div className="inline-flex items-center gap-8">
-                      <TokensOverlap tokens={[base, quote]} size={18} />
-                      <span>{base?.symbol}</span>
-                      <span className="text-white/60">/</span>
-                      <span>{quote?.symbol}</span>
-                    </div>
-                  </Link>
-                </td>
-                <td className="py-8 text-end">
-                  <Link
-                    to="/explore"
-                    search={{
-                      search: toPairSlug(base, quote),
-                    }}
-                    className="block w-full"
-                  >
-                    {formatter.format(trades)}
-                  </Link>
-                </td>
+            </tbody>
+          </table>
+        </article>
+        <article className="bg-secondary/20 border-background-800 hidden flex-1 gap-8 rounded-2xl border-2 p-20 lg:block">
+          <h2 className="text-20 font-normal font-title">
+            Trending Strategies
+          </h2>
+          <table className="text-14 w-full">
+            <thead className="text-16 text-white/60">
+              <tr>
+                <th className="font-normal text-start">ID</th>
+                <th className="font-normal text-end">Trades</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </article>
-      <article className="border-background-800 hidden flex-1 gap-8 rounded-2xl border-2 p-20 lg:block">
-        <h2 className="text-20 font-normal font-title">Trending Strategies</h2>
-        <table className="text-14 w-full">
-          <thead className="text-16 text-white/60">
-            <tr>
-              <th className="font-normal text-start">ID</th>
-              <th className="font-normal text-end">Trades</th>
-            </tr>
-          </thead>
-          <tbody className="font-medium">
-            {strategiesLoading &&
-              [1, 2, 3].map((id) => (
+            </thead>
+            <tbody className="font-medium">
+              {strategiesLoading &&
+                [1, 2, 3].map((id) => (
+                  <tr key={id}>
+                    <td>
+                      <Loading height={34} />
+                    </td>
+                    <td>
+                      <Loading height={34} />
+                    </td>
+                  </tr>
+                ))}
+              {strategies.map(({ id, idDisplay, base, quote, trades }) => (
                 <tr key={id}>
                   <td>
-                    <Loading height={34} />
+                    <Link
+                      to="/strategy/$id"
+                      params={{ id }}
+                      className="block w-full"
+                    >
+                      <div className="bg-background-800 flex gap-8 rounded-2xl px-8 py-4">
+                        <TokensOverlap tokens={[base!, quote!]} size={18} />
+                        {idDisplay}
+                      </div>
+                    </Link>
                   </td>
-                  <td>
-                    <Loading height={34} />
+                  <td className="w-full py-8 text-end">
+                    <Link
+                      to="/strategy/$id"
+                      params={{ id }}
+                      className="block w-full"
+                    >
+                      {formatter.format(trades)}
+                    </Link>
                   </td>
                 </tr>
               ))}
-            {strategies.map(({ id, idDisplay, base, quote, trades }) => (
-              <tr key={id}>
-                <td>
-                  <Link
-                    to="/strategy/$id"
-                    params={{ id }}
-                    className="block w-full"
-                  >
-                    <div className="bg-background-700 flex gap-8 rounded-2xl px-8">
-                      <TokensOverlap tokens={[base!, quote!]} size={18} />
-                      {idDisplay}
-                    </div>
-                  </Link>
-                </td>
-                <td className="w-full py-8 text-end">
-                  <Link
-                    to="/strategy/$id"
-                    params={{ id }}
-                    className="block w-full"
-                  >
-                    {formatter.format(trades)}
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </article>
+            </tbody>
+          </table>
+        </article>
+      </div>
     </header>
   );
 };

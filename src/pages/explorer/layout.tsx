@@ -12,13 +12,15 @@ export const ExplorerLayout = () => {
   const query = useGetAllStrategies();
 
   return (
-    <Page className={style.layout}>
+    <div className="grid content-start">
       {config.ui.tradeCount && <ExplorerHeader />}
-      <ExplorerSearch />
-      <ExplorerTabs url="/explore" />
-      <StrategyProvider url="/explore" query={query}>
-        <Outlet />
-      </StrategyProvider>
-    </Page>
+      <Page className={style.layout}>
+        <ExplorerSearch />
+        <ExplorerTabs url="/explore" />
+        <StrategyProvider url="/explore" query={query}>
+          <Outlet />
+        </StrategyProvider>
+      </Page>
+    </div>
   );
 };
