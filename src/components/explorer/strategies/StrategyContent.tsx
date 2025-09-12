@@ -30,6 +30,7 @@ export const StrategyContent = () => {
   const { strategies, isPending } = useStrategyCtx();
 
   const filteredStrategies = useMemo(() => {
+    if (!strategies) return [];
     return strategies.filter((strategy) => {
       if (filter.status === 'active' && strategy.status !== 'active') {
         return false;

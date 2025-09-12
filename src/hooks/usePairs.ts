@@ -20,7 +20,7 @@ export const usePairs = () => {
   const maps = useMemo(() => createPairMaps(data), [data]);
 
   const getType = useCallback(
-    (slug: string) => {
+    (slug: string = '') => {
       if (!slug) return 'full';
       if (maps.pairMap.has(slug)) return 'pair';
       if (slug.split('_').length === 2) return 'pair';

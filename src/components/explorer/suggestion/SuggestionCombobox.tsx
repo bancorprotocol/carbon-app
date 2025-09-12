@@ -2,6 +2,7 @@ import {
   ChangeEvent,
   Dispatch,
   FC,
+  memo,
   SetStateAction,
   useEffect,
   useId,
@@ -63,7 +64,7 @@ const tabs = {
   pair: 'Pairs',
 };
 type FocusTab = keyof typeof tabs;
-export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
+export const LocalSuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   const { tokensMap } = useTokens();
   const { map: pairMap, names: namesMap } = usePairs();
   const listboxId = useId();
@@ -252,3 +253,8 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
     </div>
   );
 };
+
+export const SuggestionCombobox = memo(
+  LocalSuggestionCombobox,
+  (prev, next) => prev.open === next.open,
+);

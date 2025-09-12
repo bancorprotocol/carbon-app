@@ -77,7 +77,7 @@ export const useGetEnrichedStrategies = (
 /** Inverse a base/quote strategy to quote/base */
 const reverseStrategy = (
   strategy: StrategyWithFiat<StaticOrder>,
-): StrategyWithFiat<StaticOrder> | undefined => {
+): StrategyWithFiat<StaticOrder> => {
   const invert = (value: string) => {
     if (isZero(value)) return '0';
     return new SafeDecimal(1).div(value).toString();
@@ -145,11 +145,14 @@ export const useFilterStrategies = (
       .map(reverseStrategy);
     return [...sameDirection, ...inverted];
   }
-  // TODO: implement filter by owner
+  if (type === 'wallet') {
+    // TODO: implement filter by owner
+    return [];
+  }
 };
 
 interface StrategyCtx {
-  strategies: AnyStrategyWithFiat[];
+  strategies?: AnyStrategyWithFiat[];
   isPending: boolean;
 }
 export const StrategyContext = createContext<StrategyCtx>({

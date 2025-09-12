@@ -1,5 +1,5 @@
 import { FC, FormEvent, memo, useEffect, useState } from 'react';
-import ExplorerSearchSuggestions from 'components/explorer/suggestion';
+import { SuggestionCombobox } from 'components/explorer/suggestion/SuggestionCombobox';
 import { useNavigate, useSearch } from 'libs/routing';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron-right.svg';
@@ -78,7 +78,7 @@ const LocalExplorerSearch: FC = () => {
       >
         <IconSearch className="size-18" />
         <div className="flex items-center md:relative">
-          <ExplorerSearchSuggestions open={open} setOpen={setOpen} />
+          <SuggestionCombobox open={open} setOpen={setOpen} />
         </div>
         <button type="submit">
           <IconChevron className="size-24" />

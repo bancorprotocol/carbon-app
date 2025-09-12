@@ -24,6 +24,7 @@ export const ExplorerPairs = () => {
   const [sort, setSort] = useState<PairSort>('trades');
 
   const allPairs = useMemo(() => {
+    if (!strategies) return [];
     const map: Record<string, RawPairRow> = {};
     for (const strategy of strategies) {
       const { base, quote, tradeCount, tradeCount24h, fiatBudget } = strategy;

@@ -66,7 +66,7 @@ export const explorerDistributionPage = createRoute({
 });
 
 export const explorerDistributionTokenPage = createRoute({
-  getParentRoute: () => explorerDistributionPage,
+  getParentRoute: () => explorerLayout,
   path: 'distribution/token/$address',
   component: ExplorerTypePortfolioTokenPage,
 });
