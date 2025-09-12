@@ -89,12 +89,14 @@ export const PairLayout = () => {
   }
 
   if (!pairs.length) {
-    <NotFound
-      variant="info"
-      title="No results found"
-      text="Try changing the search term"
-      className="grid-area-[list]"
-    />;
+    return (
+      <NotFound
+        variant="info"
+        title="No results found"
+        text="Try changing the search term"
+        className="grid-area-[list]"
+      />
+    );
   }
 
   return (

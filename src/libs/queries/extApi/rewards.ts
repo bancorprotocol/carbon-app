@@ -28,10 +28,10 @@ export const useRewards = (pairs: string[]) => {
       queryKey: QueryKey.reward(pair),
       queryFn: () => {
         try {
-          if (!config.ui.showRewards) return;
+          if (!config.ui.showRewards) return null;
           return carbonApi.getReward(pair);
         } catch {
-          return;
+          return null;
         }
       },
       staleTime: ONE_HOUR_IN_MS,

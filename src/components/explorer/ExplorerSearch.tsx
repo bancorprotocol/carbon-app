@@ -34,8 +34,13 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
     return setSearch(displayName || '');
   }, [search, pairs.names]);
 
-  const onSearchHandler = async (value: string) => {
-    if (value.length === 0) return;
+  const onSearchHandler = async (value?: string) => {
+    if (!value?.length) {
+      return navigate({
+        to: '.',
+        search: (s) => ({ ...s, search: undefined }),
+      });
+    }
     let slug = value;
     const filteredPairs = searchPairTrade(pairs.map, pairs.names, value);
     if (filteredPairs[0]) {
@@ -51,7 +56,7 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
     }
     navigate({
       to: '.',
-      search: { search: slug },
+      search: (s) => ({ ...s, search: slug }),
     });
   };
 
@@ -59,7 +64,6 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
     e.preventDefault();
     const data = new FormData(e.target as HTMLFormElement);
     const value = data.get('search')?.toString();
-    if (!value) return;
     onSearchHandler(value);
     setOpen(false);
   };
