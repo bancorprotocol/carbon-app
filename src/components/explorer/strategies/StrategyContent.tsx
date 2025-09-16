@@ -20,14 +20,21 @@ import { sortStrategyFn, StrategyFilter, StrategySort } from './utils';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { SafeDecimal } from 'libs/safedecimal';
+import { lsService } from 'services/localeStorage';
 import styles from 'components/strategies/overview/StrategyContent.module.css';
 
 export const StrategyContent = () => {
   const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
-  const [layout, setLayout] = useState<StrategyLayout>('grid');
+  const [layout, setLayout] = useState<StrategyLayout>(
+    lsService.getItem('strategyLayout') ?? 'grid',
+  );
   const [filter, setFilter] = useState<StrategyFilter>({ status: 'all' });
   const [sort, setSort] = useState<StrategySort>('trades');
   const { strategies, isPending } = useStrategyCtx();
+
+  useEffect(() => {
+    lsService.setItem('strategyLayout', layout);
+  }, [layout]);
 
   const filteredStrategies = useMemo(() => {
     if (!strategies) return [];

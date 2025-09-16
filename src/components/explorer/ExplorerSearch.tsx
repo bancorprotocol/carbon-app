@@ -1,4 +1,4 @@
-import { FC, FormEvent, memo, useEffect, useState } from 'react';
+import { FC, FormEvent, memo, useCallback, useEffect, useState } from 'react';
 import { SuggestionCombobox } from 'components/explorer/suggestion/SuggestionCombobox';
 import { useNavigate, useSearch } from 'libs/routing';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
@@ -27,8 +27,20 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
   const waitingToFetchEns =
     debouncedSearch !== search || !ensAddressQuery.isSuccess;
 
+  const updateSearchParams = useCallback(
+    (search?: string) => {
+      navigate({
+        to: '.',
+        search: (s) => ({ ...s, search: search || undefined }),
+        resetScroll: false,
+        replace: true,
+      });
+    },
+    [navigate],
+  );
+
   useEffect(() => {
-    if (!search) return setSearch('');
+    if (!search) return;
     const name = pairs.names.get(search);
     const displayName = name?.replace('_', '/').toUpperCase();
     return setSearch(displayName || '');
@@ -36,10 +48,7 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
 
   const onSearchHandler = async (value?: string) => {
     if (!value?.length) {
-      return navigate({
-        to: '.',
-        search: (s) => ({ ...s, search: undefined }),
-      });
+      return updateSearchParams();
     }
     let slug = value;
     const filteredPairs = searchPairTrade(pairs.map, pairs.names, value);
@@ -54,10 +63,7 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
     if (value === slug) {
       slug = await getEnsAddressIfAny(provider, value);
     }
-    navigate({
-      to: '.',
-      search: (s) => ({ ...s, search: slug }),
-    });
+    updateSearchParams(slug);
   };
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -68,11 +74,16 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
     setOpen(false);
   };
 
-  const resetHandler = (e: FormEvent<HTMLFormElement>) => {
+  const resetHandler = () => {
     setSearch('');
-    const selector = 'input[name="search"]';
-    const input = (e.target as Element).querySelector<HTMLElement>(selector);
-    input?.focus();
+    updateSearchParams();
+    setOpen(false);
+  };
+
+  const blurHandler = (e: FormEvent<HTMLFormElement>) => {
+    const data = new FormData(e.currentTarget as HTMLFormElement);
+    const value = data.get('search')?.toString();
+    if (!value) resetHandler();
   };
 
   return (
@@ -80,6 +91,7 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
       <form
         className={style.search}
         role="search"
+        onBlur={blurHandler}
         onSubmit={submitHandler}
         onReset={resetHandler}
       >

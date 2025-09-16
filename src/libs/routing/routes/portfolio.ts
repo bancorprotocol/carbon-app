@@ -22,7 +22,7 @@ export const portfolioLayout = createRoute({
     for (const end of ends) {
       if (location.pathname.endsWith(end)) {
         throw redirect({
-          to: `/portfolio/strategies${location.searchStr}`,
+          to: `/portfolio/pairs${location.searchStr}`,
           replace: true,
         } as any);
       }

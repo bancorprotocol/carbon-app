@@ -17,6 +17,7 @@ import {
 } from 'components/explorer/pairs/PairFilterSort';
 import { toPairSlug } from 'utils/pairSearch';
 import { useRewards } from 'libs/queries/extApi/rewards';
+import { PairTrade, useTrending } from 'libs/queries/extApi/tradeCount';
 
 export const PairLayout = () => {
   const { strategies, isPending } = useStrategyCtx();
@@ -31,31 +32,44 @@ export const PairLayout = () => {
     return Array.from(new Set(all));
   }, [strategies]);
   const rewards = useRewards(allPairKeys);
+  const trending = useTrending();
+
+  const pairTradeCount = useMemo(() => {
+    if (trending.isPending) return;
+    const record: Record<string, PairTrade> = {};
+    for (const pair of trending.data?.pairCount || []) {
+      const slug = toPairSlug(
+        { address: pair.token0 },
+        { address: pair.token1 },
+      );
+      record[slug] = pair;
+    }
+    return record;
+  }, [trending.data?.pairCount, trending.isPending]);
 
   const allPairs = useMemo(() => {
     if (!strategies) return [];
     const map: Record<string, RawPairRow> = {};
     for (const strategy of strategies) {
-      const { base, quote, tradeCount, tradeCount24h, fiatBudget } = strategy;
+      const { base, quote, fiatBudget } = strategy;
       const pairKey = toPairSlug(base, quote);
+      const pairCount = pairTradeCount?.[pairKey];
       map[pairKey] ||= {
         id: pairKey,
         base,
         quote,
-        tradeCount: 0,
-        tradeCount24h: 0,
+        tradeCount: pairCount?.pairTrades ?? 0,
+        tradeCount24h: pairCount?.pairTrades_24h ?? 0,
         strategyAmount: 0,
         liquidity: new SafeDecimal(0),
         reward: !!rewards.data?.[pairKey],
       };
       const liquidity = map[pairKey].liquidity.add(fiatBudget.total);
-      map[pairKey].tradeCount += tradeCount;
-      map[pairKey].tradeCount24h += tradeCount24h;
       map[pairKey].strategyAmount++;
       map[pairKey].liquidity = liquidity;
     }
     return Object.values(map);
-  }, [strategies, rewards.data]);
+  }, [strategies, pairTradeCount, rewards.data]);
 
   const filtered = useMemo(() => {
     return allPairs.filter((pair) => {
@@ -89,7 +103,7 @@ export const PairLayout = () => {
     return prettifyNumber(amount, { currentCurrency });
   }, [filtered, currentCurrency]);
 
-  if (isPending || rewards.isPending) {
+  if (isPending || rewards.isPending || trending.isPending) {
     return (
       <div className="grid place-items-center grow grid-area-[list]">
         <CarbonLogoLoading className="h-80" />
