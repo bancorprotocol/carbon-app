@@ -51,7 +51,8 @@ export const StrategyContent = () => {
 
   const sortedStrategies = useMemo(() => {
     const sortFn = sortStrategyFn[sort];
-    return filteredStrategies.sort(sortFn);
+    const result = filteredStrategies.sort(sortFn);
+    return [...result];
   }, [filteredStrategies, sort]);
 
   const liquidityAmount = useMemo(() => {
@@ -72,13 +73,9 @@ export const StrategyContent = () => {
 
   return (
     <>
-      <div className="flex gap-24 grid-area-[amount]">
-        <span className="bg-background-900 rounded-2xl px-16 py-8">
-          Total Amount: {filteredStrategies.length}
-        </span>
-        <span className="bg-background-900 rounded-2xl px-16 py-8">
-          Total Liquidity: {liquidityAmount}
-        </span>
+      <div className="text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border-2 border-white/10">
+        <span>Total Strategies: {filteredStrategies.length}</span>
+        <span>Total Liquidity: {liquidityAmount}</span>
       </div>
       <div
         role="toolbar"

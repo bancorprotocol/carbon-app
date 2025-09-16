@@ -41,9 +41,9 @@ export const StrategySortDropdown: FC<SortProps> = (props) => {
         <button
           type="button"
           className={cn(
-            'border-background-800 flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full border-2 px-16 py-8',
-            'hover:bg-white/10',
-            'active:bg-white/20',
+            'bg-background-800 flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8',
+            'hover:bg-background-700',
+            'active:bg-background-600',
             props.className,
           )}
           {...attr}
@@ -111,9 +111,9 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
         <button
           type="button"
           className={cn(
-            'border-background-800 flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full border-2 px-16 py-8',
-            'hover:bg-white/10',
-            'active:bg-white/20',
+            'bg-background-800 flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8',
+            'hover:bg-background-700',
+            'active:bg-background-600',
             props.className,
           )}
           {...attr}

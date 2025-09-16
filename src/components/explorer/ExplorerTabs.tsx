@@ -61,7 +61,7 @@ export const ExplorerTabs = ({ url }: Props) => {
         const active = match({
           to: `${url}/${href}`,
           search,
-          fuzzy: pathname.includes('/token/') && href.includes('portfolio'),
+          fuzzy: pathname.includes('/token/'),
         });
 
         return (
@@ -70,7 +70,7 @@ export const ExplorerTabs = ({ url }: Props) => {
             to={href}
             search={(s) => s}
             key={href}
-            className="grow sm:grow-0 px-8 py-4 group font-title font-medium bg-transparent text-white/60 hover:bg-background-900 flex gap-8 items-center justify-center rounded-full sm:px-16 sm:py-8 aria-page:bg-background-800"
+            className="grow sm:grow-0 px-8 py-4 group font-title font-normal bg-transparent text-white/60 hover:bg-background-900 flex gap-8 items-center justify-center rounded-full sm:px-16 sm:py-8 aria-page:bg-background-800"
             aria-current={active ? 'page' : 'false'}
           >
             {icon}

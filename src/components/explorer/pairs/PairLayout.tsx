@@ -15,7 +15,6 @@ import {
   PairFilterDropdown,
   PairSortDropdown,
 } from 'components/explorer/pairs/PairFilterSort';
-import { NotFound } from 'components/common/NotFound';
 import { toPairSlug } from 'utils/pairSearch';
 import { useRewards } from 'libs/queries/extApi/rewards';
 
@@ -61,13 +60,15 @@ export const PairLayout = () => {
   const filtered = useMemo(() => {
     return allPairs.filter((pair) => {
       if (filter === 'all') return true;
+      if (filter === 'rewards') return !!pair.reward;
       return pair.liquidity.gte(100);
     });
   }, [allPairs, filter]);
 
   const sorted = useMemo(() => {
     const sortFn = sortPairFn[sort];
-    return filtered.sort(sortFn);
+    const result = filtered.sort(sortFn);
+    return [...result];
   }, [filtered, sort]);
 
   const pairs = useMemo(() => {
@@ -80,7 +81,15 @@ export const PairLayout = () => {
     }));
   }, [sorted, currentCurrency]);
 
-  if (isPending) {
+  const liquidityAmount = useMemo(() => {
+    const amount = filtered.reduce(
+      (acc, p) => acc.add(p.liquidity),
+      new SafeDecimal(0),
+    );
+    return prettifyNumber(amount, { currentCurrency });
+  }, [filtered, currentCurrency]);
+
+  if (isPending || rewards.isPending) {
     return (
       <div className="grid place-items-center grow grid-area-[list]">
         <CarbonLogoLoading className="h-80" />
@@ -88,19 +97,12 @@ export const PairLayout = () => {
     );
   }
 
-  if (!pairs.length) {
-    return (
-      <NotFound
-        variant="info"
-        title="No results found"
-        text="Try changing the search term"
-        className="grid-area-[list]"
-      />
-    );
-  }
-
   return (
     <>
+      <div className="text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border-2 border-white/10">
+        <span>Total Pairs: {pairs.length}</span>
+        <span>Total Liquidity: {liquidityAmount}</span>
+      </div>
       <div
         role="toolbar"
         className="flex items-center sm:justify-end gap-16 grid-area-[filters]"

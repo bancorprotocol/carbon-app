@@ -1,10 +1,20 @@
 import { RawPairRow } from './types';
+import config from 'config';
 
-export const pairFilter = {
+interface PairFilterMap {
+  all: string;
+  large: string;
+  rewards?: string;
+}
+
+export const pairFilter: PairFilterMap = {
   all: 'All',
-  large: 'Hide very small pools',
+  large: 'Only significant liquidity',
 };
-export type PairFilter = keyof typeof pairFilter;
+if (config.ui.rewardUrl) {
+  pairFilter.rewards = 'Only Rewards';
+}
+export type PairFilter = keyof PairFilterMap;
 
 export const pairSort = {
   pairAsc: 'Pair (A->Z)',

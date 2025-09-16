@@ -28,7 +28,7 @@ export const useRewards = (pairs: string[]) => {
       queryKey: QueryKey.reward(pair),
       queryFn: () => {
         try {
-          if (!config.ui.showRewards) return null;
+          if (!config.ui.rewardUrl) return null;
           return carbonApi.getReward(pair);
         } catch {
           return null;
@@ -36,6 +36,7 @@ export const useRewards = (pairs: string[]) => {
       },
       staleTime: ONE_HOUR_IN_MS,
       refetchInterval: 120_000,
+      retry: false,
     })),
   });
 };

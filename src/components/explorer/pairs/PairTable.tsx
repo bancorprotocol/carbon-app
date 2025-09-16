@@ -4,6 +4,7 @@ import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Paginator } from 'components/common/table/Paginator';
+import { NewTabLink } from 'libs/routing';
 import config from 'config';
 
 interface Props {
@@ -18,7 +19,7 @@ export const PairTable: FC<Props> = ({ pairs }) => {
       <thead>
         <tr>
           <th>Token Pair</th>
-          {config.ui.showRewards && <th>Rewards</th>}
+          {config.ui.rewardUrl && <th>Rewards</th>}
           <th>Trades</th>
           <th>24h Trades</th>
           <th># of Strategies</th>
@@ -37,7 +38,18 @@ export const PairTable: FC<Props> = ({ pairs }) => {
                   <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
                 </div>
               </td>
-              {config.ui.showRewards && <td>{pair.reward && 'Yes'}</td>}
+              {config.ui.rewardUrl && (
+                <td>
+                  {pair.reward && (
+                    <NewTabLink
+                      className="text-gradient underline decoration-primary underline-offset-4 hover:no-underline"
+                      to={config.ui.rewardUrl}
+                    >
+                      Yes
+                    </NewTabLink>
+                  )}
+                </td>
+              )}
               <td>{pair.tradeCount}</td>
               <td>{pair.tradeCount24h}</td>
               <td>{pair.strategyAmount}</td>
