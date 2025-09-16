@@ -15,7 +15,6 @@ import {
   StrategySortDropdown,
 } from './StrategyFilterSort';
 import { useStrategyCtx } from 'hooks/useStrategies';
-import { useRouterState } from '@tanstack/react-router';
 import { sortStrategyFn, StrategyFilter, StrategySort } from './utils';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
@@ -23,20 +22,35 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { lsService } from 'services/localeStorage';
 import styles from 'components/strategies/overview/StrategyContent.module.css';
 
-export const StrategyContent = () => {
+const text = {
+  '/explore': {
+    strategies: 'Total Strategies',
+    liquidity: 'Total Liquidity',
+  },
+  '/portfolio': {
+    strategies: 'Your Strategies',
+    liquidity: 'Your Liquidity',
+  },
+};
+
+interface Props {
+  url: '/explore' | '/portfolio';
+}
+
+export const StrategyContent: FC<Props> = ({ url }) => {
   const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
+  const [filter, setFilter] = useState<StrategyFilter>({ status: 'all' });
+  const [sort, setSort] = useState<StrategySort>('trades');
   const [layout, setLayout] = useState<StrategyLayout>(
     lsService.getItem('strategyLayout') ?? 'grid',
   );
-  const [filter, setFilter] = useState<StrategyFilter>({ status: 'all' });
-  const [sort, setSort] = useState<StrategySort>('trades');
   const { strategies, isPending } = useStrategyCtx();
 
   useEffect(() => {
     lsService.setItem('strategyLayout', layout);
   }, [layout]);
 
-  const filteredStrategies = useMemo(() => {
+  const filtered = useMemo(() => {
     if (!strategies) return [];
     return strategies.filter((strategy) => {
       if (filter.status === 'active' && strategy.status !== 'active') {
@@ -56,19 +70,19 @@ export const StrategyContent = () => {
     });
   }, [strategies, filter]);
 
-  const sortedStrategies = useMemo(() => {
+  const sorted = useMemo(() => {
     const sortFn = sortStrategyFn[sort];
-    const result = filteredStrategies.sort(sortFn);
+    const result = filtered.sort(sortFn);
     return [...result];
-  }, [filteredStrategies, sort]);
+  }, [filtered, sort]);
 
   const liquidityAmount = useMemo(() => {
-    const amount = filteredStrategies.reduce(
+    const amount = filtered.reduce(
       (acc, s) => acc.add(s.fiatBudget.total),
       new SafeDecimal(0),
     );
     return prettifyNumber(amount, { currentCurrency });
-  }, [filteredStrategies, currentCurrency]);
+  }, [filtered, currentCurrency]);
 
   if (isPending) {
     return (
@@ -81,8 +95,12 @@ export const StrategyContent = () => {
   return (
     <>
       <div className="text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border-2 border-white/10">
-        <span>Total Strategies: {filteredStrategies.length}</span>
-        <span>Total Liquidity: {liquidityAmount}</span>
+        <span>
+          {text[url].strategies}: {filtered.length}
+        </span>
+        <span>
+          {text[url].liquidity}: {liquidityAmount}
+        </span>
       </div>
       <div
         role="toolbar"
@@ -92,7 +110,7 @@ export const StrategyContent = () => {
         <StrategySortDropdown sort={sort} setSort={setSort} />
         <StrategySelectLayout layout={layout} setLayout={setLayout} />
       </div>
-      <StrategyList strategies={sortedStrategies} layout={layout} />
+      <StrategyList url={url} strategies={sorted} layout={layout} />
     </>
   );
 };
@@ -100,16 +118,13 @@ export const StrategyContent = () => {
 interface StrategyListProps {
   strategies: AnyStrategyWithFiat[];
   layout: StrategyLayout;
+  url: '/explore' | '/portfolio';
 }
-const StrategyList: FC<StrategyListProps> = ({ strategies, layout }) => {
-  const { location } = useRouterState();
+const StrategyList: FC<StrategyListProps> = ({ url, strategies, layout }) => {
   const { belowBreakpoint } = useBreakpoints();
   const [max, setMax] = useState(21);
 
-  const isExplorer = useMemo(
-    () => location.pathname.startsWith('/explore'),
-    [location.pathname],
-  );
+  const isExplorer = url === '/explore';
 
   if (!strategies?.length) {
     return (

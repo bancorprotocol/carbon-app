@@ -2,7 +2,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { PairContent } from 'components/explorer/pairs/PairContent';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
-import { useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { RawPairRow } from 'components/explorer/pairs/types';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -19,7 +19,22 @@ import { toPairSlug } from 'utils/pairSearch';
 import { useRewards } from 'libs/queries/extApi/rewards';
 import { PairTrade, useTrending } from 'libs/queries/extApi/tradeCount';
 
-export const PairLayout = () => {
+const text = {
+  '/explore': {
+    pairs: 'Total Pairs',
+    liquidity: 'Total Liquidity',
+  },
+  '/portfolio': {
+    pairs: 'Your Pairs',
+    liquidity: 'Your Liquidity',
+  },
+};
+
+interface Props {
+  url: '/explore' | '/portfolio';
+}
+
+export const PairLayout: FC<Props> = ({ url }) => {
   const { strategies, isPending } = useStrategyCtx();
   const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
 
@@ -114,8 +129,12 @@ export const PairLayout = () => {
   return (
     <>
       <div className="text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border-2 border-white/10">
-        <span>Total Pairs: {pairs.length}</span>
-        <span>Total Liquidity: {liquidityAmount}</span>
+        <span>
+          {text[url].pairs}: {pairs.length}
+        </span>
+        <span>
+          {text[url].liquidity}: {liquidityAmount}
+        </span>
       </div>
       <div
         role="toolbar"
