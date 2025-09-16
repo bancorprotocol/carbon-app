@@ -37,6 +37,7 @@ export const useRewards = (pairs: string[]) => {
       staleTime: ONE_HOUR_IN_MS,
       refetchInterval: 120_000,
       retry: false,
+      refetchOnWindowFocus: false,
     })),
   });
 };
