@@ -102,7 +102,9 @@ export const SimulatorHistorySection = ({
       data-testid="simulation-history"
     >
       <h2 className="text-18 font-medium">Simulation History</h2>
-      <div className="grid gap-16">{renderHistory()}</div>
+      <div className="flex flex-wrap justify-center gap-16 md:justify-start">
+        {renderHistory()}
+      </div>
     </section>
   );
 };
@@ -162,7 +164,7 @@ const HistoryTile = ({
       onClick={onLoad}
       onKeyDown={handleKey}
       className={cn(
-        'border border-background-700/60 bg-background-900 rounded-3xl p-20 grid gap-16 transition-colors cursor-pointer',
+        'border border-background-700/60 bg-background-900 rounded-3xl p-20 grid w-full max-w-[360px] gap-16 transition-colors cursor-pointer sm:w-[360px]',
         'hover:border-primary/50 focus-visible:border-primary/80 focus-visible:outline-none',
       )}
     >
