@@ -4,7 +4,7 @@ import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { useToken } from 'hooks/useTokens';
 import { StrategyInputSearch } from 'libs/routing/routes/sim';
 import { Token } from 'libs/tokens';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface InternalStrategyInput extends StrategyInputSearch {
   sellBudgetError?: string;
@@ -44,6 +44,7 @@ interface Props {
 export const useStrategyInput = ({ searchState }: Props) => {
   const navigate = useNavigate({ from: '/simulate/recurring' });
   const [_state, setState] = useState<InternalStrategyInput>(searchState);
+  const hydratingRef = useRef(false);
 
   const base = useToken(_state.baseToken);
   const quote = useToken(_state.quoteToken);
@@ -64,13 +65,39 @@ export const useStrategyInput = ({ searchState }: Props) => {
     [navigate],
   );
 
-  useDebouncedValue(_state, 300, { cb: setSearch });
+  useDebouncedValue(_state, 300, {
+    cb: (next) => {
+      if (hydratingRef.current) {
+        hydratingRef.current = false;
+        return;
+      }
+      setSearch(next);
+    },
+  });
+
+  useEffect(() => {
+    setState((state) => {
+      if (!hasSearchStateChanged(state, searchState)) return state;
+      hydratingRef.current = true;
+      return { ...state, ...searchState };
+    });
+  }, [searchState]);
 
   const dispatch: StrategyInputDispatch = useCallback((key, value) => {
     setState((state) => ({ ...state, [key]: value }));
   }, []);
 
   return { dispatch, state };
+};
+
+const hasSearchStateChanged = (
+  state: InternalStrategyInput,
+  search: StrategyInputSearch,
+) => {
+  return Object.entries(search).some(([key, value]) => {
+    const typedKey = key as keyof StrategyInputSearch;
+    return state[typedKey] !== value;
+  });
 };
 
 function isInternalState(object: any): object is InternalStrategyInput {

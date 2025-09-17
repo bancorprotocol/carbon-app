@@ -5,7 +5,7 @@ import { StrategyInputOrder } from 'hooks/useStrategyInput';
 import { useToken } from 'hooks/useTokens';
 import { SimulatorInputOverlappingSearch } from 'libs/routing/routes/sim';
 import { Token } from 'libs/tokens';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getBounds } from 'components/strategies/common/utils';
 
 export interface InternalSimulatorOverlappingInput
@@ -40,6 +40,7 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
   const navigate = useNavigate({ from: '/simulate/overlapping' });
   const [_state, setState] =
     useState<InternalSimulatorOverlappingInput>(searchState);
+  const hydratingRef = useRef(false);
 
   const base = useToken(_state.baseToken);
   const quote = useToken(_state.quoteToken);
@@ -68,7 +69,23 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
     [navigate],
   );
 
-  useDebouncedValue(_state, 300, { cb: setSearch });
+  useDebouncedValue(_state, 300, {
+    cb: (next) => {
+      if (hydratingRef.current) {
+        hydratingRef.current = false;
+        return;
+      }
+      setSearch(next);
+    },
+  });
+
+  useEffect(() => {
+    setState((state) => {
+      if (!hasOverlappingSearchChanged(state, searchState)) return state;
+      hydratingRef.current = true;
+      return { ...state, ...searchState };
+    });
+  }, [searchState]);
 
   const bounds = useMemo(
     () => getBounds(state.baseToken!, state.quoteToken!, state.buy, state.sell),
@@ -81,6 +98,16 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
   );
 
   return { dispatch, state, bounds, searchState };
+};
+
+const hasOverlappingSearchChanged = (
+  state: InternalSimulatorOverlappingInput,
+  search: SimulatorInputOverlappingSearch,
+) => {
+  return Object.entries(search).some(([key, value]) => {
+    const typedKey = key as keyof SimulatorInputOverlappingSearch;
+    return state[typedKey] !== value;
+  });
 };
 
 export const buildStrategyInputState = (

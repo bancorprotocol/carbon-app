@@ -87,6 +87,17 @@ export const SimulatorInputRecurringPage = () => {
 
   useEffect(() => {
     if (initBuyRange || initSellRange) return;
+
+    const hasPrefill =
+      !!searchState.buyMin ||
+      !!searchState.buyMax ||
+      !!searchState.buyBudget ||
+      !!searchState.sellMin ||
+      !!searchState.sellMax ||
+      !!searchState.sellBudget;
+
+    if (hasPrefill) return;
+
     dispatch('baseToken', searchState.baseToken);
     dispatch('quoteToken', searchState.quoteToken);
     dispatch('sellMax', '');
@@ -102,7 +113,7 @@ export const SimulatorInputRecurringPage = () => {
     setInitBuyRange(true);
     setInitSellRange(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, searchState.baseToken, searchState.quoteToken]);
+  }, [dispatch, initBuyRange, initSellRange, searchState]);
 
   const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
