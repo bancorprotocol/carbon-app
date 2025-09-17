@@ -1,6 +1,6 @@
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { buildPercentageString } from 'components/strategies/portfolio/utils';
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useStore } from 'store';
 import { getFiatDisplayValue, tokenAmount } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
@@ -9,6 +9,7 @@ import { SuspiciousToken } from 'components/common/DisplayPair';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Paginator } from 'components/common/table/Paginator';
+import { clamp } from 'utils/helpers/operators';
 
 interface Props {
   data: PortfolioData[];
@@ -23,6 +24,10 @@ export const PortfolioAllTokensDesktop: FC<Props> = ({
 }) => {
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
+
+  const maxOffset = useMemo(() => {
+    return clamp(0, data.length - limit, offset);
+  }, [offset, limit, data.length]);
 
   return (
     <table className="table">
@@ -39,14 +44,14 @@ export const PortfolioAllTokensDesktop: FC<Props> = ({
           <Pending />
         ) : (
           <Rows
-            data={data.slice(offset, offset + limit)}
+            data={data.slice(maxOffset, maxOffset + limit)}
             onRowClick={onRowClick}
           />
         )}
       </tbody>
       <Paginator
         size={data.length}
-        offset={offset}
+        offset={maxOffset}
         setOffset={setOffset}
         limit={limit}
         setLimit={setLimit}

@@ -62,13 +62,26 @@ export const PairLayout: FC<Props> = ({ url }) => {
     return record;
   }, [trending.data?.pairCount, trending.isPending]);
 
+  // Order by alphabetic order to merge opposite pairs
+  const ordered = useMemo(() => {
+    if (!strategies) return;
+    return strategies.sort((a, b) => {
+      return a.base.address.localeCompare(b.base.address);
+    });
+  }, [strategies]);
+
   const allPairs = useMemo(() => {
-    if (!strategies) return [];
+    if (!ordered) return [];
     const map: Record<string, RawPairRow> = {};
-    for (const strategy of strategies) {
+    for (const strategy of ordered) {
       const { base, quote, fiatBudget } = strategy;
-      const pairKey = toPairSlug(base, quote);
-      const pairCount = pairTradeCount?.[pairKey];
+      // Merge both pair direction
+      const directKey = toPairSlug(base, quote);
+      const oppositeKey = toPairSlug(quote, base);
+      const pairKey = map[oppositeKey] ? oppositeKey : directKey;
+      const pairCount =
+        pairTradeCount?.[directKey] || pairTradeCount?.[oppositeKey];
+
       map[pairKey] ||= {
         id: pairKey,
         base,
@@ -84,7 +97,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
       map[pairKey].liquidity = liquidity;
     }
     return Object.values(map);
-  }, [strategies, pairTradeCount, rewards.data]);
+  }, [ordered, pairTradeCount, rewards.data]);
 
   const filtered = useMemo(() => {
     return allPairs.filter((pair) => {

@@ -1,10 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { PairRow } from './types';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Paginator } from 'components/common/table/Paginator';
 import { NewTabLink } from 'libs/routing';
+import { clamp } from 'utils/helpers/operators';
 import config from 'config';
 
 interface Props {
@@ -14,6 +15,11 @@ interface Props {
 export const PairTable: FC<Props> = ({ pairs }) => {
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
+
+  const maxOffset = useMemo(() => {
+    return clamp(0, pairs.length - limit, offset);
+  }, [offset, limit, pairs.length]);
+
   return (
     <table className="table grid-area-[list]">
       <thead>
@@ -28,7 +34,7 @@ export const PairTable: FC<Props> = ({ pairs }) => {
         </tr>
       </thead>
       <tbody>
-        {pairs.slice(offset, offset + limit).map((pair) => {
+        {pairs.slice(maxOffset, maxOffset + limit).map((pair) => {
           const base = pair.base;
           const quote = pair.quote;
           return (
@@ -78,7 +84,7 @@ export const PairTable: FC<Props> = ({ pairs }) => {
       </tbody>
       <Paginator
         size={pairs.length}
-        offset={offset}
+        offset={maxOffset}
         setOffset={setOffset}
         limit={limit}
         setLimit={setLimit}

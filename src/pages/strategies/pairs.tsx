@@ -1,5 +1,5 @@
 import { PairLayout } from 'components/explorer/pairs/PairLayout';
 
 export const PorfolioPairsPage = () => {
-  return <PairLayout url="/explore" />;
+  return <PairLayout url="/portfolio" />;
 };

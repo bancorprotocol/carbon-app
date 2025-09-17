@@ -1,7 +1,7 @@
 import { Link, useMatch } from '@tanstack/react-router';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { AnyStrategyWithFiat } from 'components/strategies/common/types';
-import { FC, useId, useState } from 'react';
+import { FC, useId, useMemo, useState } from 'react';
 import { StrategyStatusTag } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { cn, prettifyNumber, tokenAmount } from 'utils/helpers';
@@ -17,6 +17,7 @@ import { useEditToDisposableSell } from 'components/strategies/edit/utils';
 import { isDisposableStrategy } from 'components/strategies/common/utils';
 import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
 import { Paginator } from 'components/common/table/Paginator';
+import { clamp } from 'utils/helpers/operators';
 
 interface Props {
   className?: string;
@@ -25,6 +26,10 @@ interface Props {
 export const StrategyTable: FC<Props> = ({ strategies, className }) => {
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
+
+  const maxOffset = useMemo(() => {
+    return clamp(0, strategies.length - limit, offset);
+  }, [offset, limit, strategies.length]);
 
   return (
     <table className={cn('table', className)}>
@@ -44,13 +49,13 @@ export const StrategyTable: FC<Props> = ({ strategies, className }) => {
         </tr>
       </thead>
       <tbody>
-        {strategies.slice(offset, offset + limit).map((strategy) => (
+        {strategies.slice(maxOffset, maxOffset + limit).map((strategy) => (
           <StrategyRow strategy={strategy} key={strategy.id} />
         ))}
       </tbody>
       <Paginator
         size={strategies.length}
-        offset={offset}
+        offset={maxOffset}
         setOffset={setOffset}
         limit={limit}
         setLimit={setLimit}

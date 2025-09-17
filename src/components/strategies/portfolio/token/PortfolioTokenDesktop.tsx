@@ -6,11 +6,12 @@ import { Token } from 'libs/tokens';
 import { useStore } from 'store';
 import { getColorByIndex } from 'utils/colorPalettes';
 import { PortfolioTokenData } from './usePortfolioToken';
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { getFiatDisplayValue, tokenAmount } from 'utils/helpers';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Paginator } from 'components/common/table/Paginator';
+import { clamp } from 'utils/helpers/operators';
 
 export interface PortfolioTokenProps {
   selectedToken?: Token;
@@ -25,6 +26,11 @@ export const PortfolioTokenDesktop: FC<PortfolioTokenProps> = ({
 }) => {
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
+
+  const maxOffset = useMemo(() => {
+    return clamp(0, data.length - limit, offset);
+  }, [offset, limit, data.length]);
+
   return (
     <table className="table">
       <thead>
@@ -41,14 +47,14 @@ export const PortfolioTokenDesktop: FC<PortfolioTokenProps> = ({
           <Pending />
         ) : (
           <Rows
-            data={data.slice(offset, offset + limit)}
+            data={data.slice(maxOffset, maxOffset + limit)}
             selectedToken={selectedToken}
           />
         )}
       </tbody>
       <Paginator
         size={data.length}
-        offset={offset}
+        offset={maxOffset}
         setOffset={setOffset}
         limit={limit}
         setLimit={setLimit}
