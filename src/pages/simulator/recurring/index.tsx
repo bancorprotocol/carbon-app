@@ -13,7 +13,14 @@ import {
   defaultStart,
   oneYearAgo,
 } from 'components/strategies/common/utils';
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { SimulatorHistorySection } from 'components/simulator/history';
@@ -34,6 +41,11 @@ export const SimulatorInputRecurringPage = () => {
 
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
+  const shouldResetRef = useRef(true);
+  const prevTokensRef = useRef<{
+    baseToken?: string;
+    quoteToken?: string;
+  }>();
   const { data, isPending } = useGetTokenPriceHistory({
     baseToken: searchState.baseToken,
     quoteToken: searchState.quoteToken,
@@ -86,7 +98,17 @@ export const SimulatorInputRecurringPage = () => {
   }, [handleDefaultValues, data, searchState.start]);
 
   useEffect(() => {
+    const { baseToken, quoteToken } = searchState;
+    const prev = prevTokensRef.current;
+    if (prev?.baseToken !== baseToken || prev?.quoteToken !== quoteToken) {
+      prevTokensRef.current = { baseToken, quoteToken };
+      shouldResetRef.current = true;
+    }
+  }, [searchState.baseToken, searchState.quoteToken]);
+
+  useEffect(() => {
     if (initBuyRange || initSellRange) return;
+    if (!shouldResetRef.current) return;
 
     const hasPrefill =
       !!searchState.buyMin ||
@@ -96,7 +118,10 @@ export const SimulatorInputRecurringPage = () => {
       !!searchState.sellMax ||
       !!searchState.sellBudget;
 
-    if (hasPrefill) return;
+    if (hasPrefill) {
+      shouldResetRef.current = false;
+      return;
+    }
 
     dispatch('baseToken', searchState.baseToken);
     dispatch('quoteToken', searchState.quoteToken);
@@ -112,8 +137,20 @@ export const SimulatorInputRecurringPage = () => {
     dispatch('buyIsRange', true);
     setInitBuyRange(true);
     setInitSellRange(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, initBuyRange, initSellRange, searchState]);
+    shouldResetRef.current = false;
+  }, [
+    dispatch,
+    initBuyRange,
+    initSellRange,
+    searchState.baseToken,
+    searchState.quoteToken,
+    searchState.buyMin,
+    searchState.buyMax,
+    searchState.buyBudget,
+    searchState.sellMin,
+    searchState.sellMax,
+    searchState.sellBudget,
+  ]);
 
   const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;

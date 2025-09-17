@@ -43,6 +43,7 @@ export const SimInputChart = ({
   children,
   footer,
 }: Props) => {
+  const { start: currentStart, end: currentEnd } = state;
   const { marketPrice, isPending: marketIsPending } = useMarketPrice({
     base: state.baseToken,
     quote: state.quoteToken,
@@ -50,11 +51,13 @@ export const SimInputChart = ({
 
   const onDatePickerConfirm = useCallback(
     (props: { start?: string; end?: string }) => {
-      if (!props.start || !props.end) return;
-      dispatch('start', props.start);
-      dispatch('end', props.end);
+      const nextStart = props.start?.toString();
+      const nextEnd = props.end?.toString();
+      if (!nextStart || !nextEnd) return;
+      if (nextStart !== currentStart) dispatch('start', nextStart);
+      if (nextEnd !== currentEnd) dispatch('end', nextEnd);
     },
-    [dispatch],
+    [currentEnd, currentStart, dispatch],
   );
 
   if (isPending || marketIsPending) {
