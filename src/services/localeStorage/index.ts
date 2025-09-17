@@ -20,6 +20,7 @@ import { AppConfig } from 'config/types';
 import { LiquidityMatrixSearch } from 'libs/routing/routes/liquidity-matrix';
 import { StrategyLayout } from 'components/strategies/StrategySelectLayout';
 import { Cart } from 'components/cart/utils';
+import { SimulatorHistoryEntry } from 'libs/simulator/history/types';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
@@ -60,6 +61,7 @@ export interface LocalStorageSchema {
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
   hasWalkthrough: boolean;
+  simulatorHistory: SimulatorHistoryEntry[];
 }
 
 enum EnumStrategySort {

@@ -95,7 +95,8 @@ export const useGetSimulator = (search: SimulatorResultSearch) => {
     queryFn: async () => {
       try {
         // eslint-disable-next-line unused-imports/no-unused-vars
-        const { buyIsRange, sellIsRange, type, spread, ...params } = search;
+        const { buyIsRange, sellIsRange, type, spread, historyId, ...params } =
+          search;
         const res = await carbonApi.getSimulator(params);
 
         // TODO cleanup schema

@@ -6,6 +6,7 @@ import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
 import { simulatorInputRecurringRoute } from 'libs/routing/routes/sim';
+import { addSimulatorHistoryEntry } from 'libs/simulator/history';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
   defaultEnd,
@@ -15,6 +16,7 @@ import {
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { SimulatorHistorySection } from 'components/simulator/history';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { formatNumber } from 'utils/helpers';
@@ -117,23 +119,33 @@ export const SimulatorInputRecurringPage = () => {
     if (e.currentTarget.querySelector('.error-message')) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
+    const baseAddress = state.baseToken?.address;
+    const quoteAddress = state.quoteToken?.address;
+    if (!baseAddress || !quoteAddress) return;
+
+    const searchParams = {
+      baseToken: baseAddress.toLowerCase(),
+      quoteToken: quoteAddress.toLowerCase(),
+      buyMin: state.buy.min,
+      buyMax: state.buy.max,
+      buyBudget: state.buy.budget,
+      buyIsRange: state.buy.isRange,
+      sellMin: state.sell.min,
+      sellMax: state.sell.max,
+      sellBudget: state.sell.budget,
+      sellIsRange: state.sell.isRange,
+      start: start.toString(),
+      end: end.toString(),
+      type: 'recurring' as const,
+    };
+
+    const historyEntry = addSimulatorHistoryEntry(searchParams);
 
     navigate({
       to: '/simulate/result',
       search: {
-        baseToken: state.baseToken?.address || '',
-        quoteToken: state.quoteToken?.address || '',
-        buyMin: state.buy.min,
-        buyMax: state.buy.max,
-        buyBudget: state.buy.budget,
-        buyIsRange: state.buy.isRange,
-        sellMin: state.sell.min,
-        sellMax: state.sell.max,
-        sellBudget: state.sell.budget,
-        sellIsRange: state.sell.isRange,
-        start: start.toString(),
-        end: end.toString(),
-        type: 'recurring',
+        ...searchParams,
+        historyId: historyEntry.id,
       },
     });
   };
@@ -209,6 +221,7 @@ export const SimulatorInputRecurringPage = () => {
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>
       </form>
+      <SimulatorHistorySection />
     </>
   );
 };

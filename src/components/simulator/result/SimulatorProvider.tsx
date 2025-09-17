@@ -4,6 +4,7 @@ import {
 } from 'hooks/useStrategyInput';
 import { useTokens } from 'hooks/useTokens';
 import { SimulatorData, SimulatorReturn, useGetSimulator } from 'libs/queries';
+import { updateSimulatorHistoryEntry } from 'libs/simulator/history';
 import { SimulatorResultSearch, useSearch } from 'libs/routing';
 import {
   createContext,
@@ -81,6 +82,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const animationFrame = useRef<number>(0);
   const playbackSpeed = useRef<PlaybackSpeed>('1x');
   const actionAfterBrushEnd = useRef<'run' | 'pause' | null>(null);
+  const historyUpdateRef = useRef<string | null>(null);
 
   const setPlaybackSpeed = (speed: PlaybackSpeed) => {
     playbackSpeed.current = speed;
@@ -193,6 +195,23 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
     status.current = 'idle';
     setAnimationData([]);
   }, [search]);
+
+  useEffect(() => {
+    if (!query.isSuccess) return;
+    const historyId = search.historyId;
+    if (!historyId) return;
+    if (historyUpdateRef.current === historyId) return;
+
+    const { historyId: _historyId, ...restSearch } = search;
+
+    updateSimulatorHistoryEntry(historyId, {
+      roi: query.data?.roi,
+      gains: query.data?.gains,
+      search: restSearch,
+    });
+
+    historyUpdateRef.current = historyId;
+  }, [query.isSuccess, query.data, search]);
 
   return (
     <SimulatorCTX.Provider

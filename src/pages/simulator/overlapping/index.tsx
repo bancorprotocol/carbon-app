@@ -10,10 +10,12 @@ import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { useSimulatorOverlappingInput } from 'hooks/useSimulatorOverlappingInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
+import { addSimulatorHistoryEntry } from 'libs/simulator/history';
 import { FormEvent, useCallback, useEffect, useMemo } from 'react';
 import { formatNumber } from 'utils/helpers';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { SimulatorHistorySection } from 'components/simulator/history';
 import { D3ChartOverlapping } from 'components/strategies/common/d3Chart/overlapping/D3ChartOverlapping';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import {
@@ -89,6 +91,9 @@ export const SimulatorInputOverlappingPage = () => {
     if (!state.baseToken || !state.quoteToken || !_sP_) return;
     if (e.currentTarget.querySelector('.error-message')) return;
 
+    const baseToken = state.baseToken;
+    const quoteToken = state.quoteToken;
+
     const prices = calculateOverlappingPrices(
       state.buy.min,
       state.sell.max,
@@ -96,48 +101,56 @@ export const SimulatorInputOverlappingPage = () => {
       state.spread,
     );
 
-    const search = {
-      baseToken: state.baseToken.address,
-      quoteToken: state.quoteToken.address,
+    const searchParams = {
+      baseToken: baseToken.address.toLowerCase(),
+      quoteToken: quoteToken.address.toLowerCase(),
       buyMin: prices.buyPriceLow,
       buyMax: prices.buyPriceHigh,
       buyBudget: state.buy.budget,
       buyMarginal: prices.buyPriceMarginal,
-      buyIsRange: true,
+      buyIsRange: true as const,
       sellMin: prices.sellPriceLow,
       sellMax: prices.sellPriceHigh,
       sellBudget: state.sell.budget,
       sellMarginal: prices.sellPriceMarginal,
-      sellIsRange: true,
-      start: start,
-      end: end,
+      sellIsRange: true as const,
+      start: start.toString(),
+      end: end.toString(),
       type: 'overlapping' as const,
       spread: state.spread,
     };
 
-    if (search.buyBudget) {
-      search.sellBudget = calculateOverlappingSellBudget(
-        state.baseToken.decimals,
-        state.quoteToken.decimals,
+    if (searchParams.buyBudget) {
+      searchParams.sellBudget = calculateOverlappingSellBudget(
+        baseToken.decimals,
+        quoteToken.decimals,
         state.buy.min,
         state.sell.max,
         _sP_.toString(),
         state.spread,
-        search.buyBudget,
+        searchParams.buyBudget,
       );
     } else {
-      search.buyBudget = calculateOverlappingBuyBudget(
-        state.baseToken.decimals,
-        state.quoteToken.decimals,
+      searchParams.buyBudget = calculateOverlappingBuyBudget(
+        baseToken.decimals,
+        quoteToken.decimals,
         state.buy.min,
         state.sell.max,
         _sP_.toString(),
         state.spread,
-        search.sellBudget,
+        searchParams.sellBudget,
       );
     }
 
-    navigate({ to: '/simulate/result', search });
+    const historyEntry = addSimulatorHistoryEntry(searchParams);
+
+    navigate({
+      to: '/simulate/result',
+      search: {
+        ...searchParams,
+        historyId: historyEntry.id,
+      },
+    });
   };
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
@@ -213,6 +226,7 @@ export const SimulatorInputOverlappingPage = () => {
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>
       </form>
+      <SimulatorHistorySection />
     </>
   );
 };

@@ -133,7 +133,11 @@ export const simulatorInputRecurringRoute = createRoute({
 
 export interface SimulatorInputOverlappingSearch extends StrategyInputBase {
   sellMax?: string;
+  sellMin?: string;
+  sellBudget?: string;
+  buyMax?: string;
   buyMin?: string;
+  buyBudget?: string;
   spread?: string;
 }
 
@@ -144,17 +148,26 @@ export const simulatorInputOverlappingRoute = createRoute({
   validateSearch: (
     search: Record<string, unknown>,
   ): SimulatorInputOverlappingSearch => {
-    const sellMax = v.is(validNumber, search.sellMax)
-      ? roundSearchParam(search.sellMax)
-      : '';
-    const buyMin = v.is(validNumber, search.buyMin)
-      ? roundSearchParam(search.buyMin)
-      : '';
-    const spread = v.is(validNumber, search.spread) ? search.spread : '1';
+    const roundParam = (value?: unknown) =>
+      v.is(validNumber, value) ? roundSearchParam(value) : '';
+
+    const sellMax = roundParam(search.sellMax);
+    const sellMin = roundParam(search.sellMin);
+    const buyMax = roundParam(search.buyMax);
+    const buyMin = roundParam(search.buyMin);
+    const sellBudget = roundParam(search.sellBudget);
+    const buyBudget = roundParam(search.buyBudget);
+    const spread = v.is(validNumber, search.spread)
+      ? roundSearchParam(search.spread)
+      : '1';
 
     return {
       sellMax,
+      sellMin,
+      sellBudget,
+      buyMax,
       buyMin,
+      buyBudget,
       spread,
     };
   },
@@ -165,6 +178,7 @@ export type SimulatorResultSearch = Required<StrategyInputSearch> & {
   buyMarginal?: string;
   sellMarginal?: string;
   spread?: string;
+  historyId?: string;
 };
 
 export const simulatorResultRoute = createRoute({
@@ -216,6 +230,11 @@ export const simulatorResultRoute = createRoute({
       throw new Error('Invalid buy is range');
     }
 
+    const historyId =
+      typeof search.historyId === 'string' && search.historyId.length > 0
+        ? search.historyId
+        : undefined;
+
     const type: SimulatorType =
       search.type === 'overlapping' ? 'overlapping' : 'recurring';
 
@@ -237,6 +256,7 @@ export const simulatorResultRoute = createRoute({
       buyIsRange: search.buyIsRange,
       // TODO add validation
       spread: search.spread,
+      historyId,
       type,
     };
   },

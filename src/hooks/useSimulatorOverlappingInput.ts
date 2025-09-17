@@ -10,10 +10,6 @@ import { getBounds } from 'components/strategies/common/utils';
 
 export interface InternalSimulatorOverlappingInput
   extends SimulatorInputOverlappingSearch {
-  buyMax?: string;
-  sellMin?: string;
-  buyBudget?: string;
-  sellBudget?: string;
   sellBudgetError?: string;
   buyBudgetError?: string;
 }
