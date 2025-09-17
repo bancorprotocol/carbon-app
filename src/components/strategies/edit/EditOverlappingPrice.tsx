@@ -19,7 +19,7 @@ import { formatNumber } from 'utils/helpers';
 import { CreateOverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
+import { EditOverlappingStrategySearch } from 'pages/portfolio/edit/prices/overlapping';
 import { isValidRange } from '../utils';
 import { InitMarketPrice } from '../common/InitMarketPrice';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';

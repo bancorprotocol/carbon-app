@@ -1,7 +1,7 @@
 import { Outlet, useNavigate, useParams, useSearch } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
 import { useEffect, useState } from 'react';
-import { PortfolioLayout } from 'pages/strategies/layout';
+import { PortfolioLayout } from 'pages/portfolio/layout';
 import { useGetUserStrategies } from 'libs/queries';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';

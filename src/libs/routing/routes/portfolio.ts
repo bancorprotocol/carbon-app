@@ -1,14 +1,14 @@
 import { createRoute, redirect } from '@tanstack/react-router';
 import { validateActivityParams } from 'components/activity/utils';
 import { rootRoute } from 'libs/routing/routes/root';
-import { PortfolioLayout } from 'pages/strategies/layout';
-import { PortfolioActivityPage } from 'pages/strategies/activity';
-import { PortfolioStrategiesPage } from 'pages/strategies/strategies';
-import { PortfolioDistributionPage } from 'pages/strategies/portfolio';
-import { PortfolioDistributionTokenPage } from 'pages/strategies/portfolio/token';
+import { PortfolioLayout } from 'pages/portfolio/layout';
+import { PortfolioActivityPage } from 'pages/portfolio/activity';
+import { PortfolioStrategiesPage } from 'pages/portfolio/strategies';
+import { PortfolioDistributionPage } from 'pages/portfolio/distribution';
+import { PortfolioDistributionTokenPage } from 'pages/portfolio/distribution/token';
 import { searchValidator, validString } from '../utils';
 import * as v from 'valibot';
-import { PorfolioPairsPage } from 'pages/strategies/pairs';
+import { PorfolioPairsPage } from 'pages/portfolio/pairs';
 
 export const portfolioLayout = createRoute({
   getParentRoute: () => rootRoute,
