@@ -10,16 +10,16 @@ import {
 } from 'components/strategies/common/types';
 
 export const useGetEnrichedStrategies = (
-  allStrategies: UseQueryResult<AnyStrategy[] | AnyStrategy, any>,
+  query: UseQueryResult<AnyStrategy[] | AnyStrategy, any>,
 ) => {
   const { fiatCurrency } = useStore();
   const trending = useTrending();
   const currency = fiatCurrency.selectedFiatCurrency;
-  const isPending = allStrategies.isPending;
+  const isPending = query.isPending;
 
   const tokens = useMemo(() => {
-    if (!allStrategies.data) return [];
-    const data = allStrategies.data ?? [];
+    if (!query.data) return [];
+    const data = query.data ?? [];
     const strategies = Array.isArray(data) ? data : [data];
     const all = strategies.map(({ base, quote }) => [
       base.address,
@@ -27,13 +27,13 @@ export const useGetEnrichedStrategies = (
     ]);
     const unique = new Set(all.flat());
     return Array.from(unique);
-  }, [allStrategies.data]);
+  }, [query.data]);
 
   const allPrices = useGetMultipleTokenPrices(tokens);
 
   const allEnrichedStrategies = useMemo(() => {
     if (isPending) return;
-    const data = allStrategies.data ?? [];
+    const data = query.data ?? [];
     const strategies = Array.isArray(data) ? data : [data];
     const tokens = strategies.map(({ base, quote }) => [base, quote]).flat();
     const addresses = Array.from(new Set(tokens?.map((t) => t.address)));
@@ -64,13 +64,7 @@ export const useGetEnrichedStrategies = (
         tradeCount24h: tradeCount24h.get(strategy.id) ?? 0,
       } as AnyStrategyWithFiat;
     });
-  }, [
-    allPrices,
-    allStrategies.data,
-    currency,
-    trending.data?.tradeCount,
-    isPending,
-  ]);
+  }, [allPrices, query.data, currency, trending.data?.tradeCount, isPending]);
 
   return { data: allEnrichedStrategies, isPending };
 };

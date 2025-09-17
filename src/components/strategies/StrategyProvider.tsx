@@ -11,7 +11,6 @@ interface StrategyProviderProps {
 }
 export const StrategyProvider: FC<StrategyProviderProps> = (props) => {
   const { data, isPending } = useGetEnrichedStrategies(props.query);
-
   return (
     <StrategyContext.Provider value={{ strategies: data, isPending }}>
       {props.children}

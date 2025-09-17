@@ -1,4 +1,5 @@
 import { buttonStyles } from 'components/common/button/buttonStyles';
+import { Loading } from 'components/common/Loading';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useTokens } from 'hooks/useTokens';
 import {
@@ -7,7 +8,7 @@ import {
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
 import { Link } from 'libs/routing';
-import { CSSProperties, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { getLowestBits } from 'utils/helpers';
 import { toPairSlug } from 'utils/pairSearch';
 
@@ -212,12 +213,6 @@ export const ExplorerHeader = () => {
     </header>
   );
 };
-
-const Loading = (style: CSSProperties) => (
-  <div className="animate-pulse p-4" style={style}>
-    <div className="bg-white/30 h-full rounded-2xl"></div>
-  </div>
-);
 
 const formatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 0,
