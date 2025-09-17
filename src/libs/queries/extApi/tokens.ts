@@ -7,21 +7,22 @@ import { useGetAllPairs } from '../sdk/pairs';
 import { useContract } from 'hooks/useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useWagmi } from 'libs/wagmi';
+import { useMemo } from 'react';
 
 export const useExistingTokensQuery = () => {
+  const persitent = useMemo(() => lsService.getItem('tokenListCache'), []);
+
   return useQuery({
     queryKey: QueryKey.tokens(),
     queryFn: async () => {
-      const local = lsService.getItem('tokenListCache');
-      if (local && local.timestamp > Date.now() - ONE_HOUR_IN_MS) {
-        return local.tokens;
-      }
       const tokens = buildTokenList(await fetchTokenLists());
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
     },
     staleTime: ONE_HOUR_IN_MS,
-    placeholderData: (previous) => previous,
+    initialData: persitent?.tokens,
+    initialDataUpdatedAt: persitent?.timestamp,
+    refetchOnWindowFocus: false,
     meta: {
       errorMessage: 'useTokensQuery failed with error:',
     },

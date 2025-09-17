@@ -75,7 +75,6 @@ export const QueryKey = {
   missingTokens: () => [...chain, 'missing-token'],
   token: (token: string) => [...chain, 'token', token],
   pairs: () => [...sdk, 'pairs'],
-  pairTokens: () => [...sdk, 'pairs', 'tokens'],
 
   tradeData: (pair: TokenPair, isTradeBySource: boolean, amount: string) => [
     ...sdk,

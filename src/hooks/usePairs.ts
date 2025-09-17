@@ -1,41 +1,52 @@
 import { isAddress } from 'ethers';
-import { useGetTradePairsData } from 'libs/queries';
+import { useGetAllPairs } from 'libs/queries';
 import { useCallback, useMemo } from 'react';
 import { createPairMaps } from 'utils/pairSearch';
+import { useTokens } from './useTokens';
+import { Token } from 'libs/tokens';
 
 export type PairStore = ReturnType<typeof usePairs>;
 
 export const usePairs = () => {
-  const { data, isError, isPending } = useGetTradePairsData();
-  const tokens = useMemo(() => {
-    const set = new Set<string>();
-    if (!data) return set;
-    for (const { baseToken, quoteToken } of data) {
-      set.add(baseToken.address.toLowerCase());
-      set.add(quoteToken.address.toLowerCase());
-    }
-    return set;
-  }, [data]);
+  const { getTokenById } = useTokens();
+  const pairQuery = useGetAllPairs();
 
-  const maps = useMemo(() => createPairMaps(data), [data]);
+  const maps = useMemo(() => {
+    const pairs = pairQuery.data || [];
+    const result: { baseToken: Token; quoteToken: Token }[] = [];
+    for (const pair of pairs) {
+      const baseToken = getTokenById(pair[0]);
+      const quoteToken = getTokenById(pair[1]);
+      if (baseToken && quoteToken) result.push({ baseToken, quoteToken });
+    }
+
+    const pairsWithInverse = [
+      ...result,
+      ...result.map((p) => ({
+        baseToken: p.quoteToken,
+        quoteToken: p.baseToken,
+      })),
+    ];
+
+    return createPairMaps(pairsWithInverse);
+  }, [getTokenById, pairQuery.data]);
 
   const getType = useCallback(
     (slug: string = '') => {
       if (!slug) return 'full';
       if (maps.pairMap.has(slug)) return 'pair';
       if (slug.split('_').length === 2) return 'pair';
-      if (tokens.has(slug)) return 'token';
+      if (getTokenById(slug)) return 'token';
       if (isAddress(slug)) return 'wallet';
       return 'full';
     },
-    [maps.pairMap, tokens],
+    [maps.pairMap, getTokenById],
   );
 
   return {
     map: maps.pairMap,
     names: maps.nameMap,
-    isError,
-    isPending,
+    isPending: pairQuery.isPending,
     getType,
   };
 };
@@ -43,7 +54,6 @@ export const usePairs = () => {
 export const defaultPairs: PairStore = {
   map: new Map(),
   names: new Map(),
-  isError: false,
   isPending: false,
   getType: () => 'pair',
 };

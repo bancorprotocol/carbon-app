@@ -41,7 +41,6 @@ export interface LocalStorageSchema {
   batcherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
   sdkCompressedCacheData: string;
-  tokenPairsCache: { pairs: TradePair[]; timestamp: number };
   isUncheckedSigner: boolean;
   hasSeenRestrictedCountryModal: boolean;
   hasSeenCreateStratExpertMode: boolean;
@@ -58,6 +57,7 @@ export interface LocalStorageSchema {
   /* @deprecated */
   strategyOverviewFilter?: void;
   strategyOverviewSort?: void;
+  tokenPairsCache: { pairs: TradePair[]; timestamp: number };
 }
 
 enum EnumStrategySort {
