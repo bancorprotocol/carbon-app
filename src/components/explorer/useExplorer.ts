@@ -2,16 +2,18 @@ import {
   useGetPairStrategies,
   useGetUserStrategies,
   useTokenStrategies,
+  useGetAllStrategies,
 } from 'libs/queries';
 import { usePairs } from 'hooks/usePairs';
 import { useMemo } from 'react';
 import { useSearch } from '@tanstack/react-router';
+import { isAddress } from 'ethers';
 
 export const useExplorer = () => {
   const { search = '' } = useSearch({ from: '/explore' });
-  const pairs = usePairs();
+  const { getType } = usePairs();
 
-  const type = pairs.getType(search);
+  const type = useMemo(() => getType(search), [getType, search]);
 
   // SINGLE TOKEN
   const singleToken = (() => {
@@ -25,20 +27,21 @@ export const useExplorer = () => {
   const exactMatch = useMemo(() => {
     if (type !== 'pair') return;
     const [base, quote] = search.split('_');
-    if (!base || !quote) return;
-    return pairs.map.get(`${base}_${quote}`);
-  }, [pairs.map, search, type]);
-  const pairQuery = useGetPairStrategies({
-    base: exactMatch?.baseToken.address,
-    quote: exactMatch?.quoteToken.address,
-  });
+    if (!isAddress(base) || !isAddress(quote)) return;
+    return { base, quote };
+  }, [search, type]);
+  const pairQuery = useGetPairStrategies(exactMatch);
 
   // WALLET
   const walletQuery = useGetUserStrategies({
     user: type === 'wallet' ? search : undefined,
   });
 
-  if (type === 'wallet') return walletQuery;
+  // ALL
+  const allQuery = useGetAllStrategies({ enabled: type === 'full' });
+
+  if (type === 'token') return tokenQuery;
   if (type === 'pair') return pairQuery;
-  return tokenQuery;
+  if (type === 'wallet') return walletQuery;
+  return allQuery;
 };

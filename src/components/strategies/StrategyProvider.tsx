@@ -2,11 +2,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { AnyStrategy } from './common/types';
 import { ReactNode } from '@tanstack/react-router';
 import { FC } from 'react';
-import {
-  StrategyContext,
-  useFilterStrategies,
-  useGetEnrichedStrategies,
-} from 'hooks/useStrategies';
+import { StrategyContext, useGetEnrichedStrategies } from 'hooks/useStrategies';
 
 interface StrategyProviderProps {
   url: '/explore' | '/portfolio';
@@ -15,10 +11,9 @@ interface StrategyProviderProps {
 }
 export const StrategyProvider: FC<StrategyProviderProps> = (props) => {
   const { data, isPending } = useGetEnrichedStrategies(props.query);
-  const strategies = useFilterStrategies(props.url, data);
 
   return (
-    <StrategyContext.Provider value={{ strategies, isPending }}>
+    <StrategyContext.Provider value={{ strategies: data, isPending }}>
       {props.children}
     </StrategyContext.Provider>
   );

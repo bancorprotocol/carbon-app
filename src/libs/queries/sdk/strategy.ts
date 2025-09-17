@@ -31,6 +31,7 @@ import { isInPast, isPaused } from 'components/strategies/common/utils';
 import { SDKGradientStrategy } from './gradient-mock';
 import { useCarbonInit } from 'hooks/useCarbonInit';
 import { isZero } from 'components/strategies/common/utils';
+import { useMemo } from 'react';
 
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
@@ -212,7 +213,8 @@ export const useGetUserStrategies = ({ user }: Props) => {
         Token,
       });
     },
-    enabled: tokens.length > 0 && ensAddress.isFetched && isInitialized,
+    enabled:
+      !!user && tokens.length > 0 && ensAddress.isFetched && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
@@ -249,7 +251,8 @@ export const useGetStrategyList = (ids: string[]) => {
   });
 };
 
-export const useGetAllStrategies = () => {
+/** We need to add options to disable because we want to use different hooks for explorer  */
+export const useGetAllStrategies = (options: { enabled: boolean }) => {
   const { isInitialized } = useCarbonInit();
   const { tokens, getTokenById, importTokens } = useTokens();
   const { Token } = useContract();
@@ -265,7 +268,7 @@ export const useGetAllStrategies = () => {
         Token,
       });
     },
-    enabled: tokens.length > 0 && isInitialized,
+    enabled: options?.enabled && tokens.length > 0 && isInitialized,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
@@ -333,25 +336,31 @@ const normalizeStrategy = (
   }
 };
 
-export const useGetPairStrategies = ({ base, quote }: PropsPair) => {
+export const useGetPairStrategies = (pair?: PropsPair) => {
+  const { Token } = useContract();
   const { isInitialized } = useCarbonInit();
   const { getTokenById, importTokens, isPending } = useTokens();
-  const pair = usePairs();
-  const { Token } = useContract();
+  const pairs = usePairs();
+
+  const enabled = useMemo(() => {
+    if (!pair?.base || !pair.quote) return false;
+    if (pairs.isPending || isPending) return false;
+    return isInitialized;
+  }, [isInitialized, isPending, pair?.base, pair?.quote, pairs.isPending]);
 
   return useQuery<AnyStrategy[]>({
-    queryKey: QueryKey.strategiesByPair(base, quote),
+    queryKey: QueryKey.strategiesByPair(pair?.base, pair?.quote),
     queryFn: async () => {
-      if (!base || !quote) return [];
-      const strategies = await carbonSDK.getStrategiesByPair(base, quote);
+      const { base, quote } = pair!;
+      const strategies = await carbonSDK.getStrategiesByPair(base!, quote!);
       return buildStrategiesHelper({
-        strategies: strategies.map((s) => normalizeStrategy(base, quote, s)),
+        strategies: strategies.map((s) => normalizeStrategy(base!, quote!, s)),
         getTokenById,
         importTokens,
         Token,
       });
     },
-    enabled: !pair.isPending && !isPending && isInitialized,
+    enabled: enabled,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });
