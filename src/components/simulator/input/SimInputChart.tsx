@@ -88,7 +88,7 @@ export const SimInputChart = ({
   return (
     <Layout footer={footer}>
       <D3PriceHistory
-        className="self-stretch"
+        className="h-full"
         onRangeUpdates={onDatePickerConfirm}
         data={data}
         marketPrice={marketPrice}
@@ -117,19 +117,21 @@ const Layout = ({
 }) => (
   <div
     className={cn(
-      'bg-background-900 sticky top-[80px] grid gap-20 rounded-2xl p-20',
-      footer
-        ? 'grid-rows-[auto_minmax(0,1fr)_auto] min-h-[720px]'
-        : 'grid-rows-[auto_minmax(0,1fr)] h-[600px]',
+      'bg-background-900 sticky top-[80px] flex flex-col gap-20 rounded-2xl p-20',
+      'min-h-[680px]',
     )}
   >
     <header className="flex items-center justify-between">
       <h2 className="text-20 font-medium">Price Chart</h2>
     </header>
-    {children}
-    {footer && (
-      <div className="border-t border-background-800/60 pt-20">{footer}</div>
-    )}
+    <div className="flex flex-col gap-20">
+      <div className="h-[560px] min-h-0 w-full">{children}</div>
+      {footer && (
+        <div className="border-t border-background-800/60 pt-20">
+          <div className="max-h-[320px] overflow-y-auto pr-6">{footer}</div>
+        </div>
+      )}
+    </div>
   </div>
 );
 
