@@ -185,6 +185,7 @@ export const SimulatorInputRecurringPage = () => {
         isPending={isPending}
         isError={emptyHistory}
         prices={prices}
+        footer={<SimulatorHistorySection />}
       >
         <D3ChartRecurring
           base={state.baseToken!}
@@ -221,7 +222,6 @@ export const SimulatorInputRecurringPage = () => {
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>
       </form>
-      <SimulatorHistorySection />
     </>
   );
 };

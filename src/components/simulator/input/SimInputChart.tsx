@@ -8,6 +8,7 @@ import {
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { ChartPrices } from 'components/strategies/common/d3Chart';
 import { ReactNode, useCallback } from 'react';
+import { cn } from 'utils/helpers';
 import { ReactComponent as IconQuestion } from 'assets/icons/question.svg';
 import { CandlestickData } from 'libs/d3';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
@@ -28,6 +29,7 @@ interface Props {
   isError: boolean;
   prices: ChartPrices;
   children: ReactNode;
+  footer?: ReactNode;
 }
 
 export const SimInputChart = ({
@@ -39,6 +41,7 @@ export const SimInputChart = ({
   data,
   prices,
   children,
+  footer,
 }: Props) => {
   const { marketPrice, isPending: marketIsPending } = useMarketPrice({
     base: state.baseToken,
@@ -83,7 +86,7 @@ export const SimInputChart = ({
     );
   }
   return (
-    <Layout>
+    <Layout footer={footer}>
       <D3PriceHistory
         className="self-stretch"
         onRangeUpdates={onDatePickerConfirm}
@@ -105,12 +108,28 @@ export const SimInputChart = ({
   );
 };
 
-const Layout = ({ children }: { children: ReactNode }) => (
-  <div className="bg-background-900 sticky top-[80px] grid h-[600px] grid-rows-[auto_1fr] gap-20 rounded-2xl p-20">
+const Layout = ({
+  children,
+  footer,
+}: {
+  children: ReactNode;
+  footer?: ReactNode;
+}) => (
+  <div
+    className={cn(
+      'bg-background-900 sticky top-[80px] grid gap-20 rounded-2xl p-20',
+      footer
+        ? 'grid-rows-[auto_minmax(0,1fr)_auto] min-h-[720px]'
+        : 'grid-rows-[auto_minmax(0,1fr)] h-[600px]',
+    )}
+  >
     <header className="flex items-center justify-between">
       <h2 className="text-20 font-medium">Price Chart</h2>
     </header>
     {children}
+    {footer && (
+      <div className="border-t border-background-800/60 pt-20">{footer}</div>
+    )}
   </div>
 );
 

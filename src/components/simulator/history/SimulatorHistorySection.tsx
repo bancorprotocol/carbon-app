@@ -10,7 +10,11 @@ import { StrategyInputOrder } from 'hooks/useStrategyInput';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { fromUnixUTC, dayFormatter } from 'components/simulator/utils';
 
-export const SimulatorHistorySection = () => {
+export const SimulatorHistorySection = ({
+  className,
+}: {
+  className?: string;
+}) => {
   const { history, remove } = useSimulatorHistory();
   const navigate = useNavigate();
   const tokens = useTokens();
@@ -89,7 +93,7 @@ export const SimulatorHistorySection = () => {
 
   return (
     <section
-      className="mt-24 grid gap-16 md:col-span-2"
+      className={cn('grid gap-16', className)}
       data-testid="simulation-history"
     >
       <h2 className="text-18 font-medium">Simulation History</h2>

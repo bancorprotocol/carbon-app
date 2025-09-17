@@ -183,6 +183,7 @@ export const SimulatorInputOverlappingPage = () => {
         isPending={isPending}
         isError={emptyHistory}
         prices={prices}
+        footer={<SimulatorHistorySection />}
       >
         <D3ChartOverlapping
           base={state.baseToken!}
@@ -226,7 +227,6 @@ export const SimulatorInputOverlappingPage = () => {
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>
       </form>
-      <SimulatorHistorySection />
     </>
   );
 };
