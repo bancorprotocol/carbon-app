@@ -37,8 +37,9 @@ const useTrendingPairs = (trending: UseQueryResult<Trending, Error>) => {
 
   // If there are less than 3, pick the remaining best
   if (list.length < 3) {
+    const ids = list.map((p) => p.pairId);
     const remaining = Object.values(pairs)
-      .filter((pair) => !!pair.pairTrades_24h)
+      .filter((pair) => !!pair.pairTrades_24h && !ids.includes(pair.pairId))
       .sort((a, b) => b.pairTrades - a.pairTrades)
       .splice(0, 3 - list.length);
     list.push(...remaining);

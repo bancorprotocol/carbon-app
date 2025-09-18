@@ -139,7 +139,7 @@ export const searchPairTrade = (
 const includeToken = ({ address, symbol }: Token, search: string) => {
   return (
     address.toLowerCase().includes(search) ||
-    symbol.toLowerCase().includes(search)
+    replaceSpecialCharacters(symbol).toLowerCase().includes(search)
   );
 };
 
