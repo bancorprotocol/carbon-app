@@ -47,6 +47,7 @@ export const usePairs = () => {
     map: maps.pairMap,
     names: maps.nameMap,
     isPending: pairQuery.isPending,
+    isError: pairQuery.isError,
     getType,
   };
 };
@@ -55,5 +56,6 @@ export const defaultPairs: PairStore = {
   map: new Map(),
   names: new Map(),
   isPending: false,
+  isError: false,
   getType: () => 'pair',
 };
