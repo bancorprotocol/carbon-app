@@ -8,6 +8,7 @@ import { useContract } from 'hooks/useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useWagmi } from 'libs/wagmi';
 import { useMemo } from 'react';
+import config from 'config';
 
 export const useExistingTokensQuery = () => {
   const persitent = useMemo(() => lsService.getItem('tokenListCache'), []);
@@ -48,6 +49,12 @@ export const useMissingTokensQuery = () => {
         fillMissing(base);
         fillMissing(quote);
       }
+      for (const base of config.popularTokens.base) {
+        fillMissing(base);
+      }
+      for (const quote of config.popularTokens.quote) {
+        fillMissing(quote);
+      }
 
       const getTokens: Promise<Token>[] = [];
       for (const address of missing) {
@@ -73,5 +80,6 @@ export const useMissingTokensQuery = () => {
     },
     initialData: () => lsService.getItem('importedTokens'),
     enabled: !!existingTokens.data && !!pairs.data && !!provider,
+    refetchOnWindowFocus: false,
   });
 };

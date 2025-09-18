@@ -18,7 +18,7 @@ export const useGetEnrichedStrategies = (
   const isPending = query.isPending;
 
   const tokens = useMemo(() => {
-    if (!query.data) return [];
+    if (isPending) return;
     const data = query.data ?? [];
     const strategies = Array.isArray(data) ? data : [data];
     const all = strategies.map(({ base, quote }) => [
@@ -27,7 +27,7 @@ export const useGetEnrichedStrategies = (
     ]);
     const unique = new Set(all.flat());
     return Array.from(unique);
-  }, [query.data]);
+  }, [isPending, query.data]);
 
   const allPrices = useGetMultipleTokenPrices(tokens);
 

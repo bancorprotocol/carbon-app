@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
@@ -11,8 +11,6 @@ import {
   isGasTokenToHide,
   nativeToken,
 } from 'utils/tokens';
-import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
-import { useContract } from 'hooks/useContract';
 
 const SEARCH_KEYS = [
   {
@@ -38,8 +36,6 @@ export const useModalTokenList = ({ id, data }: Props) => {
     removeFavoriteToken,
     favoriteTokens,
     tokensMap,
-    importTokens,
-    getTokenById,
     isError,
   } = useTokens();
   const {
@@ -50,35 +46,12 @@ export const useModalTokenList = ({ id, data }: Props) => {
   } = data;
   const { closeModal } = useModal();
   const [search, setSearch] = useState('');
-  const { Token } = useContract();
 
   const basePopularTokens = config.popularTokens.base;
   const quotePopularTokens = config.popularTokens.quote;
   const defaultPopularTokens = isBaseToken
     ? basePopularTokens
     : quotePopularTokens;
-
-  useEffect(() => {
-    if (isPending) return;
-    const getMissingToken: Promise<Token>[] = [];
-    for (const token of defaultPopularTokens) {
-      if (!getTokenById(token)) {
-        getMissingToken.push(fetchTokenData(Token, token));
-      }
-    }
-    Promise.allSettled(getMissingToken).then((res) => {
-      const success = res
-        .filter((r) => r.status === 'fulfilled')
-        .map((r) => r.value);
-      const errors = res
-        .filter((r) => r.status === 'rejected')
-        .map((r) => r.reason);
-      importTokens(success);
-      for (const error of errors) {
-        console.error(error);
-      }
-    });
-  }, [Token, defaultPopularTokens, getTokenById, importTokens, isPending]);
 
   const onSelect = useCallback(
     (token: Token) => {
