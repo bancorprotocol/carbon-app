@@ -178,10 +178,9 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
         id={inputId}
         name="search"
         type="search"
-        className={cn(
-          'grow bg-transparent outline-hidden data-loading:animate-pulse',
-          style.inputSearch,
-        )}
+        className={cn('grow bg-transparent outline-hidden', style.inputSearch, {
+          'animate-pulse': loading,
+        })}
         role="combobox"
         autoComplete="off"
         aria-controls={listboxId}
@@ -194,7 +193,6 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
         value={loading ? '' : search}
         onInput={onInput}
         onFocus={() => setOpen(true)}
-        data-loading={loading}
       />
       <button type="reset" aria-label="Clear" onClick={() => setSearch('')}>
         <IconClose className="size-12 opacity-60" />
