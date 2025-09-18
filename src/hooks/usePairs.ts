@@ -8,10 +8,12 @@ import { Token } from 'libs/tokens';
 export type PairStore = ReturnType<typeof usePairs>;
 
 export const usePairs = () => {
-  const { getTokenById } = useTokens();
+  const { getTokenById, isPending } = useTokens();
   const pairQuery = useGetAllPairs();
 
   const maps = useMemo(() => {
+    if (isPending) return createPairMaps([]);
+
     const pairs = pairQuery.data || [];
     const result: { baseToken: Token; quoteToken: Token }[] = [];
     for (const pair of pairs) {
@@ -29,7 +31,7 @@ export const usePairs = () => {
     ];
 
     return createPairMaps(pairsWithInverse);
-  }, [getTokenById, pairQuery.data]);
+  }, [getTokenById, pairQuery.data, isPending]);
 
   const getType = useCallback(
     (slug: string = '') => {
@@ -46,7 +48,7 @@ export const usePairs = () => {
   return {
     map: maps.pairMap,
     names: maps.nameMap,
-    isPending: pairQuery.isPending,
+    isPending: isPending || pairQuery.isPending,
     isError: pairQuery.isError,
     getType,
   };

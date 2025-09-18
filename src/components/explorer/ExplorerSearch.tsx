@@ -3,29 +3,57 @@ import { SuggestionCombobox } from 'components/explorer/suggestion/SuggestionCom
 import { useNavigate, useSearch } from 'libs/routing';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron-right.svg';
-import { searchPairTrade, searchTokens, toPairSlug } from 'utils/pairSearch';
+import {
+  searchPairTrade,
+  searchTokens,
+  toPairName,
+  toPairSlug,
+} from 'utils/pairSearch';
 import { usePairs } from 'hooks/usePairs';
-import { getEnsAddressIfAny, useGetAddressFromEns } from 'libs/queries';
-import { useDebouncedValue } from 'hooks/useDebouncedValue';
+import { getEnsAddressIfAny } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
+import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { Token } from 'libs/tokens';
 import style from './ExplorerSearch.module.css';
+import { useTokens } from 'hooks/useTokens';
+
+const displaySlug = (
+  slug: string,
+  pairMap: Map<string, TradePair>,
+  tokensMap: Map<string, Token>,
+) => {
+  if (tokensMap.has(slug)) {
+    return tokensMap.get(slug)?.symbol ?? '';
+  } else if (pairMap.has(slug)) {
+    const pair = pairMap.get(slug)!;
+    return toPairName(pair.baseToken, pair.quoteToken);
+  } else {
+    return slug;
+  }
+};
 
 interface Props {
   url: '/explore' | '/portfolio';
 }
 const LocalExplorerSearch: FC<Props> = ({ url }) => {
   const navigate = useNavigate({ from: url });
-  const pairs = usePairs();
+  const { tokensMap } = useTokens();
+  const { map: pairMap, names: namesMap } = usePairs();
   const [open, setOpen] = useState(false);
   const { provider } = useWagmi();
   const params = useSearch({ from: url });
-  const [search, setSearch] = useState(params.search ?? '');
-  const [debouncedSearch] = useDebouncedValue<string>(search, 300); // Debounce search input for ens query
 
-  const ensAddressQuery = useGetAddressFromEns(debouncedSearch.toLowerCase());
+  const [search, setSearch] = useState(
+    displaySlug(params.search || '', pairMap, tokensMap),
+  );
 
-  const waitingToFetchEns =
-    debouncedSearch !== search || !ensAddressQuery.isSuccess;
+  useEffect(() => console.log(search), [search]);
+
+  useEffect(() => {
+    const display = displaySlug(params.search || '', pairMap, tokensMap);
+    console.log({ display, search: params.search });
+    setSearch(display);
+  }, [tokensMap, pairMap, params.search, setSearch]);
 
   const updateSearchParams = useCallback(
     (search?: string) => {
@@ -39,24 +67,25 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
     [navigate],
   );
 
-  useEffect(() => {
-    if (!search) return;
-    const name = pairs.names.get(search);
-    const displayName = name?.replace('_', '/').toUpperCase();
-    return setSearch(displayName || '');
-  }, [search, pairs.names]);
+  // useEffect(() => {
+  //   if (!search) return;
+  //   const name = pairs.names.get(search);
+  //   console.log({ search, name });
+  //   const displayName = name?.replace('_', '/').toUpperCase();
+  //   return setSearch(displayName || '');
+  // }, [search, pairs.names]);
 
   const onSearchHandler = async (value?: string) => {
     if (!value?.length) {
       return updateSearchParams();
     }
     let slug = value;
-    const filteredPairs = searchPairTrade(pairs.map, pairs.names, value);
+    const filteredPairs = searchPairTrade(pairMap, namesMap, value);
     if (filteredPairs[0]) {
       const { baseToken, quoteToken } = filteredPairs[0];
       slug = toPairSlug(baseToken, quoteToken);
     }
-    const filteredTokens = searchTokens(pairs.map, value);
+    const filteredTokens = searchTokens(pairMap, value);
     if (filteredTokens[0]) {
       slug = filteredTokens[0].address.toLowerCase();
     }
@@ -97,7 +126,13 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
       >
         <IconSearch className="size-18" />
         <div className="flex items-center md:relative">
-          <SuggestionCombobox url={url} open={open} setOpen={setOpen} />
+          <SuggestionCombobox
+            url={url}
+            open={open}
+            setOpen={setOpen}
+            search={search}
+            setSearch={setSearch}
+          />
         </div>
         <button type="submit">
           <IconChevron className="size-24" />
