@@ -1,3 +1,4 @@
+import { UseQueryResult } from '@tanstack/react-query';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Loading } from 'components/common/Loading';
 import { TokensOverlap } from 'components/common/tokensOverlap';
@@ -8,15 +9,25 @@ import {
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
 import { Link } from 'libs/routing';
+import { Token } from 'libs/tokens';
 import { useEffect, useRef } from 'react';
 import { getLowestBits } from 'utils/helpers';
 import { toPairSlug } from 'utils/pairSearch';
 
-const useTrendingPairs = (trending?: Trending) => {
+interface PairTrendingQuery {
+  isPending: boolean;
+  data: {
+    pairAddress: string;
+    base: Token;
+    quote: Token;
+    trades: number;
+  }[];
+}
+const useTrendingPairs = (trending: UseQueryResult<Trending, Error>) => {
   const { getTokenById, isPending } = useTokens();
-  if (!trending) return { isPending: true, data: [] };
+  if (trending.isPending || isPending) return { isPending: true, data: [] };
   const pairs: Record<string, PairTrade> = {};
-  for (const trade of trending?.pairCount ?? []) {
+  for (const trade of trending.data?.pairCount ?? []) {
     pairs[trade.pairAddresses] ||= trade;
   }
   const list = Object.values(pairs)
@@ -46,9 +57,20 @@ const useTrendingPairs = (trending?: Trending) => {
   return { isPending, data };
 };
 
-const useTrendStrategies = (trending?: Trending) => {
+interface StrategyTrendingQuery {
+  isPending: boolean;
+  data: {
+    id: string;
+    idDisplay: string;
+    base: Token | undefined;
+    quote: Token | undefined;
+    trades: number;
+  }[];
+}
+const useTrendStrategies = (trending: UseQueryResult<Trending, Error>) => {
   const { getTokenById, isPending } = useTokens();
-  const trades = trending?.tradeCount ?? [];
+  if (trending.isPending || isPending) return { isPending: true, data: [] };
+  const trades = trending.data?.tradeCount ?? [];
   const list = trades
     .filter((t) => !!t.strategyTrades_24h)
     .sort((a, b) => b.strategyTrades - a.strategyTrades)
@@ -76,21 +98,16 @@ const useTrendStrategies = (trending?: Trending) => {
 };
 
 export const ExplorerHeader = () => {
-  const { data: trending, isPending, isError } = useTrending();
+  const trending = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
   const trendingPairs = useTrendingPairs(trending);
-  const strategies = trendingStrategies.data;
-  const pairs = trendingPairs.data;
-
-  const strategiesLoading = trendingStrategies.isPending || isPending;
-  const pairLoading = trendingPairs.isPending || isPending;
-  if (isError) return;
+  if (trending.isError) return;
   return (
     <header className="bg-transparent-gradient">
       <div className="flex gap-32 max-w-[1280px] mx-auto px-16 py-24">
         <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
           <h2 className="text-24 font-normal font-title my-0">Total Trades</h2>
-          <Trades trades={trending?.totalTradeCount} />
+          <Trades trades={trending.data?.totalTradeCount} />
           <div className="flex gap-16">
             <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
               Create
@@ -113,48 +130,7 @@ export const ExplorerHeader = () => {
               </tr>
             </thead>
             <tbody className="font-medium">
-              {pairLoading &&
-                [1, 2, 3].map((id) => (
-                  <tr key={id}>
-                    <td>
-                      <Loading height={34} />
-                    </td>
-                    <td>
-                      <Loading height={34} />
-                    </td>
-                  </tr>
-                ))}
-              {pairs.map(({ pairAddress, base, quote, trades }) => (
-                <tr key={pairAddress}>
-                  <td>
-                    <Link
-                      to="/explore"
-                      search={{
-                        search: toPairSlug(base, quote),
-                      }}
-                      className="block w-full"
-                    >
-                      <div className="inline-flex items-center gap-8">
-                        <TokensOverlap tokens={[base, quote]} size={18} />
-                        <span>{base?.symbol}</span>
-                        <span className="text-white/60">/</span>
-                        <span>{quote?.symbol}</span>
-                      </div>
-                    </Link>
-                  </td>
-                  <td className="py-8 text-end">
-                    <Link
-                      to="/explore"
-                      search={{
-                        search: toPairSlug(base, quote),
-                      }}
-                      className="block w-full"
-                    >
-                      {formatter.format(trades)}
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+              <PairRows query={trendingPairs} />
             </tbody>
           </table>
         </article>
@@ -170,48 +146,97 @@ export const ExplorerHeader = () => {
               </tr>
             </thead>
             <tbody className="font-medium">
-              {strategiesLoading &&
-                [1, 2, 3].map((id) => (
-                  <tr key={id}>
-                    <td>
-                      <Loading height={34} />
-                    </td>
-                    <td>
-                      <Loading height={34} />
-                    </td>
-                  </tr>
-                ))}
-              {strategies.map(({ id, idDisplay, base, quote, trades }) => (
-                <tr key={id}>
-                  <td>
-                    <Link
-                      to="/strategy/$id"
-                      params={{ id }}
-                      className="block w-full"
-                    >
-                      <div className="bg-background-800 flex gap-8 rounded-2xl px-8 py-4">
-                        <TokensOverlap tokens={[base!, quote!]} size={18} />
-                        {idDisplay}
-                      </div>
-                    </Link>
-                  </td>
-                  <td className="w-full py-8 text-end">
-                    <Link
-                      to="/strategy/$id"
-                      params={{ id }}
-                      className="block w-full"
-                    >
-                      {formatter.format(trades)}
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+              <StrategyRows query={trendingStrategies} />
             </tbody>
           </table>
         </article>
       </div>
     </header>
   );
+};
+
+interface PairTrendingProps {
+  query: PairTrendingQuery;
+}
+const PairRows = ({ query }: PairTrendingProps) => {
+  if (query.isPending) {
+    return [1, 2, 3].map((id) => (
+      <tr key={id}>
+        <td>
+          <Loading height={34} />
+        </td>
+        <td>
+          <Loading height={34} />
+        </td>
+      </tr>
+    ));
+  }
+  return query.data.map(({ pairAddress, base, quote, trades }) => (
+    <tr key={pairAddress}>
+      <td>
+        <Link
+          to="/explore"
+          search={{
+            search: toPairSlug(base, quote),
+          }}
+          className="block w-full"
+        >
+          <div className="inline-flex items-center gap-8">
+            <TokensOverlap tokens={[base, quote]} size={18} />
+            <span>{base?.symbol}</span>
+            <span className="text-white/60">/</span>
+            <span>{quote?.symbol}</span>
+          </div>
+        </Link>
+      </td>
+      <td className="py-8 text-end">
+        <Link
+          to="/explore"
+          search={{
+            search: toPairSlug(base, quote),
+          }}
+          className="block w-full"
+        >
+          {formatter.format(trades)}
+        </Link>
+      </td>
+    </tr>
+  ));
+};
+
+interface StrategyTrendingProps {
+  query: StrategyTrendingQuery;
+}
+const StrategyRows = ({ query }: StrategyTrendingProps) => {
+  if (query.isPending) {
+    return [1, 2, 3].map((id) => (
+      <tr key={id}>
+        <td>
+          <Loading height={34} />
+        </td>
+        <td>
+          <Loading height={34} />
+        </td>
+      </tr>
+    ));
+  }
+  return query.data.map(({ id, idDisplay, base, quote, trades }) => (
+    <tr key={id}>
+      <td>
+        <Link to="/strategy/$id" params={{ id }} className="block w-full">
+          <div className="bg-background-800 flex gap-8 rounded-2xl px-8 py-4">
+            <TokensOverlap tokens={[base!, quote!]} size={18} />
+            {idDisplay}
+          </div>
+        </Link>
+      </td>
+      <td className="w-full py-8 text-end">
+        <Link to="/strategy/$id" params={{ id }} className="block w-full">
+          {formatter.format(trades)}
+        </Link>
+      </td>
+    </tr>
+  ));
 };
 
 const formatter = new Intl.NumberFormat(undefined, {
