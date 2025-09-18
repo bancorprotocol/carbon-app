@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { buildTokenList, fetchTokenLists, Token } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_HOUR_IN_MS } from 'utils/time';
@@ -30,8 +30,9 @@ export const useExistingTokensQuery = () => {
   });
 };
 
-export const useMissingTokensQuery = () => {
-  const existingTokens = useExistingTokensQuery();
+export const useMissingTokensQuery = (
+  existingTokens: UseQueryResult<Token[], Error>,
+) => {
   const pairs = useGetAllPairs();
   const { Token } = useContract();
   // We need provider before fetching tokens
@@ -40,10 +41,12 @@ export const useMissingTokensQuery = () => {
   return useQuery({
     queryKey: QueryKey.missingTokens(),
     queryFn: async () => {
-      const existing = new Set(existingTokens.data!.map((t) => t.address));
+      const existing = new Set(
+        existingTokens.data!.map((t) => t.address.toLowerCase()),
+      );
       const missing = new Set<string>();
       const fillMissing = (address: string) => {
-        if (!existing.has(address)) missing.add(address);
+        if (!existing.has(address.toLowerCase())) missing.add(address);
       };
       for (const [base, quote] of pairs.data!) {
         fillMissing(base);
