@@ -151,7 +151,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
       </div>
       <div
         role="toolbar"
-        className="flex items-center sm:justify-end gap-16 grid-area-[filters]"
+        className="grid grid-flow-col sm:justify-end gap-16 grid-area-[filters]"
       >
         <PairFilterDropdown filter={filter} setFilter={setFilter} />
         <PairSortDropdown sort={sort} setSort={setSort} />
