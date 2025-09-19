@@ -13,6 +13,7 @@ export const useVoucher = () => {
       read: Voucher__factory.connect(address, provider!),
       write: Voucher__factory.connect(config.addresses.carbon.voucher, signer!),
     }),
+    refetchOnWindowFocus: false,
   });
 };
 

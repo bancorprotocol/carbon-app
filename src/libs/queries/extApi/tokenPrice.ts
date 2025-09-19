@@ -6,8 +6,6 @@ import { useStore } from 'store';
 import { FiatPriceDict, carbonApi } from 'utils/carbonApi';
 import { toUnixUTC } from 'components/simulator/utils';
 import { startOfDay, subDays } from 'date-fns';
-import { useGetAllPairs } from '../sdk/pairs';
-import { useMemo } from 'react';
 
 export const useGetTokenPrice = (address?: string) => {
   const {
@@ -35,19 +33,6 @@ export const useGetTokenPrice = (address?: string) => {
     refetchInterval: FIVE_MIN_IN_MS,
     staleTime: FIVE_MIN_IN_MS,
   });
-};
-
-/** Query all the current pairs & get their prices  */
-export const useGetAllTokenPrices = () => {
-  const pairsQuery = useGetAllPairs();
-
-  const addresses = useMemo(() => {
-    if (!pairsQuery.data) return [];
-    const set = new Set(pairsQuery.data.flat());
-    return Array.from(set);
-  }, [pairsQuery.data]);
-
-  return useGetMultipleTokenPrices(addresses);
 };
 
 export const useGetMultipleTokenPrices = (addresses: string[] = []) => {

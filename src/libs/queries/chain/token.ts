@@ -12,5 +12,6 @@ export const useGetTokenData = (address: string) => {
     queryFn: () => fetchTokenData(Token, address),
     retry: 1,
     staleTime: ONE_DAY_IN_MS,
+    refetchOnWindowFocus: false,
   });
 };

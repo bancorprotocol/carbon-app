@@ -32,11 +32,6 @@ import { useMemo } from 'react';
 
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
-interface StrategiesHelperProps {
-  strategies: AnySDKStrategy[];
-  getTokenById: (id: string) => Token | undefined;
-}
-
 // TODO: remove when sdk is using ethers v6
 export const toTransactionRequest = (tx: PopulatedTransaction) => {
   const next: TransactionRequest = structuredClone(tx) as any;
@@ -50,10 +45,10 @@ export const toTransactionRequest = (tx: PopulatedTransaction) => {
 };
 
 // TODO: build strategy outside the useQuery to parallelize token query & strategy query
-const buildStrategiesHelper = async ({
-  strategies,
-  getTokenById,
-}: StrategiesHelperProps) => {
+const buildStrategiesHelper = async (
+  strategies: AnySDKStrategy[],
+  getTokenById: (id: string) => Token | undefined,
+) => {
   return strategies.map((s) => {
     const base = getTokenById(s.baseToken)!;
     const quote = getTokenById(s.quoteToken)!;
@@ -171,15 +166,12 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const isValidAddress = isAddress(address);
   const isZeroAddress = address === config.addresses.tokens.ZERO;
 
-  return useQuery<AnyStrategy[]>({
+  return useQuery({
     queryKey: QueryKey.strategiesByUser(address),
     queryFn: async () => {
       if (!address || !isValidAddress || isZeroAddress) return [];
       const strategies = await carbonSDK.getUserStrategies(address);
-      return buildStrategiesHelper({
-        strategies,
-        getTokenById,
-      });
+      return buildStrategiesHelper(strategies, getTokenById);
     },
     enabled: !!user && !isPending && ensAddress.isFetched && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -204,10 +196,7 @@ export const useGetStrategyList = (ids: string[]) => {
           console.error(res.reason);
         }
       }
-      return buildStrategiesHelper({
-        strategies,
-        getTokenById,
-      });
+      return buildStrategiesHelper(strategies, getTokenById);
     },
     enabled: !isPending && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -225,10 +214,7 @@ export const useGetAllStrategies = (options: { enabled: boolean }) => {
     queryFn: async () => {
       const all = await carbonSDK.getAllStrategiesByPairs();
       const strategies = all.map((item) => item.strategies).flat();
-      return buildStrategiesHelper({
-        strategies,
-        getTokenById,
-      });
+      return buildStrategiesHelper(strategies, getTokenById);
     },
     enabled: options?.enabled && !isPending && isInitialized,
     staleTime: ONE_DAY_IN_MS,
@@ -245,10 +231,7 @@ export const useGetStrategy = (id: string) => {
     queryFn: async () => {
       const strategy = await carbonSDK.getStrategy(id);
 
-      const strategies = await buildStrategiesHelper({
-        strategies: [strategy],
-        getTokenById,
-      });
+      const strategies = await buildStrategiesHelper([strategy], getTokenById);
       return strategies[0];
     },
     enabled: !isPending && isInitialized,
@@ -311,10 +294,10 @@ export const useGetPairStrategies = (pair?: PropsPair) => {
     queryFn: async () => {
       const { base, quote } = pair!;
       const strategies = await carbonSDK.getStrategiesByPair(base!, quote!);
-      return buildStrategiesHelper({
-        strategies: strategies.map((s) => normalizeStrategy(base!, quote!, s)),
+      return buildStrategiesHelper(
+        strategies.map((s) => normalizeStrategy(base!, quote!, s)),
         getTokenById,
-      });
+      );
     },
     enabled: enabled,
     staleTime: ONE_DAY_IN_MS,
@@ -348,10 +331,10 @@ export const useTokenStrategies = (token?: string) => {
       const allStrategies = allResponses
         .filter((v) => v.status === 'fulfilled')
         .map((v) => (v as PromiseFulfilledResult<SDKStrategy[]>).value);
-      const result = await buildStrategiesHelper({
-        strategies: allStrategies.flat(),
+      const result = await buildStrategiesHelper(
+        allStrategies.flat(),
         getTokenById,
-      });
+      );
       return result;
     },
     enabled: !isPending && !!token && !!pairMap.size && isInitialized,
