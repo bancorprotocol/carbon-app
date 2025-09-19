@@ -28,7 +28,7 @@ export const screenshot = async (target: Page | Locator, name: string) => {
 };
 
 const urlNames = {
-  '/portfolio': 'Portfolio',
+  '/portfolio/pairs': 'Portfolio',
   '/trade/*?*': 'Trade',
   '/explore': 'Explore',
   '/simulate/*?*': 'Simulate',

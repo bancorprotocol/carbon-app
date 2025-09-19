@@ -10,6 +10,7 @@ export interface ExplorerTab {
   href: 'pairs' | 'strategies' | 'distribution' | 'activity';
   search?: { search?: string };
   icon: ReactNode;
+  testid: string;
 }
 
 const tabs: ExplorerTab[] = [
@@ -19,6 +20,7 @@ const tabs: ExplorerTab[] = [
     icon: (
       <IconPairs className="hidden md:block size-24 group-aria-page:fill-gradient" />
     ),
+    testid: 'pairs-tab',
   },
   {
     label: 'Strategies',
@@ -26,6 +28,7 @@ const tabs: ExplorerTab[] = [
     icon: (
       <IconOverview className="hidden md:block size-24 group-aria-page:stroke-gradient" />
     ),
+    testid: 'strategies-tab',
   },
   {
     label: 'Distribution',
@@ -33,6 +36,7 @@ const tabs: ExplorerTab[] = [
     icon: (
       <IconPieChart className="hidden md:block size-24 group-aria-page:stroke-gradient" />
     ),
+    testid: 'distribution-tab',
   },
   {
     label: 'Activity',
@@ -40,6 +44,7 @@ const tabs: ExplorerTab[] = [
     icon: (
       <IconActivity className="hidden md:block size-24 group-aria-page:stroke-gradient" />
     ),
+    testid: 'activity-tab',
   },
 ];
 
@@ -54,10 +59,11 @@ export const ExplorerTabs = ({ url }: Props) => {
 
   return (
     <nav
-      aria-label="Strategy Panels"
+      aria-label="discover portfolio of strategies"
       className="text-16 sm:text-20 flex sm:place-self-start gap-8 md:gap-16 rounded-full grid-area-[tabs]"
+      data-testid="explorer-tabs"
     >
-      {tabs.map(({ label, href, search, icon }) => {
+      {tabs.map(({ label, href, search, icon, testid }) => {
         const active = match({
           to: `${url}/${href}`,
           search,
@@ -71,8 +77,9 @@ export const ExplorerTabs = ({ url }: Props) => {
             search={(s) => s}
             key={href}
             className="grow sm:grow-0 px-8 py-4 group font-title font-normal bg-transparent text-white/60 hover:bg-background-900 flex gap-8 items-center justify-center rounded-full sm:px-16 sm:py-8 aria-page:bg-background-800"
-            aria-current={active ? 'page' : 'false'}
             resetScroll={false}
+            aria-current={active ? 'page' : 'false'}
+            data-testid={testid}
           >
             {icon}
             <span className="group-aria-page:text-gradient">{label}</span>

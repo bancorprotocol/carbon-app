@@ -26,7 +26,7 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
     await edit.submit('editPrices');
 
     const myStrategies = new MyStrategyDriver(page);
-    await page.waitForURL('/portfolio', { timeout: 10_000 });
+    await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
 

@@ -21,11 +21,10 @@ export const useTokensStore = (): TokensStore => {
   const [importedTokens, setImportedTokens] = useState<Token[]>([]);
 
   useEffect(() => {
-    if (importedTokens.length) {
-      const previous = lsService.getItem('importedTokens') ?? [];
-      lsService.setItem('importedTokens', previous.concat(importedTokens));
+    if (missing.data?.length) {
+      lsService.setItem('importedTokens', missing.data.concat(importedTokens));
     }
-  }, [importedTokens]);
+  }, [missing.data, importedTokens]);
 
   // TODO add tokens imported by hand
 
