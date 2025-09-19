@@ -14,8 +14,8 @@ import { getEnsAddressIfAny } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { Token } from 'libs/tokens';
-import style from './ExplorerSearch.module.css';
 import { useTokens } from 'hooks/useTokens';
+import style from './ExplorerSearch.module.css';
 
 const displaySlug = (
   slug: string,
@@ -47,11 +47,8 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
     displaySlug(params.search || '', pairMap, tokensMap),
   );
 
-  useEffect(() => console.log(search), [search]);
-
   useEffect(() => {
     const display = displaySlug(params.search || '', pairMap, tokensMap);
-    console.log({ display, search: params.search });
     setSearch(display);
   }, [tokensMap, pairMap, params.search, setSearch]);
 

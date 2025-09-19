@@ -3,6 +3,8 @@ import { PairRow } from './types';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
+import config from 'config';
+import { NewTabLink } from 'libs/routing';
 
 interface Props {
   pairs: PairRow[];
@@ -23,9 +25,24 @@ export const PairList: FC<Props> = ({ pairs }) => {
               <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
             </header>
             <dl className="grid grid-cols-3 gap-16">
-              <div className="col-span-3 grid gap-8">
+              <div className="col-span-2 grid gap-8">
                 <dt className="text-white/80 text-12">Trades</dt>
                 <dd className="text-14">{pair.tradeCount}</dd>
+              </div>
+              <div className="grid gap-8">
+                {config.ui.rewardUrl && (
+                  <>
+                    <dt className="text-white/80 text-12">Reward</dt>
+                    <dd className="text-14">
+                      <NewTabLink
+                        className="text-gradient underline decoration-primary underline-offset-4 hover:no-underline"
+                        to={config.ui.rewardUrl}
+                      >
+                        Yes
+                      </NewTabLink>
+                    </dd>
+                  </>
+                )}
               </div>
               <div>
                 <dt className="text-white/80 text-12">24h Trades</dt>
