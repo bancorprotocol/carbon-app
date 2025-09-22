@@ -72,7 +72,10 @@ export const StrategyContent: FC<Props> = ({ url }) => {
 
   const sorted = useMemo(() => {
     const sortFn = sortStrategyFn[sort];
-    const result = filtered.sort(sortFn);
+    const result = filtered.sort((a, b) => {
+      const diff = sortFn(a, b);
+      return diff || sortStrategyFn.recent(a, b);
+    });
     return [...result];
   }, [filtered, sort]);
 
