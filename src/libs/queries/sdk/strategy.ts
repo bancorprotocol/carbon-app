@@ -292,7 +292,8 @@ export const useGetPairStrategies = (pair?: PropsPair) => {
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategiesByPair(pair?.base, pair?.quote),
     queryFn: async () => {
-      const { base, quote } = pair!;
+      const base = getAddress(pair!.base!);
+      const quote = getAddress(pair!.quote!);
       const strategies = await carbonSDK.getStrategiesByPair(base!, quote!);
       return buildStrategiesHelper(
         strategies.map((s) => normalizeStrategy(base!, quote!, s)),

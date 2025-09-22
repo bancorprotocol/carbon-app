@@ -1,6 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
 import { QueryKey } from '../queryKey';
-import { ONE_HOUR_IN_MS } from 'utils/time';
 import { carbonApi } from 'utils/carbonApi';
 import config from 'config';
 
@@ -27,16 +26,13 @@ export const useRewards = (pairs: string[]) => {
     queries: pairs.map((pair) => ({
       queryKey: QueryKey.reward(pair),
       queryFn: () => {
-        try {
-          if (!config.ui.rewardUrl) return null;
-          return carbonApi.getReward(pair);
-        } catch {
-          return null;
-        }
+        if (!config.ui.rewardUrl) return null;
+        return carbonApi.getReward(pair).catch(() => null);
       },
-      staleTime: ONE_HOUR_IN_MS,
+      staleTime: Infinity,
       retry: false,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     })),
   });
 };

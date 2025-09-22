@@ -17,7 +17,11 @@ import {
 } from 'components/explorer/pairs/PairFilterSort';
 import { toPairSlug } from 'utils/pairSearch';
 import { useRewards } from 'libs/queries/extApi/rewards';
-import { PairTrade, useTrending } from 'libs/queries/extApi/tradeCount';
+import {
+  PairTrade,
+  StrategyTrade,
+  useTrending,
+} from 'libs/queries/extApi/tradeCount';
 
 const text = {
   '/explore': {
@@ -28,6 +32,13 @@ const text = {
     pairs: 'Your Pairs',
     liquidity: 'Your Liquidity',
   },
+};
+
+const toSortedPairSlug = (base: string, quote: string) => {
+  return [base, quote]
+    .map((v) => v.toLowerCase())
+    .sort((a, b) => b.localeCompare(a))
+    .join('_');
 };
 
 interface Props {
@@ -70,24 +81,65 @@ export const PairLayout: FC<Props> = ({ url }) => {
     });
   }, [strategies]);
 
+  const tradesByPair = useMemo(() => {
+    const map: Record<string, { tradeCount: number; tradeCount24h: number }> =
+      {};
+    if (!ordered) return;
+    // In explore we take the total amount of trade for this pair
+    if (url === '/explore') {
+      const record: Record<string, PairTrade> = {};
+      for (const pair of trending.data?.pairCount || []) {
+        const slug = toSortedPairSlug(pair.token0, pair.token1);
+        record[slug] = pair;
+      }
+      for (const strategy of ordered) {
+        const base = strategy.base.address;
+        const quote = strategy.quote.address;
+        const key = toSortedPairSlug(base, quote);
+        if (!record[key]) continue;
+        map[key] = {
+          tradeCount: record[key].pairTrades,
+          tradeCount24h: record[key].pairTrades_24h,
+        };
+      }
+    }
+    // On portfolio we take only the active strategy's trades
+    if (url === '/portfolio') {
+      const record: Record<string, StrategyTrade> = {};
+      for (const strategyTrade of trending.data?.tradeCount || []) {
+        record[strategyTrade.id] = strategyTrade;
+      }
+      for (const strategy of ordered) {
+        const base = strategy.base.address;
+        const quote = strategy.quote.address;
+        const key = toSortedPairSlug(base, quote);
+        if (!record?.[key]) continue;
+        map[key] ||= {
+          tradeCount: 0,
+          tradeCount24h: 0,
+        };
+        map[key].tradeCount += record[strategy.id].strategyTrades;
+        map[key].tradeCount24h += record[strategy.id].strategyTrades_24h;
+      }
+    }
+    return map;
+  }, [ordered, trending.data?.pairCount, trending.data?.tradeCount, url]);
+
   const allPairs = useMemo(() => {
-    if (!ordered) return [];
+    if (!ordered || !tradesByPair) return [];
     const map: Record<string, RawPairRow> = {};
     for (const strategy of ordered) {
       const { base, quote, fiatBudget } = strategy;
       // Merge both pair direction
-      const directKey = toPairSlug(base, quote);
-      const oppositeKey = toPairSlug(quote, base);
-      const pairKey = map[oppositeKey] ? oppositeKey : directKey;
-      const pairCount =
-        pairTradeCount?.[directKey] || pairTradeCount?.[oppositeKey];
+      const pairKey = toSortedPairSlug(base.address, quote.address);
+      const pairCount = tradesByPair[pairKey];
 
       map[pairKey] ||= {
         id: pairKey,
         base,
         quote,
-        tradeCount: pairCount?.pairTrades ?? 0,
-        tradeCount24h: pairCount?.pairTrades_24h ?? 0,
+        tradeCount: pairCount?.tradeCount ?? 0,
+        tradeCount24h: pairCount?.tradeCount24h ?? 0,
         strategyAmount: 0,
         liquidity: new SafeDecimal(0),
         reward: !!rewards.data?.[pairKey],
@@ -97,7 +149,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
       map[pairKey].liquidity = liquidity;
     }
     return Object.values(map);
-  }, [ordered, pairTradeCount, rewards.data]);
+  }, [ordered, rewards.data, tradesByPair]);
 
   const filtered = useMemo(() => {
     return allPairs.filter((pair) => {

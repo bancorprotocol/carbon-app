@@ -5,9 +5,10 @@ import {
   useGetAllStrategies,
 } from 'libs/queries';
 import { usePairs } from 'hooks/usePairs';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSearch } from '@tanstack/react-router';
-import { isAddress } from 'ethers';
+import { getAddress, isAddress } from 'ethers';
+import { lsService } from 'services/localeStorage';
 
 export const useExplorer = () => {
   const { search = '' } = useSearch({ from: '/explore' });
@@ -31,6 +32,13 @@ export const useExplorer = () => {
     return { base, quote };
   }, [search, type]);
   const pairQuery = useGetPairStrategies(exactMatch);
+
+  useEffect(() => {
+    if (exactMatch) {
+      const { base, quote } = exactMatch;
+      lsService.setItem('tradePair', [getAddress(base), getAddress(quote)]);
+    }
+  }, [exactMatch]);
 
   // WALLET
   const walletQuery = useGetUserStrategies({
