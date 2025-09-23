@@ -9,7 +9,7 @@ import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 
-export const datePickerPresets: DatePickerPreset[] = [
+const datePickerPresets: DatePickerPreset[] = [
   { label: '1D', days: 0 },
   { label: '7D', days: 6 },
   { label: '14D', days: 13 },

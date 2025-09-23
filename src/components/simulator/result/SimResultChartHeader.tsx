@@ -1,7 +1,5 @@
-import {
-  DateRangePicker,
-  datePickerPresets,
-} from 'components/common/datePicker/DateRangePicker';
+import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
+import { datePickerPresets } from 'components/common/datePicker/utils';
 import { startOfDay, sub, subDays } from 'date-fns';
 import { useNavigate } from 'libs/routing';
 import { SimulatorType } from 'libs/routing/routes/sim';
