@@ -10,7 +10,6 @@ import { RouterProvider, router } from 'libs/routing';
 import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
-import 'init-config';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

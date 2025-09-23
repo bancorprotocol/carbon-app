@@ -216,6 +216,8 @@ export const EditPricesStrategyRecurringPage = () => {
           sell={orders.sell}
         >
           <D3ChartRecurring
+            base={base}
+            quote={quote}
             isLimit={isLimit}
             prices={prices}
             onChange={setPrices}

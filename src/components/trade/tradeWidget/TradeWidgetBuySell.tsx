@@ -1,5 +1,5 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { FormEvent, useId, JSX } from 'react';
+import { FormEvent, useId, JSX, useMemo } from 'react';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWagmi } from 'libs/wagmi';
 import { UseQueryResult } from 'libs/queries';
@@ -12,6 +12,8 @@ import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 import { useTradePairs } from '../useTradePairs';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { isZero } from 'components/strategies/common/utils';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
@@ -56,6 +58,32 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     e.preventDefault();
     handleCTAClick();
   };
+  const tooLow = useMemo(() => {
+    return !isZero(sourceInput) && isZero(targetInput);
+  }, [sourceInput, targetInput]);
+
+  const warning = useMemo(() => {
+    if (tooLow) return 'Input amount too small to return a value';
+    return '';
+  }, [tooLow]);
+
+  const slippage = useMemo(() => calcSlippage(), [calcSlippage]);
+  const rateMessage = useMemo(() => {
+    if (warning) return;
+
+    if (!rate) return '...';
+
+    if (isBuy) {
+      return `1 ${target.symbol} = ${
+        rate && rate !== '0'
+          ? prettifyNumber(new SafeDecimal(1).div(rate), { decimals: 6 })
+          : '--'
+      } ${source.symbol}`;
+    }
+    return `1 ${source.symbol} =
+        ${rate ? prettifyNumber(rate, { decimals: 6 }) : '--'}
+        ${target.symbol}`;
+  }, [isBuy, rate, source.symbol, target.symbol, warning]);
 
   const ctaButtonText = (() => {
     if (!user) return 'Connect Wallet';
@@ -72,22 +100,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   }
 
   if (!source || !target) return null;
-
-  const slippage = calcSlippage();
-  const getRate = () => {
-    if (!rate) return '...';
-
-    if (isBuy) {
-      return `1 ${target.symbol} = ${
-        rate && rate !== '0'
-          ? prettifyNumber(new SafeDecimal(1).div(rate), { decimals: 6 })
-          : '--'
-      } ${source.symbol}`;
-    }
-    return `1 ${source.symbol} =
-        ${rate ? prettifyNumber(rate, { decimals: 6 }) : '--'}
-        ${target.symbol}`;
-  };
 
   const showRouting = rate && rate !== '0';
   const disabledCTA =
@@ -164,7 +176,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         disabled={!hasEnoughLiquidity}
       />
       <footer className="rounded-b-lg rounded-t-xs text-14 mt-5 flex justify-between bg-black-gradient p-16 text-white/80">
-        <p>{getRate()}</p>
+        {warning && <Warning className="text-14" message={warning} />}
+        {rateMessage && <p>{rateMessage}</p>}
         {showRouting && (
           <button
             type="button"

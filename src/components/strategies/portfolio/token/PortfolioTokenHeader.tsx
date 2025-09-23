@@ -47,8 +47,10 @@ export const PortfolioTokenHeader: FC<Props> = ({
       >
         <IconBack className="h-10" />
       </Link>
-      <LogoImager alt="Token Logo" src={logoURI} className="mx-16 size-32" />
-      <span>{symbol ?? 'N/A'}</span>
+      {logoURI && (
+        <LogoImager alt="Token Logo" src={logoURI} className="mx-16 size-32" />
+      )}
+      {symbol && <span>{symbol}</span>}
     </div>
   );
 };

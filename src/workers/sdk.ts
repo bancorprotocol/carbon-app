@@ -282,14 +282,11 @@ const sdkExposed = {
   setOnChangeHandlers: (
     onPairDataChanged: (affectedPairs: TokenPair[]) => void,
     onPairAddedToCache: (affectedPairs: TokenPair) => void,
+    onCacheCleared: () => void,
   ) => {
-    sdkCache.on('onPairDataChanged', (affectedPairs) =>
-      onPairDataChanged(affectedPairs),
-    );
-    sdkCache.on('onPairAddedToCache', (affectedPairs) =>
-      onPairAddedToCache(affectedPairs),
-    );
-    return;
+    sdkCache.on('onPairDataChanged', onPairDataChanged);
+    sdkCache.on('onPairAddedToCache', onPairAddedToCache);
+    sdkCache.on('onCacheCleared', onCacheCleared);
   },
   hasLiquidityByPair: (baseToken: string, quoteToken: string) =>
     carbonSDK.hasLiquidityByPair(baseToken, quoteToken),

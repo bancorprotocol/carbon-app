@@ -307,7 +307,7 @@ const Trades = ({ trades }: TradesProps) => {
   return (
     <p
       ref={ref}
-      className="text-36 font-title flex h-[40px] overflow-hidden leading-none"
+      className="text-36 font-title flex h-[40px] overflow-hidden leading-40"
     >
       {initial.split('').map((v, i) => {
         if (!'0123456789'.includes(v)) return <span key={i}>{v}</span>;

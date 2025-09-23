@@ -5,15 +5,22 @@ import { useCallback, useEffect, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { useD3ChartCtx } from '../D3ChartContext';
 import { isFullRange } from '../../utils';
+import { Token } from 'libs/tokens';
 
 interface Props {
+  base: Token;
+  quote: Token;
   prices: ChartPrices;
   isLimit: { buy: boolean; sell: boolean };
   onChange?: (prices: ChartPrices) => any;
 }
 
-export const D3ChartRecurring = ({ prices, isLimit, onChange }: Props) => {
-  const readonly = !onChange || isFullRange(prices.buy.min, prices.sell.max);
+export const D3ChartRecurring = (props: Props) => {
+  const { base, quote, prices, isLimit, onChange } = props;
+  const readonly = (() => {
+    if (!onChange) return true;
+    return isFullRange(base, quote, prices.buy.min, prices.sell.max);
+  })();
   const { yScale } = useD3ChartCtx();
   const onMinMaxChange = useCallback(
     (type: 'buy' | 'sell', min: number, max: number) => {

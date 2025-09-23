@@ -23,8 +23,8 @@ export const useSimulatorInput = ({ searchState }: Props) => {
   const { state, dispatch: _dispatch } = useStrategyInput({ searchState });
 
   const bounds = useMemo(
-    () => getBounds(state.buy, state.sell),
-    [state.buy, state.sell],
+    () => getBounds(state.baseToken!, state.quoteToken!, state.buy, state.sell),
+    [state.baseToken, state.buy, state.quoteToken, state.sell],
   );
 
   const dispatch: SimulatorInputDispatch = useCallback(
