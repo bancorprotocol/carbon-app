@@ -52,18 +52,14 @@ export class MyStrategyDriver {
         direction: Direction,
         options: { isOverlapping: boolean } = { isOverlapping: false },
       ) => {
-        // Note: locator.hover() doesn't work because of polygon form I think
+        // Note: we cannot hover polygon on overlapping because of the form, we need to force hover on line
         if (options.isOverlapping) {
-          const position = await strategy
-            .getByTestId(`polygon-${direction}`)
-            .boundingBox();
-          if (!position?.x || !position?.y) throw new Error('No polygon found');
-          const x =
-            direction === 'buy'
-              ? position.x + 2
-              : position.x + position.width - 2;
-          const y = position.y + 2;
-          await this.page.mouse.move(x, y);
+          const polygon = strategy.getByTestId(`polygon-${direction}`);
+          if (direction === 'buy') {
+            await polygon.locator('line').first().hover({ force: true });
+          } else {
+            await polygon.locator('line').last().hover({ force: true });
+          }
         } else {
           await strategy.getByTestId(`polygon-${direction}`).hover();
         }
