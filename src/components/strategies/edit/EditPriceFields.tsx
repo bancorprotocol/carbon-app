@@ -116,7 +116,7 @@ export const EditStrategyPriceField: FC<Props> = ({
   return (
     <article
       aria-labelledby={titleId}
-      className="bg-black-gradient grid text-left"
+      className="grid text-left"
       data-testid={`${isBuy ? 'buy' : 'sell'}-section`}
     >
       {settings}

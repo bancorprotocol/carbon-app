@@ -7,11 +7,7 @@ export const DebugNotifications = () => {
   const { toaster } = useStore();
 
   return (
-    <div
-      className={
-        'rounded-3xl bg-black-gradient flex flex-col items-center space-y-20 p-20'
-      }
-    >
+    <div className="rounded-3xl bg-white-gradient flex flex-col items-center gap-20 p-20">
       <h2>Notifications</h2>
 
       <Button

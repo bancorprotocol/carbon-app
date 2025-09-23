@@ -6,7 +6,7 @@ export const DebugFiatCurrency = () => {
     useFiatCurrency();
 
   return (
-    <div className="flex flex-col items-center space-y-20 rounded-3xl bg-black-gradient p-20">
+    <div className="grid place-items-center gap-20 rounded-3xl bg-white-gradient p-20">
       <h2>Fiat Currency Selection</h2>
 
       {availableCurrencies.map((currency) => (

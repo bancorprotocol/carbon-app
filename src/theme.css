@@ -18,13 +18,13 @@
   --color-secondary: oklch(0.80 0.2 214.3); /* #10BBD8 */
   --color-tertiary: oklch(0.80 0.2 184.63); /* #3bcaba */
 
-  --color-error: oklch(0.70 0.2 0); /* #D86371 */
+  --color-error: oklch(0.70 0.2 15); /* #D86371 */
   --color-sell: oklch(0.70 0.2 var(--sell-hue)); /* #D86371 */
   --color-sell-dark: oklch(0.70 0.28 var(--sell-hue));
   --color-buy: oklch(0.80 0.2 var(--buy-hue)); /* #00B578 */
   --color-buy-dark: oklch(0.60 0.3 var(--buy-hue));
   --color-success: oklch(0.70 0.2 160); /* #00B578 */
-  --color-warning: oklch(0.747 0.2 57.36); /* #ff8a00 */
+  --color-warning: oklch(0.75 0.2 57); /* #ff8a00 */
 
   --color-black: oklch(0.13 var(--chroma) var(--hue));
   --color-white: oklch(1 var(--chroma) var(--hue));
@@ -135,3 +135,4 @@
 @utility bg-sell-gradient {
   background-image: linear-gradient(150deg, var(--color-sell), var(--color-sell-dark));
 }
+
