@@ -1,2 +1,2 @@
 /*
-  Content-Security-Policy: frame-ancestors 'self' https://app.safe.global https://celo.blockscout.com https://safe.tac.build https://staging.safe.tac.build;
+  Content-Security-Policy: frame-ancestors 'self' https://app.safe.global https://celo.blockscout.com https://safe.tac.build https://staging.safe.tac.build https://explorer.tac.build;
