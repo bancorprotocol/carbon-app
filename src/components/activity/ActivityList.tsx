@@ -68,7 +68,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
     setSearchParams({ actions });
   };
   return (
-    <li className="border-background-800 flex flex-col gap-16 rounded-2xl border">
+    <li className="border-background-800 flex flex-col gap-16 rounded-2xl border bg-black-gradient">
       <header className="flex px-16 pt-16 items-center">
         {!hideIds && <ActivityId activity={activity} size={12} />}
         <div className="grid text-12 ml-auto">
