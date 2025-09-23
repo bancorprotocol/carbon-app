@@ -3,6 +3,12 @@
   --chroma: 0.03; /* Recommended 0.01, 0.02 */
   --sell-hue: 15;
   --buy-hue: 170;
+
+  --white-gradient: linear-gradient(150deg, oklch(90% var(--chroma) var(--hue) / 0.1), oklch(90% var(--chroma) var(--hue) / 0.15));
+  --black-gradient: linear-gradient(150deg, oklch(10% var(--chroma) var(--hue) / 0.5), oklch(10% var(--chroma) var(--hue) / 0.8));
+  --main-gradient: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
+  --buy-gradient: linear-gradient(150deg, var(--color-buy), var(--color-buy-dark));
+  --sell-gradient: linear-gradient(150deg, var(--color-sell), var(--color-sell-dark));
 }
 @theme {
   --color-background-50: oklch(0.99 var(--chroma) var(--hue));
@@ -117,24 +123,23 @@
 }
 
 @utility bg-gradient {
-  background-image: linear-gradient(
-    90deg,
-    var(--color-primary),
-    var(--color-secondary),
-    var(--color-tertiary)
-  );
+  background-image: var(--main-gradient);
 }
 
 @utility bg-white-gradient {
-  background-image: linear-gradient(150deg, oklch(90% var(--chroma) var(--hue) / 0.1), oklch(90% var(--chroma) var(--hue) / 0.15));
+  background-image: var(--white-gradient);
 }
 @utility bg-black-gradient {
-  background-image: linear-gradient(150deg, oklch(10% var(--chroma) var(--hue) / 0.5), oklch(10% var(--chroma) var(--hue) / 0.8));
+  background-image: var(--black-gradient);
 }
 @utility bg-buy-gradient {
-  background-image: linear-gradient(150deg, var(--color-buy), var(--color-buy-dark));
+  background-image: var(--buy-gradient);
 }
 @utility bg-sell-gradient {
-  background-image: linear-gradient(150deg, var(--color-sell), var(--color-sell-dark));
+  background-image: var(--sell-gradient);
 }
 
+@utility backdrop-black {
+  background-image: linear-gradient(150deg, oklch(50% var(--chroma) var(--hue) / 0.5), oklch(30% var(--chroma) var(--hue) / 0.5));
+  backdrop-filter: blur(20px);
+}

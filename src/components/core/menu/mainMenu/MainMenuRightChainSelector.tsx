@@ -53,7 +53,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
               'rounded-sm flex w-full items-center gap-x-10 p-12',
               isCurrentNetwork
                 ? 'pointer-events-none bg-black'
-                : 'hover:bg-black',
+                : 'hover:bg-black-gradient',
             )}
             href={getFullPath(appUrl)}
             aria-current={isCurrentNetwork}

@@ -64,7 +64,7 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
                 </button>
               )}
             </header>
-            <p className="text24" onClick={() => reset(minId)}>
+            <p className="text-24" onClick={() => reset(minId)}>
               0
             </p>
             <p aria-hidden className="h-[22px]"></p>
@@ -83,7 +83,7 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
                 </button>
               )}
             </header>
-            <p className="text24" onClick={() => reset(maxId)}>
+            <p className="text-24" onClick={() => reset(maxId)}>
               ∞
             </p>
             <p aria-hidden className="h-[22px]"></p>

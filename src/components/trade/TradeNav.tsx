@@ -11,28 +11,28 @@ import { TradeType } from './TradeType';
 const staticLinks = [
   {
     label: 'Liquidity Position',
-    svg: <IconOverlapping className="hidden size-18 md:inline" />,
+    svg: <IconOverlapping className="size-18" />,
     to: '/trade/overlapping',
     text: 'Choose between a Concentrated and a Full-Range liquidity position.',
     id: 'overlapping',
   },
   {
     label: 'Limit / Range',
-    svg: <IconDisposable className="hidden size-18 md:inline" />,
+    svg: <IconDisposable className="size-18" />,
     to: '/trade/disposable' as const,
     text: 'Buy or sell at a specific price, or gradually scale in or out of a position.',
     id: 'disposable',
   },
   {
     label: 'Recurring',
-    svg: <IconRecurring className="hidden size-18 md:inline" />,
+    svg: <IconRecurring className="size-18" />,
     to: '/trade/recurring' as const,
     text: 'Create an automated trading cycle of buy low/sell high with two separate orders.',
     id: 'recurring',
   },
   {
     label: 'Swap',
-    svg: <IconMarket className="hidden size-18 md:inline" />,
+    svg: <IconMarket className="size-18" />,
     to: '/trade/market' as const,
     text: 'Instantly execute trades by directly trading against available strategies, with prices determined by current liquidity.',
     id: 'market',

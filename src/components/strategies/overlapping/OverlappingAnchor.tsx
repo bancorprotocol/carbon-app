@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import style from './OverlappingBudget.module.css';
+import style from './OverlappingAnchor.module.css';
 
 interface Props {
   base: Token;

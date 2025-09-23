@@ -11,7 +11,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { TradeNav } from 'components/trade/TradeNav';
 
-export const usePersistLastPair = (from: '/trade') => {
+const usePersistLastPair = (from: '/trade') => {
   const search = useSearch({ strict: false }) as TradeSearch;
   const defaultPair = getLastVisitedPair();
   const base = useToken(search.base ?? defaultPair.base);

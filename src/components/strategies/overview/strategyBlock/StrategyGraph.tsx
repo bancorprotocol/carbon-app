@@ -238,8 +238,8 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                     <>
                       <polygon
                         className={style.buyArea}
-                        fill="var(--color-buy)"
-                        fillOpacity="0.25"
+                        fill="url(#svg-buy-gradient)"
+                        fillOpacity="0.35"
                         points={Array.from(
                           getBuyPoints(
                             buy.from,
@@ -320,8 +320,8 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                     <>
                       <polygon
                         className={style.sellArea}
-                        fill="var(--color-sell)"
-                        fillOpacity="0.25"
+                        fill="url(#svg-sell-gradient)"
+                        fillOpacity="0.35"
                         points={Array.from(
                           getSellPoints(
                             sell.marginalPrice > sell.from &&

@@ -20,9 +20,11 @@
   @apply h-full font-medium grid cursor-pointer place-items-center bg-black-gradient py-8 text-center text-white/60 border border-transparent;
 }
 .preset input:checked + label {
-  border-color: white;
   color: white;
+  border-width: 1px;
+  background: var(--black-gradient) padding-box, var(--main-gradient) border-box;
 }
+
 .preset-custom {
   @apply border border-white;
 }
