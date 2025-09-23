@@ -1,11 +1,5 @@
 @import 'tailwindcss';
 @import './theme.css';
-/* @config '../tailwind.config.ts'; */
-
-:root {
-  --hue: 215;
-  --chroma: 0.01; /* Recommended 0.01, 0.02 */
-}
 
 @utility mobile-menu {
   height: 80px;

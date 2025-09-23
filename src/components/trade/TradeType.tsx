@@ -1,20 +1,11 @@
+import { useMemo } from 'react';
 import { ReactComponent as IconPriceBased } from 'assets/icons/price-based.svg';
 import { ReactComponent as IconGradient } from 'assets/icons/gradient.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
-
-export const staticTypePages = [
-  '/trade/disposable',
-  '/trade/recurring',
-  '/trade/overlapping',
-  '/trade/market',
-];
-const gradientTypePages = [
-  '/trade/auction',
-  '/trade/custom',
-  '/trade/quick-auction',
-  '/trade/quick-custom',
-];
+import { DropdownMenu } from 'components/common/dropdownMenu';
+import { gradientTypePages, staticTypePages } from './utils';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 
 const links = [
   {
@@ -38,11 +29,25 @@ const links = [
 export const TradeType = () => {
   const { location } = useRouterState();
   const current = location.pathname;
+
+  const selected = useMemo(() => {
+    return links.find((link) => link.pages.includes(current));
+  }, [current]);
+
   return (
-    <nav
-      aria-label="select strategy type"
-      className="bg-white-gradient text-14 grid grid-flow-col gap-8 rounded-md overflow-clip animate-slide-up"
-      style={{ animationDelay: '50ms' }}
+    <DropdownMenu
+      placement="bottom"
+      className="rounded-2xl p-8"
+      button={(attr) => (
+        <button
+          {...attr}
+          className="bg-black-gradient text-14 flex items-center gap-8 py-16 px-24 xl:max-2xl:rounded-s-md"
+        >
+          {selected?.svg}
+          {selected?.label}
+          <IconChevron className="size-16" />
+        </button>
+      )}
     >
       {links.map((link, i) => (
         <Link
@@ -63,6 +68,6 @@ export const TradeType = () => {
           <Tooltip element={link.text} iconClassName="size-14" />
         </Link>
       ))}
-    </nav>
+    </DropdownMenu>
   );
 };

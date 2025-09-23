@@ -201,7 +201,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           className="border-background-800 border-r-2"
         />
         <StrategyBlockBuySell strategy={strategy} />
-        <div className="bg-black-gradient border-background-800 col-start-1 col-end-3 border-t-2">
+        <div className="border-background-800 col-start-1 col-end-3 border-t-2">
           <StrategyGraph strategy={strategy} />
         </div>
       </div>

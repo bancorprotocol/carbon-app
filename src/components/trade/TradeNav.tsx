@@ -5,7 +5,8 @@ import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { ReactComponent as IconSlow } from 'assets/icons/slow.svg';
 import { ReactComponent as IconFast } from 'assets/icons/fast.svg';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
-import { staticTypePages } from './TradeType';
+import { staticTypePages } from './utils';
+import { TradeType } from './TradeType';
 
 const staticLinks = [
   {
@@ -79,32 +80,37 @@ export const TradeNav = () => {
   if (current === '/trade') return;
 
   return (
-    <nav
-      aria-labelledby="trading-strateg-nav"
-      className="bg-white-gradient text-14 grid grid-flow-row md:max-2xl:grid-flow-col gap-8 rounded-2xl overflow-clip xl:max-2xl:rounded-e-full animate-slide-up"
+    <div
+      className="bg-white-gradient 2xl:grid xl:flex grid content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up"
       style={{ animationDelay: '100ms' }}
     >
-      {links.map((link) => (
-        <Link
-          key={link.id}
-          id={link.id}
-          to={link.to}
-          from="/trade"
-          search={(search: TradeSearch) => ({
-            base: search.base,
-            quote: search.quote,
-            chartStart: search.chartStart,
-            chartEnd: search.chartEnd,
-            marketPrice: search.marketPrice,
-          })}
-          aria-current={current === link.to ? 'page' : 'false'}
-          data-testid={link.id}
-          className="hover:border-background-400 flex items-center justify-center gap-8 border-b border-transparent py-8 px-16 text-white/60 aria-[current=page]:bg-black-gradient aria-[current=page]:text-white"
-        >
-          {link.svg}
-          {link.label}
-        </Link>
-      ))}
-    </nav>
+      <TradeType />
+      <nav
+        aria-labelledby="trading-strateg-nav"
+        className="text-14 grid grid-flow-row md:max-2xl:grid-flow-col gap-8 overflow-clip p-8"
+      >
+        {links.map((link) => (
+          <Link
+            key={link.id}
+            id={link.id}
+            to={link.to}
+            from="/trade"
+            search={(search: TradeSearch) => ({
+              base: search.base,
+              quote: search.quote,
+              chartStart: search.chartStart,
+              chartEnd: search.chartEnd,
+              marketPrice: search.marketPrice,
+            })}
+            aria-current={current === link.to ? 'page' : 'false'}
+            data-testid={link.id}
+            className="hover:bg-white-gradient flex items-center gap-8 border-b border-transparent py-16 px-24 text-white/60 aria-[current=page]:bg-black-gradient aria-[current=page]:text-white rounded-md"
+          >
+            {link.svg}
+            {link.label}
+          </Link>
+        ))}
+      </nav>
+    </div>
   );
 };
