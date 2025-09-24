@@ -11,29 +11,20 @@ type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 const variants = {
   variant: {
     black: [
-      'bg-black-gradient border-2 border-black text-white',
-      'hover:border-background-700 hover:disabled:black',
+      'bg-black-gradient text-white hover:bg-white/20 active:bg-white/30',
     ],
     white: [
-      'bg-white-gradient border-2 border-transparent text-white',
-      'hover:opacity-40 hover:disabled:border-white',
+      'bg-background-500 text-white hover:bg-background-600 active:bg-background-700',
     ],
     secondary: [
-      'bg-background-800 border-2 border-background-800 text-white',
-      'hover:border-background-700 hover:disabled:border-background-800',
+      'bg-background-800 text-white hover:bg-background-700 active:bg-background-600',
     ],
     success: [
       'bg-primary border-2 border-primary text-black',
       'hover:border-white/60 hover:disabled:border-primary',
     ],
-    buy: [
-      'bg-buy-gradient border-2 border-buy text-black',
-      'hover:border-white/60 hover:text-black hover:bg-buy hover:disabled:border-buy',
-    ],
-    sell: [
-      'bg-sell-gradient border-2 border-sell text-black',
-      'hover:border-white/60 hover:text-black hover:bg-sell hover:disabled:border-sell',
-    ],
+    buy: ['btn-buy-gradient text-black'],
+    sell: ['btn-sell-gradient text-black'],
     error: [
       'bg-error border-2 border-error text-black',
       'hover:border-white/60 hover:disabled:border-error',
@@ -61,9 +52,7 @@ export const buttonStyles = cva<ButtonVariants>(
   [
     'font-title font-medium',
     'rounded-full px-30',
-    'transition-[border-color,opacity] duration-300 ease-in-out',
-    'disabled:cursor-not-allowed',
-    'disabled:opacity-40',
+    'disabled:opacity-40 disabled:cursor-not-allowed',
     'flex justify-center items-center',
   ],
   {

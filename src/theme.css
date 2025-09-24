@@ -126,6 +126,13 @@
 @utility bg-gradient {
   background-image: var(--main-gradient);
 }
+
+@utility bg-white-gradient {
+  background-image: var(--white-gradient);
+}
+@utility bg-black-gradient {
+  background-image: var(--black-gradient);
+}
 @utility btn-black-gradient {
   background-image: var(--black-gradient);
   @apply border-background-800 border-2;
@@ -146,17 +153,33 @@
   }
 }
 
-@utility bg-white-gradient {
-  background-image: var(--white-gradient);
-}
-@utility bg-black-gradient {
-  background-image: var(--black-gradient);
-}
 @utility bg-buy-gradient {
   background-image: var(--buy-gradient);
 }
+@utility btn-buy-gradient {
+  background-image: var(--buy-gradient);
+  &:hover {
+    background-color: var(--color-buy-dark);
+    background-image: none;
+  }
+  &:active {
+    background-color: var(--color-buy);
+    background-image: none;
+  }
+}
 @utility bg-sell-gradient {
   background-image: var(--sell-gradient);
+}
+@utility btn-sell-gradient {
+  background-image: var(--sell-gradient);
+  &:hover {
+    background-color: var(--color-sell-dark);
+    background-image: none;
+  }
+  &:active {
+    background-color: var(--color-sell);
+    background-image: none;
+  }
 }
 
 @utility backdrop-black {
