@@ -14,8 +14,8 @@ import { prettifyNumber } from 'utils/helpers';
 import { ToggleEye } from './EyeIcon';
 
 const colors = {
-  base: 'var(--color-sell)',
-  quote: 'var(--color-buy)',
+  base: 'url(#svg-sell-gradient)',
+  quote: 'url(#svg-buy-gradient)',
 };
 
 interface Props {

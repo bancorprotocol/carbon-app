@@ -21,7 +21,6 @@ import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/strategies/edit/prices/overlapping';
 import { isValidRange } from '../utils';
-import { InitMarketPrice } from '../common/InitMarketPrice';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
 import { useStrategyMarketPrice } from '../UserMarketPrice';
 
@@ -209,7 +208,6 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
           />
         </>
       )}
-      {!marketPrice && <InitMarketPrice base={base} quote={quote} />}
       <article className="grid gap-16 p-16">
         <header className="flex items-center justify-between">
           <h2 className="text-16">Budget</h2>

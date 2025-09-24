@@ -1,7 +1,5 @@
 import { FC, FormEvent, ReactNode, useState } from 'react';
-import { EditPriceNav } from './EditPriceNav';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
-import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { Button } from 'components/common/button';
 import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
@@ -218,12 +216,7 @@ export const EditPricesForm: FC<Props> = (props) => {
 
   if (!marketPrice) {
     return (
-      <article
-        key="marketPrice"
-        className="bg-black-gradient grid content-start rounded-2xl"
-      >
-        <EditStrategyOverlapTokens />
-        <EditPriceNav editType={editType} />
+      <article key="marketPrice" className="bg-white-gradient rounded-2xl">
         <InitMarketPrice base={base} quote={quote} />
       </article>
     );

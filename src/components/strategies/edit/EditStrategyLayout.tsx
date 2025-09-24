@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { useRouter } from '@tanstack/react-router';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
-import { BackButton } from 'components/common/BackButton';
+import { BackButton } from 'components/common/button/BackButton';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditPriceNav } from './EditPriceNav';
 

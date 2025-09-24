@@ -202,7 +202,7 @@ const OverlappingContent = () => {
     return (
       <div className="flex flex-col gap-20 md:w-[440px]">
         <EditStrategyOverlapTokens />
-        <article className="rounded-lg bg-black-gradient flex flex-col">
+        <article className="rounded-lg bg-white-gradient flex flex-col">
           <InitMarketPrice base={base} quote={quote} />
         </article>
       </div>

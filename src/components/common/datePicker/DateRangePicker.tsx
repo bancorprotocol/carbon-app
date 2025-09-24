@@ -55,15 +55,12 @@ export const DateRangePicker = memo(function DateRangePicker(
       type="button"
       aria-label="Pick date range"
       className={cn(
-        'bg-black-gradient text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
-        'hover:bg-background-800',
-        hasDates
-          ? 'border-white/60 active:border-white/80'
-          : 'border-background-800 hover:border-background-700 active:border-background-600',
+        'btn-black-gradient text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
         props.disabled &&
           'border-background-800 hover:border-background-800 active:border-background-800 cursor-not-allowed hover:bg-transparent',
         props.className,
       )}
+      data-selected={hasDates}
       data-testid="date-picker-button"
       disabled={props.disabled}
     >

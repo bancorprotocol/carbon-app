@@ -62,7 +62,7 @@
     left: -25dvw;
     width: 125dvw;
     height: 125dvh; 
-    background-image: radial-gradient(100% 100% at 0% 0%, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 50%, rgb(0, 0, 0) 100%);
+    background-image: radial-gradient(100% 100% at 0% 0%, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 55%, rgb(0, 0, 0) 100%);
     animation: move-gradient 30s infinite alternate;
     transition: opacity 0.5s ease-in-out;
   }

@@ -35,10 +35,7 @@ export const CreateLayout: FC<Props> = ({ children, url }) => {
   if (!marketPrice) {
     return (
       <TradeLayout>
-        <article
-          key="marketPrice"
-          className="bg-black-gradient rounded-ee-2xl rounded-es-2xl"
-        >
+        <article key="marketPrice" className="bg-white-gradient rounded-2xl">
           <InitMarketPrice base={base} quote={quote} />
         </article>
       </TradeLayout>

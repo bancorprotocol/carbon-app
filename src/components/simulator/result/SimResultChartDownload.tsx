@@ -1,8 +1,6 @@
 import { ReactComponent as IconDownload } from 'assets/icons/download.svg';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { SimulatorData } from 'libs/queries';
 import { CsvDataService } from 'libs/csv';
-import { cn } from 'utils/helpers';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 const downloadCSV = ({
@@ -38,10 +36,7 @@ export const SimResultChartDownload = ({
       element="Download a csv file with full breakdown of the simulation data"
     >
       <button
-        className={cn(
-          buttonStyles({ variant: 'black' }),
-          'border-background-900 flex size-40 items-center justify-center p-0',
-        )}
+        className="grid size-40 place-items-center btn-black-gradient rounded-full"
         onClick={() => {
           downloadCSV({ data, baseSymbol, quoteSymbol, simulationType });
         }}

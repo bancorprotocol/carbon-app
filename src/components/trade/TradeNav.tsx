@@ -87,7 +87,7 @@ export const TradeNav = () => {
       <TradeType />
       <nav
         aria-labelledby="trading-strateg-nav"
-        className="text-14 grid grid-flow-row md:max-2xl:grid-flow-col gap-8 overflow-clip p-8"
+        className="text-14 grid grid-flow-row md:max-2xl:grid-flow-col gap-8 overflow-clip py-8 px-16"
       >
         {links.map((link) => (
           <Link

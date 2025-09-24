@@ -77,7 +77,7 @@ export const MainMenuTradeSettings = () => {
     <>
       <button
         type="button"
-        className="bg-black-gradient hover:border-white/80 border border-transparent flex gap-8 items-center px-8 py-4 rounded-full"
+        className="btn-black-gradient border border-transparent flex gap-8 items-center px-8 py-4 rounded-full"
         aria-label="Trade settings"
         aria-haspopup="dialog"
         aria-controls={dialogId}

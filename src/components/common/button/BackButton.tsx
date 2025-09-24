@@ -1,9 +1,8 @@
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { cn } from 'utils/helpers';
-import { ButtonHTMLProps } from './button';
+import { ButtonHTMLProps } from '.';
+import { backStyle } from './buttonStyles';
 
-export const backStyle =
-  'bg-black-gradient hover:bg-background-800 grid size-40 place-items-center rounded-full p-12';
 export const BackIcon = () => <IconChevronLeft className="size-16" />;
 
 export const BackButton = ({ className, ...props }: ButtonHTMLProps) => {

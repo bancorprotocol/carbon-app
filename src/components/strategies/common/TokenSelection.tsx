@@ -61,7 +61,7 @@ export const TokenSelection = () => {
     >
       <button
         role="menuitem"
-        className="rounded-full pe-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 ps-10 hover:bg-black-gradient"
+        className="rounded-full pe-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 ps-10 hover:bg-white-gradient"
         aria-haspopup="dialog"
         data-testid="select-base-token"
         onClick={() => openTokenListModal('base')}
@@ -78,7 +78,7 @@ export const TokenSelection = () => {
       </button>
       <button
         role="menuitem"
-        className="border-background-900 hover:bg-background-600 grid size-40 place-items-center rounded-full border-4 bg-black-gradient"
+        className="btn-black-gradient grid size-40 place-items-center rounded-full"
         onClick={swapTokens}
       >
         <ForwardArrowIcon className="size-14" />
@@ -86,7 +86,7 @@ export const TokenSelection = () => {
       <button
         role="menuitem"
         aria-haspopup="dialog"
-        className="rounded-full ps-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 pe-10 hover:bg-black-gradient"
+        className="rounded-full ps-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 pe-10 hover:bg-white-gradient"
         data-testid="select-quote-token"
         onClick={() => openTokenListModal('quote')}
       >

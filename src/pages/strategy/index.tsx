@@ -13,14 +13,14 @@ import { useStrategiesWithFiat } from 'hooks/useStrategies';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import {
-  ManageButton,
+  ManageButtonIcon,
   StrategyBlockManage,
 } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { StrategySubtitle } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
-import { BackButton } from 'components/common/BackButton';
+import { BackButton } from 'components/common/button/BackButton';
 import {
   defaultEnd,
   isGradientStrategy,
@@ -116,7 +116,7 @@ export const StrategyPage = () => {
         </div>
         <StrategyBlockManage
           strategy={strategy}
-          button={(attr) => <ManageButton {...attr} />}
+          button={(attr) => <ManageButtonIcon {...attr} />}
         />
       </header>
       <section className="flex flex-col gap-16 md:flex-row">

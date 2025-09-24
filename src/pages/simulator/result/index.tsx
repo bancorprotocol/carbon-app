@@ -7,7 +7,8 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useCallback, useEffect } from 'react';
 import { wait } from 'utils/helpers';
 import { THREE_SECONDS_IN_MS } from 'utils/time';
-import { BackIcon, backStyle } from 'components/common/BackButton';
+import { BackIcon } from 'components/common/button/BackButton';
+import { backStyle } from 'components/common/button/buttonStyles';
 
 export const SimulatorResultPage = () => {
   const { status, isSuccess, start, ...ctx } = useSimulator();
