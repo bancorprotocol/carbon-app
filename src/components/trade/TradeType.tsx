@@ -37,7 +37,7 @@ export const TradeType = () => {
   return (
     <DropdownMenu
       placement="bottom"
-      className="rounded-2xl p-8"
+      className="grid gap-8 rounded-2xl p-8"
       button={(attr) => (
         <button
           {...attr}
@@ -45,7 +45,7 @@ export const TradeType = () => {
         >
           {selected?.svg}
           {selected?.label}
-          <IconChevron className="size-16" />
+          <IconChevron className="ml-auto size-16" />
         </button>
       )}
     >
@@ -61,7 +61,7 @@ export const TradeType = () => {
           })}
           aria-current={link.pages.includes(current) ? 'page' : 'false'}
           data-testid={link.testId}
-          className="rounded-md hover:border-background-400 flex items-center justify-center gap-8 border border-transparent py-8 px-16 text-white/60 aria-[current=page]:bg-black-gradient aria-[current=page]:text-white"
+          className="rounded-md hover:bg-white-gradient flex items-center justify-center gap-8 py-8 px-16 text-white/60 aria-[current=page]:bg-black-gradient aria-[current=page]:text-white"
         >
           {link.svg}
           {link.label}

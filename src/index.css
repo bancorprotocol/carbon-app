@@ -3,6 +3,8 @@
 
 @utility mobile-menu {
   height: 80px;
+  background-color: oklch(20% var(--chroma) var(--hue) / 65%);
+  backdrop-filter: blur(20px) saturate(150%);
   @apply font-medium border-background-800 fixed bottom-0 z-40 flex w-full flex-shrink-0 items-center justify-around border-t bg-black-gradient px-10 text-white/50 md:hidden;
 }
 
@@ -61,7 +63,7 @@
     z-index: -1;
     inset-inline: -50dvw;
     inset-block: -50dvh;
-    background-image: radial-gradient(closest-side circle at center, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 55%, rgb(0, 0, 0) 100%);
+    background-image: radial-gradient(closest-side circle at center, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 45%, oklch(0.1 var(--chroma) var(--hue)) 100%);
     animation: move-gradient 20s infinite alternate;
   }
   #root.hide-bg::before {
