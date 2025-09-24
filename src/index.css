@@ -55,27 +55,30 @@
   }
 
   #root::before {
+    --origin-translate: translate(-50dvw, -50dvh);
     content: '';
     position: fixed;
     z-index: -1;
-    top: -25dvh;
-    left: -25dvw;
-    width: 125dvw;
-    height: 125dvh; 
-    background-image: radial-gradient(100% 100% at 0% 0%, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 55%, rgb(0, 0, 0) 100%);
-    animation: move-gradient 30s infinite alternate;
-    transition: opacity 0.5s ease-in-out;
+    inset-inline: -50dvw;
+    inset-block: -50dvh;
+    background-image: radial-gradient(closest-side circle at center, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 55%, rgb(0, 0, 0) 100%);
+    animation: move-gradient 20s infinite alternate;
   }
   #root.hide-bg::before {
     opacity: 0;
   }
+  @media (max-width: 48rem) {
+    #root::before {
+      --origin-translate: translate(0, -50dvh);
+    }
+  }
 
   @keyframes move-gradient {
     from {
-      transform: translate(0, 0);
+      transform: var(--origin-translate) scale(1);
     }
     to {
-      transform: translate(25dvw, 25dvh)
+      transform: var(--origin-translate) scale(1.7);
     }
   }
 
