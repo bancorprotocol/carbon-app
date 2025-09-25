@@ -142,11 +142,13 @@ export const TradeList = () => {
       <hgroup className="grid gap-8 place-self-center">
         <h1 className="flex items-center justify-center">
           <span className="text-[60px]">CARBON</span>
-          <span className="text-24 text-gradient writing-sideways">DEFI</span>
+          <span className="text-24 text-gradient-[90deg] writing-sideways">
+            DEFI
+          </span>
         </h1>
         <p className="text-18">
-          The future of <span className="text-gradient">DEFI</span> is already
-          here
+          The future of <span className="text-gradient-[90deg]">DEFI</span> is
+          already here
         </p>
       </hgroup>
       <PreviewCommonStrategyType />
