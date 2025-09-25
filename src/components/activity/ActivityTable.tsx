@@ -182,7 +182,7 @@ export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
     <Link
       to="/strategy/$id"
       params={{ id: id }}
-      className="bg-background-800 inline-flex items-center gap-4 rounded-full px-8 py-4"
+      className="bg-black-gradient inline-flex items-center gap-4 rounded-full px-8 py-4"
     >
       <span className={`text-${size}`}>{getLowestBits(id)}</span>
       <TokensOverlap tokens={[base, quote]} size={size + 2} />
@@ -327,7 +327,7 @@ interface ActionIconProps {
   action: ActivityAction;
   size: string | number;
 }
-export const iconColor = (action: ActivityAction) => {
+const iconColor = (action: ActivityAction) => {
   if (action === 'buy') return `bg-buy/10 text-buy`;
   if (action === 'sell') return `bg-sell/10 text-sell`;
   if (action === 'create') return `bg-success/10 text-success`;

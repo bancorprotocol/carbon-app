@@ -9,6 +9,15 @@
   --main-gradient: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
   --buy-gradient: linear-gradient(150deg, var(--color-buy), var(--color-buy-dark));
   --sell-gradient: linear-gradient(150deg, var(--color-sell), var(--color-sell-dark));
+  --glass-shadow: 
+    /* Top left */
+    inset 1px 1px 0 -1px oklch(100% var(--chroma) var(--hue) / 40%),
+    inset 2px 2px 0 -1px oklch(100% var(--chroma) var(--hue) / 10%),
+    /* Bottom right */
+    inset -1px -1px 0 -1px oklch(100% var(--chroma) var(--hue) / 30%),
+    inset -2px -2px 0 -1px oklch(100% var(--chroma) var(--hue) / 10%),
+    /* Shadow bottom right */
+    0px 5px 15px 0px oklch(20% var(--chroma) var(--hue) / 25%);
 }
 
 @theme {
@@ -112,6 +121,10 @@
   writing-mode: sideways-lr;
 }
 
+@utility glass-shadow {
+  box-shadow: var(--glass-shadow);
+}
+
 @utility text-gradient-* {
   background-image: linear-gradient(
     --value([angle]),
@@ -129,6 +142,7 @@
 
 @utility bg-white-gradient {
   background-image: var(--white-gradient);
+  @apply glass-shadow;
 }
 @utility bg-black-gradient {
   background-image: var(--black-gradient);

@@ -129,11 +129,11 @@
   }
 
   h1 {
-    @apply text-36 font-medium my-3;
+    @apply text-36 font-medium;
   }
 
   h2 {
-    @apply text-20 font-medium my-2;
+    @apply text-20 font-medium;
   }
 
   h3 {

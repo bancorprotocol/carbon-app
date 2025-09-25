@@ -7,16 +7,17 @@ export const MainMenu: FC = () => {
   useEffect(() => {
     let top = true;
     const handler = () => {
-      if (top !== window.scrollY < 80) {
-        top = window.scrollY < 80;
-        if (window.scrollY > 80) {
-          ref.current!.style.backgroundColor =
-            'oklch(20% var(--chroma) var(--hue) / 0.5)';
-          ref.current!.style.backdropFilter = 'blur(20px) saturate(150%)';
-        } else {
-          ref.current!.style.backgroundColor = 'transparent';
-          ref.current!.style.backdropFilter = 'none';
-        }
+      if (window.scrollY > 80) {
+        if (!top) return;
+        ref.current!.style.backgroundColor =
+          'oklch(20% var(--chroma) var(--hue) / 0.5)';
+        ref.current!.style.backdropFilter = 'blur(20px) saturate(150%)';
+        top = false;
+      } else {
+        if (top) return;
+        ref.current!.style.backgroundColor = 'transparent';
+        ref.current!.style.backdropFilter = 'none';
+        top = true;
       }
     };
     document.addEventListener('scroll', handler);

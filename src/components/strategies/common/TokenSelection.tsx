@@ -66,7 +66,7 @@ export const TokenSelection = () => {
         data-testid="select-base-token"
         onClick={() => openTokenListModal('base')}
       >
-        <TokenLogo token={base} size={30} className="hidden md:inline" />
+        <TokenLogo token={base} size={30} className="hidden sm:inline" />
         <p className="grid flex-1 text-start">
           <span className="font-medium text-12 text-white/60">Buy or Sell</span>
           <span className="inline-flex items-center gap-4 break-all">
@@ -90,7 +90,7 @@ export const TokenSelection = () => {
         data-testid="select-quote-token"
         onClick={() => openTokenListModal('quote')}
       >
-        <TokenLogo token={quote} size={30} className="hidden md:inline" />
+        <TokenLogo token={quote} size={30} className="hidden sm:inline" />
         <p className="grid flex-1 text-start">
           <span className="font-medium text-12 text-white/60">With</span>
           <span className="inline-flex items-center gap-4 break-all">

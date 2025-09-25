@@ -511,7 +511,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
       {tooLow && (
         <>
           <rect
-            fill=""
+            fill="var(--color-background-700)"
             x={lowest - 1}
             y="6"
             width={outRangeWidth}

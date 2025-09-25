@@ -14,7 +14,7 @@ const variants = {
       'bg-black-gradient text-white hover:bg-white/20 active:bg-white/30',
     ],
     white: [
-      'bg-background-500 text-white hover:bg-background-600 active:bg-background-700',
+      'bg-white-gradient bg-background-800 text-white hover:bg-background-700 active:bg-background-600',
     ],
     secondary: [
       'bg-background-800 text-white hover:bg-background-700 active:bg-background-600',
