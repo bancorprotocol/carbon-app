@@ -21,8 +21,8 @@ const colors = {
 interface Props {
   dms: D3ChartSettings;
   data: SimulatorReturn['data'];
-  baseToken: Token;
-  quoteToken: Token;
+  base: Token;
+  quote: Token;
   isVisible: boolean;
   setIsVisible: (value: boolean) => void;
 }
@@ -30,8 +30,8 @@ interface Props {
 export const D3ChartSimulatorBalance = ({
   dms,
   data,
-  baseToken,
-  quoteToken,
+  base,
+  quote,
   isVisible,
   setIsVisible,
 }: Props) => {
@@ -88,7 +88,7 @@ export const D3ChartSimulatorBalance = ({
           value={portionRISK}
           percentage={percentage}
           dms={dms}
-          symbol={baseToken.symbol}
+          symbol={base.symbol}
         />
 
         <Bar
@@ -99,7 +99,7 @@ export const D3ChartSimulatorBalance = ({
           value={portionCASH}
           percentage={100 - percentage}
           dms={dms}
-          symbol={quoteToken.symbol}
+          symbol={quote.symbol}
         />
 
         <g>
@@ -117,7 +117,7 @@ export const D3ChartSimulatorBalance = ({
             style={{ textAnchor: 'middle' }}
             className="text-12"
           >
-            {baseToken.symbol}
+            {base.symbol}
           </text>
 
           <text
@@ -127,7 +127,7 @@ export const D3ChartSimulatorBalance = ({
             style={{ textAnchor: 'middle' }}
             className="text-12"
           >
-            {quoteToken.symbol}
+            {quote.symbol}
           </text>
         </g>
       </g>

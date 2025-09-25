@@ -2,7 +2,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { SimResultChartAnimation } from 'components/simulator/result/SimResultChartAnimation';
 import { SimResultChartSummary } from 'components/simulator/result/SimResultChartSummary';
 import { SimResultChartHeader } from 'components/simulator/result/SimResultChartHeader';
-import { useSimulator } from 'components/simulator/result/SimulatorProvider';
+import { useSimulator } from 'components/simulator/result/utils';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useState } from 'react';
@@ -31,11 +31,11 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
           icon={<IconWarning />}
           title="Missing Information"
           text={
-            <p className="w-[480px]">
+            <span className="w-[480px]">
               It appears that the simulation is missing essential information
               for successful execution. Please attempt to re-enter the
               simulation data.
-            </p>
+            </span>
           }
           variant="error"
         />
@@ -43,8 +43,8 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
           <Link
             to="/simulate/recurring"
             search={{
-              baseToken: ctx.search.baseToken,
-              quoteToken: ctx.search.quoteToken,
+              base: ctx.search.base,
+              quote: ctx.search.quote,
               start: ctx.search.start,
               end: ctx.search.end,
               buyMin: ctx.search.buyMin,
@@ -67,8 +67,8 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
           <Link
             to="/simulate/overlapping"
             search={{
-              baseToken: ctx.search.baseToken,
-              quoteToken: ctx.search.quoteToken,
+              base: ctx.search.base,
+              quote: ctx.search.quote,
               start: ctx.search.start,
               end: ctx.search.end,
               buyMin: ctx.search.buyMin,
@@ -104,15 +104,15 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
         <SimResultChartSummary
           data={ctx.data!}
           bounds={ctx.bounds!}
-          baseToken={state.baseToken!}
-          quoteToken={state.quoteToken!}
+          base={state.base!}
+          quote={state.quote!}
         />
       ) : (
         <SimResultChartAnimation
           data={ctx.animationData}
           bounds={ctx.bounds!}
-          baseToken={state.baseToken!}
-          quoteToken={state.quoteToken!}
+          base={state.base!}
+          quote={state.quote!}
         />
       )}
     </div>

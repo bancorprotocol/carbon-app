@@ -43,7 +43,7 @@ const getInitialPrices = (marketPrice: string | number) => {
 
 export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const { state, dispatch, marketPrice, spread, setSpread } = props;
-  const { baseToken: base, quoteToken: quote, buy, sell } = state;
+  const { base, quote, buy, sell } = state;
   const [touched, setTouched] = useState(false);
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
 

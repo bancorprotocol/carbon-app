@@ -33,18 +33,18 @@ export const SimResultSummary = ({
           },
         )}
       >
-        {!isPending && !!state.baseToken && !!state.quoteToken && (
+        {!isPending && !!state.base && !!state.quote && (
           <>
             <SimResultSummaryTokens
-              baseToken={state.baseToken}
-              quoteToken={state.quoteToken}
+              base={state.base}
+              quote={state.quote}
               strategyType={strategyType}
             />
             <SimResultSummaryTable
               buy={state.buy}
               sell={state.sell}
-              baseToken={state.baseToken}
-              quoteToken={state.quoteToken}
+              base={state.base}
+              quote={state.quote}
             />
           </>
         )}
@@ -57,19 +57,16 @@ export const SimResultSummary = ({
           },
         )}
       >
-        {!isPending && !!state.baseToken && !!state.quoteToken && (
+        {!isPending && !!state.base && !!state.quote && (
           <>
-            <SimResultSummaryGains
-              portfolioGains={gains}
-              quoteToken={state.quoteToken}
-            />
+            <SimResultSummaryGains portfolioGains={gains} quote={state.quote} />
             <SimResultSummaryRoi portfolioRoi={roi} />
             {strategyType === 'recurring' ? (
               <Link
                 to="/trade/recurring"
                 search={{
-                  base: state.baseToken.address,
-                  quote: state.quoteToken.address,
+                  base: state.base.address,
+                  quote: state.quote.address,
                   buyMin: state.buy.min,
                   buyMax: state.buy.max,
                   buyBudget: state.buy.budget,
@@ -92,8 +89,8 @@ export const SimResultSummary = ({
               <Link
                 to="/trade/overlapping"
                 search={{
-                  base: state.baseToken.address,
-                  quote: state.quoteToken.address,
+                  base: state.base.address,
+                  quote: state.quote.address,
                   min: state.buy.min,
                   max: state.sell.max,
                   spread: state.overlappingSpread,

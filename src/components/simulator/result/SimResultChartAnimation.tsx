@@ -37,15 +37,15 @@ const chartSettingsBalance: D3ChartSettingsProps = {
 interface Props {
   data: SimulatorData[];
   bounds: SimulatorBounds;
-  baseToken: Token;
-  quoteToken: Token;
+  base: Token;
+  quote: Token;
 }
 
 export const SimResultChartAnimation = ({
   data,
   bounds,
-  baseToken,
-  quoteToken,
+  base,
+  quote,
 }: Props) => {
   const [displayBalance, setDisplayBalance] = useState(true);
   const gridCols = displayBalance ? 'grid-cols-2' : 'grid-cols-[1fr_80px]';
@@ -79,8 +79,8 @@ export const SimResultChartAnimation = ({
             <D3ChartSimulatorBalance
               data={data}
               dms={dms}
-              baseToken={baseToken}
-              quoteToken={quoteToken}
+              base={base}
+              quote={quote}
               isVisible={displayBalance}
               setIsVisible={setDisplayBalance}
             />

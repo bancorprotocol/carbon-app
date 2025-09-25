@@ -4,11 +4,8 @@ import { ReactComponent as PlayIcon } from 'assets/icons/play.svg';
 import { ReactComponent as SkipIcon } from 'assets/icons/skip.svg';
 import { useState } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import {
-  PlaybackSpeed,
-  playbackSpeedOptions,
-  useSimulator,
-} from 'components/simulator/result/SimulatorProvider';
+import { PlaybackSpeed } from 'components/simulator/result/SimulatorProvider';
+import { playbackSpeedOptions, useSimulator } from './utils';
 
 export const SimResultChartControls = () => {
   const {

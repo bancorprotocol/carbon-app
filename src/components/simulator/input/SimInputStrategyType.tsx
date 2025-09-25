@@ -14,7 +14,7 @@ interface ItemProps {
 }
 
 export const SimInputStrategyType = () => {
-  const { baseToken, quoteToken, start, end } = useSearch({
+  const { base, quote, start, end } = useSearch({
     from: '/simulate/',
   });
   const items: ItemProps[] = [
@@ -49,7 +49,7 @@ export const SimInputStrategyType = () => {
               aria-controls={'panel-' + label}
               key={label}
               to={to}
-              search={{ baseToken, quoteToken, start, end }}
+              search={{ base, quote, start, end }}
               className={cn(
                 'rounded-lg text-14 font-medium group flex size-full flex-row items-center justify-center gap-8 bg-black-gradient px-8 py-16 outline-white',
                 'md:px-12',

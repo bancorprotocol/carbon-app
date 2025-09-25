@@ -33,8 +33,8 @@ export const SimulatorInputRecurringPage = () => {
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
   const { data, isPending } = useGetTokenPriceHistory({
-    baseToken: searchState.baseToken,
-    quoteToken: searchState.quoteToken,
+    baseToken: searchState.base,
+    quoteToken: searchState.quote,
     start: oneYearAgo(),
     end: defaultEnd(),
   });
@@ -85,8 +85,8 @@ export const SimulatorInputRecurringPage = () => {
 
   useEffect(() => {
     if (initBuyRange || initSellRange) return;
-    dispatch('baseToken', searchState.baseToken);
-    dispatch('quoteToken', searchState.quoteToken);
+    dispatch('base', searchState.base);
+    dispatch('quote', searchState.quote);
     dispatch('sellMax', '');
     dispatch('sellMin', '');
     dispatch('sellBudget', '');
@@ -100,7 +100,7 @@ export const SimulatorInputRecurringPage = () => {
     setInitBuyRange(true);
     setInitSellRange(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, searchState.baseToken, searchState.quoteToken]);
+  }, [dispatch, searchState.base, searchState.quote]);
 
   const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
@@ -121,8 +121,8 @@ export const SimulatorInputRecurringPage = () => {
     navigate({
       to: '/simulate/result',
       search: {
-        baseToken: state.baseToken?.address || '',
-        quoteToken: state.quoteToken?.address || '',
+        base: state.base?.address || '',
+        quote: state.quote?.address || '',
         buyMin: state.buy.min,
         buyMax: state.buy.max,
         buyBudget: state.buy.budget,
@@ -175,8 +175,8 @@ export const SimulatorInputRecurringPage = () => {
         prices={prices}
       >
         <D3ChartRecurring
-          base={state.baseToken!}
-          quote={state.quoteToken!}
+          base={state.base!}
+          quote={state.quote!}
           isLimit={isLimit}
           prices={prices}
           onChange={onPriceUpdates}
@@ -189,8 +189,8 @@ export const SimulatorInputRecurringPage = () => {
       >
         <div className="bg-white-gradient rounded-2xl">
           <SimInputTokenSelection
-            baseToken={searchState.baseToken}
-            quoteToken={searchState.quoteToken}
+            base={searchState.base}
+            quote={searchState.quote}
             noPriceHistory={emptyHistory}
           />
           <SimInputStrategyType />

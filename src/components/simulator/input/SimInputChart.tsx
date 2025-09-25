@@ -41,8 +41,8 @@ export const SimInputChart = ({
   children,
 }: Props) => {
   const { marketPrice, isPending: marketIsPending } = useMarketPrice({
-    base: state.baseToken,
-    quote: state.quoteToken,
+    base: state.base,
+    quote: state.quote,
   });
 
   const onDatePickerConfirm = useCallback(
@@ -64,10 +64,7 @@ export const SimInputChart = ({
   if (isError || !data) {
     return (
       <Layout>
-        <ErrorMsg
-          base={state.baseToken?.address}
-          quote={state.quoteToken?.address}
-        />
+        <ErrorMsg base={state.base?.address} quote={state.quote?.address} />
       </Layout>
     );
   }

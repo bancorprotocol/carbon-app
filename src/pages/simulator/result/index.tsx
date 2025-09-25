@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 import { SimResultChart } from 'components/simulator/result/SimResultChart';
 import { SimResultSummary } from 'components/simulator/result/SimResultSummary';
-import { useSimulator } from 'components/simulator/result/SimulatorProvider';
+import { useSimulator } from 'components/simulator/result/utils';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useCallback, useEffect } from 'react';
 import { wait } from 'utils/helpers';
@@ -39,8 +39,8 @@ export const SimulatorResultPage = () => {
           <Link
             to="/simulate/recurring"
             search={{
-              baseToken: ctx.search.baseToken,
-              quoteToken: ctx.search.quoteToken,
+              base: ctx.search.base,
+              quote: ctx.search.quote,
               start: ctx.search.start,
               end: ctx.search.end,
               buyMin: ctx.search.buyMin,
@@ -64,8 +64,8 @@ export const SimulatorResultPage = () => {
           <Link
             to="/simulate/overlapping"
             search={{
-              baseToken: ctx.search.baseToken,
-              quoteToken: ctx.search.quoteToken,
+              base: ctx.search.base,
+              quote: ctx.search.quote,
               start: ctx.search.start,
               end: ctx.search.end,
               buyMin: ctx.search.buyMin,

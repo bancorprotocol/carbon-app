@@ -103,8 +103,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           navigate({
             to: '/simulate/overlapping',
             search: {
-              baseToken: strategy.base.address,
-              quoteToken: strategy.quote.address,
+              base: strategy.base.address,
+              quote: strategy.quote.address,
               buyMin: strategy.buy.min,
               sellMax: strategy.sell.max,
             },
@@ -113,8 +113,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           navigate({
             to: '/simulate/recurring',
             search: {
-              baseToken: strategy.base.address,
-              quoteToken: strategy.quote.address,
+              base: strategy.base.address,
+              quote: strategy.quote.address,
               buyMin: strategy.buy.min,
               buyMax: strategy.buy.max,
               buyBudget: strategy.buy.budget,

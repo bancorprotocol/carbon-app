@@ -20,16 +20,16 @@ export const simulatorRootRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/simulate',
   validateSearch: searchValidator({
-    baseToken: v.optional(validNumber),
-    quoteToken: v.optional(validNumber),
+    base: v.optional(validAddress),
+    quote: v.optional(validAddress),
     start: v.optional(validNumber),
     end: v.optional(validNumber),
   }),
 });
 
 export interface StrategyInputBase {
-  baseToken?: string;
-  quoteToken?: string;
+  base?: string;
+  quote?: string;
   start?: string;
   end?: string;
 }
@@ -61,16 +61,16 @@ export const simulatorInputRootRoute = createRoute({
     }
 
     const defaultPair = getLastVisitedPair();
-    const baseToken = v.is(validAddress, search.baseToken)
-      ? search.baseToken
+    const base = v.is(validAddress, search.base)
+      ? search.base
       : defaultPair.base;
-    const quoteToken = v.is(validAddress, search.quoteToken)
-      ? search.quoteToken
+    const quote = v.is(validAddress, search.quote)
+      ? search.quote
       : defaultPair.quote;
 
     return {
-      baseToken,
-      quoteToken,
+      base,
+      quote,
       start: start as string | undefined,
       end: end as string | undefined,
     };
@@ -185,10 +185,10 @@ export const simulatorResultRoute = createRoute({
     if (Number(search.start) > Number(search.end)) {
       throw new Error('Invalid date range');
     }
-    if (!v.is(validAddress, search.baseToken)) {
+    if (!v.is(validAddress, search.base)) {
       throw new Error('Invalid base token');
     }
-    if (!v.is(validAddress, search.quoteToken)) {
+    if (!v.is(validAddress, search.quote)) {
       throw new Error('Invalid quote token');
     }
     if (!v.is(validNumber, search.sellBudget)) {
@@ -222,8 +222,8 @@ export const simulatorResultRoute = createRoute({
     return {
       start: search.start,
       end: search.end,
-      baseToken: search.baseToken.toLowerCase(),
-      quoteToken: search.quoteToken.toLowerCase(),
+      base: search.base.toLowerCase(),
+      quote: search.quote.toLowerCase(),
       sellMax: search.sellMax,
       sellMin: search.sellMin,
       sellBudget: search.sellBudget || '0',

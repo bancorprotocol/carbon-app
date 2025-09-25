@@ -20,9 +20,9 @@ import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { Token } from 'libs/tokens';
 import { D3PriceHistory } from './d3Chart/D3PriceHistory';
-import config from 'config';
 import { useStrategyMarketPrice } from '../UserMarketPrice';
 import { isEmptyHistory } from './d3Chart/utils';
+import config from 'config';
 
 interface Props {
   base: Token;

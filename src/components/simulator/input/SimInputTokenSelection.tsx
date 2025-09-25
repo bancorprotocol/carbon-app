@@ -8,27 +8,23 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { cn } from 'utils/helpers';
 
 interface Props {
-  baseToken?: string;
-  quoteToken?: string;
+  base?: string;
+  quote?: string;
   noPriceHistory: boolean;
 }
 
-export const SimInputTokenSelection: FC<Props> = ({
-  baseToken,
-  quoteToken,
-  noPriceHistory,
-}) => {
+export const SimInputTokenSelection: FC<Props> = (props) => {
   const navigate = useNavigate({ from: '/simulate' });
   const { openModal } = useModal();
   const { getTokenById } = useTokens();
-  const base = getTokenById(baseToken);
-  const quote = getTokenById(quoteToken);
+  const base = getTokenById(props.base);
+  const quote = getTokenById(props.quote);
 
   const invertTokens = () => {
     navigate({
       search: (s) => ({
-        baseToken: s.quoteToken,
-        quoteToken: s.baseToken,
+        base: s.quote,
+        quote: s.base,
         start: s.start,
         end: s.end,
       }),
@@ -50,14 +46,14 @@ export const SimInputTokenSelection: FC<Props> = ({
           }
           className={cn(
             'h-[50px] flex-1 pl-10 pr-20',
-            noPriceHistory &&
+            props.noPriceHistory &&
               'outline-warning outline-solid outline-2 md:outline-hidden',
           )}
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
                 navigate({
-                  search: { baseToken: token.address, quoteToken },
+                  search: { base: token.address, quote: props.quote },
                   params: {},
                 });
               },
@@ -89,14 +85,14 @@ export const SimInputTokenSelection: FC<Props> = ({
           }
           className={cn(
             'h-[50px] flex-1 pl-16 pr-16',
-            noPriceHistory &&
+            props.noPriceHistory &&
               'outline-warning outline-solid outline-2 md:outline-hidden',
           )}
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
                 navigate({
-                  search: { baseToken, quoteToken: token.address },
+                  search: { base: props.base, quote: token.address },
                   params: {},
                 });
               },
@@ -106,7 +102,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           }}
         />
       </article>
-      {noPriceHistory && (
+      {props.noPriceHistory && (
         <Warning className="font-medium md:hidden">
           The pair lacks price data and cannot be simulated
         </Warning>

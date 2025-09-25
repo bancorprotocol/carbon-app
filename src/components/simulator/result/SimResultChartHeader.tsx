@@ -82,8 +82,8 @@ export const SimResultChartHeader = ({
         />
         <SimResultChartDownload
           data={data}
-          baseSymbol={state.baseToken?.symbol ?? ''}
-          quoteSymbol={state.quoteToken?.symbol ?? ''}
+          baseSymbol={state.base?.symbol ?? ''}
+          quoteSymbol={state.quote?.symbol ?? ''}
           simulationType={simulationType ?? ''}
         />
       </article>

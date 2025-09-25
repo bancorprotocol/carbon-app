@@ -12,12 +12,9 @@ export const SimulatorPage = () => {
   const searchState = simulatorInputRootRoute.useSearch();
 
   useEffect(() => {
-    if (!searchState.baseToken || !searchState.quoteToken) return;
-    lsService.setItem('tradePair', [
-      searchState.baseToken,
-      searchState.quoteToken,
-    ]);
-  }, [searchState.baseToken, searchState.quoteToken]);
+    if (!searchState.base || !searchState.quote) return;
+    lsService.setItem('tradePair', [searchState.base, searchState.quote]);
+  }, [searchState.base, searchState.quote]);
 
   const { aboveBreakpoint } = useBreakpoints();
 
