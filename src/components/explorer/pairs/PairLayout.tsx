@@ -37,9 +37,11 @@ const text = {
 const toSortedPairSlug = (base: string, quote: string) => {
   return [base, quote]
     .map((v) => v.toLowerCase())
-    .sort((a, b) => b.localeCompare(a))
+    .sort((a, b) => a.localeCompare(b))
     .join('_');
 };
+
+type TradeMap = Record<string, { tradeCount: number; tradeCount24h: number }>;
 
 interface Props {
   url: '/explore' | '/portfolio';
@@ -82,9 +84,8 @@ export const PairLayout: FC<Props> = ({ url }) => {
   }, [strategies]);
 
   const tradesByPair = useMemo(() => {
-    const map: Record<string, { tradeCount: number; tradeCount24h: number }> =
-      {};
     if (!ordered) return;
+    const map: TradeMap = {};
     // In explore we take the total amount of trade for this pair
     if (url === '/explore') {
       const record: Record<string, PairTrade> = {};
@@ -113,7 +114,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
         const base = strategy.base.address;
         const quote = strategy.quote.address;
         const key = toSortedPairSlug(base, quote);
-        if (!record?.[key]) continue;
+        if (!record?.[strategy.id]) continue;
         map[key] ||= {
           tradeCount: 0,
           tradeCount24h: 0,
@@ -121,6 +122,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
         map[key].tradeCount += record[strategy.id].strategyTrades;
         map[key].tradeCount24h += record[strategy.id].strategyTrades_24h;
       }
+      console.log(map);
     }
     return map;
   }, [ordered, trending.data?.pairCount, trending.data?.tradeCount, url]);
@@ -133,7 +135,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
       // Merge both pair direction
       const pairKey = toSortedPairSlug(base.address, quote.address);
       const pairCount = tradesByPair[pairKey];
-
+      console.log(pairKey);
       map[pairKey] ||= {
         id: pairKey,
         base,

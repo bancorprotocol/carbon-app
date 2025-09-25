@@ -14,8 +14,9 @@ export interface Reward {
 export const useRewards = (pairs: string[]) => {
   return useQueries({
     combine: (rewards) => {
-      if (rewards.some((r) => r.isPending))
+      if (rewards.some((r) => r.isPending)) {
         return { isPending: true, data: undefined };
+      }
       const data: Record<string, Reward> = {};
       for (const reward of rewards) {
         if (!reward.data) continue;

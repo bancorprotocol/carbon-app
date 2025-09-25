@@ -30,9 +30,9 @@ export const PairList: FC<Props> = ({ pairs }) => {
                 <dd className="text-14">{pair.tradeCount}</dd>
               </div>
               <div className="grid gap-8">
-                {config.ui.rewardUrl && (
+                {config.ui.rewardUrl && pair.reward && (
                   <>
-                    <dt className="text-white/80 text-12">Reward</dt>
+                    <dt className="text-white/80 text-12">Rewards</dt>
                     <dd className="text-14">
                       <NewTabLink
                         className="text-gradient underline decoration-primary underline-offset-4 hover:no-underline"
