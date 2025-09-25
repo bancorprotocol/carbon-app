@@ -122,7 +122,6 @@ export const PairLayout: FC<Props> = ({ url }) => {
         map[key].tradeCount += record[strategy.id].strategyTrades;
         map[key].tradeCount24h += record[strategy.id].strategyTrades_24h;
       }
-      console.log(map);
     }
     return map;
   }, [ordered, trending.data?.pairCount, trending.data?.tradeCount, url]);
@@ -135,7 +134,6 @@ export const PairLayout: FC<Props> = ({ url }) => {
       // Merge both pair direction
       const pairKey = toSortedPairSlug(base.address, quote.address);
       const pairCount = tradesByPair[pairKey];
-      console.log(pairKey);
       map[pairKey] ||= {
         id: pairKey,
         base,
