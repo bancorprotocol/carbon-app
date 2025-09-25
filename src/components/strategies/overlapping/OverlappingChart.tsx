@@ -488,62 +488,6 @@ export const OverlappingChart: FC<Props> = (props) => {
       viewBox={viewBox}
       onWheel={updateZoom}
     >
-      {/* Pattern */}
-      <defs>
-        <pattern href="#base-pattern" id="buy-pattern">
-          <use
-            href="#carbonLogo"
-            x="0"
-            y="6"
-            width="12"
-            height="12"
-            fill="var(--color-buy)"
-          />
-          <use
-            href="#carbonLogo"
-            x="12"
-            y="24"
-            width="12"
-            height="12"
-            fill="var(--color-buy)"
-          />
-          <rect
-            x="0"
-            y="0"
-            width="15"
-            height="25"
-            fill="var(--color-buy)"
-            fillOpacity="0.05"
-          />
-        </pattern>
-        <pattern href="#base-pattern" id="sell-pattern">
-          <use
-            href="#carbonLogo"
-            x="0"
-            y="6"
-            width="12"
-            height="12"
-            fill="var(--color-sell)"
-          />
-          <use
-            href="#carbonLogo"
-            x="12"
-            y="24"
-            width="12"
-            height="12"
-            fill="var(--color-sell)"
-          />
-          <rect
-            x="0"
-            y="0"
-            width="15"
-            height="25"
-            fill="var(--color-sell)"
-            fillOpacity="0.05"
-          />
-        </pattern>
-      </defs>
-
       <g className="title">
         <text
           x={box.width / 2}
