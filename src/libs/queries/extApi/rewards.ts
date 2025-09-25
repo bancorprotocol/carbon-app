@@ -14,6 +14,9 @@ export interface Reward {
 export const useRewards = (pairs: string[]) => {
   return useQueries({
     combine: (rewards) => {
+      if (!config.ui.rewardUrl) {
+        return { isPending: false, data: undefined };
+      }
       if (rewards.some((r) => r.isPending)) {
         return { isPending: true, data: undefined };
       }
