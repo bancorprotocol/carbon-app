@@ -1,9 +1,7 @@
 import { Link } from '@tanstack/react-router';
-import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 import { SimResultChart } from 'components/simulator/result/SimResultChart';
 import { SimResultSummary } from 'components/simulator/result/SimResultSummary';
 import { useSimulator } from 'components/simulator/result/utils';
-import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useCallback, useEffect } from 'react';
 import { wait } from 'utils/helpers';
 import { THREE_SECONDS_IN_MS } from 'utils/time';
@@ -27,10 +25,6 @@ export const SimulatorResultPage = () => {
   useEffect(() => {
     handleAnimationStart();
   }, [handleAnimationStart]);
-
-  const { aboveBreakpoint } = useBreakpoints();
-
-  if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   return (
     <div className="mx-auto flex w-full max-w-[1920px] flex-col gap-16 p-20">
@@ -76,7 +70,7 @@ export const SimulatorResultPage = () => {
           >
             <BackIcon />
           </Link>
-          Simulate
+          <h1 className="text-24">Simulate</h1>
         </header>
       )}
 

@@ -58,8 +58,8 @@ export const TradeRoot = () => {
   return (
     <TradeProvider base={base} quote={quote}>
       <div className="mx-auto grid w-full content-start md:justify-center gap-16 p-16 2xl:grid-cols-[350px_1fr] max-w-[1920px]">
-        <div className="2xl:grid xl:flex grid gap-8 content-start">
-          <TokenSelection />
+        <div className="2xl:grid xl:flex grid gap-16 content-start">
+          <TokenSelection url="/trade" />
           <TradeNav />
         </div>
         <div className="xl:grid xl:grid-cols-[auto_450px] gap-16 flex flex-col-reverse">

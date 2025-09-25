@@ -1,17 +1,32 @@
-import { useNavigate } from 'libs/routing';
+import { useNavigate, useSearch } from 'libs/routing';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { ReactComponent as ForwardArrowIcon } from 'assets/icons/arrow.svg';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
-import { useTradeCtx } from 'components/trade/TradeContext';
 import { SuspiciousToken } from 'components/common/DisplayPair';
+import { FC, useMemo } from 'react';
+import { useTokens } from 'hooks/useTokens';
 
-export const TokenSelection = () => {
-  const { base, quote } = useTradeCtx();
-  const navigate = useNavigate({ from: '/trade' });
+interface Props {
+  url: '/trade' | '/simulate';
+}
+
+export const TokenSelection: FC<Props> = ({ url }) => {
+  const { getTokenById } = useTokens();
+  const search = useSearch({ from: url });
+  const navigate = useNavigate({ from: url });
   const { openModal } = useModal();
+
+  const base = useMemo(
+    () => getTokenById(search.base),
+    [getTokenById, search.base],
+  );
+  const quote = useMemo(
+    () => getTokenById(search.quote),
+    [getTokenById, search.quote],
+  );
 
   const openTokenListModal = (type: 'base' | 'quote') => {
     const isBase = type === 'base';
@@ -66,15 +81,7 @@ export const TokenSelection = () => {
         data-testid="select-base-token"
         onClick={() => openTokenListModal('base')}
       >
-        <TokenLogo token={base} size={30} className="hidden sm:inline" />
-        <p className="grid flex-1 text-start">
-          <span className="font-medium text-12 text-white/60">Buy or Sell</span>
-          <span className="inline-flex items-center gap-4 break-all">
-            {base.isSuspicious && <SuspiciousToken />}
-            {base.symbol}
-          </span>
-        </p>
-        <ChevronIcon className="ml-auto size-16" />
+        <DisplayToken token={base} label="Buy or Sell" />
       </button>
       <button
         role="menuitem"
@@ -90,16 +97,28 @@ export const TokenSelection = () => {
         data-testid="select-quote-token"
         onClick={() => openTokenListModal('quote')}
       >
-        <TokenLogo token={quote} size={30} className="hidden sm:inline" />
-        <p className="grid flex-1 text-start">
-          <span className="font-medium text-12 text-white/60">With</span>
-          <span className="inline-flex items-center gap-4 break-all">
-            {quote.isSuspicious && <SuspiciousToken />}
-            {quote.symbol}
-          </span>
-        </p>
-        <ChevronIcon className="ml-auto size-16" />
+        <DisplayToken token={quote} label="With" />
       </button>
     </article>
+  );
+};
+
+interface DisplayTokenProps {
+  token?: Token;
+  label: string;
+}
+const DisplayToken: FC<DisplayTokenProps> = ({ token, label }) => {
+  return (
+    <>
+      <TokenLogo token={token} size={30} className="hidden sm:inline" />
+      <p className="grid flex-1 text-start">
+        <span className="font-medium text-12 text-white/60">{label}</span>
+        <span className="inline-flex items-center gap-4 break-all min-h-24">
+          {token?.isSuspicious && <SuspiciousToken />}
+          {token?.symbol}
+        </span>
+      </p>
+      <ChevronIcon className="ml-auto size-16" />
+    </>
   );
 };

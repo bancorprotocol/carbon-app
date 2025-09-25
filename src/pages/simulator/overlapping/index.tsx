@@ -12,8 +12,6 @@ import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
 import { FormEvent, useCallback, useEffect, useMemo } from 'react';
 import { formatNumber } from 'utils/helpers';
-import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
-import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { D3ChartOverlapping } from 'components/strategies/common/d3Chart/overlapping/D3ChartOverlapping';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import {
@@ -186,12 +184,6 @@ export const SimulatorInputOverlappingPage = () => {
         data-testid="create-simulation-form"
       >
         <div className="bg-white-gradient grid content-start rounded-2xl">
-          <SimInputTokenSelection
-            base={searchState.base}
-            quote={searchState.quote}
-            noPriceHistory={emptyHistory}
-          />
-          <SimInputStrategyType />
           <CreateOverlappingStrategy
             state={state}
             dispatch={dispatch}

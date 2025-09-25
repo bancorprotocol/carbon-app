@@ -8,7 +8,7 @@ import {
   validBoolean,
   validNumber,
 } from 'libs/routing/utils';
-import { SimulatorPage } from 'pages/simulator';
+import { SimulatorPage } from 'pages/simulator/root';
 import { SimulatorInputOverlappingPage } from 'pages/simulator/overlapping';
 import { SimulatorInputRecurringPage } from 'pages/simulator/recurring';
 import { SimulatorResultPage } from 'pages/simulator/result';

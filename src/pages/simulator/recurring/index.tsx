@@ -13,8 +13,6 @@ import {
   oneYearAgo,
 } from 'components/strategies/common/utils';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
-import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { formatNumber } from 'utils/helpers';
@@ -188,12 +186,6 @@ export const SimulatorInputRecurringPage = () => {
         data-testid="create-simulation-form"
       >
         <div className="bg-white-gradient rounded-2xl">
-          <SimInputTokenSelection
-            base={searchState.base}
-            quote={searchState.quote}
-            noPriceHistory={emptyHistory}
-          />
-          <SimInputStrategyType />
           <SimInputRecurring state={state} dispatch={dispatch} _sP_={_sP_} />
         </div>
         <input className="approve-warnings hidden" defaultChecked />

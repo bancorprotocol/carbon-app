@@ -1,12 +1,12 @@
 import { Outlet } from '@tanstack/react-router';
-import { useBreakpoints } from 'hooks/useBreakpoints';
 import { simulatorInputRootRoute } from 'libs/routing/routes/sim';
-import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 import { ReactComponent as IconBookmark } from 'assets/icons/bookmark.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { FormEvent, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';
+import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { TokenSelection } from 'components/strategies/common/TokenSelection';
 
 export const SimulatorPage = () => {
   const searchState = simulatorInputRootRoute.useSearch();
@@ -16,14 +16,19 @@ export const SimulatorPage = () => {
     lsService.setItem('tradePair', [searchState.base, searchState.quote]);
   }, [searchState.base, searchState.quote]);
 
-  const { aboveBreakpoint } = useBreakpoints();
-
-  if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
-
   return (
-    <div className="mx-auto flex w-full max-w-[1920px] flex-col content-start gap-20 p-20 md:grid md:grid-cols-[auto_450px]">
+    <div className="mx-auto flex flex-col content-start gap-24 max-w-[1920px] p-16 w-full">
       <SimulatorDisclaimer />
-      <Outlet />
+      <div className="grid content-start gap-16 2xl:grid-cols-[350px_1fr]">
+        <div className="2xl:grid xl:flex grid gap-16 content-start">
+          {/** TODO: put back the no Price history warning */}
+          <TokenSelection url="/simulate" />
+          <SimInputStrategyType />
+        </div>
+        <div className="xl:grid xl:grid-cols-[auto_450px] gap-16 flex flex-col-reverse">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 };
