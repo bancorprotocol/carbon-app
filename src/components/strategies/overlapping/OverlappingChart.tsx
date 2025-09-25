@@ -695,7 +695,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top)}
                 width={20}
                 height={30}
-                fill="var(--color-buy)"
+                fill="url(#svg-buy-gradient)"
                 rx="4"
               />
               <rect
@@ -779,7 +779,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top)}
                 width={20}
                 height={30}
-                fill="var(--color-sell)"
+                fill="url(#svg-sell-gradient)"
                 rx="4"
               />
               <rect

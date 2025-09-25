@@ -10,7 +10,7 @@ export const PreviewCommonStrategyType = () => {
             height="40"
             rx="8"
             ry="8"
-            fill="var(--color-sell)"
+            fill="url(#svg-sell-gradient)"
           />
           <text
             x="0"
@@ -26,7 +26,7 @@ export const PreviewCommonStrategyType = () => {
         <g id="sell-indicator">
           <polyline
             points="-40,0 -20,-20 40,-20 40,20 -20,20"
-            fill="var(--color-sell)"
+            fill="url(#svg-sell-gradient)"
           />
           <text
             x="-15"
@@ -46,7 +46,7 @@ export const PreviewCommonStrategyType = () => {
             y1="0"
             y2="0"
             strokeWidth="3"
-            stroke="var(--color-sell)"
+            stroke="url(#svg-sell-gradient)"
           />
           <g transform="translate(950, 0)">
             <use href="#sell-indicator" />
@@ -61,7 +61,7 @@ export const PreviewCommonStrategyType = () => {
             height="40"
             rx="8"
             ry="8"
-            fill="var(--color-buy)"
+            fill="url(#svg-buy-gradient)"
           />
           <text
             x="0"
@@ -77,7 +77,7 @@ export const PreviewCommonStrategyType = () => {
         <g id="buy-indicator">
           <polyline
             points="-40,0 -20,-20 40,-20 40,20 -20,20"
-            fill="var(--color-buy)"
+            fill="url(#svg-buy-gradient)"
           />
           <text
             x="-15"
@@ -97,7 +97,7 @@ export const PreviewCommonStrategyType = () => {
             y1="0"
             y2="0"
             strokeWidth="3"
-            stroke="var(--color-buy)"
+            stroke="url(#svg-buy-gradient)"
           />
           <g transform="translate(950, 0)">
             <use href="#buy-indicator" />
@@ -107,7 +107,7 @@ export const PreviewCommonStrategyType = () => {
         <g id="buy-range">
           <polyline
             points="-60,0 -40,-20 40,-20 60,0 40,20 -40,20"
-            fill="var(--color-buy)"
+            fill="url(#svg-buy-gradient)"
           />
           <text
             x="0"
