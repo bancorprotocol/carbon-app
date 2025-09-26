@@ -201,12 +201,12 @@
   backdrop-filter: blur(20px);
 }
 
-@utility lense-list {
+@utility lens-list {
   @supports (anchor-name: --myanchor) {
     position: relative;
     &::before {
       content: "";
-      position-anchor: --lense-selected;
+      position-anchor: --lens-selected;
       transition-property: top, left, width, height;
       position: absolute;
       transition-duration: 400ms;
@@ -220,7 +220,7 @@
     }
   }
 }
-@utility lense-anchor {
+@utility lens-anchor {
   &:has(> *) > * {
     transition-property: color, transform;
     transition-duration: 300ms;
@@ -234,8 +234,8 @@
     transition-delay: 100ms;
   }
 }
-@utility lense-focus {
-  anchor-name: --lense-selected;
+@utility lens-focus {
+  anchor-name: --lens-selected;
   &:has(> *) > * {
     transform: scale(1.2);
   }

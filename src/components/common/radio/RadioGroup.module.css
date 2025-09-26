@@ -4,13 +4,13 @@
 
 
 .radio-group {
-  @apply lense-list;
+  @apply lens-list;
 }
 .radio + label {
-  @apply lense-anchor;
+  @apply lens-anchor;
 }
 .radio:checked + label {
-  @apply lense-focus;
+  @apply lens-focus;
 }
 
 .radio {

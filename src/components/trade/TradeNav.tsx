@@ -87,7 +87,7 @@ export const TradeNav = () => {
       <TradeType />
       <nav
         aria-labelledby="trading-strateg-nav"
-        className="text-14 grid grid-flow-row md:max-2xl:grid-flow-col gap-8 overflow-clip p-8 2xl:p-16 lense-list"
+        className="text-14 grid grid-flow-row md:max-2xl:grid-flow-col gap-8 overflow-clip p-8 2xl:p-16 lens-list"
       >
         {links.map((link) => (
           <Link
@@ -104,7 +104,7 @@ export const TradeNav = () => {
             })}
             aria-current={current === link.to ? 'page' : 'false'}
             data-testid={link.id}
-            className="flex items-center gap-8 border-b border-transparent py-16 px-24 text-white/60 aria-page:text-white aria-page:lense-focus rounded-md xl:max-2xl:rounded-full lense-anchor"
+            className="flex items-center gap-8 border-b border-transparent py-16 px-24 text-white/60 aria-page:text-white aria-page:lens-focus rounded-md xl:max-2xl:rounded-full lens-anchor"
           >
             {link.svg}
             <span className="origin-left">{link.label}</span>

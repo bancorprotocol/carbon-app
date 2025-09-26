@@ -36,7 +36,7 @@ export const SimInputStrategyType = () => {
   const current = location.pathname;
   return (
     <nav
-      className="bg-white-gradient 2xl:grid xl:flex grid gap-8 content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up p-8 2xl:p-16 lense-list"
+      className="bg-white-gradient 2xl:grid xl:flex grid gap-8 content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up p-8 2xl:p-16 lens-list"
       style={{ animationDelay: '100ms' }}
     >
       {items.map((link) => (
@@ -53,7 +53,7 @@ export const SimInputStrategyType = () => {
           })}
           aria-current={current === link.to ? 'page' : 'false'}
           data-testid={link.id}
-          className="flex items-center gap-8 border-b border-transparent py-16 px-24 text-white/60 aria-page:lense-focus aria-page:text-white rounded-md xl:max-2xl:rounded-full lense-anchor"
+          className="flex items-center gap-8 border-b border-transparent py-16 px-24 text-white/60 aria-page:lens-focus aria-page:text-white rounded-md xl:max-2xl:rounded-full lens-anchor"
         >
           {link.svg}
           {link.label}
