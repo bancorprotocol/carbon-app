@@ -22,7 +22,14 @@
     @apply bg-white-gradient rounded-full;
   }
   .radio:checked + label {
+    transform: scale(1.2);
     anchor-name: --preset-selected;
+  }
+  .radio + label {
+    transition-property: color, transform;
+    transition-duration: 300ms;
+    transition-timing-function: var(--ease-in-out);
+    transition-delay: 100ms;
   }
 }
 @supports not (anchor-name: --myanchor) {
@@ -37,6 +44,7 @@
   opacity: 0;
   pointer-events: none;
 }
+
 .radio:checked + label {
   @apply text-white;
 }
