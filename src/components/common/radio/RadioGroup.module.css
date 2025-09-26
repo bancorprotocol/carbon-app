@@ -1,13 +1,44 @@
 @reference "tailwindcss";
 @reference "../../../theme.css";
 
+
+
+@supports (anchor-name: --myanchor) {
+  .radio-group {
+    position: relative;
+  }
+  .radio-group::before {
+    content: "";
+    position-anchor: --preset-selected;
+    transition-property: top, left, width, height;
+    position: absolute;
+    transition-duration: 400ms;
+    transition-timing-function: var(--ease-in-out), var(--ease-in-out), var(--ease-back-out), var(--ease-back-out);
+
+    bottom: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    height: anchor-size(height);
+    @apply bg-white-gradient rounded-full;
+  }
+  .radio:checked + label {
+    anchor-name: --preset-selected;
+  }
+}
+@supports not (anchor-name: --myanchor) {
+  .radio:checked + label:hover {
+    @apply bg-white-gradient;
+  }
+}
+
+
 .radio {
   position: absolute;
   opacity: 0;
   pointer-events: none;
 }
 .radio:checked + label {
-  @apply bg-white-gradient text-white;
+  @apply text-white;
 }
 .radio:checked + label:hover {
   @apply text-white;

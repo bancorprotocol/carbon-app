@@ -15,6 +15,7 @@ export const RadioGroup: FC<RadioGroupProps> = ({ children, ...props }) => {
       className={cn(
         'text-14 relative flex items-center rounded-full bg-black-gradient px-6 py-4',
         props.className,
+        style.radioGroup,
       )}
     >
       {children}
