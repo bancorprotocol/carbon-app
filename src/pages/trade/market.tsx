@@ -40,7 +40,7 @@ export const TradeMarket = () => {
         </PairChartHistory>
       </StrategyChartSection>
       <TradeLayout>
-        <article className="bg-white-gradient grid rounded-2xl">
+        <article className="bg-white-gradient grid rounded-2xl overflow-clip">
           <OrderDirection
             direction={search.direction || 'sell'}
             setDirection={setDirection}
