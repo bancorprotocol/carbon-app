@@ -3,8 +3,9 @@ import { PairRow } from './types';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
-import config from 'config';
 import { NewTabLink } from 'libs/routing';
+import { ReactComponent as MerkleIcon } from 'assets/logos/merkle.svg';
+import config from 'config';
 
 interface Props {
   pairs: PairRow[];
@@ -38,7 +39,7 @@ export const PairList: FC<Props> = ({ pairs }) => {
                         className="text-gradient underline decoration-primary underline-offset-4 hover:no-underline"
                         to={config.ui.rewardUrl}
                       >
-                        Yes
+                        <MerkleIcon className="size-16 fill-gradient" />
                       </NewTabLink>
                     </dd>
                   </>

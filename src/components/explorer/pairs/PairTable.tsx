@@ -6,6 +6,7 @@ import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Paginator } from 'components/common/table/Paginator';
 import { NewTabLink } from 'libs/routing';
 import { clamp } from 'utils/helpers/operators';
+import { ReactComponent as MerkleIcon } from 'assets/logos/merkle.svg';
 import config from 'config';
 
 interface Props {
@@ -48,10 +49,10 @@ export const PairTable: FC<Props> = ({ pairs }) => {
                 <td>
                   {pair.reward && (
                     <NewTabLink
-                      className="text-gradient underline decoration-primary underline-offset-4 hover:no-underline"
+                      className="hover:scale-110 transition-transform duration-200 inline-flex text-center"
                       to={config.ui.rewardUrl}
                     >
-                      Yes
+                      <MerkleIcon className="size-16 fill-gradient" />
                     </NewTabLink>
                   )}
                 </td>
