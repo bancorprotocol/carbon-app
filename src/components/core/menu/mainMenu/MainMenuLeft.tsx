@@ -27,7 +27,7 @@ export const MainMenuLeft: FC = () => {
         <LogoCarbon className="w-34" />
       </Link>
 
-      <div className="hidden space-x-24 md:block">
+      <div className="hidden md:flex gap-8 lense-list">
         {menuItems.map(({ label, href, testid }, index) => {
           const isSamePage = isSamePageLink(href);
 
@@ -37,9 +37,7 @@ export const MainMenuLeft: FC = () => {
               to={href}
               aria-current={isSamePage ? 'page' : 'false'}
               data-testid={testid}
-              className={`font-title px-3 py-3 transition-colors duration-300 ${
-                isSamePage ? 'text-white' : 'hover:text-white'
-              }`}
+              className="font-title aria-page:text-white hover:text-white lense-anchor aria-page:lense-focus px-16 py-8"
             >
               {label}
             </Link>

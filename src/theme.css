@@ -200,3 +200,48 @@
   background-image: linear-gradient(150deg, oklch(50% var(--chroma) var(--hue) / 0.5), oklch(30% var(--chroma) var(--hue) / 0.5));
   backdrop-filter: blur(20px);
 }
+
+@utility lense-list {
+  @supports (anchor-name: --myanchor) {
+    position: relative;
+    &::before {
+      content: "";
+      position-anchor: --lense-selected;
+      transition-property: top, left, width, height;
+      position: absolute;
+      transition-duration: 400ms;
+      transition-timing-function: var(--ease-in-out);
+
+      top: anchor(top);
+      left: anchor(left);
+      width: anchor-size(width);
+      height: anchor-size(height);
+      @apply bg-white-gradient rounded-full;
+    }
+  }
+}
+@utility lense-anchor {
+  &:has(> *) > * {
+    transition-property: color, transform;
+    transition-duration: 300ms;
+    transition-timing-function: var(--ease-in-out);
+    transition-delay: 100ms;
+  }
+  &:not(:has(> *)) {
+    transition-property: color, transform;
+    transition-duration: 300ms;
+    transition-timing-function: var(--ease-in-out);
+    transition-delay: 100ms;
+  }
+}
+@utility lense-focus {
+  anchor-name: --lense-selected;
+  &:has(> *) > * {
+    transform: scale(1.2);
+  }
+  &:not(:has(> *)) {
+    transform: scale(1.2);
+  }
+}
+
+@custom-variant aria-page (&[aria-current="page"]);

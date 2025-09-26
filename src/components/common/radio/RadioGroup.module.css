@@ -3,41 +3,15 @@
 
 
 
-@supports (anchor-name: --myanchor) {
-  .radio-group {
-    position: relative;
-  }
-  .radio-group::before {
-    content: "";
-    position-anchor: --preset-selected;
-    transition-property: top, left, width, height;
-    position: absolute;
-    transition-duration: 400ms;
-    transition-timing-function: var(--ease-in-out), var(--ease-in-out), var(--ease-back-out), var(--ease-back-out);
-
-    bottom: anchor(bottom);
-    left: anchor(left);
-    width: anchor-size(width);
-    height: anchor-size(height);
-    @apply bg-white-gradient rounded-full;
-  }
-  .radio:checked + label {
-    transform: scale(1.2);
-    anchor-name: --preset-selected;
-  }
-  .radio + label {
-    transition-property: color, transform;
-    transition-duration: 300ms;
-    transition-timing-function: var(--ease-in-out);
-    transition-delay: 100ms;
-  }
+.radio-group {
+  @apply lense-list;
 }
-@supports not (anchor-name: --myanchor) {
-  .radio:checked + label:hover {
-    @apply bg-white-gradient;
-  }
+.radio + label {
+  @apply lense-anchor;
 }
-
+.radio:checked + label {
+  @apply lense-focus;
+}
 
 .radio {
   position: absolute;
