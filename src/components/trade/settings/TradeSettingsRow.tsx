@@ -37,13 +37,11 @@ export const TradeSettingsRow: FC<{
         <div
           className={cn(
             style.presetCustom,
-            'flex-1 rounded-lg text-12 flex gap-8 border border-white bg-black-gradient py-8 px-16 text-center',
-            'focus-within:outline-solid focus-within:outline-1',
+            'flex-1 rounded-lg text-12 flex gap-8 border bg-black-gradient py-8 px-16 text-center',
+            'focus-within:bg-white/30 hover:bg-white/20 focus-within:border-background-700',
           )}
         >
-          <label className="text-white/60" htmlFor={item.id}>
-            Custom
-          </label>
+          <label htmlFor={item.id}>Custom</label>
           <input
             id={item.id}
             name={item.id}

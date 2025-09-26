@@ -54,7 +54,7 @@ export const LocalStrategyContent: FC<Props> = ({
     <>
       <ul
         data-testid="strategy-list"
-        className={cn('grid gap-20', styles.strategyList)}
+        className={cn('grid gap-32', styles.strategyList)}
       >
         {strategies.slice(0, max).map((s, i) => {
           const animate = i < 21;

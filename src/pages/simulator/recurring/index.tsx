@@ -185,7 +185,7 @@ export const SimulatorInputRecurringPage = () => {
         className={cn(style.form, 'grid gap-16')}
         data-testid="create-simulation-form"
       >
-        <div className="bg-white-gradient rounded-2xl">
+        <div className="bg-white-gradient rounded-2xl overflow-clip">
           <SimInputRecurring state={state} dispatch={dispatch} _sP_={_sP_} />
         </div>
         <input className="approve-warnings hidden" defaultChecked />

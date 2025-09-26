@@ -17,10 +17,10 @@ export const SimulatorPage = () => {
   }, [searchState.base, searchState.quote]);
 
   return (
-    <div className="mx-auto flex flex-col content-start gap-24 max-w-[1920px] p-16 w-full">
+    <div className="mx-auto flex flex-col content-start gap-24 max-w-[800px] xl:max-w-[1920px] p-16 w-full">
       <SimulatorDisclaimer />
       <div className="grid content-start gap-16 2xl:grid-cols-[350px_1fr]">
-        <div className="2xl:grid xl:flex grid gap-16 content-start">
+        <div className="2xl:grid xl:flex xl:justify-between grid gap-16 content-start">
           {/** TODO: put back the no Price history warning */}
           <TokenSelection url="/simulate" />
           <SimInputStrategyType />

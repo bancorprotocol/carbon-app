@@ -2,17 +2,16 @@
 @reference "../../../theme.css";
 
 .strategy-list {
+  --items-width: 400px;
   contain: content;
-  grid-template-columns: repeat(auto-fill, 375px);
+  grid-template-columns: repeat(auto-fill, minmax(350px, var(--items-width)));
   justify-content: center;
 }
 .strategy-item {
-  height: 400px;
-  max-width: 375px;
+  aspect-ratio: 410 / 425;
   content-visibility: auto; /* to prevent no tooltips when scrolling down */
-  contain-intrinsic-size: 375px 400px;
+  contain-intrinsic-size: 410px 425px;
 }
-
 @media (prefers-reduced-motion: no-preference) {
   .animate-item {
     animation: open-item 200ms var(--delay, 0ms) backwards;
@@ -71,5 +70,10 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+@media (max-width: 40rem) {
+  .strategy-list {
+    --items-width: 330px;
   }
 }

@@ -35,15 +35,23 @@
 }
 
 .preset-custom {
-  @apply border border-white;
+  @apply text-white/60 border-transparent border;
+}
+.preset-custom:focus-within {
+  outline-width: 1px;
+  outline-style: solid;
 }
 
-.preset-container:has(input[type='radio']:checked) .preset-custom {
-  @apply text-white/60 border-transparent;
+.preset-container:not(:has(input[type='radio']:checked)) .preset-custom {
+  color: white;
+  background: var(--black-gradient) padding-box, var(--main-gradient) border-box;
 }
+
 .preset-container:has(:global(.warning-message)) .preset-custom {
+  background: var(--black-gradient) padding-box;
   @apply border border-warning outline-warning;
 }
 .preset-container:has(input[type='number']:invalid) .preset-custom {
+  background: var(--black-gradient) padding-box;
   @apply text-error border-error outline-error;
 }
