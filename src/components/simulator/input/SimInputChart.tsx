@@ -8,6 +8,7 @@ import {
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { ChartPrices } from 'components/strategies/common/d3Chart';
 import { ReactNode, useCallback } from 'react';
+import { cn } from 'utils/helpers';
 import { ReactComponent as IconQuestion } from 'assets/icons/question.svg';
 import { CandlestickData } from 'libs/d3';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
@@ -28,6 +29,7 @@ interface Props {
   isError: boolean;
   prices: ChartPrices;
   children: ReactNode;
+  footer?: ReactNode;
 }
 
 export const SimInputChart = ({
@@ -39,7 +41,9 @@ export const SimInputChart = ({
   data,
   prices,
   children,
+  footer,
 }: Props) => {
+  const { start: currentStart, end: currentEnd } = state;
   const { marketPrice, isPending: marketIsPending } = useMarketPrice({
     base: state.baseToken,
     quote: state.quoteToken,
@@ -47,11 +51,13 @@ export const SimInputChart = ({
 
   const onDatePickerConfirm = useCallback(
     (props: { start?: string; end?: string }) => {
-      if (!props.start || !props.end) return;
-      dispatch('start', props.start);
-      dispatch('end', props.end);
+      const nextStart = props.start?.toString();
+      const nextEnd = props.end?.toString();
+      if (!nextStart || !nextEnd) return;
+      if (nextStart !== currentStart) dispatch('start', nextStart);
+      if (nextEnd !== currentEnd) dispatch('end', nextEnd);
     },
-    [dispatch],
+    [currentEnd, currentStart, dispatch],
   );
 
   if (isPending || marketIsPending) {
@@ -83,9 +89,9 @@ export const SimInputChart = ({
     );
   }
   return (
-    <Layout>
+    <Layout footer={footer}>
       <D3PriceHistory
-        className="self-stretch"
+        className="h-full"
         onRangeUpdates={onDatePickerConfirm}
         data={data}
         marketPrice={marketPrice}
@@ -105,12 +111,30 @@ export const SimInputChart = ({
   );
 };
 
-const Layout = ({ children }: { children: ReactNode }) => (
-  <div className="bg-background-900 sticky top-[80px] grid h-[600px] grid-rows-[auto_1fr] gap-20 rounded-2xl p-20">
+const Layout = ({
+  children,
+  footer,
+}: {
+  children: ReactNode;
+  footer?: ReactNode;
+}) => (
+  <div
+    className={cn(
+      'bg-background-900 sticky top-[80px] flex flex-col gap-20 rounded-2xl p-20',
+      'min-h-[680px]',
+    )}
+  >
     <header className="flex items-center justify-between">
       <h2 className="text-20 font-medium">Price Chart</h2>
     </header>
-    {children}
+    <div className="flex flex-col gap-20">
+      <div className="h-[560px] min-h-0 w-full">{children}</div>
+      {footer && (
+        <div className="border-t border-background-800/60 pt-20">
+          <div className="max-h-[320px] overflow-y-auto pr-6">{footer}</div>
+        </div>
+      )}
+    </div>
   </div>
 );
 

@@ -6,15 +6,24 @@ import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
 import { simulatorInputRecurringRoute } from 'libs/routing/routes/sim';
+import { addSimulatorHistoryEntry } from 'libs/simulator/history';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
   defaultEnd,
   defaultStart,
   oneYearAgo,
 } from 'components/strategies/common/utils';
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { SimulatorHistorySection } from 'components/simulator/history';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { formatNumber } from 'utils/helpers';
@@ -32,6 +41,11 @@ export const SimulatorInputRecurringPage = () => {
 
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
+  const shouldResetRef = useRef(true);
+  const prevTokensRef = useRef<{
+    baseToken?: string;
+    quoteToken?: string;
+  }>();
   const { data, isPending } = useGetTokenPriceHistory({
     baseToken: searchState.baseToken,
     quoteToken: searchState.quoteToken,
@@ -84,7 +98,31 @@ export const SimulatorInputRecurringPage = () => {
   }, [handleDefaultValues, data, searchState.start]);
 
   useEffect(() => {
+    const { baseToken, quoteToken } = searchState;
+    const prev = prevTokensRef.current;
+    if (prev?.baseToken !== baseToken || prev?.quoteToken !== quoteToken) {
+      prevTokensRef.current = { baseToken, quoteToken };
+      shouldResetRef.current = true;
+    }
+  }, [searchState.baseToken, searchState.quoteToken]);
+
+  useEffect(() => {
     if (initBuyRange || initSellRange) return;
+    if (!shouldResetRef.current) return;
+
+    const hasPrefill =
+      !!searchState.buyMin ||
+      !!searchState.buyMax ||
+      !!searchState.buyBudget ||
+      !!searchState.sellMin ||
+      !!searchState.sellMax ||
+      !!searchState.sellBudget;
+
+    if (hasPrefill) {
+      shouldResetRef.current = false;
+      return;
+    }
+
     dispatch('baseToken', searchState.baseToken);
     dispatch('quoteToken', searchState.quoteToken);
     dispatch('sellMax', '');
@@ -99,8 +137,20 @@ export const SimulatorInputRecurringPage = () => {
     dispatch('buyIsRange', true);
     setInitBuyRange(true);
     setInitSellRange(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, searchState.baseToken, searchState.quoteToken]);
+    shouldResetRef.current = false;
+  }, [
+    dispatch,
+    initBuyRange,
+    initSellRange,
+    searchState.baseToken,
+    searchState.quoteToken,
+    searchState.buyMin,
+    searchState.buyMax,
+    searchState.buyBudget,
+    searchState.sellMin,
+    searchState.sellMax,
+    searchState.sellBudget,
+  ]);
 
   const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
@@ -117,23 +167,33 @@ export const SimulatorInputRecurringPage = () => {
     if (e.currentTarget.querySelector('.error-message')) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
+    const baseAddress = state.baseToken?.address;
+    const quoteAddress = state.quoteToken?.address;
+    if (!baseAddress || !quoteAddress) return;
+
+    const searchParams = {
+      baseToken: baseAddress.toLowerCase(),
+      quoteToken: quoteAddress.toLowerCase(),
+      buyMin: state.buy.min,
+      buyMax: state.buy.max,
+      buyBudget: state.buy.budget,
+      buyIsRange: state.buy.isRange,
+      sellMin: state.sell.min,
+      sellMax: state.sell.max,
+      sellBudget: state.sell.budget,
+      sellIsRange: state.sell.isRange,
+      start: start.toString(),
+      end: end.toString(),
+      type: 'recurring' as const,
+    };
+
+    const historyEntry = addSimulatorHistoryEntry(searchParams);
 
     navigate({
       to: '/simulate/result',
       search: {
-        baseToken: state.baseToken?.address || '',
-        quoteToken: state.quoteToken?.address || '',
-        buyMin: state.buy.min,
-        buyMax: state.buy.max,
-        buyBudget: state.buy.budget,
-        buyIsRange: state.buy.isRange,
-        sellMin: state.sell.min,
-        sellMax: state.sell.max,
-        sellBudget: state.sell.budget,
-        sellIsRange: state.sell.isRange,
-        start: start.toString(),
-        end: end.toString(),
-        type: 'recurring',
+        ...searchParams,
+        historyId: historyEntry.id,
       },
     });
   };
@@ -173,6 +233,7 @@ export const SimulatorInputRecurringPage = () => {
         isPending={isPending}
         isError={emptyHistory}
         prices={prices}
+        footer={<SimulatorHistorySection />}
       >
         <D3ChartRecurring
           base={state.baseToken!}
