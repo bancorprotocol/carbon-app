@@ -4,6 +4,7 @@
 
 
 .radio-group {
+  --tab-background: linear-gradient(var(--color-new-primary));
   @apply tab-list;
 }
 .label {

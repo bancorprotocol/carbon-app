@@ -72,6 +72,11 @@ const gradientLinks = [
   },
 ];
 
+const style = {
+  ['--tab-background' as any]:
+    'linear-gradient(var(--color-new-secondary)) padding-box, var(--main-gradient) border-box',
+};
+
 export const TradeNav = () => {
   const { location } = useRouterState();
   const current = location.pathname;
@@ -87,7 +92,8 @@ export const TradeNav = () => {
       <TradeType />
       <nav
         aria-labelledby="trading-strateg-nav"
-        className="text-14 grid grid-flow-row md:max-2xl:grid-flow-col gap-8 overflow-clip p-8 2xl:p-16 tab-list"
+        className="text-14 grid grid-flow-row md:max-2xl:grid-flow-col gap-8 overflow-clip p-8 2xl:p-0 tab-list rounded-xl"
+        style={style}
       >
         {links.map((link) => (
           <Link

@@ -31,13 +31,19 @@ const items: ItemProps[] = [
   },
 ];
 
+const style = {
+  animationDelay: '100ms',
+  '--tab-background':
+    'linear-gradient(var(--color-new-secondary)) padding-box, var(--main-gradient) border-box',
+};
+
 export const SimInputStrategyType = () => {
   const { location } = useRouterState();
   const current = location.pathname;
   return (
     <nav
-      className="bg-white-gradient 2xl:grid xl:flex grid gap-8 content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up p-8 2xl:p-16 tab-list"
-      style={{ animationDelay: '100ms' }}
+      className="bg-white-gradient 2xl:grid xl:flex grid gap-8 content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up p-8 2xl:p-0 tab-list"
+      style={style}
     >
       {items.map((link) => (
         <Link

@@ -1,9 +1,11 @@
 :root {
-  --hue: 205;
+  --hue: 206;
   --chroma: 0.02; /* Recommended 0.01, 0.02 */
 
   --sell-hue: 15;
   --buy-hue: 170;
+
+  --secondary-gradient: linear-gradient(to bottom, var(--color-new-primary), var(--color-new-secondary), var(--color-new-tertiary));
 
   --white-gradient: linear-gradient(150deg, oklch(42% var(--chroma) var(--hue) / 0.4), oklch(42% var(--chroma) var(--hue) / 0.5));
   --black-gradient: linear-gradient(150deg, oklch(10% var(--chroma) var(--hue) / 0.4), oklch(10% var(--chroma) var(--hue) / 0.5));
@@ -22,6 +24,11 @@
 }
 
 @theme {
+
+  --color-new-primary: oklch(0.4 0.045 206);
+  --color-new-secondary: oklch(0.2 0.028 206);
+  --color-new-tertiary: oklch(0.14 0.02 206);
+
   --color-background-50: oklch(0.99 var(--chroma) var(--hue));
   --color-background-100: oklch(0.97 var(--chroma) var(--hue));
   --color-background-200: oklch(0.92 var(--chroma) var(--hue));
@@ -208,19 +215,21 @@
     isolation: isolate;
     &::before {
       content: "";
-      position-anchor: --lens-selected;
+      position-anchor: --tab-selected;
       transition-property: top, left, width, height;
       position: absolute;
       transition-duration: 400ms;
       transition-timing-function: var(--ease-in-out);
-      background: var(--lens-background, var(--white-gradient));
+      background: var(--tab-background, var(--white-gradient));
       z-index: -1;
+      border-radius: inherit;
+      border-width: 1px;
+      border-color: transparent;
 
       top: anchor(top);
       left: anchor(left);
       width: anchor-size(width);
       height: anchor-size(height);
-      @apply rounded-full;
     }
   }
 }
@@ -239,7 +248,7 @@
   }
 }
 @utility tab-focus {
-  anchor-name: --lens-selected;
+  anchor-name: --tab-selected;
 }
 
 @custom-variant aria-page (&[aria-current="page"]);
