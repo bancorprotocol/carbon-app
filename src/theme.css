@@ -1,11 +1,12 @@
 :root {
   --hue: 205;
-  --chroma: 0.03; /* Recommended 0.01, 0.02 */
+  --chroma: 0.02; /* Recommended 0.01, 0.02 */
+
   --sell-hue: 15;
   --buy-hue: 170;
 
-  --white-gradient: linear-gradient(150deg, oklch(90% var(--chroma) var(--hue) / 0.1), oklch(90% var(--chroma) var(--hue) / 0.15));
-  --black-gradient: linear-gradient(150deg, oklch(10% var(--chroma) var(--hue) / 0.5), oklch(10% var(--chroma) var(--hue) / 0.8));
+  --white-gradient: linear-gradient(150deg, oklch(42% var(--chroma) var(--hue) / 0.4), oklch(42% var(--chroma) var(--hue) / 0.5));
+  --black-gradient: linear-gradient(150deg, oklch(10% var(--chroma) var(--hue) / 0.4), oklch(10% var(--chroma) var(--hue) / 0.5));
   --main-gradient: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
   --buy-gradient: linear-gradient(150deg, var(--color-buy), var(--color-buy-dark));
   --sell-gradient: linear-gradient(150deg, var(--color-sell), var(--color-sell-dark));
@@ -201,9 +202,10 @@
   backdrop-filter: blur(20px);
 }
 
-@utility lens-list {
+@utility tab-list {
   @supports (anchor-name: --myanchor) {
     position: relative;
+    isolation: isolate;
     &::before {
       content: "";
       position-anchor: --lens-selected;
@@ -211,37 +213,33 @@
       position: absolute;
       transition-duration: 400ms;
       transition-timing-function: var(--ease-in-out);
+      background: var(--lens-background, var(--white-gradient));
+      z-index: -1;
 
       top: anchor(top);
       left: anchor(left);
       width: anchor-size(width);
       height: anchor-size(height);
-      @apply bg-white-gradient rounded-full;
+      @apply rounded-full;
     }
   }
 }
-@utility lens-anchor {
+@utility tab-anchor {
   &:has(> *) > * {
-    transition-property: color, transform;
+    transition-property: color;
     transition-duration: 300ms;
     transition-timing-function: var(--ease-in-out);
     transition-delay: 100ms;
   }
   &:not(:has(> *)) {
-    transition-property: color, transform;
+    transition-property: color;
     transition-duration: 300ms;
     transition-timing-function: var(--ease-in-out);
     transition-delay: 100ms;
   }
 }
-@utility lens-focus {
+@utility tab-focus {
   anchor-name: --lens-selected;
-  &:has(> *) > * {
-    transform: scale(1.2);
-  }
-  &:not(:has(> *)) {
-    transform: scale(1.2);
-  }
 }
 
 @custom-variant aria-page (&[aria-current="page"]);

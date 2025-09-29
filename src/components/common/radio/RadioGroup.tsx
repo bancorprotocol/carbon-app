@@ -38,24 +38,25 @@ export const Radio: FC<RadioProps> = (props) => {
   const id = useId();
   return (
     <>
-      <input
-        id={id}
-        type="radio"
-        checked={props.checked}
-        value={props.value}
-        name={props.name}
-        onChange={() => props.onChange?.(props.value)}
-        className={style.radio}
-        aria-label={props['aria-label']}
-      />
       <label
         htmlFor={id}
         data-testid={props['data-testid']}
         className={cn(
           'rounded-full font-medium cursor-pointer px-10 py-4 text-white/60 hover:text-white/80',
           props.className,
+          style.label,
         )}
       >
+        <input
+          id={id}
+          type="radio"
+          checked={props.checked}
+          value={props.value}
+          name={props.name}
+          onChange={() => props.onChange?.(props.value)}
+          className={cn(style.radio, 'peer/radio')}
+          aria-label={props['aria-label']}
+        />
         {props.children}
       </label>
     </>

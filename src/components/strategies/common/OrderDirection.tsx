@@ -1,7 +1,6 @@
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { StrategyDirection } from 'libs/routing';
 import { FC } from 'react';
-import { cn } from 'utils/helpers';
 
 interface Props {
   direction: StrategyDirection;
@@ -9,22 +8,23 @@ interface Props {
 }
 export const OrderDirection: FC<Props> = (props) => {
   const { direction, setDirection } = props;
-  const color = direction === 'buy' ? 'bg-buy-gradient' : 'bg-sell-gradient';
+  const color =
+    direction === 'buy' ? 'var(--buy-gradient)' : 'var(--sell-gradient)';
 
   return (
-    <div className={cn(color, 'transition-all duration-300')}>
-      <RadioGroup className="grid grid-flow-col gap-8 text-center text-16 rounded-none p-8">
+    <div className="p-24" style={{ ['--lens-background' as any]: color }}>
+      <RadioGroup className="grid grid-flow-col text-center text-16 p-0">
         <Radio
           checked={direction === 'sell'}
           onChange={() => setDirection('sell')}
         >
-          <p>Sell</p>
+          <p className="peer-checked/radio:text-black">Sell</p>
         </Radio>
         <Radio
           checked={direction === 'buy'}
           onChange={() => setDirection('buy')}
         >
-          <p>Buy</p>
+          <p className="peer-checked/radio:text-black">Buy</p>
         </Radio>
       </RadioGroup>
     </div>

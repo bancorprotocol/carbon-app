@@ -27,9 +27,7 @@ export const MobileMenu: FC = () => {
             key={index}
             to={href}
             aria-current={isSamePage ? 'page' : 'false'}
-            className={`px-3 py-3 ${
-              isSamePage ? 'text-white' : 'hover:text-white'
-            }`}
+            className="px-3 py-3 aria-page:text-white hover:text-white"
           >
             {label}
           </Link>

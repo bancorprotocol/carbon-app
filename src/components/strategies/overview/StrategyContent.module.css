@@ -4,13 +4,13 @@
 .strategy-list {
   --items-width: 400px;
   contain: content;
-  grid-template-columns: repeat(auto-fill, minmax(350px, var(--items-width)));
+  grid-template-columns: repeat(auto-fill, var(--items-width));
   justify-content: center;
 }
 .strategy-item {
   aspect-ratio: 410 / 425;
   content-visibility: auto; /* to prevent no tooltips when scrolling down */
-  contain-intrinsic-size: 410px 425px;
+  contain-intrinsic-size: var(--items-width) calc(var(--items-width) * 410 / 425);
 }
 @media (prefers-reduced-motion: no-preference) {
   .animate-item {

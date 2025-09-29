@@ -6,7 +6,6 @@ import {
   loadHighchart,
 } from 'libs/charts';
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
-import { cn } from 'utils/helpers';
 
 interface Props {
   centerElement?: ReactNode;
@@ -22,7 +21,7 @@ export const PortfolioPieChart = ({
   hideChart,
 }: Props) => {
   return (
-    <div className="rounded-lg bg-black-gradient relative aspect-square w-full flex-shrink-0 md:size-[400px]">
+    <div className="rounded-lg bg-white-gradient relative aspect-square w-full flex-shrink-0 md:size-[400px]">
       <div className="absolute flex size-full items-center justify-center">
         {isPending ? (
           <div className="h-[80px]">
@@ -34,34 +33,9 @@ export const PortfolioPieChart = ({
       </div>
 
       {hideChart && (
-        <div
-          className={cn(
-            'flex',
-            'justify-center',
-            'items-center',
-            'w-full',
-            'h-full',
-          )}
-        >
-          <div
-            className={cn(
-              'flex',
-              'justify-center',
-              'items-center',
-              'w-4/5',
-              'rounded-full',
-              'h-4/5',
-              'bg-background-800',
-            )}
-          >
-            <div
-              className={cn(
-                'w-4/5',
-                'rounded-full',
-                'h-4/5',
-                'bg-black-gradient',
-              )}
-            ></div>
+        <div className="flex items-center justify-center w-full h-full">
+          <div className="flex items-center justify-center w-4/5 h-4/5 rounded-full bg-background-800">
+            <div className="w-4/5 h-4/5 rounded-full bg-black-gradient"></div>
           </div>
         </div>
       )}

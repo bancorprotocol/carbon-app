@@ -34,7 +34,7 @@ export const PortfolioAllTokensDesktop: FC<Props> = ({
   const nextPage = () => setOffset(Math.min(offset + limit, maxOffset));
 
   return (
-    <table className="w-full rounded-10 bg-background-900 table-fixed">
+    <table className="w-full rounded-10 bg-white-gradient table-fixed">
       <thead>
         <tr className="border-background-800 text-14 border-b text-white/60">
           <th className="text-start font-normal py-16 pl-8 whitespace-nowrap first:pl-24 last:pr-24 last:text-end">

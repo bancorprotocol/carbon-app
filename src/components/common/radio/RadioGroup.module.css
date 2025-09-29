@@ -4,13 +4,19 @@
 
 
 .radio-group {
-  @apply lens-list;
+  @apply tab-list;
 }
-.radio + label {
-  @apply lens-anchor;
+.label {
+  @apply tab-anchor;
 }
-.radio:checked + label {
-  @apply lens-focus;
+.label:has(.radio:checked) {
+  @apply tab-focus text-white;
+}
+.label:has(.radio:checked):hover {
+  @apply text-white;
+}
+.label:has(.radio:focus-visible) {
+  @apply outline outline-1;
 }
 
 .radio {
@@ -19,12 +25,3 @@
   pointer-events: none;
 }
 
-.radio:checked + label {
-  @apply text-white;
-}
-.radio:checked + label:hover {
-  @apply text-white;
-}
-.radio:focus-visible + label {
-  @apply outline outline-1;
-}
