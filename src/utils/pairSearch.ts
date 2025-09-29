@@ -149,7 +149,7 @@ export const searchTokens = (
   search: string,
 ) => {
   const tokens: Record<string, Token> = {};
-  const value = search.toLowerCase();
+  const value = replaceSpecialCharacters(search.toLowerCase());
   for (const { baseToken: base, quoteToken: quote } of pairMap.values()) {
     if (includeToken(base, value)) tokens[base.address] ||= base;
     if (includeToken(quote, value)) tokens[quote.address] ||= quote;

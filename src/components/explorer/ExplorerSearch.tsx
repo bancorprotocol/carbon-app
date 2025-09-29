@@ -64,14 +64,6 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
     [navigate],
   );
 
-  // useEffect(() => {
-  //   if (!search) return;
-  //   const name = pairs.names.get(search);
-  //   console.log({ search, name });
-  //   const displayName = name?.replace('_', '/').toUpperCase();
-  //   return setSearch(displayName || '');
-  // }, [search, pairs.names]);
-
   const onSearchHandler = async (value?: string) => {
     if (!value?.length) {
       return updateSearchParams();
@@ -106,18 +98,11 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
     setOpen(false);
   };
 
-  const blurHandler = (e: FormEvent<HTMLFormElement>) => {
-    const data = new FormData(e.currentTarget as HTMLFormElement);
-    const value = data.get('search')?.toString();
-    if (!value) resetHandler();
-  };
-
   return (
     <div className={style.searchContainer}>
       <form
         className={style.search}
         role="search"
-        onBlur={blurHandler}
         onSubmit={submitHandler}
         onReset={resetHandler}
       >
