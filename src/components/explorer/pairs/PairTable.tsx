@@ -6,7 +6,7 @@ import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Paginator } from 'components/common/table/Paginator';
 import { NewTabLink } from 'libs/routing';
 import { clamp } from 'utils/helpers/operators';
-import { ReactComponent as MerkleIcon } from 'assets/logos/merkle.svg';
+import { ReactComponent as LinkIcon } from 'assets/icons/link.svg';
 import config from 'config';
 
 interface Props {
@@ -49,10 +49,16 @@ export const PairTable: FC<Props> = ({ pairs }) => {
                 <td>
                   {pair.reward && (
                     <NewTabLink
-                      className="hover:scale-110 transition-transform duration-200 inline-flex text-center"
+                      className="inline-flex gap-8 items-center text-white/60 hover:text-white"
                       to={config.ui.rewardUrl}
                     >
-                      <MerkleIcon className="size-16 fill-gradient" />
+                      <img
+                        src="/logos/merkl.webp"
+                        className="h-[30px]"
+                        loading="lazy"
+                        alt="merkl logo"
+                      />
+                      <LinkIcon className="size-16" />
                     </NewTabLink>
                   )}
                 </td>

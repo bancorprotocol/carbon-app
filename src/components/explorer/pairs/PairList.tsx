@@ -4,7 +4,7 @@ import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { NewTabLink } from 'libs/routing';
-import { ReactComponent as MerkleIcon } from 'assets/logos/merkle.svg';
+import { ReactComponent as LinkIcon } from 'assets/icons/link.svg';
 import config from 'config';
 
 interface Props {
@@ -36,10 +36,16 @@ export const PairList: FC<Props> = ({ pairs }) => {
                     <dt className="text-white/80 text-12">Rewards</dt>
                     <dd className="text-14">
                       <NewTabLink
-                        className="text-gradient underline decoration-primary underline-offset-4 hover:no-underline"
+                        className="inline-flex items-center gap-8 text-white/60 hover:text-white"
                         to={config.ui.rewardUrl}
                       >
-                        <MerkleIcon className="size-16 fill-gradient" />
+                        <img
+                          src="/logos/merkl.webp"
+                          className="h-[30px]"
+                          loading="lazy"
+                          alt="merkl logo"
+                        />
+                        <LinkIcon className="size-16" />
                       </NewTabLink>
                     </dd>
                   </>

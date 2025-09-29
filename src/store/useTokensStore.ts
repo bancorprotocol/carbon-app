@@ -26,8 +26,6 @@ export const useTokensStore = (): TokensStore => {
     }
   }, [missing.data, importedTokens]);
 
-  // TODO add tokens imported by hand
-
   const tokensMap = useMemo(() => {
     const map = new Map<string, Token>();
     for (const token of existing.data || []) {
