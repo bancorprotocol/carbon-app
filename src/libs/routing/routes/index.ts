@@ -6,6 +6,7 @@ import {
   explorerDistributionPage,
   explorerDistributionTokenPage,
   explorerPairsPage,
+  oldExplorer,
 } from 'libs/routing/routes/explorer';
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
@@ -77,6 +78,7 @@ export const routeTree = rootRoute.addChildren([
     explorerDistributionPage.addChildren([explorerDistributionTokenPage]),
     explorerActivityPage,
   ]),
+  oldExplorer,
   portfolioLayout.addChildren([
     portfolioPairsPage,
     portfolioStrategiesPage,

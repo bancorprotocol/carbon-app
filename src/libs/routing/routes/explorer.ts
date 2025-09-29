@@ -10,19 +10,20 @@ import { searchValidator } from '../utils';
 import { ExplorerPairs } from 'pages/explorer/pairs';
 import * as v from 'valibot';
 
-// TODO: implement a redirect
-// export const oldExplorer = createRoute({
-//   getParentRoute: () => rootRoute,
-//   path: '/explore/$slug',
-//   beforeLoad: ({ params }) => {
-//     const allParams = (params as any)['*'];
-//     redirect({
-//       to: `/explore/${allParams}`,
-//       throw: true,
-//       replace: true,
-//     } as any);
-//   },
-// });
+export const oldExplorer = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/explore/$slug/*',
+  beforeLoad: ({ params }) => {
+    const slug = params.slug;
+    if (['pairs', 'strategies', 'distribution', 'activity'].includes(slug))
+      return;
+    redirect({
+      to: `/explore?search=${slug}`,
+      throw: true,
+      replace: true,
+    } as any);
+  },
+});
 
 export const explorerLayout = createRoute({
   getParentRoute: () => rootRoute,
