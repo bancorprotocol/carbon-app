@@ -22,6 +22,8 @@ import {
   StrategyTrade,
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
+import { useSearch } from '@tanstack/react-router';
+import { usePairs } from 'hooks/usePairs';
 
 const text = {
   '/explore': {
@@ -48,6 +50,8 @@ interface Props {
 }
 
 export const PairLayout: FC<Props> = ({ url }) => {
+  const { getType } = usePairs();
+  const { search } = useSearch({ from: url });
   const { strategies, isPending } = useStrategyCtx();
   const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
 
@@ -62,19 +66,6 @@ export const PairLayout: FC<Props> = ({ url }) => {
   const rewards = useRewards(allPairKeys);
   const trending = useTrending();
 
-  const pairTradeCount = useMemo(() => {
-    if (trending.isPending) return;
-    const record: Record<string, PairTrade> = {};
-    for (const pair of trending.data?.pairCount || []) {
-      const slug = toPairSlug(
-        { address: pair.token0 },
-        { address: pair.token1 },
-      );
-      record[slug] = pair;
-    }
-    return record;
-  }, [trending.data?.pairCount, trending.isPending]);
-
   // Order by alphabetic order to merge opposite pairs
   const ordered = useMemo(() => {
     if (!strategies) return;
@@ -86,26 +77,8 @@ export const PairLayout: FC<Props> = ({ url }) => {
   const tradesByPair = useMemo(() => {
     if (!ordered) return;
     const map: TradeMap = {};
-    // In explore we take the total amount of trade for this pair
-    if (url === '/explore') {
-      const record: Record<string, PairTrade> = {};
-      for (const pair of trending.data?.pairCount || []) {
-        const slug = toSortedPairSlug(pair.token0, pair.token1);
-        record[slug] = pair;
-      }
-      for (const strategy of ordered) {
-        const base = strategy.base.address;
-        const quote = strategy.quote.address;
-        const key = toSortedPairSlug(base, quote);
-        if (!record[key]) continue;
-        map[key] = {
-          tradeCount: record[key].pairTrades,
-          tradeCount24h: record[key].pairTrades_24h,
-        };
-      }
-    }
     // On portfolio we take only the active strategy's trades
-    if (url === '/portfolio') {
+    if (url === '/portfolio' || getType(search) === 'wallet') {
       const record: Record<string, StrategyTrade> = {};
       for (const strategyTrade of trending.data?.tradeCount || []) {
         record[strategyTrade.id] = strategyTrade;
@@ -123,8 +96,34 @@ export const PairLayout: FC<Props> = ({ url }) => {
         map[key].tradeCount24h += record[strategy.id].strategyTrades_24h;
       }
     }
+    // In explore we take the total amount of trade for this pair
+    else {
+      const record: Record<string, PairTrade> = {};
+      for (const pair of trending.data?.pairCount || []) {
+        const slug = toSortedPairSlug(pair.token0, pair.token1);
+        record[slug] = pair;
+      }
+      for (const strategy of ordered) {
+        const base = strategy.base.address;
+        const quote = strategy.quote.address;
+        const key = toSortedPairSlug(base, quote);
+        if (!record[key]) continue;
+        map[key] = {
+          tradeCount: record[key].pairTrades,
+          tradeCount24h: record[key].pairTrades_24h,
+        };
+      }
+    }
+
     return map;
-  }, [ordered, trending.data?.pairCount, trending.data?.tradeCount, url]);
+  }, [
+    getType,
+    ordered,
+    search,
+    trending.data?.pairCount,
+    trending.data?.tradeCount,
+    url,
+  ]);
 
   const allPairs = useMemo(() => {
     if (!ordered || !tradesByPair) return [];
