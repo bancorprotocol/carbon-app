@@ -3,6 +3,7 @@ import { Link, useRouterState, useMatchRoute } from 'libs/routing';
 import { ReactComponent as IconDots } from 'assets/icons/three-dots.svg';
 import { useModal } from 'hooks/useModal';
 import { getMenuItems } from 'components/core/menu';
+import style from './MobileMenu.module.css';
 
 export const MobileMenu: FC = () => {
   const menuItems = getMenuItems();
@@ -17,7 +18,7 @@ export const MobileMenu: FC = () => {
   };
 
   return (
-    <footer className="mobile-menu">
+    <footer className={style.mobileMenu}>
       {menuItems.map(({ label, href }, index) => {
         const isSamePage = isSamePageLink(href);
 

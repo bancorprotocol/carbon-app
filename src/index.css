@@ -1,13 +1,6 @@
 @import 'tailwindcss';
 @import './theme.css';
 
-@utility mobile-menu {
-  height: 80px;
-  background-color: oklch(20% var(--chroma) var(--hue) / 65%);
-  backdrop-filter: blur(20px) saturate(150%);
-  @apply font-medium border-background-800 fixed bottom-0 z-40 flex w-full flex-shrink-0 items-center justify-around border-t bg-black-gradient px-10 text-white/50 md:hidden;
-}
-
 @utility bg-content {
   @apply border-background-800 border bg-black;
 }
