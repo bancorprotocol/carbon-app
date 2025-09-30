@@ -1,5 +1,4 @@
 import { ReactComponent as IconDisconnect } from 'assets/icons/disconnect.svg';
-import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { Button } from 'components/common/button';
@@ -33,20 +32,21 @@ export const MainMenuRightWallet: FC = () => {
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error';
     if (!isSupportedNetwork) return 'error';
+    if (!user) return 'success';
     return 'secondary';
-  }, [isSupportedNetwork, isUserBlocked]);
+  }, [isSupportedNetwork, isUserBlocked, user]);
 
   const buttonText = useMemo(() => {
     if (isUserBlocked) return 'Wallet Blocked';
     if (!isSupportedNetwork) return 'Wrong Network';
-    if (!user) return 'Connect Wallet';
+    if (!user) return 'Launch App';
     return shortenString(ensName || user);
   }, [ensName, isSupportedNetwork, isUserBlocked, user]);
 
   const buttonIcon = useMemo(() => {
     if (isUserBlocked) return <IconWarning {...iconProps} />;
     if (!isSupportedNetwork) return <IconWarning {...iconProps} />;
-    if (!user) return <IconWallet {...iconProps} />;
+    if (!user) return;
     return (
       <WalletIcon
         className="w-20"

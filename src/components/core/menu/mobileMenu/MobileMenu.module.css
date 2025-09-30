@@ -12,6 +12,7 @@
 .mobile-menu::before {
   content: "";
   inset: 0;
+  background-color: oklch(20% var(--chroma) var(--hue) / 60%);
   backdrop-filter: blur(20px) saturate(150%);
   mask: linear-gradient(to top, black 60%, transparent);
   position: absolute;

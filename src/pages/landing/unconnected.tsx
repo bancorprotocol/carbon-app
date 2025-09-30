@@ -72,7 +72,7 @@ const types = [
 
 export const UnconnectedLandingPage = () => {
   return (
-    <section className="grid content-start gap-24 max-w-[1920px] mx-auto px-16">
+    <section className="grid content-start gap-24 max-w-[1920px] mx-auto p-16">
       <hgroup className="grid gap-24">
         <h1 className="text-5xl text-center text-gradient leading-[1.5]">
           Control You Trading Strategies

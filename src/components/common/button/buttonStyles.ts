@@ -16,9 +16,7 @@ const variants = {
     white: [
       'bg-white-gradient bg-background-800 text-white hover:bg-background-700 active:bg-background-600',
     ],
-    secondary: [
-      'bg-background-800 text-white hover:bg-background-700 active:bg-background-600',
-    ],
+    secondary: ['btn-secondary-gradient'],
     success: [
       'bg-primary border-2 border-primary text-black',
       'hover:border-white/60 hover:disabled:border-primary',

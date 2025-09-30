@@ -142,7 +142,7 @@ const tabs = [
 export const ConnectedLandingPage = () => {
   const [active, setActive] = useState('basic');
   return (
-    <div className="grid content-start gap-40">
+    <div className="grid content-start gap-40 p-16">
       {config.ui.tradeCount && <ExplorerHeader />}
       <div
         role="tablist"
@@ -156,7 +156,7 @@ export const ConnectedLandingPage = () => {
             aria-selected={active === id}
             aria-controls={`tabpanel-${id}`}
             onClick={() => setActive(id)}
-            className="text-white/60 tab-anchor aria-selected:tab-focus aria-selected:text-white py-16 px-24 text-16 lg:text-2xl"
+            className="text-white/60 tab-anchor aria-selected:tab-focus aria-selected:text-white py-8 px-16 text-16 lg:text-2xl lg:py-16 lg:px-24"
           >
             {title}
           </button>
@@ -170,11 +170,11 @@ export const ConnectedLandingPage = () => {
           hidden={active !== id}
           aria-labelledby={`tab-${id}`}
         >
-          <ul className="place-self-center flex gap-24 px-16 flex-wrap justify-center">
+          <ul className="place-self-center flex gap-24 flex-wrap justify-center">
             {items.map((item) => (
               <li
                 key={item.title}
-                className="bg-white-gradient p-16 grid gap-16 w-[350px] rounded-2xl"
+                className="bg-white-gradient p-16 grid gap-16 w-[300px] md:w-[350px] rounded-2xl"
               >
                 <header className="flex items-center gap-8">
                   {item.icon}
