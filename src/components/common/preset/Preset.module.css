@@ -17,21 +17,16 @@
 }
 .preset label {
   border-radius: 10px;
-  @apply h-full font-medium grid cursor-pointer place-items-center btn-black-gradient py-8 text-center text-white/60 border border-transparent shadow-lg;
+  @apply h-full font-medium grid cursor-pointer place-items-center bg-black py-8 text-center text-white/60 border border-transparent shadow-lg;
+}
+.preset input:not(:checked) + label:hover {
+  @apply bg-new-secondary/60 text-white;
 }
 
 .preset input:checked + label {
   color: white;
   border-width: 1px;
   background: var(--secondary-gradient) padding-box, var(--main-gradient) border-box;
-}
-.preset input:checked + label:hover {
-  border-color: transparent;
-  background: var(--secondary-gradient) padding-box, linear-gradient(oklch(0 0 0 / 20%)) padding-box, var(--main-gradient) border-box;
-}
-.preset input:checked + label:active {
-  border-width: transparent;
-  background: var(--secondary-gradient) padding-box, linear-gradient(oklch(0 0 0 / 30%)) padding-box, var(--main-gradient) border-box;
 }
 
 .preset-custom {

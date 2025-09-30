@@ -4,7 +4,6 @@
 
 
 .radio-group {
-  --tab-background: var(--color-new-primary);
   @apply tab-list border-2 border-new-primary;
 }
 .label {

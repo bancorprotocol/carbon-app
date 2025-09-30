@@ -12,8 +12,10 @@ interface Props {
   disableBuy: boolean;
   disableSell: boolean;
 }
+
 export const OverlappingAnchor: FC<Props> = (props) => {
   const { base, quote, anchor, setAnchor } = props;
+
   return (
     <>
       <h3 className="text-16 font-medium flex items-center gap-8">
@@ -38,7 +40,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <label
           htmlFor="anchor-sell"
           data-testid="anchor-sell-label"
-          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 btn-black-gradient p-16 border"
+          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black hover:bg-new-secondary/60 p-16 border border-transparent"
         >
           <TokenLogo token={base} size={20} />
           {base.symbol}
@@ -58,7 +60,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <label
           htmlFor="anchor-buy"
           data-testid="anchor-buy-label"
-          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 btn-black-gradient p-16 border"
+          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black hover:bg-new-secondary/60 p-16 border border-transparent"
         >
           <TokenLogo token={quote} size={20} />
           {quote.symbol}
