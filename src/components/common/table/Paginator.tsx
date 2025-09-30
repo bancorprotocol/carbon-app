@@ -12,7 +12,7 @@ interface Props {
 export const Paginator: FC<Props> = (props) => {
   const { size, offset, setOffset, limit, setLimit } = props;
 
-  const currentPage = Math.floor(offset / limit) + 1;
+  const currentPage = Math.ceil(offset / limit) + 1;
   const maxPage = Math.ceil(size / limit);
   const maxOffset = Math.max((maxPage - 1) * limit, 0);
 
