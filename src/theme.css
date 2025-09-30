@@ -9,7 +9,7 @@
 
   --white-gradient: linear-gradient(150deg, oklch(42% var(--chroma) var(--hue) / 0.4), oklch(42% var(--chroma) var(--hue) / 0.5));
   --black-gradient: linear-gradient(150deg, oklch(10% var(--chroma) var(--hue) / 0.4), oklch(10% var(--chroma) var(--hue) / 0.5));
-  --main-gradient: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
+  --main-gradient: linear-gradient(var(--gradient-direction, 90deg), var(--color-primary), var(--color-secondary));
   --buy-gradient: linear-gradient(150deg, var(--color-buy), var(--color-buy-dark));
   --sell-gradient: linear-gradient(150deg, var(--color-sell), var(--color-sell-dark));
   --glass-shadow: 
@@ -133,9 +133,9 @@
   box-shadow: var(--glass-shadow);
 }
 
-@utility text-gradient-* {
+@utility text-gradient {
   background-image: linear-gradient(
-    --value([angle]),
+    var(--gradient-direction, 90deg),
     var(--color-primary),
     var(--color-secondary),
     var(--color-tertiary)
@@ -144,8 +144,16 @@
   -webkit-text-fill-color: transparent;
 }
 
+@utility gradient-direction-* {
+  --gradient-direction: --value([*]);
+}
+
 @utility bg-gradient {
   background-image: var(--main-gradient);
+}
+
+@utility fill-gradient {
+  fill: url('#svg-brand-gradient');
 }
 
 @utility bg-white-gradient {
@@ -172,6 +180,36 @@
   }
   &[data-selected="true"]:active {
     @apply border-background-300;
+  }
+}
+
+@utility btn-secondary-gradient {
+  @apply rounded-full;
+  padding: 16px 24px;
+  background: linear-gradient(to bottom, #66B6C1, #30565B 50%);
+  color: var(--color-black);
+  &:hover {
+    color: white;
+    background: linear-gradient(to bottom, #4AA1AD, #254449);
+  }
+  &:disabled, &.disabled {
+    background: linear-gradient(#061B1E);
+    color: oklch(1 0 0 / 40%);
+    pointer-events: none;
+  }
+}
+@utility btn-tertiary-gradient {
+  @apply rounded-full;
+  padding: 16px 24px;
+  background: linear-gradient(to bottom, #30565B, #1B383D 30%, #061B1E);
+  color: white;
+  &:hover {
+    background: linear-gradient(to bottom, #30565B, #1B383D, #061B1E);
+  }
+  &:disabled, &.disabled {
+    background: linear-gradient(var(--color-black));
+    color: oklch(1 0 0 / 40%);
+    pointer-events: none;
   }
 }
 

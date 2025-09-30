@@ -164,7 +164,7 @@ export const InitMarketPrice = (props: FieldProps) => {
 
 const SetPriceText = ({ base, quote }: { base: Token; quote: Token }) => (
   <hgroup className="grid gap-8">
-    <h3 className="text-gradient-[90deg]">
+    <h3 className="text-gradient">
       {base.symbol}/{quote.symbol} market price is unavailable.
     </h3>
     <p className="text-14 text-white/80">

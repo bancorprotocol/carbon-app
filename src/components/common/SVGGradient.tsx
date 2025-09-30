@@ -4,8 +4,7 @@ export const SVGGradient = () => {
       <defs>
         <linearGradient id="svg-brand-gradient">
           <stop offset="0%" stopColor="var(--color-primary)" />
-          <stop offset="50%" stopColor="var(--color-secondary)" />
-          <stop offset="100%" stopColor="var(--color-tertiary)" />
+          <stop offset="100%" stopColor="var(--color-secondary)" />
         </linearGradient>
         <linearGradient id="svg-buy-gradient" x1="0" x2="1" y1="0" y2="1">
           <stop offset="0%" stopColor="var(--color-buy)" />
