@@ -49,9 +49,10 @@ const buildStrategiesHelper = async (
   strategies: AnySDKStrategy[],
   getTokenById: (id: string) => Token | undefined,
 ) => {
-  return strategies.map((s) => {
-    const base = getTokenById(s.baseToken)!;
-    const quote = getTokenById(s.quoteToken)!;
+  const result = strategies.map((s) => {
+    const base = getTokenById(s.baseToken);
+    const quote = getTokenById(s.quoteToken);
+    if (!base || !quote) return;
     if ('sellPriceLow' in s) {
       const sellLow = new SafeDecimal(s.sellPriceLow);
       const sellHigh = new SafeDecimal(s.sellPriceHigh);
@@ -150,6 +151,7 @@ const buildStrategiesHelper = async (
       return strategy;
     }
   });
+  return result.filter((s) => !!s);
 };
 
 interface Props {
