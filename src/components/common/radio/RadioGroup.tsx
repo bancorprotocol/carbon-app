@@ -13,7 +13,7 @@ export const RadioGroup: FC<RadioGroupProps> = ({ children, ...props }) => {
       role="group"
       {...props}
       className={cn(
-        'text-14 relative flex items-center rounded-full bg-new-secondary px-6 py-4',
+        'text-14 relative flex items-center rounded-full bg-new-secondary/40 p-4',
         props.className,
         style.radioGroup,
       )}
@@ -42,7 +42,7 @@ export const Radio: FC<RadioProps> = (props) => {
         htmlFor={id}
         data-testid={props['data-testid']}
         className={cn(
-          'rounded-full font-medium cursor-pointer px-10 py-4 text-white/60 hover:text-white/80',
+          'rounded-full font-medium cursor-pointer px-8 py-4 text-white/60 hover:text-white/80',
           props.className,
           style.label,
         )}

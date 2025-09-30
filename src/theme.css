@@ -157,12 +157,11 @@
 
 @utility btn-primary-gradient {
   @apply rounded-full;
-  padding: 8px 16px;
   background: var(--main-gradient);
   color: var(--color-black);
   &:hover {
     color: white;
-    background: linear-gradient(to bottom, #4AA1AD, #254449);
+    background: linear-gradient(to bottom, #4AA1AD, #254449) border-box;
   }
   &:disabled, &.disabled {
     opacity: 0.5;
@@ -199,29 +198,29 @@
 
 @utility btn-secondary-gradient {
   @apply rounded-full;
-  padding: 8px 16px;
-  background: linear-gradient(to bottom, #66B6C1, #30565B 50%);
-  color: var(--color-black);
+  box-shadow: 0 5px 5px 0 oklch(20% var(--chroma) var(--hue) / 20%);
+  background: linear-gradient(to bottom, #66B6C1, #30565B 50%) border-box;
+  color: white;
   &:hover {
     color: white;
-    background: linear-gradient(to bottom, #4AA1AD, #254449);
+    background: linear-gradient(to bottom, #4AA1AD, #254449) border-box;
   }
   &:disabled, &.disabled {
-    background: linear-gradient(#061B1E);
+    background: linear-gradient(#061B1E) border-box;
     color: oklch(1 0 0 / 40%);
     pointer-events: none;
   }
 }
 @utility btn-tertiary-gradient {
   @apply rounded-full;
-  padding: 8px 16px;
-  background: linear-gradient(to bottom, #30565B, #1B383D 30%, #061B1E);
+  box-shadow: 0 4px 15px 0 oklch(20% var(--chroma) var(--hue) / 80%);
+  background: linear-gradient(to bottom, #30565B, #1B383D 30%, #061B1E) border-box;
   color: white;
   &:hover {
-    background: linear-gradient(to bottom, #30565B, #1B383D, #061B1E);
+    background: linear-gradient(to bottom, #30565B, #1B383D, #061B1E) border-box;
   }
   &:disabled, &.disabled {
-    background: linear-gradient(var(--color-black));
+    background: linear-gradient(var(--color-black)) border-box;
     color: oklch(1 0 0 / 40%);
     pointer-events: none;
   }
@@ -272,7 +271,7 @@
       position: absolute;
       transition-duration: 400ms;
       transition-timing-function: var(--ease-in-out);
-      background: var(--tab-background, color-mix(in oklch, var(--color-new-primary), transparent 40%));
+      background: var(--tab-background, color-mix(in oklch, var(--color-new-primary), transparent 60%));
       z-index: -1;
       border-radius: inherit;
       border-width: 1px;

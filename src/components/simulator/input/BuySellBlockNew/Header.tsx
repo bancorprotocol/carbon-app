@@ -5,7 +5,7 @@ import {
 import { FC, ReactNode } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
-import { cn } from 'utils/helpers';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 interface Props {
   children: ReactNode;
@@ -42,38 +42,14 @@ export const BuySellHeader: FC<Props> = (props) => {
     <header className="flex items-center justify-between">
       {children}
       <div className="text-14 flex items-center gap-10">
-        <div className="flex items-center rounded-[100px] bg-black-gradient p-2">
-          <button
-            type="button"
-            tabIndex={!isRange ? -1 : 0}
-            onClick={setLimit}
-            className={cn(
-              'rounded-full font-medium',
-              !isRange
-                ? 'bg-black-gradient'
-                : 'text-white/60 hover:text-white/80',
-              'px-10 py-4',
-            )}
-            data-testid="tab-limit"
-          >
+        <RadioGroup>
+          <Radio checked={!isRange} onChange={setLimit}>
             Limit
-          </button>
-          <button
-            type="button"
-            tabIndex={isRange ? -1 : 0}
-            onClick={setRange}
-            className={cn(
-              'rounded-full font-medium',
-              isRange
-                ? 'bg-black-gradient'
-                : 'text-white/60 hover:text-white/80',
-              'px-10 py-4',
-            )}
-            data-testid="tab-range"
-          >
+          </Radio>
+          <Radio checked={isRange} onChange={setRange}>
             Range
-          </button>
-        </div>
+          </Radio>
+        </RadioGroup>
         <Tooltip
           iconClassName="text-white/60"
           element={

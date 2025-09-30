@@ -301,7 +301,7 @@ export const ManageButtonIcon = forwardRef<
     <button
       {...props}
       ref={ref}
-      className="btn-black-gradient size-38 rounded-md grid place-items-center"
+      className="btn-secondary-gradient size-38 rounded-md grid place-items-center"
     >
       <IconGear className="size-24" />
     </button>

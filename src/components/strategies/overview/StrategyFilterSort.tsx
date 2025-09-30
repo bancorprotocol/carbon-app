@@ -102,7 +102,7 @@ export const StrategyFilterSort: FC<Props> = (props) => {
           <button
             type="button"
             className={cn(
-              'btn-black-gradient flex h-40 flex-1 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8 md:flex-auto',
+              'btn-tertiary-gradient flex h-40 flex-1 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8 md:flex-auto',
               props.className,
             )}
             {...attr}
@@ -146,7 +146,7 @@ export const StrategyFilterSort: FC<Props> = (props) => {
           <button
             type="button"
             className={cn(
-              'btn-black-gradient flex h-40 flex-1 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8 md:flex-auto',
+              'btn-tertiary-gradient flex h-40 flex-1 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8 md:flex-auto',
               props.className,
             )}
             {...attr}

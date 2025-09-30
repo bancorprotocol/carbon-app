@@ -74,7 +74,7 @@ export const MainMenuRightWallet: FC = () => {
             {...attr}
             className={cn(
               buttonStyles({ variant: buttonVariant }),
-              'flex items-center gap-10 px-12',
+              'flex items-center gap-10 px-16 py-8',
             )}
             data-testid="user-wallet"
           >

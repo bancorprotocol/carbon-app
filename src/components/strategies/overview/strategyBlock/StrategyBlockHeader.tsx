@@ -45,7 +45,7 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
           role="menuitem"
           to="/strategy/$id"
           params={{ id: strategy.id }}
-          className="btn-black-gradient size-38 rounded-sm grid place-items-center"
+          className="btn-secondary-gradient size-38 rounded-sm grid place-items-center"
         >
           <DashboardIcon className="size-16" />
         </Link>

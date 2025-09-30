@@ -4,8 +4,8 @@
 
 
 .radio-group {
-  --tab-background: linear-gradient(var(--color-new-primary));
-  @apply tab-list;
+  --tab-background: var(--color-new-primary);
+  @apply tab-list border-2 border-new-primary;
 }
 .label {
   @apply tab-anchor;

@@ -25,7 +25,7 @@ export const StrategySelectLayout: FC<Props> = ({ from }) => {
   return (
     <RadioGroup
       aria-label="Select strategy list layout"
-      className="hidden border-2 border-white/10 xl:flex"
+      className="hidden xl:flex"
     >
       <Radio
         name="layout"
