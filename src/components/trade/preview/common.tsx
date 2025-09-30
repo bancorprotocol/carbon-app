@@ -46,7 +46,7 @@ export const PreviewCommonStrategyType = () => {
             y1="0"
             y2="0"
             strokeWidth="3"
-            stroke="url(#svg-sell-gradient)"
+            stroke="var(--color-sell)"
           />
           <g transform="translate(950, 0)">
             <use href="#sell-indicator" />
@@ -97,7 +97,7 @@ export const PreviewCommonStrategyType = () => {
             y1="0"
             y2="0"
             strokeWidth="3"
-            stroke="url(#svg-buy-gradient)"
+            stroke="var(--color-buy)"
           />
           <g transform="translate(950, 0)">
             <use href="#buy-indicator" />

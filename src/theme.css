@@ -137,8 +137,7 @@
   background-image: linear-gradient(
     var(--gradient-direction, 90deg),
     var(--color-primary),
-    var(--color-secondary),
-    var(--color-tertiary)
+    var(--color-secondary)
   );
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -154,6 +153,21 @@
 
 @utility fill-gradient {
   fill: url('#svg-brand-gradient');
+}
+
+@utility btn-primary-gradient {
+  @apply rounded-full;
+  padding: 8px 16px;
+  background: var(--main-gradient);
+  color: var(--color-black);
+  &:hover {
+    color: white;
+    background: linear-gradient(to bottom, #4AA1AD, #254449);
+  }
+  &:disabled, &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
 @utility bg-white-gradient {
@@ -185,7 +199,7 @@
 
 @utility btn-secondary-gradient {
   @apply rounded-full;
-  padding: 16px 24px;
+  padding: 8px 16px;
   background: linear-gradient(to bottom, #66B6C1, #30565B 50%);
   color: var(--color-black);
   &:hover {
@@ -200,7 +214,7 @@
 }
 @utility btn-tertiary-gradient {
   @apply rounded-full;
-  padding: 16px 24px;
+  padding: 8px 16px;
   background: linear-gradient(to bottom, #30565B, #1B383D 30%, #061B1E);
   color: white;
   &:hover {
@@ -258,7 +272,7 @@
       position: absolute;
       transition-duration: 400ms;
       transition-timing-function: var(--ease-in-out);
-      background: var(--tab-background, var(--white-gradient));
+      background: var(--tab-background, color-mix(in oklch, var(--color-new-primary), transparent 40%));
       z-index: -1;
       border-radius: inherit;
       border-width: 1px;

@@ -7,99 +7,6 @@ import { ReactComponent as IconRange } from 'assets/icons/range.svg';
 import { ReactComponent as IconArrowCircle } from 'assets/icons/arrow-circle.svg';
 import { ReactComponent as IconShield } from 'assets/icons/shield.svg';
 import { ReactComponent as IconMultiOrder } from 'assets/icons/multi-order.svg';
-import { ReactComponent as IconNativeOrder } from 'assets/icons/native-order.svg';
-
-import { OverlappingPreview } from 'components/trade/preview/all/overlapping';
-import { FullRangePreview } from 'components/trade/preview/all/full-range';
-import { LimitSellPreview } from 'components/trade/preview/all/limit-sell';
-import { RecurringLimitLimitPreview } from 'components/trade/preview/all/recurring-limit-limit';
-import { RangeSellPreview } from 'components/trade/preview/all/range-sell';
-import { RecurringRangeRangePreview } from 'components/trade/preview/all/recurring-range-range';
-
-const sections = [
-  {
-    title: 'Basic',
-    id: 'basic' as const,
-    items: [
-      {
-        to: '/trade/market',
-        icon: <IconMarket className="size-24" />,
-        title: 'Swap',
-        search: {},
-        preview: (
-          <div className="size-[250px] rounded-2xl bg-black-gradient shrink-0 grid place-items-center">
-            Something here later
-          </div>
-        ),
-        targets: ['Swappers'],
-      },
-      {
-        to: '/trade/overlapping',
-        icon: <IconOverlapping className="size-24" />,
-        title: 'Liquidity Position',
-        search: {},
-        preview: <OverlappingPreview />,
-        targets: ['Liquidity Providers', 'Token Projects'],
-      },
-      {
-        to: '/trade/overlapping',
-        icon: <IconOverlapping className="size-24" />,
-        title: 'Full Range',
-        search: {},
-        preview: <FullRangePreview />,
-        targets: ['Liquidity Providers', 'Token Projects'],
-      },
-    ],
-  },
-  {
-    title: 'Advanced',
-    id: 'advanced' as const,
-    items: [
-      {
-        to: '/trade/disposable',
-        search: {},
-        icon: <IconDisposable className="size-24" />,
-        title: 'Limit',
-        preview: <LimitSellPreview />,
-        targets: ['Traders', 'Institutions'],
-      },
-      {
-        to: '/trade/recurring',
-        search: {},
-        icon: <IconRecurring className="size-24" />,
-        title: 'Recurring Limit',
-        preview: <RecurringLimitLimitPreview />,
-        targets: ['Stablecoin Projects', 'Advance Traders'],
-      },
-    ],
-  },
-
-  {
-    title: 'Professional',
-    id: 'professional' as const,
-    items: [
-      {
-        to: '/trade/disposable',
-        search: { settings: 'range' as const },
-        icon: <IconDisposable className="size-24" />,
-        title: 'Range',
-        preview: <RangeSellPreview />,
-        targets: ['Traders', 'Institutions'],
-      },
-      {
-        to: '/trade/recurring',
-        search: {
-          buySettings: 'range' as const,
-          sellSettings: 'range' as const,
-        },
-        icon: <IconRecurring className="size-24" />,
-        title: 'Recurring Range',
-        preview: <RecurringRangeRangePreview />,
-        targets: ['Stablecoin Projects', 'Advance Traders'],
-      },
-    ],
-  },
-];
 
 const types = [
   {
@@ -163,7 +70,7 @@ const types = [
   },
 ];
 
-export const TradeList = () => {
+export const UnconnectedLandingPage = () => {
   return (
     <section className="grid content-start gap-24 max-w-[1920px] mx-auto">
       <hgroup className="grid gap-24">
@@ -243,7 +150,7 @@ export const TradeList = () => {
             <span>Multi-Order Strategies</span>
           </li>
           <li className="flex gap-8 items-center">
-            <IconNativeOrder className="size-20" />
+            <IconDisposable className="size-20" />
             <span>Native Limit Orders</span>
           </li>
         </ul>

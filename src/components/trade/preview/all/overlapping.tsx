@@ -1,6 +1,8 @@
-export const OverlappingPreview = () => {
+import { SVGProps } from 'react';
+
+export const OverlappingPreview = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg viewBox="0 0 1000 1000">
+    <svg viewBox="0 0 1000 1000" {...props}>
       <use href="#svg-price-path" />
       <g className="rect-ranges">
         {/* Marginal */}
