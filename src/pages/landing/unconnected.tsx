@@ -72,7 +72,7 @@ const types = [
 
 export const UnconnectedLandingPage = () => {
   return (
-    <section className="grid content-start gap-24 max-w-[1920px] mx-auto">
+    <section className="grid content-start gap-24 max-w-[1920px] mx-auto px-16">
       <hgroup className="grid gap-24">
         <h1 className="text-5xl text-center text-gradient leading-[1.5]">
           Control You Trading Strategies
@@ -83,15 +83,15 @@ export const UnconnectedLandingPage = () => {
       </hgroup>
       <ol className="grid gap-8 gradient-direction-[to_bottom]">
         <li className="flex items-center gap-16 bg-black/20 px-16 py-8 rounded-md">
-          <b className="text-gradient">Step 1</b>
+          <b className="text-gradient text-nowrap">Step 1</b>
           <span>Connect your wallet</span>
         </li>
         <li className="flex items-center gap-16 bg-black/20 px-16 py-8 rounded-md">
-          <b className="text-gradient">Step 2</b>
+          <b className="text-gradient text-nowrap">Step 2</b>
           <span>Create your trading strategy</span>
         </li>
         <li className="flex items-center gap-16 bg-black/20 px-16 py-8 rounded-md">
-          <b className="text-gradient">Step 3</b>
+          <b className="text-gradient text-nowrap">Step 3</b>
           <span>
             Sit back and let the market come to you - buy and sell on your terms
           </span>
@@ -99,7 +99,7 @@ export const UnconnectedLandingPage = () => {
       </ol>
       <article className="grid gap-16">
         <h2 className="text-18">Choose your Trading Strategy</h2>
-        <ul className="grid grid-flow-col gap-24">
+        <ul className="flex justify-center flex-wrap gap-24">
           {types.map((item) => (
             <li
               className="grid gap-16 p-24 bg-white-gradient w-[300px] rounded-2xl"
@@ -140,7 +140,7 @@ export const UnconnectedLandingPage = () => {
       </article>
       <article className="grid gap-24">
         <h2 className="text-center text-3xl">Carbon DeFi user benefits</h2>
-        <ul className="flex justify-center gap-40">
+        <ul className="flex justify-center flex-wrap gap-40">
           <li className="flex gap-8 items-center">
             <IconShield className="size-20" />
             <span>MEV Sandwich Attack Resistant</span>

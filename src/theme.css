@@ -286,17 +286,12 @@
   }
 }
 @utility tab-anchor {
-  &:has(> *) > * {
+  &:has(> *) > *, &:not(:has(> *)) {
     transition-property: color;
     transition-duration: 300ms;
     transition-timing-function: var(--ease-in-out);
     transition-delay: 100ms;
-  }
-  &:not(:has(> *)) {
-    transition-property: color;
-    transition-duration: 300ms;
-    transition-timing-function: var(--ease-in-out);
-    transition-delay: 100ms;
+    border-radius: inherit;
   }
 }
 @utility tab-focus {
