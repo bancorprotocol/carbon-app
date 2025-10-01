@@ -129,6 +129,7 @@ export const useCarbonInit = () => {
       setIsLoading(false);
     }
   }, [
+    onCacheClearedCallback,
     onPairAddedToCacheCallback,
     onPairDataChangedCallback,
     setIsError,

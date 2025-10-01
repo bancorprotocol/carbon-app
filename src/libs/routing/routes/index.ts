@@ -2,25 +2,22 @@ import { debugPage } from 'libs/routing/routes/debug';
 import {
   explorerActivityPage,
   explorerLayout,
-  explorerOverviewPage,
-  explorerPortfolioLayout,
   explorerPortfolioPage,
-  explorerPortfolioTokenPage,
-  explorerRedirect,
-  explorerResultLayout,
-  oldTradePairExplorer,
-  oldWalletExplorer,
+  explorerDistributionPage,
+  explorerDistributionTokenPage,
+  explorerPairsPage,
+  oldExplorer,
 } from 'libs/routing/routes/explorer';
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
-  myStrategyLayout,
+  portfolioLayout,
   oldCreateStrategies,
-  strategyActivityPage,
-  strategyOverviewPage,
-  strategyPortfolioLayout,
-  strategyPortfolioPage,
-  strategyPortfolioTokenPage,
-} from 'libs/routing/routes/myStrategies';
+  portfolioPairsPage,
+  portfolioActivityPage,
+  portfolioStrategiesPage,
+  portfolioDistributionPage,
+  portfolioDistributionTokenPage,
+} from 'libs/routing/routes/portfolio';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   simulatorInputOverlappingRoute,
@@ -75,26 +72,19 @@ export const routeTree = rootRoute.addChildren([
     editBudgetOverlapping,
     editBudgetRecurring,
   ]),
-  oldTradePairExplorer,
-  oldWalletExplorer,
   explorerLayout.addChildren([
-    explorerResultLayout.addChildren([
-      explorerOverviewPage,
-      explorerPortfolioLayout.addChildren([
-        explorerPortfolioPage,
-        explorerPortfolioTokenPage,
-      ]),
-      explorerActivityPage,
-    ]),
-    explorerRedirect,
+    explorerPairsPage,
+    explorerPortfolioPage,
+    explorerDistributionPage.addChildren([explorerDistributionTokenPage]),
+    explorerActivityPage,
   ]),
-  myStrategyLayout.addChildren([
-    strategyOverviewPage,
-    strategyPortfolioLayout.addChildren([
-      strategyPortfolioPage,
-      strategyPortfolioTokenPage,
-    ]),
-    strategyActivityPage,
+  oldExplorer,
+  portfolioLayout.addChildren([
+    portfolioPairsPage,
+    portfolioStrategiesPage,
+    portfolioDistributionPage,
+    portfolioDistributionTokenPage,
+    portfolioActivityPage,
   ]),
   simulatorRootRoute.addChildren([
     simulatorInputRootRoute.addChildren([

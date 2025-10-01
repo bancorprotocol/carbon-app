@@ -34,7 +34,7 @@ export const undercut = (testCase: CreateStrategyTestCase) => {
     await overlappingForm.budget().fill(sell.budget);
     await createForm.submit('undercut');
 
-    await page.waitForURL('/portfolio', { timeout: 10_000 });
+    await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     const myStrategies = new MyStrategyDriver(page);
     await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);

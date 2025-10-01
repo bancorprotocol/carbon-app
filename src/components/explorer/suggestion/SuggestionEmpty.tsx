@@ -9,12 +9,12 @@ interface Props {
   search: string;
 }
 export const SuggestionEmpty: FC<Props> = ({ search }) => {
-  const nav = useNavigate({ from: '/explore/$slug' });
+  const nav = useNavigate({ from: '/explore' });
   const { provider } = useWagmi();
 
   const navigate = async () => {
     const slug = await getEnsAddressIfAny(provider, search);
-    nav({ params: { slug } });
+    nav({ search: { search: slug } });
   };
 
   return (

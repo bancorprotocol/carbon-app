@@ -12,8 +12,8 @@ import { SimulatorPage } from 'pages/simulator';
 import { SimulatorInputOverlappingPage } from 'pages/simulator/overlapping';
 import { SimulatorInputRecurringPage } from 'pages/simulator/recurring';
 import { SimulatorResultPage } from 'pages/simulator/result';
-import config from 'config';
 import { roundSearchParam } from 'utils/helpers';
+import config from 'config';
 import * as v from 'valibot';
 
 export const simulatorRootRoute = createRoute({

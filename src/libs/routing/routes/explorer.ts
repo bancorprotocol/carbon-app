@@ -1,34 +1,24 @@
 import { createRoute, redirect } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
-import { ExplorerPage } from 'pages/explorer';
-import { ExplorerActivityPage } from 'pages/explorer/type/activity';
-import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
-import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
-import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
+import { ExplorerLayout } from 'pages/explorer/layout';
+import { ExplorerActivityPage } from 'pages/explorer/activity';
+import { ExplorerStrategies } from 'pages/explorer/strategies';
+import { ExplorerDistribution } from 'pages/explorer/distribution';
+import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/distribution/token';
 import { validateActivityParams } from 'components/activity/utils';
-import { getLastVisitedPair, searchValidator } from '../utils';
-import { toPairSlug } from 'utils/pairSearch';
+import { searchValidator } from '../utils';
+import { ExplorerPairs } from 'pages/explorer/pairs';
 import * as v from 'valibot';
 
-export const oldTradePairExplorer = createRoute({
+export const oldExplorer = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/explore/token-pair/*',
+  path: '/explore/$slug/*',
   beforeLoad: ({ params }) => {
-    const allParams = (params as any)['*'];
+    const slug = params.slug;
+    if (['pairs', 'strategies', 'distribution', 'activity'].includes(slug))
+      return;
     redirect({
-      to: `/explore/${allParams}`,
-      throw: true,
-      replace: true,
-    } as any);
-  },
-});
-export const oldWalletExplorer = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/explore/wallet/*',
-  beforeLoad: ({ params }) => {
-    const allParams = (params as any)['*'];
-    redirect({
-      to: `/explore/${allParams}`,
+      to: `/explore?search=${slug}`,
       throw: true,
       replace: true,
     } as any);
@@ -38,59 +28,52 @@ export const oldWalletExplorer = createRoute({
 export const explorerLayout = createRoute({
   getParentRoute: () => rootRoute,
   path: '/explore',
-});
-
-export const explorerRedirect = createRoute({
-  getParentRoute: () => explorerLayout,
-  path: '/',
+  component: ExplorerLayout,
+  validateSearch: searchValidator({
+    search: v.optional(v.string()),
+  }),
   beforeLoad: ({ location }) => {
-    if (location.pathname === '/explore' || location.pathname === '/explore/') {
-      const { base, quote } = getLastVisitedPair();
-      const slug = toPairSlug({ address: base }, { address: quote });
-      redirect({
-        to: '/explore/$slug',
-        params: { slug },
-        throw: true,
-        replace: true,
-      });
+    const ends = ['/explore', '/explore/'];
+    for (const end of ends) {
+      if (location.pathname.endsWith(end)) {
+        throw redirect({
+          to: `/explore/pairs${location.searchStr}`,
+          replace: true,
+        } as any);
+      }
     }
   },
 });
 
-export const explorerResultLayout = createRoute({
+export const explorerPortfolioPage = createRoute({
   getParentRoute: () => explorerLayout,
-  path: '$slug',
-  component: ExplorerPage,
-});
-
-export const explorerOverviewPage = createRoute({
-  getParentRoute: () => explorerResultLayout,
-  path: '/',
-  component: ExplorerTypeOverviewPage,
+  path: 'strategies',
+  component: ExplorerStrategies,
   validateSearch: searchValidator({
     layout: v.optional(v.picklist(['grid', 'table'])),
   }),
 });
 
-export const explorerPortfolioLayout = createRoute({
-  getParentRoute: () => explorerResultLayout,
-  path: 'portfolio',
+export const explorerPairsPage = createRoute({
+  getParentRoute: () => explorerLayout,
+  path: 'pairs',
+  component: ExplorerPairs,
 });
 
-export const explorerPortfolioPage = createRoute({
-  getParentRoute: () => explorerPortfolioLayout,
-  path: '/',
-  component: ExplorerTypePortfolioPage,
+export const explorerDistributionPage = createRoute({
+  getParentRoute: () => explorerLayout,
+  path: 'distribution',
+  component: ExplorerDistribution,
 });
 
-export const explorerPortfolioTokenPage = createRoute({
-  getParentRoute: () => explorerPortfolioLayout,
-  path: 'token/$address',
+export const explorerDistributionTokenPage = createRoute({
+  getParentRoute: () => explorerLayout,
+  path: 'distribution/token/$address',
   component: ExplorerTypePortfolioTokenPage,
 });
 
 export const explorerActivityPage = createRoute({
-  getParentRoute: () => explorerResultLayout,
+  getParentRoute: () => explorerLayout,
   path: '/activity',
   component: ExplorerActivityPage,
   validateSearch: validateActivityParams,

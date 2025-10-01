@@ -13,6 +13,7 @@ export const useTokens = () => {
     tokens: { tokensMap, setImportedTokens, ...props },
   } = useStore();
 
+  // TODO: remove this in favor or useMemo with tokenMap
   const getTokenById = useCallback(
     (id?: string) => (id ? tokensMap.get(id.toLowerCase()) : undefined),
     [tokensMap],
@@ -36,13 +37,13 @@ export const useTokens = () => {
     [setImportedTokens],
   );
 
-  const [favoriteTokens, _setFavoriteTokens] = useState<Token[]>(
+  const [favoriteTokens, setFavoriteTokens] = useState<Token[]>(
     lsService.getItem(`favoriteTokens-${user}`) || [],
   );
 
   const addFavoriteToken = useCallback(
     (token: Token) => {
-      _setFavoriteTokens((prev) => {
+      setFavoriteTokens((prev) => {
         const updatedFavoriteTokens = [...prev, token];
         lsService.setItem(`favoriteTokens-${user}`, updatedFavoriteTokens);
         return updatedFavoriteTokens;
@@ -53,7 +54,7 @@ export const useTokens = () => {
 
   const removeFavoriteToken = useCallback(
     (token: Token) => {
-      _setFavoriteTokens((prev) => {
+      setFavoriteTokens((prev) => {
         const updatedFavoriteTokens = prev.filter(
           (p) => p.address.toLowerCase() !== token.address.toLowerCase(),
         );

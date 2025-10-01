@@ -21,7 +21,7 @@ import { formatNumber, tokenAmount } from 'utils/helpers';
 import { CreateOverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { EditBudgetOverlappingSearch } from 'pages/strategies/edit/budget/overlapping';
+import { EditBudgetOverlappingSearch } from 'pages/portfolio/edit/budget/overlapping';
 import { OverlappingBudget } from '../overlapping/OverlappingBudget';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 

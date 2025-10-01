@@ -103,25 +103,6 @@ export const cn = (...inputs: ClassValue[]) => {
   return customTwMerge(clsx(inputs));
 };
 
-export const sortObjectArray = <D extends object>(
-  array: D[],
-  property: keyof D,
-  customSort?: (a: D, b: D) => 1 | -1 | 0,
-): D[] => {
-  return array.sort(
-    customSort
-      ? customSort
-      : (a, b) => {
-          if (a[property] > b[property]) {
-            return 1;
-          } else if (a[property] < b[property]) {
-            return -1;
-          }
-          return 0;
-        },
-  );
-};
-
 export const isPathnameMatch = (
   currentPath: string,
   href: Pathnames,

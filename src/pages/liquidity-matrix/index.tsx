@@ -243,11 +243,11 @@ export const LiquidityMatrixPage = () => {
   useEffect(() => {
     let changes = false;
     const copy = structuredClone(pairs);
-    for (let i = 0; i < quotePrices.length; i++) {
+    for (let i = 0; i < quotePrices.data.length; i++) {
       if (copy[i].price) continue;
-      if (!quotePrices[i].data?.USD) continue;
+      if (!quotePrices.data[i]?.USD) continue;
       changes = true;
-      copy[i].price = quotePrices[i].data?.USD.toString() ?? '';
+      copy[i].price = quotePrices.data[i]?.USD.toString() ?? '';
     }
     if (changes) set({ pairs: copy });
   }, [pairs, quotePrices, set]);

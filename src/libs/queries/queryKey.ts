@@ -31,9 +31,11 @@ export const QueryKey = {
     params,
   ],
   trending: () => [...extAPI, 'trending'],
+  reward: (pair: string) => [...extAPI, 'reward', pair],
 
   strategy: (id: string) => [...sdk, 'strategy', id],
   strategyList: (ids: string[]) => [...sdk, 'strategy', ...ids],
+  strategyAll: () => [...sdk, 'strategy', 'all'],
   strategiesByUser: (user?: string) => [
     ...sdk,
     'strategies',
@@ -70,7 +72,7 @@ export const QueryKey = {
 
   voucherOwner: (id?: string) => [...chain, 'voucherOwner', id],
 
-  missingTokens: (tokens: string[]) => [...chain, 'missing-token', ...tokens],
+  missingTokens: () => [...chain, 'missing-token'],
   token: (token: string) => [...chain, 'token', token],
   pairs: () => [...sdk, 'pairs'],
 

@@ -1,30 +1,23 @@
 import { usePortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
-import { AnyStrategy, Order } from 'components/strategies/common/types';
-import { sortObjectArray } from 'utils/helpers';
+import { AnyStrategyWithFiat, Order } from 'components/strategies/common/types';
 
 export interface PortfolioTokenData {
   amount: SafeDecimal;
   value: SafeDecimal;
   share: SafeDecimal;
-  strategy: AnyStrategy;
+  strategy: AnyStrategyWithFiat;
 }
 
 interface Props {
   address: string;
-  strategies?: AnyStrategy[];
-  isPending?: boolean;
+  strategies?: AnyStrategyWithFiat[];
 }
 
-export const usePortfolioToken = ({
-  address,
-  strategies,
-  isPending: _isPending,
-}: Props) => {
+export const usePortfolioToken = ({ address, strategies }: Props) => {
   const { tableData: sourceData, isPending } = usePortfolioData({
     strategies,
-    isPending: _isPending,
   });
 
   const selectedToken = useMemo(() => {
@@ -66,9 +59,7 @@ export const usePortfolioToken = ({
       };
     });
 
-    return sortObjectArray(unsorted, 'share', (a, b) =>
-      a.share.gt(b.share) ? -1 : 1,
-    );
+    return unsorted.sort((a, b) => (a.share.gt(b.share) ? -1 : 1));
   }, [address, selectedToken]);
 
   return { tableData, isPending, selectedToken };

@@ -1,6 +1,5 @@
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { FC, ReactNode } from 'react';
-import { cn } from 'utils/helpers';
 
 interface Props {
   desktopView: ReactNode;
@@ -18,12 +17,12 @@ export const PortfolioLayout: FC<Props> = ({
   const { belowBreakpoint, currentBreakpoint } = useBreakpoints();
 
   return (
-    <div className={cn('flex flex-col gap-20 md:flex-row')}>
+    <div className="flex flex-col gap-20 md:flex-row grid-area-[list]">
       {!!headerElement && belowBreakpoint('md') && headerElement}
 
       {pieChartElement}
 
-      <div className={cn('w-full')}>
+      <div className="w-full">
         {belowBreakpoint('lg') ? (
           <>
             {!!headerElement && currentBreakpoint === 'md' && headerElement}

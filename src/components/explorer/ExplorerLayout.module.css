@@ -1,0 +1,26 @@
+.layout {
+  display: grid;
+  place-content: start;
+  gap: 32px;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "search search"
+    "tabs tabs"
+    "amount filters"
+    "list list";
+  place-items: stretch;
+}
+
+/* Below SM */
+@media (max-width: 40rem) {
+  .layout {
+    grid-template-columns: 1fr; 
+    gap: 16px;
+    grid-template-areas:
+      "search"
+      "tabs"
+      "filters"
+      "amount"
+      "list";
+  }
+}

@@ -469,11 +469,13 @@ export const OverlappingChart: FC<Props> = (props) => {
   }
 
   if (!marketPrice) {
-    <NotFound
-      variant="info"
-      title="Market Price Unavailable"
-      text="Please provide a price."
-    />;
+    return (
+      <NotFound
+        variant="info"
+        title="Market Price Unavailable"
+        text="Please provide a price."
+      />
+    );
   }
 
   return (

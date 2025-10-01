@@ -28,7 +28,7 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     const createForm = new CreateStrategyDriver(page, testCase);
     await createForm.submit('undercut');
 
-    await page.waitForURL('/portfolio', { timeout: 10_000 });
+    await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     const myStrategies = new MyStrategyDriver(page);
     await myStrategies.waitForUpdates();
 

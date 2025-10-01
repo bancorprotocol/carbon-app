@@ -35,7 +35,7 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
     await edit.submit('editPrices');
 
     await tokenApproval.checkApproval([base, quote]);
-    await page.waitForURL('/portfolio', { timeout: 10_000 });
+    await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await page.mouse.move(0, 0); // Prevent mouse to open tooltip
 
     // Verify strategy data
