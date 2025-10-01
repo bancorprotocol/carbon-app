@@ -24,7 +24,6 @@ import {
   autoUpdate,
   Strategy as FloatingStrategy,
   FloatingFocusManagerProps,
-  autoPlacement,
 } from '@floating-ui/react';
 import { cn } from 'utils/helpers';
 
@@ -77,7 +76,7 @@ export const DropdownMenu: FC<Props> = ({
     strategy: strategy,
     open: menuOpen,
     onOpenChange: outsideState ? setIsOpen : setOpen,
-    middleware: [offset(offsetValue), flip(), shift(), autoPlacement()],
+    middleware: [offset(offsetValue), flip(), shift()],
     whileElementsMounted: strategy === 'fixed' ? autoUpdate : undefined,
   });
 

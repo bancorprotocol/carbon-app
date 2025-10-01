@@ -6,7 +6,6 @@ import { lsService } from 'services/localeStorage';
 import { useGetAllPairs } from '../sdk/pairs';
 import { useContract } from 'hooks/useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
-import { useWagmi } from 'libs/wagmi';
 import { useMemo } from 'react';
 import config from 'config';
 
@@ -35,8 +34,6 @@ export const useMissingTokensQuery = (
 ) => {
   const pairs = useGetAllPairs();
   const { Token } = useContract();
-  // We need provider before fetching tokens
-  const { provider } = useWagmi();
 
   return useQuery({
     queryKey: QueryKey.missingTokens(),
@@ -82,7 +79,7 @@ export const useMissingTokensQuery = (
       return tokens;
     },
     initialData: () => lsService.getItem('importedTokens'),
-    enabled: !!existingTokens.data && !!pairs.data && !!provider,
+    enabled: !!existingTokens.data && !!pairs.data,
     refetchOnWindowFocus: false,
   });
 };
