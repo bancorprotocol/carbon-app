@@ -113,7 +113,9 @@ export const useWagmiUser = ({
      * @param {Connector} connector  Connector to connect to
      */
     async (connector: Connector) => {
-      if (isCountryBlocked || isCountryBlocked === null) {
+      // (hotfix) TODO: the line below should work, but it doesn't get the update from the state anymore
+      // if (isCountryBlocked || isCountryBlocked === null) {
+      if (isCountryBlocked) {
         throw new Error('Your country is restricted from using this app.');
       }
       isManualConnection.current = true;
