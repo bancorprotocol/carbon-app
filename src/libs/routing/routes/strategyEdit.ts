@@ -6,11 +6,11 @@ import {
   validNumber,
   validInputNumber,
 } from '../utils';
-import { EditStrategyPageLayout } from 'pages/strategies/edit/layout';
+import { EditStrategyPageLayout } from 'pages/portfolio/edit/layout';
 import {
   EditPricesStrategyRecurringPage,
   EditRecurringStrategySearch,
-} from 'pages/strategies/edit/prices/recurring';
+} from 'pages/portfolio/edit/prices/recurring';
 import { Strategy } from 'components/strategies/common/types';
 import { isEmptyOrder, isZero } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
@@ -18,14 +18,14 @@ import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import {
   EditDisposableStrategySearch,
   EditPricesStrategyDisposablePage,
-} from 'pages/strategies/edit/prices/disposable';
+} from 'pages/portfolio/edit/prices/disposable';
 import {
   EditOverlappingStrategySearch,
   EditPricesOverlappingPage,
-} from 'pages/strategies/edit/prices/overlapping';
-import { EditBudgetRecurringPage } from 'pages/strategies/edit/budget/recurring';
-import { EditBudgetDisposablePage } from 'pages/strategies/edit/budget/disposable';
-import { EditBudgetOverlappingPage } from 'pages/strategies/edit/budget/overlapping';
+} from 'pages/portfolio/edit/prices/overlapping';
+import { EditBudgetRecurringPage } from 'pages/portfolio/edit/budget/recurring';
+import { EditBudgetDisposablePage } from 'pages/portfolio/edit/budget/disposable';
+import { EditBudgetOverlappingPage } from 'pages/portfolio/edit/budget/overlapping';
 import { SafeDecimal } from 'libs/safedecimal';
 import * as v from 'valibot';
 

@@ -2,6 +2,7 @@
 @reference "../../theme.css";
 
 .search-container {
+  grid-area: search;
   background-image: linear-gradient(
     to bottom,
     var(--color-primary, var(--color-primary)),

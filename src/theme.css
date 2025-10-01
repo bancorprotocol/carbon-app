@@ -129,6 +129,15 @@
   writing-mode: sideways-lr;
 }
 
+@utility bg-transparent-gradient {
+  background-image: linear-gradient(
+    to right,
+    oklch(0.7985 0.132 159.5 / 30%),
+    oklch(0.7292 0.127 214.3 / 30%) 34%,
+    transparent
+  );
+}
+
 @utility glass-shadow {
   box-shadow: var(--glass-shadow);
 }
@@ -298,3 +307,23 @@
 }
 
 @custom-variant aria-page (&[aria-current="page"]);
+@utility fill-gradient {
+  fill: url("#svg-brand-gradient");
+}
+@utility  stroke-gradient {
+  stroke: url("#svg-brand-gradient");
+}
+
+@utility table-col-span-all {
+  column-span: all;
+}
+
+@utility grid-area-* {
+  grid-area: --value([*]);
+}
+@utility grid-fill-* {
+  grid-template-columns: repeat(auto-fill, minmax(calc(--value(integer) * 1px), 1fr))
+}
+
+@custom-variant aria-page (&[aria-current="page"]);
+@custom-variant aria-location (&[aria-current="location"]);

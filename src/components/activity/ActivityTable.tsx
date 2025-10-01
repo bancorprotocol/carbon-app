@@ -46,9 +46,14 @@ const tdSecondLine = cn(
 export const ActivityTable: FC<ActivityListProps> = (props) => {
   const { activities, hideIds = false } = props;
   return (
-    <table className={cn('w-full border-collapse', style.table)}>
+    <table
+      className={cn(
+        'w-full border-collapse bg-background-900 rounded-2xl grid-area-[list]',
+        style.table,
+      )}
+    >
       <thead>
-        <tr className="border-background-800 text-14 border-y text-white/60">
+        <tr>
           {!hideIds && <th className={thStyle}>ID</th>}
           {/* @todo(gradient) */}
           {/* <th className={thStyle}>Type</th> */}

@@ -34,13 +34,14 @@ export const commonConfig: AppConfig = {
   carbonApi: 'https://sei-api.carbondefi.xyz/v1/',
   selectedConnectors: [
     'MetaMask',
+    'WalletConnect',
     'Coinbase Wallet',
     'Safe',
     'Compass Wallet',
     'Seif',
   ],
   blockedConnectors: ['Tailwind'],
-  walletConnectProjectId: '',
+  walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   policiesLastUpdated: '27 May, 2024',
   network: {
     name: 'Sei',
@@ -143,6 +144,7 @@ export const commonConfig: AppConfig = {
     showTerms: true,
     showPrivacy: true,
     showCart: true,
+    // rewardUrl: 'https://app.merkl.xyz/?chain=1329&protocol=carbon',
     walkthroughId: '51xep69sd3io',
   },
 };

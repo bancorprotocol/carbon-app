@@ -12,5 +12,6 @@ export const useGetVoucherOwner = (id?: string) => {
     enabled: !!id && !isPending,
     retry: 1,
     staleTime: ONE_DAY_IN_MS,
+    refetchOnWindowFocus: false,
   });
 };

@@ -41,6 +41,11 @@ export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
   } = useStore();
 
   return useQueries({
+    combine: (result) => ({
+      data: result.map(({ data }) => data),
+      isPending: !addresses.length || result.some(({ isPending }) => isPending),
+      isError: result.some(({ isError }) => isError),
+    }),
     queries: addresses.map((address) => {
       return {
         queryKey: QueryKey.tokenPrice(address),

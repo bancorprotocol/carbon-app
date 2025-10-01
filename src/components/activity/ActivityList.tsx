@@ -37,7 +37,7 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
       </ul>
       {limit < size && (
         <>
-          <p className="text-12 mb-16 text-center text-white/60">
+          <p className="text-12 mb-16 text-center text-white/60 grid-area-[list]">
             {limit} / {size}
           </p>
           <Button

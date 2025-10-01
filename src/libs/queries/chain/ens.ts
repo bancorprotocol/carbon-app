@@ -24,6 +24,7 @@ export const useGetEnsFromAddress = (address: string) => {
     },
     enabled: !!provider,
     staleTime: ONE_DAY_IN_MS,
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -43,6 +44,7 @@ export const useGetAddressFromEns = (ens: string) => {
     },
     enabled: !!provider,
     staleTime: ONE_DAY_IN_MS,
+    refetchOnWindowFocus: false,
   });
 };
 

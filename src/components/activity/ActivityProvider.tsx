@@ -52,8 +52,8 @@ const getQueryParams = (
 };
 
 type ActivityUrls =
-  | '/portfolio/strategies/activity'
-  | '/explore/$slug/activity'
+  | '/portfolio/activity'
+  | '/explore/activity'
   | '/strategy/$id';
 interface Props {
   url: ActivityUrls;
@@ -90,7 +90,9 @@ export const ActivityProvider: FC<Props> = ({ children, params, url }) => {
   );
 
   if (activityMetaQuery.isPending) {
-    return <CarbonLogoLoading className="h-[80px] self-center" />;
+    return (
+      <CarbonLogoLoading className="h-[80px] self-center grid-area-[list]" />
+    );
   }
 
   const activities = activityQuery.data ?? [];

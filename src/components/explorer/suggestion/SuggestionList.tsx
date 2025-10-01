@@ -1,18 +1,21 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { PairLogoName, TokenLogoName } from 'components/common/DisplayPair';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { useNavigate, useParams } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
 import { cn } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import style from './index.module.css';
 import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 interface Props {
+  url: '/explore' | '/portfolio';
   listboxId: string;
   filteredPairs: TradePair[];
   filteredTokens: Token[];
   setOpen: Dispatch<SetStateAction<boolean>>;
+  isPending: boolean;
 }
 
 const animateLeaving = async () => {
@@ -41,19 +44,31 @@ const animateLeaving = async () => {
 };
 
 export const SuggestionList: FC<Props> = (props) => {
-  const { listboxId, filteredPairs, filteredTokens, setOpen } = props;
-  const nav = useNavigate();
-  const { slug } = useParams({ from: '/explore/$slug' });
+  const { listboxId, filteredPairs, filteredTokens, setOpen, isPending } =
+    props;
+  const nav = useNavigate({ from: props.url });
+  const { search } = useSearch({ from: props.url });
   const navigate = async (nextSlug: string) => {
     setOpen(false);
-    if (slug === nextSlug) return;
-    const params = { type: 'token-pair' as const, slug: nextSlug };
+    if (search === nextSlug) return;
     await animateLeaving();
-    nav({ to: '/explore/$slug', params });
+    nav({
+      search: (s) => ({ ...s, search: nextSlug }),
+      resetScroll: false,
+      replace: true,
+    });
   };
 
   const [maxTokens, setMaxTokens] = useState(5);
   const [maxPairs, setMaxPairs] = useState(5);
+
+  if (isPending) {
+    return (
+      <div role="listbox" id={listboxId} className={cn(style.listbox, 'p-24')}>
+        <CarbonLogoLoading className="h-[60px]" />
+      </div>
+    );
+  }
 
   return (
     <div

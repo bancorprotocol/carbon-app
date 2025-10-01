@@ -6,7 +6,7 @@ import {
 } from 'components/strategies/common/utils';
 import { FC, forwardRef, ReactNode, useState } from 'react';
 import { useModal } from 'hooks/useModal';
-import { useNavigate, useParams } from 'libs/routing';
+import { useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
@@ -48,9 +48,9 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const [manage, setManage] = useState(false);
   const { openModal } = useModal();
   const navigate = useNavigate();
-  const { slug } = useParams({ strict: false });
+  const { search } = useSearch({ strict: false });
   const { getType } = usePairs();
-  const type = getType(slug ?? '');
+  const type = getType(search ?? '');
   const duplicate = useDuplicate();
   const { base, quote, buy, sell } = strategy;
 
@@ -136,8 +136,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       name: "View Owner's Strategies",
       action: () => {
         navigate({
-          to: '/explore/$slug',
-          params: { slug: owner.data ?? '' },
+          to: '/explore',
+          search: { search: owner.data ?? '' },
         });
       },
       disabled: !owner.data,
@@ -151,8 +151,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       action: () => {
         const slug = toPairSlug(strategy.base, strategy.quote);
         navigate({
-          to: '/explore/$slug',
-          params: { slug },
+          to: '/explore',
+          search: { search: slug },
         });
       },
     });
