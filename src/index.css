@@ -425,11 +425,11 @@ dialog.modal.closing {
   width: 100%;
   border-collapse: collapse;
   border-radius: 16px;
-  background-color: var(--color-background-900);
+  background: var(--white-gradient);
   font-size: 14px;
 }
 .table thead tr {
-  border-bottom: 1px solid var(--color-background-800);
+  border-bottom: 1px solid var(--color-new-secondary);
   color: oklch(100% 0 0 / 60%);
 }
 .table thead th {
@@ -448,6 +448,6 @@ dialog.modal.closing {
   padding-inline-end: 24px;
 }
 .table tfoot tr {
-  border-top: 1px solid var(--color-background-800);
+  border-top: 1px solid var(--color-new-secondary);
   color: oklch(100% 0 0 / 80%);
 }

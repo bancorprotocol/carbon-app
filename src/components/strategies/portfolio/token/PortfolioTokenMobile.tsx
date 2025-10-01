@@ -11,7 +11,7 @@ import {
   PortfolioMobileCardLoading,
 } from 'components/strategies/portfolio/PortfolioMobileCard';
 import { useStore } from 'store';
-import { cn, getFiatDisplayValue } from 'utils/helpers';
+import { getFiatDisplayValue } from 'utils/helpers';
 
 export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
   data,
@@ -25,7 +25,7 @@ export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
   if (!selectedToken) return;
 
   return (
-    <div className={cn('space-y-20')}>
+    <div className="grid gap-16">
       {isPending
         ? Array.from({ length: 3 }).map((_, i) => (
             <PortfolioMobileCardLoading key={i} />

@@ -2,13 +2,9 @@
 @reference "../../theme.css";
 
 .search-container {
+  --gradient-direction: to bottom;
   grid-area: search;
-  background-image: linear-gradient(
-    to bottom,
-    var(--color-primary, var(--color-primary)),
-    var(--color-secondary, var(--color-secondary)),
-    var(--color-tertiary, var(--color-primary))
-  );
+  background-image: var(--main-gradient);
   padding: 2px;
   border-radius: 48px;
 }
@@ -22,7 +18,7 @@
   position: relative;
   border-radius: inherit;
   height: 44px;
-  @apply bg-black;
+  @apply bg-new-primary;
 }
 
 .search button[type='submit'] {

@@ -36,7 +36,7 @@ export const StrategyBlock: FC<Props> = ({
       <StrategyBlockInfo strategy={strategy} />
       <div
         className={cn(
-          'bg-black-gradient rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
+          'bg-black/20 rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
           strategy.status === 'active' ? '' : 'opacity-50',
         )}
       >

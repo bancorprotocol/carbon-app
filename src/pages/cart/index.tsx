@@ -155,7 +155,7 @@ export const CartPage = () => {
 
   if (!strategies.length) {
     return (
-      <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] grow content-start gap-16 pt-20">
+      <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1920px] grow content-start gap-16 pt-20">
         <EmptyCart />
       </section>
     );
@@ -164,7 +164,7 @@ export const CartPage = () => {
   return (
     <form
       className={cn(
-        'px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] grow content-start gap-16 pt-20',
+        'px-content pb-30 xl:px-50 mx-auto grid max-w-[1920px] grow content-start gap-16 pt-20',
         style.form,
       )}
       onSubmit={submit}

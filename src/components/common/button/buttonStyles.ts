@@ -13,9 +13,7 @@ const variants = {
     black: [
       'bg-black-gradient text-white hover:bg-white/20 active:bg-white/30',
     ],
-    white: [
-      'bg-white-gradient bg-background-800 text-white hover:bg-background-700 active:bg-background-600',
-    ],
+    white: ['btn-secondary-gradient'],
     secondary: ['btn-secondary-gradient'],
     success: [
       'bg-primary border-2 border-primary text-black',

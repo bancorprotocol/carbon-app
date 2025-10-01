@@ -129,15 +129,6 @@
   writing-mode: sideways-lr;
 }
 
-@utility bg-transparent-gradient {
-  background-image: linear-gradient(
-    to right,
-    oklch(0.7985 0.132 159.5 / 30%),
-    oklch(0.7292 0.127 214.3 / 30%) 34%,
-    transparent
-  );
-}
-
 @utility glass-shadow {
   box-shadow: var(--glass-shadow);
 }

@@ -12,14 +12,8 @@ type Props = {
   gridColsClassName?: string;
 };
 
-const wrapperClasses = cn(
-  'flex',
-  'items-center',
-  'bg-black-gradient',
-  'h-[120px]',
-  'rounded-lg',
-  'space-x-20',
-);
+const wrapperClasses =
+  'flex items-center bg-white-gradient h-[120px] rounded-lg gap-16';
 
 export const PortfolioMobileCard: FC<Props> = ({
   index,
@@ -32,11 +26,11 @@ export const PortfolioMobileCard: FC<Props> = ({
   const content = (
     <>
       <div
-        className={cn('w-4', 'h-88', 'rounded-r-2')}
+        className="w-4 h-88"
         style={{ backgroundColor: getColorByIndex(index) }}
       />
 
-      <div className={cn('grid', 'gap-10', 'w-full', gridColsClassName)}>
+      <div className={cn('grid gap-8 w-full', gridColsClassName)}>
         {children}
       </div>
     </>

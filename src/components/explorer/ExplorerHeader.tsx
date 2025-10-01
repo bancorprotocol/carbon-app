@@ -104,8 +104,8 @@ export const ExplorerHeader = () => {
   const trendingPairs = useTrendingPairs(trending);
   if (trending.isError) return;
   return (
-    <header className="bg-transparent-gradient">
-      <div className="flex gap-32 max-w-[1280px] mx-auto px-16 py-24">
+    <header className="bg-black/20">
+      <div className="flex gap-32 max-w-[1920px] mx-auto px-16 py-24 px-content xl:px-50">
         <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
           <h2 className="text-24 font-normal font-title my-0">Total Trades</h2>
           <Trades trades={trending.data?.totalTradeCount} />
@@ -121,7 +121,7 @@ export const ExplorerHeader = () => {
             </Link>
           </div>
         </article>
-        <article className="bg-secondary/20 border-background-800 hidden flex-1 gap-8 rounded-2xl border-2 p-20 md:block">
+        <article className="bg-white-gradient hidden flex-1 gap-8 rounded-2xl p-20 md:block">
           <h2 className="text-20 font-normal font-title">Popular Pairs</h2>
           <table className="font-medium text-14 w-full">
             <thead className="text-16 text-white/60">
@@ -135,7 +135,7 @@ export const ExplorerHeader = () => {
             </tbody>
           </table>
         </article>
-        <article className="bg-secondary/20 border-background-800 hidden flex-1 gap-8 rounded-2xl border-2 p-20 lg:block">
+        <article className="bg-white-gradient hidden flex-1 gap-8 rounded-2xl p-20 lg:block">
           <h2 className="text-20 font-normal font-title">
             Trending Strategies
           </h2>
@@ -225,7 +225,7 @@ const StrategyRows = ({ query }: StrategyTrendingProps) => {
     <tr key={id}>
       <td>
         <Link to="/strategy/$id" params={{ id }} className="block w-full">
-          <div className="bg-background-800 flex gap-8 rounded-2xl px-8 py-4">
+          <div className="bg-new-primary flex gap-8 rounded-2xl px-8 py-4">
             <TokensOverlap tokens={[base!, quote!]} size={18} />
             {idDisplay}
           </div>

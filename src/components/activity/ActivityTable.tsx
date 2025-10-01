@@ -48,7 +48,7 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
   return (
     <table
       className={cn(
-        'w-full border-collapse bg-background-900 rounded-2xl grid-area-[list]',
+        'w-full border-collapse bg-white-gradient rounded-2xl grid-area-[list]',
         style.table,
       )}
     >
@@ -187,7 +187,7 @@ export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
     <Link
       to="/strategy/$id"
       params={{ id: id }}
-      className="bg-black-gradient inline-flex items-center gap-4 rounded-full px-8 py-4"
+      className="bg-new-primary inline-flex items-center gap-4 rounded-full px-8 py-4"
     >
       <span className={`text-${size}`}>{getLowestBits(id)}</span>
       <TokensOverlap tokens={[base, quote]} size={size + 2} />
@@ -267,7 +267,7 @@ const ActivityPaginator = () => {
         <div className="flex items-center gap-8">
           <label>Show results</label>
           <select
-            className="border-background-800 bg-black-gradient rounded-full border-2 px-12 py-8"
+            className="border-background-800 bg-new-primary rounded-full border-2 px-12 py-8"
             name="limit"
             onChange={changeLimit}
             value={limit}

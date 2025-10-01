@@ -27,6 +27,7 @@ import { cn } from 'utils/helpers';
 import { useEnsName } from 'wagmi';
 import { getAddress } from 'ethers';
 import style from './index.module.css';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 interface Props {
   url: '/explore' | '/portfolio';
@@ -78,8 +79,7 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
     return searchTokens(pairMap, search);
   }, [pairMap, search]);
 
-  const changeTab = (e: ChangeEvent<HTMLInputElement>, tab: FocusTab) => {
-    if (!e.target.checked) return;
+  const changeTab = (tab: FocusTab) => {
     setFocusTab(tab as FocusTab);
     const el = document.getElementById(`filtered-${tab}-list`);
     const y = window.scrollY;
@@ -200,39 +200,26 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
       <div
         role="dialog"
         className={cn(
-          'rounded-lg bg-background-800 absolute left-0 top-full z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
+          'rounded-lg backdrop-black absolute left-0 top-full z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
           style.dialog,
         )}
       >
         <header className="flex gap-8 border-b border-white/40 p-12">
-          <div
-            role="radiogroup"
-            className="text-14 font-medium flex items-center rounded-full bg-black-gradient p-2"
-          >
+          <RadioGroup>
             {Object.entries(tabs).map(([tab, label]) => (
-              <div key={tab} className="relative">
-                <input
-                  id={`filtered-${tab}-radio`}
-                  type="radio"
-                  checked={focusTab === tab}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onChange={(e) => changeTab(e, tab as FocusTab)}
-                  className="peer absolute opacity-0"
-                  tabIndex={focusTab === tab ? 0 : -1}
-                />
-                <label
-                  htmlFor={`filtered-${tab}-radio`}
-                  className="peer-checked:bg-background-800 inline-flex cursor-pointer items-center gap-4 rounded-full px-8 py-4 peer-focus-visible:outline-solid"
-                  onMouseDown={(e) => e.preventDefault()}
-                >
-                  {label}
-                  <span className="bg-black-gradient text-10 rounded-full px-8 py-4">
-                    {filters[tab as FocusTab].length}
-                  </span>
-                </label>
-              </div>
+              <Radio
+                key={tab}
+                checked={focusTab === tab}
+                onChange={() => changeTab(tab as FocusTab)}
+                className="flex items-center gap-8"
+              >
+                {label}
+                <span className="bg-new-primary text-10 rounded-full px-8 py-4">
+                  {filters[tab as FocusTab].length}
+                </span>
+              </Radio>
             ))}
-          </div>
+          </RadioGroup>
         </header>
         <SuggestionList {...suggestionListProps} />
         <SuggestionEmpty search={search} />

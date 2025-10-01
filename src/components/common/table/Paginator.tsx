@@ -29,7 +29,7 @@ export const Paginator: FC<Props> = (props) => {
             <div className="flex items-center gap-8">
               <label>Show results</label>
               <select
-                className="border-background-800 bg-background-900 rounded-full border-2 px-12 py-8"
+                className="border-background-800 bg-new-primary rounded-full border-2 px-12 py-8"
                 name="limit"
                 onChange={(e) => setLimit(Number(e.target.value))}
                 value={limit}

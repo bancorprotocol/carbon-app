@@ -132,7 +132,7 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
           />
         </div>
       </td>
-      <td className="w-[250px]">
+      <td className="w-[250px] py-0!">
         <StrategyGraph strategy={strategy} />
       </td>
       <td>
