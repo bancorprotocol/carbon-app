@@ -71,8 +71,8 @@ export type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
 export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const search = useSearch({ from: '/simulate/result' });
   const tokens = useTokens();
-  const baseToken = tokens.getTokenById(search.baseToken);
-  const quoteToken = tokens.getTokenById(search.quoteToken);
+  const baseToken = tokens.getTokenById(search.baseToken)!;
+  const quoteToken = tokens.getTokenById(search.quoteToken)!;
   const state = buildStrategyInputState(search, baseToken, quoteToken);
   const query = useGetSimulator(search);
   const [animationData, setAnimationData] = useState<SimulatorData[]>([]);

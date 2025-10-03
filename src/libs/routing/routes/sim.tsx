@@ -129,10 +129,10 @@ export const simulatorResultRoute = createRoute({
     </SimulatorProvider>
   ),
   validateSearch: searchValidator({
-    baseToken: v.optional(validAddress),
-    quoteToken: v.optional(validAddress),
-    start: v.optional(validNumber),
-    end: v.optional(validNumber),
+    baseToken: validAddress,
+    quoteToken: validAddress,
+    start: validNumber,
+    end: validNumber,
     sellMax: validNumber,
     sellMin: validNumber,
     sellBudget: validNumber,
