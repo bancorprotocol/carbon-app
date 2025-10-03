@@ -9,7 +9,6 @@ import config from 'config';
 export const getLastVisitedPair = () => {
   const [base, quote] =
     lsService.getItem('tradePair') || config.defaultTokenPair;
-
   return { base, quote };
 };
 
