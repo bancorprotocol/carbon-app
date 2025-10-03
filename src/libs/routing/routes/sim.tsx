@@ -11,7 +11,6 @@ import { SimulatorRoot } from 'pages/simulator/root';
 import { SimulatorInputOverlappingPage } from 'pages/simulator/overlapping';
 import { SimulatorInputRecurringPage } from 'pages/simulator/recurring';
 import { SimulatorResultPage } from 'pages/simulator/result';
-import { roundSearchParam } from 'utils/helpers';
 import config from 'config';
 import * as v from 'valibot';
 
@@ -59,41 +58,16 @@ export const simulatorInputRecurringRoute = createRoute({
   getParentRoute: () => simulatorInputRootRoute,
   path: 'recurring',
   component: SimulatorInputRecurringPage,
-  validateSearch: (search: Record<string, unknown>): StrategyInputSearch => {
-    const sellMax = v.is(validNumber, search.sellMax)
-      ? roundSearchParam(search.sellMax)
-      : '';
-    const sellMin = v.is(validNumber, search.sellMin)
-      ? roundSearchParam(search.sellMin)
-      : '';
-    const sellBudget = v.is(validNumber, search.sellBudget)
-      ? roundSearchParam(search.sellBudget)
-      : '';
-    const buyMax = v.is(validNumber, search.buyMax)
-      ? roundSearchParam(search.buyMax)
-      : '';
-    const buyMin = v.is(validNumber, search.buyMin)
-      ? roundSearchParam(search.buyMin)
-      : '';
-    const buyBudget = v.is(validNumber, search.buyBudget)
-      ? roundSearchParam(search.buyBudget)
-      : '';
-    const sellIsRange =
-      typeof search.sellIsRange === 'boolean' ? search.sellIsRange : true;
-    const buyIsRange =
-      typeof search.buyIsRange === 'boolean' ? search.buyIsRange : true;
-
-    return {
-      sellMax: sellIsRange ? sellMax : sellMin,
-      sellMin,
-      sellBudget,
-      buyMax: buyIsRange ? buyMax : buyMin,
-      buyMin,
-      buyBudget,
-      sellIsRange,
-      buyIsRange,
-    };
-  },
+  validateSearch: searchValidator({
+    sellMax: v.optional(validNumber),
+    sellMin: v.optional(validNumber),
+    sellBudget: v.optional(validNumber),
+    sellIsRange: v.optional(validBoolean, true),
+    buyMax: v.optional(validNumber),
+    buyMin: v.optional(validNumber),
+    buyBudget: v.optional(validNumber),
+    buyIsRange: v.optional(validBoolean, true),
+  }),
 });
 
 export interface SimulatorInputOverlappingSearch extends StrategyInputBase {
