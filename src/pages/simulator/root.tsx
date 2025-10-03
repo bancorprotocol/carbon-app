@@ -1,27 +1,57 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, useNavigate, useSearch } from '@tanstack/react-router';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { simulatorInputRootRoute } from 'libs/routing/routes/sim';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 import { ReactComponent as IconBookmark } from 'assets/icons/bookmark.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';
+import { getLastVisitedPair } from 'libs/routing';
+import { useToken } from 'hooks/useTokens';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
-export const SimulatorPage = () => {
-  const searchState = simulatorInputRootRoute.useSearch();
+// TODO: merge this hook with trade when they both use base / quote in search
+const usePersistLastPair = () => {
+  const search = useSearch({ from: '/simulate' });
+  const defaultPair = useMemo(() => getLastVisitedPair(), []);
+  const base = useToken(search.baseToken ?? defaultPair.base);
+  const quote = useToken(search.quoteToken ?? defaultPair.quote);
 
   useEffect(() => {
-    if (!searchState.baseToken || !searchState.quoteToken) return;
-    lsService.setItem('tradePair', [
-      searchState.baseToken,
-      searchState.quoteToken,
-    ]);
-  }, [searchState.baseToken, searchState.quoteToken]);
+    if (!search.baseToken || !search.quoteToken) return;
+    lsService.setItem('tradePair', [search.baseToken, search.quoteToken]);
+  }, [search.baseToken, search.quoteToken]);
+
+  const navigate = useNavigate({ from: '/simulate' });
+  useEffect(() => {
+    if (search.baseToken && search.quoteToken) return;
+    navigate({
+      search: {
+        ...search,
+        baseToken: defaultPair.base,
+        quoteToken: defaultPair.quote,
+      },
+      replace: true,
+    });
+  }, [search, navigate, defaultPair.base, defaultPair.quote]);
+
+  return {
+    base: base.token,
+    quote: quote.token,
+    isPending: base.isPending || quote.isPending,
+  };
+};
+
+export const SimulatorRoot = () => {
+  const { isPending } = usePersistLastPair();
 
   const { aboveBreakpoint } = useBreakpoints();
 
   if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
+
+  if (isPending) {
+    return <CarbonLogoLoading className="h-80 place-self-center p-16" />;
+  }
 
   return (
     <div className="mx-auto flex w-full max-w-[1920px] flex-col content-start gap-20 p-20 md:grid md:grid-cols-[auto_450px]">

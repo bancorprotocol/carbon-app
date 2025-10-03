@@ -5,6 +5,30 @@ import historyPrices from '../mocks/history-prices.json' with { type: 'json' };
 import simulatorResult from '../mocks/simulator-result.json' with { type: 'json' };
 import tokenListsMock from '../mocks/tokenLists.json' with { type: 'json' };
 
+interface PriceEntry {
+  timestamp: number;
+  low: string;
+  high: string;
+  open: string;
+  close: string;
+}
+
+interface SimulatorResultEntry {
+  date: number;
+  price: string;
+  sell: string;
+  buy: string;
+  baseBalance: string;
+  basePortion: string;
+  quoteBalance: string;
+  quotePortion: string;
+  portfolioValueInQuote: string;
+  hodlValueInQuote: string;
+  portfolioOverHodlInPercent: string;
+}
+
+type SimulatorResult = Record<string, { data: SimulatorResultEntry[] }>;
+
 export const mockApi = async (page: Page) => {
   await page.route('**/*/roi', (route) => {
     return route.fulfill({ json: roi });
@@ -13,13 +37,17 @@ export const mockApi = async (page: Page) => {
     const url = new URL(route.request().url());
     const address = url.searchParams.get('address')?.toLowerCase();
     const currencies = url.searchParams.get('convert')?.split(',');
+    if (!address) throw new Error('No address found in the URL');
+    const marketPrice = (marketRate as Record<string, Record<string, number>>)[
+      address
+    ];
     // If unexpected behavior, let the real server handle that
-    if (!address || !currencies || !marketRate[address]) {
+    if (!address || !currencies || !marketPrice) {
       return route.continue();
     }
-    const data = {};
+    const data: Record<string, number> = {};
     for (const currency of currencies) {
-      data[currency] = marketRate[address][currency];
+      data[currency] = marketPrice[currency];
     }
     return route.fulfill({ json: { data } });
   });
@@ -29,7 +57,9 @@ export const mockApi = async (page: Page) => {
       url.searchParams.entries(),
     );
     const historyPricesId = [baseToken, quoteToken].join('-').toLowerCase();
-    const data = historyPrices[historyPricesId];
+    const data = (historyPrices as Record<string, PriceEntry[]>)[
+      historyPricesId
+    ];
     // If unexpected behavior, let the real server handle that
     if (!baseToken || !quoteToken || !start || !end || !data) {
       return route.continue();
@@ -43,19 +73,19 @@ export const mockApi = async (page: Page) => {
       quoteToken,
       buyMin,
       buyMax,
-      buyMarginal,
+      buyMarginal = '0',
       buyBudget,
       sellMin,
       sellMax,
-      sellMarginal,
+      sellMarginal = '0',
       sellBudget,
       start,
       end,
     } = Object.fromEntries(url.searchParams.entries());
 
     const keyValues = [
-      baseToken,
-      quoteToken,
+      baseToken.toLowerCase(),
+      quoteToken.toLowerCase(),
       buyMin,
       buyMax,
       buyMarginal,
@@ -69,16 +99,17 @@ export const mockApi = async (page: Page) => {
     ];
 
     const simulateCreateStrategyId = keyValues.join('-');
+    console.log(simulateCreateStrategyId);
 
     // If unexpected behavior, let the real server handle that
     if (
       keyValues.some((v) => !v) ||
-      !simulatorResult[simulateCreateStrategyId]
+      !(simulatorResult as SimulatorResult)[simulateCreateStrategyId]
     ) {
       throw new Error(`Could not access ${url} in mocked simulator result`);
     }
 
-    const data = simulatorResult[simulateCreateStrategyId];
+    const data = (simulatorResult as SimulatorResult)[simulateCreateStrategyId];
     return route.fulfill({ json: data });
   });
   // E2E should be allowed in production mode (CI)
@@ -93,7 +124,7 @@ export const mockApi = async (page: Page) => {
   const tokenListsToMock = Object.keys(tokenListsMock);
   tokenListsToMock.forEach(async (tokenList) => {
     await page.route(tokenList, (route) => {
-      const json = tokenListsMock[tokenList];
+      const json = (tokenListsMock as any)[tokenList];
       if (!json) return route.continue;
       return route.fulfill({ json });
     });

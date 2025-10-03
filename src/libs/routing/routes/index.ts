@@ -20,13 +20,6 @@ import {
 } from 'libs/routing/routes/portfolio';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
-  simulatorInputOverlappingRoute,
-  simulatorInputRecurringRoute,
-  simulatorInputRootRoute,
-  simulatorResultRoute,
-  simulatorRootRoute,
-} from 'libs/routing/routes/sim';
-import {
   editStrategyLayout,
   editPricesDisposable,
   editPricesOverlapping,
@@ -45,6 +38,12 @@ import {
 import { cartPage } from './cart';
 import { createRoute, redirect } from '@tanstack/react-router';
 import { liquidityMatrixPage } from './liquidity-matrix';
+import {
+  simulatorInputOverlappingRoute,
+  simulatorInputRecurringRoute,
+  simulatorInputRootRoute,
+  simulatorResultRoute,
+} from './sim';
 
 const rootRedirect = createRoute({
   getParentRoute: () => rootRoute,
@@ -86,13 +85,11 @@ export const routeTree = rootRoute.addChildren([
     portfolioDistributionTokenPage,
     portfolioActivityPage,
   ]),
-  simulatorRootRoute.addChildren([
-    simulatorInputRootRoute.addChildren([
-      simulatorInputRecurringRoute,
-      simulatorInputOverlappingRoute,
-    ]),
-    simulatorResultRoute,
+  simulatorInputRootRoute.addChildren([
+    simulatorInputRecurringRoute,
+    simulatorInputOverlappingRoute,
   ]),
+  simulatorResultRoute,
   rootRedirect,
   liquidityMatrixPage,
 ]);

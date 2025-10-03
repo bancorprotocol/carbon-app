@@ -15,7 +15,7 @@ interface ItemProps {
 
 export const SimInputStrategyType = () => {
   const { baseToken, quoteToken, start, end } = useSearch({
-    from: '/simulate/',
+    from: '/simulate',
   });
   const items: ItemProps[] = [
     {
@@ -41,14 +41,14 @@ export const SimInputStrategyType = () => {
       </header>
       <article role="tablist" className="grid grid-cols-2 gap-8">
         {items.map(({ title, label, svg, tooltipText }) => {
-          const to = `/simulate/${label}` as const;
           return (
             <Link
               role="tab"
               id={'tab-' + label}
               aria-controls={'panel-' + label}
               key={label}
-              to={to}
+              from="/simulate"
+              to={label}
               search={{ baseToken, quoteToken, start, end }}
               className={cn(
                 'rounded-lg text-14 font-medium group flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white',
