@@ -60,7 +60,7 @@ export const ExplorerTabs = ({ url }: Props) => {
   return (
     <nav
       aria-label="discover portfolio of strategies"
-      className="text-16 sm:text-20 flex sm:place-self-start gap-8 md:gap-16 rounded-full grid-area-[tabs]"
+      className="tab-list text-16 sm:text-20 flex sm:place-self-start gap-8 md:gap-16 grid-area-[tabs] rounded-2xl"
       data-testid="explorer-tabs"
     >
       {tabs.map(({ label, href, search, icon, testid }) => {
@@ -76,13 +76,13 @@ export const ExplorerTabs = ({ url }: Props) => {
             to={href}
             search={(s) => s}
             key={href}
-            className="grow sm:grow-0 px-8 py-4 group font-title font-normal bg-transparent text-white/60 hover:bg-background-900 flex gap-8 items-center justify-center rounded-full sm:px-16 sm:py-8 aria-page:bg-background-800"
+            className="grow sm:grow-0 px-8 py-4 font-title font-normal text-white/60 flex gap-8 items-center justify-center sm:px-16 sm:py-8 aria-page:text-white aria-page:tab-focus tab-anchor"
             resetScroll={false}
             aria-current={active ? 'page' : 'false'}
             data-testid={testid}
           >
             {icon}
-            <span className="group-aria-page:text-gradient">{label}</span>
+            <span>{label}</span>
           </Link>
         );
       })}

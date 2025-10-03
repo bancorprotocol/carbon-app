@@ -3,10 +3,13 @@ import { FC } from 'react';
 export const ModalTokenListLoading: FC = () => {
   return (
     <div className="flex-1 overflow-auto">
-      <div className="mb-8 h-12 w-[180px] animate-pulse rounded-full bg-black"></div>
+      <div className="mb-8 h-12 w-[180px] animate-pulse rounded-full bg-black-gradient"></div>
       <ul className="flex flex-col gap-8">
         {Array.from({ length: 10 }).map((_, i) => (
-          <li key={i} className="h-55 rounded-lg animate-pulse bg-black"></li>
+          <li
+            key={i}
+            className="h-55 rounded-lg animate-pulse bg-black-gradient"
+          ></li>
         ))}
       </ul>
     </div>

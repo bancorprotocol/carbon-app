@@ -48,7 +48,7 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
   return (
     <table
       className={cn(
-        'w-full border-collapse bg-background-900 rounded-2xl grid-area-[list]',
+        'w-full border-collapse bg-white-gradient rounded-2xl grid-area-[list]',
         style.table,
       )}
     >
@@ -187,7 +187,7 @@ export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
     <Link
       to="/strategy/$id"
       params={{ id: id }}
-      className="bg-background-800 inline-flex items-center gap-4 rounded-full px-8 py-4"
+      className="bg-new-primary inline-flex items-center gap-4 rounded-full px-8 py-4"
     >
       <span className={`text-${size}`}>{getLowestBits(id)}</span>
       <TokensOverlap tokens={[base, quote]} size={size + 2} />
@@ -267,7 +267,7 @@ const ActivityPaginator = () => {
         <div className="flex items-center gap-8">
           <label>Show results</label>
           <select
-            className="border-background-800 bg-background-900 rounded-full border-2 px-12 py-8"
+            className="border-background-800 bg-new-primary rounded-full border-2 px-12 py-8"
             name="limit"
             onChange={changeLimit}
             value={limit}
@@ -332,7 +332,7 @@ interface ActionIconProps {
   action: ActivityAction;
   size: string | number;
 }
-export const iconColor = (action: ActivityAction) => {
+const iconColor = (action: ActivityAction) => {
   if (action === 'buy') return `bg-buy/10 text-buy`;
   if (action === 'sell') return `bg-sell/10 text-sell`;
   if (action === 'create') return `bg-success/10 text-success`;

@@ -55,7 +55,7 @@ export const InputBudget: FC<Props> = (props) => {
     disabled,
     error,
     warning,
-    title,
+    title = 'Set Budget',
     titleTooltip,
   } = props;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -109,22 +109,22 @@ export const InputBudget: FC<Props> = (props) => {
 
   return (
     <div className="flex flex-col gap-16">
-      {title && (
-        <label htmlFor={id} className="text-14 font-medium flex">
-          <Tooltip element={titleTooltip}>
-            <span className="text-white/80">{title}</span>
-          </Tooltip>
-        </label>
-      )}
       <div
         className={`
-          flex cursor-text flex-col gap-8 rounded-2xl border border-black bg-black p-16
+          flex cursor-text flex-col gap-8 rounded-2xl border border-black bg-black-gradient p-16
           focus-within:border-white/50
           ${error ? 'border-error/50!' : ''}
           ${className}
         `}
         onClick={() => inputRef.current?.focus()}
       >
+        {title && (
+          <label htmlFor={id} className="text-12 text-white/60">
+            <Tooltip element={titleTooltip}>
+              <span>{title}</span>
+            </Tooltip>
+          </label>
+        )}
         <div className="flex items-center justify-between">
           <input
             id={id}
@@ -136,7 +136,7 @@ export const InputBudget: FC<Props> = (props) => {
             size={1}
             placeholder={placeholder}
             className={`
-              text-16 font-medium grow text-ellipsis bg-transparent focus:outline-hidden
+              text-24 font-medium grow text-ellipsis bg-transparent focus:outline-hidden
               ${error ? 'text-error' : ''}
               ${disabled ? 'text-white/40' : ''}
               ${disabled ? 'cursor-not-allowed' : ''}

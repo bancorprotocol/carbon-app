@@ -62,7 +62,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
     <>
       <hgroup>
         <h3 className="text-16 font-medium flex items-center gap-6">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
+          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black-gradient text-[10px] text-white/60">
             2
           </span>
           {getTitle(editType)}

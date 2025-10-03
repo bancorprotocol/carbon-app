@@ -77,11 +77,22 @@ export const Imager = ({
 };
 
 interface TokenLogoProps {
-  token: Token;
+  token?: Token;
   size: number;
   className?: string;
 }
 export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
+  if (!token) {
+    return (
+      <div
+        style={{ height: `${size}px` }}
+        className={cn(
+          className,
+          'border border-black bg-black-gradient rounded-full aspect-square',
+        )}
+      ></div>
+    );
+  }
   return (
     <LogoImager
       width={size}
@@ -89,7 +100,7 @@ export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
       src={token.logoURI}
       alt={token.name ?? token.symbol}
       title={token.symbol}
-      className={cn(className, 'border border-black bg-black')}
+      className={cn(className, 'border border-black bg-black-gradient')}
     />
   );
 };

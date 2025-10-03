@@ -318,7 +318,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
       yTicks={y.ticks}
       zoom={zoomTransform}
     >
-      <div className={cn('rounded-xl flex flex-1 bg-black', className)}>
+      <div
+        className={cn('rounded-xl flex flex-1 bg-black-gradient', className)}
+      >
         <DrawingMenu clearDrawings={() => setDrawings([])} />
         <div className="flex flex-1 flex-col">
           <div className="relative grid flex-1 items-stretch justify-items-stretch">
@@ -363,7 +365,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
             })}
             <hr className="h-full border-e border-white/10" />
             <DateRangePicker
-              className="rounded-md border-0"
+              className="rounded-md border-0 bg-none"
               defaultStart={fromUnixUTC(defaultHistoryStart)}
               defaultEnd={default_ED_()}
               start={fromUnixUTC(props.start || defaultHistoryStart)}

@@ -47,7 +47,7 @@ export const InputLimit: FC<InputLimitProps> = ({
     <>
       <div
         className={cn(
-          'rounded-2xl flex cursor-text flex-col gap-5 border border-black bg-black p-16 focus-within:border-white/50',
+          'rounded-2xl flex cursor-text flex-col gap-5 border border-black bg-black-gradient p-16 focus-within:border-white/50',
           showWarning && 'border-warning focus-within:border-warning',
           error && 'border-error/50 focus-within:border-error/50',
         )}
@@ -66,7 +66,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             aria-label="Enter Price"
             placeholder="Enter Price"
             className={cn(
-              'text-16 font-medium flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
+              'text-24 font-medium flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
               error && 'text-error',
             )}
             data-testid="input-price"

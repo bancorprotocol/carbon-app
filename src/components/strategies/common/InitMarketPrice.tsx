@@ -25,7 +25,7 @@ export const EditMarketPrice: FC<Props> = (props) => {
     <button
       {...attr}
       className={cn(
-        'text-12 font-medium bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8',
+        'text-12 font-medium btn-tertiary-gradient flex items-center justify-between gap-8 rounded-full px-16 py-8',
         props.className,
       )}
       data-testid="edit-market-price"
@@ -107,64 +107,58 @@ export const InitMarketPrice = (props: FieldProps) => {
   };
 
   return (
-    <div className="bg-gradient rounded-lg p-2 shadow-[0_0_12px_#A3A3A3] shadow-white">
-      <form
+    <form
+      className={cn(props.className, style.form, 'grid gap-16 p-16')}
+      data-testid="user-price-form"
+      onSubmit={setPrice}
+    >
+      {!externalPrice && <SetPriceText base={base} quote={quote} />}
+      <InputLimit
+        id={inputId}
+        price={localPrice || ''}
+        setPrice={changePrice}
+        base={base}
+        quote={quote}
+        ignoreMarketPriceWarning
+        required
+      />
+      {!externalPrice && !!calculatedPrice && (
+        <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
+          <button
+            className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
+            type="button"
+            onClick={() => setLocalPrice(calculatedPrice)}
+          >
+            Use Strategy
+          </button>
+        </Tooltip>
+      )}
+      <p className="text-12 warning-message text-white/60">
+        Updating the market price will automatically adjust all related data in
+        the app.
+        {!!externalPrice && <EditPriceText />}
+      </p>
+      <label
+        htmlFor={checkboxId}
         className={cn(
-          props.className,
-          style.form,
-          'bg-background-900 rounded-lg grid gap-16 p-16',
+          style.approveWarnings,
+          'rounded-lg text-12 font-medium flex items-center gap-8 text-white/60',
         )}
-        data-testid="user-price-form"
-        onSubmit={setPrice}
       >
-        {!externalPrice && <SetPriceText base={base} quote={quote} />}
-        <InputLimit
-          id={inputId}
-          price={localPrice || ''}
-          setPrice={changePrice}
-          base={base}
-          quote={quote}
-          ignoreMarketPriceWarning
-          required
+        <input
+          id={checkboxId}
+          type="checkbox"
+          className="size-18"
+          data-testid="approve-price-warnings"
+          checked={approved}
+          onChange={(e) => setApproved(e.target.checked)}
         />
-        {!externalPrice && !!calculatedPrice && (
-          <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
-            <button
-              className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
-              type="button"
-              onClick={() => setLocalPrice(calculatedPrice)}
-            >
-              Use Strategy
-            </button>
-          </Tooltip>
-        )}
-        <p className="text-12 warning-message text-white/60">
-          Updating the market price will automatically adjust all related data
-          in the app.
-          {!!externalPrice && <EditPriceText />}
-        </p>
-        <label
-          htmlFor={checkboxId}
-          className={cn(
-            style.approveWarnings,
-            'rounded-lg text-12 font-medium flex items-center gap-8 text-white/60',
-          )}
-        >
-          <input
-            id={checkboxId}
-            type="checkbox"
-            className="size-18"
-            data-testid="approve-price-warnings"
-            checked={approved}
-            onChange={(e) => setApproved(e.target.checked)}
-          />
-          I've reviewed the new market price and chosen to proceed.
-        </label>
-        <Button type="submit" data-testid="set-overlapping-price">
-          Set New Market Price
-        </Button>
-      </form>
-    </div>
+        I've reviewed the new market price and chosen to proceed.
+      </label>
+      <Button type="submit" data-testid="set-overlapping-price">
+        Set New Market Price
+      </Button>
+    </form>
   );
 };
 

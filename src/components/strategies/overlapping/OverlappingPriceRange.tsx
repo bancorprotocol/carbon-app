@@ -55,8 +55,8 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
     <>
       {range === 'Infinity' ? (
         <div className="grid grid-cols-2 gap-6">
-          <div className="rounded-e-xs rounded-s-2xl grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
-            <header className="text-12 mb-5 flex justify-between text-white/60">
+          <div className="rounded-e-xs rounded-s-2xl grid cursor-text gap-5 border border-black bg-black-gradient p-16 focus-within:border-white/50">
+            <header className="text-12 flex justify-between text-white/60">
               <span>{props.minLabel || 'Min'}</span>
               {!!marketPrice && (
                 <button
@@ -69,11 +69,13 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
                 </button>
               )}
             </header>
-            <p onClick={() => reset(minId)}>0</p>
+            <p className="text-24" onClick={() => reset(minId)}>
+              0
+            </p>
             <p aria-hidden className="h-[22px]"></p>
           </div>
-          <div className="rounded-s-xs rounded-e-2xl grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
-            <header className="text-12 mb-5 flex justify-between text-white/60">
+          <div className="rounded-s-xs rounded-e-2xl grid cursor-text gap-5 border border-black bg-black-gradient p-16 focus-within:border-white/50">
+            <header className="text-12 flex justify-between text-white/60">
               <span>{props.maxLabel || 'Max'}</span>
               {!!marketPrice && (
                 <button
@@ -86,7 +88,9 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
                 </button>
               )}
             </header>
-            <p onClick={() => reset(maxId)}>∞</p>
+            <p className="text-24" onClick={() => reset(maxId)}>
+              ∞
+            </p>
             <p aria-hidden className="h-[22px]"></p>
           </div>
         </div>

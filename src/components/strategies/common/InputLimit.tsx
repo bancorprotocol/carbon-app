@@ -106,12 +106,15 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
     <>
       <div
         className={cn(
-          'rounded-2xl flex cursor-text flex-col gap-5 border border-black bg-black p-16 focus-within:border-white/50',
+          'rounded-2xl flex cursor-text flex-col gap-5 border border-black bg-black-gradient p-16 focus-within:border-white/50',
           showWarning && 'border-warning focus-within:border-warning',
           displayError && 'border-error/50 focus-within:border-error/50',
         )}
         onClick={() => document.getElementById(id)?.focus()}
       >
+        <label htmlFor={id} className="text-12 text-white/60">
+          Set Price
+        </label>
         <div className="flex">
           <input
             id={id}
@@ -125,7 +128,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
             aria-label="Enter Price"
             placeholder="Enter Price"
             className={cn(
-              'text-16 font-medium w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
+              'text-24 font-medium w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
               displayError && 'text-error',
             )}
             data-testid="input-price"

@@ -34,7 +34,9 @@ export const DragablePriceRange = ({
 }: OrderRangeProps) => {
   const { dms } = useD3ChartCtx();
   const isDragging = useRef(false);
-  const color = type === 'buy' ? 'var(--color-buy)' : 'var(--color-sell)';
+  const stroke = type === 'buy' ? 'var(--color-buy)' : 'var(--color-sell)';
+  const fill =
+    type === 'buy' ? 'url(#svg-buy-gradient)' : 'url(#svg-sell-gradient)';
   const maxIsOutOfScale = yPos.max <= 0;
   const minIsOutOfScale = yPos.min >= dms.boundedHeight;
 
@@ -107,7 +109,7 @@ export const DragablePriceRange = ({
           onDragStart={onDragStartHandler}
           onDrag={onDragRect}
           onDragEnd={onDragEndHandler}
-          color={color}
+          color={fill}
           readonly={readonly}
         />
       )}
@@ -118,7 +120,7 @@ export const DragablePriceRange = ({
         onDragStart={onDragStartHandler}
         onDrag={onDragH1}
         onDragEnd={onDragEndHandler}
-        color={color}
+        color={stroke}
         isLimit={isLimit}
         readonly={readonly}
       />
@@ -130,7 +132,7 @@ export const DragablePriceRange = ({
           onDragStart={onDragStartHandler}
           onDrag={onDragH2}
           onDragEnd={onDragEndHandler}
-          color={color}
+          color={stroke}
           isLimit={isLimit}
           readonly={readonly}
         />
@@ -139,7 +141,7 @@ export const DragablePriceRange = ({
         type={type}
         minOutOfScale={minIsOutOfScale}
         maxOutOfScale={maxIsOutOfScale}
-        color={color}
+        color={stroke}
       />
     </>
   );

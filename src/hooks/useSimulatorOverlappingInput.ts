@@ -31,8 +31,8 @@ interface Props {
 }
 
 export interface SimulatorInputOverlappingValues {
-  baseToken?: Token;
-  quoteToken?: Token;
+  base?: Token;
+  quote?: Token;
   buy: Omit<StrategyInputOrder, 'isRange'>;
   sell: Omit<StrategyInputOrder, 'isRange'>;
   start?: string;
@@ -45,8 +45,8 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
   const [_state, setState] =
     useState<InternalSimulatorOverlappingInput>(searchState);
 
-  const base = useToken(_state.baseToken);
-  const quote = useToken(_state.quoteToken);
+  const base = useToken(_state.base);
+  const quote = useToken(_state.quote);
 
   const state = buildStrategyInputState(_state, base.token, quote.token);
 
@@ -75,8 +75,8 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
   useDebouncedValue(_state, 300, { cb: setSearch });
 
   const bounds = useMemo(
-    () => getBounds(state.baseToken!, state.quoteToken!, state.buy, state.sell),
-    [state.baseToken, state.buy, state.quoteToken, state.sell],
+    () => getBounds(state.base!, state.quote!, state.buy, state.sell),
+    [state.base, state.buy, state.quote, state.sell],
   );
 
   const dispatch: SimulatorOverlappingInputDispatch = useCallback(
@@ -89,12 +89,12 @@ export const useSimulatorOverlappingInput = ({ searchState }: Props) => {
 
 export const buildStrategyInputState = (
   state: InternalSimulatorOverlappingInput,
-  baseToken?: Token,
-  quoteToken?: Token,
+  base?: Token,
+  quote?: Token,
 ): SimulatorInputOverlappingValues => {
   return {
-    baseToken,
-    quoteToken,
+    base,
+    quote,
     buy: {
       min: state.buyMin || '',
       max: state.buyMax || '',

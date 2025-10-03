@@ -85,8 +85,8 @@ export interface SimulatorReturnNew {
 }
 
 export type SimulatorAPIParams = Omit<
-  SimulatorResultSearch,
-  'buyIsRange' | 'sellIsRange' | 'type' | 'overlappingSpread'
+  SimulatorResultSearch & { baseToken: string; quoteToken: string },
+  'buyIsRange' | 'sellIsRange' | 'type' | 'overlappingSpread' | 'base' | 'quote'
 >;
 
 export const useGetSimulator = (search: SimulatorResultSearch) => {
@@ -96,7 +96,11 @@ export const useGetSimulator = (search: SimulatorResultSearch) => {
       try {
         // eslint-disable-next-line unused-imports/no-unused-vars
         const { buyIsRange, sellIsRange, type, spread, ...params } = search;
-        const res = await carbonApi.getSimulator(params);
+        const res = await carbonApi.getSimulator({
+          ...params,
+          baseToken: params.base,
+          quoteToken: params.quote,
+        });
 
         // TODO cleanup schema
         const data: SimulatorReturn = {

@@ -41,8 +41,8 @@ export const SimInputChart = ({
   children,
 }: Props) => {
   const { marketPrice, isPending: marketIsPending } = useMarketPrice({
-    base: state.baseToken,
-    quote: state.quoteToken,
+    base: state.base,
+    quote: state.quote,
   });
 
   const onDatePickerConfirm = useCallback(
@@ -64,10 +64,7 @@ export const SimInputChart = ({
   if (isError || !data) {
     return (
       <Layout>
-        <ErrorMsg
-          base={state.baseToken?.address}
-          quote={state.quoteToken?.address}
-        />
+        <ErrorMsg base={state.base?.address} quote={state.quote?.address} />
       </Layout>
     );
   }
@@ -106,7 +103,7 @@ export const SimInputChart = ({
 };
 
 const Layout = ({ children }: { children: ReactNode }) => (
-  <div className="bg-background-900 sticky top-[80px] grid h-[600px] grid-rows-[auto_1fr] gap-20 rounded-2xl p-20">
+  <div className="bg-white-gradient sticky top-[80px] grid h-[600px] grid-rows-[auto_1fr] gap-20 rounded-2xl p-20">
     <header className="flex items-center justify-between">
       <h2 className="text-20 font-medium">Price Chart</h2>
     </header>

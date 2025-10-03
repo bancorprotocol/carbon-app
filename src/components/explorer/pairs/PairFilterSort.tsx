@@ -34,9 +34,7 @@ export const PairSortDropdown: FC<SortProps> = (props) => {
         <button
           type="button"
           className={cn(
-            'bg-background-800 flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8',
-            'hover:bg-background-700',
-            'active:bg-background-600',
+            'btn-tertiary-gradient flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8',
             props.className,
           )}
           {...attr}
@@ -86,9 +84,7 @@ export const PairFilterDropdown: FC<FilterProps> = (props) => {
         <button
           type="button"
           className={cn(
-            'bg-background-800 flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8',
-            'hover:bg-background-700',
-            'active:bg-background-600',
+            'btn-tertiary-gradient flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8',
             props.className,
           )}
           {...attr}

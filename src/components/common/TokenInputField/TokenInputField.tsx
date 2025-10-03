@@ -87,7 +87,7 @@ export const TokenInputField: FC<Props> = (props) => {
   return (
     <div
       className={cn(
-        'flex cursor-text flex-col gap-8 border border-black p-16 focus-within:border-white/50',
+        'flex cursor-text flex-col gap-8 border border-black',
         className,
         isError && 'border-error/50 focus-within:border-error/50',
       )}
@@ -107,7 +107,7 @@ export const TokenInputField: FC<Props> = (props) => {
           onFocus={(e) => e.target.select()}
           onBlur={handleBlur}
           className={cn(
-            'text-16 font-medium grow text-ellipsis bg-transparent focus:outline-hidden',
+            'text-24 font-medium grow text-ellipsis bg-transparent focus:outline-hidden',
             disabled && 'cursor-not-allowed text-white/40',
             isError && 'text-error',
           )}

@@ -8,8 +8,10 @@ import { getLastVisitedPair } from 'libs/routing/utils';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { TokenSelection } from 'components/strategies/common/TokenSelection';
+import { TradeNav } from 'components/trade/TradeNav';
 
-export const usePersistLastPair = (from: '/trade') => {
+const usePersistLastPair = (from: '/trade') => {
   const search = useSearch({ strict: false }) as TradeSearch;
   const defaultPair = getLastVisitedPair();
   const base = useToken(search.base ?? defaultPair.base);
@@ -55,8 +57,14 @@ export const TradeRoot = () => {
   }
   return (
     <TradeProvider base={base} quote={quote}>
-      <div className="mx-auto flex w-full max-w-[1920px] flex-col-reverse content-start gap-16 p-16 md:grid md:grid-cols-[auto_450px]">
-        <Outlet />
+      <div className="mx-auto grid w-full content-start md:justify-center gap-16 p-16 2xl:grid-cols-[350px_1fr] max-w-[1920px]">
+        <div className="2xl:grid xl:flex grid gap-16 content-start">
+          <TokenSelection url="/trade" />
+          <TradeNav />
+        </div>
+        <div className="xl:grid xl:grid-cols-[auto_450px] gap-16 flex flex-col-reverse">
+          <Outlet />
+        </div>
       </div>
     </TradeProvider>
   );

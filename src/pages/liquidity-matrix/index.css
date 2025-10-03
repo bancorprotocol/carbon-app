@@ -106,7 +106,7 @@ html:has(.page) {
 }
 
 .page article {
-  @apply bg-background-900 rounded-2xl p-16;
+  @apply bg-black-gradient rounded-2xl p-16;
   display: grid;
   gap: 16px;
 }

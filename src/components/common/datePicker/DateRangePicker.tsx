@@ -16,21 +16,7 @@ import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-
-export const datePickerPresets: DatePickerPreset[] = [
-  { label: 'Last 7 days', duration: { days: 6 } },
-  { label: 'Last 30 days', duration: { days: 29 } },
-  { label: 'Last 90 days', duration: { days: 89 } },
-  { label: 'Last 365 days', duration: { days: 364 } },
-];
-
-export type DatePickerPreset = {
-  label: string;
-  duration: Duration;
-  days?: number;
-  months?: number;
-  years?: number;
-};
+import { DatePickerPreset } from './utils';
 
 interface Props {
   /** Value used to be reset to when user click on reset */
@@ -69,15 +55,12 @@ export const DateRangePicker = memo(function DateRangePicker(
       type="button"
       aria-label="Pick date range"
       className={cn(
-        'text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
-        'hover:bg-background-800',
-        hasDates
-          ? 'border-white/60 active:border-white/80'
-          : 'border-background-800 hover:border-background-700 active:border-background-600',
+        'btn-tertiary-gradient text-12 flex items-center gap-8 rounded-full px-12 py-8',
         props.disabled &&
           'border-background-800 hover:border-background-800 active:border-background-800 cursor-not-allowed hover:bg-transparent',
         props.className,
       )}
+      data-selected={hasDates}
       data-testid="date-picker-button"
       disabled={props.disabled}
     >
@@ -184,7 +167,7 @@ const Content = (props: Props) => {
                 type="button"
                 role="radio"
                 key={i}
-                className="rounded-md px-30 text-14 font-medium hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black"
+                className="rounded-md px-30 text-14 font-medium hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black-gradient"
                 onClick={() => handlePreset(duration)}
                 aria-checked={selectedPreset?.label === label}
                 data-testid="date-picker-button"

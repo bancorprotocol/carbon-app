@@ -1,22 +1,5 @@
 @import 'tailwindcss';
 @import './theme.css';
-/* @config '../tailwind.config.ts'; */
-
-:root {
-  --hue: 0;
-  --chroma: 0; /* Recommended 0.01, 0.02 */
-}
-
-
-@utility main-menu {
-  height: var(--main-menu-height);
-  @apply px-content font-medium flex w-full items-center justify-between bg-black text-white/50;
-}
-
-@utility mobile-menu {
-  height: var(--mobile-menu-height);
-  @apply font-medium border-background-800 fixed bottom-0 z-40 flex w-full flex-shrink-0 items-center justify-around border-t bg-black px-10 text-white/50 md:hidden;
-}
 
 @utility bg-content {
   @apply border-background-800 border bg-black;
@@ -27,7 +10,7 @@
 }
 
 @utility loading-skeleton {
-  @apply rounded-lg bg-background-900 animate-pulse;
+  @apply rounded-lg bg-black-gradient animate-pulse;
 }
 
 
@@ -48,7 +31,52 @@
 }
 
 @layer base {
-  
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: oklch(92.8% 0.006 264.531);
+  }
+
+  html,
+  body,
+  #root {
+    @apply text-white font-text min-h-screen;
+  }
+
+  #root {
+    position: relative;
+  }
+
+  #root::before {
+    --origin-translate: translate(-50dvw, -50dvh);
+    content: '';
+    position: fixed;
+    z-index: -1;
+    inset-inline: -50dvw;
+    inset-block: -50dvh;
+    background-image: radial-gradient(closest-side circle at center, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 45%, oklch(0.1 var(--chroma) var(--hue)) 100%);
+    animation: move-gradient 20s infinite alternate;
+  }
+  #root.hide-bg::before {
+    opacity: 0;
+  }
+  @media (max-width: 48rem) {
+    #root::before {
+      --origin-translate: translate(0, -50dvh);
+    }
+  }
+
+  @keyframes move-gradient {
+    from {
+      transform: var(--origin-translate) scale(1);
+    }
+    to {
+      transform: var(--origin-translate) scale(1.7);
+    }
+  }
+
   html {
     @apply text-white font-text;
     scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
@@ -94,11 +122,11 @@
   }
 
   h1 {
-    @apply text-36 font-medium my-3;
+    @apply text-36 font-medium;
   }
 
   h2 {
-    @apply text-20 font-medium my-2;
+    @apply text-20 font-medium;
   }
 
   h3 {
@@ -171,7 +199,7 @@
     z-index: -1;
     inset: 1px;
     border-radius: inherit;
-    @apply bg-background-900;
+    @apply bg-black-gradient;
   }
 }
 
@@ -397,11 +425,11 @@ dialog.modal.closing {
   width: 100%;
   border-collapse: collapse;
   border-radius: 16px;
-  background-color: var(--color-background-900);
+  background: var(--white-gradient);
   font-size: 14px;
 }
 .table thead tr {
-  border-bottom: 1px solid var(--color-background-800);
+  border-bottom: 1px solid var(--color-new-secondary);
   color: oklch(100% 0 0 / 60%);
 }
 .table thead th {
@@ -420,6 +448,6 @@ dialog.modal.closing {
   padding-inline-end: 24px;
 }
 .table tfoot tr {
-  border-top: 1px solid var(--color-background-800);
+  border-top: 1px solid var(--color-new-secondary);
   color: oklch(100% 0 0 / 80%);
 }

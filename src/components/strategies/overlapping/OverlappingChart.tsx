@@ -26,8 +26,8 @@ import styles from './OverlappingChart.module.css';
 type Scale = ReturnType<typeof getScale>;
 
 // Static
-const outline = '#404040';
-const background = '#212123';
+const outline = 'var(--color-background-700)';
+const background = 'var(--color-background-700)';
 const fontSize = 13;
 const padding = 5;
 const top = 70;
@@ -481,66 +481,15 @@ export const OverlappingChart: FC<Props> = (props) => {
   return (
     <svg
       id={id}
-      className={cn(styles.graph, dragging, 'rounded-2xl bg-black', className)}
+      className={cn(
+        styles.graph,
+        dragging,
+        'rounded-2xl bg-black-gradient',
+        className,
+      )}
       viewBox={viewBox}
       onWheel={updateZoom}
     >
-      {/* Pattern */}
-      <defs>
-        <pattern href="#base-pattern" id="buy-pattern">
-          <use
-            href="#carbonLogo"
-            x="0"
-            y="6"
-            width="12"
-            height="12"
-            fill="var(--color-buy)"
-          />
-          <use
-            href="#carbonLogo"
-            x="12"
-            y="24"
-            width="12"
-            height="12"
-            fill="var(--color-buy)"
-          />
-          <rect
-            x="0"
-            y="0"
-            width="15"
-            height="25"
-            fill="var(--color-buy)"
-            fillOpacity="0.05"
-          />
-        </pattern>
-        <pattern href="#base-pattern" id="sell-pattern">
-          <use
-            href="#carbonLogo"
-            x="0"
-            y="6"
-            width="12"
-            height="12"
-            fill="var(--color-sell)"
-          />
-          <use
-            href="#carbonLogo"
-            x="12"
-            y="24"
-            width="12"
-            height="12"
-            fill="var(--color-sell)"
-          />
-          <rect
-            x="0"
-            y="0"
-            width="15"
-            height="25"
-            fill="var(--color-sell)"
-            fillOpacity="0.05"
-          />
-        </pattern>
-      </defs>
-
       <g className="title">
         <text
           x={box.width / 2}
@@ -559,7 +508,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           <polygon
             id="buy-polygon"
             points={getBuyPoint(props, { x, y })}
-            fill="var(--color-buy)"
+            fill="url(#svg-buy-gradient)"
             fillOpacity="0.35"
           />
           <polygon
@@ -581,7 +530,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           <polygon
             id="sell-polygon"
             points={getSellPoint(props, { x, y })}
-            fill="var(--color-sell)"
+            fill="url(#svg-sell-gradient)"
             fillOpacity="0.35"
           />
           <polygon
@@ -748,7 +697,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top)}
                 width={20}
                 height={30}
-                fill="var(--color-buy)"
+                fill="url(#svg-buy-gradient)"
                 rx="4"
               />
               <rect
@@ -832,7 +781,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top)}
                 width={20}
                 height={30}
-                fill="var(--color-sell)"
+                fill="url(#svg-sell-gradient)"
                 rx="4"
               />
               <rect

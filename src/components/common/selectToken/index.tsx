@@ -44,7 +44,7 @@ export const SelectTokenButton: FC<Props> = ({
           height="30"
         />
       ) : (
-        <div className="size-30 grid place-items-center rounded-full bg-black">
+        <div className="size-30 grid place-items-center rounded-full bg-black-gradient">
           <IconPlus className="text-primary size-16 p-2" />
         </div>
       )}

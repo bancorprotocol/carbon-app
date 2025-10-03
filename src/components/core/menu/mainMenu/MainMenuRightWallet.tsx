@@ -1,5 +1,4 @@
 import { ReactComponent as IconDisconnect } from 'assets/icons/disconnect.svg';
-import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { Button } from 'components/common/button';
@@ -33,20 +32,21 @@ export const MainMenuRightWallet: FC = () => {
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error';
     if (!isSupportedNetwork) return 'error';
+    if (!user) return 'success';
     return 'secondary';
-  }, [isSupportedNetwork, isUserBlocked]);
+  }, [isSupportedNetwork, isUserBlocked, user]);
 
   const buttonText = useMemo(() => {
     if (isUserBlocked) return 'Wallet Blocked';
     if (!isSupportedNetwork) return 'Wrong Network';
-    if (!user) return 'Connect Wallet';
+    if (!user) return 'Launch App';
     return shortenString(ensName || user);
   }, [ensName, isSupportedNetwork, isUserBlocked, user]);
 
   const buttonIcon = useMemo(() => {
     if (isUserBlocked) return <IconWarning {...iconProps} />;
     if (!isSupportedNetwork) return <IconWarning {...iconProps} />;
-    if (!user) return <IconWallet {...iconProps} />;
+    if (!user) return;
     return (
       <WalletIcon
         className="w-20"
@@ -74,7 +74,7 @@ export const MainMenuRightWallet: FC = () => {
             {...attr}
             className={cn(
               buttonStyles({ variant: buttonVariant }),
-              'flex items-center gap-10 px-12',
+              'flex items-center gap-10 px-16 py-8',
             )}
             data-testid="user-wallet"
           >
@@ -117,7 +117,7 @@ const ConnectedMenu: FC = () => {
         <>
           <button
             role="menuitem"
-            className="rounded-sm flex w-full items-center space-x-10 p-8 hover:bg-black"
+            className="rounded-sm flex w-full items-center space-x-10 p-8 hover:bg-black-gradient"
             onClick={copyAddress}
           >
             <IconCopy className="w-16" />
@@ -127,7 +127,7 @@ const ConnectedMenu: FC = () => {
       ) : (
         <button
           role="menuitem"
-          className="rounded-sm text-error/80 hover:text-error flex w-full p-8 hover:bg-black"
+          className="rounded-sm text-error/80 hover:text-error flex w-full p-8 hover:bg-black-gradient"
           onClick={switchNetwork}
         >
           Switch Network
@@ -135,7 +135,7 @@ const ConnectedMenu: FC = () => {
       )}
       <button
         role="menuitem"
-        className="rounded-sm flex w-full items-center space-x-10 p-8 hover:bg-black"
+        className="rounded-sm flex w-full items-center space-x-10 p-8 hover:bg-black-gradient"
         onClick={disconnect}
       >
         <IconDisconnect className="w-16" />

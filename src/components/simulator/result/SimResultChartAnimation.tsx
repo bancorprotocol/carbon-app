@@ -37,18 +37,17 @@ const chartSettingsBalance: D3ChartSettingsProps = {
 interface Props {
   data: SimulatorData[];
   bounds: SimulatorBounds;
-  baseToken: Token;
-  quoteToken: Token;
+  base: Token;
+  quote: Token;
 }
 
 export const SimResultChartAnimation = ({
   data,
   bounds,
-  baseToken,
-  quoteToken,
+  base,
+  quote,
 }: Props) => {
   const [displayBalance, setDisplayBalance] = useState(true);
-  const gridCols = displayBalance ? 'grid-cols-2' : 'grid-cols-[1fr_80px]';
   return (
     <>
       <D3ChartWrapper
@@ -61,7 +60,7 @@ export const SimResultChartAnimation = ({
         )}
       </D3ChartWrapper>
 
-      <div className={`grid ${gridCols} min-h-[250px] items-stretch`}>
+      <div className="grid md:grid-flow-col min-h-[250px] items-stretch">
         <D3ChartWrapper
           settings={chartPerformanceSettings}
           className="border-background-800 w-full border-r border-t"
@@ -79,8 +78,8 @@ export const SimResultChartAnimation = ({
             <D3ChartSimulatorBalance
               data={data}
               dms={dms}
-              baseToken={baseToken}
-              quoteToken={quoteToken}
+              base={base}
+              quote={quote}
               isVisible={displayBalance}
               setIsVisible={setDisplayBalance}
             />

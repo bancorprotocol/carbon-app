@@ -18,33 +18,53 @@ export const SVGCarbonLogo = () => {
           />
         </symbol>
         <pattern
-          id="base-pattern"
-          width="15"
-          height="25"
+          id="buy-pattern"
+          viewBox="0 0 40 40"
+          height="12"
+          width="12"
           patternUnits="userSpaceOnUse"
-        />
-        <pattern href="#base-pattern" id="buy-pattern">
-          <use href="#carbonLogo" x="0" y="4" fill="var(--color-buy)" />
-          <use href="#carbonLogo" x="8" y="16" fill="var(--color-buy)" />
+        >
           <rect
             x="0"
             y="0"
-            width="15"
-            height="25"
+            width="40"
+            height="40"
             fill="var(--color-buy)"
             fillOpacity="0.05"
           />
+          <circle
+            cx="20"
+            cy="20"
+            r="12"
+            stroke="url(#svg-buy-gradient)"
+            strokeOpacity="0.6"
+            strokeWidth="2"
+            fill="none"
+          />
         </pattern>
-        <pattern href="#base-pattern" id="sell-pattern">
-          <use href="#carbonLogo" x="0" y="4" fill="var(--color-sell)" />
-          <use href="#carbonLogo" x="8" y="16" fill="var(--color-sell)" />
+        <pattern
+          id="sell-pattern"
+          viewBox="0 0 40 40"
+          height="12"
+          width="12"
+          patternUnits="userSpaceOnUse"
+        >
           <rect
             x="0"
             y="0"
-            width="15"
-            height="25"
+            width="40"
+            height="40"
             fill="var(--color-sell)"
             fillOpacity="0.05"
+          />
+          <circle
+            cx="20"
+            cy="20"
+            r="12"
+            stroke="url(#svg-sell-gradient)"
+            strokeOpacity="0.6"
+            strokeWidth="2"
+            fill="none"
           />
         </pattern>
       </defs>

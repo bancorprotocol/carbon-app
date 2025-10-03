@@ -12,8 +12,6 @@ import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
 import { FormEvent, useCallback, useEffect, useMemo } from 'react';
 import { formatNumber } from 'utils/helpers';
-import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
-import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { D3ChartOverlapping } from 'components/strategies/common/d3Chart/overlapping/D3ChartOverlapping';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import {
@@ -30,8 +28,8 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 export const SimulatorInputOverlappingPage = () => {
   const searchState = simulatorInputOverlappingRoute.useSearch();
   const { marketPrice } = useMarketPrice({
-    base: searchState.baseToken,
-    quote: searchState.quoteToken,
+    base: searchState.base,
+    quote: searchState.quote,
   });
 
   const { dispatch, state, bounds } = useSimulatorOverlappingInput({
@@ -39,16 +37,16 @@ export const SimulatorInputOverlappingPage = () => {
   });
 
   const { data, isPending } = useGetTokenPriceHistory({
-    baseToken: searchState.baseToken,
-    quoteToken: searchState.quoteToken,
+    baseToken: searchState.base,
+    quoteToken: searchState.quote,
     start: oneYearAgo(),
     end: defaultEnd(),
   });
 
   useEffect(() => {
     if (searchState.sellMax || searchState.buyMin) return;
-    dispatch('baseToken', searchState.baseToken);
-    dispatch('quoteToken', searchState.quoteToken);
+    dispatch('base', searchState.base);
+    dispatch('quote', searchState.quote);
     dispatch('spread', defaultSpread);
     dispatch('buyMax', '');
     dispatch('buyMin', '');
@@ -60,8 +58,8 @@ export const SimulatorInputOverlappingPage = () => {
     dispatch('buyBudgetError', '');
   }, [
     dispatch,
-    searchState.baseToken,
-    searchState.quoteToken,
+    searchState.base,
+    searchState.quote,
     searchState.sellMax,
     searchState.buyMin,
   ]);
@@ -86,7 +84,7 @@ export const SimulatorInputOverlappingPage = () => {
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
 
-    if (!state.baseToken || !state.quoteToken || !_sP_) return;
+    if (!state.base || !state.quote || !_sP_) return;
     if (e.currentTarget.querySelector('.error-message')) return;
 
     const prices = calculateOverlappingPrices(
@@ -97,8 +95,8 @@ export const SimulatorInputOverlappingPage = () => {
     );
 
     const search = {
-      baseToken: state.baseToken.address,
-      quoteToken: state.quoteToken.address,
+      base: state.base.address,
+      quote: state.quote.address,
       buyMin: prices.buyPriceLow,
       buyMax: prices.buyPriceHigh,
       buyBudget: state.buy.budget,
@@ -117,8 +115,8 @@ export const SimulatorInputOverlappingPage = () => {
 
     if (search.buyBudget) {
       search.sellBudget = calculateOverlappingSellBudget(
-        state.baseToken.decimals,
-        state.quoteToken.decimals,
+        state.base.decimals,
+        state.quote.decimals,
         state.buy.min,
         state.sell.max,
         _sP_.toString(),
@@ -127,8 +125,8 @@ export const SimulatorInputOverlappingPage = () => {
       );
     } else {
       search.buyBudget = calculateOverlappingBuyBudget(
-        state.baseToken.decimals,
-        state.quoteToken.decimals,
+        state.base.decimals,
+        state.quote.decimals,
         state.buy.min,
         state.sell.max,
         _sP_.toString(),
@@ -172,8 +170,8 @@ export const SimulatorInputOverlappingPage = () => {
         prices={prices}
       >
         <D3ChartOverlapping
-          base={state.baseToken!}
-          quote={state.quoteToken!}
+          base={state.base!}
+          quote={state.quote!}
           prices={prices}
           onChange={onPriceUpdates}
           marketPrice={marketPrice ?? 0}
@@ -185,13 +183,7 @@ export const SimulatorInputOverlappingPage = () => {
         className={cn(style.form, 'grid gap-16')}
         data-testid="create-simulation-form"
       >
-        <div className="bg-background-900 grid content-start rounded-2xl">
-          <SimInputTokenSelection
-            baseToken={searchState.baseToken}
-            quoteToken={searchState.quoteToken}
-            noPriceHistory={emptyHistory}
-          />
-          <SimInputStrategyType />
+        <div className="bg-white-gradient grid content-start rounded-2xl">
           <CreateOverlappingStrategy
             state={state}
             dispatch={dispatch}

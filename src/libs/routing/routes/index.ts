@@ -43,16 +43,8 @@ import {
   strategyPageRoot,
 } from 'libs/routing/routes/strategy';
 import { cartPage } from './cart';
-import { createRoute, redirect } from '@tanstack/react-router';
 import { liquidityMatrixPage } from './liquidity-matrix';
-
-const rootRedirect = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/',
-  beforeLoad: (ctx) => {
-    redirect({ to: '/trade', throw: true, search: ctx.search });
-  },
-});
+import { landingPage } from './landing';
 
 export const routeTree = rootRoute.addChildren([
   termPage,
@@ -60,6 +52,7 @@ export const routeTree = rootRoute.addChildren([
   debugPage,
   tradePage,
   cartPage,
+  landingPage,
   strategyPageRoot.addChildren([strategyPage, strategyPageRedirect]),
   oldCreateStrategies,
   editStrategyLayout.addChildren([
@@ -93,6 +86,5 @@ export const routeTree = rootRoute.addChildren([
     ]),
     simulatorResultRoute,
   ]),
-  rootRedirect,
   liquidityMatrixPage,
 ]);

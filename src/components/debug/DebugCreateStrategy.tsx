@@ -195,7 +195,7 @@ export const DebugCreateStrategy = () => {
   return (
     <form
       onSubmit={createStrategies}
-      className="rounded-3xl bg-background-900 flex flex-col space-y-20 p-20"
+      className="rounded-3xl bg-white-gradient flex flex-col space-y-20 p-20"
     >
       <h2 className="text-center">Create</h2>
 
@@ -203,7 +203,7 @@ export const DebugCreateStrategy = () => {
         <label htmlFor="strategy-json-shortcut">JSON Shortcut</label>
         <textarea
           id="strategy-json-shortcut"
-          className="rounded-3xl bg-black px-16 py-8"
+          className="rounded-3xl bg-black-gradient px-16 py-8"
           placeholder="Enter a Strategy template in JSON format"
           onChange={onShortcutChange}
           aria-describedby="strategy-json-shortcut-description"
@@ -223,7 +223,7 @@ export const DebugCreateStrategy = () => {
           {allTokens.map((t) => (
             <li
               key={t.address}
-              className="rounded-3xl flex items-center gap-8 bg-black px-16 py-8"
+              className="rounded-3xl flex items-center gap-8 bg-black-gradient px-16 py-8"
             >
               <Checkbox
                 isChecked={t.selected}

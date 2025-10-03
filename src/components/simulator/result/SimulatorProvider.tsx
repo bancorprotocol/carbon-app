@@ -1,62 +1,16 @@
-import {
-  StrategyInputValues,
-  buildStrategyInputState,
-} from 'hooks/useStrategyInput';
+import { buildStrategyInputState } from 'hooks/useStrategyInput';
 import { useTokens } from 'hooks/useTokens';
-import { SimulatorData, SimulatorReturn, useGetSimulator } from 'libs/queries';
-import { SimulatorResultSearch, useSearch } from 'libs/routing';
-import {
-  createContext,
-  FC,
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { SimulatorData, useGetSimulator } from 'libs/queries';
+import { useSearch } from 'libs/routing';
+import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { wait } from 'utils/helpers';
-
-type SimulationStatus = 'running' | 'paused' | 'ended' | 'idle';
-
-interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
-  search: SimulatorResultSearch;
-  state: StrategyInputValues;
-  status: SimulationStatus;
-  start: () => void;
-  end: () => void;
-  replay: () => void;
-  pause: () => void;
-  unpause: () => void;
-  onBrush: (frame: number) => void;
-  onBrushEnd: () => void;
-  animationData: SimulatorData[];
-  isPending: boolean;
-  isError: boolean;
-  errorMsg?: string;
-  isSuccess: boolean;
-  timer: string;
-  playbackSpeed: PlaybackSpeed;
-  setPlaybackSpeed: (speed: PlaybackSpeed) => void;
-}
-
-const SimulatorCTX = createContext<SimulatorProviderCTX | undefined>(undefined);
-
-export const useSimulator = () => {
-  const ctx = useContext(SimulatorCTX);
-  if (ctx === null || ctx === undefined) {
-    throw new Error('No context found for simulator provider.');
-  }
-  return ctx;
-};
+import { playbackSpeedOptions, SimulationStatus, SimulatorCTX } from './utils';
 
 interface SimulatorProviderProps {
   children: ReactNode;
 }
 
 const times: number[] = [];
-
-export const playbackSpeedOptions = ['0.1x', '0.5x', '1x', '2x', '4x'] as const;
 
 const playbackSpeedMap: Record<PlaybackSpeed, number> = {
   '0.1x': 1000,
@@ -71,9 +25,9 @@ export type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
 export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const search = useSearch({ from: '/simulate/result' });
   const tokens = useTokens();
-  const baseToken = tokens.getTokenById(search.baseToken);
-  const quoteToken = tokens.getTokenById(search.quoteToken);
-  const state = buildStrategyInputState(search, baseToken, quoteToken);
+  const base = tokens.getTokenById(search.base);
+  const quote = tokens.getTokenById(search.quote);
+  const state = buildStrategyInputState(search, base, quote);
   const query = useGetSimulator(search);
   const [animationData, setAnimationData] = useState<SimulatorData[]>([]);
   const [timer, setTimer] = useState('');
