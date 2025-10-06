@@ -16,21 +16,7 @@ import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-
-export const datePickerPresets: DatePickerPreset[] = [
-  { label: 'Last 7 days', duration: { days: 6 } },
-  { label: 'Last 30 days', duration: { days: 29 } },
-  { label: 'Last 90 days', duration: { days: 89 } },
-  { label: 'Last 365 days', duration: { days: 364 } },
-];
-
-export type DatePickerPreset = {
-  label: string;
-  duration: Duration;
-  days?: number;
-  months?: number;
-  years?: number;
-};
+import { DatePickerPreset } from './utils';
 
 interface Props {
   /** Value used to be reset to when user click on reset */
