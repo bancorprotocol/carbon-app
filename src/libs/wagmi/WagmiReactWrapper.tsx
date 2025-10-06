@@ -7,7 +7,8 @@ export const WagmiReactWrapper: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   return (
-    <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
+    // Do not reconnect on mount to prevent HMR issues reconnectOnMount={false}
+    <WagmiProvider config={wagmiConfig} reconnectOnMount={!import.meta.env.DEV}>
       <CarbonWagmiProvider>{children}</CarbonWagmiProvider>
     </WagmiProvider>
   );
