@@ -83,6 +83,5 @@ export const routeTree = rootRoute.addChildren([
     simulatorInputOverlappingRoute,
   ]),
   simulatorResultRoute,
-  rootRedirect,
   liquidityMatrixPage,
 ]);

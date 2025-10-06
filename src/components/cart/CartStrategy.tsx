@@ -211,7 +211,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           popover="auto"
           onBeforeToggle={setSize}
           className={cn(
-            'rounded-md bg-black-gradient absolute m-0 overflow-hidden p-24',
+            'rounded-md bg-black absolute m-0 overflow-hidden p-24',
             styles.warnings,
           )}
         >
@@ -226,7 +226,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
                 popoverTarget={popoverId}
                 popoverTargetAction="hide"
                 aria-label="close warnings"
-                className="hover:bg-black-gradient ml-auto rounded-full p-8"
+                className="hover:bg-black ml-auto rounded-full p-8"
               >
                 <IconClose className="size-16" />
               </button>

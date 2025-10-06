@@ -82,7 +82,7 @@ export const BudgetSection: FC<Props> = ({
       </legend>
       <TokenInputField
         id={inputId}
-        className="rounded-2xl bg-black-gradient p-16"
+        className="rounded-2xl border-2 border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-white/60"
         value={order.budget}
         setValue={(value) => dispatch(`${type}Budget`, value)}
         token={budgetToken}

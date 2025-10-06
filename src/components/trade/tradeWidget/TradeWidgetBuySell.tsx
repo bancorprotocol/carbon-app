@@ -117,7 +117,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   return (
     <form {...formProps} onSubmit={handleTrade} className="grid gap-24">
-      <div className="rounded-xl bg-black-gradient p-16 border-1 border-transparent focus-within:border-white/50">
+      <div className="rounded-xl p-16 border-2 border-transparent bg-black hover:bg-black/60 focus-within:border-white/50">
         <header className="text-14 flex justify-between">
           <label htmlFor={`${id}-pay`} className="text-white/50">
             You pay
@@ -147,7 +147,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         />
       </div>
       <div className="grid gap-8">
-        <div className="rounded-b-xs rounded-t-xl bg-black-gradient border-1 border-transparent p-16 focus-within:border-white/50">
+        <div className="rounded-b-xs rounded-t-xl  border-2 border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-white/50">
           <header className="text-14 flex justify-between">
             <label htmlFor={`${id}-receive`} className="text-white/50">
               You receive
@@ -178,7 +178,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             disabled={!hasEnoughLiquidity}
           />
         </div>
-        <footer className="rounded-b-xl rounded-t-xs text-14 flex justify-between bg-black-gradient p-16 text-white/80">
+        <footer className="rounded-b-xl rounded-t-xs text-14 flex justify-between bg-black p-16 text-white/80">
           {warning && <Warning className="text-14" message={warning} />}
           {rateMessage && <p>{rateMessage}</p>}
           {showRouting && (

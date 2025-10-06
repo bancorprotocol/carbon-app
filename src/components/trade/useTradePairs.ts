@@ -1,5 +1,5 @@
 import { useSearch, TradeSearch } from 'libs/routing';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { useWagmi } from 'libs/wagmi';

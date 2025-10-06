@@ -2,7 +2,7 @@ import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
 import { Pathnames } from 'libs/routing';
 import { customTwMerge } from 'libs/twmerge';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 export * from './number';
 export * from './schema';
 

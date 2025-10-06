@@ -106,9 +106,9 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
     <>
       <div
         className={cn(
-          'rounded-2xl flex cursor-text flex-col gap-5 border border-black bg-black-gradient p-16 focus-within:border-white/50',
+          'rounded-2xl flex cursor-text flex-col gap-8 border-2 border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-white/50',
           showWarning && 'border-warning focus-within:border-warning',
-          displayError && 'border-error/50 focus-within:border-error/50',
+          displayError && 'border-error/50 focus-within:border-error',
         )}
         onClick={() => document.getElementById(id)?.focus()}
       >
@@ -136,7 +136,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
           />
           {!!marketPrice && (
             <button
-              className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
+              className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
               type="button"
               onClick={setMarket}
             >

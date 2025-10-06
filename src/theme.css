@@ -155,20 +155,6 @@
   fill: url('#svg-brand-gradient');
 }
 
-@utility btn-primary-gradient {
-  @apply rounded-full;
-  background: var(--main-gradient);
-  color: var(--color-black);
-  &:hover {
-    color: white;
-    background: linear-gradient(to bottom, #4AA1AD, #254449) border-box;
-  }
-  &:disabled, &.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-}
-
 @utility bg-white-gradient {
   background-image: var(--white-gradient);
   @apply glass-shadow;
@@ -176,23 +162,24 @@
 @utility bg-black-gradient {
   background-image: var(--black-gradient);
 }
-@utility btn-black-gradient {
-  background-image: var(--black-gradient);
-  @apply border-background-800 border-2;
+
+@utility btn-primary-gradient {
+  --gradient-direction: 180deg;
+  @apply rounded-full;
+  box-shadow: 0 5px 5px 0 oklch(20% var(--chroma) var(--hue) / 20%);
+  background: var(--main-gradient);
+  color: var(--color-black);
+  transition: transform 0.1s var(--ease-out);
   &:hover {
-    @apply bg-white/20 border-background-700;
+    color: white;
+    background: linear-gradient(180deg, #50C58A, var(--color-secondary));
+  }
+  &:disabled, &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
   &:active {
-    @apply bg-white/30 border-background-600;
-  }
-  &[data-selected="true"] {
-    @apply text-white border-background-600;
-  }
-  &[data-selected="true"]:hover {
-    @apply border-background-400;
-  }
-  &[data-selected="true"]:active {
-    @apply border-background-300;
+    transform: scale(0.9);
   }
 }
 
@@ -201,6 +188,7 @@
   box-shadow: 0 5px 5px 0 oklch(20% var(--chroma) var(--hue) / 20%);
   background: linear-gradient(to bottom, #66B6C1, #30565B 50%) border-box;
   color: white;
+  transition: transform 0.1s var(--ease-out);
   &:hover {
     color: white;
     background: linear-gradient(to bottom, #4AA1AD, #254449) border-box;
@@ -210,12 +198,16 @@
     color: oklch(1 0 0 / 40%);
     pointer-events: none;
   }
+  &:active {
+    transform: scale(0.9);
+  }
 }
 @utility btn-tertiary-gradient {
   @apply rounded-full;
   box-shadow: 0 4px 15px 0 oklch(20% var(--chroma) var(--hue) / 80%);
   background: linear-gradient(to bottom, #30565B, #1B383D 30%, #061B1E) border-box;
   color: white;
+  transition: transform 0.1s var(--ease-out);
   &:hover {
     background: linear-gradient(to bottom, #30565B, #1B383D, #061B1E) border-box;
   }
@@ -223,6 +215,9 @@
     background: linear-gradient(var(--color-black)) border-box;
     color: oklch(1 0 0 / 40%);
     pointer-events: none;
+  }
+  &:active {
+    transform: scale(0.9);
   }
 }
 
@@ -285,15 +280,18 @@
   }
 }
 @utility tab-anchor {
+  &:hover {
+    color: white;
+  }
   &:has(> *) > *, &:not(:has(> *)) {
     transition-property: color;
     transition-duration: 300ms;
     transition-timing-function: var(--ease-in-out);
-    transition-delay: 100ms;
     border-radius: inherit;
   }
 }
 @utility tab-focus {
+  color: white;
   anchor-name: --tab-selected;
 }
 

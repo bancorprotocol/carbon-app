@@ -26,7 +26,7 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
   const { size, limit, setLimit } = useActivityPagination();
   return (
     <>
-      <ul className="flex flex-col gap-16 p-16">
+      <ul className="flex flex-col gap-16 p-16 grid-area-[list]">
         {activities.map((activity, i) => (
           <ActivityItem
             key={activityKey(activity, i)}

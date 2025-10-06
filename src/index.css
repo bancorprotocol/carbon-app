@@ -70,7 +70,7 @@
 
   @keyframes move-gradient {
     from {
-      transform: var(--origin-translate) scale(1);
+      transform: var(--origin-translate) scale(0.8);
     }
     to {
       transform: var(--origin-translate) scale(1.7);
@@ -332,14 +332,13 @@ dialog.modal {
 }
 
 dialog.modal > form {
-  @apply bg-background-800;
+  @apply bg-new-primary glass-shadow;
   border-radius: 16px;
   padding: 24px;
   max-width: 390px;
 }
 dialog.modal::backdrop {
-  @apply bg-black/40;
-  backdrop-filter: blur(8px);
+  @apply bg-black/85;
 }
 
 @media (max-width: 640px) {

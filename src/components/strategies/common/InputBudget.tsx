@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { Token } from 'libs/tokens';
 import {
+  cn,
   formatNumber,
   prettifyNumber,
   roundSearchParam,
@@ -108,14 +109,13 @@ export const InputBudget: FC<Props> = (props) => {
   };
 
   return (
-    <div className="flex flex-col gap-16">
+    <div className="grid gap-16">
       <div
-        className={`
-          flex cursor-text flex-col gap-8 rounded-2xl border border-black bg-black-gradient p-16
-          focus-within:border-white/50
-          ${error ? 'border-error/50!' : ''}
-          ${className}
-        `}
+        className={cn(
+          'flex cursor-text flex-col gap-8 rounded-2xl border-2 border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-white/50',
+          error && 'border-error/50 focus-within:border-error',
+          className,
+        )}
         onClick={() => inputRef.current?.focus()}
       >
         {title && (
@@ -147,7 +147,7 @@ export const InputBudget: FC<Props> = (props) => {
             disabled={disabled}
             data-testid={props['data-testid']}
           />
-          <div className="bg-background-800 flex items-center gap-6 rounded-[20px] px-8 py-6">
+          <div className="bg-new-primary flex items-center gap-6 rounded-[20px] px-8 py-6">
             <TokenLogo token={token} size={20} />
             <span className="font-medium">{token.symbol}</span>
           </div>
@@ -165,13 +165,7 @@ export const InputBudget: FC<Props> = (props) => {
                 {editType === 'deposit' ? 'Wallet:' : 'Allocated:'}
               </span>
               <span className="text-white">{prettifyNumber(max)}</span>
-              <span
-                className={
-                  disabled
-                    ? 'text-primary/40'
-                    : 'text-primary group-hover/budget-input:text-tertiary'
-                }
-              >
+              <span className="text-gradient hover:text-secondary focus:text-secondary active:text-secondary group-disabled/budget-input:text-primary/40">
                 MAX
               </span>
             </button>

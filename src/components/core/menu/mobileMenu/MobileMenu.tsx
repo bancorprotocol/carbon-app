@@ -30,7 +30,7 @@ export const MobileMenu: FC = () => {
               key={index}
               to={href}
               aria-current={isSamePage ? 'page' : 'false'}
-              className="px-8 py-4 aria-page:text-white hover:text-white tab-anchor aria-page:tab-focus"
+              className="px-8 py-4 tab-anchor aria-page:tab-focus"
             >
               {label}
             </Link>

@@ -4,21 +4,15 @@ import {
   VariantSize,
 } from 'components/common/variants';
 import { cva } from 'class-variance-authority';
-import config from 'config';
 
 type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 
 const variants = {
   variant: {
-    black: [
-      'bg-black-gradient text-white hover:bg-white/20 active:bg-white/30',
-    ],
+    black: ['bg-black text-white hover:bg-white/20 active:bg-white/30'],
     white: ['btn-secondary-gradient'],
     secondary: ['btn-secondary-gradient'],
-    success: [
-      'bg-primary border-2 border-primary text-black',
-      'hover:border-white/60 hover:disabled:border-primary',
-    ],
+    success: ['btn-primary-gradient'],
     buy: ['btn-buy-gradient text-black'],
     sell: ['btn-sell-gradient text-black'],
     error: [
@@ -36,13 +30,6 @@ const variants = {
     false: '',
   },
 };
-
-if (config.ui.useGradientBranding) {
-  variants.variant.success = [
-    'transition-[background-position] duration-500 bg-size-[200%] bg-gradient text-black',
-    'hover:bg-right hover:disabled:bg-left',
-  ];
-}
 
 export const buttonStyles = cva<ButtonVariants>(
   [

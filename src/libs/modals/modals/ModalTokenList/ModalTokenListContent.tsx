@@ -71,7 +71,7 @@ export const ModalTokenListContent: FC<Props> = ({
             onChange={() => setSelectedList(category)}
             className="flex-1 flex gap-8 justify-center items-center"
           >
-            {category}
+            <span className="capitalize">{category}</span>
             <span className="rounded-full bg-white/10 px-6">
               {tokens[category].length}
             </span>

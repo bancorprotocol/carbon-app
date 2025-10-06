@@ -107,7 +107,7 @@ export const StrategyContent: FC<Props> = ({ url }) => {
       </div>
       <div
         role="toolbar"
-        className="grid grid-flow-col sm:justify-end gap-16 grid-area-[filters]"
+        className="grid grid-flow-col items-center sm:justify-end gap-16 grid-area-[filters]"
       >
         <StrategyFilterDropdown filter={filter} setFilter={setFilter} />
         <StrategySortDropdown sort={sort} setSort={setSort} />

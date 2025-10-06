@@ -12,7 +12,7 @@ import {
 import { usePairs } from 'hooks/usePairs';
 import { getEnsAddressIfAny } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
 import style from './ExplorerSearch.module.css';

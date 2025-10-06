@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { PairLogoName, TokenLogoName } from 'components/common/DisplayPair';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
 import { cn } from 'utils/helpers';

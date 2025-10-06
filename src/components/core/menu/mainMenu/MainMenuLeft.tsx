@@ -39,7 +39,7 @@ export const MainMenuLeft: FC = () => {
               to={href}
               aria-current={isSamePage ? 'page' : 'false'}
               data-testid={testid}
-              className="font-title aria-page:text-white hover:text-white p-8 tab-anchor aria-page:tab-focus"
+              className="font-title p-8 tab-anchor aria-page:tab-focus"
             >
               {label}
             </Link>

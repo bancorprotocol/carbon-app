@@ -1,49 +1,16 @@
-import { Outlet, useNavigate, useSearch } from '@tanstack/react-router';
+import { Outlet } from '@tanstack/react-router';
 import { ReactComponent as IconBookmark } from 'assets/icons/bookmark.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { TokenSelection } from 'components/strategies/common/TokenSelection';
-import { getLastVisitedPair } from 'libs/routing';
-import { useToken } from 'hooks/useTokens';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-
-// TODO: merge this hook with trade when they both use base / quote in search
-const usePersistLastPair = () => {
-  const search = useSearch({ from: '/simulate' });
-  const defaultPair = useMemo(() => getLastVisitedPair(), []);
-  const base = useToken(search.baseToken ?? defaultPair.base);
-  const quote = useToken(search.quoteToken ?? defaultPair.quote);
-
-  useEffect(() => {
-    if (!search.baseToken || !search.quoteToken) return;
-    lsService.setItem('tradePair', [search.baseToken, search.quoteToken]);
-  }, [search.baseToken, search.quoteToken]);
-
-  const navigate = useNavigate({ from: '/simulate' });
-  useEffect(() => {
-    if (search.baseToken && search.quoteToken) return;
-    navigate({
-      search: {
-        ...search,
-        baseToken: defaultPair.base,
-        quoteToken: defaultPair.quote,
-      },
-      replace: true,
-    });
-  }, [search, navigate, defaultPair.base, defaultPair.quote]);
-
-  return {
-    base: base.token,
-    quote: quote.token,
-    isPending: base.isPending || quote.isPending,
-  };
-};
+import { usePersistLastPair } from 'hooks/usePersistLastPair';
 
 export const SimulatorRoot = () => {
-  const { isPending } = usePersistLastPair();
+  const { isPending } = usePersistLastPair({ from: '/simulate' });
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center p-16" />;

@@ -26,7 +26,6 @@ export const ModalSlideOver: FC<ModalProps> = ({
   showCloseButton = true,
 }) => {
   const { closeModal } = useModal();
-  const sizeClass = getSize(size);
 
   return (
     <Overlay
@@ -35,13 +34,13 @@ export const ModalSlideOver: FC<ModalProps> = ({
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-full ${sizeClass}`}
+        className={cn('relative w-full py-16', getSize(size))}
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <div className="bg-black-gradient p-25 relative flex h-screen w-full flex-col border-0 outline-hidden focus:outline-hidden">
+        <div className="bg-new-primary glass-shadow p-25 relative flex h-full w-full flex-col border-0 rounded-2xl outline-hidden focus:outline-hidden">
           <div
             className={`flex items-center ${
               title ? 'justify-between' : 'justify-end'
