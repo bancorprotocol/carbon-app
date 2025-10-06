@@ -3,17 +3,16 @@ import { NotFound } from 'components/common/NotFound';
 import { TradeProvider } from 'components/trade/TradeContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useToken } from 'hooks/useTokens';
-import { TradeSearch } from 'libs/routing';
 import { getLastVisitedPair } from 'libs/routing/utils';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { TradeNav } from 'components/trade/TradeNav';
 
-const usePersistLastPair = (from: '/trade') => {
-  const search = useSearch({ strict: false }) as TradeSearch;
-  const defaultPair = getLastVisitedPair();
+const usePersistLastPair = () => {
+  const search = useSearch({ from: '/trade' });
+  const defaultPair = useMemo(() => getLastVisitedPair(), []);
   const base = useToken(search.base ?? defaultPair.base);
   const quote = useToken(search.quote ?? defaultPair.quote);
 
@@ -22,7 +21,7 @@ const usePersistLastPair = (from: '/trade') => {
     lsService.setItem('tradePair', [base.token.address, quote.token.address]);
   }, [base.token, quote.token]);
 
-  const navigate = useNavigate({ from });
+  const navigate = useNavigate({ from: '/trade' });
   useEffect(() => {
     if (search.base && search.quote) return;
     navigate({
@@ -39,9 +38,8 @@ const usePersistLastPair = (from: '/trade') => {
   };
 };
 
-const url = '/trade';
 export const TradeRoot = () => {
-  const { base, quote, isPending } = usePersistLastPair(url);
+  const { base, quote, isPending } = usePersistLastPair();
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center" />;

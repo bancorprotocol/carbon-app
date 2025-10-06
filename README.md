@@ -24,7 +24,7 @@ To run the app locally, you need the following:
 - Node.js 20+
 - Yarn
 
-For E2E testing you need a Tenderly account and API Key.
+For E2E testing you need a Tenderly account and an API Key.
 
 ## Run locally
 

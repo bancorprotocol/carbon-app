@@ -20,13 +20,6 @@ import {
 } from 'libs/routing/routes/portfolio';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
-  simulatorInputOverlappingRoute,
-  simulatorInputRecurringRoute,
-  simulatorInputRootRoute,
-  simulatorResultRoute,
-  simulatorRootRoute,
-} from 'libs/routing/routes/sim';
-import {
   editStrategyLayout,
   editPricesDisposable,
   editPricesOverlapping,
@@ -45,6 +38,12 @@ import {
 import { cartPage } from './cart';
 import { liquidityMatrixPage } from './liquidity-matrix';
 import { landingPage } from './landing';
+import {
+  simulatorInputOverlappingRoute,
+  simulatorInputRecurringRoute,
+  simulatorInputRootRoute,
+  simulatorResultRoute,
+} from './sim';
 
 export const routeTree = rootRoute.addChildren([
   termPage,
@@ -79,12 +78,11 @@ export const routeTree = rootRoute.addChildren([
     portfolioDistributionTokenPage,
     portfolioActivityPage,
   ]),
-  simulatorRootRoute.addChildren([
-    simulatorInputRootRoute.addChildren([
-      simulatorInputRecurringRoute,
-      simulatorInputOverlappingRoute,
-    ]),
-    simulatorResultRoute,
+  simulatorInputRootRoute.addChildren([
+    simulatorInputRecurringRoute,
+    simulatorInputOverlappingRoute,
   ]),
+  simulatorResultRoute,
+  rootRedirect,
   liquidityMatrixPage,
 ]);

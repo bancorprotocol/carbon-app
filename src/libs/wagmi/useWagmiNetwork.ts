@@ -45,8 +45,8 @@ export const useWagmiNetwork = () => {
     activateNetwork();
   }, [activateNetwork]);
 
-  const wagmiConnectors = getConnectors(wagmiConfig);
   const connectors = useMemo(() => {
+    const wagmiConnectors = getConnectors(wagmiConfig);
     const wagmiConnectorsNames = wagmiConnectors
       .map((c) => providerRdnsToName(c.id) || c.name)
       .map((name) => name.toLowerCase());
@@ -71,7 +71,7 @@ export const useWagmiNetwork = () => {
         return connectionOrder.indexOf(nameB) - connectionOrder.indexOf(nameA);
       return connectionOrder.indexOf(nameA) - connectionOrder.indexOf(nameB);
     });
-  }, [wagmiConnectors]);
+  }, []);
 
   return {
     chainId,

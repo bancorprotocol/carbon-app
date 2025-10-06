@@ -1,11 +1,10 @@
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
-import { simulatorInputRecurringRoute } from 'libs/routing/routes/sim';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
   defaultEnd,
@@ -22,7 +21,7 @@ import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
 import style from 'components/strategies/common/form.module.css';
 
 export const SimulatorInputRecurringPage = () => {
-  const searchState = simulatorInputRecurringRoute.useSearch();
+  const searchState = useSearch({ from: '/simulate/recurring' });
 
   const { dispatch, state, bounds } = useSimulatorInput({
     searchState,

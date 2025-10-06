@@ -80,7 +80,14 @@ export class MyStrategyDriver {
       clickManageEntry: async (id: ManageStrategyID) => {
         await strategy.getByTestId('manage-strategy-btn').click();
         await waitFor(this.page, 'manage-strategy-dropdown', 10_000);
-        await this.page.getByTestId(`manage-strategy-${id}`).click();
+        try {
+          await this.page
+            .getByTestId(`manage-strategy-${id}`)
+            .click({ timeout: 2_000 });
+        } catch {
+          await strategy.scrollIntoViewIfNeeded();
+          await this.page.getByTestId(`manage-strategy-${id}`).click();
+        }
       },
     };
   }

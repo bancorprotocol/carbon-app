@@ -3,13 +3,12 @@ import {
   calculateOverlappingPrices,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
 import { CreateOverlappingStrategy } from 'components/simulator/input/overlapping/CreateOverlappingStrategy';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { useSimulatorOverlappingInput } from 'hooks/useSimulatorOverlappingInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
-import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
 import { FormEvent, useCallback, useEffect, useMemo } from 'react';
 import { formatNumber } from 'utils/helpers';
 import { D3ChartOverlapping } from 'components/strategies/common/d3Chart/overlapping/D3ChartOverlapping';
@@ -26,7 +25,7 @@ import style from 'components/strategies/common/form.module.css';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
 export const SimulatorInputOverlappingPage = () => {
-  const searchState = simulatorInputOverlappingRoute.useSearch();
+  const searchState = useSearch({ from: '/simulate/overlapping' });
   const { marketPrice } = useMarketPrice({
     base: searchState.base,
     quote: searchState.quote,

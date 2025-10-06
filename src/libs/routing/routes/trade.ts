@@ -5,7 +5,6 @@ import {
   validAddress,
   validNumber,
   validInputNumber,
-  getLastVisitedPair,
 } from '../utils';
 import { TradeDisposable } from 'pages/trade/disposable';
 import { TradeRoot } from 'pages/trade/root';
@@ -79,7 +78,6 @@ export interface TradeSearch {
   chartEnd?: string;
   marketPrice?: string;
 }
-const defaultPair = getLastVisitedPair();
 const tradePage = createRoute({
   getParentRoute: () => rootRoute,
   path: '/trade',
@@ -91,8 +89,8 @@ const tradePage = createRoute({
   },
   validateSearch: searchValidator({
     marketPrice: v.optional(validNumber),
-    base: v.optional(v.fallback(validAddress, defaultPair.base)),
-    quote: v.optional(v.fallback(validAddress, defaultPair.quote)),
+    base: v.optional(validAddress),
+    quote: v.optional(validAddress),
     chartStart: v.optional(validNumber),
     chartEnd: v.optional(validNumber),
   }),
