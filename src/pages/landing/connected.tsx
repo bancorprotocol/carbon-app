@@ -214,7 +214,7 @@ export const ConnectedLandingPage = () => {
                 <Link
                   to={item.to}
                   search={item.search}
-                  className="btn-primary-gradient text-center"
+                  className="btn-primary-gradient text-center px-16 py-8"
                 >
                   Trade
                 </Link>

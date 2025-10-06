@@ -183,7 +183,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           <button
             role="menuitem"
             type="button"
-            className="btn-tertiary-gradient size-38 rounded-sm grid place-items-center"
+            className="btn-secondary-gradient size-38 rounded-sm grid place-items-center"
             aria-label="Withdraw & Delete"
             onClick={remove}
           >
