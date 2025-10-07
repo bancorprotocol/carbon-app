@@ -68,13 +68,13 @@ export const MainMenuRightWallet: FC = () => {
     return (
       <DropdownMenu
         placement="bottom-end"
-        className="rounded-[10px] p-8"
+        className="rounded-2xl p-8"
         button={(attr) => (
           <button
             {...attr}
             className={cn(
               buttonStyles({ variant: buttonVariant }),
-              'flex items-center gap-10 px-16 py-8',
+              'flex items-center gap-8 px-16 py-8',
             )}
             data-testid="user-wallet"
           >
@@ -92,7 +92,7 @@ export const MainMenuRightWallet: FC = () => {
     <Button
       variant={buttonVariant}
       onClick={onClickOpenModal}
-      className="flex items-center gap-10 px-12"
+      className="flex items-center gap-8 px-16"
     >
       {buttonIcon}
       <span>{buttonText}</span>

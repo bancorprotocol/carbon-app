@@ -1,17 +1,20 @@
 import { UseQueryResult } from '@tanstack/react-query';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Loading } from 'components/common/Loading';
 import { TokensOverlap } from 'components/common/tokensOverlap';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useGetEnrichedStrategies } from 'hooks/useStrategies';
 import { useTokens } from 'hooks/useTokens';
+import { useGetAllStrategies } from 'libs/queries';
 import {
   PairTrade,
   Trending,
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
 import { Link } from 'libs/routing';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
-import { useEffect, useRef } from 'react';
-import { getLowestBits } from 'utils/helpers';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { cn, getLowestBits, prettifyNumber } from 'utils/helpers';
 import { toPairSlug } from 'utils/pairSearch';
 
 interface PairTrendingQuery {
@@ -98,30 +101,72 @@ const useTrendStrategies = (trending: UseQueryResult<Trending, Error>) => {
   };
 };
 
+const useTotalExchange = () => {
+  const query = useGetAllStrategies({ enabled: true });
+  const { isPending, data } = useGetEnrichedStrategies(query);
+  const result = useMemo(() => {
+    if (isPending) return;
+    return data!
+      .reduce((acc, strategy) => {
+        return acc.add(strategy.fiatBudget.total);
+      }, new SafeDecimal(0))
+      .toNumber();
+  }, [isPending, data]);
+  return result;
+};
+
 export const ExplorerHeader = () => {
+  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
+
   const trending = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
   const trendingPairs = useTrendingPairs(trending);
+  const totalExchange = useTotalExchange();
+
+  const formatInt = useCallback((value: number) => {
+    return prettifyNumber(value, { isInteger: true });
+  }, []);
+  const formatCurrency = useCallback(
+    (value: number) => {
+      return prettifyNumber(value, { currentCurrency, isInteger: true });
+    },
+    [currentCurrency],
+  );
+
   if (trending.isError) return;
   return (
     <header className="bg-black/20">
       <div className="flex gap-32 max-w-[1920px] mx-auto px-16 py-24 px-content xl:px-50">
-        <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start">
-          <h2 className="text-24 font-normal font-title my-0">Total Trades</h2>
-          <Trades trades={trending.data?.totalTradeCount} />
+        <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start font-title">
+          <h2 className="text-24 font-normal my-0">Total Trades</h2>
+          <RollingNumber
+            value={trending.data?.totalTradeCount}
+            format={formatInt}
+            loadingWidth="10ch"
+          />
           <div className="flex gap-16">
-            <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
-              Create
-            </Link>
-            <Link
-              to="/trade/market"
-              className={buttonStyles({ variant: 'white' })}
-            >
-              Trade
-            </Link>
+            <div className="grid gap-8">
+              <h3 className="text-16">Total Exchanges</h3>
+              <RollingNumber
+                value={totalExchange}
+                className="text-24"
+                format={formatCurrency}
+                loadingWidth="7ch"
+              />
+            </div>
+            <div className="grid gap-8">
+              <h3 className="text-16">Total Strategies</h3>
+              <RollingNumber
+                value={trending.data?.tradeCount.length}
+                className="text-24"
+                format={formatInt}
+                delay={9_000}
+                loadingWidth="4ch"
+              />
+            </div>
           </div>
         </article>
-        <article className="bg-white-gradient hidden flex-1 gap-8 rounded-2xl p-20 md:block">
+        <article className="bg-white-gradient hidden flex-1 gap-8 rounded-2xl p-20 md:grid">
           <h2 className="text-20 font-normal font-title">Popular Pairs</h2>
           <table className="font-medium text-14 w-full">
             <thead className="text-16 text-white/60">
@@ -135,7 +180,7 @@ export const ExplorerHeader = () => {
             </tbody>
           </table>
         </article>
-        <article className="bg-white-gradient hidden flex-1 gap-8 rounded-2xl p-20 lg:block">
+        <article className="bg-white-gradient hidden flex-1 gap-8 rounded-2xl p-20 lg:grid">
           <h2 className="text-20 font-normal font-title">
             Trending Strategies
           </h2>
@@ -198,7 +243,7 @@ const PairRows = ({ query }: PairTrendingProps) => {
           }}
           className="block w-full"
         >
-          {formatter.format(trades)}
+          {prettifyNumber(trades, { isInteger: true })}
         </Link>
       </td>
     </tr>
@@ -233,38 +278,44 @@ const StrategyRows = ({ query }: StrategyTrendingProps) => {
       </td>
       <td className="w-full py-8 text-end">
         <Link to="/strategy/$id" params={{ id }} className="block w-full">
-          {formatter.format(trades)}
+          {prettifyNumber(trades, { isInteger: true })}
         </Link>
       </td>
     </tr>
   ));
 };
 
-const formatter = new Intl.NumberFormat(undefined, {
-  maximumFractionDigits: 0,
-});
-
 interface TradesProps {
-  trades?: number;
+  value?: number;
+  className?: string;
+  delay?: number;
+  loadingWidth: string;
+  format: (value: number) => string;
 }
 
-const Trades = ({ trades }: TradesProps) => {
+const RollingNumber = ({
+  value,
+  format,
+  delay,
+  className,
+  loadingWidth,
+}: TradesProps) => {
   const ref = useRef<HTMLParagraphElement>(null);
   const anims = useRef<Promise<Animation>[]>(null);
   const lastTrades = useRef(0);
   const initDelta = 60;
 
   useEffect(() => {
-    if (typeof trades !== 'number') return;
+    if (typeof value !== 'number') return;
     let tradesChanged = false;
     const start = async () => {
-      const from = lastTrades.current || trades - initDelta;
-      const to = trades;
+      const from = lastTrades.current || value - initDelta;
+      const to = value;
       const letters = ref.current!.children;
       // Initial animation
       if (!lastTrades.current) {
         const initAnims: Promise<Animation>[] = [];
-        const next = formatter.format(from).split('');
+        const next = format(from).split('');
         for (let i = 0; i < next.length; i++) {
           const v = next[i];
           if (!'0123456789'.includes(v)) continue;
@@ -284,9 +335,9 @@ const Trades = ({ trades }: TradesProps) => {
       // Wait for lingering animations if any
       await Promise.allSettled(anims.current ?? []);
       anims.current = [];
-      let previous = formatter.format(from - 1).split('');
+      let previous = format(from - 1).split('');
       for (let value = from; value <= to; value++) {
-        const next = formatter.format(value).split('');
+        const next = format(value).split('');
         for (let i = 0; i < next.length; i++) {
           if (tradesChanged) return;
           const v = next[i];
@@ -296,7 +347,7 @@ const Trades = ({ trades }: TradesProps) => {
             [{ transform: `translateY(-${v}0%)` }],
             {
               duration: 1000,
-              delay: 2000,
+              delay: delay ?? 2000,
               fill: 'forwards',
               easing: 'cubic-bezier(1,.11,.55,.79)',
             },
@@ -312,17 +363,20 @@ const Trades = ({ trades }: TradesProps) => {
     return () => {
       tradesChanged = true;
     };
-  }, [trades]);
+  }, [format, value, delay]);
 
-  if (typeof trades !== 'number') {
-    return <Loading height={40} width="10ch" fontSize="36px" />;
+  if (typeof value !== 'number') {
+    return <Loading height={40} width={loadingWidth} fontSize="36px" />;
   }
 
-  const initial = trades ? formatter.format(trades - initDelta) : '0';
+  const initial = value ? format(value - initDelta) : '0';
   return (
     <p
       ref={ref}
-      className="text-36 font-title flex h-[40px] overflow-hidden leading-40"
+      className={cn(
+        'text-36 font-title flex h-[40px] overflow-hidden leading-40',
+        className,
+      )}
     >
       {initial.split('').map((v, i) => {
         if (!'0123456789'.includes(v)) return <span key={i}>{v}</span>;

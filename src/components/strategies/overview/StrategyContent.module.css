@@ -2,20 +2,15 @@
 @reference "../../../theme.css";
 
 .strategy-list {
-  --items-width: 400px;
+  --items-width: 380px;
   contain: content;
   grid-template-columns: repeat(auto-fill, var(--items-width));
-  justify-content: center;
+  justify-content: space-between;
 }
 .strategy-item {
   aspect-ratio: 410 / 425;
   content-visibility: auto; /* to prevent no tooltips when scrolling down */
   contain-intrinsic-size: var(--items-width) calc(var(--items-width) * 410 / 425);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .animate-item {
-    animation: open-item 200ms var(--delay, 0ms) backwards;
-  }
 }
 
 @keyframes open {
@@ -33,6 +28,17 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-item {
+    animation: open-item 200ms var(--delay, 0ms) backwards;
+  }
+}
+@media (max-width: 80rem) {
+  .strategy-list {
+    justify-content: center;
   }
 }
 @media (max-width: 40rem) {
