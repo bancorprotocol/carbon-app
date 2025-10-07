@@ -73,7 +73,7 @@ export const DateRangePicker = memo(function DateRangePicker(
       </span>
       {!props.disabled && (
         <ChevronIcon
-          className={cn('h-12 w-12 text-white/80 transition-transform', {
+          className={cn('ml-auto size-12 text-white/80 transition-transform', {
             'rotate-180': isOpen,
           })}
         />

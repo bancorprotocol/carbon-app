@@ -26,7 +26,7 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
   const { size, limit, setLimit } = useActivityPagination();
   return (
     <>
-      <ul className="flex flex-col gap-16 p-16 grid-area-[list]">
+      <ul className="grid md:grid-cols-2 gap-16 p-16 grid-area-[list]">
         {activities.map((activity, i) => (
           <ActivityItem
             key={activityKey(activity, i)}
@@ -34,21 +34,21 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
             hideIds={hideIds}
           />
         ))}
+        {limit < size && (
+          <li>
+            <p className="text-12 mb-16 text-center text-white/60 grid-area-[list]">
+              {limit} / {size}
+            </p>
+            <Button
+              fullWidth
+              variant="success"
+              onClick={() => setLimit(limit + 10)}
+            >
+              Show 10 More
+            </Button>
+          </li>
+        )}
       </ul>
-      {limit < size && (
-        <>
-          <p className="text-12 mb-16 text-center text-white/60 grid-area-[list]">
-            {limit} / {size}
-          </p>
-          <Button
-            fullWidth
-            variant="success"
-            onClick={() => setLimit(limit + 10)}
-          >
-            Show 10 More
-          </Button>
-        </>
-      )}
     </>
   );
 };
@@ -68,9 +68,9 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
     setSearchParams({ actions });
   };
   return (
-    <li className="border-background-800 flex flex-col gap-16 rounded-2xl border bg-black-gradient">
+    <li className="grid gap-16 rounded-2xl bg-white-gradient">
       <header className="flex px-16 pt-16 items-center">
-        {!hideIds && <ActivityId activity={activity} size={12} />}
+        {!hideIds && <ActivityId activity={activity} size={16} />}
         <div className="grid text-12 ml-auto">
           <p className="text-white/80">
             {activityDateFormatter.format(activity.date)}

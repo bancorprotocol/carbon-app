@@ -21,7 +21,7 @@ export const MobileMenu: FC = () => {
 
   return (
     <footer className={style.mobileMenu}>
-      <nav className="flex tab-list gap-8 rounded-md">
+      <nav className="grid grid-flow-col tab-list gap-8 rounded-md w-full">
         {menuItems.map(({ label, href }, index) => {
           const isSamePage = isSamePageLink(href);
 
@@ -30,7 +30,7 @@ export const MobileMenu: FC = () => {
               key={index}
               to={href}
               aria-current={isSamePage ? 'page' : 'false'}
-              className="px-8 py-4 tab-anchor aria-page:tab-focus"
+              className="px-8 py-4 tab-anchor aria-page:tab-focus text-center"
             >
               {label}
             </Link>
@@ -39,7 +39,7 @@ export const MobileMenu: FC = () => {
       </nav>
       <div
         onClick={() => openModal('burgerMenu', undefined)}
-        className="h-30 flex w-24 cursor-pointer items-center hover:text-white tav-"
+        className="h-30 flex w-24 cursor-pointer items-center hover:text-white"
       >
         <IconDots />
       </div>

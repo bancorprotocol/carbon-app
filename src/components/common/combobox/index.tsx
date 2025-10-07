@@ -194,7 +194,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
         {icon}
         <span>{label}</span>
         <IconChevron
-          className={cn('size-12 transition-transform', {
+          className={cn('ml-auto size-12 transition-transform', {
             'rotate-180': open,
           })}
         />
