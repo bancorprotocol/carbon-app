@@ -112,12 +112,12 @@ const ConnectedMenu: FC = () => {
   };
 
   return (
-    <div role="menu" className="font-normal space-y-10 text-white">
+    <div role="menu" className="font-normal grid gap-4 text-white">
       {isSupportedNetwork ? (
         <>
           <button
             role="menuitem"
-            className="rounded-sm flex w-full items-center space-x-10 p-8 hover:bg-black-gradient"
+            className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-black-gradient"
             onClick={copyAddress}
           >
             <IconCopy className="w-16" />
@@ -135,7 +135,7 @@ const ConnectedMenu: FC = () => {
       )}
       <button
         role="menuitem"
-        className="rounded-sm flex w-full items-center space-x-10 p-8 hover:bg-black-gradient"
+        className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-black-gradient"
         onClick={disconnect}
       >
         <IconDisconnect className="w-16" />

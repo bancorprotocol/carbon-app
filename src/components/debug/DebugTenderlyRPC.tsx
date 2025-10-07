@@ -38,7 +38,7 @@ export const DebugTenderlyRPC = () => {
   return (
     <form
       onSubmit={submit}
-      className="rounded-3xl bg-white-gradient flex flex-col items-center space-y-20 p-20"
+      className="rounded-3xl bg-white-gradient flex flex-col items-center gap-16 p-20"
     >
       <h2>Set Tenderly RPC</h2>
       <Label label="RPC URL">
@@ -77,7 +77,7 @@ export const DebugTenderlyRPC = () => {
         </>
       )}
 
-      <div className="flex w-full items-center space-x-20 rounded-full bg-black-gradient px-20 py-10">
+      <div className="flex w-full items-center gap-16 rounded-full bg-black-gradient px-20 py-10">
         <Checkbox
           data-testid="unchecked-signer"
           isChecked={isUncheckedSigner}

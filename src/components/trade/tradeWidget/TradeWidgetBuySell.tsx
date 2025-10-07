@@ -185,7 +185,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             <button
               type="button"
               onClick={openTradeRouteModal}
-              className="flex space-x-10 text-left hover:text-white md:flex"
+              className="flex gap-8 text-left hover:text-white md:flex"
               data-testid="routing"
             >
               <IconRouting className="w-12" />

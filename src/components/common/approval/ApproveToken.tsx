@@ -142,7 +142,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
         ) : null}
       </div>
       {data.nullApprovalRequired && (
-        <div className="text-14 text-warning flex space-x-20">
+        <div className="text-14 text-warning flex gap-16">
           <div>
             <IconWarning className="w-16" />
           </div>

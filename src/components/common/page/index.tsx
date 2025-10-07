@@ -14,7 +14,7 @@ export const Page: FC<{
       )}
     >
       {title && (
-        <div className="mb-30 flex flex-col justify-between gap-8 md:flex-row md:items-center md:space-y-0">
+        <div className="mb-30 flex flex-col justify-between gap-8 md:flex-row md:items-center md:gap-0">
           {title && <h1>{title}</h1>}
         </div>
       )}

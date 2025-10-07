@@ -74,14 +74,14 @@ export const UnconnectedLandingPage = () => {
   return (
     <section className="grid content-start gap-24 max-w-[1920px] mx-auto p-16">
       <hgroup className="grid gap-24">
-        <h1 className="text-5xl text-center text-gradient leading-[1.5]">
+        <h1 className="text-5xl text-center text-gradient leading-[1.5] gradient-direction-[90deg]">
           Control You Trading Strategies
         </h1>
         <p className="font-title text-3xl text-center">
           200,000 trading strategies powering 250,000 trades
         </p>
       </hgroup>
-      <ol className="grid gap-8 gradient-direction-[to_bottom]">
+      <ol className="grid gap-8">
         <li className="flex items-center gap-16 bg-black/20 px-16 py-8 rounded-md">
           <b className="text-gradient text-nowrap">Step 1</b>
           <span>Connect your wallet</span>
@@ -108,7 +108,9 @@ export const UnconnectedLandingPage = () => {
               <h3 className="text-xl">{item.title}</h3>
               <p className="text-14 text-white/60">{item.description}</p>
               <Link to="/trade" className="flex items-center gap-8">
-                <span className="text-gradient">Explore Strategies</span>
+                <span className="text-gradient gradient-direction-[90deg]">
+                  Explore Strategies
+                </span>
                 <IconArrowCircle className="size-20 fill-gradient" />
               </Link>
               <nav aria-label="strategy types" className="grid gap-16">

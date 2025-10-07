@@ -57,7 +57,7 @@ export const DebugConfig = () => {
     <form
       onSubmit={submit}
       onReset={reset}
-      className="rounded-3xl bg-white-gradient flex flex-col items-center space-y-20 p-20"
+      className="rounded-3xl bg-white-gradient flex flex-col items-center gap-16 p-20"
     >
       <h2 className="text-center">Set Config</h2>
       <label htmlFor="custom-config-json">Config Override</label>

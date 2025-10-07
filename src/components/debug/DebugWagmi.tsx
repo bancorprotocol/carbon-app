@@ -15,7 +15,7 @@ export const DebugWagmi = () => {
   return (
     <div className="rounded-3xl bg-white-gradient grid place-items-center gap-20 p-20">
       <h2>Wagmi Status</h2>
-      <div className="rounded-lg w-full space-y-3 bg-black-gradient p-10">
+      <div className="grid rounded-lg w-full gap-4 bg-black p-10">
         <div className="flex justify-between">
           <div>ChainID:</div>
           <div>{chainId}</div>

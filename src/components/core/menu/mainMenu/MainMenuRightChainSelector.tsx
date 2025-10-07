@@ -26,7 +26,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
   return (
     <DropdownMenu
       placement="bottom"
-      className="space-y-2 rounded-[12px] p-8"
+      className="rounded-xl p-8 grid gap-4"
       button={(attr) => (
         <button
           {...attr}
@@ -53,7 +53,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
               'rounded-sm flex w-full items-center gap-x-10 p-12',
               isCurrentNetwork
                 ? 'pointer-events-none bg-black'
-                : 'hover:bg-black-gradient',
+                : 'hover:bg-black/60',
             )}
             href={getFullPath(appUrl)}
             aria-current={isCurrentNetwork}
