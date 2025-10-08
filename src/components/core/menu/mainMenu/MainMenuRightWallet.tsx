@@ -12,6 +12,7 @@ import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
 import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
 import { WalletIcon } from 'components/common/WalletIcon';
+import { useNavigate } from '@tanstack/react-router';
 
 const iconProps = { className: 'w-20 hidden lg:block' };
 
@@ -105,6 +106,13 @@ const ConnectedMenu: FC = () => {
   const { toaster } = useStore();
   const { setMenuOpen } = useMenuCtx();
   const { user, disconnect, isSupportedNetwork, switchNetwork } = useWagmi();
+  const nav = useNavigate();
+
+  const signout = async () => {
+    await disconnect();
+    nav({ to: '/' });
+  };
+
   const copyAddress = async () => {
     if (!user) return;
     await navigator.clipboard.writeText(user);
@@ -137,7 +145,7 @@ const ConnectedMenu: FC = () => {
       <button
         role="menuitem"
         className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-black-gradient"
-        onClick={disconnect}
+        onClick={signout}
       >
         <IconDisconnect className="w-16" />
         <span>Disconnect</span>
