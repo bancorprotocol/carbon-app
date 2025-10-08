@@ -2,10 +2,10 @@
 @reference "../../../theme.css";
 
 .strategy-list {
-  --items-width: 380px;
+  --items-width: 350px;
   contain: content;
-  grid-template-columns: repeat(auto-fill, var(--items-width));
-  justify-content: space-between;
+  grid-template-columns: repeat(auto-fill, minmax(var(--items-width), 1fr));
+  justify-content: center;
 }
 .strategy-item {
   aspect-ratio: 410 / 425;
@@ -38,7 +38,7 @@
 }
 @media (max-width: 80rem) {
   .strategy-list {
-    justify-content: center;
+    grid-template-columns: repeat(auto-fill, var(--items-width));
   }
 }
 @media (max-width: 40rem) {
