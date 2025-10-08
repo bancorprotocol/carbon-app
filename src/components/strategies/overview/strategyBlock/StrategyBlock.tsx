@@ -26,7 +26,7 @@ export const StrategyBlock: FC<Props> = ({
     <li
       id={id}
       className={cn(
-        'rounded-lg bg-white-gradient grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        '@container/strategy rounded-lg bg-white-gradient grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className,
       )}
       style={style}

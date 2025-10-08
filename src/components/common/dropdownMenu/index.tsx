@@ -1,13 +1,4 @@
-import {
-  Dispatch,
-  FC,
-  MouseEvent,
-  ReactNode,
-  createContext,
-  useContext,
-  useId,
-  useState,
-} from 'react';
+import { Dispatch, FC, MouseEvent, ReactNode, useId, useState } from 'react';
 import {
   Placement,
   FloatingFocusManager,
@@ -26,6 +17,7 @@ import {
   FloatingFocusManagerProps,
 } from '@floating-ui/react';
 import { cn } from 'utils/helpers';
+import { MenuContext } from './utils';
 
 export interface MenuButtonProps {
   onClick: (e: MouseEvent) => void;
@@ -42,15 +34,6 @@ interface Props {
   strategy?: FloatingStrategy;
   initialFocus?: FloatingFocusManagerProps['initialFocus'];
 }
-
-interface MenuCtx {
-  setMenuOpen: Dispatch<boolean>;
-}
-
-const MenuContext = createContext<MenuCtx>({
-  setMenuOpen: () => undefined,
-});
-export const useMenuCtx = () => useContext(MenuContext);
 
 export const DropdownMenu: FC<Props> = ({
   children,

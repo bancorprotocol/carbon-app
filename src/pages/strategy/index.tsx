@@ -119,8 +119,8 @@ export const StrategyPage = () => {
           button={(attr) => <ManageButtonIcon {...attr} />}
         />
       </header>
-      <section className="flex flex-col gap-16 md:flex-row">
-        <article className="bg-white-gradient grid gap-16 rounded-2xl p-24 md:w-[400px]">
+      <section className="flex justify-center gap-16">
+        <article className="@container/strategy bg-white-gradient grid gap-16 rounded-2xl p-24 min-w-330 sm:min-w-350 w-1/4 aspect-[410/425]">
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
