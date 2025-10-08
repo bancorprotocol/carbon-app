@@ -204,7 +204,7 @@
 }
 @utility btn-tertiary-gradient {
   @apply rounded-full;
-  box-shadow: 0 4px 15px 0 oklch(20% var(--chroma) var(--hue) / 80%);
+  box-shadow: 0 4px 15px 0 oklch(35% var(--chroma) var(--hue) / 80%);
   background: linear-gradient(to bottom, #30565B, #1B383D 30%, #061B1E) border-box;
   color: white;
   transition: transform 0.1s var(--ease-out);

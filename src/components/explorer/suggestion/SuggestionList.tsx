@@ -131,7 +131,7 @@ export const SuggestionList: FC<Props> = (props) => {
             <footer className="px-30 flex h-[50px] items-center">
               <button
                 type="button"
-                className="text-14 font-medium bg-background-700 hover:bg-background-500 active:bg-black-gradient aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
+                className="text-14 font-medium btn-secondary-gradient cursor-pointer rounded-full px-16 py-8"
                 onClick={() => setMaxPairs((v) => v + 5)}
               >
                 View More
