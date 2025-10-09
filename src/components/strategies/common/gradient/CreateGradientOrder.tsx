@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, ReactNode } from 'react';
+import { FC, useCallback, useMemo, ReactNode, useId } from 'react';
 import { GradientOrderBlock } from '../types';
 import {
   RangeDate,
@@ -28,6 +28,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
   const { marketPrice } = useMarketPrice({ base, quote });
   const budgetToken = order.direction === 'buy' ? quote : base;
   const balance = useGetTokenBalance(budgetToken);
+  const budgetId = useId();
 
   const setRange = useCallback(
     (range: RangeDate) => {
@@ -105,12 +106,16 @@ export const CreateGradientOrder: FC<Props> = (props) => {
           <Warning message={priceWarning} />
         )}
       </fieldset>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      <div className="grid gap-8">
+        <label
+          htmlFor={budgetId}
+          className="text-14 font-medium capitalize text-white/60"
+        >
           Set {order.direction} Budget
-        </legend>
+        </label>
         <InputBudget
           editType="deposit"
+          id={budgetId}
           token={order.direction === 'buy' ? quote : base}
           value={order.budget}
           onChange={(budget) => setOrder({ budget })}
@@ -119,7 +124,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
           error={insufficientBalance}
           data-testid="input-budget"
         />
-      </fieldset>
+      </div>
       <GradientFullOutcome base={base} quote={quote} order={order} />
     </div>
   );

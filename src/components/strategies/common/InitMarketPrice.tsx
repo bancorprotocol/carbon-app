@@ -61,7 +61,6 @@ interface FieldProps extends Props {
 export const InitMarketPrice = (props: FieldProps) => {
   const { base, quote } = props;
   const strategy = useEditStrategyCtx()?.strategy;
-  const inputId = useId();
   const checkboxId = useId();
   const navigate = useNavigate();
   const search = useSearch({ strict: false });
@@ -114,7 +113,6 @@ export const InitMarketPrice = (props: FieldProps) => {
     >
       {!externalPrice && <SetPriceText base={base} quote={quote} />}
       <InputLimit
-        id={inputId}
         price={localPrice || ''}
         setPrice={changePrice}
         base={base}

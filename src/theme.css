@@ -142,6 +142,11 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+@utility border-gradient {
+  background: linear-gradient(var(--color-black), var(--color-black)) padding-box, var(--main-gradient) border-box;
+  border-width: 2px;
+  border-color: transparent;
+}
 
 @utility gradient-direction-* {
   --gradient-direction: --value([*]);

@@ -1,9 +1,6 @@
 import { FC, ReactNode, useId } from 'react';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/common/OrderHeader';
-import { InputRange } from 'components/strategies/common/InputRange';
-import { InputLimit } from 'components/strategies/common/InputLimit';
 import {
   EditOrderBlock,
   StaticOrder,
@@ -19,6 +16,7 @@ import { isZero } from '../common/utils';
 import { SafeDecimal } from 'libs/safedecimal';
 import style from 'components/strategies/common/order.module.css';
 import { cn } from 'utils/helpers';
+import { LimitRangeOrder } from '../common/LimitRangeOrder';
 
 interface Props {
   order: EditOrderBlock;
@@ -52,27 +50,6 @@ export const EditStrategyPriceField: FC<Props> = ({
   const initialBudget = initialOrder.budget;
   const titleId = useId();
 
-  const inputTitle = (
-    <>
-      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black-gradient text-[10px] text-white/60">
-        1
-      </span>
-      <Tooltip
-        element={`Define the price you are willing to ${
-          isBuy ? 'buy' : 'sell'
-        } ${base.symbol} at. Make sure the price is in ${quote.symbol} tokens.`}
-      >
-        <p>
-          <span className="text-white/80">
-            Set {isBuy ? 'Buy' : 'Sell'} Price&nbsp;
-          </span>
-          <span className="text-white/60">
-            ({quote.symbol} per 1 {base.symbol})
-          </span>
-        </p>
-      </Tooltip>
-    </>
-  );
   const setPrice = (price: string) => setOrder({ min: price, max: price });
   const setMin = (min: string) => setOrder({ min, marginalPrice: undefined });
   const setMax = (max: string) => setOrder({ max, marginalPrice: undefined });
@@ -125,36 +102,16 @@ export const EditStrategyPriceField: FC<Props> = ({
         data-direction={isBuy ? 'buy' : 'sell'}
       >
         <OrderHeader {...headerProps} />
-        <fieldset className="flex flex-col gap-8">
-          <legend className="text-14 font-medium mb-11 flex items-center gap-6">
-            {inputTitle}
-          </legend>
-          {order.settings === 'range' ? (
-            <InputRange
-              base={base}
-              quote={quote}
-              min={order.min}
-              setMin={setMin}
-              max={order.max}
-              setMax={setMax}
-              isBuy={isBuy}
-              error={error}
-              warnings={warnings}
-              required
-            />
-          ) : (
-            <InputLimit
-              base={base}
-              quote={quote}
-              price={order.min}
-              setPrice={setPrice}
-              isBuy={isBuy}
-              error={error}
-              warnings={warnings}
-              required
-            />
-          )}
-        </fieldset>
+        <LimitRangeOrder
+          base={base}
+          quote={quote}
+          order={order}
+          setMin={setMin}
+          setMax={setMax}
+          setPrice={setPrice}
+          error={error}
+          warnings={warnings}
+        />
         <OverlappingAction
           base={base}
           quote={quote}

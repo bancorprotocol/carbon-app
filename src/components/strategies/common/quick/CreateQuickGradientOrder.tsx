@@ -21,6 +21,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
   const { base, quote } = useTradeCtx();
   const { marketPrice } = useMarketPrice({ base, quote });
   const [localDelta, setLocalDelta] = useState(order.deltaTime);
+  const budgetId = useId();
   const endTimeId = useId();
   const budgetToken = order.direction === 'buy' ? quote : base;
   const balance = useGetTokenBalance(budgetToken);
@@ -129,12 +130,16 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
           <Warning message={priceWarning} />
         )}
       </fieldset>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      <div className="grid gap-8">
+        <label
+          htmlFor={budgetId}
+          className="text-14 font-medium capitalize text-white/60"
+        >
           Set {order.direction} Budget
-        </legend>
+        </label>
         <InputBudget
           editType="deposit"
+          id={budgetId}
           token={order.direction === 'buy' ? quote : base}
           value={order.budget}
           onChange={(budget) => setOrder({ budget })}
@@ -143,7 +148,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
           error={insufficientBalance}
           data-testid="input-budget"
         />
-      </fieldset>
+      </div>
     </div>
   );
 };

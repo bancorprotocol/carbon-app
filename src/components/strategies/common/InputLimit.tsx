@@ -112,9 +112,6 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
         )}
         onClick={() => document.getElementById(id)?.focus()}
       >
-        <label htmlFor={id} className="text-12 text-white/60">
-          Set Price
-        </label>
         <div className="flex">
           <input
             id={id}

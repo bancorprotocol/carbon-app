@@ -22,7 +22,6 @@ import { TokenLogo } from 'components/common/imager/Imager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWagmi } from 'libs/wagmi';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 export type BudgetAction = 'withdraw' | 'deposit';
 
@@ -36,7 +35,6 @@ interface Props {
   maxIsLoading?: boolean;
   placeholder?: string;
   title?: string;
-  titleTooltip?: string;
   disabled?: boolean;
   error?: string;
   warning?: string;
@@ -56,8 +54,6 @@ export const InputBudget: FC<Props> = (props) => {
     disabled,
     error,
     warning,
-    title = 'Set Budget',
-    titleTooltip,
   } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = useId();
@@ -109,7 +105,7 @@ export const InputBudget: FC<Props> = (props) => {
   };
 
   return (
-    <div className="grid gap-16">
+    <>
       <div
         className={cn(
           'flex cursor-text flex-col gap-8 rounded-2xl border-2 border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-white/50',
@@ -118,13 +114,6 @@ export const InputBudget: FC<Props> = (props) => {
         )}
         onClick={() => inputRef.current?.focus()}
       >
-        {title && (
-          <label htmlFor={id} className="text-12 text-white/60">
-            <Tooltip element={titleTooltip}>
-              <span>{title}</span>
-            </Tooltip>
-          </label>
-        )}
         <div className="flex items-center justify-between">
           <input
             id={id}
@@ -177,6 +166,6 @@ export const InputBudget: FC<Props> = (props) => {
       </div>
       {error && <Warning htmlFor={id} message={error} isError />}
       {!error && warning && <Warning htmlFor={id} message={warning} />}
-    </div>
+    </>
   );
 };
