@@ -90,7 +90,7 @@ export const DropdownMenu: FC<Props> = ({
               ref={refs.setFloating}
               className={cn(
                 // z-index is above header/footer
-                'bg-new-primary z-50 min-w-[200px] rounded-2xl shadow-lg',
+                'bg-new-primary/80 backdrop-blur-sm z-50 min-w-[200px] rounded-2xl shadow-lg',
                 className,
               )}
               style={{ ...floatingStyles, ...transition }}

@@ -332,7 +332,7 @@ dialog.modal {
 }
 
 dialog.modal > form {
-  @apply bg-new-primary glass-shadow;
+  @apply bg-new-primary/60 backdrop-blur-xs glass-shadow;
   border-radius: 16px;
   padding: 24px;
   max-width: 390px;
