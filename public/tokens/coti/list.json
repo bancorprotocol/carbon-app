@@ -58,6 +58,22 @@
       "symbol": "stCOTI",
       "decimals": 18,
       "logoURI": "/tokens/coti/0xcf1a40eff1a4d4c56dc4042a1ae93013d13c3217.webp"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0x4781f0c82Dc3Ab55D79Bd3956689D1B65FBD23aD",
+      "name": "wstCOTI",
+      "symbol": "wstCOTI",
+      "decimals": 18,
+      "logoURI": "/tokens/coti/0x4781f0c82Dc3Ab55D79Bd3956689D1B65FBD23aD.png"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0x64ec0E875b00DD50A4661462040E7C35084BcB58",
+      "name": "COTI Token Points 001",
+      "symbol": "TPS001",
+      "decimals": 18,
+      "logoURI": "/tokens/coti/0x64ec0E875b00DD50A4661462040E7C35084BcB58.svg"
     }
   ],
   "version": {

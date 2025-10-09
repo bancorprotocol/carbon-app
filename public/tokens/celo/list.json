@@ -1,0 +1,19 @@
+{
+  "name": "Bancor",
+  "keywords": ["bancor"],
+  "tokens": [
+    {
+      "chainId": 42220,
+      "address": "0x7175504C455076F15c04A2F90a8e352281F492F9",
+      "name": "cAUD",
+      "symbol": "cAUD",
+      "decimals": 18,
+      "logoURI": "/tokens/celo/0x7175504C455076F15c04A2F90a8e352281F492F9.svg"
+    }
+  ],
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  }
+}
