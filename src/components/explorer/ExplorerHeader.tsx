@@ -306,7 +306,7 @@ const RollingNumber = ({
   const initDelta = 60;
 
   useEffect(() => {
-    if (typeof value !== 'number') return;
+    if (typeof value !== 'number' || !value) return;
     let tradesChanged = false;
     const start = async () => {
       const from = lastTrades.current || value - initDelta;
@@ -318,6 +318,7 @@ const RollingNumber = ({
         const next = format(from).split('');
         for (let i = 0; i < next.length; i++) {
           const v = next[i];
+          console.log({ next: format(from), i, v });
           if (!'0123456789'.includes(v)) continue;
           const anim = letters[i]?.animate(
             [{ transform: `translateY(-${v}0%)` }],
@@ -365,11 +366,11 @@ const RollingNumber = ({
     };
   }, [format, value, delay]);
 
-  if (typeof value !== 'number') {
+  if (typeof value !== 'number' || !value) {
     return <Loading height={40} width={loadingWidth} fontSize="36px" />;
   }
 
-  const initial = value ? format(value - initDelta) : '0';
+  const initial = format(value - initDelta);
   return (
     <p
       ref={ref}
