@@ -117,6 +117,9 @@ export const commonConfig: AppConfig = {
     {
       uri: 'https://raw.githubusercontent.com/celo-org/celo-token-list/main/celo.tokenlist.json',
     },
+    {
+      uri: '/tokens/celo/list.json',
+    },
   ],
   tenderly: {
     faucetTokens: [
