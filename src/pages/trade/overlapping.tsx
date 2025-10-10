@@ -1,5 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { CreateOverlappingPrice } from 'components/strategies/create/CreateOverlappingPrice';
 import { getOverlappingOrders } from 'components/strategies/create/utils';
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';

@@ -10,7 +10,7 @@ import {
 } from 'components/cart/utils';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { FormGradientOrder } from '../types';
 
 interface FormProps {

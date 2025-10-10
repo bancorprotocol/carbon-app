@@ -12,6 +12,7 @@ import { CreateOverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
+import { useTradeCtx } from 'components/trade/context';
 
 interface Props {
   base: Token;
@@ -24,7 +25,8 @@ interface Props {
 
 const url = '/trade/overlapping';
 export const CreateOverlappingPrice: FC<Props> = (props) => {
-  const { base, quote, buy, sell, spread, set } = props;
+  const { base, quote } = useTradeCtx();
+  const { buy, sell, spread, set } = props;
   const search = useSearch({ from: url });
   const { anchor } = search;
 

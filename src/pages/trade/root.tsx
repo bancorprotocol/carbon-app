@@ -1,6 +1,6 @@
 import { Outlet } from '@tanstack/react-router';
 import { NotFound } from 'components/common/NotFound';
-import { TradeProvider } from 'components/trade/TradeContext';
+import { TradeProvider } from 'components/trade/TradeProvider';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { TradeNav } from 'components/trade/TradeNav';

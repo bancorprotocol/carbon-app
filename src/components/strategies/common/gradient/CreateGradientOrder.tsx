@@ -4,7 +4,7 @@ import {
   RangeDate,
   GradientDateRange,
 } from 'components/strategies/common/gradient/GradientDateRange';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { GradientPriceRange } from './GradientPriceRange';
 import { InputBudget } from '../InputBudget';
 import { useGetTokenBalance } from 'libs/queries';

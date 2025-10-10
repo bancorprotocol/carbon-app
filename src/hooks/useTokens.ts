@@ -86,7 +86,7 @@ export const useToken = (address?: string) => {
   const [isPending, setIsPending] = useState(!getTokenById(address));
   const [token, setToken] = useState<Token | undefined>(getTokenById(address));
   useEffect(() => {
-    if (!address || token) return;
+    if (!address || token?.address === address) return;
     const existing = getTokenById(address);
     if (existing) {
       setIsPending(false);

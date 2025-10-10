@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { StrategyDirection } from 'libs/routing/routes/trade';
 import { useCallback, useMemo } from 'react';
 import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawLine';
