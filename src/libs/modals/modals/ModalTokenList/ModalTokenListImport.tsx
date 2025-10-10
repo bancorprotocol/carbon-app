@@ -34,7 +34,7 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
           title="Token not found"
           text={<Text />}
         />
-        <Button variant="white" onClick={onClick} className="my-30">
+        <Button variant="success" onClick={onClick} className="my-30">
           Import Token
         </Button>
       </div>

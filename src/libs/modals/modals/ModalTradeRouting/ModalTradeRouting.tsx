@@ -209,7 +209,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
 
         <Button
           type="submit"
-          variant="white"
+          variant="success"
           fullWidth
           disabled={disabledCTA}
           loading={isAwaiting}

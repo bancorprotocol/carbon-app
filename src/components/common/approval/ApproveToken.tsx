@@ -122,7 +122,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
               <Button
                 type="submit"
-                variant="success"
+                variant="secondary"
                 size="sm"
                 className="text-14 px-10"
                 data-testid={`approve-${token.symbol}`}

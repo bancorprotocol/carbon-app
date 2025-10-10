@@ -37,7 +37,7 @@ export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
         Withdraw and Delete
       </Button>
       <Button
-        variant="black"
+        variant="secondary"
         fullWidth
         onClick={() => {
           closeModal(id);

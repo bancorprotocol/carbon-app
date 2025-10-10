@@ -76,14 +76,14 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         </div>
       )}
       <Button
-        variant="white"
+        variant="success"
         fullWidth
         onClick={onClick}
         disabled={isPending || isError}
       >
         Import Token
       </Button>
-      <Button variant="black" fullWidth onClick={() => closeModal(id)}>
+      <Button variant="secondary" fullWidth onClick={() => closeModal(id)}>
         Cancel
       </Button>
     </ModalOrMobileSheet>
