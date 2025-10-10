@@ -18,7 +18,7 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
   if (!data) return null;
 
   return (
-    <div className="flex flex-col items-center space-y-6">
+    <div className="flex flex-col items-center gap-4">
       <div className="font-medium text-18 flex items-center">
         <LogoImager
           alt="Token Logo"

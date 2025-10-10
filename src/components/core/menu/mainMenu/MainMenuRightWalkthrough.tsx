@@ -92,7 +92,7 @@ export const MainMenuRightWalkthrough: FC = () => {
           </p>
           <button
             type="submit"
-            className="bg-white text-black text-14 text-center px-16 py-8 rounded-full place-self-stretch outline-offset-2"
+            className="btn-primary-gradient text-14 text-center px-16 py-8 rounded-full place-self-stretch outline-offset-2"
           >
             Show me how it works
           </button>

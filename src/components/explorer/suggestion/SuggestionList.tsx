@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { PairLogoName, TokenLogoName } from 'components/common/DisplayPair';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
 import { cn } from 'utils/helpers';
@@ -97,7 +97,7 @@ export const SuggestionList: FC<Props> = (props) => {
             <footer className="px-30 flex h-[50px] items-center">
               <button
                 type="button"
-                className="text-14 font-medium bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
+                className="text-14 font-medium btn-secondary-gradient cursor-pointer rounded-full px-16 py-8"
                 onClick={() => setMaxTokens((v) => v + 5)}
               >
                 View More
@@ -131,7 +131,7 @@ export const SuggestionList: FC<Props> = (props) => {
             <footer className="px-30 flex h-[50px] items-center">
               <button
                 type="button"
-                className="text-14 font-medium bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
+                className="text-14 font-medium btn-secondary-gradient cursor-pointer rounded-full px-16 py-8"
                 onClick={() => setMaxPairs((v) => v + 5)}
               >
                 View More

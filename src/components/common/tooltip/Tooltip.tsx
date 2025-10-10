@@ -67,7 +67,7 @@ export const Tooltip: FC<Props> = ({
       render={(attrs) => (
         <m.div
           className={cn(
-            'border-background-800 bg-background-800/30 text-14 rounded-2xl border px-24 py-16 text-white shadow-lg backdrop-blur-2xl',
+            'border-background-800 bg-white-gradient text-14 rounded-2xl border px-24 py-16 text-white shadow-lg backdrop-blur-2xl',
             className,
           )}
           style={{ scale, opacity, maxWidth }}

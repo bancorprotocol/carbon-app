@@ -1,0 +1,212 @@
+@keyframes marginal-buy-line {
+  0%, 15% {
+    transform: translateY(0);
+  }
+  20%, 36% {
+    transform: translateY(100px);
+  }
+  38%, 57.5% {
+    transform: translateY(50px);
+  }
+  63.5%, 85% {
+    transform: translateY(200px);
+  }
+  87.5%, 100% {
+    transform: translateY(100px);
+  }
+}
+@keyframes marginal-buy-rect {
+  0%, 15% {
+    transform: scaleY(0);
+  }
+  20%, 36% {
+    transform: scaleY(100);
+  }
+  38%, 57.5% {
+    transform: scaleY(50);
+  }
+  63.5%, 85% {
+    transform: scaleY(200);
+  }
+  87.5%, 100% {
+    transform: scaleY(100);
+  }
+}
+
+
+@keyframes marginal-sell-line {
+  0%, 15% {
+    transform: translateY(-200px);
+  }
+  20%, 36% {
+    transform: translateY(-100px);
+  }
+  38%, 57.5% {
+    transform: translateY(-150px);
+  }
+  63.5%, 85% {
+    transform: translateY(0);
+  }
+  87.5%, 100% {
+    transform: translateY(-100px);
+  }
+}
+@keyframes marginal-sell-rect {
+  0%, 15% {
+    transform: scaleY(200);
+  }
+  20%, 36% {
+    transform: scaleY(100);
+  }
+  38%, 57.5% {
+    transform: scaleY(150);
+  }
+  63.5%, 85% {
+    transform: scaleY(0);
+  }
+  87.5%, 100% {
+    transform: scaleY(100);
+  }
+}
+.marginal-buy line,
+.marginal-buy rect,
+.marginal-sell line,
+.marginal-sell rect {
+  animation-timing-function: linear;
+}
+.marginal-buy line {
+  animation-name: marginal-buy-line;
+}
+.marginal-buy rect {
+  transform-origin: top;
+  animation-name: marginal-buy-rect;
+}
+.marginal-sell line {
+  animation-name: marginal-sell-line;
+}
+.marginal-sell rect {
+  transform-origin: bottom;
+  animation-name: marginal-sell-rect;
+}
+
+@keyframes budget-sell-1 {
+  0%, 15% {
+    transform: translateY(0);
+  }
+  20%, 32.5% {
+    transform: translateY(-1000%);
+    opacity: 1;
+  }
+  34%, 100% {
+    transform: translateY(-1000%);
+    opacity: 0;
+  }
+}
+@keyframes budget-sell-2 {
+  0%, 32.5% {
+    opacity: 0;
+    transform: translateY(-800%);
+  }
+  33%, 38% {
+    opacity: 1;
+    transform: translateY(-800%);
+  }
+  38%, 55% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+  
+}
+@keyframes budget-sell-3 {
+  0%, 55% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  62%, 85% {
+    opacity: 1;
+    transform: translateY(-800%);
+  }
+  85%, 100% {
+    opacity: 0;
+    transform: translateY(-800%);
+  }
+}
+
+
+.budget {
+  place-self: end;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 24px;
+  font-size: 1.2rem;
+  text-align: end;
+}
+.initial-buy {
+  color: var(--color-buy);
+  opacity: 0.5;
+}
+.initial-sell {
+  color: var(--color-sell);
+  opacity: 0.5;
+}
+.current-buy {
+  color: var(--color-buy);
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+.current-buy .range {
+  background: linear-gradient(to top, var(--color-buy-dark), var(--color-buy));
+}
+.current-sell {
+  color: var(--color-sell);
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+.current-sell .range {
+  background: linear-gradient(to top, var(--color-sell-dark), var(--color-sell));
+}
+
+.range {
+  height: 200px;
+  transform-origin: bottom;
+}
+
+.final-buy {
+  color: var(--color-buy);
+  text-align: center;
+  padding: 8px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--color-buy);
+}
+.final-sell {
+  color: var(--color-sell);
+  text-align: center;
+  padding: 8px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--color-sell);
+}
+
+/* 
+.budget-buy p,
+.budget-sell p {
+  grid-column: 1/1;
+  grid-row: 1/1;
+  overflow: hidden;
+}
+.budget-buy p span,
+.budget-sell p span {
+  animation-timing-function: var(--ease-out);
+}
+
+.budget-sell p:nth-child(1) span {
+  animation-name: budget-sell-1;
+}
+.budget-sell p:nth-child(2) span {
+  animation-name: budget-sell-2;
+}
+.budget-sell p:nth-child(3) span {
+  animation-name: budget-sell-3;
+} */

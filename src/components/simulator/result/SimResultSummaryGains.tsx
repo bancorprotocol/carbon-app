@@ -6,20 +6,17 @@ import { Token } from 'libs/tokens';
 import { AnimatedNumber } from 'components/common/AnimatedNumber';
 
 interface Props {
-  quoteToken: Token;
+  quote: Token;
   portfolioGains: number;
 }
 
-export const SimResultSummaryGains: FC<Props> = ({
-  portfolioGains,
-  quoteToken,
-}) => {
+export const SimResultSummaryGains: FC<Props> = ({ portfolioGains, quote }) => {
   const formatGain = useCallback(
     (gains: number) => {
       const value = prettifySignedNumber(gains, { round: true });
-      return `${quoteToken.symbol} ${value}`;
+      return `${quote.symbol} ${value}`;
     },
-    [quoteToken.symbol],
+    [quote.symbol],
   );
 
   return (

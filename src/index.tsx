@@ -18,13 +18,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryProvider>
-      <StoreProvider>
-        <WagmiReactWrapper>
+      <WagmiReactWrapper>
+        <StoreProvider>
           <LazyMotion>
             <RouterProvider router={router} />
           </LazyMotion>
-        </WagmiReactWrapper>
-      </StoreProvider>
+        </StoreProvider>
+      </WagmiReactWrapper>
     </QueryProvider>
   </React.StrictMode>,
 );

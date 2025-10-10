@@ -1,4 +1,4 @@
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { D3Drawings } from './drawing/D3Drawings';
 import { D3XAxis } from './D3XAxis';
 import { D3YAxis } from './D3YAxis';

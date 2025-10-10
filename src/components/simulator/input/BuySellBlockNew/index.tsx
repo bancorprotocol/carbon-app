@@ -50,26 +50,6 @@ export const BuySellBlock: FC<Props> = ({
 
   const tooltipText = `This section will define the order details in which you are willing to ${type} ${base.symbol} at.`;
 
-  const inputTitle = (
-    <>
-      <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-        1
-      </span>
-      <Tooltip
-        element={`Define the price you are willing to ${type} ${base.symbol} at. Make sure the price is in ${quote.symbol} tokens.`}
-      >
-        <p>
-          <span className="capitalize text-white/80">
-            Set {type} Price&nbsp;
-          </span>
-          <span className="text-white/60">
-            ({quote.symbol} per 1 {base.symbol})
-          </span>
-        </p>
-      </Tooltip>
-    </>
-  );
-
   const headerProps = { titleId, order, dispatch, base, isBuy };
   const limitRangeProps = {
     base,
@@ -77,7 +57,6 @@ export const BuySellBlock: FC<Props> = ({
     order,
     dispatch,
     isBuy,
-    inputTitle,
     isOrdersOverlap,
     isOrdersReversed,
   };

@@ -12,6 +12,7 @@ import { CreateOverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
+import { useTradeCtx } from 'components/trade/context';
 
 interface Props {
   base: Token;
@@ -24,7 +25,8 @@ interface Props {
 
 const url = '/trade/overlapping';
 export const CreateOverlappingPrice: FC<Props> = (props) => {
-  const { base, quote, buy, sell, spread, set } = props;
+  const { base, quote } = useTradeCtx();
+  const { buy, sell, spread, set } = props;
   const search = useSearch({ from: url });
   const { anchor } = search;
 
@@ -59,7 +61,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
 
   return (
     <>
-      <article key="price-range" className="bg-background-900 grid gap-16 p-16">
+      <article key="price-range" className="grid gap-16 p-16">
         <header className="flex items-center gap-8">
           <h3 className="text-16 font-medium flex-1">
             Set Price Range&nbsp;
@@ -92,7 +94,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
         spread={spread}
         setSpread={setSpread}
       />
-      <article className="bg-background-900 grid gap-16 p-16">
+      <article className="grid gap-16 p-16">
         <hgroup>
           <h3 className="text-16 font-medium flex items-center justify-between">
             Budget

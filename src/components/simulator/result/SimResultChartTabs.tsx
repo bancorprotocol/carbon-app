@@ -25,10 +25,7 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
   ];
 
   return (
-    <RadioGroup
-      aria-label="Simulation Tabs"
-      className="border-2 border-background-900"
-    >
+    <RadioGroup aria-label="Simulation Tabs">
       {tabs.map(({ label, icon, isActive, click }) => {
         const active = isActive();
         return (

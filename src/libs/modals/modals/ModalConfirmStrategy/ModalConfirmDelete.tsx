@@ -71,7 +71,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       )}
 
       <Button
-        variant="success"
+        variant="secondary"
         onClick={onClick}
         loading={isPending}
         loadingChildren={loadingChildren}

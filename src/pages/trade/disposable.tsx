@@ -9,7 +9,7 @@ import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { getDefaultOrder } from 'components/strategies/create/utils';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing';
 import {

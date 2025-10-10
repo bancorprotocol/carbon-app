@@ -82,10 +82,11 @@ export const CreateForm: FC<FormProps> = (props) => {
   return (
     <form
       onSubmit={create}
-      className={cn(style.form, 'grid')}
+      style={{ animationDelay: '100ms' }}
+      className={cn(style.form, 'grid animate-scale-up')}
       data-testid="create-strategy-form"
     >
-      <div className="overflow-hidden rounded-ee-2xl rounded-es-2xl">
+      <div className="overflow-hidden rounded-2xl bg-white-gradient">
         {children}
       </div>
       <footer className="mt-16 grid gap-16">
@@ -93,7 +94,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-lg bg-background-900 text-14 font-medium flex items-center gap-8 p-20 text-white/60',
+            'rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input

@@ -1,0 +1,11 @@
+.select-token:focus-visible + label {
+  outline: solid 1px white;
+}
+.select-token:checked + label {
+  border-color: transparent;
+  background: var(--secondary-gradient) padding-box, var(--main-gradient) border-box;
+}
+.select-token:disabled + label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

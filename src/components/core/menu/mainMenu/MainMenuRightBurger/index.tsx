@@ -28,17 +28,16 @@ export const MainMenuRightBurger: FC<{
       button={(attr) => (
         <button
           {...attr}
-          className={cn(buttonStyles({ variant: 'secondary' }), 'relative p-0')}
+          className={cn(
+            buttonStyles({ variant: 'secondary' }),
+            'relative p-0 grid size-40 place-items-center',
+          )}
           onClick={(e) => {
             setIsOpen(true);
             attr.onClick(e);
           }}
         >
-          <span className="flex size-36 items-center justify-center">
-            <span className="relative inline-flex size-36 items-center justify-center rounded-full">
-              <IconBurger className="h-14" />
-            </span>
-          </span>
+          <IconBurger className="size-14" />
         </button>
       )}
     >

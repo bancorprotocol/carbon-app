@@ -43,7 +43,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
         />
       </div>
       <Button
-        variant="white"
+        variant="success"
         fullWidth
         onClick={() => {
           closeModal(id);
@@ -52,7 +52,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
       >
         {buttonLabel}
       </Button>
-      <Button variant="black" fullWidth onClick={() => closeModal(id)}>
+      <Button variant="secondary" fullWidth onClick={() => closeModal(id)}>
         Cancel
       </Button>
     </ModalOrMobileSheet>

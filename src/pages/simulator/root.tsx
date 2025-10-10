@@ -1,62 +1,34 @@
-import { Outlet, useNavigate, useSearch } from '@tanstack/react-router';
-import { useBreakpoints } from 'hooks/useBreakpoints';
-import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
+import { Outlet } from '@tanstack/react-router';
 import { ReactComponent as IconBookmark } from 'assets/icons/bookmark.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';
-import { getLastVisitedPair } from 'libs/routing';
-import { useToken } from 'hooks/useTokens';
+import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-
-// TODO: merge this hook with trade when they both use base / quote in search
-const usePersistLastPair = () => {
-  const search = useSearch({ from: '/simulate' });
-  const defaultPair = useMemo(() => getLastVisitedPair(), []);
-  const base = useToken(search.baseToken ?? defaultPair.base);
-  const quote = useToken(search.quoteToken ?? defaultPair.quote);
-
-  useEffect(() => {
-    if (!search.baseToken || !search.quoteToken) return;
-    lsService.setItem('tradePair', [search.baseToken, search.quoteToken]);
-  }, [search.baseToken, search.quoteToken]);
-
-  const navigate = useNavigate({ from: '/simulate' });
-  useEffect(() => {
-    if (search.baseToken && search.quoteToken) return;
-    navigate({
-      search: {
-        ...search,
-        baseToken: defaultPair.base,
-        quoteToken: defaultPair.quote,
-      },
-      replace: true,
-    });
-  }, [search, navigate, defaultPair.base, defaultPair.quote]);
-
-  return {
-    base: base.token,
-    quote: quote.token,
-    isPending: base.isPending || quote.isPending,
-  };
-};
+import { usePersistLastPair } from 'hooks/usePersistLastPair';
 
 export const SimulatorRoot = () => {
-  const { isPending } = usePersistLastPair();
-
-  const { aboveBreakpoint } = useBreakpoints();
-
-  if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
+  const { isPending } = usePersistLastPair({ from: '/simulate' });
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center p-16" />;
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-[1920px] flex-col content-start gap-20 p-20 md:grid md:grid-cols-[auto_450px]">
+    <div className="mx-auto flex flex-col content-start gap-24 max-w-[800px] xl:max-w-[1920px] p-16 w-full">
       <SimulatorDisclaimer />
-      <Outlet />
+      <div className="grid content-start gap-16 2xl:grid-cols-[350px_1fr]">
+        <div className="2xl:grid xl:flex xl:justify-between grid gap-16 content-start">
+          {/** TODO: put back the no Price history warning */}
+          <TokenSelection url="/simulate" />
+          <SimInputStrategyType />
+        </div>
+        <div className="xl:grid xl:grid-cols-[auto_450px] gap-16 flex flex-col-reverse">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 };

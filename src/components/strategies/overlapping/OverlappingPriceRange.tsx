@@ -55,12 +55,12 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
     <>
       {range === 'Infinity' ? (
         <div className="grid grid-cols-2 gap-6">
-          <div className="rounded-e-xs rounded-s-2xl grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
-            <header className="text-12 mb-5 flex justify-between text-white/60">
+          <div className="rounded-e-xs rounded-s-2xl grid cursor-text gap-8 border-2 border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-white/50">
+            <header className="text-12 flex justify-between text-white/60">
               <span>{props.minLabel || 'Min'}</span>
               {!!marketPrice && (
                 <button
-                  className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
+                  className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                   type="button"
                   onClick={() => setMin(marketPrice.toString())}
                   data-testid="market-price-min"
@@ -69,15 +69,17 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
                 </button>
               )}
             </header>
-            <p onClick={() => reset(minId)}>0</p>
+            <p className="text-24" onClick={() => reset(minId)}>
+              0
+            </p>
             <p aria-hidden className="h-[22px]"></p>
           </div>
-          <div className="rounded-s-xs rounded-e-2xl grid cursor-text gap-5 border border-black bg-black p-16 focus-within:border-white/50">
-            <header className="text-12 mb-5 flex justify-between text-white/60">
+          <div className="rounded-s-xs rounded-e-2xl grid cursor-text gap-8 border-2 border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-white/50">
+            <header className="text-12 flex justify-between text-white/60">
               <span>{props.maxLabel || 'Max'}</span>
               {!!marketPrice && (
                 <button
-                  className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
+                  className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                   type="button"
                   onClick={() => setMax(marketPrice.toString())}
                   data-testid="market-price-max"
@@ -86,7 +88,9 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
                 </button>
               )}
             </header>
-            <p onClick={() => reset(maxId)}>∞</p>
+            <p className="text-24" onClick={() => reset(maxId)}>
+              ∞
+            </p>
             <p aria-hidden className="h-[22px]"></p>
           </div>
         </div>

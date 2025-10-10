@@ -14,10 +14,18 @@ export const D3PricesAxis = ({ prices }: { prices: ChartPrices<string> }) => {
 
   return (
     <>
-      {!!buyMin && <D3PriceAxis price={buyMin} color="var(--color-buy)" />}
-      {showBuyMax && <D3PriceAxis price={buyMax} color="var(--color-buy)" />}
-      {!!sellMin && <D3PriceAxis price={sellMin} color="var(--color-sell)" />}
-      {showSellMax && <D3PriceAxis price={sellMax} color="var(--color-sell)" />}
+      {!!buyMin && (
+        <D3PriceAxis price={buyMin} color="url(#svg-buy-gradient)" />
+      )}
+      {showBuyMax && (
+        <D3PriceAxis price={buyMax} color="url(#svg-buy-gradient)" />
+      )}
+      {!!sellMin && (
+        <D3PriceAxis price={sellMin} color="url(#svg-sell-gradient)" />
+      )}
+      {showSellMax && (
+        <D3PriceAxis price={sellMax} color="url(#svg-sell-gradient)" />
+      )}
     </>
   );
 };

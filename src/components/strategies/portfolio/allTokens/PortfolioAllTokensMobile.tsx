@@ -12,7 +12,7 @@ import {
   PortfolioMobileCardLoading,
 } from 'components/strategies/portfolio/PortfolioMobileCard';
 import { useStore } from 'store';
-import { cn, getFiatDisplayValue } from 'utils/helpers';
+import { getFiatDisplayValue } from 'utils/helpers';
 
 type Props = {
   data: PortfolioData[];
@@ -30,44 +30,47 @@ export const PortfolioAllTokensMobile: FC<Props> = ({
   } = useStore();
 
   return (
-    <div className={cn('space-y-20')}>
+    <ul className="grid gap-16">
       {isPending
         ? Array.from({ length: 3 }).map((_, i) => (
-            <PortfolioMobileCardLoading key={i} />
+            <li key={i}>
+              <PortfolioMobileCardLoading />
+            </li>
           ))
         : data.map((value, i) => (
-            <PortfolioMobileCard
-              key={i}
-              index={i}
-              href={getHref(value).href}
-              params={getHref(value).params}
-              search={getHref(value).search}
-            >
-              <div className={cn('flex', 'items-center', 'text-18')}>
-                <LogoImager
-                  src={value.token.logoURI}
-                  alt="Token Logo"
-                  className={cn('w-36', 'h-36', 'mr-10')}
+            <li key={i}>
+              <PortfolioMobileCard
+                index={i}
+                href={getHref(value).href}
+                params={getHref(value).params}
+                search={getHref(value).search}
+              >
+                <div className="flex items-center text-18">
+                  <LogoImager
+                    src={value.token.logoURI}
+                    alt="Token Logo"
+                    className="size-26 mr-8"
+                  />
+                  {value.token.symbol}
+                </div>
+
+                <CardSection
+                  title="Amount"
+                  value={buildAmountString(value.amount, value.token)}
                 />
-                {value.token.symbol}
-              </div>
 
-              <CardSection
-                title="Amount"
-                value={buildAmountString(value.amount, value.token)}
-              />
+                <CardSection
+                  title="Share"
+                  value={buildPercentageString(value.share)}
+                />
 
-              <CardSection
-                title="Share"
-                value={buildPercentageString(value.share)}
-              />
-
-              <CardSection
-                title="Value"
-                value={getFiatDisplayValue(value.value, selectedFiatCurrency)}
-              />
-            </PortfolioMobileCard>
+                <CardSection
+                  title="Value"
+                  value={getFiatDisplayValue(value.value, selectedFiatCurrency)}
+                />
+              </PortfolioMobileCard>
+            </li>
           ))}
-    </div>
+    </ul>
   );
 };

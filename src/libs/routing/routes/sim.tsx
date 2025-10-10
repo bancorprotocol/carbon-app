@@ -15,8 +15,8 @@ import config from 'config';
 import * as v from 'valibot';
 
 export interface StrategyInputBase {
-  baseToken?: string;
-  quoteToken?: string;
+  base?: string;
+  quote?: string;
   start?: string;
   end?: string;
 }
@@ -34,8 +34,8 @@ export const simulatorInputRootRoute = createRoute({
     }
   },
   validateSearch: searchValidator({
-    baseToken: v.optional(validAddress),
-    quoteToken: v.optional(validAddress),
+    base: v.optional(validAddress),
+    quote: v.optional(validAddress),
     start: v.optional(validNumber),
     end: v.optional(validNumber),
   }),
@@ -103,8 +103,8 @@ export const simulatorResultRoute = createRoute({
     </SimulatorProvider>
   ),
   validateSearch: searchValidator({
-    baseToken: validAddress,
-    quoteToken: validAddress,
+    base: validAddress,
+    quote: validAddress,
     start: validNumber,
     end: validNumber,
     sellMax: validNumber,

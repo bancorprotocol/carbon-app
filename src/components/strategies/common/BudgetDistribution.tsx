@@ -73,7 +73,7 @@ export const BudgetDistribution: FC<Props> = (props) => {
     Number(balance ?? '0'),
     isSimulator,
   );
-  const color = isBuy ? 'bg-buy' : 'bg-sell';
+  const color = isBuy ? 'bg-buy-gradient' : 'bg-sell-gradient';
   const allocated = isSimulator ? deposit : initialBudget;
   return (
     <div className="flex flex-col gap-4">

@@ -15,9 +15,9 @@ export function Candlesticks({ data }: CandlesticksProps) {
         const isUp = d.open > d.close;
         const isDown = d.open < d.close;
         const color = isUp
-          ? 'var(--color-sell)'
+          ? 'url(#svg-sell-gradient)'
           : isDown
-            ? 'var(--color-buy)'
+            ? 'url(#svg-buy-gradient)'
             : 'white';
 
         let height = 5;

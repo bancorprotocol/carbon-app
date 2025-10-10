@@ -42,11 +42,11 @@ export const ActivitySection: FC<SectionProps> = ({ hideIds }) => {
         variant="error"
         title="We couldn't find any activities"
         text={getEmptyText(location.pathname)}
-        className="grid-area-[list]"
+        className="bg-white-gradient grid-area-[list]"
       />
     );
   }
-  if (aboveBreakpoint('md')) {
+  if (aboveBreakpoint('lg')) {
     return <ActivityTable activities={activities} hideIds={hideIds} />;
   }
   return <ActivityList activities={activities} hideIds={hideIds} />;

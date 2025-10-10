@@ -1,4 +1,4 @@
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 import { exist } from './helpers/operators';
 import { includesGasToken, isDifferentGasToken } from './tokens';
 import { Token } from 'libs/tokens';

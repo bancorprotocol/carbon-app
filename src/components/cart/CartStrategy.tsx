@@ -157,7 +157,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       id={strategy.id}
       style={style}
       className={cn(
-        'rounded-lg bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        'rounded-lg bg-white-gradient grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className,
       )}
     >
@@ -183,7 +183,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           <button
             role="menuitem"
             type="button"
-            className="size-38 rounded-sm border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
+            className="btn-secondary-gradient size-38 rounded-sm grid place-items-center"
             aria-label="Withdraw & Delete"
             onClick={remove}
           >
@@ -194,7 +194,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       <div>
         <StrategyBlockBudget strategy={strategy} />
       </div>
-      <div className="rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
+      <div className="bg-black/20 rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
         <StrategyBlockBuySell
           strategy={strategy}
           isBuy
@@ -211,7 +211,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           popover="auto"
           onBeforeToggle={setSize}
           className={cn(
-            'rounded-md bg-background-900 absolute m-0 overflow-hidden p-24',
+            'rounded-md bg-black absolute m-0 overflow-hidden p-24',
             styles.warnings,
           )}
         >
@@ -226,7 +226,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
                 popoverTarget={popoverId}
                 popoverTargetAction="hide"
                 aria-label="close warnings"
-                className="hover:bg-background-900 ml-auto rounded-full p-8"
+                className="hover:bg-black ml-auto rounded-full p-8"
               >
                 <IconClose className="size-16" />
               </button>

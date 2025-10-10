@@ -1,6 +1,6 @@
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { FC, memo } from 'react';
 import { TokenLogo } from './imager/Imager';

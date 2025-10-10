@@ -10,7 +10,7 @@ import {
   priceHistoryHandler,
   waitFor,
 } from 'libs/testing-library';
-import { TradeProvider } from 'components/trade/TradeContext';
+import { TradeProvider } from 'components/trade/TradeProvider';
 import { Token } from 'libs/tokens';
 import { TradeDisposable } from './disposable';
 

@@ -15,10 +15,9 @@ export const useGetEnrichedStrategies = (
   const { fiatCurrency } = useStore();
   const trending = useTrending();
   const currency = fiatCurrency.selectedFiatCurrency;
-  const isPending = query.isPending;
 
   const tokens = useMemo(() => {
-    if (isPending) return;
+    if (query.isPending) return;
     const data = query.data ?? [];
     const strategies = Array.isArray(data) ? data : [data];
     const all = strategies.map(({ base, quote }) => [
@@ -27,9 +26,10 @@ export const useGetEnrichedStrategies = (
     ]);
     const unique = new Set(all.flat());
     return Array.from(unique);
-  }, [isPending, query.data]);
+  }, [query.isPending, query.data]);
 
   const allPrices = useGetMultipleTokenPrices(tokens);
+  const isPending = query.isPending || allPrices.isPending;
 
   const allEnrichedStrategies = useMemo(() => {
     if (isPending) return;

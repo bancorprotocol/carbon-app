@@ -91,6 +91,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       description:
         'Duplicate the strategy with the existing values (price, budget)',
       testId: 'duplicate-strategy-btn',
+      variant: 'secondary' as const,
     },
     {
       icon: IconCut,
@@ -100,6 +101,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
         undercutDifference * 100
       }% tighter spread and try to get filled ahead`,
       testId: 'undercut-strategy-btn',
+      variant: 'success' as const,
     },
   ];
 
@@ -108,7 +110,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       <h2 className="text-14 font-normal text-white/60">Select your option.</h2>
 
       {duplicateOptions.map(
-        ({ icon: Icon, title, onClick, description, testId }) => (
+        ({ icon: Icon, title, onClick, description, testId, variant }) => (
           <article
             key={title}
             className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl bg-black/90 p-16"
@@ -118,7 +120,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
             </div>
             <h3 className="text-14 font-medium">{title}</h3>
             <Button
-              variant="success"
+              variant={variant}
               onClick={onClick}
               className="row-span-2 self-center"
               data-testid={testId}

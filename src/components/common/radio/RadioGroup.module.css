@@ -1,17 +1,27 @@
 @reference "tailwindcss";
 @reference "../../../theme.css";
 
+
+
+.radio-group {
+  @apply tab-list border-2 border-new-primary;
+}
+.label {
+  @apply tab-anchor;
+}
+.label:has(.radio:checked) {
+  @apply tab-focus;
+}
+.label:has(.radio:checked):hover {
+  @apply text-white;
+}
+.label:has(.radio:focus-visible) {
+  @apply outline outline-1;
+}
+
 .radio {
   position: absolute;
   opacity: 0;
   pointer-events: none;
 }
-.radio:checked + label {
-  @apply bg-background-800 text-white/80;
-}
-.radio:checked + label:hover {
-  @apply text-white;
-}
-.radio:focus-visible + label {
-  @apply outline outline-1;
-}
+

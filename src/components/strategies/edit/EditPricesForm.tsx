@@ -1,7 +1,5 @@
 import { FC, FormEvent, ReactNode, useState } from 'react';
-import { EditPriceNav } from './EditPriceNav';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
-import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { Button } from 'components/common/button';
 import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
@@ -218,12 +216,7 @@ export const EditPricesForm: FC<Props> = (props) => {
 
   if (!marketPrice) {
     return (
-      <article
-        key="marketPrice"
-        className="bg-background-900 grid content-start rounded-2xl"
-      >
-        <EditStrategyOverlapTokens />
-        <EditPriceNav editType={editType} />
+      <article key="marketPrice" className="bg-white-gradient rounded-2xl">
         <InitMarketPrice base={base} quote={quote} />
       </article>
     );
@@ -240,10 +233,7 @@ export const EditPricesForm: FC<Props> = (props) => {
       )}
       data-testid="edit-form"
     >
-      <EditStrategyOverlapTokens />
-      <EditPriceNav editType={editType} />
-
-      <div className="overflow-hidden rounded-ee-2xl rounded-es-2xl">
+      <div className="bg-white-gradient overflow-hidden rounded-2xl">
         {children}
       </div>
       <footer className="mt-16 grid gap-16">
@@ -251,7 +241,7 @@ export const EditPricesForm: FC<Props> = (props) => {
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-lg bg-background-900 text-14 font-medium flex items-center gap-8 p-20 text-white/60',
+            'rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input

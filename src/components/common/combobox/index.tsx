@@ -187,19 +187,14 @@ export const Combobox: FC<ComboboxProps> = (props) => {
       <button
         {...getReferenceProps({ ref: refs.setReference })}
         type="button"
-        className={cn(
-          'text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
-          'hover:bg-background-800',
-          selected.length
-            ? 'active:border-white-80 border-white/60'
-            : 'border-background-800 hover:border-background-700 active:border-background-600',
-        )}
+        className="btn-tertiary-gradient text-12 flex items-center gap-8 rounded-full px-12 py-8 text-white/60"
+        data-selected={!!selected.length}
         aria-controls={rootId}
       >
         {icon}
-        <span className="text-white/60">{label}</span>
+        <span>{label}</span>
         <IconChevron
-          className={cn('size-12 text-white/60 transition-transform', {
+          className={cn('ml-auto size-12 transition-transform', {
             'rotate-180': open,
           })}
         />
@@ -212,10 +207,10 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               style={{ ...floatingStyles, ...transition }}
               {...getFloatingProps()}
               id={rootId}
-              className="bg-background-800 z-50 flex flex-col gap-8 rounded-2xl p-16"
+              className="bg-new-primary/80 backdrop-blur-sm z-50 flex flex-col gap-8 rounded-2xl p-16"
               onChange={onChange}
             >
-              <div className="flex gap-8 rounded-2xl bg-black p-10 focus-within:outline-1">
+              <div className="flex gap-8 rounded-2xl bg-black-gradient p-10 focus-within:outline-1">
                 <IconSearch className="w-14 self-center" />
                 <input
                   id={inputId}
@@ -229,7 +224,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               <button
                 type="button"
                 onClick={reset}
-                className="bg-background-900 text-12 font-medium rounded-2xl p-10"
+                className="bg-black-gradient text-12 font-medium rounded-2xl p-10"
               >
                 Reset Filter
               </button>

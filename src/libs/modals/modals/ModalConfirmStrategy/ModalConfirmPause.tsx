@@ -54,7 +54,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
       <Button
         onClick={() => closeModal(id)}
         disabled={isLoading}
-        variant="black"
+        variant="secondary"
         size="lg"
         fullWidth
       >
