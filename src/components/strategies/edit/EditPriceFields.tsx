@@ -94,18 +94,19 @@ export const EditStrategyPriceField: FC<Props> = ({
     <article
       aria-labelledby={titleId}
       className="grid text-left"
-      data-testid={`${isBuy ? 'buy' : 'sell'}-section`}
+      data-testid={`${direction}-section`}
     >
       {settings}
       <div
         className={cn(style.order, 'grid gap-16 p-16')}
-        data-direction={isBuy ? 'buy' : 'sell'}
+        data-direction={direction}
       >
         <OrderHeader {...headerProps} />
         <LimitRangeOrder
           base={base}
           quote={quote}
           order={order}
+          direction={direction}
           setMin={setMin}
           setMax={setMax}
           setPrice={setPrice}
