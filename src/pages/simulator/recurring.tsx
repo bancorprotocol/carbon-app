@@ -181,7 +181,7 @@ export const SimulatorInputRecurringPage = () => {
       </SimInputChart>
       <form
         onSubmit={submit}
-        className={cn(style.form, 'grid gap-16')}
+        className={cn(style.form, 'grid gap-16 grid-area-[form]')}
         data-testid="create-simulation-form"
       >
         <div className="bg-white-gradient rounded-2xl overflow-clip">

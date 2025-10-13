@@ -5,6 +5,9 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { TradeNav } from 'components/trade/TradeNav';
 import { usePersistLastPair } from 'hooks/usePersistLastPair';
+import style from './root.module.css';
+import { cn } from 'utils/helpers';
+// TODO: use grid to support sticky
 
 export const TradeRoot = () => {
   const { base, quote, isPending } = usePersistLastPair({ from: '/trade' });
@@ -23,14 +26,17 @@ export const TradeRoot = () => {
   }
   return (
     <TradeProvider base={base} quote={quote}>
-      <div className="mx-auto grid w-full content-start md:justify-center gap-16 p-16 2xl:grid-cols-[350px_1fr] max-w-[1920px]">
-        <div className="2xl:grid xl:flex grid gap-16 content-start">
+      <div
+        className={cn(
+          style.root,
+          'mx-auto grid w-full gap-16 p-16 max-w-[1920px]',
+        )}
+      >
+        <div className="2xl:grid xl:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
           <TokenSelection url="/trade" />
           <TradeNav />
         </div>
-        <div className="xl:grid xl:grid-cols-[auto_450px] gap-16 flex flex-col-reverse">
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
     </TradeProvider>
   );

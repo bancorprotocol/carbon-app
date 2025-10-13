@@ -8,6 +8,8 @@ import { SimInputStrategyType } from 'components/simulator/input/SimInputStrateg
 import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { usePersistLastPair } from 'hooks/usePersistLastPair';
+import { cn } from 'utils/helpers';
+import style from './root.module.css';
 
 export const SimulatorRoot = () => {
   const { isPending } = usePersistLastPair({ from: '/simulate' });
@@ -17,17 +19,15 @@ export const SimulatorRoot = () => {
   }
 
   return (
-    <div className="mx-auto flex flex-col content-start gap-24 max-w-[800px] xl:max-w-[1920px] p-16 w-full">
+    <div className="mx-auto flex flex-col content-start gap-24 xl:max-w-[1920px] p-16 w-full">
       <SimulatorDisclaimer />
-      <div className="grid content-start gap-16 2xl:grid-cols-[350px_1fr]">
-        <div className="2xl:grid xl:flex xl:justify-between grid gap-16 content-start">
+      <div className={cn(style.root, 'grid gap-16')}>
+        <div className="2xl:grid xl:flex xl:justify-between grid gap-16 content-start 2xl:sticky top-[96px] self-start grid-area-[nav]">
           {/** TODO: put back the no Price history warning */}
           <TokenSelection url="/simulate" />
           <SimInputStrategyType />
         </div>
-        <div className="xl:grid xl:grid-cols-[auto_450px] gap-16 flex flex-col-reverse">
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
     </div>
   );
