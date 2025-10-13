@@ -181,7 +181,9 @@ export const ConnectedLandingPage = () => {
                 </header>
                 <p className="text-14">{item.description}</p>
                 <div className="grid relative">
-                  {item.preview}
+                  <Link to={item.to} search={item.search}>
+                    {item.preview}
+                  </Link>
                   {item.unique && (
                     <svg
                       width="135"
