@@ -1,0 +1,26 @@
+.root {
+  display: grid;
+}
+
+@media (min-width: 48rem) {
+  .root {
+    grid-template-areas:
+      'nav chart form';
+  }
+}
+
+@media (min-width: 40rem) and (max-width: 48rem) {
+  .root {
+    grid-template-areas:
+      'nav'
+      'chart form';
+  }
+}
+@media (max-width: 40rem) {
+  .root {
+    grid-template-areas:
+      'nav'
+      'form'
+      'chart';
+  }
+}

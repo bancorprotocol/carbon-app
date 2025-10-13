@@ -51,5 +51,9 @@ export const useExplorer = () => {
   if (type === 'token') return tokenQuery;
   if (type === 'pair') return pairQuery;
   if (type === 'wallet') return walletQuery;
-  return allQuery;
+  if (type === 'full') return allQuery;
+  return {
+    isPending: false,
+    data: [],
+  };
 };

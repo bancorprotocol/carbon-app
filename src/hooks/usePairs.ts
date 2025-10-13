@@ -40,7 +40,7 @@ export const usePairs = () => {
       if (slug.split('_').length === 2) return 'pair';
       if (getTokenById(slug)) return 'token';
       if (isAddress(slug)) return 'wallet';
-      return 'full';
+      return 'error';
     },
     [maps.pairMap, getTokenById],
   );

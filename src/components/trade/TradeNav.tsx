@@ -108,6 +108,7 @@ export const TradeNav = () => {
               chartEnd: search.chartEnd,
               marketPrice: search.marketPrice,
             })}
+            resetScroll={false}
             aria-current={current === link.to ? 'page' : 'false'}
             data-testid={link.id}
             className="flex items-center gap-8 border-b border-transparent py-16 px-24 text-white/60 aria-page:tab-focus rounded-md xl:max-2xl:rounded-full tab-anchor"

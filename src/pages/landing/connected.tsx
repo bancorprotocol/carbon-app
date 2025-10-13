@@ -1,10 +1,10 @@
+import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
 import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { ReactComponent as IconRange } from 'assets/icons/range.svg';
-
 import { OverlappingPreview } from 'components/trade/preview/all/overlapping';
 import { FullRangePreview } from 'components/trade/preview/all/full-range';
 import { LimitSellPreview } from 'components/trade/preview/all/limit-sell';
@@ -13,10 +13,9 @@ import { RecurringLimitLimitPreview } from 'components/trade/preview/all/recurri
 import { RangeSellPreview } from 'components/trade/preview/all/range-sell';
 import { RecurringRangeRangePreview } from 'components/trade/preview/all/recurring-range-range';
 import { ExplorerHeader } from 'components/explorer/ExplorerHeader';
-import config from 'config';
-import { useState } from 'react';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { RangeBuyPreview } from 'components/trade/preview/all/range-buy';
+import config from 'config';
 
 const tabs = [
   {
@@ -142,11 +141,11 @@ const tabs = [
 export const ConnectedLandingPage = () => {
   const [active, setActive] = useState('basic');
   return (
-    <div className="grid content-start gap-40 p-16">
+    <div className="grid content-start gap-40">
       {config.ui.tradeCount && <ExplorerHeader />}
       <div
         role="tablist"
-        className="tab-list place-self-center flex rounded-2xl"
+        className="tab-list place-self-center flex rounded-2xl px-16"
       >
         {tabs.map(({ title, id }) => (
           <button
@@ -170,7 +169,7 @@ export const ConnectedLandingPage = () => {
           hidden={active !== id}
           aria-labelledby={`tab-${id}`}
         >
-          <ul className="place-self-center flex gap-24 flex-wrap justify-center">
+          <ul className="place-self-center flex gap-24 flex-wrap justify-center px-16">
             {items.map((item) => (
               <li
                 key={item.title}

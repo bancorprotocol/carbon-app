@@ -1,5 +1,4 @@
 import { createContext, useContext, useMemo } from 'react';
-import { UseQueryResult } from 'libs/queries';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { useStore } from 'store';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -9,8 +8,13 @@ import {
   AnyStrategyWithFiat,
 } from 'components/strategies/common/types';
 
+export interface QueryLike<T> {
+  isPending: boolean;
+  data?: T;
+}
+
 export const useGetEnrichedStrategies = (
-  query: UseQueryResult<AnyStrategy[] | AnyStrategy, any>,
+  query: QueryLike<AnyStrategy[] | AnyStrategy>,
 ) => {
   const { fiatCurrency } = useStore();
   const trending = useTrending();
