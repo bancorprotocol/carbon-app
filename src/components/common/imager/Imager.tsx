@@ -88,7 +88,7 @@ export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
         style={{ height: `${size}px` }}
         className={cn(
           className,
-          'border border-black bg-black-gradient rounded-full aspect-square',
+          'border border-black bg-black rounded-full aspect-square',
         )}
       ></div>
     );
@@ -100,7 +100,7 @@ export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
       src={token.logoURI}
       alt={token.name ?? token.symbol}
       title={token.symbol}
-      className={cn(className, 'border border-black bg-black-gradient')}
+      className={cn(className, 'border border-black bg-black')}
     />
   );
 };

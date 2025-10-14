@@ -167,7 +167,7 @@ const Content = (props: Props) => {
                 type="button"
                 role="radio"
                 key={i}
-                className="rounded-md px-30 text-14 font-medium hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black-gradient"
+                className="rounded-md px-30 text-14 font-medium hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black"
                 onClick={() => handlePreset(duration)}
                 aria-checked={selectedPreset?.label === label}
                 data-testid="date-picker-button"
@@ -205,7 +205,7 @@ const Content = (props: Props) => {
         />
         <Button
           type="button"
-          variant="black"
+          variant="secondary"
           size="sm"
           className="col-span-2 justify-self-start"
           onClick={onReset}

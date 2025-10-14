@@ -14,7 +14,7 @@ type Props = {
 
 const textClasses = 'text-16 font-medium';
 const buttonClasses =
-  'flex h-44 w-full items-center gap-16 rounded-md px-10 hover:bg-black-gradient disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
+  'flex h-44 w-full items-center gap-16 rounded-md px-10 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
 
 const EXT_LINKS = [
   {

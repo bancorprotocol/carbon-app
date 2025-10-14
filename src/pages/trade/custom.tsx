@@ -190,7 +190,7 @@ export const TradeCustom = () => {
           buy={orders.buy.order}
           sell={orders.sell.order}
         >
-          <article className="bg-black-gradient grid gap-16 rounded-b-2xl">
+          <article className="bg-black grid gap-16 rounded-b-2xl">
             {!search.directions?.length && (
               <h2 className="error-message text-16 m-0 px-16">
                 Please select an order

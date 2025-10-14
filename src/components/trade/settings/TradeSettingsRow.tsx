@@ -37,7 +37,7 @@ export const TradeSettingsRow: FC<{
         <div
           className={cn(
             style.presetCustom,
-            'flex-1 rounded-lg text-12 flex gap-8 border bg-black-gradient py-8 px-16 text-center',
+            'flex-1 rounded-lg text-12 flex gap-8 border bg-black py-8 px-16 text-center',
             'focus-within:bg-white/30 hover:bg-white/20 focus-within:border-background-700',
           )}
         >

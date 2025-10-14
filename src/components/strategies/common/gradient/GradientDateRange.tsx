@@ -162,7 +162,7 @@ const Content = (props: Props) => {
             type="button"
             role="radio"
             key={days}
-            className="rounded-md px-30 text-14 font-medium hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black-gradient"
+            className="rounded-md px-30 text-14 font-medium hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black"
             onClick={() => handlePreset(days)}
             aria-checked={selectedPreset?.days === days}
             data-testid="date-picker-button"
@@ -182,13 +182,13 @@ const Content = (props: Props) => {
         />
         <div className="flex gap-20">
           {startTime && (
-            <p className="bg-black-gradient flex flex-1 items-center gap-8 rounded-full px-16 py-8">
+            <p className="bg-black flex flex-1 items-center gap-8 rounded-full px-16 py-8">
               <span className="text-10 text-white/60">Start Time</span>
               <time className="text-12 font-medium">{startTime}</time>
             </p>
           )}
           {range?.to && (
-            <p className="bg-black-gradient flex flex-1 items-center gap-8 rounded-full px-16 py-8">
+            <p className="bg-black flex flex-1 items-center gap-8 rounded-full px-16 py-8">
               <span className="text-10 text-white/60">End Time</span>
               <time className="text-12 font-medium">23:59:59</time>
             </p>

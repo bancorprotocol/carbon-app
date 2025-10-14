@@ -164,9 +164,7 @@
   background-image: var(--white-gradient);
   @apply glass-shadow;
 }
-@utility bg-black-gradient {
-  background-image: var(--black-gradient);
-}
+
 
 @utility btn-primary-gradient {
   --gradient-direction: 180deg;

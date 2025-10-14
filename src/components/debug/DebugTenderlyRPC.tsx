@@ -77,7 +77,7 @@ export const DebugTenderlyRPC = () => {
         </>
       )}
 
-      <div className="flex w-full items-center gap-16 rounded-full bg-black-gradient px-20 py-10">
+      <div className="flex w-full items-center gap-16 rounded-full bg-black px-20 py-10">
         <Checkbox
           data-testid="unchecked-signer"
           isChecked={isUncheckedSigner}

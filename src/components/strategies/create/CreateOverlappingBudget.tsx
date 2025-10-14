@@ -82,7 +82,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
       <article id="overlapping-distribution" className="grid gap-16 p-16">
         <hgroup>
           <h3 className="text-16 font-medium flex items-center gap-8">
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black-gradient text-[10px] text-white/60">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
               3
             </span>
             Distribution

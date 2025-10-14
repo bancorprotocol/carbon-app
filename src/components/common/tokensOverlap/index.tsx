@@ -22,7 +22,7 @@ export const TokensOverlap = ({
           src={token.logoURI}
           alt="Token Logo"
           title={token.symbol}
-          className="max-w-none border border-black bg-black-gradient"
+          className="max-w-none border border-black bg-black"
           style={{
             zIndex: list.length - index,
             marginLeft: index > 0 ? `-${size * 0.3}px` : '0px',
@@ -31,7 +31,7 @@ export const TokensOverlap = ({
       ))}
       {tokenCount > maxLogos && (
         <span
-          className="size-30 text-12 flex items-center justify-center rounded-full bg-black-gradient"
+          className="size-30 text-12 flex items-center justify-center rounded-full bg-black"
           style={{
             marginLeft: `-${size * 0.3}px`,
           }}

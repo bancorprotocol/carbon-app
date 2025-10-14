@@ -86,7 +86,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
       <div
         className={cn(
           style.approveWarnings,
-          'rounded-lg bg-black-gradient text-14 grid gap-16 p-20 text-white/60',
+          'rounded-lg bg-black text-14 grid gap-16 p-20 text-white/60',
         )}
       >
         <p className="warning-message text-12 text-white/60">

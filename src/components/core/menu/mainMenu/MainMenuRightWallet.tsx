@@ -126,7 +126,7 @@ const ConnectedMenu: FC = () => {
         <>
           <button
             role="menuitem"
-            className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-black-gradient"
+            className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-black"
             onClick={copyAddress}
           >
             <IconCopy className="w-16" />
@@ -136,7 +136,7 @@ const ConnectedMenu: FC = () => {
       ) : (
         <button
           role="menuitem"
-          className="rounded-sm text-error/80 hover:text-error flex w-full p-8 hover:bg-black-gradient"
+          className="rounded-sm text-error/80 hover:text-error flex w-full p-8 hover:bg-black"
           onClick={switchNetwork}
         >
           Switch Network
@@ -144,7 +144,7 @@ const ConnectedMenu: FC = () => {
       )}
       <button
         role="menuitem"
-        className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-black-gradient"
+        className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-black"
         onClick={signout}
       >
         <IconDisconnect className="w-16" />

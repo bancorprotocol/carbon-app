@@ -62,7 +62,7 @@ export const PairChartHistory: FC<Props> = (props) => {
 
   if (isPending || marketIsPending) {
     return (
-      <section className="rounded-xl grid flex-1 items-center bg-black-gradient">
+      <section className="rounded-xl grid flex-1 items-center bg-black/60">
         <CarbonLogoLoading className="h-[80px]" />
       </section>
     );

@@ -71,11 +71,11 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
           Duration
         </legend>
         <div className="text-12 font-medium flex gap-8 text-nowrap text-white/60">
-          <div className="rounded-s-2xl rounded-e-md flex flex-1 items-center gap-8 bg-black-gradient px-16 py-8">
+          <div className="rounded-s-2xl rounded-e-md flex flex-1 items-center gap-8 bg-black px-16 py-8">
             <span>Start Time</span>
             <span>On Execution</span>
           </div>
-          <div className="rounded-s-md rounded-e-2xl has-[input:invalid]:outline-error has-[input:invalid]:border-error flex flex-1 items-center gap-4 border border-transparent bg-black-gradient px-16 py-8 has-[input:focus-visible]:outline-solid">
+          <div className="rounded-s-md rounded-e-2xl has-[input:invalid]:outline-error has-[input:invalid]:border-error flex flex-1 items-center gap-4 border border-transparent bg-black px-16 py-8 has-[input:focus-visible]:outline-solid">
             <label htmlFor={endTimeId}>End Time</label>
             <button
               type="button"

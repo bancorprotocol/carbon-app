@@ -27,7 +27,7 @@ const tabs = [
         icon: <IconMarket className="size-24" />,
         title: 'Swap',
         search: {},
-        preview: <LimitSellPreview className="bg-black-gradient rounded-2xl" />,
+        preview: <LimitSellPreview className="bg-black rounded-2xl" />,
         description:
           'Text about this Type of strategy, the benefits of it and what kind of users it fits',
         unique: false,
@@ -39,9 +39,7 @@ const tabs = [
         description:
           'Text about this Type of strategy, the benefits of it and what kind of users it fits',
         search: {},
-        preview: (
-          <OverlappingPreview className="bg-black-gradient rounded-2xl" />
-        ),
+        preview: <OverlappingPreview className="bg-black rounded-2xl" />,
         unique: false,
       },
       {
@@ -51,7 +49,7 @@ const tabs = [
         description:
           'Text about this Type of strategy, the benefits of it and what kind of users it fits',
         search: {},
-        preview: <FullRangePreview className="bg-black-gradient rounded-2xl" />,
+        preview: <FullRangePreview className="bg-black rounded-2xl" />,
         unique: false,
       },
     ],
@@ -67,7 +65,7 @@ const tabs = [
         title: 'Limit Buy',
         description:
           'Text about this Type of strategy, the benefits of it and what kind of users it fits',
-        preview: <LimitBuyPreview className="bg-black-gradient rounded-2xl" />,
+        preview: <LimitBuyPreview className="bg-black rounded-2xl" />,
         unique: false,
       },
       {
@@ -77,7 +75,7 @@ const tabs = [
         title: 'Limit Sell',
         description:
           'Text about this Type of strategy, the benefits of it and what kind of users it fits',
-        preview: <LimitSellPreview className="bg-black-gradient rounded-2xl" />,
+        preview: <LimitSellPreview className="bg-black rounded-2xl" />,
         unique: false,
       },
       {
@@ -88,7 +86,7 @@ const tabs = [
         description:
           'Text about this Type of strategy, the benefits of it and what kind of users it fits',
         preview: (
-          <RecurringLimitLimitPreview className="bg-black-gradient rounded-2xl" />
+          <RecurringLimitLimitPreview className="bg-black rounded-2xl" />
         ),
         unique: true,
       },
@@ -106,7 +104,7 @@ const tabs = [
         title: 'Range Order',
         description:
           'Text about this Type of strategy, the benefits of it and what kind of users it fits',
-        preview: <RangeSellPreview className="bg-black-gradient rounded-2xl" />,
+        preview: <RangeSellPreview className="bg-black rounded-2xl" />,
         unique: true,
       },
       {
@@ -116,7 +114,7 @@ const tabs = [
         title: 'Range Order',
         description:
           'Text about this Type of strategy, the benefits of it and what kind of users it fits',
-        preview: <RangeBuyPreview className="bg-black-gradient rounded-2xl" />,
+        preview: <RangeBuyPreview className="bg-black rounded-2xl" />,
         unique: true,
       },
       {
@@ -130,7 +128,7 @@ const tabs = [
         description:
           'Text about this Type of strategy, the benefits of it and what kind of users it fits',
         preview: (
-          <RecurringRangeRangePreview className="bg-black-gradient rounded-2xl" />
+          <RecurringRangeRangePreview className="bg-black rounded-2xl" />
         ),
         unique: true,
       },

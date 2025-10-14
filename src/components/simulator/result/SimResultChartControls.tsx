@@ -53,7 +53,7 @@ export const SimResultChartControls = () => {
         button={(attr) => (
           <button
             {...attr}
-            className="text-14 h-20 min-w-[20px] place-items-center rounded-[6px] px-2 hover:bg-black-gradient"
+            className="text-14 h-20 min-w-[20px] place-items-center rounded-[6px] px-2 hover:bg-black"
             onClick={(e) => {
               setIsOpen(true);
               attr.onClick(e);
@@ -71,7 +71,7 @@ export const SimResultChartControls = () => {
               key={`${index}_${speed}`}
               role="menuitem"
               aria-label={`Playback Speed: ${speed}`}
-              className="rounded-sm text-14 flex w-full px-12 py-8 text-left text-white/80 hover:bg-black-gradient"
+              className="rounded-sm text-14 flex w-full px-12 py-8 text-left text-white/80 hover:bg-black"
               onClick={() => setSpeed(speed)}
               data-testid={`set-speed-${speed}`}
             >
@@ -82,7 +82,7 @@ export const SimResultChartControls = () => {
       </DropdownMenu>
       <button
         aria-label="play&pause"
-        className="rounded-[6px] p-4 hover:bg-black-gradient"
+        className="rounded-[6px] p-4 hover:bg-black"
         onClick={playPause}
         data-testid="animation-controls-play&pause"
       >
@@ -103,7 +103,7 @@ export const SimResultChartControls = () => {
       />
       <button
         aria-label="end"
-        className="rounded-[6px] p-4 hover:bg-black-gradient"
+        className="rounded-[6px] p-4 hover:bg-black"
         onClick={end}
         data-testid="animation-controls-end"
       >
@@ -111,7 +111,7 @@ export const SimResultChartControls = () => {
       </button>
       <button
         aria-label="replay"
-        className="rounded-[6px] p-4 hover:bg-black-gradient"
+        className="rounded-[6px] p-4 hover:bg-black"
         onClick={replay}
         data-testid="animation-controls-replay"
       >

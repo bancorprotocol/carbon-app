@@ -60,7 +60,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
           replace={true}
           aria-current={pathName.includes(link.id) ? 'page' : 'false'}
           data-testid={`edit-${link.id}`}
-          className="rounded-full hover:border-background-400 flex items-center justify-center gap-8 border border-transparent px-8 py-4 text-white/60 aria-[current=page]:bg-black-gradient aria-[current=page]:text-white"
+          className="rounded-full hover:border-background-400 flex items-center justify-center gap-8 border border-transparent px-8 py-4 text-white/60 aria-[current=page]:bg-black aria-[current=page]:text-white"
         >
           {link.label}
           <Tooltip element={link.text} iconClassName="size-14" />

@@ -68,7 +68,7 @@ export const OverlappingAction: FC<Props> = (props) => {
         className="flex cursor-pointer items-center gap-8"
         data-testid="budget-summary"
       >
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black-gradient text-[10px] text-white/60">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
           2
         </span>
         <h3 className="text-16 font-medium">Edit Budget</h3>

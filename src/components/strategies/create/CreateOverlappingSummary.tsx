@@ -28,7 +28,7 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
 
   const indicationProps = { base, quote, isRange: true, isOverlapping: true };
   return (
-    <article className="rounded-md text-12 grid gap-12 bg-black-gradient px-16 py-12">
+    <article className="rounded-md text-12 grid gap-12 bg-black px-16 py-12">
       <div className="grid grid-flow-col gap-20">
         <div className="grid gap-4">
           <h4 className="font-semibold flex items-center gap-8">

@@ -210,7 +210,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               className="bg-new-primary/80 backdrop-blur-sm z-50 flex flex-col gap-8 rounded-2xl p-16"
               onChange={onChange}
             >
-              <div className="flex gap-8 rounded-2xl bg-black-gradient p-10 focus-within:outline-1">
+              <div className="flex gap-8 rounded-2xl border-2 border-transparent bg-black hover:bg-black/60 px-16 py-8 focus-within:border-white/50">
                 <IconSearch className="w-14 self-center" />
                 <input
                   id={inputId}
@@ -224,7 +224,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               <button
                 type="button"
                 onClick={reset}
-                className="bg-black-gradient text-12 font-medium rounded-2xl p-10"
+                className="btn-secondary-gradient text-12 font-medium rounded-2xl p-10"
               >
                 Reset Filter
               </button>

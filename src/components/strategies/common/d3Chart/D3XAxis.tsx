@@ -47,7 +47,6 @@ export const D3XAxis = () => {
         y={dms.boundedHeight}
         width={dms.width}
         height={dms.marginBottom}
-        className="fill-background-black"
       />
       <line
         y1={dms.boundedHeight}

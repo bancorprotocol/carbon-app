@@ -62,7 +62,7 @@ const NotificationItem: FC<{ notification: Notification }> = (props) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="bg-new-primary rounded-lg bg-black-gradient mb-20 block w-[350px] overflow-hidden border border-white/40 px-16 py-12"
+      className="bg-new-primary rounded-lg bg-black mb-20 block w-[350px] overflow-hidden border border-white/40 px-16 py-12"
       data-testid={`notification-${notification.testid}`}
     >
       <NotificationLine
