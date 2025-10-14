@@ -57,6 +57,7 @@ export const SimResultChartHeader = ({
   const DateRangePickerMemo = useMemo(() => {
     return (
       <DateRangePicker
+        className="btn-tertiary-gradient"
         defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
         defaultEnd={startOfDay(new Date())}
         start={fromUnixUTC(startUnix)}

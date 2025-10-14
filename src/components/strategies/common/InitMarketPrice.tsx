@@ -9,10 +9,10 @@ import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { InputLimit } from './InputLimit';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import style from 'components/strategies/common/form.module.css';
 import { useEditStrategyCtx } from '../edit/EditStrategyContext';
 import { isOverlappingStrategy } from './utils';
 import { getCalculatedPrice } from '../overlapping/utils';
+import style from 'components/strategies/common/form.module.css';
 
 interface Props {
   base: Token;
@@ -153,7 +153,11 @@ export const InitMarketPrice = (props: FieldProps) => {
         />
         I've reviewed the new market price and chosen to proceed.
       </label>
-      <Button type="submit" data-testid="set-overlapping-price">
+      <Button
+        variant="success"
+        type="submit"
+        data-testid="set-overlapping-price"
+      >
         Set New Market Price
       </Button>
     </form>

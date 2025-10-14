@@ -2,7 +2,7 @@
 @reference "../../../theme.css";
 
 .spread:has(input[type='radio']:checked) .spread-custom {
-  @apply text-white/60 border-transparent;
+  @apply text-white/60;
 }
 .spread:has(input[type='number']:invalid) .spread-custom {
   @apply text-error border-error;

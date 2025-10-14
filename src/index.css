@@ -56,7 +56,7 @@
     z-index: -1;
     inset-inline: -50dvw;
     inset-block: -50dvh;
-    background-image: radial-gradient(closest-side circle at center, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 45%, oklch(0.1 var(--chroma) var(--hue)) 100%);
+    background-image: radial-gradient(closest-side circle at center, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 30%, oklch(0.1 var(--chroma) var(--hue)) 100%);
     animation: move-gradient 20s infinite alternate;
   }
   #root.hide-bg::before {
@@ -70,7 +70,7 @@
 
   @keyframes move-gradient {
     from {
-      transform: var(--origin-translate) scale(0.8);
+      transform: var(--origin-translate) scale(1);
     }
     to {
       transform: var(--origin-translate) scale(1.7);

@@ -16,11 +16,15 @@
   z-index: -1;
 }
 .preset label {
+  transition: transform 100ms var(--ease-in-out);
   border-radius: 10px;
   @apply h-full font-medium grid cursor-pointer place-items-center bg-black py-8 text-center text-white/60 border border-transparent shadow-lg;
 }
 .preset input:not(:checked) + label:hover {
   @apply bg-new-secondary/60 text-white;
+}
+.preset input:not(:checked) + label:active {
+  transform: scale(0.9);
 }
 
 .preset input:checked + label {

@@ -97,7 +97,7 @@ export const ModalTokenListContent: FC<Props> = ({
               >
                 <button
                   onClick={() => onSelect(token)}
-                  className="flex flex-1 items-center gap-10 p-8"
+                  className="flex flex-1 items-center gap-8 py-8 px-16"
                   data-testid={`select-token-${token.address}`}
                 >
                   <LogoImager

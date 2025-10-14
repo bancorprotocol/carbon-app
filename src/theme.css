@@ -285,14 +285,15 @@
   }
 }
 @utility tab-anchor {
+  transition-property: color transform;
+  transition-duration: 100ms;
+  transition-timing-function: var(--ease-in-out);
+  border-radius: inherit;
   &:hover {
     color: white;
   }
-  &:has(> *) > *, &:not(:has(> *)) {
-    transition-property: color;
-    transition-duration: 300ms;
-    transition-timing-function: var(--ease-in-out);
-    border-radius: inherit;
+  &:active {
+    transform: scale(0.9);
   }
 }
 @utility tab-focus {

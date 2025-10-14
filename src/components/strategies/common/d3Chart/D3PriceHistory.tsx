@@ -189,6 +189,8 @@ export const D3PriceHistory: FC<Props> = (props) => {
     bounds,
     zoomBehavior = 'normal',
     onRangeUpdates,
+    start,
+    end,
   } = props;
   const [listenOnZoom, setListenOnZoom] = useState(false);
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
@@ -250,6 +252,11 @@ export const D3PriceHistory: FC<Props> = (props) => {
       after: new Date(Number(xScale.domain().at(-1)!) * 1000),
     },
   ];
+
+  const rangeInDays = useMemo(() => {
+    if (!start || !end) return data.length;
+    return differenceInDays(Number(end) * 1000, Number(start) * 1000) + 1;
+  }, [start, end, data.length]);
 
   const zoomFromTo = async (range: { start?: Date; end?: Date }) => {
     if (!range.start || !range.end) return;
@@ -354,10 +361,11 @@ export const D3PriceHistory: FC<Props> = (props) => {
               return (
                 <button
                   key={label}
-                  role="menuitem"
-                  className="text-12 duration-preset hover:bg-background-700 rounded-md p-8 disabled:pointer-events-none disabled:text-white/50"
+                  role="menuitemradio"
+                  className="text-12 duration-preset hover:bg-black rounded-md p-8 disabled:pointer-events-none disabled:text-white/50 aria-selected:underline underline-offset-3"
                   onClick={() => zoomIn(days)}
                   disabled={days > data.length}
+                  aria-selected={rangeInDays === days}
                 >
                   {label}
                 </button>
@@ -365,7 +373,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
             })}
             <hr className="h-full border-e border-white/10" />
             <DateRangePicker
-              className="rounded-md border-0 bg-none"
+              className="rounded-md hover:bg-black"
               defaultStart={fromUnixUTC(defaultHistoryStart)}
               defaultEnd={default_ED_()}
               start={fromUnixUTC(props.start || defaultHistoryStart)}
