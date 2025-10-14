@@ -4,7 +4,7 @@ import genericToken from 'assets/icons/generic_token.svg';
 import { cn } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 
-export const useImager = (
+const useImager = (
   src: string = genericToken,
   fallbackSrc: string = genericToken,
 ) => {

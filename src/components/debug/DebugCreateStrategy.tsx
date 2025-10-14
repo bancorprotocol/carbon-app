@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent } from 'react';
-import { Button } from 'components/common/button';
 import {
   CreateStrategyParams,
   QueryKey,
@@ -343,9 +342,13 @@ export const DebugCreateStrategy = () => {
           Strategies created: {index} / {total}
         </output>
       ) : (
-        <Button type="submit" data-testid="create-strategies">
+        <button
+          className="btn-primary-gradient"
+          type="submit"
+          data-testid="create-strategies"
+        >
           START
-        </Button>
+        </button>
       )}
     </form>
   );

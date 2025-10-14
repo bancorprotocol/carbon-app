@@ -1,4 +1,3 @@
-import { Button } from 'components/common/button';
 import { FormEvent } from 'react';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
@@ -22,14 +21,13 @@ export const DebugFeatureFlag = () => {
     >
       <h2>🧪 Feature Flags</h2>
       {!!featureFlags.length ? <FeatureRadioGroup /> : <EmptyFlags />}
-      <Button
-        className="self-end"
-        variant="success"
+      <button
+        className="btn-primary-gradient self-end"
         type="submit"
         disabled={!featureFlags.length}
       >
         Save
-      </Button>
+      </button>
     </form>
   );
 };

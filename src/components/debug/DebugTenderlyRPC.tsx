@@ -1,7 +1,6 @@
 import { useWagmi } from 'libs/wagmi';
 import { useState, FormEvent } from 'react';
 import { lsService } from 'services/localeStorage';
-import { Button } from 'components/common/button';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { tenderlyRpc } from 'utils/tenderly';
@@ -94,9 +93,13 @@ export const DebugTenderlyRPC = () => {
         />
       </Label>
 
-      <Button data-testid="save-rpc" type="submit">
+      <button
+        className="btn-primary-gradient"
+        data-testid="save-rpc"
+        type="submit"
+      >
         Save
-      </Button>
+      </button>
     </form>
   );
 };

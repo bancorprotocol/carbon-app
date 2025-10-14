@@ -2,7 +2,7 @@
   display: grid;
 }
 
-@media (min-width: 96rem) {
+@media (width > 96rem) {
   .root {
     grid-template-columns: 350px 1fr 450px;
     grid-template-areas:
@@ -10,7 +10,7 @@
   }
 }
 
-@media (min-width: 64rem) and (max-width: 96rem) {
+@media (width > 64rem) and (width <= 96rem) {
   .root {
     align-content: start;
     grid-template-columns: 1fr 450px;
@@ -20,7 +20,7 @@
   }
 }
 
-@media (max-width: 64rem) {
+@media (width <= 64rem) {
   .root {
     grid-template-areas:
       'nav'

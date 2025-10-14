@@ -1,5 +1,4 @@
 import { ModalFC } from 'libs/modals/modals.types';
-import { Button } from 'components/common/button';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconError } from 'assets/icons/times.svg';
@@ -42,19 +41,18 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
           text={text}
         />
       </div>
-      <Button
-        variant="success"
-        fullWidth
+      <button
+        className="btn-primary-gradient"
         onClick={() => {
           closeModal(id);
           onConfirm();
         }}
       >
         {buttonLabel}
-      </Button>
-      <Button variant="secondary" fullWidth onClick={() => closeModal(id)}>
+      </button>
+      <button className="btn-secondary-gradient" onClick={() => closeModal(id)}>
         Cancel
-      </Button>
+      </button>
     </ModalOrMobileSheet>
   );
 };

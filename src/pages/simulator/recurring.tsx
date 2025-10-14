@@ -1,5 +1,4 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { Button } from 'components/common/button';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
@@ -188,17 +187,14 @@ export const SimulatorInputRecurringPage = () => {
           <SimInputRecurring state={state} dispatch={dispatch} _sP_={_sP_} />
         </div>
         <input className="approve-warnings hidden" defaultChecked />
-        <Button
+        <button
           type="submit"
           data-testid="start-simulation-btn"
-          variant="success"
-          fullWidth
-          size="lg"
           disabled={btnDisabled}
-          className="mt-16"
+          className="btn-primary-gradient text-16 py-12"
         >
           {loadingText || noBudgetText || 'Start Simulation'}
-        </Button>
+        </button>
       </form>
     </>
   );

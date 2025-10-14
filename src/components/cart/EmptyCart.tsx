@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { ReactComponent as CartIcon } from 'assets/icons/cart.svg';
 
 export const EmptyCart = () => {
@@ -14,7 +13,7 @@ export const EmptyCart = () => {
       <h2 className="max-w-[440px] text-[32px] leading-[36px]">
         Your Cart is Empty
       </h2>
-      <Link to="/trade" className={buttonStyles({ variant: 'success' })}>
+      <Link to="/trade" className="btn-primary-gradient">
         Create
       </Link>
     </section>

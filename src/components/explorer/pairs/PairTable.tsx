@@ -2,7 +2,7 @@ import { FC, useMemo, useState } from 'react';
 import { PairRow } from './types';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
-import { buttonStyles } from 'components/common/button/buttonStyles';
+
 import { Paginator } from 'components/common/table/Paginator';
 import { NewTabLink } from 'libs/routing';
 import { clamp } from 'utils/helpers/operators';
@@ -70,14 +70,14 @@ export const PairTable: FC<Props> = ({ pairs }) => {
               <td>
                 <div className="inline-flex gap-8">
                   <Link
-                    className={buttonStyles({ variant: 'success' })}
+                    className="btn-primary-gradient"
                     to="/trade"
                     search={{ base: base.address, quote: quote.address }}
                   >
                     Create Position
                   </Link>
                   <Link
-                    className={buttonStyles({ variant: 'white' })}
+                    className="btn-secondary-gradient"
                     to="/trade/market"
                     search={{ base: base.address, quote: quote.address }}
                   >

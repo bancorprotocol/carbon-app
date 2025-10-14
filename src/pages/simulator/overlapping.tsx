@@ -4,7 +4,6 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { Button } from 'components/common/button';
 import { CreateOverlappingStrategy } from 'components/simulator/input/overlapping/CreateOverlappingStrategy';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { useSimulatorOverlappingInput } from 'hooks/useSimulatorOverlappingInput';
@@ -192,17 +191,14 @@ export const SimulatorInputOverlappingPage = () => {
           />
         </div>
         <input className="approve-warnings hidden" defaultChecked />
-        <Button
+        <button
           type="submit"
           data-testid="start-simulation-btn"
-          variant="success"
-          fullWidth
-          size="lg"
           disabled={btnDisabled}
-          className="mt-16"
+          className="btn-primary-gradient text-16 py-12"
         >
           {loadingText || noBudgetText || 'Start Simulation'}
-        </Button>
+        </button>
       </form>
     </>
   );

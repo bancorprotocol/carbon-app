@@ -1,6 +1,5 @@
 import { FormEvent, useLayoutEffect, useRef, useState } from 'react';
 import { lsService } from 'services/localeStorage';
-import { Button } from 'components/common/button';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { defaultConfig } from 'config';
 import { AppConfig } from 'config/types';
@@ -75,15 +74,23 @@ export const DebugConfig = () => {
       {!!error && (
         <Warning isError message={error} htmlFor="custom-config-json" />
       )}
-      <Button data-testid="save-config" type="submit" fullWidth>
+      <button
+        data-testid="save-config"
+        type="submit"
+        className="btn-primary-gradient"
+      >
         Save
-      </Button>
-      <Button type="button" onClick={handleLoadDefault} fullWidth>
+      </button>
+      <button
+        type="button"
+        onClick={handleLoadDefault}
+        className="btn-secondary-gradient"
+      >
         Load Default Config
-      </Button>
-      <Button type="reset" fullWidth>
+      </button>
+      <button type="reset" className="btn-secondary-gradient">
         Reset
-      </Button>
+      </button>
     </form>
   );
 };

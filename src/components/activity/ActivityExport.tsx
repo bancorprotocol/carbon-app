@@ -7,7 +7,6 @@ import { carbonApi } from 'utils/carbonApi';
 import { useTokens } from 'hooks/useTokens';
 import { toActivities } from './useActivityQuery';
 import { useState } from 'react';
-import { Button } from 'components/common/button';
 import { SafeDecimal } from 'libs/safedecimal';
 import { fromUnixUTC } from 'components/simulator/utils';
 import styles from './ActivityExport.module.css';
@@ -161,10 +160,10 @@ export const ActivityExport = () => {
             </p>
             <p>To include older data, adjust the date range and try again.</p>
             <footer className="flex gap-16">
-              <Button variant="success" onClick={download}>
+              <button className="btn-primary-gradient " onClick={download}>
                 Proceed
-              </Button>
-              <Button variant="secondary">Cancel</Button>
+              </button>
+              <button className="btn-secondary-gradient ">Cancel</button>
             </footer>
           </form>
         </dialog>

@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { buttonStyles } from 'components/common/button/buttonStyles';
+
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import {
   SimulatorInputOverlappingValues,
@@ -126,7 +126,7 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
       <Link
         to="/trade"
         search={{ base, quote }}
-        className={buttonStyles({ variant: 'success' })}
+        className="btn-primary-gradient"
       >
         Create
       </Link>

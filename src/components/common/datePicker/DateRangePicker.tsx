@@ -1,4 +1,3 @@
-import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import {
@@ -203,27 +202,23 @@ const Content = (props: Props) => {
           hidden
           defaultValue={toDateInput(date?.to)}
         />
-        <Button
+        <button
           type="button"
-          variant="secondary"
-          size="sm"
-          className="col-span-2 justify-self-start"
+          className="btn-secondary-gradient col-span-2 justify-self-start"
           onClick={onReset}
         >
           Reset
-        </Button>
-        <Button
+        </button>
+        <button
           form={props.form}
           type="button"
           disabled={props.required && !hasDates}
-          size="sm"
-          variant="success"
-          className="col-span-2 justify-self-end"
+          className="btn-primary-gradient col-span-2 justify-self-end"
           data-testid="date-picker-confirm"
           onClick={onConfirm}
         >
           Confirm
-        </Button>
+        </button>
       </footer>
     </div>
   );

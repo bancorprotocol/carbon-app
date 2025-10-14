@@ -51,15 +51,13 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
       >
         Pause Strategy
       </Button>
-      <Button
+      <button
         onClick={() => closeModal(id)}
         disabled={isLoading}
-        variant="secondary"
-        size="lg"
-        fullWidth
+        className="btn-secondary-gradient text-16"
       >
         Cancel
-      </Button>
+      </button>
     </ModalOrMobileSheet>
   );
 };

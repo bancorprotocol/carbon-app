@@ -13,7 +13,6 @@ import {
   TransactionLink,
 } from './ActivityTable';
 import { shortenString, tokenAmount } from 'utils/helpers';
-import { Button } from 'components/common/button';
 import { useActivity, useActivityPagination } from './ActivityProvider';
 
 export interface ActivityListProps {
@@ -35,17 +34,16 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
           />
         ))}
         {limit < size && (
-          <li>
-            <p className="text-12 mb-16 text-center text-white/60 grid-area-[list]">
+          <li className="grid place-items-center col-span-2">
+            <p className="text-12 mb-16 text-center text-white/60">
               {limit} / {size}
             </p>
-            <Button
-              fullWidth
-              variant="success"
+            <button
+              className="btn-primary-gradient "
               onClick={() => setLimit(limit + 10)}
             >
               Show 10 More
-            </Button>
+            </button>
           </li>
         )}
       </ul>

@@ -3,7 +3,6 @@ import { FC, FormEvent, useId, useMemo, useState } from 'react';
 import { cn, roundSearchParam } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
-import { Button } from 'components/common/button';
 import { NewTabLink, useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -25,7 +24,7 @@ export const EditMarketPrice: FC<Props> = (props) => {
     <button
       {...attr}
       className={cn(
-        'text-12 font-medium btn-tertiary-gradient flex items-center justify-between gap-8 rounded-full px-16 py-8',
+        'text-12 font-medium btn-tertiary-gradient flex items-center justify-between gap-8 rounded-full ',
         props.className,
       )}
       data-testid="edit-market-price"
@@ -153,13 +152,13 @@ export const InitMarketPrice = (props: FieldProps) => {
         />
         I've reviewed the new market price and chosen to proceed.
       </label>
-      <Button
-        variant="success"
+      <button
+        className="btn-primary-gradient"
         type="submit"
         data-testid="set-overlapping-price"
       >
         Set New Market Price
-      </Button>
+      </button>
     </form>
   );
 };

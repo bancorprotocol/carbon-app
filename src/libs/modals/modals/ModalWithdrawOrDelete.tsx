@@ -1,6 +1,5 @@
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
-import { Button } from 'components/common/button';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
@@ -26,26 +25,24 @@ export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
           text="Delete this strategy to keep things tidy"
         />
       </div>
-      <Button
-        variant="success"
-        fullWidth
+      <button
+        className="btn-primary-gradient"
         onClick={() => {
           closeModal(id);
           onDelete();
         }}
       >
         Withdraw and Delete
-      </Button>
-      <Button
-        variant="secondary"
-        fullWidth
+      </button>
+      <button
+        className="btn-secondary-gradient"
         onClick={() => {
           closeModal(id);
           onWithdraw();
         }}
       >
         Withdraw Only
-      </Button>
+      </button>
     </ModalOrMobileSheet>
   );
 };

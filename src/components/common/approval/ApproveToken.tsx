@@ -1,6 +1,5 @@
 import { FC, FormEvent, useId, useState } from 'react';
 import { useSetUserApproval } from 'libs/queries/chain/approval';
-import { Button } from 'components/common/button';
 import { Switch } from 'components/common/switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
 import { LogoImager } from 'components/common/imager/Imager';
@@ -120,15 +119,13 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
                 />
               </div>
 
-              <Button
+              <button
                 type="submit"
-                variant="secondary"
-                size="sm"
-                className="text-14 px-10"
+                className="btn-secondary-gradient text-14 "
                 data-testid={`approve-${token.symbol}`}
               >
                 {data.nullApprovalRequired ? 'Revoke and Approve' : 'Approve'}
-              </Button>
+              </button>
             </form>
           )
         ) : (

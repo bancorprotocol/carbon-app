@@ -1,6 +1,5 @@
 import { ModalFC } from 'libs/modals/modals.types';
 import { ApproveToken } from 'components/common/approval';
-import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
@@ -33,21 +32,18 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
           </li>
         ))}
       </ul>
-      <Button
+      <button
         type="button"
-        size="lg"
-        variant="success"
-        fullWidth
         disabled={approvalRequired}
         onClick={async () => {
           closeModal(id);
           await onConfirm();
         }}
-        className="shrink-0"
+        className="btn-primary-gradient shrink-0 text-16"
         data-testid="approve-submit"
       >
         {buttonLabel}
-      </Button>
+      </button>
     </ModalOrMobileSheet>
   );
 };

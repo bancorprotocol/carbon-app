@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { buttonStyles } from 'components/common/button/buttonStyles';
+
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useStrategyCtx } from 'hooks/useStrategies';
@@ -74,7 +74,7 @@ export const PortfolioHeader = () => {
         </div>
         <Link
           to="/trade"
-          className={buttonStyles({ variant: 'success' })}
+          className="btn-primary-gradient whitespace-nowrap"
           data-testid="create-strategy-desktop"
         >
           Create

@@ -6,8 +6,8 @@ import {
   ReactNode,
 } from 'react';
 import { VariantProps } from 'class-variance-authority';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { cn } from 'utils/helpers';
+import { buttonStyles } from './buttonStyles';
 
 export type ButtonHTMLProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,

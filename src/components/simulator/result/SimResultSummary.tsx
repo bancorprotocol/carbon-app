@@ -1,6 +1,6 @@
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { Link } from 'libs/routing';
-import { buttonStyles } from 'components/common/button/buttonStyles';
+
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { SimResultSummaryGains } from 'components/simulator/result/SimResultSummaryGains';
 import { SimResultSummaryRoi } from 'components/simulator/result/SimResultSummaryRoi';
@@ -78,10 +78,7 @@ export const SimResultSummary = ({
                   sellSettings:
                     state.sell.min === state.sell.max ? 'limit' : 'range',
                 }}
-                className={cn(
-                  buttonStyles({ variant: 'success', size: 'md' }),
-                  'whitespace-nowrap',
-                )}
+                className="btn-primary-gradient whitespace-nowrap"
               >
                 Create
               </Link>
@@ -97,10 +94,7 @@ export const SimResultSummary = ({
                   anchor: 'buy',
                   budget: state.buy.budget,
                 }}
-                className={cn(
-                  buttonStyles({ variant: 'success', size: 'md' }),
-                  'whitespace-nowrap',
-                )}
+                className="btn-primary-gradient whitespace-nowrap"
               >
                 Create
               </Link>

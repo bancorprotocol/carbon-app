@@ -1,7 +1,6 @@
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { FC } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { cn } from 'utils/helpers';
 
 interface Props {
@@ -30,10 +29,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
       button={(attr) => (
         <button
           {...attr}
-          className={cn(
-            buttonStyles({ variant: 'secondary' }),
-            'relative flex size-40 items-center justify-center p-0',
-          )}
+          className="btn-secondary-gradient relative flex size-40 items-center justify-center p-0"
         >
           <img
             alt={`Select ${activeNetwork.name}`}

@@ -4,8 +4,6 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useMenuContext } from './useMenuContext';
 import { Menu, MenuType } from './useBurgerMenuItems';
 import { MenuItem } from './MenuItem';
-import { buttonStyles } from 'components/common/button/buttonStyles';
-import { cn } from 'utils/helpers';
 
 export const MainMenuRightBurger: FC<{
   menuMapping: Map<MenuType, Menu>;
@@ -28,10 +26,7 @@ export const MainMenuRightBurger: FC<{
       button={(attr) => (
         <button
           {...attr}
-          className={cn(
-            buttonStyles({ variant: 'secondary' }),
-            'relative p-0 grid size-40 place-items-center',
-          )}
+          className="btn-secondary-gradient relative p-0 grid size-40 place-items-center"
           onClick={(e) => {
             setIsOpen(true);
             attr.onClick(e);

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Button } from 'components/common/button';
 import { Input, InputUserAccount, Label } from 'components/common/inputField';
 import { useWagmi } from 'libs/wagmi';
 import { QueryKey, useQueryClient } from 'libs/queries';
@@ -66,9 +65,13 @@ export const DebugTransferNFT = () => {
 
       {isSuccess && <p className="text-primary">Success!</p>}
       {isError && <p className="text-error">Error!</p>}
-      <Button onClick={handleOnClick} disabled={isLoading}>
+      <button
+        className="btn-secondary"
+        onClick={handleOnClick}
+        disabled={isLoading}
+      >
         {isLoading ? 'loading' : 'Confirm'}
-      </Button>
+      </button>
     </div>
   );
 };

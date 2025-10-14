@@ -4,20 +4,15 @@ import {
   IconTitleText,
   IconTitleTextProps,
 } from 'components/common/iconTitleText/IconTitleText';
-import { Button } from 'components/common/button';
 
 type Props = IconTitleTextProps & {
   children?: ReactNode;
 };
 
 const DefaultChildren = () => (
-  <div>
-    <NewTabLink to={externalLinks.faq}>
-      <Button variant="error" fullWidth>
-        Contact Support
-      </Button>
-    </NewTabLink>
-  </div>
+  <NewTabLink to={externalLinks.faq} className="btn-error-gradient text-14 ">
+    Contact Support
+  </NewTabLink>
 );
 
 export const ErrorWrapper: FC<Props> = ({ children, ...props }) => {

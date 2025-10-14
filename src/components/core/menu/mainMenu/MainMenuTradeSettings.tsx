@@ -2,7 +2,6 @@ import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { useStore } from 'store';
 import { FormEvent, useId, useState } from 'react';
-import { Button } from 'components/common/button';
 import { TradeSettingsData } from 'components/trade/settings/utils';
 import { TradeSettingsRow } from 'components/trade/settings/TradeSettingsRow';
 import { cn } from 'utils/helpers';
@@ -115,9 +114,9 @@ export const MainMenuTradeSettings = () => {
           {settingsData.map((item) => (
             <TradeSettingsRow key={item.id} item={item} />
           ))}
-          <Button variant="success" type="submit">
+          <button className="btn-primary-gradient" type="submit">
             Save Changes
-          </Button>
+          </button>
         </form>
       </dialog>
     </>

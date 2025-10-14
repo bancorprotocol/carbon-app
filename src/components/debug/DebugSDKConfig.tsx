@@ -1,8 +1,7 @@
-import { Button } from 'components/common/button';
 import { FormEvent, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
-import config from 'config';
 import { ONE_HOUR_IN_MS } from 'utils/time';
+import config from 'config';
 
 const defaultCacheTTL = config.sdk.cacheTTL ?? ONE_HOUR_IN_MS;
 
@@ -54,7 +53,9 @@ export const DebugSDKConfig = () => {
           onChange={(e) => setTTL(e.target.valueAsNumber)}
         />
       </div>
-      <Button type="submit">Save Config</Button>
+      <button className="btn-primary-gradient" type="submit">
+        Save Config
+      </button>
     </form>
   );
 };

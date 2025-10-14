@@ -1,8 +1,6 @@
 import { ReactComponent as IconDisconnect } from 'assets/icons/disconnect.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
-import { Button } from 'components/common/button';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useMenuCtx } from 'components/common/dropdownMenu/utils';
 import { useModal } from 'hooks/useModal';
@@ -32,10 +30,10 @@ export const MainMenuRightWallet: FC = () => {
   const { data: ensName } = useGetEnsFromAddress(user || '');
 
   const buttonVariant = useMemo(() => {
-    if (isUserBlocked) return 'error';
-    if (!isSupportedNetwork) return 'error';
-    if (!user) return 'success';
-    return 'secondary';
+    if (isUserBlocked) return 'btn-error-gradient';
+    if (!isSupportedNetwork) return 'btn-error-gradient';
+    if (!user) return 'btn-primary-gradient';
+    return 'btn-secondary-gradient';
   }, [isSupportedNetwork, isUserBlocked, user]);
 
   const buttonText = useMemo(() => {
@@ -74,10 +72,7 @@ export const MainMenuRightWallet: FC = () => {
         button={(attr) => (
           <button
             {...attr}
-            className={cn(
-              buttonStyles({ variant: buttonVariant }),
-              'flex items-center gap-8 px-16 py-8',
-            )}
+            className={cn(buttonVariant, 'flex items-center gap-8 px-16 py-8')}
             data-testid="user-wallet"
           >
             {buttonIcon}
@@ -91,14 +86,13 @@ export const MainMenuRightWallet: FC = () => {
   }
 
   return (
-    <Button
-      variant={buttonVariant}
+    <button
       onClick={onClickOpenModal}
-      className="flex items-center gap-8 px-16"
+      className={cn(buttonVariant, 'flex items-center gap-8 px-16')}
     >
       {buttonIcon}
       <span>{buttonText}</span>
-    </Button>
+    </button>
   );
 };
 

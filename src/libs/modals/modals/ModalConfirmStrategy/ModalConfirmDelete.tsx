@@ -3,11 +3,10 @@ import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
-import { buttonStyles } from 'components/common/button/buttonStyles';
+
 import { AnyStrategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
-import { cn } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
@@ -57,10 +56,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
             to="/strategies/edit/$strategyId"
             params={{ strategyId: strategy.id }}
             search={{ editType: 'editPrices' }}
-            className={cn(
-              'row-span-2 self-center',
-              buttonStyles({ variant: 'success' }),
-            )}
+            className="btn-primary-gradient row-span-2 self-center"
           >
             Edit Prices
           </Link>

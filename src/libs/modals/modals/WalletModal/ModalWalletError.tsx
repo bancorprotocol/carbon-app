@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { WalletIcon } from 'components/common/WalletIcon';
-import { Button } from 'components/common/button';
 
 type Props = {
   onClick: () => void;
@@ -22,9 +21,9 @@ export const ModalWalletError: FC<Props> = ({
       <output className="rounded-lg bg-error/20 font-medium text-error px-20 py-10">
         {error}
       </output>
-      <Button variant="success" onClick={onClick} fullWidth>
+      <button className="btn-primary-gradient" onClick={onClick}>
         Back
-      </Button>
+      </button>
     </>
   );
 };

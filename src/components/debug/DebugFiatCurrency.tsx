@@ -1,5 +1,4 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { Button } from 'components/common/button';
 
 export const DebugFiatCurrency = () => {
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
@@ -10,13 +9,17 @@ export const DebugFiatCurrency = () => {
       <h2>Fiat Currency Selection</h2>
 
       {availableCurrencies.map((currency) => (
-        <Button
+        <button
           key={currency}
-          variant={currency === selectedFiatCurrency ? 'success' : 'white'}
+          className={
+            currency === selectedFiatCurrency
+              ? 'btn-primary-gradient'
+              : 'btn-secondary-gradient'
+          }
           onClick={() => setSelectedFiatCurrency(currency)}
         >
           {currency}
-        </Button>
+        </button>
       ))}
     </div>
   );

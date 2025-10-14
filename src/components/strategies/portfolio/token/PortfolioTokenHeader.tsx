@@ -22,9 +22,9 @@ export const PortfolioTokenHeader: FC<Props> = ({
         params={backLinkHrefParams ?? {}}
         search={(s) => ({ ...s, token: undefined })}
         resetScroll={false}
-        className="grid place-items-center btn-secondary-gradient rounded-full size-32"
+        className="grid place-items-center btn-secondary-gradient rounded-full size-32 p-0"
       >
-        <IconBack className="h-10" />
+        <IconBack className="size-10" />
       </Link>
       {logoURI && (
         <LogoImager alt="Token Logo" src={logoURI} className="mx-16 size-32" />

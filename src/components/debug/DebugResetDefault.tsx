@@ -1,4 +1,3 @@
-import { Button } from 'components/common/button';
 import config from 'config';
 import { setNetworkConfig } from 'config/utils';
 
@@ -10,9 +9,9 @@ export const DebugResetDefault = () => {
   return (
     <article className="rounded-3xl bg-white-gradient grid place-items-center gap-40 p-20">
       <h2>Deactivate Debug Mode</h2>
-      <Button variant="success" onClick={deactivateOne}>
+      <button className="btn-primary-gradient" onClick={deactivateOne}>
         Deactive for {config.network.name}
-      </Button>
+      </button>
       <p className="text-white/60 text-14 text-center">
         This will only deactivate debug mode
         <br /> for the current network:{' '}

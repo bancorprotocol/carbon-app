@@ -1,6 +1,5 @@
 import { ModalFC } from 'libs/modals/modals.types';
 import { useGetTokenData } from 'libs/queries/chain/token';
-import { Button } from 'components/common/button';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
 import { cn, shortenString } from 'utils/helpers';
@@ -75,17 +74,16 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
           </div>
         </div>
       )}
-      <Button
-        variant="success"
-        fullWidth
+      <button
+        className="btn-primary-gradient"
         onClick={onClick}
         disabled={isPending || isError}
       >
         Import Token
-      </Button>
-      <Button variant="secondary" fullWidth onClick={() => closeModal(id)}>
+      </button>
+      <button className="btn-secondary-gradient" onClick={() => closeModal(id)}>
         Cancel
-      </Button>
+      </button>
     </ModalOrMobileSheet>
   );
 };

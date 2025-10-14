@@ -1,6 +1,5 @@
 import { items } from './items';
 import { Link } from 'libs/routing';
-import { buttonStyles } from '../button/buttonStyles';
 
 export const WalletConnect = () => {
   return (
@@ -16,10 +15,7 @@ export const WalletConnect = () => {
           A decentralized protocol for automating on-chain trading strategies.
         </p>
 
-        <Link
-          to="/trade"
-          className={buttonStyles({ variant: 'success', size: 'lg' })}
-        >
+        <Link to="/trade" className="btn-primary-gradient">
           Create
         </Link>
       </article>

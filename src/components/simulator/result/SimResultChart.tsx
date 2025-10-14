@@ -9,7 +9,6 @@ import { useState } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { Link } from '@tanstack/react-router';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 
 interface Props {
   state: StrategyInputValues;
@@ -56,9 +55,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
               buyIsRange: ctx.search.buyIsRange,
               sellIsRange: ctx.search.sellIsRange,
             }}
-            className={buttonStyles({
-              size: 'lg',
-            })}
+            className="btn-secondary-gradient"
           >
             Back
           </Link>
@@ -75,9 +72,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
               sellMax: ctx.search.sellMax,
               spread: ctx.search.spread,
             }}
-            className={buttonStyles({
-              size: 'lg',
-            })}
+            className="btn-secondary-gradient"
           >
             Back
           </Link>
