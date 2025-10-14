@@ -9,10 +9,6 @@
   @apply w-full px-10 md:px-20;
 }
 
-@utility loading-skeleton {
-  @apply rounded-lg bg-black-gradient animate-pulse;
-}
-
 
 @layer utilities {
   :root {
