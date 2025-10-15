@@ -25,7 +25,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { ActivityListProps } from './ActivityList';
 import { NotFound } from 'components/common/NotFound';
-import { useActivity, useActivityPagination } from './ActivityProvider';
+import { useActivity, useActivityPagination } from './context';
 import style from './ActivityTable.module.css';
 
 const thStyle = cn(

@@ -1,36 +1,12 @@
-import { FC, ReactNode, createContext, useCallback, useContext } from 'react';
-import {
-  Activity,
-  ActivityMeta,
-  QueryActivityParams,
-} from 'libs/queries/extApi/activity';
+import { FC, ReactNode, useCallback } from 'react';
+import { QueryActivityParams } from 'libs/queries/extApi/activity';
 import { ActivitySearchParams } from './utils';
 import { useActivityQuery, useActivityMetaQuery } from './useActivityQuery';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { isEmpty } from 'utils/helpers/operators';
 import { addDays, getUnixTime } from 'date-fns';
-import { FetchStatus } from '@tanstack/react-query';
-
-interface ActivityContextType {
-  activities: Activity[];
-  meta?: ActivityMeta;
-  size?: number;
-  status: 'error' | 'pending' | 'success';
-  fetchStatus: FetchStatus;
-  queryParams: QueryActivityParams;
-  searchParams: Partial<ActivitySearchParams>;
-  setSearchParams: (searchParams: Partial<ActivitySearchParams>) => any;
-}
-
-const ActivityContext = createContext<ActivityContextType>({
-  activities: [],
-  status: 'pending',
-  fetchStatus: 'idle',
-  queryParams: {},
-  searchParams: { limit: 10, offset: 0 },
-  setSearchParams: () => {},
-});
+import { ActivityContext, ActivityContextType } from './context';
 
 const getQueryParams = (
   baseParams: QueryActivityParams,
@@ -90,6 +66,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, url }) => {
   );
 
   if (activityMetaQuery.isPending) {
+    console.log('isPending', { ...activityMetaQuery });
     return (
       <CarbonLogoLoading className="h-[80px] self-center grid-area-[list]" />
     );
@@ -114,37 +91,3 @@ export const ActivityProvider: FC<Props> = ({ children, params, url }) => {
     <ActivityContext.Provider value={ctx}>{children}</ActivityContext.Provider>
   );
 };
-
-export function useActivity(): ActivityContextType {
-  const ctx = useContext(ActivityContext) as any;
-  if (!ctx) {
-    throw new Error('useActivity must be used within a ActivityProvider');
-  }
-  return ctx;
-}
-
-export function useActivityPagination() {
-  const { size = 0, searchParams, setSearchParams } = useActivity();
-  const { limit = 10, offset = 0 } = searchParams;
-
-  const currentPage = Math.floor(offset / limit) + 1;
-  const maxPage = Math.ceil(size / limit);
-  const maxOffset = Math.max((maxPage - 1) * limit, 0);
-
-  const setLimit = (limit: number) => setSearchParams({ limit });
-  const setOffset = (offset: number) => setSearchParams({ offset });
-
-  return {
-    size,
-    limit,
-    offset,
-    currentPage,
-    maxPage,
-    setLimit,
-    setOffset,
-    firstPage: () => setOffset(0),
-    lastPage: () => setOffset(maxOffset),
-    previousPage: () => setOffset(Math.max(offset - limit, 0)),
-    nextPage: () => setOffset(Math.min(offset + limit, maxOffset)),
-  };
-}

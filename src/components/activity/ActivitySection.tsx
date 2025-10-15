@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { ActivityTable } from './ActivityTable';
 import { ActivityList } from './ActivityList';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { useActivity } from './ActivityProvider';
+import { useActivity } from './context';
 import { NotFound } from 'components/common/NotFound';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { useRouterState } from '@tanstack/react-router';

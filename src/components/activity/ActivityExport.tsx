@@ -2,7 +2,7 @@ import { Activity, ActivityOrder } from 'libs/queries/extApi/activity';
 import { activityActionName } from './utils';
 import { getLowestBits } from 'utils/helpers';
 import { ReactComponent as IconDownloadFile } from 'assets/icons/download-file.svg';
-import { useActivity } from './ActivityProvider';
+import { useActivity } from './context';
 import { carbonApi } from 'utils/carbonApi';
 import { useTokens } from 'hooks/useTokens';
 import { toActivities } from './useActivityQuery';

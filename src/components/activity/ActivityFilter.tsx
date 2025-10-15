@@ -10,7 +10,7 @@ import { ReactComponent as IconPair } from 'assets/icons/token-pair.svg';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
 import { datePickerPresets } from 'components/common/datePicker/utils';
-import { useActivity } from './ActivityProvider';
+import { useActivity } from './context';
 
 interface DisplayID {
   id: string;

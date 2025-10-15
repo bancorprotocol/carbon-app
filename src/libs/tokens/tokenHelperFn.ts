@@ -80,16 +80,21 @@ export const fetchTokenData = async (
   Token: (address: string) => { read: TokenContract },
   address: string,
 ): Promise<Token> => {
-  const [symbol, decimals, name] = await Promise.all([
-    Token(address).read.symbol(),
-    Token(address).read.decimals(),
-    Token(address).read.name(),
-  ]);
-  return {
-    address,
-    symbol,
-    decimals: Number(decimals),
-    name,
-    isSuspicious: true,
-  };
+  try {
+    const [symbol, decimals, name] = await Promise.all([
+      Token(address).read.symbol(),
+      Token(address).read.decimals(),
+      Token(address).read.name(),
+    ]);
+    return {
+      address,
+      symbol,
+      decimals: Number(decimals),
+      name,
+      isSuspicious: true,
+    };
+  } catch (err) {
+    console.error('Could not fetch information from ' + address);
+    throw err;
+  }
 };

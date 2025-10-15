@@ -13,7 +13,7 @@ import {
   TransactionLink,
 } from './ActivityTable';
 import { shortenString, tokenAmount } from 'utils/helpers';
-import { useActivity, useActivityPagination } from './ActivityProvider';
+import { useActivity, useActivityPagination } from './context';
 
 export interface ActivityListProps {
   activities: Activity[];

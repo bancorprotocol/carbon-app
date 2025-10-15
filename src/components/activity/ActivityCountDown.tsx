@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useId, useState } from 'react';
-import { useActivity } from './ActivityProvider';
+import { useActivity } from './context';
 
 interface Props {
   time: number;
