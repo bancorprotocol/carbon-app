@@ -285,6 +285,10 @@
   }
 }
 
+@utility input-container {
+  @apply border border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-main-400;
+}
+
 @utility backdrop-black {
   background-image: linear-gradient(150deg, oklch(50% var(--chroma) var(--hue) / 0.5), oklch(30% var(--chroma) var(--hue) / 0.5));
   backdrop-filter: blur(20px);

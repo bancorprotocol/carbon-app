@@ -192,7 +192,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
 
   return (
     <>
-      <div className="bg-main-600/20 text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border-2 border-white/10">
+      <div className="bg-main-600/20 text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border border-white/10">
         <span>
           {text[url].pairs}: {pairs.length}
         </span>

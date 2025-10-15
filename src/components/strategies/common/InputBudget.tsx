@@ -108,7 +108,7 @@ export const InputBudget: FC<Props> = (props) => {
     <>
       <div
         className={cn(
-          'flex cursor-text flex-col gap-8 rounded-2xl border-2 border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-white/50',
+          'flex cursor-text flex-col gap-8 rounded-2xl input-container',
           error && 'border-error/50 focus-within:border-error',
           className,
         )}

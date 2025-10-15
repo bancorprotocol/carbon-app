@@ -124,7 +124,7 @@ export const StrategyPage = () => {
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
-              'bg-black/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
+              'bg-black/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border',
               strategy.status === 'active' ? '' : 'opacity-50',
             )}
           >

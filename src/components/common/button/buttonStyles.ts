@@ -16,7 +16,7 @@ const variants = {
     buy: ['btn-buy-gradient text-black'],
     sell: ['btn-sell-gradient text-black'],
     error: [
-      'bg-error border-2 border-error text-black',
+      'bg-error border border-error text-black',
       'hover:border-white/60 hover:disabled:border-error',
     ],
   },

@@ -106,7 +106,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
     <>
       <div
         className={cn(
-          'rounded-2xl flex cursor-text flex-col gap-8 border-2 border-transparent bg-black hover:bg-black/60 p-16 focus-within:border-white/50',
+          'rounded-2xl flex cursor-text flex-col gap-8 input-container',
           showWarning && 'border-warning focus-within:border-warning',
           displayError && 'border-error/50 focus-within:border-error',
         )}
