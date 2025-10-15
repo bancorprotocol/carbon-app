@@ -137,7 +137,7 @@ const QuickGradientChartContent: FC<ContentProps> = (props) => {
               x2={0}
               y1={0}
               y2={dms.boundedHeight}
-              className="stroke-background-800"
+              className="stroke-main-800"
             />
             {y.ticks.map(({ value, offset }) => (
               <g key={`y-${value}`} transform={`translate(0,${offset})`}>
@@ -168,12 +168,12 @@ const QuickGradientChartContent: FC<ContentProps> = (props) => {
               y2={dms.boundedHeight}
               x1={-bandwidthOffset}
               x2={dms.width}
-              className="stroke-background-800"
+              className="stroke-main-800"
             />
             {x.ticks.map(({ value, offset }) => (
               <g key={`x-${value}`} transform={`translate(${offset}, 0)`}>
                 <line
-                  className="tick stroke-background-800"
+                  className="tick stroke-main-800"
                   y1={dms.boundedHeight}
                   y2={dms.boundedHeight - 10}
                 />

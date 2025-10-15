@@ -45,10 +45,7 @@ const FeatureRadioGroup = () => {
           Select the feature flags you want to test
         </legend>
         {featureFlags.map(({ value, label, description }) => (
-          <div
-            key={value}
-            className="rounded-md bg-background-700 flex gap-16 p-16"
-          >
+          <div key={value} className="rounded-md bg-main-700 flex gap-16 p-16">
             <input
               className="h-24 w-24 self-center"
               id={`flag-${value}`}

@@ -171,7 +171,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
             <button
               type="button"
               popoverTarget={popoverId}
-              className="warning-message border-warning rounded-md text-14 text-warning hover:bg-background-800 active:bg-background-700 flex items-center gap-8 border px-8 py-2 text-start"
+              className="warning-message border-warning rounded-md text-14 text-warning hover:bg-main-800 active:bg-main-700 flex items-center gap-8 border px-8 py-2 text-start"
             >
               <IconWarning className="size-14" />
               <span>Warnings</span>
@@ -194,14 +194,14 @@ export const CartStrategyItems: FC<Props> = (props) => {
       <div>
         <StrategyBlockBudget strategy={strategy} />
       </div>
-      <div className="bg-black/20 rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
+      <div className="bg-black/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
         <StrategyBlockBuySell
           strategy={strategy}
           isBuy
-          className="border-background-800 border-r-2"
+          className="border-main-800 border-r-2"
         />
         <StrategyBlockBuySell strategy={strategy} />
-        <div className="border-background-800 col-start-1 col-end-3 border-t-2">
+        <div className="border-main-800 col-start-1 col-end-3 border-t-2">
           <StrategyGraph strategy={strategy} />
         </div>
       </div>

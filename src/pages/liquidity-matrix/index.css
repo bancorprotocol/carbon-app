@@ -13,7 +13,7 @@ html:has(.page) {
 
 /* FIELD INPUTS */
 .field {
-  @apply bg-background-800;
+  @apply bg-main-800;
   display: flex;
   align-items: center;
   border-radius: 4px;
@@ -133,19 +133,19 @@ html:has(.page) {
   display: none;
 }
 .save-locally li {
-  @apply bg-background-800;
+  @apply bg-main-800;
   border-radius: 8px;
   display: flex;
 }
 .save-locally li[aria-selected='true'] {
-  @apply bg-background-700;
+  @apply bg-main-700;
   outline: 1px solid var(--color-primary);
 }
 .save-locally li > * {
   padding: 8px;
 }
 .save-locally li > *:hover {
-  @apply bg-background-600;
+  @apply bg-main-600;
   cursor: pointer;
 }
 .save-locally .select-base {
@@ -204,11 +204,11 @@ html:has(.page) {
 }
 
 .base .price {
-  @apply bg-background-800;
+  @apply bg-main-800;
 }
 
 .base .select {
-  @apply bg-background-800;
+  @apply bg-main-800;
   border-radius: 8px;
   padding: 8px;
   display: grid;
@@ -229,7 +229,7 @@ html:has(.page) {
 }
 
 .base .field {
-  @apply bg-background-800;
+  @apply bg-main-800;
 }
 .base input {
   width: 150px;
@@ -242,7 +242,7 @@ html:has(.page) {
   gap: 24px;
 }
 .pair {
-  @apply bg-background-800 rounded-2xl p-16;
+  @apply bg-main-800 rounded-2xl p-16;
   display: grid;
   gap: 16px;
   min-height: 400px;
@@ -262,7 +262,7 @@ html:has(.page) {
 }
 
 .budget-list {
-  @apply bg-background-700 p-8;
+  @apply bg-main-700 p-8;
   display: grid;
   gap: 8px;
   border-radius: 8px;
@@ -306,7 +306,7 @@ html:has(.page) {
   font-size: 1.3rem;
 }
 .budget label {
-  @apply bg-background-800;
+  @apply bg-main-800;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -375,7 +375,7 @@ html:has(.page) {
   text-align: start;
 }
 .page table tbody td {
-  @apply bg-background-800;
+  @apply bg-main-800;
   text-align: center;
   padding: 8px;
 }
@@ -431,7 +431,7 @@ html:has(.page) {
   display: none;
 }
 .summary .strategy-card {
-  @apply bg-background-800;
+  @apply bg-main-800;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;

@@ -8,13 +8,13 @@
 
   --secondary-gradient: linear-gradient(to bottom, var(--color-new-primary), var(--color-new-secondary), var(--color-new-tertiary));
 
-  --white-gradient: linear-gradient(150deg, oklch(42% var(--chroma) var(--hue) / 0.4), oklch(42% var(--chroma) var(--hue) / 0.5));
-  --black-gradient: linear-gradient(150deg, oklch(10% var(--chroma) var(--hue) / 0.4), oklch(10% var(--chroma) var(--hue) / 0.5));
   --main-gradient: linear-gradient(var(--gradient-direction, 180deg), var(--color-primary), var(--color-secondary));
   --buy-gradient: linear-gradient(150deg, var(--color-buy), var(--color-buy-dark));
   --sell-gradient: linear-gradient(150deg, var(--color-sell), var(--color-sell-dark));
   --error-gradient: linear-gradient(150deg, var(--color-error), var(--color-error-dark));
-  --glass-shadow: 
+  --glass-shadow:
+    /* Elevation */
+    0 5px 5px oklch(10% var(--chroma) var(--hue) / 25%),
     /* Top left */
     inset 1px 1px 0 -1px oklch(100% var(--chroma) var(--hue) / 40%),
     inset 2px 2px 0 -1px oklch(100% var(--chroma) var(--hue) / 10%),
@@ -31,16 +31,17 @@
   --color-new-secondary: oklch(0.2 0.028 206);
   --color-new-tertiary: oklch(0.14 0.02 206);
 
-  --color-background-50: oklch(0.99 var(--chroma) var(--hue));
-  --color-background-100: oklch(0.97 var(--chroma) var(--hue));
-  --color-background-200: oklch(0.92 var(--chroma) var(--hue));
-  --color-background-300: oklch(0.87 var(--chroma) var(--hue));
-  --color-background-400: oklch(0.72 var(--chroma) var(--hue));
-  --color-background-500: oklch(0.56 var(--chroma) var(--hue));
-  --color-background-600: oklch(0.44 var(--chroma) var(--hue));
-  --color-background-700: oklch(0.37 var(--chroma) var(--hue));
-  --color-background-800: oklch(0.27 var(--chroma) var(--hue));
-  --color-background-900: oklch(0.2 var(--chroma) var(--hue));
+  --color-main-50: oklch(0.97 0.01 var(--hue));
+  --color-main-100: oklch(0.90 0.04 var(--hue));
+  --color-main-200: oklch(0.8 0.06 var(--hue));
+  --color-main-300: oklch(0.71 0.06 var(--hue));
+  --color-main-400: oklch(0.62 0.06 var(--hue));
+  --color-main-500: oklch(0.53 0.06 var(--hue));
+  --color-main-600: oklch(0.45 0.05 var(--hue));
+  --color-main-700: oklch(0.37 0.06 var(--hue));
+  --color-main-800: oklch(0.27 0.05 var(--hue));
+  --color-main-900: oklch(0.18 0.03 var(--hue));
+  --color-main-950: oklch(0.1 0.02 var(--hue));
   
   --color-primary: oklch(0.80 0.2 159.5); /* #67D79F */
   --color-secondary: oklch(0.80 0.2 214.3); /* #10BBD8 */
@@ -55,7 +56,7 @@
   --color-success: oklch(0.70 0.2 160); /* #00B578 */
   --color-warning: oklch(0.75 0.2 57); /* #ff8a00 */
 
-  --color-black: oklch(0.13 var(--chroma) var(--hue));
+  --color-black: var(--color-main-950);
   --color-white: oklch(1 var(--chroma) var(--hue));
 
 
@@ -164,19 +165,19 @@
 }
 
 @utility bg-white-gradient {
-  background-image: var(--white-gradient);
-  @apply glass-shadow;
+  @apply glass-shadow bg-linear-to-br from-main-400/40 to-main-600/40;
 }
 
 
 @utility btn-primary-gradient {
   --gradient-direction: 180deg;
-  @apply rounded-full text-14;
-  box-shadow: 0 5px 5px 0 oklch(20% var(--chroma) var(--hue) / 20%);
+  @apply rounded-full text-14 shadow-black/25;
+  box-shadow: 0 5px 5px 0 var(--tw-shadow-color);
   background: var(--main-gradient);
   color: var(--color-black);
   padding: 12px 20px;
   transition: transform 0.1s var(--ease-out);
+  text-align: center;
   &:hover {
     color: white;
     background: linear-gradient(180deg, #50C58A, var(--color-secondary));
@@ -191,15 +192,15 @@
 }
 
 @utility btn-secondary-gradient {
-  @apply rounded-full text-14;
-  box-shadow: 0 5px 5px 0 oklch(20% var(--chroma) var(--hue) / 20%);
-  background: linear-gradient(to bottom, #66B6C1, #30565B 50%) border-box;
-  color: white;
+  @apply rounded-full text-14 shadow-black/25;
+  box-shadow: 0 5px 5px 0 var(--tw-shadow-color);
+  background: linear-gradient(to bottom, var(--color-main-400), var(--color-main-600), var(--color-main-700)) border-box;
+  color: var(--color-white);
   padding: 12px 20px;
   transition: transform 0.1s var(--ease-out);
+  text-align: center;
   &:hover {
-    color: white;
-    background: linear-gradient(to bottom, #4AA1AD, #254449) border-box;
+    background: linear-gradient(to bottom, var(--color-main-500), var(--color-main-700), var(--color-main-900)) border-box;
   }
   &:disabled, &.disabled {
     background: linear-gradient(#061B1E) border-box;
@@ -211,14 +212,15 @@
   }
 }
 @utility btn-tertiary-gradient {
-  @apply rounded-full text-14;
-  box-shadow: 0 4px 15px 0 oklch(35% var(--chroma) var(--hue) / 80%);
-  background: linear-gradient(to bottom, #30565B, #1B383D 30%, #061B1E) border-box;
-  color: white;
+  @apply rounded-full text-14 shadow-main-700/80;
+  box-shadow: 0 4px 15px 0 var(--tw-shadow-color);
+  background: linear-gradient(to bottom, var(--color-main-600), var(--color-main-800), var(--color-main-950)) border-box;
+  color: var(--color-white);
   padding: 12px 20px;
   transition: transform 0.1s var(--ease-out);
+  text-align: center;
   &:hover {
-    background: linear-gradient(to bottom, #30565B, #1B383D, #061B1E) border-box;
+    background: linear-gradient(to bottom, var(--color-main-700), var(--color-main-900), var(--color-main-950)) border-box;
   }
   &:disabled, &.disabled {
     background: linear-gradient(var(--color-black)) border-box;
@@ -298,13 +300,14 @@
     position: relative;
     isolation: isolate;
     &::before {
+      @apply glass-shadow from-main-400/40 to-main-600/40;
       content: "";
       position-anchor: --tab-selected;
       transition-property: top, left, width, height;
       position: absolute;
       transition-duration: 400ms;
       transition-timing-function: var(--ease-in-out);
-      background: var(--tab-background, color-mix(in oklch, var(--color-new-primary), transparent 60%));
+      background: var(--tab-background, linear-gradient(180deg, var(--tw-gradient-from), var(--tw-gradient-to)));
       z-index: -1;
       border-radius: inherit;
       border-width: 1px;

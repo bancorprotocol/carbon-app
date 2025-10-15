@@ -56,7 +56,7 @@ export const DateRangePicker = memo(function DateRangePicker(
       className={cn(
         'text-12 flex items-center gap-8 rounded-full px-12 py-8',
         props.disabled &&
-          'border-background-800 hover:border-background-800 active:border-background-800 cursor-not-allowed hover:bg-transparent',
+          'border-main-800 hover:border-main-800 active:border-main-800 cursor-not-allowed hover:bg-transparent',
         props.className,
       )}
       data-selected={hasDates}
@@ -166,7 +166,7 @@ const Content = (props: Props) => {
                 type="button"
                 role="radio"
                 key={i}
-                className="rounded-md px-30 text-14 font-medium hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black"
+                className="rounded-md px-30 text-14 font-medium hover:border-main-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black"
                 onClick={() => handlePreset(duration)}
                 aria-checked={selectedPreset?.label === label}
                 data-testid="date-picker-button"

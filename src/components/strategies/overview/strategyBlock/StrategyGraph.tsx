@@ -217,7 +217,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
         </clipPath>
       </defs>
 
-      <g className={style.axes} stroke="var(--color-background-700)">
+      <g className={style.axes} stroke="var(--color-main-700)">
         <line x1="0" y1={baseline} x2={width} y2={baseline} />
       </g>
 
@@ -504,14 +504,14 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
     <g className={style.currentPrice}>
       <path
         className={style.priceLine}
-        stroke="var(--color-background-700)"
+        stroke="var(--color-main-700)"
         strokeWidth="2"
         d={`M ${Math.max(lowest, Math.min(highest, price))} ${baseline} V 25`}
       />
       {tooLow && (
         <>
           <rect
-            fill="var(--color-background-700)"
+            fill="var(--color-main-700)"
             x={lowest - 1}
             y="6"
             width={outRangeWidth}
@@ -543,7 +543,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
       {inRange && (
         <>
           <rect
-            fill="var(--color-background-700)"
+            fill="var(--color-main-700)"
             x={price}
             y="6"
             width={inRangeWidth}
@@ -567,7 +567,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
       {tooHigh && (
         <>
           <rect
-            fill="var(--color-background-700)"
+            fill="var(--color-main-700)"
             x={highest + 1}
             y="6"
             width={outRangeWidth}

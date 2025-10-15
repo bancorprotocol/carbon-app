@@ -18,7 +18,7 @@ export const D3XAxis = () => {
     return (
       <g className="axis" key={tickValue} transform={`translate(${x},0)`}>
         <line
-          className="tick stroke-background-800"
+          className="tick stroke-main-800"
           y1={dms.boundedHeight}
           y2={dms.boundedHeight - 10}
         />
@@ -53,7 +53,7 @@ export const D3XAxis = () => {
         y2={dms.boundedHeight}
         x1={-bandwidthOffset}
         x2={dms.width}
-        className="stroke-background-800"
+        className="stroke-main-800"
       />
       {ticks}
     </>

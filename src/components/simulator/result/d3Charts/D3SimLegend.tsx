@@ -26,7 +26,7 @@ export const D3SimLegend = ({ legend, toggleLegend }: Props) => {
         width={195}
         height={156}
         rx={8}
-        className="fill-background-800"
+        className="fill-main-800"
       />
       <g transform="translate(12,16)" onKeyDown={onKeyDown}>
         {Object.entries(legend).map(([key, data]) => (

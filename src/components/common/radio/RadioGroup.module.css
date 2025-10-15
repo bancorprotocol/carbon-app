@@ -16,7 +16,7 @@
   @apply text-white;
 }
 .label:has(.radio:focus-visible) {
-  @apply outline outline-1;
+  @apply outline;
 }
 
 .radio {

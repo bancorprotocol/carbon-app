@@ -4,7 +4,7 @@ import { ReactComponent as LogoCarbonDeFi } from 'assets/logos/carbondefi.svg';
 
 export const Footer: FC = () => {
   return (
-    <footer className="border-background-800 flex items-center border-t bg-black/20 px-20 py-24 md:mb-0">
+    <footer className="border-main-800 flex items-center border-t bg-black/20 px-20 py-24 md:mb-0">
       <NewTabLink
         aria-label="Powered By CarbonDeFi"
         to={externalLinks.carbonHomepage}

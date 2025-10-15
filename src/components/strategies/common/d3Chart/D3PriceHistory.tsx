@@ -342,7 +342,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               </g>
             </svg>
             {emptyHistory && (
-              <div className="text-12 rounded-md bg-background-800 absolute bottom-[60px] left-[16px] flex items-center gap-8 border-white/60 px-16 py-8">
+              <div className="text-12 rounded-md bg-main-800 absolute bottom-[60px] left-[16px] flex items-center gap-8 border-white/60 px-16 py-8">
                 <div
                   aria-hidden="true"
                   className="bg-warning/20 grid size-24 place-items-center rounded-full"

@@ -93,7 +93,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
           </hgroup>
         </button>
       </section>
-      <hr className="border-background-700 mx-8" />
+      <hr className="border-main-700 mx-8" />
       <table className="w-full table-fixed">
         <thead>
           <tr className="text-12 text-white/60">

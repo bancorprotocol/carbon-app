@@ -20,7 +20,7 @@ export const D3YAxisRight = ({ ticks, dms, formatter }: D3AxisProps) => {
         x2={0}
         y1={0}
         y2={dms.boundedHeight}
-        className="stroke-background-800"
+        className="stroke-main-800"
       />
       {ticks.map(({ value, offset }) => (
         <g key={`${uuid()}${value}`} transform={`translate(0,${offset})`}>

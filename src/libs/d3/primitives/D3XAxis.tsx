@@ -13,19 +13,15 @@ export const D3XAxis = ({ ticks, dms }: Props) => {
       {/*<path*/}
       {/*  d={['M', 0, 6, 'v', -6, 'H', dms.boundedWidth, 'v', 6].join(' ')}*/}
       {/*  fill="none"*/}
-      {/*  className='stroke-background-800'*/}
+      {/*  className='stroke-main-800'*/}
       {/*/>*/}
-      <line
-        x1={-dms.marginLeft}
-        x2={dms.width}
-        className="stroke-background-800"
-      />
+      <line x1={-dms.marginLeft} x2={dms.width} className="stroke-main-800" />
       {ticks.map(({ value, offset }) => (
         <g key={`${uuid()}${value}`} transform={`translate(${offset}, 0)`}>
           <line
             y1={dms.boundedHeight * -1}
             y2="0"
-            className="stroke-background-800"
+            className="stroke-main-800"
           />
           <text
             key={value}

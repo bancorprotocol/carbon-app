@@ -108,7 +108,7 @@ export const D3ChartSimulatorBalance = ({
             x2={dms.boundedWidth}
             y1={dms.boundedHeight}
             y2={dms.boundedHeight}
-            className="stroke-background-800"
+            className="stroke-main-800"
           />
           <text
             x={(xBase ?? 0) + barWidth / 2}
@@ -243,7 +243,7 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
         r="11"
         fill="transparent"
         strokeWidth={2}
-        className="stroke-background-800"
+        className="stroke-main-800"
       />
       <ToggleEye
         visible={isVisible}

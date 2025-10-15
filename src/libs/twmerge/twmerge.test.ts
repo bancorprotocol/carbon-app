@@ -17,7 +17,7 @@ describe('Custom Tailwind Merge', () => {
       expect(customTwMerge('text-white text-primary')).toEqual(
         customTwMerge('text-primary'),
       );
-      expect(customTwMerge('text-background-50 text-primary')).toEqual(
+      expect(customTwMerge('text-main-50 text-primary')).toEqual(
         customTwMerge('text-primary'),
       );
     });
@@ -51,13 +51,13 @@ describe('Custom Tailwind Merge', () => {
       );
     });
     it('should merge different colors', () => {
-      expect(
-        customTwMerge('border border-primary/60 border-background-800'),
-      ).toEqual(customTwMerge('border border-background-800'));
+      expect(customTwMerge('border border-primary/60 border-main-800')).toEqual(
+        customTwMerge('border border-main-800'),
+      );
     });
     it('should not merge colors and sizes', () => {
-      expect(customTwMerge('border border-5 border-background-800')).toEqual(
-        customTwMerge('border border-5 border-background-800'),
+      expect(customTwMerge('border border-5 border-main-800')).toEqual(
+        customTwMerge('border border-5 border-main-800'),
       );
     });
   });

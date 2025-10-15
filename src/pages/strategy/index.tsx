@@ -124,17 +124,17 @@ export const StrategyPage = () => {
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
-              'bg-black/20 rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
+              'bg-black/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
               strategy.status === 'active' ? '' : 'opacity-50',
             )}
           >
             <StrategyBlockBuySell
               strategy={strategy}
               isBuy
-              className="border-background-800 border-r-2"
+              className="border-main-800 border-r-2"
             />
             <StrategyBlockBuySell strategy={strategy} />
-            <div className="border-background-800 col-start-1 col-end-3 border-t-2">
+            <div className="border-main-800 col-start-1 col-end-3 border-t-2">
               <StrategyGraph strategy={strategy} />
             </div>
           </div>

@@ -262,12 +262,12 @@ const ActivityPaginator = () => {
   };
 
   return (
-    <tr className="border-background-800 text-14 border-t text-white/80">
+    <tr className="border-main-800 text-14 border-t text-white/80">
       <td className="px-24 py-16" colSpan={3}>
         <div className="flex items-center gap-8">
           <label>Show results</label>
           <select
-            className="border-background-800 bg-new-primary rounded-full border-2 px-12 py-8"
+            className="border-main-800 bg-new-primary rounded-full border-2 px-12 py-8"
             name="limit"
             onChange={changeLimit}
             value={limit}
@@ -299,7 +299,7 @@ const ActivityPaginator = () => {
             <IconChevronLeft className="size-12" />
           </button>
           <p
-            className="border-background-800 flex gap-8 rounded-full border-2 px-12 py-8"
+            className="border-main-800 flex gap-8 rounded-full border-2 px-12 py-8"
             aria-label="page position"
           >
             <span className="text-white">{currentPage}</span>

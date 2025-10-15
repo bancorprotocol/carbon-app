@@ -23,8 +23,8 @@ export const inputStyles = cva<InputVariants>(
     variants: {
       variant: {
         black: ['bg-primary-500', 'hover:bg-primary-600'],
-        secondary: ['bg-black', 'bg-white text-background-900'],
-        white: ['bg-background-800 text-white'],
+        secondary: ['bg-black', 'bg-white text-main-900'],
+        white: ['bg-main-800 text-white'],
         success: [
           'outline-solid',
           'outline-offset-2',

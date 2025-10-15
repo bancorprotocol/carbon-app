@@ -23,11 +23,11 @@ interface Props {
 export const SimResultChartSummary = ({ data, bounds, base, quote }: Props) => {
   return (
     <div
-      className="border-background-800 flex w-full border-t"
+      className="border-main-800 flex w-full border-t"
       data-testid="chart-summary"
     >
       <p
-        className="border-background-800 text-12 -rotate-180 border-l p-8 text-center text-white/60"
+        className="border-main-800 text-12 -rotate-180 border-l p-8 text-center text-white/60"
         style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
       >
         Price ({quote.symbol} per {base.symbol})
@@ -41,7 +41,7 @@ export const SimResultChartSummary = ({ data, bounds, base, quote }: Props) => {
         )}
       </D3ChartWrapper>
       <p
-        className="border-background-800 text-12 -rotate-180 border-r p-8 text-center text-white/60"
+        className="border-main-800 text-12 -rotate-180 border-r p-8 text-center text-white/60"
         style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
       >
         Portfolio Value ({quote.symbol})

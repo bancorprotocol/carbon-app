@@ -29,7 +29,7 @@ export const Paginator: FC<Props> = (props) => {
             <div className="flex items-center gap-8">
               <label>Show results</label>
               <select
-                className="border-background-800 bg-new-primary rounded-full border-2 px-12 py-8"
+                className="border-main-800 bg-new-primary rounded-full border-2 px-12 py-8"
                 name="limit"
                 onChange={(e) => setLimit(Number(e.target.value))}
                 value={limit}
@@ -59,7 +59,7 @@ export const Paginator: FC<Props> = (props) => {
                 <IconChevronLeft className="size-12" />
               </button>
               <p
-                className="border-background-800 flex gap-8 rounded-full border-2 px-12 py-8"
+                className="border-main-800 flex gap-8 rounded-full border-2 px-12 py-8"
                 aria-label="page position"
               >
                 <span className="text-white">{currentPage}</span>

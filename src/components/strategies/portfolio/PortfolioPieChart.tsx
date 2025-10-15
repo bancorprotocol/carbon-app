@@ -34,7 +34,7 @@ export const PortfolioPieChart = ({
 
       {hideChart && (
         <div className="flex items-center justify-center w-full h-full">
-          <div className="flex items-center justify-center w-4/5 h-4/5 rounded-full bg-background-800">
+          <div className="flex items-center justify-center w-4/5 h-4/5 rounded-full bg-main-800">
             <div className="w-4/5 h-4/5 rounded-full bg-black"></div>
           </div>
         </div>

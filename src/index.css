@@ -2,7 +2,7 @@
 @import './theme.css';
 
 @utility bg-content {
-  @apply border-background-800 border bg-black;
+  @apply border-main-800 border bg-black;
 }
 
 @utility px-content {
@@ -52,7 +52,7 @@
     z-index: -1;
     inset-inline: -50dvw;
     inset-block: -50dvh;
-    background-image: radial-gradient(closest-side circle at center, oklch(0.40 0.06 160) 0%, oklch(0.30 0.05 210) 30%, oklch(0.1 var(--chroma) var(--hue)) 100%);
+    background-image: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-black) 100%);
     animation: move-gradient 20s infinite alternate;
   }
   #root.hide-bg::before {
@@ -403,10 +403,10 @@ dialog.modal.closing {
 
 /* TABLE */
 .table {
+  @apply bg-white-gradient;
   width: 100%;
   border-collapse: collapse;
   border-radius: 16px;
-  background: var(--white-gradient);
   font-size: 14px;
 }
 .table thead tr {
