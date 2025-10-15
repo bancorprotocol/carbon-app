@@ -12,8 +12,7 @@ type Props = {
   gridColsClassName?: string;
 };
 
-const wrapperClasses =
-  'flex items-center bg-white-gradient h-[120px] rounded-lg gap-16';
+const wrapperClasses = 'flex items-center surface h-[120px] rounded-lg gap-16';
 
 export const PortfolioMobileCard: FC<Props> = ({
   index,

@@ -172,7 +172,7 @@ export const ConnectedLandingPage = () => {
               {items.map((item) => (
                 <li
                   key={item.title}
-                  className="bg-white-gradient p-16 grid gap-16 w-[300px] md:w-[350px] rounded-2xl"
+                  className="surface p-16 grid gap-16 w-[300px] md:w-[350px] rounded-2xl"
                 >
                   <header className="flex items-center gap-8">
                     {item.icon}

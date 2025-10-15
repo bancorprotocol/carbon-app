@@ -21,7 +21,6 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
     <ModalOrMobileSheet
       id={id}
       title="Confirm Transaction"
-      size="md"
       data-testid="approval-modal"
     >
       <h3 className="text-14 my-10 text-white/60">Approve Tokens</h3>

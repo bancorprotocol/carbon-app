@@ -157,7 +157,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       id={strategy.id}
       style={style}
       className={cn(
-        'rounded-lg bg-white-gradient grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        'rounded-lg surface grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className,
       )}
     >

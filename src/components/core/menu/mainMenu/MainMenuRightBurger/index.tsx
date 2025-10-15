@@ -36,15 +36,12 @@ export const MainMenuRightBurger: FC<{
         </button>
       )}
     >
-      {currentMenuItems?.map((item, index) => {
-        return (
-          <div
-            key={`${index}_${item.content}`}
-            className={`border-main-700 ${
-              menuContext.size() === 1 ? 'first:border-b-2 last:border-t-2' : ''
-            }`}
-          >
+      <div role="menu" className="grid">
+        {currentMenuItems?.map((item, index) => {
+          return (
             <MenuItem
+              key={`${index}_${item.content}`}
+              className="first:border-b last:border-t border-main-700"
               item={{
                 ...item,
                 hasSubMenu: !!item?.subMenu,
@@ -53,9 +50,9 @@ export const MainMenuRightBurger: FC<{
                   index === currentMenuItems.length - 1,
               }}
             />
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </DropdownMenu>
   );
 };

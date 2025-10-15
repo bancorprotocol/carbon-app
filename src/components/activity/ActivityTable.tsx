@@ -48,7 +48,7 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
   return (
     <table
       className={cn(
-        'w-full border-collapse bg-white-gradient rounded-2xl grid-area-[list]',
+        'w-full border-collapse surface rounded-2xl grid-area-[list]',
         style.table,
       )}
     >

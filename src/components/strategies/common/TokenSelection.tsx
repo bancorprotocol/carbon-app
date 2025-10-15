@@ -72,11 +72,11 @@ export const TokenSelection: FC<Props> = ({ url }) => {
   return (
     <article
       role="menu"
-      className="relative grid grid-cols-[1fr_auto_1fr] place-items-center gap-4 place-self-center rounded-full bg-white-gradient p-4 animate-slide-up"
+      className="relative grid grid-cols-[1fr_auto_1fr] place-items-center gap-4 place-self-center rounded-full surface p-4 animate-slide-up"
     >
       <button
         role="menuitem"
-        className="rounded-full pe-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 ps-10 hover:bg-white-gradient"
+        className="rounded-full pe-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 ps-10 hover:bg-main-800"
         aria-haspopup="dialog"
         data-testid="select-base-token"
         onClick={() => openTokenListModal('base')}
@@ -93,7 +93,7 @@ export const TokenSelection: FC<Props> = ({ url }) => {
       <button
         role="menuitem"
         aria-haspopup="dialog"
-        className="rounded-full ps-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 pe-10 hover:bg-white-gradient"
+        className="rounded-full ps-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 pe-10 hover:bg-main-800"
         data-testid="select-quote-token"
         onClick={() => openTokenListModal('quote')}
       >

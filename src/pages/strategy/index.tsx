@@ -120,7 +120,7 @@ export const StrategyPage = () => {
         />
       </header>
       <section className="flex justify-center gap-16">
-        <article className="@container/strategy bg-white-gradient grid gap-16 rounded-2xl p-24 min-w-330 sm:min-w-350 w-1/4 aspect-[410/425]">
+        <article className="@container/strategy surface grid gap-16 rounded-2xl p-24 min-w-330 sm:min-w-350 w-1/4 aspect-[410/425]">
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
@@ -139,7 +139,7 @@ export const StrategyPage = () => {
             </div>
           </div>
         </article>
-        <article className="bg-white-gradient hidden flex-1 flex-col gap-20 rounded-2xl p-16 md:flex">
+        <article className="surface hidden flex-1 flex-col gap-20 rounded-2xl p-16 md:flex">
           <header className="flex items-center gap-16">
             <h2 className="text-18 font-medium mr-auto">Price Chart</h2>
             {isNativeChart && (

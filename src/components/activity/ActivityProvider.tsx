@@ -66,7 +66,6 @@ export const ActivityProvider: FC<Props> = ({ children, params, url }) => {
   );
 
   if (activityMetaQuery.isPending) {
-    console.log('isPending', { ...activityMetaQuery });
     return (
       <CarbonLogoLoading className="h-[80px] self-center grid-area-[list]" />
     );

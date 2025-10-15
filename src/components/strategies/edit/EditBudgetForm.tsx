@@ -181,9 +181,7 @@ export const EditBudgetForm: FC<Props> = (props) => {
       )}
       data-testid="edit-form"
     >
-      <div className="bg-white-gradient overflow-hidden rounded-2xl">
-        {children}
-      </div>
+      <div className="surface overflow-hidden rounded-2xl">{children}</div>
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"

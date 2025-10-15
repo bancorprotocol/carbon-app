@@ -12,7 +12,7 @@ export const DebugImposter = () => {
   };
 
   return (
-    <div className="rounded-3xl bg-white-gradient grid content-start place-items-center gap-20 p-20">
+    <div className="rounded-3xl surface grid content-start place-items-center gap-20 p-20">
       <h2>Set Imposter Account</h2>
       <InputUserAccount
         label="Imposter Account"

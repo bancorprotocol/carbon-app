@@ -27,7 +27,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
         <BackButton onClick={() => history.back()} />
         <div className="flex mr-auto">
           <EditStrategyOverlapTokens />
-          <h1 className="grid place-items-center px-16 text-24 font-medium rounded-e-full bg-white-gradient">
+          <h1 className="grid place-items-center px-16 text-24 font-medium rounded-e-full surface">
             {titleByType[editType]}
           </h1>
         </div>

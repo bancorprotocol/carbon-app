@@ -86,7 +86,7 @@ export const TradeNav = () => {
 
   return (
     <div
-      className="bg-white-gradient 2xl:grid xl:flex grid content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up"
+      className="surface 2xl:grid xl:flex grid content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up"
       style={{ animationDelay: '100ms' }}
     >
       <TradeType />

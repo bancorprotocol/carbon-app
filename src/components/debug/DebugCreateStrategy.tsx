@@ -194,7 +194,7 @@ export const DebugCreateStrategy = () => {
   return (
     <form
       onSubmit={createStrategies}
-      className="rounded-3xl bg-white-gradient flex flex-col gap-16 p-20"
+      className="rounded-3xl surface flex flex-col gap-16 p-20"
     >
       <h2 className="text-center">Create</h2>
 

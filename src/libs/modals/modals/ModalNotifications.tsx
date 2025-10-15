@@ -22,7 +22,6 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
           </button>
         </header>
       }
-      size="md"
     >
       <NotificationPreferences />
       <ul className="mt-24 flex flex-col gap-10">

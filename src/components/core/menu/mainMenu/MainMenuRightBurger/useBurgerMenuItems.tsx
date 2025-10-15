@@ -119,17 +119,12 @@ export const useBurgerMenuItems = () => {
         return {
           content: (
             <div
-              className={`flex justify-between gap-20 ${
-                isCurrencySelected ? '' : ''
-              }`}
+              className="flex justify-between gap-20 group w-full aria-selected:bg-black/60"
+              aria-selected={isCurrencySelected}
             >
               <span>{currency}</span>
               <span className="flex items-center">
-                <IconV
-                  className={`invisible size-12 ${
-                    isCurrencySelected ? 'visible!' : ''
-                  }`}
-                />
+                <IconV className="invisible size-12 group-aria-selected:visible" />
               </span>
             </div>
           ),

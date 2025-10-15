@@ -122,7 +122,7 @@ export const UnconnectedLandingPage = () => {
         <ul className="flex sm:justify-center flex-wrap gap-24">
           {types.map((item) => (
             <li
-              className="grid gap-16 p-24 bg-white-gradient sm:w-[300px] rounded-2xl"
+              className="grid gap-16 p-24 surface sm:w-[300px] rounded-2xl"
               key={item.title}
             >
               <h3 className="text-xl">{item.title}</h3>

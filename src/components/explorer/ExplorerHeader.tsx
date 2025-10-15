@@ -166,7 +166,7 @@ export const ExplorerHeader = () => {
             </div>
           </div>
         </article>
-        <article className="bg-white-gradient hidden flex-1 gap-8 rounded-2xl p-20 md:grid">
+        <article className="surface hidden flex-1 gap-8 rounded-2xl p-20 md:grid">
           <h2 className="text-20 font-normal font-title">Popular Pairs</h2>
           <table className="font-medium text-14 w-full">
             <thead className="text-16 text-white/60">
@@ -180,7 +180,7 @@ export const ExplorerHeader = () => {
             </tbody>
           </table>
         </article>
-        <article className="bg-white-gradient hidden flex-1 gap-8 rounded-2xl p-20 lg:grid">
+        <article className="surface hidden flex-1 gap-8 rounded-2xl p-20 lg:grid">
           <h2 className="text-20 font-normal font-title">
             Trending Strategies
           </h2>

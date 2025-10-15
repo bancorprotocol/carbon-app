@@ -30,28 +30,21 @@ export const ModalBurgerMenu: ModalFC<undefined> = ({ id }) => {
   }, [isOpen, closeModal, id]);
 
   return (
-    <ModalSlideOver id={id} size="md">
-      <div className="mt-10">
+    <ModalSlideOver id={id}>
+      <div role="menu" className="grid">
         {currentMenuItems?.map((item, index) => {
           return (
-            <div
+            <MenuItem
               key={`${index}_${item.content}`}
-              className={`border-main-700 py-4 ${
-                menuContext.size() === 1
-                  ? 'first:border-b-2 last:border-t-2'
-                  : ''
-              }`}
-            >
-              <MenuItem
-                item={{
-                  ...item,
-                  hasSubMenu: !!item?.subMenu,
-                  disableHoverEffect:
-                    menuContext.size() === 1 &&
-                    index === currentMenuItems.length - 1,
-                }}
-              />
-            </div>
+              className="first:border-b last:border-t border-main-700"
+              item={{
+                ...item,
+                hasSubMenu: !!item?.subMenu,
+                disableHoverEffect:
+                  menuContext.size() === 1 &&
+                  index === currentMenuItems.length - 1,
+              }}
+            />
           );
         })}
       </div>

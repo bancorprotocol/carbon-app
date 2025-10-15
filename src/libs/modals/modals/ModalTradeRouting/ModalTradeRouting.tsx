@@ -106,7 +106,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   };
 
   return (
-    <ModalOrMobileSheet id={id} title="Trade Routing" size="md">
+    <ModalOrMobileSheet id={id} title="Trade Routing">
       <form className="flex max-h-[inherit] flex-col gap-20" onSubmit={submit}>
         <div
           role="group"

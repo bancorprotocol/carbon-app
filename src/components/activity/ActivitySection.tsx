@@ -42,7 +42,7 @@ export const ActivitySection: FC<SectionProps> = ({ hideIds }) => {
         variant="error"
         title="We couldn't find any activities"
         text={getEmptyText(location.pathname)}
-        className="bg-white-gradient rounded-2xl grid-area-[list]"
+        className="surface rounded-2xl grid-area-[list]"
       />
     );
   }

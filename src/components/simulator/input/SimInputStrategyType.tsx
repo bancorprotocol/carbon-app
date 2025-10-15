@@ -42,7 +42,7 @@ export const SimInputStrategyType = () => {
   const current = location.pathname;
   return (
     <nav
-      className="bg-white-gradient 2xl:grid xl:flex grid gap-8 content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up p-8 2xl:p-0 tab-list"
+      className="surface 2xl:grid xl:flex grid gap-8 content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up p-8 2xl:p-0 tab-list"
       style={style}
     >
       {items.map((link) => (

@@ -159,8 +159,8 @@
   fill: url('#svg-brand-gradient');
 }
 
-@utility bg-white-gradient {
-  @apply glass-shadow bg-linear-to-br from-main-400/40 to-main-600/40;
+@utility surface {
+  @apply glass-shadow bg-linear-to-br from-main-500/40 to-main-600/40;
 }
 
 
@@ -320,7 +320,7 @@
   }
 }
 @utility tab-anchor {
-  transition-property: color transform;
+  transition-property: color, transform;
   transition-duration: 100ms;
   transition-timing-function: var(--ease-in-out);
   border-radius: inherit;

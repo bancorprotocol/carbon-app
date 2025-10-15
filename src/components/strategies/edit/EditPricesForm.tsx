@@ -216,7 +216,7 @@ export const EditPricesForm: FC<Props> = (props) => {
 
   if (!marketPrice) {
     return (
-      <article key="marketPrice" className="bg-white-gradient rounded-2xl">
+      <article key="marketPrice" className="surface rounded-2xl">
         <InitMarketPrice base={base} quote={quote} />
       </article>
     );
@@ -233,9 +233,7 @@ export const EditPricesForm: FC<Props> = (props) => {
       )}
       data-testid="edit-form"
     >
-      <div className="bg-white-gradient overflow-hidden rounded-2xl">
-        {children}
-      </div>
+      <div className="surface overflow-hidden rounded-2xl">{children}</div>
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"

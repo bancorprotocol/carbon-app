@@ -103,7 +103,7 @@ export const SimInputChart = ({
 };
 
 const Layout = ({ children }: { children: ReactNode }) => (
-  <div className="bg-white-gradient sticky top-[96px] grid h-[600px] grid-rows-[auto_1fr] gap-20 rounded-2xl p-20 grid-area-[chart]">
+  <div className="surface sticky top-[96px] grid h-[600px] grid-rows-[auto_1fr] gap-20 rounded-2xl p-20 grid-area-[chart]">
     <header className="flex items-center justify-between">
       <h2 className="text-20 font-medium">Price Chart</h2>
     </header>

@@ -314,7 +314,7 @@ dialog.modal {
 }
 
 dialog.modal > form {
-  @apply bg-white-gradient backdrop-blur-xs;
+  @apply surface backdrop-blur-xs;
   border-radius: 16px;
   padding: 24px;
   max-width: 390px;
@@ -403,7 +403,7 @@ dialog.modal.closing {
 
 /* TABLE */
 .table {
-  @apply bg-white-gradient;
+  @apply surface;
   width: 100%;
   border-collapse: collapse;
   border-radius: 16px;

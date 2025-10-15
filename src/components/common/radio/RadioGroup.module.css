@@ -4,7 +4,7 @@
 
 
 .radio-group {
-  @apply tab-list border border-main-600;
+  @apply tab-list border border-main-500 bg-main-900/60;
 }
 .label {
   @apply tab-anchor;
@@ -13,7 +13,7 @@
   @apply tab-focus;
 }
 .label:has(.radio:checked):hover {
-  @apply text-white;
+  @apply bg-main-500/20;
 }
 .label:has(.radio:focus-visible) {
   @apply outline;

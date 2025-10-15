@@ -44,9 +44,7 @@ export const DebugTransferNFT = () => {
 
   return (
     <div
-      className={
-        'rounded-3xl bg-white-gradient flex flex-col items-center gap-16 p-20'
-      }
+      className={'rounded-3xl surface flex flex-col items-center gap-16 p-20'}
     >
       <h2>Transfer Strategy NFT</h2>
       <Label label="Strategy ID">

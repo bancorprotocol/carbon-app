@@ -3,39 +3,31 @@ import { ForwardArrow } from 'components/common/forwardArrow';
 import { cn } from 'utils/helpers';
 
 type MenuItemProps = {
+  className?: string;
   item: {
     onClick?: () => any;
     content?: string | ReactElement;
     hasSubMenu?: boolean;
     disableHoverEffect?: boolean;
-    className?: string;
   };
 };
 
-export const MenuItem: FC<MenuItemProps> = ({ item }) => {
-  const {
-    content,
-    hasSubMenu,
-    disableHoverEffect = false,
-    className = '',
-  } = item;
+export const MenuItem: FC<MenuItemProps> = ({ item, className }) => {
+  const { content, hasSubMenu, disableHoverEffect = false } = item;
 
   return (
-    <div
+    <button
+      role="menuitem"
+      type="button"
       onClick={() => item.onClick && item.onClick()}
       className={cn(
-        'text-18 md:text-16',
-        disableHoverEffect ? 'p-4' : 'p-10 md:hover:bg-black',
-        'rounded-sm block cursor-pointer md:hover:text-white',
+        'rounded-sm cursor-pointer text-18 md:text-16 p-10 hover:bg-black/40 flex items-center justify-between',
         className,
       )}
+      disabled={disableHoverEffect}
     >
-      <div
-        className={`${hasSubMenu ? 'flex items-center justify-between' : ''}`}
-      >
-        {content}
-        {hasSubMenu && <ForwardArrow />}
-      </div>
-    </div>
+      {content}
+      {hasSubMenu && <ForwardArrow />}
+    </button>
   );
 };

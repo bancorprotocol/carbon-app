@@ -135,7 +135,7 @@ const StrategyList: FC<StrategyListProps> = ({ url, strategies, layout }) => {
         variant="info"
         title="No results found"
         text="Try changing the search term"
-        className="bg-white-gradient rounded-2xl grid-area-[list]"
+        className="surface rounded-2xl grid-area-[list]"
       />
     );
   }

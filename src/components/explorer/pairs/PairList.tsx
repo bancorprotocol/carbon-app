@@ -17,10 +17,7 @@ export const PairList: FC<Props> = ({ pairs }) => {
         const base = pair.base;
         const quote = pair.quote;
         return (
-          <li
-            key={pair.id}
-            className="grid gap-16 bg-white-gradient p-16 rounded-2xl"
-          >
+          <li key={pair.id} className="grid gap-16 surface p-16 rounded-2xl">
             <header className="flex gap-8">
               <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
             </header>
