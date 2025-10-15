@@ -318,7 +318,6 @@ const RollingNumber = ({
         const next = format(from).split('');
         for (let i = 0; i < next.length; i++) {
           const v = next[i];
-          console.log({ next: format(from), i, v });
           if (!'0123456789'.includes(v)) continue;
           const anim = letters[i]?.animate(
             [{ transform: `translateY(-${v}0%)` }],

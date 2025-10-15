@@ -13,7 +13,7 @@
   content: "";
   inset: 0;
   backdrop-filter: blur(20px) saturate(150%);
-  mask: linear-gradient(to bottom, black 60%, transparent);
+  mask: linear-gradient(to bottom, black 80%, transparent);
   position: absolute;
   z-index: -1;
 }

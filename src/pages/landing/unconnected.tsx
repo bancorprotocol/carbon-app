@@ -87,14 +87,14 @@ export const UnconnectedLandingPage = () => {
   }, [trending.data]);
 
   return (
-    <section className="grid content-start gap-24 max-w-[1920px] mx-auto p-16">
+    <section className="grid content-start gap-24 mx-auto p-16">
       <hgroup className="grid gap-24">
-        <h1 className="text-5xl text-center text-gradient leading-[1.5] gradient-direction-[90deg]">
-          Control You Trading Strategies
+        <h1 className="text-3xl lg:text-5xl text-center text-gradient leading-[1.5] gradient-direction-[90deg]">
+          Control Your Trading Strategies
         </h1>
         {/* Hide while loading to prevent layout shifting */}
         <p
-          className={cn('font-title text-3xl text-center', {
+          className={cn('font-title text-xl md:text-3xl text-center', {
             invisible: !sentence,
           })}
         >
@@ -119,10 +119,10 @@ export const UnconnectedLandingPage = () => {
       </ol>
       <article className="grid gap-16">
         <h2 className="text-18">Choose your Trading Strategy</h2>
-        <ul className="flex justify-center flex-wrap gap-24">
+        <ul className="flex sm:justify-center flex-wrap gap-24">
           {types.map((item) => (
             <li
-              className="grid gap-16 p-24 bg-white-gradient w-[300px] rounded-2xl"
+              className="grid gap-16 p-24 bg-white-gradient sm:w-[300px] rounded-2xl"
               key={item.title}
             >
               <h3 className="text-xl">{item.title}</h3>

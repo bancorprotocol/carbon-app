@@ -52,7 +52,7 @@ export const App = () => {
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className="mb-16 grid grow">
+      <main className="grid content-start grow">
         <MainContent />
       </main>
       <Footer />

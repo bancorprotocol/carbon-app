@@ -139,90 +139,92 @@ const tabs = [
 export const ConnectedLandingPage = () => {
   const [active, setActive] = useState('basic');
   return (
-    <div className="grid content-start gap-40">
+    <>
       {config.ui.tradeCount && <ExplorerHeader />}
-      <div
-        role="tablist"
-        className="tab-list place-self-center flex rounded-2xl px-16"
-      >
-        {tabs.map(({ title, id }) => (
-          <button
-            key={id}
-            id={`tab-${id}`}
-            role="tab"
-            aria-selected={active === id}
-            aria-controls={`tabpanel-${id}`}
-            onClick={() => setActive(id)}
-            className="text-white/60 tab-anchor aria-selected:tab-focus py-8 px-16 text-16 lg:text-2xl lg:py-16 lg:px-24"
-          >
-            {title}
-          </button>
-        ))}
-      </div>
-      {tabs.map(({ id, items }) => (
+      <div className="mx-auto grid w-full gap-32 p-16 max-w-[1920px]">
         <div
-          key={id}
-          role="tabpanel"
-          id={`tabpanel-${id}`}
-          hidden={active !== id}
-          aria-labelledby={`tab-${id}`}
+          role="tablist"
+          className="tab-list place-self-center flex rounded-2xl px-16"
         >
-          <ul className="place-self-center flex gap-24 flex-wrap justify-center px-16">
-            {items.map((item) => (
-              <li
-                key={item.title}
-                className="bg-white-gradient p-16 grid gap-16 w-[300px] md:w-[350px] rounded-2xl"
-              >
-                <header className="flex items-center gap-8">
-                  {item.icon}
-                  <h3 className="text-16">{item.title}</h3>
-                </header>
-                <p className="text-14">{item.description}</p>
-                <div className="grid relative">
-                  <Link to={item.to} search={item.search}>
-                    {item.preview}
-                  </Link>
-                  {item.unique && (
-                    <svg
-                      width="135"
-                      height="35"
-                      viewBox="0 0 135 35"
-                      className="absolute -right-36 top-16"
-                    >
-                      <polygon
-                        points="115,20 133,20 115,30"
-                        fill="var(--color-new-primary)"
-                      />
-                      <path
-                        d="M4.93521 2.30119C5.64826 1.05809 6.97184 0.291443 8.40492 0.291443H129.088C131.297 0.291443 133.088 2.0823 133.088 4.29144V18.2914C133.088 20.5006 131.297 22.2914 129.088 22.2914H8.40492C6.97184 22.2914 5.64826 21.5248 4.93521 20.2817L0.919948 13.2817C0.212894 12.0491 0.212894 10.5338 0.919949 9.30119L4.93521 2.30119Z"
-                        fill="url(#svg-brand-gradient)"
-                      />
-                      <text
-                        x="20"
-                        y="6"
-                        height="14"
-                        width="85"
-                        fontSize="12"
-                        dominantBaseline="hanging"
-                      >
-                        Carbon Unique
-                      </text>
-                    </svg>
-                  )}
-                </div>
-                <Link
-                  to={item.to}
-                  search={item.search}
-                  className="btn-primary-gradient text-center "
-                >
-                  Trade
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {tabs.map(({ title, id }) => (
+            <button
+              key={id}
+              id={`tab-${id}`}
+              role="tab"
+              aria-selected={active === id}
+              aria-controls={`tabpanel-${id}`}
+              onClick={() => setActive(id)}
+              className="text-white/60 tab-anchor aria-selected:tab-focus py-8 px-16 text-16 lg:text-2xl lg:py-16 lg:px-24"
+            >
+              {title}
+            </button>
+          ))}
         </div>
-      ))}
-      <PreviewCommonStrategyType />
-    </div>
+        {tabs.map(({ id, items }) => (
+          <div
+            key={id}
+            role="tabpanel"
+            id={`tabpanel-${id}`}
+            hidden={active !== id}
+            aria-labelledby={`tab-${id}`}
+          >
+            <ul className="place-self-center flex gap-24 flex-wrap justify-center px-16">
+              {items.map((item) => (
+                <li
+                  key={item.title}
+                  className="bg-white-gradient p-16 grid gap-16 w-[300px] md:w-[350px] rounded-2xl"
+                >
+                  <header className="flex items-center gap-8">
+                    {item.icon}
+                    <h3 className="text-16">{item.title}</h3>
+                  </header>
+                  <p className="text-14">{item.description}</p>
+                  <div className="grid relative">
+                    <Link to={item.to} search={item.search}>
+                      {item.preview}
+                    </Link>
+                    {item.unique && (
+                      <svg
+                        width="135"
+                        height="35"
+                        viewBox="0 0 135 35"
+                        className="absolute -right-36 top-16"
+                      >
+                        <polygon
+                          points="115,20 133,20 115,30"
+                          fill="var(--color-new-primary)"
+                        />
+                        <path
+                          d="M4.93521 2.30119C5.64826 1.05809 6.97184 0.291443 8.40492 0.291443H129.088C131.297 0.291443 133.088 2.0823 133.088 4.29144V18.2914C133.088 20.5006 131.297 22.2914 129.088 22.2914H8.40492C6.97184 22.2914 5.64826 21.5248 4.93521 20.2817L0.919948 13.2817C0.212894 12.0491 0.212894 10.5338 0.919949 9.30119L4.93521 2.30119Z"
+                          fill="url(#svg-brand-gradient)"
+                        />
+                        <text
+                          x="20"
+                          y="6"
+                          height="14"
+                          width="85"
+                          fontSize="12"
+                          dominantBaseline="hanging"
+                        >
+                          Carbon Unique
+                        </text>
+                      </svg>
+                    )}
+                  </div>
+                  <Link
+                    to={item.to}
+                    search={item.search}
+                    className="btn-primary-gradient text-center "
+                  >
+                    Trade
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <PreviewCommonStrategyType />
+      </div>
+    </>
   );
 };
