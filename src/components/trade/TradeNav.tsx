@@ -74,7 +74,7 @@ const gradientLinks = [
 
 const style = {
   ['--tab-background' as any]:
-    'linear-gradient(var(--color-new-secondary)) padding-box, var(--main-gradient) border-box',
+    'linear-gradient(var(--color-main-900)) padding-box, var(--main-gradient) border-box',
 };
 
 export const TradeNav = () => {

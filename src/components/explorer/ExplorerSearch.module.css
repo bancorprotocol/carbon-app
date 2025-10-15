@@ -18,7 +18,7 @@
   position: relative;
   border-radius: inherit;
   height: 44px;
-  @apply bg-new-primary;
+  @apply bg-main-600;
 }
 
 .search button[type='submit'] {

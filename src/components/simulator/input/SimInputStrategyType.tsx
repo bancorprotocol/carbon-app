@@ -34,7 +34,7 @@ const items: ItemProps[] = [
 const style = {
   animationDelay: '100ms',
   '--tab-background':
-    'linear-gradient(var(--color-new-secondary)) padding-box, var(--main-gradient) border-box',
+    'linear-gradient(var(--color-main-900)) padding-box, var(--main-gradient) border-box',
 };
 
 export const SimInputStrategyType = () => {

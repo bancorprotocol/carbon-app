@@ -4,7 +4,7 @@
 
 
 .radio-group {
-  @apply tab-list border-2 border-new-primary;
+  @apply tab-list border-2 border-main-600;
 }
 .label {
   @apply tab-anchor;

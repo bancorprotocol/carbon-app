@@ -136,7 +136,7 @@ export const InputBudget: FC<Props> = (props) => {
             disabled={disabled}
             data-testid={props['data-testid']}
           />
-          <div className="bg-new-primary flex items-center gap-6 rounded-[20px] px-8 py-6">
+          <div className="bg-main-600 flex items-center gap-6 rounded-[20px] px-8 py-6">
             <TokenLogo token={token} size={20} />
             <span className="font-medium">{token.symbol}</span>
           </div>

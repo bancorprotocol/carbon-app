@@ -76,7 +76,7 @@ const Rows = ({ data, onRowClick }: Omit<Props, 'isPending'>) => {
   return data.map((item, i) => (
     <tr
       key={item.token.address}
-      className="h-64 text-white/80 text-16 hover:bg-new-primary hover:text-white cursor-pointer"
+      className="h-64 text-white/80 text-16 hover:bg-main-600 hover:text-white cursor-pointer"
       onClick={() => onRowClick(item.token.address)}
     >
       <td className="relative">

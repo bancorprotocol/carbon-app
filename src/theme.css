@@ -6,7 +6,7 @@
   --sell-hue: 15;
   --buy-hue: 170;
 
-  --secondary-gradient: linear-gradient(to bottom, var(--color-new-primary), var(--color-new-secondary), var(--color-new-tertiary));
+  --dark-gradient: linear-gradient(to bottom, var(--color-main-600), var(--color-main-800), var(--color-main-950));
 
   --main-gradient: linear-gradient(var(--gradient-direction, 180deg), var(--color-primary), var(--color-secondary));
   --buy-gradient: linear-gradient(150deg, var(--color-buy), var(--color-buy-dark));
@@ -26,11 +26,6 @@
 }
 
 @theme {
-
-  --color-new-primary: oklch(0.4 0.045 206);
-  --color-new-secondary: oklch(0.2 0.028 206);
-  --color-new-tertiary: oklch(0.14 0.02 206);
-
   --color-main-50: oklch(0.97 0.01 var(--hue));
   --color-main-100: oklch(0.90 0.04 var(--hue));
   --color-main-200: oklch(0.8 0.06 var(--hue));

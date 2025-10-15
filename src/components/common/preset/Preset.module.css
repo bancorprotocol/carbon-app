@@ -21,7 +21,7 @@
   @apply h-full font-medium grid cursor-pointer place-items-center bg-black py-8 text-center text-white/60 border border-transparent shadow-lg;
 }
 .preset input:not(:checked) + label:hover {
-  @apply bg-new-secondary/60 text-white;
+  @apply bg-main-900/60 text-white;
 }
 .preset input:not(:checked) + label:active {
   transform: scale(0.9);
@@ -30,7 +30,7 @@
 .preset input:checked + label {
   color: white;
   border-width: 1px;
-  background: var(--secondary-gradient) padding-box, var(--main-gradient) border-box;
+  background: var(--dark-gradient) padding-box, var(--main-gradient) border-box;
 }
 
 .preset-custom {
@@ -43,14 +43,14 @@
 
 .preset-container:not(:has(input[type='radio']:checked)) .preset-custom {
   color: white;
-  background: var(--secondary-gradient) padding-box, var(--main-gradient) border-box;
+  background: var(--dark-gradient) padding-box, var(--main-gradient) border-box;
 }
 
 .preset-container:has(:global(.warning-message)) .preset-custom {
-  background: var(--secondary-gradient) padding-box;
+  background: var(--dark-gradient) padding-box;
   @apply border border-warning outline-warning;
 }
 .preset-container:has(input[type='number']:invalid) .preset-custom {
-  background: var(--secondary-gradient) padding-box;
+  background: var(--dark-gradient) padding-box;
   @apply text-error border-error outline-error;
 }

@@ -187,7 +187,7 @@ export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
     <Link
       to="/strategy/$id"
       params={{ id: id }}
-      className="bg-new-primary inline-flex items-center gap-4 rounded-full px-8 py-4"
+      className="bg-main-600 inline-flex items-center gap-4 rounded-full px-8 py-4"
     >
       <span className={`text-${size}`}>{getLowestBits(id)}</span>
       <TokensOverlap tokens={[base, quote]} size={size + 2} />
@@ -267,7 +267,7 @@ const ActivityPaginator = () => {
         <div className="flex items-center gap-8">
           <label>Show results</label>
           <select
-            className="border-main-800 bg-new-primary rounded-full border-2 px-12 py-8"
+            className="border-main-800 bg-main-600 rounded-full border-2 px-12 py-8"
             name="limit"
             onChange={changeLimit}
             value={limit}

@@ -314,7 +314,7 @@ dialog.modal {
 }
 
 dialog.modal > form {
-  @apply bg-new-primary/60 backdrop-blur-xs glass-shadow;
+  @apply bg-white-gradient backdrop-blur-xs;
   border-radius: 16px;
   padding: 24px;
   max-width: 390px;
@@ -410,7 +410,7 @@ dialog.modal.closing {
   font-size: 14px;
 }
 .table thead tr {
-  border-bottom: 1px solid var(--color-new-secondary);
+  border-bottom: 1px solid var(--color-main-900);
   color: oklch(100% 0 0 / 60%);
 }
 .table thead th {
@@ -429,6 +429,6 @@ dialog.modal.closing {
   padding-inline-end: 24px;
 }
 .table tfoot tr {
-  border-top: 1px solid var(--color-new-secondary);
+  border-top: 1px solid var(--color-main-900);
   color: oklch(100% 0 0 / 80%);
 }

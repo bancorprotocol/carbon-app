@@ -207,7 +207,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               style={{ ...floatingStyles, ...transition }}
               {...getFloatingProps()}
               id={rootId}
-              className="bg-new-primary/80 backdrop-blur-sm z-50 flex flex-col gap-8 rounded-2xl p-16"
+              className="bg-main-600/80 backdrop-blur-sm z-50 flex flex-col gap-8 rounded-2xl p-16"
               onChange={onChange}
             >
               <div className="flex gap-8 rounded-2xl border-2 border-transparent bg-black hover:bg-black/60 px-16 py-8 focus-within:border-white/50">

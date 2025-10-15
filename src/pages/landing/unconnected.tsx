@@ -153,7 +153,7 @@ export const UnconnectedLandingPage = () => {
                 {item.targets.map((target) => (
                   <span
                     key={target}
-                    className="px-8 py-4 text-12 bg-new-primary/40 text-white/40 rounded-md"
+                    className="px-8 py-4 text-12 bg-main-600/40 text-white/40 rounded-md"
                   >
                     {target}
                   </span>

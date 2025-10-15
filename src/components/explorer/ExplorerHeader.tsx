@@ -270,7 +270,7 @@ const StrategyRows = ({ query }: StrategyTrendingProps) => {
     <tr key={id}>
       <td>
         <Link to="/strategy/$id" params={{ id }} className="block w-full">
-          <div className="bg-new-primary flex gap-8 rounded-2xl px-8 py-4">
+          <div className="bg-main-600 flex gap-8 rounded-2xl px-8 py-4">
             <TokensOverlap tokens={[base!, quote!]} size={18} />
             {idDisplay}
           </div>

@@ -115,7 +115,7 @@ export const TokenInputField: FC<Props> = (props) => {
           data-testid={testid}
           required={props.required}
         />
-        <div className="bg-new-primary flex items-center gap-6 rounded-[20px] px-8 py-6">
+        <div className="bg-main-600 flex items-center gap-6 rounded-[20px] px-8 py-6">
           <LogoImager alt="Token" src={token.logoURI} className="size-20" />
           <span className="font-medium">{token.symbol}</span>
         </div>
