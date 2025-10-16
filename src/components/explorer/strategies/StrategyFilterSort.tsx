@@ -163,15 +163,12 @@ const FilterSortItem: FC<{
         type="radio"
         name={name}
         value={item}
+        checked={selectedItem === item}
         className="peer absolute opacity-0"
       />
       <label
         htmlFor={id}
-        className="
-          rounded-sm flex cursor-pointer items-center justify-between px-16
-          py-8 hover:bg-black/90
-          peer-focus-visible:outline-solid peer-focus-visible:outline-1
-        "
+        className="rounded-sm flex cursor-pointer items-center justify-between px-16 py-8 hover:bg-black/40 peer-focus-visible:outline-solid peer-focus-visible:outline-1 peer-checked:bg-black/60"
       >
         {title}
         {selectedItem === item && <IconCheck />}

@@ -45,9 +45,9 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
           <a
             key={id}
             role="menuitemradio"
-            className="rounded-sm flex w-full items-center gap-x-10 p-12 hover:bg-black/40 aria-selected:bg-black/60 aria-disabled:pointer-events-none"
+            className="rounded-sm flex w-full items-center gap-x-10 p-12 hover:bg-black/40 aria-checked:bg-black/60 aria-disabled:pointer-events-none"
             href={getFullPath(appUrl)}
-            aria-selected={isCurrentNetwork}
+            aria-checked={isCurrentNetwork}
             aria-disabled={isCurrentNetwork}
           >
             <img alt={name} src={logoUrl} className="w-20" />
