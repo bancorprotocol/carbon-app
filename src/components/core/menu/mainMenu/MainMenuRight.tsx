@@ -3,7 +3,6 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MainMenuRightWallet } from 'components/core/menu/mainMenu/MainMenuRightWallet';
 import { MainMenuRightNotifications } from 'components/core/menu/mainMenu/MainMenuRightNotifications';
 import { MainMenuRightBurger } from './MainMenuRightBurger';
-import { useBurgerMenuItems } from './MainMenuRightBurger/useBurgerMenuItems';
 import { MainMenuRightChainSelector } from './MainMenuRightChainSelector';
 import { networks } from 'config';
 import { MainMenuCart } from './MainMenuCart';
@@ -41,7 +40,6 @@ const TenderlyForkAlert = () => {
 };
 
 export const MainMenuRight: FC = () => {
-  const { menuMapping } = useBurgerMenuItems();
   const { aboveBreakpoint } = useBreakpoints();
 
   return (
@@ -51,9 +49,7 @@ export const MainMenuRight: FC = () => {
       {config.ui.showCart && <MainMenuCart />}
       <MainMenuRightNotifications />
       <MainMenuRightChainSelector networks={networks} />
-      {aboveBreakpoint('md') && (
-        <MainMenuRightBurger menuMapping={menuMapping} />
-      )}
+      {aboveBreakpoint('md') && <MainMenuRightBurger />}
       <MainMenuRightWallet />
     </div>
   );

@@ -3,8 +3,8 @@ import { Link, useRouterState, useMatchRoute } from 'libs/routing';
 import { ReactComponent as IconDots } from 'assets/icons/three-dots.svg';
 import { useModal } from 'hooks/useModal';
 import { getMenuItems } from 'components/core/menu';
-import style from './MobileMenu.module.css';
 import { useWagmi } from 'libs/wagmi';
+import style from './MobileMenu.module.css';
 
 export const MobileMenu: FC = () => {
   const { user } = useWagmi();
@@ -37,12 +37,14 @@ export const MobileMenu: FC = () => {
           );
         })}
       </nav>
-      <div
+      <button
+        type="button"
+        aria-haspopup="true"
         onClick={() => openModal('burgerMenu', undefined)}
         className="h-30 flex w-24 cursor-pointer items-center hover:text-white"
       >
         <IconDots />
-      </div>
+      </button>
     </footer>
   );
 };
