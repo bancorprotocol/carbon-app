@@ -22,9 +22,8 @@ export const D3ChartWrapper: FC<Props> = ({
     <svg ref={ref} id="interactive-chart" className={className} {...props}>
       <defs>
         <linearGradient id="svg-brand-gradient" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="var(--color-primary)" />
-          <stop offset="50%" stopColor="var(--color-secondary)" />
-          <stop offset="100%" stopColor="var(--color-tertiary)" />
+          <stop offset="0%" stopColor="var(--color-green)" />
+          <stop offset="100%" stopColor="var(--color-secondary)" />
         </linearGradient>
       </defs>
       <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>

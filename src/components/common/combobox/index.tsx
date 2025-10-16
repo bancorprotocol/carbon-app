@@ -45,7 +45,7 @@ interface ComboboxProps {
   name: string;
   value: string[];
   /** Icon in the button */
-  icon: ReactNode;
+  icon?: ReactNode;
   /** Label displayed in the button */
   label: ReactNode;
   /** Label used for the input used to filter the options */
@@ -173,7 +173,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
     checkboxes.forEach((checkbox) => checkbox.click());
   };
 
-  const { icon, label, options, filterLabel } = props;
+  const { label, options, filterLabel } = props;
 
   const optionSize = Children.count(options);
   const ctx = {
@@ -191,7 +191,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
         data-selected={!!selected.length}
         aria-controls={rootId}
       >
-        {icon}
+        {props.icon}
         <span>{label}</span>
         <IconChevron
           className={cn('ml-auto size-12 transition-transform', {
@@ -210,7 +210,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               className="bg-main-600/80 backdrop-blur-sm z-50 flex flex-col gap-8 rounded-2xl p-16"
               onChange={onChange}
             >
-              <div className="flex gap-8 rounded-2xl border border-transparent bg-black hover:bg-black/60 px-16 py-8 focus-within:border-white/50">
+              <div className="flex gap-8 rounded-2xl border border-transparent bg-black hover:bg-black/40 px-16 py-8 focus-within:border-white/50">
                 <IconSearch className="w-14 self-center" />
                 <input
                   id={inputId}

@@ -139,7 +139,7 @@ html:has(.page) {
 }
 .save-locally li[aria-selected='true'] {
   @apply bg-main-700;
-  outline: 1px solid var(--color-primary);
+  outline: 1px solid var(--color-green);
 }
 .save-locally li > * {
   padding: 8px;
@@ -406,7 +406,7 @@ html:has(.page) {
 }
 .summary button {
   border-radius: 8px;
-  background-color: var(--color-primary);
+  background-color: var(--color-green);
   padding: 8px 16px;
   color: black;
 }
@@ -417,8 +417,8 @@ html:has(.page) {
 .summary button[type='submit'] {
   background-image: linear-gradient(
     90deg,
-    var(--color-primary),
-    var(--color-tertiary)
+    var(--color-green),
+    var(--color-primary)
   );
 }
 .summary:has(button:disabled) button[type='submit'] {

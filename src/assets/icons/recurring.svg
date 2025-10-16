@@ -6,20 +6,20 @@
 <defs>
 <linearGradient id="paint0_linear_16275_80069" x1="37.4835" y1="60.4409" x2="-7.67311" y2="23.7512" gradientUnits="userSpaceOnUse">
 <stop stop-color="var(--color-secondary)"/>
-<stop offset="1" stop-color="var(--color-primary)"/>
+<stop offset="1" stop-color="var(--color-green)"/>
 </linearGradient>
 <linearGradient id="paint1_linear_16275_80069" x1="98.0317" y1="70.5338" x2="42.6622" y2="25.8873" gradientUnits="userSpaceOnUse">
 <stop stop-color="var(--color-secondary)"/>
-<stop offset="1" stop-color="var(--color-primary)"/>
+<stop offset="1" stop-color="var(--color-green)"/>
 </linearGradient>
 <linearGradient id="paint2_linear_16275_80069" x1="89.4161" y1="19.9179" x2="47.9539" y2="70.5331" gradientUnits="userSpaceOnUse">
 <stop stop-color="var(--color-secondary)"/>
-<stop offset="0.51" stop-color="var(--color-primary)"/>
+<stop offset="0.51" stop-color="var(--color-green)"/>
 <stop offset="1" stop-color="white"/>
 </linearGradient>
 <linearGradient id="paint3_linear_16275_80069" x1="22.2211" y1="71.5477" x2="69.7946" y2="-10.8509" gradientUnits="userSpaceOnUse">
 <stop stop-color="var(--color-secondary)"/>
-<stop offset="1" stop-color="var(--color-primary)"/>
+<stop offset="1" stop-color="var(--color-green)"/>
 </linearGradient>
 </defs>
 </svg>

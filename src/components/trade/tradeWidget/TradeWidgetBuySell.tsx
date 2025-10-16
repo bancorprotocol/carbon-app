@@ -117,7 +117,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   return (
     <form {...formProps} onSubmit={handleTrade} className="grid gap-24">
-      <div className="rounded-xl p-16 border border-transparent bg-black hover:bg-black/60 focus-within:border-white/50">
+      <div className="rounded-xl p-16 border border-transparent bg-black hover:bg-black/40 focus-within:border-white/50">
         <header className="text-14 flex justify-between">
           <label htmlFor={`${id}-pay`} className="text-white/50">
             You pay

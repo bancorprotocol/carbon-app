@@ -9,7 +9,7 @@ import {
   sub,
   Duration,
 } from 'date-fns';
-import { Dispatch, memo, useRef, useState } from 'react';
+import { Dispatch, memo, ReactElement, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
@@ -34,6 +34,7 @@ interface Props {
   form?: string;
   disabled?: boolean;
   className?: string;
+  icon?: ReactElement;
 }
 
 const displayRange = (start?: Date, end?: Date) => {
@@ -63,7 +64,7 @@ export const DateRangePicker = memo(function DateRangePicker(
       data-testid="date-picker-button"
       disabled={props.disabled}
     >
-      <CalendarIcon className="text-primary size-14" />
+      {props.icon}
       <span
         className="justify-self-end text-white/60"
         data-testid="simulation-dates"
@@ -166,7 +167,7 @@ const Content = (props: Props) => {
                 type="button"
                 role="radio"
                 key={i}
-                className="rounded-md px-30 text-14 font-medium hover:border-main-700 box-border border border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black"
+                className="rounded-md px-30 text-14 font-medium hover:bg-black/40 box-border border border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black/60"
                 onClick={() => handlePreset(duration)}
                 aria-checked={selectedPreset?.label === label}
                 data-testid="date-picker-button"

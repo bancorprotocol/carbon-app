@@ -64,7 +64,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
         <div
           className={cn(
             styles.spreadCustom,
-            'rounded-lg text-12 flex gap-8 input-container py-8 px-16 text-center',
+            'rounded-lg text-12 flex gap-8 input-container py-8 px-16 text-center max-w-150',
           )}
         >
           <label className="text-white/60" htmlFor="spread-custom">
@@ -72,7 +72,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
           </label>
           <input
             id="spread-custom"
-            className="bg-transparent text-center outline-hidden w-[80px]"
+            className="bg-transparent text-center outline-hidden w-full"
             value={spread}
             type="number"
             inputMode="decimal"

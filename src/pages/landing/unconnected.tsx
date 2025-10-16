@@ -142,7 +142,7 @@ export const UnconnectedLandingPage = () => {
                     to={trade.to}
                     search={trade.search}
                     key={trade.name}
-                    className="btn-tertiary-gradient flex items-center gap-16 py-8 px-16"
+                    className="btn-tertiary-gradient flex items-center gap-16"
                   >
                     {trade.icon}
                     <span>{trade.name}</span>

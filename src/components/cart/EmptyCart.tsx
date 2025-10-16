@@ -6,7 +6,7 @@ export const EmptyCart = () => {
     <section className="surface gap-30 py-50 animate-fade relative mx-auto grid h-[600px] w-full max-w-[1240px] place-items-center content-center rounded-2xl px-20 text-center">
       <div className="grid rounded-full p-16 [grid-template-areas:'stack']">
         <CartIcon className="size-40 place-self-center text-white [grid-area:stack]" />
-        <span className="bg-success grid size-16 place-items-center justify-self-end rounded-full text-[8px] leading-[1.4] text-black [grid-area:stack]">
+        <span className="bg-primary grid size-16 place-items-center justify-self-end rounded-full text-[8px] leading-[1.4] text-black [grid-area:stack]">
           0
         </span>
       </div>

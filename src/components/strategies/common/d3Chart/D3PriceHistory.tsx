@@ -30,8 +30,9 @@ import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
 import { defaultEnd, default_ED_, defaultStart } from '../utils';
 import { differenceInDays, Duration, startOfDay, sub } from 'date-fns';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
-import style from './D3PriceHistory.module.css';
 import { SafeDecimal } from 'libs/safedecimal';
+import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
+import style from './D3PriceHistory.module.css';
 
 export interface RangeUpdate {
   start?: string;
@@ -360,7 +361,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
                 <button
                   key={label}
                   role="menuitemradio"
-                  className="text-12 duration-preset hover:bg-black rounded-md p-8 disabled:pointer-events-none disabled:text-white/50 aria-checked:underline underline-offset-3"
+                  className="text-12 duration-preset hover:bg-black/40 rounded-md p-8 disabled:pointer-events-none disabled:text-white/50 aria-checked:underline underline-offset-3"
                   onClick={() => zoomIn(days)}
                   disabled={days > data.length}
                   aria-checked={rangeInDays === days}
@@ -371,7 +372,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
             })}
             <hr className="h-full border-e border-white/10" />
             <DateRangePicker
-              className="rounded-md hover:bg-black"
+              className="rounded-md hover:bg-black/40"
               defaultStart={fromUnixUTC(defaultHistoryStart)}
               defaultEnd={default_ED_()}
               start={fromUnixUTC(props.start || defaultHistoryStart)}
@@ -380,6 +381,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               options={{
                 disabled: disabledDates,
               }}
+              icon={<CalendarIcon className="text-primary size-14" />}
             />
           </div>
         </div>

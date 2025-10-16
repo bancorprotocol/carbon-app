@@ -217,7 +217,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
         </clipPath>
       </defs>
 
-      <g className={style.axes} stroke="var(--color-main-700)">
+      <g className={style.axes} stroke="var(--color-main-600)">
         <line x1="0" y1={baseline} x2={width} y2={baseline} />
       </g>
 
@@ -239,7 +239,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                       <polygon
                         className={style.buyArea}
                         fill="url(#svg-buy-gradient)"
-                        fillOpacity="0.35"
+                        fillOpacity="0.5"
                         points={Array.from(
                           getBuyPoints(
                             buy.from,
@@ -321,7 +321,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                       <polygon
                         className={style.sellArea}
                         fill="url(#svg-sell-gradient)"
-                        fillOpacity="0.35"
+                        fillOpacity="0.5"
                         points={Array.from(
                           getSellPoints(
                             sell.marginalPrice > sell.from &&
@@ -504,14 +504,14 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
     <g className={style.currentPrice}>
       <path
         className={style.priceLine}
-        stroke="var(--color-main-700)"
+        stroke="var(--color-main-600)"
         strokeWidth="2"
         d={`M ${Math.max(lowest, Math.min(highest, price))} ${baseline} V 25`}
       />
       {tooLow && (
         <>
           <rect
-            fill="var(--color-main-700)"
+            fill="var(--color-main-600)"
             x={lowest - 1}
             y="6"
             width={outRangeWidth}
@@ -543,7 +543,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
       {inRange && (
         <>
           <rect
-            fill="var(--color-main-700)"
+            fill="var(--color-main-600)"
             x={price}
             y="6"
             width={inRangeWidth}
@@ -567,7 +567,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
       {tooHigh && (
         <>
           <rect
-            fill="var(--color-main-700)"
+            fill="var(--color-main-600)"
             x={highest + 1}
             y="6"
             width={outRangeWidth}

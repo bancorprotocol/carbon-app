@@ -48,9 +48,8 @@
   transition: all 0.2s 0.1s var(--ease-out);
   background-image: linear-gradient(
     to bottom,
-    var(--color-primary, var(--color-primary)),
-    var(--color-secondary, var(--color-secondary)),
-    var(--color-tertiary, var(--color-primary))
+    var(--color-green, var(--color-green)),
+    var(--color-secondary, var(--color-secondary))
   );
 }
 

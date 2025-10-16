@@ -37,7 +37,6 @@ export const SVGCarbonLogo = () => {
             cy="20"
             r="12"
             stroke="url(#svg-buy-gradient)"
-            strokeOpacity="0.6"
             strokeWidth="2"
             fill="none"
           />
@@ -62,7 +61,6 @@ export const SVGCarbonLogo = () => {
             cy="20"
             r="12"
             stroke="url(#svg-sell-gradient)"
-            strokeOpacity="0.6"
             strokeWidth="2"
             fill="none"
           />

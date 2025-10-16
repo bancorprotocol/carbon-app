@@ -226,7 +226,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
                 popoverTarget={popoverId}
                 popoverTargetAction="hide"
                 aria-label="close warnings"
-                className="hover:bg-black ml-auto rounded-full p-8"
+                className="hover:bg-black/40 ml-auto rounded-full p-8"
               >
                 <IconClose className="size-16" />
               </button>

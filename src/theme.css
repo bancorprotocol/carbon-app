@@ -8,7 +8,7 @@
 
   --dark-gradient: linear-gradient(to bottom, var(--color-main-600), var(--color-main-800), var(--color-main-950));
 
-  --main-gradient: linear-gradient(var(--gradient-direction, 180deg), var(--color-primary), var(--color-secondary));
+  --main-gradient: linear-gradient(var(--gradient-direction, 180deg), var(--color-green), var(--color-secondary));
   --buy-gradient: linear-gradient(150deg, var(--color-buy), var(--color-buy-dark));
   --sell-gradient: linear-gradient(150deg, var(--color-sell), var(--color-sell-dark));
   --error-gradient: linear-gradient(150deg, var(--color-error), var(--color-error-dark));
@@ -38,18 +38,19 @@
   --color-main-900: oklch(0.18 0.03 var(--hue));
   --color-main-950: oklch(0.1 0.02 var(--hue));
   
-  --color-primary: oklch(0.80 0.2 159.5); /* #67D79F */
-  --color-secondary: oklch(0.80 0.2 214.3); /* #10BBD8 */
-  --color-tertiary: oklch(0.80 0.2 184.63); /* #3bcaba */
+  --color-primary: oklch(0.8 0.3 var(--hue));
+  --color-green: oklch(0.80 0.2 159.5);
+  --color-secondary: oklch(0.80 0.2 214.3);
+  --color-tertiary: oklch(0.80 0.2 184.63);
 
-  --color-error: oklch(0.70 0.2 var(--error-hue)); /* #D86371 */
-  --color-error-dark: oklch(0.50 0.3 var(--error-hue)); /* #D86371 */
-  --color-sell: oklch(0.70 0.2 var(--sell-hue)); /* #D86371 */
+  --color-error: oklch(0.70 0.2 var(--error-hue));
+  --color-error-dark: oklch(0.50 0.3 var(--error-hue));
+  --color-sell: oklch(0.70 0.2 var(--sell-hue));
   --color-sell-dark: oklch(0.70 0.28 var(--sell-hue));
-  --color-buy: oklch(0.80 0.2 var(--buy-hue)); /* #00B578 */
+  --color-buy: oklch(0.80 0.2 var(--buy-hue));
   --color-buy-dark: oklch(0.60 0.3 var(--buy-hue));
-  --color-success: oklch(0.70 0.2 160); /* #00B578 */
-  --color-warning: oklch(0.75 0.2 57); /* #ff8a00 */
+  --color-success: oklch(0.70 0.2 160);
+  --color-warning: oklch(0.75 0.2 57);
 
   --color-black: var(--color-main-950);
   --color-white: oklch(1 var(--chroma) var(--hue));
@@ -135,7 +136,7 @@
 @utility text-gradient {
   background-image: linear-gradient(
     var(--gradient-direction, 180deg),
-    var(--color-primary),
+    var(--color-green),
     var(--color-secondary)
   );
   background-clip: text;
