@@ -9,7 +9,7 @@ import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { usePersistLastPair } from 'hooks/usePersistLastPair';
 import { cn } from 'utils/helpers';
-import style from './root.module.css';
+import style from 'components/strategies/common/root.module.css';
 
 export const SimulatorRoot = () => {
   const { isPending } = usePersistLastPair({ from: '/simulate' });

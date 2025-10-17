@@ -4,6 +4,8 @@ import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { BackButton } from 'components/common/button/BackButton';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditPriceNav } from './EditPriceNav';
+import { cn } from 'utils/helpers';
+import style from '../common/root.module.css';
 
 interface Props {
   editType: EditTypes;
@@ -22,8 +24,13 @@ export const EditStrategyLayout: FC<Props> = (props) => {
   const { history } = useRouter();
 
   return (
-    <div className="mx-auto flex w-full max-w-[1920px] flex-col gap-20 p-20">
-      <header className="flex items-center gap-16">
+    <div
+      className={cn(
+        style.root,
+        'mx-auto grid w-full gap-16 p-16 max-w-[1920px]',
+      )}
+    >
+      <header className="flex items-center gap-16 grid-area-[nav]">
         <BackButton onClick={() => history.back()} />
         <div className="flex mr-auto">
           <EditStrategyOverlapTokens />
@@ -33,9 +40,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
         </div>
         <EditPriceNav editType={editType} />
       </header>
-      <div className="flex flex-col-reverse gap-20 md:grid md:grid-cols-[auto_450px] md:items-start">
-        {children}
-      </div>
+      {children}
     </div>
   );
 };

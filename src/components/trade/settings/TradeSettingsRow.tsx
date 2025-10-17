@@ -24,8 +24,8 @@ export const TradeSettingsRow: FC<{
   );
 
   return (
-    <fieldset className={cn(style.presetContainer, 'grid gap-8')}>
-      <legend className="text-14 mb-8 text-white/80">{item.title}</legend>
+    <div role="group" className={cn(style.presetContainer, 'grid gap-8')}>
+      <h3 className="text-14 text-white/80">{item.title}</h3>
       <div className="flex gap-8">
         <Presets
           className="flex-1"
@@ -59,6 +59,6 @@ export const TradeSettingsRow: FC<{
         </div>
       </div>
       {warningMessage && <Warning isError={isError} message={warningMessage} />}
-    </fieldset>
+    </div>
   );
 };

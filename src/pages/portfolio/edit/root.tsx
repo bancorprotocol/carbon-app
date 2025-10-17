@@ -14,7 +14,7 @@ import { AnyStrategy } from 'components/strategies/common/types';
 import { isGradientStrategy } from 'components/strategies/common/utils';
 
 const url = '/strategies/edit/$strategyId';
-export const EditStrategyPageLayout = () => {
+export const EditStrategyRoot = () => {
   const { user } = useWagmi();
   const { data: strategies, isPending } = useGetUserStrategies({ user });
   const { strategyId } = useParams({ from: url });

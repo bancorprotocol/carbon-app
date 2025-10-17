@@ -36,7 +36,7 @@ export const LimitRangeOrder: FC<Props> = ({
 
   if (order.settings === 'range') {
     return (
-      <fieldset>
+      <div role="group" className="grid gap-8">
         <PriceLegendRange direction={direction} base={base} quote={quote} />
         <InputRange
           base={base}
@@ -50,7 +50,7 @@ export const LimitRangeOrder: FC<Props> = ({
           warnings={warnings}
           required
         />
-      </fieldset>
+      </div>
     );
   } else {
     return (

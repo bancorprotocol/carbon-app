@@ -43,10 +43,10 @@ export const PriceLabelLimit: FC<LimitProps> = ({
 );
 
 export const PriceLegendRange: FC<Props> = ({ base, quote, direction }) => (
-  <legend className="text-14 font-medium flex items-center gap-8 mb-8">
+  <h3 className="text-14 font-medium flex items-center gap-8">
     <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
       1
     </span>
     <PriceTitle direction={direction} base={base} quote={quote} />
-  </legend>
+  </h3>
 );

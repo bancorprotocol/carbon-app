@@ -70,10 +70,10 @@ export const CreateGradientOrder: FC<Props> = (props) => {
       >
         {order.direction} Overview
       </h2>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      <div role="group" className="grid gap-8">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
           Duration
-        </legend>
+        </h3>
         <GradientDateRange
           defaultStart={addDays(startOfDay(new Date()), 1)}
           defaultEnd={addDays(startOfDay(new Date()), 7)}
@@ -87,11 +87,11 @@ export const CreateGradientOrder: FC<Props> = (props) => {
         />
         {dateError && <Warning message={dateError} isError />}
         {!dateError && dateWarning && <Warning message={dateWarning} />}
-      </fieldset>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      </div>
+      <div className="grid gap-8">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
           Set {order.direction} Price
-        </legend>
+        </h3>
         <GradientPriceRange
           base={base}
           quote={quote}
@@ -105,8 +105,8 @@ export const CreateGradientOrder: FC<Props> = (props) => {
         {!props.priceWarning && priceWarning && (
           <Warning message={priceWarning} />
         )}
-      </fieldset>
-      <div className="grid gap-8">
+      </div>
+      <div role="group" className="grid gap-8">
         <label
           htmlFor={budgetId}
           className="text-14 font-medium capitalize text-white/60"

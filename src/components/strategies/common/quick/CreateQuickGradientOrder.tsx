@@ -66,10 +66,10 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
       >
         {order.direction} Overview
       </h2>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      <div role="group" className="grid gap-8">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
           Duration
-        </legend>
+        </h3>
         <div className="text-12 font-medium flex gap-8 text-nowrap text-white/60">
           <div className="rounded-s-2xl rounded-e-md flex flex-1 items-center gap-8 bg-black px-16 py-8">
             <span>Start Time</span>
@@ -111,11 +111,11 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
           </div>
         </div>
         {dateError && <Warning message={dateError} isError />}
-      </fieldset>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      </div>
+      <div role="group" className="grid gap-8">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
           Set {order.direction} Price
-        </legend>
+        </h3>
         <GradientPriceRange
           base={base}
           quote={quote}
@@ -129,7 +129,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
         {!props.priceWarning && priceWarning && (
           <Warning message={priceWarning} />
         )}
-      </fieldset>
+      </div>
       <div className="grid gap-8">
         <label
           htmlFor={budgetId}

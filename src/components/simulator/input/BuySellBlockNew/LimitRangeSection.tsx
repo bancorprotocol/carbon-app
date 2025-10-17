@@ -44,7 +44,7 @@ export const LimitRangeSection: FC<Props> = ({
 
   if (isRange) {
     return (
-      <fieldset>
+      <div role="group" className="grid gap-8">
         <PriceLegendRange direction={direction} base={base} quote={quote} />
         <InputRange
           quote={quote}
@@ -56,7 +56,7 @@ export const LimitRangeSection: FC<Props> = ({
           isBuy={isBuy}
           warnings={getWarnings()}
         />
-      </fieldset>
+      </div>
     );
   } else {
     <div className="grid gap-8">

@@ -50,8 +50,8 @@ export const BudgetSection: FC<Props> = ({
   }, [insufficientBalance, type, dispatch, tokenBalanceQuery?.data]);
 
   return (
-    <fieldset className="flex flex-col gap-8">
-      <legend className="text-14 font-medium mb-11 flex items-center gap-6">
+    <div role="group" className="grid gap-8">
+      <h3 className="text-14 font-medium mb-11 flex items-center gap-6">
         <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
           2
         </span>
@@ -79,7 +79,7 @@ export const BudgetSection: FC<Props> = ({
         {isBudgetOptional && (
           <span className="font-medium ml-8 text-white/60">Optional</span>
         )}
-      </legend>
+      </h3>
       <TokenInputField
         id={inputId}
         className="rounded-2xl border border-transparent bg-black hover:bg-black/40 p-16 focus-within:border-white/60"
@@ -96,6 +96,6 @@ export const BudgetSection: FC<Props> = ({
           Insufficient balance
         </Warning>
       )}
-    </fieldset>
+    </div>
   );
 };

@@ -5,9 +5,8 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { TradeNav } from 'components/trade/TradeNav';
 import { usePersistLastPair } from 'hooks/usePersistLastPair';
-import style from './root.module.css';
 import { cn } from 'utils/helpers';
-// TODO: use grid to support sticky
+import style from 'components/strategies/common/root.module.css';
 
 export const TradeRoot = () => {
   const { base, quote, isPending } = usePersistLastPair({ from: '/trade' });

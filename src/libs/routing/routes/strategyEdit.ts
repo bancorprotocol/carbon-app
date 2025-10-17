@@ -6,7 +6,7 @@ import {
   validNumber,
   validInputNumber,
 } from '../utils';
-import { EditStrategyPageLayout } from 'pages/portfolio/edit/layout';
+import { EditStrategyRoot } from 'pages/portfolio/edit/root';
 import {
   EditPricesStrategyRecurringPage,
   EditRecurringStrategySearch,
@@ -34,7 +34,7 @@ export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 export const editStrategyLayout = createRoute({
   getParentRoute: () => rootRoute,
   path: '/strategies/edit/$strategyId',
-  component: EditStrategyPageLayout,
+  component: EditStrategyRoot,
   validateSearch: searchValidator({
     chartStart: v.optional(validNumber),
     chartEnd: v.optional(validNumber),
