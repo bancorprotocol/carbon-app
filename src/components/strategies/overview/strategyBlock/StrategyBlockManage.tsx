@@ -330,7 +330,7 @@ const ManageItem: FC<{
         className={cn('rounded-sm w-full p-12 text-left', {
           'cursor-not-allowed': disabled,
           'opacity-60': disabled,
-          'hover:bg-black': !disabled,
+          'hover:bg-black/40': !disabled,
         })}
         data-testid={`manage-strategy-${id}`}
       >

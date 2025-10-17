@@ -4,6 +4,7 @@ import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
 import { ModalProps } from 'libs/modals/modals.types';
+import { cn } from 'utils/helpers';
 
 export const Modal: FC<ModalProps> = ({
   children,
@@ -13,6 +14,7 @@ export const Modal: FC<ModalProps> = ({
   isPending = false,
   onClose,
   'data-testid': testId,
+  className,
 }) => {
   const { closeModal } = useModal();
 
@@ -29,7 +31,7 @@ export const Modal: FC<ModalProps> = ({
       <m.div
         data-testid="modal-container"
         onClick={(e) => e.stopPropagation()}
-        className="relative mx-auto w-full max-w-390 md:max-w-420 lg:max-w-480 xl:max-w-580"
+        className="relative mx-auto max-w-390 md:max-w-420 lg:max-w-480 xl:max-w-580"
         variants={dropIn}
         initial="hidden"
         animate="visible"
@@ -59,7 +61,12 @@ export const Modal: FC<ModalProps> = ({
             )}
           </header>
 
-          <div className="flex max-h-[70vh] flex-col gap-20 overflow-auto">
+          <div
+            className={cn(
+              'flex max-h-[70vh] flex-col gap-20 overflow-auto',
+              className,
+            )}
+          >
             {children}
           </div>
         </div>

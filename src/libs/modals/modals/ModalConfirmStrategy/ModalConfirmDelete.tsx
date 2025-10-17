@@ -4,12 +4,14 @@ import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
 
-import { AnyStrategy } from 'components/strategies/common/types';
+import { AnyStrategy, Strategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { Button } from 'components/common/button';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
+import { useMemo } from 'react';
+import { getEditPricesPage } from 'components/strategies/edit/utils';
 
 export interface ModalConfirmDeleteData {
   strategy: AnyStrategy;
@@ -29,6 +31,10 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
 
   const isGradient = isGradientStrategy(strategy);
 
+  const editPricePage = useMemo(() => {
+    return getEditPricesPage(strategy as Strategy, 'editPrices');
+  }, [strategy]);
+
   const onClick = () => {
     deleteStrategy(
       strategy,
@@ -40,7 +46,11 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   const editPrices = () => closeModal(id);
 
   return (
-    <ModalOrMobileSheet id={id} title="Delete Strategy">
+    <ModalOrMobileSheet
+      id={id}
+      title="Delete Strategy"
+      className="md:max-w-450"
+    >
       <IconTitleText
         variant="error"
         icon={<IconTrash className="size-24" />}
@@ -53,9 +63,9 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
           <Link
             onClick={editPrices}
             disabled={isAwaiting || isProcessing}
-            to="/strategies/edit/$strategyId"
+            to={editPricePage.to}
             params={{ strategyId: strategy.id }}
-            search={{ editType: 'editPrices' }}
+            search={editPricePage.search}
             className="btn-primary-gradient row-span-2 self-center"
           >
             Edit Prices

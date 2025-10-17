@@ -6,7 +6,7 @@ export interface ModalProps {
   id: string;
   title?: string | ReactNode;
   showCloseButton?: boolean;
-  modalClasses?: string;
+  className?: string;
   isPending?: boolean;
   onClose?: (id: string) => void;
   'data-testid'?: string;

@@ -34,7 +34,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
   const loadingChildren = getStatusTextByTxStatus(isPending, isProcessing);
 
   return (
-    <ModalOrMobileSheet id={id} title="Pause Strategy">
+    <ModalOrMobileSheet id={id} title="Pause Strategy" className="md:max-w-450">
       <IconTitleText
         icon={<IconPause className="size-24" />}
         title="Are you sure you would like to pause your strategy?"

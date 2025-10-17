@@ -26,7 +26,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
   const edit = () => closeModal(id);
 
   return (
-    <ModalOrMobileSheet id={id} title="Withdraw Funds">
+    <ModalOrMobileSheet id={id} title="Withdraw Funds" className="md:max-w-450">
       <IconTitleText
         icon={<IconWallet className="size-24" />}
         title="Are you sure you would like to withdraw your funds?"
