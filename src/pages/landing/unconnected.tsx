@@ -15,7 +15,7 @@ const types = [
   {
     title: 'Basic Tools',
     description:
-      'Core DeFi primitives that are common and provide good solution for most requirements',
+      'The foundation of every DEX: core features for trading and liquidity',
     trades: [
       {
         name: 'Swap',
@@ -35,7 +35,7 @@ const types = [
   {
     title: 'Advanced Tools',
     description:
-      'A powerful set of options to design advanced, flexible trading strategies with full control',
+      'Tailored trading options for greater precision and absolute price certainty',
     trades: [
       {
         name: 'Limit Order',
@@ -44,7 +44,7 @@ const types = [
         icon: <IconDisposable className="size-24" />,
       },
       {
-        name: 'Recurring Limit',
+        name: 'Recurring Limit Orders',
         to: '/trade/recurring' as const,
         icon: <IconRecurring className="size-24" />,
       },
@@ -54,7 +54,7 @@ const types = [
   {
     title: 'Professional Tools',
     description:
-      'Fully customizable strategies with advanced sophistication offering exclusive options only on Carbon DeFi',
+      'Sophisticated, fully customizable strategies for scaling in and out, and automating buy-low, sell-high trading cycles - exclusive to Carbon DeFi',
     trades: [
       {
         name: 'Range Order',
@@ -63,7 +63,7 @@ const types = [
         icon: <IconRange className="size-24" />,
       },
       {
-        name: 'Recurring Range',
+        name: 'Recurring Range Orders',
         to: '/trade/recurring' as const,
         search: { buySettings: 'range', sellSettings: 'range' },
         icon: <IconRecurring className="size-24" />,
@@ -164,19 +164,19 @@ export const UnconnectedLandingPage = () => {
         </ul>
       </article>
       <article className="grid gap-24">
-        <h2 className="text-center text-3xl">Carbon DeFi user benefits</h2>
+        <h2 className="text-center text-3xl">Carbon DeFi User Benefits</h2>
         <ul className="flex justify-center flex-wrap gap-40">
           <li className="flex gap-8 items-center">
             <IconShield className="size-20" />
-            <span>MEV Sandwich Attack Resistant</span>
+            <span>MEV Sandwich Attack Immunity</span>
           </li>
           <li className="flex gap-8 items-center">
             <IconMultiOrder className="size-20" />
-            <span>Multi-Order Strategies</span>
+            <span>100% Price Certainty</span>
           </li>
           <li className="flex gap-8 items-center">
             <IconDisposable className="size-20" />
-            <span>Native Limit Orders</span>
+            <span>Multi-Order Strategies</span>
           </li>
         </ul>
       </article>

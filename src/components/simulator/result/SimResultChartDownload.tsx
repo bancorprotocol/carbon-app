@@ -36,7 +36,7 @@ export const SimResultChartDownload = ({
       element="Download a csv file with full breakdown of the simulation data"
     >
       <button
-        className="grid size-40 place-items-center btn-tertiary-gradient rounded-full"
+        className="grid size-40 place-items-center btn-tertiary-gradient rounded-full p-0"
         onClick={() => {
           downloadCSV({ data, baseSymbol, quoteSymbol, simulationType });
         }}

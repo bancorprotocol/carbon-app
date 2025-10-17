@@ -47,7 +47,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
   return (
     <article role="group" className={cn(styles.spread, 'grid gap-8 p-16')}>
       <header className="flex items-center gap-8 ">
-        <h2 className="text-16 font-medium flex-1">Set Fee Tier</h2>
+        <h2 className="text-16 font-medium flex-1">Fee Tier</h2>
         <Tooltip
           element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
           iconClassName="size-18 text-white/60"

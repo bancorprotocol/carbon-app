@@ -14,7 +14,7 @@ const PriceTitle: FC<Props> = ({ direction, base, quote }) => (
     element={`Define the price you are willing to ${direction} ${base.symbol} at. Make sure the price is in ${quote.symbol} tokens.`}
   >
     <p className="flex gap-8">
-      <span className="capitalize text-white/80">Set {direction} Price</span>
+      <span className="capitalize text-white/80">{direction} Price</span>
       <span className="text-white/60">
         ({quote.symbol} per 1 {base.symbol})
       </span>

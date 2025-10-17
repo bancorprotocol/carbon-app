@@ -29,7 +29,7 @@ const tabs = [
         search: {},
         preview: <LimitSellPreview className="bg-black rounded-2xl" />,
         description:
-          'Text about this Type of strategy, the benefits of it and what kind of users it fits',
+          'Exchange one token for another at the current market price.',
         unique: false,
       },
       {
@@ -37,7 +37,7 @@ const tabs = [
         icon: <IconOverlapping className="size-24" />,
         title: 'Concentrated Liquidity Position',
         description:
-          'Text about this Type of strategy, the benefits of it and what kind of users it fits',
+          'Provide liquidity in your chosen price range - collect fees that auto-compound, with no preset fee tiers.',
         search: {},
         preview: <OverlappingPreview className="bg-black rounded-2xl" />,
         unique: false,
@@ -47,7 +47,7 @@ const tabs = [
         icon: <IconOverlapping className="size-24" />,
         title: 'Full Range Liquidity Position',
         description:
-          'Text about this Type of strategy, the benefits of it and what kind of users it fits',
+          'Provide liquidity from zero to infinity for continuous exposure, auto-compounding fees, with no preset fee tiers.',
         search: {},
         preview: <FullRangePreview className="bg-black rounded-2xl" />,
         unique: false,
@@ -64,7 +64,7 @@ const tabs = [
         icon: <IconDisposable className="size-24" />,
         title: 'Limit Buy',
         description:
-          'Text about this Type of strategy, the benefits of it and what kind of users it fits',
+          'Buy the dip. Set an exact buy price with full price certainty.',
         preview: <LimitBuyPreview className="bg-black rounded-2xl" />,
         unique: false,
       },
@@ -74,7 +74,7 @@ const tabs = [
         icon: <IconDisposable className="size-24" />,
         title: 'Limit Sell',
         description:
-          'Text about this Type of strategy, the benefits of it and what kind of users it fits',
+          'Sell the rally. Set an exact sell price with full price certainty.',
         preview: <LimitSellPreview className="bg-black rounded-2xl" />,
         unique: false,
       },
@@ -84,7 +84,7 @@ const tabs = [
         icon: <IconRecurring className="size-24" />,
         title: 'Recurring Limit',
         description:
-          'Text about this Type of strategy, the benefits of it and what kind of users it fits',
+          'A continuous buy low, sell high strategy made up of linked buy and sell limit orders. Fund one or both orders, with newly acquired tokens automatically funding the opposite linked order.',
         preview: (
           <RecurringLimitLimitPreview className="bg-black rounded-2xl" />
         ),
@@ -103,7 +103,7 @@ const tabs = [
         icon: <IconRange className="size-24" />,
         title: 'Range Order',
         description:
-          'Text about this Type of strategy, the benefits of it and what kind of users it fits',
+          'Scale into a position over a custom price range to buy gradually as the price falls.',
         preview: <RangeSellPreview className="bg-black rounded-2xl" />,
         unique: true,
       },
@@ -113,7 +113,7 @@ const tabs = [
         icon: <IconRange className="size-24" />,
         title: 'Range Order',
         description:
-          'Text about this Type of strategy, the benefits of it and what kind of users it fits',
+          'Scale out of a position over a custom price range to sell gradually as the price rises.',
         preview: <RangeBuyPreview className="bg-black rounded-2xl" />,
         unique: true,
       },
@@ -126,7 +126,7 @@ const tabs = [
         icon: <IconRecurring className="size-24" />,
         title: 'Recurring Range',
         description:
-          'Text about this Type of strategy, the benefits of it and what kind of users it fits',
+          'Linked range orders create a continuous buy low, sell high strategy where newly acquired tokens automatically fund the opposite order.',
         preview: (
           <RecurringRangeRangePreview className="bg-black rounded-2xl" />
         ),

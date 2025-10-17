@@ -276,7 +276,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       <article className="grid gap-16 p-16">
         <header className="flex items-center gap-8">
           <h3 className="text-16 font-medium flex-1">
-            Set Price Range&nbsp;
+            Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
@@ -332,7 +332,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
               <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
                 2
               </span>
-              Deposit Budget
+              Budget
             </h3>
             <p className="text-14 text-white/80">
               Please enter the amount of tokens you want to deposit.

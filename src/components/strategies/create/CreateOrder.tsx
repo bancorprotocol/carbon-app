@@ -120,7 +120,7 @@ export const CreateOrder: FC<Props> = ({
               <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
                 2
               </span>
-              <span>Set {direction} Budget</span>
+              <span>{direction} Budget</span>
             </label>
           </Tooltip>
           <InputBudget

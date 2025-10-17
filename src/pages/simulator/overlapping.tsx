@@ -178,7 +178,10 @@ export const SimulatorInputOverlappingPage = () => {
       </SimInputChart>
       <form
         onSubmit={submit}
-        className={cn(style.form, 'grid gap-16 grid-area-[form] content-start')}
+        className={cn(
+          style.form,
+          'grid gap-16 grid-area-[form] content-start animate-scale-up',
+        )}
         data-testid="create-simulation-form"
       >
         <div className="surface grid content-start rounded-2xl">
