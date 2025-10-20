@@ -118,7 +118,7 @@ export const TradeNav = () => {
 
   return (
     <div
-      className="surface 2xl:grid xl:flex grid content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up"
+      className="surface 2xl:grid md:flex grid content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up"
       style={{ animationDelay: '100ms' }}
     >
       {types.map(({ title, strategies }) => (
@@ -129,10 +129,10 @@ export const TradeNav = () => {
           button={(attr) => (
             <button
               {...attr}
-              className="py-16 px-24 text-start flex gap-8 items-center justify-between"
+              className="py-16 px-24 text-start flex gap-8 items-center justify-between  flex-1"
             >
               {active?.type === title ? (
-                <div className="grid text-12">
+                <div className="grid text-12 text-nowrap">
                   <span>{title}</span>
                   <p className="flex items-center gap-8 text-16">
                     {active.strategy.icon}
