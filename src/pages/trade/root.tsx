@@ -31,7 +31,7 @@ export const TradeRoot = () => {
           'mx-auto grid w-full gap-16 p-16 max-w-[1920px]',
         )}
       >
-        <div className="2xl:grid xl:flex xl:justify-between grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
+        <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
           <TokenSelection url="/trade" />
           <TradeNav />
         </div>

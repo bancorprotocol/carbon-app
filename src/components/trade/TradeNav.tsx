@@ -3,7 +3,6 @@ import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { ReactComponent as IconRange } from 'assets/icons/range.svg';
-import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 
 import { Link, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
@@ -125,7 +124,7 @@ export const TradeNav = () => {
 
   return (
     <div
-      className="surface 2xl:grid md:flex grid content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up"
+      className="surface 2xl:grid sm:flex grid content-start rounded-2xl lg:max-2xl:rounded-full overflow-clip animate-slide-up"
       style={{ animationDelay: '100ms' }}
     >
       {types.map(({ title, strategies }) => (
@@ -136,12 +135,12 @@ export const TradeNav = () => {
           button={(attr) => (
             <button
               {...attr}
-              className="py-16 px-24 text-start flex gap-8 items-center justify-between  flex-1"
+              className="2xl:py-16 py-8 px-24 text-start flex gap-8 items-center justify-between  flex-1"
             >
               {active?.type === title ? (
                 <div className="grid text-12 text-nowrap">
                   <span>{title}</span>
-                  <p className="flex items-center gap-8 text-16">
+                  <p className="flex items-center gap-8 text-14">
                     {active.strategy.icon}
                     {active.strategy.name}
                   </p>
@@ -149,7 +148,6 @@ export const TradeNav = () => {
               ) : (
                 <span className="text-18">{title}</span>
               )}
-              <ChevronIcon className="size-16 2xl:-rotate-90" />
             </button>
           )}
         >
