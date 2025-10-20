@@ -57,13 +57,13 @@ const types = [
       {
         name: 'Range Order',
         to: '/trade/disposable' as const,
-        search: { settings: 'range' as const },
+        search: { settings: 'limit' as const },
         icon: <IconRange className="size-24" />,
       },
       {
         name: 'Recurring Range Orders',
         to: '/trade/recurring' as const,
-        search: undefined,
+        search: { buySettings: 'range', sellSettings: 'range' } as const,
         icon: <IconRecurring className="size-24" />,
       },
       //   {
@@ -120,6 +120,12 @@ export const TradeNav = () => {
         }
       }
     }
+    // TODO: find a better way to fallback to Recurring range range
+    // Fallback to "Recurring Range Orders"
+    return {
+      type: types[2].title,
+      strategy: types[2].strategies[1],
+    };
   }, [location]);
 
   return (
@@ -152,11 +158,7 @@ export const TradeNav = () => {
           )}
         >
           {strategies.map((strategy) => (
-            <StrategyLink
-              key={strategy.name}
-              strategy={strategy}
-              active={active}
-            />
+            <StrategyLink key={strategy.name} strategy={strategy} />
           ))}
         </DropdownMenu>
       ))}
@@ -164,9 +166,7 @@ export const TradeNav = () => {
   );
 };
 
-const StrategyLink: FC<{ strategy: StrategyLink; active?: ActivePage }> = (
-  props,
-) => {
+const StrategyLink: FC<{ strategy: StrategyLink }> = (props) => {
   const menu = useMenuCtx();
   const { name, to, search, icon } = props.strategy;
   return (
@@ -176,7 +176,6 @@ const StrategyLink: FC<{ strategy: StrategyLink; active?: ActivePage }> = (
       className="rounded-sm flex w-full items-center gap-x-10 p-12 hover:bg-black/40 aria-page:bg-black/60"
       to={to}
       search={search}
-      aria-current={props.active?.strategy?.name === name}
       onClick={() => menu.setMenuOpen(false)}
     >
       {icon}
