@@ -246,7 +246,7 @@
   }
 }
 @utility btn-flat-tertiary {
-  @apply rounded-full text-14 bg-main-700/60 glass-shadow;
+  @apply rounded-full text-14 bg-main-800/60 glass-shadow;
   color: var(--color-white);
   padding: 8px 16px;
   transition: transform 0.1s var(--ease-out);

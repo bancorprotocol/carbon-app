@@ -136,13 +136,16 @@ export const UnconnectedLandingPage = () => {
                 </span>
                 <IconArrowCircle className="size-20 fill-gradient" />
               </Link>
-              <nav aria-label="strategy types" className="grid gap-16">
+              <nav
+                aria-label="strategy types"
+                className="grid rounded-3xl glass-shadow bg-main-400/20 overflow-clip"
+              >
                 {item.trades.map((trade) => (
                   <Link
                     to={trade.to}
                     search={trade.search}
                     key={trade.name}
-                    className="btn-tertiary-gradient flex items-center gap-16"
+                    className="flex items-center gap-16 px-16 py-16 text-14 hover:bg-main-400/60"
                   >
                     {trade.icon}
                     <span>{trade.name}</span>
