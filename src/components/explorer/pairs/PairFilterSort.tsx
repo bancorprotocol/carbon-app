@@ -92,7 +92,7 @@ export const PairFilterDropdown: FC<FilterProps> = (props) => {
         >
           <span className="flex gap-8 text-14 truncate">
             <b>View:</b>
-            <span className="text-start min-w-160">{pairFilter[filter]}</span>
+            <span className="text-start">{pairFilter[filter]}</span>
           </span>
           <IconChevron className="w-14 shrink-0" />
         </button>

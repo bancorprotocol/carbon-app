@@ -117,7 +117,7 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
         >
           <span className="flex gap-8 text-14 truncate">
             <b>View:</b>
-            <span className="text-start min-w-55">{displayFilter}</span>
+            <span className="text-start">{displayFilter}</span>
           </span>
           <IconChevron className="w-14 shrink-0" />
         </button>
