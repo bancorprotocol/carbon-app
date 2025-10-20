@@ -8,7 +8,14 @@ import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { Link, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
+import { useMenuCtx } from 'components/common/dropdownMenu/utils';
+
+type StrategyLink = (typeof types)[number]['strategies'][number];
+type ActivePage = {
+  type: string;
+  strategy: StrategyLink;
+};
 
 const types = [
   {
@@ -17,13 +24,13 @@ const types = [
       {
         name: 'Swap',
         to: '/trade/market' as const,
-        search: {},
+        search: undefined,
         icon: <IconMarket className="size-24" />,
       },
       {
         name: 'Liquidity Position',
         to: '/trade/overlapping' as const,
-        search: {},
+        search: undefined,
         icon: <IconOverlapping className="size-24" />,
       },
     ],
@@ -34,12 +41,13 @@ const types = [
       {
         name: 'Limit Order',
         to: '/trade/disposable' as const,
-        search: {},
+        search: { settings: 'limit' as const },
         icon: <IconDisposable className="size-24" />,
       },
       {
         name: 'Recurring Limit Orders',
         to: '/trade/recurring' as const,
+        search: { buySettings: 'limit', sellSettings: 'limit' } as const,
         icon: <IconRecurring className="size-24" />,
       },
     ],
@@ -50,13 +58,13 @@ const types = [
       {
         name: 'Range Order',
         to: '/trade/disposable' as const,
-        search: { settings: 'range' },
+        search: { settings: 'range' as const },
         icon: <IconRange className="size-24" />,
       },
       {
         name: 'Recurring Range Orders',
         to: '/trade/recurring' as const,
-        search: { buySettings: 'range', sellSettings: 'range' },
+        search: undefined,
         icon: <IconRecurring className="size-24" />,
       },
       //   {
@@ -97,17 +105,16 @@ export const TradeNav = () => {
   const { location } = useRouterState();
   const { aboveBreakpoint } = useBreakpoints();
 
-  const active = useMemo(() => {
+  //TODO: MAKE RANGE THE DEFAULT SETTINGS FOR THE ORDERS
+
+  const active = useMemo((): ActivePage | undefined => {
     for (const type of types) {
       for (const strategy of type.strategies) {
         if (strategy.to === location.pathname) {
           if (!strategy.search) return { type: type.title, strategy };
           const sameSearch = Object.entries(strategy.search).every(
             ([key, value]) => {
-              return (
-                key in location.search &&
-                (location.search as any)[key] === value
-              );
+              return (location.search as any)[key] === value;
             },
           );
           if (sameSearch) return { type: type.title, strategy };
@@ -146,23 +153,36 @@ export const TradeNav = () => {
             </button>
           )}
         >
-          {strategies.map(({ name, to, search, icon }) => {
-            return (
-              <Link
-                key={name}
-                role="menuitemradio"
-                className="rounded-sm flex w-full items-center gap-x-10 p-12 hover:bg-black/40 aria-page:bg-black/60"
-                to={to}
-                search={search}
-                aria-current={active?.strategy?.name === name}
-              >
-                {icon}
-                <span>{name}</span>
-              </Link>
-            );
-          })}
+          {strategies.map((strategy) => (
+            <StrategyLink
+              key={strategy.name}
+              strategy={strategy}
+              active={active}
+            />
+          ))}
         </DropdownMenu>
       ))}
     </div>
+  );
+};
+
+const StrategyLink: FC<{ strategy: StrategyLink; active?: ActivePage }> = (
+  props,
+) => {
+  const menu = useMenuCtx();
+  const { name, to, search, icon } = props.strategy;
+  return (
+    <Link
+      key={name}
+      role="menuitemradio"
+      className="rounded-sm flex w-full items-center gap-x-10 p-12 hover:bg-black/40 aria-page:bg-black/60"
+      to={to}
+      search={search}
+      aria-current={props.active?.strategy?.name === name}
+      onClick={() => menu.setMenuOpen(false)}
+    >
+      {icon}
+      <span>{name}</span>
+    </Link>
   );
 };

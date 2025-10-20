@@ -40,12 +40,13 @@ const types = [
       {
         name: 'Limit Order',
         to: '/trade/disposable' as const,
-        search: {},
+        search: { settings: 'limit' as const },
         icon: <IconDisposable className="size-24" />,
       },
       {
         name: 'Recurring Limit Orders',
         to: '/trade/recurring' as const,
+        search: { buySettings: 'limit', sellSettings: 'limit' } as const,
         icon: <IconRecurring className="size-24" />,
       },
     ],
@@ -59,13 +60,12 @@ const types = [
       {
         name: 'Range Order',
         to: '/trade/disposable' as const,
-        search: { settings: 'range' },
+        search: { settings: 'range' as const },
         icon: <IconRange className="size-24" />,
       },
       {
         name: 'Recurring Range Orders',
         to: '/trade/recurring' as const,
-        search: { buySettings: 'range', sellSettings: 'range' },
         icon: <IconRecurring className="size-24" />,
       },
     ],
