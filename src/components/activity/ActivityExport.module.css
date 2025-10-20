@@ -2,7 +2,7 @@
 @reference "../../theme.css";
 
 .export-button {
-  @apply btn-tertiary-gradient text-12 gap-8 rounded-full px-12 py-8;
+  @apply btn-flat-tertiary text-12 gap-8 rounded-full px-12 py-8;
   display: grid;
   grid-template-columns: repeat(3, auto);
   grid-template-areas: 'icon text loading';

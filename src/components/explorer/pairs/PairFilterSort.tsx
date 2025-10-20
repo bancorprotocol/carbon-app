@@ -34,13 +34,14 @@ export const PairSortDropdown: FC<SortProps> = (props) => {
         <button
           type="button"
           className={cn(
-            'btn-tertiary-gradient flex items-center justify-center gap-8 overflow-hidden rounded-full ',
+            'btn-flat-tertiary flex items-center justify-center gap-8 overflow-hidden rounded-full ',
             props.className,
           )}
           {...attr}
         >
-          <span className="text-14 truncate">
-            <b>Sort</b>: {pairSort[sort]}
+          <span className="flex gap-8 text-14 truncate">
+            <b>Sort</b>:
+            <span className="text-start min-w-115">{pairSort[sort]}</span>
           </span>
           <IconChevron className="w-14 shrink-0" />
         </button>
@@ -84,13 +85,14 @@ export const PairFilterDropdown: FC<FilterProps> = (props) => {
         <button
           type="button"
           className={cn(
-            'btn-tertiary-gradient flex items-center justify-center gap-8 overflow-hidden rounded-full ',
+            'btn-flat-tertiary flex items-center justify-center gap-8 overflow-hidden rounded-full ',
             props.className,
           )}
           {...attr}
         >
-          <span className="text-14 truncate">
-            <b>View:</b> {pairFilter[filter]}
+          <span className="flex gap-8 text-14 truncate">
+            <b>View:</b>
+            <span className="text-start min-w-160">{pairFilter[filter]}</span>
           </span>
           <IconChevron className="w-14 shrink-0" />
         </button>

@@ -136,7 +136,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         ))}
       />
       <DateRangePicker
-        className="btn-tertiary-gradient"
+        className="btn-flat-tertiary"
         form={formId}
         presets={datePickerPresets}
         onConfirm={updateParams}

@@ -158,10 +158,10 @@ export const ActivityExport = () => {
             </p>
             <p>To include older data, adjust the date range and try again.</p>
             <footer className="flex gap-16">
-              <button className="btn-primary-gradient " onClick={download}>
+              <button className="btn-primary-gradient" onClick={download}>
                 Proceed
               </button>
-              <button className="btn-secondary-gradient ">Cancel</button>
+              <button className="btn-secondary-gradient">Cancel</button>
             </footer>
           </form>
         </dialog>

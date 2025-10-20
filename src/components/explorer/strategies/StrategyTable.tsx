@@ -141,7 +141,7 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
             role="menuitem"
             to="/strategy/$id"
             params={{ id: strategy.id }}
-            className="size-38 rounded-sm btn-secondary-gradient grid place-items-center p-0"
+            className="size-38 rounded-sm btn-flat-secondary grid place-items-center p-0"
           >
             <DashboardIcon className="size-16" />
           </Link>

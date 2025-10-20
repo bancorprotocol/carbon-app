@@ -29,7 +29,7 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
       button={(attr) => (
         <button
           {...attr}
-          className="btn-secondary-gradient relative flex size-40 items-center justify-center p-0"
+          className="btn-flat-secondary relative flex size-40 items-center justify-center p-0"
         >
           <img
             alt={`Select ${activeNetwork.name}`}

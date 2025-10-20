@@ -9,7 +9,7 @@ export const MainMenuRightNotifications: FC = () => {
 
   return (
     <button
-      className="btn-secondary-gradient relative p-0"
+      className="btn-flat-secondary relative p-0"
       onClick={() => openModal('notifications', undefined)}
     >
       <span className="grid size-40 place-items-center">

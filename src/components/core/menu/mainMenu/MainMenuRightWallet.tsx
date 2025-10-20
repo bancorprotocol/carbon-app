@@ -33,7 +33,7 @@ export const MainMenuRightWallet: FC = () => {
     if (isUserBlocked) return 'btn-error-gradient';
     if (!isSupportedNetwork) return 'btn-error-gradient';
     if (!user) return 'btn-primary-gradient';
-    return 'btn-secondary-gradient';
+    return 'btn-flat-secondary';
   }, [isSupportedNetwork, isUserBlocked, user]);
 
   const buttonText = useMemo(() => {
