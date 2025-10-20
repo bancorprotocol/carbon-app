@@ -13,7 +13,7 @@ import { cn, prettifyNumber } from 'utils/helpers';
 
 const types = [
   {
-    title: 'Basic Tools',
+    title: 'Essentials',
     description:
       'The foundation of every DEX: core features for trading and liquidity',
     trades: [
@@ -33,7 +33,7 @@ const types = [
     targets: ['Casual', 'Newbie'],
   },
   {
-    title: 'Advanced Tools',
+    title: 'Intermediate',
     description:
       'Tailored trading options for greater precision and absolute price certainty',
     trades: [
@@ -52,7 +52,7 @@ const types = [
     targets: ['Advanced', 'Experts'],
   },
   {
-    title: 'Professional Tools',
+    title: 'Advanced',
     description:
       'Sophisticated, fully customizable strategies for scaling in and out, and automating buy-low, sell-high trading cycles - exclusive to Carbon DeFi',
     trades: [
@@ -122,11 +122,11 @@ export const UnconnectedLandingPage = () => {
         <ul className="flex sm:justify-center flex-wrap gap-24">
           {types.map((item) => (
             <li
-              className="grid gap-16 p-24 surface sm:w-[300px] rounded-2xl"
+              className="flex flex-col gap-16 p-24 surface sm:w-[300px] rounded-2xl"
               key={item.title}
             >
               <h3 className="text-xl">{item.title}</h3>
-              <p className="text-14 text-white/60">{item.description}</p>
+              <p className="text-14 text-white/60 flex-1">{item.description}</p>
               <Link
                 to="/explore/strategies"
                 className="flex items-center gap-8"

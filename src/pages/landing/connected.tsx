@@ -19,7 +19,7 @@ import config from 'config';
 
 const tabs = [
   {
-    title: 'Basic Tools',
+    title: 'Essentials',
     id: 'basic',
     items: [
       {
@@ -55,7 +55,7 @@ const tabs = [
     ],
   },
   {
-    title: 'Advanced Tools',
+    title: 'Intermediate',
     id: 'advanced',
     items: [
       {
@@ -94,7 +94,7 @@ const tabs = [
   },
 
   {
-    title: 'Professional Tools',
+    title: 'Advanced',
     id: 'professional',
     items: [
       {
@@ -172,13 +172,13 @@ export const ConnectedLandingPage = () => {
               {items.map((item) => (
                 <li
                   key={item.title}
-                  className="surface p-16 grid gap-16 w-[300px] md:w-[350px] rounded-2xl"
+                  className="surface p-16 flex flex-col gap-16 w-[300px] md:w-[350px] rounded-2xl"
                 >
                   <header className="flex items-center gap-8">
                     {item.icon}
                     <h3 className="text-16">{item.title}</h3>
                   </header>
-                  <p className="text-14">{item.description}</p>
+                  <p className="text-14 flex-1">{item.description}</p>
                   <div className="grid relative">
                     <Link to={item.to} search={item.search}>
                       {item.preview}

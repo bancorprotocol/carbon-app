@@ -113,12 +113,15 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
         ({ icon: Icon, title, onClick, description, testId, variant }) => (
           <article
             key={title}
-            className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl bg-black/90 p-16"
+            className="flex gap-16 rounded-2xl bg-black/90 p-16"
           >
             <div className="bg-primary/25 row-span-2 flex size-32 items-center justify-center self-center rounded-full">
               <Icon className="text-primary size-16" />
             </div>
-            <h3 className="text-14 font-medium">{title}</h3>
+            <hgroup className="grid flex-1">
+              <h3 className="text-14 font-medium">{title}</h3>
+              <p className="text-12 font-normal text-white/60">{description}</p>
+            </hgroup>
             <Button
               variant={variant}
               onClick={onClick}
@@ -127,7 +130,6 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
             >
               Select
             </Button>
-            <p className="text-12 font-normal text-white/60">{description}</p>
           </article>
         ),
       )}
