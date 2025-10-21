@@ -22,8 +22,7 @@ export const SimulatorRoot = () => {
     <div className="mx-auto flex flex-col content-start gap-24 xl:max-w-[1920px] p-16 w-full">
       <SimulatorDisclaimer />
       <div className={cn(style.root, 'grid gap-16')}>
-        <div className="2xl:grid xl:flex xl:justify-between grid gap-16 content-start 2xl:sticky top-[96px] self-start grid-area-[nav]">
-          {/** TODO: put back the no Price history warning */}
+        <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
           <TokenSelection url="/simulate" />
           <SimInputStrategyType />
         </div>

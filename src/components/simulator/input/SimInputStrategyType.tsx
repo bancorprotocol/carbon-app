@@ -9,7 +9,7 @@ const items = [
     label: 'Liquidity Position',
     to: 'overlapping',
     search: {},
-    svg: <IconOverlappingStrategy className="size-20" />,
+    svg: <IconOverlappingStrategy className="hidden md:block size-20" />,
   },
   {
     id: 'recurring',
@@ -17,7 +17,7 @@ const items = [
     label: 'Recurring Limit',
     to: 'recurring',
     search: { sellIsRange: false, buyIsRange: false } as const,
-    svg: <IconTwoRanges className="size-20" />,
+    svg: <IconTwoRanges className="hidden md:block size-20" />,
   },
   {
     id: 'recurring',
@@ -25,24 +25,15 @@ const items = [
     label: 'Recurring Range',
     to: 'recurring',
     search: { sellIsRange: true, buyIsRange: true } as const,
-    svg: <IconTwoRanges className="size-20" />,
+    svg: <IconTwoRanges className="hidden md:block size-20" />,
   },
 ];
-
-const style = {
-  animationDelay: '100ms',
-  '--tab-background':
-    'linear-gradient(var(--color-main-900)) padding-box, var(--main-gradient) border-box',
-};
 
 export const SimInputStrategyType = () => {
   const { location } = useRouterState();
   const current = location.pathname;
   return (
-    <nav
-      className="surface 2xl:grid flex gap-8 content-start rounded-2xl xl:max-2xl:rounded-full overflow-clip animate-slide-up p-8 2xl:p-0 tab-list"
-      style={style}
-    >
+    <nav className="surface rounded-full overflow-clip animate-slide-up flex-1 flex sm:gap-8 2xl:grid 2xl:rounded-2xl">
       {items.map((link) => (
         <Link
           key={link.id}
@@ -59,10 +50,13 @@ export const SimInputStrategyType = () => {
           resetScroll={false}
           aria-current={current === link.to ? 'page' : 'false'}
           data-testid={link.id}
-          className="px-8 py-12 sm:px-24 grid place-items-center gap-8 flex-1 text-white/60 aria-page:text-white aria-page:bg-main-500 hover:bg-main-400 aria-page:hover:bg-main-400 bg-main-500/40 2xl:py-16 2xl:flex 2xl:justify-between"
+          className="shadow-md shadow-black/25 px-8 py-6 grid place-items-center flex-1 text-white/60 hover:text-white aria-page:text-white bg-main-500/40 aria-page:bg-main-500 hover:bg-main-400 aria-page:hover:bg-main-4002xl:py-16 sm:px-24 2xl:justify-items-start"
         >
-          {link.type}:{link.svg}
-          {link.label}
+          <span className="text-12 sm:text-14">{link.type}</span>
+          <div className="flex items-center gap-8 text-12 sm:text-16">
+            {link.svg}
+            <span>{link.label}</span>
+          </div>
         </Link>
       ))}
     </nav>
