@@ -30,7 +30,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
         'mx-auto grid w-full gap-16 p-16 max-w-[1920px]',
       )}
     >
-      <header className="2xl:grid content-start flex items-center gap-16 grid-area-[nav]">
+      <header className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
         <div className="flex gap-8 items-center">
           <BackButton onClick={() => history.back()} />
           <div className="flex">

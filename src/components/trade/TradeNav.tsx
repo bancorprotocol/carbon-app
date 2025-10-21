@@ -33,6 +33,12 @@ const types = [
         search: undefined,
         icon: <IconOverlapping className="hidden md:block size-24" />,
       },
+      {
+        name: 'Full Range',
+        to: '/trade/overlapping' as const,
+        search: {},
+        icon: <IconOverlapping className="hidden md:block size-24" />,
+      },
     ],
   },
   {
@@ -131,7 +137,7 @@ export const TradeNav = () => {
 
   return (
     <div
-      className="surface 2xl:grid flex rounded-2xl lg:max-2xl:rounded-full overflow-clip animate-slide-up flex-1 bg-main-700/40 gap-4"
+      className="surface 2xl:grid flex rounded-2xl lg:max-2xl:rounded-full overflow-clip animate-slide-up flex-1 bg-main-700/40 gap-8"
       style={{ animationDelay: '100ms' }}
     >
       {types.map(({ title, strategies }) => (
@@ -143,7 +149,7 @@ export const TradeNav = () => {
             <button
               {...attr}
               aria-selected={active?.type === title}
-              className="px-8 py-12 sm:px-24 grid place-items-center gap-8 flex-1 aria-selected:text-white bg-main-500/40 2xl:py-16 2xl:flex 2xl:justify-between"
+              className="shadow-md shadow-black/25 px-8 py-12 sm:px-24 grid place-items-center gap-8 flex-1 text-white/60 aria-selected:text-white aria-selected:bg-main-500 hover:bg-main-400 aria-selected:hover:bg-main-400 bg-main-500/40 2xl:py-16 2xl:flex 2xl:justify-between"
             >
               <div className="grid items-center text-nowrap md:flex sm:text-center md:gap-8">
                 <span className="text-10 md:text-18">{title}</span>

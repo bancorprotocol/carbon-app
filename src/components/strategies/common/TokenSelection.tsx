@@ -76,7 +76,7 @@ export const TokenSelection: FC<Props> = ({ url }) => {
     >
       <button
         role="menuitem"
-        className="rounded-full pe-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 ps-10 hover:bg-main-800"
+        className="rounded-full pe-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 ps-10 hover:bg-main-400"
         aria-haspopup="dialog"
         data-testid="select-base-token"
         onClick={() => openTokenListModal('base')}
@@ -93,7 +93,7 @@ export const TokenSelection: FC<Props> = ({ url }) => {
       <button
         role="menuitem"
         aria-haspopup="dialog"
-        className="rounded-full ps-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 pe-10 hover:bg-main-800"
+        className="rounded-full ps-15 flex items-center gap-8 place-self-stretch border border-transparent py-5 pe-10 hover:bg-main-400"
         data-testid="select-quote-token"
         onClick={() => openTokenListModal('quote')}
       >
