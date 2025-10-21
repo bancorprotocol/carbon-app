@@ -43,7 +43,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
 
   return (
     <nav
-      className="surface rounded-full rounded-s-8 px-16 py-8 text-14 grid grid-cols-1 gap-8 md:grid-cols-3"
+      className="surface rounded-full px-16 py-8 text-14 flex 2xl:grid 2xl:rounded-2xl"
       aria-label="Switch between type of strategy"
     >
       {links.map((link) => (

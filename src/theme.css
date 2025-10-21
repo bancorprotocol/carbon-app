@@ -386,6 +386,11 @@
   column-span: all;
 }
 
+@utility grid-stack {
+  display: grid;
+  grid-template-areas: "stack";
+}
+
 @utility grid-area-* {
   grid-area: --value([*]);
 }

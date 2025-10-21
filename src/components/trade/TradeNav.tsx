@@ -3,6 +3,7 @@ import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
 import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
 import { ReactComponent as IconRange } from 'assets/icons/range.svg';
+import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 
 import { Link, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
@@ -24,13 +25,13 @@ const types = [
         name: 'Swap',
         to: '/trade/market' as const,
         search: undefined,
-        icon: <IconMarket className="size-24" />,
+        icon: <IconMarket className="hidden md:block size-24" />,
       },
       {
         name: 'Liquidity Position',
         to: '/trade/overlapping' as const,
         search: undefined,
-        icon: <IconOverlapping className="size-24" />,
+        icon: <IconOverlapping className="hidden md:block size-24" />,
       },
     ],
   },
@@ -41,13 +42,13 @@ const types = [
         name: 'Limit Order',
         to: '/trade/disposable' as const,
         search: { settings: 'limit' as const },
-        icon: <IconDisposable className="size-24" />,
+        icon: <IconDisposable className="hidden md:block size-24" />,
       },
       {
-        name: 'Recurring Limit Orders',
+        name: 'Recurring Limit',
         to: '/trade/recurring' as const,
         search: { buySettings: 'limit', sellSettings: 'limit' } as const,
-        icon: <IconRecurring className="size-24" />,
+        icon: <IconRecurring className="hidden md:block size-24" />,
       },
     ],
   },
@@ -57,14 +58,14 @@ const types = [
       {
         name: 'Range Order',
         to: '/trade/disposable' as const,
-        search: { settings: 'limit' as const },
-        icon: <IconRange className="size-24" />,
+        search: { settings: 'range' as const },
+        icon: <IconRange className="hidden md:block size-24" />,
       },
       {
-        name: 'Recurring Range Orders',
+        name: 'Recurring Range',
         to: '/trade/recurring' as const,
         search: { buySettings: 'range', sellSettings: 'range' } as const,
-        icon: <IconRecurring className="size-24" />,
+        icon: <IconRecurring className="hidden md:block size-24" />,
       },
       //   {
       //     label: 'Auction',
@@ -130,7 +131,7 @@ export const TradeNav = () => {
 
   return (
     <div
-      className="surface 2xl:grid sm:flex grid content-start rounded-2xl lg:max-2xl:rounded-full overflow-clip animate-slide-up"
+      className="surface 2xl:grid flex rounded-2xl lg:max-2xl:rounded-full overflow-clip animate-slide-up flex-1 bg-main-700/40 gap-4"
       style={{ animationDelay: '100ms' }}
     >
       {types.map(({ title, strategies }) => (
@@ -141,19 +142,19 @@ export const TradeNav = () => {
           button={(attr) => (
             <button
               {...attr}
-              className="2xl:py-16 py-8 px-24 text-start flex gap-8 items-center justify-between  flex-1"
+              aria-selected={active?.type === title}
+              className="px-8 py-12 sm:px-24 grid place-items-center gap-8 flex-1 aria-selected:text-white bg-main-500/40 2xl:py-16 2xl:flex 2xl:justify-between"
             >
-              {active?.type === title ? (
-                <div className="grid text-12 text-nowrap">
-                  <span>{title}</span>
-                  <p className="flex items-center gap-8 text-14">
+              <div className="grid items-center text-nowrap md:flex sm:text-center md:gap-8">
+                <span className="text-10 md:text-18">{title}</span>
+                {active?.type === title && (
+                  <p className="flex items-center gap-8 text-12 md:text-14">
                     {active.strategy.icon}
                     {active.strategy.name}
                   </p>
-                </div>
-              ) : (
-                <span className="text-18">{title}</span>
-              )}
+                )}
+              </div>
+              <ChevronIcon className="size-16 hidden 2xl:block -rotate-90" />
             </button>
           )}
         >

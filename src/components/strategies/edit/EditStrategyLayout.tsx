@@ -30,13 +30,15 @@ export const EditStrategyLayout: FC<Props> = (props) => {
         'mx-auto grid w-full gap-16 p-16 max-w-[1920px]',
       )}
     >
-      <header className="flex items-center gap-16 grid-area-[nav]">
-        <BackButton onClick={() => history.back()} />
-        <div className="flex mr-auto">
-          <EditStrategyOverlapTokens />
-          <h1 className="grid place-items-center px-16 text-18 font-medium rounded-e-full surface">
-            {titleByType[editType]}
-          </h1>
+      <header className="2xl:grid content-start flex items-center gap-16 grid-area-[nav]">
+        <div className="flex gap-8 items-center">
+          <BackButton onClick={() => history.back()} />
+          <div className="flex">
+            <EditStrategyOverlapTokens />
+            <h1 className="grid place-items-center px-16 text-18 font-medium rounded-e-full surface">
+              {titleByType[editType]}
+            </h1>
+          </div>
         </div>
         <EditPriceNav editType={editType} />
       </header>
