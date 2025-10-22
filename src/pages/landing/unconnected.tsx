@@ -55,7 +55,7 @@ const types = [
   {
     title: 'Advanced',
     description:
-      'Sophisticated, fully customizable strategies for scaling in and out, and automating buy-low, sell-high trading cycles - exclusive to Carbon DeFi',
+      'Customizable strategies for scaling, and automating buy low, sell high trades - unique to Carbon DeFi.',
     trades: [
       {
         name: 'Range Order',

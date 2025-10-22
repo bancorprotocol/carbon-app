@@ -84,7 +84,7 @@ const tabs = [
         icon: <IconRecurring className="size-24" />,
         title: 'Recurring Limit',
         description:
-          'A continuous buy low, sell high strategy made up of linked buy and sell limit orders. Fund one or both orders, with newly acquired tokens automatically funding the opposite linked order.',
+          'Linked limit orders create a continuous buy low, sell high strategy where newly acquired tokens automatically fund the opposite order.',
         preview: (
           <RecurringLimitLimitPreview className="bg-black rounded-2xl" />
         ),
