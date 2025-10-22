@@ -17,33 +17,25 @@ const tabs: ExplorerTab[] = [
   {
     label: 'Pairs',
     href: 'pairs',
-    icon: (
-      <IconPairs className="hidden md:block size-24 group-aria-page:fill-gradient" />
-    ),
+    icon: <IconPairs className="hidden md:block size-24" />,
     testid: 'pairs-tab',
   },
   {
     label: 'Strategies',
     href: 'strategies',
-    icon: (
-      <IconOverview className="hidden md:block size-24 group-aria-page:stroke-gradient" />
-    ),
+    icon: <IconOverview className="hidden md:block size-24" />,
     testid: 'strategies-tab',
   },
   {
     label: 'Distribution',
     href: 'distribution',
-    icon: (
-      <IconPieChart className="hidden md:block size-24 group-aria-page:stroke-gradient" />
-    ),
+    icon: <IconPieChart className="hidden md:block size-24" />,
     testid: 'distribution-tab',
   },
   {
     label: 'Activity',
     href: 'activity',
-    icon: (
-      <IconActivity className="hidden md:block size-24 group-aria-page:stroke-gradient" />
-    ),
+    icon: <IconActivity className="hidden md:block size-24" />,
     testid: 'activity-tab',
   },
 ];

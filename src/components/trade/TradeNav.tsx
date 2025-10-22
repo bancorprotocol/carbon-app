@@ -186,7 +186,7 @@ const StrategyLink: FC<{ strategy: StrategyLink }> = (props) => {
     <Link
       key={name}
       role="menuitemradio"
-      className="rounded-sm flex w-full items-center gap-x-10 p-12 hover:bg-black/40 aria-page:bg-black/60"
+      className="rounded-sm flex w-full items-center gap-8 p-12 hover:bg-black/40 aria-page:bg-black/60"
       to={to}
       search={search}
       onClick={() => menu.setMenuOpen(false)}
