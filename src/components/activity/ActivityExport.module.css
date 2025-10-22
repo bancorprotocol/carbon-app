@@ -2,10 +2,10 @@
 @reference "../../theme.css";
 
 .export-button {
-  @apply btn-flat-tertiary text-12 gap-8 rounded-full px-12 py-8;
+  @apply btn-flat-tertiary gap-8 rounded-full px-12 py-8;
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  grid-template-areas: 'icon text loading';
+  grid-template-columns: repeat(2, auto);
+  grid-template-areas: 'text loading';
   align-items: center;
   overflow-y: clip;
 }

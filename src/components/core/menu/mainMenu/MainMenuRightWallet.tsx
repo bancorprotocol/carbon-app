@@ -30,10 +30,10 @@ export const MainMenuRightWallet: FC = () => {
   const { data: ensName } = useGetEnsFromAddress(user || '');
 
   const buttonVariant = useMemo(() => {
-    if (isUserBlocked) return 'btn-error-gradient';
-    if (!isSupportedNetwork) return 'btn-error-gradient';
-    if (!user) return 'btn-primary-gradient';
-    return 'btn-flat-secondary';
+    if (isUserBlocked) return 'btn-error-gradient text-16';
+    if (!isSupportedNetwork) return 'btn-error-gradient text-16';
+    if (!user) return 'btn-primary-gradient px-16 py-8 text-16';
+    return 'btn-flat-secondary text-16';
   }, [isSupportedNetwork, isUserBlocked, user]);
 
   const buttonText = useMemo(() => {
@@ -72,7 +72,7 @@ export const MainMenuRightWallet: FC = () => {
         button={(attr) => (
           <button
             {...attr}
-            className={cn(buttonVariant, 'flex items-center gap-8 px-16 py-8')}
+            className={cn(buttonVariant, 'flex items-center gap-8')}
             data-testid="user-wallet"
           >
             {buttonIcon}
