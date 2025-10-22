@@ -47,9 +47,15 @@ const types = [
     title: 'Intermediate',
     strategies: [
       {
-        name: 'Limit Order',
+        name: 'Limit Buy',
         to: '/trade/disposable' as const,
-        search: { settings: 'limit' as const },
+        search: { settings: 'limit' as const, direction: 'buy' as const },
+        icon: <IconDisposable className="hidden md:block size-20" />,
+      },
+      {
+        name: 'Limit Sell',
+        to: '/trade/disposable' as const,
+        search: { settings: 'limit' as const, direction: 'sell' as const },
         icon: <IconDisposable className="hidden md:block size-20" />,
       },
       {
@@ -64,9 +70,15 @@ const types = [
     title: 'Advanced',
     strategies: [
       {
-        name: 'Range Order',
+        name: 'Range Buy',
         to: '/trade/disposable' as const,
-        search: { settings: 'range' as const },
+        search: { settings: 'range' as const, direction: 'buy' as const },
+        icon: <IconRange className="hidden md:block size-20" />,
+      },
+      {
+        name: 'Range Sell',
+        to: '/trade/disposable' as const,
+        search: { settings: 'range' as const, direction: 'sell' as const },
         icon: <IconRange className="hidden md:block size-20" />,
       },
       {

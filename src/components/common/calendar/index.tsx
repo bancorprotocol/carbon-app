@@ -23,7 +23,7 @@ export const Calendar = ({
           return (
             <Chevron
               style={{ transform: `rotate(${rotate}deg)` }}
-              className="size-16 rotate-90"
+              className="size-16"
               data-testid={`date-picker-${orientation}-arrow`}
             />
           );

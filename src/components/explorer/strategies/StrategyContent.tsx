@@ -97,7 +97,7 @@ export const StrategyContent: FC<Props> = ({ url }) => {
 
   return (
     <>
-      <div className="bg-main-900/20 text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border border-main-500/40">
+      <div className="bg-main-900/20 text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border border-main-500/40 text-12 md:text-14">
         <span>
           {text[url].strategies}: {filtered.length}
         </span>

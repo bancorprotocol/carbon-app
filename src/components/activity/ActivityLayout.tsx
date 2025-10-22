@@ -8,7 +8,7 @@ export const ActivityLayout: FC<ActivityFilterProps> = (props) => {
   const { filters = [] } = props;
   return (
     <>
-      <header className="grid-area-[filters] sm:place-self-end grid md:grid-flow-col gap-16 px-20 pb-12 pt-16">
+      <header className="grid-area-[filters] sm:place-self-end grid md:grid-flow-col gap-16">
         <ActivityFilter
           filters={filters}
           className="grid justify-stretch sm:grid-flow-col gap-8"

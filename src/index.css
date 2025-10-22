@@ -397,37 +397,3 @@ dialog.modal.closing {
     transform: translateY(100%);
   }
 }
-
-
-
-/* TABLE */
-.table {
-  @apply surface;
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 16px;
-  font-size: 14px;
-}
-.table thead tr {
-  border-bottom: 1px solid var(--color-main-900);
-  color: oklch(100% 0 0 / 60%);
-}
-.table thead th {
-  text-align: start;
-  font-weight: normal;
-  white-space: nowrap;
-}
-.table td, .table th {
-  padding: 16px;
-}
-.table td:first-child, .table th:first-child {
-  padding-inline-start: 24px;
-}
-.table td:last-child, .table th:last-child {
-  text-align: end;
-  padding-inline-end: 24px;
-}
-.table tfoot tr {
-  border-top: 1px solid var(--color-main-900);
-  color: oklch(100% 0 0 / 80%);
-}

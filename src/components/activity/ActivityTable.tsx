@@ -28,41 +28,19 @@ import { NotFound } from 'components/common/NotFound';
 import { useActivity, useActivityPagination } from './context';
 import style from './ActivityTable.module.css';
 
-const thStyle = cn(
-  'text-14 text-start font-normal py-16 pl-8 whitespace-nowrap',
-  'first:pl-24',
-  'last:pr-24 last:text-end',
-);
-const tdFirstLine = cn(
-  'pt-12 align-bottom whitespace-nowrap pl-8',
-  'first:pl-24',
-  'last:pr-24 last:text-end',
-);
-const tdSecondLine = cn(
-  'pb-12 align-top whitespace-nowrap pl-8',
-  'last:pr-24 last:text-end',
-);
-
 export const ActivityTable: FC<ActivityListProps> = (props) => {
   const { activities, hideIds = false } = props;
   return (
-    <table
-      className={cn(
-        'w-full border-collapse surface rounded-2xl grid-area-[list]',
-        style.table,
-      )}
-    >
+    <table className={cn(style.table, 'table grid-area-[list]')}>
       <thead>
         <tr>
-          {!hideIds && <th className={thStyle}>ID</th>}
+          {!hideIds && <th>ID</th>}
           {/* @todo(gradient) */}
-          {/* <th className={thStyle}>Type</th> */}
-          <th className={thStyle} colSpan={2}>
-            Action
-          </th>
-          <th className={thStyle}>Buy Budget</th>
-          <th className={thStyle}>Sell Budget</th>
-          <th className={thStyle}>Date</th>
+          {/* <th>Type</th> */}
+          <th colSpan={2}>Action</th>
+          <th>Buy Budget</th>
+          <th>Sell Budget</th>
+          <th>Date</th>
         </tr>
       </thead>
       <tbody>
@@ -133,18 +111,18 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
             <ActivityIcon activity={activity} size={32} />
           </button>
         </td>
-        <td className={cn(tdFirstLine, 'font-medium')}>
+        <td className={cn(style.firstLine, 'font-medium')}>
           <button onClick={setAction} className="w-full text-start">
             {activityActionName[activity.action]}
           </button>
         </td>
-        <td className={tdFirstLine}>
+        <td className={style.firstLine}>
           {tokenAmount(strategy.buy.budget, quote)}
         </td>
-        <td className={tdFirstLine}>
+        <td className={style.firstLine}>
           {tokenAmount(strategy.sell.budget, base)}
         </td>
-        <td className={tdFirstLine}>
+        <td className={style.firstLine}>
           {activityDateFormatter.format(activity.date)}
         </td>
       </tr>
@@ -155,18 +133,18 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
         {/* ID */}
         {/* Type Icon */}
         {/* Action Icon */}
-        <td className={cn(tdSecondLine, 'w-full')}>
+        <td className={cn(style.secondLine, 'w-full')}>
           <button onClick={setAction} className="w-full text-start">
             <p className="whitespace-normal">{activityDescription(activity)}</p>
           </button>
         </td>
-        <td className={tdSecondLine}>
+        <td className={style.secondLine}>
           <BudgetChange budget={changes?.buy?.budget} token={quote} />
         </td>
-        <td className={tdSecondLine}>
+        <td className={style.secondLine}>
           <BudgetChange budget={changes?.sell?.budget} token={base} />
         </td>
-        <td className={tdSecondLine}>
+        <td className={style.secondLine}>
           <p className="flex justify-end gap-8 align-bottom">
             {shortenString(activity.txHash)}
             <TransactionLink txHash={activity.txHash} className="h-14" />

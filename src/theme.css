@@ -398,5 +398,37 @@
   grid-template-columns: repeat(auto-fill, minmax(calc(--value(integer) * 1px), 1fr))
 }
 
+@utility table {
+  @apply surface;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 16px;
+  font-size: 14px;
+  & thead tr {
+    border-bottom: 1px solid var(--color-main-900);
+    color: oklch(100% 0 0 / 60%);
+  }
+  & thead th {
+    text-align: start;
+    font-weight: normal;
+    white-space: nowrap;
+  }
+  & td, & th {
+    padding: 16px;
+  }
+  & td:first-child, & th:first-child {
+    padding-inline-start: 24px;
+  }
+  & td:last-child, & th:last-child {
+    text-align: end;
+    padding-inline-end: 24px;
+  }
+  & tfoot tr {
+    border-top: 1px solid var(--color-main-900);
+    color: oklch(100% 0 0 / 80%);
+  }
+}
+
+
 @custom-variant aria-page (&[aria-current="page"]);
 @custom-variant aria-location (&[aria-current="location"]);
