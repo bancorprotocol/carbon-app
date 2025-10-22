@@ -158,7 +158,7 @@ const StrategyList: FC<StrategyListProps> = ({ url, strategies, layout }) => {
     <>
       <ul
         data-testid="strategy-list"
-        className={cn('grid gap-20 grid-area-[list]', styles.strategyList)}
+        className={cn('grid gap-16 grid-area-[list]', styles.strategyList)}
       >
         {strategies.slice(0, max).map((s, i) => {
           const animate = i < 21;

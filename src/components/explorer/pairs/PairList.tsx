@@ -60,7 +60,7 @@ export const PairList: FC<Props> = ({ pairs }) => {
                 <dd className="text-14">{pair.liquidity}</dd>
               </div>
             </dl>
-            <footer className="grid grid-cols-2 gap-16">
+            <footer className="grid grid-cols-2 gap-8 sm:gap-16">
               <Link
                 className="btn-primary-gradient"
                 to="/trade"

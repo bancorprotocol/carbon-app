@@ -43,7 +43,7 @@ export const MainMenuRight: FC = () => {
   const { aboveBreakpoint } = useBreakpoints();
 
   return (
-    <div className="flex items-center gap-10 sm:gap-20">
+    <div className="flex items-center gap-8 sm:gap-16">
       <TenderlyForkAlert />
       <MainMenuRightWalkthrough />
       {config.ui.showCart && <MainMenuCart />}

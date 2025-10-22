@@ -24,8 +24,8 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
   const { activities, hideIds = false } = props;
   const { size, limit, setLimit } = useActivityPagination();
   return (
-    <>
-      <ul className="grid md:grid-cols-2 gap-16 p-16 grid-area-[list]">
+    <div className="grid gap-16 grid-area-[list]">
+      <ul className="grid grid-fill-320 gap-16">
         {activities.map((activity, i) => (
           <ActivityItem
             key={activityKey(activity, i)}
@@ -33,21 +33,21 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
             hideIds={hideIds}
           />
         ))}
-        {limit < size && (
-          <li className="grid place-items-center col-span-2">
-            <p className="text-12 mb-16 text-center text-white/60">
-              {limit} / {size}
-            </p>
-            <button
-              className="btn-primary-gradient "
-              onClick={() => setLimit(limit + 10)}
-            >
-              Show 10 More
-            </button>
-          </li>
-        )}
       </ul>
-    </>
+      {limit < size && (
+        <div className="grid place-items-center">
+          <p className="text-12 mb-16 text-center text-white/60">
+            {limit} / {size}
+          </p>
+          <button
+            className="btn-primary-gradient "
+            onClick={() => setLimit(limit + 10)}
+          >
+            Show 10 More
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 
