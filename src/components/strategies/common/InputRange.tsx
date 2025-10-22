@@ -44,12 +44,12 @@ export interface InputRangeProps {
 
 export const InputRange: FC<InputRangeProps> = ({
   min,
-  minLabel = 'Min Price',
+  minLabel = 'Min',
   minId,
   setMin,
   max,
   maxId,
-  maxLabel = 'Max Price',
+  maxLabel = 'Max',
   setMax,
   quote,
   base,

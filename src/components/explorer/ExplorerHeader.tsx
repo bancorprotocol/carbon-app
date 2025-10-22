@@ -146,7 +146,7 @@ export const ExplorerHeader = () => {
           />
           <div className="flex gap-16">
             <div className="grid gap-8">
-              <h3 className="text-16">Total Exchanges</h3>
+              <h3 className="text-16">Total Liquidity</h3>
               <RollingNumber
                 value={totalExchange}
                 className="text-24"

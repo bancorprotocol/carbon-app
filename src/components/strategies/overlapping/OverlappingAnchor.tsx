@@ -18,12 +18,9 @@ export const OverlappingAnchor: FC<Props> = (props) => {
 
   return (
     <>
-      <h3 className="text-16 font-medium flex items-center gap-8">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
-          1
-        </span>
+      <h2 className="text-16 font-medium flex items-center gap-8">
         Select Token
-      </h3>
+      </h2>
       <div role="radiogroup" className="flex gap-16">
         {/* SELL */}
         <input

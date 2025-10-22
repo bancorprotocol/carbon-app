@@ -46,10 +46,12 @@ export const StrategySortDropdown: FC<SortProps> = (props) => {
           )}
           {...attr}
         >
-          <span className="flex gap-8 text-14 truncate">
+          <p className="flex gap-8 text-14 truncate">
             <b>Sort</b>:
-            <span className="text-start min-w-115">{strategySort[sort]}</span>
-          </span>
+            <span className="text-start sm:min-w-115">
+              {strategySort[sort]}
+            </span>
+          </p>
           <IconChevron className="w-14 shrink-0" />
         </button>
       )}
@@ -115,10 +117,10 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
           )}
           {...attr}
         >
-          <span className="flex gap-8 text-14 truncate">
+          <p className="flex gap-8 text-14 truncate">
             <b>View:</b>
             <span className="text-start">{displayFilter}</span>
-          </span>
+          </p>
           <IconChevron className="w-14 shrink-0" />
         </button>
       )}

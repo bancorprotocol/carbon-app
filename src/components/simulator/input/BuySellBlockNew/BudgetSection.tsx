@@ -52,9 +52,6 @@ export const BudgetSection: FC<Props> = ({
   return (
     <div role="group" className="grid gap-8">
       <h3 className="text-14 font-medium mb-11 flex items-center gap-6">
-        <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-          2
-        </span>
         <Tooltip
           element={
             isBuy
@@ -74,7 +71,7 @@ export const BudgetSection: FC<Props> = ({
                 }`
           }
         >
-          <span className="capitalize text-white/80">Set {type} Budget</span>
+          <span className="text-white/80">Budget</span>
         </Tooltip>
         {isBudgetOptional && (
           <span className="font-medium ml-8 text-white/60">Optional</span>

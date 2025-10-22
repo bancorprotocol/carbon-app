@@ -14,7 +14,7 @@ const PriceTitle: FC<Props> = ({ direction, base, quote }) => (
     element={`Define the price you are willing to ${direction} ${base.symbol} at. Make sure the price is in ${quote.symbol} tokens.`}
   >
     <p className="flex gap-8">
-      <span className="capitalize text-white/80">{direction} Price</span>
+      <span className="text-white/80">Price</span>
       <span className="text-white/60">
         ({quote.symbol} per 1 {base.symbol})
       </span>
@@ -35,18 +35,12 @@ export const PriceLabelLimit: FC<LimitProps> = ({
     htmlFor={inputId}
     className="text-14 font-medium flex items-center gap-8"
   >
-    <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-      1
-    </span>
     <PriceTitle direction={direction} base={base} quote={quote} />
   </label>
 );
 
 export const PriceLegendRange: FC<Props> = ({ base, quote, direction }) => (
   <h3 className="text-14 font-medium flex items-center gap-8">
-    <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-      1
-    </span>
     <PriceTitle direction={direction} base={base} quote={quote} />
   </h3>
 );

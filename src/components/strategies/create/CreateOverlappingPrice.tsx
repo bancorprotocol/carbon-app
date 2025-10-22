@@ -95,18 +95,6 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
         setSpread={setSpread}
       />
       <article className="grid gap-16 p-16">
-        <hgroup>
-          <h3 className="text-16 font-medium flex items-center justify-between">
-            Budget
-            <Tooltip
-              iconClassName="size-18 text-white/60"
-              element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
-            />
-          </h3>
-          <p className="text-14 text-white/80">
-            Please select a token to proceed.
-          </p>
-        </hgroup>
         <OverlappingAnchor
           base={base}
           quote={quote}

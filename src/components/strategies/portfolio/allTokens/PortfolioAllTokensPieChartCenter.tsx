@@ -21,7 +21,7 @@ export const PortfolioAllTokensPieChartCenter: FC<Props> = ({
       <div className="text-24 font-medium">
         {getFiatDisplayValue(totalValue, selectedFiatCurrency)}
       </div>
-      <div className="text-white/60 font-medium">{assetsCount} Assets</div>
+      <div className="text-white/60 font-medium">{assetsCount} Tokens</div>
     </div>
   );
 };

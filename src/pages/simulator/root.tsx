@@ -1,5 +1,5 @@
 import { Outlet } from '@tanstack/react-router';
-import { ReactComponent as IconBookmark } from 'assets/icons/bookmark.svg';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { FormEvent, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
@@ -54,10 +54,10 @@ const SimulatorDisclaimer = () => {
   return (
     <form
       onSubmit={dismiss}
-      className="flex gap-16 items-start border border-warning rounded-2xl bg-warning/10 px-24 py-16 md:col-span-2"
+      className="flex gap-16 items-start border border-primary rounded-2xl bg-primary/10 px-24 py-16 md:col-span-2"
     >
-      <div className="self-center bg-warning/40 size-48 grid place-items-center rounded-full flex-shrink-0">
-        <IconBookmark className="size-24 text-warning" />
+      <div className="self-start bg-primary/40 size-48 grid place-items-center rounded-full flex-shrink-0">
+        <IconTooltip className="size-24 text-primary" />
       </div>
       <hgroup className="grid gap-8 text-14">
         <h2>Simulator Disclaimer</h2>
