@@ -9,9 +9,9 @@
   --dark-gradient: linear-gradient(to bottom, var(--color-main-600), var(--color-main-800), var(--color-main-950));
 
   --main-gradient: linear-gradient(var(--gradient-direction, 180deg), var(--color-green), var(--color-secondary));
-  --buy-gradient: linear-gradient(150deg, var(--color-buy), var(--color-buy-dark));
-  --sell-gradient: linear-gradient(150deg, var(--color-sell), var(--color-sell-dark));
-  --error-gradient: linear-gradient(150deg, var(--color-error), var(--color-error-dark));
+  --buy-gradient: linear-gradient(to bottom, var(--color-buy), var(--color-buy-dark));
+  --sell-gradient: linear-gradient(to bottom, var(--color-sell), var(--color-sell-dark));
+  --error-gradient: linear-gradient(to bottom, var(--color-error), var(--color-error-dark));
   --glass-shadow:
     /* Elevation */
     0 5px 5px oklch(10% var(--chroma) var(--hue) / 25%),
