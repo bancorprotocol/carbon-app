@@ -376,8 +376,15 @@
   }
 }
 @utility tab-focus {
-  color: white;
-  anchor-name: --tab-selected;
+  @supports (anchor-name: --myanchor) {
+    color: white;
+    anchor-name: --tab-selected;
+  }
+  @supports not (anchor-name: --myanchor) {
+    @apply glass-shadow from-main-400/40 to-main-500/40;
+    color: white;
+    background: var(--tab-background, linear-gradient(180deg, var(--tw-gradient-from), var(--tw-gradient-to)));
+  }
 }
 
 @custom-variant aria-page (&[aria-current="page"]);
