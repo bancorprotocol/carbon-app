@@ -193,8 +193,8 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
               max={sell.max}
               setMin={setMin}
               setMax={setMax}
-              minLabel="Min Buy Price"
-              maxLabel="Max Sell Price"
+              minLabel="Min Buy"
+              maxLabel="Min Sell"
               warnings={[priceWarning]}
               isOverlapping
               required

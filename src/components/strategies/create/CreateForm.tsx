@@ -83,7 +83,7 @@ export const CreateForm: FC<FormProps> = (props) => {
     <form
       onSubmit={create}
       style={{ animationDelay: '100ms' }}
-      className={cn(style.form, 'grid animate-scale-up')}
+      className={cn(style.form, 'grid')}
       data-testid="create-strategy-form"
     >
       <div className="overflow-hidden rounded-2xl surface">{children}</div>

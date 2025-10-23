@@ -71,7 +71,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
 
   const fullRange = useMemo(() => {
     return isFullRangeStrategy(base, quote, buy, sell);
-  }, [buy, sell]);
+  }, [base, buy, quote, sell]);
 
   const readonly = props.readonly || fullRange;
 

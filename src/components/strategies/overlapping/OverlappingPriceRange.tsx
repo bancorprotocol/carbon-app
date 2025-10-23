@@ -2,15 +2,18 @@ import { InputRange, InputRangeProps } from '../common/InputRange';
 import { FC, useId, useMemo } from 'react';
 import { useStrategyMarketPrice } from '../UserMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
-import { getFullRangesPrices, isFullRange } from '../common/utils';
+import { isFullRange } from '../common/utils';
 import { Presets } from '../../common/preset/Preset';
 import { overlappingPresets } from '../common/price-presets';
+import { useNavigate } from '@tanstack/react-router';
 
 export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
   const { base, quote, min, max, setMin, setMax, warnings } = props;
   const { marketPrice } = useStrategyMarketPrice({ base, quote });
   const minId = useId();
   const maxId = useId();
+
+  const navigate = useNavigate();
 
   const range = useMemo(() => {
     if (!marketPrice) return '';
@@ -29,13 +32,24 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
     const value = Number(change);
     const price = new SafeDecimal(marketPrice);
     if (value === Infinity) {
-      const { min, max } = getFullRangesPrices(
-        marketPrice,
-        base.decimals,
-        quote.decimals,
-      );
-      setMin(min);
-      setMax(max);
+      navigate({
+        to: '.',
+        search: (s) => ({
+          ...s,
+          min: undefined,
+          max: undefined,
+          fullRange: true,
+        }),
+        resetScroll: false,
+        replace: true,
+      });
+      // const { min, max } = getFullRangesPrices(
+      //   marketPrice,
+      //   base.decimals,
+      //   quote.decimals,
+      // );
+      // setMin(min);
+      // setMax(max);
     } else {
       const nextMin = price.mul(1 - value / 100);
       const nextMax = price.mul(1 + value / 100);
@@ -102,8 +116,8 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
           max={max}
           setMin={setMin}
           setMax={setMax}
-          minLabel="Min Buy Price"
-          maxLabel="Max Sell Price"
+          minLabel="Min Buy"
+          maxLabel="Min Sell"
           minId={minId}
           maxId={maxId}
           warnings={warnings}

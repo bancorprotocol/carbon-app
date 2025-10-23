@@ -159,6 +159,12 @@
 @utility fill-gradient {
   fill: url('#svg-brand-gradient');
 }
+@utility fill-sell-gradient {
+  fill: url('#svg-sell-gradient');
+}
+@utility fill-buy-gradient {
+  fill: url('#svg-buy-gradient');
+}
 
 @utility surface {
   @apply glass-shadow bg-linear-to-br from-main-500/40 to-main-600/40;

@@ -30,15 +30,15 @@ const types = [
         icon: <IconMarket className="hidden md:block size-20" />,
       },
       {
-        name: 'Liquidity Position',
+        name: 'Full Range',
         to: '/trade/overlapping' as const,
-        search: undefined,
+        search: { fullRange: true },
         icon: <IconOverlapping className="hidden md:block size-20" />,
       },
       {
-        name: 'Full Range',
+        name: 'Liquidity Position',
         to: '/trade/overlapping' as const,
-        search: {},
+        search: { fullRange: false },
         icon: <IconOverlapping className="hidden md:block size-20" />,
       },
     ],
@@ -125,7 +125,7 @@ export const TradeNav = () => {
   const { location } = useRouterState();
   const { aboveBreakpoint } = useBreakpoints();
 
-  //TODO: MAKE RANGE THE DEFAULT SETTINGS FOR THE ORDERS
+  // TODO: MAKE RANGE THE DEFAULT SETTINGS FOR THE ORDERS
 
   const active = useMemo((): ActivePage | undefined => {
     for (const type of types) {
@@ -200,7 +200,16 @@ const StrategyLink: FC<{ strategy: StrategyLink }> = (props) => {
       role="menuitemradio"
       className="rounded-sm flex w-full items-center gap-8 p-12 hover:bg-black/40 aria-page:bg-black/60"
       to={to}
-      search={search}
+      search={(s) => ({
+        base: s.base,
+        quote: s.quote,
+        marketPrice: s.marketPrice,
+        chartStart: s.chartStart,
+        chartEnd: s.chartEnd,
+        ...search,
+      })}
+      replace={true}
+      resetScroll={false}
       onClick={() => menu.setMenuOpen(false)}
     >
       {icon}

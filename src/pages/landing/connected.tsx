@@ -35,7 +35,7 @@ const tabs = [
       {
         to: '/trade/overlapping',
         icon: <IconOverlapping className="size-24" />,
-        title: 'Concentrated Liquidity Position',
+        title: 'Concentrated Liquidity',
         description:
           'Provide liquidity in your chosen price range - collect fees that auto-compound, with no preset fee tiers.',
         search: {},
@@ -45,10 +45,10 @@ const tabs = [
       {
         to: '/trade/overlapping',
         icon: <IconOverlapping className="size-24" />,
-        title: 'Full Range Liquidity Position',
+        title: 'Full Range Liquidity',
         description:
           'Provide liquidity from zero to infinity for continuous exposure, auto-compounding fees, with no preset fee tiers.',
-        search: {},
+        search: { fullRange: true },
         preview: <FullRangePreview className="bg-black rounded-2xl" />,
         unique: false,
       },

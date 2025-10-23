@@ -72,7 +72,7 @@ export const TokenSelection: FC<Props> = ({ url }) => {
   return (
     <article
       role="menu"
-      className="relative grid grid-cols-[1fr_auto_1fr] place-items-center gap-4 sm:place-self-center rounded-full surface p-4 animate-slide-up"
+      className="relative grid grid-cols-[1fr_auto_1fr] place-items-center gap-4 sm:max-xl:place-self-center rounded-full surface p-4 animate-slide-up"
     >
       <button
         role="menuitem"

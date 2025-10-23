@@ -22,6 +22,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
       id={id}
       title="Confirm Transaction"
       data-testid="approval-modal"
+      className="md:min-w-300"
     >
       <h3 className="text-14 my-10 text-white/60">Approve Tokens</h3>
       <ul className="grid gap-20">
