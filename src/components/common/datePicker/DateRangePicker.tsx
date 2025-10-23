@@ -205,7 +205,7 @@ const Content = (props: Props) => {
         />
         <button
           type="button"
-          className="btn-secondary-gradient col-span-2 justify-self-start"
+          className="btn col-span-2 justify-self-start px-16 py-8 rounded-full"
           onClick={onReset}
         >
           Reset

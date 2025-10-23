@@ -28,8 +28,8 @@ export const MarketPricePercent: FC<Props> = ({
       element="The percentage difference between the input price and the current market price of the token"
     >
       <span
-        className={`rounded-sm bg-main-800 flex items-center gap-5 px-6 py-4 ${
-          marketPriceWarning ? 'text-warning' : 'text-white/60'
+        className={`rounded-sm bg-main-700 flex items-center gap-5 px-6 py-4 ${
+          marketPriceWarning ? 'text-warning' : 'text-white/80'
         }`}
         data-testid="market-price-indication"
       >

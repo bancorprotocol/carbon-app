@@ -33,7 +33,7 @@ export const SimInputStrategyType = () => {
   const { location } = useRouterState();
   const current = location.pathname;
   return (
-    <nav className="surface rounded-full overflow-clip animate-slide-up flex-1 flex sm:gap-8 2xl:grid 2xl:rounded-2xl">
+    <nav className="surface rounded-full overflow-clip animate-slide-up flex-1 flex p-4 sm:gap-8 2xl:grid 2xl:rounded-2xl tab-list">
       {items.map((link) => (
         <Link
           key={link.id}
@@ -51,7 +51,7 @@ export const SimInputStrategyType = () => {
           resetScroll={false}
           aria-current={current === link.to ? 'page' : 'false'}
           data-testid={link.id}
-          className="shadow-md shadow-black/25 px-8 py-6 grid place-items-center flex-1 text-white/60 hover:text-white aria-page:text-white bg-main-500/40 aria-page:bg-main-500 hover:bg-main-400 aria-page:hover:bg-main-4002xl:py-16 sm:px-24 2xl:justify-items-start"
+          className="tab-anchor px-8 py-8 grid place-items-center flex-1 text-white/60 hover:text-white aria-page:text-white aria-page:tab-focus 2xl:py-16 sm:px-24 2xl:justify-items-start"
         >
           <span className="text-12 sm:text-14">{link.type}</span>
           <div className="flex items-center gap-8 text-12 sm:text-16">

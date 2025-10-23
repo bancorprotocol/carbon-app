@@ -224,7 +224,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               <button
                 type="button"
                 onClick={reset}
-                className="btn-secondary-gradient text-12 font-medium rounded-2xl p-10"
+                className="btn text-12 font-medium rounded-2xl p-8"
               >
                 Reset Filter
               </button>

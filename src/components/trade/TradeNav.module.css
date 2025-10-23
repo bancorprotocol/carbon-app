@@ -2,20 +2,14 @@
 @reference '../../theme.css';
 
 .trade-type {
-  @apply px-8 py-8 flex-1 text-white/60 tab-anchor;
+  @apply px-8 py-12 flex-1 text-white/60 tab-anchor;
   display: grid;
   grid-template-areas: 'stack';
 }
 .trade-type[aria-selected="true"] {
   @apply tab-focus;
-  /* @apply bg-main-500 tab-focus; */
 }
-.trade-type[aria-selected="true"], .trade-type:hover {
-  @apply text-white;
-}
-.trade-type[aria-selected="true"]:hover, .trade-type:hover {
-  /* @apply bg-main-400; */
-}
+
 .trade-type > * {
   grid-area: stack;
 }

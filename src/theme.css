@@ -170,6 +170,15 @@
   @apply glass-shadow bg-linear-to-br from-main-500/40 to-main-600/40;
 }
 
+@utility btn {
+  transition: background-color 100ms var(--ease-in-out);
+  &:hover {
+    @apply bg-main-900/20;
+  }
+  &:active {
+    @apply bg-main-900/40;
+  }
+}
 
 @utility btn-primary-gradient {
   --gradient-direction: 180deg;
