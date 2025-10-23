@@ -151,13 +151,13 @@ export const TradeNav = () => {
 
   return (
     <div
-      className="surface flex rounded-full overflow-clip animate-slide-up flex-1 sm:gap-8 2xl:grid 2xl:rounded-2xl"
+      className="surface flex rounded-full overflow-clip animate-slide-up flex-1 sm:gap-8 2xl:grid 2xl:rounded-2xl tab-list p-4"
       style={{ animationDelay: '100ms' }}
     >
       {types.map(({ title, strategies }) => (
         <DropdownMenu
           key={title}
-          placement={aboveBreakpoint('2xl') ? 'right-start' : 'bottom-end'}
+          placement={aboveBreakpoint('2xl') ? 'right-start' : 'bottom'}
           className="rounded-xl p-8 grid gap-4"
           button={(attr) => (
             <button

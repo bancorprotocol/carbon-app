@@ -178,7 +178,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             disabled={!hasEnoughLiquidity}
           />
         </div>
-        <footer className="rounded-b-xl rounded-t-xs text-14 flex justify-between bg-black p-16 text-white/80">
+        <footer className="rounded-b-xl rounded-t-xs text-14 flex justify-between bg-main-900/40 p-16 text-white/80">
           {warning && <Warning className="text-14" message={warning} />}
           {rateMessage && <p>{rateMessage}</p>}
           {showRouting && (

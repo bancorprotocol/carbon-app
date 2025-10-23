@@ -21,7 +21,10 @@ export const OverlappingAnchor: FC<Props> = (props) => {
       <h2 className="text-16 font-medium flex items-center gap-8">
         Select Token
       </h2>
-      <div role="radiogroup" className="flex gap-16">
+      <div
+        role="radiogroup"
+        className="flex gap-16 input-container p-4 rounded-2xl tab-list"
+      >
         {/* SELL */}
         <input
           className={cn('absolute opacity-0', style.selectToken)}
@@ -37,7 +40,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <label
           htmlFor="anchor-sell"
           data-testid="anchor-sell-label"
-          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black hover:bg-main-900/60 active:scale-90 p-16 border border-transparent"
+          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 active:scale-90 p-16 border border-transparent"
         >
           <TokenLogo token={base} size={20} />
           {base.symbol}
@@ -57,7 +60,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <label
           htmlFor="anchor-buy"
           data-testid="anchor-buy-label"
-          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black hover:bg-main-900/60 active:scale-90 p-16 border border-transparent"
+          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 active:scale-90 p-16 border border-transparent"
         >
           <TokenLogo token={quote} size={20} />
           {quote.symbol}

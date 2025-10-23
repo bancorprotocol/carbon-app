@@ -4,7 +4,8 @@
 
 
 .radio-group {
-  @apply tab-list border border-main-500 bg-main-900/60;
+  @apply tab-list border border-main-500 bg-main-900/40 hover:bg-main-900/60;
+  box-shadow: inset 0 0 10px var(--color-main-900);
 }
 .label {
   @apply tab-anchor;

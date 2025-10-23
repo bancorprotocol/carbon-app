@@ -2,18 +2,19 @@
 @reference '../../theme.css';
 
 .trade-type {
-  @apply shadow-md shadow-black/25 px-8 py-16 flex-1 text-white/60 bg-main-500/40;
+  @apply px-8 py-8 flex-1 text-white/60 tab-anchor;
   display: grid;
   grid-template-areas: 'stack';
 }
 .trade-type[aria-selected="true"] {
-  @apply bg-main-500;
+  @apply tab-focus;
+  /* @apply bg-main-500 tab-focus; */
 }
 .trade-type[aria-selected="true"], .trade-type:hover {
   @apply text-white;
 }
 .trade-type[aria-selected="true"]:hover, .trade-type:hover {
-  @apply bg-main-400;
+  /* @apply bg-main-400; */
 }
 .trade-type > * {
   grid-area: stack;

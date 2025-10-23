@@ -1,13 +1,13 @@
 @reference "tailwindcss";
 @reference "../../../theme.css";
 
-.preset {
+.preset {  
   position: relative;
   flex: 1;
 }
 .preset:has(:focus-visible) {
-  border-radius: 10px;
-  outline: solid 2px white;
+  @apply rounded-lg;
+  outline: solid 1px white;
 }
 .preset input {
   position: absolute;
@@ -16,21 +16,15 @@
   z-index: -1;
 }
 .preset label {
-  transition: transform 100ms var(--ease-in-out);
-  border-radius: 10px;
-  @apply h-full font-medium grid cursor-pointer place-items-center bg-black py-8 text-center text-white/60 border border-transparent shadow-lg;
+  @apply rounded-lg font-medium grid cursor-pointer place-items-center py-8 text-center text-white/60 tab-anchor;
 }
 .preset input:not(:checked) + label:hover {
-  @apply bg-main-900/60 text-white;
-}
-.preset input:not(:checked) + label:active {
-  transform: scale(0.9);
+  @apply bg-main-600/20 text-white;
 }
 
 .preset input:checked + label {
   color: white;
-  border-width: 1px;
-  background: var(--dark-gradient) padding-box, var(--main-gradient) border-box;
+  @apply tab-focus;
 }
 
 .preset-custom {

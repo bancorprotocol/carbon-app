@@ -19,7 +19,13 @@ export const Presets: FC<Props> = (props) => {
   const id = useId();
   const name = useId();
   return (
-    <div role="radiogroup" className={cn('text-12 flex gap-8', className)}>
+    <div
+      role="radiogroup"
+      className={cn(
+        'text-12 flex gap-8 input-container rounded-lg p-4 tab-list',
+        className,
+      )}
+    >
       {presets.map((preset) => (
         <div key={preset.value} className={style.preset}>
           <input
