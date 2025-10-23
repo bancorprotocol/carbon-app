@@ -51,7 +51,7 @@ export const BudgetSection: FC<Props> = ({
 
   return (
     <div role="group" className="grid gap-8">
-      <h3 className="text-14 font-medium mb-11 flex items-center gap-6">
+      <h3 className="text-14 font-medium flex items-center gap-8">
         <Tooltip
           element={
             isBuy

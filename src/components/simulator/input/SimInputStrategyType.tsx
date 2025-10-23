@@ -12,7 +12,7 @@ const items = [
     svg: <IconOverlappingStrategy className="hidden md:block size-20" />,
   },
   {
-    id: 'recurring',
+    id: 'recurring-limit',
     type: 'Intermediate',
     label: 'Recurring Limit',
     to: 'recurring',
@@ -20,7 +20,7 @@ const items = [
     svg: <IconTwoRanges className="hidden md:block size-20" />,
   },
   {
-    id: 'recurring',
+    id: 'recurring-range',
     type: 'Advanced',
     label: 'Recurring Range',
     to: 'recurring',
@@ -47,6 +47,7 @@ export const SimInputStrategyType = () => {
             end: search.end,
             ...link.search,
           })}
+          replace={true}
           resetScroll={false}
           aria-current={current === link.to ? 'page' : 'false'}
           data-testid={link.id}

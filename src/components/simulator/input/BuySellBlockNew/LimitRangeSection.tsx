@@ -59,26 +59,27 @@ export const LimitRangeSection: FC<Props> = ({
       </div>
     );
   } else {
-    <div className="grid gap-8">
-      <PriceLabelLimit
-        direction={direction}
-        base={base}
-        quote={quote}
-        inputId={inputId}
-      />
-      <InputLimit
-        id={inputId}
-        base={base}
-        quote={quote}
-        price={order.min}
-        setPrice={(value) => {
-          dispatch(`${direction}Min`, value);
-          dispatch(`${direction}Max`, value);
-        }}
-        isBuy={isBuy}
-        warnings={getWarnings()}
-      />
-    </div>;
-    return;
+    return (
+      <div className="grid gap-8">
+        <PriceLabelLimit
+          direction={direction}
+          base={base}
+          quote={quote}
+          inputId={inputId}
+        />
+        <InputLimit
+          id={inputId}
+          base={base}
+          quote={quote}
+          price={order.min}
+          setPrice={(value) => {
+            dispatch(`${direction}Min`, value);
+            dispatch(`${direction}Max`, value);
+          }}
+          isBuy={isBuy}
+          warnings={getWarnings()}
+        />
+      </div>
+    );
   }
 };

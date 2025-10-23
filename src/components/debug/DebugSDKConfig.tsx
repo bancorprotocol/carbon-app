@@ -21,7 +21,10 @@ export const DebugSDKConfig = () => {
   }, [counter]);
 
   return (
-    <form className="rounded-3xl surface grid gap-20 p-20" onSubmit={save}>
+    <form
+      className="rounded-3xl surface grid content-start gap-20 p-20"
+      onSubmit={save}
+    >
       <h2>SDK Config</h2>
       <div className="flex flex-col gap-8">
         <label htmlFor="sdk-timestamp">Last Dump Timestamp (ms)</label>
