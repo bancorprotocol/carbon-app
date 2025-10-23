@@ -67,9 +67,9 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
   };
   return (
     <li className="grid gap-16 rounded-2xl surface">
-      <header className="flex px-16 pt-16 items-center">
+      <header className="grid grid-flow-col px-16 pt-16 items-center justify-items-start">
         {!hideIds && <ActivityId activity={activity} size={16} />}
-        <div className="grid text-12 ml-auto">
+        <div className="grid text-12 justify-self-end align-center">
           <p className="text-white/80">
             {activityDateFormatter.format(activity.date)}
           </p>

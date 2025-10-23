@@ -43,10 +43,10 @@ export const BuySellHeader: FC<Props> = (props) => {
       {children}
       <div className="text-14 flex items-center gap-10">
         <RadioGroup>
-          <Radio checked={!isRange} onChange={setLimit}>
+          <Radio checked={!isRange} onChange={setLimit} className="py-2">
             Limit
           </Radio>
-          <Radio checked={isRange} onChange={setRange}>
+          <Radio checked={isRange} onChange={setRange} className="py-2">
             Range
           </Radio>
         </RadioGroup>

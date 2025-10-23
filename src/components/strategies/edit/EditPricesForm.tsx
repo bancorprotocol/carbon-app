@@ -216,7 +216,7 @@ export const EditPricesForm: FC<Props> = (props) => {
 
   if (!marketPrice) {
     return (
-      <article key="marketPrice" className="surface rounded-2xl">
+      <article key="marketPrice" className="self-start surface rounded-2xl">
         <InitMarketPrice base={base} quote={quote} />
       </article>
     );
