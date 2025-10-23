@@ -99,28 +99,26 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
   };
 
   return (
-    <div className={style.searchContainer}>
-      <form
-        className={style.search}
-        role="search"
-        onSubmit={submitHandler}
-        onReset={resetHandler}
-      >
-        <IconSearch className="size-18" />
-        <div className="flex items-center md:relative">
-          <SuggestionCombobox
-            url={url}
-            open={open}
-            setOpen={setOpen}
-            search={search}
-            setSearch={setSearch}
-          />
-        </div>
-        <button type="submit">
-          <IconChevron className="size-24" />
-        </button>
-      </form>
-    </div>
+    <form
+      className={style.search}
+      role="search"
+      onSubmit={submitHandler}
+      onReset={resetHandler}
+    >
+      <IconSearch className="size-18" />
+      <div className="flex items-center md:relative">
+        <SuggestionCombobox
+          url={url}
+          open={open}
+          setOpen={setOpen}
+          search={search}
+          setSearch={setSearch}
+        />
+      </div>
+      <button type="submit">
+        <IconChevron className="size-24" />
+      </button>
+    </form>
   );
 };
 

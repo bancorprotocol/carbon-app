@@ -86,7 +86,7 @@ export const SuggestionList: FC<Props> = (props) => {
               role="option"
               onMouseDown={(e) => e.preventDefault()} // prevent blur on click
               onClick={() => navigate(token.address.toLowerCase())}
-              className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
+              className="px-16 md:px-30  flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
               aria-selected="false"
               tabIndex={index ? -1 : 0}
             >
@@ -94,7 +94,7 @@ export const SuggestionList: FC<Props> = (props) => {
             </button>
           ))}
           {maxTokens <= filteredTokens.length && (
-            <footer className="px-30 flex h-[50px] items-center">
+            <footer className="px-16 md:px-30 flex h-[50px] items-center">
               <button
                 type="button"
                 className="text-14 font-medium btn cursor-pointer rounded-full "
@@ -118,7 +118,7 @@ export const SuggestionList: FC<Props> = (props) => {
                 role="option"
                 onMouseDown={(e) => e.preventDefault()} // prevent blur on click
                 onClick={() => navigate(slug)}
-                className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
+                className="px-16 md:px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
                 aria-selected="false"
                 aria-setsize={filteredPairs.length}
                 tabIndex={index ? -1 : 0}

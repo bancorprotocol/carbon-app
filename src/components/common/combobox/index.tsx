@@ -187,7 +187,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
       <button
         {...getReferenceProps({ ref: refs.setReference })}
         type="button"
-        className="btn-flat-tertiary flex items-center gap-8 rounded-full px-12 py-8 text-white/60"
+        className="btn-flat-tertiary flex items-center gap-8 rounded-full px-12 py-8 text-white/60 data-[selected=true]:text-white"
         data-selected={!!selected.length}
         aria-controls={rootId}
       >
@@ -230,7 +230,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               </button>
               <div
                 role="listbox"
-                className="flex max-h-[200px] min-w-[200px] flex-col gap-8 overflow-auto p-4"
+                className="flex max-h-[200px] min-w-[200px] flex-col gap-4 overflow-auto p-4"
                 onKeyDown={onKeydown}
               >
                 {options}
@@ -261,9 +261,13 @@ export const Option: FC<OptionProps> = (props) => {
   const id = useId();
   return (
     <div
-      className={cn('flex items-center gap-8 px-4', style.option, {
-        [style.selected]: checked,
-      })}
+      className={cn(
+        'flex items-center gap-8 px-4 py-2 rounded-xs cursor-pointer',
+        style.option,
+        {
+          [style.selected]: checked,
+        },
+      )}
     >
       <input
         id={id}

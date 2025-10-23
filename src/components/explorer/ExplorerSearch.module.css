@@ -1,24 +1,22 @@
 @reference "tailwindcss";
 @reference "../../theme.css";
 
-.search-container {
-  --gradient-direction: to bottom;
-  grid-area: search;
-  background-image: var(--main-gradient);
-  padding: 2px;
-  border-radius: 48px;
-}
-
 .search {
+  @apply input-container rounded-full border-2 border-main-400;
+  grid-area: search;
   display: grid;
   gap: 16px;
   padding-inline: 16px;
+  padding-block: 12px;
   grid-template-columns: 24px 1fr auto;
   align-items: center;
   position: relative;
-  border-radius: inherit;
-  height: 44px;
-  @apply bg-main-600;
+}
+.search:has(:focus-visible) {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--color-main-800), var(--color-main-800)) padding-box,
+    var(--main-gradient) border-box;
 }
 
 .search button[type='submit'] {

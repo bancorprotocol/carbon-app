@@ -55,7 +55,7 @@ export const DateRangePicker = memo(function DateRangePicker(
       type="button"
       aria-label="Pick date range"
       className={cn(
-        'text-12 flex items-center gap-8 rounded-full px-12 py-8',
+        'text-12 flex items-center gap-8 rounded-full px-12 py-8 text-white/60 data-[selected=true]:text-white',
         props.disabled &&
           'border-main-800 hover:border-main-800 active:border-main-800 cursor-not-allowed hover:bg-transparent',
         props.className,
@@ -65,15 +65,12 @@ export const DateRangePicker = memo(function DateRangePicker(
       disabled={props.disabled}
     >
       {props.icon}
-      <span
-        className="justify-self-end text-white/60"
-        data-testid="simulation-dates"
-      >
+      <span className="justify-self-end" data-testid="simulation-dates">
         {displayRange(props.start, props.end)}
       </span>
       {!props.disabled && (
         <ChevronIcon
-          className={cn('ml-auto size-12 text-white/80 transition-transform', {
+          className={cn('ml-auto size-12 transition-transform', {
             'rotate-180': isOpen,
           })}
         />
