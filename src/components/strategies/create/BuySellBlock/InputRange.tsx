@@ -84,11 +84,7 @@ export const InputRange: FC<InputRangeProps> = ({
     <>
       <div className="grid grid-cols-2 gap-6">
         <div
-          className={cn(
-            'grid gap-8 rounded-e-xs rounded-s-2xl w-full cursor-text  input-container',
-            showWarning && 'border-warning focus-within:border-warning',
-            error && 'border-error/50 focus-within:border-error',
-          )}
+          className="grid gap-8 rounded-e-xs rounded-s-2xl w-full cursor-text input-container"
           onClick={() => document.getElementById(inputMinId)?.focus()}
         >
           <header className="text-12 flex justify-between text-white/60">

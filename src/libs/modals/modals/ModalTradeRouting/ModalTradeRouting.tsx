@@ -193,7 +193,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             isError={!!errorMsg}
             disabled
             data-testid="confirm-source"
-            className="rounded-xl -mb-16 bg-black p-16"
+            className="rounded-xl -mb-16 p-16 input-container"
           />
           <IconArrow className="bg-black z-10 mx-auto size-24 rounded-full p-5" />
           <TokenInputField
@@ -201,7 +201,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             token={data.target}
             disabled
             data-testid="confirm-target"
-            className="rounded-xl -mt-16 bg-black  p-16"
+            className="rounded-xl -mt-16 p-16 input-container"
           />
         </div>
 

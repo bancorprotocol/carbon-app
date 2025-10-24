@@ -109,7 +109,6 @@ export const InputBudget: FC<Props> = (props) => {
       <div
         className={cn(
           'flex cursor-text flex-col gap-8 rounded-2xl input-container',
-          error && 'border-error/50 focus-within:border-error',
           className,
         )}
         onClick={() => inputRef.current?.focus()}

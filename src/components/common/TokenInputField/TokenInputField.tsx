@@ -89,7 +89,6 @@ export const TokenInputField: FC<Props> = (props) => {
       className={cn(
         'flex cursor-text flex-col gap-8 border border-transparent',
         className,
-        isError && 'border-error/50 focus-within:border-error/50',
       )}
       onClick={() => inputRef.current?.focus()}
     >

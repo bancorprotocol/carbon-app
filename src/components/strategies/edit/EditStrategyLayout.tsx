@@ -25,6 +25,7 @@ export const EditStrategyLayout: FC<Props> = (props) => {
 
   return (
     <div
+      data-edit-budget={editType !== 'editPrices' && editType !== 'renew'}
       className={cn(
         style.root,
         'mx-auto grid w-full gap-16 p-16 max-w-[1920px]',

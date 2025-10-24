@@ -8,6 +8,15 @@
     grid-template-areas:
       'nav chart form';
   }
+  /* Edit budget don't have any navigation, we need to reduce the size */
+  .root[data-edit-budget="true"] {
+    max-width: 1520px;
+    align-content: start;
+    grid-template-columns: 1fr 450px;
+    grid-template-areas:
+      'nav nav'
+      'chart form';
+  }
 }
 
 @media (width > 64rem) and (width <= 96rem) {
