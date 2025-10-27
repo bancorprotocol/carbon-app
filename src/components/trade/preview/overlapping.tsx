@@ -46,7 +46,7 @@ export const PreviewOverlappingStrategy = () => {
             y="350"
             width="900"
             height="300"
-            fill="url(#circle-pattern)"
+            fill="url(#logo-pattern)"
           />
 
           {/* Sell */}

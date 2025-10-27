@@ -548,7 +548,6 @@ export const OverlappingChart: FC<Props> = (props) => {
             strokeWidth={2}
           />
         </g>
-
         <g className="price-indicators">
           <line
             stroke={outline}

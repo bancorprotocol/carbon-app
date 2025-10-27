@@ -150,12 +150,21 @@ export const PreviewCommonStrategyType = () => {
           />
         </g>
         <pattern
-          id="circle-pattern"
+          id="logo-pattern"
           patternUnits="userSpaceOnUse"
-          width="50"
+          width="40"
           height="50"
         >
-          <circle
+          <use
+            href="#carbonLogo"
+            x="10"
+            y="10"
+            width="30"
+            height="30"
+            fill="white"
+            fillOpacity="0.4"
+          />
+          {/* <circle
             cx="25"
             cy="25"
             r="20"
@@ -163,7 +172,7 @@ export const PreviewCommonStrategyType = () => {
             stroke="white"
             strokeWidth="2"
             strokeOpacity="0.2"
-          />
+          /> */}
         </pattern>
       </defs>
     </svg>

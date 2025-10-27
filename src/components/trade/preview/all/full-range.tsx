@@ -27,7 +27,7 @@ export const FullRangePreview = (props: SVGProps<SVGSVGElement>) => {
           y="250"
           width="900"
           height="650"
-          fill="url(#circle-pattern)"
+          fill="url(#logo-pattern)"
         />
       </g>
 

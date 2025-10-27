@@ -10,10 +10,10 @@
   @apply tab-focus;
 }
 .trade-type:not([aria-selected="true"]):hover {
-  @apply bg-main-600;
+  @apply bg-main-400/60;
 }
 .trade-type[aria-selected="true"]:hover {
-  @apply bg-main-400/20;
+  @apply bg-main-400/40;
 }
 
 .trade-type > * {
