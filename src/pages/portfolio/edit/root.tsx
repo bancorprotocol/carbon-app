@@ -12,6 +12,16 @@ import {
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { AnyStrategy } from 'components/strategies/common/types';
 import { isGradientStrategy } from 'components/strategies/common/utils';
+import { BackButton } from 'components/common/button/BackButton';
+import { cn } from 'utils/helpers';
+import style from 'components/strategies/common/root.module.css';
+
+const titleByType: Record<EditTypes, string> = {
+  renew: 'Renew Strategy',
+  editPrices: 'Edit Prices',
+  deposit: 'Deposit Budgets',
+  withdraw: 'Withdraw Budgets',
+};
 
 const url = '/strategies/edit/$strategyId';
 export const EditStrategyRoot = () => {
@@ -60,7 +70,22 @@ export const EditStrategyRoot = () => {
   if (!strategy || isGradientStrategy(strategy)) return;
   return (
     <EditStrategyProvider strategy={strategy}>
-      <Outlet />
+      <div className="mx-auto grid w-full gap-16 p-16 max-w-[1920px]">
+        <header className="flex gap-16 items-center">
+          <BackButton onClick={() => history.back()} />
+          <h1 className="grid place-items-center text-2xl font-medium">
+            {titleByType[search.editType]}
+          </h1>
+        </header>
+        <div
+          data-edit-budget={
+            search.editType !== 'editPrices' && search.editType !== 'renew'
+          }
+          className={cn(style.root, 'grid gap-16')}
+        >
+          <Outlet />
+        </div>
+      </div>
     </EditStrategyProvider>
   );
 };

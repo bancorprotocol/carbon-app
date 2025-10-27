@@ -1,5 +1,6 @@
 import { UseQueryResult } from '@tanstack/react-query';
 import { Loading } from 'components/common/Loading';
+import { RollingNumber } from 'components/common/RollingNumber';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useGetEnrichedStrategies } from 'hooks/useStrategies';
@@ -13,8 +14,8 @@ import {
 import { Link } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { cn, getLowestBits, prettifyNumber } from 'utils/helpers';
+import { useCallback, useMemo } from 'react';
+import { getLowestBits, prettifyNumber } from 'utils/helpers';
 import { toPairSlug } from 'utils/pairSearch';
 
 interface PairTrendingQuery {
@@ -283,118 +284,4 @@ const StrategyRows = ({ query }: StrategyTrendingProps) => {
       </td>
     </tr>
   ));
-};
-
-interface TradesProps {
-  value?: number;
-  className?: string;
-  delay?: number;
-  loadingWidth: string;
-  format: (value: number) => string;
-}
-
-const RollingNumber = ({
-  value,
-  format,
-  delay,
-  className,
-  loadingWidth,
-}: TradesProps) => {
-  const ref = useRef<HTMLParagraphElement>(null);
-  const anims = useRef<Promise<Animation>[]>(null);
-  const lastTrades = useRef(0);
-  const initDelta = 60;
-
-  useEffect(() => {
-    if (typeof value !== 'number' || !value) return;
-    let tradesChanged = false;
-    const start = async () => {
-      const from = lastTrades.current || value - initDelta;
-      const to = value;
-      const letters = ref.current!.children;
-      // Initial animation
-      if (!lastTrades.current) {
-        const initAnims: Promise<Animation>[] = [];
-        const next = format(from).split('');
-        for (let i = 0; i < next.length; i++) {
-          const v = next[i];
-          if (!'0123456789'.includes(v)) continue;
-          const anim = letters[i]?.animate(
-            [{ transform: `translateY(-${v}0%)` }],
-            {
-              duration: 1000,
-              delay: i * 100,
-              fill: 'forwards',
-              easing: 'cubic-bezier(1,-0.54,.65,1.46)',
-            },
-          );
-          if (anim) initAnims.push(anim.finished);
-        }
-        await Promise.allSettled(initAnims);
-      }
-      // Wait for lingering animations if any
-      await Promise.allSettled(anims.current ?? []);
-      anims.current = [];
-      let previous = format(from - 1).split('');
-      for (let value = from; value <= to; value++) {
-        const next = format(value).split('');
-        for (let i = 0; i < next.length; i++) {
-          if (tradesChanged) return;
-          const v = next[i];
-          if (!'0123456789'.includes(v)) continue;
-          if (previous[i] === next[i]) continue;
-          const anim = letters[i].animate(
-            [{ transform: `translateY(-${v}0%)` }],
-            {
-              duration: 1000,
-              delay: delay ?? 2000,
-              fill: 'forwards',
-              easing: 'cubic-bezier(1,.11,.55,.79)',
-            },
-          );
-          anims.current.push(anim.finished);
-        }
-        previous = next;
-        await Promise.allSettled(anims.current ?? []);
-        lastTrades.current = value;
-      }
-    };
-    start();
-    return () => {
-      tradesChanged = true;
-    };
-  }, [format, value, delay]);
-
-  if (typeof value !== 'number' || !value) {
-    return <Loading height={40} width={loadingWidth} fontSize="36px" />;
-  }
-
-  const initial = format(value - initDelta);
-  return (
-    <p
-      ref={ref}
-      className={cn(
-        'text-36 font-title flex h-[40px] overflow-hidden leading-40',
-        className,
-      )}
-    >
-      {initial.split('').map((v, i) => {
-        if (!'0123456789'.includes(v)) return <span key={i}>{v}</span>;
-        return (
-          <span key={i} className="grid h-max text-center">
-            <span>0</span>
-            <span>1</span>
-            <span>2</span>
-            <span>3</span>
-            <span>4</span>
-            <span>5</span>
-            <span>6</span>
-            <span>7</span>
-            <span>8</span>
-            <span>9</span>
-          </span>
-        );
-      })}
-    </p>
-  );
 };

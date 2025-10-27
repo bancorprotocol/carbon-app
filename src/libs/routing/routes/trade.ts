@@ -83,9 +83,12 @@ const tradePage = createRoute({
   getParentRoute: () => rootRoute,
   path: '/trade',
   component: TradeRoot,
-  beforeLoad: ({ location, search }) => {
+  beforeLoad: ({ location }) => {
     if (location.pathname.endsWith('trade')) {
-      throw redirect({ to: '/trade/overlapping', search });
+      throw redirect({
+        to: '/trade/disposable',
+        search: { direction: 'sell', settings: 'limit' },
+      });
     }
   },
   validateSearch: searchValidator({

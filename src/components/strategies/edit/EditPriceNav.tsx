@@ -68,7 +68,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
           className="px-8 py-6 grid place-items-center flex-1 text-white/60 tab-anchor aria-page:tab-focus 2xl:py-16 sm:px-24 2xl:justify-items-start"
         >
           <span className="text-12 sm:text-14">{link.type}</span>
-          <div className="flex items-center gap-8 text-12 sm:text-16">
+          <div className="flex items-center gap-8 text-10 sm:text-16">
             {link.svg}
             <span>{link.label}</span>
           </div>

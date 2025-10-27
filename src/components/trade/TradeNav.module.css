@@ -9,6 +9,12 @@
 .trade-type[aria-selected="true"] {
   @apply tab-focus;
 }
+.trade-type:not([aria-selected="true"]):hover {
+  @apply bg-main-600;
+}
+.trade-type[aria-selected="true"]:hover {
+  @apply bg-main-400/20;
+}
 
 .trade-type > * {
   grid-area: stack;

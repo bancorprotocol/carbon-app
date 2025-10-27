@@ -12,7 +12,7 @@ interface Props {
 
 export const PairList: FC<Props> = ({ pairs }) => {
   return (
-    <ol className="w-full grid gap-24 place-self-auto grid-area-[list] grid-fill-350">
+    <ol className="w-full grid gap-24 place-self-auto grid-area-[list] grid-fill-330">
       {pairs.map((pair) => {
         const base = pair.base;
         const quote = pair.quote;

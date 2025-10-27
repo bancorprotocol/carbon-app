@@ -27,7 +27,7 @@ const tabs = [
         icon: <IconMarket className="size-24" />,
         title: 'Swap',
         search: {},
-        preview: <LimitSellPreview className="bg-black rounded-2xl" />,
+        preview: <LimitSellPreview className="bg-main-800 rounded-2xl" />,
         description:
           'Exchange one token for another at the current market price.',
         unique: false,
@@ -39,7 +39,7 @@ const tabs = [
         description:
           'Provide liquidity in your chosen price range - collect fees that auto-compound, with no preset fee tiers.',
         search: {},
-        preview: <OverlappingPreview className="bg-black rounded-2xl" />,
+        preview: <OverlappingPreview className="bg-main-800 rounded-2xl" />,
         unique: false,
       },
       {
@@ -49,7 +49,7 @@ const tabs = [
         description:
           'Provide liquidity from zero to infinity for continuous exposure, auto-compounding fees, with no preset fee tiers.',
         search: { fullRange: true },
-        preview: <FullRangePreview className="bg-black rounded-2xl" />,
+        preview: <FullRangePreview className="bg-main-800 rounded-2xl" />,
         unique: false,
       },
     ],
@@ -65,7 +65,7 @@ const tabs = [
         title: 'Limit Buy',
         description:
           'Buy the dip. Set an exact buy price with full price certainty.',
-        preview: <LimitBuyPreview className="bg-black rounded-2xl" />,
+        preview: <LimitBuyPreview className="bg-main-800 rounded-2xl" />,
         unique: false,
       },
       {
@@ -75,7 +75,7 @@ const tabs = [
         title: 'Limit Sell',
         description:
           'Sell the rally. Set an exact sell price with full price certainty.',
-        preview: <LimitSellPreview className="bg-black rounded-2xl" />,
+        preview: <LimitSellPreview className="bg-main-800 rounded-2xl" />,
         unique: false,
       },
       {
@@ -86,7 +86,7 @@ const tabs = [
         description:
           'Linked limit orders create a continuous buy low, sell high strategy where newly acquired tokens automatically fund the opposite order.',
         preview: (
-          <RecurringLimitLimitPreview className="bg-black rounded-2xl" />
+          <RecurringLimitLimitPreview className="bg-main-800 rounded-2xl" />
         ),
         unique: true,
       },
@@ -104,7 +104,7 @@ const tabs = [
         title: 'Range Order',
         description:
           'Scale into a position over a custom price range to buy gradually as the price falls.',
-        preview: <RangeSellPreview className="bg-black rounded-2xl" />,
+        preview: <RangeSellPreview className="bg-main-800 rounded-2xl" />,
         unique: true,
       },
       {
@@ -114,7 +114,7 @@ const tabs = [
         title: 'Range Order',
         description:
           'Scale out of a position over a custom price range to sell gradually as the price rises.',
-        preview: <RangeBuyPreview className="bg-black rounded-2xl" />,
+        preview: <RangeBuyPreview className="bg-main-800 rounded-2xl" />,
         unique: true,
       },
       {
@@ -128,7 +128,7 @@ const tabs = [
         description:
           'Linked range orders create a continuous buy low, sell high strategy where newly acquired tokens automatically fund the opposite order.',
         preview: (
-          <RecurringRangeRangePreview className="bg-black rounded-2xl" />
+          <RecurringRangeRangePreview className="bg-main-800 rounded-2xl" />
         ),
         unique: true,
       },

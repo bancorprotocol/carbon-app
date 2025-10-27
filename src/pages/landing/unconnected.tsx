@@ -9,7 +9,8 @@ import { ReactComponent as IconShield } from 'assets/icons/shield.svg';
 import { ReactComponent as IconMultiOrder } from 'assets/icons/multi-order.svg';
 import { useTrending } from 'libs/queries/extApi/tradeCount';
 import { useMemo } from 'react';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { prettifyNumber } from 'utils/helpers';
+import { RollingNumber } from 'components/common/RollingNumber';
 
 const types = [
   {
@@ -77,13 +78,37 @@ export const UnconnectedLandingPage = () => {
   const trending = useTrending();
 
   const sentence = useMemo(() => {
-    if (!trending.data) return;
+    if (!trending.data) {
+      return (
+        <p className="invisible font-title text-xl md:text-3xl">
+          Hide to prevent layout shift
+        </p>
+      );
+    }
     const trades = trending.data.totalTradeCount;
     const strategies = trending.data.tradeCount.length;
     if (!trades || !strategies) return;
-    const format = (value: number) =>
-      prettifyNumber(value, { isInteger: true });
-    return `${format(strategies)} trading strategies powering ${format(trades)} trades`;
+    const format = (value: number) => {
+      return prettifyNumber(value, { isInteger: true });
+    };
+    return (
+      <p className="font-title flex gap-4 justify-center text-xl md:text-3xl">
+        <RollingNumber
+          className="text-xl md:text-3xl"
+          value={strategies}
+          loadingWidth="1ch"
+          format={format}
+        />
+        <span>trading strategies powering</span>
+        <RollingNumber
+          className="text-xl md:text-3xl"
+          value={trades}
+          loadingWidth="1ch"
+          format={format}
+        />
+        <span>trades</span>
+      </p>
+    );
   }, [trending.data]);
 
   return (
@@ -92,14 +117,7 @@ export const UnconnectedLandingPage = () => {
         <h1 className="text-3xl lg:text-5xl text-center text-gradient leading-[1.5] gradient-direction-[90deg]">
           Control Your Trading Strategies
         </h1>
-        {/* Hide while loading to prevent layout shifting */}
-        <p
-          className={cn('font-title text-xl md:text-3xl text-center', {
-            invisible: !sentence,
-          })}
-        >
-          {sentence ?? 'loading'}
-        </p>
+        {sentence}
       </hgroup>
       <ol className="grid gap-8">
         <li className="flex items-center gap-16 bg-black/20 px-16 py-8 rounded-md">
@@ -136,16 +154,13 @@ export const UnconnectedLandingPage = () => {
                 </span>
                 <IconArrowCircle className="size-20 fill-gradient" />
               </Link>
-              <nav
-                aria-label="strategy types"
-                className="grid rounded-3xl glass-shadow bg-main-400/20 overflow-clip"
-              >
+              <nav aria-label="strategy types" className="grid gap-8">
                 {item.trades.map((trade) => (
                   <Link
                     to={trade.to}
                     search={trade.search}
                     key={trade.name}
-                    className="flex items-center gap-16 px-16 py-16 text-14 hover:bg-main-400/60"
+                    className="btn-flat-secondary flex items-center gap-16 px-16 py-16 text-14"
                   >
                     {trade.icon}
                     <span>{trade.name}</span>

@@ -54,7 +54,7 @@ export const SimInputStrategyType = () => {
           className="tab-anchor px-8 py-8 grid place-items-center flex-1 text-white/60 hover:text-white aria-page:text-white aria-page:tab-focus 2xl:py-16 sm:px-24 2xl:justify-items-start"
         >
           <span className="text-12 sm:text-14">{link.type}</span>
-          <div className="flex items-center gap-8 text-12 sm:text-16">
+          <div className="flex items-center gap-8 text-10 sm:text-16">
             {link.svg}
             <span>{link.label}</span>
           </div>

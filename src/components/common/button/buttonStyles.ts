@@ -48,4 +48,4 @@ export const buttonStyles = cva<ButtonVariants>(
 );
 
 export const backStyle =
-  'btn-flat-secondary grid size-40 place-items-center rounded-full p-0';
+  'btn-flat-tertiary grid size-40 place-items-center rounded-full p-0';
