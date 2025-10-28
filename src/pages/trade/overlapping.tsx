@@ -44,7 +44,6 @@ export const TradeOverlapping = () => {
           quote={quote}
           buy={orders.buy}
           sell={orders.sell}
-          approvalText="I've approve the token deposit(s) and distribution"
         >
           <CreateOverlappingPrice
             base={base!}
