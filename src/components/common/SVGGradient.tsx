@@ -24,6 +24,16 @@ export const SVGGradient = () => {
             stopColor="oklch(90% var(--chroma) var(--hue) / 0.15)"
           />
         </linearGradient>
+        <linearGradient
+          id="svg-overlapping-gradient"
+          x1="0"
+          x2="0"
+          y1="0"
+          y2="1"
+        >
+          <stop offset="0%" stopColor="var(--color-sell)" />
+          <stop offset="100%" stopColor="var(--color-buy)" />
+        </linearGradient>
       </defs>
     </svg>
   );
