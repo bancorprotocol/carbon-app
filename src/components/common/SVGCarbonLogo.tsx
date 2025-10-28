@@ -4,8 +4,6 @@ export const SVGCarbonLogo = () => {
       <defs>
         <symbol
           id="carbonLogo"
-          width="20"
-          height="20"
           viewBox="0 0 672 886"
           fill="dark"
           xmlns="http://www.w3.org/2000/svg"
@@ -19,49 +17,47 @@ export const SVGCarbonLogo = () => {
         </symbol>
         <pattern
           id="buy-pattern"
-          viewBox="0 0 40 40"
-          height="12"
-          width="12"
+          width="14"
+          height="18"
           patternUnits="userSpaceOnUse"
         >
           <rect
             x="0"
             y="0"
-            width="40"
-            height="40"
+            width="14"
+            height="18"
             fill="var(--color-buy)"
             fillOpacity="0.05"
           />
           <use
             href="#carbonLogo"
-            x="10"
-            y="10"
-            width="25"
-            height="25"
+            x="7"
+            y="9"
+            width="7"
+            height="9"
             fill="var(--color-buy)"
           />
         </pattern>
         <pattern
           id="sell-pattern"
-          viewBox="0 0 40 40"
-          height="12"
-          width="12"
+          width="14"
+          height="18"
           patternUnits="userSpaceOnUse"
         >
           <rect
             x="0"
             y="0"
-            width="40"
-            height="40"
+            width="14"
+            height="18"
             fill="var(--color-sell)"
             fillOpacity="0.05"
           />
           <use
             href="#carbonLogo"
-            x="10"
-            y="10"
-            width="25"
-            height="25"
+            x="7"
+            y="9"
+            width="7"
+            height="9"
             fill="var(--color-sell)"
           />
         </pattern>
