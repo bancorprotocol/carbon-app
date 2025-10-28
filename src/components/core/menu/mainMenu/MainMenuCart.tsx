@@ -31,7 +31,7 @@ export const MainMenuCart = () => {
     <Link
       id="menu-cart-link"
       to="/cart"
-      className="btn-flat-tertiary grid size-40 rounded-full border border-transparent p-6 [grid-template-areas:'stack'] aria-[current=page]:border-white"
+      className="btn-on-background grid size-40 rounded-full border border-transparent p-6 [grid-template-areas:'stack'] aria-[current=page]:border-white"
       aria-label="Cart page"
       aria-current={pathname.startsWith('/cart') ? 'page' : 'false'}
     >

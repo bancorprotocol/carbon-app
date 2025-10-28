@@ -11,7 +11,7 @@ export const MainMenuRightBurger = () => {
       button={(attr) => (
         <button
           {...attr}
-          className="btn-flat-tertiary relative p-0 grid size-40 place-items-center"
+          className="btn-on-background relative p-0 grid size-40 place-items-center"
         >
           <IconBurger className="size-14" />
         </button>

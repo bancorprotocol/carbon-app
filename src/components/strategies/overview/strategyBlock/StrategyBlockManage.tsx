@@ -299,7 +299,7 @@ export const ManageButtonIcon = forwardRef<
     <button
       {...props}
       ref={ref}
-      className="btn-flat-secondary size-38 rounded-md grid place-items-center p-0"
+      className="btn-on-surface size-38 rounded-md grid place-items-center p-0"
     >
       <IconGear className="size-24" />
     </button>

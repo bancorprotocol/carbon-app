@@ -24,7 +24,7 @@ export const EditMarketPrice: FC<Props> = (props) => {
     <button
       {...attr}
       className={cn(
-        'text-12 font-medium btn-flat-secondary flex items-center justify-between gap-8 rounded-full ',
+        'text-12 font-medium btn-on-surface flex items-center justify-between gap-8 rounded-full ',
         props.className,
       )}
       data-testid="edit-market-price"

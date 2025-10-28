@@ -57,7 +57,7 @@ export const MainMenuRightWalkthrough: FC = () => {
     <>
       <Tooltip element="Start Walkthrough">
         <button
-          className="btn-flat-tertiary size-40 hidden p-0 md:grid"
+          className="btn-on-background size-40 hidden p-0 md:grid"
           onClick={start}
         >
           <IconWalkthrough className="place-self-center size-20" />

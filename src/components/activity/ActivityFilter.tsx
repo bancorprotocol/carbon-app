@@ -136,7 +136,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         ))}
       />
       <DateRangePicker
-        className="btn-flat-tertiary text-14"
+        className="btn-on-background text-14"
         form={formId}
         presets={datePickerPresets}
         onConfirm={updateParams}

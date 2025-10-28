@@ -160,7 +160,7 @@ export const UnconnectedLandingPage = () => {
                     to={trade.to}
                     search={trade.search}
                     key={trade.name}
-                    className="btn-flat-secondary flex items-center gap-16 px-16 py-16 text-14"
+                    className="btn-on-surface flex items-center gap-16 px-16 py-16 text-14"
                   >
                     {trade.icon}
                     <span>{trade.name}</span>

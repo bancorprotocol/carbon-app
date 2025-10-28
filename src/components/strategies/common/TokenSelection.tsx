@@ -86,7 +86,7 @@ export const TokenSelection: FC<Props> = ({ url }) => {
       </button>
       <button
         role="menuitem"
-        className="btn-flat-secondary p-0 grid size-40 place-items-center rounded-full"
+        className="btn-on-surface p-0 grid size-40 place-items-center rounded-full"
         onClick={swapTokens}
       >
         <ForwardArrowIcon className="size-14" />

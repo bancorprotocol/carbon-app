@@ -187,7 +187,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
       <button
         {...getReferenceProps({ ref: refs.setReference })}
         type="button"
-        className="btn-flat-tertiary flex items-center gap-8 rounded-full px-12 py-8 text-white/60 data-[selected=true]:text-white"
+        className="btn-on-background flex items-center gap-8 rounded-full px-12 py-8 text-white/60 data-[selected=true]:text-white"
         data-selected={!!selected.length}
         aria-controls={rootId}
       >

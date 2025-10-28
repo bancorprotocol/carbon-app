@@ -2,7 +2,7 @@
 @reference "../../theme.css";
 
 .export-button {
-  @apply btn-flat-tertiary gap-8 rounded-full px-12 py-8;
+  @apply btn-on-background gap-8 rounded-full px-12 py-8;
   display: grid;
   grid-template-columns: repeat(2, auto);
   grid-template-areas: 'text loading';

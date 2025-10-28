@@ -76,7 +76,7 @@ export const MainMenuTradeSettings = () => {
     <>
       <button
         type="button"
-        className="btn-flat-secondary border border-transparent flex gap-8 items-center px-8 py-4 rounded-full"
+        className="btn-on-surface border border-transparent flex gap-8 items-center px-8 py-4 rounded-full"
         aria-label="Trade settings"
         aria-haspopup="dialog"
         aria-controls={dialogId}

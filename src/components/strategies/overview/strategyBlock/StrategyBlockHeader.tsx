@@ -45,7 +45,7 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
           role="menuitem"
           to="/strategy/$id"
           params={{ id: strategy.id }}
-          className="btn-flat-secondary size-38 rounded-sm grid place-items-center p-0"
+          className="btn-on-surface size-38 rounded-sm grid place-items-center p-0"
         >
           <DashboardIcon className="size-16" />
         </Link>
