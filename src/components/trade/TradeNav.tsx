@@ -62,7 +62,7 @@ const types = [
         id: 'limitSell',
         name: 'Limit Sell',
         to: '/trade/disposable' as const,
-        search: { settings: 'limit' as const, direction: 'sell' as const },
+        search: { settings: 'limit' as const },
         icon: <IconDisposable className="hidden md:block size-20" />,
       },
       {
@@ -89,7 +89,7 @@ const types = [
         id: 'rangeSell',
         name: 'Range Sell',
         to: '/trade/disposable' as const,
-        search: { settings: 'range' as const, direction: 'sell' as const },
+        search: { settings: 'range' as const },
         icon: <IconRange className="hidden md:block size-20" />,
       },
       {

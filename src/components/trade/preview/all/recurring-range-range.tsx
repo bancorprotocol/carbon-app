@@ -16,7 +16,7 @@ export const RecurringRangeRangePreview = (props: SVGProps<SVGSVGElement>) => {
         width="900"
         height="200"
         fill="url(#svg-sell-gradient)"
-        fillOpacity="0.4"
+        fillOpacity="0.7"
       />
 
       <g transform="translate(0, 650)">
@@ -31,7 +31,7 @@ export const RecurringRangeRangePreview = (props: SVGProps<SVGSVGElement>) => {
         width="900"
         height="200"
         fill="url(#svg-buy-gradient)"
-        fillOpacity="0.4"
+        fillOpacity="0.7"
       />
 
       <use href="#svg-axis-lines" />

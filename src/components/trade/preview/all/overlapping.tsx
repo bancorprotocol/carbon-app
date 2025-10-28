@@ -37,7 +37,7 @@ export const OverlappingPreview = (props: SVGProps<SVGSVGElement>) => {
           height="100"
           width="900"
           fill="url(#svg-sell-gradient)"
-          fillOpacity="0.4"
+          fillOpacity="0.7"
         />
         {/* Buy */}
         <rect
@@ -46,7 +46,7 @@ export const OverlappingPreview = (props: SVGProps<SVGSVGElement>) => {
           height="100"
           width="900"
           fill="url(#svg-buy-gradient)"
-          fillOpacity="0.4"
+          fillOpacity="0.7"
         />
       </g>
       <g className="sell-range">

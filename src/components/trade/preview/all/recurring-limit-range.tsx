@@ -19,7 +19,7 @@ export const RecurringLimitRangePreview = (props: SVGProps<SVGSVGElement>) => {
         width="900"
         height="200"
         fill="url(#svg-buy-gradient)"
-        fillOpacity="0.4"
+        fillOpacity="0.7"
       />
       <use href="#svg-axis-lines" />
     </svg>

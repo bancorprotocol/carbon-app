@@ -164,15 +164,6 @@ export const PreviewCommonStrategyType = () => {
             fill="white"
             fillOpacity="0.4"
           />
-          {/* <circle
-            cx="25"
-            cy="25"
-            r="20"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            strokeOpacity="0.2"
-          /> */}
         </pattern>
       </defs>
     </svg>

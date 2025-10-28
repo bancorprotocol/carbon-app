@@ -16,7 +16,7 @@ export const RangeSellPreview = (props: SVGProps<SVGSVGElement>) => {
         width="900"
         height="200"
         fill="url(#svg-sell-gradient)"
-        fillOpacity="0.4"
+        fillOpacity="0.7"
       />
 
       <use href="#svg-axis-lines" />

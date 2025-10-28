@@ -15,6 +15,7 @@ import { RecurringRangeRangePreview } from 'components/trade/preview/all/recurri
 import { ExplorerHeader } from 'components/explorer/ExplorerHeader';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { RangeBuyPreview } from 'components/trade/preview/all/range-buy';
+import { SwapPreview } from 'components/trade/preview/all/swap';
 import config from 'config';
 
 const tabs = [
@@ -27,7 +28,7 @@ const tabs = [
         icon: <IconMarket className="size-24" />,
         title: 'Swap',
         search: {},
-        preview: <LimitSellPreview className="bg-main-800 rounded-2xl" />,
+        preview: <SwapPreview className="bg-main-800 rounded-2xl" />,
         description:
           'Exchange one token for another at the current market price.',
         unique: false,
