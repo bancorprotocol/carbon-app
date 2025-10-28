@@ -5,15 +5,17 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { isFullRange } from '../common/utils';
 import { Presets } from '../../common/preset/Preset';
 import { overlappingPresets } from '../common/price-presets';
-import { useNavigate } from '@tanstack/react-router';
 
-export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
-  const { base, quote, min, max, setMin, setMax, warnings } = props;
+interface Props extends InputRangeProps {
+  setFullRange: () => void;
+}
+
+export const OverlappingPriceRange: FC<Props> = (props) => {
+  const { base, quote, min, max, setMin, setMax, setFullRange, warnings } =
+    props;
   const { marketPrice } = useStrategyMarketPrice({ base, quote });
   const minId = useId();
   const maxId = useId();
-
-  const navigate = useNavigate();
 
   const range = useMemo(() => {
     if (!marketPrice) return '';
@@ -32,24 +34,7 @@ export const OverlappingPriceRange: FC<InputRangeProps> = (props) => {
     const value = Number(change);
     const price = new SafeDecimal(marketPrice);
     if (value === Infinity) {
-      navigate({
-        to: '.',
-        search: (s) => ({
-          ...s,
-          min: undefined,
-          max: undefined,
-          fullRange: true,
-        }),
-        resetScroll: false,
-        replace: true,
-      });
-      // const { min, max } = getFullRangesPrices(
-      //   marketPrice,
-      //   base.decimals,
-      //   quote.decimals,
-      // );
-      // setMin(min);
-      // setMax(max);
+      setFullRange();
     } else {
       const nextMin = price.mul(1 - value / 100);
       const nextMax = price.mul(1 + value / 100);

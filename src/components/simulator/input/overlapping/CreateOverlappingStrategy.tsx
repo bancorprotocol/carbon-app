@@ -22,7 +22,10 @@ import {
 import { InputBudget } from 'components/strategies/common/InputBudget';
 import { formatNumber } from 'utils/helpers';
 import { OverlappingPriceRange } from 'components/strategies/overlapping/OverlappingPriceRange';
-import { isZero } from 'components/strategies/common/utils';
+import {
+  getFullRangesPrices,
+  isZero,
+} from 'components/strategies/common/utils';
 import { overlappingMultiplier } from 'components/strategies/create/utils';
 
 interface Props {
@@ -211,6 +214,18 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     dispatch('sellMax', max);
   };
 
+  const setFullRange = () => {
+    setTouched(true);
+    if (!base || !quote) return;
+    const { min, max } = getFullRangesPrices(
+      marketPrice.toString(),
+      base.decimals,
+      quote?.decimals,
+    );
+    dispatch('buyMin', min);
+    dispatch('sellMax', max);
+  };
+
   const setBudget = (amount: string) => {
     if (!amount) return resetBudgets(anchor!);
     if (anchor === 'buy') dispatch('buyBudget', amount);
@@ -295,6 +310,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           max={sell.max}
           setMin={setMin}
           setMax={setMax}
+          setFullRange={setFullRange}
         />
       </article>
       <OverlappingSpread

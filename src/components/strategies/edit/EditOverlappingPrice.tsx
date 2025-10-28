@@ -153,6 +153,18 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   const setMin = (min: string) => set('min', min);
   const setMax = (max: string) => set('max', max);
   const setSpread = (value: string) => set('spread', value);
+  const setFullRange = () => {
+    navigate({
+      search: (s) => ({
+        ...s,
+        min: undefined,
+        max: undefined,
+        fullRange: true,
+      }),
+      resetScroll: false,
+      replace: true,
+    });
+  };
 
   const setAnchor = (value: 'buy' | 'sell') => {
     set('budget', undefined);
@@ -193,6 +205,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
               max={sell.max}
               setMin={setMin}
               setMax={setMax}
+              setFullRange={setFullRange}
               minLabel="Min Buy"
               maxLabel="Min Sell"
               warnings={[priceWarning]}

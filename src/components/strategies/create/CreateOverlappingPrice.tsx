@@ -7,7 +7,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { Token } from 'libs/tokens';
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
 import { SetOverlapping } from 'libs/routing/routes/trade';
@@ -28,6 +28,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
   const { base, quote } = useTradeCtx();
   const { buy, sell, spread, set } = props;
   const search = useSearch({ from: url });
+  const navigate = useNavigate({ from: url });
   const { anchor } = search;
 
   const aboveMarket = isMinAboveMarket(buy);
@@ -52,6 +53,18 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
   const setMin = (min: string) => set({ min, fullRange: false });
   const setMax = (max: string) => set({ max, fullRange: false });
   const setSpread = (spread: string) => set({ spread });
+  const setFullRange = () => {
+    navigate({
+      search: (s) => ({
+        ...s,
+        min: undefined,
+        max: undefined,
+        fullRange: true,
+      }),
+      resetScroll: false,
+      replace: true,
+    });
+  };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
     set({ anchor: value, budget: undefined });
@@ -81,6 +94,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           max={sell.max}
           setMin={setMin}
           setMax={setMax}
+          setFullRange={setFullRange}
           minLabel="Min Buy"
           maxLabel="Min Sell"
           warnings={[priceWarning]}
