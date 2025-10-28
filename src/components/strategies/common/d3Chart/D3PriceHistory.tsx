@@ -28,7 +28,13 @@ import { getDomain, isEmptyHistory, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
 import { defaultEnd, default_ED_, defaultStart } from '../utils';
-import { differenceInDays, Duration, startOfDay, sub } from 'date-fns';
+import {
+  differenceInDays,
+  Duration,
+  fromUnixTime,
+  startOfDay,
+  sub,
+} from 'date-fns';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { SafeDecimal } from 'libs/safedecimal';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
@@ -125,7 +131,7 @@ const useZoom = (
       })();
 
       const selection = select<SVGSVGElement, unknown>('#interactive-chart');
-      const scale = data.length / days;
+      const scale = data.length / (days + 0.5); // border to border scale
       const translateX = baseXScale(from)!;
       const transition = selection.transition().duration(duration);
       const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
@@ -151,6 +157,19 @@ const getExtendedRange = (range: number[]) => {
   return points;
 };
 
+const durationToDays = (lastTimestamp: number, duration: Duration) => {
+  const lastDay = fromUnixTime(lastTimestamp);
+  return differenceInDays(lastDay, sub(lastDay, duration));
+};
+
+const mockCandle = (value: number) => ({
+  date: Date.now() / 1000,
+  open: value,
+  close: value,
+  high: value,
+  low: value,
+});
+
 interface Props {
   className?: string;
   data: CandlestickData[];
@@ -162,25 +181,6 @@ interface Props {
   start?: string;
   end?: string;
 }
-
-const presets = [
-  { label: '7D', duration: { weeks: 1 } },
-  { label: '1M', duration: { months: 1 } },
-  { label: '3M', duration: { months: 3 } },
-  { label: '1Y', duration: { years: 1 } },
-];
-
-const durationToDays = (duration: Duration) => {
-  return differenceInDays(new Date(), sub(new Date(), duration));
-};
-
-const mockCandle = (value: number) => ({
-  date: Date.now() / 1000,
-  open: value,
-  close: value,
-  high: value,
-  low: value,
-});
 
 export const D3PriceHistory: FC<Props> = (props) => {
   const {
@@ -202,6 +202,17 @@ export const D3PriceHistory: FC<Props> = (props) => {
     zoomRange,
     zoomHandler,
   } = useZoom(dms, data, zoomBehavior);
+
+  const presets = useMemo(() => {
+    const lastTimestamp = data.at(-1)?.date ?? Date.now() / 1000;
+    console.log(fromUnixTime(lastTimestamp));
+    return [
+      { label: '7D', days: durationToDays(lastTimestamp, { weeks: 1 }) },
+      { label: '1M', days: durationToDays(lastTimestamp, { months: 1 }) },
+      { label: '3M', days: durationToDays(lastTimestamp, { months: 3 }) },
+      { label: '1Y', days: durationToDays(lastTimestamp, { years: 1 }) },
+    ];
+  }, [data]);
 
   const defaultHistoryStart = useMemo(() => {
     return SafeDecimal.max(defaultStart(), data[0].date).toString();
@@ -271,7 +282,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   const zoomIn = async (days: number) => {
     setListenOnZoom(false);
-    const start = data.at(days * -1)!.date.toString();
+    const start = data.at((days + 1) * -1)!.date.toString();
     const end = data.at(-1)!.date.toString();
     await zoomRange(start, days);
     onRangeUpdates({ start, end });
@@ -355,8 +366,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
             )}
           </div>
           <div className="col-span-2 flex border-t border-white/10">
-            {presets.map(({ duration, label }) => {
-              const days = durationToDays(duration);
+            {presets.map(({ days, label }) => {
               return (
                 <button
                   key={label}
