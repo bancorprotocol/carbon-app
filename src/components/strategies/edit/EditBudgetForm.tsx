@@ -27,7 +27,6 @@ interface Props {
   editType: EditTypes;
   hasChanged: boolean;
   children: ReactNode;
-  approveText?: string;
 }
 
 const notifKey: Record<EditTypes, keyof NotificationSchema> = {
@@ -47,14 +46,7 @@ const submitText: Record<EditTypes, string> = {
 const spenderAddress = config.addresses.carbon.carbonController;
 
 export const EditBudgetForm: FC<Props> = (props) => {
-  const {
-    orders,
-    strategyType,
-    editType,
-    hasChanged,
-    children,
-    approveText = "I've reviewed the warning(s) but choose to proceed.",
-  } = props;
+  const { orders, strategyType, editType, hasChanged, children } = props;
   const { user } = useWagmi();
   const { strategy } = useEditStrategyCtx();
   const { history } = useRouter();
@@ -194,10 +186,11 @@ export const EditBudgetForm: FC<Props> = (props) => {
             id="approve-warnings"
             type="checkbox"
             name="approval"
-            className="size-18"
+            className="size-18 shrink-0"
             data-testid="approve-warnings"
           />
-          {approveText}
+          I accept the warning(s) and understand rebasing or fee-on-transfer
+          tokens are not supported
         </label>
         <Button
           type="submit"

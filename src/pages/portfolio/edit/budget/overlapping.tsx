@@ -215,11 +215,6 @@ const OverlappingContent = () => {
       editType={search.editType}
       orders={orders}
       hasChanged={hasChanged}
-      approveText={
-        hasChanged
-          ? "I've approved the token deposit(s) and distribution."
-          : "I've reviewed the warning(s) but choose to proceed."
-      }
     >
       <EditOverlappingBudget
         marketPrice={marketPrice}

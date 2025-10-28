@@ -182,14 +182,11 @@ export const CartPage = () => {
       )}
       {!funds.isInsufficient && (
         <div className="grid place-items-center gap-20 p-20">
-          <span className="warning-message text-14 text-center text-white/60">
-            Please confirm before proceeding
-          </span>
           <label
             htmlFor="approve-warnings"
             className={cn(
               style.approveWarnings,
-              'text-14 font-medium flex items-center gap-8 place-self-center text-white/60',
+              'surface rounded-lg text-14 font-medium flex items-center p-16 py-8 gap-8 place-self-center text-white/60',
             )}
           >
             <input
@@ -199,7 +196,8 @@ export const CartPage = () => {
               className="size-18"
               data-testid="approve-warnings"
             />
-            I've reviewed all strategies prices and deposit amounts
+            I accept the warning(s) and understand rebasing or fee-on-transfer
+            tokens are not supported
           </label>
         </div>
       )}

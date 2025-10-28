@@ -17,7 +17,6 @@ interface FormProps {
   quote: Token;
   buy: FormStaticOrder;
   sell: FormStaticOrder;
-  approvalText?: string;
   children: ReactNode;
 }
 
@@ -98,11 +97,11 @@ export const CreateForm: FC<FormProps> = (props) => {
           <input
             id="approve-warnings"
             type="checkbox"
-            className="size-18"
+            className="size-18 shrink-0"
             data-testid="approve-warnings"
           />
-          {props.approvalText ??
-            "I've reviewed the warning(s) but choose to proceed."}
+          I accept the warning(s) and understand rebasing or fee-on-transfer
+          tokens are not supported
         </label>
 
         {user && (
