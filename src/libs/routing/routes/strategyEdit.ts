@@ -156,6 +156,7 @@ export const editPricesOverlapping = createRoute({
     budget: v.optional(validNumber),
     anchor: v.optional(v.picklist(['buy', 'sell'])),
     action: v.optional(v.picklist(['deposit', 'withdraw'])),
+    fullRange: v.optional(v.boolean()),
   }),
 });
 

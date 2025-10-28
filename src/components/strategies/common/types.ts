@@ -17,6 +17,7 @@ export interface OverlappingSearch extends StrategySearch {
   anchor?: StrategyDirection;
   budget?: string;
   chartType?: 'history' | 'range';
+  fullRange?: boolean;
 }
 
 // ORDERS

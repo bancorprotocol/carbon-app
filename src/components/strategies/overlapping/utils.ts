@@ -13,6 +13,7 @@ export interface OverlappingSearch {
   min?: string;
   max?: string;
   spread?: string;
+  fullRange?: boolean;
 }
 
 export const defaultSpread = '0.05';
@@ -114,8 +115,9 @@ export const isOverlappingTouched = (
   search: OverlappingSearch,
 ) => {
   const { buy, sell } = strategy;
-  const { min, max, spread, marketPrice } = search;
+  const { min, max, spread, marketPrice, fullRange } = search;
   if (marketPrice) return true;
+  if (typeof fullRange === 'boolean') return true;
   if (!isOverlappingStrategy(strategy)) return true;
   if (hasNoBudget(strategy)) return true;
   if (isPaused(strategy)) return true;

@@ -4,7 +4,7 @@
 
 @media (width > 96rem) {
   .root {
-    grid-template-columns: auto 1fr 450px;
+    grid-template-columns: minmax(350px, auto) 1fr 450px;
     grid-template-areas:
       'nav chart form';
   }
