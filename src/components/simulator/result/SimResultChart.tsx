@@ -24,7 +24,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
       <div
         role="alert"
         aria-live="polite"
-        className="rounded-lg mx-auto my-10 flex h-[400px] flex-col items-center justify-center gap-20 bg-black"
+        className="rounded-lg mx-auto my-10 flex h-[400px] flex-col items-center justify-center gap-20 bg-main-900"
       >
         <IconTitleText
           icon={<IconWarning />}
@@ -86,7 +86,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
   }
 
   return (
-    <div className="rounded-lg bg-black">
+    <div className="rounded-lg bg-main-900">
       <SimResultChartHeader
         data={ctx.data!}
         setShowSummary={setShowSummary}
@@ -115,7 +115,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
 };
 
 const Loading = () => (
-  <div className="rounded-lg grid h-[400px] place-items-center bg-black py-10">
+  <div className="rounded-lg grid h-[400px] place-items-center bg-main-900 py-10">
     <CarbonLogoLoading className="h-[100px]" />
   </div>
 );

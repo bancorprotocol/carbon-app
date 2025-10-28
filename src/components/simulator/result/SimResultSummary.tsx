@@ -27,7 +27,7 @@ export const SimResultSummary = ({
     <header className="my-8 grid gap-8 xl:grid-cols-2">
       <section
         className={cn(
-          'rounded-lg flex flex-col md:flex-row min-h-[72px] items-center justify-between gap-8 bg-black px-16 py-10',
+          'rounded-lg flex flex-col md:flex-row min-h-[72px] items-center justify-between gap-8 bg-main-900 px-16 py-10',
           {
             'animate-pulse': isPending,
           },
@@ -51,7 +51,7 @@ export const SimResultSummary = ({
       </section>
       <section
         className={cn(
-          'rounded-lg grid min-h-[72px] grid-cols-4 items-center gap-8 bg-black px-16 py-10',
+          'rounded-lg grid min-h-[72px] grid-cols-4 items-center gap-8 bg-main-900 px-16 py-10',
           {
             'animate-pulse': isPending,
           },

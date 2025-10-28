@@ -52,7 +52,7 @@ export const QuickGradientChart: FC<Props> = (props) => {
 
   if (isPending) {
     return (
-      <section className="rounded-xl grid flex-1 items-center bg-black/60">
+      <section className="rounded-xl grid flex-1 items-center bg-main-900/60">
         <CarbonLogoLoading className="h-[80px]" />
       </section>
     );
@@ -112,7 +112,7 @@ const QuickGradientChartContent: FC<ContentProps> = (props) => {
       <svg
         ref={ref}
         id="interactive-chart"
-        className={cn(style.historyChart, 'rounded-xl flex flex-1 bg-black')}
+        className={cn(style.historyChart, 'rounded-xl flex flex-1 bg-main-900')}
         data-testid="price-chart"
       >
         <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>

@@ -194,7 +194,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       <div>
         <StrategyBlockBudget strategy={strategy} />
       </div>
-      <div className="bg-black/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border">
+      <div className="bg-main-900/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border">
         <StrategyBlockBuySell
           strategy={strategy}
           isBuy
@@ -211,7 +211,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           popover="auto"
           onBeforeToggle={setSize}
           className={cn(
-            'rounded-md bg-black absolute m-0 overflow-hidden p-24',
+            'rounded-md bg-main-900 absolute m-0 overflow-hidden p-24',
             styles.warnings,
           )}
         >
@@ -226,13 +226,13 @@ export const CartStrategyItems: FC<Props> = (props) => {
                 popoverTarget={popoverId}
                 popoverTargetAction="hide"
                 aria-label="close warnings"
-                className="hover:bg-black/40 ml-auto rounded-full p-8"
+                className="hover:bg-main-900/40 ml-auto rounded-full p-8"
               >
                 <IconClose className="size-16" />
               </button>
             </header>
             {error && (
-              <div className="rounded-md border-error absolute inset-0 grid place-items-center border bg-black/60 p-8 backdrop-blur-xs">
+              <div className="rounded-md border-error absolute inset-0 grid place-items-center border bg-main-900/60 p-8 backdrop-blur-xs">
                 <Warning message={error} isError />
               </div>
             )}

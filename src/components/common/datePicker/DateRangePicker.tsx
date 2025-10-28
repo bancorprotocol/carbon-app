@@ -164,7 +164,7 @@ const Content = (props: Props) => {
                 type="button"
                 role="radio"
                 key={i}
-                className="rounded-md px-30 text-14 font-medium hover:bg-black/40 box-border border border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black/60"
+                className="rounded-md px-30 text-14 font-medium hover:bg-main-900/40 box-border border border-transparent bg-clip-padding py-8 text-start aria-checked:bg-main-900/60"
                 onClick={() => handlePreset(duration)}
                 aria-checked={selectedPreset?.label === label}
                 data-testid="date-picker-button"

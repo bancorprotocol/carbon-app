@@ -89,7 +89,7 @@ export const AllPreview = () => {
                 className="grid gap-16 rounded-2xl surface w-fit p-16 animate-scale-up"
               >
                 <h4 className="font-normal">{name}</h4>
-                <div className="bg-black rounded-2xl p-8 w-300">{svg}</div>
+                <div className="bg-main-900 rounded-2xl p-8 w-300">{svg}</div>
               </li>
             ))}
           </ul>

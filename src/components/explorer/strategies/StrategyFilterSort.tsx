@@ -172,7 +172,7 @@ const FilterSortItem: FC<{
       />
       <label
         htmlFor={id}
-        className="rounded-sm flex cursor-pointer items-center justify-between px-16 py-8 hover:bg-black/40 peer-focus-visible:outline-solid peer-focus-visible:outline-1 peer-checked:bg-black/60"
+        className="rounded-sm flex cursor-pointer items-center justify-between px-16 py-8 hover:bg-main-900/40 peer-focus-visible:outline-solid peer-focus-visible:outline-1 peer-checked:bg-main-900/60"
       >
         {title}
         {selectedItem === item && <IconCheck />}

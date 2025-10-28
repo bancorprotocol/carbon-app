@@ -136,7 +136,7 @@ export const ExplorerHeader = () => {
 
   if (trending.isError) return;
   return (
-    <header className="bg-black/20">
+    <header className="bg-main-900/20">
       <div className="flex gap-32 max-w-[1920px] mx-auto px-16 py-24 px-content xl:px-50">
         <article className="flex w-full flex-col items-center justify-around gap-16 py-20 md:w-[40%] md:items-start font-title">
           <h2 className="text-24 font-normal my-0">Total Trades</h2>

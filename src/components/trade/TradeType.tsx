@@ -41,7 +41,7 @@ export const TradeType = () => {
       button={(attr) => (
         <button
           {...attr}
-          className="bg-black text-14 flex items-center gap-8 py-16 px-24 xl:max-2xl:rounded-s-md"
+          className="bg-main-900 text-14 flex items-center gap-8 py-16 px-24 xl:max-2xl:rounded-s-md"
         >
           {selected?.svg}
           {selected?.label}
@@ -61,7 +61,7 @@ export const TradeType = () => {
           })}
           aria-current={link.pages.includes(current) ? 'page' : 'false'}
           data-testid={link.testId}
-          className="rounded-md hover:surface flex items-center justify-center gap-8 py-8 px-16 text-white/60 aria-[current=page]:bg-black aria-[current=page]:text-white"
+          className="rounded-md hover:surface flex items-center justify-center gap-8 py-8 px-16 text-white/60 aria-[current=page]:bg-main-900 aria-[current=page]:text-white"
         >
           {link.svg}
           {link.label}

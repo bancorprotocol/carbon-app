@@ -163,7 +163,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
   return (
     <>
       {hasNoBudget(strategy) && (
-        <article className="bg-black grid gap-16 p-20">
+        <article className="bg-main-900 grid gap-16 p-20">
           <header className="text-14 flex items-center justify-between">
             <h2>Market Price</h2>
             <span>{tokenAmount(marketPrice, quote)}</span>

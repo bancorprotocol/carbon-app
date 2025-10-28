@@ -337,7 +337,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
       yTicks={y.ticks}
       zoom={zoomTransform}
     >
-      <div className={cn('rounded-xl flex flex-1 bg-black/60', className)}>
+      <div className={cn('rounded-xl flex flex-1 bg-main-900/60', className)}>
         <DrawingMenu clearDrawings={() => setDrawings([])} />
         <div className="flex flex-1 flex-col">
           <div className="relative grid flex-1 items-stretch justify-items-stretch">
@@ -371,7 +371,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
                 <button
                   key={label}
                   role="menuitemradio"
-                  className="text-12 duration-preset hover:bg-black/40 rounded-md p-8 disabled:pointer-events-none disabled:text-white/50 aria-checked:underline underline-offset-3"
+                  className="text-12 duration-preset hover:bg-main-900/40 rounded-md p-8 disabled:pointer-events-none disabled:text-white/50 aria-checked:underline underline-offset-3"
                   onClick={() => zoomIn(days)}
                   disabled={days > data.length}
                   aria-checked={rangeInDays === days}
@@ -382,7 +382,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
             })}
             <hr className="h-full border-e border-white/10" />
             <DateRangePicker
-              className="rounded-md hover:bg-black/40"
+              className="rounded-md hover:bg-main-900/40"
               defaultStart={fromUnixUTC(defaultHistoryStart)}
               defaultEnd={default_ED_()}
               start={fromUnixUTC(props.start || defaultHistoryStart)}

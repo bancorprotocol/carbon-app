@@ -113,7 +113,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
         ({ icon: Icon, title, onClick, description, testId, variant }) => (
           <article
             key={title}
-            className="flex gap-16 rounded-2xl bg-black/90 p-16"
+            className="flex gap-16 rounded-2xl bg-main-900/90 p-16"
           >
             <div className="bg-primary/25 row-span-2 flex size-32 items-center justify-center self-center rounded-full">
               <Icon className="text-primary size-16" />

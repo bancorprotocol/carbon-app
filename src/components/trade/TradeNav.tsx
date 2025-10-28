@@ -214,7 +214,7 @@ const StrategyLink: FC<{ strategy: StrategyLink; selected: boolean }> = (
     <Link
       key={name}
       role="menuitemradio"
-      className="rounded-sm flex w-full items-center gap-8 p-12 hover:bg-black/40 data-[selected=true]:bg-black/60"
+      className="rounded-sm flex w-full items-center gap-8 p-12 hover:bg-main-900/40 data-[selected=true]:bg-main-900/60"
       to={to}
       search={(s) => ({
         base: s.base,

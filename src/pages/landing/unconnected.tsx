@@ -120,15 +120,15 @@ export const UnconnectedLandingPage = () => {
         {sentence}
       </hgroup>
       <ol className="grid gap-8">
-        <li className="flex items-center gap-16 bg-black/20 px-16 py-8 rounded-md">
+        <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
           <b className="text-gradient text-nowrap">Step 1</b>
           <span>Connect your wallet</span>
         </li>
-        <li className="flex items-center gap-16 bg-black/20 px-16 py-8 rounded-md">
+        <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
           <b className="text-gradient text-nowrap">Step 2</b>
           <span>Create your trading strategy</span>
         </li>
-        <li className="flex items-center gap-16 bg-black/20 px-16 py-8 rounded-md">
+        <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
           <b className="text-gradient text-nowrap">Step 3</b>
           <span>
             Sit back and let the market come to you - buy and sell on your terms

@@ -33,7 +33,7 @@ export const DebugSDKConfig = () => {
             id="sdk-timestamp"
             name="timestamp"
             type="number"
-            className="flex-1 rounded-2xl bg-black px-16 py-8"
+            className="flex-1 rounded-2xl bg-main-900 px-16 py-8"
             value={timestamp}
             onChange={(e) => setTimestamp(e.target.valueAsNumber)}
           />
@@ -48,7 +48,7 @@ export const DebugSDKConfig = () => {
           id="sdk-ttl"
           name="ttl"
           type="number"
-          className="flex-1 rounded-2xl bg-black px-16 py-8"
+          className="flex-1 rounded-2xl bg-main-900 px-16 py-8"
           value={ttl}
           onChange={(e) => setTTL(e.target.valueAsNumber)}
         />

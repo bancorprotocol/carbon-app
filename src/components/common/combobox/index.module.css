@@ -9,7 +9,7 @@
 }
 
 .option:hover {
-  @apply bg-black/40;
+  @apply bg-main-900/40;
 }
 
 .option input:focus-visible {

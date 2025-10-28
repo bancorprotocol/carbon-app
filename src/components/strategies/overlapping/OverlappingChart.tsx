@@ -484,7 +484,7 @@ export const OverlappingChart: FC<Props> = (props) => {
       className={cn(
         styles.graph,
         dragging,
-        'rounded-2xl bg-black/60',
+        'rounded-2xl bg-main-900/60',
         className,
       )}
       viewBox={viewBox}

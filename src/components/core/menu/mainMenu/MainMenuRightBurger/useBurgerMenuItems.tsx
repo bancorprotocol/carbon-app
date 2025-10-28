@@ -13,7 +13,7 @@ export type Menu = ReactElement[];
 
 const iconStyles = 'size-32 md:size-20';
 const menuitemClass =
-  'rounded-sm cursor-pointer text-18 md:text-16 p-10 hover:bg-black/40 aria-selected:bg-black/60 flex items-center gap-8 first:border-b last:border-t border-main-700';
+  'rounded-sm cursor-pointer text-18 md:text-16 p-10 hover:bg-main-900/40 aria-selected:bg-main-900/60 flex items-center gap-8 first:border-b last:border-t border-main-700';
 
 export const useBurgerMenuItems = () => {
   const [currentMenu, setCurrentMenu] = useState<MenuType>('main');

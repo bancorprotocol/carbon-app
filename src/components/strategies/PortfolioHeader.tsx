@@ -34,7 +34,7 @@ export const PortfolioHeader = () => {
   }, [strategies]);
 
   return (
-    <header className={cn('bg-black/20', style.header)}>
+    <header className={cn('bg-main-900/20', style.header)}>
       <div className="flex flex-col justify-between gap-16 md:flex-row md:items-center w-full max-w-[1920px] mx-auto py-24 px-16 px-content xl:px-50">
         <div
           role="table"

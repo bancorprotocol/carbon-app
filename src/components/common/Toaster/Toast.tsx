@@ -16,7 +16,7 @@ export const BaseToast: FC<Props> = ({ id, children, color = 'primary' }) => {
       style={{
         backgroundImage: `linear-gradient(to right, transparent, var(--${color}))`,
       }}
-      className="bg-black text-14 rounded-sm flex items-center border border-white/10"
+      className="bg-main-900 text-14 rounded-sm flex items-center border border-white/10"
     >
       {children}
       <button

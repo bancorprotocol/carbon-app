@@ -68,7 +68,7 @@ export const DebugConfig = () => {
           placeholder="Enter config file overrides in JSON format"
           value={configOverride}
           onChange={handleConfigChange}
-          className="rounded-3xl w-full break-all bg-black px-16 py-8"
+          className="rounded-3xl w-full break-all bg-main-900 px-16 py-8"
         />
       </div>
       {!!error && (

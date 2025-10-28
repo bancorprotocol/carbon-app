@@ -50,7 +50,7 @@ html:has(.page) {
 /* PRICE INPUT */
 
 .price {
-  @apply bg-black;
+  @apply bg-main-900;
   display: grid;
   grid-template-rows: 1fr 1fr;
   align-items: center;
@@ -106,7 +106,7 @@ html:has(.page) {
 }
 
 .page article {
-  @apply bg-black rounded-2xl p-16;
+  @apply bg-main-900 rounded-2xl p-16;
   display: grid;
   gap: 16px;
 }
@@ -276,7 +276,7 @@ html:has(.page) {
   align-self: center;
 }
 .budget {
-  @apply bg-black;
+  @apply bg-main-900;
   border-radius: 8px;
   display: grid;
   grid-template-columns: 1fr auto;
@@ -357,7 +357,7 @@ html:has(.page) {
   width: 100%;
 }
 .page table th {
-  @apply bg-black;
+  @apply bg-main-900;
   padding: 8px;
 }
 .page thead th,

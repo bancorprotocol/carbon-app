@@ -2,7 +2,7 @@
 @import './theme.css';
 
 @utility bg-content {
-  @apply border-main-800 border bg-black;
+  @apply border-main-800 border bg-main-900;
 }
 
 @utility px-content {
@@ -319,7 +319,7 @@ dialog.modal > form {
   max-width: 390px;
 }
 dialog.modal::backdrop {
-  @apply bg-black/85;
+  @apply bg-main-900/85;
 }
 
 @media (max-width: 640px) {

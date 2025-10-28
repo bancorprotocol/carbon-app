@@ -652,7 +652,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
       {limit && (
-        <table className="bg-black rounded-md border-separate border border-white/40">
+        <table className="bg-main-900 rounded-md border-separate border border-white/40">
           <tbody>
             <tr>
               <th className="font-normal p-8 text-start text-white/60">
@@ -666,7 +666,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         </table>
       )}
       {!limit && (
-        <table className="bg-black rounded-md border-separate border border-white/40 p-8">
+        <table className="bg-main-900 rounded-md border-separate border border-white/40 p-8">
           <tbody>
             <tr>
               <th className="font-normal text-start text-white/60">
@@ -758,7 +758,7 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
       <h3 className={cn('text-16 font-medium', color)}>
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
-      <table className="bg-black rounded-md border-separate border border-white/40 p-8">
+      <table className="bg-main-900 rounded-md border-separate border border-white/40 p-8">
         <tbody>
           <tr>
             <th className="font-normal text-start text-white/60">_S P_</th>
