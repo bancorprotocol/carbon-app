@@ -196,8 +196,8 @@ export const CartPage = () => {
               className="size-18"
               data-testid="approve-warnings"
             />
-            I accept the warning(s) and understand rebasing or fee-on-transfer
-            tokens are not supported
+            I accept any applicable warning(s) and understand rebasing or
+            fee-on-transfer tokens are not supported
           </label>
         </div>
       )}

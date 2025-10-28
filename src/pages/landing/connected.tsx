@@ -61,7 +61,7 @@ const tabs = [
     items: [
       {
         to: '/trade/disposable',
-        search: {},
+        search: { settings: 'limit' as const, direction: 'buy' as const },
         icon: <IconDisposable className="size-24" />,
         title: 'Limit Buy',
         description:
@@ -71,7 +71,7 @@ const tabs = [
       },
       {
         to: '/trade/disposable',
-        search: {},
+        search: { settings: 'limit' as const, direction: 'sell' as const },
         icon: <IconDisposable className="size-24" />,
         title: 'Limit Sell',
         description:
@@ -81,7 +81,10 @@ const tabs = [
       },
       {
         to: '/trade/recurring',
-        search: {},
+        search: {
+          buySettings: 'limit' as const,
+          sellSettings: 'limit' as const,
+        },
         icon: <IconRecurring className="size-24" />,
         title: 'Recurring Limit',
         description:
@@ -102,20 +105,20 @@ const tabs = [
         to: '/trade/disposable',
         search: { settings: 'range' as const, direction: 'buy' as const },
         icon: <IconRange className="size-24" />,
-        title: 'Range Order',
+        title: 'Range Buy',
         description:
-          'Scale into a position over a custom price range to buy gradually as the price falls.',
-        preview: <RangeSellPreview className="bg-main-800 rounded-2xl" />,
+          'Scale out of a position over a custom price range to sell gradually as the price rises.',
+        preview: <RangeBuyPreview className="bg-main-800 rounded-2xl" />,
         unique: true,
       },
       {
         to: '/trade/disposable',
         search: { settings: 'range' as const, direction: 'sell' as const },
         icon: <IconRange className="size-24" />,
-        title: 'Range Order',
+        title: 'Range Sell',
         description:
-          'Scale out of a position over a custom price range to sell gradually as the price rises.',
-        preview: <RangeBuyPreview className="bg-main-800 rounded-2xl" />,
+          'Scale into a position over a custom price range to buy gradually as the price falls.',
+        preview: <RangeSellPreview className="bg-main-800 rounded-2xl" />,
         unique: true,
       },
       {

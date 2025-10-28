@@ -60,9 +60,9 @@ export const TokenSelection: FC<Props> = ({ url }) => {
     if (base && quote) {
       navigate({
         search: (s) => ({
+          ...s,
           base: quote.address,
           quote: base.address,
-          ...s,
         }),
         replace: true,
         resetScroll: false,

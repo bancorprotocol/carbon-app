@@ -25,7 +25,7 @@ const items = [
     type: 'Advanced',
     label: 'Recurring Range',
     to: 'recurring',
-    search: { sellIsRange: true, buyIsRange: true } as const,
+    search: {},
     svg: <IconTwoRanges className="hidden md:block size-20" />,
   },
 ];
