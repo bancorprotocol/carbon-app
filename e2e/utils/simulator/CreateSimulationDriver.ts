@@ -142,7 +142,7 @@ export class CreateSimulationDriver {
   }
 
   selectStrategyType(strategyType: StrategyType) {
-    return this.page.getByTestId(`select-type-${strategyType}`).click();
+    return this.page.getByTestId(strategyType).click();
   }
 
   async fillFormSection(

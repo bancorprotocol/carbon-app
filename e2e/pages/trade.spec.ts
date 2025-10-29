@@ -126,7 +126,7 @@ test.describe('Trade', () => {
 
       await driver.selectToken('base');
       await driver.selectToken('quote');
-      await driver.setType('market');
+      await driver.setSwap();
       await driver.setDirection(mode);
 
       for (const swap of swaps) {

@@ -82,6 +82,7 @@ export const OverlappingAction: FC<Props> = (props) => {
             value="deposit"
             checked={action === 'deposit'}
             onChange={() => setAction('deposit')}
+            data-testid="action-deposit"
           >
             <IconDeposit className="size-14" />
             Deposit
@@ -91,6 +92,7 @@ export const OverlappingAction: FC<Props> = (props) => {
             value="withdraw"
             checked={action === 'withdraw'}
             onChange={() => setAction('withdraw')}
+            data-testid="action-withdraw"
           >
             <IconWithdraw className="size-14" />
             Withdraw

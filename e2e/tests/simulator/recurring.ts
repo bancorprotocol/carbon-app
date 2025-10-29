@@ -21,7 +21,7 @@ export const simulateRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
-    await createForm.selectStrategyType('recurring');
+    await createForm.selectStrategyType('recurring-range');
     await createForm.fillRecurring();
 
     const start = testCase.input.dates.start;

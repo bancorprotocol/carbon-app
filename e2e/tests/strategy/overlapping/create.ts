@@ -31,7 +31,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await myStrategies.createStrategy();
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
-    await createForm.selectType('essential', 'overlapping');
+    await createForm.selectType('essentials', 'overlapping');
 
     const form = createForm.getOverlappingForm();
     await form.max().focus();

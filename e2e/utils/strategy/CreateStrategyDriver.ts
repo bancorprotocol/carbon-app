@@ -77,7 +77,7 @@ export class CreateStrategyDriver {
   }
 
   async selectType(
-    category: 'essential' | 'intermediate' | 'advanced',
+    category: 'essentials' | 'intermediate' | 'advanced',
     type: string,
   ) {
     await this.page.getByTestId(category).click();
