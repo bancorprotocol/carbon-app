@@ -16,11 +16,11 @@ export const ErrorUserBlocked = () => {
     >
       <NewTabLink
         to={externalLinks.treasuryGov}
-        className="w-full btn-secondary-gradient text-14 "
+        className="w-full btn-on-surface text-14 "
       >
         Learn More
       </NewTabLink>
-      <button className="btn-secondary-gradient text-14 " onClick={disconnect}>
+      <button className="btn-on-surface text-14 " onClick={disconnect}>
         Logout
       </button>
     </ErrorWrapper>

@@ -23,7 +23,7 @@ export const ModalRestrictedCountry: ModalFC<undefined> = ({ id }) => {
           text="According to our Terms of Service, users in your location are not able to use this site."
         />
       </div>
-      <button className="btn-secondary-gradient mt-16" onClick={onClose}>
+      <button className="btn-on-surface mt-16" onClick={onClose}>
         I Understand
       </button>
     </ModalOrMobileSheet>

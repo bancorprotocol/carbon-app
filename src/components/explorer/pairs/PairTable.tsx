@@ -70,14 +70,14 @@ export const PairTable: FC<Props> = ({ pairs }) => {
               <td>
                 <div className="inline-flex gap-8">
                   <Link
-                    className="btn-primary-gradient"
+                    className="btn-primary"
                     to="/trade"
                     search={{ base: base.address, quote: quote.address }}
                   >
                     Create Position
                   </Link>
                   <Link
-                    className="btn-secondary-gradient"
+                    className="btn-on-surface"
                     to="/trade/market"
                     search={{ base: base.address, quote: quote.address }}
                   >

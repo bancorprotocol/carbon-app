@@ -13,7 +13,7 @@ export const D3YAxisRight = ({ ticks, dms, formatter }: D3AxisProps) => {
         y="0"
         width={dms.marginRight}
         height={dms.height}
-        className="fill-background-black"
+        className="fill-main-800"
       />
       <line
         x1={0}

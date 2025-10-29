@@ -43,6 +43,7 @@ export const D3XAxis = () => {
   return (
     <>
       <rect
+        className="fill-main-800"
         x={-bandwidthOffset}
         y={dms.boundedHeight}
         width={dms.width}

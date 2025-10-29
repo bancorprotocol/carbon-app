@@ -1,6 +1,5 @@
 import { ReactComponent as IconCut } from 'assets/icons/cut.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
-import { Button } from 'components/common/button';
 import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
@@ -91,7 +90,6 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       description:
         'Duplicate the strategy with the existing values (price, budget)',
       testId: 'duplicate-strategy-btn',
-      variant: 'secondary' as const,
     },
     {
       icon: IconCut,
@@ -101,7 +99,6 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
         undercutDifference * 100
       }% tighter spread and try to get filled ahead`,
       testId: 'undercut-strategy-btn',
-      variant: 'success' as const,
     },
   ];
 
@@ -110,7 +107,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       <h2 className="text-14 font-normal text-white/60">Select your option.</h2>
 
       {duplicateOptions.map(
-        ({ icon: Icon, title, onClick, description, testId, variant }) => (
+        ({ icon: Icon, title, onClick, description, testId }) => (
           <article
             key={title}
             className="flex gap-16 rounded-2xl bg-main-900/90 p-16"
@@ -122,14 +119,13 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
               <h3 className="text-14 font-medium">{title}</h3>
               <p className="text-12 font-normal text-white/60">{description}</p>
             </hgroup>
-            <Button
-              variant={variant}
+            <button
               onClick={onClick}
-              className="row-span-2 self-center"
+              className="btn-on-surface row-span-2 self-center"
               data-testid={testId}
             >
               Select
-            </Button>
+            </button>
           </article>
         ),
       )}

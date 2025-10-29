@@ -21,7 +21,7 @@ export const ModalWalletError: FC<Props> = ({
       <output className="rounded-lg bg-error/20 font-medium text-error px-20 py-10">
         {error}
       </output>
-      <button className="btn-primary-gradient" onClick={onClick}>
+      <button className="btn-on-surface" onClick={onClick}>
         Back
       </button>
     </>

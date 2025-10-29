@@ -11,7 +11,7 @@ export const DebugNotifications = () => {
       <h2>Notifications</h2>
 
       <button
-        className="btn-secondary-gradient"
+        className="btn-on-surface"
         onClick={() =>
           dispatchNotification('generic', {
             title: 'test',
@@ -26,7 +26,7 @@ export const DebugNotifications = () => {
       </button>
 
       <button
-        className="btn-secondary-gradient"
+        className="btn-on-surface"
         onClick={() =>
           dispatchNotification('generic', {
             title: 'Pending',
@@ -43,7 +43,7 @@ export const DebugNotifications = () => {
       </button>
 
       <button
-        className="btn-secondary-gradient"
+        className="btn-on-surface"
         onClick={() =>
           dispatchNotification('generic', {
             title: 'Pending',
@@ -60,7 +60,7 @@ export const DebugNotifications = () => {
       </button>
 
       <button
-        className="btn-secondary-gradient"
+        className="btn-on-surface"
         onClick={() =>
           dispatchNotification('activity', {
             activity: {
@@ -102,7 +102,7 @@ export const DebugNotifications = () => {
       </button>
 
       <button
-        className="btn-secondary-gradient"
+        className="btn-on-surface"
         onClick={() =>
           toaster.addToast(`It is ` + new Date().toLocaleTimeString())
         }
@@ -111,7 +111,7 @@ export const DebugNotifications = () => {
       </button>
 
       <button
-        className="btn-secondary-gradient"
+        className="btn-on-surface"
         onClick={() => dispatchNotification('reject', undefined)}
       >
         Reject

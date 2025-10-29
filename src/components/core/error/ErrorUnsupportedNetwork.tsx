@@ -18,7 +18,7 @@ export const ErrorUnsupportedNetwork = () => {
       <button className="btn-primary-gradient" onClick={switchNetwork}>
         Change Network
       </button>
-      <button className="btn-secondary-gradient" onClick={disconnect}>
+      <button className="btn-on-surface" onClick={disconnect}>
         Disconnect Wallet
       </button>
     </ErrorWrapper>

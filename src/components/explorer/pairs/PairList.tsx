@@ -69,7 +69,7 @@ export const PairList: FC<Props> = ({ pairs }) => {
                 Create
               </Link>
               <Link
-                className="btn-secondary-gradient"
+                className="btn-on-surface"
                 to="/trade/market"
                 search={{ base: base.address, quote: quote.address }}
               >

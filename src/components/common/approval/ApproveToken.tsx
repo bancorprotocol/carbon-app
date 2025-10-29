@@ -121,7 +121,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
               <button
                 type="submit"
-                className="btn-secondary-gradient text-14 "
+                className="btn-on-surface text-14 "
                 data-testid={`approve-${token.symbol}`}
               >
                 {data.nullApprovalRequired ? 'Revoke and Approve' : 'Approve'}

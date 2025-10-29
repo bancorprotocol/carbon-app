@@ -77,7 +77,7 @@ export const PortfolioHeader = () => {
           className="btn-primary-gradient whitespace-nowrap"
           data-testid="create-strategy-desktop"
         >
-          Create
+          Create Strategy
         </Link>
       </div>
     </header>

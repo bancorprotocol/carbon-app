@@ -54,7 +54,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
       <button
         onClick={() => closeModal(id)}
         disabled={isLoading}
-        className="btn-secondary-gradient text-16"
+        className="btn-on-surface text-16"
       >
         Cancel
       </button>

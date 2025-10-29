@@ -81,7 +81,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       >
         Import Token
       </button>
-      <button className="btn-secondary-gradient" onClick={() => closeModal(id)}>
+      <button className="btn-on-surface" onClick={() => closeModal(id)}>
         Cancel
       </button>
     </ModalOrMobileSheet>

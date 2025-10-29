@@ -254,6 +254,23 @@
   }
 }
 
+@utility btn-primary {
+  @apply rounded-full text-14 bg-primary/80 glass-shadow;
+  color: var(--color-black);
+  padding: 8px 16px;
+  transition: transform 0.1s var(--ease-out);
+  text-align: center;
+  &:hover {
+    @apply bg-primary;
+  }
+  &:disabled, &.disabled {
+    opacity: 50%;
+    pointer-events: none;
+  }
+  &:active {
+    transform: scale(0.9);
+  }
+}
 @utility btn-on-background {
   @apply rounded-full text-14 bg-main-500/60 glass-shadow;
   color: var(--color-white);

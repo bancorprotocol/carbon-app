@@ -35,7 +35,7 @@ export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
         Withdraw and Delete
       </button>
       <button
-        className="btn-secondary-gradient"
+        className="btn-on-surface"
         onClick={() => {
           closeModal(id);
           onWithdraw();

@@ -84,11 +84,11 @@ export const DebugConfig = () => {
       <button
         type="button"
         onClick={handleLoadDefault}
-        className="btn-secondary-gradient"
+        className="btn-on-surface"
       >
         Load Default Config
       </button>
-      <button type="reset" className="btn-secondary-gradient">
+      <button type="reset" className="btn-on-surface">
         Reset
       </button>
     </form>

@@ -14,7 +14,7 @@ export const DebugFiatCurrency = () => {
           className={
             currency === selectedFiatCurrency
               ? 'btn-primary-gradient'
-              : 'btn-secondary-gradient'
+              : 'btn-on-surface'
           }
           onClick={() => setSelectedFiatCurrency(currency)}
         >

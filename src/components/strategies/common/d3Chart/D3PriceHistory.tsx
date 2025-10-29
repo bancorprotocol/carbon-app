@@ -337,7 +337,12 @@ export const D3PriceHistory: FC<Props> = (props) => {
       yTicks={y.ticks}
       zoom={zoomTransform}
     >
-      <div className={cn('rounded-xl flex flex-1 bg-main-900/60', className)}>
+      <div
+        className={cn(
+          'rounded-xl flex flex-1 bg-main-900/60 overflow-clip',
+          className,
+        )}
+      >
         <DrawingMenu clearDrawings={() => setDrawings([])} />
         <div className="flex flex-1 flex-col">
           <div className="relative grid flex-1 items-stretch justify-items-stretch">
@@ -365,7 +370,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               </div>
             )}
           </div>
-          <div className="col-span-2 flex border-t border-white/10">
+          <div className="col-span-2 flex border-t border-white/10 bg-main-800">
             {presets.map(({ days, label }) => {
               return (
                 <button

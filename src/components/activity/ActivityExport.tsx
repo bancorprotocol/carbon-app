@@ -161,7 +161,7 @@ export const ActivityExport = () => {
               <button className="btn-primary-gradient" onClick={download}>
                 Proceed
               </button>
-              <button className="btn-secondary-gradient">Cancel</button>
+              <button className="btn-on-surface">Cancel</button>
             </footer>
           </form>
         </dialog>
