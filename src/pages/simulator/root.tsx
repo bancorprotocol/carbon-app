@@ -1,5 +1,5 @@
 import { Outlet } from '@tanstack/react-router';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import { ReactComponent as IconClock } from 'assets/icons/clock.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { FormEvent, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
@@ -54,10 +54,10 @@ const SimulatorDisclaimer = () => {
   return (
     <form
       onSubmit={dismiss}
-      className="flex gap-16 items-start border border-primary rounded-2xl bg-primary/10 px-24 py-16 md:col-span-2"
+      className="flex gap-16 items-start border border-primary rounded-2xl bg-primary/10 p-16 md:col-span-2"
     >
-      <div className="self-start bg-primary/40 size-48 grid place-items-center rounded-full flex-shrink-0">
-        <IconTooltip className="size-24 text-primary" />
+      <div className="self-start bg-primary/20 size-48 grid place-items-center rounded-full flex-shrink-0">
+        <IconClock className="size-24 fill-gradient" />
       </div>
       <hgroup className="grid gap-8 text-14">
         <h2>Backtest Your Trading Strategy</h2>
