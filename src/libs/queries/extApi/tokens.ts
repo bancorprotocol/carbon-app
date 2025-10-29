@@ -64,6 +64,7 @@ export const useMissingTokensQuery = (
     },
     initialData: () => lsService.getItem('importedTokens'),
     enabled: !!existingTokens.data && !!pairs.data,
+    retry: false,
     refetchOnWindowFocus: false,
   });
 };
