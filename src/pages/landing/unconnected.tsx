@@ -92,7 +92,7 @@ export const UnconnectedLandingPage = () => {
       return prettifyNumber(value, { isInteger: true });
     };
     return (
-      <p className="font-title flex gap-4 justify-center text-xl md:text-3xl">
+      <div className="font-title flex gap-4 justify-center text-xl md:text-3xl">
         <RollingNumber
           className="text-xl md:text-3xl"
           value={strategies}
@@ -107,7 +107,7 @@ export const UnconnectedLandingPage = () => {
           format={format}
         />
         <span>trades</span>
-      </p>
+      </div>
     );
   }, [trending.data]);
 

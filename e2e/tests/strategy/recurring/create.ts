@@ -31,7 +31,7 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await myStrategies.createStrategy();
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
-    await createForm.selectSetting('recurring');
+    await createForm.selectType('advanced', 'recurringRange');
 
     const sellForm = await createForm.fillRecurring('sell');
     await expect(sellForm.outcomeValue()).toHaveText(output.sell.outcomeValue);

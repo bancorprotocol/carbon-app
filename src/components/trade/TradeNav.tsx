@@ -173,6 +173,7 @@ export const TradeNav = () => {
             <button
               {...attr}
               aria-selected={active?.type === id}
+              data-testid={id}
               className={cn(style.tradeType)}
             >
               <span className="text-14 sm:text-18 2xl:justify-self-start self-center">
@@ -209,7 +210,7 @@ const StrategyLink: FC<{ strategy: StrategyLink; selected: boolean }> = (
   props,
 ) => {
   const menu = useMenuCtx();
-  const { name, to, search, icon } = props.strategy;
+  const { id, name, to, search, icon } = props.strategy;
   return (
     <Link
       key={name}
@@ -228,6 +229,7 @@ const StrategyLink: FC<{ strategy: StrategyLink; selected: boolean }> = (
       resetScroll={false}
       /* override default aria-page because of fullrange */
       data-selected={props.selected}
+      data-testid={id}
       onClick={() => menu.setMenuOpen(false)}
     >
       {icon}

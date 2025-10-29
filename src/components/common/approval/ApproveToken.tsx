@@ -86,7 +86,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
   return (
     <>
-      <div className="bg-content min-h-85 flex items-center justify-between rounded-2xl px-20">
+      <div className="bg-content min-h-85 flex items-center gap-16 justify-between rounded-2xl px-20">
         <div className="flex items-center gap-10">
           <LogoImager alt="Token" src={token.logoURI} className="size-30" />
           <p className="font-medium">{token.symbol}</p>
@@ -94,7 +94,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
         {data.approvalRequired ? (
           txBusy ? (
-            <div>Waiting for Confirmation</div>
+            <p className="text-14 text-white/80">Waiting for Confirmation</p>
           ) : (
             <form
               onSubmit={onApprove}

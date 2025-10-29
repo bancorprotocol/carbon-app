@@ -199,7 +199,7 @@ test.describe('Simulator', () => {
     await setupLocalStorage(page, rpc);
     const debug = new DebugDriver(page);
     await debug.visit();
-    await page.getByTestId('close-walkthrough').click();
+    // await page.getByTestId('close-walkthrough').click();
   });
   // Need an empty object else the tests don't run
   // eslint-disable-next-line no-empty-pattern

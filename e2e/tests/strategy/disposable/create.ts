@@ -30,7 +30,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await myStrategies.createStrategy();
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
-    await createForm.selectSetting('disposable');
+    await createForm.selectType('intermediate', 'limitSell');
 
     const form = await createForm.fillDisposable();
 

@@ -20,12 +20,14 @@ export const OrderDirection: FC<Props> = (props) => {
         <Radio
           checked={direction === 'sell'}
           onChange={() => setDirection('sell')}
+          data-testid="tab-sell"
         >
           <p className="peer-checked/radio:text-black">Sell</p>
         </Radio>
         <Radio
           checked={direction === 'buy'}
           onChange={() => setDirection('buy')}
+          data-testid="tab-buy"
         >
           <p className="peer-checked/radio:text-black">Buy</p>
         </Radio>
