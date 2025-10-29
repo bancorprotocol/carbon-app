@@ -60,13 +60,12 @@ const SimulatorDisclaimer = () => {
         <IconTooltip className="size-24 text-primary" />
       </div>
       <hgroup className="grid gap-8 text-14">
-        <h2>Simulator Disclaimer</h2>
+        <h2>Backtest Your Trading Strategy</h2>
         <p>
-          This tool uses historical price data under simplified conditions and
-          does not predict future results. It excludes gas fees, may lack
-          accuracy or completeness, and is for informational purposes only. We
-          accept no liability for its use. Tax and rebase tokens are not
-          supported.
+          This tool is for informational purposes only and operates under
+          simplified conditions. It excludes gas fees, does not support fee on
+          transfer (tax) or rebase tokens, and may lack accuracy or
+          completeness. Bancor accepts no liability for its use.
         </p>
       </hgroup>
 

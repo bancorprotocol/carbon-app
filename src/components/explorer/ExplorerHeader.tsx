@@ -145,7 +145,7 @@ export const ExplorerHeader = () => {
             format={formatInt}
             loadingWidth="10ch"
           />
-          <div className="flex gap-16">
+          <div className="flex justify-between gap-16">
             <div className="grid gap-8">
               <h3 className="text-16">Total Liquidity</h3>
               <RollingNumber
@@ -155,11 +155,11 @@ export const ExplorerHeader = () => {
                 loadingWidth="7ch"
               />
             </div>
-            <div className="grid gap-8">
+            <div className="grid items-end gap-8 text-end">
               <h3 className="text-16">Total Strategies</h3>
               <RollingNumber
                 value={trending.data?.tradeCount.length}
-                className="text-24"
+                className="text-24 justify-end"
                 format={formatInt}
                 delay={9_000}
                 loadingWidth="4ch"
