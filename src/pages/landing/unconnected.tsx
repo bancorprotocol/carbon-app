@@ -31,7 +31,7 @@ const types = [
         icon: <IconOverlapping className="size-24" />,
       },
     ],
-    targets: ['Casual', 'Newbie'],
+    targets: ['Casual', 'Newbies'],
   },
   {
     title: 'Intermediate',
@@ -92,7 +92,7 @@ export const UnconnectedLandingPage = () => {
       return prettifyNumber(value, { isInteger: true });
     };
     return (
-      <div className="font-title flex gap-4 justify-center text-xl md:text-3xl">
+      <div className="font-title flex flex-col items-center gap-8 justify-center text-xl md:flex-row md:items-baseline md:text-3xl">
         <RollingNumber
           className="text-xl md:text-3xl"
           value={strategies}
