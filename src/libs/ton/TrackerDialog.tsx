@@ -13,15 +13,14 @@ interface Props {
   progress: number;
 }
 export const TrackerDialog = ({ progress }: Props) => {
-  const { ref, lightDismiss } = useDialog();
+  const { ref, lightDismiss, close, open } = useDialog();
+
   useEffect(() => {
-    if (progress && !ref.current?.open) {
-      ref.current?.showModal();
-    }
-    if (!progress && ref.current?.open) {
-      ref.current?.close();
-    }
-  }, [progress, ref]);
+    console.log({ progress, open: ref.current?.open });
+    if (progress && !ref.current?.open) open();
+    if (!progress && ref.current?.open) close();
+  }, [close, open, progress, ref]);
+
   return (
     <dialog ref={ref} className="modal" onClick={lightDismiss}>
       <form method="dialog" className="grid gap-24 relative overflow-clip">
@@ -33,7 +32,7 @@ export const TrackerDialog = ({ progress }: Props) => {
             return (
               <li className="flex items-center gap-8" key={i}>
                 <div
-                  className="p-4 rounded-sm bg-black aria-checked:bg-gradient"
+                  className="p-4 rounded-sm bg-main-900/60 aria-checked:bg-gradient"
                   role="checkbox"
                   aria-checked={checked}
                 >

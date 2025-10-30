@@ -82,7 +82,7 @@ export const commonConfig: AppConfig = {
     showSimulator: false,
     priceChart: 'native',
     useGradientBranding: true,
-    tradeCount: false,
+    tradeCount: true,
     currencyMenu: false,
     showTerms: true,
     showPrivacy: true,
