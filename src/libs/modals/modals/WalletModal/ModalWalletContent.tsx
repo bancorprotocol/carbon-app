@@ -14,7 +14,7 @@ type Props = {
 
 const textClasses = 'text-16 font-medium';
 const buttonClasses =
-  'flex h-44 w-full items-center space-x-16 rounded-md px-10 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
+  'flex h-44 w-full items-center gap-16 rounded-md px-10 hover:bg-main-900/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
 
 const EXT_LINKS = [
   {
@@ -38,7 +38,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
 
   return (
     <div className="grid gap-8">
-      <div className="grid text-14 mb-20 gap-8 text-white/80">
+      <div className="text-14 mb-20 grid gap-8 text-white/80">
         <p>
           By connecting my wallet, I agree to the{' '}
           <Link to="/terms" target="_blank" className="font-medium text-white">

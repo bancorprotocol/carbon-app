@@ -217,7 +217,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
         </clipPath>
       </defs>
 
-      <g className={style.axes} stroke="#404040">
+      <g className={style.axes} stroke="var(--color-main-600)">
         <line x1="0" y1={baseline} x2={width} y2={baseline} />
       </g>
 
@@ -238,8 +238,8 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                     <>
                       <polygon
                         className={style.buyArea}
-                        fill="var(--color-buy)"
-                        fillOpacity="0.25"
+                        fill="url(#svg-buy-gradient)"
+                        fillOpacity="0.5"
                         points={Array.from(
                           getBuyPoints(
                             buy.from,
@@ -320,8 +320,8 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                     <>
                       <polygon
                         className={style.sellArea}
-                        fill="var(--color-sell)"
-                        fillOpacity="0.25"
+                        fill="url(#svg-sell-gradient)"
+                        fillOpacity="0.5"
                         points={Array.from(
                           getSellPoints(
                             sell.marginalPrice > sell.from &&
@@ -504,14 +504,14 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
     <g className={style.currentPrice}>
       <path
         className={style.priceLine}
-        stroke="#404040"
+        stroke="var(--color-main-600)"
         strokeWidth="2"
         d={`M ${Math.max(lowest, Math.min(highest, price))} ${baseline} V 25`}
       />
       {tooLow && (
         <>
           <rect
-            fill="#404040"
+            fill="var(--color-main-600)"
             x={lowest - 1}
             y="6"
             width={outRangeWidth}
@@ -543,7 +543,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
       {inRange && (
         <>
           <rect
-            fill="#404040"
+            fill="var(--color-main-600)"
             x={price}
             y="6"
             width={inRangeWidth}
@@ -567,7 +567,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
       {tooHigh && (
         <>
           <rect
-            fill="#404040"
+            fill="var(--color-main-600)"
             x={highest + 1}
             y="6"
             width={outRangeWidth}
@@ -652,7 +652,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
       {limit && (
-        <table className="rounded-md border-separate border border-white/40">
+        <table className="bg-main-900/40 rounded-md border-separate border border-white/40">
           <tbody>
             <tr>
               <th className="font-normal p-8 text-start text-white/60">
@@ -666,7 +666,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         </table>
       )}
       {!limit && (
-        <table className="rounded-md border-separate border border-white/40 p-8">
+        <table className="bg-main-900/40 rounded-md border-separate border border-white/40 p-8">
           <tbody>
             <tr>
               <th className="font-normal text-start text-white/60">
@@ -758,7 +758,7 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
       <h3 className={cn('text-16 font-medium', color)}>
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
-      <table className="rounded-md border-separate border border-white/40 p-8">
+      <table className="bg-main-900/40 rounded-md border-separate border border-white/40 p-8">
         <tbody>
           <tr>
             <th className="font-normal text-start text-white/60">_S P_</th>

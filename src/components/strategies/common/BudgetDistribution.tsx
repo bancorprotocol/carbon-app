@@ -73,22 +73,32 @@ export const BudgetDistribution: FC<Props> = (props) => {
     Number(balance ?? '0'),
     isSimulator,
   );
-  const color = isBuy ? 'bg-buy' : 'bg-sell';
-  const allocated = isSimulator ? deposit : initialBudget;
+  const color = isBuy ? 'bg-buy-gradient' : 'bg-sell-gradient';
   return (
     <div className="flex flex-col gap-4">
-      {title && <h4 className="text-14 font-medium">{title}</h4>}
-      <div className="text-12 flex justify-between text-white/60">
-        <label htmlFor={allocatedId}>
-          Allocated:&nbsp;
-          {allocated ? (
-            <span className="text-white">{tokenAmount(allocated, token)}</span>
-          ) : (
-            <span className="loading-message text-white">Loading</span>
+      {title && (
+        <h4 className="flex gap-16 text-14 items-center">
+          <span className="font-medium">{title}</span>
+          {isSimulator && !!Number(deposit) && (
+            <span>{tokenAmount(deposit, token)}</span>
           )}
-        </label>
-        {!isSimulator && (
-          <label htmlFor={walletId}>
+        </h4>
+      )}
+      {!isSimulator && (
+        <div className="text-12 grid grid-flow-col text-white/60">
+          {!!Number(initialBudget) && (
+            <label htmlFor={allocatedId}>
+              Allocated:&nbsp;
+              {initialBudget ? (
+                <span className="text-white">
+                  {tokenAmount(initialBudget, token)}
+                </span>
+              ) : (
+                <span className="loading-message text-white">Loading</span>
+              )}
+            </label>
+          )}
+          <label htmlFor={walletId} className="self-end text-end">
             Wallet:&nbsp;
             {balance ? (
               <span className="text-white">{tokenAmount(balance, token)}</span>
@@ -96,8 +106,8 @@ export const BudgetDistribution: FC<Props> = (props) => {
               <span className="loading-message text-white">Loading</span>
             )}
           </label>
-        )}
-      </div>
+        </div>
+      )}
       <div className="rounded-md flex h-[24px] gap-4 overflow-hidden transition-[gap] duration-200">
         <div
           aria-valuenow={dist.allocationPercent}

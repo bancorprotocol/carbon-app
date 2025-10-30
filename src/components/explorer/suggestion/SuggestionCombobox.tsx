@@ -2,6 +2,7 @@ import {
   ChangeEvent,
   Dispatch,
   FC,
+  memo,
   SetStateAction,
   useEffect,
   useId,
@@ -19,36 +20,22 @@ import {
 import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
-import { searchPairTrade, searchTokens, toPairName } from 'utils/pairSearch';
-import { useParams } from '@tanstack/react-router';
+import { searchPairTrade, searchTokens } from 'utils/pairSearch';
+import { useSearch } from '@tanstack/react-router';
 import { usePairs } from 'hooks/usePairs';
 import { cn } from 'utils/helpers';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { Token } from 'libs/tokens';
-import { useTokens } from 'hooks/useTokens';
 import { useEnsName } from 'wagmi';
 import { getAddress } from 'ethers';
 import style from './index.module.css';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 interface Props {
+  url: '/explore' | '/portfolio';
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
 }
-
-const displaySlug = (
-  slug: string,
-  pairMap: Map<string, TradePair>,
-  tokensMap: Map<string, Token>,
-) => {
-  if (tokensMap.has(slug)) {
-    return tokensMap.get(slug)?.symbol ?? '';
-  } else if (pairMap.has(slug)) {
-    const pair = pairMap.get(slug)!;
-    return toPairName(pair.baseToken, pair.quoteToken);
-  } else {
-    return slug;
-  }
-};
 
 const tryEthAddress = (slug: string) => {
   try {
@@ -63,30 +50,26 @@ const tabs = {
   pair: 'Pairs',
 };
 type FocusTab = keyof typeof tabs;
-export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
-  const { tokensMap } = useTokens();
-  const { map: pairMap, names: namesMap } = usePairs();
+export const LocalSuggestionCombobox: FC<Props> = (props) => {
+  const { url, open, setOpen, search, setSearch } = props;
+  const { map: pairMap, names: namesMap, isPending } = usePairs();
   const listboxId = useId();
   const inputId = useId();
   const root = useRef<HTMLDivElement>(null);
-  const params = useParams({ from: '/explore/$slug' });
+  const params = useSearch({ from: url });
   const ensName = useEnsName({
-    address: tryEthAddress(params.slug),
+    address: tryEthAddress(params.search || ''),
   });
 
-  const [search, setSearch] = useState(
-    displaySlug(params.slug, pairMap, tokensMap),
-  );
   const [focusTab, setFocusTab] = useState<FocusTab>('token');
 
   useEffect(() => {
     if (ensName.data) setSearch(ensName.data);
-  }, [ensName.data]);
+  }, [ensName.data, setSearch]);
 
-  useEffect(() => {
-    const display = displaySlug(params.slug, pairMap, tokensMap);
-    if (display !== params.slug) setSearch(display);
-  }, [tokensMap, pairMap, params.slug, setSearch]);
+  const loading = useMemo(() => {
+    return isPending && params.search;
+  }, [isPending, params.search]);
 
   const filteredPairs = useMemo(
     () => searchPairTrade(pairMap, namesMap, search),
@@ -96,8 +79,7 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
     return searchTokens(pairMap, search);
   }, [pairMap, search]);
 
-  const changeTab = (e: ChangeEvent<HTMLInputElement>, tab: FocusTab) => {
-    if (!e.target.checked) return;
+  const changeTab = (tab: FocusTab) => {
     setFocusTab(tab as FocusTab);
     const el = document.getElementById(`filtered-${tab}-list`);
     const y = window.scrollY;
@@ -113,10 +95,12 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
   };
 
   const suggestionListProps = {
+    url,
     setOpen,
     listboxId,
     filteredPairs,
     filteredTokens,
+    isPending,
   };
 
   const filters = {
@@ -194,15 +178,19 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
         id={inputId}
         name="search"
         type="search"
-        className={cn('grow bg-transparent outline-hidden', style.inputSearch)}
+        className={cn('grow bg-transparent outline-hidden', style.inputSearch, {
+          'animate-pulse': loading,
+        })}
         role="combobox"
         autoComplete="off"
         aria-controls={listboxId}
         aria-autocomplete="both"
         aria-expanded={open}
-        placeholder="Search by Token / Pair / Wallet Address"
+        placeholder={
+          loading ? 'Loading tokens' : 'Search by Token / Pair / Wallet Address'
+        }
         aria-label="Search by Token / Pair / Wallet Address"
-        value={search}
+        value={loading ? '' : search}
         onInput={onInput}
         onFocus={() => setOpen(true)}
       />
@@ -212,39 +200,26 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
       <div
         role="dialog"
         className={cn(
-          'rounded-lg bg-background-800 absolute left-0 top-full z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
+          'rounded-lg bg-main-600/80 backdrop-blur-sm absolute left-0 top-full z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
           style.dialog,
         )}
       >
         <header className="flex gap-8 border-b border-white/40 p-12">
-          <div
-            role="radiogroup"
-            className="text-14 font-medium flex items-center rounded-full bg-black p-2"
-          >
+          <RadioGroup>
             {Object.entries(tabs).map(([tab, label]) => (
-              <div key={tab} className="relative">
-                <input
-                  id={`filtered-${tab}-radio`}
-                  type="radio"
-                  checked={focusTab === tab}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onChange={(e) => changeTab(e, tab as FocusTab)}
-                  className="peer absolute opacity-0"
-                  tabIndex={focusTab === tab ? 0 : -1}
-                />
-                <label
-                  htmlFor={`filtered-${tab}-radio`}
-                  className="peer-checked:bg-background-800 inline-flex cursor-pointer items-center gap-4 rounded-full px-8 py-4 peer-focus-visible:outline-solid"
-                  onMouseDown={(e) => e.preventDefault()}
-                >
-                  {label}
-                  <span className="bg-background-900 text-10 rounded-full px-8 py-4">
-                    {filters[tab as FocusTab].length}
-                  </span>
-                </label>
-              </div>
+              <Radio
+                key={tab}
+                checked={focusTab === tab}
+                onChange={() => changeTab(tab as FocusTab)}
+                className="flex items-center gap-8"
+              >
+                {label}
+                <span className="bg-main-600 text-10 rounded-full px-8 py-4">
+                  {filters[tab as FocusTab].length}
+                </span>
+              </Radio>
             ))}
-          </div>
+          </RadioGroup>
         </header>
         <SuggestionList {...suggestionListProps} />
         <SuggestionEmpty search={search} />
@@ -252,3 +227,8 @@ export const SuggestionCombobox: FC<Props> = ({ open, setOpen }) => {
     </div>
   );
 };
+
+export const SuggestionCombobox = memo(
+  LocalSuggestionCombobox,
+  (prev, next) => prev.open === next.open && prev.search === next.search,
+);

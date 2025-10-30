@@ -16,7 +16,6 @@ interface FormProps {
   quote: Token;
   buy: FormStaticOrder;
   sell: FormStaticOrder;
-  approvalText?: string;
   children: ReactNode;
 }
 
@@ -76,28 +75,27 @@ export const CreateForm: FC<FormProps> = (props) => {
   return (
     <form
       onSubmit={create}
+      style={{ animationDelay: '100ms' }}
       className={cn(style.form, 'grid')}
       data-testid="create-strategy-form"
     >
-      <div className="overflow-hidden rounded-ee-2xl rounded-es-2xl">
-        {children}
-      </div>
+      <div className="overflow-hidden rounded-2xl surface">{children}</div>
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-lg bg-background-900 text-14 font-medium flex items-center gap-8 p-20 text-white/60',
+            'surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input
             id="approve-warnings"
             type="checkbox"
-            className="size-18"
+            className="size-18 shrink-0"
             data-testid="approve-warnings"
           />
-          {props.approvalText ??
-            "I've reviewed the warning(s) but choose to proceed."}
+          I accept any applicable warning(s) and understand fee on transfer
+          (tax) or rebasing tokens are not supported
         </label>
 
         {user && (

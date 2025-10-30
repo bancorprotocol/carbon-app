@@ -28,13 +28,13 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
 root.render(
   <React.StrictMode>
     <QueryProvider>
-      <StoreProvider>
-        <WalletProvider>
+      <WalletProvider>
+        <StoreProvider>
           <LazyMotion>
             <RouterProvider router={router} />
           </LazyMotion>
-        </WalletProvider>
-      </StoreProvider>
+        </StoreProvider>
+      </WalletProvider>
     </QueryProvider>
   </React.StrictMode>,
 );

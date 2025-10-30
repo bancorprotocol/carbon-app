@@ -1,6 +1,6 @@
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { Link } from 'libs/routing';
-import { buttonStyles } from 'components/common/button/buttonStyles';
+
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { SimResultSummaryGains } from 'components/simulator/result/SimResultSummaryGains';
 import { SimResultSummaryRoi } from 'components/simulator/result/SimResultSummaryRoi';
@@ -27,49 +27,46 @@ export const SimResultSummary = ({
     <header className="my-8 grid gap-8 xl:grid-cols-2">
       <section
         className={cn(
-          'rounded-lg flex min-h-[72px] items-center justify-between gap-8 bg-black px-16 py-10',
+          'rounded-lg flex flex-col md:flex-row min-h-[72px] items-center justify-between gap-8 bg-main-900/60 px-16 py-10',
           {
             'animate-pulse': isPending,
           },
         )}
       >
-        {!isPending && !!state.baseToken && !!state.quoteToken && (
+        {!isPending && !!state.base && !!state.quote && (
           <>
             <SimResultSummaryTokens
-              baseToken={state.baseToken}
-              quoteToken={state.quoteToken}
+              base={state.base}
+              quote={state.quote}
               strategyType={strategyType}
             />
             <SimResultSummaryTable
               buy={state.buy}
               sell={state.sell}
-              baseToken={state.baseToken}
-              quoteToken={state.quoteToken}
+              base={state.base}
+              quote={state.quote}
             />
           </>
         )}
       </section>
       <section
         className={cn(
-          'rounded-lg grid min-h-[72px] grid-cols-4 items-center gap-8 bg-black px-16 py-10',
+          'rounded-lg grid min-h-[72px] grid-cols-4 items-center gap-8 bg-main-900/60 px-16 py-10',
           {
             'animate-pulse': isPending,
           },
         )}
       >
-        {!isPending && !!state.baseToken && !!state.quoteToken && (
+        {!isPending && !!state.base && !!state.quote && (
           <>
-            <SimResultSummaryGains
-              portfolioGains={gains}
-              quoteToken={state.quoteToken}
-            />
+            <SimResultSummaryGains portfolioGains={gains} quote={state.quote} />
             <SimResultSummaryRoi portfolioRoi={roi} />
             {strategyType === 'recurring' ? (
               <Link
                 to="/trade/recurring"
                 search={{
-                  base: state.baseToken.address,
-                  quote: state.quoteToken.address,
+                  base: state.base.address,
+                  quote: state.quote.address,
                   buyMin: state.buy.min,
                   buyMax: state.buy.max,
                   buyBudget: state.buy.budget,
@@ -81,10 +78,7 @@ export const SimResultSummary = ({
                   sellSettings:
                     state.sell.min === state.sell.max ? 'limit' : 'range',
                 }}
-                className={cn(
-                  buttonStyles({ variant: 'success', size: 'md' }),
-                  'whitespace-nowrap',
-                )}
+                className="btn-primary-gradient whitespace-nowrap"
               >
                 Create
               </Link>
@@ -92,18 +86,15 @@ export const SimResultSummary = ({
               <Link
                 to="/trade/overlapping"
                 search={{
-                  base: state.baseToken.address,
-                  quote: state.quoteToken.address,
+                  base: state.base.address,
+                  quote: state.quote.address,
                   min: state.buy.min,
                   max: state.sell.max,
                   spread: state.overlappingSpread,
                   anchor: 'buy',
                   budget: state.buy.budget,
                 }}
-                className={cn(
-                  buttonStyles({ variant: 'success', size: 'md' }),
-                  'whitespace-nowrap',
-                )}
+                className="btn-primary-gradient whitespace-nowrap"
               >
                 Create
               </Link>

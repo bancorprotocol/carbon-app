@@ -8,7 +8,7 @@ import {
 } from 'libs/routing/routes/trade';
 import { isValidRange } from '../utils';
 import { Token } from 'libs/tokens';
-import { isZero } from '../common/utils';
+import { getFullRangesPrices, isZero } from '../common/utils';
 import {
   defaultSpread,
   isMaxBelowMarket,
@@ -30,7 +30,7 @@ export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing(true);
   setTimeout(() => {
     setIsProcessing(false);
-    navigate?.({ to: '/portfolio', params: {}, search: {} });
+    navigate?.({ to: '/portfolio/strategies', params: {}, search: {} });
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 
@@ -80,11 +80,19 @@ export const overlappingMultiplier = {
   min: 0.99,
   max: 1.01,
 };
-const initMin = (marketPrice: string) => {
+export const initOverlappingMin = (
+  marketPrice: string,
+  fullRangeMin?: string,
+) => {
+  if (fullRangeMin) return fullRangeMin;
   const multiplier = overlappingMultiplier.min;
   return new SafeDecimal(marketPrice).times(multiplier).toString();
 };
-const initMax = (marketPrice: string) => {
+export const initOverlappingMax = (
+  marketPrice: string,
+  fullRangeMax?: string,
+) => {
+  if (fullRangeMax) return fullRangeMax;
   const multiplier = overlappingMultiplier.max;
   return new SafeDecimal(marketPrice).times(multiplier).toString();
 };
@@ -102,10 +110,15 @@ export const getOverlappingOrders = (
     };
   }
 
+  const fullRange = (() => {
+    if (!search.fullRange) return;
+    return getFullRangesPrices(marketPrice, base.decimals, quote.decimals);
+  })();
+
   const {
     anchor,
-    min = initMin(marketPrice),
-    max = initMax(marketPrice),
+    min = initOverlappingMin(marketPrice, fullRange?.min),
+    max = initOverlappingMax(marketPrice, fullRange?.max),
     spread = defaultSpread,
     budget,
   } = search;

@@ -126,7 +126,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
     <>
       <div className="grid grid-cols-2 gap-6">
         <div
-          className="rounded-s-2xl grid w-full cursor-text gap-4 border border-black bg-black p-16 focus-within:border-white/50"
+          className="rounded-s-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-white/50"
           onClick={() => document.getElementById(inputStartId)?.focus()}
         >
           <header className="flex items-center justify-between">
@@ -138,7 +138,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             </label>
             {!!marketPrice && (
               <button
-                className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
+                className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                 type="button"
                 onClick={setStartMarket}
                 data-testid="market-start-price"
@@ -169,7 +169,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
           />
         </div>
         <div
-          className="rounded-e-2xl grid w-full cursor-text gap-4 border border-black bg-black p-16 focus-within:border-white/50"
+          className="rounded-e-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-white/50"
           onClick={() => document.getElementById(inputEndId)?.focus()}
         >
           <header className="flex items-center justify-between">
@@ -181,7 +181,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             </label>
             {!!marketPrice && (
               <button
-                className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
+                className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                 type="button"
                 onClick={setEndMarket}
                 data-testid="market-end-price"

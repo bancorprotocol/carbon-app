@@ -1,6 +1,5 @@
 import { ModalFC } from 'libs/modals/modals.types';
 import { useGetTokenData } from 'libs/queries/chain/token';
-import { Button } from 'components/common/button';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
 import { cn, shortenString } from 'utils/helpers';
@@ -43,7 +42,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       </div>
 
       {isPending && (
-        <div className={cn(blockClasses, 'animate-pulse bg-black')}></div>
+        <div className={cn(blockClasses, 'animate-pulse bg-main-900')}></div>
       )}
       {isError && (
         <div
@@ -56,7 +55,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         </div>
       )}
       {data && (
-        <div className={cn(blockClasses, 'bg-background-900 p-16')}>
+        <div className={cn(blockClasses, 'bg-main-900 p-16')}>
           <div className="flex items-center justify-between">
             <div className="font-medium">{data.symbol}</div>
             <NewTabLink
@@ -73,17 +72,16 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
           </div>
         </div>
       )}
-      <Button
-        variant="white"
-        fullWidth
+      <button
+        className="btn-primary-gradient"
         onClick={onClick}
         disabled={isPending || isError}
       >
         Import Token
-      </Button>
-      <Button variant="black" fullWidth onClick={() => closeModal(id)}>
+      </button>
+      <button className="btn-on-surface" onClick={() => closeModal(id)}>
         Cancel
-      </Button>
+      </button>
     </ModalOrMobileSheet>
   );
 };

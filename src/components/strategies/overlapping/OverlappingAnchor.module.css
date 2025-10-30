@@ -1,0 +1,19 @@
+@reference "tailwindcss";
+@reference "../../../theme.css";
+
+.select-token + label {
+  @apply tab-anchor;
+  transition: scale 100ms var(--ease-in-out);
+}
+.select-token:focus-visible + label {
+  outline: solid 1px white;
+}
+.select-token:checked + label {
+  border-color: transparent;
+  @apply tab-focus;
+  /* background: var(--dark-gradient) padding-box, var(--main-gradient) border-box; */
+}
+.select-token:disabled + label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

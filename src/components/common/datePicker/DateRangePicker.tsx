@@ -1,4 +1,3 @@
-import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import {
@@ -10,27 +9,13 @@ import {
   sub,
   Duration,
 } from 'date-fns';
-import { Dispatch, memo, useRef, useState } from 'react';
+import { Dispatch, memo, ReactElement, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-
-export const datePickerPresets: DatePickerPreset[] = [
-  { label: 'Last 7 days', duration: { days: 6 } },
-  { label: 'Last 30 days', duration: { days: 29 } },
-  { label: 'Last 90 days', duration: { days: 89 } },
-  { label: 'Last 365 days', duration: { days: 364 } },
-];
-
-export type DatePickerPreset = {
-  label: string;
-  duration: Duration;
-  days?: number;
-  months?: number;
-  years?: number;
-};
+import { DatePickerPreset } from './utils';
 
 interface Props {
   /** Value used to be reset to when user click on reset */
@@ -49,6 +34,7 @@ interface Props {
   form?: string;
   disabled?: boolean;
   className?: string;
+  icon?: ReactElement;
 }
 
 const displayRange = (start?: Date, end?: Date) => {
@@ -69,28 +55,22 @@ export const DateRangePicker = memo(function DateRangePicker(
       type="button"
       aria-label="Pick date range"
       className={cn(
-        'text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
-        'hover:bg-background-800',
-        hasDates
-          ? 'border-white/60 active:border-white/80'
-          : 'border-background-800 hover:border-background-700 active:border-background-600',
+        'text-12 flex items-center gap-8 rounded-full px-12 py-8 text-white/60 data-[selected=true]:text-white',
         props.disabled &&
-          'border-background-800 hover:border-background-800 active:border-background-800 cursor-not-allowed hover:bg-transparent',
+          'border-main-800 hover:border-main-800 active:border-main-800 cursor-not-allowed hover:bg-transparent',
         props.className,
       )}
+      data-selected={hasDates}
       data-testid="date-picker-button"
       disabled={props.disabled}
     >
-      <CalendarIcon className="text-primary size-14" />
-      <span
-        className="justify-self-end text-white/60"
-        data-testid="simulation-dates"
-      >
+      {props.icon}
+      <span className="justify-self-end" data-testid="simulation-dates">
         {displayRange(props.start, props.end)}
       </span>
       {!props.disabled && (
         <ChevronIcon
-          className={cn('h-12 w-12 text-white/80 transition-transform', {
+          className={cn('ml-auto size-12 transition-transform', {
             'rotate-180': isOpen,
           })}
         />
@@ -184,7 +164,7 @@ const Content = (props: Props) => {
                 type="button"
                 role="radio"
                 key={i}
-                className="rounded-md px-30 text-14 font-medium hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black"
+                className="rounded-md px-30 text-14 font-medium hover:bg-main-900/40 box-border border border-transparent bg-clip-padding py-8 text-start aria-checked:bg-main-900/60"
                 onClick={() => handlePreset(duration)}
                 aria-checked={selectedPreset?.label === label}
                 data-testid="date-picker-button"
@@ -220,27 +200,23 @@ const Content = (props: Props) => {
           hidden
           defaultValue={toDateInput(date?.to)}
         />
-        <Button
+        <button
           type="button"
-          variant="black"
-          size="sm"
-          className="col-span-2 justify-self-start"
+          className="btn col-span-2 justify-self-start px-16 py-8 rounded-full"
           onClick={onReset}
         >
           Reset
-        </Button>
-        <Button
+        </button>
+        <button
           form={props.form}
           type="button"
           disabled={props.required && !hasDates}
-          size="sm"
-          variant="success"
-          className="col-span-2 justify-self-end"
+          className="btn-primary-gradient col-span-2 justify-self-end"
           data-testid="date-picker-confirm"
           onClick={onConfirm}
         >
           Confirm
-        </Button>
+        </button>
       </footer>
     </div>
   );

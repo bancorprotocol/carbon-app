@@ -2,14 +2,13 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { SimResultChartAnimation } from 'components/simulator/result/SimResultChartAnimation';
 import { SimResultChartSummary } from 'components/simulator/result/SimResultChartSummary';
 import { SimResultChartHeader } from 'components/simulator/result/SimResultChartHeader';
-import { useSimulator } from 'components/simulator/result/SimulatorProvider';
+import { useSimulator } from 'components/simulator/result/utils';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useState } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { Link } from '@tanstack/react-router';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 
 interface Props {
   state: StrategyInputValues;
@@ -25,17 +24,17 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
       <div
         role="alert"
         aria-live="polite"
-        className="rounded-lg mx-auto my-10 flex h-[400px] flex-col items-center justify-center gap-20 bg-black"
+        className="rounded-lg mx-auto my-10 flex h-[400px] flex-col items-center justify-center gap-20 bg-main-900/60"
       >
         <IconTitleText
           icon={<IconWarning />}
           title="Missing Information"
           text={
-            <p className="w-[480px]">
+            <span className="w-[480px]">
               It appears that the simulation is missing essential information
               for successful execution. Please attempt to re-enter the
               simulation data.
-            </p>
+            </span>
           }
           variant="error"
         />
@@ -43,8 +42,8 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
           <Link
             to="/simulate/recurring"
             search={{
-              baseToken: ctx.search.baseToken,
-              quoteToken: ctx.search.quoteToken,
+              base: ctx.search.base,
+              quote: ctx.search.quote,
               start: ctx.search.start,
               end: ctx.search.end,
               buyMin: ctx.search.buyMin,
@@ -56,9 +55,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
               buyIsRange: ctx.search.buyIsRange,
               sellIsRange: ctx.search.sellIsRange,
             }}
-            className={buttonStyles({
-              size: 'lg',
-            })}
+            className="btn-secondary-gradient"
           >
             Back
           </Link>
@@ -67,17 +64,15 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
           <Link
             to="/simulate/overlapping"
             search={{
-              baseToken: ctx.search.baseToken,
-              quoteToken: ctx.search.quoteToken,
+              base: ctx.search.base,
+              quote: ctx.search.quote,
               start: ctx.search.start,
               end: ctx.search.end,
               buyMin: ctx.search.buyMin,
               sellMax: ctx.search.sellMax,
               spread: ctx.search.spread,
             }}
-            className={buttonStyles({
-              size: 'lg',
-            })}
+            className="btn-secondary-gradient"
           >
             Back
           </Link>
@@ -91,7 +86,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
   }
 
   return (
-    <div className="rounded-lg bg-black">
+    <div className="rounded-lg bg-main-900/60">
       <SimResultChartHeader
         data={ctx.data!}
         setShowSummary={setShowSummary}
@@ -104,15 +99,15 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
         <SimResultChartSummary
           data={ctx.data!}
           bounds={ctx.bounds!}
-          baseToken={state.baseToken!}
-          quoteToken={state.quoteToken!}
+          base={state.base!}
+          quote={state.quote!}
         />
       ) : (
         <SimResultChartAnimation
           data={ctx.animationData}
           bounds={ctx.bounds!}
-          baseToken={state.baseToken!}
-          quoteToken={state.quoteToken!}
+          base={state.base!}
+          quote={state.quote!}
         />
       )}
     </div>
@@ -120,7 +115,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
 };
 
 const Loading = () => (
-  <div className="rounded-lg grid h-[400px] place-items-center bg-black py-10">
+  <div className="rounded-lg grid h-[400px] place-items-center bg-main-900 py-10">
     <CarbonLogoLoading className="h-[100px]" />
   </div>
 );

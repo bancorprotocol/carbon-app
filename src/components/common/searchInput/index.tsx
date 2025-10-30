@@ -22,7 +22,7 @@ export const SearchInput = ({
   return (
     <div
       className={cn(
-        'flex items-center gap-16 border border-transparent bg-black px-16 py-8 focus-within:border-white',
+        'flex items-center gap-16 px-16 py-8 input-container',
         className,
       )}
     >

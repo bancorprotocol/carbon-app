@@ -17,6 +17,7 @@ export interface OverlappingSearch extends StrategySearch {
   anchor?: StrategyDirection;
   budget?: string;
   chartType?: 'history' | 'range';
+  fullRange?: boolean;
 }
 
 // ORDERS
@@ -153,3 +154,8 @@ export type AnyCartStrategy =
 export type AnyCartStrategyStorage =
   | CartStrategyStorage<StaticOrder>
   | CartStrategyStorage<GradientOrder>;
+
+export interface TradePair {
+  baseToken: Token;
+  quoteToken: Token;
+}

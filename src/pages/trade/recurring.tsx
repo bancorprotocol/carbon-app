@@ -3,7 +3,7 @@ import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { getDefaultOrder } from 'components/strategies/create/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';

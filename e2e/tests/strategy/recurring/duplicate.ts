@@ -29,7 +29,7 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
     const createForm = new CreateStrategyDriver(page, testCase);
     await createForm.submit('duplicate');
 
-    await page.waitForURL('/portfolio', { timeout: 10_000 });
+    await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await waitForTenderlyRpc(page);
 
     const myStrategies = new MyStrategyDriver(page);

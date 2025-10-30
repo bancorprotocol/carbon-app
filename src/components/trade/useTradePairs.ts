@@ -1,6 +1,5 @@
-import { useSearch, useNavigate, TradeSearch } from 'libs/routing';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { useModal } from 'hooks/useModal';
+import { useSearch, TradeSearch } from 'libs/routing';
+import { TradePair } from 'components/strategies/common/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { useWagmi } from 'libs/wagmi';
@@ -10,23 +9,9 @@ import config from 'config';
 
 export const useTradePairs = () => {
   const { user } = useWagmi();
-  const { openModal } = useModal();
-
-  const navigate = useNavigate();
   const search: TradeSearch = useSearch({ strict: false });
 
   const pairs = usePairs();
-
-  const onTradePairSelect = (tradePair: TradePair) => {
-    navigate({
-      to: '/trade/disposable',
-      search: {
-        base: tradePair.baseToken.address,
-        quote: tradePair.quoteToken.address,
-      },
-    });
-  };
-
   const getTradePair = useCallback(
     (base: string, quote: string) => {
       const key = toPairSlug({ address: base }, { address: quote });
@@ -85,12 +70,7 @@ export const useTradePairs = () => {
       item.quoteToken.address.toLowerCase() === search.quote?.toLowerCase(),
   );
 
-  const openTradePairList = () => {
-    openModal('tradeTokenList', { onClick: onTradePairSelect });
-  };
-
   return {
-    openTradePairList,
     isPending: pairs.isPending,
     isError: pairs.isError,
     isTradePairError,

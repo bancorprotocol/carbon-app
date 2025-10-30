@@ -1,10 +1,7 @@
-import { FC, useId } from 'react';
+import { FC, useId, useMemo } from 'react';
 import { Token } from 'libs/tokens';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/common/OrderHeader';
-import { InputRange } from 'components/strategies/common/InputRange';
-import { InputLimit } from 'components/strategies/common/InputLimit';
 import { OrderBlock } from 'components/strategies/common/types';
 import { InputBudget } from 'components/strategies/common/InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
@@ -17,6 +14,8 @@ import {
   StrategyType,
 } from 'libs/routing';
 import style from 'components/strategies/common/order.module.css';
+import { LimitRangeOrder } from '../common/LimitRangeOrder';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 interface Props {
   base: Token;
@@ -38,7 +37,6 @@ export const CreateOrder: FC<Props> = ({
   base,
   quote,
   order,
-  optionalBudget,
   type,
   setOrder,
   direction = 'sell',
@@ -48,30 +46,9 @@ export const CreateOrder: FC<Props> = ({
   warnings,
 }) => {
   const titleId = useId();
+  const budgetId = useId();
 
   const isBuy = direction === 'buy';
-  // PRICES
-  const inputTitle = (
-    <>
-      <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-        1
-      </span>
-      <Tooltip
-        element={`Define the price you are willing to ${
-          isBuy ? 'buy' : 'sell'
-        } ${base.symbol} at. Make sure the price is in ${quote.symbol} tokens.`}
-      >
-        <p>
-          <span className="text-white/80">
-            Set {isBuy ? 'Buy' : 'Sell'} Price&nbsp;
-          </span>
-          <span className="text-white/60">
-            ({quote.symbol} per 1 {base.symbol})
-          </span>
-        </p>
-      </Tooltip>
-    </>
-  );
   const setPrice = (price: string) => setOrder({ min: price, max: price });
   const setMin = (min: string) => setOrder({ min });
   const setMax = (max: string) => setOrder({ max });
@@ -83,7 +60,7 @@ export const CreateOrder: FC<Props> = ({
     balance.data && new SafeDecimal(balance.data).lt(order.budget)
       ? 'Insufficient balance'
       : '';
-  const budgetTooltip = () => {
+  const budgetTooltip = useMemo(() => {
     if (isBuy) {
       const note =
         type === 'recurring'
@@ -97,7 +74,7 @@ export const CreateOrder: FC<Props> = ({
           : '';
       return `The amount of ${base.symbol} tokens you would like to sell. ${note}`;
     }
-  };
+  }, [base.symbol, isBuy, quote.symbol, type]);
   const setBudget = (budget: string) => setOrder({ budget });
 
   const headerProps = {
@@ -112,7 +89,7 @@ export const CreateOrder: FC<Props> = ({
   return (
     <article
       aria-labelledby={titleId}
-      className="bg-background-900 grid"
+      className="grid"
       data-testid={`${direction}-section`}
     >
       {!!setDirection && (
@@ -123,50 +100,26 @@ export const CreateOrder: FC<Props> = ({
         data-direction={direction}
       >
         <OrderHeader {...headerProps} />
-        <fieldset className="flex flex-col gap-8">
-          <legend className="text-14 font-medium mb-11 flex items-center gap-6">
-            {inputTitle}
-          </legend>
-          {order.settings === 'range' ? (
-            <InputRange
-              base={base}
-              quote={quote}
-              min={order.min}
-              setMin={setMin}
-              max={order.max}
-              setMax={setMax}
-              isBuy={isBuy}
-              error={error}
-              warnings={warnings}
-              required
-            />
-          ) : (
-            <InputLimit
-              base={base}
-              quote={quote}
-              price={order.min}
-              setPrice={setPrice}
-              isBuy={isBuy}
-              error={error}
-              warnings={warnings}
-              required
-            />
-          )}
-        </fieldset>
-        <fieldset className="flex flex-col gap-8">
-          <legend className="text-14 font-medium mb-11 flex items-center gap-6">
-            <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-              2
-            </span>
-            <Tooltip element={budgetTooltip()}>
-              <span className="text-white/80">
-                Set {isBuy ? 'Buy' : 'Sell'} Budget&nbsp;
-              </span>
-            </Tooltip>
-            {optionalBudget && (
-              <span className="font-medium ml-8 text-white/60">Optional</span>
-            )}
-          </legend>
+        <LimitRangeOrder
+          base={base}
+          quote={quote}
+          order={order}
+          direction={direction}
+          setMin={setMin}
+          setMax={setMax}
+          setPrice={setPrice}
+          error={error}
+          warnings={warnings}
+        />
+        <div className="grid gap-8">
+          <Tooltip element={budgetTooltip}>
+            <label
+              htmlFor={budgetId}
+              className="text-14 font-medium flex items-center gap-8 capitalize text-white/80"
+            >
+              Budget
+            </label>
+          </Tooltip>
           <InputBudget
             editType="deposit"
             token={budgetToken}
@@ -177,7 +130,7 @@ export const CreateOrder: FC<Props> = ({
             error={insufficientBalance}
             data-testid="input-budget"
           />
-        </fieldset>
+        </div>
         <FullOutcome
           min={order.min}
           max={order.max}

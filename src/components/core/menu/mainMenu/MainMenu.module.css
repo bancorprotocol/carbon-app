@@ -1,0 +1,19 @@
+.main-menu {
+  position: sticky;
+  top: 0;
+  height: 80px;
+  padding-inline: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: oklch(100% var(--chroma) var(--hue) / 50%);
+  z-index: 40;
+}
+.main-menu::before {
+  content: "";
+  inset: 0;
+  backdrop-filter: blur(20px) saturate(150%);
+  mask: linear-gradient(to bottom, black 80%, transparent);
+  position: absolute;
+  z-index: -1;
+}

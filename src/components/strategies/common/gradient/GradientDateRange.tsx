@@ -9,7 +9,7 @@ import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 
-export const datePickerPresets: DatePickerPreset[] = [
+const datePickerPresets: DatePickerPreset[] = [
   { label: '1D', days: 0 },
   { label: '7D', days: 6 },
   { label: '14D', days: 13 },
@@ -60,8 +60,8 @@ export const GradientDateRange = memo(function TimeRange(
       type="button"
       aria-label="Pick date range"
       className={cn(
-        'text-12 flex items-center gap-8 rounded-full border border-transparent bg-black px-12 py-8',
-        'hover:bg-background-900 active:bg-background-800 outline-1 outline-white/60 focus-visible:outline-solid',
+        'text-12 flex items-center gap-8 rounded-full border border-transparent btn-tertiary-gradient px-12 py-8',
+        'outline-1 outline-white/60 focus-visible:outline-solid',
         props.className,
       )}
       data-testid="date-picker-button"
@@ -162,7 +162,7 @@ const Content = (props: Props) => {
             type="button"
             role="radio"
             key={days}
-            className="rounded-md px-30 text-14 font-medium hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start aria-checked:bg-black"
+            className="rounded-md px-30 text-14 font-medium hover:bg-main-900/40 box-border border border-transparent bg-clip-padding py-8 text-start aria-checked:bg-main-900/60"
             onClick={() => handlePreset(days)}
             aria-checked={selectedPreset?.days === days}
             data-testid="date-picker-button"
@@ -182,13 +182,13 @@ const Content = (props: Props) => {
         />
         <div className="flex gap-20">
           {startTime && (
-            <p className="bg-background-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
+            <p className="bg-main-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
               <span className="text-10 text-white/60">Start Time</span>
               <time className="text-12 font-medium">{startTime}</time>
             </p>
           )}
           {range?.to && (
-            <p className="bg-background-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
+            <p className="bg-main-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
               <span className="text-10 text-white/60">End Time</span>
               <time className="text-12 font-medium">23:59:59</time>
             </p>

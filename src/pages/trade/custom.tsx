@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { StrategyDirection } from 'libs/routing/routes/trade';
 import { useCallback, useMemo } from 'react';
 import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawLine';
@@ -190,7 +190,7 @@ export const TradeCustom = () => {
           buy={orders.buy.order}
           sell={orders.sell.order}
         >
-          <article className="bg-background-900 grid gap-16 rounded-b-2xl">
+          <article className="bg-main-900 grid gap-16 rounded-b-2xl">
             {!search.directions?.length && (
               <h2 className="error-message text-16 m-0 px-16">
                 Please select an order

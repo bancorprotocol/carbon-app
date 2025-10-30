@@ -6,24 +6,19 @@ import { StrategyInputOrder } from 'hooks/useStrategyInput';
 interface Props {
   buy: StrategyInputOrder;
   sell: StrategyInputOrder;
-  baseToken: Token;
-  quoteToken: Token;
+  base: Token;
+  quote: Token;
 }
 
-export const SimResultSummaryTable = ({
-  baseToken,
-  quoteToken,
-  buy,
-  sell,
-}: Props) => {
+export const SimResultSummaryTable = ({ base, quote, buy, sell }: Props) => {
   const sellMin = prettifyNumber(sell.min, { abbreviate: true });
   const sellMax = prettifyNumber(sell.max, { abbreviate: true });
   const buyMin = prettifyNumber(buy.min, { abbreviate: true });
   const buyMax = prettifyNumber(buy.max, { abbreviate: true });
   const baseBudget = prettifyNumber(sell.budget, { abbreviate: true });
   const quoteBudget = prettifyNumber(buy.budget, { abbreviate: true });
-  const baseSymbol = baseToken.symbol;
-  const quoteSymbol = quoteToken.symbol;
+  const baseSymbol = base.symbol;
+  const quoteSymbol = quote.symbol;
 
   const isBuyLimitOrder = buy.min === buy.max;
   const isSellLimitOrder = sell.min === sell.max;

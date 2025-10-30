@@ -2,7 +2,6 @@ import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { useStore } from 'store';
 import { FormEvent, useId, useState } from 'react';
-import { Button } from 'components/common/button';
 import { TradeSettingsData } from 'components/trade/settings/utils';
 import { TradeSettingsRow } from 'components/trade/settings/TradeSettingsRow';
 import { cn } from 'utils/helpers';
@@ -77,7 +76,7 @@ export const MainMenuTradeSettings = () => {
     <>
       <button
         type="button"
-        className="bg-black hover:border-white/80 border border-transparent flex gap-8 items-center px-8 py-4 rounded-full"
+        className="btn-on-surface border border-transparent flex gap-8 items-center px-8 py-4 rounded-full"
         aria-label="Trade settings"
         aria-haspopup="dialog"
         aria-controls={dialogId}
@@ -115,9 +114,9 @@ export const MainMenuTradeSettings = () => {
           {settingsData.map((item) => (
             <TradeSettingsRow key={item.id} item={item} />
           ))}
-          <Button variant="success" type="submit">
+          <button className="btn-primary-gradient" type="submit">
             Save Changes
-          </Button>
+          </button>
         </form>
       </dialog>
     </>

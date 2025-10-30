@@ -1,46 +1,12 @@
-import { createContext, FC, ReactNode, useCallback, useContext } from 'react';
-import { CarbonWagmiProviderContext } from 'libs/wagmi/wagmi.types';
+import { FC, ReactNode, useCallback } from 'react';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
-import { currentChain } from './chains';
-import { useModal } from 'hooks/useModal';
+import { CarbonWagmiCTX } from './context';
 import { Contract, TransactionRequest } from 'ethers';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
-
-// ********************************** //
-// WAGMI CONTEXT
-// ********************************** //
-
-const defaultValue: CarbonWagmiProviderContext = {
-  user: undefined,
-  imposterAccount: undefined,
-  setImposterAccount: () => {},
-  isNetworkActive: false,
-  provider: undefined,
-  signer: undefined,
-  sendTransaction: async () => undefined as any,
-  currentConnector: undefined,
-  connectors: [],
-  chainId: currentChain.id,
-  accountChainId: undefined,
-  handleTenderlyRPC: () => {},
-  disconnect: async () => {},
-  openConnect: async () => {},
-  connect: async () => {},
-  networkError: undefined,
-  isSupportedNetwork: true,
-  switchNetwork: () => {},
-  isUserBlocked: false,
-  isUncheckedSigner: false,
-  setIsUncheckedSigner: () => {},
-  getBalance: async () => BigInt(0),
-};
-
-export const CarbonWagmiCTX = createContext(defaultValue);
-
-export const useWagmi = () => useContext(CarbonWagmiCTX);
+import { useModal } from 'hooks/useModal';
 
 // ********************************** //
 // WAGMI PROVIDER

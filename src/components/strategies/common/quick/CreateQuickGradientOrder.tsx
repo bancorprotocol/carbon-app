@@ -1,6 +1,6 @@
 import { FC, useMemo, ReactNode, useId, useState, useEffect } from 'react';
 import { QuickGradientOrderBlock } from '../types';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { GradientPriceRange } from '../gradient/GradientPriceRange';
 import { InputBudget } from '../InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
@@ -21,6 +21,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
   const { base, quote } = useTradeCtx();
   const { marketPrice } = useMarketPrice({ base, quote });
   const [localDelta, setLocalDelta] = useState(order.deltaTime);
+  const budgetId = useId();
   const endTimeId = useId();
   const budgetToken = order.direction === 'buy' ? quote : base;
   const balance = useGetTokenBalance(budgetToken);
@@ -65,16 +66,16 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
       >
         {order.direction} Overview
       </h2>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      <div role="group" className="grid gap-8">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
           Duration
-        </legend>
+        </h3>
         <div className="text-12 font-medium flex gap-8 text-nowrap text-white/60">
-          <div className="rounded-s-2xl rounded-e-md flex flex-1 items-center gap-8 bg-black px-16 py-8">
+          <div className="rounded-s-2xl rounded-e-md flex flex-1 items-center gap-8 bg-main-900 px-16 py-8">
             <span>Start Time</span>
             <span>On Execution</span>
           </div>
-          <div className="rounded-s-md rounded-e-2xl has-[input:invalid]:outline-error has-[input:invalid]:border-error flex flex-1 items-center gap-4 border border-transparent bg-black px-16 py-8 has-[input:focus-visible]:outline-solid">
+          <div className="rounded-s-md rounded-e-2xl has-[input:invalid]:outline-error has-[input:invalid]:border-error flex flex-1 items-center gap-4 border border-transparent bg-main-900 px-16 py-8 has-[input:focus-visible]:outline-solid">
             <label htmlFor={endTimeId}>End Time</label>
             <button
               type="button"
@@ -110,11 +111,11 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
           </div>
         </div>
         {dateError && <Warning message={dateError} isError />}
-      </fieldset>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      </div>
+      <div role="group" className="grid gap-8">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
           Set {order.direction} Price
-        </legend>
+        </h3>
         <GradientPriceRange
           base={base}
           quote={quote}
@@ -128,13 +129,17 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
         {!props.priceWarning && priceWarning && (
           <Warning message={priceWarning} />
         )}
-      </fieldset>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      </div>
+      <div className="grid gap-8">
+        <label
+          htmlFor={budgetId}
+          className="text-14 font-medium capitalize text-white/60"
+        >
           Set {order.direction} Budget
-        </legend>
+        </label>
         <InputBudget
           editType="deposit"
+          id={budgetId}
           token={order.direction === 'buy' ? quote : base}
           value={order.budget}
           onChange={(budget) => setOrder({ budget })}
@@ -143,7 +148,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
           error={insufficientBalance}
           data-testid="input-budget"
         />
-      </fieldset>
+      </div>
     </div>
   );
 };

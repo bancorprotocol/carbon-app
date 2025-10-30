@@ -12,6 +12,7 @@ import {
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 import { waitForTenderlyRpc } from '../../../utils/tenderly';
 import { DebugDriver } from '../../../utils/DebugDriver';
+import { PortfolioDriver } from '../../../utils/strategy/PortfolioDriver';
 
 export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
@@ -22,13 +23,15 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     const debug = new DebugDriver(page);
     await debug.waitForBalance(quote);
 
-    await navigateTo(page, '/portfolio');
+    await navigateTo(page, '/portfolio/pairs');
+    const portfolio = new PortfolioDriver(page);
+    await portfolio.tabInto('strategies');
     const myStrategies = new MyStrategyDriver(page);
     const createForm = new CreateStrategyDriver(page, testCase);
     await myStrategies.createStrategy();
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
-    await createForm.selectSetting('recurring');
+    await createForm.selectType('advanced', 'recurringRange');
 
     const sellForm = await createForm.fillRecurring('sell');
     await expect(sellForm.outcomeValue()).toHaveText(output.sell.outcomeValue);
@@ -41,7 +44,7 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await createForm.submit('create');
     await tokenApproval.checkApproval([base, quote]);
 
-    await page.waitForURL('/portfolio', { timeout: 10_000 });
+    await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await waitForTenderlyRpc(page);
 
     // Verify strategy data

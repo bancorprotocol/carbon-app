@@ -82,30 +82,35 @@ export const fetchTokenData = async (
   Token: (address: string) => { read: TokenContract },
   address: string,
 ): Promise<Token> => {
-  if (config.network.name === 'TON') {
-    const tonAddress = await getTVMTokenAddress(address);
-    const [token, evmAddress] = await Promise.all([
-      getTonTokenData(tonAddress),
-      getEVMTokenAddress(address),
-    ]);
-    return {
-      ...token,
-      address: evmAddress,
-      tonAddress: tonAddress,
-      isSuspicious: true,
-    } as TonToken;
-  } else {
-    const [symbol, decimals, name] = await Promise.all([
-      Token(address).read.symbol(),
-      Token(address).read.decimals(),
-      Token(address).read.name(),
-    ]);
-    return {
-      address,
-      symbol,
-      decimals: Number(decimals),
-      name,
-      isSuspicious: true,
-    };
+  try {
+    if (config.network.name === 'TON') {
+      const tonAddress = await getTVMTokenAddress(address);
+      const [token, evmAddress] = await Promise.all([
+        getTonTokenData(tonAddress),
+        getEVMTokenAddress(address),
+      ]);
+      return {
+        ...token,
+        address: evmAddress,
+        tonAddress: tonAddress,
+        isSuspicious: true,
+      } as TonToken;
+    } else {
+      const [symbol, decimals, name] = await Promise.all([
+        Token(address).read.symbol(),
+        Token(address).read.decimals(),
+        Token(address).read.name(),
+      ]);
+      return {
+        address,
+        symbol,
+        decimals: Number(decimals),
+        name,
+        isSuspicious: true,
+      };
+    }
+  } catch (err) {
+    console.error('Could not fetch information from ' + address);
+    throw err;
   }
 };

@@ -1,6 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   StrategyDirection,
@@ -96,7 +96,7 @@ export const TradeQuickAuction = () => {
       </StrategyChartSection>
       <CreateLayout url={url}>
         <CreateGradientStrategyForm buy={orders.buy} sell={orders.sell}>
-          <article className="bg-background-900 rounded-b-2xl grid">
+          <article className="bg-main-900 rounded-b-2xl grid">
             <OrderDirection direction={direction} setDirection={setDirection} />
             <div
               className={cn(style.order, 'grid gap-16 p-16')}

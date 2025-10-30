@@ -28,8 +28,8 @@ export interface StrategyInputOrder {
 }
 
 export interface StrategyInputValues {
-  baseToken?: Token;
-  quoteToken?: Token;
+  base?: Token;
+  quote?: Token;
   buy: StrategyInputOrder;
   sell: StrategyInputOrder;
   start?: string;
@@ -45,8 +45,8 @@ export const useStrategyInput = ({ searchState }: Props) => {
   const navigate = useNavigate({ from: '/simulate/recurring' });
   const [_state, setState] = useState<InternalStrategyInput>(searchState);
 
-  const base = useToken(_state.baseToken);
-  const quote = useToken(_state.quoteToken);
+  const base = useToken(_state.base);
+  const quote = useToken(_state.quote);
 
   const state = buildStrategyInputState(_state, base.token, quote.token);
 
@@ -79,13 +79,13 @@ function isInternalState(object: any): object is InternalStrategyInput {
 
 export const buildStrategyInputState = (
   state: InternalStrategyInput | StrategyInputSearch,
-  baseToken?: Token,
-  quoteToken?: Token,
+  base?: Token,
+  quote?: Token,
 ): StrategyInputValues => {
   if (isInternalState(state)) {
     return {
-      baseToken,
-      quoteToken,
+      base,
+      quote,
       buy: {
         min: state.buyMin || '',
         max: state.buyMax || '',
@@ -105,8 +105,8 @@ export const buildStrategyInputState = (
     };
   } else {
     return {
-      baseToken,
-      quoteToken,
+      base,
+      quote,
       buy: {
         min: state.buyMin || '',
         max: state.buyMax || '',

@@ -117,6 +117,9 @@ export const commonConfig: AppConfig = {
     {
       uri: 'https://raw.githubusercontent.com/celo-org/celo-token-list/main/celo.tokenlist.json',
     },
+    {
+      uri: '/tokens/celo/list.json',
+    },
   ],
   tenderly: {
     faucetTokens: [
@@ -149,6 +152,7 @@ export const commonConfig: AppConfig = {
     showTerms: true,
     showPrivacy: true,
     showCart: true,
-    walkthroughId: 'uouygtywoj3c',
+    // rewardUrl: 'https://app.merkl.xyz/?chain=42220&protocol=carbon',
+    // walkthroughId: 'uouygtywoj3c',
   },
 };

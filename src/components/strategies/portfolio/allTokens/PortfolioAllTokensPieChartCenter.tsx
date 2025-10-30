@@ -1,7 +1,7 @@
 import { SafeDecimal } from 'libs/safedecimal';
 import { FC } from 'react';
 import { useStore } from 'store';
-import { cn, getFiatDisplayValue } from 'utils/helpers';
+import { getFiatDisplayValue } from 'utils/helpers';
 
 type Props = {
   totalValue: SafeDecimal;
@@ -17,13 +17,11 @@ export const PortfolioAllTokensPieChartCenter: FC<Props> = ({
   } = useStore();
 
   return (
-    <div className={cn('flex', 'flex-col', 'items-center', 'space-y-6')}>
-      <div className={cn('text-24', 'font-medium')}>
+    <div className="flex flex-col items-center gap-4">
+      <div className="text-24 font-medium">
         {getFiatDisplayValue(totalValue, selectedFiatCurrency)}
       </div>
-      <div className={cn('text-white/60', 'font-medium')}>
-        {assetsCount} Assets
-      </div>
+      <div className="text-white/60 font-medium">{assetsCount} Tokens</div>
     </div>
   );
 };

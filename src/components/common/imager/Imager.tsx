@@ -4,7 +4,7 @@ import genericToken from 'assets/icons/generic_token.svg';
 import { cn } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 
-export const useImager = (
+const useImager = (
   src: string = genericToken,
   fallbackSrc: string = genericToken,
 ) => {
@@ -77,11 +77,22 @@ export const Imager = ({
 };
 
 interface TokenLogoProps {
-  token: Token;
+  token?: Token;
   size: number;
   className?: string;
 }
 export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
+  if (!token) {
+    return (
+      <div
+        style={{ height: `${size}px` }}
+        className={cn(
+          className,
+          'border border-black bg-main-900 rounded-full aspect-square',
+        )}
+      ></div>
+    );
+  }
   return (
     <LogoImager
       width={size}
@@ -89,7 +100,7 @@ export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
       src={token.logoURI}
       alt={token.name ?? token.symbol}
       title={token.symbol}
-      className={cn(className, 'border border-black bg-black')}
+      className={cn(className, 'border border-black bg-main-900')}
     />
   );
 };

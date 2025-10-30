@@ -37,23 +37,7 @@ export const useTrending = () => {
     queryKey: QueryKey.trending(),
     queryFn: carbonApi.getTrending,
     staleTime: ONE_HOUR_IN_MS,
-    refetchInterval: 120_000,
+    refetchInterval: Infinity,
+    refetchOnWindowFocus: false,
   });
-};
-
-interface StrategyTradeCount {
-  tradeCount: number;
-  tradeCount24h: number;
-}
-
-export const useTradeCount = () => {
-  const query = useTrending();
-  const tradeCount: Record<string, StrategyTradeCount> = {};
-  for (const item of query.data?.tradeCount ?? []) {
-    tradeCount[item.id] = {
-      tradeCount: item.strategyTrades,
-      tradeCount24h: item.strategyTrades_24h,
-    };
-  }
-  return { data: tradeCount, isPending: query.isPending };
 };

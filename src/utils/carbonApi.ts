@@ -14,6 +14,7 @@ import {
 } from 'libs/queries/extApi/activity';
 import { lsService } from 'services/localeStorage';
 import { Trending } from 'libs/queries/extApi/tradeCount';
+import { Reward } from 'libs/queries/extApi/rewards';
 
 // Only ETH is supported as network currency by the API
 const NETWORK_CURRENCY =
@@ -96,6 +97,7 @@ const carbonApi = {
     return get<ServerActivityMeta>('activity/meta', params);
   },
   getTrending: () => get<Trending>('analytics/trending'),
+  getReward: (pair: string) => get<Reward>('merkle/data', { pair }),
 };
 
 export { carbonApi };

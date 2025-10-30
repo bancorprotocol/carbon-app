@@ -8,24 +8,26 @@ export interface MenuItem {
   testid: string;
 }
 
-export const getMenuItems = () => {
+export const getMenuItems = (user?: string) => {
   const items = [
-    {
-      label: 'Portfolio',
-      href: '/portfolio',
-      testid: 'my-strategies-page',
-    },
     {
       label: 'Trade',
       href: '/trade',
       testid: 'trade-page',
     },
+    {
+      label: 'Explore',
+      href: '/explore',
+      testid: 'explore-page',
+    },
   ];
-  items.push({
-    label: 'Explore',
-    href: '/explore',
-    testid: 'explore-page',
-  });
+  if (user) {
+    items.unshift({
+      label: 'Portfolio',
+      href: '/portfolio',
+      testid: 'my-strategies-page',
+    });
+  }
   if (config.ui.showSimulator) {
     items.push({
       label: 'Simulate',

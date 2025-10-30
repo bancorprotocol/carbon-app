@@ -2,57 +2,15 @@
 @reference "../../../theme.css";
 
 .strategy-list {
+  --items-width: 350px;
   contain: content;
-  grid-template-columns: repeat(auto-fill, 375px);
+  grid-template-columns: repeat(auto-fill, minmax(var(--items-width), 1fr));
   justify-content: center;
 }
 .strategy-item {
-  height: 400px;
-  max-width: 375px;
+  aspect-ratio: 410 / 425;
   content-visibility: auto; /* to prevent no tooltips when scrolling down */
-  contain-intrinsic-size: 375px 400px;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .animate-item {
-    animation: open-item 200ms var(--delay, 0ms) backwards;
-  }
-}
-.strategy-table {
-  @apply bg-background-900 text-14;
-  border-radius: 8px;
-  animation: open 300ms ease-out;
-}
-.strategy-table th {
-  @apply border-b border-background-800;
-  font-weight: 400;
-  color: rgba(255 255 255 / 0.6);
-  padding: 16px;
-  text-align: start;
-  text-wrap: nowrap;
-}
-.strategy-table td {
-  padding: 8px 16px;
-}
-.strategy-table td:first-child {
-  padding-left: 24px;
-}
-.strategy-table td:last-child {
-  padding-right: 24px;
-}
-.strategy-table th:first-child {
-  border-top-left-radius: 8px;
-}
-.strategy-table th:last-child {
-  border-top-right-radius: 8px;
-}
-.strategy-table tr:not(:last-child) td {
-  @apply border-b border-background-800;
-}
-.strategy-table tr:last-child td:first-child {
-  border-bottom-left-radius: 8px;
-}
-.strategy-table tr:last-child td:last-child {
-  border-bottom-right-radius: 8px;
+  contain-intrinsic-size: var(--items-width) calc(var(--items-width) * 410 / 425);
 }
 
 @keyframes open {
@@ -70,5 +28,21 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-item {
+    animation: open-item 200ms var(--delay, 0ms) backwards;
+  }
+}
+@media (max-width: 80rem) {
+  .strategy-list {
+    grid-template-columns: repeat(auto-fill, var(--items-width));
+  }
+}
+@media (max-width: 40rem) {
+  .strategy-list {
+    --items-width: 330px;
   }
 }

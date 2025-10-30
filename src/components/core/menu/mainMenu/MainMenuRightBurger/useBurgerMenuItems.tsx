@@ -1,207 +1,186 @@
-import { ReactElement, useMemo } from 'react';
+import { ReactElement, useMemo, useState } from 'react';
 import { externalLinks, NewTabLink, Link } from 'libs/routing';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { MenuItemActions } from './useMenuContext';
 import { ReactComponent as IconX } from 'assets/logos/x.svg';
 import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
 import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
 import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
-import { ReactComponent as IconV } from 'assets/icons/v.svg';
+import { ForwardArrow } from 'components/common/forwardArrow';
 import config from 'config';
 
-export type MenuItemType = {
-  subMenu?: MenuType;
-  content?: string | ReactElement;
-  onClick?: () => any;
-  postClickAction?: MenuItemActions;
-};
+export type MenuType = 'main' | 'resources';
 
-export type MenuType = 'main' | 'resources' | 'currency';
-
-export type Menu = { title?: string; items: MenuItemType[] };
+export type Menu = ReactElement[];
 
 const iconStyles = 'size-32 md:size-20';
+const menuitemClass =
+  'rounded-sm cursor-pointer text-18 md:text-16 p-10 hover:bg-main-900/40 aria-selected:bg-main-900/60 flex items-center gap-8 first:border-b last:border-t border-main-700';
 
 export const useBurgerMenuItems = () => {
-  const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
-    useFiatCurrency();
-  const menuMap = new Map<MenuType, Menu>();
+  const [currentMenu, setCurrentMenu] = useState<MenuType>('main');
+  const menus = useMemo(() => {
+    const menuMap = new Map<MenuType, Menu>();
 
-  const mainItems: MenuItemType[] = [
-    {
-      subMenu: 'resources',
-      content: 'Resources',
-    },
-    {
-      content: (
-        <NewTabLink className="flex" to={externalLinks.faq}>
-          FAQ
-        </NewTabLink>
-      ),
-    },
-    {
-      content: externalLinks.analytics && (
-        <NewTabLink className="flex" to={externalLinks.analytics}>
-          Analytics
-        </NewTabLink>
-      ),
-    },
-    {
-      content: (
-        <NewTabLink className="flex" to={externalLinks.blog}>
-          Blog
-        </NewTabLink>
-      ),
-    },
-  ];
-  if (config.ui.showTerms) {
-    mainItems.push({
-      content: (
-        <Link className="flex" to="/terms">
-          Terms of Use
-        </Link>
-      ),
-    });
-  }
-  if (config.ui.showPrivacy) {
-    mainItems.push({
-      content: (
-        <Link className="flex" to="/privacy">
-          Privacy Policy
-        </Link>
-      ),
-    });
-  }
-  mainItems.push({
-    content: (
-      <div className="flex w-full items-center justify-between">
+    /** Main Menu */
+    const mainItems: Menu = [
+      <button
+        key="resources"
+        role="menuitem"
+        onClick={() => setCurrentMenu('resources')}
+        className={menuitemClass}
+      >
+        <span>Resources</span>
+        <ForwardArrow className="ml-auto" />
+      </button>,
+      <NewTabLink
+        key="faq"
+        role="menuitem"
+        className={menuitemClass}
+        to={externalLinks.faq}
+      >
+        FAQ
+      </NewTabLink>,
+      <NewTabLink
+        key="blog"
+        role="menuitem"
+        className={menuitemClass}
+        to={externalLinks.blog}
+      >
+        Blog
+      </NewTabLink>,
+    ];
+    if (externalLinks.analytics) {
+      mainItems.push(
         <NewTabLink
+          key="analytics"
+          role="menuitem"
+          className={menuitemClass}
+          to={externalLinks.analytics}
+        >
+          Analytics
+        </NewTabLink>,
+      );
+    }
+    if (config.ui.showTerms) {
+      mainItems.push(
+        <Link key="terms" role="menuitem" className={menuitemClass} to="/terms">
+          Terms of Use
+        </Link>,
+      );
+    }
+    if (config.ui.showPrivacy) {
+      mainItems.push(
+        <Link
+          key="policy"
+          role="menuitem"
+          className={menuitemClass}
+          to="/privacy"
+        >
+          Privacy Policy
+        </Link>,
+      );
+    }
+    mainItems.push(
+      <footer key="footer" className="flex w-full items-center justify-between">
+        <NewTabLink
+          role="menuitem"
+          className={menuitemClass}
           to={externalLinks.x}
-          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconX className={iconStyles} />
         </NewTabLink>
         <NewTabLink
+          role="menuitem"
+          className={menuitemClass}
           to={externalLinks.youtube}
-          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconYoutube className={iconStyles} />
         </NewTabLink>
         <NewTabLink
+          role="menuitem"
+          className={menuitemClass}
           to={externalLinks.discord}
-          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconDiscord className={iconStyles} />
         </NewTabLink>
         <NewTabLink
+          role="menuitem"
+          className={menuitemClass}
           to={externalLinks.telegram}
-          className="rounded-sm p-6 md:hover:bg-black"
         >
           <IconTelegram className={iconStyles} />
         </NewTabLink>
-      </div>
-    ),
-  });
-  if (config.ui.currencyMenu) {
-    mainItems.unshift({
-      subMenu: 'currency',
-      content: <CurrencyMenuItemContent />,
-    });
-  }
+      </footer>,
+    );
 
-  menuMap.set('main', { items: mainItems });
+    menuMap.set('main', mainItems);
 
-  const currencyItems = useMemo(
-    (): MenuItemType[] => [
-      ...availableCurrencies.map((currency) => {
-        const isCurrencySelected = currency === selectedFiatCurrency;
+    /** Currency Menu */
 
-        return {
-          content: (
-            <div
-              className={`flex justify-between gap-20 ${
-                isCurrencySelected ? '' : ''
-              }`}
-            >
-              <span>{currency}</span>
-              <span className="flex items-center">
-                <IconV
-                  className={`invisible size-12 ${
-                    isCurrencySelected ? 'visible!' : ''
-                  }`}
-                />
-              </span>
-            </div>
-          ),
-          onClick: () => {
-            setSelectedFiatCurrency(currency);
-          },
-          postClickAction: 'back' as const,
-        };
-      }),
-    ],
-    [availableCurrencies, selectedFiatCurrency, setSelectedFiatCurrency],
-  );
-  if (config.ui.currencyMenu) {
-    menuMap.set('currency', {
-      items: currencyItems,
-      title: 'Currency',
-    });
-  }
-
-  const resourcesItems: MenuItemType[] = [
-    {
-      content: (
-        <NewTabLink className="flex" to={externalLinks.techDocs}>
-          Tech Docs
-        </NewTabLink>
-      ),
-    },
-    {
-      content: (
-        <NewTabLink className="flex" to={externalLinks.litePaper}>
-          Litepaper
-        </NewTabLink>
-      ),
-    },
-    {
-      content: (
-        <NewTabLink className="flex" to={externalLinks.whitepaper}>
-          Whitepaper
-        </NewTabLink>
-      ),
-    },
-    {
-      content: externalLinks.simulatorRepo && (
-        <NewTabLink className="flex" to={externalLinks.simulatorRepo}>
+    const resourcesItems: Menu = [
+      <button
+        key="resource-submenu"
+        role="menuitem"
+        onClick={() => setCurrentMenu('main')}
+        className={menuitemClass}
+      >
+        <span className="rotate-180">
+          <ForwardArrow />
+        </span>
+        <span className="font-medium">Resources</span>
+      </button>,
+      <NewTabLink
+        key="tect"
+        role="menuitem"
+        className={menuitemClass}
+        to={externalLinks.techDocs}
+      >
+        Tech Docs
+      </NewTabLink>,
+      <NewTabLink
+        key="litepaper"
+        role="menuitem"
+        className={menuitemClass}
+        to={externalLinks.litePaper}
+      >
+        Litepaper
+      </NewTabLink>,
+      <NewTabLink
+        key="whitepaper"
+        role="menuitem"
+        className={menuitemClass}
+        to={externalLinks.whitepaper}
+      >
+        Whitepaper
+      </NewTabLink>,
+    ];
+    if (externalLinks.simulatorRepo) {
+      resourcesItems.push(
+        <NewTabLink
+          key="simulator"
+          role="menuitem"
+          className={menuitemClass}
+          to={externalLinks.simulatorRepo}
+        >
           Simulator Repo
-        </NewTabLink>
-      ),
-    },
-    {
-      content: externalLinks.duneDashboard && (
-        <NewTabLink className="flex" to={externalLinks.duneDashboard}>
-          Dune Dashboard
-        </NewTabLink>
-      ),
-    },
-  ];
-  menuMap.set('resources', {
-    items: resourcesItems,
-    title: 'Resources',
-  });
+        </NewTabLink>,
+      );
+    }
+    if (externalLinks.duneDashboard) {
+      <NewTabLink
+        key="dune"
+        role="menuitem"
+        className={menuitemClass}
+        to={externalLinks.duneDashboard}
+      >
+        Dune Dashboard
+      </NewTabLink>;
+    }
+    menuMap.set('resources', resourcesItems);
 
-  return {
-    menuMapping: menuMap,
-  };
-};
+    return menuMap;
+  }, []);
 
-const CurrencyMenuItemContent = () => {
-  const { selectedFiatCurrency } = useFiatCurrency();
-  return (
-    <div className="flex w-full items-center justify-between">
-      <span>Currency</span>
-      <span className="font-medium mr-10">{selectedFiatCurrency}</span>
-    </div>
-  );
+  const menu = useMemo(() => menus.get(currentMenu)!, [currentMenu, menus]);
+
+  return menu;
 };

@@ -2,33 +2,23 @@ import { debugPage } from 'libs/routing/routes/debug';
 import {
   explorerActivityPage,
   explorerLayout,
-  explorerOverviewPage,
-  explorerPortfolioLayout,
   explorerPortfolioPage,
-  explorerPortfolioTokenPage,
-  explorerRedirect,
-  explorerResultLayout,
-  oldTradePairExplorer,
-  oldWalletExplorer,
+  explorerDistributionPage,
+  explorerDistributionTokenPage,
+  explorerPairsPage,
+  oldExplorer,
 } from 'libs/routing/routes/explorer';
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
-  myStrategyLayout,
+  portfolioLayout,
   oldCreateStrategies,
-  strategyActivityPage,
-  strategyOverviewPage,
-  strategyPortfolioLayout,
-  strategyPortfolioPage,
-  strategyPortfolioTokenPage,
-} from 'libs/routing/routes/myStrategies';
+  portfolioPairsPage,
+  portfolioActivityPage,
+  portfolioStrategiesPage,
+  portfolioDistributionPage,
+  portfolioDistributionTokenPage,
+} from 'libs/routing/routes/portfolio';
 import { rootRoute } from 'libs/routing/routes/root';
-import {
-  simulatorInputOverlappingRoute,
-  simulatorInputRecurringRoute,
-  simulatorInputRootRoute,
-  simulatorResultRoute,
-  simulatorRootRoute,
-} from 'libs/routing/routes/sim';
 import {
   editStrategyLayout,
   editPricesDisposable,
@@ -46,16 +36,14 @@ import {
   strategyPageRoot,
 } from 'libs/routing/routes/strategy';
 import { cartPage } from './cart';
-import { createRoute, redirect } from '@tanstack/react-router';
 import { liquidityMatrixPage } from './liquidity-matrix';
-
-const rootRedirect = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/',
-  beforeLoad: (ctx) => {
-    redirect({ to: '/trade', throw: true, search: ctx.search });
-  },
-});
+import { landingPage } from './landing';
+import {
+  simulatorInputOverlappingRoute,
+  simulatorInputRecurringRoute,
+  simulatorInputRootRoute,
+  simulatorResultRoute,
+} from './sim';
 
 export const routeTree = rootRoute.addChildren([
   termPage,
@@ -63,6 +51,7 @@ export const routeTree = rootRoute.addChildren([
   debugPage,
   tradePage,
   cartPage,
+  landingPage,
   strategyPageRoot.addChildren([strategyPage, strategyPageRedirect]),
   oldCreateStrategies,
   editStrategyLayout.addChildren([
@@ -75,34 +64,24 @@ export const routeTree = rootRoute.addChildren([
     editBudgetOverlapping,
     editBudgetRecurring,
   ]),
-  oldTradePairExplorer,
-  oldWalletExplorer,
   explorerLayout.addChildren([
-    explorerResultLayout.addChildren([
-      explorerOverviewPage,
-      explorerPortfolioLayout.addChildren([
-        explorerPortfolioPage,
-        explorerPortfolioTokenPage,
-      ]),
-      explorerActivityPage,
-    ]),
-    explorerRedirect,
+    explorerPairsPage,
+    explorerPortfolioPage,
+    explorerDistributionPage.addChildren([explorerDistributionTokenPage]),
+    explorerActivityPage,
   ]),
-  myStrategyLayout.addChildren([
-    strategyOverviewPage,
-    strategyPortfolioLayout.addChildren([
-      strategyPortfolioPage,
-      strategyPortfolioTokenPage,
-    ]),
-    strategyActivityPage,
+  oldExplorer,
+  portfolioLayout.addChildren([
+    portfolioPairsPage,
+    portfolioStrategiesPage,
+    portfolioDistributionPage,
+    portfolioDistributionTokenPage,
+    portfolioActivityPage,
   ]),
-  simulatorRootRoute.addChildren([
-    simulatorInputRootRoute.addChildren([
-      simulatorInputRecurringRoute,
-      simulatorInputOverlappingRoute,
-    ]),
-    simulatorResultRoute,
+  simulatorInputRootRoute.addChildren([
+    simulatorInputRecurringRoute,
+    simulatorInputOverlappingRoute,
   ]),
-  rootRedirect,
+  simulatorResultRoute,
   liquidityMatrixPage,
 ]);

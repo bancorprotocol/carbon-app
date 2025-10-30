@@ -1,10 +1,10 @@
-import { FC, useCallback, useMemo, ReactNode } from 'react';
+import { FC, useCallback, useMemo, ReactNode, useId } from 'react';
 import { GradientOrderBlock } from '../types';
 import {
   RangeDate,
   GradientDateRange,
 } from 'components/strategies/common/gradient/GradientDateRange';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { GradientPriceRange } from './GradientPriceRange';
 import { InputBudget } from '../InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
@@ -28,6 +28,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
   const { marketPrice } = useMarketPrice({ base, quote });
   const budgetToken = order.direction === 'buy' ? quote : base;
   const balance = useGetTokenBalance(budgetToken);
+  const budgetId = useId();
 
   const setRange = useCallback(
     (range: RangeDate) => {
@@ -69,10 +70,10 @@ export const CreateGradientOrder: FC<Props> = (props) => {
       >
         {order.direction} Overview
       </h2>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      <div role="group" className="grid gap-8">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
           Duration
-        </legend>
+        </h3>
         <GradientDateRange
           defaultStart={addDays(startOfDay(new Date()), 1)}
           defaultEnd={addDays(startOfDay(new Date()), 7)}
@@ -86,11 +87,11 @@ export const CreateGradientOrder: FC<Props> = (props) => {
         />
         {dateError && <Warning message={dateError} isError />}
         {!dateError && dateWarning && <Warning message={dateWarning} />}
-      </fieldset>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      </div>
+      <div className="grid gap-8">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
           Set {order.direction} Price
-        </legend>
+        </h3>
         <GradientPriceRange
           base={base}
           quote={quote}
@@ -104,13 +105,17 @@ export const CreateGradientOrder: FC<Props> = (props) => {
         {!props.priceWarning && priceWarning && (
           <Warning message={priceWarning} />
         )}
-      </fieldset>
-      <fieldset className="grid gap-8">
-        <legend className="text-14 font-medium mb-8 flex items-center gap-6 capitalize text-white/60">
+      </div>
+      <div role="group" className="grid gap-8">
+        <label
+          htmlFor={budgetId}
+          className="text-14 font-medium capitalize text-white/60"
+        >
           Set {order.direction} Budget
-        </legend>
+        </label>
         <InputBudget
           editType="deposit"
+          id={budgetId}
           token={order.direction === 'buy' ? quote : base}
           value={order.budget}
           onChange={(budget) => setOrder({ budget })}
@@ -119,7 +124,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
           error={insufficientBalance}
           data-testid="input-budget"
         />
-      </fieldset>
+      </div>
       <GradientFullOutcome base={base} quote={quote} order={order} />
     </div>
   );

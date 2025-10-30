@@ -11,6 +11,7 @@ import {
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 import { waitForTenderlyRpc } from '../../../utils/tenderly';
 import { DebugDriver } from '../../../utils/DebugDriver';
+import { PortfolioDriver } from '../../../utils/strategy/PortfolioDriver';
 
 export const create = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
@@ -22,13 +23,15 @@ export const create = (testCase: CreateStrategyTestCase) => {
     const debug = new DebugDriver(page);
     await debug.waitForBalance(quote);
 
-    await navigateTo(page, '/portfolio');
+    await navigateTo(page, '/portfolio/pairs');
+    const portfolio = new PortfolioDriver(page);
+    await portfolio.tabInto('strategies');
     const myStrategies = new MyStrategyDriver(page);
     const createForm = new CreateStrategyDriver(page, testCase);
     await myStrategies.createStrategy();
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
-    await createForm.selectSetting('overlapping');
+    await createForm.selectType('essentials', 'overlapping');
 
     const form = createForm.getOverlappingForm();
     await form.max().focus();
@@ -43,7 +46,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit('create');
     await tokenApproval.checkApproval([base, quote]);
-    await page.waitForURL('/portfolio', { timeout: 10_000 });
+    await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);
 

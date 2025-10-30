@@ -12,9 +12,13 @@ export const StrategyBlockTradeCount: FC<Props> = ({ strategy }) => {
     decimals: 0,
   });
   return (
-    <article className="rounded-md border-background-800 flex w-2/5 flex-col border-2 p-16">
-      <h4 className="text-12 flex items-center gap-4 text-white/60">Trades</h4>
-      <p className="text-18 font-medium truncate">{count}</p>
+    <article className="bg-main-900/20 rounded-md border-main-800 grid w-2/5 border p-16">
+      <h4 className="text-12 flex items-center gap-4 text-white/60 self-start">
+        Trades
+      </h4>
+      <p className="text-18 font-medium truncate @xs/strategy:text-24">
+        {count}
+      </p>
     </article>
   );
 };

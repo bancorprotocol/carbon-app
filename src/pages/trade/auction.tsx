@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import {
   StrategyDirection,
   TradeAuctionSearch,
@@ -90,7 +90,7 @@ export const TradeAuction = () => {
       </StrategyChartSection>
       <CreateLayout url={url}>
         <CreateGradientStrategyForm buy={orders.buy} sell={orders.sell}>
-          <article className="bg-background-900 grid rounded-b-2xl">
+          <article className="bg-main-900 grid rounded-b-2xl">
             <OrderDirection direction={direction} setDirection={setDirection} />
             <div
               className={cn(style.order, 'grid gap-16 p-16')}

@@ -12,7 +12,6 @@ import {
 import { type ConnectErrorType, type DisconnectErrorType } from '@wagmi/core';
 import { isAccountBlocked } from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
-import { useStore } from 'store';
 import { errorMessages } from './wagmi.utils';
 import { clientToSigner } from './ethers';
 import { getUncheckedSigner } from 'utils/tenderly';
@@ -29,9 +28,12 @@ export const useWagmiUser = ({
   imposterAccount,
   setImposterAccount,
 }: Props) => {
-  const { address: walletAccount, chainId: accountChainId } = useAccount();
+  const {
+    address: walletAccount,
+    chainId: accountChainId,
+    connector: currentConnector,
+  } = useAccount();
 
-  const { isCountryBlocked } = useStore();
   const [isUncheckedSigner, _setIsUncheckedSigner] = useState(
     lsService.getItem('isUncheckedSigner') || false,
   );
@@ -50,8 +52,6 @@ export const useWagmiUser = ({
   const isSupportedNetwork = !accountChainId || accountChainId === chainId;
 
   const isUserBlocked = isAccountBlocked(user);
-
-  const { connector: currentConnector } = useAccount();
 
   const { data: client } = useConnectorClient<Config>({ chainId });
 
@@ -113,9 +113,6 @@ export const useWagmiUser = ({
      * @param {Connector} connector  Connector to connect to
      */
     async (connector: Connector) => {
-      if (isCountryBlocked || isCountryBlocked === null) {
-        throw new Error('Your country is restricted from using this app.');
-      }
       isManualConnection.current = true;
       try {
         await connectAsync(
@@ -134,7 +131,7 @@ export const useWagmiUser = ({
         throw new Error(codeErrorMessage || error.message);
       }
     },
-    [isCountryBlocked, connectAsync, chainId, disconnectAsync],
+    [connectAsync, chainId, disconnectAsync],
   );
 
   const disconnect = useCallback(

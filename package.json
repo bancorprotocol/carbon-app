@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@bancor/carbon-sdk": "0.0.122-DEV",
+    "@bancor/carbon-sdk": "0.0.123-DEV",
     "@cloudflare/workers-types": "4.20230717.0",
     "@floating-ui/react": "0.25.4",
     "@oddbird/popover-polyfill": "0.5.2",

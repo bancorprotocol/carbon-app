@@ -30,8 +30,8 @@ export const SelectTokenButton: FC<Props> = ({
       type="button"
       data-testid={testId}
       className={cn(
-        'rounded-xl hover:outline-background-400 flex items-center gap-8 p-10 hover:outline-solid hover:outline-1',
-        token?.symbol ? 'bg-black text-white' : 'bg-primary text-black',
+        'rounded-xl hover:outline-main-400 flex items-center gap-8 p-10 hover:outline-solid hover:outline-1',
+        token?.symbol ? 'bg-main-900 text-white' : 'bg-primary text-black',
         className,
       )}
       {...props}
@@ -44,7 +44,7 @@ export const SelectTokenButton: FC<Props> = ({
           height="30"
         />
       ) : (
-        <div className="size-30 grid place-items-center rounded-full bg-black">
+        <div className="size-30 grid place-items-center rounded-full bg-main-900">
           <IconPlus className="text-primary size-16 p-2" />
         </div>
       )}

@@ -1,5 +1,4 @@
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { Button } from 'components/common/button';
 import { useWagmi } from 'libs/wagmi';
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
 import config from 'config';
@@ -16,12 +15,12 @@ export const ErrorUnsupportedNetwork = () => {
       text={`Please connect to ${networkName} using your wallet or the button below`}
       variant="error"
     >
-      <Button variant="success" onClick={switchNetwork}>
+      <button className="btn-primary-gradient" onClick={switchNetwork}>
         Change Network
-      </Button>
-      <Button variant="black" onClick={disconnect}>
+      </button>
+      <button className="btn-on-surface" onClick={disconnect}>
         Disconnect Wallet
-      </Button>
+      </button>
     </ErrorWrapper>
   );
 };

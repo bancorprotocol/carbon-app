@@ -16,26 +16,21 @@ const chartSettingsSummary: D3ChartSettingsProps = {
 interface Props {
   data: SimulatorData[];
   bounds: SimulatorBounds;
-  baseToken: Token;
-  quoteToken: Token;
+  base: Token;
+  quote: Token;
 }
 
-export const SimResultChartSummary = ({
-  data,
-  bounds,
-  baseToken,
-  quoteToken,
-}: Props) => {
+export const SimResultChartSummary = ({ data, bounds, base, quote }: Props) => {
   return (
     <div
-      className="border-background-800 flex w-full border-t"
+      className="border-main-800 flex w-full border-t"
       data-testid="chart-summary"
     >
       <p
-        className="border-background-800 text-12 -rotate-180 border-l p-8 text-center text-white/60"
+        className="border-main-800 text-12 -rotate-180 border-l p-8 text-center text-white/60"
         style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
       >
-        Price ({quoteToken.symbol} per {baseToken.symbol})
+        Price ({quote.symbol} per {base.symbol})
       </p>
       <D3ChartWrapper
         className="min-h-[600px] flex-1"
@@ -46,10 +41,10 @@ export const SimResultChartSummary = ({
         )}
       </D3ChartWrapper>
       <p
-        className="border-background-800 text-12 -rotate-180 border-r p-8 text-center text-white/60"
+        className="border-main-800 text-12 -rotate-180 border-r p-8 text-center text-white/60"
         style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
       >
-        Portfolio Value ({quoteToken.symbol})
+        Portfolio Value ({quote.symbol})
       </p>
     </div>
   );

@@ -2,7 +2,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { FC, ReactNode } from 'react';
 import { InitMarketPrice } from '../common/InitMarketPrice';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { useSearch } from '@tanstack/react-router';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
@@ -35,10 +35,7 @@ export const CreateLayout: FC<Props> = ({ children, url }) => {
   if (!marketPrice) {
     return (
       <TradeLayout>
-        <article
-          key="marketPrice"
-          className="bg-background-900 rounded-ee-2xl rounded-es-2xl"
-        >
+        <article key="marketPrice" className="surface rounded-2xl">
           <InitMarketPrice base={base} quote={quote} />
         </article>
       </TradeLayout>

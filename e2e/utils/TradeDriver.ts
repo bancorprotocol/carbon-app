@@ -21,8 +21,9 @@ export class TradeDriver {
     return this.form.getByLabel('You Receive');
   }
 
-  setType(type: 'overlapping' | 'disposable' | 'recurring' | 'market') {
-    return this.page.getByTestId(type).click();
+  async setSwap() {
+    await this.page.getByTestId('essentials').click();
+    await this.page.getByTestId('swap').click();
   }
 
   setDirection(mode: 'buy' | 'sell') {

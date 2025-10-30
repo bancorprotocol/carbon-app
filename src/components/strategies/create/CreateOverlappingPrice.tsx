@@ -7,11 +7,12 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { Token } from 'libs/tokens';
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
 import { SetOverlapping } from 'libs/routing/routes/trade';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
+import { useTradeCtx } from 'components/trade/context';
 
 interface Props {
   base: Token;
@@ -24,8 +25,10 @@ interface Props {
 
 const url = '/trade/overlapping';
 export const CreateOverlappingPrice: FC<Props> = (props) => {
-  const { base, quote, buy, sell, spread, set } = props;
+  const { base, quote } = useTradeCtx();
+  const { buy, sell, spread, set } = props;
   const search = useSearch({ from: url });
+  const navigate = useNavigate({ from: url });
   const { anchor } = search;
 
   const aboveMarket = isMinAboveMarket(buy);
@@ -47,9 +50,21 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
     }
   }, [anchor, aboveMarket, belowMarket, set, buy.min, sell.max]);
 
-  const setMin = (min: string) => set({ min });
-  const setMax = (max: string) => set({ max });
+  const setMin = (min: string) => set({ min, fullRange: false });
+  const setMax = (max: string) => set({ max, fullRange: false });
   const setSpread = (spread: string) => set({ spread });
+  const setFullRange = () => {
+    navigate({
+      search: (s) => ({
+        ...s,
+        min: undefined,
+        max: undefined,
+        fullRange: true,
+      }),
+      resetScroll: false,
+      replace: true,
+    });
+  };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
     set({ anchor: value, budget: undefined });
@@ -59,10 +74,10 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
 
   return (
     <>
-      <article key="price-range" className="bg-background-900 grid gap-16 p-16">
+      <article key="price-range" className="grid gap-16 p-16">
         <header className="flex items-center gap-8">
           <h3 className="text-16 font-medium flex-1">
-            Set Price Range&nbsp;
+            Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
@@ -79,8 +94,9 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           max={sell.max}
           setMin={setMin}
           setMax={setMax}
-          minLabel="Min Buy Price"
-          maxLabel="Max Sell Price"
+          setFullRange={setFullRange}
+          minLabel="Min Buy"
+          maxLabel="Max Sell"
           warnings={[priceWarning]}
           isOverlapping
           required
@@ -92,19 +108,7 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
         spread={spread}
         setSpread={setSpread}
       />
-      <article className="bg-background-900 grid gap-16 p-16">
-        <hgroup>
-          <h3 className="text-16 font-medium flex items-center justify-between">
-            Budget
-            <Tooltip
-              iconClassName="size-18 text-white/60"
-              element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
-            />
-          </h3>
-          <p className="text-14 text-white/80">
-            Please select a token to proceed.
-          </p>
-        </hgroup>
+      <article className="grid gap-16 p-16">
         <OverlappingAnchor
           base={base}
           quote={quote}

@@ -87,9 +87,8 @@ export const TokenInputField: FC<Props> = (props) => {
   return (
     <div
       className={cn(
-        'flex cursor-text flex-col gap-8 border border-black p-16 focus-within:border-white/50',
+        'flex cursor-text flex-col gap-8 border border-transparent',
         className,
-        isError && 'border-error/50 focus-within:border-error/50',
       )}
       onClick={() => inputRef.current?.focus()}
     >
@@ -107,7 +106,7 @@ export const TokenInputField: FC<Props> = (props) => {
           onFocus={(e) => e.target.select()}
           onBlur={handleBlur}
           className={cn(
-            'text-16 font-medium grow text-ellipsis bg-transparent focus:outline-hidden',
+            'text-24 font-medium grow text-ellipsis bg-transparent focus:outline-hidden',
             disabled && 'cursor-not-allowed text-white/40',
             isError && 'text-error',
           )}
@@ -115,7 +114,7 @@ export const TokenInputField: FC<Props> = (props) => {
           data-testid={testid}
           required={props.required}
         />
-        <div className="bg-background-800 flex items-center gap-6 rounded-[20px] px-8 py-6">
+        <div className="bg-main-600 flex items-center gap-6 rounded-[20px] px-8 py-6">
           <LogoImager alt="Token" src={token.logoURI} className="size-20" />
           <span className="font-medium">{token.symbol}</span>
         </div>
@@ -145,13 +144,7 @@ export const TokenInputField: FC<Props> = (props) => {
             <span className="text-white">
               Wallet: {prettifyNumber(balance || 0)}&nbsp;
             </span>
-            <b
-              className={
-                disabled
-                  ? 'text-primary/40'
-                  : 'text-primary group-hover/token-input:text-white'
-              }
-            >
+            <b className="text-gradient hover:text-secondary focus:text-secondary active:text-secondary group-disabled/token-input:text-primary/40">
               MAX
             </b>
           </button>

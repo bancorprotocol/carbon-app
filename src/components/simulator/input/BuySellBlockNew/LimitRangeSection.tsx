@@ -2,17 +2,20 @@ import {
   StrategyInputDispatch,
   StrategyInputOrder,
 } from 'hooks/useStrategyInput';
-import { FC, ReactNode } from 'react';
+import { FC, useId } from 'react';
 import { Token } from 'libs/tokens';
 import { InputLimit } from 'components/strategies/common/InputLimit';
 import { InputRange } from 'components/strategies/common/InputRange';
+import {
+  PriceLabelLimit,
+  PriceLegendRange,
+} from 'components/strategies/common/PriceLabel';
 
 type Props = {
   base: Token;
   quote: Token;
   order: StrategyInputOrder;
   dispatch: StrategyInputDispatch;
-  inputTitle: ReactNode | string;
   isBuy?: boolean;
   isOrdersOverlap: boolean;
   isOrdersReversed: boolean;
@@ -23,13 +26,13 @@ export const LimitRangeSection: FC<Props> = ({
   quote,
   order,
   dispatch,
-  inputTitle,
   isBuy = false,
   isOrdersOverlap,
   isOrdersReversed,
 }) => {
   const { isRange } = order;
-  const type = isBuy ? 'buy' : 'sell';
+  const direction = isBuy ? 'buy' : 'sell';
+  const inputId = useId();
 
   const getWarnings = () => {
     const warnings = [];
@@ -39,35 +42,44 @@ export const LimitRangeSection: FC<Props> = ({
     return warnings;
   };
 
-  return (
-    <fieldset className="flex flex-col gap-8">
-      <legend className="text-14 font-medium mb-11 flex items-center gap-6">
-        {inputTitle}
-      </legend>
-      {isRange ? (
+  if (isRange) {
+    return (
+      <div role="group" className="grid gap-8">
+        <PriceLegendRange direction={direction} base={base} quote={quote} />
         <InputRange
           quote={quote}
           base={base}
           min={order.min}
-          setMin={(value) => dispatch(`${type}Min`, value)}
+          setMin={(value) => dispatch(`${direction}Min`, value)}
           max={order.max}
-          setMax={(value) => dispatch(`${type}Max`, value)}
+          setMax={(value) => dispatch(`${direction}Max`, value)}
           isBuy={isBuy}
           warnings={getWarnings()}
         />
-      ) : (
+      </div>
+    );
+  } else {
+    return (
+      <div className="grid gap-8">
+        <PriceLabelLimit
+          direction={direction}
+          base={base}
+          quote={quote}
+          inputId={inputId}
+        />
         <InputLimit
+          id={inputId}
           base={base}
           quote={quote}
           price={order.min}
           setPrice={(value) => {
-            dispatch(`${type}Min`, value);
-            dispatch(`${type}Max`, value);
+            dispatch(`${direction}Min`, value);
+            dispatch(`${direction}Max`, value);
           }}
           isBuy={isBuy}
           warnings={getWarnings()}
         />
-      )}
-    </fieldset>
-  );
+      </div>
+    );
+  }
 };

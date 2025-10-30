@@ -14,15 +14,15 @@ import { prettifyNumber } from 'utils/helpers';
 import { ToggleEye } from './EyeIcon';
 
 const colors = {
-  base: 'var(--color-sell)',
-  quote: 'var(--color-buy)',
+  base: 'url(#svg-sell-gradient)',
+  quote: 'url(#svg-buy-gradient)',
 };
 
 interface Props {
   dms: D3ChartSettings;
   data: SimulatorReturn['data'];
-  baseToken: Token;
-  quoteToken: Token;
+  base: Token;
+  quote: Token;
   isVisible: boolean;
   setIsVisible: (value: boolean) => void;
 }
@@ -30,8 +30,8 @@ interface Props {
 export const D3ChartSimulatorBalance = ({
   dms,
   data,
-  baseToken,
-  quoteToken,
+  base,
+  quote,
   isVisible,
   setIsVisible,
 }: Props) => {
@@ -88,7 +88,7 @@ export const D3ChartSimulatorBalance = ({
           value={portionRISK}
           percentage={percentage}
           dms={dms}
-          symbol={baseToken.symbol}
+          symbol={base.symbol}
         />
 
         <Bar
@@ -99,7 +99,7 @@ export const D3ChartSimulatorBalance = ({
           value={portionCASH}
           percentage={100 - percentage}
           dms={dms}
-          symbol={quoteToken.symbol}
+          symbol={quote.symbol}
         />
 
         <g>
@@ -108,7 +108,7 @@ export const D3ChartSimulatorBalance = ({
             x2={dms.boundedWidth}
             y1={dms.boundedHeight}
             y2={dms.boundedHeight}
-            className="stroke-background-800"
+            className="stroke-main-800"
           />
           <text
             x={(xBase ?? 0) + barWidth / 2}
@@ -117,7 +117,7 @@ export const D3ChartSimulatorBalance = ({
             style={{ textAnchor: 'middle' }}
             className="text-12"
           >
-            {baseToken.symbol}
+            {base.symbol}
           </text>
 
           <text
@@ -127,7 +127,7 @@ export const D3ChartSimulatorBalance = ({
             style={{ textAnchor: 'middle' }}
             className="text-12"
           >
-            {quoteToken.symbol}
+            {quote.symbol}
           </text>
         </g>
       </g>
@@ -243,7 +243,7 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
         r="11"
         fill="transparent"
         strokeWidth={2}
-        className="stroke-background-800"
+        className="stroke-main-800"
       />
       <ToggleEye
         visible={isVisible}

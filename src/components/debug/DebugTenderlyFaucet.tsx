@@ -59,7 +59,7 @@ export const DebugTenderlyFaucet = () => {
 
   return (
     <form
-      className="rounded-3xl bg-background-900 flex flex-col items-center gap-20 p-20"
+      className="rounded-3xl surface flex flex-col items-center gap-20 p-20"
       onSubmit={handleOnSubmit}
     >
       <h2>Tenderly Faucet</h2>
@@ -87,7 +87,9 @@ export const DebugTenderlyFaucet = () => {
         })}
       </ul>
 
-      <Button type="submit">Get money</Button>
+      <button className="btn-primary-gradient" type="submit">
+        Get money
+      </button>
     </form>
   );
 };

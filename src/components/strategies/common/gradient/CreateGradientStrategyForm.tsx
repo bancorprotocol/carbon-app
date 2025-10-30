@@ -9,7 +9,7 @@ import {
 } from 'components/cart/utils';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { FormGradientOrder } from '../types';
 
 interface FormProps {
@@ -80,7 +80,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
       <div
         className={cn(
           style.approveWarnings,
-          'rounded-lg bg-background-900 text-14 grid gap-16 p-20 text-white/60',
+          'rounded-lg bg-main-900/60 text-14 grid gap-16 p-20 text-white/60',
         )}
       >
         <p className="warning-message text-12 text-white/60">

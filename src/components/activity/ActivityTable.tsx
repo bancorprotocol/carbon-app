@@ -25,39 +25,22 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { ActivityListProps } from './ActivityList';
 import { NotFound } from 'components/common/NotFound';
-import { useActivity, useActivityPagination } from './ActivityProvider';
+import { useActivity, useActivityPagination } from './context';
 import style from './ActivityTable.module.css';
-
-const thStyle = cn(
-  'text-14 text-start font-normal py-16 pl-8 whitespace-nowrap',
-  'first:pl-24',
-  'last:pr-24 last:text-end',
-);
-const tdFirstLine = cn(
-  'pt-12 align-bottom whitespace-nowrap pl-8',
-  'first:pl-24',
-  'last:pr-24 last:text-end',
-);
-const tdSecondLine = cn(
-  'pb-12 align-top whitespace-nowrap pl-8',
-  'last:pr-24 last:text-end',
-);
 
 export const ActivityTable: FC<ActivityListProps> = (props) => {
   const { activities, hideIds = false } = props;
   return (
-    <table className={cn('w-full border-collapse', style.table)}>
+    <table className={cn(style.table, 'table grid-area-[list]')}>
       <thead>
-        <tr className="border-background-800 text-14 border-y text-white/60">
-          {!hideIds && <th className={thStyle}>ID</th>}
+        <tr>
+          {!hideIds && <th>ID</th>}
           {/* @todo(gradient) */}
-          {/* <th className={thStyle}>Type</th> */}
-          <th className={thStyle} colSpan={2}>
-            Action
-          </th>
-          <th className={thStyle}>Buy Budget</th>
-          <th className={thStyle}>Sell Budget</th>
-          <th className={thStyle}>Date</th>
+          {/* <th>Type</th> */}
+          <th colSpan={2}>Action</th>
+          <th>Buy Budget</th>
+          <th>Sell Budget</th>
+          <th>Date</th>
         </tr>
       </thead>
       <tbody>
@@ -128,18 +111,18 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
             <ActivityIcon activity={activity} size={32} />
           </button>
         </td>
-        <td className={cn(tdFirstLine, 'font-medium')}>
+        <td className={cn(style.firstLine, 'font-medium')}>
           <button onClick={setAction} className="w-full text-start">
             {activityActionName[activity.action]}
           </button>
         </td>
-        <td className={tdFirstLine}>
+        <td className={style.firstLine}>
           {tokenAmount(strategy.buy.budget, quote)}
         </td>
-        <td className={tdFirstLine}>
+        <td className={style.firstLine}>
           {tokenAmount(strategy.sell.budget, base)}
         </td>
-        <td className={tdFirstLine}>
+        <td className={style.firstLine}>
           {activityDateFormatter.format(activity.date)}
         </td>
       </tr>
@@ -150,18 +133,18 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
         {/* ID */}
         {/* Type Icon */}
         {/* Action Icon */}
-        <td className={cn(tdSecondLine, 'w-full')}>
+        <td className={cn(style.secondLine, 'w-full')}>
           <button onClick={setAction} className="w-full text-start">
             <p className="whitespace-normal">{activityDescription(activity)}</p>
           </button>
         </td>
-        <td className={tdSecondLine}>
+        <td className={style.secondLine}>
           <BudgetChange budget={changes?.buy?.budget} token={quote} />
         </td>
-        <td className={tdSecondLine}>
+        <td className={style.secondLine}>
           <BudgetChange budget={changes?.sell?.budget} token={base} />
         </td>
-        <td className={tdSecondLine}>
+        <td className={style.secondLine}>
           <p className="flex justify-end gap-8 align-bottom">
             {shortenString(activity.txHash)}
             <TransactionLink txHash={activity.txHash} className="h-14" />
@@ -182,7 +165,7 @@ export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
     <Link
       to="/strategy/$id"
       params={{ id: id }}
-      className="bg-background-800 inline-flex items-center gap-4 rounded-full px-8 py-4"
+      className="bg-main-600 inline-flex items-center gap-4 rounded-full px-8 py-4"
     >
       <span className={`text-${size}`}>{getLowestBits(id)}</span>
       <TokensOverlap tokens={[base, quote]} size={size + 2} />
@@ -257,12 +240,12 @@ const ActivityPaginator = () => {
   };
 
   return (
-    <tr className="border-background-800 text-14 border-t text-white/80">
+    <tr className="border-main-800 text-14 border-t text-white/80">
       <td className="px-24 py-16" colSpan={3}>
         <div className="flex items-center gap-8">
           <label>Show results</label>
           <select
-            className="border-background-800 bg-background-900 rounded-full border-2 px-12 py-8"
+            className="border-main-800 bg-main-600 rounded-full border px-12 py-8"
             name="limit"
             onChange={changeLimit}
             value={limit}
@@ -294,7 +277,7 @@ const ActivityPaginator = () => {
             <IconChevronLeft className="size-12" />
           </button>
           <p
-            className="border-background-800 flex gap-8 rounded-full border-2 px-12 py-8"
+            className="border-main-800 flex gap-8 rounded-full border px-12 py-8"
             aria-label="page position"
           >
             <span className="text-white">{currentPage}</span>
@@ -327,7 +310,7 @@ interface ActionIconProps {
   action: ActivityAction;
   size: string | number;
 }
-export const iconColor = (action: ActivityAction) => {
+const iconColor = (action: ActivityAction) => {
   if (action === 'buy') return `bg-buy/10 text-buy`;
   if (action === 'sell') return `bg-sell/10 text-sell`;
   if (action === 'create') return `bg-success/10 text-success`;

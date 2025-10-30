@@ -50,11 +50,8 @@ export const BudgetSection: FC<Props> = ({
   }, [insufficientBalance, type, dispatch, tokenBalanceQuery?.data]);
 
   return (
-    <fieldset className="flex flex-col gap-8">
-      <legend className="text-14 font-medium mb-11 flex items-center gap-6">
-        <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-          2
-        </span>
+    <div role="group" className="grid gap-8">
+      <h3 className="text-14 font-medium flex items-center gap-8">
         <Tooltip
           element={
             isBuy
@@ -74,15 +71,15 @@ export const BudgetSection: FC<Props> = ({
                 }`
           }
         >
-          <span className="capitalize text-white/80">Set {type} Budget</span>
+          <span className="text-white/80">Budget</span>
         </Tooltip>
         {isBudgetOptional && (
           <span className="font-medium ml-8 text-white/60">Optional</span>
         )}
-      </legend>
+      </h3>
       <TokenInputField
         id={inputId}
-        className="rounded-2xl bg-black p-16"
+        className="rounded-2xl input-container p-16"
         value={order.budget}
         setValue={(value) => dispatch(`${type}Budget`, value)}
         token={budgetToken}
@@ -96,6 +93,6 @@ export const BudgetSection: FC<Props> = ({
           Insufficient balance
         </Warning>
       )}
-    </fieldset>
+    </div>
   );
 };

@@ -84,14 +84,10 @@ export const InputRange: FC<InputRangeProps> = ({
     <>
       <div className="grid grid-cols-2 gap-6">
         <div
-          className={cn(
-            'rounded-e-xs rounded-s-2xl w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
-            showWarning && 'border-warning focus-within:border-warning',
-            error && 'border-error/50 focus-within:border-error',
-          )}
+          className="grid gap-8 rounded-e-xs rounded-s-2xl w-full cursor-text input-container"
           onClick={() => document.getElementById(inputMinId)?.focus()}
         >
-          <header className="text-12 mb-5 flex justify-between text-white/60">
+          <header className="text-12 flex justify-between text-white/60">
             <Tooltip
               element={`The lowest price to ${isBuy ? 'buy' : 'sell'} ${
                 base.symbol
@@ -101,7 +97,7 @@ export const InputRange: FC<InputRangeProps> = ({
             </Tooltip>
             {!!marketPrice && (
               <button
-                className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
+                className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                 type="button"
                 onClick={() => setMin(formatNumber(marketPrice.toString()))}
                 data-testid="market-price-min"
@@ -118,7 +114,7 @@ export const InputRange: FC<InputRangeProps> = ({
             value={min}
             placeholder="Enter Price"
             className={cn(
-              'text-18 font-medium mb-5 w-full text-ellipsis bg-transparent focus:outline-hidden',
+              'text-24 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden',
               error && 'text-error',
             )}
             onChange={handleChangeMin}
@@ -135,13 +131,13 @@ export const InputRange: FC<InputRangeProps> = ({
         </div>
         <div
           className={cn(
-            'rounded-e-2xl rounded-s-xs w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
+            'grid gap-8 rounded-e-2xl rounded-s-xs w-full cursor-text input-container',
             showWarning && 'border-warning focus-within:border-warning',
             error && 'border-error/50 focus-within:border-error',
           )}
           onClick={() => document.getElementById(inputMaxId)?.focus()}
         >
-          <header className="text-12 mb-5 flex justify-between text-white/60">
+          <header className="text-12 flex justify-between text-white/60">
             <Tooltip
               element={`The highest price to ${isBuy ? 'buy' : 'sell'} ${
                 base.symbol
@@ -151,7 +147,7 @@ export const InputRange: FC<InputRangeProps> = ({
             </Tooltip>
             {!!marketPrice && (
               <button
-                className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
+                className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                 type="button"
                 onClick={() => setMax(formatNumber(marketPrice.toString()))}
                 data-testid="market-price-max"
@@ -168,7 +164,7 @@ export const InputRange: FC<InputRangeProps> = ({
             value={max}
             placeholder="Enter Price"
             className={cn(
-              'text-16 font-medium mb-5 w-full text-ellipsis bg-transparent focus:outline-hidden',
+              'text-24 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden',
               error && 'text-error',
             )}
             onChange={handleChangeMax}

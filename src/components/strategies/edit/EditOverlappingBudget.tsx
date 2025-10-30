@@ -21,9 +21,8 @@ import { formatNumber, tokenAmount } from 'utils/helpers';
 import { CreateOverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { EditBudgetOverlappingSearch } from 'pages/strategies/edit/budget/overlapping';
+import { EditBudgetOverlappingSearch } from 'pages/portfolio/edit/budget/overlapping';
 import { OverlappingBudget } from '../overlapping/OverlappingBudget';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 interface Props {
   marketPrice: string;
@@ -145,9 +144,9 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
   return (
     <>
       {hasNoBudget(strategy) && (
-        <article className="bg-background-900 grid gap-16 p-20">
+        <article className="bg-main-900 grid gap-16 p-20">
           <header className="text-14 flex items-center justify-between">
-            <h3>Market Price</h3>
+            <h2>Market Price</h2>
             <span>{tokenAmount(marketPrice, quote)}</span>
           </header>
           <Warning>
@@ -157,19 +156,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
           <EditMarketPrice base={base} quote={quote} className="self-start" />
         </article>
       )}
-      <article className="bg-background-900 grid gap-8 p-16">
-        <header className="flex items-center justify-between">
-          <hgroup>
-            <h2 className="text-16">Budget</h2>
-            <p className="text-14 text-white/80">
-              Please select a token to proceed.
-            </p>
-          </hgroup>
-          <Tooltip
-            iconClassName="size-14 text-white/60"
-            element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
-          />
-        </header>
+      <article className="grid gap-8 p-16">
         <OverlappingAnchor
           base={base}
           quote={quote}
@@ -180,7 +167,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
         />
       </article>
       {anchor && editType && (
-        <article className="bg-background-900 grid gap-16 p-16">
+        <article className="grid gap-16 p-16">
           <OverlappingBudget
             base={base}
             quote={quote}
@@ -196,15 +183,9 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
         </article>
       )}
       {anchor && (
-        <article
-          id="overlapping-distribution"
-          className="bg-background-900 grid gap-16 p-16"
-        >
+        <article id="overlapping-distribution" className="grid gap-16 p-16">
           <hgroup>
             <h3 className="text-16 font-medium flex items-center gap-8">
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
-                3
-              </span>
               Distribution
             </h3>
             <p className="text-14 text-white/80">

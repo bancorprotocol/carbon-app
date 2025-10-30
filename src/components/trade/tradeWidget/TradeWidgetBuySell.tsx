@@ -116,87 +116,91 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   };
 
   return (
-    <form {...formProps} onSubmit={handleTrade} className="flex flex-col">
-      <header className="text-14 flex justify-between">
-        <label htmlFor={`${id}-pay`} className="text-white/50">
-          You pay
-        </label>
-        {errorMsgSource && (
-          <output
-            htmlFor={`${id}-pay`}
-            className="text-12 font-weight-500 text-error"
-          >
-            {errorMsgSource}
-          </output>
-        )}
-      </header>
-      <TokenInputField
-        id={`${id}-pay`}
-        className="rounded-xl mb-20 mt-5 bg-black p-16"
-        token={source}
-        isBalanceLoading={sourceBalanceQuery.isPending}
-        value={sourceInput}
-        setValue={(value) => {
-          setSourceInput(value);
-        }}
-        balance={sourceBalanceQuery.data}
-        onKeystroke={() => onInputChange(true)}
-        isLoading={byTargetQuery.isFetching}
-        isError={!!errorMsgSource}
-        disabled={!hasEnoughLiquidity}
-      />
-      <header className="text-14 flex justify-between">
-        <label htmlFor={`${id}-receive`} className="text-white/50">
-          You receive
-        </label>
-        {errorMsgTarget && (
-          <button
-            type="button"
-            className="font-weight-500 text-error cursor-pointer"
-            onClick={() => {
-              onInputChange(false);
-              setTargetInput(liquidityQuery.data || '0');
-            }}
-          >
-            {errorMsgTarget}
-          </button>
-        )}
-      </header>
-      <TokenInputField
-        id={`${id}-receive`}
-        className="rounded-b-xs rounded-t-xl mt-5 bg-black p-16"
-        token={target}
-        value={targetInput}
-        setValue={(value) => setTargetInput(value)}
-        placeholder="Total Amount"
-        onKeystroke={() => onInputChange(false)}
-        isLoading={bySourceQuery.isFetching}
-        isError={!!errorMsgTarget}
-        slippage={slippage}
-        disabled={!hasEnoughLiquidity}
-      />
-      <footer className="rounded-b-xl rounded-t-xs text-14 mt-5 flex justify-between bg-black p-16 text-white/80">
-        {warning && <Warning className="text-14" message={warning} />}
-        {rateMessage && <p>{rateMessage}</p>}
-        {showRouting && (
-          <button
-            type="button"
-            onClick={openTradeRouteModal}
-            className="flex space-x-10 text-left hover:text-white md:flex"
-            data-testid="routing"
-          >
-            <IconRouting className="w-12" />
-            <Tooltip
-              placement="left"
-              element="You can view and manage the orders that are included in the trade."
+    <form {...formProps} onSubmit={handleTrade} className="grid gap-24">
+      <div className="rounded-xl p-16 input-container">
+        <header className="text-14 flex justify-between">
+          <label htmlFor={`${id}-pay`} className="text-white/50">
+            You pay
+          </label>
+          {errorMsgSource && (
+            <output
+              htmlFor={`${id}-pay`}
+              className="text-12 font-weight-500 text-error"
             >
-              <span>Routing</span>
-            </Tooltip>
-          </button>
-        )}
-      </footer>
+              {errorMsgSource}
+            </output>
+          )}
+        </header>
+        <TokenInputField
+          id={`${id}-pay`}
+          token={source}
+          isBalanceLoading={sourceBalanceQuery.isPending}
+          value={sourceInput}
+          setValue={(value) => {
+            setSourceInput(value);
+          }}
+          balance={sourceBalanceQuery.data}
+          onKeystroke={() => onInputChange(true)}
+          isLoading={byTargetQuery.isFetching}
+          isError={!!errorMsgSource}
+          disabled={!hasEnoughLiquidity}
+        />
+      </div>
+      <div className="grid gap-8">
+        <div className="rounded-b-xs rounded-t-xl  input-container">
+          <header className="text-14 flex justify-between">
+            <label htmlFor={`${id}-receive`} className="text-white/50">
+              You receive
+            </label>
+            {errorMsgTarget && (
+              <button
+                type="button"
+                className="font-weight-500 text-error cursor-pointer"
+                onClick={() => {
+                  onInputChange(false);
+                  setTargetInput(liquidityQuery.data || '0');
+                }}
+              >
+                {errorMsgTarget}
+              </button>
+            )}
+          </header>
+          <TokenInputField
+            id={`${id}-receive`}
+            token={target}
+            value={targetInput}
+            setValue={(value) => setTargetInput(value)}
+            placeholder="Total Amount"
+            onKeystroke={() => onInputChange(false)}
+            isLoading={bySourceQuery.isFetching}
+            isError={!!errorMsgTarget}
+            slippage={slippage}
+            disabled={!hasEnoughLiquidity}
+          />
+        </div>
+        <footer className="rounded-b-xl rounded-t-xs text-14 flex justify-between bg-main-900/40 p-16 text-white/80">
+          {warning && <Warning className="text-14" message={warning} />}
+          {rateMessage && <p>{rateMessage}</p>}
+          {showRouting && (
+            <button
+              type="button"
+              onClick={openTradeRouteModal}
+              className="flex gap-8 text-left hover:text-white md:flex"
+              data-testid="routing"
+            >
+              <IconRouting className="w-12" />
+              <Tooltip
+                placement="left"
+                element="You can view and manage the orders that are included in the trade."
+              >
+                <span>Routing</span>
+              </Tooltip>
+            </button>
+          )}
+        </footer>
+      </div>
       {IS_TENDERLY_FORK && (
-        <div className="text-14 mt-5 text-right text-white/60">
+        <div className="text-14 text-right text-white/60">
           DEBUG: {getLiquidity()}
         </div>
       )}
@@ -208,7 +212,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         loadingChildren="Waiting for Confirmation"
         variant={isBuy ? 'buy' : 'sell'}
         fullWidth
-        className="mt-20"
         data-testid="submit"
       >
         {ctaButtonText}

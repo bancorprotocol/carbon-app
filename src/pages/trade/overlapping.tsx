@@ -1,5 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { CreateOverlappingPrice } from 'components/strategies/create/CreateOverlappingPrice';
 import { getOverlappingOrders } from 'components/strategies/create/utils';
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
@@ -44,7 +44,6 @@ export const TradeOverlapping = () => {
           quote={quote}
           buy={orders.buy}
           sell={orders.sell}
-          approvalText="I've approve the token deposit(s) and distribution"
         >
           <CreateOverlappingPrice
             base={base!}

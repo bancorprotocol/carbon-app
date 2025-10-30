@@ -1,7 +1,6 @@
 import { useWagmi } from 'libs/wagmi';
 import { NewTabLink, externalLinks } from 'libs/routing';
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
-import { Button } from 'components/common/button';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import config from 'config';
 
@@ -15,12 +14,15 @@ export const ErrorUserBlocked = () => {
       text={`For compliance reasons, this wallet has been blocked from using the ${config.appName} App.`}
       variant="error"
     >
-      <NewTabLink to={externalLinks.treasuryGov} className="w-full">
-        <Button>Learn More</Button>
+      <NewTabLink
+        to={externalLinks.treasuryGov}
+        className="w-full btn-on-surface text-14 "
+      >
+        Learn More
       </NewTabLink>
-      <Button variant="black" onClick={disconnect}>
+      <button className="btn-on-surface text-14 " onClick={disconnect}>
         Logout
-      </Button>
+      </button>
     </ErrorWrapper>
   );
 };

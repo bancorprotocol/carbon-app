@@ -8,7 +8,7 @@ export {
   blocklistConnectors,
 } from 'libs/wagmi/wagmi.constants';
 export { type SelectableConnectionName } from 'libs/wagmi/wagmi.types';
-export { useWagmi } from 'libs/wagmi/WagmiProvider';
+export { useWagmi } from 'libs/wagmi/context';
 export { WagmiReactWrapper } from 'libs/wagmi/WagmiReactWrapper';
 export { type Connector } from 'wagmi';
 export { currentChain } from 'libs/wagmi/chains';

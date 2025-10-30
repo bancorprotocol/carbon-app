@@ -7,14 +7,11 @@ export const DebugNotifications = () => {
   const { toaster } = useStore();
 
   return (
-    <div
-      className={
-        'rounded-3xl bg-background-900 flex flex-col items-center space-y-20 p-20'
-      }
-    >
+    <div className="rounded-3xl surface flex flex-col items-center gap-20 p-20">
       <h2>Notifications</h2>
 
-      <Button
+      <button
+        className="btn-on-surface"
         onClick={() =>
           dispatchNotification('generic', {
             title: 'test',
@@ -26,9 +23,10 @@ export const DebugNotifications = () => {
         }
       >
         Pending
-      </Button>
+      </button>
 
-      <Button
+      <button
+        className="btn-on-surface"
         onClick={() =>
           dispatchNotification('generic', {
             title: 'Pending',
@@ -42,9 +40,10 @@ export const DebugNotifications = () => {
         }
       >
         Success
-      </Button>
+      </button>
 
-      <Button
+      <button
+        className="btn-on-surface"
         onClick={() =>
           dispatchNotification('generic', {
             title: 'Pending',
@@ -58,9 +57,10 @@ export const DebugNotifications = () => {
         }
       >
         Fail
-      </Button>
+      </button>
 
-      <Button
+      <button
+        className="btn-on-surface"
         onClick={() =>
           dispatchNotification('activity', {
             activity: {
@@ -99,19 +99,23 @@ export const DebugNotifications = () => {
         }
       >
         Activity Create
-      </Button>
+      </button>
 
-      <Button
+      <button
+        className="btn-on-surface"
         onClick={() =>
           toaster.addToast(`It is ` + new Date().toLocaleTimeString())
         }
       >
         Open Toast
-      </Button>
+      </button>
 
-      <Button onClick={() => dispatchNotification('reject', undefined)}>
+      <button
+        className="btn-on-surface"
+        onClick={() => dispatchNotification('reject', undefined)}
+      >
         Reject
-      </Button>
+      </button>
     </div>
   );
 };

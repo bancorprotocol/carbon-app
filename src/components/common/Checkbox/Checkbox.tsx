@@ -10,7 +10,7 @@ type Props = HTMLAttributes<HTMLButtonElement> & {
 export const Checkbox: FC<Props> = ({ isChecked, setIsChecked, ...attr }) => {
   const classNames =
     'size-18 rounded-xs flex items-center justify-center cursor-pointer';
-  const borderBgColor = isChecked ? 'bg-gradient' : ' border-2 ';
+  const borderBgColor = isChecked ? 'bg-gradient' : ' border ';
 
   return (
     <button
@@ -21,7 +21,7 @@ export const Checkbox: FC<Props> = ({ isChecked, setIsChecked, ...attr }) => {
       className={cn(`${classNames} ${borderBgColor}`, attr.className)}
       onClick={() => setIsChecked(!isChecked)}
     >
-      {isChecked && <IconCheck className="text-background-900 size-10" />}
+      {isChecked && <IconCheck className="text-main-900 size-10" />}
     </button>
   );
 };

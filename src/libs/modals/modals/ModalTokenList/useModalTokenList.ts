@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
@@ -34,13 +34,11 @@ export const useModalTokenList = ({ id, data }: Props) => {
   const {
     tokens,
     isPending,
-    isError,
-    error,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
     tokensMap,
-    getAllTokens,
+    isError,
   } = useTokens();
   const {
     onClick,
@@ -56,11 +54,6 @@ export const useModalTokenList = ({ id, data }: Props) => {
   const defaultPopularTokens = isBaseToken
     ? basePopularTokens
     : quotePopularTokens;
-
-  useEffect(() => {
-    if (isPending) return;
-    getAllTokens(defaultPopularTokens);
-  }, [defaultPopularTokens, getAllTokens, isPending]);
 
   const onSelect = useCallback(
     (token: Token) => {
@@ -194,7 +187,6 @@ export const useModalTokenList = ({ id, data }: Props) => {
     onSelect,
     isPending,
     isError,
-    error,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens: _favoriteTokens,

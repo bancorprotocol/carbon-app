@@ -3,7 +3,6 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MainMenuRightWallet } from 'components/core/menu/mainMenu/MainMenuRightWallet';
 import { MainMenuRightNotifications } from 'components/core/menu/mainMenu/MainMenuRightNotifications';
 import { MainMenuRightBurger } from './MainMenuRightBurger';
-import { useBurgerMenuItems } from './MainMenuRightBurger/useBurgerMenuItems';
 import { MainMenuRightChainSelector } from './MainMenuRightChainSelector';
 import { networks } from 'config';
 import { MainMenuCart } from './MainMenuCart';
@@ -42,11 +41,10 @@ const TenderlyForkAlert = () => {
 };
 
 export const MainMenuRight: FC = () => {
-  const { menuMapping } = useBurgerMenuItems();
   const { aboveBreakpoint } = useBreakpoints();
 
   return (
-    <div className="flex items-center gap-10 sm:gap-20">
+    <div className="flex items-center gap-8 sm:gap-16">
       <TenderlyForkAlert />
       <MainMenuRightWalkthrough />
       {config.ui.showCart && <MainMenuCart />}
@@ -54,9 +52,7 @@ export const MainMenuRight: FC = () => {
       {config.network.name !== 'TON' && (
         <MainMenuRightChainSelector networks={networks} />
       )}
-      {aboveBreakpoint('md') && (
-        <MainMenuRightBurger menuMapping={menuMapping} />
-      )}
+      {aboveBreakpoint('md') && <MainMenuRightBurger />}
       {config.network.name === 'TON' ? (
         <TonConnectBtn />
       ) : (

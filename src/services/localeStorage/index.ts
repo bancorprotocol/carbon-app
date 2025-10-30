@@ -1,13 +1,8 @@
 import { ManagedLocalStorage } from 'utils/managedLocalStorage';
 import { Token } from 'libs/tokens';
 import { Notification } from 'libs/notifications';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
+import { TradePair } from 'components/strategies/common/types';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
-import {
-  StrategyFilter,
-  StrategySort,
-} from 'components/strategies/overview/StrategyFilterSort';
 import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
 import { FiatSymbol } from 'utils/carbonApi';
 import {
@@ -18,7 +13,7 @@ import {
 import { NotificationPreference } from 'libs/notifications/NotificationPreferences';
 import { AppConfig } from 'config/types';
 import { LiquidityMatrixSearch } from 'libs/routing/routes/liquidity-matrix';
-import { StrategyLayout } from 'components/strategies/StrategySelectLayout';
+import { StrategyLayout } from 'components/explorer/strategies/StrategySelectLayout';
 import { Cart } from 'components/cart/utils';
 
 // ************************** /
@@ -33,7 +28,6 @@ export interface LocalStorageSchema {
   [k: `notifications-${string}`]: Notification[];
   [k: `favoriteTradePairs-${string}`]: TradePair[];
   [k: `favoriteTokens-${string}`]: Token[];
-  tradePairsCategory: TradePairCategory;
   tradePair: [string, string];
   currentCurrency: FiatSymbol;
   tradeSlippage: string;
@@ -41,13 +35,10 @@ export interface LocalStorageSchema {
   tradeMaxOrders: string;
   chooseTokenCategory: ChooseTokenCategory;
   carbonControllerAddress: string;
-  strategyOverviewFilter: StrategyFilter;
-  strategyOverviewSort: StrategySort;
   voucherContractAddress: string;
   batcherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
   sdkCompressedCacheData: string;
-  tokenPairsCache: { pairs: TradePair[]; timestamp: number };
   isUncheckedSigner: boolean;
   hasSeenRestrictedCountryModal: boolean;
   hasSeenCreateStratExpertMode: boolean;
@@ -61,6 +52,12 @@ export interface LocalStorageSchema {
   carts: Record<string, Cart>;
   hasWalkthrough: boolean;
   tacToTonAddress: Record<string, string>;
+
+  /* @deprecated */
+  strategyOverviewFilter?: void;
+  strategyOverviewSort?: void;
+  tokenPairsCache: { pairs: TradePair[]; timestamp: number };
+  tradePairsCategory: any;
 }
 
 enum EnumStrategySort {

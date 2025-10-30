@@ -1,6 +1,5 @@
 import { FC, FormEvent, useId, useState } from 'react';
 import { useSetUserApproval } from 'libs/queries/chain/approval';
-import { Button } from 'components/common/button';
 import { Switch } from 'components/common/switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
 import { LogoImager } from 'components/common/imager/Imager';
@@ -87,7 +86,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
   return (
     <>
-      <div className="bg-content min-h-85 flex items-center justify-between rounded-2xl px-20">
+      <div className="bg-content min-h-85 flex items-center gap-16 justify-between rounded-2xl px-20">
         <div className="flex items-center gap-10">
           <LogoImager alt="Token" src={token.logoURI} className="size-30" />
           <p className="font-medium">{token.symbol}</p>
@@ -95,7 +94,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
         {data.approvalRequired ? (
           txBusy ? (
-            <div>Waiting for Confirmation</div>
+            <p className="text-14 text-white/80">Waiting for Confirmation</p>
           ) : (
             <form
               onSubmit={onApprove}
@@ -120,15 +119,13 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
                 />
               </div>
 
-              <Button
+              <button
                 type="submit"
-                variant="success"
-                size="sm"
-                className="text-14 px-10"
+                className="btn-on-surface text-14 "
                 data-testid={`approve-${token.symbol}`}
               >
                 {data.nullApprovalRequired ? 'Revoke and Approve' : 'Approve'}
-              </Button>
+              </button>
             </form>
           )
         ) : (
@@ -142,7 +139,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
         ) : null}
       </div>
       {data.nullApprovalRequired && (
-        <div className="text-14 text-warning flex space-x-20">
+        <div className="text-14 text-warning flex gap-16">
           <div>
             <IconWarning className="w-16" />
           </div>

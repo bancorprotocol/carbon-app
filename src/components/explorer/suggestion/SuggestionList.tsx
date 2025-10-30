@@ -1,18 +1,21 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { PairLogoName, TokenLogoName } from 'components/common/DisplayPair';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { useNavigate, useParams } from '@tanstack/react-router';
+import { TradePair } from 'components/strategies/common/types';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
 import { cn } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import style from './index.module.css';
 import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 interface Props {
+  url: '/explore' | '/portfolio';
   listboxId: string;
   filteredPairs: TradePair[];
   filteredTokens: Token[];
   setOpen: Dispatch<SetStateAction<boolean>>;
+  isPending: boolean;
 }
 
 const animateLeaving = async () => {
@@ -41,19 +44,31 @@ const animateLeaving = async () => {
 };
 
 export const SuggestionList: FC<Props> = (props) => {
-  const { listboxId, filteredPairs, filteredTokens, setOpen } = props;
-  const nav = useNavigate();
-  const { slug } = useParams({ from: '/explore/$slug' });
+  const { listboxId, filteredPairs, filteredTokens, setOpen, isPending } =
+    props;
+  const nav = useNavigate({ from: props.url });
+  const { search } = useSearch({ from: props.url });
   const navigate = async (nextSlug: string) => {
     setOpen(false);
-    if (slug === nextSlug) return;
-    const params = { type: 'token-pair' as const, slug: nextSlug };
+    if (search === nextSlug) return;
     await animateLeaving();
-    nav({ to: '/explore/$slug', params });
+    nav({
+      search: (s) => ({ ...s, search: nextSlug }),
+      resetScroll: false,
+      replace: true,
+    });
   };
 
   const [maxTokens, setMaxTokens] = useState(5);
   const [maxPairs, setMaxPairs] = useState(5);
+
+  if (isPending) {
+    return (
+      <div role="listbox" id={listboxId} className={cn(style.listbox, 'p-24')}>
+        <CarbonLogoLoading className="h-[60px]" />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -71,7 +86,7 @@ export const SuggestionList: FC<Props> = (props) => {
               role="option"
               onMouseDown={(e) => e.preventDefault()} // prevent blur on click
               onClick={() => navigate(token.address.toLowerCase())}
-              className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
+              className="px-16 md:px-30  flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
               aria-selected="false"
               tabIndex={index ? -1 : 0}
             >
@@ -79,10 +94,10 @@ export const SuggestionList: FC<Props> = (props) => {
             </button>
           ))}
           {maxTokens <= filteredTokens.length && (
-            <footer className="px-30 flex h-[50px] items-center">
+            <footer className="px-16 md:px-30 flex h-[50px] items-center">
               <button
                 type="button"
-                className="text-14 font-medium bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
+                className="text-14 font-medium btn cursor-pointer rounded-full "
                 onClick={() => setMaxTokens((v) => v + 5)}
               >
                 View More
@@ -103,7 +118,7 @@ export const SuggestionList: FC<Props> = (props) => {
                 role="option"
                 onMouseDown={(e) => e.preventDefault()} // prevent blur on click
                 onClick={() => navigate(slug)}
-                className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
+                className="px-16 md:px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
                 aria-selected="false"
                 aria-setsize={filteredPairs.length}
                 tabIndex={index ? -1 : 0}
@@ -116,7 +131,7 @@ export const SuggestionList: FC<Props> = (props) => {
             <footer className="px-30 flex h-[50px] items-center">
               <button
                 type="button"
-                className="text-14 font-medium bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
+                className="text-14 font-medium btn cursor-pointer rounded-full "
                 onClick={() => setMaxPairs((v) => v + 5)}
               >
                 View More
