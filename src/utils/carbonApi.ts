@@ -96,6 +96,7 @@ const carbonApi = {
   },
   getTrending: () => get<Trending>('analytics/trending'),
   getReward: (pair: string) => get<Reward>('merkle/data', { pair }),
+  getAllRewards: () => get<Reward[]>('merkle/all-data'),
 };
 
 export { carbonApi };

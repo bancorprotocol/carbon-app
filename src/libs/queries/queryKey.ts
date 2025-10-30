@@ -32,6 +32,7 @@ export const QueryKey = {
   ],
   trending: () => [...extAPI, 'trending'],
   reward: (pair: string) => [...extAPI, 'reward', pair],
+  rewards: () => [...extAPI, 'reward', 'all'],
 
   strategy: (id: string) => [...sdk, 'strategy', id],
   strategyList: (ids: string[]) => [...sdk, 'strategy', ...ids],

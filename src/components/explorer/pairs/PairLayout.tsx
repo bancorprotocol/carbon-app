@@ -15,7 +15,6 @@ import {
   PairFilterDropdown,
   PairSortDropdown,
 } from 'components/explorer/pairs/PairFilterSort';
-import { toPairSlug } from 'utils/pairSearch';
 import { useRewards } from 'libs/queries/extApi/rewards';
 import {
   PairTrade,
@@ -58,12 +57,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
   const [filter, setFilter] = useState<PairFilter>('all');
   const [sort, setSort] = useState<PairSort>('trades');
 
-  const allPairKeys = useMemo(() => {
-    if (!strategies) return [];
-    const all = strategies.map((s) => toPairSlug(s.base, s.quote));
-    return Array.from(new Set(all));
-  }, [strategies]);
-  const rewards = useRewards(allPairKeys);
+  const rewards = useRewards();
   const trending = useTrending();
 
   // Order by alphabetic order to merge opposite pairs
@@ -127,6 +121,8 @@ export const PairLayout: FC<Props> = ({ url }) => {
 
   const allPairs = useMemo(() => {
     if (!ordered || !tradesByPair) return [];
+    const rewardPairs = new Set(rewards.data?.map((r) => r.pair));
+
     const map: Record<string, RawPairRow> = {};
     for (const strategy of ordered) {
       const { base, quote, fiatBudget } = strategy;
@@ -141,7 +137,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
         tradeCount24h: pairCount?.tradeCount24h ?? 0,
         strategyAmount: 0,
         liquidity: new SafeDecimal(0),
-        reward: !!rewards.data?.[pairKey],
+        reward: rewardPairs.has(pairKey),
       };
       const liquidity = map[pairKey].liquidity.add(fiatBudget.total);
       map[pairKey].strategyAmount++;
