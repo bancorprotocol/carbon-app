@@ -6,7 +6,6 @@ import {
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { TonToken, useTonTokenMapping } from './tokenMap';
 import { tokenParserMap } from 'config/utils';
-import { CarbonWagmiCTX } from 'libs/wagmi/WagmiProvider';
 import { wagmiConfig } from 'libs/wagmi/config';
 import { WagmiProvider } from 'wagmi';
 import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
@@ -29,6 +28,7 @@ import batcher from 'abis/batcher.json' with { type: 'json' };
 import { getTonBalance } from './api';
 import config from 'config';
 import { TrackerDialog } from './TrackerDialog';
+import { CarbonWagmiCTX } from 'libs/wagmi/context';
 
 interface TxResult {
   success: boolean;

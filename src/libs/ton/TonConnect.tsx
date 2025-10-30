@@ -1,17 +1,12 @@
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
-import { cn, shortenString } from 'utils/helpers';
+import { shortenString } from 'utils/helpers';
 import { ReactComponent as TelegramIcon } from 'assets/icons/telegram.svg';
 import { ReactComponent as IconDisconnect } from 'assets/icons/disconnect.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 
-import { DropdownMenu, useMenuCtx } from 'components/common/dropdownMenu';
-import { buttonStyles } from 'components/common/button/buttonStyles';
+import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useStore } from 'store';
-
-const btnStyle = cn(
-  buttonStyles({ variant: 'secondary' }),
-  'flex items-center gap-8 px-16',
-);
+import { useMenuCtx } from 'components/common/dropdownMenu/utils';
 
 export const TonConnectBtn = () => {
   const [tonConnectUI] = useTonConnectUI();
@@ -23,7 +18,10 @@ export const TonConnectBtn = () => {
         placement="bottom-end"
         className="rounded-[10px] p-8"
         button={(attr) => (
-          <button {...attr} className={btnStyle}>
+          <button
+            {...attr}
+            className="btn-on-background flex items-center gap-8"
+          >
             <TelegramIcon className="text-primary" />
             <span>{shortenString(address)}</span>
           </button>
@@ -36,7 +34,7 @@ export const TonConnectBtn = () => {
     return (
       <button
         type="button"
-        className={btnStyle}
+        className="btn-on-background flex items-center gap-8"
         onClick={() => tonConnectUI.openModal()}
       >
         <TelegramIcon />
