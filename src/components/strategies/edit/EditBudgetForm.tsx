@@ -1,7 +1,5 @@
 import { FC, FormEvent, ReactNode, useState } from 'react';
-import { EditPriceNav } from './EditPriceNav';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
-import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { Button } from 'components/common/button';
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
@@ -29,7 +27,6 @@ interface Props {
   editType: EditTypes;
   hasChanged: boolean;
   children: ReactNode;
-  approveText?: string;
 }
 
 const notifKey: Record<EditTypes, keyof NotificationSchema> = {
@@ -49,14 +46,7 @@ const submitText: Record<EditTypes, string> = {
 const spenderAddress = config.addresses.carbon.carbonController;
 
 export const EditBudgetForm: FC<Props> = (props) => {
-  const {
-    orders,
-    strategyType,
-    editType,
-    hasChanged,
-    children,
-    approveText = "I've reviewed the warning(s) but choose to proceed.",
-  } = props;
+  const { orders, strategyType, editType, hasChanged, children } = props;
   const { user } = useWagmi();
   const { strategy } = useEditStrategyCtx();
   const { history } = useRouter();
@@ -183,28 +173,24 @@ export const EditBudgetForm: FC<Props> = (props) => {
       )}
       data-testid="edit-form"
     >
-      <EditStrategyOverlapTokens />
-      <EditPriceNav editType={editType} />
-
-      <div className="overflow-hidden rounded-ee-2xl rounded-es-2xl">
-        {children}
-      </div>
+      <div className="surface overflow-hidden rounded-2xl">{children}</div>
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'rounded-lg bg-background-900 text-14 font-medium flex items-center gap-8 p-20 text-white/60',
+            'surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-white/60',
           )}
         >
           <input
             id="approve-warnings"
             type="checkbox"
             name="approval"
-            className="size-18"
+            className="size-18 shrink-0"
             data-testid="approve-warnings"
           />
-          {approveText}
+          I accept any applicable warning(s) and understand fee on transfer
+          (tax) or rebasing tokens are not supported
         </label>
         <Button
           type="submit"

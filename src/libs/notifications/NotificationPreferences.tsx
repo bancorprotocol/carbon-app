@@ -19,7 +19,7 @@ export const NotificationPreferences = () => {
 
   return (
     <form className="mt-24">
-      <div className="rounded-sm flex border-2 border-white/10 px-16 py-8">
+      <div className="rounded-sm flex border border-white/10 px-16 py-8">
         <h3
           id="global-notif-label"
           className="text-16 flex flex-1 items-center gap-8"

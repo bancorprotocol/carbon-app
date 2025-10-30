@@ -13,13 +13,9 @@ export const DebugWagmi = () => {
   } = useWagmi();
 
   return (
-    <div
-      className={
-        'rounded-3xl bg-background-900 flex flex-col items-center space-y-20 p-20'
-      }
-    >
+    <div className="rounded-3xl surface grid content-start place-items-center gap-20 p-20">
       <h2>Wagmi Status</h2>
-      <div className="rounded-lg w-full space-y-3 bg-black p-10">
+      <div className="grid rounded-lg w-full gap-4 bg-main-900 p-10">
         <div className="flex justify-between">
           <div>ChainID:</div>
           <div>{chainId}</div>

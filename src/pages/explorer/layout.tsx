@@ -12,7 +12,7 @@ export const ExplorerLayout = () => {
   const query = useExplorer();
 
   return (
-    <div className="grid content-start">
+    <>
       {config.ui.tradeCount && <ExplorerHeader />}
       <Page className={style.layout}>
         <ExplorerSearch url="/explore" />
@@ -21,6 +21,6 @@ export const ExplorerLayout = () => {
           <Outlet />
         </StrategyProvider>
       </Page>
-    </div>
+    </>
   );
 };

@@ -1,5 +1,4 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { Button } from 'components/common/button';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
@@ -12,8 +11,6 @@ import {
   oneYearAgo,
 } from 'components/strategies/common/utils';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
-import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { formatNumber } from 'utils/helpers';
@@ -32,8 +29,8 @@ export const SimulatorInputRecurringPage = () => {
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
   const { data, isPending } = useGetTokenPriceHistory({
-    baseToken: searchState.baseToken,
-    quoteToken: searchState.quoteToken,
+    baseToken: searchState.base,
+    quoteToken: searchState.quote,
     start: oneYearAgo(),
     end: defaultEnd(),
   });
@@ -84,8 +81,8 @@ export const SimulatorInputRecurringPage = () => {
 
   useEffect(() => {
     if (initBuyRange || initSellRange) return;
-    dispatch('baseToken', searchState.baseToken);
-    dispatch('quoteToken', searchState.quoteToken);
+    dispatch('base', searchState.base);
+    dispatch('quote', searchState.quote);
     dispatch('sellMax', '');
     dispatch('sellMin', '');
     dispatch('sellBudget', '');
@@ -99,7 +96,7 @@ export const SimulatorInputRecurringPage = () => {
     setInitBuyRange(true);
     setInitSellRange(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, searchState.baseToken, searchState.quoteToken]);
+  }, [dispatch, searchState.base, searchState.quote]);
 
   const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
@@ -120,8 +117,8 @@ export const SimulatorInputRecurringPage = () => {
     navigate({
       to: '/simulate/result',
       search: {
-        baseToken: state.baseToken?.address || '',
-        quoteToken: state.quoteToken?.address || '',
+        base: state.base?.address || '',
+        quote: state.quote?.address || '',
         buyMin: state.buy.min,
         buyMax: state.buy.max,
         buyBudget: state.buy.budget,
@@ -174,8 +171,8 @@ export const SimulatorInputRecurringPage = () => {
         prices={prices}
       >
         <D3ChartRecurring
-          base={state.baseToken!}
-          quote={state.quoteToken!}
+          base={state.base!}
+          quote={state.quote!}
           isLimit={isLimit}
           prices={prices}
           onChange={onPriceUpdates}
@@ -183,30 +180,24 @@ export const SimulatorInputRecurringPage = () => {
       </SimInputChart>
       <form
         onSubmit={submit}
-        className={cn(style.form, 'grid gap-16')}
+        className={cn(
+          style.form,
+          'grid gap-16 grid-area-[form] content-start animate-scale-up',
+        )}
         data-testid="create-simulation-form"
       >
-        <div className="bg-background-900 rounded-2xl">
-          <SimInputTokenSelection
-            baseToken={searchState.baseToken}
-            quoteToken={searchState.quoteToken}
-            noPriceHistory={emptyHistory}
-          />
-          <SimInputStrategyType />
+        <div className="surface rounded-2xl overflow-clip">
           <SimInputRecurring state={state} dispatch={dispatch} _sP_={_sP_} />
         </div>
         <input className="approve-warnings hidden" defaultChecked />
-        <Button
+        <button
           type="submit"
           data-testid="start-simulation-btn"
-          variant="success"
-          fullWidth
-          size="lg"
           disabled={btnDisabled}
-          className="mt-16"
+          className="btn-primary-gradient text-16 py-12"
         >
           {loadingText || noBudgetText || 'Start Simulation'}
-        </Button>
+        </button>
       </form>
     </>
   );

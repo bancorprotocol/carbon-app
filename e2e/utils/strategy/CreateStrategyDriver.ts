@@ -6,7 +6,7 @@ import {
   getRecurringSettings,
   screenshotPath,
 } from './utils';
-import { CreateStrategyTestCase, StrategyType } from './types';
+import { CreateStrategyTestCase } from './types';
 import {
   RangeOrder,
   debugTokens,
@@ -76,8 +76,12 @@ export class CreateStrategyDriver {
     await waitModalClose(this.page);
   }
 
-  selectSetting(strategySettings: StrategyType) {
-    return this.page.getByTestId(strategySettings).click();
+  async selectType(
+    category: 'essentials' | 'intermediate' | 'advanced',
+    type: string,
+  ) {
+    await this.page.getByTestId(category).click();
+    await this.page.getByTestId(type).click();
   }
 
   async fillFormSection(

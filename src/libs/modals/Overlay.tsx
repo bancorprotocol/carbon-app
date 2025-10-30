@@ -20,7 +20,7 @@ export const Overlay: FC<Props> = ({ children, close, className }) => {
       animate="visible"
       exit="exit"
       className={cn(
-        'fixed inset-0 z-40 flex overflow-hidden bg-black/70 outline-hidden backdrop-blur-sm focus:outline-hidden',
+        'fixed inset-0 z-40 flex overflow-hidden bg-main-900/80 outline-hidden focus:outline-hidden',
         className,
       )}
     >

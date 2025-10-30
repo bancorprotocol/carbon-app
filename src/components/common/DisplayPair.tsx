@@ -1,6 +1,6 @@
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { FC, memo } from 'react';
 import { TokenLogo } from './imager/Imager';
@@ -16,12 +16,12 @@ export const _TokenLogoName: FC<TokenProps> = ({ token }) => {
   return (
     <>
       <TokenLogo token={token} size={30} />
-      <div>
+      <div className="grid">
         <p className="flex gap-8">
           {token.isSuspicious && <SuspiciousToken />}
           {token.symbol}
         </p>
-        <p className="text-white/60 text-12">{token.address}</p>
+        <p className="text-white/60 text-12 truncate">{token.address}</p>
       </div>
     </>
   );

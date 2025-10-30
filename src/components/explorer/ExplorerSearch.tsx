@@ -12,7 +12,7 @@ import {
 import { usePairs } from 'hooks/usePairs';
 import { getEnsAddressIfAny } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
 import style from './ExplorerSearch.module.css';
@@ -99,28 +99,26 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
   };
 
   return (
-    <div className={style.searchContainer}>
-      <form
-        className={style.search}
-        role="search"
-        onSubmit={submitHandler}
-        onReset={resetHandler}
-      >
-        <IconSearch className="size-18" />
-        <div className="flex items-center md:relative">
-          <SuggestionCombobox
-            url={url}
-            open={open}
-            setOpen={setOpen}
-            search={search}
-            setSearch={setSearch}
-          />
-        </div>
-        <button type="submit">
-          <IconChevron className="size-24" />
-        </button>
-      </form>
-    </div>
+    <form
+      className={style.search}
+      role="search"
+      onSubmit={submitHandler}
+      onReset={resetHandler}
+    >
+      <IconSearch className="size-18" />
+      <div className="flex items-center md:relative">
+        <SuggestionCombobox
+          url={url}
+          open={open}
+          setOpen={setOpen}
+          search={search}
+          setSearch={setSearch}
+        />
+      </div>
+      <button type="submit">
+        <IconChevron className="size-24" />
+      </button>
+    </form>
   );
 };
 

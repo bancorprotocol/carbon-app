@@ -1,6 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/TradeContext';
+import { useTradeCtx } from 'components/trade/context';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing/routes/trade';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -198,7 +198,7 @@ export const TradeQuickCustom = () => {
           buy={orders.buy.gradientOrder}
           sell={orders.sell.gradientOrder}
         >
-          <article className="bg-background-900 grid gap-16 rounded-b-2xl">
+          <article className="bg-main-900 grid gap-16 rounded-b-2xl">
             {!search.directions?.length && (
               <h2 className="error-message text-16 m-0 px-16">
                 Please select an order

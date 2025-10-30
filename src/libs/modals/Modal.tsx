@@ -4,27 +4,17 @@ import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
 import { ModalProps } from 'libs/modals/modals.types';
-
-const getSize = (size: 'sm' | 'md' | 'lg') => {
-  switch (size) {
-    case 'lg':
-      return 'max-w-[580px]';
-    case 'md':
-      return 'max-w-[480px]';
-    default:
-      return 'max-w-[390px]';
-  }
-};
+import { cn } from 'utils/helpers';
 
 export const Modal: FC<ModalProps> = ({
   children,
   id,
   title,
-  size = 'sm',
   showCloseButton = true,
   isPending = false,
   onClose,
   'data-testid': testId,
+  className,
 }) => {
   const { closeModal } = useModal();
 
@@ -32,8 +22,6 @@ export const Modal: FC<ModalProps> = ({
     if (onClose) onClose(id);
     closeModal(id);
   };
-
-  const sizeClass = getSize(size);
 
   return (
     <Overlay
@@ -43,7 +31,7 @@ export const Modal: FC<ModalProps> = ({
       <m.div
         data-testid="modal-container"
         onClick={(e) => e.stopPropagation()}
-        className={`relative mx-auto w-full ${sizeClass}`}
+        className="relative mx-auto max-w-390 md:max-w-420 lg:max-w-480 xl:max-w-580"
         variants={dropIn}
         initial="hidden"
         animate="visible"
@@ -51,7 +39,7 @@ export const Modal: FC<ModalProps> = ({
       >
         <div
           data-testid={testId}
-          className="rounded-lg bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-hidden focus:outline-hidden"
+          className="rounded-lg surface backdrop-blur-xs relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-hidden focus:outline-hidden"
         >
           {isPending && (
             <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
@@ -73,7 +61,12 @@ export const Modal: FC<ModalProps> = ({
             )}
           </header>
 
-          <div className="flex max-h-[70vh] flex-col gap-20 overflow-auto">
+          <div
+            className={cn(
+              'flex max-h-[70vh] flex-col gap-20 overflow-auto',
+              className,
+            )}
+          >
             {children}
           </div>
         </div>

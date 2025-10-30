@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { buttonStyles } from 'components/common/button/buttonStyles';
+
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useStrategyCtx } from 'hooks/useStrategies';
@@ -34,8 +34,8 @@ export const PortfolioHeader = () => {
   }, [strategies]);
 
   return (
-    <header className={cn('bg-transparent-gradient', style.header)}>
-      <div className="flex flex-col justify-between gap-16 md:flex-row md:items-center w-full max-w-[1280px] mx-auto py-24 px-16">
+    <header className={cn('bg-main-900/20', style.header)}>
+      <div className="flex flex-col justify-between gap-16 md:flex-row md:items-center w-full max-w-[1920px] mx-auto py-24 px-16 px-content xl:px-50">
         <div
           role="table"
           className="flex flex-col gap-16 md:flex-row md:gap-24"
@@ -74,10 +74,10 @@ export const PortfolioHeader = () => {
         </div>
         <Link
           to="/trade"
-          className={buttonStyles({ variant: 'success' })}
+          className="btn-primary-gradient whitespace-nowrap"
           data-testid="create-strategy-desktop"
         >
-          Create
+          Create Strategy
         </Link>
       </div>
     </header>

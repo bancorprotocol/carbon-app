@@ -7,15 +7,11 @@ export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {
       <path
         d={['M', -6, dms.boundedHeight, 'h', 6, 'V', 0, 'h', -6].join(' ')}
         fill="none"
-        className="stroke-background-800"
+        className="stroke-main-800"
       />
       {ticks.map(({ value, offset }) => (
         <g key={`${uuid()}${value}`} transform={`translate(0,${offset})`}>
-          <line
-            x1={0}
-            x2={dms.boundedWidth}
-            className="stroke-background-800"
-          />
+          <line x1={0} x2={dms.boundedWidth} className="stroke-main-800" />
           <text
             key={value}
             style={{

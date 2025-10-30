@@ -157,7 +157,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       id={strategy.id}
       style={style}
       className={cn(
-        'rounded-lg bg-background-900 grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
+        'rounded-lg surface grid grid-cols-1 grid-rows-[auto_auto_auto] gap-16 p-24',
         className,
       )}
     >
@@ -171,7 +171,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
             <button
               type="button"
               popoverTarget={popoverId}
-              className="warning-message border-warning rounded-md text-14 text-warning hover:bg-background-800 active:bg-background-700 flex items-center gap-8 border px-8 py-2 text-start"
+              className="warning-message border-warning rounded-md text-14 text-warning hover:bg-main-800 active:bg-main-700 flex items-center gap-8 border px-8 py-2 text-start"
             >
               <IconWarning className="size-14" />
               <span>Warnings</span>
@@ -183,7 +183,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           <button
             role="menuitem"
             type="button"
-            className="size-38 rounded-sm border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
+            className="btn-on-surface size-38 rounded-sm grid place-items-center p-0"
             aria-label="Withdraw & Delete"
             onClick={remove}
           >
@@ -194,14 +194,14 @@ export const CartStrategyItems: FC<Props> = (props) => {
       <div>
         <StrategyBlockBudget strategy={strategy} />
       </div>
-      <div className="rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2">
+      <div className="bg-main-900/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border">
         <StrategyBlockBuySell
           strategy={strategy}
           isBuy
-          className="border-background-800 border-r-2"
+          className="border-main-800 border-r-2"
         />
         <StrategyBlockBuySell strategy={strategy} />
-        <div className="border-background-800 col-start-1 col-end-3 border-t-2">
+        <div className="border-main-800 col-start-1 col-end-3 border-t-2">
           <StrategyGraph strategy={strategy} />
         </div>
       </div>
@@ -211,7 +211,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           popover="auto"
           onBeforeToggle={setSize}
           className={cn(
-            'rounded-md bg-background-900 absolute m-0 overflow-hidden p-24',
+            'rounded-md bg-main-900 absolute m-0 overflow-hidden p-24',
             styles.warnings,
           )}
         >
@@ -226,13 +226,13 @@ export const CartStrategyItems: FC<Props> = (props) => {
                 popoverTarget={popoverId}
                 popoverTargetAction="hide"
                 aria-label="close warnings"
-                className="hover:bg-background-900 ml-auto rounded-full p-8"
+                className="hover:bg-main-900/40 ml-auto rounded-full p-8"
               >
                 <IconClose className="size-16" />
               </button>
             </header>
             {error && (
-              <div className="rounded-md border-error absolute inset-0 grid place-items-center border-2 bg-black/60 p-8 backdrop-blur-xs">
+              <div className="rounded-md border-error absolute inset-0 grid place-items-center border bg-main-900/60 p-8 backdrop-blur-xs">
                 <Warning message={error} isError />
               </div>
             )}

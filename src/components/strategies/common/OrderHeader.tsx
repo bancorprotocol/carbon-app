@@ -35,6 +35,7 @@ export const OrderHeader: FC<Props> = (props) => {
             checked={order.settings !== 'range'}
             onChange={() => setSettings('limit')}
             data-testid="tab-limit"
+            className="px-8 py-2"
           >
             Limit
           </Radio>
@@ -43,6 +44,7 @@ export const OrderHeader: FC<Props> = (props) => {
             checked={order.settings === 'range'}
             onChange={() => setSettings('range')}
             data-testid="tab-range"
+            className="px-8 py-2"
           >
             Range
           </Radio>

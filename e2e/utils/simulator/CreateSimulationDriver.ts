@@ -122,8 +122,8 @@ export class CreateSimulationDriver {
     const form = this.getForm();
     return {
       locator: form,
-      min: () => form.getByLabel('Min Buy Price'),
-      max: () => form.getByLabel('Max Sell Price'),
+      min: () => form.getByLabel('Min Buy'),
+      max: () => form.getByLabel('Min Sell'),
       budgetBase: () => form.getByTestId('input-budget-base'),
       budgetQuote: () => form.getByTestId('input-budget-quote'),
       spread: () => form.getByTestId('spread-input'),
@@ -142,7 +142,7 @@ export class CreateSimulationDriver {
   }
 
   selectStrategyType(strategyType: StrategyType) {
-    return this.page.getByTestId(`select-type-${strategyType}`).click();
+    return this.page.getByTestId(strategyType).click();
   }
 
   async fillFormSection(

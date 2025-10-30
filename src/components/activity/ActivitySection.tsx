@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { ActivityTable } from './ActivityTable';
 import { ActivityList } from './ActivityList';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { useActivity } from './ActivityProvider';
+import { useActivity } from './context';
 import { NotFound } from 'components/common/NotFound';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { useRouterState } from '@tanstack/react-router';
@@ -42,11 +42,11 @@ export const ActivitySection: FC<SectionProps> = ({ hideIds }) => {
         variant="error"
         title="We couldn't find any activities"
         text={getEmptyText(location.pathname)}
-        className="grid-area-[list]"
+        className="surface rounded-2xl grid-area-[list]"
       />
     );
   }
-  if (aboveBreakpoint('md')) {
+  if (aboveBreakpoint('lg')) {
     return <ActivityTable activities={activities} hideIds={hideIds} />;
   }
   return <ActivityList activities={activities} hideIds={hideIds} />;

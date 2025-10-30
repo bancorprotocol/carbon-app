@@ -3,14 +3,15 @@ import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
-import { buttonStyles } from 'components/common/button/buttonStyles';
-import { AnyStrategy } from 'components/strategies/common/types';
+
+import { AnyStrategy, Strategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
-import { cn } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
+import { useMemo } from 'react';
+import { getEditPricesPage } from 'components/strategies/edit/utils';
 
 export interface ModalConfirmDeleteData {
   strategy: AnyStrategy;
@@ -30,6 +31,10 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
 
   const isGradient = isGradientStrategy(strategy);
 
+  const editPricePage = useMemo(() => {
+    return getEditPricesPage(strategy as Strategy, 'editPrices');
+  }, [strategy]);
+
   const onClick = () => {
     deleteStrategy(
       strategy,
@@ -41,7 +46,11 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   const editPrices = () => closeModal(id);
 
   return (
-    <ModalOrMobileSheet id={id} title="Delete Strategy">
+    <ModalOrMobileSheet
+      id={id}
+      title="Delete Strategy"
+      className="md:max-w-450"
+    >
       <IconTitleText
         variant="error"
         icon={<IconTrash className="size-24" />}
@@ -49,18 +58,15 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />
       {!isGradient && (
-        <article className="bg-background-800 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
+        <article className="bg-main-800 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
           <h3 className="text-14 font-medium">Did you know?</h3>
           <Link
             onClick={editPrices}
             disabled={isAwaiting || isProcessing}
-            to="/strategies/edit/$strategyId"
+            to={editPricePage.to}
             params={{ strategyId: strategy.id }}
-            search={{ editType: 'editPrices' }}
-            className={cn(
-              'row-span-2 self-center',
-              buttonStyles({ variant: 'success' }),
-            )}
+            search={editPricePage.search}
+            className="btn-primary-gradient row-span-2 self-center"
           >
             Edit Prices
           </Link>
@@ -71,7 +77,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       )}
 
       <Button
-        variant="success"
+        variant="secondary"
         onClick={onClick}
         loading={isPending}
         loadingChildren={loadingChildren}

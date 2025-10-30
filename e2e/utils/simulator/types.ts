@@ -7,7 +7,7 @@ interface Dates {
   end: string;
 }
 
-export type StrategyType = 'recurring' | 'overlapping';
+export type StrategyType = 'recurring-range' | 'overlapping';
 
 export interface CreateStrategyInput {
   buy: RangeOrder;

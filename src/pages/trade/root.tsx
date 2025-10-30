@@ -1,43 +1,15 @@
 import { Outlet } from '@tanstack/react-router';
 import { NotFound } from 'components/common/NotFound';
-import { TradeProvider } from 'components/trade/TradeContext';
-import { useNavigate, useSearch } from '@tanstack/react-router';
-import { useToken } from 'hooks/useTokens';
-import { getLastVisitedPair } from 'libs/routing/utils';
-import { useEffect, useMemo } from 'react';
-import { lsService } from 'services/localeStorage';
+import { TradeProvider } from 'components/trade/TradeProvider';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-
-const usePersistLastPair = () => {
-  const search = useSearch({ from: '/trade' });
-  const defaultPair = useMemo(() => getLastVisitedPair(), []);
-  const base = useToken(search.base ?? defaultPair.base);
-  const quote = useToken(search.quote ?? defaultPair.quote);
-
-  useEffect(() => {
-    if (!base.token || !quote.token) return;
-    lsService.setItem('tradePair', [base.token.address, quote.token.address]);
-  }, [base.token, quote.token]);
-
-  const navigate = useNavigate({ from: '/trade' });
-  useEffect(() => {
-    if (search.base && search.quote) return;
-    navigate({
-      search: { ...search, ...getLastVisitedPair() },
-      params: {},
-      replace: true,
-    });
-  }, [search, navigate]);
-
-  return {
-    base: base.token,
-    quote: quote.token,
-    isPending: base.isPending || quote.isPending,
-  };
-};
+import { TokenSelection } from 'components/strategies/common/TokenSelection';
+import { TradeNav } from 'components/trade/TradeNav';
+import { usePersistLastPair } from 'hooks/usePersistLastPair';
+import { cn } from 'utils/helpers';
+import style from 'components/strategies/common/root.module.css';
 
 export const TradeRoot = () => {
-  const { base, quote, isPending } = usePersistLastPair();
+  const { base, quote, isPending } = usePersistLastPair({ from: '/trade' });
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center" />;
@@ -53,7 +25,16 @@ export const TradeRoot = () => {
   }
   return (
     <TradeProvider base={base} quote={quote}>
-      <div className="mx-auto flex w-full max-w-[1920px] flex-col-reverse content-start gap-16 p-16 md:grid md:grid-cols-[auto_450px]">
+      <div
+        className={cn(
+          style.root,
+          'mx-auto grid w-full gap-16 p-16 max-w-[1920px]',
+        )}
+      >
+        <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
+          <TokenSelection url="/trade" />
+          <TradeNav />
+        </div>
         <Outlet />
       </div>
     </TradeProvider>

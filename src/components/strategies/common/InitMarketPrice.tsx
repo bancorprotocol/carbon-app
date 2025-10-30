@@ -3,16 +3,15 @@ import { FC, FormEvent, useId, useMemo, useState } from 'react';
 import { cn, roundSearchParam } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
-import { Button } from 'components/common/button';
 import { NewTabLink, useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { InputLimit } from './InputLimit';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import style from 'components/strategies/common/form.module.css';
 import { useEditStrategyCtx } from '../edit/EditStrategyContext';
 import { isOverlappingStrategy } from './utils';
 import { getCalculatedPrice } from '../overlapping/utils';
+import style from 'components/strategies/common/form.module.css';
 
 interface Props {
   base: Token;
@@ -25,7 +24,7 @@ export const EditMarketPrice: FC<Props> = (props) => {
     <button
       {...attr}
       className={cn(
-        'text-12 font-medium bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8',
+        'text-12 font-medium btn-on-surface flex items-center justify-between gap-8 rounded-full ',
         props.className,
       )}
       data-testid="edit-market-price"
@@ -61,7 +60,6 @@ interface FieldProps extends Props {
 export const InitMarketPrice = (props: FieldProps) => {
   const { base, quote } = props;
   const strategy = useEditStrategyCtx()?.strategy;
-  const inputId = useId();
   const checkboxId = useId();
   const navigate = useNavigate();
   const search = useSearch({ strict: false });
@@ -107,64 +105,61 @@ export const InitMarketPrice = (props: FieldProps) => {
   };
 
   return (
-    <div className="bg-gradient rounded-lg p-2 shadow-[0_0_12px_#A3A3A3] shadow-white">
-      <form
+    <form
+      className={cn(props.className, style.form, 'grid gap-16 p-16')}
+      data-testid="user-price-form"
+      onSubmit={setPrice}
+    >
+      {!externalPrice && <SetPriceText base={base} quote={quote} />}
+      <InputLimit
+        price={localPrice || ''}
+        setPrice={changePrice}
+        base={base}
+        quote={quote}
+        ignoreMarketPriceWarning
+        required
+      />
+      {!externalPrice && !!calculatedPrice && (
+        <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
+          <button
+            className="text-12 font-medium text-primary hover:text-secondary focus:text-secondary active:text-secondary"
+            type="button"
+            onClick={() => setLocalPrice(calculatedPrice)}
+          >
+            Use Strategy
+          </button>
+        </Tooltip>
+      )}
+      <p className="text-12 warning-message text-white/60">
+        Updating the market price will automatically adjust all related data in
+        the app.
+        {!!externalPrice && <EditPriceText />}
+      </p>
+      <label
+        htmlFor={checkboxId}
         className={cn(
-          props.className,
-          style.form,
-          'bg-background-900 rounded-lg grid gap-16 p-16',
+          style.approveWarnings,
+          'rounded-lg text-12 font-medium flex items-center gap-8 text-white/60',
         )}
-        data-testid="user-price-form"
-        onSubmit={setPrice}
       >
-        {!externalPrice && <SetPriceText base={base} quote={quote} />}
-        <InputLimit
-          id={inputId}
-          price={localPrice || ''}
-          setPrice={changePrice}
-          base={base}
-          quote={quote}
-          ignoreMarketPriceWarning
-          required
+        <input
+          id={checkboxId}
+          type="checkbox"
+          className="size-18"
+          data-testid="approve-price-warnings"
+          checked={approved}
+          onChange={(e) => setApproved(e.target.checked)}
         />
-        {!externalPrice && !!calculatedPrice && (
-          <Tooltip element="This price is the geometric mean of the strategy buy and sell marginal prices.">
-            <button
-              className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
-              type="button"
-              onClick={() => setLocalPrice(calculatedPrice)}
-            >
-              Use Strategy
-            </button>
-          </Tooltip>
-        )}
-        <p className="text-12 warning-message text-white/60">
-          Updating the market price will automatically adjust all related data
-          in the app.
-          {!!externalPrice && <EditPriceText />}
-        </p>
-        <label
-          htmlFor={checkboxId}
-          className={cn(
-            style.approveWarnings,
-            'rounded-lg text-12 font-medium flex items-center gap-8 text-white/60',
-          )}
-        >
-          <input
-            id={checkboxId}
-            type="checkbox"
-            className="size-18"
-            data-testid="approve-price-warnings"
-            checked={approved}
-            onChange={(e) => setApproved(e.target.checked)}
-          />
-          I've reviewed the new market price and chosen to proceed.
-        </label>
-        <Button type="submit" data-testid="set-overlapping-price">
-          Set New Market Price
-        </Button>
-      </form>
-    </div>
+        I've reviewed the new market price and chosen to proceed.
+      </label>
+      <button
+        className="btn-primary-gradient"
+        type="submit"
+        data-testid="set-overlapping-price"
+      >
+        Set New Market Price
+      </button>
+    </form>
   );
 };
 

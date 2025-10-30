@@ -1,20 +1,12 @@
 import { LogoImager } from 'components/common/imager/Imager';
-import {
-  FC,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
-import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
 import { ModalTokenListDuplicateWarning } from 'libs/modals/modals/ModalTokenList/ModalTokenListDuplicateWarning';
 import { SuspiciousToken } from 'components/common/DisplayPair';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -69,28 +61,23 @@ export const ModalTokenListContent: FC<Props> = ({
     [favoritesMap],
   );
 
-  const selectCategory = (e: FormEvent<HTMLFieldSetElement>) => {
-    if (e.target instanceof HTMLInputElement) {
-      setSelectedList(e.target.value as ChooseTokenCategory);
-    }
-  };
-
   return (
     <>
-      <fieldset
-        aria-label="Filter tokens"
-        className="grid grid-cols-3 px-4"
-        onChange={selectCategory}
-      >
+      <RadioGroup aria-label="Filter tokens">
         {categories.map((category) => (
-          <CategoryWithCounter
+          <Radio
             key={category}
-            category={category}
-            numOfItemsInCategory={tokens[category].length}
-            isActive={category === selectedList}
-          />
+            checked={category === selectedList}
+            onChange={() => setSelectedList(category)}
+            className="flex-1 flex gap-8 justify-center items-center"
+          >
+            <span className="capitalize">{category}</span>
+            <span className="rounded-full bg-white/10 px-6">
+              {tokens[category].length}
+            </span>
+          </Radio>
         ))}
-      </fieldset>
+      </RadioGroup>
       <div ref={parentRef} className="h-[70vh] overflow-auto p-8">
         <ul
           className="relative"
@@ -105,12 +92,12 @@ export const ModalTokenListContent: FC<Props> = ({
             return (
               <li
                 key={token.address}
-                className="rounded-xl absolute inset-0 flex items-center justify-between hover:bg-black"
+                className="rounded-xl absolute inset-0 flex items-center justify-between hover:bg-main-900/40"
                 style={style}
               >
                 <button
                   onClick={() => onSelect(token)}
-                  className="flex flex-1 items-center gap-10 p-8"
+                  className="flex flex-1 items-center gap-8 py-8 px-16"
                   data-testid={`select-token-${token.address}`}
                 >
                   <LogoImager

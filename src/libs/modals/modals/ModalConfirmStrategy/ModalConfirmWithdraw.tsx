@@ -2,11 +2,9 @@ import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Strategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
-import { cn } from 'utils/helpers';
 import {
   getEditBudgetPage,
   getEditPricesPage,
@@ -28,7 +26,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
   const edit = () => closeModal(id);
 
   return (
-    <ModalOrMobileSheet id={id} title="Withdraw Funds">
+    <ModalOrMobileSheet id={id} title="Withdraw Funds" className="md:max-w-450">
       <IconTitleText
         icon={<IconWallet className="size-24" />}
         title="Are you sure you would like to withdraw your funds?"
@@ -40,10 +38,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
           to={editPrices.to}
           search={editPrices.search}
           params={{ strategyId: strategy.id }}
-          className={cn(
-            'row-span-2 self-center',
-            buttonStyles({ variant: 'success' }),
-          )}
+          className="btn-primary-gradient row-span-2 self-center"
         >
           Edit Prices
         </Link>
@@ -56,7 +51,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         to={withdraw.to}
         search={withdraw.search}
         params={{ strategyId: strategy.id }}
-        className={buttonStyles({ variant: 'success' })}
+        className="btn-on-surface"
         data-testid="withdraw-strategy-btn"
       >
         Withdraw Funds

@@ -8,10 +8,10 @@ export interface FiatCurrencyStore {
   setSelectedFiatCurrency: (currency: FiatSymbol) => void;
 }
 
+// TODO: remove the fiat selection logic
 export const useFiatCurrencyStore = (): FiatCurrencyStore => {
-  const [selectedFiatCurrency, _setSelectedFiatCurrency] = useState<FiatSymbol>(
-    lsService.getItem('currentCurrency') || 'USD',
-  );
+  const [selectedFiatCurrency, _setSelectedFiatCurrency] =
+    useState<FiatSymbol>('USD');
 
   const setSelectedFiatCurrency = (currency: FiatSymbol) => {
     _setSelectedFiatCurrency(currency);

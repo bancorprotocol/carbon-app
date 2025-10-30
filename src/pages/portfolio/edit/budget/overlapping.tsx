@@ -202,7 +202,7 @@ const OverlappingContent = () => {
     return (
       <div className="flex flex-col gap-20 md:w-[440px]">
         <EditStrategyOverlapTokens />
-        <article className="rounded-lg bg-background-900 flex flex-col">
+        <article className="rounded-lg surface flex flex-col">
           <InitMarketPrice base={base} quote={quote} />
         </article>
       </div>
@@ -215,11 +215,6 @@ const OverlappingContent = () => {
       editType={search.editType}
       orders={orders}
       hasChanged={hasChanged}
-      approveText={
-        hasChanged
-          ? "I've approved the token deposit(s) and distribution."
-          : "I've reviewed the warning(s) but choose to proceed."
-      }
     >
       <EditOverlappingBudget
         marketPrice={marketPrice}

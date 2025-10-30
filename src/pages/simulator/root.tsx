@@ -1,62 +1,33 @@
-import { Outlet, useNavigate, useSearch } from '@tanstack/react-router';
-import { useBreakpoints } from 'hooks/useBreakpoints';
-import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
-import { ReactComponent as IconBookmark } from 'assets/icons/bookmark.svg';
+import { Outlet } from '@tanstack/react-router';
+import { ReactComponent as IconClock } from 'assets/icons/clock.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';
-import { getLastVisitedPair } from 'libs/routing';
-import { useToken } from 'hooks/useTokens';
+import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-
-// TODO: merge this hook with trade when they both use base / quote in search
-const usePersistLastPair = () => {
-  const search = useSearch({ from: '/simulate' });
-  const defaultPair = useMemo(() => getLastVisitedPair(), []);
-  const base = useToken(search.baseToken ?? defaultPair.base);
-  const quote = useToken(search.quoteToken ?? defaultPair.quote);
-
-  useEffect(() => {
-    if (!search.baseToken || !search.quoteToken) return;
-    lsService.setItem('tradePair', [search.baseToken, search.quoteToken]);
-  }, [search.baseToken, search.quoteToken]);
-
-  const navigate = useNavigate({ from: '/simulate' });
-  useEffect(() => {
-    if (search.baseToken && search.quoteToken) return;
-    navigate({
-      search: {
-        ...search,
-        baseToken: defaultPair.base,
-        quoteToken: defaultPair.quote,
-      },
-      replace: true,
-    });
-  }, [search, navigate, defaultPair.base, defaultPair.quote]);
-
-  return {
-    base: base.token,
-    quote: quote.token,
-    isPending: base.isPending || quote.isPending,
-  };
-};
+import { usePersistLastPair } from 'hooks/usePersistLastPair';
+import { cn } from 'utils/helpers';
+import style from 'components/strategies/common/root.module.css';
 
 export const SimulatorRoot = () => {
-  const { isPending } = usePersistLastPair();
-
-  const { aboveBreakpoint } = useBreakpoints();
-
-  if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
+  const { isPending } = usePersistLastPair({ from: '/simulate' });
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center p-16" />;
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-[1920px] flex-col content-start gap-20 p-20 md:grid md:grid-cols-[auto_450px]">
+    <div className="mx-auto flex flex-col content-start gap-24 xl:max-w-[1920px] p-16 w-full">
       <SimulatorDisclaimer />
-      <Outlet />
+      <div className={cn(style.root, 'grid gap-16')}>
+        <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
+          <TokenSelection url="/simulate" />
+          <SimInputStrategyType />
+        </div>
+        <Outlet />
+      </div>
     </div>
   );
 };
@@ -83,19 +54,18 @@ const SimulatorDisclaimer = () => {
   return (
     <form
       onSubmit={dismiss}
-      className="flex gap-16 items-start border border-warning rounded-2xl bg-warning/10 px-24 py-16 md:col-span-2"
+      className="flex gap-16 items-start border border-primary rounded-2xl bg-primary/10 p-16 md:col-span-2"
     >
-      <div className="self-center bg-warning/40 size-48 grid place-items-center rounded-full flex-shrink-0">
-        <IconBookmark className="size-24 text-warning" />
+      <div className="self-start bg-primary/20 size-48 grid place-items-center rounded-full flex-shrink-0">
+        <IconClock className="size-24 fill-gradient" />
       </div>
       <hgroup className="grid gap-8 text-14">
-        <h2>Simulator Disclaimer</h2>
+        <h2>Backtest Your Trading Strategy</h2>
         <p>
-          This tool uses historical price data under simplified conditions and
-          does not predict future results. It excludes gas fees, may lack
-          accuracy or completeness, and is for informational purposes only. We
-          accept no liability for its use. Tax and rebase tokens are not
-          supported.
+          This tool is for informational purposes only and operates under
+          simplified conditions. It excludes gas fees, does not support fee on
+          transfer (tax) or rebase tokens, and may lack accuracy or
+          completeness. Bancor accepts no liability for its use.
         </p>
       </hgroup>
 

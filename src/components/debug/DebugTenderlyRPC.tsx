@@ -1,7 +1,6 @@
 import { useWagmi } from 'libs/wagmi';
 import { useState, FormEvent } from 'react';
 import { lsService } from 'services/localeStorage';
-import { Button } from 'components/common/button';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { tenderlyRpc } from 'utils/tenderly';
@@ -38,7 +37,7 @@ export const DebugTenderlyRPC = () => {
   return (
     <form
       onSubmit={submit}
-      className="rounded-3xl bg-background-900 flex flex-col items-center space-y-20 p-20"
+      className="rounded-3xl surface flex flex-col items-center gap-16 p-20"
     >
       <h2>Set Tenderly RPC</h2>
       <Label label="RPC URL">
@@ -77,7 +76,7 @@ export const DebugTenderlyRPC = () => {
         </>
       )}
 
-      <div className="flex w-full items-center space-x-20 rounded-full bg-black px-20 py-10">
+      <div className="flex w-full items-center gap-16 rounded-full bg-main-900 px-20 py-10">
         <Checkbox
           data-testid="unchecked-signer"
           isChecked={isUncheckedSigner}
@@ -94,9 +93,13 @@ export const DebugTenderlyRPC = () => {
         />
       </Label>
 
-      <Button data-testid="save-rpc" type="submit">
+      <button
+        className="btn-primary-gradient"
+        data-testid="save-rpc"
+        type="submit"
+      >
         Save
-      </Button>
+      </button>
     </form>
   );
 };

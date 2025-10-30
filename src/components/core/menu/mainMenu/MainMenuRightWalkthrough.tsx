@@ -1,12 +1,11 @@
 import { FC, useEffect } from 'react';
 import { ReactComponent as IconWalkthrough } from 'assets/icons/walkthrough.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
-import { Button } from 'components/common/button';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { lsService } from 'services/localeStorage';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import config from 'config';
 import { useDialog } from 'hooks/useDialog';
+import config from 'config';
 
 export const MainMenuRightWalkthrough: FC = () => {
   const { currentBreakpoint } = useBreakpoints();
@@ -57,13 +56,12 @@ export const MainMenuRightWalkthrough: FC = () => {
   return (
     <>
       <Tooltip element="Start Walkthrough">
-        <Button
-          variant="secondary"
-          className="size-40 hidden p-0 md:grid"
+        <button
+          className="btn-on-background size-40 hidden p-0 md:grid"
           onClick={start}
         >
           <IconWalkthrough className="place-self-center size-20" />
-        </Button>
+        </button>
       </Tooltip>
       <dialog ref={ref} className="modal" onClick={lightDismiss}>
         <form
@@ -92,7 +90,7 @@ export const MainMenuRightWalkthrough: FC = () => {
           </p>
           <button
             type="submit"
-            className="bg-white text-black text-14 text-center px-16 py-8 rounded-full place-self-stretch outline-offset-2"
+            className="btn-primary-gradient text-center  rounded-full place-self-stretch outline-offset-2"
           >
             Show me how it works
           </button>

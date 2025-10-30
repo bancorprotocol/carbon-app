@@ -72,7 +72,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
   return (
     <article
       aria-labelledby={titleId}
-      className={cn(style.order, 'bg-background-900 grid gap-16 p-16')}
+      className={cn(style.order, 'grid gap-16 p-16')}
       data-testid={`${isBuy ? 'buy' : 'sell'}-section`}
       data-direction={isBuy ? 'buy' : 'sell'}
     >

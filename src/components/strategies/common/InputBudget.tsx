@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { Token } from 'libs/tokens';
 import {
+  cn,
   formatNumber,
   prettifyNumber,
   roundSearchParam,
@@ -21,7 +22,6 @@ import { TokenLogo } from 'components/common/imager/Imager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWagmi } from 'libs/wagmi';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 export type BudgetAction = 'withdraw' | 'deposit';
 
@@ -35,7 +35,6 @@ interface Props {
   maxIsLoading?: boolean;
   placeholder?: string;
   title?: string;
-  titleTooltip?: string;
   disabled?: boolean;
   error?: string;
   warning?: string;
@@ -55,8 +54,6 @@ export const InputBudget: FC<Props> = (props) => {
     disabled,
     error,
     warning,
-    title,
-    titleTooltip,
   } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = useId();
@@ -108,21 +105,12 @@ export const InputBudget: FC<Props> = (props) => {
   };
 
   return (
-    <div className="flex flex-col gap-16">
-      {title && (
-        <label htmlFor={id} className="text-14 font-medium flex">
-          <Tooltip element={titleTooltip}>
-            <span className="text-white/80">{title}</span>
-          </Tooltip>
-        </label>
-      )}
+    <>
       <div
-        className={`
-          flex cursor-text flex-col gap-8 rounded-2xl border border-black bg-black p-16
-          focus-within:border-white/50
-          ${error ? 'border-error/50!' : ''}
-          ${className}
-        `}
+        className={cn(
+          'flex cursor-text flex-col gap-8 rounded-2xl input-container',
+          className,
+        )}
         onClick={() => inputRef.current?.focus()}
       >
         <div className="flex items-center justify-between">
@@ -136,7 +124,7 @@ export const InputBudget: FC<Props> = (props) => {
             size={1}
             placeholder={placeholder}
             className={`
-              text-16 font-medium grow text-ellipsis bg-transparent focus:outline-hidden
+              text-24 font-medium grow text-ellipsis bg-transparent focus:outline-hidden
               ${error ? 'text-error' : ''}
               ${disabled ? 'text-white/40' : ''}
               ${disabled ? 'cursor-not-allowed' : ''}
@@ -147,7 +135,7 @@ export const InputBudget: FC<Props> = (props) => {
             disabled={disabled}
             data-testid={props['data-testid']}
           />
-          <div className="bg-background-800 flex items-center gap-6 rounded-[20px] px-8 py-6">
+          <div className="bg-main-600 flex items-center gap-6 rounded-[20px] px-8 py-6">
             <TokenLogo token={token} size={20} />
             <span className="font-medium">{token.symbol}</span>
           </div>
@@ -165,13 +153,7 @@ export const InputBudget: FC<Props> = (props) => {
                 {editType === 'deposit' ? 'Wallet:' : 'Allocated:'}
               </span>
               <span className="text-white">{prettifyNumber(max)}</span>
-              <span
-                className={
-                  disabled
-                    ? 'text-primary/40'
-                    : 'text-primary group-hover/budget-input:text-tertiary'
-                }
-              >
+              <span className="text-gradient hover:text-secondary focus:text-secondary active:text-secondary group-disabled/budget-input:text-primary/40">
                 MAX
               </span>
             </button>
@@ -183,6 +165,6 @@ export const InputBudget: FC<Props> = (props) => {
       </div>
       {error && <Warning htmlFor={id} message={error} isError />}
       {!error && warning && <Warning htmlFor={id} message={warning} />}
-    </div>
+    </>
   );
 };

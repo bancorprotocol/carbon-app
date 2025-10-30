@@ -17,7 +17,7 @@ export const PairContent: FC<Props> = ({ pairs }) => {
         variant="info"
         title="No results found"
         text="Try changing the search term"
-        className="grid-area-[list]"
+        className="surface rounded-2xl grid-area-[list]"
       />
     );
   }

@@ -13,8 +13,7 @@ import {
   TransactionLink,
 } from './ActivityTable';
 import { shortenString, tokenAmount } from 'utils/helpers';
-import { Button } from 'components/common/button';
-import { useActivity, useActivityPagination } from './ActivityProvider';
+import { useActivity, useActivityPagination } from './context';
 
 export interface ActivityListProps {
   activities: Activity[];
@@ -25,8 +24,8 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
   const { activities, hideIds = false } = props;
   const { size, limit, setLimit } = useActivityPagination();
   return (
-    <>
-      <ul className="flex flex-col gap-16 p-16">
+    <div className="grid gap-16 grid-area-[list]">
+      <ul className="grid grid-fill-320 gap-16">
         {activities.map((activity, i) => (
           <ActivityItem
             key={activityKey(activity, i)}
@@ -36,20 +35,19 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
         ))}
       </ul>
       {limit < size && (
-        <>
-          <p className="text-12 mb-16 text-center text-white/60 grid-area-[list]">
+        <div className="grid place-items-center">
+          <p className="text-12 mb-16 text-center text-white/60">
             {limit} / {size}
           </p>
-          <Button
-            fullWidth
-            variant="success"
+          <button
+            className="btn-primary-gradient "
             onClick={() => setLimit(limit + 10)}
           >
             Show 10 More
-          </Button>
-        </>
+          </button>
+        </div>
       )}
-    </>
+    </div>
   );
 };
 
@@ -68,10 +66,10 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
     setSearchParams({ actions });
   };
   return (
-    <li className="border-background-800 flex flex-col gap-16 rounded-2xl border">
-      <header className="flex px-16 pt-16 items-center">
-        {!hideIds && <ActivityId activity={activity} size={12} />}
-        <div className="grid text-12 ml-auto">
+    <li className="grid gap-16 rounded-2xl surface">
+      <header className="grid grid-flow-col px-16 pt-16 items-center justify-items-start">
+        {!hideIds && <ActivityId activity={activity} size={16} />}
+        <div className="grid text-12 justify-self-end align-center">
           <p className="text-white/80">
             {activityDateFormatter.format(activity.date)}
           </p>
@@ -95,7 +93,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
           </hgroup>
         </button>
       </section>
-      <hr className="border-background-700 mx-8" />
+      <hr className="border-main-700 mx-8" />
       <table className="w-full table-fixed">
         <thead>
           <tr className="text-12 text-white/60">

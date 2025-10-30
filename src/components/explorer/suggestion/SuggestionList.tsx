@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { PairLogoName, TokenLogoName } from 'components/common/DisplayPair';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { TradePair } from 'components/strategies/common/types';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
 import { cn } from 'utils/helpers';
@@ -86,7 +86,7 @@ export const SuggestionList: FC<Props> = (props) => {
               role="option"
               onMouseDown={(e) => e.preventDefault()} // prevent blur on click
               onClick={() => navigate(token.address.toLowerCase())}
-              className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
+              className="px-16 md:px-30  flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
               aria-selected="false"
               tabIndex={index ? -1 : 0}
             >
@@ -94,10 +94,10 @@ export const SuggestionList: FC<Props> = (props) => {
             </button>
           ))}
           {maxTokens <= filteredTokens.length && (
-            <footer className="px-30 flex h-[50px] items-center">
+            <footer className="px-16 md:px-30 flex h-[50px] items-center">
               <button
                 type="button"
-                className="text-14 font-medium bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
+                className="text-14 font-medium btn cursor-pointer rounded-full "
                 onClick={() => setMaxTokens((v) => v + 5)}
               >
                 View More
@@ -118,7 +118,7 @@ export const SuggestionList: FC<Props> = (props) => {
                 role="option"
                 onMouseDown={(e) => e.preventDefault()} // prevent blur on click
                 onClick={() => navigate(slug)}
-                className="px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
+                className="px-16 md:px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
                 aria-selected="false"
                 aria-setsize={filteredPairs.length}
                 tabIndex={index ? -1 : 0}
@@ -131,7 +131,7 @@ export const SuggestionList: FC<Props> = (props) => {
             <footer className="px-30 flex h-[50px] items-center">
               <button
                 type="button"
-                className="text-14 font-medium bg-background-700 hover:bg-background-500 active:bg-background-900 aria-selected:bg-background-600 cursor-pointer rounded-full px-16 py-8"
+                className="text-14 font-medium btn cursor-pointer rounded-full "
                 onClick={() => setMaxPairs((v) => v + 5)}
               >
                 View More

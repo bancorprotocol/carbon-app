@@ -2,7 +2,6 @@ import { useWagmi } from 'libs/wagmi';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { InputUserAccount } from 'components/common/inputField';
-import { Button } from 'components/common/button';
 
 export const DebugImposter = () => {
   const { setImposterAccount } = useWagmi();
@@ -13,11 +12,7 @@ export const DebugImposter = () => {
   };
 
   return (
-    <div
-      className={
-        'rounded-3xl bg-background-900 flex flex-col items-center space-y-20 p-20'
-      }
-    >
+    <div className="rounded-3xl surface grid content-start place-items-center gap-20 p-20">
       <h2>Set Imposter Account</h2>
       <InputUserAccount
         label="Imposter Account"
@@ -25,9 +20,13 @@ export const DebugImposter = () => {
         onChange={(e) => setInput(e.target.value)}
       />
 
-      <Button data-testid="save-imposter" onClick={handleOnClick}>
+      <button
+        className="btn-primary-gradient"
+        data-testid="save-imposter"
+        onClick={handleOnClick}
+      >
         Save
-      </Button>
+      </button>
     </div>
   );
 };

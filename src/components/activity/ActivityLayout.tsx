@@ -8,12 +8,12 @@ export const ActivityLayout: FC<ActivityFilterProps> = (props) => {
   const { filters = [] } = props;
   return (
     <>
-      <header className="grid-area-[filters] grid grid-cols-[auto_1fr] gap-16 px-20 pb-12 pt-16 md:grid-cols-[1fr_auto]">
+      <header className="grid-area-[filters] sm:place-self-end grid md:grid-flow-col gap-16">
         <ActivityFilter
           filters={filters}
-          className="col-span-2 row-start-2 md:col-auto md:row-start-1"
+          className="grid justify-stretch sm:grid-flow-col gap-8"
         />
-        <div className="row-start-1 flex items-center gap-8 self-start justify-self-end">
+        <div className="flex items-center gap-8 justify-self-end">
           <ActivityExport />
           <ActivityCountDown time={30} />
         </div>

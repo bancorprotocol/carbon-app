@@ -12,8 +12,6 @@ import {
   isZero,
   outSideMarketWarning,
 } from 'components/strategies/common/utils';
-import { TabsMenu } from 'components/common/tabs/TabsMenu';
-import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -31,6 +29,7 @@ import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
+import { OrderDirection } from 'components/strategies/common/OrderDirection';
 
 export interface EditDisposableStrategySearch {
   marketPrice?: string;
@@ -224,51 +223,32 @@ export const EditPricesStrategyDisposablePage = () => {
           direction={search.direction}
           hasPriceChanged={hasPriceChanged}
           settings={
-            <div className="p-16 pb-0">
-              <TabsMenu>
-                <TabsMenuButton
-                  onClick={() => setDirection('buy')}
-                  variant={isBuy ? 'buy' : 'black'}
-                  data-testid="tab-buy"
-                >
-                  Buy
-                </TabsMenuButton>
-                <TabsMenuButton
-                  onClick={() => setDirection('sell')}
-                  variant={!isBuy ? 'sell' : 'black'}
-                  data-testid="tab-sell"
-                >
-                  Sell
-                </TabsMenuButton>
-              </TabsMenu>
-            </div>
+            <OrderDirection direction={direction} setDirection={setDirection} />
           }
         />
         {(buyBudgetChanges || sellBudgetChanges) && (
           <article
             id="budget-changed"
-            className="warning-message bg-background-900 p-16"
+            className="warning-message p-16 border-t border-white/40 bg-warning/5"
           >
-            <div className="border-warning/40 rounded-lg grid gap-16 border p-16">
-              <h3 className="text-16 text-warning font-medium flex items-center gap-8">
-                <IconWarning className="size-16" />
-                Notice
-              </h3>
-              {buyBudgetChanges && (
-                <p className="text-14 text-white/80">
-                  You will withdraw&nbsp;
-                  {tokenAmount(buy.budget, quote)} from the inactive buy order
-                  to your wallet.
-                </p>
-              )}
-              {sellBudgetChanges && (
-                <p className="text-14 text-white/80">
-                  You will withdraw&nbsp;
-                  {tokenAmount(sell.budget, base)} from the inactive sell order
-                  to your wallet.
-                </p>
-              )}
-            </div>
+            <h3 className="text-16 text-warning font-medium flex items-center gap-8">
+              <IconWarning className="size-16" />
+              Notice
+            </h3>
+            {buyBudgetChanges && (
+              <p className="text-14 text-white/80">
+                You will withdraw&nbsp;
+                {tokenAmount(buy.budget, quote)} from the inactive buy order to
+                your wallet.
+              </p>
+            )}
+            {sellBudgetChanges && (
+              <p className="text-14 text-white/80">
+                You will withdraw&nbsp;
+                {tokenAmount(sell.budget, base)} from the inactive sell order to
+                your wallet.
+              </p>
+            )}
           </article>
         )}
       </EditPricesForm>

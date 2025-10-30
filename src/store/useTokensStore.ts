@@ -17,6 +17,7 @@ export const useTokensStore = (): TokensStore => {
   const existing = useExistingTokensQuery();
   // Tokens from pairs not in static token list
   const missing = useMissingTokensQuery(existing);
+
   // Tokens imported by the user
   const [importedTokens, setImportedTokens] = useState<Token[]>([]);
 

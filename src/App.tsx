@@ -10,6 +10,7 @@ import { useStore } from 'store';
 import { Toaster } from 'components/common/Toaster/Toaster';
 import { Footer } from 'components/common/Footer/Footer';
 import { SVGCarbonLogo } from 'components/common/SVGCarbonLogo';
+import { SVGGradient } from 'components/common/SVGGradient';
 
 let didInitCheck = false;
 let didInitSDK = false;
@@ -51,7 +52,7 @@ export const App = () => {
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className="mb-16 grid grow">
+      <main className="grid content-start grow">
         <MainContent />
       </main>
       <Footer />
@@ -60,15 +61,7 @@ export const App = () => {
       <Toaster />
       <CreateStrategyCTAMobile />
       <SVGCarbonLogo />
-      <svg width="0" height="0">
-        <defs>
-          <linearGradient id="svg-brand-gradient" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="var(--color-primary)" />
-            <stop offset="50%" stopColor="var(--color-secondary)" />
-            <stop offset="100%" stopColor="var(--color-tertiary)" />
-          </linearGradient>
-        </defs>
-      </svg>
+      <SVGGradient />
     </>
   );
 };

@@ -1,20 +1,11 @@
+import { useMemo } from 'react';
 import { ReactComponent as IconPriceBased } from 'assets/icons/price-based.svg';
 import { ReactComponent as IconGradient } from 'assets/icons/gradient.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
-
-export const staticTypePages = [
-  '/trade/disposable',
-  '/trade/recurring',
-  '/trade/overlapping',
-  '/trade/market',
-];
-const gradientTypePages = [
-  '/trade/auction',
-  '/trade/custom',
-  '/trade/quick-auction',
-  '/trade/quick-custom',
-];
+import { DropdownMenu } from 'components/common/dropdownMenu';
+import { gradientTypePages, staticTypePages } from './utils';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 
 const links = [
   {
@@ -38,35 +29,45 @@ const links = [
 export const TradeType = () => {
   const { location } = useRouterState();
   const current = location.pathname;
+
+  const selected = useMemo(() => {
+    return links.find((link) => link.pages.includes(current));
+  }, [current]);
+
   return (
-    <article className="bg-background-900 grid gap-16 p-16">
-      <h2 id="trading-strateg-nav" className="text-16">
-        Strategy Types
-      </h2>
-      <nav
-        aria-labelledby="trading-strateg-nav"
-        className="text-14 grid grid-cols-1 gap-8 md:grid-cols-2"
-      >
-        {links.map((link, i) => (
-          <Link
-            key={i}
-            to={link.to}
-            from="/trade"
-            search={(search: TradeSearch) => ({
-              base: search.base,
-              quote: search.quote,
-              marketPrice: search.marketPrice,
-            })}
-            aria-current={link.pages.includes(current) ? 'page' : 'false'}
-            data-testid={link.testId}
-            className="rounded-md hover:border-background-400 flex items-center justify-center gap-8 border border-transparent bg-black p-8 text-white/60 aria-[current=page]:border-white aria-[current=page]:text-white"
-          >
-            {link.svg}
-            {link.label}
-            <Tooltip element={link.text} iconClassName="size-14" />
-          </Link>
-        ))}
-      </nav>
-    </article>
+    <DropdownMenu
+      placement="bottom"
+      className="grid gap-8 rounded-2xl p-8"
+      button={(attr) => (
+        <button
+          {...attr}
+          className="bg-main-900 text-14 flex items-center gap-8 py-16 px-24 xl:max-2xl:rounded-s-md"
+        >
+          {selected?.svg}
+          {selected?.label}
+          <IconChevron className="ml-auto size-16" />
+        </button>
+      )}
+    >
+      {links.map((link, i) => (
+        <Link
+          key={i}
+          to={link.to}
+          from="/trade"
+          search={(search: TradeSearch) => ({
+            base: search.base,
+            quote: search.quote,
+            marketPrice: search.marketPrice,
+          })}
+          aria-current={link.pages.includes(current) ? 'page' : 'false'}
+          data-testid={link.testId}
+          className="rounded-md hover:surface flex items-center justify-center gap-8 py-8 px-16 text-white/60 aria-[current=page]:bg-main-900 aria-[current=page]:text-white"
+        >
+          {link.svg}
+          {link.label}
+          <Tooltip element={link.text} iconClassName="size-14" />
+        </Link>
+      ))}
+    </DropdownMenu>
   );
 };

@@ -10,6 +10,7 @@ import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimResultChartControls } from 'components/simulator/result/SimResultChartControls';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { fromUnixUTC, toUnixUTC } from '../utils';
+import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 
 interface Props {
   data: Array<SimulatorData>;
@@ -57,6 +58,7 @@ export const SimResultChartHeader = ({
   const DateRangePickerMemo = useMemo(() => {
     return (
       <DateRangePicker
+        className="btn-tertiary-gradient"
         defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
         defaultEnd={startOfDay(new Date())}
         start={fromUnixUTC(startUnix)}
@@ -66,6 +68,7 @@ export const SimResultChartHeader = ({
         options={{ disabled: datePickerDisabledDays }}
         required
         disabled={simulationType === 'overlapping'}
+        icon={<CalendarIcon className="text-primary size-14" />}
       />
     );
   }, [endUnix, onDatePickerConfirm, simulationType, startUnix]);
@@ -82,8 +85,8 @@ export const SimResultChartHeader = ({
         />
         <SimResultChartDownload
           data={data}
-          baseSymbol={state.baseToken?.symbol ?? ''}
-          quoteSymbol={state.quoteToken?.symbol ?? ''}
+          baseSymbol={state.base?.symbol ?? ''}
+          quoteSymbol={state.quote?.symbol ?? ''}
           simulationType={simulationType ?? ''}
         />
       </article>

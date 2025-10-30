@@ -1,13 +1,12 @@
 import { Link } from '@tanstack/react-router';
-import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 import { SimResultChart } from 'components/simulator/result/SimResultChart';
 import { SimResultSummary } from 'components/simulator/result/SimResultSummary';
-import { useSimulator } from 'components/simulator/result/SimulatorProvider';
-import { useBreakpoints } from 'hooks/useBreakpoints';
+import { useSimulator } from 'components/simulator/result/utils';
 import { useCallback, useEffect } from 'react';
 import { wait } from 'utils/helpers';
 import { THREE_SECONDS_IN_MS } from 'utils/time';
-import { BackIcon, backStyle } from 'components/common/BackButton';
+import { BackIcon } from 'components/common/button/BackButton';
+import { backStyle } from 'components/common/button/buttonStyles';
 
 export const SimulatorResultPage = () => {
   const { status, isSuccess, start, ...ctx } = useSimulator();
@@ -27,10 +26,6 @@ export const SimulatorResultPage = () => {
     handleAnimationStart();
   }, [handleAnimationStart]);
 
-  const { aboveBreakpoint } = useBreakpoints();
-
-  if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
-
   return (
     <div className="mx-auto flex w-full max-w-[1920px] flex-col gap-16 p-20">
       {simulationType === 'recurring' && (
@@ -38,8 +33,8 @@ export const SimulatorResultPage = () => {
           <Link
             to="/simulate/recurring"
             search={{
-              baseToken: ctx.search.baseToken,
-              quoteToken: ctx.search.quoteToken,
+              base: ctx.search.base,
+              quote: ctx.search.quote,
               start: ctx.search.start,
               end: ctx.search.end,
               buyMin: ctx.search.buyMin,
@@ -63,8 +58,8 @@ export const SimulatorResultPage = () => {
           <Link
             to="/simulate/overlapping"
             search={{
-              baseToken: ctx.search.baseToken,
-              quoteToken: ctx.search.quoteToken,
+              base: ctx.search.base,
+              quote: ctx.search.quote,
               start: ctx.search.start,
               end: ctx.search.end,
               buyMin: ctx.search.buyMin,
@@ -75,11 +70,11 @@ export const SimulatorResultPage = () => {
           >
             <BackIcon />
           </Link>
-          Simulate
+          <h1 className="text-24">Simulate</h1>
         </header>
       )}
 
-      <div className="rounded-3xl bg-background-900 p-20">
+      <div className="rounded-3xl surface p-20">
         <SimResultSummary
           roi={ctx.roi}
           gains={ctx.gains}

@@ -1,9 +1,9 @@
 import { FC, ChangeEvent } from 'react';
 import { cn, sanitizeNumber } from 'utils/helpers';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
-import { Warning } from 'components/common/WarningMessageWithIcon';
 import { Preset, Presets } from 'components/common/preset/Preset';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { Warning } from 'components/common/WarningMessageWithIcon';
 import styles from './OverlappingSpread.module.css';
 
 interface Props {
@@ -45,12 +45,9 @@ export const OverlappingSpread: FC<Props> = (props) => {
   };
 
   return (
-    <article
-      role="group"
-      className={cn(styles.spread, 'bg-background-900 grid gap-8 p-16')}
-    >
+    <article role="group" className={cn(styles.spread, 'grid gap-8 p-16')}>
       <header className="flex items-center gap-8 ">
-        <h2 className="text-16 font-medium flex-1">Set Fee Tier</h2>
+        <h2 className="text-16 font-medium flex-1">Fee Tier</h2>
         <Tooltip
           element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
           iconClassName="size-18 text-white/60"
@@ -67,8 +64,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
         <div
           className={cn(
             styles.spreadCustom,
-            'rounded-lg text-12 flex gap-8 border border-white bg-black py-8 px-16 text-center',
-            'focus-within:outline-solid focus-within:outline-1',
+            'rounded-lg text-12 flex items-center gap-8 input-container py-8 px-16 text-center max-w-150',
           )}
         >
           <label className="text-white/60" htmlFor="spread-custom">
@@ -76,7 +72,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
           </label>
           <input
             id="spread-custom"
-            className="bg-transparent text-center outline-hidden w-[80px]"
+            className="bg-transparent text-center outline-hidden w-full"
             value={spread}
             type="number"
             inputMode="decimal"

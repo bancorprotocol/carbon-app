@@ -56,30 +56,35 @@ export const useMissingTokensQuery = (
         fillMissing(quote);
       }
 
-      const getTokens: Promise<Token>[] = [];
-      for (const address of missing) {
-        const getToken = fetchTokenData(Token, address).catch((err) => {
-          console.error(`Error fetching Token ${address}`);
-          throw err;
-        });
-        getTokens.push(getToken);
-      }
-
-      const tokens: Token[] = [];
-      const responses = await Promise.allSettled(getTokens);
-      for (const res of responses) {
-        if (res.status === 'fulfilled') {
-          tokens.push(res.value);
-        } else {
-          console.error(res.reason);
-        }
-      }
-
+      const tokens = await getMissingTokens(missing, (address) =>
+        fetchTokenData(Token, address),
+      );
       lsService.setItem('importedTokens', tokens);
       return tokens;
     },
     initialData: () => lsService.getItem('importedTokens'),
     enabled: !!existingTokens.data && !!pairs.data,
+    retry: false,
     refetchOnWindowFocus: false,
   });
+};
+
+export const getMissingTokens = async (
+  addresses: Set<string>,
+  getToken: (address: string) => Promise<Token>,
+) => {
+  const getTokens: Promise<Token>[] = [];
+  for (const address of addresses) {
+    getTokens.push(getToken(address));
+  }
+  const tokens: Token[] = [];
+  const responses = await Promise.allSettled(getTokens);
+  for (const res of responses) {
+    if (res.status === 'fulfilled') {
+      tokens.push(res.value);
+    } else {
+      console.error(res.reason);
+    }
+  }
+  return tokens;
 };

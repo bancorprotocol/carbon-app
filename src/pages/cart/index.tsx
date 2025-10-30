@@ -155,7 +155,7 @@ export const CartPage = () => {
 
   if (!strategies.length) {
     return (
-      <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] grow content-start gap-16 pt-20">
+      <section className="px-content pb-30 xl:px-50 mx-auto grid max-w-[1920px] grow content-start gap-16 pt-20">
         <EmptyCart />
       </section>
     );
@@ -164,7 +164,7 @@ export const CartPage = () => {
   return (
     <form
       className={cn(
-        'px-content pb-30 xl:px-50 mx-auto grid max-w-[1280px] grow content-start gap-16 pt-20',
+        'px-content pb-30 xl:px-50 mx-auto grid max-w-[1920px] grow content-start gap-16 pt-20',
         style.form,
       )}
       onSubmit={submit}
@@ -182,14 +182,11 @@ export const CartPage = () => {
       )}
       {!funds.isInsufficient && (
         <div className="grid place-items-center gap-20 p-20">
-          <span className="warning-message text-14 text-center text-white/60">
-            Please confirm before proceeding
-          </span>
           <label
             htmlFor="approve-warnings"
             className={cn(
               style.approveWarnings,
-              'text-14 font-medium flex items-center gap-8 place-self-center text-white/60',
+              'surface rounded-lg text-14 font-medium flex items-center p-16 py-8 gap-8 place-self-center text-white/60',
             )}
           >
             <input
@@ -199,7 +196,8 @@ export const CartPage = () => {
               className="size-18"
               data-testid="approve-warnings"
             />
-            I've reviewed all strategies prices and deposit amounts
+            I accept any applicable warning(s) and understand fee on transfer
+            (tax) or rebasing tokens are not supported
           </label>
         </div>
       )}

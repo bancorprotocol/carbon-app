@@ -1,5 +1,4 @@
-import { TabsMenu } from 'components/common/tabs/TabsMenu';
-import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { StrategyDirection } from 'libs/routing';
 import { FC } from 'react';
 
@@ -9,22 +8,30 @@ interface Props {
 }
 export const OrderDirection: FC<Props> = (props) => {
   const { direction, setDirection } = props;
+  const color =
+    direction === 'buy' ? 'var(--buy-gradient)' : 'var(--sell-gradient)';
+
   return (
-    <TabsMenu className="bg-background-900 px-16">
-      <TabsMenuButton
-        onClick={() => setDirection('sell')}
-        variant={direction === 'buy' ? 'black' : 'sell'}
-        data-testid="tab-sell"
+    <div className="p-24">
+      <RadioGroup
+        className="grid grid-flow-col text-center text-16 p-0"
+        style={{ ['--tab-background' as any]: color }}
       >
-        Sell
-      </TabsMenuButton>
-      <TabsMenuButton
-        onClick={() => setDirection('buy')}
-        variant={direction !== 'buy' ? 'black' : 'buy'}
-        data-testid="tab-buy"
-      >
-        Buy
-      </TabsMenuButton>
-    </TabsMenu>
+        <Radio
+          checked={direction === 'sell'}
+          onChange={() => setDirection('sell')}
+          data-testid="tab-sell"
+        >
+          <p className="peer-checked/radio:text-black">Sell</p>
+        </Radio>
+        <Radio
+          checked={direction === 'buy'}
+          onChange={() => setDirection('buy')}
+          data-testid="tab-buy"
+        >
+          <p className="peer-checked/radio:text-black">Buy</p>
+        </Radio>
+      </RadioGroup>
+    </div>
   );
 };

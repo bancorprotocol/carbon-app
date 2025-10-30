@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import style from './OverlappingBudget.module.css';
+import style from './OverlappingAnchor.module.css';
 
 interface Props {
   base: Token;
@@ -12,17 +12,19 @@ interface Props {
   disableBuy: boolean;
   disableSell: boolean;
 }
+
 export const OverlappingAnchor: FC<Props> = (props) => {
   const { base, quote, anchor, setAnchor } = props;
+
   return (
     <>
-      <h3 className="text-16 font-medium flex items-center gap-8">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
-          1
-        </span>
+      <h2 className="text-16 font-medium flex items-center gap-8">
         Select Token
-      </h3>
-      <div role="radiogroup" className="flex gap-16">
+      </h2>
+      <div
+        role="radiogroup"
+        className="flex gap-16 input-container p-4 rounded-2xl tab-list"
+      >
         {/* SELL */}
         <input
           className={cn('absolute opacity-0', style.selectToken)}
@@ -38,9 +40,9 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <label
           htmlFor="anchor-sell"
           data-testid="anchor-sell-label"
-          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
+          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 active:scale-90 p-16 border border-transparent"
         >
-          <TokenLogo token={base} size={14} />
+          <TokenLogo token={base} size={20} />
           {base.symbol}
         </label>
         {/* BUY */}
@@ -58,9 +60,9 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <label
           htmlFor="anchor-buy"
           data-testid="anchor-buy-label"
-          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
+          className="rounded-md text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 active:scale-90 p-16 border border-transparent"
         >
-          <TokenLogo token={quote} size={14} />
+          <TokenLogo token={quote} size={20} />
           {quote.symbol}
         </label>
       </div>

@@ -13,14 +13,14 @@ import { useGetEnrichedStrategies } from 'hooks/useStrategies';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import {
-  ManageButton,
+  ManageButtonIcon,
   StrategyBlockManage,
 } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { StrategySubtitle } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
-import { BackButton } from 'components/common/BackButton';
+import { BackButton } from 'components/common/button/BackButton';
 import {
   defaultEnd,
   isGradientStrategy,
@@ -116,30 +116,30 @@ export const StrategyPage = () => {
         </div>
         <StrategyBlockManage
           strategy={strategy}
-          button={(attr) => <ManageButton {...attr} />}
+          button={(attr) => <ManageButtonIcon {...attr} />}
         />
       </header>
-      <section className="flex flex-col gap-16 md:flex-row">
-        <article className="bg-background-900 grid gap-16 rounded-2xl p-24 md:w-[400px]">
+      <section className="flex justify-center gap-16">
+        <article className="@container/strategy surface grid gap-16 rounded-2xl p-24 min-w-330 sm:min-w-350 w-1/4 aspect-[410/425]">
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
-              'rounded-md border-background-800 grid grid-cols-2 grid-rows-[auto_auto] border-2',
+              'bg-main-900/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border',
               strategy.status === 'active' ? '' : 'opacity-50',
             )}
           >
             <StrategyBlockBuySell
               strategy={strategy}
               isBuy
-              className="border-background-800 border-r-2"
+              className="border-main-800 border-r-2"
             />
             <StrategyBlockBuySell strategy={strategy} />
-            <div className="border-background-800 col-start-1 col-end-3 border-t-2">
+            <div className="border-main-800 col-start-1 col-end-3 border-t-2">
               <StrategyGraph strategy={strategy} />
             </div>
           </div>
         </article>
-        <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded-2xl p-16 md:flex">
+        <article className="surface hidden flex-1 flex-col gap-20 rounded-2xl p-16 md:flex">
           <header className="flex items-center gap-16">
             <h2 className="text-18 font-medium mr-auto">Price Chart</h2>
             {isNativeChart && (

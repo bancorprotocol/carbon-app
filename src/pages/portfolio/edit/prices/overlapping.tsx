@@ -18,13 +18,20 @@ import {
 import { EditOverlappingPrice } from 'components/strategies/edit/EditOverlappingPrice';
 import { isOverlappingTouched } from 'components/strategies/overlapping/utils';
 import { SafeDecimal } from 'libs/safedecimal';
-import { isZero } from 'components/strategies/common/utils';
+import {
+  getFullRangesPrices,
+  isZero,
+} from 'components/strategies/common/utils';
 import { getTotalBudget } from 'components/strategies/edit/utils';
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
 import { useCallback } from 'react';
 import { OverlappingSearch } from 'components/strategies/common/types';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
+import {
+  initOverlappingMax,
+  initOverlappingMin,
+} from 'components/strategies/create/utils';
 
 export interface EditOverlappingStrategySearch extends OverlappingSearch {
   editType: 'editPrices' | 'renew';
@@ -32,13 +39,6 @@ export interface EditOverlappingStrategySearch extends OverlappingSearch {
 }
 
 const defaultSpread = '0.05';
-
-const initMin = (marketPrice: string) => {
-  return new SafeDecimal(marketPrice).times(0.99).toString();
-};
-const initMax = (marketPrice: string) => {
-  return new SafeDecimal(marketPrice).times(1.01).toString();
-};
 
 /** Create the orders out of the search params */
 const getOrders = (
@@ -55,10 +55,15 @@ const getOrders = (
     };
   }
 
+  const fullRange = (() => {
+    if (!search.fullRange) return;
+    return getFullRangesPrices(marketPrice, base.decimals, quote.decimals);
+  })();
+
   const {
     anchor,
-    min = initMin(marketPrice),
-    max = initMax(marketPrice),
+    min = initOverlappingMin(marketPrice, fullRange?.min),
+    max = initOverlappingMax(marketPrice, fullRange?.max),
     spread = defaultSpread,
     budget = '0',
     action = 'deposit',
@@ -212,11 +217,6 @@ const OverlappingContent = () => {
       editType={search.editType}
       orders={orders}
       hasChanged={hasChanged}
-      approveText={
-        hasChanged
-          ? "I've approved the token deposit(s) and distribution."
-          : "I've reviewed the warning(s) but choose to proceed."
-      }
     >
       <EditOverlappingPrice
         buy={orders.buy}

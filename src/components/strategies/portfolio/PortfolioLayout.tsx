@@ -22,7 +22,7 @@ export const PortfolioLayout: FC<Props> = ({
 
       {pieChartElement}
 
-      <div className="w-full">
+      <div className="grid gap-16 w-full">
         {belowBreakpoint('lg') ? (
           <>
             {!!headerElement && currentBreakpoint === 'md' && headerElement}

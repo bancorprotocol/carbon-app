@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Button } from 'components/common/button';
 import { Input, InputUserAccount, Label } from 'components/common/inputField';
 import { useWagmi } from 'libs/wagmi';
 import { QueryKey, useQueryClient } from 'libs/queries';
@@ -45,9 +44,7 @@ export const DebugTransferNFT = () => {
 
   return (
     <div
-      className={
-        'rounded-3xl bg-background-900 flex flex-col items-center space-y-20 p-20'
-      }
+      className={'rounded-3xl surface flex flex-col items-center gap-16 p-20'}
     >
       <h2>Transfer Strategy NFT</h2>
       <Label label="Strategy ID">
@@ -66,9 +63,13 @@ export const DebugTransferNFT = () => {
 
       {isSuccess && <p className="text-primary">Success!</p>}
       {isError && <p className="text-error">Error!</p>}
-      <Button onClick={handleOnClick} disabled={isLoading}>
+      <button
+        className="btn-secondary"
+        onClick={handleOnClick}
+        disabled={isLoading}
+      >
         {isLoading ? 'loading' : 'Confirm'}
-      </Button>
+      </button>
     </div>
   );
 };

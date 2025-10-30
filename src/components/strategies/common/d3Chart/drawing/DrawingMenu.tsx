@@ -56,7 +56,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
   const { drawingMode, setDrawingMode } = useD3ChartCtx();
   return (
     <div
-      className="bg-background-black flex flex-col border-e border-white/10"
+      className="flex flex-col border-e border-white/10 bg-main-800"
       role="menubar"
     >
       {drawings.map(({ mode, label, icon }) => (
@@ -66,7 +66,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
               role="menuitemradio"
               aria-label={label}
               aria-checked={drawingMode === mode}
-              className="hover:bg-background-700 rounded-md aria-checked:text-primary p-8"
+              className="hover:bg-main-700 rounded-md aria-checked:text-primary p-8"
               onClick={() => setDrawingMode(mode as DrawingMode)}
             >
               {icon}
@@ -83,7 +83,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
           <button
             role="menuitem"
             aria-label="Delete all"
-            className="hover:bg-background-700 rounded-md p-8"
+            className="hover:bg-main-700 rounded-md p-8"
             onClick={clearDrawings}
           >
             <IconTrash className="size-20" />

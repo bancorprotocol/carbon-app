@@ -1,7 +1,6 @@
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { FC } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { cn } from 'utils/helpers';
 
 interface Props {
@@ -26,14 +25,11 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
   return (
     <DropdownMenu
       placement="bottom"
-      className="space-y-2 rounded-[12px] p-8"
+      className="rounded-xl p-8 grid gap-4"
       button={(attr) => (
         <button
           {...attr}
-          className={cn(
-            buttonStyles({ variant: 'secondary' }),
-            'relative flex size-40 items-center justify-center p-0',
-          )}
+          className="btn-on-background relative flex size-40 items-center justify-center p-0"
         >
           <img
             alt={`Select ${activeNetwork.name}`}
@@ -48,15 +44,10 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
         return (
           <a
             key={id}
-            role="menuitem"
-            className={cn(
-              'rounded-sm flex w-full items-center gap-x-10 p-12',
-              isCurrentNetwork
-                ? 'pointer-events-none bg-black'
-                : 'hover:bg-black',
-            )}
+            role="menuitemradio"
+            className="rounded-sm flex w-full items-center gap-x-10 p-12 hover:bg-main-900/40 aria-checked:bg-main-900/60 aria-disabled:pointer-events-none"
             href={getFullPath(appUrl)}
-            aria-current={isCurrentNetwork}
+            aria-checked={isCurrentNetwork}
             aria-disabled={isCurrentNetwork}
           >
             <img alt={name} src={logoUrl} className="w-20" />

@@ -17,7 +17,6 @@ import {
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
 import { isDisposableStrategy } from 'components/strategies/common/utils';
 import {
@@ -104,8 +103,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           navigate({
             to: '/simulate/overlapping',
             search: {
-              baseToken: strategy.base.address,
-              quoteToken: strategy.quote.address,
+              base: strategy.base.address,
+              quote: strategy.quote.address,
               buyMin: strategy.buy.min,
               sellMax: strategy.sell.max,
             },
@@ -114,8 +113,8 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           navigate({
             to: '/simulate/recurring',
             search: {
-              baseToken: strategy.base.address,
-              quoteToken: strategy.quote.address,
+              base: strategy.base.address,
+              quote: strategy.quote.address,
               buyMin: strategy.buy.min,
               buyMax: strategy.buy.max,
               buyBudget: strategy.buy.budget,
@@ -264,9 +263,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       <ul role="menu" data-testid="manage-strategy-dropdown">
         {items.map((item) => {
           if (typeof item === 'number') {
-            return (
-              <hr key={item} className="border  border-background-700 my-10" />
-            );
+            return <hr key={item} className="border  border-main-700 my-10" />;
           }
 
           const { name, id, action, disabled } = item;
@@ -294,22 +291,6 @@ interface ManageButtonProps extends MenuButtonProps {
   'data-testid': string;
 }
 
-export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
-  function ManageButton(props, ref) {
-    const style = cn(
-      buttonStyles({ variant: 'secondary' }),
-      'max-md:p-8 gap-8',
-    );
-    const { aboveBreakpoint } = useBreakpoints();
-    return (
-      <button {...props} className={style} ref={ref}>
-        <IconGear className="size-24" />
-        {aboveBreakpoint('md') && 'Manage'}
-      </button>
-    );
-  },
-);
-
 export const ManageButtonIcon = forwardRef<
   HTMLButtonElement,
   ManageButtonProps
@@ -318,11 +299,7 @@ export const ManageButtonIcon = forwardRef<
     <button
       {...props}
       ref={ref}
-      className={`
-        size-38 rounded-md border-background-800 grid place-items-center border-2
-        hover:bg-white/10
-        active:bg-white/20
-      `}
+      className="btn-on-surface size-38 rounded-md grid place-items-center p-0"
     >
       <IconGear className="size-24" />
     </button>
@@ -353,7 +330,7 @@ const ManageItem: FC<{
         className={cn('rounded-sm w-full p-12 text-left', {
           'cursor-not-allowed': disabled,
           'opacity-60': disabled,
-          'hover:bg-black': !disabled,
+          'hover:bg-main-900/40': !disabled,
         })}
         data-testid={`manage-strategy-${id}`}
       >

@@ -1,6 +1,4 @@
 import { FC, ReactNode } from 'react';
-import { TokenSelection } from 'components/strategies/common/TokenSelection';
-import { TradeNav } from './TradeNav';
 
 interface Props {
   children: ReactNode;
@@ -8,11 +6,9 @@ interface Props {
 
 export const TradeLayout: FC<Props> = ({ children }) => {
   return (
-    <section className="grid content-start">
-      <TokenSelection />
+    <section className="grid content-start grid-area-[form] animate-scale-up">
       {/* @todo(gradient) */}
       {/* <TradeType /> */}
-      <TradeNav />
       {children}
     </section>
   );

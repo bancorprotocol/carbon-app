@@ -14,7 +14,7 @@ type Props = {
 
 const textClasses = 'text-16 font-medium';
 const buttonClasses =
-  'flex h-44 w-full items-center space-x-16 rounded-md px-10 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
+  'flex h-44 w-full items-center gap-16 rounded-md px-10 hover:bg-main-900/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
 
 const EXT_LINKS = [
   {
@@ -37,8 +37,8 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
   const isDisabled = isPending || !checked;
 
   return (
-    <div className="space-y-10">
-      <div className="text-14 mb-20 space-y-10 text-white/80">
+    <div className="grid gap-8">
+      <div className="text-14 mb-20 grid gap-8 text-white/80">
         <p>
           By connecting my wallet, I agree to the{' '}
           <Link to="/terms" target="_blank" className="font-medium text-white">
@@ -54,7 +54,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
           </Link>{' '}
           of this site.{' '}
         </p>
-        <div className="flex items-center space-x-10">
+        <div className="flex items-center gap-10">
           <Checkbox isChecked={checked} setIsChecked={setChecked} />
           <button onClick={() => setChecked((prev) => !prev)}>
             I read and accept

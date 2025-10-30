@@ -1,33 +1,12 @@
 @import 'tailwindcss';
 @import './theme.css';
-/* @config '../tailwind.config.ts'; */
-
-:root {
-  --hue: 0;
-  --chroma: 0; /* Recommended 0.01, 0.02 */
-}
-
-
-@utility main-menu {
-  height: var(--main-menu-height);
-  @apply px-content font-medium flex w-full items-center justify-between bg-black text-white/50;
-}
-
-@utility mobile-menu {
-  height: var(--mobile-menu-height);
-  @apply font-medium border-background-800 fixed bottom-0 z-40 flex w-full flex-shrink-0 items-center justify-around border-t bg-black px-10 text-white/50 md:hidden;
-}
 
 @utility bg-content {
-  @apply border-background-800 border bg-black;
+  @apply border-main-800 border bg-main-900;
 }
 
 @utility px-content {
   @apply w-full px-10 md:px-20;
-}
-
-@utility loading-skeleton {
-  @apply rounded-lg bg-background-900 animate-pulse;
 }
 
 
@@ -48,7 +27,52 @@
 }
 
 @layer base {
-  
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: oklch(92.8% 0.006 264.531);
+  }
+
+  html,
+  body,
+  #root {
+    @apply text-white font-text min-h-screen;
+  }
+
+  #root {
+    position: relative;
+  }
+
+  #root::before {
+    --origin-translate: translate(-50dvw, -50dvh);
+    content: '';
+    position: fixed;
+    z-index: -1;
+    inset-inline: -50dvw;
+    inset-block: -50dvh;
+    background-image: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-black) 100%);
+    animation: move-gradient 20s infinite alternate;
+  }
+  #root.hide-bg::before {
+    opacity: 0;
+  }
+  @media (max-width: 48rem) {
+    #root::before {
+      --origin-translate: translate(0, -50dvh);
+    }
+  }
+
+  @keyframes move-gradient {
+    from {
+      transform: var(--origin-translate) scale(1);
+    }
+    to {
+      transform: var(--origin-translate) scale(1.7);
+    }
+  }
+
   html {
     @apply text-white font-text;
     scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
@@ -94,11 +118,11 @@
   }
 
   h1 {
-    @apply text-36 font-medium my-3;
+    @apply text-36 font-medium;
   }
 
   h2 {
-    @apply text-20 font-medium my-2;
+    @apply text-20 font-medium;
   }
 
   h3 {
@@ -133,7 +157,7 @@
     color: rgba(22, 22, 22, var(--tw-text-opacity));
     background-image: linear-gradient(
       90deg,
-      var(--color-primary) 0%,
+      var(--color-green) 0%,
       var(--color-secondary) 100%
     );
   }
@@ -159,20 +183,6 @@
   details[open] .toggle {
     transform: rotate(-180deg);
   }
-  .border-gradient {
-    position: relative;
-    isolation: isolate;
-    background-image: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
-    animation: card-entry 0.2s var(--ease-out);
-  }
-  .border-gradient::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset: 1px;
-    border-radius: inherit;
-    @apply bg-background-900;
-  }
 }
 
 .statusBar {
@@ -189,11 +199,10 @@
   background: linear-gradient(
     90deg,
     rgba(0, 181, 120, 0.25) 37.5%,
-    var(--color-primary) 37.5%,
+    var(--color-green) 37.5%,
     var(--color-secondary) 50%,
     rgba(0, 181, 120, 0.25) 50%,
     rgba(0, 181, 120, 0.25) 87.5%,
-    var(--color-tertiary) 87.5%
   );
   animation: 1.3s progress ease infinite;
 }
@@ -304,14 +313,13 @@ dialog.modal {
 }
 
 dialog.modal > form {
-  @apply bg-background-800;
+  @apply surface backdrop-blur-xs;
   border-radius: 16px;
   padding: 24px;
   max-width: 390px;
 }
 dialog.modal::backdrop {
-  @apply bg-black/40;
-  backdrop-filter: blur(8px);
+  @apply bg-main-900/85;
 }
 
 @media (max-width: 640px) {
@@ -388,38 +396,4 @@ dialog.modal.closing {
   100% {
     transform: translateY(100%);
   }
-}
-
-
-
-/* TABLE */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 16px;
-  background-color: var(--color-background-900);
-  font-size: 14px;
-}
-.table thead tr {
-  border-bottom: 1px solid var(--color-background-800);
-  color: oklch(100% 0 0 / 60%);
-}
-.table thead th {
-  text-align: start;
-  font-weight: normal;
-  white-space: nowrap;
-}
-.table td, .table th {
-  padding: 16px;
-}
-.table td:first-child, .table th:first-child {
-  padding-inline-start: 24px;
-}
-.table td:last-child, .table th:last-child {
-  text-align: end;
-  padding-inline-end: 24px;
-}
-.table tfoot tr {
-  border-top: 1px solid var(--color-background-800);
-  color: oklch(100% 0 0 / 80%);
 }

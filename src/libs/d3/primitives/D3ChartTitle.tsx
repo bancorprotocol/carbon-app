@@ -12,7 +12,7 @@ export const D3ChartTitle = ({ dms, title, width, marginTop = 20 }: Props) => {
     <g
       transform={`translate(${dms.boundedWidth / 2 - width / 2},${marginTop})`}
     >
-      <rect width={width} height={24} className="fill-background-800" rx={12} />
+      <rect width={width} height={24} className="fill-main-800" rx={12} />
       <text
         x={width / 2}
         y={16}

@@ -4,10 +4,9 @@ import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useGetTokenBalance } from 'libs/queries';
-import { cn } from 'utils/helpers';
 import { InputBudget, BudgetAction } from '../common/InputBudget';
 import { SafeDecimal } from 'libs/safedecimal';
-import style from './OverlappingBudget.module.css';
+import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 interface Props {
   base: Token;
@@ -69,54 +68,36 @@ export const OverlappingAction: FC<Props> = (props) => {
         className="flex cursor-pointer items-center gap-8"
         data-testid="budget-summary"
       >
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
-          2
-        </span>
         <h3 className="text-16 font-medium">Edit Budget</h3>
         <span className="text-12 text-white/60">(Optional)</span>
         <IconChevron className="toggle h-14 w-14" />
       </summary>
-      <div className="flex flex-col gap-16">
+      <div className="grid gap-16">
         <p className="text-14 text-white/80">
           Please select the action and amount of tokens
         </p>
-        <div
-          role="radiogroup"
-          className="border-background-700 flex gap-2 self-start rounded-full border-2 p-4"
-        >
-          <input
-            className={cn('absolute opacity-0', style.budgetMode)}
-            type="radio"
-            name={actionName}
-            id={depositId}
+        <RadioGroup className="justify-self-start">
+          <Radio
+            className="flex items-center gap-8"
+            value="deposit"
             checked={action === 'deposit'}
-            onChange={(e) => e.target.checked && setAction('deposit')}
-          />
-          <label
-            htmlFor={depositId}
-            className="text-14 flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-4"
+            onChange={() => setAction('deposit')}
             data-testid="action-deposit"
           >
-            <IconDeposit className="h-14 w-14" />
+            <IconDeposit className="size-14" />
             Deposit
-          </label>
-          <input
-            className={cn('absolute opacity-0', style.budgetMode)}
-            type="radio"
-            name={actionName}
-            id={withdrawId}
+          </Radio>
+          <Radio
+            className="flex items-center gap-8"
+            value="withdraw"
             checked={action === 'withdraw'}
-            onChange={(e) => e.target.checked && setAction('withdraw')}
-          />
-          <label
-            htmlFor={withdrawId}
-            className="text-14 flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-4"
+            onChange={() => setAction('withdraw')}
             data-testid="action-withdraw"
           >
-            <IconWithdraw className="h-14 w-14" />
+            <IconWithdraw className="size-14" />
             Withdraw
-          </label>
-        </div>
+          </Radio>
+        </RadioGroup>
         <InputBudget
           editType={action}
           token={anchor === 'buy' ? quote : base}

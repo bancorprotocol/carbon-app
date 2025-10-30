@@ -4,6 +4,7 @@ import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
 import { ModalProps } from 'libs/modals/modals.types';
+import { cn } from 'utils/helpers';
 
 export const ModalSheet: FC<ModalProps> = ({
   children,
@@ -13,6 +14,7 @@ export const ModalSheet: FC<ModalProps> = ({
   isPending = false,
   onClose,
   'data-testid': testId,
+  className,
 }) => {
   const { closeModal } = useModal();
   const onCloseHandler = (id: string) => {
@@ -31,7 +33,7 @@ export const ModalSheet: FC<ModalProps> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="rounded-t-lg bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-hidden focus:outline-hidden">
+        <div className="surface backdrop-blur-xs rounded-t-md relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-hidden focus:outline-hidden">
           {isPending && (
             <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
           )}
@@ -47,7 +49,12 @@ export const ModalSheet: FC<ModalProps> = ({
               </button>
             )}
           </header>
-          <div className="flex max-h-[70vh] flex-col gap-20 overflow-auto">
+          <div
+            className={cn(
+              'flex max-h-[70vh] flex-col gap-20 overflow-auto',
+              className,
+            )}
+          >
             {children}
           </div>
         </div>

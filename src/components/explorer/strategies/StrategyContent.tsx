@@ -97,7 +97,7 @@ export const StrategyContent: FC<Props> = ({ url }) => {
 
   return (
     <>
-      <div className="text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border-2 border-white/10">
+      <div className="bg-main-900/20 text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border border-main-500/40 text-12 md:text-14">
         <span>
           {text[url].strategies}: {filtered.length}
         </span>
@@ -107,7 +107,7 @@ export const StrategyContent: FC<Props> = ({ url }) => {
       </div>
       <div
         role="toolbar"
-        className="grid grid-flow-col sm:justify-end gap-16 grid-area-[filters]"
+        className="grid grid-flow-col items-center sm:justify-end gap-16 grid-area-[filters]"
       >
         <StrategyFilterDropdown filter={filter} setFilter={setFilter} />
         <StrategySortDropdown sort={sort} setSort={setSort} />
@@ -135,7 +135,7 @@ const StrategyList: FC<StrategyListProps> = ({ url, strategies, layout }) => {
         variant="info"
         title="No results found"
         text="Try changing the search term"
-        className="grid-area-[list]"
+        className="surface rounded-2xl grid-area-[list]"
       />
     );
   }
@@ -158,7 +158,7 @@ const StrategyList: FC<StrategyListProps> = ({ url, strategies, layout }) => {
     <>
       <ul
         data-testid="strategy-list"
-        className={cn('grid gap-20 grid-area-[list]', styles.strategyList)}
+        className={cn('grid gap-16 grid-area-[list]', styles.strategyList)}
       >
         {strategies.slice(0, max).map((s, i) => {
           const animate = i < 21;

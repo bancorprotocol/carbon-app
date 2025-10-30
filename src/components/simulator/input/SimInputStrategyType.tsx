@@ -1,96 +1,66 @@
-import { ReactNode } from 'react';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/recurring.svg';
 import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping.svg';
-import { SimulatorType } from 'libs/routing/routes/sim';
-import { Link, useSearch } from 'libs/routing';
-import { cn } from 'utils/helpers';
+import { Link, useRouterState } from 'libs/routing';
 
-interface ItemProps {
-  title: string;
-  label: SimulatorType;
-  svg: ReactNode;
-  tooltipText: string;
-}
+const items = [
+  {
+    id: 'overlapping',
+    type: 'Essentials',
+    label: 'Liquidity Position',
+    to: 'overlapping',
+    search: {},
+    svg: <IconOverlappingStrategy className="hidden md:block size-20" />,
+  },
+  // TODO: currently not work, need to update simulator code
+  // {
+  //   id: 'recurring-limit',
+  //   type: 'Intermediate',
+  //   label: 'Recurring Limit',
+  //   to: 'recurring',
+  //   search: { sellIsRange: false, buyIsRange: false } as const,
+  //   svg: <IconTwoRanges className="hidden md:block size-20" />,
+  // },
+  {
+    id: 'recurring-range',
+    type: 'Advanced',
+    label: 'Recurring Range',
+    to: 'recurring',
+    search: {},
+    svg: <IconTwoRanges className="hidden md:block size-20" />,
+  },
+];
 
 export const SimInputStrategyType = () => {
-  const { baseToken, quoteToken, start, end } = useSearch({
-    from: '/simulate',
-  });
-  const items: ItemProps[] = [
-    {
-      title: 'Liquidity Position',
-      label: 'overlapping',
-      svg: <IconOverlappingStrategy className="size-14" />,
-      tooltipText:
-        'Choose between a Concentrated and a Full-Range liquidity position.',
-    },
-    {
-      title: 'Recurring',
-      label: 'recurring',
-      svg: <IconTwoRanges className="size-14" />,
-      tooltipText:
-        'Create an automated trading cycle of buy low/sell high with two separate orders.',
-    },
-  ];
-
+  const { location } = useRouterState();
+  const current = location.pathname;
   return (
-    <section className="p-16" key="simulatorTypeSelection">
-      <header className="mb-16 flex items-center justify-between">
-        <h2 className="text-16 font-medium m-0">Type</h2>
-      </header>
-      <article role="tablist" className="grid grid-cols-2 gap-8">
-        {items.map(({ title, label, svg, tooltipText }) => {
-          return (
-            <Link
-              role="tab"
-              id={'tab-' + label}
-              aria-controls={'panel-' + label}
-              key={label}
-              from="/simulate"
-              to={label}
-              search={{ baseToken, quoteToken, start, end }}
-              className={cn(
-                'rounded-lg text-14 font-medium group flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white',
-                'md:px-12',
-                'focus-visible:outline-solid focus-visible:outline-1',
-              )}
-              inactiveProps={{
-                className:
-                  'hover:outline-solid hover:outline-1 hover:outline-background-400',
-              }}
-              activeProps={{
-                className: 'outline-solid outline-1 outline-white',
-              }}
-              replace={true}
-              resetScroll={false}
-              params={{ simulationType: label }}
-              data-testid={`select-type-${label}`}
-            >
-              {({ isActive }) => {
-                return (
-                  <>
-                    {svg}
-                    <span
-                      className={`capitalize ${
-                        isActive
-                          ? 'text-white'
-                          : 'text-white/40 group-hover:text-white/80'
-                      }`}
-                    >
-                      {title}
-                    </span>
-                    <Tooltip
-                      element={<div>{tooltipText}</div>}
-                      iconClassName="size-12 text-white/60"
-                    />
-                  </>
-                );
-              }}
-            </Link>
-          );
-        })}
-      </article>
-    </section>
+    <nav className="surface rounded-full overflow-clip animate-slide-up flex-1 flex p-4 sm:gap-8 2xl:grid 2xl:rounded-2xl tab-list">
+      {items.map((link) => (
+        <Link
+          key={link.id}
+          id={link.id}
+          to={link.to}
+          from="/simulate"
+          search={(search) => ({
+            base: search.base,
+            quote: search.quote,
+            start: search.start,
+            end: search.end,
+            ...link.search,
+          })}
+          replace={true}
+          resetScroll={false}
+          aria-current={current === link.to ? 'page' : 'false'}
+          data-testid={link.id}
+          className="tab-anchor px-8 py-8 grid place-items-center flex-1 text-white/60 hover:text-white hover:bg-main-400/60 aria-page:text-white aria-page:tab-focus 2xl:py-16 sm:px-24 2xl:justify-items-start"
+        >
+          <span className="text-12 sm:text-14">{link.type}</span>
+          <div className="flex items-center gap-8 text-10 sm:text-16">
+            {link.svg}
+            <span>{link.label}</span>
+          </div>
+        </Link>
+      ))}
+    </nav>
   );
 };

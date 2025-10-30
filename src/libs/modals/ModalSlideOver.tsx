@@ -7,26 +7,13 @@ import { ModalProps } from 'libs/modals/modals.types';
 import { cn } from 'utils/helpers';
 import styles from './modal.module.css';
 
-const getSize = (size: 'sm' | 'md' | 'lg') => {
-  switch (size) {
-    case 'lg':
-      return 'max-w-[580px]';
-    case 'md':
-      return 'max-w-[480px]';
-    default:
-      return 'max-w-[390px]';
-  }
-};
-
 export const ModalSlideOver: FC<ModalProps> = ({
   children,
   id,
   title,
-  size = 'sm',
   showCloseButton = true,
 }) => {
   const { closeModal } = useModal();
-  const sizeClass = getSize(size);
 
   return (
     <Overlay
@@ -35,13 +22,13 @@ export const ModalSlideOver: FC<ModalProps> = ({
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-full ${sizeClass}`}
+        className="relative w-full py-16 max-w-390 md:max-w-420 lg:max-w-480 xl:max-w-580"
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <div className="bg-background-900 p-25 relative flex h-screen w-full flex-col border-0 outline-hidden focus:outline-hidden">
+        <div className="surface backdrop-blur-xs p-25 relative flex h-full w-full flex-col border-0 rounded-2xl outline-hidden focus:outline-hidden">
           <div
             className={`flex items-center ${
               title ? 'justify-between' : 'justify-end'

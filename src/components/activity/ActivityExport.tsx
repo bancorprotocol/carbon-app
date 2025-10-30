@@ -1,13 +1,11 @@
 import { Activity, ActivityOrder } from 'libs/queries/extApi/activity';
 import { activityActionName } from './utils';
 import { getLowestBits } from 'utils/helpers';
-import { ReactComponent as IconDownloadFile } from 'assets/icons/download-file.svg';
-import { useActivity } from './ActivityProvider';
+import { useActivity } from './context';
 import { carbonApi } from 'utils/carbonApi';
 import { useTokens } from 'hooks/useTokens';
 import { toActivities } from './useActivityQuery';
 import { useState } from 'react';
-import { Button } from 'components/common/button';
 import { SafeDecimal } from 'libs/safedecimal';
 import { fromUnixUTC } from 'components/simulator/utils';
 import styles from './ActivityExport.module.css';
@@ -137,7 +135,6 @@ export const ActivityExport = () => {
         disabled={loading}
         className={styles.exportButton}
       >
-        <IconDownloadFile className="text-primary size-14" />
         <span className={styles.export}>Export Activities</span>
         <span className={styles.exporting}>Exporting</span>
         <svg
@@ -161,10 +158,10 @@ export const ActivityExport = () => {
             </p>
             <p>To include older data, adjust the date range and try again.</p>
             <footer className="flex gap-16">
-              <Button variant="success" onClick={download}>
+              <button className="btn-primary-gradient" onClick={download}>
                 Proceed
-              </Button>
-              <Button variant="secondary">Cancel</Button>
+              </button>
+              <button className="btn-on-surface">Cancel</button>
             </footer>
           </form>
         </dialog>

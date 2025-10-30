@@ -105,11 +105,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
   return (
     <>
       <div
-        className={cn(
-          'rounded-2xl flex cursor-text flex-col gap-5 border border-black bg-black p-16 focus-within:border-white/50',
-          showWarning && 'border-warning focus-within:border-warning',
-          displayError && 'border-error/50 focus-within:border-error/50',
-        )}
+        className="rounded-2xl flex cursor-text flex-col gap-8 input-container"
         onClick={() => document.getElementById(id)?.focus()}
       >
         <div className="flex">
@@ -125,7 +121,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
             aria-label="Enter Price"
             placeholder="Enter Price"
             className={cn(
-              'text-16 font-medium w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
+              'text-24 font-medium w-0 flex-1 text-ellipsis bg-transparent text-start focus:outline-hidden',
               displayError && 'text-error',
             )}
             data-testid="input-price"
@@ -133,7 +129,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
           />
           {!!marketPrice && (
             <button
-              className="text-12 font-medium text-primary hover:text-tertiary focus:text-tertiary active:text-tertiary"
+              className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
               type="button"
               onClick={setMarket}
             >

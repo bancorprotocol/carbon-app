@@ -25,7 +25,7 @@ interface Props {
 
 export const SimInputRecurring = (props: Props) => {
   const { state, dispatch, _sP_ } = props;
-  if (!state.baseToken || !state.quoteToken) {
+  if (!state.base || !state.quote) {
     return <p>error no tokens found</p>;
   }
 
@@ -33,16 +33,16 @@ export const SimInputRecurring = (props: Props) => {
   const showSellWarning = _sP_?.high ? _sP_.low > +state.sell.max : false;
 
   const warningMsg = {
-    buy: showBuyWarning ? buyWarningMsg(state.baseToken) : undefined,
-    sell: showSellWarning ? sellWarningMsg(state.baseToken) : undefined,
+    buy: showBuyWarning ? buyWarningMsg(state.base) : undefined,
+    sell: showSellWarning ? sellWarningMsg(state.base) : undefined,
   };
 
   return (
     <>
       <BuySellBlock
         isBuy={false}
-        base={state.baseToken}
-        quote={state.quoteToken}
+        base={state.base}
+        quote={state.quote}
         order={state.sell}
         dispatch={dispatch}
         isOrdersOverlap={checkIfOrdersOverlap(state.buy, state.sell)}
@@ -54,8 +54,8 @@ export const SimInputRecurring = (props: Props) => {
 
       <BuySellBlock
         isBuy
-        base={state.baseToken}
-        quote={state.quoteToken}
+        base={state.base}
+        quote={state.quote}
         order={state.buy}
         dispatch={dispatch}
         isOrdersOverlap={checkIfOrdersOverlap(state.buy, state.sell)}

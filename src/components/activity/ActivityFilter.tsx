@@ -5,12 +5,10 @@ import { toPairSlug } from 'utils/pairSearch';
 import { FC, useId } from 'react';
 import { Combobox, Option } from 'components/common/combobox';
 import { cn, getLowestBits } from 'utils/helpers';
-import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
-import { ReactComponent as IconPair } from 'assets/icons/token-pair.svg';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
 import { datePickerPresets } from 'components/common/datePicker/utils';
-import { useActivity } from './ActivityProvider';
+import { useActivity } from './context';
 
 interface DisplayID {
   id: string;
@@ -85,7 +83,6 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
           form={formId}
           name="ids"
           value={ids ?? []}
-          icon={<IconSearch className="text-primary w-14" />}
           label={
             ids?.length
               ? `${ids.length} Strategies Selected`
@@ -110,7 +107,6 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
           form={formId}
           name="pairs"
           value={pairs ?? []}
-          icon={<IconPair className="text-primary w-14" />}
           label={
             pairs?.length ? `${pairs.length} Pairs Selected` : 'Filter Pairs'
           }
@@ -127,7 +123,6 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         form={formId}
         name="actions"
         value={actions ?? []}
-        icon={<IconSearch className="text-primary w-14" />}
         label={
           actions?.length
             ? `${actions.length} Actions Selected`
@@ -141,6 +136,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         ))}
       />
       <DateRangePicker
+        className="btn-on-background text-14"
         form={formId}
         presets={datePickerPresets}
         onConfirm={updateParams}

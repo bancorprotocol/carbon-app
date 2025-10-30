@@ -1,28 +1,22 @@
 @reference "tailwindcss";
 @reference "../../theme.css";
 
-.search-container {
-  grid-area: search;
-  background-image: linear-gradient(
-    to bottom,
-    var(--color-primary, var(--color-primary)),
-    var(--color-secondary, var(--color-secondary)),
-    var(--color-tertiary, var(--color-primary))
-  );
-  padding: 2px;
-  border-radius: 48px;
-}
-
 .search {
+  @apply input-container rounded-full border-2 border-main-400;
+  grid-area: search;
   display: grid;
   gap: 16px;
   padding-inline: 16px;
+  padding-block: 12px;
   grid-template-columns: 24px 1fr auto;
   align-items: center;
   position: relative;
-  border-radius: inherit;
-  height: 44px;
-  @apply bg-black;
+}
+.search:has(:focus-visible) {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--color-main-800), var(--color-main-800)) padding-box,
+    var(--main-gradient) border-box;
 }
 
 .search button[type='submit'] {
@@ -52,9 +46,8 @@
   transition: all 0.2s 0.1s var(--ease-out);
   background-image: linear-gradient(
     to bottom,
-    var(--color-primary, var(--color-primary)),
-    var(--color-secondary, var(--color-secondary)),
-    var(--color-tertiary, var(--color-primary))
+    var(--color-green, var(--color-green)),
+    var(--color-secondary, var(--color-secondary))
   );
 }
 

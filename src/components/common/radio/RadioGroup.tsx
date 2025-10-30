@@ -13,8 +13,9 @@ export const RadioGroup: FC<RadioGroupProps> = ({ children, ...props }) => {
       role="group"
       {...props}
       className={cn(
-        'text-14 relative flex items-center rounded-full bg-black px-6 py-4',
+        'text-14 relative flex items-center rounded-full bg-main-900/40 p-4',
         props.className,
+        style.radioGroup,
       )}
     >
       {children}
@@ -37,24 +38,25 @@ export const Radio: FC<RadioProps> = (props) => {
   const id = useId();
   return (
     <>
-      <input
-        id={id}
-        type="radio"
-        checked={props.checked}
-        value={props.value}
-        name={props.name}
-        onChange={() => props.onChange?.(props.value)}
-        className={style.radio}
-        aria-label={props['aria-label']}
-      />
       <label
         htmlFor={id}
         data-testid={props['data-testid']}
         className={cn(
+          'rounded-full font-medium cursor-pointer px-12 py-6 text-white/60 hover:bg-main-600/20',
           props.className,
-          'rounded-full font-medium cursor-pointer px-10 py-4 text-white/60 hover:text-white/80',
+          style.label,
         )}
       >
+        <input
+          id={id}
+          type="radio"
+          checked={props.checked}
+          value={props.value}
+          name={props.name}
+          onChange={() => props.onChange?.(props.value)}
+          className={cn(style.radio, 'peer/radio')}
+          aria-label={props['aria-label']}
+        />
         {props.children}
       </label>
     </>

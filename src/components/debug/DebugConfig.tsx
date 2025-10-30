@@ -1,6 +1,5 @@
 import { FormEvent, useLayoutEffect, useRef, useState } from 'react';
 import { lsService } from 'services/localeStorage';
-import { Button } from 'components/common/button';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { defaultConfig } from 'config';
 import { AppConfig } from 'config/types';
@@ -57,7 +56,7 @@ export const DebugConfig = () => {
     <form
       onSubmit={submit}
       onReset={reset}
-      className="rounded-3xl bg-background-900 flex flex-col items-center space-y-20 p-20"
+      className="rounded-3xl surface flex flex-col items-center gap-16 p-20"
     >
       <h2 className="text-center">Set Config</h2>
       <label htmlFor="custom-config-json">Config Override</label>
@@ -69,21 +68,29 @@ export const DebugConfig = () => {
           placeholder="Enter config file overrides in JSON format"
           value={configOverride}
           onChange={handleConfigChange}
-          className="rounded-3xl w-full break-all bg-black px-16 py-8"
+          className="rounded-3xl w-full break-all bg-main-900 px-16 py-8"
         />
       </div>
       {!!error && (
         <Warning isError message={error} htmlFor="custom-config-json" />
       )}
-      <Button data-testid="save-config" type="submit" fullWidth>
+      <button
+        data-testid="save-config"
+        type="submit"
+        className="btn-primary-gradient"
+      >
         Save
-      </Button>
-      <Button type="button" onClick={handleLoadDefault} fullWidth>
+      </button>
+      <button
+        type="button"
+        onClick={handleLoadDefault}
+        className="btn-on-surface"
+      >
         Load Default Config
-      </Button>
-      <Button type="reset" fullWidth>
+      </button>
+      <button type="reset" className="btn-on-surface">
         Reset
-      </Button>
+      </button>
     </form>
   );
 };

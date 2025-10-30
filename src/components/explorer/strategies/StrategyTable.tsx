@@ -132,7 +132,7 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
           />
         </div>
       </td>
-      <td className="w-[250px]">
+      <td className="w-[250px] py-0!">
         <StrategyGraph strategy={strategy} />
       </td>
       <td>
@@ -141,7 +141,7 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
             role="menuitem"
             to="/strategy/$id"
             params={{ id: strategy.id }}
-            className="size-38 rounded-sm border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
+            className="size-38 rounded-sm btn-on-surface grid place-items-center p-0"
           >
             <DashboardIcon className="size-16" />
           </Link>

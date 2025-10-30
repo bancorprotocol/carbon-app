@@ -41,16 +41,17 @@ export const StrategySortDropdown: FC<SortProps> = (props) => {
         <button
           type="button"
           className={cn(
-            'bg-background-800 flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8',
-            'hover:bg-background-700',
-            'active:bg-background-600',
+            'btn-on-background flex items-center justify-center gap-8 overflow-hidden rounded-full ',
             props.className,
           )}
           {...attr}
         >
-          <span className="text-14 truncate">
-            <b>Sort</b>: {strategySort[sort]}
-          </span>
+          <p className="flex gap-8 text-14 truncate">
+            <b>Sort</b>:
+            <span className="text-start sm:min-w-115">
+              {strategySort[sort]}
+            </span>
+          </p>
           <IconChevron className="w-14 shrink-0" />
         </button>
       )}
@@ -111,16 +112,15 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
         <button
           type="button"
           className={cn(
-            'bg-background-800 flex h-40 items-center justify-center gap-8 overflow-hidden rounded-full px-16 py-8',
-            'hover:bg-background-700',
-            'active:bg-background-600',
+            'btn-on-background flex items-center justify-center gap-8 overflow-hidden rounded-full ',
             props.className,
           )}
           {...attr}
         >
-          <span className="text-14 truncate">
-            <b>View:</b> {displayFilter}
-          </span>
+          <p className="flex gap-8 text-14 truncate">
+            <b>View:</b>
+            <span className="text-start">{displayFilter}</span>
+          </p>
           <IconChevron className="w-14 shrink-0" />
         </button>
       )}
@@ -167,15 +167,12 @@ const FilterSortItem: FC<{
         type="radio"
         name={name}
         value={item}
+        checked={selectedItem === item}
         className="peer absolute opacity-0"
       />
       <label
         htmlFor={id}
-        className="
-          rounded-sm flex cursor-pointer items-center justify-between px-16
-          py-8 hover:bg-black/90
-          peer-focus-visible:outline-solid peer-focus-visible:outline-1
-        "
+        className="rounded-sm flex cursor-pointer items-center justify-between px-16 py-8 hover:bg-main-900/40 peer-focus-visible:outline-solid peer-focus-visible:outline-1 peer-checked:bg-main-900/60"
       >
         {title}
         {selectedItem === item && <IconCheck />}

@@ -28,10 +28,17 @@ import { getDomain, isEmptyHistory, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
 import { defaultEnd, default_ED_, defaultStart } from '../utils';
-import { differenceInDays, Duration, startOfDay, sub } from 'date-fns';
+import {
+  differenceInDays,
+  Duration,
+  fromUnixTime,
+  startOfDay,
+  sub,
+} from 'date-fns';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
-import style from './D3PriceHistory.module.css';
 import { SafeDecimal } from 'libs/safedecimal';
+import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
+import style from './D3PriceHistory.module.css';
 
 export interface RangeUpdate {
   start?: string;
@@ -124,7 +131,7 @@ const useZoom = (
       })();
 
       const selection = select<SVGSVGElement, unknown>('#interactive-chart');
-      const scale = data.length / days;
+      const scale = data.length / (days + 0.5); // border to border scale
       const translateX = baseXScale(from)!;
       const transition = selection.transition().duration(duration);
       const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
@@ -150,6 +157,19 @@ const getExtendedRange = (range: number[]) => {
   return points;
 };
 
+const durationToDays = (lastTimestamp: number, duration: Duration) => {
+  const lastDay = fromUnixTime(lastTimestamp);
+  return differenceInDays(lastDay, sub(lastDay, duration));
+};
+
+const mockCandle = (value: number) => ({
+  date: Date.now() / 1000,
+  open: value,
+  close: value,
+  high: value,
+  low: value,
+});
+
 interface Props {
   className?: string;
   data: CandlestickData[];
@@ -162,25 +182,6 @@ interface Props {
   end?: string;
 }
 
-const presets = [
-  { label: '7D', duration: { weeks: 1 } },
-  { label: '1M', duration: { months: 1 } },
-  { label: '3M', duration: { months: 3 } },
-  { label: '1Y', duration: { years: 1 } },
-];
-
-const durationToDays = (duration: Duration) => {
-  return differenceInDays(new Date(), sub(new Date(), duration));
-};
-
-const mockCandle = (value: number) => ({
-  date: Date.now() / 1000,
-  open: value,
-  close: value,
-  high: value,
-  low: value,
-});
-
 export const D3PriceHistory: FC<Props> = (props) => {
   const {
     className,
@@ -189,6 +190,8 @@ export const D3PriceHistory: FC<Props> = (props) => {
     bounds,
     zoomBehavior = 'normal',
     onRangeUpdates,
+    start,
+    end,
   } = props;
   const [listenOnZoom, setListenOnZoom] = useState(false);
   const [drawingMode, setDrawingMode] = useState<DrawingMode>();
@@ -199,6 +202,17 @@ export const D3PriceHistory: FC<Props> = (props) => {
     zoomRange,
     zoomHandler,
   } = useZoom(dms, data, zoomBehavior);
+
+  const presets = useMemo(() => {
+    const lastTimestamp = data.at(-1)?.date ?? Date.now() / 1000;
+    console.log(fromUnixTime(lastTimestamp));
+    return [
+      { label: '7D', days: durationToDays(lastTimestamp, { weeks: 1 }) },
+      { label: '1M', days: durationToDays(lastTimestamp, { months: 1 }) },
+      { label: '3M', days: durationToDays(lastTimestamp, { months: 3 }) },
+      { label: '1Y', days: durationToDays(lastTimestamp, { years: 1 }) },
+    ];
+  }, [data]);
 
   const defaultHistoryStart = useMemo(() => {
     return SafeDecimal.max(defaultStart(), data[0].date).toString();
@@ -251,6 +265,11 @@ export const D3PriceHistory: FC<Props> = (props) => {
     },
   ];
 
+  const rangeInDays = useMemo(() => {
+    if (!start || !end) return data.length;
+    return differenceInDays(Number(end) * 1000, Number(start) * 1000) + 1;
+  }, [start, end, data.length]);
+
   const zoomFromTo = async (range: { start?: Date; end?: Date }) => {
     if (!range.start || !range.end) return;
     setListenOnZoom(false);
@@ -263,7 +282,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   const zoomIn = async (days: number) => {
     setListenOnZoom(false);
-    const start = data.at(days * -1)!.date.toString();
+    const start = data.at((days + 1) * -1)!.date.toString();
     const end = data.at(-1)!.date.toString();
     await zoomRange(start, days);
     onRangeUpdates({ start, end });
@@ -318,7 +337,12 @@ export const D3PriceHistory: FC<Props> = (props) => {
       yTicks={y.ticks}
       zoom={zoomTransform}
     >
-      <div className={cn('rounded-xl flex flex-1 bg-black', className)}>
+      <div
+        className={cn(
+          'rounded-xl flex flex-1 bg-main-900/60 overflow-clip',
+          className,
+        )}
+      >
         <DrawingMenu clearDrawings={() => setDrawings([])} />
         <div className="flex flex-1 flex-col">
           <div className="relative grid flex-1 items-stretch justify-items-stretch">
@@ -335,7 +359,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               </g>
             </svg>
             {emptyHistory && (
-              <div className="text-12 rounded-md bg-background-800 absolute bottom-[60px] left-[16px] flex items-center gap-8 border-white/60 px-16 py-8">
+              <div className="text-12 rounded-md bg-main-800 absolute bottom-[60px] left-[16px] flex items-center gap-8 border-white/60 px-16 py-8">
                 <div
                   aria-hidden="true"
                   className="bg-warning/20 grid size-24 place-items-center rounded-full"
@@ -346,16 +370,16 @@ export const D3PriceHistory: FC<Props> = (props) => {
               </div>
             )}
           </div>
-          <div className="col-span-2 flex border-t border-white/10">
-            {presets.map(({ duration, label }) => {
-              const days = durationToDays(duration);
+          <div className="col-span-2 flex border-t border-white/10 bg-main-800">
+            {presets.map(({ days, label }) => {
               return (
                 <button
                   key={label}
-                  role="menuitem"
-                  className="text-12 duration-preset hover:bg-background-700 rounded-md p-8 disabled:pointer-events-none disabled:text-white/50"
+                  role="menuitemradio"
+                  className="text-12 duration-preset hover:bg-main-900/40 rounded-md p-8 disabled:pointer-events-none disabled:text-white/50 aria-checked:underline underline-offset-3"
                   onClick={() => zoomIn(days)}
                   disabled={days > data.length}
+                  aria-checked={rangeInDays === days}
                 >
                   {label}
                 </button>
@@ -363,7 +387,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
             })}
             <hr className="h-full border-e border-white/10" />
             <DateRangePicker
-              className="rounded-md border-0"
+              className="rounded-md hover:bg-main-900/40"
               defaultStart={fromUnixUTC(defaultHistoryStart)}
               defaultEnd={default_ED_()}
               start={fromUnixUTC(props.start || defaultHistoryStart)}
@@ -372,6 +396,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               options={{
                 disabled: disabledDates,
               }}
+              icon={<CalendarIcon className="text-primary size-14" />}
             />
           </div>
         </div>

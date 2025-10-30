@@ -18,10 +18,6 @@ import {
 } from 'libs/modals/modals/ModalImportToken';
 import { ModalNotifications } from 'libs/modals/modals/ModalNotifications';
 import {
-  ModalTradeTokenList,
-  ModalTradeTokenListData,
-} from 'libs/modals/modals/ModalTradeTokenList';
-import {
   ModalTradeRouting,
   ModalTradeRoutingData,
 } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
@@ -52,7 +48,6 @@ import {
 export interface ModalSchema {
   wallet: undefined;
   tokenLists: ModalTokenListData;
-  tradeTokenList: ModalTradeTokenListData;
   txConfirm: ModalCreateConfirmData;
   importToken: ModalImportTokenData;
   notifications: undefined;
@@ -76,7 +71,6 @@ export const MODAL_COMPONENTS: TModals = {
   txConfirm: (props) => ModalConfirm(props),
   importToken: (props) => ModalImportToken(props),
   notifications: (props) => ModalNotifications(props),
-  tradeTokenList: (props) => ModalTradeTokenList(props),
   tradeRouting: (props) => ModalTradeRouting(props),
   burgerMenu: (props) => ModalBurgerMenu(props),
   restrictedCountry: (props) => ModalRestrictedCountry(props),

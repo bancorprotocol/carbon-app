@@ -74,7 +74,7 @@ export const D3Pointer: FC<Props> = ({
         height={handleDms.height}
         rx="4"
         ry="4"
-        className="fill-background-700"
+        className="fill-main-700"
       />
       <text
         x={x + bandwidth / 2}
@@ -105,7 +105,7 @@ export const D3Pointer: FC<Props> = ({
         height={handleDms.height}
         rx="4"
         ry="4"
-        className="fill-background-700"
+        className="fill-main-700"
       />
       <text
         x={dms.boundedWidth + 13}

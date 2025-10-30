@@ -5,13 +5,13 @@ import {
   validAddress,
   validNumber,
   validInputNumber,
+  validBoolean,
 } from '../utils';
 import { TradeDisposable } from 'pages/trade/disposable';
 import { TradeRoot } from 'pages/trade/root';
 import { TradeMarket } from 'pages/trade/market';
 import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
-import { OverlappingSearch } from 'components/strategies/common/types';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
 import * as v from 'valibot';
@@ -52,8 +52,9 @@ export interface TradeRecurringSearch extends TradeSearch {
 }
 
 // TRADE OVERLAPPING
-export type TradeOverlappingSearch = TradeSearch & OverlappingSearch;
-export type SetOverlapping = (next: OverlappingSearch) => any;
+export type TradeOverlappingSearch =
+  (typeof overlappingPage)['types']['searchSchema'];
+export type SetOverlapping = (next: TradeOverlappingSearch) => any;
 
 // TRADE MARKET
 export interface TradeMarketSearch extends TradeSearch {
@@ -82,9 +83,12 @@ const tradePage = createRoute({
   getParentRoute: () => rootRoute,
   path: '/trade',
   component: TradeRoot,
-  beforeLoad: ({ location, search }) => {
+  beforeLoad: ({ location }) => {
     if (location.pathname.endsWith('trade')) {
-      throw redirect({ to: '/trade/overlapping', search });
+      throw redirect({
+        to: '/trade/disposable',
+        search: { direction: 'sell', settings: 'limit' },
+      });
     }
   },
   validateSearch: searchValidator({
@@ -149,6 +153,7 @@ const overlappingPage = createRoute({
   validateSearch: searchValidator({
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
+    fullRange: v.optional(validBoolean),
     spread: v.optional(validNumber),
     budget: v.optional(validNumber),
     anchor: v.optional(v.picklist(['buy', 'sell'])),

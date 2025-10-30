@@ -58,7 +58,7 @@
   border-radius: 0;
 }
 .rdp-day_button:hover {
-  @apply bg-black;
+  @apply bg-main-900;
   color: white;
 }
 .rdp-range_start .rdp-day_button {

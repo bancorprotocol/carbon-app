@@ -1,4 +1,3 @@
-import { Button } from 'components/common/button';
 import { FormEvent } from 'react';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
@@ -18,18 +17,17 @@ export const DebugFeatureFlag = () => {
   return (
     <form
       onSubmit={setFeatureFlags}
-      className="rounded-3xl bg-background-800 flex flex-col gap-20 border border-white/60 p-20 md:col-span-2"
+      className="rounded-3xl bg-main-900 flex flex-col gap-20 border border-white/60 p-20 md:col-span-2"
     >
       <h2>🧪 Feature Flags</h2>
       {!!featureFlags.length ? <FeatureRadioGroup /> : <EmptyFlags />}
-      <Button
-        className="self-end"
-        variant="success"
+      <button
+        className="btn-primary-gradient self-end"
         type="submit"
         disabled={!featureFlags.length}
       >
         Save
-      </Button>
+      </button>
     </form>
   );
 };
@@ -47,10 +45,7 @@ const FeatureRadioGroup = () => {
           Select the feature flags you want to test
         </legend>
         {featureFlags.map(({ value, label, description }) => (
-          <div
-            key={value}
-            className="rounded-md bg-background-700 flex gap-16 p-16"
-          >
+          <div key={value} className="rounded-md bg-main-700 flex gap-16 p-16">
             <input
               className="h-24 w-24 self-center"
               id={`flag-${value}`}

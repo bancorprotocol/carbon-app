@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+  <circle cx="10" cy="10" r="10" fill="url(#paint0_linear_23234_43094)" fill-opacity="0.5"/>
+  <circle cx="9.94336" cy="9.94305" r="1.5" fill="url(#paint3_linear_23234_43094)"/>
+  <circle cx="10" cy="10" r="7.89258" stroke="url(#paint3_linear_23234_43094)"/>
+  <circle cx="9.99957" cy="10" r="4.85699" stroke="url(#paint3_linear_23234_43094)"/>
+  <defs>
+    <linearGradient id="paint0_linear_23234_43094" x1="17.1873" y1="3.38529" x2="0.0375946" y2="12.1536" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10BBD5" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#67D79F"/>
+    </linearGradient>
+    <linearGradient id="paint3_linear_23234_43094" x1="9.99957" y1="4.64301" x2="9.99957" y2="15.357" gradientUnits="userSpaceOnUse">
+      <stop offset="0.09" stop-color="#10BBD5"/>
+      <stop offset="1" stop-color="#67D79F"/>
+    </linearGradient>
+  </defs>
+</svg>

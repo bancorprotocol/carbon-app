@@ -45,7 +45,7 @@ interface ComboboxProps {
   name: string;
   value: string[];
   /** Icon in the button */
-  icon: ReactNode;
+  icon?: ReactNode;
   /** Label displayed in the button */
   label: ReactNode;
   /** Label used for the input used to filter the options */
@@ -173,7 +173,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
     checkboxes.forEach((checkbox) => checkbox.click());
   };
 
-  const { icon, label, options, filterLabel } = props;
+  const { label, options, filterLabel } = props;
 
   const optionSize = Children.count(options);
   const ctx = {
@@ -187,19 +187,14 @@ export const Combobox: FC<ComboboxProps> = (props) => {
       <button
         {...getReferenceProps({ ref: refs.setReference })}
         type="button"
-        className={cn(
-          'text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
-          'hover:bg-background-800',
-          selected.length
-            ? 'active:border-white-80 border-white/60'
-            : 'border-background-800 hover:border-background-700 active:border-background-600',
-        )}
+        className="btn-on-background flex items-center gap-8 rounded-full px-12 py-8 text-white/60 data-[selected=true]:text-white"
+        data-selected={!!selected.length}
         aria-controls={rootId}
       >
-        {icon}
-        <span className="text-white/60">{label}</span>
+        {props.icon}
+        <span>{label}</span>
         <IconChevron
-          className={cn('size-12 text-white/60 transition-transform', {
+          className={cn('ml-auto size-12 transition-transform', {
             'rotate-180': open,
           })}
         />
@@ -212,10 +207,10 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               style={{ ...floatingStyles, ...transition }}
               {...getFloatingProps()}
               id={rootId}
-              className="bg-background-800 z-50 flex flex-col gap-8 rounded-2xl p-16"
+              className="bg-main-600/80 backdrop-blur-sm z-50 flex flex-col gap-8 rounded-2xl p-16"
               onChange={onChange}
             >
-              <div className="flex gap-8 rounded-2xl bg-black p-10 focus-within:outline-1">
+              <div className="flex gap-8 rounded-2xl input-container px-16 py-8">
                 <IconSearch className="w-14 self-center" />
                 <input
                   id={inputId}
@@ -229,13 +224,13 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               <button
                 type="button"
                 onClick={reset}
-                className="bg-background-900 text-12 font-medium rounded-2xl p-10"
+                className="btn text-12 font-medium rounded-2xl p-8"
               >
                 Reset Filter
               </button>
               <div
                 role="listbox"
-                className="flex max-h-[200px] min-w-[200px] flex-col gap-8 overflow-auto p-4"
+                className="flex max-h-[200px] min-w-[200px] flex-col gap-4 overflow-auto p-4"
                 onKeyDown={onKeydown}
               >
                 {options}
@@ -266,9 +261,13 @@ export const Option: FC<OptionProps> = (props) => {
   const id = useId();
   return (
     <div
-      className={cn('flex items-center gap-8 px-4', style.option, {
-        [style.selected]: checked,
-      })}
+      className={cn(
+        'flex items-center gap-8 px-4 py-2 rounded-xs cursor-pointer',
+        style.option,
+        {
+          [style.selected]: checked,
+        },
+      )}
     >
       <input
         id={id}

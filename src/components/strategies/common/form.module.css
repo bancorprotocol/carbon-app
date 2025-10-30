@@ -1,7 +1,7 @@
 .form:invalid button[type='submit'],
 .form:has(:global(.error-message)) button[type='submit'],
 .form:has(:global(.loading-message)) button[type='submit'],
-.form:has(:global(.warning-message)):has(.approve-warnings input:not(:checked))
+.form:has(.approve-warnings input:not(:checked))
   button[type='submit'] {
   opacity: 0.4;
   cursor: not-allowed;
@@ -19,7 +19,7 @@
   cursor: not-allowed;
 }
 
-.form:has(:global(.error-message)) .approve-warnings,
+/* .form:has(:global(.error-message)) .approve-warnings,
 .form:not(:has(:global(.warning-message))) .approve-warnings {
   display: none;
-}
+} */

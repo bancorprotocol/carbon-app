@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { PairRow } from './types';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { NewTabLink } from 'libs/routing';
 import { ReactComponent as LinkIcon } from 'assets/icons/link.svg';
 import config from 'config';
@@ -13,15 +12,12 @@ interface Props {
 
 export const PairList: FC<Props> = ({ pairs }) => {
   return (
-    <ol className="w-full grid gap-24 place-self-auto grid-area-[list] grid-fill-350">
+    <ol className="w-full grid gap-24 place-self-auto grid-area-[list] grid-fill-330">
       {pairs.map((pair) => {
         const base = pair.base;
         const quote = pair.quote;
         return (
-          <li
-            key={pair.id}
-            className="grid gap-16 bg-background-800 p-16 rounded-2xl"
-          >
+          <li key={pair.id} className="grid gap-16 surface p-16 rounded-2xl">
             <header className="flex gap-8">
               <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
             </header>
@@ -64,16 +60,16 @@ export const PairList: FC<Props> = ({ pairs }) => {
                 <dd className="text-14">{pair.liquidity}</dd>
               </div>
             </dl>
-            <footer className="grid grid-cols-2 gap-16">
+            <footer className="grid grid-cols-2 gap-8 sm:gap-16">
               <Link
-                className={buttonStyles({ variant: 'success' })}
+                className="btn-primary-gradient"
                 to="/trade"
                 search={{ base: base.address, quote: quote.address }}
               >
                 Create
               </Link>
               <Link
-                className={buttonStyles({ variant: 'white' })}
+                className="btn-on-surface"
                 to="/trade/market"
                 search={{ base: base.address, quote: quote.address }}
               >

@@ -45,7 +45,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   };
 
   return (
-    <ModalOrMobileSheet id={id} title="Select Token">
+    <ModalOrMobileSheet id={id} title="Select Token" className="md:max-w-500">
       <SearchInput
         aria-labelledby="modal-title"
         aria-description="search by token symbol"
