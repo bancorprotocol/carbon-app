@@ -154,7 +154,7 @@ export const ActivityExport = () => {
         <dialog className="modal" ref={ref} onClick={lightDismiss}>
           <form method="dialog" className="text-14 grid gap-16">
             <header className="flex justify-between">
-              <h2>Export Limit</h2>
+              <h2 className="text-18">Export Limit</h2>
               <button>
                 <IconClose className="size-18" />
               </button>
@@ -164,7 +164,7 @@ export const ActivityExport = () => {
               <b>Only the most recent 10,000 records will be exported.</b>
             </p>
             <p>To include older data, adjust the date range and try again.</p>
-            <footer className="flex gap-16">
+            <footer className="grid grid-flow-col gap-16">
               <button className="btn-primary-gradient" onClick={download}>
                 Proceed
               </button>
