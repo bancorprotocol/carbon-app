@@ -8,8 +8,9 @@ import { toActivities } from './useActivityQuery';
 import { useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { fromUnixUTC } from 'components/simulator/utils';
-import styles from './ActivityExport.module.css';
 import { useDialog } from 'hooks/useDialog';
+import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import styles from './ActivityExport.module.css';
 
 const getActivityCSV = (activities: Activity[]) => {
   const header = [
@@ -152,6 +153,12 @@ export const ActivityExport = () => {
       {!!size && size > limit && (
         <dialog className="modal" ref={ref} onClick={lightDismiss}>
           <form method="dialog" className="text-14 grid gap-16">
+            <header className="flex justify-between">
+              <h2>Export Limit</h2>
+              <button>
+                <IconClose className="size-18" />
+              </button>
+            </header>
             <p>
               The export limit is 10,000 rows.&nbsp;
               <b>Only the most recent 10,000 records will be exported.</b>
