@@ -62,7 +62,7 @@ export const PairList: FC<Props> = ({ pairs }) => {
             </dl>
             <footer className="grid grid-cols-2 gap-8 sm:gap-16">
               <Link
-                className="btn-primary-gradient"
+                className="btn-primary"
                 to="/trade"
                 search={{ base: base.address, quote: quote.address }}
               >
