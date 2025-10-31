@@ -348,6 +348,7 @@ dialog.modal.closing::backdrop {
 }
 dialog.modal.closing {
   animation-name: modal-leave;
+  animation-fill-mode: forwards;
 }
 @media (max-width: 640px) {
   dialog.modal,
