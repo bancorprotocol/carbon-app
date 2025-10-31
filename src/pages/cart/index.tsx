@@ -217,7 +217,7 @@ export const CartPage = () => {
               id="approve-warnings"
               type="checkbox"
               name="approval"
-              className="size-18"
+              className="size-18 shrink-0"
               data-testid="approve-warnings"
             />
             I accept any applicable warning(s) and understand fee on transfer
