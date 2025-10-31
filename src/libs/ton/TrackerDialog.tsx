@@ -15,7 +15,13 @@ export const TrackerDialog = ({ progress }: Props) => {
   const { ref, close, open } = useDialog();
   const hasClosed = useRef(false);
 
+  const closeSession = () => {
+    close();
+    hasClosed.current = true;
+  };
+
   useEffect(() => {
+    console.log({ progress, hasClosed: hasClosed.current });
     if (progress && !hasClosed.current) {
       open();
     }
@@ -64,10 +70,7 @@ export const TrackerDialog = ({ progress }: Props) => {
             );
           })}
         </ol>
-        <button
-          className="btn-on-surface"
-          onClick={() => (hasClosed.current = true)}
-        >
+        <button type="button" className="btn-on-surface" onClick={closeSession}>
           Close
         </button>
       </form>
