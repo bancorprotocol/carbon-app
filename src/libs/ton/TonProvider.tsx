@@ -94,9 +94,8 @@ const awaitTransactionIsDone = async (
 ) => {
   return repeat(async () => {
     const stage = await tracker.getStageProfiling(operationId);
-    console.log(stage);
     if (stage.operationType !== OperationType.PENDING) {
-      if (stage.operationType !== OperationType.UNKNOWN) return;
+      if (stage.operationType !== OperationType.UNKNOWN) return stage;
       throw new Error('Unknown state of transaction');
     }
   });
