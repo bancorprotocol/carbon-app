@@ -1,6 +1,5 @@
-import { Button } from 'components/common/button';
 import { useDialog } from 'hooks/useDialog';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const stages = [
   'Initialization',
@@ -13,16 +12,22 @@ interface Props {
   progress: number;
 }
 export const TrackerDialog = ({ progress }: Props) => {
-  const { ref, lightDismiss, close, open } = useDialog();
+  const { ref, close, open } = useDialog();
+  const hasClosed = useRef(false);
 
   useEffect(() => {
-    console.log({ progress, open: ref.current?.open });
-    if (progress && !ref.current?.open) open();
-    if (!progress && ref.current?.open) close();
+    if (progress && !hasClosed.current) {
+      open();
+    }
+    if (!progress && !hasClosed.current) {
+      // Reset to false for next transaction
+      hasClosed.current = false;
+      close();
+    }
   }, [close, open, progress, ref]);
 
   return (
-    <dialog ref={ref} className="modal" onClick={lightDismiss}>
+    <dialog ref={ref} className="modal">
       <form method="dialog" className="grid gap-24 relative overflow-clip">
         <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
         <h3>Transaction Progress</h3>
@@ -59,7 +64,12 @@ export const TrackerDialog = ({ progress }: Props) => {
             );
           })}
         </ol>
-        <Button variant="secondary">Close</Button>
+        <button
+          className="btn-on-surface"
+          onClick={() => (hasClosed.current = true)}
+        >
+          Close
+        </button>
       </form>
     </dialog>
   );
