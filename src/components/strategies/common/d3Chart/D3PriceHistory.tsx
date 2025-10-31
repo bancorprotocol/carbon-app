@@ -205,7 +205,6 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   const presets = useMemo(() => {
     const lastTimestamp = data.at(-1)?.date ?? Date.now() / 1000;
-    console.log(fromUnixTime(lastTimestamp));
     return [
       { label: '7D', days: durationToDays(lastTimestamp, { weeks: 1 }) },
       { label: '1M', days: durationToDays(lastTimestamp, { months: 1 }) },
