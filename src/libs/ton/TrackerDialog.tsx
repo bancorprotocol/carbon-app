@@ -21,7 +21,6 @@ export const TrackerDialog = ({ progress }: Props) => {
   };
 
   useEffect(() => {
-    console.log({ progress, hasClosed: hasClosed.current });
     if (progress && !hasClosed.current) {
       open();
     }

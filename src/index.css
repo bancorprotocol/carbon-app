@@ -345,6 +345,7 @@ dialog.modal[open]::backdrop {
 }
 dialog.modal.closing::backdrop {
   animation-name: fadeout;
+  animation-fill-mode: forwards;
 }
 dialog.modal.closing {
   animation-name: modal-leave;
