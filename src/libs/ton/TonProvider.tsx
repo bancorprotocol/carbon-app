@@ -261,7 +261,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
         return {
           hash: hash!,
           wait: async () => {
-            setTimeout(() => setProgress(0), 1_000);
+            setProgress(0);
             return awaitTransactionIsDone(tracker, operationId);
           },
         };
