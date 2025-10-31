@@ -25,6 +25,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 
 export const SimulatorInputOverlappingPage = () => {
   const searchState = useSearch({ from: '/simulate/overlapping' });
+  const navigate = useNavigate({ from: '/simulate/overlapping' });
   const { marketPrice } = useMarketPrice({
     base: searchState.base,
     quote: searchState.quote,
@@ -42,9 +43,9 @@ export const SimulatorInputOverlappingPage = () => {
   });
 
   useEffect(() => {
-    if (searchState.sellMax || searchState.buyMin) return;
     dispatch('base', searchState.base);
     dispatch('quote', searchState.quote);
+    if (searchState.sellMax || searchState.buyMin) return;
     dispatch('spread', defaultSpread);
     dispatch('buyMax', '');
     dispatch('buyMin', '');
@@ -68,8 +69,6 @@ export const SimulatorInputOverlappingPage = () => {
     !emptyHistory && noBudget && 'Please add Sell and/or Buy budgets';
   const loadingText = isPending && 'Loading price history...';
   const btnDisabled = isPending || emptyHistory || noBudget;
-
-  const navigate = useNavigate();
 
   const _sP_ = useMemo(() => {
     const start = Number(state.start ?? defaultStart());

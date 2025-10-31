@@ -45,7 +45,7 @@ export const useMissingTokensQuery = (
       const fillMissing = (address: string) => {
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
-      for (const [base, quote] of pairs.data!) {
+      for (const [base, quote] of pairs.data || []) {
         fillMissing(base);
         fillMissing(quote);
       }
@@ -63,7 +63,7 @@ export const useMissingTokensQuery = (
       return tokens;
     },
     initialData: () => lsService.getItem('importedTokens'),
-    enabled: !!existingTokens.data && !!pairs.data,
+    enabled: !!existingTokens.data,
     retry: false,
     refetchOnWindowFocus: false,
   });
