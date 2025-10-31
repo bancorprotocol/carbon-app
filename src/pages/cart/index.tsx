@@ -141,6 +141,10 @@ export const CartPage = () => {
         setProcessing(true);
         dispatchNotification('createBatchStrategy', { txHash: tx.hash });
         await tx.wait();
+        setConfirmation(false);
+        setProcessing(false);
+        clearCart(user!);
+        nav({ to: '/portfolio' });
         cache.invalidateQueries({
           queryKey: QueryKey.strategiesByUser(user),
         });
@@ -154,8 +158,8 @@ export const CartPage = () => {
             queryKey: QueryKey.balance(user!, token),
           });
         }
-        clearCart(user!);
-        nav({ to: '/portfolio' });
+      } catch (err) {
+        console.error(err);
       } finally {
         setConfirmation(false);
         setProcessing(false);
