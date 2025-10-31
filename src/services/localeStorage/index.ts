@@ -51,6 +51,7 @@ export interface LocalStorageSchema {
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
   hasWalkthrough: boolean;
+  tacToTonAddress: Record<string, string>;
 
   /* @deprecated */
   strategyOverviewFilter?: void;

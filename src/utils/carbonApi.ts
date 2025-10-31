@@ -46,7 +46,9 @@ const get = async <T>(
   const api = lsService.getItem('carbonApi') || config.carbonApi;
   const url = new URL(api + endpoint);
   for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined) url.searchParams.set(key, value);
+    if (value !== undefined) {
+      url.searchParams.set(key, value);
+    }
   }
   const response = await fetch(url, { signal: abortSignal });
   const result = await response.json();

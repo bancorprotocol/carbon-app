@@ -34,9 +34,17 @@ export const isDifferentGasToken =
   config.network.gasToken.address.toLowerCase() !==
   NATIVE_TOKEN_ADDRESS.toLowerCase();
 
-export const isGasTokenToHide = (address: string) =>
-  isDifferentGasToken &&
-  address.toLowerCase() === config.network.gasToken.address.toLowerCase();
+/**
+ * On CELO (and maybe other chains) there are two addresses for the native token, we want to hide one of them
+ * On TON the gasToken is TON, but 0xeee...ee is TAC, we don't want to hide the gas token though
+ */
+export const isGasTokenToHide = (address: string) => {
+  if (config.network.name === 'TON') return false;
+  return (
+    isDifferentGasToken &&
+    address.toLowerCase() === config.network.gasToken.address.toLowerCase()
+  );
+};
 
 export const includesGasToken = (address: string) =>
   address.toLowerCase().includes(config.network.gasToken.address.toLowerCase());

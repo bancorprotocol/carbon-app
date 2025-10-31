@@ -6,6 +6,7 @@ import { Action, TradeActionBNStr } from 'libs/sdk';
 import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
 import { useWagmi } from 'libs/wagmi';
+import { useTokens } from 'hooks/useTokens';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionBNStr[];
@@ -38,12 +39,15 @@ export interface TradeParams {
 }
 
 export const useTradeQuery = () => {
-  const { signer } = useWagmi();
+  const { sendTransaction } = useWagmi();
+  const { getTokenById } = useTokens();
 
   return useMutation({
     mutationFn: async (params: TradeParams) => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
+
       let unsignedTx: PopulatedTransaction;
+      let baseAmount: string;
       if (params.isTradeBySource) {
         unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
           params.sourceAddress,
@@ -52,6 +56,7 @@ export const useTradeQuery = () => {
           calcDeadline(params.deadline),
           calcMinReturn(params.targetInput),
         );
+        baseAmount = params.sourceInput;
       } else {
         unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
           params.sourceAddress,
@@ -60,8 +65,19 @@ export const useTradeQuery = () => {
           calcDeadline(params.deadline),
           calcMaxInput(params.sourceInput),
         );
+        baseAmount = calcMaxInput(params.sourceInput);
       }
-      return signer!.sendTransaction(toTransactionRequest(unsignedTx));
+      const source = getTokenById(params.sourceAddress);
+      const powerDecimal = new SafeDecimal(10).pow(source!.decimals);
+      const amount = new SafeDecimal(baseAmount).mul(powerDecimal).toFixed(0);
+      const assets = [
+        {
+          address: params.sourceAddress,
+          rawAmount: amount,
+        },
+      ];
+      unsignedTx.customData = { assets };
+      return sendTransaction(toTransactionRequest(unsignedTx));
     },
   });
 };

@@ -194,25 +194,18 @@
   top: 0;
   right: 0;
   bottom: 0;
-  left: -100%;
+  left: 0;
   will-change: transform;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 181, 120, 0.25) 37.5%,
-    var(--color-green) 37.5%,
-    var(--color-secondary) 50%,
-    rgba(0, 181, 120, 0.25) 50%,
-    rgba(0, 181, 120, 0.25) 87.5%,
-  );
-  animation: 1.3s progress ease infinite;
+  background: var(--color-primary);
+  animation: 2s progress var(--ease-in-out) infinite;
 }
 
 @keyframes progress {
   0% {
-    transform: translate(0);
+    transform: translate(-100%);
   }
   100% {
-    transform: translate(50%);
+    transform: translate(100%);
   }
 }
 
@@ -334,6 +327,7 @@ dialog.modal::backdrop {
     border-bottom-right-radius: 0;
     padding: 16px;
     padding-bottom: 24px;
+    max-width: unset;
   }
 }
 
@@ -351,9 +345,11 @@ dialog.modal[open]::backdrop {
 }
 dialog.modal.closing::backdrop {
   animation-name: fadeout;
+  animation-fill-mode: forwards;
 }
 dialog.modal.closing {
   animation-name: modal-leave;
+  animation-fill-mode: forwards;
 }
 @media (max-width: 640px) {
   dialog.modal,

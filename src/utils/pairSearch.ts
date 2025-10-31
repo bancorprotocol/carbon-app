@@ -57,6 +57,7 @@ export const createPairMaps = (
   const tokens = new Set<string>();
   const pairMap = new Map<string, TradePair>();
   const nameMap = new Map<string, string>();
+
   for (const pair of pairs) {
     const { baseToken: base, quoteToken: quote } = pair;
     const slug = toPairSlug(base, quote);

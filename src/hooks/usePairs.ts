@@ -1,11 +1,29 @@
 import { isAddress } from 'ethers';
-import { useGetAllPairs } from 'libs/queries';
+import { useGetAllPairs } from 'libs/queries/sdk/pairs';
 import { useCallback, useMemo } from 'react';
 import { createPairMaps } from 'utils/pairSearch';
 import { useTokens } from './useTokens';
 import { Token } from 'libs/tokens';
 
 export type PairStore = ReturnType<typeof usePairs>;
+
+// Change length if different address format that evm
+const addressLength = 42;
+
+export const isPairSlug = (slug: string) => {
+  // ${address}_${address}
+  return slug.length === addressLength * 2 + 1;
+};
+
+export const isTokenSlug = (slug?: string) => {
+  return slug?.length === addressLength;
+};
+
+export const extractExplorerPair = (slug: string) => {
+  const base = slug.slice(0, addressLength);
+  const quote = slug.slice(addressLength * -1);
+  return [base, quote];
+};
 
 export const usePairs = () => {
   const { getTokenById, isPending } = useTokens();
@@ -37,7 +55,7 @@ export const usePairs = () => {
     (slug: string = '') => {
       if (!slug) return 'full';
       if (maps.pairMap.has(slug)) return 'pair';
-      if (slug.split('_').length === 2) return 'pair';
+      if (isPairSlug(slug)) return 'pair';
       if (getTokenById(slug)) return 'token';
       if (isAddress(slug)) return 'wallet';
       return 'error';

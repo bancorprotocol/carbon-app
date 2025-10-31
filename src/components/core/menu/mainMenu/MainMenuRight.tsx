@@ -9,6 +9,7 @@ import { MainMenuCart } from './MainMenuCart';
 import { lsService } from 'services/localeStorage';
 import { Link } from '@tanstack/react-router';
 import { MainMenuRightWalkthrough } from './MainMenuRightWalkthrough';
+import { TonConnectBtn } from 'libs/ton/TonConnect';
 import config from 'config';
 
 const TenderlyForkAlert = () => {
@@ -48,9 +49,15 @@ export const MainMenuRight: FC = () => {
       <MainMenuRightWalkthrough />
       {config.ui.showCart && <MainMenuCart />}
       <MainMenuRightNotifications />
-      <MainMenuRightChainSelector networks={networks} />
+      {config.network.name !== 'TON' && (
+        <MainMenuRightChainSelector networks={networks} />
+      )}
       {aboveBreakpoint('md') && <MainMenuRightBurger />}
-      <MainMenuRightWallet />
+      {config.network.name === 'TON' ? (
+        <TonConnectBtn />
+      ) : (
+        <MainMenuRightWallet />
+      )}
     </div>
   );
 };

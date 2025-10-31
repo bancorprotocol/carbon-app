@@ -12,12 +12,14 @@ const defaultValue: CarbonWagmiProviderContext = {
   isNetworkActive: false,
   provider: undefined,
   signer: undefined,
+  sendTransaction: async () => undefined as any,
   currentConnector: undefined,
   connectors: [],
   chainId: currentChain.id,
   accountChainId: undefined,
   handleTenderlyRPC: () => {},
   disconnect: async () => {},
+  openConnect: async () => {},
   connect: async () => {},
   networkError: undefined,
   isSupportedNetwork: true,
@@ -25,6 +27,7 @@ const defaultValue: CarbonWagmiProviderContext = {
   isUserBlocked: false,
   isUncheckedSigner: false,
   setIsUncheckedSigner: () => {},
+  getBalance: async () => BigInt(0),
 };
 
 export const CarbonWagmiCTX = createContext(defaultValue);
