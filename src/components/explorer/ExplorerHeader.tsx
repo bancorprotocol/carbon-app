@@ -77,14 +77,24 @@ const useTrendStrategies = (trending: UseQueryResult<Trending, Error>) => {
   if (trending.isPending || isPending) return { isPending: true, data: [] };
   const trades = trending.data?.tradeCount ?? [];
   const list = trades
-    .filter((t) => !!t.strategyTrades_24h)
+    .filter(
+      (t) =>
+        !!t.strategyTrades_24h &&
+        !!getTokenById(t.token0) &&
+        !!getTokenById(t.token1),
+    )
     .sort((a, b) => b.strategyTrades - a.strategyTrades)
     .splice(0, 3);
 
   // If there are less than 3, pick the remaining best
   if (list.length < 3) {
     const remaining = trades
-      .filter((t) => !!t.strategyTrades_24h)
+      .filter(
+        (t) =>
+          !!t.strategyTrades_24h &&
+          !!getTokenById(t.token0) &&
+          !!getTokenById(t.token1),
+      )
       .sort((a, b) => b.strategyTrades - a.strategyTrades)
       .splice(0, 3 - list.length);
     list.push(...remaining);
