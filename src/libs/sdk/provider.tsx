@@ -40,41 +40,13 @@ interface Props {
 }
 
 export const SDKProvider: FC<Props> = ({ children }) => {
-  const { invalidateQueries } = useQueryClient();
+  const cache = useQueryClient();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    const invalidateQueriesByPair = (pair: TokenPair) => {
-      invalidateQueries({
-        predicate: (query) =>
-          query.queryKey[1] === buildTokenPairKey(pair) ||
-          query.queryKey[1] === buildTokenPairKey([pair[1], pair[0]]) ||
-          query.queryKey[1] === 'strategies',
-      });
-    };
-
-    const onPairDataChangedCallback = async (pairs: TokenPair[]) => {
-      console.log('onPairDataChangedCallback', pairs);
-      if (pairs.length === 0) return;
-      pairs.forEach((pair) => invalidateQueriesByPair(pair));
-    };
-
-    const onPairAddedToCacheCallback = async (pair: TokenPair) => {
-      console.log('onPairAddedToCacheCallback', pair);
-      if (pair.length !== 2) return;
-      void invalidateQueriesByPair(pair);
-      void invalidateQueries({ queryKey: QueryKey.pairs() });
-    };
-
-    const onCacheClearedCallback = () => {
-      invalidateQueries({
-        predicate: (key) => key.queryKey.includes('sdk'),
-      });
-    };
-
     const initSDK = async () => {
       try {
         setIsLoading(true);
@@ -99,11 +71,6 @@ export const SDKProvider: FC<Props> = ({ children }) => {
               refreshInterval: config.sdk.refreshInterval,
             },
           ),
-          carbonSDK.setOnChangeHandlers(
-            Comlink.proxy(onPairDataChangedCallback),
-            Comlink.proxy(onPairAddedToCacheCallback),
-            Comlink.proxy(onCacheClearedCallback),
-          ),
         ]);
         setIsInitialized(true);
         setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
@@ -115,9 +82,52 @@ export const SDKProvider: FC<Props> = ({ children }) => {
       }
     };
     initSDK();
-    // Init SDK only once
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const invalidateQueriesByPair = (pair: TokenPair) => {
+      cache.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey[1] === buildTokenPairKey(pair) ||
+          query.queryKey[1] === buildTokenPairKey([pair[1], pair[0]]) ||
+          query.queryKey[1] === 'strategies',
+      });
+    };
+
+    const onPairDataChangedCallback = async (pairs: TokenPair[]) => {
+      console.log('onPairDataChangedCallback', pairs);
+      for (const pair of pairs) {
+        invalidateQueriesByPair(pair);
+      }
+    };
+
+    const onPairAddedToCacheCallback = async (pair: TokenPair) => {
+      console.log('onPairAddedToCacheCallback', pair);
+      if (pair.length !== 2) return;
+      invalidateQueriesByPair(pair);
+      cache.invalidateQueries({ queryKey: QueryKey.pairs() });
+    };
+
+    const onCacheClearedCallback = () => {
+      cache.invalidateQueries({
+        predicate: (key) => key.queryKey.includes('sdk'),
+      });
+    };
+
+    carbonSDK.setOnChangeHandlers(
+      Comlink.proxy(onPairDataChangedCallback),
+      Comlink.proxy(onPairAddedToCacheCallback),
+      Comlink.proxy(onCacheClearedCallback),
+    );
+
+    return () => {
+      carbonSDK.setOffChangeHandlers(
+        Comlink.proxy(onPairDataChangedCallback),
+        Comlink.proxy(onPairAddedToCacheCallback),
+        Comlink.proxy(onCacheClearedCallback),
+      );
+    };
+  }, [cache]);
 
   return (
     <SdkContext.Provider value={{ isInitialized, isLoading, isError }}>
