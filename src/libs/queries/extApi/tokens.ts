@@ -39,17 +39,26 @@ export const useMissingTokensQuery = (
   return useQuery({
     queryKey: QueryKey.missingTokens(),
     queryFn: async () => {
-      const existing = new Set(
-        existingTokens.data!.map((t) => t.address.toLowerCase()),
-      );
+      const previous = lsService.getItem('importedTokens') || [];
+      const existing = new Set();
+
+      // Tokens from app files
+      for (const token of existingTokens.data || []) {
+        existing.add(token.address.toLowerCase());
+      }
+
+      // Manually imported tokens from local storage
+      for (const token of previous || []) {
+        existing.add(token.address.toLowerCase());
+      }
+
       const missing = new Set<string>();
       const fillMissing = (address: string) => {
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
 
-      const meta = await carbonApi.getActivityMeta({ actions: 'create,edit' });
-
       // External API: all tokens even deleted strategies
+      const meta = await carbonApi.getActivityMeta({ actions: 'create,edit' });
       for (const [base, quote] of meta.pairs) {
         fillMissing(base);
         fillMissing(quote);
@@ -67,9 +76,12 @@ export const useMissingTokensQuery = (
         fillMissing(quote);
       }
 
-      const tokens = await getMissingTokens(missing, (address) =>
+      const missingTokens = await getMissingTokens(missing, (address) =>
         fetchTokenData(Token, address),
       );
+
+      const tokens = previous.concat(missingTokens);
+
       lsService.setItem('importedTokens', tokens);
       return tokens;
     },
