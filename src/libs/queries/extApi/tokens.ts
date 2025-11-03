@@ -57,17 +57,19 @@ export const useMissingTokensQuery = (
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
 
-      // External API: all tokens even deleted strategies
+      // External API: all tokens, even from deleted strategies
       const meta = await carbonApi.getActivityMeta({ actions: 'create,edit' });
       for (const [base, quote] of meta.pairs) {
         fillMissing(base);
         fillMissing(quote);
       }
+
       // SDK: all tokens from current strategies (require for Tenderly)
       for (const [base, quote] of pairs.data || []) {
         fillMissing(base);
         fillMissing(quote);
       }
+
       // Config: Mainly for testnet on new chains
       for (const base of config.popularTokens.base) {
         fillMissing(base);
@@ -81,7 +83,6 @@ export const useMissingTokensQuery = (
       );
 
       const tokens = previous.concat(missingTokens);
-
       lsService.setItem('importedTokens', tokens);
       return tokens;
     },
