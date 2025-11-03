@@ -7,7 +7,7 @@ import { useGetAllPairs } from '../sdk/pairs';
 import { useContract } from 'hooks/useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useMemo } from 'react';
-import { useTrending } from './tradeCount';
+import { carbonApi } from 'utils/carbonApi';
 import config from 'config';
 
 export const useExistingTokensQuery = () => {
@@ -33,7 +33,6 @@ export const useExistingTokensQuery = () => {
 export const useMissingTokensQuery = (
   existingTokens: UseQueryResult<Token[], Error>,
 ) => {
-  const trending = useTrending();
   const pairs = useGetAllPairs();
   const { Token } = useContract();
 
@@ -47,10 +46,13 @@ export const useMissingTokensQuery = (
       const fillMissing = (address: string) => {
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
+
+      const meta = await carbonApi.getActivityMeta({ actions: 'create,edit' });
+
       // External API: all tokens even deleted strategies
-      for (const trade of trending.data?.tradeCount || []) {
-        fillMissing(trade.token0);
-        fillMissing(trade.token1);
+      for (const [base, quote] of meta.pairs) {
+        fillMissing(base);
+        fillMissing(quote);
       }
       // SDK: all tokens from current strategies (require for Tenderly)
       for (const [base, quote] of pairs.data || []) {
@@ -72,7 +74,7 @@ export const useMissingTokensQuery = (
       return tokens;
     },
     initialData: () => lsService.getItem('importedTokens'),
-    enabled: !!existingTokens.data && !pairs.isPending && !trending.isPending,
+    enabled: !!existingTokens.data && !pairs.isPending,
     retry: false,
     refetchOnWindowFocus: false,
   });
