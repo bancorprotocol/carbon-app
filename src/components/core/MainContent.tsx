@@ -4,7 +4,7 @@ import { ErrorUnsupportedNetwork } from 'components/core/error/ErrorUnsupportedN
 import { ErrorNetworkConnection } from 'components/core/error/ErrorNetworkConnection';
 import { useTokens } from 'hooks/useTokens';
 import { ErrorTokenList } from 'components/core/error/ErrorTokenList';
-import { useCarbonInit } from 'hooks/useCarbonInit';
+import { useCarbonInit } from 'libs/sdk/context';
 import { ErrorSDKStartSync } from 'components/core/error/ErrorSDKStartSync';
 import { carbonEvents } from 'services/events';
 import { ErrorUserBlocked } from 'components/core/error/ErrorUserBlocked';

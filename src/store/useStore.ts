@@ -9,7 +9,6 @@ import {
 } from 'store/useNotificationsStore';
 import { defaultModalStore, ModalStore } from 'store/useModalStore';
 import { defaultTokensStore, TokensStore } from 'store/useTokensStore';
-import { defaultSDKStore, SDKStore } from 'store/useSDKStore';
 import {
   defaultFiatCurrencyStore,
   FiatCurrencyStore,
@@ -27,7 +26,6 @@ import { defaultToastStore, ToastStore } from 'store/useToasterStore';
 export interface StoreContext {
   isCountryBlocked: boolean | null;
   setCountryBlocked: (value: boolean | null) => void;
-  sdk: SDKStore;
   tokens: TokensStore;
   notifications: NotificationsStore;
   modals: ModalStore;
@@ -46,7 +44,6 @@ export interface StoreContext {
 export const defaultValue: StoreContext = {
   isCountryBlocked: null,
   setCountryBlocked: () => {},
-  sdk: defaultSDKStore,
   tokens: defaultTokensStore,
   notifications: defaultNotificationsStore,
   modals: defaultModalStore,

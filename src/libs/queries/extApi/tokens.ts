@@ -7,6 +7,7 @@ import { useGetAllPairs } from '../sdk/pairs';
 import { useContract } from 'hooks/useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useMemo } from 'react';
+import { useTrending } from './tradeCount';
 import config from 'config';
 
 export const useExistingTokensQuery = () => {
@@ -32,6 +33,7 @@ export const useExistingTokensQuery = () => {
 export const useMissingTokensQuery = (
   existingTokens: UseQueryResult<Token[], Error>,
 ) => {
+  const trending = useTrending();
   const pairs = useGetAllPairs();
   const { Token } = useContract();
 
@@ -45,10 +47,17 @@ export const useMissingTokensQuery = (
       const fillMissing = (address: string) => {
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
+      // External API: all tokens even deleted strategies
+      for (const trade of trending.data?.tradeCount || []) {
+        fillMissing(trade.token0);
+        fillMissing(trade.token1);
+      }
+      // SDK: all tokens from current strategies (require for Tenderly)
       for (const [base, quote] of pairs.data || []) {
         fillMissing(base);
         fillMissing(quote);
       }
+      // Config: Mainly for testnet on new chains
       for (const base of config.popularTokens.base) {
         fillMissing(base);
       }
@@ -63,7 +72,7 @@ export const useMissingTokensQuery = (
       return tokens;
     },
     initialData: () => lsService.getItem('importedTokens'),
-    enabled: !!existingTokens.data,
+    enabled: !!existingTokens.data && !pairs.isPending && !trending.isPending,
     retry: false,
     refetchOnWindowFocus: false,
   });

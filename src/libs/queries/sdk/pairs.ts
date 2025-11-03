@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useCarbonInit } from 'hooks/useCarbonInit';
+import { useCarbonInit } from 'libs/sdk/context';
 import { QueryKey } from 'libs/queries/queryKey';
 import { carbonSDK } from 'libs/sdk';
 import { ONE_HOUR_IN_MS } from 'utils/time';
