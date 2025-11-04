@@ -1,4 +1,4 @@
-import { useCarbonInit } from 'hooks/useCarbonInit';
+import { useCarbonInit } from 'libs/sdk/context';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';

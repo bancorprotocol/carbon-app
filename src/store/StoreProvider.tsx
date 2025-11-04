@@ -3,7 +3,6 @@ import { useTradeSettingsStore } from 'store/useTradeSettingsStore';
 import { useNotificationsStore } from 'store/useNotificationsStore';
 import { useModalStore } from 'store/useModalStore';
 import { useTokensStore } from 'store/useTokensStore';
-import { useSDKStore } from 'store/useSDKStore';
 import { useFiatCurrencyStore } from 'store/useFiatCurrencyStore';
 import { useOrderBookSettingsStore } from 'store/useOrderBookSettingsStore';
 import { useToastStore } from 'store/useToasterStore';
@@ -16,7 +15,6 @@ import { StoreContext, StoreCTX } from './useStore';
 export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [countryBlocked, setCountryBlocked] = useState<boolean | null>(null);
   const [innerHeight, setInnerHeight] = useState<number>(window.innerHeight);
-  const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
   const notifications = useNotificationsStore();
@@ -28,7 +26,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
     setCountryBlocked,
-    sdk,
     tokens,
     notifications,
     modals,

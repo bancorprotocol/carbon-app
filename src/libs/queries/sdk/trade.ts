@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryKey, toTransactionRequest } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
-import { useCarbonInit } from 'hooks/useCarbonInit';
+import { useCarbonInit } from 'libs/sdk/context';
 import { Action, TradeActionBNStr } from 'libs/sdk';
 import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';

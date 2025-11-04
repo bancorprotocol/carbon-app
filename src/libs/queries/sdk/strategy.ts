@@ -31,7 +31,7 @@ import {
   isPaused,
 } from 'components/strategies/common/utils';
 import { SDKGradientStrategy } from './gradient-mock';
-import { useCarbonInit } from 'hooks/useCarbonInit';
+import { useCarbonInit } from 'libs/sdk/context';
 import { isZero } from 'components/strategies/common/utils';
 import { useMemo } from 'react';
 

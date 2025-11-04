@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { ONE_DAY_IN_MS } from 'utils/time';
-import { useCarbonInit } from 'hooks/useCarbonInit';
+import { useCarbonInit } from 'libs/sdk/context';
 import { carbonSDK } from 'libs/sdk';
 
 export const useGetTradeLiquidity = (base?: string, quote?: string) => {

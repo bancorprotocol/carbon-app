@@ -7,6 +7,7 @@ import { useGetAllPairs } from '../sdk/pairs';
 import { useContract } from 'hooks/useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useMemo } from 'react';
+import { carbonApi } from 'utils/carbonApi';
 import config from 'config';
 
 export const useExistingTokensQuery = () => {
@@ -38,17 +39,38 @@ export const useMissingTokensQuery = (
   return useQuery({
     queryKey: QueryKey.missingTokens(),
     queryFn: async () => {
-      const existing = new Set(
-        existingTokens.data!.map((t) => t.address.toLowerCase()),
-      );
+      const previous = lsService.getItem('importedTokens') || [];
+      const existing = new Set();
+
+      // Tokens from app files
+      for (const token of existingTokens.data || []) {
+        existing.add(token.address.toLowerCase());
+      }
+
+      // Manually imported tokens from local storage
+      for (const token of previous || []) {
+        existing.add(token.address.toLowerCase());
+      }
+
       const missing = new Set<string>();
       const fillMissing = (address: string) => {
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
+
+      // External API: all tokens, even from deleted strategies
+      const meta = await carbonApi.getActivityMeta({ actions: 'create,edit' });
+      for (const [base, quote] of meta.pairs) {
+        fillMissing(base);
+        fillMissing(quote);
+      }
+
+      // SDK: all tokens from current strategies (require for Tenderly)
       for (const [base, quote] of pairs.data || []) {
         fillMissing(base);
         fillMissing(quote);
       }
+
+      // Config: Mainly for testnet on new chains
       for (const base of config.popularTokens.base) {
         fillMissing(base);
       }
@@ -56,14 +78,16 @@ export const useMissingTokensQuery = (
         fillMissing(quote);
       }
 
-      const tokens = await getMissingTokens(missing, (address) =>
+      const missingTokens = await getMissingTokens(missing, (address) =>
         fetchTokenData(Token, address),
       );
+
+      const tokens = previous.concat(missingTokens);
       lsService.setItem('importedTokens', tokens);
       return tokens;
     },
     initialData: () => lsService.getItem('importedTokens'),
-    enabled: !!existingTokens.data,
+    enabled: !!existingTokens.data && !pairs.isPending,
     retry: false,
     refetchOnWindowFocus: false,
   });

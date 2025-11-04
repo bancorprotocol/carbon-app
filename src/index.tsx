@@ -12,6 +12,7 @@ import config from 'config';
 import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
+import { SDKProvider } from 'libs/sdk/provider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -29,11 +30,13 @@ root.render(
   <React.StrictMode>
     <QueryProvider>
       <WalletProvider>
-        <StoreProvider>
-          <LazyMotion>
-            <RouterProvider router={router} />
-          </LazyMotion>
-        </StoreProvider>
+        <SDKProvider>
+          <StoreProvider>
+            <LazyMotion>
+              <RouterProvider router={router} />
+            </LazyMotion>
+          </StoreProvider>
+        </SDKProvider>
       </WalletProvider>
     </QueryProvider>
   </React.StrictMode>,
