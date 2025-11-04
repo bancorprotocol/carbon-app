@@ -39,16 +39,19 @@ export const validDay = v.pipe(v.string(), v.regex(/\d{4}-\d{2}-\d{2}/));
 
 export const validNumberType = v.number();
 
-export const validAddress = v.pipe(
-  v.string(),
-  v.check((value: string) => {
-    try {
-      getAddress(value.toLocaleLowerCase());
-      return true;
-    } catch {
-      return false;
-    }
-  }),
+export const validAddress = v.fallback(
+  v.pipe(
+    v.string(),
+    v.check((value: string) => {
+      try {
+        getAddress(value.toLocaleLowerCase());
+        return true;
+      } catch {
+        return false;
+      }
+    }),
+  ),
+  '',
 );
 
 export const validString = v.string();

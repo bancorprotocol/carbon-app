@@ -59,6 +59,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     handleCTAClick();
   };
   const tooLow = useMemo(() => {
+    // empty strings means that amount is too large
+    if (!sourceInput || !targetInput) return false;
     return !isZero(sourceInput) && isZero(targetInput);
   }, [sourceInput, targetInput]);
 
