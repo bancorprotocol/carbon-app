@@ -1,5 +1,5 @@
 import { useDialog } from 'hooks/useDialog';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 const stages = [
   'Initialization',
@@ -9,27 +9,17 @@ const stages = [
 ];
 
 interface Props {
+  opened: boolean;
+  setOpened: (opened: boolean) => void;
   progress: number;
 }
-export const TrackerDialog = ({ progress }: Props) => {
+export const TrackerDialog = ({ opened, setOpened, progress }: Props) => {
   const { ref, close, open } = useDialog();
-  const hasClosed = useRef(false);
-
-  const closeSession = () => {
-    close();
-    hasClosed.current = true;
-  };
 
   useEffect(() => {
-    if (progress && !hasClosed.current) {
-      open();
-    }
-    if (!progress && !hasClosed.current) {
-      // Reset to false for next transaction
-      hasClosed.current = false;
-      close();
-    }
-  }, [close, open, progress, ref]);
+    if (opened) open();
+    else close();
+  }, [close, open, opened]);
 
   return (
     <dialog ref={ref} className="modal">
@@ -69,7 +59,11 @@ export const TrackerDialog = ({ progress }: Props) => {
             );
           })}
         </ol>
-        <button type="button" className="btn-on-surface" onClick={closeSession}>
+        <button
+          type="button"
+          className="btn-on-surface"
+          onClick={() => setOpened(false)}
+        >
           Close
         </button>
       </form>

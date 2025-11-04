@@ -117,6 +117,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
     throw new Error('config.addresses.tac is not defined');
   }
   const [progress, setProgress] = useState(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { getTVMAddress, getEvmAddress, setTonAddress, setTonTokens } =
     useTonTokenMapping();
 
@@ -240,6 +241,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
         if (txResult.error) throw txResult.error;
 
         const tracker = new OperationTracker(sdk.network);
+        setDialogOpen(true);
         setProgress(1);
         const operationId = await awaitOperationId(tracker, linker);
         setProgress(2);
@@ -262,6 +264,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           hash: hash!,
           wait: async () => {
             setProgress(0);
+            setDialogOpen(false);
             return awaitTransactionIsDone(tracker, operationId);
           },
         };
@@ -335,7 +338,11 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
       >
         {children}
       </CarbonWagmiCTX.Provider>
-      <TrackerDialog progress={progress} />
+      <TrackerDialog
+        opened={dialogOpen}
+        setOpened={setDialogOpen}
+        progress={progress}
+      />
     </>
   );
 };
