@@ -29,7 +29,11 @@ interface PairTrendingQuery {
 }
 const useTrendingPairs = (trending: UseQueryResult<Trending, Error>) => {
   const { getTokenById, isPending } = useTokens();
-  if (trending.isPending || isPending) return { isPending: true, data: [] };
+
+  if (trending.isPending || isPending) {
+    return { isPending: true, data: [] };
+  }
+
   const pairs: Record<string, PairTrade> = {};
   for (const trade of trending.data?.pairCount ?? []) {
     pairs[trade.pairAddresses] ||= trade;
@@ -43,7 +47,7 @@ const useTrendingPairs = (trending: UseQueryResult<Trending, Error>) => {
   if (list.length < 3) {
     const ids = list.map((p) => p.pairId);
     const remaining = Object.values(pairs)
-      .filter((pair) => !!pair.pairTrades_24h && !ids.includes(pair.pairId))
+      .filter((pair) => !ids.includes(pair.pairId))
       .sort((a, b) => b.pairTrades - a.pairTrades)
       .splice(0, 3 - list.length);
     list.push(...remaining);
@@ -74,27 +78,22 @@ interface StrategyTrendingQuery {
 }
 const useTrendStrategies = (trending: UseQueryResult<Trending, Error>) => {
   const { getTokenById, isPending } = useTokens();
-  if (trending.isPending || isPending) return { isPending: true, data: [] };
+
+  if (trending.isPending || isPending) {
+    return { isPending: true, data: [] };
+  }
+
   const trades = trending.data?.tradeCount ?? [];
   const list = trades
-    .filter(
-      (t) =>
-        !!t.strategyTrades_24h &&
-        !!getTokenById(t.token0) &&
-        !!getTokenById(t.token1),
-    )
+    .filter((t) => !!t.strategyTrades_24h)
     .sort((a, b) => b.strategyTrades - a.strategyTrades)
     .splice(0, 3);
 
   // If there are less than 3, pick the remaining best
   if (list.length < 3) {
+    const ids = list.map((t) => t.id);
     const remaining = trades
-      .filter(
-        (t) =>
-          !!t.strategyTrades_24h &&
-          !!getTokenById(t.token0) &&
-          !!getTokenById(t.token1),
-      )
+      .filter((t) => !ids.includes(t.id))
       .sort((a, b) => b.strategyTrades - a.strategyTrades)
       .splice(0, 3 - list.length);
     list.push(...remaining);

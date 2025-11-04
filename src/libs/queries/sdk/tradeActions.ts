@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MatchActionBNStr } from '@bancor/carbon-sdk';
 import { QueryKey } from 'libs/queries';
 import { carbonSDK } from 'libs/sdk';
-import { useCarbonInit } from 'hooks/useCarbonInit';
+import { useCarbonInit } from 'libs/sdk/context';
 import { ONE_DAY_IN_MS } from 'utils/time';
 
 type Props = {

@@ -10,6 +10,7 @@ import { RouterProvider, router } from 'libs/routing';
 import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
+import { SDKProvider } from 'libs/sdk/provider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -19,11 +20,13 @@ root.render(
   <React.StrictMode>
     <QueryProvider>
       <WagmiReactWrapper>
-        <StoreProvider>
-          <LazyMotion>
-            <RouterProvider router={router} />
-          </LazyMotion>
-        </StoreProvider>
+        <SDKProvider>
+          <StoreProvider>
+            <LazyMotion>
+              <RouterProvider router={router} />
+            </LazyMotion>
+          </StoreProvider>
+        </SDKProvider>
       </WagmiReactWrapper>
     </QueryProvider>
   </React.StrictMode>,
