@@ -28,6 +28,7 @@ import { useEnsName } from 'wagmi';
 import { getAddress } from 'ethers';
 import style from './index.module.css';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
+import { searchWalletTags } from 'config/walletTags';
 
 interface Props {
   url: '/explore' | '/portfolio';
@@ -46,6 +47,7 @@ const tryEthAddress = (slug: string) => {
 };
 
 const tabs = {
+  wallet: 'Wallets',
   token: 'Tokens',
   pair: 'Pairs',
 };
@@ -78,6 +80,7 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
   const filteredTokens = useMemo(() => {
     return searchTokens(pairMap, search);
   }, [pairMap, search]);
+  const filteredWallets = useMemo(() => searchWalletTags(search), [search]);
 
   const changeTab = (tab: FocusTab) => {
     setFocusTab(tab as FocusTab);
@@ -91,7 +94,13 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
 
   const onInput = (e: ChangeEvent<HTMLInputElement>) => {
     setOpen(true);
-    setSearch(e.currentTarget.value);
+    const nextValue = e.currentTarget.value;
+    setSearch(nextValue);
+    if (nextValue.trim().startsWith('@')) {
+      setFocusTab('wallet');
+    } else if (focusTab === 'wallet') {
+      setFocusTab('token');
+    }
   };
 
   const suggestionListProps = {
@@ -100,10 +109,12 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
     listboxId,
     filteredPairs,
     filteredTokens,
+    filteredWallets,
     isPending,
   };
 
   const filters = {
+    wallet: filteredWallets,
     token: filteredTokens,
     pair: filteredPairs,
   };
@@ -131,7 +142,12 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
       if (el) observer.observe(el);
     }
     return () => observer.disconnect();
-  }, [open, filteredTokens.length, filteredPairs.length]);
+  }, [
+    open,
+    filteredTokens.length,
+    filteredPairs.length,
+    filteredWallets.length,
+  ]);
 
   useEffect(() => {
     if (!open) return;

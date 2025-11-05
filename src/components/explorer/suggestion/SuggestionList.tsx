@@ -8,12 +8,14 @@ import { Token } from 'libs/tokens';
 import style from './index.module.css';
 import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { WalletTagEntry } from 'config/walletTags';
 
 interface Props {
   url: '/explore' | '/portfolio';
   listboxId: string;
   filteredPairs: TradePair[];
   filteredTokens: Token[];
+  filteredWallets: WalletTagEntry[];
   setOpen: Dispatch<SetStateAction<boolean>>;
   isPending: boolean;
 }
@@ -44,8 +46,14 @@ const animateLeaving = async () => {
 };
 
 export const SuggestionList: FC<Props> = (props) => {
-  const { listboxId, filteredPairs, filteredTokens, setOpen, isPending } =
-    props;
+  const {
+    listboxId,
+    filteredPairs,
+    filteredTokens,
+    filteredWallets,
+    setOpen,
+    isPending,
+  } = props;
   const nav = useNavigate({ from: props.url });
   const { search } = useSearch({ from: props.url });
   const navigate = async (nextSlug: string) => {
@@ -61,6 +69,7 @@ export const SuggestionList: FC<Props> = (props) => {
 
   const [maxTokens, setMaxTokens] = useState(5);
   const [maxPairs, setMaxPairs] = useState(5);
+  const [maxWallets, setMaxWallets] = useState(5);
 
   if (isPending) {
     return (
@@ -76,6 +85,41 @@ export const SuggestionList: FC<Props> = (props) => {
       id={listboxId}
       className={cn(style.listbox, 'grid gap-20 overflow-auto py-10')}
     >
+      {!!filteredWallets.length && (
+        <div id="filtered-wallet-list" data-tab="wallet">
+          <h3 className="text-14 font-medium px-30 text-white/60">Wallets</h3>
+          {filteredWallets.slice(0, maxWallets).map((wallet, index) => (
+            <button
+              key={wallet.address}
+              type="button"
+              role="option"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => navigate(wallet.address.toLowerCase())}
+              className="px-16 md:px-30 flex w-full cursor-pointer items-center gap-10 py-10 hover:bg-white/20 focus-visible:bg-white/10 aria-selected:bg-white/10"
+              aria-selected="false"
+              tabIndex={index ? -1 : 0}
+            >
+              <div className="flex flex-col items-start gap-2 text-start">
+                <span className="text-14 font-medium">@{wallet.tag}</span>
+                <span className="text-12 font-normal text-white/60">
+                  {wallet.address}
+                </span>
+              </div>
+            </button>
+          ))}
+          {maxWallets <= filteredWallets.length && (
+            <footer className="px-16 md:px-30 flex h-[50px] items-center">
+              <button
+                type="button"
+                className="text-14 font-medium btn cursor-pointer rounded-full "
+                onClick={() => setMaxWallets((v) => v + 5)}
+              >
+                View More
+              </button>
+            </footer>
+          )}
+        </div>
+      )}
       {!!filteredTokens.length && (
         <div id="filtered-token-list" data-tab="token">
           <h3 className="text-14 font-medium px-30 text-white/60">Tokens</h3>

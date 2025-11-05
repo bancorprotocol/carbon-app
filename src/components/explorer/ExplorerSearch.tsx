@@ -1,8 +1,4 @@
 import { FC, FormEvent, memo, useCallback, useEffect, useState } from 'react';
-import { SuggestionCombobox } from 'components/explorer/suggestion/SuggestionCombobox';
-import { useNavigate, useSearch } from 'libs/routing';
-import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron-right.svg';
 import {
   searchPairTrade,
   searchTokens,
@@ -16,17 +12,31 @@ import { TradePair } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
 import style from './ExplorerSearch.module.css';
+import { SuggestionCombobox } from 'components/explorer/suggestion/SuggestionCombobox';
+import { useNavigate, useSearch } from 'libs/routing';
+import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron-right.svg';
+import {
+  getWalletAddressForTag,
+  getWalletTagForAddress,
+} from 'config/walletTags';
 
 const displaySlug = (
   slug: string,
   pairMap: Map<string, TradePair>,
   tokensMap: Map<string, Token>,
 ) => {
-  if (tokensMap.has(slug)) {
-    return tokensMap.get(slug)?.symbol ?? '';
-  } else if (pairMap.has(slug)) {
-    const pair = pairMap.get(slug)!;
+  const normalizedSlug = slug.toLowerCase();
+  if (tokensMap.has(normalizedSlug)) {
+    return tokensMap.get(normalizedSlug)?.symbol ?? '';
+  } else if (pairMap.has(normalizedSlug)) {
+    const pair = pairMap.get(normalizedSlug)!;
     return toPairName(pair.baseToken, pair.quoteToken);
+  }
+
+  const walletTag = getWalletTagForAddress(normalizedSlug);
+  if (walletTag) {
+    return `@${walletTag.tag}`;
   } else {
     return slug;
   }
@@ -65,21 +75,29 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
   );
 
   const onSearchHandler = async (value?: string) => {
-    if (!value?.length) {
+    const trimmedValue = value?.trim();
+    if (!trimmedValue?.length) {
       return updateSearchParams();
     }
-    let slug = value;
-    const filteredPairs = searchPairTrade(pairMap, namesMap, value);
+    let slug = trimmedValue;
+    if (trimmedValue.startsWith('@')) {
+      const tag = trimmedValue.slice(1);
+      const walletAddress = getWalletAddressForTag(tag);
+      if (walletAddress) {
+        slug = walletAddress.toLowerCase();
+      }
+    }
+    const filteredPairs = searchPairTrade(pairMap, namesMap, trimmedValue);
     if (filteredPairs[0]) {
       const { baseToken, quoteToken } = filteredPairs[0];
       slug = toPairSlug(baseToken, quoteToken);
     }
-    const filteredTokens = searchTokens(pairMap, value);
+    const filteredTokens = searchTokens(pairMap, trimmedValue);
     if (filteredTokens[0]) {
       slug = filteredTokens[0].address.toLowerCase();
     }
-    if (value === slug) {
-      slug = await getEnsAddressIfAny(provider, value);
+    if (trimmedValue === slug) {
+      slug = await getEnsAddressIfAny(provider, trimmedValue);
     }
     updateSearchParams(slug);
   };
