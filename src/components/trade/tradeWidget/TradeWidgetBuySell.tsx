@@ -26,7 +26,7 @@ export interface TradeWidgetBuySellProps extends FormAttributes {
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
   const { user } = useWagmi();
-  const { isTradePairError, isPending: isTradePairPending } = useTradePairs();
+  const { isPending: isTradePairPending } = useTradePairs();
   const {
     sourceInput,
     setSourceInput,
@@ -95,8 +95,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   if (isTradePairPending || liquidityQuery.isPending) {
     return <CarbonLogoLoading className="h-80 m-20" />;
   }
+
   if (liquidityQuery?.isError) return <div>Error</div>;
-  if (isTradePairError) return <NoLiquidity />;
   if (!hasEnoughLiquidity && !liquidityQuery.isPending) {
     return <NoLiquidity />;
   }

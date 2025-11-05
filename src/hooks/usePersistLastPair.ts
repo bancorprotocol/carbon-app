@@ -29,7 +29,9 @@ export const usePersistLastPair = ({
   }, [base.token, quote.token, search.base, search.quote]);
 
   useEffect(() => {
-    if (base.token && quote.token) return;
+    const hasBase = search.base && base.token;
+    const hasQuote = search.quote && quote.token;
+    if (hasBase && hasQuote) return;
     navigate({
       search: {
         ...search,
