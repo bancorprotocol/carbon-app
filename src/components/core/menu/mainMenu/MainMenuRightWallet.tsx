@@ -10,7 +10,7 @@ import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
 import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
 import { WalletIcon } from 'components/common/WalletIcon';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useRouterState } from '@tanstack/react-router';
 
 const iconProps = { className: 'w-20 hidden lg:block' };
 
@@ -23,6 +23,7 @@ export const MainMenuRightWallet: FC = () => {
     currentConnector,
   } = useWagmi();
   const { openModal } = useModal();
+  const { location } = useRouterState();
   const selectedWallet = currentConnector?.name;
 
   const onClickOpenModal = () => openModal('wallet', undefined);
@@ -39,9 +40,12 @@ export const MainMenuRightWallet: FC = () => {
   const buttonText = useMemo(() => {
     if (isUserBlocked) return 'Wallet Blocked';
     if (!isSupportedNetwork) return 'Wrong Network';
-    if (!user) return 'Launch App';
+    if (!user) {
+      if (location.pathname === '/') return 'Launch App';
+      return 'Connect Wallet';
+    }
     return shortenString(ensName || user);
-  }, [ensName, isSupportedNetwork, isUserBlocked, user]);
+  }, [ensName, isSupportedNetwork, isUserBlocked, location.pathname, user]);
 
   const buttonIcon = useMemo(() => {
     if (isUserBlocked) return <IconWarning {...iconProps} />;
