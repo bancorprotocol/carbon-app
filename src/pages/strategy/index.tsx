@@ -7,7 +7,7 @@ import {
 import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { Page } from 'components/common/page';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { cn } from 'utils/helpers';
+import { cn, getLowestBits, prettifyNumber } from 'utils/helpers';
 import { useGetStrategy } from 'libs/queries';
 import { useGetEnrichedStrategies } from 'hooks/useStrategies';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
@@ -18,7 +18,6 @@ import {
 } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { StrategySubtitle } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { BackButton } from 'components/common/button/BackButton';
 import {
@@ -28,7 +27,10 @@ import {
 } from 'components/strategies/common/utils';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
-import { useActivityQuery } from 'components/activity/useActivityQuery';
+import {
+  useActivityMetaQuery,
+  useActivityQuery,
+} from 'components/activity/useActivityQuery';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import { StrategyPageSearch } from 'libs/routing/routes/strategy';
 import { PairName } from 'components/common/DisplayPair';
@@ -69,11 +71,13 @@ export const StrategyPage = () => {
     setSearch({ hideIndicators: shouldShow });
   };
 
-  const { data: activities } = useActivityQuery({
+  const { data: activityData } = useActivityQuery({
     strategyIds: id,
     start: chartStart ?? oneYearAgo(),
     end: chartEnd ?? defaultEnd(),
   });
+  const { data: activityMeta } = useActivityMetaQuery(params);
+  const activities = activityData ?? [];
 
   if (isPending) {
     return (
@@ -82,99 +86,151 @@ export const StrategyPage = () => {
       </Page>
     );
   }
-  if (!strategy) {
-    return (
-      <Page>
-        <NotFound
-          variant="error"
-          title="Strategy not found"
-          text="The strategy you are looking for does not exist or has been deleted."
-          bordered
-          showBackButton
-        />
-      </Page>
-    );
-  }
-  const base = strategy.base;
-  const quote = strategy.quote;
-  const isNativeChart = config.ui.priceChart === 'native';
+
+  const strategyExists = Boolean(strategy);
+  const base = strategy?.base;
+  const quote = strategy?.quote;
+  const fallbackTokens =
+    (!strategyExists && activityMeta?.strategies?.[id]) ||
+    (!strategyExists && activities[0]
+      ? [activities[0].strategy.base, activities[0].strategy.quote]
+      : undefined);
+  const displayBase = base ?? fallbackTokens?.[0];
+  const displayQuote = quote ?? fallbackTokens?.[1];
+  const tokensForOverlap =
+    displayBase && displayQuote ? [displayBase, displayQuote] : [];
+  const idDisplay = strategy?.idDisplay ?? getLowestBits(id);
+  const tradesCount = activities.filter(
+    (activity) => activity.action === 'buy' || activity.action === 'sell',
+  ).length;
+  const tradesCountLabel = prettifyNumber(tradesCount, {
+    abbreviate: true,
+    decimals: 0,
+  });
+  const isNativeChart = strategyExists && config.ui.priceChart === 'native';
 
   return (
     <Page className="gap-20">
       <header className="flex items-center gap-8">
         <BackButton onClick={() => history.back()} />
-        <TokensOverlap tokens={[base, quote]} size={40} />
+        <TokensOverlap tokens={tokensForOverlap} size={40} />
         <div className="flex-1 flex-col gap-8">
           <h1 className="text-18 font-medium flex gap-8">
-            <PairName baseToken={base} quoteToken={quote} />
+            {displayBase && displayQuote ? (
+              <PairName baseToken={displayBase} quoteToken={displayQuote} />
+            ) : (
+              <span className="text-white/60">Strategy {idDisplay}</span>
+            )}
           </h1>
-          <StrategySubtitle
-            id={strategy.idDisplay}
-            status={strategy.status}
-            isGradient={isGradientStrategy(strategy)}
-          />
+          {strategyExists ? (
+            <StrategySubtitle
+              id={strategy!.idDisplay}
+              status={strategy!.status}
+              isGradient={isGradientStrategy(strategy!)}
+            />
+          ) : (
+            <p className="text-12 flex items-center gap-8 text-white/60">
+              {idDisplay}
+              <svg width="4" height="4" role="separator">
+                <circle cx="2" cy="2" r="2" fill="currentcolor" />
+              </svg>
+              <span className="text-error inline-flex items-center gap-4">
+                Deleted
+              </span>
+            </p>
+          )}
         </div>
-        <StrategyBlockManage
-          strategy={strategy}
-          button={(attr) => <ManageButtonIcon {...attr} />}
-        />
+        {strategyExists && (
+          <StrategyBlockManage
+            strategy={strategy!}
+            button={(attr) => <ManageButtonIcon {...attr} />}
+          />
+        )}
       </header>
-      <section className="flex justify-center gap-16">
-        <article className="@container/strategy surface grid gap-16 rounded-2xl p-24 min-w-330 sm:min-w-350 w-1/4 aspect-[410/425]">
-          <StrategyBlockInfo strategy={strategy} />
-          <div
-            className={cn(
-              'bg-main-900/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border',
-              strategy.status === 'active' ? '' : 'opacity-50',
-            )}
-          >
-            <StrategyBlockBuySell
-              strategy={strategy}
-              isBuy
-              className="border-main-800 border-r-2"
-            />
-            <StrategyBlockBuySell strategy={strategy} />
-            <div className="border-main-800 col-start-1 col-end-3 border-t-2">
-              <StrategyGraph strategy={strategy} />
-            </div>
-          </div>
-        </article>
-        <article className="surface hidden flex-1 flex-col gap-20 rounded-2xl p-16 md:flex">
-          <header className="flex items-center gap-16">
-            <h2 className="text-18 font-medium mr-auto">Price Chart</h2>
-            {isNativeChart && (
-              <div className="flex items-center gap-8">
-                <p id="indicator-label">Indicators</p>
-                <RadioGroup aria-labelledby="indicator-label">
-                  <Radio
-                    checked={!hideIndicators}
-                    onChange={() => showIndicator(false)}
-                  >
-                    On
-                  </Radio>
-                  <Radio
-                    checked={hideIndicators}
-                    onChange={() => showIndicator(true)}
-                  >
-                    Off
-                  </Radio>
-                </RadioGroup>
+      {strategyExists ? (
+        <section className="flex justify-center gap-16">
+          <article className="@container/strategy surface grid gap-16 rounded-2xl p-24 min-w-330 sm:min-w-350 w-1/4 aspect-[410/425]">
+            <StrategyBlockInfo strategy={strategy!} />
+            <div
+              className={cn(
+                'bg-main-900/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border',
+                strategy!.status === 'active' ? '' : 'opacity-50',
+              )}
+            >
+              <StrategyBlockBuySell
+                strategy={strategy!}
+                isBuy
+                className="border-main-800 border-r-2"
+              />
+              <StrategyBlockBuySell strategy={strategy!} />
+              <div className="border-main-800 col-start-1 col-end-3 border-t-2">
+                <StrategyGraph strategy={strategy!} />
               </div>
-            )}
-          </header>
-          <PairChartHistory base={base} quote={quote}>
-            <D3ChartIndicators
-              activities={(!hideIndicators && activities) || []}
-            />
-            <D3Drawings />
-            <D3XAxis />
-            {/* @todo(gradient) */}
-            {/* <D3ChartToday /> */}
-            <D3YAxis />
-            <D3ChartMarketPrice marketPrice={marketPrice} />
-          </PairChartHistory>
-        </article>
-      </section>
+            </div>
+          </article>
+          <article className="surface hidden flex-1 flex-col gap-20 rounded-2xl p-16 md:flex">
+            <header className="flex items-center gap-16">
+              <h2 className="text-18 font-medium mr-auto">Price Chart</h2>
+              {isNativeChart && (
+                <div className="flex items-center gap-8">
+                  <p id="indicator-label">Indicators</p>
+                  <RadioGroup aria-labelledby="indicator-label">
+                    <Radio
+                      checked={!hideIndicators}
+                      onChange={() => showIndicator(false)}
+                    >
+                      On
+                    </Radio>
+                    <Radio
+                      checked={hideIndicators}
+                      onChange={() => showIndicator(true)}
+                    >
+                      Off
+                    </Radio>
+                  </RadioGroup>
+                </div>
+              )}
+            </header>
+            <PairChartHistory base={base!} quote={quote!}>
+              <D3ChartIndicators
+                activities={(!hideIndicators && activities) || []}
+              />
+              <D3Drawings />
+              <D3XAxis />
+              {/* @todo(gradient) */}
+              {/* <D3ChartToday /> */}
+              <D3YAxis />
+              <D3ChartMarketPrice marketPrice={marketPrice} />
+            </PairChartHistory>
+          </article>
+        </section>
+      ) : (
+        <section className="flex flex-col gap-16 md:flex-row md:items-stretch md:justify-center">
+          <article className="@container/strategy surface grid gap-16 rounded-2xl p-24 min-w-330 sm:min-w-350 md:w-1/3">
+            <div className="flex gap-16">
+              <article className="bg-main-900/20 rounded-md border border-main-800 p-16 flex-1 grid">
+                <h4 className="text-12 flex items-center gap-4 text-white/60 self-start">
+                  Trades
+                </h4>
+                <p className="text-18 font-medium truncate @xs/strategy:text-24">
+                  {tradesCountLabel}
+                </p>
+              </article>
+            </div>
+          </article>
+          <article className="surface flex-1 rounded-2xl p-24">
+            <div className="grid h-full place-items-center text-center gap-12">
+              <div className="grid gap-12">
+                <h2 className="text-18 font-medium">Strategy deleted</h2>
+                <p className="text-14 text-white/80">
+                  This strategy is no longer active, but you can review its
+                  historical activity below.
+                </p>
+              </div>
+            </div>
+          </article>
+        </section>
+      )}
       <ActivityProvider params={params} url="/strategy/$id">
         <ActivityLayout filters={[]} />
       </ActivityProvider>
