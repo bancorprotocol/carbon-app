@@ -10,7 +10,6 @@ import style from 'components/strategies/common/root.module.css';
 
 export const TradeRoot = () => {
   const { base, quote, isPending } = usePersistLastPair({ from: '/trade' });
-  console.log({ base, quote });
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center" />;
