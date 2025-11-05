@@ -107,7 +107,7 @@ const tabs = [
         icon: <IconRange className="size-24" />,
         title: 'Range Buy',
         description:
-          'Scale out of a position over a custom price range to sell gradually as the price rises.',
+          'Scale into a position over a custom price range to buy gradually as the price falls.',
         preview: <RangeBuyPreview className="bg-main-800 rounded-2xl" />,
         unique: true,
       },
@@ -117,7 +117,7 @@ const tabs = [
         icon: <IconRange className="size-24" />,
         title: 'Range Sell',
         description:
-          'Scale out of a position over a custom price range to sell gradually as the price rises.',
+          'Scale into a position over a custom price range to buy gradually as the price falls.',
         preview: <RangeSellPreview className="bg-main-800 rounded-2xl" />,
         unique: true,
       },
