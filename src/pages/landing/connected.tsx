@@ -107,7 +107,7 @@ const tabs = [
         icon: <IconRange className="size-24" />,
         title: 'Range Buy',
         description:
-          'Scale out of a position over a custom price range to sell gradually as the price rises.',
+          'Scale into a position over a custom price range to buy gradually as the price falls.',
         preview: <RangeBuyPreview className="bg-main-800 rounded-2xl" />,
         unique: true,
       },
@@ -148,7 +148,7 @@ export const ConnectedLandingPage = () => {
       <div className="mx-auto grid w-full gap-32 p-16 max-w-[1920px]">
         <div
           role="tablist"
-          className="tab-list place-self-center flex rounded-2xl px-16"
+          className="tab-list place-self-center flex rounded-2xl"
         >
           {tabs.map(({ title, id }) => (
             <button
@@ -158,7 +158,7 @@ export const ConnectedLandingPage = () => {
               aria-selected={active === id}
               aria-controls={`tabpanel-${id}`}
               onClick={() => setActive(id)}
-              className="text-white/60 tab-anchor aria-selected:tab-focus py-8 px-16 text-16 lg:text-2xl lg:py-16 lg:px-24"
+              className="text-white/60 tab-anchor aria-selected:tab-focus py-8 px-16 text-14 sm:text-16 lg:text-2xl lg:py-16 lg:px-24"
             >
               {title}
             </button>
@@ -172,7 +172,7 @@ export const ConnectedLandingPage = () => {
             hidden={active !== id}
             aria-labelledby={`tab-${id}`}
           >
-            <ul className="place-self-center flex gap-24 flex-wrap justify-center px-16">
+            <ul className="place-self-center flex gap-24 flex-wrap justify-center">
               {items.map((item) => (
                 <li
                   key={item.title}

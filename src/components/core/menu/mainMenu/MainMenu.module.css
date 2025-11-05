@@ -9,6 +9,11 @@
   color: oklch(100% var(--chroma) var(--hue) / 50%);
   z-index: 40;
 }
+@media (max-width: 40rem) {
+  .main-menu {
+    padding-inline: 16px;
+  }
+}
 .main-menu::before {
   content: "";
   inset: 0;

@@ -9,9 +9,9 @@ import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
 import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
 import { WalletIcon } from 'components/common/WalletIcon';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useRouterState } from '@tanstack/react-router';
 
-const iconProps = { className: 'w-20 hidden lg:block' };
+const iconClass = 'w-20 hidden sm:block';
 
 export const MainMenuRightWallet: FC = () => {
   const {
@@ -22,6 +22,7 @@ export const MainMenuRightWallet: FC = () => {
     currentConnector,
     openConnect,
   } = useWagmi();
+  const { location } = useRouterState();
   const selectedWallet = currentConnector?.name;
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
@@ -36,17 +37,20 @@ export const MainMenuRightWallet: FC = () => {
   const buttonText = useMemo(() => {
     if (isUserBlocked) return 'Wallet Blocked';
     if (!isSupportedNetwork) return 'Wrong Network';
-    if (!user) return 'Launch App';
+    if (!user) {
+      if (location.pathname === '/') return 'Launch App';
+      return 'Connect Wallet';
+    }
     return shortenString(ensName || user);
-  }, [ensName, isSupportedNetwork, isUserBlocked, user]);
+  }, [ensName, isSupportedNetwork, isUserBlocked, location.pathname, user]);
 
   const buttonIcon = useMemo(() => {
-    if (isUserBlocked) return <IconWarning {...iconProps} />;
-    if (!isSupportedNetwork) return <IconWarning {...iconProps} />;
+    if (isUserBlocked) return <IconWarning className={iconClass} />;
+    if (!isSupportedNetwork) return <IconWarning className={iconClass} />;
     if (!user) return;
     return (
       <WalletIcon
-        className="w-20"
+        className={iconClass}
         isImposter={!!imposterAccount}
         selectedWallet={selectedWallet}
         icon={currentConnector?.icon}

@@ -1,4 +1,3 @@
-import { useSearch, TradeSearch } from 'libs/routing';
 import { TradePair } from 'components/strategies/common/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
@@ -9,7 +8,6 @@ import config from 'config';
 
 export const useTradePairs = () => {
   const { user } = useWagmi();
-  const search: TradeSearch = useSearch({ strict: false });
 
   const pairs = usePairs();
   const getTradePair = useCallback(
@@ -64,16 +62,9 @@ export const useTradePairs = () => {
     [user],
   );
 
-  const isTradePairError = !Array.from(pairs.map.values()).some(
-    (item) =>
-      item.baseToken.address.toLowerCase() === search.base?.toLowerCase() &&
-      item.quoteToken.address.toLowerCase() === search.quote?.toLowerCase(),
-  );
-
   return {
     isPending: pairs.isPending,
     isError: pairs.isError,
-    isTradePairError,
     tradePairsPopular,
     favoritePairs,
     addFavoritePair,

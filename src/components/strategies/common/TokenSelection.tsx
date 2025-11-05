@@ -1,4 +1,4 @@
-import { useNavigate, useSearch } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { ReactComponent as ForwardArrowIcon } from 'assets/icons/arrow.svg';
@@ -6,27 +6,17 @@ import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { SuspiciousToken } from 'components/common/DisplayPair';
-import { FC, useMemo } from 'react';
-import { useTokens } from 'hooks/useTokens';
+import { FC } from 'react';
 
 interface Props {
   url: '/trade' | '/simulate';
+  base: Token;
+  quote: Token;
 }
 
-export const TokenSelection: FC<Props> = ({ url }) => {
-  const { getTokenById } = useTokens();
-  const search = useSearch({ from: url });
+export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
   const navigate = useNavigate({ from: url });
   const { openModal } = useModal();
-
-  const base = useMemo(
-    () => getTokenById(search.base),
-    [getTokenById, search.base],
-  );
-  const quote = useMemo(
-    () => getTokenById(search.quote),
-    [getTokenById, search.quote],
-  );
 
   const openTokenListModal = (type: 'base' | 'quote') => {
     const isBase = type === 'base';

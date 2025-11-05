@@ -136,7 +136,7 @@ export const UnconnectedLandingPage = () => {
         </li>
       </ol>
       <article className="grid gap-16">
-        <h2 className="text-18">Choose your Trading Strategy</h2>
+        <h2 className="text-18">Choose Your Trading Strategy</h2>
         <ul className="flex sm:justify-center flex-wrap gap-24">
           {types.map((item) => (
             <li

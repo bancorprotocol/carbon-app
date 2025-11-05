@@ -9,21 +9,30 @@ import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { usePersistLastPair } from 'hooks/usePersistLastPair';
 import { cn } from 'utils/helpers';
+import { NotFound } from 'components/common/NotFound';
 import style from 'components/strategies/common/root.module.css';
 
 export const SimulatorRoot = () => {
-  const { isPending } = usePersistLastPair({ from: '/simulate' });
+  const { base, quote, isPending } = usePersistLastPair({ from: '/simulate' });
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center p-16" />;
   }
-
+  if (!base || !quote) {
+    return (
+      <NotFound
+        variant="error"
+        title="Token not found"
+        text="Could not found base or quote token"
+      />
+    );
+  }
   return (
     <div className="mx-auto flex flex-col content-start gap-24 xl:max-w-[1920px] p-16 w-full">
       <SimulatorDisclaimer />
       <div className={cn(style.root, 'grid gap-16')}>
         <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
-          <TokenSelection url="/simulate" />
+          <TokenSelection url="/simulate" base={base} quote={quote} />
           <SimInputStrategyType />
         </div>
         <Outlet />
