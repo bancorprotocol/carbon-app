@@ -115,7 +115,7 @@ export const CartPage = () => {
         }
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
         const getRawAmount = (token: Token, amount: string) => {
-          return new SafeDecimal(amount).mul(10 ** token.decimals).toNumber();
+          return new SafeDecimal(amount).mul(10 ** token.decimals);
         };
         const amounts: Record<string, SafeDecimal> = {};
         for (const strategy of strategies) {

@@ -56,6 +56,7 @@ export const useTonTokenMapping = () => {
           copy[address] ||= tvmAddress;
           return copy;
         });
+        return tvmAddress;
       }
       return tacToTon[address];
     },

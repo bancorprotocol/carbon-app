@@ -35,6 +35,12 @@ interface TxResult {
   error?: string;
 }
 
+interface TonAsset {
+  type: AssetType;
+  address: string;
+  rawAmount: bigint;
+}
+
 const TON = config.addresses.tokens.TON;
 const smartAccountFactory = config.addresses.tac?.smartAccountFactory;
 const proxyContract = config.addresses.tac?.proxy;
@@ -194,7 +200,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setUser('');
     }
-  }, [getEvmAddress, setTonAddress, tonUser, user, provider]);
+  }, [setTonAddress, tonUser, user, provider]);
 
   const openConnect = useCallback(
     () => tonConnectUI.openModal(),
@@ -214,15 +220,21 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
         const toAsset = async (asset: {
           address: string;
           rawAmount: number | string;
-        }) => ({
-          type: AssetType.FT,
-          address: await getAssetAddress(asset.address),
-          rawAmount: BigInt(asset.rawAmount),
-        });
+        }) => {
+          const address = await getAssetAddress(asset.address);
+          if (!address) return;
+          return {
+            type: AssetType.FT,
+            address: address,
+            rawAmount: BigInt(asset.rawAmount),
+          };
+        };
+        const getAllAssets = tx.customData?.assets?.map(toAsset) || [];
+
         const [sdk, sender, allAssets] = await Promise.all([
           getTacSDK(),
           SenderFactory.getSender({ tonConnect: tonConnectUI }),
-          Promise.all(tx.customData?.assets?.map(toAsset) || []),
+          getAllAssets,
         ]);
         const parsed = parseTransaction(tx);
 
@@ -231,7 +243,9 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           methodName: `${parsed?.name}(bytes,bytes)`,
           encodedParameters: tx.data!.replace(parsed!.selector, '0x'),
         };
-        const assets = allAssets.filter((asset) => !!asset.rawAmount);
+        const assets = allAssets.filter(
+          (asset: TonAsset) => !!asset?.rawAmount,
+        );
         const linker = await sdk.sendCrossChainTransaction(
           evmProxyMsg,
           sender,

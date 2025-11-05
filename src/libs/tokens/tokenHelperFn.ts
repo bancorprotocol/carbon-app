@@ -89,6 +89,9 @@ export const fetchTokenData = async (
         getTonTokenData(tonAddress),
         getEVMTokenAddress(address),
       ]);
+      if (!token) {
+        throw new Error('Could not find TON token');
+      }
       return {
         ...token,
         address: evmAddress,

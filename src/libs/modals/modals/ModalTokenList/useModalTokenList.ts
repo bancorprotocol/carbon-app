@@ -122,7 +122,6 @@ export const useModalTokenList = ({ id, data }: Props) => {
       const found = (sanitizedTokens as TonToken[]).find(
         (token) => token.tonAddress === search,
       );
-      console.log(search);
       if (found) return [found];
       return [];
     } else {
