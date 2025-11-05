@@ -139,7 +139,6 @@ export const EditPricesForm: FC<Props> = (props) => {
   };
 
   const update = () => {
-    const fieldsToUpdate = getFieldsToUpdate(orders, strategy);
     updateMutation.mutate(orders, {
       onSuccess: async (tx) => {
         handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
@@ -150,6 +149,7 @@ export const EditPricesForm: FC<Props> = (props) => {
         cache.invalidateQueries({
           queryKey: QueryKey.strategiesByUser(user),
         });
+        const fieldsToUpdate = getFieldsToUpdate(orders, strategy);
         if (fieldsToUpdate.sellBudget) {
           cache.invalidateQueries({
             queryKey: QueryKey.balance(user!, strategy.base.address),
