@@ -10,6 +10,7 @@ import style from 'components/strategies/common/root.module.css';
 
 export const TradeRoot = () => {
   const { base, quote, isPending } = usePersistLastPair({ from: '/trade' });
+  console.log({ base, quote });
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center" />;
@@ -32,7 +33,7 @@ export const TradeRoot = () => {
         )}
       >
         <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
-          <TokenSelection url="/trade" />
+          <TokenSelection url="/trade" base={base} quote={quote} />
           <TradeNav />
         </div>
         <Outlet />
