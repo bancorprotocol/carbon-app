@@ -45,11 +45,10 @@ const TON = config.addresses.tokens.TON;
 const smartAccountFactory = config.addresses.tac?.smartAccountFactory;
 const proxyContract = config.addresses.tac?.proxy;
 
-// TODO: update with production URL once deployed
 const manifestUrl =
   config.mode === 'development'
     ? 'https://ton-connect.github.io/demo-dapp-with-wallet/tonconnect-manifest.json'
-    : 'https://add-ton-tg.carbon-app-ton-tg.pages.dev/tonconnect-manifest.json';
+    : 'https://ton.carbondefi.xyz/tonconnect-manifest.json';
 
 export const TonProvider = ({ children }: { children: ReactNode }) => {
   return (
