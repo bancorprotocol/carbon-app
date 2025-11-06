@@ -1,9 +1,12 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useCallback } from 'react';
 import { useWagmiTenderly } from 'libs/wagmi/useWagmiTenderly';
 import { useWagmiNetwork } from 'libs/wagmi/useWagmiNetwork';
 import { useWagmiImposter } from 'libs/wagmi/useWagmiImposter';
 import { useWagmiUser } from 'libs/wagmi/useWagmiUser';
 import { CarbonWagmiCTX } from './context';
+import { Contract, TransactionRequest } from 'ethers';
+import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
+import { useModal } from 'hooks/useModal';
 
 // ********************************** //
 // WAGMI PROVIDER
@@ -12,6 +15,7 @@ import { CarbonWagmiCTX } from './context';
 export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const { openModal } = useModal();
   const {
     chainId,
     provider,
@@ -41,6 +45,32 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
     setImposterAccount,
   });
 
+  const openConnect = useCallback(
+    () => openModal('wallet', undefined),
+    [openModal],
+  );
+  const sendTransaction = useCallback(
+    (tx: TransactionRequest) => signer!.sendTransaction(tx),
+    [signer],
+  );
+  const getBalance = useCallback(
+    (address: string) => {
+      if (!provider) throw new Error('No provider found');
+      if (!user) throw new Error('No user provided');
+      if (address === NATIVE_TOKEN_ADDRESS) {
+        return provider.getBalance(user);
+      } else {
+        const contract = new Contract(
+          address,
+          ['function balanceOf(address owner) view returns (uint256)'],
+          provider,
+        );
+        return contract.balanceOf(user);
+      }
+    },
+    [user, provider],
+  );
+
   return (
     <CarbonWagmiCTX.Provider
       value={{
@@ -48,6 +78,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         isNetworkActive,
         provider,
         signer,
+        sendTransaction,
         currentConnector,
         connectors,
         chainId,
@@ -56,6 +87,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         imposterAccount,
         setImposterAccount,
         connect,
+        openConnect,
         disconnect,
         networkError,
         isSupportedNetwork,
@@ -63,6 +95,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         isUserBlocked,
         isUncheckedSigner,
         setIsUncheckedSigner,
+        getBalance,
       }}
     >
       {children}

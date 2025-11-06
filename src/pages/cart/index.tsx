@@ -64,7 +64,7 @@ const useHasInsufficientFunds = (approvalTokens: ApprovalToken[]) => {
 
 export const CartPage = () => {
   const strategies = useStrategyCart();
-  const { user, signer } = useWagmi();
+  const { user, sendTransaction } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
@@ -114,13 +114,37 @@ export const CartPage = () => {
           });
         }
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
-        const tx = await signer!.sendTransaction(
-          toTransactionRequest(unsignedTx),
-        );
+        const getRawAmount = (token: Token, amount: string) => {
+          return new SafeDecimal(amount).mul(10 ** token.decimals);
+        };
+        const amounts: Record<string, SafeDecimal> = {};
+        for (const strategy of strategies) {
+          const base = strategy.base.address;
+          const quote = strategy.quote.address;
+          amounts[base] ||= new SafeDecimal(0);
+          const sellAmount = getRawAmount(strategy.base, strategy.sell.budget);
+          amounts[base] = amounts[base].add(sellAmount);
+
+          amounts[quote] ||= new SafeDecimal(0);
+          const buyAmount = getRawAmount(strategy.quote, strategy.buy.budget);
+          amounts[quote] = amounts[quote].add(buyAmount);
+        }
+        unsignedTx.customData = {
+          assets: Object.entries(amounts).map(([address, amount]) => ({
+            address,
+            rawAmount: amount.toString(),
+          })),
+        };
+
+        const tx = await sendTransaction(toTransactionRequest(unsignedTx));
         setConfirmation(false);
         setProcessing(true);
         dispatchNotification('createBatchStrategy', { txHash: tx.hash });
         await tx.wait();
+        setConfirmation(false);
+        setProcessing(false);
+        clearCart(user!);
+        nav({ to: '/portfolio' });
         cache.invalidateQueries({
           queryKey: QueryKey.strategiesByUser(user),
         });
@@ -134,8 +158,8 @@ export const CartPage = () => {
             queryKey: QueryKey.balance(user!, token),
           });
         }
-        clearCart(user!);
-        nav({ to: '/portfolio' });
+      } catch (err) {
+        console.error(err);
       } finally {
         setConfirmation(false);
         setProcessing(false);

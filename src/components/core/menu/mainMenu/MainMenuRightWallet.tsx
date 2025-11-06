@@ -3,7 +3,6 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useMenuCtx } from 'components/common/dropdownMenu/utils';
-import { useModal } from 'hooks/useModal';
 import { useWagmi } from 'libs/wagmi';
 import { FC, useMemo } from 'react';
 import { useStore } from 'store';
@@ -21,12 +20,10 @@ export const MainMenuRightWallet: FC = () => {
     imposterAccount,
     isUserBlocked,
     currentConnector,
+    openConnect,
   } = useWagmi();
-  const { openModal } = useModal();
   const { location } = useRouterState();
   const selectedWallet = currentConnector?.name;
-
-  const onClickOpenModal = () => openModal('wallet', undefined);
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
 
@@ -91,7 +88,7 @@ export const MainMenuRightWallet: FC = () => {
 
   return (
     <button
-      onClick={onClickOpenModal}
+      onClick={openConnect}
       className={cn(buttonVariant, 'flex items-center gap-8 px-16')}
     >
       {buttonIcon}

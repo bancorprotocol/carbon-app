@@ -1,7 +1,7 @@
 import { useSearch } from '@tanstack/react-router';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
-import { usePairs } from 'hooks/usePairs';
+import { extractExplorerPair, usePairs } from 'hooks/usePairs';
 import { QueryActivityParams } from 'libs/queries/extApi/activity';
 import { useMemo } from 'react';
 
@@ -12,7 +12,7 @@ export const ExplorerActivityPage = () => {
   const params = useMemo(() => {
     const params: QueryActivityParams = {};
     if (type === 'pair') {
-      const [base, quote] = search.split('_');
+      const [base, quote] = extractExplorerPair(search);
       params.token0 = base;
       params.token1 = quote;
     } else if (type === 'token') {
