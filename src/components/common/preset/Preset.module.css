@@ -3,7 +3,6 @@
 
 .preset {  
   position: relative;
-  flex: 1;
 }
 .preset:has(:focus-visible) {
   @apply rounded-lg;
