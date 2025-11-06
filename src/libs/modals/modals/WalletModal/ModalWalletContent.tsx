@@ -54,7 +54,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
           </Link>{' '}
           of this site.{' '}
         </p>
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-8">
           <Checkbox isChecked={checked} setIsChecked={setChecked} />
           <button onClick={() => setChecked((prev) => !prev)}>
             I read and accept

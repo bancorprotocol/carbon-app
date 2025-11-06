@@ -176,7 +176,7 @@ const round = (value: number) => Math.round(value * 100) / 100;
 
 const url = '/liquidity-matrix';
 export const LiquidityMatrixPage = () => {
-  const { user, signer } = useWagmi();
+  const { user, sendTransaction } = useWagmi();
   const { getTokenById, importTokens } = useTokens();
   const { openModal } = useModal();
   const search = useSearch({ from: url });
@@ -332,9 +332,7 @@ export const LiquidityMatrixPage = () => {
         }));
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
         setDisabled(true);
-        const tx = await signer!.sendTransaction(
-          toTransactionRequest(unsignedTx),
-        );
+        const tx = await sendTransaction(toTransactionRequest(unsignedTx));
         await tx.wait();
         await Promise.all(
           strategies.map((s) => animateLeaving(s.quote, { isLast: true })),

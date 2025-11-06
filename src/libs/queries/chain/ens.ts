@@ -67,7 +67,6 @@ export const getEnsAddressIfAny = async (
   try {
     if (isValidEnsName(value)) {
       const address = await provider?.resolveName(value);
-      console.log({ value, address });
       return address || value;
     }
   } catch {

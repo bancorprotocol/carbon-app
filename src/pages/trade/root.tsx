@@ -32,7 +32,7 @@ export const TradeRoot = () => {
         )}
       >
         <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
-          <TokenSelection url="/trade" />
+          <TokenSelection url="/trade" base={base} quote={quote} />
           <TradeNav />
         </div>
         <Outlet />

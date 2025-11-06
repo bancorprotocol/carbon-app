@@ -59,8 +59,8 @@ export const DropdownMenu: FC<Props> = ({
     strategy: strategy,
     open: menuOpen,
     onOpenChange: outsideState ? setIsOpen : setOpen,
-    middleware: [offset(offsetValue), flip(), shift()],
-    whileElementsMounted: autoUpdate,
+    middleware: [offset(offsetValue), flip(), shift({ padding: 16 })],
+    whileElementsMounted: strategy === 'fixed' ? autoUpdate : undefined,
   });
 
   // Default transition provides a fadein on enter

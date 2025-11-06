@@ -1,6 +1,7 @@
 import { waitFor } from './../../utils/operators';
 import { Page } from 'playwright-core';
 import { Direction } from '../types';
+import { MainMenuDriver } from '../MainMenuDriver';
 
 // TODO import type `StrategyEditOptionId`
 type ManageStrategyID =
@@ -85,8 +86,13 @@ export class MyStrategyDriver {
             .getByTestId(`manage-strategy-${id}`)
             .click({ timeout: 2_000 });
         } catch {
+          // Usually this happens because dropdown is below header.
+          // Hide header, scroll, click and show header again
+          const mainMenu = new MainMenuDriver(this.page);
+          await mainMenu.hide();
           await strategy.scrollIntoViewIfNeeded();
           await this.page.getByTestId(`manage-strategy-${id}`).click();
+          await mainMenu.show();
         }
       },
     };
