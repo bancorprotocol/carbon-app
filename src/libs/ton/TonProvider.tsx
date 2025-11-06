@@ -20,6 +20,7 @@ import {
   OperationTracker,
   OperationType,
   StageName,
+  RawAssetBridgingData,
 } from '@tonappchain/sdk';
 import { Address } from '@ton/ton';
 import { getTacSDK } from './sdk';
@@ -34,12 +35,11 @@ interface TxResult {
   success: boolean;
   error?: string;
 }
-
-interface TonAsset {
-  type: AssetType;
+interface RawAsset {
   address: string;
-  rawAmount: bigint;
+  rawAmount: number | string;
 }
+type TonAsset = RawAssetBridgingData;
 
 const TON = config.addresses.tokens.TON;
 const smartAccountFactory = config.addresses.tac?.smartAccountFactory;
@@ -124,8 +124,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   }
   const [progress, setProgress] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { getTVMAddress, getEvmAddress, setTonAddress, setTonTokens } =
-    useTonTokenMapping();
+  const { getTVMAddress, setTonAddress, setTonTokens } = useTonTokenMapping();
 
   // Get token list
   useEffect(() => {
@@ -217,19 +216,17 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           if (address === TON) return;
           return getTVMAddress(address);
         };
-        const toAsset = async (asset: {
-          address: string;
-          rawAmount: number | string;
-        }) => {
+        const toAsset = async (asset: RawAsset) => {
           const address = await getAssetAddress(asset.address);
           if (!address) return;
           return {
             type: AssetType.FT,
             address: address,
             rawAmount: BigInt(asset.rawAmount),
-          };
+          } as TonAsset;
         };
-        const getAllAssets = tx.customData?.assets?.map(toAsset) || [];
+        const rawAssets: RawAsset[] = tx.customData?.assets || [];
+        const getAllAssets = Promise.all(rawAssets.map(toAsset));
 
         const [sdk, sender, allAssets] = await Promise.all([
           getTacSDK(),
@@ -243,9 +240,9 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           methodName: `${parsed?.name}(bytes,bytes)`,
           encodedParameters: tx.data!.replace(parsed!.selector, '0x'),
         };
-        const assets = allAssets.filter(
-          (asset: TonAsset) => !!asset?.rawAmount,
-        );
+        const assetExist = (asset?: TonAsset): asset is TonAsset =>
+          !!asset?.rawAmount;
+        const assets = allAssets.filter(assetExist);
         const linker = await sdk.sendCrossChainTransaction(
           evmProxyMsg,
           sender,
