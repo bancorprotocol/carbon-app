@@ -273,9 +273,9 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
         return {
           hash: hash!,
           wait: async () => {
-            setProgress(0);
+            await awaitTransactionIsDone(tracker, operationId);
             setDialogOpen(false);
-            return awaitTransactionIsDone(tracker, operationId);
+            setProgress(0);
           },
         };
       } catch (e: any) {
@@ -284,6 +284,8 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
             `cast call --trace -r ${config.network.rpc.url} --block ${e.debugInfo.blockNumber} --from ${e.debugInfo.from} --data ${e.debugInfo.callData} ${e.debugInfo.to}`,
           );
         }
+        setProgress(0);
+        setDialogOpen(false);
         throw e;
       }
     },
