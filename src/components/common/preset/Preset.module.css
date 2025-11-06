@@ -27,23 +27,16 @@
 }
 
 .preset-custom {
-  @apply text-white/60 border-transparent border;
-}
-.preset-custom:focus-within {
-  outline-width: 1px;
-  outline-style: solid;
+  @apply text-white/60;
 }
 
 .preset-container:not(:has(input[type='radio']:checked)) .preset-custom {
   color: white;
-  background: var(--dark-gradient) padding-box, var(--main-gradient) border-box;
 }
 
 .preset-container:has(:global(.warning-message)) .preset-custom {
-  background: var(--dark-gradient) padding-box;
-  @apply border border-warning outline-warning;
+  @apply border-warning outline-warning;
 }
 .preset-container:has(input[type='number']:invalid) .preset-custom {
-  background: var(--dark-gradient) padding-box;
   @apply text-error border-error outline-error;
 }
