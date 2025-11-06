@@ -27,7 +27,7 @@ import {
 import { getDomain, isEmptyHistory, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
-import { defaultEnd, default_ED_, defaultStart } from '../utils';
+import { defaultEnd, default_ED_, defaultStart, default_SD_ } from '../utils';
 import {
   differenceInDays,
   Duration,
@@ -206,7 +206,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
   const presets = useMemo(() => {
     const lastTimestamp = data.at(-1)?.date ?? Date.now() / 1000;
     return [
-      { label: '7D', days: durationToDays(lastTimestamp, { weeks: 1 }) },
+      { label: '1W', days: durationToDays(lastTimestamp, { weeks: 1 }) },
       { label: '1M', days: durationToDays(lastTimestamp, { months: 1 }) },
       { label: '3M', days: durationToDays(lastTimestamp, { months: 3 }) },
       { label: '1Y', days: durationToDays(lastTimestamp, { years: 1 }) },
@@ -214,7 +214,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
   }, [data]);
 
   const defaultHistoryStart = useMemo(() => {
-    return SafeDecimal.max(defaultStart(), data[0].date).toString();
+    const lastTimestamp = data.at(-1)?.date;
+    const lastDay = lastTimestamp ? new Date(lastTimestamp * 1000) : new Date();
+    return SafeDecimal.max(defaultStart(lastDay), data[0].date).toString();
   }, [data]);
   const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
 
@@ -265,12 +267,14 @@ export const D3PriceHistory: FC<Props> = (props) => {
   ];
 
   const rangeInDays = useMemo(() => {
-    if (!start || !end) return data.length;
+    if (!start || !end) {
+      return differenceInDays(new Date(), default_SD_());
+    }
     // Compare two dates at the same local hour
     const startDate = startOfDay(Number(start) * 1000);
     const endDate = startOfDay(Number(end) * 1000);
     return differenceInDays(endDate, startDate);
-  }, [start, end, data.length]);
+  }, [start, end]);
 
   const zoomFromTo = async (range: { start?: Date; end?: Date }) => {
     if (!range.start || !range.end) return;

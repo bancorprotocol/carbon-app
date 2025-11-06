@@ -11,7 +11,7 @@ import {
   BuySellOrders,
 } from './types';
 import { fromUnixUTC } from 'components/simulator/utils';
-import { startOfDay, subMonths, subYears } from 'date-fns';
+import { startOfDay, sub } from 'date-fns';
 import { toUnixUTC } from 'components/simulator/utils';
 import { ChartPrices } from './d3Chart';
 import { getMinMaxPricesByDecimals } from '@bancor/carbon-sdk/strategy-management';
@@ -245,11 +245,13 @@ export const resetPrice = (price?: string) => {
   return isZero(price) ? '' : price;
 };
 
-export const default_SD_ = () => startOfDay(subMonths(new Date(), 3));
-export const default_ED_ = () => startOfDay(new Date());
-export const defaultStart = () => toUnixUTC(default_SD_());
-export const defaultEnd = () => toUnixUTC(default_ED_());
-export const oneYearAgo = () => toUnixUTC(startOfDay(subYears(new Date(), 1)));
+export const default_SD_ = (now = new Date()) =>
+  startOfDay(sub(now, { months: 3 }));
+export const default_ED_ = (now = new Date()) => startOfDay(now);
+export const defaultStart = (now?: Date) => toUnixUTC(default_SD_(now));
+export const defaultEnd = (now?: Date) => toUnixUTC(default_ED_(now));
+export const oneYearAgo = (now = new Date()) =>
+  toUnixUTC(startOfDay(sub(now, { years: 1 })));
 
 export const getBounds = (
   base: Token,
