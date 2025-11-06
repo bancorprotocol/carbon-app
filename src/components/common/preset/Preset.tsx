@@ -22,7 +22,7 @@ export const Presets: FC<Props> = (props) => {
     <div
       role="radiogroup"
       className={cn(
-        'text-12 flex gap-8 input-container rounded-lg p-4 tab-list',
+        'text-12 grid grid-flow-col gap-8 input-container rounded-lg p-4 tab-list',
         className,
       )}
     >

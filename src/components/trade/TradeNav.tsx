@@ -40,7 +40,7 @@ const types = [
       },
       {
         id: 'overlapping',
-        name: 'Liquidity Position',
+        name: 'Concentrated',
         to: '/trade/overlapping' as const,
         search: undefined,
         icon: <IconOverlapping className="hidden md:block size-20" />,
