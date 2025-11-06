@@ -92,7 +92,7 @@ export const EditPricesForm: FC<Props> = (props) => {
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
 
-  const updateMutation = useUpdateStrategyQuery();
+  const updateMutation = useUpdateStrategyQuery(strategy);
   const cache = useQueryClient();
   const [isProcessing, setIsProcessing] = useState(false);
   const isPending = updateMutation.isPending;
@@ -139,43 +139,34 @@ export const EditPricesForm: FC<Props> = (props) => {
   };
 
   const update = () => {
-    const fieldsToUpdate = getFieldsToUpdate(orders, strategy);
-    updateMutation.mutate(
-      {
-        id: strategy.id,
-        encoded: strategy.encoded,
-        fieldsToUpdate: fieldsToUpdate,
-        buyMarginalPrice: orders.buy.marginalPrice,
-        sellMarginalPrice: orders.sell.marginalPrice,
-      },
-      {
-        onSuccess: async (tx) => {
-          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
-          dispatchNotification(notifKey[editType], { txHash: tx.hash });
-          if (!tx) return;
-          console.log('tx hash', tx.hash);
-          await tx.wait();
+    updateMutation.mutate(orders, {
+      onSuccess: async (tx) => {
+        handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
+        dispatchNotification(notifKey[editType], { txHash: tx.hash });
+        if (!tx) return;
+        console.log('tx hash', tx.hash);
+        await tx.wait();
+        cache.invalidateQueries({
+          queryKey: QueryKey.strategiesByUser(user),
+        });
+        const fieldsToUpdate = getFieldsToUpdate(orders, strategy);
+        if (fieldsToUpdate.sellBudget) {
           cache.invalidateQueries({
-            queryKey: QueryKey.strategiesByUser(user),
+            queryKey: QueryKey.balance(user!, strategy.base.address),
           });
-          if (fieldsToUpdate.sellBudget) {
-            cache.invalidateQueries({
-              queryKey: QueryKey.balance(user!, strategy.base.address),
-            });
-          }
-          if (fieldsToUpdate.buyBudget) {
-            cache.invalidateQueries({
-              queryKey: QueryKey.balance(user!, strategy.quote.address),
-            });
-          }
-          console.log('tx confirmed');
-        },
-        onError: (e) => {
-          setIsProcessing(false);
-          console.error('update mutation failed', e);
-        },
+        }
+        if (fieldsToUpdate.buyBudget) {
+          cache.invalidateQueries({
+            queryKey: QueryKey.balance(user!, strategy.quote.address),
+          });
+        }
+        console.log('tx confirmed');
       },
-    );
+      onError: (e) => {
+        setIsProcessing(false);
+        console.error('update mutation failed', e);
+      },
+    });
   };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {

@@ -4,7 +4,7 @@ import {
   useTokenStrategies,
   useGetAllStrategies,
 } from 'libs/queries';
-import { usePairs } from 'hooks/usePairs';
+import { extractExplorerPair, usePairs } from 'hooks/usePairs';
 import { useEffect, useMemo } from 'react';
 import { useSearch } from '@tanstack/react-router';
 import { getAddress, isAddress } from 'ethers';
@@ -27,7 +27,7 @@ export const useExplorer = () => {
   // PAIR
   const exactMatch = useMemo(() => {
     if (type !== 'pair') return;
-    const [base, quote] = search.split('_');
+    const [base, quote] = extractExplorerPair(search);
     if (!isAddress(base) || !isAddress(quote)) return;
     return { base, quote };
   }, [search, type]);

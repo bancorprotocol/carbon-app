@@ -90,7 +90,6 @@ export const commonConfig: AppConfig = {
   },
   tokenListOverride: [],
   tokenLists: [
-    // Bancor
     {
       uri: 'https://raw.githubusercontent.com/TacBuild/tokenlist/refs/heads/main/src/tokens/tac.json',
     },

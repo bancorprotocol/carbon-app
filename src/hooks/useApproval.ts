@@ -5,6 +5,7 @@ import {
 import { useMemo } from 'react';
 import { sanitizeNumber } from 'utils/helpers';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
+import config from 'config';
 
 export type ApprovalToken = GetUserApprovalProps & {
   amount: string;
@@ -18,6 +19,7 @@ export type ApprovalTokenResult = ApprovalToken & {
 };
 
 export const useApproval = (data: ApprovalToken[]) => {
+  if (config.network.name === 'TON') data = [];
   const approvalQuery = useGetUserApproval(data);
 
   const result = useMemo(() => {

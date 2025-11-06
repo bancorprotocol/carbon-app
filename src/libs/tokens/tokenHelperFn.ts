@@ -1,8 +1,11 @@
+import { getEVMTokenAddress, getTVMTokenAddress } from 'libs/ton/address';
 import { getAddress } from 'ethers';
 import { Token, TokenList } from 'libs/tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
 import { tokenParserMap } from 'config/utils';
+import { TonToken } from 'libs/ton/tokenMap';
+import { getTonTokenData } from 'libs/ton/api';
 import config from 'config';
 
 const getLogoByURI = (uri: string | undefined) =>
@@ -18,7 +21,6 @@ export const fetchTokenLists = async () => {
       const response = await fetch(uri, { signal: controller.signal });
       clearTimeout(abort);
       const result: TokenList = await response.json();
-
       if (!response.ok) {
         const error = (result as { error?: string }).error;
         throw new Error(
@@ -81,18 +83,35 @@ export const fetchTokenData = async (
   address: string,
 ): Promise<Token> => {
   try {
-    const [symbol, decimals, name] = await Promise.all([
-      Token(address).read.symbol(),
-      Token(address).read.decimals(),
-      Token(address).read.name(),
-    ]);
-    return {
-      address,
-      symbol,
-      decimals: Number(decimals),
-      name,
-      isSuspicious: true,
-    };
+    if (config.network.name === 'TON') {
+      const tonAddress = await getTVMTokenAddress(address);
+      const [token, evmAddress] = await Promise.all([
+        getTonTokenData(tonAddress),
+        getEVMTokenAddress(address),
+      ]);
+      if (!token) {
+        throw new Error('Could not find TON token');
+      }
+      return {
+        ...token,
+        address: evmAddress,
+        tonAddress: tonAddress,
+        isSuspicious: true,
+      } as TonToken;
+    } else {
+      const [symbol, decimals, name] = await Promise.all([
+        Token(address).read.symbol(),
+        Token(address).read.decimals(),
+        Token(address).read.name(),
+      ]);
+      return {
+        address,
+        symbol,
+        decimals: Number(decimals),
+        name,
+        isSuspicious: true,
+      };
+    }
   } catch (err) {
     console.error('Could not fetch information from ' + address);
     throw err;

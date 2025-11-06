@@ -1,5 +1,5 @@
 import 'global-shim';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
 import { StoreProvider } from 'store';
@@ -7,6 +7,8 @@ import { WagmiReactWrapper } from 'libs/wagmi';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
+import { TonProvider } from 'libs/ton/TonProvider';
+import config from 'config';
 import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
@@ -16,10 +18,18 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
+const WalletProvider = ({ children }: { children: ReactNode }) => {
+  if (config.network.name === 'TON') {
+    return <TonProvider>{children}</TonProvider>;
+  } else {
+    return <WagmiReactWrapper>{children}</WagmiReactWrapper>;
+  }
+};
+
 root.render(
   <React.StrictMode>
     <QueryProvider>
-      <WagmiReactWrapper>
+      <WalletProvider>
         <SDKProvider>
           <StoreProvider>
             <LazyMotion>
@@ -27,7 +37,7 @@ root.render(
             </LazyMotion>
           </StoreProvider>
         </SDKProvider>
-      </WagmiReactWrapper>
+      </WalletProvider>
     </QueryProvider>
   </React.StrictMode>,
 );
