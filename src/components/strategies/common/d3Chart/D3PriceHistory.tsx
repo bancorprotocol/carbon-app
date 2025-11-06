@@ -266,7 +266,10 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   const rangeInDays = useMemo(() => {
     if (!start || !end) return data.length;
-    return differenceInDays(Number(end) * 1000, Number(start) * 1000) + 1;
+    // Compare two dates at the same local hour
+    const startDate = startOfDay(Number(start) * 1000);
+    const endDate = startOfDay(Number(end) * 1000);
+    return differenceInDays(endDate, startDate);
   }, [start, end, data.length]);
 
   const zoomFromTo = async (range: { start?: Date; end?: Date }) => {
@@ -274,7 +277,11 @@ export const D3PriceHistory: FC<Props> = (props) => {
     setListenOnZoom(false);
     const start = toUnixUTC(startOfDay(range.start));
     const end = toUnixUTC(startOfDay(range.end));
-    await zoomRange(start, differenceInDays(range.end, range.start) + 1);
+    const diff = differenceInDays(
+      startOfDay(range.end),
+      startOfDay(range.start),
+    );
+    await zoomRange(start, diff);
     onRangeUpdates({ start, end });
     setListenOnZoom(true);
   };
