@@ -29,15 +29,15 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
 root.render(
   <React.StrictMode>
     <QueryProvider>
-      <WalletProvider>
-        <SDKProvider>
-          <StoreProvider>
+      <SDKProvider>
+        <StoreProvider>
+          <WalletProvider>
             <LazyMotion>
               <RouterProvider router={router} />
             </LazyMotion>
-          </StoreProvider>
-        </SDKProvider>
-      </WalletProvider>
+          </WalletProvider>
+        </StoreProvider>
+      </SDKProvider>
     </QueryProvider>
   </React.StrictMode>,
 );
