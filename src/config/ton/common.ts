@@ -11,9 +11,10 @@ const addresses = {
 const popularTokens = [addresses.TON, addresses.USDT];
 
 export const commonConfig: AppConfig = {
+  hidden: true,
   mode: 'development',
   appName: 'TON - Carbon DeFi Mini-App',
-  appUrl: 'https://ton.tg.carbondefi.xyz',
+  appUrl: 'https://ton.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/tac/',
   tonApi: 'https://rp.mainnet.tac.build/api/v3',
   selectedConnectors: ['MetaMask'],
