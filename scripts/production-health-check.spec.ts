@@ -7,7 +7,7 @@ import { expect, test } from '@playwright/test';
  */
 
 // Keep the longer timeout so it won't get killed prematurely
-test.setTimeout(210000);
+// test.setTimeout(210000);
 
 test('visit page and check wallet modal', async ({ page }) => {
   // Set action timeout for page operations
