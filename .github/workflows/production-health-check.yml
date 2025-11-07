@@ -30,5 +30,3 @@ jobs:
 
       - name: Run production health check
         run: yarn playwright test scripts/production-health-check.spec.ts
-        env:
-          VITE_CI: 'true'
