@@ -250,8 +250,10 @@ export const default_SD_ = (now = new Date()) =>
 export const default_ED_ = (now = new Date()) => startOfDay(now);
 export const defaultStart = (now?: Date) => toUnixUTC(default_SD_(now));
 export const defaultEnd = (now?: Date) => toUnixUTC(default_ED_(now));
-export const oneYearAgo = (now = new Date()) =>
-  toUnixUTC(startOfDay(sub(now, { years: 1 })));
+export const oneYearAgo = (now = new Date()) => {
+  // Add extra days because last day is sometime today sometime yesterday
+  return toUnixUTC(startOfDay(sub(now, { years: 1, days: 2 })));
+};
 
 export const getBounds = (
   base: Token,
