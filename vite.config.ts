@@ -29,6 +29,8 @@ export default defineConfig(({ mode }) => {
       sentryVitePlugin({
         org: env.SENTRY_ORG,
         project: env.SENTRY_PROJECT,
+        applicationKey:
+          env.SENTRY_APPLICATION_KEY || 'custom_application_key_carbon_app',
 
         // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
         // and need `project:releases` and `org:read` scopes
