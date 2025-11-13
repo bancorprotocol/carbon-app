@@ -3,6 +3,7 @@ import { CartStrategy, Order } from 'components/strategies/common/types';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
 import { cn, getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
 
@@ -34,10 +35,9 @@ export const StrategyBlockBuySell: FC<{
         <header className="flex items-center gap-4">
           <h4 className="text-12 text-buy">Buy {token.symbol}</h4>
           {hasFiatValue && (
-            <Tooltip
-              element={buyTooltip}
-              iconClassName="size-10 text-white/60"
-            />
+            <Tooltip element={buyTooltip}>
+              <IconTooltip className="size-10 text-white/60" />
+            </Tooltip>
           )}
           {!hasFiatValue && (
             <Tooltip
@@ -59,10 +59,9 @@ export const StrategyBlockBuySell: FC<{
         <header className="flex items-center gap-4">
           <h4 className="text-12 text-sell">Sell {otherToken.symbol}</h4>
           {hasFiatValue && (
-            <Tooltip
-              element={sellTooltip}
-              iconClassName="size-10 text-white/60"
-            />
+            <Tooltip element={sellTooltip}>
+              <IconTooltip className="size-10 text-white/60" />
+            </Tooltip>
           )}
           {!hasFiatValue && (
             <Tooltip
@@ -74,9 +73,7 @@ export const StrategyBlockBuySell: FC<{
                 </p>
               }
             >
-              <span>
-                <WarningIcon className="text-warning size-10" />
-              </span>
+              <WarningIcon className="text-warning size-10" />
             </Tooltip>
           )}
         </header>

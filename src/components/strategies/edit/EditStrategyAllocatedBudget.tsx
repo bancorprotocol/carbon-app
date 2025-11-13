@@ -2,6 +2,7 @@ import { FC, ReactNode, useId } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Switch } from 'components/common/switch';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
@@ -29,9 +30,10 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
         <p role="columnheader" className="flex w-auto items-center gap-6">
           Allocated Budget
           <Tooltip
-            iconClassName="h-13 text-white/60"
             element={`This is the current available ${token.symbol} budget you can withdraw`}
-          />
+          >
+            <IconTooltip className="h-13 text-white/60" />
+          </Tooltip>
         </p>
         <div role="cell" className="flex flex-1 justify-end gap-8">
           <TooltipTokenAmount amount={initialBudget ?? ''} token={token} />
@@ -84,7 +86,6 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
           Distribute Across Entire Range
         </label>
         <Tooltip
-          iconClassName="h-13 text-white/60"
           element={
             <div className="flex flex-col gap-10">
               <div className="flex gap-8">
@@ -117,7 +118,9 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
               </div>
             </div>
           }
-        />
+        >
+          <IconTooltip className="h-13 text-white/60" />
+        </Tooltip>
       </p>
       <Switch
         id={id}

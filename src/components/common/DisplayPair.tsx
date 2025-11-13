@@ -53,19 +53,17 @@ export const PairLogoName = memo(_PairLogoName, (a, b) => {
 });
 
 export const PairName: FC<TradePair> = ({ baseToken, quoteToken }) => (
-  <>
-    <span className="font-medium inline-flex items-center gap-4">
-      {baseToken.isSuspicious && <SuspiciousToken />}
-      <Tooltip element={<TokenTooltip token={baseToken} />}>
-        <span>{baseToken.symbol}</span>
-      </Tooltip>
-      <span className="text-white/60">/</span>
-      {quoteToken.isSuspicious && <SuspiciousToken />}
-      <Tooltip element={<TokenTooltip token={quoteToken} />}>
-        <span>{quoteToken.symbol}</span>
-      </Tooltip>
-    </span>
-  </>
+  <span className="font-medium inline-flex items-center gap-4">
+    {baseToken.isSuspicious && <SuspiciousToken />}
+    <Tooltip element={<TokenTooltip token={baseToken} />}>
+      <span>{baseToken.symbol}</span>
+    </Tooltip>
+    <span className="text-white/60">/</span>
+    {quoteToken.isSuspicious && <SuspiciousToken />}
+    <Tooltip element={<TokenTooltip token={quoteToken} />}>
+      <span>{quoteToken.symbol}</span>
+    </Tooltip>
+  </span>
 );
 
 export const SuspiciousToken = () => (
