@@ -18,30 +18,28 @@ export const NotificationPreferences = () => {
   };
 
   return (
-    <form className="mt-24">
-      <div className="rounded-sm flex border border-white/10 px-16 py-8">
-        <h3
-          id="global-notif-label"
-          className="text-16 flex flex-1 items-center gap-8"
+    <form className="rounded-sm flex items-center gap-8 border border-white/10 px-16 py-8 bg-main-600/40">
+      <h3
+        id="global-notif-label"
+        className="text-16 flex flex-1 items-center gap-8 font-normal"
+      >
+        <IconGear className="size-18 shrink-0 hidden md:block" />
+        Receive notifications
+      </h3>
+      <RadioGroup className="shrink-0 p-2" aria-labelledby="global-notif-label">
+        <Radio
+          checked={preferences?.global !== false}
+          onChange={() => setGlobal(true)}
         >
-          <IconGear className="size-18" />
-          Receive general notifications
-        </h3>
-        <RadioGroup aria-labelledby="global-notif-label">
-          <Radio
-            checked={preferences?.global !== false}
-            onChange={() => setGlobal(true)}
-          >
-            On
-          </Radio>
-          <Radio
-            checked={preferences?.global === false}
-            onChange={() => setGlobal(false)}
-          >
-            Off
-          </Radio>
-        </RadioGroup>
-      </div>
+          On
+        </Radio>
+        <Radio
+          checked={preferences?.global === false}
+          onChange={() => setGlobal(false)}
+        >
+          Off
+        </Radio>
+      </RadioGroup>
     </form>
   );
 };

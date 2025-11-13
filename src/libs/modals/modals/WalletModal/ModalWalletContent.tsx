@@ -1,8 +1,7 @@
-import { FC, useState } from 'react';
+import { FC, useId, useState } from 'react';
 import { NewTabLink, Link } from 'libs/routing';
 import { Connector, useWagmi } from 'libs/wagmi';
 import { Imager } from 'components/common/imager/Imager';
-import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import iconLedger from 'assets/logos/ledger.svg';
 import iconTrezor from 'assets/logos/trezor.svg';
 import { WalletIcon } from 'components/common/WalletIcon';
@@ -31,6 +30,7 @@ const EXT_LINKS = [
 
 export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
   const [checked, setChecked] = useState(false);
+  const checkoxId = useId();
 
   const { connectors } = useWagmi();
 
@@ -55,10 +55,14 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
           of this site.{' '}
         </p>
         <div className="flex items-center gap-8">
-          <Checkbox isChecked={checked} setIsChecked={setChecked} />
-          <button onClick={() => setChecked((prev) => !prev)}>
-            I read and accept
-          </button>
+          <input
+            id={checkoxId}
+            className="size-18 shrink-0"
+            type="checkbox"
+            checked={checked}
+            onChange={() => setChecked((v) => !v)}
+          />
+          <label htmlFor={checkoxId}>I read and accept</label>
         </div>
       </div>
 
@@ -66,6 +70,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
         return (
           <button
             key={c.uid}
+            type="button"
             onClick={() => onClick(c)}
             className={buttonClasses}
             disabled={isDisabled}

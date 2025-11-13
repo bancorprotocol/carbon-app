@@ -1,15 +1,23 @@
-import { MouseEvent, RefObject, useEffect, useRef } from 'react';
+import { MouseEvent, RefObject, useCallback, useEffect, useRef } from 'react';
+
+interface OpenOptions {
+  autofocus?: boolean;
+}
 
 export const useDialog = () => {
   const ref = useRef<HTMLDialogElement>(null);
-  const open = () => {
+
+  const open = useCallback((options: OpenOptions = {}) => {
     ref.current!.showModal();
     // Remove auto focus if needed
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
+    if (options.autofocus === false) {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
     }
-  };
-  const close = async () => {
+  }, []);
+
+  const close = useCallback(async () => {
     if (!ref.current) return;
     if (navigator.webdriver) return ref.current.close();
     // Because of Safari we cannot use native transition
@@ -21,10 +29,14 @@ export const useDialog = () => {
     ]);
     ref.current.close();
     ref.current?.classList.remove('closing');
-  };
-  const lightDismiss = (e: MouseEvent<HTMLDialogElement>) => {
-    if (e.target === e.currentTarget) close();
-  };
+  }, []);
+
+  const lightDismiss = useCallback(
+    (e: MouseEvent<HTMLDialogElement>) => {
+      if (e.target === e.currentTarget) close();
+    },
+    [close],
+  );
 
   return {
     ref,

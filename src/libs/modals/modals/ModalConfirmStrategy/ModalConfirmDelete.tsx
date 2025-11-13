@@ -1,6 +1,6 @@
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import { useModal } from 'hooks/useModal';
-import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
+import { Modal } from '../../Modal';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
 
@@ -46,11 +46,8 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   const editPrices = () => closeModal(id);
 
   return (
-    <ModalOrMobileSheet
-      id={id}
-      title="Delete Strategy"
-      className="md:max-w-450"
-    >
+    <Modal id={id} className="grid gap-16">
+      <h2>Delete Strategy</h2>
       <IconTitleText
         variant="error"
         icon={<IconTrash className="size-24" />}
@@ -77,7 +74,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       )}
 
       <Button
-        variant="secondary"
+        variant="white"
         onClick={onClick}
         loading={isPending}
         loadingChildren={loadingChildren}
@@ -85,6 +82,6 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       >
         Delete Strategy
       </Button>
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

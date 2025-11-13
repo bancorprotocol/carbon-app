@@ -1,7 +1,7 @@
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { Modal } from 'libs/modals/Modal';
 import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
 
 export type ModalWithdrawOrDeleteData = {
@@ -16,15 +16,13 @@ export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
   const { closeModal } = useModal();
 
   return (
-    <ModalOrMobileSheet id={id}>
-      <div className="my-20">
-        <IconTitleText
-          variant="error"
-          icon={<IconDelete />}
-          title="This strategy will become inactive once the budget is removed"
-          text="Delete this strategy to keep things tidy"
-        />
-      </div>
+    <Modal id={id} className="grid gap-16">
+      <IconTitleText
+        variant="error"
+        icon={<IconDelete />}
+        title="This strategy will become inactive once the budget is removed"
+        text="Delete this strategy to keep things tidy"
+      />
       <button
         className="btn-primary-gradient"
         onClick={() => {
@@ -43,6 +41,6 @@ export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
       >
         Withdraw Only
       </button>
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

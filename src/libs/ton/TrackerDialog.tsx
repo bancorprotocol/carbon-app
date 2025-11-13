@@ -22,7 +22,7 @@ export const TrackerDialog = ({ opened, setOpened, progress }: Props) => {
   }, [close, open, opened]);
 
   return (
-    <dialog ref={ref} className="modal">
+    <dialog ref={ref} className="modal center">
       <form method="dialog" className="grid gap-24 relative overflow-clip">
         <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
         <h3>Transaction Progress</h3>

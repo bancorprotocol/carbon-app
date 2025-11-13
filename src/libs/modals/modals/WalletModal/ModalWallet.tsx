@@ -4,7 +4,7 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { useWagmi, Connector } from 'libs/wagmi';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { Modal } from 'libs/modals/Modal';
 import { useStore } from 'store';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
@@ -25,8 +25,13 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
       if (isCountryBlocked || isCountryBlocked === null) {
         throw new Error('Your country is restricted from using this app.');
       }
-      await connect(c);
-      closeModal(id);
+      if (c.id === 'walletConnect') {
+        closeModal(id);
+        await connect(c);
+      } else {
+        await connect(c);
+        closeModal(id);
+      }
     } catch (e: any) {
       setConnectionError(e.message || 'Unknown connection error.');
     }
@@ -38,7 +43,11 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   };
 
   return (
-    <ModalOrMobileSheet id={id} title="Connect Wallet" isPending={isPending}>
+    <Modal id={id} className="overflow-clip">
+      {isPending && (
+        <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
+      )}
+      <h2>Connect Wallet</h2>
       {isError ? (
         <div className="flex flex-col items-center gap-16">
           <ModalWalletError
@@ -51,6 +60,6 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
       ) : (
         <ModalWalletContent onClick={onClickConnect} isPending={isPending} />
       )}
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

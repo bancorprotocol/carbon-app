@@ -7,9 +7,26 @@ import { ModalSchema } from 'libs/modals/modals';
 export const useModal = () => {
   const {
     isCountryBlocked,
-    modals: { setModalsOpen, modals, setModalsMinimized, activeModalId },
+    modals: { setModalsOpen, modals },
   } = useStore();
-  const { open: modalsOpen, minimized: modalsMinimized } = modals;
+  const { open: modalsOpen } = modals;
+
+  const removeModal = useCallback(
+    (id: string) => {
+      const index = modalsOpen.findIndex((modal) => modal.id === id);
+      if (index > -1) {
+        const copy = [...modalsOpen];
+        copy.splice(index, 1);
+        setModalsOpen(copy);
+      }
+    },
+    [modalsOpen, setModalsOpen],
+  );
+
+  const closeModal = useCallback((id: string) => {
+    // trigger lightdismiss
+    document.getElementById(id)?.click();
+  }, []);
 
   const openModal = useCallback(
     <T extends ModalKey>(key: T, data: ModalSchema[T]) => {
@@ -22,49 +39,16 @@ export const useModal = () => {
           return;
         }
       }
-      setModalsOpen((prevState) => [...prevState, { id: uuid(), key, data }]);
+      const id = uuid();
+      setModalsOpen((prevState) => [...prevState, { id, key, data }]);
     },
-    [isCountryBlocked, setModalsOpen],
+    [setModalsOpen, isCountryBlocked],
   );
-
-  const closeModal = useCallback(
-    (id: string) => {
-      const index = modalsOpen.findIndex((modal) => modal.id === id);
-      if (index > -1) {
-        const newModals = [...modalsOpen];
-        newModals.splice(index, 1);
-        setModalsOpen(newModals);
-      }
-    },
-    [modalsOpen, setModalsOpen],
-  );
-
-  const minimizeModal = (id: string) => {
-    const index = modalsOpen.findIndex((modal) => modal.id === id);
-    if (index > -1) {
-      const newModals = [...modalsOpen];
-      const modalFound = newModals.splice(index, 1);
-      setModalsOpen(newModals);
-      setModalsMinimized((prevState) => [...prevState, modalFound[0]!]);
-    }
-  };
-
-  const maximizeModal = (id: string) => {
-    const index = modalsMinimized.findIndex((modal) => modal.id === id);
-    if (index > -1) {
-      const newModals = [...modalsMinimized];
-      const modalFound = newModals.splice(index, 1);
-      setModalsMinimized(newModals);
-      setModalsOpen((prevState) => [...prevState, modalFound[0]!]);
-    }
-  };
 
   return {
     modals,
     openModal,
     closeModal,
-    activeModalId,
-    minimizeModal,
-    maximizeModal,
+    removeModal,
   };
 };

@@ -1,14 +1,14 @@
 import { useBurgerMenuItems } from 'components/core/menu/mainMenu/MainMenuRightBurger/useBurgerMenuItems';
 import { ModalFC } from 'libs/modals/modals.types';
-import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
+import { Modal } from '../Modal';
 
 export const ModalBurgerMenu: ModalFC<undefined> = ({ id }) => {
   const menu = useBurgerMenuItems();
   return (
-    <ModalSlideOver id={id}>
+    <Modal id={id} placement="side" className="grid content-start">
       <div role="menu" className="grid">
         {menu}
       </div>
-    </ModalSlideOver>
+    </Modal>
   );
 };

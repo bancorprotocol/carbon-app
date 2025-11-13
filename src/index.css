@@ -301,33 +301,56 @@ input[type='search']::-webkit-search-cancel-button {
 
 /* Modal */
 dialog.modal {
-  margin: auto;
   background-color: transparent;
 }
 
-dialog.modal > form {
-  @apply surface backdrop-blur-xs;
-  border-radius: 16px;
-  padding: 24px;
-  max-width: 390px;
+dialog.modal.center {
+  margin: auto;
 }
+
+dialog.modal.side {
+  margin-inline-start: auto;
+  margin-block: 0;
+  height: 100dvh;
+  max-height: unset;
+}
+
+dialog.modal > * {
+  @apply surface backdrop-blur-xs;
+  padding: 24px;
+  width: 500px;
+}
+
+dialog.modal.center > * {
+  border-radius: 16px;
+}
+
+dialog.modal.side > * {
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+  height: 100dvh;
+}
+
 dialog.modal::backdrop {
   @apply bg-main-900/85;
 }
 
 @media (max-width: 640px) {
-  dialog.modal {
-    width: 100dvw;
+  dialog.modal.center {
+    max-width: unset; /* Override browser max width */
     margin: auto; /* Force margin for Safari */
     margin-bottom: 0;
+    margin-inline: 0;
     background-color: unset;
   }
-  dialog.modal > form  {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+  dialog.modal > *  {
     padding: 16px;
     padding-bottom: 24px;
-    max-width: unset;
+    width: unset;
+  }
+  dialog.modal.center > * {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }
 
@@ -335,10 +358,19 @@ dialog.modal::backdrop {
 dialog.modal,
 dialog.modal::backdrop {
   animation-duration: 0.5s;
+}
+dialog.modal.center {
   animation-timing-function: var(--ease-back-in-out);
 }
-dialog.modal[open] {
-  animation-name: modal-entry;
+dialog.modal.side,
+dialog.modal::backdrop {
+  animation-timing-function: var(--ease-in-out);
+}
+dialog.modal.center[open] {
+  animation-name: modal-center-entry;
+}
+dialog.modal.side[open] {
+  animation-name: modal-side-entry;
 }
 dialog.modal[open]::backdrop {
   animation-name: fade;
@@ -347,13 +379,16 @@ dialog.modal.closing::backdrop {
   animation-name: fadeout;
   animation-fill-mode: forwards;
 }
-dialog.modal.closing {
-  animation-name: modal-leave;
+dialog.modal.closing.center {
+  animation-name: modal-center-leave;
+  animation-fill-mode: forwards;
+}
+dialog.modal.closing.side {
+  animation-name: modal-side-leave;
   animation-fill-mode: forwards;
 }
 @media (max-width: 640px) {
-  dialog.modal,
-  dialog.modal::backdrop {
+  dialog.modal {
     animation-timing-function: var(--ease-in-out);
   }
   dialog.modal[open] {
@@ -363,10 +398,16 @@ dialog.modal.closing {
     animation-name: modal-sm-leave;
   }
 }
-@keyframes modal-entry {
+@keyframes modal-center-entry {
   0% {
     opacity: 0;
     transform: translateY(100px);
+  }
+}
+@keyframes modal-side-entry {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
   }
 }
 @keyframes modal-sm-entry {
@@ -382,10 +423,16 @@ dialog.modal.closing {
     opacity: 0;
   }
 }
-@keyframes modal-leave {
+@keyframes modal-center-leave {
   100% {
     opacity: 0;
     transform: scale(0.8);
+  }
+}
+@keyframes modal-side-leave {
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
   }
 }
 @keyframes modal-sm-leave {

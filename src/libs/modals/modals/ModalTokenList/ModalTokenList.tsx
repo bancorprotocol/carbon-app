@@ -8,8 +8,7 @@ import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTo
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalTokenImportNotification } from 'libs/modals/modals/ModalTokenList/ModalTokenImportNotification';
 import { SearchInput } from 'components/common/searchInput';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
-import { useBreakpoints } from 'hooks/useBreakpoints';
+import { Modal } from 'libs/modals/Modal';
 import { KeyboardEvent } from 'react';
 
 export type ModalTokenListData = {
@@ -20,8 +19,6 @@ export type ModalTokenListData = {
 };
 
 export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
-  const { belowBreakpoint } = useBreakpoints();
-
   const {
     search,
     setSearch,
@@ -45,11 +42,10 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   };
 
   return (
-    <ModalOrMobileSheet id={id} title="Select Token" className="md:max-w-500">
+    <Modal id={id} className="grid content-start gap-16 md:w-500 h-[70vh]">
+      <h2>Select Token</h2>
       <SearchInput
-        aria-labelledby="modal-title"
-        aria-description="search by token symbol"
-        autoFocus={!belowBreakpoint('md')}
+        aria-label="search by token symbol"
         value={search}
         setValue={setSearch}
         className="rounded-md"
@@ -79,6 +75,6 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
           onRemoveFavorite={removeFavoriteToken}
         />
       )}
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

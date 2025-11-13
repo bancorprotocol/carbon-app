@@ -5,7 +5,7 @@ import { Button } from 'components/common/button';
 import { usePauseStrategy } from 'components/strategies/usePauseStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { Modal } from 'libs/modals/Modal';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 
 export type ModalConfirmPauseData = {
@@ -34,7 +34,8 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
   const loadingChildren = getStatusTextByTxStatus(isPending, isProcessing);
 
   return (
-    <ModalOrMobileSheet id={id} title="Pause Strategy" className="md:max-w-450">
+    <Modal id={id} className="grid gap-16">
+      <h2>Pause Strategy</h2>
       <IconTitleText
         icon={<IconPause className="size-24" />}
         title="Are you sure you would like to pause your strategy?"
@@ -51,13 +52,9 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
       >
         Pause Strategy
       </Button>
-      <button
-        onClick={() => closeModal(id)}
-        disabled={isLoading}
-        className="btn-on-surface text-16"
-      >
+      <button disabled={isLoading} className="btn-on-surface text-16">
         Cancel
       </button>
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

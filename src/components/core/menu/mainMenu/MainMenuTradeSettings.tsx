@@ -80,12 +80,17 @@ export const MainMenuTradeSettings = () => {
         aria-label="Trade settings"
         aria-haspopup="dialog"
         aria-controls={dialogId}
-        onClick={open}
+        onClick={() => open({ autofocus: false })}
       >
         <span className="text-white/60 text-14">{slippage}%</span>
         <IconCog className="size-18" />
       </button>
-      <dialog ref={ref} id={dialogId} className="modal" onClick={lightDismiss}>
+      <dialog
+        ref={ref}
+        id={dialogId}
+        className="modal center"
+        onClick={lightDismiss}
+      >
         <form
           method="dialog"
           className={cn(style.form, 'grid gap-40 md:min-w-[440px]')}

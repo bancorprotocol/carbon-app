@@ -8,7 +8,6 @@ interface Props extends InputProps {
   value: string;
   setValue: (value: string) => void;
   className?: string;
-  autoFocus?: boolean;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
 }
 
@@ -16,7 +15,6 @@ export const SearchInput = ({
   value,
   setValue,
   className,
-  autoFocus,
   ...inputProps
 }: Props) => {
   return (
@@ -29,7 +27,7 @@ export const SearchInput = ({
       <IconSearch className="text-white-disabled w-16" />
       <input
         {...inputProps}
-        autoFocus={autoFocus}
+        name="search"
         type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -45,6 +43,7 @@ export const SearchInput = ({
       />
       {value.length > 0 && (
         <button
+          type="button"
           aria-label="clear search"
           data-testid="clear-search"
           onClick={() => setValue('')}

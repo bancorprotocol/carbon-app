@@ -14,11 +14,7 @@ export const MainMenuRightWalkthrough: FC = () => {
     if (currentBreakpoint === 'sm' || !config.ui.walkthroughId) return;
     const hasWalkthrough = lsService.getItem('hasWalkthrough');
     if (!hasWalkthrough) {
-      open();
-      // Need to force focus to prevent race focus on browser start
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur();
-      }
+      open({ autofocus: false });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -63,7 +59,7 @@ export const MainMenuRightWalkthrough: FC = () => {
           <IconWalkthrough className="place-self-center size-20" />
         </button>
       </Tooltip>
-      <dialog ref={ref} className="modal" onClick={lightDismiss}>
+      <dialog ref={ref} className="modal center" onClick={lightDismiss}>
         <form
           method="dialog"
           className="grid gap-24 place-items-center"
