@@ -52,7 +52,11 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
       >
         Pause Strategy
       </Button>
-      <button disabled={isLoading} className="btn-on-surface text-16">
+      <button
+        onClick={() => closeModal(id)}
+        disabled={isLoading}
+        className="btn-on-surface text-16"
+      >
         Cancel
       </button>
     </Modal>
