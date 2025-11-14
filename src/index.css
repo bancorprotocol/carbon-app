@@ -316,7 +316,7 @@ dialog.modal.side {
 }
 
 dialog.modal > * {
-  @apply surface backdrop-blur-xs;
+  @apply glass-shadow bg-main-800;
   padding: 24px;
   width: 500px;
 }

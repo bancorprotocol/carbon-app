@@ -25,6 +25,7 @@ export const Modal: FC<ModalProps> = ({ children, ...props }) => {
       ref={ref}
       onClick={lightDismiss}
       onClose={onClose}
+      data-testid="modal-container"
     >
       <div className={className}>{children}</div>
     </dialog>
