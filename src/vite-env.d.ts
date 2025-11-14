@@ -9,7 +9,7 @@ interface ImportMetaEnv {
   readonly VITE_TENDERLY_ACCESS_KEY: string;
   readonly SENTRY_ORG: string;
   readonly SENTRY_PROJECT: string;
-  readonly SENTRY_APPLICATION_KEY: string;
+  readonly VITE_SENTRY_APPLICATION_KEY: string;
   readonly SENTRY_AUTH_TOKEN: string;
 }
 

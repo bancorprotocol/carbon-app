@@ -10,7 +10,7 @@ if (config.sentryDSN) {
       Sentry.captureConsoleIntegration({ levels: ['error'] }),
       Sentry.thirdPartyErrorFilterIntegration({
         filterKeys: [
-          import.meta.env.SENTRY_APPLICATION_KEY ||
+          import.meta.env.VITE_SENTRY_APPLICATION_KEY ||
             'custom_application_key_carbon_app',
         ],
         behaviour: 'drop-error-if-contains-third-party-frames',
