@@ -40,7 +40,8 @@ export class MyStrategyDriver {
     const selector = `[data-testid="strategy-list"] > li:nth-child(${index})`;
     const strategy = this.page.locator(selector);
     return {
-      pair: () => strategy.getByTestId('token-pair'),
+      pairBase: () => strategy.getByTestId('pair-base'),
+      pairQuote: () => strategy.getByTestId('pair-quote'),
       status: () => strategy.getByTestId('status'),
       totalBudget: () => strategy.getByTestId('total-budget'),
       budget: (direction: Direction) => {

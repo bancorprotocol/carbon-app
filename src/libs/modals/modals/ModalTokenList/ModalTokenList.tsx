@@ -9,7 +9,8 @@ import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalToke
 import { ModalTokenImportNotification } from 'libs/modals/modals/ModalTokenList/ModalTokenImportNotification';
 import { SearchInput } from 'components/common/searchInput';
 import { Modal } from 'libs/modals/Modal';
-import { KeyboardEvent } from 'react';
+import { KeyboardEvent, useCallback } from 'react';
+import { useStore } from 'store';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
@@ -20,14 +21,15 @@ export type ModalTokenListData = {
 
 export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   const {
+    tokens: { isError, isPending },
+  } = useStore();
+  const {
     search,
     setSearch,
     showImportToken,
     showNoResults,
     filteredTokens,
     onSelect,
-    isError,
-    isPending,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
@@ -35,17 +37,20 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
     duplicateSymbols,
   } = useModalTokenList({ id, data });
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' && !!filteredTokens.length) {
-      onSelect(filteredTokens[0]);
-    }
-  };
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !!filteredTokens.length) {
+        onSelect(filteredTokens[0]);
+      }
+    },
+    [filteredTokens, onSelect],
+  );
 
   return (
     <Modal id={id} className="grid content-start gap-16 md:w-500 h-[70vh]">
-      <h2>Select Token</h2>
+      <h2 id="modal-title">Select Token</h2>
       <SearchInput
-        aria-label="search by token symbol"
+        aria-labelledby="modal-title"
         value={search}
         setValue={setSearch}
         className="rounded-md"

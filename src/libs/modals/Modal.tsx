@@ -1,5 +1,5 @@
 import { ModalProps } from 'libs/modals/modals.types';
-import { FC, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useDialog } from 'hooks/useDialog';
 import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
@@ -13,10 +13,10 @@ export const Modal: FC<ModalProps> = ({ children, ...props }) => {
     open();
   }, [open]);
 
-  const onClose = () => {
+  const onClose = useCallback(() => {
     props.onClose?.(id);
     removeModal(id);
-  };
+  }, [id, props, removeModal]);
 
   return (
     <dialog

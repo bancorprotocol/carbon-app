@@ -102,12 +102,17 @@ export const getMissingTokens = async (
     getTokens.push(getToken(address));
   }
   const tokens: Token[] = [];
-  const responses = await Promise.allSettled(getTokens);
-  for (const res of responses) {
-    if (res.status === 'fulfilled') {
-      tokens.push(res.value);
-    } else {
-      console.error(res.reason);
+  const step = 100;
+  for (let i = 0; i < getTokens.length; i += step) {
+    const max = Math.min(i + step, getTokens.length);
+    const batch = getTokens.slice(i, max);
+    const responses = await Promise.allSettled(batch);
+    for (const res of responses) {
+      if (res.status === 'fulfilled') {
+        tokens.push(res.value);
+      } else {
+        console.error(res.reason);
+      }
     }
   }
   return tokens;
