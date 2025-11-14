@@ -1,7 +1,6 @@
 import * as Sentry from '@sentry/react';
 import config from 'config';
 import { router } from 'libs/routing';
-import { env } from 'process';
 
 if (config.sentryDSN) {
   Sentry.init({
@@ -11,7 +10,8 @@ if (config.sentryDSN) {
       Sentry.captureConsoleIntegration({ levels: ['error'] }),
       Sentry.thirdPartyErrorFilterIntegration({
         filterKeys: [
-          env.SENTRY_APPLICATION_KEY || 'custom_application_key_carbon_app',
+          import.meta.env.SENTRY_APPLICATION_KEY ||
+            'custom_application_key_carbon_app',
         ],
         behaviour: 'drop-error-if-contains-third-party-frames',
       }),
