@@ -47,6 +47,9 @@ const getCheckResponse = (value: boolean) => {
     status: 200,
     headers: {
       'content-type': 'application/json',
+      'Cache-Control': 'no-store, no-cache, max-age=0, must-revalidate',
+      Expires: '0',
+      Pragma: 'no-cache',
     },
   });
 };
