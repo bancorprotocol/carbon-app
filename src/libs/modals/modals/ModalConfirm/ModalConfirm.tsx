@@ -22,8 +22,8 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
       <ModalHeader id={id}>
         <h2>Confirm Transaction</h2>
       </ModalHeader>
-      <h3 className="text-14 my-10 text-white/60">Approve Tokens</h3>
-      <ul className="grid gap-20">
+      <h3 className="text-14 text-white/60">Approve Tokens</h3>
+      <ul className="grid gap-8">
         {approvalQuery.map(({ data, isPending, error }, i) => (
           <li key={i}>
             <ApproveToken data={data} isPending={isPending} error={error} />

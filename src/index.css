@@ -323,6 +323,7 @@ dialog.modal > * {
 
 dialog.modal.center > * {
   border-radius: 16px;
+  max-height: 70dvh;
 }
 
 dialog.modal.side > * {

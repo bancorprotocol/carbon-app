@@ -106,11 +106,11 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   };
 
   return (
-    <Modal id={id} className="grid gap-16">
+    <Modal id={id} className="grid gap-16 grid-rows-[auto_1fr]">
       <ModalHeader id={id}>
         <h2>Trade Routing</h2>
       </ModalHeader>
-      <form className="flex max-h-[inherit] flex-col gap-20" onSubmit={submit}>
+      <form className="grid gap-16 overflow-auto" onSubmit={submit}>
         <div
           role="group"
           aria-labelledby="routing-table"
