@@ -3,8 +3,7 @@ import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { useNotifications } from 'hooks/useNotifications';
 import { useModal } from 'hooks/useModal';
 import { NotificationPreferences } from 'libs/notifications/NotificationPreferences';
-import { Modal } from '../Modal';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import { Modal, ModalHeader } from '../Modal';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
   const { notifications, clearNotifications, removeNotification } =
@@ -14,15 +13,15 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
 
   return (
     <Modal id={id} placement="side" className="grid content-start gap-16">
-      <header className="flex items-center justify-between gap-16">
-        Notifications
-        <button onClick={() => clearNotifications()} className="ms-auto">
+      <ModalHeader id={id} className="grid-cols-[auto_1fr_auto]">
+        <h2>Notifications</h2>
+        <button
+          onClick={() => clearNotifications()}
+          className="justify-self-end"
+        >
           Clear All
         </button>
-        <button onClick={() => closeModal(id)}>
-          <IconClose className="size-16" />
-        </button>
-      </header>
+      </ModalHeader>
       <NotificationPreferences />
       <ul className="grid gap-16">
         {reversedNotifications.map((n) => (

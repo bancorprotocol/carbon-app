@@ -10,6 +10,12 @@ export interface ModalProps {
   'data-testid'?: string;
 }
 
+export interface ModalHeaderProps {
+  id: string;
+  children?: ReactNode;
+  className?: string;
+}
+
 export type TModals = {
   [key in keyof ModalSchema]: FC<{ id: string; data: ModalSchema[key] }>;
 };

@@ -23,7 +23,7 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
       case 'success':
         return 'text-primary bg-primary/25';
       default:
-        return 'bg-main-800';
+        return 'bg-main-700';
     }
   };
 
@@ -33,7 +33,7 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
     <div className="flex flex-col items-center">
       <div
         className={cn(
-          'p-18 flex size-60 items-center justify-center rounded-full',
+          'grid place-items-center size-60 rounded-full',
           variantClass,
         )}
       >

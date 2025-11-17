@@ -4,7 +4,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconError } from 'assets/icons/times.svg';
 import { ReactNode, useMemo } from 'react';
 import { useModal } from 'hooks/useModal';
-import { Modal } from 'libs/modals/Modal';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 
 export type ModalGenericInfoData = {
   title: string;
@@ -33,6 +33,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
 
   return (
     <Modal id={id} className="grid gap-16">
+      <ModalHeader id={id} />
       <div>
         <IconTitleText
           variant={variant}

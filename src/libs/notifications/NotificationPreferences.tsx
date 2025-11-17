@@ -24,7 +24,7 @@ export const NotificationPreferences = () => {
         className="text-16 flex flex-1 items-center gap-8 font-normal"
       >
         <IconGear className="size-18 shrink-0 hidden md:block" />
-        Receive notifications
+        Receive general notifications
       </h3>
       <RadioGroup className="shrink-0 p-2" aria-labelledby="global-notif-label">
         <Radio

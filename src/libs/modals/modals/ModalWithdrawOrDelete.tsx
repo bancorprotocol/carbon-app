@@ -1,7 +1,7 @@
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { Modal } from 'libs/modals/Modal';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
 
 export type ModalWithdrawOrDeleteData = {
@@ -17,6 +17,7 @@ export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
 
   return (
     <Modal id={id} className="grid gap-16">
+      <ModalHeader id={id} />
       <IconTitleText
         variant="error"
         icon={<IconDelete />}

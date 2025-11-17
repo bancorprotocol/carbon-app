@@ -1,6 +1,6 @@
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import { useModal } from 'hooks/useModal';
-import { Modal } from '../../Modal';
+import { Modal, ModalHeader } from '../../Modal';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
 
@@ -47,7 +47,9 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
 
   return (
     <Modal id={id} className="grid gap-16">
-      <h2>Delete Strategy</h2>
+      <ModalHeader id={id}>
+        <h2>Delete Strategy</h2>
+      </ModalHeader>
       <IconTitleText
         variant="error"
         icon={<IconTrash className="size-24" />}

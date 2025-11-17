@@ -4,7 +4,7 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { useWagmi, Connector } from 'libs/wagmi';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
-import { Modal } from 'libs/modals/Modal';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { useStore } from 'store';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
@@ -47,7 +47,9 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
       {isPending && (
         <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
       )}
-      <h2>Connect Wallet</h2>
+      <ModalHeader id={id}>
+        <h2>Connect Wallet</h2>
+      </ModalHeader>
       {isError ? (
         <div className="flex flex-col items-center gap-16">
           <ModalWalletError

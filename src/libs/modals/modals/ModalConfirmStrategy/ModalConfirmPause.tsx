@@ -5,7 +5,7 @@ import { Button } from 'components/common/button';
 import { usePauseStrategy } from 'components/strategies/usePauseStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
-import { Modal } from 'libs/modals/Modal';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 
 export type ModalConfirmPauseData = {
@@ -35,7 +35,9 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
 
   return (
     <Modal id={id} className="grid gap-16">
-      <h2>Pause Strategy</h2>
+      <ModalHeader id={id}>
+        <h2>Pause Strategy</h2>
+      </ModalHeader>
       <IconTitleText
         icon={<IconPause className="size-24" />}
         title="Are you sure you would like to pause your strategy?"

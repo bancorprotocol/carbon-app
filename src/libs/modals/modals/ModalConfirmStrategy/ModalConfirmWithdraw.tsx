@@ -1,5 +1,5 @@
 import { useModal } from 'hooks/useModal';
-import { Modal } from '../../Modal';
+import { Modal, ModalHeader } from '../../Modal';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
 import { Strategy } from 'components/strategies/common/types';
@@ -27,7 +27,9 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
 
   return (
     <Modal id={id} className="grid gap-16">
-      <h2>Withdraw Funds</h2>
+      <ModalHeader id={id}>
+        <h2>Withdraw Funds</h2>
+      </ModalHeader>
       <IconTitleText
         icon={<IconWallet className="size-24" />}
         title="Are you sure you would like to withdraw your funds?"

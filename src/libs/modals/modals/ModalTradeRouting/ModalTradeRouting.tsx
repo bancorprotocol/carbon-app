@@ -9,7 +9,7 @@ import { MatchActionBNStr } from '@bancor/carbon-sdk/';
 import { useModalTradeRouting } from './useModalTradeRouting';
 import { ModalTradeRoutingRow } from './ModalTradeRoutingRow';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
-import { Modal } from '../../Modal';
+import { Modal, ModalHeader } from '../../Modal';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { SafeDecimal } from 'libs/safedecimal';
 
@@ -107,7 +107,9 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
 
   return (
     <Modal id={id} className="grid gap-16">
-      <h2>Trade Routing</h2>
+      <ModalHeader id={id}>
+        <h2>Trade Routing</h2>
+      </ModalHeader>
       <form className="flex max-h-[inherit] flex-col gap-20" onSubmit={submit}>
         <div
           role="group"

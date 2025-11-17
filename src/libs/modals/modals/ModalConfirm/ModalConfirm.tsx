@@ -2,7 +2,7 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { ApproveToken } from 'components/common/approval';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { Modal } from 'libs/modals/Modal';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
@@ -19,7 +19,9 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
 
   return (
     <Modal id={id} data-testid="approval-modal" className="grid gap-16">
-      <h2>Confirm Transaction</h2>
+      <ModalHeader id={id}>
+        <h2>Confirm Transaction</h2>
+      </ModalHeader>
       <h3 className="text-14 my-10 text-white/60">Approve Tokens</h3>
       <ul className="grid gap-20">
         {approvalQuery.map(({ data, isPending, error }, i) => (

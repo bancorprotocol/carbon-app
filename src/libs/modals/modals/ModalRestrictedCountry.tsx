@@ -2,7 +2,7 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { lsService } from 'services/localeStorage';
-import { Modal } from 'libs/modals/Modal';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { useCallback } from 'react';
 
 export const ModalRestrictedCountry: ModalFC<undefined> = ({ id }) => {
@@ -12,6 +12,7 @@ export const ModalRestrictedCountry: ModalFC<undefined> = ({ id }) => {
 
   return (
     <Modal id={id} onClose={onClose} className="grid gap-16">
+      <ModalHeader id={id} />
       <IconTitleText
         variant="warning"
         icon={<IconWarning />}

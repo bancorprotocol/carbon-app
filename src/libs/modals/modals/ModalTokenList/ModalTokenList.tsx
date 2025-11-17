@@ -8,7 +8,7 @@ import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTo
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalTokenImportNotification } from 'libs/modals/modals/ModalTokenList/ModalTokenImportNotification';
 import { SearchInput } from 'components/common/searchInput';
-import { Modal } from 'libs/modals/Modal';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { KeyboardEvent, useCallback } from 'react';
 import { useStore } from 'store';
 
@@ -48,7 +48,9 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
 
   return (
     <Modal id={id} className="grid content-start gap-16 md:w-500 h-[70vh]">
-      <h2 id="modal-title">Select Token</h2>
+      <ModalHeader id={id}>
+        <h2 id="modal-title">Select Token</h2>
+      </ModalHeader>
       <SearchInput
         aria-labelledby="modal-title"
         value={search}

@@ -8,7 +8,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { NewTabLink } from 'libs/routing';
-import { Modal } from 'libs/modals/Modal';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 
 export type ModalImportTokenData = {
   address: string;
@@ -32,7 +32,9 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
 
   return (
     <Modal id={id} className="grid gap-16">
-      <h2>Import Token</h2>
+      <ModalHeader id={id}>
+        <h2>Import Token</h2>
+      </ModalHeader>
       <div className="mt-40">
         <IconTitleText
           variant="warning"

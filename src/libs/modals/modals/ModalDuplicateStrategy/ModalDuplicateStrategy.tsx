@@ -3,7 +3,7 @@ import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
-import { Modal } from 'libs/modals/Modal';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { StaticOrder, Strategy } from 'components/strategies/common/types';
 import { getUndercutStrategy } from './utils';
 import {
@@ -104,7 +104,9 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
 
   return (
     <Modal id={id} className="grid gap-16">
-      <h2>Duplicate Strategy</h2>
+      <ModalHeader id={id}>
+        <h2>Duplicate Strategy</h2>
+      </ModalHeader>
       <h3 className="text-14 font-normal text-white/60">Select your option.</h3>
 
       {duplicateOptions.map(
