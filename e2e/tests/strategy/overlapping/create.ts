@@ -52,7 +52,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
 
     // Verify strategy data
     const strategies = myStrategies.getAllStrategies();
-    await expect(strategies).toHaveCount(1, { timeout: 20_000 });
+    await expect(strategies).toHaveCount(1);
     const strategy = await myStrategies.getStrategy(1);
     await expect(strategy.pairBase()).toHaveText(base);
     await expect(strategy.pairQuote()).toHaveText(quote);
