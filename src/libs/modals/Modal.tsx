@@ -46,6 +46,7 @@ export const ModalHeader: FC<ModalHeaderProps> = ({
         className="justify-self-end"
         onClick={() => closeModal(id)}
         aria-label="close modal"
+        data-testid="modal-close"
       >
         <IconClose className="size-16" />
       </button>
