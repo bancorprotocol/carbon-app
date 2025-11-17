@@ -33,7 +33,7 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
     <div className="flex flex-col items-center">
       <div
         className={cn(
-          'grid place-items-center size-60 rounded-full',
+          'grid place-items-center size-60 rounded-full p-16',
           variantClass,
         )}
       >

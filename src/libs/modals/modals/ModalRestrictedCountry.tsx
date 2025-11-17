@@ -4,11 +4,14 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { lsService } from 'services/localeStorage';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { useCallback } from 'react';
+import { useModal } from 'hooks/useModal';
 
 export const ModalRestrictedCountry: ModalFC<undefined> = ({ id }) => {
+  const { closeModal } = useModal();
   const onClose = useCallback(() => {
+    closeModal(id);
     lsService.setItem('hasSeenRestrictedCountryModal', true);
-  }, []);
+  }, [closeModal, id]);
 
   return (
     <Modal id={id} onClose={onClose} className="grid gap-16">
