@@ -8,7 +8,7 @@ import { networks } from 'config';
 import { MainMenuCart } from './MainMenuCart';
 import { lsService } from 'services/localeStorage';
 import { Link } from '@tanstack/react-router';
-import { MainMenuRightWalkthrough } from './MainMenuRightWalkthrough';
+import { MainMenuRightReward } from './MainMenuRightRewards';
 import { TonConnectBtn } from 'libs/ton/TonConnect';
 import config from 'config';
 
@@ -46,7 +46,7 @@ export const MainMenuRight: FC = () => {
   return (
     <div className="flex items-center gap-8 sm:gap-16">
       <TenderlyForkAlert />
-      <MainMenuRightWalkthrough />
+      <MainMenuRightReward />
       {config.ui.showCart && <MainMenuCart />}
       <MainMenuRightNotifications />
       {config.network.name !== 'TON' && (

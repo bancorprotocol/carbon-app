@@ -50,14 +50,15 @@ export interface LocalStorageSchema {
   liquidityMatrix: Record<string, LiquidityMatrixSearch>;
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
-  hasWalkthrough: boolean;
   tacToTonAddress: Record<string, string>;
+  haveSeen: 'rewards'[];
 
   /* @deprecated */
   strategyOverviewFilter?: void;
   strategyOverviewSort?: void;
   tokenPairsCache: { pairs: TradePair[]; timestamp: number };
   tradePairsCategory: any;
+  hasWalkthrough: boolean;
 }
 
 enum EnumStrategySort {
