@@ -15,8 +15,8 @@ export const Modal: FC<ModalProps> = ({ children, ...props }) => {
   }, [open]);
 
   const onClose = useCallback(() => {
-    props.onClose?.(id);
     removeModal(id);
+    props.onClose?.(id);
   }, [id, props, removeModal]);
 
   return (
