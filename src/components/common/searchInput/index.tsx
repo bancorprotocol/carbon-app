@@ -1,4 +1,4 @@
-import { HTMLAttributes, KeyboardEventHandler } from 'react';
+import { HTMLAttributes, KeyboardEventHandler, useEffect, useRef } from 'react';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 import { cn } from 'utils/helpers';
@@ -17,6 +17,13 @@ export const SearchInput = ({
   className,
   ...inputProps
 }: Props) => {
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Force autofocus when dialog open: we need that because dialog don't support tabIndex
+    ref.current?.focus();
+  }, []);
+
   return (
     <div
       className={cn(
@@ -27,6 +34,7 @@ export const SearchInput = ({
       <IconSearch className="text-white-disabled w-16" />
       <input
         {...inputProps}
+        ref={ref}
         name="search"
         type="search"
         value={value}
