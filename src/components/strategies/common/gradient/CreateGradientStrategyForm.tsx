@@ -104,9 +104,8 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
         <>
           {config.ui.showCart && (
             <Button
-              className={cn(style.addCart, 'shrink-0')}
+              className={cn(style.addCart, 'btn-secondary-gradient shrink-0')}
               type="button"
-              variant="white"
               size="lg"
               fullWidth
               disabled={!!loadingText || animating}
