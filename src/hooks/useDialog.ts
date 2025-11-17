@@ -54,5 +54,5 @@ export const useOnDialogClose = (
     const dialog = ref.current;
     dialog?.addEventListener('close', cb);
     return () => dialog?.removeEventListener('close', cb);
-  });
+  }, [cb, ref]);
 };

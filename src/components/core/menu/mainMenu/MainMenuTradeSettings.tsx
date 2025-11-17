@@ -1,7 +1,7 @@
 import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { useStore } from 'store';
-import { FormEvent, useId, useState } from 'react';
+import { FormEvent, useCallback, useId, useState } from 'react';
 import { TradeSettingsData } from 'components/trade/settings/utils';
 import { TradeSettingsRow } from 'components/trade/settings/TradeSettingsRow';
 import { cn } from 'utils/helpers';
@@ -27,12 +27,14 @@ export const MainMenuTradeSettings = () => {
   const defaultSlippage = presets.slippage[0];
   const defaultDeadline = presets.deadline[1];
 
-  useOnDialogClose(ref, () => {
+  const initSettings = useCallback(() => {
     setTimeout(() => {
       setInternalSlippage(slippage);
       setInternalDeadline(deadline);
     }, 500); // Wait for animation to stop
-  });
+  }, [deadline, slippage]);
+
+  useOnDialogClose(ref, initSettings);
 
   const resetAll = (e: FormEvent) => {
     e.preventDefault();
