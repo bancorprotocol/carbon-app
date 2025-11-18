@@ -54,7 +54,8 @@ export const create = (testCase: CreateStrategyTestCase) => {
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);
     const strategy = await myStrategies.getStrategy(1);
-    await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
+    await expect(strategy.pairBase()).toHaveText(base);
+    await expect(strategy.pairQuote()).toHaveText(quote);
     await expect(strategy.status()).toHaveText('Active');
     await expect(strategy.totalBudget()).toHaveText(output.fiat);
     await expect(strategy.budget(direction)).toHaveText(output.budget);

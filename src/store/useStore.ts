@@ -36,8 +36,6 @@ export interface StoreContext {
     settings: OrderBookSettingsStore;
   };
   fiatCurrency: FiatCurrencyStore;
-  innerHeight: number;
-  setInnerHeight: (value: number) => void;
   toaster: ToastStore;
 }
 
@@ -54,8 +52,6 @@ export const defaultValue: StoreContext = {
     settings: defaultOrderBookSettingsStore,
   },
   fiatCurrency: defaultFiatCurrencyStore,
-  innerHeight: 0,
-  setInnerHeight: () => {},
   toaster: defaultToastStore,
 };
 

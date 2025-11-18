@@ -27,6 +27,7 @@ import {
   isZero,
 } from 'components/strategies/common/utils';
 import { overlappingMultiplier } from 'components/strategies/create/utils';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 
 interface Props {
   state: SimulatorInputOverlappingValues;
@@ -296,10 +297,9 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>
-          <Tooltip
-            element="Indicate the strategy exact buy and sell prices."
-            iconClassName="size-18 text-white/60"
-          />
+          <Tooltip element="Indicate the strategy exact buy and sell prices.">
+            <IconTooltip className="size-18 text-white/60" />
+          </Tooltip>
         </header>
         <OverlappingPriceRange
           minLabel="Min"
@@ -322,10 +322,9 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       <article className="grid gap-16 p-16">
         <header className="flex items-start justify-between">
           <h2 className="text-16">Budget</h2>
-          <Tooltip
-            iconClassName="size-18 text-white/60"
-            element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use."
-          />
+          <Tooltip element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use.">
+            <IconTooltip className="size-18 text-white/60" />
+          </Tooltip>
         </header>
         <OverlappingAnchor
           base={base}

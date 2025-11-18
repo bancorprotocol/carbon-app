@@ -4,12 +4,16 @@ import { ModalSchema } from 'libs/modals/modals';
 export interface ModalProps {
   children: ReactNode;
   id: string;
-  title?: string | ReactNode;
-  showCloseButton?: boolean;
   className?: string;
-  isPending?: boolean;
+  placement?: 'center' | 'side';
   onClose?: (id: string) => void;
   'data-testid'?: string;
+}
+
+export interface ModalHeaderProps {
+  id: string;
+  children?: ReactNode;
+  className?: string;
 }
 
 export type TModals = {

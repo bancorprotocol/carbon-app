@@ -29,7 +29,7 @@ export const NotificationAlerts: FC = () => {
 
   return (
     <ul
-      className="fixed right-[34px] top-80 z-50"
+      className="fixed right-[34px] top-80 z-50 grid gap-16"
       data-testid="notification-list"
     >
       <AnimatePresence mode="popLayout">
@@ -62,7 +62,7 @@ const NotificationItem: FC<{ notification: Notification }> = (props) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="rounded-lg bg-main-900 mb-20 block w-[350px] overflow-hidden border border-white/40 px-16 py-12"
+      className="rounded-lg bg-main-800 glass-shadow block w-[350px] overflow-hidden px-16 py-12"
       data-testid={`notification-${notification.testid}`}
     >
       <NotificationLine

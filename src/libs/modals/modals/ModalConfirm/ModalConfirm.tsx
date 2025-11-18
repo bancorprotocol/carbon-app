@@ -2,7 +2,7 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { ApproveToken } from 'components/common/approval';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
@@ -18,14 +18,12 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
 
   return (
-    <ModalOrMobileSheet
-      id={id}
-      title="Confirm Transaction"
-      data-testid="approval-modal"
-      className="md:min-w-300"
-    >
-      <h3 className="text-14 my-10 text-white/60">Approve Tokens</h3>
-      <ul className="grid gap-20">
+    <Modal id={id} data-testid="approval-modal" className="grid gap-16">
+      <ModalHeader id={id}>
+        <h2>Confirm Transaction</h2>
+      </ModalHeader>
+      <h3 className="text-14 text-white/60">Approve Tokens</h3>
+      <ul className="grid gap-8">
         {approvalQuery.map(({ data, isPending, error }, i) => (
           <li key={i}>
             <ApproveToken data={data} isPending={isPending} error={error} />
@@ -44,6 +42,6 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
       >
         {buttonLabel}
       </button>
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

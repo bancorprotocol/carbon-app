@@ -102,9 +102,8 @@ export const CreateForm: FC<FormProps> = (props) => {
           <>
             {config.ui.showCart && (
               <Button
-                className={style.addCart}
+                className={cn(style.addCart, 'btn-secondary-gradient')}
                 type="button"
-                variant="white"
                 size="lg"
                 disabled={loading || animating}
                 onClick={addToCart}

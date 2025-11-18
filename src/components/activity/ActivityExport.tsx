@@ -151,7 +151,7 @@ export const ActivityExport = () => {
         </svg>
       </button>
       {!!size && size > limit && (
-        <dialog className="modal" ref={ref} onClick={lightDismiss}>
+        <dialog className="modal center" ref={ref} onClick={lightDismiss}>
           <form method="dialog" className="text-14 grid gap-16">
             <header className="flex justify-between">
               <h2 className="text-18">Export Limit</h2>

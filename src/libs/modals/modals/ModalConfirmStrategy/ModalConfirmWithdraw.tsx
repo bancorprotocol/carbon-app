@@ -1,5 +1,5 @@
 import { useModal } from 'hooks/useModal';
-import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
+import { Modal, ModalHeader } from '../../Modal';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
 import { Strategy } from 'components/strategies/common/types';
@@ -26,7 +26,10 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
   const edit = () => closeModal(id);
 
   return (
-    <ModalOrMobileSheet id={id} title="Withdraw Funds" className="md:max-w-450">
+    <Modal id={id} className="grid gap-16">
+      <ModalHeader id={id}>
+        <h2>Withdraw Funds</h2>
+      </ModalHeader>
       <IconTitleText
         icon={<IconWallet className="size-24" />}
         title="Are you sure you would like to withdraw your funds?"
@@ -56,6 +59,6 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
       >
         Withdraw Funds
       </Link>
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

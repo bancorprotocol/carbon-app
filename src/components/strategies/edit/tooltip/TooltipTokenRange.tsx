@@ -28,7 +28,7 @@ export const TooltipTokenRange: FC<TooltipPriceProps> = ({
   const maxFullPrice = prettifyNumber(max, options);
   return (
     <Tooltip
-      maxWidth={600}
+      className="max-w-600"
       element={
         <>
           <div className="align-center flex gap-6">

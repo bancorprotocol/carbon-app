@@ -4,6 +4,7 @@ import {
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { Token } from 'libs/tokens';
@@ -82,10 +83,9 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>
-          <Tooltip
-            element="Indicate the strategy exact buy and sell prices."
-            iconClassName="size-18 text-white/60"
-          />
+          <Tooltip element="Indicate the strategy exact buy and sell prices.">
+            <IconTooltip className="size-18 text-white/60" />
+          </Tooltip>
         </header>
         <OverlappingPriceRange
           base={base}

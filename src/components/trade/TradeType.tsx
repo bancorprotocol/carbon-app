@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { ReactComponent as IconPriceBased } from 'assets/icons/price-based.svg';
 import { ReactComponent as IconGradient } from 'assets/icons/gradient.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { gradientTypePages, staticTypePages } from './utils';
@@ -65,7 +66,9 @@ export const TradeType = () => {
         >
           {link.svg}
           {link.label}
-          <Tooltip element={link.text} iconClassName="size-14" />
+          <Tooltip element={link.text}>
+            <IconTooltip className="size-14" />
+          </Tooltip>
         </Link>
       ))}
     </DropdownMenu>

@@ -78,7 +78,7 @@ export const ModalTokenListContent: FC<Props> = ({
           </Radio>
         ))}
       </RadioGroup>
-      <div ref={parentRef} className="h-[70vh] overflow-auto p-8">
+      <div ref={parentRef} className="overflow-auto p-8">
         <ul
           className="relative"
           style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
