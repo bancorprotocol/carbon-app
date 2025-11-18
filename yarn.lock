@@ -3083,7 +3083,7 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.0.0-beta.30.tgz#7fd5e206dd706297b8234227c330c203a795f061"
   integrity sha512-fewNoKiJeG5v0T4jg7UO99G+hUYDHig6AkiIeqvC1O2zEw96MlzR6DXw91aqxcsIPSVp83IPsgNa7su8yZWldw==
 
-"@telegram-apps/analytics@^1.4.4":
+"@telegram-apps/analytics@1.4.4":
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/@telegram-apps/analytics/-/analytics-1.4.4.tgz#6bbc57ea3f0495c3dfc459a7e6e89ad2bb8b6b5b"
   integrity sha512-YHQgPR6McwAy5ohXfjJnRysjoC2Yq4zGX5OAuPtInT+bKbnq6iJgaLIe/Ztv/6ZP8zWHwgk6RVG+LoaLVS/meQ==
