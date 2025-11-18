@@ -8,9 +8,9 @@ import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTo
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalTokenImportNotification } from 'libs/modals/modals/ModalTokenList/ModalTokenImportNotification';
 import { SearchInput } from 'components/common/searchInput';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
-import { useBreakpoints } from 'hooks/useBreakpoints';
-import { KeyboardEvent } from 'react';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
+import { KeyboardEvent, useCallback } from 'react';
+import { useStore } from 'store';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
@@ -20,8 +20,9 @@ export type ModalTokenListData = {
 };
 
 export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
-  const { belowBreakpoint } = useBreakpoints();
-
+  const {
+    tokens: { isError, isPending },
+  } = useStore();
   const {
     search,
     setSearch,
@@ -29,8 +30,6 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
     showNoResults,
     filteredTokens,
     onSelect,
-    isError,
-    isPending,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
@@ -38,18 +37,22 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
     duplicateSymbols,
   } = useModalTokenList({ id, data });
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' && !!filteredTokens.length) {
-      onSelect(filteredTokens[0]);
-    }
-  };
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !!filteredTokens.length) {
+        onSelect(filteredTokens[0]);
+      }
+    },
+    [filteredTokens, onSelect],
+  );
 
   return (
-    <ModalOrMobileSheet id={id} title="Select Token" className="md:max-w-500">
+    <Modal id={id} className="grid content-start gap-16 md:w-500 h-[70vh]">
+      <ModalHeader id={id}>
+        <h2 id="modal-title">Select Token</h2>
+      </ModalHeader>
       <SearchInput
         aria-labelledby="modal-title"
-        aria-description="search by token symbol"
-        autoFocus={!belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
         className="rounded-md"
@@ -79,6 +82,6 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
           onRemoveFavorite={removeFavoriteToken}
         />
       )}
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

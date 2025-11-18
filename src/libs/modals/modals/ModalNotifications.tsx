@@ -1,9 +1,9 @@
 import { ModalFC } from 'libs/modals/modals.types';
-import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { useNotifications } from 'hooks/useNotifications';
 import { useModal } from 'hooks/useModal';
 import { NotificationPreferences } from 'libs/notifications/NotificationPreferences';
+import { Modal, ModalHeader } from '../Modal';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
   const { notifications, clearNotifications, removeNotification } =
@@ -12,23 +12,22 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
 
   return (
-    <ModalSlideOver
-      id={id}
-      title={
-        <header className="flex w-full items-center justify-between">
-          Notifications
-          <button onClick={() => clearNotifications()} className="mr-20">
-            Clear All
-          </button>
-        </header>
-      }
-    >
+    <Modal id={id} placement="side" className="grid content-start gap-16">
+      <ModalHeader id={id} className="grid-cols-[auto_1fr_auto]">
+        <h2>Notifications</h2>
+        <button
+          onClick={() => clearNotifications()}
+          className="justify-self-end"
+        >
+          Clear All
+        </button>
+      </ModalHeader>
       <NotificationPreferences />
-      <ul className="mt-24 flex flex-col gap-10">
+      <ul className="grid gap-16">
         {reversedNotifications.map((n) => (
           <li
             key={n.id}
-            className="rounded-lg overflow-hidden bg-main-900 px-16 py-12"
+            className="surface rounded-lg overflow-hidden px-16 py-12"
           >
             <NotificationLine
               notification={n}
@@ -38,6 +37,6 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
           </li>
         ))}
       </ul>
-    </ModalSlideOver>
+    </Modal>
   );
 };

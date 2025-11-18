@@ -1,5 +1,6 @@
 import { FC, useId } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import {
   FormStaticOrder,
@@ -85,8 +86,9 @@ export const EditStrategyBudgetField: FC<Props> = ({
           element={`Indicate the amount you wish to ${
             editType === 'withdraw' ? 'withdraw' : 'deposit'
           } from the available "allocated budget"`}
-          iconClassName="text-white/60"
-        />
+        >
+          <IconTooltip className="size-18 text-white/60" />
+        </Tooltip>
       </header>
       <InputBudget
         editType={editType}

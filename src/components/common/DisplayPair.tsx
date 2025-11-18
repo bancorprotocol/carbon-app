@@ -53,19 +53,17 @@ export const PairLogoName = memo(_PairLogoName, (a, b) => {
 });
 
 export const PairName: FC<TradePair> = ({ baseToken, quoteToken }) => (
-  <>
-    <span className="font-medium inline-flex items-center gap-4">
-      {baseToken.isSuspicious && <SuspiciousToken />}
-      <Tooltip element={<TokenTooltip token={baseToken} />}>
-        <span>{baseToken.symbol}</span>
-      </Tooltip>
-      <span className="text-white/60">/</span>
-      {quoteToken.isSuspicious && <SuspiciousToken />}
-      <Tooltip element={<TokenTooltip token={quoteToken} />}>
-        <span>{quoteToken.symbol}</span>
-      </Tooltip>
-    </span>
-  </>
+  <span className="font-medium inline-flex items-center gap-4">
+    {baseToken.isSuspicious && <SuspiciousToken />}
+    <Tooltip element={<TokenTooltip token={baseToken} />}>
+      <span data-testid="pair-base">{baseToken.symbol}</span>
+    </Tooltip>
+    <span className="text-white/60">/</span>
+    {quoteToken.isSuspicious && <SuspiciousToken />}
+    <Tooltip element={<TokenTooltip token={quoteToken} />}>
+      <span data-testid="pair-quote">{quoteToken.symbol}</span>
+    </Tooltip>
+  </span>
 );
 
 export const SuspiciousToken = () => (
@@ -81,13 +79,15 @@ const TokenTooltip: FC<{ token: Token }> = ({ token }) => {
   return (
     <div className="flex flex-col gap-4">
       <p>{token.symbol}</p>
-      <button
+      {/* In SuggestionList the PairLogoName is used inside a button. It's forbidden to use a button within a button */}
+      <span
+        role="button"
         onClick={copy}
-        className="text-14 inline-flex gap-8 text-white/60"
+        className="text-14 inline-flex gap-8 text-white/60 cursor-pointer"
       >
         {shortenString(token.address)}
         <CopyIcon className="size-14" />
-      </button>
+      </span>
     </div>
   );
 };

@@ -14,7 +14,6 @@ import { StoreContext, StoreCTX } from './useStore';
 
 export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [countryBlocked, setCountryBlocked] = useState<boolean | null>(null);
-  const [innerHeight, setInnerHeight] = useState<number>(window.innerHeight);
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
   const notifications = useNotificationsStore();
@@ -36,8 +35,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
       settings: orderBookSettings,
     },
     fiatCurrency,
-    innerHeight,
-    setInnerHeight,
     toaster,
   };
 

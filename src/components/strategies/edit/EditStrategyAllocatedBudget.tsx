@@ -2,6 +2,7 @@ import { FC, ReactNode, useId } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Switch } from 'components/common/switch';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
@@ -23,17 +24,21 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
   return (
     <div
       role="table"
-      className="rounded-md p-15 text-12 font-medium flex flex-col gap-10 border border-white/10 text-left"
+      className="rounded-md p-15 text-12 font-medium grid gap-8 border border-white/10 text-left"
     >
-      <div role="row" className="flex items-center justify-between gap-16">
-        <p role="columnheader" className="flex w-auto items-center gap-6">
+      <div role="row" className="grid grid-flow-col items-center gap-16">
+        <p
+          role="columnheader"
+          className="flex items-center gap-8 justify-self-start"
+        >
           Allocated Budget
           <Tooltip
-            iconClassName="h-13 text-white/60"
             element={`This is the current available ${token.symbol} budget you can withdraw`}
-          />
+          >
+            <IconTooltip className="size-14 text-white/60" />
+          </Tooltip>
         </p>
-        <div role="cell" className="flex flex-1 justify-end gap-8">
+        <div role="cell" className="justify-self-end">
           <TooltipTokenAmount amount={initialBudget ?? ''} token={token} />
         </div>
       </div>
@@ -84,7 +89,6 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
           Distribute Across Entire Range
         </label>
         <Tooltip
-          iconClassName="h-13 text-white/60"
           element={
             <div className="flex flex-col gap-10">
               <div className="flex gap-8">
@@ -117,7 +121,9 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
               </div>
             </div>
           }
-        />
+        >
+          <IconTooltip className="h-13 text-white/60" />
+        </Tooltip>
       </p>
       <Switch
         id={id}

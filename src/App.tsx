@@ -14,7 +14,7 @@ import { useModal } from 'hooks/useModal';
 import { carbonApi } from 'utils/carbonApi';
 
 export const App = () => {
-  const { setInnerHeight, setCountryBlocked } = useStore();
+  const { setCountryBlocked } = useStore();
 
   const { openModal } = useModal();
   const didInitCheck = useRef(false);
@@ -38,15 +38,6 @@ export const App = () => {
       initCheck();
     }
   }, [initCheck]);
-
-  useEffect(() => {
-    const handler = (e: UIEvent) => {
-      const h = (e.target as Window)?.innerHeight || 0;
-      setInnerHeight(h);
-    };
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
-  }, [setInnerHeight]);
 
   return (
     <>

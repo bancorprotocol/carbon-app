@@ -8,7 +8,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { NewTabLink } from 'libs/routing';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 
 export type ModalImportTokenData = {
   address: string;
@@ -31,7 +31,10 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
   const blockClasses = 'my-20 h-80 rounded-md';
 
   return (
-    <ModalOrMobileSheet id={id} title="Import Token">
+    <Modal id={id} className="grid gap-16">
+      <ModalHeader id={id}>
+        <h2>Import Token</h2>
+      </ModalHeader>
       <div className="mt-40">
         <IconTitleText
           variant="warning"
@@ -82,6 +85,6 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       <button className="btn-on-surface" onClick={() => closeModal(id)}>
         Cancel
       </button>
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

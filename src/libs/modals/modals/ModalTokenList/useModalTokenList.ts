@@ -33,12 +33,10 @@ type Props = {
 export const useModalTokenList = ({ id, data }: Props) => {
   const {
     tokens,
-    isPending,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
     tokensMap,
-    isError,
   } = useTokens();
   const {
     onClick,
@@ -184,8 +182,6 @@ export const useModalTokenList = ({ id, data }: Props) => {
     filteredTokens,
     duplicateSymbols,
     onSelect,
-    isPending,
-    isError,
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens: _favoriteTokens,

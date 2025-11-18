@@ -341,11 +341,7 @@ const ManageItem: FC<{
 
   if (tooltipText) {
     return (
-      <Tooltip
-        disabled={belowBreakpoint('md')}
-        element={tooltipText}
-        interactive={false}
-      >
+      <Tooltip disabled={belowBreakpoint('md')} element={tooltipText}>
         <li role="none">
           <Content />
         </li>

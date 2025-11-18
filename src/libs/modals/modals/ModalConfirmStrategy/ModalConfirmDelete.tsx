@@ -1,6 +1,6 @@
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import { useModal } from 'hooks/useModal';
-import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
+import { Modal, ModalHeader } from '../../Modal';
 import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
 
@@ -46,11 +46,10 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   const editPrices = () => closeModal(id);
 
   return (
-    <ModalOrMobileSheet
-      id={id}
-      title="Delete Strategy"
-      className="md:max-w-450"
-    >
+    <Modal id={id} className="grid gap-16">
+      <ModalHeader id={id}>
+        <h2>Delete Strategy</h2>
+      </ModalHeader>
       <IconTitleText
         variant="error"
         icon={<IconTrash className="size-24" />}
@@ -58,7 +57,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />
       {!isGradient && (
-        <article className="bg-main-800 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
+        <article className="bg-main-900/40 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
           <h3 className="text-14 font-medium">Did you know?</h3>
           <Link
             onClick={editPrices}
@@ -77,7 +76,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       )}
 
       <Button
-        variant="secondary"
+        variant="white"
         onClick={onClick}
         loading={isPending}
         loadingChildren={loadingChildren}
@@ -85,6 +84,6 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       >
         Delete Strategy
       </Button>
-    </ModalOrMobileSheet>
+    </Modal>
   );
 };

@@ -6,6 +6,7 @@ import { FC, ReactNode } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 
 interface Props {
   children: ReactNode;
@@ -61,7 +62,6 @@ export const BuySellHeader: FC<Props> = (props) => {
           </Radio>
         </RadioGroup>
         <Tooltip
-          iconClassName="text-white/60"
           element={
             <p>
               This section will define the order details in which you are
@@ -74,7 +74,9 @@ export const BuySellHeader: FC<Props> = (props) => {
               {isBuy ? 'buy' : 'sell'} the token at.
             </p>
           }
-        />
+        >
+          <IconTooltip className="size-18 text-white/60" />
+        </Tooltip>
       </div>
     </header>
   );

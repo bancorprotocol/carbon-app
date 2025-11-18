@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
-
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -46,10 +46,9 @@ export const PortfolioHeader = () => {
               className="flex items-center gap-4 text-white/60"
             >
               <span>Net Worth</span>
-              <Tooltip
-                iconClassName="size-14"
-                element="The sum of the budgets from all strategies in the portfolio."
-              />
+              <Tooltip element="The sum of the budgets from all strategies in the portfolio.">
+                <IconTooltip className="size-14" />
+              </Tooltip>
             </p>
             <p role="cell" className="md:text-[32px]">
               {netWorth}
