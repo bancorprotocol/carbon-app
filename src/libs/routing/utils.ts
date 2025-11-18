@@ -54,6 +54,33 @@ export const validAddress = v.fallback(
   '',
 );
 
+export const validPairFilter = v.optional(
+  v.picklist(['all', 'large', 'rewards']),
+);
+export const validPairSort = v.optional(
+  v.picklist([
+    'pairAsc',
+    'pairDesc',
+    'trades',
+    'trades24h',
+    'liquidity',
+    'strategyAmount',
+  ]),
+);
+export const validStrategyFilter = v.optional(
+  v.picklist(['all', 'active', 'inactive']),
+);
+export const validStrategySort = v.optional(
+  v.picklist([
+    'recent',
+    'old',
+    'pairAsc',
+    'pairDesc',
+    'totalBudgetDesc',
+    'trades',
+  ]),
+);
+
 export const validString = v.string();
 
 export const validBoolean = v.pipe(

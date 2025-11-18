@@ -35,6 +35,7 @@ export const MainMenuRightReward: FC = () => {
     <>
       <Link
         to="/explore/pairs"
+        search={{ filter: 'rewards' }}
         className="btn-on-background size-40 hidden p-0 md:grid place-items-center"
       >
         <svg
@@ -116,6 +117,7 @@ export const MainMenuRightReward: FC = () => {
           </p>
           <Link
             to="/explore/pairs"
+            search={{ filter: 'rewards' }}
             className="py-12 text-center rounded-full justify-self-stretch bg-linear-to-b from-[#C78BFF] to-[#6942FF] text-white font-title"
           >
             View Pairs with Rewards

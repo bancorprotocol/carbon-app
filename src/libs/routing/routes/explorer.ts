@@ -6,7 +6,13 @@ import { ExplorerStrategies } from 'pages/explorer/strategies';
 import { ExplorerDistribution } from 'pages/explorer/distribution';
 import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/distribution/token';
 import { validateActivityParams } from 'components/activity/utils';
-import { searchValidator } from '../utils';
+import {
+  searchValidator,
+  validPairFilter,
+  validPairSort,
+  validStrategyFilter,
+  validStrategySort,
+} from '../utils';
 import { ExplorerPairs } from 'pages/explorer/pairs';
 import * as v from 'valibot';
 
@@ -51,6 +57,8 @@ export const explorerPortfolioPage = createRoute({
   component: ExplorerStrategies,
   validateSearch: searchValidator({
     layout: v.optional(v.picklist(['grid', 'table'])),
+    filter: validStrategyFilter,
+    sort: validStrategySort,
   }),
 });
 
@@ -58,6 +66,10 @@ export const explorerPairsPage = createRoute({
   getParentRoute: () => explorerLayout,
   path: 'pairs',
   component: ExplorerPairs,
+  validateSearch: searchValidator({
+    filter: validPairFilter,
+    sort: validPairSort,
+  }),
 });
 
 export const explorerDistributionPage = createRoute({

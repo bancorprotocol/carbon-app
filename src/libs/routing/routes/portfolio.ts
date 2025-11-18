@@ -6,7 +6,14 @@ import { PortfolioActivityPage } from 'pages/portfolio/activity';
 import { PortfolioStrategiesPage } from 'pages/portfolio/strategies';
 import { PortfolioDistributionPage } from 'pages/portfolio/distribution';
 import { PortfolioDistributionTokenPage } from 'pages/portfolio/distribution/token';
-import { searchValidator, validString } from '../utils';
+import {
+  searchValidator,
+  validPairFilter,
+  validPairSort,
+  validStrategyFilter,
+  validStrategySort,
+  validString,
+} from '../utils';
 import * as v from 'valibot';
 import { PorfolioPairsPage } from 'pages/portfolio/pairs';
 
@@ -35,7 +42,8 @@ export const portfolioPairsPage = createRoute({
   path: 'pairs',
   component: PorfolioPairsPage,
   validateSearch: searchValidator({
-    layout: v.optional(v.picklist(['grid', 'table'])),
+    filter: validPairFilter,
+    sort: validPairSort,
   }),
 });
 
@@ -45,6 +53,8 @@ export const portfolioStrategiesPage = createRoute({
   component: PortfolioStrategiesPage,
   validateSearch: searchValidator({
     layout: v.optional(v.picklist(['grid', 'table'])),
+    filter: validStrategyFilter,
+    sort: validStrategySort,
   }),
 });
 
