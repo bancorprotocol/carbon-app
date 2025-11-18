@@ -21,7 +21,7 @@ export const SearchInput = ({
 
   useEffect(() => {
     // Force autofocus when dialog open: we need that because dialog don't support tabIndex
-    ref.current?.focus();
+    setTimeout(() => ref.current?.focus());
   }, []);
 
   return (
