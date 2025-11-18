@@ -118,6 +118,7 @@ export const MainMenuRightReward: FC = () => {
           <Link
             to="/explore/pairs"
             search={{ filter: 'rewards' }}
+            onClick={close}
             className="py-12 text-center rounded-full justify-self-stretch bg-linear-to-b from-[#C78BFF] to-[#6942FF] text-white font-title"
           >
             View Pairs with Rewards
