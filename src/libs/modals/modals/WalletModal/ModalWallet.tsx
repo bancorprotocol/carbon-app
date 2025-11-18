@@ -43,7 +43,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   };
 
   return (
-    <Modal id={id} className="overflow-clip">
+    <Modal id={id} className="grid gap-16 relative overflow-clip">
       {isPending && (
         <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
       )}
@@ -51,14 +51,12 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
         <h2>Connect Wallet</h2>
       </ModalHeader>
       {isError ? (
-        <div className="flex flex-col items-center gap-16">
-          <ModalWalletError
-            logoUrl={selectedConnection.icon}
-            walletName={selectedConnection.name}
-            onClick={onClickReturn}
-            error={connectionError}
-          />
-        </div>
+        <ModalWalletError
+          logoUrl={selectedConnection.icon}
+          walletName={selectedConnection.name}
+          onClick={onClickReturn}
+          error={connectionError}
+        />
       ) : (
         <ModalWalletContent onClick={onClickConnect} isPending={isPending} />
       )}
