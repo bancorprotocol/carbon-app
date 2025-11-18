@@ -75,7 +75,7 @@
     "typescript-eslint": "8.33.0",
     "valibot": "0.34.0",
     "viem": "2.x",
-    "vite": "5.3.6",
+    "vite": "5.4.21",
     "vite-bundle-analyzer": "0.15.2",
     "vite-plugin-svgr": "2.4.0",
     "vite-tsconfig-paths": "4.2.1",
