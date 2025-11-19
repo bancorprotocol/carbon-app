@@ -106,7 +106,11 @@ export const commonConfig: AppConfig = {
     showTerms: true,
     showPrivacy: true,
     showCart: true,
-    rewardUrl: 'https://app.merkl.xyz/?chain=239&protocol=carbon',
+    rewards: {
+      url: 'https://app.merkl.xyz/?chain=42220&protocol=carbon',
+      logo: '/logos/merkl.webp',
+      colors: ['#714CFF', '#804CFF', '#AA4EFF', '#D4C2FA', '#FFFBFDCC'],
+    },
     // walkthroughId: 'vjbcftqceykr',
   },
 };

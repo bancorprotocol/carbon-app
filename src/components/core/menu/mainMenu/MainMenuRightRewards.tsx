@@ -3,8 +3,8 @@ import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { lsService } from 'services/localeStorage';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useDialog } from 'hooks/useDialog';
-import config from 'config';
 import { Link } from '@tanstack/react-router';
+import config from 'config';
 
 export const MainMenuRightReward: FC = () => {
   const { currentBreakpoint } = useBreakpoints();
@@ -12,7 +12,7 @@ export const MainMenuRightReward: FC = () => {
   const haveSeen = useRef(lsService.getItem('haveSeen'));
 
   useEffect(() => {
-    if (currentBreakpoint === 'sm' || !config.ui.rewardUrl) return;
+    if (currentBreakpoint === 'sm' || !config.ui.rewards) return;
     if (!haveSeen.current?.includes('rewards')) {
       open();
       // Need to force focus to prevent race focus on browser start
@@ -29,7 +29,8 @@ export const MainMenuRightReward: FC = () => {
   };
 
   if (currentBreakpoint === 'sm') return;
-  if (!config.ui.rewardUrl) return;
+  if (!config.ui.rewards) return;
+  const colors = config.ui.rewards.colors;
 
   return (
     <>
@@ -79,11 +80,9 @@ export const MainMenuRightReward: FC = () => {
               y2="32.9994"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stopColor="#714CFF" />
-              <stop offset="0.123033" stopColor="#804CFF" />
-              <stop offset="0.399979" stopColor="#AA4EFF" />
-              <stop offset="0.730614" stopColor="#D4C2FA" />
-              <stop offset="1" stopColor="#FFFBFD" stopOpacity="0.8" />
+              {colors.map((color, i) => (
+                <stop key={i} offset={i / colors.length} stopColor={color} />
+              ))}
             </linearGradient>
           </defs>
         </svg>
@@ -105,7 +104,10 @@ export const MainMenuRightReward: FC = () => {
               <IconClose className="size-18" />
             </button>
           </header>
-          <div className="grid place-items-center size-48 bg-[#C78BFF]/50 rounded-full">
+          <div
+            style={{ backgroundColor: `${colors.at(0)}80` }}
+            className="grid place-items-center size-48 rounded-full"
+          >
             <svg className="size-40" width="40" height="40" viewBox="0 0 40 40">
               <use href="#rewards-icon" />
             </svg>
@@ -119,7 +121,10 @@ export const MainMenuRightReward: FC = () => {
             to="/explore/pairs"
             search={{ filter: 'rewards' }}
             onClick={close}
-            className="py-12 text-center rounded-full justify-self-stretch bg-linear-to-b from-[#C78BFF] to-[#6942FF] text-white font-title"
+            style={{
+              backgroundImage: `linear-gradient(to bottom, ${colors.at(0)}, ${colors.at(-1)})`,
+            }}
+            className="py-12 text-center rounded-full justify-self-stretch font-title text-black"
           >
             View Pairs with Rewards
           </Link>

@@ -26,7 +26,7 @@ export const PairTable: FC<Props> = ({ pairs }) => {
       <thead>
         <tr>
           <th>Token Pair</th>
-          {config.ui.rewardUrl && <th>Rewards</th>}
+          {config.ui.rewards && <th>Rewards</th>}
           <th>Trades</th>
           <th>24h Trades</th>
           <th># of Strategies</th>
@@ -45,18 +45,18 @@ export const PairTable: FC<Props> = ({ pairs }) => {
                   <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
                 </div>
               </td>
-              {config.ui.rewardUrl && (
+              {config.ui.rewards && (
                 <td>
                   {pair.reward && (
                     <NewTabLink
                       className="inline-flex gap-8 items-center text-white/60 hover:text-white"
-                      to={config.ui.rewardUrl}
+                      to={config.ui.rewards.url}
                     >
                       <img
-                        src="/logos/merkl.webp"
-                        className="h-[30px]"
+                        src={config.ui.rewards.logo}
+                        className="h-[24px]"
                         loading="lazy"
-                        alt="merkl logo"
+                        alt="reward logo"
                       />
                       <LinkIcon className="size-16" />
                     </NewTabLink>

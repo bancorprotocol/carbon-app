@@ -133,7 +133,14 @@ export const AppConfigSchema = v.object({
     showTerms: v.optional(v.boolean()),
     showPrivacy: v.optional(v.boolean()),
     showCart: v.optional(v.boolean()),
-    rewardUrl: v.optional(v.string()),
+    rewards: v.optional(
+      v.object({
+        url: v.string(),
+        logo: v.string(),
+        list: v.optional(v.array(v.string())),
+        colors: v.array(v.string()),
+      }),
+    ),
     walkthroughId: v.optional(v.string()),
   }),
 });
