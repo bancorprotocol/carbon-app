@@ -18,6 +18,7 @@
     "@tanstack/react-virtual": "3.0.0-beta.30",
     "@tanstack/router-devtools": "1.4.9",
     "@tanstack/router-valibot-adapter": "1.57.18",
+    "@telegram-apps/analytics": "1.4.4",
     "@testing-library/dom": "10.2.0",
     "@testing-library/jest-dom": "6.4.6",
     "@testing-library/react": "16.0.0",

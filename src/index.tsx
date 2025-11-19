@@ -26,6 +26,15 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
   }
 };
 
+if (config.network.name === 'TON') {
+  import('@telegram-apps/analytics').then(({ default: TelegramAnalytics }) => {
+    TelegramAnalytics.init({
+      token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
+      appName: 'Carbondefiappbot',
+    });
+  });
+}
+
 root.render(
   <React.StrictMode>
     <QueryProvider>
