@@ -1,4 +1,4 @@
-import { Dispatch, FC, FormEvent, SetStateAction, useId } from 'react';
+import { FC, FormEvent, useId } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
@@ -20,7 +20,7 @@ const sortItems = Object.entries(strategySort)
 
 interface SortProps {
   sort: StrategySort;
-  setSort: Dispatch<SetStateAction<StrategySort>>;
+  setSort: (sort: StrategySort) => void;
   className?: string;
 }
 
@@ -74,7 +74,7 @@ export const StrategySortDropdown: FC<SortProps> = (props) => {
 
 interface FilterProps {
   filter: StrategyFilter;
-  setFilter: Dispatch<SetStateAction<StrategyFilter>>;
+  setFilter: (filter: StrategyFilter) => void;
   className?: string;
 }
 export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
@@ -83,7 +83,7 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
   const onFilterStatusChange = (event: FormEvent<HTMLFieldSetElement>) => {
     if (event.target instanceof HTMLInputElement) {
       const status = event.target.value as FilterStatus;
-      setFilter((filter) => ({ ...filter, status }));
+      setFilter({ ...filter, status });
     }
   };
   // const onFilterTypeChange = (event: FormEvent<HTMLFieldSetElement>) => {

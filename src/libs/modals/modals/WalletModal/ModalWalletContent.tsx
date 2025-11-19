@@ -37,8 +37,8 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
   const isDisabled = isPending || !checked;
 
   return (
-    <div className="grid gap-8">
-      <div className="text-14 mb-20 grid gap-8 text-white/80">
+    <>
+      <div className="text-14 grid gap-8 text-white/80">
         <p>
           By connecting my wallet, I agree to the{' '}
           <Link to="/terms" target="_blank" className="font-medium text-white">
@@ -65,43 +65,45 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
           <label htmlFor={checkoxId}>I read and accept</label>
         </div>
       </div>
+      <div role="menu" className="grid gap-8">
+        {connectors.map((c) => {
+          return (
+            <button
+              key={c.uid}
+              role="menuitem"
+              type="button"
+              onClick={() => onClick(c)}
+              className={buttonClasses}
+              disabled={isDisabled}
+            >
+              <WalletIcon
+                selectedWallet={c.name}
+                className="w-24"
+                icon={c.icon}
+              />
+              <span className={textClasses}>{c?.name}</span>
+            </button>
+          );
+        })}
 
-      {connectors.map((c) => {
-        return (
-          <button
-            key={c.uid}
-            type="button"
-            onClick={() => onClick(c)}
-            className={buttonClasses}
+        {EXT_LINKS.map(({ url, name, logoUrl }) => (
+          <NewTabLink
+            key={url}
+            to={url}
+            className={`${buttonClasses} ${
+              isDisabled
+                ? 'pointer-events-none cursor-not-allowed opacity-50 hover:bg-transparent'
+                : ''
+            }`}
             disabled={isDisabled}
           >
-            <WalletIcon
-              selectedWallet={c.name}
-              className="w-24"
-              icon={c.icon}
-            />
-            <span className={textClasses}>{c?.name}</span>
-          </button>
-        );
-      })}
-
-      {EXT_LINKS.map(({ url, name, logoUrl }) => (
-        <NewTabLink
-          key={url}
-          to={url}
-          className={`${buttonClasses} ${
-            isDisabled
-              ? 'pointer-events-none cursor-not-allowed opacity-50 hover:bg-transparent'
-              : ''
-          }`}
-          disabled={isDisabled}
-        >
-          <div className="flex w-24 justify-center">
-            <Imager alt="Wallet Logo" src={logoUrl} className="h-24" />
-          </div>
-          <span className={textClasses}>{name}</span>
-        </NewTabLink>
-      ))}
-    </div>
+            <div className="flex w-24 justify-center">
+              <Imager alt="Wallet Logo" src={logoUrl} className="h-24" />
+            </div>
+            <span className={textClasses}>{name}</span>
+          </NewTabLink>
+        ))}
+      </div>
+    </>
   );
 };
