@@ -8,6 +8,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { useApproval } from 'hooks/useApproval';
+import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 
 type TradeProps = {
   source: Token;
@@ -33,6 +34,7 @@ export const useTradeAction = ({
       settings: { slippage, deadline },
     },
   } = useStore();
+  const { checkRestriction } = useRestrictedCountry();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
   const { user } = useWagmi();
@@ -68,6 +70,8 @@ export const useTradeAction = ({
     targetInput,
     tradeActions,
   }: TradeProps) => {
+    const checked = await checkRestriction();
+    if (!checked) return;
     if (!user) {
       throw new Error('No user');
     }
