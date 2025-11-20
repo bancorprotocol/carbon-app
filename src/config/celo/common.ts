@@ -155,7 +155,6 @@ export const commonConfig: AppConfig = {
     rewards: {
       url: 'https://app.merkl.xyz/?chain=42220&protocol=carbon',
       logo: '/logos/merkl.webp',
-      colors: ['#714CFF', '#804CFF', '#AA4EFF', '#D4C2FA', '#FFFBFDCC'],
     },
     // walkthroughId: 'uouygtywoj3c',
   },

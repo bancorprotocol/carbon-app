@@ -30,7 +30,6 @@ export const MainMenuRightReward: FC = () => {
 
   if (currentBreakpoint === 'sm') return;
   if (!config.ui.rewards) return;
-  const colors = config.ui.rewards.colors;
 
   return (
     <>

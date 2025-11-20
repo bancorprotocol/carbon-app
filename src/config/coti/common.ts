@@ -96,7 +96,6 @@ export const commonConfig: AppConfig = {
         '0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1',
         '0x8C39B1fD0e6260fdf20652Fc436d25026832bfEA',
       ],
-      colors: ['#12d794', '#b6f07f'],
     },
     // walkthroughId: 'd2a5isof88vg',
   },
