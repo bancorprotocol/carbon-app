@@ -23,6 +23,7 @@ import {
 } from 'libs/queries/extApi/tradeCount';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { usePairs } from 'hooks/usePairs';
+import { toSortedPairSlug } from 'utils/pairs';
 
 const text = {
   '/explore/pairs': {
@@ -33,13 +34,6 @@ const text = {
     pairs: 'Your Pairs',
     liquidity: 'Your Liquidity',
   },
-};
-
-const toSortedPairSlug = (base: string, quote: string) => {
-  return [base, quote]
-    .map((v) => v.toLowerCase())
-    .sort((a, b) => a.localeCompare(b))
-    .join('_');
 };
 
 type TradeMap = Record<string, { tradeCount: number; tradeCount24h: number }>;
@@ -141,7 +135,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
 
   const allPairs = useMemo(() => {
     if (!ordered || !tradesByPair) return [];
-    const rewardPairs = new Set(rewards.data?.map((r) => r.pair));
+    const rewardPairs = new Set(rewards.data ?? []);
 
     const map: Record<string, RawPairRow> = {};
     for (const strategy of ordered) {
