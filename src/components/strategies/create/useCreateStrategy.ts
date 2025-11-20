@@ -12,6 +12,7 @@ import { carbonEvents } from 'services/events';
 import { handleTxStatusAndRedirectToOverview } from './utils';
 import { getStrategyType } from '../common/utils';
 import { useNavigate } from '@tanstack/react-router';
+import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 
 const spenderAddress = config.addresses.carbon.carbonController;
 
@@ -53,6 +54,7 @@ export const useCreateStrategy = (props: Props) => {
   const { user } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
+  const { checkRestriction } = useRestrictedCountry();
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
@@ -82,6 +84,8 @@ export const useCreateStrategy = (props: Props) => {
 
   const createStrategy = async () => {
     if (!base || !quote) return;
+    const checked = await checkRestriction();
+    if (!checked) return;
     if (!user) return openModal('wallet', undefined);
 
     const onConfirm = () => {

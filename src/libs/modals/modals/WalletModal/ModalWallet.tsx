@@ -5,12 +5,10 @@ import { useWagmi, Connector } from 'libs/wagmi';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
-import { useStore } from 'store';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
   const { connect } = useWagmi();
-  const { isCountryBlocked } = useStore();
 
   const [selectedConnection, setSelectedConnection] =
     useState<Connector | null>(null);
@@ -22,9 +20,6 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const onClickConnect = async (c: Connector) => {
     setSelectedConnection(c);
     try {
-      if (isCountryBlocked || isCountryBlocked === null) {
-        throw new Error('Your country is restricted from using this app.');
-      }
       if (c.id === 'walletConnect') {
         closeModal(id);
         await connect(c);

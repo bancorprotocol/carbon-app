@@ -23,6 +23,7 @@ import { AnyCartStrategy } from 'components/strategies/common/types';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 import { isGradientStrategy } from 'components/strategies/common/utils';
+import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 
 const batcher = config.addresses.carbon.batcher;
 const getApproveTokens = (strategies: AnyCartStrategy[]) => {
@@ -67,6 +68,7 @@ export const CartPage = () => {
   const { user, sendTransaction } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
+  const { checkRestriction } = useRestrictedCountry();
   const cache = useQueryClient();
 
   const nav = useNavigate({ from: '/cart' });
@@ -80,7 +82,7 @@ export const CartPage = () => {
   const approval = useApproval(approvalTokens);
   const funds = useHasInsufficientFunds(approvalTokens);
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     if (form.querySelector('.error-message')) return;
@@ -89,6 +91,9 @@ export const CartPage = () => {
       const approve = form.querySelector<HTMLInputElement>('#approve-warnings');
       if (approve && !approve.checked) return;
     }
+
+    const checked = await checkRestriction();
+    if (!checked) return;
 
     const create = async () => {
       setConfirmation(true);

@@ -6,7 +6,6 @@ import { ModalSchema } from 'libs/modals/modals';
 
 export const useModal = () => {
   const {
-    isCountryBlocked,
     modals: { setModalsOpen, modals },
   } = useStore();
   const { open: modalsOpen } = modals;
@@ -30,19 +29,10 @@ export const useModal = () => {
 
   const openModal = useCallback(
     <T extends ModalKey>(key: T, data: ModalSchema[T]) => {
-      if (key === 'wallet') {
-        if (isCountryBlocked === null) {
-          return;
-        }
-        if (isCountryBlocked) {
-          openModal('restrictedCountry', undefined);
-          return;
-        }
-      }
       const id = uuid();
       setModalsOpen((prevState) => [...prevState, { id, key, data }]);
     },
-    [setModalsOpen, isCountryBlocked],
+    [setModalsOpen],
   );
 
   return {
