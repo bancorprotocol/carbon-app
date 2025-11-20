@@ -80,9 +80,11 @@ export const MainMenuRightReward: FC = () => {
               y2="32.9994"
               gradientUnits="userSpaceOnUse"
             >
-              {colors.map((color, i) => (
-                <stop key={i} offset={i / colors.length} stopColor={color} />
-              ))}
+              <stop stopColor="#B80093" />
+              <stop offset="0.123033" stopColor="#CF28AD" />
+              <stop offset="0.399979" stopColor="#E35FC7" />
+              <stop offset="0.730614" stopColor="#FAC2E5" />
+              <stop offset="1" stopColor="#FFFBFD" stopOpacity="0.8" />
             </linearGradient>
           </defs>
         </svg>
@@ -104,27 +106,21 @@ export const MainMenuRightReward: FC = () => {
               <IconClose className="size-18" />
             </button>
           </header>
-          <div
-            style={{ backgroundColor: `${colors.at(0)}80` }}
-            className="grid place-items-center size-48 rounded-full"
-          >
+          <div className="grid place-items-center size-48 rounded-full bg-[#FF66E0]/50">
             <svg className="size-40" width="40" height="40" viewBox="0 0 40 40">
               <use href="#rewards-icon" />
             </svg>
           </div>
-          <h2 className="text-18">Earn rewards for providing liquidity</h2>
+          <h2 className="text-18">Earn rewards with eligible pairs</h2>
           <p className="text-14 text-white/80 text-center">
-            Create trading strategies to eligible token pairs and start earning
-            rewards.
+            Create trading strategies with eligible token pairs and start
+            earning rewards.
           </p>
           <Link
             to="/explore/pairs"
             search={{ filter: 'rewards' }}
             onClick={close}
-            style={{
-              backgroundImage: `linear-gradient(to bottom, ${colors.at(0)}, ${colors.at(-1)})`,
-            }}
-            className="py-12 text-center rounded-full justify-self-stretch font-title text-black"
+            className="py-12 text-center rounded-full justify-self-stretch font-title text-white bg-linear-to-t from-[#B80093] to-[#E38FE3]"
           >
             View Pairs with Rewards
           </Link>
