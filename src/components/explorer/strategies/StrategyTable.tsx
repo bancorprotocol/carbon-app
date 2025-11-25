@@ -6,7 +6,7 @@ import { StrategyStatusTag } from 'components/strategies/overview/strategyBlock/
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { cn, prettifyNumber, tokenAmount } from 'utils/helpers';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
-import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
+import DashboardIcon from 'assets/icons/dashboard.svg?react';
 import {
   ManageButtonIcon,
   StrategyBlockManage,

@@ -7,7 +7,7 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 import config from 'config';
 
 type Props = {

@@ -14,7 +14,7 @@ import {
 } from 'components/strategies/common/utils';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';

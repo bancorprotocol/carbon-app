@@ -1,9 +1,9 @@
 import { ReactElement, useMemo, useState } from 'react';
 import { externalLinks, NewTabLink, Link } from 'libs/routing';
-import { ReactComponent as IconX } from 'assets/logos/x.svg';
-import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
-import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
-import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
+import IconX from 'assets/logos/x.svg?react';
+import IconYoutube from 'assets/logos/youtube.svg?react';
+import IconDiscord from 'assets/logos/discord.svg?react';
+import IconTelegram from 'assets/logos/telegram.svg?react';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import config from 'config';
 

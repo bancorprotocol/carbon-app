@@ -1,9 +1,9 @@
-import { ReactComponent as IconWallet1 } from 'assets/icons/wallet-1.svg';
-import { ReactComponent as IconWallet2 } from 'assets/icons/wallet-2.svg';
-import { ReactComponent as IconWallet3 } from 'assets/icons/wallet-3.svg';
-import { ReactComponent as IconWallet4 } from 'assets/icons/wallet-4.svg';
-import { ReactComponent as IconWallet5 } from 'assets/icons/wallet-5.svg';
-import { ReactComponent as IconWallet6 } from 'assets/icons/wallet-6.svg';
+import IconWallet1 from 'assets/icons/wallet-1.svg?react';
+import IconWallet2 from 'assets/icons/wallet-2.svg?react';
+import IconWallet3 from 'assets/icons/wallet-3.svg?react';
+import IconWallet4 from 'assets/icons/wallet-4.svg?react';
+import IconWallet5 from 'assets/icons/wallet-5.svg?react';
+import IconWallet6 from 'assets/icons/wallet-6.svg?react';
 
 export const items = [
   {

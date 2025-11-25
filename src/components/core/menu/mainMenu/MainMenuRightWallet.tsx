@@ -1,6 +1,6 @@
-import { ReactComponent as IconDisconnect } from 'assets/icons/disconnect.svg';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
+import IconDisconnect from 'assets/icons/disconnect.svg?react';
+import IconWarning from 'assets/icons/warning.svg?react';
+import IconCopy from 'assets/icons/copy.svg?react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useMenuCtx } from 'components/common/dropdownMenu/utils';
 import { useWagmi } from 'libs/wagmi';

@@ -1,8 +1,8 @@
 import { Token } from 'libs/tokens';
 import { FC, FormEvent, useId, useMemo, useState } from 'react';
 import { cn, roundSearchParam } from 'utils/helpers';
-import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
-import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
+import IconCoinGecko from 'assets/icons/coin-gecko.svg?react';
+import IconEdit from 'assets/icons/edit.svg?react';
 import { NewTabLink, useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { useMarketPrice } from 'hooks/useMarketPrice';

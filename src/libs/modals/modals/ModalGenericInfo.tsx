@@ -1,7 +1,7 @@
 import { ModalFC } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { ReactComponent as IconError } from 'assets/icons/times.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
+import IconError from 'assets/icons/times.svg?react';
 import { ReactNode, useMemo } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Modal, ModalHeader } from 'libs/modals/Modal';

@@ -1,8 +1,8 @@
 import { Token } from 'libs/tokens';
 import { FC, useId } from 'react';
 import { cn, tokenAmount } from 'utils/helpers';
-import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
-import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
+import IconDeposit from 'assets/icons/deposit.svg?react';
+import IconWithdraw from 'assets/icons/withdraw.svg?react';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useFiatValue } from 'hooks/useFiatValue';
 

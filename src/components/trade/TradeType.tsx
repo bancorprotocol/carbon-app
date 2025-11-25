@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import { ReactComponent as IconPriceBased } from 'assets/icons/price-based.svg';
-import { ReactComponent as IconGradient } from 'assets/icons/gradient.svg';
+import IconPriceBased from 'assets/icons/price-based.svg?react';
+import IconGradient from 'assets/icons/gradient.svg?react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { gradientTypePages, staticTypePages } from './utils';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import IconChevron from 'assets/icons/chevron.svg?react';
 
 const links = [
   {

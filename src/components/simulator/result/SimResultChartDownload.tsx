@@ -1,4 +1,4 @@
-import { ReactComponent as IconDownload } from 'assets/icons/download.svg';
+import IconDownload from 'assets/icons/download.svg?react';
 import { SimulatorData } from 'libs/queries';
 import { CsvDataService } from 'libs/csv';
 import { Tooltip } from 'components/common/tooltip/Tooltip';

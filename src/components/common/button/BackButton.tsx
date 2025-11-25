@@ -1,4 +1,4 @@
-import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
+import IconChevronLeft from 'assets/icons/chevron-left.svg?react';
 import { cn } from 'utils/helpers';
 import { ButtonHTMLProps } from '.';
 import { backStyle } from './buttonStyles';

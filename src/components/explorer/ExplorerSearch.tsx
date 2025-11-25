@@ -1,8 +1,8 @@
 import { FC, FormEvent, memo, useCallback, useEffect, useState } from 'react';
 import { SuggestionCombobox } from 'components/explorer/suggestion/SuggestionCombobox';
 import { useNavigate, useSearch } from 'libs/routing';
-import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron-right.svg';
+import IconSearch from 'assets/icons/search.svg?react';
+import IconChevron from 'assets/icons/chevron-right.svg?react';
 import {
   searchPairTrade,
   searchTokens,

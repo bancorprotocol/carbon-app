@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 
 export const ModalTokenImportNotification: FC = () => {
   return (

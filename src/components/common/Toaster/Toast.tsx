@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconClose from 'assets/icons/X.svg?react';
 import { useStore } from 'store';
 import { Toast } from 'store/useToasterStore';
 

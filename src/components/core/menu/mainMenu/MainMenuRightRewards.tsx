@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconClose from 'assets/icons/X.svg?react';
 import { lsService } from 'services/localeStorage';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useDialog } from 'hooks/useDialog';

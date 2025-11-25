@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 import { DayPicker } from 'react-day-picker';
-import { ReactComponent as Chevron } from 'assets/icons/chevron.svg';
+import Chevron from 'assets/icons/chevron.svg?react';
 import './index.css';
 
 export type CalendarProps = ComponentProps<typeof DayPicker>;

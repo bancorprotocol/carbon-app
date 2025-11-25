@@ -37,7 +37,7 @@ import {
 } from 'date-fns';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { SafeDecimal } from 'libs/safedecimal';
-import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
+import CalendarIcon from 'assets/icons/calendar.svg?react';
 import style from './D3PriceHistory.module.css';
 
 export interface RangeUpdate {

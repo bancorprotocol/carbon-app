@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
-import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
-import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
+import IconPause from 'assets/icons/pause.svg?react';
+import IconTrash from 'assets/icons/trash.svg?react';
+import IconWallet from 'assets/icons/wallet.svg?react';
 
 export type MutateModalContentData = {
   modalTitle: string;

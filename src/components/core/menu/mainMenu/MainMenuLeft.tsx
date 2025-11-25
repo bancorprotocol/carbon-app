@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link, useRouterState } from 'libs/routing';
-import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
+import LogoCarbon from 'assets/logos/carbon.svg?react';
 import { getMenuItems } from 'components/core/menu';
 import { useWagmi } from 'libs/wagmi';
 

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { LogoImager } from 'components/common/imager/Imager';
-import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import IconArrow from 'assets/icons/arrow.svg?react';
+import IconChevron from 'assets/icons/chevron.svg?react';
 import { shortenString } from 'utils/helpers';
 
 interface Props {

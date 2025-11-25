@@ -4,7 +4,7 @@ import { ModalFC } from '../../modals.types';
 import { Link } from 'libs/routing';
 import { Strategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
+import IconWallet from 'assets/icons/wallet.svg?react';
 import {
   getEditBudgetPage,
   getEditPricesPage,

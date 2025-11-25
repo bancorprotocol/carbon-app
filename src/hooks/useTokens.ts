@@ -80,6 +80,7 @@ export const useToken = (address?: string) => {
   const {
     getTokenById,
     importTokens,
+    tokensMap,
     isPending: tokenQueryIsPending,
   } = useTokens();
   const { Token } = useContract();
@@ -92,6 +93,7 @@ export const useToken = (address?: string) => {
       setIsPending(false);
       return setToken(existing);
     }
+    console.log({ tokensMap, address, existing, tokenQueryIsPending });
     if (tokenQueryIsPending) return;
     fetchTokenData(Token, address)
       .then((token) => {
@@ -100,6 +102,14 @@ export const useToken = (address?: string) => {
       })
       .catch((err) => console.error(err))
       .finally(() => setIsPending(false));
-  }, [getTokenById, address, Token, importTokens, tokenQueryIsPending, token]);
+  }, [
+    tokensMap,
+    getTokenById,
+    address,
+    Token,
+    importTokens,
+    tokenQueryIsPending,
+    token,
+  ]);
   return { token, isPending };
 };

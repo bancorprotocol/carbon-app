@@ -4,16 +4,16 @@ import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
 import { Link, NewTabLink } from 'libs/routing';
 import { cn, getLowestBits, shortenString, tokenAmount } from 'utils/helpers';
 import { getExplorerLink } from 'utils/blockExplorer';
-import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
-import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
-import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
-import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
-import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
-import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
-import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
-import { ReactComponent as IconTransfer } from 'assets/icons/transfer.svg';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
+import IconCheck from 'assets/icons/check.svg?react';
+import IconPause from 'assets/icons/pause.svg?react';
+import IconEdit from 'assets/icons/edit.svg?react';
+import IconArrowDown from 'assets/icons/arrowDown.svg?react';
+import IconWithdraw from 'assets/icons/withdraw.svg?react';
+import IconDeposit from 'assets/icons/deposit.svg?react';
+import IconDelete from 'assets/icons/delete.svg?react';
+import IconTransfer from 'assets/icons/transfer.svg?react';
+import IconLink from 'assets/icons/link.svg?react';
+import IconChevronLeft from 'assets/icons/chevron-left.svg?react';
 import {
   activityActionName,
   activityDateFormatter,

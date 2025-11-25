@@ -3,7 +3,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { lsService } from 'services/localeStorage';
-import { ReactComponent as IconStar } from 'assets/icons/star.svg';
+import IconStar from 'assets/icons/star.svg?react';
 import { ModalTokenListDuplicateWarning } from 'libs/modals/modals/ModalTokenList/ModalTokenListDuplicateWarning';
 import { SuspiciousToken } from 'components/common/DisplayPair';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';

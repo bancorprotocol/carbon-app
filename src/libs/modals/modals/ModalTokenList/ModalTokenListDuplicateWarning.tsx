@@ -3,8 +3,8 @@ import { Token } from 'libs/tokens';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { shortenString } from 'utils/helpers';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconLink from 'assets/icons/link.svg?react';
+import IconWarning from 'assets/icons/warning.svg?react';
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 

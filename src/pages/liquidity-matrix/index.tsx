@@ -3,9 +3,9 @@ import { TokenLogo } from 'components/common/imager/Imager';
 import { useModal } from 'hooks/useModal';
 import { useTokens } from 'hooks/useTokens';
 import { getLastVisitedPair } from 'libs/routing';
-import { ReactComponent as AddIcon } from 'assets/icons/plus.svg';
-import { ReactComponent as RemoveIcon } from 'assets/icons/X.svg';
-import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
+import AddIcon from 'assets/icons/plus.svg?react';
+import RemoveIcon from 'assets/icons/X.svg?react';
+import ChevronIcon from 'assets/icons/chevron.svg?react';
 import {
   FC,
   FormEvent,
