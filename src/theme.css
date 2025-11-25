@@ -493,7 +493,3 @@
 
 @custom-variant aria-page (&[aria-current="page"]);
 @custom-variant aria-location (&[aria-current="location"]);
-
-.test {
-  color: red;
-}
