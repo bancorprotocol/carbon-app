@@ -9,7 +9,6 @@ import { setLSUserNotifications } from 'libs/notifications/utils';
 import { useCallback } from 'react';
 import { NOTIFICATIONS_MAP } from 'libs/notifications/data';
 import { uuid } from 'utils/helpers';
-import { dayjs } from 'libs/dayjs';
 
 export const useNotifications = () => {
   const { user, provider } = useWagmi();
@@ -51,7 +50,7 @@ export const useNotifications = () => {
           {
             ...NOTIFICATIONS_MAP[key](data),
             id: uuid(),
-            timestamp: dayjs().unix(),
+            timestamp: Date.now() / 1000,
           },
         ];
         if (newNotifications.length > 100) {

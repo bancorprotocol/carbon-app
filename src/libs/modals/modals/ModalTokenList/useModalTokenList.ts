@@ -116,7 +116,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
     }
     const lowercase = search.toLowerCase();
 
-    if (config.network.name === 'TON' && isTONAddress(search)) {
+    if (import.meta.env.VITE_NETWORK === 'ton' && isTONAddress(search)) {
       const found = (sanitizedTokens as TonToken[]).find(
         (token) => token.tonAddress === search,
       );
@@ -145,7 +145,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
   const showImportToken = useMemo(() => {
     const lowercase = search.toLowerCase();
     if (isGasTokenToHide(lowercase)) return false;
-    if (config.network.name === 'TON' && isTONAddress(search)) {
+    if (import.meta.env.VITE_NETWORK === 'ton' && isTONAddress(search)) {
       const existing = (filteredTokens as TonToken[]).some(
         (token) => token.tonAddress === search,
       );
