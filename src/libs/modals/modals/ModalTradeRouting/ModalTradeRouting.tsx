@@ -8,7 +8,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MatchActionBNStr } from '@bancor/carbon-sdk/';
 import { useModalTradeRouting } from './useModalTradeRouting';
 import { ModalTradeRoutingRow } from './ModalTradeRoutingRow';
-import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
+import IconArrow from 'assets/icons/arrowDown.svg?react';
 import { Modal, ModalHeader } from '../../Modal';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { SafeDecimal } from 'libs/safedecimal';

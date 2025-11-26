@@ -3,8 +3,8 @@ import { CartStrategy, Order } from 'components/strategies/common/types';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
-import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import { cn, getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
 
 export const StrategyBlockBuySell: FC<{

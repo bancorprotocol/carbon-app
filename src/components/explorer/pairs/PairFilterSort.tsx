@@ -1,7 +1,7 @@
 import { FC, FormEvent, useId } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
+import IconChevron from 'assets/icons/chevron.svg?react';
+import IconCheck from 'assets/icons/check.svg?react';
 import { cn } from 'utils/helpers';
 import { pairFilter, PairFilter, pairSort, PairSort } from './utils';
 

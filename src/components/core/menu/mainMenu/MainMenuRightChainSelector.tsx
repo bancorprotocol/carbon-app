@@ -1,4 +1,4 @@
-import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
+import IconCheck from 'assets/icons/check.svg?react';
 import { FC } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { cn } from 'utils/helpers';

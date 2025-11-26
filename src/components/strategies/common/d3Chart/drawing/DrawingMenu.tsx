@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { ReactComponent as IconIndicator } from 'assets/icons/draw-indicator.svg';
-import { ReactComponent as IconLine } from 'assets/icons/draw-line.svg';
-import { ReactComponent as IconExtendedLine } from 'assets/icons/draw-extended-line.svg';
-import { ReactComponent as IconChannel } from 'assets/icons/draw-channel.svg';
-import { ReactComponent as IconTriangle } from 'assets/icons/draw-triangle.svg';
-import { ReactComponent as IconRectangle } from 'assets/icons/draw-rectangle.svg';
-import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
+import IconIndicator from 'assets/icons/draw-indicator.svg?react';
+import IconLine from 'assets/icons/draw-line.svg?react';
+import IconExtendedLine from 'assets/icons/draw-extended-line.svg?react';
+import IconChannel from 'assets/icons/draw-channel.svg?react';
+import IconTriangle from 'assets/icons/draw-triangle.svg?react';
+import IconRectangle from 'assets/icons/draw-rectangle.svg?react';
+import IconTrash from 'assets/icons/trash.svg?react';
 import { useD3ChartCtx } from '../D3ChartContext';
 import {
   FloatTooltip,

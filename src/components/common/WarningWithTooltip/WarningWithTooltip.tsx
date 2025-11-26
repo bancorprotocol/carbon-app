@@ -1,4 +1,4 @@
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { cn } from 'utils/helpers';
 

@@ -1,5 +1,5 @@
-import { ReactComponent as IconCut } from 'assets/icons/cut.svg';
-import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
+import IconCut from 'assets/icons/cut.svg?react';
+import IconCopy from 'assets/icons/copy.svg?react';
 import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';

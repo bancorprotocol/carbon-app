@@ -1,5 +1,5 @@
 import { Link, useRouterState } from 'libs/routing';
-import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import IconPlus from 'assets/icons/plus.svg?react';
 import { isPathnameMatch } from 'utils/helpers';
 
 export const CreateStrategyCTAMobile = () => {

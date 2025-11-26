@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ReactComponent as IconAnimation } from 'assets/icons/movie.svg';
-import { ReactComponent as IconSummary } from 'assets/icons/image.svg';
+import IconAnimation from 'assets/icons/movie.svg?react';
+import IconSummary from 'assets/icons/image.svg?react';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 interface Props {

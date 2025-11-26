@@ -1,5 +1,5 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { prettifySignedNumber } from 'utils/helpers';
 import { FC, useCallback } from 'react';
 import { Token } from 'libs/tokens';

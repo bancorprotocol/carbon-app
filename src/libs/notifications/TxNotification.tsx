@@ -1,9 +1,9 @@
 import { FC, useId } from 'react';
 import { NotificationStatus, NotificationTx } from 'libs/notifications/types';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { ReactComponent as IconTimes } from 'assets/icons/times.svg';
-import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconLink from 'assets/icons/link.svg?react';
+import IconTimes from 'assets/icons/times.svg?react';
+import IconCheck from 'assets/icons/check.svg?react';
+import IconClose from 'assets/icons/X.svg?react';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { unix } from 'libs/dayjs';
 import { NewTabLink } from 'libs/routing';

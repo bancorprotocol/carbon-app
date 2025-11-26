@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link } from 'libs/routing';
-import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import IconPlus from 'assets/icons/plus.svg?react';
 import { cn } from 'utils/helpers';
 
 type Props = {

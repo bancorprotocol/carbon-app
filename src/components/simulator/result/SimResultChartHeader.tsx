@@ -10,7 +10,7 @@ import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimResultChartControls } from 'components/simulator/result/SimResultChartControls';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { fromUnixUTC, toUnixUTC } from '../utils';
-import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
+import CalendarIcon from 'assets/icons/calendar.svg?react';
 
 interface Props {
   data: Array<SimulatorData>;

@@ -2,7 +2,7 @@ import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
-import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
+import IconDelete from 'assets/icons/delete.svg?react';
 
 export type ModalWithdrawOrDeleteData = {
   onDelete: () => void;

@@ -1,6 +1,6 @@
 import { HTMLAttributes, KeyboardEventHandler, useEffect, useRef } from 'react';
-import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
-import { ReactComponent as IconClose } from 'assets/icons/times.svg';
+import IconSearch from 'assets/icons/search.svg?react';
+import IconClose from 'assets/icons/times.svg?react';
 import { cn } from 'utils/helpers';
 
 type InputProps = HTMLAttributes<HTMLInputElement>;

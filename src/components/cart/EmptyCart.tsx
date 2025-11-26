@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { ReactComponent as CartIcon } from 'assets/icons/cart.svg';
+import CartIcon from 'assets/icons/cart.svg?react';
 
 export const EmptyCart = () => {
   return (

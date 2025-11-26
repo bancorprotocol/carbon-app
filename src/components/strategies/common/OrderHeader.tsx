@@ -3,7 +3,7 @@ import { Token } from 'libs/tokens';
 import { OrderBlock } from 'components/strategies/common/types';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 

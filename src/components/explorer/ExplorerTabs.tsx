@@ -1,8 +1,8 @@
 import { Link, useMatchRoute, useRouterState } from 'libs/routing';
-import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
-import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
-import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
-import { ReactComponent as IconPairs } from 'assets/icons/pairs.svg';
+import IconOverview from 'assets/icons/overview.svg?react';
+import IconPieChart from 'assets/icons/piechart.svg?react';
+import IconActivity from 'assets/icons/activity.svg?react';
+import IconPairs from 'assets/icons/pairs.svg?react';
 import { ReactNode } from 'react';
 
 export interface ExplorerTab {

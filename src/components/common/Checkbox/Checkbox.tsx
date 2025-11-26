@@ -1,5 +1,5 @@
 import { FC, HTMLAttributes } from 'react';
-import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
+import IconCheck from 'assets/icons/check.svg?react';
 import { cn } from 'utils/helpers';
 
 type Props = HTMLAttributes<HTMLButtonElement> & {

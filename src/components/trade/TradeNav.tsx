@@ -1,9 +1,9 @@
-import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
-import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
-import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
-import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
-import { ReactComponent as IconRange } from 'assets/icons/range.svg';
-import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
+import IconDisposable from 'assets/icons/disposable.svg?react';
+import IconRecurring from 'assets/icons/recurring.svg?react';
+import IconOverlapping from 'assets/icons/overlapping.svg?react';
+import IconMarket from 'assets/icons/market.svg?react';
+import IconRange from 'assets/icons/range.svg?react';
+import ChevronIcon from 'assets/icons/chevron.svg?react';
 
 import { Link, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';

@@ -1,6 +1,6 @@
 import { Token } from 'libs/tokens';
 import { FC, useMemo } from 'react';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
+import IconLink from 'assets/icons/link.svg?react';
 import { FullOutcomeParams, getFullOutcome } from 'utils/fullOutcome';
 import { prettifyNumber } from 'utils/helpers';
 

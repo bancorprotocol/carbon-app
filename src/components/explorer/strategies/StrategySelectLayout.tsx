@@ -1,6 +1,6 @@
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
-import { ReactComponent as IconGrid } from 'assets/icons/grid.svg';
-import { ReactComponent as IconTable } from 'assets/icons/table.svg';
+import IconGrid from 'assets/icons/grid.svg?react';
+import IconTable from 'assets/icons/table.svg?react';
 import { Dispatch, FC, SetStateAction } from 'react';
 
 export type StrategyLayout = 'grid' | 'table';

@@ -1,6 +1,6 @@
 import { ModalFC } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 import { lsService } from 'services/localeStorage';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { useCallback } from 'react';

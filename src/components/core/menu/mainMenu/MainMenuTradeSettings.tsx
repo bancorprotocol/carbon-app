@@ -1,5 +1,5 @@
-import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconCog from 'assets/icons/cog.svg?react';
+import IconClose from 'assets/icons/X.svg?react';
 import { useStore } from 'store';
 import { FormEvent, useCallback, useId, useState } from 'react';
 import { TradeSettingsData } from 'components/trade/settings/utils';
