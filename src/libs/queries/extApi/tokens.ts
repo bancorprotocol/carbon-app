@@ -16,15 +16,13 @@ export const useExistingTokensQuery = () => {
   return useQuery({
     queryKey: QueryKey.tokens(),
     queryFn: async () => {
-      console.log('GET EXISTING');
-
       const tokens = buildTokenList(await fetchTokenLists());
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
     },
     staleTime: ONE_HOUR_IN_MS,
-    // initialData: persitent?.tokens,
-    // initialDataUpdatedAt: persitent?.timestamp,
+    initialData: persitent?.tokens,
+    initialDataUpdatedAt: persitent?.timestamp,
     refetchOnWindowFocus: false,
     meta: {
       errorMessage: 'useTokensQuery failed with error:',

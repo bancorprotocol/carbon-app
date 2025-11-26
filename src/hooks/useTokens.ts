@@ -93,7 +93,6 @@ export const useToken = (address?: string) => {
       setIsPending(false);
       return setToken(existing);
     }
-    console.log({ tokensMap, address, existing, tokenQueryIsPending });
     if (tokenQueryIsPending) return;
     fetchTokenData(Token, address)
       .then((token) => {
