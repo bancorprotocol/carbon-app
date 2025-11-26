@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
 import { StoreProvider } from 'store';
 import { WagmiReactWrapper } from 'libs/wagmi';
-import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
 import 'init-sentry';
@@ -41,9 +40,7 @@ root.render(
       <SDKProvider>
         <StoreProvider>
           <WalletProvider>
-            <LazyMotion>
-              <RouterProvider router={router} />
-            </LazyMotion>
+            <RouterProvider router={router} />
           </WalletProvider>
         </StoreProvider>
       </SDKProvider>
