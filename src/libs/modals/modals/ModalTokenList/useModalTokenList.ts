@@ -11,7 +11,6 @@ import {
   isGasTokenToHide,
   nativeToken,
 } from 'utils/tokens';
-import { isTONAddress } from 'libs/ton/address';
 import { TonToken } from 'libs/ton/tokenMap';
 
 const SEARCH_KEYS = [
@@ -115,16 +114,15 @@ export const useModalTokenList = ({ id, data }: Props) => {
       return sanitizedTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
     }
     const lowercase = search.toLowerCase();
-
-    if (import.meta.env.VITE_NETWORK === 'ton' && isTONAddress(search)) {
+    const isEthAdress = isAddress(lowercase);
+    if (import.meta.env.VITE_NETWORK === 'ton' && !isEthAdress) {
       const found = (sanitizedTokens as TonToken[]).find(
         (token) => token.tonAddress === search,
       );
       if (found) return [found];
       return [];
     } else {
-      const isValidAddress = isAddress(lowercase);
-      if (isValidAddress) {
+      if (isEthAdress) {
         if (
           isGasTokenToHide(lowercase) &&
           !excludedTokens.includes(NATIVE_TOKEN_ADDRESS)
@@ -144,8 +142,9 @@ export const useModalTokenList = ({ id, data }: Props) => {
 
   const showImportToken = useMemo(() => {
     const lowercase = search.toLowerCase();
+    const isEthAdress = isAddress(lowercase);
     if (isGasTokenToHide(lowercase)) return false;
-    if (import.meta.env.VITE_NETWORK === 'ton' && isTONAddress(search)) {
+    if (import.meta.env.VITE_NETWORK === 'ton' && !isEthAdress) {
       const existing = (filteredTokens as TonToken[]).some(
         (token) => token.tonAddress === search,
       );
@@ -155,7 +154,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
         (token) => token.address.toLowerCase() === search.toLowerCase(),
       );
       if (existing) return false;
-      if (isAddress(lowercase)) return true;
+      if (isEthAdress) return true;
     }
     return false;
   }, [search, filteredTokens]);
