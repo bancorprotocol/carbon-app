@@ -50,7 +50,7 @@ const manifestUrl =
     ? 'https://ton-connect.github.io/demo-dapp-with-wallet/tonconnect-manifest.json'
     : 'https://ton.carbondefi.xyz/tonconnect-manifest.json';
 
-export const TonProvider = ({ children }: { children: ReactNode }) => {
+export default function TonProvider({ children }: { children: ReactNode }) {
   return (
     <TonConnectUIProvider manifestUrl={manifestUrl}>
       <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
@@ -58,7 +58,7 @@ export const TonProvider = ({ children }: { children: ReactNode }) => {
       </WagmiProvider>
     </TonConnectUIProvider>
   );
-};
+}
 
 async function repeat<T>(cb: () => Promise<T>): Promise<T> {
   let remaining = 60;

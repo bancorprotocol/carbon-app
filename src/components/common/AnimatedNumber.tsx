@@ -1,6 +1,42 @@
-import { animate } from 'framer-motion';
-import { m } from 'libs/motion';
 import { useEffect, useRef } from 'react';
+
+interface TweenOptions {
+  from: number;
+  to: number;
+  duration: number;
+  delay?: number;
+  ease?: (t: number) => number;
+}
+
+async function* tween({
+  from,
+  to,
+  duration,
+  delay = 0,
+  ease = (t) => t, // Default linear easing
+}: TweenOptions): AsyncGenerator<number> {
+  if (delay > 0) {
+    await new Promise((resolve) => setTimeout(resolve, delay));
+  }
+
+  const startTime = performance.now();
+  let currentTime = startTime;
+  let elapsed = 0;
+
+  while (elapsed < duration) {
+    const t = Math.min(1, elapsed / duration);
+    const easedT = ease(t);
+    const currentValue = from + (to - from) * easedT;
+    yield currentValue;
+
+    currentTime = await new Promise<number>((resolve) =>
+      requestAnimationFrame(resolve),
+    );
+
+    elapsed = currentTime - startTime;
+  }
+  yield to;
+}
 
 interface Props {
   from: number;
@@ -24,18 +60,25 @@ export const AnimatedNumber = ({
   useEffect(() => {
     const node = nodeRef.current;
     if (!node) return;
-    const controls = animate(from, to, {
-      type: 'tween',
-      ease: [0.1, 0.84, 0.29, 0.93], // cubic-bezier
-      duration: duration ?? 2,
-      onUpdate(value) {
-        node.textContent = formatFn ? formatFn(value) : value.toString();
-      },
-    });
+    let close = false;
+    const animate = async () => {
+      const animation = tween({
+        from,
+        to,
+        duration: duration ?? 2000,
+        ease: (x) => 1 - Math.pow(1 - x, 3), // ease-out
+      });
+      for await (const value of animation) {
+        if (close) return;
+        const text = formatFn ? formatFn(value) : value.toString();
+        node.textContent = text;
+      }
+    };
+    animate();
+    return () => {
+      close = true;
+    };
+  }, [duration, formatFn, from, to]);
 
-    return () => controls.stop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [to]);
-
-  return <m.p ref={nodeRef} className={className ?? ''} data-testid={testid} />;
+  return <p ref={nodeRef} className={className ?? ''} data-testid={testid}></p>;
 };

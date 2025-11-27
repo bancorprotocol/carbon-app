@@ -40,7 +40,7 @@ export const MobileMenu: FC = () => {
       <button
         type="button"
         aria-haspopup="true"
-        onClick={() => openModal('burgerMenu', undefined)}
+        onClick={() => openModal('burgerMenu')}
         className="flex px-8 py-4 cursor-pointer items-center hover:text-white"
       >
         <IconDots className="w-24" />

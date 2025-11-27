@@ -8,10 +8,10 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { SafeDecimal } from 'libs/safedecimal';
 
-type Props = {
+interface Props {
   id: string;
   data: ModalTradeRoutingData;
-};
+}
 
 export const useModalTradeRouting = ({
   id,
@@ -68,7 +68,7 @@ export const useModalTradeRouting = ({
 
   const handleCTAClick = useCallback(() => {
     if (!user) {
-      return openModal('wallet', undefined);
+      return openModal('wallet');
     }
 
     if (approval.isPending || isPending || isError) {

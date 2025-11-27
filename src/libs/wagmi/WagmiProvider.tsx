@@ -45,10 +45,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
     setImposterAccount,
   });
 
-  const openConnect = useCallback(
-    () => openModal('wallet', undefined),
-    [openModal],
-  );
+  const openConnect = useCallback(() => openModal('wallet'), [openModal]);
   const sendTransaction = useCallback(
     (tx: TransactionRequest) => signer!.sendTransaction(tx),
     [signer],

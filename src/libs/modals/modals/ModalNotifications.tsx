@@ -1,11 +1,11 @@
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { useNotifications } from 'hooks/useNotifications';
 import { useModal } from 'hooks/useModal';
 import { NotificationPreferences } from 'libs/notifications/NotificationPreferences';
 import { Modal, ModalHeader } from '../Modal';
 
-export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
+export default function ModalNotifications({ id }: ModalProps) {
   const { notifications, clearNotifications, removeNotification } =
     useNotifications();
   const reversedNotifications = notifications.slice().reverse();
@@ -39,4 +39,4 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
       </ul>
     </Modal>
   );
-};
+}

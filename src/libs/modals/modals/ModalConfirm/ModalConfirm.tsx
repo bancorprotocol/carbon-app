@@ -1,19 +1,19 @@
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { ApproveToken } from 'components/common/approval';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 
-export type ModalCreateConfirmData = {
+interface ModalCreateConfirmData {
   approvalTokens: ApprovalToken[];
   onConfirm: () => any;
   buttonLabel?: string;
-};
+}
 
-export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
+export default function ModalConfirm({
   id,
   data: { approvalTokens, onConfirm, buttonLabel = 'Confirm' },
-}) => {
+}: ModalProps<ModalCreateConfirmData>) {
   const { closeModal } = useModal();
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
 
@@ -44,4 +44,4 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
       </button>
     </Modal>
   );
-};
+}

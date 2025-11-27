@@ -1,6 +1,6 @@
 import { useModal } from 'hooks/useModal';
 import { Modal, ModalHeader } from '../../Modal';
-import { ModalFC } from '../../modals.types';
+import { ModalProps } from '../../modals.types';
 import { Link } from 'libs/routing';
 import { Strategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
@@ -10,14 +10,14 @@ import {
   getEditPricesPage,
 } from 'components/strategies/edit/utils';
 
-export interface ModalConfirmWithdrawData {
+interface ModalConfirmWithdrawData {
   strategy: Strategy;
 }
 
-export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
+export default function ModalConfirmWithdraw({
   id,
   data,
-}) => {
+}: ModalProps<ModalConfirmWithdrawData>) {
   const { closeModal } = useModal();
   const { strategy } = data;
   const editPrices = getEditPricesPage(strategy, 'editPrices');
@@ -61,4 +61,4 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
       </Link>
     </Modal>
   );
-};
+}

@@ -1,4 +1,4 @@
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { AnyStrategy } from 'components/strategies/common/types';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
@@ -8,14 +8,14 @@ import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 import IconPause from 'assets/icons/pause.svg?react';
 
-export type ModalConfirmPauseData = {
+interface ModalConfirmPauseData {
   strategy: AnyStrategy;
-};
+}
 
-export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
+export default function ModalConfirmPause({
   id,
   data,
-}) => {
+}: ModalProps<ModalConfirmPauseData>) {
   const { strategy } = data;
   const { closeModal } = useModal();
   const { pauseStrategy, isProcessing, updateMutation } = usePauseStrategy();
@@ -63,4 +63,4 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
       </button>
     </Modal>
   );
-};
+}

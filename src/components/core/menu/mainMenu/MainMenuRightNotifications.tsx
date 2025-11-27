@@ -10,7 +10,7 @@ export const MainMenuRightNotifications: FC = () => {
   return (
     <button
       className="btn-on-background relative p-0"
-      onClick={() => openModal('notifications', undefined)}
+      onClick={() => openModal('notifications')}
     >
       <span className="grid size-40 place-items-center">
         {hasPendingTx && (

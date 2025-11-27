@@ -82,7 +82,7 @@ export const useCreateStrategy = (props: Props) => {
 
   const createStrategy = async () => {
     if (!base || !quote) return;
-    if (!user) return openModal('wallet', undefined);
+    if (!user) return openModal('wallet');
 
     const onConfirm = () => {
       return mutation.mutate(toCreateStrategyParams(base, quote, buy, sell), {

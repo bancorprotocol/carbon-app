@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useModal } from 'hooks/useModal';
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { useWagmi, Connector } from 'libs/wagmi';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { useStore } from 'store';
 
-export const ModalWallet: ModalFC<undefined> = ({ id }) => {
+export default function ModalWallet({ id }: ModalProps) {
   const { closeModal } = useModal();
   const { connect } = useWagmi();
   const { isCountryBlocked } = useStore();
@@ -62,4 +62,4 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
       )}
     </Modal>
   );
-};
+}

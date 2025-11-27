@@ -8,7 +8,7 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useStore } from 'store';
 import { useMenuCtx } from 'components/common/dropdownMenu/utils';
 
-export const TonConnectBtn = () => {
+export default function TonConnectBtn() {
   const [tonConnectUI] = useTonConnectUI();
   const address = useTonAddress();
 
@@ -42,7 +42,7 @@ export const TonConnectBtn = () => {
       </button>
     );
   }
-};
+}
 
 const Menu = () => {
   const [tonConnectUI] = useTonConnectUI();

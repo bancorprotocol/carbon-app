@@ -1,34 +1,7 @@
 import config from 'config';
-import { getAddress as getEthersAddress, isAddress } from 'ethers';
-
-import { Address } from '@ton/core';
+import { isAddress } from 'ethers';
 import { Token } from 'libs/tokens';
 import { getTacSDK } from './sdk';
-
-export const isTONAddress = (address: string) => {
-  try {
-    Address.parse(address);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-export const isNetworkAddress = (address: string) => {
-  if (config.network.name === 'TON') {
-    return isTONAddress(address);
-  } else {
-    return isAddress(address);
-  }
-};
-
-export const getNetworkAddress = (address: string) => {
-  if (config.network.name === 'TON') {
-    return Address.parse(address).toString({ bounceable: true });
-  } else {
-    return getEthersAddress(address);
-  }
-};
 
 export const getTokenAddress = (token: Token) => {
   if (config.network.name === 'TON' && 'tonAddress' in token) {
@@ -42,13 +15,20 @@ export const getTokenAddress = (token: Token) => {
 
 export const getEVMTokenAddress = async (tvmTokenAddress: string) => {
   if (isAddress(tvmTokenAddress)) return tvmTokenAddress;
+  const { Address } = await import('@ton/core');
   const sdk = await getTacSDK();
   const ton = Address.parse(tvmTokenAddress).toString({ bounceable: true });
   return sdk.getEVMTokenAddress(ton);
 };
 export const getTVMTokenAddress = async (evmTokenAddress: string) => {
-  if (isTONAddress(evmTokenAddress)) return evmTokenAddress;
-  const sdk = await getTacSDK();
-  const tvmAddress = await sdk.getTVMTokenAddress(evmTokenAddress);
-  return Address.parse(tvmAddress).toString({ bounceable: true });
+  const { Address } = await import('@ton/core');
+  try {
+    // If evmTokenAddress is actually a TON address, return it
+    Address.parse(evmTokenAddress);
+    return evmTokenAddress;
+  } catch {
+    const sdk = await getTacSDK();
+    const tvmAddress = await sdk.getTVMTokenAddress(evmTokenAddress);
+    return Address.parse(tvmAddress).toString({ bounceable: true });
+  }
 };

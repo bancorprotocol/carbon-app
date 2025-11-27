@@ -4,7 +4,7 @@ import ChevronIcon from 'assets/icons/chevron.svg?react';
 import ForwardArrowIcon from 'assets/icons/arrow.svg?react';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
-import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
+import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/types';
 import { SuspiciousToken } from 'components/common/DisplayPair';
 import { FC } from 'react';
 

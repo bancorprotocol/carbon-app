@@ -1,4 +1,4 @@
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { useGetTokenData } from 'libs/queries/chain/token';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
@@ -10,14 +10,14 @@ import { getExplorerLink } from 'utils/blockExplorer';
 import { NewTabLink } from 'libs/routing';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 
-export type ModalImportTokenData = {
+interface ModalImportTokenData {
   address: string;
-};
+}
 
-export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
+export default function ModalImportToken({
   id,
   data: { address },
-}) => {
+}: ModalProps<ModalImportTokenData>) {
   const { closeModal } = useModal();
   const { data, isPending, isError } = useGetTokenData(address);
   const { importTokens } = useTokens();
@@ -87,4 +87,4 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       </button>
     </Modal>
   );
-};
+}

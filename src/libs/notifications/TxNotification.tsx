@@ -1,12 +1,12 @@
-import { FC, useId } from 'react';
+import { FC, useId, useMemo } from 'react';
 import { NotificationStatus, NotificationTx } from 'libs/notifications/types';
 import IconLink from 'assets/icons/link.svg?react';
 import IconTimes from 'assets/icons/times.svg?react';
 import IconCheck from 'assets/icons/check.svg?react';
 import IconClose from 'assets/icons/X.svg?react';
 import { getExplorerLink } from 'utils/blockExplorer';
-import { unix } from 'libs/dayjs';
 import { NewTabLink } from 'libs/routing';
+import { formatDistanceToNow, fromUnixTime } from 'date-fns';
 import config from 'config';
 
 const StatusIcon = (status: NotificationStatus) => {
@@ -63,41 +63,52 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
   const titleId = useId();
   const blockExplorer = config.network.blockExplorer.name;
 
+  const date = useMemo(
+    () => fromUnixTime(notification.timestamp),
+    [notification.timestamp],
+  );
+  const duration = formatDistanceToNow(date, { addSuffix: true });
+
   return (
-    <article aria-labelledby={titleId} className="flex gap-16">
+    <article
+      aria-labelledby={titleId}
+      className="grid grid-cols-[auto_1fr] gap-16"
+    >
       {StatusIcon(notification.status)}
-      <div className="text-14 flex flex-1 flex-col gap-8 overflow-hidden">
-        <hgroup>
+      <div className="grid">
+        <header className="flex items-center justify-between">
           <h3 id={titleId} className="text-16" data-testid="notif-title">
             {getTitleByStatus(notification)}
           </h3>
-          <p className="truncate text-white/80" data-testid="notif-description">
-            {getDescriptionByStatus(notification)}
-          </p>
-        </hgroup>
-        {notification.txHash && (
-          <NewTabLink
-            to={getExplorerLink('tx', notification.txHash)}
-            className="font-medium flex items-center"
+          <button
+            className="text-12 font-medium"
+            onClick={close}
+            data-testid="notif-close"
+            aria-label="Remove notification"
           >
-            View on {blockExplorer}
-            <IconLink className="ml-6 w-14" />
-          </NewTabLink>
-        )}
-      </div>
-
-      <div className="flex flex-col items-end justify-between">
-        <button
-          className="text-12 font-medium"
-          onClick={close}
-          data-testid="notif-close"
-          aria-label="Remove notification"
+            <IconClose className="size-14 text-white/80" />
+          </button>
+        </header>
+        <p
+          className="text-14 truncate text-white/80"
+          data-testid="notif-description"
         >
-          <IconClose className="size-14 text-white/80" />
-        </button>
-        <p className="text-12 font-medium whitespace-nowrap text-white/60">
-          {unix(notification.timestamp).fromNow(true)}
+          {getDescriptionByStatus(notification)}
         </p>
+        <footer className="grid grid-flow-col pt-8">
+          {notification.txHash && (
+            <NewTabLink
+              to={getExplorerLink('tx', notification.txHash)}
+              className="justify-self-start text-14 font-medium flex items-center"
+            >
+              View on {blockExplorer}
+              <IconLink className="ml-6 w-14" />
+            </NewTabLink>
+          )}
+          <p className="justify-self-end text-12 font-medium whitespace-nowrap text-white/60">
+            {duration}
+          </p>
+        </footer>
       </div>
     </article>
   );

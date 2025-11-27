@@ -4,15 +4,15 @@ import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
 import Fuse from 'fuse.js';
 import { isAddress } from 'ethers';
-import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/ModalTokenList';
+import { ModalTokenListData } from './types';
 import config from 'config';
 import {
   NATIVE_TOKEN_ADDRESS,
   isGasTokenToHide,
   nativeToken,
 } from 'utils/tokens';
-import { isTONAddress } from 'libs/ton/address';
 import { TonToken } from 'libs/ton/tokenMap';
+import { isTonAddress } from 'libs/ton/is-address';
 
 const SEARCH_KEYS = [
   {
@@ -115,16 +115,16 @@ export const useModalTokenList = ({ id, data }: Props) => {
       return sanitizedTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
     }
     const lowercase = search.toLowerCase();
+    const isEthAdress = isAddress(lowercase);
 
-    if (config.network.name === 'TON' && isTONAddress(search)) {
-      const found = (sanitizedTokens as TonToken[]).find(
-        (token) => token.tonAddress === search,
+    if (import.meta.env.VITE_NETWORK === 'ton' && isTonAddress(search)) {
+      const found = (sanitizedTokens as TonToken[]).find((token) =>
+        token.tonAddress.includes(search),
       );
       if (found) return [found];
       return [];
     } else {
-      const isValidAddress = isAddress(lowercase);
-      if (isValidAddress) {
+      if (isEthAdress) {
         if (
           isGasTokenToHide(lowercase) &&
           !excludedTokens.includes(NATIVE_TOKEN_ADDRESS)
@@ -144,8 +144,9 @@ export const useModalTokenList = ({ id, data }: Props) => {
 
   const showImportToken = useMemo(() => {
     const lowercase = search.toLowerCase();
+    const isEthAdress = isAddress(lowercase);
     if (isGasTokenToHide(lowercase)) return false;
-    if (config.network.name === 'TON' && isTONAddress(search)) {
+    if (import.meta.env.VITE_NETWORK === 'ton' && isTonAddress(search)) {
       const existing = (filteredTokens as TonToken[]).some(
         (token) => token.tonAddress === search,
       );
@@ -155,7 +156,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
         (token) => token.address.toLowerCase() === search.toLowerCase(),
       );
       if (existing) return false;
-      if (isAddress(lowercase)) return true;
+      if (isEthAdress) return true;
     }
     return false;
   }, [search, filteredTokens]);

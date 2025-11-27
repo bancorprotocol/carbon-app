@@ -1,18 +1,18 @@
 import { useModal } from 'hooks/useModal';
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 import IconDelete from 'assets/icons/delete.svg?react';
 
-export type ModalWithdrawOrDeleteData = {
+interface ModalWithdrawOrDeleteData {
   onDelete: () => void;
   onWithdraw: () => void;
-};
+}
 
-export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
+export default function ModalWithdrawOrDelete({
   id,
   data: { onDelete, onWithdraw },
-}) => {
+}: ModalProps<ModalWithdrawOrDeleteData>) {
   const { closeModal } = useModal();
 
   return (
@@ -44,4 +44,4 @@ export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
       </button>
     </Modal>
   );
-};
+}

@@ -32,7 +32,7 @@ export const SimResultSummaryGains: FC<Props> = ({ portfolioGains, quote }) => {
         from={0.0}
         to={portfolioGains}
         formatFn={formatGain}
-        duration={2}
+        duration={2000}
         data-testid="summary-gains"
       />
     </article>

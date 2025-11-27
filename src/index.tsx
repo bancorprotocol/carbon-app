@@ -1,23 +1,23 @@
 import 'global-shim';
-import React, { ReactNode } from 'react';
+import React, { lazy, ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
 import { StoreProvider } from 'store';
 import { WagmiReactWrapper } from 'libs/wagmi';
-import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
-import { TonProvider } from 'libs/ton/TonProvider';
+import { SDKProvider } from 'libs/sdk/provider';
+import TelegramAnalytics from '@telegram-apps/analytics';
 import config from 'config';
 import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
-import { SDKProvider } from 'libs/sdk/provider';
-import TelegramAnalytics from '@telegram-apps/analytics';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
+
+const TonProvider = lazy(() => import('libs/ton/TonProvider'));
 
 const WalletProvider = ({ children }: { children: ReactNode }) => {
   if (config.network.name === 'TON') {
@@ -27,10 +27,12 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
   }
 };
 
-TelegramAnalytics.init({
-  token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
-  appName: 'Carbondefiappbot',
-});
+if (config.network.name === 'TON') {
+  TelegramAnalytics.init({
+    token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
+    appName: 'Carbondefiappbot',
+  });
+}
 
 root.render(
   <React.StrictMode>
@@ -38,9 +40,7 @@ root.render(
       <SDKProvider>
         <StoreProvider>
           <WalletProvider>
-            <LazyMotion>
-              <RouterProvider router={router} />
-            </LazyMotion>
+            <RouterProvider router={router} />
           </WalletProvider>
         </StoreProvider>
       </SDKProvider>

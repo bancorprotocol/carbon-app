@@ -1,11 +1,11 @@
-import { FC, useId } from 'react';
+import { FC, useId, useMemo } from 'react';
 import { NotificationActivity } from 'libs/notifications/types';
 import { activityActionName, activityDescription } from './utils';
 import IconClose from 'assets/icons/X.svg?react';
 import { Link } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
 import { ActivityAction } from 'libs/queries/extApi/activity';
-import { unix } from 'dayjs';
+import { formatDistanceToNow, fromUnixTime } from 'date-fns';
 import style from './ActivityNotification.module.css';
 
 interface Props {
@@ -22,39 +22,51 @@ export const ActivityNotification: FC<Props> = ({
   const titleId = useId();
   const { activity } = notification;
 
+  const date = useMemo(
+    () => fromUnixTime(notification.timestamp),
+    [notification.timestamp],
+  );
+  const duration = formatDistanceToNow(date, { addSuffix: true });
+
   return (
-    <article aria-labelledby={titleId} className="flex gap-16">
+    <article
+      aria-labelledby={titleId}
+      className="grid grid-cols-[auto_1fr] gap-16"
+    >
       <AnimatedActionIcon action={activity.action} />
-      <div className="text-14 flex flex-1 flex-col gap-8 overflow-hidden">
-        <hgroup>
-          <h3 className="text-16" id={titleId} data-testid="notif-title">
+      <div className="grid">
+        <header className="flex items-center justify-between">
+          <h3 id={titleId} className="text-16" data-testid="notif-title">
             {activityActionName[activity.action]}
           </h3>
-          <p className="truncate text-white/60" data-testid="notif-description">
-            {activityDescription(activity)}
-          </p>
-        </hgroup>
-        <Link
-          to="/strategy/$id"
-          onClick={onClick}
-          params={{ id: activity.strategy.id }}
-          className="font-medium flex items-center"
+          <button
+            className="text-12 font-medium"
+            onClick={close}
+            data-testid="notif-close"
+            aria-label="Remove notification"
+          >
+            <IconClose className="size-14 text-white/80" />
+          </button>
+        </header>
+        <p
+          className="text-14 truncate text-white/80"
+          data-testid="notif-description"
         >
-          View Activity
-        </Link>
-      </div>
-      <div className="flex flex-col items-end justify-between">
-        <button
-          onClick={close}
-          data-testid="notif-close"
-          aria-label="Remove notification"
-        >
-          <IconClose className="size-14 text-white/80" />
-        </button>
-
-        <p className="text-12 font-medium whitespace-nowrap text-white/60">
-          {unix(notification.timestamp).fromNow(true)}
+          {activityDescription(activity)}
         </p>
+        <footer className="flex items-center justify-between pt-8">
+          <Link
+            to="/strategy/$id"
+            onClick={onClick}
+            params={{ id: activity.strategy.id }}
+            className="font-medium flex items-center"
+          >
+            View Activity
+          </Link>
+          <p className="text-12 font-medium whitespace-nowrap text-white/60">
+            {duration}
+          </p>
+        </footer>
       </div>
     </article>
   );

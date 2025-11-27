@@ -1,7 +1,7 @@
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import { useModal } from 'hooks/useModal';
 import { Modal, ModalHeader } from '../../Modal';
-import { ModalFC } from '../../modals.types';
+import { ModalProps } from '../../modals.types';
 import { Link } from 'libs/routing';
 
 import { AnyStrategy, Strategy } from 'components/strategies/common/types';
@@ -13,14 +13,14 @@ import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { useMemo } from 'react';
 import { getEditPricesPage } from 'components/strategies/edit/utils';
 
-export interface ModalConfirmDeleteData {
+interface ModalConfirmDeleteData {
   strategy: AnyStrategy;
 }
 
-export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
+export default function ModalConfirmDelete({
   id,
   data,
-}) => {
+}: ModalProps<ModalConfirmDeleteData>) {
   const { closeModal } = useModal();
   const { strategy } = data;
   const { deleteStrategy, deleteMutation, isProcessing } = useDeleteStrategy();
@@ -86,4 +86,4 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       </Button>
     </Modal>
   );
-};
+}
