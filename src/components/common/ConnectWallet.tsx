@@ -18,5 +18,5 @@ const ConnectWagmiWallet = (props: ButtonProps) => {
   const { address } = useAccount();
   const { openModal } = useModal();
   if (address) return;
-  return <Button {...props} onClick={() => openModal('wallet', undefined)} />;
+  return <Button {...props} onClick={() => openModal('wallet')} />;
 };

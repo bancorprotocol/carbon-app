@@ -7,9 +7,9 @@ export interface ModalHeaderProps {
   className?: string;
 }
 
-export type TModals = {
-  [key in keyof ModalSchema]: FC<{ id: string; data: ModalSchema[key] }>;
-};
+// export type TModals = {
+//   [key in keyof ModalSchema]: FC<{ id: string; data: ModalSchema[key] }>;
+// };
 
 export type ModalKey = keyof ModalSchema;
 
@@ -19,9 +19,11 @@ export interface ModalOpen {
   data: ModalSchema[ModalKey];
 }
 
-export interface ModalProps<D> {
-  id: string;
-  data: D;
-}
+export type ModalProps<D = void> = D extends void
+  ? { id: string }
+  : {
+      id: string;
+      data: D;
+    };
 
 export type ModalFC<D> = FC<ModalProps<D>>;

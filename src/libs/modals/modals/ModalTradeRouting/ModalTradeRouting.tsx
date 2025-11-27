@@ -1,5 +1,5 @@
 import { FormEvent, KeyboardEvent, useId, useRef } from 'react';
-import { ModalFC } from '../../modals.types';
+import { ModalProps } from '../../modals.types';
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
 import { Button } from 'components/common/button';
@@ -13,7 +13,7 @@ import { Modal, ModalHeader } from '../../Modal';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { SafeDecimal } from 'libs/safedecimal';
 
-export type ModalTradeRoutingData = {
+export interface ModalTradeRoutingData {
   source: Token;
   target: Token;
   tradeActionsRes: Action[];
@@ -22,12 +22,12 @@ export type ModalTradeRoutingData = {
   onSuccess: () => any;
   sourceBalance: string;
   isBuy?: boolean;
-};
+}
 
-export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
+export default function ModalTradeRouting({
   id,
   data,
-}) => {
+}: ModalProps<ModalTradeRoutingData>) {
   const sourceInputId = useId();
   const table = useRef<HTMLTableElement>(null);
   const { source, target } = data;
@@ -222,4 +222,4 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
       </form>
     </Modal>
   );
-};
+}

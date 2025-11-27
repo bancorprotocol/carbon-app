@@ -25,7 +25,7 @@ export const App = () => {
       const isBlocked = await carbonApi.getCheck();
       setCountryBlocked(isBlocked);
       if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
-        openModal('restrictedCountry', undefined);
+        openModal('restrictedCountry');
       }
     } catch (e) {
       console.error('Error carbonApi.getCheck', e);

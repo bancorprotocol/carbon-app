@@ -190,7 +190,7 @@ export const useBuySell = ({
 
   const handleCTAClick = useCallback(() => {
     if (!user) {
-      return openModal('wallet', undefined);
+      return openModal('wallet');
     }
 
     if (
