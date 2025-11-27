@@ -1,15 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { ModalSchema } from 'libs/modals/modals';
 
-export interface ModalProps {
-  children: ReactNode;
-  id: string;
-  className?: string;
-  placement?: 'center' | 'side';
-  onClose?: (id: string) => void;
-  'data-testid'?: string;
-}
-
 export interface ModalHeaderProps {
   id: string;
   children?: ReactNode;
@@ -28,7 +19,9 @@ export interface ModalOpen {
   data: ModalSchema[ModalKey];
 }
 
-export type ModalFC<D> = FC<{
+export interface ModalProps<D> {
   id: string;
   data: D;
-}>;
+}
+
+export type ModalFC<D> = FC<ModalProps<D>>;

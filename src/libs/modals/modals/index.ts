@@ -3,10 +3,7 @@ import {
   ModalWithdrawOrDeleteData,
 } from 'libs/modals/modals/ModalWithdrawOrDelete';
 import { ModalWallet } from 'libs/modals/modals/WalletModal/ModalWallet';
-import {
-  ModalTokenList,
-  ModalTokenListData,
-} from 'libs/modals/modals/ModalTokenList';
+import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/types';
 import { TModals } from 'libs/modals/modals.types';
 import {
   ModalConfirm,
@@ -43,6 +40,7 @@ import {
   ModalConfirmDelete,
   ModalConfirmDeleteData,
 } from 'libs/modals/modals/ModalConfirmStrategy/ModalConfirmDelete';
+import { lazy } from 'react';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -67,7 +65,9 @@ export interface ModalSchema {
 // Step 3: Add modal component here
 export const MODAL_COMPONENTS: TModals = {
   wallet: (props) => ModalWallet(props),
-  tokenLists: (props) => ModalTokenList(props),
+  tokenLists: lazy(
+    () => import('libs/modals/modals/ModalTokenList/ModalTokenList'),
+  ),
   txConfirm: (props) => ModalConfirm(props),
   importToken: (props) => ModalImportToken(props),
   notifications: (props) => ModalNotifications(props),

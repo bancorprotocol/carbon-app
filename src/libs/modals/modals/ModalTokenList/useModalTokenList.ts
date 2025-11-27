@@ -4,7 +4,7 @@ import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
 import Fuse from 'fuse.js';
 import { isAddress } from 'ethers';
-import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/ModalTokenList';
+import { ModalTokenListData } from './types';
 import config from 'config';
 import {
   NATIVE_TOKEN_ADDRESS,
@@ -12,6 +12,7 @@ import {
   nativeToken,
 } from 'utils/tokens';
 import { TonToken } from 'libs/ton/tokenMap';
+import { isTonAddress } from 'libs/ton/is-address';
 
 const SEARCH_KEYS = [
   {
@@ -115,9 +116,10 @@ export const useModalTokenList = ({ id, data }: Props) => {
     }
     const lowercase = search.toLowerCase();
     const isEthAdress = isAddress(lowercase);
-    if (import.meta.env.VITE_NETWORK === 'ton' && !isEthAdress) {
-      const found = (sanitizedTokens as TonToken[]).find(
-        (token) => token.tonAddress === search,
+
+    if (import.meta.env.VITE_NETWORK === 'ton' && isTonAddress(search)) {
+      const found = (sanitizedTokens as TonToken[]).find((token) =>
+        token.tonAddress.includes(search),
       );
       if (found) return [found];
       return [];
@@ -144,7 +146,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
     const lowercase = search.toLowerCase();
     const isEthAdress = isAddress(lowercase);
     if (isGasTokenToHide(lowercase)) return false;
-    if (import.meta.env.VITE_NETWORK === 'ton' && !isEthAdress) {
+    if (import.meta.env.VITE_NETWORK === 'ton' && isTonAddress(search)) {
       const existing = (filteredTokens as TonToken[]).some(
         (token) => token.tonAddress === search,
       );
