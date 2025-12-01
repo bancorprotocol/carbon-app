@@ -2,7 +2,6 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { Loading } from 'components/common/Loading';
 import { RollingNumber } from 'components/common/RollingNumber';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useGetEnrichedStrategies } from 'hooks/useStrategies';
 import { useTokens } from 'hooks/useTokens';
 import { useGetAllStrategies } from 'libs/queries';
@@ -15,7 +14,7 @@ import { Link } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useCallback, useMemo } from 'react';
-import { getLowestBits, prettifyNumber } from 'utils/helpers';
+import { getUsdPrice, getLowestBits, prettifyNumber } from 'utils/helpers';
 import { toPairSlug } from 'utils/pairSearch';
 
 interface PairTrendingQuery {
@@ -126,8 +125,6 @@ const useTotalExchange = () => {
 };
 
 export const ExplorerHeader = () => {
-  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
-
   const trending = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
   const trendingPairs = useTrendingPairs(trending);
@@ -136,12 +133,9 @@ export const ExplorerHeader = () => {
   const formatInt = useCallback((value: number) => {
     return prettifyNumber(value, { isInteger: true });
   }, []);
-  const formatCurrency = useCallback(
-    (value: number) => {
-      return prettifyNumber(value, { currentCurrency, isInteger: true });
-    },
-    [currentCurrency],
-  );
+  const formatCurrency = useCallback((value: number) => {
+    return getUsdPrice(value, { isInteger: true });
+  }, []);
 
   if (trending.isError) return;
   return (

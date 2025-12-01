@@ -1,8 +1,7 @@
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { buildPercentageString } from 'components/strategies/portfolio/utils';
 import { FC, useMemo, useState } from 'react';
-import { useStore } from 'store';
-import { getFiatDisplayValue, tokenAmount } from 'utils/helpers';
+import { getUsdPrice, tokenAmount } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { getColorByIndex } from 'utils/colorPalettes';
 import { SuspiciousToken } from 'components/common/DisplayPair';
@@ -69,10 +68,6 @@ const Pending = () => (
 );
 
 const Rows = ({ data, onRowClick }: Omit<Props, 'isPending'>) => {
-  const {
-    fiatCurrency: { selectedFiatCurrency },
-  } = useStore();
-
   return data.map((item, i) => (
     <tr
       key={item.token.address}
@@ -104,7 +99,7 @@ const Rows = ({ data, onRowClick }: Omit<Props, 'isPending'>) => {
           </span>
         </Tooltip>
       </td>
-      <td>{getFiatDisplayValue(item.value, selectedFiatCurrency)}</td>
+      <td>{getUsdPrice(item.value)}</td>
     </tr>
   ));
 };

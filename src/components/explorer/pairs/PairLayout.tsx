@@ -3,9 +3,8 @@ import { PairContent } from 'components/explorer/pairs/PairContent';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
 import { FC, useCallback, useMemo } from 'react';
-import { prettifyNumber } from 'utils/helpers';
+import { getUsdPrice, prettifyNumber } from 'utils/helpers';
 import { RawPairRow } from 'components/explorer/pairs/types';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import {
   PairFilter,
   PairSort,
@@ -53,7 +52,6 @@ export const PairLayout: FC<Props> = ({ url }) => {
   const { search, filter = 'all', sort = 'trades' } = useSearch({ from: url });
   const nav = useNavigate({ from: url });
   const { strategies, isPending } = useStrategyCtx();
-  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
 
   const setFilter = useCallback(
     (filter?: PairFilter) => {
@@ -186,17 +184,17 @@ export const PairLayout: FC<Props> = ({ url }) => {
       tradeCount: prettifyNumber(row.tradeCount, { isInteger: true }),
       tradeCount24h: prettifyNumber(row.tradeCount24h, { isInteger: true }),
       strategyAmount: prettifyNumber(row.strategyAmount, { isInteger: true }),
-      liquidity: prettifyNumber(row.liquidity, { currentCurrency }),
+      liquidity: getUsdPrice(row.liquidity),
     }));
-  }, [sorted, currentCurrency]);
+  }, [sorted]);
 
   const liquidityAmount = useMemo(() => {
     const amount = filtered.reduce(
       (acc, p) => acc.add(p.liquidity),
       new SafeDecimal(0),
     );
-    return prettifyNumber(amount, { currentCurrency });
-  }, [filtered, currentCurrency]);
+    return getUsdPrice(amount);
+  }, [filtered]);
 
   if (isPending || rewards.isPending || trending.isPending) {
     return (

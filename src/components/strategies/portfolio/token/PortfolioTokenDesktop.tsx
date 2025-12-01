@@ -3,11 +3,10 @@ import {
   buildPercentageString,
 } from 'components/strategies/portfolio/utils';
 import { Token } from 'libs/tokens';
-import { useStore } from 'store';
 import { getColorByIndex } from 'utils/colorPalettes';
 import { PortfolioTokenData } from './usePortfolioToken';
 import { FC, useMemo, useState } from 'react';
-import { getFiatDisplayValue, tokenAmount } from 'utils/helpers';
+import { getUsdPrice, tokenAmount } from 'utils/helpers';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Paginator } from 'components/common/table/Paginator';
@@ -75,10 +74,6 @@ const Rows = ({
   data,
   selectedToken,
 }: Omit<PortfolioTokenProps, 'isPending'>) => {
-  const {
-    fiatCurrency: { selectedFiatCurrency },
-  } = useStore();
-
   return data.map((item, i) => (
     <tr key={item.strategy.id} className="h-64 text-white/80 text-16">
       <td className="relative">
@@ -105,7 +100,7 @@ const Rows = ({
           </Tooltip>
         )}
       </td>
-      <td>{getFiatDisplayValue(item.value, selectedFiatCurrency)}</td>
+      <td>{getUsdPrice(item.value)}</td>
     </tr>
   ));
 };

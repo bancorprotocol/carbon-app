@@ -27,7 +27,7 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { prettifyNumber, tokenAmount } from 'utils/helpers';
+import { getUsdPrice, prettifyNumber, tokenAmount } from 'utils/helpers';
 import {
   useGetTokensPrice,
   useGetTokenPrice,
@@ -170,7 +170,7 @@ const createPair = (quote: string) => ({
 
 const usdPrice = (value?: string | number) => {
   if (!value) return '';
-  return prettifyNumber(value, { abbreviate: true, currentCurrency: 'USD' });
+  return getUsdPrice(value, { abbreviate: true });
 };
 const round = (value: number) => Math.round(value * 100) / 100;
 

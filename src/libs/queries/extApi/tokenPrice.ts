@@ -10,18 +10,22 @@ import { useMemo } from 'react';
 export const useGetTokenPrice = (address?: string) => {
   const pricesQuery = useGetTokensPrice();
   return useMemo(() => {
+    if (pricesQuery.isError) {
+      return { isError: true, isPending: false, data: undefined };
+    }
     if (!address) {
-      return { isPending: false, data: undefined };
+      return { isError: false, isPending: false, data: undefined };
     }
     if (pricesQuery.isPending) {
-      return { isPending: true, data: undefined };
+      return { isError: false, isPending: true, data: undefined };
     }
     const prices = pricesQuery.data ?? {};
     return {
+      isError: false,
       isPending: false,
       data: prices[address],
     };
-  }, [address, pricesQuery.data, pricesQuery.isPending]);
+  }, [address, pricesQuery.data, pricesQuery.isError, pricesQuery.isPending]);
 };
 
 export const useGetTokensPrice = () => {

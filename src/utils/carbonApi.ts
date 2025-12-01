@@ -16,28 +16,6 @@ import { lsService } from 'services/localeStorage';
 import { Trending } from 'libs/queries/extApi/tradeCount';
 import { Reward } from 'libs/queries/extApi/rewards';
 
-// Only ETH is supported as network currency by the API
-const NETWORK_CURRENCY =
-  config.network.gasToken.symbol === 'ETH' ? ['ETH' as const] : [];
-
-export const AVAILABLE_CURRENCIES = [
-  'USD',
-  'EUR',
-  'JPY',
-  'GBP',
-  'AUD',
-  'CAD',
-  'CHF',
-  'CNY',
-  ...NETWORK_CURRENCY,
-] as const;
-
-export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
-
-export type FiatPriceDict = {
-  [k in FiatSymbol]: number;
-};
-
 const get = async <T>(
   endpoint: string,
   params: object = {},

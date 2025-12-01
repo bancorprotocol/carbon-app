@@ -1,7 +1,7 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { useFiatCurrency } from './useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { prettifyNumber } from 'utils/helpers';
+import { getUsdPrice } from 'utils/helpers';
+import { useGetTokenPrice } from 'libs/queries';
 
 interface FiatValueParams {
   token: Token;
@@ -11,13 +11,10 @@ interface FiatValueParams {
 
 export const useFiatValue = (params: FiatValueParams) => {
   const { price, token, highPrecision } = params;
-  const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-  const { data: fiatPriceMap } = useGetTokenPrice(token.address);
-  const fiatPrice = fiatPriceMap?.[selectedFiatCurrency];
-  if (!price || !fiatPrice) return;
-  const value = new SafeDecimal(price).times(fiatPrice);
-  return prettifyNumber(value, {
-    currentCurrency: selectedFiatCurrency,
+  const query = useGetTokenPrice(token.address);
+  if (!price || !query.isPending || !query.data) return;
+  const value = new SafeDecimal(price).times(query.data);
+  return getUsdPrice(value, {
     highPrecision,
   });
 };

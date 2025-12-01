@@ -3,7 +3,6 @@ import { useTradeSettingsStore } from 'store/useTradeSettingsStore';
 import { useNotificationsStore } from 'store/useNotificationsStore';
 import { useModalStore } from 'store/useModalStore';
 import { useTokensStore } from 'store/useTokensStore';
-import { useFiatCurrencyStore } from 'store/useFiatCurrencyStore';
 import { useOrderBookSettingsStore } from 'store/useOrderBookSettingsStore';
 import { useToastStore } from 'store/useToasterStore';
 import { StoreContext, StoreCTX } from './useStore';
@@ -19,7 +18,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const notifications = useNotificationsStore();
   const modals = useModalStore();
   const tokens = useTokensStore();
-  const fiatCurrency = useFiatCurrencyStore();
   const toaster = useToastStore();
 
   const value: StoreContext = {
@@ -34,7 +32,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     orderBook: {
       settings: orderBookSettings,
     },
-    fiatCurrency,
     toaster,
   };
 

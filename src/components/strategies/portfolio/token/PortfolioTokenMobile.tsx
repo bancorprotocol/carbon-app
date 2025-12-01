@@ -10,18 +10,13 @@ import {
   PortfolioMobileCard,
   PortfolioMobileCardLoading,
 } from 'components/strategies/portfolio/PortfolioMobileCard';
-import { useStore } from 'store';
-import { getFiatDisplayValue } from 'utils/helpers';
+import { getUsdPrice } from 'utils/helpers';
 
 export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
   data,
   isPending,
   selectedToken,
 }) => {
-  const {
-    fiatCurrency: { selectedFiatCurrency },
-  } = useStore();
-
   if (!selectedToken) return;
 
   return (
@@ -51,10 +46,7 @@ export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
                 value={buildPercentageString(value.share)}
               />
 
-              <CardSection
-                title="Value"
-                value={getFiatDisplayValue(value.value, selectedFiatCurrency)}
-              />
+              <CardSection title="Value" value={getUsdPrice(value.value)} />
 
               <CardSection
                 title="Amount"

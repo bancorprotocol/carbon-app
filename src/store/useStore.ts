@@ -10,10 +10,6 @@ import {
 import { defaultModalStore, ModalStore } from 'store/useModalStore';
 import { defaultTokensStore, TokensStore } from 'store/useTokensStore';
 import {
-  defaultFiatCurrencyStore,
-  FiatCurrencyStore,
-} from 'store/useFiatCurrencyStore';
-import {
   defaultOrderBookSettingsStore,
   OrderBookSettingsStore,
 } from 'store/useOrderBookSettingsStore';
@@ -35,7 +31,6 @@ export interface StoreContext {
   orderBook: {
     settings: OrderBookSettingsStore;
   };
-  fiatCurrency: FiatCurrencyStore;
   toaster: ToastStore;
 }
 
@@ -51,7 +46,6 @@ export const defaultValue: StoreContext = {
   orderBook: {
     settings: defaultOrderBookSettingsStore,
   },
-  fiatCurrency: defaultFiatCurrencyStore,
   toaster: defaultToastStore,
 };
 

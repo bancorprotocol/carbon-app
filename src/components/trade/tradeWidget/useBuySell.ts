@@ -26,7 +26,6 @@ export const useBuySell = ({
   const [targetInput, setTargetInput] = useState('');
   const { user } = useWagmi();
   const { openModal } = useModal();
-  const { selectedFiatCurrency } = useFiatCurrency();
   const sourceTokenPriceQuery = useGetTokenPrice(source.address);
   const targetTokenPriceQuery = useGetTokenPrice(target.address);
   const [isTradeBySource, setIsTradeBySource] = useState(true);
@@ -69,7 +68,7 @@ export const useBuySell = ({
         token_pair: `${target.symbol}/${source.symbol}`,
         buy_token: target.symbol,
         sell_token: source.symbol,
-        value_usd: getFiatValue(sourceInput, true).toString(),
+        value_usd: getFiatValue(sourceInput).toString(),
         transaction_hash: transactionHash,
         blockchain_network: network?.name ?? '',
       };
@@ -308,14 +307,10 @@ export const useBuySell = ({
     sourceBalanceQuery,
   ]);
 
-  const getTokenFiat = useCallback(
-    (value: string, query: any) => {
-      return new SafeDecimal(value || 0).times(
-        query.data?.[selectedFiatCurrency] || 0,
-      );
-    },
-    [selectedFiatCurrency],
-  );
+  const getTokenFiat = useCallback((value: string, query: any) => {
+    const price = query.data || 0;
+    return new SafeDecimal(value || 0).times(price);
+  }, []);
 
   const calcSlippage = useCallback((): SafeDecimal | null => {
     const sourceFiat = getTokenFiat(sourceInput, sourceTokenPriceQuery);
