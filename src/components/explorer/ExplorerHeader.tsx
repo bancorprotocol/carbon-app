@@ -2,6 +2,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { Loading } from 'components/common/Loading';
 import { RollingNumber } from 'components/common/RollingNumber';
 import { TokensOverlap } from 'components/common/tokensOverlap';
+import { AnyStrategy } from 'components/strategies/common/types';
 import { useGetEnrichedStrategies } from 'hooks/useStrategies';
 import { useTokens } from 'hooks/useTokens';
 import { useGetAllStrategies } from 'libs/queries';
@@ -110,9 +111,10 @@ const useTrendStrategies = (trending: UseQueryResult<Trending, Error>) => {
   };
 };
 
-const useTotalExchange = () => {
-  const query = useGetAllStrategies({ enabled: true });
-  const { isPending, data } = useGetEnrichedStrategies(query);
+const useTotalExchange = (
+  strategyQuery: UseQueryResult<AnyStrategy[], any>,
+) => {
+  const { isPending, data } = useGetEnrichedStrategies(strategyQuery);
   const result = useMemo(() => {
     if (isPending) return;
     return data!
@@ -128,7 +130,8 @@ export const ExplorerHeader = () => {
   const trending = useTrending();
   const trendingStrategies = useTrendStrategies(trending);
   const trendingPairs = useTrendingPairs(trending);
-  const totalExchange = useTotalExchange();
+  const totalStrategies = useGetAllStrategies({ enabled: true });
+  const totalExchange = useTotalExchange(totalStrategies);
 
   const formatInt = useCallback((value: number) => {
     return prettifyNumber(value, { isInteger: true });
@@ -161,7 +164,7 @@ export const ExplorerHeader = () => {
             <div className="grid items-end gap-8 text-end">
               <h3 className="text-16">Total Strategies</h3>
               <RollingNumber
-                value={trending.data?.tradeCount.length}
+                value={totalStrategies.data?.length}
                 className="text-24 justify-end"
                 format={formatInt}
                 delay={9_000}
