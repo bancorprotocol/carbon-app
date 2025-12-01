@@ -234,8 +234,8 @@ export const LiquidityMatrixPage = () => {
   const { data: baseTokenPrice } = useGetTokenPrice(search.base);
   useEffect(() => {
     if (Number(basePrice)) return;
-    if (!baseTokenPrice?.USD) return;
-    set({ basePrice: baseTokenPrice?.USD?.toString() ?? '' });
+    if (!baseTokenPrice) return;
+    set({ basePrice: baseTokenPrice?.toString() ?? '' });
   }, [basePrice, baseTokenPrice, set]);
 
   // Set quotes market prices
@@ -394,10 +394,10 @@ export const LiquidityMatrixPage = () => {
                   <button
                     type="button"
                     onClick={() =>
-                      set({ basePrice: baseTokenPrice.USD.toString() })
+                      set({ basePrice: baseTokenPrice.toString() })
                     }
                   >
-                    Use Market Price: {usdPrice(baseTokenPrice.USD)}
+                    Use Market Price: {usdPrice(baseTokenPrice)}
                   </button>
                 )}
               </div>
@@ -570,7 +570,7 @@ const PairForm: FC<PairFormProps> = (props) => {
   }, [baseBudget, basePrice]);
 
   useEffect(() => {
-    const price = quotePrice?.USD ?? '0';
+    const price = quotePrice ?? '0';
     const value = new SafeDecimal(quoteBudget).mul(price).toString();
     setLocalQuoteBudgetUSD(value);
   }, [quoteBudget, quotePrice]);
@@ -650,12 +650,12 @@ const PairForm: FC<PairFormProps> = (props) => {
             <span>USD</span>
           </div>
           <div className="price-action">
-            {!!quotePrice?.USD && (
+            {!!quotePrice && (
               <button
                 type="button"
-                onClick={() => update({ price: quotePrice.USD.toString() })}
+                onClick={() => update({ price: quotePrice.toString() })}
               >
-                Use Market Price: {usdPrice(quotePrice.USD)}
+                Use Market Price: {usdPrice(quotePrice)}
               </button>
             )}
           </div>

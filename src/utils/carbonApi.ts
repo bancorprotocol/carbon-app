@@ -68,16 +68,6 @@ const carbonApi = {
     const res = await fetch(`/api/check`, { cache: 'no-store' });
     return res.json();
   },
-  getMarketRate: async (
-    address: string,
-    convert: readonly FiatSymbol[],
-  ): Promise<FiatPriceDict> => {
-    const { data } = await get<{ data: FiatPriceDict }>('market-rate', {
-      address,
-      convert: convert.join(','),
-    });
-    return data;
-  },
   getTokensMarketPrice: () => {
     return get<Record<string, number>>('tokens-prices');
   },
