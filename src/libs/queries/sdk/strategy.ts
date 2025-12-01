@@ -34,10 +34,19 @@ import { SDKGradientStrategy } from './gradient-mock';
 import { useCarbonInit } from 'libs/sdk/context';
 import { isZero } from 'components/strategies/common/utils';
 import { useMemo } from 'react';
+import { lsService } from 'services/localeStorage';
+import { carbonApi } from 'utils/carbonApi';
+import { StrategyAPI } from '../extApi/strategy';
 
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
 // READ
+const getStatus = (offCurve: boolean, noBudget: boolean) => {
+  if (offCurve && noBudget) return 'inactive';
+  if (offCurve) return 'paused';
+  if (noBudget) return 'noBudget';
+  return 'active';
+};
 
 // TODO: build strategy outside the useQuery to parallelize token query & strategy query
 const buildStrategiesHelper = async (
@@ -65,14 +74,7 @@ const buildStrategiesHelper = async (
 
       const noBudget = sellBudget.isZero() && buyBudget.isZero();
 
-      const status =
-        noBudget && offCurve
-          ? 'inactive'
-          : offCurve
-            ? 'paused'
-            : noBudget
-              ? 'noBudget'
-              : 'active';
+      const status = getStatus(offCurve, noBudget);
 
       // ATTENTION *****************************
       // This is the buy order | UI order 0 and CONTRACT order 1
@@ -149,6 +151,48 @@ const buildStrategiesHelper = async (
   return result.filter((s) => !!s);
 };
 
+export const fromStrategyApi = (
+  strategies: StrategyAPI[],
+  getTokenById: (id: string) => Token | undefined,
+) => {
+  const result = strategies.map((s) => {
+    const base = getTokenById(s.base);
+    const quote = getTokenById(s.quote);
+    if (!base || !quote) return;
+    const offCurve =
+      isZero(s.sell.min) &&
+      isZero(s.sell.max) &&
+      isZero(s.buy.min) &&
+      isZero(s.buy.max);
+    const noBudget = isZero(s.sell.budget) && isZero(s.buy.budget);
+    const status = getStatus(offCurve, noBudget);
+
+    const buy: StaticOrder = {
+      ...s.buy,
+      marginalPrice: s.buy.marginal,
+    };
+
+    const sell: StaticOrder = {
+      ...s.sell,
+      marginalPrice: s.sell.marginal,
+    };
+
+    return {
+      type: 'static',
+      id: s.id,
+      idDisplay: getLowestBits(s.id),
+      base,
+      quote,
+      buy,
+      sell,
+      status,
+    } as Strategy;
+
+    // @todo(gradient) implement function here
+  });
+  return result.filter((s) => !!s);
+};
+
 interface Props {
   user?: string;
 }
@@ -209,9 +253,14 @@ export const useGetAllStrategies = (options: { enabled: boolean }) => {
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategyAll(),
     queryFn: async () => {
-      const all = await carbonSDK.getAllStrategiesByPairs();
-      const strategies = all.map((item) => item.strategies).flat();
-      return buildStrategiesHelper(strategies, getTokenById);
+      if (lsService.getItem('tenderlyRpc')) {
+        const all = await carbonSDK.getAllStrategiesByPairs();
+        const strategies = all.map((item) => item.strategies).flat();
+        return buildStrategiesHelper(strategies, getTokenById);
+      } else {
+        const strategies = await carbonApi.getAllStrategies();
+        return fromStrategyApi(strategies, getTokenById);
+      }
     },
     enabled: options?.enabled && !isPending && isInitialized,
     staleTime: ONE_DAY_IN_MS,
