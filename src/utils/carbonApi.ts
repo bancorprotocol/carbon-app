@@ -65,9 +65,8 @@ const get = async <T>(
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
     if (config.mode === 'development') return false;
-    return fetch(`/api/check`, {
-      cache: 'no-store',
-    }).then((res) => res.json());
+    const res = await fetch(`/api/check`, { cache: 'no-store' });
+    return res.json();
   },
   getMarketRate: async (
     address: string,
@@ -78,6 +77,9 @@ const carbonApi = {
       convert: convert.join(','),
     });
     return data;
+  },
+  getTokensMarketPrice: () => {
+    return get<Record<string, number>>('tokens-prices');
   },
   getMarketRateHistory: async (
     params: TokenPriceHistorySearch,

@@ -1,4 +1,4 @@
-import { useQueries, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { CandlestickData } from 'libs/d3';
 import { QueryKey } from 'libs/queries/queryKey';
 import { FIVE_MIN_IN_MS } from 'utils/time';
@@ -35,36 +35,13 @@ export const useGetTokenPrice = (address?: string) => {
   });
 };
 
-export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
-  const {
-    fiatCurrency: { availableCurrencies },
-  } = useStore();
-
-  return useQueries({
-    combine: (result) => ({
-      data: result.map(({ data }) => data),
-      isPending: result.some(({ isPending }) => isPending),
-      isError: result.some(({ isError }) => isError),
-    }),
-    queries: addresses.map((address) => {
-      return {
-        queryKey: QueryKey.tokenPrice(address),
-        queryFn: () => {
-          return carbonApi
-            .getMarketRate(address, availableCurrencies)
-            .catch((err) => {
-              // See comment above
-              console.error(err);
-              return {} as FiatPriceDict;
-            });
-        },
-        enabled: !!address && availableCurrencies.length > 0,
-        refetchInterval: FIVE_MIN_IN_MS,
-        staleTime: FIVE_MIN_IN_MS,
-        refetchOnWindowFocus: false,
-        retry: 0, // Critical for initial load
-      };
-    }),
+export const useGetTokensPrice = () => {
+  return useQuery({
+    queryKey: QueryKey.tokenPrice(),
+    queryFn: carbonApi.getTokensMarketPrice,
+    refetchInterval: FIVE_MIN_IN_MS,
+    refetchOnWindowFocus: false,
+    retry: 0, // Critical for initial load
   });
 };
 

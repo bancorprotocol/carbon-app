@@ -29,7 +29,7 @@ import {
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { prettifyNumber, tokenAmount } from 'utils/helpers';
 import {
-  useGetMultipleTokenPrices,
+  useGetTokensPrice,
   useGetTokenPrice,
 } from 'libs/queries/extApi/tokenPrice';
 import { StaticOrder } from 'components/strategies/common/types';
@@ -239,15 +239,16 @@ export const LiquidityMatrixPage = () => {
   }, [basePrice, baseTokenPrice, set]);
 
   // Set quotes market prices
-  const quotePrices = useGetMultipleTokenPrices(pairs.map((p) => p.quote));
+  const quotePrices = useGetTokensPrice();
   useEffect(() => {
     let changes = false;
     const copy = structuredClone(pairs);
-    for (let i = 0; i < quotePrices.data.length; i++) {
-      if (copy[i].price) continue;
-      if (!quotePrices.data[i]?.USD) continue;
+    if (quotePrices.isPending) return;
+    const prices = quotePrices.data ?? {};
+    for (const pair of copy) {
+      if (!prices[pair.quote]) continue;
       changes = true;
-      copy[i].price = quotePrices.data[i]?.USD.toString() ?? '';
+      pair.price = prices[pair.quote].toString();
     }
     if (changes) set({ pairs: copy });
   }, [pairs, quotePrices, set]);

@@ -1,6 +1,5 @@
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTokens } from 'hooks/useTokens';
-import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
+import { useGetTokensPrice } from 'libs/queries/extApi/tokenPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
@@ -69,11 +68,8 @@ export const useStrategyCart = () => {
   const [cart, setCart] = useState<Cart>([]);
   const { user } = useWagmi();
   const { getTokenById } = useTokens();
-  const { selectedFiatCurrency } = useFiatCurrency();
 
-  const tokens = cart.map(({ base, quote }) => [base, quote]).flat();
-  const addresses = Array.from(new Set(tokens));
-  const priceQueries = useGetMultipleTokenPrices(addresses);
+  const pricesQuery = useGetTokensPrice();
 
   useEffect(() => {
     if (!user) return setCart([]);
@@ -93,12 +89,8 @@ export const useStrategyCart = () => {
   });
 
   return useMemo(() => {
-    const prices: Record<string, number | undefined> = {};
-    for (let i = 0; i < priceQueries.data.length; i++) {
-      const address = addresses[i];
-      const price = priceQueries.data[i]?.[selectedFiatCurrency];
-      prices[address] = price;
-    }
+    if (pricesQuery.isPending) return [];
+    const prices = pricesQuery.data ?? {};
     return cart.map((strategy) => {
       const basePrice = new SafeDecimal(prices[strategy.base] ?? 0);
       const quotePrice = new SafeDecimal(prices[strategy.quote] ?? 0);
@@ -128,7 +120,7 @@ export const useStrategyCart = () => {
       }
       return cartStrategy;
     });
-  }, [addresses, cart, getTokenById, priceQueries, selectedFiatCurrency]);
+  }, [cart, getTokenById, pricesQuery]);
 };
 
 export const addStrategyToCart = (
