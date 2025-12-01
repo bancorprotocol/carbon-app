@@ -16,7 +16,12 @@ export const useExistingTokensQuery = () => {
   return useQuery({
     queryKey: QueryKey.tokens(),
     queryFn: async () => {
-      const tokens = buildTokenList(await fetchTokenLists());
+      const [apiList, localList] = await Promise.all([
+        carbonApi.getTokens(),
+        fetchTokenLists(),
+      ]);
+      const localTokens = buildTokenList(localList);
+      const tokens = localTokens.concat(apiList);
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
     },
@@ -56,13 +61,6 @@ export const useMissingTokensQuery = (
       const fillMissing = (address: string) => {
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
-
-      // External API: all tokens, even from deleted strategies
-      const meta = await carbonApi.getActivityMeta({ actions: 'create,edit' });
-      for (const [base, quote] of meta.pairs) {
-        fillMissing(base);
-        fillMissing(quote);
-      }
 
       // SDK: all tokens from current strategies (require for Tenderly)
       for (const [base, quote] of pairs.data || []) {

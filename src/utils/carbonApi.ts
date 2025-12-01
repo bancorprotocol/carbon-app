@@ -15,6 +15,7 @@ import {
 import { lsService } from 'services/localeStorage';
 import { Trending } from 'libs/queries/extApi/tradeCount';
 import { Reward } from 'libs/queries/extApi/rewards';
+import { Token } from 'libs/tokens';
 
 const get = async <T>(
   endpoint: string,
@@ -45,6 +46,9 @@ const carbonApi = {
     if (config.mode === 'development') return false;
     const res = await fetch(`/api/check`, { cache: 'no-store' });
     return res.json();
+  },
+  getTokens: () => {
+    return get<Token[]>('/tokens');
   },
   getTokensMarketPrice: () => {
     return get<Record<string, number>>('tokens-prices');
