@@ -23,7 +23,7 @@ export const QueryKey = {
   ],
 
   tokens: () => [...extAPI, 'tokens'],
-  tokenPrice: (address: string = '') => [...extAPI, 'token-price', address],
+  tokensPrice: () => [...extAPI, 'tokens-price'],
 
   tokenPriceHistory: (params: TokenPriceHistorySearch) => [
     ...extAPI,

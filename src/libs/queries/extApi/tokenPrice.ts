@@ -30,7 +30,7 @@ export const useGetTokenPrice = (address?: string) => {
 
 export const useGetTokensPrice = () => {
   return useQuery({
-    queryKey: QueryKey.tokenPrice(),
+    queryKey: QueryKey.tokensPrice(),
     queryFn: carbonApi.getTokensMarketPrice,
     refetchInterval: FIVE_MIN_IN_MS,
     refetchOnWindowFocus: false,
