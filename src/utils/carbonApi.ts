@@ -49,10 +49,10 @@ const carbonApi = {
     return res.json();
   },
   getTokens: () => {
-    return get<Token[]>('/tokens');
+    return get<Token[]>('tokens');
   },
   getTokensMarketPrice: () => {
-    return get<Record<string, number>>('tokens-prices');
+    return get<Record<string, number>>('tokens/prices');
   },
   getMarketRateHistory: async (
     params: TokenPriceHistorySearch,
@@ -65,7 +65,7 @@ const carbonApi = {
     return get<SimulatorReturnNew>('simulator/create', params);
   },
   getAllStrategies: () => {
-    return get<StrategyAPI[]>('/strategies');
+    return get<StrategyAPI[]>('strategies');
   },
   getActivity: async (
     params: QueryActivityParams,

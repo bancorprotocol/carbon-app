@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { buildTokenList, fetchTokenLists, Token } from 'libs/tokens';
+import { buildTokenList, fetchTokenLists, Token, TokenList } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_HOUR_IN_MS } from 'utils/time';
 import { lsService } from 'services/localeStorage';
@@ -16,12 +16,17 @@ export const useExistingTokensQuery = () => {
   return useQuery({
     queryKey: QueryKey.tokens(),
     queryFn: async () => {
-      const [apiList, localList] = await Promise.all([
+      const [apiTokens, localList] = await Promise.all([
         carbonApi.getTokens(),
         fetchTokenLists(),
       ]);
-      const localTokens = buildTokenList(localList);
-      const tokens = localTokens.concat(apiList);
+      const apiList: TokenList = {
+        id: 'api',
+        name: 'api',
+        tokens: apiTokens,
+      };
+      const tokens = buildTokenList(localList.concat(apiList));
+
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
     },
