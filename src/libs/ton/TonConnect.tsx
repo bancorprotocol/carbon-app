@@ -1,8 +1,8 @@
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 import { shortenString } from 'utils/helpers';
-import { ReactComponent as TelegramIcon } from 'assets/icons/telegram.svg';
-import { ReactComponent as IconDisconnect } from 'assets/icons/disconnect.svg';
-import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
+import TelegramIcon from 'assets/icons/telegram.svg?react';
+import IconDisconnect from 'assets/icons/disconnect.svg?react';
+import IconCopy from 'assets/icons/copy.svg?react';
 
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useStore } from 'store';

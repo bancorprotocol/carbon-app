@@ -6,7 +6,7 @@ import { usePauseStrategy } from 'components/strategies/usePauseStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
-import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
+import IconPause from 'assets/icons/pause.svg?react';
 
 export type ModalConfirmPauseData = {
   strategy: AnyStrategy;

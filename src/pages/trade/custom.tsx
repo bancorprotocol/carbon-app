@@ -12,8 +12,8 @@ import { CreateGradientStrategyForm } from 'components/strategies/common/gradien
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import { ReactComponent as IconDelete } from 'assets/icons/trash.svg';
-import { ReactComponent as IconAdd } from 'assets/icons/plus.svg';
+import IconDelete from 'assets/icons/trash.svg?react';
+import IconAdd from 'assets/icons/plus.svg?react';
 import {
   defaultGradientOrder,
   isReverseGradientOrders,

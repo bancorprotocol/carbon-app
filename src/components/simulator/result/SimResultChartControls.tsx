@@ -1,7 +1,7 @@
-import { ReactComponent as ReplayIcon } from 'assets/icons/replay.svg';
-import { ReactComponent as PauseIcon } from 'assets/icons/pause-sim.svg';
-import { ReactComponent as PlayIcon } from 'assets/icons/play.svg';
-import { ReactComponent as SkipIcon } from 'assets/icons/skip.svg';
+import ReplayIcon from 'assets/icons/replay.svg?react';
+import PauseIcon from 'assets/icons/pause-sim.svg?react';
+import PlayIcon from 'assets/icons/play.svg?react';
+import SkipIcon from 'assets/icons/skip.svg?react';
 import { useState } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { PlaybackSpeed } from 'components/simulator/result/SimulatorProvider';

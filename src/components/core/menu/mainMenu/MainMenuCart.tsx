@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { ReactComponent as CartIcon } from 'assets/icons/cart.svg';
+import CartIcon from 'assets/icons/cart.svg?react';
 import { useWagmi } from 'libs/wagmi';
 import { useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';

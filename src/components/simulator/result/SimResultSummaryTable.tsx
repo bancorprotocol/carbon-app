@@ -1,4 +1,4 @@
-import { ReactComponent as Arrow } from 'assets/icons/arrow-round.svg';
+import Arrow from 'assets/icons/arrow-round.svg?react';
 import { prettifyNumber } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import { StrategyInputOrder } from 'hooks/useStrategyInput';

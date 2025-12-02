@@ -6,7 +6,7 @@ import { Link } from 'libs/routing';
 
 import { AnyStrategy, Strategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
+import IconTrash from 'assets/icons/trash.svg?react';
 import { Button } from 'components/common/button';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';

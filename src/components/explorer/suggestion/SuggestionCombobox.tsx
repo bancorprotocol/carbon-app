@@ -17,7 +17,7 @@ import {
   selectNextSibling,
   selectPreviousSibling,
 } from './utils';
-import { ReactComponent as IconClose } from 'assets/icons/times.svg';
+import IconClose from 'assets/icons/times.svg?react';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
 import { searchPairTrade, searchTokens } from 'utils/pairSearch';

@@ -8,7 +8,7 @@ import {
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { ChartPrices } from 'components/strategies/common/d3Chart';
 import { ReactNode, useCallback } from 'react';
-import { ReactComponent as IconQuestion } from 'assets/icons/question.svg';
+import IconQuestion from 'assets/icons/question.svg?react';
 import { CandlestickData } from 'libs/d3';
 import { D3PriceHistory } from 'components/strategies/common/d3Chart/D3PriceHistory';
 import { useMarketPrice } from 'hooks/useMarketPrice';

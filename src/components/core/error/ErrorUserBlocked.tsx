@@ -1,7 +1,7 @@
 import { useWagmi } from 'libs/wagmi';
 import { NewTabLink, externalLinks } from 'libs/routing';
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 import config from 'config';
 
 export const ErrorUserBlocked = () => {

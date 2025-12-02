@@ -1,6 +1,6 @@
 import { cn } from 'utils/helpers';
-import { ReactComponent as IconQuestion } from 'assets/icons/question.svg';
-import { ReactComponent as ForwardArrow } from 'assets/icons/arrow.svg';
+import IconQuestion from 'assets/icons/question.svg?react';
+import ForwardArrow from 'assets/icons/arrow.svg?react';
 import { useRouter } from '@tanstack/react-router';
 import { FC } from 'react';
 

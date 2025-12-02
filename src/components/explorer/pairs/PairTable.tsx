@@ -6,7 +6,7 @@ import { Link } from '@tanstack/react-router';
 import { Paginator } from 'components/common/table/Paginator';
 import { NewTabLink } from 'libs/routing';
 import { clamp } from 'utils/helpers/operators';
-import { ReactComponent as LinkIcon } from 'assets/icons/link.svg';
+import LinkIcon from 'assets/icons/link.svg?react';
 import config from 'config';
 
 interface Props {

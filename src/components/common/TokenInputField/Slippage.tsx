@@ -3,7 +3,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { cn, sanitizeNumber } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from '../tooltip/Tooltip';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 
 interface Props {
   slippage: SafeDecimal;

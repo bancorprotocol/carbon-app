@@ -1,5 +1,5 @@
-import { ReactComponent as InfinityIcon } from 'assets/icons/infinity.svg';
-import { ReactComponent as GradientIcon } from 'assets/icons/gradient-type.svg';
+import InfinityIcon from 'assets/icons/infinity.svg?react';
+import GradientIcon from 'assets/icons/gradient-type.svg?react';
 import { cn } from 'utils/helpers';
 
 interface Props {

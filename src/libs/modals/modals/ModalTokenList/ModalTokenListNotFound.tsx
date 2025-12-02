@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
+import IconSearch from 'assets/icons/search.svg?react';
 
 export const ModalTokenListNotFound: FC = () => {
   const Text = () => (

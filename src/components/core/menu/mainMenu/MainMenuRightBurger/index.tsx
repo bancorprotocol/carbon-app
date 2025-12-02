@@ -1,4 +1,4 @@
-import { ReactComponent as IconBurger } from 'assets/icons/burger.svg';
+import IconBurger from 'assets/icons/burger.svg?react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useBurgerMenuItems } from './useBurgerMenuItems';
 

@@ -1,6 +1,6 @@
 import { FC, useId } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import {
   FormStaticOrder,

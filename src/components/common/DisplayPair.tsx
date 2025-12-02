@@ -6,7 +6,7 @@ import { FC, memo } from 'react';
 import { TokenLogo } from './imager/Imager';
 import { Tooltip } from './tooltip/Tooltip';
 import { shortenString } from 'utils/helpers';
-import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
+import CopyIcon from 'assets/icons/copy.svg?react';
 import { useStore } from 'store';
 import { getTokenAddress } from 'libs/ton/address';
 

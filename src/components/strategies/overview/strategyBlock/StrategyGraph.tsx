@@ -5,7 +5,7 @@ import {
   FloatTooltipContent,
   FloatTooltipTrigger,
 } from 'components/common/tooltip/FloatTooltip';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
+import IconLink from 'assets/icons/link.svg?react';
 import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';

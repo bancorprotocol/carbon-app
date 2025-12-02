@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link, useRouterState, useMatchRoute } from 'libs/routing';
-import { ReactComponent as IconDots } from 'assets/icons/three-dots.svg';
+import IconDots from 'assets/icons/three-dots.svg?react';
 import { useModal } from 'hooks/useModal';
 import { getMenuItems } from 'components/core/menu';
 import { useWagmi } from 'libs/wagmi';

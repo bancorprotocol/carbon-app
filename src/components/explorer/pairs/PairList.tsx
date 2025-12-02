@@ -3,7 +3,7 @@ import { PairRow } from './types';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
 import { NewTabLink } from 'libs/routing';
-import { ReactComponent as LinkIcon } from 'assets/icons/link.svg';
+import LinkIcon from 'assets/icons/link.svg?react';
 import config from 'config';
 
 interface Props {

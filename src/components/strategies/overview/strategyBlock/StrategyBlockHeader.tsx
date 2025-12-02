@@ -4,7 +4,7 @@ import {
 } from 'components/strategies/common/types';
 import { FC } from 'react';
 import { getTooltipTextByStatus, statusText } from './utils';
-import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
+import DashboardIcon from 'assets/icons/dashboard.svg?react';
 import {
   ManageButtonIcon,
   StrategyBlockManage,

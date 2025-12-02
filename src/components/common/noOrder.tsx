@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ReactComponent as NoOrdersIcon } from 'assets/icons/bars.svg';
+import NoOrdersIcon from 'assets/icons/bars.svg?react';
 
 type NoOrdersProps = {
   text?: string;

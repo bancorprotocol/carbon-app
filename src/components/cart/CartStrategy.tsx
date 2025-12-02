@@ -11,10 +11,10 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
-import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconTrash from 'assets/icons/trash.svg?react';
+import IconChevron from 'assets/icons/chevron.svg?react';
+import IconClose from 'assets/icons/X.svg?react';
+import IconWarning from 'assets/icons/warning.svg?react';
 import { cn } from 'utils/helpers';
 import {
   isEmptyGradientOrder,

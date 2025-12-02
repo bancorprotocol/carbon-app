@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
-import { ReactComponent as IconBell } from 'assets/icons/bell.svg';
+import IconBell from 'assets/icons/bell.svg?react';
 import { useNotifications } from 'hooks/useNotifications';
 
 export const MainMenuRightNotifications: FC = () => {

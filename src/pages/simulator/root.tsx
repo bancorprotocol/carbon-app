@@ -1,6 +1,6 @@
 import { Outlet } from '@tanstack/react-router';
-import { ReactComponent as IconClock } from 'assets/icons/clock.svg';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconClock from 'assets/icons/clock.svg?react';
+import IconClose from 'assets/icons/X.svg?react';
 import { FormEvent, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';

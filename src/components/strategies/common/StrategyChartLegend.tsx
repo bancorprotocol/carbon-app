@@ -1,5 +1,5 @@
-import { ReactComponent as IconLock } from 'assets/icons/lock.svg';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconLock from 'assets/icons/lock.svg?react';
+import IconWarning from 'assets/icons/warning.svg?react';
 
 export const StrategyChartLegend = () => {
   return (

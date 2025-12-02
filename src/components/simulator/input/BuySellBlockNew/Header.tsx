@@ -6,7 +6,7 @@ import { FC, ReactNode } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 
 interface Props {
   children: ReactNode;

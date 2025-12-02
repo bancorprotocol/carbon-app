@@ -6,7 +6,7 @@ import { useSimulator } from 'components/simulator/result/utils';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useState } from 'react';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 import { Link } from '@tanstack/react-router';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 

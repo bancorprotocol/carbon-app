@@ -1,8 +1,8 @@
 import { FC, ReactNode, SyntheticEvent, useId, useRef } from 'react';
 import { Token } from 'libs/tokens';
-import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
-import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import IconDeposit from 'assets/icons/deposit.svg?react';
+import IconWithdraw from 'assets/icons/withdraw.svg?react';
+import IconChevron from 'assets/icons/chevron.svg?react';
 import { useGetTokenBalance } from 'libs/queries';
 import { InputBudget, BudgetAction } from '../common/InputBudget';
 import { SafeDecimal } from 'libs/safedecimal';

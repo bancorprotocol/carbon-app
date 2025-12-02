@@ -1,12 +1,12 @@
-import { ReactComponent as IconCoinbaseLogo } from 'assets/logos/coinbase.svg';
-import { ReactComponent as IconCompassWalletLogo } from 'assets/logos/compassWallet.svg';
-import { ReactComponent as IconTailwindWalletLogo } from 'assets/logos/tailwindWallet.svg';
-import { ReactComponent as IconSeifWalletLogo } from 'assets/logos/seifWallet.svg';
-import { ReactComponent as IconGnosisLogo } from 'assets/logos/gnosis.svg';
-import { ReactComponent as IconImposterLogo } from 'assets/logos/imposter.svg';
-import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
-import { ReactComponent as IconWalletConnectLogo } from 'assets/logos/walletConnect.svg';
-import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
+import IconCoinbaseLogo from 'assets/logos/coinbase.svg?react';
+import IconCompassWalletLogo from 'assets/logos/compassWallet.svg?react';
+import IconTailwindWalletLogo from 'assets/logos/tailwindWallet.svg?react';
+import IconSeifWalletLogo from 'assets/logos/seifWallet.svg?react';
+import IconGnosisLogo from 'assets/logos/gnosis.svg?react';
+import IconImposterLogo from 'assets/logos/imposter.svg?react';
+import IconMetaMaskLogo from 'assets/logos/metamask.svg?react';
+import IconWalletConnectLogo from 'assets/logos/walletConnect.svg?react';
+import IconWallet from 'assets/icons/wallet.svg?react';
 
 type Props = {
   isImposter?: boolean;
