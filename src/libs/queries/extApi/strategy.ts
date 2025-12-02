@@ -1,3 +1,7 @@
+export interface StrategyAPIResult {
+  strategies: StrategyAPI[];
+  paginator: any;
+}
 export interface StrategyAPI {
   id: string;
   owner: string;

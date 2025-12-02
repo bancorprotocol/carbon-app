@@ -258,7 +258,7 @@ export const useGetAllStrategies = (options: { enabled: boolean }) => {
         const strategies = all.map((item) => item.strategies).flat();
         return buildStrategiesHelper(strategies, getTokenById);
       } else {
-        const strategies = await carbonApi.getAllStrategies();
+        const { strategies } = await carbonApi.getAllStrategies();
         return fromStrategyApi(strategies, getTokenById);
       }
     },

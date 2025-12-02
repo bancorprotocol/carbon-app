@@ -16,7 +16,7 @@ import { lsService } from 'services/localeStorage';
 import { Trending } from 'libs/queries/extApi/tradeCount';
 import { Reward } from 'libs/queries/extApi/rewards';
 import { Token } from 'libs/tokens';
-import { StrategyAPI } from 'libs/queries/extApi/strategy';
+import { StrategyAPIResult } from 'libs/queries/extApi/strategy';
 
 const get = async <T>(
   endpoint: string,
@@ -65,7 +65,7 @@ const carbonApi = {
     return get<SimulatorReturnNew>('simulator/create', params);
   },
   getAllStrategies: () => {
-    return get<StrategyAPI[]>('strategies');
+    return get<StrategyAPIResult>('strategies');
   },
   getActivity: async (
     params: QueryActivityParams,
