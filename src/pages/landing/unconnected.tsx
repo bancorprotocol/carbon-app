@@ -105,6 +105,7 @@ export const UnconnectedLandingPage = () => {
           value={trades}
           loadingWidth="1ch"
           format={format}
+          initDelta={60}
         />
         <span>trades</span>
       </div>
