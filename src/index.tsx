@@ -29,7 +29,7 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
 
 TelegramAnalytics.init({
   token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
-  appName: 'Carbondefiappbot',
+  appName: 'carbondefi',
 });
 
 root.render(
