@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { NewTabLink, externalLinks } from 'libs/routing';
-import { ReactComponent as LogoCarbonDeFi } from 'assets/logos/carbondefi.svg';
+import LogoCarbonDeFi from 'assets/logos/carbondefi.svg?react';
 
 export const Footer: FC = () => {
   return (

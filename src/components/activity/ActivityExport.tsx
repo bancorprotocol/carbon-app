@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { fromUnixUTC } from 'components/simulator/utils';
 import { useDialog } from 'hooks/useDialog';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconClose from 'assets/icons/X.svg?react';
 import styles from './ActivityExport.module.css';
 
 const getActivityCSV = (activities: Activity[]) => {

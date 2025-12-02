@@ -1,4 +1,4 @@
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 import { FC, ReactNode } from 'react';
 import { Tooltip } from './tooltip/Tooltip';
 import { cn } from 'utils/helpers';

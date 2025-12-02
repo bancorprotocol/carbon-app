@@ -3,7 +3,7 @@ import { cn, sanitizeNumber } from 'utils/helpers';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import { Preset, Presets } from 'components/common/preset/Preset';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import styles from './OverlappingSpread.module.css';
 

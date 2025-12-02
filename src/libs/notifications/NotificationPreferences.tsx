@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
-import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
+import IconGear from 'assets/icons/gear.svg?react';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 export interface NotificationPreference {

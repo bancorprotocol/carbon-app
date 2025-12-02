@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
-import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
-import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
-import { ReactComponent as IconMarket } from 'assets/icons/market.svg';
-import { ReactComponent as IconRange } from 'assets/icons/range.svg';
+import IconDisposable from 'assets/icons/disposable.svg?react';
+import IconRecurring from 'assets/icons/recurring.svg?react';
+import IconOverlapping from 'assets/icons/overlapping.svg?react';
+import IconMarket from 'assets/icons/market.svg?react';
+import IconRange from 'assets/icons/range.svg?react';
 import { OverlappingPreview } from 'components/trade/preview/all/overlapping';
 import { FullRangePreview } from 'components/trade/preview/all/full-range';
 import { LimitSellPreview } from 'components/trade/preview/all/limit-sell';

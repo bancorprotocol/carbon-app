@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAddress, isAddress } from 'ethers';
+import { isAddress } from 'ethers';
 import { useTokens } from 'hooks/useTokens';
-import { getMissingTokens, QueryKey } from 'libs/queries';
+import { QueryKey } from 'libs/queries';
 import {
   Activity,
   ActivityMeta,
@@ -13,8 +13,7 @@ import { Token } from 'libs/tokens';
 import { carbonApi } from 'utils/carbonApi';
 import { THIRTY_SEC_IN_MS } from 'utils/time';
 import { fromUnixUTC } from 'components/simulator/utils';
-import { useContract } from 'hooks/useContract';
-import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
+
 export const toActivities = (
   data: ServerActivity[],
   tokensMap: Map<string, Token>,
@@ -101,21 +100,12 @@ export const useActivityQuery = (
 };
 
 export const useActivityMetaQuery = (params: QueryActivityParams = {}) => {
-  const { importTokens, getTokenById, isPending } = useTokens();
-  const { Token } = useContract();
+  const { getTokenById, isPending } = useTokens();
   const validParams = isValidParams(params);
   return useQuery({
     queryKey: QueryKey.activitiesMeta(params),
     queryFn: async () => {
       const meta = await carbonApi.getActivityMeta(params);
-      // Get addresses of tokens from deleted strategies
-      const addresses = new Set(
-        meta.pairs.flat().filter((address) => !getTokenById(address)),
-      );
-      const tokens = await getMissingTokens(addresses, (address) =>
-        fetchTokenData(Token, getAddress(address)),
-      );
-      importTokens(tokens);
       return toMetaActivities(meta, getTokenById);
     },
     enabled: !isPending && validParams,

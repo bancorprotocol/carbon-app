@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
+import IconChevronLeft from 'assets/icons/chevron-left.svg?react';
 
 interface Props {
   size: number;

@@ -10,8 +10,8 @@ import { useQuickGradientOrder } from 'components/strategies/common/gradient/use
 import { CreateGradientStrategyForm } from 'components/strategies/common/gradient/CreateGradientStrategyForm';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import { ReactComponent as IconDelete } from 'assets/icons/trash.svg';
-import { ReactComponent as IconAdd } from 'assets/icons/plus.svg';
+import IconDelete from 'assets/icons/trash.svg?react';
+import IconAdd from 'assets/icons/plus.svg?react';
 import { isReverseGradientOrders } from 'components/strategies/common/gradient/utils';
 import { ChartPoint } from 'components/strategies/common/d3Chart/D3ChartContext';
 import { cn } from 'utils/helpers';

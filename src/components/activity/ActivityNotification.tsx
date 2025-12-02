@@ -1,7 +1,7 @@
 import { FC, useId } from 'react';
 import { NotificationActivity } from 'libs/notifications/types';
 import { activityActionName, activityDescription } from './utils';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconClose from 'assets/icons/X.svg?react';
 import { Link } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
 import { ActivityAction } from 'libs/queries/extApi/activity';

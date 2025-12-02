@@ -1,10 +1,10 @@
 import { FC, useEffect, useRef } from 'react';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconClose from 'assets/icons/X.svg?react';
 import { lsService } from 'services/localeStorage';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useDialog } from 'hooks/useDialog';
-import config from 'config';
 import { Link } from '@tanstack/react-router';
+import config from 'config';
 
 export const MainMenuRightReward: FC = () => {
   const { currentBreakpoint } = useBreakpoints();
@@ -12,7 +12,7 @@ export const MainMenuRightReward: FC = () => {
   const haveSeen = useRef(lsService.getItem('haveSeen'));
 
   useEffect(() => {
-    if (currentBreakpoint === 'sm' || !config.ui.rewardUrl) return;
+    if (currentBreakpoint === 'sm' || !config.ui.rewards) return;
     if (!haveSeen.current?.includes('rewards')) {
       open();
       // Need to force focus to prevent race focus on browser start
@@ -29,7 +29,7 @@ export const MainMenuRightReward: FC = () => {
   };
 
   if (currentBreakpoint === 'sm') return;
-  if (!config.ui.rewardUrl) return;
+  if (!config.ui.rewards) return;
 
   return (
     <>
@@ -79,10 +79,10 @@ export const MainMenuRightReward: FC = () => {
               y2="32.9994"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stopColor="#714CFF" />
-              <stop offset="0.123033" stopColor="#804CFF" />
-              <stop offset="0.399979" stopColor="#AA4EFF" />
-              <stop offset="0.730614" stopColor="#D4C2FA" />
+              <stop stopColor="#B80093" />
+              <stop offset="0.123033" stopColor="#CF28AD" />
+              <stop offset="0.399979" stopColor="#E35FC7" />
+              <stop offset="0.730614" stopColor="#FAC2E5" />
               <stop offset="1" stopColor="#FFFBFD" stopOpacity="0.8" />
             </linearGradient>
           </defs>
@@ -105,21 +105,21 @@ export const MainMenuRightReward: FC = () => {
               <IconClose className="size-18" />
             </button>
           </header>
-          <div className="grid place-items-center size-48 bg-[#C78BFF]/50 rounded-full">
+          <div className="grid place-items-center size-48 rounded-full bg-[#FF66E0]/50">
             <svg className="size-40" width="40" height="40" viewBox="0 0 40 40">
               <use href="#rewards-icon" />
             </svg>
           </div>
-          <h2 className="text-18">Earn rewards for providing liquidity</h2>
+          <h2 className="text-18">Earn rewards with eligible pairs</h2>
           <p className="text-14 text-white/80 text-center">
-            Create trading strategies to eligible token pairs and start earning
-            rewards.
+            Create trading strategies with eligible token pairs and start
+            earning rewards.
           </p>
           <Link
             to="/explore/pairs"
             search={{ filter: 'rewards' }}
             onClick={close}
-            className="py-12 text-center rounded-full justify-self-stretch bg-linear-to-b from-[#C78BFF] to-[#6942FF] text-white font-title"
+            className="py-12 text-center rounded-full justify-self-stretch font-title text-white bg-linear-to-t from-[#B80093] to-[#E38FE3]"
           >
             View Pairs with Rewards
           </Link>

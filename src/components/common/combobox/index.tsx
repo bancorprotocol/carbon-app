@@ -23,8 +23,8 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
+import IconChevron from 'assets/icons/chevron.svg?react';
+import IconSearch from 'assets/icons/search.svg?react';
 import { cn } from 'utils/helpers';
 import style from './index.module.css';
 import { replaceSpecialCharacters } from 'utils/pairSearch';

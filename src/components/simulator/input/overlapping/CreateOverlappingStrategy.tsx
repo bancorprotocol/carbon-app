@@ -27,7 +27,7 @@ import {
   isZero,
 } from 'components/strategies/common/utils';
 import { overlappingMultiplier } from 'components/strategies/create/utils';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 
 interface Props {
   state: SimulatorInputOverlappingValues;

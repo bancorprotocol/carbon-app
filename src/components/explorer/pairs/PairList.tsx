@@ -3,7 +3,7 @@ import { PairRow } from './types';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
 import { NewTabLink } from 'libs/routing';
-import { ReactComponent as LinkIcon } from 'assets/icons/link.svg';
+import LinkIcon from 'assets/icons/link.svg?react';
 import config from 'config';
 
 interface Props {
@@ -27,19 +27,19 @@ export const PairList: FC<Props> = ({ pairs }) => {
                 <dd className="text-14">{pair.tradeCount}</dd>
               </div>
               <div className="grid gap-8">
-                {config.ui.rewardUrl && pair.reward && (
+                {config.ui.rewards && pair.reward && (
                   <>
                     <dt className="text-white/80 text-12">Rewards</dt>
                     <dd className="text-14">
                       <NewTabLink
                         className="inline-flex items-center gap-8 text-white/60 hover:text-white"
-                        to={config.ui.rewardUrl}
+                        to={config.ui.rewards.url}
                       >
                         <img
-                          src="/logos/merkl.webp"
+                          src={config.ui.rewards.logo}
                           className="h-[30px]"
                           loading="lazy"
-                          alt="merkl logo"
+                          alt="reward logo"
                         />
                         <LinkIcon className="size-16" />
                       </NewTabLink>

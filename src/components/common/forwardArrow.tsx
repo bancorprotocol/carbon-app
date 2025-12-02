@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { ReactComponent as IconArrowCut } from 'assets/icons/arrow-cut.svg';
-import { ReactComponent as IconArrowFull } from 'assets/icons/arrow.svg';
+import IconArrowCut from 'assets/icons/arrow-cut.svg?react';
+import IconArrowFull from 'assets/icons/arrow.svg?react';
 import { cn } from 'utils/helpers';
 
 export type ForwardArrowProps = {

@@ -2,7 +2,7 @@ import { ModalHeaderProps, ModalProps } from 'libs/modals/modals.types';
 import { FC, useCallback, useEffect } from 'react';
 import { useDialog } from 'hooks/useDialog';
 import { useModal } from 'hooks/useModal';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconClose from 'assets/icons/X.svg?react';
 import { cn } from 'utils/helpers';
 
 export const Modal: FC<ModalProps> = ({ children, ...props }) => {

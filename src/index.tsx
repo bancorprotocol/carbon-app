@@ -13,6 +13,7 @@ import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
 import { SDKProvider } from 'libs/sdk/provider';
+import TelegramAnalytics from '@telegram-apps/analytics';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -26,14 +27,10 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
   }
 };
 
-if (config.network.name === 'TON') {
-  import('@telegram-apps/analytics').then(({ default: TelegramAnalytics }) => {
-    TelegramAnalytics.init({
-      token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
-      appName: 'Carbondefiappbot',
-    });
-  });
-}
+TelegramAnalytics.init({
+  token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
+  appName: 'carbondefi',
+});
 
 root.render(
   <React.StrictMode>

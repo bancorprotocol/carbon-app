@@ -1,5 +1,5 @@
-import { ReactComponent as IconTwoRanges } from 'assets/icons/recurring.svg';
-import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping.svg';
+import IconTwoRanges from 'assets/icons/recurring.svg?react';
+import IconOverlappingStrategy from 'assets/icons/overlapping.svg?react';
 import { Link, useRouterState } from 'libs/routing';
 
 const items = [

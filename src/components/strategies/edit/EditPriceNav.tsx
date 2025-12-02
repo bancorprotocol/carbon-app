@@ -1,8 +1,8 @@
 import { Link, useParams } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
-import { ReactComponent as IconDisposable } from 'assets/icons/disposable.svg';
-import { ReactComponent as IconRecurring } from 'assets/icons/recurring.svg';
-import { ReactComponent as IconOverlapping } from 'assets/icons/overlapping.svg';
+import IconDisposable from 'assets/icons/disposable.svg?react';
+import IconRecurring from 'assets/icons/recurring.svg?react';
+import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import {
   EditTypes,
   toDisposablePricesSearch,

@@ -9,7 +9,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NoLiquidity } from './NoLiquidity';
 import { prettifyNumber } from 'utils/helpers';
-import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
+import IconRouting from 'assets/icons/routing.svg?react';
 import { useTradePairs } from '../useTradePairs';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { isZero } from 'components/strategies/common/utils';

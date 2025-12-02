@@ -1,4 +1,4 @@
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 import { useWagmi } from 'libs/wagmi';
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
 import config from 'config';

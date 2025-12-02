@@ -1,8 +1,8 @@
 import { FC, ReactNode } from 'react';
 import { LogoImager } from 'components/common/imager/Imager';
 import { ButtonHTMLProps } from 'components/common/button';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import IconChevron from 'assets/icons/chevron.svg?react';
+import IconPlus from 'assets/icons/plus.svg?react';
 import { cn } from 'utils/helpers';
 import { SuspiciousToken } from '../DisplayPair';
 import { Token } from 'libs/tokens';

@@ -11,8 +11,8 @@ import {
 } from 'date-fns';
 import { Dispatch, memo, ReactElement, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
-import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
+import CalendarIcon from 'assets/icons/calendar.svg?react';
+import ChevronIcon from 'assets/icons/chevron.svg?react';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { DatePickerPreset } from './utils';

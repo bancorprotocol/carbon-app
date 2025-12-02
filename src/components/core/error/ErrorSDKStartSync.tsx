@@ -1,5 +1,5 @@
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
 
 export const ErrorSDKStartSync = () => {
   return (
