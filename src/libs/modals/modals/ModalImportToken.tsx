@@ -28,7 +28,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
     closeModal(id);
   };
 
-  const blockClasses = 'my-20 h-80 rounded-md';
+  const blockClasses = 'py-16 min-h-56 rounded-md';
 
   return (
     <Modal id={id} className="grid gap-16">
@@ -58,7 +58,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         </div>
       )}
       {data && (
-        <div className={cn(blockClasses, 'bg-main-900 p-16')}>
+        <div className={cn(blockClasses, 'bg-main-900 px-16')}>
           <div className="flex items-center justify-between">
             <div className="font-medium">{data.symbol}</div>
             <NewTabLink
