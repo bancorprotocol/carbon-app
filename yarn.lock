@@ -3194,6 +3194,64 @@
   resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-14.5.2.tgz#db7257d727c891905947bd1c1a99da20e03c2ebd"
   integrity sha512-YAh82Wh4TIrxYLmfGcixwD18oIjyC1pFQC2Y01F2lzV2HTMiYrI0nze0FD0ocB//CKS/7jIUgae+adPqxK5yCQ==
 
+"@tma.js/bridge@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@tma.js/bridge/-/bridge-2.2.0.tgz#e9a0e6a54ec8ed628dbf9bcc144676fc781cfd03"
+  integrity sha512-wzmnH5cROVZRJAH8o1fS8bKyuujDhQ7OuGTkIpcRA4ic0WSptTDR/wyK26hMIWoeMSNfUh+srzFm+mK7JYwC4g==
+  dependencies:
+    "@tma.js/signals" "^1.0.1"
+    "@tma.js/toolkit" "^1.0.2"
+    "@tma.js/transformers" "^1.1.1"
+    "@tma.js/types" "^1.0.2"
+    better-promises "^1.0.0"
+    error-kid "^1.0.2"
+    fp-ts "^2.16.11"
+    mitt "^3.0.1"
+    valibot "^1.1.0"
+
+"@tma.js/sdk@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@tma.js/sdk/-/sdk-3.1.2.tgz#bce65aedd6d4eafa1b4216a8c276f6e3e1a91913"
+  integrity sha512-ZeQwtQrrKzCLV/iWKppuNHpEbsX990wnO2axDNYrYxokJ2ZRrBWGO66GCsG7jd+k++wo3K3egmozjTd3pT87Lg==
+  dependencies:
+    "@tma.js/bridge" "^2.2.0"
+    "@tma.js/signals" "^1.0.1"
+    "@tma.js/toolkit" "^1.0.2"
+    "@tma.js/transformers" "^1.1.1"
+    "@tma.js/types" "^1.0.2"
+    better-promises "^1.0.0"
+    error-kid "^1.0.2"
+    fp-ts "^2.16.11"
+    valibot "^1.1.0"
+
+"@tma.js/signals@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@tma.js/signals/-/signals-1.0.1.tgz#7b6071ce5500d23a6a8cde5e128cf4978841da7d"
+  integrity sha512-i2HUuwGqL4BmM5KAklAUhMhlEgUOF+F4nMHHS/zxrmD0upHE/0CiXCEdQxVeeOGN6e2RrKlonA40sDtR6OUDCw==
+
+"@tma.js/toolkit@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@tma.js/toolkit/-/toolkit-1.0.2.tgz#e3c1bc926e7ef0ee7aa6b50c3153b813a004c1e8"
+  integrity sha512-HGKYFZuxfbrlUguyoV+q+0ghNWqEYnnI66oI5DH2zSrafA0QyTsMOYXZ95aU+fzKbulf5S+YOVJTnFZQZnqLMQ==
+  dependencies:
+    better-promises "^1.0.0"
+    fp-ts "^2.16.11"
+
+"@tma.js/transformers@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@tma.js/transformers/-/transformers-1.1.1.tgz#f952c2e5a41900d0fad38d50b8da90e023a699c1"
+  integrity sha512-FTzsUXojndg/zk5Ai/lxncc11gxGiI2szdK4tsN36elhig8lPj0gg9uYDlIfyWNM7TCyq2ZWE3jliCz3ofpiiA==
+  dependencies:
+    "@tma.js/toolkit" "^1.0.2"
+    "@tma.js/types" "^1.0.2"
+    fp-ts "^2.16.11"
+    valibot "^1.1.0"
+
+"@tma.js/types@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@tma.js/types/-/types-1.0.2.tgz#522305fae7a4d5753058f506cbf06c929d858917"
+  integrity sha512-qs4mi+U1xZmMQBdMhWAo1X4YqUJ/ae0y28s+GNCpQq58bsJo0h8rvyVOB1RwPvXogIY9+yribbZe6z3AIJmsAQ==
+
 "@ton/core@^0.61.0":
   version "0.61.0"
   resolved "https://registry.yarnpkg.com/@ton/core/-/core-0.61.0.tgz#09b37801cb2f5a942020fcc992be1e99f4b16689"
@@ -4618,6 +4676,13 @@ bech32@1.1.4:
   resolved "https://registry.yarnpkg.com/bech32/-/bech32-1.1.4.tgz#e38c9f37bf179b8eb16ae3a772b40c356d4832e9"
   integrity sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==
 
+better-promises@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/better-promises/-/better-promises-1.0.0.tgz#b90552e8c037781b061433b89c8d4bfd203a08a8"
+  integrity sha512-gPgL2nRgeSbMIe3QpsYdKR3K0S9OZuphVuos60Eqsw8d/6GivOkyJ5D/zmnolJ6hzh7upnnflBUWUlQh4qpU2A==
+  dependencies:
+    error-kid "^1.0.1"
+
 binary-extensions@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
@@ -5943,6 +6008,11 @@ error-ex@^1.3.1:
   dependencies:
     is-arrayish "^0.2.1"
 
+error-kid@^1.0.1, error-kid@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/error-kid/-/error-kid-1.0.2.tgz#91708b9db45d002a154e118c36f00b54d096c811"
+  integrity sha512-Xvq0ZrY/azCbREWKt9E/3mXDF0MkuEVVvHnOKutUhtq2O8pyneEixQ4nSFkA19Xfn+/OVSg//iVG0dxIDj7DIA==
+
 es-abstract@^1.17.5, es-abstract@^1.23.2, es-abstract@^1.23.3, es-abstract@^1.23.5, es-abstract@^1.23.6, es-abstract@^1.23.9, es-abstract@^1.24.0:
   version "1.24.0"
   resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.24.0.tgz#c44732d2beb0acc1ed60df840869e3106e7af328"
@@ -6751,6 +6821,11 @@ form-data@^4.0.4:
     es-set-tostringtag "^2.1.0"
     hasown "^2.0.2"
     mime-types "^2.1.12"
+
+fp-ts@^2.16.11:
+  version "2.16.11"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.16.11.tgz#831a10514bf4e22adf12065732fc5a20c85d9623"
+  integrity sha512-LaI+KaX2NFkfn1ZGHoKCmcfv7yrZsC3b8NtWsTVQeHkq4F27vI5igUuO53sxqDEa2gNQMHFPmpojDw/1zmUK7w==
 
 framer-motion@11.13.5:
   version "11.13.5"
@@ -8439,6 +8514,11 @@ mipd@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mipd/-/mipd-0.0.7.tgz#bb5559e21fa18dc3d9fe1c08902ef14b7ce32fd9"
   integrity sha512-aAPZPNDQ3uMTdKbuO2YmAw2TxLHO0moa4YKAyETM/DTj5FloZo+a+8tU+iv4GmW+sOxKLSRwcSFuczk+Cpt6fg==
+
+mitt@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/mitt/-/mitt-3.0.1.tgz#ea36cf0cc30403601ae074c8f77b7092cdab36d1"
+  integrity sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==
 
 mkdirp@^1.0.4:
   version "1.0.4"
@@ -10767,6 +10847,11 @@ valibot@0.34.0:
   version "0.34.0"
   resolved "https://registry.yarnpkg.com/valibot/-/valibot-0.34.0.tgz#4c1710fd02faddd33df8a3c3aeb07466c99f046a"
   integrity sha512-TELvxO0hEB1/6XjTS5Jfi4dS0oyawA5flxs4/sK/tSUXnlLMiKTMYE6Atuu0a7kvtP3eqPv3yZ80msfM+qMDHA==
+
+valibot@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-1.2.0.tgz#8fc720d9e4082ba16e30a914064a39619b2f1d6f"
+  integrity sha512-mm1rxUsmOxzrwnX5arGS+U4T25RdvpPjPN4yR0u9pUBov9+zGVtO84tif1eY4r6zWxVxu3KzIyknJy3rxfRZZg==
 
 valtio@1.11.2:
   version "1.11.2"

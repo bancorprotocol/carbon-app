@@ -13,6 +13,7 @@ import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
 import { SDKProvider } from 'libs/sdk/provider';
+import { init as initTelegramSDK } from '@tma.js/sdk';
 import TelegramAnalytics from '@telegram-apps/analytics';
 
 const root = ReactDOM.createRoot(
@@ -27,6 +28,7 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
   }
 };
 
+initTelegramSDK();
 TelegramAnalytics.init({
   token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
   appName: 'carbondefi',
