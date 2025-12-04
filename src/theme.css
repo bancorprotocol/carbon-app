@@ -201,8 +201,7 @@
   transition: transform 0.1s var(--ease-out);
   text-align: center;
   &:hover {
-    color: white;
-    background: linear-gradient(180deg, #50C58A, var(--color-secondary));
+    background: linear-gradient(180deg, var(--color-green), var(--color-primary) 40%);
   }
   &:disabled, &.disabled {
     opacity: 0.5;

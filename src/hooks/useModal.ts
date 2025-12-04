@@ -10,7 +10,6 @@ type OpenModalArgs<K extends ModalKey> = ModalSchema[K] extends undefined
 
 export const useModal = () => {
   const {
-    isCountryBlocked,
     modals: { setModalsOpen, modals },
   } = useStore();
   const { open: modalsOpen } = modals;
@@ -35,19 +34,10 @@ export const useModal = () => {
   const openModal = useCallback(
     <T extends ModalKey>(...args: OpenModalArgs<T>) => {
       const [key, data = undefined] = args;
-      if (key === 'wallet') {
-        if (isCountryBlocked === null) {
-          return;
-        }
-        if (isCountryBlocked) {
-          openModal('restrictedCountry');
-          return;
-        }
-      }
       const id = uuid();
       setModalsOpen((prevState) => [...prevState, { id, key, data }]);
     },
-    [setModalsOpen, isCountryBlocked],
+    [setModalsOpen],
   );
 
   return {
