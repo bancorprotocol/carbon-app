@@ -6,7 +6,6 @@ import { carbonApi } from 'utils/carbonApi';
 import { toUnixUTC } from 'components/simulator/utils';
 import { startOfDay, subDays } from 'date-fns';
 import { useMemo } from 'react';
-import { getAddress } from 'ethers';
 
 export const useGetTokenPrice = (address?: string) => {
   const pricesQuery = useGetTokensPrice();
@@ -32,15 +31,7 @@ export const useGetTokenPrice = (address?: string) => {
 export const useGetTokensPrice = () => {
   return useQuery({
     queryKey: QueryKey.tokensPrice(),
-    queryFn: async () => {
-      // TODO: update that once addresses are returned checksum by backend
-      const prices = await carbonApi.getTokensMarketPrice();
-      const result: Record<string, number> = {};
-      for (const [address, price] of Object.entries(prices)) {
-        result[getAddress(address)] = price;
-      }
-      return result;
-    },
+    queryFn: () => carbonApi.getTokensMarketPrice(),
     refetchInterval: FIVE_MIN_IN_MS,
     refetchOnWindowFocus: false,
     retry: 0, // Critical for initial load
