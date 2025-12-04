@@ -28,11 +28,13 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
   }
 };
 
-initTelegramSDK();
-TelegramAnalytics.init({
-  token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
-  appName: 'carbondefi',
-});
+if (config.network.name === 'TON') {
+  initTelegramSDK();
+  TelegramAnalytics.init({
+    token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
+    appName: 'carbondefi',
+  });
+}
 
 root.render(
   <React.StrictMode>
