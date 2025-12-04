@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { useTradeSettingsStore } from 'store/useTradeSettingsStore';
 import { useNotificationsStore } from 'store/useNotificationsStore';
 import { useModalStore } from 'store/useModalStore';
@@ -13,7 +13,6 @@ import { StoreContext, StoreCTX } from './useStore';
 // ********************************** //
 
 export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [countryBlocked, setCountryBlocked] = useState<boolean | null>(null);
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
   const notifications = useNotificationsStore();
@@ -23,8 +22,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const toaster = useToastStore();
 
   const value: StoreContext = {
-    isCountryBlocked: countryBlocked,
-    setCountryBlocked,
     tokens,
     notifications,
     modals,

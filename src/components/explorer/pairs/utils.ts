@@ -11,7 +11,7 @@ export const pairFilter: PairFilterMap = {
   all: 'All',
   large: 'Only significant liquidity',
 };
-if (config.ui.rewardUrl) {
+if (config.ui.rewards) {
   pairFilter.rewards = 'Only Rewards';
 }
 export type PairFilter = keyof PairFilterMap;
