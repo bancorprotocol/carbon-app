@@ -49,7 +49,8 @@ export const useMissingTokensQuery = (
   return useQuery({
     queryKey: QueryKey.missingTokens(),
     queryFn: async () => {
-      const previous = lsService.getItem('importedTokens') || [];
+      const previous: Token[] = [];
+      const imported = lsService.getItem('importedTokens') || [];
       const existing = new Set();
 
       // Tokens from app files
@@ -58,8 +59,12 @@ export const useMissingTokensQuery = (
       }
 
       // Manually imported tokens from local storage
-      for (const token of previous || []) {
-        existing.add(token.address.toLowerCase());
+      for (const token of imported || []) {
+        // If we add a new token in local list which is already in imported LS, ignore it
+        if (!existing.has(token.address.toLowerCase())) {
+          existing.add(token.address.toLowerCase());
+          previous.push(token);
+        }
       }
 
       const missing = new Set<string>();
