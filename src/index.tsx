@@ -6,8 +6,6 @@ import { StoreProvider } from 'store';
 import { WagmiReactWrapper } from 'libs/wagmi';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
-import { SDKProvider } from 'libs/sdk/provider';
-import TelegramAnalytics from '@telegram-apps/analytics';
 import config from 'config';
 import 'init-sentry';
 import 'fonts.css';
