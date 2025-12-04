@@ -29,11 +29,15 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
 };
 
 if (config.network.name === 'TON') {
-  initTelegramSDK();
-  TelegramAnalytics.init({
-    token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
-    appName: 'carbondefi',
-  });
+  try {
+    initTelegramSDK();
+    TelegramAnalytics.init({
+      token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
+      appName: 'carbondefi',
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 root.render(
