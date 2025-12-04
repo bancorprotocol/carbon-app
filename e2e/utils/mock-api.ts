@@ -34,7 +34,7 @@ export const mockApi = async (page: Page) => {
   await page.route('**/*/roi', (route) => {
     return route.fulfill({ json: roi });
   });
-  await page.route('**/*/tokens-prices', (route) => {
+  await page.route('**/*/tokens/prices', (route) => {
     return route.fulfill({ json: marketRate });
   });
   await page.route('**/*/history/prices?*', (route) => {
