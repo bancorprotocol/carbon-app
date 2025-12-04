@@ -1,8 +1,8 @@
 import { useBurgerMenuItems } from 'components/core/menu/mainMenu/MainMenuRightBurger/useBurgerMenuItems';
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { Modal, ModalHeader } from '../Modal';
 
-export const ModalBurgerMenu: ModalFC<undefined> = ({ id }) => {
+export default function ModalBurgerMenu({ id }: ModalProps) {
   const menu = useBurgerMenuItems();
   return (
     <Modal id={id} placement="side" className="grid content-start">
@@ -12,4 +12,4 @@ export const ModalBurgerMenu: ModalFC<undefined> = ({ id }) => {
       </div>
     </Modal>
   );
-};
+}

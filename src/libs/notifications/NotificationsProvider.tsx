@@ -1,6 +1,5 @@
 import { useWagmi } from 'libs/wagmi';
 import { FC, useEffect, useState } from 'react';
-import { AnimatePresence, m } from 'framer-motion';
 import { getLSUserNotifications } from 'libs/notifications/utils';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
@@ -29,14 +28,13 @@ export const NotificationAlerts: FC = () => {
 
   return (
     <ul
+      id="notification-list"
       className="fixed right-[34px] top-80 z-50 grid gap-16"
       data-testid="notification-list"
     >
-      <AnimatePresence mode="popLayout">
-        {alerts.map((n) => (
-          <NotificationItem notification={n} key={n.id} />
-        ))}
-      </AnimatePresence>
+      {alerts.map((n) => (
+        <NotificationItem notification={n} key={n.id} />
+      ))}
     </ul>
   );
 };
@@ -53,16 +51,11 @@ const NotificationItem: FC<{ notification: Notification }> = (props) => {
   }, [delay, dismissAlert, id]);
 
   return (
-    <m.li
-      layout
-      variants={notificationVariants}
+    <li
+      id={id}
       onMouseEnter={() => setDelay(1_000_000)} // Infinity doesn't work with timeout
       onMouseLeave={() => setDelay(7 * 1000)}
-      whileHover="hover"
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="rounded-lg bg-main-800 glass-shadow block w-[350px] overflow-hidden px-16 py-12"
+      className="rounded-lg bg-main-800 glass-shadow block w-[400px] overflow-hidden px-16 py-12 hover:scale-105 transition-all animate-slide-up ease-out"
       data-testid={`notification-${notification.testid}`}
     >
       <NotificationLine
@@ -70,24 +63,6 @@ const NotificationItem: FC<{ notification: Notification }> = (props) => {
         close={() => dismissAlert(id)}
         onClick={() => dismissAlert(id)}
       />
-    </m.li>
+    </li>
   );
-};
-
-const notificationVariants = {
-  initial: {
-    opacity: 0,
-    scale: 0.2,
-    transition: { type: 'spring' },
-  },
-  animate: {
-    opacity: 1,
-    scale: 1,
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.2,
-    transition: { type: 'spring' },
-  },
-  hover: { scale: 1.05, transition: { type: 'spring' } },
 };

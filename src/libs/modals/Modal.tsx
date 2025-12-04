@@ -1,11 +1,20 @@
-import { ModalHeaderProps, ModalProps } from 'libs/modals/modals.types';
-import { FC, useCallback, useEffect } from 'react';
+import { ModalHeaderProps } from 'libs/modals/modals.types';
+import { FC, ReactNode, useCallback, useEffect } from 'react';
 import { useDialog } from 'hooks/useDialog';
 import { useModal } from 'hooks/useModal';
 import IconClose from 'assets/icons/X.svg?react';
 import { cn } from 'utils/helpers';
 
-export const Modal: FC<ModalProps> = ({ children, ...props }) => {
+export interface Props {
+  children: ReactNode;
+  id: string;
+  className?: string;
+  placement?: 'center' | 'side';
+  onClose?: (id: string) => void;
+  'data-testid'?: string;
+}
+
+export const Modal: FC<Props> = ({ children, ...props }) => {
   const { id, placement = 'center', className } = props;
   const { ref, open, lightDismiss } = useDialog();
   const { removeModal } = useModal();

@@ -6,7 +6,6 @@ import {
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
-import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
   BudgetDescription,
@@ -17,7 +16,7 @@ import { getDeposit, getWithdraw } from './utils';
 import { hasNoBudget } from '../overlapping/utils';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { formatNumber, tokenAmount } from 'utils/helpers';
+import { tokenAmount } from 'utils/helpers';
 import { CreateOverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
@@ -28,25 +27,6 @@ interface Props {
   marketPrice: string;
   buy: CreateOverlappingOrder;
   sell: CreateOverlappingOrder;
-}
-
-export function isEditBelowMarket(
-  min: string,
-  max: string,
-  marketPrice: number | undefined,
-  spread: number,
-) {
-  if (!marketPrice) return false;
-  const prices = calculateOverlappingPrices(
-    formatNumber(min || '0'),
-    formatNumber(max || '0'),
-    marketPrice.toString(),
-    spread.toString(),
-  );
-  return isMaxBelowMarket({
-    max: prices.sellPriceHigh,
-    marginalPrice: prices.sellPriceMarginal,
-  });
 }
 
 type Search = EditBudgetOverlappingSearch;

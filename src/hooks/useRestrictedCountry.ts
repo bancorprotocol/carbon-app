@@ -8,7 +8,7 @@ export const useRestrictedCountry = () => {
   const checkRestriction = useCallback(async () => {
     const isBlocked = await carbonApi.getCheck();
     if (!isBlocked) return true;
-    openModal('restrictedCountry', undefined);
+    openModal('restrictedCountry');
     return false;
   }, [openModal]);
   return { checkRestriction };

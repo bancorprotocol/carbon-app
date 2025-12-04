@@ -2,7 +2,7 @@ import IconCut from 'assets/icons/cut.svg?react';
 import IconCopy from 'assets/icons/copy.svg?react';
 import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { useModal } from 'hooks/useModal';
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { StaticOrder, Strategy } from 'components/strategies/common/types';
 import { getUndercutStrategy } from './utils';
@@ -16,14 +16,14 @@ import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import { NATIVE_TOKEN_ADDRESS, isGasTokenToHide } from 'utils/tokens';
 import { StrategyDirection } from 'libs/routing';
 
-export interface ModalDuplicateStrategyData {
+interface ModalDuplicateStrategyData {
   strategy: Strategy<StaticOrder>;
 }
 
-export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
+export default function ModalDuplicateStrategy({
   id,
   data: { strategy },
-}) => {
+}: ModalProps<ModalDuplicateStrategyData>) {
   const navigate = useNavigate();
   const duplicate = useDuplicate();
   const { closeModal } = useModal();
@@ -134,4 +134,4 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       )}
     </Modal>
   );
-};
+}

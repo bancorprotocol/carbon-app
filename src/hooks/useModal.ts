@@ -4,6 +4,10 @@ import { uuid } from 'utils/helpers';
 import { useStore } from 'store';
 import { ModalSchema } from 'libs/modals/modals';
 
+type OpenModalArgs<K extends ModalKey> = ModalSchema[K] extends undefined
+  ? [key: K]
+  : [key: K, data: ModalSchema[K]];
+
 export const useModal = () => {
   const {
     modals: { setModalsOpen, modals },
@@ -28,7 +32,8 @@ export const useModal = () => {
   }, []);
 
   const openModal = useCallback(
-    <T extends ModalKey>(key: T, data: ModalSchema[T]) => {
+    <T extends ModalKey>(...args: OpenModalArgs<T>) => {
+      const [key, data = undefined] = args;
       const id = uuid();
       setModalsOpen((prevState) => [...prevState, { id, key, data }]);
     },

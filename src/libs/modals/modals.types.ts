@@ -1,24 +1,15 @@
 import { FC, ReactNode } from 'react';
 import { ModalSchema } from 'libs/modals/modals';
 
-export interface ModalProps {
-  children: ReactNode;
-  id: string;
-  className?: string;
-  placement?: 'center' | 'side';
-  onClose?: (id: string) => void;
-  'data-testid'?: string;
-}
-
 export interface ModalHeaderProps {
   id: string;
   children?: ReactNode;
   className?: string;
 }
 
-export type TModals = {
-  [key in keyof ModalSchema]: FC<{ id: string; data: ModalSchema[key] }>;
-};
+// export type TModals = {
+//   [key in keyof ModalSchema]: FC<{ id: string; data: ModalSchema[key] }>;
+// };
 
 export type ModalKey = keyof ModalSchema;
 
@@ -28,7 +19,11 @@ export interface ModalOpen {
   data: ModalSchema[ModalKey];
 }
 
-export type ModalFC<D> = FC<{
-  id: string;
-  data: D;
-}>;
+export type ModalProps<D = void> = D extends void
+  ? { id: string }
+  : {
+      id: string;
+      data: D;
+    };
+
+export type ModalFC<D> = FC<ModalProps<D>>;

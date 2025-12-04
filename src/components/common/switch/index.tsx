@@ -1,4 +1,3 @@
-import { m } from 'framer-motion';
 import { BaseHTMLAttributes, DetailedHTMLProps, FC } from 'react';
 import { VariantProps } from 'class-variance-authority';
 import { switchStyles } from 'components/common/switch/switchStyles';
@@ -40,23 +39,14 @@ export const Switch: FC<SwitchProps> = ({
           id={id}
           onChange={(e) => setIsOn(e.target.checked)}
         />
-        <m.div
+        <div
           className={cn(
             'aspect-square h-10 rounded-full outline-2',
             isOn ? 'bg-main-900 outline-black' : 'bg-white/60 outline-white/60',
             'peer-focus-visible:outline-solid',
           )}
-          layout
-          transition={spring}
         />
       </div>
     </>
   );
-};
-
-const spring = {
-  type: 'spring',
-  mass: 0.6,
-  stiffness: 700,
-  damping: 30,
 };
