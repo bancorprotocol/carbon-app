@@ -24,8 +24,6 @@ import { defaultToastStore, ToastStore } from 'store/useToasterStore';
 // ********************************** //
 
 export interface StoreContext {
-  isCountryBlocked: boolean | null;
-  setCountryBlocked: (value: boolean | null) => void;
   tokens: TokensStore;
   notifications: NotificationsStore;
   modals: ModalStore;
@@ -40,8 +38,6 @@ export interface StoreContext {
 }
 
 export const defaultValue: StoreContext = {
-  isCountryBlocked: null,
-  setCountryBlocked: () => {},
   tokens: defaultTokensStore,
   notifications: defaultNotificationsStore,
   modals: defaultModalStore,
