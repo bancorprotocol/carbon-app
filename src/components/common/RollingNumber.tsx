@@ -82,7 +82,7 @@ export const RollingNumber = ({
     return () => {
       tradesChanged = true;
     };
-  }, [format, value, delay]);
+  }, [format, value, delay, initDelta]);
 
   if (typeof value !== 'number' || !value) {
     return <Loading height={40} width={loadingWidth} fontSize="36px" />;
