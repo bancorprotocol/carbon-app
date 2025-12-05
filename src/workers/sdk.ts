@@ -17,7 +17,7 @@ import {
 import Decimal from 'decimal.js';
 import { OrderRow } from 'libs/queries';
 import { OrderBook } from 'libs/queries/sdk/orderBook';
-import { StaticJsonRpcProvider } from '@ethersproject/providers';
+import { JsonRpcProvider } from 'ethers';
 
 Decimal.set({
   precision: 100,
@@ -51,13 +51,10 @@ const init = async (
 ) => {
   if (isInitialized || isInitializing) return;
   isInitializing = true;
-  const provider = new StaticJsonRpcProvider(
-    {
-      ...rpc,
-      skipFetchSetup: true,
-    },
-    chainId,
-  );
+  const provider = new JsonRpcProvider(rpc.url, chainId, {
+    staticNetwork: true,
+  });
+
   api = new ContractsApi(provider, config);
   const { cache, startDataSync } = initSyncedCache(
     api.reader,
@@ -405,8 +402,6 @@ const sdkExposed = {
     ),
   getOrderBook,
   getCacheDump: () => sdkCache.serialize(),
-  getLastTradeByPair: (source: string, target: string) =>
-    sdkCache.getLatestTradeByPair(source, target),
   getMaxSourceAmountByPair: (source: string, target: string) =>
     carbonSDK.getMaxSourceAmountByPair(source, target),
 };
