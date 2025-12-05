@@ -9,7 +9,6 @@ import { setLSUserNotifications } from 'libs/notifications/utils';
 import { useCallback } from 'react';
 import { NOTIFICATIONS_MAP } from 'libs/notifications/data';
 import { uuid } from 'utils/helpers';
-import { dayjs } from 'libs/dayjs';
 
 export const useNotifications = () => {
   const { user, provider } = useWagmi();
@@ -51,7 +50,7 @@ export const useNotifications = () => {
           {
             ...NOTIFICATIONS_MAP[key](data),
             id: uuid(),
-            timestamp: dayjs().unix(),
+            timestamp: Date.now() / 1000,
           },
         ];
         if (newNotifications.length > 100) {
@@ -76,7 +75,20 @@ export const useNotifications = () => {
   );
 
   const dismissAlert = useCallback(
-    (id: string) => {
+    async (id: string) => {
+      const item = document.getElementById(id) as HTMLElement;
+      const animate = item.animate(
+        [
+          { transform: 'scale(1)', opacity: 1 },
+          { transform: 'scale(0.6)', opacity: 0 },
+        ],
+        {
+          duration: 400,
+          easing: 'cubic-bezier(0.36, 0, 0.66, -0.56)', // ease-in-back
+          fill: 'forwards',
+        },
+      );
+      await animate.finished;
       setNotifications((prev) => {
         const newNotifications = prev.map((n) =>
           n.id === id ? { ...n, showAlert: false } : n,

@@ -1,4 +1,4 @@
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import IconWarning from 'assets/icons/warning.svg?react';
 import { lsService } from 'services/localeStorage';
@@ -6,7 +6,7 @@ import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { useCallback } from 'react';
 import { useModal } from 'hooks/useModal';
 
-export const ModalRestrictedCountry: ModalFC<undefined> = ({ id }) => {
+export default function ModalRestrictedCountry({ id }: ModalProps) {
   const { closeModal } = useModal();
   const onClose = useCallback(() => {
     closeModal(id);
@@ -27,4 +27,4 @@ export const ModalRestrictedCountry: ModalFC<undefined> = ({ id }) => {
       </button>
     </Modal>
   );
-};
+}

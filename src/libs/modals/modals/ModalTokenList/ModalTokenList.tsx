@@ -1,5 +1,4 @@
-import { ModalFC } from 'libs/modals/modals.types';
-import { Token } from 'libs/tokens';
+import { ModalProps } from 'libs/modals/modals.types';
 import { useModalTokenList } from 'libs/modals/modals/ModalTokenList/useModalTokenList';
 import { ModalTokenListImport } from 'libs/modals/modals/ModalTokenList/ModalTokenListImport';
 import { ModalTokenListNotFound } from 'libs/modals/modals/ModalTokenList/ModalTokenListNotFound';
@@ -11,15 +10,12 @@ import { SearchInput } from 'components/common/searchInput';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { KeyboardEvent, useCallback } from 'react';
 import { useStore } from 'store';
+import { ModalTokenListData } from './types';
 
-export type ModalTokenListData = {
-  onClick: (token: Token) => void;
-  excludedTokens?: string[];
-  includedTokens?: string[];
-  isBaseToken?: boolean;
-};
-
-export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
+export default function ModalTokenList({
+  id,
+  data,
+}: ModalProps<ModalTokenListData>) {
   const {
     tokens: { isError, isPending },
   } = useStore();
@@ -84,4 +80,4 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
       )}
     </Modal>
   );
-};
+}

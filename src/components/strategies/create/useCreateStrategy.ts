@@ -86,7 +86,7 @@ export const useCreateStrategy = (props: Props) => {
     if (!base || !quote) return;
     const checked = await checkRestriction();
     if (!checked) return;
-    if (!user) return openModal('wallet', undefined);
+    if (!user) return openModal('wallet');
 
     const onConfirm = () => {
       return mutation.mutate(toCreateStrategyParams(base, quote, buy, sell), {

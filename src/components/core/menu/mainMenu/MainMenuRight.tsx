@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, lazy, useEffect, useState } from 'react';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MainMenuRightWallet } from 'components/core/menu/mainMenu/MainMenuRightWallet';
 import { MainMenuRightNotifications } from 'components/core/menu/mainMenu/MainMenuRightNotifications';
@@ -9,8 +9,9 @@ import { MainMenuCart } from './MainMenuCart';
 import { lsService } from 'services/localeStorage';
 import { Link } from '@tanstack/react-router';
 import { MainMenuRightReward } from './MainMenuRightRewards';
-import { TonConnectBtn } from 'libs/ton/TonConnect';
 import config from 'config';
+
+const TonConnectBtn = lazy(() => import('libs/ton/TonConnectBtn'));
 
 const TenderlyForkAlert = () => {
   const [isDebugMode, setIsDebugMode] = useState(false);
