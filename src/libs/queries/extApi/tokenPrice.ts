@@ -18,7 +18,7 @@ export const useGetTokenPrice = (address?: string) => {
         return carbonApi.getMarketRate(address);
       } catch (err) {
         console.error(err);
-        return 0;
+        return;
       }
     },
     enabled: !pricesQuery.isPending && !!address,
