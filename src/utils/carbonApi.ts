@@ -18,6 +18,10 @@ import { Reward } from 'libs/queries/extApi/rewards';
 import { Token } from 'libs/tokens';
 import { StrategyAPIResult } from 'libs/queries/extApi/strategy';
 
+interface MarketRate {
+  data: { USD: number };
+}
+
 const get = async <T>(
   endpoint: string,
   params: object = {},
@@ -58,6 +62,11 @@ const carbonApi = {
     params: TokenPriceHistorySearch,
   ): Promise<TokenPriceHistoryResult[]> => {
     return get<TokenPriceHistoryResult[]>('history/prices', params);
+  },
+  getMarketRate: async (address: string) => {
+    const params = { address, convert: ['USD'] };
+    const result = await get<MarketRate>('market-rate', params);
+    return result.data.USD;
   },
   getSimulator: async (
     params: SimulatorAPIParams,

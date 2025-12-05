@@ -5,27 +5,27 @@ import { FIVE_MIN_IN_MS } from 'utils/time';
 import { carbonApi } from 'utils/carbonApi';
 import { toUnixUTC } from 'components/simulator/utils';
 import { startOfDay, subDays } from 'date-fns';
-import { useMemo } from 'react';
 
 export const useGetTokenPrice = (address?: string) => {
   const pricesQuery = useGetTokensPrice();
-  return useMemo(() => {
-    if (pricesQuery.isError) {
-      return { isError: true, isPending: false, data: undefined };
-    }
-    if (!address) {
-      return { isError: false, isPending: false, data: undefined };
-    }
-    if (pricesQuery.isPending) {
-      return { isError: false, isPending: true, data: undefined };
-    }
-    const prices = pricesQuery.data ?? {};
-    return {
-      isError: false,
-      isPending: false,
-      data: prices[address],
-    };
-  }, [address, pricesQuery.data, pricesQuery.isError, pricesQuery.isPending]);
+  return useQuery({
+    queryKey: QueryKey.tokenPrice(address),
+    queryFn: async () => {
+      if (!address) return;
+      const prices = pricesQuery.data ?? {};
+      if (prices[address]) return prices[address];
+      try {
+        return carbonApi.getMarketRate(address);
+      } catch (err) {
+        console.error(err);
+        return 0;
+      }
+    },
+    enabled: !pricesQuery.isPending && !!address,
+    refetchInterval: FIVE_MIN_IN_MS,
+    refetchOnWindowFocus: false,
+    retry: 0, // Critical for initial load
+  });
 };
 
 export const useGetTokensPrice = () => {

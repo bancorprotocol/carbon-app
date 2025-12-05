@@ -37,6 +37,20 @@ export const mockApi = async (page: Page) => {
   await page.route('**/*/tokens/prices', (route) => {
     return route.fulfill({ json: marketRate });
   });
+  await page.route('**/*/market-rate?*', (route) => {
+    const url = new URL(route.request().url());
+    const address = url.searchParams.get('address') as keyof typeof marketRate;
+    if (!address) throw new Error('No address found in the URL');
+    const marketPrice = marketRate[address];
+    // If unexpected behavior, let the real server handle that
+    if (!address || !marketPrice) {
+      return route.continue();
+    }
+    const data = {
+      USD: marketPrice,
+    };
+    return route.fulfill({ json: { data } });
+  });
   await page.route('**/*/history/prices?*', (route) => {
     const url = new URL(route.request().url());
     const { baseToken, quoteToken, start, end } = Object.fromEntries(

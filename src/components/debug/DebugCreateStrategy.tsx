@@ -16,7 +16,7 @@ import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
-import { useGetTokensPrice } from 'libs/queries/extApi/tokenPrice';
+import { carbonApi } from 'utils/carbonApi';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -63,7 +63,6 @@ export const DebugCreateStrategy = () => {
   const quoteSymbol = selectedTokens?.[1]?.symbol ?? '';
 
   const balanceQueries = useGetTokenBalances(selectedTokens);
-  const tokensPriceQuery = useGetTokensPrice();
 
   const perRound = 1;
 
@@ -106,9 +105,10 @@ export const DebugCreateStrategy = () => {
   };
 
   const getMarketPrice = async (base: Token, quote: Token) => {
-    const prices = tokensPriceQuery.data ?? {};
-    const basePrice = prices[base.address];
-    const quotePrice = prices[quote.address];
+    const [basePrice, quotePrice] = await Promise.all([
+      carbonApi.getMarketRate(base.address),
+      carbonApi.getMarketRate(quote.address),
+    ]);
     if (!basePrice || !quotePrice) {
       throw new Error(
         `Token price not available for ${base.address} or ${quote.address}`,
