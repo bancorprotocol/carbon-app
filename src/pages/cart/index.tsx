@@ -6,12 +6,7 @@ import { useWagmi } from 'libs/wagmi';
 import { cn } from 'utils/helpers';
 import { FormEvent, useMemo, useState } from 'react';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import {
-  QueryKey,
-  toTransactionRequest,
-  useGetTokenBalances,
-  useQueryClient,
-} from 'libs/queries';
+import { QueryKey, useGetTokenBalances, useQueryClient } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { Warning } from 'components/common/WarningMessageWithIcon';
@@ -141,7 +136,7 @@ export const CartPage = () => {
           })),
         };
 
-        const tx = await sendTransaction(toTransactionRequest(unsignedTx));
+        const tx = await sendTransaction(unsignedTx);
         setConfirmation(false);
         setProcessing(true);
         dispatchNotification('createBatchStrategy', { txHash: tx.hash });

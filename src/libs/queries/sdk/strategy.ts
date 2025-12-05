@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { isAddress, getAddress, TransactionRequest } from 'ethers';
+import { isAddress, getAddress } from 'ethers';
 import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
@@ -11,7 +11,6 @@ import {
   EncodedStrategyBNStr,
   StrategyUpdate,
   Strategy as SDKStrategy,
-  PopulatedTransaction,
 } from '@bancor/carbon-sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
@@ -343,18 +342,6 @@ export const useTokenStrategies = (token?: string) => {
 
 // WRITE
 
-// TODO: remove when sdk is using ethers v6
-export const toTransactionRequest = (tx: PopulatedTransaction) => {
-  const next: TransactionRequest = structuredClone(tx) as any;
-  if (tx.gasLimit) next.gasLimit = BigInt(tx.gasLimit._hex);
-  if (tx.gasPrice) next.gasPrice = BigInt(tx.gasPrice._hex);
-  if (tx.value) next.value = BigInt(tx.value._hex);
-  if (tx.maxFeePerGas) next.maxFeePerGas = BigInt(tx.maxFeePerGas._hex);
-  if (tx.maxPriorityFeePerGas)
-    next.maxFeePerGas = BigInt(tx.maxPriorityFeePerGas._hex);
-  return next;
-};
-
 const getFieldsToUpdate = (orders: EditOrders, strategy: AnyStrategy) => {
   const { buy, sell } = orders;
   const fields: Partial<StrategyUpdate> = {};
@@ -426,7 +413,7 @@ export const useCreateStrategyQuery = () => {
         ],
       };
 
-      return sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(unsignedTx);
     },
   });
 };
@@ -470,7 +457,7 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
         ],
       };
 
-      return sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(unsignedTx);
     },
   });
 };
@@ -491,7 +478,7 @@ export const usePauseStrategyQuery = () => {
         },
       );
 
-      return sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(unsignedTx);
     },
   });
 };
@@ -503,7 +490,7 @@ export const useDeleteStrategyQuery = () => {
     mutationFn: async ({ id }: DeleteStrategyParams) => {
       const unsignedTx = await carbonSDK.deleteStrategy(id);
 
-      return sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(unsignedTx);
     },
   });
 };
