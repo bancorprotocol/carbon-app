@@ -3,8 +3,7 @@ import { PairLogoName } from 'components/common/DisplayPair';
 import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { FC, useId, useMemo, useState } from 'react';
 import { StrategyStatusTag } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { cn, prettifyNumber, tokenAmount } from 'utils/helpers';
+import { cn, getUsdPrice, tokenAmount } from 'utils/helpers';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import DashboardIcon from 'assets/icons/dashboard.svg?react';
 import {
@@ -73,7 +72,6 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
   const toDisposableSell = useEditToDisposableSell(strategy);
   const isOwn = useIsStrategyOwner(strategy.id);
   const isExplorer = !!useMatch({ from: '/explore', shouldThrow: false });
-  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
   const totalBalance = strategy.fiatBudget.total;
   const disableEdit =
     !isOwn || isDisposableStrategy(strategy) || strategy.status !== 'active';
@@ -95,13 +93,8 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
       </td>
       <td>{strategy.tradeCount}</td>
       <td>
-        <Tooltip element={prettifyNumber(totalBalance, { currentCurrency })}>
-          <p>
-            {prettifyNumber(totalBalance, {
-              currentCurrency,
-              abbreviate: true,
-            })}
-          </p>
+        <Tooltip element={getUsdPrice(totalBalance)}>
+          <p>{getUsdPrice(totalBalance, { abbreviate: true })}</p>
         </Tooltip>
       </td>
       <td>

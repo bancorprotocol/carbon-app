@@ -1,23 +1,21 @@
 import { Link } from '@tanstack/react-router';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import IconTooltip from 'assets/icons/tooltip.svg?react';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useMemo } from 'react';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { cn, getUsdPrice, prettifyNumber } from 'utils/helpers';
 import style from './PortfolioHeader.module.css';
 
 export const PortfolioHeader = () => {
   const { strategies = [] } = useStrategyCtx();
-  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
 
   const netWorth = useMemo(() => {
     const total = strategies.reduce((acc, strategy) => {
       return acc.add(strategy.fiatBudget.total);
     }, new SafeDecimal(0));
-    return prettifyNumber(total, { currentCurrency });
-  }, [strategies, currentCurrency]);
+    return getUsdPrice(total);
+  }, [strategies]);
 
   const totalTrade = useMemo(() => {
     const total = strategies.reduce((acc, strategy) => {

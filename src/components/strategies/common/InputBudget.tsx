@@ -5,6 +5,7 @@ import {
   MouseEvent,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -12,6 +13,7 @@ import { Token } from 'libs/tokens';
 import {
   cn,
   formatNumber,
+  getUsdPrice,
   prettifyNumber,
   roundSearchParam,
   sanitizeNumber,
@@ -60,18 +62,14 @@ export const InputBudget: FC<Props> = (props) => {
   const id = props.id ?? inputId;
   const { user } = useWagmi();
   const [localBudget, setLocalBudget] = useState(roundSearchParam(value));
-  const {
-    getFiatValue,
-    selectedFiatCurrency: currentCurrency,
-    hasFiatValue,
-  } = useFiatCurrency(token);
-  const fiatValue = getFiatValue(localBudget ?? '0', true);
+  const { getFiatValue, hasFiatValue } = useFiatCurrency(token);
+  const fiatValue = getFiatValue(localBudget ?? '0');
 
-  const priceText = () => {
-    if (!hasFiatValue()) return `${currentCurrency} value unavailable`;
-    if (fiatValue.gt(0)) return prettifyNumber(fiatValue, { currentCurrency });
+  const priceText = useMemo(() => {
+    if (!hasFiatValue()) return 'USD value unavailable';
+    if (fiatValue.gt(0)) return getUsdPrice(fiatValue);
     return '';
-  };
+  }, [fiatValue, hasFiatValue]);
 
   useEffect(() => {
     if (document.activeElement?.id !== id) {
@@ -141,7 +139,7 @@ export const InputBudget: FC<Props> = (props) => {
           </div>
         </div>
         <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10">
-          <p className="flex items-center gap-5 text-white/60">{priceText()}</p>
+          <p className="flex items-center gap-5 text-white/60">{priceText}</p>
           {user && max && !maxIsLoading && (
             <button
               disabled={disabled}

@@ -38,6 +38,12 @@ import { useMemo } from 'react';
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
 // READ
+const getStatus = (offCurve: boolean, noBudget: boolean) => {
+  if (offCurve && noBudget) return 'inactive';
+  if (offCurve) return 'paused';
+  if (noBudget) return 'noBudget';
+  return 'active';
+};
 
 // TODO: build strategy outside the useQuery to parallelize token query & strategy query
 const buildStrategiesHelper = async (
@@ -65,14 +71,7 @@ const buildStrategiesHelper = async (
 
       const noBudget = sellBudget.isZero() && buyBudget.isZero();
 
-      const status =
-        noBudget && offCurve
-          ? 'inactive'
-          : offCurve
-            ? 'paused'
-            : noBudget
-              ? 'noBudget'
-              : 'active';
+      const status = getStatus(offCurve, noBudget);
 
       // ATTENTION *****************************
       // This is the buy order | UI order 0 and CONTRACT order 1

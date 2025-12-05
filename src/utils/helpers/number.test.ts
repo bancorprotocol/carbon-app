@@ -46,42 +46,6 @@ describe('Test helpers', () => {
         );
       });
 
-      test('should return €0.00 for input lower then 0 and currentCurrency is EUR', () => {
-        expect(prettifyNumber(-10, { currentCurrency: 'EUR' })).toEqual(
-          '€0.00',
-        );
-      });
-
-      test('should return 0.00 ETH for input lower then 0 and currentCurrency is ETH', () => {
-        expect(prettifyNumber(-10, { currentCurrency: 'ETH' })).toEqual(
-          '0.00 ETH',
-        );
-      });
-
-      test('should return ¥0.00 for input lower then 0 and currentCurrency is JPY', () => {
-        expect(prettifyNumber(-10, { currentCurrency: 'JPY' })).toEqual(
-          '¥0.00',
-        );
-      });
-
-      test('should return "$0.00" for input 0 and currentCurrency is USD', () => {
-        expect(prettifyNumber(0, { currentCurrency: 'USD' })).toEqual('$0.00');
-      });
-
-      test('should return "€0.00" for input 0 and currentCurrency is EUR', () => {
-        expect(prettifyNumber(0, { currentCurrency: 'EUR' })).toEqual('€0.00');
-      });
-
-      test('should return "0.00 ETH" for input 0 and currentCurrency is ETH', () => {
-        expect(prettifyNumber(0, { currentCurrency: 'ETH' })).toEqual(
-          '0.00 ETH',
-        );
-      });
-
-      test('should return "¥0.00" for input 0 and currentCurrency is JPY', () => {
-        expect(prettifyNumber(0, { currentCurrency: 'JPY' })).toEqual('¥0.00');
-      });
-
       // < 1
       test('should return "$0.001" for input 0.001 and currentCurrency is USD', () => {
         expect(prettifyNumber(0.001, { currentCurrency: 'USD' })).toEqual(
@@ -89,58 +53,10 @@ describe('Test helpers', () => {
         );
       });
 
-      test('should return "€0.001" for input 0.001 and currentCurrency is EUR', () => {
-        expect(prettifyNumber(0.001, { currentCurrency: 'EUR' })).toEqual(
-          '€0.001',
-        );
-      });
-
-      test('should return "0.001 ETH" for input 0.001 and currentCurrency is ETH', () => {
-        expect(prettifyNumber(0.001, { currentCurrency: 'ETH' })).toEqual(
-          '0.001 ETH',
-        );
-      });
-
-      test('should return "0.0₃1 ETH" for input 0.0001 and currentCurrency is ETH', () => {
-        expect(prettifyNumber(0.0001, { currentCurrency: 'ETH' })).toEqual(
-          '0.0₃1 ETH',
-        );
-      });
-
-      test('should return "0.0₄1 ETH" for input 0.00001 and currentCurrency is ETH', () => {
-        expect(prettifyNumber(0.00001, { currentCurrency: 'ETH' })).toEqual(
-          '0.0₄1 ETH',
-        );
-      });
-
-      test('should return "¥0.001" for input 0.001 and currentCurrency is JPY', () => {
-        expect(prettifyNumber(0.001, { currentCurrency: 'JPY' })).toEqual(
-          '¥0.001',
-        );
-      });
-
       // 1 -> 10
       test('should return "$1.2345" for input 1.23456 and currentCurrency is USD', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'USD' })).toEqual(
           '$1.2345',
-        );
-      });
-
-      test('should return "€1.2346" for input 1.23456 and currentCurrency is EUR', () => {
-        expect(prettifyNumber(1.2345, { currentCurrency: 'EUR' })).toEqual(
-          '€1.2345',
-        );
-      });
-
-      test('should return "1.23 ETH" for input 1.23456 and currentCurrency is ETH', () => {
-        expect(prettifyNumber(1.2345, { currentCurrency: 'ETH' })).toEqual(
-          '1.2345 ETH',
-        );
-      });
-
-      test('should return "¥1.23" for input 1.23456 and currentCurrency is JPY', () => {
-        expect(prettifyNumber(1.2345, { currentCurrency: 'JPY' })).toEqual(
-          '¥1.2345',
         );
       });
 
@@ -157,24 +73,6 @@ describe('Test helpers', () => {
         );
       });
 
-      test('should return "€123,456,789.00" for input 123456789 and currentCurrency is EUR', () => {
-        expect(prettifyNumber(123456789, { currentCurrency: 'EUR' })).toEqual(
-          '€123,456,789.00',
-        );
-      });
-
-      test('should return "123,456,789.00 ETH" for input 123456789 and currentCurrency is ETH', () => {
-        expect(prettifyNumber(123456789, { currentCurrency: 'ETH' })).toEqual(
-          '123,456,789.00 ETH',
-        );
-      });
-
-      test('should return "¥123,456,789.00" for input 123456789 and currentCurrency is JPY', () => {
-        expect(prettifyNumber(123456789, { currentCurrency: 'JPY' })).toEqual(
-          '¥123,456,789.00',
-        );
-      });
-
       test('should return "1,000" for input 1000 and no currentCurrency selected', () => {
         expect(prettifyNumber(1000, {})).toEqual('1,000.00');
       });
@@ -188,18 +86,6 @@ describe('Test helpers', () => {
         ).toEqual('$1.23M');
       });
 
-      test('should return "1.23M ETH" for input 1234567, with abbreviate true, and currentCurrency is ETH', () => {
-        expect(
-          prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'ETH' }),
-        ).toEqual('1.23M ETH');
-      });
-
-      test('should return "¥1.23M" for input 1234567, with abbreviate true, and currentCurrency is JPY', () => {
-        expect(
-          prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'JPY' }),
-        ).toEqual('¥1.23M');
-      });
-
       ////////////////////
       // High Precision //
       ////////////////////
@@ -209,18 +95,18 @@ describe('Test helpers', () => {
       });
 
       test('should return "123,456.789 ETH" for input 123456.789, with highPrecision, and currentCurrency is ETH', () => {
-        const option = { highPrecision: true, currentCurrency: 'ETH' } as const;
-        expect(prettifyNumber(123456.789, option)).toEqual('123,456.789 ETH');
+        const option = { highPrecision: true, currentCurrency: 'USD' } as const;
+        expect(prettifyNumber(123456.789, option)).toEqual('$123,456.789');
       });
 
       test('should return "¥1.234567" for input 1.23456789, with highPrecision, and currentCurrency is JPY', () => {
-        const option = { highPrecision: true, currentCurrency: 'JPY' } as const;
-        expect(prettifyNumber(1.23456789, option)).toEqual('¥1.234567');
+        const option = { highPrecision: true, currentCurrency: 'USD' } as const;
+        expect(prettifyNumber(1.23456789, option)).toEqual('$1.234567');
       });
       test('should display 5 significant numbers when there is at least 6 zeros in a row', () => {
-        const option = { highPrecision: true, currentCurrency: 'JPY' } as const;
+        const option = { highPrecision: true, currentCurrency: 'USD' } as const;
         expect(prettifyNumber(0.000000123456789, option)).toEqual(
-          '¥0.00000012345',
+          '$0.00000012345',
         );
       });
     });

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { cn, getUsdPrice } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { CartStrategy, Order } from 'components/strategies/common/types';
 
@@ -12,9 +12,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   const quoteFiat = useFiatCurrency(strategy.quote);
   const noFiatValue = !baseFiat.hasFiatValue() && !quoteFiat.hasFiatValue();
   const totalBalance = strategy.fiatBudget.total;
-  const budgetFormatted = prettifyNumber(totalBalance, {
-    currentCurrency: baseFiat.selectedFiatCurrency,
-  });
+  const budgetFormatted = getUsdPrice(totalBalance);
 
   return (
     <article className="bg-main-900/20 rounded-md border-main-800 flex-1 grid border p-16">

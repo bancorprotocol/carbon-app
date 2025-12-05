@@ -1,6 +1,5 @@
 import { createContext, useContext, useMemo } from 'react';
-import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
-import { useStore } from 'store';
+import { useGetTokensPrice } from 'libs/queries/extApi/tokenPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useTrending } from 'libs/queries/extApi/tradeCount';
 import {
@@ -16,37 +15,16 @@ export interface QueryLike<T> {
 export const useGetEnrichedStrategies = (
   query: QueryLike<AnyStrategy[] | AnyStrategy>,
 ) => {
-  const { fiatCurrency } = useStore();
   const trending = useTrending();
-  const currency = fiatCurrency.selectedFiatCurrency;
 
-  const tokens = useMemo(() => {
-    if (query.isPending) return;
-    const data = query.data ?? [];
-    const strategies = Array.isArray(data) ? data : [data];
-    const all = strategies.map(({ base, quote }) => [
-      base.address,
-      quote.address,
-    ]);
-    const unique = new Set(all.flat());
-    return Array.from(unique);
-  }, [query.isPending, query.data]);
-
-  const allPrices = useGetMultipleTokenPrices(tokens);
+  const allPrices = useGetTokensPrice();
   const isPending = query.isPending || allPrices.isPending;
 
   const allEnrichedStrategies = useMemo(() => {
     if (isPending) return;
     const data = query.data ?? [];
     const strategies = Array.isArray(data) ? data : [data];
-    const tokens = strategies.map(({ base, quote }) => [base, quote]).flat();
-    const addresses = Array.from(new Set(tokens?.map((t) => t.address)));
-    const prices: Record<string, number | undefined> = {};
-    for (let i = 0; i < allPrices.data.length; i++) {
-      const address = addresses[i];
-      const price = allPrices.data[i]?.[currency];
-      prices[address] = price;
-    }
+    const prices = allPrices.data ?? {};
 
     const tradeCount = new Map<string, number>();
     const tradeCount24h = new Map<string, number>();
@@ -68,7 +46,7 @@ export const useGetEnrichedStrategies = (
         tradeCount24h: tradeCount24h.get(strategy.id) ?? 0,
       } as AnyStrategyWithFiat;
     });
-  }, [allPrices, query.data, currency, trending.data?.tradeCount, isPending]);
+  }, [allPrices, query.data, trending.data?.tradeCount, isPending]);
 
   return { data: allEnrichedStrategies, isPending };
 };

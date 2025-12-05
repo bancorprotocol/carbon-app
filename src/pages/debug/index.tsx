@@ -7,7 +7,6 @@ import { DebugTransferNFT } from 'components/debug/DebugTransferNFT';
 import { DebugResetDefault } from 'components/debug/DebugResetDefault';
 import { DebugNotifications } from 'components/debug/DebugNotifications';
 import { DebugCreateStrategy } from 'components/debug/DebugCreateStrategy';
-import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
 import { DebugOrderBook } from 'components/debug/DebugOrderBook';
 import { DebugSDKConfig } from 'components/debug/DebugSDKConfig';
 import { DebugConfig } from 'components/debug/DebugConfig';
@@ -26,7 +25,6 @@ export const DebugPage = () => {
         <DebugTransferNFT />
         <DebugNotifications />
         <DebugCreateStrategy />
-        <DebugFiatCurrency />
         <DebugOrderBook />
         <DebugConfig />
         <DebugSDKConfig />

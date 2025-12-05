@@ -16,15 +16,11 @@ export const MarketPriceIndication: FC<Props> = (props) => {
   const { base, quote, price, ignoreMarketPriceWarning, isBuy } = props;
   const { marketPrice } = useStrategyMarketPrice({ base, quote });
   const marketPercent = marketPricePercent(price, marketPrice);
-  const { getFiatAsString, selectedFiatCurrency } = useFiatCurrency(quote);
+  const { getFiatAsString } = useFiatCurrency(quote);
   const fiatAsString = getFiatAsString(price);
 
   if (!marketPrice)
-    return (
-      <span className="text-12 text-white/60">
-        {selectedFiatCurrency} value unavailable
-      </span>
-    );
+    return <span className="text-12 text-white/60">USD value unavailable</span>;
 
   return (
     <p className="flex flex-wrap items-center gap-8">

@@ -10,8 +10,8 @@ export const useBudgetWarning = (
   const { getFiatValue: getFiatValueBase } = useFiatCurrency(base);
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(quote);
 
-  const budgetInUsd = getFiatValueQuote(buyBudget, true).plus(
-    getFiatValueBase(sellBudget, true),
+  const budgetInUsd = getFiatValueQuote(buyBudget).plus(
+    getFiatValueBase(sellBudget),
   );
 
   return budgetInUsd.lt(0);

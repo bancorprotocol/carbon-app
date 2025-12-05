@@ -15,28 +15,12 @@ import {
 import { lsService } from 'services/localeStorage';
 import { Trending } from 'libs/queries/extApi/tradeCount';
 import { Reward } from 'libs/queries/extApi/rewards';
+import { Token } from 'libs/tokens';
+import { StrategyAPIResult } from 'libs/queries/extApi/strategy';
 
-// Only ETH is supported as network currency by the API
-const NETWORK_CURRENCY =
-  config.network.gasToken.symbol === 'ETH' ? ['ETH' as const] : [];
-
-export const AVAILABLE_CURRENCIES = [
-  'USD',
-  'EUR',
-  'JPY',
-  'GBP',
-  'AUD',
-  'CAD',
-  'CHF',
-  'CNY',
-  ...NETWORK_CURRENCY,
-] as const;
-
-export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
-
-export type FiatPriceDict = {
-  [k in FiatSymbol]: number;
-};
+interface MarketRate {
+  data: { USD: number };
+}
 
 const get = async <T>(
   endpoint: string,
@@ -65,29 +49,32 @@ const get = async <T>(
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
     if (config.mode === 'development') return false;
-    return fetch(`/api/check`, {
-      cache: 'no-store',
-    }).then((res) => res.json());
+    const res = await fetch(`/api/check`, { cache: 'no-store' });
+    return res.json();
   },
-  getMarketRate: async (
-    address: string,
-    convert: readonly FiatSymbol[],
-  ): Promise<FiatPriceDict> => {
-    const { data } = await get<{ data: FiatPriceDict }>('market-rate', {
-      address,
-      convert: convert.join(','),
-    });
-    return data;
+  getTokens: () => {
+    return get<Token[]>('tokens');
+  },
+  getTokensMarketPrice: () => {
+    return get<Record<string, number>>('tokens/prices');
   },
   getMarketRateHistory: async (
     params: TokenPriceHistorySearch,
   ): Promise<TokenPriceHistoryResult[]> => {
     return get<TokenPriceHistoryResult[]>('history/prices', params);
   },
+  getMarketRate: async (address: string) => {
+    const params = { address, convert: ['USD'] };
+    const result = await get<MarketRate>('market-rate', params);
+    return result.data.USD;
+  },
   getSimulator: async (
     params: SimulatorAPIParams,
   ): Promise<SimulatorReturnNew> => {
     return get<SimulatorReturnNew>('simulator/create', params);
+  },
+  getAllStrategies: () => {
+    return get<StrategyAPIResult>('strategies');
   },
   getActivity: async (
     params: QueryActivityParams,

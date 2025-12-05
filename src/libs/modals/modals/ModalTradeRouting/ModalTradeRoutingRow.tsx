@@ -1,19 +1,17 @@
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { ModalTradeRoutingRowCell } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRowCell';
 import { ForwardArrow } from 'components/common/forwardArrow';
-import { FiatPriceDict } from 'utils/carbonApi';
 
 type ModalTradeRoutingRowProps = {
   action: Action;
   source: Token;
   target: Token;
-  sourceFiatPrice?: FiatPriceDict;
-  targetFiatPrice?: FiatPriceDict;
+  sourceFiatPrice?: number;
+  targetFiatPrice?: number;
   isSelected: boolean;
   handleClick: (id: string) => void;
   isBuy?: boolean;
@@ -29,14 +27,12 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
   isBuy,
   handleClick,
 }) => {
-  const { selectedFiatCurrency } = useFiatCurrency();
-
   const sourceAmountFiat = new SafeDecimal(sourceAmount).times(
-    sourceFiatPrice?.[selectedFiatCurrency] || 0,
+    sourceFiatPrice || 0,
   );
 
   const targetAmountFiat = new SafeDecimal(targetAmount).times(
-    targetFiatPrice?.[selectedFiatCurrency] || 0,
+    targetFiatPrice || 0,
   );
 
   const averageToken = isBuy ? source : target;
@@ -45,9 +41,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
     ? new SafeDecimal(sourceAmount).div(targetAmount)
     : new SafeDecimal(targetAmount).div(sourceAmount);
 
-  const averagePriceFiat = averageAmount.times(
-    averageFiatPrice?.[selectedFiatCurrency] || 0,
-  );
+  const averagePriceFiat = averageAmount.times(averageFiatPrice || 0);
 
   const onCheckboxClick = () => {
     handleClick(id);
@@ -69,7 +63,6 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           amount={sourceAmount}
           fiatAmount={sourceAmountFiat}
           logoURI={source.logoURI}
-          selectedFiatCurrency={selectedFiatCurrency}
         />
       </td>
       <td className="border-main-800 border-t">
@@ -83,7 +76,6 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           amount={targetAmount}
           fiatAmount={targetAmountFiat}
           logoURI={target.logoURI}
-          selectedFiatCurrency={selectedFiatCurrency}
         />
       </td>
 
@@ -92,7 +84,6 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           amount={averageAmount}
           fiatAmount={averagePriceFiat}
           logoURI={averageToken.logoURI}
-          selectedFiatCurrency={selectedFiatCurrency}
         />
       </td>
     </tr>

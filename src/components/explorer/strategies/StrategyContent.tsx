@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock/StrategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock/StrategyBlockCreate';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { cn, getUsdPrice } from 'utils/helpers';
 import { StrategyTable } from './StrategyTable';
 import {
   StrategyLayout,
@@ -16,7 +16,6 @@ import {
 } from './StrategyFilterSort';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { sortStrategyFn, StrategyFilter, StrategySort } from './utils';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { SafeDecimal } from 'libs/safedecimal';
 import { lsService } from 'services/localeStorage';
@@ -40,7 +39,6 @@ interface Props {
 
 export const StrategyContent: FC<Props> = ({ url }) => {
   const { strategies, isPending } = useStrategyCtx();
-  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
   const search = useSearch({ from: url });
   const nav = useNavigate({ from: url });
 
@@ -115,8 +113,8 @@ export const StrategyContent: FC<Props> = ({ url }) => {
       (acc, s) => acc.add(s.fiatBudget.total),
       new SafeDecimal(0),
     );
-    return prettifyNumber(amount, { currentCurrency });
-  }, [filtered, currentCurrency]);
+    return getUsdPrice(amount);
+  }, [filtered]);
 
   if (isPending) {
     return (

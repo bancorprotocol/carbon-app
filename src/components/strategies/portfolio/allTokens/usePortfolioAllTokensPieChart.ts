@@ -6,17 +6,11 @@ import {
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { Options } from 'libs/charts';
 import { useMemo } from 'react';
-import { useStore } from 'store';
 import { getColorByIndex } from 'utils/colorPalettes';
-import { getFiatDisplayValue } from 'utils/helpers';
+import { getUsdPrice } from 'utils/helpers';
 
 export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
   const { belowBreakpoint } = useBreakpoints();
-
-  const {
-    fiatCurrency: { selectedFiatCurrency },
-  } = useStore();
-
   const pieChartOptions: Options = useMemo(
     () => ({
       chart: {
@@ -71,10 +65,7 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
             '</div>' +
             '<div class="flex justify-between">' +
             '<span class="text-white/60">Value</span>' +
-            getFiatDisplayValue(
-              data[this.colorIndex].value,
-              selectedFiatCurrency,
-            ) +
+            getUsdPrice(data[this.colorIndex].value) +
             '</div>' +
             '</div>'
           );
@@ -98,7 +89,7 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
         },
       ],
     }),
-    [belowBreakpoint, data, selectedFiatCurrency],
+    [belowBreakpoint, data],
   );
 
   return { pieChartOptions };

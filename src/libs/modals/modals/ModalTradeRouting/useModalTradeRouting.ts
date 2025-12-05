@@ -4,9 +4,9 @@ import { useWagmi } from 'libs/wagmi';
 import { ModalTradeRoutingData } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
 import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
 import { useModal } from 'hooks/useModal';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { SafeDecimal } from 'libs/safedecimal';
+import { useGetTokenPrice } from 'libs/queries';
 
 interface Props {
   id: string;
@@ -28,10 +28,8 @@ export const useModalTradeRouting = ({
 }: Props) => {
   const { user } = useWagmi();
   const { openModal, closeModal } = useModal();
-  const { useGetTokenPrice } = useFiatCurrency();
   const sourceFiatPrice = useGetTokenPrice(source.address);
   const targetFiatPrice = useGetTokenPrice(target.address);
-  const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
 
   const [selected, setSelected] = useState<
     (Action & { isSelected: boolean })[]
@@ -113,7 +111,6 @@ export const useModalTradeRouting = ({
     data?.totalTargetAmount,
     isTradeBySource,
     isBuy,
-    getFiatValueSource,
   ]);
 
   const onSelect = (id: string) => {
