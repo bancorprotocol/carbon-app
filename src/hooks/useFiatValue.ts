@@ -12,7 +12,7 @@ interface FiatValueParams {
 export const useFiatValue = (params: FiatValueParams) => {
   const { price, token, highPrecision } = params;
   const query = useGetTokenPrice(token.address);
-  if (!price || !query.isPending || !query.data) return;
+  if (!price || query.isPending || !query.data) return;
   const value = new SafeDecimal(price).times(query.data);
   return getUsdPrice(value, {
     highPrecision,
