@@ -5,6 +5,7 @@ import historyPrices from '../mocks/history-prices.json' with { type: 'json' };
 import simulatorResult from '../mocks/simulator-result.json' with { type: 'json' };
 import tokenListsMock from '../mocks/tokenLists.json' with { type: 'json' };
 import activityMeta from '../mocks/activity-meta.json' with { type: 'json' };
+import { getAddress } from 'ethers';
 
 interface PriceEntry {
   timestamp: number;
@@ -39,13 +40,12 @@ export const mockApi = async (page: Page) => {
   });
   await page.route('**/*/market-rate?*', (route) => {
     const url = new URL(route.request().url());
-    const address = url.searchParams.get('address') as keyof typeof marketRate;
+    const address = url.searchParams.get('address');
     if (!address) throw new Error('No address found in the URL');
-    const marketPrice = marketRate[address];
-    // If unexpected behavior, let the real server handle that
-    if (!address || !marketPrice) {
-      return route.continue();
-    }
+    const marketPrice =
+      marketRate[getAddress(address) as keyof typeof marketRate];
+    if (!marketPrice)
+      throw new Error(`Token ${address} is not mocked by market-rates.json`);
     const data = {
       USD: marketPrice,
     };

@@ -1,14 +1,16 @@
 import { Token } from 'libs/tokens';
 import { useGetTokenPrice } from 'libs/queries';
 
+const getAddress = (token?: Token | string) => {
+  return typeof token === 'string' ? token : token?.address;
+};
+
 interface Props {
   base?: Token | string;
   quote?: Token | string;
 }
 /** Return the market price of the base token in quote */
 export const useMarketPrice = ({ base, quote }: Props) => {
-  const getAddress = (token?: Token | string) =>
-    typeof token === 'string' ? token : token?.address;
   const baseQuery = useGetTokenPrice(getAddress(base));
   const quoteQuery = useGetTokenPrice(getAddress(quote));
   const basePrice = baseQuery.data;
