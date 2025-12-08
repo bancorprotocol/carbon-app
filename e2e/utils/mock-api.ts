@@ -42,10 +42,11 @@ export const mockApi = async (page: Page) => {
     const url = new URL(route.request().url());
     const address = url.searchParams.get('address');
     if (!address) throw new Error('No address found in the URL');
-    const marketPrice =
-      marketRate[getAddress(address) as keyof typeof marketRate];
-    if (!marketPrice)
+    const ethAddress = getAddress(address) as keyof typeof marketRate;
+    const marketPrice = marketRate[ethAddress];
+    if (!marketPrice) {
       throw new Error(`Token ${address} is not mocked by market-rates.json`);
+    }
     const data = {
       USD: marketPrice,
     };
