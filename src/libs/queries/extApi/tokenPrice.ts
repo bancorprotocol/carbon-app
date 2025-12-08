@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { CandlestickData } from 'libs/d3';
 import { QueryKey } from 'libs/queries/queryKey';
 import { FIVE_MIN_IN_MS } from 'utils/time';
@@ -6,21 +6,28 @@ import { carbonApi } from 'utils/carbonApi';
 import { toUnixUTC } from 'components/simulator/utils';
 import { startOfDay, subDays } from 'date-fns';
 
+const getMarketPrice = async (
+  prices: Record<string, number>,
+  address?: string,
+) => {
+  if (!address) return;
+  if (prices[address]) return prices[address];
+  try {
+    // need to await to enter the catch if needed
+    return await carbonApi.getMarketRate(address);
+  } catch (err) {
+    console.error(err);
+    return 0;
+  }
+};
+
 export const useGetTokenPrice = (address?: string) => {
   const pricesQuery = useGetTokensPrice();
   return useQuery({
     queryKey: QueryKey.tokenPrice(address),
     queryFn: async () => {
-      if (!address) return;
       const prices = pricesQuery.data ?? {};
-      if (prices[address]) return prices[address];
-      try {
-        // need to await to enter the catch if needed
-        return await carbonApi.getMarketRate(address);
-      } catch (err) {
-        console.error(err);
-        return 0;
-      }
+      return await getMarketPrice(prices, address);
     },
     enabled: !pricesQuery.isPending && !!address,
     refetchInterval: FIVE_MIN_IN_MS,
@@ -86,5 +93,30 @@ export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
     enabled: !!params.baseToken && !!params.quoteToken,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
+  const pricesQuery = useGetTokensPrice();
+  return useQueries({
+    combine: (result) => ({
+      data: result.map(({ data }) => data),
+      isPending: result.some(({ isPending }) => isPending),
+      isError: result.some(({ isError }) => isError),
+    }),
+    queries: addresses.map((address) => {
+      return {
+        queryKey: QueryKey.tokenPrice(address),
+        queryFn: async () => {
+          const prices = pricesQuery.data ?? {};
+          return await getMarketPrice(prices, address);
+        },
+        enabled: !!address,
+        refetchInterval: FIVE_MIN_IN_MS,
+        staleTime: FIVE_MIN_IN_MS,
+        refetchOnWindowFocus: false,
+        retry: 0, // Critical for initial load
+      };
+    }),
   });
 };
