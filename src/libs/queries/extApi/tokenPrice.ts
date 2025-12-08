@@ -15,10 +15,11 @@ export const useGetTokenPrice = (address?: string) => {
       const prices = pricesQuery.data ?? {};
       if (prices[address]) return prices[address];
       try {
-        return carbonApi.getMarketRate(address);
+        // need to await to enter the catch if needed
+        return await carbonApi.getMarketRate(address);
       } catch (err) {
         console.error(err);
-        return;
+        return 0;
       }
     },
     enabled: !pricesQuery.isPending && !!address,
