@@ -494,10 +494,10 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
-"@bancor/carbon-sdk@0.0.126-TEST":
-  version "0.0.126-TEST"
-  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.126-TEST.tgz#c1e3dee51176b6065814ab1b73f0b01de509d72a"
-  integrity sha512-OIym0ky2OKZ+5YKYaUczEYuQQOydDRuR+M5Dp6BYCHCWgvRr9NcczpsRUjRJdSSX+IEMtfYZoUIE+V4MuNlyTg==
+"@bancor/carbon-sdk@^0.0.126-DEV":
+  version "0.0.126-DEV"
+  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.126-DEV.tgz#c2da025598ae1ae15a37998539bb428c54e9753e"
+  integrity sha512-l2OYGMBITP9cXYoAvS6Drn0FdJ3DYbpDGgTC1Qqs6tHAAoahQuexLAliNT/PcJR2Zy4W32iAvsiuXbqem50RBQ==
   dependencies:
     decimal.js "^10.5.0"
     events "^3.3.0"
