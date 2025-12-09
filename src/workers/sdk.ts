@@ -17,7 +17,7 @@ import {
 import Decimal from 'decimal.js';
 import { OrderRow } from 'libs/queries';
 import { OrderBook } from 'libs/queries/sdk/orderBook';
-import { JsonRpcProvider } from 'ethers';
+import { JsonRpcProvider, FetchRequest } from 'ethers';
 
 Decimal.set({
   precision: 100,
@@ -51,7 +51,17 @@ const init = async (
 ) => {
   if (isInitialized || isInitializing) return;
   isInitializing = true;
-  const provider = new JsonRpcProvider(rpc.url, chainId, {
+
+  // Create FetchRequest to support custom headers (required for ethers v6)
+  const fetchRequest = new FetchRequest(rpc.url);
+  if (rpc.headers) {
+    // Set all custom headers on the FetchRequest instance
+    for (const [key, value] of Object.entries(rpc.headers)) {
+      fetchRequest.setHeader(key, String(value));
+    }
+  }
+
+  const provider = new JsonRpcProvider(fetchRequest, chainId, {
     staticNetwork: true,
   });
 
