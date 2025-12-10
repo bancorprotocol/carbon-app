@@ -32,19 +32,27 @@ export default function ModalTokenList({
     [data, closeModal, id],
   );
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Enter' && !!all.size) {
-        const token = all
-          .values()
-          .take(0)
-          .find(() => true);
-        if (token) select(token);
-      }
-      // TODO: handle keydown, up, start & end
-    },
-    [all, select],
-  );
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      const selected = '.token-select[aria-selected]';
+      const getSelected = () => document.querySelector<HTMLElement>(selected);
+      const getFirst = () =>
+        document.querySelector<HTMLElement>('.token-select');
+      const el = getSelected() || getFirst();
+      el?.click();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const getAll = () =>
+        document.querySelectorAll<HTMLElement>('.token-select');
+      const all = Array.from(getAll());
+      const current = all.findIndex((item) => item.ariaSelected);
+      // Always fallback on first because list is too long
+      const next = e.key === 'ArrowDown' ? current + 1 : current - 1;
+      all[current]?.removeAttribute('aria-selected');
+      all[next]?.setAttribute('aria-selected', 'true');
+      all[next]?.scrollIntoView({ block: 'center' });
+    }
+  }, []);
 
   return (
     <Modal id={id} className="grid content-start gap-16 md:w-500 h-[70vh]">

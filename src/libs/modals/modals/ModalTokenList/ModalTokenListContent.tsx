@@ -132,7 +132,7 @@ export const ModalTokenListContent: FC<Props> = ({
           <button
             key={token.address}
             role="menuitem"
-            className="btn-on-surface rounded-md flex items-center gap-8 px-8 py-4"
+            className="token-select btn-on-surface rounded-md flex items-center gap-8 px-8 py-4 aria-selected:outline"
             onClick={() => select(token)}
           >
             <TokenLogo token={token} size={20} />
@@ -141,7 +141,7 @@ export const ModalTokenListContent: FC<Props> = ({
         ))}
       </menu>
       {!!popularTokens.length && <hr className="border-main-900" />}
-      <div className="grid gap-16 overflow-auto" ref={parentRef}>
+      <div className="grid gap-16 overflow-auto px-1" ref={parentRef}>
         <ul className="grid empty:hidden" aria-label="favorites">
           {favoriteTokens.map((token) => (
             <li
@@ -151,7 +151,7 @@ export const ModalTokenListContent: FC<Props> = ({
             >
               <button
                 onClick={() => select(token)}
-                className="flex flex-1 items-center gap-16 py-8 px-16"
+                className="token-select flex flex-1 items-center gap-16 py-8 px-16 aria-selected:outline"
                 data-testid={`select-token-${token.address}`}
               >
                 <LogoImager
@@ -206,7 +206,7 @@ export const ModalTokenListContent: FC<Props> = ({
                 >
                   <button
                     onClick={() => select(token)}
-                    className="flex gap-16 flex-1 items-center py-8 px-16"
+                    className="token-select flex gap-16 flex-1 items-center py-8 px-16 aria-selected:outline"
                     data-testid={`select-token-${token.address}`}
                   >
                     <LogoImager
