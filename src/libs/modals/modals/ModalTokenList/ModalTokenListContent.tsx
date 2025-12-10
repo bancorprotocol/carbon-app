@@ -58,6 +58,10 @@ const useFavorites = () => {
   );
 
   useEffect(() => {
+    setFavorites(lsService.getItem(`favoriteTokens-${user}`) || []);
+  }, [user]);
+
+  useEffect(() => {
     if (init.current) {
       lsService.setItem(`favoriteTokens-${user}`, favorites);
     } else {

@@ -166,12 +166,10 @@ const migrations: Migration[] = [
       if (prevFormattedKey.includes(`${prefix}favoriteTokens`)) {
         const current = localStorage.getItem(prevFormattedKey);
         const tokens = JSON.parse(current ?? '[]') as Token[];
-        console.log(tokens);
         localStorage.setItem(
           prevFormattedKey,
           JSON.stringify(tokens.map((t) => t.address)),
         );
-        console.log(tokens.map((t) => t.address));
       }
       const isMatch = prevFormattedKey.startsWith(prefix);
       if (!isMatch) return;

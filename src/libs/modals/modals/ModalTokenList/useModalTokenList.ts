@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
 import Fuse from 'fuse.js';
-import { isAddress } from 'ethers';
+import { getAddress, isAddress } from 'ethers';
 import {
   NATIVE_TOKEN_ADDRESS,
   isGasTokenToHide,
@@ -89,7 +89,7 @@ export const useModalTokenList = (excludedTokens: string[] = []) => {
   const map = useMemo(() => {
     const map = new Map<string, Token>();
     for (const token of filtered) {
-      map.set(token.address, token);
+      map.set(getAddress(token.address), token);
     }
     return map;
   }, [filtered]);
