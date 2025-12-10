@@ -11,6 +11,7 @@ export class ManagedLocalStorage<T> {
     if (keyFormatter) {
       this.keyFormatter = keyFormatter;
     }
+    this.migrateItems();
   }
 
   private emit(formattedId: string, newValue: string | null) {

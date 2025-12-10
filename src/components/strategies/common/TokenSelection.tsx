@@ -41,7 +41,6 @@ export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
     const data: ModalTokenListData = {
       onClick,
       excludedTokens: [isBase ? (quote?.address ?? '') : (base?.address ?? '')],
-      isBaseToken: isBase,
     };
     openModal('tokenLists', data);
   };

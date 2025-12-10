@@ -16,6 +16,16 @@ const addresses = {
   DACKIE: '0x47C337Bd5b9344a6F3D6f58C474D9D8cd419D8cA',
 };
 
+const popularTokens = [
+  addresses.BLAST,
+  addresses.USDB,
+  addresses.BAG,
+  addresses.AI,
+  addresses.MIM,
+  addresses.OMNI,
+  addresses.JUICE,
+];
+
 export const commonConfig: AppConfig = {
   hidden: true,
   mode: 'development',
@@ -63,26 +73,7 @@ export const commonConfig: AppConfig = {
     [addresses.BLAST, addresses.ZERO],
     [addresses.BLAST, addresses.bLOOKS],
   ],
-  popularTokens: {
-    base: [
-      addresses.BLAST,
-      addresses.USDB,
-      addresses.BAG,
-      addresses.AI,
-      addresses.MIM,
-      addresses.OMNI,
-      addresses.JUICE,
-    ],
-    quote: [
-      addresses.BLAST,
-      addresses.USDB,
-      addresses.BAG,
-      addresses.AI,
-      addresses.MIM,
-      addresses.OMNI,
-      addresses.JUICE,
-    ],
-  },
+  popularTokens: popularTokens,
   addresses: {
     tokens: addresses,
     carbon: {

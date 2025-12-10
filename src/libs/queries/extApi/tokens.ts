@@ -76,11 +76,8 @@ export const useMissingTokensQuery = (
       }
 
       // Config: Mainly for testnet on new chains
-      for (const base of config.popularTokens.base) {
+      for (const base of config.popularTokens) {
         fillMissing(base);
-      }
-      for (const quote of config.popularTokens.quote) {
-        fillMissing(quote);
       }
 
       const missingTokens = await getMissingTokens(missing, (address) =>

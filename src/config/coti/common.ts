@@ -4,15 +4,16 @@ import IconCotiLogo from 'assets/logos/cotilogo.svg';
 const addresses = {
   COTI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   GCOTI: '0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1',
+  'USDC.e': '0xf1Feebc4376c68B7003450ae66343Ae59AB37D3C',
+  WETH: '0x639aCc80569c5FC83c6FBf2319A6Cc38bBfe26d1',
   ZERO: '0x0000000000000000000000000000000000000000',
 };
 
 const popularTokens = [
-  '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-  '0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1',
-  '0xf1Feebc4376c68B7003450ae66343Ae59AB37D3C',
-  '0x639aCc80569c5FC83c6FBf2319A6Cc38bBfe26d1',
-  '0x8C39B1fD0e6260fdf20652Fc436d25026832bfEA',
+  addresses.COTI,
+  addresses.GCOTI,
+  addresses['USDC.e'],
+  addresses.WETH,
 ];
 
 export const commonConfig: AppConfig = {
@@ -49,10 +50,7 @@ export const commonConfig: AppConfig = {
   },
   defaultTokenPair: [addresses.COTI, addresses.GCOTI],
   popularPairs: [[addresses.COTI, addresses.GCOTI]],
-  popularTokens: {
-    base: popularTokens,
-    quote: popularTokens,
-  },
+  popularTokens: popularTokens,
   addresses: {
     tokens: addresses,
     carbon: {
