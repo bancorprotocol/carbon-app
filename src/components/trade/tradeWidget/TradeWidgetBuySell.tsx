@@ -65,12 +65,20 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     handleCTAClick();
   };
 
-  const selectToken = (key: 'base' | 'quote', token: Token) => {
+  const selectToken = (key: 'source' | 'target') => {
+    const exclude = key === 'source' ? target : source;
+    const tokenKey = isBuy
+      ? key === 'source'
+        ? 'quote'
+        : 'base'
+      : key === 'source'
+        ? 'base'
+        : 'quote';
     openModal('tokenLists', {
-      excludedTokens: [token.address],
+      excludedTokens: [exclude.address],
       onClick: (next) => {
         navigate({
-          search: (s) => ({ ...s, [key]: next.address }),
+          search: (s) => ({ ...s, [tokenKey]: next.address }),
           replace: true,
           resetScroll: false,
         });
@@ -170,7 +178,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             disabled={!hasEnoughLiquidity}
           >
             <button
-              onClick={() => selectToken('base', source)}
+              onClick={() => selectToken('source')}
               type="button"
               className="btn-on-background flex items-center gap-8 rounded-full px-8 py-6"
             >
@@ -223,7 +231,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               disabled={!hasEnoughLiquidity}
             >
               <button
-                onClick={() => selectToken('quote', target)}
+                onClick={() => selectToken('target')}
                 type="button"
                 className="btn-on-background flex items-center gap-8 rounded-full px-8 py-6"
               >
