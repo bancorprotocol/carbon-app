@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FocusEvent, useRef } from 'react';
+import { ChangeEvent, FC, FocusEvent, ReactNode, useRef } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useWagmi } from 'libs/wagmi';
@@ -31,6 +31,7 @@ type Props = {
   withoutWallet?: boolean;
   'data-testid'?: string;
   required?: boolean;
+  children?: ReactNode;
 };
 
 export const TokenInputField: FC<Props> = (props) => {
@@ -49,6 +50,7 @@ export const TokenInputField: FC<Props> = (props) => {
     slippage,
     withoutWallet,
     'data-testid': testid,
+    children,
   } = props;
   const { user } = useWagmi();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -84,6 +86,13 @@ export const TokenInputField: FC<Props> = (props) => {
     if (fiatValueUsd.gt(0)) return getFiatAsString(value);
   };
 
+  const TokenWidget = children ?? (
+    <div className="bg-main-600 flex items-center gap-6 rounded-[20px] px-8 py-6">
+      <LogoImager alt="Token" src={token.logoURI} className="size-20" />
+      <span className="font-medium">{token.symbol}</span>
+    </div>
+  );
+
   return (
     <div
       className={cn(
@@ -114,10 +123,7 @@ export const TokenInputField: FC<Props> = (props) => {
           data-testid={testid}
           required={props.required}
         />
-        <div className="bg-main-600 flex items-center gap-6 rounded-[20px] px-8 py-6">
-          <LogoImager alt="Token" src={token.logoURI} className="size-20" />
-          <span className="font-medium">{token.symbol}</span>
-        </div>
+        {TokenWidget}
       </div>
       <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10">
         <p className="flex items-center gap-5 text-white/60">
