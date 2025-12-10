@@ -95,14 +95,12 @@ export const ModalTokenListContent: FC<Props> = ({
   const { favorites, toggleFavorite } = useFavorites();
 
   const rest = useMemo(() => {
-    return all
-      .keys()
-      .toArray()
-      .filter((address) => {
-        if (favorites.includes(address)) return false;
-        if (popular.includes(address)) return false;
-        return true;
-      });
+    const list = Array.from(all.keys());
+    return list.filter((address) => {
+      if (favorites.includes(address)) return false;
+      if (popular.includes(address)) return false;
+      return true;
+    });
   }, [all, favorites]);
 
   const favoriteTokens = useMemo(() => {
@@ -138,6 +136,7 @@ export const ModalTokenListContent: FC<Props> = ({
             role="menuitem"
             className="token-select btn-on-surface rounded-md flex items-center gap-8 px-8 py-4 aria-selected:outline"
             onClick={() => select(token)}
+            data-testid={`select-token-${token.address}`}
           >
             <TokenLogo token={token} size={20} />
             <span className="text-14">{token.symbol}</span>
