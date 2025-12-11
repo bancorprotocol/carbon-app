@@ -4,7 +4,6 @@ import { Notification } from 'libs/notifications';
 import { TradePair } from 'components/strategies/common/types';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
 import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
-import { FiatSymbol } from 'utils/carbonApi';
 import {
   Migration,
   migrateAndRemoveItem,
@@ -29,7 +28,6 @@ export interface LocalStorageSchema {
   [k: `favoriteTradePairs-${string}`]: TradePair[];
   [k: `favoriteTokens-${string}`]: Token[];
   tradePair: [string, string];
-  currentCurrency: FiatSymbol;
   tradeSlippage: string;
   tradeDeadline: string;
   tradeMaxOrders: string;
@@ -59,6 +57,7 @@ export interface LocalStorageSchema {
   tokenPairsCache: { pairs: TradePair[]; timestamp: number };
   tradePairsCategory: any;
   hasWalkthrough: boolean;
+  currentCurrency: string;
 }
 
 enum EnumStrategySort {

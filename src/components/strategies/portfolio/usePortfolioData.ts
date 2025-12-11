@@ -2,9 +2,7 @@ import { AnyStrategyWithFiat, Order } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
-import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
-import { useStore } from 'store';
-import { FiatPriceDict } from 'utils/carbonApi';
+import { useGetTokensPrice } from 'libs/queries/extApi/tokenPrice';
 
 export interface PortfolioData {
   token: Token;
@@ -19,34 +17,7 @@ interface Props {
 }
 
 export const usePortfolioData = ({ strategies }: Props) => {
-  const {
-    fiatCurrency: { selectedFiatCurrency },
-  } = useStore();
-
-  const uniqueTokens = useMemo(() => {
-    if (!strategies) return [];
-
-    const tokens = new Set<string>();
-
-    strategies.forEach((strategy) => {
-      tokens.add(strategy.quote.address);
-      tokens.add(strategy.base.address);
-    });
-
-    return Array.from(tokens);
-  }, [strategies]);
-
-  const tokenPriceQueries = useGetMultipleTokenPrices(uniqueTokens);
-
-  const tokenPriceMap = useMemo(() => {
-    const map = new Map<string, FiatPriceDict>();
-
-    tokenPriceQueries.data.forEach((data, index) => {
-      if (data) map.set(uniqueTokens[index], data);
-    });
-
-    return map;
-  }, [tokenPriceQueries, uniqueTokens]);
+  const tokensPriceQuery = useGetTokensPrice();
 
   const totalValue = useMemo(() => {
     if (!strategies?.length) return new SafeDecimal(0);
@@ -57,12 +28,12 @@ export const usePortfolioData = ({ strategies }: Props) => {
 
   const tableData: PortfolioData[] = useMemo(() => {
     if (!strategies?.length) return [];
+    if (tokensPriceQuery.isPending) return [];
+    const prices = tokensPriceQuery.data ?? {};
     const unsorted = strategies.reduce(
       ((map) => (acc: PortfolioData[], strategy) => {
         const handleData = (token: Token, order: Order) => {
-          const fiatPriceDict = tokenPriceMap.get(token.address);
-          const tokenPrice = fiatPriceDict?.[selectedFiatCurrency] || 0;
-
+          const tokenPrice = prices[token.address] ?? 0;
           const amount = new SafeDecimal(order.budget);
 
           let item = map.get(token.symbol);
@@ -101,7 +72,12 @@ export const usePortfolioData = ({ strategies }: Props) => {
     );
 
     return unsorted.sort((a, b) => (a.share.gt(b.share) ? -1 : 1));
-  }, [selectedFiatCurrency, strategies, tokenPriceMap, totalValue]);
+  }, [
+    strategies,
+    tokensPriceQuery.data,
+    tokensPriceQuery.isPending,
+    totalValue,
+  ]);
 
-  return { tableData, totalValue, isPending: tokenPriceQueries.isPending };
+  return { tableData, totalValue, isPending: tokensPriceQuery.isPending };
 };

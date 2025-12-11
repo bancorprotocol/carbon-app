@@ -27,10 +27,10 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { prettifyNumber, tokenAmount } from 'utils/helpers';
+import { getUsdPrice, prettifyNumber, tokenAmount } from 'utils/helpers';
 import {
-  useGetMultipleTokenPrices,
   useGetTokenPrice,
+  useGetMultipleTokenPrices,
 } from 'libs/queries/extApi/tokenPrice';
 import { StaticOrder } from 'components/strategies/common/types';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
@@ -170,7 +170,7 @@ const createPair = (quote: string) => ({
 
 const usdPrice = (value?: string | number) => {
   if (!value) return '';
-  return prettifyNumber(value, { abbreviate: true, currentCurrency: 'USD' });
+  return getUsdPrice(value, { abbreviate: true });
 };
 const round = (value: number) => Math.round(value * 100) / 100;
 
@@ -234,8 +234,8 @@ export const LiquidityMatrixPage = () => {
   const { data: baseTokenPrice } = useGetTokenPrice(search.base);
   useEffect(() => {
     if (Number(basePrice)) return;
-    if (!baseTokenPrice?.USD) return;
-    set({ basePrice: baseTokenPrice?.USD?.toString() ?? '' });
+    if (!baseTokenPrice) return;
+    set({ basePrice: baseTokenPrice?.toString() ?? '' });
   }, [basePrice, baseTokenPrice, set]);
 
   // Set quotes market prices
@@ -243,11 +243,12 @@ export const LiquidityMatrixPage = () => {
   useEffect(() => {
     let changes = false;
     const copy = structuredClone(pairs);
-    for (let i = 0; i < quotePrices.data.length; i++) {
+    const prices = quotePrices.data;
+    for (let i = 0; i < prices.length; i++) {
       if (copy[i].price) continue;
-      if (!quotePrices.data[i]?.USD) continue;
+      if (!prices[i]) continue;
       changes = true;
-      copy[i].price = quotePrices.data[i]?.USD.toString() ?? '';
+      copy[i].price = prices[i]!.toString() ?? '';
     }
     if (changes) set({ pairs: copy });
   }, [pairs, quotePrices, set]);
@@ -393,10 +394,10 @@ export const LiquidityMatrixPage = () => {
                   <button
                     type="button"
                     onClick={() =>
-                      set({ basePrice: baseTokenPrice.USD.toString() })
+                      set({ basePrice: baseTokenPrice.toString() })
                     }
                   >
-                    Use Market Price: {usdPrice(baseTokenPrice.USD)}
+                    Use Market Price: {usdPrice(baseTokenPrice)}
                   </button>
                 )}
               </div>
@@ -569,7 +570,7 @@ const PairForm: FC<PairFormProps> = (props) => {
   }, [baseBudget, basePrice]);
 
   useEffect(() => {
-    const price = quotePrice?.USD ?? '0';
+    const price = quotePrice ?? '0';
     const value = new SafeDecimal(quoteBudget).mul(price).toString();
     setLocalQuoteBudgetUSD(value);
   }, [quoteBudget, quotePrice]);
@@ -649,12 +650,12 @@ const PairForm: FC<PairFormProps> = (props) => {
             <span>USD</span>
           </div>
           <div className="price-action">
-            {!!quotePrice?.USD && (
+            {!!quotePrice && (
               <button
                 type="button"
-                onClick={() => update({ price: quotePrice.USD.toString() })}
+                onClick={() => update({ price: quotePrice.toString() })}
               >
-                Use Market Price: {usdPrice(quotePrice.USD)}
+                Use Market Price: {usdPrice(quotePrice)}
               </button>
             )}
           </div>

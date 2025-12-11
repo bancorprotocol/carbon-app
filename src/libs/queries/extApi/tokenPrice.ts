@@ -2,69 +2,47 @@ import { useQueries, useQuery } from '@tanstack/react-query';
 import { CandlestickData } from 'libs/d3';
 import { QueryKey } from 'libs/queries/queryKey';
 import { FIVE_MIN_IN_MS } from 'utils/time';
-import { useStore } from 'store';
-import { FiatPriceDict, carbonApi } from 'utils/carbonApi';
+import { carbonApi } from 'utils/carbonApi';
 import { toUnixUTC } from 'components/simulator/utils';
 import { startOfDay, subDays } from 'date-fns';
 
+const getMarketPrice = async (
+  prices: Record<string, number>,
+  address?: string,
+) => {
+  if (!address) return;
+  if (prices[address]) return prices[address];
+  try {
+    // need to await to enter the catch if needed
+    return await carbonApi.getMarketRate(address);
+  } catch (err) {
+    console.error(err);
+    return 0;
+  }
+};
+
 export const useGetTokenPrice = (address?: string) => {
-  const {
-    fiatCurrency: { availableCurrencies },
-  } = useStore();
+  const pricesQuery = useGetTokensPrice();
   return useQuery({
-    queryKey: QueryKey.tokenPrice(address?.toLowerCase()),
-    queryFn: () => {
-      return carbonApi
-        .getMarketRate(address!, availableCurrencies)
-        .then((res) => {
-          if (Object.values(res).some((rate) => rate < 0)) {
-            throw new Error('Negative market rate from backend');
-          }
-          return res;
-        })
-        .catch((err) => {
-          console.error(err);
-          // Return an empty object to prevent refetch on error from child component
-          // @todo(#1438) see how to multi cast the error state
-          return {} as FiatPriceDict;
-        });
+    queryKey: QueryKey.tokenPrice(address),
+    queryFn: async () => {
+      const prices = pricesQuery.data ?? {};
+      return await getMarketPrice(prices, address);
     },
-    enabled: !!address && availableCurrencies.length > 0,
+    enabled: !pricesQuery.isPending && !!address,
     refetchInterval: FIVE_MIN_IN_MS,
-    staleTime: FIVE_MIN_IN_MS,
+    refetchOnWindowFocus: false,
+    retry: 0, // Critical for initial load
   });
 };
 
-export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
-  const {
-    fiatCurrency: { availableCurrencies },
-  } = useStore();
-
-  return useQueries({
-    combine: (result) => ({
-      data: result.map(({ data }) => data),
-      isPending: result.some(({ isPending }) => isPending),
-      isError: result.some(({ isError }) => isError),
-    }),
-    queries: addresses.map((address) => {
-      return {
-        queryKey: QueryKey.tokenPrice(address),
-        queryFn: () => {
-          return carbonApi
-            .getMarketRate(address, availableCurrencies)
-            .catch((err) => {
-              // See comment above
-              console.error(err);
-              return {} as FiatPriceDict;
-            });
-        },
-        enabled: !!address && availableCurrencies.length > 0,
-        refetchInterval: FIVE_MIN_IN_MS,
-        staleTime: FIVE_MIN_IN_MS,
-        refetchOnWindowFocus: false,
-        retry: 0, // Critical for initial load
-      };
-    }),
+export const useGetTokensPrice = () => {
+  return useQuery({
+    queryKey: QueryKey.tokensPrice(),
+    queryFn: () => carbonApi.getTokensMarketPrice(),
+    refetchInterval: FIVE_MIN_IN_MS,
+    refetchOnWindowFocus: false,
+    retry: 0, // Critical for initial load
   });
 };
 
@@ -115,5 +93,30 @@ export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
     enabled: !!params.baseToken && !!params.quoteToken,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
+  const pricesQuery = useGetTokensPrice();
+  return useQueries({
+    combine: (result) => ({
+      data: result.map(({ data }) => data),
+      isPending: result.some(({ isPending }) => isPending),
+      isError: result.some(({ isError }) => isError),
+    }),
+    queries: addresses.map((address) => {
+      return {
+        queryKey: QueryKey.tokenPrice(address),
+        queryFn: async () => {
+          const prices = pricesQuery.data ?? {};
+          return await getMarketPrice(prices, address);
+        },
+        enabled: !!address,
+        refetchInterval: FIVE_MIN_IN_MS,
+        staleTime: FIVE_MIN_IN_MS,
+        refetchOnWindowFocus: false,
+        retry: 0, // Critical for initial load
+      };
+    }),
   });
 };

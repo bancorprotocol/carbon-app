@@ -1,15 +1,13 @@
 import { FC } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { LogoImager } from 'components/common/imager/Imager';
-import { getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
-import { FiatSymbol } from 'utils/carbonApi';
+import { getUsdPrice, prettifyNumber } from 'utils/helpers';
 
 export const ModalTradeRoutingRowCell: FC<{
   logoURI?: string;
   amount: string | SafeDecimal;
   fiatAmount: string | SafeDecimal;
-  selectedFiatCurrency: FiatSymbol;
-}> = ({ logoURI, amount, fiatAmount, selectedFiatCurrency }) => {
+}> = ({ logoURI, amount, fiatAmount }) => {
   const isFiatAmountNotZero = new SafeDecimal(fiatAmount).gt(0);
   return (
     <>
@@ -19,7 +17,7 @@ export const ModalTradeRoutingRowCell: FC<{
       </p>
       {isFiatAmountNotZero && (
         <p className="text-12 font-medium text-white/60">
-          {getFiatDisplayValue(fiatAmount, selectedFiatCurrency)}
+          {getUsdPrice(fiatAmount)}
         </p>
       )}
     </>

@@ -91,6 +91,7 @@ export const StrategyPage = () => {
           text="The strategy you are looking for does not exist or has been deleted."
           bordered
           showBackButton
+          className="surface"
         />
       </Page>
     );
