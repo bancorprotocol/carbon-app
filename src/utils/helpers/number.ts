@@ -1,15 +1,14 @@
-import type { FiatSymbol } from 'utils/carbonApi';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { captureException, setContext } from '@sentry/react';
 
 export type NumberLike = number | string | SafeDecimal;
 
-export const getFiatDisplayValue = (
+export const getUsdPrice = (
   fiatValue: SafeDecimal | string | number,
-  currentCurrency: FiatSymbol,
+  options: PrettifyNumberOptions = {},
 ) => {
-  return prettifyNumber(fiatValue, { currentCurrency });
+  return prettifyNumber(fiatValue, { currentCurrency: 'USD', ...options });
 };
 
 /** Enforce precision on a string number */
@@ -105,7 +104,7 @@ export const largeNumbers = (num: number, formatter: Intl.NumberFormat) => {
 
 interface PrettifyNumberOptions {
   abbreviate?: boolean;
-  currentCurrency?: FiatSymbol;
+  currentCurrency?: 'USD';
   highPrecision?: boolean;
   locale?: string;
   round?: boolean;

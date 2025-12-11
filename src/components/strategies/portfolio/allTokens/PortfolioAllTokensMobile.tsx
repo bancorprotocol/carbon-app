@@ -11,8 +11,7 @@ import {
   PortfolioMobileCard,
   PortfolioMobileCardLoading,
 } from 'components/strategies/portfolio/PortfolioMobileCard';
-import { useStore } from 'store';
-import { getFiatDisplayValue } from 'utils/helpers';
+import { getUsdPrice } from 'utils/helpers';
 
 type Props = {
   data: PortfolioData[];
@@ -25,10 +24,6 @@ export const PortfolioAllTokensMobile: FC<Props> = ({
   isPending,
   getHref,
 }) => {
-  const {
-    fiatCurrency: { selectedFiatCurrency },
-  } = useStore();
-
   return (
     <ul className="grid gap-16">
       {isPending
@@ -64,10 +59,7 @@ export const PortfolioAllTokensMobile: FC<Props> = ({
                   value={buildPercentageString(value.share)}
                 />
 
-                <CardSection
-                  title="Value"
-                  value={getFiatDisplayValue(value.value, selectedFiatCurrency)}
-                />
+                <CardSection title="Value" value={getUsdPrice(value.value)} />
               </PortfolioMobileCard>
             </li>
           ))}

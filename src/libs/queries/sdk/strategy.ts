@@ -38,6 +38,12 @@ import { useMemo } from 'react';
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
 // READ
+const getStatus = (offCurve: boolean, noBudget: boolean) => {
+  if (offCurve && noBudget) return 'inactive';
+  if (offCurve) return 'paused';
+  if (noBudget) return 'noBudget';
+  return 'active';
+};
 
 // TODO: build strategy outside the useQuery to parallelize token query & strategy query
 const buildStrategiesHelper = async (
@@ -65,14 +71,7 @@ const buildStrategiesHelper = async (
 
       const noBudget = sellBudget.isZero() && buyBudget.isZero();
 
-      const status =
-        noBudget && offCurve
-          ? 'inactive'
-          : offCurve
-            ? 'paused'
-            : noBudget
-              ? 'noBudget'
-              : 'active';
+      const status = getStatus(offCurve, noBudget);
 
       // ATTENTION *****************************
       // This is the buy order | UI order 0 and CONTRACT order 1
@@ -203,7 +202,7 @@ export const useGetStrategyList = (ids: string[]) => {
 
 /** We need to add options to disable because we want to use different hooks for explorer  */
 export const useGetAllStrategies = (options: { enabled: boolean }) => {
-  const { isInitialized } = useCarbonInit();
+  const { isEnabled } = useCarbonInit();
   const { isPending, getTokenById } = useTokens();
 
   return useQuery<AnyStrategy[]>({
@@ -213,9 +212,8 @@ export const useGetAllStrategies = (options: { enabled: boolean }) => {
       const strategies = all.map((item) => item.strategies).flat();
       return buildStrategiesHelper(strategies, getTokenById);
     },
-    enabled: options?.enabled && !isPending && isInitialized,
+    enabled: options?.enabled && !isPending && isEnabled,
     staleTime: ONE_DAY_IN_MS,
-    retry: false,
   });
 };
 

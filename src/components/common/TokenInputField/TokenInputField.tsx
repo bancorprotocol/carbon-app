@@ -54,9 +54,9 @@ export const TokenInputField: FC<Props> = (props) => {
   } = props;
   const { user } = useWagmi();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { getFiatValue, getFiatAsString, hasFiatValue, selectedFiatCurrency } =
+  const { getFiatValue, getFiatAsString, hasFiatValue } =
     useFiatCurrency(token);
-  const fiatValueUsd = getFiatValue(value, true);
+  const fiatValueUsd = getFiatValue(value);
 
   const handleChange = ({
     target: { value },
@@ -82,7 +82,7 @@ export const TokenInputField: FC<Props> = (props) => {
 
   const priceText = () => {
     if (slippage?.isZero()) return;
-    if (!hasFiatValue()) return `${selectedFiatCurrency} value unavailable`;
+    if (!hasFiatValue()) return 'USD value unavailable';
     if (fiatValueUsd.gt(0)) return getFiatAsString(value);
   };
 

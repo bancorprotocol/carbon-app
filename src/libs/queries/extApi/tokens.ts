@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { buildTokenList, fetchTokenLists, Token } from 'libs/tokens';
+import { buildTokenList, fetchTokenLists, Token, TokenList } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_HOUR_IN_MS } from 'utils/time';
 import { lsService } from 'services/localeStorage';
@@ -16,7 +16,17 @@ export const useExistingTokensQuery = () => {
   return useQuery({
     queryKey: QueryKey.tokens(),
     queryFn: async () => {
-      const tokens = buildTokenList(await fetchTokenLists());
+      const [apiTokens, localList] = await Promise.all([
+        carbonApi.getTokens(),
+        fetchTokenLists(),
+      ]);
+      const apiList: TokenList = {
+        id: 'api',
+        name: 'api',
+        tokens: apiTokens,
+      };
+      const tokens = buildTokenList(localList.concat(apiList));
+
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
     },
@@ -61,13 +71,6 @@ export const useMissingTokensQuery = (
       const fillMissing = (address: string) => {
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
-
-      // External API: all tokens, even from deleted strategies
-      const meta = await carbonApi.getActivityMeta({ actions: 'create,edit' });
-      for (const [base, quote] of meta.pairs) {
-        fillMissing(base);
-        fillMissing(quote);
-      }
 
       // SDK: all tokens from current strategies (require for Tenderly)
       for (const [base, quote] of pairs.data || []) {
