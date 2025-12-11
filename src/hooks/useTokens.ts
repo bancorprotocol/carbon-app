@@ -1,14 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Token } from 'libs/tokens';
-import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
-import { useWagmi } from 'libs/wagmi';
 import { useContract } from './useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { getAddress } from 'ethers';
 
 export const useTokens = () => {
-  const { user } = useWagmi();
   const {
     tokens: { tokensMap, setImportedTokens, ...props },
   } = useStore();
@@ -37,41 +34,10 @@ export const useTokens = () => {
     [setImportedTokens],
   );
 
-  const [favoriteTokens, setFavoriteTokens] = useState<Token[]>(
-    lsService.getItem(`favoriteTokens-${user}`) || [],
-  );
-
-  const addFavoriteToken = useCallback(
-    (token: Token) => {
-      setFavoriteTokens((prev) => {
-        const updatedFavoriteTokens = [...prev, token];
-        lsService.setItem(`favoriteTokens-${user}`, updatedFavoriteTokens);
-        return updatedFavoriteTokens;
-      });
-    },
-    [user],
-  );
-
-  const removeFavoriteToken = useCallback(
-    (token: Token) => {
-      setFavoriteTokens((prev) => {
-        const updatedFavoriteTokens = prev.filter(
-          (p) => p.address.toLowerCase() !== token.address.toLowerCase(),
-        );
-        lsService.setItem(`favoriteTokens-${user}`, updatedFavoriteTokens);
-        return updatedFavoriteTokens;
-      });
-    },
-    [user],
-  );
-
   return {
     ...props,
     getTokenById,
     importTokens,
-    addFavoriteToken,
-    removeFavoriteToken,
-    favoriteTokens,
     tokensMap,
   };
 };

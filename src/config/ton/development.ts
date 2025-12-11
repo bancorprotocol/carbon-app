@@ -21,10 +21,7 @@ const config: AppConfig = {
   ],
   defaultTokenPair: [addresses.TON, addresses.USDT],
   popularPairs: [[addresses.TON, addresses.USDT]],
-  popularTokens: {
-    base: popularTokens,
-    quote: popularTokens,
-  },
+  popularTokens: popularTokens,
   addresses: {
     tokens: addresses,
     carbon: {

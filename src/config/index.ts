@@ -6,8 +6,6 @@ import celoDev from './celo/development';
 import celoProd from './celo/production';
 import cotiDev from './coti/development';
 import cotiProd from './coti/production';
-import blastDev from './blast/development';
-import blastProd from './blast/production';
 import tacDev from './tac/development';
 import tacProd from './tac/production';
 import tonDev from './ton/development';
@@ -30,10 +28,6 @@ const configs = {
   coti: {
     development: cotiDev,
     production: cotiProd,
-  },
-  blast: {
-    development: blastDev,
-    production: blastProd,
   },
   tac: {
     development: tacDev,

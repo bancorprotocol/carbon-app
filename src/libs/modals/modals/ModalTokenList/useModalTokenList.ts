@@ -1,11 +1,8 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokens } from 'hooks/useTokens';
-import { useModal } from 'hooks/useModal';
 import Fuse from 'fuse.js';
-import { isAddress } from 'ethers';
-import { ModalTokenListData } from './types';
-import config from 'config';
+import { getAddress, isAddress } from 'ethers';
 import {
   NATIVE_TOKEN_ADDRESS,
   isGasTokenToHide,
@@ -24,54 +21,25 @@ const SEARCH_KEYS = [
     weight: 0.4,
   },
 ];
-
-type Props = {
-  id: string;
-  data: ModalTokenListData;
+const fuseConfig = {
+  keys: SEARCH_KEYS,
+  threshold: 0.3,
+  distance: 50,
 };
 
-export const useModalTokenList = ({ id, data }: Props) => {
-  const {
-    tokens,
-    addFavoriteToken,
-    removeFavoriteToken,
-    favoriteTokens,
-    tokensMap,
-  } = useTokens();
-  const {
-    onClick,
-    excludedTokens = [],
-    includedTokens = [],
-    isBaseToken = false,
-  } = data;
-  const { closeModal } = useModal();
+export const useModalTokenList = (excludedTokens: string[] = []) => {
+  const { tokens } = useTokens();
   const [search, setSearch] = useState('');
 
-  const basePopularTokens = config.popularTokens.base;
-  const quotePopularTokens = config.popularTokens.quote;
-  const defaultPopularTokens = isBaseToken
-    ? basePopularTokens
-    : quotePopularTokens;
-
-  const onSelect = useCallback(
-    (token: Token) => {
-      onClick(token);
-      closeModal(id);
-    },
-    [onClick, closeModal, id],
-  );
-
-  const sanitizedTokens = useMemo(
-    () =>
-      tokens.filter(
-        (token) =>
-          (includedTokens.length === 0 ||
-            includedTokens.includes(token.address)) &&
-          !excludedTokens.includes(token.address) &&
-          !isGasTokenToHide(token.address),
-      ),
-    [tokens, excludedTokens, includedTokens],
-  );
+  const sanitizedTokens = useMemo(() => {
+    return tokens
+      .filter((token) => {
+        if (excludedTokens.includes(token.address)) return false;
+        if (isGasTokenToHide(token.address)) return false;
+        return true;
+      })
+      .sort((a, b) => a.symbol.localeCompare(b.symbol));
+  }, [tokens, excludedTokens]);
 
   const duplicateSymbols = useMemo(() => {
     const seenSymbol: Record<string, boolean> = {};
@@ -83,37 +51,13 @@ export const useModalTokenList = ({ id, data }: Props) => {
     return Array.from(duplicates);
   }, [tokens]);
 
-  const _favoriteTokens = useMemo(
-    () =>
-      favoriteTokens.filter(
-        (token) => !excludedTokens.includes(token?.address || ''),
-      ),
-    [excludedTokens, favoriteTokens],
-  );
+  const fuse = useMemo(() => {
+    const index = Fuse.createIndex(SEARCH_KEYS, sanitizedTokens);
+    return new Fuse(sanitizedTokens, fuseConfig, index);
+  }, [sanitizedTokens]);
 
-  const fuseIndex = useMemo(
-    () => Fuse.createIndex(SEARCH_KEYS, sanitizedTokens),
-    [sanitizedTokens],
-  );
-
-  const fuse = useMemo(
-    () =>
-      new Fuse(
-        sanitizedTokens,
-        {
-          keys: SEARCH_KEYS,
-          threshold: 0.3,
-          distance: 50,
-        },
-        fuseIndex,
-      ),
-    [sanitizedTokens, fuseIndex],
-  );
-
-  const filteredTokens = useMemo(() => {
-    if (search.length === 0) {
-      return sanitizedTokens.sort((a, b) => a.symbol.localeCompare(b.symbol));
-    }
+  const filtered = useMemo(() => {
+    if (!search) return sanitizedTokens;
     const lowercase = search.toLowerCase();
     const isEthAdress = isAddress(lowercase);
 
@@ -142,50 +86,45 @@ export const useModalTokenList = ({ id, data }: Props) => {
     }
   }, [search, fuse, sanitizedTokens, excludedTokens]);
 
+  const map = useMemo(() => {
+    const map = new Map<string, Token>();
+    for (const token of filtered) {
+      map.set(getAddress(token.address), token);
+    }
+    return map;
+  }, [filtered]);
+
   const showImportToken = useMemo(() => {
     const lowercase = search.toLowerCase();
     const isEthAdress = isAddress(lowercase);
     if (isGasTokenToHide(lowercase)) return false;
     if (import.meta.env.VITE_NETWORK === 'ton' && isTonAddress(search)) {
-      const existing = (filteredTokens as TonToken[]).some(
+      const existing = (filtered as TonToken[]).some(
         (token) => token.tonAddress === search,
       );
       return !existing;
     } else {
-      const existing = filteredTokens.some(
+      const existing = filtered.some(
         (token) => token.address.toLowerCase() === search.toLowerCase(),
       );
       if (existing) return false;
       if (isEthAdress) return true;
     }
     return false;
-  }, [search, filteredTokens]);
+  }, [search, filtered]);
 
   const showNoResults = useMemo(
-    () => !showImportToken && filteredTokens.length === 0,
-    [showImportToken, filteredTokens],
+    () => !showImportToken && filtered.length === 0,
+    [showImportToken, filtered],
   );
-
-  const popularTokens = useMemo(() => {
-    return defaultPopularTokens
-      .map((tokenAddress) => tokensMap.get(tokenAddress.toLowerCase()))
-      .filter((token) => {
-        if (!token) return false;
-        return !excludedTokens.includes(token?.address || '');
-      }) as Token[];
-  }, [defaultPopularTokens, excludedTokens, tokensMap]);
 
   return {
     search,
     setSearch,
     showImportToken,
     showNoResults,
-    filteredTokens,
+    filteredTokens: filtered,
     duplicateSymbols,
-    onSelect,
-    addFavoriteToken,
-    removeFavoriteToken,
-    favoriteTokens: _favoriteTokens,
-    popularTokens,
+    all: map,
   };
 };

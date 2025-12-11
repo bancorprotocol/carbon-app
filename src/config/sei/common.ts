@@ -7,24 +7,16 @@ const addresses = {
   WSEI: '0xE30feDd158A2e3b13e9badaeABaFc5516e95e8C7',
   USDC: '0x3894085Ef7Ff0f0aeDf52E2A2704928d1Ec074F1',
   USDT: '0xB75D0B03c06A926e488e2659DF1A861F860bD3d1',
+  syUSD: '0x059A6b0bA116c63191182a0956cF697d0d2213eC',
+  WETH: '0x160345fC359604fC6e70E3c5fAcbdE5F7A9342d8',
 };
 
 const popularTokens = [
-  '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-  '0xe30fedd158a2e3b13e9badaeabafc5516e95e8c7',
-  '0x3894085Ef7Ff0f0aeDf52E2A2704928d1Ec074F1',
-  '0xb75d0b03c06a926e488e2659df1a861f860bd3d1',
-  '0x9151434b16b9763660705744891fa906f660ecc5',
-  '0x160345fC359604fC6e70E3c5fAcbdE5F7A9342d8',
-  '0x5bff88ca1442c2496f7e475e9e7786383bc070c0',
-  '0x83c82f0f959ad3eff528ee513b43808aa53f4b37',
-  '0x805679729df385815c57c24b20f4161bd34b655f',
-  '0x95597eb8d227a7c4b4f5e807a815c5178ee6dbe1',
-  '0x5cf6826140c1c56ff49c808a1a75407cd1df9423',
-  '0xd78BE621436e69C81E4d0e9f29bE14C5EC51E6Ae',
-  '0x9C367a272f8E318D10118C6367fD69DEf30e430E',
-  '0x5f0E07dFeE5832Faa00c63F2D33A0D79150E8598',
-  '0x059a6b0ba116c63191182a0956cf697d0d2213ec',
+  addresses.SEI,
+  addresses.USDT,
+  addresses.USDC,
+  addresses.syUSD,
+  addresses.WETH,
 ];
 
 export const commonConfig: AppConfig = {
@@ -72,10 +64,7 @@ export const commonConfig: AppConfig = {
     [addresses.SEI, addresses.USDC],
     [addresses.SEI, addresses.USDT],
   ],
-  popularTokens: {
-    base: popularTokens,
-    quote: popularTokens,
-  },
+  popularTokens: popularTokens,
   addresses: {
     tokens: addresses,
     carbon: {

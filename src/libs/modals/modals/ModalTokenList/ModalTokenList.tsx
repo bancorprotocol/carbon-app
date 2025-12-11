@@ -9,38 +9,50 @@ import { ModalTokenImportNotification } from 'libs/modals/modals/ModalTokenList/
 import { SearchInput } from 'components/common/searchInput';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { KeyboardEvent, useCallback } from 'react';
-import { useStore } from 'store';
 import { ModalTokenListData } from './types';
+import { Token } from 'libs/tokens';
+import { useTokens } from 'hooks/useTokens';
+import { useModal } from 'hooks/useModal';
 
 export default function ModalTokenList({
   id,
   data,
 }: ModalProps<ModalTokenListData>) {
-  const {
-    tokens: { isError, isPending },
-  } = useStore();
-  const {
-    search,
-    setSearch,
-    showImportToken,
-    showNoResults,
-    filteredTokens,
-    onSelect,
-    addFavoriteToken,
-    removeFavoriteToken,
-    favoriteTokens,
-    popularTokens,
-    duplicateSymbols,
-  } = useModalTokenList({ id, data });
+  const { closeModal } = useModal();
+  const { isError, isPending } = useTokens();
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Enter' && !!filteredTokens.length) {
-        onSelect(filteredTokens[0]);
-      }
+  const { search, setSearch, showImportToken, all, duplicateSymbols } =
+    useModalTokenList(data.excludedTokens);
+
+  const select = useCallback(
+    (token: Token) => {
+      data.onClick(token);
+      closeModal(id);
     },
-    [filteredTokens, onSelect],
+    [data, closeModal, id],
   );
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      const selected = '.token-select[aria-selected]';
+      const getSelected = () => document.querySelector<HTMLElement>(selected);
+      const getFirst = () =>
+        document.querySelector<HTMLElement>('.token-select');
+      const el = getSelected() || getFirst();
+      el?.click();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const getAll = () =>
+        document.querySelectorAll<HTMLElement>('.token-select');
+      const all = Array.from(getAll());
+      const current = all.findIndex((item) => item.ariaSelected);
+      // Always fallback on first because list is too long
+      const next = e.key === 'ArrowDown' ? current + 1 : current - 1;
+      all[current]?.removeAttribute('aria-selected');
+      all[next]?.setAttribute('aria-selected', 'true');
+      all[next]?.scrollIntoView({ block: 'center' });
+    }
+  }, []);
 
   return (
     <Modal id={id} className="grid content-start gap-16 md:w-500 h-[70vh]">
@@ -54,7 +66,7 @@ export default function ModalTokenList({
         className="rounded-md"
         onKeyDown={handleKeyDown}
       />
-      {!showNoResults && !showImportToken && <ModalTokenImportNotification />}
+      {!!all.size && !showImportToken && <ModalTokenImportNotification />}
 
       {isError ? (
         <ModalTokenListError />
@@ -62,20 +74,14 @@ export default function ModalTokenList({
         <ModalTokenListLoading />
       ) : showImportToken ? (
         <ModalTokenListImport address={search} />
-      ) : showNoResults ? (
+      ) : !all.size ? (
         <ModalTokenListNotFound />
       ) : (
         <ModalTokenListContent
-          tokens={{
-            all: filteredTokens,
-            favorites: favoriteTokens,
-            popular: popularTokens,
-          }}
+          all={all}
           duplicateSymbols={duplicateSymbols}
-          onSelect={onSelect}
+          select={select}
           search={search}
-          onAddFavorite={addFavoriteToken}
-          onRemoveFavorite={removeFavoriteToken}
         />
       )}
     </Modal>

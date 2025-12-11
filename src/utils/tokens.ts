@@ -1,5 +1,6 @@
 import config from 'config';
 import { SafeDecimal } from 'libs/safedecimal';
+import { Token } from 'libs/tokens';
 
 export const expandToken = (amount: string | number, precision: number) => {
   const trimmed = new SafeDecimal(amount).toFixed(precision, 1);
@@ -28,7 +29,7 @@ export const NATIVE_TOKEN_ADDRESS =
 export const nativeToken = {
   ...config.network.gasToken,
   address: NATIVE_TOKEN_ADDRESS,
-};
+} as Token;
 
 export const isDifferentGasToken =
   config.network.gasToken.address.toLowerCase() !==
