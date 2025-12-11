@@ -129,7 +129,7 @@ export const ModalTokenListContent: FC<Props> = ({
 
   return (
     <>
-      <menu className="flex items-center gap-16">
+      <menu className="flex items-center gap-16 flex-wrap">
         {popularTokens.map((token) => (
           <button
             key={token.address}
