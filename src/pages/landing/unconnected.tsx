@@ -11,6 +11,7 @@ import { useTrending } from 'libs/queries/extApi/tradeCount';
 import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { RollingNumber } from 'components/common/RollingNumber';
+import { useGetAllStrategies } from 'libs/queries';
 
 const types = [
   {
@@ -76,18 +77,18 @@ const types = [
 
 export const UnconnectedLandingPage = () => {
   const trending = useTrending();
-
+  const strategies = useGetAllStrategies({ enabled: true });
   const sentence = useMemo(() => {
-    if (!trending.data) {
+    if (trending.isPending || strategies.isPending) {
       return (
         <p className="invisible font-title text-xl md:text-3xl">
           Hide to prevent layout shift
         </p>
       );
     }
-    const trades = trending.data.totalTradeCount;
-    const strategies = trending.data.tradeCount.length;
-    if (!trades || !strategies) return;
+    const trades = trending.data?.totalTradeCount;
+    const totalStrategies = strategies.data?.length;
+    if (!trades || !totalStrategies) return;
     const format = (value: number) => {
       return prettifyNumber(value, { isInteger: true });
     };
@@ -95,7 +96,7 @@ export const UnconnectedLandingPage = () => {
       <div className="font-title flex flex-col items-center gap-8 justify-center text-xl md:flex-row md:items-baseline md:text-3xl">
         <RollingNumber
           className="text-xl md:text-3xl"
-          value={strategies}
+          value={totalStrategies}
           loadingWidth="1ch"
           format={format}
         />
@@ -110,7 +111,12 @@ export const UnconnectedLandingPage = () => {
         <span>trades</span>
       </div>
     );
-  }, [trending.data]);
+  }, [
+    strategies.data?.length,
+    strategies.isPending,
+    trending.data?.totalTradeCount,
+    trending.isPending,
+  ]);
 
   return (
     <section className="grid content-start gap-24 mx-auto p-16">

@@ -202,7 +202,7 @@ export const useGetStrategyList = (ids: string[]) => {
 
 /** We need to add options to disable because we want to use different hooks for explorer  */
 export const useGetAllStrategies = (options: { enabled: boolean }) => {
-  const { isInitialized } = useCarbonInit();
+  const { isEnabled } = useCarbonInit();
   const { isPending, getTokenById } = useTokens();
 
   return useQuery<AnyStrategy[]>({
@@ -212,9 +212,8 @@ export const useGetAllStrategies = (options: { enabled: boolean }) => {
       const strategies = all.map((item) => item.strategies).flat();
       return buildStrategiesHelper(strategies, getTokenById);
     },
-    enabled: options?.enabled && !isPending && isInitialized,
+    enabled: options?.enabled && !isPending && isEnabled,
     staleTime: ONE_DAY_IN_MS,
-    retry: false,
   });
 };
 

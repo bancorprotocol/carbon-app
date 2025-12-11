@@ -42,6 +42,7 @@ interface Props {
 export const SDKProvider: FC<Props> = ({ children }) => {
   const cache = useQueryClient();
 
+  const [isEnabled, setIsEnabled] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -55,23 +56,23 @@ export const SDKProvider: FC<Props> = ({ children }) => {
         if (timestamp && ttl && timestamp + ttl > Date.now()) {
           cacheData = lsService.getItem('sdkCompressedCacheData');
         }
-        await Promise.all([
-          carbonSDK.init(
-            CHAIN_ID,
-            {
-              url: RPC_URLS[CHAIN_ID],
-              headers: RPC_HEADERS[CHAIN_ID],
-            },
-            contractsConfig,
-            getTokenDecimalMap(),
-            {
-              cache: cacheData,
-              pairBatchSize: config.sdk.pairBatchSize,
-              blockRangeSize: config.sdk.blockRangeSize,
-              refreshInterval: config.sdk.refreshInterval,
-            },
-          ),
-        ]);
+        const initializer = carbonSDK.init(
+          CHAIN_ID,
+          {
+            url: RPC_URLS[CHAIN_ID],
+            headers: RPC_HEADERS[CHAIN_ID],
+          },
+          contractsConfig,
+          getTokenDecimalMap(),
+          {
+            cache: cacheData,
+            pairBatchSize: config.sdk.pairBatchSize,
+            blockRangeSize: config.sdk.blockRangeSize,
+            refreshInterval: config.sdk.refreshInterval,
+          },
+        );
+        setIsEnabled(true);
+        await initializer;
         setIsInitialized(true);
         setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
       } catch (e) {
@@ -130,7 +131,9 @@ export const SDKProvider: FC<Props> = ({ children }) => {
   }, [cache]);
 
   return (
-    <SdkContext.Provider value={{ isInitialized, isLoading, isError }}>
+    <SdkContext.Provider
+      value={{ isEnabled, isInitialized, isLoading, isError }}
+    >
       {children}
     </SdkContext.Provider>
   );
