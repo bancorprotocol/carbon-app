@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { QueryKey, toTransactionRequest } from 'libs/queries';
+import { QueryKey } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useCarbonInit } from 'libs/sdk/context';
 import { Action, TradeActionBNStr } from 'libs/sdk';
@@ -77,7 +77,7 @@ export const useTradeQuery = () => {
         },
       ];
       unsignedTx.customData = { assets };
-      return sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(unsignedTx);
     },
   });
 };
