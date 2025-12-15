@@ -35,7 +35,7 @@ import {
 import { StaticOrder } from 'components/strategies/common/types';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
-import { toTransactionRequest, useGetTokenBalance } from 'libs/queries';
+import { useGetTokenBalance } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { lsService } from 'services/localeStorage';
 import { isZero } from 'components/strategies/common/utils';
@@ -333,7 +333,7 @@ export const LiquidityMatrixPage = () => {
         }));
         const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
         setDisabled(true);
-        const tx = await sendTransaction(toTransactionRequest(unsignedTx));
+        const tx = await sendTransaction(unsignedTx);
         await tx.wait();
         await Promise.all(
           strategies.map((s) => animateLeaving(s.quote, { isLast: true })),
