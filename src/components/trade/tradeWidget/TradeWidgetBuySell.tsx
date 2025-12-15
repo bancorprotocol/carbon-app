@@ -15,6 +15,7 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { LogoImager } from 'components/common/imager/Imager';
 import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-router';
+import { OpenOceanPath } from './OpenOceanPath';
 import IconRouting from 'assets/icons/routing.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import IconArrow from 'assets/icons/arrowDown.svg?react';
@@ -46,10 +47,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     liquidityQuery,
     errorMsgSource,
     errorMsgTarget,
-    openTradeRouteModal,
+    displayRouting,
     calcSlippage,
     maxSourceAmountQuery,
     isAwaiting,
+    showRoutingPath,
+    routingPath,
   } = useBuySell(props);
   const {
     source,
@@ -136,7 +139,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
 
-  const showRouting = rate && rate !== '0';
+  const showRouting = routingPath || !isZero(rate);
   const disabledCTA =
     !!errorMsgSource ||
     !!errorMsgTarget ||
@@ -251,7 +254,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {showRouting && (
               <button
                 type="button"
-                onClick={openTradeRouteModal}
+                onClick={displayRouting}
                 className="flex gap-8 text-left hover:text-white md:flex"
                 data-testid="routing"
               >
@@ -270,6 +273,17 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       {IS_TENDERLY_FORK && (
         <div className="text-14 text-right text-white/60">
           DEBUG: {getLiquidity()}
+        </div>
+      )}
+
+      {showRoutingPath && !!routingPath && (
+        <div className="grid gap-8 px-16 py-8 rounded-md bg-main-500/60">
+          <h3 className="text-12">Routing:</h3>
+          <OpenOceanPath path={routingPath} />
+          <p className="text-white/60 text-12">
+            The Carbon Auto Router consider optimal routes and network costs to
+            provide the best price.
+          </p>
         </div>
       )}
 

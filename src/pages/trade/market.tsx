@@ -1,4 +1,4 @@
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTradeSettings';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useTradeCtx } from 'components/trade/context';
@@ -9,8 +9,9 @@ import { StrategyDirection } from 'libs/routing';
 import { cn } from 'utils/helpers';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
-import style from 'components/strategies/common/order.module.css';
 import { OrderDirection } from 'components/strategies/common/OrderDirection';
+import style from 'components/strategies/common/order.module.css';
+import config from 'config';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
@@ -64,7 +65,25 @@ export const TradeMarket = () => {
               data-testid={isBuy ? 'buy-form' : 'sell-form'}
             />
           </div>
+          {config.ui.useOpenocean && (
+            <p className="text-center text-10 py-8">
+              Powered by <b>OpenOcean</b>
+            </p>
+          )}
         </article>
+        <Link
+          from="/trade/market"
+          to=".."
+          search={(s) => ({ base: s.base, quote: s.quote })}
+          className="grid gap-8 p-16 text-center border-gradient rounded-2xl"
+        >
+          <h3 className="text-gradient">Create Limit Order - Click Here !</h3>
+          <p className="text-14 font-medium">
+            If you'd like this pair to be available in the system and tradable
+            in the future, you can create various advanced strategies on the
+            Limit order.
+          </p>
+        </Link>
       </TradeLayout>
     </>
   );

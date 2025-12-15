@@ -53,6 +53,7 @@ export const commonConfig: AppConfig = {
       carbonController: '0xA4682A2A5Fe02feFF8Bd200240A41AD0E6EaF8d5',
       voucher: '0xb0d39990E1C38B50D0b7f6911525535Fbacb4C26',
       batcher: '0x0f54099D787e26c90c487625B4dE819eC5A9BDAA',
+      vault: '0xBBAFF3Bf6eC4C15992c0Fb37F12491Fd62C5B496',
     },
     tac: {
       proxy: '0x188F6e49FC62c0D73173b11e7BD39C36cD3d730f',

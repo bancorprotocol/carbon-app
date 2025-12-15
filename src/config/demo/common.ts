@@ -42,6 +42,7 @@ export const commonConfig: AppConfig = {
     carbon: {
       carbonController: '',
       voucher: '',
+      vault: '',
     },
   },
   utils: {

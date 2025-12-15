@@ -15,6 +15,8 @@ import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
 import { isTouchedZero, isZero } from 'components/strategies/common/utils';
 import { carbonEvents } from 'services/events';
+import { OpenOceanSwapPath } from 'utils/openocean';
+import config from 'config';
 
 export const useBuySell = ({
   source,
@@ -38,6 +40,10 @@ export const useBuySell = ({
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
+
+  const [routingPath, setRoutingPath] = useState<OpenOceanSwapPath>();
+  const [showRoutingPath, setShowRoutingPath] = useState(false);
+
   const { provider } = useWagmi();
   const { getFiatValue } = useFiatCurrency(source);
 
@@ -78,16 +84,16 @@ export const useBuySell = ({
   });
 
   const bySourceQuery = useGetTradeData({
-    sourceToken: source.address,
-    targetToken: target.address,
+    sourceToken: source,
+    targetToken: target,
     isTradeBySource: true,
     input: sourceInput,
     enabled: isTradeBySource,
   });
 
   const byTargetQuery = useGetTradeData({
-    sourceToken: source.address,
-    targetToken: target.address,
+    sourceToken: source,
+    targetToken: target,
     isTradeBySource: false,
     input: targetInput,
     enabled: !isTradeBySource,
@@ -131,20 +137,24 @@ export const useBuySell = ({
         actionsTokenRes,
         effectiveRate,
         actionsWei,
+        path,
       } = bySourceQuery.data;
 
+      // Bancor SDK
       setTargetInput(totalTargetAmount);
       setTradeActions(tradeActions);
       setTradeActionsRes(actionsTokenRes);
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-
       if (
         effectiveRate !== '0' ||
         (!isZero(sourceInput) && isTouchedZero(totalTargetAmount))
       ) {
         checkLiquidity();
       }
+
+      // OpenOcean
+      setRoutingPath(path);
     }
     // eslint-disable-next-line
   }, [bySourceQuery.data]);
@@ -157,20 +167,24 @@ export const useBuySell = ({
         actionsTokenRes,
         effectiveRate,
         actionsWei,
+        path,
       } = byTargetQuery.data;
 
+      // Bancor SDK
       setSourceInput(totalSourceAmount);
       setTradeActions(tradeActions);
       setTradeActionsRes(actionsTokenRes);
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-
       if (
         effectiveRate !== '0' ||
         (!isZero(targetInput) && isTouchedZero(totalSourceAmount))
       ) {
         checkLiquidity();
       }
+
+      // OpenOcean
+      setRoutingPath(path);
     }
     // eslint-disable-next-line
   }, [byTargetQuery.data]);
@@ -284,17 +298,21 @@ export const useBuySell = ({
     target.symbol,
   ]);
 
-  const openTradeRouteModal = useCallback(() => {
-    openModal('tradeRouting', {
-      sourceBalance: sourceBalanceQuery.data ?? '0',
-      tradeActionsWei,
-      tradeActionsRes,
-      source,
-      target,
-      isTradeBySource,
-      onSuccess: clearInputs,
-      isBuy,
-    });
+  const displayRouting = useCallback(() => {
+    if (config.ui.useOpenocean) {
+      setShowRoutingPath((current) => !current);
+    } else {
+      openModal('tradeRouting', {
+        sourceBalance: sourceBalanceQuery.data ?? '0',
+        tradeActionsWei,
+        tradeActionsRes,
+        source,
+        target,
+        isTradeBySource,
+        onSuccess: clearInputs,
+        isBuy,
+      });
+    }
   }, [
     isBuy,
     clearInputs,
@@ -350,10 +368,12 @@ export const useBuySell = ({
     isLiquidityError,
     errorMsgSource,
     errorMsgTarget,
-    openTradeRouteModal,
+    displayRouting,
     calcSlippage,
     isTradeBySource,
     maxSourceAmountQuery,
     isAwaiting,
+    showRoutingPath,
+    routingPath,
   };
 };

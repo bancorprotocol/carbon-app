@@ -78,8 +78,8 @@ export const useTradeAction = ({
 
     return mutation.mutate(
       {
-        sourceAddress: source.address,
-        targetAddress: target.address,
+        source,
+        target,
         isTradeBySource,
         tradeActions,
         sourceInput,

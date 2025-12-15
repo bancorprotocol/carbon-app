@@ -84,7 +84,7 @@ export const MainMenuTradeSettings = () => {
         aria-controls={dialogId}
         onClick={() => open({ autofocus: false })}
       >
-        <span className="text-white/60 text-14">{slippage}%</span>
+        <span className="text-14">{slippage}%</span>
         <IconCog className="size-18" />
       </button>
       <dialog
