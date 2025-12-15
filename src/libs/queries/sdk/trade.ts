@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { QueryKey, toTransactionRequest } from 'libs/queries';
+import { QueryKey } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useCarbonInit } from 'libs/sdk/context';
 import { Action, TradeActionBNStr } from 'libs/sdk';
@@ -70,14 +70,12 @@ export const useTradeQuery = () => {
           slippage: Number(settings.slippage),
         });
         const { value, gasPrice, to, estimatedGas } = tx;
-        return sendTransaction(
-          toTransactionRequest({
-            to,
-            gasPrice: BigNumber.from(gasPrice),
-            value: BigNumber.from(value),
-            gasLimit: BigNumber.from(estimatedGas),
-          }),
-        );
+        return sendTransaction({
+          to,
+          gasPrice: BigNumber.from(gasPrice),
+          value: BigNumber.from(value),
+          gasLimit: BigNumber.from(estimatedGas),
+        });
       } else {
         let unsignedTx: PopulatedTransaction;
         let baseAmount: string;
@@ -110,7 +108,7 @@ export const useTradeQuery = () => {
           },
         ];
         unsignedTx.customData = { assets };
-        return sendTransaction(toTransactionRequest(unsignedTx));
+        return sendTransaction(unsignedTx);
       }
     },
   });
