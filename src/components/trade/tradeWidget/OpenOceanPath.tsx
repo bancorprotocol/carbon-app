@@ -63,15 +63,12 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
                         <hr className="border-main-300" />
                         <ul className="grid gap-4">
                           {subroute.dexes.map((dex) => (
-                            <li key={dex.id} className="grid gap-8 grid-cols-3">
+                            <li key={dex.id} className="grid gap-8 grid-cols-2">
                               <span className="justify-self-start">
                                 {dex.dex}
                               </span>
                               <span className="justify-self-end">
                                 ({dex.percentage}%)
-                              </span>
-                              <span className="justify-self-end">
-                                {dex.fee}% fee
                               </span>
                             </li>
                           ))}
