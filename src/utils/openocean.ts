@@ -103,6 +103,7 @@ interface OpenOceanSwapSubRoutes {
     id: string;
     parts: number;
     percentage: number;
+    fee?: number;
   }[];
 }
 
