@@ -101,7 +101,8 @@ export const useBuySell = ({
 
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
 
-  const checkLiquidity = () => {
+  const checkLiquidity = useCallback(() => {
+    if (config.ui.useOpenocean) return;
     const checkSource = () =>
       new SafeDecimal(sourceInput).gt(maxSourceAmountQuery.data || 0);
 
@@ -125,7 +126,13 @@ export const useBuySell = ({
         return set();
       }
     }
-  };
+  }, [
+    isTradeBySource,
+    liquidityQuery.data,
+    maxSourceAmountQuery.data,
+    sourceInput,
+    targetInput,
+  ]);
 
   const onInputChange = (bySource: boolean) => {
     setIsTradeBySource(bySource);
