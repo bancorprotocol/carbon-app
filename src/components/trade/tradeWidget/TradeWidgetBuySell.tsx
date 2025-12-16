@@ -5,7 +5,6 @@ import { IS_TENDERLY_FORK, useWagmi } from 'libs/wagmi';
 import { UseQueryResult } from 'libs/queries';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { prettifyNumber } from 'utils/helpers';
 import { useTradePairs } from '../useTradePairs';
@@ -260,12 +259,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                 data-testid="routing"
               >
                 <IconRouting className="w-12" />
-                <Tooltip
-                  placement="left"
-                  element="You can view and manage the orders that are included in the trade."
-                >
-                  <span>Routing</span>
-                </Tooltip>
+                <span>Routing</span>
               </button>
             )}
           </footer>

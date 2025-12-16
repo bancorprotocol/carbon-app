@@ -30,7 +30,7 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
   return (
     <ol className="grid gap-8 text-12">
       {path.routes.map((route, i) => (
-        <li key={i} className="flex items-center gap-8">
+        <li key={`route-${i}`} className="flex items-center gap-8">
           <span>{route.percentage}%</span>
           <ol className="flex items-center gap-4 flex-wrap">
             {route.subRoutes.map((subroute, j) => {
@@ -40,7 +40,7 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
                 <>
                   {!!j && (
                     <svg
-                      key={j}
+                      key={`separator-${j}`}
                       role="separator"
                       width="16"
                       height="4"
@@ -54,7 +54,7 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
                     </svg>
                   )}
                   <Tooltip
-                    key={j}
+                    key={`tooltip-${j}`}
                     element={
                       <div className="grid gap-8">
                         <h4>
@@ -63,7 +63,7 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
                         <hr className="border-main-300" />
                         <ul className="grid gap-4">
                           {subroute.dexes.map((dex) => (
-                            <li key={j} className="grid grid-cols-2">
+                            <li key={dex.id} className="grid grid-cols-2">
                               <span className="justify-self-start">
                                 {dex.dex}
                               </span>
