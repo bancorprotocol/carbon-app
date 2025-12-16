@@ -172,12 +172,15 @@ export const useGetTradeData = ({
           : await openocean.reverseQuote(params);
         const sourceAmount = isTradeBySource ? res.inAmount : res.outAmount;
         const targetAmount = isTradeBySource ? res.outAmount : res.inAmount;
+        const totalSourceAmount = fromDecimal(sourceAmount, sourceToken);
+        const totalTargetAmount = fromDecimal(targetAmount, targetToken);
+        const rate = new SafeDecimal(totalTargetAmount).div(totalSourceAmount);
         return {
-          totalSourceAmount: fromDecimal(sourceAmount, sourceToken),
-          totalTargetAmount: fromDecimal(targetAmount, targetToken),
+          totalSourceAmount,
+          totalTargetAmount,
           tradeActions: [],
           actionsTokenRes: [],
-          effectiveRate: '',
+          effectiveRate: rate.toString(),
           actionsWei: [],
           path: res.path,
         };
