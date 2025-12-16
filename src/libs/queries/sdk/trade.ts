@@ -11,7 +11,6 @@ import config from 'config';
 import { openocean, OpenOceanSwapPath } from 'utils/openocean';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
-import { BigNumber } from '@bancor/carbon-sdk/utils';
 
 interface GetTradeDataResult {
   tradeActions: TradeActionBNStr[];
@@ -72,9 +71,9 @@ export const useTradeQuery = () => {
         const { value, gasPrice, to, estimatedGas } = tx;
         return sendTransaction({
           to,
-          gasPrice: BigNumber.from(gasPrice),
-          value: BigNumber.from(value),
-          gasLimit: BigNumber.from(estimatedGas),
+          gasPrice: BigInt(gasPrice),
+          value: BigInt(value),
+          gasLimit: BigInt(estimatedGas),
         });
       } else {
         let unsignedTx: PopulatedTransaction;
@@ -191,7 +190,7 @@ export const useGetTradeData = ({
         );
       }
     },
-    enabled: !!enabled && isInitialized && input !== '...',
+    enabled: !!enabled && isInitialized,
     gcTime: 0,
     retry: 1,
   });

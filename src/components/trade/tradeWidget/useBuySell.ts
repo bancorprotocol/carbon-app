@@ -108,7 +108,10 @@ export const useBuySell = ({
     const checkTarget = () =>
       new SafeDecimal(targetInput).gt(liquidityQuery.data || 0);
 
-    const set = () => setIsLiquidityError(true);
+    const set = () => {
+      if (config.ui.useOpenocean) return;
+      setIsLiquidityError(true);
+    };
     setIsLiquidityError(false);
 
     if (isTradeBySource) {

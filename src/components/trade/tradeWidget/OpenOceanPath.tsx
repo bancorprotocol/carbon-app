@@ -1,15 +1,32 @@
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { useTokens } from 'hooks/useTokens';
-import { FC } from 'react';
+import { useImportTokens, useTokens } from 'hooks/useTokens';
+import { FC, useMemo } from 'react';
 import { OpenOceanSwapPath } from 'utils/openocean';
 
 interface Props {
   path: OpenOceanSwapPath;
 }
 
+const useImportMissingTokens = (path: OpenOceanSwapPath) => {
+  const addresses = useMemo(() => {
+    const addresses = new Set<string>();
+    addresses.add(path.from);
+    addresses.add(path.to);
+    for (const route of path.routes) {
+      for (const subroute of route.subRoutes) {
+        addresses.add(subroute.from);
+        addresses.add(subroute.to);
+      }
+    }
+    return addresses;
+  }, [path]);
+  return useImportTokens(Array.from(addresses));
+};
+
 export const OpenOceanPath: FC<Props> = ({ path }) => {
   const { getTokenById } = useTokens();
+  useImportMissingTokens(path);
   return (
     <ol className="grid gap-8 text-12">
       {path.routes.map((route, i) => (
@@ -17,9 +34,8 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
           <span>{route.percentage}%</span>
           <ol className="flex items-center gap-4 flex-wrap">
             {route.subRoutes.map((subroute, j) => {
-              // TODO: DO NOT MERGE UNTIL WE IMPORT MISSING TOKENS
-              const from = getTokenById(subroute.from)!;
-              const to = getTokenById(subroute.to)!;
+              const from = getTokenById(subroute.from);
+              const to = getTokenById(subroute.to);
               return (
                 <>
                   {!!j && (
@@ -42,7 +58,7 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
                     element={
                       <div className="grid gap-8">
                         <h4>
-                          {from.symbol} / {to.symbol}
+                          {from?.symbol} / {to?.symbol}
                         </h4>
                         <hr className="border-main-300" />
                         <ul className="grid gap-4">

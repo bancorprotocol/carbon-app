@@ -61,6 +61,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     isBuy = false,
     ...formProps
   } = props;
+
   const hasEnoughLiquidity = +liquidityQuery.data! > 0;
 
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
@@ -136,7 +137,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return <CarbonLogoLoading className="h-80 m-20" />;
   }
 
-  if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
 
   const showRouting = routingPath || !isZero(rate);
@@ -147,6 +147,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     !maxSourceAmountQuery.data;
 
   const getLiquidity = () => {
+    if (!liquidityQuery.data) return;
     const value = prettifyNumber(liquidityQuery.data);
     return `Liquidity: ${value} ${target.symbol}`;
   };
@@ -280,10 +281,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         <div className="grid gap-8 px-16 py-8 rounded-md bg-main-500/60">
           <h3 className="text-12">Routing:</h3>
           <OpenOceanPath path={routingPath} />
-          <p className="text-white/60 text-12">
-            The Carbon Auto Router consider optimal routes and network costs to
-            provide the best price.
-          </p>
         </div>
       )}
 

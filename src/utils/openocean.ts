@@ -1,4 +1,5 @@
 import config from 'config';
+import { NATIVE_TOKEN_ADDRESS } from './tokens';
 const apiUrl = `https://open-api.openocean.finance/v4/${config.network.chainId}/`;
 
 // TODO: implement with cloudflare function
@@ -148,10 +149,74 @@ interface GasPriceResult {
   instant: number | GasPriceEth;
 }
 
+// Replace native tokens with the once here: https://apis.openocean.finance/developer/apis/supported-chains
+const nativeTokenList = {
+  // ETH
+  1: {
+    from: NATIVE_TOKEN_ADDRESS,
+    to: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+  },
+  // Celo
+  42220: {
+    from: NATIVE_TOKEN_ADDRESS,
+    to: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+  },
+  // Sei
+  1329: {
+    from: NATIVE_TOKEN_ADDRESS,
+    to: '0x0000000000000000000000000000000000000000',
+  },
+  // Tac
+  239: {
+    from: NATIVE_TOKEN_ADDRESS,
+    to: '0x0000000000000000000000000000000000000000',
+  },
+};
+
+const nativeToken =
+  nativeTokenList[config.network.chainId as keyof typeof nativeTokenList];
+
+const replaceNativeTokenParams = (params: QuoteParams) => {
+  if (params.inTokenAddress === nativeToken.from) {
+    params.inTokenAddress = nativeToken.to;
+  }
+  if (params.outTokenAddress === nativeToken.from) {
+    params.outTokenAddress = nativeToken.to;
+  }
+  return params;
+};
+
+const replaceNativeTokenResult = (result: OpenOceanQuoteResult) => {
+  if (result.path.from === nativeToken.to) {
+    result.path.from = nativeToken.from;
+  }
+  if (result.path.to === nativeToken.to) {
+    result.path.to = nativeToken.from;
+  }
+  for (const route of result.path.routes) {
+    for (const subRoute of route.subRoutes) {
+      if (subRoute.from === nativeToken.to) {
+        subRoute.from = nativeToken.from;
+      }
+      if (subRoute.to === nativeToken.to) {
+        subRoute.to = nativeToken.from;
+      }
+    }
+  }
+  return result;
+};
+
 export const openocean = {
-  quote: (params: QuoteParams) => get<OpenOceanQuoteResult>('quote', params),
-  reverseQuote: (params: QuoteParams) =>
-    get<OpenOceanQuoteResult>('reverseQuote', params),
+  quote: async (params: QuoteParams) => {
+    const sanitized = replaceNativeTokenParams(params);
+    const result = await get<OpenOceanQuoteResult>('quote', sanitized);
+    return replaceNativeTokenResult(result);
+  },
+  reverseQuote: async (params: QuoteParams) => {
+    const sanitized = replaceNativeTokenParams(params);
+    const result = await get<OpenOceanQuoteResult>('reverseQuote', sanitized);
+    return replaceNativeTokenResult(result);
+  },
   swap: (params: SwapParams) => get<OpenOceanSwapResult>('swap', params),
   gasPrice: async () => {
     const result = await get<GasPriceResult>('gasPrice');

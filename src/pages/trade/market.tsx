@@ -5,7 +5,7 @@ import { useTradeCtx } from 'components/trade/context';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useGetTokenBalance } from 'libs/queries';
-import { StrategyDirection } from 'libs/routing';
+import { NewTabLink, StrategyDirection } from 'libs/routing';
 import { cn } from 'utils/helpers';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
@@ -67,22 +67,24 @@ export const TradeMarket = () => {
           </div>
           {config.ui.useOpenocean && (
             <p className="text-center text-10 py-8">
-              Powered by <b>OpenOcean</b>
+              Powered by{' '}
+              <NewTabLink to="https://openocean.finance/" className="font-bold">
+                OpenOcean
+              </NewTabLink>
             </p>
           )}
         </article>
         <Link
           from="/trade/market"
-          to=".."
-          search={(s) => ({ base: s.base, quote: s.quote })}
+          to="../disposable"
+          search={(s) => ({ base: s.base, quote: s.quote, settings: 'limit' })}
           className="grid gap-8 p-16 text-center border-gradient rounded-2xl"
         >
-          <h3 className="text-gradient">Create Limit Order - Click Here !</h3>
+          <h3 className="text-gradient">Your Price. Your Rules.</h3>
           <p className="text-14 font-medium">
-            If you'd like this pair to be available in the system and tradable
-            in the future, you can create various advanced strategies on the
-            Limit order.
+            Set a Limit Order to buy or sell exactly where you want.
           </p>
+          <p className="text-gradient">Click here to create a Limit Order</p>
         </Link>
       </TradeLayout>
     </>
