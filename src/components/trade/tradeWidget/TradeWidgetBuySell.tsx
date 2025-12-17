@@ -154,7 +154,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   return (
     <form {...formProps} onSubmit={handleTrade} className="grid gap-24">
       <div className="grid">
-        <div className="rounded-xl p-16 input-container">
+        <div className="rounded-xl p-16 input-container relative">
+          <div
+            className="rounded-xl absolute inset-0 animate-pulse bg-main-400/40"
+            hidden={!byTargetQuery.isFetching}
+          ></div>
           <header className="text-14 flex justify-between">
             <label htmlFor={`${id}-pay`} className="text-white/50">
               You pay
@@ -203,7 +207,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           <IconArrow className="size-16" />
         </button>
         <div className="grid gap-8">
-          <div className="rounded-b-xs rounded-t-xl  input-container">
+          <div className="rounded-b-xs rounded-t-xl input-container relative">
+            <div
+              className="rounded-b-xs rounded-t-xl absolute inset-0 animate-pulse bg-main-400/40"
+              hidden={!bySourceQuery.isFetching}
+            ></div>
             <header className="text-14 flex justify-between">
               <label htmlFor={`${id}-receive`} className="text-white/50">
                 You receive
