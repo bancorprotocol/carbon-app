@@ -3,15 +3,14 @@ import { NATIVE_TOKEN_ADDRESS } from './tokens';
 const apiUrl = `https://open-api.openocean.finance/v4/${config.network.chainId}/`;
 
 const getUrl = (endpoint: string) => {
-  return new URL(apiUrl + endpoint);
-  // if (import.meta.env.PROD) {
-  //   // In production send to cloudflare proxy
-  //   const url = new URL('/api/openocean');
-  //   url.searchParams.set('endpoint', endpoint);
-  //   return url;
-  // } else {
-  //   return new URL(apiUrl + endpoint);
-  // }
+  if (import.meta.env.PROD) {
+    // In production send to cloudflare proxy
+    const url = new URL('/api/openocean');
+    url.searchParams.set('endpoint', endpoint);
+    return url;
+  } else {
+    return new URL(apiUrl + endpoint);
+  }
 };
 
 // TODO: implement with cloudflare function
