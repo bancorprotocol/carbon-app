@@ -3,13 +3,13 @@ import { NATIVE_TOKEN_ADDRESS } from './tokens';
 const apiUrl = `https://open-api.openocean.finance/v4/${config.network.chainId}/`;
 
 const getUrl = (endpoint: string) => {
-  if (import.meta.env.PROD) {
+  if (import.meta.env.DEV) {
+    return new URL(apiUrl + endpoint);
+  } else {
     // In production send to cloudflare proxy
     const url = new URL('/api/openocean');
     url.searchParams.set('endpoint', endpoint);
     return url;
-  } else {
-    return new URL(apiUrl + endpoint);
   }
 };
 
