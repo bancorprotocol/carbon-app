@@ -1,6 +1,6 @@
 const proOrigin = 'https://open-api-pro.openocean.finance/v4';
 
-const allowedEndpoints = ['reverseQuote', 'quote', 'swap'];
+const allowedEndpoints = ['reverseQuote', 'quote', 'swap', 'gasPrice'];
 
 const vaults = {
   sei: '0x773B75CfB146bd5d1095fa9d6d45637f02B05119',
