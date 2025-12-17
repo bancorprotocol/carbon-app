@@ -233,8 +233,15 @@ export const openocean = {
   },
   swap: (params: SwapParams) => get<OpenOceanSwapResult>('swap', params),
   gasPrice: async () => {
-    const result = await get<GasPriceResult>('gasPrice');
-    if (typeof result.standard === 'number') return result.standard;
-    return result.standard.maxPriorityFeePerGas;
+    const { standard } = await get<GasPriceResult>('gasPrice');
+    if (typeof standard === 'number') {
+      return { gasPrice: BigInt(standard) };
+    } else {
+      return {
+        gasPrice: BigInt(standard.legacyGasPrice),
+        maxPriorityFeePerGas: BigInt(standard.maxPriorityFeePerGas),
+        maxFeePerGas: BigInt(standard.maxFeePerGas),
+      };
+    }
   },
 };
