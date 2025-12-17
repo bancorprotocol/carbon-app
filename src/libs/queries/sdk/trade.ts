@@ -158,13 +158,13 @@ export const useGetTradeData = ({
       if (config.ui.useOpenocean) {
         const inToken = isTradeBySource ? sourceToken : targetToken;
         const outToken = isTradeBySource ? targetToken : sourceToken;
-        const gasPriceDecimals = await openocean.gasPrice();
+        const prices = await openocean.gasPrice();
         const params = {
           amountDecimals: toDecimal(input, inToken),
           inTokenAddress: inToken.address,
           outTokenAddress: outToken.address,
           slippage: Number(trade.settings.slippage),
-          gasPriceDecimals: gasPriceDecimals.toString(),
+          gasPriceDecimals: prices.gasPrice.toString(),
         };
         const res = isTradeBySource
           ? await openocean.quote(params)
