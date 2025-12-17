@@ -9,6 +9,7 @@ const getUrl = (endpoint: string) => {
     // In production send to cloudflare proxy
     const url = new URL(location.origin + '/api/openocean');
     url.searchParams.set('endpoint', endpoint);
+    url.searchParams.set('chain', config.network.chainId.toString());
     return url;
   }
 };
