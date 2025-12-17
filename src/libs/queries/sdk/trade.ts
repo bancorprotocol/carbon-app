@@ -51,34 +51,27 @@ export const useTradeQuery = () => {
   } = useStore();
   return useMutation({
     mutationFn: async (params: TradeParams) => {
-      const { calcDeadline, calcMinReturn, calcMaxInput, isTradeBySource } =
-        params;
+      const { calcDeadline, calcMinReturn, calcMaxInput } = params;
 
       if (config.ui.useOpenocean) {
-        const inToken = isTradeBySource ? params.source : params.target;
-        const outToken = isTradeBySource ? params.target : params.source;
-        const amount = isTradeBySource
-          ? params.sourceInput
-          : params.targetInput;
         const gasPriceDecimals = await openocean.gasPrice();
         const tx = await openocean.swap({
           account: user,
-          inTokenAddress: inToken.address,
-          outTokenAddress: outToken.address,
-          amountDecimals: toDecimal(amount, inToken),
+          inTokenAddress: params.source.address,
+          outTokenAddress: params.target.address,
+          amountDecimals: toDecimal(params.sourceInput, params.source),
           gasPriceDecimals: gasPriceDecimals.toString(),
           slippage: Number(settings.slippage),
           referrer: config.addresses.carbon.vault,
           referrerFee: '0.25',
         });
-        const { value, gasPrice, from, to, estimatedGas, data } = tx;
         return sendTransaction({
-          from,
-          to,
-          gasPrice: BigInt(gasPrice),
-          value: BigInt(value),
-          gasLimit: BigInt(estimatedGas),
-          data: data,
+          from: tx.from,
+          to: tx.to,
+          gasPrice: BigInt(tx.gasPrice),
+          value: BigInt(tx.value),
+          gasLimit: BigInt(tx.estimatedGas),
+          data: tx.data,
         });
       } else {
         let unsignedTx: PopulatedTransaction;
