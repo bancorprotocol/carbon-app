@@ -202,7 +202,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         <button
           onClick={swapTokens}
           type="button"
-          className="grid place-items-center place-self-center size-40 -my-12 border-2 border-main-900 btn-on-background p-0 rounded-full z-0"
+          className="grid place-items-center place-self-center size-40 -my-12 border-2 border-main-900 btn-on-background p-0 rounded-full z-1 bg-main-600 hover:bg-main-500"
         >
           <IconArrow className="size-16" />
         </button>
