@@ -2,20 +2,31 @@ import config from 'config';
 import { NATIVE_TOKEN_ADDRESS } from './tokens';
 const apiUrl = `https://open-api.openocean.finance/v4/${config.network.chainId}/`;
 
+const getUrl = (endpoint: string) => {
+  return new URL(apiUrl + endpoint);
+  // if (import.meta.env.PROD) {
+  //   // In production send to cloudflare proxy
+  //   const url = new URL('/api/openocean');
+  //   url.searchParams.set('endpoint', endpoint);
+  //   return url;
+  // } else {
+  //   return new URL(apiUrl + endpoint);
+  // }
+};
+
 // TODO: implement with cloudflare function
 const get = async <T>(
   endpoint: string,
   params: object = {},
   abortSignal?: AbortSignal,
 ): Promise<T> => {
-  const url = new URL(apiUrl + endpoint);
+  const url = getUrl(endpoint);
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined) {
       url.searchParams.set(key, value);
     }
   }
-  url.searchParams.set('referrer', config.addresses.carbon.vault);
-  url.searchParams.set('referrerFee', '0.25');
+
   const response = await fetch(url, { signal: abortSignal });
   const result = await response.json();
   if (!response.ok) {
@@ -68,6 +79,8 @@ interface SwapParams extends QuoteParams {
    * minOutput with decimals. For example, if 9.9 USDT is minOutput, use 9900000 (9.9 USDT * 10^6).
    */
   minOutput?: number;
+  /** Wallet address */
+  account?: string;
 }
 
 interface OpenOceanSwapToken {

@@ -44,7 +44,7 @@ export interface TradeParams {
 }
 
 export const useTradeQuery = () => {
-  const { sendTransaction } = useWagmi();
+  const { sendTransaction, user } = useWagmi();
   const { getTokenById } = useTokens();
   const {
     trade: { settings },
@@ -62,18 +62,23 @@ export const useTradeQuery = () => {
           : params.targetInput;
         const gasPriceDecimals = await openocean.gasPrice();
         const tx = await openocean.swap({
+          account: user,
           inTokenAddress: inToken.address,
           outTokenAddress: outToken.address,
           amountDecimals: toDecimal(amount, inToken),
           gasPriceDecimals: gasPriceDecimals.toString(),
           slippage: Number(settings.slippage),
+          referrer: config.addresses.carbon.vault,
+          referrerFee: '0.25',
         });
-        const { value, gasPrice, to, estimatedGas } = tx;
+        const { value, gasPrice, from, to, estimatedGas, data } = tx;
         return sendTransaction({
+          from,
           to,
           gasPrice: BigInt(gasPrice),
           value: BigInt(value),
           gasLimit: BigInt(estimatedGas),
+          data: data,
         });
       } else {
         let unsignedTx: PopulatedTransaction;
