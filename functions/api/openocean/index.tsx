@@ -1,7 +1,12 @@
-import config from 'config';
 const proOrigin = 'https://open-api-pro.openocean.finance';
 
 const allowedEndpoints = ['reverseQuote', 'quote', 'swap'];
+
+const vaults = {
+  sei: '0x773B75CfB146bd5d1095fa9d6d45637f02B05119',
+  celo: '0x8cE318919438982514F9f479FDfB40D32C6ab749',
+  tac: '0xBBAFF3Bf6eC4C15992c0Fb37F12491Fd62C5B496',
+};
 
 export const onRequestGet: PagesFunction = async ({ request }) => {
   const apikey = process.env.OPENOCEAN_APIKEY;
@@ -16,8 +21,11 @@ export const onRequestGet: PagesFunction = async ({ request }) => {
   }
   const url = new URL(proOrigin + endpoint);
 
+  const network = import.meta.env.VITE_NETWORK as keyof typeof vaults;
+  const vault = vaults[network] || '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4';
+
   if (endpoint === 'swap') {
-    url.searchParams.set('referrer', config.addresses.carbon.vault);
+    url.searchParams.set('referrer', vault);
     url.searchParams.set('referrerFee', '0.25');
   }
 
