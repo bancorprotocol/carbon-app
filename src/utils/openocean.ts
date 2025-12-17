@@ -1,26 +1,24 @@
 import config from 'config';
 import { NATIVE_TOKEN_ADDRESS } from './tokens';
-// const apiUrl = `https://open-api.openocean.finance/v4/${config.network.chainId}/`;
+const apiUrl = `https://open-api.openocean.finance/v4/${config.network.chainId}/`;
 
-// const getUrl = (endpoint: string) => {
-//   if (import.meta.env.DEV) {
-//     return new URL(apiUrl + endpoint);
-//   } else {
-//     // In production send to cloudflare proxy
-//     const url = new URL('/api/openocean');
-//     url.searchParams.set('endpoint', endpoint);
-//     return url;
-//   }
-// };
+const getUrl = (endpoint: string) => {
+  if (import.meta.env.DEV) {
+    return new URL(apiUrl + endpoint);
+  } else {
+    // In production send to cloudflare proxy
+    const url = new URL(location.origin + '/api/openocean');
+    url.searchParams.set('endpoint', endpoint);
+    return url;
+  }
+};
 
 const get = async <T>(
   endpoint: string,
   params: object = {},
   abortSignal?: AbortSignal,
 ): Promise<T> => {
-  // TODO support public API url on dev
-  const url = new URL('/api/openocean');
-  url.searchParams.set('endpoint', endpoint);
+  const url = getUrl(endpoint);
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined) {
       url.searchParams.set(key, value);
