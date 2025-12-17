@@ -9,47 +9,54 @@ const vaults = {
 };
 
 export const onRequestGet: PagesFunction = async ({ request, env }) => {
-  const apikey = (env as any)['OPENOCEAN_APIKEY'];
-  if (!apikey) throw new Error('No API key available in cloudflare');
-  const { searchParams } = new URL(request.url);
+  try {
+    const apikey = (env as any)['OPENOCEAN_APIKEY'];
+    if (!apikey) throw new Error('No API key available in cloudflare');
+    const { searchParams } = new URL(request.url);
 
-  // Get endpoint sent by the client & remove it
-  const endpoint = searchParams.get('endpoint') ?? '';
-  searchParams.delete('endpoint');
-  if (allowedEndpoints.includes(endpoint)) {
-    throw new Error('Unsupported endpoint');
+    // Get endpoint sent by the client & remove it
+    const endpoint = searchParams.get('endpoint') ?? '';
+    searchParams.delete('endpoint');
+    if (allowedEndpoints.includes(endpoint)) {
+      throw new Error('Unsupported endpoint');
+    }
+    const url = new URL(proOrigin + endpoint);
+
+    const network = (env as any).VITE_NETWORK as keyof typeof vaults;
+    const vault =
+      vaults[network] || '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4';
+
+    if (endpoint === 'swap') {
+      url.searchParams.set('referrer', vault);
+      url.searchParams.set('referrerFee', '0.25');
+    }
+
+    const response = await fetch(url, {
+      headers: {
+        apikey,
+        'Content-Type': 'application/json',
+      },
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      const error = (result as { error?: string }).error;
+      throw new Error(
+        error ||
+          `Response was not okay. ${response.statusText} response received.`,
+      );
+    }
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+        'Cache-Control': 'no-store, no-cache, max-age=0, must-revalidate',
+        Expires: '0',
+        Pragma: 'no-cache',
+      },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: (err as Error).message }), {
+      status: 500,
+    });
   }
-  const url = new URL(proOrigin + endpoint);
-
-  const network = (env as any).VITE_NETWORK as keyof typeof vaults;
-  const vault = vaults[network] || '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4';
-
-  if (endpoint === 'swap') {
-    url.searchParams.set('referrer', vault);
-    url.searchParams.set('referrerFee', '0.25');
-  }
-
-  const response = await fetch(url, {
-    headers: {
-      apikey,
-      'Content-Type': 'application/json',
-    },
-  });
-  const result = await response.json();
-  if (!response.ok) {
-    const error = (result as { error?: string }).error;
-    throw new Error(
-      error ||
-        `Response was not okay. ${response.statusText} response received.`,
-    );
-  }
-  return new Response(JSON.stringify(result), {
-    status: 200,
-    headers: {
-      'content-type': 'application/json',
-      'Cache-Control': 'no-store, no-cache, max-age=0, must-revalidate',
-      Expires: '0',
-      Pragma: 'no-cache',
-    },
-  });
 };
