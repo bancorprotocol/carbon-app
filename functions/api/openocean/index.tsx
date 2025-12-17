@@ -8,8 +8,8 @@ const vaults = {
   tac: '0xBBAFF3Bf6eC4C15992c0Fb37F12491Fd62C5B496',
 };
 
-export const onRequestGet: PagesFunction = async ({ request }) => {
-  const apikey = process.env.OPENOCEAN_APIKEY;
+export const onRequestGet: PagesFunction = async ({ request, env }) => {
+  const apikey = (env as any)['OPENOCEAN_APIKEY'];
   if (!apikey) throw new Error('No API key available in cloudflare');
   const { searchParams } = new URL(request.url);
 
@@ -21,7 +21,7 @@ export const onRequestGet: PagesFunction = async ({ request }) => {
   }
   const url = new URL(proOrigin + endpoint);
 
-  const network = import.meta.env.VITE_NETWORK as keyof typeof vaults;
+  const network = (env as any).VITE_NETWORK as keyof typeof vaults;
   const vault = vaults[network] || '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4';
 
   if (endpoint === 'swap') {
