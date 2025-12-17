@@ -59,6 +59,7 @@ export const commonConfig: AppConfig = {
       proxy: '0x188F6e49FC62c0D73173b11e7BD39C36cD3d730f',
       smartAccountFactory: '0x070820Ed658860f77138d71f74EfbE173775895b',
     },
+    openocean: '',
   },
   utils: {
     multicall3: {

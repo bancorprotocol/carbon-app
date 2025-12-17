@@ -73,6 +73,7 @@ export const commonConfig: AppConfig = {
       batcher: '0xa977879684eece2015ae879dc120c8a1c00718f7',
       vault: '0x8cE318919438982514F9f479FDfB40D32C6ab749',
     },
+    openocean: '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64',
   },
   utils: {
     multicall3: {

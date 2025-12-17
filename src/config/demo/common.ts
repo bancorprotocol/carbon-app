@@ -44,6 +44,7 @@ export const commonConfig: AppConfig = {
       voucher: '',
       vault: '',
     },
+    openocean: '',
   },
   utils: {
     multicall3: {
