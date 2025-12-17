@@ -48,6 +48,7 @@ export const commonConfig: AppConfig = {
       voucher: '0x907f03ae649581ebff369a21c587cb8f154a0b84',
       vault: '',
     },
+    openocean: '',
   },
   utils: {
     multicall3: {
