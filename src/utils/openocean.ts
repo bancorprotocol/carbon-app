@@ -200,7 +200,7 @@ const replaceNativeTokenParams = (params: QuoteParams) => {
   return params;
 };
 
-const replaceNativeTokenResult = (result: OpenOceanQuoteResult) => {
+const replaceNativeTokenQuoteResult = (result: OpenOceanQuoteResult) => {
   if (result.path.from === nativeToken.to) {
     result.path.from = nativeToken.from;
   }
@@ -224,24 +224,23 @@ export const openocean = {
   quote: async (params: QuoteParams) => {
     const sanitized = replaceNativeTokenParams(params);
     const result = await get<OpenOceanQuoteResult>('quote', sanitized);
-    return replaceNativeTokenResult(result);
+    return replaceNativeTokenQuoteResult(result);
   },
   reverseQuote: async (params: QuoteParams) => {
     const sanitized = replaceNativeTokenParams(params);
     const result = await get<OpenOceanQuoteResult>('reverseQuote', sanitized);
-    return replaceNativeTokenResult(result);
+    return replaceNativeTokenQuoteResult(result);
   },
-  swap: (params: SwapParams) => get<OpenOceanSwapResult>('swap', params),
+  swap: async (params: SwapParams) => {
+    const sanitized = replaceNativeTokenParams(params);
+    return get<OpenOceanSwapResult>('swap', sanitized);
+  },
   gasPrice: async () => {
     const { standard } = await get<GasPriceResult>('gasPrice');
     if (typeof standard === 'number') {
-      return { gasPrice: BigInt(standard) };
+      return standard;
     } else {
-      return {
-        gasPrice: BigInt(standard.legacyGasPrice),
-        maxPriorityFeePerGas: BigInt(standard.maxPriorityFeePerGas),
-        maxFeePerGas: BigInt(standard.maxFeePerGas),
-      };
+      return standard.legacyGasPrice;
     }
   },
 };

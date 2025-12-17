@@ -54,25 +54,23 @@ export const useTradeQuery = () => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
 
       if (config.ui.useOpenocean) {
-        const prices = await openocean.gasPrice();
+        const gasPrice = await openocean.gasPrice();
         const tx = await openocean.swap({
           account: user,
           inTokenAddress: params.source.address,
           outTokenAddress: params.target.address,
           amountDecimals: toDecimal(params.sourceInput, params.source),
-          gasPriceDecimals: prices.gasPrice.toString(),
+          gasPriceDecimals: gasPrice.toString(),
           slippage: Number(settings.slippage),
           // Overriden in the backend on production
           referrer: config.addresses.carbon.vault,
           referrerFee: '0.25',
         });
-
         return sendTransaction({
           from: tx.from,
           to: tx.to,
           value: BigInt(tx.value),
           data: tx.data,
-          ...prices,
         });
       } else {
         let unsignedTx: PopulatedTransaction;
@@ -158,13 +156,13 @@ export const useGetTradeData = ({
       if (config.ui.useOpenocean) {
         const inToken = isTradeBySource ? sourceToken : targetToken;
         const outToken = isTradeBySource ? targetToken : sourceToken;
-        const prices = await openocean.gasPrice();
+        const gasPrice = await openocean.gasPrice();
         const params = {
           amountDecimals: toDecimal(input, inToken),
           inTokenAddress: inToken.address,
           outTokenAddress: outToken.address,
           slippage: Number(trade.settings.slippage),
-          gasPriceDecimals: prices.gasPrice.toString(),
+          gasPriceDecimals: gasPrice.toString(),
         };
         const res = isTradeBySource
           ? await openocean.quote(params)
