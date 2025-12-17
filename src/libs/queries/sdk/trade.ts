@@ -54,24 +54,26 @@ export const useTradeQuery = () => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
 
       if (config.ui.useOpenocean) {
-        const gasPriceDecimals = await openocean.gasPrice();
+        const prices = await openocean.gasPrice();
         const tx = await openocean.swap({
           account: user,
           inTokenAddress: params.source.address,
           outTokenAddress: params.target.address,
           amountDecimals: toDecimal(params.sourceInput, params.source),
-          gasPriceDecimals: gasPriceDecimals.toString(),
+          gasPriceDecimals: prices.gasPrice.toString(),
           slippage: Number(settings.slippage),
+          // Overriden in the backend on production
           referrer: config.addresses.carbon.vault,
           referrerFee: '0.25',
         });
+
         return sendTransaction({
           from: tx.from,
           to: tx.to,
-          gasPrice: BigInt(tx.gasPrice),
           value: BigInt(tx.value),
           gasLimit: BigInt(tx.estimatedGas),
           data: tx.data,
+          ...prices,
         });
       } else {
         let unsignedTx: PopulatedTransaction;
