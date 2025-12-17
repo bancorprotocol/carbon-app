@@ -24,6 +24,11 @@ export const onRequestGet: PagesFunction = async ({ request, env }) => {
   const network = (env as any).VITE_NETWORK as keyof typeof vaults;
   const vault = vaults[network] || '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4';
 
+  // Copy search params from request to openocean
+  for (const [key, value] of searchParams.entries()) {
+    url.searchParams.set(key, value);
+  }
+
   if (endpoint === 'swap') {
     url.searchParams.set('referrer', vault);
     url.searchParams.set('referrerFee', '0.25');
