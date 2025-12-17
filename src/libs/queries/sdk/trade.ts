@@ -71,7 +71,6 @@ export const useTradeQuery = () => {
           from: tx.from,
           to: tx.to,
           value: BigInt(tx.value),
-          gasLimit: BigInt(tx.estimatedGas),
           data: tx.data,
           ...prices,
         });
