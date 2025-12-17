@@ -19,7 +19,7 @@ export const onRequestGet: PagesFunction = async ({ request, env }) => {
   if (!allowedEndpoints.includes(endpoint)) {
     throw new Error('Unsupported endpoint');
   }
-  const url = new URL(proOrigin + endpoint);
+  const url = new URL(proOrigin + '/' + endpoint);
 
   const network = (env as any).VITE_NETWORK as keyof typeof vaults;
   const vault = vaults[network] || '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4';
@@ -28,6 +28,8 @@ export const onRequestGet: PagesFunction = async ({ request, env }) => {
     url.searchParams.set('referrer', vault);
     url.searchParams.set('referrerFee', '0.25');
   }
+
+  console.log('OpenOcean', url);
 
   const response = await fetch(url, {
     headers: {
