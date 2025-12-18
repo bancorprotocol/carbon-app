@@ -37,8 +37,6 @@ export const onRequestGet: PagesFunction = async ({ request, env }) => {
     url.searchParams.set('referrerFee', '0.25');
   }
 
-  console.log('OpenOcean', url);
-
   const response = await fetch(url, {
     headers: {
       apikey,
