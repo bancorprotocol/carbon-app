@@ -11,7 +11,7 @@ import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
 import { SDKProvider } from 'libs/sdk/provider';
-import { init as initTelegramSDK } from '@tma.js/sdk';
+import { init as initTelegramSDK, isTMA } from '@tma.js/sdk';
 import TelegramAnalytics from '@telegram-apps/analytics';
 
 const root = ReactDOM.createRoot(
@@ -28,7 +28,7 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
   }
 };
 
-if (config.network.name === 'TON') {
+if (config.network.name === 'TON' && isTMA()) {
   try {
     initTelegramSDK();
     TelegramAnalytics.init({
