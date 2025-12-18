@@ -154,8 +154,8 @@
   -webkit-text-fill-color: transparent;
 }
 @utility border-gradient {
-  background: linear-gradient(var(--color-black), var(--color-black)) padding-box, var(--main-gradient) border-box;
-  border-width: 2px;
+  background: linear-gradient(var(--color-main-800), var(--color-main-800)) padding-box, var(--main-gradient) border-box;
+  border-width: 1px;
   border-color: transparent;
 }
 

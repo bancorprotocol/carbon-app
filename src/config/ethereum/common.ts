@@ -98,7 +98,9 @@ export const commonConfig: AppConfig = {
       carbonController: '0xC537e898CD774e2dCBa3B14Ea6f34C93d5eA45e1',
       voucher: '0x3660F04B79751e31128f6378eAC70807e38f554E',
       batcher: '0x0199f3A6C4B192B9f9C3eBE31FBC535CdD4B7D4e',
+      vault: '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4',
     },
+    openocean: '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64',
   },
   utils: {
     multicall3: {
@@ -208,5 +210,6 @@ export const commonConfig: AppConfig = {
     showCart: true,
     // rewardUrl: 'https://app.merkl.xyz/?chain=1&protocol=carbon',
     // walkthroughId: 'i2ok96zcpzqw',
+    useOpenocean: !navigator.webdriver, // use sdk in E2E
   },
 };

@@ -6,7 +6,7 @@ export const TokensOverlap = ({
   size,
   maxLogos = 4,
 }: {
-  tokens: Token[];
+  tokens: (Token | undefined)[];
   maxLogos?: number;
   className?: string;
   size: number;
@@ -18,10 +18,10 @@ export const TokensOverlap = ({
         <LogoImager
           width={size}
           height={size}
-          key={token.symbol + index}
-          src={token.logoURI}
+          key={index + (token?.symbol || '')}
+          src={token?.logoURI}
           alt="Token Logo"
-          title={token.symbol}
+          title={token?.symbol}
           className="max-w-none border border-black bg-main-900"
           style={{
             zIndex: list.length - index,

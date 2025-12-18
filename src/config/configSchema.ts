@@ -78,6 +78,7 @@ export const AppConfigSchema = v.object({
       carbonController: v.string(),
       voucher: v.string(),
       batcher: v.optional(v.string()),
+      vault: v.string(),
     }),
     tac: v.optional(
       v.object({
@@ -85,6 +86,7 @@ export const AppConfigSchema = v.object({
         smartAccountFactory: v.string(),
       }),
     ),
+    openocean: v.string(),
   }),
   utils: v.union([
     v.partial(
@@ -138,5 +140,6 @@ export const AppConfigSchema = v.object({
       }),
     ),
     walkthroughId: v.optional(v.string()),
+    useOpenocean: v.optional(v.boolean()),
   }),
 });

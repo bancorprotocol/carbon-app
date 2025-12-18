@@ -10,6 +10,10 @@ import { Token } from 'libs/tokens';
 import { useApproval } from 'hooks/useApproval';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 
+const spender = config.ui.useOpenocean
+  ? config.addresses.openocean
+  : config.addresses.carbon.carbonController;
+
 type TradeProps = {
   source: Token;
   target: Token;
@@ -78,8 +82,8 @@ export const useTradeAction = ({
 
     return mutation.mutate(
       {
-        sourceAddress: source.address,
-        targetAddress: target.address,
+        source,
+        target,
         isTradeBySource,
         tradeActions,
         sourceInput,
@@ -107,11 +111,7 @@ export const useTradeAction = ({
             queryKey: QueryKey.balance(user, target.address),
           });
           cache.invalidateQueries({
-            queryKey: QueryKey.approval(
-              user,
-              source.address,
-              config.addresses.carbon.carbonController,
-            ),
+            queryKey: QueryKey.approval(user, source.address, spender),
           });
         },
         onError: (e: any) => {
@@ -125,7 +125,7 @@ export const useTradeAction = ({
     () => [
       {
         ...source,
-        spender: config.addresses.carbon.carbonController,
+        spender: spender,
         amount: isTradeBySource ? sourceInput : calcMaxInput(sourceInput),
       },
     ],
