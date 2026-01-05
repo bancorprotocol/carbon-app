@@ -82,6 +82,22 @@
       "symbol": "TPS002",
       "decimals": 18,
       "logoURI": "/tokens/coti/0x64ec0E875b00DD50A4661462040E7C35084BcB58.svg"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0xe757Ca19d2c237AA52eBb1d2E8E4368eeA3eb331",
+      "name": "Wrapped ADA",
+      "symbol": "wADA",
+      "decimals": 6,
+      "logoURI": "https://chainport-public-files-prod.s3.amazonaws.com/24e3b041-ef88-4eaf-9c7d-4f99940826f3.svg"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0xfA6f73446b17A97a56e464256DA54AD43c2Cbc3E",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "decimals": 6,
+      "logoURI": "/tokens/coti/0xfA6f73446b17A97a56e464256DA54AD43c2Cbc3E.svg"
     }
   ],
   "version": {
