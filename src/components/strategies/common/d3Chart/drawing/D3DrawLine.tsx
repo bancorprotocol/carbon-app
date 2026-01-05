@@ -170,7 +170,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({
       cx={xScale(x)! + xScale.bandwidth() / 2}
       cy={yScale(y)}
       r="5"
-      fill={`var(--${color})`}
+      fill={`var(--color-${color})`}
       className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
@@ -214,7 +214,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({
           x2={xScale(drawing.points[1].x)! + xScale.bandwidth() / 2}
           y1={yScale(drawing.points[0].y)}
           y2={yScale(drawing.points[1].y)}
-          stroke={`var(--${color})`}
+          stroke={`var(--color-${color})`}
           strokeWidth="2"
         />
         {circles}
