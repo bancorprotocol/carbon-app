@@ -54,14 +54,13 @@ export const useTradeQuery = () => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
 
       if (config.ui.useOpenocean) {
-        if (!memorizeGasPrice) throw new Error('Gas Price not set previously');
-        // const gasPrice = await openocean.gasPrice();
+        const gasPrice = await openocean.gasPrice();
         const tx = await openocean.swap({
           account: user,
           inTokenAddress: params.source.address,
           outTokenAddress: params.target.address,
           amountDecimals: toDecimal(params.sourceInput, params.source),
-          gasPriceDecimals: memorizeGasPrice.toString(),
+          gasPriceDecimals: gasPrice.toString(),
           slippage: Number(settings.slippage),
           // Overriden in the backend on production
           referrer: config.addresses.carbon.vault,
@@ -122,10 +121,6 @@ const toDecimal = (amount: string, token: Token) => {
   return inDecimals.toString();
 };
 
-// TODO: Hack to test if gasPrice have an impact on the result
-// remove this after the test.
-let memorizeGasPrice = 0;
-
 export const useGetTradeData = ({
   isTradeBySource,
   input,
@@ -161,9 +156,7 @@ export const useGetTradeData = ({
       if (config.ui.useOpenocean) {
         const inToken = isTradeBySource ? sourceToken : targetToken;
         const outToken = isTradeBySource ? targetToken : sourceToken;
-        if (memorizeGasPrice) memorizeGasPrice = 0;
         const gasPrice = await openocean.gasPrice();
-        memorizeGasPrice = gasPrice;
         const params = {
           amountDecimals: toDecimal(input, inToken),
           inTokenAddress: inToken.address,

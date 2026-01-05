@@ -17,12 +17,13 @@ export const useGetTradeLiquidity = (base?: string, quote?: string) => {
       if (config.ui.useOpenocean) {
         const baseToken = getTokenById(base);
         if (!baseToken) return '';
+        const gasPrice = await openocean.gasPrice();
         // Try to trade one token. Since liquidity is only checking if > 0 it should be fine.
         const res = await openocean.quote({
           amountDecimals: (10 ** baseToken.decimals).toString(),
           inTokenAddress: base!,
           outTokenAddress: quote!,
-          gasPriceDecimals: '10000000', // needed
+          gasPriceDecimals: gasPrice.toString(),
         });
         return res.outAmount;
       } else {
