@@ -54,8 +54,10 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
       if (!user || !signer) throw new Error('No user connected');
       try {
         return await batchTransaction(user, tx);
-      } catch (err) {
-        if ((err as any).code === 5750) throw err;
+      } catch (err: any) {
+        // Throw if error comes from EOA.
+        // TODO: find a cleaner solution
+        if ('code' in err) throw err;
         return signer!.sendTransaction(tx);
       }
     },

@@ -74,7 +74,6 @@ export const useBatchTransaction = () => {
   const { Token } = useContract();
   const batchTransaction = useCallback(
     async (user: string, tx: TransactionRequest) => {
-      console.log(user, tx);
       if (!window.ethereum) {
         throw new Error('No Eip1193Provider found');
       }
@@ -114,15 +113,10 @@ export const useBatchTransaction = () => {
       }
 
       const chainId = `0x${config.network.chainId.toString(16)}`;
-      console.log({
-        method: 'wallet_getCapabilities',
-        params: [user, [chainId]],
-      });
       const res: Record<string, Capabilities> = await window.ethereum.request({
         method: 'wallet_getCapabilities',
         params: [user, [chainId]],
       });
-      console.log(res);
       const atomic = res[chainId]?.atomic.status;
       if (!atomic || atomic === 'unsupported') {
         throw new Error('Batch transaction not supported');
@@ -143,25 +137,22 @@ export const useBatchTransaction = () => {
           ],
         },
       ];
-      console.log(params);
       const { id } = await window.ethereum.request({
         method: 'wallet_sendCalls',
         params: params,
       });
-      console.log({ id });
+      const result = await repeat(async () => {
+        const res: CallStatus = await window.ethereum.request({
+          method: 'wallet_getCallsStatus',
+          params: [id],
+        });
+        if (res.status >= 400) return res;
+        if (res.status === 200) return res;
+      });
+      const hash = result?.receipts[0].transactionHash;
       return {
-        hash: '',
-        wait: async () => {
-          const result = await repeat(async () => {
-            const res: CallStatus = await window.ethereum.request({
-              method: 'wallet_getCallsStatus',
-              params: [id],
-            });
-            console.log(res);
-            if (res.status === 200) return true;
-          });
-          return result || false;
-        },
+        hash: hash || '',
+        wait: async () => true,
       };
     },
     [Token, getTokenById],
