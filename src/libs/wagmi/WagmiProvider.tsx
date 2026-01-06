@@ -7,6 +7,7 @@ import { CarbonWagmiCTX } from './context';
 import { Contract, TransactionRequest } from 'ethers';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 import { useModal } from 'hooks/useModal';
+import { useBatchTransaction } from './batch-transaction';
 
 // ********************************** //
 // WAGMI PROVIDER
@@ -45,10 +46,20 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
     setImposterAccount,
   });
 
+  const { batchTransaction } = useBatchTransaction();
+
   const openConnect = useCallback(() => openModal('wallet'), [openModal]);
   const sendTransaction = useCallback(
-    (tx: TransactionRequest) => signer!.sendTransaction(tx),
-    [signer],
+    async (tx: TransactionRequest) => {
+      if (!user || !signer) throw new Error('No user connected');
+      try {
+        return await batchTransaction(user, tx);
+      } catch (err) {
+        if ((err as any).code === 5750) throw err;
+        return signer!.sendTransaction(tx);
+      }
+    },
+    [user, batchTransaction, signer],
   );
   const getBalance = useCallback(
     (address: string) => {

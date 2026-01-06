@@ -399,6 +399,7 @@ export const useCreateStrategyQuery = () => {
         return new SafeDecimal(amount).mul(10 ** token.decimals).toString();
       };
       unsignedTx.customData = {
+        spender: config.addresses.carbon.carbonController,
         assets: [
           {
             address: base,
@@ -435,6 +436,7 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
         return new SafeDecimal(delta).mul(10 ** token.decimals).toString();
       };
       unsignedTx.customData = {
+        spender: config.addresses.carbon.carbonController,
         assets: [
           {
             address: strategy.base.address,

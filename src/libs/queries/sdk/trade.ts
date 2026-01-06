@@ -7,6 +7,7 @@ import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
+import config from 'config';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionBNStr[];
@@ -76,7 +77,10 @@ export const useTradeQuery = () => {
           rawAmount: amount,
         },
       ];
-      unsignedTx.customData = { assets };
+      unsignedTx.customData = {
+        spender: config.addresses.carbon.carbonController,
+        assets,
+      };
       return sendTransaction(unsignedTx);
     },
   });
