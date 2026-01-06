@@ -52,7 +52,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
         y={dms.boundedHeight}
         height={dms.marginBottom}
         width={max - min}
-        fill={`var(--${props.color})`}
+        fill={`var(--color-${props.color})`}
         fillOpacity="0.2"
       />
       <g transform={`translate(${min}, ${y})`}>
@@ -63,7 +63,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
           height={handleDms.height}
           rx="4"
           ry="4"
-          fill={`var(--${props.color})`}
+          fill={`var(--color-${props.color})`}
         />
         <text
           x={xScale.bandwidth() / 2}
@@ -84,7 +84,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
           height={handleDms.height}
           rx="4"
           ry="4"
-          fill={`var(--${props.color})`}
+          fill={`var(--color-${props.color})`}
         />
         <text
           x={xScale.bandwidth() / 2}
@@ -120,7 +120,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
         y={max}
         width={dms.marginRight}
         height={min - max}
-        fill={`var(--${props.color})`}
+        fill={`var(--color-${props.color})`}
         fillOpacity="0.2"
       />
       <g transform={`translate(${x}, ${min})`}>
@@ -131,7 +131,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           height={handleDms.height}
           rx="4"
           ry="4"
-          fill={`var(--${props.color})`}
+          fill={`var(--color-${props.color})`}
         />
         <text
           x={dms.marginRight / 2}
@@ -152,7 +152,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           height={handleDms.height}
           rx="4"
           ry="4"
-          fill={`var(--${props.color})`}
+          fill={`var(--color-${props.color})`}
         />
         <text
           x={dms.marginRight / 2}

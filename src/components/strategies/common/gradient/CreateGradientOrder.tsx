@@ -66,7 +66,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
     <div className="grid gap-16">
       <h2
         className="text-16 capitalize"
-        style={{ color: `var(--${order.direction})` }}
+        style={{ color: `var(--color-${order.direction})` }}
       >
         {order.direction} Overview
       </h2>

@@ -14,7 +14,7 @@ export const BaseToast: FC<Props> = ({ id, children, color = 'primary' }) => {
     <li
       id={id}
       style={{
-        backgroundImage: `linear-gradient(to right, transparent, var(--${color}))`,
+        backgroundImage: `linear-gradient(to right, transparent, var(--color-${color}))`,
       }}
       className="bg-main-900 text-14 rounded-sm flex items-center border border-white/10"
     >
