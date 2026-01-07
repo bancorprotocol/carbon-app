@@ -71,15 +71,14 @@ export const useTradeQuery = () => {
       const source = getTokenById(params.sourceAddress);
       const powerDecimal = new SafeDecimal(10).pow(source!.decimals);
       const amount = new SafeDecimal(baseAmount).mul(powerDecimal).toFixed(0);
-      const assets = [
-        {
-          address: params.sourceAddress,
-          rawAmount: amount,
-        },
-      ];
       unsignedTx.customData = {
         spender: config.addresses.carbon.carbonController,
-        assets,
+        assets: [
+          {
+            address: params.sourceAddress,
+            rawAmount: amount,
+          },
+        ],
       };
       return sendTransaction(unsignedTx);
     },

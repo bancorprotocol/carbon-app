@@ -136,14 +136,13 @@ export const useCreateStrategy = (props: Props) => {
       });
     }
 
-    // TODO: reimplement it somehow
-    // if (approval.approvalRequired) {
-    //   return openModal('txConfirm', {
-    //     approvalTokens,
-    //     onConfirm,
-    //     buttonLabel: 'Create',
-    //   });
-    // }
+    if (approval.approvalRequired) {
+      return openModal('txConfirm', {
+        approvalTokens,
+        onConfirm,
+        buttonLabel: 'Create',
+      });
+    }
     return onConfirm();
   };
 

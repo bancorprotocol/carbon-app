@@ -15,10 +15,10 @@ import { carbonSDK } from 'libs/sdk';
 import { useNavigate } from '@tanstack/react-router';
 import { useNotifications } from 'hooks/useNotifications';
 import { AnyCartStrategy } from 'components/strategies/common/types';
-import style from 'components/strategies/common/form.module.css';
-import config from 'config';
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
+import style from 'components/strategies/common/form.module.css';
+import config from 'config';
 
 const batcher = config.addresses.carbon.batcher;
 const getApproveTokens = (strategies: AnyCartStrategy[]) => {
@@ -130,6 +130,7 @@ export const CartPage = () => {
           amounts[quote] = amounts[quote].add(buyAmount);
         }
         unsignedTx.customData = {
+          spender: batcher,
           assets: Object.entries(amounts).map(([address, amount]) => ({
             address,
             rawAmount: amount.toString(),

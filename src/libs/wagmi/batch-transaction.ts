@@ -1,4 +1,4 @@
-import { TransactionRequest } from 'ethers';
+import { BigNumberish, TransactionRequest } from 'ethers';
 import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
 import { useCallback } from 'react';
@@ -26,11 +26,11 @@ interface Call {
 
 interface CallStatus {
   /**
-   * 100 - Pending
-   * 200 - Confirmed
-   * 400 - Failed offchain
-   * 500 - Reverted
-   * 600 - Partially reverted
+   * - 100: Pending
+   * - 200: Confirmed
+   * - 400: Failed offchain
+   * - 500: Reverted
+   * - 600: Partially reverted
    */
   status: 100 | 200 | 400 | 500 | 600;
   version: string;
@@ -63,7 +63,7 @@ async function repeat<T>(cb: () => Promise<T>): Promise<T> {
       // Do nothing
     } finally {
       --remaining;
-      await new Promise((res) => setTimeout(res, 5_000));
+      await new Promise((res) => setTimeout(res, 1_000));
     }
   }
   throw new Error('Too many attempts');
@@ -72,13 +72,33 @@ async function repeat<T>(cb: () => Promise<T>): Promise<T> {
 export const useBatchTransaction = () => {
   const { getTokenById } = useTokens();
   const { Token } = useContract();
+  // Note: can can't access user from useWagmi because `useBatchTransaction` is used in useWagmi
+
+  // Move that into a query
+  const canBatchTransaction = useCallback(async (user: string) => {
+    const chainId = `0x${config.network.chainId.toString(16)}`;
+    const res: Record<string, Capabilities> = await window.ethereum.request({
+      method: 'wallet_getCapabilities',
+      params: [user, [chainId]],
+    });
+    console.log(user, res);
+    const atomic = res[chainId]?.atomic.status;
+    return atomic === 'ready' || atomic === 'supported';
+  }, []);
+
   const batchTransaction = useCallback(
     async (user: string, tx: TransactionRequest) => {
+      console.log('Try batch tx', user, window.ethereum);
+      if (!user) {
+        throw new Error('No user connected');
+      }
       if (!window.ethereum) {
         throw new Error('No Eip1193Provider found');
       }
-      const toHexValue = (value: bigint = BigInt(0)) =>
-        `0x${value.toString(16)}`;
+      const toHexValue = (value?: BigNumberish | null) => {
+        if (!value) return '0x0';
+        return `0x${value.toString(16)}`;
+      };
       const calls: Call[] = [];
       const spender = tx.customData.spender as string;
       for (const asset of tx.customData?.assets ?? []) {
@@ -112,15 +132,11 @@ export const useBatchTransaction = () => {
         }
       }
 
-      const chainId = `0x${config.network.chainId.toString(16)}`;
-      const res: Record<string, Capabilities> = await window.ethereum.request({
-        method: 'wallet_getCapabilities',
-        params: [user, [chainId]],
-      });
-      const atomic = res[chainId]?.atomic.status;
-      if (!atomic || atomic === 'unsupported') {
+      const canBatch = await canBatchTransaction(user);
+      if (!canBatch) {
         throw new Error('Batch transaction not supported');
       }
+      const chainId = `0x${config.network.chainId.toString(16)}`;
       const params = [
         {
           version: '2.0.0',
@@ -131,12 +147,13 @@ export const useBatchTransaction = () => {
             ...calls,
             {
               to: tx.to,
-              value: `0x${tx.value?.toString(16)}`,
+              value: toHexValue(tx.value),
               data: tx.data,
             },
           ],
         },
       ];
+      console.log(params);
       const { id } = await window.ethereum.request({
         method: 'wallet_sendCalls',
         params: params,
@@ -155,8 +172,8 @@ export const useBatchTransaction = () => {
         wait: async () => true,
       };
     },
-    [Token, getTokenById],
+    [Token, canBatchTransaction, getTokenById],
   );
 
-  return { batchTransaction };
+  return { batchTransaction, canBatchTransaction };
 };
