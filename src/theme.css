@@ -46,9 +46,9 @@
   --color-main-950: oklch(0.1 0.02 var(--hue));
   
   --color-primary: oklch(0.8 0.3 var(--hue));
-  --color-green: oklch(0.80 0.2 159.5);
-  --color-secondary: oklch(0.80 0.2 214.3);
-  --color-tertiary: oklch(0.80 0.2 184.63);
+  --color-green: oklch(0.80 0.2 160);
+  --color-secondary: oklch(0.80 0.2 215);
+  --color-tertiary: oklch(0.80 0.2 185);
 
   --color-error: oklch(0.70 0.2 var(--error-hue));
   --color-error-dark: oklch(0.50 0.3 var(--error-hue));
