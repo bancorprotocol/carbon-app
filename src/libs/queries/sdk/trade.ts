@@ -74,6 +74,7 @@ export const useTradeQuery = () => {
           value: BigInt(tx.value),
           data: tx.data,
         };
+        // Bump estimated gas because openocean isn't working correctly
         const estimateGas = await signer?.estimateGas(unsignedTx);
         if (estimateGas) {
           const limit = new SafeDecimal(estimateGas?.toString())
