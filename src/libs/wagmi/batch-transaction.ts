@@ -1,7 +1,7 @@
 import { BigNumberish, TransactionRequest } from 'ethers';
 import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 import config from 'config';
@@ -72,23 +72,25 @@ async function repeat<T>(cb: () => Promise<T>): Promise<T> {
 export const useBatchTransaction = () => {
   const { getTokenById } = useTokens();
   const { Token } = useContract();
+
+  const allowBatch = useRef<boolean>(null);
   // Note: can can't access user from useWagmi because `useBatchTransaction` is used in useWagmi
 
-  // Move that into a query
-  const canBatchTransaction = useCallback(async (user: string) => {
-    const chainId = `0x${config.network.chainId.toString(16)}`;
-    const res: Record<string, Capabilities> = await window.ethereum.request({
-      method: 'wallet_getCapabilities',
-      params: [user, [chainId]],
-    });
-    console.log(user, res);
-    const atomic = res[chainId]?.atomic.status;
-    return atomic === 'ready' || atomic === 'supported';
+  const canBatchTransactions = useCallback(async (user: string) => {
+    if (typeof allowBatch.current !== 'boolean') {
+      const chainId = `0x${config.network.chainId.toString(16)}`;
+      const res: Record<string, Capabilities> = await window.ethereum.request({
+        method: 'wallet_getCapabilities',
+        params: [user, [chainId]],
+      });
+      const atomic = res[chainId]?.atomic.status;
+      allowBatch.current = atomic === 'ready' || atomic === 'supported';
+    }
+    return allowBatch.current;
   }, []);
 
   const batchTransaction = useCallback(
-    async (user: string, tx: TransactionRequest) => {
-      console.log('Try batch tx', user, window.ethereum);
+    async (user: string, tx: TransactionRequest | TransactionRequest[]) => {
       if (!user) {
         throw new Error('No user connected');
       }
@@ -99,61 +101,67 @@ export const useBatchTransaction = () => {
         if (!value) return '0x0';
         return `0x${value.toString(16)}`;
       };
+      const txs = Array.isArray(tx) ? tx : [tx];
       const calls: Call[] = [];
-      const spender = tx.customData.spender as string;
-      for (const asset of tx.customData?.assets ?? []) {
-        const { address, rawAmount } = asset as Asset;
-        const amount = BigInt(rawAmount);
-        if (amount === 0n) continue;
-        const token = getTokenById(address);
-        if (!token) throw new Error('Could not find token');
-        if (address === NATIVE_TOKEN_ADDRESS) continue;
 
-        const allowance = await Token(address).read.allowance(user, spender);
-        const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(
-          address.toLowerCase(),
-        );
-        const { populateTransaction } = Token(address).write.approve;
-        if (isNullApprovalContract && allowance > 0) {
-          const revokeTx = await populateTransaction(spender, '0');
-          calls.push({
-            to: revokeTx.to,
-            value: toHexValue(revokeTx.value),
-            data: revokeTx.data,
-          });
-        }
-        if (allowance < amount) {
-          const approval = await populateTransaction(spender, amount);
-          calls.push({
-            to: approval.to,
-            value: toHexValue(approval.value),
-            data: approval.data,
-          });
+      // Add approvals
+      for (const transaction of txs) {
+        const assets = transaction.customData?.assets ?? [];
+        const spender = transaction.customData.spender as string;
+        for (const asset of assets) {
+          const { address, rawAmount } = asset as Asset;
+          const amount = BigInt(rawAmount);
+          if (amount === 0n) continue;
+          const token = getTokenById(address);
+          if (!token) throw new Error('Could not find token');
+          if (address === NATIVE_TOKEN_ADDRESS) continue;
+
+          const allowance = await Token(address).read.allowance(user, spender);
+          const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(
+            address.toLowerCase(),
+          );
+          const { populateTransaction } = Token(address).write.approve;
+          if (isNullApprovalContract && allowance > 0) {
+            const revokeTx = await populateTransaction(spender, '0');
+            calls.push({
+              to: revokeTx.to,
+              value: toHexValue(revokeTx.value),
+              data: revokeTx.data,
+            });
+          }
+          if (allowance < amount) {
+            const approval = await populateTransaction(spender, amount);
+            calls.push({
+              to: approval.to,
+              value: toHexValue(approval.value),
+              data: approval.data,
+            });
+          }
         }
       }
 
-      const canBatch = await canBatchTransaction(user);
+      const canBatch = await canBatchTransactions(user);
       if (!canBatch) {
         throw new Error('Batch transaction not supported');
       }
       const chainId = `0x${config.network.chainId.toString(16)}`;
+      for (const transaction of txs) {
+        if (typeof transaction.to !== 'string') continue;
+        calls.push({
+          to: transaction.to,
+          value: toHexValue(transaction.value),
+          data: transaction.data ?? '0x0',
+        });
+      }
       const params = [
         {
           version: '2.0.0',
           from: user,
           chainId: chainId,
           atomicRequired: true,
-          calls: [
-            ...calls,
-            {
-              to: tx.to,
-              value: toHexValue(tx.value),
-              data: tx.data,
-            },
-          ],
+          calls: calls,
         },
       ];
-      console.log(params);
       const { id } = await window.ethereum.request({
         method: 'wallet_sendCalls',
         params: params,
@@ -172,8 +180,8 @@ export const useBatchTransaction = () => {
         wait: async () => true,
       };
     },
-    [Token, canBatchTransaction, getTokenById],
+    [Token, canBatchTransactions, getTokenById],
   );
 
-  return { batchTransaction, canBatchTransaction };
+  return { batchTransaction, canBatchTransactions };
 };

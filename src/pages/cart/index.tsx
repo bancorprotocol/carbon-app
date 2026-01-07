@@ -17,6 +17,8 @@ import { useNotifications } from 'hooks/useNotifications';
 import { AnyCartStrategy } from 'components/strategies/common/types';
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
+import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
+import { TransactionRequest } from 'ethers';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
@@ -64,6 +66,7 @@ export const CartPage = () => {
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
   const { checkRestriction } = useRestrictedCountry();
+  const { canBatchTransactions } = useBatchTransaction();
   const cache = useQueryClient();
 
   const nav = useNavigate({ from: '/cart' });
@@ -93,51 +96,98 @@ export const CartPage = () => {
     const create = async () => {
       setConfirmation(true);
       try {
-        // TODO: support gradient
-        const params: Parameters<
-          typeof carbonSDK.batchCreateBuySellStrategies
-        >[0] = [];
-        for (const strategy of strategies) {
-          if (isGradientStrategy(strategy)) continue;
-          const { base, quote, buy, sell } = strategy;
-          params.push({
-            baseToken: base.address,
-            quoteToken: quote.address,
-            buyPriceLow: buy.min,
-            buyPriceMarginal: buy.marginalPrice || buy.max,
-            buyPriceHigh: buy.max,
-            buyBudget: buy.budget,
-            sellPriceLow: sell.min,
-            sellPriceMarginal: sell.marginalPrice || sell.min,
-            sellPriceHigh: sell.max,
-            sellBudget: sell.budget,
-          });
-        }
-        const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
+        if (!user) throw new Error('User not found');
+        const canBatch = await canBatchTransactions(user);
         const getRawAmount = (token: Token, amount: string) => {
           return new SafeDecimal(amount).mul(10 ** token.decimals);
         };
-        const amounts: Record<string, SafeDecimal> = {};
-        for (const strategy of strategies) {
-          const base = strategy.base.address;
-          const quote = strategy.quote.address;
-          amounts[base] ||= new SafeDecimal(0);
-          const sellAmount = getRawAmount(strategy.base, strategy.sell.budget);
-          amounts[base] = amounts[base].add(sellAmount);
+        const tokens = new Set<string>();
+        const txs: TransactionRequest[] = [];
+        if (canBatch) {
+          for (const strategy of strategies) {
+            if (isGradientStrategy(strategy)) continue;
+            const { base, quote, buy, sell } = strategy;
+            const unsignedTx = await carbonSDK.createBuySellStrategy(
+              base.address,
+              quote.address,
+              buy.min,
+              buy.marginalPrice || buy.max,
+              buy.max,
+              buy.budget,
+              sell.min,
+              sell.marginalPrice || sell.min,
+              sell.max,
+              sell.budget,
+            );
+            unsignedTx.customData = {
+              spender: config.addresses.carbon.carbonController,
+              assets: [
+                {
+                  address: base.address,
+                  rawAmount: getRawAmount(base, sell.budget),
+                },
+                {
+                  address: quote.address,
+                  rawAmount: getRawAmount(quote, buy.budget),
+                },
+              ],
+            };
+            txs.push(unsignedTx);
+            tokens.add(base.address);
+            tokens.add(quote.address);
+          }
+        } else {
+          // TODO: support gradient
+          const params: Parameters<
+            typeof carbonSDK.batchCreateBuySellStrategies
+          >[0] = [];
+          for (const strategy of strategies) {
+            if (isGradientStrategy(strategy)) continue;
+            const { base, quote, buy, sell } = strategy;
+            params.push({
+              baseToken: base.address,
+              quoteToken: quote.address,
+              buyPriceLow: buy.min,
+              buyPriceMarginal: buy.marginalPrice || buy.max,
+              buyPriceHigh: buy.max,
+              buyBudget: buy.budget,
+              sellPriceLow: sell.min,
+              sellPriceMarginal: sell.marginalPrice || sell.min,
+              sellPriceHigh: sell.max,
+              sellBudget: sell.budget,
+            });
+            tokens.add(base.address);
+            tokens.add(quote.address);
+          }
+          const unsignedTx =
+            await carbonSDK.batchCreateBuySellStrategies(params);
 
-          amounts[quote] ||= new SafeDecimal(0);
-          const buyAmount = getRawAmount(strategy.quote, strategy.buy.budget);
-          amounts[quote] = amounts[quote].add(buyAmount);
+          const amounts: Record<string, SafeDecimal> = {};
+          for (const strategy of strategies) {
+            const base = strategy.base.address;
+            const quote = strategy.quote.address;
+            amounts[base] ||= new SafeDecimal(0);
+            const sellAmount = getRawAmount(
+              strategy.base,
+              strategy.sell.budget,
+            );
+            amounts[base] = amounts[base].add(sellAmount);
+
+            amounts[quote] ||= new SafeDecimal(0);
+            const buyAmount = getRawAmount(strategy.quote, strategy.buy.budget);
+            amounts[quote] = amounts[quote].add(buyAmount);
+          }
+          unsignedTx.customData = {
+            spender: batcher,
+            assets: Object.entries(amounts).map(([address, amount]) => ({
+              address,
+              rawAmount: amount.toString(),
+            })),
+          };
+          txs.push(unsignedTx);
         }
-        unsignedTx.customData = {
-          spender: batcher,
-          assets: Object.entries(amounts).map(([address, amount]) => ({
-            address,
-            rawAmount: amount.toString(),
-          })),
-        };
 
-        const tx = await sendTransaction(unsignedTx);
+        const tx = await sendTransaction(txs);
         setConfirmation(false);
         setProcessing(true);
         dispatchNotification('createBatchStrategy', { txHash: tx.hash });
@@ -149,11 +199,7 @@ export const CartPage = () => {
         cache.invalidateQueries({
           queryKey: QueryKey.strategiesByUser(user),
         });
-        const tokens = new Set<string>();
-        for (const param of params) {
-          tokens.add(param.baseToken);
-          tokens.add(param.quoteToken);
-        }
+
         for (const token of tokens) {
           cache.invalidateQueries({
             queryKey: QueryKey.balance(user!, token),

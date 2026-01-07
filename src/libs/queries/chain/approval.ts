@@ -21,7 +21,7 @@ export type GetUserApprovalProps = Pick<
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
   const { user } = useWagmi();
   const { Token } = useContract();
-  const { canBatchTransaction } = useBatchTransaction();
+  const { canBatchTransactions } = useBatchTransaction();
 
   return useQueries({
     queries: data.map((t) => ({
@@ -42,7 +42,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           return new SafeDecimal(shrinkToken(UNLIMITED_WEI, t.decimals));
         }
         // Do not ask approval if can batch transaction
-        const canBatch = await canBatchTransaction(user);
+        const canBatch = await canBatchTransactions(user);
         if (canBatch) {
           return new SafeDecimal(shrinkToken(UNLIMITED_WEI, t.decimals));
         }

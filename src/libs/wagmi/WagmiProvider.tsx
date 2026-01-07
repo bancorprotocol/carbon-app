@@ -50,7 +50,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
 
   const openConnect = useCallback(() => openModal('wallet'), [openModal]);
   const sendTransaction = useCallback(
-    async (tx: TransactionRequest) => {
+    async (tx: TransactionRequest | TransactionRequest[]) => {
       if (!user || !signer) throw new Error('No user connected');
       try {
         return await batchTransaction(user, tx);
@@ -58,6 +58,9 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         // Throw if error comes from EOA.
         // TODO: find a cleaner solution
         if ('code' in err) throw err;
+        if (Array.isArray(tx)) {
+          throw new Error('Array of transaction is only allowed for EIP7702');
+        }
         return signer!.sendTransaction(tx);
       }
     },
