@@ -11,6 +11,7 @@ import config from 'config';
 import { openocean, OpenOceanSwapPath } from 'utils/openocean';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
+import { TransactionRequest } from 'ethers';
 
 interface GetTradeDataResult {
   tradeActions: TradeActionBNStr[];
@@ -49,6 +50,7 @@ export const useTradeQuery = () => {
   const {
     trade: { settings },
   } = useStore();
+  const { signer } = useWagmi();
   return useMutation({
     mutationFn: async (params: TradeParams) => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
@@ -66,12 +68,21 @@ export const useTradeQuery = () => {
           referrer: config.addresses.carbon.vault,
           referrerFee: '0.25',
         });
-        return sendTransaction({
+        const unsignedTx: TransactionRequest = {
           from: tx.from,
           to: tx.to,
           value: BigInt(tx.value),
           data: tx.data,
-        });
+        };
+        const estimateGas = await signer?.estimateGas(unsignedTx);
+        if (estimateGas) {
+          const limit = new SafeDecimal(estimateGas?.toString())
+            .mul(1.1)
+            .round()
+            .toString();
+          unsignedTx.gasLimit = BigInt(limit);
+        }
+        return sendTransaction(unsignedTx);
       } else {
         let unsignedTx: PopulatedTransaction;
         let baseAmount: string;
