@@ -1,7 +1,7 @@
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useImportTokens, useTokens } from 'hooks/useTokens';
-import { FC, useMemo } from 'react';
+import { FC, Fragment, useMemo } from 'react';
 import { OpenOceanSwapPath } from 'utils/openocean';
 
 interface Props {
@@ -19,9 +19,9 @@ const useImportMissingTokens = (path: OpenOceanSwapPath) => {
         addresses.add(subroute.to);
       }
     }
-    return addresses;
+    return Array.from(addresses);
   }, [path]);
-  return useImportTokens(Array.from(addresses));
+  return useImportTokens(addresses);
 };
 
 export const OpenOceanPath: FC<Props> = ({ path }) => {
@@ -37,10 +37,9 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
               const from = getTokenById(subroute.from);
               const to = getTokenById(subroute.to);
               return (
-                <>
+                <Fragment key={j}>
                   {!!j && (
                     <svg
-                      key={`separator-${j}`}
                       role="separator"
                       width="16"
                       height="4"
@@ -54,7 +53,6 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
                     </svg>
                   )}
                   <Tooltip
-                    key={`tooltip-${j}`}
                     element={
                       <div className="grid gap-8">
                         <h4>
@@ -83,7 +81,7 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
                       </span>
                     </li>
                   </Tooltip>
-                </>
+                </Fragment>
               );
             })}
           </ol>

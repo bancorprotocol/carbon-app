@@ -190,11 +190,13 @@ const nativeToken =
   nativeTokenList[config.network.chainId as keyof typeof nativeTokenList];
 
 const replaceNativeTokenParams = (params: QuoteParams) => {
-  if (params.inTokenAddress === nativeToken.from) {
-    params.inTokenAddress = nativeToken.to;
-  }
-  if (params.outTokenAddress === nativeToken.from) {
-    params.outTokenAddress = nativeToken.to;
+  if (nativeToken) {
+    if (params.inTokenAddress === nativeToken.from) {
+      params.inTokenAddress = nativeToken.to;
+    }
+    if (params.outTokenAddress === nativeToken.from) {
+      params.outTokenAddress = nativeToken.to;
+    }
   }
   return params;
 };
