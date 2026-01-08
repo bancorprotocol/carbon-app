@@ -74,23 +74,25 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     if (env.AXIOM_APIKEY) {
       console.log('FETCH AXIOM');
       const res = await fetch(
-        'https://us-east-1.aws.edge.axiom.co/v1/datasets/cf-aggregator-proxy/ingest',
+        'https://eu-central-1.aws.edge.axiom.co/v1/ingest/cf-aggregator-proxy/ingest',
         {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${env.AXIOM_APIKEY}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            level: 'info',
-            message: {
-              request: url.toString(),
-              response: result,
+          body: JSON.stringify([
+            {
+              level: 'info',
+              message: {
+                request: url.toString(),
+                response: result,
+              },
             },
-          }),
+          ]),
         },
       );
-      console.log(res);
+      console.log(JSON.stringify(res));
     }
     return new Response(result, {
       status: response.status,
