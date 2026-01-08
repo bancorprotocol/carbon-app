@@ -202,19 +202,21 @@ const replaceNativeTokenParams = (params: QuoteParams) => {
 };
 
 const replaceNativeTokenQuoteResult = (result: OpenOceanQuoteResult) => {
-  if (result.path.from === nativeToken.to) {
-    result.path.from = nativeToken.from;
-  }
-  if (result.path.to === nativeToken.to) {
-    result.path.to = nativeToken.from;
-  }
-  for (const route of result.path.routes) {
-    for (const subRoute of route.subRoutes) {
-      if (subRoute.from === nativeToken.to) {
-        subRoute.from = nativeToken.from;
-      }
-      if (subRoute.to === nativeToken.to) {
-        subRoute.to = nativeToken.from;
+  if (nativeToken) {
+    if (result.path.from === nativeToken.to) {
+      result.path.from = nativeToken.from;
+    }
+    if (result.path.to === nativeToken.to) {
+      result.path.to = nativeToken.from;
+    }
+    for (const route of result.path.routes) {
+      for (const subRoute of route.subRoutes) {
+        if (subRoute.from === nativeToken.to) {
+          subRoute.from = nativeToken.from;
+        }
+        if (subRoute.to === nativeToken.to) {
+          subRoute.to = nativeToken.from;
+        }
       }
     }
   }
