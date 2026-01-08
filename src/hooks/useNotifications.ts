@@ -44,12 +44,13 @@ export const useNotifications = () => {
 
   const dispatchNotification: DispatchNotification = useCallback(
     (key, data) => {
+      const id = uuid();
       setNotifications((prev) => {
         const newNotifications = [
           ...prev,
           {
             ...NOTIFICATIONS_MAP[key](data),
-            id: uuid(),
+            id: id,
             timestamp: Date.now() / 1000,
           },
         ];
@@ -59,6 +60,7 @@ export const useNotifications = () => {
         setLSUserNotifications(user, newNotifications);
         return newNotifications;
       });
+      return id;
     },
     [setNotifications, user],
   );

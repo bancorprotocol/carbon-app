@@ -5,6 +5,7 @@ import { useCallback, useRef } from 'react';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 import config from 'config';
+import { useNotifications } from 'hooks/useNotifications';
 
 interface Capabilities {
   alternateGasFees: {
@@ -70,6 +71,7 @@ async function repeat<T>(cb: () => Promise<T>): Promise<T> {
 }
 
 export const useBatchTransaction = () => {
+  const { dispatchNotification, dismissAlert } = useNotifications();
   const { getTokenById } = useTokens();
   const { Token } = useContract();
 
@@ -167,6 +169,13 @@ export const useBatchTransaction = () => {
         method: 'wallet_sendCalls',
         params: params,
       });
+      const notificationId = dispatchNotification('generic', {
+        title: 'Batch Transactions',
+        description: 'Batch transaction has been submitted.',
+        status: 'pending',
+        showAlert: true,
+        testid: 'batch-transaction',
+      });
       const result = await repeat(async () => {
         const res: CallStatus = await window.ethereum.request({
           method: 'wallet_getCallsStatus',
@@ -175,13 +184,20 @@ export const useBatchTransaction = () => {
         if (res.status >= 400) return res;
         if (res.status === 200) return res;
       });
+      dismissAlert(notificationId);
       const hash = result?.receipts[0].transactionHash;
       return {
         hash: hash || '',
         wait: async () => true,
       };
     },
-    [Token, canBatchTransactions, getTokenById],
+    [
+      Token,
+      canBatchTransactions,
+      dismissAlert,
+      dispatchNotification,
+      getTokenById,
+    ],
   );
 
   return { batchTransaction, canBatchTransactions };
