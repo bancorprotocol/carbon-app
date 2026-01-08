@@ -12,6 +12,7 @@ const vaults = {
 
 interface Env {
   OPENOCEAN_APIKEY: string;
+  AXIOM_APIKEY: string;
   VITE_NETWORK?: string;
 }
 
@@ -25,18 +26,23 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     const endpoint = searchParams.get('endpoint') ?? '';
     searchParams.delete('endpoint');
     if (!allowedEndpoints.includes(endpoint)) {
-      throw new Error('Unsupported endpoint');
+      throw new Error(`Unsupported endpoint: ${endpoint}`);
     }
 
     const chain = searchParams.get('chain') ?? '';
     searchParams.delete('chain');
     if (!allowChains.includes(chain)) {
-      throw new Error('Unsupported endpoint');
+      throw new Error(`Unsupported chain: ${chain}`);
     }
 
     const url = new URL(proOrigin + '/' + chain + '/' + endpoint);
 
     const network = (env.VITE_NETWORK || 'ethereum') as keyof typeof vaults;
+
+    if (!(network in vaults)) {
+      throw new Error(`Unsupported VITE_NETWORK: ${chain}`);
+    }
+
     const vault = vaults[network];
 
     // Copy search params from request to openocean
@@ -62,6 +68,23 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
         error ||
           `Response was not okay. ${response.statusText} response received.`,
       );
+    }
+    if (env.AXIOM_APIKEY) {
+      const result = await response.text();
+      fetch('https://api.axiom.co/v1/datasets/cf-aggregator-proxy/ingest', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${env.AXIOM_APIKEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          level: 'info',
+          message: {
+            request: url.toString(),
+            response: result,
+          },
+        }),
+      });
     }
     return response;
   } catch (err) {
