@@ -71,20 +71,23 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     }
     const result = await response.text();
     if (env.AXIOM_APIKEY) {
-      fetch('https://api.axiom.co/v1/datasets/cf-aggregator-proxy/ingest', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${env.AXIOM_APIKEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          level: 'info',
-          message: {
-            request: url.toString(),
-            response: result,
+      fetch(
+        'https://eu-central-1.aws.edge.axiom.co/v1/datasets/cf-aggregator-proxy/ingest',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${env.AXIOM_APIKEY}`,
+            'Content-Type': 'application/json',
           },
-        }),
-      });
+          body: JSON.stringify({
+            level: 'info',
+            message: {
+              request: url.toString(),
+              response: result,
+            },
+          }),
+        },
+      );
     }
     return new Response(result, {
       status: response.status,
