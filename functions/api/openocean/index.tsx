@@ -69,8 +69,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
           `Response was not okay. ${response.statusText} response received.`,
       );
     }
+    const result = await response.text();
     if (env.AXIOM_APIKEY) {
-      const result = await response.text();
       fetch('https://api.axiom.co/v1/datasets/cf-aggregator-proxy/ingest', {
         method: 'POST',
         headers: {
@@ -86,7 +86,10 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
         }),
       });
     }
-    return response;
+    return new Response(result, {
+      status: response.status,
+      headers: response.headers,
+    });
   } catch (err) {
     return new Response(JSON.stringify((err as Error).message), {
       status: 500,
