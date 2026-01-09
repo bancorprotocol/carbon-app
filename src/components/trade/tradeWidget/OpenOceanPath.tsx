@@ -2,7 +2,7 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useImportTokens, useTokens } from 'hooks/useTokens';
 import { FC, Fragment, useMemo } from 'react';
-import { OpenOceanSwapPath } from 'utils/openocean';
+import { OpenOceanSwapPath } from 'services/openocean';
 
 interface Props {
   path: OpenOceanSwapPath;

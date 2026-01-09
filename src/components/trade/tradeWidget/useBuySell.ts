@@ -15,7 +15,7 @@ import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
 import { isTouchedZero, isZero } from 'components/strategies/common/utils';
 import { carbonEvents } from 'services/events';
-import { OpenOceanSwapPath } from 'utils/openocean';
+import { OpenOceanSwapPath } from 'services/openocean';
 import config from 'config';
 import { useDebounced } from 'hooks/useDebouncedValue';
 

@@ -1,5 +1,5 @@
 import config from 'config';
-import { NATIVE_TOKEN_ADDRESS } from './tokens';
+import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 const apiUrl = `https://open-api.openocean.finance/v4/${config.network.chainId}/`;
 
 const getUrl = (endpoint: string) => {

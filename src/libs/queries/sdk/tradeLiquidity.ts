@@ -3,9 +3,9 @@ import { QueryKey } from 'libs/queries';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useCarbonInit } from 'libs/sdk/context';
 import { carbonSDK } from 'libs/sdk';
-import config from 'config';
-import { openocean } from 'utils/openocean';
+import { openocean } from 'services/openocean';
 import { useTokens } from 'hooks/useTokens';
+import config from 'config';
 
 export const useGetTradeLiquidity = (base?: string, quote?: string) => {
   const { isInitialized } = useCarbonInit();

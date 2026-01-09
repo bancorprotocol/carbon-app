@@ -7,11 +7,11 @@ import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
-import config from 'config';
-import { openocean, OpenOceanSwapPath } from 'utils/openocean';
+import { openocean, OpenOceanSwapPath } from 'services/openocean';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { TransactionRequest } from 'ethers';
+import config from 'config';
 
 interface GetTradeDataResult {
   tradeActions: TradeActionBNStr[];

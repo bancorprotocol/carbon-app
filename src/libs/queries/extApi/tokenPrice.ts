@@ -2,7 +2,7 @@ import { useQueries, useQuery } from '@tanstack/react-query';
 import { CandlestickData } from 'libs/d3';
 import { QueryKey } from 'libs/queries/queryKey';
 import { FIVE_MIN_IN_MS } from 'utils/time';
-import { carbonApi } from 'utils/carbonApi';
+import { carbonApi } from 'services/carbonApi';
 import { toUnixUTC } from 'components/simulator/utils';
 import { startOfDay, subDays } from 'date-fns';
 
