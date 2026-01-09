@@ -202,7 +202,7 @@ const replaceNativeTokenParams = (params: QuoteParams) => {
 };
 
 const replaceNativeTokenQuoteResult = (result: OpenOceanQuoteResult) => {
-  if (nativeToken) {
+  if (nativeToken && result.path) {
     if (result.path.from === nativeToken.to) {
       result.path.from = nativeToken.from;
     }

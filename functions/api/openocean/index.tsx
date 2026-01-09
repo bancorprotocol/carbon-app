@@ -96,8 +96,9 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       headers: response.headers,
     });
   } catch (err) {
-    return new Response(JSON.stringify((err as Error).message), {
-      status: 500,
+    const body = JSON.stringify({
+      error: (err as Error).message,
     });
+    return new Response(body, { status: 500 });
   }
 };
