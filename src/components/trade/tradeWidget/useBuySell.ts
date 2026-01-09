@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useWagmi } from 'libs/wagmi';
 import {
@@ -23,6 +17,7 @@ import { isTouchedZero, isZero } from 'components/strategies/common/utils';
 import { carbonEvents } from 'services/events';
 import { OpenOceanSwapPath } from 'utils/openocean';
 import config from 'config';
+import { useDebounced } from 'hooks/useDebouncedValue';
 
 export const useBuySell = ({
   source,
@@ -32,8 +27,8 @@ export const useBuySell = ({
 }: TradeWidgetBuySellProps) => {
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
-  const sourceValue = useDeferredValue(sourceInput);
-  const targetValue = useDeferredValue(targetInput);
+  const sourceValue = useDebounced(sourceInput, 500);
+  const targetValue = useDebounced(targetInput, 500);
   const { user } = useWagmi();
   const { openModal } = useModal();
   const sourceTokenPriceQuery = useGetTokenPrice(source.address);
