@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useWagmi } from 'libs/wagmi';
 import {
@@ -26,6 +32,8 @@ export const useBuySell = ({
 }: TradeWidgetBuySellProps) => {
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
+  const sourceValue = useDeferredValue(sourceInput);
+  const targetValue = useDeferredValue(targetInput);
   const { user } = useWagmi();
   const { openModal } = useModal();
   const sourceTokenPriceQuery = useGetTokenPrice(source.address);
@@ -87,7 +95,7 @@ export const useBuySell = ({
     sourceToken: source,
     targetToken: target,
     isTradeBySource: true,
-    input: sourceInput,
+    input: sourceValue,
     enabled: isTradeBySource,
   });
 
@@ -95,7 +103,7 @@ export const useBuySell = ({
     sourceToken: source,
     targetToken: target,
     isTradeBySource: false,
-    input: targetInput,
+    input: targetValue,
     enabled: !isTradeBySource,
   });
 

@@ -89,7 +89,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     });
   };
 
-  const swapTokens = () => {
+  const reverseTokens = () => {
     navigate({
       search: (s) => ({ ...s, base: s.quote, quote: s.base }),
       replace: true,
@@ -200,7 +200,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           </TokenInputField>
         </div>
         <button
-          onClick={swapTokens}
+          aria-label="switch tokens"
+          onClick={reverseTokens}
           type="button"
           className="grid place-items-center place-self-center size-40 -my-12 border-2 border-main-900 btn-on-background p-0 rounded-full z-1 bg-main-600 hover:bg-main-500"
         >
