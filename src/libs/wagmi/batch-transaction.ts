@@ -124,13 +124,15 @@ export const useBatchTransaction = () => {
             address.toLowerCase(),
           );
           const { populateTransaction } = Token(address).write.approve;
-          if (isNullApprovalContract && allowance > 0) {
-            const revokeTx = await populateTransaction(spender, '0');
-            calls.push({
-              to: revokeTx.to,
-              value: toHexValue(revokeTx.value),
-              data: revokeTx.data,
-            });
+          if (isNullApprovalContract && allowance !== amount) {
+            if (allowance && allowance !== amount) {
+              const revokeTx = await populateTransaction(spender, '0');
+              calls.push({
+                to: revokeTx.to,
+                value: toHexValue(revokeTx.value),
+                data: revokeTx.data,
+              });
+            }
           }
           if (allowance < amount) {
             const approval = await populateTransaction(spender, amount);
@@ -156,6 +158,9 @@ export const useBatchTransaction = () => {
           data: transaction.data ?? '0x0',
         });
       }
+
+      console.log(calls);
+
       const params = [
         {
           version: '2.0.0',
