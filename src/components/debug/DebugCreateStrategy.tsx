@@ -16,7 +16,7 @@ import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
-import { carbonApi } from 'utils/carbonApi';
+import { carbonApi } from 'services/carbonApi';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,

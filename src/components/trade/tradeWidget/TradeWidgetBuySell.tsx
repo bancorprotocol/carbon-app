@@ -5,7 +5,6 @@ import { IS_TENDERLY_FORK, useWagmi } from 'libs/wagmi';
 import { UseQueryResult } from 'libs/queries';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { prettifyNumber } from 'utils/helpers';
 import { useTradePairs } from '../useTradePairs';
@@ -15,6 +14,7 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { LogoImager } from 'components/common/imager/Imager';
 import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-router';
+import { OpenOceanPath } from './OpenOceanPath';
 import IconRouting from 'assets/icons/routing.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import IconArrow from 'assets/icons/arrowDown.svg?react';
@@ -46,10 +46,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     liquidityQuery,
     errorMsgSource,
     errorMsgTarget,
-    openTradeRouteModal,
+    displayRouting,
     calcSlippage,
     maxSourceAmountQuery,
     isAwaiting,
+    showRoutingPath,
+    routingPath,
   } = useBuySell(props);
   const {
     source,
@@ -58,6 +60,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     isBuy = false,
     ...formProps
   } = props;
+
   const hasEnoughLiquidity = +liquidityQuery.data! > 0;
 
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
@@ -86,7 +89,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     });
   };
 
-  const swapTokens = () => {
+  const reverseTokens = () => {
     navigate({
       search: (s) => ({ ...s, base: s.quote, quote: s.base }),
       replace: true,
@@ -133,10 +136,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return <CarbonLogoLoading className="h-80 m-20" />;
   }
 
-  if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
 
-  const showRouting = rate && rate !== '0';
+  const showRouting = routingPath || !isZero(rate);
   const disabledCTA =
     !!errorMsgSource ||
     !!errorMsgTarget ||
@@ -144,6 +146,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     !maxSourceAmountQuery.data;
 
   const getLiquidity = () => {
+    if (!liquidityQuery.data) return;
     const value = prettifyNumber(liquidityQuery.data);
     return `Liquidity: ${value} ${target.symbol}`;
   };
@@ -151,7 +154,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   return (
     <form {...formProps} onSubmit={handleTrade} className="grid gap-24">
       <div className="grid">
-        <div className="rounded-xl p-16 input-container">
+        <div className="rounded-xl p-16 input-container relative">
+          <div
+            className="rounded-xl absolute inset-0 animate-pulse bg-main-400/40"
+            hidden={!byTargetQuery.isFetching}
+          ></div>
           <header className="text-14 flex justify-between">
             <label htmlFor={`${id}-pay`} className="text-white/50">
               You pay
@@ -193,14 +200,19 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           </TokenInputField>
         </div>
         <button
-          onClick={swapTokens}
+          aria-label="switch tokens"
+          onClick={reverseTokens}
           type="button"
-          className="grid place-items-center place-self-center size-40 -my-12 border-2 border-main-900 btn-on-background p-0 rounded-full z-0"
+          className="grid place-items-center place-self-center size-40 -my-12 border-2 border-main-900 btn-on-background p-0 rounded-full z-1 bg-main-600 hover:bg-main-500"
         >
           <IconArrow className="size-16" />
         </button>
         <div className="grid gap-8">
-          <div className="rounded-b-xs rounded-t-xl  input-container">
+          <div className="rounded-b-xs rounded-t-xl input-container relative">
+            <div
+              className="rounded-b-xs rounded-t-xl absolute inset-0 animate-pulse bg-main-400/40"
+              hidden={!bySourceQuery.isFetching}
+            ></div>
             <header className="text-14 flex justify-between">
               <label htmlFor={`${id}-receive`} className="text-white/50">
                 You receive
@@ -251,17 +263,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {showRouting && (
               <button
                 type="button"
-                onClick={openTradeRouteModal}
+                onClick={displayRouting}
                 className="flex gap-8 text-left hover:text-white md:flex"
                 data-testid="routing"
               >
                 <IconRouting className="w-12" />
-                <Tooltip
-                  placement="left"
-                  element="You can view and manage the orders that are included in the trade."
-                >
-                  <span>Routing</span>
-                </Tooltip>
+                <span>Routing</span>
               </button>
             )}
           </footer>
@@ -270,6 +277,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       {IS_TENDERLY_FORK && (
         <div className="text-14 text-right text-white/60">
           DEBUG: {getLiquidity()}
+        </div>
+      )}
+
+      {showRoutingPath && !!routingPath && (
+        <div className="grid gap-8 px-16 py-8 rounded-md bg-main-500/60">
+          <h3 className="text-12">Routing:</h3>
+          <OpenOceanPath path={routingPath} />
         </div>
       )}
 

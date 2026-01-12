@@ -7,7 +7,7 @@ import { useGetAllPairs } from '../sdk/pairs';
 import { useContract } from 'hooks/useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useMemo } from 'react';
-import { carbonApi } from 'utils/carbonApi';
+import { carbonApi } from 'services/carbonApi';
 import config from 'config';
 
 export const useExistingTokensQuery = () => {
