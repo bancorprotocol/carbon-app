@@ -107,41 +107,48 @@ export const useBatchTransaction = () => {
       const txs = Array.isArray(tx) ? tx : [tx];
       const calls: Call[] = [];
 
+      const amounts: Record<string, bigint> = {};
+
       // Add approvals
       for (const transaction of txs) {
         const assets = transaction.customData?.assets ?? [];
         const spender = transaction.customData.spender as string;
         for (const asset of assets) {
           const { address, rawAmount } = asset as Asset;
-          const amount = BigInt(rawAmount);
-          if (amount === 0n) continue;
-          const token = getTokenById(address);
-          if (!token) throw new Error('Could not find token');
-          if (address === NATIVE_TOKEN_ADDRESS) continue;
+          const key = `${address}_${spender}`;
+          amounts[key] ||= BigInt(0);
+          amounts[key] += BigInt(rawAmount);
+        }
+      }
+      for (const [key, amount] of Object.entries(amounts)) {
+        if (amount === 0n) continue;
+        const [address, spender] = key.split('_');
+        const token = getTokenById(address);
+        if (!token) throw new Error('Could not find token');
+        if (address === NATIVE_TOKEN_ADDRESS) continue;
 
-          const allowance = await Token(address).read.allowance(user, spender);
-          const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(
-            address.toLowerCase(),
-          );
-          const { populateTransaction } = Token(address).write.approve;
-          if (isNullApprovalContract && allowance !== amount) {
-            if (allowance && allowance !== amount) {
-              const revokeTx = await populateTransaction(spender, '0');
-              calls.push({
-                to: revokeTx.to,
-                value: toHexValue(revokeTx.value),
-                data: revokeTx.data,
-              });
-            }
-          }
-          if (allowance < amount) {
-            const approval = await populateTransaction(spender, amount);
+        const allowance = await Token(address).read.allowance(user, spender);
+        const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(
+          address.toLowerCase(),
+        );
+        const { populateTransaction } = Token(address).write.approve;
+        if (isNullApprovalContract && allowance !== amount) {
+          if (allowance && allowance !== amount) {
+            const revokeTx = await populateTransaction(spender, '0');
             calls.push({
-              to: approval.to,
-              value: toHexValue(approval.value),
-              data: approval.data,
+              to: revokeTx.to,
+              value: toHexValue(revokeTx.value),
+              data: revokeTx.data,
             });
           }
+        }
+        if (allowance < amount) {
+          const approval = await populateTransaction(spender, amount);
+          calls.push({
+            to: approval.to,
+            value: toHexValue(approval.value),
+            data: approval.data,
+          });
         }
       }
 
