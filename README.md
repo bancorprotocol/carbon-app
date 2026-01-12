@@ -404,7 +404,9 @@ If you're not using cloudflare function, check the section [Without Cloudflare f
 
 
 ## With cloudflare functions
-Under [`functions/api/openocean/index.ts`](/functions/api/openocean/index.ts) update the variable `referrers` & `referrerFee` with your own values.
+Under [`functions/api/openocean/index.ts`](/functions/api/openocean/index.ts) 
+- Update the variable `referrers` & `referrerFee` with your own values.
+- Add `OPENOCEAN_APIKEY` in your environment variables in cloudflare.
 
 ## Without cloudflare functions
 Under [`src/services/openocean.ts`](/src/services/openocean.ts) update the `getUrl` function to send to your own implementation.
