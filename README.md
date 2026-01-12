@@ -396,10 +396,10 @@ fontFamily: {
 You can also remove the unused `@font-face` from the [`src/fonts.css`](src/fonts.css) file.
 
 # Openocean
-*Contact Bancor team before setting openocean so we can evaluate the required changes.*
+*Contact Bancor team before setting openocean so we can assist with the required changes.*
 
 In order to setup openocean you need to set the config: `ui.useOpenocean` to `true`.
-By default Carbon tries call cloudflare function to call openocean.
+By default Carbon tries calling cloudflare function to call openocean.
 If you're not using cloudflare function, check the section [Without Cloudflare functions](#without-cloudflare-functions).
 
 
