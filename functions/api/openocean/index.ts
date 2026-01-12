@@ -82,6 +82,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
           body: JSON.stringify([
             {
               level: 'info',
+              network: network,
               message: {
                 request: url.toString(),
                 response: result,
