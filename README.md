@@ -395,6 +395,21 @@ fontFamily: {
 
 You can also remove the unused `@font-face` from the [`src/fonts.css`](src/fonts.css) file.
 
+# Openocean
+In order to setup openocean you need to set the config: `ui.useOpenocean` to `true`.
+By default Carbon tries call cloudflare function to call openocean.
+If you're not using cloudflare function, check this [section](#with-cloudflare-functions).
+
+In any case, contact Bancor team before setting `ui.useOpenocean` to `true` to evaluate the required changes.
+
+## With cloudflare functions
+Under `functions/api/openocean/index.ts` update the variable `referrers` & `referrerFee` with your own values.
+
+## Without cloudflare functions
+Under `src\services\openocean.ts` update the `getUrl` function to send to your own implementation.
+Alternatively you can update the `referrer`, `referrerFee` and `apiKey` in the same file in order to do a client call. **But the apiKey would be public** !
+
+
 # License
 
 The license used is the MIT License. You can find it [here](LICENSE).

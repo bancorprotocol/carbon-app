@@ -1,14 +1,14 @@
-const proOrigin = 'https://open-api-pro.openocean.finance/v4';
-
-const allowedEndpoints = ['reverseQuote', 'quote', 'swap', 'gasPrice'];
-const allowChains = ['1', '42220', '1329', '239'];
-
-const vaults = {
+const referrers = {
   sei: '0x773B75CfB146bd5d1095fa9d6d45637f02B05119',
   celo: '0x8cE318919438982514F9f479FDfB40D32C6ab749',
   tac: '0xBBAFF3Bf6eC4C15992c0Fb37F12491Fd62C5B496',
   ethereum: '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4',
 };
+const referrerFee = '0.25';
+
+const proOrigin = 'https://open-api-pro.openocean.finance/v4';
+const allowedEndpoints = ['reverseQuote', 'quote', 'swap', 'gasPrice'];
+const allowChains = ['1', '42220', '1329', '239'];
 
 interface Env {
   OPENOCEAN_APIKEY: string;
@@ -37,13 +37,13 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 
     const url = new URL(proOrigin + '/' + chain + '/' + endpoint);
 
-    const network = (env.VITE_NETWORK || 'ethereum') as keyof typeof vaults;
+    const network = (env.VITE_NETWORK || 'ethereum') as keyof typeof referrers;
 
-    if (!(network in vaults)) {
+    if (!(network in referrers)) {
       throw new Error(`Unsupported VITE_NETWORK: ${chain}`);
     }
 
-    const vault = vaults[network];
+    const referrer = referrers[network];
 
     // Copy search params from request to openocean
     for (const [key, value] of searchParams.entries()) {
@@ -51,8 +51,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     }
 
     if (endpoint === 'swap') {
-      url.searchParams.set('referrer', vault);
-      url.searchParams.set('referrerFee', '0.25');
+      url.searchParams.set('referrer', referrer);
+      url.searchParams.set('referrerFee', referrerFee);
     }
 
     const response = await fetch(url, {

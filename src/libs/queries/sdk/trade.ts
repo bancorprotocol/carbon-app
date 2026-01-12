@@ -64,9 +64,6 @@ export const useTradeQuery = () => {
           amountDecimals: toDecimal(params.sourceInput, params.source),
           gasPriceDecimals: gasPrice.toString(),
           slippage: Number(settings.slippage),
-          // Overriden in the backend on production
-          referrer: config.addresses.carbon.vault,
-          referrerFee: '0.25',
         });
         const unsignedTx: TransactionRequest = {
           from: tx.from,

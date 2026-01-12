@@ -1,10 +1,17 @@
 import config from 'config';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
+
+const referrer = config.addresses.carbon.vault;
+const referrerFee = '0.25';
+const apiKey = undefined;
 const apiUrl = `https://open-api.openocean.finance/v4/${config.network.chainId}/`;
 
 const getUrl = (endpoint: string) => {
   if (import.meta.env.DEV) {
-    return new URL(apiUrl + endpoint);
+    const url = new URL(apiUrl + endpoint);
+    url.searchParams.set('referrer', referrer);
+    url.searchParams.set('referrerFee', referrerFee);
+    return url;
   } else {
     // In production send to cloudflare proxy
     const url = new URL(location.origin + '/api/openocean');
@@ -26,7 +33,13 @@ const get = async <T>(
     }
   }
 
-  const response = await fetch(url, { signal: abortSignal });
+  const request = new Request(url, { signal: abortSignal });
+  if (apiKey) {
+    request.headers.append('apiKey', apiKey);
+    request.headers.append('Content-Type', 'application/json');
+  }
+
+  const response = await fetch(request);
   const result = await response.json();
   if (!response.ok) {
     const error = (result as { error?: string }).error;
