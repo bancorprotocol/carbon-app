@@ -81,13 +81,19 @@ export const useBatchTransaction = () => {
   const canBatchTransactions = useCallback(async (user: string) => {
     if (!window.ethereum) return false;
     if (typeof allowBatch.current !== 'boolean') {
-      const chainId = `0x${config.network.chainId.toString(16)}`;
-      const res: Record<string, Capabilities> = await window.ethereum.request({
-        method: 'wallet_getCapabilities',
-        params: [user, [chainId]],
-      });
-      const atomic = res[chainId]?.atomic.status;
-      allowBatch.current = atomic === 'ready' || atomic === 'supported';
+      try {
+        const chainId = `0x${config.network.chainId.toString(16)}`;
+        const res: Record<string, Capabilities> = await window.ethereum.request(
+          {
+            method: 'wallet_getCapabilities',
+            params: [user, [chainId]],
+          },
+        );
+        const atomic = res[chainId]?.atomic.status;
+        allowBatch.current = atomic === 'ready' || atomic === 'supported';
+      } catch {
+        allowBatch.current = false;
+      }
     }
     return allowBatch.current;
   }, []);
