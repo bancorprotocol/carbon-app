@@ -2,7 +2,7 @@ import { Activity, ActivityOrder } from 'libs/queries/extApi/activity';
 import { activityActionName } from './utils';
 import { getLowestBits } from 'utils/helpers';
 import { useActivity } from './context';
-import { carbonApi } from 'utils/carbonApi';
+import { carbonApi } from 'services/carbonApi';
 import { useTokens } from 'hooks/useTokens';
 import { toActivities } from './useActivityQuery';
 import { useState } from 'react';

@@ -1,5 +1,14 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 
+export const useDebounced = <T>(state: T, wait: number) => {
+  const [value, setValue] = useState(state);
+  useEffect(() => {
+    const timeout = setTimeout(() => setValue(state), wait);
+    return () => clearTimeout(timeout);
+  }, [state, wait]);
+  return value;
+};
+
 export const useDebouncedValue = <T = any>(
   value: T,
   wait: number,

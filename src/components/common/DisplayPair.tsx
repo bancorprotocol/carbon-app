@@ -35,12 +35,16 @@ export const TokenLogoName = memo(_TokenLogoName, (a, b) => {
 
 interface PairProps {
   pair: TradePair;
+  size?: number;
 }
 
-const _PairLogoName: FC<PairProps> = ({ pair: { baseToken, quoteToken } }) => {
+const _PairLogoName: FC<PairProps> = ({
+  pair: { baseToken, quoteToken },
+  size,
+}) => {
   return (
     <>
-      <TokensOverlap tokens={[baseToken, quoteToken]} size={30} />
+      <TokensOverlap tokens={[baseToken, quoteToken]} size={size || 30} />
       <PairName baseToken={baseToken} quoteToken={quoteToken} />
     </>
   );
@@ -48,7 +52,8 @@ const _PairLogoName: FC<PairProps> = ({ pair: { baseToken, quoteToken } }) => {
 export const PairLogoName = memo(_PairLogoName, (a, b) => {
   return (
     a.pair.baseToken.address === b.pair.baseToken.address &&
-    a.pair.quoteToken.address === b.pair.quoteToken.address
+    a.pair.quoteToken.address === b.pair.quoteToken.address &&
+    a.size === b.size
   );
 });
 

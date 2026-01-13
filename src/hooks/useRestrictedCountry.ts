@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { carbonApi } from 'utils/carbonApi';
+import { carbonApi } from 'services/carbonApi';
 import { useModal } from './useModal';
 
 export const useRestrictedCountry = () => {

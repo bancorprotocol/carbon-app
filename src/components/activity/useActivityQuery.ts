@@ -10,7 +10,7 @@ import {
   ServerActivityMeta,
 } from 'libs/queries/extApi/activity';
 import { Token } from 'libs/tokens';
-import { carbonApi } from 'utils/carbonApi';
+import { carbonApi } from 'services/carbonApi';
 import { THIRTY_SEC_IN_MS } from 'utils/time';
 import { fromUnixUTC } from 'components/simulator/utils';
 

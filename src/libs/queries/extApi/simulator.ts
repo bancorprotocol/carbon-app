@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { SimulatorResultSearch } from 'libs/routing';
-import { carbonApi } from 'utils/carbonApi';
+import { carbonApi } from 'services/carbonApi';
 import { FIVE_MIN_IN_MS } from 'utils/time';
 
 export interface SimulatorResult {
