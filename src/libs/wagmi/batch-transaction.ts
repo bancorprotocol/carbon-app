@@ -152,11 +152,6 @@ export const useBatchTransaction = () => {
         }
       }
 
-      const canBatch = await canBatchTransactions(user);
-      if (!canBatch) {
-        throw new Error('Batch transaction not supported');
-      }
-      const chainId = `0x${config.network.chainId.toString(16)}`;
       for (const transaction of txs) {
         if (typeof transaction.to !== 'string') continue;
         calls.push({
@@ -165,6 +160,16 @@ export const useBatchTransaction = () => {
           data: transaction.data ?? '0x0',
         });
       }
+
+      if (calls.length === 1) {
+        throw new Error('Use regular sendTransaction for single transaction');
+      }
+
+      const canBatch = await canBatchTransactions(user);
+      if (!canBatch) {
+        throw new Error('Batch transaction not supported');
+      }
+      const chainId = `0x${config.network.chainId.toString(16)}`;
 
       const params = [
         {

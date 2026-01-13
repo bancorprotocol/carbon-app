@@ -59,7 +59,11 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         // TODO: find a cleaner solution
         if ('code' in err) throw err;
         if (Array.isArray(tx)) {
-          throw new Error('Array of transaction is only allowed for EIP7702');
+          if (tx.length === 1) {
+            return signer!.sendTransaction(tx[0]);
+          } else {
+            throw new Error('Array of transaction is only allowed for EIP7702');
+          }
         }
         return signer!.sendTransaction(tx);
       }
