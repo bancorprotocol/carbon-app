@@ -7,13 +7,13 @@ import { ReactNode } from 'react';
 
 export interface ExplorerTab {
   label: string;
-  href: 'pairs' | 'strategies' | 'distribution' | 'activity';
+  href: 'pairs' | 'strategies' | 'distribution' | 'activity' | 'migrate';
   search?: { search?: string };
   icon: ReactNode;
   testid: string;
 }
 
-const tabs: ExplorerTab[] = [
+export const baseTabs: ExplorerTab[] = [
   {
     label: 'Pairs',
     href: 'pairs',
@@ -42,8 +42,9 @@ const tabs: ExplorerTab[] = [
 
 interface Props {
   url: '/explore' | '/portfolio';
+  tabs: ExplorerTab[];
 }
-export const ExplorerTabs = ({ url }: Props) => {
+export const ExplorerTabs = ({ url, tabs }: Props) => {
   // To support emojis in ens domains
   const { location } = useRouterState();
   const pathname = decodeURIComponent(location.pathname);

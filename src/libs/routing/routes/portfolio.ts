@@ -16,6 +16,7 @@ import {
 } from '../utils';
 import * as v from 'valibot';
 import { PorfolioPairsPage } from 'pages/portfolio/pairs';
+import { MigratePage } from 'pages/portfolio/migrate';
 
 export const portfolioLayout = createRoute({
   getParentRoute: () => rootRoute,
@@ -77,6 +78,12 @@ export const portfolioActivityPage = createRoute({
   path: 'activity',
   component: PortfolioActivityPage,
   validateSearch: validateActivityParams,
+});
+
+export const portfolioMigratePage = createRoute({
+  getParentRoute: () => portfolioLayout,
+  path: 'migrate',
+  component: MigratePage,
 });
 
 // REDIRECT
