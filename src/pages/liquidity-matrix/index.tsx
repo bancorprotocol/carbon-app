@@ -40,10 +40,11 @@ import { useWagmi } from 'libs/wagmi';
 import { lsService } from 'services/localeStorage';
 import { isZero } from 'components/strategies/common/utils';
 import './index.css';
-import { getAddress } from 'ethers';
+import { getAddress, TransactionRequest } from 'ethers';
 import { useApproval } from 'hooks/useApproval';
 import { carbonSDK } from 'libs/sdk';
 import config from 'config';
+import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 
 const batcher = config.addresses.carbon.batcher;
 
@@ -179,6 +180,7 @@ export const LiquidityMatrixPage = () => {
   const { user, sendTransaction } = useWagmi();
   const { getTokenById, importTokens } = useTokens();
   const { openModal } = useModal();
+  const { canBatchTransactions } = useBatchTransaction();
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
   const set = useCallback(
@@ -319,21 +321,45 @@ export const LiquidityMatrixPage = () => {
     if (!batcher) return;
     const create = async () => {
       try {
-        const params = strategies.map((strategy) => ({
-          baseToken: strategy.base,
-          quoteToken: strategy.quote,
-          buyPriceLow: strategy.buyMin,
-          buyPriceMarginal: strategy.buyMarginal || strategy.buyMax,
-          buyPriceHigh: strategy.buyMax,
-          buyBudget: strategy.buyBudget,
-          sellPriceLow: strategy.sellMin,
-          sellPriceMarginal: strategy.sellMarginal || strategy.sellMax,
-          sellPriceHigh: strategy.sellMax,
-          sellBudget: strategy.sellBudget,
-        }));
-        const unsignedTx = await carbonSDK.batchCreateBuySellStrategies(params);
+        if (!user) throw new Error('No user found');
+        const canBatch = await canBatchTransactions(user);
+        const transactions: TransactionRequest[] = [];
+        if (canBatch) {
+          const getTransactions = strategies.map((strategy) => {
+            return carbonSDK.createBuySellStrategy(
+              strategy.base,
+              strategy.quote,
+              strategy.buyMin,
+              strategy.buyMarginal || strategy.buyMax,
+              strategy.buyMax,
+              strategy.buyBudget,
+              strategy.sellMin,
+              strategy.sellMarginal || strategy.sellMax,
+              strategy.sellMax,
+              strategy.sellBudget,
+            );
+          });
+          const allTxs = await Promise.all(getTransactions);
+          allTxs.forEach((tx) => transactions.push(tx));
+        } else {
+          const params = strategies.map((strategy) => ({
+            baseToken: strategy.base,
+            quoteToken: strategy.quote,
+            buyPriceLow: strategy.buyMin,
+            buyPriceMarginal: strategy.buyMarginal || strategy.buyMax,
+            buyPriceHigh: strategy.buyMax,
+            buyBudget: strategy.buyBudget,
+            sellPriceLow: strategy.sellMin,
+            sellPriceMarginal: strategy.sellMarginal || strategy.sellMax,
+            sellPriceHigh: strategy.sellMax,
+            sellBudget: strategy.sellBudget,
+          }));
+          const unsignedTx =
+            await carbonSDK.batchCreateBuySellStrategies(params);
+          transactions.push(unsignedTx);
+        }
         setDisabled(true);
-        const tx = await sendTransaction(unsignedTx);
+        const tx = await sendTransaction(transactions);
         await tx.wait();
         await Promise.all(
           strategies.map((s) => animateLeaving(s.quote, { isLast: true })),

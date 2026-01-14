@@ -57,11 +57,12 @@ export const useTradeQuery = () => {
 
       if (config.ui.useOpenocean) {
         const gasPrice = await openocean.gasPrice();
+        const amountDecimals = toDecimal(params.sourceInput, params.source);
         const tx = await openocean.swap({
           account: user,
           inTokenAddress: params.source.address,
           outTokenAddress: params.target.address,
-          amountDecimals: toDecimal(params.sourceInput, params.source),
+          amountDecimals: amountDecimals,
           gasPriceDecimals: gasPrice.toString(),
           slippage: Number(settings.slippage),
         });
@@ -80,6 +81,15 @@ export const useTradeQuery = () => {
             .toString();
           unsignedTx.gasLimit = BigInt(limit);
         }
+        unsignedTx.customData = {
+          spender: config.addresses.carbon.carbonController,
+          assets: [
+            {
+              address: params.source.address,
+              rawAmount: amountDecimals,
+            },
+          ],
+        };
         return sendTransaction(unsignedTx);
       } else {
         let unsignedTx: PopulatedTransaction;
@@ -106,13 +116,15 @@ export const useTradeQuery = () => {
         const source = getTokenById(params.source.address);
         const powerDecimal = new SafeDecimal(10).pow(source!.decimals);
         const amount = new SafeDecimal(baseAmount).mul(powerDecimal).toFixed(0);
-        const assets = [
-          {
-            address: params.source.address,
-            rawAmount: amount,
-          },
-        ];
-        unsignedTx.customData = { assets };
+        unsignedTx.customData = {
+          spender: config.addresses.carbon.carbonController,
+          assets: [
+            {
+              address: params.source.address,
+              rawAmount: amount,
+            },
+          ],
+        };
         return sendTransaction(unsignedTx);
       }
     },

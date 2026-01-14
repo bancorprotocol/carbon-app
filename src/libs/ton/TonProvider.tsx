@@ -206,8 +206,11 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const sendTransaction = useCallback(
-    async (tx: TransactionRequest) => {
+    async (tx: TransactionRequest | TransactionRequest[]) => {
       try {
+        if (Array.isArray(tx)) {
+          throw new Error('Batch transaction unsupported in TON');
+        }
         if (!proxyContract) {
           throw new Error('config.addresses.tac is not defined');
         }

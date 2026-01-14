@@ -29,7 +29,7 @@ export interface CarbonWagmiProviderContext {
   provider?: BrowserProvider | JsonRpcProvider;
   signer: JsonRpcSigner | undefined;
   sendTransaction: (
-    tx: TransactionRequest,
+    tx: TransactionRequest | TransactionRequest[],
   ) => Promise<{ hash: string; wait: () => Promise<any> }>;
   currentConnector: Connector | undefined;
   connectors: readonly Connector[];

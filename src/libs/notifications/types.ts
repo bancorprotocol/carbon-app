@@ -33,7 +33,7 @@ export type Notification = NotificationTx | NotificationActivity;
 export type DispatchNotification = <T extends keyof NotificationSchema>(
   key: T,
   data: NotificationSchema[T],
-) => void;
+) => string;
 
 export interface NotificationsContext {
   dispatchNotification: DispatchNotification;

@@ -7,8 +7,9 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
 import { ContractTransactionResponse } from 'ethers';
-import config from 'config';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
+import config from 'config';
+import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 
 export type GetUserApprovalProps = Pick<
   Token,
@@ -20,6 +21,7 @@ export type GetUserApprovalProps = Pick<
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
   const { user } = useWagmi();
   const { Token } = useContract();
+  const { canBatchTransactions } = useBatchTransaction();
 
   return useQueries({
     queries: data.map((t) => ({
@@ -37,6 +39,11 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
         const isGasToken = t.address === NATIVE_TOKEN_ADDRESS;
         if (isGasToken) {
+          return new SafeDecimal(shrinkToken(UNLIMITED_WEI, t.decimals));
+        }
+        // Do not ask approval if can batch transaction
+        const canBatch = await canBatchTransactions(user);
+        if (canBatch) {
           return new SafeDecimal(shrinkToken(UNLIMITED_WEI, t.decimals));
         }
 
