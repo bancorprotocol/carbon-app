@@ -71,7 +71,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     }
     const result = await response.text();
     if (env.AXIOM_APIKEY) {
-      fetch(
+      await fetch(
         'https://us-east-1.aws.edge.axiom.co/v1/ingest/cf-aggregator-proxy',
         {
           method: 'POST',
@@ -90,7 +90,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
             },
           ]),
         },
-      );
+      ).catch((err) => console.error(err)); // avoid axiom to break the whole function if fails
     }
     return new Response(result, {
       status: response.status,
