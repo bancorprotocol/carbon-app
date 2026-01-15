@@ -4,7 +4,7 @@ const referrers = {
   tac: '0xBBAFF3Bf6eC4C15992c0Fb37F12491Fd62C5B496',
   ethereum: '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4',
 };
-const referrerFee = '0.25';
+const referrerFee = '0';
 
 const proOrigin = 'https://open-api-pro.openocean.finance/v4';
 const allowedEndpoints = ['reverseQuote', 'quote', 'swap', 'gasPrice'];
