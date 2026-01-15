@@ -43,16 +43,15 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       throw new Error(`Unsupported VITE_NETWORK: ${chain}`);
     }
 
-    const referrer = referrers[network];
-
     // Copy search params from request to openocean
     for (const [key, value] of searchParams.entries()) {
       url.searchParams.set(key, value);
     }
 
     if (endpoint === 'swap') {
-      url.searchParams.set('referrer', referrer);
-      url.searchParams.set('referrerFee', referrerFee);
+      const referrer = referrers[network];
+      // url.searchParams.set('referrer', referrer);
+      // url.searchParams.set('referrerFee', referrerFee);
     }
 
     const response = await fetch(url, {

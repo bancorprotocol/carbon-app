@@ -12,6 +12,7 @@ import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { TransactionRequest } from 'ethers';
 import config from 'config';
+import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 
 interface GetTradeDataResult {
   tradeActions: TradeActionBNStr[];
@@ -51,6 +52,7 @@ export const useTradeQuery = () => {
     trade: { settings },
   } = useStore();
   const { signer } = useWagmi();
+  const { canBatchTransactions } = useBatchTransaction();
   return useMutation({
     mutationFn: async (params: TradeParams) => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
@@ -72,17 +74,20 @@ export const useTradeQuery = () => {
           value: BigInt(tx.value),
           data: tx.data,
         };
-        // Bump estimated gas because openocean isn't working correctly
-        const estimateGas = await signer?.estimateGas(unsignedTx);
-        if (estimateGas) {
-          const limit = new SafeDecimal(estimateGas?.toString())
-            .mul(1.1)
-            .round()
-            .toString();
-          unsignedTx.gasLimit = BigInt(limit);
+        // If tokens are not approved, the estimate gas will fail with EIP7702
+        if (!canBatchTransactions) {
+          // Bump estimated gas because openocean isn't working correctly
+          const estimateGas = await signer?.estimateGas(unsignedTx);
+          if (estimateGas) {
+            const limit = new SafeDecimal(estimateGas?.toString())
+              .mul(1.1)
+              .round()
+              .toString();
+            unsignedTx.gasLimit = BigInt(limit);
+          }
         }
         unsignedTx.customData = {
-          spender: config.addresses.carbon.carbonController,
+          spender: config.addresses.openocean,
           assets: [
             {
               address: params.source.address,
