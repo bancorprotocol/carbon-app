@@ -99,17 +99,26 @@ export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
 export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
   const pricesQuery = useGetTokensPrice();
   return useQueries({
-    combine: (result) => ({
-      data: result.map(({ data }) => data),
-      isPending: result.some(({ isPending }) => isPending),
-      isError: result.some(({ isError }) => isError),
-    }),
+    combine: (result) => {
+      const isPending = result.some(({ isPending }) => isPending);
+      const isError = result.some(({ isError }) => isError);
+      if (isPending || isError) return { isPending, isError, data: undefined };
+      const data: Record<string, number> = {};
+      for (const query of result) {
+        if (!query.data) continue;
+        const [address, marketPrice] = query.data;
+        if (typeof marketPrice !== 'number') continue;
+        data[address] = marketPrice;
+      }
+      return { isPending, isError, data };
+    },
     queries: addresses.map((address) => {
       return {
         queryKey: QueryKey.tokenPrice(address),
         queryFn: async () => {
           const prices = pricesQuery.data ?? {};
-          return await getMarketPrice(prices, address);
+          const marketPrice = await getMarketPrice(prices, address);
+          return [address, marketPrice] as const;
         },
         enabled: !!address,
         refetchInterval: FIVE_MIN_IN_MS,
