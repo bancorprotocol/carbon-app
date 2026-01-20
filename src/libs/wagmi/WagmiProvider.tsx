@@ -46,12 +46,16 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
     setImposterAccount,
   });
 
-  const { batchTransaction } = useBatchTransaction();
+  const { batchTransaction, canBatchTransactions } = useBatchTransaction();
 
   const openConnect = useCallback(() => openModal('wallet'), [openModal]);
   const sendTransaction = useCallback(
     async (tx: TransactionRequest | TransactionRequest[]) => {
       if (!user || !signer) throw new Error('No user connected');
+      const canBatch = await canBatchTransactions(user);
+      if (!canBatch && Array.isArray(tx) && tx.length > 1) {
+        throw new Error('Array of transaction is only allowed for EIP7702');
+      }
       try {
         return await batchTransaction(user, tx);
       } catch (err: any) {
@@ -62,13 +66,15 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
           if (tx.length === 1) {
             return signer!.sendTransaction(tx[0]);
           } else {
-            throw new Error('Array of transaction is only allowed for EIP7702');
+            throw new Error(
+              'Cannot fallback to regular transaction because it is an Array of txs',
+            );
           }
         }
         return signer!.sendTransaction(tx);
       }
     },
-    [user, batchTransaction, signer],
+    [user, signer, canBatchTransactions, batchTransaction],
   );
   const getBalance = useCallback(
     (address: string) => {
