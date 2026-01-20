@@ -195,7 +195,7 @@ export const CartPage = () => {
         setConfirmation(false);
         setProcessing(false);
         clearCart(user!);
-        nav({ to: '/portfolio' });
+        nav({ to: '/portfolio/strategies' });
         cache.invalidateQueries({
           queryKey: QueryKey.strategiesByUser(user),
         });

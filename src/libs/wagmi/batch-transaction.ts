@@ -71,7 +71,7 @@ async function repeat<T>(cb: () => Promise<T>): Promise<T> {
 }
 
 export const useBatchTransaction = () => {
-  const { dispatchNotification, dismissAlert } = useNotifications();
+  const { dispatchNotification, removeNotification } = useNotifications();
   const { getTokenById } = useTokens();
   const { Token } = useContract();
 
@@ -206,7 +206,7 @@ export const useBatchTransaction = () => {
         if (res.status >= 400) return res;
         if (res.status === 200) return res;
       });
-      dismissAlert(notificationId);
+      removeNotification(notificationId);
       const hash = result?.receipts[0].transactionHash;
       return {
         hash: hash || '',
@@ -216,7 +216,7 @@ export const useBatchTransaction = () => {
     [
       Token,
       canBatchTransactions,
-      dismissAlert,
+      removeNotification,
       dispatchNotification,
       getTokenById,
     ],
