@@ -7,6 +7,8 @@
     "@bancor/carbon-sdk": "0.0.127-DEV",
     "@cloudflare/workers-types": "4.20230717.0",
     "@eslint/js": "^9.39.2",
+    "@floating-ui/core": "^1.7.3",
+    "@floating-ui/dom": "^1.7.4",
     "@floating-ui/react": "0.27.16",
     "@oddbird/popover-polyfill": "0.6.1",
     "@playwright/test": "1.52.0",
