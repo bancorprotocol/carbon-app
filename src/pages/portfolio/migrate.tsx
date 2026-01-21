@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { TransactionRequest } from 'ethers';
+import { parseUnits, TransactionRequest } from 'ethers';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -154,11 +154,11 @@ export const MigratePage = () => {
       assets: [
         {
           address: position.base,
-          rawAmount: position.baseLiquidity,
+          rawAmount: parseUnits(budgets.sell, base.decimals).toString(),
         },
         {
           address: position.quote,
-          rawAmount: position.quoteLiquidity,
+          rawAmount: parseUnits(budgets.buy, quote.decimals).toString(),
         },
       ],
     };

@@ -41,7 +41,7 @@ export const DebugUniswap = () => {
       baseAmount,
       quoteAmount,
     );
-    await sendTransaction([txsV2, txsV3]);
+    await sendTransaction([txsV2]);
   };
   return (
     <section className="rounded-3xl surface grid gap-20 p-20">

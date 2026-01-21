@@ -45,8 +45,8 @@ const FACTORY_ABI = [
 /**
  * Creates a new Uniswap V3 Position (Mint NFT).
  * @param signer - The ether.js signer
- * @param token0Addr - Address of the first token (must be sorted or function will sort)
- * @param token1Addr - Address of the second token
+ * @param token0 - Address of the first token (must be sorted or function will sort)
+ * @param token1 - Address of the second token
  * @param amount0 - Amount of Token0 to add (BigInt)
  * @param amount1 - Amount of Token1 to add (BigInt)
  * @param fee - The pool fee tier (e.g. 3000 for 0.3%)
@@ -55,8 +55,8 @@ const FACTORY_ABI = [
  */
 export async function createV3Position(
   signer: Signer,
-  token0Addr: string,
-  token1Addr: string,
+  token0: string,
+  token1: string,
   amount0: bigint,
   amount1: bigint,
   fee: number = 3000, // e.g. 500, 3000, 10000
@@ -69,8 +69,8 @@ export async function createV3Position(
 
   // 1. Sort Tokens (Uniswap V3 requires token0 < token1)
   // If inputs are not sorted, we swap them to match the pool structure
-  let t0 = token0Addr;
-  let t1 = token1Addr;
+  let t0 = token0;
+  let t1 = token1;
   let amt0 = amount0;
   let amt1 = amount1;
 

@@ -1,16 +1,14 @@
-import { Contract, id, Provider, zeroPadValue } from 'ethers';
+import { Contract, id, Provider, zeroPadValue, formatUnits } from 'ethers';
 import { UniswapPosition } from '../utils';
 
 // --- Configuration ---
-const V2_FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
+const FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
 
 // --- ABIs ---
 // Minimal ABI to detect Transfer events and read Pair data
-const ERC20_TRANSFER_ABI = [
-  'event Transfer(address indexed from, address indexed to, uint256 value)',
-];
+const ERC20_ABI = ['function decimals() view returns (uint8)'];
 
-const V2_PAIR_ABI = [
+const PAIR_ABI = [
   'function balanceOf(address owner) view returns (uint)',
   'function token0() view returns (address)',
   'function token1() view returns (address)',
@@ -19,7 +17,7 @@ const V2_PAIR_ABI = [
   'function factory() view returns (address)', // Used for verification
 ];
 
-const V2_FACTORY_ABI = [
+const FACTORY_ABI = [
   'function getPair(address tokenA, address tokenB) view returns (address pair)',
 ];
 
@@ -33,11 +31,7 @@ export async function getAllV2Positions(
   fromBlock: number = -100000, // Defaults to scanning last 100k blocks. Set to 0 for full history (slow).
 ): Promise<UniswapPosition[]> {
   const positions: UniswapPosition[] = [];
-  const factoryContract = new Contract(
-    V2_FACTORY_ADDRESS,
-    V2_FACTORY_ABI,
-    provider,
-  );
+  const factoryContract = new Contract(FACTORY_ADDRESS, FACTORY_ABI, provider);
 
   // 1. SCAN LOGS (Discovery Phase)
   // We look for any 'Transfer' event where 'to' == userAddress.
@@ -70,7 +64,7 @@ export async function getAllV2Positions(
   // Check which of these tokens are actually Uniswap V2 pairs
   for (const pairAddress of potentialPairs) {
     try {
-      const pairContract = new Contract(pairAddress, V2_PAIR_ABI, provider);
+      const pairContract = new Contract(pairAddress, PAIR_ABI, provider);
 
       // A. Quick check: Does it identify as a pair?
       // Calling token0() is a cheap way to filter out standard tokens like USDC which don't have this method.
@@ -78,6 +72,13 @@ export async function getAllV2Positions(
       const [token0, token1] = await Promise.all([
         pairContract.token0(),
         pairContract.token1(),
+      ]);
+
+      const token0Contract = new Contract(token0, ERC20_ABI, provider);
+      const token1Contract = new Contract(token1, ERC20_ABI, provider);
+      const [decimal0, decimal1] = await Promise.all([
+        token0Contract.decimals(),
+        token1Contract.decimals(),
       ]);
 
       // B. Security Check: Ask the Factory
@@ -110,8 +111,8 @@ export async function getAllV2Positions(
           quote: token1,
           min: '0', // V2 is always 0 to Infinity
           max: 'Infinity',
-          baseLiquidity: amount0.toString(),
-          quoteLiquidity: amount1.toString(),
+          baseLiquidity: formatUnits(amount0, decimal0),
+          quoteLiquidity: formatUnits(amount1, decimal1),
           baseFee: '0', // V2 fees are not separable; they increase the value of LP tokens
           quoteFee: '0',
           fee: '3000', // Hardcoded 0.3%
