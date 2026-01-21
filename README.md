@@ -258,7 +258,7 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `defaultLimitedApproval`: Optional flag to set the default ERC-20 approval to limited approval. For chains where gas is low, it is recommended to set this flag to true.
   - `gasToken`: Gas token name, symbol, decimals, address and logoURI. This parameter will take priority over the `tokenListOverride`.
   - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
-  - `rpc`: 
+  - `rpc`:
     - `url`: RPC url of the network
     - `headers`: Headers append to each request to the RPC network
     - `batchSize`: The maximum number of JSON-RPC requests to send in a batch
@@ -270,9 +270,9 @@ The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains impor
   - `tokens`:
     - `ZERO`: Address of the zero token
   - `carbon`:
-     - `carbonController`: Address of CarbonController contract
-     - `voucher`: Address of Voucher contract 
-  - `utils`: 
+    - `carbonController`: Address of CarbonController contract
+    - `voucher`: Address of Voucher contract
+  - `utils`:
     - `multicall3`
       - `address`: Address of the multicall3 contract
       - `blockCreated`: Block of the creation of the multicall3
@@ -396,23 +396,25 @@ fontFamily: {
 You can also remove the unused `@font-face` from the [`src/fonts.css`](src/fonts.css) file.
 
 # Openocean
-*Contact Bancor team before setting openocean so we can assist with the required changes.*
+
+_Contact Bancor team before setting openocean so we can assist with the required changes._
 
 In order to setup openocean you need to set the config: `ui.useOpenocean` to `true`.
 By default Carbon tries calling cloudflare function to call openocean.
 If you're not using cloudflare function, check the section [Without Cloudflare functions](#without-cloudflare-functions).
 
-
 ## With cloudflare functions
-Under [`functions/api/openocean/index.ts`](/functions/api/openocean/index.ts) 
+
+Under [`functions/api/openocean/index.ts`](/functions/api/openocean/index.ts)
+
 - Update the variable `referrers` & `referrerFee` with your own values.
 - Add `OPENOCEAN_APIKEY` in your environment variables in cloudflare.
 
 ## Without cloudflare functions
+
 Under [`src/services/openocean.ts`](/src/services/openocean.ts) update the `getUrl` function to send to your own implementation.
 
 Alternatively you can update the `referrer`, `referrerFee` and `apiKey` in the same file in order to do a client call. **But the apiKey would be public** !
-
 
 # License
 
