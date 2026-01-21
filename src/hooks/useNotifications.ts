@@ -66,7 +66,20 @@ export const useNotifications = () => {
   );
 
   const removeNotification = useCallback(
-    (id: string) => {
+    async (id: string) => {
+      const item = document.getElementById(id) as HTMLElement;
+      const animate = item.animate(
+        [
+          { transform: 'scale(1)', opacity: 1 },
+          { transform: 'scale(0.6)', opacity: 0 },
+        ],
+        {
+          duration: 400,
+          easing: 'cubic-bezier(1, 0, 1, .5)',
+          fill: 'forwards',
+        },
+      );
+      await animate.finished;
       setNotifications((prev) => {
         const newNotifications = prev.filter((n) => n.id !== id);
         setLSUserNotifications(user, newNotifications);
