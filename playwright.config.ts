@@ -63,6 +63,6 @@ export default defineConfig({
   webServer: {
     url: 'http://localhost:3000',
     reuseExistingServer: !isCI,
-    command: isCI ? 'yarn build && yarn serve --port 3000' : 'yarn start',
+    command: isCI ? 'pnpm build && pnpm serve --port 3000' : 'pnpm start',
   },
 });

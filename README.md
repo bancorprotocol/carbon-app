@@ -22,7 +22,7 @@ Carbon DeFi is an advanced onchain trading protocol enabling automated limit ord
 To run the app locally, you need the following:
 
 - Node.js 20+
-- Yarn
+- pnpm 10
 
 For E2E testing you need a Tenderly account and an API Key.
 
@@ -33,18 +33,18 @@ For E2E testing you need a Tenderly account and an API Key.
 2. In the project directory, you can install all dependencies by running:
 
 ```bash
-yarn install
+pnpm install
 ```
 
 3. Run the app in development mode by running the following:
 
 ```bash
-yarn start
+pnpm start
 ```
 
 You can choose the network to run the app by setting the `VITE_NETWORK` variable in the `.env` file. The default network is `ethereum`.
 
-Alternatively, if defined in the in the [package.json](package.json) file, you can select the network to use by running `yarn:network` where `network` is one of the networks defined in the [config](src/config/index.ts) and the `yarn:network` command is defined in [package.json](package.json) file as follows:
+Alternatively, if defined in the in the [package.json](package.json) file, you can select the network to use by running `pnpm:network` where `network` is one of the networks defined in the [config](src/config/index.ts) and the `pnpm:network` command is defined in [package.json](package.json) file as follows:
 
 ```bash
 "start:network": "cross-env VITE_NETWORK=network vite",
@@ -127,13 +127,13 @@ If you need to make changes to the Docker image or update dependencies, you can 
 To launch the test runner, run the following command:
 
 ```bash
-yarn test
+pnpm test
 ```
 
 If you wish to check the test coverage, run the following command:
 
 ```bash
-yarn coverage
+pnpm coverage
 ```
 
 ## E2E tests
@@ -147,7 +147,7 @@ To ensure consistency and reliability in testing environments, we use Docker. Ma
 Running the following, will build the app for production:
 
 ```bash
-yarn build
+pnpm build
 ```
 
 It will build the app for production to the `build` folder.
