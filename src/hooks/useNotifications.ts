@@ -75,7 +75,7 @@ export const useNotifications = () => {
         ],
         {
           duration: 400,
-          easing: 'cubic-bezier(0.36, 0, 0.66, -0.56)', // ease-in-back
+          easing: 'cubic-bezier(1, 0, 1, .5)',
           fill: 'forwards',
         },
       );
