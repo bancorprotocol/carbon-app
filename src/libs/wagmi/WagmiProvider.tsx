@@ -66,9 +66,10 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
           if (tx.length === 1) {
             return signer!.sendTransaction(tx[0]);
           } else {
-            throw new Error(
-              'Cannot fallback to regular transaction because it is an Array of txs',
-            );
+            const msg =
+              'Cannot fallback to regular transaction because it is an Array of txs';
+            console.error(msg);
+            throw err;
           }
         }
         return signer!.sendTransaction(tx);

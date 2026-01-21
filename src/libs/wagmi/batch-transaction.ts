@@ -207,11 +207,17 @@ export const useBatchTransaction = () => {
         if (res.status === 200) return res;
       });
       removeNotification(notificationId);
-      const hash = result?.receipts[0].transactionHash;
-      return {
-        hash: hash || '',
-        wait: async () => true,
-      };
+      if (result?.receipts) {
+        const hash = result.receipts[0].transactionHash;
+        return {
+          hash: hash || '',
+          wait: async () => true,
+        };
+      } else {
+        throw new Error(
+          `Batch Transaction fails with status ${result?.status}`,
+        );
+      }
     },
     [
       Token,
