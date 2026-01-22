@@ -59,6 +59,7 @@ export async function createV3Position(
   token1: string,
   amount0: bigint,
   amount1: bigint,
+  marketPrice: number,
   fee: number = 3000, // e.g. 500, 3000, 10000
 ): Promise<TransactionRequest> {
   const provider = signer.provider!;
@@ -81,15 +82,16 @@ export async function createV3Position(
 
   // 3. Get Pool State (Needed to calculate Slippage/MinAmounts)
   // We need the current sqrtPrice to calculate how much liquidity the amounts generate
-  const factory = new Contract(FACTORY_ADDRESS, FACTORY_ABI, provider);
-  const poolAddress = await factory.getPool(t0, t1, fee);
-
-  if (poolAddress === ZeroAddress) {
-    const price = new SafeDecimal(amt0.toString())
-      .div(t1.toString())
-      .toNumber();
-    await createAndInitializePool(signer, t0, t1, fee, price);
-  }
+  const price = new SafeDecimal(amt0.toString())
+    .div(amt1.toString())
+    .toNumber();
+  const poolAddress = await createPoolIfNeeded(
+    signer,
+    t0,
+    t1,
+    fee,
+    marketPrice,
+  );
 
   const poolContract = new Contract(poolAddress, POOL_ABI, provider);
   const [slot0, liquidity] = await Promise.all([
@@ -170,18 +172,17 @@ export async function createV3Position(
     recipient: userAddress,
     deadline: mintOptions.deadline,
   };
-
   const unsignedTx = await manager.mint.populateTransaction(params);
   unsignedTx.customData = {
     spender: POSITION_MANAGER_ADDRESS,
     assets: [
       {
         address: t0,
-        rawAmount: amount0Min.toString(),
+        rawAmount: amt0.toString(),
       },
       {
         address: t1,
-        rawAmount: amount1Min.toString(),
+        rawAmount: amt1.toString(),
       },
     ],
   };
@@ -223,7 +224,7 @@ export function getTicksFromRange(
  * @param fee - Fee tier (500, 3000, 10000)
  * @param initialPrice - The starting price of Token0 in terms of Token1 (e.g., "3000" if 1 Token0 = 3000 Token1)
  */
-export async function createAndInitializePool(
+export async function createPoolIfNeeded(
   signer: Signer,
   token0: string,
   token1: string,

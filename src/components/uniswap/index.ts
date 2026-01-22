@@ -1,9 +1,9 @@
 import { Provider, Signer } from 'ethers';
 import { UniswapPosition } from './utils';
-import { fetchV3PositionsGraph } from './v3/read';
 import { withdrawAllV2Liquidity } from './v2/withdraw';
 import { deleteAndWithdrawV3Position } from './v3/withdraw';
 import { getAllV2Positions } from './v2/read.contract';
+import { getAllV3Positions } from './v3/read.contract';
 
 export async function getUniswapPositions(
   provider: Provider,
@@ -14,8 +14,9 @@ export async function getUniswapPositions(
   // Run queries in parallel
   const [v2Positions, v3Positions] = await Promise.all([
     getAllV2Positions(provider, normalizedUser),
+    getAllV3Positions(provider, normalizedUser),
     // fetchV2PositionsGraph(normalizedUser),
-    fetchV3PositionsGraph(provider, normalizedUser),
+    // fetchV3PositionsGraph(provider, normalizedUser),
   ]);
 
   return [...v2Positions, ...v3Positions];

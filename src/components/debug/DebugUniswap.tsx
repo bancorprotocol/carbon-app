@@ -5,6 +5,8 @@ import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import { FormEvent } from 'react';
 import { parseUnits } from 'ethers';
 import { createV3Position } from 'components/uniswap/v3/create';
+import { getMarketPrice } from 'libs/queries/extApi/tokenPrice';
+import config from 'config';
 
 export const DebugUniswap = () => {
   const { getTokenById } = useTokens();
@@ -12,7 +14,6 @@ export const DebugUniswap = () => {
   const { canBatchTransactions } = useBatchTransaction();
   const createV2 = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(event);
     if (!user) throw new Error('User Required');
     if (!signer) throw new Error('Signer Required');
     const canBatch = await canBatchTransactions(user);
@@ -20,6 +21,8 @@ export const DebugUniswap = () => {
     const data = new FormData(event.target as HTMLFormElement);
     const base = getTokenById(data.get('base') as string)!;
     const quote = getTokenById(data.get('quote') as string)!;
+    const fee = Number(data.get('fee')!) * 1000;
+    const marketPrice = await getMarketPrice(base, quote);
     const baseAmount = parseUnits(
       data.get('base-amount') as string,
       base.decimals,
@@ -40,30 +43,47 @@ export const DebugUniswap = () => {
       quote.address,
       baseAmount,
       quoteAmount,
+      marketPrice,
+      fee,
     );
-    await sendTransaction([txsV2]);
+    await sendTransaction([txsV3]);
   };
   return (
     <section className="rounded-3xl surface grid gap-20 p-20">
       <form className="grid gap-8" onSubmit={createV2}>
-        <h2 className="text-center">Uniswap v2 & v3</h2>
+        <hgroup>
+          <h2>Uniswap v2 & v3</h2>
+          <p className="text-white/60">Create a uniswap v2 & v3 position</p>
+        </hgroup>
         <div className="grid gap-8">
           <label htmlFor="uni-base">Base</label>
-          <input
+          <select
             className="bg-main-900 px-16 py-8 rounded-2xl"
             id="uni-base"
             name="base"
             required
-          />
+          >
+            {Object.entries(config.addresses.tokens).map(
+              ([symbol, address]) => (
+                <option value={address}>{symbol}</option>
+              ),
+            )}
+          </select>
         </div>
         <div className="grid gap-8">
           <label htmlFor="uni-quote">Quote</label>
-          <input
+          <select
             className="bg-main-900 px-16 py-8 rounded-2xl"
             id="uni-quote"
             name="quote"
             required
-          />
+          >
+            {Object.entries(config.addresses.tokens).map(
+              ([symbol, address]) => (
+                <option value={address}>{symbol}</option>
+              ),
+            )}
+          </select>
         </div>
         <div className="grid gap-8">
           <label htmlFor="uni-base-amount">Base Amount</label>
@@ -75,11 +95,20 @@ export const DebugUniswap = () => {
           />
         </div>
         <div className="grid gap-8">
-          <label htmlFor="uni-quote-amount">Quote Amount</label>
+          <label htmlFor="uni-quote-amount">Quote Amount (only for v3)</label>
           <input
             className="bg-main-900 px-16 py-8 rounded-2xl"
             id="uni-quote-amount"
             name="quote-amount"
+            required
+          />
+        </div>
+        <div className="grid gap-8">
+          <label htmlFor="uni-fee">Fee in % (only for v3)</label>
+          <input
+            className="bg-main-900 px-16 py-8 rounded-2xl"
+            id="uni-fee"
+            name="fee"
             required
           />
         </div>

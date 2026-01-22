@@ -8,12 +8,9 @@ import { getUsdPrice, tokenAmount } from 'utils/helpers';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { carbonSDK } from 'libs/sdk';
+import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import {
-  calculateOverlappingBuyBudget,
-  calculateOverlappingPrices,
-  calculateOverlappingSellBudget,
-} from '@bancor/carbon-sdk/strategy-management';
-import {
+  getMaxSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
@@ -52,6 +49,8 @@ export const MigratePage = () => {
     return Array.from(list);
   }, [uniPositions]);
 
+  // TODO: this is broken because it uses the same query as UseTokenPrice but not the same result [address, price] vs price.
+  // Create a dedicated cache
   const marketPriceQuery = useGetMultipleTokenPrices(tokens);
 
   const positions = useMemo(() => {
@@ -60,17 +59,17 @@ export const MigratePage = () => {
     return uniPositions.map((pos) => {
       const basePrice = new SafeDecimal(marketPrices[pos.base]);
       const quotePrice = new SafeDecimal(marketPrices[pos.quote]);
+      const baseFiat = basePrice.mul(pos.baseLiquidity);
+      const baseFeeFiat = basePrice.mul(pos.baseFee);
+      const quoteFiat = quotePrice.mul(pos.quoteLiquidity);
+      const quoteFeeFiat = quotePrice.mul(pos.quoteFee);
       return {
         id: pos.id,
         dex: dexNames[pos.dex],
         base: getTokenById(pos.base)!,
         quote: getTokenById(pos.quote)!,
-        liquidity: basePrice
-          .mul(pos.baseLiquidity)
-          .add(quotePrice.mul(pos.quoteLiquidity)),
-        feeLiquidity: basePrice
-          .mul(pos.baseFee)
-          .add(quotePrice.mul(pos.quoteFee)),
+        liquidity: baseFiat.add(quoteFiat),
+        feeLiquidity: baseFeeFiat.add(quoteFeeFiat),
         feePercent: `${new SafeDecimal(pos.fee).div(1_000).toString()}%`,
         min: pos.min.toString(),
         max: pos.max.toString(),
@@ -99,7 +98,9 @@ export const MigratePage = () => {
     const basePrice = new SafeDecimal(marketPrices[position.base]);
     const quotePrice = new SafeDecimal(marketPrices[position.quote]);
     const marketPrice = basePrice.div(quotePrice).toString();
-    const spread = new SafeDecimal(position.fee).div(1_000).toString();
+    const feePercent = new SafeDecimal(position.fee).div(1000);
+    const maxSpread = getMaxSpread(Number(position.min), Number(position.max));
+    const spread = Math.min(maxSpread, feePercent.toNumber()).toString();
     const isFullRange = position.min === '0' && position.max === 'Infinity';
     const fullrange = getFullRangesPrices(
       marketPrice,
@@ -116,25 +117,9 @@ export const MigratePage = () => {
       buy: position.quoteLiquidity,
     };
     if (isMinAboveMarket(buyOrder)) {
-      budgets.sell = calculateOverlappingSellBudget(
-        base.decimals,
-        quote.decimals,
-        min,
-        max,
-        marketPrice,
-        spread,
-        budgets.buy || '0',
-      );
+      budgets.buy = '0';
     } else if (isMaxBelowMarket(sellOrder)) {
-      budgets.buy = calculateOverlappingBuyBudget(
-        base.decimals,
-        quote.decimals,
-        min,
-        max,
-        marketPrice,
-        spread,
-        budgets.sell || '0',
-      );
+      budgets.sell = '0';
     }
     const params: CreateStrategyParams = [
       position.base,
@@ -148,6 +133,7 @@ export const MigratePage = () => {
       prices.sellPriceHigh,
       budgets.sell,
     ];
+
     const unsignedTx = await carbonSDK.createBuySellStrategy(...params);
     unsignedTx.customData = {
       spender: config.addresses.carbon.carbonController,
