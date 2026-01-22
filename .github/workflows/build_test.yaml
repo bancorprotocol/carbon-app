@@ -19,12 +19,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - uses: pnpm/action-setup@v4
+        id: pnpm-setup
+        with:
+          version: 10.28.0
       - uses: actions/cache@v4
         id: pnpm-cache
         with:
           path: |
             **/node_modules
-            ${{ steps.pnpm-cache-dir-path.outputs.dir }}
+            ${{ steps.pnpm-setup.outputs.store-path }}
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-

@@ -18,6 +18,10 @@ jobs:
         with:
           node-version: 20
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -31,7 +35,7 @@ jobs:
           echo "$CLEAN_OUTPUT"
           echo EOF
           } >> "$GITHUB_OUTPUT"
-          LATEST_VERSION=$(pnpm info caniuse-lite version | sed -n '2p' | sed 's/\x1b\[[0-9;]*m//g')
+          LATEST_VERSION=$(pnpm info caniuse-lite version)
           echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Import GPG key
