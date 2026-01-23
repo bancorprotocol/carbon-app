@@ -3,7 +3,7 @@ import { useTokens } from 'hooks/useTokens';
 import { useWagmi } from 'libs/wagmi';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import { FormEvent } from 'react';
-import { parseUnits } from 'ethers';
+import { parseUnits, TransactionRequest } from 'ethers';
 import { createV3Position } from 'components/uniswap/v3/create';
 import { getMarketPrice } from 'libs/queries/extApi/tokenPrice';
 import config from 'config';
@@ -31,12 +31,14 @@ export const DebugUniswap = () => {
       data.get('quote-amount') as string,
       quote.decimals,
     );
+    const txs: TransactionRequest[] = [];
     const txsV2 = await createV2Position(
       signer,
       base.address,
       quote.address,
       baseAmount,
     );
+    txs.push(txsV2);
     const txsV3 = await createV3Position(
       signer,
       base.address,
@@ -44,9 +46,10 @@ export const DebugUniswap = () => {
       baseAmount,
       quoteAmount,
       marketPrice,
-      fee,
+      // fee, // NOT WORKING
     );
-    await sendTransaction([txsV3]);
+    txs.push(txsV3);
+    await sendTransaction(txs);
   };
   return (
     <section className="rounded-3xl surface grid gap-20 p-20">
