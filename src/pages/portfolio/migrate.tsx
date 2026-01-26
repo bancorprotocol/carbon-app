@@ -83,8 +83,6 @@ interface MigratedPosition {
   };
 }
 
-type CreateStrategyParams = Parameters<typeof carbonSDK.createBuySellStrategy>;
-
 export const MigratePage = () => {
   const { user, provider } = useWagmi();
   const [uniPositions, setUniPositions] = useState<UniswapPosition[]>();
@@ -272,12 +270,22 @@ export const MigratePage = () => {
           })}
         </tbody>
       </table>
-      {selectedPosition && <PositionDialog position={selectedPosition} />}
+      {selectedPosition && (
+        <PositionDialog
+          position={selectedPosition}
+          onClose={() => setSelectedIndex(-1)}
+        />
+      )}
     </>
   );
 };
 
-const PositionDialog: FC<{ position: MigratedPosition }> = (props) => {
+interface Props {
+  position: MigratedPosition;
+  onClose: () => void;
+}
+
+const PositionDialog: FC<Props> = (props) => {
   const { ref, open, lightDismiss, close } = useDialog();
   const { user, signer, sendTransaction } = useWagmi();
   const p = props.position;
@@ -312,29 +320,40 @@ const PositionDialog: FC<{ position: MigratedPosition }> = (props) => {
       transactions.push(tx);
     }
 
-    // Create new strategies
-
+    // Check Spread
     const maxSpread = getMaxSpread(Number(buy.min), Number(sell.max));
     const spread = Math.min(maxSpread, Number(position.spread)).toString();
+
+    // Check fullrange
     const isFullRange = buy.min === '0' && sell.max === 'Infinity';
     const fullrange = getFullRangesPrices(
       marketPrice,
       base.decimals,
       quote.decimals,
     );
-    const min = isFullRange ? fullrange.min : buy.min;
-    const max = isFullRange ? fullrange.max : sell.max;
-    const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
+    if (isFullRange) buy.min = fullrange.min;
+    if (isFullRange) sell.max = fullrange.max;
+
+    // Calculate prices
+    const prices = calculateOverlappingPrices(
+      buy.min,
+      sell.max,
+      marketPrice,
+      spread,
+    );
     buy.marginalPrice = prices.buyPriceMarginal;
     buy.max = prices.buyPriceHigh;
     sell.min = prices.sellPriceLow;
     sell.marginalPrice = prices.sellPriceMarginal;
+
+    // Calculate budget
     if (isMinAboveMarket(buy)) {
       buy.budget = '0';
     } else if (isMaxBelowMarket(sell)) {
       sell.budget = '0';
     }
-    const params: CreateStrategyParams = [
+
+    const unsignedTx = await carbonSDK.createBuySellStrategy(
       base.address,
       quote.address,
       buy.min,
@@ -345,9 +364,7 @@ const PositionDialog: FC<{ position: MigratedPosition }> = (props) => {
       sell.marginalPrice,
       sell.max,
       sell.budget,
-    ];
-    console.log(params);
-    const unsignedTx = await carbonSDK.createBuySellStrategy(...params);
+    );
     unsignedTx.customData = {
       spender: config.addresses.carbon.carbonController,
       assets: [
@@ -395,6 +412,7 @@ const PositionDialog: FC<{ position: MigratedPosition }> = (props) => {
       ref={ref}
       className="modal center"
       onClick={lightDismiss}
+      onClose={() => props.onClose()}
     >
       <form method="dialog" className="grid gap-16" onSubmit={migrate}>
         <header className="flex items-center justify-between">

@@ -106,6 +106,8 @@ export const DebugUniswap = () => {
             required
           />
         </div>
+        {/*
+        TODO: currently fee is not working
         <div className="grid gap-8">
           <label htmlFor="uni-fee">Fee in % (only for v3)</label>
           <input
@@ -115,6 +117,7 @@ export const DebugUniswap = () => {
             required
           />
         </div>
+        */}
         <button className="btn-primary-gradient" type="submit">
           Create position
         </button>
