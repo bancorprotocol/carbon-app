@@ -16,7 +16,7 @@ export const useDebouncedValue = <T = any>(
 ) => {
   const [_value, _setValue] = useState(value);
   const mountedRef = useRef(false);
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<number>(null);
   const cooldownRef = useRef(false);
 
   const setValue = useCallback(
