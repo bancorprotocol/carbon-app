@@ -4,32 +4,6 @@ interface OpenOptions {
   autofocus?: boolean;
 }
 
-/** Manage dialog open/close */
-export const dialogManager = {
-  lightDismiss(e: PointerEvent) {
-    if (e.target === e.currentTarget) this.close((e.target as HTMLElement).id);
-  },
-  async close(id: string) {
-    const dialog = document.getElementById(id) as HTMLDialogElement;
-    if (navigator.webdriver) return dialog.close();
-    // Because of Safari we cannot use native transition
-    dialog.classList.add('closing');
-    const all = dialog.getAnimations({ subtree: true });
-    await Promise.race([
-      Promise.all(all.map((t) => t.finished)),
-      new Promise((res) => setTimeout(res, 1_000)),
-    ]);
-    dialog.close();
-    dialog.classList.remove('closing');
-    dialog.removeEventListener('click', this.lightDismiss);
-  },
-  open(id: string) {
-    const dialog = document.getElementById(id) as HTMLDialogElement;
-    dialog.showModal();
-    dialog.addEventListener('click', this.lightDismiss);
-  },
-};
-
 export const useDialog = () => {
   const ref = useRef<HTMLDialogElement>(null);
 
