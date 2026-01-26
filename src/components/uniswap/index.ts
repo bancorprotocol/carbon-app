@@ -1,5 +1,5 @@
 import { Provider, Signer } from 'ethers';
-import { UniswapPosition } from './utils';
+import { Dexes, UniswapPosition } from './utils';
 import { withdrawAllV2Liquidity } from './v2/withdraw';
 import { deleteAndWithdrawV3Position } from './v3/withdraw';
 import { getAllV2Positions } from './v2/read.contract';
@@ -24,11 +24,12 @@ export async function getUniswapPositions(
 
 export async function withdrawPosition(
   signer: Signer,
-  position: UniswapPosition,
+  dex: Dexes,
+  positionId: string,
 ) {
-  if (position.dex === 'uniswap-v2') {
-    return withdrawAllV2Liquidity(signer, position.id);
+  if (dex === 'uniswap-v2') {
+    return withdrawAllV2Liquidity(signer, positionId);
   } else {
-    return deleteAndWithdrawV3Position(signer, position.id);
+    return deleteAndWithdrawV3Position(signer, positionId);
   }
 }

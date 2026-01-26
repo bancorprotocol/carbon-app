@@ -1,4 +1,6 @@
 import {
+  FC,
+  FormEvent,
   FunctionComponent,
   SVGProps,
   useEffect,
@@ -24,12 +26,17 @@ import { getFullRangesPrices } from 'components/strategies/common/utils';
 import { Dexes, UniswapPosition } from 'components/uniswap/utils';
 import { getUniswapPositions, withdrawPosition } from 'components/uniswap';
 import { NotFound } from 'components/common/NotFound';
-import { dialogManager } from 'hooks/useDialog';
+import { useDialog } from 'hooks/useDialog';
 import IconClose from 'assets/icons/X.svg?react';
 import IconCarbon from 'assets/logos/carbon.svg?react';
 import IconUniswap from 'assets/logos/uniswap.svg?react';
 import config from 'config';
 import { TokenLogo } from 'components/common/imager/Imager';
+import { Token } from 'libs/tokens';
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { useQueryClient } from '@tanstack/react-query';
+import { QueryKey } from 'libs/queries';
+import { useNotifications } from 'hooks/useNotifications';
 
 const dexNames: Record<Dexes, string> = {
   'uniswap-v2': 'Uniswap V2',
@@ -40,11 +47,48 @@ const dexIcon: Record<Dexes, FunctionComponent<SVGProps<SVGSVGElement>>> = {
   'uniswap-v3': (props) => <IconUniswap {...props} />,
 };
 
+interface MigratedPosition {
+  id: string;
+  dex: Dexes;
+  base: Token;
+  quote: Token;
+  spread: string;
+  buy: {
+    min: string;
+    marginalPrice: string;
+    max: string;
+    budget: string;
+    fee: string;
+  };
+  sell: {
+    min: string;
+    marginalPrice: string;
+    max: string;
+    budget: string;
+    fee: string;
+  };
+  fiat: {
+    base: {
+      budget: string;
+      fee: string;
+    };
+    quote: {
+      budget: string;
+      fee: string;
+    };
+    total: {
+      budget: string;
+      fee: string;
+    };
+  };
+}
+
 type CreateStrategyParams = Parameters<typeof carbonSDK.createBuySellStrategy>;
 
 export const MigratePage = () => {
-  const { user, provider, signer, sendTransaction } = useWagmi();
+  const { user, provider } = useWagmi();
   const [uniPositions, setUniPositions] = useState<UniswapPosition[]>();
+  const [selectedIndex, setSelectedIndex] = useState<number>();
   const { getTokenById } = useTokens();
 
   useEffect(() => {
@@ -64,11 +108,10 @@ export const MigratePage = () => {
     return Array.from(list);
   }, [uniPositions]);
 
-  // TODO: this is broken because it uses the same query as UseTokenPrice but not the same result [address, price] vs price.
   // Create a dedicated cache
   const marketPriceQuery = useGetMultipleTokenPrices(tokens);
 
-  const positions = useMemo(() => {
+  const positions = useMemo((): undefined | MigratedPosition[] => {
     if (marketPriceQuery.isPending) return;
     if (!uniPositions) return;
     const marketPrices = marketPriceQuery.data || {};
@@ -87,10 +130,14 @@ export const MigratePage = () => {
         spread: new SafeDecimal(pos.fee).div(1_000).toString(),
         buy: {
           min: pos.min.toString(),
+          marginalPrice: '',
+          max: '',
           budget: pos.quoteLiquidity,
           fee: pos.quoteFee,
         },
         sell: {
+          min: '',
+          marginalPrice: '',
           max: pos.max.toString(),
           budget: pos.baseLiquidity,
           fee: pos.baseFee,
@@ -118,88 +165,11 @@ export const MigratePage = () => {
     uniPositions,
   ]);
 
-  const migrateOne = async (position: UniswapPosition) => {
-    if (!signer) throw new Error('No Signer found');
-    const marketPrices = marketPriceQuery.data || {};
-    const transactions: TransactionRequest[] = [];
-
-    const withdrawTxs = await withdrawPosition(signer, position);
-    for (const tx of withdrawTxs) {
-      transactions.push(tx);
-    }
-
-    // Create new strategies
-    const base = getTokenById(position.base)!;
-    const quote = getTokenById(position.quote)!;
-    const basePrice = new SafeDecimal(marketPrices[position.base]);
-    const quotePrice = new SafeDecimal(marketPrices[position.quote]);
-    const marketPrice = basePrice.div(quotePrice).toString();
-    const feePercent = new SafeDecimal(position.fee).div(1000);
-    const maxSpread = getMaxSpread(Number(position.min), Number(position.max));
-    const spread = Math.min(maxSpread, feePercent.toNumber()).toString();
-    const isFullRange = position.min === '0' && position.max === 'Infinity';
-    const fullrange = getFullRangesPrices(
-      marketPrice,
-      base.decimals,
-      quote.decimals,
-    );
-    const min = isFullRange ? fullrange.min : position.min;
-    const max = isFullRange ? fullrange.max : position.max;
-    const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
-    const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
-    const sellOrder = { max, marginalPrice: prices.sellPriceMarginal };
-    const budgets = {
-      sell: position.baseLiquidity,
-      buy: position.quoteLiquidity,
-    };
-    if (isMinAboveMarket(buyOrder)) {
-      budgets.buy = '0';
-    } else if (isMaxBelowMarket(sellOrder)) {
-      budgets.sell = '0';
-    }
-    const params: CreateStrategyParams = [
-      position.base,
-      position.quote,
-      prices.buyPriceLow,
-      prices.buyPriceMarginal,
-      prices.buyPriceHigh,
-      budgets.buy,
-      prices.sellPriceLow,
-      prices.sellPriceMarginal,
-      prices.sellPriceHigh,
-      budgets.sell,
-    ];
-
-    const unsignedTx = await carbonSDK.createBuySellStrategy(...params);
-    unsignedTx.customData = {
-      spender: config.addresses.carbon.carbonController,
-      assets: [
-        {
-          address: position.base,
-          rawAmount: parseUnits(budgets.sell, base.decimals).toString(),
-        },
-        {
-          address: position.quote,
-          rawAmount: parseUnits(budgets.buy, quote.decimals).toString(),
-        },
-      ],
-    };
-    transactions.push(unsignedTx);
-    return transactions;
-  };
-
-  const openDialog = async (id: string) => {
-    dialogManager.open(id);
-  };
-
-  const migrate = async (index: number) => {
-    const position = uniPositions?.[index];
-    if (!position) return;
-    dialogManager.close(position.id);
-    const txs = await migrateOne(position);
-    const tx = await sendTransaction(txs);
-    await tx.wait();
-  };
+  const selectedPosition = useMemo(() => {
+    if (typeof selectedIndex !== 'number') return;
+    if (!positions) return;
+    return positions[selectedIndex];
+  }, [selectedIndex, positions]);
 
   if (!positions) {
     return <CarbonLogoLoading className="h-80 grid-area-[list]" />;
@@ -232,7 +202,7 @@ export const MigratePage = () => {
           </tr>
         </thead>
         <tbody className="align-top">
-          {positions.map((p) => {
+          {positions.map((p, i) => {
             const dexName = dexNames[p.dex];
             const Icon = dexIcon[p.dex];
             return (
@@ -292,7 +262,7 @@ export const MigratePage = () => {
                 <td>
                   <button
                     className="btn-on-surface"
-                    onClick={() => openDialog(p.id)}
+                    onClick={() => setSelectedIndex(i)}
                   >
                     Migrate
                   </button>
@@ -302,135 +272,255 @@ export const MigratePage = () => {
           })}
         </tbody>
       </table>
-      {positions.map((p, i) => (
-        <dialog key={p.id} id={p.id} className="modal center">
-          <form
-            method="dialog"
-            className="grid gap-16"
-            onSubmit={() => migrate(i)}
-          >
-            <header className="flex items-center justify-between">
-              <h3>Migrate Position + Fees</h3>
-              <button>
-                <IconClose className="size-14" />
-              </button>
-            </header>
-            <div className="bg-main-900/60 rounded-2xl px-16 py-8 font-title">
-              <table className="w-full border-separate border-spacing-y-8 text-12">
-                <thead>
-                  <tr className="text-white/60">
-                    <th className="text-start font-normal">Position:</th>
-                    <th className="text-start font-normal">+Fees:</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-16 font-medium">
-                    <td>{getUsdPrice(p.fiat.total.budget)}</td>
-                    <td>{getUsdPrice(p.fiat.total.fee)}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className="inline-flex items-center gap-4">
-                        <TokenLogo token={p.base} size={14} />
-                        {tokenAmount(p.sell.budget, p.base)}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="inline-flex items-center gap-4">
-                        <TokenLogo token={p.base} size={14} />
-                        {tokenAmount(p.sell.fee, p.base)}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className="inline-flex items-center gap-4">
-                        <TokenLogo token={p.base} size={14} />
-                        {tokenAmount(p.buy.budget, p.quote)}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="inline-flex items-center gap-4">
-                        <TokenLogo token={p.base} size={14} />
-                        {tokenAmount(p.buy.fee, p.quote)}
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="flex items-center justify-center gap-16 bg-main-900/60 rounded-2xl px-16 py-8 font-title font-medium text-14">
-              <div className="flex items-center gap-8 py-8">
-                <IconUniswap className="size-24" />
-                <p>{p.dex}</p>
-              </div>
-              <svg
-                width="100"
-                height="24"
-                viewBox="0 0 100 24"
-                fill="none"
-                strokeWidth="3"
-                strokeLinecap="round"
-              >
-                <line
-                  x1="5"
-                  x2="95"
-                  y1="12"
-                  y2="12"
-                  strokeDasharray="13"
-                  stroke="var(--color-primary)"
-                />
-                <path
-                  d="M85,4 L95,12 L85,20"
-                  strokeLinejoin="round"
-                  stroke="url(#svg-brand-gradient)"
-                />
-              </svg>
-              <div className="flex items-center gap-8 py-8">
-                <IconCarbon className="size-24" />
-                <p>Carbon Defi</p>
-              </div>
-            </div>
-            <div className="bg-main-900/60 rounded-2xl px-16 py-8 font-title">
-              <table className="w-full border-separate caption-bottom border-spacing-y-8">
-                <tbody className="text-12">
-                  <tr>
-                    <th className="text-start text-white/60 font-normal">
-                      Min Price
-                    </th>
-                    <td>
-                      {tokenAmount(p.buy.min, p.quote)} per {p.base.symbol}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="text-start text-white/60 font-normal">
-                      Max Price
-                    </th>
-                    <td>
-                      {tokenAmount(p.sell.max, p.quote)} per {p.base.symbol}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="text-start text-white/60 font-normal">
-                      Fee Tier
-                    </th>
-                    <td>{p.spread}%</td>
-                  </tr>
-                </tbody>
-                <caption className="text-start text-10 text-white/40">
-                  *fetched from original position
-                </caption>
-              </table>
-            </div>
-            <p className="text-14 text-center">
-              NOTE: Any unused funds will be sent back to your wallet
-            </p>
-            <button className="btn-primary-gradient" type="submit">
-              Migrate
-            </button>
-          </form>
-        </dialog>
-      ))}
+      {selectedPosition && <PositionDialog position={selectedPosition} />}
     </>
+  );
+};
+
+const PositionDialog: FC<{ position: MigratedPosition }> = (props) => {
+  const { ref, open, lightDismiss, close } = useDialog();
+  const { user, signer, sendTransaction } = useWagmi();
+  const p = props.position;
+
+  // TODO: This should be done by the `useCreateStrategy` once the approval is centralized
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const { dispatchNotification } = useNotifications();
+  const cache = useQueryClient();
+
+  const marketPriceQuery = useMarketPrice(p);
+
+  useEffect(() => {
+    open();
+  }, [open]);
+
+  const migrateOne = async (position: MigratedPosition) => {
+    if (!signer) throw new Error('No Signer found');
+
+    // Copy because we mutate it later
+    const { base, quote, buy, sell } = structuredClone(position);
+
+    const marketPrice = marketPriceQuery.marketPrice?.toString();
+    if (!marketPrice) throw new Error('No market price available');
+    const transactions: TransactionRequest[] = [];
+
+    const withdrawTxs = await withdrawPosition(
+      signer,
+      position.dex,
+      position.id,
+    );
+    for (const tx of withdrawTxs) {
+      transactions.push(tx);
+    }
+
+    // Create new strategies
+
+    const maxSpread = getMaxSpread(Number(buy.min), Number(sell.max));
+    const spread = Math.min(maxSpread, Number(position.spread)).toString();
+    const isFullRange = buy.min === '0' && sell.max === 'Infinity';
+    const fullrange = getFullRangesPrices(
+      marketPrice,
+      base.decimals,
+      quote.decimals,
+    );
+    const min = isFullRange ? fullrange.min : buy.min;
+    const max = isFullRange ? fullrange.max : sell.max;
+    const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
+    buy.marginalPrice = prices.buyPriceMarginal;
+    buy.max = prices.buyPriceHigh;
+    sell.min = prices.sellPriceLow;
+    sell.marginalPrice = prices.sellPriceMarginal;
+    if (isMinAboveMarket(buy)) {
+      buy.budget = '0';
+    } else if (isMaxBelowMarket(sell)) {
+      sell.budget = '0';
+    }
+    const params: CreateStrategyParams = [
+      base.address,
+      quote.address,
+      buy.min,
+      buy.marginalPrice,
+      buy.max,
+      buy.budget,
+      sell.min,
+      sell.marginalPrice,
+      sell.max,
+      sell.budget,
+    ];
+    console.log(params);
+    const unsignedTx = await carbonSDK.createBuySellStrategy(...params);
+    unsignedTx.customData = {
+      spender: config.addresses.carbon.carbonController,
+      assets: [
+        {
+          address: base.address,
+          rawAmount: parseUnits(sell.budget, base.decimals).toString(),
+        },
+        {
+          address: quote.address,
+          rawAmount: parseUnits(buy.budget, quote.decimals).toString(),
+        },
+      ],
+    };
+    transactions.push(unsignedTx);
+    return transactions;
+  };
+
+  const migrate = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!user) throw new Error('No User connected for migration');
+    try {
+      setIsProcessing(true);
+      const txs = await migrateOne(p);
+      const tx = await sendTransaction(txs);
+      await tx.wait();
+      dispatchNotification('createStrategy', { txHash: tx.hash });
+      cache.invalidateQueries({
+        queryKey: QueryKey.strategiesByUser(user),
+      });
+      cache.invalidateQueries({
+        queryKey: QueryKey.balance(user, p.base.address),
+      });
+      cache.invalidateQueries({
+        queryKey: QueryKey.balance(user, p.quote.address),
+      });
+      close();
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <dialog
+      key={p.id}
+      ref={ref}
+      className="modal center"
+      onClick={lightDismiss}
+    >
+      <form method="dialog" className="grid gap-16" onSubmit={migrate}>
+        <header className="flex items-center justify-between">
+          <h3>Migrate Position + Fees</h3>
+          <button type="button" onClick={() => close()}>
+            <IconClose className="size-14" />
+          </button>
+        </header>
+        <div className="bg-main-900/60 rounded-2xl px-16 py-8 font-title">
+          <table className="w-full border-separate border-spacing-y-8 text-12">
+            <thead>
+              <tr className="text-white/60">
+                <th className="text-start font-normal">Position:</th>
+                <th className="text-start font-normal">+Fees:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="text-16 font-medium">
+                <td>{getUsdPrice(p.fiat.total.budget)}</td>
+                <td>{getUsdPrice(p.fiat.total.fee)}</td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="inline-flex items-center gap-4">
+                    <TokenLogo token={p.base} size={14} />
+                    {tokenAmount(p.sell.budget, p.base)}
+                  </div>
+                </td>
+                <td>
+                  <div className="inline-flex items-center gap-4">
+                    <TokenLogo token={p.base} size={14} />
+                    {tokenAmount(p.sell.fee, p.base)}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="inline-flex items-center gap-4">
+                    <TokenLogo token={p.base} size={14} />
+                    {tokenAmount(p.buy.budget, p.quote)}
+                  </div>
+                </td>
+                <td>
+                  <div className="inline-flex items-center gap-4">
+                    <TokenLogo token={p.base} size={14} />
+                    {tokenAmount(p.buy.fee, p.quote)}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="flex items-center justify-center gap-16 bg-main-900/60 rounded-2xl px-16 py-8 font-title font-medium text-14">
+          <div className="flex items-center gap-8 py-8">
+            <IconUniswap className="size-24" />
+            <p>{p.dex}</p>
+          </div>
+          <svg
+            width="100"
+            height="24"
+            viewBox="0 0 100 24"
+            fill="none"
+            strokeWidth="3"
+            strokeLinecap="round"
+          >
+            <line
+              x1="5"
+              x2="95"
+              y1="12"
+              y2="12"
+              strokeDasharray="13"
+              stroke="var(--color-primary)"
+            />
+            <path
+              d="M85,4 L95,12 L85,20"
+              strokeLinejoin="round"
+              stroke="url(#svg-brand-gradient)"
+            />
+          </svg>
+          <div className="flex items-center gap-8 py-8">
+            <IconCarbon className="size-24" />
+            <p>Carbon Defi</p>
+          </div>
+        </div>
+        <div className="bg-main-900/60 rounded-2xl px-16 py-8 font-title">
+          <table className="w-full border-separate caption-bottom border-spacing-y-8">
+            <tbody className="text-12">
+              <tr>
+                <th className="text-start text-white/60 font-normal">
+                  Min Price
+                </th>
+                <td>
+                  {tokenAmount(p.buy.min, p.quote)} per {p.base.symbol}
+                </td>
+              </tr>
+              <tr>
+                <th className="text-start text-white/60 font-normal">
+                  Max Price
+                </th>
+                <td>
+                  {tokenAmount(p.sell.max, p.quote)} per {p.base.symbol}
+                </td>
+              </tr>
+              <tr>
+                <th className="text-start text-white/60 font-normal">
+                  Fee Tier
+                </th>
+                <td>{p.spread}%</td>
+              </tr>
+            </tbody>
+            <caption className="text-start text-10 text-white/40">
+              *fetched from original position
+            </caption>
+          </table>
+        </div>
+        <p className="text-14 text-center">
+          NOTE: Any unused funds will be sent back to your wallet
+        </p>
+        <button
+          className="btn-primary-gradient"
+          type="submit"
+          disabled={isProcessing}
+        >
+          {isProcessing ? 'Loading' : 'Migrate'}
+        </button>
+      </form>
+    </dialog>
   );
 };
