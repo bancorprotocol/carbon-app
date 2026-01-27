@@ -3,4 +3,4 @@
 
 echo "Running pre-commit hook"
 
-yarn pre-commit
+pnpm pre-commit

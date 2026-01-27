@@ -19,14 +19,18 @@ jobs:
         with:
           node-version: 20
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+
       - name: Install build-essential
         run: apt-get update && apt-get install -y build-essential
 
       - name: Install dependencies
-        run: yarn
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers and run Playwright tests
-        run: yarn e2e
+        run: pnpm e2e
         env:
           TENDERLY_ACCOUNT: bancor
           TENDERLY_PROJECT: carbon-test-forks
