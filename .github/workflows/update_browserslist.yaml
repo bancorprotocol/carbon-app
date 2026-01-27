@@ -35,7 +35,7 @@ jobs:
           echo "$CLEAN_OUTPUT"
           echo EOF
           } >> "$GITHUB_OUTPUT"
-          LATEST_VERSION=$(pnpm info caniuse-lite version)
+          LATEST_VERSION=$(pnpm info caniuse-lite version | sed 's/\x1b\[[0-9;]*m//g')
           echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Import GPG key
