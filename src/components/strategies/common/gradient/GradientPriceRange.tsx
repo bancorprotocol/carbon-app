@@ -35,6 +35,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
   const inputStartId = useId();
   const inputEndId = useId();
   const { marketPrice } = useStrategyMarketPrice({ base, quote });
+
   const startTimeout = useRef<number>(null);
   const endTimeout = useRef<number>(null);
 
