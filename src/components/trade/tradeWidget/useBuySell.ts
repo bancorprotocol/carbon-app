@@ -15,9 +15,9 @@ import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
 import { isTouchedZero, isZero } from 'components/strategies/common/utils';
 import { carbonEvents } from 'services/events';
-import { OpenOceanSwapPath } from 'services/openocean';
-import config from 'config';
+import { QuoteMetadata } from 'services/openocean';
 import { useDebounced } from 'hooks/useDebouncedValue';
+import config from 'config';
 
 export const useBuySell = ({
   source,
@@ -44,7 +44,8 @@ export const useBuySell = ({
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
 
-  const [routingPath, setRoutingPath] = useState<OpenOceanSwapPath>();
+  const [routingPath, setRoutingPath] = useState<QuoteMetadata[]>();
+  const [quoteId, setQuoteId] = useState<string>();
   const [showRoutingPath, setShowRoutingPath] = useState(false);
 
   const { provider } = useWagmi();
@@ -151,6 +152,7 @@ export const useBuySell = ({
         effectiveRate,
         actionsWei,
         path,
+        quoteId,
       } = bySourceQuery.data;
 
       // Bancor SDK
@@ -165,9 +167,9 @@ export const useBuySell = ({
       ) {
         checkLiquidity();
       }
-
-      // OpenOcean
-      setRoutingPath(path);
+      // Dex Aggregator
+      if (path) setRoutingPath(path);
+      if (quoteId) setQuoteId(quoteId);
     }
     // eslint-disable-next-line
   }, [bySourceQuery.data]);
@@ -181,6 +183,7 @@ export const useBuySell = ({
         effectiveRate,
         actionsWei,
         path,
+        quoteId,
       } = byTargetQuery.data;
 
       // Bancor SDK
@@ -196,8 +199,9 @@ export const useBuySell = ({
         checkLiquidity();
       }
 
-      // OpenOcean
-      setRoutingPath(path);
+      // Dex Aggregator
+      if (path) setRoutingPath(path);
+      if (quoteId) setQuoteId(quoteId);
     }
     // eslint-disable-next-line
   }, [byTargetQuery.data]);
@@ -246,6 +250,7 @@ export const useBuySell = ({
         isTradeBySource,
         sourceInput,
         targetInput,
+        quoteId,
       });
 
     if (approval.approvalRequired) {
@@ -388,5 +393,6 @@ export const useBuySell = ({
     isAwaiting,
     showRoutingPath,
     routingPath,
+    quoteId,
   };
 };

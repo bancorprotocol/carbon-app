@@ -1,22 +1,15 @@
-import config from 'config';
-import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
+import { PopulatedTransaction } from '@bancor/carbon-sdk';
 
-const referrer = config.addresses.carbon.vault;
-const referrerFee = '0.25';
-const apiKey = undefined;
-const apiUrl = `https://open-api.openocean.finance/v4/${config.network.chainId}/`;
+// TODO: remove this
+const apiUrl = 'https://agg-api-458865443958.europe-west1.run.app/v1/';
 
 const getUrl = (endpoint: string) => {
   if (import.meta.env.DEV) {
     const url = new URL(apiUrl + endpoint);
-    url.searchParams.set('referrer', referrer);
-    url.searchParams.set('referrerFee', referrerFee);
     return url;
   } else {
     // In production send to cloudflare proxy
     const url = new URL(location.origin + '/api/openocean');
-    url.searchParams.set('endpoint', endpoint);
-    url.searchParams.set('chain', config.network.chainId.toString());
     return url;
   }
 };
@@ -27,20 +20,18 @@ const get = async <T>(
   abortSignal?: AbortSignal,
 ): Promise<T> => {
   const url = getUrl(endpoint);
-  for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined) {
-      url.searchParams.set(key, value);
-    }
-  }
+  const apiKey = import.meta.env.VITE_DEX_AGGREGATOR_APIKEY;
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(params),
+    signal: abortSignal,
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+  });
 
-  const request = new Request(url, { signal: abortSignal });
-  if (apiKey) {
-    request.headers.append('apiKey', apiKey);
-    request.headers.append('Content-Type', 'application/json');
-  }
-
-  const response = await fetch(request);
-  const result = await response.json();
+  const result = await response.json<T>();
   if (!response.ok) {
     const error = (result as { error?: string }).error;
     throw new Error(
@@ -48,66 +39,23 @@ const get = async <T>(
         `Response was not okay. ${response.statusText} response received.`,
     );
   }
-  return (result as { data: T }).data;
+  return result;
 };
 
 interface QuoteParams {
-  /** Base */
-  inTokenAddress: string;
-  /** Quote */
-  outTokenAddress: string;
-  /** Token amount with decimals. For example, if 1 USDT is input, use 1000000 (1 USDT * 10^6) */
-  amountDecimals: string;
-  /** GasPrice with decimals */
-  gasPriceDecimals: string;
-  /** Define the acceptable slippage level by inputting a percentage value within the range of 0.05 to 50. e.g. 1% slippage set as 1 default value 1 */
-  slippage?: number;
-  /** Enter the 'index' number of dexs through dexList endpoint to disable single or multiple dexs separated by commas, e.g. disabledDexIds: "2,6,9".*/
-  disabledDexIds?: string;
-  /** Enter the 'index' number of dexs through dexList. P.S. enabledDexIds has higher priority compared with disabledDexIds */
-  enabledDexIds?: string;
+  chainId: number;
+  sourceToken: string;
+  targetToken: string;
+  amount: string;
+  tradeBySource: boolean;
+  slippage: number;
 }
 
 interface SwapParams extends QuoteParams {
-  /**
-   * An EOA wallet address used to identify partners and optionally receive a fee from users.
-   * If no fee is set up, it serves purely as a tracking tool to help our dev team provide better support and insights
-   */
-  referrer?: string;
-  /**
-   * Specify the percentage of in-token you wish to receive from the transaction, within the range of 0% to 5%, with 1% represented as '1', in the range of 0.01 to 5.
-   * e.g. 1.2% fee set as 1.2
-   * By default, OpenOcean shares 20% of the fee. Please contact us if you wish to modify this rate.
-   */
-  referrerFee?: string;
-  /** The caller address.
-   * Token Delivery Logic
-   * If a sender address is specified, the sender address will be set as sender(caller), and account address will be set as receiver.
-   * If no sender address is specified, the account address will automatically be set as the sender(caller) and receiver.
-   */
-  sender?: string;
-  /**
-   * The minimum amount of target tokens the user expects to receive.
-   * minOutput with decimals. For example, if 9.9 USDT is minOutput, use 9900000 (9.9 USDT * 10^6).
-   */
-  minOutput?: number;
-  /** Wallet address */
-  account?: string;
+  recipient: string;
+  quoteId: string;
 }
 
-interface OpenOceanSwapToken {
-  address: string;
-  decimals: number;
-  symbol: string;
-  name: string;
-  usd: string;
-  volume: number;
-}
-interface OpenOceanSwapDex {
-  dexIndex: number;
-  dexCode: string;
-  swapAmount: string;
-}
 export interface OpenOceanSwapPath {
   from: string;
   to: string;
@@ -132,131 +80,191 @@ interface OpenOceanSwapSubRoutes {
   }[];
 }
 
-interface OpenOceanQuoteResult {
-  inToken: OpenOceanSwapToken;
-  outToken: OpenOceanSwapToken;
-  inAmount: string;
-  outAmount: string;
-  estimatedGas: string;
-  dexes: OpenOceanSwapDex[];
-  path: OpenOceanSwapPath;
-  save: number;
-  price_impact: string;
-  exchange: string;
+/** Quote is found */
+interface QuoteFoundResult {
+  id: string;
+  tradeFound: true;
+  sourceAmount: string;
+  targetAmount: string;
+  metadata: QuoteMetadata[];
+  slippage: number;
+  allowanceRequired: string;
+}
+/** Quote is not found */
+interface QuoteNotFoundResult {
+  id: string;
+  tradeFound: false;
+}
+type QuoteResult = QuoteFoundResult | QuoteNotFoundResult;
+
+/** Quote is found and it returns the transaction information */
+interface SwapResult extends QuoteFoundResult {
+  validated: boolean;
+  gasEstimate: string;
+  tx: PopulatedTransaction;
+  confirmNewQuote: boolean;
 }
 
-interface OpenOceanSwapResult {
-  inToken: OpenOceanSwapToken;
-  outToken: OpenOceanSwapToken;
-  inAmount: string;
-  outAmount: string;
-  estimatedGas: number;
-  minOutAmount: string;
-  from: string;
-  to: string;
-  value: string;
-  gasPrice: string;
-  data: string;
-  chainId: number;
-  rfqDeadline: number;
-  gmxFee: number;
-  price_impact: string;
+export interface QuoteMetadata {
+  percentage: number;
+  sourceToken: string;
+  targetToken: string;
+  amountIn: string;
+  amountOut: string;
+  exchange: ExchangeKey & 'Unwrap';
 }
 
-interface GasPriceEth {
-  legacyGasPrice: number;
-  maxPriorityFeePerGas: number;
-  maxFeePerGas: number;
-  waitTimeEstimate: number;
-}
-interface GasPriceResult {
-  standard: number | GasPriceEth;
-  fast: number | GasPriceEth;
-  instant: number | GasPriceEth;
-}
-
-// Replace native tokens with the once here: https://apis.openocean.finance/developer/apis/supported-chains
-const nativeTokenList = {
-  // ETH
-  1: {
-    from: NATIVE_TOKEN_ADDRESS,
-    to: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-  },
-  // Celo
-  42220: {
-    from: NATIVE_TOKEN_ADDRESS,
-    to: '0x471EcE3750Da237f93B8E339c536989b8978a438',
-  },
-  // Sei
-  1329: {
-    from: NATIVE_TOKEN_ADDRESS,
-    to: '0x0000000000000000000000000000000000000000',
-  },
-  // Tac
-  239: {
-    from: NATIVE_TOKEN_ADDRESS,
-    to: '0x0000000000000000000000000000000000000000',
-  },
+export const exchangeNames = {
+  'carbon-OG': 'Carbon V1',
+  'vortex-v2-eth': 'Vortex V2',
+  'vortex-v2-sei': 'Vortex V2',
+  'vortex-v2-celo': 'Vortex V2',
+  'vortex-v2-base': 'Vortex V2',
+  'vortex-v2-mantle': 'Vortex V2',
+  'vortex-v2-linea': 'Vortex V2',
+  'vortex-v2-blast': 'Vortex V2',
+  'vortex-v2-velocimeter-iota': 'Vortex V2 Velocimeter',
+  'vortex-v2-velocimeter-base': 'Vortex V2 Velocimeter',
+  'vortex-v2-velocimeter-mantle': 'Vortex V2 Velocimeter',
+  'vortex-v2-velocimeter-bera': 'Vortex V2 Velocimeter',
+  'carbon-sei': 'Carbon',
+  'carbon-celo': 'Carbon',
+  velocimeter: 'Velocimeter',
+  'uniswap-OG': 'Uniswap V3',
+  'uniswap-celo': 'Uniswap V3',
+  'uniswap-v2': 'Uniswap V2',
+  agni: 'Agni',
+  'sushi-OG': 'Sushi V3',
+  'sushi-v2': 'Sushi V2',
+  pancake: 'Pancake',
+  'pancake-v2': 'Pancake V2',
+  butter: 'Butter',
+  cleopatra: 'Cleo',
+  fusionx: 'Fusion X',
+  'uniswap-v3-sei-unknown': 'Uni V3',
+  dragonswap: 'Dragonswap',
+  'dragonswap-v3': 'Dragonswap V3',
+  supernova: 'Supernova',
+  merchantmoe: 'Merchantmoe',
+  'fusionx-v2': 'Fusion X V2',
+  oku: 'O K U',
+  'uniswap-v2-sei-unknown': 'Uni V2',
+  'stratum-v2': 'Stratum V2',
+  ubeswap: 'Ubeswap',
+  'sushi-celo': 'Sushi V2',
+  'xei-sei': 'Xei',
+  'thruster-v2-30': 'Thruster V230',
+  'thruster-v2-100': 'Thruster V2100',
+  'thruster-v3': 'Thruster V3',
+  'ringswap-v2': 'Ringswap V2',
+  'ringswap-v3': 'Ringswap V3',
+  'blasterswap-v2': 'Blasterswap V2',
+  'blasterswap-v3': 'Blasterswap V3',
+  'dyor-v2': 'Dyor V2',
+  'roguex-v3': 'Rogue X',
+  'monoswap-v2': 'Monoswap2',
+  'monoswap-v3': 'Monoswap V3',
+  'fenix-carbon': 'Fenix Carbon',
+  'uniswap-blast': 'Uniswap V3',
+  'alien-base-v2': 'Alien Base V2',
+  'alien-base-v3': 'Alien Base V3',
+  'alien-base-carbon': 'Alien Base Carbon',
+  'aerodrome-base': 'Aerodrome',
+  'baseswap-v2': 'Base Swap V2',
+  'baseswap-v3': 'Base Swap V3',
+  'graphene-base': 'Graphene Base',
+  'pancake-v2-base': 'Pancake V2',
+  'pancake-v3-base': 'Pancake V3',
+  'sushi-v2-base': 'Sushi V2',
+  'sushi-v3-base': 'Sushi V3',
+  'swapbased-v2': 'Swapbased V2',
+  'uni-v2-base': 'Uni V2',
+  'uni-v3-base': 'Uni V3',
+  'hyperjump-v2': 'Hyperjump V2',
+  'knightswap-v2': 'Knightswap V2',
+  'soulswap-v2': 'Soulswap V2',
+  'spookyswap-v2': 'Spookyswap V2',
+  'wigoswap-v2': 'Wigoswap V2',
+  'echodex-v3': 'Echodex V3',
+  'metavault-v2': 'Metavault V2',
+  'metavault-v3': 'Metavault V3',
+  'pancake-v3-linea': 'Pancake V3',
+  'secta-v2': 'Secta V2',
+  'secta-v3': 'Secta V3',
+  'xfai-carbon': 'X Fai Carbon',
+  xfai: 'X FAI',
+  'ubeswap-v3-celo': 'Ubeswap V3',
+  'graphene-iota': 'Graphene',
+  'magicsea-v2-iota': 'Magicsea V2',
+  'velocimeter-solidly-iota': 'Velocimeter Solidlt',
+  'wagmi-v3-iota': 'Wagmi V3',
+  'vortex-v2-iota': 'Vortex V2',
+  'donkeswap-sei': 'Donke Swap',
+  'bancor-v3-ethereum': 'Bancor V3',
+  'bancor-v2-ethereum': 'Bancor V2',
+  'kodiak-v2-bera': 'Bera Kodiak V2',
+  'bera-uni-v2-unknown1': 'Bera Uni V2',
+  'memeswap-v2-bera': 'Bera Memeswap V2',
+  'forestbear-v2-bera': 'Bera Forest Bear V2',
+  'kodiak-v3-bera': 'Bera Kodiak V3',
+  'carbon-bera-velocimeter': 'Carbon Bera Velocimeter',
+  'sailor-finance-sei': 'Sailor Finance',
+  'carbon-sonic-velocimeter': 'Carbon Sonic Velocimeter',
+  'wagmi-v3-sonic': 'Wagmi V3 Sonic',
+  'oku-sonic': 'Oku Sonic',
+  'metropolis-v2-sonic': 'Metropolis V2 Sonic',
+  'shadow-v3-sonic': 'Shadow Sonic V3',
+  'shadow-v2-sonic': 'Shadow Sonic V2',
+  'defive-v2-sonic': 'De Five Sonic V2',
+  'spookyswap-v2-sonic': 'Spookyswap Sonic V2',
+  'spookyswap-v3-sonic': 'Spookyswap Sonic V3',
+  'nile-cl-linea': 'Nile C L',
+  'scale-base': 'Scale',
+  'lynex-v1-linea': 'Lynex V1',
+  'nile-legacy-linea': 'Nile Legacy',
+  'carbon-coti': 'Carbon Coti',
+  'uniswap-v4-ethereum': 'Uniswap V4',
+  'uniswap-v4-base': 'Uniswap V4',
+  'uniswap-v4-blast': 'Uniswap V4',
+  'uniswap-v4-arbitrum': 'Uniswap V4',
+  'carbon-arbitrum': 'Carbon Arb',
+  'uniswap-v3-arbitrum': 'Arb Uniswap V3',
+  'sushiswap-v3-arbitrum': 'Arb Sushiswap V3',
+  'pancakeswap-v3-arbitrum': 'Arb Pancakeswap V3',
+  'uniswap-v2-arbitrum': 'Arb Uniswap V2',
+  'sushiswap-v2-arbitrum': 'Arb Sushiswap V2',
+  'pancakeswap-v2-arbitrum': 'Arb Pancakeswap V2',
+  'kalaeidocube-v2-arbitrum': 'Arb Kaleido Cube',
+  'arbswap-v2-arbitrum': 'Arb Arbswap V2',
+  'spatradex-v2-arbitrum': 'Arb Spartadex V2',
+  'zyberswap-v2-arbitrum': 'Arb Zyberswap V2',
+  'vortex-v2-bera': 'Vortex V2',
+  'curve-ethereum': 'Curve',
+  'camelot-v4-arbitrum': 'Camelot V4',
+  'carbon-tac': 'Carbon Tac',
+  'vortex-v2-coti': 'Vortex V2',
+  'vortex-v2-tac': 'Vortex V2',
+  'curve-tac': 'Curve Tac',
+  'yaka-solidly-sei': 'Yaka Finance',
+  'carbon-dna-bnb': 'Carbon Dna',
+  'uni-v2-bnb': 'Uni V2',
+  'pancake-v2-bnb': 'Pancake V2',
+  'uni-v3-bnb': 'Uni V3',
+  'pancake-v3-bnb': 'Pancake V3',
+  'curve-base': 'Curve Base',
+  'curve-arbitrum': 'Curve Arb',
+  'curve-sonic': 'Curve Sonic',
+  'curve-celo': 'Curve Celo',
+  'snap-algebra-tac': 'Snap Algebra',
+  'snap-solidly-tac': 'Snap Solidly',
+  'mento-celo': 'Mento',
+  'curve-bnb': 'Curve',
+  'uni-v3-mantle': 'Uniswap V3',
 };
-
-const nativeToken =
-  nativeTokenList[config.network.chainId as keyof typeof nativeTokenList];
-
-const replaceNativeTokenParams = (params: QuoteParams) => {
-  if (nativeToken) {
-    if (params.inTokenAddress === nativeToken.from) {
-      params.inTokenAddress = nativeToken.to;
-    }
-    if (params.outTokenAddress === nativeToken.from) {
-      params.outTokenAddress = nativeToken.to;
-    }
-  }
-  return params;
-};
-
-const replaceNativeTokenQuoteResult = (result: OpenOceanQuoteResult) => {
-  if (nativeToken && result.path) {
-    if (result.path.from === nativeToken.to) {
-      result.path.from = nativeToken.from;
-    }
-    if (result.path.to === nativeToken.to) {
-      result.path.to = nativeToken.from;
-    }
-    for (const route of result.path.routes) {
-      for (const subRoute of route.subRoutes) {
-        if (subRoute.from === nativeToken.to) {
-          subRoute.from = nativeToken.from;
-        }
-        if (subRoute.to === nativeToken.to) {
-          subRoute.to = nativeToken.from;
-        }
-      }
-    }
-  }
-  return result;
-};
+type ExchangeKey = keyof typeof exchangeNames;
 
 export const openocean = {
-  quote: async (params: QuoteParams) => {
-    const sanitized = replaceNativeTokenParams(params);
-    const result = await get<OpenOceanQuoteResult>('quote', sanitized);
-    return replaceNativeTokenQuoteResult(result);
-  },
-  reverseQuote: async (params: QuoteParams) => {
-    const sanitized = replaceNativeTokenParams(params);
-    const result = await get<OpenOceanQuoteResult>('reverseQuote', sanitized);
-    return replaceNativeTokenQuoteResult(result);
-  },
-  swap: async (params: SwapParams) => {
-    const sanitized = replaceNativeTokenParams(params);
-    return get<OpenOceanSwapResult>('swap', sanitized);
-  },
-  gasPrice: async () => {
-    const { standard } = await get<GasPriceResult>('gasPrice');
-    if (typeof standard === 'number') {
-      return standard;
-    } else {
-      return standard.legacyGasPrice;
-    }
-  },
+  quote: async (params: QuoteParams) => get<QuoteResult>('quote', params),
+  // TODO: add recipient
+  swap: async (params: SwapParams) => get<SwapResult>('quote', params),
 };

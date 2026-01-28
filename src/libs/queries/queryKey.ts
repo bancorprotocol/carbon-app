@@ -98,7 +98,12 @@ export const QueryKey = {
     actions,
   ],
 
-  tradeLiquidity: (pair: TokenPair) => [
+  tradeDexAggregatorLiquidity: (pair: TokenPair) => [
+    'dex-aggregator',
+    buildTokenPairKey(pair),
+    'liquidity',
+  ],
+  tradeSDKLiquidity: (pair: TokenPair) => [
     ...sdk,
     buildTokenPairKey(pair),
     'liquidity',

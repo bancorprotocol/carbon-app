@@ -1,63 +1,32 @@
-const referrers = {
-  sei: '0x773B75CfB146bd5d1095fa9d6d45637f02B05119',
-  celo: '0x8cE318919438982514F9f479FDfB40D32C6ab749',
-  tac: '0xBBAFF3Bf6eC4C15992c0Fb37F12491Fd62C5B496',
-  ethereum: '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4',
-};
-const referrerFee = '0.25';
-
-const proOrigin = 'https://open-api-pro.openocean.finance/v4';
-const allowedEndpoints = ['reverseQuote', 'quote', 'swap', 'gasPrice'];
 const allowChains = ['1', '42220', '1329', '239'];
 
 interface Env {
-  OPENOCEAN_APIKEY: string;
+  DEX_AGGREGATOR_APIKEY: string;
   AXIOM_APIKEY: string;
   VITE_NETWORK?: string;
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   try {
-    const apikey = env.OPENOCEAN_APIKEY;
+    const apikey = env.DEX_AGGREGATOR_APIKEY;
     if (!apikey) throw new Error('No API key available in cloudflare');
     const { searchParams } = new URL(request.url);
 
-    // Get endpoint sent by the client & remove it
-    const endpoint = searchParams.get('endpoint') ?? '';
-    searchParams.delete('endpoint');
-    if (!allowedEndpoints.includes(endpoint)) {
-      throw new Error(`Unsupported endpoint: ${endpoint}`);
-    }
-
-    const chain = searchParams.get('chain') ?? '';
+    const chain = searchParams.get('chainId') ?? '';
     searchParams.delete('chain');
     if (!allowChains.includes(chain)) {
       throw new Error(`Unsupported chain: ${chain}`);
     }
 
-    const url = new URL(proOrigin + '/' + chain + '/' + endpoint);
-
-    const network = (env.VITE_NETWORK || 'ethereum') as keyof typeof referrers;
-
-    if (!(network in referrers)) {
-      throw new Error(`Unsupported VITE_NETWORK: ${chain}`);
-    }
-
-    const referrer = referrers[network];
-
-    // Copy search params from request to openocean
-    for (const [key, value] of searchParams.entries()) {
-      url.searchParams.set(key, value);
-    }
-
-    if (endpoint === 'swap') {
-      url.searchParams.set('referrer', referrer);
-      url.searchParams.set('referrerFee', referrerFee);
-    }
-
+    const url = new URL(
+      'https://agg-api-458865443958.europe-west1.run.app/v1/quote',
+    );
+    const body = Object.entries(searchParams.entries());
     const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(body),
       headers: {
-        apikey,
+        Authorization: `Bearer ${env.DEX_AGGREGATOR_APIKEY}`,
         'Content-Type': 'application/json',
       },
     });
@@ -82,7 +51,6 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
           body: JSON.stringify([
             {
               level: 'info',
-              network: network,
               message: {
                 request: url.toString(),
                 response: result,

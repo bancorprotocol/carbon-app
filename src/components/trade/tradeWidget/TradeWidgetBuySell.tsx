@@ -14,7 +14,7 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { LogoImager } from 'components/common/imager/Imager';
 import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-router';
-import { OpenOceanPath } from './OpenOceanPath';
+import { RoutingExchanges } from './RoutingExchanges';
 import IconRouting from 'assets/icons/routing.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import IconArrow from 'assets/icons/arrowDown.svg?react';
@@ -52,6 +52,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     isAwaiting,
     showRoutingPath,
     routingPath,
+    quoteId,
   } = useBuySell(props);
   const {
     source,
@@ -282,14 +283,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
       {showRoutingPath && !!routingPath && (
         <div className="grid gap-8 px-16 py-8 rounded-md bg-main-500/60">
-          <h3 className="text-12">Routing:</h3>
-          <OpenOceanPath path={routingPath} />
+          <h3 className="text-12">Exchanges:</h3>
+          <RoutingExchanges path={routingPath} />
         </div>
       )}
 
       <Button
         type="submit"
-        disabled={disabledCTA}
+        disabled={!quoteId || disabledCTA}
         loading={isAwaiting}
         loadingChildren="Waiting for Confirmation"
         variant={isBuy ? 'buy' : 'sell'}

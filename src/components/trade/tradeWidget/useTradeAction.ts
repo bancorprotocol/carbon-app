@@ -21,6 +21,7 @@ type TradeProps = {
   isTradeBySource: boolean;
   sourceInput: string;
   targetInput: string;
+  quoteId?: string;
 };
 
 type Props = Pick<TradeProps, 'source' | 'isTradeBySource' | 'sourceInput'> & {
@@ -73,6 +74,7 @@ export const useTradeAction = ({
     sourceInput,
     targetInput,
     tradeActions,
+    quoteId,
   }: TradeProps) => {
     const checked = await checkRestriction();
     if (!checked) return;
@@ -92,6 +94,7 @@ export const useTradeAction = ({
         calcDeadline,
         calcMaxInput,
         calcMinReturn,
+        quoteId,
       },
       {
         onSuccess: async (tx) => {

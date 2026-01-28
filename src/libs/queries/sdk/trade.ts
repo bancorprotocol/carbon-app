@@ -7,10 +7,10 @@ import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
-import { openocean, OpenOceanSwapPath } from 'services/openocean';
+import { openocean, QuoteMetadata } from 'services/openocean';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
-import { TransactionRequest } from 'ethers';
+import { formatUnits, parseUnits } from 'ethers';
 import config from 'config';
 
 interface GetTradeDataResult {
@@ -20,7 +20,8 @@ interface GetTradeDataResult {
   totalTargetAmount: string;
   effectiveRate: string;
   actionsWei: MatchActionBNStr[];
-  path?: OpenOceanSwapPath;
+  path?: QuoteMetadata[];
+  quoteId?: string;
 }
 
 type Props = {
@@ -32,6 +33,7 @@ type Props = {
 };
 
 export interface TradeParams {
+  quoteId?: string;
   source: Token;
   target: Token;
   tradeActions: TradeActionBNStr[];
@@ -50,37 +52,26 @@ export const useTradeQuery = () => {
   const {
     trade: { settings },
   } = useStore();
-  const { signer } = useWagmi();
   return useMutation({
     mutationFn: async (params: TradeParams) => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
 
       if (config.ui.useOpenocean) {
-        const gasPrice = await openocean.gasPrice();
+        if (!user) throw new Error('User not connected');
+        if (!params.quoteId) throw new Error('No quoteId provided');
         const amountDecimals = toDecimal(params.sourceInput, params.source);
-        const tx = await openocean.swap({
-          account: user,
-          inTokenAddress: params.source.address,
-          outTokenAddress: params.target.address,
-          amountDecimals: amountDecimals,
-          gasPriceDecimals: gasPrice.toString(),
-          slippage: Number(settings.slippage),
+        const result = await openocean.swap({
+          chainId: config.network.chainId,
+          recipient: user,
+          sourceToken: params.source.address,
+          targetToken: params.target.address,
+          tradeBySource: params.isTradeBySource,
+          amount: toDecimal(params.sourceInput, params.source),
+          slippage: new SafeDecimal(settings.slippage).mul(100).toNumber(),
+          quoteId: params.quoteId,
         });
-        const unsignedTx: TransactionRequest = {
-          from: tx.from,
-          to: tx.to,
-          value: BigInt(tx.value),
-          data: tx.data,
-        };
-        // Bump estimated gas because openocean isn't working correctly
-        const estimateGas = await signer?.estimateGas(unsignedTx);
-        if (estimateGas) {
-          const limit = new SafeDecimal(estimateGas?.toString())
-            .mul(1.1)
-            .round()
-            .toString();
-          unsignedTx.gasLimit = BigInt(limit);
-        }
+        if (!result.tx) throw new Error('Swap request does not support ');
+        const unsignedTx = result.tx;
         unsignedTx.customData = {
           spender: config.addresses.carbon.carbonController,
           assets: [
@@ -132,14 +123,10 @@ export const useTradeQuery = () => {
 };
 
 const fromDecimal = (amount: string, token: Token) => {
-  const decimals = new SafeDecimal(10).pow(token.decimals);
-  const inDecimals = new SafeDecimal(amount).div(decimals);
-  return inDecimals.toString();
+  return formatUnits(amount, token.decimals);
 };
 const toDecimal = (amount: string, token: Token) => {
-  const decimals = new SafeDecimal(10).pow(token.decimals);
-  const inDecimals = new SafeDecimal(amount).mul(decimals);
-  return inDecimals.toString();
+  return parseUnits(amount, token.decimals).toString();
 };
 
 export const useGetTradeData = ({
@@ -175,23 +162,21 @@ export const useGetTradeData = ({
       }
 
       if (config.ui.useOpenocean) {
-        const inToken = isTradeBySource ? sourceToken : targetToken;
-        const outToken = isTradeBySource ? targetToken : sourceToken;
-        const gasPrice = await openocean.gasPrice();
-        const params = {
-          amountDecimals: toDecimal(input, inToken),
-          inTokenAddress: inToken.address,
-          outTokenAddress: outToken.address,
-          slippage: Number(trade.settings.slippage),
-          gasPriceDecimals: gasPrice.toString(),
-        };
-        const res = isTradeBySource
-          ? await openocean.quote(params)
-          : await openocean.reverseQuote(params);
-        const sourceAmount = isTradeBySource ? res.inAmount : res.outAmount;
-        const targetAmount = isTradeBySource ? res.outAmount : res.inAmount;
-        const totalSourceAmount = fromDecimal(sourceAmount, sourceToken);
-        const totalTargetAmount = fromDecimal(targetAmount, targetToken);
+        const inputToken = isTradeBySource ? sourceToken : targetToken;
+        const res = await openocean.quote({
+          chainId: config.network.chainId,
+          sourceToken: sourceToken.address,
+          targetToken: targetToken.address,
+          amount: parseUnits(input, inputToken.decimals).toString(),
+          tradeBySource: isTradeBySource,
+          slippage: new SafeDecimal(trade.settings.slippage)
+            .mul(100)
+            .toNumber(),
+        });
+        // TODO: manage
+        if (!res.tradeFound) throw new Error('Trade not found');
+        const totalSourceAmount = fromDecimal(res.sourceAmount, sourceToken);
+        const totalTargetAmount = fromDecimal(res.targetAmount, targetToken);
         const rate = new SafeDecimal(totalTargetAmount).div(totalSourceAmount);
         return {
           totalSourceAmount,
@@ -200,7 +185,8 @@ export const useGetTradeData = ({
           actionsTokenRes: [],
           effectiveRate: rate.toString(),
           actionsWei: [],
-          path: res.path,
+          path: res.metadata,
+          quoteId: res.id,
         };
       } else {
         return carbonSDK.getTradeData(
