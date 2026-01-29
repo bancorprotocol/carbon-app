@@ -1,9 +1,5 @@
 import { BigNumberish, TransactionRequest } from 'ethers';
-import { useContract } from 'hooks/useContract';
-import { useTokens } from 'hooks/useTokens';
 import { useCallback, useRef } from 'react';
-import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
-import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 import config from 'config';
 import { useNotifications } from 'hooks/useNotifications';
 
@@ -70,10 +66,13 @@ async function repeat<T>(cb: () => Promise<T>): Promise<T> {
   throw new Error('Too many attempts');
 }
 
+const toHexValue = (value?: BigNumberish | null) => {
+  if (!value) return '0x0';
+  return `0x${value.toString(16)}`;
+};
+
 export const useBatchTransaction = () => {
   const { dispatchNotification, removeNotification } = useNotifications();
-  const { getTokenById } = useTokens();
-  const { Token } = useContract();
 
   const allowBatch = useRef<boolean>(null);
   // Note: can can't access user from useWagmi because `useBatchTransaction` is used in useWagmi
@@ -107,57 +106,9 @@ export const useBatchTransaction = () => {
       if (!window.ethereum) {
         throw new Error('No Eip1193Provider found');
       }
-      const toHexValue = (value?: BigNumberish | null) => {
-        if (!value) return '0x0';
-        return `0x${value.toString(16)}`;
-      };
+
       const txs = Array.isArray(tx) ? tx : [tx];
       const calls: Call[] = [];
-
-      const amounts: Record<string, bigint> = {};
-
-      // Add approvals
-      for (const transaction of txs) {
-        const assets = transaction.customData?.assets ?? [];
-        const spender = transaction.customData.spender as string;
-        for (const asset of assets) {
-          const { address, rawAmount } = asset as Asset;
-          const key = `${address}_${spender}`;
-          amounts[key] ||= BigInt(0);
-          amounts[key] += BigInt(rawAmount);
-        }
-      }
-      for (const [key, amount] of Object.entries(amounts)) {
-        if (amount === 0n) continue;
-        const [address, spender] = key.split('_');
-        const token = getTokenById(address);
-        if (!token) throw new Error('Could not find token');
-        if (address === NATIVE_TOKEN_ADDRESS) continue;
-
-        const allowance = await Token(address).read.allowance(user, spender);
-        const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(
-          address.toLowerCase(),
-        );
-        const { populateTransaction } = Token(address).write.approve;
-        if (isNullApprovalContract) {
-          if (allowance && allowance < amount) {
-            const revokeTx = await populateTransaction(spender, '0');
-            calls.push({
-              to: revokeTx.to,
-              value: toHexValue(revokeTx.value),
-              data: revokeTx.data,
-            });
-          }
-        }
-        if (allowance < amount) {
-          const approval = await populateTransaction(spender, amount);
-          calls.push({
-            to: approval.to,
-            value: toHexValue(approval.value),
-            data: approval.data,
-          });
-        }
-      }
 
       for (const transaction of txs) {
         if (typeof transaction.to !== 'string') continue;
@@ -219,13 +170,7 @@ export const useBatchTransaction = () => {
         );
       }
     },
-    [
-      Token,
-      canBatchTransactions,
-      removeNotification,
-      dispatchNotification,
-      getTokenById,
-    ],
+    [canBatchTransactions, removeNotification, dispatchNotification],
   );
 
   return { batchTransaction, canBatchTransactions };

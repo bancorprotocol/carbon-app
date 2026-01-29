@@ -210,7 +210,7 @@ export const commonConfig: AppConfig = {
     showCart: true,
     // rewardUrl: 'https://app.merkl.xyz/?chain=1&protocol=carbon',
     // walkthroughId: 'i2ok96zcpzqw',
-    useOpenocean: !navigator.webdriver, // use sdk in E2E
+    useDexAggregator: !navigator.webdriver, // use sdk in E2E
     useEIP7702: true,
   },
 };

@@ -11,7 +11,7 @@ import config from 'config';
 export const useGetTradeLiquidity = (base?: string, quote?: string) => {
   const dexQuery = useDexAggregatorTrade(base, quote);
   const sdkQuery = useSDKTrade(base, quote);
-  return config.ui.useOpenocean ? dexQuery : sdkQuery;
+  return config.ui.useDexAggregator ? dexQuery : sdkQuery;
 };
 
 const useDexAggregatorTrade = (base?: string, quote?: string) => {
@@ -33,7 +33,7 @@ const useDexAggregatorTrade = (base?: string, quote?: string) => {
       if (!res.tradeFound) return '';
       return res.targetAmount;
     },
-    enabled: !!base && !!quote && config.ui.useOpenocean,
+    enabled: !!base && !!quote && config.ui.useDexAggregator,
     staleTime: ONE_DAY_IN_MS,
     refetchOnWindowFocus: false,
   });
@@ -44,7 +44,7 @@ const useSDKTrade = (base?: string, quote?: string) => {
   return useQuery({
     queryKey: QueryKey.tradeSDKLiquidity([base!, quote!]),
     queryFn: () => carbonSDK.getLiquidityByPair(base!, quote!),
-    enabled: !!base && !!quote && isInitialized && !config.ui.useOpenocean,
+    enabled: !!base && !!quote && isInitialized && !config.ui.useDexAggregator,
     staleTime: ONE_DAY_IN_MS,
     refetchOnWindowFocus: false,
   });

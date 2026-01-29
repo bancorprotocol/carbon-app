@@ -96,6 +96,6 @@ export const commonConfig: AppConfig = {
       logo: '/logos/merkl.webp',
     },
     // walkthroughId: 'vjbcftqceykr',
-    useOpenocean: false,
+    useDexAggregator: false,
   },
 };

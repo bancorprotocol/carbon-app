@@ -106,7 +106,7 @@ export const useBuySell = ({
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
 
   const checkLiquidity = useCallback(() => {
-    if (config.ui.useOpenocean) return;
+    if (config.ui.useDexAggregator) return;
     const checkSource = () =>
       new SafeDecimal(sourceInput).gt(maxSourceAmountQuery.data || 0);
 
@@ -114,7 +114,7 @@ export const useBuySell = ({
       new SafeDecimal(targetInput).gt(liquidityQuery.data || 0);
 
     const set = () => {
-      if (config.ui.useOpenocean) return;
+      if (config.ui.useDexAggregator) return;
       setIsLiquidityError(true);
     };
     setIsLiquidityError(false);
@@ -317,7 +317,7 @@ export const useBuySell = ({
   ]);
 
   const displayRouting = useCallback(() => {
-    if (config.ui.useOpenocean) {
+    if (config.ui.useDexAggregator) {
       setShowRoutingPath((current) => !current);
     } else {
       openModal('tradeRouting', {

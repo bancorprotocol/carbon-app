@@ -12,6 +12,8 @@ import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { formatUnits, parseUnits } from 'ethers';
 import config from 'config';
+import { useModal } from 'hooks/useModal';
+import { useGetApproval } from 'hooks/useApproval';
 
 interface GetTradeDataResult {
   tradeActions: TradeActionBNStr[];
@@ -49,6 +51,8 @@ export interface TradeParams {
 export const useTradeQuery = () => {
   const { sendTransaction, user } = useWagmi();
   const { getTokenById } = useTokens();
+  const { openModal } = useModal();
+  const getApproval = useGetApproval();
   const {
     trade: { settings },
   } = useStore();
@@ -56,10 +60,32 @@ export const useTradeQuery = () => {
     mutationFn: async (params: TradeParams) => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
 
-      if (config.ui.useOpenocean) {
+      if (config.ui.useDexAggregator) {
         if (!user) throw new Error('User not connected');
         if (!params.quoteId) throw new Error('No quoteId provided');
         const amountDecimals = toDecimal(params.sourceInput, params.source);
+        const customData = {
+          showApproval: true,
+          spender: config.addresses.carbon.aggregator,
+          assets: [
+            {
+              address: params.source.address,
+              rawAmount: amountDecimals,
+            },
+          ],
+        };
+        const { approvalTokens } = await getApproval(user, [customData]);
+        if (approvalTokens.length) {
+          await new Promise<void>((res) => {
+            openModal('txConfirm', {
+              approvalTokens,
+              onConfirm: () => res(),
+            });
+          });
+          // prevent showing approval modal multiple time
+          customData.showApproval = false;
+        }
+
         const result = await openocean.swap({
           chainId: config.network.chainId,
           recipient: user,
@@ -70,17 +96,10 @@ export const useTradeQuery = () => {
           slippage: new SafeDecimal(settings.slippage).mul(100).toNumber(),
           quoteId: params.quoteId,
         });
-        if (!result.tx) throw new Error('Swap request does not support ');
+        if (!result.validated) throw new Error('Swap failed');
         const unsignedTx = result.tx;
-        unsignedTx.customData = {
-          spender: config.addresses.carbon.carbonController,
-          assets: [
-            {
-              address: params.source.address,
-              rawAmount: amountDecimals,
-            },
-          ],
-        };
+        console.log(result.tx);
+        unsignedTx.customData = customData;
         return sendTransaction(unsignedTx);
       } else {
         let unsignedTx: PopulatedTransaction;
@@ -161,7 +180,7 @@ export const useGetTradeData = ({
         };
       }
 
-      if (config.ui.useOpenocean) {
+      if (config.ui.useDexAggregator) {
         const inputToken = isTradeBySource ? sourceToken : targetToken;
         const res = await openocean.quote({
           chainId: config.network.chainId,

@@ -10,8 +10,8 @@ import { Token } from 'libs/tokens';
 import { useApproval } from 'hooks/useApproval';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 
-const spender = config.ui.useOpenocean
-  ? config.addresses.openocean
+const spender = config.ui.useDexAggregator
+  ? config.addresses.carbon.aggregator
   : config.addresses.carbon.carbonController;
 
 type TradeProps = {
