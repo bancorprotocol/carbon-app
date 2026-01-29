@@ -11,7 +11,7 @@ import { useApproval } from 'hooks/useApproval';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 
 const spender = config.ui.useDexAggregator
-  ? config.addresses.carbon.aggregator
+  ? config.addresses.carbon.aggregator!
   : config.addresses.carbon.carbonController;
 
 type TradeProps = {

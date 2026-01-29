@@ -79,7 +79,7 @@ export const AppConfigSchema = v.object({
       voucher: v.string(),
       batcher: v.optional(v.string()),
       vault: v.string(),
-      aggregator: v.string(),
+      aggregator: v.optional(v.string()),
     }),
     tac: v.optional(
       v.object({

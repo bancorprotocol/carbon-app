@@ -66,7 +66,7 @@ export const useTradeQuery = () => {
         const amountDecimals = toDecimal(params.sourceInput, params.source);
         const customData = {
           showApproval: true,
-          spender: config.addresses.carbon.aggregator,
+          spender: config.addresses.carbon.aggregator!,
           assets: [
             {
               address: params.source.address,
