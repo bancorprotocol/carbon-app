@@ -1,36 +1,33 @@
 import { PopulatedTransaction } from '@bancor/carbon-sdk';
 
-// TODO: remove this
-const apiUrl = 'https://agg-api-458865443958.europe-west1.run.app/v1/';
-
-const getUrl = (endpoint: string) => {
+const getResponse = (params: object, abortSignal?: AbortSignal) => {
   if (import.meta.env.DEV) {
-    const url = new URL(apiUrl + endpoint);
-    return url;
+    const url = 'https://agg-api-458865443958.europe-west1.run.app/v1/quote';
+    const apiKey = import.meta.env.VITE_DEX_AGGREGATOR_APIKEY;
+    return fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      signal: abortSignal,
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+    });
   } else {
     // In production send to cloudflare proxy
     const url = new URL(location.origin + '/api/dex-aggregator');
-    return url;
+    for (const [key, value] of Object.entries(params)) {
+      url.searchParams.set(key, value);
+    }
+    return fetch(url, { signal: abortSignal });
   }
 };
 
 const get = async <T>(
-  endpoint: string,
   params: object = {},
   abortSignal?: AbortSignal,
 ): Promise<T> => {
-  const url = getUrl(endpoint);
-  const apiKey = import.meta.env.VITE_DEX_AGGREGATOR_APIKEY;
-  const response = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(params),
-    signal: abortSignal,
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
+  const response = await getResponse(params, abortSignal);
   const result = await response.json<T>();
   if (!response.ok) {
     const error = (result as { error?: string }).error;
@@ -264,7 +261,7 @@ export const exchangeNames = {
 type ExchangeKey = keyof typeof exchangeNames;
 
 export const dexAggregator = {
-  quote: async (params: QuoteParams) => get<QuoteResult>('quote', params),
+  quote: async (params: QuoteParams) => get<QuoteResult>(params),
   // TODO: add recipient
-  swap: async (params: SwapParams) => get<SwapResult>('quote', params),
+  swap: async (params: SwapParams) => get<SwapResult>(params),
 };

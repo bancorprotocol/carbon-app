@@ -1,3 +1,5 @@
+const allowChains = ['1', '42220', '1329', '239'];
+
 interface Env {
   DEX_AGGREGATOR_APIKEY: string;
   AXIOM_APIKEY: string;
@@ -8,13 +10,21 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   try {
     const apikey = env.DEX_AGGREGATOR_APIKEY;
     if (!apikey) throw new Error('No API key available in cloudflare');
-    const body = await request.clone().text();
+    const { searchParams } = new URL(request.url);
+
+    const chain = searchParams.get('chainId') ?? '';
+    searchParams.delete('chain');
+    if (!allowChains.includes(chain)) {
+      throw new Error(`Unsupported chain: ${chain}`);
+    }
+
     const url = new URL(
       'https://agg-api-458865443958.europe-west1.run.app/v1/quote',
     );
+    const body = Object.entries(searchParams.entries());
     const response = await fetch(url, {
       method: 'POST',
-      body,
+      body: JSON.stringify(body),
       headers: {
         Authorization: `Bearer ${env.DEX_AGGREGATOR_APIKEY}`,
         'Content-Type': 'application/json',
