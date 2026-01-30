@@ -53,30 +53,6 @@ interface SwapParams extends QuoteParams {
   quoteId: string;
 }
 
-export interface OpenOceanSwapPath {
-  from: string;
-  to: string;
-  parts: number;
-  routes: OpenOceanSwapRoutes[];
-}
-interface OpenOceanSwapRoutes {
-  parts: number;
-  percentage: number;
-  subRoutes: OpenOceanSwapSubRoutes[];
-}
-interface OpenOceanSwapSubRoutes {
-  from: string;
-  to: string;
-  parts: number;
-  dexes: {
-    dex: string;
-    id: string;
-    parts: number;
-    percentage: number;
-    fee?: number;
-  }[];
-}
-
 /** Quote is found */
 interface QuoteFoundResult {
   id: string;
