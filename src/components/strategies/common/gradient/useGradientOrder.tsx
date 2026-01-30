@@ -19,7 +19,7 @@ export const useGradientOrder = (
   saveOrder: (order: Partial<GradientOrderBlock>) => any,
 ) => {
   const id = useId();
-  const timeout = useRef<NodeJS.Timeout>(null);
+  const timeout = useRef<number>(null);
   const [order, setOrder] = useState(initOrder);
 
   const set = useCallback(
@@ -81,7 +81,7 @@ export const useQuickGradientOrder = (
   saveOrder: (order: Partial<GradientOrderBlock>) => any,
 ) => {
   const id = useId();
-  const timeout = useRef<NodeJS.Timeout>(null);
+  const timeout = useRef<number>(null);
   const [order, setOrder] = useState(initOrder);
 
   const set = useCallback(

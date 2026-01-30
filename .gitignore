@@ -29,6 +29,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+pnpm-error.log*
 
 # typechain
 /src/abis/types

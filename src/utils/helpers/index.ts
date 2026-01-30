@@ -64,8 +64,8 @@ export const buildTokenPairKey = (pair: TokenPair) =>
 export const setIntervalUsingTimeout = (
   callback: () => any,
   interval: number,
-): NodeJS.Timeout => {
-  let intervalId: NodeJS.Timeout;
+): number => {
+  let intervalId: number | null = null;
 
   const timeoutCallback = () => {
     callback();
