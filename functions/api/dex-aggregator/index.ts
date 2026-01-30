@@ -1,4 +1,4 @@
-const allowChains = ['1', '42220', '1329', '239'];
+const allowChains = [1, 42220, 1329, 239];
 
 interface Env {
   DEX_AGGREGATOR_APIKEY: string;
@@ -12,15 +12,20 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     if (!apikey) throw new Error('No API key available in cloudflare');
     const { searchParams } = new URL(request.url);
 
-    const chain = searchParams.get('chainId') ?? '';
-    if (!allowChains.includes(chain)) {
-      throw new Error(`Unsupported chain: ${chain}`);
+    const entries = Object.fromEntries(searchParams.entries());
+    const body = {
+      ...entries,
+      chainId: Number(entries.chainId),
+      slippage: Number(entries.slippage),
+      tradeBySource: entries.tradeBySource === 'true',
+    };
+    if (!allowChains.includes(body.chainId)) {
+      throw new Error(`Unsupported chain: ${body.chainId}`);
     }
+    console.log(entries);
+    console.log(body);
 
     const url = 'https://agg-api-458865443958.europe-west1.run.app/v1/quote';
-    const body = Object.fromEntries(searchParams.entries());
-    (body as any).slippage = Number(body.slippage);
-    console.log(JSON.stringify(body));
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -65,7 +70,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     });
   } catch (err) {
     console.error(err);
-    const body = JSON.stringify(err);
+    const body = JSON.stringify((err as Error).message);
     return new Response(body, { status: 500 });
   }
 };
