@@ -3,7 +3,7 @@ import { QueryKey } from 'libs/queries';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useCarbonInit } from 'libs/sdk/context';
 import { carbonSDK } from 'libs/sdk';
-import { openocean } from 'services/openocean';
+import { dexAggregator } from 'services/dex-aggregator';
 import { useTokens } from 'hooks/useTokens';
 import { parseUnits } from 'ethers';
 import config from 'config';
@@ -22,7 +22,7 @@ const useDexAggregatorTrade = (base?: string, quote?: string) => {
       const baseToken = getTokenById(base);
       if (!baseToken) return '';
       // Try to trade one token. Since liquidity is only checking if > 0 it should be fine.
-      const res = await openocean.quote({
+      const res = await dexAggregator.quote({
         chainId: config.network.chainId,
         amount: parseUnits('1', baseToken.decimals).toString(),
         sourceToken: base!,

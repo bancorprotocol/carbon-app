@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { exchangeNames, QuoteMetadata } from 'services/openocean';
+import { exchangeNames, QuoteMetadata } from 'services/dex-aggregator';
 
 interface Props {
   path: QuoteMetadata[];

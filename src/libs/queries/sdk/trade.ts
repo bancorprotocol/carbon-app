@@ -7,7 +7,7 @@ import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
-import { openocean, QuoteMetadata } from 'services/openocean';
+import { dexAggregator, QuoteMetadata } from 'services/dex-aggregator';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { formatUnits, parseUnits } from 'ethers';
@@ -88,7 +88,7 @@ export const useTradeQuery = () => {
         const amount = params.isTradeBySource
           ? toDecimal(params.sourceInput, params.source)
           : toDecimal(params.targetInput, params.target);
-        const result = await openocean.swap({
+        const result = await dexAggregator.swap({
           chainId: config.network.chainId,
           recipient: user,
           sourceToken: params.source.address,
@@ -195,7 +195,7 @@ export const useDexAggregatorData = ({
       }
 
       const inputToken = isTradeBySource ? sourceToken : targetToken;
-      const res = await openocean.quote({
+      const res = await dexAggregator.quote({
         chainId: config.network.chainId,
         sourceToken: sourceToken.address,
         targetToken: targetToken.address,

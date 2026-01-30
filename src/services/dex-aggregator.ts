@@ -9,7 +9,7 @@ const getUrl = (endpoint: string) => {
     return url;
   } else {
     // In production send to cloudflare proxy
-    const url = new URL(location.origin + '/api/openocean');
+    const url = new URL(location.origin + '/api/dex-aggregator');
     return url;
   }
 };
@@ -263,7 +263,7 @@ export const exchangeNames = {
 };
 type ExchangeKey = keyof typeof exchangeNames;
 
-export const openocean = {
+export const dexAggregator = {
   quote: async (params: QuoteParams) => get<QuoteResult>('quote', params),
   // TODO: add recipient
   swap: async (params: SwapParams) => get<SwapResult>('quote', params),

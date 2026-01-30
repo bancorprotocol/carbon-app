@@ -74,7 +74,6 @@ export const commonConfig: AppConfig = {
       vault: '0x8cE318919438982514F9f479FDfB40D32C6ab749',
       aggregator: '0x351B735CC9AE7442A84CF9cAcF34DDe83eBf66E1',
     },
-    openocean: '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64',
   },
   utils: {
     multicall3: {

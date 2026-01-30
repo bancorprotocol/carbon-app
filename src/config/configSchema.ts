@@ -87,7 +87,6 @@ export const AppConfigSchema = v.object({
         smartAccountFactory: v.string(),
       }),
     ),
-    openocean: v.string(),
   }),
   utils: v.union([
     v.partial(
