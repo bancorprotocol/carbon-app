@@ -19,6 +19,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 
     const url = 'https://agg-api-458865443958.europe-west1.run.app/v1/quote';
     const body = Object.fromEntries(searchParams.entries());
+    (body as any).slippage = Number(body.slippage);
     console.log(JSON.stringify(body));
     const response = await fetch(url, {
       method: 'POST',
@@ -63,9 +64,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       headers: response.headers,
     });
   } catch (err) {
-    const body = JSON.stringify({
-      error: (err as Error).message,
-    });
+    console.error(err);
+    const body = JSON.stringify(err);
     return new Response(body, { status: 500 });
   }
 };
