@@ -13,6 +13,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     const { searchParams } = new URL(request.url);
 
     const entries = Object.fromEntries(searchParams.entries());
+    // Need to force type conversion for the backend
     const body = {
       ...entries,
       chainId: Number(entries.chainId),
@@ -22,8 +23,6 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     if (!allowChains.includes(body.chainId)) {
       throw new Error(`Unsupported chain: ${body.chainId}`);
     }
-    console.log(entries);
-    console.log(body);
 
     const url = 'https://agg-api-458865443958.europe-west1.run.app/v1/quote';
     const response = await fetch(url, {
