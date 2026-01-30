@@ -18,8 +18,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     }
 
     const url = 'https://agg-api-458865443958.europe-west1.run.app/v1/quote';
-    const body = Object.entries(searchParams.entries());
-    console.log(body);
+    const body = Object.fromEntries(searchParams.entries());
+    console.log(JSON.stringify(body));
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -28,7 +28,6 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
         'Content-Type': 'application/json',
       },
     });
-    console.log(response);
     if (!response.ok) {
       const result = await response.json();
       const error = (result as { error?: string }).error;
