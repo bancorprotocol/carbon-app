@@ -17,7 +17,7 @@ export const useGetTradeLiquidity = (base?: string, quote?: string) => {
 const useDexAggregatorTrade = (base?: string, quote?: string) => {
   const { getTokenById } = useTokens();
   return useQuery({
-    queryKey: QueryKey.tradeDexAggregatorLiquidity([base!, quote!]),
+    queryKey: QueryKey.dexAggregatorTradeLiquidity([base!, quote!]),
     queryFn: async () => {
       const baseToken = getTokenById(base);
       if (!baseToken) return '';

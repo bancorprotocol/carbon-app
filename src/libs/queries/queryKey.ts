@@ -78,7 +78,7 @@ export const QueryKey = {
   token: (token: string) => [...chain, 'token', token],
   pairs: () => [...sdk, 'pairs'],
 
-  tradeData: (pair: TokenPair, isTradeBySource: boolean, amount: string) => [
+  sdkTradeData: (pair: TokenPair, isTradeBySource: boolean, amount: string) => [
     ...sdk,
     buildTokenPairKey(pair),
     'trade-data',
@@ -98,15 +98,29 @@ export const QueryKey = {
     actions,
   ],
 
-  tradeDexAggregatorLiquidity: (pair: TokenPair) => [
-    'dex-aggregator',
-    buildTokenPairKey(pair),
-    'liquidity',
-  ],
   tradeSDKLiquidity: (pair: TokenPair) => [
     ...sdk,
     buildTokenPairKey(pair),
     'liquidity',
+  ],
+
+  dexAggregatorTradeLiquidity: (pair: TokenPair) => [
+    'dex-aggregator',
+    buildTokenPairKey(pair),
+    'liquidity',
+  ],
+  dexAggregatorTradeData: (
+    pair: TokenPair,
+    isTradeBySource: boolean,
+    amount: string,
+    slippage: string,
+  ) => [
+    'dex-aggregator',
+    buildTokenPairKey(pair),
+    'trade-data',
+    isTradeBySource,
+    amount,
+    slippage,
   ],
 
   tradeMaxSourceAmount: (pair: TokenPair) => [

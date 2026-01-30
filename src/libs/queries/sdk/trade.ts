@@ -11,9 +11,9 @@ import { openocean, QuoteMetadata } from 'services/openocean';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { formatUnits, parseUnits } from 'ethers';
-import config from 'config';
 import { useModal } from 'hooks/useModal';
 import { useGetApproval } from 'hooks/useApproval';
+import config from 'config';
 
 interface GetTradeDataResult {
   tradeActions: TradeActionBNStr[];
@@ -31,7 +31,7 @@ type Props = {
   targetToken: Token;
   input: string;
   isTradeBySource: boolean;
-  enabled?: boolean;
+  enabled: boolean;
 };
 
 export interface TradeParams {
@@ -85,14 +85,16 @@ export const useTradeQuery = () => {
           // prevent showing approval modal multiple time
           customData.showApproval = false;
         }
-
+        const amount = params.isTradeBySource
+          ? toDecimal(params.sourceInput, params.source)
+          : toDecimal(params.targetInput, params.target);
         const result = await openocean.swap({
           chainId: config.network.chainId,
           recipient: user,
           sourceToken: params.source.address,
           targetToken: params.target.address,
           tradeBySource: params.isTradeBySource,
-          amount: toDecimal(params.sourceInput, params.source),
+          amount: amount,
           slippage: new SafeDecimal(settings.slippage).mul(100).toNumber(),
           quoteId: params.quoteId,
         });
@@ -148,7 +150,82 @@ const toDecimal = (amount: string, token: Token) => {
   return parseUnits(amount, token.decimals).toString();
 };
 
-export const useGetTradeData = ({
+export const useGetTradeData = (props: Props) => {
+  const dexValue = useDexAggregatorData({
+    ...props,
+    enabled: props.enabled && !!config.ui.useDexAggregator,
+  });
+  const sdkValue = useDexAggregatorData({
+    ...props,
+    enabled: props.enabled && !config.ui.useDexAggregator,
+  });
+  return config.ui.useDexAggregator ? dexValue : sdkValue;
+};
+
+export const useDexAggregatorData = ({
+  isTradeBySource,
+  input,
+  sourceToken,
+  targetToken,
+  enabled,
+}: Props) => {
+  const { trade } = useStore();
+
+  return useQuery<GetTradeDataResult>({
+    queryKey: QueryKey.dexAggregatorTradeData(
+      [sourceToken.address, targetToken.address],
+      isTradeBySource,
+      input,
+      trade.settings.slippage,
+    ),
+
+    queryFn: async () => {
+      const hasInvalidInput =
+        new SafeDecimal(input).isNaN() || new SafeDecimal(input).isZero();
+
+      if (hasInvalidInput) {
+        return {
+          totalSourceAmount: '',
+          totalTargetAmount: '',
+          tradeActions: [],
+          actionsTokenRes: [],
+          effectiveRate: '',
+          actionsWei: [],
+        };
+      }
+
+      const inputToken = isTradeBySource ? sourceToken : targetToken;
+      const res = await openocean.quote({
+        chainId: config.network.chainId,
+        sourceToken: sourceToken.address,
+        targetToken: targetToken.address,
+        amount: parseUnits(input, inputToken.decimals).toString(),
+        tradeBySource: isTradeBySource,
+        slippage: new SafeDecimal(trade.settings.slippage).mul(100).toNumber(),
+      });
+      // TODO: manage
+      if (!res.tradeFound) throw new Error('Trade not found');
+      const totalSourceAmount = fromDecimal(res.sourceAmount, sourceToken);
+      const totalTargetAmount = fromDecimal(res.targetAmount, targetToken);
+      const rate = new SafeDecimal(totalTargetAmount).div(totalSourceAmount);
+      return {
+        totalSourceAmount,
+        totalTargetAmount,
+        tradeActions: [],
+        actionsTokenRes: [],
+        effectiveRate: rate.toString(),
+        actionsWei: [],
+        path: res.metadata,
+        quoteId: res.id,
+      };
+    },
+    enabled: !!enabled,
+    gcTime: 0,
+    retry: 1,
+  });
+};
+
+export const useSDKTradeData = ({
   isTradeBySource,
   input,
   sourceToken,
@@ -156,10 +233,9 @@ export const useGetTradeData = ({
   enabled,
 }: Props) => {
   const { isInitialized } = useCarbonInit();
-  const { trade } = useStore();
 
   return useQuery<GetTradeDataResult>({
-    queryKey: QueryKey.tradeData(
+    queryKey: QueryKey.sdkTradeData(
       [sourceToken.address, targetToken.address],
       isTradeBySource,
       input,
@@ -180,41 +256,12 @@ export const useGetTradeData = ({
         };
       }
 
-      if (config.ui.useDexAggregator) {
-        const inputToken = isTradeBySource ? sourceToken : targetToken;
-        const res = await openocean.quote({
-          chainId: config.network.chainId,
-          sourceToken: sourceToken.address,
-          targetToken: targetToken.address,
-          amount: parseUnits(input, inputToken.decimals).toString(),
-          tradeBySource: isTradeBySource,
-          slippage: new SafeDecimal(trade.settings.slippage)
-            .mul(100)
-            .toNumber(),
-        });
-        // TODO: manage
-        if (!res.tradeFound) throw new Error('Trade not found');
-        const totalSourceAmount = fromDecimal(res.sourceAmount, sourceToken);
-        const totalTargetAmount = fromDecimal(res.targetAmount, targetToken);
-        const rate = new SafeDecimal(totalTargetAmount).div(totalSourceAmount);
-        return {
-          totalSourceAmount,
-          totalTargetAmount,
-          tradeActions: [],
-          actionsTokenRes: [],
-          effectiveRate: rate.toString(),
-          actionsWei: [],
-          path: res.metadata,
-          quoteId: res.id,
-        };
-      } else {
-        return carbonSDK.getTradeData(
-          sourceToken.address,
-          targetToken.address,
-          input,
-          !isTradeBySource,
-        );
-      }
+      return carbonSDK.getTradeData(
+        sourceToken.address,
+        targetToken.address,
+        input,
+        !isTradeBySource,
+      );
     },
     enabled: !!enabled && isInitialized,
     gcTime: 0,
