@@ -125,7 +125,7 @@ export const MigratePage = () => {
         dex: pos.dex,
         base: getTokenById(pos.base)!,
         quote: getTokenById(pos.quote)!,
-        spread: new SafeDecimal(pos.fee).div(1_000).toString(),
+        spread: new SafeDecimal(pos.fee).div(10_000).toString(),
         buy: {
           min: pos.min.toString(),
           marginalPrice: '',
