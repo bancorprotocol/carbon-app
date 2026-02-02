@@ -5,7 +5,7 @@
 Install Playwright browsers
 
 ```shell
-yarn playwright install
+pnpm playwright install
 ```
 
 E2E tests call the Tenderly API to create a fork of mainnet at a specific blockNumber. You need to have a [Tenderly account](https://tenderly.co/).
@@ -21,13 +21,13 @@ TENDERLY_ACCESS_KEY=...
 Install browsers and run in headless mode :
 
 ```shell
-yarn e2e
+pnpm e2e
 ```
 
 Install browsers and run in UI mode :
 
 ```shell
-yarn e2e --ui
+pnpm e2e --ui
 ```
 
 ## CI
@@ -103,7 +103,7 @@ await this.page.waitForResponse(historyPricesRegExp);
 ## Common Errors
 
 - **Error**: `Executable doesn't exist`
-- **Solution**: run `yarn playwright install`
+- **Solution**: run `pnpm playwright install`
 - **Description**: Browsers are not installed locally yet
 
 ---

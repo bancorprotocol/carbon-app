@@ -85,6 +85,14 @@
     },
     {
       "chainId": 2632500,
+      "address": "0x9eC8c1459B92e8f19fE160E63e169e7EFAAA4359",
+      "name": "COTI Token Points 003",
+      "symbol": "TPS003",
+      "decimals": 18,
+      "logoURI": "/tokens/coti/0x64ec0E875b00DD50A4661462040E7C35084BcB58.svg"
+    },
+    {
+      "chainId": 2632500,
       "address": "0xe757Ca19d2c237AA52eBb1d2E8E4368eeA3eb331",
       "name": "Wrapped ADA",
       "symbol": "wADA",
@@ -98,6 +106,14 @@
       "symbol": "USDT",
       "decimals": 6,
       "logoURI": "/tokens/coti/0xfA6f73446b17A97a56e464256DA54AD43c2Cbc3E.svg"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0xFc075Bd3e22d337C19b7Ca25635282ad8e24941a",
+      "name": "NIGHT",
+      "symbol": "NIGHT",
+      "decimals": 6,
+      "logoURI": "/tokens/coti/0xFc075Bd3e22d337C19b7Ca25635282ad8e24941a.svg"
     }
   ],
   "version": {

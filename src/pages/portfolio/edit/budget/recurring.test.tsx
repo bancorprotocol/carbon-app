@@ -12,7 +12,6 @@ import { EditBudgetRecurringPage } from './recurring';
 import { EditStrategyProvider } from 'components/strategies/edit/EditStrategyContext';
 import { Strategy } from 'components/strategies/common/types';
 import { carbonSDK } from 'libs/sdk';
-import { spyOn } from '@vitest/spy';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import {
   mockMarketRate,
@@ -111,7 +110,7 @@ describe('Edit budget recurring page', () => {
     // Check form
     await user.type(form.buy.budget(), '2');
     expect(form.buy.budget()).toHaveValue('2');
-    const spy = spyOn(carbonSDK, 'updateStrategy');
+    const spy = vitest.spyOn(carbonSDK, 'updateStrategy');
     await user.click(form.submit());
     expect(spy).toHaveBeenCalledWith(
       strategy.id,

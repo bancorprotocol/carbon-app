@@ -6,6 +6,9 @@
   "dependencies": {
     "@bancor/carbon-sdk": "0.0.127-DEV",
     "@cloudflare/workers-types": "4.20230717.0",
+    "@eslint/js": "^9.39.2",
+    "@floating-ui/core": "^1.7.3",
+    "@floating-ui/dom": "^1.7.4",
     "@floating-ui/react": "0.27.16",
     "@oddbird/popover-polyfill": "0.6.1",
     "@playwright/test": "1.52.0",
@@ -37,6 +40,7 @@
     "@uniswap/v3-sdk": "^3.27.0",
     "@vitejs/plugin-react": "5.1.1",
     "@vitest/coverage-v8": "1.6.0",
+    "@wagmi/core": "2.14.6",
     "buffer": "6.0.3",
     "class-variance-authority": "0.2.4",
     "clsx": "1.2.1",
@@ -88,7 +92,7 @@
   },
   "scripts": {
     "compile-abis": "typechain --target ethers-v6 --out-dir \"src/abis/types\" \"src/abis/**/*.json\"",
-    "prepare": "yarn husky install",
+    "prepare": "pnpm husky install",
     "start": "vite",
     "start:ethereum": "cross-env VITE_NETWORK=ethereum vite",
     "start:sei": "cross-env VITE_NETWORK=sei vite",
@@ -97,16 +101,16 @@
     "start:blast": "cross-env VITE_NETWORK=blast vite",
     "start:tac": "cross-env VITE_NETWORK=tac vite",
     "start:ton": "cross-env VITE_NETWORK=ton vite",
-    "prebuild": "yarn compile-abis",
+    "prebuild": "pnpm compile-abis",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "pretest": "yarn compile-abis",
+    "pretest": "pnpm compile-abis",
     "test": "vitest run --mode production",
-    "coverage": "yarn test --coverage",
-    "pree2e": "yarn playwright install --with-deps chromium",
+    "coverage": "pnpm test --coverage",
+    "pree2e": "pnpm playwright install --with-deps chromium",
     "e2e": "playwright test",
     "lint": "eslint --ext .tsx,.ts .",
-    "pre-commit": "yarn lint-staged",
+    "pre-commit": "pnpm lint-staged",
     "e2e:report": "npx playwright show-report e2e/playwright-report",
     "update-browserslist": "npx update-browserslist-db@latest",
     "analyze": "npx analyze -c vite.config.ts"
@@ -128,5 +132,5 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "pnpm@10.28.0"
 }

@@ -8,7 +8,7 @@ export const useDebouncePrices = (
   sell: FormStaticOrder,
   cb: OnPriceUpdates,
 ) => {
-  const timeout = useRef<NodeJS.Timeout>(null);
+  const timeout = useRef<number>(null);
   const [localPrices, setLocalPrices] = useState({
     buy: { min: buy.min || '0', max: buy.max || '0' },
     sell: { min: sell.min || '0', max: sell.max || '0' },

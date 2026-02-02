@@ -35,8 +35,9 @@ export const GradientPriceRange: FC<Props> = (props) => {
   const inputStartId = useId();
   const inputEndId = useId();
   const { marketPrice } = useStrategyMarketPrice({ base, quote });
-  const startTimeout = useRef<NodeJS.Timeout>(null);
-  const endTimeout = useRef<NodeJS.Timeout>(null);
+
+  const startTimeout = useRef<number>(null);
+  const endTimeout = useRef<number>(null);
 
   const startPercent = useMemo(() => {
     if (!marketPrice) return '';
