@@ -74,16 +74,20 @@ export const useTradeQuery = () => {
             },
           ],
         };
-        const { approvalTokens } = await getApproval(user, [customData]);
-        if (approvalTokens.length) {
-          await new Promise<void>((res) => {
-            openModal('txConfirm', {
-              approvalTokens,
-              onConfirm: () => res(),
+        // If config supports EIP7702 we want to force approval
+        // the backend requires approval to happen before
+        if (config.ui.useEIP7702) {
+          const { approvalTokens } = await getApproval(user, [customData]);
+          if (approvalTokens.length) {
+            await new Promise<void>((res) => {
+              openModal('txConfirm', {
+                approvalTokens,
+                onConfirm: () => res(),
+              });
             });
-          });
-          // prevent showing approval modal multiple time
-          customData.showApproval = false;
+            // prevent showing approval modal multiple time
+            customData.showApproval = false;
+          }
         }
         const amount = params.isTradeBySource
           ? toDecimal(params.sourceInput, params.source)
