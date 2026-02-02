@@ -90,7 +90,7 @@ export const useGetApproval = () => {
       for (const customData of txCustomData) {
         const showApproval = customData?.showApproval;
         const assets = customData?.assets ?? [];
-        const spender = customData.spender as string;
+        const spender = customData?.spender as string;
         for (const asset of assets) {
           const { address, rawAmount } = asset as Asset;
           const key = `${address}_${spender}` as const;
