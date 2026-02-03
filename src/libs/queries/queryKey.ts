@@ -127,4 +127,6 @@ export const QueryKey = {
     buildTokenPairKey(pair),
     'trade-order-book-last-trade-buy',
   ],
+
+  uniswapPosition: (user: string) => ['uniswap', 'position', user],
 };

@@ -23,8 +23,8 @@ import {
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
 import { getFullRangesPrices } from 'components/strategies/common/utils';
-import { Dexes, UniswapPosition } from 'components/uniswap/utils';
-import { getUniswapPositions, withdrawPosition } from 'components/uniswap';
+import { Dexes } from 'components/uniswap/utils';
+import { withdrawPosition } from 'components/uniswap';
 import { NotFound } from 'components/common/NotFound';
 import { useDialog } from 'hooks/useDialog';
 import IconClose from 'assets/icons/X.svg?react';
@@ -37,6 +37,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { useNotifications } from 'hooks/useNotifications';
+import { useUniswapPositions } from 'libs/queries/uniswap/positions';
 
 const dexNames: Record<Dexes, string> = {
   'uniswap-v2': 'Uniswap V2',
@@ -84,36 +85,30 @@ interface MigratedPosition {
 }
 
 export const MigratePage = () => {
-  const { user, provider } = useWagmi();
-  const [uniPositions, setUniPositions] = useState<UniswapPosition[]>();
   const [selectedIndex, setSelectedIndex] = useState<number>();
   const { getTokenById } = useTokens();
 
-  useEffect(() => {
-    if (!user || !provider) return;
-    getUniswapPositions(provider, user)
-      // TODO: fetch missing tokens
-      .then((positions) => setUniPositions(positions));
-  }, [user, provider]);
+  const query = useUniswapPositions();
 
   const tokens = useMemo(() => {
-    if (!uniPositions?.length) return;
+    const positions = query.data;
+    if (!positions?.length) return;
     const list = new Set<string>();
-    for (const position of uniPositions) {
+    for (const position of positions) {
       list.add(position.base);
       list.add(position.quote);
     }
     return Array.from(list);
-  }, [uniPositions]);
+  }, [query.data]);
 
   // Create a dedicated cache
   const marketPriceQuery = useGetMultipleTokenPrices(tokens);
 
   const positions = useMemo((): undefined | MigratedPosition[] => {
     if (marketPriceQuery.isPending) return;
-    if (!uniPositions) return;
+    if (query.isPending) return;
     const marketPrices = marketPriceQuery.data || {};
-    return uniPositions.map((pos) => {
+    return query.data?.map((pos) => {
       const basePrice = new SafeDecimal(marketPrices[pos.base]);
       const quotePrice = new SafeDecimal(marketPrices[pos.quote]);
       const baseBudgetFiat = basePrice.mul(pos.baseLiquidity);
@@ -160,7 +155,8 @@ export const MigratePage = () => {
     getTokenById,
     marketPriceQuery.data,
     marketPriceQuery.isPending,
-    uniPositions,
+    query.data,
+    query.isPending,
   ]);
 
   const selectedPosition = useMemo(() => {
@@ -169,11 +165,11 @@ export const MigratePage = () => {
     return positions[selectedIndex];
   }, [selectedIndex, positions]);
 
-  if (!positions) {
+  if (query.isPending) {
     return <CarbonLogoLoading className="h-80 grid-area-[list]" />;
   }
 
-  if (!positions.length) {
+  if (!positions?.length) {
     return (
       <NotFound
         className="grid-area-[list] surface rounded-2xl"
@@ -347,6 +343,8 @@ const PositionDialog: FC<Props> = (props) => {
     sell.marginalPrice = prices.sellPriceMarginal;
 
     // Calculate budget
+    buy.budget = new SafeDecimal(buy.budget).add(buy.fee).toString();
+    sell.budget = new SafeDecimal(sell.budget).add(sell.fee).toString();
     if (isMinAboveMarket(buy)) {
       buy.budget = '0';
     } else if (isMaxBelowMarket(sell)) {

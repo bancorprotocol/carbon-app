@@ -126,8 +126,8 @@ export async function getAllV3Positions(
         max: priceUpper.toSignificant(15),
         baseLiquidity: formatUnits(amount0, dec0),
         quoteLiquidity: formatUnits(amount1, dec1),
-        baseFee: fee0,
-        quoteFee: fee1,
+        baseFee: formatUnits(fee0, dec0),
+        quoteFee: formatUnits(fee1, dec1),
         fee: posData.fee.toString(),
       };
       positions.push(position);
