@@ -157,11 +157,11 @@ const toDecimal = (amount: string, token: Token) => {
 export const useGetTradeData = (props: Props) => {
   const dexValue = useDexAggregatorData({
     ...props,
-    enabled: props.enabled && !!config.ui.useDexAggregator,
+    enabled: props.enabled,
   });
-  const sdkValue = useDexAggregatorData({
+  const sdkValue = useSDKTradeData({
     ...props,
-    enabled: props.enabled && !config.ui.useDexAggregator,
+    enabled: props.enabled,
   });
   return config.ui.useDexAggregator ? dexValue : sdkValue;
 };
@@ -223,7 +223,7 @@ export const useDexAggregatorData = ({
         quoteId: res.id,
       };
     },
-    enabled: !!enabled,
+    enabled: !!enabled && !!config.ui.useDexAggregator,
     gcTime: 0,
     retry: 1,
   });
@@ -259,15 +259,21 @@ export const useSDKTradeData = ({
           actionsWei: [],
         };
       }
-
-      return carbonSDK.getTradeData(
-        sourceToken.address,
-        targetToken.address,
-        input,
-        !isTradeBySource,
-      );
+      try {
+        const v = await carbonSDK.getTradeData(
+          sourceToken.address,
+          targetToken.address,
+          input,
+          !isTradeBySource,
+        );
+        console.log({ v });
+        return v;
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
     },
-    enabled: !!enabled && isInitialized,
+    enabled: !!enabled && isInitialized && !config.ui.useDexAggregator,
     gcTime: 0,
     retry: 1,
   });

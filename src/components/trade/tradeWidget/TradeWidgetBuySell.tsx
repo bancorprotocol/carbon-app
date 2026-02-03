@@ -18,6 +18,7 @@ import { RoutingExchanges } from './RoutingExchanges';
 import IconRouting from 'assets/icons/routing.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import IconArrow from 'assets/icons/arrowDown.svg?react';
+import config from 'config';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
@@ -63,6 +64,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   } = props;
 
   const hasEnoughLiquidity = +liquidityQuery.data! > 0;
+  const enableSubmit = config.ui.useDexAggregator ? !!quoteId : true;
 
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -290,7 +292,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
       <Button
         type="submit"
-        disabled={!quoteId || disabledCTA}
+        disabled={enableSubmit || disabledCTA}
         loading={isAwaiting}
         loadingChildren="Waiting for Confirmation"
         variant={isBuy ? 'buy' : 'sell'}
