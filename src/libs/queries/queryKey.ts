@@ -7,6 +7,7 @@ import { QueryActivityParams } from './extApi/activity';
 export const sdk = ['sdk'];
 export const chain = ['chain'];
 export const extAPI = ['ext-api'];
+export const aggregator = ['dex-aggregator'];
 export const QueryKey = {
   activities: (params: QueryActivityParams) => [...extAPI, 'activity', params],
   activitiesMeta: (params: QueryActivityParams) => [
@@ -104,25 +105,6 @@ export const QueryKey = {
     'liquidity',
   ],
 
-  dexAggregatorTradeLiquidity: (pair: TokenPair) => [
-    'dex-aggregator',
-    buildTokenPairKey(pair),
-    'liquidity',
-  ],
-  dexAggregatorTradeData: (
-    pair: TokenPair,
-    isTradeBySource: boolean,
-    amount: string,
-    slippage: string,
-  ) => [
-    'dex-aggregator',
-    buildTokenPairKey(pair),
-    'trade-data',
-    isTradeBySource,
-    amount,
-    slippage,
-  ],
-
   tradeMaxSourceAmount: (pair: TokenPair) => [
     ...sdk,
     buildTokenPairKey(pair),
@@ -140,5 +122,24 @@ export const QueryKey = {
     ...sdk,
     buildTokenPairKey(pair),
     'trade-order-book-last-trade-buy',
+  ],
+
+  dexAggregatorTradeLiquidity: (pair: TokenPair) => [
+    ...aggregator,
+    buildTokenPairKey(pair),
+    'liquidity',
+  ],
+  dexAggregatorTradeData: (
+    pair: TokenPair,
+    isTradeBySource: boolean,
+    amount: string,
+    slippage: string,
+  ) => [
+    ...aggregator,
+    buildTokenPairKey(pair),
+    'trade-data',
+    isTradeBySource,
+    amount,
+    slippage,
   ],
 };

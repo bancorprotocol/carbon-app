@@ -64,7 +64,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   } = props;
 
   const hasEnoughLiquidity = +liquidityQuery.data! > 0;
-  const enableSubmit = config.ui.useDexAggregator ? !!quoteId : true;
 
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -142,11 +141,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   if (!source || !target) return null;
 
   const showRouting = routingPath || !isZero(rate);
+  const hasPrice = config.ui.useDexAggregator
+    ? !!quoteId
+    : !!maxSourceAmountQuery.data;
+
   const disabledCTA =
-    !!errorMsgSource ||
-    !!errorMsgTarget ||
-    !hasEnoughLiquidity ||
-    !maxSourceAmountQuery.data;
+    !!errorMsgSource || !!errorMsgTarget || !hasEnoughLiquidity || !hasPrice;
 
   const getLiquidity = () => {
     if (!liquidityQuery.data) return;
@@ -292,7 +292,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
       <Button
         type="submit"
-        disabled={enableSubmit || disabledCTA}
+        disabled={disabledCTA}
         loading={isAwaiting}
         loadingChildren="Waiting for Confirmation"
         variant={isBuy ? 'buy' : 'sell'}

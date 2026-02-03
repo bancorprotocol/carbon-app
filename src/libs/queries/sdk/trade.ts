@@ -104,7 +104,6 @@ export const useTradeQuery = () => {
         });
         if (!result.validated) throw new Error('Swap failed');
         const unsignedTx = result.tx;
-        console.log(result.tx);
         unsignedTx.customData = customData;
         return sendTransaction(unsignedTx);
       } else {
@@ -259,19 +258,12 @@ export const useSDKTradeData = ({
           actionsWei: [],
         };
       }
-      try {
-        const v = await carbonSDK.getTradeData(
-          sourceToken.address,
-          targetToken.address,
-          input,
-          !isTradeBySource,
-        );
-        console.log({ v });
-        return v;
-      } catch (err) {
-        console.error(err);
-        throw err;
-      }
+      return await carbonSDK.getTradeData(
+        sourceToken.address,
+        targetToken.address,
+        input,
+        !isTradeBySource,
+      );
     },
     enabled: !!enabled && isInitialized && !config.ui.useDexAggregator,
     gcTime: 0,
