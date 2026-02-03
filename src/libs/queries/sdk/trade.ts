@@ -12,7 +12,7 @@ import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { formatUnits, parseUnits } from 'ethers';
 import { useModal } from 'hooks/useModal';
-import { useGetApproval } from 'hooks/useApproval';
+import { useGetApprovalTokens } from 'hooks/useApproval';
 import config from 'config';
 
 interface GetTradeDataResult {
@@ -52,7 +52,7 @@ export const useTradeQuery = () => {
   const { sendTransaction, user } = useWagmi();
   const { getTokenById } = useTokens();
   const { openModal } = useModal();
-  const getApproval = useGetApproval();
+  const getApproval = useGetApprovalTokens();
   const {
     trade: { settings },
   } = useStore();
@@ -65,7 +65,6 @@ export const useTradeQuery = () => {
         if (!params.quoteId) throw new Error('No quoteId provided');
         const amountDecimals = toDecimal(params.sourceInput, params.source);
         const customData = {
-          showApproval: true,
           spender: config.addresses.carbon.aggregator!,
           assets: [
             {
@@ -77,7 +76,7 @@ export const useTradeQuery = () => {
         // If config supports EIP7702 we want to force approval
         // the backend requires approval to happen before
         if (config.ui.useEIP7702) {
-          const { approvalTokens } = await getApproval(user, [customData]);
+          const approvalTokens = await getApproval(user, [customData]);
           if (approvalTokens.length) {
             await new Promise<void>((res) => {
               openModal('txConfirm', {
@@ -85,8 +84,6 @@ export const useTradeQuery = () => {
                 onConfirm: () => res(),
               });
             });
-            // prevent showing approval modal multiple time
-            customData.showApproval = false;
           }
         }
         const amount = params.isTradeBySource

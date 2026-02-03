@@ -16,7 +16,6 @@ export interface Asset {
   rawAmount: string;
 }
 export interface TxCustomData {
-  showApproval: boolean;
   spender: string;
   assets: Asset[];
 }
@@ -77,35 +76,28 @@ export const useApproval = (data: ApprovalToken[]) => {
 };
 
 /** Extract approval information based on transaction custom data information */
-export const useGetApproval = () => {
+export const useGetApprovalTokens = () => {
   const { getTokenById } = useTokens();
   const { Token } = useContract();
 
   return useCallback(
     async (user: string, txCustomData: TxCustomData[]) => {
-      const earlyApproval: Record<string, bigint> = {};
-      const lateApproval: Record<string, bigint> = {};
+      const approval: Record<string, bigint> = {};
 
       // Group approvals
       for (const customData of txCustomData) {
-        const showApproval = customData?.showApproval;
         const assets = customData?.assets ?? [];
         const spender = customData?.spender as string;
         for (const asset of assets) {
           const { address, rawAmount } = asset as Asset;
           const key = `${address}_${spender}` as const;
-          if (!showApproval) {
-            lateApproval[key] ||= BigInt(0);
-            lateApproval[key] += BigInt(rawAmount);
-          } else {
-            earlyApproval[key] ||= BigInt(0);
-            earlyApproval[key] += BigInt(rawAmount);
-          }
+          approval[key] ||= BigInt(0);
+          approval[key] += BigInt(rawAmount);
         }
       }
 
       const approvalTokens: ApprovalToken[] = [];
-      for (const [key, amount] of Object.entries(earlyApproval)) {
+      for (const [key, amount] of Object.entries(approval)) {
         if (amount === 0n) continue;
         const [address, spender] = key.split('_');
         const token = getTokenById(address);
@@ -117,9 +109,34 @@ export const useGetApproval = () => {
           approvalTokens.push({ spender, amount: tokenAmount, ...token });
         }
       }
+      return approvalTokens;
+    },
+    [Token, getTokenById],
+  );
+};
+
+/** Create approval transaction information based on transaction custom data information */
+export const useGetApprovalTxs = () => {
+  const { getTokenById } = useTokens();
+  const { Token } = useContract();
+  return useCallback(
+    async (user: string, txCustomData: TxCustomData[]) => {
+      const approval: Record<string, bigint> = {};
+
+      // Group approvals
+      for (const customData of txCustomData) {
+        const assets = customData?.assets ?? [];
+        const spender = customData?.spender as string;
+        for (const asset of assets) {
+          const { address, rawAmount } = asset as Asset;
+          const key = `${address}_${spender}` as const;
+          approval[key] ||= BigInt(0);
+          approval[key] += BigInt(rawAmount);
+        }
+      }
 
       const approvalTxs: TransactionRequest[] = [];
-      for (const [key, amount] of Object.entries(lateApproval)) {
+      for (const [key, amount] of Object.entries(approval)) {
         if (amount === 0n) continue;
         const [address, spender] = key.split('_');
         const token = getTokenById(address);
@@ -142,8 +159,7 @@ export const useGetApproval = () => {
           approvalTxs.push(approval);
         }
       }
-
-      return { approvalTxs, approvalTokens };
+      return approvalTxs;
     },
     [Token, getTokenById],
   );
