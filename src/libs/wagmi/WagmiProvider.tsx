@@ -63,12 +63,12 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         user,
         customData,
       );
-      console.log({ approvalTxs, approvalTokens });
       if (approvalTokens.length) {
-        await new Promise<void>((res) => {
+        await new Promise<void>((res, rej) => {
           // TODO: Throw if modal is closed
           openModal('txConfirm', {
             approvalTokens,
+            onClose: () => rej(),
             onConfirm: () => res(),
           });
         });
