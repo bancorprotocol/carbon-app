@@ -10,7 +10,7 @@ type RadioGroupProps = DetailedHTMLProps<
 export const RadioGroup: FC<RadioGroupProps> = ({ children, ...props }) => {
   return (
     <div
-      role="group"
+      role="radiogroup"
       {...props}
       className={cn(
         'text-14 relative flex items-center rounded-full bg-main-900/40 p-4',
@@ -28,6 +28,7 @@ interface RadioProps {
   value?: string;
   children: ReactNode;
   checked?: boolean;
+  defaultChecked?: boolean;
   onChange?: (value?: string) => any;
   className?: string;
   'data-testid'?: string;
@@ -51,6 +52,7 @@ export const Radio: FC<RadioProps> = (props) => {
           id={id}
           type="radio"
           checked={props.checked}
+          defaultChecked={props.defaultChecked}
           value={props.value}
           name={props.name}
           onChange={() => props.onChange?.(props.value)}
