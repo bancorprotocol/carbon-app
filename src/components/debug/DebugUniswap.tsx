@@ -1,10 +1,10 @@
-import { createV2Position } from 'components/uniswap/v2/create';
 import { useTokens } from 'hooks/useTokens';
 import { useWagmi } from 'libs/wagmi';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import { FormEvent } from 'react';
 import { parseUnits, TransactionRequest } from 'ethers';
-import { createV3Position } from 'components/uniswap/v3/create';
+import { createV2Position } from 'services/uniswap/v2/create';
+import { createV3Position } from 'services/uniswap/v3/create';
 import { getMarketPrice } from 'libs/queries/extApi/tokenPrice';
 import config from 'config';
 

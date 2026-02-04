@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from '..';
-import { getUniswapPositions } from 'components/uniswap';
+import { getUniswapPositions } from 'services/uniswap';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
 
