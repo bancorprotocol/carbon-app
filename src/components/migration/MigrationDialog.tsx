@@ -32,7 +32,7 @@ export const PositionDialog: FC<Props> = (props) => {
   const p = props.position;
 
   // TODO: This should be done by the `useCreateStrategy` once the approval is centralized
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [status, setStatus] = useState<string>();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
 
@@ -129,23 +129,24 @@ export const PositionDialog: FC<Props> = (props) => {
     event.preventDefault();
     if (!user) throw new Error('No User connected for migration');
     try {
-      setIsProcessing(true);
       const txs = await migrateOne(p);
+      setStatus('Withdraw funds and create strategy');
       const tx = await sendTransaction(txs);
+      setStatus('Waiting for block to be mined');
       await tx.wait();
       dispatchNotification('createStrategy', { txHash: tx.hash });
-      cache.invalidateQueries({
-        queryKey: QueryKey.strategiesByUser(user),
-      });
-      cache.invalidateQueries({
-        queryKey: QueryKey.balance(user, p.base.address),
-      });
-      cache.invalidateQueries({
-        queryKey: QueryKey.balance(user, p.quote.address),
+      const queryKey = [
+        QueryKey.strategiesByUser(user),
+        QueryKey.balance(user, p.base.address),
+        QueryKey.balance(user, p.quote.address),
+      ];
+      cache.invalidateQueries({ queryKey });
+      cache.refetchQueries({
+        queryKey: QueryKey.migrationPositions(user),
       });
       close();
     } finally {
-      setIsProcessing(false);
+      setStatus('');
     }
   };
 
@@ -171,9 +172,9 @@ export const PositionDialog: FC<Props> = (props) => {
         <button
           className="btn-primary-gradient"
           type="submit"
-          disabled={isProcessing}
+          disabled={!!status}
         >
-          {isProcessing ? 'Loading' : 'Migrate'}
+          {status || 'Migrate'}
         </button>
       </form>
     </dialog>

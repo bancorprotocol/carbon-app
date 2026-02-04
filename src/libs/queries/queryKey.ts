@@ -128,5 +128,5 @@ export const QueryKey = {
     'trade-order-book-last-trade-buy',
   ],
 
-  uniswapPosition: (user: string) => ['uniswap', 'position', user],
+  migrationPositions: (user: string) => ['migration', 'positions', user],
 };

@@ -5,18 +5,22 @@ import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
 import { UniswapPosition } from 'services/uniswap/utils';
 
-export const useUniswapPositions = () => {
+export const useMigrationPositions = () => {
   const { user, provider } = useWagmi();
   const { importTokenAddresses, getTokenById } = useTokens();
   return useQuery({
-    queryKey: QueryKey.uniswapPosition(user || ''),
+    queryKey: QueryKey.migrationPositions(user || ''),
     queryFn: async () => {
+      console.log('Fetching Positions');
       const positions = await getUniswapPositions(
         provider!,
         user!,
         getTokenById,
       );
-      sessionStorage.setItem('migration-position', JSON.stringify(positions));
+      sessionStorage.setItem(
+        `migration-positions-${user}`,
+        JSON.stringify(positions),
+      );
       const tokens = positions.map((p) => [p.base, p.quote]).flat();
       await importTokenAddresses(tokens);
       return positions;
@@ -24,7 +28,8 @@ export const useUniswapPositions = () => {
     enabled: !!provider && !!user,
     refetchOnWindowFocus: false,
     initialData: () => {
-      const positions = sessionStorage.getItem('migration-position');
+      if (!user) return;
+      const positions = sessionStorage.getItem(`migration-positions-${user}`);
       if (!positions) return;
       return JSON.parse(positions) as UniswapPosition[];
     },

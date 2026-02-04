@@ -6,7 +6,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { Dexes } from 'services/uniswap/utils';
 import { NotFound } from 'components/common/NotFound';
 import { Token } from 'libs/tokens';
-import { useUniswapPositions } from 'libs/queries/uniswap/positions';
+import { useMigrationPositions } from 'libs/queries/migration/positions';
 import { MigrationTable } from 'components/migration/MigrationTable';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MigrationList } from 'components/migration/MigrationList';
@@ -51,7 +51,7 @@ export const MigratePage = () => {
   const { getTokenById } = useTokens();
   const { aboveBreakpoint } = useBreakpoints();
 
-  const query = useUniswapPositions();
+  const query = useMigrationPositions();
 
   const tokens = useMemo(() => {
     const positions = query.data;
