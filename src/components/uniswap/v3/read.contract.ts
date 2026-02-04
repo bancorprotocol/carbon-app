@@ -1,7 +1,8 @@
 import { Signer, Provider, Contract, formatUnits } from 'ethers';
 import { Pool, Position, tickToPrice } from '@uniswap/v3-sdk';
-import { Token, ChainId } from '@uniswap/sdk-core';
+import { Token as UniToken, ChainId } from '@uniswap/sdk-core';
 import JSBI from 'jsbi';
+import { Token } from 'libs/tokens';
 
 // --- Interfaces ---
 export type Dexes = 'uniswap-v2' | 'uniswap-v3';
@@ -42,6 +43,7 @@ const ERC20_ABI = ['function decimals() view returns (uint8)'];
 export async function getAllV3Positions(
   signerOrProvider: Signer | Provider,
   userAddress: string,
+  getTokenById: (address: string) => Token | undefined,
 ): Promise<UniswapPosition[]> {
   const provider =
     (signerOrProvider as Signer).provider || (signerOrProvider as Provider);
@@ -57,7 +59,14 @@ export async function getAllV3Positions(
 
   console.log(`Processing ${balance} V3 positions...`);
 
-  for (let i = 0; i < Number(balance); i++) {
+  const getTokenDecimals = (address: string) => {
+    const token = getTokenById(address);
+    if (token) return token.decimals;
+    const contract = new Contract(address, ERC20_ABI, provider);
+    return contract.decimals();
+  };
+
+  const getPosition = async (i: number) => {
     try {
       // 1. Fetch Position Data
       const tokenId = await manager.tokenOfOwnerByIndex(userAddress, i);
@@ -67,21 +76,28 @@ export async function getAllV3Positions(
         posData.liquidity === 0n &&
         posData.tokensOwed0 === 0n &&
         posData.tokensOwed1 === 0n
-      )
-        continue;
+      ) {
+        return;
+      }
 
       // 2. Fetch Decimals (Crucial for Price Calculation)
       // Note: In production, cache these results to avoid repeated RPC calls for the same token
-      const t0Contract = new Contract(posData.token0, ERC20_ABI, provider);
-      const t1Contract = new Contract(posData.token1, ERC20_ABI, provider);
       const [dec0, dec1] = await Promise.all([
-        t0Contract.decimals(),
-        t1Contract.decimals(),
+        getTokenDecimals(posData.token0),
+        getTokenDecimals(posData.token1),
       ]);
 
       // 3. Create SDK Token Instances
-      const token0 = new Token(ChainId.MAINNET, posData.token0, Number(dec0));
-      const token1 = new Token(ChainId.MAINNET, posData.token1, Number(dec1));
+      const token0 = new UniToken(
+        ChainId.MAINNET,
+        posData.token0,
+        Number(dec0),
+      );
+      const token1 = new UniToken(
+        ChainId.MAINNET,
+        posData.token1,
+        Number(dec1),
+      );
 
       // 4. Fetch Pool State
       const poolAddress = await factory.getPool(
@@ -134,8 +150,10 @@ export async function getAllV3Positions(
     } catch (error) {
       console.error(`Error processing token ${i}:`, error);
     }
-  }
-
+  };
+  const indexes = new Array(Number(balance)).fill(null);
+  const getAllPositions = indexes.map((_, i) => getPosition(i));
+  await Promise.all(getAllPositions);
   return positions;
 }
 
@@ -147,8 +165,8 @@ function calculateAmounts(
   tickLower: number,
   tickUpper: number,
   fee: number,
-  token0: Token, // Pass full Token object now
-  token1: Token,
+  token0: UniToken, // Pass full Token object now
+  token1: UniToken,
 ) {
   if (liquidity === 0n) return { amount0: '0', amount1: '0' };
 

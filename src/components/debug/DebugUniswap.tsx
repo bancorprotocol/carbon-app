@@ -68,7 +68,9 @@ export const DebugUniswap = () => {
           >
             {Object.entries(config.addresses.tokens).map(
               ([symbol, address]) => (
-                <option value={address}>{symbol}</option>
+                <option key={address} value={address}>
+                  {symbol}
+                </option>
               ),
             )}
           </select>
@@ -83,7 +85,9 @@ export const DebugUniswap = () => {
           >
             {Object.entries(config.addresses.tokens).map(
               ([symbol, address]) => (
-                <option value={address}>{symbol}</option>
+                <option key={address} value={address}>
+                  {symbol}
+                </option>
               ),
             )}
           </select>

@@ -1,5 +1,6 @@
 import { Contract, id, Provider, zeroPadValue, formatUnits } from 'ethers';
 import { UniswapPosition } from '../utils';
+import { Token } from 'libs/tokens';
 
 // --- Configuration ---
 const FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
@@ -28,6 +29,7 @@ const FACTORY_ABI = [
 export async function getAllV2Positions(
   provider: Provider,
   userAddress: string,
+  getTokenById: (address: string) => Token | undefined,
   fromBlock: number = -100000, // Defaults to scanning last 100k blocks. Set to 0 for full history (slow).
 ): Promise<UniswapPosition[]> {
   const positions: UniswapPosition[] = [];
@@ -60,9 +62,16 @@ export async function getAllV2Positions(
     `Found ${potentialPairs.size} unique tokens interacted with. Verifying V2 Pairs...`,
   );
 
+  const getTokenDecimals = (address: string) => {
+    const token = getTokenById(address);
+    if (token) return token.decimals;
+    const contract = new Contract(address, ERC20_ABI, provider);
+    return contract.decimals();
+  };
+
   // 2. VERIFY & FETCH DATA
   // Check which of these tokens are actually Uniswap V2 pairs
-  for (const pairAddress of potentialPairs) {
+  const getPosition = async (pairAddress: string) => {
     try {
       const pairContract = new Contract(pairAddress, PAIR_ABI, provider);
 
@@ -74,11 +83,9 @@ export async function getAllV2Positions(
         pairContract.token1(),
       ]);
 
-      const token0Contract = new Contract(token0, ERC20_ABI, provider);
-      const token1Contract = new Contract(token1, ERC20_ABI, provider);
-      const [decimal0, decimal1] = await Promise.all([
-        token0Contract.decimals(),
-        token1Contract.decimals(),
+      const [dec0, dec1] = await Promise.all([
+        getTokenDecimals(token0),
+        getTokenDecimals(token1),
       ]);
 
       // B. Security Check: Ask the Factory
@@ -87,7 +94,7 @@ export async function getAllV2Positions(
       const officialPair = await factoryContract.getPair(token0, token1);
 
       if (officialPair.toLowerCase() !== pairAddress.toLowerCase()) {
-        continue; // Not a legitimate Uniswap V2 Pair
+        return; // Not a legitimate Uniswap V2 Pair
       }
 
       // C. Get Balance & Reserves
@@ -111,8 +118,8 @@ export async function getAllV2Positions(
           quote: token1,
           min: '0', // V2 is always 0 to Infinity
           max: 'Infinity',
-          baseLiquidity: formatUnits(amount0, decimal0),
-          quoteLiquidity: formatUnits(amount1, decimal1),
+          baseLiquidity: formatUnits(amount0, dec0),
+          quoteLiquidity: formatUnits(amount1, dec1),
           baseFee: '0', // V2 fees are not separable; they increase the value of LP tokens
           quoteFee: '0',
           fee: '3000', // Hardcoded 0.3%
@@ -121,7 +128,9 @@ export async function getAllV2Positions(
     } catch (e) {
       // If token0() call fails, it's just a regular token (like USDT), not a pair. Ignore it.
     }
-  }
+  };
+  const getAllPosition = Array.from(potentialPairs).map(getPosition);
+  await Promise.all(getAllPosition);
 
   return positions;
 }
