@@ -23,9 +23,9 @@ export const commonConfig: AppConfig = {
   appName: 'Carbon DeFi (Coti)',
   appUrl: 'https://coti.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/coti/',
-  selectedConnectors: ['MetaMask'],
+  selectedConnectors: ['MetaMask', 'WalletConnect'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
-  walletConnectProjectId: '',
+  walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   policiesLastUpdated: '31 Jul, 2024',
   network: {
     name: 'Coti',
