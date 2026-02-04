@@ -148,7 +148,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
         <>
           <article className="grid gap-16 p-16">
             <header className="flex items-center gap-8">
-              <h2 className="text-16 font-medium flex-1">
+              <h2 className="font-title text-16 font-medium flex-1">
                 Edit Price Range&nbsp;
                 <span className="text-white/40">
                   ({quote?.symbol} per 1 {base?.symbol})
