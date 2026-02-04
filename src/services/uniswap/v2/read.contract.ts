@@ -30,8 +30,9 @@ export async function getAllV2Positions(
   provider: Provider,
   userAddress: string,
   getTokenById: (address: string) => Token | undefined,
-  fromBlock: number = -100000, // Defaults to scanning last 100k blocks. Set to 0 for full history (slow).
 ): Promise<UniswapPosition[]> {
+  // Dev: scan last 100k blocks (fast-ish) / Prod: contract creation (slow).
+  const fromBlock = import.meta.env.DEV ? -100000 : 10000835;
   const positions: UniswapPosition[] = [];
   const factoryContract = new Contract(FACTORY_ADDRESS, FACTORY_ABI, provider);
 
@@ -49,7 +50,7 @@ export async function getAllV2Positions(
       null, // 'from' - don't care
       userTopic, // 'to' - must be the user
     ],
-    fromBlock: fromBlock >= 0 ? fromBlock : 'earliest', // Be careful with 'earliest' on public RPCs
+    fromBlock,
   };
 
   const logs = await provider.getLogs(filter);
