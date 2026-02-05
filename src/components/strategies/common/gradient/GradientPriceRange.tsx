@@ -133,7 +133,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
           <header className="flex items-center justify-between">
             <label
               htmlFor={inputStartId}
-              className="text-12 flex justify-between text-white/60"
+              className="text-12 flex justify-between text-main-0/60"
             >
               _S P_
             </label>
@@ -176,7 +176,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
           <header className="flex items-center justify-between">
             <label
               htmlFor={inputEndId}
-              className="text-12 flex justify-between text-white/60"
+              className="text-12 flex justify-between text-main-0/60"
             >
               _E P_
             </label>

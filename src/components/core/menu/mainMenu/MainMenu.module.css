@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: oklch(100% var(--chroma) var(--hue) / 50%);
+  color: oklch(var(--light-0) var(--chroma) var(--hue) / 50%);
   box-shadow: 0 1px 10px var(--color-main-800);
   z-index: 40;
 }

@@ -118,7 +118,7 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
         <IconQuestion className="size-48" />
       </div>
       <h2 className="text-center">Well, this doesn't happen often...</h2>
-      <p className="text-14 font-normal text-center text-white/60">
+      <p className="text-14 font-normal text-center text-main-0/60">
         Unfortunately, price data for this pair is currently unavailable, so
         simulation isn't possible. However, you can still go ahead and create a
         strategy.

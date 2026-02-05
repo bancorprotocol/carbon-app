@@ -293,12 +293,12 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
         <header className="flex items-center gap-8">
           <h3 className="font-title text-16 font-medium flex-1">
             Price Range&nbsp;
-            <span className="text-white/40">
+            <span className="text-main-0/40">
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>
           <Tooltip element="Indicate the strategy exact buy and sell prices.">
-            <IconTooltip className="size-18 text-white/60" />
+            <IconTooltip className="size-18 text-main-0/60" />
           </Tooltip>
         </header>
         <OverlappingPriceRange
@@ -323,7 +323,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
         <header className="flex items-start justify-between">
           <h2 className="text-16">Budget</h2>
           <Tooltip element="Indicate the token, action and amount for the strategy. Note that in order to maintain the concentrated liquidity behavior, the 2nd budget indication will be calculated using the prices, fee tier and budget values you use.">
-            <IconTooltip className="size-18 text-white/60" />
+            <IconTooltip className="size-18 text-main-0/60" />
           </Tooltip>
         </header>
         <OverlappingAnchor
@@ -358,7 +358,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
             <h3 className="text-16 font-medium flex items-center gap-8">
               Distribution
             </h3>
-            <p className="text-14 text-white/80">
+            <p className="text-14 text-main-0/80">
               Following the above deposit amount, these are the changes in
               budget allocation
             </p>

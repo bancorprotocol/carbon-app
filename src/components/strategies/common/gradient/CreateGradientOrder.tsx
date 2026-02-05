@@ -71,7 +71,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
         {order.direction} Overview
       </h2>
       <div role="group" className="grid gap-8">
-        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
           Duration
         </h3>
         <GradientDateRange
@@ -89,7 +89,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
         {!dateError && dateWarning && <Warning message={dateWarning} />}
       </div>
       <div className="grid gap-8">
-        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
           Set {order.direction} Price
         </h3>
         <GradientPriceRange
@@ -109,7 +109,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
       <div role="group" className="grid gap-8">
         <label
           htmlFor={budgetId}
-          className="text-14 font-medium capitalize text-white/60"
+          className="text-14 font-medium capitalize text-main-0/60"
         >
           Set {order.direction} Budget
         </label>

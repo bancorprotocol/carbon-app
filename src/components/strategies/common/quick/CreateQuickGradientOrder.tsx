@@ -67,10 +67,10 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
         {order.direction} Overview
       </h2>
       <div role="group" className="grid gap-8">
-        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
           Duration
         </h3>
-        <div className="text-12 font-medium flex gap-8 text-nowrap text-white/60">
+        <div className="text-12 font-medium flex gap-8 text-nowrap text-main-0/60">
           <div className="rounded-s-2xl rounded-e-md flex flex-1 items-center gap-8 bg-main-900 px-16 py-8">
             <span>Start Time</span>
             <span>On Execution</span>
@@ -79,7 +79,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
             <label htmlFor={endTimeId}>End Time</label>
             <button
               type="button"
-              className="text-success text-16 disabled:text-white/60"
+              className="text-success text-16 disabled:text-main-0/60"
               disabled={order.deltaTime === '1'}
               onClick={() => setDeltaTime(Number(order.deltaTime) - 1)}
             >
@@ -87,7 +87,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
             </button>
             <input
               id={endTimeId}
-              className="invalid:text-error w-[2ch] bg-transparent text-center text-white focus-visible:outline-hidden"
+              className="invalid:text-error w-[2ch] bg-transparent text-center text-main-0 focus-visible:outline-hidden"
               value={localDelta}
               onChange={(e) => setDeltaTime(e.currentTarget.value)}
               type="number"
@@ -96,13 +96,13 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
               step="1"
               autoComplete="off"
             />
-            <span className="text-white">min</span>
-            <span className="text-10 text-white">
+            <span className="text-main-0">min</span>
+            <span className="text-10 text-main-0">
               ({formatQuickTime(order.deltaTime)})
             </span>
             <button
               type="button"
-              className="text-success text-16 disabled:text-white/60"
+              className="text-success text-16 disabled:text-main-0/60"
               disabled={order.deltaTime === '60'}
               onClick={() => setDeltaTime(Number(order.deltaTime) + 1)}
             >
@@ -113,7 +113,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
         {dateError && <Warning message={dateError} isError />}
       </div>
       <div role="group" className="grid gap-8">
-        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-white/60">
+        <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
           Set {order.direction} Price
         </h3>
         <GradientPriceRange
@@ -133,7 +133,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
       <div className="grid gap-8">
         <label
           htmlFor={budgetId}
-          className="text-14 font-medium capitalize text-white/60"
+          className="text-14 font-medium capitalize text-main-0/60"
         >
           Set {order.direction} Budget
         </label>

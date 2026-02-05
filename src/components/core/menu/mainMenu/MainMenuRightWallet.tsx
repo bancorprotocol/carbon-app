@@ -116,7 +116,7 @@ const ConnectedMenu: FC = () => {
   };
 
   return (
-    <div role="menu" className="font-normal grid gap-4 text-white">
+    <div role="menu" className="font-normal grid gap-4 text-main-0">
       {isSupportedNetwork ? (
         <>
           <button

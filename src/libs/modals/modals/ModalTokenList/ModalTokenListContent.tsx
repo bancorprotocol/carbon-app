@@ -167,7 +167,7 @@ export const ModalTokenListContent: FC<Props> = ({
                     {token.isSuspicious && <SuspiciousToken />}
                     {token.symbol}
                   </div>
-                  <div className="text-12 max-w-full truncate text-white/60">
+                  <div className="text-12 max-w-full truncate text-main-0/60">
                     {token.name ?? token.symbol}
                   </div>
                   {duplicateSymbols.includes(token.symbol) && (
@@ -186,7 +186,7 @@ export const ModalTokenListContent: FC<Props> = ({
           <hr className="flip border-main-900/20" id="flip-divider" />
         )}
         <div>
-          <h3 className="flip px-16 text-12 text-white/60" id="flip-title">
+          <h3 className="flip px-16 text-12 text-main-0/60" id="flip-title">
             All
           </h3>
           <ul
@@ -222,7 +222,7 @@ export const ModalTokenListContent: FC<Props> = ({
                         {token.isSuspicious && <SuspiciousToken />}
                         {token.symbol}
                       </div>
-                      <div className="text-12 max-w-full truncate text-white/60">
+                      <div className="text-12 max-w-full truncate text-main-0/60">
                         {token.name ?? token.symbol}
                       </div>
                       {duplicateSymbols.includes(token.symbol) && (
@@ -260,7 +260,7 @@ const FavoriteButton = ({ checked, onChange }: FavoriteProps) => {
       className="group p-16"
       onClick={onChange}
     >
-      <IconStar className="w-20 text-white/40 hover:fill-white/80 hover:text-white/80 group-aria-checked:text-primary group-aria-checked:fill-primary" />
+      <IconStar className="w-20 text-main-0/40 hover:fill-white/80 hover:text-main-0/80 group-aria-checked:text-primary group-aria-checked:fill-primary" />
     </button>
   );
 };

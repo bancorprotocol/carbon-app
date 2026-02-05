@@ -117,7 +117,7 @@ export const Tooltip: FC<Props> = ({
         onClick={(e) => e.stopPropagation()}
         onMouseLeave={hideTooltip}
         className={cn(
-          'bg-main-600/40 text-14 rounded-2xl px-24 py-16 text-white backdrop-blur-2xl max-w-350',
+          'bg-main-600/40 text-14 rounded-2xl px-24 py-16 text-main-0 backdrop-blur-2xl max-w-350',
           className,
         )}
         popover="manual"

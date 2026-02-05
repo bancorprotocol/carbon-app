@@ -79,12 +79,12 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
         <header className="flex items-center gap-8">
           <h3 className="font-title text-16 font-medium flex-1">
             Price Range&nbsp;
-            <span className="text-white/40">
+            <span className="text-main-0/40">
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>
           <Tooltip element="Indicate the strategy exact buy and sell prices.">
-            <IconTooltip className="size-18 text-white/60" />
+            <IconTooltip className="size-18 text-main-0/60" />
           </Tooltip>
         </header>
         <OverlappingPriceRange

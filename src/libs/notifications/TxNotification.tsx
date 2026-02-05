@@ -86,11 +86,11 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
             data-testid="notif-close"
             aria-label="Remove notification"
           >
-            <IconClose className="size-14 text-white/80" />
+            <IconClose className="size-14 text-main-0/80" />
           </button>
         </header>
         <p
-          className="text-14 truncate text-white/80"
+          className="text-14 truncate text-main-0/80"
           data-testid="notif-description"
         >
           {getDescriptionByStatus(notification)}
@@ -105,7 +105,7 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
               <IconLink className="ml-6 w-14" />
             </NewTabLink>
           )}
-          <p className="justify-self-end text-12 font-medium whitespace-nowrap text-white/60">
+          <p className="justify-self-end text-12 font-medium whitespace-nowrap text-main-0/60">
             {duration}
           </p>
         </footer>

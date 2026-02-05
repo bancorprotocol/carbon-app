@@ -11,7 +11,7 @@ export const WalletConnect = () => {
         <h1 id="wallet-connect-title" className="text-30 md:text-36">
           Automate your Trading Strategies
         </h1>
-        <p className="mb-24 mt-16 text-white/60 md:mb-40 md:mt-24">
+        <p className="mb-24 mt-16 text-main-0/60 md:mb-40 md:mt-24">
           A decentralized protocol for automating on-chain trading strategies.
         </p>
 
@@ -24,7 +24,7 @@ export const WalletConnect = () => {
         {items.map((item, index) => (
           <li className="flex items-center gap-20" key={index}>
             {item.icon}
-            <span className="text-white/80">{item.title}</span>
+            <span className="text-main-0/80">{item.title}</span>
           </li>
         ))}
       </ul>

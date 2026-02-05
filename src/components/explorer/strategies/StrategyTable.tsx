@@ -107,7 +107,7 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
           <FiatPrice
             token={quote}
             amount={buy.budget}
-            className="text-12 text-white/60"
+            className="text-12 text-main-0/60"
           />
         </div>
       </td>
@@ -121,7 +121,7 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
           <FiatPrice
             token={base}
             amount={sell.budget}
-            className="text-12 text-white/60"
+            className="text-12 text-main-0/60"
           />
         </div>
       </td>

@@ -257,7 +257,7 @@ export const CartPage = () => {
             htmlFor="approve-warnings"
             className={cn(
               style.approveWarnings,
-              'surface rounded-lg text-14 font-medium flex items-center p-16 py-8 gap-8 place-self-center text-white/60',
+              'surface rounded-lg text-14 font-medium flex items-center p-16 py-8 gap-8 place-self-center text-main-0/60',
             )}
           >
             <input

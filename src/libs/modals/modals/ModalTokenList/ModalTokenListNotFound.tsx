@@ -9,7 +9,7 @@ export const ModalTokenListNotFound: FC = () => {
         Unfortunately we couldn't find the token you're looking for, try
         searching for it
       </span>
-      <span className="font-medium text-white"> by address.</span>
+      <span className="font-medium text-main-0"> by address.</span>
     </>
   );
 

@@ -22,7 +22,7 @@ const _TokenLogoName: FC<TokenProps> = ({ token }) => {
           {token.isSuspicious && <SuspiciousToken />}
           {token.symbol}
         </p>
-        <p className="text-white/60 text-12 truncate">
+        <p className="text-main-0/60 text-12 truncate">
           {getTokenAddress(token)}
         </p>
       </div>
@@ -63,7 +63,7 @@ export const PairName: FC<TradePair> = ({ baseToken, quoteToken }) => (
     <Tooltip element={<TokenTooltip token={baseToken} />}>
       <span data-testid="pair-base">{baseToken.symbol}</span>
     </Tooltip>
-    <span className="text-white/60">/</span>
+    <span className="text-main-0/60">/</span>
     {quoteToken.isSuspicious && <SuspiciousToken />}
     <Tooltip element={<TokenTooltip token={quoteToken} />}>
       <span data-testid="pair-quote">{quoteToken.symbol}</span>
@@ -88,7 +88,7 @@ const TokenTooltip: FC<{ token: Token }> = ({ token }) => {
       <span
         role="button"
         onClick={copy}
-        className="text-14 inline-flex gap-8 text-white/60 cursor-pointer"
+        className="text-14 inline-flex gap-8 text-main-0/60 cursor-pointer"
       >
         {shortenString(token.address)}
         <CopyIcon className="size-14" />

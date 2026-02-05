@@ -21,7 +21,7 @@ export const GradientFullOutcome: FC<Props> = (props) => {
   const token = direction === 'buy' ? base : quote;
 
   return (
-    <p className="text-12 text-white/60" data-testid="full-outcome">
+    <p className="text-12 text-main-0/60" data-testid="full-outcome">
       If the order is 100% filled, you will receive between&nbsp;
       <b className="font-semibold break-words" data-testid="outcome-value">
         {tokenAmount(min, token)}&nbsp;

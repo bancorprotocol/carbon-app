@@ -21,7 +21,7 @@
   color: rgba(255 255 255 / 0.6);
 }
 .rdp-nav button:hover {
-  color: white;
+  color: var(--color-main-0);
 }
 .rdp-month {
   display: flex;
@@ -53,13 +53,11 @@
   border-radius: 8px;
 }
 .rdp-range_middle .rdp-day_button {
-  @apply bg-primary/20;
-  color: white;
+  @apply bg-primary/20 text-main-0;
   border-radius: 0;
 }
 .rdp-day_button:hover {
-  @apply bg-main-900;
-  color: white;
+  @apply bg-main-900 text-main-0;
 }
 .rdp-range_start .rdp-day_button {
   @apply bg-primary;

@@ -35,7 +35,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
           <Tooltip
             element={`This is the current available ${token.symbol} budget you can withdraw`}
           >
-            <IconTooltip className="size-14 text-white/60" />
+            <IconTooltip className="size-14 text-main-0/60" />
           </Tooltip>
         </p>
         <div role="cell" className="justify-self-end">
@@ -96,10 +96,10 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
                   <IconDistributedEntireRange />
                 </div>
                 <div>
-                  <div className="text-12 font-medium text-white">
+                  <div className="text-12 font-medium text-main-0">
                     Distribute Across Entire Range
                   </div>
-                  <div className="text-10 text-white/60">
+                  <div className="text-10 text-main-0/60">
                     The budget is allocated to the entire newly set range and
                     the asking price is updated.
                   </div>
@@ -110,10 +110,10 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
                   <IconDistributedUnusedRange />
                 </div>
                 <div>
-                  <div className="text-12 font-medium text-white">
+                  <div className="text-12 font-medium text-main-0">
                     Distribute To Unused Range
                   </div>
-                  <div className="text-10 text-white/60">
+                  <div className="text-10 text-main-0/60">
                     Price remains the same as it was. The budget is not
                     allocated to the new range.
                   </div>
@@ -122,7 +122,7 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
             </div>
           }
         >
-          <IconTooltip className="h-13 text-white/60" />
+          <IconTooltip className="h-13 text-main-0/60" />
         </Tooltip>
       </p>
       <Switch

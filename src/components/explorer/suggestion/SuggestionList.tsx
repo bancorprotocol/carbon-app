@@ -78,7 +78,7 @@ export const SuggestionList: FC<Props> = (props) => {
     >
       {!!filteredTokens.length && (
         <div id="filtered-token-list" data-tab="token">
-          <h3 className="text-14 font-medium px-30 text-white/60">Tokens</h3>
+          <h3 className="text-14 font-medium px-30 text-main-0/60">Tokens</h3>
           {filteredTokens.slice(0, maxTokens).map((token, index) => (
             <button
               key={token.address}
@@ -108,7 +108,7 @@ export const SuggestionList: FC<Props> = (props) => {
       )}
       {!!filteredPairs.length && (
         <div id="filtered-pair-list" data-tab="pair">
-          <h3 className="text-14 font-medium px-30 text-white/60">Pairs</h3>
+          <h3 className="text-14 font-medium px-30 text-main-0/60">Pairs</h3>
           {filteredPairs.slice(0, maxPairs).map((pair, index) => {
             const slug = toPairSlug(pair.baseToken, pair.quoteToken);
             return (

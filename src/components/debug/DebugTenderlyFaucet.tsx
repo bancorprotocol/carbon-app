@@ -74,7 +74,7 @@ export const DebugTenderlyFaucet = () => {
               )}
               <span>{symbol}</span>
               <button
-                className="text-12 border border-white/60 rounded-2xl px-8 py-4 cursor-pointer disabled:text-white/60"
+                className="text-12 border border-white/60 rounded-2xl px-8 py-4 cursor-pointer disabled:text-main-0/60"
                 type="button"
                 disabled={!user}
                 onClick={() => addOne(TOKENS[i])}

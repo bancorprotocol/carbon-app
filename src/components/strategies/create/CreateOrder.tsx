@@ -115,7 +115,7 @@ export const CreateOrder: FC<Props> = ({
           <Tooltip element={budgetTooltip}>
             <label
               htmlFor={budgetId}
-              className="text-14 font-medium flex items-center gap-8 capitalize text-white/80"
+              className="text-14 font-medium flex items-center gap-8 capitalize text-main-0/80"
             >
               Budget
             </label>
