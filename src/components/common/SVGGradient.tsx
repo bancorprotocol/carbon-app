@@ -17,11 +17,11 @@ export const SVGGradient = () => {
         <linearGradient id="svg-white-gradient" x1="0" x2="1" y1="0" y2="1">
           <stop
             offset="0%"
-            stopColor="oklch(var(--light-50) var(--chroma) var(--hue) / 0.1)"
+            stopColor="oklch(1 var(--chroma) var(--hue) / 0.1)"
           />
           <stop
             offset="100%"
-            stopColor="oklch(var(--light-50) var(--chroma) var(--hue) / 0.15)"
+            stopColor="oklch(1 var(--chroma) var(--hue) / 0.15)"
           />
         </linearGradient>
         <linearGradient
