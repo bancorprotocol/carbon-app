@@ -5,13 +5,12 @@ import { useTradeCtx } from 'components/trade/context';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useGetTokenBalance } from 'libs/queries';
-import { NewTabLink, StrategyDirection } from 'libs/routing';
+import { StrategyDirection } from 'libs/routing';
 import { cn } from 'utils/helpers';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 import { OrderDirection } from 'components/strategies/common/OrderDirection';
 import style from 'components/strategies/common/order.module.css';
-import config from 'config';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
@@ -65,14 +64,6 @@ export const TradeMarket = () => {
               data-testid={isBuy ? 'buy-form' : 'sell-form'}
             />
           </div>
-          {config.ui.useOpenocean && (
-            <p className="text-center text-10 py-8">
-              Powered by{' '}
-              <NewTabLink to="https://openocean.finance/" className="font-bold">
-                OpenOcean
-              </NewTabLink>
-            </p>
-          )}
         </article>
         <Link
           from="/trade/market"

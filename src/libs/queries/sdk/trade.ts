@@ -7,10 +7,12 @@ import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
-import { openocean, OpenOceanSwapPath } from 'services/openocean';
+import { dexAggregator, QuoteMetadata } from 'services/dex-aggregator';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
-import { TransactionRequest } from 'ethers';
+import { formatUnits, parseUnits } from 'ethers';
+import { useModal } from 'hooks/useModal';
+import { useGetApprovalTokens } from 'hooks/useApproval';
 import config from 'config';
 
 interface GetTradeDataResult {
@@ -20,7 +22,8 @@ interface GetTradeDataResult {
   totalTargetAmount: string;
   effectiveRate: string;
   actionsWei: MatchActionBNStr[];
-  path?: OpenOceanSwapPath;
+  path?: QuoteMetadata[];
+  quoteId?: string;
 }
 
 type Props = {
@@ -28,10 +31,11 @@ type Props = {
   targetToken: Token;
   input: string;
   isTradeBySource: boolean;
-  enabled?: boolean;
+  enabled: boolean;
 };
 
 export interface TradeParams {
+  quoteId?: string;
   source: Token;
   target: Token;
   tradeActions: TradeActionBNStr[];
@@ -47,42 +51,21 @@ export interface TradeParams {
 export const useTradeQuery = () => {
   const { sendTransaction, user } = useWagmi();
   const { getTokenById } = useTokens();
+  const { openModal } = useModal();
+  const getApproval = useGetApprovalTokens();
   const {
     trade: { settings },
   } = useStore();
-  const { signer } = useWagmi();
   return useMutation({
     mutationFn: async (params: TradeParams) => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
 
-      if (config.ui.useOpenocean) {
-        const gasPrice = await openocean.gasPrice();
+      if (config.ui.useDexAggregator) {
+        if (!user) throw new Error('User not connected');
+        if (!params.quoteId) throw new Error('No quoteId provided');
         const amountDecimals = toDecimal(params.sourceInput, params.source);
-        const tx = await openocean.swap({
-          account: user,
-          inTokenAddress: params.source.address,
-          outTokenAddress: params.target.address,
-          amountDecimals: amountDecimals,
-          gasPriceDecimals: gasPrice.toString(),
-          slippage: Number(settings.slippage),
-        });
-        const unsignedTx: TransactionRequest = {
-          from: tx.from,
-          to: tx.to,
-          value: BigInt(tx.value),
-          data: tx.data,
-        };
-        // Bump estimated gas because openocean isn't working correctly
-        const estimateGas = await signer?.estimateGas(unsignedTx);
-        if (estimateGas) {
-          const limit = new SafeDecimal(estimateGas?.toString())
-            .mul(1.1)
-            .round()
-            .toString();
-          unsignedTx.gasLimit = BigInt(limit);
-        }
-        unsignedTx.customData = {
-          spender: config.addresses.carbon.carbonController,
+        const customData = {
+          spender: config.addresses.carbon.aggregator!,
           assets: [
             {
               address: params.source.address,
@@ -90,6 +73,35 @@ export const useTradeQuery = () => {
             },
           ],
         };
+        // If config supports EIP7702 we want to force approval
+        // the backend requires approval to happen before
+        if (config.ui.useEIP7702) {
+          const approvalTokens = await getApproval(user, [customData]);
+          if (approvalTokens.length) {
+            await new Promise<void>((res) => {
+              openModal('txConfirm', {
+                approvalTokens,
+                onConfirm: () => res(),
+              });
+            });
+          }
+        }
+        const amount = params.isTradeBySource
+          ? toDecimal(params.sourceInput, params.source)
+          : toDecimal(params.targetInput, params.target);
+        const result = await dexAggregator.swap({
+          chainId: config.network.chainId,
+          recipient: user,
+          sourceToken: params.source.address,
+          targetToken: params.target.address,
+          tradeBySource: params.isTradeBySource,
+          amount: amount,
+          slippage: new SafeDecimal(settings.slippage).mul(100).toNumber(),
+          quoteId: params.quoteId,
+        });
+        if (!result.validated) throw new Error('Swap failed');
+        const unsignedTx = result.tx;
+        unsignedTx.customData = customData;
         return sendTransaction(unsignedTx);
       } else {
         let unsignedTx: PopulatedTransaction;
@@ -132,17 +144,88 @@ export const useTradeQuery = () => {
 };
 
 const fromDecimal = (amount: string, token: Token) => {
-  const decimals = new SafeDecimal(10).pow(token.decimals);
-  const inDecimals = new SafeDecimal(amount).div(decimals);
-  return inDecimals.toString();
+  return formatUnits(amount, token.decimals);
 };
 const toDecimal = (amount: string, token: Token) => {
-  const decimals = new SafeDecimal(10).pow(token.decimals);
-  const inDecimals = new SafeDecimal(amount).mul(decimals);
-  return inDecimals.toString();
+  return parseUnits(amount, token.decimals).toString();
 };
 
-export const useGetTradeData = ({
+export const useGetTradeData = (props: Props) => {
+  const dexValue = useDexAggregatorData({
+    ...props,
+    enabled: props.enabled,
+  });
+  const sdkValue = useSDKTradeData({
+    ...props,
+    enabled: props.enabled,
+  });
+  return config.ui.useDexAggregator ? dexValue : sdkValue;
+};
+
+export const useDexAggregatorData = ({
+  isTradeBySource,
+  input,
+  sourceToken,
+  targetToken,
+  enabled,
+}: Props) => {
+  const { trade } = useStore();
+
+  return useQuery<GetTradeDataResult>({
+    queryKey: QueryKey.dexAggregatorTradeData(
+      [sourceToken.address, targetToken.address],
+      isTradeBySource,
+      input,
+      trade.settings.slippage,
+    ),
+
+    queryFn: async () => {
+      const hasInvalidInput =
+        new SafeDecimal(input).isNaN() || new SafeDecimal(input).isZero();
+
+      if (hasInvalidInput) {
+        return {
+          totalSourceAmount: '',
+          totalTargetAmount: '',
+          tradeActions: [],
+          actionsTokenRes: [],
+          effectiveRate: '',
+          actionsWei: [],
+        };
+      }
+
+      const inputToken = isTradeBySource ? sourceToken : targetToken;
+      const res = await dexAggregator.quote({
+        chainId: config.network.chainId,
+        sourceToken: sourceToken.address,
+        targetToken: targetToken.address,
+        amount: parseUnits(input, inputToken.decimals).toString(),
+        tradeBySource: isTradeBySource,
+        slippage: new SafeDecimal(trade.settings.slippage).mul(100).toNumber(),
+      });
+      // TODO: manage
+      if (!res.tradeFound) throw new Error('Trade not found');
+      const totalSourceAmount = fromDecimal(res.sourceAmount, sourceToken);
+      const totalTargetAmount = fromDecimal(res.targetAmount, targetToken);
+      const rate = new SafeDecimal(totalTargetAmount).div(totalSourceAmount);
+      return {
+        totalSourceAmount,
+        totalTargetAmount,
+        tradeActions: [],
+        actionsTokenRes: [],
+        effectiveRate: rate.toString(),
+        actionsWei: [],
+        path: res.metadata,
+        quoteId: res.id,
+      };
+    },
+    enabled: !!enabled && !!config.ui.useDexAggregator,
+    gcTime: 0,
+    retry: 1,
+  });
+};
+
+export const useSDKTradeData = ({
   isTradeBySource,
   input,
   sourceToken,
@@ -150,10 +233,9 @@ export const useGetTradeData = ({
   enabled,
 }: Props) => {
   const { isInitialized } = useCarbonInit();
-  const { trade } = useStore();
 
   return useQuery<GetTradeDataResult>({
-    queryKey: QueryKey.tradeData(
+    queryKey: QueryKey.sdkTradeData(
       [sourceToken.address, targetToken.address],
       isTradeBySource,
       input,
@@ -173,45 +255,14 @@ export const useGetTradeData = ({
           actionsWei: [],
         };
       }
-
-      if (config.ui.useOpenocean) {
-        const inToken = isTradeBySource ? sourceToken : targetToken;
-        const outToken = isTradeBySource ? targetToken : sourceToken;
-        const gasPrice = await openocean.gasPrice();
-        const params = {
-          amountDecimals: toDecimal(input, inToken),
-          inTokenAddress: inToken.address,
-          outTokenAddress: outToken.address,
-          slippage: Number(trade.settings.slippage),
-          gasPriceDecimals: gasPrice.toString(),
-        };
-        const res = isTradeBySource
-          ? await openocean.quote(params)
-          : await openocean.reverseQuote(params);
-        const sourceAmount = isTradeBySource ? res.inAmount : res.outAmount;
-        const targetAmount = isTradeBySource ? res.outAmount : res.inAmount;
-        const totalSourceAmount = fromDecimal(sourceAmount, sourceToken);
-        const totalTargetAmount = fromDecimal(targetAmount, targetToken);
-        const rate = new SafeDecimal(totalTargetAmount).div(totalSourceAmount);
-        return {
-          totalSourceAmount,
-          totalTargetAmount,
-          tradeActions: [],
-          actionsTokenRes: [],
-          effectiveRate: rate.toString(),
-          actionsWei: [],
-          path: res.path,
-        };
-      } else {
-        return carbonSDK.getTradeData(
-          sourceToken.address,
-          targetToken.address,
-          input,
-          !isTradeBySource,
-        );
-      }
+      return await carbonSDK.getTradeData(
+        sourceToken.address,
+        targetToken.address,
+        input,
+        !isTradeBySource,
+      );
     },
-    enabled: !!enabled && isInitialized,
+    enabled: !!enabled && isInitialized && !config.ui.useDexAggregator,
     gcTime: 0,
     retry: 1,
   });

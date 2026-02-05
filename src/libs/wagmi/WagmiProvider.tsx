@@ -8,6 +8,7 @@ import { Contract, TransactionRequest } from 'ethers';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 import { useModal } from 'hooks/useModal';
 import { useBatchTransaction } from './batch-transaction';
+import { useGetApprovalTxs } from 'hooks/useApproval';
 
 // ********************************** //
 // WAGMI PROVIDER
@@ -45,7 +46,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
     imposterAccount,
     setImposterAccount,
   });
-
+  const getApprovals = useGetApprovalTxs();
   const { batchTransaction, canBatchTransactions } = useBatchTransaction();
 
   const openConnect = useCallback(() => openModal('wallet'), [openModal]);
@@ -53,29 +54,32 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
     async (tx: TransactionRequest | TransactionRequest[]) => {
       if (!user || !signer) throw new Error('No user connected');
       const canBatch = await canBatchTransactions(user);
-      if (!canBatch && Array.isArray(tx) && tx.length > 1) {
+      const txs = Array.isArray(tx) ? [...tx] : [tx];
+      if (!canBatch && txs.length > 1) {
         throw new Error('Array of transaction is only allowed for EIP7702');
       }
+      const customData = txs.map((tx) => tx.customData);
+      const approvalTxs = await getApprovals(user, customData);
+      if (canBatch) {
+        txs.unshift(...approvalTxs);
+      }
       try {
-        return await batchTransaction(user, tx);
+        return await batchTransaction(user, txs);
       } catch (err: any) {
         // Throw if error comes from EOA.
         // TODO: find a cleaner solution
         if ('code' in err) throw err;
-        if (Array.isArray(tx)) {
-          if (tx.length === 1) {
-            return signer!.sendTransaction(tx[0]);
-          } else {
-            const msg =
-              'Cannot fallback to regular transaction because it is an Array of txs';
-            console.error(msg);
-            throw err;
-          }
+        if (txs.length === 1) {
+          return signer!.sendTransaction(txs[0]);
+        } else {
+          const msg =
+            'Cannot fallback to regular transaction because it is an Array of txs';
+          console.error(msg);
+          throw err;
         }
-        return signer!.sendTransaction(tx);
       }
     },
-    [user, signer, canBatchTransactions, batchTransaction],
+    [user, signer, canBatchTransactions, getApprovals, batchTransaction],
   );
   const getBalance = useCallback(
     (address: string) => {

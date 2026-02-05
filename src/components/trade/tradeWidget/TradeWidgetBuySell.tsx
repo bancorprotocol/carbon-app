@@ -14,10 +14,11 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { LogoImager } from 'components/common/imager/Imager';
 import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-router';
-import { OpenOceanPath } from './OpenOceanPath';
+import { RoutingExchanges } from './RoutingExchanges';
 import IconRouting from 'assets/icons/routing.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import IconArrow from 'assets/icons/arrowDown.svg?react';
+import config from 'config';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
@@ -52,6 +53,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     isAwaiting,
     showRoutingPath,
     routingPath,
+    quoteId,
   } = useBuySell(props);
   const {
     source,
@@ -139,11 +141,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   if (!source || !target) return null;
 
   const showRouting = routingPath || !isZero(rate);
+  const hasPrice = config.ui.useDexAggregator
+    ? !!quoteId
+    : !!maxSourceAmountQuery.data;
+
   const disabledCTA =
-    !!errorMsgSource ||
-    !!errorMsgTarget ||
-    !hasEnoughLiquidity ||
-    !maxSourceAmountQuery.data;
+    !!errorMsgSource || !!errorMsgTarget || !hasEnoughLiquidity || !hasPrice;
 
   const getLiquidity = () => {
     if (!liquidityQuery.data) return;
@@ -282,8 +285,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
       {showRoutingPath && !!routingPath && (
         <div className="grid gap-8 px-16 py-8 rounded-md bg-main-500/60">
-          <h3 className="text-12">Routing:</h3>
-          <OpenOceanPath path={routingPath} />
+          <h3 className="text-12">Exchanges:</h3>
+          <RoutingExchanges path={routingPath} />
         </div>
       )}
 
