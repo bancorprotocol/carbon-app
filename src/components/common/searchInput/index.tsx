@@ -31,7 +31,7 @@ export const SearchInput = ({
         className,
       )}
     >
-      <IconSearch className="text-white-disabled w-16" />
+      <IconSearch className="text-main-0-disabled w-16" />
       <input
         {...inputProps}
         ref={ref}

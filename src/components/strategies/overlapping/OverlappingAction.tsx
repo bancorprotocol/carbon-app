@@ -69,11 +69,11 @@ export const OverlappingAction: FC<Props> = (props) => {
         data-testid="budget-summary"
       >
         <h3 className="text-16 font-medium">Edit Budget</h3>
-        <span className="text-12 text-white/60">(Optional)</span>
+        <span className="text-12 text-main-0/60">(Optional)</span>
         <IconChevron className="toggle h-14 w-14" />
       </summary>
       <div className="grid gap-16">
-        <p className="text-14 text-white/80">
+        <p className="text-14 text-main-0/80">
           Please select the action and amount of tokens
         </p>
         <RadioGroup className="justify-self-start">

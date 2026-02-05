@@ -23,10 +23,10 @@ export const SimResultSummaryTokens = ({
       <div className="flex flex-col">
         <h2 className="text-18 flex gap-6">
           {base.symbol}
-          <span className="self-align-center text-16 text-white/60">/</span>
+          <span className="self-align-center text-16 text-main-0/60">/</span>
           {quote.symbol}
         </h2>
-        <h3 className="text-12 flex items-center gap-8 capitalize text-white/60">
+        <h3 className="text-12 flex items-center gap-8 capitalize text-main-0/60">
           {title[strategyType]}
         </h3>
       </div>

@@ -13,7 +13,7 @@ export const StrategyBlockTradeCount: FC<Props> = ({ strategy }) => {
   });
   return (
     <article className="bg-main-900/20 rounded-md border-main-800 grid w-2/5 border p-16">
-      <h4 className="text-12 flex items-center gap-4 text-white/60 self-start">
+      <h4 className="text-12 flex items-center gap-4 text-main-0/60 self-start">
         Trades
       </h4>
       <p className="text-18 font-medium truncate @xs/strategy:text-24">

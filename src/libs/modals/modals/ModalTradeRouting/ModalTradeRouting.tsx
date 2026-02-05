@@ -117,7 +117,7 @@ export default function ModalTradeRouting({
           className="flex min-h-[130px] flex-col gap-8 overflow-auto"
         >
           <Tooltip element="This is the list of orders your trade will use when executed.">
-            <h3 id="routing-table" className="text-14 text-white/60">
+            <h3 id="routing-table" className="text-14 text-main-0/60">
               Routing Table
             </h3>
           </Tooltip>
@@ -138,14 +138,14 @@ export default function ModalTradeRouting({
                       aria-label="toggle all orders"
                     />
                   </th>
-                  <th className="text-14 font-medium sticky top-0 bg-main-900 py-8 text-white/60">
+                  <th className="text-14 font-medium sticky top-0 bg-main-900 py-8 text-main-0/60">
                     {source.symbol}
                   </th>
                   <th className="sticky top-0 bg-main-900">{/* Arrow */}</th>
-                  <th className="text-14 font-medium sticky top-0 bg-main-900 py-8 text-white/60">
+                  <th className="text-14 font-medium sticky top-0 bg-main-900 py-8 text-main-0/60">
                     {target.symbol}
                   </th>
-                  <th className="text-14 font-medium sticky top-0 bg-main-900 py-8 text-white/60">
+                  <th className="text-14 font-medium sticky top-0 bg-main-900 py-8 text-main-0/60">
                     Avg Price
                   </th>
                 </tr>
@@ -176,7 +176,7 @@ export default function ModalTradeRouting({
         >
           <header className="flex items-center justify-between">
             <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
-              <h3 id="confirm-table" className="text-14 text-white/60">
+              <h3 id="confirm-table" className="text-14 text-main-0/60">
                 Confirm Trade
               </h3>
             </Tooltip>

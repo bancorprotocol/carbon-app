@@ -12,9 +12,6 @@
 
 @layer utilities {
   :root {
-    color-scheme: dark;
-    accent-color: white;
-
     --main-menu-height: 80px;
     --mobile-menu-height: 80px;
 
@@ -38,7 +35,7 @@
   html,
   body,
   #root {
-    @apply text-white font-text min-h-screen;
+    @apply text-main-0 font-text min-h-screen;
   }
 
   #root {
@@ -52,7 +49,7 @@
     z-index: -1;
     inset-inline: -50dvw;
     inset-block: -50dvh;
-    background-image: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-black) 100%);
+    background-image: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-main-950) 100%);
     animation: move-gradient 20s infinite alternate;
   }
   #root.hide-bg::before {
@@ -73,8 +70,26 @@
     }
   }
 
+  @media (prefers-color-scheme: dark) {
+    html[data-theme="system"] {
+      @apply dark-scheme;
+    }
+  }
+  @media (prefers-color-scheme: light) {
+    html[data-theme="system"] {
+      @apply light-scheme;
+    }
+  }
+  html[data-theme="light"] {
+    @apply light-scheme;
+  }
+  html[data-theme="dark"] {
+    @apply dark-scheme;
+  }
+
+
   html {
-    @apply text-white font-text;
+    @apply text-main-0 font-text;
     scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
   }
   #root {

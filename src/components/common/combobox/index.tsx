@@ -187,7 +187,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
       <button
         {...getReferenceProps({ ref: refs.setReference })}
         type="button"
-        className="btn-on-background flex items-center gap-8 rounded-full px-12 py-8 text-white/60 data-[selected=true]:text-white"
+        className="btn-on-background flex items-center gap-8 rounded-full px-12 py-8 text-main-0/60 data-[selected=true]:text-main-0"
         data-selected={!!selected.length}
         aria-controls={rootId}
       >
@@ -293,7 +293,7 @@ const Empty = () => {
         <IconSearch className="size-16 self-center" />
       </div>
       <h3 className="text-14 font-medium mb-8">Nothing found</h3>
-      <p className="text-12 text-center text-white/80">
+      <p className="text-12 text-center text-main-0/80">
         Unfortunately we couldn't find what you're looking for.
       </p>
     </output>

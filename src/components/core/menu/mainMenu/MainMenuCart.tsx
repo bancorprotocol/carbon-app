@@ -37,7 +37,7 @@ export const MainMenuCart = () => {
     >
       <CartIcon className="size-20 place-self-center [grid-area:stack]" />
       {!!cartSize && (
-        <span className="bg-primary grid size-12 place-items-center justify-self-end rounded-full text-[10px] leading-none text-black [grid-area:stack]">
+        <span className="bg-primary grid size-12 place-items-center justify-self-end rounded-full text-[10px] leading-none text-main-950 [grid-area:stack]">
           {cartSize}
         </span>
       )}

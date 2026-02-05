@@ -65,7 +65,7 @@ export const OrderHeader: FC<Props> = (props) => {
           </p>
         }
       >
-        <IconTooltip className="size-18 text-white/60" />
+        <IconTooltip className="size-18 text-main-0/60" />
       </Tooltip>
     </header>
   );

@@ -107,7 +107,9 @@ export default function ModalDuplicateStrategy({
       <ModalHeader id={id}>
         <h2>Duplicate Strategy</h2>
       </ModalHeader>
-      <h3 className="text-14 font-normal text-white/60">Select your option.</h3>
+      <h3 className="text-14 font-normal text-main-0/60">
+        Select your option.
+      </h3>
 
       {duplicateOptions.map(
         ({ icon: Icon, title, onClick, description, testId }) => (
@@ -120,7 +122,9 @@ export default function ModalDuplicateStrategy({
             </div>
             <hgroup className="grid flex-1">
               <h3 className="text-14 font-medium">{title}</h3>
-              <p className="text-12 font-normal text-white/60">{description}</p>
+              <p className="text-12 font-normal text-main-0/60">
+                {description}
+              </p>
             </hgroup>
             <button
               onClick={onClick}

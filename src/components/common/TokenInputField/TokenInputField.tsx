@@ -116,7 +116,7 @@ export const TokenInputField: FC<Props> = (props) => {
           onBlur={handleBlur}
           className={cn(
             'text-24 font-medium grow text-ellipsis bg-transparent focus:outline-hidden',
-            disabled && 'cursor-not-allowed text-white/40',
+            disabled && 'cursor-not-allowed text-main-0/40',
             isError && 'text-error',
           )}
           disabled={disabled}
@@ -126,7 +126,7 @@ export const TokenInputField: FC<Props> = (props) => {
         {TokenWidget}
       </div>
       <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10">
-        <p className="flex items-center gap-5 text-white/60">
+        <p className="flex items-center gap-5 text-main-0/60">
           {priceText()}
           {slippage && !isZero(value) && <Slippage slippage={slippage} />}
         </p>
@@ -147,7 +147,7 @@ export const TokenInputField: FC<Props> = (props) => {
             onClick={handleBalanceClick}
             className="group/token-input flex items-center"
           >
-            <span className="text-white">
+            <span className="text-main-0">
               Wallet: {prettifyNumber(balance || 0)}&nbsp;
             </span>
             <b className="text-gradient hover:text-secondary focus:text-secondary active:text-secondary group-disabled/token-input:text-primary/40">

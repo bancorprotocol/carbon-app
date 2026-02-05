@@ -59,7 +59,7 @@ const FeatureRadioGroup = () => {
               <label htmlFor={`flag-${value}`}>{label}</label>
               <p
                 id={`flag-description-${value}`}
-                className="text-14 text-white/80"
+                className="text-14 text-main-0/80"
               >
                 {description}
               </p>

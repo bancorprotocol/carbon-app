@@ -94,7 +94,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
         {data.approvalRequired ? (
           txBusy ? (
-            <p className="text-14 text-white/80">Waiting for Confirmation</p>
+            <p className="text-14 text-main-0/80">Waiting for Confirmation</p>
           ) : (
             <form
               onSubmit={onApprove}
@@ -104,7 +104,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
                 <label
                   htmlFor={inputId}
                   className={`text-12 font-medium transition-all ${
-                    isLimited ? 'text-white/60' : 'text-white/85'
+                    isLimited ? 'text-main-0/60' : 'text-main-0/85'
                   }`}
                 >
                   Unlimited

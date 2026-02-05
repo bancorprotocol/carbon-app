@@ -104,7 +104,7 @@ export const MainMenuTradeSettings = () => {
             {!isAllSettingsDefault && (
               <button
                 type="reset"
-                className="text-14 text-white p-8 rounded-md"
+                className="text-14 text-main-0 p-8 rounded-md"
               >
                 Reset All
               </button>

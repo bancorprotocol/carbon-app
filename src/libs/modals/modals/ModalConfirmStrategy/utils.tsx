@@ -37,7 +37,7 @@ export const getModalDataByType = (
         additionalContent: (
           <div className="mt-20 flex items-center">
             <IconWallet className="mr-10 size-12" />
-            <div className="text-14 font-medium flex-1 text-white/80">
+            <div className="text-14 font-medium flex-1 text-main-0/80">
               All funds will be withdrawn to your wallet
             </div>
           </div>

@@ -49,7 +49,7 @@ export const PairTable: FC<Props> = ({ pairs }) => {
                 <td>
                   {pair.reward && (
                     <NewTabLink
-                      className="inline-flex gap-8 items-center text-white/60 hover:text-white"
+                      className="inline-flex gap-8 items-center text-main-0/60 hover:text-main-0"
                       to={config.ui.rewards.url}
                     >
                       <img

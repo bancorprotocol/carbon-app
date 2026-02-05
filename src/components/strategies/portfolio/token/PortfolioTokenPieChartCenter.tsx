@@ -23,10 +23,10 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
         {data.token.symbol}
       </div>
       <div className="text-20 font-medium">{getUsdPrice(data.value)}</div>
-      <div className="font-medium text-white/60">
+      <div className="font-medium text-main-0/60">
         {buildAmountString(data.amount, data.token)}
       </div>
-      <div className="font-medium text-white/60">
+      <div className="font-medium text-main-0/60">
         {getStrategyText(data.strategies.length)}
       </div>
     </div>

@@ -20,7 +20,7 @@ export const StrategyBlockCreate: FC<Props> = ({
       )}
     >
       <div className="grid place-items-center size-72 rounded-full md:size-80 bg-gradient self-end">
-        <IconPlus className="text-black md:p-26 p-24" />
+        <IconPlus className="text-main-950 md:p-26 p-24" />
       </div>
       <h1 className="w-[200px] text-center md:w-[250px] text-24">{title}</h1>
     </Link>

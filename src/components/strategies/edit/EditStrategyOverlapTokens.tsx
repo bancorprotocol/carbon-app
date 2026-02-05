@@ -11,7 +11,7 @@ export const EditStrategyOverlapTokens = () => {
         <h2 className="text-14">
           <PairName baseToken={strategy.base} quoteToken={strategy.quote} />
         </h2>
-        <div className="text-14 flex text-white/60">
+        <div className="text-14 flex text-main-0/60">
           ID: {strategy.idDisplay}
         </div>
       </div>

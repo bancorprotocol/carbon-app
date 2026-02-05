@@ -215,7 +215,7 @@ export const DebugCreateStrategy = () => {
         ></textarea>
         <p
           id="strategy-json-shortcut-description"
-          className="text-12 text-white/60"
+          className="text-12 text-main-0/60"
         >
           Used by E2E to prefill the form
         </p>
@@ -256,7 +256,7 @@ export const DebugCreateStrategy = () => {
             data-testid="spread"
           />
         </Label>
-        <p id="strategy-spread-description" className="text-12 text-white/60">
+        <p id="strategy-spread-description" className="text-12 text-main-0/60">
           Spread will create a concentrated liquidity. You still need to set the
           correct budget.
         </p>

@@ -69,7 +69,7 @@ export default function ModalConfirmDelete({
           >
             Edit Prices
           </Link>
-          <p className="text-12 text-white/80">
+          <p className="text-12 text-main-0/80">
             Editing prices is cheaper and keeps your strategy working for you.
           </p>
         </article>

@@ -55,7 +55,7 @@ export const OverlappingPriceRange: FC<Props> = (props) => {
       {range === 'Infinity' ? (
         <div className="grid grid-cols-2 gap-6">
           <div className="rounded-e-xs rounded-s-2xl grid cursor-text gap-8 input-container">
-            <header className="text-12 flex justify-between text-white/60">
+            <header className="text-12 flex justify-between text-main-0/60">
               <span>{props.minLabel || 'Min'}</span>
               {!!marketPrice && (
                 <button
@@ -74,7 +74,7 @@ export const OverlappingPriceRange: FC<Props> = (props) => {
             <p aria-hidden className="h-[22px]"></p>
           </div>
           <div className="rounded-s-xs rounded-e-2xl grid cursor-text gap-8 input-container">
-            <header className="text-12 flex justify-between text-white/60">
+            <header className="text-12 flex justify-between text-main-0/60">
               <span>{props.maxLabel || 'Max'}</span>
               {!!marketPrice && (
                 <button

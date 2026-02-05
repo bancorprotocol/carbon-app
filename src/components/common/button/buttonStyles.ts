@@ -9,14 +9,14 @@ type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 
 const variants = {
   variant: {
-    black: ['bg-main-900 text-white hover:bg-white/20 active:bg-white/30'],
+    black: ['bg-main-900 text-main-0 hover:bg-white/20 active:bg-white/30'],
     white: ['btn-on-surface'],
     secondary: ['btn-secondary-gradient'],
     success: ['btn-primary-gradient'],
-    buy: ['btn-buy-gradient text-black'],
-    sell: ['btn-sell-gradient text-black'],
+    buy: ['btn-buy-gradient text-main-950'],
+    sell: ['btn-sell-gradient text-main-950'],
     error: [
-      'bg-error border border-error text-black',
+      'bg-error border border-error text-main-950',
       'hover:border-white/60 hover:disabled:border-error',
     ],
   },

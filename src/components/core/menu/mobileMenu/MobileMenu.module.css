@@ -6,13 +6,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: oklch(100% var(--chroma) var(--hue) / 50%);
+  color: oklch(var(--light-50) var(--chroma) var(--hue) / 50%);
   z-index: 40;
 }
 .mobile-menu::before {
   content: "";
   inset: 0;
-  background-color: oklch(20% var(--chroma) var(--hue) / 60%);
+  background-color: oklch(var(--light-900) var(--chroma) var(--hue) / 60%);
   backdrop-filter: blur(20px) saturate(150%);
   mask: linear-gradient(to top, black 60%, transparent);
   position: absolute;

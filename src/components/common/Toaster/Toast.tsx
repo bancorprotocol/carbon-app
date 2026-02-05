@@ -20,7 +20,7 @@ export const BaseToast: FC<Props> = ({ id, children, color = 'primary' }) => {
     >
       {children}
       <button
-        className="p-16 text-white/80"
+        className="p-16 text-main-0/80"
         aria-label="close message"
         onClick={() => toaster.removeToast(id)}
       >
