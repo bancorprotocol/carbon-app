@@ -1,4 +1,8 @@
+@reference "tailwindcss";
+@reference "../../../../theme.css";
+
 .mobile-menu {
+  @apply text-main-0/50;
   position: sticky;
   bottom: 0;
   height: 80px;
@@ -6,13 +10,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: oklch(var(--light-50) var(--chroma) var(--hue) / 50%);
   z-index: 40;
 }
 .mobile-menu::before {
+  @apply bg-main-900/60;
   content: "";
   inset: 0;
-  background-color: oklch(var(--light-900) var(--chroma) var(--hue) / 60%);
   backdrop-filter: blur(20px) saturate(150%);
   mask: linear-gradient(to top, black 60%, transparent);
   position: absolute;
