@@ -2,12 +2,9 @@ import { JsonRpcProvider, Signer } from 'ethers';
 import { Dexes, UniswapPosition } from './utils';
 import { withdrawAllV2Liquidity } from './v2/withdraw';
 import { deleteAndWithdrawV3Position } from './v3/withdraw';
-import { getAllV2Positions as getV2Dev } from './v2/read.dev';
-import { getAllV2Positions as getV2Prod } from './v2/read.prod';
+import { getAllV2Positions } from './v2/read.contract';
 import { getAllV3Positions } from './v3/read.contract';
 import { Token } from 'libs/tokens';
-
-const getV2Positions = import.meta.env.DEV ? getV2Dev : getV2Prod;
 
 export async function getUniswapPositions(
   provider: JsonRpcProvider,
@@ -18,7 +15,7 @@ export async function getUniswapPositions(
 
   // Run queries in parallel
   const [v2Positions, v3Positions] = await Promise.all([
-    getV2Positions(provider, normalizedUser, getTokenById),
+    getAllV2Positions(provider, normalizedUser, getTokenById),
     getAllV3Positions(provider, normalizedUser, getTokenById),
   ]);
 
