@@ -111,7 +111,7 @@ export const MainMenuRightReward: FC = () => {
             </svg>
           </div>
           <h2 className="text-18">Earn rewards with eligible pairs</h2>
-          <p className="text-14 text-white/80 text-center">
+          <p className="text-14 text-main-0/80 text-center">
             Create trading strategies with eligible token pairs and start
             earning rewards.
           </p>
@@ -119,7 +119,7 @@ export const MainMenuRightReward: FC = () => {
             to="/explore/pairs"
             search={{ filter: 'rewards' }}
             onClick={close}
-            className="py-12 text-center rounded-full justify-self-stretch font-title text-white bg-linear-to-t from-[#B80093] to-[#E38FE3]"
+            className="py-12 text-center rounded-full justify-self-stretch font-title text-main-0 bg-linear-to-t from-[#B80093] to-[#E38FE3]"
           >
             View Pairs with Rewards
           </Link>

@@ -151,7 +151,9 @@ export const UnconnectedLandingPage = () => {
               key={item.title}
             >
               <h3 className="text-xl">{item.title}</h3>
-              <p className="text-14 text-white/60 flex-1">{item.description}</p>
+              <p className="text-14 text-main-0/60 flex-1">
+                {item.description}
+              </p>
               <Link
                 to="/explore/strategies"
                 className="flex items-center gap-8"
@@ -178,7 +180,7 @@ export const UnconnectedLandingPage = () => {
                 {item.targets.map((target) => (
                   <span
                     key={target}
-                    className="px-8 py-4 text-12 bg-main-600/40 text-white/40 rounded-md"
+                    className="px-8 py-4 text-12 bg-main-600/40 text-main-0/40 rounded-md"
                   >
                     {target}
                   </span>

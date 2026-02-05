@@ -168,7 +168,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             <h3 className="text-16 font-medium flex items-center gap-8">
               Distribution
             </h3>
-            <p className="text-14 text-white/80">
+            <p className="text-14 text-main-0/80">
               Following the above {editType} amount, these are the changes in
               budget allocation
             </p>

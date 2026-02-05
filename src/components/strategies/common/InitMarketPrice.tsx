@@ -130,7 +130,7 @@ export const InitMarketPrice = (props: FieldProps) => {
           </button>
         </Tooltip>
       )}
-      <p className="text-12 warning-message text-white/60">
+      <p className="text-12 warning-message text-main-0/60">
         Updating the market price will automatically adjust all related data in
         the app.
         {!!externalPrice && <EditPriceText />}
@@ -139,7 +139,7 @@ export const InitMarketPrice = (props: FieldProps) => {
         htmlFor={checkboxId}
         className={cn(
           style.approveWarnings,
-          'rounded-lg text-12 font-medium flex items-center gap-8 text-white/60',
+          'rounded-lg text-12 font-medium flex items-center gap-8 text-main-0/60',
         )}
       >
         <input
@@ -168,7 +168,7 @@ const SetPriceText = ({ base, quote }: { base: Token; quote: Token }) => (
     <h3 className="text-gradient">
       {base.symbol}/{quote.symbol} market price is unavailable.
     </h3>
-    <p className="text-14 text-white/80">
+    <p className="text-14 text-main-0/80">
       Enter the current market price to continue ({quote.symbol} per 1&nbsp;
       {base.symbol}).
     </p>

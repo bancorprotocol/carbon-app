@@ -79,7 +79,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           )}
         </div>
         {!!marketPrice && (
-          <p className="text-12 break-all text-white/60">{fiatAsString}</p>
+          <p className="text-12 break-all text-main-0/60">{fiatAsString}</p>
         )}
       </div>
       {error ? (

@@ -236,14 +236,14 @@ export const EditPricesStrategyDisposablePage = () => {
               Notice
             </h3>
             {buyBudgetChanges && (
-              <p className="text-14 text-white/80">
+              <p className="text-14 text-main-0/80">
                 You will withdraw&nbsp;
                 {tokenAmount(buy.budget, quote)} from the inactive buy order to
                 your wallet.
               </p>
             )}
             {sellBudgetChanges && (
-              <p className="text-14 text-white/80">
+              <p className="text-14 text-main-0/80">
                 You will withdraw&nbsp;
                 {tokenAmount(sell.budget, base)} from the inactive sell order to
                 your wallet.

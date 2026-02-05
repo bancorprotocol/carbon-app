@@ -7,7 +7,7 @@ export const MainMenuRightBurger = () => {
   return (
     <DropdownMenu
       placement="bottom"
-      className="text-16 font-normal rounded-xl p-8 text-white"
+      className="text-16 font-normal rounded-xl p-8 text-main-0"
       button={(attr) => (
         <button
           {...attr}

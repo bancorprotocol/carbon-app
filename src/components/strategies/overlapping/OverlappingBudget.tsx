@@ -64,7 +64,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
         <h3 className="text-16 font-medium flex items-center gap-6">
           {getTitle(editType)}
         </h3>
-        <p className="text-14 text-white/80">{getDescription(editType)}</p>
+        <p className="text-14 text-main-0/80">{getDescription(editType)}</p>
       </hgroup>
       <InputBudget
         editType={editType}

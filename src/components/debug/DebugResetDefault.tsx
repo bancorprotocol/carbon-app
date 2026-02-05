@@ -12,10 +12,10 @@ export const DebugResetDefault = () => {
       <button className="btn-primary-gradient" onClick={deactivateOne}>
         Deactive for {config.network.name}
       </button>
-      <p className="text-white/60 text-14 text-center">
+      <p className="text-main-0/60 text-14 text-center">
         This will only deactivate debug mode
         <br /> for the current network:{' '}
-        <b className="text-white">{config.network.name}</b>
+        <b className="text-main-0">{config.network.name}</b>
       </p>
     </article>
   );

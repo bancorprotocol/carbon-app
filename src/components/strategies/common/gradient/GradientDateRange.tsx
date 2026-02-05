@@ -68,13 +68,13 @@ export const GradientDateRange = memo(function TimeRange(
     >
       <CalendarIcon className="text-primary size-14" />
       <span
-        className="mr-auto mr-auto justify-self-end text-white/60"
+        className="mr-auto mr-auto justify-self-end text-main-0/60"
         data-testid="simulation-dates"
       >
         {displayRange(props.start, props.end)}
       </span>
       <ChevronIcon
-        className={cn('h-12 w-12 text-white/80 transition-transform', {
+        className={cn('h-12 w-12 text-main-0/80 transition-transform', {
           'rotate-180': isOpen,
         })}
       />
@@ -183,13 +183,13 @@ const Content = (props: Props) => {
         <div className="flex gap-20">
           {startTime && (
             <p className="bg-main-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
-              <span className="text-10 text-white/60">Start Time</span>
+              <span className="text-10 text-main-0/60">Start Time</span>
               <time className="text-12 font-medium">{startTime}</time>
             </p>
           )}
           {range?.to && (
             <p className="bg-main-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
-              <span className="text-10 text-white/60">End Time</span>
+              <span className="text-10 text-main-0/60">End Time</span>
               <time className="text-12 font-medium">23:59:59</time>
             </p>
           )}

@@ -28,7 +28,7 @@ export const TooltipTokenAmount: FC<TooltipPriceProps> = (props) => {
             {token.symbol}
           </div>
           {fiatPrice && (
-            <TokenPrice className="text-white/60" price={fiatPrice} />
+            <TokenPrice className="text-main-0/60" price={fiatPrice} />
           )}
         </>
       }

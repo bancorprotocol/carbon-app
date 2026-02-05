@@ -68,7 +68,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
       <td className="border-main-800 border-t">
         <ForwardArrow
           arrowType="full"
-          className="size-18 bg-main-900 inline rounded-full p-4 text-white/60"
+          className="size-18 bg-main-900 inline rounded-full p-4 text-main-0/60"
         />
       </td>
       <td className="border-main-800 border-t p-8">

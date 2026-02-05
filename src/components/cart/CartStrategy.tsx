@@ -237,7 +237,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
               </div>
             )}
             {!error && !!warnings.length && (
-              <ul className="text-14 grid list-disc gap-8 pl-16	text-white/80">
+              <ul className="text-14 grid list-disc gap-8 pl-16	text-main-0/80">
                 {warnings.map((warning, i) => (
                   <li
                     key={i}

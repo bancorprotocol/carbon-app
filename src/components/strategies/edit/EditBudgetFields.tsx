@@ -87,7 +87,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
             editType === 'withdraw' ? 'withdraw' : 'deposit'
           } from the available "allocated budget"`}
         >
-          <IconTooltip className="size-18 text-white/60" />
+          <IconTooltip className="size-18 text-main-0/60" />
         </Tooltip>
       </header>
       <InputBudget

@@ -52,7 +52,7 @@ export const NotFound: FC<Props> = ({
         />
       </div>
       <h2 className="max-w-[440px] text-[32px] leading-[36px]">{title}</h2>
-      <p className="text-16 max-w-[440px] text-white/60">{text}</p>
+      <p className="text-16 max-w-[440px] text-main-0/60">{text}</p>
     </section>
   );
 };

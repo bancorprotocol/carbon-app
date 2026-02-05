@@ -158,7 +158,7 @@ export const ConnectedLandingPage = () => {
               aria-selected={active === id}
               aria-controls={`tabpanel-${id}`}
               onClick={() => setActive(id)}
-              className="text-white/60 tab-anchor aria-selected:tab-focus py-8 px-16 text-14 sm:text-16 lg:text-2xl lg:py-16 lg:px-24"
+              className="text-main-0/60 tab-anchor aria-selected:tab-focus py-8 px-16 text-14 sm:text-16 lg:text-2xl lg:py-16 lg:px-24"
             >
               {title}
             </button>

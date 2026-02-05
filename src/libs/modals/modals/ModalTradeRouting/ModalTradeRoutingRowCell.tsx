@@ -16,7 +16,7 @@ export const ModalTradeRoutingRowCell: FC<{
         <span className="text-14 font-medium">{prettifyNumber(amount)}</span>
       </p>
       {isFiatAmountNotZero && (
-        <p className="text-12 font-medium text-white/60">
+        <p className="text-12 font-medium text-main-0/60">
           {getUsdPrice(fiatAmount)}
         </p>
       )}

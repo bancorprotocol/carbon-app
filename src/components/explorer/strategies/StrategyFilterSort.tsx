@@ -57,7 +57,7 @@ export const StrategySortDropdown: FC<SortProps> = (props) => {
       )}
     >
       <fieldset onChange={onSortChange}>
-        <legend className="text-14 px-16 py-8 text-white/60">Sort By</legend>
+        <legend className="text-14 px-16 py-8 text-main-0/60">Sort By</legend>
         {sortItems.map((sortItem) => (
           <FilterSortItem
             name="sort"
@@ -126,7 +126,7 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
       )}
     >
       <fieldset onChange={onFilterStatusChange}>
-        <legend className="text-14 px-16 py-8 text-white/60">Status</legend>
+        <legend className="text-14 px-16 py-8 text-main-0/60">Status</legend>
         {Object.entries(strategyFilter.status).map(([key, label]) => (
           <FilterSortItem
             name="filter"
@@ -138,7 +138,7 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
         ))}
       </fieldset>
       {/* <fieldset onChange={onFilterTypeChange}>
-        <legend className="text-14 px-16 py-8 text-white/60">Type</legend>
+        <legend className="text-14 px-16 py-8 text-main-0/60">Type</legend>
         {Object.entries(filterItems.type).map(([key, label]) => (
           <FilterSortItem
             name="filter"

@@ -655,7 +655,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         <table className="bg-main-900/40 rounded-md border-separate border border-white/40">
           <tbody>
             <tr>
-              <th className="font-normal p-8 text-start text-white/60">
+              <th className="font-normal p-8 text-start text-main-0/60">
                 Price
               </th>
               <td className="p-8 text-end" data-testid="price">
@@ -669,7 +669,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         <table className="bg-main-900/40 rounded-md border-separate border border-white/40 p-8">
           <tbody>
             <tr>
-              <th className="font-normal text-start text-white/60">
+              <th className="font-normal text-start text-main-0/60">
                 Min Price
               </th>
               <td className="text-end" data-testid="min-price">
@@ -677,7 +677,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
               </td>
             </tr>
             <tr>
-              <th className="font-normal text-start text-white/60">
+              <th className="font-normal text-start text-main-0/60">
                 Max Price
               </th>
               <td className="text-end" data-testid="max-price">
@@ -686,7 +686,9 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
             </tr>
             {!!spread && (
               <tr>
-                <th className="font-normal text-start text-white/60">Spread</th>
+                <th className="font-normal text-start text-main-0/60">
+                  Spread
+                </th>
                 <td className="text-end" data-testid="spread">
                   {spread}%
                 </td>
@@ -695,7 +697,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
           </tbody>
         </table>
       )}
-      <p className="text-white/60">
+      <p className="text-main-0/60">
         Current marginal price is&nbsp;
         <span data-testid="marginal-price">
           {marginalPrice} {quote.symbol}
@@ -761,32 +763,32 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
       <table className="bg-main-900/40 rounded-md border-separate border border-white/40 p-8">
         <tbody>
           <tr>
-            <th className="font-normal text-start text-white/60">_S P_</th>
+            <th className="font-normal text-start text-main-0/60">_S P_</th>
             <td className="text-end" data-testid="start-price">
               {_sP_} {quote.symbol}
             </td>
           </tr>
           <tr>
-            <th className="font-normal text-start text-white/60">_E P_</th>
+            <th className="font-normal text-start text-main-0/60">_E P_</th>
             <td className="text-end" data-testid="end-price">
               {_eP_} {quote.symbol}
             </td>
           </tr>
           <tr>
-            <th className="font-normal text-start text-white/60">_S D_</th>
+            <th className="font-normal text-start text-main-0/60">_S D_</th>
             <td className="text-end" data-testid="start-date">
               {_sD_Text}
             </td>
           </tr>
           <tr>
-            <th className="font-normal text-start text-white/60">_E D_</th>
+            <th className="font-normal text-start text-main-0/60">_E D_</th>
             <td className="text-end" data-testid="end-date">
               {fromUnixUTC(_eD_).toLocaleString()}
             </td>
           </tr>
         </tbody>
       </table>
-      <p className="text-white/60">
+      <p className="text-main-0/60">
         Current marginal price is&nbsp;
         <span data-testid="marginal-price">
           {marginalPrice} {quote.symbol}

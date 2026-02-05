@@ -70,7 +70,7 @@ export default function ModalImportToken({
             </NewTabLink>
           </div>
           <div className="text-14 flex items-center justify-between">
-            <div className="text-white/60">{data.name}</div>
+            <div className="text-main-0/60">{data.name}</div>
             <div>{shortenString(data.address)}</div>
           </div>
         </div>

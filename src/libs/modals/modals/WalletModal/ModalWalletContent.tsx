@@ -38,17 +38,17 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
 
   return (
     <>
-      <div className="text-14 grid gap-8 text-white/80">
+      <div className="text-14 grid gap-8 text-main-0/80">
         <p>
           By connecting my wallet, I agree to the{' '}
-          <Link to="/terms" target="_blank" className="font-medium text-white">
+          <Link to="/terms" target="_blank" className="font-medium text-main-0">
             terms & conditions
           </Link>{' '}
           and{' '}
           <Link
             target="_blank"
             to="/privacy"
-            className="font-medium text-white"
+            className="font-medium text-main-0"
           >
             cookie & privacy policy
           </Link>{' '}

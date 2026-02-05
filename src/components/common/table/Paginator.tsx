@@ -62,9 +62,9 @@ export const Paginator: FC<Props> = (props) => {
                 className="border-main-800 flex gap-8 rounded-full border px-12 py-8"
                 aria-label="page position"
               >
-                <span className="text-white">{currentPage}</span>
+                <span className="text-main-0">{currentPage}</span>
                 <span role="separator">/</span>
-                <span className="text-white">{maxPage}</span>
+                <span className="text-main-0">{maxPage}</span>
               </p>
               <button
                 onClick={nextPage}
