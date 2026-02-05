@@ -23,6 +23,7 @@ const colors = [
   'primaryGradient-first',
   'primaryGradient-middle',
   'primaryGradient-last',
+  'main-0',
   'main-50',
   'main-100',
   'main-200',
@@ -33,6 +34,7 @@ const colors = [
   'main-700',
   'main-800',
   'main-900',
+  'main-950',
 ];
 
 const createConfigValues = (start: number, end: number, step: number) =>
