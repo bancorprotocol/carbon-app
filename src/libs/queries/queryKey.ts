@@ -25,6 +25,11 @@ export const QueryKey = {
   tokens: () => [...extAPI, 'tokens'],
   tokenPrice: (address?: string) => [...extAPI, 'token-price', address],
   tokensPrice: () => [...extAPI, 'tokens-price'],
+  tokenListPrice: (addresses: string[]) => [
+    ...extAPI,
+    'token-list-price',
+    ...addresses,
+  ],
 
   tokenPriceHistory: (params: TokenPriceHistorySearch) => [
     ...extAPI,
@@ -122,4 +127,6 @@ export const QueryKey = {
     buildTokenPairKey(pair),
     'trade-order-book-last-trade-buy',
   ],
+
+  migrationPositions: (user: string) => ['migration', 'positions', user],
 };

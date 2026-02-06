@@ -39,7 +39,7 @@ interface CallStatus {
   chainId: string;
   /** true if the wallet executed the calls atomically. false if the wallet executed the calls non-atomically. */
   atomic: boolean;
-  receipts: {
+  receipts?: {
     logs: [];
     status: '0x1' | '0x0';
     blockHash: string;
@@ -119,12 +119,14 @@ export const useBatchTransaction = () => {
       // Add approvals
       for (const transaction of txs) {
         const assets = transaction.customData?.assets ?? [];
-        const spender = transaction.customData.spender as string;
-        for (const asset of assets) {
-          const { address, rawAmount } = asset as Asset;
-          const key = `${address}_${spender}`;
-          amounts[key] ||= BigInt(0);
-          amounts[key] += BigInt(rawAmount);
+        const spender = transaction.customData?.spender as string;
+        if (spender) {
+          for (const asset of assets) {
+            const { address, rawAmount } = asset as Asset;
+            const key = `${address}_${spender}`;
+            amounts[key] ||= BigInt(0);
+            amounts[key] += BigInt(rawAmount);
+          }
         }
       }
       for (const [key, amount] of Object.entries(amounts)) {
