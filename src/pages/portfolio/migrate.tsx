@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useTokens } from 'hooks/useTokens';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { Dexes } from 'services/uniswap/utils';
 import { NotFound } from 'components/common/NotFound';
 import { Token } from 'libs/tokens';
@@ -10,6 +9,7 @@ import { useMigrationPositions } from 'libs/queries/migration/positions';
 import { MigrationTable } from 'components/migration/MigrationTable';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MigrationList } from 'components/migration/MigrationList';
+import { MigrationLoading } from 'components/migration/MigrationLoading';
 
 interface MigratedPosition {
   id: string;
@@ -48,7 +48,7 @@ interface MigratedPosition {
 }
 
 export const MigratePage = () => {
-  const { getTokenById } = useTokens();
+  const { getTokenById, isPending } = useTokens();
   const { aboveBreakpoint } = useBreakpoints();
 
   const query = useMigrationPositions();
@@ -68,6 +68,7 @@ export const MigratePage = () => {
   const marketPriceQuery = useGetMultipleTokenPrices(tokens);
 
   const positions = useMemo((): undefined | MigratedPosition[] => {
+    if (isPending) return;
     if (marketPriceQuery.isPending) return;
     if (query.isPending) return;
     const marketPrices = marketPriceQuery.data || {};
@@ -116,14 +117,15 @@ export const MigratePage = () => {
     });
   }, [
     getTokenById,
+    isPending,
     marketPriceQuery.data,
     marketPriceQuery.isPending,
     query.data,
     query.isPending,
   ]);
 
-  if (query.isPending) {
-    return <CarbonLogoLoading className="h-80 grid-area-[list]" />;
+  if (isPending || query.isPending) {
+    return <MigrationLoading />;
   }
 
   if (!positions?.length) {

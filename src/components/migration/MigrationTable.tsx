@@ -2,10 +2,10 @@ import { FC, useMemo, useState } from 'react';
 import { MigratedPosition } from './type';
 import { DexIcon } from './DexIcon';
 import { dexNames } from './utils';
-import { TokensOverlap } from 'components/common/tokensOverlap';
 import { getUsdPrice, tokenAmount } from 'utils/helpers';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { PositionDialog } from './MigrationDialog';
+import { PairLogoName } from 'components/common/DisplayPair';
 
 interface Props {
   positions: MigratedPosition[];
@@ -46,31 +46,38 @@ export const MigrationTable: FC<Props> = ({ positions }) => {
                   </div>
                 </td>
                 <td>
-                  <TokensOverlap tokens={[p.base, p.quote]} size={32} />
+                  <div className="inline-flex gap-8">
+                    <PairLogoName
+                      pair={{ baseToken: p.base, quoteToken: p.quote }}
+                      size={20}
+                    />
+                  </div>
                 </td>
                 <td>
                   <div className="inline-grid gap-8">
-                    {getUsdPrice(p.fiat.total.budget)}
+                    <p className="text-16">
+                      {getUsdPrice(p.fiat.total.budget)}
+                    </p>
                     <div className="inline-flex items-center gap-4">
                       <TokenLogo token={p.base} size={14} />
-                      {tokenAmount(p.sell.budget, p.base)}
+                      {tokenAmount(p.sell.budget, p.base, { abbreviate: true })}
                     </div>
                     <div className="inline-flex items-center gap-4">
                       <TokenLogo token={p.quote} size={14} />
-                      {tokenAmount(p.buy.budget, p.quote)}
+                      {tokenAmount(p.buy.budget, p.quote, { abbreviate: true })}
                     </div>
                   </div>
                 </td>
                 <td>
                   <div className="inline-grid gap-8">
-                    {getUsdPrice(p.fiat.total.fee)}
+                    <p className="text-16">{getUsdPrice(p.fiat.total.fee)}</p>
                     <div className="inline-flex items-center gap-4">
                       <TokenLogo token={p.base} size={14} />
-                      {tokenAmount(p.sell.fee, p.base)}
+                      {tokenAmount(p.sell.fee, p.base, { abbreviate: true })}
                     </div>
                     <div className="inline-flex items-center gap-4">
                       <TokenLogo token={p.quote} size={14} />
-                      {tokenAmount(p.buy.fee, p.quote)}
+                      {tokenAmount(p.buy.fee, p.quote, { abbreviate: true })}
                     </div>
                   </div>
                 </td>

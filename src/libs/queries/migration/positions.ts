@@ -4,17 +4,13 @@ import { getUniswapPositions } from 'services/uniswap';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
 import { UniswapPosition } from 'services/uniswap/utils';
-import { JsonRpcProvider } from 'ethers';
 
 export const useMigrationPositions = () => {
-  const { user } = useWagmi();
+  const { user, provider } = useWagmi();
   const { importTokenAddresses, getTokenById } = useTokens();
   return useQuery({
     queryKey: QueryKey.migrationPositions(user || ''),
     queryFn: async () => {
-      // We need Alchemy endpoint
-      const provider = new JsonRpcProvider(import.meta.env.VITE_CHAIN_RPC_URL);
-      console.log('Fetching Positions');
       const positions = await getUniswapPositions(
         provider!,
         user!,
@@ -28,7 +24,7 @@ export const useMigrationPositions = () => {
       await importTokenAddresses(tokens);
       return positions;
     },
-    enabled: !!user,
+    enabled: !!user && !!provider,
     refetchOnWindowFocus: false,
     initialData: () => {
       if (!user) return;

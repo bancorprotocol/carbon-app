@@ -1,4 +1,4 @@
-import { JsonRpcProvider, Signer } from 'ethers';
+import { Provider, Signer } from 'ethers';
 import { Dexes, UniswapPosition } from './utils';
 import { withdrawAllV2Liquidity } from './v2/withdraw';
 import { deleteAndWithdrawV3Position } from './v3/withdraw';
@@ -7,7 +7,7 @@ import { getAllV3Positions } from './v3/read.contract';
 import { Token } from 'libs/tokens';
 
 export async function getUniswapPositions(
-  provider: JsonRpcProvider,
+  provider: Provider,
   userAddress: string,
   getTokenById: (address: string) => Token | undefined,
 ): Promise<UniswapPosition[]> {
