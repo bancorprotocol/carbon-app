@@ -134,7 +134,13 @@ export const PositionDialog: FC<Props> = (props) => {
       const tx = await sendTransaction(txs);
       setStatus('Waiting for block to be mined');
       await tx.wait();
-      dispatchNotification('createStrategy', { txHash: tx.hash });
+      dispatchNotification('generic', {
+        status: 'success',
+        title: 'Success',
+        description: 'Liquidity position was successfully migrated',
+        txHash: tx.hash,
+        testid: 'migration',
+      });
       const queryKey = [
         QueryKey.strategiesByUser(user),
         QueryKey.balance(user, p.base.address),

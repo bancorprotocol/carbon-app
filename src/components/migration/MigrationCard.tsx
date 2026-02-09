@@ -42,13 +42,13 @@ export const MigrationCard: FC<Props> = ({ position }) => {
             <tr>
               <td>
                 <div className="inline-flex items-center gap-4">
-                  <TokenLogo token={base} size={14} />
+                  <TokenLogo token={quote} size={14} />
                   {tokenAmount(buy.budget, quote)}
                 </div>
               </td>
               <td>
                 <div className="inline-flex items-center gap-4">
-                  <TokenLogo token={base} size={14} />
+                  <TokenLogo token={quote} size={14} />
                   {tokenAmount(buy.fee, quote)}
                 </div>
               </td>
@@ -56,12 +56,13 @@ export const MigrationCard: FC<Props> = ({ position }) => {
           </tbody>
         </table>
       </div>
-      <div className="flex items-center justify-center gap-16 bg-main-900/60 rounded-2xl px-16 py-8 font-title font-medium text-14">
+      <div className="flex items-center justify-center gap-16 bg-main-900/60 rounded-2xl px-16 py-8 font-title font-medium text-12 md:text-14">
         <div className="flex items-center gap-8 py-8">
           <DexIcon dex={dex} className="size-24" />
           <p>{dex}</p>
         </div>
         <svg
+          className="flex"
           width="100"
           height="24"
           viewBox="0 0 100 24"
