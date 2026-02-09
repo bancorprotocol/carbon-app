@@ -121,7 +121,7 @@ export const PreviewCommonStrategyType = () => {
           </text>
         </g>
         <g id="trade-icon">
-          <polygon points="-20,0 0,20 20,0 0,-20" fill="white" />
+          <polygon points="-20,0 0,20 20,0 0,-20" fill="var(--color-main-0)" />
         </g>
         <path
           id="svg-price-path"
@@ -161,7 +161,7 @@ export const PreviewCommonStrategyType = () => {
             y="10"
             width="30"
             height="30"
-            fill="white"
+            fill="var(--color-main-0)"
             fillOpacity="0.4"
           />
         </pattern>

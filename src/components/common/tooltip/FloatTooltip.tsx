@@ -133,7 +133,10 @@ export const FloatTooltipContent = forwardRef<
           ...style,
         }}
         {...context.getFloatingProps(props)}
-        className={cn('backdrop-black rounded-2xl p-16', props.className)}
+        className={cn(
+          'bg-main-600/80 backdrop-blur-xs shadow-lg rounded-2xl p-16',
+          props.className,
+        )}
       />
     </FloatingPortal>
   );

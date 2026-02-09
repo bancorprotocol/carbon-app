@@ -117,7 +117,7 @@ export const PreviewRecurringRangeStrategy = ({
           cx="0"
           cy="0"
           r="10"
-          fill="white"
+          fill="var(--color-main-0)"
         />
       </svg>
 

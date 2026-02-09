@@ -160,7 +160,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         x="50"
         y="55"
         fontSize="30"
-        fill="white"
+        fill="var(--color-main-0)"
         textAnchor="middle"
         dominantBaseline="middle"
       >

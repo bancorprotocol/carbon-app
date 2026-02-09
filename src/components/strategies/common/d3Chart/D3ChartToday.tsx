@@ -17,7 +17,13 @@ export const D3ChartToday = () => {
         strokeDasharray="2"
       />
       <g transform={`translate(${x}, ${dms.boundedHeight + 8})`}>
-        <rect x={-32} height="16" width="64" fill="white" rx="4" />
+        <rect
+          x={-32}
+          height="16"
+          width="64"
+          fill="var(--color-main-0)"
+          rx="4"
+        />
         <text
           y="6"
           dominantBaseline="hanging"

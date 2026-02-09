@@ -162,14 +162,14 @@
     border-radius: 4px;
   }
   input[type='checkbox']:not(:checked) {
-    border: 1px solid rgb(255 255 255 / 0.6);
+    @apply border border-main-0/60;
   }
   input[type='checkbox']:not(:checked):hover {
-    border-color: rgb(255 255 255 / 0.8);
+    @apply border-main-0/80;
   }
   input[type='checkbox']:checked {
+    @apply text-main-0;
     border: 0px;
-    color: rgba(22, 22, 22, var(--tw-text-opacity));
     background-image: linear-gradient(
       90deg,
       var(--color-green) 0%,
@@ -348,7 +348,7 @@ dialog.modal.side > * {
 }
 
 dialog.modal::backdrop {
-  @apply bg-main-900/85;
+  @apply bg-black/60;
 }
 
 @media (max-width: 640px) {

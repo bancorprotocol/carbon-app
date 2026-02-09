@@ -77,7 +77,7 @@ export const D3ChartIndicators = ({ activities }: D3ChartIndicatorsProps) => {
                 y={xScale.bandwidth() / 2 - 4}
                 width={8}
                 height={8}
-                fill="white"
+                fill="var(--color-main-0)"
                 stroke="black"
               />
             </g>

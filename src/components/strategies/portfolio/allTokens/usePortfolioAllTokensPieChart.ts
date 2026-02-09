@@ -33,13 +33,13 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
       },
       tooltip: {
         borderRadius: 12,
-        backgroundColor: '#212123',
+        backgroundColor: 'var(--color-main-800)',
         borderWidth: 0,
         useHTML: true,
         style: { fontFamily: 'Carbon-Text' },
         formatter: function () {
           return (
-            '<div class="p-10 text-14 text-main-0 font-medium space-y-12">' +
+            '<div class="grid gap-16 p-10 text-14 text-main-0 font-medium">' +
             '<div class="flex items-center w-[230px] gap-8">' +
             '<img alt="Token Logo" width="30" height="30" src="' +
             data[this.colorIndex].token.logoURI +

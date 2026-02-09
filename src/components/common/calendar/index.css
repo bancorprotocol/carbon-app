@@ -18,7 +18,7 @@
   justify-content: space-between;
 }
 .rdp-nav button {
-  color: rgba(255 255 255 / 0.6);
+  @apply text-main-0/60;
 }
 .rdp-nav button:hover {
   color: var(--color-main-0);
@@ -32,13 +32,12 @@
   text-align: center;
 }
 .rdp-weekday {
-  @apply text-12;
+  @apply text-12 text-main-0/20;
   font-weight: 400;
-  color: rgba(255 255 255 / 0.2);
 }
 
 .rdp-day {
-  color: rgba(255 255 255 / 0.6);
+  @apply text-main-0/60;
   padding-inline: 0;
 }
 .rdp-disabled {

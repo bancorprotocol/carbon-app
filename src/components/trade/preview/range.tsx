@@ -75,7 +75,7 @@ export const PreviewRangeStrategy = () => {
           cx="0"
           cy="0"
           r="10"
-          fill="white"
+          fill="var(--color-main-0)"
         />
       </svg>
       <div className={cn(style.budget, style.disposable, style.range)}>

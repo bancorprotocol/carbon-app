@@ -406,7 +406,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                 opacity="60%"
               />
               <text
-                fill="white"
+                fill="var(--color-main-0)"
                 x={x(point)}
                 y={baseline + 10}
                 dominantBaseline="hanging"
@@ -430,7 +430,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                 opacity="60%"
               />
               <text
-                fill="white"
+                fill="var(--color-main-0)"
                 x={x(point)}
                 y={baseline + 10}
                 dominantBaseline="hanging"
@@ -519,7 +519,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             rx="4"
           />
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             x={lowest + fontWidth}
             y="9"
             dominantBaseline="hanging"
@@ -529,7 +529,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             {formattedPrice}
           </text>
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             x={lowest + fontWidth}
             y="26"
             dominantBaseline="hanging"
@@ -554,7 +554,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             }}
           />
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             y="12"
             dominantBaseline="hanging"
             fontSize={fontSize}
@@ -578,7 +578,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             }}
           />
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             x={highest - fontWidth}
             y="9"
             dominantBaseline="hanging"
@@ -588,7 +588,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             {formattedPrice}
           </text>
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             x={highest - fontWidth}
             y="26"
             dominantBaseline="hanging"

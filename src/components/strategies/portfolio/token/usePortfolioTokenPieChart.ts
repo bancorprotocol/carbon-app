@@ -39,13 +39,13 @@ export const usePortfolioTokenPieChart = (
       },
       tooltip: {
         borderRadius: 12,
-        backgroundColor: '#212123',
+        backgroundColor: 'var(--color-main-800)',
         borderWidth: 0,
         useHTML: true,
         style: { fontFamily: 'Carbon-Text' },
         formatter: function () {
           return (
-            '<div class="p-10 text-14 text-main-0 font-medium space-y-12 w-[230px]">' +
+            '<div class="grid gap-16 p-10 text-14 text-main-0 font-medium w-[230px]">' +
             '<div class="flex justify-between">' +
             '<span class="text-main-0/60">ID</span>' +
             data[this.point.index].strategy.idDisplay +
