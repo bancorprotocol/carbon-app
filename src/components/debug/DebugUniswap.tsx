@@ -60,8 +60,10 @@ export const DebugUniswap = () => {
     <section className="rounded-3xl surface grid gap-20 p-20">
       <form className="grid gap-8" onSubmit={createV2}>
         <hgroup>
-          <h2>Uniswap v2 & v3</h2>
-          <p className="text-white/60">Create a uniswap v2 & v3 position</p>
+          <h2>Uniswap v2</h2>
+          <p className="text-white/60">
+            Create a uniswap/sushi/pancake v2 position
+          </p>
         </hgroup>
         <div className="grid gap-8">
           <label htmlFor="uni-base">Base</label>
@@ -107,7 +109,9 @@ export const DebugUniswap = () => {
           />
         </div>
         <div className="grid gap-8">
-          <label htmlFor="uni-quote-amount">Quote Amount (only for v3)</label>
+          <label htmlFor="uni-quote-amount">
+            Quote Amount (only if pool doesn't exist)
+          </label>
           <input
             className="bg-main-900 px-16 py-8 rounded-2xl"
             id="uni-quote-amount"

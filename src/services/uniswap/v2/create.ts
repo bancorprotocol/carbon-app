@@ -45,8 +45,10 @@ export async function createV2Position(
     if (pairAddress !== ZeroAddress) {
       return pairAddress;
     } else {
+      console.log('Pool does not exist. Creating one');
       const tx = await factory.createPair(base, quote);
       await tx.wait();
+      console.log('Pool created');
       return factory.getPair(base, quote);
     }
   };
