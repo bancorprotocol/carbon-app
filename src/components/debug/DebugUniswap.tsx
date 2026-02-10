@@ -32,7 +32,7 @@ export const DebugUniswap = () => {
     const dex = data.get('dex');
     const base = getTokenById(data.get('base') as string)!;
     const quote = getTokenById(data.get('quote') as string)!;
-    const fee = Number(data.get('fee')!) * 1000;
+    const fee = Number(data.get('fee')!);
     const marketPrice = await getMarketPrice(base, quote);
     const baseAmount = parseUnits(
       data.get('base-amount') as string,
@@ -74,7 +74,7 @@ export const DebugUniswap = () => {
           baseAmount,
           quoteAmount,
           marketPrice,
-          // fee, // NOT WORKING
+          fee,
         );
         await sendTransaction(txsV3);
       };
@@ -175,18 +175,24 @@ export const DebugUniswap = () => {
             required
           />
         </div>
-        {/*
-        TODO: currently fee is not working
+
         <div className="grid gap-8">
-          <label htmlFor="uni-fee">Fee in % (only for v3)</label>
-          <input
+          <label htmlFor="uni-fee">Fee (v3 only)</label>
+          <select
             className="bg-main-900 px-16 py-8 rounded-2xl"
             id="uni-fee"
             name="fee"
+            defaultValue="500"
             required
-          />
+          >
+            <option value="100">0.01% (Pancake / Sushi)</option>
+            <option value="500">0.05% (All)</option>
+            <option value="2500">0.25% (Pancake)</option>
+            <option value="3000">0.30% (Uniswap / Sushi)</option>
+            <option value="10000">1.00% (All)</option>
+          </select>
         </div>
-        */}
+
         <button className="btn-primary-gradient" type="submit">
           Create position
         </button>

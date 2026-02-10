@@ -72,7 +72,6 @@ export async function getUniswapPositions(
 
   const results = await Promise.allSettled(getAll);
   for (const result of results) {
-    console.log(result);
     if (result.status === 'fulfilled') {
       allPositions.push(...result.value);
     } else {
