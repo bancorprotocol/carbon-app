@@ -21,7 +21,7 @@ export const MigrationTable: FC<Props> = ({ positions }) => {
 
   return (
     <>
-      <table className="table grid-area-[list]">
+      <table className="table">
         <thead>
           <tr>
             <th>Dex</th>

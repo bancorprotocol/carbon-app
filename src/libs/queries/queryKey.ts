@@ -3,6 +3,7 @@ import { TokenPriceHistorySearch } from 'libs/queries/extApi/tokenPrice';
 import { SimulatorResultSearch } from 'libs/routing';
 import { buildTokenPairKey } from 'utils/helpers';
 import { QueryActivityParams } from './extApi/activity';
+import { Dexes } from 'services/uniswap/utils';
 
 export const sdk = ['sdk'];
 export const chain = ['chain'];
@@ -128,5 +129,5 @@ export const QueryKey = {
     'trade-order-book-last-trade-buy',
   ],
 
-  migrationPositions: (user: string) => ['migration', 'positions', user],
+  dexMigration: (dex: Dexes, user: string) => ['migration', dex, user],
 };

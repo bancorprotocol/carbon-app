@@ -18,7 +18,7 @@ export const MigrationList: FC<Props> = ({ positions }) => {
 
   return (
     <>
-      <ul className="grid-area-[list] grid gap-16 grid-fill-350">
+      <ul className="grid gap-16 grid-fill-350">
         {positions.map((position, i) => (
           <li
             key={position.id}

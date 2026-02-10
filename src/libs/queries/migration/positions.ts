@@ -1,36 +1,70 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import { QueryKey } from '..';
-import { getUniswapPositions } from 'services/uniswap';
+import { allUniConfigs } from 'services/uniswap';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
-import { UniswapPosition } from 'services/uniswap/utils';
+import {
+  UniswapPosition,
+  UniswapV2Config,
+  UniswapV3Config,
+} from 'services/uniswap/utils';
+import { getAllV3Positions } from 'services/uniswap/v3/read.contract';
+import { getAllV2Positions } from 'services/uniswap/v2/read.contract';
 
-export const useMigrationPositions = () => {
+export const useDexesMigration = () => {
   const { user, provider } = useWagmi();
   const { importTokenAddresses, getTokenById } = useTokens();
-  return useQuery({
-    queryKey: QueryKey.migrationPositions(user || ''),
-    queryFn: async () => {
-      const positions = await getUniswapPositions(
-        provider!,
-        user!,
-        getTokenById,
-      );
-      sessionStorage.setItem(
-        `migration-positions-${user}`,
-        JSON.stringify(positions),
-      );
-      const tokens = positions.map((p) => [p.base, p.quote]).flat();
-      await importTokenAddresses(tokens);
-      return positions;
-    },
-    enabled: !!user && !!provider,
-    refetchOnWindowFocus: false,
-    initialData: () => {
-      if (!user) return;
-      const positions = sessionStorage.getItem(`migration-positions-${user}`);
-      if (!positions) return;
-      return JSON.parse(positions) as UniswapPosition[];
+  return useQueries({
+    queries: allUniConfigs.map((config) => ({
+      queryKey: QueryKey.dexMigration(config.dex, user || ''),
+      queryFn: async () => {
+        const [_, version] = config.dex.split('-');
+        let positions: UniswapPosition[];
+        if (version === 'v2') {
+          positions = await getAllV2Positions(
+            config as UniswapV2Config,
+            provider!,
+            user!,
+            getTokenById,
+          );
+        } else {
+          positions = await getAllV3Positions(
+            config as UniswapV3Config,
+            provider!,
+            user!,
+            getTokenById,
+          );
+        }
+        sessionStorage.setItem(
+          `migration-${config.dex}-${user}`,
+          JSON.stringify(positions),
+        );
+        const tokens = positions.map((p) => [p.base, p.quote]).flat();
+        await importTokenAddresses(tokens);
+        return positions;
+      },
+      enabled: !!user && !!provider,
+      refetchOnWindowFocus: true,
+      initialData: () => {
+        if (!user) return;
+        const positions = sessionStorage.getItem(
+          `migration-${config.dex}-${user}`,
+        );
+        if (!positions) return;
+        return JSON.parse(positions) as UniswapPosition[];
+      },
+    })),
+    combine: (queries) => {
+      return {
+        isLoading: queries.some((q) => q.isLoading),
+        data: queries
+          .map((q) => q.data)
+          .filter((data) => !!data)
+          .flat(),
+        fetching: Object.fromEntries(
+          queries.map((q, i) => [allUniConfigs[i].dex, q.isFetching]),
+        ),
+      };
     },
   });
 };

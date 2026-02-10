@@ -11,7 +11,7 @@ const sentences = [
 ];
 export const MigrationLoading = () => {
   return (
-    <section className="grid-area-[list] grid gap-16 place-items-center">
+    <section className="grid gap-16 place-items-center">
       <CarbonLogoLoading className="h-80 " />
       <ul className="grid-stack-container place-items-center p-16 overflow-clip text-2xl text-center">
         {sentences.map((sentence, i) => (

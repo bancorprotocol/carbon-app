@@ -1,15 +1,16 @@
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { useTokens } from 'hooks/useTokens';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { Dexes } from 'services/uniswap/utils';
 import { NotFound } from 'components/common/NotFound';
 import { Token } from 'libs/tokens';
-import { useMigrationPositions } from 'libs/queries/migration/positions';
+import { useDexesMigration } from 'libs/queries/migration/positions';
 import { MigrationTable } from 'components/migration/MigrationTable';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MigrationList } from 'components/migration/MigrationList';
 import { MigrationLoading } from 'components/migration/MigrationLoading';
+import { MigrationFetching } from 'components/migration/MigrationFetching';
 
 interface MigratedPosition {
   id: string;
@@ -47,13 +48,29 @@ interface MigratedPosition {
   };
 }
 
+type MigrationQuery = ReturnType<typeof useDexesMigration>;
+
 export const MigratePage = () => {
+  const query = useDexesMigration();
+
+  return (
+    <div className="grid gap-8 grid-area-[list]">
+      <MigrationFetching fetching={query.fetching} />
+      <MigrationContent query={query} />
+    </div>
+  );
+};
+
+interface Props {
+  query: MigrationQuery;
+}
+
+const MigrationContent: FC<Props> = ({ query }) => {
   const { getTokenById, isPending } = useTokens();
   const { aboveBreakpoint } = useBreakpoints();
 
-  const query = useMigrationPositions();
-
   const tokens = useMemo(() => {
+    if (query.isLoading) return;
     const positions = query.data;
     if (!positions?.length) return;
     const list = new Set<string>();
@@ -62,7 +79,7 @@ export const MigratePage = () => {
       list.add(position.quote);
     }
     return Array.from(list);
-  }, [query.data]);
+  }, [query.data, query.isLoading]);
 
   // Create a dedicated cache
   const marketPriceQuery = useGetMultipleTokenPrices(tokens);
@@ -70,7 +87,7 @@ export const MigratePage = () => {
   const positions = useMemo((): undefined | MigratedPosition[] => {
     if (isPending) return;
     if (marketPriceQuery.isPending) return;
-    if (query.isPending) return;
+    if (query.isLoading) return;
     const marketPrices = marketPriceQuery.data || {};
     return query.data?.map((pos) => {
       const basePrice = new SafeDecimal(marketPrices[pos.base]);
@@ -121,7 +138,7 @@ export const MigratePage = () => {
     marketPriceQuery.data,
     marketPriceQuery.isPending,
     query.data,
-    query.isPending,
+    query.isLoading,
   ]);
 
   if (isPending || query.isLoading) {
@@ -131,7 +148,7 @@ export const MigratePage = () => {
   if (!positions?.length) {
     return (
       <NotFound
-        className="grid-area-[list] surface rounded-2xl"
+        className="surface rounded-2xl"
         title="No Position Found"
         text=""
         variant="info"
@@ -145,5 +162,3 @@ export const MigratePage = () => {
 
   return <MigrationList positions={positions} />;
 };
-
-export const PositionCard = () => {};

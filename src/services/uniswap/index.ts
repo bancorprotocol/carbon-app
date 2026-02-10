@@ -48,6 +48,11 @@ export const uniV3Configs = {
   },
 };
 
+export const allUniConfigs = [
+  ...Object.values(uniV2Configs),
+  ...Object.values(uniV3Configs),
+];
+
 export async function getUniswapPositions(
   provider: Provider,
   userAddress: string,
