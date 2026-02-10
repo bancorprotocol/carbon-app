@@ -1,7 +1,7 @@
 import { Contract, Signer, MaxUint256, TransactionRequest } from 'ethers';
+import { UniswapV2Config } from '../utils';
 
 // --- Configuration ---
-const ROUTER_ADDRESS = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D';
 
 // --- Minimal ABIs ---
 const ROUTER_ABI = [
@@ -23,6 +23,7 @@ const PAIR_ABI = [
  * Automatically calculates 'min' amounts based on a slippage tolerance.
  */
 export async function withdrawAllV2Liquidity(
+  config: UniswapV2Config,
   signer: Signer,
   pairAddress: string,
   slippagePercent: number = 0.5, // Default 0.5% slippage protection
@@ -32,7 +33,7 @@ export async function withdrawAllV2Liquidity(
 
   const userAddress = await signer.getAddress();
   const pairContract = new Contract(pairAddress, PAIR_ABI, signer);
-  const routerContract = new Contract(ROUTER_ADDRESS, ROUTER_ABI, signer);
+  const routerContract = new Contract(config.routerAddress, ROUTER_ABI, signer);
 
   // 1. Get User's Full LP Balance
   const lpBalance: bigint = await pairContract.balanceOf(userAddress);
@@ -67,11 +68,11 @@ export async function withdrawAllV2Liquidity(
   // 4. Handle Approval
   const allowance: bigint = await pairContract.allowance(
     userAddress,
-    ROUTER_ADDRESS,
+    config.routerAddress,
   );
   if (allowance < lpBalance) {
     const approveTx = await pairContract.approve.populateTransaction(
-      ROUTER_ADDRESS,
+      config.routerAddress,
       MaxUint256,
     );
     transactions.push(approveTx);

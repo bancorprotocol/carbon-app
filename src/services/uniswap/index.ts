@@ -6,6 +6,30 @@ import { getAllV2Positions } from './v2/read.contract';
 import { getAllV3Positions } from './v3/read.contract';
 import { Token } from 'libs/tokens';
 
+export const uniV2Configs = {
+  'sushi-v2': {
+    dex: 'sushi-v2' as const,
+    factoryAddress: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
+    routerAddress: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+    startBlock: 10794229,
+    fee: '3000',
+  },
+  'pancake-v2': {
+    dex: 'pancake-v2' as const,
+    factoryAddress: '0x1097053Fd2ea711dad45caCcc45EfF7548fCB362',
+    routerAddress: '0xEfF92A263d31888d860bD50809A8D171709b7b1c',
+    startBlock: 15614590,
+    fee: '2500',
+  },
+  'uniswap-v2': {
+    dex: 'uniswap-v2' as const,
+    factoryAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+    routerAddress: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+    startBlock: 10000835,
+    fee: '3000',
+  },
+};
+
 export async function getUniswapPositions(
   provider: Provider,
   userAddress: string,
@@ -13,13 +37,28 @@ export async function getUniswapPositions(
 ): Promise<UniswapPosition[]> {
   const normalizedUser = userAddress.toLowerCase();
 
-  // Run queries in parallel
-  const [v2Positions, v3Positions] = await Promise.all([
-    getAllV2Positions(provider, normalizedUser, getTokenById),
-    getAllV3Positions(provider, normalizedUser, getTokenById),
-  ]);
+  const allPositions: UniswapPosition[] = [];
+  const getAll: Promise<UniswapPosition[]>[] = [];
 
-  return [...v2Positions, ...v3Positions];
+  for (const config of Object.values(uniV2Configs)) {
+    getAll.push(
+      getAllV2Positions(config, provider, normalizedUser, getTokenById),
+    );
+  }
+
+  getAll.push(getAllV3Positions(provider, normalizedUser, getTokenById));
+
+  const results = await Promise.allSettled(getAll);
+  for (const result of results) {
+    console.log(result);
+    if (result.status === 'fulfilled') {
+      allPositions.push(...result.value);
+    } else {
+      console.error(result.reason);
+    }
+  }
+
+  return allPositions;
 }
 
 export async function withdrawPosition(
@@ -27,8 +66,10 @@ export async function withdrawPosition(
   dex: Dexes,
   positionId: string,
 ) {
-  if (dex === 'uniswap-v2') {
-    return withdrawAllV2Liquidity(signer, positionId);
+  const [name, version] = dex.split('-');
+  if (version === 'v2') {
+    const config = uniV2Configs[dex as keyof typeof uniV2Configs];
+    return withdrawAllV2Liquidity(config, signer, positionId);
   } else {
     return deleteAndWithdrawV3Position(signer, positionId);
   }

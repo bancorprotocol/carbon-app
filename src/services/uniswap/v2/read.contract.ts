@@ -1,9 +1,6 @@
 import { Contract, id, Provider, zeroPadValue, formatUnits } from 'ethers';
-import { UniswapPosition } from '../utils';
+import { UniswapPosition, UniswapV2Config } from '../utils';
 import { Token } from 'libs/tokens';
-
-// --- Configuration ---
-const FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
 
 // --- ABIs ---
 // Minimal ABI to detect Transfer events and read Pair data
@@ -27,14 +24,17 @@ const FACTORY_ABI = [
  * No external APIs (Covalent/TheGraph) required.
  */
 export async function getAllV2Positions(
+  config: UniswapV2Config,
   provider: Provider,
   userAddress: string,
   getTokenById: (address: string) => Token | undefined,
 ): Promise<UniswapPosition[]> {
-  // Dev: scan last 100k blocks (fast-ish) / Prod: contract creation (slow).
-  const fromBlock = import.meta.env.DEV ? -100000 : 10000835;
   const positions: UniswapPosition[] = [];
-  const factoryContract = new Contract(FACTORY_ADDRESS, FACTORY_ABI, provider);
+  const factoryContract = new Contract(
+    config.factoryAddress,
+    FACTORY_ABI,
+    provider,
+  );
 
   // 1. SCAN LOGS (Discovery Phase)
   // We look for any 'Transfer' event where 'to' == userAddress.
@@ -50,7 +50,7 @@ export async function getAllV2Positions(
       null, // 'from' - don't care
       userTopic, // 'to' - must be the user
     ],
-    fromBlock,
+    fromBlock: config.startBlock,
   };
 
   const logs = await provider.getLogs(filter);
@@ -114,7 +114,7 @@ export async function getAllV2Positions(
 
         positions.push({
           id: pairAddress,
-          dex: 'uniswap-v2',
+          dex: config.dex,
           base: token0,
           quote: token1,
           min: '0', // V2 is always 0 to Infinity
@@ -123,7 +123,7 @@ export async function getAllV2Positions(
           quoteLiquidity: formatUnits(amount1, dec1),
           baseFee: '0', // V2 fees are not separable; they increase the value of LP tokens
           quoteFee: '0',
-          fee: '3000', // Hardcoded 0.3%
+          fee: config.fee,
         });
       }
     } catch (e) {

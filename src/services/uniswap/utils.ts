@@ -1,4 +1,4 @@
-export type Dexes = 'uniswap-v2' | 'uniswap-v3';
+export type Dexes = `${'uniswap' | 'sushi' | 'pancake'}-${'v2' | 'v3'}`;
 
 export interface GraphToken {
   id: string; // Address
@@ -38,4 +38,12 @@ export interface UniswapPosition {
   baseFee: string; // Uncollected Fees Token0
   quoteFee: string; // Uncollected Fees Token1
   fee: string; // Fee Tier (e.g. "3000" for 0.3%)
+}
+
+export interface UniswapV2Config {
+  dex: Dexes;
+  factoryAddress: string;
+  routerAddress: string;
+  startBlock: number;
+  fee: string;
 }

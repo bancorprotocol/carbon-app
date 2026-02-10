@@ -7,6 +7,7 @@ import { createV2Position } from 'services/uniswap/v2/create';
 import { createV3Position } from 'services/uniswap/v3/create';
 import { getMarketPrice } from 'libs/queries/extApi/tokenPrice';
 import config from 'config';
+import { uniV2Configs } from 'services/uniswap';
 
 export const DebugUniswap = () => {
   const { getTokenById } = useTokens();
@@ -32,23 +33,26 @@ export const DebugUniswap = () => {
       quote.decimals,
     );
     const txs: TransactionRequest[] = [];
-    const txsV2 = await createV2Position(
-      signer,
-      base.address,
-      quote.address,
-      baseAmount,
-    );
-    txs.push(txsV2);
-    const txsV3 = await createV3Position(
-      signer,
-      base.address,
-      quote.address,
-      baseAmount,
-      quoteAmount,
-      marketPrice,
-      // fee, // NOT WORKING
-    );
-    txs.push(txsV3);
+    for (const config of Object.values(uniV2Configs)) {
+      const txsV2 = await createV2Position(
+        config,
+        signer,
+        base.address,
+        quote.address,
+        baseAmount,
+      );
+      txs.push(txsV2);
+    }
+    // const txsV3 = await createV3Position(
+    //   signer,
+    //   base.address,
+    //   quote.address,
+    //   baseAmount,
+    //   quoteAmount,
+    //   marketPrice,
+    //   // fee, // NOT WORKING
+    // );
+    // txs.push(txsV3);
     await sendTransaction(txs);
   };
   return (
