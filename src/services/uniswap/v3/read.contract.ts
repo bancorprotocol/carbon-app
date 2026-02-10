@@ -1,8 +1,9 @@
-import { Signer, Provider, Contract, formatUnits } from 'ethers';
+import { Provider, Contract, formatUnits } from 'ethers';
 import { Pool, Position, tickToPrice } from '@uniswap/v3-sdk';
 import { Token as UniToken, ChainId } from '@uniswap/sdk-core';
 import JSBI from 'jsbi';
 import { Token } from 'libs/tokens';
+import { UniswapV3Config } from '../utils';
 
 // --- Interfaces ---
 export type Dexes = 'uniswap-v2' | 'uniswap-v3';
@@ -21,10 +22,6 @@ export interface UniswapPosition {
   fee: string;
 }
 
-// --- Configuration ---
-const POSITION_MANAGER_ADDRESS = '0xC36442b4a4522E871399CD717aBDD847Ab11FE88';
-const FACTORY_ADDRESS = '0x1F98431c8aD98523631AE4a59f267346ea31F984';
-
 const MANAGER_ABI = [
   'function balanceOf(address owner) view returns (uint256)',
   'function tokenOfOwnerByIndex(address owner, uint256 index) view returns (uint256)',
@@ -41,18 +38,13 @@ const POOL_ABI = [
 const ERC20_ABI = ['function decimals() view returns (uint8)'];
 
 export async function getAllV3Positions(
-  signerOrProvider: Signer | Provider,
+  config: UniswapV3Config,
+  provider: Provider,
   userAddress: string,
   getTokenById: (address: string) => Token | undefined,
 ): Promise<UniswapPosition[]> {
-  const provider =
-    (signerOrProvider as Signer).provider || (signerOrProvider as Provider);
-  const manager = new Contract(
-    POSITION_MANAGER_ADDRESS,
-    MANAGER_ABI,
-    signerOrProvider,
-  );
-  const factory = new Contract(FACTORY_ADDRESS, FACTORY_ABI, provider);
+  const manager = new Contract(config.managerAddress, MANAGER_ABI, provider);
+  const factory = new Contract(config.factoryAddress, FACTORY_ABI, provider);
 
   const positions: UniswapPosition[] = [];
   const balance = await manager.balanceOf(userAddress);

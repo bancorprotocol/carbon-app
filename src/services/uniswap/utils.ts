@@ -47,3 +47,9 @@ export interface UniswapV2Config {
   startBlock: number;
   fee: string;
 }
+
+export interface UniswapV3Config {
+  dex: Dexes;
+  factoryAddress: string;
+  managerAddress: string;
+}

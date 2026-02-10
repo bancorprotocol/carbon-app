@@ -30,6 +30,24 @@ export const uniV2Configs = {
   },
 };
 
+export const univ3Configs = {
+  'sushi-v3': {
+    dex: 'sushi-v3' as const,
+    factoryAddress: '0xbACEB8eC6b9355Dfc0269C18bac9d6E2Bdc29C4F',
+    managerAddress: '0x2214a42d8e2a1d20635c2cb0664422c528b6a432',
+  },
+  'pancake-v3': {
+    dex: 'pancake-v3' as const,
+    factoryAddress: '0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865',
+    managerAddress: '0x46A15B0b27311cedF172AB29E4f4766fbE7F4364',
+  },
+  'uniswap-v3': {
+    dex: 'uniswap-v3' as const,
+    factoryAddress: '0x1F98431c8aD98523631AE4a59f267346ea31F984',
+    managerAddress: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
+  },
+};
+
 export async function getUniswapPositions(
   provider: Provider,
   userAddress: string,
@@ -46,7 +64,11 @@ export async function getUniswapPositions(
     );
   }
 
-  getAll.push(getAllV3Positions(provider, normalizedUser, getTokenById));
+  for (const config of Object.values(univ3Configs)) {
+    getAll.push(
+      getAllV3Positions(config, provider, normalizedUser, getTokenById),
+    );
+  }
 
   const results = await Promise.allSettled(getAll);
   for (const result of results) {
