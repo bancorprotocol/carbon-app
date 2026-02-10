@@ -32,8 +32,8 @@ export const DebugUniswap = () => {
       data.get('quote-amount') as string,
       quote.decimals,
     );
-    const txs: TransactionRequest[] = [];
     for (const config of Object.values(uniV2Configs)) {
+      const txs: TransactionRequest[] = [];
       const txsV2 = await createV2Position(
         config,
         signer,
@@ -43,6 +43,7 @@ export const DebugUniswap = () => {
         quoteAmount,
       );
       txs.push(txsV2);
+      await sendTransaction(txs);
     }
     // const txsV3 = await createV3Position(
     //   signer,
@@ -54,7 +55,6 @@ export const DebugUniswap = () => {
     //   // fee, // NOT WORKING
     // );
     // txs.push(txsV3);
-    await sendTransaction(txs);
   };
   return (
     <section className="rounded-3xl surface grid gap-20 p-20">
