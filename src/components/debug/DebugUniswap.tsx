@@ -40,6 +40,7 @@ export const DebugUniswap = () => {
         base.address,
         quote.address,
         baseAmount,
+        quoteAmount,
       );
       txs.push(txsV2);
     }
