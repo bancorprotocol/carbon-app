@@ -2,12 +2,15 @@ import { useTokens } from 'hooks/useTokens';
 import { useWagmi } from 'libs/wagmi';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import { FormEvent } from 'react';
-import { parseUnits, TransactionRequest } from 'ethers';
+import { parseUnits } from 'ethers';
 import { createV2Position } from 'services/uniswap/v2/create';
 import { createV3Position } from 'services/uniswap/v3/create';
 import { getMarketPrice } from 'libs/queries/extApi/tokenPrice';
+import { uniV2Configs, univ3Configs } from 'services/uniswap';
 import config from 'config';
-import { uniV2Configs } from 'services/uniswap';
+import { UniswapV2Config, UniswapV3Config } from 'services/uniswap/utils';
+
+const dexes = ['uniswap', 'sushi', 'pancake'];
 
 export const DebugUniswap = () => {
   const { getTokenById } = useTokens();
@@ -20,6 +23,8 @@ export const DebugUniswap = () => {
     const canBatch = await canBatchTransactions(user);
     if (!canBatch) throw new Error('Uniswap create requires EIP7702');
     const data = new FormData(event.target as HTMLFormElement);
+    const version = data.get('version');
+    const dex = data.get('dex');
     const base = getTokenById(data.get('base') as string)!;
     const quote = getTokenById(data.get('quote') as string)!;
     const fee = Number(data.get('fee')!) * 1000;
@@ -32,39 +37,88 @@ export const DebugUniswap = () => {
       data.get('quote-amount') as string,
       quote.decimals,
     );
-    for (const config of Object.values(uniV2Configs)) {
-      const txs: TransactionRequest[] = [];
-      const txsV2 = await createV2Position(
-        config,
-        signer,
-        base.address,
-        quote.address,
-        baseAmount,
-        quoteAmount,
-      );
-      txs.push(txsV2);
-      await sendTransaction(txs);
+    if (version === 'v2') {
+      const run = async (config: UniswapV2Config) => {
+        const txsV2 = await createV2Position(
+          config,
+          signer,
+          base.address,
+          quote.address,
+          baseAmount,
+          quoteAmount,
+        );
+        await sendTransaction(txsV2);
+      };
+      if (dex === 'all') {
+        for (const config of Object.values(uniV2Configs)) {
+          await run(config);
+        }
+      } else {
+        const key = `${dex}-v2` as keyof typeof uniV2Configs;
+        await run(uniV2Configs[key]);
+      }
     }
-    // const txsV3 = await createV3Position(
-    //   signer,
-    //   base.address,
-    //   quote.address,
-    //   baseAmount,
-    //   quoteAmount,
-    //   marketPrice,
-    //   // fee, // NOT WORKING
-    // );
-    // txs.push(txsV3);
+    if (version === 'v3') {
+      const run = async (config: UniswapV3Config) => {
+        const txsV3 = await createV3Position(
+          config,
+          signer,
+          base.address,
+          quote.address,
+          baseAmount,
+          quoteAmount,
+          marketPrice,
+          // fee, // NOT WORKING
+        );
+        await sendTransaction(txsV3);
+      };
+      if (dex === 'all') {
+        for (const config of Object.values(univ3Configs)) {
+          await run(config);
+        }
+      } else {
+        const key = `${dex}-v3` as keyof typeof univ3Configs;
+        await run(univ3Configs[key]);
+      }
+    }
   };
   return (
     <section className="rounded-3xl surface grid gap-20 p-20">
       <form className="grid gap-8" onSubmit={createV2}>
         <hgroup>
-          <h2>Uniswap v2</h2>
+          <h2>Uniswap</h2>
           <p className="text-white/60">
-            Create a uniswap/sushi/pancake v2 position
+            Create a uniswap/sushi/pancake position
           </p>
         </hgroup>
+        <div className="grid gap-8">
+          <label htmlFor="uni-version">Version</label>
+          <select
+            className="bg-main-900 px-16 py-8 rounded-2xl"
+            id="uni-version"
+            name="version"
+            defaultValue="v2"
+            required
+          >
+            <option value="v2">V2</option>
+            <option value="v3">V3</option>
+          </select>
+        </div>
+        <div className="grid gap-8">
+          <label htmlFor="uni-dex">Dex</label>
+          <select
+            className="bg-main-900 px-16 py-8 rounded-2xl"
+            id="uni-dex"
+            name="dex"
+            defaultValue="all"
+            required
+          >
+            <option value="all">All</option>
+            {dexes.map((dex) => (
+              <option value={dex}>{dex}</option>
+            ))}
+          </select>
+        </div>
         <div className="grid gap-8">
           <label htmlFor="uni-base">Base</label>
           <select

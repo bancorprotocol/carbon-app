@@ -15,10 +15,7 @@ import {
   encodeSqrtRatioX96,
 } from '@uniswap/v3-sdk';
 import { SafeDecimal } from 'libs/safedecimal';
-
-// --- Configuration ---
-const POSITION_MANAGER_ADDRESS = '0xC36442b4a4522E871399CD717aBDD847Ab11FE88'; // Mainnet
-const FACTORY_ADDRESS = '0x1F98431c8aD98523631AE4a59f267346ea31F984';
+import { UniswapV3Config } from '../utils';
 
 // --- Minimal ABIs ---
 const ERC20_ABI = [
@@ -55,6 +52,7 @@ const FACTORY_ABI = [
  * @param tickUpper - The upper bound tick of your range
  */
 export async function createV3Position(
+  config: UniswapV3Config,
   signer: Signer,
   token0: string,
   token1: string,
@@ -65,7 +63,7 @@ export async function createV3Position(
 ): Promise<TransactionRequest> {
   const provider = signer.provider!;
   const userAddress = await signer.getAddress();
-  const manager = new Contract(POSITION_MANAGER_ADDRESS, MANAGER_ABI, signer);
+  const manager = new Contract(config.managerAddress, MANAGER_ABI, signer);
 
   console.log(`Preparing to mint V3 Position...`);
 
@@ -87,6 +85,7 @@ export async function createV3Position(
     .div(amt1.toString())
     .toNumber();
   const poolAddress = await createPoolIfNeeded(
+    config.factoryAddress,
     signer,
     t0,
     t1,
@@ -175,7 +174,7 @@ export async function createV3Position(
   };
   const unsignedTx = await manager.mint.populateTransaction(params);
   unsignedTx.customData = {
-    spender: POSITION_MANAGER_ADDRESS,
+    spender: config.managerAddress,
     assets: [
       {
         address: t0,
@@ -226,13 +225,14 @@ export function getTicksFromRange(
  * @param initialPrice - The starting price of Token0 in terms of Token1 (e.g., "3000" if 1 Token0 = 3000 Token1)
  */
 export async function createPoolIfNeeded(
+  factoryAddress: string,
   signer: Signer,
   token0: string,
   token1: string,
   fee: number,
   initialPrice: number,
 ): Promise<string> {
-  const factory = new Contract(FACTORY_ADDRESS, FACTORY_ABI, signer);
+  const factory = new Contract(factoryAddress, FACTORY_ABI, signer);
 
   console.log('Checking if pool exists...');
 
