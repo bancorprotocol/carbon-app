@@ -14,7 +14,7 @@
   --error-gradient: linear-gradient(to bottom, var(--color-error), var(--color-error-dark));
   --glass-shadow:
     /* Elevation */
-    0 5px 5px oklch(10% var(--chroma) var(--hue) / 25%),
+    0 5px 5px var(--color-shadow),
     /* Top left */
     inset 1px 1px 0 -1px oklch(100% var(--chroma) var(--hue) / 40%),
     inset 2px 2px 0 -1px oklch(100% var(--chroma) var(--hue) / 10%),
@@ -48,10 +48,10 @@
   --color-main-900: oklch(0.99 0.02 var(--hue));
   --color-main-950: oklch(1 0.01 var(--hue));
 
-  --color-primary: oklch(.8 .2 var(--hue));
-  --color-green: oklch(80% .3 160);
-  --color-secondary: oklch(80% .2 215);
-  --color-tertiary: oklch(80% .3 185);
+  --color-primary: oklch(0.8 .2 var(--hue));
+  --color-green: oklch(0.76 0.2 160);
+  --color-secondary: oklch(0.73 0.17 204);
+  --color-tertiary: oklch(0.8 .3 185);
 
   --color-error: oklch(0.7 0.21 10.77);
   --color-error-dark: oklch(0.56 0.25 16.46);
@@ -59,10 +59,10 @@
   --color-sell-dark: oklch(.5 .28 var(--sell-hue));
   --color-buy: oklch(0.81 0.21 171.56);
   --color-buy-dark: oklch(0.53 0.16 161.03);
-  --color-success: oklch(70% .2 160);
-  --color-warning: oklch(75% .2 57);
+  --color-success: oklch(0.7 .2 160);
+  --color-warning: oklch(0.75 .2 57);
 
-  --color-shadow: var(--color-main-300);
+  --color-shadow: oklch(0.35 0.06 var(--hue) / 40%);
 
   color-scheme: light;
   accent-color: var(--color-main-0);
@@ -95,7 +95,7 @@
   --color-success: oklch(0.70 0.2 160);
   --color-warning: oklch(0.60 0.2 57);
 
-  --color-shadow: var(--color-main-900);
+  --color-shadow: oklch(0.1 0.02 var(--hue) / 25%);
 
   color: var(--color-main-0);
   color-scheme: dark;
@@ -266,8 +266,8 @@
 
 @utility btn-primary-gradient {
   --gradient-direction: 180deg;
-  @apply rounded-full text-14 shadow-black/25;
-  box-shadow: 0 5px 5px 0 var(--tw-shadow-color);
+  @apply rounded-full text-14;
+  box-shadow: 0 5px 5px 0 var(--color-shadow);
   background: var(--main-gradient);
   color: var(--color-black);
   padding: 12px 20px;
@@ -286,8 +286,8 @@
 }
 
 @utility btn-secondary-gradient {
-  @apply rounded-full text-14 shadow-black/25;
-  box-shadow: 0 5px 5px 0 var(--tw-shadow-color);
+  @apply rounded-full text-14;
+  box-shadow: 0 5px 5px 0 var(--color-shadow);
   background: linear-gradient(to bottom, var(--color-main-400), var(--color-main-600), var(--color-main-700)) border-box;
   color: var(--color-main-0);
   padding: 12px 20px;
@@ -306,8 +306,8 @@
   }
 }
 @utility btn-tertiary-gradient {
-  @apply rounded-full text-14 shadow-main-700/80;
-  box-shadow: 0 4px 15px 0 var(--tw-shadow-color);
+  @apply rounded-full text-14;
+  box-shadow: 0 4px 15px 0 var(--color-shadow);
   background: linear-gradient(to bottom, var(--color-main-600), var(--color-main-800), var(--color-main-950)) border-box;
   color: var(--color-main-0);
   padding: 12px 20px;
