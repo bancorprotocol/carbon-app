@@ -166,7 +166,7 @@ export const DebugUniswap = () => {
         </div>
         <div className="grid gap-8">
           <label htmlFor="uni-quote-amount">
-            Quote Amount (only if pool doesn't exist)
+            Quote Amount (in v2 only used if pool doesn't exist)
           </label>
           <input
             className="bg-main-900 px-16 py-8 rounded-2xl"
