@@ -12,6 +12,11 @@ import { UniswapV2Config, UniswapV3Config } from 'services/uniswap/utils';
 
 const dexes = ['uniswap', 'sushi', 'pancake'];
 
+const forbiddenSymbols = ['ETH', 'WETH', 'ZERO'];
+const tokens = Object.entries(config.addresses.tokens).filter(
+  ([symbol]) => !forbiddenSymbols.includes(symbol),
+);
+
 export const DebugUniswap = () => {
   const { getTokenById } = useTokens();
   const { signer, sendTransaction, user } = useWagmi();
@@ -60,6 +65,7 @@ export const DebugUniswap = () => {
     }
     if (version === 'v3') {
       const run = async (config: UniswapV3Config) => {
+        console.log(config);
         const txsV3 = await createV3Position(
           config,
           signer,
@@ -97,7 +103,6 @@ export const DebugUniswap = () => {
             className="bg-main-900 px-16 py-8 rounded-2xl"
             id="uni-version"
             name="version"
-            defaultValue="v2"
             required
           >
             <option value="v2">V2</option>
@@ -110,12 +115,13 @@ export const DebugUniswap = () => {
             className="bg-main-900 px-16 py-8 rounded-2xl"
             id="uni-dex"
             name="dex"
-            defaultValue="all"
             required
           >
             <option value="all">All</option>
             {dexes.map((dex) => (
-              <option value={dex}>{dex}</option>
+              <option key={dex} value={dex}>
+                {dex}
+              </option>
             ))}
           </select>
         </div>
@@ -127,13 +133,11 @@ export const DebugUniswap = () => {
             name="base"
             required
           >
-            {Object.entries(config.addresses.tokens).map(
-              ([symbol, address]) => (
-                <option key={address} value={address}>
-                  {symbol}
-                </option>
-              ),
-            )}
+            {tokens.map(([symbol, address]) => (
+              <option key={address} value={address}>
+                {symbol}
+              </option>
+            ))}
           </select>
         </div>
         <div className="grid gap-8">
@@ -144,13 +148,11 @@ export const DebugUniswap = () => {
             name="quote"
             required
           >
-            {Object.entries(config.addresses.tokens).map(
-              ([symbol, address]) => (
-                <option key={address} value={address}>
-                  {symbol}
-                </option>
-              ),
-            )}
+            {tokens.map(([symbol, address]) => (
+              <option key={address} value={address}>
+                {symbol}
+              </option>
+            ))}
           </select>
         </div>
         <div className="grid gap-8">

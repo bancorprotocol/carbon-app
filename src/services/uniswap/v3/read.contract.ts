@@ -3,24 +3,9 @@ import { Pool, Position, tickToPrice } from '@uniswap/v3-sdk';
 import { Token as UniToken, ChainId } from '@uniswap/sdk-core';
 import JSBI from 'jsbi';
 import { Token } from 'libs/tokens';
-import { UniswapV3Config } from '../utils';
+import { UniswapPosition, UniswapV3Config } from '../utils';
 
 // --- Interfaces ---
-export type Dexes = 'uniswap-v2' | 'uniswap-v3';
-
-export interface UniswapPosition {
-  id: string;
-  dex: Dexes;
-  base: string; // Token0
-  quote: string; // Token1
-  min: string; // Price: Token1 per Token0 (Lower Bound)
-  max: string; // Price: Token1 per Token0 (Upper Bound)
-  baseLiquidity: string;
-  quoteLiquidity: string;
-  baseFee: string;
-  quoteFee: string;
-  fee: string;
-}
 
 const MANAGER_ABI = [
   'function balanceOf(address owner) view returns (uint256)',
@@ -126,7 +111,7 @@ export async function getAllV3Positions(
 
       const position: UniswapPosition = {
         id: tokenId.toString(),
-        dex: 'uniswap-v3',
+        dex: config.dex,
         base: posData.token0,
         quote: posData.token1,
         // Convert Price Object to String (using 15 significant digits for precision)

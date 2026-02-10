@@ -124,7 +124,7 @@ export const MigratePage = () => {
     query.isPending,
   ]);
 
-  if (isPending || query.isPending) {
+  if (isPending || query.isLoading) {
     return <MigrationLoading />;
   }
 
