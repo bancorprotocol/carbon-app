@@ -56,27 +56,25 @@ export async function getUniswapPositions(
   const normalizedUser = userAddress.toLowerCase();
 
   const allPositions: UniswapPosition[] = [];
-  const getAll: Promise<UniswapPosition[]>[] = [];
+  // TODO: this one can be parallelized because it's just calls
+  for (const config of Object.values(uniV3Configs)) {
+    const positions = await getAllV3Positions(
+      config,
+      provider,
+      normalizedUser,
+      getTokenById,
+    );
+    allPositions.push(...positions);
+  }
 
   for (const config of Object.values(uniV2Configs)) {
-    getAll.push(
-      getAllV2Positions(config, provider, normalizedUser, getTokenById),
+    const positions = await getAllV2Positions(
+      config,
+      provider,
+      normalizedUser,
+      getTokenById,
     );
-  }
-
-  for (const config of Object.values(uniV3Configs)) {
-    getAll.push(
-      getAllV3Positions(config, provider, normalizedUser, getTokenById),
-    );
-  }
-
-  const results = await Promise.allSettled(getAll);
-  for (const result of results) {
-    if (result.status === 'fulfilled') {
-      allPositions.push(...result.value);
-    } else {
-      console.error(result.reason);
-    }
+    allPositions.push(...positions);
   }
 
   return allPositions;
