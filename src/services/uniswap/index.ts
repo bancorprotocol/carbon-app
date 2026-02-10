@@ -30,7 +30,7 @@ export const uniV2Configs = {
   },
 };
 
-export const univ3Configs = {
+export const uniV3Configs = {
   'sushi-v3': {
     dex: 'sushi-v3' as const,
     factoryAddress: '0xbACEB8eC6b9355Dfc0269C18bac9d6E2Bdc29C4F',
@@ -64,7 +64,7 @@ export async function getUniswapPositions(
     );
   }
 
-  for (const config of Object.values(univ3Configs)) {
+  for (const config of Object.values(uniV3Configs)) {
     getAll.push(
       getAllV3Positions(config, provider, normalizedUser, getTokenById),
     );
@@ -92,6 +92,7 @@ export async function withdrawPosition(
     const config = uniV2Configs[dex as keyof typeof uniV2Configs];
     return withdrawAllV2Liquidity(config, signer, positionId);
   } else {
-    return deleteAndWithdrawV3Position(signer, positionId);
+    const config = uniV3Configs[dex as keyof typeof uniV3Configs];
+    return deleteAndWithdrawV3Position(config, signer, positionId);
   }
 }

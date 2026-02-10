@@ -6,7 +6,7 @@ import { parseUnits } from 'ethers';
 import { createV2Position } from 'services/uniswap/v2/create';
 import { createV3Position } from 'services/uniswap/v3/create';
 import { getMarketPrice } from 'libs/queries/extApi/tokenPrice';
-import { uniV2Configs, univ3Configs } from 'services/uniswap';
+import { uniV2Configs, uniV3Configs } from 'services/uniswap';
 import config from 'config';
 import { UniswapV2Config, UniswapV3Config } from 'services/uniswap/utils';
 
@@ -79,18 +79,18 @@ export const DebugUniswap = () => {
         await sendTransaction(txsV3);
       };
       if (dex === 'all') {
-        for (const config of Object.values(univ3Configs)) {
+        for (const config of Object.values(uniV3Configs)) {
           await run(config);
         }
       } else {
-        const key = `${dex}-v3` as keyof typeof univ3Configs;
-        await run(univ3Configs[key]);
+        const key = `${dex}-v3` as keyof typeof uniV3Configs;
+        await run(uniV3Configs[key]);
       }
     }
   };
   return (
     <section className="rounded-3xl surface grid gap-20 p-20">
-      <form className="grid gap-8" onSubmit={createV2}>
+      <form className="grid gap-16" onSubmit={createV2}>
         <hgroup>
           <h2>Uniswap</h2>
           <p className="text-white/60">

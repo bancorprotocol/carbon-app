@@ -1,7 +1,7 @@
 import { Contract, Signer, TransactionRequest } from 'ethers';
+import { UniswapV3Config } from '../utils';
 
 // --- Configuration ---
-const POSITION_MANAGER_ADDRESS = '0xC36442b4a4522E871399CD717aBDD847Ab11FE88';
 
 // --- ABIs ---
 const MANAGER_ABI = [
@@ -19,10 +19,11 @@ const MANAGER_ABI = [
  * 3. Burns the NFT (deleting the position)
  */
 export async function deleteAndWithdrawV3Position(
+  config: UniswapV3Config,
   signer: Signer,
   tokenId: bigint | string,
 ) {
-  const manager = new Contract(POSITION_MANAGER_ADDRESS, MANAGER_ABI, signer);
+  const manager = new Contract(config.managerAddress, MANAGER_ABI, signer);
   const userAddress = await signer.getAddress();
   const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins
 
