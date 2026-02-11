@@ -1,4 +1,11 @@
-const allowChains = [1, 42220, 1329, 239];
+/**
+ * 1: Ethereum
+ * 42220: Celo
+ * 1329: Sei
+ * 239: TAC
+ * 2632500: Coti
+ */
+const allowChains = ['1', '42220', '1329', '239', '2632500'];
 
 interface Env {
   DEX_AGGREGATOR_APIKEY: string;
@@ -31,6 +38,11 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       }
     }
 
+    if (!entries.slippage) throw new Error('No Slippage provided');
+    if (!allowChains.includes(entries.chainId)) {
+      throw new Error(`Unsupported chain: ${entries.chainId}`);
+    }
+
     // Need to force type conversion for the backend
     const body = {
       ...entries,
@@ -38,9 +50,6 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       slippage: Number(entries.slippage),
       tradeBySource: entries.tradeBySource === 'true',
     };
-    if (!allowChains.includes(body.chainId)) {
-      throw new Error(`Unsupported chain: ${body.chainId}`);
-    }
 
     const url = baseUrl + '/quote';
     return await fetch(url, {
