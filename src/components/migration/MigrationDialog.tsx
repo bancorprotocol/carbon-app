@@ -20,6 +20,7 @@ import { QueryKey } from 'libs/queries';
 import IconClose from 'assets/icons/X.svg?react';
 import config from 'config';
 import { MigrationCard } from './MigrationCard';
+import { DotPulse } from 'components/common/DotPulse/DotPulse';
 
 interface Props {
   position: MigratedPosition;
@@ -31,7 +32,6 @@ export const PositionDialog: FC<Props> = (props) => {
   const { user, signer, sendTransaction } = useWagmi();
   const p = props.position;
 
-  // TODO: This should be done by the `useCreateStrategy` once the approval is centralized
   const [status, setStatus] = useState<string>();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
@@ -132,7 +132,7 @@ export const PositionDialog: FC<Props> = (props) => {
       const txs = await migrateOne(p);
       setStatus('Withdraw funds and create strategy');
       const tx = await sendTransaction(txs);
-      setStatus('Waiting for block to be mined');
+      close();
       await tx.wait();
       dispatchNotification('generic', {
         status: 'success',
@@ -141,16 +141,16 @@ export const PositionDialog: FC<Props> = (props) => {
         txHash: tx.hash,
         testid: 'migration',
       });
-      const queryKey = [
+      const keys = [
         QueryKey.strategiesByUser(user),
         QueryKey.balance(user, p.base.address),
         QueryKey.balance(user, p.quote.address),
+        QueryKey.dexMigration(p.dex, user),
       ];
-      cache.invalidateQueries({ queryKey });
-      cache.refetchQueries({
-        queryKey: QueryKey.migrationPositions(user),
-      });
-      close();
+      // Passing the array directly doesn't work for some reason
+      for (const queryKey of keys) {
+        cache.invalidateQueries({ queryKey });
+      }
     } finally {
       setStatus('');
     }
@@ -176,11 +176,12 @@ export const PositionDialog: FC<Props> = (props) => {
           NOTE: Any unused funds will be sent back to your wallet
         </p>
         <button
-          className="btn-primary-gradient"
+          className="btn-primary-gradient flex items-center justify-center gap-16"
           type="submit"
           disabled={!!status}
         >
           {status || 'Migrate'}
+          {status && <DotPulse />}
         </button>
       </form>
     </dialog>
