@@ -3,8 +3,18 @@ const allowChains = [1, 42220, 1329, 239];
 interface Env {
   DEX_AGGREGATOR_APIKEY: string;
   DEX_AGGREGATOR_URL: string;
-  VITE_NETWORK?: string;
 }
+
+const allowedParams = [
+  'chainId',
+  'sourceToken',
+  'targetToken',
+  'amount',
+  'tradeBySource',
+  'slippage',
+  'recipient',
+  'quoteId',
+];
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   try {
@@ -14,7 +24,13 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     if (!baseUrl) throw new Error('No URL available in cloudflare env');
     const { searchParams } = new URL(request.url);
 
-    const entries = Object.fromEntries(searchParams.entries());
+    const entries: Record<string, string> = {};
+    for (const key in searchParams) {
+      if (allowedParams.includes(key)) {
+        entries[key] = searchParams.get(key)!;
+      }
+    }
+
     // Need to force type conversion for the backend
     const body = {
       ...entries,
@@ -26,12 +42,12 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       throw new Error(`Unsupported chain: ${body.chainId}`);
     }
 
-    const url = env.DEX_AGGREGATOR_URL + '/quote';
-    return fetch(url, {
+    const url = baseUrl + '/quote';
+    return await fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
       headers: {
-        Authorization: `Bearer ${env.DEX_AGGREGATOR_APIKEY}`,
+        Authorization: `Bearer ${apikey}`,
         'Content-Type': 'application/json',
       },
     });
