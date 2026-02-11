@@ -55,7 +55,7 @@ export const MigratePage = () => {
 
   return (
     <div className="grid gap-8 grid-area-[list]">
-      <MigrationFetching fetching={query.fetching} />
+      <MigrationFetching queryState={query.states} />
       <MigrationContent query={query} />
     </div>
   );

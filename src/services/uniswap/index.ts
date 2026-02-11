@@ -1,10 +1,7 @@
-import { Provider, Signer } from 'ethers';
-import { Dexes, UniswapPosition } from './utils';
+import { Signer } from 'ethers';
+import { Dexes } from './utils';
 import { withdrawAllV2Liquidity } from './v2/withdraw';
 import { deleteAndWithdrawV3Position } from './v3/withdraw';
-import { getAllV2Positions } from './v2/read.contract';
-import { getAllV3Positions } from './v3/read.contract';
-import { Token } from 'libs/tokens';
 
 export const uniV2Configs = {
   'sushi-v2': {
@@ -52,38 +49,6 @@ export const allUniConfigs = [
   ...Object.values(uniV2Configs),
   ...Object.values(uniV3Configs),
 ];
-
-export async function getUniswapPositions(
-  provider: Provider,
-  userAddress: string,
-  getTokenById: (address: string) => Token | undefined,
-): Promise<UniswapPosition[]> {
-  const normalizedUser = userAddress.toLowerCase();
-
-  const allPositions: UniswapPosition[] = [];
-  // TODO: this one can be parallelized because it's just calls
-  for (const config of Object.values(uniV3Configs)) {
-    const positions = await getAllV3Positions(
-      config,
-      provider,
-      normalizedUser,
-      getTokenById,
-    );
-    allPositions.push(...positions);
-  }
-
-  for (const config of Object.values(uniV2Configs)) {
-    const positions = await getAllV2Positions(
-      config,
-      provider,
-      normalizedUser,
-      getTokenById,
-    );
-    allPositions.push(...positions);
-  }
-
-  return allPositions;
-}
 
 export async function withdrawPosition(
   signer: Signer,

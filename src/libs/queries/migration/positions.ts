@@ -61,9 +61,11 @@ export const useDexesMigration = () => {
           .map((q) => q.data)
           .filter((data) => !!data)
           .flat(),
-        fetching: Object.fromEntries(
-          queries.map((q, i) => [allUniConfigs[i].dex, q.isFetching]),
-        ),
+        states: queries.map((q, i) => ({
+          dex: allUniConfigs[i].dex,
+          status: q.status,
+          fetchStatus: q.fetchStatus,
+        })),
       };
     },
   });
