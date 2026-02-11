@@ -2,7 +2,7 @@ import { PopulatedTransaction } from '@bancor/carbon-sdk';
 
 const getResponse = (params: object, abortSignal?: AbortSignal) => {
   if (import.meta.env.DEV) {
-    const url = 'https://agg-api-458865443958.europe-west1.run.app/v1/quote';
+    const url = import.meta.env.VITE_DEX_AGGREGATOR_URL + '/quote';
     const apiKey = import.meta.env.VITE_DEX_AGGREGATOR_APIKEY;
     return fetch(url, {
       method: 'POST',

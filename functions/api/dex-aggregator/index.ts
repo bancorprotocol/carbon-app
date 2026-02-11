@@ -2,7 +2,7 @@ const allowChains = [1, 42220, 1329, 239];
 
 interface Env {
   DEX_AGGREGATOR_APIKEY: string;
-  AXIOM_APIKEY: string;
+  DEX_AGGREGATOR_URL: string;
   VITE_NETWORK?: string;
 }
 
@@ -24,7 +24,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       throw new Error(`Unsupported chain: ${body.chainId}`);
     }
 
-    const url = 'https://agg-api-458865443958.europe-west1.run.app/v1/quote';
+    const url = env.DEX_AGGREGATOR_URL + '/quote';
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -42,27 +42,6 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       );
     }
     const result = await response.text();
-    if (env.AXIOM_APIKEY) {
-      await fetch(
-        'https://us-east-1.aws.edge.axiom.co/v1/ingest/cf-aggregator-proxy',
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${env.AXIOM_APIKEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify([
-            {
-              level: 'info',
-              message: {
-                request: url.toString(),
-                response: result,
-              },
-            },
-          ]),
-        },
-      ).catch((err) => console.error(err)); // avoid axiom to break the whole function if fails
-    }
     return new Response(result, {
       status: response.status,
       headers: response.headers,
