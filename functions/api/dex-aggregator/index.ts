@@ -51,6 +51,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       tradeBySource: entries.tradeBySource === 'true',
     };
 
+    if (isNaN(body.slippage)) throw new Error('Invalid Slippage provided');
+
     const url = baseUrl + '/quote';
     return await fetch(url, {
       method: 'POST',
