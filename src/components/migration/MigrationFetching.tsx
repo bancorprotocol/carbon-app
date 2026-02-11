@@ -11,7 +11,10 @@ interface Props {
 
 export const MigrationFetching: FC<Props> = ({ fetching }) => {
   const someFetching = Object.values(fetching).some((isFetching) => isFetching);
-  const dexes = Object.keys(fetching).sort();
+  // Remove duplicated icons
+  const dexes = Object.keys(fetching)
+    .filter((dex) => dex.endsWith('v2'))
+    .sort();
   return (
     <DropdownMenu
       button={(attr) => (
@@ -26,7 +29,7 @@ export const MigrationFetching: FC<Props> = ({ fetching }) => {
               </li>
             ))}
           </ul>
-          <span className="text-14">Dexes</span>
+          <span className="text-14">Positions from dexes</span>
           <FetchIndicator isFetching={someFetching} />
         </button>
       )}
