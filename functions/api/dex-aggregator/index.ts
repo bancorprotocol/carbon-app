@@ -5,6 +5,17 @@ interface Env {
   DEX_AGGREGATOR_URL: string;
 }
 
+const allowedParams = [
+  'chainId',
+  'sourceToken',
+  'targetToken',
+  'amount',
+  'tradeBySource',
+  'slippage',
+  'recipient',
+  'quoteId',
+];
+
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   try {
     const apikey = env.DEX_AGGREGATOR_APIKEY;
@@ -13,7 +24,13 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     if (!baseUrl) throw new Error('No URL available in cloudflare env');
     const { searchParams } = new URL(request.url);
 
-    const entries = Object.fromEntries(searchParams.entries());
+    const entries: Record<string, string> = {};
+    for (const key in searchParams) {
+      if (allowedParams.includes(key)) {
+        entries[key] = searchParams.get(key)!;
+      }
+    }
+
     // Need to force type conversion for the backend
     const body = {
       ...entries,
