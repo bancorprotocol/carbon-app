@@ -3,7 +3,6 @@ const allowChains = [1, 42220, 1329, 239];
 interface Env {
   DEX_AGGREGATOR_APIKEY: string;
   DEX_AGGREGATOR_URL: string;
-  VITE_NETWORK?: string;
 }
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
@@ -26,12 +25,12 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       throw new Error(`Unsupported chain: ${body.chainId}`);
     }
 
-    const url = env.DEX_AGGREGATOR_URL + '/quote';
-    return fetch(url, {
+    const url = baseUrl + '/quote';
+    return await fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
       headers: {
-        Authorization: `Bearer ${env.DEX_AGGREGATOR_APIKEY}`,
+        Authorization: `Bearer ${apikey}`,
         'Content-Type': 'application/json',
       },
     });
