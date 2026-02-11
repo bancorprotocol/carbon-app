@@ -9,7 +9,9 @@ interface Env {
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   try {
     const apikey = env.DEX_AGGREGATOR_APIKEY;
-    if (!apikey) throw new Error('No API key available in cloudflare');
+    const baseUrl = env.DEX_AGGREGATOR_URL;
+    if (!apikey) throw new Error('No API key available in cloudflare env');
+    if (!baseUrl) throw new Error('No URL available in cloudflare env');
     const { searchParams } = new URL(request.url);
 
     const entries = Object.fromEntries(searchParams.entries());
@@ -25,7 +27,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     }
 
     const url = env.DEX_AGGREGATOR_URL + '/quote';
-    const response = await fetch(url, {
+    return fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
       headers: {
@@ -33,22 +35,9 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
         'Content-Type': 'application/json',
       },
     });
-    if (!response.ok) {
-      const result = await response.json();
-      const error = (result as { error?: string }).error;
-      throw new Error(
-        error ||
-          `Response was not okay. ${response.statusText} response received.`,
-      );
-    }
-    const result = await response.text();
-    return new Response(result, {
-      status: response.status,
-      headers: response.headers,
-    });
   } catch (err) {
     console.error(err);
-    const body = JSON.stringify((err as Error).message);
+    const body = JSON.stringify({ error: (err as Error).message });
     return new Response(body, { status: 500 });
   }
 };
