@@ -25,9 +25,9 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     const { searchParams } = new URL(request.url);
 
     const entries: Record<string, string> = {};
-    for (const key in searchParams) {
+    for (const [key, value] of searchParams.entries()) {
       if (allowedParams.includes(key)) {
-        entries[key] = searchParams.get(key)!;
+        entries[key] = value;
       }
     }
 
