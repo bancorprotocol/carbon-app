@@ -14,7 +14,7 @@
   --error-gradient: linear-gradient(to bottom, var(--color-error), var(--color-error-dark));
   --glass-shadow:
     /* Elevation */
-    0 5px 5px var(--color-shadow),
+    0 0 5px var(--color-shadow),
     /* Top left */
     inset 1px 1px 0 -1px oklch(100% var(--chroma) var(--hue) / 40%),
     inset 2px 2px 0 -1px oklch(100% var(--chroma) var(--hue) / 10%),
@@ -22,7 +22,7 @@
     inset -1px -1px 0 -1px oklch(100% var(--chroma) var(--hue) / 30%),
     inset -2px -2px 0 -1px oklch(100% var(--chroma) var(--hue) / 10%),
     /* Shadow bottom right */
-    0px 5px 15px 0px oklch(20% var(--chroma) var(--hue) / 25%);
+    0px 1px 3px 0px var(--color-shadow);
   --flat-glass-shadow:
     /* Top left */
     inset 1px 1px 0 -1px oklch(100% var(--chroma) var(--hue) / 40%),
@@ -42,15 +42,15 @@
   --color-main-300: oklch(0.7 0.07 var(--hue));
   --color-main-400: oklch(0.8 0.08 var(--hue));
   --color-main-500: oklch(0.85 0.05 var(--hue));
-  --color-main-600: oklch(0.9 0.03 var(--hue));
+  --color-main-600: oklch(0.9 0.04 var(--hue));
   --color-main-700: oklch(0.95 0.02 var(--hue));
   --color-main-800: oklch(0.98 0.02 var(--hue));
   --color-main-900: oklch(0.99 0.02 var(--hue));
   --color-main-950: oklch(1 0.01 var(--hue));
 
   --color-primary: oklch(0.8 .2 var(--hue));
-  --color-green: oklch(0.76 0.2 160);
-  --color-secondary: oklch(0.73 0.17 204);
+  --color-green: oklch(0.75 0.2 160);
+  --color-secondary: oklch(0.6 0.3 204);
   --color-tertiary: oklch(0.8 .3 185);
 
   --color-error: oklch(0.7 0.21 10.77);
@@ -62,7 +62,9 @@
   --color-success: oklch(0.7 .2 160);
   --color-warning: oklch(0.75 .2 57);
 
-  --color-shadow: oklch(0.35 0.06 var(--hue) / 40%);
+  --color-shadow: oklch(0.4 0.06 var(--hue) / 40%);
+
+  --bg-gradient: radial-gradient(closest-side circle at center, var(--color-main-800) 40%, var(--color-main-950) 100%);
 
   color-scheme: light;
   accent-color: var(--color-main-0);
@@ -96,6 +98,8 @@
   --color-warning: oklch(0.60 0.2 57);
 
   --color-shadow: oklch(0.1 0.02 var(--hue) / 25%);
+
+  --bg-gradient: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-main-950) 100%);
 
   color: var(--color-main-0);
   color-scheme: dark;

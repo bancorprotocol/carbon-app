@@ -49,7 +49,7 @@
     z-index: -1;
     inset-inline: -50dvw;
     inset-block: -50dvh;
-    background-image: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-main-950) 100%);
+    background-image: var(--bg-gradient);
     animation: move-gradient 20s infinite alternate;
   }
   #root.hide-bg::before {
