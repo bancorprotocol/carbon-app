@@ -22,7 +22,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     };
 
     const url = baseUrl + '/quote';
-    return fetch(url, {
+    return await fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
       headers: {
