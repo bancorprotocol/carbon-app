@@ -16,10 +16,11 @@ const getResponse = (params: object, abortSignal?: AbortSignal) => {
   } else {
     // In production send to cloudflare proxy
     const url = new URL(location.origin + '/api/dex-aggregator');
-    for (const [key, value] of Object.entries(params)) {
-      url.searchParams.set(key, value);
-    }
-    return fetch(url, { signal: abortSignal });
+    return fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      signal: abortSignal,
+    });
   }
 };
 
