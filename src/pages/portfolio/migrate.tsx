@@ -141,7 +141,7 @@ const MigrationContent: FC<Props> = ({ query }) => {
     query.isLoading,
   ]);
 
-  if (isPending || query.isLoading) {
+  if (isPending || query.isLoading || marketPriceQuery.isPending) {
     return <MigrationLoading />;
   }
 
