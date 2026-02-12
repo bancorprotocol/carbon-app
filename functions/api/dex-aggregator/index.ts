@@ -1,20 +1,7 @@
-const allowChains = [1, 42220, 1329, 239];
-
 interface Env {
   DEX_AGGREGATOR_APIKEY: string;
   DEX_AGGREGATOR_URL: string;
 }
-
-const allowedParams = [
-  'chainId',
-  'sourceToken',
-  'targetToken',
-  'amount',
-  'tradeBySource',
-  'slippage',
-  'recipient',
-  'quoteId',
-];
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   try {
@@ -24,12 +11,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     if (!baseUrl) throw new Error('No URL available in cloudflare env');
     const { searchParams } = new URL(request.url);
 
-    const entries: Record<string, string> = {};
-    for (const key in searchParams) {
-      if (allowedParams.includes(key)) {
-        entries[key] = searchParams.get(key)!;
-      }
-    }
+    const entries = Object.fromEntries(searchParams.entries());
 
     // Need to force type conversion for the backend
     const body = {
@@ -38,9 +20,6 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
       slippage: Number(entries.slippage),
       tradeBySource: entries.tradeBySource === 'true',
     };
-    if (!allowChains.includes(body.chainId)) {
-      throw new Error(`Unsupported chain: ${body.chainId}`);
-    }
 
     const url = baseUrl + '/quote';
     return await fetch(url, {
