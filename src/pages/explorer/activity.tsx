@@ -23,11 +23,14 @@ export const ExplorerActivityPage = () => {
     return params;
   }, [type, search]);
 
+  const filters = useMemo(() => {
+    if (type === 'pair') return ['ids' as const];
+    return ['ids' as const, 'pairs' as const];
+  }, [type]);
+
   return (
     <ActivityProvider params={params} url="/explore/activity">
-      <ActivityLayout
-        filters={type === 'wallet' ? ['ids', 'pairs'] : ['ids']}
-      />
+      <ActivityLayout filters={filters} />
     </ActivityProvider>
   );
 };

@@ -23,19 +23,19 @@ interface DisplayPair {
 
 const getAllIds = (meta?: ActivityMeta): DisplayID[] => {
   if (!meta) return [];
-  return Object.entries(meta.strategies).map(([id, pair]) => ({
-    id: id,
-    base: pair[0],
-    quote: pair[1],
-  }));
+  return Object.entries(meta.strategies)
+    .map(([id, pair]) => ({ id, base: pair[0], quote: pair[1] }))
+    .sort((a, b) => Number(a.id) - Number(b.id));
 };
 const getAllPairs = (meta?: ActivityMeta): DisplayPair[] => {
   if (!meta) return [];
-  return meta.pairs.map(([base, quote]) => ({
-    pair: toPairSlug(base, quote),
-    base,
-    quote,
-  }));
+  return meta.pairs
+    .map(([base, quote]) => ({
+      pair: toPairSlug(base, quote),
+      base,
+      quote,
+    }))
+    .sort((a, b) => a.pair.localeCompare(b.pair));
 };
 export interface ActivityFilterProps {
   filters?: ('ids' | 'pairs')[];
