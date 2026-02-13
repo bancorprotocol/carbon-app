@@ -51,11 +51,7 @@ export const useBuySell = ({
   const { provider } = useWagmi();
   const { getFiatValue } = useFiatCurrency(source);
 
-  const { calcMaxInput } = useTradeAction({
-    source,
-    isTradeBySource,
-    sourceInput,
-  });
+  const { calcMaxInput } = useTradeAction({});
   const maxSourceAmountQuery = useGetMaxSourceAmountByPair(
     source.address,
     target.address,
@@ -66,10 +62,7 @@ export const useBuySell = ({
     setTargetInput('');
   }, []);
 
-  const { trade, isAwaiting, approval } = useTradeAction({
-    source,
-    sourceInput,
-    isTradeBySource,
+  const { trade, isAwaiting } = useTradeAction({
     onSuccess: async (transactionHash: string) => {
       clearInputs();
       const network = await provider?.getNetwork();
@@ -226,7 +219,6 @@ export const useBuySell = ({
     if (
       bySourceQuery.isFetching ||
       byTargetQuery.isFetching ||
-      approval.isPending ||
       isLiquidityError ||
       errorBaseBalanceSufficient ||
       maxSourceAmountQuery.isFetching
@@ -242,32 +234,16 @@ export const useBuySell = ({
       return setIsTargetEmptyError(true);
     }
 
-    const tradeFn = async () =>
-      await trade({
-        source,
-        target,
-        tradeActions,
-        isTradeBySource,
-        sourceInput,
-        targetInput,
-        quoteId,
-      });
-
-    if (approval.approvalRequired) {
-      openModal('txConfirm', {
-        approvalTokens: approval.tokens,
-        onConfirm: () => {
-          tradeFn();
-        },
-        buttonLabel: 'Confirm Trade',
-      });
-    } else {
-      void tradeFn();
-    }
+    return trade({
+      source,
+      target,
+      tradeActions,
+      isTradeBySource,
+      sourceInput,
+      targetInput,
+      quoteId,
+    });
   }, [
-    approval.approvalRequired,
-    approval.isPending,
-    approval.tokens,
     bySourceQuery.isFetching,
     byTargetQuery.isFetching,
     errorBaseBalanceSufficient,
@@ -275,6 +251,7 @@ export const useBuySell = ({
     isTradeBySource,
     maxSourceAmountQuery.isFetching,
     openModal,
+    quoteId,
     source,
     sourceInput,
     target,
@@ -381,7 +358,6 @@ export const useBuySell = ({
     errorBaseBalanceSufficient,
     bySourceQuery,
     byTargetQuery,
-    approval,
     liquidityQuery,
     isLiquidityError,
     errorMsgSource,

@@ -1,20 +1,16 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { CreateStrategyParams, QueryKey, useQueryClient } from 'libs/queries';
 import { useCreateStrategyQuery } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
-import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { FormStaticOrder } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
-import config from 'config';
 import { carbonEvents } from 'services/events';
 import { handleTxStatusAndRedirectToOverview } from './utils';
 import { getStrategyType } from '../common/utils';
 import { useNavigate } from '@tanstack/react-router';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
-
-const spenderAddress = config.addresses.carbon.carbonController;
 
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 
@@ -58,28 +54,6 @@ export const useCreateStrategy = (props: Props) => {
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
-  const approvalTokens = useMemo(() => {
-    const arr = [];
-
-    if (base && +sell.budget > 0) {
-      arr.push({
-        ...base,
-        spender: spenderAddress,
-        amount: sell.budget,
-      });
-    }
-    if (quote && +buy.budget > 0) {
-      arr.push({
-        ...quote,
-        spender: spenderAddress,
-        amount: buy.budget,
-      });
-    }
-
-    return arr;
-  }, [base, quote, buy.budget, sell.budget]);
-
-  const approval = useApproval(approvalTokens);
   const mutation = useCreateStrategyQuery();
 
   const createStrategy = async () => {
@@ -135,19 +109,10 @@ export const useCreateStrategy = (props: Props) => {
         onConfirm,
       });
     }
-
-    if (approval.approvalRequired) {
-      return openModal('txConfirm', {
-        approvalTokens,
-        onConfirm,
-        buttonLabel: 'Create',
-      });
-    }
     return onConfirm();
   };
 
   return {
-    isLoading: approval.isPending && !!user,
     isAwaiting: mutation.isPending,
     createStrategy,
     isProcessing,

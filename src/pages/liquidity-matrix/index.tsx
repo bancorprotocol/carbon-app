@@ -41,7 +41,6 @@ import { lsService } from 'services/localeStorage';
 import { isZero } from 'components/strategies/common/utils';
 import './index.css';
 import { getAddress, TransactionRequest } from 'ethers';
-import { useApproval } from 'hooks/useApproval';
 import { carbonSDK } from 'libs/sdk';
 import config from 'config';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
@@ -255,28 +254,6 @@ export const LiquidityMatrixPage = () => {
     if (changes) set({ pairs: copy });
   }, [pairs, quotePrices, set]);
 
-  const approvalBatchTokens = useMemo(() => {
-    if (!batcher) return [];
-    if (!base) return [];
-    const tokens: Record<string, Token> = {};
-    const amount: Record<string, SafeDecimal> = {};
-    for (const strategy of strategies) {
-      const { base, quote } = strategy;
-      tokens[base] ||= getTokenById(base)!;
-      amount[base] ||= new SafeDecimal(0);
-      amount[base] = amount[base].add(strategy.sellBudget);
-      tokens[quote] ||= getTokenById(quote)!;
-      amount[quote] ||= new SafeDecimal(0);
-      amount[quote] = amount[quote].add(strategy.buyBudget);
-    }
-    return Object.values(tokens).map((token) => ({
-      ...token,
-      spender: batcher,
-      amount: amount[token.address].toString(),
-    }));
-  }, [base, strategies, getTokenById]);
-  const batchApproval = useApproval(approvalBatchTokens);
-
   if (!base) return;
 
   const selectBase = () => {
@@ -370,15 +347,7 @@ export const LiquidityMatrixPage = () => {
         setDisabled(false);
       }
     };
-    if (batchApproval.approvalRequired) {
-      return openModal('txConfirm', {
-        approvalTokens: approvalBatchTokens,
-        onConfirm: create,
-        buttonLabel: 'Create all Strategies',
-      });
-    } else {
-      create();
-    }
+    create();
   };
 
   return (
@@ -889,8 +858,12 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     budget: strategy.sellBudget,
   };
 
-  const { createStrategy, isLoading, isAwaiting, isProcessing } =
-    useCreateStrategy({ base, quote, buy, sell });
+  const { createStrategy, isAwaiting, isProcessing } = useCreateStrategy({
+    base,
+    quote,
+    buy,
+    sell,
+  });
   const disabled = (() => {
     if (!user) return true;
     if (new SafeDecimal(baseBalance || '0').lt(sell.budget)) return true;
@@ -899,7 +872,7 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     if ('Infinity' === strategy.sellMax) return true;
     if (isZero(strategy.buyMin)) return true;
     if (isZero(strategy.sellMax)) return true;
-    return isLoading || isAwaiting || isProcessing;
+    return isAwaiting || isProcessing;
   })();
   const createText = (() => {
     if (!user) return 'Connect Wallet';
@@ -958,8 +931,12 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     budget: strategy.sellBudget,
   };
 
-  const { createStrategy, isLoading, isAwaiting, isProcessing } =
-    useCreateStrategy({ base, quote, buy, sell });
+  const { createStrategy, isAwaiting, isProcessing } = useCreateStrategy({
+    base,
+    quote,
+    buy,
+    sell,
+  });
   const disabled = (() => {
     if (!user) return true;
     if (new SafeDecimal(baseBalance || '0').lt(sell.budget)) return true;
@@ -968,7 +945,7 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     if ('Infinity' === strategy.sellMax) return true;
     if (isZero(strategy.buyMin)) return true;
     if (isZero(strategy.sellMax)) return true;
-    return isLoading || isAwaiting || isProcessing;
+    return isAwaiting || isProcessing;
   })();
   const createText = (() => {
     if (!user) return 'Connect Wallet';

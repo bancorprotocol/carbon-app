@@ -1,7 +1,7 @@
 import { BigNumberish, TransactionRequest } from 'ethers';
 import { useCallback, useRef } from 'react';
-import config from 'config';
 import { useNotifications } from 'hooks/useNotifications';
+import config from 'config';
 
 interface Capabilities {
   alternateGasFees: {
