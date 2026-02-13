@@ -102,16 +102,12 @@ export const useGetApprovalTokens = () => {
         const [address, spender] = key.split('_');
         const token = getTokenById(address);
         if (!token) throw new Error('Could not find token');
-        if (address === NATIVE_TOKEN_ADDRESS) continue;
-        const allowance = await Token(address).read.allowance(user, spender);
-        if (allowance < amount) {
-          const tokenAmount = formatUnits(amount, token.decimals);
-          approvalTokens.push({ spender, amount: tokenAmount, ...token });
-        }
+        const tokenAmount = formatUnits(amount, token.decimals);
+        approvalTokens.push({ spender, amount: tokenAmount, ...token });
       }
       return approvalTokens;
     },
-    [Token, getTokenById],
+    [getTokenById],
   );
 };
 
