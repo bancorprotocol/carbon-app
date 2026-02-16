@@ -4,7 +4,7 @@ import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { useFiatValue } from 'hooks/useFiatValue';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 
 export interface TooltipPriceProps {
   range: {
@@ -49,11 +49,7 @@ export const TooltipTokenRange: FC<TooltipPriceProps> = ({
     >
       <div className={cn('align-center flex gap-7', className)}>
         {prettifyNumber(min)} - {prettifyNumber(max)} {token.symbol}
-        <LogoImager
-          className="size-16"
-          src={token.logoURI}
-          alt={token.name ?? 'Token'}
-        />
+        <TokenLogo token={token} size={16} />
       </div>
     </Tooltip>
   );

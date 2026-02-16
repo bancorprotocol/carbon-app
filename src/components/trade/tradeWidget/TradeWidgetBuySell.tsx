@@ -11,7 +11,7 @@ import { useTradePairs } from '../useTradePairs';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { isZero } from 'components/strategies/common/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-router';
 import { OpenOceanPath } from './OpenOceanPath';
@@ -189,11 +189,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               type="button"
               className="btn-on-background flex items-center gap-8 rounded-full px-8 py-6"
             >
-              <LogoImager
-                alt="Token"
-                src={source.logoURI}
-                className="size-20"
-              />
+              <TokenLogo token={source} size={20} />
               <span className="font-medium">{source.symbol}</span>
               <IconChevron className="size-14" />
             </button>
@@ -247,11 +243,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                 type="button"
                 className="btn-on-background flex items-center gap-8 rounded-full px-8 py-6"
               >
-                <LogoImager
-                  alt="Token"
-                  src={target.logoURI}
-                  className="size-20"
-                />
+                <TokenLogo token={target} size={20} />
                 <span className="font-medium">{target.symbol}</span>
                 <IconChevron className="size-14" />
               </button>

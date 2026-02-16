@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { CartStrategy, Order } from 'components/strategies/common/types';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import IconTooltip from 'assets/icons/tooltip.svg?react';
 import WarningIcon from 'assets/icons/warning.svg?react';
@@ -80,11 +80,7 @@ export const StrategyBlockBuySell: FC<{
       <Tooltip
         element={
           <span className="inline-flex items-center gap-4">
-            <LogoImager
-              className="size-16"
-              src={otherToken.logoURI}
-              alt="token"
-            />
+            <TokenLogo token={otherToken} size={16} />
             {prettifyNumber(order.budget, { highPrecision: true })}
           </span>
         }

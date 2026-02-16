@@ -3,7 +3,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useWagmi } from 'libs/wagmi';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
 import {
   prettifyNumber,
@@ -88,7 +88,7 @@ export const TokenInputField: FC<Props> = (props) => {
 
   const TokenWidget = children ?? (
     <div className="bg-main-600 flex items-center gap-6 rounded-[20px] px-8 py-6">
-      <LogoImager alt="Token" src={token.logoURI} className="size-20" />
+      <TokenLogo token={token} size={20} />
       <span className="font-medium">{token.symbol}</span>
     </div>
   );

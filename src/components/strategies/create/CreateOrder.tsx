@@ -13,9 +13,9 @@ import {
   StrategySettings,
   StrategyType,
 } from 'libs/routing';
-import style from 'components/strategies/common/order.module.css';
 import { LimitRangeOrder } from '../common/LimitRangeOrder';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import style from 'components/strategies/common/order.module.css';
 
 interface Props {
   base: Token;
@@ -98,6 +98,7 @@ export const CreateOrder: FC<Props> = ({
       <div
         className={cn(style.order, 'grid gap-16 p-16')}
         data-direction={direction}
+        data-disposable={!!setDirection}
       >
         <OrderHeader {...headerProps} />
         <LimitRangeOrder

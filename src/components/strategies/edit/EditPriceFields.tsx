@@ -95,6 +95,7 @@ export const EditStrategyPriceField: FC<Props> = ({
       aria-labelledby={titleId}
       className="grid text-left"
       data-testid={`${direction}-section`}
+      data-disposable={!!settings}
     >
       {settings}
       <div

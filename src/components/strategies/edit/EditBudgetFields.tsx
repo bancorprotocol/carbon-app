@@ -24,6 +24,7 @@ interface Props {
   budget: string;
   order: FormStaticOrder;
   editType: 'withdraw' | 'deposit';
+  strategyType: 'disposable' | 'recurring';
   isBuy?: boolean;
   initialOrder: StaticOrder;
   setOrder: (order: Partial<OrderBlock>) => void;
@@ -35,6 +36,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
   budget,
   order,
   editType,
+  strategyType,
   initialOrder,
   setOrder,
   isBuy = false,
@@ -76,6 +78,7 @@ export const EditStrategyBudgetField: FC<Props> = ({
       className={cn(style.order, 'grid gap-16 p-16')}
       data-testid={`${isBuy ? 'buy' : 'sell'}-section`}
       data-direction={isBuy ? 'buy' : 'sell'}
+      data-disposable={strategyType === 'disposable'}
     >
       <header className="flex items-center justify-between">
         <h3 id={titleId} className="text-18 flex items-center gap-8">

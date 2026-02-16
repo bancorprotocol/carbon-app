@@ -1,4 +1,4 @@
-import { LogoImager, TokenLogo } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
@@ -157,11 +157,7 @@ export const ModalTokenListContent: FC<Props> = ({
                 className="token-select flex flex-1 items-center gap-16 py-8 px-16 aria-selected:outline"
                 data-testid={`select-token-${token.address}`}
               >
-                <LogoImager
-                  src={token.logoURI}
-                  alt={`${token.symbol} Token`}
-                  className="size-32"
-                />
+                <TokenLogo token={token} size={32} />
                 <div className="grid justify-items-start">
                   <div className="flex gap-4">
                     {token.isSuspicious && <SuspiciousToken />}
@@ -212,11 +208,7 @@ export const ModalTokenListContent: FC<Props> = ({
                     className="token-select flex gap-16 flex-1 items-center py-8 px-16 aria-selected:outline"
                     data-testid={`select-token-${token.address}`}
                   >
-                    <LogoImager
-                      src={token.logoURI}
-                      alt={`${token.symbol} Token`}
-                      className="size-32"
-                    />
+                    <TokenLogo token={token} size={32} />
                     <div className="grid justify-items-start">
                       <div className="flex gap-4">
                         {token.isSuspicious && <SuspiciousToken />}

@@ -43,7 +43,7 @@ export const SimResultChartControls = () => {
   };
 
   return (
-    <article className="flex h-36 flex-row items-center justify-between gap-12 rounded-[24px] bg-white/10 px-20 flat-glass-shadow">
+    <article className="flex h-36 flex-row items-center justify-between gap-12 rounded-[24px] bg-main-600 px-20 flat-glass-shadow">
       <DropdownMenu
         isOpen={isOpen}
         setIsOpen={setIsOpen}

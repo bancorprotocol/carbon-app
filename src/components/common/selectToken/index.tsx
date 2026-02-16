@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { ButtonHTMLProps } from 'components/common/button';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import IconPlus from 'assets/icons/plus.svg?react';
@@ -37,12 +37,7 @@ export const SelectTokenButton: FC<Props> = ({
       {...props}
     >
       {token?.symbol ? (
-        <LogoImager
-          alt="Token Logo"
-          src={token?.logoURI}
-          width="30"
-          height="30"
-        />
+        <TokenLogo token={token} size={30} />
       ) : (
         <div className="size-30 grid place-items-center rounded-full bg-main-900">
           <IconPlus className="text-primary size-16 p-2" />
