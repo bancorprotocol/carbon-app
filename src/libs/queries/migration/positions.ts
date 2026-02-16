@@ -43,6 +43,7 @@ export const useDexesMigration = () => {
         await importTokenAddresses(tokens);
         return positions;
       },
+      retry: 3,
       enabled: !!user && !!provider,
       refetchOnWindowFocus: true,
       initialData: () => {
@@ -58,8 +59,8 @@ export const useDexesMigration = () => {
       return {
         isLoading: queries.some((q) => q.isLoading),
         data: queries
+          .filter((q) => !!q.data && !q.isError)
           .map((q) => q.data)
-          .filter((data) => !!data)
           .flat(),
         states: queries.map((q, i) => ({
           dex: allUniConfigs[i].dex,

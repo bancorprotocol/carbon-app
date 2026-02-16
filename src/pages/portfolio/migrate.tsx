@@ -11,6 +11,7 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MigrationList } from 'components/migration/MigrationList';
 import { MigrationLoading } from 'components/migration/MigrationLoading';
 import { MigrationFetching } from 'components/migration/MigrationFetching';
+import { MigrationExplainer } from 'components/migration/MigrationExplainer';
 
 interface MigratedPosition {
   id: string;
@@ -54,7 +55,8 @@ export const MigratePage = () => {
   const query = useDexesMigration();
 
   return (
-    <div className="grid gap-8 grid-area-[list]">
+    <div className="grid gap-16 grid-area-[list]">
+      <MigrationExplainer />
       <MigrationFetching queryState={query.states} />
       <MigrationContent query={query} />
     </div>
