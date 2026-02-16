@@ -48,13 +48,13 @@ const walletEvents: CarbonEventsInput<WalletProps> = {
     });
   },
   walletConnected: ({ name, address }) => {
-    sendGTMEvent('wallet', 'walletConnect', {
+    sendGTMEvent('wallet', 'walletConnected', {
       wallet_name: name,
       wallet_id: address,
     });
   },
   walletDisconnect: ({ address }) => {
-    sendGTMEvent('wallet', 'walletConnect', { wallet_id: address });
+    sendGTMEvent('wallet', 'walletDisconnect', { wallet_id: address });
   },
   walletDisconnected: () => {
     sendGTMEvent('wallet', 'walletDisconnected', {});
