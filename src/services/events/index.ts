@@ -28,7 +28,7 @@ interface StrategyProps {
 }
 const strategyEvents: CarbonEventsInput<StrategyProps> = {
   createStrategy: (params) => {
-    sendGTMEvent('wallet', 'walletConnect', params);
+    sendGTMEvent('strategy', 'createStrategy', params);
   },
 };
 
