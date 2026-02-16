@@ -72,7 +72,7 @@ const MigrationContent: FC<Props> = ({ query }) => {
   const { aboveBreakpoint } = useBreakpoints();
 
   const tokens = useMemo(() => {
-    if (query.isLoading) return;
+    if (query.isPending) return;
     const positions = query.data;
     if (!positions?.length) return;
     const list = new Set<string>();
@@ -81,7 +81,7 @@ const MigrationContent: FC<Props> = ({ query }) => {
       list.add(position.quote);
     }
     return Array.from(list);
-  }, [query.data, query.isLoading]);
+  }, [query.data, query.isPending]);
 
   // Create a dedicated cache
   const marketPriceQuery = useGetMultipleTokenPrices(tokens);
@@ -89,7 +89,7 @@ const MigrationContent: FC<Props> = ({ query }) => {
   const positions = useMemo((): undefined | MigratedPosition[] => {
     if (isPending) return;
     if (marketPriceQuery.isPending) return;
-    if (query.isLoading) return;
+    if (query.isPending) return;
     const marketPrices = marketPriceQuery.data || {};
     return query.data?.map((pos) => {
       const basePrice = new SafeDecimal(marketPrices[pos.base]);
@@ -140,10 +140,10 @@ const MigrationContent: FC<Props> = ({ query }) => {
     marketPriceQuery.data,
     marketPriceQuery.isPending,
     query.data,
-    query.isLoading,
+    query.isPending,
   ]);
 
-  if (isPending || query.isLoading || marketPriceQuery.isPending) {
+  if (isPending || query.isPending || marketPriceQuery.isPending) {
     return <MigrationLoading />;
   }
 

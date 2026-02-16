@@ -57,7 +57,7 @@ export const useDexesMigration = () => {
     })),
     combine: (queries) => {
       return {
-        isLoading: queries.some((q) => q.isLoading),
+        isPending: queries.some((q) => q.isPending),
         data: queries
           .filter((q) => !!q.data && !q.isError)
           .map((q) => q.data)
