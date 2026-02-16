@@ -17,7 +17,7 @@ const variants = {
     sell: ['btn-sell-gradient text-main-950'],
     error: [
       'bg-error border border-error text-main-950',
-      'hover:border-white/60 hover:disabled:border-error',
+      'hover:border-main-0/60 hover:disabled:border-error',
     ],
   },
   size: {

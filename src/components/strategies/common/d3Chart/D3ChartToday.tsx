@@ -12,7 +12,7 @@ export const D3ChartToday = () => {
         x2={x}
         y1={0}
         y2={dms.boundedHeight}
-        stroke="white"
+        stroke="var(--color-main-0)"
         strokeWidth="1"
         strokeDasharray="2"
       />

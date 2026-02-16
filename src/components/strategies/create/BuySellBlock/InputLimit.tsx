@@ -46,7 +46,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   return (
     <>
       <div
-        className="rounded-2xl flex cursor-text flex-col gap-8 border border-transparent bg-main-900 hover:bg-main-900/40 p-16 focus-within:border-white/50"
+        className="rounded-2xl flex cursor-text flex-col gap-8 border border-transparent bg-main-900 hover:bg-main-900/40 p-16 focus-within:border-main-0/50"
         onClick={() => document.getElementById(id ?? inputId)?.focus()}
       >
         <div className="flex">

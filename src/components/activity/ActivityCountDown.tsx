@@ -117,7 +117,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         cx="50"
         cy="50"
         r={radius}
-        stroke="white"
+        stroke="var(--color-main-0)"
         strokeWidth="6"
         strokeOpacity="0.2"
       />

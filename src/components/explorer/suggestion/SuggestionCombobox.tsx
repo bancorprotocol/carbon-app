@@ -204,7 +204,7 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
           style.dialog,
         )}
       >
-        <header className="flex gap-8 border-b border-white/40 p-12">
+        <header className="flex gap-8 border-b border-main-0/40 p-12">
           <RadioGroup>
             {Object.entries(tabs).map(([tab, label]) => (
               <Radio

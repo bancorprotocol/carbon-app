@@ -46,7 +46,7 @@ describe('Custom Tailwind Merge', () => {
       );
     });
     it('should merge different colors', () => {
-      expect(customTwMerge('border border-white border-primary')).toEqual(
+      expect(customTwMerge('border border-main-0 border-primary')).toEqual(
         customTwMerge('border border-primary'),
       );
     });

@@ -221,7 +221,7 @@ export const DebugCreateStrategy = () => {
         </p>
       </div>
 
-      <fieldset className="flex flex-col gap-16 rounded-2xl border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-16 rounded-2xl border border-main-0/60 p-16">
         <legend>Tokens</legend>
         <ul className="flex flex-col gap-8">
           {allTokens.map((t) => (
@@ -244,7 +244,7 @@ export const DebugCreateStrategy = () => {
         </footer>
       </fieldset>
 
-      <fieldset className="flex flex-col gap-8 rounded-2xl border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded-2xl border border-main-0/60 p-16">
         <legend>Liquidity Position Fee Tier</legend>
         <Label label="Spread">
           <Input
@@ -262,7 +262,7 @@ export const DebugCreateStrategy = () => {
         </p>
       </fieldset>
 
-      <fieldset className="flex flex-col gap-8 rounded-2xl border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded-2xl border border-main-0/60 p-16">
         <legend>Buy Low {baseSymbol}</legend>
         <Label label="Min">
           <Input
@@ -293,7 +293,7 @@ export const DebugCreateStrategy = () => {
           />
         </Label>
       </fieldset>
-      <fieldset className="flex flex-col gap-8 rounded-2xl border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded-2xl border border-main-0/60 p-16">
         <legend>Sell High {baseSymbol}</legend>
         <Label label={`Min ${spread ? '(Disabled)' : ''}`}>
           <Input

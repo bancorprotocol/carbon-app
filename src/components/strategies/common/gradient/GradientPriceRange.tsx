@@ -127,7 +127,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
     <>
       <div className="grid grid-cols-2 gap-6">
         <div
-          className="rounded-s-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-white/50"
+          className="rounded-s-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-main-0/50"
           onClick={() => document.getElementById(inputStartId)?.focus()}
         >
           <header className="flex items-center justify-between">
@@ -170,7 +170,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
           />
         </div>
         <div
-          className="rounded-e-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-white/50"
+          className="rounded-e-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-main-0/50"
           onClick={() => document.getElementById(inputEndId)?.focus()}
         >
           <header className="flex items-center justify-between">

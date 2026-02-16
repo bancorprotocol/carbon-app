@@ -26,8 +26,8 @@ import styles from './OverlappingChart.module.css';
 type Scale = ReturnType<typeof getScale>;
 
 // Static
-const outline = 'var(--color-main-700)';
-const background = 'var(--color-main-700)';
+const outline = 'var(--color-main-500)';
+const background = 'var(--color-main-600)';
 const fontSize = 13;
 const padding = 5;
 const top = 70;

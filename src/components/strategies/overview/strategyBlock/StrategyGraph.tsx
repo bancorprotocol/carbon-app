@@ -402,7 +402,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                 x2={x(point)}
                 y1={tick}
                 y2={baseline + 5}
-                stroke="white"
+                stroke="var(--color-main-0)"
                 opacity="60%"
               />
               <text
@@ -426,7 +426,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                 x2={x(point)}
                 y1={tick}
                 y2={baseline + 5}
-                stroke="white"
+                stroke="var(--color-main-0)"
                 opacity="60%"
               />
               <text
@@ -652,7 +652,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
       {limit && (
-        <table className="bg-main-900/40 rounded-md border-separate border border-white/40">
+        <table className="bg-main-900/40 rounded-md border-separate border border-main-0/40">
           <tbody>
             <tr>
               <th className="font-normal p-8 text-start text-main-0/60">
@@ -666,7 +666,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         </table>
       )}
       {!limit && (
-        <table className="bg-main-900/40 rounded-md border-separate border border-white/40 p-8">
+        <table className="bg-main-900/40 rounded-md border-separate border border-main-0/40 p-8">
           <tbody>
             <tr>
               <th className="font-normal text-start text-main-0/60">
@@ -760,7 +760,7 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
       <h3 className={cn('text-16 font-medium', color)}>
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
-      <table className="bg-main-900/40 rounded-md border-separate border border-white/40 p-8">
+      <table className="bg-main-900/40 rounded-md border-separate border border-main-0/40 p-8">
         <tbody>
           <tr>
             <th className="font-normal text-start text-main-0/60">_S P_</th>

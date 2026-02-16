@@ -33,7 +33,7 @@ export const NotFound: FC<Props> = ({
       {showBackButton && (
         <button
           onClick={() => history.back()}
-          className="absolute left-8 top-8 rounded-full p-16 hover:bg-white/20"
+          className="absolute left-8 top-8 rounded-full p-16 hover:bg-main-0/20"
         >
           <ForwardArrow className="size-16 rotate-180" />
         </button>

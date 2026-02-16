@@ -61,14 +61,14 @@ export const GradientDateRange = memo(function TimeRange(
       aria-label="Pick date range"
       className={cn(
         'text-12 flex items-center gap-8 rounded-full border border-transparent btn-tertiary-gradient px-12 py-8',
-        'outline-1 outline-white/60 focus-visible:outline-solid',
+        'outline-1 outline-main-0/60 focus-visible:outline-solid',
         props.className,
       )}
       data-testid="date-picker-button"
     >
       <CalendarIcon className="text-primary size-14" />
       <span
-        className="mr-auto mr-auto justify-self-end text-main-0/60"
+        className="mr-auto justify-self-end text-main-0/60"
         data-testid="simulation-dates"
       >
         {displayRange(props.start, props.end)}

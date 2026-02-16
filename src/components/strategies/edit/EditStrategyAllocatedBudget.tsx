@@ -24,7 +24,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
   return (
     <div
       role="table"
-      className="rounded-md p-15 text-12 font-medium grid gap-8 border border-white/10 text-left"
+      className="rounded-md p-15 text-12 font-medium grid gap-8 border border-main-0/10 text-left"
     >
       <div role="row" className="grid grid-flow-col items-center gap-16">
         <p

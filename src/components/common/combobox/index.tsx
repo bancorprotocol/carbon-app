@@ -236,7 +236,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
                 {options}
                 {empty && <Empty />}
                 <hr
-                  className={cn('-order-1 border-white/60', {
+                  className={cn('-order-1 border-main-0/60', {
                     hidden: !selected.length || optionSize === selected.length,
                   })}
                 />
@@ -289,7 +289,7 @@ export const Option: FC<OptionProps> = (props) => {
 const Empty = () => {
   return (
     <output className="flex max-w-[200px] flex-col items-center p-16">
-      <div className="mb-16 grid place-items-center rounded-full bg-white/40 p-8">
+      <div className="mb-16 grid place-items-center rounded-full bg-main-0/40 p-8">
         <IconSearch className="size-16 self-center" />
       </div>
       <h3 className="text-14 font-medium mb-8">Nothing found</h3>

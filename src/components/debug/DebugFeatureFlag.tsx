@@ -17,7 +17,7 @@ export const DebugFeatureFlag = () => {
   return (
     <form
       onSubmit={setFeatureFlags}
-      className="rounded-3xl bg-main-900 flex flex-col gap-20 border border-white/60 p-20 md:col-span-2"
+      className="rounded-3xl bg-main-900 flex flex-col gap-20 border border-main-0/60 p-20 md:col-span-2"
     >
       <h2>🧪 Feature Flags</h2>
       {!!featureFlags.length ? <FeatureRadioGroup /> : <EmptyFlags />}

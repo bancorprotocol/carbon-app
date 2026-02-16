@@ -252,7 +252,7 @@ const FavoriteButton = ({ checked, onChange }: FavoriteProps) => {
       className="group p-16"
       onClick={onChange}
     >
-      <IconStar className="w-20 text-main-0/40 hover:fill-white/80 hover:text-main-0/80 group-aria-checked:text-primary group-aria-checked:fill-primary" />
+      <IconStar className="w-20 text-main-0/40 hover:fill-main-0/80 hover:text-main-0/80 group-aria-checked:text-primary group-aria-checked:fill-primary" />
     </button>
   );
 };

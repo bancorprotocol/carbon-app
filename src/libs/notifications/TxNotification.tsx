@@ -14,7 +14,7 @@ const StatusIcon = (status: NotificationStatus) => {
     case 'pending':
       return (
         <div className="relative flex items-center justify-center">
-          <div className="size-38 animate-spin rounded-full border-r border-t border-white" />
+          <div className="size-38 animate-spin rounded-full border-r border-t border-main-0" />
         </div>
       );
     case 'success':

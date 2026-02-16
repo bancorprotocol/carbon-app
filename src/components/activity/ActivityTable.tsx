@@ -315,7 +315,7 @@ const iconColor = (action: ActivityAction) => {
   if (action === 'sell') return `bg-sell/10 text-sell`;
   if (action === 'create') return `bg-success/10 text-success`;
   if (action === 'delete') return `bg-error/10 text-error`;
-  return `bg-white/10 text-main-0`;
+  return `bg-main-0/10 text-main-0`;
 };
 
 export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
