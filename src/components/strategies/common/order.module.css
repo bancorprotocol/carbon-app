@@ -13,7 +13,7 @@
   --direction-gradient: to bottom;
   --direction-translate: -80px;
 }
-.order[data-direction='sell'][data-disposable] {
+.order[data-direction='sell'][data-disposable="true"] {
   --direction-gradient: to top;
   --direction-translate: 80px;
 }
