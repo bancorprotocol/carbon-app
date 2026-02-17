@@ -73,61 +73,66 @@ export async function getAllV2Positions(
   // 2. VERIFY & FETCH DATA
   // Check which of these tokens are actually Uniswap V2 pairs
   const getPosition = async (pairAddress: string) => {
-    try {
-      const pairContract = new Contract(pairAddress, PAIR_ABI, provider);
+    const pairContract = new Contract(pairAddress, PAIR_ABI, provider);
 
-      // A. Quick check: Does it identify as a pair?
-      // Calling token0() is a cheap way to filter out standard tokens like USDC which don't have this method.
-      // If this reverts, it's not a pair.
-      const [token0, token1] = await Promise.all([
+    // A. Quick check: Does it identify as a pair?
+    // Calling token0() is a cheap way to filter out standard tokens like USDC which don't have this method.
+    // If this reverts, it's not a pair.
+    let token0;
+    let token1;
+    try {
+      const tokens = await Promise.all([
         pairContract.token0(),
         pairContract.token1(),
       ]);
+      token0 = tokens[0];
+      token1 = tokens[1];
+    } catch (e) {
+      return;
+      // If token0() call fails, it's just a regular token (like USDT), not a pair. Ignore it.
+    }
 
-      const [dec0, dec1] = await Promise.all([
-        getTokenDecimals(token0),
-        getTokenDecimals(token1),
+    const [dec0, dec1] = await Promise.all([
+      getTokenDecimals(token0),
+      getTokenDecimals(token1),
+    ]);
+
+    // B. Security Check: Ask the Factory
+    // Even if it has token0/token1, anyone can deploy a fake contract.
+    // We ask the official Factory: "Is this address the real pair for these tokens?"
+    const officialPair = await factoryContract.getPair(token0, token1);
+
+    if (officialPair.toLowerCase() !== pairAddress.toLowerCase()) {
+      return; // Not a legitimate Uniswap V2 Pair
+    }
+
+    // C. Get Balance & Reserves
+    const balance: bigint = await pairContract.balanceOf(userAddress);
+
+    if (balance > 0n) {
+      const [reserves, totalSupply] = await Promise.all([
+        pairContract.getReserves(),
+        pairContract.totalSupply(),
       ]);
 
-      // B. Security Check: Ask the Factory
-      // Even if it has token0/token1, anyone can deploy a fake contract.
-      // We ask the official Factory: "Is this address the real pair for these tokens?"
-      const officialPair = await factoryContract.getPair(token0, token1);
+      // D. Calculate Underlying Amounts
+      // Formula: (UserLP / TotalSupply) * Reserve
+      const amount0 = (balance * reserves.reserve0) / totalSupply;
+      const amount1 = (balance * reserves.reserve1) / totalSupply;
 
-      if (officialPair.toLowerCase() !== pairAddress.toLowerCase()) {
-        return; // Not a legitimate Uniswap V2 Pair
-      }
-
-      // C. Get Balance & Reserves
-      const balance: bigint = await pairContract.balanceOf(userAddress);
-
-      if (balance > 0n) {
-        const [reserves, totalSupply] = await Promise.all([
-          pairContract.getReserves(),
-          pairContract.totalSupply(),
-        ]);
-
-        // D. Calculate Underlying Amounts
-        // Formula: (UserLP / TotalSupply) * Reserve
-        const amount0 = (balance * reserves.reserve0) / totalSupply;
-        const amount1 = (balance * reserves.reserve1) / totalSupply;
-
-        positions.push({
-          id: pairAddress,
-          dex: config.dex,
-          base: token0,
-          quote: token1,
-          min: '0', // V2 is always 0 to Infinity
-          max: 'Infinity',
-          baseLiquidity: formatUnits(amount0, dec0),
-          quoteLiquidity: formatUnits(amount1, dec1),
-          baseFee: '0', // V2 fees are not separable; they increase the value of LP tokens
-          quoteFee: '0',
-          fee: config.fee,
-        });
-      }
-    } catch (e) {
-      // If token0() call fails, it's just a regular token (like USDT), not a pair. Ignore it.
+      positions.push({
+        id: pairAddress,
+        dex: config.dex,
+        base: token0,
+        quote: token1,
+        min: '0', // V2 is always 0 to Infinity
+        max: 'Infinity',
+        baseLiquidity: formatUnits(amount0, dec0),
+        quoteLiquidity: formatUnits(amount1, dec1),
+        baseFee: '0', // V2 fees are not separable; they increase the value of LP tokens
+        quoteFee: '0',
+        fee: config.fee,
+      });
     }
   };
   const getAllPosition = Array.from(potentialPairs).map(getPosition);

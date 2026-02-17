@@ -12,18 +12,19 @@ import { StrategyProvider } from 'components/strategies/StrategyProvider';
 import { ExplorerSearch } from 'components/explorer/ExplorerSearch';
 import { usePortfolio } from 'components/explorer/usePortfolio';
 import IconMigrate from 'assets/icons/migrate.svg?react';
+import config from 'config';
 
 import style from 'components/explorer/ExplorerLayout.module.css';
 
-const tabs: ExplorerTab[] = [
-  ...baseTabs,
-  {
+const tabs: ExplorerTab[] = [...baseTabs];
+if (config.ui.useEIP7702) {
+  tabs.push({
     label: 'Migration',
     href: 'migrate',
     icon: <IconMigrate className="hidden md:block size-24" />,
     testid: 'migrate-tab',
-  },
-];
+  });
+}
 
 export const PortfolioLayout = () => {
   const { user } = useWagmi();
