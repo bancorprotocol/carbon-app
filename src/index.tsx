@@ -33,7 +33,7 @@ if (config.network.name === 'TON' && isTMA()) {
     initTelegramSDK();
     TelegramAnalytics.init({
       token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
-      appName: 'Carbondefiappbot',
+      appName: 'carbondefiappbot',
     });
   } catch (err) {
     console.error(err);
