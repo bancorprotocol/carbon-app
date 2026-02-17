@@ -88,8 +88,14 @@ export async function getAllV2Positions(
       token0 = tokens[0];
       token1 = tokens[1];
     } catch (e) {
-      return;
-      // If token0() call fails, it's just a regular token (like USDT), not a pair. Ignore it.
+      const msg = (e as any)?.info?.error.message;
+      if (msg.includes('429')) {
+        // If this is a 429 error, throw to retry
+        throw e;
+      } else {
+        // If token0() call fails, it's just a regular token (like USDT), not a pair. Ignore it.
+        return;
+      }
     }
 
     const [dec0, dec1] = await Promise.all([

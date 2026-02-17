@@ -268,7 +268,7 @@ export const tokenAmount = (
   options?: PrettifyNumberOptions,
 ) => {
   if (amount === undefined || isNaN(Number(amount))) return;
-  return `${prettifySignedNumber(Number(amount), options)} ${token.symbol}`;
+  return `${prettifySignedNumber(Number(amount), { decimals: token.decimals, ...options })} ${token.symbol}`;
 };
 
 export const tokenRange = (

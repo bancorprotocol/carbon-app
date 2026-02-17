@@ -62,7 +62,6 @@ export const useDexesMigration = () => {
       },
     })),
     combine: (queries) => {
-      console.log(queries);
       return {
         isPending: queries.some((q) => q.isPending),
         data: queries
