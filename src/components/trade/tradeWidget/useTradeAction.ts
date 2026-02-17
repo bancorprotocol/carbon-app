@@ -1,5 +1,5 @@
 import { useWagmi } from 'libs/wagmi';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import config from 'config';
 import { TradeActionBNStr } from 'libs/sdk';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -7,11 +7,10 @@ import { QueryKey, useQueryClient, useTradeQuery } from 'libs/queries';
 import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
-import { useApproval } from 'hooks/useApproval';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 
-const spender = config.ui.useOpenocean
-  ? config.addresses.openocean
+const spender = config.ui.useDexAggregator
+  ? config.addresses.carbon.aggregator!
   : config.addresses.carbon.carbonController;
 
 type TradeProps = {
@@ -21,18 +20,14 @@ type TradeProps = {
   isTradeBySource: boolean;
   sourceInput: string;
   targetInput: string;
+  quoteId?: string;
 };
 
-type Props = Pick<TradeProps, 'source' | 'isTradeBySource' | 'sourceInput'> & {
+interface Props {
   onSuccess?: (hash: string) => any;
-};
+}
 
-export const useTradeAction = ({
-  source,
-  isTradeBySource,
-  sourceInput,
-  onSuccess,
-}: Props) => {
+export const useTradeAction = ({ onSuccess }: Props) => {
   const {
     trade: {
       settings: { slippage, deadline },
@@ -73,6 +68,7 @@ export const useTradeAction = ({
     sourceInput,
     targetInput,
     tradeActions,
+    quoteId,
   }: TradeProps) => {
     const checked = await checkRestriction();
     if (!checked) return;
@@ -92,6 +88,7 @@ export const useTradeAction = ({
         calcDeadline,
         calcMaxInput,
         calcMinReturn,
+        quoteId,
       },
       {
         onSuccess: async (tx) => {
@@ -121,25 +118,11 @@ export const useTradeAction = ({
     );
   };
 
-  const approvalTokens = useMemo(
-    () => [
-      {
-        ...source,
-        spender: spender,
-        amount: isTradeBySource ? sourceInput : calcMaxInput(sourceInput),
-      },
-    ],
-    [calcMaxInput, sourceInput, isTradeBySource, source],
-  );
-
-  const approval = useApproval(approvalTokens);
-
   return {
     trade,
     calcMaxInput,
     calcMinReturn,
     calcDeadline,
-    approval,
     isAwaiting: mutation.isPending,
   };
 };

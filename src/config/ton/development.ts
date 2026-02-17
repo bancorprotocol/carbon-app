@@ -34,7 +34,6 @@ const config: AppConfig = {
       proxy: '0xfa60E12747D719baDBe3B67dEd3f128B20EDd058',
       smartAccountFactory: '0x5919D1D0D1b36F08018d7C9650BF914AEbC6BAd6',
     },
-    openocean: '',
   },
   network: {
     ...commonConfig.network,

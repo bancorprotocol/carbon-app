@@ -26,10 +26,14 @@ export const CreateForm: FC<FormProps> = (props) => {
 
   const [animating, setAnimating] = useState(false);
 
-  const { isLoading, isProcessing, isAwaiting, createStrategy } =
-    useCreateStrategy({ base, quote, buy, sell });
+  const { isProcessing, isAwaiting, createStrategy } = useCreateStrategy({
+    base,
+    quote,
+    buy,
+    sell,
+  });
 
-  const loading = isLoading || isProcessing || isAwaiting;
+  const loading = isProcessing || isAwaiting;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
 
   const isDisabled = (form: HTMLFormElement) => {

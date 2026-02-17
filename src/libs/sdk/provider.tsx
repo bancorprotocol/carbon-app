@@ -88,10 +88,15 @@ export const SDKProvider: FC<Props> = ({ children }) => {
   useEffect(() => {
     const invalidateQueriesByPair = (pair: TokenPair) => {
       cache.invalidateQueries({
-        predicate: (query) =>
-          query.queryKey[1] === buildTokenPairKey(pair) ||
-          query.queryKey[1] === buildTokenPairKey([pair[1], pair[0]]) ||
-          query.queryKey[1] === 'strategies',
+        predicate: (query) => {
+          const [prefix, content] = query.queryKey;
+          if (prefix !== 'sdk') return false;
+          return (
+            content === buildTokenPairKey(pair) ||
+            content === buildTokenPairKey([pair[1], pair[0]]) ||
+            content === 'strategies'
+          );
+        },
       });
     };
 
