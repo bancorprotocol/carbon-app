@@ -44,6 +44,12 @@ export const useDexesMigration = () => {
         return positions;
       },
       retry: 3,
+      retryDelay: (attemptIndex: number, error: Error) => {
+        console.log(
+          `[${config.dex} - attempt ${attemptIndex}] Getting error ${error.message}`,
+        );
+        return 500 * attemptIndex;
+      },
       enabled: !!user && !!provider,
       refetchOnWindowFocus: true,
       initialData: () => {
