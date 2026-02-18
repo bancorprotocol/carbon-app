@@ -130,7 +130,7 @@ export default function ModalTradeRouting({
             >
               <thead>
                 <tr>
-                  <th className="sticky top-0 bg-main-900 p-8">
+                  <th className="sticky top-0 p-8">
                     <Checkbox
                       className="m-auto"
                       isChecked={allSelected}
@@ -138,14 +138,14 @@ export default function ModalTradeRouting({
                       aria-label="toggle all orders"
                     />
                   </th>
-                  <th className="text-14 font-medium sticky top-0 bg-main-900 py-8 text-main-0/60">
+                  <th className="text-14 font-medium sticky top-0 py-8 text-main-0/60">
                     {source.symbol}
                   </th>
-                  <th className="sticky top-0 bg-main-900">{/* Arrow */}</th>
-                  <th className="text-14 font-medium sticky top-0 bg-main-900 py-8 text-main-0/60">
+                  <th className="sticky top-0">{/* Arrow */}</th>
+                  <th className="text-14 font-medium sticky top-0 py-8 text-main-0/60">
                     {target.symbol}
                   </th>
-                  <th className="text-14 font-medium sticky top-0 bg-main-900 py-8 text-main-0/60">
+                  <th className="text-14 font-medium sticky top-0 py-8 text-main-0/60">
                     Avg Price
                   </th>
                 </tr>

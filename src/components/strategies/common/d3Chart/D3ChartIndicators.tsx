@@ -95,7 +95,11 @@ export const D3ChartIndicators = ({ activities }: D3ChartIndicatorsProps) => {
                 cx={xScale.bandwidth() / 2}
                 cy={xScale.bandwidth() / 2}
                 r={5}
-                fill={isBelowAxis ? 'url(#svg-brand-gradient)' : 'white'}
+                fill={
+                  isBelowAxis
+                    ? 'url(#svg-brand-gradient)'
+                    : 'var(--color-main-0)'
+                }
                 stroke="black"
               />
             </g>
