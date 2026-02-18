@@ -19,10 +19,21 @@ const FACTORY_ABI = [
   'function getPair(address tokenA, address tokenB) view returns (address pair)',
 ];
 
+const getSessionTokenPairs = (dex: DexesV2) => {
+  const pairs = sessionStorage.getItem(`${dex}-token-pairs`);
+  if (!pairs) return {};
+  return JSON.parse(pairs);
+};
+
+const lastBlock = {
+  'pancake-v2': 0,
+  'uniswap-v2': 0,
+  'sushi-v2': 0,
+};
 const tokenPairs: Record<DexesV2, Record<string, string[]>> = {
-  'pancake-v2': {},
-  'uniswap-v2': {},
-  'sushi-v2': {},
+  'pancake-v2': getSessionTokenPairs('pancake-v2'),
+  'uniswap-v2': getSessionTokenPairs('uniswap-v2'),
+  'sushi-v2': getSessionTokenPairs('sushi-v2'),
 };
 
 /**
@@ -56,9 +67,10 @@ export async function getAllV2Positions(
       null, // 'from' - don't care
       userTopic, // 'to' - must be the user
     ],
-    fromBlock: config.startBlock,
+    fromBlock: lastBlock[config.dex] || config.startBlock,
   };
 
+  const blockNumber = await provider.getBlockNumber();
   const logs = await provider.getLogs(filter);
 
   // Extract unique contract addresses (potential pairs) from logs
@@ -68,7 +80,6 @@ export async function getAllV2Positions(
   }
 
   // Filter out pairs with tokens: if no tokens, the address is a regular ERC20 and not an LP token
-  const realPairs = new Set<string>();
   const getRealPairs = async (pairAddress: string) => {
     if (!tokenPairs[config.dex][pairAddress]) {
       try {
@@ -90,10 +101,6 @@ export async function getAllV2Positions(
           tokenPairs[config.dex][pairAddress] = []; // Empty pair
         }
       }
-    }
-    // If this is a legit pair with 2 token move on
-    if (tokenPairs[config.dex][pairAddress].length === 2) {
-      realPairs.add(pairAddress);
     }
   };
 
@@ -170,8 +177,17 @@ export async function getAllV2Positions(
       });
     }
   };
-  const getAllPosition = Array.from(realPairs).map(getPosition);
+  const realPairs = Object.keys(tokenPairs[config.dex]).filter(
+    (address) => tokenPairs[config.dex][address].length === 2,
+  );
+  const getAllPosition = realPairs.map(getPosition);
   await Promise.all(getAllPosition);
+
+  lastBlock[config.dex] = blockNumber;
+  sessionStorage.setItem(
+    `${config.dex}-token-pairs`,
+    JSON.stringify(tokenPairs[config.dex]),
+  );
 
   return positions;
 }
