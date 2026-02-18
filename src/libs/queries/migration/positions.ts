@@ -58,7 +58,7 @@ export const useDexesMigration = () => {
         return 500 * attemptIndex;
       },
       enabled: !!user && !!provider,
-      refetchOnWindowFocus: false, // Too many errors: we don't want to hide existing queries on tab focus
+      refetchOnWindowFocus: true,
       initialData: () => {
         if (!user) return;
         const positions = sessionStorage.getItem(
