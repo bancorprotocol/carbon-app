@@ -1,5 +1,5 @@
 import { Contract, id, Provider, zeroPadValue, formatUnits } from 'ethers';
-import { UniswapPosition, UniswapV2Config } from '../utils';
+import { DexesV2, UniswapPosition, UniswapV2Config } from '../utils';
 import { Token } from 'libs/tokens';
 
 // --- ABIs ---
@@ -18,6 +18,12 @@ const PAIR_ABI = [
 const FACTORY_ABI = [
   'function getPair(address tokenA, address tokenB) view returns (address pair)',
 ];
+
+const tokenPairs: Record<DexesV2, Record<string, string[]>> = {
+  'pancake-v2': {},
+  'uniswap-v2': {},
+  'sushi-v2': {},
+};
 
 /**
  * Discovers all Uniswap V2 positions for a user by scanning logs.
@@ -57,7 +63,47 @@ export async function getAllV2Positions(
 
   // Extract unique contract addresses (potential pairs) from logs
   const potentialPairs = new Set<string>();
-  logs.forEach((log) => potentialPairs.add(log.address));
+  for (const log of logs) {
+    potentialPairs.add(log.address);
+  }
+
+  // Filter out pairs with tokens: if no tokens, the address is a regular ERC20 and not an LP token
+  const realPairs = new Set<string>();
+  const getRealPairs = async (pairAddress: string) => {
+    if (!tokenPairs[config.dex][pairAddress]) {
+      try {
+        // If this is a legit LP token, add its tokens to the list
+        const pairContract = new Contract(pairAddress, PAIR_ABI, provider);
+        const [t0, t1] = await Promise.all([
+          pairContract.token0(),
+          pairContract.token1(),
+        ]);
+        tokenPairs[config.dex][pairAddress] = [t0, t1];
+      } catch (e) {
+        // Else check if its a real error or just not an LP token
+        const msg = (e as any)?.info?.error?.message;
+        if (msg?.includes('Status: 429')) {
+          // If this is a 429 error, throw to retry
+          throw new Error(msg);
+        } else {
+          // If token0() call fails, it's just a regular token (like USDT), not a pair. Put it on the ignore list for later calls
+          tokenPairs[config.dex][pairAddress] = []; // Empty pair
+        }
+      }
+    }
+    // If this is a legit pair with 2 token move on
+    if (tokenPairs[config.dex][pairAddress].length === 2) {
+      realPairs.add(pairAddress);
+    }
+  };
+
+  // Batch requests to prevent 429 Too Many requests
+  const potentialPairList = Array.from(potentialPairs);
+  for (let i = 0; i < potentialPairs.size; i += 50) {
+    const list = potentialPairList.slice(i, i + 50);
+    const getAllRealPairs = Array.from(list).map(getRealPairs);
+    await Promise.all(getAllRealPairs);
+  }
 
   console.log(
     `Found ${potentialPairs.size} unique tokens interacted with. Verifying V2 Pairs...`,
@@ -74,34 +120,10 @@ export async function getAllV2Positions(
   // Check which of these tokens are actually Uniswap V2 pairs
   const getPosition = async (pairAddress: string) => {
     const pairContract = new Contract(pairAddress, PAIR_ABI, provider);
-
-    // A. Quick check: Does it identify as a pair?
-    // Calling token0() is a cheap way to filter out standard tokens like USDC which don't have this method.
-    // If this reverts, it's not a pair.
-    let token0;
-    let token1;
-    try {
-      const tokens = await Promise.all([
-        pairContract.token0(),
-        pairContract.token1(),
-      ]);
-      token0 = tokens[0];
-      token1 = tokens[1];
-    } catch (e) {
-      const msg = (e as any)?.info?.error.message;
-      if (msg.includes('429')) {
-        // If this is a 429 error, throw to retry
-        throw e;
-      } else {
-        // If token0() call fails, it's just a regular token (like USDT), not a pair. Ignore it.
-        return;
-      }
-    }
-
-    const [dec0, dec1] = await Promise.all([
-      getTokenDecimals(token0),
-      getTokenDecimals(token1),
-    ]);
+    const tokens = tokenPairs[config.dex][pairAddress];
+    if (tokens.length !== 2)
+      throw new Error('Should only have pair with 2 tokens');
+    const [token0, token1] = tokens;
 
     // B. Security Check: Ask the Factory
     // Even if it has token0/token1, anyone can deploy a fake contract.
@@ -109,7 +131,9 @@ export async function getAllV2Positions(
     const officialPair = await factoryContract.getPair(token0, token1);
 
     if (officialPair.toLowerCase() !== pairAddress.toLowerCase()) {
-      return; // Not a legitimate Uniswap V2 Pair
+      // Not a legitimate Uniswap V2 Pair, reset tokens to empty array to ignore on next round
+      tokenPairs[config.dex][pairAddress] = [];
+      return;
     }
 
     // C. Get Balance & Reserves
@@ -121,13 +145,18 @@ export async function getAllV2Positions(
         pairContract.totalSupply(),
       ]);
 
+      const [dec0, dec1] = await Promise.all([
+        getTokenDecimals(token0),
+        getTokenDecimals(token1),
+      ]);
+
       // D. Calculate Underlying Amounts
       // Formula: (UserLP / TotalSupply) * Reserve
       const amount0 = (balance * reserves.reserve0) / totalSupply;
       const amount1 = (balance * reserves.reserve1) / totalSupply;
 
       positions.push({
-        id: pairAddress,
+        id: `${config.dex}-${pairAddress}`,
         dex: config.dex,
         base: token0,
         quote: token1,
@@ -141,7 +170,7 @@ export async function getAllV2Positions(
       });
     }
   };
-  const getAllPosition = Array.from(potentialPairs).map(getPosition);
+  const getAllPosition = Array.from(realPairs).map(getPosition);
   await Promise.all(getAllPosition);
 
   return positions;

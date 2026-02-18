@@ -1,5 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
-import { QueryKey } from '..';
+import { QueryKey } from '../queryKey';
 import { allUniConfigs } from 'services/uniswap';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
@@ -10,6 +10,7 @@ import {
 } from 'services/uniswap/utils';
 import { getAllV3Positions } from 'services/uniswap/v3/read.contract';
 import { getAllV2Positions } from 'services/uniswap/v2/read.contract';
+import { EthersError } from 'ethers';
 
 export const useDexesMigration = () => {
   const { user, provider } = useWagmi();
@@ -44,14 +45,20 @@ export const useDexesMigration = () => {
         return positions;
       },
       retry: 3,
-      retryDelay: (attemptIndex: number, error: Error) => {
+      retryDelay: (attemptIndex: number, error: any) => {
+        const msg = (() => {
+          if ('info' in error)
+            return (error as EthersError).info?.error?.message;
+          if (error instanceof Error) return error.message;
+          return error;
+        })();
         console.log(
-          `[${config.dex} - attempt ${attemptIndex}] Getting error ${error.message}`,
+          `[${config.dex} - attempt ${attemptIndex}] Getting error ${msg}`,
         );
         return 500 * attemptIndex;
       },
       enabled: !!user && !!provider,
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false, // Too many errors: we don't want to hide existing queries on tab focus
       initialData: () => {
         if (!user) return;
         const positions = sessionStorage.getItem(

@@ -1,4 +1,8 @@
-export type Dexes = `${'uniswap' | 'sushi' | 'pancake'}-${'v2' | 'v3'}`;
+export type DexesName = 'uniswap' | 'sushi' | 'pancake';
+export type DexesVersions = 'v2' | 'v3';
+export type DexesV2 = `${DexesName}-v2`;
+export type DexesV3 = `${DexesName}-v3`;
+export type Dexes = DexesV2 | DexesV3;
 
 export interface GraphToken {
   id: string; // Address
@@ -41,7 +45,7 @@ export interface UniswapPosition {
 }
 
 export interface UniswapV2Config {
-  dex: Dexes;
+  dex: DexesV2;
   factoryAddress: string;
   routerAddress: string;
   startBlock: number;
@@ -49,7 +53,7 @@ export interface UniswapV2Config {
 }
 
 export interface UniswapV3Config {
-  dex: Dexes;
+  dex: DexesV3;
   factoryAddress: string;
   managerAddress: string;
 }
