@@ -19,12 +19,12 @@ export const MigrationList: FC<Props> = ({ positions }) => {
   return (
     <>
       <ul className="grid gap-16 grid-fill-350">
-        {positions.map((position, i) => (
+        {positions.map((p, i) => (
           <li
-            key={position.id}
+            key={`${p.dex}-${p.id}`}
             className="surface rounded-2xl grid gap-16 p-16"
           >
-            <MigrationCard position={position} />
+            <MigrationCard position={p} />
             <button
               className="btn-on-surface"
               onClick={() => setSelectedIndex(i)}

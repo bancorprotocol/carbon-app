@@ -38,7 +38,7 @@ export const MigrationTable: FC<Props> = ({ positions }) => {
           {positions.map((p, i) => {
             const dexName = dexNames[p.dex];
             return (
-              <tr key={p.id}>
+              <tr key={`${p.dex}-${p.id}`}>
                 <td>
                   <div className="inline-flex items-center gap-8">
                     <DexIcon dex={p.dex} className="size-24" />

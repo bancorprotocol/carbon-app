@@ -110,7 +110,7 @@ export async function getAllV3Positions(
       );
 
       const position: UniswapPosition = {
-        id: `${config.dex}-${tokenId.toString()}`,
+        id: tokenId.toString(),
         dex: config.dex,
         base: posData.token0,
         quote: posData.token1,

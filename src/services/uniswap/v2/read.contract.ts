@@ -156,7 +156,7 @@ export async function getAllV2Positions(
       const amount1 = (balance * reserves.reserve1) / totalSupply;
 
       positions.push({
-        id: `${config.dex}-${pairAddress}`,
+        id: pairAddress,
         dex: config.dex,
         base: token0,
         quote: token1,
