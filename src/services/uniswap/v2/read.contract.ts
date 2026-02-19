@@ -1,4 +1,4 @@
-import { Contract, id, Provider, zeroPadValue, formatUnits } from 'ethers';
+import { Contract, id, Provider, zeroPadValue, formatUnits, Log } from 'ethers';
 import { DexesV2, UniswapPosition, UniswapV2Config } from '../utils';
 import { Token } from 'libs/tokens';
 
@@ -25,10 +25,19 @@ const getSessionTokenPairs = (dex: DexesV2) => {
   return JSON.parse(pairs);
 };
 
-const lastBlock = {
-  'pancake-v2': 0,
-  'uniswap-v2': 0,
-  'sushi-v2': 0,
+const dexLogs: Record<DexesV2, { block: number; logs: Log[] }> = {
+  'pancake-v2': {
+    block: 0,
+    logs: [],
+  },
+  'uniswap-v2': {
+    block: 0,
+    logs: [],
+  },
+  'sushi-v2': {
+    block: 0,
+    logs: [],
+  },
 };
 const tokenPairs: Record<DexesV2, Record<string, string[]>> = {
   'pancake-v2': getSessionTokenPairs('pancake-v2'),
@@ -61,21 +70,52 @@ export async function getAllV2Positions(
   const transferTopic = id('Transfer(address,address,uint256)');
   const userTopic = zeroPadValue(userAddress, 32);
 
-  const filter = {
-    topics: [
-      transferTopic,
-      null, // 'from' - don't care
-      userTopic, // 'to' - must be the user
-    ],
-    fromBlock: lastBlock[config.dex] || config.startBlock,
-  };
+  const currentBlock = await provider.getBlockNumber();
 
-  const blockNumber = await provider.getBlockNumber();
-  const logs = await provider.getLogs(filter);
+  const MAX_CHUNK_SIZE = 5_000_000;
+  const MIN_CHUNK_SIZE = 50_000;
+  let chunkSize = MAX_CHUNK_SIZE;
+  let fromBlock = dexLogs[config.dex].block || config.startBlock;
+
+  while (fromBlock <= currentBlock) {
+    // Ensure we don't query past the current block
+    const toBlock = Math.min(fromBlock + chunkSize - 1, currentBlock);
+
+    const filter = {
+      topics: [
+        transferTopic,
+        null, // 'from' - don't care
+        userTopic, // 'to' - must be the user
+      ],
+      fromBlock: fromBlock,
+      toBlock: toBlock,
+    };
+
+    try {
+      console.log(
+        `Fetching from ${fromBlock} to ${toBlock}. Current block is ${currentBlock}`,
+      );
+      const chunkLogs = await provider.getLogs(filter);
+
+      // Keep in memory so we don't have to call again on retry
+      dexLogs[config.dex].logs.push(...chunkLogs);
+      dexLogs[config.dex].block = toBlock + 1;
+      fromBlock = toBlock + 1;
+      chunkSize = Math.min(MAX_CHUNK_SIZE, Math.floor(chunkSize * 1.5)); // Reset progressively
+    } catch (err) {
+      chunkSize = Math.floor(chunkSize / 2);
+      console.log('Reduce the amount of chunk to ' + chunkSize);
+      if (chunkSize < MIN_CHUNK_SIZE) {
+        throw new Error(
+          `RPC failing persistently. Aborting at block ${fromBlock}. The node might be offline or rate-limiting you.`,
+        );
+      }
+    }
+  }
 
   // Extract unique contract addresses (potential pairs) from logs
   const potentialPairs = new Set<string>();
-  for (const log of logs) {
+  for (const log of dexLogs[config.dex].logs) {
     potentialPairs.add(log.address);
   }
 
@@ -183,7 +223,6 @@ export async function getAllV2Positions(
   const getAllPosition = realPairs.map(getPosition);
   await Promise.all(getAllPosition);
 
-  lastBlock[config.dex] = blockNumber;
   sessionStorage.setItem(
     `${config.dex}-token-pairs`,
     JSON.stringify(tokenPairs[config.dex]),
