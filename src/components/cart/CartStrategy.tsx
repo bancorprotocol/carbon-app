@@ -194,7 +194,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       <div>
         <StrategyBlockBudget strategy={strategy} />
       </div>
-      <div className="bg-main-900/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border">
+      <div className="bg-main-900/40 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border">
         <StrategyBlockBuySell
           strategy={strategy}
           isBuy

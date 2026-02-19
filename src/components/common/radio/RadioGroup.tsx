@@ -47,6 +47,7 @@ export const Radio: FC<RadioProps> = (props) => {
           props.className,
           style.label,
         )}
+        aria-label={props['aria-label']}
       >
         <input
           id={id}
@@ -57,7 +58,6 @@ export const Radio: FC<RadioProps> = (props) => {
           name={props.name}
           onChange={() => props.onChange?.(props.value)}
           className={cn(style.radio, 'peer/radio')}
-          aria-label={props['aria-label']}
         />
         {props.children}
       </label>

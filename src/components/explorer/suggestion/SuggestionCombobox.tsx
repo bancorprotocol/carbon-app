@@ -200,7 +200,7 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
       <div
         role="dialog"
         className={cn(
-          'rounded-lg bg-main-600/80 backdrop-blur-sm absolute left-0 top-full z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
+          'rounded-lg bg-main-600/90 backdrop-blur-sm absolute left-0 top-full z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
           style.dialog,
         )}
       >
