@@ -39,12 +39,12 @@
   --color-main-50: oklch(0.2 0.06 var(--hue));
   --color-main-100: oklch(0.30 0.05 var(--hue));
   --color-main-200: oklch(0.4 0.06 var(--hue));
-  --color-main-300: oklch(0.7 0.07 var(--hue));
-  --color-main-400: oklch(0.8 0.08 var(--hue));
-  --color-main-500: oklch(0.85 0.05 var(--hue));
-  --color-main-600: oklch(0.9 0.04 var(--hue));
-  --color-main-700: oklch(0.95 0.02 var(--hue));
-  --color-main-800: oklch(0.98 0.02 var(--hue));
+  --color-main-300: oklch(0.6 0.07 var(--hue));
+  --color-main-400: oklch(0.7 0.08 var(--hue));
+  --color-main-500: oklch(0.8 0.05 var(--hue));
+  --color-main-600: oklch(0.85 0.04 var(--hue));
+  --color-main-700: oklch(0.9 0.02 var(--hue));
+  --color-main-800: oklch(0.95 0.02 var(--hue));
   --color-main-900: oklch(0.99 0.02 var(--hue));
   --color-main-950: oklch(1 0.01 var(--hue));
 
@@ -64,7 +64,7 @@
 
   --color-shadow: oklch(0.4 0.06 var(--hue) / 40%);
 
-  --bg-gradient: radial-gradient(closest-side circle at center, var(--color-main-800) 40%, var(--color-main-950) 100%);
+  --bg-gradient: radial-gradient(closest-side circle at center, var(--color-main-950) 40%, var(--color-main-700) 100%);
 
   color-scheme: light;
   accent-color: var(--color-main-0);
