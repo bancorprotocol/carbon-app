@@ -90,30 +90,38 @@ export const useBurgerMenuItems = () => {
         className="flex w-full items-center justify-between border-t border-main-700"
       >
         <NewTabLink
+          key="x"
           role="menuitem"
           className={menuitemClass}
           to={externalLinks.x}
+          aria-label="X social network"
         >
           <IconX className={iconStyles} />
         </NewTabLink>
         <NewTabLink
+          key="youtube"
           role="menuitem"
           className={menuitemClass}
           to={externalLinks.youtube}
+          aria-label="youtube"
         >
           <IconYoutube className={iconStyles} />
         </NewTabLink>
         <NewTabLink
+          key="discord"
           role="menuitem"
           className={menuitemClass}
           to={externalLinks.discord}
+          aria-label="discord"
         >
           <IconDiscord className={iconStyles} />
         </NewTabLink>
         <NewTabLink
+          key="telegram"
           role="menuitem"
           className={menuitemClass}
           to={externalLinks.telegram}
+          aria-label="telegram"
         >
           <IconTelegram className={iconStyles} />
         </NewTabLink>

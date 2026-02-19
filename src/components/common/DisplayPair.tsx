@@ -82,8 +82,8 @@ const TokenTooltip: FC<{ token: Token }> = ({ token }) => {
     toaster.addToast('Address copied in Clipboard 👍');
   };
   return (
-    <div className="flex flex-col gap-4">
-      <p>{token.symbol}</p>
+    <span className="flex flex-col gap-4">
+      <span>{token.symbol}</span>
       {/* In SuggestionList the PairLogoName is used inside a button. It's forbidden to use a button within a button */}
       <span
         role="button"
@@ -93,6 +93,6 @@ const TokenTooltip: FC<{ token: Token }> = ({ token }) => {
         {shortenString(token.address)}
         <CopyIcon className="size-14" />
       </span>
-    </div>
+    </span>
   );
 };
