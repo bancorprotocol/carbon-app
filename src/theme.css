@@ -543,7 +543,7 @@
     font-weight: normal;
     white-space: nowrap;
   }
-  & tbody tr:not(:last-child) {
+  & tbody tr:not(:last-child) td {
     @apply border-b border-b-main-900/40 text-main-0/60;
   }
   & td, & th {

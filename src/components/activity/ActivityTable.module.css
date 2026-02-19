@@ -8,7 +8,7 @@
   }
 }
 .first-line {
-  @apply p-0 pt-12 align-bottom whitespace-nowrap pl-8 first:pl-24 last:pr-24 last:text-end;
+  @apply p-0 pt-12 align-bottom whitespace-nowrap pl-8 first:pl-24 last:pr-24 last:text-end border-b-0;
 }
 .second-line {
   @apply p-0 pb-12 align-top whitespace-nowrap pl-8 last:pr-24 last:text-end;
