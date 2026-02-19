@@ -89,7 +89,7 @@ export const StrategyStatusTag: FC<{
   const { status, isExplorer } = props;
   if (status === 'active') {
     return (
-      <span data-testid="status" className="text-success">
+      <span data-testid="status" className="text-success font-medium">
         {statusText.active}
       </span>
     );

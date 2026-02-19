@@ -6,9 +6,7 @@
   --sell-hue: 15;
   --buy-hue: 170;
 
-  --dark-gradient: linear-gradient(to bottom, var(--color-main-600), var(--color-main-800), var(--color-main-950));
-
-  --main-gradient: linear-gradient(var(--gradient-direction, 180deg), var(--color-green), var(--color-secondary));
+  --main-gradient: linear-gradient(var(--gradient-direction, 180deg), oklch(0.80 0.2 160), oklch(0.80 0.2 215));
   --buy-gradient: linear-gradient(to bottom, var(--color-buy), var(--color-buy-dark));
   --sell-gradient: linear-gradient(to bottom, var(--color-sell), var(--color-sell-dark));
   --error-gradient: linear-gradient(to bottom, var(--color-error), var(--color-error-dark));
@@ -40,27 +38,27 @@
   --color-main-100: oklch(0.30 0.05 var(--hue));
   --color-main-200: oklch(0.4 0.06 var(--hue));
   --color-main-300: oklch(0.6 0.07 var(--hue));
-  --color-main-400: oklch(0.7 0.08 var(--hue));
+  --color-main-400: oklch(0.70 0.06 var(--hue));
   --color-main-500: oklch(0.8 0.05 var(--hue));
   --color-main-600: oklch(0.85 0.04 var(--hue));
-  --color-main-700: oklch(0.9 0.02 var(--hue));
+  --color-main-700: oklch(0.9 0.03 var(--hue));
   --color-main-800: oklch(0.95 0.02 var(--hue));
   --color-main-900: oklch(0.99 0.02 var(--hue));
   --color-main-950: oklch(1 0.01 var(--hue));
 
-  --color-primary: oklch(0.8 .2 var(--hue));
-  --color-green: oklch(0.75 0.2 160);
-  --color-secondary: oklch(0.6 0.3 204);
+  --color-primary: oklch(0.4 .2 var(--hue));
+  --color-green: oklch(0.45 0.2 160);
+  --color-secondary: oklch(0.5 0.3 204);
   --color-tertiary: oklch(0.8 .3 185);
 
   --color-error: oklch(0.7 0.21 10.77);
   --color-error-dark: oklch(0.56 0.25 16.46);
-  --color-sell: oklch(0.65 0.24 16.66);
-  --color-sell-dark: oklch(.5 .28 var(--sell-hue));
-  --color-buy: oklch(0.81 0.21 171.56);
-  --color-buy-dark: oklch(0.53 0.16 161.03);
-  --color-success: oklch(0.7 .2 160);
-  --color-warning: oklch(0.75 .2 57);
+  --color-sell: oklch(0.55 0.24 16.66);
+  --color-sell-dark: oklch(.40 .28 var(--sell-hue));
+  --color-buy: oklch(0.55 0.21 171.56);
+  --color-buy-dark: oklch(0.40 0.16 161.03);
+  --color-success: oklch(0.5 .2 160);
+  --color-warning: oklch(0.5 .2 57);
 
   --color-shadow: oklch(0.4 0.06 var(--hue) / 40%);
 
@@ -95,7 +93,7 @@
   --color-buy: oklch(0.80 0.2 var(--buy-hue));
   --color-buy-dark: oklch(0.60 0.3 var(--buy-hue));
   --color-success: oklch(0.70 0.2 160);
-  --color-warning: oklch(0.60 0.2 57);
+  --color-warning: oklch(0.70 0.2 57);
 
   --color-shadow: oklch(0.1 0.02 var(--hue) / 25%);
 
@@ -245,7 +243,7 @@
 }
 
 @utility fill-gradient {
-  fill: url('#svg-brand-gradient');
+  fill: url('#svg-main-gradient');
 }
 @utility fill-sell-gradient {
   fill: url('#svg-sell-gradient');
@@ -268,17 +266,17 @@
   }
 }
 
-@utility btn-primary-gradient {
+@utility btn-main-gradient {
   --gradient-direction: 180deg;
   @apply rounded-full text-14;
   box-shadow: 0 5px 5px 0 var(--color-shadow);
-  background: var(--main-gradient);
+  background-image: var(--main-gradient);
   color: var(--color-black);
   padding: 12px 20px;
   transition: transform 0.1s var(--ease-out);
   text-align: center;
   &:hover {
-    background: linear-gradient(180deg, var(--color-green), var(--color-primary) 40%);
+    background: linear-gradient(var(--gradient-direction, 180deg), oklch(0.80 0.2 160), oklch(0.80 0.2 215) 40%);
   }
   &:disabled, &.disabled {
     opacity: 0.5;
@@ -289,50 +287,10 @@
   }
 }
 
-@utility btn-secondary-gradient {
-  @apply rounded-full text-14;
-  box-shadow: 0 5px 5px 0 var(--color-shadow);
-  background: linear-gradient(to bottom, var(--color-main-400), var(--color-main-600), var(--color-main-700)) border-box;
-  color: var(--color-main-0);
-  padding: 12px 20px;
-  transition: transform 0.1s var(--ease-out);
-  text-align: center;
-  &:hover {
-    background: linear-gradient(to bottom, var(--color-main-500), var(--color-main-700), var(--color-main-900)) border-box;
-  }
-  &:disabled, &.disabled {
-    background: linear-gradient(#061B1E) border-box;
-    color: oklch(1 0 0 / 40%);
-    pointer-events: none;
-  }
-  &:active {
-    transform: scale(0.9);
-  }
-}
-@utility btn-tertiary-gradient {
-  @apply rounded-full text-14;
-  box-shadow: 0 4px 15px 0 var(--color-shadow);
-  background: linear-gradient(to bottom, var(--color-main-600), var(--color-main-800), var(--color-main-950)) border-box;
-  color: var(--color-main-0);
-  padding: 12px 20px;
-  transition: transform 0.1s var(--ease-out);
-  text-align: center;
-  &:hover {
-    background: linear-gradient(to bottom, var(--color-main-700), var(--color-main-900), var(--color-main-950)) border-box;
-  }
-  &:disabled, &.disabled {
-    background: linear-gradient(var(--color-main-950)) border-box;
-    color: oklch(1 0 0 / 40%);
-    pointer-events: none;
-  }
-  &:active {
-    transform: scale(0.9);
-  }
-}
 
 @utility btn-primary {
   @apply rounded-full text-14 bg-primary/80;
-  color: var(--color-black);
+  color: var(--color-main-950);
   padding: 8px 16px;
   transition: transform 0.1s var(--ease-out);
   text-align: center;
@@ -507,10 +465,10 @@
 
 @custom-variant aria-page (&[aria-current="page"]);
 @utility fill-gradient {
-  fill: url("#svg-brand-gradient");
+  fill: url("#svg-main-gradient");
 }
 @utility  stroke-gradient {
-  stroke: url("#svg-brand-gradient");
+  stroke: url("#svg-main-gradient");
 }
 
 @utility table-col-span-all {
@@ -536,7 +494,7 @@
   border-radius: 16px;
   font-size: 14px;
   & thead tr {
-    @apply border-b border-b-main-900/40 text-main-0/60;
+    @apply border-b border-b-main-900/40 text-main-0/80;
   }
   & thead th {
     text-align: start;
@@ -544,7 +502,7 @@
     white-space: nowrap;
   }
   & tbody tr:not(:last-child) td {
-    @apply border-b border-b-main-900/40 text-main-0/60;
+    @apply border-b border-b-main-900/40;
   }
   & td, & th {
     padding: 16px;

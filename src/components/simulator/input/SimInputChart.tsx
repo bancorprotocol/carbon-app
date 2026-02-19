@@ -123,11 +123,7 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
         simulation isn't possible. However, you can still go ahead and create a
         strategy.
       </p>
-      <Link
-        to="/trade"
-        search={{ base, quote }}
-        className="btn-primary-gradient"
-      >
+      <Link to="/trade" search={{ base, quote }} className="btn-main-gradient">
         Create
       </Link>
     </div>

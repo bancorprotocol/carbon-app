@@ -53,7 +53,7 @@ export const PreviewRecurringRangeStrategy = ({
               y="0"
               width="900"
               height="1"
-              fill="black"
+              fill="var(--color-main-950)"
               fillOpacity="0.4"
             />
           </g>
@@ -89,7 +89,7 @@ export const PreviewRecurringRangeStrategy = ({
               y="0"
               width="900"
               height="1"
-              fill="black"
+              fill="var(--color-main-950)"
               fillOpacity="0.4"
             />
           </g>

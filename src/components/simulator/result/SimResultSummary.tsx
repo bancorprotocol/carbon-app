@@ -78,7 +78,7 @@ export const SimResultSummary = ({
                   sellSettings:
                     state.sell.min === state.sell.max ? 'limit' : 'range',
                 }}
-                className="btn-primary-gradient whitespace-nowrap"
+                className="btn-main-gradient whitespace-nowrap"
               >
                 Create
               </Link>
@@ -94,7 +94,7 @@ export const SimResultSummary = ({
                   anchor: 'buy',
                   budget: state.buy.budget,
                 }}
-                className="btn-primary-gradient whitespace-nowrap"
+                className="btn-main-gradient whitespace-nowrap"
               >
                 Create
               </Link>

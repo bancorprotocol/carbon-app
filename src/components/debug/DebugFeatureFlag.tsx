@@ -22,7 +22,7 @@ export const DebugFeatureFlag = () => {
       <h2>🧪 Feature Flags</h2>
       {!!featureFlags.length ? <FeatureRadioGroup /> : <EmptyFlags />}
       <button
-        className="btn-primary-gradient self-end"
+        className="btn-main-gradient self-end"
         type="submit"
         disabled={!featureFlags.length}
       >

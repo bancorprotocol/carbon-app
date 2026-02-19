@@ -57,7 +57,7 @@ export default function ModalConfirmDelete({
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />
       {!isGradient && (
-        <article className="bg-main-900/40 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
+        <article className="bg-main-900/80 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
           <h3 className="text-14 font-medium">Did you know?</h3>
           <Link
             onClick={editPrices}
@@ -65,7 +65,7 @@ export default function ModalConfirmDelete({
             to={editPricePage.to}
             params={{ strategyId: strategy.id }}
             search={editPricePage.search}
-            className="btn-primary-gradient row-span-2 self-center"
+            className="btn-main-gradient row-span-2 self-center"
           >
             Edit Prices
           </Link>

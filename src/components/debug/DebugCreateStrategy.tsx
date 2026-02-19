@@ -348,7 +348,7 @@ export const DebugCreateStrategy = () => {
         </output>
       ) : (
         <button
-          className="btn-primary-gradient"
+          className="btn-main-gradient"
           type="submit"
           data-testid="create-strategies"
         >

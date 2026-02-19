@@ -76,7 +76,7 @@ const tick = 87; // Where the ticks end, from baseline
 const lowest = 10;
 const highest = width - 10;
 
-const fontSize = 16;
+const fontSize = 15;
 const fontWidth = fontSize / 2;
 
 export const StrategyGraph: FC<Props> = ({ strategy, className }) => {

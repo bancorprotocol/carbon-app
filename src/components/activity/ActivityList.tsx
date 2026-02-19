@@ -40,7 +40,7 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
             {limit} / {size}
           </p>
           <button
-            className="btn-primary-gradient "
+            className="btn-main-gradient "
             onClick={() => setLimit(limit + 10)}
           >
             Show 10 More

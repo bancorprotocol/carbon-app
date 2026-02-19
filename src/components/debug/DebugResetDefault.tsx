@@ -9,7 +9,7 @@ export const DebugResetDefault = () => {
   return (
     <article className="rounded-3xl surface grid place-items-center gap-40 p-20">
       <h2>Deactivate Debug Mode</h2>
-      <button className="btn-primary-gradient" onClick={deactivateOne}>
+      <button className="btn-main-gradient" onClick={deactivateOne}>
         Deactive for {config.network.name}
       </button>
       <p className="text-main-0/60 text-14 text-center">

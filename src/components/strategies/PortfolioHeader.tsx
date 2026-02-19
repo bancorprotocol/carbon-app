@@ -71,7 +71,7 @@ export const PortfolioHeader = () => {
         </div>
         <Link
           to="/trade"
-          className="btn-primary-gradient whitespace-nowrap"
+          className="btn-main-gradient whitespace-nowrap"
           data-testid="create-strategy-desktop"
         >
           Create Strategy

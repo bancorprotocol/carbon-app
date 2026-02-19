@@ -121,7 +121,7 @@ export const MainMenuTradeSettings = () => {
           {settingsData.map((item) => (
             <TradeSettingsRow key={item.id} item={item} />
           ))}
-          <button className="btn-primary-gradient" type="submit">
+          <button className="btn-main-gradient" type="submit">
             Save Changes
           </button>
         </form>

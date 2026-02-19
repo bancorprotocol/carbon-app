@@ -11,8 +11,8 @@ const variants = {
   variant: {
     black: ['bg-main-900 text-main-0 hover:bg-white/20 active:bg-white/30'],
     white: ['btn-on-surface'],
-    secondary: ['btn-secondary-gradient'],
-    success: ['btn-primary-gradient'],
+    secondary: ['btn-on-background'],
+    success: ['btn-main-gradient'],
     buy: ['btn-buy-gradient text-main-950'],
     sell: ['btn-sell-gradient text-main-950'],
     error: [

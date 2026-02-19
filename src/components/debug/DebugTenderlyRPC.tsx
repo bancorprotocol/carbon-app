@@ -94,7 +94,7 @@ export const DebugTenderlyRPC = () => {
       </Label>
 
       <button
-        className="btn-primary-gradient"
+        className="btn-main-gradient"
         data-testid="save-rpc"
         type="submit"
       >

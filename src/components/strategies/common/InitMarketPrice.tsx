@@ -153,7 +153,7 @@ export const InitMarketPrice = (props: FieldProps) => {
         I've reviewed the new market price and chosen to proceed.
       </label>
       <button
-        className="btn-primary-gradient"
+        className="btn-main-gradient"
         type="submit"
         data-testid="set-overlapping-price"
       >

@@ -170,11 +170,7 @@
   input[type='checkbox']:checked {
     @apply text-main-0;
     border: 0px;
-    background-image: linear-gradient(
-      90deg,
-      var(--color-green) 0%,
-      var(--color-secondary) 100%
-    );
+    background-image: var(--main-gradient);
   }
   input[type='checkbox']:checked:hover {
     filter: brightness(1.2);

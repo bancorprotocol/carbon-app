@@ -2,7 +2,7 @@ export const SVGGradient = () => {
   return (
     <svg width="0" height="0">
       <defs>
-        <linearGradient id="svg-brand-gradient">
+        <linearGradient id="svg-main-gradient">
           <stop offset="0%" stopColor="var(--color-green)" />
           <stop offset="100%" stopColor="var(--color-secondary)" />
         </linearGradient>

@@ -219,7 +219,7 @@ export const BudgetChange: FC<BudgetChangeProps> = ({ budget, token }) => {
   const text = value.isNegative()
     ? tokenAmount(budget, token)
     : `+${tokenAmount(budget, token)}`;
-  return <p className={budgetColor(budget)}>{text}</p>;
+  return <p className={budgetColor(budget) + ' font-medium'}>{text}</p>;
 };
 
 const ActivityPaginator = () => {

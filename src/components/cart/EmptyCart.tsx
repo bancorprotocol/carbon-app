@@ -13,7 +13,7 @@ export const EmptyCart = () => {
       <h2 className="max-w-[440px] text-[32px] leading-[36px]">
         Your Cart is Empty
       </h2>
-      <Link to="/trade" className="btn-primary-gradient">
+      <Link to="/trade" className="btn-main-gradient">
         Create
       </Link>
     </section>

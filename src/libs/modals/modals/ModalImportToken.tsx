@@ -76,7 +76,7 @@ export default function ModalImportToken({
         </div>
       )}
       <button
-        className="btn-primary-gradient"
+        className="btn-main-gradient"
         onClick={onClick}
         disabled={isPending || isError}
       >

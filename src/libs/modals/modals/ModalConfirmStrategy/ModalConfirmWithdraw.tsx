@@ -41,7 +41,7 @@ export default function ModalConfirmWithdraw({
           to={editPrices.to}
           search={editPrices.search}
           params={{ strategyId: strategy.id }}
-          className="btn-primary-gradient row-span-2 self-center"
+          className="btn-main-gradient row-span-2 self-center"
         >
           Edit Prices
         </Link>

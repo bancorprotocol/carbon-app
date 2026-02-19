@@ -32,7 +32,7 @@ export const StrategyBlockBuySell: FC<{
     <article className={cn('flex flex-col gap-4 p-16', className)}>
       {isBuy ? (
         <header className="flex items-center gap-4">
-          <h4 className="text-12 text-buy">Buy {token.symbol}</h4>
+          <h4 className="text-12 text-buy font-medium">Buy {token.symbol}</h4>
           {hasFiatValue && (
             <Tooltip element={buyTooltip}>
               <IconTooltip className="size-10 text-main-0/60" />
@@ -56,7 +56,9 @@ export const StrategyBlockBuySell: FC<{
         </header>
       ) : (
         <header className="flex items-center gap-4">
-          <h4 className="text-12 text-sell">Sell {otherToken.symbol}</h4>
+          <h4 className="text-12 text-sell font-medium">
+            Sell {otherToken.symbol}
+          </h4>
           {hasFiatValue && (
             <Tooltip element={sellTooltip}>
               <IconTooltip className="size-10 text-main-0/60" />

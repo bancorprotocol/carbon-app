@@ -211,7 +211,7 @@ const Content = (props: Props) => {
           form={props.form}
           type="button"
           disabled={props.required && !hasDates}
-          className="btn-primary-gradient col-span-2 justify-self-end"
+          className="btn-main-gradient col-span-2 justify-self-end"
           data-testid="date-picker-confirm"
           onClick={onConfirm}
         >

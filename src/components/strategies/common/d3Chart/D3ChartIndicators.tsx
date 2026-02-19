@@ -78,7 +78,7 @@ export const D3ChartIndicators = ({ activities }: D3ChartIndicatorsProps) => {
                 width={8}
                 height={8}
                 fill="var(--color-main-0)"
-                stroke="black"
+                stroke="var(--color-main-950)"
               />
             </g>
           </IndicatorTooltip>
@@ -97,10 +97,10 @@ export const D3ChartIndicators = ({ activities }: D3ChartIndicatorsProps) => {
                 r={5}
                 fill={
                   isBelowAxis
-                    ? 'url(#svg-brand-gradient)'
+                    ? 'url(#svg-main-gradient)'
                     : 'var(--color-main-0)'
                 }
-                stroke="black"
+                stroke="var(--color-main-950)"
               />
             </g>
           </IndicatorTooltip>

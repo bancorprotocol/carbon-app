@@ -15,7 +15,7 @@ export const WalletConnect = () => {
           A decentralized protocol for automating on-chain trading strategies.
         </p>
 
-        <Link to="/trade" className="btn-primary-gradient">
+        <Link to="/trade" className="btn-main-gradient">
           Create
         </Link>
       </article>

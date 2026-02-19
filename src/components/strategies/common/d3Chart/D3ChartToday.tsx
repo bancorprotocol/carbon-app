@@ -28,7 +28,7 @@ export const D3ChartToday = () => {
           y="6"
           dominantBaseline="hanging"
           textAnchor="middle"
-          fill="black"
+          fill="var(--color-main-950)"
           fontSize="10"
         >
           {dayFormatter.format(new Date())}

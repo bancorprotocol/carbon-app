@@ -18,7 +18,7 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="middle"
-            stroke="black"
+            fill="var(--color-main-950)"
           >
             Sell
           </text>
@@ -34,7 +34,7 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="start"
-            stroke="black"
+            fill="var(--color-main-950)"
           >
             Sell
           </text>
@@ -69,7 +69,7 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="middle"
-            stroke="black"
+            fill="var(--color-main-950)"
           >
             Buy
           </text>
@@ -85,7 +85,7 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="start"
-            stroke="black"
+            fill="var(--color-main-950)"
           >
             Buy
           </text>
@@ -115,7 +115,7 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="middle"
-            stroke="black"
+            stroke="var(--color-main-950)"
           >
             Buy
           </text>

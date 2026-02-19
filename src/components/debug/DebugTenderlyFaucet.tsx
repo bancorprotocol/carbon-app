@@ -87,7 +87,7 @@ export const DebugTenderlyFaucet = () => {
         })}
       </ul>
 
-      <button className="btn-primary-gradient" type="submit">
+      <button className="btn-main-gradient" type="submit">
         Get money
       </button>
     </form>

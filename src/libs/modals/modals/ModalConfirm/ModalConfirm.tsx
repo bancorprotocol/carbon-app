@@ -37,7 +37,7 @@ export default function ModalConfirm({
           closeModal(id);
           await onConfirm();
         }}
-        className="btn-primary-gradient shrink-0 text-16"
+        className="btn-main-gradient shrink-0 text-16"
         data-testid="approve-submit"
       >
         {buttonLabel}

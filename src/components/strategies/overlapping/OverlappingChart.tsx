@@ -704,7 +704,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top) + 10}
                 width={1}
                 height={10}
-                fill="black"
+                fill="var(--color-main-950)"
                 fillOpacity="0.5"
               />
               <rect
@@ -712,7 +712,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top) + 10}
                 width={1}
                 height={10}
-                fill="black"
+                fill="var(--color-main-950)"
                 fillOpacity="0.5"
               />
             </g>
@@ -788,7 +788,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top) + 10}
                 width={1}
                 height={10}
-                fill="black"
+                fill="var(--color-main-950)"
                 fillOpacity="0.5"
               />
               <rect
@@ -796,7 +796,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top) + 10}
                 width={1}
                 height={10}
-                fill="black"
+                fill="var(--color-main-950)"
                 fillOpacity="0.5"
               />
             </g>
