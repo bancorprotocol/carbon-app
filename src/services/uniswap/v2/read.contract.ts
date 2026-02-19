@@ -73,7 +73,7 @@ export async function getAllV2Positions(
   const currentBlock = await provider.getBlockNumber();
 
   const MAX_CHUNK_SIZE = 5_000_000;
-  const MIN_CHUNK_SIZE = 5_000;
+  const MIN_CHUNK_SIZE = 500;
   let chunkSize = MAX_CHUNK_SIZE;
   let fromBlock = dexLogs[config.dex].block || config.startBlock;
 
@@ -101,7 +101,7 @@ export async function getAllV2Positions(
       dexLogs[config.dex].logs.push(...chunkLogs);
       dexLogs[config.dex].block = toBlock + 1;
       fromBlock = toBlock + 1;
-      chunkSize = Math.min(MAX_CHUNK_SIZE, Math.floor(chunkSize * 10)); // Reset progressively
+      chunkSize = Math.min(MAX_CHUNK_SIZE, Math.floor(chunkSize * 100)); // Reset progressively
     } catch {
       chunkSize = Math.floor(chunkSize / 10);
       console.log('Reduce the amount of chunk to ' + chunkSize);
