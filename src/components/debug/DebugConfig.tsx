@@ -77,7 +77,7 @@ export const DebugConfig = () => {
       <button
         data-testid="save-config"
         type="submit"
-        className="btn-primary-gradient"
+        className="btn-main-gradient"
       >
         Save
       </button>

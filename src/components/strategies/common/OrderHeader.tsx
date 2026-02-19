@@ -4,7 +4,7 @@ import { OrderBlock } from 'components/strategies/common/types';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import IconTooltip from 'assets/icons/tooltip.svg?react';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 interface Props {
@@ -26,7 +26,7 @@ export const OrderHeader: FC<Props> = (props) => {
         <Tooltip element={tooltipText}>
           <span>{isBuy ? 'Buy Low' : 'Sell High'}</span>
         </Tooltip>
-        <LogoImager alt="Token" src={base.logoURI} className="size-18" />
+        <TokenLogo token={base} size={18} />
         <span>{base.symbol}</span>
       </h2>
       {setSettings && (
@@ -65,7 +65,7 @@ export const OrderHeader: FC<Props> = (props) => {
           </p>
         }
       >
-        <IconTooltip className="size-18 text-white/60" />
+        <IconTooltip className="size-18 text-main-0/60" />
       </Tooltip>
     </header>
   );

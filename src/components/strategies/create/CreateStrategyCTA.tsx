@@ -17,7 +17,7 @@ export const CreateStrategyCTAMobile = () => {
     <Link
       aria-label="Create Strategy"
       to="/trade"
-      className="btn-primary-gradient bottom-100 right-30 place-items-center fixed grid size-56 rounded-full p-0 md:hidden"
+      className="btn-main-gradient bottom-100 right-30 place-items-center fixed grid size-56 rounded-full p-0 md:hidden"
       data-testid="create-strategy-mobile"
     >
       <IconPlus className="size-24" />

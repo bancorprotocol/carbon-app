@@ -194,7 +194,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
       <div>
         <StrategyBlockBudget strategy={strategy} />
       </div>
-      <div className="bg-main-900/20 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border">
+      <div className="bg-main-900/40 rounded-md border-main-800 grid grid-cols-2 grid-rows-[auto_auto] border">
         <StrategyBlockBuySell
           strategy={strategy}
           isBuy
@@ -232,12 +232,12 @@ export const CartStrategyItems: FC<Props> = (props) => {
               </button>
             </header>
             {error && (
-              <div className="rounded-md border-error absolute inset-0 grid place-items-center border bg-main-900/60 p-8 backdrop-blur-xs">
+              <div className="rounded-md border-error absolute inset-0 grid place-items-center border bg-main-900/60 p-8 backdrop-blur-sm">
                 <Warning message={error} isError />
               </div>
             )}
             {!error && !!warnings.length && (
-              <ul className="text-14 grid list-disc gap-8 pl-16	text-white/80">
+              <ul className="text-14 grid list-disc gap-8 pl-16	text-main-0/80">
                 {warnings.map((warning, i) => (
                   <li
                     key={i}

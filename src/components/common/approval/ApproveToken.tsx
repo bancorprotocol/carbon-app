@@ -2,7 +2,7 @@ import { FC, FormEvent, useId, useState } from 'react';
 import { useSetUserApproval } from 'libs/queries/chain/approval';
 import { Switch } from 'components/common/switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { useNotifications } from 'hooks/useNotifications';
@@ -88,13 +88,13 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
     <>
       <div className="bg-content min-h-85 flex items-center gap-16 justify-between rounded-2xl px-20">
         <div className="flex items-center gap-10">
-          <LogoImager alt="Token" src={token.logoURI} className="size-30" />
+          <TokenLogo token={token} size={30} />
           <p className="font-medium">{token.symbol}</p>
         </div>
 
         {data.approvalRequired ? (
           txBusy ? (
-            <p className="text-14 text-white/80">Waiting for Confirmation</p>
+            <p className="text-14 text-main-0/80">Waiting for Confirmation</p>
           ) : (
             <form
               onSubmit={onApprove}
@@ -104,7 +104,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
                 <label
                   htmlFor={inputId}
                   className={`text-12 font-medium transition-all ${
-                    isLimited ? 'text-white/60' : 'text-white/85'
+                    isLimited ? 'text-main-0/60' : 'text-main-0/85'
                   }`}
                 >
                   Unlimited

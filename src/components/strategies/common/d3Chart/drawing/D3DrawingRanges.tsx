@@ -71,7 +71,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="10"
-          fill="black"
+          fill="var(--color-main-950)"
         >
           {props.format(props.min)}
         </text>
@@ -92,7 +92,7 @@ export const D3DrawingXRange: FC<XRangeProps> = (props) => {
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="10"
-          fill="black"
+          fill="var(--color-main-950)"
         >
           {props.format(props.max)}
         </text>
@@ -139,7 +139,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="10"
-          fill="black"
+          fill="var(--color-main-950)"
         >
           {props.format(props.min)}
         </text>
@@ -160,7 +160,7 @@ export const D3DrawingYRange: FC<YRangeProps> = (props) => {
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="10"
-          fill="black"
+          fill="var(--color-main-950)"
         >
           {props.format(props.max)}
         </text>

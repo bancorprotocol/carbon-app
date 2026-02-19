@@ -12,7 +12,7 @@ export const StrategyChartLegend = () => {
       <p className="flex items-center gap-8">
         <span
           aria-hidden
-          className="size-16 shrink-0 rounded-full bg-white/20 p-4"
+          className="size-16 shrink-0 rounded-full bg-main-0/20 p-4"
         >
           <IconWarning />
         </span>

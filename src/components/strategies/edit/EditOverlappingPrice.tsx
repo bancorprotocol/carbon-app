@@ -148,14 +148,14 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
         <>
           <article className="grid gap-16 p-16">
             <header className="flex items-center gap-8">
-              <h2 className="text-16 font-medium flex-1">
+              <h2 className="font-title text-16 font-medium flex-1">
                 Edit Price Range&nbsp;
-                <span className="text-white/40">
+                <span className="text-main-0/40">
                   ({quote?.symbol} per 1 {base?.symbol})
                 </span>
               </h2>
               <Tooltip element="Indicate the strategy exact buy and sell prices.">
-                <IconTooltip className="size-18 text-white/60" />
+                <IconTooltip className="size-18 text-main-0/60" />
               </Tooltip>
             </header>
             <OverlappingPriceRange
@@ -213,7 +213,7 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
             <h3 className="text-16 font-medium flex items-center gap-8">
               Distribution
             </h3>
-            <p className="text-14 text-white/80">
+            <p className="text-14 text-main-0/80">
               Following the above {action} amount, these are the changes in
               budget allocation
             </p>

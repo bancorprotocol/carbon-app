@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -25,12 +25,12 @@
 </head>
 
 <body>
-  <style>
-    /* Avoid white flash on reload */
-    body {
-      background-color: black;
-    }
-  </style>
+  <script>
+    (() => {
+      const theme = localStorage.getItem('theme') || 'system';
+      document.documentElement.dataset.theme = theme;
+    })()
+  </script>
   <script>(function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
         'gtm.start':

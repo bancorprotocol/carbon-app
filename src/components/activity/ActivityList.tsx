@@ -36,11 +36,11 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
       </ul>
       {limit < size && (
         <div className="grid place-items-center">
-          <p className="text-12 mb-16 text-center text-white/60">
+          <p className="text-12 mb-16 text-center text-main-0/60">
             {limit} / {size}
           </p>
           <button
-            className="btn-primary-gradient "
+            className="btn-main-gradient "
             onClick={() => setLimit(limit + 10)}
           >
             Show 10 More
@@ -70,10 +70,10 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
       <header className="grid grid-flow-col px-16 pt-16 items-center justify-items-start">
         {!hideIds && <ActivityId activity={activity} size={16} />}
         <div className="grid text-12 justify-self-end align-center">
-          <p className="text-white/80">
+          <p className="text-main-0/80">
             {activityDateFormatter.format(activity.date)}
           </p>
-          <p className="flex gap-8 items-center text-white/60">
+          <p className="flex gap-8 items-center text-main-0/60">
             <span>{shortenString(activity.txHash)}</span>
             <TransactionLink txHash={activity.txHash} className="h-16" />
           </p>
@@ -87,7 +87,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
           <ActivityIcon activity={activity} size={36} className="p-8" />
           <hgroup className="grid">
             <h3>{activityActionName[activity.action]}</h3>
-            <p className="text-12 text-white/60">
+            <p className="text-12 text-main-0/60">
               {activityDescription(activity)}
             </p>
           </hgroup>
@@ -96,7 +96,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
       <hr className="border-main-700 mx-8" />
       <table className="w-full table-fixed">
         <thead>
-          <tr className="text-12 text-white/60">
+          <tr className="text-12 text-main-0/60">
             <th className="font-normal px-24">Buy Budget</th>
             <th className="font-normal px-24">Sell Budget</th>
           </tr>

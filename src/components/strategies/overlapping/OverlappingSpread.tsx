@@ -50,7 +50,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
       <header className="flex items-center gap-8 ">
         <h2 className="text-16 font-medium flex-1">Fee Tier</h2>
         <Tooltip element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price">
-          <IconTooltip className="size-18 text-white/60" />
+          <IconTooltip className="size-18 text-main-0/60" />
         </Tooltip>
       </header>
       <div className="flex gap-8">
@@ -67,7 +67,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
             'rounded-lg text-12 flex items-center gap-8 input-container py-8 px-16 text-center max-w-150',
           )}
         >
-          <label className="text-white/60" htmlFor="spread-custom">
+          <label className="text-main-0/60" htmlFor="spread-custom">
             Custom
           </label>
           <input

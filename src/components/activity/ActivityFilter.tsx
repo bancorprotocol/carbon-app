@@ -93,9 +93,15 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
             <Option key={id} value={id}>
               <span>{getLowestBits(id)}</span>
               <svg width="4" height="4">
-                <circle cx="2" cy="2" r="2" fill="white" fillOpacity="0.4" />
+                <circle
+                  cx="2"
+                  cy="2"
+                  r="2"
+                  fill="var(--color-main-0)"
+                  fillOpacity="0.4"
+                />
               </svg>
-              <span className="text-white/40">
+              <span className="text-main-0/40">
                 {base.symbol}/{quote.symbol}
               </span>
             </Option>

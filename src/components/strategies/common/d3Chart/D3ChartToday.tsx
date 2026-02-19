@@ -12,17 +12,23 @@ export const D3ChartToday = () => {
         x2={x}
         y1={0}
         y2={dms.boundedHeight}
-        stroke="white"
+        stroke="var(--color-main-0)"
         strokeWidth="1"
         strokeDasharray="2"
       />
       <g transform={`translate(${x}, ${dms.boundedHeight + 8})`}>
-        <rect x={-32} height="16" width="64" fill="white" rx="4" />
+        <rect
+          x={-32}
+          height="16"
+          width="64"
+          fill="var(--color-main-0)"
+          rx="4"
+        />
         <text
           y="6"
           dominantBaseline="hanging"
           textAnchor="middle"
-          fill="black"
+          fill="var(--color-main-950)"
           fontSize="10"
         >
           {dayFormatter.format(new Date())}

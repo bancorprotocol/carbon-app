@@ -17,12 +17,12 @@ export const DebugFeatureFlag = () => {
   return (
     <form
       onSubmit={setFeatureFlags}
-      className="rounded-3xl bg-main-900 flex flex-col gap-20 border border-white/60 p-20 md:col-span-2"
+      className="rounded-3xl bg-main-900 flex flex-col gap-20 border border-main-0/60 p-20 md:col-span-2"
     >
       <h2>🧪 Feature Flags</h2>
       {!!featureFlags.length ? <FeatureRadioGroup /> : <EmptyFlags />}
       <button
-        className="btn-primary-gradient self-end"
+        className="btn-main-gradient self-end"
         type="submit"
         disabled={!featureFlags.length}
       >
@@ -59,7 +59,7 @@ const FeatureRadioGroup = () => {
               <label htmlFor={`flag-${value}`}>{label}</label>
               <p
                 id={`flag-description-${value}`}
-                className="text-14 text-white/80"
+                className="text-14 text-main-0/80"
               >
                 {description}
               </p>

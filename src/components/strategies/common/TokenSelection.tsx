@@ -102,7 +102,7 @@ const DisplayToken: FC<DisplayTokenProps> = ({ token, label }) => {
     <>
       <TokenLogo token={token} size={30} className="hidden sm:inline" />
       <p className="grid flex-1 text-start">
-        <span className="font-medium text-12 text-white/60">{label}</span>
+        <span className="font-medium text-12 text-main-0/60">{label}</span>
         <span className="inline-flex items-center gap-4 break-all min-h-24">
           {token?.isSuspicious && <SuspiciousToken />}
           {token?.symbol}

@@ -15,7 +15,7 @@ export const ErrorUnsupportedNetwork = () => {
       text={`Please connect to ${networkName} using your wallet or the button below`}
       variant="error"
     >
-      <button className="btn-primary-gradient" onClick={switchNetwork}>
+      <button className="btn-main-gradient" onClick={switchNetwork}>
         Change Network
       </button>
       <button className="btn-on-surface" onClick={disconnect}>

@@ -19,7 +19,7 @@ export const defaultLegend: D3SimLegendType = {
     index: 2,
     label: 'Price',
     labelSecondary: 'LHS',
-    color: 'white',
+    color: 'var(--color-main-0)',
     isDisabled: false,
   },
   portfolio: {

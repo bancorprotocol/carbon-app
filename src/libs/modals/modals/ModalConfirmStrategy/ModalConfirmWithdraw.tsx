@@ -34,18 +34,18 @@ export default function ModalConfirmWithdraw({
         icon={<IconWallet className="size-24" />}
         title="Are you sure you would like to withdraw your funds?"
       />
-      <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl bg-white/10 p-16">
+      <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl bg-main-0/10 p-16">
         <h3 className="text-14 font-medium">Did you know?</h3>
         <Link
           onClick={edit}
           to={editPrices.to}
           search={editPrices.search}
           params={{ strategyId: strategy.id }}
-          className="btn-primary-gradient row-span-2 self-center"
+          className="btn-main-gradient row-span-2 self-center"
         >
           Edit Prices
         </Link>
-        <p className="text-12 text-white/80">
+        <p className="text-12 text-main-0/80">
           Editing prices is cheaper and keeps your strategy working for you.
         </p>
       </article>

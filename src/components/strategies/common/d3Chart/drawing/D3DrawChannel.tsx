@@ -294,7 +294,7 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       cy={yScale(y)}
       r="5"
       fill="var(--color-secondary)"
-      className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
+      className="edge draggable invisible hover:fill-main-0 group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
   ));
@@ -360,14 +360,14 @@ export const D3EditChannel: FC<D3ShapeProps> = ({ drawing, onChange }) => {
           {...getLineCenter([points[0], points[1]], xScale, yScale)}
           r="5"
           fill="var(--color-secondary)"
-          className="draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
+          className="draggable invisible hover:fill-main-0 group-hover/drawing:visible group-focus/drawing:visible"
           onMouseDown={(e) => dragCenter(e, 0)}
         />
         <circle
           {...getLineCenter([points[2], points[3]], xScale, yScale)}
           r="5"
           fill="var(--color-secondary)"
-          className="draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
+          className="draggable invisible hover:fill-main-0 group-hover/drawing:visible group-focus/drawing:visible"
           onMouseDown={(e) => dragCenter(e, 1)}
         />
       </g>

@@ -49,6 +49,7 @@ export const TradeMarket = () => {
           <div
             className={cn(style.order, 'grid gap-16 p-16')}
             data-direction={isBuy ? 'buy' : 'sell'}
+            data-disposable={true}
           >
             <header className="flex items-center justify-between">
               <h2 className="text-18 flex items-center gap-8">

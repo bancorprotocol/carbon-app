@@ -71,10 +71,10 @@ export const BudgetSection: FC<Props> = ({
                 }`
           }
         >
-          <span className="text-white/80">Budget</span>
+          <span className="text-main-0/80">Budget</span>
         </Tooltip>
         {isBudgetOptional && (
-          <span className="font-medium ml-8 text-white/60">Optional</span>
+          <span className="font-medium ml-8 text-main-0/60">Optional</span>
         )}
       </h3>
       <TokenInputField

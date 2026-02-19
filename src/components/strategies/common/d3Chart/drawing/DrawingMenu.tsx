@@ -56,7 +56,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
   const { drawingMode, setDrawingMode } = useD3ChartCtx();
   return (
     <div
-      className="flex flex-col border-e border-white/10 bg-main-800"
+      className="flex flex-col border-e border-main-0/10 bg-main-800"
       role="menubar"
     >
       {drawings.map(({ mode, label, icon }) => (
@@ -77,7 +77,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
           </FloatTooltipContent>
         </FloatTooltip>
       ))}
-      <hr className="mx-auto my-8 w-3/4 border-e border-white/40" />
+      <hr className="mx-auto my-8 w-3/4 border-e border-main-0/40" />
       <FloatTooltip placement="right">
         <FloatTooltipTrigger>
           <button

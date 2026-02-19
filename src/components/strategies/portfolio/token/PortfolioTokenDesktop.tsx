@@ -75,7 +75,7 @@ const Rows = ({
   selectedToken,
 }: Omit<PortfolioTokenProps, 'isPending'>) => {
   return data.map((item, i) => (
-    <tr key={item.strategy.id} className="h-64 text-white/80 text-16">
+    <tr key={item.strategy.id} className="h-64 text-main-0/80 text-16">
       <td className="relative">
         <div className="flex items-center gap-16">
           <div

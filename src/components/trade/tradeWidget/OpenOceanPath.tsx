@@ -44,7 +44,7 @@ export const OpenOceanPath: FC<Props> = ({ path }) => {
                       width="16"
                       height="4"
                       viewBox="0 0 16 4"
-                      fill="white"
+                      fill="var(--color-main-0)"
                       fillOpacity="0.2"
                     >
                       <circle cx="2" cy="2" r="2" />

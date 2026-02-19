@@ -59,7 +59,7 @@ const Menu = () => {
     <menu>
       <button
         role="menuitem"
-        className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-black"
+        className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-main-950"
         onClick={copyAddress}
       >
         <IconCopy className="w-16" />
@@ -67,7 +67,7 @@ const Menu = () => {
       </button>
       <button
         role="menuitem"
-        className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-black"
+        className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-main-950"
         onClick={() => tonConnectUI.disconnect()}
       >
         <IconDisconnect className="size-16" />

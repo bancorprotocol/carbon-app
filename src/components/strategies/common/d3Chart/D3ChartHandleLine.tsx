@@ -52,7 +52,7 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
       >
         <rect y={y} {...handleDms} fill={color} rx={4} />
         {label && (
-          <text y={y + 12} x={6} fill="black" fontSize={10}>
+          <text y={y + 12} x={6} fill="var(--color-main-950)" fontSize={10}>
             {label}
           </text>
         )}
@@ -69,13 +69,13 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
             width="5.83333"
             height="4.16667"
             rx="1"
-            stroke="white"
+            stroke="var(--color-main-0)"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           <path
             d="M6.33008 6.62264C6.33008 5.47205 7.26282 4.53931 8.41341 4.53931V4.53931C9.564 4.53931 10.4967 5.47205 10.4967 6.62264V7.87264H6.33008V6.62264Z"
-            stroke="white"
+            stroke="var(--color-main-0)"
             strokeLinecap="round"
             strokeLinejoin="round"
           />

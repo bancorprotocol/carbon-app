@@ -16,11 +16,11 @@ export const BaseToast: FC<Props> = ({ id, children, color = 'primary' }) => {
       style={{
         backgroundImage: `linear-gradient(to right, transparent, var(--color-${color}))`,
       }}
-      className="bg-main-900 text-14 rounded-sm flex items-center border border-white/10"
+      className="bg-main-900 text-14 rounded-sm flex items-center border border-main-0/10"
     >
       {children}
       <button
-        className="p-16 text-white/80"
+        className="p-16 text-main-0/80"
         aria-label="close message"
         onClick={() => toaster.removeToast(id)}
       >
