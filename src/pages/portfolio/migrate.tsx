@@ -12,6 +12,7 @@ import { MigrationList } from 'components/migration/MigrationList';
 import { MigrationLoading } from 'components/migration/MigrationLoading';
 import { MigrationFetching } from 'components/migration/MigrationFetching';
 import { MigrationExplainer } from 'components/migration/MigrationExplainer';
+import { useCanBatchTransactions } from 'libs/queries/chain/canBatch';
 
 interface MigratedPosition {
   id: string;
@@ -70,6 +71,7 @@ interface Props {
 const MigrationContent: FC<Props> = ({ query }) => {
   const { getTokenById, isPending } = useTokens();
   const { aboveBreakpoint } = useBreakpoints();
+  const canBatch = useCanBatchTransactions();
 
   const tokens = useMemo(() => {
     if (query.isPending) return;
@@ -145,6 +147,17 @@ const MigrationContent: FC<Props> = ({ query }) => {
 
   if (isPending || query.isPending || marketPriceQuery.isPending) {
     return <MigrationLoading />;
+  }
+
+  if (!canBatch.data) {
+    return (
+      <NotFound
+        className="surface rounded-2xl"
+        title="Unsupported Feature"
+        text="This feature only work with compatible wallet, like Metamask. Try to connect with another wallet."
+        variant="error"
+      />
+    );
   }
 
   if (!positions?.length) {

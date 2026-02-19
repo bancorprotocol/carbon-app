@@ -78,7 +78,8 @@ export const useBatchTransaction = () => {
   const allowBatch = useRef<boolean>(null);
   // Note: can can't access user from useWagmi because `useBatchTransaction` is used in useWagmi
 
-  const canBatchTransactions = useCallback(async (user: string) => {
+  const canBatchTransactions = useCallback(async (user?: string) => {
+    if (!user) return false;
     if (!config.ui.useEIP7702) return false;
     if (!window.ethereum) return false;
     if (typeof allowBatch.current !== 'boolean') {

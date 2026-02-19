@@ -82,6 +82,7 @@ export const QueryKey = {
 
   missingTokens: () => [...chain, 'missing-token'],
   token: (token: string) => [...chain, 'token', token],
+  canBatch: (user?: string) => [...chain, 'can-batch', user],
   pairs: () => [...sdk, 'pairs'],
 
   tradeData: (pair: TokenPair, isTradeBySource: boolean, amount: string) => [
