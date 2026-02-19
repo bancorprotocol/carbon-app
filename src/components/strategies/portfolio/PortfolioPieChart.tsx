@@ -21,7 +21,7 @@ export const PortfolioPieChart = ({
   hideChart,
 }: Props) => {
   return (
-    <div className="rounded-lg surface relative aspect-square w-full flex-shrink-0 md:size-[400px]">
+    <div className="rounded-lg surface relative aspect-square w-full flex-shrink-0 md:size-[400px] grid">
       <div className="absolute flex size-full items-center justify-center">
         {isPending ? (
           <div className="h-[80px]">
