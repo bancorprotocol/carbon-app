@@ -1,9 +1,8 @@
 import { FC, useId, useState } from 'react';
 import { NewTabLink, Link } from 'libs/routing';
 import { Connector, useWagmi } from 'libs/wagmi';
-import { Imager } from 'components/common/imager/Imager';
-import iconLedger from 'assets/logos/ledger.svg';
-import iconTrezor from 'assets/logos/trezor.svg';
+import IconLedger from 'assets/logos/ledger.svg?react';
+import IconTrezor from 'assets/logos/trezor.svg?react';
 import { WalletIcon } from 'components/common/WalletIcon';
 
 type Props = {
@@ -18,12 +17,12 @@ const buttonClasses =
 const EXT_LINKS = [
   {
     name: 'Ledger',
-    logoUrl: iconLedger,
+    icon: <IconLedger className="h-24" />,
     url: 'https://www.ledger.com/academy/security/the-safest-way-to-use-metamask',
   },
   {
     name: 'Trezor',
-    logoUrl: iconTrezor,
+    icon: <IconTrezor className="h-24" />,
     url: 'https://trezor.io/learn/a/metamask-and-trezor',
   },
 ];
@@ -86,7 +85,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
           );
         })}
 
-        {EXT_LINKS.map(({ url, name, logoUrl }) => (
+        {EXT_LINKS.map(({ url, name, icon }) => (
           <NewTabLink
             key={url}
             to={url}
@@ -97,9 +96,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
             }`}
             disabled={isDisabled}
           >
-            <div className="flex w-24 justify-center">
-              <Imager alt="Wallet Logo" src={logoUrl} className="h-24" />
-            </div>
+            <div className="flex w-24 justify-center">{icon}</div>
             <span className={textClasses}>{name}</span>
           </NewTabLink>
         ))}

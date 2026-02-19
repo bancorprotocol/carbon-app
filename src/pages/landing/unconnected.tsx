@@ -158,10 +158,10 @@ export const UnconnectedLandingPage = () => {
                 to="/explore/strategies"
                 className="flex items-center gap-8"
               >
-                <span className="text-gradient gradient-direction-[90deg]">
+                <span className="text-gradient gradient-direction-[90deg] font-medium">
                   Explore Strategies
                 </span>
-                <IconArrowCircle className="size-20 fill-gradient" />
+                <IconArrowCircle className="size-20 fill-gradient stroke-gradient" />
               </Link>
               <nav aria-label="strategy types" className="grid gap-8">
                 {item.trades.map((trade) => (

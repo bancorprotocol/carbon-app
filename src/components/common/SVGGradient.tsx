@@ -3,8 +3,8 @@ export const SVGGradient = () => {
     <svg width="0" height="0">
       <defs>
         <linearGradient id="svg-main-gradient">
-          <stop offset="0%" stopColor="var(--color-green)" />
-          <stop offset="100%" stopColor="var(--color-secondary)" />
+          <stop offset="0%" stopColor="var(--main-gradient-from)" />
+          <stop offset="100%" stopColor="var(--main-gradient-to)" />
         </linearGradient>
         <linearGradient id="svg-buy-gradient" x1="0" x2="1" y1="0" y2="1">
           <stop offset="0%" stopColor="var(--color-buy)" />

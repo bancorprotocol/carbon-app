@@ -49,7 +49,7 @@
     z-index: -1;
     inset-inline: -50dvw;
     inset-block: -50dvh;
-    background-image: var(--bg-gradient);
+    background-image: var(--app-background);
     animation: move-gradient 20s infinite alternate;
   }
   #root.hide-bg::before {

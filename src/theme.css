@@ -6,7 +6,7 @@
   --sell-hue: 15;
   --buy-hue: 170;
 
-  --main-gradient: linear-gradient(var(--gradient-direction, 180deg), oklch(0.80 0.2 160), oklch(0.80 0.2 215));
+  --main-gradient: linear-gradient(var(--gradient-direction, 180deg), var(--main-gradient-from), var(--main-gradient-to));
   --buy-gradient: linear-gradient(to bottom, var(--color-buy), var(--color-buy-dark));
   --sell-gradient: linear-gradient(to bottom, var(--color-sell), var(--color-sell-dark));
   --error-gradient: linear-gradient(to bottom, var(--color-error), var(--color-error-dark));
@@ -62,7 +62,11 @@
 
   --color-shadow: oklch(0.4 0.06 var(--hue) / 40%);
 
-  --bg-gradient: radial-gradient(closest-side circle at center, var(--color-main-950) 40%, var(--color-main-700) 100%);
+  /* Background of the app */
+  --app-background: radial-gradient(closest-side circle at center, var(--color-main-950) 40%, var(--color-main-700) 100%);
+  /* Colors used for the gradient */
+  --main-gradient-from: oklch(0.7 0.13 160);
+  --main-gradient-to: oklch(0.7 0.13 214);
 
   color-scheme: light;
   accent-color: var(--color-main-0);
@@ -97,7 +101,9 @@
 
   --color-shadow: oklch(0.1 0.02 var(--hue) / 25%);
 
-  --bg-gradient: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-main-950) 100%);
+  --app-background: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-main-950) 100%);
+  --main-gradient-from: oklch(80% .2 160);
+  --main-gradient-to: oklch(80% .2 215);
 
   color: var(--color-main-0);
   color-scheme: dark;
@@ -222,8 +228,8 @@
 @utility text-gradient {
   background-image: linear-gradient(
     var(--gradient-direction, 180deg),
-    var(--color-green),
-    var(--color-secondary)
+    var(--main-gradient-from),
+    var(--main-gradient-to)
   );
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -243,7 +249,10 @@
 }
 
 @utility fill-gradient {
-  fill: url('#svg-main-gradient');
+  fill: url("#svg-main-gradient");
+}
+@utility  stroke-gradient {
+  stroke: url("#svg-main-gradient");
 }
 @utility fill-sell-gradient {
   fill: url('#svg-sell-gradient');
@@ -267,23 +276,35 @@
 }
 
 @utility btn-main-gradient {
-  --gradient-direction: 180deg;
   @apply rounded-full text-14;
   box-shadow: 0 5px 5px 0 var(--color-shadow);
-  background-image: var(--main-gradient);
-  color: var(--color-black);
+  color: var(--color-main-950);
   padding: 12px 20px;
   transition: transform 0.1s var(--ease-out);
   text-align: center;
-  &:hover {
-    background: linear-gradient(var(--gradient-direction, 180deg), oklch(0.80 0.2 160), oklch(0.80 0.2 215) 40%);
-  }
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
   &:disabled, &.disabled {
     opacity: 0.5;
     pointer-events: none;
   }
   &:active {
     transform: scale(0.9);
+  }
+  &::before {
+    --gradient-direction: 60deg;
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background-image: linear-gradient(170deg, var(--main-gradient-from), var(--main-gradient-to));
+    scale: 1 2;
+    transform-origin: top;
+    transition: transform 0.5s var(--ease-in-out);
+  }
+  &:hover::before {
+    transform: translateY(-50%);
   }
 }
 
@@ -464,12 +485,7 @@
 }
 
 @custom-variant aria-page (&[aria-current="page"]);
-@utility fill-gradient {
-  fill: url("#svg-main-gradient");
-}
-@utility  stroke-gradient {
-  stroke: url("#svg-main-gradient");
-}
+
 
 @utility table-col-span-all {
   column-span: all;

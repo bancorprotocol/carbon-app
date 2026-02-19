@@ -19,9 +19,9 @@
     <defs>
         <linearGradient id="paint0_linear_6068_1398" x1="34.3511" y1="0" x2="34.3511" y2="90"
             gradientUnits="userSpaceOnUse">
-            <stop stop-color="#00B578" stop-opacity="0.7" />
-            <stop offset="0.515" stop-color="#00B578" />
-            <stop offset="1" stop-color="var(--color-secondary)" />
+            <stop stop-color="var(--main-gradient-from)" stop-opacity="0.7" />
+            <stop offset="0.5" stop-color="var(--main-gradient-from)" />
+            <stop offset="1" stop-color="var(--main-gradient-to)" />
         </linearGradient>
     </defs>
 </svg>
