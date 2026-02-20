@@ -3,16 +3,16 @@ import { CreateStrategyParams, QueryKey, useQueryClient } from 'libs/queries';
 import { useCreateStrategyQuery } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { useApproval } from 'hooks/useApproval';
-import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { FormStaticOrder } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
-import config from 'config';
 import { carbonEvents } from 'services/events';
 import { handleTxStatusAndRedirectToOverview } from './utils';
 import { getStrategyType } from '../common/utils';
 import { useNavigate } from '@tanstack/react-router';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
+import { useModal } from 'hooks/useModal';
+import config from 'config';
 
 const spenderAddress = config.addresses.carbon.carbonController;
 
@@ -51,7 +51,7 @@ export const useCreateStrategy = (props: Props) => {
   const { base, quote, buy, sell } = props;
   const cache = useQueryClient();
   const navigate = useNavigate();
-  const { user } = useWagmi();
+  const { user, openConnect } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
   const { checkRestriction } = useRestrictedCountry();
@@ -86,7 +86,7 @@ export const useCreateStrategy = (props: Props) => {
     if (!base || !quote) return;
     const checked = await checkRestriction();
     if (!checked) return;
-    if (!user) return openModal('wallet');
+    if (!user) return openConnect();
 
     const onConfirm = () => {
       return mutation.mutate(toCreateStrategyParams(base, quote, buy, sell), {
