@@ -446,9 +446,12 @@
   column-span: all;
 }
 
-@utility grid-stack {
+@utility grid-stack-container {
   display: grid;
   grid-template-areas: "stack";
+}
+@utility grid-stack {
+  grid-area: stack;
 }
 
 @utility grid-area-* {
