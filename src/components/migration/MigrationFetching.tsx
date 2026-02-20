@@ -8,6 +8,7 @@ import { useWagmi } from 'libs/wagmi';
 import { QueryKey } from 'libs/queries';
 import IconCheck from 'assets/icons/check.svg?react';
 import IconFails from 'assets/icons/X.svg?react';
+import IconRefresh from 'assets/icons/refresh.svg?react';
 
 interface QueryState {
   dex: Dexes;
@@ -65,10 +66,14 @@ export const MigrationFetching: FC<Props> = ({ queryState }) => {
             role="menuitem"
             onClick={() => refetch(q.dex)}
             key={q.dex}
-            className="rounded-sm flex items-center gap-8 p-8 hover:bg-main-900/40"
+            className="rounded-sm flex items-center gap-8 p-8 hover:bg-main-900/40 group"
           >
             <DexIcon dex={q.dex} className="size-24" />
             <span className="mr-auto pe-8">{dexNames[q.dex]}</span>
+            <IconRefresh
+              className="size-24 invisible group-hover:visible data-[fetching=true]:invisible"
+              data-fetching={q.fetchStatus === 'fetching'}
+            />
             <FetchIndicator
               isFetching={q.fetchStatus === 'fetching'}
               hasError={q.status === 'error'}

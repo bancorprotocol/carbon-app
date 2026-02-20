@@ -173,7 +173,9 @@ export const PositionDialog: FC<Props> = (props) => {
         </header>
         <MigrationCard position={p} />
         <p className="text-14 text-center">
-          NOTE: Any unused funds will be sent back to your wallet
+          Any unused funds will be sent back to your wallet
+          <br />
+          Fee on transfer (tax) or rebasing tokens are not supported
         </p>
         <button
           className="btn-primary-gradient flex items-center justify-center gap-16"
