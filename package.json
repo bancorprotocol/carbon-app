@@ -30,7 +30,7 @@
     "@ton/core": "^0.61.0",
     "@ton/ton": "^15.3.1",
     "@tonappchain/sdk": "^0.6.5-mainnet-alpha",
-    "@tonconnect/ui-react": "2.4.1",
+    "@tonconnect/ui-react": "2.2.0",
     "@typechain/ethers-v6": "0.5.1",
     "@types/d3": "7.4.3",
     "@types/node": "20.0.0",
