@@ -215,7 +215,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
         <PairFilterDropdown filter={filter} setFilter={setFilter} />
         <PairSortDropdown sort={sort} setSort={setSort} />
       </div>
-      <PairContent pairs={pairs} />
+      <PairContent pairs={pairs} url={url} />
     </>
   );
 };

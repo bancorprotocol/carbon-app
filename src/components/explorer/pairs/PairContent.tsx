@@ -6,9 +6,10 @@ import { PairTable } from './PairTable';
 import { NotFound } from 'components/common/NotFound';
 
 interface Props {
+  url: '/explore/pairs' | '/portfolio/pairs';
   pairs: PairRow[];
 }
-export const PairContent: FC<Props> = ({ pairs }) => {
+export const PairContent: FC<Props> = ({ pairs, url }) => {
   const { belowBreakpoint } = useBreakpoints();
 
   if (!pairs.length) {
@@ -23,8 +24,8 @@ export const PairContent: FC<Props> = ({ pairs }) => {
   }
 
   if (!belowBreakpoint('xl')) {
-    return <PairTable pairs={pairs} />;
+    return <PairTable pairs={pairs} url={url} />;
   } else {
-    return <PairList pairs={pairs} />;
+    return <PairList pairs={pairs} url={url} />;
   }
 };

@@ -5,21 +5,31 @@ import { Link } from '@tanstack/react-router';
 import { NewTabLink } from 'libs/routing';
 import LinkIcon from 'assets/icons/link.svg?react';
 import config from 'config';
+import { toPairSlug } from 'utils/pairSearch';
 
 interface Props {
+  url: '/explore/pairs' | '/portfolio/pairs';
   pairs: PairRow[];
 }
 
-export const PairList: FC<Props> = ({ pairs }) => {
+export const PairList: FC<Props> = ({ pairs, url }) => {
   return (
     <ol className="w-full grid gap-24 place-self-auto grid-area-[list] grid-fill-330">
       {pairs.map((pair) => {
         const base = pair.base;
         const quote = pair.quote;
+        const search = toPairSlug(base, quote);
         return (
           <li key={pair.id} className="grid gap-16 surface p-16 rounded-2xl">
-            <header className="flex gap-8">
-              <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
+            <header>
+              <Link
+                className="flex gap-8"
+                from={url}
+                to="../strategies"
+                search={{ search }}
+              >
+                <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
+              </Link>
             </header>
             <dl className="grid grid-cols-3 gap-16">
               <div className="col-span-2 grid gap-8">

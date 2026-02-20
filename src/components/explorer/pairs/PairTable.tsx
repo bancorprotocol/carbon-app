@@ -8,12 +8,14 @@ import { NewTabLink } from 'libs/routing';
 import { clamp } from 'utils/helpers/operators';
 import LinkIcon from 'assets/icons/link.svg?react';
 import config from 'config';
+import { toPairSlug } from 'utils/pairSearch';
 
 interface Props {
+  url: '/explore/pairs' | '/portfolio/pairs';
   pairs: PairRow[];
 }
 
-export const PairTable: FC<Props> = ({ pairs }) => {
+export const PairTable: FC<Props> = ({ url, pairs }) => {
   const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
 
@@ -38,12 +40,18 @@ export const PairTable: FC<Props> = ({ pairs }) => {
         {pairs.slice(maxOffset, maxOffset + limit).map((pair) => {
           const base = pair.base;
           const quote = pair.quote;
+          const search = toPairSlug(base, quote);
           return (
             <tr key={pair.id}>
               <td>
-                <div className="inline-flex gap-16">
+                <Link
+                  from={url}
+                  to="../strategies"
+                  search={{ search }}
+                  className="inline-flex gap-16"
+                >
                   <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
-                </div>
+                </Link>
               </td>
               {config.ui.rewards && (
                 <td>
