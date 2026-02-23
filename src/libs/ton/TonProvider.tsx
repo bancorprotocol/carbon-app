@@ -337,6 +337,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
           accountChainId,
           handleTenderlyRPC,
           imposterAccount,
+          walletAccount: user,
           setImposterAccount,
           connect,
           openConnect,
