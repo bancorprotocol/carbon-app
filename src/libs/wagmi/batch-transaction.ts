@@ -76,8 +76,8 @@ export const useBatchTransaction = () => {
   const { Token } = useContract();
 
   const allowBatch = useRef<boolean>(null);
-  // Note: can can't access user from useWagmi because `useBatchTransaction` is used in useWagmi
 
+  // Note: can can't access user from useWagmi because `useBatchTransaction` is used in useWagmi
   const canBatchTransactions = useCallback(async (user?: string) => {
     if (!user) return false;
     if (!config.ui.useEIP7702) return false;

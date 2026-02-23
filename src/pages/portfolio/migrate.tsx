@@ -13,6 +13,7 @@ import { MigrationLoading } from 'components/migration/MigrationLoading';
 import { MigrationFetching } from 'components/migration/MigrationFetching';
 import { MigrationExplainer } from 'components/migration/MigrationExplainer';
 import { useCanBatchTransactions } from 'libs/queries/chain/canBatch';
+import { MigrationImposterWarning } from 'components/migration/MigrationImposterWarning';
 
 interface MigratedPosition {
   id: string;
@@ -57,6 +58,7 @@ export const MigratePage = () => {
 
   return (
     <div className="grid gap-16 grid-area-[list]">
+      <MigrationImposterWarning />
       <MigrationExplainer />
       <MigrationFetching queryState={query.states} />
       <MigrationContent query={query} />

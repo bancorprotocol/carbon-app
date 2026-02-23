@@ -32,6 +32,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
 
   const {
     user,
+    walletAccount,
     signer,
     currentConnector,
     connect,
@@ -109,6 +110,7 @@ export const CarbonWagmiProvider: FC<{ children: ReactNode }> = ({
         accountChainId,
         handleTenderlyRPC,
         imposterAccount,
+        walletAccount,
         setImposterAccount,
         connect,
         openConnect,

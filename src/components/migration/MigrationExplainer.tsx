@@ -18,7 +18,7 @@ export const MigrationExplainer = () => {
   return (
     <form
       onSubmit={close}
-      className="grid gap-16 border-primary rounded-2xl bg-primary/10 p-16"
+      className="grid gap-16 border-primary border rounded-2xl bg-primary/10 p-16"
     >
       <header className="flex gap-16 items-start">
         <div className="row-span-2 hidden self-center bg-primary/20 size-32 md:size-48 md:grid place-items-center rounded-full flex-shrink-0">

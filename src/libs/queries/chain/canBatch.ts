@@ -4,10 +4,10 @@ import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import { QueryKey } from '../queryKey';
 
 export const useCanBatchTransactions = () => {
-  const { user } = useWagmi();
+  const { walletAccount } = useWagmi();
   const { canBatchTransactions } = useBatchTransaction();
   return useQuery({
-    queryKey: QueryKey.canBatch(user),
-    queryFn: () => canBatchTransactions(user),
+    queryKey: QueryKey.canBatch(walletAccount),
+    queryFn: () => canBatchTransactions(walletAccount),
   });
 };
