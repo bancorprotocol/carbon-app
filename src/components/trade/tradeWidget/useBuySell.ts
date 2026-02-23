@@ -29,7 +29,7 @@ export const useBuySell = ({
   const [targetInput, setTargetInput] = useState('');
   const sourceValue = useDebounced(sourceInput, 500);
   const targetValue = useDebounced(targetInput, 500);
-  const { user } = useWagmi();
+  const { user, openConnect } = useWagmi();
   const { openModal } = useModal();
   const sourceTokenPriceQuery = useGetTokenPrice(source.address);
   const targetTokenPriceQuery = useGetTokenPrice(target.address);
@@ -216,7 +216,7 @@ export const useBuySell = ({
 
   const handleCTAClick = useCallback(() => {
     if (!user) {
-      return openModal('wallet');
+      return openConnect();
     }
 
     if (
