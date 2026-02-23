@@ -3,6 +3,7 @@ import compassWalletLogo from 'assets/logos/compassWallet.svg';
 import seifWalletLogo from 'assets/logos/seifWallet.svg';
 import { Connector, CreateConnectorFn, createConnector } from 'wagmi';
 import {
+  injected,
   metaMask,
   coinbaseWallet,
   walletConnect,
@@ -109,6 +110,8 @@ const getDefaultConnector = (connectorType: SelectableConnectionName) => {
           /staging.safe.tac.build$/,
         ],
       });
+    case 'Injected':
+      return injected({});
   }
 };
 

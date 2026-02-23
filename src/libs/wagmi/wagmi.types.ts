@@ -14,6 +14,7 @@ export const selectableConnectionNames = [
   'Tailwind',
   'Compass Wallet',
   'Seif',
+  'Injected',
 ] as const;
 
 export type SelectableConnectionName =
