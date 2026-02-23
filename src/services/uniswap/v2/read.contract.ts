@@ -55,6 +55,10 @@ export async function getAllV2Positions(
   userAddress: string,
   getTokenById: (address: string) => Token | undefined,
 ): Promise<UniswapPosition[]> {
+  // These tokens are NOT pool tokens
+  const erc20Import = await import('./erc20.json');
+  const knownERC20 = new Set(erc20Import.default);
+
   const positions: UniswapPosition[] = [];
   const factoryContract = new Contract(
     config.factoryAddress,
@@ -121,6 +125,8 @@ export async function getAllV2Positions(
 
   // Filter out pairs with tokens: if no tokens, the address is a regular ERC20 and not an LP token
   const getRealPairs = async (pairAddress: string) => {
+    // If this is a known token, ignore it
+    if (knownERC20.has(pairAddress)) return;
     if (!tokenPairs[config.dex][pairAddress]) {
       try {
         // If this is a legit LP token, add its tokens to the list
