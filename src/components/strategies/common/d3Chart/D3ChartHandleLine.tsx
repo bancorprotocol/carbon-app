@@ -62,20 +62,26 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
           className="readonly"
           transform={`translate(${lineWidth - 20}, ${y - 8})`}
         >
-          <circle cx="8.41406" cy="8.28931" r="8" fill="#404040" />
+          <circle
+            cx="8.41406"
+            cy="8.28931"
+            r="8"
+            fill="currentColor"
+            fillOpacity="0.2"
+          />
           <rect
             x="5.49805"
             y="7.87268"
             width="5.83333"
             height="4.16667"
             rx="1"
-            stroke="var(--color-main-0)"
+            stroke="currentColor"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           <path
             d="M6.33008 6.62264C6.33008 5.47205 7.26282 4.53931 8.41341 4.53931V4.53931C9.564 4.53931 10.4967 5.47205 10.4967 6.62264V7.87264H6.33008V6.62264Z"
-            stroke="var(--color-main-0)"
+            stroke="currentColor"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
