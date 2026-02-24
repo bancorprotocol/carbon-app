@@ -27,10 +27,20 @@
 <body>
   <script>
     (() => {
-      const theme = localStorage.getItem('theme') || 'system';
+      const theme = localStorage.getItem('theme') || 'dark';
       document.documentElement.dataset.theme = theme;
     })()
   </script>
+  <style>
+    html[data-theme="dark"] {background-color: black;}
+    html[data-theme="light"] {background-color: white;}
+    @media (prefers-color-scheme: dark) {
+      html[data-theme="system"] {background-color: black;}
+    }
+    @media (prefers-color-scheme: light) {
+      html[data-theme="system"] {background-color: white;}
+    }
+  </style>
   <script>(function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
         'gtm.start':
