@@ -111,8 +111,8 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
   useEffect(() => {
     if (open) return;
     const selector = '[role="option"][aria-selected="true"]';
-    const listbox = document.getElementById(listboxId)!;
-    const selected = listbox.querySelector<HTMLElement>(selector);
+    const listbox = document.getElementById(listboxId);
+    const selected = listbox?.querySelector<HTMLElement>(selector);
     selected?.setAttribute('aria-selected', 'false');
   }, [open, listboxId]);
 
@@ -214,7 +214,7 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
                 className="flex items-center gap-8"
               >
                 {label}
-                <span className="bg-main-600 text-10 rounded-full px-8 py-4">
+                <span className="bg-main-600 text-10 rounded-full px-8 py-4 box-content min-w-[4ch] text-center">
                   {filters[tab as FocusTab].length}
                 </span>
               </Radio>

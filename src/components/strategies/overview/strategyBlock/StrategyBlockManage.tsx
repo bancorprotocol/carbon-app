@@ -27,6 +27,7 @@ import { toPairSlug } from 'utils/pairSearch';
 import { AnyStrategy } from 'components/strategies/common/types';
 import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { usePairs } from 'hooks/usePairs';
+import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import config from 'config';
 
 type itemsType = {
@@ -107,6 +108,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
               quote: strategy.quote.address,
               buyMin: strategy.buy.min,
               sellMax: strategy.sell.max,
+              spread: getRoundedSpread(strategy).toString(),
             },
           });
         } else {
