@@ -43,7 +43,7 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask', 'WalletConnect', 'Coinbase Wallet', 'Safe'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
-  policiesLastUpdated: '18 April, 2023',
+  policiesLastUpdated: '24 Feb, 2026',
   network: {
     name: 'Ethereum',
     logoUrl: IconETHLogo,

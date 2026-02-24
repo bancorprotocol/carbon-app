@@ -20,7 +20,7 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask'],
   blockedConnectors: [],
   walletConnectProjectId: '',
-  policiesLastUpdated: '26 June, 2025',
+  policiesLastUpdated: '24 Feb, 2026',
   network: {
     name: 'TON',
     logoUrl: IconTonLogo,
