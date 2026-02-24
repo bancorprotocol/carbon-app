@@ -95,6 +95,7 @@ export const EditStrategyPriceField: FC<Props> = ({
       aria-labelledby={titleId}
       className="grid text-left"
       data-testid={`${direction}-section`}
+      data-disposable={!!settings}
     >
       {settings}
       <div
@@ -127,7 +128,7 @@ export const EditStrategyPriceField: FC<Props> = ({
           {showDistribution() && (
             <div
               role="table"
-              className="rounded-md p-15 text-12 font-medium mt-8 flex flex-col gap-10 border border-white/10 text-left"
+              className="rounded-md p-15 text-12 font-medium mt-8 flex flex-col gap-10 border border-main-0/10 text-left"
             >
               <EditBudgetDistribution
                 marginalPrice={order.marginalPrice}

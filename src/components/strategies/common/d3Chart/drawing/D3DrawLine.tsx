@@ -171,7 +171,7 @@ export const D3EditLine: FC<D3ShapeProps> = ({
       cy={yScale(y)}
       r="5"
       fill={`var(--color-${color})`}
-      className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
+      className="edge draggable invisible hover:fill-main-0 group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
   ));

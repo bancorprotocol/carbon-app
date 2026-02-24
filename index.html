@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -25,10 +25,20 @@
 </head>
 
 <body>
+  <script>
+    (() => {
+      const theme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.dataset.theme = theme;
+    })()
+  </script>
   <style>
-    /* Avoid white flash on reload */
-    body {
-      background-color: black;
+    html[data-theme="dark"] {background-color: black;}
+    html[data-theme="light"] {background-color: white;}
+    @media (prefers-color-scheme: dark) {
+      html[data-theme="system"] {background-color: black;}
+    }
+    @media (prefers-color-scheme: light) {
+      html[data-theme="system"] {background-color: white;}
     }
   </style>
   <script>(function (w, d, s, l, i) {

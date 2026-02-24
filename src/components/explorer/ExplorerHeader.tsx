@@ -177,7 +177,7 @@ export const ExplorerHeader = () => {
         <article className="surface hidden flex-1 gap-8 rounded-2xl p-20 md:grid">
           <h2 className="text-20 font-normal font-title">Popular Pairs</h2>
           <table className="font-medium text-14 w-full">
-            <thead className="text-16 text-white/60">
+            <thead className="text-16 text-main-0/60">
               <tr>
                 <th className="font-normal text-start">Token Pair</th>
                 <th className="font-normal text-end">Trades</th>
@@ -193,7 +193,7 @@ export const ExplorerHeader = () => {
             Trending Strategies
           </h2>
           <table className="text-14 w-full">
-            <thead className="text-16 text-white/60">
+            <thead className="text-16 text-main-0/60">
               <tr>
                 <th className="font-normal text-start">ID</th>
                 <th className="font-normal text-end">Trades</th>
@@ -238,7 +238,7 @@ const PairRows = ({ query }: PairTrendingProps) => {
           <div className="inline-flex items-center gap-8">
             <TokensOverlap tokens={[base, quote]} size={18} />
             <span>{base?.symbol}</span>
-            <span className="text-white/60">/</span>
+            <span className="text-main-0/60">/</span>
             <span>{quote?.symbol}</span>
           </div>
         </Link>

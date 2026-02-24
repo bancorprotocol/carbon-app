@@ -188,7 +188,7 @@ const Bar = ({
         y={y - 10}
         fill="currentColor"
         style={{ textAnchor: 'middle' }}
-        className="text-14 text-white/60"
+        className="text-14 text-main-0/60"
       >
         {prettifyNumber(label)} {symbol}
       </text>
@@ -248,7 +248,7 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
       <ToggleEye
         visible={isVisible}
         transform="translate(5, 5)"
-        className="text-white"
+        className="text-main-0"
       />
     </g>
   );

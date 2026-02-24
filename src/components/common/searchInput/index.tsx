@@ -31,7 +31,7 @@ export const SearchInput = ({
         className,
       )}
     >
-      <IconSearch className="text-white-disabled w-16" />
+      <IconSearch className="text-main-0-disabled w-16" />
       <input
         {...inputProps}
         ref={ref}
@@ -40,7 +40,7 @@ export const SearchInput = ({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Search"
-        className="placeholder-white-disabled flex-1 bg-transparent focus:outline-hidden"
+        className="placeholder-main-0-disabled flex-1 bg-transparent focus:outline-hidden"
         onKeyDown={(e) => {
           if (e.key === 'Escape' && !!value) {
             e.stopPropagation();

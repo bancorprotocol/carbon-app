@@ -35,7 +35,7 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
             {aboveMarket && <WarningTooltip message={warningText} />}
             Min Price
           </h4>
-          <p className="font-medium text-white/80">
+          <p className="font-medium text-main-0/80">
             {tokenAmount(buy.min, quote)}
           </p>
           <MarketPriceIndication {...indicationProps} price={buy.min!} isBuy />
@@ -45,7 +45,7 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
             {belowMarket && <WarningTooltip message={warningText} />}
             Max Price
           </h4>
-          <p className="font-medium text-white/80">
+          <p className="font-medium text-main-0/80">
             {tokenAmount(sell.max, quote)}
           </p>
           <MarketPriceIndication {...indicationProps} price={sell.max!} />
@@ -53,7 +53,7 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
       </div>
       <div className="grid gap-4">
         <h4 className="font-semibold">Fee Tier</h4>
-        <p className="font-medium text-white/80">{spread}%</p>
+        <p className="font-medium text-main-0/80">{spread}%</p>
       </div>
       <div className="grid grid-flow-col gap-20">
         <div className="grid gap-4">
@@ -61,20 +61,20 @@ export const CreateOverlappingSummary: FC<Props> = (props) => {
             <TokenLogo token={base} size={16} />
             {base.symbol} Budget
           </h4>
-          <p className="font-medium text-white/80">
+          <p className="font-medium text-main-0/80">
             {tokenAmount(sell.budget, base)}
           </p>
-          <p className="break-all text-white/60">{getBaseFiat(sell.budget)}</p>
+          <p className="break-all text-main-0/60">{getBaseFiat(sell.budget)}</p>
         </div>
         <div className="grid gap-4">
           <h4 className="font-semibold flex items-center gap-4">
             <TokenLogo token={quote} size={16} />
             {quote.symbol} Budget
           </h4>
-          <p className="font-medium text-white/80">
+          <p className="font-medium text-main-0/80">
             {tokenAmount(buy.budget, quote)}
           </p>
-          <p className="break-all text-white/60">{getQuoteFiat(buy.budget)}</p>
+          <p className="break-all text-main-0/60">{getQuoteFiat(buy.budget)}</p>
         </div>
       </div>
     </article>

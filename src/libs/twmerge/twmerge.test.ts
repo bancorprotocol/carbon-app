@@ -14,7 +14,7 @@ describe('Custom Tailwind Merge', () => {
       );
     });
     it('should merge different colors', () => {
-      expect(customTwMerge('text-white text-primary')).toEqual(
+      expect(customTwMerge('text-main-0 text-primary')).toEqual(
         customTwMerge('text-primary'),
       );
       expect(customTwMerge('text-main-50 text-primary')).toEqual(
@@ -46,7 +46,7 @@ describe('Custom Tailwind Merge', () => {
       );
     });
     it('should merge different colors', () => {
-      expect(customTwMerge('border border-white border-primary')).toEqual(
+      expect(customTwMerge('border border-main-0 border-primary')).toEqual(
         customTwMerge('border border-primary'),
       );
     });

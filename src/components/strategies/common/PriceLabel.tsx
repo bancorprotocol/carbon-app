@@ -25,8 +25,8 @@ export const PriceLabelLimit: FC<LimitProps> = ({
       htmlFor={inputId}
       className="text-14 font-medium flex items-center gap-8"
     >
-      <span className="text-white/80">Price</span>
-      <span className="text-white/60">
+      <span className="text-main-0/80">Price</span>
+      <span className="text-main-0/60">
         ({quote.symbol} per 1 {base.symbol})
       </span>
     </label>
@@ -38,8 +38,8 @@ export const PriceLegendRange: FC<Props> = ({ base, quote, direction }) => (
     element={`Define the price you are willing to ${direction} ${base.symbol} at. Make sure the price is in ${quote.symbol} tokens.`}
   >
     <h3 className="text-14 font-medium flex items-center gap-8">
-      <span className="text-white/80">Price</span>
-      <span className="text-white/60">
+      <span className="text-main-0/80">Price</span>
+      <span className="text-main-0/60">
         ({quote.symbol} per 1 {base.symbol})
       </span>
     </h3>

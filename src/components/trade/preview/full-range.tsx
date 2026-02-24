@@ -62,7 +62,7 @@ export const PreviewFullRangeStrategy = ({ running, className }: Props) => {
           x2="950"
           y1="250"
           y2="250"
-          stroke="white"
+          stroke="var(--color-main-0)"
           strokeWidth="2"
         />
         <line
@@ -70,7 +70,7 @@ export const PreviewFullRangeStrategy = ({ running, className }: Props) => {
           x2="950"
           y1="900"
           y2="900"
-          stroke="white"
+          stroke="var(--color-main-0)"
           strokeWidth="2"
         />
 
@@ -78,7 +78,7 @@ export const PreviewFullRangeStrategy = ({ running, className }: Props) => {
           ref={path}
           className={common.pathStroke}
           fill="none"
-          stroke="white"
+          stroke="var(--color-main-0)"
           strokeLinejoin="round"
           strokeWidth="5"
           d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
@@ -90,7 +90,7 @@ export const PreviewFullRangeStrategy = ({ running, className }: Props) => {
           cx="0"
           cy="0"
           r="10"
-          fill="white"
+          fill="var(--color-main-0)"
         />
       </svg>
       <div className={style.trades}>

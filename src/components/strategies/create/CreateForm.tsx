@@ -85,7 +85,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           htmlFor="approve-warnings"
           className={cn(
             style.approveWarnings,
-            'surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-white/60',
+            'surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-main-0/60',
           )}
         >
           <input
@@ -102,7 +102,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           <>
             {config.ui.showCart && (
               <Button
-                className={cn(style.addCart, 'btn-secondary-gradient')}
+                className={cn(style.addCart, 'btn-on-background')}
                 type="button"
                 size="lg"
                 disabled={loading || animating}

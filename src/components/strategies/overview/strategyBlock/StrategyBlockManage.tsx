@@ -9,7 +9,7 @@ import { useModal } from 'hooks/useModal';
 import { useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import IconGear from 'assets/icons/gear.svg?react';
+import IconDots from 'assets/icons/three-dots.svg?react';
 import {
   StrategyEditOptionId,
   getTooltipTextByStrategyEditOptionsId,
@@ -23,12 +23,12 @@ import {
   getEditBudgetPage,
   getEditPricesPage,
 } from 'components/strategies/edit/utils';
-import config from 'config';
 import { toPairSlug } from 'utils/pairSearch';
 import { AnyStrategy } from 'components/strategies/common/types';
 import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { usePairs } from 'hooks/usePairs';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
+import config from 'config';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -303,7 +303,7 @@ export const ManageButtonIcon = forwardRef<
       ref={ref}
       className="btn-on-surface size-38 rounded-md grid place-items-center p-0"
     >
-      <IconGear className="size-24" />
+      <IconDots className="size-24" />
     </button>
   );
 });

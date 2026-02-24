@@ -45,7 +45,7 @@ const D3PriceAxis: FC<Props> = ({ price, color }) => {
       className="pointer-events-none"
     >
       <rect y={y} {...handleDms} fill={color} rx={4} />
-      <text y={y + 12} x={6} fill="black" fontSize={10}>
+      <text y={y + 12} x={6} fill="var(--color-main-950)" fontSize={10}>
         {prettifyNumber(price, { abbreviate: true })}
       </text>
     </g>

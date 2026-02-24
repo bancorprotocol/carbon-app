@@ -30,7 +30,7 @@ export const MainMenuRightWallet: FC = () => {
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'btn-error-gradient text-16';
     if (!isSupportedNetwork) return 'btn-error-gradient text-16';
-    if (!user) return 'btn-primary-gradient px-16 py-8 text-16';
+    if (!user) return 'btn-main-gradient px-16 py-8 text-16';
     return 'btn-on-background text-16';
   }, [isSupportedNetwork, isUserBlocked, user]);
 
@@ -116,7 +116,7 @@ const ConnectedMenu: FC = () => {
   };
 
   return (
-    <div role="menu" className="font-normal grid gap-4 text-white">
+    <div role="menu" className="font-normal grid gap-4 text-main-0">
       {isSupportedNetwork ? (
         <>
           <button

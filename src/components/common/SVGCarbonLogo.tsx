@@ -27,7 +27,7 @@ export const SVGCarbonLogo = () => {
             width="14"
             height="18"
             fill="var(--color-buy)"
-            fillOpacity="0.05"
+            fillOpacity="0.15"
           />
           <use
             href="#carbonLogo"
@@ -50,7 +50,7 @@ export const SVGCarbonLogo = () => {
             width="14"
             height="18"
             fill="var(--color-sell)"
-            fillOpacity="0.05"
+            fillOpacity="0.15"
           />
           <use
             href="#carbonLogo"

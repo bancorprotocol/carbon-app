@@ -369,7 +369,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               </g>
             </svg>
             {emptyHistory && (
-              <div className="text-12 rounded-md bg-main-800 absolute bottom-[60px] left-[16px] flex items-center gap-8 border-white/60 px-16 py-8">
+              <div className="text-12 rounded-md bg-main-800 absolute bottom-[60px] left-[16px] flex items-center gap-8 border-main-0/60 px-16 py-8">
                 <div
                   aria-hidden="true"
                   className="bg-warning/20 grid size-24 place-items-center rounded-full"
@@ -380,13 +380,13 @@ export const D3PriceHistory: FC<Props> = (props) => {
               </div>
             )}
           </div>
-          <div className="col-span-2 flex border-t border-white/10 bg-main-800">
+          <div className="col-span-2 flex border-t border-main-0/10 bg-main-800">
             {presets.map(({ days, label }) => {
               return (
                 <button
                   key={label}
                   role="menuitemradio"
-                  className="text-12 duration-preset hover:bg-main-900/40 rounded-md p-8 disabled:pointer-events-none disabled:text-white/50 aria-checked:underline underline-offset-3"
+                  className="text-12 duration-preset hover:bg-main-900/40 rounded-md p-8 disabled:pointer-events-none disabled:text-main-0/50 aria-checked:underline underline-offset-3"
                   onClick={() => zoomIn(days)}
                   disabled={days > data.length}
                   aria-checked={rangeInDays === days}
@@ -395,7 +395,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
                 </button>
               );
             })}
-            <hr className="h-full border-e border-white/10" />
+            <hr className="h-full border-e border-main-0/10" />
             <DateRangePicker
               className="rounded-md hover:bg-main-900/40"
               defaultStart={fromUnixUTC(defaultHistoryStart)}

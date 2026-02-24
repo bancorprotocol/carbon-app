@@ -14,7 +14,7 @@ export const PortfolioAllTokensPieChartCenter: FC<Props> = ({
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="text-24 font-medium">{getUsdPrice(totalValue)}</div>
-      <div className="text-white/60 font-medium">{assetsCount} Tokens</div>
+      <div className="text-main-0/60 font-medium">{assetsCount} Tokens</div>
     </div>
   );
 };
