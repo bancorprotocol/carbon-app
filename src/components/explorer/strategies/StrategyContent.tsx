@@ -171,15 +171,7 @@ const StrategyList: FC<StrategyListProps> = ({ url, strategies, layout }) => {
 
   if (layout === 'table' && !belowBreakpoint('xl')) {
     return (
-      <>
-        <StrategyTable
-          className="grid-area-[list]"
-          strategies={strategies.slice(0, max)}
-        />
-        {max < strategies.length && (
-          <Paginator increase={() => setMax((v) => v + 21)} />
-        )}
-      </>
+      <StrategyTable className="grid-area-[list]" strategies={strategies} />
     );
   }
 
