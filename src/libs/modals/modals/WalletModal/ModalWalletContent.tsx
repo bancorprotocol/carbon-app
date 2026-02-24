@@ -5,6 +5,7 @@ import { Imager } from 'components/common/imager/Imager';
 import iconLedger from 'assets/logos/ledger.svg';
 import iconTrezor from 'assets/logos/trezor.svg';
 import { WalletIcon } from 'components/common/WalletIcon';
+import config from 'config';
 
 type Props = {
   onClick: (c: Connector) => Promise<void>;
@@ -50,7 +51,9 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
             to="/privacy"
             className="font-medium text-white"
           >
-            cookie & privacy policy
+            cookie & privacy policy{' '}
+            {config.policiesLastUpdated &&
+              `(last updated on ${config.policiesLastUpdated})`}
           </Link>{' '}
           of this site.{' '}
         </p>

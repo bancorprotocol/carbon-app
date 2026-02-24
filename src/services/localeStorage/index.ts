@@ -48,6 +48,7 @@ export interface LocalStorageSchema {
   carts: Record<string, Cart>;
   tacToTonAddress: Record<string, string>;
   haveSeen: 'rewards'[];
+  lastConnection: number;
 
   /* @deprecated */
   strategyOverviewFilter?: void;
