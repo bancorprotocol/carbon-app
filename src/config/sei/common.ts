@@ -34,7 +34,7 @@ export const commonConfig: AppConfig = {
   ],
   blockedConnectors: ['Tailwind'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
-  policiesLastUpdated: '27 May, 2024',
+  policiesLastUpdated: '24 Feb, 2026',
   network: {
     name: 'Sei',
     logoUrl: IconSeiLogo,

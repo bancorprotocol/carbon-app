@@ -25,7 +25,7 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask', 'Safe'],
   blockedConnectors: [],
   walletConnectProjectId: '',
-  policiesLastUpdated: '26 June, 2025',
+  policiesLastUpdated: '24 Feb, 2026',
   network: {
     name: 'TAC',
     logoUrl: IconTacLogo,

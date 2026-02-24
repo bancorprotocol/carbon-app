@@ -26,7 +26,7 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask', 'WalletConnect'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
-  policiesLastUpdated: '31 Jul, 2024',
+  policiesLastUpdated: '24 Feb, 2026',
   network: {
     name: 'Coti',
     logoUrl: IconCotiLogo,
