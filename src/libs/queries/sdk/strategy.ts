@@ -25,9 +25,8 @@ import {
   Strategy,
 } from 'components/strategies/common/types';
 import {
+  getStrategyStatus,
   isGradientStrategy,
-  isInPast,
-  isPaused,
 } from 'components/strategies/common/utils';
 import { SDKGradientStrategy } from './gradient-mock';
 import { useCarbonInit } from 'libs/sdk/context';
@@ -37,12 +36,6 @@ import { useMemo } from 'react';
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
 // READ
-const getStatus = (offCurve: boolean, noBudget: boolean) => {
-  if (offCurve && noBudget) return 'inactive';
-  if (offCurve) return 'paused';
-  if (noBudget) return 'noBudget';
-  return 'active';
-};
 
 // TODO: build strategy outside the useQuery to parallelize token query & strategy query
 const buildStrategiesHelper = async (
@@ -54,24 +47,6 @@ const buildStrategiesHelper = async (
     const quote = getTokenById(s.quoteToken);
     if (!base || !quote) return;
     if ('sellPriceLow' in s) {
-      const sellLow = new SafeDecimal(s.sellPriceLow);
-      const sellHigh = new SafeDecimal(s.sellPriceHigh);
-      const sellBudget = new SafeDecimal(s.sellBudget);
-
-      const buyLow = new SafeDecimal(s.buyPriceLow);
-      const buyHight = new SafeDecimal(s.buyPriceHigh);
-      const buyBudget = new SafeDecimal(s.buyBudget);
-
-      const offCurve =
-        sellLow.isZero() &&
-        sellHigh.isZero() &&
-        buyLow.isZero() &&
-        buyHight.isZero();
-
-      const noBudget = sellBudget.isZero() && buyBudget.isZero();
-
-      const status = getStatus(offCurve, noBudget);
-
       // ATTENTION *****************************
       // This is the buy order | UI order 0 and CONTRACT order 1
       // ATTENTION *****************************
@@ -100,7 +75,7 @@ const buildStrategiesHelper = async (
         quote,
         buy,
         sell,
-        status,
+        status: getStrategyStatus({ buy, sell }),
         encoded: s.encoded,
       } as Strategy;
     } else {
@@ -130,17 +105,10 @@ const buildStrategiesHelper = async (
         quote,
         buy,
         sell,
-        status: 'active',
+        status: getStrategyStatus({ buy, sell }),
         encoded: s.encoded,
       };
 
-      if (isPaused(strategy) || isInPast(strategy)) {
-        strategy.status = 'paused';
-      }
-      if (!Number(strategy.buy.budget) && !Number(strategy.sell.budget)) {
-        strategy.status =
-          strategy.status === 'paused' ? 'inactive' : 'noBudget';
-      }
       return strategy;
     }
   });
@@ -423,6 +391,8 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
   return useMutation({
     mutationFn: async (orders: EditOrders) => {
       const updates = getFieldsToUpdate(orders, strategy);
+      if (!strategy.encoded)
+        throw new Error('No encoded found on the strategy');
       const unsignedTx = await carbonSDK.updateStrategy(
         strategy.id,
         strategy.encoded,
@@ -467,6 +437,8 @@ export const usePauseStrategyQuery = () => {
 
   return useMutation({
     mutationFn: async (strategy: AnyStrategy) => {
+      if (!strategy.encoded)
+        throw new Error('No encoded found on the strategy');
       const unsignedTx = await carbonSDK.updateStrategy(
         strategy.id,
         strategy.encoded,

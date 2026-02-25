@@ -1,13 +1,9 @@
+import { GradientOrder, StaticOrder } from 'components/strategies/common/types';
 import {
   isEmptyGradientOrder,
   isEmptyOrder,
 } from 'components/strategies/common/utils';
-import {
-  Activity,
-  ActivityAction,
-  ActivityGradientOrder,
-  ActivityStaticOrder,
-} from 'libs/queries/extApi/activity';
+import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
 import {
   InferSearch,
   searchValidator,
@@ -83,7 +79,7 @@ export const activityDescription = (activity: Activity) => {
     case 'create':
     case 'edit': {
       if (strategy.type === 'gradient') {
-        const order = (prefix: string, order: ActivityGradientOrder) => {
+        const order = (prefix: string, order: GradientOrder) => {
           if (isEmptyGradientOrder(order)) return '';
           const prices = tokenRange(order._sP_, order._eP_, quote);
           return `${prefix} ${base.symbol}: ${prices}`;
@@ -92,7 +88,7 @@ export const activityDescription = (activity: Activity) => {
         const sell = order('Sell', strategy.sell);
         return [buy, sell].filter((v) => !!v).join(' / ');
       } else {
-        const order = (prefix: string, order: ActivityStaticOrder) => {
+        const order = (prefix: string, order: StaticOrder) => {
           if (isEmptyOrder(order)) return '';
           const prices = tokenRange(order.min, order.max, quote);
           return `${prefix} ${base.symbol}: ${prices}`;
