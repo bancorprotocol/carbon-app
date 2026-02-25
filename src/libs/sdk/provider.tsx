@@ -10,6 +10,7 @@ import { QueryKey } from 'libs/queries';
 import { CHAIN_ID, RPC_URLS, RPC_HEADERS } from 'libs/wagmi';
 import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
 import { ONE_HOUR_IN_MS } from 'utils/time';
+import { carbonApi } from 'services/carbonApi';
 import config from 'config';
 
 const contractsConfig: ContractsConfig = {
@@ -51,10 +52,15 @@ export const SDKProvider: FC<Props> = ({ children }) => {
     const initSDK = async () => {
       try {
         setIsLoading(true);
-        const { timestamp, ttl } = lsService.getItem('lastSdkCache') ?? {};
         let cacheData: string | undefined;
-        if (timestamp && ttl && timestamp + ttl > Date.now()) {
-          cacheData = lsService.getItem('sdkCompressedCacheData');
+        if (import.meta.env.PROD && config.ui.useSeedData) {
+          const seed = await carbonApi.getSeedData();
+          cacheData = JSON.stringify(seed);
+        } else {
+          const { timestamp, ttl } = lsService.getItem('lastSdkCache') ?? {};
+          if (timestamp && ttl && timestamp + ttl > Date.now()) {
+            cacheData = lsService.getItem('sdkCompressedCacheData');
+          }
         }
         const initializer = carbonSDK.init(
           CHAIN_ID,
@@ -86,6 +92,7 @@ export const SDKProvider: FC<Props> = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    if (!isInitialized) return;
     const invalidateQueriesByPair = (pair: TokenPair) => {
       cache.invalidateQueries({
         predicate: (query) =>
@@ -128,7 +135,7 @@ export const SDKProvider: FC<Props> = ({ children }) => {
         Comlink.proxy(onCacheClearedCallback),
       );
     };
-  }, [cache]);
+  }, [cache, isInitialized]);
 
   return (
     <SdkContext.Provider

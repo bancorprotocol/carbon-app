@@ -97,5 +97,6 @@ export const commonConfig: AppConfig = {
     //},
     // walkthroughId: 'vjbcftqceykr',
     useOpenocean: false,
+    useSeedData: true,
   },
 };

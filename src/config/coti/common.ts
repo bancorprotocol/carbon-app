@@ -101,6 +101,7 @@ export const commonConfig: AppConfig = {
         '0xfA6f73446b17A97a56e464256DA54AD43c2Cbc3E',
       ],
     },
+    useSeedData: true,
     // walkthroughId: 'd2a5isof88vg',
   },
 };
