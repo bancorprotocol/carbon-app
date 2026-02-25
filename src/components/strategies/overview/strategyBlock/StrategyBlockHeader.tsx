@@ -93,16 +93,22 @@ export const StrategyStatusTag: FC<{
         {statusText.active}
       </span>
     );
-  } else {
+  }
+  if (status === 'deleted') {
     return (
-      <Tooltip element={getTooltipTextByStatus(isExplorer, status)}>
-        <span
-          className="text-error inline-flex items-center gap-4"
-          data-testid="status"
-        >
-          {statusText.inactive}
-        </span>
-      </Tooltip>
+      <span data-testid="status" className="text-error font-medium">
+        {statusText.deleted}
+      </span>
     );
   }
+  return (
+    <Tooltip element={getTooltipTextByStatus(isExplorer, status)}>
+      <span
+        className="text-error inline-flex items-center gap-4"
+        data-testid="status"
+      >
+        {statusText.inactive}
+      </span>
+    </Tooltip>
+  );
 };

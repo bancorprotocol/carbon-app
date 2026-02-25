@@ -44,6 +44,8 @@ export const toActivities = (
     const type = '_sP_' in strategy.buy ? 'gradient' : 'static';
     const buy = toOrder(strategy.buy);
     const sell = toOrder(strategy.sell);
+    const status =
+      activity.action === 'delete' ? 'deleted' : getStrategyStatus(strategy);
     return {
       ...activity,
       date: fromUnixUTC(activity.timestamp),
@@ -52,7 +54,7 @@ export const toActivities = (
         buy,
         sell,
         idDisplay: getLowestBits(strategy.id),
-        status: getStrategyStatus(strategy),
+        status,
         base,
         quote,
         type,

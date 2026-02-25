@@ -88,7 +88,12 @@ export interface QuickGradientOrderBlock {
 }
 
 // STRATEGIES
-export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
+export type StrategyStatus =
+  | 'active'
+  | 'noBudget'
+  | 'paused'
+  | 'inactive'
+  | 'deleted';
 export interface BuySellOrders<T extends FormOrder = StaticOrder> {
   buy: T;
   sell: T;
