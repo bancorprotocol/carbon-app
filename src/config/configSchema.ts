@@ -142,5 +142,6 @@ export const AppConfigSchema = v.object({
     walkthroughId: v.optional(v.string()),
     useOpenocean: v.optional(v.boolean()),
     useEIP7702: v.optional(v.boolean()),
+    useSeedData: v.optional(v.boolean()),
   }),
 });
