@@ -538,3 +538,42 @@
 
 @custom-variant aria-page (&[aria-current="page"]);
 @custom-variant aria-location (&[aria-current="location"]);
+
+
+
+@custom-variant sm {
+  @media (width >= 40rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+@custom-variant md {
+  @media (width >= 48rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+@custom-variant lg {
+  @media (width >= 64rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+@custom-variant xl {
+  @media (width >= 80rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+@custom-variant 2xl {
+  @media (width >= 96rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+
+@custom-variant max-sm {
+  @media (width < 40rem), (orientation: portrait) {
+    @slot;
+  }
+}
+@custom-variant max-md {
+  @media (width < 48rem) and (orientation: landscape), (orientation: portrait) {
+    @slot;
+  }
+}

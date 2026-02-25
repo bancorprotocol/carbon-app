@@ -47,21 +47,17 @@
   }
 }
 
-@media (max-width: 40rem) {
+@variant max-sm {
   .trade-type:has(p:not([hidden])) span {
     transform: translateY(-5px) scale(0.7);
   }
 }
-
-/* sm */
-@media (min-width: 40rem) {
+@variant sm {
   .trade-type {
     @apply px-24;
   }
 }
-
-/* 2xl */
-@media (min-width: 96rem) {
+@variant 2xl {
   .trade-type {
      @apply py-16;
   }
