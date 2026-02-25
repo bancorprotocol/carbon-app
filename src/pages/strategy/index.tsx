@@ -9,7 +9,7 @@ import { Page } from 'components/common/page';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { cn } from 'utils/helpers';
 import { useGetStrategy } from 'libs/queries';
-import { useGetEnrichedStrategies } from 'hooks/useStrategies';
+import { useEnrichedStrategy } from 'hooks/useStrategies';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import {
@@ -39,6 +39,7 @@ import { D3YAxis } from 'components/strategies/common/d3Chart/D3YAxis';
 import { D3ChartMarketPrice } from 'components/strategies/common/d3Chart/D3ChartMarketPrice';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
+import { useMemo } from 'react';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -48,9 +49,25 @@ export const StrategyPage = () => {
     from: '/strategy/$id',
   });
   const params = { strategyIds: id };
-  const query = useGetStrategy(id);
-  const { data, isPending } = useGetEnrichedStrategies(query);
-  const strategy = data?.[0];
+  const strategyQuery = useGetStrategy(id);
+  const activityQuery = useActivityQuery({
+    strategyIds: id,
+    start: chartStart ?? oneYearAgo(),
+    end: chartEnd ?? defaultEnd(),
+  });
+
+  const isPending = strategyQuery.isPending || activityQuery.isPending;
+
+  const baseStrategy = useMemo(() => {
+    if (isPending) return;
+    if (strategyQuery.data) return strategyQuery.data;
+    if (activityQuery.data?.[0]) {
+      return activityQuery.data?.[0].strategy;
+    }
+  }, [strategyQuery.data, activityQuery.data, isPending]);
+
+  const strategy = useEnrichedStrategy(baseStrategy);
+
   const { marketPrice } = useMarketPrice({
     base: strategy?.base,
     quote: strategy?.quote,
@@ -68,12 +85,6 @@ export const StrategyPage = () => {
   const showIndicator = (shouldShow: boolean) => {
     setSearch({ hideIndicators: shouldShow });
   };
-
-  const { data: activities } = useActivityQuery({
-    strategyIds: id,
-    start: chartStart ?? oneYearAgo(),
-    end: chartEnd ?? defaultEnd(),
-  });
 
   if (isPending) {
     return (
@@ -165,7 +176,7 @@ export const StrategyPage = () => {
           </header>
           <PairChartHistory base={base} quote={quote}>
             <D3ChartIndicators
-              activities={(!hideIndicators && activities) || []}
+              activities={(!hideIndicators && activityQuery.data) || []}
             />
             <D3Drawings />
             <D3XAxis />
