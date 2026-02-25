@@ -41,7 +41,7 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
       </div>
       <h2 className="my-16 text-center">{title}</h2>
       {text && (
-        <p className="text-14 font-normal text-center text-white/60">{text}</p>
+        <p className="text-14 font-normal text-center text-main-0/60">{text}</p>
       )}
     </div>
   );

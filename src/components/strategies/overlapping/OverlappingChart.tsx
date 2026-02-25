@@ -26,8 +26,8 @@ import styles from './OverlappingChart.module.css';
 type Scale = ReturnType<typeof getScale>;
 
 // Static
-const outline = 'var(--color-main-700)';
-const background = 'var(--color-main-700)';
+const outline = 'var(--color-main-500)';
+const background = 'var(--color-main-600)';
 const fontSize = 13;
 const padding = 5;
 const top = 70;
@@ -496,7 +496,7 @@ export const OverlappingChart: FC<Props> = (props) => {
           y={y(100) + padding + fontSize}
           fontSize={box.width < 500 ? fontSize - 2 : fontSize}
           textAnchor="middle"
-          fill="white"
+          fill="var(--color-main-0)"
           fillOpacity="0.8"
         >
           {title}
@@ -574,7 +574,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 fontSize={fontSize}
                 dominantBaseline="hanging"
                 textAnchor="middle"
-                fill="white"
+                fill="var(--color-main-0)"
                 fillOpacity="0.8"
               >
                 0
@@ -585,7 +585,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 fontSize={fontSize}
                 dominantBaseline="hanging"
                 textAnchor="middle"
-                fill="white"
+                fill="var(--color-main-0)"
                 fillOpacity="0.8"
               >
                 ∞
@@ -601,7 +601,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 fontSize={fontSize}
                 dominantBaseline="hanging"
                 textAnchor="middle"
-                fill="white"
+                fill="var(--color-main-0)"
                 fillOpacity="0.8"
               >
                 {prettifySignedNumber(price, { abbreviate: true })}
@@ -636,7 +636,7 @@ export const OverlappingChart: FC<Props> = (props) => {
               fontSize={fontSize}
               dominantBaseline="middle"
               textAnchor="middle"
-              fill="white"
+              fill="var(--color-main-0)"
             >
               {marketPriceText}
             </text>
@@ -672,7 +672,7 @@ export const OverlappingChart: FC<Props> = (props) => {
               fontSize={fontSize}
               dominantBaseline="middle"
               textAnchor="middle"
-              fill="white"
+              fill="var(--color-main-0)"
             >
               {minText}
             </text>
@@ -683,7 +683,7 @@ export const OverlappingChart: FC<Props> = (props) => {
               fontSize={fontSize}
               dominantBaseline="middle"
               textAnchor="middle"
-              fill="white"
+              fill="var(--color-main-0)"
               fillOpacity="0.4"
             >
               {minPercentText}
@@ -704,7 +704,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top) + 10}
                 width={1}
                 height={10}
-                fill="black"
+                fill="var(--color-main-950)"
                 fillOpacity="0.5"
               />
               <rect
@@ -712,7 +712,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top) + 10}
                 width={1}
                 height={10}
-                fill="black"
+                fill="var(--color-main-950)"
                 fillOpacity="0.5"
               />
             </g>
@@ -756,7 +756,7 @@ export const OverlappingChart: FC<Props> = (props) => {
               fontSize={fontSize}
               dominantBaseline="middle"
               textAnchor="middle"
-              fill="white"
+              fill="var(--color-main-0)"
             >
               {maxText}
             </text>
@@ -767,7 +767,7 @@ export const OverlappingChart: FC<Props> = (props) => {
               fontSize={fontSize}
               dominantBaseline="middle"
               textAnchor="middle"
-              fill="white"
+              fill="var(--color-main-0)"
               fillOpacity="0.4"
             >
               {maxPercentText}
@@ -788,7 +788,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top) + 10}
                 width={1}
                 height={10}
-                fill="black"
+                fill="var(--color-main-950)"
                 fillOpacity="0.5"
               />
               <rect
@@ -796,7 +796,7 @@ export const OverlappingChart: FC<Props> = (props) => {
                 y={y(top) + 10}
                 width={1}
                 height={10}
-                fill="black"
+                fill="var(--color-main-950)"
                 fillOpacity="0.5"
               />
             </g>

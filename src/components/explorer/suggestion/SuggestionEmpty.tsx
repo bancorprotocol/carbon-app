@@ -23,7 +23,7 @@ export const SuggestionEmpty: FC<Props> = ({ search }) => {
       onClick={navigate}
       className={cn(
         style.empty,
-        'px-30 py-10 text-start hover:bg-white/20 focus-visible:bg-white/10',
+        'px-30 py-10 text-start hover:bg-main-0/20 focus-visible:bg-main-0/10',
       )}
     >
       {search}

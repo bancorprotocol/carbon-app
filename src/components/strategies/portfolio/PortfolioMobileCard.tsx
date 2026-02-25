@@ -58,7 +58,7 @@ export const CardSection: FC<{ title: string; value?: string }> = ({
 }) => {
   return (
     <div>
-      <div className="text-12 text-white/60">{title}</div>
+      <div className="text-12 text-main-0/60">{title}</div>
       <div>{value}</div>
     </div>
   );

@@ -41,7 +41,7 @@ export const PortfolioHeader = () => {
           <div role="row" className="flex justify-between gap-8 md:flex-col">
             <p
               role="rowheader"
-              className="flex items-center gap-4 text-white/60"
+              className="flex items-center gap-4 text-main-0/60"
             >
               <span>Net Worth</span>
               <Tooltip element="The sum of the budgets from all strategies in the portfolio.">
@@ -53,7 +53,7 @@ export const PortfolioHeader = () => {
             </p>
           </div>
           <div role="row" className="flex justify-between gap-8 md:flex-col">
-            <p role="rowheader" className="text-white/60">
+            <p role="rowheader" className="text-main-0/60">
               Total Trades
             </p>
             <p role="cell" className="md:text-[32px]">
@@ -61,7 +61,7 @@ export const PortfolioHeader = () => {
             </p>
           </div>
           <div role="row" className="flex justify-between gap-8 md:flex-col">
-            <p role="rowheader" className="text-white/60">
+            <p role="rowheader" className="text-main-0/60">
               Trades (Last 24h)
             </p>
             <p role="cell" className="md:text-[32px]">
@@ -71,7 +71,7 @@ export const PortfolioHeader = () => {
         </div>
         <Link
           to="/trade"
-          className="btn-primary-gradient whitespace-nowrap"
+          className="btn-main-gradient whitespace-nowrap"
           data-testid="create-strategy-desktop"
         >
           Create Strategy

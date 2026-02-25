@@ -48,7 +48,7 @@ export const PairSortDropdown: FC<SortProps> = (props) => {
       )}
     >
       <fieldset onChange={onSortChange}>
-        <legend className="text-14 px-16 py-8 text-white/60">Sort By</legend>
+        <legend className="text-14 px-16 py-8 text-main-0/60">Sort By</legend>
         {sortItems.map((sortItem) => (
           <FilterSortItem
             name="sort"
@@ -99,7 +99,7 @@ export const PairFilterDropdown: FC<FilterProps> = (props) => {
       )}
     >
       <fieldset onChange={onFilterChange}>
-        <legend className="text-14 px-16 py-8 text-white/60">Status</legend>
+        <legend className="text-14 px-16 py-8 text-main-0/60">Status</legend>
         {Object.entries(pairFilter).map(([key, label]) => (
           <FilterSortItem
             name="filter"

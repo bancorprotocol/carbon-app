@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { CartStrategy, Order } from 'components/strategies/common/types';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import IconTooltip from 'assets/icons/tooltip.svg?react';
 import WarningIcon from 'assets/icons/warning.svg?react';
@@ -32,10 +32,10 @@ export const StrategyBlockBuySell: FC<{
     <article className={cn('flex flex-col gap-4 p-16', className)}>
       {isBuy ? (
         <header className="flex items-center gap-4">
-          <h4 className="text-12 text-buy">Buy {token.symbol}</h4>
+          <h4 className="text-12 text-buy font-medium">Buy {token.symbol}</h4>
           {hasFiatValue && (
             <Tooltip element={buyTooltip}>
-              <IconTooltip className="size-10 text-white/60" />
+              <IconTooltip className="size-10 text-main-0/60" />
             </Tooltip>
           )}
           {!hasFiatValue && (
@@ -56,10 +56,12 @@ export const StrategyBlockBuySell: FC<{
         </header>
       ) : (
         <header className="flex items-center gap-4">
-          <h4 className="text-12 text-sell">Sell {otherToken.symbol}</h4>
+          <h4 className="text-12 text-sell font-medium">
+            Sell {otherToken.symbol}
+          </h4>
           {hasFiatValue && (
             <Tooltip element={sellTooltip}>
-              <IconTooltip className="size-10 text-white/60" />
+              <IconTooltip className="size-10 text-main-0/60" />
             </Tooltip>
           )}
           {!hasFiatValue && (
@@ -80,11 +82,7 @@ export const StrategyBlockBuySell: FC<{
       <Tooltip
         element={
           <span className="inline-flex items-center gap-4">
-            <LogoImager
-              className="size-16"
-              src={otherToken.logoURI}
-              alt="token"
-            />
+            <TokenLogo token={otherToken} size={16} />
             {prettifyNumber(order.budget, { highPrecision: true })}
           </span>
         }
@@ -95,7 +93,7 @@ export const StrategyBlockBuySell: FC<{
       </Tooltip>
       <p
         data-testid={`${testIdPrefix}-budget-fiat`}
-        className="text-12 text-white/60"
+        className="text-12 text-main-0/60"
       >
         {hasFiatValue ? fiatBudgetValue : '...'}
       </p>

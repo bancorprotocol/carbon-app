@@ -56,7 +56,7 @@ export const PreviewRangeStrategy = () => {
           ref={path}
           className={style.pathStroke}
           fill="none"
-          stroke="white"
+          stroke="var(--color-main-0)"
           strokeLinejoin="round"
           strokeWidth="5"
           d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
@@ -75,7 +75,7 @@ export const PreviewRangeStrategy = () => {
           cx="0"
           cy="0"
           r="10"
-          fill="white"
+          fill="var(--color-main-0)"
         />
       </svg>
       <div className={cn(style.budget, style.disposable, style.range)}>

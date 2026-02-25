@@ -26,7 +26,7 @@ export const D3SimLegend = ({ legend, toggleLegend }: Props) => {
         width={195}
         height={156}
         rx={8}
-        className="fill-main-800"
+        className="fill-main-950"
       />
       <g transform="translate(12,16)" onKeyDown={onKeyDown}>
         {Object.entries(legend).map(([key, data]) => (
@@ -90,7 +90,7 @@ const LegendItem = ({
       <g transform="translate(160, -6)">
         <ToggleEye
           visible={!isDisabled}
-          className={isDisabled ? 'text-white/60' : 'text-primary'}
+          className={isDisabled ? 'text-main-0/60' : 'text-primary'}
         />
       </g>
       <rect x="0" height="20" y="-7" fill="transparent" width="174" />

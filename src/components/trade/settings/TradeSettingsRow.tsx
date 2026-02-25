@@ -25,7 +25,7 @@ export const TradeSettingsRow: FC<{
 
   return (
     <div role="group" className={cn(style.presetContainer, 'grid gap-8')}>
-      <h3 className="text-14 text-white/80">{item.title}</h3>
+      <h3 className="text-14 text-main-0/80">{item.title}</h3>
       <div className="flex gap-8">
         <Presets
           className="flex-1"

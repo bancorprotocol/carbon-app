@@ -33,16 +33,16 @@ export const PairList: FC<Props> = ({ pairs, url }) => {
             </header>
             <dl className="grid grid-cols-3 gap-16">
               <div className="col-span-2 grid gap-8">
-                <dt className="text-white/80 text-12">Trades</dt>
+                <dt className="text-main-0/80 text-12">Trades</dt>
                 <dd className="text-14">{pair.tradeCount}</dd>
               </div>
               <div className="grid gap-8">
                 {config.ui.rewards && pair.reward && (
                   <>
-                    <dt className="text-white/80 text-12">Rewards</dt>
+                    <dt className="text-main-0/80 text-12">Rewards</dt>
                     <dd className="text-14">
                       <NewTabLink
-                        className="inline-flex items-center gap-8 text-white/60 hover:text-white"
+                        className="inline-flex items-center gap-8 text-main-0/60 hover:text-main-0"
                         to={config.ui.rewards.url}
                       >
                         <img
@@ -58,15 +58,15 @@ export const PairList: FC<Props> = ({ pairs, url }) => {
                 )}
               </div>
               <div>
-                <dt className="text-white/80 text-12">24h Trades</dt>
+                <dt className="text-main-0/80 text-12">24h Trades</dt>
                 <dd className="text-14">{pair.tradeCount24h}</dd>
               </div>
               <div>
-                <dt className="text-white/80 text-12"># of Strategies</dt>
+                <dt className="text-main-0/80 text-12"># of Strategies</dt>
                 <dd className="text-14">{pair.strategyAmount}</dd>
               </div>
               <div>
-                <dt className="text-white/80 text-12">Liquidity</dt>
+                <dt className="text-main-0/80 text-12">Liquidity</dt>
                 <dd className="text-14">{pair.liquidity}</dd>
               </div>
             </dl>

@@ -15,8 +15,12 @@ export const D3ChartPriceOutOfScale = ({
   color,
 }: Props) => {
   const { dms } = useD3ChartCtx();
-  const stopColor1 = minOutOfScale ? 'black' : color;
-  const stopColor2 = minOutOfScale ? color : 'black';
+  const stopColor1 = minOutOfScale
+    ? `var(--color-${type}-dark)`
+    : `var(--color-${type})`;
+  const stopColor2 = minOutOfScale
+    ? `var(--color-${type})`
+    : `var(--color-${type}-dark)`;
   const stopOpacity1 = minOutOfScale ? 0 : undefined;
   const stopOpacity2 = minOutOfScale ? undefined : 0;
   const yRect = minOutOfScale ? dms.boundedHeight - 30 : -1;

@@ -26,7 +26,7 @@ export const MarketPricePercent: FC<Props> = ({
     <Tooltip element="The percentage difference between the input price and the current market price of the token">
       <span
         className={`rounded-sm bg-main-700 flex items-center gap-5 px-6 py-4 ${
-          marketPriceWarning ? 'text-warning' : 'text-white/80'
+          marketPriceWarning ? 'text-warning' : 'text-main-0/80'
         }`}
         data-testid="market-price-indication"
       >

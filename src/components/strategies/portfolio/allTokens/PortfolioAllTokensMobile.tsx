@@ -1,4 +1,4 @@
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import {
   buildAmountString,
@@ -41,11 +41,7 @@ export const PortfolioAllTokensMobile: FC<Props> = ({
                 search={getHref(value).search}
               >
                 <div className="flex items-center text-18">
-                  <LogoImager
-                    src={value.token.logoURI}
-                    alt="Token Logo"
-                    className="size-26 mr-8"
-                  />
+                  <TokenLogo token={value.token} size={26} className="mr-8" />
                   {value.token.symbol}
                 </div>
 

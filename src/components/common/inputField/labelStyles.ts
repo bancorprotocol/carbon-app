@@ -8,7 +8,7 @@ export const labelStyles = cva<LabelVariants>([], {
     variant: {
       black: ['bg-primary', 'hover:bg-primary/25'],
       secondary: ['bg-main-900', 'bg-white text-main-800'],
-      white: ['bg-main-800 text-white'],
+      white: ['bg-main-800 text-main-0'],
       success: ['bg-success', 'hover:bg-success/25'],
       buy: ['bg-buy', 'hover:bg-buy/25'],
       sell: ['bg-sell', 'hover:bg-sell/25'],

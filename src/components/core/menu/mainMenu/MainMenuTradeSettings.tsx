@@ -104,7 +104,7 @@ export const MainMenuTradeSettings = () => {
             {!isAllSettingsDefault && (
               <button
                 type="reset"
-                className="text-14 text-white p-8 rounded-md"
+                className="text-14 text-main-0 p-8 rounded-md"
               >
                 Reset All
               </button>
@@ -121,7 +121,7 @@ export const MainMenuTradeSettings = () => {
           {settingsData.map((item) => (
             <TradeSettingsRow key={item.id} item={item} />
           ))}
-          <button className="btn-primary-gradient" type="submit">
+          <button className="btn-main-gradient" type="submit">
             Save Changes
           </button>
         </form>

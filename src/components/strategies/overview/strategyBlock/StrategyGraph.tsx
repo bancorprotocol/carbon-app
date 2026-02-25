@@ -76,7 +76,7 @@ const tick = 87; // Where the ticks end, from baseline
 const lowest = 10;
 const highest = width - 10;
 
-const fontSize = 16;
+const fontSize = 15;
 const fontWidth = fontSize / 2;
 
 export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
@@ -402,11 +402,11 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                 x2={x(point)}
                 y1={tick}
                 y2={baseline + 5}
-                stroke="white"
+                stroke="var(--color-main-0)"
                 opacity="60%"
               />
               <text
-                fill="white"
+                fill="var(--color-main-0)"
                 x={x(point)}
                 y={baseline + 10}
                 dominantBaseline="hanging"
@@ -426,11 +426,11 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                 x2={x(point)}
                 y1={tick}
                 y2={baseline + 5}
-                stroke="white"
+                stroke="var(--color-main-0)"
                 opacity="60%"
               />
               <text
-                fill="white"
+                fill="var(--color-main-0)"
                 x={x(point)}
                 y={baseline + 10}
                 dominantBaseline="hanging"
@@ -519,7 +519,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             rx="4"
           />
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             x={lowest + fontWidth}
             y="9"
             dominantBaseline="hanging"
@@ -529,7 +529,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             {formattedPrice}
           </text>
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             x={lowest + fontWidth}
             y="26"
             dominantBaseline="hanging"
@@ -554,7 +554,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             }}
           />
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             y="12"
             dominantBaseline="hanging"
             fontSize={fontSize}
@@ -578,7 +578,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             }}
           />
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             x={highest - fontWidth}
             y="9"
             dominantBaseline="hanging"
@@ -588,7 +588,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             {formattedPrice}
           </text>
           <text
-            fill="white"
+            fill="var(--color-main-0)"
             x={highest - fontWidth}
             y="26"
             dominantBaseline="hanging"
@@ -652,10 +652,10 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
       {limit && (
-        <table className="bg-main-900/40 rounded-md border-separate border border-white/40">
+        <table className="bg-main-900/40 rounded-md border-separate border border-main-0/40">
           <tbody>
             <tr>
-              <th className="font-normal p-8 text-start text-white/60">
+              <th className="font-normal p-8 text-start text-main-0/60">
                 Price
               </th>
               <td className="p-8 text-end" data-testid="price">
@@ -666,10 +666,10 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         </table>
       )}
       {!limit && (
-        <table className="bg-main-900/40 rounded-md border-separate border border-white/40 p-8">
+        <table className="bg-main-900/40 rounded-md border-separate border border-main-0/40 p-8">
           <tbody>
             <tr>
-              <th className="font-normal text-start text-white/60">
+              <th className="font-normal text-start text-main-0/60">
                 Min Price
               </th>
               <td className="text-end" data-testid="min-price">
@@ -677,7 +677,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
               </td>
             </tr>
             <tr>
-              <th className="font-normal text-start text-white/60">
+              <th className="font-normal text-start text-main-0/60">
                 Max Price
               </th>
               <td className="text-end" data-testid="max-price">
@@ -686,7 +686,9 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
             </tr>
             {!!spread && (
               <tr>
-                <th className="font-normal text-start text-white/60">Spread</th>
+                <th className="font-normal text-start text-main-0/60">
+                  Spread
+                </th>
                 <td className="text-end" data-testid="spread">
                   {spread}%
                 </td>
@@ -695,7 +697,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
           </tbody>
         </table>
       )}
-      <p className="text-white/60">
+      <p className="text-main-0/60">
         Current marginal price is&nbsp;
         <span data-testid="marginal-price">
           {marginalPrice} {quote.symbol}
@@ -758,35 +760,35 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
       <h3 className={cn('text-16 font-medium', color)}>
         {isBuy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
-      <table className="bg-main-900/40 rounded-md border-separate border border-white/40 p-8">
+      <table className="bg-main-900/40 rounded-md border-separate border border-main-0/40 p-8">
         <tbody>
           <tr>
-            <th className="font-normal text-start text-white/60">_S P_</th>
+            <th className="font-normal text-start text-main-0/60">_S P_</th>
             <td className="text-end" data-testid="start-price">
               {_sP_} {quote.symbol}
             </td>
           </tr>
           <tr>
-            <th className="font-normal text-start text-white/60">_E P_</th>
+            <th className="font-normal text-start text-main-0/60">_E P_</th>
             <td className="text-end" data-testid="end-price">
               {_eP_} {quote.symbol}
             </td>
           </tr>
           <tr>
-            <th className="font-normal text-start text-white/60">_S D_</th>
+            <th className="font-normal text-start text-main-0/60">_S D_</th>
             <td className="text-end" data-testid="start-date">
               {_sD_Text}
             </td>
           </tr>
           <tr>
-            <th className="font-normal text-start text-white/60">_E D_</th>
+            <th className="font-normal text-start text-main-0/60">_E D_</th>
             <td className="text-end" data-testid="end-date">
               {fromUnixUTC(_eD_).toLocaleString()}
             </td>
           </tr>
         </tbody>
       </table>
-      <p className="text-white/60">
+      <p className="text-main-0/60">
         Current marginal price is&nbsp;
         <span data-testid="marginal-price">
           {marginalPrice} {quote.symbol}
