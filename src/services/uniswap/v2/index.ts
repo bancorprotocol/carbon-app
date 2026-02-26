@@ -20,34 +20,41 @@ export const getAllV2Positions = async (
       userAddress,
       getTokenById,
     );
+  }
+  const url = import.meta.env.VITE_CHAIN_RPC_URL;
+  if (!url) {
+    throw new Error(
+      'You need to set VITE_CHAIN_RPC_URL to use migration. Or use tenderly',
+    );
+  }
+  let tokenBalances: TokenBalance[] | undefined;
+  if (url.includes('alchemy.com')) {
+    const alchemy = new JsonRpcProvider(url);
+    const response = await alchemy.send('alchemy_getTokenBalances', [
+      userAddress,
+      'erc20',
+    ]);
+    tokenBalances = response.tokenBalances;
   } else {
-    const url = import.meta.env.VITE_CHAIN_RPC_URL;
-    if (!url) {
-      throw new Error(
-        'You need to set VITE_CHAIN_RPC_URL to use migration. Or use tenderly',
-      );
-    }
-    let tokenBalances: TokenBalance[] | undefined;
-    if (url.includes('alchemy.com')) {
-      const alchemy = new JsonRpcProvider(url);
-      const response = await alchemy.send('alchemy_getTokenBalances', [
-        userAddress,
-        'erc20',
-      ]);
-      tokenBalances = response.tokenBalances;
-    } else {
-      throw new Error(
-        'Currently univ2 query only support Alchemy. Contact Carbondefi to add an additional API',
-      );
-    }
-    if (!tokenBalances) {
-      throw new Error('No token balances found for user ' + userAddress);
-    }
-    return getAllV2PositionsFromBalances(
+    // Additional API implementation here
+    console.warn(
+      'RPC endpoint is not Alchemy: Falling back to Contract read',
+      'Currently univ2 query only support Alchemy. Contact Carbondefi to add an additional API',
+    );
+    return getAllV2PositionsFromLogs(
       uniConfig,
       provider,
-      tokenBalances,
+      userAddress,
       getTokenById,
     );
   }
+  if (!tokenBalances) {
+    throw new Error('No token balances found for user ' + userAddress);
+  }
+  return getAllV2PositionsFromBalances(
+    uniConfig,
+    provider,
+    tokenBalances,
+    getTokenById,
+  );
 };
