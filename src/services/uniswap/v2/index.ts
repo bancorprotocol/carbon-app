@@ -4,6 +4,7 @@ import { Provider } from 'ethers';
 import { Token } from 'libs/tokens';
 import { getAllV2PositionsFromLogs } from './read.contract';
 import { getAllV2PositionsFromBalances, TokenBalance } from './read.alchemy';
+import { lsService } from 'services/localeStorage';
 
 export const getAllV2Positions = async (
   uniConfig: UniswapV2Config,
@@ -11,8 +12,21 @@ export const getAllV2Positions = async (
   userAddress: string,
   getTokenById: (address: string) => Token | undefined,
 ) => {
-  if (import.meta.env.VITE_CHAIN_RPC_URL) {
+  const tenderly = lsService.getItem('tenderlyRpc');
+  if (tenderly) {
+    return getAllV2PositionsFromLogs(
+      uniConfig,
+      provider,
+      userAddress,
+      getTokenById,
+    );
+  } else {
     const url = import.meta.env.VITE_CHAIN_RPC_URL;
+    if (!url) {
+      throw new Error(
+        'You need to set VITE_CHAIN_RPC_URL to use migration. Or use tenderly',
+      );
+    }
     let tokenBalances: TokenBalance[] | undefined;
     if (url.includes('alchemy.com')) {
       const alchemy = new JsonRpcProvider(url);
@@ -33,13 +47,6 @@ export const getAllV2Positions = async (
       uniConfig,
       provider,
       tokenBalances,
-      getTokenById,
-    );
-  } else {
-    return getAllV2PositionsFromLogs(
-      uniConfig,
-      provider,
-      userAddress,
       getTokenById,
     );
   }
