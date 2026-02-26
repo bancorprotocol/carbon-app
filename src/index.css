@@ -55,7 +55,7 @@
   #root.hide-bg::before {
     opacity: 0;
   }
-  @media (max-width: 48rem) {
+  @variant max-md {
     #root::before {
       --origin-translate: translate(0, -50dvh);
     }
@@ -347,7 +347,7 @@ dialog.modal::backdrop {
   @apply bg-black/60;
 }
 
-@media (max-width: 640px) {
+@variant max-sm {
   dialog.modal.center {
     width: 100%;
     max-width: unset; /* Override browser max width */
@@ -400,7 +400,7 @@ dialog.modal.closing.side {
   animation-name: modal-side-leave;
   animation-fill-mode: forwards;
 }
-@media (max-width: 640px) {
+@variant max-sm {
   dialog.modal.center {
     animation-timing-function: var(--ease-in-out);
   }

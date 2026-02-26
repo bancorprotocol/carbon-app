@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../theme.css";
+@reference "#theme";
 
 .spread:has(input[type='radio']:checked) .spread-custom {
   @apply text-main-0/60;

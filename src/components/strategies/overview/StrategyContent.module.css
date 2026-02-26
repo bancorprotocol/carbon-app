@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../theme.css";
+@reference "#theme";
 
 .strategy-list {
   --items-width: 350px;
@@ -40,7 +40,7 @@
     grid-template-columns: repeat(auto-fill, var(--items-width));
   }
 }
-@media (max-width: 40rem) {
+@variant max-sm {
   .strategy-list {
     --items-width: 330px;
   }
