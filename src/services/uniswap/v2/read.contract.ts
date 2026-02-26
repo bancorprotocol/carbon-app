@@ -25,6 +25,19 @@ const getSessionTokenPairs = (dex: DexesV2) => {
   return JSON.parse(pairs);
 };
 
+const transfers: Record<string, { block: number; logs: Log[] }> = {};
+const getTransferLogs = (user: string) => {
+  const transfers = sessionStorage.getItem(`transfer-logs-${user}`);
+  if (!transfers) return { block: 0, logs: [] };
+  return JSON.parse(transfers) as { block: number; logs: Log[] };
+};
+const setTransferLogs = (user: string) => {
+  sessionStorage.setItem(
+    `transfer-logs-${user}`,
+    JSON.stringify(transfers[user]),
+  );
+};
+
 const dexLogs: Record<DexesV2, { block: number; logs: Log[] }> = {
   'pancake-v2': {
     block: 0,
@@ -45,11 +58,76 @@ const tokenPairs: Record<DexesV2, Record<string, string[]>> = {
   'sushi-v2': getSessionTokenPairs('sushi-v2'),
 };
 
+let gettingTransferEvent: Promise<void> | undefined = undefined;
+export async function getTransferEvents(
+  provider: Provider,
+  user: string,
+  startBlock: number,
+) {
+  const transferTopic = id('Transfer(address,address,uint256)');
+  const userTopic = zeroPadValue(user, 32);
+  transfers[user] ||= getTransferLogs(user);
+
+  const MAX_CHUNK_SIZE = 5_000_000;
+  const MIN_CHUNK_SIZE = 500;
+  let chunkSize = MAX_CHUNK_SIZE;
+  let fromBlock = transfers[user].block || startBlock;
+  const currentBlock = await provider.getBlockNumber();
+
+  if (currentBlock <= fromBlock) return;
+  if (!gettingTransferEvent) {
+    // eslint-disable-next-line no-async-promise-executor
+    gettingTransferEvent = new Promise<void>(async (res, rej) => {
+      while (fromBlock <= currentBlock) {
+        // Ensure we don't query past the current block
+        const toBlock = Math.min(fromBlock + chunkSize - 1, currentBlock);
+
+        const filter = {
+          topics: [
+            transferTopic,
+            null, // 'from' - don't care
+            userTopic, // 'to' - must be the user
+          ],
+          fromBlock: fromBlock,
+          toBlock: toBlock,
+        };
+
+        try {
+          console.log(
+            `Fetching from ${fromBlock} to ${toBlock}. Current block is ${currentBlock}`,
+          );
+          const chunkLogs = await provider.getLogs(filter);
+
+          // Keep in memory so we don't have to call again on retry
+          transfers[user].logs.push(...chunkLogs);
+          transfers[user].block = toBlock + 1;
+          fromBlock = toBlock + 1;
+          chunkSize = Math.min(MAX_CHUNK_SIZE, Math.floor(chunkSize * 10)); // Reset progressively
+
+          setTransferLogs(user);
+        } catch {
+          chunkSize = Math.floor(chunkSize / 10);
+          console.log('Reduce the amount of chunk to ' + chunkSize);
+          if (chunkSize < MIN_CHUNK_SIZE) {
+            rej(
+              `RPC failing persistently. Aborting at block ${fromBlock}. The node might be offline or rate-limiting you.`,
+            );
+            gettingTransferEvent = undefined;
+          }
+        }
+      }
+      res();
+      gettingTransferEvent = undefined;
+    });
+  }
+  return gettingTransferEvent;
+}
+
 /**
  * Discovers all Uniswap V2 positions for a user by scanning logs.
  * No external APIs (Covalent/TheGraph) required.
  */
-export async function getAllV2Positions(
+export async function getAllV2PositionsFromLogs(
   config: UniswapV2Config,
   provider: Provider,
   userAddress: string,
@@ -71,51 +149,8 @@ export async function getAllV2Positions(
   // This tells us every token the user has ever received.
   console.log(`Scanning logs for ERC20 activity...`);
 
-  const transferTopic = id('Transfer(address,address,uint256)');
-  const userTopic = zeroPadValue(userAddress, 32);
-
-  const currentBlock = await provider.getBlockNumber();
-
-  const MAX_CHUNK_SIZE = 5_000_000;
-  const MIN_CHUNK_SIZE = 500;
-  let chunkSize = MAX_CHUNK_SIZE;
-  let fromBlock = dexLogs[config.dex].block || config.startBlock;
-
-  while (fromBlock <= currentBlock) {
-    // Ensure we don't query past the current block
-    const toBlock = Math.min(fromBlock + chunkSize - 1, currentBlock);
-
-    const filter = {
-      topics: [
-        transferTopic,
-        null, // 'from' - don't care
-        userTopic, // 'to' - must be the user
-      ],
-      fromBlock: fromBlock,
-      toBlock: toBlock,
-    };
-
-    try {
-      console.log(
-        `Fetching from ${fromBlock} to ${toBlock}. Current block is ${currentBlock}`,
-      );
-      const chunkLogs = await provider.getLogs(filter);
-
-      // Keep in memory so we don't have to call again on retry
-      dexLogs[config.dex].logs.push(...chunkLogs);
-      dexLogs[config.dex].block = toBlock + 1;
-      fromBlock = toBlock + 1;
-      chunkSize = Math.min(MAX_CHUNK_SIZE, Math.floor(chunkSize * 100)); // Reset progressively
-    } catch {
-      chunkSize = Math.floor(chunkSize / 10);
-      console.log('Reduce the amount of chunk to ' + chunkSize);
-      if (chunkSize < MIN_CHUNK_SIZE) {
-        throw new Error(
-          `RPC failing persistently. Aborting at block ${fromBlock}. The node might be offline or rate-limiting you.`,
-        );
-      }
-    }
-  }
+  // TODO: use lowest start point
+  await getTransferEvents(provider, userAddress, config.startBlock);
 
   // Extract unique contract addresses (potential pairs) from logs
   const potentialPairs = new Set<string>();
@@ -172,17 +207,16 @@ export async function getAllV2Positions(
   // 2. VERIFY & FETCH DATA
   // Check which of these tokens are actually Uniswap V2 pairs
   const getPosition = async (pairAddress: string) => {
-    const pairContract = new Contract(pairAddress, PAIR_ABI, provider);
     const tokens = tokenPairs[config.dex][pairAddress];
-    if (tokens.length !== 2)
+    if (tokens.length !== 2) {
       throw new Error('Should only have pair with 2 tokens');
+    }
     const [token0, token1] = tokens;
 
     // B. Security Check: Ask the Factory
     // Even if it has token0/token1, anyone can deploy a fake contract.
     // We ask the official Factory: "Is this address the real pair for these tokens?"
     const officialPair = await factoryContract.getPair(token0, token1);
-
     if (officialPair.toLowerCase() !== pairAddress.toLowerCase()) {
       // Not a legitimate Uniswap V2 Pair, reset tokens to empty array to ignore on next round
       tokenPairs[config.dex][pairAddress] = [];
@@ -190,6 +224,7 @@ export async function getAllV2Positions(
     }
 
     // C. Get Balance & Reserves
+    const pairContract = new Contract(pairAddress, PAIR_ABI, provider);
     const balance: bigint = await pairContract.balanceOf(userAddress);
 
     if (balance > 0n) {

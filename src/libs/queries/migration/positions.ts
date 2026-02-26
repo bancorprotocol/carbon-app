@@ -9,7 +9,7 @@ import {
   UniswapV3Config,
 } from 'services/uniswap/utils';
 import { getAllV3Positions } from 'services/uniswap/v3/read.contract';
-import { getAllV2Positions } from 'services/uniswap/v2/read.contract';
+import { getAllV2Positions } from 'services/uniswap/v2';
 import { EthersError } from 'ethers';
 
 export const useDexesMigration = () => {
