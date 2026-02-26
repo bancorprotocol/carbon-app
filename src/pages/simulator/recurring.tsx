@@ -14,10 +14,8 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { formatNumber } from 'utils/helpers';
-import { cn } from 'utils/helpers';
 import { getRecurringPriceMultiplier } from 'components/strategies/create/utils';
 import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
-import style from 'components/strategies/common/form.module.css';
 
 export const SimulatorInputRecurringPage = () => {
   const searchState = useSearch({ from: '/simulate/recurring' });
@@ -180,10 +178,7 @@ export const SimulatorInputRecurringPage = () => {
       </SimInputChart>
       <form
         onSubmit={submit}
-        className={cn(
-          style.form,
-          'grid gap-16 grid-area-[form] content-start animate-scale-up',
-        )}
+        className="form grid gap-16 grid-area-[form] content-start animate-scale-up"
         data-testid="create-simulation-form"
       >
         <div className="surface rounded-2xl overflow-clip">

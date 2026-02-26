@@ -17,6 +17,7 @@ import {
   portfolioStrategiesPage,
   portfolioDistributionPage,
   portfolioDistributionTokenPage,
+  portfolioMigratePage,
 } from 'libs/routing/routes/portfolio';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
@@ -77,6 +78,7 @@ export const routeTree = rootRoute.addChildren([
     portfolioDistributionPage,
     portfolioDistributionTokenPage,
     portfolioActivityPage,
+    portfolioMigratePage,
   ]),
   simulatorInputRootRoute.addChildren([
     simulatorInputRecurringRoute,

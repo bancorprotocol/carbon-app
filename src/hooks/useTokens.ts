@@ -9,6 +9,7 @@ export const useTokens = () => {
   const {
     tokens: { tokensMap, setImportedTokens, ...props },
   } = useStore();
+  const { Token } = useContract();
 
   // TODO: remove this in favor or useMemo with tokenMap
   const getTokenById = useCallback(
@@ -34,11 +35,35 @@ export const useTokens = () => {
     [setImportedTokens],
   );
 
+  const importTokenAddresses = useCallback(
+    async (addresses: string[]) => {
+      const missing = new Set<string>();
+      for (const address of addresses) {
+        if (!getTokenById(address)) missing.add(address);
+      }
+      if (!missing.size) return;
+      const fetchAll = [];
+      for (const address of missing) {
+        fetchAll.push(fetchTokenData(Token, address));
+      }
+      return Promise.allSettled(fetchAll)
+        .then((res) => {
+          const tokens = res
+            .filter((r) => r.status === 'fulfilled')
+            .map((r) => r.value);
+          importTokens(tokens);
+        })
+        .catch((err) => console.error(err));
+    },
+    [Token, getTokenById, importTokens],
+  );
+
   return {
     ...props,
     getTokenById,
     importTokens,
     tokensMap,
+    importTokenAddresses,
   };
 };
 
@@ -82,47 +107,30 @@ export const useToken = (address?: string) => {
 export const useImportTokens = (addresses: string[]) => {
   const {
     getTokenById,
-    importTokens,
-    tokensMap,
     isPending: tokenQueryIsPending,
+    importTokenAddresses,
   } = useTokens();
-  const { Token } = useContract();
   const [isPending, setIsPending] = useState(
     addresses.every((a) => !getTokenById(a)),
   );
   const [tokens, setTokens] = useState<Token[]>();
   useEffect(() => {
     if (tokenQueryIsPending) return;
-    const missing = new Set<string>();
-    for (const address of addresses) {
-      if (!getTokenById(address)) missing.add(address);
-    }
-    if (!missing.size && !tokens) {
-      setIsPending(false);
+    if (isPending) {
+      // If there are missing token, import them
+      importTokenAddresses(addresses).finally(() => {
+        setIsPending(false);
+      });
+    } else {
+      // Next rendering get all tokens
       setTokens(addresses.map((a) => getTokenById(a)!));
-    } else if (missing.size) {
-      const fetchAll = [];
-      for (const address of missing) {
-        fetchAll.push(fetchTokenData(Token, address));
-      }
-      Promise.allSettled(fetchAll)
-        .then((res) => {
-          const tokens = res
-            .filter((r) => r.status === 'fulfilled')
-            .map((r) => r.value);
-          importTokens(tokens);
-        })
-        .catch((err) => console.error(err))
-        .finally(() => setIsPending(false));
     }
   }, [
-    tokensMap,
-    getTokenById,
     addresses,
-    Token,
-    importTokens,
+    getTokenById,
+    importTokenAddresses,
+    isPending,
     tokenQueryIsPending,
-    tokens,
   ]);
   return { tokens, isPending };
 };

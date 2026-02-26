@@ -7,13 +7,13 @@ import { ReactNode } from 'react';
 
 export interface ExplorerTab {
   label: string;
-  href: 'pairs' | 'strategies' | 'distribution' | 'activity';
+  href: 'pairs' | 'strategies' | 'distribution' | 'activity' | 'migrate';
   search?: { search?: string };
   icon: ReactNode;
   testid: string;
 }
 
-const tabs: ExplorerTab[] = [
+export const baseTabs: ExplorerTab[] = [
   {
     label: 'Pairs',
     href: 'pairs',
@@ -42,8 +42,9 @@ const tabs: ExplorerTab[] = [
 
 interface Props {
   url: '/explore' | '/portfolio';
+  tabs: ExplorerTab[];
 }
-export const ExplorerTabs = ({ url }: Props) => {
+export const ExplorerTabs = ({ url, tabs }: Props) => {
   // To support emojis in ens domains
   const { location } = useRouterState();
   const pathname = decodeURIComponent(location.pathname);
@@ -52,7 +53,7 @@ export const ExplorerTabs = ({ url }: Props) => {
   return (
     <nav
       aria-label="discover portfolio of strategies"
-      className="tab-list text-16 sm:text-20 flex sm:place-self-start sm:gap-8 md:gap-16 grid-area-[tabs] rounded-2xl"
+      className="tab-list text-16 sm:text-20 flex sm:place-self-start sm:gap-8 md:gap-16 grid-area-[tabs] rounded-2xl max-sm:p-8 max-sm:overflow-x-auto"
       data-testid="explorer-tabs"
     >
       {tabs.map(({ label, href, search, icon, testid }) => {
