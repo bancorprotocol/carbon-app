@@ -18,9 +18,9 @@ import { carbonSDK } from 'libs/sdk';
 import { MigratedPosition } from './type';
 import { QueryKey } from 'libs/queries';
 import IconClose from 'assets/icons/X.svg?react';
-import config from 'config';
 import { MigrationCard } from './MigrationCard';
 import { DotPulse } from 'components/common/DotPulse/DotPulse';
+import config from 'config';
 
 interface Props {
   position: MigratedPosition;
@@ -127,6 +127,10 @@ export const PositionDialog: FC<Props> = (props) => {
 
   const migrate = async (event: FormEvent) => {
     event.preventDefault();
+    const approve = document.getElementById(
+      'approve-warnings',
+    ) as HTMLInputElement;
+    if (!approve.checked) return;
     if (!user) throw new Error('No User connected for migration');
     try {
       const txs = await migrateOne(p);
@@ -164,7 +168,7 @@ export const PositionDialog: FC<Props> = (props) => {
       onClick={lightDismiss}
       onClose={() => props.onClose()}
     >
-      <form method="dialog" className="grid gap-16" onSubmit={migrate}>
+      <form method="dialog" className="form grid gap-16" onSubmit={migrate}>
         <header className="flex items-center justify-between">
           <h3>Migrate Position + Fees</h3>
           <button type="button" onClick={() => close()}>
@@ -172,11 +176,20 @@ export const PositionDialog: FC<Props> = (props) => {
           </button>
         </header>
         <MigrationCard position={p} />
-        <p className="text-14 text-center">
+        <label
+          htmlFor="approve-warnings"
+          className="approve-warnings text-14 flex items-center gap-16 p-8"
+        >
+          <input
+            id="approve-warnings"
+            type="checkbox"
+            className="size-18 shrink-0"
+            data-testid="approve-warnings"
+          />
           Any unused funds will be sent back to your wallet
           <br />
           Fee on transfer (tax) or rebasing tokens are not supported
-        </p>
+        </label>
         <button
           className="btn-primary-gradient flex items-center justify-center gap-16"
           type="submit"

@@ -2,7 +2,6 @@ import { FC, FormEvent, ReactNode, useState } from 'react';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { Button } from 'components/common/button';
 import { useNavigate, useRouter, useSearch } from '@tanstack/react-router';
-import { cn } from 'utils/helpers';
 import { QueryKey, useQueryClient, useUpdateStrategyQuery } from 'libs/queries';
 import { FormStaticOrder, StaticOrder, Strategy } from '../common/types';
 import { getStatusTextByTxStatus } from '../utils';
@@ -11,7 +10,6 @@ import { handleTxStatusAndRedirectToOverview } from '../create/utils';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { NotificationSchema } from 'libs/notifications/data';
-import { StrategyType } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
 import { getDeposit } from './utils';
 import { useApproval } from 'hooks/useApproval';
@@ -22,7 +20,6 @@ import { StrategyUpdate } from '@bancor/carbon-sdk';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { InitMarketPrice } from '../common/InitMarketPrice';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
 interface EditOrders {
@@ -32,7 +29,6 @@ interface EditOrders {
 
 interface Props {
   orders: EditOrders;
-  strategyType: StrategyType;
   editType: EditTypes;
   hasChanged: boolean;
   children: ReactNode;
@@ -81,7 +77,7 @@ const getFieldsToUpdate = (
 };
 
 export const EditPricesForm: FC<Props> = (props) => {
-  const { orders, strategyType, editType, hasChanged, children } = props;
+  const { orders, editType, hasChanged, children } = props;
   const { user } = useWagmi();
   const { strategy } = useEditStrategyCtx();
   const { history } = useRouter();
@@ -209,21 +205,14 @@ export const EditPricesForm: FC<Props> = (props) => {
     <form
       onSubmit={submit}
       onReset={() => history.back()}
-      className={cn(
-        'grid content-start',
-        style.form,
-        strategyType === 'overlapping' ? style.overlapping : '',
-      )}
+      className="form grid content-start"
       data-testid="edit-form"
     >
       <div className="surface overflow-hidden rounded-2xl">{children}</div>
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"
-          className={cn(
-            style.approveWarnings,
-            'surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-white/60',
-          )}
+          className="approve-warnings surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-white/60"
         >
           <input
             id="approve-warnings"

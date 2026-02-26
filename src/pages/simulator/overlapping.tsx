@@ -17,10 +17,8 @@ import {
   defaultStart,
   oneYearAgo,
 } from 'components/strategies/common/utils';
-import { cn } from 'utils/helpers';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
 import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
-import style from 'components/strategies/common/form.module.css';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
 export const SimulatorInputOverlappingPage = () => {
@@ -177,10 +175,7 @@ export const SimulatorInputOverlappingPage = () => {
       </SimInputChart>
       <form
         onSubmit={submit}
-        className={cn(
-          style.form,
-          'grid gap-16 grid-area-[form] content-start animate-scale-up',
-        )}
+        className="form grid gap-16 grid-area-[form] content-start animate-scale-up"
         data-testid="create-simulation-form"
       >
         <div className="surface grid content-start rounded-2xl">
