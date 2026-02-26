@@ -93,7 +93,7 @@ export const DebugUniswap = () => {
       <form className="grid gap-16" onSubmit={createV2}>
         <hgroup>
           <h2>Uniswap</h2>
-          <p className="text-white/60">
+          <p className="text-main-0/60">
             Create a uniswap/sushi/pancake position
           </p>
         </hgroup>

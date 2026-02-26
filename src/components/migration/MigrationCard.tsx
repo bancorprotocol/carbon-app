@@ -15,7 +15,7 @@ export const MigrationCard: FC<Props> = ({ position }) => {
       <div className="bg-main-900/60 rounded-2xl px-16 py-8 font-title">
         <table className="w-full border-separate border-spacing-y-8 text-12">
           <thead>
-            <tr className="text-white/60">
+            <tr className="text-main-0/60">
               <th className="text-start font-normal">Position:</th>
               <th className="text-start font-normal">+Fees:</th>
             </tr>
@@ -81,7 +81,7 @@ export const MigrationCard: FC<Props> = ({ position }) => {
           <path
             d="M85,4 L95,12 L85,20"
             strokeLinejoin="round"
-            stroke="url(#svg-brand-gradient)"
+            stroke="var(--color-primary)"
           />
         </svg>
         <div className="flex items-center gap-8 py-8">
@@ -93,7 +93,7 @@ export const MigrationCard: FC<Props> = ({ position }) => {
         <table className="w-full border-separate caption-bottom border-spacing-y-8">
           <tbody className="text-12">
             <tr>
-              <th className="text-start text-white/60 font-normal">
+              <th className="text-start text-main-0/60 font-normal">
                 Min Price
               </th>
               <td>
@@ -101,7 +101,7 @@ export const MigrationCard: FC<Props> = ({ position }) => {
               </td>
             </tr>
             <tr>
-              <th className="text-start text-white/60 font-normal">
+              <th className="text-start text-main-0/60 font-normal">
                 Max Price
               </th>
               <td>
@@ -109,11 +109,13 @@ export const MigrationCard: FC<Props> = ({ position }) => {
               </td>
             </tr>
             <tr>
-              <th className="text-start text-white/60 font-normal">Fee Tier</th>
+              <th className="text-start text-main-0/60 font-normal">
+                Fee Tier
+              </th>
               <td>{spread}%</td>
             </tr>
           </tbody>
-          <caption className="text-start text-10 text-white/40">
+          <caption className="text-start text-10 text-main-0/40">
             *fetched from original position
           </caption>
         </table>

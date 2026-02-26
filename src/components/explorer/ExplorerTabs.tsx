@@ -53,7 +53,7 @@ export const ExplorerTabs = ({ url, tabs }: Props) => {
   return (
     <nav
       aria-label="discover portfolio of strategies"
-      className="tab-list text-16 sm:text-20 flex sm:place-self-start sm:gap-8 md:gap-16 grid-area-[tabs] rounded-2xl overflow-x-auto"
+      className="tab-list text-16 sm:text-20 flex sm:place-self-start sm:gap-8 md:gap-16 grid-area-[tabs] rounded-2xl max-sm:p-8 max-sm:overflow-x-auto"
       data-testid="explorer-tabs"
     >
       {tabs.map(({ label, href, search, icon, testid }) => {

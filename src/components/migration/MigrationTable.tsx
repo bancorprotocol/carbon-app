@@ -85,7 +85,7 @@ export const MigrationTable: FC<Props> = ({ positions }) => {
                 <td>
                   <div className="inline-grid gap-8">
                     <p>{tokenAmount(p.buy.min, p.quote)}</p>
-                    <p className="text-12 text-white/60">
+                    <p className="text-12 text-main-0/60">
                       {p.quote.symbol} per {p.base.symbol}
                     </p>
                   </div>
@@ -93,7 +93,7 @@ export const MigrationTable: FC<Props> = ({ positions }) => {
                 <td>
                   <div className="inline-grid gap-8">
                     <p>{tokenAmount(p.sell.max, p.quote)}</p>
-                    <p className="text-12 text-white/60">
+                    <p className="text-12 text-main-0/60">
                       {p.quote.symbol} per {p.base.symbol}
                     </p>
                   </div>

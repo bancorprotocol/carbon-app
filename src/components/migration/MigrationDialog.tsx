@@ -191,7 +191,7 @@ export const PositionDialog: FC<Props> = (props) => {
           Fee on transfer (tax) or rebasing tokens are not supported
         </label>
         <button
-          className="btn-primary-gradient flex items-center justify-center gap-16"
+          className="btn-main-gradient flex items-center justify-center gap-16"
           type="submit"
           disabled={!!status}
         >
