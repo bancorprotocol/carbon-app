@@ -250,7 +250,7 @@ export const CartPage = () => {
         <div className="grid place-items-center gap-20 p-20">
           <label
             htmlFor="approve-warnings"
-            className="approve-warnings surface rounded-lg text-14 font-medium flex items-center p-16 py-8 gap-8 place-self-center text-white/60"
+            className="approve-warnings surface rounded-lg text-14 font-medium flex items-center p-16 py-8 gap-8 place-self-center text-main-0/60"
           >
             <input
               id="approve-warnings"

@@ -9,18 +9,18 @@
     <defs>
         <linearGradient id="paint0_linear_4740_90520" x1="20.4003" y1="8.42525" x2="4.79626" y2="4.10539"
             gradientUnits="userSpaceOnUse">
-            <stop stop-color="var(--color-green)" />
-            <stop offset="1" stop-color="var(--color-secondary)" stop-opacity="0.5" />
+            <stop stop-color="var(--main-gradient-from)" />
+            <stop offset="1" stop-color="var(--main-gradient-to)" stop-opacity="0.5" />
         </linearGradient>
         <linearGradient id="paint1_linear_4740_90520" x1="21" y1="1" x2="11.6825" y2="6.6592"
             gradientUnits="userSpaceOnUse">
-            <stop stop-color="var(--color-green)" />
-            <stop offset="0.910087" stop-color="var(--color-secondary)" />
+            <stop stop-color="var(--main-gradient-from)" />
+            <stop offset="0.910087" stop-color="var(--main-gradient-to)" />
         </linearGradient>
         <linearGradient id="paint2_linear_4740_90520" x1="3" y1="1.60004" x2="-5.78511" y2="6.93585"
             gradientUnits="userSpaceOnUse">
-            <stop stop-color="var(--color-green)" />
-            <stop offset="1" stop-color="var(--color-secondary)" />
+            <stop stop-color="var(--main-gradient-from)" />
+            <stop offset="1" stop-color="var(--main-gradient-to)" />
         </linearGradient>
     </defs>
 </svg>

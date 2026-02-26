@@ -200,7 +200,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
 
   return (
     <>
-      <div className="bg-main-900/20 text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border border-main-500/40 text-12 md:text-14">
+      <div className="bg-main-900/20 text-main-0/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border border-main-500/40 text-12 md:text-14">
         <span>
           {text[url].pairs}: {pairs.length}
         </span>
@@ -215,7 +215,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
         <PairFilterDropdown filter={filter} setFilter={setFilter} />
         <PairSortDropdown sort={sort} setSort={setSort} />
       </div>
-      <PairContent pairs={pairs} />
+      <PairContent pairs={pairs} url={url} />
     </>
   );
 };

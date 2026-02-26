@@ -1,6 +1,5 @@
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
-import { Button } from 'components/common/button';
-import { ButtonProps } from 'react-day-picker';
+import { Button, ButtonProps } from 'components/common/button';
 
 export default function ConnectTonWallet(props: ButtonProps) {
   const user = useTonAddress();

@@ -45,11 +45,11 @@ export const ActivityNotification: FC<Props> = ({
             data-testid="notif-close"
             aria-label="Remove notification"
           >
-            <IconClose className="size-14 text-white/80" />
+            <IconClose className="size-14 text-main-0/80" />
           </button>
         </header>
         <p
-          className="text-14 truncate text-white/80"
+          className="text-14 truncate text-main-0/80"
           data-testid="notif-description"
         >
           {activityDescription(activity)}
@@ -63,7 +63,7 @@ export const ActivityNotification: FC<Props> = ({
           >
             View Activity
           </Link>
-          <p className="text-12 font-medium whitespace-nowrap text-white/60">
+          <p className="text-12 font-medium whitespace-nowrap text-main-0/60">
             {duration}
           </p>
         </footer>

@@ -1,13 +1,13 @@
 @reference "tailwindcss";
-@reference "../../theme.css";
+@reference "#theme";
 
 html:has(.page) {
   scrollbar-gutter: stable;
 }
 
 .matrix-form[data-disabled='true'] .summary button {
+  @apply bg-main-0;
   pointer-events: none;
-  background-color: white;
   opacity: 0.4;
 }
 
@@ -411,7 +411,7 @@ html:has(.page) {
   color: black;
 }
 .summary button:disabled {
-  background-color: white;
+  @apply bg-main-0;
   opacity: 0.4;
 }
 .summary button[type='submit'] {
@@ -422,8 +422,8 @@ html:has(.page) {
   );
 }
 .summary:has(button:disabled) button[type='submit'] {
+  @apply bg-main-0;
   pointer-events: none;
-  background-color: white;
   opacity: 0.4;
 }
 

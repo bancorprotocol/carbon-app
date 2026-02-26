@@ -22,7 +22,7 @@ export const SimResultSummaryGains: FC<Props> = ({ portfolioGains, quote }) => {
   return (
     <article className="rounded-md col-span-2 flex flex-col">
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-12 flex items-center gap-4 text-white/60">
+        <h4 className="text-12 flex items-center gap-4 text-main-0/60">
           Estimated Gains
           <IconTooltip className="size-10" />
         </h4>

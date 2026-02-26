@@ -12,9 +12,6 @@
 
 @layer utilities {
   :root {
-    color-scheme: dark;
-    accent-color: white;
-
     --main-menu-height: 80px;
     --mobile-menu-height: 80px;
 
@@ -38,7 +35,7 @@
   html,
   body,
   #root {
-    @apply text-white font-text min-h-screen;
+    @apply text-main-0 font-text min-h-screen;
   }
 
   #root {
@@ -52,13 +49,13 @@
     z-index: -1;
     inset-inline: -50dvw;
     inset-block: -50dvh;
-    background-image: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-black) 100%);
+    background-image: var(--app-background);
     animation: move-gradient 20s infinite alternate;
   }
   #root.hide-bg::before {
     opacity: 0;
   }
-  @media (max-width: 48rem) {
+  @variant max-md {
     #root::before {
       --origin-translate: translate(0, -50dvh);
     }
@@ -73,8 +70,26 @@
     }
   }
 
+  @media (prefers-color-scheme: dark) {
+    html[data-theme="system"] {
+      @apply dark-scheme;
+    }
+  }
+  @media (prefers-color-scheme: light) {
+    html[data-theme="system"] {
+      @apply light-scheme;
+    }
+  }
+  html[data-theme="light"] {
+    @apply light-scheme;
+  }
+  html[data-theme="dark"] {
+    @apply dark-scheme;
+  }
+
+
   html {
-    @apply text-white font-text;
+    @apply text-main-0 font-text;
     scrollbar-gutter: stable both-edges; /* Prevent layout shifting */
   }
   #root {
@@ -147,19 +162,15 @@
     border-radius: 4px;
   }
   input[type='checkbox']:not(:checked) {
-    border: 1px solid rgb(255 255 255 / 0.6);
+    @apply border border-main-0/60;
   }
   input[type='checkbox']:not(:checked):hover {
-    border-color: rgb(255 255 255 / 0.8);
+    @apply border-main-0/80;
   }
   input[type='checkbox']:checked {
+    @apply text-main-0;
     border: 0px;
-    color: rgba(22, 22, 22, var(--tw-text-opacity));
-    background-image: linear-gradient(
-      90deg,
-      var(--color-green) 0%,
-      var(--color-secondary) 100%
-    );
+    background-image: var(--main-gradient);
   }
   input[type='checkbox']:checked:hover {
     filter: brightness(1.2);
@@ -334,10 +345,10 @@ dialog.modal.side > * {
 }
 
 dialog.modal::backdrop {
-  @apply bg-main-900/85;
+  @apply bg-black/60;
 }
 
-@media (max-width: 640px) {
+@variant max-sm {
   dialog.modal.center {
     width: 100%;
     max-width: unset; /* Override browser max width */
@@ -390,7 +401,7 @@ dialog.modal.closing.side {
   animation-name: modal-side-leave;
   animation-fill-mode: forwards;
 }
-@media (max-width: 640px) {
+@variant max-sm {
   dialog.modal.center {
     animation-timing-function: var(--ease-in-out);
   }

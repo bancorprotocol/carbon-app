@@ -9,6 +9,7 @@ export const statusText: Record<StrategyStatus, string> = {
   inactive: 'Inactive',
   noBudget: 'No Budget - Inactive',
   paused: 'Paused - Inactive',
+  deleted: 'Deleted',
 };
 
 export const getTooltipTextByStatus = (

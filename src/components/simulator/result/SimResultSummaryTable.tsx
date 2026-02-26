@@ -30,7 +30,7 @@ export const SimResultSummaryTable = ({ base, quote, buy, sell }: Props) => {
         {isSellLimitOrder ? sellMin : `${sellMin} - ${sellMax}`} {quoteSymbol}{' '}
         per {baseSymbol}
       </span>
-      <span className="text-white/40">|</span>
+      <span className="text-main-0/40">|</span>
       <span data-testid="table-sell-order-budget">
         {baseBudget} {baseSymbol}
       </span>
@@ -39,7 +39,7 @@ export const SimResultSummaryTable = ({ base, quote, buy, sell }: Props) => {
         {isBuyLimitOrder ? buyMin : `${buyMin} - ${buyMax}`} {quoteSymbol} per{' '}
         {baseSymbol}
       </span>
-      <span className="text-white/40">|</span>
+      <span className="text-main-0/40">|</span>
       <span data-testid="table-buy-order-budget">
         {quoteBudget} {quoteSymbol}
       </span>

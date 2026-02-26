@@ -121,6 +121,7 @@ export const EditBudgetDisposablePage = () => {
             initialOrder={strategy.sell}
             setOrder={setSellOrder}
             warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
+            strategyType="disposable"
           />
         )}
         {showBuy && (
@@ -131,6 +132,7 @@ export const EditBudgetDisposablePage = () => {
             initialOrder={strategy.buy}
             setOrder={setBuyOrder}
             warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
+            strategyType="disposable"
             isBuy
           />
         )}

@@ -18,6 +18,11 @@
   }
 }
 
+/* Do not display the dialog until tokens are loaded */
+.dialog:has(.listbox:empty):has(.empty:empty) {
+  display: none;
+}
+
 .dialog:has(.listbox:empty) header {
   display: none;
 }

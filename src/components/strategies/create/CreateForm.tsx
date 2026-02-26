@@ -81,7 +81,7 @@ export const CreateForm: FC<FormProps> = (props) => {
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"
-          className="approve-warnings surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-white/60"
+          className="approve-warnings surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-main-0/60"
         >
           <input
             id="approve-warnings"
@@ -97,7 +97,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           <>
             {config.ui.showCart && (
               <Button
-                className="add-cart btn-secondary-gradient"
+                className="add-cart btn-on-background"
                 type="button"
                 size="lg"
                 disabled={loading || animating}

@@ -12,6 +12,34 @@ export interface QueryLike<T> {
   data?: T;
 }
 
+export const useEnrichedStrategy = (strategy?: AnyStrategy) => {
+  const trending = useTrending();
+  const allPrices = useGetTokensPrice();
+  return useMemo(() => {
+    if (!strategy) return;
+    const prices = allPrices.data ?? {};
+
+    const tradeCount = new Map<string, number>();
+    const tradeCount24h = new Map<string, number>();
+    for (const item of trending.data?.tradeCount ?? []) {
+      tradeCount.set(item.id, item.strategyTrades);
+      tradeCount24h.set(item.id, item.strategyTrades_24h);
+    }
+
+    const basePrice = new SafeDecimal(prices[strategy.base.address] ?? 0);
+    const quotePrice = new SafeDecimal(prices[strategy.quote.address] ?? 0);
+    const base = basePrice.times(strategy.sell.budget);
+    const quote = quotePrice.times(strategy.buy.budget);
+    const total = base.plus(quote);
+    return {
+      ...strategy,
+      fiatBudget: { base, quote, total },
+      tradeCount: tradeCount.get(strategy.id) ?? 0,
+      tradeCount24h: tradeCount24h.get(strategy.id) ?? 0,
+    } as AnyStrategyWithFiat;
+  }, [allPrices.data, strategy, trending.data?.tradeCount]);
+};
+
 export const useGetEnrichedStrategies = (
   query: QueryLike<AnyStrategy[] | AnyStrategy>,
 ) => {

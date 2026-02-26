@@ -84,7 +84,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
           <h3 className="text-16 font-medium flex items-center gap-8">
             Distribution
           </h3>
-          <p className="text-14 text-white/80">
+          <p className="text-14 text-main-0/80">
             Based on the deposit amount above, the total required budgets are as
             follows:
           </p>

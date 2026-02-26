@@ -21,7 +21,7 @@ export const DebugImposter = () => {
       />
 
       <button
-        className="btn-primary-gradient"
+        className="btn-main-gradient"
         data-testid="save-imposter"
         onClick={handleOnClick}
       >

@@ -95,6 +95,7 @@ export const TradeAuction = () => {
             <div
               className={cn(style.order, 'grid gap-16 p-16')}
               data-direction={direction}
+              data-disposable={true}
             >
               <CreateGradientOrder order={order} setOrder={setOrder} />
             </div>

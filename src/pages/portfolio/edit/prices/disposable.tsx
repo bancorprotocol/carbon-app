@@ -228,21 +228,21 @@ export const EditPricesStrategyDisposablePage = () => {
         {(buyBudgetChanges || sellBudgetChanges) && (
           <article
             id="budget-changed"
-            className="warning-message p-16 border-t border-white/40 bg-warning/5"
+            className="warning-message p-16 border-t border-main-0/40 bg-warning/5"
           >
             <h3 className="text-16 text-warning font-medium flex items-center gap-8">
               <IconWarning className="size-16" />
               Notice
             </h3>
             {buyBudgetChanges && (
-              <p className="text-14 text-white/80">
+              <p className="text-14 text-main-0/80">
                 You will withdraw&nbsp;
                 {tokenAmount(buy.budget, quote)} from the inactive buy order to
                 your wallet.
               </p>
             )}
             {sellBudgetChanges && (
-              <p className="text-14 text-white/80">
+              <p className="text-14 text-main-0/80">
                 You will withdraw&nbsp;
                 {tokenAmount(sell.budget, base)} from the inactive sell order to
                 your wallet.

@@ -87,7 +87,7 @@ export const InputRange: FC<InputRangeProps> = ({
           className="grid gap-8 rounded-e-xs rounded-s-2xl w-full cursor-text input-container"
           onClick={() => document.getElementById(inputMinId)?.focus()}
         >
-          <header className="text-12 flex justify-between text-white/60">
+          <header className="text-12 flex justify-between text-main-0/60">
             <Tooltip
               element={`The lowest price to ${isBuy ? 'buy' : 'sell'} ${
                 base.symbol
@@ -124,7 +124,7 @@ export const InputRange: FC<InputRangeProps> = ({
             required
           />
           {!!marketPrice && (
-            <p className="text-12 break-all text-white/60">
+            <p className="text-12 break-all text-main-0/60">
               {getFiatAsString(min)}
             </p>
           )}
@@ -137,7 +137,7 @@ export const InputRange: FC<InputRangeProps> = ({
           )}
           onClick={() => document.getElementById(inputMaxId)?.focus()}
         >
-          <header className="text-12 flex justify-between text-white/60">
+          <header className="text-12 flex justify-between text-main-0/60">
             <Tooltip
               element={`The highest price to ${isBuy ? 'buy' : 'sell'} ${
                 base.symbol
@@ -174,7 +174,7 @@ export const InputRange: FC<InputRangeProps> = ({
             required
           />
           {!!marketPrice && (
-            <p className="text-12 break-all text-white/60">
+            <p className="text-12 break-all text-main-0/60">
               {getFiatAsString(max)}
             </p>
           )}

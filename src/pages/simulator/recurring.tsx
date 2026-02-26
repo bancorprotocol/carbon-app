@@ -189,7 +189,7 @@ export const SimulatorInputRecurringPage = () => {
           type="submit"
           data-testid="start-simulation-btn"
           disabled={btnDisabled}
-          className="btn-primary-gradient text-16 py-12"
+          className="btn-main-gradient text-16 py-12"
         >
           {loadingText || noBudgetText || 'Start Simulation'}
         </button>

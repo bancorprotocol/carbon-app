@@ -6,15 +6,13 @@
   --sell-hue: 15;
   --buy-hue: 170;
 
-  --dark-gradient: linear-gradient(to bottom, var(--color-main-600), var(--color-main-800), var(--color-main-950));
-
-  --main-gradient: linear-gradient(var(--gradient-direction, 180deg), var(--color-green), var(--color-secondary));
+  --main-gradient: linear-gradient(var(--gradient-direction, 180deg), var(--main-gradient-from), var(--main-gradient-to));
   --buy-gradient: linear-gradient(to bottom, var(--color-buy), var(--color-buy-dark));
   --sell-gradient: linear-gradient(to bottom, var(--color-sell), var(--color-sell-dark));
   --error-gradient: linear-gradient(to bottom, var(--color-error), var(--color-error-dark));
   --glass-shadow:
     /* Elevation */
-    0 5px 5px oklch(10% var(--chroma) var(--hue) / 25%),
+    0 0 5px var(--color-shadow),
     /* Top left */
     inset 1px 1px 0 -1px oklch(100% var(--chroma) var(--hue) / 40%),
     inset 2px 2px 0 -1px oklch(100% var(--chroma) var(--hue) / 10%),
@@ -22,7 +20,7 @@
     inset -1px -1px 0 -1px oklch(100% var(--chroma) var(--hue) / 30%),
     inset -2px -2px 0 -1px oklch(100% var(--chroma) var(--hue) / 10%),
     /* Shadow bottom right */
-    0px 5px 15px 0px oklch(20% var(--chroma) var(--hue) / 25%);
+    0px 1px 3px 0px var(--color-shadow);
   --flat-glass-shadow:
     /* Top left */
     inset 1px 1px 0 -1px oklch(100% var(--chroma) var(--hue) / 40%),
@@ -32,7 +30,49 @@
     inset -2px -2px 0 -1px oklch(100% var(--chroma) var(--hue) / 10%);
 }
 
-@theme {
+
+/* Color Scheme */
+@utility light-scheme {
+  --color-main-0: oklch(0 0.01 var(--hue));
+  --color-main-50: oklch(0.2 0.06 var(--hue));
+  --color-main-100: oklch(0.30 0.05 var(--hue));
+  --color-main-200: oklch(0.4 0.06 var(--hue));
+  --color-main-300: oklch(0.6 0.07 var(--hue));
+  --color-main-400: oklch(0.70 0.06 var(--hue));
+  --color-main-500: oklch(0.8 0.05 var(--hue));
+  --color-main-600: oklch(0.85 0.04 var(--hue));
+  --color-main-700: oklch(0.9 0.03 var(--hue));
+  --color-main-800: oklch(0.95 0.02 var(--hue));
+  --color-main-900: oklch(0.99 0.02 var(--hue));
+  --color-main-950: oklch(1 0.01 var(--hue));
+
+  --color-primary: oklch(0.4 .2 var(--hue));
+  --color-green: oklch(0.45 0.2 160);
+  --color-secondary: oklch(0.5 0.3 204);
+  --color-tertiary: oklch(0.8 .3 185);
+
+  --color-error: oklch(0.7 0.21 10.77);
+  --color-error-dark: oklch(0.56 0.25 16.46);
+  --color-sell: oklch(0.55 0.24 16.66);
+  --color-sell-dark: oklch(.40 .28 var(--sell-hue));
+  --color-buy: oklch(0.55 0.21 171.56);
+  --color-buy-dark: oklch(0.40 0.16 161.03);
+  --color-success: oklch(0.5 .2 160);
+  --color-warning: oklch(0.5 .2 57);
+
+  --color-shadow: oklch(0.4 0.06 var(--hue) / 40%);
+
+  /* Background of the app */
+  --app-background: radial-gradient(closest-side circle at center, var(--color-main-950) 40%, var(--color-main-700) 100%);
+  /* Colors used for the gradient */
+  --main-gradient-from: oklch(0.7 0.13 160);
+  --main-gradient-to: oklch(0.7 0.13 214);
+
+  color-scheme: light;
+  accent-color: var(--color-main-0);
+}
+@utility dark-scheme {
+  --color-main-0: oklch(1 0.01 var(--hue));
   --color-main-50: oklch(0.97 0.01 var(--hue));
   --color-main-100: oklch(0.90 0.04 var(--hue));
   --color-main-200: oklch(0.8 0.06 var(--hue));
@@ -44,7 +84,7 @@
   --color-main-800: oklch(0.27 0.05 var(--hue));
   --color-main-900: oklch(0.18 0.03 var(--hue));
   --color-main-950: oklch(0.1 0.02 var(--hue));
-  
+
   --color-primary: oklch(0.8 0.3 var(--hue));
   --color-green: oklch(0.80 0.2 160);
   --color-secondary: oklch(0.80 0.2 215);
@@ -57,9 +97,49 @@
   --color-buy: oklch(0.80 0.2 var(--buy-hue));
   --color-buy-dark: oklch(0.60 0.3 var(--buy-hue));
   --color-success: oklch(0.70 0.2 160);
-  --color-warning: oklch(0.75 0.2 57);
+  --color-warning: oklch(0.70 0.2 57);
 
-  --color-black: var(--color-main-950);
+  --color-shadow: oklch(0.1 0.02 var(--hue) / 25%);
+
+  --app-background: radial-gradient(closest-side circle at center, var(--color-main-600) 0%, var(--color-main-800) 40%, var(--color-main-950) 100%);
+  --main-gradient-from: oklch(80% .2 160);
+  --main-gradient-to: oklch(80% .2 215);
+
+  color: var(--color-main-0);
+  color-scheme: dark;
+  accent-color: var(--color-main-0);
+}
+
+
+@theme {
+  --color-main-0: oklch(1 0.01 var(--hue));
+  --color-main-50: oklch(0.97 0.01 var(--hue));
+  --color-main-100: oklch(0.90 0.04 var(--hue));
+  --color-main-200: oklch(0.8 0.06 var(--hue));
+  --color-main-300: oklch(0.71 0.06 var(--hue));
+  --color-main-400: oklch(0.62 0.06 var(--hue));
+  --color-main-500: oklch(0.53 0.06 var(--hue));
+  --color-main-600: oklch(0.45 0.05 var(--hue));
+  --color-main-700: oklch(0.37 0.06 var(--hue));
+  --color-main-800: oklch(0.27 0.05 var(--hue));
+  --color-main-900: oklch(0.18 0.03 var(--hue));
+  --color-main-950: oklch(0.1 0.02 var(--hue));
+
+  --color-primary: oklch(0.8 0.3 var(--hue));
+  --color-green: oklch(0.80 0.2 160);
+  --color-secondary: oklch(0.80 0.2 215);
+  --color-tertiary: oklch(0.80 0.2 185);
+  
+  --color-error: oklch(0.70 0.2 var(--error-hue));
+  --color-error-dark: oklch(0.50 0.3 var(--error-hue));
+  --color-sell: oklch(0.70 0.2 var(--sell-hue));
+  --color-sell-dark: oklch(0.70 0.28 var(--sell-hue));
+  --color-buy: oklch(0.80 0.2 var(--buy-hue));
+  --color-buy-dark: oklch(0.60 0.3 var(--buy-hue));
+  --color-success: oklch(0.70 0.2 160);
+  --color-warning: oklch(0.75 0.2 57);
+  
+  --color-black: oklch(0.2 var(--chroma) var(--hue));
   --color-white: oklch(1 var(--chroma) var(--hue));
 
 
@@ -144,11 +224,12 @@
   box-shadow: var(--glass-shadow);
 }
 
+
 @utility text-gradient {
   background-image: linear-gradient(
     var(--gradient-direction, 180deg),
-    var(--color-green),
-    var(--color-secondary)
+    var(--main-gradient-from),
+    var(--main-gradient-to)
   );
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -168,7 +249,10 @@
 }
 
 @utility fill-gradient {
-  fill: url('#svg-brand-gradient');
+  fill: url("#svg-main-gradient");
+}
+@utility  stroke-gradient {
+  stroke: url("#svg-main-gradient");
 }
 @utility fill-sell-gradient {
   fill: url('#svg-sell-gradient');
@@ -191,18 +275,16 @@
   }
 }
 
-@utility btn-primary-gradient {
-  --gradient-direction: 180deg;
-  @apply rounded-full text-14 shadow-black/25;
-  box-shadow: 0 5px 5px 0 var(--tw-shadow-color);
-  background: var(--main-gradient);
-  color: var(--color-black);
+@utility btn-main-gradient {
+  @apply rounded-full text-14;
+  box-shadow: 0 5px 5px 0 var(--color-shadow);
+  color: var(--color-main-950);
   padding: 12px 20px;
   transition: transform 0.1s var(--ease-out);
   text-align: center;
-  &:hover {
-    background: linear-gradient(180deg, var(--color-green), var(--color-primary) 40%);
-  }
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
   &:disabled, &.disabled {
     opacity: 0.5;
     pointer-events: none;
@@ -210,52 +292,26 @@
   &:active {
     transform: scale(0.9);
   }
+  &::before {
+    --gradient-direction: 60deg;
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background-image: linear-gradient(170deg, var(--main-gradient-from), var(--main-gradient-to));
+    scale: 1 2;
+    transform-origin: top;
+    transition: transform 0.5s var(--ease-in-out);
+  }
+  &:hover::before {
+    transform: translateY(-50%);
+  }
 }
 
-@utility btn-secondary-gradient {
-  @apply rounded-full text-14 shadow-black/25;
-  box-shadow: 0 5px 5px 0 var(--tw-shadow-color);
-  background: linear-gradient(to bottom, var(--color-main-400), var(--color-main-600), var(--color-main-700)) border-box;
-  color: var(--color-white);
-  padding: 12px 20px;
-  transition: transform 0.1s var(--ease-out);
-  text-align: center;
-  &:hover {
-    background: linear-gradient(to bottom, var(--color-main-500), var(--color-main-700), var(--color-main-900)) border-box;
-  }
-  &:disabled, &.disabled {
-    background: linear-gradient(#061B1E) border-box;
-    color: oklch(1 0 0 / 40%);
-    pointer-events: none;
-  }
-  &:active {
-    transform: scale(0.9);
-  }
-}
-@utility btn-tertiary-gradient {
-  @apply rounded-full text-14 shadow-main-700/80;
-  box-shadow: 0 4px 15px 0 var(--tw-shadow-color);
-  background: linear-gradient(to bottom, var(--color-main-600), var(--color-main-800), var(--color-main-950)) border-box;
-  color: var(--color-white);
-  padding: 12px 20px;
-  transition: transform 0.1s var(--ease-out);
-  text-align: center;
-  &:hover {
-    background: linear-gradient(to bottom, var(--color-main-700), var(--color-main-900), var(--color-main-950)) border-box;
-  }
-  &:disabled, &.disabled {
-    background: linear-gradient(var(--color-black)) border-box;
-    color: oklch(1 0 0 / 40%);
-    pointer-events: none;
-  }
-  &:active {
-    transform: scale(0.9);
-  }
-}
 
 @utility btn-primary {
   @apply rounded-full text-14 bg-primary/80;
-  color: var(--color-black);
+  color: var(--color-main-950);
   padding: 8px 16px;
   transition: transform 0.1s var(--ease-out);
   text-align: center;
@@ -272,7 +328,7 @@
 }
 @utility btn-on-background {
   @apply rounded-full text-14 bg-main-500/60 glass-shadow;
-  color: var(--color-white);
+  color: var(--color-main-0);
   padding: 8px 16px;
   transition: transform 0.1s var(--ease-out);
   text-align: center;
@@ -290,7 +346,7 @@
 
 @utility btn-on-surface {
   @apply rounded-full text-14 bg-main-500/60 flat-glass-shadow;
-  color: var(--color-white);
+  color: var(--color-main-0);
   padding: 8px 16px;
   transition: transform 0.1s var(--ease-out);
   text-align: center;
@@ -317,7 +373,7 @@
   text-align: center;
   padding: 12px 20px;
   transition: transform 0.1s var(--ease-out);
-  color: var(--color-black);
+  color: var(--color-main-950);
   &:hover {
     background-color: var(--color-buy-dark);
     background-image: none;
@@ -337,7 +393,7 @@
   text-align: center;
   padding: 12px 20px;
   transition: transform 0.1s var(--ease-out);
-  color: var(--color-black);
+  color: var(--color-main-950);
   &:hover {
     background-color: var(--color-sell-dark);
     background-image: none;
@@ -354,7 +410,7 @@
   text-align: center;
   padding: 12px 20px;
   transition: transform 0.1s var(--ease-out);
-  color: var(--color-black);
+  color: var(--color-main-950);
   &:hover {
     background-color: var(--color-error);
     background-image: none;
@@ -368,7 +424,7 @@
 
 @utility input-container {
   @apply border border-transparent bg-main-900/40 hover:bg-main-900/60 p-16 focus-within:border-main-400;
-  box-shadow: inset 0 0 10px var(--color-main-900);
+  box-shadow: inset 0 0 10px var(--color-shadow);
   &:has(:disabled) {
     @apply bg-main-900/40;
   }
@@ -378,11 +434,6 @@
   &:has(.text-error) {
     @apply border-error/80 focus-within:border-error;
   }
-}
-
-@utility backdrop-black {
-  background-image: linear-gradient(150deg, oklch(50% var(--chroma) var(--hue) / 0.5), oklch(30% var(--chroma) var(--hue) / 0.5));
-  backdrop-filter: blur(20px);
 }
 
 @utility tab-list {
@@ -416,7 +467,7 @@
   transition-timing-function: var(--ease-in-out);
   border-radius: inherit;
   &:hover {
-    color: white;
+    @apply text-main-0;
   }
   &:active {
     transform: scale(0.9);
@@ -424,23 +475,17 @@
 }
 @utility tab-focus {
   @supports (anchor-name: --myanchor) {
-    color: white;
+    @apply text-main-0;
     anchor-name: --tab-selected;
   }
   @supports not (anchor-name: --myanchor) {
-    @apply glass-shadow from-main-400/40 to-main-500/40;
-    color: white;
+    @apply glass-shadow from-main-400/40 to-main-500/40 text-main-0;
     background: var(--tab-background, linear-gradient(180deg, var(--tw-gradient-from), var(--tw-gradient-to)));
   }
 }
 
 @custom-variant aria-page (&[aria-current="page"]);
-@utility fill-gradient {
-  fill: url("#svg-brand-gradient");
-}
-@utility  stroke-gradient {
-  stroke: url("#svg-brand-gradient");
-}
+
 
 @utility table-col-span-all {
   column-span: all;
@@ -468,13 +513,15 @@
   border-radius: 16px;
   font-size: 14px;
   & thead tr {
-    @apply border-b border-b-main-900/40;
-    color: oklch(100% 0 0 / 60%);
+    @apply border-b border-b-main-900/40 text-main-0/80;
   }
   & thead th {
     text-align: start;
     font-weight: normal;
     white-space: nowrap;
+  }
+  & tbody tr:not(:last-child) td {
+    @apply border-b border-b-main-900/40;
   }
   & td, & th {
     padding: 16px;
@@ -487,8 +534,7 @@
     padding-inline-end: 24px;
   }
   & tfoot tr {
-    @apply border-t border-t-main-900/40;
-    color: oklch(100% 0 0 / 80%);
+    @apply border-t border-t-main-900/40 text-main-0/80;
   }
 }
 
@@ -517,3 +563,42 @@
 
 @custom-variant aria-page (&[aria-current="page"]);
 @custom-variant aria-location (&[aria-current="location"]);
+
+
+
+@custom-variant sm {
+  @media (width >= 40rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+@custom-variant md {
+  @media (width >= 48rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+@custom-variant lg {
+  @media (width >= 64rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+@custom-variant xl {
+  @media (width >= 80rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+@custom-variant 2xl {
+  @media (width >= 96rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+
+@custom-variant max-sm {
+  @media (width < 40rem), (orientation: portrait) {
+    @slot;
+  }
+}
+@custom-variant max-md {
+  @media (width < 48rem) and (orientation: landscape), (orientation: portrait) {
+    @slot;
+  }
+}

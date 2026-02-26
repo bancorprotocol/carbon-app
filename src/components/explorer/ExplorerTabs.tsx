@@ -69,7 +69,7 @@ export const ExplorerTabs = ({ url, tabs }: Props) => {
             to={href}
             search={(s) => ({ search: s.search })}
             key={href}
-            className="grow sm:grow-0 px-8 py-4 font-title font-normal text-white/60 flex gap-8 items-center justify-center sm:px-16 sm:py-8 aria-page:tab-focus tab-anchor"
+            className="grow sm:grow-0 px-8 py-4 font-title font-normal text-main-0/60 flex gap-8 items-center justify-center sm:px-16 sm:py-8 aria-page:tab-focus tab-anchor"
             resetScroll={false}
             aria-current={active ? 'page' : 'false'}
             data-testid={testid}

@@ -4,7 +4,7 @@ import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { useFiatValue } from 'hooks/useFiatValue';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 
 export interface TooltipPriceProps {
   amount: string;
@@ -28,18 +28,14 @@ export const TooltipTokenAmount: FC<TooltipPriceProps> = (props) => {
             {token.symbol}
           </div>
           {fiatPrice && (
-            <TokenPrice className="text-white/60" price={fiatPrice} />
+            <TokenPrice className="text-main-0/60" price={fiatPrice} />
           )}
         </>
       }
     >
       <div className={cn('align-center flex gap-7', className)}>
         {prettifyNumber(amount)}
-        <LogoImager
-          className="size-16"
-          src={token.logoURI}
-          alt={token.name ?? 'Token'}
-        />
+        <TokenLogo token={token} size={16} />
       </div>
     </Tooltip>
   );

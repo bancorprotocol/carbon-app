@@ -38,7 +38,7 @@ export const commonConfig: AppConfig = {
       symbol: 'TON',
       decimals: 9,
       address: addresses.TON,
-      logoURI: 'https://ton.org/download/ton_symbol.svg',
+      logoURI: IconTonLogo,
     },
   },
   sdk: {

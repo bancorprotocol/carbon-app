@@ -23,7 +23,7 @@ export default function ModalNotifications({ id }: ModalProps) {
         </button>
       </ModalHeader>
       <NotificationPreferences />
-      <ul className="grid gap-16 overflow-auto">
+      <ul className="grid gap-16 p-8 overflow-auto">
         {reversedNotifications.map((n) => (
           <li key={n.id} id={n.id} className="surface rounded-lg px-16 py-12">
             <NotificationLine

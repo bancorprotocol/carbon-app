@@ -55,7 +55,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
               buyIsRange: ctx.search.buyIsRange,
               sellIsRange: ctx.search.sellIsRange,
             }}
-            className="btn-secondary-gradient"
+            className="btn-on-background"
           >
             Back
           </Link>
@@ -72,7 +72,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
               sellMax: ctx.search.sellMax,
               spread: ctx.search.spread,
             }}
-            className="btn-secondary-gradient"
+            className="btn-on-background"
           >
             Back
           </Link>

@@ -1,4 +1,4 @@
-import { Activity, ActivityOrder } from 'libs/queries/extApi/activity';
+import { Activity } from 'libs/queries/extApi/activity';
 import { activityActionName } from './utils';
 import { getLowestBits } from 'utils/helpers';
 import { useActivity } from './context';
@@ -11,6 +11,7 @@ import { fromUnixUTC } from 'components/simulator/utils';
 import { useDialog } from 'hooks/useDialog';
 import IconClose from 'assets/icons/X.svg?react';
 import styles from './ActivityExport.module.css';
+import { Order } from 'components/strategies/common/types';
 
 const getActivityCSV = (activities: Activity[]) => {
   const header = [
@@ -50,15 +51,15 @@ const getActivityCSV = (activities: Activity[]) => {
     const { strategy, changes, blockNumber, txHash } = activity;
     const { base, quote } = strategy;
     const date = new Date(activity.date).toLocaleDateString();
-    const min = (order: ActivityOrder) => {
+    const min = (order: Order) => {
       if ('min' in order) return order.min;
       return SafeDecimal.min(order._sP_, order._eP_).toString();
     };
-    const max = (order: ActivityOrder) => {
+    const max = (order: Order) => {
       if ('max' in order) return order.max;
       return SafeDecimal.max(order._sP_, order._eP_).toString();
     };
-    const gradientPrices = (order: ActivityOrder) => {
+    const gradientPrices = (order: Order) => {
       if ('min' in order) return ['', '', '', ''];
       return [
         order._sP_,
@@ -165,7 +166,7 @@ export const ActivityExport = () => {
             </p>
             <p>To include older data, adjust the date range and try again.</p>
             <footer className="grid grid-flow-col gap-16">
-              <button className="btn-primary-gradient" onClick={download}>
+              <button className="btn-main-gradient" onClick={download}>
                 Proceed
               </button>
               <button className="btn-on-surface">Cancel</button>

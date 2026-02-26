@@ -75,8 +75,8 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
       data-testid="create-strategy-form"
     >
       {children}
-      <div className="approve-warnings rounded-lg bg-main-900/60 text-14 grid gap-16 p-20 text-white/60">
-        <p className="warning-message text-12 text-white/60">
+      <div className="approve-warnings rounded-lg bg-main-900/60 text-14 grid gap-16 p-20 text-main-0/60">
+        <p className="warning-message text-12 text-main-0/60">
           Please confirm before proceeding.
         </p>
         <label
@@ -97,7 +97,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
         <>
           {config.ui.showCart && (
             <Button
-              className="add-cart btn-secondary-gradient shrink-0"
+              className="add-cart btn-on-background shrink-0"
               type="button"
               size="lg"
               fullWidth

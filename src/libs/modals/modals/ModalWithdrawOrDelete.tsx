@@ -25,7 +25,7 @@ export default function ModalWithdrawOrDelete({
         text="Delete this strategy to keep things tidy"
       />
       <button
-        className="btn-primary-gradient"
+        className="btn-main-gradient"
         onClick={() => {
           closeModal(id);
           onDelete();

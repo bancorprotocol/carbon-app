@@ -62,7 +62,7 @@ export const TradeType = () => {
           })}
           aria-current={link.pages.includes(current) ? 'page' : 'false'}
           data-testid={link.testId}
-          className="rounded-md hover:surface flex items-center justify-center gap-8 py-8 px-16 text-white/60 aria-[current=page]:bg-main-900 aria-[current=page]:text-white"
+          className="rounded-md hover:surface flex items-center justify-center gap-8 py-8 px-16 text-main-0/60 aria-[current=page]:bg-main-900 aria-[current=page]:text-main-0"
         >
           {link.svg}
           {link.label}

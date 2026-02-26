@@ -22,7 +22,7 @@ export interface StrategyInput {
   sell: { min: string; max: string };
 }
 
-type OrdersInput =
+export type OrdersInput =
   | BuySellOrders<FormGradientOrder>
   | BuySellOrders<FormStaticOrder>;
 
@@ -146,10 +146,11 @@ export const getStrategyType = (strategy: OrdersInput) => {
 export const isPaused = (strategy: OrdersInput) => {
   if (isGradientStrategy(strategy)) {
     return (
-      isZero(strategy.buy._sP_) &&
-      isZero(strategy.buy._eP_) &&
-      isZero(strategy.sell._sP_) &&
-      isZero(strategy.sell._eP_)
+      (isZero(strategy.buy._sP_) &&
+        isZero(strategy.buy._eP_) &&
+        isZero(strategy.sell._sP_) &&
+        isZero(strategy.sell._eP_)) ||
+      isInPast(strategy)
     );
   } else {
     return (
@@ -162,7 +163,12 @@ export const isPaused = (strategy: OrdersInput) => {
     );
   }
 };
-export const isInPast = (strategy: BaseStrategy<GradientOrder>) => {
+
+export const isNoBudget = (strategy: OrdersInput) => {
+  return !Number(strategy.buy.budget) && !Number(strategy.sell.budget);
+};
+
+export const isInPast = (strategy: BuySellOrders<FormGradientOrder>) => {
   if (!isEmptyGradientOrder(strategy.buy)) {
     if (fromUnixUTC(strategy.buy._eD_) < new Date()) return true;
   }
@@ -170,6 +176,15 @@ export const isInPast = (strategy: BaseStrategy<GradientOrder>) => {
     if (fromUnixUTC(strategy.sell._eD_) < new Date()) return true;
   }
   return false;
+};
+
+export const getStrategyStatus = (orders: OrdersInput) => {
+  const paused = isPaused(orders);
+  const noBudget = isNoBudget(orders);
+  if (paused && noBudget) return 'inactive';
+  if (paused) return 'paused';
+  if (noBudget) return 'noBudget';
+  return 'active';
 };
 
 export const isStaticOrder = (order: FormOrder): order is FormStaticOrder => {

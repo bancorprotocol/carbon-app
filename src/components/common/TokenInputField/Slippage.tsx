@@ -12,7 +12,7 @@ const slippageColor = (slippage: SafeDecimal) => {
   if (slippage?.gt(0)) return 'text-primary';
   if (slippage?.isZero()) return 'text-warning';
   if (slippage?.lt(-3)) return 'text-error';
-  return 'text-white/80';
+  return 'text-main-0/80';
 };
 
 export const Slippage: FC<Props> = ({ slippage }) => {

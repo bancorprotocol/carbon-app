@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../theme.css";
+@reference "#theme";
 
 .preset {  
   position: relative;
@@ -15,23 +15,22 @@
   z-index: -1;
 }
 .preset label {
-  @apply rounded-lg font-medium grid cursor-pointer place-items-center py-8 text-center text-white/60 tab-anchor;
+  @apply rounded-lg font-medium grid cursor-pointer place-items-center py-8 text-center text-main-0/60 tab-anchor;
 }
 .preset input:not(:checked) + label:hover {
-  @apply bg-main-600/20 text-white;
+  @apply bg-main-600/20 text-main-0;
 }
 
 .preset input:checked + label {
-  color: white;
-  @apply tab-focus;
+  @apply tab-focus text-main-0;
 }
 
 .preset-custom {
-  @apply text-white/60;
+  @apply text-main-0/60;
 }
 
 .preset-container:not(:has(input[type='radio']:checked)) .preset-custom {
-  color: white;
+   @apply text-main-0;
 }
 
 .preset-container:has(:global(.warning-message)) .preset-custom {

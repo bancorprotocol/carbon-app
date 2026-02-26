@@ -2,7 +2,7 @@
 @reference '../../theme.css';
 
 .trade-type {
-  @apply px-8 py-12 flex-1 text-white/60 tab-anchor;
+  @apply px-8 py-12 flex-1 text-main-0/60 tab-anchor;
   display: grid;
   grid-template-areas: 'stack';
 }
@@ -47,21 +47,17 @@
   }
 }
 
-@media (max-width: 40rem) {
+@variant max-sm {
   .trade-type:has(p:not([hidden])) span {
     transform: translateY(-5px) scale(0.7);
   }
 }
-
-/* sm */
-@media (min-width: 40rem) {
+@variant sm {
   .trade-type {
     @apply px-24;
   }
 }
-
-/* 2xl */
-@media (min-width: 96rem) {
+@variant 2xl {
   .trade-type {
      @apply py-16;
   }

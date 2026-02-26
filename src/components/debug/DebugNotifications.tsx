@@ -1,4 +1,3 @@
-import { Button } from 'components/common/button';
 import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 
@@ -68,6 +67,8 @@ export const DebugNotifications = () => {
               strategy: {
                 type: 'static',
                 id: '10000',
+                idDisplay: '100',
+                status: 'active',
                 base: {
                   address: '0xeeeeeeeeeeeeeeee',
                   decimals: 18,
@@ -82,11 +83,13 @@ export const DebugNotifications = () => {
                 buy: {
                   min: '1000',
                   max: '2000',
+                  marginalPrice: '1000',
                   budget: '10',
                 },
                 sell: {
                   min: '1000',
                   max: '2000',
+                  marginalPrice: '2000',
                   budget: '10',
                 },
               },
