@@ -86,7 +86,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
   return (
     <>
-      <div className="bg-content min-h-85 flex items-center gap-16 justify-between rounded-2xl px-20">
+      <div className="bg-main-900/80 min-h-85 flex items-center gap-16 justify-between rounded-2xl px-20">
         <div className="flex items-center gap-10">
           <TokenLogo token={token} size={30} />
           <p className="font-medium">{token.symbol}</p>
@@ -111,10 +111,8 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
                 </label>
                 <Switch
                   id={inputId}
-                  variant={isLimited ? 'secondary' : 'white'}
-                  isOn={!isLimited}
-                  setIsOn={handleLimitChange}
-                  size="sm"
+                  checked={!isLimited}
+                  onChange={handleLimitChange}
                   data-testid={`approve-limited-${token.symbol}`}
                 />
               </div>
