@@ -23,7 +23,7 @@ export default function ModalConfirmWithdraw({
   const editPrices = getEditPricesPage(strategy, 'editPrices');
   const withdraw = getEditBudgetPage(strategy, 'withdraw');
 
-  const edit = () => closeModal(id);
+  const close = () => closeModal(id);
 
   return (
     <Modal id={id} className="grid gap-16">
@@ -34,10 +34,10 @@ export default function ModalConfirmWithdraw({
         icon={<IconWallet className="size-24" />}
         title="Are you sure you would like to withdraw your funds?"
       />
-      <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl bg-main-0/10 p-16">
+      <article className="bg-main-900/80 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
         <h3 className="text-14 font-medium">Did you know?</h3>
         <Link
-          onClick={edit}
+          onClick={close}
           to={editPrices.to}
           search={editPrices.search}
           params={{ strategyId: strategy.id }}
@@ -49,16 +49,26 @@ export default function ModalConfirmWithdraw({
           Editing prices is cheaper and keeps your strategy working for you.
         </p>
       </article>
-      <Link
-        onClick={edit}
-        to={withdraw.to}
-        search={withdraw.search}
-        params={{ strategyId: strategy.id }}
-        className="btn-on-surface"
-        data-testid="withdraw-strategy-btn"
-      >
-        Withdraw Funds
-      </Link>
+      <article className="bg-main-900/80 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
+        <h3 className="text-14 font-medium">Only Withdraw Funds</h3>
+        <Link
+          onClick={close}
+          to={withdraw.to}
+          search={withdraw.search}
+          params={{ strategyId: strategy.id }}
+          className="btn-primary row-span-2 self-center"
+          data-testid="withdraw-strategy-btn"
+        >
+          Withdraw Funds
+        </Link>
+        <p className="text-12 text-main-0/80">
+          Withdraw all or a part of the funds in the strategy.
+        </p>
+      </article>
+
+      <button type="reset" className="btn-on-surface" onClick={close}>
+        Cancel
+      </button>
     </Modal>
   );
 }
