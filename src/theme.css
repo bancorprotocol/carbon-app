@@ -566,6 +566,11 @@
 
 
 
+@custom-variant xs {
+  @media (width >= 25rem) {
+    @slot;
+  }
+}
 @custom-variant sm {
   @media (width >= 40rem) and (orientation: landscape) {
     @slot;
@@ -588,6 +593,12 @@
 }
 @custom-variant 2xl {
   @media (width >= 96rem) and (orientation: landscape) {
+    @slot;
+  }
+}
+
+@custom-variant max-xs {
+  @media (width < 25rem) {
     @slot;
   }
 }

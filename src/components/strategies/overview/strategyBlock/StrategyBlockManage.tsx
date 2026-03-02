@@ -192,20 +192,11 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       });
 
       if (strategy.status !== 'noBudget') {
-        const withdraw = getEditBudgetPage(strategy, 'withdraw');
         items.push({
           id: 'withdrawFunds',
           name: 'Withdraw Funds',
           action: () => {
-            if (isOverlapping) {
-              navigate({
-                to: withdraw.to,
-                search: withdraw.search,
-                params: { strategyId: strategy.id },
-              });
-            } else {
-              openModal('confirmWithdrawStrategy', { strategy });
-            }
+            openModal('confirmWithdrawStrategy', { strategy });
           },
         });
       }
