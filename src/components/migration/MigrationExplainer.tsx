@@ -43,9 +43,12 @@ export const MigrationExplainer = () => {
         </button>
       </header>
       <p className="text-14">
-        Import positions from supported DEXs, define your own price ranges,
-        spreads, and liquidity distribution, and adjust your strategy as markets
-        evolve — without the need to withdraw and redeploy.
+        Import positions from supported DEXs and turn passive positions into
+        active, customizable strategies.
+        <br />
+        Define your own price ranges, spreads, and liquidity distribution, and
+        adjust your strategy as markets evolve — without the need to withdraw
+        and redeploy.
         <br />
         Your liquidity, on your terms.
       </p>

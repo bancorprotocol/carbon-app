@@ -55,7 +55,7 @@ export const MigrationFetching: FC<Props> = ({ queryState }) => {
               </li>
             ))}
           </ul>
-          <span className="text-14">Positions from dexes</span>
+          <span className="text-14">Positions from DEXs</span>
           <FetchIndicator isFetching={someFetching} hasError={someError} />
         </button>
       )}
