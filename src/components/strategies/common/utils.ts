@@ -77,8 +77,23 @@ export const isDisposableStrategy = (strategy: OrdersInput) => {
   return false;
 };
 
-export const getFullRangeFactor = (min: string, max: string) => {
-  return new SafeDecimal(max).mul(min).sqrt();
+export const getFullRangeFactor = (
+  base: Token,
+  quote: Token,
+  min: string,
+  max: string,
+) => {
+  const mean = geoMean(min, max); // current price at creation time
+  if (!mean) return;
+  const { minBuyPrice, maxSellPrice } = getMinMaxPricesByDecimals(
+    base.decimals,
+    quote.decimals,
+  );
+  return SafeDecimal.min(
+    mean.div(minBuyPrice),
+    new SafeDecimal(maxSellPrice).div(mean),
+    1000,
+  );
 };
 
 /** Get the full range min & max price for a specific pair */
@@ -123,16 +138,8 @@ export const isFullRange = (
   max: string,
 ) => {
   const mean = geoMean(min, max); // current price at creation time
-  if (!mean) return false;
-  const { minBuyPrice, maxSellPrice } = getMinMaxPricesByDecimals(
-    base.decimals,
-    quote.decimals,
-  );
-  const factor = SafeDecimal.min(
-    mean.div(minBuyPrice),
-    new SafeDecimal(maxSellPrice).div(mean),
-    1000,
-  );
+  const factor = getFullRangeFactor(base, quote, min, max);
+  if (!factor || !mean) return false;
 
   return (
     new SafeDecimal(min).lte(mean.div(factor).mul(1.01)) &&

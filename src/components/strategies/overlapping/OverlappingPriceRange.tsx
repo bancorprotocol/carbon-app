@@ -54,13 +54,13 @@ export const OverlappingPriceRange: FC<Props> = (props) => {
 
   const fullRangeWarning = useMemo(() => {
     if (range !== 'Infinity') return '';
-    const factor = getFullRangeFactor(min, max);
-    if (factor.gt(50)) return '';
+    const factor = getFullRangeFactor(base, quote, min, max);
+    if (!factor || factor.gt(50)) return '';
     const displayFactor = prettifyNumber(factor);
     const displayMin = prettifyNumber(min);
     const displayMax = prettifyNumber(max);
     return `Due to price and decimal constraints, the full-range strategy will be set ${displayFactor}x above and below the current market price, providing liquidity at prices between ${displayMin} and ${displayMax}`;
-  }, [range, min, max]);
+  }, [range, base, quote, min, max]);
 
   return (
     <>
