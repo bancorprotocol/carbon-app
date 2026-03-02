@@ -127,11 +127,9 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
       </p>
       <Switch
         id={id}
-        size="sm"
         role="cell"
-        variant={checked ? 'white' : 'black'}
-        isOn={checked}
-        setIsOn={(isOn) =>
+        checked={checked}
+        onChange={(isOn) =>
           onChange(
             isOn ? MarginalPriceOptions.reset : MarginalPriceOptions.maintain,
           )

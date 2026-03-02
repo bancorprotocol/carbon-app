@@ -7,6 +7,7 @@ import {
   MyStrategyDriver,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
+import { waitModalOpen } from '../../../utils/modal';
 
 export const withdraw = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
@@ -18,6 +19,10 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
     const tokenApproval = new TokenApprovalDriver(page);
     const initial = await manage.createStrategy(testCase, { tokenApproval });
     await initial.clickManageEntry('withdrawFunds');
+
+    const modal = await waitModalOpen(page);
+    await modal.getByTestId('withdraw-strategy-btn').click();
+    await modal.waitFor({ state: 'detached' });
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('overlapping', 'withdraw');
