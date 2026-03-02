@@ -55,7 +55,7 @@ export default function ModalTokenList({
   }, []);
 
   return (
-    <Modal id={id} className="grid content-start gap-16 md:w-500 h-[70vh]">
+    <Modal id={id} className="grid content-start gap-16 md:w-500 h-full">
       <ModalHeader id={id}>
         <h2 id="modal-title">Select Token</h2>
       </ModalHeader>
