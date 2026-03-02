@@ -137,9 +137,6 @@ importers:
       date-fns:
         specifier: 3.3.1
         version: 3.3.1
-      dayjs:
-        specifier: 1.11.7
-        version: 1.11.7
       decimal.js:
         specifier: 10.4.2
         version: 10.4.2
@@ -3176,9 +3173,6 @@ packages:
 
   date-fns@4.1.0:
     resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
-
-  dayjs@1.11.7:
-    resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -10090,8 +10084,6 @@ snapshots:
   date-fns@3.3.1: {}
 
   date-fns@4.1.0: {}
-
-  dayjs@1.11.7: {}
 
   debug@2.6.9:
     dependencies:
