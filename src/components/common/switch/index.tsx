@@ -7,6 +7,7 @@ interface Props {
   role?: AriaRole;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  'data-testid'?: string;
 }
 
 export const Switch: FC<Props> = ({
@@ -14,11 +15,11 @@ export const Switch: FC<Props> = ({
   checked,
   onChange,
   id,
-  role,
+  ...props
 }) => {
   return (
     <div
-      role={role}
+      {...props}
       className={cn(
         'relative bg-main-600 rounded-full w-40 p-4 hover:bg-main-500 has-[:checked]:bg-primary',
         className,
