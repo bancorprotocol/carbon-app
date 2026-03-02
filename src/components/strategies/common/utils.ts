@@ -77,6 +77,10 @@ export const isDisposableStrategy = (strategy: OrdersInput) => {
   return false;
 };
 
+export const getFullRangeFactor = (min: string, max: string) => {
+  return new SafeDecimal(max).mul(min).sqrt();
+};
+
 /** Get the full range min & max price for a specific pair */
 export const getFullRangesPrices = (
   currentPrice: string,
@@ -90,7 +94,7 @@ export const getFullRangesPrices = (
   const price = new SafeDecimal(currentPrice);
   const factor = SafeDecimal.min(
     price.div(minBuyPrice),
-    new SafeDecimal(maxSellPrice).div(currentPrice),
+    new SafeDecimal(maxSellPrice).div(price),
     1000,
   );
   return {
