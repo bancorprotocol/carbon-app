@@ -2,9 +2,7 @@ import { FC, useMemo } from 'react';
 import { useTokens } from 'hooks/useTokens';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
-import { Dexes } from 'services/uniswap/utils';
 import { NotFound } from 'components/common/NotFound';
-import { Token } from 'libs/tokens';
 import { useDexesMigration } from 'libs/queries/migration/positions';
 import { MigrationTable } from 'components/migration/MigrationTable';
 import { useBreakpoints } from 'hooks/useBreakpoints';
@@ -14,42 +12,7 @@ import { MigrationFetching } from 'components/migration/MigrationFetching';
 import { MigrationExplainer } from 'components/migration/MigrationExplainer';
 import { useCanBatchTransactions } from 'libs/queries/chain/canBatch';
 import { MigrationImposterWarning } from 'components/migration/MigrationImposterWarning';
-
-interface MigratedPosition {
-  id: string;
-  dex: Dexes;
-  base: Token;
-  quote: Token;
-  spread: string;
-  buy: {
-    min: string;
-    marginalPrice: string;
-    max: string;
-    budget: string;
-    fee: string;
-  };
-  sell: {
-    min: string;
-    marginalPrice: string;
-    max: string;
-    budget: string;
-    fee: string;
-  };
-  fiat: {
-    base: {
-      budget: string;
-      fee: string;
-    };
-    quote: {
-      budget: string;
-      fee: string;
-    };
-    total: {
-      budget: string;
-      fee: string;
-    };
-  };
-}
+import { MigratedPosition } from 'components/migration/type';
 
 type MigrationQuery = ReturnType<typeof useDexesMigration>;
 
@@ -95,18 +58,24 @@ const MigrationContent: FC<Props> = ({ query }) => {
     if (marketPriceQuery.isPending) return;
     if (query.isPending) return;
     const marketPrices = marketPriceQuery.data || {};
-    return query.data?.map((pos) => {
+    const positions: MigratedPosition[] = [];
+    for (const pos of query.data) {
+      const base = getTokenById(pos.base);
+      const quote = getTokenById(pos.quote);
+      if (!base || !quote) continue;
+
       const basePrice = new SafeDecimal(marketPrices[pos.base]);
       const quotePrice = new SafeDecimal(marketPrices[pos.quote]);
       const baseBudgetFiat = basePrice.mul(pos.baseLiquidity);
       const baseFeeFiat = basePrice.mul(pos.baseFee);
       const quoteBudgetFiat = quotePrice.mul(pos.quoteLiquidity);
       const quoteFeeFiat = quotePrice.mul(pos.quoteFee);
-      return {
+
+      positions.push({
         id: pos.id,
         dex: pos.dex,
-        base: getTokenById(pos.base)!,
-        quote: getTokenById(pos.quote)!,
+        base,
+        quote,
         spread: new SafeDecimal(pos.fee).div(10_000).toString(),
         buy: {
           min: pos.min.toString(),
@@ -136,8 +105,9 @@ const MigrationContent: FC<Props> = ({ query }) => {
             fee: baseFeeFiat.add(quoteFeeFiat).toString(),
           },
         },
-      };
-    });
+      });
+    }
+    return positions;
   }, [
     getTokenById,
     isPending,
