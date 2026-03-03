@@ -22,11 +22,11 @@ interface MarketRate {
   data: { USD: number };
 }
 
-const get = async <T>(
+const getResponse = async (
   endpoint: string,
   params: object = {},
   abortSignal?: AbortSignal,
-): Promise<T> => {
+) => {
   const api = lsService.getItem('carbonApi') || config.carbonApi;
   const url = new URL(api + endpoint);
   for (const [key, value] of Object.entries(params)) {
@@ -35,15 +35,24 @@ const get = async <T>(
     }
   }
   const response = await fetch(url, { signal: abortSignal });
-  const result = await response.json();
   if (!response.ok) {
+    const result = await response.json();
     const error = (result as { error?: string }).error;
     throw new Error(
       error ||
         `Response was not okay. ${response.statusText} response received.`,
     );
   }
-  return result as T;
+  return response;
+};
+
+const getJSON = async <T>(
+  endpoint: string,
+  params: object = {},
+  abortSignal?: AbortSignal,
+): Promise<T> => {
+  const res = await getResponse(endpoint, params, abortSignal);
+  return res.json();
 };
 
 const carbonApi = {
@@ -53,42 +62,42 @@ const carbonApi = {
     return res.json();
   },
   getTokens: () => {
-    return get<Token[]>('tokens');
+    return getJSON<Token[]>('tokens');
   },
   getTokensMarketPrice: () => {
-    return get<Record<string, number>>('tokens/prices');
+    return getJSON<Record<string, number>>('tokens/prices');
   },
   getMarketRateHistory: async (
     params: TokenPriceHistorySearch,
   ): Promise<TokenPriceHistoryResult[]> => {
-    return get<TokenPriceHistoryResult[]>('history/prices', params);
+    return getJSON<TokenPriceHistoryResult[]>('history/prices', params);
   },
   getMarketRate: async (address: string) => {
     const params = { address, convert: ['USD'] };
-    const result = await get<MarketRate>('market-rate', params);
+    const result = await getJSON<MarketRate>('market-rate', params);
     return result.data.USD;
   },
   getSimulator: async (
     params: SimulatorAPIParams,
   ): Promise<SimulatorReturnNew> => {
-    return get<SimulatorReturnNew>('simulator/create', params);
+    return getJSON<SimulatorReturnNew>('simulator/create', params);
   },
   getAllStrategies: () => {
-    return get<StrategyAPIResult>('strategies');
+    return getJSON<StrategyAPIResult>('strategies');
   },
   getActivity: async (
     params: QueryActivityParams,
     abortSignal?: AbortSignal,
   ) => {
-    return get<ServerActivity[]>('activity', params, abortSignal);
+    return getJSON<ServerActivity[]>('activity', params, abortSignal);
   },
   getActivityMeta: async (params: QueryActivityParams) => {
-    return get<ServerActivityMeta>('activity/meta', params);
+    return getJSON<ServerActivityMeta>('activity/meta', params);
   },
-  getTrending: () => get<Trending>('analytics/trending'),
-  getReward: (pair: string) => get<Reward>('merkle/data', { pair }),
-  getAllRewards: () => get<Reward[]>('merkle/all-data'),
-  getSeedData: () => get('seed-data'),
+  getTrending: () => getJSON<Trending>('analytics/trending'),
+  getReward: (pair: string) => getJSON<Reward>('merkle/data', { pair }),
+  getAllRewards: () => getJSON<Reward[]>('merkle/all-data'),
+  getSeedData: () => getResponse('seed-data').then((res) => res.text()),
 };
 
 export { carbonApi };

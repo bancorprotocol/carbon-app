@@ -54,8 +54,7 @@ export const SDKProvider: FC<Props> = ({ children }) => {
         setIsLoading(true);
         let cacheData: string | undefined;
         if (import.meta.env.PROD && config.ui.useSeedData) {
-          const seed = await carbonApi.getSeedData();
-          cacheData = JSON.stringify(seed);
+          cacheData = await carbonApi.getSeedData();
         } else {
           const { timestamp, ttl } = lsService.getItem('lastSdkCache') ?? {};
           if (timestamp && ttl && timestamp + ttl > Date.now()) {
