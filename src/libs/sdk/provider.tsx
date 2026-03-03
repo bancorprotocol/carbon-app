@@ -50,10 +50,17 @@ export const SDKProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const initSDK = async () => {
+      const shouldUseSeedData = () => {
+        if (!import.meta.env.PROD) return false;
+        if (!config.ui.useSeedData) return false;
+        if (lsService.getItem('tenderlyRpc')) return false;
+        return true;
+      };
+
       try {
         setIsLoading(true);
         let cacheData: string | undefined;
-        if (import.meta.env.PROD && config.ui.useSeedData) {
+        if (shouldUseSeedData()) {
           cacheData = await carbonApi.getSeedData();
         } else {
           const { timestamp, ttl } = lsService.getItem('lastSdkCache') ?? {};
