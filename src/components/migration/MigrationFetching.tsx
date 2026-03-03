@@ -46,7 +46,7 @@ export const MigrationFetching: FC<Props> = ({ queryState }) => {
       button={(attr) => (
         <button
           {...attr}
-          className="btn-on-background place-self-start flex gap-8 items-center"
+          className="btn-on-background flex place-self-start gap-8 items-center"
         >
           <ul className="flex">
             {dexes.map((dex) => (
