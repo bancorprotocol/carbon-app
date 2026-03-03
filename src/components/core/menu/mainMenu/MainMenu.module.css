@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../../theme.css";
+@reference "#theme";
 
 .main-menu {
   @apply text-main-0/50;
@@ -13,7 +13,7 @@
   box-shadow: 0 1px 10px var(--color-shadow);
   z-index: 40;
 }
-@media (max-width: 40rem) {
+@variant max-sm {
   .main-menu {
     padding-inline: 16px;
   }

@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../theme.css";
+@reference "#theme";
 
 .search {
   @apply input-container rounded-full border-2 border-main-400;

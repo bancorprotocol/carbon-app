@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../../theme.css";
+@reference "#theme";
 
 .mobile-menu {
   @apply text-main-0/50;
@@ -22,7 +22,7 @@
   z-index: -1;
 }
 
-@media (min-width: 48rem) {
+@variant sm {
   .mobile-menu {
     display: none;
   }

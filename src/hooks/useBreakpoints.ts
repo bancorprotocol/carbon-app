@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export type Breakpoint = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
@@ -14,42 +14,52 @@ const screens: Screens = {
   '2xl': 1536,
 };
 
-const getWidth = () => {
-  return window?.innerWidth || 0;
-};
-
 export const useBreakpoints = () => {
-  const [width, setWidth] = useState(getWidth);
-
-  const currentBreakpoint = useMemo(() => {
-    return Object.keys(screens).reduce(
-      (acc, key) => (width >= screens[key as Breakpoint] ? key : acc),
-      'sm',
-    ) as Breakpoint;
-  }, [width]);
+  const [breakpoint, setBreakpoint] = useState<Breakpoint>('sm');
 
   const aboveBreakpoint = useCallback(
-    (breakpoint: Breakpoint) => {
-      return width >= screens[breakpoint];
+    (target: Breakpoint) => {
+      return screens[breakpoint] >= screens[target];
     },
-    [width],
+    [breakpoint],
   );
 
   const belowBreakpoint = useCallback(
-    (breakpoint: Breakpoint) => {
-      return width < screens[breakpoint];
+    (target: Breakpoint) => {
+      return screens[breakpoint] < screens[target];
     },
-    [width],
+    [breakpoint],
   );
 
-  const track = useCallback(() => {
-    setWidth(getWidth);
+  useEffect(() => {
+    const cleanup: (() => void)[] = [];
+    // landscape mode
+    for (const [key, value] of Object.entries(screens)) {
+      const media = `(width >= ${value}px) and (orientation: landscape)`;
+      const queryList = window.matchMedia(media);
+      if (queryList.matches) setBreakpoint(key as Breakpoint);
+      const update = (e: MediaQueryListEvent) => {
+        if (e.matches) setBreakpoint(key as Breakpoint);
+      };
+      queryList.addEventListener('change', update);
+      cleanup.push(() => queryList.removeEventListener('change', update));
+    }
+    // portrait -> sm
+    const portrait = window.matchMedia('(orientation: portrait)');
+    if (portrait.matches) setBreakpoint('sm');
+    const setPortrait = (e: MediaQueryListEvent) => {
+      if (e.matches) setBreakpoint('sm');
+    };
+    portrait.addEventListener('change', setPortrait);
+    cleanup.push(() => portrait.removeEventListener('change', setPortrait));
+
+    // cleanup
+    return () => cleanup.forEach((fn) => fn());
   }, []);
 
-  useEffect(() => {
-    window.addEventListener('resize', track);
-    return () => window.removeEventListener('resize', track);
-  }, [track]);
-
-  return { currentBreakpoint, aboveBreakpoint, belowBreakpoint };
+  return {
+    currentBreakpoint: breakpoint,
+    aboveBreakpoint,
+    belowBreakpoint,
+  };
 };

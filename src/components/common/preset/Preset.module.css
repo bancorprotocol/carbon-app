@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../../theme.css";
+@reference "#theme";
 
 .preset {  
   position: relative;

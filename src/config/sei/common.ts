@@ -139,5 +139,6 @@ export const commonConfig: AppConfig = {
     // walkthroughId: '51xep69sd3io',
     useOpenocean: false, // true,
     useSeedData: true,
+    useEIP7702: true,
   },
 };

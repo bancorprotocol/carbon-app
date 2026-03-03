@@ -43,7 +43,7 @@ export default function ModalConfirmDelete({
     );
   };
 
-  const editPrices = () => closeModal(id);
+  const close = () => closeModal(id);
 
   return (
     <Modal id={id} className="grid gap-16">
@@ -60,7 +60,7 @@ export default function ModalConfirmDelete({
         <article className="bg-main-900/80 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
           <h3 className="text-14 font-medium">Did you know?</h3>
           <Link
-            onClick={editPrices}
+            onClick={close}
             disabled={isAwaiting || isProcessing}
             to={editPricePage.to}
             params={{ strategyId: strategy.id }}
@@ -74,16 +74,25 @@ export default function ModalConfirmDelete({
           </p>
         </article>
       )}
+      <article className="bg-main-900/80 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
+        <h3 className="text-14 font-medium">Watch out</h3>
+        <Button
+          onClick={onClick}
+          loading={isPending}
+          loadingChildren={loadingChildren}
+          className="btn-error-gradient row-span-2 self-center"
+          data-testid="delete-strategy-btn"
+        >
+          Delete Strategy
+        </Button>
+        <p className="text-12 text-main-0/80">
+          This is definitive. Once deleted the strategy can't be restored.
+        </p>
+      </article>
 
-      <Button
-        variant="white"
-        onClick={onClick}
-        loading={isPending}
-        loadingChildren={loadingChildren}
-        data-testid="delete-strategy-btn"
-      >
-        Delete Strategy
-      </Button>
+      <button type="reset" className="btn-on-surface" onClick={close}>
+        Cancel
+      </button>
     </Modal>
   );
 }
