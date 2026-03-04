@@ -8,12 +8,13 @@ import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { Token } from 'libs/tokens';
-import { useNavigate, useSearch } from '@tanstack/react-router';
 import { CreateOverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
-import { SetOverlapping } from 'libs/routing/routes/trade';
+import {
+  StrategyDirection,
+  TradeOverlappingSearch,
+} from 'libs/routing/routes/trade';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
-import { useTradeCtx } from 'components/trade/context';
 
 interface Props {
   base: Token;
@@ -21,16 +22,12 @@ interface Props {
   buy: CreateOverlappingOrder;
   sell: CreateOverlappingOrder;
   spread: string;
-  set: SetOverlapping;
+  anchor?: StrategyDirection;
+  set: (next: TradeOverlappingSearch) => any;
 }
 
-const url = '/trade/overlapping';
 export const CreateOverlappingPrice: FC<Props> = (props) => {
-  const { base, quote } = useTradeCtx();
-  const { buy, sell, spread, set } = props;
-  const search = useSearch({ from: url });
-  const navigate = useNavigate({ from: url });
-  const { anchor } = search;
+  const { base, quote, buy, sell, spread, set, anchor } = props;
 
   const aboveMarket = isMinAboveMarket(buy);
   const belowMarket = isMaxBelowMarket(sell);
@@ -54,18 +51,12 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
   const setMin = (min: string) => set({ min, fullRange: false });
   const setMax = (max: string) => set({ max, fullRange: false });
   const setSpread = (spread: string) => set({ spread });
-  const setFullRange = () => {
-    navigate({
-      search: (s) => ({
-        ...s,
-        min: undefined,
-        max: undefined,
-        fullRange: true,
-      }),
-      resetScroll: false,
-      replace: true,
+  const setFullRange = () =>
+    set({
+      min: undefined,
+      max: undefined,
+      fullRange: true,
     });
-  };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
     set({ anchor: value, budget: undefined });

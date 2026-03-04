@@ -6,6 +6,9 @@ import {
   validNumber,
   validInputNumber,
   validBoolean,
+  validDirection,
+  validSettings,
+  validChartType,
 } from '../utils';
 import { TradeDisposable } from 'pages/trade/disposable';
 import { TradeRoot } from 'pages/trade/root';
@@ -52,8 +55,9 @@ export interface TradeRecurringSearch extends TradeSearch {
 }
 
 // TRADE OVERLAPPING
-export type TradeOverlappingSearch =
-  (typeof overlappingPage)['types']['searchSchema'];
+export type TradeOverlappingSearch = Partial<
+  (typeof overlappingPage)['types']['searchSchema']
+>;
 export type SetOverlapping = (next: TradeOverlappingSearch) => any;
 
 // TRADE MARKET
@@ -105,7 +109,7 @@ const marketPage = createRoute({
   path: '/market',
   component: TradeMarket,
   validateSearch: searchValidator({
-    direction: v.optional(v.picklist(['buy', 'sell'])),
+    direction: v.optional(validDirection),
   }),
 });
 
@@ -114,8 +118,8 @@ const disposablePage = createRoute({
   path: '/disposable',
   component: TradeDisposable,
   validateSearch: searchValidator({
-    direction: v.optional(v.picklist(['buy', 'sell'])),
-    settings: v.optional(v.picklist(['limit', 'range'])),
+    direction: v.optional(validDirection),
+    settings: v.optional(validSettings),
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
     budget: v.optional(validInputNumber),
@@ -131,12 +135,12 @@ const recurringPage = createRoute({
     buyMin: v.optional(validInputNumber),
     buyMax: v.optional(validInputNumber),
     buyBudget: v.optional(validInputNumber),
-    buySettings: v.optional(v.picklist(['limit', 'range'])),
+    buySettings: v.optional(validSettings),
     buyMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
     sellMin: v.optional(validInputNumber),
     sellMax: v.optional(validInputNumber),
     sellBudget: v.optional(validInputNumber),
-    sellSettings: v.optional(v.picklist(['limit', 'range'])),
+    sellSettings: v.optional(validSettings),
     sellMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
   }),
 });
@@ -145,19 +149,14 @@ const overlappingPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/overlapping',
   component: TradeOverlapping,
-  beforeLoad: ({ search }) => {
-    if (!('spread' in search)) {
-      search.spread = defaultSpread;
-    }
-  },
   validateSearch: searchValidator({
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
     fullRange: v.optional(validBoolean),
-    spread: v.optional(validNumber),
+    spread: v.optional(validNumber, defaultSpread),
     budget: v.optional(validNumber),
-    anchor: v.optional(v.picklist(['buy', 'sell'])),
-    chartType: v.optional(v.picklist(['history', 'range'])),
+    anchor: v.optional(validDirection),
+    chartType: v.optional(validChartType),
   }),
 });
 
@@ -168,7 +167,7 @@ const auctionPage = createRoute({
   component: () => null,
   // component: TradeAuction,
   validateSearch: searchValidator({
-    direction: v.optional(v.picklist(['buy', 'sell'])),
+    direction: v.optional(validDirection),
     _sP_: v.optional(validInputNumber),
     _eP_: v.optional(validInputNumber),
     _sD_: v.optional(validNumber),
@@ -184,7 +183,7 @@ const customPage = createRoute({
   component: () => null,
   // component: TradeCustom,
   validateSearch: searchValidator({
-    directions: v.optional(v.array(v.picklist(['buy', 'sell']))),
+    directions: v.optional(v.array(validDirection)),
     buy_SP_: v.optional(validInputNumber),
     buy_EP_: v.optional(validInputNumber),
     buy_SD_: v.optional(validNumber),
@@ -205,7 +204,7 @@ const quickAuctionPage = createRoute({
   component: () => null,
   // component: TradeQuickAuction,
   validateSearch: searchValidator({
-    direction: v.optional(v.picklist(['buy', 'sell'])),
+    direction: v.optional(validDirection),
     _sP_: v.optional(validInputNumber),
     _eP_: v.optional(validInputNumber),
     deltaTime: v.optional(validInputNumber),
@@ -220,7 +219,7 @@ const quickCustomPage = createRoute({
   component: () => null,
   // component: TradeQuickCustom,
   validateSearch: searchValidator({
-    directions: v.optional(v.array(v.picklist(['buy', 'sell']))),
+    directions: v.optional(v.array(validDirection)),
     buy_SP_: v.optional(validInputNumber),
     buy_EP_: v.optional(validInputNumber),
     buyDeltaTime: v.optional(validNumber),

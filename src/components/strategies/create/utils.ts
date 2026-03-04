@@ -34,7 +34,7 @@ export const handleTxStatusAndRedirectToOverview = (
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 
-export const getRecurringPriceMultiplier = (
+const getRecurringPriceMultiplier = (
   direction: StrategyDirection,
   settings: StrategySettings,
 ) => {

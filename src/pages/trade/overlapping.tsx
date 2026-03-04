@@ -51,6 +51,7 @@ export const TradeOverlapping = () => {
             buy={orders.buy}
             sell={orders.sell}
             spread={search.spread || ''}
+            anchor={search.anchor}
             set={set}
           />
           <CreateOverlappingBudget
@@ -58,6 +59,8 @@ export const TradeOverlapping = () => {
             quote={quote}
             buy={orders.buy}
             sell={orders.sell}
+            anchor={search.anchor}
+            budget={search.budget}
             set={set}
           />
         </CreateForm>

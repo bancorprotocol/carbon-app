@@ -5,6 +5,10 @@ import {
   validMarginalPrice,
   validNumber,
   validInputNumber,
+  validSettings,
+  validAction,
+  validDirection,
+  validChartType,
 } from '../utils';
 import { EditStrategyRoot } from 'pages/portfolio/edit/root';
 import {
@@ -79,9 +83,9 @@ export const editPricesDisposable = createRoute({
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
     budget: v.optional(validInputNumber),
-    settings: v.optional(v.picklist(['limit', 'range'])),
-    direction: v.optional(v.picklist(['buy', 'sell'])),
-    action: v.optional(v.picklist(['deposit', 'withdraw'])),
+    settings: v.optional(validSettings),
+    direction: v.optional(validDirection),
+    action: v.optional(validAction),
   }),
 });
 
@@ -109,13 +113,13 @@ export const editPricesRecurring = createRoute({
     buyMin: v.optional(validInputNumber),
     buyMax: v.optional(validInputNumber),
     buyBudget: v.optional(validInputNumber),
-    buySettings: v.optional(v.picklist(['limit', 'range'])),
-    buyAction: v.optional(v.picklist(['deposit', 'withdraw'])),
+    buySettings: v.optional(validSettings),
+    buyAction: v.optional(validAction),
     sellMin: v.optional(validInputNumber),
     sellMax: v.optional(validInputNumber),
     sellBudget: v.optional(validInputNumber),
-    sellSettings: v.optional(v.picklist(['limit', 'range'])),
-    sellAction: v.optional(v.picklist(['deposit', 'withdraw'])),
+    sellSettings: v.optional(validSettings),
+    sellAction: v.optional(validAction),
   }),
 });
 
@@ -148,14 +152,14 @@ export const editPricesOverlapping = createRoute({
   component: EditPricesOverlappingPage,
   validateSearch: searchValidator({
     editType: v.picklist(['editPrices', 'renew']),
-    chartType: v.optional(v.picklist(['history', 'range'])),
+    chartType: v.optional(validChartType),
     marketPrice: v.optional(validNumber),
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
     spread: v.optional(validNumber),
     budget: v.optional(validNumber),
-    anchor: v.optional(v.picklist(['buy', 'sell'])),
-    action: v.optional(v.picklist(['deposit', 'withdraw'])),
+    anchor: v.optional(validDirection),
+    action: v.optional(validAction),
     fullRange: v.optional(v.boolean()),
   }),
 });
@@ -166,7 +170,7 @@ export const editBudgetDisposable = createRoute({
   path: 'budget/disposable',
   component: EditBudgetDisposablePage,
   validateSearch: searchValidator({
-    editType: v.picklist(['deposit', 'withdraw']),
+    editType: validAction,
     buyBudget: v.optional(validNumber),
     sellBudget: v.optional(validNumber),
     buyMarginalPrice: v.optional(validMarginalPrice),
@@ -179,7 +183,7 @@ export const editBudgetRecurring = createRoute({
   path: 'budget/recurring',
   component: EditBudgetRecurringPage,
   validateSearch: searchValidator({
-    editType: v.picklist(['deposit', 'withdraw']),
+    editType: validAction,
     buyBudget: v.optional(validNumber),
     buyMarginalPrice: v.optional(validMarginalPrice),
     sellBudget: v.optional(validNumber),
@@ -192,10 +196,10 @@ export const editBudgetOverlapping = createRoute({
   path: 'budget/overlapping',
   component: EditBudgetOverlappingPage,
   validateSearch: searchValidator({
-    editType: v.picklist(['deposit', 'withdraw']),
-    chartType: v.optional(v.picklist(['history', 'range'])),
+    editType: validAction,
+    chartType: v.optional(validChartType),
     marketPrice: v.optional(validNumber),
     budget: v.optional(validNumber),
-    anchor: v.optional(v.picklist(['buy', 'sell'])),
+    anchor: v.optional(validDirection),
   }),
 });

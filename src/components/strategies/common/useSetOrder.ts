@@ -37,7 +37,8 @@ type RecurringUrl =
   | '/strategies/edit/$strategyId/budget/disposable'
   | '/strategies/edit/$strategyId/budget/recurring'
   | '/strategies/edit/$strategyId/prices/recurring'
-  | '/trade/recurring';
+  | '/trade/recurring'
+  | '/simulate/recurring';
 export const useSetRecurringOrder = <T>(url: RecurringUrl) => {
   const navigate = useNavigate({ from: url });
   const setOrder = useCallback(

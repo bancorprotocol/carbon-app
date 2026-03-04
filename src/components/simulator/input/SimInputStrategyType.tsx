@@ -44,8 +44,8 @@ export const SimInputStrategyType = () => {
           search={(search) => ({
             base: search.base,
             quote: search.quote,
-            start: search.start,
-            end: search.end,
+            chartStart: search.chartStart,
+            chartEnd: search.chartEnd,
             ...link.search,
           })}
           replace={true}
