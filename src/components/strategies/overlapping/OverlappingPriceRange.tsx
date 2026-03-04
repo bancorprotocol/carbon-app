@@ -1,10 +1,10 @@
 import { InputRange, InputRangeProps } from '../common/InputRange';
 import { FC, useId, useMemo } from 'react';
-import { useStrategyMarketPrice } from '../UserMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isFullRange } from '../common/utils';
 import { Presets } from '../../common/preset/Preset';
 import { overlappingPresets } from '../common/price-presets';
+import { useStrategyFormCtx } from '../common/StrategyFormContext';
 
 interface Props extends InputRangeProps {
   setFullRange: () => void;
@@ -13,7 +13,7 @@ interface Props extends InputRangeProps {
 export const OverlappingPriceRange: FC<Props> = (props) => {
   const { base, quote, min, max, setMin, setMax, setFullRange, warnings } =
     props;
-  const { marketPrice } = useStrategyMarketPrice({ base, quote });
+  const { marketPrice } = useStrategyFormCtx();
   const minId = useId();
   const maxId = useId();
 

@@ -11,15 +11,6 @@ const items = [
     search: {},
     svg: <IconOverlappingStrategy className="hidden md:block size-20" />,
   },
-  // TODO: currently not work, need to update simulator code
-  // {
-  //   id: 'recurring-limit',
-  //   type: 'Intermediate',
-  //   label: 'Recurring Limit',
-  //   to: 'recurring',
-  //   search: { sellIsRange: false, buyIsRange: false } as const,
-  //   svg: <IconTwoRanges className="hidden md:block size-20" />,
-  // },
   {
     id: 'recurring-range',
     type: 'Advanced',

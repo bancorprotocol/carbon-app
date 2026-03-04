@@ -10,7 +10,7 @@ import {
   priceHistoryHandler,
   waitFor,
 } from 'libs/testing-library';
-import { TradeProvider } from 'components/trade/TradeProvider';
+import { StrategyFormProvider } from 'components/strategies/common/StrategyFormProvider';
 import { Token } from 'libs/tokens';
 import { TradeRecurring } from './recurring';
 
@@ -28,9 +28,9 @@ afterAll(() => mockServer.close());
 
 const WrappedRecurring = ({ base, quote }: { base: Token; quote: Token }) => {
   return (
-    <TradeProvider base={base} quote={quote}>
+    <StrategyFormProvider base={base} quote={quote}>
       <TradeRecurring />
-    </TradeProvider>
+    </StrategyFormProvider>
   );
 };
 

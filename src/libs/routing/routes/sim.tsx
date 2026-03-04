@@ -136,8 +136,8 @@ export const simulatorResultRoute = createRoute({
   validateSearch: searchValidator({
     base: validAddress,
     quote: validAddress,
-    start: validNumber,
-    end: validNumber,
+    chartStart: validNumber,
+    chartEnd: validNumber,
     sellMax: validNumber,
     sellMin: validNumber,
     sellBudget: validNumber,

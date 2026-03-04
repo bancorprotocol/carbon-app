@@ -1,7 +1,7 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, useSearch } from '@tanstack/react-router';
 import IconClock from 'assets/icons/clock.svg?react';
 import IconClose from 'assets/icons/X.svg?react';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
@@ -10,10 +10,34 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { usePersistLastPair } from 'hooks/usePersistLastPair';
 import { cn } from 'utils/helpers';
 import { NotFound } from 'components/common/NotFound';
+import { StrategyFormProvider } from 'components/strategies/common/StrategyFormProvider';
+import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
+import {
+  defaultEnd,
+  defaultStart,
+  oneYearAgo,
+} from 'components/strategies/common/utils';
 import style from 'components/strategies/common/root.module.css';
+import { clamp } from 'utils/helpers/operators';
 
 export const SimulatorRoot = () => {
+  const { chartStart } = useSearch({ from: '/simulate' });
   const { base, quote, isPending } = usePersistLastPair({ from: '/simulate' });
+  const priceHistory = useGetTokenPriceHistory({
+    baseToken: base?.address,
+    quoteToken: quote?.address,
+    start: oneYearAgo(),
+    end: defaultEnd(),
+  });
+
+  const marketPrice = useMemo(() => {
+    if (!priceHistory.data) return;
+    const min = priceHistory.data[0].date;
+    const max = priceHistory.data.at(-1)!.date;
+    const start = Number(chartStart ?? defaultStart());
+    const date = clamp(min, start, max);
+    return priceHistory.data.find((v) => v.date === date)?.close;
+  }, [priceHistory.data, chartStart]);
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center p-16" />;
@@ -28,16 +52,18 @@ export const SimulatorRoot = () => {
     );
   }
   return (
-    <div className="mx-auto flex flex-col content-start gap-24 xl:max-w-[1920px] p-16 w-full">
-      <SimulatorDisclaimer />
-      <div className={cn(style.root, 'grid gap-16')}>
-        <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
-          <TokenSelection url="/simulate" base={base} quote={quote} />
-          <SimInputStrategyType />
+    <StrategyFormProvider base={base} quote={quote} marketPrice={marketPrice}>
+      <div className="mx-auto flex flex-col content-start gap-24 xl:max-w-[1920px] p-16 w-full">
+        <SimulatorDisclaimer />
+        <div className={cn(style.root, 'grid gap-16')}>
+          <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
+            <TokenSelection url="/simulate" base={base} quote={quote} />
+            <SimInputStrategyType />
+          </div>
+          <Outlet />
         </div>
-        <Outlet />
       </div>
-    </div>
+    </StrategyFormProvider>
   );
 };
 

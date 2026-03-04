@@ -21,7 +21,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/portfolio/edit/prices/overlapping';
 import { isValidRange } from '../utils';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
-import { useStrategyMarketPrice } from '../UserMarketPrice';
+import { useStrategyFormCtx } from '../common/StrategyFormContext';
 
 interface Props {
   buy: CreateOverlappingOrder;
@@ -35,8 +35,7 @@ const url = '/strategies/edit/$strategyId/prices/overlapping';
 export const EditOverlappingPrice: FC<Props> = (props) => {
   const { buy, sell, spread } = props;
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
-  const { marketPrice } = useStrategyMarketPrice({ base, quote });
+  const { base, quote, marketPrice } = useStrategyFormCtx();
 
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });

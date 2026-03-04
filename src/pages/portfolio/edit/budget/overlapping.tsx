@@ -161,7 +161,10 @@ export const EditBudgetOverlappingPage = () => {
   );
 
   return (
-    <EditStrategyLayout editType={search.editType}>
+    <EditStrategyLayout
+      editType={search.editType}
+      marketPrice={Number(marketPrice)}
+    >
       <StrategyChartOverlapping
         base={base}
         quote={quote}

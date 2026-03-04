@@ -11,7 +11,7 @@ import {
   mockMarketRate,
   priceHistoryHandler,
 } from 'libs/testing-library';
-import { TradeProvider } from 'components/trade/TradeProvider';
+import { StrategyFormProvider } from 'components/strategies/common/StrategyFormProvider';
 import { Token } from 'libs/tokens';
 
 const basePath = '/trade/overlapping';
@@ -28,9 +28,9 @@ afterAll(() => mockServer.close());
 
 const WrappedOverlapping = ({ base, quote }: { base: Token; quote: Token }) => {
   return (
-    <TradeProvider base={base} quote={quote}>
+    <StrategyFormProvider base={base} quote={quote}>
       <TradeOverlapping />
-    </TradeProvider>
+    </StrategyFormProvider>
   );
 };
 

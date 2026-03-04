@@ -101,7 +101,7 @@ export const getOverlappingOrders = (
   search: TradeOverlappingSearch,
   base?: Token,
   quote?: Token,
-  marketPrice?: string,
+  marketPrice?: number,
 ): { buy: CreateOverlappingOrder; sell: CreateOverlappingOrder } => {
   if (!base || !quote || !marketPrice) {
     return {
@@ -109,30 +109,31 @@ export const getOverlappingOrders = (
       sell: { min: '', max: '', marginalPrice: '', budget: '' },
     };
   }
+  const marketPriceStr = marketPrice.toString();
 
   const fullRange = (() => {
     if (!search.fullRange) return;
-    return getFullRangesPrices(marketPrice, base.decimals, quote.decimals);
+    return getFullRangesPrices(marketPriceStr, base.decimals, quote.decimals);
   })();
 
   const {
     anchor,
-    min = initOverlappingMin(marketPrice, fullRange?.min),
-    max = initOverlappingMax(marketPrice, fullRange?.max),
+    min = initOverlappingMin(marketPriceStr, fullRange?.min),
+    max = initOverlappingMax(marketPriceStr, fullRange?.max),
     spread = defaultSpread,
     budget,
   } = search;
 
   if (!isValidRange(min, max) || !isValidSpread(min, max, spread)) {
-    let marginalPrice = marketPrice;
-    if (new SafeDecimal(marketPrice).gt(max)) marginalPrice = max;
-    if (new SafeDecimal(marketPrice).lt(min)) marginalPrice = min;
+    let marginalPrice = marketPriceStr;
+    if (new SafeDecimal(marketPriceStr).gt(max)) marginalPrice = max;
+    if (new SafeDecimal(marketPriceStr).lt(min)) marginalPrice = min;
     return {
       buy: { min: min, max: max, marginalPrice, budget: '' },
       sell: { min: min, max: max, marginalPrice, budget: '' },
     };
   }
-  const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
+  const prices = calculateOverlappingPrices(min, max, marketPriceStr, spread);
   const orders = {
     buy: {
       min: prices.buyPriceLow,
@@ -156,7 +157,7 @@ export const getOverlappingOrders = (
       quote.decimals,
       min,
       max,
-      marketPrice,
+      marketPriceStr,
       spread,
       budget,
     );
@@ -168,7 +169,7 @@ export const getOverlappingOrders = (
       quote.decimals,
       min,
       max,
-      marketPrice,
+      marketPriceStr,
       spread,
       budget,
     );

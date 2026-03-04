@@ -205,7 +205,10 @@ export const EditPricesStrategyRecurringPage = () => {
   const error = getError(search);
 
   return (
-    <EditStrategyLayout editType={search.editType}>
+    <EditStrategyLayout
+      editType={search.editType}
+      marketPrice={Number(marketPrice)}
+    >
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >

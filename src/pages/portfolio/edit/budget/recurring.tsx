@@ -86,7 +86,7 @@ export const EditBudgetRecurringPage = () => {
   });
 
   return (
-    <EditStrategyLayout editType={search.editType}>
+    <EditStrategyLayout editType={search.editType} marketPrice={marketPrice}>
       <StrategyChartSection>
         <StrategyChartHistory
           base={base}

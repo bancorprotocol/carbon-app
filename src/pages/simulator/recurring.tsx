@@ -24,10 +24,8 @@ import { StrategyChartHistory } from 'components/strategies/common/StrategyChart
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
-import { usePersistLastPair } from 'hooks/usePersistLastPair';
 import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { NotFound } from 'components/common/NotFound';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import style from 'components/strategies/common/form.module.css';
 
 const getRecurringError = (buy: OrderBlock, sell: OrderBlock) => {
@@ -47,7 +45,7 @@ export const SimulatorInputRecurringPage = () => {
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder(url);
-  const { base, quote, isPending } = usePersistLastPair({ from: '/simulate' });
+  const { base, quote, marketPrice } = useStrategyFormCtx();
 
   const priceHistory = useGetTokenPriceHistory({
     baseToken: search.base,
@@ -55,11 +53,6 @@ export const SimulatorInputRecurringPage = () => {
     start: oneYearAgo(),
     end: defaultEnd(),
   });
-
-  const marketPrice = useMemo(() => {
-    const start = Number(search.chartStart ?? defaultStart());
-    return priceHistory.data?.find((v) => v.date === start)?.close;
-  }, [priceHistory.data, search.chartStart]);
 
   const updatePrices: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
@@ -138,14 +131,14 @@ export const SimulatorInputRecurringPage = () => {
     Number(buyOrder.budget) + Number(sellOrder.budget) <= 0;
   const noBudgetText =
     !emptyHistory && noBudgetByOrders && 'Please add Sell and/or Buy budgets';
-  const btnDisabled = isPending || emptyHistory || noBudgetByOrders;
+  const btnDisabled = emptyHistory || noBudgetByOrders;
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (btnDisabled || !base || !quote) return;
     if (e.currentTarget.querySelector('.error-message')) return;
-    const start = search.chartStart ?? defaultStart();
-    const end = search.chartEnd ?? defaultEnd();
+    const chartStart = search.chartStart ?? defaultStart();
+    const chartEnd = search.chartEnd ?? defaultEnd();
 
     navigate({
       to: '/simulate/result',
@@ -160,8 +153,8 @@ export const SimulatorInputRecurringPage = () => {
         sellMax: sellOrder.max,
         sellBudget: sellOrder.budget,
         sellIsRange: sellOrder.settings === 'range',
-        start: start.toString(),
-        end: end.toString(),
+        chartStart: chartStart,
+        chartEnd: chartEnd,
         type: 'recurring',
       },
     });
@@ -169,19 +162,6 @@ export const SimulatorInputRecurringPage = () => {
 
   const error = getRecurringError(buyOrder, sellOrder);
   const warning = getRecurringWarning(buyOrder, sellOrder);
-
-  if (isPending) {
-    return <CarbonLogoLoading className="h-80 place-self-center" />;
-  }
-  if (!base || !quote) {
-    return (
-      <NotFound
-        variant="error"
-        title="Token not found"
-        text="Could not found base or quote token"
-      />
-    );
-  }
 
   return (
     <>

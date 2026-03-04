@@ -188,7 +188,10 @@ export const EditPricesStrategyDisposablePage = () => {
   const sellBudgetChanges = resetBudget && isBuy && !isZero(sell.budget);
 
   return (
-    <EditStrategyLayout editType={search.editType}>
+    <EditStrategyLayout
+      editType={search.editType}
+      marketPrice={Number(marketPrice)}
+    >
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >

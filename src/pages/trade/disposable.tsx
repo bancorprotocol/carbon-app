@@ -9,7 +9,7 @@ import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { getDefaultOrder } from 'components/strategies/create/utils';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing';
 import {
@@ -26,7 +26,7 @@ import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
   const marketQuery = useMarketPrice({ base, quote });

@@ -17,12 +17,12 @@ import {
 } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 import { isTouchedZero } from 'components/strategies/common/utils';
 import { MarketPriceIndication } from '../marketPriceIndication/MarketPriceIndication';
 import { Presets } from 'components/common/preset/Preset';
 import { limitPreset } from './price-presets';
 import { SafeDecimal } from 'libs/safedecimal';
+import { useStrategyFormCtx } from './StrategyFormContext';
 
 export interface InputRangeProps {
   min: string;
@@ -61,7 +61,7 @@ export const InputRange: FC<InputRangeProps> = ({
 }) => {
   const [localMin, setLocalMin] = useState(roundSearchParam(min));
   const [localMax, setLocalMax] = useState(roundSearchParam(max));
-  const { marketPrice } = useStrategyMarketPrice({ base, quote });
+  const { marketPrice } = useStrategyFormCtx();
   const _inputMinId = useId();
   const _inputMaxId = useId();
   const inputMinId = minId || _inputMinId;

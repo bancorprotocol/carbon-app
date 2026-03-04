@@ -14,24 +14,17 @@ import {
 } from 'components/strategies/common/utils';
 import { cn } from 'utils/helpers';
 import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
-import { usePersistLastPair } from 'hooks/usePersistLastPair';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { NotFound } from 'components/common/NotFound';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import style from 'components/strategies/common/form.module.css';
 
 export const SimulatorInputOverlappingPage = () => {
   const search = useSearch({ from: '/simulate/overlapping' });
   const navigate = useNavigate({ from: '/simulate/overlapping' });
-  const { marketPrice: externalMarketPrice } = useMarketPrice({
-    base: search.base,
-    quote: search.quote,
-  });
-  const { base, quote, isPending } = usePersistLastPair({ from: '/simulate' });
+  const { base, quote, marketPrice } = useStrategyFormCtx();
 
   const priceHistory = useGetTokenPriceHistory({
     baseToken: search.base,
@@ -40,13 +33,8 @@ export const SimulatorInputOverlappingPage = () => {
     end: defaultEnd(),
   });
 
-  const marketPrice = useMemo(() => {
-    const start = Number(search.chartStart ?? defaultStart());
-    return priceHistory.data?.find(({ date }) => date === start)?.close;
-  }, [priceHistory.data, search.chartStart]);
-
   const orders = useMemo(() => {
-    return getOverlappingOrders(search, base, quote, marketPrice?.toString());
+    return getOverlappingOrders(search, base, quote, marketPrice);
   }, [marketPrice, base, quote, search]);
 
   const emptyHistory = useMemo(
@@ -58,14 +46,14 @@ export const SimulatorInputOverlappingPage = () => {
     Number(orders.buy.budget) + Number(orders.sell.budget) <= 0;
   const noBudgetText =
     !emptyHistory && noBudgetByOrders && 'Please add Sell and/or Buy budgets';
-  const btnDisabled = isPending || emptyHistory || noBudgetByOrders;
+  const btnDisabled = emptyHistory || noBudgetByOrders;
 
   const submit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (btnDisabled) return;
-      const start = search.chartStart ?? defaultStart();
-      const end = search.chartEnd ?? defaultEnd();
+      const chartStart = search.chartStart ?? defaultStart();
+      const chartEnd = search.chartEnd ?? defaultEnd();
 
       if (!base || !quote || !marketPrice) return;
       if (e.currentTarget.querySelector('.error-message')) return;
@@ -83,8 +71,8 @@ export const SimulatorInputOverlappingPage = () => {
         sellBudget: orders.sell.budget,
         sellMarginal: orders.sell.marginalPrice,
         sellIsRange: true,
-        start: start,
-        end: end,
+        chartStart: chartStart,
+        chartEnd: chartEnd,
         type: 'overlapping' as const,
         spread: search.spread,
       };
@@ -127,19 +115,6 @@ export const SimulatorInputOverlappingPage = () => {
     updatePrices,
   );
 
-  if (isPending) {
-    return <CarbonLogoLoading className="h-80 place-self-center" />;
-  }
-  if (!base || !quote) {
-    return (
-      <NotFound
-        variant="error"
-        title="Token not found"
-        text="Could not found base or quote token"
-      />
-    );
-  }
-
   return (
     <>
       <section
@@ -156,7 +131,6 @@ export const SimulatorInputOverlappingPage = () => {
           quote={quote}
           buy={orders.buy}
           sell={orders.sell}
-          marketPrice={externalMarketPrice?.toString()}
         >
           <D3ChartOverlapping
             base={base}

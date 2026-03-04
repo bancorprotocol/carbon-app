@@ -9,7 +9,7 @@ import {
 } from 'components/cart/utils';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { FormGradientOrder } from '../types';
 
 interface FormProps {
@@ -19,7 +19,7 @@ interface FormProps {
 }
 
 export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const { children, buy, sell } = props;
   const { user, openConnect } = useWagmi();
   const nav = useNavigate();

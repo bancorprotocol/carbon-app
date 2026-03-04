@@ -93,7 +93,7 @@ export const EditBudgetDisposablePage = () => {
     !isBuy || (search.editType === 'withdraw' && !isZero(sell.budget));
 
   return (
-    <EditStrategyLayout editType={search.editType}>
+    <EditStrategyLayout editType={search.editType} marketPrice={marketPrice}>
       <StrategyChartSection>
         <StrategyChartHistory
           base={base}

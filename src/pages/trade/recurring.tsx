@@ -3,7 +3,7 @@ import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { getDefaultOrder } from 'components/strategies/create/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';
@@ -38,7 +38,7 @@ const getRecurringWarning = (buy: OrderBlock, sell: OrderBlock) => {
 const url = '/trade/recurring';
 export const TradeRecurring = () => {
   const search = useSearch({ from: url });
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder(url);
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
