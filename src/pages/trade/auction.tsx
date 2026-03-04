@@ -70,12 +70,7 @@ export const TradeAuction = () => {
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <StrategyChartHistory
-          base={base}
-          quote={quote}
-          direction={direction}
-          {...orders}
-        >
+        <StrategyChartHistory direction={direction} {...orders}>
           <D3EditLine
             drawing={drawing}
             color={direction}

@@ -96,8 +96,6 @@ export const EditBudgetDisposablePage = () => {
     <EditStrategyLayout editType={search.editType} marketPrice={marketPrice}>
       <StrategyChartSection>
         <StrategyChartHistory
-          base={base}
-          quote={quote}
           buy={orders.buy}
           sell={orders.sell}
           direction={direction}

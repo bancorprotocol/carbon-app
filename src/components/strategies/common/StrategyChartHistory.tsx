@@ -18,15 +18,13 @@ import {
 } from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
-import { Token } from 'libs/tokens';
 import { D3PriceHistory } from './d3Chart/D3PriceHistory';
 import { isEmptyHistory } from './d3Chart/utils';
 import { useStrategyFormCtx } from './StrategyFormContext';
 import config from 'config';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
-  base: Token;
-  quote: Token;
   // TODO: Provide Bounds directly instead of passing the orders
   buy?: FormOrder;
   sell?: FormOrder;
@@ -35,9 +33,10 @@ interface Props {
 }
 
 export const StrategyChartHistory: FC<Props> = (props) => {
-  const { base, quote, children, buy, sell } = props;
+  const { children, buy, sell } = props;
   const { chartStart, chartEnd } = useSearch({ strict: false }) as TradeSearch;
-  const { marketPrice } = useStrategyFormCtx();
+  const { base, quote, marketPrice } = useStrategyFormCtx();
+  const { marketPrice: externalMarketPrice } = useMarketPrice({ base, quote });
 
   const nav = useNavigate();
 
@@ -71,11 +70,11 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   });
 
   const history = useMemo(() => {
-    if (!data || !marketPrice || isEmptyHistory(data)) return data;
+    if (!data || !externalMarketPrice || isEmptyHistory(data)) return data;
     const copy = structuredClone(data);
-    copy.at(-1)!.close = marketPrice;
+    copy.at(-1)!.close = externalMarketPrice;
     return copy;
-  }, [data, marketPrice]);
+  }, [data, externalMarketPrice]);
 
   useEffect(() => {
     setBounds(getBounds(base, quote, buy, sell, direction));

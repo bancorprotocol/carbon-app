@@ -126,12 +126,7 @@ export const SimulatorInputOverlappingPage = () => {
             Price Chart
           </h2>
         </header>
-        <StrategyChartHistory
-          base={base}
-          quote={quote}
-          buy={orders.buy}
-          sell={orders.sell}
-        >
+        <StrategyChartHistory buy={orders.buy} sell={orders.sell}>
           <D3ChartOverlapping
             base={base}
             quote={quote}

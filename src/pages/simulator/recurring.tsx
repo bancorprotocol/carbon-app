@@ -85,17 +85,15 @@ export const SimulatorInputRecurringPage = () => {
 
   const setSellSetting = useCallback(
     (settings: StrategySettings) => {
-      const { min, max } = getDefaultOrder('sell', { settings }, marketPrice);
-      setSellOrder({ settings, min, max });
+      setSellOrder({ settings, min: undefined, max: undefined });
     },
-    [marketPrice, setSellOrder],
+    [setSellOrder],
   );
   const setBuySetting = useCallback(
     (settings: StrategySettings) => {
-      const { min, max } = getDefaultOrder('buy', { settings }, marketPrice);
-      setBuyOrder({ settings, min, max });
+      setBuyOrder({ settings, min: undefined, max: undefined });
     },
-    [marketPrice, setBuyOrder],
+    [setBuyOrder],
   );
 
   const sellOutsideMarket = outSideMarketWarning({
@@ -166,12 +164,7 @@ export const SimulatorInputRecurringPage = () => {
   return (
     <>
       <StrategyChartSection>
-        <StrategyChartHistory
-          base={base}
-          quote={quote}
-          buy={buyOrder}
-          sell={sellOrder}
-        >
+        <StrategyChartHistory buy={buyOrder} sell={sellOrder}>
           <D3ChartRecurring
             base={base}
             quote={quote}

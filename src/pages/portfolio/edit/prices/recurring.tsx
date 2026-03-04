@@ -212,12 +212,7 @@ export const EditPricesStrategyRecurringPage = () => {
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <StrategyChartHistory
-          base={base}
-          quote={quote}
-          buy={orders.buy}
-          sell={orders.sell}
-        >
+        <StrategyChartHistory buy={orders.buy} sell={orders.sell}>
           <D3ChartRecurring
             base={base}
             quote={quote}

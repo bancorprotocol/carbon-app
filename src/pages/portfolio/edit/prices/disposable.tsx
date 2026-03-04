@@ -196,8 +196,6 @@ export const EditPricesStrategyDisposablePage = () => {
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
         <StrategyChartHistory
-          base={base}
-          quote={quote}
           buy={orders.buy}
           sell={orders.sell}
           direction={search.direction ?? 'sell'}

@@ -158,12 +158,7 @@ export const TradeCustom = () => {
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <StrategyChartHistory
-          base={base}
-          quote={quote}
-          buy={orders.buy.order}
-          sell={orders.sell.order}
-        >
+        <StrategyChartHistory buy={orders.buy.order} sell={orders.sell.order}>
           {search.directions?.map((direction) => (
             <D3EditLine
               key={direction}

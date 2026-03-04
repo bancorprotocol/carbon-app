@@ -68,21 +68,21 @@ export const simulatorInputRecurringRoute = createRoute({
     if (!search.buySettings && typeof search.buyIsRange === 'boolean') {
       search.buySettings = search.buyIsRange ? 'range' : 'limit';
     }
-    delete search.sellSettings;
-    delete search.buySettings;
+    delete search.sellIsRange;
+    delete search.buyIsRange;
   },
   validateSearch: searchValidator({
     sellMax: v.optional(validNumber),
     sellMin: v.optional(validNumber),
     sellBudget: v.optional(validNumber),
-    sellSettings: v.optional(validSettings),
+    sellSettings: v.optional(validSettings, 'range'),
     buyMax: v.optional(validNumber),
     buyMin: v.optional(validNumber),
     buyBudget: v.optional(validNumber),
     buySettings: v.optional(validSettings),
     // @deprecated Keep this around for preview links (March 2026)
-    sellIsRange: v.optional(validBoolean, true),
-    buyIsRange: v.optional(validBoolean, true),
+    sellIsRange: v.optional(validBoolean),
+    buyIsRange: v.optional(validBoolean),
   }),
 });
 
