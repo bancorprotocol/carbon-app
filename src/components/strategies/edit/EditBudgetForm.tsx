@@ -2,7 +2,6 @@ import { FC, FormEvent, ReactNode, useState } from 'react';
 import { EditTypes } from 'libs/routing/routes/strategyEdit';
 import { Button } from 'components/common/button';
 import { useNavigate, useRouter } from '@tanstack/react-router';
-import { cn } from 'utils/helpers';
 import { QueryKey, useQueryClient, useUpdateStrategyQuery } from 'libs/queries';
 import { getStatusTextByTxStatus } from '../utils';
 import { isZero } from '../common/utils';
@@ -10,7 +9,6 @@ import { handleTxStatusAndRedirectToOverview } from '../create/utils';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { NotificationSchema } from 'libs/notifications/data';
-import { StrategyType } from 'libs/routing';
 import { useWagmi } from 'libs/wagmi';
 import { getDeposit } from './utils';
 import { useApproval } from 'hooks/useApproval';
@@ -18,12 +16,10 @@ import { useEditStrategyCtx } from './EditStrategyContext';
 import { useDeleteStrategy } from '../useDeleteStrategy';
 import { hasNoBudget } from '../overlapping/utils';
 import { EditOrders } from '../common/types';
-import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
 interface Props {
   orders: EditOrders;
-  strategyType: StrategyType;
   editType: EditTypes;
   hasChanged: boolean;
   children: ReactNode;
@@ -46,7 +42,7 @@ const submitText: Record<EditTypes, string> = {
 const spenderAddress = config.addresses.carbon.carbonController;
 
 export const EditBudgetForm: FC<Props> = (props) => {
-  const { orders, strategyType, editType, hasChanged, children } = props;
+  const { orders, editType, hasChanged, children } = props;
   const { user } = useWagmi();
   const { strategy } = useEditStrategyCtx();
   const { history } = useRouter();
@@ -156,21 +152,14 @@ export const EditBudgetForm: FC<Props> = (props) => {
     <form
       onSubmit={submit}
       onReset={() => history.back()}
-      className={cn(
-        'grid content-start',
-        style.form,
-        strategyType === 'overlapping' ? style.overlapping : '',
-      )}
+      className="form grid content-start"
       data-testid="edit-form"
     >
       <div className="surface overflow-hidden rounded-2xl">{children}</div>
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"
-          className={cn(
-            style.approveWarnings,
-            'surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-main-0/60',
-          )}
+          className="approve-warnings surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-main-0/60"
         >
           <input
             id="approve-warnings"

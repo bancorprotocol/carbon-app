@@ -106,7 +106,6 @@ export const EditBudgetRecurringPage = () => {
         <StrategyChartLegend />
       </StrategyChartSection>
       <EditBudgetForm
-        strategyType="recurring"
         editType={search.editType}
         orders={orders}
         hasChanged={!isZero(search.buyBudget) || !isZero(search.sellBudget)}

@@ -11,7 +11,6 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useEditStrategyCtx } from '../edit/EditStrategyContext';
 import { isOverlappingStrategy } from './utils';
 import { getCalculatedPrice } from '../overlapping/utils';
-import style from 'components/strategies/common/form.module.css';
 
 interface Props {
   base: Token;
@@ -106,7 +105,7 @@ export const InitMarketPrice = (props: FieldProps) => {
 
   return (
     <form
-      className={cn(props.className, style.form, 'grid gap-16 p-16')}
+      className={cn(props.className, 'form grid gap-16 p-16')}
       data-testid="user-price-form"
       onSubmit={setPrice}
     >
@@ -137,10 +136,7 @@ export const InitMarketPrice = (props: FieldProps) => {
       </p>
       <label
         htmlFor={checkboxId}
-        className={cn(
-          style.approveWarnings,
-          'rounded-lg text-12 font-medium flex items-center gap-8 text-main-0/60',
-        )}
+        className="approve-warnings rounded-lg text-12 font-medium flex items-center gap-8 text-main-0/60"
       >
         <input
           id={checkboxId}

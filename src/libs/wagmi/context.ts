@@ -8,6 +8,7 @@ import { createContext, useContext } from 'react';
 const defaultValue: CarbonWagmiProviderContext = {
   user: undefined,
   imposterAccount: undefined,
+  walletAccount: undefined,
   setImposterAccount: () => {},
   isNetworkActive: false,
   provider: undefined,
