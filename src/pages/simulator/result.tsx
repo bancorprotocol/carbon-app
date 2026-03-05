@@ -35,8 +35,8 @@ export const SimulatorResultPage = () => {
             search={{
               base: ctx.search.base,
               quote: ctx.search.quote,
-              chartStart: ctx.search.chartStart,
-              chartEnd: ctx.search.chartEnd,
+              chartStart: ctx.search.start,
+              chartEnd: ctx.search.end,
               buyMin: ctx.search.buyMin,
               buyMax: ctx.search.buyMax,
               buyBudget: ctx.search.buyBudget,
@@ -60,8 +60,8 @@ export const SimulatorResultPage = () => {
             search={{
               base: ctx.search.base,
               quote: ctx.search.quote,
-              chartStart: ctx.search.chartStart,
-              chartEnd: ctx.search.chartEnd,
+              chartStart: ctx.search.start,
+              chartEnd: ctx.search.end,
               buyMin: ctx.search.buyMin,
               sellMax: ctx.search.sellMax,
               spread: ctx.search.spread,

@@ -71,8 +71,8 @@ export const SimulatorInputOverlappingPage = () => {
         sellBudget: orders.sell.budget,
         sellMarginal: orders.sell.marginalPrice,
         sellIsRange: true,
-        chartStart: chartStart,
-        chartEnd: chartEnd,
+        start: chartStart,
+        end: chartEnd,
         type: 'overlapping' as const,
         spread: search.spread,
       };

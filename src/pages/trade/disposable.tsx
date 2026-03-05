@@ -47,11 +47,23 @@ export const TradeDisposable = () => {
   );
 
   const setDirection = (direction: StrategyDirection) => {
-    setSearch({ direction, budget: undefined, min: undefined, max: undefined });
+    setSearch({
+      direction,
+      budget: undefined,
+      min: undefined,
+      max: undefined,
+      presetMin: undefined,
+      presetMax: undefined,
+    });
   };
   const setSettings = (settings: StrategySettings) => {
-    const { min, max } = getDefaultOrder(direction, { settings }, marketPrice);
-    setSearch({ settings, min, max });
+    setSearch({
+      settings,
+      min: undefined,
+      max: undefined,
+      presetMin: undefined,
+      presetMax: undefined,
+    });
   };
 
   const updatePrices: OnPriceUpdates = useCallback(

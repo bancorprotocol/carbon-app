@@ -73,12 +73,16 @@ export const simulatorInputRecurringRoute = createRoute({
     delete search.buyIsRange;
   },
   validateSearch: searchValidator({
-    sellMax: v.optional(validNumber),
-    sellMin: v.optional(validNumber),
+    sellMax: v.optional(validInputNumber),
+    sellMin: v.optional(validInputNumber),
+    sellPresetMin: v.optional(validNumber),
+    sellPresetMax: v.optional(validNumber),
     sellBudget: v.optional(validNumber),
     sellSettings: v.optional(validSettings, 'range'),
-    buyMax: v.optional(validNumber),
-    buyMin: v.optional(validNumber),
+    buyMax: v.optional(validInputNumber),
+    buyMin: v.optional(validInputNumber),
+    buyPresetMin: v.optional(validNumber),
+    buyPresetMax: v.optional(validNumber),
     buyBudget: v.optional(validNumber),
     buySettings: v.optional(validSettings),
     // @deprecated (March 2026)
@@ -122,12 +126,8 @@ export const simulatorInputOverlappingRoute = createRoute({
   }),
 });
 
-export type SimulatorResultSearch = Required<StrategyInputSearch> & {
-  type: SimulatorType;
-  buyMarginal?: string;
-  sellMarginal?: string;
-  spread?: string;
-};
+export type SimulatorResultSearch =
+  (typeof simulatorResultRoute)['types']['searchSchema'];
 
 export const simulatorResultRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -140,8 +140,8 @@ export const simulatorResultRoute = createRoute({
   validateSearch: searchValidator({
     base: validAddress,
     quote: validAddress,
-    chartStart: validNumber,
-    chartEnd: validNumber,
+    start: validNumber,
+    end: validNumber,
     sellMax: validNumber,
     sellMin: validNumber,
     sellBudget: validNumber,

@@ -47,6 +47,12 @@ export interface EditOrders {
 export interface OrderBlock extends FormStaticOrder {
   settings: StrategySettings;
   direction?: StrategyDirection;
+  presetMin?: string;
+  presetMax?: string;
+}
+
+export interface PreOrderBlock extends Partial<OrderBlock> {
+  direction: StrategyDirection;
 }
 
 export interface EditOrderBlock extends OrderBlock {

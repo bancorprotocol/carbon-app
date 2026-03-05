@@ -39,6 +39,8 @@ export interface TradeDisposableSearch extends TradeSearch {
   settings?: StrategySettings;
   min?: string;
   max?: string;
+  presetMin?: string;
+  presetMax?: string;
   budget?: string;
 }
 
@@ -122,8 +124,8 @@ const disposablePage = createRoute({
     settings: v.optional(validSettings),
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
-    presetMin: v.optional(validInputNumber),
-    presetMax: v.optional(validInputNumber),
+    presetMin: v.optional(validNumber),
+    presetMax: v.optional(validNumber),
     budget: v.optional(validInputNumber),
     marginalPrice: v.optional(v.enum(MarginalPriceOptions)),
   }),
@@ -136,15 +138,15 @@ const recurringPage = createRoute({
   validateSearch: searchValidator({
     buyMin: v.optional(validInputNumber),
     buyMax: v.optional(validInputNumber),
-    buyPresetMin: v.optional(validInputNumber),
-    buyPresetMax: v.optional(validInputNumber),
+    buyPresetMin: v.optional(validNumber),
+    buyPresetMax: v.optional(validNumber),
     buyBudget: v.optional(validInputNumber),
     buySettings: v.optional(validSettings),
     buyMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
     sellMin: v.optional(validInputNumber),
     sellMax: v.optional(validInputNumber),
-    sellPresetMin: v.optional(validInputNumber),
-    sellPresetMax: v.optional(validInputNumber),
+    sellPresetMin: v.optional(validNumber),
+    sellPresetMax: v.optional(validNumber),
     sellBudget: v.optional(validInputNumber),
     sellSettings: v.optional(validSettings),
     sellMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),

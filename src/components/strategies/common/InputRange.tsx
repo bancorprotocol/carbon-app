@@ -97,12 +97,12 @@ export const InputRange: FC<Props> = (props) => {
 
   const minPercent = useMemo(() => {
     if (!marketPrice) return '';
-    return new SafeDecimal(min).div(marketPrice).sub(1).mul(100).toString();
+    return new SafeDecimal(min).div(marketPrice).sub(1).abs().toString();
   }, [marketPrice, min]);
 
   const maxPercent = useMemo(() => {
     if (!marketPrice) return '';
-    return new SafeDecimal(max).div(marketPrice).sub(1).mul(100).toString();
+    return new SafeDecimal(max).div(marketPrice).sub(1).abs().toString();
   }, [marketPrice, max]);
 
   useEffect(() => {

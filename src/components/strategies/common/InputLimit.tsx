@@ -27,6 +27,7 @@ type InputLimitProps = {
   id?: string;
   price: string;
   setPrice: (value: string) => void;
+  setPreset: (value: string) => void;
   base: Token;
   quote: Token;
   error?: string;
@@ -40,6 +41,7 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
   const {
     price,
     setPrice,
+    setPreset,
     base,
     quote,
     error,
@@ -55,8 +57,8 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
 
   const percent = useMemo(() => {
     if (!marketPrice) return '';
-    return new SafeDecimal(price).div(marketPrice).sub(1).mul(100).toString();
-  }, [price, marketPrice]);
+    return new SafeDecimal(price).div(marketPrice).sub(1).abs().toString();
+  }, [marketPrice, price]);
 
   // Errors
   const priceError = isTouchedZero(price) && 'Price must be greater than 0';
@@ -92,14 +94,6 @@ export const InputLimit: FC<InputLimitProps> = (props) => {
   const setMarket = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     onChange(formatNumber(marketPrice?.toString() ?? ''));
-  };
-
-  const setPreset = (preset: string) => {
-    if (!marketPrice) return;
-    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
-    const next = new SafeDecimal(marketPrice).mul(percent).toString();
-    setLocalPrice(roundSearchParam(next));
-    setPrice(next);
   };
 
   return (

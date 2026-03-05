@@ -1,7 +1,6 @@
 import { useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
-import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   isZero,
@@ -19,10 +18,11 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
-import { EditOrderBlock } from 'components/strategies/common/types';
+import {
+  EditOrderBlock,
+  PreOrderBlock,
+} from 'components/strategies/common/types';
 import { StaticOrder, Strategy } from 'components/strategies/common/types';
-import { SafeDecimal } from 'libs/safedecimal';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
@@ -30,26 +30,10 @@ import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
+import { getEditRecurringPrices } from 'components/strategies/create/utils';
+import { EditPriceRecurringSearch } from 'libs/routing/routes/strategyEdit';
 
-export interface EditRecurringStrategySearch {
-  chartStart?: string;
-  chartEnd?: string;
-  editType: 'editPrices' | 'renew';
-  buyMin?: string;
-  buyMax?: string;
-  buySettings?: StrategySettings;
-  buyBudget?: string;
-  buyAction?: 'deposit' | 'withdraw';
-  buyMarginalPrice?: MarginalPriceOptions;
-  sellMin?: string;
-  sellMax?: string;
-  sellSettings?: StrategySettings;
-  sellBudget?: string;
-  sellAction?: 'deposit' | 'withdraw';
-  sellMarginalPrice?: MarginalPriceOptions;
-}
-
-type Search = EditRecurringStrategySearch;
+type Search = EditPriceRecurringSearch;
 
 const getOrders = (
   strategy: Strategy,
@@ -58,49 +42,35 @@ const getOrders = (
 ): { buy: EditOrderBlock; sell: EditOrderBlock } => {
   const { buy, sell } = strategy;
 
-  const defaultMin = (
-    direction: StrategyDirection,
-    settings: StrategySettings = 'limit',
-  ) => {
-    const isBuy = direction === 'buy';
-    const defaultPrice = isBuy ? buy.min : sell.max;
-    const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
-    const multiplier = (() => {
-      if (isZero(defaultPrice)) {
-        if (isBuy) return settings === 'limit' ? 0.9 : 0.8;
-        else return settings === 'limit' ? 1.1 : 1.1;
-      } else {
-        if (isBuy) return settings === 'limit' ? 1 : 0.9;
-        else return settings === 'limit' ? 1 : 1;
-      }
-    })();
-    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
+  const getPrices = (order: PreOrderBlock) => {
+    const baseOrder = order.direction === 'buy' ? buy : sell;
+    // search preset > search prices > strategy > default preset
+    return getEditRecurringPrices(order, baseOrder, marketPrice);
   };
-  const defaultMax = (
-    direction: StrategyDirection,
-    settings: StrategySettings = 'limit',
-  ) => {
-    const isBuy = direction === 'buy';
-    const defaultPrice = isBuy ? buy.min : sell.max;
-    const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
-    const multiplier = (() => {
-      if (isZero(defaultPrice)) {
-        if (isBuy) return settings === 'limit' ? 0.9 : 0.9;
-        else return settings === 'limit' ? 1.1 : 1.2;
-      } else {
-        if (isBuy) return settings === 'limit' ? 1 : 1;
-        else return settings === 'limit' ? 1 : 1.1;
-      }
-    })();
-    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
-  };
+  const buyPrices = getPrices({
+    direction: 'buy',
+    settings: search.buySettings,
+    min: search.buyMin,
+    max: search.buyMax,
+    presetMin: search.buyPresetMin,
+    presetMax: search.buyPresetMax,
+  });
+  const sellPrices = getPrices({
+    direction: 'sell',
+    settings: search.sellSettings,
+    min: search.sellMin,
+    max: search.sellMax,
+    presetMin: search.sellPresetMin,
+    presetMax: search.sellPresetMax,
+  });
+
   const defaultSettings = (order: StaticOrder) => {
     return isLimitOrder(order) ? 'limit' : 'range';
   };
   return {
     buy: {
-      min: search.buyMin ?? defaultMin('buy', search.buySettings) ?? '',
-      max: search.buyMax ?? defaultMax('buy', search.buySettings) ?? '',
+      min: buyPrices.min,
+      max: buyPrices.max,
       settings: search.buySettings ?? defaultSettings(buy),
       action: search.buyAction ?? 'deposit',
       budget: getTotalBudget(
@@ -108,11 +78,10 @@ const getOrders = (
         buy.budget,
         search.buyBudget,
       ),
-      marginalPrice: search.buyMarginalPrice,
     },
     sell: {
-      min: search.sellMin ?? defaultMin('sell', search.sellSettings) ?? '',
-      max: search.sellMax ?? defaultMax('sell', search.sellSettings) ?? '',
+      min: sellPrices.min,
+      max: sellPrices.max,
       settings: search.sellSettings ?? defaultSettings(sell),
       action: search.sellAction ?? 'deposit',
       budget: getTotalBudget(
@@ -120,12 +89,11 @@ const getOrders = (
         sell.budget,
         search.sellBudget,
       ),
-      marginalPrice: search.sellMarginalPrice,
     },
   };
 };
 
-const getWarning = (search: EditRecurringStrategySearch) => {
+const getWarning = (search: Search) => {
   const { buyMin, buyMax, sellMin, sellMax } = search;
   const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
   const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
@@ -134,7 +102,7 @@ const getWarning = (search: EditRecurringStrategySearch) => {
   }
 };
 
-const getError = (search: EditRecurringStrategySearch) => {
+const getError = (search: Search) => {
   const { buyMin, buyMax, sellMin, sellMax } = search;
   const buyOrder = { min: buyMin ?? '', max: buyMax ?? '' };
   const sellOrder = { min: sellMin ?? '', max: sellMax ?? '' };
@@ -144,7 +112,6 @@ const getError = (search: EditRecurringStrategySearch) => {
 };
 
 const url = '/strategies/edit/$strategyId/prices/recurring';
-
 export const EditPricesStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, buy, sell } = strategy;

@@ -21,7 +21,12 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
-import { OrderBlock, CreateOverlappingOrder } from '../common/types';
+import {
+  OrderBlock,
+  CreateOverlappingOrder,
+  PreOrderBlock,
+  StaticOrder,
+} from '../common/types';
 
 export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing: Dispatch<SetStateAction<boolean>>,
@@ -34,46 +39,113 @@ export const handleTxStatusAndRedirectToOverview = (
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 
-const getRecurringPriceMultiplier = (
+const getRecurringPreset = (
   direction: StrategyDirection,
   settings: StrategySettings,
 ) => {
   if (settings === 'range') {
     return {
-      min: direction === 'buy' ? 0.95 : 1.01,
-      max: direction === 'buy' ? 0.99 : 1.05,
+      min: direction === 'buy' ? 0.05 : 0.01,
+      max: direction === 'buy' ? 0.01 : 0.05,
     };
   } else {
     return {
-      min: direction === 'buy' ? 0.99 : 1.01,
-      max: direction === 'buy' ? 0.99 : 1.01,
+      min: 0.01,
+      max: 0.01,
     };
   }
 };
 
+// search preset * marketPrice > search prices > strategy > default preset * price > default preset * marketPrice
+export const getEditRecurringPrices = (
+  order: PreOrderBlock,
+  baseOrder: StaticOrder,
+  marketPrice: string = '0',
+) => {
+  const direction = order.direction;
+  // Settings is only used when there is no prices in the strategy
+  const settings = order.settings ?? 'limit';
+  const presets = getRecurringPreset(direction, settings);
+  const getMultiplier = (value: string | number) => {
+    if (direction === 'buy') {
+      return new SafeDecimal(1).minus(value);
+    } else {
+      return new SafeDecimal(1).add(value);
+    }
+  };
+  const getPrice = (preset: string | number, priceRef: string) => {
+    return getMultiplier(preset).mul(priceRef).toString();
+  };
+  const getMin = () => {
+    // 1: Search preset * marketPrice
+    if (order.presetMin) return getPrice(order.presetMin, marketPrice);
+    // 2: Search price
+    if (!isZero(order.min)) return order.min;
+    // 3. Strategy Price
+    if (!isZero(baseOrder.min)) {
+      if (direction === 'sell') return baseOrder.min;
+      if (settings === 'limit') return baseOrder.min;
+      // 4. default preset * default price
+      return getPrice(presets.min, baseOrder.max);
+    }
+    // 5. default preset * marketPrice
+    return getPrice(presets.min, marketPrice);
+  };
+  const getMax = () => {
+    // 1: Search preset * marketPrice
+    if (order.presetMax) return getPrice(order.presetMax, marketPrice);
+    // 2: Search price
+    if (!isZero(order.max)) return order.max;
+    // 3. Strategy Price
+    if (!isZero(baseOrder.max)) {
+      if (direction === 'buy') return baseOrder.max;
+      if (settings === 'limit') return baseOrder.max;
+      // 4. default preset * default price
+      return getPrice(presets.max, baseOrder.min);
+    }
+    // 5. default preset * marketPrice
+    return getPrice(presets.max, marketPrice);
+  };
+  return {
+    min: getMin(),
+    max: getMax(),
+  };
+};
+
+// search preset > search prices > default preset
+export const getTradeRecurringPrices = (
+  order: PreOrderBlock,
+  marketPrice: number | string,
+) => {
+  const direction = order.direction;
+  const settings = order.settings ?? 'limit';
+  const presets = getRecurringPreset(direction, settings);
+  const presetMin = order.presetMin || presets.min;
+  const presetMax = order.presetMax || presets.max;
+  const getMultiplier = (value: string | number) => {
+    if (direction === 'buy') {
+      return new SafeDecimal(1).minus(value);
+    } else {
+      return new SafeDecimal(1).add(value);
+    }
+  };
+  return {
+    min: getMultiplier(presetMin).mul(marketPrice).toString(),
+    max: getMultiplier(presetMax).mul(marketPrice).toString(),
+  };
+};
+
 export const getDefaultOrder = (
-  direction: StrategyDirection,
-  order: Partial<OrderBlock>,
+  order: PreOrderBlock,
   marketPrice: number | string = 0,
 ): OrderBlock => {
-  const market = new SafeDecimal(marketPrice);
-  const settings = order.settings ?? 'limit';
-  const multiplier = getRecurringPriceMultiplier(direction, settings);
-  if (settings === 'range') {
-    return {
-      min: order.min ?? market.mul(multiplier.min).toString(),
-      max: order.max ?? market.mul(multiplier.max).toString(),
-      budget: order.budget ?? '',
-      settings,
-    };
-  } else {
-    return {
-      min: order.min ?? market.mul(multiplier.min).toString(),
-      max: order.max ?? market.mul(multiplier.max).toString(),
-      budget: order.budget ?? '',
-      settings,
-    };
-  }
+  const prices = getTradeRecurringPrices(order, marketPrice);
+  return {
+    min: order.min ?? prices.min,
+    max: order.max ?? prices.max,
+    budget: order.budget ?? '',
+    settings: order.settings ?? 'limit',
+  };
 };
 
 export const defaultPreset = 0.01;

@@ -63,20 +63,24 @@ export const SimulatorInputRecurringPage = () => {
   );
 
   const sellOrder = getDefaultOrder(
-    'sell',
     {
+      direction: 'sell',
       min: search.sellMin,
       max: search.sellMax,
+      presetMin: search.sellPresetMin,
+      presetMax: search.sellPresetMax,
       budget: search.sellBudget,
       settings: search.sellSettings,
     },
     marketPrice,
   );
   const buyOrder = getDefaultOrder(
-    'buy',
     {
+      direction: 'buy',
       min: search.buyMin,
       max: search.buyMax,
+      presetMin: search.buyPresetMin,
+      presetMax: search.buyPresetMax,
       budget: search.buyBudget,
       settings: search.buySettings,
     },
@@ -85,13 +89,25 @@ export const SimulatorInputRecurringPage = () => {
 
   const setSellSetting = useCallback(
     (settings: StrategySettings) => {
-      setSellOrder({ settings, min: undefined, max: undefined });
+      setSellOrder({
+        settings,
+        min: undefined,
+        max: undefined,
+        presetMin: undefined,
+        presetMax: undefined,
+      });
     },
     [setSellOrder],
   );
   const setBuySetting = useCallback(
     (settings: StrategySettings) => {
-      setBuyOrder({ settings, min: undefined, max: undefined });
+      setBuyOrder({
+        settings,
+        min: undefined,
+        max: undefined,
+        presetMin: undefined,
+        presetMax: undefined,
+      });
     },
     [setBuyOrder],
   );
@@ -151,8 +167,8 @@ export const SimulatorInputRecurringPage = () => {
         sellMax: sellOrder.max,
         sellBudget: sellOrder.budget,
         sellIsRange: sellOrder.settings === 'range',
-        chartStart: chartStart,
-        chartEnd: chartEnd,
+        start: chartStart,
+        end: chartEnd,
         type: 'recurring',
       },
     });

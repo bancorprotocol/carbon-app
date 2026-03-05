@@ -11,18 +11,12 @@ import {
   validChartType,
 } from '../utils';
 import { EditStrategyRoot } from 'pages/portfolio/edit/root';
-import {
-  EditPricesStrategyRecurringPage,
-  EditRecurringStrategySearch,
-} from 'pages/portfolio/edit/prices/recurring';
+import { EditPricesStrategyRecurringPage } from 'pages/portfolio/edit/prices/recurring';
 import { Strategy } from 'components/strategies/common/types';
 import { isEmptyOrder, isZero } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
-import {
-  EditDisposableStrategySearch,
-  EditPricesStrategyDisposablePage,
-} from 'pages/portfolio/edit/prices/disposable';
+import { EditPricesStrategyDisposablePage } from 'pages/portfolio/edit/prices/disposable';
 import {
   EditOverlappingStrategySearch,
   EditPricesOverlappingPage,
@@ -55,7 +49,7 @@ const initInput = (value: string) => {
 export const toDisposablePricesSearch = (
   strategy: Strategy,
   editType: 'editPrices' | 'renew',
-): EditDisposableStrategySearch => {
+): EditPriceDisposableSearch => {
   const { buy, sell } = strategy;
   const direction = isEmptyOrder(buy) ? 'sell' : 'buy';
   const order = direction === 'sell' ? sell : buy;
@@ -74,6 +68,9 @@ export const editPrice = createRoute({
     marketPrice: v.optional(validNumber),
   }),
 });
+
+export type EditPriceDisposableSearch =
+  (typeof editPricesDisposable)['types']['searchSchema'];
 export const editPricesDisposable = createRoute({
   getParentRoute: () => editPrice,
   path: 'disposable',
@@ -82,6 +79,8 @@ export const editPricesDisposable = createRoute({
     editType: v.picklist(['editPrices', 'renew']),
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
+    presetMin: v.optional(validNumber),
+    presetMax: v.optional(validNumber),
     budget: v.optional(validInputNumber),
     settings: v.optional(validSettings),
     direction: v.optional(validDirection),
@@ -92,18 +91,21 @@ export const editPricesDisposable = createRoute({
 export const toRecurringPricesSearch = (
   strategy: Strategy,
   editType: 'editPrices' | 'renew',
-): EditRecurringStrategySearch => {
+): EditPriceRecurringSearch => {
   const { buy, sell } = strategy;
   return {
     editType,
-    buyMin: initInput(buy.min),
-    buyMax: initInput(buy.max),
-    buySettings: buy.min === buy.max ? 'limit' : 'range',
-    sellMin: initInput(sell.min),
-    sellMax: initInput(sell.max),
-    sellSettings: sell.min === sell.max ? 'limit' : 'range',
+    // buyMin: initInput(buy.min),
+    // buyMax: initInput(buy.max),
+    // buySettings: buy.min === buy.max ? 'limit' : 'range',
+    // sellMin: initInput(sell.min),
+    // sellMax: initInput(sell.max),
+    // sellSettings: sell.min === sell.max ? 'limit' : 'range',
   };
 };
+
+export type EditPriceRecurringSearch =
+  (typeof editPricesRecurring)['types']['searchSchema'];
 export const editPricesRecurring = createRoute({
   getParentRoute: () => editPrice,
   path: 'recurring',
@@ -112,11 +114,15 @@ export const editPricesRecurring = createRoute({
     editType: v.picklist(['editPrices', 'renew']),
     buyMin: v.optional(validInputNumber),
     buyMax: v.optional(validInputNumber),
+    buyPresetMin: v.optional(validNumber),
+    buyPresetMax: v.optional(validNumber),
     buyBudget: v.optional(validInputNumber),
     buySettings: v.optional(validSettings),
     buyAction: v.optional(validAction),
     sellMin: v.optional(validInputNumber),
     sellMax: v.optional(validInputNumber),
+    sellPresetMin: v.optional(validNumber),
+    sellPresetMax: v.optional(validNumber),
     sellBudget: v.optional(validInputNumber),
     sellSettings: v.optional(validSettings),
     sellAction: v.optional(validAction),

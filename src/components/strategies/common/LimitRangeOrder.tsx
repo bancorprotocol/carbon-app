@@ -21,6 +21,7 @@ interface Props {
   setPresetMin: (value: string) => void;
   setPresetMax: (value: string) => void;
   setPrice: (value: string) => void;
+  setPreset: (value: string) => void;
 }
 
 export const LimitRangeOrder: FC<Props> = ({
@@ -35,6 +36,7 @@ export const LimitRangeOrder: FC<Props> = ({
   setPresetMin,
   setPresetMax,
   setPrice,
+  setPreset,
 }) => {
   const inputId = useId();
 
@@ -73,6 +75,7 @@ export const LimitRangeOrder: FC<Props> = ({
           quote={quote}
           price={order.min}
           setPrice={setPrice}
+          setPreset={setPreset}
           isBuy={direction === 'buy'}
           error={error}
           warnings={warnings}

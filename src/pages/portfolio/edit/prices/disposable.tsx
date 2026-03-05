@@ -2,7 +2,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { tokenAmount } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
-import { StrategyDirection, StrategySettings } from 'libs/routing';
+import { StrategyDirection } from 'libs/routing';
 import { EditOrderBlock, Order } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
@@ -19,9 +19,7 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
-import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'components/strategies/common/types';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
 import { D3ChartDisposable } from 'components/strategies/common/d3Chart/disposable/D3ChartDisposable';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
@@ -30,24 +28,14 @@ import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayou
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { OrderDirection } from 'components/strategies/common/OrderDirection';
+import { getEditRecurringPrices } from 'components/strategies/create/utils';
+import { EditPriceDisposableSearch } from 'libs/routing/routes/strategyEdit';
 
-export interface EditDisposableStrategySearch {
-  marketPrice?: string;
-  chartStart?: string;
-  chartEnd?: string;
-  editType: 'editPrices' | 'renew';
-  min?: string;
-  max?: string;
-  settings?: StrategySettings;
-  direction?: StrategyDirection;
-  action?: 'deposit' | 'withdraw';
-  budget?: string;
-  marginalPrice?: MarginalPriceOptions;
-}
+type Search = EditPriceDisposableSearch;
 
 const getOrder = (
   strategy: Strategy,
-  search: EditDisposableStrategySearch,
+  search: Search,
   marketPrice?: string,
 ): EditOrderBlock => {
   const { buy, sell } = strategy;
@@ -58,40 +46,24 @@ const getOrder = (
   const defaultSettings = isLimitOrder(order) ? 'limit' : 'range';
   const settings = search.settings ?? defaultSettings;
   const action = search.action ?? 'deposit';
-  const defaultPrice = isBuy ? buy.min : sell.max;
-  const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
 
-  const defaultMin = () => {
-    const multiplier = (() => {
-      if (isZero(defaultPrice)) {
-        if (isBuy) return settings === 'limit' ? 0.9 : 0.8;
-        else return settings === 'limit' ? 1.1 : 1.1;
-      } else {
-        if (isBuy) return settings === 'limit' ? 1 : 0.9;
-        else return settings === 'limit' ? 1 : 1;
-      }
-    })();
-    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
+  const searchOrder = {
+    direction: direction,
+    settings: settings,
+    min: search.min || order.min,
+    max: search.max || order.max,
+    presetMin: search.presetMin,
+    presetMax: search.presetMax,
   };
-  const defaultMax = () => {
-    const multiplier = (() => {
-      if (isZero(defaultPrice)) {
-        if (isBuy) return settings === 'limit' ? 0.9 : 0.9;
-        else return settings === 'limit' ? 1.1 : 1.2;
-      } else {
-        if (isBuy) return settings === 'limit' ? 1 : 1;
-        else return settings === 'limit' ? 1 : 1.1;
-      }
-    })();
-    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
-  };
+  const prices = getEditRecurringPrices(searchOrder, order, marketPrice);
+
   return {
     settings,
     action,
-    min: search.min ?? defaultMin()?.toString() ?? '0',
-    max: search.max ?? defaultMax()?.toString() ?? '0',
+    min: prices.min,
+    max: prices.max,
     budget: getTotalBudget(action, order.budget, search.budget),
-    marginalPrice: search.marginalPrice,
+    marginalPrice: order.marginalPrice,
   };
 };
 
@@ -115,7 +87,7 @@ export const EditPricesStrategyDisposablePage = () => {
   const { setOrder } = useSetDisposableOrder(url);
 
   const setSearch = useCallback(
-    (next: Partial<EditDisposableStrategySearch>) => {
+    (next: Partial<Search>) => {
       navigate({
         params: (params) => params,
         search: (previous) => ({ ...previous, ...next }),
@@ -132,7 +104,8 @@ export const EditPricesStrategyDisposablePage = () => {
       budget: undefined,
       min: undefined,
       max: undefined,
-      marginalPrice: undefined,
+      presetMin: undefined,
+      presetMax: undefined,
     });
   };
 
