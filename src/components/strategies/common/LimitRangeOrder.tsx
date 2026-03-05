@@ -9,7 +9,7 @@ import {
 import { OrderBlock } from './types';
 import { StrategyDirection } from 'libs/routing';
 
-type Props = {
+interface Props {
   base: Token;
   quote: Token;
   order: OrderBlock;
@@ -18,8 +18,10 @@ type Props = {
   warnings?: (string | undefined)[];
   setMin: (value: string) => void;
   setMax: (value: string) => void;
+  setPresetMin: (value: string) => void;
+  setPresetMax: (value: string) => void;
   setPrice: (value: string) => void;
-};
+}
 
 export const LimitRangeOrder: FC<Props> = ({
   base,
@@ -30,6 +32,8 @@ export const LimitRangeOrder: FC<Props> = ({
   warnings,
   setMin,
   setMax,
+  setPresetMin,
+  setPresetMax,
   setPrice,
 }) => {
   const inputId = useId();
@@ -43,8 +47,10 @@ export const LimitRangeOrder: FC<Props> = ({
           quote={quote}
           min={order.min}
           setMin={setMin}
+          setPresetMin={setPresetMin}
           max={order.max}
           setMax={setMax}
+          setPresetMax={setPresetMax}
           isBuy={direction === 'buy'}
           error={error}
           warnings={warnings}

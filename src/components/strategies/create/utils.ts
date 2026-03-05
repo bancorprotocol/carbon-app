@@ -76,26 +76,8 @@ export const getDefaultOrder = (
   }
 };
 
-export const overlappingMultiplier = {
-  min: 0.99,
-  max: 1.01,
-};
-export const initOverlappingMin = (
-  marketPrice: string,
-  fullRangeMin?: string,
-) => {
-  if (fullRangeMin) return fullRangeMin;
-  const multiplier = overlappingMultiplier.min;
-  return new SafeDecimal(marketPrice).times(multiplier).toString();
-};
-export const initOverlappingMax = (
-  marketPrice: string,
-  fullRangeMax?: string,
-) => {
-  if (fullRangeMax) return fullRangeMax;
-  const multiplier = overlappingMultiplier.max;
-  return new SafeDecimal(marketPrice).times(multiplier).toString();
-};
+export const defaultPreset = 0.01;
+
 /** Create the orders out of the search params */
 export const getOverlappingOrders = (
   search: TradeOverlappingSearch,
@@ -112,14 +94,27 @@ export const getOverlappingOrders = (
   const marketPriceStr = marketPrice.toString();
 
   const fullRange = (() => {
-    if (!search.fullRange) return;
+    if (search.preset !== 'Infinity') return;
     return getFullRangesPrices(marketPriceStr, base.decimals, quote.decimals);
   })();
 
+  const getMin = () => {
+    if (fullRange) return fullRange.min;
+    const preset = search.preset || defaultPreset;
+    const multiplier = new SafeDecimal(1).minus(preset);
+    return new SafeDecimal(marketPrice).times(multiplier).toString();
+  };
+  const getMax = () => {
+    if (fullRange) return fullRange.max;
+    const preset = search.preset || defaultPreset;
+    const multiplier = new SafeDecimal(1).add(preset);
+    return new SafeDecimal(marketPrice).times(multiplier).toString();
+  };
+
   const {
     anchor,
-    min = initOverlappingMin(marketPriceStr, fullRange?.min),
-    max = initOverlappingMax(marketPriceStr, fullRange?.max),
+    min = getMin(),
+    max = getMax(),
     spread = defaultSpread,
     budget,
   } = search;

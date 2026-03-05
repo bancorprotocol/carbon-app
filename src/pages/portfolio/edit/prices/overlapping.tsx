@@ -9,6 +9,7 @@ import {
 } from '@bancor/carbon-sdk/strategy-management';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
+  defaultSpread,
   getOverlappingMarketPrice,
   getRoundedSpread,
   isMaxBelowMarket,
@@ -28,17 +29,12 @@ import { useCallback } from 'react';
 import { OverlappingSearch } from 'components/strategies/common/types';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
-import {
-  initOverlappingMax,
-  initOverlappingMin,
-} from 'components/strategies/create/utils';
+import { defaultPreset } from 'components/strategies/create/utils';
 
 export interface EditOverlappingStrategySearch extends OverlappingSearch {
   editType: 'editPrices' | 'renew';
   action?: 'deposit' | 'withdraw';
 }
-
-const defaultSpread = '0.05';
 
 /** Create the orders out of the search params */
 const getOrders = (
@@ -56,14 +52,27 @@ const getOrders = (
   }
 
   const fullRange = (() => {
-    if (!search.fullRange) return;
+    if (search.preset !== 'Infinity') return;
     return getFullRangesPrices(marketPrice, base.decimals, quote.decimals);
   })();
 
+  const getMin = () => {
+    if (fullRange) return fullRange.min;
+    const preset = search.preset || defaultPreset;
+    const multiplier = new SafeDecimal(1).minus(preset);
+    return new SafeDecimal(marketPrice).times(multiplier).toString();
+  };
+  const getMax = () => {
+    if (fullRange) return fullRange.max;
+    const preset = search.preset || defaultPreset;
+    const multiplier = new SafeDecimal(1).add(preset);
+    return new SafeDecimal(marketPrice).times(multiplier).toString();
+  };
+
   const {
     anchor,
-    min = initOverlappingMin(marketPrice, fullRange?.min),
-    max = initOverlappingMax(marketPrice, fullRange?.max),
+    min = getMin(),
+    max = getMax(),
     spread = defaultSpread,
     budget = '0',
     action = 'deposit',

@@ -122,6 +122,8 @@ const disposablePage = createRoute({
     settings: v.optional(validSettings),
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
+    presetMin: v.optional(validInputNumber),
+    presetMax: v.optional(validInputNumber),
     budget: v.optional(validInputNumber),
     marginalPrice: v.optional(v.enum(MarginalPriceOptions)),
   }),
@@ -134,11 +136,15 @@ const recurringPage = createRoute({
   validateSearch: searchValidator({
     buyMin: v.optional(validInputNumber),
     buyMax: v.optional(validInputNumber),
+    buyPresetMin: v.optional(validInputNumber),
+    buyPresetMax: v.optional(validInputNumber),
     buyBudget: v.optional(validInputNumber),
     buySettings: v.optional(validSettings),
     buyMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
     sellMin: v.optional(validInputNumber),
     sellMax: v.optional(validInputNumber),
+    sellPresetMin: v.optional(validInputNumber),
+    sellPresetMax: v.optional(validInputNumber),
     sellBudget: v.optional(validInputNumber),
     sellSettings: v.optional(validSettings),
     sellMarginalPrice: v.optional(v.enum(MarginalPriceOptions)),
@@ -149,14 +155,20 @@ const overlappingPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/overlapping',
   component: TradeOverlapping,
+  beforeLoad: ({ search }) => {
+    if (!search.preset && search.fullRange) search.preset = 'Infinity';
+    delete search.fullRange;
+  },
   validateSearch: searchValidator({
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
-    fullRange: v.optional(validBoolean),
+    preset: v.optional(validNumber),
     spread: v.optional(validNumber, defaultSpread),
     budget: v.optional(validNumber),
     anchor: v.optional(validDirection),
     chartType: v.optional(validChartType),
+    // @deprecated (March 2026)
+    fullRange: v.optional(validBoolean),
   }),
 });
 

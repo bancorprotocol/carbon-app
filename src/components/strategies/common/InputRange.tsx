@@ -24,7 +24,7 @@ import { limitPreset } from './price-presets';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useStrategyFormCtx } from './StrategyFormContext';
 
-export interface InputRangeProps {
+export interface BaseInputRange {
   min: string;
   minLabel?: string;
   minId?: string;
@@ -38,27 +38,38 @@ export interface InputRangeProps {
   isBuy?: boolean;
   error?: string;
   warnings?: (string | undefined)[];
-  isOverlapping?: boolean;
   required?: boolean;
 }
 
-export const InputRange: FC<InputRangeProps> = ({
-  min,
-  minLabel = 'Min',
-  minId,
-  setMin,
-  max,
-  maxId,
-  maxLabel = 'Max',
-  setMax,
-  quote,
-  base,
-  error,
-  isBuy = false,
-  warnings = [],
-  isOverlapping,
-  required,
-}) => {
+export interface InputRangeProps extends BaseInputRange {
+  setPresetMin: (value: string) => void;
+  setPresetMax: (value: string) => void;
+  isOverlapping?: false;
+}
+export interface OverlappingInputRangeProps extends BaseInputRange {
+  isOverlapping: true;
+}
+
+type Props = InputRangeProps | OverlappingInputRangeProps;
+
+export const InputRange: FC<Props> = (props) => {
+  const {
+    min,
+    minLabel = 'Min',
+    minId,
+    setMin,
+    max,
+    maxId,
+    maxLabel = 'Max',
+    setMax,
+    quote,
+    base,
+    error,
+    isBuy = false,
+    warnings = [],
+    isOverlapping,
+    required,
+  } = props;
   const [localMin, setLocalMin] = useState(roundSearchParam(min));
   const [localMax, setLocalMax] = useState(roundSearchParam(max));
   const { marketPrice } = useStrategyFormCtx();
@@ -129,11 +140,8 @@ export const InputRange: FC<InputRangeProps> = ({
   };
 
   const setMinPreset = (preset: string) => {
-    if (!marketPrice) return;
-    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
-    const next = new SafeDecimal(marketPrice).mul(percent).toString();
-    setLocalMin(roundSearchParam(next));
-    setMin(next);
+    if (!marketPrice || !('setPresetMin' in props)) return;
+    props.setPresetMin(preset);
   };
 
   const onMaxFocus = (e: FocusEvent<HTMLInputElement>) => {
@@ -159,11 +167,8 @@ export const InputRange: FC<InputRangeProps> = ({
   };
 
   const setMaxPreset = (preset: string) => {
-    if (!marketPrice) return;
-    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
-    const next = new SafeDecimal(marketPrice).mul(percent).toString();
-    setLocalMax(roundSearchParam(next));
-    setMax(next);
+    if (!marketPrice || !('setPresetMax' in props)) return;
+    props.setPresetMax(preset);
   };
 
   return (

@@ -48,15 +48,12 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
     }
   }, [anchor, aboveMarket, belowMarket, set, buy.min, sell.max]);
 
-  const setMin = (min: string) => set({ min, fullRange: false });
-  const setMax = (max: string) => set({ max, fullRange: false });
+  const setMin = (min: string) =>
+    set({ min, max: sell.max, preset: undefined });
+  const setMax = (max: string) => set({ min: buy.min, max, preset: undefined });
+  const setPreset = (preset: string) =>
+    set({ preset, min: undefined, max: undefined });
   const setSpread = (spread: string) => set({ spread });
-  const setFullRange = () =>
-    set({
-      min: undefined,
-      max: undefined,
-      fullRange: true,
-    });
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
     set({ anchor: value, budget: undefined });
@@ -85,11 +82,10 @@ export const CreateOverlappingPrice: FC<Props> = (props) => {
           max={sell.max}
           setMin={setMin}
           setMax={setMax}
-          setFullRange={setFullRange}
+          setPreset={setPreset}
           minLabel="Min Buy"
           maxLabel="Max Sell"
           warnings={[priceWarning]}
-          isOverlapping
           required
         />
       </article>

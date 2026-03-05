@@ -156,10 +156,12 @@ export const editPricesOverlapping = createRoute({
     marketPrice: v.optional(validNumber),
     min: v.optional(validInputNumber),
     max: v.optional(validInputNumber),
+    preset: v.optional(validNumber),
     spread: v.optional(validNumber),
     budget: v.optional(validNumber),
     anchor: v.optional(validDirection),
     action: v.optional(validAction),
+    // @deprecated March 2026
     fullRange: v.optional(v.boolean()),
   }),
 });

@@ -13,6 +13,7 @@ export interface OverlappingSearch extends StrategySearch {
   marketPrice?: string;
   min?: string;
   max?: string;
+  preset?: string;
   spread?: string;
   anchor?: StrategyDirection;
   budget?: string;

@@ -6,6 +6,7 @@ import {
   validAddress,
   validBoolean,
   validDirection,
+  validInputNumber,
   validNumber,
   validSettings,
 } from 'libs/routing/utils';
@@ -13,9 +14,9 @@ import { SimulatorRoot } from 'pages/simulator/root';
 import { SimulatorInputOverlappingPage } from 'pages/simulator/overlapping';
 import { SimulatorInputRecurringPage } from 'pages/simulator/recurring';
 import { SimulatorResultPage } from 'pages/simulator/result';
+import { defaultSpread } from 'components/strategies/overlapping/utils';
 import config from 'config';
 import * as v from 'valibot';
-import { defaultSpread } from 'components/strategies/overlapping/utils';
 
 export interface StrategyInputBase {
   base?: string;
@@ -80,7 +81,7 @@ export const simulatorInputRecurringRoute = createRoute({
     buyMin: v.optional(validNumber),
     buyBudget: v.optional(validNumber),
     buySettings: v.optional(validSettings),
-    // @deprecated Keep this around for preview links (March 2026)
+    // @deprecated (March 2026)
     sellIsRange: v.optional(validBoolean),
     buyIsRange: v.optional(validBoolean),
   }),
@@ -102,17 +103,20 @@ export const simulatorInputOverlappingRoute = createRoute({
   beforeLoad: ({ search }) => {
     if (!search.min && search.buyMin) search.min = search.buyMin;
     if (!search.max && search.sellMax) search.max = search.sellMax;
+    if (!search.preset && search.fullRange) search.preset = 'Infinity';
     delete search.buyMin;
     delete search.sellMax;
+    delete search.fullRange;
   },
   validateSearch: searchValidator({
-    min: v.optional(validNumber),
-    max: v.optional(validNumber),
-    fullRange: v.optional(validBoolean),
+    min: v.optional(validInputNumber),
+    max: v.optional(validInputNumber),
+    preset: v.optional(validNumber),
     spread: v.optional(validNumber, defaultSpread),
     anchor: v.optional(validDirection),
     budget: v.optional(validNumber),
-    // @deprecated Keep this around for preview links (March 2026)
+    // @deprecated (March 2026)
+    fullRange: v.optional(validBoolean),
     sellMax: v.optional(validNumber),
     buyMin: v.optional(validNumber),
   }),

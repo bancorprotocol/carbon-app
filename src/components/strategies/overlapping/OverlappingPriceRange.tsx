@@ -1,4 +1,4 @@
-import { InputRange, InputRangeProps } from '../common/InputRange';
+import { BaseInputRange, InputRange } from '../common/InputRange';
 import { FC, useId, useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isFullRange } from '../common/utils';
@@ -6,13 +6,12 @@ import { Presets } from '../../common/preset/Preset';
 import { overlappingPresets } from '../common/price-presets';
 import { useStrategyFormCtx } from '../common/StrategyFormContext';
 
-interface Props extends InputRangeProps {
-  setFullRange: () => void;
+interface Props extends BaseInputRange {
+  setPreset: (value: string) => void;
 }
 
 export const OverlappingPriceRange: FC<Props> = (props) => {
-  const { base, quote, min, max, setMin, setMax, setFullRange, warnings } =
-    props;
+  const { base, quote, min, max, setMin, setMax, setPreset, warnings } = props;
   const { marketPrice } = useStrategyFormCtx();
   const minId = useId();
   const maxId = useId();
@@ -25,23 +24,9 @@ export const OverlappingPriceRange: FC<Props> = (props) => {
       const low = new SafeDecimal(min).div(marketPrice).sub(1).abs();
       const high = new SafeDecimal(max).div(marketPrice).sub(1).abs();
       if (!low.eq(high)) return '';
-      return low.mul(100).toString();
+      return low.toString();
     }
   }, [base, marketPrice, max, min, quote]);
-
-  const change = (change: string) => {
-    if (!marketPrice) return;
-    const value = Number(change);
-    const price = new SafeDecimal(marketPrice);
-    if (value === Infinity) {
-      setFullRange();
-    } else {
-      const nextMin = price.mul(1 - value / 100);
-      const nextMax = price.mul(1 + value / 100);
-      setMin(nextMin.toString());
-      setMax(nextMax.toString());
-    }
-  };
 
   const reset = (id: string) => {
     const price = new SafeDecimal(marketPrice!);
@@ -111,7 +96,11 @@ export const OverlappingPriceRange: FC<Props> = (props) => {
         />
       )}
       {marketPrice && (
-        <Presets value={range} presets={overlappingPresets} onChange={change} />
+        <Presets
+          value={range}
+          presets={overlappingPresets}
+          onChange={setPreset}
+        />
       )}
     </>
   );
