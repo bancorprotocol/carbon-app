@@ -50,8 +50,8 @@ const getOrder = (
   const searchOrder = {
     direction: direction,
     settings: settings,
-    min: search.min || order.min,
-    max: search.max || order.max,
+    min: search.min,
+    max: search.max,
     presetMin: search.presetMin,
     presetMax: search.presetMax,
   };
