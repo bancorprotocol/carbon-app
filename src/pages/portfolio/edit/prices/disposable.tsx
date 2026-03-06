@@ -28,7 +28,7 @@ import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayou
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { OrderDirection } from 'components/strategies/common/OrderDirection';
-import { getEditRecurringPrices } from 'components/strategies/create/utils';
+import { getEditOrderPrices } from 'components/strategies/create/utils';
 import { EditPriceDisposableSearch } from 'libs/routing/routes/strategyEdit';
 
 type Search = EditPriceDisposableSearch;
@@ -41,8 +41,7 @@ const getOrder = (
   const { buy, sell } = strategy;
   const defaultDirection = !isEmptyOrder(buy) ? 'buy' : 'sell';
   const direction = search.direction ?? defaultDirection;
-  const isBuy = direction === 'buy';
-  const order = isBuy ? buy : sell;
+  const order = direction === 'buy' ? buy : sell;
   const defaultSettings = isLimitOrder(order) ? 'limit' : 'range';
   const settings = search.settings ?? defaultSettings;
   const action = search.action ?? 'deposit';
@@ -55,9 +54,10 @@ const getOrder = (
     presetMin: search.presetMin,
     presetMax: search.presetMax,
   };
-  const prices = getEditRecurringPrices(searchOrder, order, marketPrice);
+  const prices = getEditOrderPrices(searchOrder, order, marketPrice);
 
   return {
+    direction,
     settings,
     action,
     min: prices.min,
@@ -81,7 +81,8 @@ export const EditPricesStrategyDisposablePage = () => {
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
-  const direction = search.direction ?? 'sell';
+  const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
+  const direction = order.direction ?? 'sell';
   const isBuy = search.direction !== 'sell';
   const { setOrder } = useSetDisposableOrder(url);
 
@@ -122,7 +123,6 @@ export const EditPricesStrategyDisposablePage = () => {
     initialType !== 'disposable' || initialDirection !== direction;
   const initialOrder = isBuy ? buy : sell;
 
-  const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
   const orders = {
     buy: isBuy ? order : resetOrder(buy, resetBudget),
     sell: isBuy ? resetOrder(sell, resetBudget) : order,
@@ -170,7 +170,7 @@ export const EditPricesStrategyDisposablePage = () => {
         <StrategyChartHistory
           buy={orders.buy}
           sell={orders.sell}
-          direction={search.direction ?? 'sell'}
+          direction={direction}
         >
           <D3ChartDisposable
             isLimit={isLimit}
@@ -192,7 +192,7 @@ export const EditPricesStrategyDisposablePage = () => {
           initialOrder={initialOrder}
           setOrder={setOrder}
           warnings={[outSideMarket]}
-          direction={search.direction}
+          direction={direction}
           hasPriceChanged={hasPriceChanged}
           settings={
             <OrderDirection direction={direction} setDirection={setDirection} />

@@ -27,7 +27,7 @@ import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayout';
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
-import { getEditRecurringPrices } from 'components/strategies/create/utils';
+import { getEditOrderPrices } from 'components/strategies/create/utils';
 import { EditPriceRecurringSearch } from 'libs/routing/routes/strategyEdit';
 
 type Search = EditPriceRecurringSearch;
@@ -42,11 +42,14 @@ const getOrders = (
   const getPrices = (order: Partial<OrderBlock>) => {
     const baseOrder = order.direction === 'buy' ? buy : sell;
     // search preset > search prices > strategy > default preset
-    return getEditRecurringPrices(order, baseOrder, marketPrice);
+    return getEditOrderPrices(order, baseOrder, marketPrice);
+  };
+  const defaultSettings = (order: StaticOrder) => {
+    return isLimitOrder(order) ? 'limit' : 'range';
   };
   const buyPrices = getPrices({
     direction: 'buy',
-    settings: search.buySettings,
+    settings: search.buySettings ?? defaultSettings(buy),
     min: search.buyMin,
     max: search.buyMax,
     presetMin: search.buyPresetMin,
@@ -54,16 +57,13 @@ const getOrders = (
   });
   const sellPrices = getPrices({
     direction: 'sell',
-    settings: search.sellSettings,
+    settings: search.sellSettings ?? defaultSettings(buy),
     min: search.sellMin,
     max: search.sellMax,
     presetMin: search.sellPresetMin,
     presetMax: search.sellPresetMax,
   });
 
-  const defaultSettings = (order: StaticOrder) => {
-    return isLimitOrder(order) ? 'limit' : 'range';
-  };
   return {
     buy: {
       min: buyPrices.min,

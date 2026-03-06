@@ -56,14 +56,14 @@ const getRecurringPreset = (
 };
 
 // search preset * marketPrice > search prices > strategy > default preset * price > default preset * marketPrice
-export const getEditRecurringPrices = (
+export const getEditOrderPrices = (
   order: Partial<OrderBlock>,
   baseOrder: StaticOrder,
   marketPrice: string = '0',
 ) => {
   const direction = order.direction ?? 'sell';
-  // Settings is only used when there is no prices in the strategy
   const settings = order.settings ?? 'limit';
+  const baseSettings = baseOrder.min === baseOrder.max ? 'limit' : 'range';
   const presets = getRecurringPreset(direction, settings);
   const getMultiplier = (value: string | number) => {
     if (direction === 'buy') {
@@ -83,11 +83,14 @@ export const getEditRecurringPrices = (
     // 3. Strategy Price
     if (!isZero(baseOrder.min)) {
       if (direction === 'sell') return baseOrder.min;
-      if (settings === 'limit') return baseOrder.min;
-      // 4. default preset * default price
+      // limit -> limit / range -> range
+      if (baseSettings === settings) return baseOrder.min;
+      // range -> limit
+      if (settings === 'limit') return baseOrder.max;
+      // limit -> range
       return getPrice(presets.min, baseOrder.max);
     }
-    // 5. default preset * marketPrice
+    // 4. disposable -> recurrning
     return getPrice(presets.min, marketPrice);
   };
   const getMax = () => {
@@ -98,11 +101,14 @@ export const getEditRecurringPrices = (
     // 3. Strategy Price
     if (!isZero(baseOrder.max)) {
       if (direction === 'buy') return baseOrder.max;
-      if (settings === 'limit') return baseOrder.max;
-      // 4. default preset * default price
+      // limit -> limit / range -> range
+      if (baseSettings === settings) return baseOrder.max;
+      // range -> limit
+      if (baseSettings === 'limit') return baseOrder.min;
+      // limit -> range
       return getPrice(presets.max, baseOrder.min);
     }
-    // 5. default preset * marketPrice
+    // 4. disposable -> recurrning
     return getPrice(presets.max, marketPrice);
   };
   return {
