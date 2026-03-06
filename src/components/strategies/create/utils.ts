@@ -24,7 +24,6 @@ import { SafeDecimal } from 'libs/safedecimal';
 import {
   OrderBlock,
   CreateOverlappingOrder,
-  PreOrderBlock,
   StaticOrder,
 } from '../common/types';
 
@@ -58,11 +57,11 @@ const getRecurringPreset = (
 
 // search preset * marketPrice > search prices > strategy > default preset * price > default preset * marketPrice
 export const getEditRecurringPrices = (
-  order: PreOrderBlock,
+  order: Partial<OrderBlock>,
   baseOrder: StaticOrder,
   marketPrice: string = '0',
 ) => {
-  const direction = order.direction;
+  const direction = order.direction ?? 'sell';
   // Settings is only used when there is no prices in the strategy
   const settings = order.settings ?? 'limit';
   const presets = getRecurringPreset(direction, settings);
@@ -113,11 +112,11 @@ export const getEditRecurringPrices = (
 };
 
 // search preset > search prices > default preset
-export const getTradeRecurringPrices = (
-  order: PreOrderBlock,
+const getTradeRecurringPrices = (
+  order: Partial<OrderBlock>,
   marketPrice: number | string,
 ) => {
-  const direction = order.direction;
+  const direction = order.direction ?? 'sell';
   const settings = order.settings ?? 'limit';
   const presets = getRecurringPreset(direction, settings);
   const presetMin = order.presetMin || presets.min;
@@ -135,8 +134,8 @@ export const getTradeRecurringPrices = (
   };
 };
 
-export const getDefaultOrder = (
-  order: PreOrderBlock,
+export const getTradeOrder = (
+  order: Partial<OrderBlock>,
   marketPrice: number | string = 0,
 ): OrderBlock => {
   const prices = getTradeRecurringPrices(order, marketPrice);

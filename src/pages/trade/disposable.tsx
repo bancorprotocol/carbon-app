@@ -6,7 +6,7 @@ import {
 } from 'components/strategies/common/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
-import { getDefaultOrder } from 'components/strategies/create/utils';
+import { getTradeOrder } from 'components/strategies/create/utils';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
@@ -33,7 +33,13 @@ export const TradeDisposable = () => {
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
   const direction = search.direction || 'sell';
-  const order = getDefaultOrder(direction, search, marketPrice);
+  const order = getTradeOrder(
+    {
+      direction,
+      ...search,
+    },
+    marketPrice,
+  );
   const setSearch = useCallback(
     (next: TradeDisposableSearch) => {
       navigate({

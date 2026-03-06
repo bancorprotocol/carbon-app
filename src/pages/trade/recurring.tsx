@@ -5,7 +5,7 @@ import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { getDefaultOrder } from 'components/strategies/create/utils';
+import { getTradeOrder } from 'components/strategies/create/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { useCallback } from 'react';
@@ -51,9 +51,9 @@ export const TradeRecurring = () => {
     [setBuyOrder, setSellOrder],
   );
 
-  const sellOrder = getDefaultOrder(
-    'sell',
+  const sellOrder = getTradeOrder(
     {
+      direction: 'sell',
       min: search.sellMin,
       max: search.sellMax,
       presetMin: search.sellPresetMin,
@@ -63,9 +63,9 @@ export const TradeRecurring = () => {
     },
     marketPrice,
   );
-  const buyOrder = getDefaultOrder(
-    'buy',
+  const buyOrder = getTradeOrder(
     {
+      direction: 'buy',
       min: search.buyMin,
       max: search.buyMax,
       presetMin: search.buyPresetMin,

@@ -18,10 +18,7 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
-import {
-  EditOrderBlock,
-  PreOrderBlock,
-} from 'components/strategies/common/types';
+import { EditOrderBlock, OrderBlock } from 'components/strategies/common/types';
 import { StaticOrder, Strategy } from 'components/strategies/common/types';
 import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
@@ -42,7 +39,7 @@ const getOrders = (
 ): { buy: EditOrderBlock; sell: EditOrderBlock } => {
   const { buy, sell } = strategy;
 
-  const getPrices = (order: PreOrderBlock) => {
+  const getPrices = (order: Partial<OrderBlock>) => {
     const baseOrder = order.direction === 'buy' ? buy : sell;
     // search preset > search prices > strategy > default preset
     return getEditRecurringPrices(order, baseOrder, marketPrice);

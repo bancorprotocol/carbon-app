@@ -10,7 +10,7 @@ import { FormEvent, useCallback, useMemo } from 'react';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { cn } from 'utils/helpers';
-import { getDefaultOrder } from 'components/strategies/create/utils';
+import { getTradeOrder } from 'components/strategies/create/utils';
 import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import {
@@ -62,7 +62,7 @@ export const SimulatorInputRecurringPage = () => {
     [setBuyOrder, setSellOrder],
   );
 
-  const sellOrder = getDefaultOrder(
+  const sellOrder = getTradeOrder(
     {
       direction: 'sell',
       min: search.sellMin,
@@ -74,7 +74,7 @@ export const SimulatorInputRecurringPage = () => {
     },
     marketPrice,
   );
-  const buyOrder = getDefaultOrder(
+  const buyOrder = getTradeOrder(
     {
       direction: 'buy',
       min: search.buyMin,
