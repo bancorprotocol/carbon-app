@@ -18,10 +18,10 @@ export const EditStrategyLayout: FC<Props> = (props) => {
 
   return (
     <StrategyFormProvider base={base} quote={quote} marketPrice={marketPrice}>
-      <header className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
+      <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
         <EditStrategyOverlapTokens />
         <EditPriceNav editType={editType} />
-      </header>
+      </div>
       {children}
     </StrategyFormProvider>
   );
