@@ -63,7 +63,6 @@ const getOrder = (
     min: prices.min,
     max: prices.max,
     budget: getTotalBudget(action, order.budget, search.budget),
-    marginalPrice: order.marginalPrice,
   };
 };
 

@@ -75,7 +75,6 @@ const getOrders = (
         buy.budget,
         search.buyBudget,
       ),
-      marginalPrice: buy.marginalPrice,
     },
     sell: {
       min: sellPrices.min,
@@ -87,7 +86,6 @@ const getOrders = (
         sell.budget,
         search.sellBudget,
       ),
-      marginalPrice: sell.marginalPrice,
     },
   };
 };
