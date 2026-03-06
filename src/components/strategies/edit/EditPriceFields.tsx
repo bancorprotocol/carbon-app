@@ -50,26 +50,30 @@ export const EditStrategyPriceField: FC<Props> = ({
   const initialBudget = initialOrder.budget;
   const titleId = useId();
 
-  const setPrice = (price: string) =>
+  const setPrice = (price: string) => {
     setOrder({
       min: price,
       max: price,
       presetMin: undefined,
       presetMax: undefined,
     });
+  };
   const setMin = (min: string) => setOrder({ min, presetMin: undefined });
   const setMax = (max: string) => setOrder({ max, presetMax: undefined });
-  const setPreset = (preset: string) =>
+  const setPreset = (preset: string) => {
     setOrder({
       min: undefined,
       max: undefined,
       presetMin: preset,
       presetMax: preset,
     });
-  const setPresetMin = (presetMin: string) =>
+  };
+  const setPresetMin = (presetMin: string) => {
     setOrder({ min: undefined, presetMin });
-  const setPresetMax = (presetMax: string) =>
+  };
+  const setPresetMax = (presetMax: string) => {
     setOrder({ max: undefined, presetMax });
+  };
   const setBudget = (budget: string) => setOrder({ budget });
   const setMarginalPrice = (marginalPrice: string) => {
     setOrder({ marginalPrice });
@@ -82,6 +86,8 @@ export const EditStrategyPriceField: FC<Props> = ({
       settings,
       min: undefined,
       max: undefined,
+      presetMin: undefined,
+      presetMax: undefined,
       marginalPrice: undefined,
     });
   };
