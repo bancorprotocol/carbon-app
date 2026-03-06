@@ -84,7 +84,7 @@ export const simulatorInputRecurringRoute = createRoute({
     buyPresetMin: v.optional(validNumber),
     buyPresetMax: v.optional(validNumber),
     buyBudget: v.optional(validNumber),
-    buySettings: v.optional(validSettings),
+    buySettings: v.optional(validSettings, 'range'),
     // @deprecated (March 2026)
     sellIsRange: v.optional(validBoolean),
     buyIsRange: v.optional(validBoolean),
