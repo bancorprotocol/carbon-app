@@ -9,7 +9,6 @@ import {
 import { FormEvent, useCallback, useMemo } from 'react';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
-import { cn } from 'utils/helpers';
 import { getTradeOrder } from 'components/strategies/create/utils';
 import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
@@ -26,7 +25,6 @@ import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
 import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
-import style from 'components/strategies/common/form.module.css';
 
 const getRecurringError = (buy: OrderBlock, sell: OrderBlock) => {
   if (checkIfOrdersReversed(buy, sell)) {
@@ -194,10 +192,7 @@ export const SimulatorInputRecurringPage = () => {
       </StrategyChartSection>
       <form
         onSubmit={submit}
-        className={cn(
-          style.form,
-          'grid gap-16 grid-area-[form] content-start animate-scale-up',
-        )}
+        className="form grid gap-16 grid-area-[form] content-start animate-scale-up"
         data-testid="create-simulation-form"
       >
         <div className="surface rounded-2xl overflow-clip">

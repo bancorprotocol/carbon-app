@@ -225,7 +225,6 @@ const OverlappingContent = () => {
 
   return (
     <EditPricesForm
-      strategyType="overlapping"
       editType={search.editType}
       orders={orders}
       hasChanged={hasChanged}

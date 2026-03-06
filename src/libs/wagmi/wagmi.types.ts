@@ -22,6 +22,8 @@ export type SelectableConnectionName =
 export interface CarbonWagmiProviderContext {
   user: string | undefined;
   imposterAccount: string | undefined;
+  /** account from the connected wallet (if imposter account is set) */
+  walletAccount: string | undefined;
   accountChainId: number | undefined;
   chainId: number;
   isNetworkActive: boolean;

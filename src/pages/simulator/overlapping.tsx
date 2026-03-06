@@ -12,14 +12,12 @@ import {
   defaultStart,
   oneYearAgo,
 } from 'components/strategies/common/utils';
-import { cn } from 'utils/helpers';
 import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
 import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
-import style from 'components/strategies/common/form.module.css';
 
 export const SimulatorInputOverlappingPage = () => {
   const search = useSearch({ from: '/simulate/overlapping' });
@@ -140,10 +138,7 @@ export const SimulatorInputOverlappingPage = () => {
       </section>
       <form
         onSubmit={submit}
-        className={cn(
-          style.form,
-          'grid gap-16 grid-area-[form] content-start animate-scale-up',
-        )}
+        className="form grid gap-16 grid-area-[form] content-start animate-scale-up"
         data-testid="create-simulation-form"
       >
         <div className="surface grid content-start rounded-2xl">

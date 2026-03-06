@@ -107,7 +107,6 @@ export const EditBudgetDisposablePage = () => {
         <StrategyChartLegend />
       </StrategyChartSection>
       <EditBudgetForm
-        strategyType="disposable"
         editType={search.editType}
         orders={orders}
         hasChanged={!isZero(search.buyBudget) || !isZero(search.sellBudget)}

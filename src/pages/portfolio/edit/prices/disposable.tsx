@@ -183,7 +183,6 @@ export const EditPricesStrategyDisposablePage = () => {
         </StrategyChartHistory>
       </StrategyChartSection>
       <EditPricesForm
-        strategyType="disposable"
         editType={search.editType}
         orders={orders}
         hasChanged={hasChanged}

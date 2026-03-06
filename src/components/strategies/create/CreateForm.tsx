@@ -4,11 +4,9 @@ import { useNavigate } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { useCreateStrategy } from './useCreateStrategy';
 import { getStatusTextByTxStatus } from '../utils';
-import { cn } from 'utils/helpers';
 import { useWagmi } from 'libs/wagmi';
 import { FormStaticOrder } from 'components/strategies/common/types';
 import { addStrategyToCart, toStaticCartStorage } from 'components/cart/utils';
-import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
 interface FormProps {
@@ -76,17 +74,14 @@ export const CreateForm: FC<FormProps> = (props) => {
     <form
       onSubmit={create}
       style={{ animationDelay: '100ms' }}
-      className={cn(style.form, 'grid')}
+      className="form grid"
       data-testid="create-strategy-form"
     >
       <div className="overflow-hidden rounded-2xl surface">{children}</div>
       <footer className="mt-16 grid gap-16">
         <label
           htmlFor="approve-warnings"
-          className={cn(
-            style.approveWarnings,
-            'surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-main-0/60',
-          )}
+          className="approve-warnings surface rounded-lg text-14 font-medium flex items-center gap-8 p-20 text-main-0/60"
         >
           <input
             id="approve-warnings"
@@ -102,7 +97,7 @@ export const CreateForm: FC<FormProps> = (props) => {
           <>
             {config.ui.showCart && (
               <Button
-                className={cn(style.addCart, 'btn-on-background')}
+                className="add-cart btn-on-background"
                 type="button"
                 size="lg"
                 disabled={loading || animating}
