@@ -126,7 +126,7 @@ export const StrategyContent: FC<Props> = ({ url }) => {
 
   return (
     <>
-      <div className="bg-main-900/20 text-white/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border border-main-500/40 text-12 md:text-14">
+      <div className="bg-main-900/20 text-main-0/60 flex gap-24 grid-area-[amount] rounded-full px-16 py-8 border border-main-500/40 text-12 md:text-14">
         <span>
           {text[url].strategies}: {filtered.length}
         </span>
@@ -171,15 +171,7 @@ const StrategyList: FC<StrategyListProps> = ({ url, strategies, layout }) => {
 
   if (layout === 'table' && !belowBreakpoint('xl')) {
     return (
-      <>
-        <StrategyTable
-          className="grid-area-[list]"
-          strategies={strategies.slice(0, max)}
-        />
-        {max < strategies.length && (
-          <Paginator increase={() => setMax((v) => v + 21)} />
-        )}
-      </>
+      <StrategyTable className="grid-area-[list]" strategies={strategies} />
     );
   }
 

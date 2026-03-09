@@ -85,25 +85,25 @@ export const BudgetDistribution: FC<Props> = (props) => {
         </h4>
       )}
       {!isSimulator && (
-        <div className="text-12 grid grid-flow-col text-white/60">
+        <div className="text-12 grid grid-flow-col text-main-0/60">
           {!!Number(initialBudget) && (
             <label htmlFor={allocatedId}>
               Allocated:&nbsp;
               {initialBudget ? (
-                <span className="text-white">
+                <span className="text-main-0">
                   {tokenAmount(initialBudget, token)}
                 </span>
               ) : (
-                <span className="loading-message text-white">Loading</span>
+                <span className="loading-message text-main-0">Loading</span>
               )}
             </label>
           )}
           <label htmlFor={walletId} className="self-end text-end">
             Wallet:&nbsp;
             {balance ? (
-              <span className="text-white">{tokenAmount(balance, token)}</span>
+              <span className="text-main-0">{tokenAmount(balance, token)}</span>
             ) : (
-              <span className="loading-message text-white">Loading</span>
+              <span className="loading-message text-main-0">Loading</span>
             )}
           </label>
         </div>
@@ -168,7 +168,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="warning-message animate-scale-up text-12 flex items-start gap-8 text-white/60">
+      <p className="warning-message animate-scale-up text-12 flex items-start gap-8 text-main-0/60">
         <span className="bg-buy/10 text-buy rounded-full p-4">
           <IconDeposit className="h-12 w-12" />
         </span>
@@ -197,7 +197,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="warning-message animate-scale-up text-12 flex items-start gap-8 text-white/60">
+      <p className="warning-message animate-scale-up text-12 flex items-start gap-8 text-main-0/60">
         <span className="bg-sell/10 text-sell rounded-full p-4">
           <IconWithdraw className="h-12 w-12" />
         </span>

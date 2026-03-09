@@ -1,11 +1,11 @@
 @reference "tailwindcss";
-@reference "../../../theme.css";
+@reference "#theme";
 
 
 
 .radio-group {
   @apply tab-list border border-main-500 bg-main-900/40 hover:bg-main-900/60;
-  box-shadow: inset 0 0 10px var(--color-main-900);
+  box-shadow: inset 0 0 10px var(--color-shadow);
 }
 .label {
   @apply tab-anchor;

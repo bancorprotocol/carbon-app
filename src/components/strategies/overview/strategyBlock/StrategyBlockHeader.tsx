@@ -67,7 +67,7 @@ interface StrategySubtitleProps {
 export const StrategySubtitle: FC<StrategySubtitleProps> = (props) => {
   const { id, status, isExplorer } = props;
   return (
-    <p className="text-12 flex items-center gap-8 text-white/60">
+    <p className="text-12 flex items-center gap-8 text-main-0/60">
       {id}
       <svg width="4" height="4" role="separator">
         <circle cx="2" cy="2" r="2" fill="currentcolor" />
@@ -89,20 +89,26 @@ export const StrategyStatusTag: FC<{
   const { status, isExplorer } = props;
   if (status === 'active') {
     return (
-      <span data-testid="status" className="text-success">
+      <span data-testid="status" className="text-success font-medium">
         {statusText.active}
       </span>
     );
-  } else {
+  }
+  if (status === 'deleted') {
     return (
-      <Tooltip element={getTooltipTextByStatus(isExplorer, status)}>
-        <span
-          className="text-error inline-flex items-center gap-4"
-          data-testid="status"
-        >
-          {statusText.inactive}
-        </span>
-      </Tooltip>
+      <span data-testid="status" className="text-error font-medium">
+        {statusText.deleted}
+      </span>
     );
   }
+  return (
+    <Tooltip element={getTooltipTextByStatus(isExplorer, status)}>
+      <span
+        className="text-error inline-flex items-center gap-4"
+        data-testid="status"
+      >
+        {statusText.inactive}
+      </span>
+    </Tooltip>
+  );
 };

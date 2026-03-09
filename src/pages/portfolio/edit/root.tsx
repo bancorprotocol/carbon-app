@@ -19,8 +19,8 @@ import style from 'components/strategies/common/root.module.css';
 const titleByType: Record<EditTypes, string> = {
   renew: 'Renew Strategy',
   editPrices: 'Edit Prices',
-  deposit: 'Deposit Budgets',
-  withdraw: 'Withdraw Budgets',
+  deposit: 'Deposit Funds',
+  withdraw: 'Withdraw Funds',
 };
 
 const url = '/strategies/edit/$strategyId';

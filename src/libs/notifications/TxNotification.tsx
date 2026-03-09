@@ -14,19 +14,19 @@ const StatusIcon = (status: NotificationStatus) => {
     case 'pending':
       return (
         <div className="relative flex items-center justify-center">
-          <div className="size-38 animate-spin rounded-full border-r border-t border-white" />
+          <div className="size-38 animate-spin rounded-full border-r border-t border-main-0" />
         </div>
       );
     case 'success':
       return (
         <div className="size-38 bg-primary/10 flex items-center justify-center rounded-full">
-          <IconCheck className="text-primary w-11" />
+          <IconCheck className="text-primary w-16" />
         </div>
       );
     case 'failed':
       return (
         <div className="size-38 bg-error/10 flex items-center justify-center rounded-full">
-          <IconTimes className="text-error w-11" />
+          <IconTimes className="text-error w-16" />
         </div>
       );
   }
@@ -86,11 +86,11 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
             data-testid="notif-close"
             aria-label="Remove notification"
           >
-            <IconClose className="size-14 text-white/80" />
+            <IconClose className="size-14 text-main-0/80" />
           </button>
         </header>
         <p
-          className="text-14 truncate text-white/80"
+          className="text-14 truncate text-main-0/80"
           data-testid="notif-description"
         >
           {getDescriptionByStatus(notification)}
@@ -105,7 +105,7 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
               <IconLink className="ml-6 w-14" />
             </NewTabLink>
           )}
-          <p className="justify-self-end text-12 font-medium whitespace-nowrap text-white/60">
+          <p className="justify-self-end text-12 font-medium whitespace-nowrap text-main-0/60">
             {duration}
           </p>
         </footer>

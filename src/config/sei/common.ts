@@ -137,5 +137,7 @@ export const commonConfig: AppConfig = {
     // rewardUrl: 'https://app.merkl.xyz/?chain=1329&protocol=carbon',
     // walkthroughId: '51xep69sd3io',
     useDexAggregator: false, // true,
+    useSeedData: true,
+    useEIP7702: true,
   },
 };

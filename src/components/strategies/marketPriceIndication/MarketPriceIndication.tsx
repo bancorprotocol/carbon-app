@@ -20,11 +20,13 @@ export const MarketPriceIndication: FC<Props> = (props) => {
   const fiatAsString = getFiatAsString(price);
 
   if (!marketPrice)
-    return <span className="text-12 text-white/60">USD value unavailable</span>;
+    return (
+      <span className="text-12 text-main-0/60">USD value unavailable</span>
+    );
 
   return (
     <p className="flex flex-wrap items-center gap-8">
-      <span className="text-12 break-all text-white/60">{fiatAsString}</span>
+      <span className="text-12 break-all text-main-0/60">{fiatAsString}</span>
       <MarketPricePercent
         ignoreMarketPriceWarning={ignoreMarketPriceWarning}
         marketPricePercentage={marketPercent}

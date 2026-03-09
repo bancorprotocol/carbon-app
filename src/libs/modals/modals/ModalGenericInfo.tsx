@@ -43,7 +43,7 @@ export default function ModalGenericInfo({
         />
       </div>
       <button
-        className="btn-primary-gradient"
+        className="btn-main-gradient"
         onClick={() => {
           closeModal(id);
           onConfirm();

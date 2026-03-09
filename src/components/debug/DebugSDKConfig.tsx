@@ -53,7 +53,7 @@ export const DebugSDKConfig = () => {
           onChange={(e) => setTTL(e.target.valueAsNumber)}
         />
       </div>
-      <button className="btn-primary-gradient" type="submit">
+      <button className="btn-main-gradient" type="submit">
         Save Config
       </button>
     </form>

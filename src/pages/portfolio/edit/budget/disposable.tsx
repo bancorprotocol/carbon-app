@@ -109,7 +109,6 @@ export const EditBudgetDisposablePage = () => {
         <StrategyChartLegend />
       </StrategyChartSection>
       <EditBudgetForm
-        strategyType="disposable"
         editType={search.editType}
         orders={orders}
         hasChanged={!isZero(search.buyBudget) || !isZero(search.sellBudget)}
@@ -122,6 +121,7 @@ export const EditBudgetDisposablePage = () => {
             initialOrder={strategy.sell}
             setOrder={setSellOrder}
             warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
+            strategyType="disposable"
           />
         )}
         {showBuy && (
@@ -132,6 +132,7 @@ export const EditBudgetDisposablePage = () => {
             initialOrder={strategy.buy}
             setOrder={setBuyOrder}
             warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
+            strategyType="disposable"
             isBuy
           />
         )}

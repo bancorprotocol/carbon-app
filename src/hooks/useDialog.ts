@@ -22,7 +22,7 @@ export const useDialog = () => {
     if (navigator.webdriver) return ref.current.close();
     // Because of Safari we cannot use native transition
     ref.current.classList.add('closing');
-    const all = ref.current.getAnimations({ subtree: true });
+    const all = ref.current.getAnimations();
     await Promise.race([
       Promise.all(all.map((t) => t.finished)),
       new Promise((res) => setTimeout(res, 1_000)),

@@ -11,7 +11,7 @@ import { useTradePairs } from '../useTradePairs';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { isZero } from 'components/strategies/common/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-router';
 import { RoutingExchanges } from './RoutingExchanges';
@@ -163,7 +163,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             hidden={!byTargetQuery.isFetching}
           ></div>
           <header className="text-14 flex justify-between">
-            <label htmlFor={`${id}-pay`} className="text-white/50">
+            <label htmlFor={`${id}-pay`} className="text-main-0/50">
               You pay
             </label>
             {errorMsgSource && (
@@ -192,11 +192,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               type="button"
               className="btn-on-background flex items-center gap-8 rounded-full px-8 py-6"
             >
-              <LogoImager
-                alt="Token"
-                src={source.logoURI}
-                className="size-20"
-              />
+              <TokenLogo token={source} size={20} />
               <span className="font-medium">{source.symbol}</span>
               <IconChevron className="size-14" />
             </button>
@@ -217,7 +213,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               hidden={!bySourceQuery.isFetching}
             ></div>
             <header className="text-14 flex justify-between">
-              <label htmlFor={`${id}-receive`} className="text-white/50">
+              <label htmlFor={`${id}-receive`} className="text-main-0/50">
                 You receive
               </label>
               {errorMsgTarget && (
@@ -250,24 +246,20 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                 type="button"
                 className="btn-on-background flex items-center gap-8 rounded-full px-8 py-6"
               >
-                <LogoImager
-                  alt="Token"
-                  src={target.logoURI}
-                  className="size-20"
-                />
+                <TokenLogo token={target} size={20} />
                 <span className="font-medium">{target.symbol}</span>
                 <IconChevron className="size-14" />
               </button>
             </TokenInputField>
           </div>
-          <footer className="rounded-b-xl rounded-t-xs text-14 flex justify-between bg-main-900/40 p-16 text-white/80">
+          <footer className="rounded-b-xl rounded-t-xs text-14 flex justify-between bg-main-900/40 p-16 text-main-0/80">
             {warning && <Warning className="text-14" message={warning} />}
             {rateMessage && <p>{rateMessage}</p>}
             {showRouting && (
               <button
                 type="button"
                 onClick={displayRouting}
-                className="flex gap-8 text-left hover:text-white md:flex"
+                className="flex gap-8 text-left hover:text-main-0 md:flex"
                 data-testid="routing"
               >
                 <IconRouting className="w-12" />
@@ -278,7 +270,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         </div>
       </div>
       {IS_TENDERLY_FORK && (
-        <div className="text-14 text-right text-white/60">
+        <div className="text-14 text-right text-main-0/60">
           DEBUG: {getLiquidity()}
         </div>
       )}

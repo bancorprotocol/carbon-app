@@ -106,7 +106,6 @@ export const EditBudgetRecurringPage = () => {
         <StrategyChartLegend />
       </StrategyChartSection>
       <EditBudgetForm
-        strategyType="recurring"
         editType={search.editType}
         orders={orders}
         hasChanged={!isZero(search.buyBudget) || !isZero(search.sellBudget)}
@@ -117,6 +116,7 @@ export const EditBudgetRecurringPage = () => {
           budget={search.sellBudget ?? ''}
           initialOrder={strategy.sell}
           setOrder={setSellOrder}
+          strategyType="recurring"
           warning={search.editType === 'deposit' ? sellOutsideMarket : ''}
         />
         <EditStrategyBudgetField
@@ -125,6 +125,7 @@ export const EditBudgetRecurringPage = () => {
           budget={search.buyBudget ?? ''}
           initialOrder={strategy.buy}
           setOrder={setBuyOrder}
+          strategyType="recurring"
           warning={search.editType === 'deposit' ? buyOutsideMarket : ''}
           isBuy
         />

@@ -43,12 +43,12 @@ export const SimResultChartControls = () => {
   };
 
   return (
-    <article className="flex h-36 flex-row items-center justify-between gap-12 rounded-[24px] bg-white/10 px-20 flat-glass-shadow">
+    <article className="flex h-36 flex-row items-center justify-between gap-12 rounded-[24px] bg-main-600 px-20 flat-glass-shadow">
       <DropdownMenu
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         placement="bottom-end"
-        className="min-w-[144px] items-center rounded-[10px] border-0 p-8 text-white"
+        className="min-w-[144px] items-center rounded-[10px] border-0 p-8 text-main-0"
         aria-expanded={isOpen}
         button={(attr) => (
           <button
@@ -71,7 +71,7 @@ export const SimResultChartControls = () => {
               key={`${index}_${speed}`}
               role="menuitem"
               aria-label={`Playback Speed: ${speed}`}
-              className="rounded-sm text-14 flex w-full px-12 py-8 text-left text-white/80 hover:bg-main-900/40"
+              className="rounded-sm text-14 flex w-full px-12 py-8 text-left text-main-0/80 hover:bg-main-900/40"
               onClick={() => setSpeed(speed)}
               data-testid={`set-speed-${speed}`}
             >

@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
+import { CSSProperties, DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import genericToken from 'assets/icons/generic_token.svg';
 import { cn } from 'utils/helpers';
@@ -80,15 +80,21 @@ interface TokenLogoProps {
   token?: Token;
   size: number;
   className?: string;
+  style?: CSSProperties;
 }
-export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
+export const TokenLogo = ({
+  token,
+  size,
+  className,
+  style,
+}: TokenLogoProps) => {
   if (!token) {
     return (
       <div
-        style={{ height: `${size}px` }}
+        style={{ height: `${size}px`, ...style }}
         className={cn(
           className,
-          'border border-black bg-main-900 rounded-full aspect-square',
+          'border border-white bg-white rounded-full aspect-square',
         )}
       ></div>
     );
@@ -100,7 +106,8 @@ export const TokenLogo = ({ token, size, className }: TokenLogoProps) => {
       src={token.logoURI}
       alt={token.name ?? token.symbol}
       title={token.symbol}
-      className={cn(className, 'border border-black bg-main-900')}
+      className={cn(className, 'border border-white bg-white')}
+      style={style}
     />
   );
 };

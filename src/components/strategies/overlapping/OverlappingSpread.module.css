@@ -1,8 +1,8 @@
 @reference "tailwindcss";
-@reference "../../../theme.css";
+@reference "#theme";
 
 .spread:has(input[type='radio']:checked) .spread-custom {
-  @apply text-white/60;
+  @apply text-main-0/60;
 }
 .spread:has(input[type='number']:invalid) .spread-custom {
   @apply text-error border-error;

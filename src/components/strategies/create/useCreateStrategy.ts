@@ -47,7 +47,7 @@ export const useCreateStrategy = (props: Props) => {
   const { base, quote, buy, sell } = props;
   const cache = useQueryClient();
   const navigate = useNavigate();
-  const { user } = useWagmi();
+  const { user, openConnect } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
   const { checkRestriction } = useRestrictedCountry();
@@ -60,7 +60,7 @@ export const useCreateStrategy = (props: Props) => {
     if (!base || !quote) return;
     const checked = await checkRestriction();
     if (!checked) return;
-    if (!user) return openModal('wallet');
+    if (!user) return openConnect();
 
     const onConfirm = () => {
       return mutation.mutate(toCreateStrategyParams(base, quote, buy, sell), {

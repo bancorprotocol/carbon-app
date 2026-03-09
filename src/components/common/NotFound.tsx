@@ -33,7 +33,7 @@ export const NotFound: FC<Props> = ({
       {showBackButton && (
         <button
           onClick={() => history.back()}
-          className="absolute left-8 top-8 rounded-full p-16 hover:bg-white/20"
+          className="absolute left-8 top-8 rounded-full p-16 hover:bg-main-0/20"
         >
           <ForwardArrow className="size-16 rotate-180" />
         </button>
@@ -52,7 +52,7 @@ export const NotFound: FC<Props> = ({
         />
       </div>
       <h2 className="max-w-[440px] text-[32px] leading-[36px]">{title}</h2>
-      <p className="text-16 max-w-[440px] text-white/60">{text}</p>
+      <p className="text-16 max-w-[440px] text-main-0/60">{text}</p>
     </section>
   );
 };

@@ -33,13 +33,13 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
       },
       tooltip: {
         borderRadius: 12,
-        backgroundColor: '#212123',
+        backgroundColor: 'var(--color-main-800)',
         borderWidth: 0,
         useHTML: true,
         style: { fontFamily: 'Carbon-Text' },
         formatter: function () {
           return (
-            '<div class="p-10 text-14 text-white font-medium space-y-12">' +
+            '<div class="grid gap-16 p-10 text-14 text-main-0 font-medium">' +
             '<div class="flex items-center w-[230px] gap-8">' +
             '<img alt="Token Logo" width="30" height="30" src="' +
             data[this.colorIndex].token.logoURI +
@@ -49,22 +49,22 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
             '</span>' +
             '</div>' +
             '<div class="flex justify-between">' +
-            '<span class="text-white/60">Strategies</span>' +
+            '<span class="text-main-0/60">Strategies</span>' +
             data[this.colorIndex].strategies.length +
             '</div>' +
             '<div class="flex justify-between">' +
-            '<span class="text-white/60">Share</span>' +
+            '<span class="text-main-0/60">Share</span>' +
             buildPercentageString(data[this.colorIndex].share) +
             '</div>' +
             '<div class="flex justify-between">' +
-            '<span class="text-white/60">Amount</span>' +
+            '<span class="text-main-0/60">Amount</span>' +
             buildAmountString(
               data[this.colorIndex].amount,
               data[this.colorIndex].token,
             ) +
             '</div>' +
             '<div class="flex justify-between">' +
-            '<span class="text-white/60">Value</span>' +
+            '<span class="text-main-0/60">Value</span>' +
             getUsdPrice(data[this.colorIndex].value) +
             '</div>' +
             '</div>'

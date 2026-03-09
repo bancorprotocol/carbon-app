@@ -158,7 +158,7 @@ export const ConnectedLandingPage = () => {
               aria-selected={active === id}
               aria-controls={`tabpanel-${id}`}
               onClick={() => setActive(id)}
-              className="text-white/60 tab-anchor aria-selected:tab-focus py-8 px-16 text-14 sm:text-16 lg:text-2xl lg:py-16 lg:px-24"
+              className="text-main-0/60 tab-anchor aria-selected:tab-focus py-8 px-16 text-14 sm:text-16 lg:text-2xl lg:py-16 lg:px-24"
             >
               {title}
             </button>
@@ -200,7 +200,7 @@ export const ConnectedLandingPage = () => {
                         />
                         <path
                           d="M4.93521 2.30119C5.64826 1.05809 6.97184 0.291443 8.40492 0.291443H129.088C131.297 0.291443 133.088 2.0823 133.088 4.29144V18.2914C133.088 20.5006 131.297 22.2914 129.088 22.2914H8.40492C6.97184 22.2914 5.64826 21.5248 4.93521 20.2817L0.919948 13.2817C0.212894 12.0491 0.212894 10.5338 0.919949 9.30119L4.93521 2.30119Z"
-                          fill="url(#svg-brand-gradient)"
+                          fill="url(#svg-main-gradient)"
                         />
                         <text
                           x="20"
@@ -218,7 +218,7 @@ export const ConnectedLandingPage = () => {
                   <Link
                     to={item.to}
                     search={item.search}
-                    className="btn-primary-gradient text-center "
+                    className="btn-main-gradient text-center "
                   >
                     Trade
                   </Link>

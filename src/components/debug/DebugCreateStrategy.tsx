@@ -15,8 +15,7 @@ import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
-import { Token } from 'libs/tokens';
-import { carbonApi } from 'services/carbonApi';
+import { getMarketPrice } from 'libs/queries/extApi/tokenPrice';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -102,19 +101,6 @@ export const DebugCreateStrategy = () => {
   const createStrategies = async (e: FormEvent) => {
     e.preventDefault();
     openModal('txConfirm', { approvalTokens, onConfirm: create });
-  };
-
-  const getMarketPrice = async (base: Token, quote: Token) => {
-    const [basePrice, quotePrice] = await Promise.all([
-      carbonApi.getMarketRate(base.address),
-      carbonApi.getMarketRate(quote.address),
-    ]);
-    if (!basePrice || !quotePrice) {
-      throw new Error(
-        `Token price not available for ${base.address} or ${quote.address}`,
-      );
-    }
-    return basePrice / quotePrice;
   };
 
   const create = async () => {
@@ -215,13 +201,13 @@ export const DebugCreateStrategy = () => {
         ></textarea>
         <p
           id="strategy-json-shortcut-description"
-          className="text-12 text-white/60"
+          className="text-12 text-main-0/60"
         >
           Used by E2E to prefill the form
         </p>
       </div>
 
-      <fieldset className="flex flex-col gap-16 rounded-2xl border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-16 rounded-2xl border border-main-0/60 p-16">
         <legend>Tokens</legend>
         <ul className="flex flex-col gap-8">
           {allTokens.map((t) => (
@@ -244,7 +230,7 @@ export const DebugCreateStrategy = () => {
         </footer>
       </fieldset>
 
-      <fieldset className="flex flex-col gap-8 rounded-2xl border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded-2xl border border-main-0/60 p-16">
         <legend>Liquidity Position Fee Tier</legend>
         <Label label="Spread">
           <Input
@@ -256,13 +242,13 @@ export const DebugCreateStrategy = () => {
             data-testid="spread"
           />
         </Label>
-        <p id="strategy-spread-description" className="text-12 text-white/60">
+        <p id="strategy-spread-description" className="text-12 text-main-0/60">
           Spread will create a concentrated liquidity. You still need to set the
           correct budget.
         </p>
       </fieldset>
 
-      <fieldset className="flex flex-col gap-8 rounded-2xl border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded-2xl border border-main-0/60 p-16">
         <legend>Buy Low {baseSymbol}</legend>
         <Label label="Min">
           <Input
@@ -293,7 +279,7 @@ export const DebugCreateStrategy = () => {
           />
         </Label>
       </fieldset>
-      <fieldset className="flex flex-col gap-8 rounded-2xl border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded-2xl border border-main-0/60 p-16">
         <legend>Sell High {baseSymbol}</legend>
         <Label label={`Min ${spread ? '(Disabled)' : ''}`}>
           <Input
@@ -348,7 +334,7 @@ export const DebugCreateStrategy = () => {
         </output>
       ) : (
         <button
-          className="btn-primary-gradient"
+          className="btn-main-gradient"
           type="submit"
           data-testid="create-strategies"
         >

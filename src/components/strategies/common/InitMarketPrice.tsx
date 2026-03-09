@@ -11,7 +11,6 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useEditStrategyCtx } from '../edit/EditStrategyContext';
 import { isOverlappingStrategy } from './utils';
 import { getCalculatedPrice } from '../overlapping/utils';
-import style from 'components/strategies/common/form.module.css';
 
 interface Props {
   base: Token;
@@ -106,7 +105,7 @@ export const InitMarketPrice = (props: FieldProps) => {
 
   return (
     <form
-      className={cn(props.className, style.form, 'grid gap-16 p-16')}
+      className={cn(props.className, 'form grid gap-16 p-16')}
       data-testid="user-price-form"
       onSubmit={setPrice}
     >
@@ -130,17 +129,14 @@ export const InitMarketPrice = (props: FieldProps) => {
           </button>
         </Tooltip>
       )}
-      <p className="text-12 warning-message text-white/60">
+      <p className="text-12 warning-message text-main-0/60">
         Updating the market price will automatically adjust all related data in
         the app.
         {!!externalPrice && <EditPriceText />}
       </p>
       <label
         htmlFor={checkboxId}
-        className={cn(
-          style.approveWarnings,
-          'rounded-lg text-12 font-medium flex items-center gap-8 text-white/60',
-        )}
+        className="approve-warnings rounded-lg text-12 font-medium flex items-center gap-8 text-main-0/60"
       >
         <input
           id={checkboxId}
@@ -153,7 +149,7 @@ export const InitMarketPrice = (props: FieldProps) => {
         I've reviewed the new market price and chosen to proceed.
       </label>
       <button
-        className="btn-primary-gradient"
+        className="btn-main-gradient"
         type="submit"
         data-testid="set-overlapping-price"
       >
@@ -168,7 +164,7 @@ const SetPriceText = ({ base, quote }: { base: Token; quote: Token }) => (
     <h3 className="text-gradient">
       {base.symbol}/{quote.symbol} market price is unavailable.
     </h3>
-    <p className="text-14 text-white/80">
+    <p className="text-14 text-main-0/80">
       Enter the current market price to continue ({quote.symbol} per 1&nbsp;
       {base.symbol}).
     </p>

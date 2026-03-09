@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../theme.css";
+@reference "#theme";
 
 .export-button {
   @apply btn-on-background gap-8 rounded-full px-12 py-8;

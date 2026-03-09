@@ -23,19 +23,19 @@ interface DisplayPair {
 
 const getAllIds = (meta?: ActivityMeta): DisplayID[] => {
   if (!meta) return [];
-  return Object.entries(meta.strategies).map(([id, pair]) => ({
-    id: id,
-    base: pair[0],
-    quote: pair[1],
-  }));
+  return Object.entries(meta.strategies)
+    .map(([id, pair]) => ({ id, base: pair[0], quote: pair[1] }))
+    .sort((a, b) => Number(a.id) - Number(b.id));
 };
 const getAllPairs = (meta?: ActivityMeta): DisplayPair[] => {
   if (!meta) return [];
-  return meta.pairs.map(([base, quote]) => ({
-    pair: toPairSlug(base, quote),
-    base,
-    quote,
-  }));
+  return meta.pairs
+    .map(([base, quote]) => ({
+      pair: toPairSlug(base, quote),
+      base,
+      quote,
+    }))
+    .sort((a, b) => a.pair.localeCompare(b.pair));
 };
 export interface ActivityFilterProps {
   filters?: ('ids' | 'pairs')[];
@@ -93,9 +93,15 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
             <Option key={id} value={id}>
               <span>{getLowestBits(id)}</span>
               <svg width="4" height="4">
-                <circle cx="2" cy="2" r="2" fill="white" fillOpacity="0.4" />
+                <circle
+                  cx="2"
+                  cy="2"
+                  r="2"
+                  fill="var(--color-main-0)"
+                  fillOpacity="0.4"
+                />
               </svg>
-              <span className="text-white/40">
+              <span className="text-main-0/40">
                 {base.symbol}/{quote.symbol}
               </span>
             </Option>

@@ -15,14 +15,14 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   const budgetFormatted = getUsdPrice(totalBalance);
 
   return (
-    <article className="bg-main-900/20 rounded-md border-main-800 flex-1 grid border p-16">
-      <h4 className="text-12 flex items-center gap-4 text-white/60 self-start">
+    <article className="bg-main-900/40 rounded-md border-main-800 flex-1 grid border p-16">
+      <h4 className="text-12 flex items-center gap-4 text-main-0/60 self-start">
         Total Budget
       </h4>
       <p
         className={cn(
           'text-18 font-medium  @xs/strategy:text-24',
-          noFiatValue ? 'text-white/60' : '',
+          noFiatValue ? 'text-main-0/60' : '',
         )}
         data-testid="total-budget"
       >

@@ -10,7 +10,7 @@ type InputVariants = VariantColor & VariantSize & VariantFullWidth;
 export const inputStyles = cva<InputVariants>(
   [
     'bg-main-900',
-    'text-white',
+    'text-main-0',
     'rounded-full',
     'px-30',
     'outline-hidden',
@@ -24,7 +24,7 @@ export const inputStyles = cva<InputVariants>(
       variant: {
         black: ['bg-primary-500', 'hover:bg-primary-600'],
         secondary: ['bg-main-900', 'bg-white text-main-900'],
-        white: ['bg-main-800 text-white'],
+        white: ['bg-main-800 text-main-0'],
         success: [
           'outline-solid',
           'outline-offset-2',

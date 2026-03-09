@@ -61,7 +61,7 @@ export const D3Pointer: FC<Props> = ({
         x2={x + bandwidth / 2}
         y1={0}
         y2={dms.boundedHeight + 5}
-        stroke="white"
+        stroke="var(--color-main-0)"
         strokeOpacity="0.5"
         strokeDasharray="5"
         strokeDashoffset="5"
@@ -82,7 +82,7 @@ export const D3Pointer: FC<Props> = ({
         dominantBaseline="middle"
         textAnchor="middle"
         fontSize="10"
-        fill="white"
+        fill="var(--color-main-0)"
       >
         {formatX(position.x)}
       </text>
@@ -92,7 +92,7 @@ export const D3Pointer: FC<Props> = ({
         x2={dms.boundedWidth + 5}
         y1={y}
         y2={y}
-        stroke="white"
+        stroke="var(--color-main-0)"
         strokeOpacity="0.5"
         strokeDasharray="5"
         strokeDashoffset="5"
@@ -113,7 +113,7 @@ export const D3Pointer: FC<Props> = ({
         dominantBaseline="middle"
         textAnchor="start"
         fontSize="10"
-        fill="white"
+        fill="var(--color-main-0)"
       >
         {formatY(position.y)}
       </text>

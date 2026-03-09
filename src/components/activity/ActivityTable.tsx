@@ -127,7 +127,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
         </td>
       </tr>
       <tr
-        className="text-12 text-white/60"
+        className="text-12 text-main-0/60"
         style={{ animationDelay: `${index * 50}ms` }}
       >
         {/* ID */}
@@ -204,7 +204,7 @@ export const TransactionLink: FC<TransactionLinkProps> = (props) => {
       aria-label="See transaction on block explorer"
       to={getExplorerLink('tx', txHash)}
     >
-      <IconLink className={cn('text-white', className)} />
+      <IconLink className={cn('text-main-0', className)} />
     </NewTabLink>
   );
 };
@@ -219,7 +219,7 @@ export const BudgetChange: FC<BudgetChangeProps> = ({ budget, token }) => {
   const text = value.isNegative()
     ? tokenAmount(budget, token)
     : `+${tokenAmount(budget, token)}`;
-  return <p className={budgetColor(budget)}>{text}</p>;
+  return <p className={budgetColor(budget) + ' font-medium'}>{text}</p>;
 };
 
 const ActivityPaginator = () => {
@@ -240,7 +240,7 @@ const ActivityPaginator = () => {
   };
 
   return (
-    <tr className="border-main-800 text-14 border-t text-white/80">
+    <tr className="border-main-800 text-14 border-t text-main-0/80">
       <td className="px-24 py-16" colSpan={3}>
         <div className="flex items-center gap-8">
           <label>Show results</label>
@@ -280,9 +280,9 @@ const ActivityPaginator = () => {
             className="border-main-800 flex gap-8 rounded-full border px-12 py-8"
             aria-label="page position"
           >
-            <span className="text-white">{currentPage}</span>
+            <span className="text-main-0">{currentPage}</span>
             <span role="separator">/</span>
-            <span className="text-white">{maxPage}</span>
+            <span className="text-main-0">{maxPage}</span>
           </p>
           <button
             onClick={nextPage}
@@ -315,7 +315,7 @@ const iconColor = (action: ActivityAction) => {
   if (action === 'sell') return `bg-sell/10 text-sell`;
   if (action === 'create') return `bg-success/10 text-success`;
   if (action === 'delete') return `bg-error/10 text-error`;
-  return `bg-white/10 text-white`;
+  return `bg-main-0/10 text-main-0`;
 };
 
 export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {

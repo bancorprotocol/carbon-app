@@ -96,5 +96,6 @@ export const commonConfig: AppConfig = {
     //},
     // walkthroughId: 'vjbcftqceykr',
     useDexAggregator: false,
+    useSeedData: true,
   },
 };

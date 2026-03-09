@@ -11,7 +11,7 @@ export const D3ChartMarketPrice: FC<Props> = ({ marketPrice }) => {
   if (!marketPrice) return;
   return (
     <D3ChartHandleLine
-      color="white"
+      color="var(--color-main-0)"
       y={yScale(marketPrice)}
       lineProps={{ strokeDasharray: 2 }}
       label={prettifyNumber(marketPrice, { abbreviate: true })}

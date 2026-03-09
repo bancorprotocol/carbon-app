@@ -27,7 +27,7 @@ export const ModalTokenListDuplicateWarning: FC<Props> = ({ token }) => {
         <p className="flex items-center">
           {token.symbol}: {token.address}
           <NewTabLink to={getExplorerLink('token', token.address)}>
-            <IconLink className="ml-6 w-14 text-white/80" />
+            <IconLink className="ml-6 w-14 text-main-0/80" />
           </NewTabLink>
         </p>
       </div>
@@ -35,14 +35,14 @@ export const ModalTokenListDuplicateWarning: FC<Props> = ({ token }) => {
   };
 
   return (
-    <div className="text-12 flex max-w-full truncate py-2 text-white/60">
+    <div className="text-12 flex max-w-full truncate py-2 text-main-0/60">
       {isNativeToken ? 'Native Gas Token' : shortenString(token.address)}
       <Tooltip
         placement="right"
         element={duplicatedTokenTooltipElement(token)}
         className="max-w-450"
       >
-        <IconWarning className="ml-5 size-14 text-white/60" />
+        <IconWarning className="ml-5 size-14 text-main-0/60" />
       </Tooltip>
     </div>
   );

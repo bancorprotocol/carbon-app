@@ -1,8 +1,10 @@
+import { AnyStrategy } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 
 export interface ActivityStaticOrder {
   min: string;
   max: string;
+  marginal: string;
   budget: string;
 }
 export interface ActivityGradientOrder {
@@ -10,17 +12,18 @@ export interface ActivityGradientOrder {
   _eD_: string;
   _sP_: string;
   _eP_: string;
+  marginal: string;
   budget: string;
 }
 
-export type ActivityOrder = ActivityStaticOrder | ActivityGradientOrder;
+export type RawActivityOrder = ActivityStaticOrder | ActivityGradientOrder;
 
 interface StrategyChanges {
   owner?: string;
   buy?: Partial<ActivityStaticOrder>;
   sell?: Partial<ActivityStaticOrder>;
 }
-interface BaseActivityStrategy<Order extends ActivityOrder> {
+interface BaseActivityStrategy<Order extends RawActivityOrder> {
   id: string;
   owner: string;
   buy: Order;
@@ -43,28 +46,21 @@ export interface BaseRawActivity {
   txHash: string;
   timestamp: number;
 }
-interface RawServerActivity<Order extends ActivityOrder>
+interface RawServerActivity<Order extends RawActivityOrder>
   extends BaseRawActivity {
   strategy: BaseActivityStrategy<Order> & {
     base: string;
     quote: string;
   };
 }
-interface RawAppActivity<Order extends ActivityOrder> extends BaseRawActivity {
+export interface Activity extends BaseRawActivity {
   date: Date;
-  strategy: BaseActivityStrategy<Order> & {
-    type: Order extends ActivityGradientOrder ? 'gradient' : 'static';
-    base: Token;
-    quote: Token;
-  };
+  strategy: AnyStrategy & { owner: string };
 }
 
 export type ServerActivity =
   | RawServerActivity<ActivityStaticOrder>
   | RawServerActivity<ActivityGradientOrder>;
-export type Activity =
-  | RawAppActivity<ActivityStaticOrder>
-  | RawAppActivity<ActivityGradientOrder>;
 
 export interface QueryActivityParams {
   ownerId?: string;

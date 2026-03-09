@@ -3,6 +3,7 @@ import { TokenPriceHistorySearch } from 'libs/queries/extApi/tokenPrice';
 import { SimulatorResultSearch } from 'libs/routing';
 import { buildTokenPairKey } from 'utils/helpers';
 import { QueryActivityParams } from './extApi/activity';
+import { Dexes } from 'services/uniswap/utils';
 
 export const sdk = ['sdk'];
 export const chain = ['chain'];
@@ -26,6 +27,11 @@ export const QueryKey = {
   tokens: () => [...extAPI, 'tokens'],
   tokenPrice: (address?: string) => [...extAPI, 'token-price', address],
   tokensPrice: () => [...extAPI, 'tokens-price'],
+  tokenListPrice: (addresses: string[]) => [
+    ...extAPI,
+    'token-list-price',
+    ...addresses,
+  ],
 
   tokenPriceHistory: (params: TokenPriceHistorySearch) => [
     ...extAPI,
@@ -77,6 +83,7 @@ export const QueryKey = {
 
   missingTokens: () => [...chain, 'missing-token'],
   token: (token: string) => [...chain, 'token', token],
+  canBatch: (user?: string) => [...chain, 'can-batch', user],
   pairs: () => [...sdk, 'pairs'],
 
   sdkTradeData: (pair: TokenPair, isTradeBySource: boolean, amount: string) => [
@@ -142,4 +149,5 @@ export const QueryKey = {
     amount,
     slippage,
   ],
+  dexMigration: (dex: Dexes, user: string) => ['migration', dex, user],
 };

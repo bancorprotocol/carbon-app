@@ -18,7 +18,7 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="middle"
-            stroke="black"
+            fill="var(--color-main-950)"
           >
             Sell
           </text>
@@ -34,7 +34,7 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="start"
-            stroke="black"
+            fill="var(--color-main-950)"
           >
             Sell
           </text>
@@ -69,7 +69,7 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="middle"
-            stroke="black"
+            fill="var(--color-main-950)"
           >
             Buy
           </text>
@@ -85,7 +85,7 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="start"
-            stroke="black"
+            fill="var(--color-main-950)"
           >
             Buy
           </text>
@@ -115,18 +115,18 @@ export const PreviewCommonStrategyType = () => {
             fontSize="28"
             dominantBaseline="middle"
             textAnchor="middle"
-            stroke="black"
+            stroke="var(--color-main-950)"
           >
             Buy
           </text>
         </g>
         <g id="trade-icon">
-          <polygon points="-20,0 0,20 20,0 0,-20" fill="white" />
+          <polygon points="-20,0 0,20 20,0 0,-20" fill="var(--color-main-0)" />
         </g>
         <path
           id="svg-price-path"
           fill="none"
-          stroke="white"
+          stroke="var(--color-main-0)"
           strokeLinejoin="round"
           strokeWidth="5"
           d="M50 350 150 350 250 750 300 750 400 300 450 300 500 400 550 400 650 900 700 900 850 350 900 350 950 550 1000 550"
@@ -138,7 +138,7 @@ export const PreviewCommonStrategyType = () => {
             y1="950"
             y2="950"
             strokeWidth="3"
-            stroke="white"
+            stroke="var(--color-main-0)"
           />
           <line
             x1="50"
@@ -146,7 +146,7 @@ export const PreviewCommonStrategyType = () => {
             y1="50"
             y2="950"
             strokeWidth="3"
-            stroke="white"
+            stroke="var(--color-main-0)"
           />
         </g>
         <pattern
@@ -161,7 +161,7 @@ export const PreviewCommonStrategyType = () => {
             y="10"
             width="30"
             height="30"
-            fill="white"
+            fill="var(--color-main-0)"
             fillOpacity="0.4"
           />
         </pattern>

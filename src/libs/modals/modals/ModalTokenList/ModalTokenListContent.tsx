@@ -1,4 +1,4 @@
-import { LogoImager, TokenLogo } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
@@ -157,17 +157,13 @@ export const ModalTokenListContent: FC<Props> = ({
                 className="token-select flex flex-1 items-center gap-16 py-8 px-16 aria-selected:outline"
                 data-testid={`select-token-${token.address}`}
               >
-                <LogoImager
-                  src={token.logoURI}
-                  alt={`${token.symbol} Token`}
-                  className="size-32"
-                />
+                <TokenLogo token={token} size={32} />
                 <div className="grid justify-items-start">
                   <div className="flex gap-4">
                     {token.isSuspicious && <SuspiciousToken />}
                     {token.symbol}
                   </div>
-                  <div className="text-12 max-w-full truncate text-white/60">
+                  <div className="text-12 max-w-full truncate text-main-0/60">
                     {token.name ?? token.symbol}
                   </div>
                   {duplicateSymbols.includes(token.symbol) && (
@@ -186,7 +182,7 @@ export const ModalTokenListContent: FC<Props> = ({
           <hr className="flip border-main-900/20" id="flip-divider" />
         )}
         <div>
-          <h3 className="flip px-16 text-12 text-white/60" id="flip-title">
+          <h3 className="flip px-16 text-12 text-main-0/60" id="flip-title">
             All
           </h3>
           <ul
@@ -212,17 +208,13 @@ export const ModalTokenListContent: FC<Props> = ({
                     className="token-select flex gap-16 flex-1 items-center py-8 px-16 aria-selected:outline"
                     data-testid={`select-token-${token.address}`}
                   >
-                    <LogoImager
-                      src={token.logoURI}
-                      alt={`${token.symbol} Token`}
-                      className="size-32"
-                    />
+                    <TokenLogo token={token} size={32} />
                     <div className="grid justify-items-start">
                       <div className="flex gap-4">
                         {token.isSuspicious && <SuspiciousToken />}
                         {token.symbol}
                       </div>
-                      <div className="text-12 max-w-full truncate text-white/60">
+                      <div className="text-12 max-w-full truncate text-main-0/60">
                         {token.name ?? token.symbol}
                       </div>
                       {duplicateSymbols.includes(token.symbol) && (
@@ -260,7 +252,7 @@ const FavoriteButton = ({ checked, onChange }: FavoriteProps) => {
       className="group p-16"
       onClick={onChange}
     >
-      <IconStar className="w-20 text-white/40 hover:fill-white/80 hover:text-white/80 group-aria-checked:text-primary group-aria-checked:fill-primary" />
+      <IconStar className="w-20 text-main-0/40 hover:fill-main-0/80 hover:text-main-0/80 group-aria-checked:text-primary group-aria-checked:fill-primary" />
     </button>
   );
 };

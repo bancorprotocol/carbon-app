@@ -179,7 +179,7 @@ export const D3EditTriangle: FC<D3ShapeProps> = ({ drawing, onChange }) => {
       cy={yScale(y)}
       r="5"
       fill="var(--color-secondary)"
-      className="edge draggable invisible hover:fill-white group-hover/drawing:visible group-focus/drawing:visible"
+      className="edge draggable invisible hover:fill-main-0 group-hover/drawing:visible group-focus/drawing:visible"
       onMouseDown={(e) => dragPoint(e, i)}
     />
   ));

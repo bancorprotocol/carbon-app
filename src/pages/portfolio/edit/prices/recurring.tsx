@@ -227,7 +227,6 @@ export const EditPricesStrategyRecurringPage = () => {
         </StrategyChartHistory>
       </StrategyChartSection>
       <EditPricesForm
-        strategyType="recurring"
         editType={search.editType}
         orders={orders}
         hasChanged={hasChanged}

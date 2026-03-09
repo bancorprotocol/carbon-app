@@ -163,6 +163,7 @@ export const useWagmiUser = ({
 
   return {
     user,
+    walletAccount,
     signer,
     currentConnector,
     connect,

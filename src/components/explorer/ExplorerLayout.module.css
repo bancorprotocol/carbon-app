@@ -1,3 +1,6 @@
+@reference "tailwindcss";
+@reference "#theme";
+
 .layout {
   display: grid;
   place-content: start;
@@ -11,8 +14,7 @@
   place-items: stretch;
 }
 
-/* Below SM */
-@media (max-width: 40rem) {
+@variant max-sm {
   .layout {
     grid-template-columns: 1fr; 
     gap: 16px;

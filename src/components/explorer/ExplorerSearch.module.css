@@ -1,5 +1,5 @@
 @reference "tailwindcss";
-@reference "../../theme.css";
+@reference "#theme";
 
 .search {
   @apply input-container rounded-full border-2 border-main-400;
@@ -44,11 +44,7 @@
   z-index: -1;
   transform: scale(0.7);
   transition: all 0.2s 0.1s var(--ease-out);
-  background-image: linear-gradient(
-    to bottom,
-    var(--color-green, var(--color-green)),
-    var(--color-secondary, var(--color-secondary))
-  );
+  background-image: var(--main-gradient);
 }
 
 .search:active button[type='submit'] svg {

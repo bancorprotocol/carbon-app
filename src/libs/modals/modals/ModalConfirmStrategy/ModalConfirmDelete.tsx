@@ -43,7 +43,7 @@ export default function ModalConfirmDelete({
     );
   };
 
-  const editPrices = () => closeModal(id);
+  const close = () => closeModal(id);
 
   return (
     <Modal id={id} className="grid gap-16">
@@ -57,33 +57,42 @@ export default function ModalConfirmDelete({
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />
       {!isGradient && (
-        <article className="bg-main-900/40 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
+        <article className="bg-main-900/80 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
           <h3 className="text-14 font-medium">Did you know?</h3>
           <Link
-            onClick={editPrices}
+            onClick={close}
             disabled={isAwaiting || isProcessing}
             to={editPricePage.to}
             params={{ strategyId: strategy.id }}
             search={editPricePage.search}
-            className="btn-primary-gradient row-span-2 self-center"
+            className="btn-main-gradient row-span-2 self-center"
           >
             Edit Prices
           </Link>
-          <p className="text-12 text-white/80">
+          <p className="text-12 text-main-0/80">
             Editing prices is cheaper and keeps your strategy working for you.
           </p>
         </article>
       )}
+      <article className="bg-main-900/80 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded-2xl p-16">
+        <h3 className="text-14 font-medium">Watch out</h3>
+        <Button
+          onClick={onClick}
+          loading={isPending}
+          loadingChildren={loadingChildren}
+          className="btn-error-gradient row-span-2 self-center"
+          data-testid="delete-strategy-btn"
+        >
+          Delete Strategy
+        </Button>
+        <p className="text-12 text-main-0/80">
+          This is definitive. Once deleted the strategy can't be restored.
+        </p>
+      </article>
 
-      <Button
-        variant="white"
-        onClick={onClick}
-        loading={isPending}
-        loadingChildren={loadingChildren}
-        data-testid="delete-strategy-btn"
-      >
-        Delete Strategy
-      </Button>
+      <button type="reset" className="btn-on-surface" onClick={close}>
+        Cancel
+      </button>
     </Modal>
   );
 }

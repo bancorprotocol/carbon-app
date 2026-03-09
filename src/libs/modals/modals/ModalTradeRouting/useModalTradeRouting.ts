@@ -26,7 +26,7 @@ export const useModalTradeRouting = ({
     sourceBalance,
   },
 }: Props) => {
-  const { user } = useWagmi();
+  const { user, openConnect } = useWagmi();
   const { openModal, closeModal } = useModal();
   const sourceFiatPrice = useGetTokenPrice(source.address);
   const targetFiatPrice = useGetTokenPrice(target.address);
@@ -63,7 +63,7 @@ export const useModalTradeRouting = ({
 
   const handleCTAClick = useCallback(() => {
     if (!user) {
-      return openModal('wallet');
+      return openConnect();
     }
 
     if (isPending || isError) {

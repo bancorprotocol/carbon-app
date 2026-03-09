@@ -211,5 +211,6 @@ export const commonConfig: AppConfig = {
     // walkthroughId: 'i2ok96zcpzqw',
     useDexAggregator: false, // !navigator.webdriver, // use sdk in E2E
     useEIP7702: true,
+    useSeedData: true,
   },
 };

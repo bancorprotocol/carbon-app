@@ -35,7 +35,7 @@ interface CallStatus {
   chainId: string;
   /** true if the wallet executed the calls atomically. false if the wallet executed the calls non-atomically. */
   atomic: boolean;
-  receipts: {
+  receipts?: {
     logs: [];
     status: '0x1' | '0x0';
     blockHash: string;
@@ -43,11 +43,6 @@ interface CallStatus {
     gasUsed: string;
     transactionHash: string;
   }[];
-}
-
-interface Asset {
-  address: string;
-  rawAmount: string;
 }
 
 async function repeat<T>(cb: () => Promise<T>): Promise<T> {
@@ -75,9 +70,10 @@ export const useBatchTransaction = () => {
   const { dispatchNotification, removeNotification } = useNotifications();
 
   const allowBatch = useRef<boolean>(null);
-  // Note: can can't access user from useWagmi because `useBatchTransaction` is used in useWagmi
 
-  const canBatchTransactions = useCallback(async (user: string) => {
+  // Note: can can't access user from useWagmi because `useBatchTransaction` is used in useWagmi
+  const canBatchTransactions = useCallback(async (user?: string) => {
+    if (!user) return false;
     if (!config.ui.useEIP7702) return false;
     if (!window.ethereum) return false;
     if (typeof allowBatch.current !== 'boolean') {

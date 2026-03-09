@@ -124,7 +124,7 @@ export const InputBudget: FC<Props> = (props) => {
             className={`
               text-24 font-medium grow text-ellipsis bg-transparent focus:outline-hidden
               ${error ? 'text-error' : ''}
-              ${disabled ? 'text-white/40' : ''}
+              ${disabled ? 'text-main-0/40' : ''}
               ${disabled ? 'cursor-not-allowed' : ''}
             `}
             onFocus={onFocus}
@@ -139,7 +139,7 @@ export const InputBudget: FC<Props> = (props) => {
           </div>
         </div>
         <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10">
-          <p className="flex items-center gap-5 text-white/60">{priceText}</p>
+          <p className="flex items-center gap-5 text-main-0/60">{priceText}</p>
           {user && max && !maxIsLoading && (
             <button
               disabled={disabled}
@@ -147,10 +147,10 @@ export const InputBudget: FC<Props> = (props) => {
               onClick={setMax}
               className="group/budget-input flex items-center gap-4"
             >
-              <span className="text-white/60">
+              <span className="text-main-0/60">
                 {editType === 'deposit' ? 'Wallet:' : 'Allocated:'}
               </span>
-              <span className="text-white">{prettifyNumber(max)}</span>
+              <span className="text-main-0">{prettifyNumber(max)}</span>
               <span className="text-gradient hover:text-secondary focus:text-secondary active:text-secondary group-disabled/budget-input:text-primary/40">
                 MAX
               </span>

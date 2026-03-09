@@ -46,7 +46,7 @@ export const TrackerDialog = ({ opened, setOpened, progress }: Props) => {
                     <path
                       className="transition-[stroke-dashoffset] transition-duration-300"
                       fill="none"
-                      stroke="black"
+                      stroke="var(--color-main-950)"
                       d="M 2 13 L 8 19 L 23 5"
                       strokeWidth="2"
                       strokeDasharray="30"

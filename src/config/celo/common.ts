@@ -144,5 +144,7 @@ export const commonConfig: AppConfig = {
     },
     // walkthroughId: 'uouygtywoj3c',
     useDexAggregator: true,
+    useSeedData: true,
+    useEIP7702: true,
   },
 };

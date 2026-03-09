@@ -4,9 +4,7 @@ import { useStore } from 'store';
 import { FormEvent, useCallback, useId, useState } from 'react';
 import { TradeSettingsData } from 'components/trade/settings/utils';
 import { TradeSettingsRow } from 'components/trade/settings/TradeSettingsRow';
-import { cn } from 'utils/helpers';
 import { useDialog, useOnDialogClose } from 'hooks/useDialog';
-import style from 'components/strategies/common/form.module.css';
 
 const toSlippagePreset = (values: string[]) => {
   return values.map((value) => ({ label: `${value}%`, value }));
@@ -95,7 +93,7 @@ export const MainMenuTradeSettings = () => {
       >
         <form
           method="dialog"
-          className={cn(style.form, 'grid gap-40 md:min-w-[440px]')}
+          className="form grid gap-40 md:min-w-[440px]"
           onSubmit={submit}
           onReset={resetAll}
         >
@@ -104,7 +102,7 @@ export const MainMenuTradeSettings = () => {
             {!isAllSettingsDefault && (
               <button
                 type="reset"
-                className="text-14 text-white p-8 rounded-md"
+                className="text-14 text-main-0 p-8 rounded-md"
               >
                 Reset All
               </button>
@@ -121,7 +119,7 @@ export const MainMenuTradeSettings = () => {
           {settingsData.map((item) => (
             <TradeSettingsRow key={item.id} item={item} />
           ))}
-          <button className="btn-primary-gradient" type="submit">
+          <button className="btn-main-gradient" type="submit">
             Save Changes
           </button>
         </form>

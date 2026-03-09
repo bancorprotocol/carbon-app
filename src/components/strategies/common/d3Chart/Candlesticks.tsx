@@ -18,7 +18,7 @@ export function Candlesticks({ data }: CandlesticksProps) {
           ? 'url(#svg-sell-gradient)'
           : isDown
             ? 'url(#svg-buy-gradient)'
-            : 'white';
+            : 'var(--color-main-0)';
 
         let height = 5;
         let y = yScale(d.open);

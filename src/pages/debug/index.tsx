@@ -11,6 +11,7 @@ import { DebugOrderBook } from 'components/debug/DebugOrderBook';
 import { DebugSDKConfig } from 'components/debug/DebugSDKConfig';
 import { DebugConfig } from 'components/debug/DebugConfig';
 import { DebugFeatureFlag } from 'components/debug/DebugFeatureFlag';
+import { DebugUniswap } from 'components/debug/DebugUniswap';
 
 export const DebugPage = () => {
   return (
@@ -28,6 +29,7 @@ export const DebugPage = () => {
         <DebugOrderBook />
         <DebugConfig />
         <DebugSDKConfig />
+        <DebugUniswap />
       </div>
     </Page>
   );

@@ -65,7 +65,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
           replace={true}
           aria-current={pathName.includes(link.id) ? 'page' : 'false'}
           data-testid={`edit-${link.id}`}
-          className="px-8 py-6 grid place-items-center flex-1 text-white/60 tab-anchor aria-page:tab-focus 2xl:py-16 sm:px-24 2xl:justify-items-start hover:bg-main-400/60"
+          className="px-8 py-6 grid place-items-center flex-1 text-main-0/60 tab-anchor aria-page:tab-focus 2xl:py-16 sm:px-24 2xl:justify-items-start hover:bg-main-400/60"
         >
           <span className="text-12 sm:text-14">{link.type}</span>
           <div className="flex items-center gap-8 text-10 sm:text-16">

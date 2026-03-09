@@ -5,7 +5,7 @@ import { StrategyType } from 'libs/routing';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { LimitRangeSection } from 'components/simulator/input/BuySellBlockNew/LimitRangeSection';
-import { LogoImager } from 'components/common/imager/Imager';
+import { TokenLogo } from 'components/common/imager/Imager';
 import { BuySellHeader } from 'components/simulator/input/BuySellBlockNew/Header';
 import { BudgetSection } from 'components/simulator/input/BuySellBlockNew/BudgetSection';
 import {
@@ -83,7 +83,7 @@ export const BuySellBlock: FC<Props> = ({
           <Tooltip element={tooltipText}>
             <span>{isBuy ? 'Buy Low' : 'Sell High'}</span>
           </Tooltip>
-          <LogoImager alt="Token" src={base.logoURI} className="size-18" />
+          <TokenLogo token={base} size={18} />
           <span>{base.symbol}</span>
         </h2>
       </BuySellHeader>

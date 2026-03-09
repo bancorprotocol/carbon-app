@@ -111,8 +111,8 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
   useEffect(() => {
     if (open) return;
     const selector = '[role="option"][aria-selected="true"]';
-    const listbox = document.getElementById(listboxId)!;
-    const selected = listbox.querySelector<HTMLElement>(selector);
+    const listbox = document.getElementById(listboxId);
+    const selected = listbox?.querySelector<HTMLElement>(selector);
     selected?.setAttribute('aria-selected', 'false');
   }, [open, listboxId]);
 
@@ -200,11 +200,11 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
       <div
         role="dialog"
         className={cn(
-          'rounded-lg bg-main-600/80 backdrop-blur-sm absolute left-0 top-full z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
+          'rounded-lg bg-main-600/90 backdrop-blur-sm absolute left-0 top-full z-30 mt-10 flex max-h-[400px] w-full flex-col overflow-hidden sm:max-h-[600px] md:mt-20',
           style.dialog,
         )}
       >
-        <header className="flex gap-8 border-b border-white/40 p-12">
+        <header className="flex gap-8 border-b border-main-0/40 p-12">
           <RadioGroup>
             {Object.entries(tabs).map(([tab, label]) => (
               <Radio
@@ -214,7 +214,7 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
                 className="flex items-center gap-8"
               >
                 {label}
-                <span className="bg-main-600 text-10 rounded-full px-8 py-4">
+                <span className="bg-main-600 text-10 rounded-full px-8 py-4 box-content min-w-[4ch] text-center">
                   {filters[tab as FocusTab].length}
                 </span>
               </Radio>

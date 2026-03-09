@@ -4,6 +4,7 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import tailwindcss from '@tailwindcss/vite';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
+import { sri } from 'vite-plugin-sri3';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -47,6 +48,9 @@ export default defineConfig(({ mode }) => {
       }),
     );
   }
+
+  // Should be at the end (except if there is a compression plugin)
+  plugins.push(sri());
 
   return {
     optimizeDeps: {
