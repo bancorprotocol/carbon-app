@@ -8,7 +8,7 @@ interface Props {
 export const RoutingExchanges: FC<Props> = ({ path }) => {
   const exchanges = useMemo(() => {
     const set = new Set(
-      path.map((p) => p.exchange).filter((e) => e !== 'Unwrap'),
+      path.map((p) => p.exchange).filter((e) => e !== 'Unwrap' && e !== 'Wrap'),
     );
     return Array.from(set);
   }, [path]);
@@ -16,7 +16,7 @@ export const RoutingExchanges: FC<Props> = ({ path }) => {
     <ul className="flex gap-8 text-12 flex-wrap">
       {exchanges.map((exchange) => (
         <li
-          className="text-nowrap p-8 border border-main-400 rounded-2xl"
+          className="text-nowrap px-8 py-4 border border-main-400 rounded-2xl"
           key={exchange}
         >
           {exchangeNames[exchange]}

@@ -11,6 +11,7 @@ import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeCha
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 import { OrderDirection } from 'components/strategies/common/OrderDirection';
 import style from 'components/strategies/common/order.module.css';
+import config from 'config';
 
 const url = '/trade/market';
 export const TradeMarket = () => {
@@ -64,6 +65,11 @@ export const TradeMarket = () => {
               isBuy={isBuy}
               data-testid={isBuy ? 'buy-form' : 'sell-form'}
             />
+            {!!config.ui.useDexAggregator && (
+              <footer className="grid place-items-center text-14">
+                Powered by Bancor Solver
+              </footer>
+            )}
           </div>
         </article>
         <Link

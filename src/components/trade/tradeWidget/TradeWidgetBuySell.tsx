@@ -7,8 +7,6 @@ import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { prettifyNumber } from 'utils/helpers';
-import { useTradePairs } from '../useTradePairs';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { isZero } from 'components/strategies/common/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { TokenLogo } from 'components/common/imager/Imager';
@@ -32,7 +30,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
   const { user } = useWagmi();
   const { openModal } = useModal();
-  const { isPending: isTradePairPending } = useTradePairs();
   const navigate = useNavigate({ from: '/trade/market' });
   const {
     sourceInput,
@@ -133,10 +130,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     if (!user) return 'Connect Wallet';
     return isBuy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
   })();
-
-  if (isTradePairPending || liquidityQuery.isPending) {
-    return <CarbonLogoLoading className="h-80 m-20" />;
-  }
 
   if (!source || !target) return null;
 
@@ -276,7 +269,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       )}
 
       {showRoutingPath && !!routingPath && (
-        <div className="grid gap-8 px-16 py-8 rounded-md bg-main-500/60">
+        <div className="grid gap-8 px-16 py-8 rounded-md bg-main-900/40">
           <h3 className="text-12">Exchanges:</h3>
           <RoutingExchanges path={routingPath} />
         </div>
