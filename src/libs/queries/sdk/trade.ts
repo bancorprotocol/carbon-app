@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useCarbonInit } from 'libs/sdk/context';
@@ -31,7 +31,7 @@ type Props = {
   targetToken: Token;
   input: string;
   isTradeBySource: boolean;
-  enabled: boolean;
+  // enabled: boolean;
 };
 
 export interface TradeParams {
@@ -151,14 +151,8 @@ const toDecimal = (amount: string, token: Token) => {
 };
 
 export const useGetTradeData = (props: Props) => {
-  const dexValue = useDexAggregatorData({
-    ...props,
-    enabled: props.enabled,
-  });
-  const sdkValue = useSDKTradeData({
-    ...props,
-    enabled: props.enabled,
-  });
+  const dexValue = useDexAggregatorData(props);
+  const sdkValue = useSDKTradeData(props);
   return config.ui.useDexAggregator ? dexValue : sdkValue;
 };
 
@@ -167,7 +161,6 @@ export const useDexAggregatorData = ({
   input,
   sourceToken,
   targetToken,
-  enabled,
 }: Props) => {
   const { trade } = useStore();
 
@@ -193,7 +186,6 @@ export const useDexAggregatorData = ({
           actionsWei: [],
         };
       }
-
       const inputToken = isTradeBySource ? sourceToken : targetToken;
       const res = await dexAggregator.quote({
         chainId: config.network.chainId,
@@ -203,7 +195,6 @@ export const useDexAggregatorData = ({
         tradeBySource: isTradeBySource,
         slippage: new SafeDecimal(trade.settings.slippage).mul(100).toNumber(),
       });
-      // TODO: manage
       if (!res.tradeFound) throw new Error('Trade not found');
       const totalSourceAmount = fromDecimal(res.sourceAmount, sourceToken);
       const totalTargetAmount = fromDecimal(res.targetAmount, targetToken);
@@ -219,7 +210,8 @@ export const useDexAggregatorData = ({
         quoteId: res.id,
       };
     },
-    enabled: !!enabled && !!config.ui.useDexAggregator,
+    placeholderData: keepPreviousData,
+    enabled: !!config.ui.useDexAggregator,
     gcTime: 0,
     retry: 1,
   });
@@ -230,7 +222,6 @@ export const useSDKTradeData = ({
   input,
   sourceToken,
   targetToken,
-  enabled,
 }: Props) => {
   const { isInitialized } = useCarbonInit();
 
@@ -262,7 +253,7 @@ export const useSDKTradeData = ({
         !isTradeBySource,
       );
     },
-    enabled: !!enabled && isInitialized && !config.ui.useDexAggregator,
+    enabled: isInitialized && !config.ui.useDexAggregator,
     gcTime: 0,
     retry: 1,
   });

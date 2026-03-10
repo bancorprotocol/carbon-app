@@ -4,12 +4,13 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { useTradeCtx } from 'components/trade/context';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
-import { useGetTokenBalance } from 'libs/queries';
 import { StrategyDirection } from 'libs/routing';
 import { cn } from 'utils/helpers';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 import { OrderDirection } from 'components/strategies/common/OrderDirection';
+import { useCallback } from 'react';
+import { TradeMarketSearch } from 'libs/routing/routes/trade';
 import style from 'components/strategies/common/order.module.css';
 import config from 'config';
 
@@ -19,17 +20,23 @@ export const TradeMarket = () => {
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
   const isBuy = search.direction === 'buy';
-  const balanceQuery = useGetTokenBalance(isBuy ? quote : base);
+
+  const set = useCallback(
+    (params: Partial<TradeMarketSearch>) => {
+      navigate({
+        search: (s) => ({ ...s, ...params }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate],
+  );
 
   const setDirection = (direction: StrategyDirection) => {
-    navigate({
-      params: (params) => params,
-      search: (previous) => ({
-        ...previous,
-        direction,
-      }),
-      replace: true,
-      resetScroll: false,
+    set({
+      direction,
+      sourceInput: undefined,
+      targetInput: undefined,
     });
   };
 
@@ -61,9 +68,8 @@ export const TradeMarket = () => {
             <TradeWidgetBuySell
               source={isBuy ? quote : base}
               target={isBuy ? base : quote}
-              sourceBalanceQuery={balanceQuery}
+              set={set}
               isBuy={isBuy}
-              data-testid={isBuy ? 'buy-form' : 'sell-form'}
             />
             {!!config.ui.useDexAggregator && (
               <footer className="grid place-items-center text-14">
