@@ -2,6 +2,7 @@ import { GradientOrder, StaticOrder } from 'components/strategies/common/types';
 import {
   isEmptyGradientOrder,
   isEmptyOrder,
+  isFullRange,
 } from 'components/strategies/common/utils';
 import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
 import {
@@ -87,6 +88,14 @@ export const activityDescription = (activity: Activity) => {
         const buy = order('Buy', strategy.buy);
         const sell = order('Sell', strategy.sell);
         return [buy, sell].filter((v) => !!v).join(' / ');
+      } else if (
+        isFullRange(base, quote, strategy.buy.min, strategy.sell.max)
+      ) {
+        const fullOrder = () => {
+          const prices = tokenRange(0, Infinity, quote, { decimals: 0 });
+          return `${base.symbol}: ${prices}`;
+        };
+        return `Buy ${fullOrder()} / Sell ${fullOrder()}`;
       } else {
         const order = (prefix: string, order: StaticOrder) => {
           if (isEmptyOrder(order)) return '';
