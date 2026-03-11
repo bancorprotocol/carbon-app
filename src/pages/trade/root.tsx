@@ -1,4 +1,4 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, useSearch } from '@tanstack/react-router';
 import { NotFound } from 'components/common/NotFound';
 import { StrategyFormProvider } from 'components/strategies/common/StrategyFormProvider';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
@@ -11,9 +11,11 @@ import style from 'components/strategies/common/root.module.css';
 
 export const TradeRoot = () => {
   const { base, quote, isPending } = usePersistLastPair({ from: '/trade' });
-  const { marketPrice } = useMarketPrice({ base, quote });
+  const search = useSearch({ from: '/trade' });
+  const priceQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? priceQuery.marketPrice?.toString();
 
-  if (isPending) {
+  if (isPending || (!search.marketPrice && priceQuery.isPending)) {
     return <CarbonLogoLoading className="h-80 place-self-center" />;
   }
   if (!base || !quote) {
@@ -26,7 +28,11 @@ export const TradeRoot = () => {
     );
   }
   return (
-    <StrategyFormProvider base={base} quote={quote} marketPrice={marketPrice}>
+    <StrategyFormProvider
+      base={base}
+      quote={quote}
+      marketPrice={Number(marketPrice)}
+    >
       <div
         className={cn(
           style.root,

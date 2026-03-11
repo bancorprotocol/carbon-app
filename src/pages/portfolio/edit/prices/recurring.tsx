@@ -113,8 +113,8 @@ export const EditPricesStrategyRecurringPage = () => {
   const { strategy } = useEditStrategyCtx();
   const { base, quote, buy, sell } = strategy;
   const search = useSearch({ from: url });
-  const marketQuery = useMarketPrice({ base, quote });
-  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
+  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? externalPrice?.toString();
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder<Search>(url);
 
   const updatePrices: OnPriceUpdates = useCallback(

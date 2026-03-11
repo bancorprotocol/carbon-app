@@ -78,8 +78,8 @@ export const EditPricesStrategyDisposablePage = () => {
   const { base, quote, buy, sell } = strategy;
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
-  const marketQuery = useMarketPrice({ base, quote });
-  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
+  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
   const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
   const direction = order.direction ?? 'sell';

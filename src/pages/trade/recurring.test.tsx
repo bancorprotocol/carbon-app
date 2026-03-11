@@ -16,7 +16,8 @@ import { TradeRecurring } from './recurring';
 
 const basePath = '/trade/recurring';
 
-const marketRates = mockMarketRate({ USDC: 1, ETH: 2800 });
+const marketPrices = { USDC: 1, ETH: 2800 };
+const marketRates = mockMarketRate(marketPrices);
 
 const mockServer = new MockServer([
   marketRateHandler(marketRates),
@@ -27,8 +28,9 @@ beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());
 
 const WrappedRecurring = ({ base, quote }: { base: Token; quote: Token }) => {
+  const marketPrice = marketPrices[base.symbol as 'USDC' | 'ETH'];
   return (
-    <StrategyFormProvider base={base} quote={quote}>
+    <StrategyFormProvider base={base} quote={quote} marketPrice={marketPrice}>
       <TradeRecurring />
     </StrategyFormProvider>
   );
