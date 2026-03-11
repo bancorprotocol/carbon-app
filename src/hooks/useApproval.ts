@@ -96,18 +96,30 @@ export const useGetApprovalTokens = () => {
         }
       }
 
-      const approvalTokens: ApprovalToken[] = [];
+      const preApproved: ApprovalToken[] = [];
+      const needApproval: ApprovalToken[] = [];
       for (const [key, amount] of Object.entries(approval)) {
         if (amount === 0n) continue;
         const [address, spender] = key.split('_');
         const token = getTokenById(address);
         if (!token) throw new Error('Could not find token');
         const tokenAmount = formatUnits(amount, token.decimals);
-        approvalTokens.push({ spender, amount: tokenAmount, ...token });
+        const approval = { spender, amount: tokenAmount, ...token };
+        if (address === NATIVE_TOKEN_ADDRESS) {
+          preApproved.push(approval);
+        } else {
+          const allowance = await Token(address).read.allowance(user, spender);
+          if (allowance < amount) {
+            needApproval.push(approval);
+          } else {
+            preApproved.push(approval);
+          }
+        }
       }
-      return approvalTokens;
+      if (!needApproval.length) return [];
+      return [...preApproved, ...needApproval];
     },
-    [getTokenById],
+    [Token, getTokenById],
   );
 };
 

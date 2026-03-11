@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { isAddress, getAddress } from 'ethers';
+import { isAddress, getAddress, parseUnits } from 'ethers';
 import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
@@ -364,7 +364,7 @@ export const useCreateStrategyQuery = () => {
       );
       const getRawAmount = (address: string, amount: string) => {
         const token = getTokenById(address)!;
-        return new SafeDecimal(amount).mul(10 ** token.decimals).toString();
+        return parseUnits(amount, token.decimals).toString();
       };
       unsignedTx.customData = {
         spender: config.addresses.carbon.carbonController,
