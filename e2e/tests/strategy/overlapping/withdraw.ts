@@ -32,7 +32,10 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
     await form.budget().fill(input.budget);
     await edit.submit('withdraw');
 
-    await tokenApproval.checkApproval([base, quote]);
+    await tokenApproval.checkApproval([
+      { symbol: base, amount: '0' },
+      { symbol: quote, amount: '0' },
+    ]);
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await page.mouse.move(0, 0); // Prevent mouse to open tooltip
 

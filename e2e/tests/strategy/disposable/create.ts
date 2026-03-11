@@ -42,9 +42,13 @@ export const create = (testCase: CreateStrategyTestCase) => {
 
     const tokenApproval = new TokenApprovalDriver(page);
     if (direction === 'buy') {
-      await tokenApproval.checkApproval([quote]);
+      await tokenApproval.checkApproval([
+        { symbol: quote, amount: testCase.input.create.budget },
+      ]);
     } else {
-      await tokenApproval.checkApproval([base]);
+      await tokenApproval.checkApproval([
+        { symbol: base, amount: testCase.input.create.budget },
+      ]);
     }
 
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
