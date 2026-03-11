@@ -3,7 +3,7 @@ import { PairLogoName } from 'components/common/DisplayPair';
 import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { FC, useId, useMemo, useState } from 'react';
 import { StrategyStatusTag } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
-import { cn, getUsdPrice, tokenAmount } from 'utils/helpers';
+import { cn, getUsdPrice, prettifyNumber, tokenAmount } from 'utils/helpers';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import DashboardIcon from 'assets/icons/dashboard.svg?react';
 import {
@@ -91,7 +91,7 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
       <td>
         <StrategyStatusTag status={status} isExplorer={isExplorer} />
       </td>
-      <td>{strategy.tradeCount}</td>
+      <td>{prettifyNumber(strategy.tradeCount, { isInteger: true })}</td>
       <td>
         <Tooltip element={getUsdPrice(totalBalance)}>
           <p>{getUsdPrice(totalBalance, { abbreviate: true })}</p>

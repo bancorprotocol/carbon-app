@@ -39,7 +39,7 @@ export const commonConfig: AppConfig = {
     name: 'Sei',
     logoUrl: IconSeiLogo,
     chainId: 1329,
-    blockExplorer: { name: 'Seitrace', url: 'https://seitrace.com' },
+    blockExplorer: { name: 'Seiscan', url: 'https://seiscan.io' },
     rpc: {
       url: 'https://evm-rpc.sei-apis.com',
       headers: {
