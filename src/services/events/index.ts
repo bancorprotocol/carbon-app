@@ -97,10 +97,26 @@ const exploreEvents: CarbonEventsInput<ExploreProps> = {
   exploreSearch: (params) => sendGTMEvent('explore', 'exploreSearch', params),
 };
 
+// Migrate
+interface MigrateProps {
+  migrate: {
+    token_pair: string;
+    strategy_base_token: string;
+    strategy_quote_token: string;
+    strategy_category: 'static' | 'gradient';
+    strategy_type: StrategyType;
+    source_amm: string;
+  };
+}
+const migrateEvents: CarbonEventsInput<MigrateProps> = {
+  migrate: (params) => sendGTMEvent('migrate', 'migrate', params),
+};
+
 export const carbonEvents = {
   general: generalEvents,
   wallet: walletEvents,
   strategy: strategyEvents,
   trade: tradeEvents,
   explore: exploreEvents,
+  migrate: migrateEvents,
 };
