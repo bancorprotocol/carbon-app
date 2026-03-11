@@ -3,7 +3,6 @@ import { EmptyCart } from 'components/cart/EmptyCart';
 import { clearCart, useStrategyCart } from 'components/cart/utils';
 import { Button } from 'components/common/button';
 import { useWagmi } from 'libs/wagmi';
-import { cn } from 'utils/helpers';
 import { FormEvent, useMemo, useState } from 'react';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { QueryKey, useGetTokenBalances, useQueryClient } from 'libs/queries';
@@ -19,7 +18,6 @@ import { isGradientStrategy } from 'components/strategies/common/utils';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import { TransactionRequest } from 'ethers';
-import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 
 const batcher = config.addresses.carbon.batcher;
@@ -234,10 +232,7 @@ export const CartPage = () => {
 
   return (
     <form
-      className={cn(
-        'px-content pb-30 xl:px-50 mx-auto grid max-w-[1920px] grow content-start gap-16 pt-20',
-        style.form,
-      )}
+      className="form px-content pb-30 xl:px-50 mx-auto grid max-w-[1920px] grow content-start gap-16 pt-20"
       onSubmit={submit}
     >
       <h1 className="text-18 flex items-center gap-8">
@@ -255,10 +250,7 @@ export const CartPage = () => {
         <div className="grid place-items-center gap-20 p-20">
           <label
             htmlFor="approve-warnings"
-            className={cn(
-              style.approveWarnings,
-              'surface rounded-lg text-14 font-medium flex items-center p-16 py-8 gap-8 place-self-center text-main-0/60',
-            )}
+            className="approve-warnings surface rounded-lg text-14 font-medium flex items-center p-16 py-8 gap-8 place-self-center text-main-0/60"
           >
             <input
               id="approve-warnings"

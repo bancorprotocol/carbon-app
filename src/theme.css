@@ -491,9 +491,12 @@
   column-span: all;
 }
 
-@utility grid-stack {
+@utility grid-stack-container {
   display: grid;
   grid-template-areas: "stack";
+}
+@utility grid-stack {
+  grid-area: stack;
 }
 
 @utility grid-area-* {
@@ -535,6 +538,28 @@
   }
 }
 
+
+@utility form {
+  &:invalid button[type="submit"],
+  &:has(.error-message) button[type="submit"],
+  &:has(.loading-message) button[type="submit"],
+  &:has(.approve-warnings input:not(:checked)) button[type="submit"] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &:invalid button[type="submit"]:hover,
+  &:has(.error-message) button[type="submit"]:hover {
+    border: none;
+  }
+
+  &:invalid .add-cart,
+  &:has(.error-message) .add-cart,
+  &:has(.loading-message) .add-cart {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
 
 @custom-variant aria-page (&[aria-current="page"]);
 @custom-variant aria-location (&[aria-current="location"]);

@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { useWagmi } from 'libs/wagmi';
 import strategyStyle from 'components/strategies/overview/StrategyContent.module.css';
-import formStyle from 'components/strategies/common/form.module.css';
 import {
   AnyCartStrategy,
   AnyCartStrategyStorage,
@@ -142,7 +141,7 @@ export const addStrategyToCart = (
     const translateY = centerY - elRect.top - radius;
     return `translate(${translateX}px, ${translateY}px)`;
   };
-  const source = document.querySelector<HTMLElement>(`.${formStyle.addCart}`);
+  const source = document.querySelector<HTMLElement>(`.add-cart`);
   const target = document.getElementById('menu-cart-link');
   const el = document.getElementById('animate-cart-indicator');
   if (!source || !target || !el) return;

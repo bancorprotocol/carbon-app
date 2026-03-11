@@ -1,13 +1,11 @@
 import { FC, FormEvent, MouseEvent, ReactNode, useState } from 'react';
 import { useNavigate } from 'libs/routing';
 import { Button } from 'components/common/button';
-import { cn } from 'utils/helpers';
 import { useWagmi } from 'libs/wagmi';
 import {
   addStrategyToCart,
   toGradientCartStorage,
 } from 'components/cart/utils';
-import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 import { useTradeCtx } from 'components/trade/context';
 import { FormGradientOrder } from '../types';
@@ -73,16 +71,11 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
   return (
     <form
       onSubmit={create}
-      className={cn(style.form, 'flex flex-1 flex-col gap-20')}
+      className="form flex flex-1 flex-col gap-20"
       data-testid="create-strategy-form"
     >
       {children}
-      <div
-        className={cn(
-          style.approveWarnings,
-          'rounded-lg bg-main-900/60 text-14 grid gap-16 p-20 text-main-0/60',
-        )}
-      >
+      <div className="approve-warnings rounded-lg bg-main-900/60 text-14 grid gap-16 p-20 text-main-0/60">
         <p className="warning-message text-12 text-main-0/60">
           Please confirm before proceeding.
         </p>
@@ -104,7 +97,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
         <>
           {config.ui.showCart && (
             <Button
-              className={cn(style.addCart, 'btn-on-background shrink-0')}
+              className="add-cart btn-on-background shrink-0"
               type="button"
               size="lg"
               fullWidth
