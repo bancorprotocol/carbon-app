@@ -19,7 +19,7 @@ export const ErrorSDKStartSync = () => {
         </hgroup>
         <div className="grid gap-16">
           <button
-            className="btn-main-gradient p-12 sm:p-16 flex gap-8 items-center justify-center font-title text-16 sm:text-20 font-bold"
+            className="btn-main-gradient p-12 sm:p-16 flex gap-8 items-center justify-center text-16 sm:text-20"
             onClick={() => location.reload()}
           >
             <IconRefresh className="size-16 sm:size-24" />
