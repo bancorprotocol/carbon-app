@@ -16,6 +16,7 @@ export const App = () => {
   // Keep track of connection
   const { user, disconnect } = useWagmi();
   useEffect(() => {
+    if (navigator.webdriver) return;
     if (!config.policiesLastUpdated) return;
     const last = lsService.getItem('lastConnection');
     const lastPrivacy = new Date(config.policiesLastUpdated).getTime();
