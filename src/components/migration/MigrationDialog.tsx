@@ -21,6 +21,7 @@ import IconClose from 'assets/icons/X.svg?react';
 import { MigrationCard } from './MigrationCard';
 import { DotPulse } from 'components/common/DotPulse/DotPulse';
 import config from 'config';
+import { carbonEvents } from 'services/events';
 
 interface Props {
   position: MigratedPosition;
@@ -144,6 +145,14 @@ export const PositionDialog: FC<Props> = (props) => {
         description: 'Liquidity position was successfully migrated',
         txHash: tx.hash,
         testid: 'migration',
+      });
+      carbonEvents.migrate.migrate({
+        token_pair: `${p.base.symbol}/${p.quote.symbol}`,
+        strategy_base_token: p.base.symbol,
+        strategy_quote_token: p.quote.symbol,
+        strategy_category: 'static',
+        strategy_type: 'overlapping',
+        source_amm: p.dex,
       });
       const keys = [
         QueryKey.strategiesByUser(user),
