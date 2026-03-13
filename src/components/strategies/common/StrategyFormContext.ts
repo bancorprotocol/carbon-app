@@ -7,13 +7,19 @@ const defaultToken = () => ({
   symbol: '',
 });
 
-export const TradeContext = createContext<{ base: Token; quote: Token }>({
+interface TradeProps {
+  base: Token;
+  quote: Token;
+  marketPrice?: number;
+}
+
+export const StrategyFormContext = createContext<TradeProps>({
   base: defaultToken(),
   quote: defaultToken(),
 });
 
-export const useTradeCtx = () => {
-  const ctx = useContext(TradeContext);
+export const useStrategyFormCtx = () => {
+  const ctx = useContext(StrategyFormContext);
   if (!ctx) {
     throw new Error('useTradeCtx must be used within a TradeProvider');
   }

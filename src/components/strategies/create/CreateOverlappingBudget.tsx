@@ -12,24 +12,25 @@ import {
 } from 'components/strategies/common/BudgetDistribution';
 import { Token } from 'libs/tokens';
 import { useWagmi } from 'libs/wagmi';
-import { useSearch } from '@tanstack/react-router';
 import { CreateOverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
-import { SetOverlapping } from 'libs/routing/routes/trade';
+import {
+  StrategyDirection,
+  TradeOverlappingSearch,
+} from 'libs/routing/routes/trade';
 
 interface Props {
   base: Token;
   quote: Token;
   buy: CreateOverlappingOrder;
   sell: CreateOverlappingOrder;
-  set: SetOverlapping;
+  anchor?: StrategyDirection;
+  budget?: string;
+  set: (next: TradeOverlappingSearch) => any;
 }
 
-const url = '/trade/overlapping';
 export const CreateOverlappingBudget: FC<Props> = (props) => {
-  const { base, quote, buy, sell, set } = props;
-  const search = useSearch({ from: url });
-  const { anchor, budget } = search;
+  const { base, quote, buy, sell, anchor, budget, set } = props;
   const { user } = useWagmi();
 
   const baseBalance = useGetTokenBalance(base).data;

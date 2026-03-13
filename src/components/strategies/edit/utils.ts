@@ -5,11 +5,6 @@ import {
   isGradientStrategy,
   isZero,
 } from 'components/strategies/common/utils';
-import {
-  toDisposablePricesSearch,
-  toOverlappingPricesSearch,
-  toRecurringPricesSearch,
-} from 'libs/routing/routes/strategyEdit';
 import { AnyStrategy, Strategy } from '../common/types';
 import { useNotifications } from 'hooks/useNotifications';
 import { useWagmi } from 'libs/wagmi';
@@ -46,18 +41,18 @@ export const getEditPricesPage = (
   if (type === 'disposable') {
     return {
       to: '/strategies/edit/$strategyId/prices/disposable',
-      search: toDisposablePricesSearch(strategy, editType),
+      search: { editType },
     };
   }
   if (type === 'overlapping') {
     return {
       to: '/strategies/edit/$strategyId/prices/overlapping',
-      search: toOverlappingPricesSearch(strategy, editType),
+      search: { editType },
     };
   }
   return {
     to: '/strategies/edit/$strategyId/prices/recurring',
-    search: toRecurringPricesSearch(strategy, editType),
+    search: { editType },
   };
 };
 export const getEditBudgetPage = (

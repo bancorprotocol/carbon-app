@@ -1,188 +1,223 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { SimInputChart } from 'components/simulator/input/SimInputChart';
-import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring';
-import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
-import { StrategyDirection } from 'libs/routing';
-import { SafeDecimal } from 'libs/safedecimal';
 import {
   defaultEnd,
   defaultStart,
   oneYearAgo,
+  outSideMarketWarning,
 } from 'components/strategies/common/utils';
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useCallback, useMemo } from 'react';
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
-import { formatNumber } from 'utils/helpers';
-import { getRecurringPriceMultiplier } from 'components/strategies/create/utils';
+import { getTradeOrder } from 'components/strategies/create/utils';
 import { isEmptyHistory } from 'components/strategies/common/d3Chart/utils';
+import { CreateOrder } from 'components/strategies/create/CreateOrder';
+import {
+  checkIfOrdersOverlap,
+  checkIfOrdersReversed,
+} from 'components/strategies/utils';
+import { OrderBlock } from 'components/strategies/common/types';
+import { StrategySettings } from 'libs/routing/routes/trade';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
+import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
+import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
+import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
+import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 
+const getRecurringError = (buy: OrderBlock, sell: OrderBlock) => {
+  if (checkIfOrdersReversed(buy, sell)) {
+    return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
+  }
+};
+
+const getRecurringWarning = (buy: OrderBlock, sell: OrderBlock) => {
+  if (checkIfOrdersOverlap(buy, sell)) {
+    return 'Notice: your Buy and Sell orders overlap';
+  }
+};
+
+const url = '/simulate/recurring';
 export const SimulatorInputRecurringPage = () => {
-  const searchState = useSearch({ from: '/simulate/recurring' });
+  const search = useSearch({ from: url });
+  const navigate = useNavigate({ from: url });
+  const { setSellOrder, setBuyOrder } = useSetRecurringOrder(url);
+  const { base, quote, marketPrice } = useStrategyFormCtx();
 
-  const { dispatch, state, bounds } = useSimulatorInput({
-    searchState,
-  });
-
-  const [initBuyRange, setInitBuyRange] = useState(true);
-  const [initSellRange, setInitSellRange] = useState(true);
-  const { data, isPending } = useGetTokenPriceHistory({
-    baseToken: searchState.base,
-    quoteToken: searchState.quote,
+  const priceHistory = useGetTokenPriceHistory({
+    baseToken: search.base,
+    quoteToken: search.quote,
     start: oneYearAgo(),
     end: defaultEnd(),
   });
 
-  const handleDefaultValues = useCallback(
-    (direction: StrategyDirection, _sP_: number) => {
-      const init = direction === 'buy' ? initBuyRange : initSellRange;
-      const setInit = direction === 'buy' ? setInitBuyRange : setInitSellRange;
-
-      if (!init) return;
-      setInit(false);
-
-      if (state[direction].max || state[direction].min) {
-        return;
-      }
-      const multiplier = getRecurringPriceMultiplier(direction, 'range');
-      const price = new SafeDecimal(_sP_);
-      const min = price.mul(multiplier.min).toFixed();
-      const max = price.mul(multiplier.max).toFixed();
-
-      if (state[direction].isRange) {
-        dispatch(`${direction}Max`, max);
-        dispatch(`${direction}Min`, min);
-      } else {
-        const value = direction === 'buy' ? max : min;
-        dispatch(`${direction}Max`, value);
-        dispatch(`${direction}Min`, value);
-      }
+  const updatePrices: OnPriceUpdates = useCallback(
+    ({ buy, sell }) => {
+      setBuyOrder({ min: buy.min, max: buy.max });
+      setSellOrder({ min: sell.min, max: sell.max });
     },
-    [
-      dispatch,
-      initBuyRange,
-      initSellRange,
-      setInitBuyRange,
-      setInitSellRange,
-      state,
-    ],
+    [setBuyOrder, setSellOrder],
   );
 
-  useEffect(() => {
-    const _sD_ = Number(searchState.start || defaultStart());
-    const _sP_ = data?.find(({ date }) => date === _sD_)?.close;
-    if (_sP_) {
-      handleDefaultValues('buy', _sP_);
-      handleDefaultValues('sell', _sP_);
-    }
-  }, [handleDefaultValues, data, searchState.start]);
+  const sellOrder = getTradeOrder(
+    {
+      direction: 'sell',
+      min: search.sellMin,
+      max: search.sellMax,
+      presetMin: search.sellPresetMin,
+      presetMax: search.sellPresetMax,
+      budget: search.sellBudget,
+      settings: search.sellSettings,
+    },
+    marketPrice,
+  );
+  const buyOrder = getTradeOrder(
+    {
+      direction: 'buy',
+      min: search.buyMin,
+      max: search.buyMax,
+      presetMin: search.buyPresetMin,
+      presetMax: search.buyPresetMax,
+      budget: search.buyBudget,
+      settings: search.buySettings,
+    },
+    marketPrice,
+  );
 
-  useEffect(() => {
-    if (initBuyRange || initSellRange) return;
-    dispatch('base', searchState.base);
-    dispatch('quote', searchState.quote);
-    dispatch('sellMax', '');
-    dispatch('sellMin', '');
-    dispatch('sellBudget', '');
-    dispatch('sellBudgetError', '');
-    dispatch('sellIsRange', true);
-    dispatch('buyMax', '');
-    dispatch('buyMin', '');
-    dispatch('buyBudget', '');
-    dispatch('buyBudgetError', '');
-    dispatch('buyIsRange', true);
-    setInitBuyRange(true);
-    setInitSellRange(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, searchState.base, searchState.quote]);
+  const setSellSetting = useCallback(
+    (settings: StrategySettings) => {
+      setSellOrder({
+        settings,
+        min: undefined,
+        max: undefined,
+        presetMin: undefined,
+        presetMax: undefined,
+      });
+    },
+    [setSellOrder],
+  );
+  const setBuySetting = useCallback(
+    (settings: StrategySettings) => {
+      setBuyOrder({
+        settings,
+        min: undefined,
+        max: undefined,
+        presetMin: undefined,
+        presetMax: undefined,
+      });
+    },
+    [setBuyOrder],
+  );
 
-  const emptyHistory = useMemo(() => isEmptyHistory(data), [data]);
-  const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
+  const sellOutsideMarket = outSideMarketWarning({
+    base,
+    marketPrice,
+    min: sellOrder.min,
+    max: sellOrder.max,
+    isBuy: false,
+  });
+  const buyOutsideMarket = outSideMarketWarning({
+    base,
+    marketPrice,
+    min: buyOrder.min,
+    max: buyOrder.max,
+    isBuy: true,
+  });
+  const isLimit = {
+    buy: buyOrder.settings === 'limit',
+    sell: sellOrder.settings === 'limit',
+  };
+  const { prices, setPrices } = useDebouncePrices(
+    buyOrder,
+    sellOrder,
+    updatePrices,
+  );
+
+  const emptyHistory = useMemo(
+    () => isEmptyHistory(priceHistory.data),
+    [priceHistory.data],
+  );
+  const loadingText = priceHistory.isPending && 'Loading price history...';
+  const noBudgetByOrders =
+    Number(buyOrder.budget) + Number(sellOrder.budget) <= 0;
   const noBudgetText =
-    !emptyHistory && noBudget && 'Please add Sell and/or Buy budgets';
-  const loadingText = isPending && 'Loading price history...';
-  const btnDisabled = isPending || emptyHistory || noBudget;
-
-  const navigate = useNavigate();
+    !emptyHistory && noBudgetByOrders && 'Please add Sell and/or Buy budgets';
+  const btnDisabled = emptyHistory || noBudgetByOrders;
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (btnDisabled) return;
+    if (btnDisabled || !base || !quote) return;
     if (e.currentTarget.querySelector('.error-message')) return;
-    const start = state.start ?? defaultStart();
-    const end = state.end ?? defaultEnd();
+    const chartStart = search.chartStart ?? defaultStart();
+    const chartEnd = search.chartEnd ?? defaultEnd();
 
     navigate({
       to: '/simulate/result',
       search: {
-        base: state.base?.address || '',
-        quote: state.quote?.address || '',
-        buyMin: state.buy.min,
-        buyMax: state.buy.max,
-        buyBudget: state.buy.budget,
-        buyIsRange: state.buy.isRange,
-        sellMin: state.sell.min,
-        sellMax: state.sell.max,
-        sellBudget: state.sell.budget,
-        sellIsRange: state.sell.isRange,
-        start: start.toString(),
-        end: end.toString(),
+        base: base.address,
+        quote: quote.address,
+        buyMin: buyOrder.min,
+        buyMax: buyOrder.max,
+        buyBudget: buyOrder.budget,
+        buyIsRange: buyOrder.settings === 'range',
+        sellMin: sellOrder.min,
+        sellMax: sellOrder.max,
+        sellBudget: sellOrder.budget,
+        sellIsRange: sellOrder.settings === 'range',
+        start: chartStart,
+        end: chartEnd,
         type: 'recurring',
       },
     });
   };
-  const isLimit = { buy: !state.buy.isRange, sell: !state.sell.isRange };
-  const onPriceUpdates: OnPriceUpdates = useCallback(
-    ({ buy, sell }) => {
-      dispatch('buyMin', formatNumber(buy.min), false);
-      dispatch('buyMax', formatNumber(buy.max), false);
-      dispatch('sellMin', formatNumber(sell.min), false);
-      dispatch('sellMax', formatNumber(sell.max), false);
-    },
-    [dispatch],
-  );
-  const prices = {
-    buy: {
-      min: state.buy.min,
-      max: state.buy.max,
-    },
-    sell: {
-      min: state.sell.min,
-      max: state.sell.max,
-    },
-  };
 
-  const _sP_ = useMemo(() => {
-    const start = Number(state.start ?? defaultStart());
-    return data?.find((v) => v.date === start);
-  }, [data, state.start]);
+  const error = getRecurringError(buyOrder, sellOrder);
+  const warning = getRecurringWarning(buyOrder, sellOrder);
 
   return (
     <>
-      <SimInputChart
-        state={state}
-        dispatch={dispatch}
-        bounds={bounds}
-        data={data}
-        isPending={isPending}
-        isError={emptyHistory}
-        prices={prices}
-      >
-        <D3ChartRecurring
-          base={state.base!}
-          quote={state.quote!}
-          isLimit={isLimit}
-          prices={prices}
-          onChange={onPriceUpdates}
-        />
-      </SimInputChart>
+      <StrategyChartSection>
+        <StrategyChartHistory buy={buyOrder} sell={sellOrder}>
+          <D3ChartRecurring
+            base={base}
+            quote={quote}
+            isLimit={isLimit}
+            prices={prices}
+            onChange={setPrices}
+          />
+          <TradeChartContent />
+          <D3PricesAxis prices={prices} />
+        </StrategyChartHistory>
+      </StrategyChartSection>
       <form
         onSubmit={submit}
         className="form grid gap-16 grid-area-[form] content-start animate-scale-up"
         data-testid="create-simulation-form"
       >
         <div className="surface rounded-2xl overflow-clip">
-          <SimInputRecurring state={state} dispatch={dispatch} _sP_={_sP_} />
+          <CreateOrder
+            type="recurring"
+            direction="sell"
+            base={base}
+            quote={quote}
+            order={sellOrder}
+            setOrder={setSellOrder}
+            setSettings={setSellSetting}
+            error={error}
+            warnings={[sellOutsideMarket, warning]}
+          />
+          <CreateOrder
+            type="recurring"
+            direction="buy"
+            base={base}
+            quote={quote}
+            order={buyOrder}
+            setOrder={setBuyOrder}
+            setSettings={setBuySetting}
+            error={error}
+            warnings={[buyOutsideMarket, warning]}
+          />
         </div>
         <input className="approve-warnings hidden" defaultChecked />
         <button

@@ -44,8 +44,8 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
             search={{
               base: ctx.search.base,
               quote: ctx.search.quote,
-              start: ctx.search.start,
-              end: ctx.search.end,
+              chartStart: ctx.search.start,
+              chartEnd: ctx.search.end,
               buyMin: ctx.search.buyMin,
               buyMax: ctx.search.buyMax,
               buyBudget: ctx.search.buyBudget,
@@ -66,8 +66,8 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
             search={{
               base: ctx.search.base,
               quote: ctx.search.quote,
-              start: ctx.search.start,
-              end: ctx.search.end,
+              chartStart: ctx.search.start,
+              chartEnd: ctx.search.end,
               buyMin: ctx.search.buyMin,
               sellMax: ctx.search.sellMax,
               spread: ctx.search.spread,

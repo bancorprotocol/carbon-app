@@ -11,6 +11,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useEditStrategyCtx } from '../edit/EditStrategyContext';
 import { isOverlappingStrategy } from './utils';
 import { getCalculatedPrice } from '../overlapping/utils';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   base: Token;
@@ -86,6 +87,13 @@ export const InitMarketPrice = (props: FieldProps) => {
     setApproved(!!marketPrice && value === marketPrice);
   };
 
+  const setPreset = (preset: string) => {
+    if (!marketPrice) return;
+    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
+    const next = new SafeDecimal(marketPrice).mul(percent).toString();
+    changePrice(next);
+  };
+
   const isDisabled = (form: HTMLFormElement) => {
     if (!form.checkValidity()) return true;
     if (form.querySelector('.loading-message')) return true;
@@ -113,6 +121,7 @@ export const InitMarketPrice = (props: FieldProps) => {
       <InputLimit
         price={localPrice || ''}
         setPrice={changePrice}
+        setPreset={setPreset}
         base={base}
         quote={quote}
         ignoreMarketPriceWarning

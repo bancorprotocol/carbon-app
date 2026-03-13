@@ -18,7 +18,6 @@ import {
 } from 'libs/testing-library/utils/mock';
 import { EditPricesStrategyDisposablePage } from './disposable';
 import { EditStrategyDriver } from 'libs/testing-library/drivers/EditStrategyDriver';
-import { toDisposablePricesSearch } from 'libs/routing/routes/strategyEdit';
 import * as balanceQueries from 'libs/queries/chain/balance';
 
 const basePath = '/strategies/edit/$strategyId/prices/disposable';
@@ -53,20 +52,20 @@ const baseBuyOrder = {
 };
 
 const renderPage = async (
-  type: 'editPrices' | 'renew',
+  editType: 'editPrices' | 'renew',
   strategyParams: MockStrategyParams,
 ) => {
   const strategy: Strategy = mockStrategy(strategyParams);
   const { router } = await renderWithRouter({
     component: () => (
       <EditStrategyProvider strategy={strategy}>
-        <EditStrategyLayout editType={type}>
+        <EditStrategyLayout editType={editType}>
           <EditPricesStrategyDisposablePage />
         </EditStrategyLayout>
       </EditStrategyProvider>
     ),
     basePath,
-    search: toDisposablePricesSearch(strategy, type) as any,
+    search: { editType },
     params: { strategyId: strategy.id },
   });
   return { strategy, router };
