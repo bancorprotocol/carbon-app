@@ -33,13 +33,9 @@ import { EditPriceDisposableSearch } from 'libs/routing/routes/strategyEdit';
 
 type Search = EditPriceDisposableSearch;
 
-const getOrder = (
-  strategy: Strategy,
-  search: Search,
-  marketPrice?: string,
-): EditOrderBlock => {
+const getOrder = (strategy: Strategy, search: Search, marketPrice?: string) => {
   const { buy, sell } = strategy;
-  const defaultDirection = !isEmptyOrder(buy) ? 'buy' : 'sell';
+  const defaultDirection = isEmptyOrder(buy) ? 'sell' : 'buy';
   const direction = search.direction ?? defaultDirection;
   const order = direction === 'buy' ? buy : sell;
   const defaultSettings = isLimitOrder(order) ? 'limit' : 'range';
@@ -63,7 +59,7 @@ const getOrder = (
     min: prices.min,
     max: prices.max,
     budget: getTotalBudget(action, order.budget, search.budget),
-  };
+  } satisfies EditOrderBlock;
 };
 
 const resetOrder = (order: Order, resetBudget: boolean) => ({
@@ -81,9 +77,8 @@ export const EditPricesStrategyDisposablePage = () => {
   const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
-  const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
-  const direction = order.direction ?? 'sell';
-  const isBuy = search.direction !== 'sell';
+  const order = getOrder(strategy, search, marketPrice);
+  const isBuy = order.direction !== 'sell';
   const { setOrder } = useSetDisposableOrder(url);
 
   const setSearch = useCallback(
@@ -119,8 +114,8 @@ export const EditPricesStrategyDisposablePage = () => {
 
   const initialType = getStrategyType(strategy);
   const initialDirection = isEmptyOrder(buy) ? 'sell' : 'buy';
-  const resetBudget =
-    initialType !== 'disposable' || initialDirection !== direction;
+  const directionChanged = initialDirection !== order.direction;
+  const resetBudget = initialType !== 'disposable' || directionChanged;
   const initialOrder = isBuy ? buy : sell;
 
   const orders = {
@@ -170,7 +165,7 @@ export const EditPricesStrategyDisposablePage = () => {
         <StrategyChartHistory
           buy={orders.buy}
           sell={orders.sell}
-          direction={direction}
+          direction={order.direction}
         >
           <D3ChartDisposable
             isLimit={isLimit}
@@ -192,10 +187,13 @@ export const EditPricesStrategyDisposablePage = () => {
           initialOrder={initialOrder}
           setOrder={setOrder}
           warnings={[outSideMarket]}
-          direction={direction}
+          direction={order.direction}
           hasPriceChanged={hasPriceChanged}
           settings={
-            <OrderDirection direction={direction} setDirection={setDirection} />
+            <OrderDirection
+              direction={order.direction}
+              setDirection={setDirection}
+            />
           }
         />
         {(buyBudgetChanges || sellBudgetChanges) && (

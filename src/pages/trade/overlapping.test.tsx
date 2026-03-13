@@ -13,6 +13,7 @@ import {
 } from 'libs/testing-library';
 import { StrategyFormProvider } from 'components/strategies/common/StrategyFormProvider';
 import { Token } from 'libs/tokens';
+import { useSearch } from '@tanstack/react-router';
 
 const basePath = '/trade/overlapping';
 
@@ -27,8 +28,18 @@ const mockServer = new MockServer([
 beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());
 
-const WrappedOverlapping = ({ base, quote }: { base: Token; quote: Token }) => {
-  const marketPrice = marketPrices[base.symbol as 'USDC' | 'ETH'];
+interface Props {
+  base: Token;
+  quote: Token;
+}
+
+const WrappedOverlapping = ({ base, quote }: Props) => {
+  const search = useSearch({ strict: false });
+  const userMarketPrice = search.marketPrice
+    ? Number(search.marketPrice)
+    : undefined;
+  const marketPrice =
+    userMarketPrice || marketPrices[base.symbol as 'USDC' | 'ETH'];
   return (
     <StrategyFormProvider base={base} quote={quote} marketPrice={marketPrice}>
       <TradeOverlapping />
