@@ -132,9 +132,9 @@ export const EditPricesStrategyRecurringPage = () => {
   };
 
   const hasBuyPriceChanged =
-    search.buyMin !== buy.min || search.buyMax !== buy.max;
+    orders.buy.min !== buy.min || orders.buy.max !== buy.max;
   const hasSellPriceChanged =
-    search.sellMin !== sell.min || search.sellMax !== sell.max;
+    orders.sell.min !== sell.min || orders.sell.max !== sell.max;
 
   const hasChanged = (() => {
     if (isOverlappingStrategy(strategy)) return true;
@@ -149,15 +149,15 @@ export const EditPricesStrategyRecurringPage = () => {
   const sellOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: search.sellMin,
-    max: search.sellMax,
+    min: orders.sell.min,
+    max: orders.sell.max,
     isBuy: false,
   });
   const buyOutsideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: search.buyMin,
-    max: search.buyMax,
+    min: orders.buy.min,
+    max: orders.buy.max,
     isBuy: true,
   });
   const { prices, setPrices } = useDebouncePrices(

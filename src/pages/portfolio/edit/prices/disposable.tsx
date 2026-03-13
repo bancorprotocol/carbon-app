@@ -145,8 +145,8 @@ export const EditPricesStrategyDisposablePage = () => {
   const outSideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: search.min,
-    max: search.max,
+    min: order.min,
+    max: order.max,
     isBuy,
   });
 
