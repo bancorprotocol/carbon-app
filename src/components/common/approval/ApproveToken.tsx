@@ -2,12 +2,13 @@ import { FC, FormEvent, useId, useState } from 'react';
 import { useSetUserApproval } from 'libs/queries/chain/approval';
 import { Switch } from 'components/common/switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
-import { TokenLogo } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
 import IconWarning from 'assets/icons/warning.svg?react';
+import { prettifyNumber } from 'utils/helpers';
 import config from 'config';
 
 type Props = {
@@ -88,8 +89,13 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
     <>
       <div className="bg-main-900/80 min-h-85 flex items-center gap-16 justify-between rounded-2xl px-20">
         <div className="flex items-center gap-10">
-          <TokenLogo token={token} size={30} />
-          <p className="font-medium">{token.symbol}</p>
+          <LogoImager alt="Token" src={token.logoURI} className="size-30" />
+          <div className="grid">
+            <p className="font-medium">{token.symbol}</p>
+            <p className="text-14 text-white/60">
+              {prettifyNumber(data.amount)}
+            </p>
+          </div>
         </div>
 
         {data.approvalRequired ? (

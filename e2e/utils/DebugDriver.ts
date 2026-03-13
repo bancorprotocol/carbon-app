@@ -111,6 +111,9 @@ export class DebugDriver {
       .getByTestId('strategy-json-shortcut')
       .fill(JSON.stringify(template));
     await this.page.getByTestId('create-strategies').click();
-    await deps.tokenApproval.checkApproval([base, quote]);
+    await deps.tokenApproval.checkApproval([
+      { symbol: base, amount: sell.budget },
+      { symbol: quote, amount: buy.budget },
+    ]);
   }
 }

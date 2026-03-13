@@ -14,7 +14,7 @@ import {
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { isZero } from 'components/strategies/common/utils';
 
-type Props = {
+interface Props {
   id?: string;
   value: string;
   setValue?: (value: string) => void;
@@ -32,7 +32,7 @@ type Props = {
   'data-testid'?: string;
   required?: boolean;
   children?: ReactNode;
-};
+}
 
 export const TokenInputField: FC<Props> = (props) => {
   const {

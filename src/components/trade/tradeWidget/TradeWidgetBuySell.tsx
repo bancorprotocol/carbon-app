@@ -1,89 +1,203 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { FormEvent, useId, JSX, useMemo } from 'react';
+import { FormEvent, useId, JSX, useMemo, useCallback, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWagmi } from 'libs/wagmi';
-import { UseQueryResult } from 'libs/queries';
+import {
+  useGetTokenBalance,
+  useGetTokenPrice,
+  useGetTradeData,
+  useGetTradeLiquidity,
+  UseQueryResult,
+} from 'libs/queries';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
-import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
-import { prettifyNumber } from 'utils/helpers';
-import { useTradePairs } from '../useTradePairs';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { prettifyNumber, tokenAmount } from 'utils/helpers';
 import { isZero } from 'components/strategies/common/utils';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { useModal } from 'hooks/useModal';
-import { useNavigate } from '@tanstack/react-router';
-import { OpenOceanPath } from './OpenOceanPath';
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { RoutingExchanges } from './RoutingExchanges';
+import { TradeMarketSearch } from 'libs/routing/routes/trade';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useTradeAction } from './useTradeAction';
+import { carbonEvents } from 'services/events';
+import { useGetMaxSource } from 'libs/queries/sdk/maxSourceAmount';
 import IconRouting from 'assets/icons/routing.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import IconArrow from 'assets/icons/arrowDown.svg?react';
+import config from 'config';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
   source: Token;
   target: Token;
   isBuy?: boolean;
-  sourceBalanceQuery: UseQueryResult<string>;
+  set: (params: Partial<TradeMarketSearch>) => void;
 }
 
+const getTokenFiat = (
+  value: string,
+  query: UseQueryResult<number | undefined>,
+) => {
+  const price = query.data || 0;
+  return new SafeDecimal(value || 0).times(price);
+};
+
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
+  const { set, source, target, isBuy = false } = props;
+
   const id = useId();
-  const { user } = useWagmi();
+  const { user, openConnect, provider } = useWagmi();
   const { openModal } = useModal();
-  const { isPending: isTradePairPending } = useTradePairs();
+  const { getFiatValue } = useFiatCurrency(source);
+  const search = useSearch({ from: '/trade/market' });
+  const sourcePriceQuery = useGetTokenPrice(source.address);
+  const targetPriceQuery = useGetTokenPrice(target.address);
+  const balanceQuery = useGetTokenBalance(source);
+  const maxSource = useGetMaxSource(source.address, target.address);
+  const maxTarget = useGetTradeLiquidity(source.address, target.address);
+
   const navigate = useNavigate({ from: '/trade/market' });
-  const {
-    sourceInput,
-    setSourceInput,
-    targetInput,
-    setTargetInput,
-    rate,
-    onInputChange,
-    handleCTAClick,
-    bySourceQuery,
-    byTargetQuery,
-    liquidityQuery,
-    errorMsgSource,
-    errorMsgTarget,
-    displayRouting,
-    calcSlippage,
-    maxSourceAmountQuery,
-    isAwaiting,
-    showRoutingPath,
-    routingPath,
-  } = useBuySell(props);
-  const {
+
+  const [showRoutingPath, setShowRoutingPath] = useState(false);
+
+  const { sourceInput, targetInput } = search;
+  const isTradeBySource = !!sourceInput;
+
+  const bySourceQuery = useGetTradeData({
+    sourceToken: source,
+    targetToken: target,
+    isTradeBySource: true,
+    input: sourceInput || '',
+  });
+
+  const byTargetQuery = useGetTradeData({
+    sourceToken: source,
+    targetToken: target,
+    isTradeBySource: false,
+    input: targetInput || '',
+  });
+
+  const query = isTradeBySource ? bySourceQuery : byTargetQuery;
+
+  const sourceValue =
+    sourceInput ?? byTargetQuery.data?.totalSourceAmount ?? '';
+  const targetValue =
+    targetInput ?? bySourceQuery.data?.totalTargetAmount ?? '';
+
+  const displayRouting = useCallback(() => {
+    if (config.ui.useDexAggregator) {
+      setShowRoutingPath((current) => !current);
+    } else if (query.data) {
+      const { actionsTokenRes, actionsWei } = query.data;
+      openModal('tradeRouting', {
+        source,
+        target,
+        sourceBalance: balanceQuery.data ?? '0',
+        tradeActionsWei: actionsWei,
+        tradeActionsRes: actionsTokenRes,
+        isTradeBySource,
+        onSuccess: () =>
+          set({
+            sourceInput: undefined,
+            targetInput: undefined,
+          }),
+        isBuy,
+      });
+    }
+  }, [
+    balanceQuery.data,
+    isBuy,
+    isTradeBySource,
+    openModal,
+    query.data,
+    set,
     source,
     target,
-    sourceBalanceQuery,
-    isBuy = false,
-    ...formProps
-  } = props;
+  ]);
 
-  const hasEnoughLiquidity = +liquidityQuery.data! > 0;
+  const { trade, calcMaxInput, isAwaiting } = useTradeAction({
+    onSuccess: async (transactionHash: string) => {
+      set({
+        sourceInput: undefined,
+        targetInput: undefined,
+      });
+      const network = await provider?.getNetwork();
+      const event = {
+        trade_direction: isBuy ? ('buy' as const) : ('sell' as const),
+        token_pair: `${target.symbol}/${source.symbol}`,
+        buy_token: target.symbol,
+        sell_token: source.symbol,
+        value_usd: getFiatValue(sourceValue).toString(),
+        transaction_hash: transactionHash,
+        blockchain_network: network?.name ?? '',
+      };
+      if (isBuy) carbonEvents.trade.tradeBuy(event);
+      else carbonEvents.trade.tradeSell(event);
+    },
+  });
 
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleCTAClick();
+    if (!user) return openConnect();
+    if (query.isFetching) return;
+    if (!query.data) return;
+    if (e.currentTarget.querySelector('.error-message')) {
+      return;
+    }
+    const { tradeActions, quoteId } = query.data;
+    return trade({
+      source,
+      target,
+      tradeActions,
+      isTradeBySource,
+      sourceInput: sourceValue,
+      targetInput: targetValue,
+      quoteId,
+    });
+  };
+
+  const setSourceInput = (value: string) => {
+    set({
+      sourceInput: value || undefined,
+      targetInput: undefined,
+    });
+  };
+
+  const setMaxSource = () => {
+    if (config.ui.useDexAggregator) return;
+    setSourceInput(maxSource.data!);
+  };
+
+  const setTargetInput = (value: string) => {
+    set({
+      sourceInput: undefined,
+      targetInput: value || undefined,
+    });
+  };
+
+  const setMaxTarget = () => {
+    if (config.ui.useDexAggregator) return;
+    setTargetInput(maxTarget.data!);
   };
 
   const selectToken = (key: 'source' | 'target') => {
     const exclude = key === 'source' ? target : source;
-    const tokenKey = isBuy
-      ? key === 'source'
-        ? 'quote'
-        : 'base'
-      : key === 'source'
-        ? 'base'
-        : 'quote';
+    const tokenKey = (() => {
+      if (isBuy) {
+        return key === 'source' ? 'quote' : 'base';
+      } else {
+        return key === 'source' ? 'base' : 'quote';
+      }
+    })();
     openModal('tokenLists', {
       excludedTokens: [exclude.address],
       onClick: (next) => {
-        navigate({
-          search: (s) => ({ ...s, [tokenKey]: next.address }),
-          replace: true,
-          resetScroll: false,
+        set({
+          [tokenKey]: next.address,
+          sourceInput: undefined,
+          targetInput: undefined,
         });
       },
     });
@@ -91,27 +205,49 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   const reverseTokens = () => {
     navigate({
-      search: (s) => ({ ...s, base: s.quote, quote: s.base }),
+      search: (s) => ({
+        ...s,
+        base: s.quote,
+        quote: s.base,
+        sourceInput: undefined,
+        targetInput: undefined,
+      }),
       replace: true,
       resetScroll: false,
     });
   };
 
+  const slippage = useMemo(() => {
+    if (query.isFetching) return;
+    if (query.isPending) return;
+    const sourceFiat = getTokenFiat(sourceValue, sourcePriceQuery);
+    const targetFiat = getTokenFiat(targetValue, targetPriceQuery);
+    if (sourceFiat.isZero() || targetFiat.isZero()) return;
+
+    const diff = targetFiat.div(sourceFiat);
+    const slippage = diff.minus(new SafeDecimal(1)).times(100);
+    if (slippage.isFinite()) return slippage;
+    return null;
+  }, [
+    query.isFetching,
+    query.isPending,
+    sourcePriceQuery,
+    sourceValue,
+    targetPriceQuery,
+    targetValue,
+  ]);
+
+  // Warnings
   const tooLow = useMemo(() => {
-    // empty strings means that amount is too large
     if (!sourceInput || !targetInput) return false;
-    return !isZero(sourceInput) && isZero(targetInput);
+    if (!isZero(sourceInput) && isZero(targetInput)) {
+      return 'Input amount too small to return a value';
+    }
   }, [sourceInput, targetInput]);
 
-  const warning = useMemo(() => {
-    if (tooLow) return 'Input amount too small to return a value';
-    return '';
-  }, [tooLow]);
-
-  const slippage = useMemo(() => calcSlippage(), [calcSlippage]);
+  const rate = query.data?.effectiveRate;
   const rateMessage = useMemo(() => {
-    if (warning) return;
-
+    if (tooLow) return;
     if (!rate) return '...';
 
     if (isBuy) {
@@ -124,65 +260,101 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return `1 ${source.symbol} =
         ${rate ? prettifyNumber(rate, { decimals: 6 }) : '--'}
         ${target.symbol}`;
-  }, [isBuy, rate, source.symbol, target.symbol, warning]);
+  }, [isBuy, rate, source.symbol, target.symbol, tooLow]);
+
+  // Errors
+  const balanceTooLow = useMemo(() => {
+    if (!balanceQuery.data) return;
+    const balance = new SafeDecimal(balanceQuery.data);
+    if (isTradeBySource && balance.lt(sourceValue)) {
+      return 'Insufficient balance';
+    }
+    if (!isTradeBySource && balance.lt(calcMaxInput(sourceValue))) {
+      return 'Insufficient balance';
+    }
+  }, [balanceQuery.data, calcMaxInput, isTradeBySource, sourceValue]);
+
+  const tradeNotFound = query.error && 'Could not find any trade';
+
+  const isMaxSource = useMemo(() => {
+    if (config.ui.useDexAggregator) return;
+    if (!maxSource.data) return;
+    const max = new SafeDecimal(maxSource.data);
+    if (max.gte(sourceValue || '0')) return;
+    return `Maximal source: : ${tokenAmount(maxSource.data, source)}`;
+  }, [maxSource.data, source, sourceValue]);
+
+  const sourceError = useMemo(() => {
+    if (balanceTooLow) return balanceTooLow;
+    if (config.ui.useDexAggregator) {
+      if (!isTradeBySource) return tradeNotFound;
+    } else {
+      return isMaxSource;
+    }
+  }, [balanceTooLow, isMaxSource, isTradeBySource, tradeNotFound]);
+
+  const isMaxTarget = useMemo(() => {
+    if (config.ui.useDexAggregator) return;
+    if (!maxTarget.data) return;
+    const max = new SafeDecimal(maxTarget.data);
+    if (max.gte(targetValue || '0')) return;
+    return `Available liquidity: ${tokenAmount(max, target)}`;
+  }, [maxTarget.data, target, targetValue]);
+
+  const targetError = useMemo(() => {
+    if (config.ui.useDexAggregator) {
+      if (isTradeBySource) return tradeNotFound;
+    } else {
+      return isMaxTarget;
+    }
+  }, [isMaxTarget, isTradeBySource, tradeNotFound]);
 
   const ctaButtonText = (() => {
-    if (!hasEnoughLiquidity) return 'No Liquidity available';
     if (!user) return 'Connect Wallet';
-    return isBuy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
+    if (isBuy) return `Buy ${target.symbol}`;
+    return `Sell ${source.symbol}`;
   })();
-
-  if (isTradePairPending || liquidityQuery.isPending) {
-    return <CarbonLogoLoading className="h-80 m-20" />;
-  }
 
   if (!source || !target) return null;
 
+  const routingPath = query.data?.path;
   const showRouting = routingPath || !isZero(rate);
-  const disabledCTA =
-    !!errorMsgSource ||
-    !!errorMsgTarget ||
-    !hasEnoughLiquidity ||
-    !maxSourceAmountQuery.data;
+  const hasPrice = config.ui.useDexAggregator
+    ? !!query.data?.quoteId
+    : !!maxSource.data;
 
-  const getLiquidity = () => {
-    if (!liquidityQuery.data) return;
-    const value = prettifyNumber(liquidityQuery.data);
-    return `Liquidity: ${value} ${target.symbol}`;
-  };
+  const disabledCTA = !!sourceError || !!targetError || !hasPrice;
 
   return (
-    <form {...formProps} onSubmit={handleTrade} className="grid gap-24">
+    <form
+      onSubmit={handleTrade}
+      className="form grid gap-24"
+      data-testid={isBuy ? 'buy-form' : 'sell-form'}
+    >
       <div className="grid">
         <div className="rounded-xl p-16 input-container relative">
-          <div
-            className="rounded-xl absolute inset-0 animate-pulse bg-main-400/40"
-            hidden={!byTargetQuery.isFetching}
-          ></div>
+          {byTargetQuery.isFetching && (
+            <div className="rounded-xl absolute inset-0 animate-pulse bg-main-400/40 loading-message"></div>
+          )}
           <header className="text-14 flex justify-between">
             <label htmlFor={`${id}-pay`} className="text-main-0/50">
               You pay
             </label>
-            {errorMsgSource && (
-              <output
-                htmlFor={`${id}-pay`}
-                className="text-12 font-weight-500 text-error"
-              >
-                {errorMsgSource}
-              </output>
+            {sourceError && (
+              <button type="button" onClick={() => setMaxSource()}>
+                <Warning htmlFor={`${id}-pay`} message={sourceError} isError />
+              </button>
             )}
           </header>
           <TokenInputField
             id={`${id}-pay`}
             token={source}
-            isBalanceLoading={sourceBalanceQuery.isPending}
-            value={sourceInput}
+            isBalanceLoading={balanceQuery.isPending}
+            value={sourceValue}
             setValue={(value) => setSourceInput(value)}
-            balance={sourceBalanceQuery.data}
-            onKeystroke={() => onInputChange(true)}
+            balance={balanceQuery.data}
             isLoading={byTargetQuery.isFetching}
-            isError={!!errorMsgSource}
-            disabled={!hasEnoughLiquidity}
+            isError={!!sourceError}
           >
             <button
               onClick={() => selectToken('source')}
@@ -205,38 +377,32 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         </button>
         <div className="grid gap-8">
           <div className="rounded-b-xs rounded-t-xl input-container relative">
-            <div
-              className="rounded-b-xs rounded-t-xl absolute inset-0 animate-pulse bg-main-400/40"
-              hidden={!bySourceQuery.isFetching}
-            ></div>
+            {bySourceQuery.isFetching && (
+              <div className="rounded-b-xs rounded-t-xl absolute inset-0 animate-pulse bg-main-400/40 loading-message"></div>
+            )}
             <header className="text-14 flex justify-between">
               <label htmlFor={`${id}-receive`} className="text-main-0/50">
                 You receive
               </label>
-              {errorMsgTarget && (
-                <button
-                  type="button"
-                  className="font-weight-500 text-error cursor-pointer"
-                  onClick={() => {
-                    onInputChange(false);
-                    setTargetInput(liquidityQuery.data || '0');
-                  }}
-                >
-                  {errorMsgTarget}
+              {targetError && (
+                <button type="button" onClick={() => setMaxTarget()}>
+                  <Warning
+                    htmlFor={`${id}-receive`}
+                    message={targetError}
+                    isError
+                  />
                 </button>
               )}
             </header>
             <TokenInputField
               id={`${id}-receive`}
               token={target}
-              value={targetInput}
+              value={targetValue}
               setValue={(value) => setTargetInput(value)}
               placeholder="Total Amount"
-              onKeystroke={() => onInputChange(false)}
               isLoading={bySourceQuery.isFetching}
-              isError={!!errorMsgTarget}
+              isError={!!targetError}
               slippage={slippage}
-              disabled={!hasEnoughLiquidity}
             >
               <button
                 onClick={() => selectToken('target')}
@@ -250,7 +416,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             </TokenInputField>
           </div>
           <footer className="rounded-b-xl rounded-t-xs text-14 flex justify-between bg-main-900/40 p-16 text-main-0/80">
-            {warning && <Warning className="text-14" message={warning} />}
+            {tooLow && <Warning className="text-14" message={tooLow} />}
             {rateMessage && <p>{rateMessage}</p>}
             {showRouting && (
               <button
@@ -268,14 +434,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       </div>
       {IS_TENDERLY_FORK && (
         <div className="text-14 text-right text-main-0/60">
-          DEBUG: {getLiquidity()}
+          DEBUG: {`Liquidity: ${tokenAmount(maxTarget.data, target)}`}
         </div>
       )}
 
       {showRoutingPath && !!routingPath && (
-        <div className="grid gap-8 px-16 py-8 rounded-md bg-main-500/60">
-          <h3 className="text-12">Routing:</h3>
-          <OpenOceanPath path={routingPath} />
+        <div className="grid gap-8 px-16 py-8 rounded-md bg-main-900/40">
+          <h3 className="text-12">Exchanges:</h3>
+          <RoutingExchanges path={routingPath} />
         </div>
       )}
 

@@ -11,8 +11,6 @@ import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { NotificationSchema } from 'libs/notifications/data';
 import { useWagmi } from 'libs/wagmi';
-import { getDeposit } from './utils';
-import { useApproval } from 'hooks/useApproval';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useDeleteStrategy } from '../useDeleteStrategy';
 import { hasNoBudget } from '../overlapping/utils';
@@ -20,7 +18,6 @@ import { StrategyUpdate } from '@bancor/carbon-sdk';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { InitMarketPrice } from '../common/InitMarketPrice';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import config from 'config';
 
 interface EditOrders {
   buy: FormStaticOrder;
@@ -47,8 +44,6 @@ const submitText: Record<EditTypes, string> = {
   deposit: 'Confirm Deposit',
   withdraw: 'Confirm Withdraw',
 };
-
-const spenderAddress = config.addresses.carbon.carbonController;
 
 const getFieldsToUpdate = (
   orders: EditOrders,
@@ -97,29 +92,7 @@ export const EditPricesForm: FC<Props> = (props) => {
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
 
-  const approvalTokens = (() => {
-    const arr = [];
-    const buyDeposit = getDeposit(strategy.buy.budget, orders.buy.budget);
-    if (!isZero(buyDeposit)) {
-      arr.push({
-        ...strategy.quote,
-        spender: spenderAddress,
-        amount: buyDeposit,
-      });
-    }
-    const sellDeposit = getDeposit(strategy.sell.budget, orders.sell.budget);
-    if (!isZero(sellDeposit)) {
-      arr.push({
-        ...strategy.base,
-        spender: spenderAddress,
-        amount: sellDeposit,
-      });
-    }
-    return arr;
-  })();
-  const approval = useApproval(approvalTokens);
-  const isLoading =
-    (approval.isPending && !!user) || isPending || isProcessing || isDeleting;
+  const isLoading = isPending || isProcessing || isDeleting;
   const loadingChildren = getStatusTextByTxStatus(
     isPending,
     isProcessing || isDeleting,
@@ -179,13 +152,6 @@ export const EditPricesForm: FC<Props> = (props) => {
       });
     }
 
-    if (approval.approvalRequired) {
-      return openModal('txConfirm', {
-        approvalTokens,
-        onConfirm: update,
-        buttonLabel: 'Confirm Deposit',
-      });
-    }
     return update();
   };
 

@@ -17,6 +17,7 @@ import { PortfolioDriver } from '../../../utils/strategy/PortfolioDriver';
 export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
   const { base, quote } = testCase;
+  const { buy, sell } = testCase.input.create;
   const output = testCase.output.create;
 
   return test(`Create`, async ({ page }) => {
@@ -42,7 +43,10 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit('create');
-    await tokenApproval.checkApproval([base, quote]);
+    await tokenApproval.checkApproval([
+      { symbol: base, amount: sell.budget },
+      { symbol: quote, amount: buy.budget },
+    ]);
 
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await waitForTenderlyRpc(page);
