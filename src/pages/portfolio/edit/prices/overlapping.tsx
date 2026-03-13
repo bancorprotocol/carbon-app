@@ -58,12 +58,16 @@ const getOrders = (
 
   const getMin = () => {
     if (fullRange) return fullRange.min;
+    if (search.min) return search.min;
+    if (!search.preset && !isZero(buy.min)) return buy.min;
     const preset = search.preset || defaultPreset;
     const multiplier = new SafeDecimal(1).minus(preset);
     return new SafeDecimal(marketPrice).times(multiplier).toString();
   };
   const getMax = () => {
     if (fullRange) return fullRange.max;
+    if (search.max) return search.max;
+    if (!search.preset && !isZero(sell.max)) return sell.max;
     const preset = search.preset || defaultPreset;
     const multiplier = new SafeDecimal(1).add(preset);
     return new SafeDecimal(marketPrice).times(multiplier).toString();
@@ -215,9 +219,9 @@ const OverlappingContent = () => {
   const spread = search.spread || defaultSpread;
 
   const hasChanged = (() => {
-    if (search.min !== buy.min) return true;
-    if (search.max !== sell.max) return true;
-    if (search.spread !== getRoundedSpread(strategy).toString()) return true;
+    if (orders.buy.min !== buy.min) return true;
+    if (orders.sell.max !== sell.max) return true;
+    if (spread !== getRoundedSpread(strategy).toString()) return true;
     if (search.marketPrice) return true;
     if (!isZero(search.budget)) return true;
     return false;
