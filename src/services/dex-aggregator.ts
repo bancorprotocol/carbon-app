@@ -197,6 +197,7 @@ export const exchangeNames = {
   'lynex-v1-linea': 'Lynex V1',
   'nile-legacy-linea': 'Nile Legacy',
   'carbon-coti': 'Carbon Coti',
+  'uniswap-v4-celo': 'Uniswap V4',
   'uniswap-v4-ethereum': 'Uniswap V4',
   'uniswap-v4-base': 'Uniswap V4',
   'uniswap-v4-blast': 'Uniswap V4',

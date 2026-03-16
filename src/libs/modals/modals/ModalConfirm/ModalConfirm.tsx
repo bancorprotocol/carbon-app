@@ -15,7 +15,8 @@ type Props = ModalProps<ModalCreateConfirmData>;
 export default function ModalConfirm({ id, data }: Props) {
   const { approvalTokens, onConfirm, onClose, buttonLabel = 'Confirm' } = data;
   const { closeModal } = useModal();
-  const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
+  const { approvalQuery, approvalRequired, isPending } =
+    useApproval(approvalTokens);
 
   return (
     <Modal
@@ -37,7 +38,7 @@ export default function ModalConfirm({ id, data }: Props) {
       </ul>
       <button
         type="button"
-        disabled={approvalRequired}
+        disabled={isPending || approvalRequired}
         onClick={async () => {
           closeModal(id);
           await onConfirm();

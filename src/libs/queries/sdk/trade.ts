@@ -78,10 +78,11 @@ export const useTradeQuery = () => {
         if (config.ui.useEIP7702) {
           const approvalTokens = await getApproval(user, [customData]);
           if (approvalTokens.length) {
-            await new Promise<void>((res) => {
+            await new Promise<void>((res, rej) => {
               openModal('txConfirm', {
                 approvalTokens,
                 onConfirm: () => res(),
+                onClose: () => rej(),
               });
             });
           }

@@ -19,7 +19,7 @@ export const RoutingExchanges: FC<Props> = ({ path }) => {
           className="text-nowrap px-8 py-4 border border-main-400 rounded-2xl"
           key={exchange}
         >
-          {exchangeNames[exchange]}
+          {exchangeNames[exchange] || exchange}
         </li>
       ))}
     </ul>

@@ -80,7 +80,11 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
 
   if (!data || !token) {
     if (isPending) {
-      return <div>Loading...</div>;
+      return (
+        <div className="bg-main-900/80 h-85 px-20 rounded-2xl flex items-center">
+          Loading...
+        </div>
+      );
     }
     return <div>Unknown Error</div>;
   }
