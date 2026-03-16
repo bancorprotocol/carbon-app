@@ -71,7 +71,7 @@ export const MigrationFetching: FC<Props> = ({ queryState }) => {
             <DexIcon dex={q.dex} className="size-24" />
             <span className="mr-auto pe-8">{dexNames[q.dex]}</span>
             <IconRefresh
-              className="size-24 invisible group-hover:visible data-[fetching=true]:invisible"
+              className="size-16 invisible group-hover:visible data-[fetching=true]:invisible"
               data-fetching={q.fetchStatus === 'fetching'}
             />
             <FetchIndicator
