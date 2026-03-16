@@ -13,6 +13,7 @@ import { Token } from 'libs/tokens';
 import { formatUnits, parseUnits } from 'ethers';
 import { useModal } from 'hooks/useModal';
 import { useGetApprovalTokens } from 'hooks/useApproval';
+import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import config from 'config';
 
 interface GetTradeDataResult {
@@ -52,10 +53,10 @@ export const useTradeQuery = () => {
   const { sendTransaction, user } = useWagmi();
   const { getTokenById } = useTokens();
   const { openModal } = useModal();
+  const { trade } = useStore();
+  const { canBatchTransactions } = useBatchTransaction();
   const getApproval = useGetApprovalTokens();
-  const {
-    trade: { settings },
-  } = useStore();
+
   return useMutation({
     mutationFn: async (params: TradeParams) => {
       const { calcDeadline, calcMinReturn, calcMaxInput } = params;
@@ -75,7 +76,8 @@ export const useTradeQuery = () => {
         };
         // If config supports EIP7702 we want to force approval
         // the backend requires approval to happen before
-        if (config.ui.useEIP7702) {
+        const canBatch = await canBatchTransactions(user);
+        if (canBatch) {
           const approvalTokens = await getApproval(user, [customData]);
           if (approvalTokens.length) {
             await new Promise<void>((res, rej) => {
@@ -87,6 +89,7 @@ export const useTradeQuery = () => {
             });
           }
         }
+        const slippage = trade.settings.slippage;
         const amount = params.isTradeBySource
           ? toDecimal(params.sourceInput, params.source)
           : toDecimal(params.targetInput, params.target);
@@ -97,7 +100,7 @@ export const useTradeQuery = () => {
           targetToken: params.target.address,
           tradeBySource: params.isTradeBySource,
           amount: amount,
-          slippage: new SafeDecimal(settings.slippage).mul(100).toNumber(),
+          slippage: new SafeDecimal(slippage).mul(100).toNumber(),
           quoteId: params.quoteId,
         });
         if (!result.validated) throw new Error('Swap failed');

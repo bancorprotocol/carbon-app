@@ -72,9 +72,7 @@ export const useTradeAction = ({ onSuccess }: Props) => {
   }: TradeProps) => {
     const checked = await checkRestriction();
     if (!checked) return;
-    if (!user) {
-      throw new Error('No user');
-    }
+    if (!user) throw new Error('No user');
 
     return mutation.mutate(
       {

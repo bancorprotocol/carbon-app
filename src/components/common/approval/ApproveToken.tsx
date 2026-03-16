@@ -101,7 +101,6 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
             </p>
           </div>
         </div>
-
         {data.approvalRequired ? (
           txBusy ? (
             <p className="text-14 text-main-0/80">Waiting for Confirmation</p>
