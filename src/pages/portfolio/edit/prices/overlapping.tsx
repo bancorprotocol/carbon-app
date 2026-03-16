@@ -56,21 +56,34 @@ const getOrders = (
     return getFullRangesPrices(marketPrice, base.decimals, quote.decimals);
   })();
 
+  const getMinPresetPrice = (preset: string | number) => {
+    const multiplier = new SafeDecimal(1).minus(preset);
+    return new SafeDecimal(marketPrice).times(multiplier);
+  };
+  const getMaxPresetPrice = (preset: string | number) => {
+    const multiplier = new SafeDecimal(1).add(preset);
+    return new SafeDecimal(marketPrice).times(multiplier);
+  };
+
   const getMin = () => {
+    const defaultMax = getMaxPresetPrice(defaultPreset);
     if (fullRange) return fullRange.min;
     if (search.min) return search.min;
-    if (!search.preset && !isZero(buy.min)) return buy.min;
+    if (!search.preset && !isZero(buy.min) && defaultMax.gt(buy.min)) {
+      return buy.min;
+    }
     const preset = search.preset || defaultPreset;
-    const multiplier = new SafeDecimal(1).minus(preset);
-    return new SafeDecimal(marketPrice).times(multiplier).toString();
+    return getMinPresetPrice(preset).toString();
   };
   const getMax = () => {
+    const defaultMin = getMinPresetPrice(defaultPreset);
     if (fullRange) return fullRange.max;
     if (search.max) return search.max;
-    if (!search.preset && !isZero(sell.max)) return sell.max;
+    if (!search.preset && !isZero(sell.max) && defaultMin.lt(sell.max)) {
+      return sell.max;
+    }
     const preset = search.preset || defaultPreset;
-    const multiplier = new SafeDecimal(1).add(preset);
-    return new SafeDecimal(marketPrice).times(multiplier).toString();
+    return getMaxPresetPrice(preset).toString();
   };
 
   const {
