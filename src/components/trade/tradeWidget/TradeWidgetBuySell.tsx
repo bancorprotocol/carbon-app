@@ -27,6 +27,7 @@ import IconRouting from 'assets/icons/routing.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import IconArrow from 'assets/icons/arrowDown.svg?react';
 import config from 'config';
+import { useDebounced } from 'hooks/useDebouncedValue';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
@@ -65,18 +66,21 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const { sourceInput, targetInput } = search;
   const isTradeBySource = !!sourceInput;
 
+  const debouncedSource = useDebounced(sourceInput, 300);
+  const debouncedTarget = useDebounced(targetInput, 300);
+
   const bySourceQuery = useGetTradeData({
     sourceToken: source,
     targetToken: target,
     isTradeBySource: true,
-    input: sourceInput || '',
+    input: debouncedSource || '',
   });
 
   const byTargetQuery = useGetTradeData({
     sourceToken: source,
     targetToken: target,
     isTradeBySource: false,
-    input: targetInput || '',
+    input: debouncedTarget || '',
   });
 
   const query = isTradeBySource ? bySourceQuery : byTargetQuery;
