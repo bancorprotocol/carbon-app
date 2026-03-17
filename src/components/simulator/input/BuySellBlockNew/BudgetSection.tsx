@@ -85,7 +85,7 @@ export const BudgetSection: FC<Props> = ({
         token={budgetToken}
         isBalanceLoading={tokenBalanceQuery?.isPending}
         balance={tokenBalanceQuery?.data}
-        isError={insufficientBalance}
+        error={insufficientBalance}
         data-testid="input-budget"
       />
       {insufficientBalance && (

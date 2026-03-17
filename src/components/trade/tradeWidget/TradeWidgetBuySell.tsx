@@ -158,29 +158,25 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     });
   };
 
-  const setSourceInput = (value: string) => {
-    set({
-      sourceInput: value || undefined,
-      targetInput: undefined,
-    });
-  };
+  const setSourceInput = useCallback(
+    (value: string) => {
+      set({
+        sourceInput: value || undefined,
+        targetInput: undefined,
+      });
+    },
+    [set],
+  );
 
-  const setMaxSource = () => {
-    if (config.ui.useDexAggregator) return;
-    setSourceInput(maxSource.data!);
-  };
-
-  const setTargetInput = (value: string) => {
-    set({
-      sourceInput: undefined,
-      targetInput: value || undefined,
-    });
-  };
-
-  const setMaxTarget = () => {
-    if (config.ui.useDexAggregator) return;
-    setTargetInput(maxTarget.data!);
-  };
+  const setTargetInput = useCallback(
+    (value: string) => {
+      set({
+        sourceInput: undefined,
+        targetInput: value || undefined,
+      });
+    },
+    [set],
+  );
 
   const selectToken = (key: 'source' | 'target') => {
     const exclude = key === 'source' ? target : source;
@@ -237,17 +233,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     targetValue,
   ]);
 
-  // Warnings
-  const tooLow = useMemo(() => {
-    if (!sourceInput || !targetInput) return false;
-    if (!isZero(sourceInput) && isZero(targetInput)) {
-      return 'Input amount too small to return a value';
-    }
-  }, [sourceInput, targetInput]);
-
   const rate = query.data?.effectiveRate;
   const rateMessage = useMemo(() => {
-    if (tooLow) return;
     if (!rate) return '...';
 
     if (isBuy) {
@@ -260,7 +247,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return `1 ${source.symbol} =
         ${rate ? prettifyNumber(rate, { decimals: 6 }) : '--'}
         ${target.symbol}`;
-  }, [isBuy, rate, source.symbol, target.symbol, tooLow]);
+  }, [isBuy, rate, source.symbol, target.symbol]);
 
   // Errors
   const balanceTooLow = useMemo(() => {
@@ -274,40 +261,51 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     }
   }, [balanceQuery.data, calcMaxInput, isTradeBySource, sourceValue]);
 
-  const tradeNotFound = query.error && 'Could not find any trade';
-
   const isMaxSource = useMemo(() => {
     if (config.ui.useDexAggregator) return;
     if (!maxSource.data) return;
     const max = new SafeDecimal(maxSource.data);
     if (max.gte(sourceValue || '0')) return;
-    return `Maximal source: : ${tokenAmount(maxSource.data, source)}`;
-  }, [maxSource.data, source, sourceValue]);
+    const msg = `Available liquidity: ${tokenAmount(maxSource.data, source)}`;
+    return (
+      <button type="button" onClick={() => setSourceInput(maxSource.data!)}>
+        <Warning htmlFor={`${id}-pay`} message={msg} isError />
+      </button>
+    );
+  }, [id, maxSource.data, setSourceInput, source, sourceValue]);
 
   const sourceError = useMemo(() => {
     if (balanceTooLow) return balanceTooLow;
-    if (config.ui.useDexAggregator) {
-      if (!isTradeBySource) return tradeNotFound;
-    } else {
-      return isMaxSource;
-    }
-  }, [balanceTooLow, isMaxSource, isTradeBySource, tradeNotFound]);
+    return isMaxSource;
+  }, [balanceTooLow, isMaxSource]);
 
   const isMaxTarget = useMemo(() => {
     if (config.ui.useDexAggregator) return;
     if (!maxTarget.data) return;
     const max = new SafeDecimal(maxTarget.data);
     if (max.gte(targetValue || '0')) return;
-    return `Available liquidity: ${tokenAmount(max, target)}`;
-  }, [maxTarget.data, target, targetValue]);
+    const msg = `Requested amount exceeds available liquidity: ${tokenAmount(max, target)}`;
+    return (
+      <button type="button" onClick={() => setTargetInput(maxTarget.data!)}>
+        <Warning htmlFor={`${id}-receive`} message={msg} isError />
+      </button>
+    );
+  }, [id, maxTarget.data, setTargetInput, target, targetValue]);
 
   const targetError = useMemo(() => {
-    if (config.ui.useDexAggregator) {
-      if (isTradeBySource) return tradeNotFound;
-    } else {
-      return isMaxTarget;
+    if (isMaxTarget) return isMaxTarget;
+    // Input amount too small
+    if (!sourceInput || !targetInput) return;
+    if (!isZero(sourceInput) && isZero(targetInput)) {
+      return 'Input amount too small to return a value';
     }
-  }, [isMaxTarget, isTradeBySource, tradeNotFound]);
+  }, [isMaxTarget, sourceInput, targetInput]);
+
+  const globalError = useMemo(() => {
+    if (config.ui.useDexAggregator && query.error) {
+      return 'Could not find any trade';
+    }
+  }, [query.error]);
 
   const ctaButtonText = (() => {
     if (!user) return 'Connect Wallet';
@@ -318,12 +316,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   if (!source || !target) return null;
 
   const routingPath = query.data?.path;
-  const showRouting = routingPath || !isZero(rate);
+  const showRouting = (!query.error && routingPath) || !isZero(rate);
   const hasPrice = config.ui.useDexAggregator
     ? !!query.data?.quoteId
     : !!maxSource.data;
 
-  const disabledCTA = !!sourceError || !!targetError || !hasPrice;
+  const disabledCTA =
+    !!sourceError || !!targetError || !!globalError || !hasPrice;
 
   return (
     <form
@@ -336,16 +335,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           {byTargetQuery.isFetching && (
             <div className="rounded-xl absolute inset-0 animate-pulse bg-main-400/40 loading-message"></div>
           )}
-          <header className="text-14 flex justify-between">
-            <label htmlFor={`${id}-pay`} className="text-main-0/50">
-              You pay
-            </label>
-            {sourceError && (
-              <button type="button" onClick={() => setMaxSource()}>
-                <Warning htmlFor={`${id}-pay`} message={sourceError} isError />
-              </button>
-            )}
-          </header>
+          <label htmlFor={`${id}-pay`} className="text-14 text-main-0/50">
+            You pay
+          </label>
           <TokenInputField
             id={`${id}-pay`}
             token={source}
@@ -354,7 +346,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             setValue={(value) => setSourceInput(value)}
             balance={balanceQuery.data}
             isLoading={byTargetQuery.isFetching}
-            isError={!!sourceError}
+            error={sourceError}
           >
             <button
               onClick={() => selectToken('source')}
@@ -380,20 +372,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {bySourceQuery.isFetching && (
               <div className="rounded-b-xs rounded-t-xl absolute inset-0 animate-pulse bg-main-400/40 loading-message"></div>
             )}
-            <header className="text-14 flex justify-between">
-              <label htmlFor={`${id}-receive`} className="text-main-0/50">
-                You receive
-              </label>
-              {targetError && (
-                <button type="button" onClick={() => setMaxTarget()}>
-                  <Warning
-                    htmlFor={`${id}-receive`}
-                    message={targetError}
-                    isError
-                  />
-                </button>
-              )}
-            </header>
+            <label htmlFor={`${id}-receive`} className="text-14 text-main-0/50">
+              You receive
+            </label>
             <TokenInputField
               id={`${id}-receive`}
               token={target}
@@ -401,7 +382,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               setValue={(value) => setTargetInput(value)}
               placeholder="Total Amount"
               isLoading={bySourceQuery.isFetching}
-              isError={!!targetError}
+              error={targetError}
               slippage={slippage}
             >
               <button
@@ -415,33 +396,38 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               </button>
             </TokenInputField>
           </div>
-          <footer className="rounded-b-xl rounded-t-xs text-14 flex justify-between bg-main-900/40 p-16 text-main-0/80">
-            {tooLow && <Warning className="text-14" message={tooLow} />}
-            {rateMessage && <p>{rateMessage}</p>}
-            {showRouting && (
-              <button
-                type="button"
-                onClick={displayRouting}
-                className="flex gap-8 text-left hover:text-main-0 md:flex"
-                data-testid="routing"
-              >
-                <IconRouting className="w-12" />
-                <span>Routing</span>
-              </button>
+          <button
+            type="button"
+            onClick={displayRouting}
+            className="grid gap-16 input-container rounded-b-xl rounded-t-xs text-14 bg-main-900/40 p-16 text-main-0/80"
+          >
+            <div className=" flex justify-between">
+              {globalError && (
+                <Warning className="text-14" message={globalError} isError />
+              )}
+              {!globalError && rateMessage && <p>{rateMessage}</p>}
+              {showRouting && (
+                <p
+                  className="flex gap-8 text-left hover:text-main-0 md:flex"
+                  data-testid="routing"
+                >
+                  <IconRouting className="w-12" />
+                  <span>Routing</span>
+                </p>
+              )}
+            </div>
+            {showRoutingPath && !!routingPath && (
+              <div className="grid gap-8 text-start">
+                <h3 className="text-12">Exchanges:</h3>
+                <RoutingExchanges path={routingPath} />
+              </div>
             )}
-          </footer>
+          </button>
         </div>
       </div>
       {IS_TENDERLY_FORK && (
         <div className="text-14 text-right text-main-0/60">
           DEBUG: {`Liquidity: ${tokenAmount(maxTarget.data, target)}`}
-        </div>
-      )}
-
-      {showRoutingPath && !!routingPath && (
-        <div className="grid gap-8 px-16 py-8 rounded-md bg-main-900/40">
-          <h3 className="text-12">Exchanges:</h3>
-          <RoutingExchanges path={routingPath} />
         </div>
       )}
 
