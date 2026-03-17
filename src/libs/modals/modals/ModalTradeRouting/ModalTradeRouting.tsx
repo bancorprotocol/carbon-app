@@ -193,7 +193,7 @@ export default function ModalTradeRouting({
             id={sourceInputId}
             value={totalSourceAmount}
             token={data.source}
-            isError={!!errorMsg}
+            error={errorMsg}
             disabled
             data-testid="confirm-source"
             className="rounded-xl -mb-16 p-16 input-container"
