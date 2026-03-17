@@ -12,6 +12,7 @@ import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { RollingNumber } from 'components/common/RollingNumber';
 import { useGetAllStrategies } from 'libs/queries';
+import { RewardBanner } from 'components/rewards/banner';
 
 const types = [
   {
@@ -119,30 +120,34 @@ export const UnconnectedLandingPage = () => {
   ]);
 
   return (
-    <section className="grid content-start gap-24 mx-auto p-16">
-      <hgroup className="grid gap-24">
-        <h1 className="text-3xl lg:text-5xl text-center text-gradient leading-[1.5] gradient-direction-[90deg]">
-          Control Your Trading Strategies
-        </h1>
-        {sentence}
-      </hgroup>
-      <ol className="grid gap-8">
-        <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
-          <b className="text-gradient text-nowrap">Step 1</b>
-          <span>Connect your wallet</span>
-        </li>
-        <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
-          <b className="text-gradient text-nowrap">Step 2</b>
-          <span>Create your trading strategy</span>
-        </li>
-        <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
-          <b className="text-gradient text-nowrap">Step 3</b>
-          <span>
-            Sit back and let the market come to you - buy and sell on your terms
-          </span>
-        </li>
-      </ol>
-      <article className="grid gap-16">
+    <section className="grid content-start gap-24 p-16">
+      <div className="grid gap-24 justify-self-center">
+        <hgroup className="grid gap-24">
+          <h1 className="text-3xl lg:text-5xl text-center text-gradient leading-[1.5] gradient-direction-[90deg]">
+            Control Your Trading Strategies
+          </h1>
+          {sentence}
+        </hgroup>
+        <ol className="grid gap-8">
+          <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
+            <b className="text-gradient text-nowrap">Step 1</b>
+            <span>Connect your wallet</span>
+          </li>
+          <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
+            <b className="text-gradient text-nowrap">Step 2</b>
+            <span>Create your trading strategy</span>
+          </li>
+          <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
+            <b className="text-gradient text-nowrap">Step 3</b>
+            <span>
+              Sit back and let the market come to you - buy and sell on your
+              terms
+            </span>
+          </li>
+        </ol>
+      </div>
+      <RewardBanner />
+      <article className="grid gap-16 justify-self-center">
         <h2 className="text-18">Choose Your Trading Strategy</h2>
         <ul className="flex sm:justify-center flex-wrap gap-24">
           {types.map((item) => (
