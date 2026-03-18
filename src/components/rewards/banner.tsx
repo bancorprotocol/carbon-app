@@ -5,8 +5,6 @@ import Celo from 'assets/logos/celologo.svg?react';
 import Eth from 'assets/logos/ethlogo.svg?react';
 import Sei from 'assets/logos/seilogo.svg?react';
 import Ton from 'assets/logos/tonlogo.svg?react';
-import OpenTabIcon from 'assets/icons/link.svg?react';
-import { NewTabLink } from 'libs/routing';
 import { RewardIcon } from './icon';
 import { useAllChainRewards } from 'libs/queries/extApi/rewards';
 import { Loading } from 'components/common/Loading';
@@ -92,11 +90,13 @@ const RewardChains = () => {
       {list.map(({ url, label, icon }, i) => (
         <Fragment key={url}>
           {!!i && <hr className="w-1 h-16 bg-main-0" />}
-          <NewTabLink to={url} className="flex items-center gap-8">
+          <a
+            href={url}
+            className="flex items-center gap-8 px-8 py-4 border border-main-0/40 rounded-md bg-main-0/10 hover:bg-main-0/20"
+          >
             {icon}
             {label}
-            <OpenTabIcon className="size-16" />
-          </NewTabLink>
+          </a>
         </Fragment>
       ))}
     </nav>
