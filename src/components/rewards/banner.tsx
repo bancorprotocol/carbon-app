@@ -1,28 +1,48 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import Tac from 'assets/logos/taclogo.svg?react';
 import Coti from 'assets/logos/cotilogo.svg?react';
 import Celo from 'assets/logos/celologo.svg?react';
+import Eth from 'assets/logos/ethlogo.svg?react';
+import Sei from 'assets/logos/seilogo.svg?react';
+import Ton from 'assets/logos/tonlogo.svg?react';
 import OpenTabIcon from 'assets/icons/link.svg?react';
 import { NewTabLink } from 'libs/routing';
 import { RewardIcon } from './icon';
+import { useAllChainRewards } from 'libs/queries/extApi/rewards';
+import { Loading } from 'components/common/Loading';
 
-const links = [
-  {
+const links = {
+  coti: {
     icon: <Coti className="size-16" />,
     url: 'https://coti.carbondefi.xyz/explore/pairs?filter=rewards',
     label: 'Coti chain',
   },
-  {
+  tac: {
     icon: <Tac className="size-16" />,
     url: 'https://tac.carbondefi.xyz/explore/pairs?filter=rewards',
     label: 'TAC chain',
   },
-  {
+  celo: {
     icon: <Celo className="size-16" />,
     url: 'https://celo.carbondefi.xyz/explore/pairs?filter=rewards',
     label: 'Celo chain',
   },
-];
+  ethereum: {
+    icon: <Eth className="size-16" />,
+    url: 'https://app.carbondefi.xyz/explore/pairs?filter=rewards',
+    label: 'Ethereum chain',
+  },
+  sei: {
+    icon: <Sei className="size-16" />,
+    url: 'https://sei.carbondefi.xyz/explore/pairs?filter=rewards',
+    label: 'Sei chain',
+  },
+  ton: {
+    icon: <Ton className="size-16" />,
+    url: 'https://ton.carbondefi.xyz/explore/pairs?filter=rewards',
+    label: 'Ton chain',
+  },
+};
 
 export const RewardBanner = () => {
   return (
@@ -34,21 +54,51 @@ export const RewardBanner = () => {
         Join One of the Active Rewards (Yield farming) Programs
         <RewardIcon className="size-20" />
       </h2>
-      <nav
-        aria-label="redirect to reward page"
-        className="flex items-center gap-16"
-      >
-        {links.map(({ url, label, icon }, i) => (
-          <Fragment key={url}>
-            {!!i && <hr className="w-1 h-16 bg-main-0" />}
-            <NewTabLink to={url} className="flex items-center gap-8">
-              {icon}
-              {label}
-              <OpenTabIcon className="size-16" />
-            </NewTabLink>
-          </Fragment>
-        ))}
-      </nav>
+      <RewardChains />
     </div>
+  );
+};
+
+const RewardChains = () => {
+  const rewardsQuery = useAllChainRewards();
+  const list = useMemo(() => {
+    if (!rewardsQuery.data) return;
+    console.log(rewardsQuery.data);
+    return rewardsQuery.data
+      ?.filter(([_, rewards]) => !!rewards.length)
+      .map(([network, _]) => links[network]);
+  }, [rewardsQuery.data]);
+
+  if (!list) {
+    const loadingItems = new Array(3).fill(null);
+    return (
+      <ul className="flex items-center gap-16">
+        {loadingItems.map((_, i) => (
+          <Loading width="16ch" height="24px" key={i} />
+        ))}
+      </ul>
+    );
+  }
+
+  if (!list.length) {
+    return <p>No reward campaign at the moment</p>;
+  }
+
+  return (
+    <nav
+      aria-label="redirect to reward page"
+      className="flex items-center gap-16"
+    >
+      {list.map(({ url, label, icon }, i) => (
+        <Fragment key={url}>
+          {!!i && <hr className="w-1 h-16 bg-main-0" />}
+          <NewTabLink to={url} className="flex items-center gap-8">
+            {icon}
+            {label}
+            <OpenTabIcon className="size-16" />
+          </NewTabLink>
+        </Fragment>
+      ))}
+    </nav>
   );
 };
