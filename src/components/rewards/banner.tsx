@@ -50,9 +50,9 @@ export const RewardBanner = () => {
       role="banner"
       className="grid place-items-center gap-16 p-16 font-title bg-gradient-to-r from-reward/80 to-reward-dark/80 border-reward-dark border-y-2"
     >
-      <h2 className="flex items-center gap-8 font-bold text-24">
+      <h2 className="flex justify-center items-center gap-8 text-center font-bold text-20 sm:text-24">
         Join One of the Active Rewards (Yield farming) Programs
-        <RewardIcon className="size-20" />
+        <RewardIcon className="hidden sm:block size-20" />
       </h2>
       <RewardChains />
     </div>

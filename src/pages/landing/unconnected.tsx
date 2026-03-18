@@ -120,8 +120,8 @@ export const UnconnectedLandingPage = () => {
   ]);
 
   return (
-    <section className="grid content-start gap-24 p-16">
-      <div className="grid gap-24 justify-self-center">
+    <section className="grid content-start gap-24 py-16">
+      <div className="grid gap-24 justify-self-center px-16">
         <hgroup className="grid gap-24">
           <h1 className="text-3xl lg:text-5xl text-center text-gradient leading-[1.5] gradient-direction-[90deg]">
             Control Your Trading Strategies
@@ -147,7 +147,7 @@ export const UnconnectedLandingPage = () => {
         </ol>
       </div>
       <RewardBanner />
-      <article className="grid gap-16 justify-self-center">
+      <article className="grid gap-16 justify-self-center px-16">
         <h2 className="text-18">Choose Your Trading Strategy</h2>
         <ul className="flex sm:justify-center flex-wrap gap-24">
           {types.map((item) => (
@@ -195,7 +195,7 @@ export const UnconnectedLandingPage = () => {
           ))}
         </ul>
       </article>
-      <article className="grid gap-24">
+      <article className="grid gap-24 px-16">
         <h2 className="text-center text-3xl">Carbon DeFi User Benefits</h2>
         <ul className="flex justify-center flex-wrap gap-40">
           <li className="flex gap-8 items-center">
