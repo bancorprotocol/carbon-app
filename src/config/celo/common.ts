@@ -11,14 +11,14 @@ const addresses = {
   CETH: '0x2DEf4285787d58a2f811AF24755A8150622f4361',
   USDC: '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
   USDT: '0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e',
-  WETH: '0x66803FB87aBd4aaC3cbB3fAd7C3aa01f6F3FB207',
+  WETH: '0xD221812de1BD094f35587EE8E174B07B6167D9Af',
 };
 
 const popularTokens = [
-  '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-  '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
-  '0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e',
-  '0x66803FB87aBd4aaC3cbB3fAd7C3aa01f6F3FB207',
+  addresses.CELO,
+  addresses.USDC,
+  addresses.USDT,
+  addresses.WETH,
 ];
 
 export const commonConfig: AppConfig = {
