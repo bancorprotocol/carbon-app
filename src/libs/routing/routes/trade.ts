@@ -15,6 +15,12 @@ import { TradeOverlapping } from 'pages/trade/overlapping';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
 import * as v from 'valibot';
+import { TradeAuction } from 'pages/trade/auction';
+import { TradeCustom } from 'pages/trade/custom';
+import { TradeQuickAuction } from 'pages/trade/quick-auction';
+import { TradeQuickCustom } from 'pages/trade/quick-custom';
+import { addMonths, startOfDay, subMonths } from 'date-fns';
+import { toUnixUTC } from 'components/simulator/utils';
 
 // TRADE TYPE
 export type StrategyType =
@@ -164,15 +170,23 @@ const overlappingPage = createRoute({
 const auctionPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/auction',
-  // @todo(gradient)
-  component: () => null,
-  // component: TradeAuction,
+  component: TradeAuction,
+  beforeLoad: ({ search }) => {
+    if (!search.chartStart) {
+      const date = startOfDay(subMonths(new Date(), 1));
+      search.chartStart = toUnixUTC(date).toString();
+    }
+    if (!search.chartEnd) {
+      const date = startOfDay(addMonths(new Date(), 2));
+      search.chartEnd = toUnixUTC(date).toString();
+    }
+  },
   validateSearch: searchValidator({
     direction: v.optional(v.picklist(['buy', 'sell'])),
-    _sP_: v.optional(validInputNumber),
-    _eP_: v.optional(validInputNumber),
-    _sD_: v.optional(validNumber),
-    _eD_: v.optional(validNumber),
+    startPrice: v.optional(validInputNumber),
+    endPrice: v.optional(validInputNumber),
+    startDate: v.optional(validNumber),
+    endDate: v.optional(validNumber),
     budget: v.optional(validInputNumber),
   }),
 });
@@ -180,20 +194,28 @@ const auctionPage = createRoute({
 const customPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/custom',
-  // @todo(gradient)
-  component: () => null,
-  // component: TradeCustom,
+  component: TradeCustom,
+  beforeLoad: ({ search }) => {
+    if (!search.chartStart) {
+      const date = startOfDay(subMonths(new Date(), 1));
+      search.chartStart = toUnixUTC(date).toString();
+    }
+    if (!search.chartEnd) {
+      const date = startOfDay(addMonths(new Date(), 2));
+      search.chartEnd = toUnixUTC(date).toString();
+    }
+  },
   validateSearch: searchValidator({
     directions: v.optional(v.array(v.picklist(['buy', 'sell']))),
-    buy_SP_: v.optional(validInputNumber),
-    buy_EP_: v.optional(validInputNumber),
-    buy_SD_: v.optional(validNumber),
-    buy_ED_: v.optional(validNumber),
+    buyStartPrice: v.optional(validInputNumber),
+    buyEndPrice: v.optional(validInputNumber),
+    buyStartDate: v.optional(validNumber),
+    buyEndDate: v.optional(validNumber),
     buyBudget: v.optional(validInputNumber),
-    sell_SP_: v.optional(validInputNumber),
-    sell_EP_: v.optional(validInputNumber),
-    sell_SD_: v.optional(validNumber),
-    sell_ED_: v.optional(validNumber),
+    sellStartPrice: v.optional(validInputNumber),
+    sellEndPrice: v.optional(validInputNumber),
+    sellStartDate: v.optional(validNumber),
+    sellEndDate: v.optional(validNumber),
     sellBudget: v.optional(validInputNumber),
   }),
 });
@@ -201,13 +223,11 @@ const customPage = createRoute({
 const quickAuctionPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/quick-auction',
-  // @todo(gradient)
-  component: () => null,
-  // component: TradeQuickAuction,
+  component: TradeQuickAuction,
   validateSearch: searchValidator({
     direction: v.optional(v.picklist(['buy', 'sell'])),
-    _sP_: v.optional(validInputNumber),
-    _eP_: v.optional(validInputNumber),
+    startPrice: v.optional(validInputNumber),
+    endPrice: v.optional(validInputNumber),
     deltaTime: v.optional(validInputNumber),
     budget: v.optional(validInputNumber),
   }),
@@ -216,17 +236,15 @@ const quickAuctionPage = createRoute({
 const quickCustomPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/quick-custom',
-  // @todo(gradient)
-  component: () => null,
-  // component: TradeQuickCustom,
+  component: TradeQuickCustom,
   validateSearch: searchValidator({
     directions: v.optional(v.array(v.picklist(['buy', 'sell']))),
-    buy_SP_: v.optional(validInputNumber),
-    buy_EP_: v.optional(validInputNumber),
+    buyStartPrice: v.optional(validInputNumber),
+    buyEndPrice: v.optional(validInputNumber),
     buyDeltaTime: v.optional(validNumber),
     buyBudget: v.optional(validInputNumber),
-    sell_SP_: v.optional(validInputNumber),
-    sell_EP_: v.optional(validInputNumber),
+    sellStartPrice: v.optional(validInputNumber),
+    sellEndPrice: v.optional(validInputNumber),
     sellDeltaTime: v.optional(validNumber),
     sellBudget: v.optional(validInputNumber),
   }),

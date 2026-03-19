@@ -81,19 +81,19 @@ const buildStrategiesHelper = async (
     } else {
       const buy: GradientOrder = {
         budget: s.buyBudget,
-        _sP_: s.buy_SP_,
-        _eP_: s.buy_EP_,
-        _sD_: s.buy_SD_,
-        _eD_: s.buy_ED_,
+        startPrice: s.buyStartPrice,
+        endPrice: s.buyEndPrice,
+        startDate: s.buyStartDate,
+        endDate: s.buyEndDate,
         marginalPrice: s.buyPriceMarginal,
       };
 
       const sell: GradientOrder = {
         budget: s.sellBudget,
-        _sP_: s.sell_SP_,
-        _eP_: s.sell_EP_,
-        _sD_: s.sell_SD_,
-        _eD_: s.sell_ED_,
+        startPrice: s.sellStartPrice,
+        endPrice: s.sellEndPrice,
+        startDate: s.sellStartDate,
+        endDate: s.sellEndDate,
         marginalPrice: s.sellPriceMarginal,
       };
 

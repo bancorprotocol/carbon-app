@@ -3,7 +3,9 @@ import IconRecurring from 'assets/icons/recurring.svg?react';
 import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
-import ChevronIcon from 'assets/icons/chevron.svg?react';
+import IconChevron from 'assets/icons/chevron.svg?react';
+import IconSlow from 'assets/icons/slow.svg?react';
+import IconFast from 'assets/icons/fast.svg?react';
 
 import { Link, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
@@ -99,36 +101,34 @@ const types = [
         search: { buySettings: 'range', sellSettings: 'range' } as const,
         icon: <IconRecurring className="hidden md:block size-20" />,
       },
-      //   {
-      //     label: 'Auction',
-      //     svg: <IconSlow className="hidden size-14 md:inline" />,
-      //     to: '/trade/auction' as const,
-      //     text: '',
-      //     id: 'auction',
-      //   },
-      //   {
-      //     label: 'Quick Auction',
-      //     svg: <IconFast className="hidden size-16 md:inline" />,
-      //     to: '/trade/quick-auction' as const,
-      //     text: '',
-      //     testId: 'strategy-gradient-regular',
-      //     id: 'quick-auction',
-      //   },
-      //   {
-      //     label: 'Custom',
-      //     svg: <IconSlow className="hidden size-14 md:inline" />,
-      //     to: '/trade/custom' as const,
-      //     text: '',
-      //     id: 'custom',
-      //   },
-      //   {
-      //     label: 'Quick Custom',
-      //     svg: <IconFast className="hidden size-16 md:inline" />,
-      //     to: '/trade/quick-custom' as const,
-      //     text: '',
-      //     testId: 'strategy-gradient-quick',
-      //     id: 'quick-custom',
-      //   },
+      {
+        id: 'auction',
+        name: 'Auction',
+        to: '/trade/auction' as const,
+        search: {} as const,
+        icon: <IconSlow className="hidden md:block size-20" />,
+      },
+      {
+        id: 'quick-auction',
+        name: 'Quick Auction',
+        to: '/trade/quick-auction' as const,
+        search: {} as const,
+        icon: <IconFast className="hidden md:block size-20" />,
+      },
+      {
+        id: 'custom',
+        name: 'Custom',
+        to: '/trade/custom' as const,
+        search: {} as const,
+        icon: <IconSlow className="hidden md:block size-20" />,
+      },
+      {
+        id: 'quick-custom',
+        name: 'Quick Custom',
+        to: '/trade/quick-custom' as const,
+        search: {} as const,
+        icon: <IconFast className="hidden md:block size-20" />,
+      },
     ],
   },
 ];
@@ -189,7 +189,7 @@ export const TradeNav = () => {
                   {name}
                 </p>
               ))}
-              <ChevronIcon className="self-center justify-self-end size-16 hidden 2xl:block -rotate-90" />
+              <IconChevron className="self-center justify-self-end size-16 hidden 2xl:block -rotate-90" />
             </button>
           )}
         >

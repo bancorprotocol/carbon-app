@@ -34,7 +34,7 @@ export const SimulatorInputRecurringPage = () => {
   });
 
   const handleDefaultValues = useCallback(
-    (direction: StrategyDirection, _sP_: number) => {
+    (direction: StrategyDirection, startPrice: number) => {
       const init = direction === 'buy' ? initBuyRange : initSellRange;
       const setInit = direction === 'buy' ? setInitBuyRange : setInitSellRange;
 
@@ -45,7 +45,7 @@ export const SimulatorInputRecurringPage = () => {
         return;
       }
       const multiplier = getRecurringPriceMultiplier(direction, 'range');
-      const price = new SafeDecimal(_sP_);
+      const price = new SafeDecimal(startPrice);
       const min = price.mul(multiplier.min).toFixed();
       const max = price.mul(multiplier.max).toFixed();
 
@@ -69,11 +69,11 @@ export const SimulatorInputRecurringPage = () => {
   );
 
   useEffect(() => {
-    const _sD_ = Number(searchState.start || defaultStart());
-    const _sP_ = data?.find(({ date }) => date === _sD_)?.close;
-    if (_sP_) {
-      handleDefaultValues('buy', _sP_);
-      handleDefaultValues('sell', _sP_);
+    const startDate = Number(searchState.start || defaultStart());
+    const startPrice = data?.find(({ date }) => date === startDate)?.close;
+    if (startPrice) {
+      handleDefaultValues('buy', startPrice);
+      handleDefaultValues('sell', startPrice);
     }
   }, [handleDefaultValues, data, searchState.start]);
 
@@ -152,7 +152,7 @@ export const SimulatorInputRecurringPage = () => {
     },
   };
 
-  const _sP_ = useMemo(() => {
+  const startPrice = useMemo(() => {
     const start = Number(state.start ?? defaultStart());
     return data?.find((v) => v.date === start);
   }, [data, state.start]);
@@ -182,7 +182,11 @@ export const SimulatorInputRecurringPage = () => {
         data-testid="create-simulation-form"
       >
         <div className="surface rounded-2xl overflow-clip">
-          <SimInputRecurring state={state} dispatch={dispatch} _sP_={_sP_} />
+          <SimInputRecurring
+            state={state}
+            dispatch={dispatch}
+            startPrice={startPrice}
+          />
         </div>
         <input className="approve-warnings hidden" defaultChecked />
         <button

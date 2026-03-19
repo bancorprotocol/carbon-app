@@ -57,19 +57,19 @@ export interface CreateOverlappingOrder extends FormStaticOrder {
 }
 
 export interface GradientOrder {
-  _sP_: string;
-  _eP_: string;
-  _sD_: string;
-  _eD_: string;
+  startPrice: string;
+  endPrice: string;
+  startDate: string;
+  endDate: string;
   budget: string;
   marginalPrice: string;
 }
 
 export interface FormGradientOrder {
-  _sP_: string;
-  _eP_: string;
-  _sD_: string;
-  _eD_: string;
+  startPrice: string;
+  endPrice: string;
+  startDate: string;
+  endDate: string;
   budget: string;
   marginalPrice?: string;
 }
@@ -79,8 +79,8 @@ export interface GradientOrderBlock extends FormGradientOrder {
 }
 
 export interface QuickGradientOrderBlock {
-  _sP_: string;
-  _eP_: string;
+  startPrice: string;
+  endPrice: string;
   deltaTime: string;
   budget: string;
   marginalPrice?: string;

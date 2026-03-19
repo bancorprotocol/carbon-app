@@ -19,8 +19,9 @@ import { sortStrategyFn, StrategyFilter, StrategySort } from './utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { SafeDecimal } from 'libs/safedecimal';
 import { lsService } from 'services/localeStorage';
-import styles from 'components/strategies/overview/StrategyContent.module.css';
 import { useNavigate, useSearch } from '@tanstack/react-router';
+import { isGradientStrategy } from 'components/strategies/common/utils';
+import styles from 'components/strategies/overview/StrategyContent.module.css';
 
 const text = {
   '/explore/strategies': {
@@ -43,8 +44,9 @@ export const StrategyContent: FC<Props> = ({ url }) => {
   const nav = useNavigate({ from: url });
 
   const filter = useMemo(
-    () => ({
+    (): StrategyFilter => ({
       status: search.filter ?? 'all',
+      type: 'all',
     }),
     [search.filter],
   );
@@ -88,13 +90,12 @@ export const StrategyContent: FC<Props> = ({ url }) => {
       if (filter.status === 'inactive' && strategy.status === 'active') {
         return false;
       }
-      // @todo(gradient)
-      // if (filter.type === 'gradient' && !isGradientStrategy(strategy)) {
-      //   return false;
-      // }
-      // if (filter.type === 'static' && isGradientStrategy(strategy)) {
-      //   return false;
-      // }
+      if (filter.type === 'gradient' && !isGradientStrategy(strategy)) {
+        return false;
+      }
+      if (filter.type === 'static' && isGradientStrategy(strategy)) {
+        return false;
+      }
       return true;
     });
   }, [strategies, filter]);

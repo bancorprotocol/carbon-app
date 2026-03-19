@@ -1,34 +1,23 @@
 import { FC, useId } from 'react';
-import { Token } from 'libs/tokens';
 import { OrderBlock } from 'components/strategies/common/types';
-import { StrategyDirection, StrategySettings } from 'libs/routing';
+import { StrategySettings } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import IconTooltip from 'assets/icons/tooltip.svg?react';
-import { TokenLogo } from 'components/common/imager/Imager';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
+import { OrderTitle, OrderTitleProps } from './OrderTitle';
 
-interface Props {
-  titleId: string;
+interface Props extends OrderTitleProps {
   order: OrderBlock;
-  base: Token;
-  direction: StrategyDirection;
   setSettings?: (value: StrategySettings) => any;
 }
 
 export const OrderHeader: FC<Props> = (props) => {
-  const { titleId, order, direction, base, setSettings } = props;
+  const { order, direction, base, setSettings } = props;
   const settingName = useId();
-  const tooltipText = `This section will define the order details in which you are willing to ${direction} ${base.symbol} at.`;
   const isBuy = direction === 'buy';
   return (
     <header className="grid xs:flex items-center gap-8">
-      <h2 className="text-18 me-auto flex items-center gap-8" id={titleId}>
-        <Tooltip element={tooltipText}>
-          <span>{isBuy ? 'Buy Low' : 'Sell High'}</span>
-        </Tooltip>
-        <TokenLogo token={base} size={18} />
-        <span>{base.symbol}</span>
-      </h2>
+      <OrderTitle {...props} />
       {setSettings && (
         <div className="flex gap-8 items-center">
           <RadioGroup

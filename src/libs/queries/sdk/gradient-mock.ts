@@ -4,17 +4,17 @@ export interface SDKGradientStrategy {
   id: string;
   baseToken: string;
   quoteToken: string;
-  buy_SP_: string;
-  buy_EP_: string;
+  buyStartPrice: string;
+  buyEndPrice: string;
   buyPriceMarginal: string;
-  buy_SD_: string;
-  buy_ED_: string;
+  buyStartDate: string;
+  buyEndDate: string;
   buyBudget: string;
-  sell_SP_: string;
-  sell_EP_: string;
+  sellStartPrice: string;
+  sellEndPrice: string;
   sellPriceMarginal: string;
-  sell_SD_: string;
-  sell_ED_: string;
+  sellStartDate: string;
+  sellEndDate: string;
   sellBudget: string;
   encoded: any;
 }

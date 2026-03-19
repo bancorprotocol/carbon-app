@@ -127,7 +127,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
     <>
       <div className="grid grid-cols-2 gap-6">
         <div
-          className="rounded-s-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-main-0/50"
+          className="input-container rounded-s-2xl grid w-full cursor-text gap-8 p-16"
           onClick={() => document.getElementById(inputStartId)?.focus()}
         >
           <header className="flex items-center justify-between">
@@ -135,7 +135,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
               htmlFor={inputStartId}
               className="text-12 flex justify-between text-main-0/60"
             >
-              _S P_
+              Start Price
             </label>
             {!!marketPrice && (
               <button
@@ -155,7 +155,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             inputMode="decimal"
             value={localStart}
             placeholder="Enter Price"
-            className="text-18 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
+            className="text-24 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
             onChange={(e) => onStartChange(e.target.value)}
             onFocus={onStartFocus}
             onBlur={onStartBlur}
@@ -170,7 +170,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
           />
         </div>
         <div
-          className="rounded-e-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-main-0/50"
+          className="input-container rounded-e-2xl grid w-full cursor-text gap-8"
           onClick={() => document.getElementById(inputEndId)?.focus()}
         >
           <header className="flex items-center justify-between">
@@ -178,7 +178,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
               htmlFor={inputEndId}
               className="text-12 flex justify-between text-main-0/60"
             >
-              _E P_
+              End Price
             </label>
             {!!marketPrice && (
               <button
@@ -198,7 +198,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             inputMode="decimal"
             value={localEnd}
             placeholder="Enter Price"
-            className="text-18 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
+            className="text-24 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
             onChange={(e) => onEndChange(e.target.value)}
             onFocus={onEndFocus}
             onBlur={onEndBlur}

@@ -66,10 +66,10 @@ export const TradeCustom = () => {
     return defaultGradientOrder(
       {
         direction: 'buy',
-        _sP_: search.buy_SP_,
-        _eP_: search.buy_EP_,
-        _sD_: search.buy_SD_,
-        _eD_: search.buy_ED_,
+        startPrice: search.buyStartPrice,
+        endPrice: search.buyEndPrice,
+        startDate: search.buyStartDate,
+        endDate: search.buyEndDate,
         budget: search.buyBudget,
       },
       marketPrice,
@@ -77,20 +77,20 @@ export const TradeCustom = () => {
   }, [
     marketPrice,
     search.buyBudget,
-    search.buy_ED_,
-    search.buy_EP_,
-    search.buy_SD_,
-    search.buy_SP_,
+    search.buyEndDate,
+    search.buyEndPrice,
+    search.buyStartDate,
+    search.buyStartPrice,
   ]);
 
   const baseSell = useMemo(() => {
     return defaultGradientOrder(
       {
         direction: 'sell',
-        _sP_: search.sell_SP_,
-        _eP_: search.sell_EP_,
-        _sD_: search.sell_SD_,
-        _eD_: search.sell_ED_,
+        startPrice: search.sellStartPrice,
+        endPrice: search.sellEndPrice,
+        startDate: search.sellStartDate,
+        endDate: search.sellEndDate,
         budget: search.sellBudget,
       },
       marketPrice,
@@ -98,10 +98,10 @@ export const TradeCustom = () => {
   }, [
     marketPrice,
     search.sellBudget,
-    search.sell_ED_,
-    search.sell_EP_,
-    search.sell_SD_,
-    search.sell_SP_,
+    search.sellEndDate,
+    search.sellEndPrice,
+    search.sellStartDate,
+    search.sellStartPrice,
   ]);
 
   const buy = useGradientOrder(baseBuy, (next) => saveOrder(next, 'buy'));
@@ -126,10 +126,10 @@ export const TradeCustom = () => {
         set.delete(direction);
         saveOrder(
           {
-            _sP_: undefined,
-            _eP_: undefined,
-            _sD_: undefined,
-            _eD_: undefined,
+            startPrice: undefined,
+            endPrice: undefined,
+            startDate: undefined,
+            endDate: undefined,
             budget: undefined,
           },
           direction,
@@ -190,9 +190,9 @@ export const TradeCustom = () => {
           buy={orders.buy.order}
           sell={orders.sell.order}
         >
-          <article className="bg-main-900 grid gap-16 rounded-b-2xl">
+          <article className="surface grid rounded-2xl overflow-clip">
             {!search.directions?.length && (
-              <h2 className="error-message text-16 m-0 px-16">
+              <h2 className="error-message text-16 p-16">
                 Please select an order
               </h2>
             )}
@@ -208,26 +208,27 @@ export const TradeCustom = () => {
                     )}
                     data-direction={order.direction}
                   >
-                    <button
-                      type="button"
-                      className="absolute right-16 top-28"
-                      aria-label={`remove ${direction} order`}
-                      onClick={() => removeDirection(direction)}
-                    >
-                      <IconDelete className="size-16" />
-                    </button>
                     <CreateGradientOrder
                       order={order}
                       setOrder={setOrder}
                       priceWarning={
                         priceError && <Warning message={priceError} isError />
                       }
+                      action={
+                        <button
+                          type="button"
+                          aria-label={`remove ${direction} order`}
+                          onClick={() => removeDirection(direction)}
+                        >
+                          <IconDelete className="size-16" />
+                        </button>
+                      }
                     />
                   </section>
                 );
               } else {
                 return (
-                  <div key={direction} className="grid px-16 last:pb-16">
+                  <div key={direction} className="grid px-16 py-8 last:pb-16">
                     <button
                       type="button"
                       onClick={() => addDirection(direction)}

@@ -49,7 +49,7 @@ const isSmallRange = (strategy: AnyBaseStrategy) => {
   const strategyPrices = (() => {
     if (isGradientStrategy(strategy)) {
       const { buy, sell } = strategy;
-      return [buy._sP_, buy._eP_, sell._sP_, sell._eP_];
+      return [buy.startPrice, buy.endPrice, sell.startPrice, sell.endPrice];
     } else {
       const { buy, sell } = strategy;
       return [buy.min, buy.max, sell.min, sell.max];
@@ -632,10 +632,10 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
     strategy.buy,
     strategy.sell,
   );
-  const _sP_ = useMemo(() => {
+  const startPrice = useMemo(() => {
     return fullRange ? '0' : prettifyNumber(min, priceOption);
   }, [fullRange, min, priceOption]);
-  const _eP_ = useMemo(() => {
+  const endPrice = useMemo(() => {
     return fullRange ? '∞' : prettifyNumber(max, priceOption);
   }, [fullRange, max, priceOption]);
   const marginalPrice = useMemo(
@@ -659,7 +659,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
                 Price
               </th>
               <td className="p-8 text-end" data-testid="price">
-                {_sP_} {quote.symbol}
+                {startPrice} {quote.symbol}
               </td>
             </tr>
           </tbody>
@@ -673,7 +673,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
                 Min Price
               </th>
               <td className="text-end" data-testid="min-price">
-                {_sP_} {quote.symbol}
+                {startPrice} {quote.symbol}
               </td>
             </tr>
             <tr>
@@ -681,7 +681,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
                 Max Price
               </th>
               <td className="text-end" data-testid="max-price">
-                {_eP_} {quote.symbol}
+                {endPrice} {quote.symbol}
               </td>
             </tr>
             {!!spread && (
@@ -724,7 +724,7 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
 }) => {
   const location = useLocation();
   const order = isBuy ? strategy.buy : strategy.sell;
-  const { _sD_, _eD_ } = order;
+  const { startDate, endDate } = order;
 
   const smallRange = isSmallRange(strategy);
   const priceOption = useMemo(
@@ -735,22 +735,22 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
     }),
     [smallRange],
   );
-  const _sP_ = useMemo(() => {
-    return prettifyNumber(order._sP_, priceOption);
-  }, [order._sP_, priceOption]);
-  const _eP_ = useMemo(() => {
-    return prettifyNumber(order._eP_, priceOption);
-  }, [order._eP_, priceOption]);
+  const startPrice = useMemo(() => {
+    return prettifyNumber(order.startPrice, priceOption);
+  }, [order.startPrice, priceOption]);
+  const endPrice = useMemo(() => {
+    return prettifyNumber(order.endPrice, priceOption);
+  }, [order.endPrice, priceOption]);
   const marginalPrice = useMemo(
     () => prettifyNumber(order.marginalPrice, priceOption),
     [order.marginalPrice, priceOption],
   );
   const { quote, base } = strategy;
   const color = isBuy ? 'text-buy' : 'text-sell';
-  const _sD_Text =
-    location.pathname.includes('cart') && isToday(fromUnixUTC(_sD_))
+  const startDateText =
+    location.pathname.includes('cart') && isToday(fromUnixUTC(startDate))
       ? 'Now'
-      : fromUnixUTC(_sD_).toLocaleString();
+      : fromUnixUTC(startDate).toLocaleString();
 
   return (
     <article
@@ -763,27 +763,31 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
       <table className="bg-main-900/40 rounded-md border-separate border border-main-0/40 p-8">
         <tbody>
           <tr>
-            <th className="font-normal text-start text-main-0/60">_S P_</th>
+            <th className="font-normal text-start text-main-0/60">
+              Start Price
+            </th>
             <td className="text-end" data-testid="start-price">
-              {_sP_} {quote.symbol}
+              {startPrice} {quote.symbol}
             </td>
           </tr>
           <tr>
-            <th className="font-normal text-start text-main-0/60">_E P_</th>
+            <th className="font-normal text-start text-main-0/60">End Price</th>
             <td className="text-end" data-testid="end-price">
-              {_eP_} {quote.symbol}
+              {endPrice} {quote.symbol}
             </td>
           </tr>
           <tr>
-            <th className="font-normal text-start text-main-0/60">_S D_</th>
+            <th className="font-normal text-start text-main-0/60">
+              Start Date
+            </th>
             <td className="text-end" data-testid="start-date">
-              {_sD_Text}
+              {startDateText}
             </td>
           </tr>
           <tr>
-            <th className="font-normal text-start text-main-0/60">_E D_</th>
+            <th className="font-normal text-start text-main-0/60">End Date</th>
             <td className="text-end" data-testid="end-date">
-              {fromUnixUTC(_eD_).toLocaleString()}
+              {fromUnixUTC(endDate).toLocaleString()}
             </td>
           </tr>
         </tbody>

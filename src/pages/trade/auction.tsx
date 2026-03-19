@@ -90,7 +90,7 @@ export const TradeAuction = () => {
       </StrategyChartSection>
       <CreateLayout url={url}>
         <CreateGradientStrategyForm buy={orders.buy} sell={orders.sell}>
-          <article className="bg-main-900 grid rounded-b-2xl">
+          <div className="surface grid rounded-2xl overflow-clip">
             <OrderDirection direction={direction} setDirection={setDirection} />
             <div
               className={cn(style.order, 'grid gap-16 p-16')}
@@ -99,7 +99,7 @@ export const TradeAuction = () => {
             >
               <CreateGradientOrder order={order} setOrder={setOrder} />
             </div>
-          </article>
+          </div>
         </CreateGradientStrategyForm>
       </CreateLayout>
     </>

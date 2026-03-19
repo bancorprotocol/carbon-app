@@ -68,7 +68,7 @@ export const SimulatorInputOverlappingPage = () => {
   const loadingText = isPending && 'Loading price history...';
   const btnDisabled = isPending || emptyHistory || noBudget;
 
-  const _sP_ = useMemo(() => {
+  const startPrice = useMemo(() => {
     const start = Number(state.start ?? defaultStart());
     return data?.find(({ date }) => date === start)?.close;
   }, [data, state.start]);
@@ -79,13 +79,13 @@ export const SimulatorInputOverlappingPage = () => {
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
 
-    if (!state.base || !state.quote || !_sP_) return;
+    if (!state.base || !state.quote || !startPrice) return;
     if (e.currentTarget.querySelector('.error-message')) return;
 
     const prices = calculateOverlappingPrices(
       state.buy.min,
       state.sell.max,
-      _sP_.toString(),
+      startPrice.toString(),
       state.spread,
     );
 
@@ -114,7 +114,7 @@ export const SimulatorInputOverlappingPage = () => {
         state.quote.decimals,
         state.buy.min,
         state.sell.max,
-        _sP_.toString(),
+        startPrice.toString(),
         state.spread,
         search.buyBudget,
       );
@@ -124,7 +124,7 @@ export const SimulatorInputOverlappingPage = () => {
         state.quote.decimals,
         state.buy.min,
         state.sell.max,
-        _sP_.toString(),
+        startPrice.toString(),
         state.spread,
         search.sellBudget,
       );
@@ -182,7 +182,7 @@ export const SimulatorInputOverlappingPage = () => {
           <CreateOverlappingStrategy
             state={state}
             dispatch={dispatch}
-            marketPrice={_sP_ ?? 0}
+            marketPrice={startPrice ?? 0}
             spread={state.spread}
             setSpread={(v) => dispatch('spread', v)}
           />

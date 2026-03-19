@@ -41,16 +41,16 @@ export const useGradientOrder = (
       mode: 'line',
       points: [
         {
-          x: order._sD_,
-          y: Number(order._sP_),
+          x: order.startDate,
+          y: Number(order.startPrice),
         },
         {
-          x: order._eD_,
-          y: Number(order._eP_),
+          x: order.endDate,
+          y: Number(order.endPrice),
         },
       ],
     }),
-    [id, order._eD_, order._eP_, order._sD_, order._sP_],
+    [id, order.endDate, order.endPrice, order.startDate, order.startPrice],
   );
 
   const onDrawingUpdate = useCallback(
@@ -59,10 +59,10 @@ export const useGradientOrder = (
       const copy = structuredClone(points);
       const [start, end] = copy.sort((a, b) => Number(a.x) - Number(b.x));
       set({
-        _sP_: start.y.toString(),
-        _eP_: end.y.toString(),
-        _sD_: start.x,
-        _eD_: end.x,
+        startPrice: start.y.toString(),
+        endPrice: end.y.toString(),
+        startDate: start.x,
+        endDate: end.x,
       });
     },
     [set],
@@ -104,15 +104,15 @@ export const useQuickGradientOrder = (
       points: [
         {
           x: '0',
-          y: Number(order._sP_),
+          y: Number(order.startPrice),
         },
         {
           x: order.deltaTime,
-          y: Number(order._eP_),
+          y: Number(order.endPrice),
         },
       ],
     }),
-    [id, order._sP_, order.deltaTime, order._eP_],
+    [id, order.startPrice, order.deltaTime, order.endPrice],
   );
 
   const onDrawingUpdate = useCallback(
@@ -121,8 +121,8 @@ export const useQuickGradientOrder = (
       const copy = structuredClone(points);
       const [start, end] = copy.sort((a, b) => Number(a.x) - Number(b.x));
       set({
-        _sP_: start.y.toString(),
-        _eP_: end.y.toString(),
+        startPrice: start.y.toString(),
+        endPrice: end.y.toString(),
         deltaTime: end.x,
       });
     },

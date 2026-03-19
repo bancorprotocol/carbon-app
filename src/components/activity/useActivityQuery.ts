@@ -41,7 +41,7 @@ export const toActivities = (
         `Quote "${strategy.quote}" not found for activity with txhash "${activity.txHash}"`,
       );
     }
-    const type = '_sP_' in strategy.buy ? 'gradient' : 'static';
+    const type = 'startPrice' in strategy.buy ? 'gradient' : 'static';
     const buy = toOrder(strategy.buy);
     const sell = toOrder(strategy.sell);
     const status =

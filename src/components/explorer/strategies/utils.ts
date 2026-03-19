@@ -10,19 +10,18 @@ export const strategyFilter = {
     active: 'Active',
     inactive: 'Inactive',
   },
-  // @todo(gradient)
-  // type: {
-  //   all: 'All',
-  //   static: 'Static',
-  //   gradient: 'Gradient',
-  // },
+  type: {
+    all: 'All',
+    static: 'Static',
+    gradient: 'Gradient',
+  },
 };
 export type FilterStatus = keyof (typeof strategyFilter)['status'];
-// export type FilterType = keyof (typeof strategyFilter)['type'];
+export type FilterType = keyof (typeof strategyFilter)['type'];
 export type AllFilter = FilterStatus; // | FilterType;
 export type StrategyFilter = {
   status: FilterStatus;
-  // type: FilterType;
+  type: FilterType;
 };
 
 export const strategySort = {
