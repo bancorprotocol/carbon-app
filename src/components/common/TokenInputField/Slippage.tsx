@@ -11,7 +11,7 @@ interface Props {
 const slippageColor = (slippage: SafeDecimal) => {
   if (slippage?.gt(0)) return 'text-primary';
   if (slippage?.isZero()) return 'text-warning';
-  if (slippage?.lt(-3)) return 'text-error';
+  if (slippage?.lt(-3)) return 'text-warning';
   return 'text-main-0/80';
 };
 

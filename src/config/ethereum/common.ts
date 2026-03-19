@@ -43,7 +43,7 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask', 'WalletConnect', 'Coinbase Wallet', 'Safe'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
-  policiesLastUpdated: '18 April, 2023',
+  policiesLastUpdated: '24 Feb, 2026',
   network: {
     name: 'Ethereum',
     logoUrl: IconETHLogo,
@@ -100,7 +100,6 @@ export const commonConfig: AppConfig = {
       batcher: '0x0199f3A6C4B192B9f9C3eBE31FBC535CdD4B7D4e',
       vault: '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4',
     },
-    openocean: '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64',
   },
   utils: {
     multicall3: {
@@ -210,7 +209,7 @@ export const commonConfig: AppConfig = {
     showCart: true,
     // rewardUrl: 'https://app.merkl.xyz/?chain=1&protocol=carbon',
     // walkthroughId: 'i2ok96zcpzqw',
-    useOpenocean: false, // !navigator.webdriver, // use sdk in E2E
+    useDexAggregator: false, // !navigator.webdriver, // use sdk in E2E
     useEIP7702: true,
     useSeedData: true,
   },

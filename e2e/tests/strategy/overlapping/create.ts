@@ -45,7 +45,10 @@ export const create = (testCase: CreateStrategyTestCase) => {
 
     const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit('create');
-    await tokenApproval.checkApproval([base, quote]);
+    await tokenApproval.checkApproval([
+      { symbol: base, amount: sell.budget },
+      { symbol: quote, amount: buy.budget },
+    ]);
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await myStrategies.waitForUpdates();
     await waitForTenderlyRpc(page);

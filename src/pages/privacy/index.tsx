@@ -1,5 +1,6 @@
 import { Page } from 'components/common/page';
 import config from 'config';
+import { html } from 'd3';
 import { NewTabLink, externalLinks } from 'libs/routing';
 
 const content = [
@@ -19,7 +20,7 @@ const content = [
       <p>
         By using and interacting with our Site, you agree to the collection and
         use of your personal information in accordance with this Privacy Policy.
-        If you don’t agree with the Privacy Policy, you are prohibited from
+        If you don't agree with the Privacy Policy, you are prohibited from
         using the Site or the Content.
       </p>
     ),
@@ -66,11 +67,13 @@ const content = [
           community or when you otherwise voluntarily provide such information
           to us. We use the information in order to administer the Site, its
           functions and for internal operations, including troubleshooting, data
-          analysis, testing, research, statistical and survey purposes. We may
-          also store information that your computer or mobile device provides us
-          in connection with your use of the Site, such as your browser type,
-          financial information, type of computer or mobile device, browser
-          language and IP address.
+          analysis, testing, research, statistical and survey purposes. To the
+          extent you use the Site to access third party services, we may share
+          information with those third parties to facilitate their services. We
+          may also store information that your computer or mobile device
+          provides us in connection with your use of the Site, such as your
+          browser type, financial information, type of computer or mobile
+          device, browser language and IP address.
         </p>
       </>
     ),
@@ -80,8 +83,9 @@ const content = [
     html: (
       <p>
         We do not rent or sell any information about you to others or trade any
-        such information. We may disclose your information with third parties
-        employed by us to facilitate the operation of the Site and its
+        such information. We may disclose your information with third parties,
+        including those providing and linked third-party services as well as
+        those employed by us to facilitate the operation of the Site and its
         functions, and to perform services related to administration of the Site
         and its functions. We may also disclose your information to third
         parties for marketing purposes, as described in our Cookies Statement.
@@ -183,13 +187,14 @@ const content = [
     subtitle: 'Processing and Transferring Your Information',
     html: (
       <p>
-        The information provided will be saved and stored with the hosting and
-        information backup providers (such as Google Cloud) in the United
-        States, held and operated by third parties other than the Foundation or
-        which may not be controlled by the Foundation. Upon providing your
-        information to the Site, you agree and confirm that the Foundation may
-        transfer to or save the information provided to the Site on servers
-        located in the United States.
+        The information provided may be saved and stored with the hosting and
+        information backup providers (such as Google Cloud), which may locate
+        data in other jurisdictions including in the United States, held and
+        operated by third parties other than the Foundation or which may not be
+        controlled by the Foundation. Upon providing your information to the
+        Site, you agree and confirm that the Foundation may transfer to or save
+        the information provided to the Site on servers located in the United
+        States.
       </p>
     ),
   },
@@ -197,16 +202,13 @@ const content = [
     subtitle: 'Your Rights',
     html: (
       <p>
-        You may review, correct, or delete the information collected by or
-        through the Site or the Site’s functionalities by logging into your
-        account and reviewing your account settings and profile. You have a
-        right to access to your personal information held by us by requesting a
-        copy in writing. We will provide you with such copy after receiving a
-        valid request. We may charge you a fee, which shall not exceed the cost
-        for such copy. We may request proof of identification to verify your
-        access request and reject any unfair or suspicious request in our sole
-        discretion. To exercise this right, please refer to the Contact Us
-        section below.
+        You have a right to access to your personal information held by us by
+        requesting a copy in writing. We will provide you with such copy after
+        receiving a valid request. We may charge you a fee, which shall not
+        exceed the cost for such copy. We may request proof of identification to
+        verify your access request and reject any unfair or suspicious request
+        in our sole discretion. To exercise this right, please refer to the
+        Contact Us section below.
       </p>
     ),
   },
@@ -222,7 +224,7 @@ const content = [
           Union (“EU”) and United Kingdom (“UK”) residents to explain how we
           collect, use and share their personal data (as defined in the GDPR),
           and the rights and choices we offer EU and UK residents regarding our
-          handling of their personal information.
+          handling of their personal information
         </p>
         <p>
           We process personal data for the purposes described in the Information
@@ -337,7 +339,7 @@ const content = [
           You have the right to revoke your consent to the processing of your
           personal data at any time. The revocation of consent does not affect
           the legality of the processing carried out on the basis of the consent
-          until revocation.
+          until revocation
         </li>
         <br />
         <p>
@@ -359,23 +361,24 @@ const content = [
     html: (
       <>
         <p>
-          If you a resident of the United States, you are prohibited from using
-          our Site pursuant to our Terms of Service. If you, however, have
-          incidentally reached our Site, we may collect some information. If you
-          are a resident of California, you are entitled to certain rights under
-          the California Consumer Privacy act of 2018 (“CCPA”), and if you are a
-          resident of Virginia, you are entitled to certain rights under the
-          Virginia Consumer Data Protection Act (“VCDPA”).
+          Our website is not directed to users in the United States, and our
+          Terms of Service prohibit U.S. residents from using our Site. If
+          however, you have incidentally reached our Site, we may collect some
+          information. Certain U.S. state laws provide specific privacy rights
+          to their residents, including laws in California, Colorado,
+          Connecticut, Delaware, Indiana, Iowa, Kentucky, Maryland, Minnesota,
+          Montana, Nebraska, New Hampshire, New Jersey, Oregon, Rhode Island,
+          Tennessee, Texas, Utah, and Virginia.
         </p>
         <br />
         <p>
           Over the past twelve months, we may have collected the personal
           information specified in the Information Collected and Purposes for
-          Collection section of this Privacy Policy about visitors of our Site
-          from California or Virginia. We obtain this information indirectly
-          from you, such as by observing your actions on our Site or from third
-          parties that we use to support our business. We may use or disclose
-          this information for the following business or commercial purposes:
+          Collection section of this Privacy Policy about visitors of our Site.
+          We obtain this information from you, such as by observing your actions
+          on our Site or from third parties that we use to support our business.
+          We may use or disclose this information for the following business or
+          commercial purposes:
         </p>
         <br />
         <li>To provide and improve our Site;</li>
@@ -396,7 +399,7 @@ const content = [
           If you wish to know the information that we have collected about you
           in the last 12 months, you may submit a verifiable consumer request to
           us, and subject to our verification of that request, we will provide
-          you with the following information:
+          you with the following information, where required by applicable law:
         </p>
         <br />
         <li>The categories of information we have collected about you;</li>
@@ -462,10 +465,10 @@ const content = [
       <p>
         If you want to correct inaccuracies in the information that we have
         collected, processed, or otherwise obtained about you in the last twelve
-        (12) months, you may submit a verifiable consumer request to us, and
-        subject to our verification of that request, we will provide you with
-        the opportunity to correct the inaccuracies, taking into account the
-        purposes of processing the personal information.
+        (12) months, you may have the right to submit a verifiable consumer
+        request to us, and subject to our verification of that request, we will
+        provide you with the opportunity to correct the inaccuracies, taking
+        into account the purposes of processing the personal information.
       </p>
     ),
   },
@@ -476,15 +479,18 @@ const content = [
       <>
         <p>
           For us to process a request to know, access, correct, or delete, it is
-          necessary for us to verify your identity. We will ask you to provide
-          certain additional information about yourself, such as name, physical
-          address, email address and phone number, or other identifying
-          information, to compare to information we have on file for you to
-          verify your identity. We cannot fulfil your request if we cannot
-          verify your identity. It may take up to forty-five (45) days to fulfil
-          your request. If we cannot complete your request within the initial
-          forty-five (45) day period, we will notify you in writing within
-          forty-five (45) days of your initial request.
+          necessary for us to verify your identity. We will ask you or a person
+          you have authorized to provide certain additional information about
+          yourself, such as name, physical address, email address and phone
+          number, or other identifying information, to compare to information we
+          have on file for you to verify your identity. We cannot fulfil your
+          request if we cannot verify your identity. Please note that because we
+          collect limited personal information and our website is not intended
+          for U.S. users, our ability to identify and process individual
+          requests may be limited. It may take up to forty-five (45) days to
+          fulfil your request. If we cannot complete your request within the
+          initial forty-five (45) day period, we will notify you in writing
+          within forty-five (45) days of your initial request.
         </p>
         <br />
         <p>
@@ -493,20 +499,12 @@ const content = [
         </p>
         <br />
         <p>
-          California residents may authorize another person (your “agent”) to
-          submit a request on your behalf. We will also require that you provide
-          us with information sufficient for us to verify that you have
-          authorized this person to act for you and to verify your identity as
-          provided above.
-        </p>
-        <br />
-        <p>
-          Virginia residents may appeal our decision denying your initial
-          request by submitting an additional request pursuant to the directions
-          set forth in the prior paragraphs. Within 60 days of receipt of your
-          appeal, we will inform you of any action taken or not taken in
-          response to your appeal, along with a written explanation for these
-          actions.
+          You may have the right to appeal our decision regarding your request
+          by submitting an additional request pursuant to the directions set
+          forth above. We will respond in writing within 60 days of receiving
+          your appeal. To exercise one or more of your consumer privacy rights,
+          please submit a verifiable consumer request to:
+          privacy@bancor.network.
         </p>
       </>
     ),
@@ -518,10 +516,10 @@ const content = [
       <p>
         We currently disclose information collected through our Site to third
         parties, which under the CCPA may be considered a “sale.” In addition,
-        we may share information with third parties for the purpose of targeted
-        advertising. You have the right to opt out of the sale or sharing of
-        your information by clicking the “Do Not Sell or Share My Personal
-        Information” link on our Site or by clicking this{' '}
+        we may share information with third parties for targeted advertising.
+        You have the right to opt out of the sale or sharing of your information
+        by clicking the “Do Not Sell or Share My Personal Information” link on
+        our Site or by clicking this{' '}
         <button
           onClick={() => window?.OneTrust?.ToggleInfoDisplay()}
           id="ot-sdk-btn"
@@ -539,11 +537,20 @@ const content = [
       <p>
         We do not discriminate against consumers for exercising any of their
         rights with respect to their information. If you exercise any of your
-        rights under this Privacy Policy, we will not deny you goods or
-        services; charge you different prices or rates for goods or services; or
-        provide different levels or quality of goods or services to you. For the
-        avoidance of doubt and as noted above, residents of the United States
-        cannot use our Site per our Terms of Service.
+        rights under this Privacy Policy, we will not deny you services; charge
+        you different prices or rates for services; or provide different levels
+        or quality of services to you. For the avoidance of doubt and as noted
+        above, residents of the United States cannot use our Site per our Terms
+        of Service.
+      </p>
+    ),
+  },
+  {
+    subtitle: "Children's Privacy",
+    html: (
+      <p>
+        Our website is not directed to individuals under 16 years of age, and we
+        do not knowingly collect information from children.
       </p>
     ),
   },
@@ -579,8 +586,8 @@ export const PrivacyPage = () => {
       <>
         <span>Last updated: {config.policiesLastUpdated}</span>
         <p>
-          if you have not reviewed THIS PRIVACY POLICY since the “last updated”
-          date above, It is your responsibility to re-review IT.
+          IF YOU HAVE NOT REVIEWED THIS PRIVACY POLICY SINCE THE “LAST UPDATED”
+          DATE ABOVE, IT IS YOUR RESPONSIBILITY TO RE-REVIEW IT.
         </p>
         <p>
           THIS PRIVACY POLICY IS SUBJECT IN ALL RESPECTS TO THE TERMS OF USE
@@ -617,10 +624,11 @@ export const PrivacyPage = () => {
           the Site are held by Bprotocol Foundation, a Swiss foundation, with
           legal seat in Zug, Switzerland, registered in the Swiss commercial
           register under UID CHE-181.679.849 (the “Foundation”), and the terms
-          “we,” “us,” and “our” refer to the Foundation. Please read this
-          Privacy Policy carefully. This Privacy Policy, together with the Terms
-          of Use, govern your access to and use of the Site and Content (as
-          defined in the Terms of Use).
+          “we,” “us,” and “our” refer to the Foundation. The Site may also
+          provide links to content or services provided by third parties. Please
+          read this Privacy Policy carefully. This Privacy Policy, together with
+          the Terms of Use, govern your access to and use of the Site and
+          Content (as defined in the Terms of Use).
         </p>
 
         {content.map((item, index) => (
