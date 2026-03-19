@@ -19,6 +19,8 @@ import { TradeAuction } from 'pages/trade/auction';
 import { TradeCustom } from 'pages/trade/custom';
 import { TradeQuickAuction } from 'pages/trade/quick-auction';
 import { TradeQuickCustom } from 'pages/trade/quick-custom';
+import { addMonths, startOfDay, subMonths } from 'date-fns';
+import { toUnixUTC } from 'components/simulator/utils';
 
 // TRADE TYPE
 export type StrategyType =
@@ -169,6 +171,16 @@ const auctionPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/auction',
   component: TradeAuction,
+  beforeLoad: ({ search }) => {
+    if (!search.chartStart) {
+      const date = startOfDay(subMonths(new Date(), 1));
+      search.chartStart = toUnixUTC(date).toString();
+    }
+    if (!search.chartEnd) {
+      const date = startOfDay(addMonths(new Date(), 2));
+      search.chartEnd = toUnixUTC(date).toString();
+    }
+  },
   validateSearch: searchValidator({
     direction: v.optional(v.picklist(['buy', 'sell'])),
     startPrice: v.optional(validInputNumber),
@@ -183,6 +195,16 @@ const customPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/custom',
   component: TradeCustom,
+  beforeLoad: ({ search }) => {
+    if (!search.chartStart) {
+      const date = startOfDay(subMonths(new Date(), 1));
+      search.chartStart = toUnixUTC(date).toString();
+    }
+    if (!search.chartEnd) {
+      const date = startOfDay(addMonths(new Date(), 2));
+      search.chartEnd = toUnixUTC(date).toString();
+    }
+  },
   validateSearch: searchValidator({
     directions: v.optional(v.array(v.picklist(['buy', 'sell']))),
     buyStartPrice: v.optional(validInputNumber),

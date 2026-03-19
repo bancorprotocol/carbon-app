@@ -9,11 +9,13 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { quickGradientPriceWarning } from '../gradient/utils';
 import { formatQuickTime } from './utils';
+import { OrderTitle } from '../OrderTitle';
 
 interface Props {
   order: QuickGradientOrderBlock;
   setOrder: (order: Partial<QuickGradientOrderBlock>) => any;
   priceWarning?: ReactNode;
+  action?: ReactNode;
 }
 
 export const CreateQuickGradientOrder: FC<Props> = (props) => {
@@ -23,6 +25,7 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
   const [localDelta, setLocalDelta] = useState(order.deltaTime);
   const budgetId = useId();
   const endTimeId = useId();
+  const titleId = useId();
   const budgetToken = order.direction === 'buy' ? quote : base;
   const balance = useGetTokenBalance(budgetToken);
 
@@ -59,7 +62,11 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
   };
 
   return (
-    <div className="grid gap-16">
+    <article className="grid gap-16" aria-labelledby={titleId}>
+      <header className="flex items-center justify-between gap-8">
+        <OrderTitle direction={order.direction} titleId={titleId} base={base} />
+        {props.action}
+      </header>
       <div role="group" className="grid gap-8">
         <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
           Duration
@@ -143,6 +150,6 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
           data-testid="input-budget"
         />
       </div>
-    </div>
+    </article>
   );
 };

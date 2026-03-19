@@ -112,7 +112,10 @@ const QuickGradientChartContent: FC<ContentProps> = (props) => {
       <svg
         ref={ref}
         id="interactive-chart"
-        className={cn(style.historyChart, 'rounded-xl flex flex-1 bg-main-900')}
+        className={cn(
+          style.historyChart,
+          'rounded-xl flex flex-1 bg-main-900/60 overflow-clip',
+        )}
         data-testid="price-chart"
       >
         <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
@@ -130,7 +133,7 @@ const QuickGradientChartContent: FC<ContentProps> = (props) => {
               y="0"
               width={dms.marginRight}
               height={dms.height}
-              className="fill-main-900"
+              className="fill-main-800"
             />
             <line
               x1={0}
@@ -161,7 +164,7 @@ const QuickGradientChartContent: FC<ContentProps> = (props) => {
               y={dms.boundedHeight}
               width={dms.width}
               height={dms.marginBottom}
-              className="fill-main-900"
+              className="fill-main-800"
             />
             <line
               y1={dms.boundedHeight}

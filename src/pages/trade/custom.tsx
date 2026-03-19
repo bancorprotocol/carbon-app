@@ -26,7 +26,6 @@ import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
 import style from 'components/strategies/common/order.module.css';
-import { TokenLogo } from 'components/common/imager/Imager';
 
 const url = '/trade/custom';
 export const TradeCustom = () => {
@@ -209,27 +208,20 @@ export const TradeCustom = () => {
                     )}
                     data-direction={order.direction}
                   >
-                    <header className="flex items-center justify-between gap-8">
-                      <h2 className="text-18 flex items-center gap-8">
-                        <span>
-                          {direction === 'buy' ? 'Buy Low' : 'Sell High'}
-                        </span>
-                        <TokenLogo token={base} size={18} />
-                        <span>{base.symbol}</span>
-                      </h2>
-                      <button
-                        type="button"
-                        aria-label={`remove ${direction} order`}
-                        onClick={() => removeDirection(direction)}
-                      >
-                        <IconDelete className="size-16" />
-                      </button>
-                    </header>
                     <CreateGradientOrder
                       order={order}
                       setOrder={setOrder}
                       priceWarning={
                         priceError && <Warning message={priceError} isError />
+                      }
+                      action={
+                        <button
+                          type="button"
+                          aria-label={`remove ${direction} order`}
+                          onClick={() => removeDirection(direction)}
+                        >
+                          <IconDelete className="size-16" />
+                        </button>
                       }
                     />
                   </section>

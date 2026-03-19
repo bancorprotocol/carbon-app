@@ -15,10 +15,12 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { addDays, addYears, endOfDay, startOfDay } from 'date-fns';
 import { gradientDateWarning, gradientPriceWarning } from './utils';
 import { GradientFullOutcome } from './GradientFullOutcome';
+import { OrderTitle } from '../OrderTitle';
 
 interface Props {
   order: GradientOrderBlock;
   setOrder: (order: Partial<GradientOrderBlock>) => any;
+  action?: ReactNode;
   priceWarning?: ReactNode;
 }
 
@@ -29,6 +31,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
   const budgetToken = order.direction === 'buy' ? quote : base;
   const balance = useGetTokenBalance(budgetToken);
   const budgetId = useId();
+  const titleId = useId();
 
   const setRange = useCallback(
     (range: RangeDate) => {
@@ -50,8 +53,7 @@ export const CreateGradientOrder: FC<Props> = (props) => {
   const dateError = useMemo(() => {
     const end = endOfDay(fromUnixUTC(order.endDate));
     if (new Date() > end) {
-      // @todo(gradient)
-      return '';
+      return 'Your order is set in the past and will never be active.';
     }
   }, [order.endDate]);
 
@@ -63,7 +65,11 @@ export const CreateGradientOrder: FC<Props> = (props) => {
   }, [base, dateError, marketPrice, order]);
 
   return (
-    <div className="grid gap-16">
+    <article className="grid gap-16" aria-labelledby={titleId}>
+      <header className="flex items-center justify-between gap-8">
+        <OrderTitle direction={order.direction} titleId={titleId} base={base} />
+        {props.action}
+      </header>
       <div role="group" className="grid gap-8">
         <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
           Duration
@@ -120,6 +126,6 @@ export const CreateGradientOrder: FC<Props> = (props) => {
         />
       </div>
       <GradientFullOutcome base={base} quote={quote} order={order} />
-    </div>
+    </article>
   );
 };

@@ -26,6 +26,8 @@ import { Token } from 'libs/tokens';
 import { ActivityListProps } from './ActivityList';
 import { NotFound } from 'components/common/NotFound';
 import { useActivity, useActivityPagination } from './context';
+import { StrategyTypeIcon } from 'components/strategies/overview/StrategyTypeIcon';
+import { isGradientStrategy } from 'components/strategies/common/utils';
 import style from './ActivityTable.module.css';
 
 export const ActivityTable: FC<ActivityListProps> = (props) => {
@@ -34,9 +36,7 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
     <table className={cn(style.table, 'table grid-area-[list]')}>
       <thead>
         <tr>
-          {!hideIds && <th>ID</th>}
-          {/* @todo(gradient) */}
-          {/* <th>Type</th> */}
+          {!hideIds && <th>ID</th>}= <th>Type</th>
           <th colSpan={2}>Action</th>
           <th>Buy Budget</th>
           <th>Sell Budget</th>
@@ -99,13 +99,12 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
             <ActivityId activity={activity} size={14} />
           </td>
         )}
-        {/* @todo(gradient) */}
-        {/* <td rowSpan={2} className="px-8 py-12 first:pl-24">
+        <td rowSpan={2} className="px-8 py-12 first:pl-24">
           <StrategyTypeIcon
             className="place-self-center"
             isGradient={isGradientStrategy(strategy)}
           />
-        </td> */}
+        </td>
         <td rowSpan={2} className="py-12 pl-8 first:pl-24">
           <button onClick={setAction}>
             <ActivityIcon activity={activity} size={32} />

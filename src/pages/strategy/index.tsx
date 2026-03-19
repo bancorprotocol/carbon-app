@@ -40,6 +40,7 @@ import { D3ChartMarketPrice } from 'components/strategies/common/d3Chart/D3Chart
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 import { useMemo } from 'react';
+import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -180,8 +181,7 @@ export const StrategyPage = () => {
             />
             <D3Drawings />
             <D3XAxis />
-            {/* @todo(gradient) */}
-            {/* <D3ChartToday /> */}
+            <D3ChartToday />
             <D3YAxis />
             <D3ChartMarketPrice marketPrice={marketPrice} />
           </PairChartHistory>

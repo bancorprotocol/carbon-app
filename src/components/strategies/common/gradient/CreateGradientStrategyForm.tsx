@@ -63,9 +63,10 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
   const create = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
-    await createStrategy({
-      onSuccess: () => nav({ to: '/portfolio' }),
-    });
+    // @todo(gradient)
+    // await createStrategy({
+    //   onSuccess: () => nav({ to: '/portfolio' }),
+    // });
   };
 
   return (

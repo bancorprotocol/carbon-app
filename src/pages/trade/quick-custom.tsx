@@ -198,9 +198,9 @@ export const TradeQuickCustom = () => {
           buy={orders.buy.gradientOrder}
           sell={orders.sell.gradientOrder}
         >
-          <article className="bg-main-900 grid gap-16 rounded-b-2xl">
+          <div className="surface grid gap-16 rounded-2xl overflow-clip">
             {!search.directions?.length && (
-              <h2 className="error-message text-16 m-0 px-16">
+              <h2 className="error-message text-16 p-16">
                 Please select an order
               </h2>
             )}
@@ -208,7 +208,7 @@ export const TradeQuickCustom = () => {
               const { order, setOrder } = orders[direction];
               if (search.directions?.includes(direction)) {
                 return (
-                  <section
+                  <div
                     key={direction}
                     className={cn(
                       style.order,
@@ -216,26 +216,28 @@ export const TradeQuickCustom = () => {
                     )}
                     data-direction={order.direction}
                   >
-                    <button
-                      type="button"
-                      className="absolute right-16 top-28"
-                      aria-label={`remove ${direction} order`}
-                      onClick={() => removeDirection(direction)}
-                    >
-                      <IconDelete className="size-16" />
-                    </button>
                     <CreateQuickGradientOrder
                       order={order}
                       setOrder={setOrder}
                       priceWarning={
                         priceError && <Warning message={priceError} isError />
                       }
+                      action={
+                        <button
+                          type="button"
+                          className="absolute right-16 top-28"
+                          aria-label={`remove ${direction} order`}
+                          onClick={() => removeDirection(direction)}
+                        >
+                          <IconDelete className="size-16" />
+                        </button>
+                      }
                     />
-                  </section>
+                  </div>
                 );
               } else {
                 return (
-                  <div key={direction} className="grid px-16">
+                  <div key={direction} className="grid px-16 py-8 last:pb-16">
                     <button
                       type="button"
                       onClick={() => addDirection(direction)}
@@ -253,7 +255,7 @@ export const TradeQuickCustom = () => {
                 );
               }
             })}
-          </article>
+          </div>
         </CreateGradientStrategyForm>
       </CreateLayout>
     </>
