@@ -43,6 +43,23 @@ const links = {
 };
 
 export const RewardBanner = () => {
+  const rewardsQuery = useAllChainRewards();
+  const list = useMemo(() => {
+    if (!rewardsQuery.data) return;
+    return rewardsQuery.data
+      ?.filter(([_, rewards]) => !!rewards.length)
+      .map(([network, _]) => links[network]);
+  }, [rewardsQuery.data]);
+
+  if (!list) {
+    return (
+      <div role="banner" className="grid place-items-center gap-16 p-16">
+        <Loading width="55ch" height="36px" />
+        <Loading width="16ch" height="33px" />
+      </div>
+    );
+  }
+  if (!list.length) return;
   return (
     <div
       role="banner"
@@ -52,53 +69,23 @@ export const RewardBanner = () => {
         Join One of the Active Rewards (Yield farming) Programs
         <RewardIcon className="hidden sm:block size-20" />
       </h2>
-      <RewardChains />
-    </div>
-  );
-};
-
-const RewardChains = () => {
-  const rewardsQuery = useAllChainRewards();
-  const list = useMemo(() => {
-    if (!rewardsQuery.data) return;
-    console.log(rewardsQuery.data);
-    return rewardsQuery.data
-      ?.filter(([_, rewards]) => !!rewards.length)
-      .map(([network, _]) => links[network]);
-  }, [rewardsQuery.data]);
-
-  if (!list) {
-    const loadingItems = new Array(3).fill(null);
-    return (
-      <ul className="flex items-center gap-16">
-        {loadingItems.map((_, i) => (
-          <Loading width="16ch" height="24px" key={i} />
+      <nav
+        aria-label="redirect to reward page"
+        className="flex items-center gap-16"
+      >
+        {list.map(({ url, label, icon }, i) => (
+          <Fragment key={url}>
+            {!!i && <hr className="w-1 h-16 bg-main-0" />}
+            <a
+              href={url}
+              className="flex items-center gap-8 px-8 py-4 border border-main-0/40 rounded-md bg-main-0/10 hover:bg-main-0/20"
+            >
+              {icon}
+              {label}
+            </a>
+          </Fragment>
         ))}
-      </ul>
-    );
-  }
-
-  if (!list.length) {
-    return <p>No reward campaign at the moment</p>;
-  }
-
-  return (
-    <nav
-      aria-label="redirect to reward page"
-      className="flex items-center gap-16"
-    >
-      {list.map(({ url, label, icon }, i) => (
-        <Fragment key={url}>
-          {!!i && <hr className="w-1 h-16 bg-main-0" />}
-          <a
-            href={url}
-            className="flex items-center gap-8 px-8 py-4 border border-main-0/40 rounded-md bg-main-0/10 hover:bg-main-0/20"
-          >
-            {icon}
-            {label}
-          </a>
-        </Fragment>
-      ))}
-    </nav>
+      </nav>
+    </div>
   );
 };
