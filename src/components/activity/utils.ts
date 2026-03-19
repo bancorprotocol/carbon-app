@@ -82,7 +82,7 @@ export const activityDescription = (activity: Activity) => {
       if (strategy.type === 'gradient') {
         const order = (prefix: string, order: GradientOrder) => {
           if (isEmptyGradientOrder(order)) return '';
-          const prices = tokenRange(order._sP_, order._eP_, quote);
+          const prices = tokenRange(order.startPrice, order.endPrice, quote);
           return `${prefix} ${base.symbol}: ${prices}`;
         };
         const buy = order('Buy', strategy.buy);

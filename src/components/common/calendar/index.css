@@ -59,14 +59,12 @@
   @apply bg-main-900 text-main-0;
 }
 .rdp-range_start .rdp-day_button {
-  @apply bg-primary;
-  color: black;
+  @apply bg-primary text-main-900;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 .rdp-range_end .rdp-day_button {
-  @apply bg-primary;
-  color: black;
+  @apply bg-primary text-main-900;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }

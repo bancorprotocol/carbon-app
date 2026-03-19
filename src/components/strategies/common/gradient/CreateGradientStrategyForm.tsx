@@ -63,9 +63,9 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
   const create = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
-    // await createStrategy({
-    //   onSuccess: () => nav({ to: '/', search: {}, params: {} }),
-    // });
+    await createStrategy({
+      onSuccess: () => nav({ to: '/portfolio' }),
+    });
   };
 
   return (
@@ -75,10 +75,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
       data-testid="create-strategy-form"
     >
       {children}
-      <div className="approve-warnings rounded-lg bg-main-900/60 text-14 grid gap-16 p-20 text-main-0/60">
-        <p className="warning-message text-12 text-main-0/60">
-          Please confirm before proceeding.
-        </p>
+      <div className="surface approve-warnings rounded-lg bg-main-900/60 text-14 grid gap-16 p-20 text-main-0/60">
         <label
           htmlFor="approve-warnings"
           className="font-medium flex items-center gap-8"
@@ -86,10 +83,11 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
           <input
             id="approve-warnings"
             type="checkbox"
-            className="size-18"
+            className="size-18 shrink-0"
             data-testid="approve-warnings"
           />
-          I've reviewed all strategy parameters.
+          I accept any applicable warning(s) and understand fee on transfer
+          (tax) or rebasing tokens are not supported
         </label>
       </div>
 

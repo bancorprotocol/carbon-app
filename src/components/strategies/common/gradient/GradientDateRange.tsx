@@ -1,4 +1,3 @@
-import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { isSameDay, subMonths, startOfDay, endOfDay, addDays } from 'date-fns';
@@ -60,8 +59,7 @@ export const GradientDateRange = memo(function TimeRange(
       type="button"
       aria-label="Pick date range"
       className={cn(
-        'text-12 flex items-center gap-8 rounded-full border border-transparent btn-on-background px-12 py-8',
-        'outline-1 outline-main-0/60 focus-visible:outline-solid',
+        'btn-on-surface text-12 flex items-center gap-8 rounded-full',
         props.className,
       )}
       data-testid="date-picker-button"
@@ -182,40 +180,36 @@ const Content = (props: Props) => {
         />
         <div className="flex gap-20">
           {startTime && (
-            <p className="bg-main-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
+            <p className="bg-main-900/60 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
               <span className="text-10 text-main-0/60">Start Time</span>
               <time className="text-12 font-medium">{startTime}</time>
             </p>
           )}
           {range?.to && (
-            <p className="bg-main-900 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
+            <p className="bg-main-900/60 flex flex-1 items-center gap-8 rounded-full px-16 py-8">
               <span className="text-10 text-main-0/60">End Time</span>
               <time className="text-12 font-medium">23:59:59</time>
             </p>
           )}
         </div>
         <footer className="flex justify-end gap-16">
-          <Button
+          <button
             type="button"
-            variant="black"
-            size="sm"
-            className="col-span-2 justify-self-start"
+            className="btn-on-surface col-span-2 justify-self-start"
             onClick={onReset}
           >
             Reset
-          </Button>
-          <Button
+          </button>
+          <button
             form={props.form}
             type="button"
             disabled={props.required && !hasDates}
-            size="sm"
-            variant="success"
-            className="col-span-2 justify-self-end"
+            className="btn-main-gradient col-span-2 justify-self-end"
             data-testid="date-picker-confirm"
             onClick={onConfirm}
           >
             Confirm
-          </Button>
+          </button>
         </footer>
       </div>
     </div>

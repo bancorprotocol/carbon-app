@@ -25,10 +25,10 @@ export const defaultGradientOrder = (
   const endMultiplier = direction === 'buy' ? 0.99 : 1.01;
   const price = new SafeDecimal(marketPrice);
   const order = {
-    _sP_: baseOrder._sP_ ?? price.mul(startMultiplier).toString(),
-    _eP_: baseOrder._eP_ ?? price.mul(endMultiplier).toString(),
-    _sD_: baseOrder._sD_ ?? toUnixUTCDay(addDays(today, 1)),
-    _eD_: baseOrder._eD_ ?? toUnixUTCDay(addDays(today, 21)),
+    startPrice: baseOrder.startPrice ?? price.mul(startMultiplier).toString(),
+    endPrice: baseOrder.endPrice ?? price.mul(endMultiplier).toString(),
+    startDate: baseOrder.startDate ?? toUnixUTCDay(addDays(today, 1)),
+    endDate: baseOrder.endDate ?? toUnixUTCDay(addDays(today, 21)),
     budget: baseOrder.budget ?? '',
     direction: direction,
   };
@@ -38,15 +38,18 @@ export const defaultGradientOrder = (
   };
 };
 
-export const order_SD_ = (timestamp: string) => {
+export const orderStartDate = (timestamp: string) => {
   const date = fromUnixUTC(timestamp);
   return isToday(date) ? new Date() : startOfDay(date);
 };
-export const order_ED_ = (timestamp: string) => {
+export const orderEndDate = (timestamp: string) => {
   return endOfDay(fromUnixUTC(timestamp));
 };
 
-type Line = Pick<GradientOrderBlock, '_sD_' | '_eD_' | '_sP_' | '_eP_'>;
+type Line = Pick<
+  GradientOrderBlock,
+  'startDate' | 'endDate' | 'startPrice' | 'endPrice'
+>;
 
 /** Checks if the buy and sell lines overlap, and if the buy line is above the sell line at any point within the overlapping range */
 export const isReverseGradientOrders = (buy: Line, sell: Line): boolean => {
@@ -55,15 +58,15 @@ export const isReverseGradientOrders = (buy: Line, sell: Line): boolean => {
 };
 
 export const gradientDateWarning = (order: FormGradientOrder) => {
-  const _sD_ = order_SD_(order._sD_);
-  const _eD_ = order_ED_(order._eD_);
-  if (_eD_ < new Date()) return;
-  if (_sD_ >= new Date()) return;
-  if (new SafeDecimal(order._sP_).gt(order._eP_)) {
+  const startDate = orderStartDate(order.startDate);
+  const endDate = orderEndDate(order.endDate);
+  if (endDate < new Date()) return;
+  if (startDate >= new Date()) return;
+  if (new SafeDecimal(order.startPrice).gt(order.endPrice)) {
     // @todo(gradient)
     return '';
   }
-  if (new SafeDecimal(order._sP_).lt(order._eP_)) {
+  if (new SafeDecimal(order.startPrice).lt(order.endPrice)) {
     // @todo(gradient)
     return '';
   }
@@ -96,7 +99,7 @@ export const quickGradientPriceWarning = (
 };
 
 export const gradientDateError = (order: FormGradientOrder) => {
-  if (new Date() > order_ED_(order._eD_)) {
+  if (new Date() > orderEndDate(order.endDate)) {
     // @todo(gradient)
     return '';
   }

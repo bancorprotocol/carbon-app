@@ -27,7 +27,12 @@ import {
 import { getDomain, isEmptyHistory, scaleBandInvert } from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
-import { defaultEnd, default_ED_, defaultStart, default_SD_ } from '../utils';
+import {
+  defaultEnd,
+  defaultEndDate,
+  defaultStart,
+  defaultStartDate,
+} from '../utils';
 import {
   differenceInDays,
   Duration,
@@ -268,7 +273,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   const rangeInDays = useMemo(() => {
     if (!start || !end) {
-      return differenceInDays(new Date(), default_SD_());
+      return differenceInDays(new Date(), defaultStartDate());
     }
     // Compare two dates at the same local hour
     const startDate = startOfDay(Number(start) * 1000);
@@ -399,9 +404,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
             <DateRangePicker
               className="rounded-md hover:bg-main-900/40"
               defaultStart={fromUnixUTC(defaultHistoryStart)}
-              defaultEnd={default_ED_()}
+              defaultEnd={defaultEndDate()}
               start={fromUnixUTC(props.start || defaultHistoryStart)}
-              end={fromUnixUTC(props.end) || default_ED_()}
+              end={fromUnixUTC(props.end) || defaultEndDate()}
               onConfirm={zoomFromTo}
               options={{
                 disabled: disabledDates,

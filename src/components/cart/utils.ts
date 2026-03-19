@@ -15,8 +15,8 @@ import { Token } from 'libs/tokens';
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import {
   gradientMarginalPrice,
-  order_ED_,
-  order_SD_,
+  orderEndDate,
+  orderStartDate,
 } from 'components/strategies/common/gradient/utils';
 import { toUnixUTC } from 'components/simulator/utils';
 
@@ -110,11 +110,11 @@ export const useStrategyCart = () => {
       // update strategy with today value
       if (isGradientStrategy(cartStrategy)) {
         const { buy, sell } = cartStrategy;
-        cartStrategy.buy._sD_ = toUnixUTC(order_SD_(buy._sD_));
-        cartStrategy.buy._eD_ = toUnixUTC(order_ED_(buy._eD_));
+        cartStrategy.buy.startDate = toUnixUTC(orderStartDate(buy.startDate));
+        cartStrategy.buy.endDate = toUnixUTC(orderEndDate(buy.endDate));
         cartStrategy.buy.marginalPrice = gradientMarginalPrice(buy);
-        cartStrategy.sell._sD_ = toUnixUTC(order_SD_(sell._sD_));
-        cartStrategy.sell._eD_ = toUnixUTC(order_ED_(sell._eD_));
+        cartStrategy.sell.startDate = toUnixUTC(orderStartDate(sell.startDate));
+        cartStrategy.sell.endDate = toUnixUTC(orderEndDate(sell.endDate));
         cartStrategy.sell.marginalPrice = gradientMarginalPrice(sell);
       }
       return cartStrategy;

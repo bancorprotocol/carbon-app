@@ -68,8 +68,8 @@ export const TradeQuickCustom = () => {
     return defaultQuickGradientOrder(
       {
         direction: 'buy',
-        _sP_: search.buy_SP_,
-        _eP_: search.buy_EP_,
+        startPrice: search.buyStartPrice,
+        endPrice: search.buyEndPrice,
         deltaTime: search.buyDeltaTime,
         budget: search.buyBudget,
       },
@@ -78,17 +78,17 @@ export const TradeQuickCustom = () => {
   }, [
     marketPrice,
     search.buyBudget,
-    search.buy_EP_,
+    search.buyEndPrice,
     search.buyDeltaTime,
-    search.buy_SP_,
+    search.buyStartPrice,
   ]);
 
   const baseSell = useMemo(() => {
     return defaultQuickGradientOrder(
       {
         direction: 'sell',
-        _sP_: search.sell_SP_,
-        _eP_: search.sell_EP_,
+        startPrice: search.sellStartPrice,
+        endPrice: search.sellEndPrice,
         deltaTime: search.sellDeltaTime,
         budget: search.sellBudget,
       },
@@ -97,9 +97,9 @@ export const TradeQuickCustom = () => {
   }, [
     marketPrice,
     search.sellBudget,
-    search.sell_EP_,
+    search.sellEndPrice,
     search.sellDeltaTime,
-    search.sell_SP_,
+    search.sellStartPrice,
   ]);
 
   const buy = useQuickGradientOrder(baseBuy, (next) => {
@@ -136,10 +136,10 @@ export const TradeQuickCustom = () => {
         set.delete(direction);
         saveOrder(
           {
-            _sP_: undefined,
-            _eP_: undefined,
-            _sD_: undefined,
-            _eD_: undefined,
+            startPrice: undefined,
+            endPrice: undefined,
+            startDate: undefined,
+            endDate: undefined,
             budget: undefined,
           },
           direction,

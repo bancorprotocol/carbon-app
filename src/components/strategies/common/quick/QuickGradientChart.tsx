@@ -39,7 +39,7 @@ interface Props {
 const yDomain = (orders: QuickGradientOrderBlock[], marketPrice?: string) => {
   if (!marketPrice) return [0, 1000];
   const price = Number(marketPrice);
-  const orderPrices = orders.map((o) => [+o._sP_, +o._eP_]).flat();
+  const orderPrices = orders.map((o) => [+o.startPrice, +o.endPrice]).flat();
   return [
     Math.min(price / 1.5, ...orderPrices),
     Math.max(price * 1.5, ...orderPrices),
@@ -130,7 +130,7 @@ const QuickGradientChartContent: FC<ContentProps> = (props) => {
               y="0"
               width={dms.marginRight}
               height={dms.height}
-              className="fill-background-black"
+              className="fill-main-900"
             />
             <line
               x1={0}
@@ -161,7 +161,7 @@ const QuickGradientChartContent: FC<ContentProps> = (props) => {
               y={dms.boundedHeight}
               width={dms.width}
               height={dms.marginBottom}
-              className="fill-background-black"
+              className="fill-main-900"
             />
             <line
               y1={dms.boundedHeight}

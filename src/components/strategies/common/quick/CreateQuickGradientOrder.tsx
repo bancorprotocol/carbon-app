@@ -60,22 +60,16 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
 
   return (
     <div className="grid gap-16">
-      <h2
-        className="text-16 capitalize"
-        style={{ color: `var(--color-${order.direction})` }}
-      >
-        {order.direction} Overview
-      </h2>
       <div role="group" className="grid gap-8">
         <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
           Duration
         </h3>
         <div className="text-12 font-medium flex gap-8 text-nowrap text-main-0/60">
-          <div className="rounded-s-2xl rounded-e-md flex flex-1 items-center gap-8 bg-main-900 px-16 py-8">
+          <div className="input-container rounded-s-2xl rounded-e-md flex flex-1 items-center gap-8 px-16 py-8">
             <span>Start Time</span>
             <span>On Execution</span>
           </div>
-          <div className="rounded-s-md rounded-e-2xl has-[input:invalid]:outline-error has-[input:invalid]:border-error flex flex-1 items-center gap-4 border border-transparent bg-main-900 px-16 py-8 has-[input:focus-visible]:outline-solid">
+          <div className="input-container rounded-s-md rounded-e-2xl  flex flex-1 items-center gap-4">
             <label htmlFor={endTimeId}>End Time</label>
             <button
               type="button"
@@ -119,10 +113,10 @@ export const CreateQuickGradientOrder: FC<Props> = (props) => {
         <GradientPriceRange
           base={base}
           quote={quote}
-          start={order._sP_}
-          end={order._eP_}
-          setStart={(_sP_) => setOrder({ _sP_ })}
-          setEnd={(_eP_) => setOrder({ _eP_ })}
+          start={order.startPrice}
+          end={order.endPrice}
+          setStart={(startPrice) => setOrder({ startPrice })}
+          setEnd={(endPrice) => setOrder({ endPrice })}
           direction={order.direction}
         />
         {props.priceWarning}

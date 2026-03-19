@@ -1,4 +1,4 @@
-import { FC, FormEvent, useId } from 'react';
+import { FC, FormEvent, useId, useMemo } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import IconCheck from 'assets/icons/check.svg?react';
@@ -93,16 +93,14 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
   //   }
   // };
 
-  // @todo(gradient)
-  const displayFilter = strategyFilter.status[filter.status];
-  // const displayFilter = useMemo(() => {
-  //   if (filter.status === 'all' && filter.type === 'all') return 'All';
-  //   const typeLabel = strategyFilter.type[filter.type];
-  //   const statusLabel = strategyFilter.status[filter.status];
-  //   if (filter.status === 'all') return typeLabel;
-  //   if (filter.type === 'all') return statusLabel;
-  //   return `${typeLabel}, ${statusLabel}`;
-  // }, [filter.status, filter.type]);
+  const displayFilter = useMemo(() => {
+    if (filter.status === 'all' && filter.type === 'all') return 'All';
+    const typeLabel = strategyFilter.type[filter.type];
+    const statusLabel = strategyFilter.status[filter.status];
+    if (filter.status === 'all') return typeLabel;
+    if (filter.type === 'all') return statusLabel;
+    return `${typeLabel}, ${statusLabel}`;
+  }, [filter.status, filter.type]);
 
   return (
     <DropdownMenu

@@ -34,8 +34,8 @@ export const CreateGradientOrder: FC<Props> = (props) => {
     (range: RangeDate) => {
       if (!range.start || !range.end) return;
       setOrder({
-        _sD_: toUnixUTCDay(range.start),
-        _eD_: toUnixUTCDay(range.end),
+        startDate: toUnixUTCDay(range.start),
+        endDate: toUnixUTCDay(range.end),
       });
     },
     [setOrder],
@@ -48,12 +48,12 @@ export const CreateGradientOrder: FC<Props> = (props) => {
   })();
 
   const dateError = useMemo(() => {
-    const end = endOfDay(fromUnixUTC(order._eD_));
+    const end = endOfDay(fromUnixUTC(order.endDate));
     if (new Date() > end) {
       // @todo(gradient)
       return '';
     }
-  }, [order._eD_]);
+  }, [order.endDate]);
 
   const dateWarning = useMemo(() => gradientDateWarning(order), [order]);
 
@@ -64,12 +64,6 @@ export const CreateGradientOrder: FC<Props> = (props) => {
 
   return (
     <div className="grid gap-16">
-      <h2
-        className="text-16 capitalize"
-        style={{ color: `var(--color-${order.direction})` }}
-      >
-        {order.direction} Overview
-      </h2>
       <div role="group" className="grid gap-8">
         <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
           Duration
@@ -77,8 +71,8 @@ export const CreateGradientOrder: FC<Props> = (props) => {
         <GradientDateRange
           defaultStart={addDays(startOfDay(new Date()), 1)}
           defaultEnd={addDays(startOfDay(new Date()), 7)}
-          start={fromUnixUTC(order._sD_)}
-          end={fromUnixUTC(order._eD_)}
+          start={fromUnixUTC(order.startDate)}
+          end={fromUnixUTC(order.endDate)}
           onConfirm={setRange}
           options={{
             disabled: { after: addYears(new Date(), 1) },
@@ -88,17 +82,17 @@ export const CreateGradientOrder: FC<Props> = (props) => {
         {dateError && <Warning message={dateError} isError />}
         {!dateError && dateWarning && <Warning message={dateWarning} />}
       </div>
-      <div className="grid gap-8">
+      <div role="group" className="grid gap-8">
         <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
           Set {order.direction} Price
         </h3>
         <GradientPriceRange
           base={base}
           quote={quote}
-          start={order._sP_}
-          end={order._eP_}
-          setStart={(_sP_) => setOrder({ _sP_ })}
-          setEnd={(_eP_) => setOrder({ _eP_ })}
+          start={order.startPrice}
+          end={order.endPrice}
+          setStart={(startPrice) => setOrder({ startPrice })}
+          setEnd={(endPrice) => setOrder({ endPrice })}
           direction={order.direction}
         />
         {props.priceWarning}

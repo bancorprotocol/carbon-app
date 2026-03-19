@@ -8,10 +8,10 @@ export interface ActivityStaticOrder {
   budget: string;
 }
 export interface ActivityGradientOrder {
-  _sD_: string;
-  _eD_: string;
-  _sP_: string;
-  _eP_: string;
+  startDate: string;
+  endDate: string;
+  startPrice: string;
+  endPrice: string;
   marginal: string;
   budget: string;
 }
