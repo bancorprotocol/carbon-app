@@ -4,7 +4,7 @@ import {
   RangeDate,
   GradientDateRange,
 } from 'components/strategies/common/gradient/GradientDateRange';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { GradientPriceRange } from './GradientPriceRange';
 import { InputBudget } from '../InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
@@ -24,7 +24,7 @@ interface Props {
 
 export const CreateGradientOrder: FC<Props> = (props) => {
   const { order, setOrder } = props;
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const { marketPrice } = useMarketPrice({ base, quote });
   const budgetToken = order.direction === 'buy' ? quote : base;
   const balance = useGetTokenBalance(budgetToken);

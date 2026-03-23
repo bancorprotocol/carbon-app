@@ -14,9 +14,9 @@ import { OverlappingAction } from '../overlapping/OverlappingAction';
 import { EditBudgetDistribution } from './EditStrategyAllocatedBudget';
 import { isZero } from '../common/utils';
 import { SafeDecimal } from 'libs/safedecimal';
-import style from 'components/strategies/common/order.module.css';
 import { cn } from 'utils/helpers';
 import { LimitRangeOrder } from '../common/LimitRangeOrder';
+import style from 'components/strategies/common/order.module.css';
 
 interface Props {
   order: EditOrderBlock;
@@ -50,9 +50,30 @@ export const EditStrategyPriceField: FC<Props> = ({
   const initialBudget = initialOrder.budget;
   const titleId = useId();
 
-  const setPrice = (price: string) => setOrder({ min: price, max: price });
-  const setMin = (min: string) => setOrder({ min, marginalPrice: undefined });
-  const setMax = (max: string) => setOrder({ max, marginalPrice: undefined });
+  const setPrice = (price: string) => {
+    setOrder({
+      min: price,
+      max: price,
+      presetMin: undefined,
+      presetMax: undefined,
+    });
+  };
+  const setMin = (min: string) => setOrder({ min, presetMin: undefined });
+  const setMax = (max: string) => setOrder({ max, presetMax: undefined });
+  const setPreset = (preset: string) => {
+    setOrder({
+      min: undefined,
+      max: undefined,
+      presetMin: preset,
+      presetMax: preset,
+    });
+  };
+  const setPresetMin = (presetMin: string) => {
+    setOrder({ min: undefined, presetMin });
+  };
+  const setPresetMax = (presetMax: string) => {
+    setOrder({ max: undefined, presetMax });
+  };
   const setBudget = (budget: string) => setOrder({ budget });
   const setMarginalPrice = (marginalPrice: string) => {
     setOrder({ marginalPrice });
@@ -65,6 +86,8 @@ export const EditStrategyPriceField: FC<Props> = ({
       settings,
       min: undefined,
       max: undefined,
+      presetMin: undefined,
+      presetMax: undefined,
       marginalPrice: undefined,
     });
   };
@@ -111,6 +134,9 @@ export const EditStrategyPriceField: FC<Props> = ({
           setMin={setMin}
           setMax={setMax}
           setPrice={setPrice}
+          setPresetMin={setPresetMin}
+          setPresetMax={setPresetMax}
+          setPreset={setPreset}
           error={error}
           warnings={warnings}
         />

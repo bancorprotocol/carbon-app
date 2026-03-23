@@ -1,6 +1,6 @@
 import { FC, useMemo, ReactNode, useId, useState, useEffect } from 'react';
 import { QuickGradientOrderBlock } from '../types';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { GradientPriceRange } from '../gradient/GradientPriceRange';
 import { InputBudget } from '../InputBudget';
 import { useGetTokenBalance } from 'libs/queries';
@@ -18,7 +18,7 @@ interface Props {
 
 export const CreateQuickGradientOrder: FC<Props> = (props) => {
   const { order, setOrder } = props;
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const { marketPrice } = useMarketPrice({ base, quote });
   const [localDelta, setLocalDelta] = useState(order.deltaTime);
   const budgetId = useId();

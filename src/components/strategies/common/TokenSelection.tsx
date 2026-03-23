@@ -32,7 +32,11 @@ export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
       }
 
       navigate({
-        search: (s) => ({ ...s, ...tokens }),
+        search: (s) => ({
+          ...tokens,
+          chartStart: s.chartStart,
+          chartEnd: s.chartEnd,
+        }),
         replace: true,
         resetScroll: false,
       });
@@ -48,11 +52,14 @@ export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
   const swapTokens = () => {
     if (base && quote) {
       navigate({
-        search: (s) => ({
-          ...s,
-          base: quote.address,
-          quote: base.address,
-        }),
+        search: (s) => {
+          return {
+            base: quote.address,
+            quote: base.address,
+            chartStart: s.chartStart,
+            chartEnd: s.chartEnd,
+          };
+        },
         replace: true,
         resetScroll: false,
       });

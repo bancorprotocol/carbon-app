@@ -21,7 +21,11 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
-import { OrderBlock, CreateOverlappingOrder } from '../common/types';
+import {
+  OrderBlock,
+  CreateOverlappingOrder,
+  StaticOrder,
+} from '../common/types';
 
 export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing: Dispatch<SetStateAction<boolean>>,
@@ -34,74 +38,129 @@ export const handleTxStatusAndRedirectToOverview = (
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 
-export const getRecurringPriceMultiplier = (
+const getRecurringPreset = (
   direction: StrategyDirection,
   settings: StrategySettings,
 ) => {
   if (settings === 'range') {
     return {
-      min: direction === 'buy' ? 0.95 : 1.01,
-      max: direction === 'buy' ? 0.99 : 1.05,
+      min: direction === 'buy' ? 0.05 : 0.01,
+      max: direction === 'buy' ? 0.01 : 0.05,
     };
   } else {
     return {
-      min: direction === 'buy' ? 0.99 : 1.01,
-      max: direction === 'buy' ? 0.99 : 1.01,
+      min: 0.01,
+      max: 0.01,
     };
   }
 };
 
-export const getDefaultOrder = (
-  direction: StrategyDirection,
+// search preset * marketPrice > search prices > strategy > default preset * price > default preset * marketPrice
+export const getEditOrderPrices = (
+  order: Partial<OrderBlock>,
+  baseOrder: StaticOrder,
+  marketPrice: string = '0',
+) => {
+  const direction = order.direction ?? 'sell';
+  const settings = order.settings ?? 'limit';
+  const baseSettings = baseOrder.min === baseOrder.max ? 'limit' : 'range';
+  const presets = getRecurringPreset(direction, settings);
+  const getMultiplier = (value: string | number) => {
+    if (direction === 'buy') {
+      return new SafeDecimal(1).minus(value);
+    } else {
+      return new SafeDecimal(1).add(value);
+    }
+  };
+  const getPrice = (preset: string | number, priceRef: string) => {
+    return getMultiplier(preset).mul(priceRef).toString();
+  };
+  const getMin = () => {
+    // 1: Search preset * marketPrice
+    if (order.presetMin) return getPrice(order.presetMin, marketPrice);
+    // 2: Search price
+    if (!isZero(order.min)) return order.min;
+    // 3. Strategy Price
+    if (!isZero(baseOrder.min)) {
+      if (direction === 'sell') return baseOrder.min;
+      // limit -> limit / range -> range
+      if (baseSettings === settings) return baseOrder.min;
+      // range -> limit
+      if (settings === 'limit') return baseOrder.max;
+      // limit -> range
+      return getPrice(presets.min, baseOrder.max);
+    }
+    // 4. disposable -> recurrning
+    return getPrice(presets.min, marketPrice);
+  };
+  const getMax = () => {
+    // 1: Search preset * marketPrice
+    if (order.presetMax) return getPrice(order.presetMax, marketPrice);
+    // 2: Search price
+    if (!isZero(order.max)) return order.max;
+    // 3. Strategy Price
+    if (!isZero(baseOrder.max)) {
+      if (direction === 'buy') return baseOrder.max;
+      // limit -> limit / range -> range
+      if (baseSettings === settings) return baseOrder.max;
+      // range -> limit
+      if (baseSettings === 'limit') return baseOrder.min;
+      // limit -> range
+      return getPrice(presets.max, baseOrder.min);
+    }
+    // 4. disposable -> recurrning
+    return getPrice(presets.max, marketPrice);
+  };
+  return {
+    min: getMin(),
+    max: getMax(),
+  };
+};
+
+// search preset > search prices > default preset
+const getTradeRecurringPrices = (
+  order: Partial<OrderBlock>,
+  marketPrice: number | string,
+) => {
+  const direction = order.direction ?? 'sell';
+  const settings = order.settings ?? 'limit';
+  const presets = getRecurringPreset(direction, settings);
+  const presetMin = order.presetMin || presets.min;
+  const presetMax = order.presetMax || presets.max;
+  const getMultiplier = (value: string | number) => {
+    if (direction === 'buy') {
+      return new SafeDecimal(1).minus(value);
+    } else {
+      return new SafeDecimal(1).add(value);
+    }
+  };
+  return {
+    min: getMultiplier(presetMin).mul(marketPrice).toString(),
+    max: getMultiplier(presetMax).mul(marketPrice).toString(),
+  };
+};
+
+export const getTradeOrder = (
   order: Partial<OrderBlock>,
   marketPrice: number | string = 0,
 ): OrderBlock => {
-  const market = new SafeDecimal(marketPrice);
-  const settings = order.settings ?? 'limit';
-  const multiplier = getRecurringPriceMultiplier(direction, settings);
-  if (settings === 'range') {
-    return {
-      min: order.min ?? market.mul(multiplier.min).toString(),
-      max: order.max ?? market.mul(multiplier.max).toString(),
-      budget: order.budget ?? '',
-      settings,
-    };
-  } else {
-    return {
-      min: order.min ?? market.mul(multiplier.min).toString(),
-      max: order.max ?? market.mul(multiplier.max).toString(),
-      budget: order.budget ?? '',
-      settings,
-    };
-  }
+  const prices = getTradeRecurringPrices(order, marketPrice);
+  return {
+    min: order.min ?? prices.min,
+    max: order.max ?? prices.max,
+    budget: order.budget ?? '',
+    settings: order.settings ?? 'limit',
+  };
 };
 
-export const overlappingMultiplier = {
-  min: 0.99,
-  max: 1.01,
-};
-export const initOverlappingMin = (
-  marketPrice: string,
-  fullRangeMin?: string,
-) => {
-  if (fullRangeMin) return fullRangeMin;
-  const multiplier = overlappingMultiplier.min;
-  return new SafeDecimal(marketPrice).times(multiplier).toString();
-};
-export const initOverlappingMax = (
-  marketPrice: string,
-  fullRangeMax?: string,
-) => {
-  if (fullRangeMax) return fullRangeMax;
-  const multiplier = overlappingMultiplier.max;
-  return new SafeDecimal(marketPrice).times(multiplier).toString();
-};
+export const defaultPreset = 0.01;
+
 /** Create the orders out of the search params */
 export const getOverlappingOrders = (
   search: TradeOverlappingSearch,
   base?: Token,
   quote?: Token,
-  marketPrice?: string,
+  marketPrice?: number,
 ): { buy: CreateOverlappingOrder; sell: CreateOverlappingOrder } => {
   if (!base || !quote || !marketPrice) {
     return {
@@ -109,30 +168,44 @@ export const getOverlappingOrders = (
       sell: { min: '', max: '', marginalPrice: '', budget: '' },
     };
   }
+  const marketPriceStr = marketPrice.toString();
 
   const fullRange = (() => {
-    if (!search.fullRange) return;
-    return getFullRangesPrices(marketPrice, base.decimals, quote.decimals);
+    if (search.preset !== 'Infinity') return;
+    return getFullRangesPrices(marketPriceStr, base.decimals, quote.decimals);
   })();
+
+  const getMin = () => {
+    if (fullRange) return fullRange.min;
+    const preset = search.preset || defaultPreset;
+    const multiplier = new SafeDecimal(1).minus(preset);
+    return new SafeDecimal(marketPrice).times(multiplier).toString();
+  };
+  const getMax = () => {
+    if (fullRange) return fullRange.max;
+    const preset = search.preset || defaultPreset;
+    const multiplier = new SafeDecimal(1).add(preset);
+    return new SafeDecimal(marketPrice).times(multiplier).toString();
+  };
 
   const {
     anchor,
-    min = initOverlappingMin(marketPrice, fullRange?.min),
-    max = initOverlappingMax(marketPrice, fullRange?.max),
+    min = getMin(),
+    max = getMax(),
     spread = defaultSpread,
     budget,
   } = search;
 
   if (!isValidRange(min, max) || !isValidSpread(min, max, spread)) {
-    let marginalPrice = marketPrice;
-    if (new SafeDecimal(marketPrice).gt(max)) marginalPrice = max;
-    if (new SafeDecimal(marketPrice).lt(min)) marginalPrice = min;
+    let marginalPrice = marketPriceStr;
+    if (new SafeDecimal(marketPriceStr).gt(max)) marginalPrice = max;
+    if (new SafeDecimal(marketPriceStr).lt(min)) marginalPrice = min;
     return {
       buy: { min: min, max: max, marginalPrice, budget: '' },
       sell: { min: min, max: max, marginalPrice, budget: '' },
     };
   }
-  const prices = calculateOverlappingPrices(min, max, marketPrice, spread);
+  const prices = calculateOverlappingPrices(min, max, marketPriceStr, spread);
   const orders = {
     buy: {
       min: prices.buyPriceLow,
@@ -156,7 +229,7 @@ export const getOverlappingOrders = (
       quote.decimals,
       min,
       max,
-      marketPrice,
+      marketPriceStr,
       spread,
       budget,
     );
@@ -168,7 +241,7 @@ export const getOverlappingOrders = (
       quote.decimals,
       min,
       max,
-      marketPrice,
+      marketPriceStr,
       spread,
       budget,
     );

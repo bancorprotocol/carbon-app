@@ -33,6 +33,10 @@ export const validInputNumber = v.optional(
   ),
   '0',
 );
+export const validSettings = v.picklist(['limit', 'range']);
+export const validAction = v.picklist(['deposit', 'withdraw']);
+export const validDirection = v.picklist(['buy', 'sell']);
+export const validChartType = v.picklist(['history', 'range']);
 
 /** yyyy-mm-dd */
 export const validDay = v.pipe(v.string(), v.regex(/\d{4}-\d{2}-\d{2}/));

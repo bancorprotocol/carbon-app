@@ -11,12 +11,14 @@ import {
   mockMarketRate,
   priceHistoryHandler,
 } from 'libs/testing-library';
-import { TradeProvider } from 'components/trade/TradeProvider';
+import { StrategyFormProvider } from 'components/strategies/common/StrategyFormProvider';
 import { Token } from 'libs/tokens';
+import { useSearch } from '@tanstack/react-router';
 
 const basePath = '/trade/overlapping';
 
-const marketRates = mockMarketRate({ USDC: 1, ETH: 2800 });
+const marketPrices = { USDC: 1, ETH: 2800 };
+const marketRates = mockMarketRate(marketPrices);
 
 const mockServer = new MockServer([
   marketRateHandler(marketRates),
@@ -26,11 +28,22 @@ const mockServer = new MockServer([
 beforeAll(() => mockServer.start());
 afterAll(() => mockServer.close());
 
-const WrappedOverlapping = ({ base, quote }: { base: Token; quote: Token }) => {
+interface Props {
+  base: Token;
+  quote: Token;
+}
+
+const WrappedOverlapping = ({ base, quote }: Props) => {
+  const search = useSearch({ strict: false });
+  const userMarketPrice = search.marketPrice
+    ? Number(search.marketPrice)
+    : undefined;
+  const marketPrice =
+    userMarketPrice || marketPrices[base.symbol as 'USDC' | 'ETH'];
   return (
-    <TradeProvider base={base} quote={quote}>
+    <StrategyFormProvider base={base} quote={quote} marketPrice={marketPrice}>
       <TradeOverlapping />
-    </TradeProvider>
+    </StrategyFormProvider>
   );
 };
 

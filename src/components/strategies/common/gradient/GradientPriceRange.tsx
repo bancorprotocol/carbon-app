@@ -15,8 +15,8 @@ import { Presets } from 'components/common/preset/Preset';
 import { buyPresets, sellPresets } from '../price-presets';
 import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
-import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication/MarketPriceIndication';
+import { useStrategyFormCtx } from '../StrategyFormContext';
 
 interface Props {
   base: Token;
@@ -34,7 +34,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
   const [localEnd, setLocalEnd] = useState(roundSearchParam(end));
   const inputStartId = useId();
   const inputEndId = useId();
-  const { marketPrice } = useStrategyMarketPrice({ base, quote });
+  const { marketPrice } = useStrategyFormCtx();
 
   const startTimeout = useRef<number>(null);
   const endTimeout = useRef<number>(null);
@@ -83,7 +83,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
 
   const setStartMarket = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    onStartChange(formatNumber(marketPrice!));
+    onStartChange(formatNumber(marketPrice!.toString()));
   };
 
   const onStartBlur = (e: FocusEvent<HTMLInputElement>) => {
@@ -106,7 +106,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
 
   const setEndMarket = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    onEndChange(formatNumber(marketPrice!));
+    onEndChange(formatNumber(marketPrice!.toString()));
   };
 
   const onEndBlur = (e: FocusEvent<HTMLInputElement>) => {
