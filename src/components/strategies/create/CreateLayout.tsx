@@ -2,7 +2,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradeLayout } from 'components/trade/TradeLayout';
 import { FC, ReactNode } from 'react';
 import { InitMarketPrice } from '../common/InitMarketPrice';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { useSearch } from '@tanstack/react-router';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const CreateLayout: FC<Props> = ({ children, url }) => {
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const search = useSearch({ from: url });
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();

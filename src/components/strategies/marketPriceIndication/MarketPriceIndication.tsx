@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { MarketPricePercent } from './MarketPricePercent';
 import { marketPricePercent } from './useMarketPercent';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useStrategyMarketPrice } from '../UserMarketPrice';
+import { useStrategyFormCtx } from '../common/StrategyFormContext';
 
 interface Props {
   base: Token;
@@ -13,8 +13,8 @@ interface Props {
   isBuy?: boolean;
 }
 export const MarketPriceIndication: FC<Props> = (props) => {
-  const { base, quote, price, ignoreMarketPriceWarning, isBuy } = props;
-  const { marketPrice } = useStrategyMarketPrice({ base, quote });
+  const { quote, price, ignoreMarketPriceWarning, isBuy } = props;
+  const { marketPrice } = useStrategyFormCtx();
   const marketPercent = marketPricePercent(price, marketPrice);
   const { getFiatAsString } = useFiatCurrency(quote);
   const fiatAsString = getFiatAsString(price);

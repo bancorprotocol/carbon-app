@@ -1,14 +1,8 @@
 import { Link, useParams } from '@tanstack/react-router';
-import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import IconDisposable from 'assets/icons/disposable.svg?react';
 import IconRecurring from 'assets/icons/recurring.svg?react';
 import IconOverlapping from 'assets/icons/overlapping.svg?react';
-import {
-  EditTypes,
-  toDisposablePricesSearch,
-  toOverlappingPricesSearch,
-  toRecurringPricesSearch,
-} from 'libs/routing/routes/strategyEdit';
+import { EditTypes } from 'libs/routing/routes/strategyEdit';
 
 const links = [
   {
@@ -37,13 +31,6 @@ const links = [
 export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
   const params = useParams({ from: '/strategies/edit/$strategyId' });
   const pathName = window.location.pathname;
-  const priceSearchFn = {
-    disposable: toDisposablePricesSearch,
-    recurring: toRecurringPricesSearch,
-    overlapping: toOverlappingPricesSearch,
-  };
-
-  const { strategy } = useEditStrategyCtx();
   if (editType !== 'editPrices' && editType !== 'renew') return;
 
   return (
@@ -56,7 +43,7 @@ export const EditPriceNav = ({ editType }: { editType: EditTypes }) => {
           key={link.id}
           to={link.to}
           search={({ chartStart, chartEnd, marketPrice }) => ({
-            ...priceSearchFn[link.id](strategy, editType),
+            editType,
             chartStart,
             chartEnd,
             marketPrice,

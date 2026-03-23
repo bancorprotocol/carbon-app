@@ -1,6 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing/routes/trade';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -28,7 +28,7 @@ import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/quick-custom';
 export const TradeQuickCustom = () => {
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const { marketPrice, isPending: pendingMarketPrice } = useMarketPrice({
     base,
     quote,
@@ -170,11 +170,7 @@ export const TradeQuickCustom = () => {
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <QuickGradientChart
-          base={base}
-          quote={quote}
-          orders={[orders.buy.order, orders.sell.order]}
-        >
+        <QuickGradientChart orders={[orders.buy.order, orders.sell.order]}>
           {search.directions?.map((direction) => (
             <D3EditLine
               key={direction}

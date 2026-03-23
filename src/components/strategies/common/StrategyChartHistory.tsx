@@ -18,28 +18,25 @@ import {
 } from 'components/strategies/common/utils';
 import { NotFound } from 'components/common/NotFound';
 import { TradingviewChart } from 'components/tradingviewChart';
-import { Token } from 'libs/tokens';
 import { D3PriceHistory } from './d3Chart/D3PriceHistory';
-import { useStrategyMarketPrice } from '../UserMarketPrice';
 import { isEmptyHistory } from './d3Chart/utils';
+import { useStrategyFormCtx } from './StrategyFormContext';
 import config from 'config';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
-  base: Token;
-  quote: Token;
   // TODO: Provide Bounds directly instead of passing the orders
   buy?: FormOrder;
   sell?: FormOrder;
   direction?: 'buy' | 'sell'; // Only for disposable
-  marketPrice?: string;
   children?: ReactNode;
 }
 
 export const StrategyChartHistory: FC<Props> = (props) => {
-  const { base, quote, children, buy, sell } = props;
+  const { children, buy, sell } = props;
   const { chartStart, chartEnd } = useSearch({ strict: false }) as TradeSearch;
-  const { marketPrice, isPending: isMarketPricePending } =
-    useStrategyMarketPrice({ base, quote });
+  const { base, quote, marketPrice } = useStrategyFormCtx();
+  const { marketPrice: externalMarketPrice } = useMarketPrice({ base, quote });
 
   const nav = useNavigate();
 
@@ -73,11 +70,11 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   });
 
   const history = useMemo(() => {
-    if (!data || !marketPrice || isEmptyHistory(data)) return data;
+    if (!data || !externalMarketPrice || isEmptyHistory(data)) return data;
     const copy = structuredClone(data);
-    copy.at(-1)!.close = Number(marketPrice);
+    copy.at(-1)!.close = externalMarketPrice;
     return copy;
-  }, [data, marketPrice]);
+  }, [data, externalMarketPrice]);
 
   useEffect(() => {
     setBounds(getBounds(base, quote, buy, sell, direction));
@@ -89,7 +86,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
     return <TradingviewChart base={base} quote={quote} />;
   }
 
-  if (isPending || isMarketPricePending) {
+  if (isPending) {
     return (
       <section className="rounded-xl grid flex-1 items-center bg-main-900/60">
         <CarbonLogoLoading className="h-[80px]" />
@@ -121,7 +118,7 @@ export const StrategyChartHistory: FC<Props> = (props) => {
   return (
     <D3PriceHistory
       data={history!}
-      marketPrice={Number(marketPrice)}
+      marketPrice={marketPrice}
       bounds={bounds}
       zoomBehavior="extended"
       start={chartStart}

@@ -2,7 +2,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEditStrategyCtx } from 'components/strategies/edit/EditStrategyContext';
 import { tokenAmount } from 'utils/helpers';
 import { EditStrategyPriceField } from 'components/strategies/edit/EditPriceFields';
-import { StrategyDirection, StrategySettings } from 'libs/routing';
+import { StrategyDirection } from 'libs/routing';
 import { EditOrderBlock, Order } from 'components/strategies/common/types';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
@@ -19,9 +19,7 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
 import { useCallback } from 'react';
-import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'components/strategies/common/types';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { useDebouncePrices } from 'components/strategies/common/d3Chart/useDebouncePrices';
 import { D3ChartDisposable } from 'components/strategies/common/d3Chart/disposable/D3ChartDisposable';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
@@ -30,69 +28,38 @@ import { EditStrategyLayout } from 'components/strategies/edit/EditStrategyLayou
 import { EditPricesForm } from 'components/strategies/edit/EditPricesForm';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { OrderDirection } from 'components/strategies/common/OrderDirection';
+import { getEditOrderPrices } from 'components/strategies/create/utils';
+import { EditPriceDisposableSearch } from 'libs/routing/routes/strategyEdit';
 
-export interface EditDisposableStrategySearch {
-  marketPrice?: string;
-  chartStart?: string;
-  chartEnd?: string;
-  editType: 'editPrices' | 'renew';
-  min?: string;
-  max?: string;
-  settings?: StrategySettings;
-  direction?: StrategyDirection;
-  action?: 'deposit' | 'withdraw';
-  budget?: string;
-  marginalPrice?: MarginalPriceOptions;
-}
+type Search = EditPriceDisposableSearch;
 
-const getOrder = (
-  strategy: Strategy,
-  search: EditDisposableStrategySearch,
-  marketPrice?: string,
-): EditOrderBlock => {
+const getOrder = (strategy: Strategy, search: Search, marketPrice?: string) => {
   const { buy, sell } = strategy;
-  const defaultDirection = !isEmptyOrder(buy) ? 'buy' : 'sell';
+  const defaultDirection = isEmptyOrder(buy) ? 'sell' : 'buy';
   const direction = search.direction ?? defaultDirection;
-  const isBuy = direction === 'buy';
-  const order = isBuy ? buy : sell;
+  const order = direction === 'buy' ? buy : sell;
   const defaultSettings = isLimitOrder(order) ? 'limit' : 'range';
   const settings = search.settings ?? defaultSettings;
   const action = search.action ?? 'deposit';
-  const defaultPrice = isBuy ? buy.min : sell.max;
-  const price = isZero(defaultPrice) ? marketPrice : defaultPrice;
 
-  const defaultMin = () => {
-    const multiplier = (() => {
-      if (isZero(defaultPrice)) {
-        if (isBuy) return settings === 'limit' ? 0.9 : 0.8;
-        else return settings === 'limit' ? 1.1 : 1.1;
-      } else {
-        if (isBuy) return settings === 'limit' ? 1 : 0.9;
-        else return settings === 'limit' ? 1 : 1;
-      }
-    })();
-    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
+  const searchOrder = {
+    direction: direction,
+    settings: settings,
+    min: search.min,
+    max: search.max,
+    presetMin: search.presetMin,
+    presetMax: search.presetMax,
   };
-  const defaultMax = () => {
-    const multiplier = (() => {
-      if (isZero(defaultPrice)) {
-        if (isBuy) return settings === 'limit' ? 0.9 : 0.9;
-        else return settings === 'limit' ? 1.1 : 1.2;
-      } else {
-        if (isBuy) return settings === 'limit' ? 1 : 1;
-        else return settings === 'limit' ? 1 : 1.1;
-      }
-    })();
-    return new SafeDecimal(price ?? 0).mul(multiplier).toString();
-  };
+  const prices = getEditOrderPrices(searchOrder, order, marketPrice);
+
   return {
+    direction,
     settings,
     action,
-    min: search.min ?? defaultMin()?.toString() ?? '0',
-    max: search.max ?? defaultMax()?.toString() ?? '0',
+    min: prices.min,
+    max: prices.max,
     budget: getTotalBudget(action, order.budget, search.budget),
-    marginalPrice: search.marginalPrice,
-  };
+  } satisfies EditOrderBlock;
 };
 
 const resetOrder = (order: Order, resetBudget: boolean) => ({
@@ -107,15 +74,15 @@ export const EditPricesStrategyDisposablePage = () => {
   const { base, quote, buy, sell } = strategy;
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
-  const marketQuery = useMarketPrice({ base, quote });
-  const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
+  const { marketPrice: externalPrice } = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? externalPrice?.toString();
 
-  const direction = search.direction ?? 'sell';
-  const isBuy = search.direction !== 'sell';
+  const order = getOrder(strategy, search, marketPrice);
+  const isBuy = order.direction !== 'sell';
   const { setOrder } = useSetDisposableOrder(url);
 
   const setSearch = useCallback(
-    (next: Partial<EditDisposableStrategySearch>) => {
+    (next: Partial<Search>) => {
       navigate({
         params: (params) => params,
         search: (previous) => ({ ...previous, ...next }),
@@ -132,7 +99,8 @@ export const EditPricesStrategyDisposablePage = () => {
       budget: undefined,
       min: undefined,
       max: undefined,
-      marginalPrice: undefined,
+      presetMin: undefined,
+      presetMax: undefined,
     });
   };
 
@@ -146,11 +114,10 @@ export const EditPricesStrategyDisposablePage = () => {
 
   const initialType = getStrategyType(strategy);
   const initialDirection = isEmptyOrder(buy) ? 'sell' : 'buy';
-  const resetBudget =
-    initialType !== 'disposable' || initialDirection !== direction;
+  const directionChanged = initialDirection !== order.direction;
+  const resetBudget = initialType !== 'disposable' || directionChanged;
   const initialOrder = isBuy ? buy : sell;
 
-  const order: EditOrderBlock = getOrder(strategy, search, marketPrice);
   const orders = {
     buy: isBuy ? order : resetOrder(buy, resetBudget),
     sell: isBuy ? resetOrder(sell, resetBudget) : order,
@@ -178,8 +145,8 @@ export const EditPricesStrategyDisposablePage = () => {
   const outSideMarket = outSideMarketWarning({
     base,
     marketPrice,
-    min: search.min,
-    max: search.max,
+    min: order.min,
+    max: order.max,
     isBuy,
   });
 
@@ -188,16 +155,17 @@ export const EditPricesStrategyDisposablePage = () => {
   const sellBudgetChanges = resetBudget && isBuy && !isZero(sell.budget);
 
   return (
-    <EditStrategyLayout editType={search.editType}>
+    <EditStrategyLayout
+      editType={search.editType}
+      marketPrice={Number(marketPrice)}
+    >
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
         <StrategyChartHistory
-          base={base}
-          quote={quote}
           buy={orders.buy}
           sell={orders.sell}
-          direction={search.direction ?? 'sell'}
+          direction={order.direction}
         >
           <D3ChartDisposable
             isLimit={isLimit}
@@ -219,10 +187,13 @@ export const EditPricesStrategyDisposablePage = () => {
           initialOrder={initialOrder}
           setOrder={setOrder}
           warnings={[outSideMarket]}
-          direction={search.direction}
+          direction={order.direction}
           hasPriceChanged={hasPriceChanged}
           settings={
-            <OrderDirection direction={direction} setDirection={setDirection} />
+            <OrderDirection
+              direction={order.direction}
+              setDirection={setDirection}
+            />
           }
         />
         {(buyBudgetChanges || sellBudgetChanges) && (
