@@ -81,7 +81,6 @@ export const CreateOrder: FC<Props> = ({
   const insufficientBalance = useMemo(() => {
     if (!balanceQuery?.data) return '';
     const balance = new SafeDecimal(balanceQuery.data);
-    console.log(balanceQuery.data, order.budget);
     if (balance.gte(order.budget || '0')) return '';
     return 'Insufficient balance';
   }, [balanceQuery?.data, order.budget]);

@@ -40,8 +40,9 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
   const { editType, anchor, budget } = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
 
-  const baseBalance = useGetTokenBalance(base).data;
-  const quoteBalance = useGetTokenBalance(quote).data;
+  const baseBalance = useGetTokenBalance(base);
+  const quoteBalance = useGetTokenBalance(quote);
+  const balanceQuery = anchor === 'buy' ? baseBalance : quoteBalance;
 
   const initialBuyBudget = strategy.buy.budget;
   const initialSellBudget = strategy.sell.budget;
@@ -68,18 +69,20 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
   const budgetError = (() => {
     const value = anchor === 'buy' ? buy.budget : sell.budget;
     const budget = new SafeDecimal(value);
-    if (editType === 'deposit' && anchor === 'buy' && quoteBalance) {
+    if (editType === 'deposit' && anchor === 'buy' && quoteBalance.data) {
       const delta = budget.sub(initialBuyBudget);
-      if (delta.gt(quoteBalance)) return 'Insufficient balance';
+      const balance = quoteBalance.data;
+      if (delta.gt(balance)) return 'Insufficient balance';
     }
-    if (editType === 'deposit' && anchor === 'sell' && baseBalance) {
+    if (editType === 'deposit' && anchor === 'sell' && baseBalance.data) {
       const delta = budget.sub(initialSellBudget);
-      if (delta.gt(baseBalance)) return 'Insufficient balance';
+      const balance = baseBalance.data;
+      if (delta.gt(balance)) return 'Insufficient balance';
     }
-    if (editType === 'withdraw' && anchor === 'buy' && quoteBalance) {
+    if (editType === 'withdraw' && anchor === 'buy' && quoteBalance.data) {
       if (budget.lt(0)) return 'Insufficient funds';
     }
-    if (editType === 'withdraw' && anchor === 'sell' && baseBalance) {
+    if (editType === 'withdraw' && anchor === 'sell' && baseBalance.data) {
       if (budget.lt(0)) return 'Insufficient funds';
     }
     return '';
@@ -154,6 +157,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             anchor={anchor}
             editType={editType}
             budget={budget ?? ''}
+            balanceQuery={balanceQuery}
             setBudget={setBudget}
             buyBudget={initialBuyBudget}
             sellBudget={initialSellBudget}
@@ -179,14 +183,14 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             initialBudget={initialSellBudget}
             withdraw={budgetError ? '0' : withdrawSellBudget}
             deposit={budgetError ? '0' : depositSellBudget}
-            balance={baseBalance}
+            balanceQuery={baseBalance}
           />
           <BudgetDescription
             token={base}
             initialBudget={initialSellBudget}
             withdraw={budgetError ? '0' : withdrawSellBudget}
             deposit={budgetError ? '0' : depositSellBudget}
-            balance={baseBalance ?? '0'}
+            balance={baseBalance?.data ?? '0'}
           />
           <BudgetDistribution
             title="Buy"
@@ -194,7 +198,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             initialBudget={initialBuyBudget}
             withdraw={budgetError ? '0' : withdrawBuyBudget}
             deposit={budgetError ? '0' : depositBuyBudget}
-            balance={quoteBalance}
+            balanceQuery={quoteBalance}
             isBuy
           />
           <BudgetDescription
@@ -202,7 +206,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
             initialBudget={initialBuyBudget}
             withdraw={budgetError ? '0' : withdrawBuyBudget}
             deposit={budgetError ? '0' : depositBuyBudget}
-            balance={quoteBalance ?? '0'}
+            balance={quoteBalance?.data ?? '0'}
           />
         </article>
       )}

@@ -5,6 +5,7 @@ import IconDeposit from 'assets/icons/deposit.svg?react';
 import IconWithdraw from 'assets/icons/withdraw.svg?react';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useFiatValue } from 'hooks/useFiatValue';
+import { UseQueryResult } from '@tanstack/react-query';
 
 interface Props {
   title?: string;
@@ -13,8 +14,7 @@ interface Props {
   initialBudget: string;
   withdraw: string;
   deposit: string;
-  balance?: string;
-  isSimulator?: boolean;
+  balanceQuery?: UseQueryResult<string, Error>;
 }
 
 function getBudgetDistribution(
@@ -22,56 +22,65 @@ function getBudgetDistribution(
   withdraw: number,
   deposit: number,
   balance: number,
-  isSimulator: boolean,
+  isBalanceEnabled: boolean,
 ) {
   const total = initial + balance;
   const delta = deposit || withdraw;
-  if (isSimulator) {
+  if (!isBalanceEnabled) {
     return {
       mode: 'deposit',
       allocationPercent: deposit ? 0.5 : 0,
       deltaPercent: 0,
       balancePercent: deposit ? 0.5 : 1,
     };
-  } else if (!total) {
+  }
+  if (!total) {
     return {
       mode: deposit ? 'deposit' : 'withdraw',
       allocationPercent: 0,
       deltaPercent: 0,
       balancePercent: 1,
     };
-  } else if (delta > total) {
+  }
+  if (delta > total) {
     return {
       mode: deposit ? 'deposit' : 'withdraw',
       allocationPercent: 0,
       deltaPercent: 1,
       balancePercent: 0,
     };
-  } else {
-    const deltaPercent = (delta / total) * 100;
-    const newAllocation = (Math.max(initial - withdraw, 0) / total) * 100;
-    const newBalance = (Math.max(balance - deposit, 0) / total) * 100;
-    return {
-      mode: deposit ? 'deposit' : 'withdraw',
-      allocationPercent: Math.round(newAllocation),
-      deltaPercent: Math.round(deltaPercent),
-      balancePercent: Math.round(newBalance),
-    };
   }
+  const deltaPercent = (delta / total) * 100;
+  const newAllocation = (Math.max(initial - withdraw, 0) / total) * 100;
+  const newBalance = (Math.max(balance - deposit, 0) / total) * 100;
+  return {
+    mode: deposit ? 'deposit' : 'withdraw',
+    allocationPercent: Math.round(newAllocation),
+    deltaPercent: Math.round(deltaPercent),
+    balancePercent: Math.round(newBalance),
+  };
 }
 
 export const BudgetDistribution: FC<Props> = (props) => {
   const allocatedId = useId();
   const walletId = useId();
-  const { title, isBuy, token, initialBudget, withdraw, deposit, balance } =
-    props;
-  const isSimulator = !!props.isSimulator;
+  const {
+    title,
+    isBuy,
+    token,
+    initialBudget,
+    withdraw,
+    deposit,
+    balanceQuery,
+  } = props;
+  const balanceEnabled = !!balanceQuery?.isEnabled;
+  const balance = balanceQuery?.data;
   const dist = getBudgetDistribution(
     Number(initialBudget),
     Number(withdraw),
     Number(deposit),
     Number(balance ?? '0'),
-    isSimulator,
+    balanceEnabled,
   );
   const color = isBuy ? 'bg-buy-gradient' : 'bg-sell-gradient';
   return (
@@ -79,12 +88,12 @@ export const BudgetDistribution: FC<Props> = (props) => {
       {title && (
         <h4 className="flex gap-16 text-14 items-center">
           <span className="font-medium">{title}</span>
-          {isSimulator && !!Number(deposit) && (
+          {!balanceEnabled && !!Number(deposit) && (
             <span>{tokenAmount(deposit, token)}</span>
           )}
         </h4>
       )}
-      {!isSimulator && (
+      {balanceEnabled && (
         <div className="text-12 grid grid-flow-col text-main-0/60">
           {!!Number(initialBudget) && (
             <label htmlFor={allocatedId}>
