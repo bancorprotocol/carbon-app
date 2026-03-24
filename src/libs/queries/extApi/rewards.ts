@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from '../queryKey';
 import { carbonApi } from 'services/carbonApi';
-import config from 'config';
 import { toSortedPairSlug } from 'utils/pairs';
+import config, { CarbonNetworks, getAllConfigs } from 'config';
+import { AppConfig } from 'config/types';
 
 export interface Reward {
   pair: string;
@@ -31,6 +32,50 @@ export const useRewards = () => {
         const all = await carbonApi.getAllRewards();
         return all.map(({ pair }) => pair);
       }
+    },
+    staleTime: Infinity,
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+};
+
+export const useAllChainRewards = () => {
+  return useQuery({
+    queryKey: QueryKey.allChainsRewards(),
+    queryFn: async () => {
+      const allConfigs = getAllConfigs();
+      const getRewards = async (network: CarbonNetworks, config: AppConfig) => {
+        if (!config.ui.rewards) return;
+        if (config.ui.rewards.list) {
+          return [network, config.ui.rewards.list.length] satisfies [
+            CarbonNetworks,
+            number,
+          ];
+        }
+        const url = config.carbonApi + 'merkle/all-data';
+        const res = await fetch(url);
+        const result = await res.json();
+        if (!res.ok) {
+          const error = (result as { error?: string }).error;
+          throw new Error(error);
+        } else {
+          return [network, result.length] satisfies [CarbonNetworks, number];
+        }
+      };
+      const getAll = Object.entries(allConfigs).map(([network, config]) => {
+        return getRewards(network as CarbonNetworks, config);
+      });
+      const responses = await Promise.allSettled(getAll);
+      const rewards: [CarbonNetworks, number][] = [];
+      for (const res of responses) {
+        if (res.status === 'rejected') {
+          console.error(res.reason);
+        } else if (res.value) {
+          rewards.push(res.value);
+        }
+      }
+      return rewards;
     },
     staleTime: Infinity,
     retry: false,

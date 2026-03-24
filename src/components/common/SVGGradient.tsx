@@ -34,6 +34,20 @@ export const SVGGradient = () => {
           <stop offset="0%" stopColor="var(--color-sell)" />
           <stop offset="100%" stopColor="var(--color-buy)" />
         </linearGradient>
+        <linearGradient
+          id="reward-gradient"
+          x1="27.8523"
+          y1="14.4891"
+          x2="9.54105"
+          y2="32.9994"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#B80093" />
+          <stop offset="0.123033" stopColor="#CF28AD" />
+          <stop offset="0.399979" stopColor="#E35FC7" />
+          <stop offset="0.730614" stopColor="#FAC2E5" />
+          <stop offset="1" stopColor="#FFFBFD" stopOpacity="0.8" />
+        </linearGradient>
       </defs>
     </svg>
   );
