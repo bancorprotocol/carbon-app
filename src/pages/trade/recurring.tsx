@@ -22,6 +22,7 @@ import {
   checkIfOrdersReversed,
 } from 'components/strategies/utils';
 import { OrderBlock } from 'components/strategies/common/types';
+import { useGetTokenBalance } from 'libs/queries';
 
 const getRecurringError = (buy: OrderBlock, sell: OrderBlock) => {
   if (checkIfOrdersReversed(buy, sell)) {
@@ -42,6 +43,8 @@ export const TradeRecurring = () => {
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder(url);
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
+  const buyBalance = useGetTokenBalance(quote);
+  const sellBalance = useGetTokenBalance(base);
 
   const updatePrices: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
@@ -153,6 +156,7 @@ export const TradeRecurring = () => {
             base={base}
             quote={quote}
             order={sellOrder}
+            balanceQuery={sellBalance}
             setOrder={setSellOrder}
             setSettings={setSellSetting}
             error={error}
@@ -164,6 +168,7 @@ export const TradeRecurring = () => {
             base={base}
             quote={quote}
             order={buyOrder}
+            balanceQuery={buyBalance}
             setOrder={setBuyOrder}
             setSettings={setBuySetting}
             error={error}
