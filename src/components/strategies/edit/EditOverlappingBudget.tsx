@@ -42,7 +42,7 @@ export const EditOverlappingBudget: FC<Props> = (props) => {
 
   const baseBalance = useGetTokenBalance(base);
   const quoteBalance = useGetTokenBalance(quote);
-  const balanceQuery = anchor === 'buy' ? baseBalance : quoteBalance;
+  const balanceQuery = anchor === 'buy' ? quoteBalance : baseBalance;
 
   const initialBuyBudget = strategy.buy.budget;
   const initialSellBudget = strategy.sell.budget;
