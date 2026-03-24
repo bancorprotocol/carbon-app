@@ -47,7 +47,7 @@ export const RewardBanner = () => {
   const list = useMemo(() => {
     if (!rewardsQuery.data) return;
     return rewardsQuery.data
-      ?.filter(([_, rewards]) => !!rewards.length)
+      ?.filter(([_, size]) => !!size)
       .map(([network, _]) => links[network]);
   }, [rewardsQuery.data]);
 
