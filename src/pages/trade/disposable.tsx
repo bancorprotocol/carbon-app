@@ -23,6 +23,7 @@ import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeCha
 import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
+import { useGetTokenBalance } from 'libs/queries';
 
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
@@ -31,8 +32,10 @@ export const TradeDisposable = () => {
   const navigate = useNavigate({ from: url });
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
-
   const direction = search.direction || 'sell';
+  const budgetToken = direction === 'buy' ? quote : base;
+  const balanceQuery = useGetTokenBalance(budgetToken);
+
   const order = getTradeOrder(
     {
       direction,
@@ -124,6 +127,7 @@ export const TradeDisposable = () => {
             quote={quote}
             direction={search.direction}
             order={order}
+            balanceQuery={balanceQuery}
             setOrder={setSearch}
             warnings={[outSideMarket]}
             setDirection={setDirection}

@@ -4,7 +4,7 @@ import { FullOutcome } from 'components/strategies/FullOutcome';
 import { OrderHeader } from 'components/strategies/common/OrderHeader';
 import { OrderBlock } from 'components/strategies/common/types';
 import { InputBudget } from 'components/strategies/common/InputBudget';
-import { useGetTokenBalance } from 'libs/queries';
+import { UseQueryResult } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { cn } from 'utils/helpers';
 import { OrderDirection } from '../common/OrderDirection';
@@ -24,6 +24,7 @@ interface Props {
   direction?: StrategyDirection;
   optionalBudget?: boolean;
   type: StrategyType;
+  balanceQuery?: UseQueryResult<string, Error>;
   setOrder: (order: Partial<OrderBlock>) => any;
   /** If provided, display the direction tabs */
   setDirection?: (direction: StrategyDirection) => any;
@@ -40,6 +41,7 @@ export const CreateOrder: FC<Props> = ({
   type,
   setOrder,
   direction = 'sell',
+  balanceQuery,
   setDirection,
   setSettings,
   error,
@@ -49,34 +51,40 @@ export const CreateOrder: FC<Props> = ({
   const budgetId = useId();
 
   const isBuy = direction === 'buy';
-  const setPrice = (price: string) =>
+  const setPrice = (price: string) => {
     setOrder({
       min: price,
       max: price,
       presetMin: undefined,
       presetMax: undefined,
     });
+  };
   const setMin = (min: string) => setOrder({ min, presetMin: undefined });
   const setMax = (max: string) => setOrder({ max, presetMax: undefined });
-  const setPreset = (preset: string) =>
+  const setPreset = (preset: string) => {
     setOrder({
       min: undefined,
       max: undefined,
       presetMin: preset,
       presetMax: preset,
     });
-  const setPresetMin = (presetMin: string) =>
+  };
+  const setPresetMin = (presetMin: string) => {
     setOrder({ min: undefined, presetMin });
-  const setPresetMax = (presetMax: string) =>
+  };
+  const setPresetMax = (presetMax: string) => {
     setOrder({ max: undefined, presetMax });
+  };
 
   // BUDGET
   const budgetToken = isBuy ? quote : base;
-  const balance = useGetTokenBalance(budgetToken);
-  const insufficientBalance =
-    balance.data && new SafeDecimal(balance.data).lt(order.budget)
-      ? 'Insufficient balance'
-      : '';
+  const insufficientBalance = useMemo(() => {
+    if (!balanceQuery?.data) return '';
+    const balance = new SafeDecimal(balanceQuery.data);
+    if (balance.gte(order.budget || '0')) return '';
+    return 'Insufficient balance';
+  }, [balanceQuery?.data, order.budget]);
+
   const budgetTooltip = useMemo(() => {
     if (isBuy) {
       const note =
@@ -146,8 +154,8 @@ export const CreateOrder: FC<Props> = ({
             token={budgetToken}
             value={order.budget}
             onChange={setBudget}
-            max={balance.data || '0'}
-            maxIsLoading={balance.isPending}
+            max={balanceQuery?.data}
+            maxIsLoading={balanceQuery?.isPending}
             error={insufficientBalance}
             data-testid="input-budget"
           />

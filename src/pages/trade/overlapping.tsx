@@ -8,6 +8,7 @@ import { CreateOverlappingBudget } from 'components/strategies/create/CreateOver
 import { useCallback } from 'react';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
+import { useGetTokenBalance } from 'libs/queries';
 
 const url = '/trade/overlapping';
 export const TradeOverlapping = () => {
@@ -15,6 +16,8 @@ export const TradeOverlapping = () => {
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
   const orders = getOverlappingOrders(search, base, quote, marketPrice);
+  const baseBalance = useGetTokenBalance(base);
+  const quoteBalance = useGetTokenBalance(quote);
 
   const set = useCallback(
     (next: TradeOverlappingSearch) => {
@@ -59,6 +62,8 @@ export const TradeOverlapping = () => {
             sell={orders.sell}
             anchor={search.anchor}
             budget={search.budget}
+            baseBalance={baseBalance}
+            quoteBalance={quoteBalance}
             set={set}
           />
         </CreateForm>
