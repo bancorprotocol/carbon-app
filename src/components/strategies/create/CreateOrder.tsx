@@ -49,9 +49,26 @@ export const CreateOrder: FC<Props> = ({
   const budgetId = useId();
 
   const isBuy = direction === 'buy';
-  const setPrice = (price: string) => setOrder({ min: price, max: price });
-  const setMin = (min: string) => setOrder({ min });
-  const setMax = (max: string) => setOrder({ max });
+  const setPrice = (price: string) =>
+    setOrder({
+      min: price,
+      max: price,
+      presetMin: undefined,
+      presetMax: undefined,
+    });
+  const setMin = (min: string) => setOrder({ min, presetMin: undefined });
+  const setMax = (max: string) => setOrder({ max, presetMax: undefined });
+  const setPreset = (preset: string) =>
+    setOrder({
+      min: undefined,
+      max: undefined,
+      presetMin: preset,
+      presetMax: preset,
+    });
+  const setPresetMin = (presetMin: string) =>
+    setOrder({ min: undefined, presetMin });
+  const setPresetMax = (presetMax: string) =>
+    setOrder({ max: undefined, presetMax });
 
   // BUDGET
   const budgetToken = isBuy ? quote : base;
@@ -108,7 +125,10 @@ export const CreateOrder: FC<Props> = ({
           direction={direction}
           setMin={setMin}
           setMax={setMax}
+          setPresetMin={setPresetMin}
+          setPresetMax={setPresetMax}
           setPrice={setPrice}
+          setPreset={setPreset}
           error={error}
           warnings={warnings}
         />

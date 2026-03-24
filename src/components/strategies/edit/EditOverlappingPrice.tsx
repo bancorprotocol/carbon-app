@@ -21,7 +21,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { EditOverlappingStrategySearch } from 'pages/portfolio/edit/prices/overlapping';
 import { isValidRange } from '../utils';
 import { OverlappingPriceRange } from '../overlapping/OverlappingPriceRange';
-import { useStrategyMarketPrice } from '../UserMarketPrice';
+import { useStrategyFormCtx } from '../common/StrategyFormContext';
 
 interface Props {
   buy: CreateOverlappingOrder;
@@ -35,8 +35,7 @@ const url = '/strategies/edit/$strategyId/prices/overlapping';
 export const EditOverlappingPrice: FC<Props> = (props) => {
   const { buy, sell, spread } = props;
   const { strategy } = useEditStrategyCtx();
-  const { base, quote } = strategy;
-  const { marketPrice } = useStrategyMarketPrice({ base, quote });
+  const { base, quote, marketPrice } = useStrategyFormCtx();
 
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
@@ -53,10 +52,10 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   const withdrawSellBudget = getWithdraw(initialSellBudget, sell.budget);
 
   const set = useCallback(
-    <T extends keyof Search>(key: T, value: Search[T]) => {
+    (next: Partial<Search>) => {
       navigate({
         params: (params) => params,
-        search: (previous) => ({ ...previous, [key]: value }),
+        search: (previous) => ({ ...previous, ...next }),
         replace: true,
         resetScroll: false,
       });
@@ -102,44 +101,34 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
   useEffect(() => {
     if (!isValidRange(buy.min, sell.max)) return;
     if (anchor === 'buy' && aboveMarket) {
-      set('anchor', 'sell');
-      set('budget', undefined);
+      set({ anchor: 'sell', budget: undefined });
     }
     if (anchor === 'sell' && belowMarket) {
-      set('anchor', 'buy');
-      set('budget', undefined);
+      set({ anchor: 'buy', budget: undefined });
     }
   }, [anchor, aboveMarket, belowMarket, set, buy.min, sell.max]);
 
-  const setMin = (min: string) => set('min', min);
-  const setMax = (max: string) => set('max', max);
-  const setSpread = (value: string) => set('spread', value);
-  const setFullRange = () => {
-    navigate({
-      search: (s) => ({
-        ...s,
-        min: undefined,
-        max: undefined,
-        fullRange: true,
-      }),
-      resetScroll: false,
-      replace: true,
+  const setMin = (min: string) =>
+    set({ min, max: sell.max, preset: undefined });
+  const setMax = (max: string) => set({ min: buy.min, max, preset: undefined });
+  const setSpread = (spread: string) => set({ spread });
+  const setPreset = (preset: string) =>
+    set({ min: undefined, max: undefined, preset });
+
+  const setAnchor = (anchor: 'buy' | 'sell') => {
+    set({
+      budget: undefined,
+      anchor,
+      action: action || 'deposit',
     });
   };
 
-  const setAnchor = (value: 'buy' | 'sell') => {
-    set('budget', undefined);
-    set('anchor', value);
-    if (!action) set('action', 'deposit');
+  const setAction = (action: 'deposit' | 'withdraw') => {
+    set({ budget: undefined, action });
   };
 
-  const setAction = (value: 'deposit' | 'withdraw') => {
-    set('budget', undefined);
-    set('action', value);
-  };
-
-  const setBudget = async (value: string) => {
-    set('budget', value);
+  const setBudget = async (budget: string) => {
+    set({ budget });
   };
 
   return (
@@ -165,11 +154,10 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
               max={sell.max}
               setMin={setMin}
               setMax={setMax}
-              setFullRange={setFullRange}
+              setPreset={setPreset}
               minLabel="Min Buy"
               maxLabel="Max Sell"
               warnings={[priceWarning]}
-              isOverlapping
               required
             />
           </article>

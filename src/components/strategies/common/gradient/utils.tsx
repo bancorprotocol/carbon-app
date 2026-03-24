@@ -17,7 +17,7 @@ export const gradientMarginalPrice = (order: FormGradientOrder) => {
 
 export const defaultGradientOrder = (
   baseOrder: Partial<GradientOrderBlock>,
-  marketPrice: string = '0',
+  marketPrice: number = 0,
 ): GradientOrderBlock => {
   const direction = baseOrder.direction ?? 'sell';
   const today = new Date();
