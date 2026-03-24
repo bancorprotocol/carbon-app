@@ -65,9 +65,9 @@ export const RewardBanner = () => {
       role="banner"
       className="grid place-items-center gap-16 p-16 font-title bg-gradient-to-r from-reward/80 to-reward-dark/80 border-reward-dark border-y-2"
     >
-      <h2 className="flex justify-center items-center gap-8 text-center font-bold text-20 sm:text-24">
-        Join One of the Active Rewards (Yield farming) Programs
+      <h2 className="flex justify-center items-center gap-8 text-center font-medium text-20 sm:text-24">
         <RewardIcon className="hidden sm:block size-20" />
+        Earn Rewards - Join an active yield farming campaign
       </h2>
       <nav
         aria-label="redirect to reward page"
