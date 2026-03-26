@@ -49,6 +49,7 @@ export const TokenInputField: FC<Props> = (props) => {
     onKeystroke,
     placeholder = 'Enter Amount',
     disabled,
+    isLoading,
     slippage,
     'data-testid': testid,
     children,
@@ -127,12 +128,14 @@ export const TokenInputField: FC<Props> = (props) => {
         {TokenWidget}
       </div>
       <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10">
-        <ErrorSlot error={error} warning={warning}>
-          <p className="flex items-center gap-5 text-main-0/60">
-            {priceText()}
-            {slippage && !isZero(value) && <Slippage slippage={slippage} />}
-          </p>
-        </ErrorSlot>
+        {!isLoading && (
+          <ErrorSlot error={error} warning={warning}>
+            <p className="flex items-center gap-5 text-main-0/60">
+              {priceText()}
+              {slippage && !isZero(value) && <Slippage slippage={slippage} />}
+            </p>
+          </ErrorSlot>
+        )}
         {user && isBalanceLoading && (
           <button
             disabled

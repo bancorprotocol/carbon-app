@@ -90,6 +90,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const targetValue =
     targetInput ?? bySourceQuery.data?.totalTargetAmount ?? '';
 
+  const isDebouncing = useMemo(() => {
+    if (sourceInput !== debouncedSource) return true;
+    if (targetInput !== debouncedTarget) return true;
+    return false;
+  }, [debouncedSource, debouncedTarget, sourceInput, targetInput]);
+
   const displayRouting = useCallback(() => {
     if (config.ui.useDexAggregator) {
       setShowRoutingPath((current) => !current);
@@ -385,7 +391,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               value={targetValue}
               setValue={(value) => setTargetInput(value)}
               placeholder="Total Amount"
-              isLoading={bySourceQuery.isFetching}
+              isLoading={isDebouncing}
               error={targetError}
               slippage={slippage}
             >
