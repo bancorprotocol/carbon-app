@@ -3,7 +3,7 @@ import IconRecurring from 'assets/icons/recurring.svg?react';
 import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
-import ChevronIcon from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 
 import { Link, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
@@ -189,7 +189,7 @@ export const TradeNav = () => {
                   {name}
                 </p>
               ))}
-              <ChevronIcon className="self-center justify-self-end size-16 hidden 2xl:block -rotate-90" />
+              <KeyboardArrowDownIcon className="self-center justify-self-end size-24 hidden 2xl:block -rotate-90" />
             </button>
           )}
         >

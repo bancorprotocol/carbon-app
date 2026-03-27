@@ -30,7 +30,7 @@ export const EditMarketPrice: FC<Props> = (props) => {
       data-testid="edit-market-price"
       type="button"
     >
-      <IconEdit className="size-16" />
+      <IconEdit className="size-24" />
       <span>Edit Market Price</span>
     </button>
   );
@@ -189,7 +189,7 @@ const EditPriceText = () => (
       to="https://www.coingecko.com/"
     >
       <b>CoinGecko</b>
-      <IconCoinGecko className="size-10" />
+      <IconCoinGecko className="size-24" />
     </NewTabLink>
   </span>
 );

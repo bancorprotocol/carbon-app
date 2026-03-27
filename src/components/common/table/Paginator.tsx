@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import IconChevronLeft from 'assets/icons/chevron-left.svg?react';
+import ChevronLeftIcon from 'assets/icons/chevron_left.svg?react';
 
 interface Props {
   size: number;
@@ -56,7 +56,7 @@ export const Paginator: FC<Props> = (props) => {
                 aria-label="Previous page"
                 className="p-8 disabled:opacity-50"
               >
-                <IconChevronLeft className="size-12" />
+                <ChevronLeftIcon className="size-24" />
               </button>
               <p
                 className="border-main-800 flex gap-8 rounded-full border px-12 py-8"
@@ -72,7 +72,7 @@ export const Paginator: FC<Props> = (props) => {
                 aria-label="Next page"
                 className="p-8 disabled:opacity-50"
               >
-                <IconChevronLeft className="size-12 rotate-180" />
+                <ChevronLeftIcon className="size-24 rotate-180" />
               </button>
               <button
                 onClick={lastPage}

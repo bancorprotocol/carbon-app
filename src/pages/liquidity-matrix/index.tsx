@@ -5,7 +5,7 @@ import { useTokens } from 'hooks/useTokens';
 import { getLastVisitedPair } from 'libs/routing';
 import AddIcon from 'assets/icons/plus.svg?react';
 import CloseIcon from 'assets/icons/close.svg?react';
-import ChevronIcon from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import {
   FC,
   FormEvent,
@@ -398,7 +398,7 @@ export const LiquidityMatrixPage = () => {
               <TokenLogo token={base} size={32} />
               <span>{base.symbol}</span>
               <span className="description">Select your base token</span>
-              <ChevronIcon className="size-16" />
+              <KeyboardArrowDownIcon className="size-24" />
             </button>
             <div className="price">
               <div className="price-field">

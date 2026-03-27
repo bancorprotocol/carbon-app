@@ -1,5 +1,5 @@
-import IconCut from 'assets/icons/cut.svg?react';
-import IconCopy from 'assets/icons/copy.svg?react';
+import ContentCutIcon from 'assets/icons/content_cut.svg?react';
+import ContentCopyIcon from 'assets/icons/content_copy.svg?react';
 import { useDuplicate } from 'components/strategies/create/useDuplicateStrategy';
 import { useModal } from 'hooks/useModal';
 import { ModalProps } from 'libs/modals/modals.types';
@@ -84,7 +84,7 @@ export default function ModalDuplicateStrategy({
 
   const duplicateOptions = [
     {
-      icon: IconCopy,
+      icon: ContentCopyIcon,
       title: 'Copy as Is',
       onClick: duplicateStrategy,
       description:
@@ -92,7 +92,7 @@ export default function ModalDuplicateStrategy({
       testId: 'duplicate-strategy-btn',
     },
     {
-      icon: IconCut,
+      icon: ContentCutIcon,
       title: 'Undercut the Strategy',
       onClick: undercutStrategy,
       description: `Set prices at ${
@@ -118,7 +118,7 @@ export default function ModalDuplicateStrategy({
             className="flex gap-16 rounded-2xl bg-main-800 p-16"
           >
             <div className="bg-primary/25 row-span-2 flex size-32 items-center justify-center self-center rounded-full">
-              <Icon className="text-primary size-16" />
+              <Icon className="text-primary size-24" />
             </div>
             <hgroup className="grid flex-1">
               <h3 className="text-14 font-medium">{title}</h3>

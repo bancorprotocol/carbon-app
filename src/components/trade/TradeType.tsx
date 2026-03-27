@@ -6,7 +6,7 @@ import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { gradientTypePages, staticTypePages } from './utils';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 
 const links = [
   {
@@ -46,7 +46,7 @@ export const TradeType = () => {
         >
           {selected?.svg}
           {selected?.label}
-          <IconChevron className="ml-auto size-16" />
+          <KeyboardArrowDownIcon className="ml-auto size-24" />
         </button>
       )}
     >

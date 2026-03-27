@@ -1,8 +1,8 @@
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 import { shortenString } from 'utils/helpers';
 import TelegramIcon from 'assets/icons/telegram.svg?react';
-import IconDisconnect from 'assets/icons/disconnect.svg?react';
-import IconCopy from 'assets/icons/copy.svg?react';
+import UploadIcon from 'assets/icons/upload.svg?react';
+import ContentCopyIcon from 'assets/icons/content_copy.svg?react';
 
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useStore } from 'store';
@@ -62,7 +62,7 @@ const Menu = () => {
         className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-main-950"
         onClick={copyAddress}
       >
-        <IconCopy className="w-16" />
+        <ContentCopyIcon className="size-24" />
         <span>Copy Address</span>
       </button>
       <button
@@ -70,7 +70,7 @@ const Menu = () => {
         className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-main-950"
         onClick={() => tonConnectUI.disconnect()}
       >
-        <IconDisconnect className="size-16" />
+        <UploadIcon className="size-24" />
         <span>Disconnect</span>
       </button>
     </menu>

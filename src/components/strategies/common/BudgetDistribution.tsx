@@ -1,7 +1,7 @@
 import { Token } from 'libs/tokens';
 import { FC, useId } from 'react';
 import { cn, tokenAmount } from 'utils/helpers';
-import IconDeposit from 'assets/icons/deposit.svg?react';
+import VerticalAlignBottomIcon from 'assets/icons/vertical_align_bottom.svg?react';
 import IconWithdraw from 'assets/icons/withdraw.svg?react';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useFiatValue } from 'hooks/useFiatValue';
@@ -179,7 +179,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
     return (
       <p className="warning-message animate-scale-up text-12 flex items-start gap-8 text-main-0/60">
         <span className="bg-buy/10 text-buy rounded-full p-4">
-          <IconDeposit className="h-12 w-12" />
+          <VerticalAlignBottomIcon className="size-24" />
         </span>
         <span>
           You will&nbsp;

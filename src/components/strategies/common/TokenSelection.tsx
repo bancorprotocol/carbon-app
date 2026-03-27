@@ -1,6 +1,6 @@
 import { useNavigate } from 'libs/routing';
 import { TokenLogo } from 'components/common/imager/Imager';
-import ChevronIcon from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import ArrowForwardIcon from 'assets/icons/arrow_forward.svg?react';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
@@ -115,7 +115,7 @@ const DisplayToken: FC<DisplayTokenProps> = ({ token, label }) => {
           {token?.symbol}
         </span>
       </p>
-      <ChevronIcon className="ml-auto size-16" />
+      <KeyboardArrowDownIcon className="ml-auto size-24" />
     </>
   );
 };

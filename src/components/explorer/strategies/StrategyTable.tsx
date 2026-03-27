@@ -5,7 +5,7 @@ import { FC, useId, useMemo, useState } from 'react';
 import { StrategyStatusTag } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { cn, getUsdPrice, prettifyNumber, tokenAmount } from 'utils/helpers';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
-import DashboardIcon from 'assets/icons/dashboard.svg?react';
+import AnalyticsIcon from 'assets/icons/analytics.svg?react';
 import {
   ManageButtonIcon,
   StrategyBlockManage,
@@ -136,7 +136,7 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
             params={{ id: strategy.id }}
             className="size-38 rounded-sm btn-on-surface grid place-items-center p-0"
           >
-            <DashboardIcon className="size-16" />
+            <AnalyticsIcon className="size-24" />
           </Link>
           <StrategyBlockManage
             strategy={strategy}

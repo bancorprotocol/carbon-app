@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { LogoImager } from 'components/common/imager/Imager';
 import ArrowForwardIcon from 'assets/icons/arrow_forward.svg?react';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import { shortenString } from 'utils/helpers';
 
 interface Props {
@@ -35,7 +35,7 @@ export const SelectTokens: FC<Props> = ({
         <div className="text-16 font-medium mr-auto">
           {symbol0 ? shortenString(symbol0, '...', 5) : 'Select'}
         </div>
-        <IconChevron className="w-14" />
+        <KeyboardArrowDownIcon className="size-24" />
       </button>
       <button
         onClick={() => onMiddleClick?.()}
@@ -58,7 +58,7 @@ export const SelectTokens: FC<Props> = ({
         <div className="text-16 font-medium mr-auto">
           {symbol1 ? shortenString(symbol1, '...', 5) : 'Select'}
         </div>
-        <IconChevron className="w-14" />
+        <KeyboardArrowDownIcon className="size-24" />
       </button>
     </div>
   );

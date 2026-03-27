@@ -20,7 +20,7 @@ const StatusIcon = (status: NotificationStatus) => {
     case 'success':
       return (
         <div className="size-38 bg-primary/10 flex items-center justify-center rounded-full">
-          <IconCheck className="text-primary w-16" />
+          <IconCheck className="text-primary size-24" />
         </div>
       );
     case 'failed':

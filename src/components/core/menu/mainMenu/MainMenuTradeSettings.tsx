@@ -1,4 +1,4 @@
-import IconCog from 'assets/icons/cog.svg?react';
+import SettingsIcon from 'assets/icons/settings.svg?react';
 import CloseIcon from 'assets/icons/close.svg?react';
 import { useStore } from 'store';
 import { FormEvent, useCallback, useId, useState } from 'react';
@@ -83,7 +83,7 @@ export const MainMenuTradeSettings = () => {
         onClick={() => open({ autofocus: false })}
       >
         <span className="text-14">{slippage}%</span>
-        <IconCog className="size-18" />
+        <SettingsIcon className="size-24" />
       </button>
       <dialog
         ref={ref}

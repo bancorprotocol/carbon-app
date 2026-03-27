@@ -9,11 +9,11 @@ import IconPause from 'assets/icons/pause.svg?react';
 import IconEdit from 'assets/icons/edit.svg?react';
 import ArrowDownwardIcon from 'assets/icons/arrow_downward.svg?react';
 import IconWithdraw from 'assets/icons/withdraw.svg?react';
-import IconDeposit from 'assets/icons/deposit.svg?react';
+import VerticalAlignBottomIcon from 'assets/icons/vertical_align_bottom.svg?react';
 import IconDelete from 'assets/icons/delete.svg?react';
 import IconTransfer from 'assets/icons/transfer.svg?react';
 import IconLink from 'assets/icons/link.svg?react';
-import IconChevronLeft from 'assets/icons/chevron-left.svg?react';
+import ChevronLeftIcon from 'assets/icons/chevron_left.svg?react';
 import {
   activityActionName,
   activityDateFormatter,
@@ -274,7 +274,7 @@ const ActivityPaginator = () => {
             aria-label="Previous page"
             className="p-8 disabled:opacity-50"
           >
-            <IconChevronLeft className="size-12" />
+            <ChevronLeftIcon className="size-24" />
           </button>
           <p
             className="border-main-800 flex gap-8 rounded-full border px-12 py-8"
@@ -290,7 +290,7 @@ const ActivityPaginator = () => {
             aria-label="Next page"
             className="p-8 disabled:opacity-50"
           >
-            <IconChevronLeft className="size-12 rotate-180" />
+            <ChevronLeftIcon className="size-24 rotate-180" />
           </button>
           <button
             onClick={lastPage}
@@ -325,7 +325,8 @@ export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
   if (action === 'edit') return <IconEdit className={className} />;
   if (action === 'delete') return <IconDelete className={className} />;
   if (action === 'pause') return <IconPause className={className} />;
-  if (action === 'deposit') return <IconDeposit className={className} />;
+  if (action === 'deposit')
+    return <VerticalAlignBottomIcon className={className} />;
   if (action === 'withdraw') return <IconWithdraw className={className} />;
   if (action === 'buy')
     return <ArrowDownwardIcon className={cn('rotate-[-60deg]', className)} />;

@@ -12,7 +12,7 @@ import { StrategyBlockBudget } from 'components/strategies/overview/strategyBloc
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import IconTrash from 'assets/icons/trash.svg?react';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import CloseIcon from 'assets/icons/close.svg?react';
 import IconWarning from 'assets/icons/warning.svg?react';
 import { cn } from 'utils/helpers';
@@ -175,7 +175,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
             >
               <IconWarning className="size-14" />
               <span>Warnings</span>
-              <IconChevron className="size-14" />
+              <KeyboardArrowDownIcon className="size-24" />
             </button>
           )}
         </div>

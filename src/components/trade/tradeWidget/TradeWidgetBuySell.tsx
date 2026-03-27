@@ -16,7 +16,7 @@ import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-router';
 import { OpenOceanPath } from './OpenOceanPath';
 import IconRouting from 'assets/icons/routing.svg?react';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import ArrowDownwardIcon from 'assets/icons/arrow_downward.svg?react';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
@@ -191,7 +191,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             >
               <TokenLogo token={source} size={20} />
               <span className="font-medium">{source.symbol}</span>
-              <IconChevron className="size-14" />
+              <KeyboardArrowDownIcon className="size-24" />
             </button>
           </TokenInputField>
         </div>
@@ -245,7 +245,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               >
                 <TokenLogo token={target} size={20} />
                 <span className="font-medium">{target.symbol}</span>
-                <IconChevron className="size-14" />
+                <KeyboardArrowDownIcon className="size-24" />
               </button>
             </TokenInputField>
           </div>

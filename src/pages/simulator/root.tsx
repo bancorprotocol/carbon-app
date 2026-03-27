@@ -1,5 +1,5 @@
 import { Outlet, useSearch } from '@tanstack/react-router';
-import IconClock from 'assets/icons/clock.svg?react';
+import HistoryIcon from 'assets/icons/history.svg?react';
 import CloseIcon from 'assets/icons/close.svg?react';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
@@ -92,7 +92,7 @@ const SimulatorDisclaimer = () => {
       className="grid grid-cols-[auto_1fr_auto] gap-x-16 gap-y-8 items-start justify-between border border-primary rounded-2xl bg-primary/10 p-16 md:col-span-2"
     >
       <div className="row-span-2 hidden self-center bg-primary/20 size-32 md:size-48 md:grid place-items-center rounded-full flex-shrink-0">
-        <IconClock className="size-16 md:size-24 fill-gradient" />
+        <HistoryIcon className="size-16 md:size-24 fill-gradient" />
       </div>
       <h2 className="text-16 md:text-18 self-center">
         Backtest Your Strategy Using Real Historical Price Data

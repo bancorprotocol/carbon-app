@@ -20,7 +20,7 @@ export default function ModalWithdrawOrDelete({
       <ModalHeader id={id} />
       <IconTitleText
         variant="error"
-        icon={<IconDelete />}
+        icon={<IconDelete className="size-24" />}
         title="This strategy will become inactive once the budget is removed"
         text="Delete this strategy to keep things tidy"
       />

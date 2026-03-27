@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { ButtonHTMLProps } from 'components/common/button';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import IconPlus from 'assets/icons/plus.svg?react';
 import { cn } from 'utils/helpers';
 import { SuspiciousToken } from '../DisplayPair';
@@ -50,7 +50,7 @@ export const SelectTokenButton: FC<Props> = ({
           {token?.symbol ?? text}
         </p>
       </div>
-      <IconChevron className={cn('size-20', chevronClassName)} />
+      <KeyboardArrowDownIcon className={cn('size-24', chevronClassName)} />
     </button>
   );
 };

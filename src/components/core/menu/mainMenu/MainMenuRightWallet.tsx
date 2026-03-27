@@ -1,6 +1,6 @@
-import IconDisconnect from 'assets/icons/disconnect.svg?react';
+import UploadIcon from 'assets/icons/upload.svg?react';
 import IconWarning from 'assets/icons/warning.svg?react';
-import IconCopy from 'assets/icons/copy.svg?react';
+import ContentCopyIcon from 'assets/icons/content_copy.svg?react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useMenuCtx } from 'components/common/dropdownMenu/utils';
 import { useWagmi } from 'libs/wagmi';
@@ -124,7 +124,7 @@ const ConnectedMenu: FC = () => {
             className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-main-900/40"
             onClick={copyAddress}
           >
-            <IconCopy className="w-16" />
+            <ContentCopyIcon className="size-24" />
             <span>Copy Address</span>
           </button>
         </>
@@ -142,7 +142,7 @@ const ConnectedMenu: FC = () => {
         className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-main-900/40"
         onClick={signout}
       >
-        <IconDisconnect className="w-16" />
+        <UploadIcon className="size-24" />
         <span>Disconnect</span>
       </button>
     </div>

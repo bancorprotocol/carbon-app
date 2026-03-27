@@ -2,7 +2,7 @@ import { FC, FormEvent, memo, useCallback, useEffect, useState } from 'react';
 import { SuggestionCombobox } from 'components/explorer/suggestion/SuggestionCombobox';
 import { useNavigate, useSearch } from 'libs/routing';
 import IconSearch from 'assets/icons/search.svg?react';
-import IconChevron from 'assets/icons/chevron-right.svg?react';
+import ChevronRightIcon from 'assets/icons/chevron_right.svg?react';
 import {
   searchPairTrade,
   searchTokens,
@@ -116,7 +116,7 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
         />
       </div>
       <button type="submit">
-        <IconChevron className="size-24" />
+        <ChevronRightIcon className="size-24" />
       </button>
     </form>
   );

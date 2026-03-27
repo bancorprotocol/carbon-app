@@ -23,7 +23,7 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import IconSearch from 'assets/icons/search.svg?react';
 import { cn } from 'utils/helpers';
 import style from './index.module.css';
@@ -193,8 +193,8 @@ export const Combobox: FC<ComboboxProps> = (props) => {
       >
         {props.icon}
         <span>{label}</span>
-        <IconChevron
-          className={cn('ml-auto size-12 transition-transform', {
+        <KeyboardArrowDownIcon
+          className={cn('ml-auto size-24 transition-transform', {
             'rotate-180': open,
           })}
         />
