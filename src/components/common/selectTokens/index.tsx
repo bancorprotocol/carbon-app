@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { LogoImager } from 'components/common/imager/Imager';
-import IconArrow from 'assets/icons/arrow.svg?react';
+import ArrowForwardIcon from 'assets/icons/arrow_forward.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
 import { shortenString } from 'utils/helpers';
 
@@ -42,7 +42,9 @@ export const SelectTokens: FC<Props> = ({
         disabled={middleDisabled}
         className="size-30 bg-main-900 z-20 flex grow-0 items-center justify-center rounded-full disabled:cursor-not-allowed"
       >
-        <IconArrow className={`${middleDisabled && 'opacity-25'}`} />
+        <ArrowForwardIcon
+          className={middleDisabled ? 'size-24 opacity-25' : 'size-24'}
+        />
       </button>
       <button
         onClick={() => onClick1()}

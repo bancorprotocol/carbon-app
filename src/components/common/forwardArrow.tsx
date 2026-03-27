@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import IconArrowCut from 'assets/icons/arrow-cut.svg?react';
-import IconArrowFull from 'assets/icons/arrow.svg?react';
+import ArrowForwardIosIcon from 'assets/icons/arrow_forward_ios.svg?react';
+import ArrowForwardIcon from 'assets/icons/arrow_forward.svg?react';
 import { cn } from 'utils/helpers';
 
 export type ForwardArrowProps = {
@@ -12,11 +12,11 @@ export const ForwardArrow: FC<ForwardArrowProps> = ({
   arrowType = 'cut',
   className = '',
 }) => {
-  const newClassName = cn('h-12 w-7', className);
+  const newClassName = cn('size-24', className);
 
   return arrowType === 'cut' ? (
-    <IconArrowCut className={newClassName} />
+    <ArrowForwardIosIcon className={newClassName} />
   ) : (
-    <IconArrowFull className={newClassName} />
+    <ArrowForwardIcon className={newClassName} />
   );
 };

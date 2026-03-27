@@ -7,7 +7,7 @@ import { FetchStatus, useQueryClient } from '@tanstack/react-query';
 import { useWagmi } from 'libs/wagmi';
 import { QueryKey } from 'libs/queries';
 import IconCheck from 'assets/icons/check.svg?react';
-import IconFails from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import IconRefresh from 'assets/icons/refresh.svg?react';
 
 interface QueryState {
@@ -110,7 +110,7 @@ const FetchIndicator: FC<IndicatorProps> = (props) => {
   if (props.hasError) {
     return (
       <div className="size-24 grid place-items-center">
-        <IconFails className="size-18 text-error" />
+        <CloseIcon className="size-24 text-error" />
       </div>
     );
   }

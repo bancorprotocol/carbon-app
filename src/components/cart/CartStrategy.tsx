@@ -13,7 +13,7 @@ import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlo
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
 import IconTrash from 'assets/icons/trash.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import IconWarning from 'assets/icons/warning.svg?react';
 import { cn } from 'utils/helpers';
 import {
@@ -228,7 +228,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
                 aria-label="close warnings"
                 className="hover:bg-main-900/40 ml-auto rounded-full p-8"
               >
-                <IconClose className="size-16" />
+                <CloseIcon className="size-24" />
               </button>
             </header>
             {error && (

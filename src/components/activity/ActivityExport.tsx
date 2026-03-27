@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { fromUnixUTC } from 'components/simulator/utils';
 import { useDialog } from 'hooks/useDialog';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import styles from './ActivityExport.module.css';
 import { Order } from 'components/strategies/common/types';
 
@@ -157,7 +157,7 @@ export const ActivityExport = () => {
             <header className="flex justify-between">
               <h2 className="text-18">Export Limit</h2>
               <button>
-                <IconClose className="size-18" />
+                <CloseIcon className="size-24" />
               </button>
             </header>
             <p>

@@ -7,7 +7,7 @@ import { getExplorerLink } from 'utils/blockExplorer';
 import IconCheck from 'assets/icons/check.svg?react';
 import IconPause from 'assets/icons/pause.svg?react';
 import IconEdit from 'assets/icons/edit.svg?react';
-import IconArrowDown from 'assets/icons/arrowDown.svg?react';
+import ArrowDownwardIcon from 'assets/icons/arrow_downward.svg?react';
 import IconWithdraw from 'assets/icons/withdraw.svg?react';
 import IconDeposit from 'assets/icons/deposit.svg?react';
 import IconDelete from 'assets/icons/delete.svg?react';
@@ -319,7 +319,7 @@ const iconColor = (action: ActivityAction) => {
 };
 
 export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
-  const className = `size-${size}`;
+  const className = `size-${Math.max(Number(size), 24)}`;
   if (action === 'create') return <IconCheck className={className} />;
   if (action === 'transfer') return <IconTransfer className={className} />;
   if (action === 'edit') return <IconEdit className={className} />;
@@ -328,6 +328,6 @@ export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
   if (action === 'deposit') return <IconDeposit className={className} />;
   if (action === 'withdraw') return <IconWithdraw className={className} />;
   if (action === 'buy')
-    return <IconArrowDown className={cn('rotate-[-60deg]', className)} />;
-  return <IconArrowDown className={cn('rotate-[-120deg]', className)} />;
+    return <ArrowDownwardIcon className={cn('rotate-[-60deg]', className)} />;
+  return <ArrowDownwardIcon className={cn('rotate-[-120deg]', className)} />;
 };

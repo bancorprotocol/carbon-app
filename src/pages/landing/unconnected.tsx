@@ -4,7 +4,7 @@ import IconRecurring from 'assets/icons/recurring.svg?react';
 import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
-import IconArrowCircle from 'assets/icons/arrow-circle.svg?react';
+import ArrowCircleRightIcon from 'assets/icons/arrow_circle_right.svg?react';
 import IconShield from 'assets/icons/shield.svg?react';
 import IconMultiOrder from 'assets/icons/multi-order.svg?react';
 import { useTrending } from 'libs/queries/extApi/tradeCount';
@@ -166,7 +166,7 @@ export const UnconnectedLandingPage = () => {
                 <span className="text-gradient gradient-direction-[90deg] font-medium">
                   Explore Strategies
                 </span>
-                <IconArrowCircle className="size-20 fill-gradient stroke-gradient" />
+                <ArrowCircleRightIcon className="size-24 fill-gradient stroke-gradient" />
               </Link>
               <nav aria-label="strategy types" className="grid gap-8">
                 {item.trades.map((trade) => (

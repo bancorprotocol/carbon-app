@@ -1,6 +1,6 @@
 import { Outlet, useSearch } from '@tanstack/react-router';
 import IconClock from 'assets/icons/clock.svg?react';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';
@@ -103,7 +103,7 @@ const SimulatorDisclaimer = () => {
         className="p-8 rounded-full justify-self-end"
         data-testid="clear-sim-disclaimer"
       >
-        <IconClose className="size-14 md:size-18" />
+        <CloseIcon className="size-20 md:size-24" />
       </button>
       <p className="text-14 col-span-2">
         This tool is for informational purposes only and operates under

@@ -17,7 +17,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { OpenOceanPath } from './OpenOceanPath';
 import IconRouting from 'assets/icons/routing.svg?react';
 import IconChevron from 'assets/icons/chevron.svg?react';
-import IconArrow from 'assets/icons/arrowDown.svg?react';
+import ArrowDownwardIcon from 'assets/icons/arrow_downward.svg?react';
 
 type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
 export interface TradeWidgetBuySellProps extends FormAttributes {
@@ -201,7 +201,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           type="button"
           className="grid place-items-center place-self-center size-40 -my-12 border-2 border-main-900 btn-on-background p-0 rounded-full z-1 bg-main-600 hover:bg-main-500"
         >
-          <IconArrow className="size-16" />
+          <ArrowDownwardIcon className="size-24" />
         </button>
         <div className="grid gap-8">
           <div className="rounded-b-xs rounded-t-xl input-container relative">

@@ -3,7 +3,7 @@ import { NotificationStatus, NotificationTx } from 'libs/notifications/types';
 import IconLink from 'assets/icons/link.svg?react';
 import IconTimes from 'assets/icons/times.svg?react';
 import IconCheck from 'assets/icons/check.svg?react';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { NewTabLink } from 'libs/routing';
 import { formatDistanceToNow, fromUnixTime } from 'date-fns';
@@ -86,7 +86,7 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
             data-testid="notif-close"
             aria-label="Remove notification"
           >
-            <IconClose className="size-14 text-main-0/80" />
+            <CloseIcon className="size-24 text-main-0/80" />
           </button>
         </header>
         <p

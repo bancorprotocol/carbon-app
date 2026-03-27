@@ -1,5 +1,5 @@
 import IconCog from 'assets/icons/cog.svg?react';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { useStore } from 'store';
 import { FormEvent, useCallback, useId, useState } from 'react';
 import { TradeSettingsData } from 'components/trade/settings/utils';
@@ -113,7 +113,7 @@ export const MainMenuTradeSettings = () => {
               className="p-8 rounded-full"
               onClick={close}
             >
-              <IconClose className="size-18" />
+              <CloseIcon className="size-24" />
             </button>
           </header>
           {settingsData.map((item) => (

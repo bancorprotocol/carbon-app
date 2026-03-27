@@ -4,7 +4,7 @@ import { useModal } from 'hooks/useModal';
 import { useTokens } from 'hooks/useTokens';
 import { getLastVisitedPair } from 'libs/routing';
 import AddIcon from 'assets/icons/plus.svg?react';
-import RemoveIcon from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import ChevronIcon from 'assets/icons/chevron.svg?react';
 import {
   FC,
@@ -657,7 +657,7 @@ const PairForm: FC<PairFormProps> = (props) => {
           <TokenLogo token={quote} size={24} />
           <h3>{quote.symbol}</h3>
           <button type="button" onClick={() => remove(quote.address)}>
-            <RemoveIcon className="size-16" />
+            <CloseIcon className="size-24" />
           </button>
         </div>
         <div className="price">
@@ -842,7 +842,7 @@ export const SaveLocally = () => {
                 type="button"
                 onClick={() => remove(base.address)}
               >
-                <RemoveIcon className="size-16" />
+                <CloseIcon className="size-24" />
               </button>
             </li>
           );
