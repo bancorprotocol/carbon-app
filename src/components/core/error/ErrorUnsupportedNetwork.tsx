@@ -1,6 +1,5 @@
-import IconWarning from 'assets/icons/warning.svg?react';
 import { useWagmi } from 'libs/wagmi';
-import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
+import { MainError } from './ErrorSDKStartSync';
 import config from 'config';
 
 export const ErrorUnsupportedNetwork = () => {
@@ -9,18 +8,18 @@ export const ErrorUnsupportedNetwork = () => {
   const networkName = config.network.name;
 
   return (
-    <ErrorWrapper
-      icon={<IconWarning />}
+    <MainError
       title="Wrong Network"
-      text={`Please connect to ${networkName} using your wallet or the button below`}
-      variant="error"
+      description={`Please connect to ${networkName} using your wallet or the button below`}
     >
-      <button className="btn-main-gradient" onClick={switchNetwork}>
-        Change Network
-      </button>
-      <button className="btn-on-surface" onClick={disconnect}>
-        Disconnect Wallet
-      </button>
-    </ErrorWrapper>
+      <div className="grid gap-16">
+        <button className="btn-main-gradient" onClick={switchNetwork}>
+          Change Network
+        </button>
+        <button className="btn-on-surface" onClick={disconnect}>
+          Disconnect Wallet
+        </button>
+      </div>
+    </MainError>
   );
 };

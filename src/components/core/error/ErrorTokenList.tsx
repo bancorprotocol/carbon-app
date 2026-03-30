@@ -1,13 +1,10 @@
-import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
-import IconWarning from 'assets/icons/warning.svg?react';
+import { MainError } from './ErrorSDKStartSync';
 
 export const ErrorTokenList = () => {
   return (
-    <ErrorWrapper
-      icon={<IconWarning />}
+    <MainError
       title="Network Error"
-      text="Failed to fetch token list. Please check your network connection and try again."
-      variant="error"
+      description="Failed to fetch token list. Please check your network connection and try again."
     />
   );
 };
