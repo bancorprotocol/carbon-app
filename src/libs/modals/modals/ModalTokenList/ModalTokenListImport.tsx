@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
-import IconSearch from 'assets/icons/search.svg?react';
+import SearchIcon from 'assets/icons/search.svg?react';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 
 export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
@@ -24,7 +24,7 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
   return (
     <div className="mt-40 grid gap-16">
       <IconTitleText
-        icon={<IconSearch />}
+        icon={<SearchIcon className="size-24" />}
         title="Token not found"
         text={<Text />}
       />

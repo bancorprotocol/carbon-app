@@ -5,7 +5,7 @@ import IconExtendedLine from 'assets/icons/draw-extended-line.svg?react';
 import IconChannel from 'assets/icons/draw-channel.svg?react';
 import IconTriangle from 'assets/icons/draw-triangle.svg?react';
 import ActivityZoneIcon from 'assets/icons/activity_zone.svg?react';
-import IconTrash from 'assets/icons/trash.svg?react';
+import DeleteIcon from 'assets/icons/delete.svg?react';
 import { useD3ChartCtx } from '../D3ChartContext';
 import {
   FloatTooltip,
@@ -86,7 +86,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
             className="hover:bg-main-700 rounded-md p-8"
             onClick={clearDrawings}
           >
-            <IconTrash className="size-20" />
+            <DeleteIcon className="size-24" />
           </button>
         </FloatTooltipTrigger>
         <FloatTooltipContent className="text-12 rounded-md py-8">

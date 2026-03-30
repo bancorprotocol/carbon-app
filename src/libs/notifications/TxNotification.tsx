@@ -1,7 +1,6 @@
 import { FC, useId, useMemo } from 'react';
 import { NotificationStatus, NotificationTx } from 'libs/notifications/types';
 import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
-import IconTimes from 'assets/icons/times.svg?react';
 import IconCheck from 'assets/icons/check.svg?react';
 import CloseIcon from 'assets/icons/close.svg?react';
 import { getExplorerLink } from 'utils/blockExplorer';
@@ -26,7 +25,7 @@ const StatusIcon = (status: NotificationStatus) => {
     case 'failed':
       return (
         <div className="size-38 bg-error/10 flex items-center justify-center rounded-full">
-          <IconTimes className="text-error w-16" />
+          <CloseIcon className="text-error size-24" />
         </div>
       );
   }

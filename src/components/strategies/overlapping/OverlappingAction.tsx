@@ -1,7 +1,7 @@
 import { FC, ReactNode, SyntheticEvent, useId, useRef } from 'react';
 import { Token } from 'libs/tokens';
 import VerticalAlignBottomIcon from 'assets/icons/vertical_align_bottom.svg?react';
-import IconWithdraw from 'assets/icons/withdraw.svg?react';
+import UpgradeIcon from 'assets/icons/upgrade.svg?react';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import { useGetTokenBalance } from 'libs/queries';
 import { InputBudget, BudgetAction } from '../common/InputBudget';
@@ -94,7 +94,7 @@ export const OverlappingAction: FC<Props> = (props) => {
             onChange={() => setAction('withdraw')}
             data-testid="action-withdraw"
           >
-            <IconWithdraw className="size-14" />
+            <UpgradeIcon className="size-24" />
             Withdraw
           </Radio>
         </RadioGroup>

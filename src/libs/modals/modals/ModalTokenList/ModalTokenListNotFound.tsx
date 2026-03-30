@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import IconSearch from 'assets/icons/search.svg?react';
+import SearchIcon from 'assets/icons/search.svg?react';
 
 export const ModalTokenListNotFound: FC = () => {
   const Text = () => (
@@ -17,7 +17,7 @@ export const ModalTokenListNotFound: FC = () => {
     <div className="my-40 grid place-items-center">
       <IconTitleText
         title="Token not found"
-        icon={<IconSearch />}
+        icon={<SearchIcon className="size-24" />}
         text={<Text />}
       />
     </div>

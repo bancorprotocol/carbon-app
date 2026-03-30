@@ -4,7 +4,7 @@ import { getExplorerLink } from 'utils/blockExplorer';
 import { shortenString } from 'utils/helpers';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
@@ -42,7 +42,7 @@ export const ModalTokenListDuplicateWarning: FC<Props> = ({ token }) => {
         element={duplicatedTokenTooltipElement(token)}
         className="max-w-450"
       >
-        <IconWarning className="ml-5 size-14 text-main-0/60" />
+        <WarningIcon className="ml-5 size-24 text-main-0/60" />
       </Tooltip>
     </div>
   );

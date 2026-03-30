@@ -1,7 +1,7 @@
 import { FC, FormEvent, memo, useCallback, useEffect, useState } from 'react';
 import { SuggestionCombobox } from 'components/explorer/suggestion/SuggestionCombobox';
 import { useNavigate, useSearch } from 'libs/routing';
-import IconSearch from 'assets/icons/search.svg?react';
+import SearchIcon from 'assets/icons/search.svg?react';
 import ChevronRightIcon from 'assets/icons/chevron_right.svg?react';
 import {
   searchPairTrade,
@@ -105,7 +105,7 @@ const LocalExplorerSearch: FC<Props> = ({ url }) => {
       onSubmit={submitHandler}
       onReset={resetHandler}
     >
-      <IconSearch className="size-18" />
+      <SearchIcon className="size-24" />
       <div className="flex items-center md:relative">
         <SuggestionCombobox
           url={url}

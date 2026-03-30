@@ -8,10 +8,10 @@ import IconCheck from 'assets/icons/check.svg?react';
 import IconPause from 'assets/icons/pause.svg?react';
 import EditSquareIcon from 'assets/icons/edit_square.svg?react';
 import ArrowDownwardIcon from 'assets/icons/arrow_downward.svg?react';
-import IconWithdraw from 'assets/icons/withdraw.svg?react';
+import UpgradeIcon from 'assets/icons/upgrade.svg?react';
 import VerticalAlignBottomIcon from 'assets/icons/vertical_align_bottom.svg?react';
 import IconDelete from 'assets/icons/delete.svg?react';
-import IconTransfer from 'assets/icons/transfer.svg?react';
+import SyncAltIcon from 'assets/icons/sync_alt.svg?react';
 import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import ChevronLeftIcon from 'assets/icons/chevron_left.svg?react';
 import {
@@ -321,13 +321,13 @@ const iconColor = (action: ActivityAction) => {
 export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
   const className = `size-${Math.max(Number(size), 24)}`;
   if (action === 'create') return <IconCheck className={className} />;
-  if (action === 'transfer') return <IconTransfer className={className} />;
+  if (action === 'transfer') return <SyncAltIcon className={className} />;
   if (action === 'edit') return <EditSquareIcon className={className} />;
   if (action === 'delete') return <IconDelete className={className} />;
   if (action === 'pause') return <IconPause className={className} />;
   if (action === 'deposit')
     return <VerticalAlignBottomIcon className={className} />;
-  if (action === 'withdraw') return <IconWithdraw className={className} />;
+  if (action === 'withdraw') return <UpgradeIcon className={className} />;
   if (action === 'buy')
     return <ArrowDownwardIcon className={cn('rotate-[-60deg]', className)} />;
   return <ArrowDownwardIcon className={cn('rotate-[-120deg]', className)} />;

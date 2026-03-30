@@ -1,7 +1,7 @@
 import ReplayIcon from 'assets/icons/replay.svg?react';
 import PauseIcon from 'assets/icons/pause.svg?react';
 import PlayArrowIcon from 'assets/icons/play_arrow.svg?react';
-import SkipIcon from 'assets/icons/skip.svg?react';
+import FastForwardIcon from 'assets/icons/fast_forward.svg?react';
 import { useState } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { PlaybackSpeed } from 'components/simulator/result/SimulatorProvider';
@@ -107,7 +107,7 @@ export const SimResultChartControls = () => {
         onClick={end}
         data-testid="animation-controls-end"
       >
-        <SkipIcon className="size-16" />
+        <FastForwardIcon className="size-24" />
       </button>
       <button
         aria-label="replay"
@@ -115,7 +115,7 @@ export const SimResultChartControls = () => {
         onClick={replay}
         data-testid="animation-controls-replay"
       >
-        <ReplayIcon className="size-16" />
+        <ReplayIcon className="size-24" />
       </button>
     </article>
   );

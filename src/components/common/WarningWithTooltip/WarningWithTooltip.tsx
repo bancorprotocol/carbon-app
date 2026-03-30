@@ -1,4 +1,4 @@
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { cn } from 'utils/helpers';
 
@@ -13,7 +13,7 @@ export const WarningWithTooltip = ({
 }: WarningWithTooltipProps) => {
   return (
     <Tooltip element={tooltipContent}>
-      <IconWarning className={cn('text-warning w-14', className)} />
+      <WarningIcon className={cn('text-warning size-24', className)} />
     </Tooltip>
   );
 };

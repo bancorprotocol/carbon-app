@@ -1,6 +1,6 @@
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 import ViewComfyAltIcon from 'assets/icons/view_comfy_alt.svg?react';
-import IconTable from 'assets/icons/table.svg?react';
+import ListIcon from 'assets/icons/list.svg?react';
 import { Dispatch, FC, SetStateAction } from 'react';
 
 export type StrategyLayout = 'grid' | 'table';
@@ -29,7 +29,7 @@ export const StrategySelectLayout: FC<Props> = ({ layout, setLayout }) => {
         onChange={() => setLayout('table')}
         aria-label="Table"
       >
-        <IconTable className="size-20" />
+        <ListIcon className="size-24" />
       </Radio>
     </RadioGroup>
   );

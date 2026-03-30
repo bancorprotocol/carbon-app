@@ -2,7 +2,7 @@ import { Token } from 'libs/tokens';
 import { FC, useId } from 'react';
 import { cn, tokenAmount } from 'utils/helpers';
 import VerticalAlignBottomIcon from 'assets/icons/vertical_align_bottom.svg?react';
-import IconWithdraw from 'assets/icons/withdraw.svg?react';
+import UpgradeIcon from 'assets/icons/upgrade.svg?react';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { useFiatValue } from 'hooks/useFiatValue';
 import { UseQueryResult } from '@tanstack/react-query';
@@ -208,7 +208,7 @@ export const BudgetDescription: FC<DescriptionProps> = (props) => {
     return (
       <p className="warning-message animate-scale-up text-12 flex items-start gap-8 text-main-0/60">
         <span className="bg-sell/10 text-sell rounded-full p-4">
-          <IconWithdraw className="h-12 w-12" />
+          <UpgradeIcon className="size-24" />
         </span>
         <span>
           You will&nbsp;

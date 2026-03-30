@@ -2,7 +2,7 @@ import { FC, ReactNode, useId } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import IconTooltip from 'assets/icons/tooltip.svg?react';
+import InfoIcon from 'assets/icons/info.svg?react';
 import { Switch } from 'components/common/switch';
 import IconDistributedEntireRange from 'assets/distributedEntireRange.svg?react';
 import IconDistributedUnusedRange from 'assets/distributedUnusedRange.svg?react';
@@ -35,7 +35,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
           <Tooltip
             element={`This is the current available ${token.symbol} budget you can withdraw`}
           >
-            <IconTooltip className="size-14 text-main-0/60" />
+            <InfoIcon className="size-24 text-main-0/60" />
           </Tooltip>
         </p>
         <div role="cell" className="justify-self-end">
@@ -122,7 +122,7 @@ export const EditBudgetDistribution: FC<BudgetDistributionProps> = (props) => {
             </div>
           }
         >
-          <IconTooltip className="h-13 text-main-0/60" />
+          <InfoIcon className="size-24 text-main-0/60" />
         </Tooltip>
       </p>
       <Switch

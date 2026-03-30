@@ -14,7 +14,7 @@ import {
 } from 'components/strategies/common/utils';
 import { useSetDisposableOrder } from 'components/strategies/common/useSetOrder';
 import { getTotalBudget } from 'components/strategies/edit/utils';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { OnPriceUpdates } from 'components/strategies/common/d3Chart';
@@ -202,7 +202,7 @@ export const EditPricesStrategyDisposablePage = () => {
             className="warning-message p-16 border-t border-main-0/40 bg-warning/5"
           >
             <h3 className="text-16 text-warning font-medium flex items-center gap-8">
-              <IconWarning className="size-16" />
+              <WarningIcon className="size-24" />
               Notice
             </h3>
             {buyBudgetChanges && (

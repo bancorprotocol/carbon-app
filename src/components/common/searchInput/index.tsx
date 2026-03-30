@@ -1,6 +1,6 @@
 import { HTMLAttributes, KeyboardEventHandler, useEffect, useRef } from 'react';
-import IconSearch from 'assets/icons/search.svg?react';
-import IconClose from 'assets/icons/times.svg?react';
+import SearchIcon from 'assets/icons/search.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { cn } from 'utils/helpers';
 
 type InputProps = HTMLAttributes<HTMLInputElement>;
@@ -31,7 +31,7 @@ export const SearchInput = ({
         className,
       )}
     >
-      <IconSearch className="text-main-0-disabled w-16" />
+      <SearchIcon className="text-main-0-disabled size-24" />
       <input
         {...inputProps}
         ref={ref}
@@ -57,7 +57,7 @@ export const SearchInput = ({
           onClick={() => setValue('')}
           className="text-graphite hover:text-error"
         >
-          <IconClose className="w-12" />
+          <CloseIcon className="size-24" />
         </button>
       )}
     </div>

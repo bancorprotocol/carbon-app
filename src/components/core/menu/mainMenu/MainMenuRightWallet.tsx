@@ -1,5 +1,5 @@
 import UploadIcon from 'assets/icons/upload.svg?react';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import ContentCopyIcon from 'assets/icons/content_copy.svg?react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useMenuCtx } from 'components/common/dropdownMenu/utils';
@@ -45,8 +45,8 @@ export const MainMenuRightWallet: FC = () => {
   }, [ensName, isSupportedNetwork, isUserBlocked, location.pathname, user]);
 
   const buttonIcon = useMemo(() => {
-    if (isUserBlocked) return <IconWarning className={iconClass} />;
-    if (!isSupportedNetwork) return <IconWarning className={iconClass} />;
+    if (isUserBlocked) return <WarningIcon className={iconClass} />;
+    if (!isSupportedNetwork) return <WarningIcon className={iconClass} />;
     if (!user) return;
     return (
       <WalletIcon

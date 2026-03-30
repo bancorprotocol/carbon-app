@@ -10,7 +10,7 @@ import { useQuickGradientOrder } from 'components/strategies/common/gradient/use
 import { CreateGradientStrategyForm } from 'components/strategies/common/gradient/CreateGradientStrategyForm';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import IconDelete from 'assets/icons/trash.svg?react';
+import DeleteIcon from 'assets/icons/delete.svg?react';
 import AddIcon from 'assets/icons/add.svg?react';
 import { isReverseGradientOrders } from 'components/strategies/common/gradient/utils';
 import { ChartPoint } from 'components/strategies/common/d3Chart/D3ChartContext';
@@ -218,7 +218,7 @@ export const TradeQuickCustom = () => {
                       aria-label={`remove ${direction} order`}
                       onClick={() => removeDirection(direction)}
                     >
-                      <IconDelete className="size-16" />
+                      <DeleteIcon className="size-24" />
                     </button>
                     <CreateQuickGradientOrder
                       order={order}

@@ -11,10 +11,10 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
-import IconTrash from 'assets/icons/trash.svg?react';
+import DeleteIcon from 'assets/icons/delete.svg?react';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import CloseIcon from 'assets/icons/close.svg?react';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import { cn } from 'utils/helpers';
 import {
   isEmptyGradientOrder,
@@ -173,7 +173,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
               popoverTarget={popoverId}
               className="warning-message border-warning rounded-md text-14 text-warning hover:bg-main-800 active:bg-main-700 flex items-center gap-8 border px-8 py-2 text-start"
             >
-              <IconWarning className="size-14" />
+              <WarningIcon className="size-24" />
               <span>Warnings</span>
               <KeyboardArrowDownIcon className="size-24" />
             </button>
@@ -187,7 +187,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
             aria-label="Withdraw & Delete"
             onClick={remove}
           >
-            <IconTrash className="size-16" />
+            <DeleteIcon className="size-24" />
           </button>
         </div>
       </header>
@@ -218,7 +218,7 @@ export const CartStrategyItems: FC<Props> = (props) => {
           <article className="grid h-full content-start gap-16">
             <header className="flex items-center gap-16">
               <div className="bg-warning/25 text-warning rounded-full p-8">
-                <IconWarning className="size-18" />
+                <WarningIcon className="size-24" />
               </div>
               <h3 className="text-16 text-warning font-bold">Warnings</h3>
               <button

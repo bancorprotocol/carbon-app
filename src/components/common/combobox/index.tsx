@@ -24,7 +24,7 @@ import {
   useTransitionStyles,
 } from '@floating-ui/react';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
-import IconSearch from 'assets/icons/search.svg?react';
+import SearchIcon from 'assets/icons/search.svg?react';
 import { cn } from 'utils/helpers';
 import style from './index.module.css';
 import { replaceSpecialCharacters } from 'utils/pairSearch';
@@ -211,7 +211,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               onChange={onChange}
             >
               <div className="flex gap-8 rounded-2xl input-container px-16 py-8">
-                <IconSearch className="w-14 self-center" />
+                <SearchIcon className="size-24 self-center" />
                 <input
                   id={inputId}
                   type="search"
@@ -290,7 +290,7 @@ const Empty = () => {
   return (
     <output className="flex max-w-[200px] flex-col items-center p-16">
       <div className="mb-16 grid place-items-center rounded-full bg-main-0/40 p-8">
-        <IconSearch className="size-16 self-center" />
+        <SearchIcon className="size-24 self-center" />
       </div>
       <h3 className="text-14 font-medium mb-8">Nothing found</h3>
       <p className="text-12 text-center text-main-0/80">

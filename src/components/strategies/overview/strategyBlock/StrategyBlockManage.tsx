@@ -9,7 +9,7 @@ import { useModal } from 'hooks/useModal';
 import { useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import IconDots from 'assets/icons/three-dots.svg?react';
+import MoreHorizIcon from 'assets/icons/more_horiz.svg?react';
 import {
   StrategyEditOptionId,
   getTooltipTextByStrategyEditOptionsId,
@@ -294,7 +294,7 @@ export const ManageButtonIcon = forwardRef<
       ref={ref}
       className="btn-on-surface size-38 rounded-md grid place-items-center p-0"
     >
-      <IconDots className="size-24" />
+      <MoreHorizIcon className="size-24" />
     </button>
   );
 });

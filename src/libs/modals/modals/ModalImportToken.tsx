@@ -4,7 +4,7 @@ import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
 import { cn, shortenString } from 'utils/helpers';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { NewTabLink } from 'libs/routing';
@@ -38,7 +38,7 @@ export default function ModalImportToken({
       <div className="mt-40">
         <IconTitleText
           variant="warning"
-          icon={<IconWarning />}
+          icon={<WarningIcon className="size-24" />}
           title="Use at your own risk"
           text="This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
         />

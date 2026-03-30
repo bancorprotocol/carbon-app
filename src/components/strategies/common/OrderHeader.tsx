@@ -3,7 +3,7 @@ import { Token } from 'libs/tokens';
 import { OrderBlock } from 'components/strategies/common/types';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import IconTooltip from 'assets/icons/tooltip.svg?react';
+import InfoIcon from 'assets/icons/info.svg?react';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
@@ -68,7 +68,7 @@ export const OrderHeader: FC<Props> = (props) => {
               </p>
             }
           >
-            <IconTooltip className="size-18 text-main-0/60" />
+            <InfoIcon className="size-24 text-main-0/60" />
           </Tooltip>
         </div>
       )}

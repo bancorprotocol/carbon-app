@@ -3,7 +3,7 @@ import { cn, sanitizeNumber } from 'utils/helpers';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import { Preset, Presets } from 'components/common/preset/Preset';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import IconTooltip from 'assets/icons/tooltip.svg?react';
+import InfoIcon from 'assets/icons/info.svg?react';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import styles from './OverlappingSpread.module.css';
 
@@ -50,7 +50,7 @@ export const OverlappingSpread: FC<Props> = (props) => {
       <header className="flex items-center gap-8 ">
         <h2 className="text-16 font-medium flex-1">Fee Tier</h2>
         <Tooltip element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price">
-          <IconTooltip className="size-18 text-main-0/60" />
+          <InfoIcon className="size-24 text-main-0/60" />
         </Tooltip>
       </header>
       <div className="flex gap-8">

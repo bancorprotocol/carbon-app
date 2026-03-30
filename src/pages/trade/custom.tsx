@@ -12,7 +12,7 @@ import { CreateGradientStrategyForm } from 'components/strategies/common/gradien
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import IconDelete from 'assets/icons/trash.svg?react';
+import DeleteIcon from 'assets/icons/delete.svg?react';
 import AddIcon from 'assets/icons/add.svg?react';
 import {
   defaultGradientOrder,
@@ -207,7 +207,7 @@ export const TradeCustom = () => {
                       aria-label={`remove ${direction} order`}
                       onClick={() => removeDirection(direction)}
                     >
-                      <IconDelete className="size-16" />
+                      <DeleteIcon className="size-24" />
                     </button>
                     <CreateGradientOrder
                       order={order}
