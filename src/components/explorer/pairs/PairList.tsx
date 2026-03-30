@@ -3,7 +3,7 @@ import { PairRow } from './types';
 import { PairLogoName } from 'components/common/DisplayPair';
 import { Link } from '@tanstack/react-router';
 import { NewTabLink } from 'libs/routing';
-import LinkIcon from 'assets/icons/link.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import config from 'config';
 import { toPairSlug } from 'utils/pairSearch';
 
@@ -51,7 +51,7 @@ export const PairList: FC<Props> = ({ pairs, url }) => {
                           loading="lazy"
                           alt="reward logo"
                         />
-                        <LinkIcon className="size-16" />
+                        <OpenInNewIcon className="size-24" />
                       </NewTabLink>
                     </dd>
                   </>

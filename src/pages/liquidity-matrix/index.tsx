@@ -3,7 +3,7 @@ import { TokenLogo } from 'components/common/imager/Imager';
 import { useModal } from 'hooks/useModal';
 import { useTokens } from 'hooks/useTokens';
 import { getLastVisitedPair } from 'libs/routing';
-import AddIcon from 'assets/icons/plus.svg?react';
+import AddIcon from 'assets/icons/add.svg?react';
 import CloseIcon from 'assets/icons/close.svg?react';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import {

@@ -1,5 +1,5 @@
-import InfinityIcon from 'assets/icons/infinity.svg?react';
-import GradientIcon from 'assets/icons/gradient-type.svg?react';
+import AllInclusiveIcon from 'assets/icons/all_inclusive.svg?react';
+import HourglassIcon from 'assets/icons/hourglass.svg?react';
 import { cn } from 'utils/helpers';
 
 interface Props {
@@ -8,6 +8,6 @@ interface Props {
 }
 
 export const StrategyTypeIcon = ({ isGradient, className }: Props) => {
-  if (isGradient) return <GradientIcon className={cn('size-16', className)} />;
-  return <InfinityIcon className={cn('size-16', className)} />;
+  if (isGradient) return <HourglassIcon className={cn('size-24', className)} />;
+  return <AllInclusiveIcon className={cn('size-24', className)} />;
 };

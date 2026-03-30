@@ -11,7 +11,7 @@ import { CreateGradientStrategyForm } from 'components/strategies/common/gradien
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
 import IconDelete from 'assets/icons/trash.svg?react';
-import IconAdd from 'assets/icons/plus.svg?react';
+import AddIcon from 'assets/icons/add.svg?react';
 import { isReverseGradientOrders } from 'components/strategies/common/gradient/utils';
 import { ChartPoint } from 'components/strategies/common/d3Chart/D3ChartContext';
 import { cn } from 'utils/helpers';
@@ -242,7 +242,7 @@ export const TradeQuickCustom = () => {
                           : 'hover:bg-sell/10 text-sell border-sell',
                       ])}
                     >
-                      <IconAdd className="size-24" />
+                      <AddIcon className="size-24" />
                       <span className="capitalize">Add {direction} Order</span>
                     </button>
                   </div>

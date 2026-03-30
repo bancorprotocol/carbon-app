@@ -1,6 +1,6 @@
 import { FC, useId, useMemo } from 'react';
 import { NotificationStatus, NotificationTx } from 'libs/notifications/types';
-import IconLink from 'assets/icons/link.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import IconTimes from 'assets/icons/times.svg?react';
 import IconCheck from 'assets/icons/check.svg?react';
 import CloseIcon from 'assets/icons/close.svg?react';
@@ -102,7 +102,7 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
               className="justify-self-start text-14 font-medium flex items-center"
             >
               View on {blockExplorer}
-              <IconLink className="ml-6 w-14" />
+              <OpenInNewIcon className="ml-6 size-24" />
             </NewTabLink>
           )}
           <p className="justify-self-end text-12 font-medium whitespace-nowrap text-main-0/60">

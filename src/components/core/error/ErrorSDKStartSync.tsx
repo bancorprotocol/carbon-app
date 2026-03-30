@@ -1,6 +1,6 @@
 import IconChain from 'assets/icons/chain.svg?react';
 import IconRefresh from 'assets/icons/refresh.svg?react';
-import IconExternalLink from 'assets/icons/link.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import { externalLinks, NewTabLink } from 'libs/routing';
 
 export const ErrorSDKStartSync = () => {
@@ -32,7 +32,7 @@ export const ErrorSDKStartSync = () => {
               className="flex items-center gap-8"
             >
               Contact Support
-              <IconExternalLink className="size-16" />
+              <OpenInNewIcon className="size-16" />
             </NewTabLink>
           </p>
         </div>

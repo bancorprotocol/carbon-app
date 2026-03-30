@@ -2,7 +2,7 @@ import { Token } from 'libs/tokens';
 import { FC, FormEvent, useId, useMemo, useState } from 'react';
 import { cn, roundSearchParam } from 'utils/helpers';
 import IconCoinGecko from 'assets/icons/coin-gecko.svg?react';
-import IconEdit from 'assets/icons/edit.svg?react';
+import EditSquareIcon from 'assets/icons/edit_square.svg?react';
 import { NewTabLink, useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -30,7 +30,7 @@ export const EditMarketPrice: FC<Props> = (props) => {
       data-testid="edit-market-price"
       type="button"
     >
-      <IconEdit className="size-24" />
+      <EditSquareIcon className="size-24" />
       <span>Edit Market Price</span>
     </button>
   );

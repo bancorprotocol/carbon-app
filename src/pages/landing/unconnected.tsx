@@ -6,7 +6,7 @@ import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
 import ArrowCircleRightIcon from 'assets/icons/arrow_circle_right.svg?react';
 import IconShield from 'assets/icons/shield.svg?react';
-import IconMultiOrder from 'assets/icons/multi-order.svg?react';
+import TargetIcon from 'assets/icons/target.svg?react';
 import { useTrending } from 'libs/queries/extApi/tradeCount';
 import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
@@ -203,7 +203,7 @@ export const UnconnectedLandingPage = () => {
             <span>MEV Sandwich Attack Immunity</span>
           </li>
           <li className="flex gap-8 items-center">
-            <IconMultiOrder className="size-20" />
+            <TargetIcon className="size-24" />
             <span>100% Price Certainty</span>
           </li>
           <li className="flex gap-8 items-center">

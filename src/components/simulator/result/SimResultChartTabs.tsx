@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
-import IconAnimation from 'assets/icons/movie.svg?react';
-import IconSummary from 'assets/icons/image.svg?react';
+import TheatersIcon from 'assets/icons/theaters.svg?react';
+import ImageIcon from 'assets/icons/image.svg?react';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 interface Props {
@@ -12,13 +12,13 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
   const tabs = [
     {
       label: 'animation',
-      icon: <IconAnimation className="size-18" />,
+      icon: <TheatersIcon className="size-24" />,
       isActive: () => !showSummary,
       click: () => setShowSummary(false),
     },
     {
       label: 'summary',
-      icon: <IconSummary className="size-18" />,
+      icon: <ImageIcon className="size-24" />,
       isActive: () => showSummary,
       click: () => setShowSummary(true),
     },

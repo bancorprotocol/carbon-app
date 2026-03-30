@@ -1,5 +1,5 @@
 import { cn } from 'utils/helpers';
-import IconQuestion from 'assets/icons/question.svg?react';
+import HelpIcon from 'assets/icons/help.svg?react';
 import ArrowForwardIcon from 'assets/icons/arrow_forward.svg?react';
 import { useRouter } from '@tanstack/react-router';
 import { FC } from 'react';
@@ -44,7 +44,7 @@ export const NotFound: FC<Props> = ({
           'bg-error/20': variant === 'error',
         })}
       >
-        <IconQuestion
+        <HelpIcon
           className={cn('size-48', {
             'text-primary': variant === 'info',
             'text-error': variant === 'error',

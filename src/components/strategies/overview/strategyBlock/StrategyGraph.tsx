@@ -5,7 +5,7 @@ import {
   FloatTooltipContent,
   FloatTooltipTrigger,
 } from 'components/common/tooltip/FloatTooltip';
-import IconLink from 'assets/icons/link.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import { Token } from 'libs/tokens';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -712,7 +712,7 @@ const StaticOrderTooltip: FC<OrderTooltipProps<StaticOrder>> = ({
         className="font-medium text-primary inline-flex items-center gap-4"
       >
         <span>Learn more about marginal price</span>
-        <IconLink className="inline size-12" />
+        <OpenInNewIcon className="inline size-24" />
       </a>
     </article>
   );
@@ -803,7 +803,7 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
         className="font-medium text-primary inline-flex items-center gap-4"
       >
         <span>Learn more about marginal price</span>
-        <IconLink className="inline size-12" />
+        <OpenInNewIcon className="inline size-24" />
       </a>
     </article>
   );

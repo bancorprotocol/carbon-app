@@ -6,7 +6,7 @@ import { Link } from '@tanstack/react-router';
 import { Paginator } from 'components/common/table/Paginator';
 import { NewTabLink } from 'libs/routing';
 import { clamp } from 'utils/helpers/operators';
-import LinkIcon from 'assets/icons/link.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import config from 'config';
 import { toPairSlug } from 'utils/pairSearch';
 
@@ -66,7 +66,7 @@ export const PairTable: FC<Props> = ({ url, pairs }) => {
                         loading="lazy"
                         alt="reward logo"
                       />
-                      <LinkIcon className="size-16" />
+                      <OpenInNewIcon className="size-24" />
                     </NewTabLink>
                   )}
                 </td>

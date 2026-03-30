@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import IconPriceBased from 'assets/icons/price-based.svg?react';
-import IconGradient from 'assets/icons/gradient.svg?react';
+import HourglassIcon from 'assets/icons/hourglass.svg?react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
@@ -19,7 +19,7 @@ const links = [
   },
   {
     label: 'Gradient',
-    svg: <IconGradient className="hidden size-16 md:inline" />,
+    svg: <HourglassIcon className="hidden size-24 md:inline" />,
     to: '/trade/auction' as const,
     text: '',
     testId: 'strategy-type-gradient',

@@ -1,6 +1,6 @@
 import ReplayIcon from 'assets/icons/replay.svg?react';
-import PauseIcon from 'assets/icons/pause-sim.svg?react';
-import PlayIcon from 'assets/icons/play.svg?react';
+import PauseIcon from 'assets/icons/pause.svg?react';
+import PlayArrowIcon from 'assets/icons/play_arrow.svg?react';
 import SkipIcon from 'assets/icons/skip.svg?react';
 import { useState } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
@@ -87,9 +87,9 @@ export const SimResultChartControls = () => {
         data-testid="animation-controls-play&pause"
       >
         {!isRunning || isStopped ? (
-          <PlayIcon className="size-16" />
+          <PlayArrowIcon className="size-24" />
         ) : (
-          <PauseIcon className="size-16" />
+          <PauseIcon className="size-24" />
         )}
       </button>
       <input

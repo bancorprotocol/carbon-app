@@ -6,13 +6,13 @@ import { cn, getLowestBits, shortenString, tokenAmount } from 'utils/helpers';
 import { getExplorerLink } from 'utils/blockExplorer';
 import IconCheck from 'assets/icons/check.svg?react';
 import IconPause from 'assets/icons/pause.svg?react';
-import IconEdit from 'assets/icons/edit.svg?react';
+import EditSquareIcon from 'assets/icons/edit_square.svg?react';
 import ArrowDownwardIcon from 'assets/icons/arrow_downward.svg?react';
 import IconWithdraw from 'assets/icons/withdraw.svg?react';
 import VerticalAlignBottomIcon from 'assets/icons/vertical_align_bottom.svg?react';
 import IconDelete from 'assets/icons/delete.svg?react';
 import IconTransfer from 'assets/icons/transfer.svg?react';
-import IconLink from 'assets/icons/link.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import ChevronLeftIcon from 'assets/icons/chevron_left.svg?react';
 import {
   activityActionName,
@@ -204,7 +204,7 @@ export const TransactionLink: FC<TransactionLinkProps> = (props) => {
       aria-label="See transaction on block explorer"
       to={getExplorerLink('tx', txHash)}
     >
-      <IconLink className={cn('text-main-0', className)} />
+      <OpenInNewIcon className={cn('text-main-0 size-24', className)} />
     </NewTabLink>
   );
 };
@@ -322,7 +322,7 @@ export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
   const className = `size-${Math.max(Number(size), 24)}`;
   if (action === 'create') return <IconCheck className={className} />;
   if (action === 'transfer') return <IconTransfer className={className} />;
-  if (action === 'edit') return <IconEdit className={className} />;
+  if (action === 'edit') return <EditSquareIcon className={className} />;
   if (action === 'delete') return <IconDelete className={className} />;
   if (action === 'pause') return <IconPause className={className} />;
   if (action === 'deposit')

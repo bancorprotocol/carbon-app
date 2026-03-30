@@ -5,7 +5,7 @@ import { useModal } from 'hooks/useModal';
 import { cn, shortenString } from 'utils/helpers';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import IconWarning from 'assets/icons/warning.svg?react';
-import IconLink from 'assets/icons/link.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { NewTabLink } from 'libs/routing';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
@@ -66,7 +66,7 @@ export default function ModalImportToken({
               className="text-14 font-medium text-warning flex items-center"
             >
               <span className="whitespace-nowrap">View on Explorer</span>
-              <IconLink className="ml-4 inline-flex h-14" />
+              <OpenInNewIcon className="ml-4 inline-flex size-24" />
             </NewTabLink>
           </div>
           <div className="text-14 flex items-center justify-between">
