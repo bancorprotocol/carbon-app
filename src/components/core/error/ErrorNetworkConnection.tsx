@@ -1,13 +1,10 @@
-import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
-import IconWarning from 'assets/icons/warning.svg?react';
+import { MainError } from './ErrorSDKStartSync';
 
 export const ErrorNetworkConnection = () => {
   return (
-    <ErrorWrapper
-      icon={<IconWarning />}
+    <MainError
       title="Network Error"
-      text="Failed to establish RPC connection. Please check your network connection and try again."
-      variant="error"
+      description="Failed to establish RPC connection. Please check your network connection and try again."
     />
   );
 };

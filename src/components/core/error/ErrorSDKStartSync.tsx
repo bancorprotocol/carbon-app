@@ -2,8 +2,15 @@ import IconChain from 'assets/icons/chain.svg?react';
 import IconRefresh from 'assets/icons/refresh.svg?react';
 import IconExternalLink from 'assets/icons/link.svg?react';
 import { externalLinks, NewTabLink } from 'libs/routing';
+import { FC, ReactNode } from 'react';
 
-export const ErrorSDKStartSync = () => {
+interface Props {
+  title: string;
+  description: string;
+  children?: ReactNode;
+}
+
+export const MainError: FC<Props> = ({ title, description, children }) => {
   return (
     <section className="grid place-items-center p-16 sm:mt-80">
       <article className="grid gap-32 w-400 max-w-fit text-center">
@@ -11,32 +18,30 @@ export const ErrorSDKStartSync = () => {
           <IconChain className="size-40 text-error" />
         </div>
         <hgroup className="grid gap-24">
-          <h2 className="text-24">Connection Interrupted</h2>
-          <p className="text-main-0/80">
-            We're having a hard time fetching the latest data from the
-            blockchain. Don't worry, a quick page refresh usually fixes this.
-          </p>
+          <h2 className="text-24">{title}</h2>
+          <p className="text-main-0/80">{description}</p>
         </hgroup>
-        <div className="grid gap-16">
-          <button
-            className="btn-main-gradient py-8 px-16 flex gap-8 items-center justify-center text-16 sm:text-18"
-            onClick={() => location.reload()}
-          >
-            <IconRefresh className="size-16 sm:size-20" />
-            Refresh Page
-          </button>
-          <p className="flex justify-center gap-16 text-14 text-main-0/80">
-            <span>Still not working ?</span>
-            <NewTabLink
-              to={externalLinks.faq}
-              className="flex items-center gap-8"
-            >
-              Contact Support
-              <IconExternalLink className="size-16" />
-            </NewTabLink>
-          </p>
-        </div>
+        {children || <DefaultAction />}
       </article>
     </section>
   );
 };
+
+const DefaultAction = () => (
+  <div className="grid gap-16">
+    <button
+      className="btn-main-gradient py-8 px-16 flex gap-8 items-center justify-center text-16 sm:text-18"
+      onClick={() => location.reload()}
+    >
+      <IconRefresh className="size-16 sm:size-20" />
+      Refresh Page
+    </button>
+    <p className="flex justify-center gap-16 text-14 text-main-0/80">
+      <span>Still not working ?</span>
+      <NewTabLink to={externalLinks.faq} className="flex items-center gap-8">
+        Contact Support
+        <IconExternalLink className="size-16" />
+      </NewTabLink>
+    </p>
+  </div>
+);
