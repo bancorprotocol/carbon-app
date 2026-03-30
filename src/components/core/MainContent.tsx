@@ -5,7 +5,7 @@ import { ErrorNetworkConnection } from 'components/core/error/ErrorNetworkConnec
 import { useTokens } from 'hooks/useTokens';
 import { ErrorTokenList } from 'components/core/error/ErrorTokenList';
 import { useCarbonInit } from 'libs/sdk/context';
-import { ErrorSDKStartSync } from 'components/core/error/ErrorSDKStartSync';
+import { MainError } from 'components/core/error/ErrorSDKStartSync';
 import { carbonEvents } from 'services/events';
 import { ErrorUserBlocked } from 'components/core/error/ErrorUserBlocked';
 import {
@@ -58,7 +58,12 @@ export const MainContent: FC = () => {
   }
 
   if (sdk.isError) {
-    return <ErrorSDKStartSync />;
+    return (
+      <MainError
+        title="Connection Interrupted"
+        description="We're having a hard time fetching the latest data from the blockchain. Don't worry, a quick page refresh usually fixes this."
+      />
+    );
   }
 
   if (tokens.isError) {
