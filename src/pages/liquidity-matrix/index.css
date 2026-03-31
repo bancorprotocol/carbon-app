@@ -28,7 +28,7 @@ html:has(.page) {
 }
 .field input {
   flex: 1;
-  width: 150px;
+  width: 100%;
   padding: 4px 8px;
   border-radius: 8px;
   background-color: transparent;
@@ -83,15 +83,16 @@ html:has(.page) {
 }
 
 .page {
-  width: 100%;
   max-width: 1920px;
   display: grid;
+  align-content: start;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 32px;
+  padding: 32px;
   margin-inline: auto;
 }
-.page h1, .page .save-locally {
-  grid-template-columns: 1 / span 2;
+.page h1 {
+  grid-column: 1 / span 2;
 }
 .page h1 {
   margin: 0;
@@ -101,70 +102,16 @@ html:has(.page) {
   gap: 24px;
 }
 
-.page form article, .page .save-locally {
+.page form article {
   @apply surface rounded-2xl p-16;
   display: grid;
   gap: 16px;
 }
 
 .page .description {
-  @apply text-main-0/60;
   font-size: 0.8rem;
 }
 
-.page .save-locally {
-  @apply border-main-0/40;
-  grid-column: 1/3;
-  border-radius: 16px;
-  padding: 16px;
-  border-bottom: 1px solid;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.save-locally ul {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-}
-.save-locally ul:empty {
-  display: none;
-}
-.save-locally li {
-  @apply bg-main-800;
-  border-radius: 8px;
-  display: flex;
-}
-.save-locally li[aria-selected='true'] {
-  @apply bg-main-700;
-  outline: 1px solid var(--color-green);
-}
-.save-locally li > * {
-  padding: 8px;
-}
-.save-locally li > *:hover {
-  @apply bg-main-600;
-  cursor: pointer;
-}
-.save-locally .select-base {
-  @apply border-main-0/40;
-  flex: 1;
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
-  gap: 4px 8px;
-  align-items: center;
-  border-inline-end: 1px solid;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-}
-.save-locally .saved-matrix .remove {
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-.save-locally .main-icon {
-  grid-row: 1/3;
-}
 
 .save-locally:has(li[aria-selected='true']) .add-save {
   display: none;
@@ -237,28 +184,49 @@ html:has(.page) {
 .pair-list {
   --pair-width: 320px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--pair-width), 1fr));
   gap: 24px;
 }
 .pair {
   @apply bg-main-800 rounded-2xl p-16;
   display: grid;
   gap: 16px;
-  min-height: 400px;
 }
 
 .pair header {
-  display: grid;
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 .pair header h3 {
   margin-inline-end: auto;
 }
-.pair .quote-header {
-  display: flex;
-  align-items: center;
+
+.pair-fields {
+  display: grid;
   gap: 8px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 
+    "price-label budget-label budget-label"
+    "price-area budget-base budget-quote"
 }
+
+.price-label {
+  grid-area: price-label;
+}
+.budget-label {
+  grid-area: budget-label;
+}
+.price-area {
+  grid-area: price-area;
+}
+.budget-base {
+  grid-area: budget-base;
+}
+.budget-quote {
+  grid-area: budget-quote;
+}
+
 
 .budget-list {
   @apply bg-main-700 p-8;
@@ -341,11 +309,44 @@ html:has(.page) {
 .summary {
   position: sticky;
   top: 80px;
-  align-self: start;
+  display: grid;
+  align-content: start;
   gap: 24px;
 }
+
+.summary header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .summary h3 {
   margin-bottom: 16px;
+}
+
+.summary .save-list {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.summary .save-list li {
+  @apply surface rounded-full flex items-center gap-16 px-8 py-4;
+  & a {
+    @apply flex items-center gap-8;
+  }
+}
+
+.summary .strategy-list {
+  display: none;
+}
+
+.summary th {
+  @apply text-main-0/60;
+  text-align: start;
+  font-weight: 500;
+}
+.summary td:last-child {
+  text-align: start;
 }
 
 .summary:has(button:disabled) button[type='submit'] {
@@ -354,16 +355,12 @@ html:has(.page) {
   opacity: 0.4;
 }
 
-.summary ul {
-  display: none;
-}
 .summary .strategy-card {
-  @apply bg-main-800;
+  @apply surface rounded-2xl;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   padding: 16px;
-  border-radius: 8px;
 }
 .summary .strategy-card p {
   display: flex;
@@ -389,32 +386,59 @@ html:has(.page) {
   }
 }
 
-@media (max-width: 1350px) {
-  .page form {
-    grid-template-columns: 1fr;
+@media ((min-width: 1350px) and (max-width: 1550px)) or (max-width: 850px) {
+  .price-config, .base {
+    display: grid;
+    justify-content: unset;
   }
-  .page .save-locally {
-    grid-column: 1/2;
+  .pair-fields {
+    grid-template-columns: unset;
+    grid-template-rows: unset;
+    grid-template-areas: 
+      "price-label price-label"
+      "price-area price-area"
+      "budget-label budget-label"
+      "budget-base budget-quote"
   }
 }
 
-@media (max-width: 630px) {
-  .page .save-locally {
-    flex-direction: column;
+@media (max-width: 1350px) {
+  .page {
+    margin: unset;
+    grid-template-columns: 1fr;
   }
-  .save-locally ul {
-    grid-auto-flow: row;
+  .page h1 {
+    grid-column: unset;
   }
-  .base,
-  .price-config {
-    flex-direction: column;
+  .page form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 850px) {
+  .page {
+    padding: 24px;
   }
   .summary table,
   .price-ratio {
     display: none;
   }
-  .summary ul {
+  .summary .strategy-list {
     display: grid;
     gap: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .page {
+    padding: 16px;
+  }
+  .pair-fields {
+    grid-template-areas: 
+      "price-label"
+      "price-area"
+      "budget-label"
+      "budget-base"
+      "budget-quote";
   }
 }

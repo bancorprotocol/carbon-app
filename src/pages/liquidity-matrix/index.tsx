@@ -383,9 +383,8 @@ export const LiquidityMatrixPage = () => {
   };
 
   return (
-    <section className="page px-32">
+    <section className="page">
       <h1>Liquidity Matrix</h1>
-      <SaveLocally />
       <form
         onSubmit={createAll}
         data-disabled={disabled}
@@ -491,8 +490,8 @@ export const LiquidityMatrixPage = () => {
         </article>
       </form>
       {!!quotes.length && (
-        <article className="summary">
-          <h2>Summary</h2>
+        <div className="summary">
+          <SaveLocally />
           <div className="price-ratio">
             <h3>Token Price Ratio</h3>
             <table className="table">
@@ -544,7 +543,7 @@ export const LiquidityMatrixPage = () => {
                 ))}
               </tbody>
             </table>
-            <ul>
+            <ul className="strategy-list">
               {strategies.map((order) => (
                 <StrategyItem
                   key={order.quote}
@@ -563,7 +562,7 @@ export const LiquidityMatrixPage = () => {
               </button>
             </footer>
           )}
-        </article>
+        </div>
       )}
     </section>
   );
@@ -655,19 +654,18 @@ const PairForm: FC<PairFormProps> = (props) => {
   return (
     <li className="pair" key={quote.address} data-on-leave={quote.address}>
       <header>
-        <div className="quote-header">
-          <TokenLogo token={quote} size={24} />
-          <h3>{quote.symbol}</h3>
-          <button type="button" onClick={() => remove(quote.address)}>
-            <RemoveIcon className="size-16" />
-          </button>
-        </div>
-        <div className="price">
+        <TokenLogo token={quote} size={24} />
+        <h3>{quote.symbol}</h3>
+        <button type="button" onClick={() => remove(quote.address)}>
+          <RemoveIcon className="size-16" />
+        </button>
+      </header>
+      <div role="group" className="pair-fields">
+        <label className="price-label" htmlFor={`${id}-price`}>
+          Price
+        </label>
+        <div className="price price-area">
           <div className="price-field">
-            <label htmlFor={`${id}-price`}>
-              <TokenLogo token={quote} size={14} />
-              {quote.symbol} Price
-            </label>
             <input
               id={`${id}-price`}
               type="number"
@@ -689,13 +687,9 @@ const PairForm: FC<PairFormProps> = (props) => {
             )}
           </div>
         </div>
-      </header>
-      <div className="budget-list">
-        <h3>
-          <TokensOverlap tokens={[base, quote]} size={24} />
-          Budgets
-        </h3>
-        <div className="budget">
+
+        <h4 className="budget-label">Budgets</h4>
+        <div className="budget base-budget">
           <div className="token">
             <input
               id={`${id}-base-budget`}
@@ -733,7 +727,7 @@ const PairForm: FC<PairFormProps> = (props) => {
           )}
           <output className="budget-error">Insufficient funds</output>
         </div>
-        <div className="budget">
+        <div className="budget quote-budget">
           <div className="token">
             <input
               id={`${id}-base-budget`}
@@ -785,10 +779,6 @@ export const SaveLocally = () => {
   const [savedMatrix, setSavedMatrix] = useState(
     lsService.getItem('liquidityMatrix') ?? {},
   );
-  const currentBase = useMemo(() => {
-    if (!search.base) return;
-    return getTokenById(search.base);
-  }, [getTokenById, search.base]);
 
   const set = (result: Record<string, LiquidityMatrixSearch>) => {
     flip('.saved-matrix, .add-save');
@@ -816,8 +806,20 @@ export const SaveLocally = () => {
   }, [add, search, savedMatrix]);
 
   return (
-    <article className="save-locally">
-      <ul role="listbox">
+    <>
+      <header className="summary-header">
+        <h2>Summary</h2>
+        <button
+          className="btn-main-gradient flex gap-8 items-center"
+          type="button"
+          disabled={!search.base}
+          onClick={add}
+        >
+          <AddIcon className="size-16" />
+          <span className="description">Save it for later</span>
+        </button>
+      </header>
+      <ul role="listbox" className="save-list">
         {Object.values(savedMatrix).map((matrix) => {
           const base = getTokenById(matrix.base)!;
           const quotes = matrix.pairs?.map(({ quote }) => getTokenById(quote)!);
@@ -825,19 +827,17 @@ export const SaveLocally = () => {
             <li
               key={base.address}
               role="option"
-              className="saved-matrix"
               data-on-leave={base.address}
               aria-selected={base.address === search.base}
             >
               <Link
-                className="select-base"
                 to="."
                 search={savedMatrix[base.address]}
                 onClick={() => flip('article, h2, li, tr')}
               >
                 <TokenLogo className="main-icon" token={base} size={32} />
-                <TokensOverlap tokens={quotes ?? []} size={24} />
                 <span className="description">{base.symbol}</span>
+                <TokensOverlap tokens={quotes ?? []} size={24} />
               </Link>
               <button
                 className="remove"
@@ -849,20 +849,8 @@ export const SaveLocally = () => {
             </li>
           );
         })}
-        <li role="none" className="add-save">
-          <button type="button" disabled={!search.base} onClick={add}>
-            {currentBase && (
-              <div className="flex gap-8">
-                <TokenLogo token={currentBase} size={24} />
-                {currentBase.symbol}
-              </div>
-            )}
-            <span className="description">Save it for later</span>
-            <AddIcon className="main-icon size-20" />
-          </button>
-        </li>
       </ul>
-    </article>
+    </>
   );
 };
 
