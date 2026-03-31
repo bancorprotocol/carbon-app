@@ -383,14 +383,13 @@ export const LiquidityMatrixPage = () => {
   };
 
   return (
-    <section className="page px-32">
+    <section className="page">
       <h1>Liquidity Matrix</h1>
       <form
         onSubmit={createAll}
         data-disabled={disabled}
         className="matrix-form"
       >
-        <SaveLocally />
         <article role="group">
           <h2>Base token</h2>
           <div className="base">
@@ -402,10 +401,7 @@ export const LiquidityMatrixPage = () => {
             </button>
             <div className="price">
               <div className="price-field">
-                <label htmlFor="base-price">
-                  <TokenLogo token={base} size={14} />
-                  {base.symbol} Price
-                </label>
+                <label htmlFor="base-price">{base.symbol} Price</label>
                 <input
                   id="base-price"
                   type="number"
@@ -419,12 +415,13 @@ export const LiquidityMatrixPage = () => {
               <div className="price-action">
                 {baseTokenPrice && (
                   <button
+                    className="use-market"
                     type="button"
                     onClick={() =>
                       set({ basePrice: baseTokenPrice.toString() })
                     }
                   >
-                    Use Market Price: {usdPrice(baseTokenPrice)}
+                    Use Market
                   </button>
                 )}
               </div>
@@ -466,7 +463,13 @@ export const LiquidityMatrixPage = () => {
           </div>
         </article>
         <article role="group">
-          <h2>Add your quote tokens</h2>
+          <header className="quotes">
+            <h2>Add your quote tokens</h2>
+            <button className="add-pair" type="button" onClick={addPair}>
+              <AddIcon className="size-16" />
+              Add quote
+            </button>
+          </header>
           <ul className="pair-list">
             {pairs.map((pair, i) => (
               <PairForm
@@ -481,71 +484,54 @@ export const LiquidityMatrixPage = () => {
                 update={(p) => updatePair(i, p)}
               />
             ))}
-            <li className="pair" key="add">
-              <button className="add-pair" type="button" onClick={addPair}>
-                <AddIcon className="size-32" />
-                Add quote
-              </button>
-            </li>
           </ul>
         </article>
-        {!!quotes.length && (
-          <article className="summary">
-            <h2>Summary</h2>
-            <div className="price-ratio">
-              <h3>Token Price Ratio</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th></th>
-                    {[base, ...quotes].map((token) => (
-                      <th key={token.address}>{token.symbol}</th>
+      </form>
+      {!!quotes.length && (
+        <div className="summary">
+          <SaveLocally />
+          <div className="price-ratio">
+            <h3>Token Price Ratio</h3>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th></th>
+                  {[base, ...quotes].map((token) => (
+                    <th key={token.address}>{token.symbol}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[base, ...quotes].map((token, i) => (
+                  <tr key={token.address}>
+                    <th>per {token.symbol}</th>
+                    {[base, ...quotes].map((otherToken, j) => (
+                      <td key={otherToken.address}>
+                        {prettifyNumber(ratios[i][j])}
+                      </td>
                     ))}
                   </tr>
-                </thead>
-                <tbody>
-                  {[base, ...quotes].map((token, i) => (
-                    <tr key={token.address}>
-                      <th>per {token.symbol}</th>
-                      {[base, ...quotes].map((otherToken, j) => (
-                        <td key={otherToken.address}>
-                          {prettifyNumber(ratios[i][j])}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="strategies">
-              <h3>Strategies</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Pair</th>
-                    <th>Spread</th>
-                    <th>Min Price</th>
-                    <th>Max Price</th>
-                    <th>Base Token Budget</th>
-                    <th>Quote Token Budget</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {strategies.map((order) => (
-                    <StrategyRow
-                      key={order.quote}
-                      strategy={order}
-                      spread={spread}
-                      base={base}
-                      clear={() => removeQuote(order.quote)}
-                    />
-                  ))}
-                </tbody>
-              </table>
-              <ul>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="strategies">
+            <h3>Strategies</h3>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Pair</th>
+                  <th>Spread</th>
+                  <th>Min Price</th>
+                  <th>Max Price</th>
+                  <th>Base Token Budget</th>
+                  <th>Quote Token Budget</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
                 {strategies.map((order) => (
-                  <StrategyItem
+                  <StrategyRow
                     key={order.quote}
                     strategy={order}
                     spread={spread}
@@ -553,16 +539,29 @@ export const LiquidityMatrixPage = () => {
                     clear={() => removeQuote(order.quote)}
                   />
                 ))}
-              </ul>
-            </div>
-            {batcher && user && strategies.length > 1 && (
-              <footer className="flex flex-col justify-end md:flex-row">
-                <button type="submit">Create All</button>
-              </footer>
-            )}
-          </article>
-        )}
-      </form>
+              </tbody>
+            </table>
+            <ul className="strategy-list">
+              {strategies.map((order) => (
+                <StrategyItem
+                  key={order.quote}
+                  strategy={order}
+                  spread={spread}
+                  base={base}
+                  clear={() => removeQuote(order.quote)}
+                />
+              ))}
+            </ul>
+          </div>
+          {batcher && user && strategies.length > 1 && (
+            <footer className="flex flex-col justify-end md:flex-row">
+              <button className="btn-main-gradient" type="submit">
+                Create All
+              </button>
+            </footer>
+          )}
+        </div>
+      )}
     </section>
   );
 };
@@ -653,19 +652,18 @@ const PairForm: FC<PairFormProps> = (props) => {
   return (
     <li className="pair" key={quote.address} data-on-leave={quote.address}>
       <header>
-        <div className="quote-header">
-          <TokenLogo token={quote} size={24} />
-          <h3>{quote.symbol}</h3>
-          <button type="button" onClick={() => remove(quote.address)}>
-            <RemoveIcon className="size-16" />
-          </button>
-        </div>
-        <div className="price">
+        <TokenLogo token={quote} size={24} />
+        <h3>{quote.symbol}</h3>
+        <button type="button" onClick={() => remove(quote.address)}>
+          <RemoveIcon className="size-16" />
+        </button>
+      </header>
+      <div role="group" className="pair-fields">
+        <label className="price-label" htmlFor={`${id}-price`}>
+          Price
+        </label>
+        <div className="price price-area">
           <div className="price-field">
-            <label htmlFor={`${id}-price`}>
-              <TokenLogo token={quote} size={14} />
-              {quote.symbol} Price
-            </label>
             <input
               id={`${id}-price`}
               type="number"
@@ -679,21 +677,18 @@ const PairForm: FC<PairFormProps> = (props) => {
           <div className="price-action">
             {!!quotePrice && (
               <button
+                className="use-market"
                 type="button"
                 onClick={() => update({ price: quotePrice.toString() })}
               >
-                Use Market Price: {usdPrice(quotePrice)}
+                Use Market
               </button>
             )}
           </div>
         </div>
-      </header>
-      <div className="budget-list">
-        <h3>
-          <TokensOverlap tokens={[base, quote]} size={24} />
-          Budgets
-        </h3>
-        <div className="budget">
+
+        <h4 className="budget-label">Budgets</h4>
+        <div className="budget base-budget">
           <div className="token">
             <input
               id={`${id}-base-budget`}
@@ -721,17 +716,19 @@ const PairForm: FC<PairFormProps> = (props) => {
               min="0"
               step="any"
             />
+            {baseBalance && (
+              <output className="budget-error">
+                <button
+                  type="button"
+                  onClick={() => setBaseBudget(baseBalance)}
+                >
+                  Insufficient funds
+                </button>
+              </output>
+            )}
           </div>
-          {baseBalance && (
-            <div className="balance">
-              <button type="button" onClick={() => setBaseBudget(baseBalance)}>
-                Use balance: <span>{tokenAmount(baseBalance, base)}</span>
-              </button>
-            </div>
-          )}
-          <output className="budget-error">Insufficient funds</output>
         </div>
-        <div className="budget">
+        <div className="budget quote-budget">
           <div className="token">
             <input
               id={`${id}-base-budget`}
@@ -759,18 +756,17 @@ const PairForm: FC<PairFormProps> = (props) => {
               min="0"
               step="any"
             />
+            {quoteBalance && (
+              <output className="budget-error">
+                <button
+                  type="button"
+                  onClick={() => setQuoteBudget(quoteBalance)}
+                >
+                  Insufficient funds
+                </button>
+              </output>
+            )}
           </div>
-          {quoteBalance && (
-            <div className="balance">
-              <button
-                type="button"
-                onClick={() => setQuoteBudget(quoteBalance)}
-              >
-                Use balance: <span>{tokenAmount(quoteBalance, quote)}</span>
-              </button>
-            </div>
-          )}
-          <output className="budget-error">Insufficient funds</output>
         </div>
       </div>
     </li>
@@ -783,10 +779,6 @@ export const SaveLocally = () => {
   const [savedMatrix, setSavedMatrix] = useState(
     lsService.getItem('liquidityMatrix') ?? {},
   );
-  const currentBase = useMemo(() => {
-    if (!search.base) return;
-    return getTokenById(search.base);
-  }, [getTokenById, search.base]);
 
   const set = (result: Record<string, LiquidityMatrixSearch>) => {
     flip('.saved-matrix, .add-save');
@@ -814,8 +806,20 @@ export const SaveLocally = () => {
   }, [add, search, savedMatrix]);
 
   return (
-    <article className="save-locally">
-      <ul role="listbox">
+    <>
+      <header className="summary-header">
+        <h2>Summary</h2>
+        <button
+          className="btn-main-gradient flex gap-8 items-center"
+          type="button"
+          disabled={!search.base}
+          onClick={add}
+        >
+          <AddIcon className="size-16" />
+          <span className="description">Save it for later</span>
+        </button>
+      </header>
+      <ul role="listbox" className="save-list">
         {Object.values(savedMatrix).map((matrix) => {
           const base = getTokenById(matrix.base)!;
           const quotes = matrix.pairs?.map(({ quote }) => getTokenById(quote)!);
@@ -823,19 +827,17 @@ export const SaveLocally = () => {
             <li
               key={base.address}
               role="option"
-              className="saved-matrix"
               data-on-leave={base.address}
               aria-selected={base.address === search.base}
             >
               <Link
-                className="select-base"
                 to="."
                 search={savedMatrix[base.address]}
                 onClick={() => flip('article, h2, li, tr')}
               >
                 <TokenLogo className="main-icon" token={base} size={32} />
-                <TokensOverlap tokens={quotes ?? []} size={24} />
                 <span className="description">{base.symbol}</span>
+                <TokensOverlap tokens={quotes ?? []} size={24} />
               </Link>
               <button
                 className="remove"
@@ -847,20 +849,8 @@ export const SaveLocally = () => {
             </li>
           );
         })}
-        <li role="none" className="add-save">
-          <button type="button" disabled={!search.base} onClick={add}>
-            {currentBase && (
-              <div className="flex gap-8">
-                <TokenLogo token={currentBase} size={24} />
-                {currentBase.symbol}
-              </div>
-            )}
-            <span className="description">Save it for later</span>
-            <AddIcon className="main-icon size-24" />
-          </button>
-        </li>
       </ul>
-    </article>
+    </>
   );
 };
 
@@ -876,6 +866,7 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { data: baseBalance } = useGetTokenBalance(base);
   const { data: quoteBalance } = useGetTokenBalance(quote);
   const { user } = useWagmi();
+  const { openModal } = useModal();
 
   const buy: StaticOrder = {
     min: strategy.buyMin,
@@ -893,7 +884,7 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { createStrategy, isLoading, isAwaiting, isProcessing } =
     useCreateStrategy({ base, quote, buy, sell });
   const disabled = (() => {
-    if (!user) return true;
+    if (!user) return false;
     if (new SafeDecimal(baseBalance || '0').lt(sell.budget)) return true;
     if (new SafeDecimal(quoteBalance || '0').lt(buy.budget)) return true;
     if ('Infinity' === strategy.buyMin) return true;
@@ -910,8 +901,12 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   })();
 
   const create = async () => {
-    await createStrategy();
-    clear();
+    if (!user) {
+      openModal('wallet');
+    } else {
+      await createStrategy();
+      clear();
+    }
   };
 
   return (
@@ -931,7 +926,12 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
         <span className="usd">({usdPrice(strategy.buyBudgetUSD)})</span>
       </td>
       <td>
-        <button type="button" disabled={disabled} onClick={create}>
+        <button
+          className="btn-on-surface text-nowrap"
+          type="button"
+          disabled={disabled}
+          onClick={create}
+        >
           {createText}
         </button>
       </td>
@@ -945,6 +945,7 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { data: baseBalance } = useGetTokenBalance(base);
   const { data: quoteBalance } = useGetTokenBalance(quote);
   const { user } = useWagmi();
+  const { openModal } = useModal();
 
   const buy: StaticOrder = {
     min: strategy.buyMin,
@@ -962,7 +963,7 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { createStrategy, isLoading, isAwaiting, isProcessing } =
     useCreateStrategy({ base, quote, buy, sell });
   const disabled = (() => {
-    if (!user) return true;
+    if (!user) return false;
     if (new SafeDecimal(baseBalance || '0').lt(sell.budget)) return true;
     if (new SafeDecimal(quoteBalance || '0').lt(buy.budget)) return true;
     if ('Infinity' === strategy.buyMin) return true;
@@ -978,8 +979,12 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     return 'Create';
   })();
   const create = async () => {
-    await createStrategy();
-    clear();
+    if (!user) {
+      openModal('wallet');
+    } else {
+      await createStrategy();
+      clear();
+    }
   };
 
   return (
@@ -1012,7 +1017,12 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
         <span>{tokenAmount(strategy.buyBudget, quote)}</span>
         <span className="usd">({usdPrice(strategy.buyBudgetUSD)})</span>
       </p>
-      <button type="button" disabled={disabled} onClick={create}>
+      <button
+        className="btn-on-surface"
+        type="button"
+        disabled={disabled}
+        onClick={create}
+      >
         {createText}
       </button>
     </li>
