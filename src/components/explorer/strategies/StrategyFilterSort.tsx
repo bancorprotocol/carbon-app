@@ -1,6 +1,6 @@
 import { FC, FormEvent, useId } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import IconCheck from 'assets/icons/check.svg?react';
 import { cn } from 'utils/helpers';
 import {
@@ -52,7 +52,7 @@ export const StrategySortDropdown: FC<SortProps> = (props) => {
               {strategySort[sort]}
             </span>
           </p>
-          <IconChevron className="w-14 shrink-0" />
+          <KeyboardArrowDownIcon className="size-24 shrink-0" />
         </button>
       )}
     >
@@ -121,7 +121,7 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
             <b>View:</b>
             <span className="text-start">{displayFilter}</span>
           </p>
-          <IconChevron className="w-14 shrink-0" />
+          <KeyboardArrowDownIcon className="size-24 shrink-0" />
         </button>
       )}
     >
@@ -175,7 +175,7 @@ const FilterSortItem: FC<{
         className="rounded-sm flex cursor-pointer items-center justify-between px-16 py-8 hover:bg-main-900/40 peer-focus-visible:outline-solid peer-focus-visible:outline-1 peer-checked:bg-main-900/60"
       >
         {title}
-        {selectedItem === item && <IconCheck />}
+        {selectedItem === item && <IconCheck className="size-24" />}
       </label>
     </div>
   );

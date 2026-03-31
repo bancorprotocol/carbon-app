@@ -1,12 +1,11 @@
 import { useMemo } from 'react';
 import IconPriceBased from 'assets/icons/price-based.svg?react';
-import IconGradient from 'assets/icons/gradient.svg?react';
+import HourglassIcon from 'assets/icons/hourglass.svg?react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { gradientTypePages, staticTypePages } from './utils';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 
 const links = [
   {
@@ -19,7 +18,7 @@ const links = [
   },
   {
     label: 'Gradient',
-    svg: <IconGradient className="hidden size-16 md:inline" />,
+    svg: <HourglassIcon className="hidden size-24 md:inline" />,
     to: '/trade/auction' as const,
     text: '',
     testId: 'strategy-type-gradient',
@@ -46,7 +45,7 @@ export const TradeType = () => {
         >
           {selected?.svg}
           {selected?.label}
-          <IconChevron className="ml-auto size-16" />
+          <KeyboardArrowDownIcon className="ml-auto size-24" />
         </button>
       )}
     >
@@ -66,9 +65,7 @@ export const TradeType = () => {
         >
           {link.svg}
           {link.label}
-          <Tooltip element={link.text}>
-            <IconTooltip className="size-14" />
-          </Tooltip>
+          <Tooltip element={link.text} />
         </Link>
       ))}
     </DropdownMenu>

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { cn, sanitizeNumber } from 'utils/helpers';
 import { Tooltip } from '../tooltip/Tooltip';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 
 interface Props {
   slippage: SafeDecimal;
@@ -22,11 +22,11 @@ export const Slippage: FC<Props> = ({ slippage }) => {
   return (
     <Tooltip element="The slippage is calculated based on the USD value difference between the selected source and target tokens.">
       <span className={cn('flex flex-1 items-center gap-5', textColor)}>
-        {slippage?.eq(0) && <IconWarning className="size-12" />}
+        {slippage?.eq(0) && <WarningIcon className="size-24" />}
         {slippage?.gt(0) && <>(+{slippageValue}%)</>}
         {slippage?.lt(0) && <>(-{slippageValue}%)</>}
         {slippage?.isZero() && <>Notice: price & slippage are unknown</>}
-        {slippage.lt(-3) && <IconWarning className="size-12" />}
+        {slippage.lt(-3) && <WarningIcon className="size-24" />}
       </span>
     </Tooltip>
   );

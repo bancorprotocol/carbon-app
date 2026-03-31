@@ -6,7 +6,7 @@ import { FC, memo } from 'react';
 import { TokenLogo } from './imager/Imager';
 import { Tooltip } from './tooltip/Tooltip';
 import { shortenString } from 'utils/helpers';
-import CopyIcon from 'assets/icons/copy.svg?react';
+import ContentCopyIcon from 'assets/icons/content_copy.svg?react';
 import { useStore } from 'store';
 import { getTokenAddress } from 'libs/ton/address';
 
@@ -91,7 +91,7 @@ const TokenTooltip: FC<{ token: Token }> = ({ token }) => {
         className="text-14 inline-flex gap-8 text-main-0/60 cursor-pointer"
       >
         {shortenString(token.address)}
-        <CopyIcon className="size-14" />
+        <ContentCopyIcon className="size-24" />
       </span>
     </span>
   );

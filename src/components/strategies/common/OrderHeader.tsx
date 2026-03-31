@@ -3,7 +3,6 @@ import { Token } from 'libs/tokens';
 import { OrderBlock } from 'components/strategies/common/types';
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
@@ -67,9 +66,7 @@ export const OrderHeader: FC<Props> = (props) => {
                 {isBuy ? 'buy' : 'sell'} the token at.
               </p>
             }
-          >
-            <IconTooltip className="size-18 text-main-0/60" />
-          </Tooltip>
+          />
         </div>
       )}
     </header>

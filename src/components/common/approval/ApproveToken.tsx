@@ -7,7 +7,7 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWagmi } from 'libs/wagmi';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import config from 'config';
 
 type Props = {
@@ -139,7 +139,7 @@ export const ApproveToken: FC<Props> = ({ data, isPending, error }) => {
       {data.nullApprovalRequired && (
         <div className="text-14 text-warning flex gap-16">
           <div>
-            <IconWarning className="w-16" />
+            <WarningIcon className="size-24" />
           </div>
           <span>
             Before updating {token.symbol} allowance, you are required to revoke

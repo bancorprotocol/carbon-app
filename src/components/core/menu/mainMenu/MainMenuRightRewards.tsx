@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { lsService } from 'services/localeStorage';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useDialog } from 'hooks/useDialog';
@@ -55,7 +55,7 @@ export const MainMenuRightReward: FC = () => {
               onClick={close}
               data-testid="close-reward"
             >
-              <IconClose className="size-18" />
+              <CloseIcon className="size-24" />
             </button>
           </header>
           <div className="grid place-items-center size-48 rounded-full bg-[#FF66E0]/50">

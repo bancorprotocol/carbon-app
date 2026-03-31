@@ -11,8 +11,8 @@ import {
 } from 'date-fns';
 import { Dispatch, memo, ReactElement, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import CalendarIcon from 'assets/icons/calendar.svg?react';
-import ChevronIcon from 'assets/icons/chevron.svg?react';
+import CalendarTodayIcon from 'assets/icons/calendar_today.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { DatePickerPreset } from './utils';
@@ -69,8 +69,8 @@ export const DateRangePicker = memo(function DateRangePicker(
         {displayRange(props.start, props.end)}
       </span>
       {!props.disabled && (
-        <ChevronIcon
-          className={cn('ml-auto size-12 transition-transform', {
+        <KeyboardArrowDownIcon
+          className={cn('ml-auto size-24 transition-transform', {
             'rotate-180': isOpen,
           })}
         />
@@ -244,14 +244,14 @@ export const DatePickerButton = memo(function DatePickerButton({
 
   return (
     <>
-      <CalendarIcon className="text-primary size-14" />
+      <CalendarTodayIcon className="text-primary size-24" />
       <span
         className="justify-self-end text-main-0/60"
         data-testid="simulation-dates"
       >
         {hasDates ? `${_sD_} - ${_eD_}` : 'Select Date Range'}
       </span>
-      <ChevronIcon className="size-12 rotate-180 text-main-0/80" />
+      <KeyboardArrowDownIcon className="size-24 rotate-180 text-main-0/80" />
     </>
   );
 });

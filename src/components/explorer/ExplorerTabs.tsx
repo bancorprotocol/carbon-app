@@ -1,7 +1,7 @@
 import { Link, useMatchRoute, useRouterState } from 'libs/routing';
-import IconOverview from 'assets/icons/overview.svg?react';
-import IconPieChart from 'assets/icons/piechart.svg?react';
-import IconActivity from 'assets/icons/activity.svg?react';
+import ViewComfyAltIcon from 'assets/icons/view_comfy_alt.svg?react';
+import PieChartIcon from 'assets/icons/pie_chart.svg?react';
+import InsertChartIcon from 'assets/icons/insert_chart.svg?react';
 import IconPairs from 'assets/icons/pairs.svg?react';
 import { ReactNode } from 'react';
 
@@ -23,19 +23,19 @@ export const baseTabs: ExplorerTab[] = [
   {
     label: 'Strategies',
     href: 'strategies',
-    icon: <IconOverview className="hidden md:block size-24" />,
+    icon: <ViewComfyAltIcon className="hidden md:block size-24" />,
     testid: 'strategies-tab',
   },
   {
     label: 'Distribution',
     href: 'distribution',
-    icon: <IconPieChart className="hidden md:block size-24" />,
+    icon: <PieChartIcon className="hidden md:block size-24" />,
     testid: 'distribution-tab',
   },
   {
     label: 'Activity',
     href: 'activity',
-    icon: <IconActivity className="hidden md:block size-24" />,
+    icon: <InsertChartIcon className="hidden md:block size-24" />,
     testid: 'activity-tab',
   },
 ];

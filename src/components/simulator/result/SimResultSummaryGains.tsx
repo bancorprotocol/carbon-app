@@ -1,5 +1,5 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import IconTooltip from 'assets/icons/tooltip.svg?react';
+import InfoIcon from 'assets/icons/info.svg?react';
 import { prettifySignedNumber } from 'utils/helpers';
 import { FC, useCallback } from 'react';
 import { Token } from 'libs/tokens';
@@ -24,7 +24,7 @@ export const SimResultSummaryGains: FC<Props> = ({ portfolioGains, quote }) => {
       <Tooltip element={<TooltipContent />}>
         <h4 className="text-12 flex items-center gap-4 text-main-0/60">
           Estimated Gains
-          <IconTooltip className="size-10" />
+          <InfoIcon className="size-24" />
         </h4>
       </Tooltip>
       <AnimatedNumber

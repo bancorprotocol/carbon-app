@@ -4,8 +4,8 @@ import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { isSameDay, subMonths, startOfDay, endOfDay, addDays } from 'date-fns';
 import { Dispatch, memo, useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import CalendarIcon from 'assets/icons/calendar.svg?react';
-import ChevronIcon from 'assets/icons/chevron.svg?react';
+import CalendarTodayIcon from 'assets/icons/calendar_today.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import { cn } from 'utils/helpers';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 
@@ -66,15 +66,15 @@ export const GradientDateRange = memo(function TimeRange(
       )}
       data-testid="date-picker-button"
     >
-      <CalendarIcon className="text-primary size-14" />
+      <CalendarTodayIcon className="text-primary size-24" />
       <span
         className="mr-auto justify-self-end text-main-0/60"
         data-testid="simulation-dates"
       >
         {displayRange(props.start, props.end)}
       </span>
-      <ChevronIcon
-        className={cn('h-12 w-12 text-main-0/80 transition-transform', {
+      <KeyboardArrowDownIcon
+        className={cn('size-24 text-main-0/80 transition-transform', {
           'rotate-180': isOpen,
         })}
       />

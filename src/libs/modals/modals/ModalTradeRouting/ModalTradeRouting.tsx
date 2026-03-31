@@ -8,7 +8,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MatchActionBNStr } from '@bancor/carbon-sdk/';
 import { useModalTradeRouting } from './useModalTradeRouting';
 import { ModalTradeRoutingRow } from './ModalTradeRoutingRow';
-import IconArrow from 'assets/icons/arrowDown.svg?react';
+import ArrowDownwardIcon from 'assets/icons/arrow_downward.svg?react';
 import { Modal, ModalHeader } from '../../Modal';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -198,7 +198,7 @@ export default function ModalTradeRouting({
             data-testid="confirm-source"
             className="rounded-xl -mb-16 p-16 input-container"
           />
-          <IconArrow className="bg-main-900 z-10 mx-auto size-24 rounded-full p-5" />
+          <ArrowDownwardIcon className="bg-main-900 z-10 mx-auto size-24 rounded-full p-5" />
           <TokenInputField
             value={totalTargetAmount}
             token={data.target}

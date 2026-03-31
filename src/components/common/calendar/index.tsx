@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 import { DayPicker } from 'react-day-picker';
-import Chevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import './index.css';
 
 export type CalendarProps = ComponentProps<typeof DayPicker>;
@@ -21,9 +21,9 @@ export const Calendar = ({
         Chevron: ({ orientation }) => {
           const rotate = orientation === 'left' ? 90 : -90;
           return (
-            <Chevron
+            <KeyboardArrowDownIcon
               style={{ transform: `rotate(${rotate}deg)` }}
-              className="size-16"
+              className="size-24"
               data-testid={`date-picker-${orientation}-arrow`}
             />
           );

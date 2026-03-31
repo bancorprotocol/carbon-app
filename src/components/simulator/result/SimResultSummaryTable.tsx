@@ -1,4 +1,4 @@
-import Arrow from 'assets/icons/arrow-round.svg?react';
+import SouthEastIcon from 'assets/icons/south_east.svg?react';
 import { prettifyNumber } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import { StrategyInputOrder } from 'hooks/useStrategyInput';
@@ -25,7 +25,9 @@ export const SimResultSummaryTable = ({ base, quote, buy, sell }: Props) => {
 
   return (
     <article className="grid grid-cols-[auto_auto_auto_auto] grid-rows-2 items-center justify-evenly gap-x-8 gap-y-4">
-      <Arrow className="text-sell size-16 -rotate-90" />
+      <div className="bg-sell/20 size-20 grid place-items-center rounded-full">
+        <SouthEastIcon className="text-sell size-12 -rotate-90" />
+      </div>
       <span data-testid="table-sell-order-rates">
         {isSellLimitOrder ? sellMin : `${sellMin} - ${sellMax}`} {quoteSymbol}{' '}
         per {baseSymbol}
@@ -34,7 +36,9 @@ export const SimResultSummaryTable = ({ base, quote, buy, sell }: Props) => {
       <span data-testid="table-sell-order-budget">
         {baseBudget} {baseSymbol}
       </span>
-      <Arrow className="text-buy size-16" />
+      <div className="bg-buy/20 size-20 grid place-items-center rounded-full">
+        <SouthEastIcon className="text-buy size-12" />
+      </div>
       <span data-testid="table-buy-order-rates">
         {isBuyLimitOrder ? buyMin : `${buyMin} - ${buyMax}`} {quoteSymbol} per{' '}
         {baseSymbol}

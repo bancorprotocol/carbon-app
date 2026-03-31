@@ -1,4 +1,4 @@
-import IconBurger from 'assets/icons/burger.svg?react';
+import MenuIcon from 'assets/icons/menu.svg?react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useBurgerMenuItems } from './useBurgerMenuItems';
 
@@ -13,7 +13,7 @@ export const MainMenuRightBurger = () => {
           {...attr}
           className="btn-on-background relative p-0 grid size-40 place-items-center"
         >
-          <IconBurger className="size-14" />
+          <MenuIcon className="size-24" />
         </button>
       )}
     >

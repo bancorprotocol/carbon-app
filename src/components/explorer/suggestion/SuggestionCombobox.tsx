@@ -17,7 +17,7 @@ import {
   selectNextSibling,
   selectPreviousSibling,
 } from './utils';
-import IconClose from 'assets/icons/times.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
 import { searchPairTrade, searchTokens } from 'utils/pairSearch';
@@ -195,7 +195,7 @@ export const LocalSuggestionCombobox: FC<Props> = (props) => {
         onFocus={() => setOpen(true)}
       />
       <button type="reset" aria-label="Clear" onClick={() => setSearch('')}>
-        <IconClose className="size-12 opacity-60" />
+        <CloseIcon className="size-24 opacity-60" />
       </button>
       <div
         role="dialog"

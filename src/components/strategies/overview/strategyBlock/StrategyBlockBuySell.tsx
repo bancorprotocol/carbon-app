@@ -3,7 +3,6 @@ import { CartStrategy, Order } from 'components/strategies/common/types';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { TokenLogo } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import IconTooltip from 'assets/icons/tooltip.svg?react';
 import WarningIcon from 'assets/icons/warning.svg?react';
 import { cn, getUsdPrice, prettifyNumber } from 'utils/helpers';
 
@@ -33,11 +32,7 @@ export const StrategyBlockBuySell: FC<{
       {isBuy ? (
         <header className="flex items-center gap-4">
           <h4 className="text-12 text-buy font-medium">Buy {token.symbol}</h4>
-          {hasFiatValue && (
-            <Tooltip element={buyTooltip}>
-              <IconTooltip className="size-10 text-main-0/60" />
-            </Tooltip>
-          )}
+          {hasFiatValue && <Tooltip element={buyTooltip} />}
           {!hasFiatValue && (
             <Tooltip
               element={
@@ -59,11 +54,7 @@ export const StrategyBlockBuySell: FC<{
           <h4 className="text-12 text-sell font-medium">
             Sell {otherToken.symbol}
           </h4>
-          {hasFiatValue && (
-            <Tooltip element={sellTooltip}>
-              <IconTooltip className="size-10 text-main-0/60" />
-            </Tooltip>
-          )}
+          {hasFiatValue && <Tooltip element={sellTooltip} />}
           {!hasFiatValue && (
             <Tooltip
               element={

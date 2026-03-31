@@ -37,7 +37,7 @@ import {
 } from 'date-fns';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { SafeDecimal } from 'libs/safedecimal';
-import CalendarIcon from 'assets/icons/calendar.svg?react';
+import CalendarTodayIcon from 'assets/icons/calendar_today.svg?react';
 import style from './D3PriceHistory.module.css';
 
 export interface RangeUpdate {
@@ -406,7 +406,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               options={{
                 disabled: disabledDates,
               }}
-              icon={<CalendarIcon className="text-primary size-14" />}
+              icon={<CalendarTodayIcon className="text-primary size-16" />}
             />
           </div>
         </div>

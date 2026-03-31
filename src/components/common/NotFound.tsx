@@ -1,6 +1,6 @@
 import { cn } from 'utils/helpers';
-import IconQuestion from 'assets/icons/question.svg?react';
-import ForwardArrow from 'assets/icons/arrow.svg?react';
+import HelpIcon from 'assets/icons/help.svg?react';
+import ArrowForwardIcon from 'assets/icons/arrow_forward.svg?react';
 import { useRouter } from '@tanstack/react-router';
 import { FC } from 'react';
 
@@ -35,7 +35,7 @@ export const NotFound: FC<Props> = ({
           onClick={() => history.back()}
           className="absolute left-8 top-8 rounded-full p-16 hover:bg-main-0/20"
         >
-          <ForwardArrow className="size-16 rotate-180" />
+          <ArrowForwardIcon className="size-24 rotate-180" />
         </button>
       )}
       <div
@@ -44,7 +44,7 @@ export const NotFound: FC<Props> = ({
           'bg-error/20': variant === 'error',
         })}
       >
-        <IconQuestion
+        <HelpIcon
           className={cn('size-48', {
             'text-primary': variant === 'info',
             'text-error': variant === 'error',

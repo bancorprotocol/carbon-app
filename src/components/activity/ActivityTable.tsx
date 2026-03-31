@@ -6,14 +6,14 @@ import { cn, getLowestBits, shortenString, tokenAmount } from 'utils/helpers';
 import { getExplorerLink } from 'utils/blockExplorer';
 import IconCheck from 'assets/icons/check.svg?react';
 import IconPause from 'assets/icons/pause.svg?react';
-import IconEdit from 'assets/icons/edit.svg?react';
-import IconArrowDown from 'assets/icons/arrowDown.svg?react';
-import IconWithdraw from 'assets/icons/withdraw.svg?react';
-import IconDeposit from 'assets/icons/deposit.svg?react';
+import EditSquareIcon from 'assets/icons/edit_square.svg?react';
+import ArrowDownwardIcon from 'assets/icons/arrow_downward.svg?react';
+import UpgradeIcon from 'assets/icons/upgrade.svg?react';
+import VerticalAlignBottomIcon from 'assets/icons/vertical_align_bottom.svg?react';
 import IconDelete from 'assets/icons/delete.svg?react';
-import IconTransfer from 'assets/icons/transfer.svg?react';
-import IconLink from 'assets/icons/link.svg?react';
-import IconChevronLeft from 'assets/icons/chevron-left.svg?react';
+import SyncAltIcon from 'assets/icons/sync_alt.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
+import ChevronLeftIcon from 'assets/icons/chevron_left.svg?react';
 import {
   activityActionName,
   activityDateFormatter,
@@ -188,7 +188,7 @@ export const ActivityIcon: FC<ActivityIconProps> = (props) => {
   );
   return (
     <div className={classes}>
-      <ActionIcon action={activity.action} size={size - 16} />
+      <ActionIcon action={activity.action} size={size - 12} />
     </div>
   );
 };
@@ -204,7 +204,7 @@ export const TransactionLink: FC<TransactionLinkProps> = (props) => {
       aria-label="See transaction on block explorer"
       to={getExplorerLink('tx', txHash)}
     >
-      <IconLink className={cn('text-main-0', className)} />
+      <OpenInNewIcon className={cn('text-main-0 size-24', className)} />
     </NewTabLink>
   );
 };
@@ -274,7 +274,7 @@ const ActivityPaginator = () => {
             aria-label="Previous page"
             className="p-8 disabled:opacity-50"
           >
-            <IconChevronLeft className="size-12" />
+            <ChevronLeftIcon className="size-24" />
           </button>
           <p
             className="border-main-800 flex gap-8 rounded-full border px-12 py-8"
@@ -290,7 +290,7 @@ const ActivityPaginator = () => {
             aria-label="Next page"
             className="p-8 disabled:opacity-50"
           >
-            <IconChevronLeft className="size-12 rotate-180" />
+            <ChevronLeftIcon className="size-24 rotate-180" />
           </button>
           <button
             onClick={lastPage}
@@ -321,13 +321,14 @@ const iconColor = (action: ActivityAction) => {
 export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
   const className = `size-${size}`;
   if (action === 'create') return <IconCheck className={className} />;
-  if (action === 'transfer') return <IconTransfer className={className} />;
-  if (action === 'edit') return <IconEdit className={className} />;
+  if (action === 'transfer') return <SyncAltIcon className={className} />;
+  if (action === 'edit') return <EditSquareIcon className={className} />;
   if (action === 'delete') return <IconDelete className={className} />;
   if (action === 'pause') return <IconPause className={className} />;
-  if (action === 'deposit') return <IconDeposit className={className} />;
-  if (action === 'withdraw') return <IconWithdraw className={className} />;
+  if (action === 'deposit')
+    return <VerticalAlignBottomIcon className={className} />;
+  if (action === 'withdraw') return <UpgradeIcon className={className} />;
   if (action === 'buy')
-    return <IconArrowDown className={cn('rotate-[-60deg]', className)} />;
-  return <IconArrowDown className={cn('rotate-[-120deg]', className)} />;
+    return <ArrowDownwardIcon className={cn('rotate-[-60deg]', className)} />;
+  return <ArrowDownwardIcon className={cn('rotate-[-120deg]', className)} />;
 };

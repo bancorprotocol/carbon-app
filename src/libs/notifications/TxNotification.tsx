@@ -1,9 +1,8 @@
 import { FC, useId, useMemo } from 'react';
 import { NotificationStatus, NotificationTx } from 'libs/notifications/types';
-import IconLink from 'assets/icons/link.svg?react';
-import IconTimes from 'assets/icons/times.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import IconCheck from 'assets/icons/check.svg?react';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { NewTabLink } from 'libs/routing';
 import { formatDistanceToNow, fromUnixTime } from 'date-fns';
@@ -20,13 +19,13 @@ const StatusIcon = (status: NotificationStatus) => {
     case 'success':
       return (
         <div className="size-38 bg-primary/10 flex items-center justify-center rounded-full">
-          <IconCheck className="text-primary w-16" />
+          <IconCheck className="text-primary size-24" />
         </div>
       );
     case 'failed':
       return (
         <div className="size-38 bg-error/10 flex items-center justify-center rounded-full">
-          <IconTimes className="text-error w-16" />
+          <CloseIcon className="text-error size-24" />
         </div>
       );
   }
@@ -86,7 +85,7 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
             data-testid="notif-close"
             aria-label="Remove notification"
           >
-            <IconClose className="size-14 text-main-0/80" />
+            <CloseIcon className="size-24 text-main-0/80" />
           </button>
         </header>
         <p
@@ -102,7 +101,7 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
               className="justify-self-start text-14 font-medium flex items-center"
             >
               View on {blockExplorer}
-              <IconLink className="ml-6 w-14" />
+              <OpenInNewIcon className="ml-6 size-24" />
             </NewTabLink>
           )}
           <p className="justify-self-end text-12 font-medium whitespace-nowrap text-main-0/60">

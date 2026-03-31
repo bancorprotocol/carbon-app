@@ -6,7 +6,7 @@ import { Link } from 'libs/routing';
 
 import { AnyStrategy, Strategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import IconTrash from 'assets/icons/trash.svg?react';
+import DeleteIcon from 'assets/icons/delete.svg?react';
 import { Button } from 'components/common/button';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
@@ -52,7 +52,7 @@ export default function ModalConfirmDelete({
       </ModalHeader>
       <IconTitleText
         variant="error"
-        icon={<IconTrash className="size-24" />}
+        icon={<DeleteIcon className="size-24" />}
         title="Are you sure you would like to delete your strategy?"
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />

@@ -1,7 +1,7 @@
 import { useNavigate } from 'libs/routing';
 import { TokenLogo } from 'components/common/imager/Imager';
-import ChevronIcon from 'assets/icons/chevron.svg?react';
-import ForwardArrowIcon from 'assets/icons/arrow.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
+import ArrowForwardIcon from 'assets/icons/arrow_forward.svg?react';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/types';
@@ -85,7 +85,7 @@ export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
         className="btn-on-surface p-0 grid size-40 place-items-center rounded-full"
         onClick={swapTokens}
       >
-        <ForwardArrowIcon className="size-14" />
+        <ArrowForwardIcon className="size-24" />
       </button>
       <button
         role="menuitem"
@@ -115,7 +115,7 @@ const DisplayToken: FC<DisplayTokenProps> = ({ token, label }) => {
           {token?.symbol}
         </span>
       </p>
-      <ChevronIcon className="ml-auto size-16" />
+      <KeyboardArrowDownIcon className="ml-auto size-24" />
     </>
   );
 };

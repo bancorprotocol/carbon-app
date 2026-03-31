@@ -1,5 +1,5 @@
 import IconLock from 'assets/icons/lock.svg?react';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 
 export const StrategyChartLegend = () => {
   return (
@@ -14,7 +14,7 @@ export const StrategyChartLegend = () => {
           aria-hidden
           className="size-16 shrink-0 rounded-full bg-main-0/20 p-4"
         >
-          <IconWarning />
+          <WarningIcon className="size-24" />
         </span>
         The strategy prices shown on the chart reflect the current strategy
         settings without considering historical price changes
