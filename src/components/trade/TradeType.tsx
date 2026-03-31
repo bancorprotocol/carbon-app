@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import IconPriceBased from 'assets/icons/price-based.svg?react';
 import HourglassIcon from 'assets/icons/hourglass.svg?react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import InfoIcon from 'assets/icons/info.svg?react';
 import { Link, TradeSearch, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { gradientTypePages, staticTypePages } from './utils';
@@ -66,9 +65,7 @@ export const TradeType = () => {
         >
           {link.svg}
           {link.label}
-          <Tooltip element={link.text}>
-            <InfoIcon className="size-24" />
-          </Tooltip>
+          <Tooltip element={link.text} />
         </Link>
       ))}
     </DropdownMenu>

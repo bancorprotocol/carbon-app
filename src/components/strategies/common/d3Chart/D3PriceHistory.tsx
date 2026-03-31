@@ -406,7 +406,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
               options={{
                 disabled: disabledDates,
               }}
-              icon={<CalendarTodayIcon className="text-primary size-24" />}
+              icon={<CalendarTodayIcon className="text-primary size-16" />}
             />
           </div>
         </div>

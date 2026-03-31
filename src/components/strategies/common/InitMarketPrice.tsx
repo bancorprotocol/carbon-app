@@ -30,7 +30,7 @@ export const EditMarketPrice: FC<Props> = (props) => {
       data-testid="edit-market-price"
       type="button"
     >
-      <EditSquareIcon className="size-24" />
+      <EditSquareIcon className="size-16" />
       <span>Edit Market Price</span>
     </button>
   );

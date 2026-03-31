@@ -31,7 +31,7 @@ export const Tooltip: FC<Props> = ({
   className = '',
   disabled = false,
   placement,
-  children = <InfoIcon className="size-24" />,
+  children = <InfoIcon className="size-16 text-main-0/60" />,
 }) => {
   const anchorId = useId();
   const popoverId = useId();

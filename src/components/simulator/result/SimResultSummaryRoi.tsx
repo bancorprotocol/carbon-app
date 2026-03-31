@@ -28,7 +28,7 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
       <Tooltip element={<TooltipContent />}>
         <h4 className="text-12 flex items-center gap-4 text-main-0/60">
           ROI
-          <InfoIcon className="size-24" />
+          <InfoIcon className="size-16" />
         </h4>
       </Tooltip>
       <AnimatedNumber
