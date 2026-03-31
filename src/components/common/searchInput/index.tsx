@@ -31,7 +31,7 @@ export const SearchInput = ({
         className,
       )}
     >
-      <SearchIcon className="text-main-0-disabled size-24" />
+      <SearchIcon className="text-main-0-disabled size-20" />
       <input
         {...inputProps}
         ref={ref}

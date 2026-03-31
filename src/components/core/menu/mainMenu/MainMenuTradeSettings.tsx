@@ -83,7 +83,7 @@ export const MainMenuTradeSettings = () => {
         onClick={() => open({ autofocus: false })}
       >
         <span className="text-14">{slippage}%</span>
-        <SettingsIcon className="size-24" />
+        <SettingsIcon className="size-20" />
       </button>
       <dialog
         ref={ref}

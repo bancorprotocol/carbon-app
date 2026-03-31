@@ -188,7 +188,7 @@ export const ActivityIcon: FC<ActivityIconProps> = (props) => {
   );
   return (
     <div className={classes}>
-      <ActionIcon action={activity.action} size={size - 16} />
+      <ActionIcon action={activity.action} size={size - 12} />
     </div>
   );
 };
@@ -319,7 +319,7 @@ const iconColor = (action: ActivityAction) => {
 };
 
 export const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
-  const className = `size-${Math.max(Number(size), 24)}`;
+  const className = `size-${size}`;
   if (action === 'create') return <IconCheck className={className} />;
   if (action === 'transfer') return <SyncAltIcon className={className} />;
   if (action === 'edit') return <EditSquareIcon className={className} />;
