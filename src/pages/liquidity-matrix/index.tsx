@@ -385,12 +385,12 @@ export const LiquidityMatrixPage = () => {
   return (
     <section className="page px-32">
       <h1>Liquidity Matrix</h1>
+      <SaveLocally />
       <form
         onSubmit={createAll}
         data-disabled={disabled}
         className="matrix-form"
       >
-        <SaveLocally />
         <article role="group">
           <h2>Base token</h2>
           <div className="base">
@@ -466,7 +466,13 @@ export const LiquidityMatrixPage = () => {
           </div>
         </article>
         <article role="group">
-          <h2>Add your quote tokens</h2>
+          <header className="quotes">
+            <h2>Add your quote tokens</h2>
+            <button className="add-pair" type="button" onClick={addPair}>
+              <AddIcon className="size-16" />
+              Add quote
+            </button>
+          </header>
           <ul className="pair-list">
             {pairs.map((pair, i) => (
               <PairForm
@@ -481,71 +487,54 @@ export const LiquidityMatrixPage = () => {
                 update={(p) => updatePair(i, p)}
               />
             ))}
-            <li className="pair" key="add">
-              <button className="add-pair" type="button" onClick={addPair}>
-                <AddIcon className="size-32" />
-                Add quote
-              </button>
-            </li>
           </ul>
         </article>
-        {!!quotes.length && (
-          <article className="summary">
-            <h2>Summary</h2>
-            <div className="price-ratio">
-              <h3>Token Price Ratio</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th></th>
-                    {[base, ...quotes].map((token) => (
-                      <th key={token.address}>{token.symbol}</th>
+      </form>
+      {!!quotes.length && (
+        <article className="summary">
+          <h2>Summary</h2>
+          <div className="price-ratio">
+            <h3>Token Price Ratio</h3>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th></th>
+                  {[base, ...quotes].map((token) => (
+                    <th key={token.address}>{token.symbol}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[base, ...quotes].map((token, i) => (
+                  <tr key={token.address}>
+                    <th>per {token.symbol}</th>
+                    {[base, ...quotes].map((otherToken, j) => (
+                      <td key={otherToken.address}>
+                        {prettifyNumber(ratios[i][j])}
+                      </td>
                     ))}
                   </tr>
-                </thead>
-                <tbody>
-                  {[base, ...quotes].map((token, i) => (
-                    <tr key={token.address}>
-                      <th>per {token.symbol}</th>
-                      {[base, ...quotes].map((otherToken, j) => (
-                        <td key={otherToken.address}>
-                          {prettifyNumber(ratios[i][j])}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="strategies">
-              <h3>Strategies</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Pair</th>
-                    <th>Spread</th>
-                    <th>Min Price</th>
-                    <th>Max Price</th>
-                    <th>Base Token Budget</th>
-                    <th>Quote Token Budget</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {strategies.map((order) => (
-                    <StrategyRow
-                      key={order.quote}
-                      strategy={order}
-                      spread={spread}
-                      base={base}
-                      clear={() => removeQuote(order.quote)}
-                    />
-                  ))}
-                </tbody>
-              </table>
-              <ul>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="strategies">
+            <h3>Strategies</h3>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Pair</th>
+                  <th>Spread</th>
+                  <th>Min Price</th>
+                  <th>Max Price</th>
+                  <th>Base Token Budget</th>
+                  <th>Quote Token Budget</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
                 {strategies.map((order) => (
-                  <StrategyItem
+                  <StrategyRow
                     key={order.quote}
                     strategy={order}
                     spread={spread}
@@ -553,16 +542,29 @@ export const LiquidityMatrixPage = () => {
                     clear={() => removeQuote(order.quote)}
                   />
                 ))}
-              </ul>
-            </div>
-            {batcher && user && strategies.length > 1 && (
-              <footer className="flex flex-col justify-end md:flex-row">
-                <button type="submit">Create All</button>
-              </footer>
-            )}
-          </article>
-        )}
-      </form>
+              </tbody>
+            </table>
+            <ul>
+              {strategies.map((order) => (
+                <StrategyItem
+                  key={order.quote}
+                  strategy={order}
+                  spread={spread}
+                  base={base}
+                  clear={() => removeQuote(order.quote)}
+                />
+              ))}
+            </ul>
+          </div>
+          {batcher && user && strategies.length > 1 && (
+            <footer className="flex flex-col justify-end md:flex-row">
+              <button className="btn-main-gradient" type="submit">
+                Create All
+              </button>
+            </footer>
+          )}
+        </article>
+      )}
     </section>
   );
 };
@@ -856,7 +858,7 @@ export const SaveLocally = () => {
               </div>
             )}
             <span className="description">Save it for later</span>
-            <AddIcon className="main-icon size-24" />
+            <AddIcon className="main-icon size-20" />
           </button>
         </li>
       </ul>
@@ -931,7 +933,12 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
         <span className="usd">({usdPrice(strategy.buyBudgetUSD)})</span>
       </td>
       <td>
-        <button type="button" disabled={disabled} onClick={create}>
+        <button
+          className="btn-on-surface"
+          type="button"
+          disabled={disabled}
+          onClick={create}
+        >
           {createText}
         </button>
       </td>
@@ -1012,7 +1019,12 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
         <span>{tokenAmount(strategy.buyBudget, quote)}</span>
         <span className="usd">({usdPrice(strategy.buyBudgetUSD)})</span>
       </p>
-      <button type="button" disabled={disabled} onClick={create}>
+      <button
+        className="btn-on-surface"
+        type="button"
+        disabled={disabled}
+        onClick={create}
+      >
         {createText}
       </button>
     </li>

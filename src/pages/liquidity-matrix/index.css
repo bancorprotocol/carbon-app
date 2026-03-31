@@ -13,11 +13,9 @@ html:has(.page) {
 
 /* FIELD INPUTS */
 .field {
-  @apply bg-main-800;
+  @apply input-container rounded-2xl;
   display: flex;
   align-items: center;
-  border-radius: 4px;
-  border: solid 1px rgba(255, 255, 255, 0.2);
 }
 .field .prefix,
 .field .suffix {
@@ -37,7 +35,7 @@ html:has(.page) {
   text-align: end;
 }
 .field:has(input:focus-visible) {
-  outline: solid 1px white;
+  outline: solid 1px var(--color-main-0);
 }
 .field:has(input:user-invalid:not(:focus-visible)) {
   outline: solid 1px var(--color-error);
@@ -50,15 +48,12 @@ html:has(.page) {
 /* PRICE INPUT */
 
 .price {
-  @apply bg-main-900;
+  @apply input-container;
   display: grid;
   grid-template-rows: 1fr 1fr;
   align-items: center;
   border-radius: 8px;
   padding: 8px;
-}
-.price:has(input:focus-visible) {
-  outline: 1px solid rgba(255, 255, 255, 0.4);
 }
 .price > * {
   display: flex;
@@ -81,7 +76,7 @@ html:has(.page) {
   align-items: center;
 }
 .price .price-action {
-  color: rgba(255, 255, 255, 0.6);
+  @apply text-main-0/60;
   font-size: 0.8rem;
   justify-content: end;
   animation: scalein 0.2s ease-out;
@@ -90,37 +85,39 @@ html:has(.page) {
 .page {
   width: 100%;
   max-width: 1920px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 24px;
   margin-inline: auto;
+}
+.page h1, .page .save-locally {
+  grid-template-columns: 1 / span 2;
 }
 .page h1 {
   margin: 0;
 }
 .page form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-flow: row;
   gap: 24px;
 }
 
-.page article {
-  @apply bg-main-900 rounded-2xl p-16;
+.page form article, .page .save-locally {
+  @apply surface rounded-2xl p-16;
   display: grid;
   gap: 16px;
 }
 
 .page .description {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  @apply text-main-0/60;
+  font-size: 0.8rem;
 }
 
 .page .save-locally {
+  @apply border-main-0/40;
   grid-column: 1/3;
   border-radius: 16px;
   padding: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -149,6 +146,7 @@ html:has(.page) {
   cursor: pointer;
 }
 .save-locally .select-base {
+  @apply border-main-0/40;
   flex: 1;
   display: grid;
   grid-auto-flow: column;
@@ -156,7 +154,7 @@ html:has(.page) {
   grid-template-rows: auto auto;
   gap: 4px 8px;
   align-items: center;
-  border-inline-end: 1px solid rgba(255, 255, 255, 0.4);
+  border-inline-end: 1px solid;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
 }
@@ -186,6 +184,7 @@ html:has(.page) {
   }
 }
 .save-locally .add-save button {
+  @apply btn-on-surface;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
@@ -200,21 +199,18 @@ html:has(.page) {
 .price-config {
   display: flex;
   justify-content: space-between;
+  align-items: start;
   gap: 16px;
 }
 
-.base .price {
-  @apply bg-main-800;
-}
-
 .base .select {
-  @apply bg-main-800;
-  border-radius: 8px;
+  @apply btn-on-surface;
   padding: 8px;
   display: grid;
   gap: 8px 16px;
   justify-items: start;
   align-items: center;
+  text-align: start;
   grid-template-columns: 32px auto 24px;
   grid-template-rows: 16px 16px;
   grid-template-areas:
@@ -228,11 +224,14 @@ html:has(.page) {
   grid-area: chevron;
 }
 
-.base .field {
-  @apply bg-main-800;
-}
 .base input {
   width: 150px;
+}
+
+.quotes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .pair-list {
@@ -276,19 +275,13 @@ html:has(.page) {
   align-self: center;
 }
 .budget {
-  @apply bg-main-900;
+  @apply input-container;
   border-radius: 8px;
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: 1fr 1fr;
   padding: 8px;
   align-items: center;
-}
-.budget:has(input:focus-visible) {
-  outline: 1px solid rgba(255, 255, 255, 0.4);
-}
-.budget:has(input:invalid) {
-  outline: 1px solid var(--color-error);
 }
 .budget input {
   background-color: transparent;
@@ -319,16 +312,16 @@ html:has(.page) {
   overflow: hidden;
 }
 .usd {
+  @apply text-main-0/60;
   display: inline-flex;
   align-items: center;
   gap: 4px;
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
 }
 .budget .balance {
+  @apply text-main-0/60;
   justify-self: end;
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
   animation: scalein 0.2s ease-out;
 }
 .budget .budget-error {
@@ -342,57 +335,7 @@ html:has(.page) {
 }
 
 .add-pair {
-  @apply rounded-2xl;
-  display: grid;
-  align-items: start;
-  justify-items: center;
-  border: dashed 1px rgba(255, 255, 255, 0.4);
-  gap: 16px;
-}
-.add-pair :first-child {
-  align-self: end;
-}
-
-.page table {
-  width: 100%;
-}
-.page table th {
-  @apply bg-main-900;
-  padding: 8px;
-}
-.page thead th,
-.page tbody tr:not(:last-child) th,
-.page tbody tr:not(:last-child) td {
-  border-bottom: solid 1px rgba(255, 255, 255, 0.4);
-}
-.page tbody th {
-  border-inline-end: solid 1px rgba(255, 255, 255, 0.4);
-}
-.page table thead th {
-  text-align: center;
-}
-.page table tbody th {
-  text-align: start;
-}
-.page table tbody td {
-  @apply bg-main-800;
-  text-align: center;
-  padding: 8px;
-}
-.page table thead th:first-child {
-  border-top-left-radius: 8px;
-}
-.page table thead th:last-child {
-  border-top-right-radius: 8px;
-}
-.page table tbody tr:last-child :first-child {
-  border-bottom-left-radius: 8px;
-}
-.page table tbody tr:last-child :last-child {
-  border-bottom-right-radius: 8px;
-}
-.page table button {
-  text-wrap: nowrap;
+  @apply btn-on-surface flex gap-8 items-center rounded-full;
 }
 
 .summary {
@@ -404,23 +347,7 @@ html:has(.page) {
 .summary h3 {
   margin-bottom: 16px;
 }
-.summary button {
-  border-radius: 8px;
-  background-color: var(--color-green);
-  padding: 8px 16px;
-  color: black;
-}
-.summary button:disabled {
-  @apply bg-main-0;
-  opacity: 0.4;
-}
-.summary button[type='submit'] {
-  background-image: linear-gradient(
-    90deg,
-    var(--color-green),
-    var(--color-primary)
-  );
-}
+
 .summary:has(button:disabled) button[type='submit'] {
   @apply bg-main-0;
   pointer-events: none;
