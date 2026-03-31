@@ -401,10 +401,7 @@ export const LiquidityMatrixPage = () => {
             </button>
             <div className="price">
               <div className="price-field">
-                <label htmlFor="base-price">
-                  <TokenLogo token={base} size={14} />
-                  {base.symbol} Price
-                </label>
+                <label htmlFor="base-price">{base.symbol} Price</label>
                 <input
                   id="base-price"
                   type="number"
@@ -418,12 +415,13 @@ export const LiquidityMatrixPage = () => {
               <div className="price-action">
                 {baseTokenPrice && (
                   <button
+                    className="use-market"
                     type="button"
                     onClick={() =>
                       set({ basePrice: baseTokenPrice.toString() })
                     }
                   >
-                    Use Market Price: {usdPrice(baseTokenPrice)}
+                    Use Market
                   </button>
                 )}
               </div>
@@ -679,10 +677,11 @@ const PairForm: FC<PairFormProps> = (props) => {
           <div className="price-action">
             {!!quotePrice && (
               <button
+                className="use-market"
                 type="button"
                 onClick={() => update({ price: quotePrice.toString() })}
               >
-                Use Market Price: {usdPrice(quotePrice)}
+                Use Market
               </button>
             )}
           </div>
@@ -717,15 +716,17 @@ const PairForm: FC<PairFormProps> = (props) => {
               min="0"
               step="any"
             />
+            {baseBalance && (
+              <output className="budget-error">
+                <button
+                  type="button"
+                  onClick={() => setBaseBudget(baseBalance)}
+                >
+                  Insufficient funds
+                </button>
+              </output>
+            )}
           </div>
-          {baseBalance && (
-            <div className="balance">
-              <button type="button" onClick={() => setBaseBudget(baseBalance)}>
-                Use balance: <span>{tokenAmount(baseBalance, base)}</span>
-              </button>
-            </div>
-          )}
-          <output className="budget-error">Insufficient funds</output>
         </div>
         <div className="budget quote-budget">
           <div className="token">
@@ -755,18 +756,17 @@ const PairForm: FC<PairFormProps> = (props) => {
               min="0"
               step="any"
             />
+            {quoteBalance && (
+              <output className="budget-error">
+                <button
+                  type="button"
+                  onClick={() => setQuoteBudget(quoteBalance)}
+                >
+                  Insufficient funds
+                </button>
+              </output>
+            )}
           </div>
-          {quoteBalance && (
-            <div className="balance">
-              <button
-                type="button"
-                onClick={() => setQuoteBudget(quoteBalance)}
-              >
-                Use balance: <span>{tokenAmount(quoteBalance, quote)}</span>
-              </button>
-            </div>
-          )}
-          <output className="budget-error">Insufficient funds</output>
         </div>
       </div>
     </li>
@@ -866,6 +866,7 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { data: baseBalance } = useGetTokenBalance(base);
   const { data: quoteBalance } = useGetTokenBalance(quote);
   const { user } = useWagmi();
+  const { openModal } = useModal();
 
   const buy: StaticOrder = {
     min: strategy.buyMin,
@@ -883,7 +884,7 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { createStrategy, isLoading, isAwaiting, isProcessing } =
     useCreateStrategy({ base, quote, buy, sell });
   const disabled = (() => {
-    if (!user) return true;
+    if (!user) return false;
     if (new SafeDecimal(baseBalance || '0').lt(sell.budget)) return true;
     if (new SafeDecimal(quoteBalance || '0').lt(buy.budget)) return true;
     if ('Infinity' === strategy.buyMin) return true;
@@ -900,8 +901,12 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   })();
 
   const create = async () => {
-    await createStrategy();
-    clear();
+    if (!user) {
+      openModal('wallet');
+    } else {
+      await createStrategy();
+      clear();
+    }
   };
 
   return (
@@ -922,7 +927,7 @@ const StrategyRow: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
       </td>
       <td>
         <button
-          className="btn-on-surface"
+          className="btn-on-surface text-nowrap"
           type="button"
           disabled={disabled}
           onClick={create}
@@ -940,6 +945,7 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { data: baseBalance } = useGetTokenBalance(base);
   const { data: quoteBalance } = useGetTokenBalance(quote);
   const { user } = useWagmi();
+  const { openModal } = useModal();
 
   const buy: StaticOrder = {
     min: strategy.buyMin,
@@ -957,7 +963,7 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
   const { createStrategy, isLoading, isAwaiting, isProcessing } =
     useCreateStrategy({ base, quote, buy, sell });
   const disabled = (() => {
-    if (!user) return true;
+    if (!user) return false;
     if (new SafeDecimal(baseBalance || '0').lt(sell.budget)) return true;
     if (new SafeDecimal(quoteBalance || '0').lt(buy.budget)) return true;
     if ('Infinity' === strategy.buyMin) return true;
@@ -973,8 +979,12 @@ const StrategyItem: FC<StrategyProps> = ({ base, spread, strategy, clear }) => {
     return 'Create';
   })();
   const create = async () => {
-    await createStrategy();
-    clear();
+    if (!user) {
+      openModal('wallet');
+    } else {
+      await createStrategy();
+      clear();
+    }
   };
 
   return (

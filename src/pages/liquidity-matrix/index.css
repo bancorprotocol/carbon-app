@@ -71,15 +71,16 @@ html:has(.page) {
   outline: none;
 }
 .price label {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+  @apply text-main-0/60;
 }
 .price .price-action {
   @apply text-main-0/60;
   font-size: 0.8rem;
   justify-content: end;
   animation: scalein 0.2s ease-out;
+}
+.price .use-market {
+  @apply text-primary;
 }
 
 .page {
