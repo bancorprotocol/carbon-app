@@ -35,9 +35,7 @@ export const usePairs = () => {
     const pairs = pairQuery.data || [];
     const result: { baseToken: Token; quoteToken: Token }[] = [];
     for (const pair of pairs) {
-      const baseToken = getTokenById(pair[0]);
-      const quoteToken = getTokenById(pair[1]);
-      if (baseToken && quoteToken) result.push({ baseToken, quoteToken });
+      result.push({ baseToken: pair[0], quoteToken: pair[1] });
     }
 
     const pairsWithInverse = [
@@ -49,7 +47,7 @@ export const usePairs = () => {
     ];
 
     return createPairMaps(pairsWithInverse);
-  }, [getTokenById, pairQuery.data, isPending]);
+  }, [pairQuery.data, isPending]);
 
   const getType = useCallback(
     (slug: string = '') => {
