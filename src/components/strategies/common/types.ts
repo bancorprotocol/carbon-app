@@ -117,6 +117,7 @@ export interface Strategy<T extends Order = StaticOrder>
   idDisplay: string;
   status: StrategyStatus;
   encoded?: EncodedStrategyBNStr;
+  owner?: string;
 }
 
 export interface StrategyWithFiat<T extends Order = StaticOrder>

@@ -47,7 +47,7 @@ export const useDeleteStrategy = () => {
           console.log('tx hash', tx.hash);
           await tx.wait();
           cache.invalidateQueries({
-            queryKey: QueryKey.strategiesByUser(user),
+            queryKey: QueryKey.strategyAll(),
           });
           console.log('tx confirmed');
           successEventsCb?.();

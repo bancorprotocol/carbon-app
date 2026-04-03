@@ -143,7 +143,7 @@ export const EditPricesForm: FC<Props> = (props) => {
         console.log('tx hash', tx.hash);
         await tx.wait();
         cache.invalidateQueries({
-          queryKey: QueryKey.strategiesByUser(user),
+          queryKey: QueryKey.strategyAll(),
         });
         const fieldsToUpdate = getFieldsToUpdate(orders, strategy);
         if (fieldsToUpdate.sellBudget) {

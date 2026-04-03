@@ -7,20 +7,14 @@ import { SafeDecimal } from 'libs/safedecimal';
 import config from 'config';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
-import {
-  EncodedStrategyBNStr,
-  StrategyUpdate,
-  Strategy as SDKStrategy,
-} from '@bancor/carbon-sdk';
+import { EncodedStrategyBNStr, StrategyUpdate } from '@bancor/carbon-sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { useGetAddressFromEns } from 'libs/queries/chain/ens';
-import { usePairs } from 'hooks/usePairs';
 import {
   AnyStrategy,
   EditOrders,
-  GradientOrder,
   StaticOrder,
   Strategy,
 } from 'components/strategies/common/types';
@@ -28,103 +22,90 @@ import {
   getStrategyStatus,
   isGradientStrategy,
 } from 'components/strategies/common/utils';
-import { SDKGradientStrategy } from './gradient-mock';
-import { useCarbonInit } from 'libs/sdk/context';
-import { isZero } from 'components/strategies/common/utils';
-import { useMemo } from 'react';
+import { StrategyAPI } from 'libs/queries/extApi/strategy';
+import { carbonApi } from 'services/carbonApi';
 
-type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
+const buildStrategyFromAPI = (
+  s: StrategyAPI,
+  getTokenById: (id: string) => Token | undefined,
+  encoded?: EncodedStrategyBNStr,
+) => {
+  const base = getTokenById(s.base);
+  const quote = getTokenById(s.quote);
+  if (!base || !quote) return;
+
+  const buy: StaticOrder = {
+    budget: s.buy.budget,
+    min: s.buy.min,
+    max: s.buy.max,
+    marginalPrice: s.buy.marginal,
+  };
+
+  const sell: StaticOrder = {
+    budget: s.sell.budget,
+    min: s.sell.min,
+    max: s.sell.max,
+    marginalPrice: s.sell.marginal,
+  };
+
+  return {
+    type: 'static',
+    id: s.id,
+    idDisplay: getLowestBits(s.id),
+    base,
+    quote,
+    buy,
+    sell,
+    owner: s.owner,
+    status: getStrategyStatus({ buy, sell }),
+    encoded,
+  } as Strategy;
+};
 
 // READ
 
-// TODO: build strategy outside the useQuery to parallelize token query & strategy query
-const buildStrategiesHelper = async (
-  strategies: AnySDKStrategy[],
+const buildAPIStrategiesHelper = (
+  strategies: StrategyAPI[],
   getTokenById: (id: string) => Token | undefined,
 ) => {
-  const result = strategies.map((s) => {
-    const base = getTokenById(s.baseToken);
-    const quote = getTokenById(s.quoteToken);
-    if (!base || !quote) return;
-    if ('sellPriceLow' in s) {
-      // ATTENTION *****************************
-      // This is the buy order | UI order 0 and CONTRACT order 1
-      // ATTENTION *****************************
-      const buy: StaticOrder = {
-        budget: s.buyBudget,
-        min: s.buyPriceLow,
-        max: s.buyPriceHigh,
-        marginalPrice: s.buyPriceMarginal,
-      };
-
-      // ATTENTION *****************************
-      // This is the sell order | UI order 1 and CONTRACT order 0
-      // ATTENTION *****************************
-      const sell: StaticOrder = {
-        budget: s.sellBudget,
-        min: s.sellPriceLow,
-        max: s.sellPriceHigh,
-        marginalPrice: s.sellPriceMarginal,
-      };
-
-      return {
-        type: 'static',
-        id: s.id,
-        idDisplay: getLowestBits(s.id),
-        base,
-        quote,
-        buy,
-        sell,
-        status: getStrategyStatus({ buy, sell }),
-        encoded: s.encoded,
-      } as Strategy;
-    } else {
-      const buy: GradientOrder = {
-        budget: s.buyBudget,
-        _sP_: s.buy_SP_,
-        _eP_: s.buy_EP_,
-        _sD_: s.buy_SD_,
-        _eD_: s.buy_ED_,
-        marginalPrice: s.buyPriceMarginal,
-      };
-
-      const sell: GradientOrder = {
-        budget: s.sellBudget,
-        _sP_: s.sell_SP_,
-        _eP_: s.sell_EP_,
-        _sD_: s.sell_SD_,
-        _eD_: s.sell_ED_,
-        marginalPrice: s.sellPriceMarginal,
-      };
-
-      const strategy: Strategy<GradientOrder> = {
-        type: 'gradient',
-        id: s.id,
-        idDisplay: getLowestBits(s.id),
-        base,
-        quote,
-        buy,
-        sell,
-        status: getStrategyStatus({ buy, sell }),
-        encoded: s.encoded,
-      };
-
-      return strategy;
-    }
-  });
-  return result.filter((s) => !!s);
+  return strategies
+    .map((strategy) => buildStrategyFromAPI(strategy, getTokenById))
+    .filter((strategy): strategy is Strategy => !!strategy);
 };
 
-interface Props {
-  user?: string;
-}
+const fetchAllStrategiesFromApi = async (
+  getTokenById: (id: string) => Token | undefined,
+) => {
+  const response = await carbonApi.getStrategies({ pageSize: 0 });
+  return buildAPIStrategiesHelper(response.strategies, getTokenById);
+};
 
-export const useGetUserStrategies = ({ user }: Props) => {
-  const { isInitialized } = useCarbonInit();
+/** We need to add options to disable because we want to use different hooks for explorer  */
+export const useGetAllStrategies = (options: { enabled: boolean }) => {
   const { isPending, getTokenById } = useTokens();
 
-  const ensAddress = useGetAddressFromEns(user || '');
-  const address: string = (ensAddress?.data || user || '').toLowerCase();
+  return useQuery<AnyStrategy[]>({
+    queryKey: QueryKey.strategyAll(),
+    queryFn: () => fetchAllStrategiesFromApi(getTokenById),
+    enabled: options?.enabled && !isPending,
+    retry: false,
+  });
+};
+
+export const useGetStrategyList = (ids: string[]) => {
+  const { data: strategies } = useGetAllStrategies({ enabled: true });
+  return useQuery<AnyStrategy[]>({
+    queryKey: QueryKey.strategyList(ids),
+    queryFn: () => strategies!.filter((strategy) => ids.includes(strategy.id)),
+    enabled: !strategies,
+    retry: false,
+  });
+};
+
+export const useGetUserStrategies = ({ user }: { user?: string }) => {
+  const { data: strategies } = useGetAllStrategies({ enabled: true });
+  const { data: ensAddress, isPending } = useGetAddressFromEns(user || '');
+  const address: string = ensAddress || user || '';
 
   const isValidAddress = isAddress(address);
   const isZeroAddress = address === config.addresses.tokens.ZERO;
@@ -132,72 +113,22 @@ export const useGetUserStrategies = ({ user }: Props) => {
   return useQuery({
     queryKey: QueryKey.strategiesByUser(address),
     queryFn: async () => {
-      if (!address || !isValidAddress || isZeroAddress) return [];
-      const strategies = await carbonSDK.getUserStrategies(address);
-      return buildStrategiesHelper(strategies, getTokenById);
+      if (!isValidAddress || isZeroAddress) return [];
+      const owner = getAddress(address);
+      return strategies!.filter((s) => s.owner === owner);
     },
-    enabled: !!user && !isPending && ensAddress.isFetched && isInitialized,
-    staleTime: ONE_DAY_IN_MS,
+    enabled: !!address && !!strategies && !isPending,
     retry: false,
-  });
-};
-
-export const useGetStrategyList = (ids: string[]) => {
-  const { isInitialized } = useCarbonInit();
-  const { isPending, getTokenById } = useTokens();
-
-  return useQuery<AnyStrategy[]>({
-    queryKey: QueryKey.strategyList(ids),
-    queryFn: async () => {
-      const getStrategies = ids.map((id) => carbonSDK.getStrategy(id));
-      const responses = await Promise.allSettled(getStrategies);
-      const strategies = [];
-      for (const res of responses) {
-        if (res.status === 'fulfilled') {
-          strategies.push(res.value);
-        } else {
-          console.error(res.reason);
-        }
-      }
-      return buildStrategiesHelper(strategies, getTokenById);
-    },
-    enabled: !isPending && isInitialized,
-    staleTime: ONE_DAY_IN_MS,
-    retry: false,
-  });
-};
-
-/** We need to add options to disable because we want to use different hooks for explorer  */
-export const useGetAllStrategies = (options: { enabled: boolean }) => {
-  const { isEnabled } = useCarbonInit();
-  const { isPending, getTokenById } = useTokens();
-
-  return useQuery<AnyStrategy[]>({
-    queryKey: QueryKey.strategyAll(),
-    queryFn: async () => {
-      const all = await carbonSDK.getAllStrategiesByPairs();
-      const strategies = all.map((item) => item.strategies).flat();
-      return buildStrategiesHelper(strategies, getTokenById);
-    },
-    enabled: options?.enabled && !isPending && isEnabled,
-    staleTime: ONE_DAY_IN_MS,
   });
 };
 
 export const useGetStrategy = (id: string) => {
-  const { isInitialized } = useCarbonInit();
-  const { isPending, getTokenById } = useTokens();
-
-  return useQuery<AnyStrategy>({
+  const { isPending } = useTokens();
+  const { data: strategies } = useGetAllStrategies({ enabled: true });
+  return useQuery<AnyStrategy | undefined>({
     queryKey: QueryKey.strategy(id),
-    queryFn: async () => {
-      const strategy = await carbonSDK.getStrategy(id);
-
-      const strategies = await buildStrategiesHelper([strategy], getTokenById);
-      return strategies[0];
-    },
-    enabled: !isPending && isInitialized,
-    staleTime: ONE_DAY_IN_MS,
+    queryFn: () => strategies!.find((strategy) => strategy.id === id),
+    enabled: strategies && !isPending,
     retry: false,
   });
 };
@@ -207,100 +138,37 @@ interface PropsPair {
   quote?: string;
 }
 
-/** Inverse a base/quote strategy to quote/base */
-const reverseStrategy = (strategy: SDKStrategy): SDKStrategy => {
-  const invert = (value: string) => {
-    if (isZero(value)) return '0';
-    return new SafeDecimal(1).div(value).toString();
-  };
-  return {
-    id: strategy.id,
-    baseToken: strategy.quoteToken,
-    quoteToken: strategy.baseToken,
-    buyPriceLow: invert(strategy.sellPriceHigh),
-    buyPriceMarginal: invert(strategy.sellPriceMarginal),
-    buyPriceHigh: invert(strategy.sellPriceLow),
-    buyBudget: strategy.sellBudget,
-    sellPriceLow: invert(strategy.buyPriceHigh),
-    sellPriceMarginal: invert(strategy.buyPriceMarginal),
-    sellPriceHigh: invert(strategy.buyPriceLow),
-    sellBudget: strategy.buyBudget,
-    encoded: strategy.encoded,
-  };
-};
-const normalizeStrategy = (
-  base: string,
-  quote: string,
-  strategy: SDKStrategy,
-) => {
-  if (base === strategy.quoteToken && quote === strategy.baseToken) {
-    return reverseStrategy(strategy);
-  } else {
-    return strategy;
-  }
-};
-
 export const useGetPairStrategies = (pair?: PropsPair) => {
-  const { isInitialized } = useCarbonInit();
-  const { isPending, getTokenById } = useTokens();
-  const pairs = usePairs();
-
-  const enabled = useMemo(() => {
-    if (!pair?.base || !pair.quote) return false;
-    if (pairs.isPending || isPending) return false;
-    return isInitialized;
-  }, [isInitialized, isPending, pair?.base, pair?.quote, pairs.isPending]);
+  const { data: strategies } = useGetAllStrategies({ enabled: true });
 
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategiesByPair(pair?.base, pair?.quote),
-    queryFn: async () => {
+    queryFn: () => {
       const base = getAddress(pair!.base!);
       const quote = getAddress(pair!.quote!);
-      const strategies = await carbonSDK.getStrategiesByPair(base!, quote!);
-      return buildStrategiesHelper(
-        strategies.map((s) => normalizeStrategy(base!, quote!, s)),
-        getTokenById,
-      );
+      return strategies!.filter((s) => {
+        return s.base.address === base && s.quote.address === quote;
+      });
     },
-    enabled: enabled,
-    staleTime: ONE_DAY_IN_MS,
+    enabled: !!strategies && !!pair?.base && !!pair.quote,
     retry: false,
   });
 };
 
 export const useTokenStrategies = (token?: string) => {
-  const { isInitialized } = useCarbonInit();
-  const { isPending, getTokenById } = useTokens();
-  const { map: pairMap } = usePairs();
+  const { data: strategies } = useGetAllStrategies({ enabled: true });
 
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategiesByToken(token),
-    queryFn: async () => {
-      const allQuotes = new Set<string>();
-      const base = getAddress(token!);
-      for (const { baseToken, quoteToken } of pairMap.values()) {
-        if (baseToken.address === base) allQuotes.add(quoteToken.address);
-        if (quoteToken.address === base) allQuotes.add(baseToken.address);
-      }
-      const getStrategies: Promise<SDKStrategy[]>[] = [];
-      for (const quote of allQuotes) {
-        getStrategies.push(carbonSDK.getStrategiesByPair(base, quote));
-      }
-
-      const allResponses = await Promise.allSettled(getStrategies);
-      for (const res of allResponses) {
-        if (res.status === 'rejected') console.error(res.reason);
-      }
-      const allStrategies = allResponses
-        .filter((v) => v.status === 'fulfilled')
-        .map((v) => (v as PromiseFulfilledResult<SDKStrategy[]>).value);
-      const result = await buildStrategiesHelper(
-        allStrategies.flat(),
-        getTokenById,
-      );
-      return result;
+    queryFn: () => {
+      const address = getAddress(token!);
+      return strategies!.filter((s) => {
+        if (s.base.address === address) return true;
+        if (s.quote.address === address) return true;
+        return false;
+      });
     },
-    enabled: !isPending && !!token && !!pairMap.size && isInitialized,
+    enabled: !!strategies && !!token,
     staleTime: ONE_DAY_IN_MS,
     retry: false,
   });

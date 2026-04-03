@@ -102,7 +102,7 @@ export const useCreateStrategy = (props: Props) => {
           });
           await tx.wait();
           cache.invalidateQueries({
-            queryKey: QueryKey.strategiesByUser(user),
+            queryKey: QueryKey.strategyAll(),
           });
           cache.invalidateQueries({
             queryKey: QueryKey.balance(user, base.address),

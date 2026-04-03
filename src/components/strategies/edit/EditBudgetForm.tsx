@@ -103,7 +103,7 @@ export const EditBudgetForm: FC<Props> = (props) => {
         console.log('tx hash', tx.hash);
         await tx.wait();
         cache.invalidateQueries({
-          queryKey: QueryKey.strategiesByUser(user),
+          queryKey: QueryKey.strategyAll(),
         });
         if (orders.sell.budget !== strategy.sell.budget) {
           cache.invalidateQueries({

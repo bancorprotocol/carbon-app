@@ -43,7 +43,7 @@ export const usePauseStrategy = () => {
         await tx.wait();
 
         cache.invalidateQueries({
-          queryKey: QueryKey.strategiesByUser(user),
+          queryKey: QueryKey.strategyAll(),
         });
         console.log('tx confirmed');
         successEventsCb?.();
