@@ -4,12 +4,11 @@ import { clearCart, useStrategyCart } from 'components/cart/utils';
 import { Button } from 'components/common/button';
 import { useWagmi } from 'libs/wagmi';
 import { FormEvent, useMemo, useState } from 'react';
-import { ApprovalToken, useApproval } from 'hooks/useApproval';
+import { ApprovalToken } from 'hooks/useApproval';
 import { QueryKey, useGetTokenBalances, useQueryClient } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { Warning } from 'components/common/WarningMessageWithIcon';
-import { useModal } from 'hooks/useModal';
 import { carbonSDK } from 'libs/sdk';
 import { useNavigate } from '@tanstack/react-router';
 import { useNotifications } from 'hooks/useNotifications';
@@ -17,7 +16,7 @@ import { AnyCartStrategy } from 'components/strategies/common/types';
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
-import { TransactionRequest } from 'ethers';
+import { TransactionRequest, parseUnits } from 'ethers';
 import config from 'config';
 
 const batcher = config.addresses.carbon.batcher;
@@ -61,7 +60,6 @@ const useHasInsufficientFunds = (approvalTokens: ApprovalToken[]) => {
 export const CartPage = () => {
   const strategies = useStrategyCart();
   const { user, sendTransaction } = useWagmi();
-  const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
   const { checkRestriction } = useRestrictedCountry();
   const { canBatchTransactions } = useBatchTransaction();
@@ -75,7 +73,6 @@ export const CartPage = () => {
     return getApproveTokens(strategies);
   }, [strategies]);
 
-  const approval = useApproval(approvalTokens);
   const funds = useHasInsufficientFunds(approvalTokens);
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
@@ -97,7 +94,7 @@ export const CartPage = () => {
         if (!user) throw new Error('User not found');
         const canBatch = await canBatchTransactions(user);
         const getRawAmount = (token: Token, amount: string) => {
-          return new SafeDecimal(amount).mul(10 ** token.decimals);
+          return parseUnits(amount, token.decimals).toString();
         };
         const tokens = new Set<string>();
         const txs: TransactionRequest[] = [];
@@ -211,15 +208,7 @@ export const CartPage = () => {
       }
     };
 
-    if (approval.approvalRequired) {
-      return openModal('txConfirm', {
-        approvalTokens,
-        onConfirm: create,
-        buttonLabel: 'Create all Strategies',
-      });
-    } else {
-      create();
-    }
+    create();
   };
 
   if (!strategies.length) {
@@ -266,7 +255,7 @@ export const CartPage = () => {
       )}
       <Button
         type="submit"
-        disabled={!user || approval.isPending || funds.isPending}
+        disabled={!user || funds.isPending}
         loading={confirmation || processing}
         loadingChildren={
           confirmation ? 'Waiting for Confirmation' : 'Processing'

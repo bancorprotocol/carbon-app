@@ -4,6 +4,7 @@ import { Connector, useWagmi } from 'libs/wagmi';
 import IconLedger from 'assets/logos/ledger.svg?react';
 import IconTrezor from 'assets/logos/trezor.svg?react';
 import { WalletIcon } from 'components/common/WalletIcon';
+import config from 'config';
 
 type Props = {
   onClick: (c: Connector) => Promise<void>;
@@ -49,7 +50,9 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isPending }) => {
             to="/privacy"
             className="font-medium text-main-0"
           >
-            cookie & privacy policy
+            cookie & privacy policy{' '}
+            {config.policiesLastUpdated &&
+              `(last updated on ${config.policiesLastUpdated})`}
           </Link>{' '}
           of this site.{' '}
         </p>

@@ -13,8 +13,9 @@ import {
 } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { isZero } from 'components/strategies/common/utils';
+import { Warning } from '../WarningMessageWithIcon';
 
-type Props = {
+interface Props {
   id?: string;
   value: string;
   setValue?: (value: string) => void;
@@ -22,17 +23,17 @@ type Props = {
   placeholder?: string;
   balance?: string;
   isBalanceLoading?: boolean;
-  isError?: boolean;
+  error?: ReactNode;
+  warning?: ReactNode;
   className?: string;
   onKeystroke?: () => void;
   isLoading?: boolean;
   disabled?: boolean;
   slippage?: SafeDecimal | null;
-  withoutWallet?: boolean;
   'data-testid'?: string;
   required?: boolean;
   children?: ReactNode;
-};
+}
 
 export const TokenInputField: FC<Props> = (props) => {
   const {
@@ -42,13 +43,14 @@ export const TokenInputField: FC<Props> = (props) => {
     token,
     balance,
     isBalanceLoading,
-    isError,
+    error,
+    warning,
     className,
     onKeystroke,
     placeholder = 'Enter Amount',
     disabled,
+    isLoading,
     slippage,
-    withoutWallet,
     'data-testid': testid,
     children,
   } = props;
@@ -117,7 +119,7 @@ export const TokenInputField: FC<Props> = (props) => {
           className={cn(
             'text-24 font-medium grow text-ellipsis bg-transparent focus:outline-hidden',
             disabled && 'cursor-not-allowed text-main-0/40',
-            isError && 'text-error',
+            !!error && 'text-error',
           )}
           disabled={disabled}
           data-testid={testid}
@@ -126,11 +128,15 @@ export const TokenInputField: FC<Props> = (props) => {
         {TokenWidget}
       </div>
       <div className="text-12 font-medium flex min-h-[16px] flex-wrap items-center justify-between gap-10">
-        <p className="flex items-center gap-5 text-main-0/60">
-          {priceText()}
-          {slippage && !isZero(value) && <Slippage slippage={slippage} />}
-        </p>
-        {user && !withoutWallet && isBalanceLoading && (
+        {!isLoading && (
+          <ErrorSlot error={error} warning={warning}>
+            <p className="flex items-center gap-5 text-main-0/60">
+              {priceText()}
+              {slippage && !isZero(value) && <Slippage slippage={slippage} />}
+            </p>
+          </ErrorSlot>
+        )}
+        {user && isBalanceLoading && (
           <button
             disabled
             type="button"
@@ -140,7 +146,7 @@ export const TokenInputField: FC<Props> = (props) => {
             Wallet: loading
           </button>
         )}
-        {user && !withoutWallet && isBalanceLoading === false && (
+        {user && isBalanceLoading === false && (
           <button
             disabled={disabled}
             type="button"
@@ -158,4 +164,22 @@ export const TokenInputField: FC<Props> = (props) => {
       </div>
     </div>
   );
+};
+
+interface ErrorProps {
+  error?: ReactNode;
+  warning?: ReactNode;
+  children: ReactNode;
+}
+export const ErrorSlot: FC<ErrorProps> = (props) => {
+  const { error, warning, children } = props;
+  if (error && typeof error === 'string') {
+    return <Warning message={error} isError />;
+  }
+  if (error) return error;
+  if (warning && typeof warning === 'string') {
+    return <Warning message={warning} />;
+  }
+  if (warning) return warning;
+  return children;
 };

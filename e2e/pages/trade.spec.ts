@@ -145,7 +145,10 @@ test.describe('Trade', () => {
         await waitForTenderlyRpc(page);
 
         // Token approval
-        await tokenApproval.checkApproval([source], isLimitedApproval);
+        await tokenApproval.checkApproval(
+          [{ symbol: source, amount: sourceValue }],
+          isLimitedApproval,
+        );
 
         // Verify form empty
         await driver.awaitSuccess();

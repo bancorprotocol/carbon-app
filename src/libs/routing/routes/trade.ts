@@ -65,6 +65,8 @@ export type SetOverlapping = (next: TradeOverlappingSearch) => any;
 // TRADE MARKET
 export interface TradeMarketSearch extends TradeSearch {
   direction?: StrategyDirection;
+  sourceInput?: string;
+  targetInput?: string;
 }
 
 // TRADE AUCTION
@@ -112,6 +114,8 @@ const marketPage = createRoute({
   component: TradeMarket,
   validateSearch: searchValidator({
     direction: v.optional(validDirection),
+    sourceInput: v.optional(validInputNumber),
+    targetInput: v.optional(validInputNumber),
   }),
 });
 

@@ -10,13 +10,10 @@ import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
 import { NotificationSchema } from 'libs/notifications/data';
 import { useWagmi } from 'libs/wagmi';
-import { getDeposit } from './utils';
-import { useApproval } from 'hooks/useApproval';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useDeleteStrategy } from '../useDeleteStrategy';
 import { hasNoBudget } from '../overlapping/utils';
 import { EditOrders } from '../common/types';
-import config from 'config';
 
 interface Props {
   orders: EditOrders;
@@ -39,8 +36,6 @@ const submitText: Record<EditTypes, string> = {
   withdraw: 'Confirm Withdraw',
 };
 
-const spenderAddress = config.addresses.carbon.carbonController;
-
 export const EditBudgetForm: FC<Props> = (props) => {
   const { orders, editType, hasChanged, children } = props;
   const { user } = useWagmi();
@@ -57,29 +52,7 @@ export const EditBudgetForm: FC<Props> = (props) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const isPending = updateMutation.isPending;
 
-  const approvalTokens = (() => {
-    const arr = [];
-    const buyDeposit = getDeposit(strategy.buy.budget, orders.buy.budget);
-    if (!isZero(buyDeposit)) {
-      arr.push({
-        ...strategy.quote,
-        spender: spenderAddress,
-        amount: buyDeposit,
-      });
-    }
-    const sellDeposit = getDeposit(strategy.sell.budget, orders.sell.budget);
-    if (!isZero(sellDeposit)) {
-      arr.push({
-        ...strategy.base,
-        spender: spenderAddress,
-        amount: sellDeposit,
-      });
-    }
-    return arr;
-  })();
-  const approval = useApproval(approvalTokens);
-  const isLoading =
-    (approval.isPending && !!user) || isPending || isProcessing || isDeleting;
+  const isLoading = isPending || isProcessing || isDeleting;
   const loadingChildren = getStatusTextByTxStatus(
     isPending,
     isProcessing || isDeleting,
@@ -138,13 +111,6 @@ export const EditBudgetForm: FC<Props> = (props) => {
       });
     }
 
-    if (approval.approvalRequired) {
-      return openModal('txConfirm', {
-        approvalTokens,
-        onConfirm: update,
-        buttonLabel: 'Confirm Deposit',
-      });
-    }
     return update();
   };
 

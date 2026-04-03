@@ -29,7 +29,7 @@ export const commonConfig: AppConfig = {
   selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe', 'WalletConnect'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
-  policiesLastUpdated: '31 Jul, 2024',
+  policiesLastUpdated: '24 Feb, 2026',
   network: {
     name: 'Celo',
     logoUrl: IconCeloLogo,
@@ -72,8 +72,8 @@ export const commonConfig: AppConfig = {
       voucher: '0x5E994Ac7d65d81f51a76e0bB5a236C6fDA8dBF9A',
       batcher: '0xa977879684eece2015ae879dc120c8a1c00718f7',
       vault: '0x8cE318919438982514F9f479FDfB40D32C6ab749',
+      aggregator: '0x351B735CC9AE7442A84CF9cAcF34DDe83eBf66E1',
     },
-    openocean: '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64',
   },
   utils: {
     multicall3: {
@@ -143,7 +143,7 @@ export const commonConfig: AppConfig = {
       logo: '/logos/merkl.webp',
     },
     // walkthroughId: 'uouygtywoj3c',
-    useOpenocean: false,
+    useDexAggregator: true,
     useSeedData: true,
     useEIP7702: true,
   },
