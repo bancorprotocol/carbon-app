@@ -1,14 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { ONE_DAY_IN_MS } from 'utils/time';
-import { useCarbonInit } from 'libs/sdk/context';
-import { carbonSDK } from 'libs/sdk';
 import { openocean } from 'services/openocean';
 import { useTokens } from 'hooks/useTokens';
 import config from 'config';
+import { getSDK } from 'libs/sdk';
 
 export const useGetTradeLiquidity = (base?: string, quote?: string) => {
-  const { isInitialized } = useCarbonInit();
   const { getTokenById } = useTokens();
 
   return useQuery({
@@ -27,10 +25,11 @@ export const useGetTradeLiquidity = (base?: string, quote?: string) => {
         });
         return res.outAmount;
       } else {
-        return carbonSDK.getLiquidityByPair(base!, quote!);
+        const sdk = await getSDK();
+        return sdk.getLiquidityByPair(base!, quote!);
       }
     },
-    enabled: !!base && !!quote && isInitialized,
+    enabled: !!base && !!quote,
     staleTime: ONE_DAY_IN_MS,
   });
 };

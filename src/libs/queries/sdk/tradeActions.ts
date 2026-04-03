@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { MatchActionBNStr } from '@bancor/carbon-sdk';
 import { QueryKey } from 'libs/queries';
-import { carbonSDK } from 'libs/sdk';
-import { useCarbonInit } from 'libs/sdk/context';
+import { getSDK } from 'libs/sdk';
 import { ONE_DAY_IN_MS } from 'utils/time';
 
 type Props = {
@@ -18,8 +17,6 @@ export const useGetTradeActionsQuery = ({
   sourceToken,
   targetToken,
 }: Props) => {
-  const { isInitialized } = useCarbonInit();
-
   return useQuery({
     queryKey: QueryKey.tradeActions(
       [sourceToken, targetToken],
@@ -27,14 +24,14 @@ export const useGetTradeActionsQuery = ({
       actionsWei,
     ),
     queryFn: async () => {
-      return carbonSDK.getTradeDataFromActions(
+      const sdk = await getSDK();
+      return sdk.getTradeDataFromActions(
         sourceToken,
         targetToken,
         !isTradeBySource,
         actionsWei,
       );
     },
-    enabled: isInitialized,
     staleTime: ONE_DAY_IN_MS,
   });
 };

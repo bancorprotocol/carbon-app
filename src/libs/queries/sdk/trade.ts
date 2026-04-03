@@ -1,10 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
-import { useCarbonInit } from 'libs/sdk/context';
-import { Action, TradeActionBNStr } from 'libs/sdk';
+import { Action, getSDK, TradeActionBNStr } from 'libs/sdk';
 import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
-import { carbonSDK } from 'libs/sdk';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
 import { openocean, OpenOceanSwapPath } from 'services/openocean';
@@ -95,7 +93,8 @@ export const useTradeQuery = () => {
         let unsignedTx: PopulatedTransaction;
         let baseAmount: string;
         if (params.isTradeBySource) {
-          unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
+          const sdk = await getSDK();
+          unsignedTx = await sdk.composeTradeBySourceTransaction(
             params.source.address,
             params.target.address,
             params.tradeActions,
@@ -104,7 +103,8 @@ export const useTradeQuery = () => {
           );
           baseAmount = params.sourceInput;
         } else {
-          unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
+          const sdk = await getSDK();
+          unsignedTx = await sdk.composeTradeByTargetTransaction(
             params.source.address,
             params.target.address,
             params.tradeActions,
@@ -149,7 +149,6 @@ export const useGetTradeData = ({
   targetToken,
   enabled,
 }: Props) => {
-  const { isInitialized } = useCarbonInit();
   const { trade } = useStore();
 
   return useQuery<GetTradeDataResult>({
@@ -203,7 +202,8 @@ export const useGetTradeData = ({
           path: res.path,
         };
       } else {
-        return carbonSDK.getTradeData(
+        const sdk = await getSDK();
+        return sdk.getTradeData(
           sourceToken.address,
           targetToken.address,
           input,
@@ -211,7 +211,7 @@ export const useGetTradeData = ({
         );
       }
     },
-    enabled: !!enabled && isInitialized,
+    enabled: !!enabled,
     gcTime: 0,
     retry: 1,
   });

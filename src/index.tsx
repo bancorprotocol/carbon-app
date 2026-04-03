@@ -10,7 +10,6 @@ import config from 'config';
 import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
-import { SDKProvider } from 'libs/sdk/provider';
 import { init as initTelegramSDK, isTMA } from '@tma.js/sdk';
 import TelegramAnalytics from '@telegram-apps/analytics';
 
@@ -43,13 +42,11 @@ if (config.network.name === 'TON' && isTMA()) {
 root.render(
   <React.StrictMode>
     <QueryProvider>
-      <SDKProvider>
-        <StoreProvider>
-          <WalletProvider>
-            <RouterProvider router={router} />
-          </WalletProvider>
-        </StoreProvider>
-      </SDKProvider>
+      <StoreProvider>
+        <WalletProvider>
+          <RouterProvider router={router} />
+        </WalletProvider>
+      </StoreProvider>
     </QueryProvider>
   </React.StrictMode>,
 );
