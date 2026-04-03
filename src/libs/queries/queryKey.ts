@@ -118,18 +118,5 @@ export const QueryKey = {
     'trade-max-source-amount',
   ],
 
-  tradeOrderBook: (pair: TokenPair, steps: number) => [
-    ...sdk,
-    buildTokenPairKey(pair),
-    'trade-order-book',
-    steps,
-  ],
-
-  tradeOrderBookLastTradeBuy: (pair: TokenPair) => [
-    ...sdk,
-    buildTokenPairKey(pair),
-    'trade-order-book-last-trade-buy',
-  ],
-
   dexMigration: (dex: Dexes, user: string) => ['migration', dex, user],
 };
