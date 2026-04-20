@@ -1,7 +1,7 @@
-import { Outlet } from '@tanstack/react-router';
-import IconClock from 'assets/icons/clock.svg?react';
-import IconClose from 'assets/icons/X.svg?react';
-import { FormEvent, useEffect, useState } from 'react';
+import { Outlet, useSearch } from '@tanstack/react-router';
+import HistoryIcon from 'assets/icons/history.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { differenceInWeeks } from 'date-fns';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
@@ -10,10 +10,34 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { usePersistLastPair } from 'hooks/usePersistLastPair';
 import { cn } from 'utils/helpers';
 import { NotFound } from 'components/common/NotFound';
+import { StrategyFormProvider } from 'components/strategies/common/StrategyFormProvider';
+import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
+import {
+  defaultEnd,
+  defaultStart,
+  oneYearAgo,
+} from 'components/strategies/common/utils';
 import style from 'components/strategies/common/root.module.css';
+import { clamp } from 'utils/helpers/operators';
 
 export const SimulatorRoot = () => {
+  const { chartStart } = useSearch({ from: '/simulate' });
   const { base, quote, isPending } = usePersistLastPair({ from: '/simulate' });
+  const priceHistory = useGetTokenPriceHistory({
+    baseToken: base?.address,
+    quoteToken: quote?.address,
+    start: oneYearAgo(),
+    end: defaultEnd(),
+  });
+
+  const marketPrice = useMemo(() => {
+    if (!priceHistory.data) return;
+    const min = priceHistory.data[0].date;
+    const max = priceHistory.data.at(-1)!.date;
+    const start = Number(chartStart ?? defaultStart());
+    const date = clamp(min, start, max);
+    return priceHistory.data.find((v) => v.date === date)?.close;
+  }, [priceHistory.data, chartStart]);
 
   if (isPending) {
     return <CarbonLogoLoading className="h-80 place-self-center p-16" />;
@@ -28,16 +52,18 @@ export const SimulatorRoot = () => {
     );
   }
   return (
-    <div className="mx-auto flex flex-col content-start gap-24 xl:max-w-[1920px] p-16 w-full">
-      <SimulatorDisclaimer />
-      <div className={cn(style.root, 'grid gap-16')}>
-        <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
-          <TokenSelection url="/simulate" base={base} quote={quote} />
-          <SimInputStrategyType />
+    <StrategyFormProvider base={base} quote={quote} marketPrice={marketPrice}>
+      <div className="mx-auto flex flex-col content-start gap-24 xl:max-w-[1920px] p-16 w-full">
+        <SimulatorDisclaimer />
+        <div className={cn(style.root, 'grid gap-16')}>
+          <div className="2xl:grid lg:flex grid gap-16 self-start grid-area-[nav] 2xl:sticky top-[96px]">
+            <TokenSelection url="/simulate" base={base} quote={quote} />
+            <SimInputStrategyType />
+          </div>
+          <Outlet />
         </div>
-        <Outlet />
       </div>
-    </div>
+    </StrategyFormProvider>
   );
 };
 
@@ -66,7 +92,7 @@ const SimulatorDisclaimer = () => {
       className="grid grid-cols-[auto_1fr_auto] gap-x-16 gap-y-8 items-start justify-between border border-primary rounded-2xl bg-primary/10 p-16 md:col-span-2"
     >
       <div className="row-span-2 hidden self-center bg-primary/20 size-32 md:size-48 md:grid place-items-center rounded-full flex-shrink-0">
-        <IconClock className="size-16 md:size-24 fill-gradient" />
+        <HistoryIcon className="size-16 md:size-24 fill-gradient" />
       </div>
       <h2 className="text-16 md:text-18 self-center">
         Backtest Your Strategy Using Real Historical Price Data
@@ -77,7 +103,7 @@ const SimulatorDisclaimer = () => {
         className="p-8 rounded-full justify-self-end"
         data-testid="clear-sim-disclaimer"
       >
-        <IconClose className="size-14 md:size-18" />
+        <CloseIcon className="size-20 md:size-24" />
       </button>
       <p className="text-14 col-span-2">
         This tool is for informational purposes only and operates under

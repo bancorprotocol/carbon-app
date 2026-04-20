@@ -17,6 +17,7 @@ import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { RangeBuyPreview } from 'components/trade/preview/all/range-buy';
 import { SwapPreview } from 'components/trade/preview/all/swap';
 import config from 'config';
+import { RewardBanner } from 'components/rewards/banner';
 
 const tabs = [
   {
@@ -145,6 +146,7 @@ export const ConnectedLandingPage = () => {
   return (
     <>
       {config.ui.tradeCount && <ExplorerHeader />}
+      <RewardBanner />
       <div className="mx-auto grid w-full gap-32 p-16 max-w-[1920px]">
         <div
           role="tablist"

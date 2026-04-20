@@ -100,7 +100,7 @@ export const SuggestionList: FC<Props> = (props) => {
                 className="text-14 font-medium btn cursor-pointer rounded-full "
                 onClick={() => setMaxTokens((v) => v + 5)}
               >
-                View More
+                View more
               </button>
             </footer>
           )}
@@ -134,7 +134,7 @@ export const SuggestionList: FC<Props> = (props) => {
                 className="text-14 font-medium btn cursor-pointer rounded-full "
                 onClick={() => setMaxPairs((v) => v + 5)}
               >
-                View More
+                View more
               </button>
             </footer>
           )}

@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { useStore } from 'store';
 import { Toast } from 'store/useToasterStore';
 
@@ -24,7 +24,7 @@ export const BaseToast: FC<Props> = ({ id, children, color = 'primary' }) => {
         aria-label="close message"
         onClick={() => toaster.removeToast(id)}
       >
-        <IconClose className="size-10" />
+        <CloseIcon className="size-24" />
       </button>
     </li>
   );

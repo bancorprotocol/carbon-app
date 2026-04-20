@@ -1,6 +1,6 @@
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import IconWarning from 'assets/icons/warning.svg?react';
-import IconError from 'assets/icons/times.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { ReactNode, useMemo } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
@@ -23,11 +23,11 @@ export default function ModalGenericInfo({
   const icon = useMemo(() => {
     switch (variant) {
       case 'warning':
-        return <IconWarning />;
+        return <WarningIcon className="size-24" />;
       case 'error':
-        return <IconError />;
+        return <CloseIcon className="size-24" />;
       default:
-        return <IconWarning />;
+        return <WarningIcon className="size-24" />;
     }
   }, [variant]);
 

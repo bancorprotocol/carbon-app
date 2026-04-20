@@ -3,9 +3,9 @@ import { useSetRecurringOrder } from 'components/strategies/common/useSetOrder';
 import { outSideMarketWarning } from 'components/strategies/common/utils';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { getDefaultOrder } from 'components/strategies/create/utils';
+import { getTradeOrder } from 'components/strategies/create/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { useCallback } from 'react';
@@ -22,6 +22,7 @@ import {
   checkIfOrdersReversed,
 } from 'components/strategies/utils';
 import { OrderBlock } from 'components/strategies/common/types';
+import { useGetTokenBalance } from 'libs/queries';
 
 const getRecurringError = (buy: OrderBlock, sell: OrderBlock) => {
   if (checkIfOrdersReversed(buy, sell)) {
@@ -38,10 +39,12 @@ const getRecurringWarning = (buy: OrderBlock, sell: OrderBlock) => {
 const url = '/trade/recurring';
 export const TradeRecurring = () => {
   const search = useSearch({ from: url });
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const { setSellOrder, setBuyOrder } = useSetRecurringOrder(url);
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
+  const buyBalance = useGetTokenBalance(quote);
+  const sellBalance = useGetTokenBalance(base);
 
   const updatePrices: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
@@ -51,21 +54,25 @@ export const TradeRecurring = () => {
     [setBuyOrder, setSellOrder],
   );
 
-  const sellOrder = getDefaultOrder(
-    'sell',
+  const sellOrder = getTradeOrder(
     {
+      direction: 'sell',
       min: search.sellMin,
       max: search.sellMax,
+      presetMin: search.sellPresetMin,
+      presetMax: search.sellPresetMax,
       budget: search.sellBudget,
       settings: search.sellSettings,
     },
     marketPrice,
   );
-  const buyOrder = getDefaultOrder(
-    'buy',
+  const buyOrder = getTradeOrder(
     {
+      direction: 'buy',
       min: search.buyMin,
       max: search.buyMax,
+      presetMin: search.buyPresetMin,
+      presetMax: search.buyPresetMax,
       budget: search.buyBudget,
       settings: search.buySettings,
     },
@@ -74,17 +81,27 @@ export const TradeRecurring = () => {
 
   const setSellSetting = useCallback(
     (settings: StrategySettings) => {
-      const { min, max } = getDefaultOrder('sell', { settings }, marketPrice);
-      setSellOrder({ settings, min, max });
+      setSellOrder({
+        settings,
+        min: undefined,
+        max: undefined,
+        presetMin: undefined,
+        presetMax: undefined,
+      });
     },
-    [marketPrice, setSellOrder],
+    [setSellOrder],
   );
   const setBuySetting = useCallback(
     (settings: StrategySettings) => {
-      const { min, max } = getDefaultOrder('buy', { settings }, marketPrice);
-      setBuyOrder({ settings, min, max });
+      setBuyOrder({
+        settings,
+        min: undefined,
+        max: undefined,
+        presetMin: undefined,
+        presetMax: undefined,
+      });
     },
-    [marketPrice, setBuyOrder],
+    [setBuyOrder],
   );
 
   const sellOutsideMarket = outSideMarketWarning({
@@ -119,12 +136,7 @@ export const TradeRecurring = () => {
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <StrategyChartHistory
-          base={base}
-          quote={quote}
-          buy={buyOrder}
-          sell={sellOrder}
-        >
+        <StrategyChartHistory buy={buyOrder} sell={sellOrder}>
           <D3ChartRecurring
             base={base}
             quote={quote}
@@ -144,6 +156,7 @@ export const TradeRecurring = () => {
             base={base}
             quote={quote}
             order={sellOrder}
+            balanceQuery={sellBalance}
             setOrder={setSellOrder}
             setSettings={setSellSetting}
             error={error}
@@ -155,6 +168,7 @@ export const TradeRecurring = () => {
             base={base}
             quote={quote}
             order={buyOrder}
+            balanceQuery={buyBalance}
             setOrder={setBuyOrder}
             setSettings={setBuySetting}
             error={error}

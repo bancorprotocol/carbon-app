@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import IconPause from 'assets/icons/pause.svg?react';
-import IconTrash from 'assets/icons/trash.svg?react';
+import DeleteIcon from 'assets/icons/delete.svg?react';
 import IconWallet from 'assets/icons/wallet.svg?react';
 
 export type MutateModalContentData = {
@@ -24,13 +24,13 @@ export const getModalDataByType = (
         title: 'Are you sure you would like to pause your strategy?',
         content:
           'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
-        actionButton: 'Pause Strategy',
+        actionButton: 'Pause strategy',
       };
 
     case 'delete':
       return {
         modalTitle: 'Delete Strategy',
-        icon: <IconTrash className="size-24" />,
+        icon: <DeleteIcon className="size-24" />,
         title: 'Are you sure you would like to delete your strategy?',
         content:
           'All data on the strategy will be deleted. It will be impossible to restore them.',
@@ -42,7 +42,7 @@ export const getModalDataByType = (
             </div>
           </div>
         ),
-        actionButton: 'Delete Strategy',
+        actionButton: 'Delete strategy',
         variant: 'error',
       };
   }

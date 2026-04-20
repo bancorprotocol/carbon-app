@@ -10,7 +10,7 @@ import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimResultChartControls } from 'components/simulator/result/SimResultChartControls';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { fromUnixUTC, toUnixUTC } from '../utils';
-import CalendarIcon from 'assets/icons/calendar.svg?react';
+import CalendarTodayIcon from 'assets/icons/calendar_today.svg?react';
 
 interface Props {
   data: Array<SimulatorData>;
@@ -68,7 +68,7 @@ export const SimResultChartHeader = ({
         options={{ disabled: datePickerDisabledDays }}
         required
         disabled={simulationType === 'overlapping'}
-        icon={<CalendarIcon className="text-primary size-14" />}
+        icon={<CalendarTodayIcon className="text-primary size-24" />}
       />
     );
   }, [endUnix, onDatePickerConfirm, simulationType, startUnix]);

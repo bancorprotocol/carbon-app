@@ -1,12 +1,12 @@
 import IconLock from 'assets/icons/lock.svg?react';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 
 export const StrategyChartLegend = () => {
   return (
     <footer className="text-12 flex flex-col gap-16">
       <p className="flex items-center gap-8">
         <IconLock className="size-16 shrink-0" />
-        Strategy prices can only be modified when selecting "Edit Prices"
+        Strategy prices can only be modified when selecting "Edit prices"
         option.
       </p>
       <p className="flex items-center gap-8">
@@ -14,7 +14,7 @@ export const StrategyChartLegend = () => {
           aria-hidden
           className="size-16 shrink-0 rounded-full bg-main-0/20 p-4"
         >
-          <IconWarning />
+          <WarningIcon className="size-24" />
         </span>
         The strategy prices shown on the chart reflect the current strategy
         settings without considering historical price changes

@@ -1,17 +1,21 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, useSearch } from '@tanstack/react-router';
 import { NotFound } from 'components/common/NotFound';
-import { TradeProvider } from 'components/trade/TradeProvider';
+import { StrategyFormProvider } from 'components/strategies/common/StrategyFormProvider';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TokenSelection } from 'components/strategies/common/TokenSelection';
 import { TradeNav } from 'components/trade/TradeNav';
 import { usePersistLastPair } from 'hooks/usePersistLastPair';
 import { cn } from 'utils/helpers';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 import style from 'components/strategies/common/root.module.css';
 
 export const TradeRoot = () => {
   const { base, quote, isPending } = usePersistLastPair({ from: '/trade' });
+  const search = useSearch({ from: '/trade' });
+  const priceQuery = useMarketPrice({ base, quote });
+  const marketPrice = search.marketPrice ?? priceQuery.marketPrice?.toString();
 
-  if (isPending) {
+  if (isPending || (!search.marketPrice && priceQuery.isPending)) {
     return <CarbonLogoLoading className="h-80 place-self-center" />;
   }
   if (!base || !quote) {
@@ -24,7 +28,11 @@ export const TradeRoot = () => {
     );
   }
   return (
-    <TradeProvider base={base} quote={quote}>
+    <StrategyFormProvider
+      base={base}
+      quote={quote}
+      marketPrice={Number(marketPrice)}
+    >
       <div
         className={cn(
           style.root,
@@ -37,6 +45,6 @@ export const TradeRoot = () => {
         </div>
         <Outlet />
       </div>
-    </TradeProvider>
+    </StrategyFormProvider>
   );
 };

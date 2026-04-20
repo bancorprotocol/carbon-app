@@ -43,7 +43,7 @@ export default function ModalConfirmWithdraw({
           params={{ strategyId: strategy.id }}
           className="btn-main-gradient row-span-2 self-center"
         >
-          Edit Prices
+          Edit prices
         </Link>
         <p className="text-12 text-main-0/80">
           Editing prices is cheaper and keeps your strategy working for you.
@@ -59,7 +59,7 @@ export default function ModalConfirmWithdraw({
           className="btn-primary row-span-2 self-center"
           data-testid="withdraw-strategy-btn"
         >
-          Withdraw Funds
+          Withdraw funds
         </Link>
         <p className="text-12 text-main-0/80">
           Withdraw all or a part of the funds in the strategy.

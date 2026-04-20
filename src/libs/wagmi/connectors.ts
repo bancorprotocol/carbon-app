@@ -107,6 +107,7 @@ const getDefaultConnector = (connectorType: SelectableConnectionName) => {
           /app.safe.global$/,
           /safe.tac.build$/,
           /staging.safe.tac.build$/,
+          /sei-safe.protofire.io$/,
         ],
       });
   }

@@ -27,7 +27,13 @@ export const deposit = (testCase: CreateStrategyTestCase) => {
     await form.budget().fill(input.budget);
     await edit.submit('deposit');
 
-    await tokenApproval.checkApproval([base, quote]);
+    const getAmount = (anchor: 'sell' | 'buy') => {
+      return input.anchor === anchor ? input.budget : '0';
+    };
+    await tokenApproval.checkApproval([
+      { symbol: base, amount: getAmount('sell') },
+      { symbol: quote, amount: getAmount('buy') },
+    ]);
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await page.mouse.move(0, 0); // Prevent mouse to open tooltip
 

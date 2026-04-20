@@ -36,7 +36,7 @@ const TenderlyForkAlert = () => {
       to="/debug"
       className="bg-warning text-14 rounded-full px-16 py-8 text-main-950"
     >
-      Debug Mode
+      Debug mode
     </Link>
   );
 };

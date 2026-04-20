@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
-import { useGetTokenBalance } from 'libs/queries';
 import { InputBudget, BudgetAction } from '../common/InputBudget';
 import { useWagmi } from 'libs/wagmi';
+import { UseQueryResult } from '@tanstack/react-query';
 
 interface Props {
   base: Token;
@@ -10,6 +10,7 @@ interface Props {
   buyBudget?: string;
   sellBudget?: string;
   budget: string;
+  balanceQuery?: UseQueryResult<string, Error>;
   setBudget: (value: string) => void;
   anchor: 'buy' | 'sell';
   editType: BudgetAction;
@@ -40,6 +41,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
     editType,
     anchor,
     budget,
+    balanceQuery,
     setBudget,
     error,
     warning,
@@ -47,15 +49,16 @@ export const OverlappingBudget: FC<Props> = (props) => {
   const { user } = useWagmi();
 
   const token = anchor === 'buy' ? quote : base;
-  const balance = useGetTokenBalance(token);
   const allocatedBudget = anchor === 'buy' ? buyBudget : sellBudget;
-  const maxIsLoading = editType === 'deposit' && balance.isPending;
-  const max = editType === 'deposit' ? balance.data || '0' : allocatedBudget;
+  const maxIsLoading =
+    editType === 'deposit' && balanceQuery?.isEnabled && balanceQuery.isPending;
+  const max = editType === 'deposit' ? balanceQuery?.data : allocatedBudget;
 
   const disabled = (() => {
     if (!user) return false;
     if (editType !== 'deposit') return false;
-    return !balance.data;
+    if (!balanceQuery?.isEnabled) return false;
+    return !balanceQuery.data;
   })();
 
   return (

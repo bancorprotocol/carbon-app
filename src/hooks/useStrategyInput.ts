@@ -100,8 +100,8 @@ export const buildStrategyInputState = (
         budgetError: state.sellBudgetError,
         isRange: !!state.sellIsRange,
       },
-      start: state.start || undefined,
-      end: state.end || undefined,
+      start: state.chartStart || undefined,
+      end: state.chartEnd || undefined,
     };
   } else {
     return {
@@ -121,8 +121,8 @@ export const buildStrategyInputState = (
         budgetError: '',
         isRange: !!state.sellIsRange,
       },
-      start: state.start || undefined,
-      end: state.end || undefined,
+      start: state.chartStart || undefined,
+      end: state.chartEnd || undefined,
     };
   }
 };

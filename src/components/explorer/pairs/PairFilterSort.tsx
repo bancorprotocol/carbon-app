@@ -1,6 +1,6 @@
 import { FC, FormEvent, useId } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import IconCheck from 'assets/icons/check.svg?react';
 import { cn } from 'utils/helpers';
 import { pairFilter, PairFilter, pairSort, PairSort } from './utils';
@@ -43,7 +43,7 @@ export const PairSortDropdown: FC<SortProps> = (props) => {
             <b>Sort</b>:
             <span className="text-start sm:min-w-115">{pairSort[sort]}</span>
           </p>
-          <IconChevron className="w-14 shrink-0" />
+          <KeyboardArrowDownIcon className="size-24 shrink-0" />
         </button>
       )}
     >
@@ -94,7 +94,7 @@ export const PairFilterDropdown: FC<FilterProps> = (props) => {
             <b>View:</b>
             <span className="text-start">{pairFilter[filter]}</span>
           </p>
-          <IconChevron className="w-14 shrink-0" />
+          <KeyboardArrowDownIcon className="size-24 shrink-0" />
         </button>
       )}
     >
@@ -136,7 +136,7 @@ const FilterSortItem: FC<{
         className="rounded-sm flex cursor-pointer items-center justify-between px-16 py-8 hover:bg-main-900/40 peer-focus-visible:outline-solid peer-focus-visible:outline-1 peer-checked:bg-main-900/60"
       >
         {title}
-        {selectedItem === item && <IconCheck />}
+        {selectedItem === item && <IconCheck className="size-24" />}
       </label>
     </div>
   );

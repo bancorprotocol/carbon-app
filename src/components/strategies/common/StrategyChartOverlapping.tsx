@@ -103,13 +103,7 @@ const OverlappingChartContent: FC<Props> = (props) => {
   }
   return (
     <>
-      <StrategyChartHistory
-        base={base}
-        quote={quote}
-        buy={buy}
-        sell={sell}
-        marketPrice={search.marketPrice}
-      >
+      <StrategyChartHistory buy={buy} sell={sell}>
         <D3ChartOverlapping
           base={base}
           quote={quote}

@@ -11,6 +11,7 @@ import tacProd from './tac/production';
 import tonDev from './ton/development';
 import tonProd from './ton/production';
 import { handleConfigOverrides } from './utils';
+import { AppConfig } from './types';
 
 const configs = {
   ethereum: {
@@ -38,10 +39,10 @@ const configs = {
     production: tonProd,
   },
 };
-type Network = keyof typeof configs;
+export type CarbonNetworks = keyof typeof configs;
 type Mode = 'development' | 'production';
 
-const network = (import.meta.env.VITE_NETWORK || 'ethereum') as Network;
+const network = (import.meta.env.VITE_NETWORK || 'ethereum') as CarbonNetworks;
 const mode = import.meta.env.MODE as Mode;
 
 if (!configs[network]) {
@@ -67,6 +68,17 @@ export const networks = Object.entries(configs)
       appUrl: config[mode].appUrl,
     };
   });
+
+export const getAllConfigs = () => {
+  const record: Partial<Record<CarbonNetworks, AppConfig>> = {};
+  for (const network in configs) {
+    const net = network as CarbonNetworks;
+    for (const configMode in configs[net]) {
+      if (configMode === mode) record[net] = configs[net][mode];
+    }
+  }
+  return record;
+};
 
 export const defaultConfig = configs[network][mode];
 const currentConfig = handleConfigOverrides(defaultConfig);

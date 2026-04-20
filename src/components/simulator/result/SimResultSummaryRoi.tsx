@@ -1,7 +1,7 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { NewTabLink, externalLinks } from 'libs/routing';
-import IconLink from 'assets/icons/link.svg?react';
-import IconTooltip from 'assets/icons/tooltip.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
+import InfoIcon from 'assets/icons/info.svg?react';
 import { formatNumberWithApproximation } from 'utils/helpers';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useCallback } from 'react';
@@ -28,7 +28,7 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
       <Tooltip element={<TooltipContent />}>
         <h4 className="text-12 flex items-center gap-4 text-main-0/60">
           ROI
-          <IconTooltip className="size-10" />
+          <InfoIcon className="size-16" />
         </h4>
       </Tooltip>
       <AnimatedNumber
@@ -47,7 +47,7 @@ const TooltipContent = () => (
   <>
     <NewTabLink to={externalLinks.roiLearnMore} className="text-primary">
       <span className="align-middle">Learn how ROI is calculated.</span>
-      <IconLink className="mb-1 inline-block size-14 align-middle" />
+      <OpenInNewIcon className="mb-1 inline-block size-24 align-middle" />
     </NewTabLink>
   </>
 );

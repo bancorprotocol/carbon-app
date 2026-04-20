@@ -1,7 +1,7 @@
 import { useNavigate } from 'libs/routing';
 import { TokenLogo } from 'components/common/imager/Imager';
-import ChevronIcon from 'assets/icons/chevron.svg?react';
-import ForwardArrowIcon from 'assets/icons/arrow.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
+import ArrowForwardIcon from 'assets/icons/arrow_forward.svg?react';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/types';
@@ -12,6 +12,20 @@ interface Props {
   url: '/trade' | '/simulate';
   base: Token;
   quote: Token;
+}
+
+// Keep none price/budget related searches. Should be removed if we split into one page per link
+function copyTradeSearch(search: any) {
+  const copy: any = {};
+  for (const key of ['limit', 'settings', 'direction']) {
+    if (key in search) {
+      copy[key] = search[key];
+    }
+  }
+  if (search['preset'] === 'Infinity') {
+    copy['preset'] = 'Infinity';
+  }
+  return copy;
 }
 
 export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
@@ -32,7 +46,12 @@ export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
       }
 
       navigate({
-        search: (s) => ({ ...s, ...tokens }),
+        search: (s) => ({
+          ...copyTradeSearch(s),
+          ...tokens,
+          chartStart: s.chartStart,
+          chartEnd: s.chartEnd,
+        }),
         replace: true,
         resetScroll: false,
       });
@@ -48,11 +67,15 @@ export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
   const swapTokens = () => {
     if (base && quote) {
       navigate({
-        search: (s) => ({
-          ...s,
-          base: quote.address,
-          quote: base.address,
-        }),
+        search: (s) => {
+          return {
+            ...copyTradeSearch(s),
+            base: quote.address,
+            quote: base.address,
+            chartStart: s.chartStart,
+            chartEnd: s.chartEnd,
+          };
+        },
         replace: true,
         resetScroll: false,
       });
@@ -71,14 +94,14 @@ export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
         data-testid="select-base-token"
         onClick={() => openTokenListModal('base')}
       >
-        <DisplayToken token={base} label="Buy or Sell" />
+        <DisplayToken token={base} label="Buy or sell" />
       </button>
       <button
         role="menuitem"
         className="btn-on-surface p-0 grid size-40 place-items-center rounded-full"
         onClick={swapTokens}
       >
-        <ForwardArrowIcon className="size-14" />
+        <ArrowForwardIcon className="size-24" />
       </button>
       <button
         role="menuitem"
@@ -108,7 +131,7 @@ const DisplayToken: FC<DisplayTokenProps> = ({ token, label }) => {
           {token?.symbol}
         </span>
       </p>
-      <ChevronIcon className="ml-auto size-16" />
+      <KeyboardArrowDownIcon className="ml-auto size-24" />
     </>
   );
 };

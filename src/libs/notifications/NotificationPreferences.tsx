@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
-import IconGear from 'assets/icons/gear.svg?react';
+import SettingsIcon from 'assets/icons/settings.svg?react';
 import { Radio, RadioGroup } from 'components/common/radio/RadioGroup';
 
 export interface NotificationPreference {
@@ -23,7 +23,7 @@ export const NotificationPreferences = () => {
         id="global-notif-label"
         className="text-16 flex flex-1 items-center gap-8 font-normal"
       >
-        <IconGear className="size-18 shrink-0 hidden md:block" />
+        <SettingsIcon className="size-24 shrink-0 hidden md:block" />
         Receive general notifications
       </h3>
       <RadioGroup className="shrink-0 p-2" aria-labelledby="global-notif-label">

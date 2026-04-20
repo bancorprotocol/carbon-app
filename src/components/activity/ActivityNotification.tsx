@@ -1,7 +1,7 @@
 import { FC, useId, useMemo } from 'react';
 import { NotificationActivity } from 'libs/notifications/types';
 import { activityActionName, activityDescription } from './utils';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { Link } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
 import { ActivityAction } from 'libs/queries/extApi/activity';
@@ -45,7 +45,7 @@ export const ActivityNotification: FC<Props> = ({
             data-testid="notif-close"
             aria-label="Remove notification"
           >
-            <IconClose className="size-14 text-main-0/80" />
+            <CloseIcon className="size-24 text-main-0/80" />
           </button>
         </header>
         <p

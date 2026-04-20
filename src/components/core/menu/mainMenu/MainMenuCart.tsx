@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import CartIcon from 'assets/icons/cart.svg?react';
+import ShoppingCartIcon from 'assets/icons/shopping_cart.svg?react';
 import { useWagmi } from 'libs/wagmi';
 import { useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
@@ -35,7 +35,7 @@ export const MainMenuCart = () => {
       aria-label="Cart page"
       aria-current={pathname.startsWith('/cart') ? 'page' : 'false'}
     >
-      <CartIcon className="size-20 place-self-center [grid-area:stack]" />
+      <ShoppingCartIcon className="size-24 place-self-center [grid-area:stack]" />
       {!!cartSize && (
         <span className="bg-primary grid size-12 place-items-center justify-self-end rounded-full text-[10px] leading-none text-main-950 [grid-area:stack]">
           {cartSize}

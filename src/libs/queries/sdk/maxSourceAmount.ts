@@ -3,14 +3,15 @@ import { QueryKey } from 'libs/queries';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useCarbonInit } from 'libs/sdk/context';
 import { carbonSDK } from 'libs/sdk';
+import config from 'config';
 
-export const useGetMaxSourceAmountByPair = (base?: string, quote?: string) => {
+export const useGetMaxSource = (base?: string, quote?: string) => {
   const { isInitialized } = useCarbonInit();
 
   return useQuery({
     queryKey: QueryKey.tradeMaxSourceAmount([base!, quote!]),
     queryFn: () => carbonSDK.getMaxSourceAmountByPair(base!, quote!),
-    enabled: !!base && !!quote && isInitialized,
+    enabled: !!base && !!quote && isInitialized && !config.ui.useDexAggregator,
     staleTime: ONE_DAY_IN_MS,
   });
 };

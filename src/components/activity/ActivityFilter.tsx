@@ -85,8 +85,8 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
           value={ids ?? []}
           label={
             ids?.length
-              ? `${ids.length} Strategies Selected`
-              : 'Filter Strategies'
+              ? `${ids.length} strategies selected`
+              : 'Filter strategies'
           }
           filterLabel="Search by ID or Symbol"
           options={allIds.map(({ id, base, quote }) => (
@@ -114,9 +114,9 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
           name="pairs"
           value={pairs ?? []}
           label={
-            pairs?.length ? `${pairs.length} Pairs Selected` : 'Filter Pairs'
+            pairs?.length ? `${pairs.length} pairs selected` : 'Filter pairs'
           }
-          filterLabel="Search by Pair"
+          filterLabel="Search by pair"
           options={allPairs.map(({ pair, base, quote }) => (
             <Option key={pair} value={pair}>
               <TokensOverlap tokens={[base, quote]} size={14} />
@@ -131,10 +131,10 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         value={actions ?? []}
         label={
           actions?.length
-            ? `${actions.length} Actions Selected`
-            : 'Filter Actions'
+            ? `${actions.length} actions selected`
+            : 'Filter actions'
         }
-        filterLabel="Search by Action"
+        filterLabel="Search by action"
         options={allActions.map((action) => (
           <Option key={action} value={action}>
             {activityActionName[action]}

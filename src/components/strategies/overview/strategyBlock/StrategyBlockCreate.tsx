@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link } from 'libs/routing';
-import IconPlus from 'assets/icons/plus.svg?react';
+import AddIcon from 'assets/icons/add.svg?react';
 import { cn } from 'utils/helpers';
 
 type Props = {
@@ -20,7 +20,7 @@ export const StrategyBlockCreate: FC<Props> = ({
       )}
     >
       <div className="grid place-items-center size-72 rounded-full md:size-80 bg-gradient self-end">
-        <IconPlus className="text-main-950 md:p-26 p-24" />
+        <AddIcon className="text-main-950 size-32" />
       </div>
       <h1 className="w-[200px] text-center md:w-[250px] text-24">{title}</h1>
     </Link>

@@ -52,7 +52,7 @@ export default function ModalConfirmPause({
         fullWidth
         data-testid="pause-strategy-btn"
       >
-        Pause Strategy
+        Pause strategy
       </Button>
       <button
         onClick={() => closeModal(id)}

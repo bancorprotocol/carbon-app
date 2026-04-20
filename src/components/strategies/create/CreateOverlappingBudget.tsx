@@ -1,5 +1,4 @@
-import { FC, useEffect } from 'react';
-import { useGetTokenBalance } from 'libs/queries';
+import { FC, useEffect, useMemo } from 'react';
 import {
   isMaxBelowMarket,
   isMinAboveMarket,
@@ -11,44 +10,56 @@ import {
   BudgetDistribution,
 } from 'components/strategies/common/BudgetDistribution';
 import { Token } from 'libs/tokens';
-import { useWagmi } from 'libs/wagmi';
-import { useSearch } from '@tanstack/react-router';
 import { CreateOverlappingOrder } from 'components/strategies/common/types';
 import { isValidRange } from '../utils';
-import { SetOverlapping } from 'libs/routing/routes/trade';
+import {
+  StrategyDirection,
+  TradeOverlappingSearch,
+} from 'libs/routing/routes/trade';
+import { UseQueryResult } from '@tanstack/react-query';
 
 interface Props {
   base: Token;
   quote: Token;
   buy: CreateOverlappingOrder;
   sell: CreateOverlappingOrder;
-  set: SetOverlapping;
+  anchor?: StrategyDirection;
+  budget?: string;
+  baseBalance?: UseQueryResult<string, Error>;
+  quoteBalance?: UseQueryResult<string, Error>;
+  set: (next: TradeOverlappingSearch) => any;
 }
 
-const url = '/trade/overlapping';
 export const CreateOverlappingBudget: FC<Props> = (props) => {
-  const { base, quote, buy, sell, set } = props;
-  const search = useSearch({ from: url });
-  const { anchor, budget } = search;
-  const { user } = useWagmi();
+  const {
+    base,
+    quote,
+    buy,
+    sell,
+    anchor,
+    budget,
+    baseBalance,
+    quoteBalance,
+    set,
+  } = props;
 
-  const baseBalance = useGetTokenBalance(base).data;
-  const quoteBalance = useGetTokenBalance(quote).data;
-
+  const balanceQuery = anchor === 'buy' ? quoteBalance : baseBalance;
   const aboveMarket = isMinAboveMarket(buy);
   const belowMarket = isMaxBelowMarket(sell);
 
   // ERROR
-  const budgetError = (() => {
-    if (anchor === 'buy' && quoteBalance && budget) {
-      const hasError = new SafeDecimal(budget).gt(quoteBalance);
+  const budgetError = useMemo(() => {
+    if (anchor === 'buy' && quoteBalance?.data && budget) {
+      const balance = quoteBalance.data;
+      const hasError = new SafeDecimal(budget).gt(balance);
       if (hasError) return 'Insufficient balance';
     }
-    if (anchor === 'sell' && baseBalance && budget) {
-      const hasError = new SafeDecimal(budget).gt(baseBalance);
+    if (anchor === 'sell' && baseBalance?.data && budget) {
+      const balance = baseBalance.data;
+      const hasError = new SafeDecimal(budget).gt(balance);
       if (hasError) return 'Insufficient balance';
     }
-  })();
+  }, [anchor, baseBalance, budget, quoteBalance]);
 
   useEffect(() => {
     if (!isValidRange(buy.min, sell.max)) return;
@@ -75,6 +86,7 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
           anchor={anchor}
           editType="deposit"
           budget={budget ?? ''}
+          balanceQuery={balanceQuery}
           setBudget={setBudget}
           error={budgetError}
         />
@@ -95,16 +107,15 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
           initialBudget="0"
           withdraw="0"
           deposit={budgetError ? '0' : sell.budget}
-          balance={baseBalance}
-          isSimulator={!user}
+          balanceQuery={baseBalance}
         />
-        {!!user && (
+        {baseBalance?.isEnabled && (
           <BudgetDescription
             token={base}
             initialBudget="0"
             withdraw="0"
             deposit={budgetError ? '0' : sell.budget}
-            balance={baseBalance || '0'}
+            balance={baseBalance?.data || '0'}
           />
         )}
         <BudgetDistribution
@@ -113,17 +124,16 @@ export const CreateOverlappingBudget: FC<Props> = (props) => {
           initialBudget="0"
           withdraw="0"
           deposit={budgetError ? '0' : buy.budget}
-          balance={quoteBalance}
-          isSimulator={!user}
+          balanceQuery={quoteBalance}
           isBuy
         />
-        {!!user && (
+        {quoteBalance?.isEnabled && (
           <BudgetDescription
             token={quote}
             initialBudget="0"
             withdraw="0"
             deposit={budgetError ? '0' : buy.budget}
-            balance={quoteBalance || '0'}
+            balance={quoteBalance?.data || '0'}
           />
         )}
       </article>

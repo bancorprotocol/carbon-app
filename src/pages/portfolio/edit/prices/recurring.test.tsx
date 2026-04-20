@@ -16,7 +16,6 @@ import {
   priceHistoryHandler,
 } from 'libs/testing-library/utils/mock';
 import { EditStrategyDriver } from 'libs/testing-library/drivers/EditStrategyDriver';
-import { toRecurringPricesSearch } from 'libs/routing/routes/strategyEdit';
 import * as balanceQueries from 'libs/queries/chain/balance';
 import { EditPricesStrategyRecurringPage } from './recurring';
 
@@ -52,20 +51,20 @@ const baseBuyOrder = {
 };
 
 const renderPage = async (
-  type: 'editPrices' | 'renew',
+  editType: 'editPrices' | 'renew',
   strategyParams: MockStrategyParams,
 ) => {
   const strategy: Strategy = mockStrategy(strategyParams);
   const { router } = await renderWithRouter({
     component: () => (
       <EditStrategyProvider strategy={strategy}>
-        <EditStrategyLayout editType={type}>
+        <EditStrategyLayout editType={editType}>
           <EditPricesStrategyRecurringPage />
         </EditStrategyLayout>
       </EditStrategyProvider>
     ),
     basePath,
-    search: toRecurringPricesSearch(strategy, type) as any,
+    search: { editType },
     params: { strategyId: strategy.id },
   });
   return { strategy, router };

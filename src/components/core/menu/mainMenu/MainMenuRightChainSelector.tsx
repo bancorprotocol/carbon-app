@@ -53,7 +53,10 @@ export const MainMenuRightChainSelector: FC<Props> = ({ networks }) => {
             <img alt={name} src={logoUrl} className="w-20" />
             <span>{name}</span>
             <IconCheck
-              className={cn('ml-auto', isCurrentNetwork ? '' : 'invisible')}
+              className={cn(
+                'ml-auto size-24',
+                isCurrentNetwork ? '' : 'invisible',
+              )}
             />
           </a>
         );

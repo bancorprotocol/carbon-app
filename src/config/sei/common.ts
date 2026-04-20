@@ -13,7 +13,6 @@ const addresses = {
 
 const popularTokens = [
   addresses.SEI,
-  addresses.USDT,
   addresses.USDC,
   addresses.syUSD,
   addresses.WETH,
@@ -34,7 +33,7 @@ export const commonConfig: AppConfig = {
   ],
   blockedConnectors: ['Tailwind'],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
-  policiesLastUpdated: '27 May, 2024',
+  policiesLastUpdated: '24 Feb, 2026',
   network: {
     name: 'Sei',
     logoUrl: IconSeiLogo,
@@ -62,7 +61,6 @@ export const commonConfig: AppConfig = {
   popularPairs: [
     [addresses.SEI, addresses.WSEI],
     [addresses.SEI, addresses.USDC],
-    [addresses.SEI, addresses.USDT],
   ],
   popularTokens: popularTokens,
   addresses: {
@@ -73,7 +71,6 @@ export const commonConfig: AppConfig = {
       batcher: '0x30dd96D6B693F78730C7C48b6849d9C44CAF39f0',
       vault: '0x773B75CfB146bd5d1095fa9d6d45637f02B05119',
     },
-    openocean: '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64',
   },
   utils: {
     multicall3: {
@@ -92,16 +89,7 @@ export const commonConfig: AppConfig = {
   ],
   tokenLists: [
     {
-      uri: 'https://raw.githubusercontent.com/Seitrace/sei-assetlist/refs/heads/main/assetlist.json',
-      parser: 'tokenSeiListParser',
-    },
-    {
-      uri: 'https://raw.githubusercontent.com/Sei-Public-Goods/sei-assetlist/main/assetlist.json',
-      parser: 'tokenSeiListParser',
-    },
-    {
-      uri: 'https://raw.githubusercontent.com/dragonswap-app/assets/main/tokenlist-sei-mainnet.json',
-      parser: 'tokenDragonswapListParser',
+      uri: '/tokens/sei/list.json',
     },
   ],
   tenderly: {
@@ -137,7 +125,7 @@ export const commonConfig: AppConfig = {
     showCart: true,
     // rewardUrl: 'https://app.merkl.xyz/?chain=1329&protocol=carbon',
     // walkthroughId: '51xep69sd3io',
-    useOpenocean: false, // true,
+    useDexAggregator: false,
     useSeedData: true,
     useEIP7702: true,
   },

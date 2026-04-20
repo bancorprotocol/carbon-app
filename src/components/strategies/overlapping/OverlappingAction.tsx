@@ -1,8 +1,8 @@
 import { FC, ReactNode, SyntheticEvent, useId, useRef } from 'react';
 import { Token } from 'libs/tokens';
-import IconDeposit from 'assets/icons/deposit.svg?react';
-import IconWithdraw from 'assets/icons/withdraw.svg?react';
-import IconChevron from 'assets/icons/chevron.svg?react';
+import VerticalAlignBottomIcon from 'assets/icons/vertical_align_bottom.svg?react';
+import UpgradeIcon from 'assets/icons/upgrade.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import { useGetTokenBalance } from 'libs/queries';
 import { InputBudget, BudgetAction } from '../common/InputBudget';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -70,7 +70,7 @@ export const OverlappingAction: FC<Props> = (props) => {
       >
         <h3 className="text-16 font-medium">Edit Budget</h3>
         <span className="text-12 text-main-0/60">(Optional)</span>
-        <IconChevron className="toggle h-14 w-14" />
+        <KeyboardArrowDownIcon className="toggle size-24" />
       </summary>
       <div className="grid gap-16">
         <p className="text-14 text-main-0/80">
@@ -84,7 +84,7 @@ export const OverlappingAction: FC<Props> = (props) => {
             onChange={() => setAction('deposit')}
             data-testid="action-deposit"
           >
-            <IconDeposit className="size-14" />
+            <VerticalAlignBottomIcon className="size-24" />
             Deposit
           </Radio>
           <Radio
@@ -94,7 +94,7 @@ export const OverlappingAction: FC<Props> = (props) => {
             onChange={() => setAction('withdraw')}
             data-testid="action-withdraw"
           >
-            <IconWithdraw className="size-14" />
+            <UpgradeIcon className="size-24" />
             Withdraw
           </Radio>
         </RadioGroup>

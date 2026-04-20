@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import {
   StrategyDirection,
   TradeAuctionSearch,
@@ -18,15 +18,13 @@ import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeCha
 import { emptyGradientOrder } from 'components/strategies/common/utils';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
-import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
 import { cn } from 'utils/helpers';
 import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/auction';
 export const TradeAuction = () => {
-  const { base, quote } = useTradeCtx();
-  const { marketPrice } = useStrategyMarketPrice({ base, quote });
+  const { base, quote, marketPrice } = useStrategyFormCtx();
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
 
@@ -72,12 +70,7 @@ export const TradeAuction = () => {
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <StrategyChartHistory
-          base={base}
-          quote={quote}
-          direction={direction}
-          {...orders}
-        >
+        <StrategyChartHistory direction={direction} {...orders}>
           <D3EditLine
             drawing={drawing}
             color={direction}

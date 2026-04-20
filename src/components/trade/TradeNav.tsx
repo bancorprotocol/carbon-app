@@ -3,9 +3,9 @@ import IconRecurring from 'assets/icons/recurring.svg?react';
 import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
-import IconChevron from 'assets/icons/chevron.svg?react';
 import IconSlow from 'assets/icons/slow.svg?react';
 import IconFast from 'assets/icons/fast.svg?react';
+import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 
 import { Link, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
@@ -35,9 +35,9 @@ const types = [
       },
       {
         id: 'fullRange',
-        name: 'Full Range',
+        name: 'Full range',
         to: '/trade/overlapping' as const,
-        search: { fullRange: true },
+        search: { preset: 'Infinity' },
         icon: <IconOverlapping className="hidden md:block size-20" />,
       },
       {
@@ -55,21 +55,21 @@ const types = [
     strategies: [
       {
         id: 'limitBuy',
-        name: 'Limit Buy',
+        name: 'Limit buy',
         to: '/trade/disposable' as const,
         search: { settings: 'limit' as const, direction: 'buy' as const },
         icon: <IconDisposable className="hidden md:block size-20" />,
       },
       {
         id: 'limitSell',
-        name: 'Limit Sell',
+        name: 'Limit sell',
         to: '/trade/disposable' as const,
         search: { settings: 'limit' as const },
         icon: <IconDisposable className="hidden md:block size-20" />,
       },
       {
         id: 'recurringLimit',
-        name: 'Recurring Limit',
+        name: 'Recurring limit',
         to: '/trade/recurring' as const,
         search: { buySettings: 'limit', sellSettings: 'limit' } as const,
         icon: <IconRecurring className="hidden md:block size-20" />,
@@ -82,21 +82,21 @@ const types = [
     strategies: [
       {
         id: 'rangeBuy',
-        name: 'Range Buy',
+        name: 'Range buy',
         to: '/trade/disposable' as const,
         search: { settings: 'range' as const, direction: 'buy' as const },
         icon: <IconRange className="hidden md:block size-20" />,
       },
       {
         id: 'rangeSell',
-        name: 'Range Sell',
+        name: 'Range sell',
         to: '/trade/disposable' as const,
         search: { settings: 'range' as const },
         icon: <IconRange className="hidden md:block size-20" />,
       },
       {
         id: 'recurringRange',
-        name: 'Recurring Range',
+        name: 'Recurring range',
         to: '/trade/recurring' as const,
         search: { buySettings: 'range', sellSettings: 'range' } as const,
         icon: <IconRecurring className="hidden md:block size-20" />,
@@ -189,7 +189,7 @@ export const TradeNav = () => {
                   {name}
                 </p>
               ))}
-              <IconChevron className="self-center justify-self-end size-16 hidden 2xl:block -rotate-90" />
+              <KeyboardArrowDownIcon className="self-center justify-self-end size-24 hidden 2xl:block -rotate-90" />
             </button>
           )}
         >

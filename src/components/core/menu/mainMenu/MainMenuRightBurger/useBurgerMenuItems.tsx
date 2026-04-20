@@ -65,7 +65,7 @@ export const useBurgerMenuItems = () => {
     if (config.ui.showTerms) {
       mainItems.push(
         <Link key="terms" role="menuitem" className={menuitemClass} to="/terms">
-          Terms of Use
+          Terms of use
         </Link>,
       );
     }
@@ -77,7 +77,7 @@ export const useBurgerMenuItems = () => {
           className={menuitemClass}
           to="/privacy"
         >
-          Privacy Policy
+          Privacy policy
         </Link>,
       );
     }
@@ -151,7 +151,7 @@ export const useBurgerMenuItems = () => {
         className={menuitemClass}
         to={externalLinks.techDocs}
       >
-        Tech Docs
+        Tech docs
       </NewTabLink>,
       <NewTabLink
         key="litepaper"
@@ -178,7 +178,7 @@ export const useBurgerMenuItems = () => {
           className={menuitemClass}
           to={externalLinks.simulatorRepo}
         >
-          Simulator Repo
+          Simulator repo
         </NewTabLink>,
       );
     }
@@ -189,7 +189,7 @@ export const useBurgerMenuItems = () => {
         className={menuitemClass}
         to={externalLinks.duneDashboard}
       >
-        Dune Dashboard
+        Dune dashboard
       </NewTabLink>;
     }
     menuMap.set('resources', resourcesItems);

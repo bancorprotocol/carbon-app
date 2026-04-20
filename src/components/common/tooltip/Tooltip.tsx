@@ -7,7 +7,7 @@ import {
   useId,
   useMemo,
 } from 'react';
-import IconTooltip from 'assets/icons/tooltip.svg?react';
+import InfoIcon from 'assets/icons/info.svg?react';
 import { cn } from 'utils/helpers';
 import {
   autoPlacement,
@@ -31,7 +31,7 @@ export const Tooltip: FC<Props> = ({
   className = '',
   disabled = false,
   placement,
-  children = <IconTooltip className="size-18" />,
+  children = <InfoIcon className="size-16 text-main-0/60" />,
 }) => {
   const anchorId = useId();
   const popoverId = useId();

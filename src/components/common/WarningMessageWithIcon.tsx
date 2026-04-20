@@ -1,4 +1,4 @@
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import { FC, ReactNode } from 'react';
 import { Tooltip } from './tooltip/Tooltip';
 import { cn } from 'utils/helpers';
@@ -26,7 +26,7 @@ export const Warning: FC<Props> = (props) => {
       )}
       data-testid={props['data-testid']}
     >
-      <IconWarning className="size-12" />
+      <WarningIcon className="size-24" />
       <span className="flex-1">{children ?? message}</span>
     </output>
   );
@@ -37,9 +37,9 @@ export const WarningTooltip: FC<Props> = (props) => {
   return (
     <Tooltip element={children || message}>
       <span>
-        <IconWarning
+        <WarningIcon
           className={cn(
-            'size-12',
+            'size-24',
             isError
               ? 'error-message text-error'
               : 'warning-message text-warning',

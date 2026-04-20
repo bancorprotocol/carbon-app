@@ -1,6 +1,6 @@
-import IconDisconnect from 'assets/icons/disconnect.svg?react';
-import IconWarning from 'assets/icons/warning.svg?react';
-import IconCopy from 'assets/icons/copy.svg?react';
+import UploadIcon from 'assets/icons/upload.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
+import ContentCopyIcon from 'assets/icons/content_copy.svg?react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useMenuCtx } from 'components/common/dropdownMenu/utils';
 import { useWagmi } from 'libs/wagmi';
@@ -35,18 +35,18 @@ export const MainMenuRightWallet: FC = () => {
   }, [isSupportedNetwork, isUserBlocked, user]);
 
   const buttonText = useMemo(() => {
-    if (isUserBlocked) return 'Wallet Blocked';
-    if (!isSupportedNetwork) return 'Wrong Network';
+    if (isUserBlocked) return 'Wallet blocked';
+    if (!isSupportedNetwork) return 'Wrong network';
     if (!user) {
-      if (location.pathname === '/') return 'Launch App';
-      return 'Connect Wallet';
+      if (location.pathname === '/') return 'Launch app';
+      return 'Connect wallet';
     }
     return shortenString(ensName || user);
   }, [ensName, isSupportedNetwork, isUserBlocked, location.pathname, user]);
 
   const buttonIcon = useMemo(() => {
-    if (isUserBlocked) return <IconWarning className={iconClass} />;
-    if (!isSupportedNetwork) return <IconWarning className={iconClass} />;
+    if (isUserBlocked) return <WarningIcon className={iconClass} />;
+    if (!isSupportedNetwork) return <WarningIcon className={iconClass} />;
     if (!user) return;
     return (
       <WalletIcon
@@ -124,8 +124,8 @@ const ConnectedMenu: FC = () => {
             className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-main-900/40"
             onClick={copyAddress}
           >
-            <IconCopy className="w-16" />
-            <span>Copy Address</span>
+            <ContentCopyIcon className="size-24" />
+            <span>Copy address</span>
           </button>
         </>
       ) : (
@@ -134,7 +134,7 @@ const ConnectedMenu: FC = () => {
           className="rounded-sm text-error/80 hover:text-error flex w-full p-8 hover:bg-main-900/40"
           onClick={switchNetwork}
         >
-          Switch Network
+          Switch network
         </button>
       )}
       <button
@@ -142,7 +142,7 @@ const ConnectedMenu: FC = () => {
         className="rounded-sm flex w-full items-center gap-8 p-8 hover:bg-main-900/40"
         onClick={signout}
       >
-        <IconDisconnect className="w-16" />
+        <UploadIcon className="size-24" />
         <span>Disconnect</span>
       </button>
     </div>

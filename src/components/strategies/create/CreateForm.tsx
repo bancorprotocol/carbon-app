@@ -24,10 +24,14 @@ export const CreateForm: FC<FormProps> = (props) => {
 
   const [animating, setAnimating] = useState(false);
 
-  const { isLoading, isProcessing, isAwaiting, createStrategy } =
-    useCreateStrategy({ base, quote, buy, sell });
+  const { isProcessing, isAwaiting, createStrategy } = useCreateStrategy({
+    base,
+    quote,
+    buy,
+    sell,
+  });
 
-  const loading = isLoading || isProcessing || isAwaiting;
+  const loading = isProcessing || isAwaiting;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
 
   const isDisabled = (form: HTMLFormElement) => {
@@ -104,7 +108,7 @@ export const CreateForm: FC<FormProps> = (props) => {
                 onClick={addToCart}
                 data-testid="add-strategy-to-cart"
               >
-                Add to Cart
+                Add to cart
               </Button>
             )}
             <Button
@@ -128,7 +132,7 @@ export const CreateForm: FC<FormProps> = (props) => {
             loadingChildren={loadingChildren}
             onClick={openConnect}
           >
-            Connect Wallet
+            Connect wallet
           </Button>
         )}
       </footer>

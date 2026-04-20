@@ -6,10 +6,10 @@ import {
 } from 'components/strategies/common/utils';
 import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOrder } from 'components/strategies/create/CreateOrder';
-import { getDefaultOrder } from 'components/strategies/create/utils';
+import { getTradeOrder } from 'components/strategies/create/utils';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing';
 import {
@@ -23,17 +23,26 @@ import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeCha
 import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
+import { useGetTokenBalance } from 'libs/queries';
 
 const url = '/trade/disposable';
 export const TradeDisposable = () => {
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
   const marketQuery = useMarketPrice({ base, quote });
   const marketPrice = search.marketPrice ?? marketQuery.marketPrice?.toString();
-
   const direction = search.direction || 'sell';
-  const order = getDefaultOrder(direction, search, marketPrice);
+  const budgetToken = direction === 'buy' ? quote : base;
+  const balanceQuery = useGetTokenBalance(budgetToken);
+
+  const order = getTradeOrder(
+    {
+      direction,
+      ...search,
+    },
+    marketPrice,
+  );
   const setSearch = useCallback(
     (next: TradeDisposableSearch) => {
       navigate({
@@ -47,11 +56,23 @@ export const TradeDisposable = () => {
   );
 
   const setDirection = (direction: StrategyDirection) => {
-    setSearch({ direction, budget: undefined, min: undefined, max: undefined });
+    setSearch({
+      direction,
+      budget: undefined,
+      min: undefined,
+      max: undefined,
+      presetMin: undefined,
+      presetMax: undefined,
+    });
   };
   const setSettings = (settings: StrategySettings) => {
-    const { min, max } = getDefaultOrder(direction, { settings }, marketPrice);
-    setSearch({ settings, min, max });
+    setSearch({
+      settings,
+      min: undefined,
+      max: undefined,
+      presetMin: undefined,
+      presetMax: undefined,
+    });
   };
 
   const updatePrices: OnPriceUpdates = useCallback(
@@ -85,8 +106,6 @@ export const TradeDisposable = () => {
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
         <StrategyChartHistory
-          base={base}
-          quote={quote}
           buy={buy}
           sell={sell}
           direction={search.direction ?? 'sell'}
@@ -108,6 +127,7 @@ export const TradeDisposable = () => {
             quote={quote}
             direction={search.direction}
             order={order}
+            balanceQuery={balanceQuery}
             setOrder={setSearch}
             warnings={[outSideMarket]}
             setDirection={setDirection}

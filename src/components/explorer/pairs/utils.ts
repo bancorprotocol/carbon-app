@@ -19,7 +19,7 @@ export type PairFilter = keyof PairFilterMap;
 export const pairSort = {
   pairAsc: 'Pair (A->Z)',
   pairDesc: 'Pair (Z->A)',
-  trades: 'Total Trades',
+  trades: 'Total trades',
   trades24h: 'Trades (24h)',
   liquidity: 'Liquidity',
   strategyAmount: 'Strategies',

@@ -1,0 +1,1045 @@
+{
+  "name": "Bancor",
+  "keywords": ["bancor"],
+  "tokens": [
+    {
+        "name": "SEI",
+        "symbol": "SEI",
+        "decimals": 18,
+        "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "logoURI": "https://cdn.sei.io/assets/Sei_Symbol_Gradient.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "WSEI",
+        "symbol": "WSEI",
+        "decimals": 18,
+        "address": "0xE30feDd158A2e3b13e9badaeABaFc5516e95e8C7",
+        "logoURI": "https://cdn.sei.io/assets/Sei_Symbol_Gradient.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "GPT Wars",
+        "address": "0xcB0DdC112EF317271266c83D7179Bf9186b9C658",
+        "symbol": "GPTW",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/GPTW_LOGO.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Master",
+        "address": "0x9b31ad7d1eE5a37c64a5972275C5F09fFfbC2C6f",
+        "symbol": "SENSEI",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/Master.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SEITAN",
+        "address": "0xDF3D7DD2848f491645974215474c566E79F2e538",
+        "symbol": "S8N",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/SEITAN.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SEIFUN",
+        "address": "0xd0D622dE44A521404dc50e4ABef08dE82269Dcbf",
+        "symbol": "SFN",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/seifun.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Burger",
+        "address": "0xF63980e3818607c0797e994cfD34c1c592968469",
+        "symbol": "SUPERSEIZ",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/Burger.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SEIYAN",
+        "address": "0x5f0E07dFeE5832Faa00c63F2D33A0D79150E8598",
+        "symbol": "SEIYAN",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/SEIYAN.png",
+        "chainId": 1329
+    },
+    {
+        "name": "RED",
+        "address": "0xD049e189ACC1873BCa8c0a314d6B26835684Fb89",
+        "symbol": "RED",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/RED.png",
+        "chainId": 1329
+    },
+    {
+        "name": "xSEIYAN",
+        "address": "0x9D9b12c69555669966D36596C56061B6Cc0A937D",
+        "symbol": "xSEIYAN",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/xSEIYAN.png",
+        "chainId": 1329
+    },
+    {
+        "name": "MILLI",
+        "address": "0x95597EB8D227a7c4B4f5E807a815C5178eE6dBE1",
+        "symbol": "MILLI",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/MILLI.png",
+        "chainId": 1329
+    },
+    {
+        "name": "iSEI",
+        "address": "0x5Cf6826140C1C56Ff49C808A1A75407Cd1DF9423",
+        "symbol": "iSEI",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/iSEI.png",
+        "chainId": 1329
+    },
+    {
+        "name": "USD Coin (Axelar)",
+        "address": "0xa855562b0644FaDFd8F04fC3e2eD0B69577EB816",
+        "symbol": "USDC.axl",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDCoin.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Osmosis",
+        "address": "0xBdE3bD155613752065C52059f8B2F72f506C4374",
+        "symbol": "OSMO",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/Osmosis.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Atom (Osmosis)",
+        "address": "0x0E8440025B74605151F5644b93AA861f35906Bec",
+        "symbol": "ATOM",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/Atom.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Atom",
+        "address": "0xaF5fd7Df92B103B40b9Ed8D0d002696a5436E4D8",
+        "symbol": "ATOM",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/Atom.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped Ether (Wormhole)",
+        "address": "0x4636DC75851c28561C4A117Be362Bedd7f9Ad8f8",
+        "symbol": "WETH",
+        "decimals": 8,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/WrappedEther(Wormhole).png",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped USD Coin (Wormhole from Ethereum)",
+        "address": "0xa272ee55434655970f7226c95eF0068a22994B84",
+        "symbol": "USDC.eth",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDCoin.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped Tether USD (Wormhole from Ethereum)",
+        "address": "0x3b5F977957CF3f62a9d357F302311e8B4ab8608a",
+        "symbol": "USDT.eth",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDT.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped BTC (Wormhole from Ethereum)",
+        "address": "0xe369ddC65Ec947FCB10262AA0E08C3fB9823001a",
+        "symbol": "WBTC",
+        "decimals": 8,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/WrappedBTC(WormholefromEthereum).svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped USD Coin (Wormhole from Arbitrum)",
+        "address": "0xc60cb642EF30EbaF8D625E38BD73534913388da7",
+        "symbol": "USDC.arb",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDCoin.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped Ether (Wormhole from Arbitrum)",
+        "address": "0x28417c04dfB49Ec881051B8930d74f8C740Eb688",
+        "symbol": "WETHar",
+        "decimals": 8,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/WrappedEther(Wormhole).png",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped USD Coin (Wormhole from Polygon)",
+        "address": "0xA186cCd543732B1E6515e8f47AAAe989bA289665",
+        "symbol": "USDC.matic",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDCoin.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped USD Coin (Wormhole from Optimism)",
+        "address": "0x6EBC03CAb85815bc59a4286882c9Bad88a9A09fF",
+        "symbol": "USDC.op",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDCoin.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped USD Coin (Wormhole from Solana)",
+        "address": "0x8eEDF32a4FC6fB78DDF231Cd3CcF6b7B8dF9D99d",
+        "symbol": "USDC.sol",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDCoin.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped USD Coin (Wormhole from BSC)",
+        "address": "0x2a5DC09df34c1276162b95415a38E5519E345c7F",
+        "symbol": "USDC.bsc",
+        "decimals": 8,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDCoin.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped Ether (Wormhole from BSC)",
+        "address": "0x9D128bE5d9C96A4A574A9bd277D7c18e331194bd",
+        "symbol": "WETHbs",
+        "decimals": 8,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/WrappedEther(Wormhole).png",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped USDT (Wormhole from BSC)",
+        "address": "0xDA9edB031e3dEF95D0350366718e02a1216DB0ED",
+        "symbol": "USDT.bsc",
+        "decimals": 8,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDT.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "PKS",
+        "address": "0x24E4d0Af5a6b1C3BD336Dd60dEEfa64C704b19B7",
+        "symbol": "PKS",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/PKS.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "USDT0",
+        "address": "0x9151434b16b9763660705744891fA906F660EcC5",
+        "symbol": "USDT",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/usdt0.png",
+        "chainId": 1329
+    },
+    {
+        "name": "IBC Bridged USDT",
+        "address": "0xB75D0B03c06A926e488e2659DF1A861F860bD3d1",
+        "symbol": "kavaUSDT",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/kavaUSDT.png",
+        "chainId": 1329
+    },
+    {
+        "name": "USDC via Noble",
+        "address": "0x3894085Ef7Ff0f0aeDf52E2A2704928d1Ec074F1",
+        "symbol": "USDC.n",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDCoin.n.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "USDC",
+        "address": "0xe15fC38F6D8c56aF07bbCBe3BAf5708A2Bf42392",
+        "symbol": "USDC",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/USDCoin.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Gokucity Token",
+        "address": "0x019EA1347BD9bc912c0221d24983a74E9386B794",
+        "symbol": "GOKU",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/GOKU.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Bridged Wrapped Ether (Stargate)",
+        "address": "0x160345fC359604fC6e70E3c5fAcbdE5F7A9342d8",
+        "symbol": "WETH",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/BridgedWrappedEther(Stargate).png",
+        "chainId": 1329
+    },
+    {
+        "name": "Seibacca",
+        "address": "0x3eA30C06F4BA6f696D3ba4b660C39DA96ed8f686",
+        "symbol": "SBC",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/Seibacca.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Pepei",
+        "address": "0x9C367a272f8E318D10118C6367fD69DEf30e430E",
+        "symbol": "PEPEI",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/Pepei.png",
+        "chainId": 1329
+    },
+    {
+        "name": "ROCK",
+        "address": "0x83c82f0f959aD3eff528eE513b43808Aa53f4B37",
+        "symbol": "ROCK",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/zenrock.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "fastUSD",
+        "address": "0x37a4dD9CED2b19Cfe8FAC251cd727b5787E45269",
+        "symbol": "fastUSD",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/fastUSD.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Staked fastUSD",
+        "address": "0xdf77686D99667Ae56BC18f539B777DBc2BBE3E9F",
+        "symbol": "sfastUSD",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/sfastUSD.png",
+        "chainId": 1329
+    },
+    {
+        "name": "ForU AI",
+        "address": "0x04f0542fb2ec871A6e28156039d71fD9a9e85a92",
+        "symbol": "FORU",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/foruaigenesis.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Frax USD",
+        "address": "0x80Eede496655FB9047dd39d9f418d5483ED600df",
+        "symbol": "frxUSD",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/frxUSD.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Staked Frax USD",
+        "address": "0x5Bff88cA1442c2496f7E475E9e7786383Bc070c0",
+        "symbol": "sfrxUSD",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/sfrxUSD.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Frax Ether",
+        "address": "0x43eDD7f3831b08FE70B7555ddD373C8bF65a9050",
+        "symbol": "frxETH",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/frxETH.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Staked Frax Ether",
+        "address": "0x3Ec3849C33291a9eF4c5dB86De593EB4A37fDe45",
+        "symbol": "sfrxETH",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/sfrxETH.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Frax Shares",
+        "address": "0x64445f0aecC51E94aD52d8AC56b7190e764E561a",
+        "symbol": "FXS",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/FXS.png",
+        "chainId": 1329
+    },
+    {
+        "name": "MOOZ",
+        "address": "0x65856bb190955c72d4fd9b1b5700b29067018492",
+        "symbol": "MOOZ",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/MOOZ.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Fiamma BTC",
+        "address": "0x60C230c38aF6d86b0277a98a1CAeAA345a7B061F",
+        "symbol": "FIABTC",
+        "decimals": 8,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/FiaBTC.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Ondo U.S. Dollar Yield",
+        "address": "0x54cD901491AeF397084453F4372B93c33260e2A6",
+        "symbol": "USDY",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/Seitrace/sei-assetlist/main/images/usdy.svg",
+        "chainId": 1329
+    },
+    {
+        "name": "Dragonswap Token",
+        "address": "0x0a526e425809aEA71eb279d24ae22Dee6C92A4Fe",
+        "symbol": "DRG",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x0a526e425809aEA71eb279d24ae22Dee6C92A4Fe/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Staked DragonSwap Token",
+        "address": "0xb71886c52D754CF2B1D3d866c7Cfe9eeC01418a7",
+        "symbol": "sDRG",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xb71886c52D754CF2B1D3d866c7Cfe9eeC01418a7/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Wrapped BTC",
+        "address": "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+        "symbol": "WBTC",
+        "decimals": 8,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x0555E30da8f98308EdB960aa94C0Db47230d2B9c/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "MILLI",
+        "address": "0xF91fBe296b0121DA410f885BfA39fad078407234",
+        "symbol": "MILLI",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xF91fBe296b0121DA410f885BfA39fad078407234/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Popo The Cat",
+        "address": "0xC18b6a15FB0ceaf5eb18696EeFCb5bc7b9107149",
+        "symbol": "POPO",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xC18b6a15FB0ceaf5eb18696EeFCb5bc7b9107149/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SeiBallz",
+        "address": "0xC6BC81A0E287cC8103cC002147a9d76caE4cD6E5",
+        "symbol": "BALLZ",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xc6bc81a0e287cc8103cc002147a9d76cae4cd6e5/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Seipex Credits",
+        "address": "0x3A0A7a3cA25C17D15E8d51332fb25BFEA274d107",
+        "symbol": "SPEX",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x3A0A7a3cA25C17D15E8d51332fb25BFEA274d107/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SeiPepe",
+        "address": "0x17fe1101aF2dAB1aF0317d1ad1BD66cD06Da4B5c",
+        "symbol": "SeiPepe",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x17fe1101aF2dAB1aF0317d1ad1BD66cD06Da4B5c/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "OpenSei",
+        "address": "0x99B85E9dFFfed176E46a3bE009ab9f9FE6AE59ed",
+        "symbol": "OS",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x99B85E9dFFfed176E46a3bE009ab9f9FE6AE59ed/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "$NINJA",
+        "address": "0x6B92994f5d5D7D36608BDeD50724282F1E58FBB1",
+        "symbol": "NINJA",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x6B92994f5d5D7D36608BDeD50724282F1E58FBB1/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "JOG",
+        "address": "0x49d1bBfaf4038D5E53124aEdB6809CEDcA3D28A5",
+        "symbol": "JOG",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x49d1bBfaf4038D5E53124aEdB6809CEDcA3D28A5/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "F you Roy",
+        "address": "0x9134d733AaC991b96E899af657C717276A627E32",
+        "symbol": "FROY",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x9134d733AaC991b96E899af657C717276A627E32/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SEIYUN COIN",
+        "address": "0xECf7f1EFC9620A911339619C91c9FA0f71e0600E",
+        "symbol": "SEIYUN",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xECf7f1EFC9620A911339619C91c9FA0f71e0600E/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "jay jeo",
+        "address": "0xf5020DC8eC5e0ef8869Ecc3044933356650b61Cf",
+        "symbol": "JAYJEO",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xf5020DC8eC5e0ef8869Ecc3044933356650b61Cf/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "INSPECTOR",
+        "address": "0x6291148AE49e0f0d847bB97C4E060E49D87638bA",
+        "symbol": "REX",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x6291148AE49e0f0d847bB97C4E060E49D87638bA/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "CHUCKCOIN",
+        "address": "0xb8D41DB605A3258010D531429E85b13C7abdE579",
+        "symbol": "CHUCK",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xb8D41DB605A3258010D531429E85b13C7abdE579/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "gonad",
+        "address": "0xd78BE621436e69C81E4d0e9f29bE14C5EC51E6Ae",
+        "symbol": "$gonad",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xd78BE621436e69C81E4d0e9f29bE14C5EC51E6Ae/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Sei Usagi",
+        "address": "0x5c85726f71aFB7e26d769fB559Ce0168CE1F8f4E",
+        "symbol": "USA",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x5c85726f71aFB7e26d769fB559Ce0168CE1F8f4E/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SEIS AI",
+        "address": "0xE94a7c93A00B12E803166D8e355F617B920DD48e",
+        "symbol": "$SEIS",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xE94a7c93A00B12E803166D8e355F617B920DD48e/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SeiWhale",
+        "address": "0x67DA7010C6c231AD620E3940e707adB6c1a08f23",
+        "symbol": "SeiWhale",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x67DA7010C6c231AD620E3940e707adB6c1a08f23/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SAKEINU",
+        "address": "0xe85dC0CCECa105755753Fef452C091dEF5324138",
+        "symbol": "SAKE",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xe85dC0CCECa105755753Fef452C091dEF5324138/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "BOOBLE",
+        "address": "0xF20903d034B12a7266055FE97cEBdB9199Ec6925",
+        "symbol": "BOOBLE",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xF20903d034B12a7266055FE97cEBdB9199Ec6925/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Anome USD",
+        "address": "0x0Bbda0F76e205Fc6A160B90a09975fa443B3fE44",
+        "symbol": "USDA",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x0Bbda0F76e205Fc6A160B90a09975fa443B3fE44/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Synnax Stablecoin",
+        "address": "0x059A6b0bA116c63191182a0956cF697d0d2213eC",
+        "symbol": "syUSD",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x059A6b0bA116c63191182a0956cF697d0d2213eC/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "DogWithHoodie",
+        "address": "0xB629b01A0b3Be5fDab174464507B37C67c3c6084",
+        "symbol": "HOOD",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xB629b01A0b3Be5fDab174464507B37C67c3c6084/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Sei Bitch",
+        "address": "0x646E178a05B4Cb4f2b36D04Bd02767CFeed730CA",
+        "symbol": "BITCH",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x646E178a05B4Cb4f2b36D04Bd02767CFeed730CA/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Seiro",
+        "address": "0xC66a9B784C0FE8c2Ef7dDaBFacCC6c37b15e73AA",
+        "symbol": "SEIRO",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xC66a9B784C0FE8c2Ef7dDaBFacCC6c37b15e73AA/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "CookOnSEI",
+        "address": "0x69e48cE9CF965aCc1DE2aD5ad2FdbC3Bdb51509b",
+        "symbol": "COOK",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x69e48cE9CF965aCc1DE2aD5ad2FdbC3Bdb51509b/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Sei What?",
+        "address": "0x597f3D8B4e826806915C9158fb0D700367117D7f",
+        "symbol": "What?",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x597f3D8B4e826806915C9158fb0D700367117D7f/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Mushvro",
+        "address": "0x7950C5Fbd48F6BC3555D1dAE2C03e0Ea5Eb987dc",
+        "symbol": "VROS",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x7950C5Fbd48F6BC3555D1dAE2C03e0Ea5Eb987dc/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Sei Less",
+        "address": "0x8c5529ad032c48bc6413Df8e8dC83D26Dc680079",
+        "symbol": "LESS",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x8c5529ad032c48bc6413Df8e8dC83D26Dc680079/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "LORD SHISHO",
+        "address": "0xd0C7EdF2109bE009364ac3DB76C6fE8a75728657",
+        "symbol": "SHISHO",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xd0C7EdF2109bE009364ac3DB76C6fE8a75728657/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "CHIP$ on SEI",
+        "address": "0xBd82f3bfE1dF0c84faEC88a22EbC34C9A86595dc",
+        "symbol": "CHIPS",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xBd82f3bfE1dF0c84faEC88a22EbC34C9A86595dc/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "SHENRON",
+        "address": "0x0DD9e6A6AEb91f1e3596F69d5443b6ca2e864896",
+        "symbol": "SHENRN",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x0DD9e6A6AEb91f1e3596F69d5443b6ca2e864896/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Yoshi",
+        "address": "0x40ff962cc119AA9fB5380D316050986805e1a681",
+        "symbol": "YOSHI",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x40ff962cc119AA9fB5380D316050986805e1a681/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Wilson",
+        "address": "0x962Aae191622498BcA205c1c1B73E59aC7d295f2",
+        "symbol": "WILSON",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x962Aae191622498BcA205c1c1B73E59aC7d295f2/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "KOSEI 🔴💨",
+        "address": "0x57fBA850EfcA7c72c270A252383767D741C3017F",
+        "symbol": "KOSEI",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x57fBA850EfcA7c72c270A252383767D741C3017F/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "WAIT",
+        "address": "0x00bc9aF972B5fb3b7fA04827bD3C17d4599BAd8b",
+        "symbol": "WAIT",
+        "decimals": 6,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x00bc9aF972B5fb3b7fA04827bD3C17d4599BAd8b/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "POCHITA",
+        "address": "0xCF40ACBed3f6307C33bF00680c9eDaE8F7d789fF",
+        "symbol": "POCHITA",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xCF40ACBed3f6307C33bF00680c9eDaE8F7d789fF/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Froggy",
+        "address": "0xF9BDbF259eCe5ae17e29BF92EB7ABd7B8b465Db9",
+        "symbol": "Frog",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xF9BDbF259eCe5ae17e29BF92EB7ABd7B8b465Db9/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Official Trump",
+        "address": "0xea3910f1C6E687B59835885904A2FD1944B51Ec6",
+        "symbol": "TRUMP",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xea3910f1C6E687B59835885904A2FD1944B51Ec6/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Fishwar",
+        "address": "0x805679729Df385815C57c24B20f4161BD34B655f",
+        "symbol": "FISHW",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x805679729Df385815C57c24B20f4161BD34B655f/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Grand Gangsta City",
+        "address": "0x58E11d8ED38a2061361e90916540c5c32281A380",
+        "symbol": "GGC",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x58E11d8ED38a2061361e90916540c5c32281A380/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "APO",
+        "address": "0x5b8203e65aA5Be3F1CF53FD7fa21b91BA4038ECC",
+        "symbol": "APO",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x5b8203e65aA5Be3F1CF53FD7fa21b91BA4038ECC/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "MAD",
+        "address": "0xC141153C69F28BE65469c98e318872911587ebEc",
+        "symbol": "MAD",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xC141153C69F28BE65469c98e318872911587ebEc/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "aUSD",
+        "address": "0x049EAa1B2C9934aaAcC12a141484eEfd62867653",
+        "symbol": "aUSD",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x049EAa1B2C9934aaAcC12a141484eEfd62867653/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "aMSTR",
+        "address": "0x7D330358F0bE21fEeb751d0622ffeE04E25d7Dfa",
+        "symbol": "aMSTR",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x7D330358F0bE21fEeb751d0622ffeE04E25d7Dfa/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Raiin",
+        "address": "0x481FE356DF88169f5F38203Dd7f3C67B7559FDa5",
+        "symbol": "RAIIN",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x481FE356DF88169f5F38203Dd7f3C67B7559FDa5/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "GIGA SONIC",
+        "address": "0xA1207b84980A4A56A75b450500875272AD9630a0",
+        "symbol": "GIGAS",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xA1207b84980A4A56A75b450500875272AD9630a0/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "BULLX",
+        "address": "0x4605232eA642a328bdC036F2EbA9B8C4c59B6CF8",
+        "symbol": "BULLX",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x4605232eA642a328bdC036F2EbA9B8C4c59B6CF8/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Splashing SEI",
+        "address": "0xC257361320F4514D91c05F461006CE6a0300E2d2",
+        "symbol": "spSEI",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xC257361320F4514D91c05F461006CE6a0300E2d2/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "BOREDTOPIA",
+        "address": "0x30a419440D557bD8B28cF7a0cf26A2bF94B97308",
+        "symbol": "BCT",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x30a419440D557bD8B28cF7a0cf26A2bF94B97308/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Tea-REX",
+        "address": "0xedf7732991B3De8F46fb97dcD4c5CdB28E6aD859",
+        "symbol": "TReX",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0xedf7732991B3De8F46fb97dcD4c5CdB28E6aD859/logo.png",
+        "chainId": 1329
+    },
+    {
+        "name": "Infinity Games",
+        "address": "0x76D469a747327EE2de4FbdF50d59DdD1145683e6",
+        "symbol": "INFY",
+        "decimals": 18,
+        "logoURI": "https://raw.githubusercontent.com/dragonswap-app/assets/main/logos/0x76D469a747327EE2de4FbdF50d59DdD1145683e6/logo.png",
+        "chainId": 1329
+    },
+    {
+        "address": "0x008c8C362Cd46a9E41957cc11Ee812647233dFF1",
+        "decimals": 18,
+        "symbol": "YKP",
+        "name": "Yakapie",
+        "chainId": 1329
+    },
+    {
+        "address": "0x08c45398Db3Ba83869C4CE8c15e777B5ebd075Fe",
+        "decimals": 18,
+        "symbol": "SYN",
+        "name": "SynnaxUSD",
+        "chainId": 1329
+    },
+    {
+        "address": "0x1430eB4D5865eC9a8b1D6f58BF7657d78CeCf458",
+        "decimals": 18,
+        "symbol": "NTHP",
+        "name": "Nthpower",
+        "chainId": 1329
+    },
+    {
+        "address": "0x3140E3ead4943A1e603CCaC577B50E9889AB27f3",
+        "decimals": 18,
+        "symbol": "SUPERSEIZ",
+        "name": "Burger",
+        "chainId": 1329
+    },
+    {
+        "address": "0x34a8bB445004E47d1a65573A2c085cE6D134f815",
+        "decimals": 18,
+        "symbol": "SENSEI",
+        "name": "Master",
+        "chainId": 1329
+    },
+    {
+        "address": "0x490736a46aaBa689Db5265510B5C53aF4c23DEd4",
+        "decimals": 6,
+        "symbol": "HAPE",
+        "name": "HappyApe",
+        "chainId": 1329
+    },
+    {
+        "address": "0x51121BCAE92E302f19D06C193C95E1f7b81a444b",
+        "decimals": 18,
+        "symbol": "YAKA",
+        "name": "YAKA",
+        "chainId": 1329
+    },
+    {
+        "address": "0x51c8F5D0305Ac6880B775eEDD217E400485c6A19",
+        "decimals": 18,
+        "symbol": "NAPCAT",
+        "name": "NAPCAT",
+        "chainId": 1329
+    },
+    {
+        "address": "0x541FD749419CA806a8bc7da8ac23D346f2dF8B77",
+        "decimals": 18,
+        "symbol": "SolvBTC",
+        "name": "SolvBTC",
+        "chainId": 1329
+    },
+    {
+        "address": "0x5aAa55A1E7b9457576F750CaeF01fBCa8441ca7C",
+        "decimals": 18,
+        "symbol": "Blueprint",
+        "name": "Blueprint",
+        "chainId": 1329
+    },
+    {
+        "address": "0x609872b1700Ea971a8Bc40315181C60dB77350bB",
+        "decimals": 18,
+        "symbol": "SETT",
+        "name": "SETT",
+        "chainId": 1329
+    },
+    {
+        "address": "0x7A6e53EA8A9B81eCdb623CdC546026FAC5De0133",
+        "decimals": 18,
+        "symbol": "ASTRO",
+        "name": "AstroonSei",
+        "chainId": 1329
+    },
+    {
+        "address": "0x80B56cF09c18e642DC04d94b8AD25Bb5605c1421",
+        "decimals": 18,
+        "symbol": "WIND",
+        "name": "WindSwap",
+        "chainId": 1329
+    },
+    {
+        "address": "0x81D3A238b02827F62B9f390f947D36d4A5bf89D2",
+        "decimals": 18,
+        "symbol": "CLO",
+        "name": "YeiFinance",
+        "chainId": 1329
+    },
+    {
+        "address": "0x84Ab5DCC8b093dD0b7143877Aa0966a61501ab3b",
+        "decimals": 18,
+        "symbol": "PEACE",
+        "name": "PEACE",
+        "chainId": 1329
+    },
+    {
+        "address": "0x888d81e3ea5E8362B5f69188CBCF34Fa8da4b888",
+        "decimals": 18,
+        "symbol": "LARRY",
+        "name": "LARRYTALBOT",
+        "chainId": 1329
+    },
+    {
+        "address": "0x893CC8a006b88BeeF66c79bBb1C14b9c6c0AD7Cc",
+        "decimals": 6,
+        "symbol": "UMI",
+        "name": "UMI",
+        "chainId": 1329
+    },
+    {
+        "address": "0x8BEA56dd8CD426e8cD9c225B5De6894db0E04800",
+        "decimals": 18,
+        "symbol": "GEI",
+        "name": "Gei",
+        "chainId": 1329
+    },
+    {
+        "address": "0x8EE050F6af49a6B7fd8557d0E75219D66f5F6094",
+        "decimals": 18,
+        "symbol": "OXI",
+        "name": "Oxium",
+        "chainId": 1329
+    },
+    {
+        "address": "0x939E1b4252db8B0697E59d0E8011E8DBdD178f86",
+        "decimals": 18,
+        "symbol": "SENSEI",
+        "name": "SENSEI",
+        "chainId": 1329
+    },
+    {
+        "address": "0xB13E945556f3F69187599f4eDc1982f24f10462a",
+        "decimals": 18,
+        "symbol": "HARD",
+        "name": "HARDonsei",
+        "chainId": 1329
+    },
+    {
+        "address": "0xb684E8fafdf9Db710E044780A382D6Fe9559f56b",
+        "decimals": 18,
+        "symbol": "STASH",
+        "name": "Moustache",
+        "chainId": 1329
+    },
+    {
+        "address": "0xcBAb11cF275011cE85d9B93c236a4844eCa13CDd",
+        "decimals": 18,
+        "symbol": "MOONSEI",
+        "name": "MOONSEI",
+        "chainId": 1329
+    },
+    {
+        "address": "0xdc8B124F3d2e29cE877EB5950C339a840906676B",
+        "decimals": 18,
+        "symbol": "DIMMER",
+        "name": "Dimmertokenname",
+        "chainId": 1329
+    },
+    {
+        "address": "0xdD1358dF189aF9605dd9978e1c89eE4ec5B4E6Fe",
+        "decimals": 18,
+        "symbol": "S8N",
+        "name": "SEITAN",
+        "chainId": 1329
+    },
+    {
+        "address": "0xDD7d5e4Ea2125d43C16eEd8f1FFeFffa2F4b4aF6",
+        "decimals": 18,
+        "symbol": "JLY",
+        "name": "JellyToken",
+        "chainId": 1329
+    },
+    {
+        "address": "0xdF943c12E0742C890A34795E8dEcB388C13Fd9F2",
+        "decimals": 18,
+        "symbol": "GAYAT",
+        "name": "GAY",
+        "chainId": 1329
+    },
+    {
+        "address": "0xe5085112160fF75ee89a540Cdba570eAFdAF7f57",
+        "decimals": 6,
+        "symbol": "STSEI",
+        "name": "stSEI",
+        "chainId": 1329
+    },
+    {
+        "address": "0xff12470a969Dd362EB6595FFB44C82c959Fe9ACc",
+        "decimals": 18,
+        "symbol": "USDa",
+        "name": "USDa",
+        "chainId": 1329
+    },
+    {
+        "address": "0xfFd58c89F777e0ee3995B04713D8f45DF2fA5850",
+        "decimals": 18,
+        "symbol": "NOISE",
+        "name": "NOISE",
+        "chainId": 1329
+    }
+  ],
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  }
+}

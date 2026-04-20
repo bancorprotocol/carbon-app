@@ -3,7 +3,6 @@ import {
   CreateStrategyParams,
   QueryKey,
   useCreateStrategyQuery,
-  useGetTokenBalances,
 } from 'libs/queries';
 import { FAUCET_TOKENS } from 'utils/tenderly';
 import config from 'config';
@@ -11,7 +10,6 @@ import { formatNumber, wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
 import { useWagmi } from 'libs/wagmi';
 import { useQueryClient } from '@tanstack/react-query';
-import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
@@ -30,12 +28,9 @@ TOKENS.push({
   symbol: gasToken.symbol,
 });
 
-const spender = config.addresses.carbon.carbonController;
-
 export const DebugCreateStrategy = () => {
   const count = useRef(0);
   const { user } = useWagmi();
-  const { openModal } = useModal();
   const queryClient = useQueryClient();
   const createMutation = useCreateStrategyQuery();
   const [rounds, setRounds] = useState(1);
@@ -61,8 +56,6 @@ export const DebugCreateStrategy = () => {
   const baseSymbol = selectedTokens?.[0]?.symbol ?? '';
   const quoteSymbol = selectedTokens?.[1]?.symbol ?? '';
 
-  const balanceQueries = useGetTokenBalances(selectedTokens);
-
   const perRound = 1;
 
   const selectToken = (token: string) => {
@@ -82,25 +75,11 @@ export const DebugCreateStrategy = () => {
     });
   };
 
-  const balancesMap = useMemo(() => {
-    return new Map(
-      balanceQueries.map((t, i) => [selectedTokens[i].address, t.data]),
-    );
-  }, [balanceQueries, selectedTokens]);
-
-  const approvalTokens = useMemo(() => {
-    return selectedTokens.map((tkn) => {
-      const amount = balancesMap.get(tkn.address) || '0';
-
-      return { ...tkn, spender, amount };
-    });
-  }, [balancesMap, selectedTokens]);
-
   const total = useMemo(() => rounds * perRound, [perRound, rounds]);
 
   const createStrategies = async (e: FormEvent) => {
     e.preventDefault();
-    openModal('txConfirm', { approvalTokens, onConfirm: create });
+    create();
   };
 
   const create = async () => {

@@ -1,6 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing/routes/trade';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -10,8 +10,8 @@ import { useQuickGradientOrder } from 'components/strategies/common/gradient/use
 import { CreateGradientStrategyForm } from 'components/strategies/common/gradient/CreateGradientStrategyForm';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import IconDelete from 'assets/icons/trash.svg?react';
-import IconAdd from 'assets/icons/plus.svg?react';
+import DeleteIcon from 'assets/icons/delete.svg?react';
+import AddIcon from 'assets/icons/add.svg?react';
 import { isReverseGradientOrders } from 'components/strategies/common/gradient/utils';
 import { ChartPoint } from 'components/strategies/common/d3Chart/D3ChartContext';
 import { cn } from 'utils/helpers';
@@ -28,7 +28,7 @@ import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/quick-custom';
 export const TradeQuickCustom = () => {
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const { marketPrice, isPending: pendingMarketPrice } = useMarketPrice({
     base,
     quote,
@@ -170,11 +170,7 @@ export const TradeQuickCustom = () => {
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <QuickGradientChart
-          base={base}
-          quote={quote}
-          orders={[orders.buy.order, orders.sell.order]}
-        >
+        <QuickGradientChart orders={[orders.buy.order, orders.sell.order]}>
           {search.directions?.map((direction) => (
             <D3EditLine
               key={direction}
@@ -229,7 +225,7 @@ export const TradeQuickCustom = () => {
                           aria-label={`remove ${direction} order`}
                           onClick={() => removeDirection(direction)}
                         >
-                          <IconDelete className="size-16" />
+                          <DeleteIcon className="size-16" />
                         </button>
                       }
                     />
@@ -248,7 +244,7 @@ export const TradeQuickCustom = () => {
                           : 'hover:bg-sell/10 text-sell border-sell',
                       ])}
                     >
-                      <IconAdd className="size-24" />
+                      <AddIcon className="size-24" />
                       <span className="capitalize">Add {direction} Order</span>
                     </button>
                   </div>

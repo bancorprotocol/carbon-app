@@ -16,6 +16,7 @@ export interface OverlappingSearch extends StrategySearch {
   marketPrice?: string;
   min?: string;
   max?: string;
+  preset?: string;
   spread?: string;
   anchor?: StrategyDirection;
   budget?: string;
@@ -52,6 +53,8 @@ export type AnyEditOrders =
 export interface OrderBlock extends FormStaticOrder {
   settings: StrategySettings;
   direction?: StrategyDirection;
+  presetMin?: string;
+  presetMax?: string;
 }
 
 export interface EditOrderBlock extends OrderBlock {

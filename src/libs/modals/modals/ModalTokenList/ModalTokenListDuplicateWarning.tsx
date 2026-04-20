@@ -3,8 +3,8 @@ import { Token } from 'libs/tokens';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { shortenString } from 'utils/helpers';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
-import IconLink from 'assets/icons/link.svg?react';
-import IconWarning from 'assets/icons/warning.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
@@ -27,7 +27,7 @@ export const ModalTokenListDuplicateWarning: FC<Props> = ({ token }) => {
         <p className="flex items-center">
           {token.symbol}: {token.address}
           <NewTabLink to={getExplorerLink('token', token.address)}>
-            <IconLink className="ml-6 w-14 text-main-0/80" />
+            <OpenInNewIcon className="ml-6 size-24 text-main-0/80" />
           </NewTabLink>
         </p>
       </div>
@@ -42,7 +42,7 @@ export const ModalTokenListDuplicateWarning: FC<Props> = ({ token }) => {
         element={duplicatedTokenTooltipElement(token)}
         className="max-w-450"
       >
-        <IconWarning className="ml-5 size-14 text-main-0/60" />
+        <WarningIcon className="ml-5 size-24 text-main-0/60" />
       </Tooltip>
     </div>
   );

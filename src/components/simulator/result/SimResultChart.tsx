@@ -6,7 +6,7 @@ import { useSimulator } from 'components/simulator/result/utils';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useState } from 'react';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import { Link } from '@tanstack/react-router';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 
@@ -27,7 +27,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
         className="rounded-lg mx-auto my-10 flex h-[400px] flex-col items-center justify-center gap-20 bg-main-900/60"
       >
         <IconTitleText
-          icon={<IconWarning />}
+          icon={<WarningIcon className="size-24" />}
           title="Missing Information"
           text={
             <span className="w-[480px]">
@@ -44,8 +44,8 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
             search={{
               base: ctx.search.base,
               quote: ctx.search.quote,
-              start: ctx.search.start,
-              end: ctx.search.end,
+              chartStart: ctx.search.start,
+              chartEnd: ctx.search.end,
               buyMin: ctx.search.buyMin,
               buyMax: ctx.search.buyMax,
               buyBudget: ctx.search.buyBudget,
@@ -66,8 +66,8 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
             search={{
               base: ctx.search.base,
               quote: ctx.search.quote,
-              start: ctx.search.start,
-              end: ctx.search.end,
+              chartStart: ctx.search.start,
+              chartEnd: ctx.search.end,
               buyMin: ctx.search.buyMin,
               sellMax: ctx.search.sellMax,
               spread: ctx.search.spread,

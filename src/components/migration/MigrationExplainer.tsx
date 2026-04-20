@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import IconMigrate from 'assets/icons/migrate.svg?react';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { lsService } from 'services/localeStorage';
 
 export const MigrationExplainer = () => {
@@ -39,7 +39,7 @@ export const MigrationExplainer = () => {
           className="p-8 rounded-full justify-self-end"
           data-testid="clear-sim-disclaimer"
         >
-          <IconClose className="size-14 md:size-18" />
+          <CloseIcon className="size-20 md:size-24" />
         </button>
       </header>
       <p className="text-14">

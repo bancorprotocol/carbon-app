@@ -20,7 +20,7 @@ export default function ModalWithdrawOrDelete({
       <ModalHeader id={id} />
       <IconTitleText
         variant="error"
-        icon={<IconDelete />}
+        icon={<IconDelete className="size-24" />}
         title="This strategy will become inactive once the budget is removed"
         text="Delete this strategy to keep things tidy"
       />
@@ -31,7 +31,7 @@ export default function ModalWithdrawOrDelete({
           onDelete();
         }}
       >
-        Withdraw and Delete
+        Withdraw and delete
       </button>
       <button
         className="btn-on-surface"
@@ -40,7 +40,7 @@ export default function ModalWithdrawOrDelete({
           onWithdraw();
         }}
       >
-        Withdraw Only
+        Withdraw only
       </button>
     </Modal>
   );

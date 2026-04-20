@@ -1,6 +1,6 @@
 import { Token } from 'libs/tokens';
 import { FC, useMemo } from 'react';
-import IconLink from 'assets/icons/link.svg?react';
+import OpenInNewIcon from 'assets/icons/open_in_new.svg?react';
 import { FullOutcomeParams, getFullOutcome } from 'utils/fullOutcome';
 import { prettifyNumber } from 'utils/helpers';
 
@@ -39,8 +39,8 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
         rel="noreferrer"
         className="font-medium text-primary inline-flex items-center gap-4"
       >
-        <span>Learn More</span>
-        <IconLink className="inline size-12" />
+        <span>Learn more</span>
+        <OpenInNewIcon className="inline size-24" />
       </a>
     </p>
   );

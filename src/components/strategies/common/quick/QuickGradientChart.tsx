@@ -5,18 +5,16 @@ import {
 } from 'libs/d3';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { useBandScale } from 'libs/d3/useBandScale';
-import style from '../d3Chart/D3PriceHistory.module.css';
-import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 import { FC, ReactNode, useState } from 'react';
-import { Token } from 'libs/tokens';
 import { D3ChartProvider, Drawing } from '../d3Chart/D3ChartContext';
 import { D3ChartMarketPrice } from '../d3Chart/D3ChartMarketPrice';
 import { D3Pointer } from '../d3Chart/D3Pointer';
 import { DrawingMode } from '../d3Chart/drawing/DrawingMenu';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { NotFound } from 'components/common/NotFound';
 import { formatQuickTime } from './utils';
 import { QuickGradientOrderBlock } from '../types';
+import { useStrategyFormCtx } from '../StrategyFormContext';
+import style from '../d3Chart/D3PriceHistory.module.css';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -30,8 +28,6 @@ const chartSettings: D3ChartSettingsProps = {
 const bandwidthOffset = 0;
 
 interface Props {
-  base: Token;
-  quote: Token;
   orders: QuickGradientOrderBlock[];
   children: ReactNode;
 }
@@ -47,16 +43,8 @@ const yDomain = (orders: QuickGradientOrderBlock[], marketPrice?: string) => {
 };
 
 export const QuickGradientChart: FC<Props> = (props) => {
-  const { base, quote, orders, children } = props;
-  const { marketPrice, isPending } = useStrategyMarketPrice({ base, quote });
-
-  if (isPending) {
-    return (
-      <section className="rounded-xl grid flex-1 items-center bg-main-900/60">
-        <CarbonLogoLoading className="h-[80px]" />
-      </section>
-    );
-  }
+  const { orders, children } = props;
+  const { marketPrice } = useStrategyFormCtx();
 
   if (!marketPrice) {
     return (
@@ -69,7 +57,10 @@ export const QuickGradientChart: FC<Props> = (props) => {
   }
 
   return (
-    <QuickGradientChartContent marketPrice={marketPrice} orders={orders}>
+    <QuickGradientChartContent
+      marketPrice={marketPrice.toString()}
+      orders={orders}
+    >
       {children}
     </QuickGradientChartContent>
   );

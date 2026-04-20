@@ -2,7 +2,7 @@ import { ModalHeaderProps } from 'libs/modals/modals.types';
 import { FC, ReactNode, useCallback, useEffect } from 'react';
 import { useDialog } from 'hooks/useDialog';
 import { useModal } from 'hooks/useModal';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { cn } from 'utils/helpers';
 
 export interface Props {
@@ -57,7 +57,7 @@ export const ModalHeader: FC<ModalHeaderProps> = ({
         aria-label="close modal"
         data-testid="modal-close"
       >
-        <IconClose className="size-16" />
+        <CloseIcon className="size-24" />
       </button>
     </header>
   );

@@ -17,7 +17,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { carbonSDK } from 'libs/sdk';
 import { MigratedPosition } from './type';
 import { QueryKey } from 'libs/queries';
-import IconClose from 'assets/icons/X.svg?react';
+import CloseIcon from 'assets/icons/close.svg?react';
 import { MigrationCard } from './MigrationCard';
 import { DotPulse } from 'components/common/DotPulse/DotPulse';
 import config from 'config';
@@ -181,7 +181,7 @@ export const PositionDialog: FC<Props> = (props) => {
         <header className="flex items-center justify-between">
           <h3>Migrate Position + Fees</h3>
           <button type="button" onClick={() => close()}>
-            <IconClose className="size-14" />
+            <CloseIcon className="size-24" />
           </button>
         </header>
         <MigrationCard position={p} />

@@ -47,6 +47,7 @@ export interface LocalStorageSchema {
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
   tacToTonAddress: Record<string, string>;
+  lastConnection: number;
   haveSeen: ('rewards' | 'migration')[];
 
   /* @deprecated */

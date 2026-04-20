@@ -4,14 +4,15 @@ import IconRecurring from 'assets/icons/recurring.svg?react';
 import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
-import IconArrowCircle from 'assets/icons/arrow-circle.svg?react';
+import ArrowCircleRightIcon from 'assets/icons/arrow_circle_right.svg?react';
 import IconShield from 'assets/icons/shield.svg?react';
-import IconMultiOrder from 'assets/icons/multi-order.svg?react';
+import TargetIcon from 'assets/icons/target.svg?react';
 import { useTrending } from 'libs/queries/extApi/tradeCount';
 import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { RollingNumber } from 'components/common/RollingNumber';
 import { useGetAllStrategies } from 'libs/queries';
+import { RewardBanner } from 'components/rewards/banner';
 
 const types = [
   {
@@ -26,7 +27,7 @@ const types = [
         icon: <IconMarket className="size-24" />,
       },
       {
-        name: 'Liquidity Position',
+        name: 'Liquidity position',
         to: '/trade/overlapping' as const,
         search: {},
         icon: <IconOverlapping className="size-24" />,
@@ -40,13 +41,13 @@ const types = [
       'Tailored trading options for greater precision and absolute price certainty',
     trades: [
       {
-        name: 'Limit Order',
+        name: 'Limit order',
         to: '/trade/disposable' as const,
         search: { settings: 'limit' as const },
         icon: <IconDisposable className="size-24" />,
       },
       {
-        name: 'Recurring Limit Orders',
+        name: 'Recurring limit orders',
         to: '/trade/recurring' as const,
         search: { buySettings: 'limit', sellSettings: 'limit' } as const,
         icon: <IconRecurring className="size-24" />,
@@ -60,13 +61,13 @@ const types = [
       'Customizable strategies for scaling, and automating buy low, sell high trades - unique to Carbon DeFi.',
     trades: [
       {
-        name: 'Range Order',
+        name: 'Range order',
         to: '/trade/disposable' as const,
         search: { settings: 'range' as const },
         icon: <IconRange className="size-24" />,
       },
       {
-        name: 'Recurring Range Orders',
+        name: 'Recurring range orders',
         to: '/trade/recurring' as const,
         icon: <IconRecurring className="size-24" />,
       },
@@ -119,30 +120,34 @@ export const UnconnectedLandingPage = () => {
   ]);
 
   return (
-    <section className="grid content-start gap-24 mx-auto p-16">
-      <hgroup className="grid gap-24">
-        <h1 className="text-3xl lg:text-5xl text-center text-gradient leading-[1.5] gradient-direction-[90deg]">
-          Control Your Trading Strategies
-        </h1>
-        {sentence}
-      </hgroup>
-      <ol className="grid gap-8">
-        <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
-          <b className="text-gradient text-nowrap">Step 1</b>
-          <span>Connect your wallet</span>
-        </li>
-        <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
-          <b className="text-gradient text-nowrap">Step 2</b>
-          <span>Create your trading strategy</span>
-        </li>
-        <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
-          <b className="text-gradient text-nowrap">Step 3</b>
-          <span>
-            Sit back and let the market come to you - buy and sell on your terms
-          </span>
-        </li>
-      </ol>
-      <article className="grid gap-16">
+    <section className="grid content-start gap-24 py-16">
+      <div className="grid gap-24 justify-self-center px-16">
+        <hgroup className="grid gap-24">
+          <h1 className="text-3xl lg:text-5xl text-center text-gradient leading-[1.5] gradient-direction-[90deg]">
+            Control Your Trading Strategies
+          </h1>
+          {sentence}
+        </hgroup>
+        <ol className="grid gap-8">
+          <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
+            <b className="text-gradient text-nowrap">Step 1</b>
+            <span>Connect your wallet</span>
+          </li>
+          <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
+            <b className="text-gradient text-nowrap">Step 2</b>
+            <span>Create your trading strategy</span>
+          </li>
+          <li className="flex items-center gap-16 bg-main-900/20 px-16 py-8 rounded-md">
+            <b className="text-gradient text-nowrap">Step 3</b>
+            <span>
+              Sit back and let the market come to you - buy and sell on your
+              terms
+            </span>
+          </li>
+        </ol>
+      </div>
+      <RewardBanner />
+      <article className="grid gap-16 justify-self-center px-16">
         <h2 className="text-18">Choose Your Trading Strategy</h2>
         <ul className="flex sm:justify-center flex-wrap gap-24">
           {types.map((item) => (
@@ -159,9 +164,9 @@ export const UnconnectedLandingPage = () => {
                 className="flex items-center gap-8"
               >
                 <span className="text-gradient gradient-direction-[90deg] font-medium">
-                  Explore Strategies
+                  Explore strategies
                 </span>
-                <IconArrowCircle className="size-20 fill-gradient stroke-gradient" />
+                <ArrowCircleRightIcon className="size-24 fill-gradient stroke-gradient" />
               </Link>
               <nav aria-label="strategy types" className="grid gap-8">
                 {item.trades.map((trade) => (
@@ -190,7 +195,7 @@ export const UnconnectedLandingPage = () => {
           ))}
         </ul>
       </article>
-      <article className="grid gap-24">
+      <article className="grid gap-24 px-16">
         <h2 className="text-center text-3xl">Carbon DeFi User Benefits</h2>
         <ul className="flex justify-center flex-wrap gap-40">
           <li className="flex gap-8 items-center">
@@ -198,7 +203,7 @@ export const UnconnectedLandingPage = () => {
             <span>MEV Sandwich Attack Immunity</span>
           </li>
           <li className="flex gap-8 items-center">
-            <IconMultiOrder className="size-20" />
+            <TargetIcon className="size-24" />
             <span>100% Price Certainty</span>
           </li>
           <li className="flex gap-8 items-center">

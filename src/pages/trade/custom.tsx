@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { StrategyDirection } from 'libs/routing/routes/trade';
 import { useCallback, useMemo } from 'react';
 import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawLine';
@@ -12,8 +12,8 @@ import { CreateGradientStrategyForm } from 'components/strategies/common/gradien
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import IconDelete from 'assets/icons/trash.svg?react';
-import IconAdd from 'assets/icons/plus.svg?react';
+import DeleteIcon from 'assets/icons/delete.svg?react';
+import AddIcon from 'assets/icons/add.svg?react';
 import {
   defaultGradientOrder,
   isReverseGradientOrders,
@@ -23,14 +23,12 @@ import { cn } from 'utils/helpers';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
-import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
 import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/custom';
 export const TradeCustom = () => {
-  const { base, quote } = useTradeCtx();
-  const { marketPrice } = useStrategyMarketPrice({ base, quote });
+  const { base, quote, marketPrice } = useStrategyFormCtx();
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
 
@@ -160,12 +158,7 @@ export const TradeCustom = () => {
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <StrategyChartHistory
-          base={base}
-          quote={quote}
-          buy={orders.buy.order}
-          sell={orders.sell.order}
-        >
+        <StrategyChartHistory buy={orders.buy.order} sell={orders.sell.order}>
           {search.directions?.map((direction) => (
             <D3EditLine
               key={direction}
@@ -220,7 +213,7 @@ export const TradeCustom = () => {
                           aria-label={`remove ${direction} order`}
                           onClick={() => removeDirection(direction)}
                         >
-                          <IconDelete className="size-16" />
+                          <DeleteIcon className="size-16" />
                         </button>
                       }
                     />
@@ -239,7 +232,7 @@ export const TradeCustom = () => {
                           : 'hover:bg-sell/10 text-sell border-sell',
                       ])}
                     >
-                      <IconAdd className="size-24" />
+                      <AddIcon className="size-24" />
                       <span className="capitalize">Add {direction} Order</span>
                     </button>
                   </div>

@@ -19,7 +19,7 @@ export default function ModalNotifications({ id }: ModalProps) {
           onClick={() => clearNotifications()}
           className="justify-self-end"
         >
-          Clear All
+          Clear all
         </button>
       </ModalHeader>
       <NotificationPreferences />

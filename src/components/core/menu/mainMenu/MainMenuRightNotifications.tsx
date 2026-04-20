@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
-import IconBell from 'assets/icons/bell.svg?react';
+import NotificationsIcon from 'assets/icons/notifications.svg?react';
 import { useNotifications } from 'hooks/useNotifications';
 
 export const MainMenuRightNotifications: FC = () => {
@@ -16,7 +16,7 @@ export const MainMenuRightNotifications: FC = () => {
         {hasPendingTx && (
           <span className="bg-error/30 absolute inline-flex size-full animate-ping rounded-full opacity-75"></span>
         )}
-        <IconBell />
+        <NotificationsIcon className="size-24" />
       </span>
     </button>
   );

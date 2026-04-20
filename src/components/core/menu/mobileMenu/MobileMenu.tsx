@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link, useRouterState, useMatchRoute } from 'libs/routing';
-import IconDots from 'assets/icons/three-dots.svg?react';
+import MoreHorizIcon from 'assets/icons/more_horiz.svg?react';
 import { useModal } from 'hooks/useModal';
 import { getMenuItems } from 'components/core/menu';
 import { useWagmi } from 'libs/wagmi';
@@ -43,7 +43,7 @@ export const MobileMenu: FC = () => {
         onClick={() => openModal('burgerMenu')}
         className="flex px-8 py-4 cursor-pointer items-center hover:text-main-0"
       >
-        <IconDots className="w-24" />
+        <MoreHorizIcon className="size-24" />
       </button>
     </footer>
   );

@@ -1,6 +1,6 @@
 import { ModalProps } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import IconWarning from 'assets/icons/warning.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
 import { lsService } from 'services/localeStorage';
 import { Modal, ModalHeader } from 'libs/modals/Modal';
 import { useCallback } from 'react';
@@ -18,7 +18,7 @@ export default function ModalRestrictedCountry({ id }: ModalProps) {
       <ModalHeader id={id} />
       <IconTitleText
         variant="warning"
-        icon={<IconWarning />}
+        icon={<WarningIcon className="size-24" />}
         title="Limited access in your location"
         text="According to our Terms of Service, users in your location are not able to use this site."
       />

@@ -7,7 +7,7 @@ import {
   toGradientCartStorage,
 } from 'components/cart/utils';
 import config from 'config';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { FormGradientOrder } from '../types';
 import { carbonSDK } from 'libs/sdk';
 import { GradientType } from '@bancor/carbon-sdk';
@@ -25,7 +25,7 @@ interface FormProps {
 }
 
 export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const { children, buy, sell } = props;
   const { user, openConnect, sendTransaction } = useWagmi();
   const nav = useNavigate();
@@ -161,7 +161,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
               onClick={addToCart}
               data-testid="add-strategy-to-cart"
             >
-              Add to Cart
+              Add to cart
             </Button>
           )}
           <Button
@@ -174,7 +174,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
             loadingChildren={loadingText}
             data-testid="create-strategy"
           >
-            Create Strategy
+            Create strategy
           </Button>
         </>
       )}
@@ -189,7 +189,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
           loadingChildren={loadingText}
           onClick={openConnect}
         >
-          Connect Wallet
+          Connect wallet
         </Button>
       )}
     </form>

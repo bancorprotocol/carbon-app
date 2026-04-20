@@ -7,18 +7,24 @@ import { Modal, ModalHeader } from 'libs/modals/Modal';
 interface ModalCreateConfirmData {
   approvalTokens: ApprovalToken[];
   onConfirm: () => any;
+  onClose?: () => any;
   buttonLabel?: string;
 }
+type Props = ModalProps<ModalCreateConfirmData>;
 
-export default function ModalConfirm({
-  id,
-  data: { approvalTokens, onConfirm, buttonLabel = 'Confirm' },
-}: ModalProps<ModalCreateConfirmData>) {
+export default function ModalConfirm({ id, data }: Props) {
+  const { approvalTokens, onConfirm, onClose, buttonLabel = 'Confirm' } = data;
   const { closeModal } = useModal();
-  const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
+  const { approvalQuery, approvalRequired, isPending } =
+    useApproval(approvalTokens);
 
   return (
-    <Modal id={id} data-testid="approval-modal" className="grid gap-16">
+    <Modal
+      id={id}
+      data-testid="approval-modal"
+      className="grid gap-16"
+      onClose={onClose}
+    >
       <ModalHeader id={id}>
         <h2>Confirm Transaction</h2>
       </ModalHeader>
@@ -32,7 +38,7 @@ export default function ModalConfirm({
       </ul>
       <button
         type="button"
-        disabled={approvalRequired}
+        disabled={isPending || approvalRequired}
         onClick={async () => {
           closeModal(id);
           await onConfirm();

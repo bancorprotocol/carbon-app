@@ -1,6 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
   StrategyDirection,
@@ -26,7 +26,7 @@ import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/quick-auction';
 export const TradeQuickAuction = () => {
-  const { base, quote } = useTradeCtx();
+  const { base, quote } = useStrategyFormCtx();
   const { marketPrice, isPending: pendingMarketPrice } = useMarketPrice({
     base,
     quote,
@@ -81,7 +81,7 @@ export const TradeQuickAuction = () => {
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <QuickGradientChart base={base} quote={quote} orders={[order]}>
+        <QuickGradientChart orders={[order]}>
           <D3EditLine
             drawing={drawing}
             color={direction}

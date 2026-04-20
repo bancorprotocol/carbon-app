@@ -24,11 +24,11 @@ import * as v from 'valibot';
 
 export const activityActionName: Record<ActivityAction, string> = {
   create: 'Create',
-  edit: 'Edit Price',
+  edit: 'Edit price',
   deposit: 'Deposit',
   withdraw: 'Withdraw',
-  buy: 'Buy Low',
-  sell: 'Sell High',
+  buy: 'Buy low',
+  sell: 'Sell high',
   transfer: 'Transfer',
   delete: 'Delete',
   pause: 'Pause',

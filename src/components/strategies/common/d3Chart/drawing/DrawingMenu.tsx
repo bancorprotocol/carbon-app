@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import IconIndicator from 'assets/icons/draw-indicator.svg?react';
-import IconLine from 'assets/icons/draw-line.svg?react';
+import FilterCenterFocusIcon from 'assets/icons/filter_center_focus.svg?react';
+import DiagonalLineIcon from 'assets/icons/diagonal_line.svg?react';
 import IconExtendedLine from 'assets/icons/draw-extended-line.svg?react';
 import IconChannel from 'assets/icons/draw-channel.svg?react';
 import IconTriangle from 'assets/icons/draw-triangle.svg?react';
-import IconRectangle from 'assets/icons/draw-rectangle.svg?react';
-import IconTrash from 'assets/icons/trash.svg?react';
+import ActivityZoneIcon from 'assets/icons/activity_zone.svg?react';
+import DeleteIcon from 'assets/icons/delete.svg?react';
 import { useD3ChartCtx } from '../D3ChartContext';
 import {
   FloatTooltip,
@@ -18,12 +18,12 @@ export type DrawingMode = (typeof drawings)[number]['mode'];
 const drawings = [
   {
     mode: undefined,
-    icon: <IconIndicator className="size-20" />,
+    icon: <FilterCenterFocusIcon className="size-24" />,
     label: 'Cross',
   },
   {
     mode: 'line' as const,
-    icon: <IconLine className="size-20" />,
+    icon: <DiagonalLineIcon className="size-24" />,
     label: 'Trending Line',
   },
   {
@@ -43,7 +43,7 @@ const drawings = [
   },
   {
     mode: 'rectangle' as const,
-    icon: <IconRectangle className="size-20" />,
+    icon: <ActivityZoneIcon className="size-24" />,
     label: 'Rectangle',
   },
 ];
@@ -86,7 +86,7 @@ export const DrawingMenu: FC<Props> = ({ clearDrawings }) => {
             className="hover:bg-main-700 rounded-md p-8"
             onClick={clearDrawings}
           >
-            <IconTrash className="size-20" />
+            <DeleteIcon className="size-24" />
           </button>
         </FloatTooltipTrigger>
         <FloatTooltipContent className="text-12 rounded-md py-8">

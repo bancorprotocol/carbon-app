@@ -15,6 +15,6 @@ export {
 export type { UseQueryResult } from '@tanstack/react-query';
 export { useGetOrderBook } from 'libs/queries/sdk/orderBook';
 export type { OrderRow } from 'libs/queries/sdk/orderBook';
-export { useGetMaxSourceAmountByPair } from 'libs/queries/sdk/maxSourceAmount';
+export { useGetMaxSource as useGetMaxSourceAmountByPair } from 'libs/queries/sdk/maxSourceAmount';
 export { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 export * from 'libs/queries/extApi/simulator';

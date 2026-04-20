@@ -29,7 +29,7 @@ export class CreateSimulationDriver {
 
   async waitForPriceChart(timeout?: number) {
     const btn = this.page.getByTestId('start-simulation-btn');
-    await expect(btn).toHaveText('Start Simulation');
+    await expect(btn).toHaveText('Start simulation');
     return waitFor(this.page, 'price-chart', timeout);
   }
 
@@ -191,7 +191,7 @@ export class CreateSimulationDriver {
 
   async submit() {
     const btn = this.page.getByTestId('start-simulation-btn');
-    await expect(btn).toHaveText('Start Simulation');
+    await expect(btn).toHaveText('Start simulation');
     await expect(btn).toBeEnabled();
     return btn.click();
   }

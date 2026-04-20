@@ -7,7 +7,7 @@ import { SuspiciousToken } from 'components/common/DisplayPair';
 import { lsService } from 'services/localeStorage';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
-import IconStar from 'assets/icons/star.svg?react';
+import StarRateIcon from 'assets/icons/star_rate.svg?react';
 import config from 'config';
 
 type Props = {
@@ -252,7 +252,7 @@ const FavoriteButton = ({ checked, onChange }: FavoriteProps) => {
       className="group p-16"
       onClick={onChange}
     >
-      <IconStar className="w-20 text-main-0/40 hover:fill-main-0/80 hover:text-main-0/80 group-aria-checked:text-primary group-aria-checked:fill-primary" />
+      <StarRateIcon className="size-24 text-main-0/40 hover:fill-main-0/80 hover:text-main-0/80 group-aria-checked:text-primary group-aria-checked:fill-primary" />
     </button>
   );
 };

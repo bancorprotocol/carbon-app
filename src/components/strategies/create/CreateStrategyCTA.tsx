@@ -1,5 +1,5 @@
 import { Link, useRouterState } from 'libs/routing';
-import IconPlus from 'assets/icons/plus.svg?react';
+import AddIcon from 'assets/icons/add.svg?react';
 import { isPathnameMatch } from 'utils/helpers';
 
 export const CreateStrategyCTAMobile = () => {
@@ -20,7 +20,7 @@ export const CreateStrategyCTAMobile = () => {
       className="btn-main-gradient bottom-100 right-30 place-items-center fixed grid size-56 rounded-full p-0 md:hidden"
       data-testid="create-strategy-mobile"
     >
-      <IconPlus className="size-24" />
+      <AddIcon className="size-24" />
     </Link>
   );
 };

@@ -1,5 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { useTradeCtx } from 'components/trade/context';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { CreateOverlappingPrice } from 'components/strategies/create/CreateOverlappingPrice';
 import { getOverlappingOrders } from 'components/strategies/create/utils';
 import { StrategyChartOverlapping } from 'components/strategies/common/StrategyChartOverlapping';
@@ -7,16 +7,17 @@ import { CreateForm } from 'components/strategies/create/CreateForm';
 import { CreateOverlappingBudget } from 'components/strategies/create/CreateOverlappingBudget';
 import { useCallback } from 'react';
 import { TradeOverlappingSearch } from 'libs/routing/routes/trade';
-import { useStrategyMarketPrice } from 'components/strategies/UserMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
+import { useGetTokenBalance } from 'libs/queries';
 
 const url = '/trade/overlapping';
 export const TradeOverlapping = () => {
-  const { base, quote } = useTradeCtx();
+  const { base, quote, marketPrice } = useStrategyFormCtx();
   const navigate = useNavigate({ from: url });
   const search = useSearch({ from: url });
-  const { marketPrice } = useStrategyMarketPrice({ base, quote });
   const orders = getOverlappingOrders(search, base, quote, marketPrice);
+  const baseBalance = useGetTokenBalance(base);
+  const quoteBalance = useGetTokenBalance(quote);
 
   const set = useCallback(
     (next: TradeOverlappingSearch) => {
@@ -51,6 +52,7 @@ export const TradeOverlapping = () => {
             buy={orders.buy}
             sell={orders.sell}
             spread={search.spread || ''}
+            anchor={search.anchor}
             set={set}
           />
           <CreateOverlappingBudget
@@ -58,6 +60,10 @@ export const TradeOverlapping = () => {
             quote={quote}
             buy={orders.buy}
             sell={orders.sell}
+            anchor={search.anchor}
+            budget={search.budget}
+            baseBalance={baseBalance}
+            quoteBalance={quoteBalance}
             set={set}
           />
         </CreateForm>

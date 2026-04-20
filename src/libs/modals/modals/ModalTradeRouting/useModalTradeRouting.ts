@@ -54,10 +54,7 @@ export const useModalTradeRouting = ({
   });
   const sourceInput = data?.totalSourceAmount || '0';
 
-  const { trade, calcMaxInput, isAwaiting, approval } = useTradeAction({
-    source,
-    isTradeBySource,
-    sourceInput,
+  const { trade, calcMaxInput, isAwaiting } = useTradeAction({
     onSuccess: () => {
       onSuccess();
       closeModal(id);
@@ -69,37 +66,21 @@ export const useModalTradeRouting = ({
       return openConnect();
     }
 
-    if (approval.isPending || isPending || isError) {
+    if (isPending || isError) {
       return;
     }
 
-    const tradeFn = async () =>
-      await trade({
-        source,
-        target,
-        tradeActions: data.tradeActions,
-        isTradeBySource,
-        sourceInput,
-        targetInput: data.totalTargetAmount,
-      });
-
-    if (approval.approvalRequired) {
-      openModal('txConfirm', {
-        approvalTokens: approval.tokens,
-        onConfirm: () => {
-          tradeFn();
-        },
-        buttonLabel: 'Confirm Trade',
-      });
-    } else {
-      void tradeFn();
-    }
+    return trade({
+      source,
+      target,
+      tradeActions: data.tradeActions,
+      isTradeBySource,
+      sourceInput,
+      targetInput: data.totalTargetAmount,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     user,
-    approval.isPending,
-    approval.approvalRequired,
-    approval.tokens,
     isPending,
     isError,
     openModal,
@@ -130,7 +111,7 @@ export const useModalTradeRouting = ({
     new SafeDecimal(sourceBalance).lt(
       isTradeBySource ? sourceInput : calcMaxInput(sourceInput),
     );
-  const errorMsg = insufficientBalance ? 'Insufficient Balance' : '';
+  const errorMsg = insufficientBalance ? 'Insufficient balance' : '';
   const onCancel = useCallback(() => {
     closeModal(id);
   }, [closeModal, id]);
@@ -138,7 +119,7 @@ export const useModalTradeRouting = ({
   const disabledCTA =
     !selectedIDs.length || isPending || isError || insufficientBalance;
 
-  const buttonText = user ? 'Confirm' : 'Connect Wallet';
+  const buttonText = user ? 'Confirm' : 'Connect wallet';
 
   return {
     selected,

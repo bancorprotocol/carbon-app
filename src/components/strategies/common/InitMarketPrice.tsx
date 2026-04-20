@@ -2,7 +2,7 @@ import { Token } from 'libs/tokens';
 import { FC, FormEvent, useId, useMemo, useState } from 'react';
 import { cn, roundSearchParam } from 'utils/helpers';
 import IconCoinGecko from 'assets/icons/coin-gecko.svg?react';
-import IconEdit from 'assets/icons/edit.svg?react';
+import EditSquareIcon from 'assets/icons/edit_square.svg?react';
 import { NewTabLink, useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -11,6 +11,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useEditStrategyCtx } from '../edit/EditStrategyContext';
 import { isOverlappingStrategy } from './utils';
 import { getCalculatedPrice } from '../overlapping/utils';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   base: Token;
@@ -29,8 +30,8 @@ export const EditMarketPrice: FC<Props> = (props) => {
       data-testid="edit-market-price"
       type="button"
     >
-      <IconEdit className="size-16" />
-      <span>Edit Market Price</span>
+      <EditSquareIcon className="size-16" />
+      <span>Edit market price</span>
     </button>
   );
 
@@ -86,6 +87,13 @@ export const InitMarketPrice = (props: FieldProps) => {
     setApproved(!!marketPrice && value === marketPrice);
   };
 
+  const setPreset = (preset: string) => {
+    if (!marketPrice) return;
+    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
+    const next = new SafeDecimal(marketPrice).mul(percent).toString();
+    changePrice(next);
+  };
+
   const isDisabled = (form: HTMLFormElement) => {
     if (!form.checkValidity()) return true;
     if (form.querySelector('.loading-message')) return true;
@@ -109,10 +117,20 @@ export const InitMarketPrice = (props: FieldProps) => {
       data-testid="user-price-form"
       onSubmit={setPrice}
     >
-      {!externalPrice && <SetPriceText base={base} quote={quote} />}
+      {!externalPrice ? (
+        <SetPriceText base={base} quote={quote} />
+      ) : (
+        <h3>
+          Set Market Price{' '}
+          <span className="text-main-0/60">
+            ({quote.symbol} per 1 {base.symbol})
+          </span>
+        </h3>
+      )}
       <InputLimit
         price={localPrice || ''}
         setPrice={changePrice}
+        setPreset={setPreset}
         base={base}
         quote={quote}
         ignoreMarketPriceWarning
@@ -153,7 +171,7 @@ export const InitMarketPrice = (props: FieldProps) => {
         type="submit"
         data-testid="set-overlapping-price"
       >
-        Set New Market Price
+        Set new market price
       </button>
     </form>
   );
@@ -180,7 +198,7 @@ const EditPriceText = () => (
       to="https://www.coingecko.com/"
     >
       <b>CoinGecko</b>
-      <IconCoinGecko className="size-10" />
+      <IconCoinGecko className="size-24" />
     </NewTabLink>
   </span>
 );
