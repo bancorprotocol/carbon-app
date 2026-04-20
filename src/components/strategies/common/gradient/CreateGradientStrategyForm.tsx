@@ -9,6 +9,14 @@ import {
 import config from 'config';
 import { useTradeCtx } from 'components/trade/context';
 import { FormGradientOrder } from '../types';
+import { carbonSDK } from 'libs/sdk';
+import { GradientType } from '@bancor/carbon-sdk';
+import { Token } from 'libs/tokens';
+import { parseUnits } from 'ethers';
+import { SafeDecimal } from 'libs/safedecimal';
+import { useNotifications } from 'hooks/useNotifications';
+import { useQueryClient } from '@tanstack/react-query';
+import { QueryKey } from 'libs/queries';
 
 interface FormProps {
   buy: FormGradientOrder;
@@ -19,8 +27,10 @@ interface FormProps {
 export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
   const { base, quote } = useTradeCtx();
   const { children, buy, sell } = props;
-  const { user, openConnect } = useWagmi();
+  const { user, openConnect, sendTransaction } = useWagmi();
   const nav = useNavigate();
+  const { dispatchNotification } = useNotifications();
+  const cache = useQueryClient();
 
   const [animating, setAnimating] = useState(false);
   const [loadingText, setLoadingText] = useState('');
@@ -62,11 +72,58 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
 
   const create = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!user) return;
     if (isDisabled(e.currentTarget)) return;
-    // @todo(gradient)
-    // await createStrategy({
-    //   onSuccess: () => nav({ to: '/portfolio' }),
-    // });
+    const getType = (order: FormGradientOrder) => {
+      return new SafeDecimal(order.startPrice).gt(order.endPrice)
+        ? GradientType.LinearDecrease
+        : GradientType.LinearDecrease;
+    };
+
+    const unsignedTx = await carbonSDK.createGradientStrategy(
+      base.address,
+      quote.address,
+      buy.startPrice,
+      buy.endPrice,
+      buy.budget || '0',
+      getType(buy),
+      Number(buy.startDate),
+      Number(buy.endDate) || 1_000_000_000,
+      sell.startPrice,
+      sell.endPrice,
+      sell.budget || '0',
+      getType(sell),
+      Number(sell.startDate),
+      Number(sell.endDate) || 1_000_000_000,
+    );
+    const getRawAmount = (token: Token, amount: string) => {
+      return parseUnits(amount, token.decimals).toString();
+    };
+    unsignedTx.customData = {
+      spender: config.addresses.carbon.carbonController,
+      assets: [
+        {
+          address: base,
+          rawAmount: getRawAmount(base, sell.budget),
+        },
+        {
+          address: quote,
+          rawAmount: getRawAmount(quote, buy.budget),
+        },
+      ],
+    };
+    const tx = await sendTransaction(unsignedTx);
+    dispatchNotification('createStrategy', { txHash: tx.hash });
+    await tx.wait();
+    cache.invalidateQueries({
+      queryKey: QueryKey.strategiesByUser(user),
+    });
+    cache.invalidateQueries({
+      queryKey: QueryKey.balance(user, base.address),
+    });
+    cache.invalidateQueries({
+      queryKey: QueryKey.balance(user, quote.address),
+    });
   };
 
   return (

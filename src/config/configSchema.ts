@@ -79,6 +79,8 @@ export const AppConfigSchema = v.object({
       voucher: v.string(),
       batcher: v.optional(v.string()),
       vault: v.string(),
+      gradientController: v.optional(v.string()),
+      gradientVoucher: v.optional(v.string()),
     }),
     tac: v.optional(
       v.object({

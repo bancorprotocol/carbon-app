@@ -20,18 +20,17 @@ import { usePairs } from 'hooks/usePairs';
 import {
   AnyStrategy,
   EditOrders,
+  FormStaticOrder,
   GradientOrder,
   StaticOrder,
   Strategy,
 } from 'components/strategies/common/types';
-import {
-  getStrategyStatus,
-  isGradientStrategy,
-} from 'components/strategies/common/utils';
+import { getStrategyStatus } from 'components/strategies/common/utils';
 import { SDKGradientStrategy } from './gradient-mock';
 import { useCarbonInit } from 'libs/sdk/context';
 import { isZero } from 'components/strategies/common/utils';
 import { useMemo } from 'react';
+import { isGradientStrategyId } from '@bancor/carbon-sdk/utils';
 
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
@@ -308,22 +307,6 @@ export const useTokenStrategies = (token?: string) => {
 
 // WRITE
 
-const getFieldsToUpdate = (orders: EditOrders, strategy: AnyStrategy) => {
-  const { buy, sell } = orders;
-  const fields: Partial<StrategyUpdate> = {};
-  if (isGradientStrategy(strategy)) {
-    // @todo(gradient) implement edit fields for gradient
-  } else {
-    if (buy.min !== strategy.buy.min) fields.buyPriceLow = buy.min;
-    if (buy.max !== strategy.buy.max) fields.buyPriceHigh = buy.max;
-    if (sell.min !== strategy.sell.min) fields.sellPriceLow = sell.min;
-    if (sell.max !== strategy.sell.max) fields.sellPriceHigh = sell.max;
-  }
-  if (buy.budget !== strategy.buy.budget) fields.buyBudget = buy.budget;
-  if (sell.budget !== strategy.sell.budget) fields.sellBudget = sell.budget;
-  return fields as StrategyUpdate;
-};
-
 export interface CreateStrategyParams {
   base: string;
   quote: string;
@@ -389,14 +372,27 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
   const { sendTransaction } = useWagmi();
 
   return useMutation({
-    mutationFn: async (orders: EditOrders) => {
-      const updates = getFieldsToUpdate(orders, strategy);
-      if (!strategy.encoded)
+    mutationFn: async (orders: EditOrders<FormStaticOrder>) => {
+      if (!strategy.encoded) {
         throw new Error('No encoded found on the strategy');
+      }
+      if (strategy.type === 'gradient') {
+        throw new Error('Strategy is gradient, use dedicated function for it');
+      }
+      const { buy, sell } = orders;
+      const fields: Partial<StrategyUpdate> = {};
+
+      if (buy.min !== strategy.buy.min) fields.buyPriceLow = buy.min;
+      if (buy.max !== strategy.buy.max) fields.buyPriceHigh = buy.max;
+      if (sell.min !== strategy.sell.min) fields.sellPriceLow = sell.min;
+      if (sell.max !== strategy.sell.max) fields.sellPriceHigh = sell.max;
+      if (buy.budget !== strategy.buy.budget) fields.buyBudget = buy.budget;
+      if (sell.budget !== strategy.sell.budget) fields.sellBudget = sell.budget;
+
       const unsignedTx = await carbonSDK.updateStrategy(
         strategy.id,
         strategy.encoded,
-        updates,
+        fields as StrategyUpdate,
         orders.buy.marginalPrice,
         orders.sell.marginalPrice,
       );
@@ -413,7 +409,7 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
             rawAmount: getRawAmount(
               strategy.base,
               strategy.sell.budget,
-              updates.sellBudget,
+              fields.sellBudget,
             ),
           },
           {
@@ -421,7 +417,7 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
             rawAmount: getRawAmount(
               strategy.quote,
               strategy.buy.budget,
-              updates.buyBudget,
+              fields.buyBudget,
             ),
           },
         ],
@@ -437,20 +433,34 @@ export const usePauseStrategyQuery = () => {
 
   return useMutation({
     mutationFn: async (strategy: AnyStrategy) => {
-      if (!strategy.encoded)
+      if (!strategy.encoded) {
         throw new Error('No encoded found on the strategy');
-      const unsignedTx = await carbonSDK.updateStrategy(
-        strategy.id,
-        strategy.encoded,
-        {
-          buyPriceLow: '0',
-          buyPriceHigh: '0',
-          sellPriceLow: '0',
-          sellPriceHigh: '0',
-        },
-      );
-
-      return sendTransaction(unsignedTx);
+      }
+      if (strategy.type === 'static') {
+        const unsignedTx = await carbonSDK.updateStrategy(
+          strategy.id,
+          strategy.encoded,
+          {
+            buyPriceLow: '0',
+            buyPriceHigh: '0',
+            sellPriceLow: '0',
+            sellPriceHigh: '0',
+          },
+        );
+        return sendTransaction(unsignedTx);
+      } else {
+        const unsignedTx = await carbonSDK.updateGradientStrategy(
+          strategy.id,
+          strategy.encoded,
+          {
+            buyPriceStart: '0',
+            buyPriceEnd: '0',
+            sellPriceStart: '0',
+            sellPriceEnd: '0',
+          },
+        );
+        return sendTransaction(unsignedTx);
+      }
     },
   });
 };
@@ -460,7 +470,9 @@ export const useDeleteStrategyQuery = () => {
 
   return useMutation({
     mutationFn: async ({ id }: DeleteStrategyParams) => {
-      const unsignedTx = await carbonSDK.deleteStrategy(id);
+      const unsignedTx = isGradientStrategyId(BigInt(id))
+        ? await carbonSDK.deleteGradientStrategy(id)
+        : await carbonSDK.deleteStrategy(id);
 
       return sendTransaction(unsignedTx);
     },

@@ -414,6 +414,25 @@ const sdkExposed = {
   getCacheDump: () => sdkCache.serialize(),
   getMaxSourceAmountByPair: (source: string, target: string) =>
     carbonSDK.getMaxSourceAmountByPair(source, target),
+  // Gradient
+  createGradientStrategy: (
+    ...args: Parameters<(typeof carbonSDK)['createBuySellGradientStrategy']>
+  ) => carbonSDK.createBuySellGradientStrategy(...args),
+  updateGradientStrategy: (
+    ...args: Parameters<(typeof carbonSDK)['updateGradientStrategy']>
+  ) => carbonSDK.updateGradientStrategy(...args),
+  deleteGradientStrategy: (
+    ...args: Parameters<(typeof carbonSDK)['deleteGradientStrategy']>
+  ) => carbonSDK.deleteGradientStrategy(...args),
+  getGradientStrategyById: (
+    ...args: Parameters<(typeof carbonSDK)['getGradientStrategyById']>
+  ) => carbonSDK.getGradientStrategyById(...args),
+  getGradientStrategiesByPair: (
+    ...args: Parameters<(typeof carbonSDK)['getGradientStrategiesByPair']>
+  ) => carbonSDK.getGradientStrategiesByPair(...args),
+  getGradientStrategyByUsre: (
+    ...args: Parameters<(typeof carbonSDK)['getUserGradientStrategies']>
+  ) => carbonSDK.getUserGradientStrategies(...args),
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;

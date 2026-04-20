@@ -99,6 +99,8 @@ export const commonConfig: AppConfig = {
       voucher: '0x3660F04B79751e31128f6378eAC70807e38f554E',
       batcher: '0x0199f3A6C4B192B9f9C3eBE31FBC535CdD4B7D4e',
       vault: '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4',
+      gradientController: '0x5BDdF8EdeEaE66Cc8477c9282b8c0462CD7132aa',
+      gradientVoucher: '0x4973fa43c4c4b0Bbe4071eB3e7c900810Df143E8',
     },
     openocean: '0x6352a56caadC4F1E25CD6c75970Fa768A3304e64',
   },

@@ -15,11 +15,11 @@ import { useApproval } from 'hooks/useApproval';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useDeleteStrategy } from '../useDeleteStrategy';
 import { hasNoBudget } from '../overlapping/utils';
-import { EditOrders } from '../common/types';
+import { EditOrders, FormStaticOrder } from '../common/types';
 import config from 'config';
 
 interface Props {
-  orders: EditOrders;
+  orders: EditOrders<FormStaticOrder>;
   editType: EditTypes;
   hasChanged: boolean;
   children: ReactNode;

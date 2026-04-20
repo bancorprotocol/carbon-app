@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@bancor/carbon-sdk": "0.0.127-DEV",
+    "@bancor/carbon-sdk": "0.0.131-DEV",
     "@cloudflare/workers-types": "4.20230717.0",
     "@eslint/js": "^9.39.2",
     "@floating-ui/core": "^1.7.3",

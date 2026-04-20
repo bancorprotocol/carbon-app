@@ -1,6 +1,9 @@
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { Token } from 'libs/tokens';
-import { EncodedStrategyBNStr } from '@bancor/carbon-sdk';
+import {
+  EncodedStrategyBNStr,
+  GradientEncodedStrategyBNStr,
+} from '@bancor/carbon-sdk';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
@@ -38,10 +41,13 @@ export interface FormStaticOrder {
   marginalPrice?: string | MarginalPriceOptions;
 }
 
-export interface EditOrders {
-  buy: FormStaticOrder;
-  sell: FormStaticOrder;
+export interface EditOrders<T extends FormStaticOrder | FormGradientOrder> {
+  buy: T;
+  sell: T;
 }
+export type AnyEditOrders =
+  | EditOrders<FormStaticOrder>
+  | EditOrders<FormGradientOrder>;
 
 export interface OrderBlock extends FormStaticOrder {
   settings: StrategySettings;
@@ -113,7 +119,9 @@ export interface Strategy<T extends Order = StaticOrder>
   id: string;
   idDisplay: string;
   status: StrategyStatus;
-  encoded?: EncodedStrategyBNStr;
+  encoded?: T extends StaticOrder
+    ? EncodedStrategyBNStr
+    : GradientEncodedStrategyBNStr;
 }
 
 export interface StrategyWithFiat<T extends Order = StaticOrder>
