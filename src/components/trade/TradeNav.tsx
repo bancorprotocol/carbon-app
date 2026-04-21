@@ -3,6 +3,7 @@ import IconRecurring from 'assets/icons/recurring.svg?react';
 import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
+import IconAuction from 'assets/icons/auction.svg?react';
 import IconSlow from 'assets/icons/slow.svg?react';
 import IconFast from 'assets/icons/fast.svg?react';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
@@ -32,6 +33,7 @@ const types = [
         to: '/trade/market' as const,
         search: undefined,
         icon: <IconMarket className="hidden md:block size-20" />,
+        isNew: false,
       },
       {
         id: 'fullRange',
@@ -39,6 +41,7 @@ const types = [
         to: '/trade/overlapping' as const,
         search: { preset: 'Infinity' },
         icon: <IconOverlapping className="hidden md:block size-20" />,
+        isNew: false,
       },
       {
         id: 'overlapping',
@@ -46,6 +49,7 @@ const types = [
         to: '/trade/overlapping' as const,
         search: undefined,
         icon: <IconOverlapping className="hidden md:block size-20" />,
+        isNew: false,
       },
     ],
   },
@@ -59,6 +63,7 @@ const types = [
         to: '/trade/disposable' as const,
         search: { settings: 'limit' as const, direction: 'buy' as const },
         icon: <IconDisposable className="hidden md:block size-20" />,
+        isNew: false,
       },
       {
         id: 'limitSell',
@@ -66,6 +71,7 @@ const types = [
         to: '/trade/disposable' as const,
         search: { settings: 'limit' as const },
         icon: <IconDisposable className="hidden md:block size-20" />,
+        isNew: false,
       },
       {
         id: 'recurringLimit',
@@ -73,6 +79,23 @@ const types = [
         to: '/trade/recurring' as const,
         search: { buySettings: 'limit', sellSettings: 'limit' } as const,
         icon: <IconRecurring className="hidden md:block size-20" />,
+        isNew: false,
+      },
+      {
+        id: 'auction',
+        name: 'Auction Buy',
+        to: '/trade/auction' as const,
+        search: { direction: 'buy' } as const,
+        icon: <IconAuction className="hidden md:block size-20" />,
+        isNew: true,
+      },
+      {
+        id: 'auction',
+        name: 'Auction Sell',
+        to: '/trade/auction' as const,
+        search: { direction: 'sell' } as const,
+        icon: <IconAuction className="hidden md:block size-20" />,
+        isNew: true,
       },
     ],
   },
@@ -86,6 +109,7 @@ const types = [
         to: '/trade/disposable' as const,
         search: { settings: 'range' as const, direction: 'buy' as const },
         icon: <IconRange className="hidden md:block size-20" />,
+        isNew: false,
       },
       {
         id: 'rangeSell',
@@ -93,6 +117,7 @@ const types = [
         to: '/trade/disposable' as const,
         search: { settings: 'range' as const },
         icon: <IconRange className="hidden md:block size-20" />,
+        isNew: false,
       },
       {
         id: 'recurringRange',
@@ -100,20 +125,16 @@ const types = [
         to: '/trade/recurring' as const,
         search: { buySettings: 'range', sellSettings: 'range' } as const,
         icon: <IconRecurring className="hidden md:block size-20" />,
+        isNew: false,
       },
-      {
-        id: 'auction',
-        name: 'Auction',
-        to: '/trade/auction' as const,
-        search: {} as const,
-        icon: <IconSlow className="hidden md:block size-20" />,
-      },
+
       {
         id: 'quick-auction',
         name: 'Quick Auction',
         to: '/trade/quick-auction' as const,
         search: {} as const,
         icon: <IconFast className="hidden md:block size-20" />,
+        isNew: true,
       },
       {
         id: 'custom',
@@ -121,6 +142,7 @@ const types = [
         to: '/trade/custom' as const,
         search: {} as const,
         icon: <IconSlow className="hidden md:block size-20" />,
+        isNew: true,
       },
       {
         id: 'quick-custom',
@@ -128,6 +150,7 @@ const types = [
         to: '/trade/quick-custom' as const,
         search: {} as const,
         icon: <IconFast className="hidden md:block size-20" />,
+        isNew: true,
       },
     ],
   },
@@ -206,11 +229,14 @@ export const TradeNav = () => {
   );
 };
 
-const StrategyLink: FC<{ strategy: StrategyLink; selected: boolean }> = (
-  props,
-) => {
+interface Props {
+  strategy: StrategyLink;
+  selected: boolean;
+}
+
+const StrategyLink: FC<Props> = (props) => {
   const menu = useMenuCtx();
-  const { id, name, to, search, icon } = props.strategy;
+  const { id, name, to, search, icon, isNew } = props.strategy;
   return (
     <Link
       key={name}
@@ -233,7 +259,12 @@ const StrategyLink: FC<{ strategy: StrategyLink; selected: boolean }> = (
       onClick={() => menu.setMenuOpen(false)}
     >
       {icon}
-      <span>{name}</span>
+      <span className="flex-1">{name}</span>
+      {isNew && (
+        <span className="ps-8 text-14 text-secondary font-weight-500">
+          New!
+        </span>
+      )}
     </Link>
   );
 };
