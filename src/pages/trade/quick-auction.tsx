@@ -51,7 +51,7 @@ export const TradeQuickAuction = () => {
     return defaultQuickGradientOrder('line', search, marketPrice);
   }, [search, marketPrice]);
   const { order, setOrder, drawing, onDrawingUpdate, gradientOrder } =
-    useQuickGradientOrder(baseOrder, saveOrder);
+    useQuickGradientOrder('line', baseOrder, saveOrder);
 
   const direction = order.direction;
   const orders = {
@@ -92,7 +92,7 @@ export const TradeQuickAuction = () => {
           <D3DrawingRanges
             drawing={drawing}
             color={direction}
-            formatX={(x) => formatQuickTime(x)}
+            formatX={formatQuickTime}
           />
         </QuickGradientChart>
       </StrategyChartSection>

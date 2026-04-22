@@ -4,7 +4,6 @@ import { StrategyChartSection } from 'components/strategies/common/StrategyChart
 import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { StrategyDirection } from 'libs/routing/routes/trade';
 import { useCallback, useMemo } from 'react';
-import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawLine';
 import { D3DrawingRanges } from 'components/strategies/common/d3Chart/drawing/D3DrawingRanges';
 import { useGradientOrder } from 'components/strategies/common/gradient/useGradientOrder';
 import { CreateGradientOrder } from 'components/strategies/common/gradient/CreateGradientOrder';
@@ -12,19 +11,21 @@ import { CreateGradientStrategyForm } from 'components/strategies/common/gradien
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import DeleteIcon from 'assets/icons/delete.svg?react';
-import AddIcon from 'assets/icons/add.svg?react';
 import {
   defaultGradientOrder,
   isReverseGradientOrders,
 } from 'components/strategies/common/gradient/utils';
-import { ChartPoint } from 'components/strategies/common/d3Chart/D3ChartContext';
+import {
+  ChartPoint,
+  Drawing,
+} from 'components/strategies/common/d3Chart/D3ChartContext';
 import { cn } from 'utils/helpers';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
 import style from 'components/strategies/common/order.module.css';
+import { D3EditChannel } from 'components/strategies/common/d3Chart/drawing/D3DrawChannel';
 
 const url = '/trade/channel';
 export const TradeChannel = () => {
@@ -45,23 +46,9 @@ export const TradeChannel = () => {
     [navigate],
   );
 
-  const setDirections = useCallback(
-    (cb: (direction: StrategyDirection[]) => StrategyDirection[]) => {
-      navigate({
-        params: (params) => params,
-        search: (previous) => ({
-          ...previous,
-          directions: cb(previous.directions || []),
-        }),
-        replace: true,
-        resetScroll: false,
-      });
-    },
-    [navigate],
-  );
-
   const baseBuy = useMemo(() => {
     return defaultGradientOrder(
+      'channel',
       {
         direction: 'buy',
         startPrice: search.buyStartPrice,
@@ -83,6 +70,7 @@ export const TradeChannel = () => {
 
   const baseSell = useMemo(() => {
     return defaultGradientOrder(
+      'channel',
       {
         direction: 'sell',
         startPrice: search.sellStartPrice,
@@ -102,143 +90,77 @@ export const TradeChannel = () => {
     search.sellStartPrice,
   ]);
 
-  const buy = useGradientOrder(baseBuy, (next) => saveOrder(next, 'buy'));
-  const sell = useGradientOrder(baseSell, (next) => saveOrder(next, 'sell'));
-
-  const orders = useMemo(() => ({ buy, sell }), [buy, sell]);
-
-  const addDirection = useCallback(
-    (direction: StrategyDirection) => {
-      setDirections((directions) => {
-        const set = new Set(directions);
-        set.add(direction);
-        return Array.from(set);
-      });
-    },
-    [setDirections],
+  const buy = useGradientOrder('channel', baseBuy, (next) =>
+    saveOrder(next, 'buy'),
   );
-  const removeDirection = useCallback(
-    (direction: StrategyDirection) => {
-      setDirections((directions) => {
-        const set = new Set(directions);
-        set.delete(direction);
-        saveOrder(
-          {
-            startPrice: undefined,
-            endPrice: undefined,
-            startDate: undefined,
-            endDate: undefined,
-            budget: undefined,
-          },
-          direction,
-        );
-        return Array.from(set);
-      });
-    },
-    [setDirections, saveOrder],
+  const sell = useGradientOrder('channel', baseSell, (next) =>
+    saveOrder(next, 'sell'),
   );
 
-  const onDrawingChange = useCallback(
-    (points: ChartPoint[], direction: StrategyDirection) => {
-      if (points.length) return orders[direction].onDrawingUpdate(points);
-      removeDirection(direction);
-    },
-    [orders, removeDirection],
+  const onDrawingChange = (points: ChartPoint[]) => {
+    buy.onDrawingUpdate([points[0], points[1]]);
+    sell.onDrawingUpdate([points[2], points[3]]);
+  };
+
+  const drawing = useMemo(
+    () =>
+      ({
+        id: 'channel',
+        mode: 'channel',
+        points: [...buy.drawing.points, ...sell.drawing.points],
+      }) satisfies Drawing,
+    [buy.drawing, sell.drawing],
   );
 
   const priceError = useMemo(() => {
-    if (search.directions?.length !== 2) return;
     if (isReverseGradientOrders(buy.order, sell.order)) {
       return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid loss of funds.';
     }
-  }, [buy.order, search.directions?.length, sell.order]);
+  }, [buy.order, sell.order]);
 
   return (
     <>
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <StrategyChartHistory buy={orders.buy.order} sell={orders.sell.order}>
-          {search.directions?.map((direction) => (
-            <D3EditLine
-              key={direction}
-              color={direction}
-              drawing={orders[direction].drawing}
-              onChange={(points) => onDrawingChange(points, direction)}
-            />
-          ))}
+        <StrategyChartHistory buy={buy.order} sell={sell.order}>
+          <D3EditChannel
+            colors={['sell', 'buy']}
+            drawing={drawing}
+            onChange={onDrawingChange}
+          />
           <TradeChartContent />
           <D3ChartToday />
-          {search.directions?.map((direction) => (
-            <D3DrawingRanges
-              key={direction}
-              color={direction}
-              drawing={orders[direction].drawing}
-            />
-          ))}
+          <D3DrawingRanges color="secondary" drawing={drawing} />
         </StrategyChartHistory>
       </StrategyChartSection>
       <CreateLayout url={url}>
-        <CreateGradientStrategyForm
-          buy={orders.buy.order}
-          sell={orders.sell.order}
-        >
+        <CreateGradientStrategyForm buy={buy.order} sell={sell.order}>
           <article className="surface grid rounded-2xl overflow-clip">
-            {!search.directions?.length && (
-              <h2 className="error-message text-16 p-16">
-                Please select an order
-              </h2>
-            )}
-            {(['sell', 'buy'] as const).map((direction) => {
-              const { order, setOrder } = orders[direction];
-              if (search.directions?.includes(direction)) {
-                return (
-                  <section
-                    key={direction}
-                    className={cn(
-                      style.order,
-                      'animate-scale-up relative grid gap-16 p-16',
-                    )}
-                    data-direction={order.direction}
-                  >
-                    <CreateGradientOrder
-                      order={order}
-                      setOrder={setOrder}
-                      priceWarning={
-                        priceError && <Warning message={priceError} isError />
-                      }
-                      action={
-                        <button
-                          type="button"
-                          aria-label={`remove ${direction} order`}
-                          onClick={() => removeDirection(direction)}
-                        >
-                          <DeleteIcon className="size-16" />
-                        </button>
-                      }
-                    />
-                  </section>
-                );
-              } else {
-                return (
-                  <div key={direction} className="grid px-16 py-8 last:pb-16">
-                    <button
-                      type="button"
-                      onClick={() => addDirection(direction)}
-                      className={cn([
-                        'rounded-md grid justify-items-center gap-16 border border-dashed p-20 text-center',
-                        direction === 'buy'
-                          ? 'hover:bg-buy/10 text-buy border-buy'
-                          : 'hover:bg-sell/10 text-sell border-sell',
-                      ])}
-                    >
-                      <AddIcon className="size-24" />
-                      <span className="capitalize">Add {direction} Order</span>
-                    </button>
-                  </div>
-                );
-              }
-            })}
+            <section
+              className={cn(style.order, 'relative grid gap-16 p-16')}
+              data-direction="sell"
+            >
+              <CreateGradientOrder
+                order={sell.order}
+                setOrder={sell.setOrder}
+                priceWarning={
+                  priceError && <Warning message={priceError} isError />
+                }
+              />
+            </section>
+            <section
+              className={cn(style.order, 'relative grid gap-16 p-16')}
+              data-direction="buy"
+            >
+              <CreateGradientOrder
+                order={buy.order}
+                setOrder={buy.setOrder}
+                priceWarning={
+                  priceError && <Warning message={priceError} isError />
+                }
+              />
+            </section>
           </article>
         </CreateGradientStrategyForm>
       </CreateLayout>

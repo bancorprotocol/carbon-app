@@ -24,8 +24,8 @@ import {
 } from 'components/strategies/common/quick/utils';
 import { QuickGradientChart } from 'components/strategies/common/quick/QuickGradientChart';
 import { CreateQuickGradientOrder } from 'components/strategies/common/quick/CreateQuickGradientOrder';
-import style from 'components/strategies/common/order.module.css';
 import { D3EditChannel } from 'components/strategies/common/d3Chart/drawing/D3DrawChannel';
+import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/quick-channel';
 export const TradeQuickChannel = () => {
@@ -90,10 +90,10 @@ export const TradeQuickChannel = () => {
     search.sellStartPrice,
   ]);
 
-  const buy = useQuickGradientOrder(baseBuy, (next) => {
+  const buy = useQuickGradientOrder('channel', baseBuy, (next) => {
     return saveOrder(next, 'buy');
   });
-  const sell = useQuickGradientOrder(baseSell, (next) => {
+  const sell = useQuickGradientOrder('channel', baseSell, (next) => {
     return saveOrder(next, 'sell');
   });
 
@@ -116,7 +116,8 @@ export const TradeQuickChannel = () => {
   );
 
   const onDrawingChange = (points: ChartPoint[]) => {
-    console.log(points);
+    buy.onDrawingUpdate([points[0], points[1]]);
+    sell.onDrawingUpdate([points[2], points[3]]);
   };
 
   const priceError = useMemo(() => {
@@ -132,18 +133,14 @@ export const TradeQuickChannel = () => {
       >
         <QuickGradientChart orders={[buy.order, sell.order]}>
           <D3EditChannel
+            colors={['sell', 'buy']}
             drawing={drawing}
-            onChange={(points) => onDrawingChange(points)}
+            onChange={onDrawingChange}
           />
           <D3DrawingRanges
-            color="buy"
-            drawing={buy.drawing}
-            formatX={(x) => formatQuickTime(x)}
-          />
-          <D3DrawingRanges
-            color="sell"
-            drawing={sell.drawing}
-            formatX={(x) => formatQuickTime(x)}
+            color="secondary"
+            drawing={drawing}
+            formatX={formatQuickTime}
           />
         </QuickGradientChart>
       </StrategyChartSection>

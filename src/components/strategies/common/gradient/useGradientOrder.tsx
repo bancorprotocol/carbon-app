@@ -13,8 +13,10 @@ import {
   quickToGradientOrder,
 } from '../quick/utils';
 import { ChartPoint, Drawing } from '../d3Chart/D3ChartContext';
+import { DrawingMode } from '../d3Chart/drawing/DrawingMenu';
 
 export const useGradientOrder = (
+  mode: DrawingMode,
   initOrder: GradientOrderBlock,
   saveOrder: (order: Partial<GradientOrderBlock>) => any,
 ) => {
@@ -24,11 +26,13 @@ export const useGradientOrder = (
 
   const set = useCallback(
     (next: Partial<GradientOrderBlock>) => {
-      setOrder((current) => defaultGradientOrder({ ...current, ...next }));
+      setOrder((current) =>
+        defaultGradientOrder(mode, { ...current, ...next }),
+      );
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => saveOrder(next), 200);
     },
-    [saveOrder],
+    [mode, saveOrder],
   );
 
   useEffect(() => {
@@ -77,6 +81,7 @@ export const useGradientOrder = (
 };
 
 export const useQuickGradientOrder = (
+  mode: DrawingMode,
   initOrder: QuickGradientOrderBlock,
   saveOrder: (order: Partial<GradientOrderBlock>) => any,
 ) => {
@@ -87,12 +92,12 @@ export const useQuickGradientOrder = (
   const set = useCallback(
     (next: Partial<QuickGradientOrderBlock>) => {
       setOrder((current) =>
-        defaultQuickGradientOrder('line', { ...current, ...next }),
+        defaultQuickGradientOrder(mode, { ...current, ...next }),
       );
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => saveOrder(next), 200);
     },
-    [saveOrder],
+    [mode, saveOrder],
   );
 
   useEffect(() => {
