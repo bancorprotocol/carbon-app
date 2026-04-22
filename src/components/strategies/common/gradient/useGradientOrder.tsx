@@ -86,7 +86,9 @@ export const useQuickGradientOrder = (
 
   const set = useCallback(
     (next: Partial<QuickGradientOrderBlock>) => {
-      setOrder((current) => defaultQuickGradientOrder({ ...current, ...next }));
+      setOrder((current) =>
+        defaultQuickGradientOrder('line', { ...current, ...next }),
+      );
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => saveOrder(next), 200);
     },

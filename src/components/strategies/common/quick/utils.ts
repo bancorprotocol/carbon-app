@@ -3,6 +3,7 @@ import { GradientOrderBlock, QuickGradientOrderBlock } from '../types';
 import { addMinutes } from 'date-fns';
 
 export const defaultQuickGradientOrder = (
+  mode: 'line' | 'channel' | 'triangle',
   baseOrder: Partial<QuickGradientOrderBlock>,
   marketPrice: number = 0,
 ): QuickGradientOrderBlock => {

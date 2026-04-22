@@ -1,38 +1,34 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
+import { StrategyChartHistory } from 'components/strategies/common/StrategyChartHistory';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import { StrategyDirection } from 'libs/routing/routes/trade';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawLine';
 import { D3DrawingRanges } from 'components/strategies/common/d3Chart/drawing/D3DrawingRanges';
-import { useQuickGradientOrder } from 'components/strategies/common/gradient/useGradientOrder';
+import { useGradientOrder } from 'components/strategies/common/gradient/useGradientOrder';
+import { CreateGradientOrder } from 'components/strategies/common/gradient/CreateGradientOrder';
 import { CreateGradientStrategyForm } from 'components/strategies/common/gradient/CreateGradientStrategyForm';
+import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
 import DeleteIcon from 'assets/icons/delete.svg?react';
 import AddIcon from 'assets/icons/add.svg?react';
-import { isReverseGradientOrders } from 'components/strategies/common/gradient/utils';
+import {
+  defaultGradientOrder,
+  isReverseGradientOrders,
+} from 'components/strategies/common/gradient/utils';
 import { ChartPoint } from 'components/strategies/common/d3Chart/D3ChartContext';
 import { cn } from 'utils/helpers';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
-import {
-  defaultQuickGradientOrder,
-  formatQuickTime,
-} from 'components/strategies/common/quick/utils';
-import { QuickGradientChart } from 'components/strategies/common/quick/QuickGradientChart';
-import { CreateQuickGradientOrder } from 'components/strategies/common/quick/CreateQuickGradientOrder';
+import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
 import style from 'components/strategies/common/order.module.css';
 
-const url = '/trade/quick-custom';
-export const TradeQuickCustom = () => {
-  const { base, quote } = useStrategyFormCtx();
-  const { marketPrice, isPending: pendingMarketPrice } = useMarketPrice({
-    base,
-    quote,
-  });
+const url = '/trade/channel';
+export const TradeChannel = () => {
+  const { base, quote, marketPrice } = useStrategyFormCtx();
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
 
@@ -65,13 +61,13 @@ export const TradeQuickCustom = () => {
   );
 
   const baseBuy = useMemo(() => {
-    return defaultQuickGradientOrder(
-      'line',
+    return defaultGradientOrder(
       {
         direction: 'buy',
         startPrice: search.buyStartPrice,
         endPrice: search.buyEndPrice,
-        deltaTime: search.buyDeltaTime,
+        startDate: search.buyStartDate,
+        endDate: search.buyEndDate,
         budget: search.buyBudget,
       },
       marketPrice,
@@ -79,19 +75,20 @@ export const TradeQuickCustom = () => {
   }, [
     marketPrice,
     search.buyBudget,
+    search.buyEndDate,
     search.buyEndPrice,
-    search.buyDeltaTime,
+    search.buyStartDate,
     search.buyStartPrice,
   ]);
 
   const baseSell = useMemo(() => {
-    return defaultQuickGradientOrder(
-      'line',
+    return defaultGradientOrder(
       {
         direction: 'sell',
         startPrice: search.sellStartPrice,
         endPrice: search.sellEndPrice,
-        deltaTime: search.sellDeltaTime,
+        startDate: search.sellStartDate,
+        endDate: search.sellEndDate,
         budget: search.sellBudget,
       },
       marketPrice,
@@ -99,25 +96,14 @@ export const TradeQuickCustom = () => {
   }, [
     marketPrice,
     search.sellBudget,
+    search.sellEndDate,
     search.sellEndPrice,
-    search.sellDeltaTime,
+    search.sellStartDate,
     search.sellStartPrice,
   ]);
 
-  const buy = useQuickGradientOrder(baseBuy, (next) => {
-    return saveOrder(next, 'buy');
-  });
-  const sell = useQuickGradientOrder(baseSell, (next) => {
-    return saveOrder(next, 'sell');
-  });
-
-  useEffect(() => {
-    if (pendingMarketPrice) return;
-    buy.setOrder(baseBuy);
-    sell.setOrder(baseSell);
-    // Only run this once the marketprice is ready
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pendingMarketPrice]);
+  const buy = useGradientOrder(baseBuy, (next) => saveOrder(next, 'buy'));
+  const sell = useGradientOrder(baseSell, (next) => saveOrder(next, 'sell'));
 
   const orders = useMemo(() => ({ buy, sell }), [buy, sell]);
 
@@ -162,17 +148,17 @@ export const TradeQuickCustom = () => {
 
   const priceError = useMemo(() => {
     if (search.directions?.length !== 2) return;
-    if (isReverseGradientOrders(buy.gradientOrder, sell.gradientOrder)) {
+    if (isReverseGradientOrders(buy.order, sell.order)) {
       return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid loss of funds.';
     }
-  }, [buy.gradientOrder, search.directions?.length, sell.gradientOrder]);
+  }, [buy.order, search.directions?.length, sell.order]);
 
   return (
     <>
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <QuickGradientChart orders={[orders.buy.order, orders.sell.order]}>
+        <StrategyChartHistory buy={orders.buy.order} sell={orders.sell.order}>
           {search.directions?.map((direction) => (
             <D3EditLine
               key={direction}
@@ -181,22 +167,23 @@ export const TradeQuickCustom = () => {
               onChange={(points) => onDrawingChange(points, direction)}
             />
           ))}
+          <TradeChartContent />
+          <D3ChartToday />
           {search.directions?.map((direction) => (
             <D3DrawingRanges
               key={direction}
               color={direction}
               drawing={orders[direction].drawing}
-              formatX={(x) => formatQuickTime(x)}
             />
           ))}
-        </QuickGradientChart>
+        </StrategyChartHistory>
       </StrategyChartSection>
       <CreateLayout url={url}>
         <CreateGradientStrategyForm
-          buy={orders.buy.gradientOrder}
-          sell={orders.sell.gradientOrder}
+          buy={orders.buy.order}
+          sell={orders.sell.order}
         >
-          <div className="surface grid gap-16 rounded-2xl overflow-clip">
+          <article className="surface grid rounded-2xl overflow-clip">
             {!search.directions?.length && (
               <h2 className="error-message text-16 p-16">
                 Please select an order
@@ -206,7 +193,7 @@ export const TradeQuickCustom = () => {
               const { order, setOrder } = orders[direction];
               if (search.directions?.includes(direction)) {
                 return (
-                  <div
+                  <section
                     key={direction}
                     className={cn(
                       style.order,
@@ -214,7 +201,7 @@ export const TradeQuickCustom = () => {
                     )}
                     data-direction={order.direction}
                   >
-                    <CreateQuickGradientOrder
+                    <CreateGradientOrder
                       order={order}
                       setOrder={setOrder}
                       priceWarning={
@@ -223,7 +210,6 @@ export const TradeQuickCustom = () => {
                       action={
                         <button
                           type="button"
-                          className="absolute right-16 top-28"
                           aria-label={`remove ${direction} order`}
                           onClick={() => removeDirection(direction)}
                         >
@@ -231,7 +217,7 @@ export const TradeQuickCustom = () => {
                         </button>
                       }
                     />
-                  </div>
+                  </section>
                 );
               } else {
                 return (
@@ -240,7 +226,7 @@ export const TradeQuickCustom = () => {
                       type="button"
                       onClick={() => addDirection(direction)}
                       className={cn([
-                        'rounded-md grid justify-items-center gap-16 border border-dashed p-16 text-center',
+                        'rounded-md grid justify-items-center gap-16 border border-dashed p-20 text-center',
                         direction === 'buy'
                           ? 'hover:bg-buy/10 text-buy border-buy'
                           : 'hover:bg-sell/10 text-sell border-sell',
@@ -253,7 +239,7 @@ export const TradeQuickCustom = () => {
                 );
               }
             })}
-          </div>
+          </article>
         </CreateGradientStrategyForm>
       </CreateLayout>
     </>

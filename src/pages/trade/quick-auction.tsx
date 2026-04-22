@@ -48,7 +48,7 @@ export const TradeQuickAuction = () => {
   );
 
   const baseOrder = useMemo(() => {
-    return defaultQuickGradientOrder(search, marketPrice);
+    return defaultQuickGradientOrder('line', search, marketPrice);
   }, [search, marketPrice]);
   const { order, setOrder, drawing, onDrawingUpdate, gradientOrder } =
     useQuickGradientOrder(baseOrder, saveOrder);
@@ -68,6 +68,7 @@ export const TradeQuickAuction = () => {
   const setDirection = useCallback(
     (direction: StrategyDirection) => {
       const next = defaultQuickGradientOrder(
+        'line',
         { direction, budget: order.budget },
         marketPrice,
       );

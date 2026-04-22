@@ -17,13 +17,13 @@ import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
-import * as v from 'valibot';
 import { TradeAuction } from 'pages/trade/auction';
-import { TradeCustom } from 'pages/trade/custom';
 import { TradeQuickAuction } from 'pages/trade/quick-auction';
-import { TradeQuickCustom } from 'pages/trade/quick-custom';
 import { addMonths, startOfDay, subMonths } from 'date-fns';
 import { toUnixUTC } from 'components/simulator/utils';
+import { TradeChannel } from 'pages/trade/channel';
+import { TradeQuickChannel } from 'pages/trade/quick-channel';
+import * as v from 'valibot';
 
 // TRADE TYPE
 export type StrategyType =
@@ -208,10 +208,10 @@ const auctionPage = createRoute({
   }),
 });
 
-const customPage = createRoute({
+const channelPage = createRoute({
   getParentRoute: () => tradePage,
-  path: '/custom',
-  component: TradeCustom,
+  path: '/channel',
+  component: TradeChannel,
   beforeLoad: ({ search }) => {
     if (!search.chartStart) {
       const date = startOfDay(subMonths(new Date(), 1));
@@ -223,7 +223,6 @@ const customPage = createRoute({
     }
   },
   validateSearch: searchValidator({
-    directions: v.optional(v.array(validDirection)),
     buyStartPrice: v.optional(validInputNumber),
     buyEndPrice: v.optional(validInputNumber),
     buyStartDate: v.optional(validNumber),
@@ -236,6 +235,34 @@ const customPage = createRoute({
     sellBudget: v.optional(validInputNumber),
   }),
 });
+// const customPage = createRoute({
+//   getParentRoute: () => tradePage,
+//   path: '/custom',
+//   component: TradeCustom,
+//   beforeLoad: ({ search }) => {
+//     if (!search.chartStart) {
+//       const date = startOfDay(subMonths(new Date(), 1));
+//       search.chartStart = toUnixUTC(date).toString();
+//     }
+//     if (!search.chartEnd) {
+//       const date = startOfDay(addMonths(new Date(), 2));
+//       search.chartEnd = toUnixUTC(date).toString();
+//     }
+//   },
+//   validateSearch: searchValidator({
+//     directions: v.optional(v.array(validDirection)),
+//     buyStartPrice: v.optional(validInputNumber),
+//     buyEndPrice: v.optional(validInputNumber),
+//     buyStartDate: v.optional(validNumber),
+//     buyEndDate: v.optional(validNumber),
+//     buyBudget: v.optional(validInputNumber),
+//     sellStartPrice: v.optional(validInputNumber),
+//     sellEndPrice: v.optional(validInputNumber),
+//     sellStartDate: v.optional(validNumber),
+//     sellEndDate: v.optional(validNumber),
+//     sellBudget: v.optional(validInputNumber),
+//   }),
+// });
 
 const quickAuctionPage = createRoute({
   getParentRoute: () => tradePage,
@@ -250,12 +277,11 @@ const quickAuctionPage = createRoute({
   }),
 });
 
-const quickCustomPage = createRoute({
+const quickChannelPage = createRoute({
   getParentRoute: () => tradePage,
-  path: '/quick-custom',
-  component: TradeQuickCustom,
+  path: '/quick-channel',
+  component: TradeQuickChannel,
   validateSearch: searchValidator({
-    directions: v.optional(v.array(validDirection)),
     buyStartPrice: v.optional(validInputNumber),
     buyEndPrice: v.optional(validInputNumber),
     buyDeltaTime: v.optional(validNumber),
@@ -266,6 +292,22 @@ const quickCustomPage = createRoute({
     sellBudget: v.optional(validInputNumber),
   }),
 });
+// const quickCustomPage = createRoute({
+//   getParentRoute: () => tradePage,
+//   path: '/quick-custom',
+//   component: TradeQuickCustom,
+//   validateSearch: searchValidator({
+//     directions: v.optional(v.array(validDirection)),
+//     buyStartPrice: v.optional(validInputNumber),
+//     buyEndPrice: v.optional(validInputNumber),
+//     buyDeltaTime: v.optional(validNumber),
+//     buyBudget: v.optional(validInputNumber),
+//     sellStartPrice: v.optional(validInputNumber),
+//     sellEndPrice: v.optional(validInputNumber),
+//     sellDeltaTime: v.optional(validNumber),
+//     sellBudget: v.optional(validInputNumber),
+//   }),
+// });
 
 export default tradePage.addChildren([
   marketPage,
@@ -273,7 +315,7 @@ export default tradePage.addChildren([
   recurringPage,
   overlappingPage,
   auctionPage,
-  customPage,
+  channelPage,
   quickAuctionPage,
-  quickCustomPage,
+  quickChannelPage,
 ]);

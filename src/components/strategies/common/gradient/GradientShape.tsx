@@ -6,24 +6,24 @@ import IconFast from 'assets/icons/fast.svg?react';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 
 interface Props {
-  speed: 'fast' | 'slow';
+  shape: 'triangle' | 'channel';
 }
 
 const items = {
-  fast: {
+  triangle: {
     Icon: IconFast,
-    to: '/trade/quick-auction' as const,
-    label: 'Fast auction',
+    to: '/trade/triangle' as const,
+    label: 'Triangle',
   },
-  slow: {
+  channel: {
     Icon: IconSlow,
-    to: '/trade/auction' as const,
-    label: 'Slow auction',
+    to: '/trade/channel' as const,
+    label: 'Channel',
   },
 };
 
-export const GradientSpeed: FC<Props> = ({ speed }) => {
-  const item = items[speed];
+export const GradientShape: FC<Props> = ({ shape }) => {
+  const item = items[shape];
   return (
     <DropdownMenu
       className="rounded-xl p-8 grid gap-4"
@@ -44,7 +44,7 @@ export const GradientSpeed: FC<Props> = ({ speed }) => {
         <Link
           key={id}
           to={item.to}
-          data-selected={speed === id}
+          data-selected={shape === id}
           className="flex gap-8 items-center px-16 py-8 rounded-sm w-full hover:bg-main-900/40 data-[selected=true]:bg-main-900/60"
           search={(s) => ({
             base: s.base,

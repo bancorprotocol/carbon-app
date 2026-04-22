@@ -4,8 +4,8 @@ import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
 import IconAuction from 'assets/icons/auction.svg?react';
-import IconSlow from 'assets/icons/slow.svg?react';
 import IconFast from 'assets/icons/fast.svg?react';
+import IconChannel from 'assets/icons/channel.svg?react';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 
 import { Link, useRouterState } from 'libs/routing';
@@ -130,26 +130,42 @@ const types = [
 
       {
         id: 'quick-auction',
-        name: 'Quick Auction',
+        name: 'Quick auction',
         to: '/trade/quick-auction' as const,
         search: {} as const,
         icon: <IconFast className="hidden md:block size-20" />,
         isNew: true,
       },
       {
-        id: 'custom',
-        name: 'Custom',
-        to: '/trade/custom' as const,
+        id: 'channel',
+        name: 'Channel',
+        to: '/trade/channel' as const,
         search: {} as const,
-        icon: <IconSlow className="hidden md:block size-20" />,
+        icon: <IconChannel className="hidden md:block size-20" />,
         isNew: true,
       },
       {
-        id: 'quick-custom',
-        name: 'Quick Custom',
-        to: '/trade/quick-custom' as const,
+        id: 'quick-channel',
+        name: 'Quick channel',
+        to: '/trade/quick-channel' as const,
         search: {} as const,
-        icon: <IconFast className="hidden md:block size-20" />,
+        icon: <IconChannel className="hidden md:block size-20" />,
+        isNew: true,
+      },
+      {
+        id: 'triangle',
+        name: 'Triangle',
+        to: '/trade/triangle' as const,
+        search: {} as const,
+        icon: <IconChannel className="hidden md:block size-20" />,
+        isNew: true,
+      },
+      {
+        id: 'quick-triangle',
+        name: 'Quick triangle',
+        to: '/trade/quick-triangle' as const,
+        search: {} as const,
+        icon: <IconChannel className="hidden md:block size-20" />,
         isNew: true,
       },
     ],
