@@ -23,6 +23,7 @@ import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawL
 import { D3DrawingRanges } from 'components/strategies/common/d3Chart/drawing/D3DrawingRanges';
 import { cn } from 'utils/helpers';
 import style from 'components/strategies/common/order.module.css';
+import { GradientSpeed } from 'components/strategies/common/gradient/GradientSpeed';
 
 const url = '/trade/quick-auction';
 export const TradeQuickAuction = () => {
@@ -95,6 +96,7 @@ export const TradeQuickAuction = () => {
         </QuickGradientChart>
       </StrategyChartSection>
       <CreateLayout url={url}>
+        <GradientSpeed speed="fast" />
         <CreateGradientStrategyForm buy={orders.buy} sell={orders.sell}>
           <div className="surface rounded-2xl grid overflow-clip">
             <OrderDirection direction={direction} setDirection={setDirection} />

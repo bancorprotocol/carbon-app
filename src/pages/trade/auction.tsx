@@ -20,6 +20,7 @@ import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
 import { cn } from 'utils/helpers';
+import { GradientSpeed } from 'components/strategies/common/gradient/GradientSpeed';
 import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/auction';
@@ -82,6 +83,7 @@ export const TradeAuction = () => {
         </StrategyChartHistory>
       </StrategyChartSection>
       <CreateLayout url={url}>
+        <GradientSpeed speed="slow" />
         <CreateGradientStrategyForm buy={orders.buy} sell={orders.sell}>
           <div className="surface grid rounded-2xl overflow-clip">
             <OrderDirection direction={direction} setDirection={setDirection} />

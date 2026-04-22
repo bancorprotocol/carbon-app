@@ -81,7 +81,7 @@ const init = async (
       ? (address) => decimalsMap.get(address.toLowerCase())
       : undefined,
   );
-  await startDataSync();
+  // await startDataSync();
   isInitialized = true;
   isInitializing = false;
 };

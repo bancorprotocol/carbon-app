@@ -82,7 +82,7 @@ const types = [
         isNew: false,
       },
       {
-        id: 'auction',
+        id: 'auction-buy',
         name: 'Auction Buy',
         to: '/trade/auction' as const,
         search: { direction: 'buy' } as const,
@@ -90,7 +90,7 @@ const types = [
         isNew: true,
       },
       {
-        id: 'auction',
+        id: 'auction-sell',
         name: 'Auction Sell',
         to: '/trade/auction' as const,
         search: { direction: 'sell' } as const,
