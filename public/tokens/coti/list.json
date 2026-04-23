@@ -114,11 +114,19 @@
       "symbol": "NIGHT",
       "decimals": 6,
       "logoURI": "/tokens/coti/0xFc075Bd3e22d337C19b7Ca25635282ad8e24941a.svg"
+    },
+    {
+      "chainId": 2632500,
+      "address": "0x256353f5B4b515f488876dD1CAc2300c6C6f98B7",
+      "name": "Wrapped BabyTuru",
+      "symbol": "WBBT",
+      "decimals": 18,
+      "logoURI": "/tokens/coti/0x256353f5B4b515f488876dD1CAc2300c6C6f98B7.jpg"
     }
   ],
   "version": {
     "major": 1,
     "minor": 0,
-    "patch": 0
+    "patch": 1
   }
 }
