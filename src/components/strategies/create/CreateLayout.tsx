@@ -15,7 +15,8 @@ interface Props {
     | '/trade/auction'
     | '/trade/triangle'
     | '/trade/quick-auction'
-    | '/trade/quick-channel';
+    | '/trade/quick-channel'
+    | '/trade/quick-triangle';
   children: ReactNode;
 }
 

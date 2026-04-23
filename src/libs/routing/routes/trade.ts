@@ -25,6 +25,7 @@ import { TradeChannel } from 'pages/trade/channel';
 import { TradeQuickChannel } from 'pages/trade/quick-channel';
 import * as v from 'valibot';
 import { TradeTriangle } from 'pages/trade/triangle';
+import { TradeQuickTriangle } from 'pages/trade/quick-triangle';
 
 // TRADE TYPE
 export type StrategyType =
@@ -321,6 +322,21 @@ const quickChannelPage = createRoute({
     sellBudget: v.optional(validInputNumber),
   }),
 });
+const quickTrianglePage = createRoute({
+  getParentRoute: () => tradePage,
+  path: '/quick-triangle',
+  component: TradeQuickTriangle,
+  validateSearch: searchValidator({
+    buyStartPrice: v.optional(validInputNumber),
+    buyEndPrice: v.optional(validInputNumber),
+    buyDeltaTime: v.optional(validNumber),
+    buyBudget: v.optional(validInputNumber),
+    sellStartPrice: v.optional(validInputNumber),
+    sellEndPrice: v.optional(validInputNumber),
+    sellDeltaTime: v.optional(validNumber),
+    sellBudget: v.optional(validInputNumber),
+  }),
+});
 // const quickCustomPage = createRoute({
 //   getParentRoute: () => tradePage,
 //   path: '/quick-custom',
@@ -348,4 +364,5 @@ export default tradePage.addChildren([
   trianglePage,
   quickAuctionPage,
   quickChannelPage,
+  quickTrianglePage,
 ]);
