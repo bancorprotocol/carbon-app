@@ -97,6 +97,14 @@ const types = [
         icon: <IconAuction className="hidden md:block size-20" />,
         isNew: true,
       },
+      {
+        id: 'quick-auction',
+        name: 'Quick auction',
+        to: '/trade/quick-auction' as const,
+        search: {} as const,
+        icon: <IconFast className="hidden md:block size-20" />,
+        isNew: true,
+      },
     ],
   },
   {
@@ -126,15 +134,6 @@ const types = [
         search: { buySettings: 'range', sellSettings: 'range' } as const,
         icon: <IconRecurring className="hidden md:block size-20" />,
         isNew: false,
-      },
-
-      {
-        id: 'quick-auction',
-        name: 'Quick auction',
-        to: '/trade/quick-auction' as const,
-        search: {} as const,
-        icon: <IconFast className="hidden md:block size-20" />,
-        isNew: true,
       },
       {
         id: 'channel',
