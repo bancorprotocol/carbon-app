@@ -54,7 +54,7 @@ const getEndMultiplier = (mode: DrawingMode, direction: StrategyDirection) => {
   } else if (mode === 'channel') {
     return direction === 'buy' ? 0.9 : 1.1;
   } else {
-    return direction === 'buy' ? 0.99 : 1.01;
+    return 1;
   }
 };
 

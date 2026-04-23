@@ -13,6 +13,7 @@ interface Props {
     | '/trade/overlapping'
     | '/trade/channel'
     | '/trade/auction'
+    | '/trade/triangle'
     | '/trade/quick-auction'
     | '/trade/quick-channel';
   children: ReactNode;

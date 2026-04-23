@@ -24,6 +24,7 @@ import { toUnixUTC } from 'components/simulator/utils';
 import { TradeChannel } from 'pages/trade/channel';
 import { TradeQuickChannel } from 'pages/trade/quick-channel';
 import * as v from 'valibot';
+import { TradeTriangle } from 'pages/trade/triangle';
 
 // TRADE TYPE
 export type StrategyType =
@@ -235,6 +236,34 @@ const channelPage = createRoute({
     sellBudget: v.optional(validInputNumber),
   }),
 });
+
+const trianglePage = createRoute({
+  getParentRoute: () => tradePage,
+  path: '/triangle',
+  component: TradeTriangle,
+  beforeLoad: ({ search }) => {
+    if (!search.chartStart) {
+      const date = startOfDay(subMonths(new Date(), 1));
+      search.chartStart = toUnixUTC(date).toString();
+    }
+    if (!search.chartEnd) {
+      const date = startOfDay(addMonths(new Date(), 2));
+      search.chartEnd = toUnixUTC(date).toString();
+    }
+  },
+  validateSearch: searchValidator({
+    buyStartPrice: v.optional(validInputNumber),
+    buyEndPrice: v.optional(validInputNumber),
+    buyStartDate: v.optional(validNumber),
+    buyEndDate: v.optional(validNumber),
+    buyBudget: v.optional(validInputNumber),
+    sellStartPrice: v.optional(validInputNumber),
+    sellEndPrice: v.optional(validInputNumber),
+    sellStartDate: v.optional(validNumber),
+    sellEndDate: v.optional(validNumber),
+    sellBudget: v.optional(validInputNumber),
+  }),
+});
 // const customPage = createRoute({
 //   getParentRoute: () => tradePage,
 //   path: '/custom',
@@ -316,6 +345,7 @@ export default tradePage.addChildren([
   overlappingPage,
   auctionPage,
   channelPage,
+  trianglePage,
   quickAuctionPage,
   quickChannelPage,
 ]);
