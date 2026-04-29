@@ -24,8 +24,13 @@ import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
-import style from 'components/strategies/common/order.module.css';
 import { D3EditChannel } from 'components/strategies/common/d3Chart/drawing/D3DrawChannel';
+import {
+  ChannelOrder,
+  DeltaChannel,
+  DeltaType,
+} from 'components/strategies/common/channel/CreateChannelOrder';
+import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/channel';
 export const TradeChannel = () => {
@@ -46,15 +51,38 @@ export const TradeChannel = () => {
     [navigate],
   );
 
+  const setDelta = useCallback(
+    (delta: Partial<DeltaChannel>) => {
+      const params: Partial<{ delta: string; deltaType: DeltaType }> = {};
+      if (delta.value) params['delta'] = delta.value;
+      if (delta.type) params['deltaType'] = delta.type;
+      navigate({
+        params: (params) => params,
+        search: (previous) => ({ ...previous, ...params }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate],
+  );
+
+  const delta: DeltaChannel = {
+    value: search.delta ?? '5',
+    type: search.deltaType ?? 'percent',
+  };
+
   const baseBuy = useMemo(() => {
+    // TODO: calcul
+    const startPrice = search.sellStartPrice;
+    const endPrice = search.sellEndPrice;
     return defaultGradientOrder(
       'channel',
       {
         direction: 'buy',
-        startPrice: search.buyStartPrice,
-        endPrice: search.buyEndPrice,
-        startDate: search.buyStartDate,
-        endDate: search.buyEndDate,
+        startPrice: startPrice,
+        endPrice: endPrice,
+        startDate: search.sellStartDate,
+        endDate: search.sellEndDate,
         budget: search.buyBudget,
       },
       marketPrice,
@@ -62,10 +90,10 @@ export const TradeChannel = () => {
   }, [
     marketPrice,
     search.buyBudget,
-    search.buyEndDate,
-    search.buyEndPrice,
-    search.buyStartDate,
-    search.buyStartPrice,
+    search.sellEndDate,
+    search.sellEndPrice,
+    search.sellStartDate,
+    search.sellStartPrice,
   ]);
 
   const baseSell = useMemo(() => {
@@ -153,12 +181,11 @@ export const TradeChannel = () => {
               className={cn(style.order, 'relative grid gap-16 p-16')}
               data-direction="buy"
             >
-              <CreateGradientOrder
+              <ChannelOrder
+                delta={delta}
+                setDelta={setDelta}
                 order={buy.order}
                 setOrder={buy.setOrder}
-                priceWarning={
-                  priceError && <Warning message={priceError} isError />
-                }
               />
             </section>
           </article>

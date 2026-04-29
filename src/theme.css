@@ -429,7 +429,8 @@
   @apply border border-transparent bg-main-900/40 hover:bg-main-900/60 p-16 focus-within:border-main-400;
   box-shadow: inset 0 0 10px var(--color-shadow);
   &:has(:disabled) {
-    @apply bg-main-900/40;
+    box-shadow: none;
+    @apply opacity-60;
   }
   &:has(.text-warning) {
     @apply border-warning/80 focus-within:border-warning;

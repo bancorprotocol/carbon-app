@@ -26,6 +26,7 @@ interface Props {
   end: string;
   setEnd: (value: string) => void;
   direction: StrategyDirection;
+  disabled?: boolean;
 }
 
 export const GradientPriceRange: FC<Props> = (props) => {
@@ -137,7 +138,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             >
               Start Price
             </label>
-            {!!marketPrice && (
+            {!!marketPrice && !props.disabled && (
               <button
                 className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                 type="button"
@@ -160,6 +161,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             onFocus={onStartFocus}
             onBlur={onStartBlur}
             required
+            disabled={props.disabled}
           />
           <MarketPriceIndication
             base={base}
@@ -180,7 +182,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             >
               End Price
             </label>
-            {!!marketPrice && (
+            {!!marketPrice && !props.disabled && (
               <button
                 className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                 type="button"
@@ -203,6 +205,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             onFocus={onEndFocus}
             onBlur={onEndBlur}
             required
+            disabled={props.disabled}
           />
           <MarketPriceIndication
             base={base}
@@ -212,7 +215,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
             ignoreMarketPriceWarning
           />
         </div>
-        {!!marketPrice && (
+        {!!marketPrice && !props.disabled && (
           <>
             <Presets
               value={startPercent}

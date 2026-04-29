@@ -225,10 +225,8 @@ const channelPage = createRoute({
     }
   },
   validateSearch: searchValidator({
-    buyStartPrice: v.optional(validInputNumber),
-    buyEndPrice: v.optional(validInputNumber),
-    buyStartDate: v.optional(validNumber),
-    buyEndDate: v.optional(validNumber),
+    delta: v.optional(validInputNumber),
+    deltaType: v.optional(v.picklist(['percent', 'token'])),
     buyBudget: v.optional(validInputNumber),
     sellStartPrice: v.optional(validInputNumber),
     sellEndPrice: v.optional(validInputNumber),
