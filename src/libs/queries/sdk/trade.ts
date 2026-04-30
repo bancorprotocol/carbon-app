@@ -129,15 +129,13 @@ export const useTradeQuery = () => {
           );
           baseAmount = calcMaxInput(params.sourceInput);
         }
-        const source = getTokenById(params.source.address);
-        const powerDecimal = new SafeDecimal(10).pow(source!.decimals);
-        const amount = new SafeDecimal(baseAmount).mul(powerDecimal).toFixed(0);
+        const source = getTokenById(params.source.address)!;
         unsignedTx.customData = {
           spender: config.addresses.carbon.carbonController,
           assets: [
             {
               address: params.source.address,
-              rawAmount: amount,
+              rawAmount: toDecimal(baseAmount, source),
             },
           ],
         };

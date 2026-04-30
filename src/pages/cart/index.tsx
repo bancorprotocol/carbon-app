@@ -157,20 +157,23 @@ export const CartPage = () => {
           const unsignedTx =
             await carbonSDK.batchCreateBuySellStrategies(params);
 
-          const amounts: Record<string, SafeDecimal> = {};
+          const amounts: Record<string, bigint> = {};
           for (const strategy of strategies) {
             const base = strategy.base.address;
             const quote = strategy.quote.address;
-            amounts[base] ||= new SafeDecimal(0);
-            const sellAmount = getRawAmount(
-              strategy.base,
+            amounts[base] ||= BigInt(0);
+            const sellAmount = parseUnits(
               strategy.sell.budget,
+              strategy.base.decimals,
             );
-            amounts[base] = amounts[base].add(sellAmount);
+            amounts[base] = amounts[base] + sellAmount;
 
-            amounts[quote] ||= new SafeDecimal(0);
-            const buyAmount = getRawAmount(strategy.quote, strategy.buy.budget);
-            amounts[quote] = amounts[quote].add(buyAmount);
+            amounts[quote] ||= BigInt(0);
+            const buyAmount = parseUnits(
+              strategy.buy.budget,
+              strategy.quote.decimals,
+            );
+            amounts[quote] = amounts[quote] + buyAmount;
           }
           unsignedTx.customData = {
             spender: batcher,

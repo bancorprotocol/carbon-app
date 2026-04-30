@@ -399,7 +399,7 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
       const getRawAmount = (token: Token, previous: string, next?: string) => {
         const delta = new SafeDecimal(next ?? 0).minus(previous);
         if (delta.lte(0)) return '0';
-        return new SafeDecimal(delta).mul(10 ** token.decimals).toString();
+        return parseUnits(delta.toString(), token.decimals).toString();
       };
       unsignedTx.customData = {
         spender: config.addresses.carbon.carbonController,
