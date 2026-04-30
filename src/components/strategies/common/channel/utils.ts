@@ -14,21 +14,26 @@ import {
   useState,
 } from 'react';
 import { ChartPoint, Drawing } from '../d3Chart/D3ChartContext';
+import { ChannelSearch } from 'libs/routing/routes/trade';
 
 export const deltaTypes = ['percent', 'token'] as const;
 export type DeltaType = (typeof deltaTypes)[number];
+export interface ChannelDelta {
+  deltaType: DeltaType;
+  delta?: string;
+}
 
 export const toDelta = (
   type: DeltaType,
-  order: GradientOrderBlock,
-  otherOrder: GradientOrderBlock,
+  buyPrice: number,
+  sellPrice: number,
 ) => {
-  const start = new SafeDecimal(order.startPrice);
-  const otherStart = new SafeDecimal(otherOrder.startPrice);
   if (type === 'percent') {
-    return start.minus(otherStart).toString();
+    const percent = new SafeDecimal(buyPrice).div(sellPrice);
+    const multiplier = new SafeDecimal(1).minus(percent);
+    return multiplier.mul(100).toFixed(2);
   } else {
-    return start.div(otherStart).minus(1).mul(100).toString();
+    return new SafeDecimal(sellPrice).minus(buyPrice).toString();
   }
 };
 export const fromDelta = (
@@ -38,21 +43,22 @@ export const fromDelta = (
 ) => {
   const price = new SafeDecimal(otherPrice);
   if (type === 'percent') {
-    return price.add(delta).toString();
+    const percent = new SafeDecimal(delta).div(100);
+    const multiplier = new SafeDecimal(1).minus(percent);
+    return price.mul(multiplier).toString();
   } else {
-    const percent = new SafeDecimal(delta).div(100).add(1);
-    return price.mul(percent).toString();
+    return price.add(delta).toString();
   }
 };
 
 export const defaultChannelOrder = (
   baseOrder: Partial<GradientOrderBlock>,
   marketPrice: number = 0,
-) => {
+): GradientOrderBlock => {
   const direction = baseOrder.direction ?? 'sell';
   const multiplier = direction === 'buy' ? 0.99 : 1.01;
   const price = new SafeDecimal(marketPrice ?? 0);
-  const order: GradientOrderBlock = {
+  const order = {
     startPrice: baseOrder.startPrice ?? price.mul(multiplier).toString(),
     endPrice: baseOrder.endPrice ?? price.mul(multiplier).toString(),
     startDate: baseOrder.startDate ?? defaultGradientStartDate,
@@ -67,40 +73,56 @@ export const defaultChannelOrder = (
 };
 
 export const useGradientChannelOrder = (
-  buyOrder: GradientOrderBlock,
-  sellOrder: GradientOrderBlock,
-  saveBuyOrder: (order: Partial<GradientOrderBlock>) => any,
-  saveSellOrder: (order: Partial<GradientOrderBlock>) => any,
+  search: ChannelSearch,
+  setSearch: (next: Partial<ChannelSearch>) => any,
+  marketPrice?: number,
 ) => {
   const id = useId();
-  const sellTimeout = useRef<number>(null);
-  const buyTimeout = useRef<number>(null);
-  const [localSell, setLocalSell] = useState(sellOrder);
-  const [localBuy, setLocalBuy] = useState(buyOrder);
+  const timeout = useRef<number>(null);
 
-  const setSell = useCallback(
-    (next: Partial<GradientOrderBlock>) => {
-      setLocalSell((current) => {
-        return defaultChannelOrder({ ...current, ...next });
-      });
-      if (sellTimeout.current) clearTimeout(sellTimeout.current);
-      sellTimeout.current = setTimeout(() => saveSellOrder(next), 200);
-    },
-    [saveSellOrder],
-  );
-  const setBuy = useCallback(
-    (next: Partial<GradientOrderBlock>) => {
-      setLocalBuy((current) => {
-        return defaultChannelOrder({ ...current, ...next });
-      });
-      if (buyTimeout.current) clearTimeout(buyTimeout.current);
-      buyTimeout.current = setTimeout(() => saveBuyOrder(next), 200);
-    },
-    [saveBuyOrder],
-  );
+  const deltaType = search.deltaType ?? 'percent';
+  const baseDelta = search.delta ?? '2';
 
-  useEffect(() => setLocalBuy(buyOrder), [buyOrder]);
-  useEffect(() => setLocalSell(sellOrder), [sellOrder]);
+  const { baseBuy, baseSell } = useMemo(() => {
+    const baseSell = defaultChannelOrder(
+      {
+        direction: 'sell',
+        startPrice: search.sellStartPrice,
+        endPrice: search.sellEndPrice,
+        startDate: search.sellStartDate,
+        endDate: search.sellEndDate,
+        budget: search.sellBudget ?? '',
+      },
+      marketPrice,
+    );
+    const baseBuy: GradientOrderBlock = {
+      direction: 'buy',
+      startPrice: fromDelta(deltaType, baseDelta, baseSell.startPrice),
+      endPrice: fromDelta(deltaType, baseDelta, baseSell.endPrice),
+      startDate: baseSell.startDate,
+      endDate: baseSell.endDate,
+      budget: search.buyBudget || '',
+    };
+    return { baseBuy, baseSell };
+  }, [
+    baseDelta,
+    deltaType,
+    marketPrice,
+    search.buyBudget,
+    search.sellBudget,
+    search.sellEndDate,
+    search.sellEndPrice,
+    search.sellStartDate,
+    search.sellStartPrice,
+  ]);
+
+  const [sell, setSell] = useState(baseBuy);
+  const [buy, setBuy] = useState(baseSell);
+  const [delta, setDelta] = useState(search.delta ?? '2');
+
+  useEffect(() => setSell(baseSell), [baseSell]);
+  useEffect(() => setBuy(baseBuy), [baseBuy]);
+  useEffect(() => setDelta(baseDelta), [baseDelta]);
 
   const drawing = useMemo<Drawing>(
     () => ({
@@ -108,33 +130,33 @@ export const useGradientChannelOrder = (
       mode: 'channel',
       points: [
         {
-          x: localSell.startDate,
-          y: Number(localSell.startPrice),
+          x: sell.startDate,
+          y: Number(sell.startPrice),
         },
         {
-          x: localSell.endDate,
-          y: Number(localSell.endPrice),
+          x: sell.endDate,
+          y: Number(sell.endPrice),
         },
         {
-          x: localBuy.startDate,
-          y: Number(localBuy.startPrice),
+          x: buy.startDate,
+          y: Number(buy.startPrice),
         },
         {
-          x: localBuy.endDate,
-          y: Number(localBuy.endPrice),
+          x: buy.endDate,
+          y: Number(buy.endPrice),
         },
       ],
     }),
     [
       id,
-      localBuy.endDate,
-      localBuy.endPrice,
-      localBuy.startDate,
-      localBuy.startPrice,
-      localSell.endDate,
-      localSell.endPrice,
-      localSell.startDate,
-      localSell.startPrice,
+      buy.endDate,
+      buy.endPrice,
+      buy.startDate,
+      buy.startPrice,
+      sell.endDate,
+      sell.endPrice,
+      sell.startDate,
+      sell.startPrice,
     ],
   );
 
@@ -147,28 +169,41 @@ export const useGradientChannelOrder = (
           ? Number(a.y) - Number(b.y)
           : Number(a.x) - Number(b.x);
       });
-      setSell({
+      const delta = toDelta(deltaType, buyStart.y, sellStart.y);
+      if (timeout.current) clearTimeout(timeout.current);
+      timeout.current = setTimeout(() => {
+        setSearch({
+          delta,
+          sellStartDate: sellStart.x,
+          sellEndDate: sellEnd.x,
+          sellStartPrice: sellStart.y.toString(),
+          sellEndPrice: sellEnd.y.toString(),
+        });
+      }, 200);
+      setDelta(delta);
+      setSell((current) => ({
+        ...current,
         startPrice: sellStart.y.toString(),
         endPrice: sellEnd.y.toString(),
         startDate: sellStart.x,
         endDate: sellEnd.x,
-      });
-      setBuy({
+      }));
+      setBuy((current) => ({
+        ...current,
         startPrice: buyStart.y.toString(),
         endPrice: buyEnd.y.toString(),
         startDate: buyStart.x,
         endDate: buyEnd.x,
-      });
+      }));
     },
-    [setBuy, setSell],
+    [deltaType, setSearch],
   );
 
   return {
     drawing,
     onDrawingUpdate,
-    buy: localBuy,
-    sell: localSell,
-    setBuy,
-    setSell,
+    buy,
+    sell,
+    delta,
   };
 };

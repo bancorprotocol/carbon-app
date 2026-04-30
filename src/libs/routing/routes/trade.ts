@@ -210,6 +210,7 @@ const auctionPage = createRoute({
   }),
 });
 
+export type ChannelSearch = (typeof channelPage)['types']['searchSchema'];
 const channelPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/channel',
@@ -225,11 +226,12 @@ const channelPage = createRoute({
     }
   },
   validateSearch: searchValidator({
+    delta: v.optional(validInputNumber),
     deltaType: v.optional(v.picklist(['percent', 'token'])),
-    buyStartPrice: v.optional(validInputNumber),
-    buyEndPrice: v.optional(validInputNumber),
-    buyStartDate: v.optional(validNumber),
-    buyEndDate: v.optional(validNumber),
+    // buyStartPrice: v.optional(validInputNumber),
+    // buyEndPrice: v.optional(validInputNumber),
+    // buyStartDate: v.optional(validNumber),
+    // buyEndDate: v.optional(validNumber),
     buyBudget: v.optional(validInputNumber),
     sellStartPrice: v.optional(validInputNumber),
     sellEndPrice: v.optional(validInputNumber),

@@ -10,23 +10,23 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Token } from 'libs/tokens';
 import { OrderTitle } from '../OrderTitle';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
-import { DeltaType, deltaTypes, fromDelta, toDelta } from './utils';
+import { ChannelDelta, DeltaType, deltaTypes } from './utils';
 
 interface Props {
+  delta: string;
   type: DeltaType;
-  setType: (type: DeltaType) => any;
+  setDelta: (next: Partial<ChannelDelta>) => any;
   order: GradientOrderBlock;
-  otherOrder: GradientOrderBlock;
   setOrder: (order: Partial<GradientOrderBlock>) => any;
 }
 
-const getType = (deltaType: DeltaType, base: Token) => {
+const getType = (deltaType: DeltaType, quote: Token) => {
   if (deltaType === 'percent') return '%';
-  return base.symbol;
+  return quote.symbol;
 };
 
 export const ChannelOrder: FC<Props> = (props) => {
-  const { type, otherOrder, order, setOrder, setType } = props;
+  const { delta, type, order, setOrder, setDelta } = props;
   const { base, quote } = useStrategyFormCtx();
   const budgetToken = order.direction === 'buy' ? quote : base;
 
@@ -34,15 +34,6 @@ export const ChannelOrder: FC<Props> = (props) => {
   const budgetId = useId();
   const titleId = useId();
   const deltaId = useId();
-
-  const delta = toDelta(type, order, otherOrder);
-
-  const setDelta = (delta: string) => {
-    setOrder({
-      startPrice: fromDelta(type, delta, otherOrder.startPrice),
-      endPrice: fromDelta(type, delta, otherOrder.endPrice),
-    });
-  };
 
   const insufficientBalance = (() => {
     if (!balance.data) return;
@@ -73,20 +64,20 @@ export const ChannelOrder: FC<Props> = (props) => {
                 type="button"
                 {...attr}
               >
-                {getType(type, base)}
+                {getType(type, quote)}
                 <KeyboardArrowDownIcon className="size-24" />
               </button>
             )}
           >
-            {deltaTypes.map((type) => (
+            {deltaTypes.map((deltaType) => (
               <button
-                key={type}
+                key={deltaType}
                 className="rounded-sm py-8 px-16 hover:bg-main-900/40 aria-checked:bg-main-900/60"
                 role="menuitem"
-                aria-checked={type === type}
-                onClick={() => setType(type)}
+                aria-checked={deltaType === type}
+                onClick={() => setDelta({ delta: undefined, deltaType })}
               >
-                {getType(type, base)}
+                {getType(deltaType, quote)}
               </button>
             ))}
           </DropdownMenu>
@@ -102,7 +93,9 @@ export const ChannelOrder: FC<Props> = (props) => {
             type="number"
             id={deltaId}
             value={delta}
-            onChange={(e) => setDelta(e.target.value)}
+            step="any"
+            min="0"
+            onChange={(e) => setDelta({ delta: e.target.value })}
           />
         </div>
       </div>
