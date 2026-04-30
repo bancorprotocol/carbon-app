@@ -10,18 +10,13 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Token } from 'libs/tokens';
 import { OrderTitle } from '../OrderTitle';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
-
-const deltaTypes = ['percent', 'token'] as const;
-export type DeltaType = (typeof deltaTypes)[number];
-export interface DeltaChannel {
-  value: string;
-  type: DeltaType;
-}
+import { DeltaType, deltaTypes, fromDelta, toDelta } from './utils';
 
 interface Props {
-  delta: DeltaChannel;
-  setDelta: (delta: Partial<DeltaChannel>) => any;
+  type: DeltaType;
+  setType: (type: DeltaType) => any;
   order: GradientOrderBlock;
+  otherOrder: GradientOrderBlock;
   setOrder: (order: Partial<GradientOrderBlock>) => any;
 }
 
@@ -30,12 +25,8 @@ const getType = (deltaType: DeltaType, base: Token) => {
   return base.symbol;
 };
 
-export const ChannelOrder: FC<Props> = ({
-  delta,
-  setDelta,
-  order,
-  setOrder,
-}) => {
+export const ChannelOrder: FC<Props> = (props) => {
+  const { type, otherOrder, order, setOrder, setType } = props;
   const { base, quote } = useStrategyFormCtx();
   const budgetToken = order.direction === 'buy' ? quote : base;
 
@@ -43,6 +34,15 @@ export const ChannelOrder: FC<Props> = ({
   const budgetId = useId();
   const titleId = useId();
   const deltaId = useId();
+
+  const delta = toDelta(type, order, otherOrder);
+
+  const setDelta = (delta: string) => {
+    setOrder({
+      startPrice: fromDelta(type, delta, otherOrder.startPrice),
+      endPrice: fromDelta(type, delta, otherOrder.endPrice),
+    });
+  };
 
   const insufficientBalance = (() => {
     if (!balance.data) return;
@@ -73,7 +73,7 @@ export const ChannelOrder: FC<Props> = ({
                 type="button"
                 {...attr}
               >
-                {getType(delta.type, base)}
+                {getType(type, base)}
                 <KeyboardArrowDownIcon className="size-24" />
               </button>
             )}
@@ -83,8 +83,8 @@ export const ChannelOrder: FC<Props> = ({
                 key={type}
                 className="rounded-sm py-8 px-16 hover:bg-main-900/40 aria-checked:bg-main-900/60"
                 role="menuitem"
-                aria-checked={delta.type === type}
-                onClick={() => setDelta({ type })}
+                aria-checked={type === type}
+                onClick={() => setType(type)}
               >
                 {getType(type, base)}
               </button>
@@ -101,8 +101,8 @@ export const ChannelOrder: FC<Props> = ({
             className="flex-1 rounded-e-2xl px-16 py-8 text-end outline-none"
             type="number"
             id={deltaId}
-            value={delta.value}
-            onChange={(e) => setDelta({ value: e.target.value ?? undefined })}
+            value={delta}
+            onChange={(e) => setDelta(e.target.value)}
           />
         </div>
       </div>
@@ -113,11 +113,12 @@ export const ChannelOrder: FC<Props> = ({
         <GradientPriceRange
           base={base}
           quote={quote}
+          direction={order.direction}
           start={order.startPrice}
           end={order.endPrice}
-          setStart={(startPrice) => setOrder({ startPrice })}
-          setEnd={(endPrice) => setOrder({ endPrice })}
-          direction={order.direction}
+          // This is not triggered in disable mode.
+          setStart={() => undefined}
+          setEnd={() => undefined}
           disabled
         />
       </div>

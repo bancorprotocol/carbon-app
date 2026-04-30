@@ -41,10 +41,9 @@ export const TradeAuction = () => {
   );
 
   const baseOrder = useMemo(() => {
-    return defaultGradientOrder('line', search, marketPrice);
+    return defaultGradientOrder(search, marketPrice);
   }, [search, marketPrice]);
   const { order, setOrder, drawing, onDrawingUpdate } = useGradientOrder(
-    'line',
     baseOrder,
     saveOrder,
   );
@@ -57,7 +56,6 @@ export const TradeAuction = () => {
   const setDirection = useCallback(
     (direction: StrategyDirection) => {
       const next = defaultGradientOrder(
-        'line',
         { direction, budget: order.budget },
         marketPrice,
       );

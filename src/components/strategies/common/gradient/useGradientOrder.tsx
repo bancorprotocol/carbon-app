@@ -16,7 +16,6 @@ import { ChartPoint, Drawing } from '../d3Chart/D3ChartContext';
 import { DrawingMode } from '../d3Chart/drawing/DrawingMenu';
 
 export const useGradientOrder = (
-  mode: DrawingMode,
   initOrder: GradientOrderBlock,
   saveOrder: (order: Partial<GradientOrderBlock>) => any,
 ) => {
@@ -26,13 +25,11 @@ export const useGradientOrder = (
 
   const set = useCallback(
     (next: Partial<GradientOrderBlock>) => {
-      setOrder((current) =>
-        defaultGradientOrder(mode, { ...current, ...next }),
-      );
+      setOrder((current) => defaultGradientOrder({ ...current, ...next }));
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => saveOrder(next), 200);
     },
-    [mode, saveOrder],
+    [saveOrder],
   );
 
   useEffect(() => {

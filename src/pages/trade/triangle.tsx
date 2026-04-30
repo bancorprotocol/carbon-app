@@ -15,7 +15,6 @@ import {
   defaultGradientOrder,
   isReverseGradientOrders,
 } from 'components/strategies/common/gradient/utils';
-import { ChartPoint } from 'components/strategies/common/d3Chart/D3ChartContext';
 import { cn } from 'utils/helpers';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
@@ -45,7 +44,6 @@ export const TradeTriangle = () => {
 
   const baseBuy = useMemo(() => {
     return defaultGradientOrder(
-      'line',
       {
         direction: 'buy',
         startPrice: search.buyStartPrice,
@@ -67,7 +65,6 @@ export const TradeTriangle = () => {
 
   const baseSell = useMemo(() => {
     return defaultGradientOrder(
-      'line',
       {
         direction: 'sell',
         startPrice: search.sellStartPrice,
@@ -87,21 +84,8 @@ export const TradeTriangle = () => {
     search.sellStartPrice,
   ]);
 
-  const buy = useGradientOrder('line', baseBuy, (next) =>
-    saveOrder(next, 'buy'),
-  );
-  const sell = useGradientOrder('line', baseSell, (next) =>
-    saveOrder(next, 'sell'),
-  );
-
-  const onSellDrawingChange = (points: ChartPoint[]) => {
-    buy.onDrawingUpdate([points[0], points[1]]);
-    sell.onDrawingUpdate([points[2], points[3]]);
-  };
-  const onBuyDrawingChange = (points: ChartPoint[]) => {
-    buy.onDrawingUpdate([points[0], points[1]]);
-    sell.onDrawingUpdate([points[2], points[3]]);
-  };
+  const sell = useGradientOrder(baseSell, (next) => saveOrder(next, 'sell'));
+  const buy = useGradientOrder(baseBuy, (next) => saveOrder(next, 'buy'));
 
   const priceError = useMemo(() => {
     if (isReverseGradientOrders(buy.order, sell.order)) {

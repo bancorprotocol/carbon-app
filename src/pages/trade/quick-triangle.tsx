@@ -43,26 +43,6 @@ export const TradeQuickTriangle = () => {
     [navigate],
   );
 
-  const baseBuy = useMemo(() => {
-    return defaultQuickGradientOrder(
-      'line',
-      {
-        direction: 'buy',
-        startPrice: search.buyStartPrice,
-        endPrice: search.buyEndPrice,
-        deltaTime: search.buyDeltaTime,
-        budget: search.buyBudget,
-      },
-      marketPrice,
-    );
-  }, [
-    marketPrice,
-    search.buyBudget,
-    search.buyEndPrice,
-    search.buyDeltaTime,
-    search.buyStartPrice,
-  ]);
-
   const baseSell = useMemo(() => {
     return defaultQuickGradientOrder(
       'line',
@@ -83,11 +63,32 @@ export const TradeQuickTriangle = () => {
     search.sellStartPrice,
   ]);
 
-  const buy = useQuickGradientOrder('line', baseBuy, (next) => {
-    return saveOrder(next, 'buy');
-  });
+  const baseBuy = useMemo(() => {
+    return defaultQuickGradientOrder(
+      'line',
+      {
+        direction: 'buy',
+        startPrice: search.buyStartPrice,
+        endPrice: search.buyEndPrice,
+        deltaTime: search.buyDeltaTime,
+        budget: search.buyBudget,
+      },
+      marketPrice,
+    );
+  }, [
+    marketPrice,
+    search.buyBudget,
+    search.buyEndPrice,
+    search.buyDeltaTime,
+    search.buyStartPrice,
+  ]);
+
   const sell = useQuickGradientOrder('line', baseSell, (next) => {
     return saveOrder(next, 'sell');
+  });
+
+  const buy = useQuickGradientOrder('line', baseBuy, (next) => {
+    return saveOrder(next, 'buy');
   });
 
   useEffect(() => {

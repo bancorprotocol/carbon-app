@@ -13,7 +13,6 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { StrategyDirection } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { isEmptyGradientOrder } from '../utils';
-import { DrawingMode } from '../d3Chart/drawing/DrawingMenu';
 
 export const gradientMarginalPrice = (
   order: FormGradientOrder,
@@ -35,40 +34,23 @@ export const gradientMarginalPrice = (
   return marginalPrice.toString();
 };
 
-const getStartMultiplier = (
-  mode: DrawingMode,
-  direction: StrategyDirection,
-) => {
-  if (mode === 'line') {
-    return direction === 'buy' ? 0.9 : 1.1;
-  } else {
-    return direction === 'buy' ? 0.9 : 1.1;
-  }
-};
-
-const getEndMultiplier = (mode: DrawingMode, direction: StrategyDirection) => {
-  if (mode === 'line') {
-    return direction === 'buy' ? 0.99 : 1.01;
-  } else {
-    return direction === 'buy' ? 0.9 : 1.1;
-  }
-};
+const today = new Date();
+export const defaultGradientStartDate = toUnixUTCDay(addDays(today, 1));
+export const defaultGradientEndDate = toUnixUTCDay(addDays(today, 21));
 
 export const defaultGradientOrder = (
-  mode: DrawingMode,
   baseOrder: Partial<GradientOrderBlock>,
   marketPrice: number = 0,
 ): GradientOrderBlock => {
   const direction = baseOrder.direction ?? 'sell';
-  const today = new Date();
-  const startMultiplier = getStartMultiplier(mode, direction);
-  const endMultiplier = getEndMultiplier(mode, direction);
+  const startMultiplier = direction === 'buy' ? 0.9 : 1.1;
+  const endMultiplier = direction === 'buy' ? 0.99 : 1.01;
   const price = new SafeDecimal(marketPrice);
   const order = {
     startPrice: baseOrder.startPrice ?? price.mul(startMultiplier).toString(),
     endPrice: baseOrder.endPrice ?? price.mul(endMultiplier).toString(),
-    startDate: baseOrder.startDate ?? toUnixUTCDay(addDays(today, 1)),
-    endDate: baseOrder.endDate ?? toUnixUTCDay(addDays(today, 21)),
+    startDate: baseOrder.startDate ?? defaultGradientStartDate,
+    endDate: baseOrder.endDate ?? defaultGradientEndDate,
     budget: baseOrder.budget ?? '',
     direction: direction,
   };
