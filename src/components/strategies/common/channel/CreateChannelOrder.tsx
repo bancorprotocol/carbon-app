@@ -10,14 +10,15 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Token } from 'libs/tokens';
 import { OrderTitle } from '../OrderTitle';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
-import { ChannelDelta, DeltaType, deltaTypes } from './utils';
+import { ChannelDelta, DeltaType, deltaTypes, toDelta } from './utils';
 
 interface Props {
   delta: string;
   type: DeltaType;
   setDelta: (next: Partial<ChannelDelta>) => any;
-  order: GradientOrderBlock;
-  setOrder: (order: Partial<GradientOrderBlock>) => any;
+  sell: GradientOrderBlock;
+  buy: GradientOrderBlock;
+  setBuy: (order: Partial<GradientOrderBlock>) => any;
 }
 
 const getType = (deltaType: DeltaType, quote: Token) => {
@@ -26,9 +27,9 @@ const getType = (deltaType: DeltaType, quote: Token) => {
 };
 
 export const ChannelOrder: FC<Props> = (props) => {
-  const { delta, type, order, setOrder, setDelta } = props;
+  const { delta, type, sell, buy, setBuy, setDelta } = props;
   const { base, quote } = useStrategyFormCtx();
-  const budgetToken = order.direction === 'buy' ? quote : base;
+  const budgetToken = buy.direction === 'buy' ? quote : base;
 
   const balance = useGetTokenBalance(budgetToken);
   const budgetId = useId();
@@ -37,14 +38,19 @@ export const ChannelOrder: FC<Props> = (props) => {
 
   const insufficientBalance = (() => {
     if (!balance.data) return;
-    if (new SafeDecimal(balance.data).gte(order.budget || '0')) return;
+    if (new SafeDecimal(balance.data).gte(buy.budget || '0')) return;
     return 'Insufficient balance';
   })();
+
+  const setDeltaType = (deltaType: DeltaType) => {
+    const delta = toDelta(deltaType, buy.startPrice, sell.startPrice);
+    setDelta({ delta, deltaType });
+  };
 
   return (
     <article className="grid gap-16" aria-labelledby={titleId}>
       <header className="flex items-center justify-between gap-8">
-        <OrderTitle direction={order.direction} titleId={titleId} base={base} />
+        <OrderTitle direction={buy.direction} titleId={titleId} base={base} />
       </header>
       <div role="group" className="grid gap-8">
         <hgroup className="grid gap-4">
@@ -75,7 +81,7 @@ export const ChannelOrder: FC<Props> = (props) => {
                 className="rounded-sm py-8 px-16 hover:bg-main-900/40 aria-checked:bg-main-900/60"
                 role="menuitem"
                 aria-checked={deltaType === type}
-                onClick={() => setDelta({ delta: undefined, deltaType })}
+                onClick={() => setDeltaType(deltaType)}
               >
                 {getType(deltaType, quote)}
               </button>
@@ -101,14 +107,14 @@ export const ChannelOrder: FC<Props> = (props) => {
       </div>
       <div role="group" className="grid gap-8">
         <h3 className="text-14 font-medium flex items-center gap-6 capitalize text-main-0/60">
-          Set {order.direction} Price
+          Set {buy.direction} Price
         </h3>
         <GradientPriceRange
           base={base}
           quote={quote}
-          direction={order.direction}
-          start={order.startPrice}
-          end={order.endPrice}
+          direction={buy.direction}
+          start={buy.startPrice}
+          end={buy.endPrice}
           // This is not triggered in disable mode.
           setStart={() => undefined}
           setEnd={() => undefined}
@@ -120,21 +126,21 @@ export const ChannelOrder: FC<Props> = (props) => {
           htmlFor={budgetId}
           className="text-14 font-medium capitalize text-main-0/60"
         >
-          Set {order.direction} Budget
+          Set {buy.direction} Budget
         </label>
         <InputBudget
           editType="deposit"
           id={budgetId}
-          token={order.direction === 'buy' ? quote : base}
-          value={order.budget}
-          onChange={(budget) => setOrder({ budget })}
+          token={buy.direction === 'buy' ? quote : base}
+          value={buy.budget}
+          onChange={(budget) => setBuy({ budget })}
           max={balance.data || '0'}
           maxIsLoading={balance.isPending}
           error={insufficientBalance}
           data-testid="input-budget"
         />
       </div>
-      <GradientFullOutcome base={base} quote={quote} order={order} />
+      <GradientFullOutcome base={base} quote={quote} order={buy} />
     </article>
   );
 };

@@ -25,8 +25,8 @@ export interface ChannelDelta {
 
 export const toDelta = (
   type: DeltaType,
-  buyPrice: number,
-  sellPrice: number,
+  buyPrice: string,
+  sellPrice: string,
 ) => {
   if (type === 'percent') {
     const percent = new SafeDecimal(buyPrice).div(sellPrice);
@@ -47,7 +47,7 @@ export const fromDelta = (
     const multiplier = new SafeDecimal(1).minus(percent);
     return price.mul(multiplier).toString();
   } else {
-    return price.add(delta).toString();
+    return price.minus(delta).toString();
   }
 };
 
@@ -84,24 +84,30 @@ export const useGradientChannelOrder = (
   const baseDelta = search.delta ?? '2';
 
   const { baseBuy, baseSell } = useMemo(() => {
-    const baseSell = defaultChannelOrder(
-      {
-        direction: 'sell',
-        startPrice: search.sellStartPrice,
-        endPrice: search.sellEndPrice,
-        startDate: search.sellStartDate,
-        endDate: search.sellEndDate,
-        budget: search.sellBudget ?? '',
-      },
-      marketPrice,
-    );
-    const baseBuy: GradientOrderBlock = {
-      direction: 'buy',
+    const price = new SafeDecimal(marketPrice ?? 0);
+    const baseSellOrder = {
+      direction: 'sell' as const,
+      startPrice: search.sellStartPrice ?? price.mul(1.01).toString(),
+      endPrice: search.sellEndPrice ?? price.mul(1.01).toString(),
+      startDate: search.sellStartDate ?? defaultGradientStartDate,
+      endDate: search.sellEndDate ?? defaultGradientEndDate,
+      budget: search.sellBudget ?? '',
+    };
+    const baseSell: GradientOrderBlock = {
+      ...baseSellOrder,
+      marginalPrice: gradientMarginalPrice(baseSellOrder),
+    };
+    const baseBuyOrder = {
+      direction: 'buy' as const,
       startPrice: fromDelta(deltaType, baseDelta, baseSell.startPrice),
       endPrice: fromDelta(deltaType, baseDelta, baseSell.endPrice),
       startDate: baseSell.startDate,
       endDate: baseSell.endDate,
       budget: search.buyBudget || '',
+    };
+    const baseBuy: GradientOrderBlock = {
+      ...baseBuyOrder,
+      marginalPrice: gradientMarginalPrice(baseBuyOrder),
     };
     return { baseBuy, baseSell };
   }, [
@@ -169,7 +175,9 @@ export const useGradientChannelOrder = (
           ? Number(a.y) - Number(b.y)
           : Number(a.x) - Number(b.x);
       });
-      const delta = toDelta(deltaType, buyStart.y, sellStart.y);
+      const sellStartPrice = sellStart.y.toString();
+      const buyStartPrice = buyStart.y.toString();
+      const delta = toDelta(deltaType, buyStartPrice, sellStartPrice);
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => {
         setSearch({

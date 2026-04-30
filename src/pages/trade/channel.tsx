@@ -17,9 +17,9 @@ import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday'
 import { D3EditChannel } from 'components/strategies/common/d3Chart/drawing/D3DrawChannel';
 import { ChannelOrder } from 'components/strategies/common/channel/CreateChannelOrder';
 import { useGradientChannelOrder } from 'components/strategies/common/channel/utils';
-import style from 'components/strategies/common/order.module.css';
 import { isReverseGradientOrders } from 'components/strategies/common/gradient/utils';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
+import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/channel';
 export const TradeChannel = () => {
@@ -97,8 +97,9 @@ export const TradeChannel = () => {
                 delta={delta}
                 type={deltaType}
                 setDelta={setSearch}
-                order={buy}
-                setOrder={(next) => setOrder(next, 'buy')}
+                sell={sell}
+                buy={buy}
+                setBuy={(next) => setOrder(next, 'buy')}
               />
             </section>
           </article>
