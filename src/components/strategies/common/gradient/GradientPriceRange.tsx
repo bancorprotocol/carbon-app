@@ -12,7 +12,7 @@ import { Token } from 'libs/tokens';
 import { formatNumber, roundSearchParam, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { Presets } from 'components/common/preset/Preset';
-import { buyPresets, sellPresets } from '../price-presets';
+import { limitPreset } from '../price-presets';
 import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication/MarketPriceIndication';
@@ -42,12 +42,12 @@ export const GradientPriceRange: FC<Props> = (props) => {
 
   const startPercent = useMemo(() => {
     if (!marketPrice) return '';
-    return new SafeDecimal(start).div(marketPrice).sub(1).mul(100).toString();
+    return new SafeDecimal(start).div(marketPrice).sub(1).abs().toString();
   }, [marketPrice, start]);
 
   const endPercent = useMemo(() => {
     if (!marketPrice) return '';
-    return new SafeDecimal(end).div(marketPrice).sub(1).mul(100).toString();
+    return new SafeDecimal(end).div(marketPrice).sub(1).abs().toString();
   }, [marketPrice, end]);
 
   useEffect(() => {
@@ -64,7 +64,10 @@ export const GradientPriceRange: FC<Props> = (props) => {
 
   const setStartPreset = (preset: string) => {
     if (!marketPrice) return;
-    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
+    const percent =
+      direction === 'buy'
+        ? new SafeDecimal(1).sub(new SafeDecimal(preset))
+        : new SafeDecimal(1).add(new SafeDecimal(preset));
     const next = new SafeDecimal(marketPrice).mul(percent).toString();
     setLocalStart(roundSearchParam(next));
     setStart(next);
@@ -118,7 +121,10 @@ export const GradientPriceRange: FC<Props> = (props) => {
 
   const setEndPreset = (preset: string) => {
     if (!marketPrice) return;
-    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
+    const percent =
+      direction === 'buy'
+        ? new SafeDecimal(1).sub(new SafeDecimal(preset))
+        : new SafeDecimal(1).add(new SafeDecimal(preset));
     const next = new SafeDecimal(marketPrice).mul(percent).toString();
     setLocalEnd(roundSearchParam(next));
     setEnd(next);
@@ -219,12 +225,12 @@ export const GradientPriceRange: FC<Props> = (props) => {
           <>
             <Presets
               value={startPercent}
-              presets={direction === 'buy' ? buyPresets : sellPresets}
+              presets={limitPreset(direction === 'buy')}
               onChange={setStartPreset}
             />
             <Presets
               value={endPercent}
-              presets={direction === 'buy' ? buyPresets : sellPresets}
+              presets={limitPreset(direction === 'buy')}
               onChange={setEndPreset}
             />
           </>

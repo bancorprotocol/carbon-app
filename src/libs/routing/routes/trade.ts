@@ -19,7 +19,7 @@ import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
 import { TradeAuction } from 'pages/trade/auction';
 import { TradeQuickAuction } from 'pages/trade/quick-auction';
-import { addMonths, startOfDay, subMonths } from 'date-fns';
+import { addMonths, startOfDay, subWeeks } from 'date-fns';
 import { toUnixUTC } from 'components/simulator/utils';
 import { TradeChannel } from 'pages/trade/channel';
 import { TradeQuickChannel } from 'pages/trade/quick-channel';
@@ -186,19 +186,26 @@ const overlappingPage = createRoute({
   }),
 });
 
+const setGradientChartDates = (search: {
+  chartStart?: string;
+  chartEnd?: string;
+}) => {
+  if (!search.chartStart) {
+    const date = startOfDay(subWeeks(new Date(), 7));
+    search.chartStart = toUnixUTC(date).toString();
+  }
+  if (!search.chartEnd) {
+    const date = startOfDay(addMonths(new Date(), 2));
+    search.chartEnd = toUnixUTC(date).toString();
+  }
+};
+
 const auctionPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/auction',
   component: TradeAuction,
   beforeLoad: ({ search }) => {
-    if (!search.chartStart) {
-      const date = startOfDay(subMonths(new Date(), 1));
-      search.chartStart = toUnixUTC(date).toString();
-    }
-    if (!search.chartEnd) {
-      const date = startOfDay(addMonths(new Date(), 2));
-      search.chartEnd = toUnixUTC(date).toString();
-    }
+    setGradientChartDates(search);
   },
   validateSearch: searchValidator({
     direction: v.optional(validDirection),
@@ -216,22 +223,11 @@ const channelPage = createRoute({
   path: '/channel',
   component: TradeChannel,
   beforeLoad: ({ search }) => {
-    if (!search.chartStart) {
-      const date = startOfDay(subMonths(new Date(), 1));
-      search.chartStart = toUnixUTC(date).toString();
-    }
-    if (!search.chartEnd) {
-      const date = startOfDay(addMonths(new Date(), 2));
-      search.chartEnd = toUnixUTC(date).toString();
-    }
+    setGradientChartDates(search);
   },
   validateSearch: searchValidator({
     delta: v.optional(validInputNumber),
     deltaType: v.optional(v.picklist(['percent', 'token'])),
-    // buyStartPrice: v.optional(validInputNumber),
-    // buyEndPrice: v.optional(validInputNumber),
-    // buyStartDate: v.optional(validNumber),
-    // buyEndDate: v.optional(validNumber),
     buyBudget: v.optional(validInputNumber),
     sellStartPrice: v.optional(validInputNumber),
     sellEndPrice: v.optional(validInputNumber),
@@ -246,14 +242,7 @@ const trianglePage = createRoute({
   path: '/triangle',
   component: TradeTriangle,
   beforeLoad: ({ search }) => {
-    if (!search.chartStart) {
-      const date = startOfDay(subMonths(new Date(), 1));
-      search.chartStart = toUnixUTC(date).toString();
-    }
-    if (!search.chartEnd) {
-      const date = startOfDay(addMonths(new Date(), 2));
-      search.chartEnd = toUnixUTC(date).toString();
-    }
+    setGradientChartDates(search);
   },
   validateSearch: searchValidator({
     buyStartPrice: v.optional(validInputNumber),
@@ -268,34 +257,6 @@ const trianglePage = createRoute({
     sellBudget: v.optional(validInputNumber),
   }),
 });
-// const customPage = createRoute({
-//   getParentRoute: () => tradePage,
-//   path: '/custom',
-//   component: TradeCustom,
-//   beforeLoad: ({ search }) => {
-//     if (!search.chartStart) {
-//       const date = startOfDay(subMonths(new Date(), 1));
-//       search.chartStart = toUnixUTC(date).toString();
-//     }
-//     if (!search.chartEnd) {
-//       const date = startOfDay(addMonths(new Date(), 2));
-//       search.chartEnd = toUnixUTC(date).toString();
-//     }
-//   },
-//   validateSearch: searchValidator({
-//     directions: v.optional(v.array(validDirection)),
-//     buyStartPrice: v.optional(validInputNumber),
-//     buyEndPrice: v.optional(validInputNumber),
-//     buyStartDate: v.optional(validNumber),
-//     buyEndDate: v.optional(validNumber),
-//     buyBudget: v.optional(validInputNumber),
-//     sellStartPrice: v.optional(validInputNumber),
-//     sellEndPrice: v.optional(validInputNumber),
-//     sellStartDate: v.optional(validNumber),
-//     sellEndDate: v.optional(validNumber),
-//     sellBudget: v.optional(validInputNumber),
-//   }),
-// });
 
 const quickAuctionPage = createRoute({
   getParentRoute: () => tradePage,
@@ -340,22 +301,6 @@ const quickTrianglePage = createRoute({
     sellBudget: v.optional(validInputNumber),
   }),
 });
-// const quickCustomPage = createRoute({
-//   getParentRoute: () => tradePage,
-//   path: '/quick-custom',
-//   component: TradeQuickCustom,
-//   validateSearch: searchValidator({
-//     directions: v.optional(v.array(validDirection)),
-//     buyStartPrice: v.optional(validInputNumber),
-//     buyEndPrice: v.optional(validInputNumber),
-//     buyDeltaTime: v.optional(validNumber),
-//     buyBudget: v.optional(validInputNumber),
-//     sellStartPrice: v.optional(validInputNumber),
-//     sellEndPrice: v.optional(validInputNumber),
-//     sellDeltaTime: v.optional(validNumber),
-//     sellBudget: v.optional(validInputNumber),
-//   }),
-// });
 
 export default tradePage.addChildren([
   marketPage,

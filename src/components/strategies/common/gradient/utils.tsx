@@ -35,8 +35,8 @@ export const gradientMarginalPrice = (
 };
 
 const today = new Date();
-export const defaultGradientStartDate = toUnixUTCDay(addDays(today, 1));
-export const defaultGradientEndDate = toUnixUTCDay(addDays(today, 21));
+export const defaultGradientStartDate = toUnixUTCDay(addDays(today, 5));
+export const defaultGradientEndDate = toUnixUTCDay(addDays(today, 50));
 
 export const defaultGradientOrder = (
   baseOrder: Partial<GradientOrderBlock>,
