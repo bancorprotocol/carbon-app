@@ -217,7 +217,8 @@ const auctionPage = createRoute({
   }),
 });
 
-export type ChannelSearch = (typeof channelPage)['types']['searchSchema'];
+export type ChannelSearch = (typeof channelPage)['types']['searchSchema'] &
+  TradeSearch;
 const channelPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/channel',

@@ -1,40 +1,16 @@
 import { hourFormatter, toUnixUTC } from 'components/simulator/utils';
 import { GradientOrderBlock, QuickGradientOrderBlock } from '../types';
 import { addMinutes } from 'date-fns';
-import { StrategyDirection } from 'libs/routing';
-import { DrawingMode } from '../d3Chart/drawing/DrawingMenu';
-
-const getStartMultiplier = (
-  mode: DrawingMode,
-  direction: StrategyDirection,
-) => {
-  if (mode === 'line') {
-    return direction === 'buy' ? 0.95 : 1.05;
-  } else if (mode === 'channel') {
-    return direction === 'buy' ? 0.95 : 1.05;
-  } else {
-    return direction === 'buy' ? 0.95 : 1.05;
-  }
-};
-
-const getEndMultiplier = (mode: DrawingMode, direction: StrategyDirection) => {
-  if (mode === 'line') {
-    return direction === 'buy' ? 0.99 : 1.01;
-  } else if (mode === 'channel') {
-    return direction === 'buy' ? 0.95 : 1.05;
-  } else {
-    return direction === 'buy' ? 0.99 : 1.01;
-  }
-};
+import { GradientMultipliers } from '../gradient/utils';
 
 export const defaultQuickGradientOrder = (
-  mode: DrawingMode,
   baseOrder: Partial<QuickGradientOrderBlock>,
+  multiplier: GradientMultipliers,
   marketPrice: number = 0,
 ): QuickGradientOrderBlock => {
   const direction = baseOrder.direction ?? 'sell';
-  const startMultiplier = getStartMultiplier(mode, direction);
-  const endMultiplier = getEndMultiplier(mode, direction);
+  const startMultiplier = multiplier.start;
+  const endMultiplier = multiplier.end;
   const defaultStartPrice = (marketPrice * startMultiplier).toString();
   const defaultEndPrice = (marketPrice * endMultiplier).toString();
   const order: QuickGradientOrderBlock = {

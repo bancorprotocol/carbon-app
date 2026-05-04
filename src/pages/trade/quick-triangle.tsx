@@ -9,7 +9,10 @@ import { useQuickGradientOrder } from 'components/strategies/common/gradient/use
 import { CreateGradientStrategyForm } from 'components/strategies/common/gradient/CreateGradientStrategyForm';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import { isReverseGradientOrders } from 'components/strategies/common/gradient/utils';
+import {
+  defaultGradientMultipliers,
+  isReverseGradientOrders,
+} from 'components/strategies/common/gradient/utils';
 import { cn } from 'utils/helpers';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
@@ -45,7 +48,6 @@ export const TradeQuickTriangle = () => {
 
   const baseSell = useMemo(() => {
     return defaultQuickGradientOrder(
-      'line',
       {
         direction: 'sell',
         startPrice: search.sellStartPrice,
@@ -53,19 +55,21 @@ export const TradeQuickTriangle = () => {
         deltaTime: search.sellDeltaTime,
         budget: search.sellBudget,
       },
+      defaultGradientMultipliers(base.address, quote.address, 'sell'),
       marketPrice,
     );
   }, [
-    marketPrice,
-    search.sellBudget,
+    search.sellStartPrice,
     search.sellEndPrice,
     search.sellDeltaTime,
-    search.sellStartPrice,
+    search.sellBudget,
+    base.address,
+    quote.address,
+    marketPrice,
   ]);
 
   const baseBuy = useMemo(() => {
     return defaultQuickGradientOrder(
-      'line',
       {
         direction: 'buy',
         startPrice: search.buyStartPrice,
@@ -73,14 +77,17 @@ export const TradeQuickTriangle = () => {
         deltaTime: search.buyDeltaTime,
         budget: search.buyBudget,
       },
+      defaultGradientMultipliers(base.address, quote.address, 'buy'),
       marketPrice,
     );
   }, [
-    marketPrice,
-    search.buyBudget,
+    search.buyStartPrice,
     search.buyEndPrice,
     search.buyDeltaTime,
-    search.buyStartPrice,
+    search.buyBudget,
+    base.address,
+    quote.address,
+    marketPrice,
   ]);
 
   const sell = useQuickGradientOrder('line', baseSell, (next) => {

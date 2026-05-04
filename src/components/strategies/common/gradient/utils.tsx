@@ -13,6 +13,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { StrategyDirection } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { isEmptyGradientOrder } from '../utils';
+import config from 'config';
 
 export const gradientMarginalPrice = (
   order: FormGradientOrder,
@@ -38,17 +39,40 @@ const today = new Date();
 export const defaultGradientStartDate = toUnixUTCDay(addDays(today, 5));
 export const defaultGradientEndDate = toUnixUTCDay(addDays(today, 50));
 
+export interface GradientMultipliers {
+  start: number;
+  end: number;
+}
+export const defaultGradientMultipliers = (
+  base: string,
+  quote: string,
+  direction: StrategyDirection = 'sell',
+): GradientMultipliers => {
+  const isStable = (token: string) => config.stableTokens.includes(token);
+  const stablePair = isStable(base) && isStable(quote);
+  if (stablePair) {
+    return {
+      start: direction === 'buy' ? 0.8 : 1.2,
+      end: direction === 'buy' ? 0.98 : 1.02,
+    };
+  } else {
+    return {
+      start: direction === 'buy' ? 0.9 : 1.1,
+      end: direction === 'buy' ? 0.99 : 1.01,
+    };
+  }
+};
+
 export const defaultGradientOrder = (
   baseOrder: Partial<GradientOrderBlock>,
+  multipliers: GradientMultipliers,
   marketPrice: number = 0,
 ): GradientOrderBlock => {
   const direction = baseOrder.direction ?? 'sell';
-  const startMultiplier = direction === 'buy' ? 0.9 : 1.1;
-  const endMultiplier = direction === 'buy' ? 0.99 : 1.01;
   const price = new SafeDecimal(marketPrice);
   const order = {
-    startPrice: baseOrder.startPrice ?? price.mul(startMultiplier).toString(),
-    endPrice: baseOrder.endPrice ?? price.mul(endMultiplier).toString(),
+    startPrice: baseOrder.startPrice ?? price.mul(multipliers.start).toString(),
+    endPrice: baseOrder.endPrice ?? price.mul(multipliers.end).toString(),
     startDate: baseOrder.startDate ?? defaultGradientStartDate,
     endDate: baseOrder.endDate ?? defaultGradientEndDate,
     budget: baseOrder.budget ?? '',

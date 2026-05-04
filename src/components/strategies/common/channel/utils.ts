@@ -15,6 +15,7 @@ import {
 } from 'react';
 import { ChartPoint, Drawing } from '../d3Chart/D3ChartContext';
 import { ChannelSearch } from 'libs/routing/routes/trade';
+import config from 'config';
 
 export const deltaTypes = ['percent', 'token'] as const;
 export type DeltaType = (typeof deltaTypes)[number];
@@ -79,16 +80,20 @@ export const useGradientChannelOrder = (
 ) => {
   const id = useId();
   const timeout = useRef<number>(null);
+  const isStable = (token: string) => config.stableTokens.includes(token);
+  const multi =
+    isStable(search.base!) && isStable(search.quote!) ? 1.001 : 1.01;
 
   const deltaType = search.deltaType ?? 'percent';
-  const baseDelta = search.delta ?? '2';
+  const baseDelta =
+    search.delta ?? new SafeDecimal(multi).sub(1).mul(200).toString();
 
   const { baseBuy, baseSell } = useMemo(() => {
     const price = new SafeDecimal(marketPrice ?? 0);
     const baseSellOrder = {
       direction: 'sell' as const,
-      startPrice: search.sellStartPrice ?? price.mul(1.01).toString(),
-      endPrice: search.sellEndPrice ?? price.mul(1.01).toString(),
+      startPrice: search.sellStartPrice ?? price.mul(multi).toString(),
+      endPrice: search.sellEndPrice ?? price.mul(multi).toString(),
       startDate: search.sellStartDate ?? defaultGradientStartDate,
       endDate: search.sellEndDate ?? defaultGradientEndDate,
       budget: search.sellBudget ?? '',

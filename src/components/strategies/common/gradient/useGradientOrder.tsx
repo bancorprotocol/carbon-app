@@ -7,13 +7,14 @@ import {
   useState,
 } from 'react';
 import { GradientOrderBlock, QuickGradientOrderBlock } from '../types';
-import { defaultGradientOrder } from './utils';
+import { defaultGradientMultipliers, defaultGradientOrder } from './utils';
 import {
   defaultQuickGradientOrder,
   quickToGradientOrder,
 } from '../quick/utils';
 import { ChartPoint, Drawing } from '../d3Chart/D3ChartContext';
 import { DrawingMode } from '../d3Chart/drawing/DrawingMenu';
+import { useStrategyFormCtx } from '../StrategyFormContext';
 
 export const useGradientOrder = (
   initOrder: GradientOrderBlock,
@@ -21,15 +22,25 @@ export const useGradientOrder = (
 ) => {
   const id = useId();
   const timeout = useRef<number>(null);
+  const { base, quote } = useStrategyFormCtx();
+
+  const direction = initOrder.direction;
+
+  const multi = useMemo(() => {
+    return defaultGradientMultipliers(base.address, quote.address, direction);
+  }, [base.address, quote.address, direction]);
+
   const [order, setOrder] = useState(initOrder);
 
   const set = useCallback(
     (next: Partial<GradientOrderBlock>) => {
-      setOrder((current) => defaultGradientOrder({ ...current, ...next }));
+      setOrder((current) =>
+        defaultGradientOrder({ ...current, ...next }, multi),
+      );
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => saveOrder(next), 200);
     },
-    [saveOrder],
+    [multi, saveOrder],
   );
 
   useEffect(() => {

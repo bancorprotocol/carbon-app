@@ -9,7 +9,10 @@ import { useQuickGradientOrder } from 'components/strategies/common/gradient/use
 import { CreateGradientStrategyForm } from 'components/strategies/common/gradient/CreateGradientStrategyForm';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import { isReverseGradientOrders } from 'components/strategies/common/gradient/utils';
+import {
+  defaultGradientMultipliers,
+  isReverseGradientOrders,
+} from 'components/strategies/common/gradient/utils';
 import {
   ChartPoint,
   Drawing,
@@ -50,29 +53,8 @@ export const TradeQuickChannel = () => {
     [navigate],
   );
 
-  const baseBuy = useMemo(() => {
-    return defaultQuickGradientOrder(
-      'channel',
-      {
-        direction: 'buy',
-        startPrice: search.buyStartPrice,
-        endPrice: search.buyEndPrice,
-        deltaTime: search.buyDeltaTime,
-        budget: search.buyBudget,
-      },
-      marketPrice,
-    );
-  }, [
-    marketPrice,
-    search.buyBudget,
-    search.buyEndPrice,
-    search.buyDeltaTime,
-    search.buyStartPrice,
-  ]);
-
   const baseSell = useMemo(() => {
     return defaultQuickGradientOrder(
-      'channel',
       {
         direction: 'sell',
         startPrice: search.sellStartPrice,
@@ -80,14 +62,39 @@ export const TradeQuickChannel = () => {
         deltaTime: search.sellDeltaTime,
         budget: search.sellBudget,
       },
+      defaultGradientMultipliers(base.address, quote.address, 'sell'),
       marketPrice,
     );
   }, [
-    marketPrice,
-    search.sellBudget,
+    search.sellStartPrice,
     search.sellEndPrice,
     search.sellDeltaTime,
-    search.sellStartPrice,
+    search.sellBudget,
+    base.address,
+    quote.address,
+    marketPrice,
+  ]);
+
+  const baseBuy = useMemo(() => {
+    return defaultQuickGradientOrder(
+      {
+        direction: 'buy',
+        startPrice: search.buyStartPrice,
+        endPrice: search.buyEndPrice,
+        deltaTime: search.buyDeltaTime,
+        budget: search.buyBudget,
+      },
+      defaultGradientMultipliers(base.address, quote.address, 'sell'),
+      marketPrice,
+    );
+  }, [
+    search.buyStartPrice,
+    search.buyEndPrice,
+    search.buyDeltaTime,
+    search.buyBudget,
+    base.address,
+    quote.address,
+    marketPrice,
   ]);
 
   const buy = useQuickGradientOrder('channel', baseBuy, (next) => {

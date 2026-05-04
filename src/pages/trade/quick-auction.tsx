@@ -23,6 +23,7 @@ import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawL
 import { D3DrawingRanges } from 'components/strategies/common/d3Chart/drawing/D3DrawingRanges';
 import { cn } from 'utils/helpers';
 import style from 'components/strategies/common/order.module.css';
+import { defaultGradientMultipliers } from 'components/strategies/common/gradient/utils';
 
 const url = '/trade/quick-auction';
 export const TradeQuickAuction = () => {
@@ -46,13 +47,17 @@ export const TradeQuickAuction = () => {
     [navigate],
   );
 
+  const direction = search.direction ?? 'sell';
+  const multi = useMemo(() => {
+    return defaultGradientMultipliers(base.address, quote.address, direction);
+  }, [base.address, quote.address, direction]);
+
   const baseOrder = useMemo(() => {
-    return defaultQuickGradientOrder('line', search, marketPrice);
-  }, [search, marketPrice]);
+    return defaultQuickGradientOrder(search, multi, marketPrice);
+  }, [search, multi, marketPrice]);
   const { order, setOrder, drawing, onDrawingUpdate, gradientOrder } =
     useQuickGradientOrder('line', baseOrder, saveOrder);
 
-  const direction = order.direction;
   const orders = {
     buy: direction === 'buy' ? gradientOrder : emptyGradientOrder(),
     sell: direction === 'sell' ? gradientOrder : emptyGradientOrder(),
@@ -67,14 +72,14 @@ export const TradeQuickAuction = () => {
   const setDirection = useCallback(
     (direction: StrategyDirection) => {
       const next = defaultQuickGradientOrder(
-        'line',
         { direction, budget: order.budget },
+        multi,
         marketPrice,
       );
       delete next.marginalPrice;
       setOrder(next);
     },
-    [marketPrice, order.budget, setOrder],
+    [marketPrice, multi, order.budget, setOrder],
   );
 
   return (

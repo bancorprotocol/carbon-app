@@ -12,6 +12,7 @@ import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeCha
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
 import {
+  defaultGradientMultipliers,
   defaultGradientOrder,
   isReverseGradientOrders,
 } from 'components/strategies/common/gradient/utils';
@@ -52,10 +53,13 @@ export const TradeTriangle = () => {
         endDate: search.buyEndDate,
         budget: search.buyBudget,
       },
+      defaultGradientMultipliers(base.address, quote.address, 'buy'),
       marketPrice,
     );
   }, [
+    base.address,
     marketPrice,
+    quote.address,
     search.buyBudget,
     search.buyEndDate,
     search.buyEndPrice,
@@ -73,10 +77,13 @@ export const TradeTriangle = () => {
         endDate: search.sellEndDate,
         budget: search.sellBudget,
       },
+      defaultGradientMultipliers(base.address, quote.address, 'sell'),
       marketPrice,
     );
   }, [
+    base.address,
     marketPrice,
+    quote.address,
     search.sellBudget,
     search.sellEndDate,
     search.sellEndPrice,
