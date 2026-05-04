@@ -44,7 +44,7 @@ export const ChannelOrder: FC<Props> = (props) => {
 
   const setDeltaType = (deltaType: DeltaType) => {
     const delta = toDelta(deltaType, buy.startPrice, sell.startPrice);
-    setDelta({ delta, deltaType });
+    setDelta({ deltaPrice: delta, deltaType });
   };
 
   return (
@@ -101,7 +101,7 @@ export const ChannelOrder: FC<Props> = (props) => {
             value={delta}
             step="any"
             min="0"
-            onChange={(e) => setDelta({ delta: e.target.value })}
+            onChange={(e) => setDelta({ deltaPrice: e.target.value })}
           />
         </div>
       </div>

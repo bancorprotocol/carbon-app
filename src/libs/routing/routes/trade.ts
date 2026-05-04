@@ -227,7 +227,7 @@ const channelPage = createRoute({
     setGradientChartDates(search);
   },
   validateSearch: searchValidator({
-    delta: v.optional(validInputNumber),
+    deltaPrice: v.optional(validInputNumber),
     deltaType: v.optional(v.picklist(['percent', 'token'])),
     buyBudget: v.optional(validInputNumber),
     sellStartPrice: v.optional(validInputNumber),
@@ -272,18 +272,19 @@ const quickAuctionPage = createRoute({
   }),
 });
 
+export type QuickChannelSearch =
+  (typeof quickChannelPage)['types']['searchSchema'] & TradeSearch;
 const quickChannelPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/quick-channel',
   component: TradeQuickChannel,
   validateSearch: searchValidator({
-    buyStartPrice: v.optional(validInputNumber),
-    buyEndPrice: v.optional(validInputNumber),
-    buyDeltaTime: v.optional(validNumber),
+    deltaTime: v.optional(validInputNumber),
+    deltaPrice: v.optional(validInputNumber),
+    deltaType: v.optional(v.picklist(['percent', 'token'])),
     buyBudget: v.optional(validInputNumber),
     sellStartPrice: v.optional(validInputNumber),
     sellEndPrice: v.optional(validInputNumber),
-    sellDeltaTime: v.optional(validNumber),
     sellBudget: v.optional(validInputNumber),
   }),
 });

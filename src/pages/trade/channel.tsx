@@ -49,7 +49,7 @@ export const TradeChannel = () => {
 
   const deltaType = search.deltaType ?? 'percent';
 
-  const { drawing, onDrawingUpdate, buy, sell, delta } =
+  const { drawing, onDrawingUpdate, buy, sell, deltaPrice } =
     useGradientChannelOrder(search, setSearch, marketPrice);
 
   const priceError = useMemo(() => {
@@ -94,7 +94,7 @@ export const TradeChannel = () => {
               data-direction="buy"
             >
               <ChannelOrder
-                delta={delta}
+                delta={deltaPrice}
                 type={deltaType}
                 setDelta={setSearch}
                 sell={sell}

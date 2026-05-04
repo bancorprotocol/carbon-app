@@ -1,51 +1,42 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
 import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
-import { useMarketPrice } from 'hooks/useMarketPrice';
-import { StrategyDirection } from 'libs/routing/routes/trade';
-import { useCallback, useEffect, useMemo } from 'react';
+import {
+  QuickChannelSearch,
+  StrategyDirection,
+} from 'libs/routing/routes/trade';
+import { useCallback, useMemo } from 'react';
 import { D3DrawingRanges } from 'components/strategies/common/d3Chart/drawing/D3DrawingRanges';
-import { useQuickGradientOrder } from 'components/strategies/common/gradient/useGradientOrder';
 import { CreateGradientStrategyForm } from 'components/strategies/common/gradient/CreateGradientStrategyForm';
 import { GradientOrderBlock } from 'components/strategies/common/types';
 import { toOrderSearch } from 'components/strategies/common/useSetOrder';
-import {
-  defaultGradientMultipliers,
-  isReverseGradientOrders,
-} from 'components/strategies/common/gradient/utils';
-import {
-  ChartPoint,
-  Drawing,
-} from 'components/strategies/common/d3Chart/D3ChartContext';
+import { isReverseGradientOrders } from 'components/strategies/common/gradient/utils';
 import { cn } from 'utils/helpers';
 import { Warning } from 'components/common/WarningMessageWithIcon';
 import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
 import { CreateLayout } from 'components/strategies/create/CreateLayout';
 import {
-  defaultQuickGradientOrder,
   formatQuickTime,
+  quickToGradientOrder,
 } from 'components/strategies/common/quick/utils';
 import { QuickGradientChart } from 'components/strategies/common/quick/QuickGradientChart';
 import { CreateQuickGradientOrder } from 'components/strategies/common/quick/CreateQuickGradientOrder';
 import { D3EditChannel } from 'components/strategies/common/d3Chart/drawing/D3DrawChannel';
+import { ChannelOrder } from 'components/strategies/common/channel/CreateChannelOrder';
+import { useQuickGradientChannelOrder } from 'components/strategies/common/channel/utils';
 import style from 'components/strategies/common/order.module.css';
 
 const url = '/trade/quick-channel';
 export const TradeQuickChannel = () => {
-  const { base, quote } = useStrategyFormCtx();
-  const { marketPrice, isPending: pendingMarketPrice } = useMarketPrice({
-    base,
-    quote,
-  });
+  const { base, quote, marketPrice } = useStrategyFormCtx();
   const search = useSearch({ from: url });
   const navigate = useNavigate({ from: url });
 
-  const saveOrder = useCallback(
-    (next: Partial<GradientOrderBlock>, direction: StrategyDirection) => {
-      const params = toOrderSearch(next, direction);
+  const setSearch = useCallback(
+    (next: Partial<QuickChannelSearch>) => {
       navigate({
         params: (params) => params,
-        search: (previous) => ({ ...previous, ...params }),
+        search: (previous) => ({ ...previous, ...next }),
         replace: true,
         resetScroll: false,
       });
@@ -53,94 +44,38 @@ export const TradeQuickChannel = () => {
     [navigate],
   );
 
-  const baseSell = useMemo(() => {
-    return defaultQuickGradientOrder(
-      {
-        direction: 'sell',
-        startPrice: search.sellStartPrice,
-        endPrice: search.sellEndPrice,
-        deltaTime: search.sellDeltaTime,
-        budget: search.sellBudget,
-      },
-      defaultGradientMultipliers(base.address, quote.address, 'sell'),
-      marketPrice,
-    );
-  }, [
-    search.sellStartPrice,
-    search.sellEndPrice,
-    search.sellDeltaTime,
-    search.sellBudget,
-    base.address,
-    quote.address,
-    marketPrice,
-  ]);
-
-  const baseBuy = useMemo(() => {
-    return defaultQuickGradientOrder(
-      {
-        direction: 'buy',
-        startPrice: search.buyStartPrice,
-        endPrice: search.buyEndPrice,
-        deltaTime: search.buyDeltaTime,
-        budget: search.buyBudget,
-      },
-      defaultGradientMultipliers(base.address, quote.address, 'sell'),
-      marketPrice,
-    );
-  }, [
-    search.buyStartPrice,
-    search.buyEndPrice,
-    search.buyDeltaTime,
-    search.buyBudget,
-    base.address,
-    quote.address,
-    marketPrice,
-  ]);
-
-  const buy = useQuickGradientOrder(baseBuy, (next) => saveOrder(next, 'buy'));
-  const sell = useQuickGradientOrder(baseSell, (next) =>
-    saveOrder(next, 'sell'),
+  const setOrder = useCallback(
+    (next: Partial<GradientOrderBlock>, direction: StrategyDirection) => {
+      const params = toOrderSearch(next, direction);
+      setSearch(params);
+    },
+    [setSearch],
   );
 
-  useEffect(() => {
-    if (pendingMarketPrice) return;
-    buy.setOrder(baseBuy);
-    sell.setOrder(baseSell);
-    // Only run this once the marketprice is ready
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pendingMarketPrice]);
+  const deltaType = search.deltaType ?? 'percent';
 
-  const drawing = useMemo(
-    () =>
-      ({
-        id: 'quick-channel',
-        mode: 'channel',
-        points: [...buy.drawing.points, ...sell.drawing.points],
-      }) satisfies Drawing,
-    [buy.drawing, sell.drawing],
-  );
+  const { drawing, onDrawingUpdate, buy, sell, deltaPrice } =
+    useQuickGradientChannelOrder(search, setSearch, marketPrice);
 
-  const onDrawingChange = (points: ChartPoint[]) => {
-    buy.onDrawingUpdate([points[0], points[1]]);
-    sell.onDrawingUpdate([points[2], points[3]]);
-  };
+  const buyGradient = useMemo(() => quickToGradientOrder(buy), [buy]);
+  const sellGradient = useMemo(() => quickToGradientOrder(sell), [sell]);
 
   const priceError = useMemo(() => {
-    if (isReverseGradientOrders(buy.gradientOrder, sell.gradientOrder)) {
+    if (isReverseGradientOrders(buyGradient, sellGradient)) {
       return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid loss of funds.';
     }
-  }, [buy.gradientOrder, sell.gradientOrder]);
+  }, [buyGradient, sellGradient]);
 
   return (
     <>
       <StrategyChartSection
         editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
       >
-        <QuickGradientChart orders={[buy.order, sell.order]}>
+        <QuickGradientChart orders={[buy, sell]}>
           <D3EditChannel
             colors={['sell', 'buy']}
             drawing={drawing}
-            onChange={onDrawingChange}
+            onChange={onDrawingUpdate}
           />
           <D3DrawingRanges
             color="secondary"
@@ -150,36 +85,34 @@ export const TradeQuickChannel = () => {
         </QuickGradientChart>
       </StrategyChartSection>
       <CreateLayout url={url}>
-        <CreateGradientStrategyForm
-          buy={buy.gradientOrder}
-          sell={sell.gradientOrder}
-        >
-          <div className="surface grid rounded-2xl overflow-clip">
-            <div
+        <CreateGradientStrategyForm sell={sellGradient} buy={buyGradient}>
+          <article className="surface grid rounded-2xl overflow-clip">
+            <section
               className={cn(style.order, 'relative grid gap-16 p-16')}
               data-direction="sell"
             >
               <CreateQuickGradientOrder
-                order={sell.order}
-                setOrder={sell.setOrder}
+                order={sell}
+                setOrder={(next) => setOrder(next, 'sell')}
                 priceWarning={
                   priceError && <Warning message={priceError} isError />
                 }
               />
-            </div>
-            <div
+            </section>
+            <section
               className={cn(style.order, 'relative grid gap-16 p-16')}
               data-direction="buy"
             >
-              <CreateQuickGradientOrder
-                order={buy.order}
-                setOrder={buy.setOrder}
-                priceWarning={
-                  priceError && <Warning message={priceError} isError />
-                }
+              <ChannelOrder
+                delta={deltaPrice}
+                type={deltaType}
+                setDelta={setSearch}
+                sell={sellGradient}
+                buy={buyGradient}
+                setBuy={(next) => setOrder(next, 'buy')}
               />
-            </div>
-          </div>
+            </section>
+          </article>
         </CreateGradientStrategyForm>
       </CreateLayout>
     </>
