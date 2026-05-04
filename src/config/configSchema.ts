@@ -120,9 +120,9 @@ export const AppConfigSchema = v.object({
     faucetTokens: v.array(
       v.object({
         decimals: v.number(),
-        tokenContract: v.string(),
-        donorAccount: v.string(),
+        address: v.string(),
         symbol: v.string(),
+        amount: v.optional(v.string()),
       }),
     ),
   }),

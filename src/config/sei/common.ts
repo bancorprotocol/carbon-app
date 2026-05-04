@@ -96,20 +96,17 @@ export const commonConfig: AppConfig = {
   tenderly: {
     faucetTokens: [
       {
-        donorAccount: '0x06b49C508f278a9219a6e45A7bcEbBC0aA1E2e7b',
-        tokenContract: addresses.WSEI,
+        address: addresses.WSEI,
         decimals: 18,
         symbol: 'WSEI',
       },
       {
-        donorAccount: '0xE071600b2445Ba5aD609Cb282436663789b388F8',
-        tokenContract: addresses.USDC,
+        address: addresses.USDC,
         decimals: 6,
         symbol: 'USDC',
       },
       {
-        donorAccount: '0x41eEa09c971294FcDE3B6E553902B04a47be7442',
-        tokenContract: addresses.USDT,
+        address: addresses.USDT,
         decimals: 6,
         symbol: 'USDT',
       },

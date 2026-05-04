@@ -2,17 +2,12 @@ import { FAUCET_TOKENS, tenderlyFaucetTransferTKN } from 'utils/tenderly';
 import { useWagmi } from 'libs/wagmi';
 import { useGetTokenBalances } from 'libs/queries/chain/balance';
 import { useQueryClient } from '@tanstack/react-query';
-import config from 'config';
-import { Button } from 'components/common/button';
 import { QueryKey } from 'libs/queries';
 import { FormEvent } from 'react';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
+import config from 'config';
 
-const TOKENS = FAUCET_TOKENS.map((tkn) => ({
-  address: tkn.tokenContract,
-  decimals: tkn.decimals,
-  symbol: tkn.symbol,
-}));
+const TOKENS = [...FAUCET_TOKENS];
 
 const gasToken = config.network.gasToken;
 TOKENS.push({

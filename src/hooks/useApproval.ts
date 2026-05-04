@@ -10,6 +10,7 @@ import { useTokens } from './useTokens';
 import { useContract } from './useContract';
 import { NATIVE_TOKEN_ADDRESS } from 'utils/tokens';
 import { formatUnits, TransactionRequest } from 'ethers';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export interface Asset {
   address: string;
@@ -91,8 +92,10 @@ export const useGetApprovalTokens = () => {
         for (const asset of assets) {
           const { address, rawAmount } = asset as Asset;
           const key = `${address}_${spender}` as const;
+          // Force amount to be bigint compatible
+          const safeAmount = new SafeDecimal(rawAmount).toFixed();
           approval[key] ||= BigInt(0);
-          approval[key] += BigInt(rawAmount);
+          approval[key] += BigInt(safeAmount);
         }
       }
 

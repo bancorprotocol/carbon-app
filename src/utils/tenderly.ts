@@ -34,8 +34,7 @@ class UncheckedJsonRpcSigner extends JsonRpcSigner {
 
 export interface FaucetToken {
   decimals: number;
-  tokenContract: string;
-  donorAccount: string;
+  address: string;
   symbol: string;
 }
 
@@ -57,20 +56,21 @@ export const tenderlyFaucetTransferNativeToken = async (user: string) => {
 };
 
 export const tenderlyFaucetTransferTKN = async (
-  token: { address: string; decimals: number },
+  token: { address: string; decimals: number; amount?: string },
   user: string,
 ) => {
   const provider = new JsonRpcProvider(tenderlyRpc);
+  const amount = token.amount ?? '1000';
   if (token.address === NATIVE_TOKEN_ADDRESS) {
     return provider.send('tenderly_setBalance', [
       [user],
-      toQuantity(parseUnits('1000', 'ether')),
+      toQuantity(parseUnits(amount, 'ether')),
     ]);
   } else {
     return provider.send('tenderly_setErc20Balance', [
       token.address,
       user,
-      toQuantity(parseUnits('1000', token.decimals)),
+      toQuantity(parseUnits(amount, token.decimals)),
     ]);
   }
 };

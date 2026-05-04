@@ -15,11 +15,7 @@ import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { getMarketPrice } from 'libs/queries/extApi/tokenPrice';
 
-const TOKENS = FAUCET_TOKENS.map((tkn) => ({
-  address: tkn.tokenContract,
-  decimals: tkn.decimals,
-  symbol: tkn.symbol,
-}));
+const TOKENS = [...FAUCET_TOKENS];
 
 const gasToken = config.network.gasToken;
 TOKENS.push({
