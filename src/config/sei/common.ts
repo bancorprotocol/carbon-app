@@ -63,7 +63,7 @@ export const commonConfig: AppConfig = {
     [addresses.SEI, addresses.USDC],
   ],
   popularTokens: popularTokens,
-  stableTokens: [addresses.USDT, addresses.USDC],
+  stableTokens: [addresses.USDT, addresses.USDC, addresses.syUSD],
   addresses: {
     tokens: addresses,
     carbon: {

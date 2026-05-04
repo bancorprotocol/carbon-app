@@ -12,6 +12,8 @@ const addresses = {
   USDC: '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
   USDT: '0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e',
   WETH: '0xD221812de1BD094f35587EE8E174B07B6167D9Af',
+  USDM: '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+  USDGLO: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
 };
 
 const popularTokens = [
@@ -65,7 +67,12 @@ export const commonConfig: AppConfig = {
     [addresses.CELO, addresses.WETH],
   ],
   popularTokens: popularTokens,
-  stableTokens: [addresses.USDC, addresses.USDT],
+  stableTokens: [
+    addresses.USDC,
+    addresses.USDT,
+    addresses.USDM,
+    addresses.USDGLO,
+  ],
   addresses: {
     tokens: addresses,
     carbon: {
