@@ -90,13 +90,10 @@ export const TradeQuickTriangle = () => {
     marketPrice,
   ]);
 
-  const sell = useQuickGradientOrder('line', baseSell, (next) => {
-    return saveOrder(next, 'sell');
-  });
-
-  const buy = useQuickGradientOrder('line', baseBuy, (next) => {
-    return saveOrder(next, 'buy');
-  });
+  const sell = useQuickGradientOrder(baseSell, (next) =>
+    saveOrder(next, 'sell'),
+  );
+  const buy = useQuickGradientOrder(baseBuy, (next) => saveOrder(next, 'buy'));
 
   useEffect(() => {
     if (pendingMarketPrice) return;

@@ -13,7 +13,6 @@ import {
   quickToGradientOrder,
 } from '../quick/utils';
 import { ChartPoint, Drawing } from '../d3Chart/D3ChartContext';
-import { DrawingMode } from '../d3Chart/drawing/DrawingMenu';
 import { useStrategyFormCtx } from '../StrategyFormContext';
 
 export const useGradientOrder = (
@@ -89,23 +88,28 @@ export const useGradientOrder = (
 };
 
 export const useQuickGradientOrder = (
-  mode: DrawingMode,
   initOrder: QuickGradientOrderBlock,
   saveOrder: (order: Partial<GradientOrderBlock>) => any,
 ) => {
   const id = useId();
   const timeout = useRef<number>(null);
+  const { base, quote } = useStrategyFormCtx();
   const [order, setOrder] = useState(initOrder);
+
+  const direction = initOrder.direction;
+  const multi = useMemo(() => {
+    return defaultGradientMultipliers(base.address, quote.address, direction);
+  }, [base.address, quote.address, direction]);
 
   const set = useCallback(
     (next: Partial<QuickGradientOrderBlock>) => {
       setOrder((current) => {
-        return defaultQuickGradientOrder(mode, { ...current, ...next });
+        return defaultQuickGradientOrder({ ...current, ...next }, multi);
       });
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => saveOrder(next), 200);
     },
-    [mode, saveOrder],
+    [multi, saveOrder],
   );
 
   useEffect(() => {

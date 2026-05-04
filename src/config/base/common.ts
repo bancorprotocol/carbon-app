@@ -39,6 +39,7 @@ export const commonConfig: AppConfig = {
   ],
   popularPairs: [],
   popularTokens: [],
+  stableTokens: [],
   addresses: {
     tokens: {
       ZERO: '0x0000000000000000000000000000000000000000',

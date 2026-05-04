@@ -56,7 +56,7 @@ export const TradeQuickAuction = () => {
     return defaultQuickGradientOrder(search, multi, marketPrice);
   }, [search, multi, marketPrice]);
   const { order, setOrder, drawing, onDrawingUpdate, gradientOrder } =
-    useQuickGradientOrder('line', baseOrder, saveOrder);
+    useQuickGradientOrder(baseOrder, saveOrder);
 
   const orders = {
     buy: direction === 'buy' ? gradientOrder : emptyGradientOrder(),

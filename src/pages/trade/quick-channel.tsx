@@ -97,12 +97,10 @@ export const TradeQuickChannel = () => {
     marketPrice,
   ]);
 
-  const buy = useQuickGradientOrder('channel', baseBuy, (next) => {
-    return saveOrder(next, 'buy');
-  });
-  const sell = useQuickGradientOrder('channel', baseSell, (next) => {
-    return saveOrder(next, 'sell');
-  });
+  const buy = useQuickGradientOrder(baseBuy, (next) => saveOrder(next, 'buy'));
+  const sell = useQuickGradientOrder(baseSell, (next) =>
+    saveOrder(next, 'sell'),
+  );
 
   useEffect(() => {
     if (pendingMarketPrice) return;
