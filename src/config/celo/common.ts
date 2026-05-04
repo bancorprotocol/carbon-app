@@ -65,6 +65,7 @@ export const commonConfig: AppConfig = {
     [addresses.CELO, addresses.WETH],
   ],
   popularTokens: popularTokens,
+  stableTokens: [addresses.USDC, addresses.USDT],
   addresses: {
     tokens: addresses,
     carbon: {

@@ -92,6 +92,7 @@ export const commonConfig: AppConfig = {
     [addresses.SHIB, addresses.ETH],
   ],
   popularTokens: popularTokens,
+  stableTokens: [addresses.USDT, addresses.USDC, addresses.DAI],
   addresses: {
     tokens: addresses,
     carbon: {

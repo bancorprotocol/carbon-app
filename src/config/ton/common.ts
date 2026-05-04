@@ -60,6 +60,7 @@ export const commonConfig: AppConfig = {
       smartAccountFactory: '0x070820Ed658860f77138d71f74EfbE173775895b',
     },
   },
+  stableTokens: [addresses.USDT],
   utils: {
     multicall3: {
       address: '0xcA11bde05977b3631167028862bE2a173976CA11',

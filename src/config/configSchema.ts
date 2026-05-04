@@ -52,6 +52,7 @@ export const AppConfigSchema = v.object({
   defaultTokenPair: v.tuple([v.string(), v.string()]),
   popularPairs: v.array(v.tuple([v.string(), v.string()])),
   popularTokens: v.array(v.string()),
+  stableTokens: v.array(v.string()),
   tokenListOverride: v.array(
     v.object({
       name: v.string(),
