@@ -68,7 +68,13 @@ export const allV3Configs = {
       managerAddress: '0x3d79EdAaBC0EaB6F08ED885C05Fc0B014290D95A',
     },
   },
-  sei: {},
+  sei: {
+    'dragon-v3': {
+      dex: 'dragon-v2' as const,
+      factoryAddress: '0x75FC67473A91335B5b8F8821277262a13B38c9b3',
+      managerAddress: '0x8B3c541c30f9b29560f56B9E44b59718916B69EF',
+    },
+  },
   coti: {},
   tac: {},
   ton: {},

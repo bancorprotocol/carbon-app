@@ -3,6 +3,7 @@ import { Dexes, DexesName } from 'services/uniswap/utils';
 import IconUniswap from 'assets/logos/uniswap.svg?react';
 import IconSushiswap from 'assets/logos/sushiswap.svg?react';
 import IconPancakeswap from 'assets/logos/pancakeswap.svg?react';
+import IconDragonswap from 'assets/logos/dragonswap.svg?react';
 
 interface Props extends SVGProps<SVGSVGElement> {
   dex: DexesName | Dexes;
@@ -17,6 +18,9 @@ export const DexIcon: FC<Props> = ({ dex, ...props }) => {
   }
   if (dex.includes('pancake')) {
     return <IconPancakeswap {...props} />;
+  }
+  if (dex.includes('dragon')) {
+    return <IconDragonswap {...props} />;
   }
   return;
 };
