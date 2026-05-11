@@ -6,6 +6,7 @@ import { cn } from 'utils/helpers';
 import {
   AllFilter,
   FilterStatus,
+  FilterType,
   strategyFilter,
   StrategyFilter,
   strategySort,
@@ -86,12 +87,12 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
       setFilter({ ...filter, status });
     }
   };
-  // const onFilterTypeChange = (event: FormEvent<HTMLFieldSetElement>) => {
-  //   if (event.target instanceof HTMLInputElement) {
-  //     const type = event.target.value as FilterType;
-  //     setFilter((filter) => ({ ...filter, type }));
-  //   }
-  // };
+  const onFilterTypeChange = (event: FormEvent<HTMLFieldSetElement>) => {
+    if (event.target instanceof HTMLInputElement) {
+      const type = event.target.value as FilterType;
+      setFilter({ ...filter, type });
+    }
+  };
 
   const displayFilter = useMemo(() => {
     if (filter.status === 'all' && filter.type === 'all') return 'All';
@@ -127,7 +128,7 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
         <legend className="text-14 px-16 py-8 text-main-0/60">Status</legend>
         {Object.entries(strategyFilter.status).map(([key, label]) => (
           <FilterSortItem
-            name="filter"
+            name="filter-status"
             key={key}
             item={key as FilterStatus}
             title={label}
@@ -135,18 +136,18 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
           />
         ))}
       </fieldset>
-      {/* <fieldset onChange={onFilterTypeChange}>
+      <fieldset onChange={onFilterTypeChange}>
         <legend className="text-14 px-16 py-8 text-main-0/60">Type</legend>
-        {Object.entries(filterItems.type).map(([key, label]) => (
+        {Object.entries(strategyFilter.type).map(([key, label]) => (
           <FilterSortItem
-            name="filter"
+            name="filter-type"
             key={key}
             item={key as FilterType}
             title={label}
             selectedItem={filter.type}
           />
         ))}
-      </fieldset> */}
+      </fieldset>
     </DropdownMenu>
   );
 };

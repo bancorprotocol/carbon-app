@@ -45,15 +45,15 @@ export const StrategyContent: FC<Props> = ({ url }) => {
 
   const filter = useMemo(
     (): StrategyFilter => ({
-      status: search.filter ?? 'all',
-      type: 'all',
+      status: search.status ?? 'all',
+      type: search.type ?? 'all',
     }),
-    [search.filter],
+    [search.status, search.type],
   );
   const setFilter = useCallback(
     (filter?: StrategyFilter) => {
       nav({
-        search: (s) => ({ ...s, filter: filter?.status }),
+        search: (s) => ({ ...s, ...filter }),
         replace: true,
         resetScroll: false,
       });

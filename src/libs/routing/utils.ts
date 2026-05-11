@@ -71,8 +71,11 @@ export const validPairSort = v.optional(
     'strategyAmount',
   ]),
 );
-export const validStrategyFilter = v.optional(
+export const validStrategyFilterStatus = v.optional(
   v.picklist(['all', 'active', 'inactive']),
+);
+export const validStrategyFilterType = v.optional(
+  v.picklist(['all', 'gradient', 'static']),
 );
 export const validStrategySort = v.optional(
   v.picklist([

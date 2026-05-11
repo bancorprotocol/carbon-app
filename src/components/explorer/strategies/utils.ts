@@ -18,7 +18,7 @@ export const strategyFilter = {
 };
 export type FilterStatus = keyof (typeof strategyFilter)['status'];
 export type FilterType = keyof (typeof strategyFilter)['type'];
-export type AllFilter = FilterStatus; // | FilterType;
+export type AllFilter = FilterStatus | FilterType;
 export type StrategyFilter = {
   status: FilterStatus;
   type: FilterType;

@@ -10,7 +10,8 @@ import {
   searchValidator,
   validPairFilter,
   validPairSort,
-  validStrategyFilter,
+  validStrategyFilterStatus,
+  validStrategyFilterType,
   validStrategySort,
   validString,
 } from '../utils';
@@ -52,10 +53,17 @@ export const portfolioStrategiesPage = createRoute({
   getParentRoute: () => portfolioLayout,
   path: 'strategies',
   component: PortfolioStrategiesPage,
+  beforeLoad: ({ search }) => {
+    if (search.filter) search.status = search.filter;
+    delete search.filter;
+  },
   validateSearch: searchValidator({
     layout: v.optional(v.picklist(['grid', 'table'])),
-    filter: validStrategyFilter,
+    status: validStrategyFilterStatus,
+    type: validStrategyFilterType,
     sort: validStrategySort,
+    // @deprecated: use status instead
+    filter: validStrategyFilterStatus,
   }),
 });
 
