@@ -36,10 +36,11 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
     <table className={cn(style.table, 'table grid-area-[list]')}>
       <thead>
         <tr>
-          {!hideIds && <th>ID</th>}= <th>Type</th>
+          {!hideIds && <th>ID</th>}
+          <th>Type</th>
           <th colSpan={2}>Action</th>
-          <th>Buy Budget</th>
-          <th>Sell Budget</th>
+          <th className="px-8">Buy Budget</th>
+          <th className="px-8">Sell Budget</th>
           <th>Date</th>
         </tr>
       </thead>
