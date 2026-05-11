@@ -10,7 +10,7 @@ import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import { Link, useRouterState } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { FC, useMemo } from 'react';
+import { FC, Fragment, useMemo } from 'react';
 import { useMenuCtx } from 'components/common/dropdownMenu/utils';
 import { cn } from 'utils/helpers';
 import style from './TradeNav.module.css';
@@ -95,7 +95,7 @@ const types = [
         label: 'Time based strategies',
         strategies: [
           {
-            id: 'auction-buy',
+            id: 'auctionBuy',
             name: 'Auction Buy',
             to: '/trade/auction' as const,
             search: { direction: 'buy' } as const,
@@ -103,7 +103,7 @@ const types = [
             isNew: true,
           },
           {
-            id: 'auction-sell',
+            id: 'auctionSell',
             name: 'Auction Sell',
             to: '/trade/auction' as const,
             search: { direction: 'sell' } as const,
@@ -111,7 +111,7 @@ const types = [
             isNew: true,
           },
           {
-            id: 'quick-auction',
+            id: 'quickAuction',
             name: 'Fast auction',
             to: '/trade/quick-auction' as const,
             search: {} as const,
@@ -167,7 +167,7 @@ const types = [
             isNew: true,
           },
           {
-            id: 'quick-channel',
+            id: 'quickChannel',
             name: 'Fast channel',
             to: '/trade/quick-channel' as const,
             search: {} as const,
@@ -183,7 +183,7 @@ const types = [
             isNew: true,
           },
           {
-            id: 'quick-triangle',
+            id: 'quickTriangle',
             name: 'Fast triangle',
             to: '/trade/quick-triangle' as const,
             search: {} as const,
@@ -232,12 +232,13 @@ export const TradeNav = () => {
     >
       {types.map(({ id, title, groups }) => (
         <DropdownMenu
-          key={title}
+          key={id}
           placement={aboveBreakpoint('2xl') ? 'right-start' : 'bottom'}
           className="rounded-xl p-8 grid gap-4"
           button={(attr) => (
             <button
               {...attr}
+              key={id}
               aria-selected={active?.type === id}
               data-testid={id}
               className={cn(style.tradeType)}
@@ -262,7 +263,7 @@ export const TradeNav = () => {
           )}
         >
           {groups.map(({ label, strategies }) => (
-            <>
+            <Fragment key={label}>
               {label && (
                 <h4 className="text-12 text-main-0/60 px-8">{label}</h4>
               )}
@@ -273,7 +274,7 @@ export const TradeNav = () => {
                   selected={active?.strategy === strategy.id}
                 />
               ))}
-            </>
+            </Fragment>
           ))}
         </DropdownMenu>
       ))}
