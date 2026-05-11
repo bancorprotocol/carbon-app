@@ -4,7 +4,6 @@ import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
 import IconAuction from 'assets/icons/auction.svg?react';
-import IconFast from 'assets/icons/fast.svg?react';
 import IconChannel from 'assets/icons/channel.svg?react';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 
@@ -113,10 +112,10 @@ const types = [
           },
           {
             id: 'quick-auction',
-            name: 'Quick auction',
+            name: 'Fast auction',
             to: '/trade/quick-auction' as const,
             search: {} as const,
-            icon: <IconFast className="hidden md:block size-20" />,
+            icon: <IconAuction className="hidden md:block size-20" />,
             isNew: true,
           },
         ],
@@ -169,7 +168,7 @@ const types = [
           },
           {
             id: 'quick-channel',
-            name: 'Quick channel',
+            name: 'Fast channel',
             to: '/trade/quick-channel' as const,
             search: {} as const,
             icon: <IconChannel className="hidden md:block size-20" />,
@@ -185,7 +184,7 @@ const types = [
           },
           {
             id: 'quick-triangle',
-            name: 'Quick triangle',
+            name: 'Fast triangle',
             to: '/trade/quick-triangle' as const,
             search: {} as const,
             icon: <IconChannel className="hidden md:block size-20" />,
