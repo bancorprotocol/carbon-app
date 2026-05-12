@@ -212,5 +212,6 @@ export const commonConfig: AppConfig = {
     useDexAggregator: false, // !navigator.webdriver, // use sdk in E2E
     useEIP7702: true,
     useSeedData: true,
+    useMigration: true,
   },
 };

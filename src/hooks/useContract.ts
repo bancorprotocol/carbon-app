@@ -1,5 +1,9 @@
 import { currentChain, useWagmi } from 'libs/wagmi';
-import { Token__factory, Voucher__factory } from 'abis/types';
+import {
+  Token__factory,
+  Voucher__factory,
+  Controller__factory,
+} from 'abis/types';
 import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import config from 'config';
@@ -13,7 +17,20 @@ export const useVoucher = () => {
     queryKey: ['contract', 'voucher'],
     queryFn: () => ({
       read: Voucher__factory.connect(address, provider!),
-      write: Voucher__factory.connect(config.addresses.carbon.voucher, signer!),
+      write: Voucher__factory.connect(address, signer!),
+    }),
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useCarbonController = () => {
+  const { provider, signer } = useWagmi();
+  const address = config.addresses.carbon.carbonController;
+  return useQuery({
+    queryKey: ['contract', 'controller'],
+    queryFn: () => ({
+      read: Controller__factory.connect(address, provider!),
+      write: Controller__factory.connect(address, signer!),
     }),
     refetchOnWindowFocus: false,
   });

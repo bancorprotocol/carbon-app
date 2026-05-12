@@ -42,7 +42,8 @@ const configs = {
 export type CarbonNetworks = keyof typeof configs;
 type Mode = 'development' | 'production';
 
-const network = (import.meta.env.VITE_NETWORK || 'ethereum') as CarbonNetworks;
+export const network = (import.meta.env.VITE_NETWORK ||
+  'ethereum') as CarbonNetworks;
 const mode = import.meta.env.MODE as Mode;
 
 if (!configs[network]) {

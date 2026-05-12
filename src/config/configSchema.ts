@@ -146,5 +146,6 @@ export const AppConfigSchema = v.object({
     useDexAggregator: v.optional(v.boolean()),
     useEIP7702: v.optional(v.boolean()),
     useSeedData: v.optional(v.boolean()),
+    useMigration: v.optional(v.boolean()),
   }),
 });

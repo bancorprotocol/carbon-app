@@ -13,11 +13,23 @@ import { MigrationExplainer } from 'components/migration/MigrationExplainer';
 import { useCanBatchTransactions } from 'libs/queries/chain/canBatch';
 import { MigrationImposterWarning } from 'components/migration/MigrationImposterWarning';
 import { MigratedPosition } from 'components/migration/type';
+import config from 'config';
 
 type MigrationQuery = ReturnType<typeof useDexesMigration>;
 
 export const MigratePage = () => {
   const query = useDexesMigration();
+
+  if (!config.ui.useMigration) {
+    return (
+      <NotFound
+        className="surface rounded-2xl grid-area-[list]"
+        title="Unsupported Feature"
+        text="This feature is not available for this network."
+        variant="error"
+      />
+    );
+  }
 
   return (
     <div className="grid gap-16 grid-area-[list]">

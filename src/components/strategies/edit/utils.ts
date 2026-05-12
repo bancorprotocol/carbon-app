@@ -83,8 +83,8 @@ export const getEditBudgetPage = (
 export const useEditToDisposableSell = (strategy: AnyStrategy) => {
   const updateMutation = useUpdateStrategyQuery(strategy);
   const { dispatchNotification } = useNotifications();
-  const { user } = useWagmi();
   const cache = useQueryClient();
+  const { user } = useWagmi();
   return () => {
     if (isGradientStrategy(strategy)) {
       return console.error('Cannot change a gradient strategy into disposable');
@@ -104,9 +104,14 @@ export const useEditToDisposableSell = (strategy: AnyStrategy) => {
         if (!tx) return;
         console.log('tx hash', tx.hash);
         await tx.wait();
-        cache.invalidateQueries({
-          queryKey: QueryKey.strategiesByUser(user),
-        });
+        const keys = [
+          QueryKey.strategyAll(),
+          QueryKey.balance(user!, strategy.base.address),
+          QueryKey.balance(user!, strategy.quote.address),
+        ];
+        for (const queryKey of keys) {
+          cache.invalidateQueries({ queryKey });
+        }
       },
       onError: (e) => {
         console.error('update mutation failed', e);

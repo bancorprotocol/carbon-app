@@ -16,7 +16,10 @@ import { lsService } from 'services/localeStorage';
 import { Trending } from 'libs/queries/extApi/tradeCount';
 import { Reward } from 'libs/queries/extApi/rewards';
 import { Token } from 'libs/tokens';
-import { StrategyAPIResult } from 'libs/queries/extApi/strategy';
+import {
+  StrategiesSearchParams,
+  StrategyAPIResult,
+} from 'libs/queries/extApi/strategy';
 
 interface MarketRate {
   data: { USD: number };
@@ -82,8 +85,8 @@ const carbonApi = {
   ): Promise<SimulatorReturnNew> => {
     return getJSON<SimulatorReturnNew>('simulator/create', params);
   },
-  getAllStrategies: () => {
-    return getJSON<StrategyAPIResult>('strategies');
+  getStrategies: (params?: StrategiesSearchParams) => {
+    return getJSON<StrategyAPIResult>('strategies', params);
   },
   getActivity: async (
     params: QueryActivityParams,

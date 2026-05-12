@@ -8,7 +8,6 @@ import {
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { waitModalOpen } from '../../../utils/modal';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
-import { waitForTenderlyRpc } from '../../../utils/tenderly';
 
 export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
   const { base, quote } = testCase;
@@ -30,7 +29,6 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
     await createForm.submit('duplicate');
 
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
-    await waitForTenderlyRpc(page);
 
     const myStrategies = new MyStrategyDriver(page);
     await myStrategies.waitForUpdates();

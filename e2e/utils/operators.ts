@@ -1,4 +1,4 @@
-import { Locator, Page } from 'playwright-core';
+import { Locator, Page } from '@playwright/test';
 import { MainMenuDriver } from './MainMenuDriver';
 export { prettifyNumber as pn } from '../../src/utils/helpers/number';
 

@@ -46,9 +46,16 @@ export const useDeleteStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          cache.invalidateQueries({
-            queryKey: QueryKey.strategiesByUser(user),
-          });
+          setTimeout(() => {
+            const keys = [
+              QueryKey.strategyAll(),
+              QueryKey.balance(user, base.address),
+              QueryKey.balance(user, quote.address),
+            ];
+            for (const queryKey of keys) {
+              cache.refetchQueries({ queryKey });
+            }
+          }, 3000);
           console.log('tx confirmed');
           successEventsCb?.();
         },

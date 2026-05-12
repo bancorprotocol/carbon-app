@@ -3,8 +3,6 @@ import * as Comlink from 'comlink';
 import {
   PayableOverrides,
   TradeActionBNStr,
-  TokenPair,
-  MatchActionBNStr,
   StrategyUpdate,
   EncodedStrategyBNStr,
 } from '@bancor/carbon-sdk';
@@ -15,8 +13,6 @@ import {
   ContractsConfig,
 } from '@bancor/carbon-sdk/contracts-api';
 import Decimal from 'decimal.js';
-import { OrderRow } from 'libs/queries';
-import { OrderBook } from 'libs/queries/sdk/orderBook';
 import { JsonRpcProvider, FetchRequest } from 'ethers';
 
 Decimal.set({
@@ -26,15 +22,16 @@ Decimal.set({
   toExpPos: 30,
 });
 
-const ONE = new Decimal(1);
-
 let api: ContractsApi;
 let sdkCache: ChainCache;
 let carbonSDK: Toolkit;
-let isInitialized = false;
-let isInitializing = false;
 
-const init = async (
+let syncedCache: {
+  cache: ChainCache;
+  startDataSync: () => Promise<void>;
+};
+
+const setup = async (
   chainId: number,
   rpc: {
     url: string;
@@ -49,9 +46,6 @@ const init = async (
     refreshInterval?: number;
   },
 ) => {
-  if (isInitialized || isInitializing) return;
-  isInitializing = true;
-
   // Create FetchRequest to support custom headers (required for ethers v6)
   const fetchRequest = new FetchRequest(rpc.url);
   if (rpc.headers) {
@@ -66,251 +60,25 @@ const init = async (
   });
 
   api = new ContractsApi(provider, config);
-  const { cache, startDataSync } = initSyncedCache(
+  syncedCache = initSyncedCache(
     api.reader,
     sdkConfig?.cache,
     sdkConfig?.pairBatchSize,
     sdkConfig?.refreshInterval,
     sdkConfig?.blockRangeSize,
   );
-  sdkCache = cache;
+  sdkCache = syncedCache.cache;
   carbonSDK = new Toolkit(
     api,
-    sdkCache,
+    syncedCache.cache,
     decimalsMap
       ? (address) => decimalsMap.get(address.toLowerCase())
       : undefined,
   );
-  // await startDataSync();
-  isInitialized = true;
-  isInitializing = false;
-};
-
-const buildOrderBook = async (
-  isBuy: boolean,
-  baseToken: string,
-  quoteToken: string,
-  startRate: Decimal,
-  step: Decimal,
-  min: Decimal,
-  max: Decimal,
-  steps: number,
-): Promise<OrderRow[]> => {
-  const orders: OrderRow[] = [];
-  const rates: string[] = [];
-
-  for (let i = 0; i <= steps + 1; i++) {
-    const incrementBy = step.times(i);
-    let rate = startRate[isBuy ? 'minus' : 'plus'](incrementBy);
-    rate = isBuy ? rate : ONE.div(rate);
-    if (rate.gt(0)) {
-      rates.push(rate.toString());
-    }
-  }
-
-  const results = await carbonSDK.getRateLiquidityDepthsByPair(
-    baseToken,
-    quoteToken,
-    rates,
-  );
-
-  results.forEach((liquidity, i) => {
-    const length = orders.length;
-    let rate = rates[i];
-    let liquidityBn = new Decimal(liquidity);
-    let totalBn = liquidityBn;
-
-    if (liquidityBn.eq(0)) {
-      console.warn('order book getRateLiquidityDepthsByPair returns 0');
-      return;
-    }
-    if (isBuy) {
-      if (length === 0) {
-        liquidityBn = liquidityBn.div(rate);
-      } else {
-        if (liquidityBn.eq(orders[length - 1].originalTotal || '0')) {
-          liquidityBn = new Decimal(orders[length - 1].amount);
-        } else {
-          const firstRate = new Decimal(orders[0].rate);
-          const firstTotal = new Decimal(orders[0].originalTotal || '0');
-          const delta = liquidityBn.minus(firstTotal);
-          liquidityBn = firstTotal.div(firstRate).plus(delta.div(rate));
-        }
-      }
-    } else {
-      rate = ONE.div(rate).toString();
-      totalBn = totalBn.times(rate);
-    }
-    orders.push({
-      rate,
-      total: totalBn.toString(),
-      amount: liquidityBn.toString(),
-      originalTotal: liquidity,
-    });
-  });
-
-  const sortedOrders = orders.sort(
-    (a, b) => +new Decimal(a.rate).sub(b.rate).toNumber(),
-  );
-
-  return sortedOrders;
-};
-
-const getStep = (
-  stepBuy: Decimal,
-  stepSell: Decimal,
-  minBuy: Decimal,
-  maxBuy: Decimal,
-  steps: number,
-  minSell: Decimal,
-  maxSell: Decimal,
-): Decimal => {
-  if (stepBuy.isFinite() && stepBuy.gt(0)) {
-    if (stepSell.isFinite() && stepSell.gt(0)) {
-      return stepBuy.lte(stepSell) ? stepBuy : stepSell;
-    } else {
-      return stepBuy;
-    }
-  } else if (stepSell.isFinite() && stepSell.gt(0)) {
-    return stepSell;
-  } else {
-    if (minBuy.gt(0) && minBuy.eq(maxBuy)) {
-      return minBuy.div(steps + 2);
-    }
-    if (minSell.gt(0) && minSell.eq(maxSell)) {
-      return minSell.div(steps + 2);
-    }
-    return ONE.div(10000);
-  }
-};
-
-const getMiddleRate = (maxBuy: Decimal, maxSell: Decimal): Decimal => {
-  if (
-    maxBuy.isFinite() &&
-    maxBuy.gt(0) &&
-    maxSell.isFinite() &&
-    maxSell.gt(0)
-  ) {
-    return maxBuy.plus(ONE.div(maxSell)).div(2);
-  }
-  if (maxBuy.isFinite() && maxBuy.gt(0)) {
-    return maxBuy;
-  }
-  if (maxSell.isFinite() && maxSell.gt(0)) {
-    return ONE.div(maxSell);
-  }
-  return new Decimal(0);
-};
-
-const getOrderBook = async (
-  base: string,
-  quote: string,
-  steps: number,
-): Promise<OrderBook> => {
-  const buyHasLiq = await carbonSDK.hasLiquidityByPair(base, quote);
-  const sellHasLiq = await carbonSDK.hasLiquidityByPair(quote, base);
-
-  const minBuy = new Decimal(
-    buyHasLiq ? await carbonSDK.getMinRateByPair(base, quote) : 0,
-  );
-  const maxBuy = new Decimal(
-    buyHasLiq ? await carbonSDK.getMaxRateByPair(base, quote) : 0,
-  );
-  const minSell = new Decimal(
-    sellHasLiq ? await carbonSDK.getMinRateByPair(quote, base) : 0,
-  );
-  const maxSell = new Decimal(
-    sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0,
-  );
-
-  const minSellNormalized = ONE.div(maxSell);
-  const maxSellNormalized = ONE.div(minSell);
-
-  const deltaBuy = maxBuy.minus(minBuy);
-  const deltaSell = maxSellNormalized.minus(minSellNormalized);
-
-  const stepBuy = deltaBuy.div(steps);
-  const stepSell = deltaSell.div(steps);
-
-  const step = getStep(
-    stepBuy,
-    stepSell,
-    minBuy,
-    maxBuy,
-    steps,
-    minSell,
-    maxSell,
-  );
-
-  const middleRate = getMiddleRate(maxBuy, maxSell);
-
-  const hasOverlappingRates = maxBuy.gt(minSellNormalized);
-  const buyStartRate = hasOverlappingRates ? middleRate : maxBuy;
-  const sellStartRate = hasOverlappingRates ? middleRate : minSellNormalized;
-
-  const buy = buyHasLiq
-    ? await buildOrderBook(
-        true,
-        base,
-        quote,
-        buyStartRate,
-        step,
-        minBuy,
-        maxBuy,
-        steps,
-      )
-    : [];
-
-  const sell = sellHasLiq
-    ? await buildOrderBook(
-        false,
-        quote,
-        base,
-        sellStartRate,
-        step,
-        minSell,
-        maxSell,
-        steps,
-      )
-    : [];
-
-  return {
-    buy,
-    sell,
-    middleRate: middleRate.toString(),
-    step: step.toString(),
-  };
 };
 
 const sdkExposed = {
-  init,
-  isInitialized: () => isInitialized,
-  getAllPairs: () => api.reader.pairs(),
-  setOnChangeHandlers: (
-    onPairDataChanged: (affectedPairs: TokenPair[]) => void,
-    onPairAddedToCache: (affectedPairs: TokenPair) => void,
-    onCacheCleared: () => void,
-  ) => {
-    sdkCache.on('onPairDataChanged', onPairDataChanged);
-    sdkCache.on('onPairAddedToCache', onPairAddedToCache);
-    sdkCache.on('onCacheCleared', onCacheCleared);
-  },
-  setOffChangeHandlers: (
-    onPairDataChanged: (affectedPairs: TokenPair[]) => void,
-    onPairAddedToCache: (affectedPairs: TokenPair) => void,
-    onCacheCleared: () => void,
-  ) => {
-    sdkCache.off('onPairDataChanged', onPairDataChanged);
-    sdkCache.off('onPairAddedToCache', onPairAddedToCache);
-    sdkCache.off('onCacheCleared', onCacheCleared);
-  },
-  hasLiquidityByPair: (baseToken: string, quoteToken: string) =>
-    carbonSDK.hasLiquidityByPair(baseToken, quoteToken),
-  getUserStrategies: (address: string) => carbonSDK.getUserStrategies(address),
-  getAllStrategiesByPairs: () => carbonSDK.getStrategiesByPairs(),
-  getStrategiesByPair: (token0: string, token1: string) =>
-    carbonSDK.getStrategiesByPair(token0, token1),
-  getStrategy: (id: string) => carbonSDK.getStrategyById(id),
+  setup,
   createBuySellStrategy: (
     baseToken: string,
     quoteToken: string,
@@ -357,27 +125,10 @@ const sdkExposed = {
       overrides,
     ),
   deleteStrategy: (strategyId: string) => carbonSDK.deleteStrategy(strategyId),
-  getTradeData: (
-    sourceToken: string,
-    targetToken: string,
-    amount: string,
-    isTradeBySource: boolean,
-  ) =>
-    carbonSDK.getTradeData(sourceToken, targetToken, amount, isTradeBySource),
-  getTradeDataFromActions: (
-    sourceToken: string,
-    targetToken: string,
-    isTradeBySource: boolean,
-    actionsWei: MatchActionBNStr[],
-  ) =>
-    carbonSDK.getTradeDataFromActions(
-      sourceToken,
-      targetToken,
-      isTradeBySource,
-      actionsWei,
-    ),
-  getLiquidityByPair: (baseToken: string, quoteToken: string) =>
-    carbonSDK.getLiquidityByPair(baseToken, quoteToken),
+  getTradeData: Toolkit.getTradeDataStatic,
+  getTradeDataFromActions: Toolkit.getTradeDataFromActionsStatic,
+  getLiquidityByPair: Toolkit.getLiquidityByPairStatic,
+  getMaxSourceAmountByPair: Toolkit.getMaxSourceAmountByPairStatic,
   composeTradeBySourceTransaction: (
     sourceToken: string,
     targetToken: string,
@@ -410,7 +161,6 @@ const sdkExposed = {
       maxInput,
       overrides,
     ),
-  getOrderBook,
   getCacheDump: () => sdkCache.serialize(),
   getMaxSourceAmountByPair: (source: string, target: string) =>
     carbonSDK.getMaxSourceAmountByPair(source, target),

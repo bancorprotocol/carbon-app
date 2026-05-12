@@ -15,6 +15,7 @@ import { useMemo } from 'react';
 import { useCanBatchTransactions } from 'libs/queries/chain/canBatch';
 import IconMigrate from 'assets/icons/migrate.svg?react';
 import style from 'components/explorer/ExplorerLayout.module.css';
+import config from 'config';
 
 export const PortfolioLayout = () => {
   const { user } = useWagmi();
@@ -22,6 +23,7 @@ export const PortfolioLayout = () => {
   const query = usePortfolio({ user });
 
   const tabs = useMemo(() => {
+    if (!config.ui.useMigration) return baseTabs;
     if (!canBatch.data) return baseTabs;
     return [
       ...baseTabs,

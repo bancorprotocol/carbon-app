@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Dexes } from 'services/uniswap/utils';
+import { Dexes, DexesName } from 'services/uniswap/utils';
 import { DexIcon } from './DexIcon';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { dexNames } from './utils';
@@ -29,10 +29,7 @@ export const MigrationFetching: FC<Props> = ({ queryState }) => {
   );
   const someError = queryState.some(({ status }) => status === 'error');
   // Remove duplicated icons
-  const dexes = queryState
-    .map((q) => q.dex)
-    .filter((dex) => dex.endsWith('v2'))
-    .sort();
+  const dexes = [...new Set(queryState.map((q) => q.dex.split('-').shift()))];
 
   const refetch = (dex: Dexes) => {
     if (!user) return;
@@ -51,7 +48,7 @@ export const MigrationFetching: FC<Props> = ({ queryState }) => {
           <ul className="flex">
             {dexes.map((dex) => (
               <li key={dex} className="-ml-8">
-                <DexIcon dex={dex as Dexes} className="size-24" />
+                <DexIcon dex={dex as DexesName} className="size-24" />
               </li>
             ))}
           </ul>

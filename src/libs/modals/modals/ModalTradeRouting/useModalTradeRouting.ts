@@ -41,17 +41,13 @@ export const useModalTradeRouting = ({
     [selected],
   );
 
-  const selectedActionsWei = useMemo(
+  const actionsWei = useMemo(
     () => tradeActionsWei.filter((x) => selectedIDs.includes(x.id)),
     [selectedIDs, tradeActionsWei],
   );
 
-  const { data, isPending, isError } = useGetTradeActionsQuery({
-    sourceToken: source.address,
-    isTradeBySource,
-    targetToken: target.address,
-    actionsWei: selectedActionsWei,
-  });
+  const tradeProps = { source, target, isTradeBySource, actionsWei };
+  const { data, isPending, isError } = useGetTradeActionsQuery(tradeProps);
   const sourceInput = data?.totalSourceAmount || '0';
 
   const { trade, calcMaxInput, isAwaiting } = useTradeAction({

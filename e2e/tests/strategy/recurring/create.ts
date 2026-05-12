@@ -10,7 +10,6 @@ import {
   screenshotPath,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
-import { waitForTenderlyRpc } from '../../../utils/tenderly';
 import { DebugDriver } from '../../../utils/DebugDriver';
 import { PortfolioDriver } from '../../../utils/strategy/PortfolioDriver';
 
@@ -49,7 +48,6 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     ]);
 
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
-    await waitForTenderlyRpc(page);
 
     // Verify strategy data
     myStrategies.waitForUpdates();

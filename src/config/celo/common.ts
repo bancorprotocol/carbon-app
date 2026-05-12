@@ -151,5 +151,6 @@ export const commonConfig: AppConfig = {
     useDexAggregator: false,
     useSeedData: true,
     useEIP7702: true,
+    useMigration: true,
   },
 };

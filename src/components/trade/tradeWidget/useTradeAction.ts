@@ -99,15 +99,14 @@ export const useTradeAction = ({ onSuccess }: Props) => {
 
           await tx.wait();
           onSuccess?.(tx.hash);
-          cache.invalidateQueries({
-            queryKey: QueryKey.balance(user, source.address),
-          });
-          cache.invalidateQueries({
-            queryKey: QueryKey.balance(user, target.address),
-          });
-          cache.invalidateQueries({
-            queryKey: QueryKey.approval(user, source.address, spender),
-          });
+          const keys = [
+            QueryKey.balance(user, source.address),
+            QueryKey.balance(user, target.address),
+            QueryKey.approval(user, source.address, spender),
+          ];
+          for (const queryKey of keys) {
+            cache.invalidateQueries({ queryKey });
+          }
         },
         onError: (e: any) => {
           console.error(e);

@@ -37,13 +37,12 @@ export const setupVirtualNetwork = async (testInfo: TestInfo) => {
   return vNet;
 };
 
-export const setupLocalStorage = async (page: Page, tenderlyRpc: string) => {
+export const setupLocalStorage = async (page: Page) => {
   // We need to be on a page to set localstorage so we create an empty page
   await page.route('empty', (route) => {
     return route.fulfill({ status: 200, contentType: 'text/plain', body: '' });
   });
   await page.goto('empty');
-  const storage = { ...mockLocalStorage, tenderlyRpc };
   return page.evaluate((storage) => {
     // each value is stringified to match lsservice
     for (const [key, value] of Object.entries(storage)) {
@@ -52,7 +51,7 @@ export const setupLocalStorage = async (page: Page, tenderlyRpc: string) => {
         JSON.stringify(value),
       );
     }
-  }, storage);
+  }, mockLocalStorage);
 };
 
 export const removeFork = async (testInfo: TestInfo) => {

@@ -31,7 +31,7 @@ export const DebugTransferNFT = () => {
       );
       await tx?.wait();
       await cache.invalidateQueries({
-        queryKey: QueryKey.strategiesByUser(user),
+        queryKey: [QueryKey.strategyAll()],
       });
       setIsSuccess(true);
     } catch (e) {

@@ -122,6 +122,7 @@ export interface Strategy<T extends Order = StaticOrder>
   id: string;
   idDisplay: string;
   status: StrategyStatus;
+  owner?: string;
   encoded?: T extends StaticOrder
     ? EncodedStrategyBNStr
     : GradientEncodedStrategyBNStr;

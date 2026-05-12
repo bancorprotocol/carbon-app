@@ -9,7 +9,6 @@ import {
   screenshotPath,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
-import { waitForTenderlyRpc } from '../../../utils/tenderly';
 import { DebugDriver } from '../../../utils/DebugDriver';
 import { PortfolioDriver } from '../../../utils/strategy/PortfolioDriver';
 
@@ -53,7 +52,6 @@ export const create = (testCase: CreateStrategyTestCase) => {
 
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await myStrategies.waitForUpdates();
-    await waitForTenderlyRpc(page);
     // Verify strategy data
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);

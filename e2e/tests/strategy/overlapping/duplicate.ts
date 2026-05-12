@@ -7,7 +7,6 @@ import {
 } from './../../../utils/strategy';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
-import { waitForTenderlyRpc } from '../../../utils/tenderly';
 import { waitModalOpen } from '../../../utils/modal';
 
 export const duplicate = (testCase: CreateStrategyTestCase) => {
@@ -38,7 +37,6 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     const myStrategies = new MyStrategyDriver(page);
     await myStrategies.waitForUpdates();
-    await waitForTenderlyRpc(page);
 
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);

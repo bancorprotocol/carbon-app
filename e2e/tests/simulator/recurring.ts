@@ -7,7 +7,6 @@ import {
   assertRecurringTestCase,
   testDescription,
 } from '../../utils/simulator/';
-import { waitForTenderlyRpc } from '../../utils/tenderly';
 
 export const simulateRecurringStrategy = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
@@ -31,9 +30,7 @@ export const simulateRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     await createForm.waitForPriceChart();
     await createForm.screenshotPriceChart();
-
     await createForm.submit();
-    await waitForTenderlyRpc(page);
 
     const simulationResult = new SimulationResultDriver(page, testCase);
     await simulationResult.waitForChartElement();

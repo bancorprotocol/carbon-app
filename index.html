@@ -25,6 +25,7 @@
     (() => {
       const theme = localStorage.getItem('theme') || 'dark';
       document.documentElement.dataset.theme = theme;
+      document.documentElement.dataset.e2e = !!navigator.webdriver;
     })()
   </script>
   <style>

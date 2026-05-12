@@ -43,24 +43,7 @@ export const QueryKey = {
   rewards: () => [...extAPI, 'reward', 'all'],
   allChainsRewards: () => [...extAPI, 'all-chains', 'reward', 'all'],
 
-  strategy: (id: string) => [...sdk, 'strategy', id],
-  strategyList: (ids: string[]) => [...sdk, 'strategy', ...ids],
   strategyAll: () => [...sdk, 'strategy', 'all'],
-  strategiesByUser: (user?: string) => [
-    ...sdk,
-    'strategies',
-    'user',
-    user?.toLowerCase(),
-  ],
-  strategiesByPair: (token0?: string, token1?: string) => [
-    ...sdk,
-    'strategies',
-    'pair',
-    token0,
-    token1,
-  ],
-  strategiesByToken: (token?: string) => [...sdk, 'strategies', 'token', token],
-
   approval: (user: string, token: string, spender: string) => [
     ...chain,
     'approval',
@@ -70,9 +53,7 @@ export const QueryKey = {
   ],
 
   ensToAddress: (user: string) => [...chain, 'ens', 'user', user],
-
   ensFromAddress: (address: string) => [...chain, 'ens', 'address', address],
-
   balance: (user: string, token: string) => [
     ...chain,
     'balance',
@@ -119,24 +100,6 @@ export const QueryKey = {
     'trade-max-source-amount',
   ],
 
-  tradeOrderBook: (pair: TokenPair, steps: number) => [
-    ...sdk,
-    buildTokenPairKey(pair),
-    'trade-order-book',
-    steps,
-  ],
-
-  tradeOrderBookLastTradeBuy: (pair: TokenPair) => [
-    ...sdk,
-    buildTokenPairKey(pair),
-    'trade-order-book-last-trade-buy',
-  ],
-
-  dexAggregatorTradeLiquidity: (pair: TokenPair) => [
-    ...aggregator,
-    buildTokenPairKey(pair),
-    'liquidity',
-  ],
   dexAggregatorTradeData: (
     pair: TokenPair,
     isTradeBySource: boolean,

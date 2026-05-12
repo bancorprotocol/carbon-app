@@ -176,6 +176,15 @@
     slideY var(--duration, 400ms) var(--delay, 0s) var(--easing, var(--ease-out)) both;
 }
 
+html[data-e2e="true"] {
+  --animate-spin: unset;
+  --animate-ping: unset;
+  --animate-pulse: unset;
+  --animate-fade: unset;
+  --animate-scale-up: unset;
+  --animate-slide-up: unset;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

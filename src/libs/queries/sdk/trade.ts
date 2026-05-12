@@ -1,10 +1,8 @@
+import { QueryKey, useGetAllStrategies } from 'libs/queries';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
-import { QueryKey } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
-import { useCarbonInit } from 'libs/sdk/context';
-import { Action, TradeActionBNStr } from 'libs/sdk';
+import { Action, carbonSDK, TradeActionBNStr } from 'libs/sdk';
 import { MatchActionBNStr, PopulatedTransaction } from '@bancor/carbon-sdk';
-import { carbonSDK } from 'libs/sdk';
 import { useWagmi } from 'libs/wagmi';
 import { useTokens } from 'hooks/useTokens';
 import { dexAggregator, QuoteMetadata } from 'services/dex-aggregator';
@@ -15,6 +13,7 @@ import { useModal } from 'hooks/useModal';
 import { useGetApprovalTokens } from 'hooks/useApproval';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import config from 'config';
+import { useCarbonController } from 'hooks/useContract';
 
 interface GetTradeDataResult {
   tradeActions: TradeActionBNStr[];
@@ -225,7 +224,10 @@ export const useSDKTradeData = ({
   sourceToken,
   targetToken,
 }: Props) => {
-  const { isInitialized } = useCarbonInit();
+  const { data: strategies } = useGetAllStrategies({
+    enabled: !config.ui.useDexAggregator,
+  });
+  const { data: controller } = useCarbonController();
 
   return useQuery<GetTradeDataResult>({
     queryKey: QueryKey.sdkTradeData(
@@ -248,14 +250,22 @@ export const useSDKTradeData = ({
           actionsWei: [],
         };
       }
-      return await carbonSDK.getTradeData(
+      const tradingFeePPM = await controller!.read.pairTradingFeePPM(
         sourceToken.address,
         targetToken.address,
-        input,
-        !isTradeBySource,
       );
+      return carbonSDK.getTradeData({
+        amount: input,
+        strategies: strategies!.map((s) => s.encoded).filter((e) => !!e),
+        tradeByTargetAmount: !isTradeBySource,
+        sourceToken: sourceToken.address,
+        sourceDecimals: sourceToken.decimals,
+        targetToken: targetToken.address,
+        targetDecimals: targetToken.decimals,
+        tradingFeePPM: Number(tradingFeePPM),
+      });
     },
-    enabled: isInitialized && !config.ui.useDexAggregator,
+    enabled: !!strategies && !!controller && !config.ui.useDexAggregator,
     gcTime: 0,
     retry: 1,
   });

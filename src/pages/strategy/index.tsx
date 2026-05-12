@@ -21,11 +21,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { NotFound } from 'components/common/NotFound';
 import { ActivityLayout } from 'components/activity/ActivityLayout';
 import { BackButton } from 'components/common/button/BackButton';
-import {
-  defaultEnd,
-  isGradientStrategy,
-  oneYearAgo,
-} from 'components/strategies/common/utils';
+import { isGradientStrategy } from 'components/strategies/common/utils';
 import config from 'config';
 import { StrategyBlockInfo } from 'components/strategies/overview/strategyBlock/StrategyBlockInfo';
 import { useActivityQuery } from 'components/activity/useActivityQuery';
@@ -53,8 +49,8 @@ export const StrategyPage = () => {
   const strategyQuery = useGetStrategy(id);
   const activityQuery = useActivityQuery({
     strategyIds: id,
-    start: chartStart ?? oneYearAgo(),
-    end: chartEnd ?? defaultEnd(),
+    start: chartStart,
+    end: chartEnd,
   });
 
   const isPending = strategyQuery.isPending || activityQuery.isPending;

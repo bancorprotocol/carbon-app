@@ -41,7 +41,7 @@ export class TradeDriver {
     await waitModalClose(this.page);
   }
 
-  setPay(swap: TestCaseSwap) {
+  setSource(swap: TestCaseSwap) {
     const { sourceValue } = swap;
     return this.form.getByLabel('You Pay').fill(sourceValue);
   }

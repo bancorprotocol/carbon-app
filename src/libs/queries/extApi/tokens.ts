@@ -3,7 +3,6 @@ import { buildTokenList, fetchTokenLists, Token, TokenList } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_HOUR_IN_MS } from 'utils/time';
 import { lsService } from 'services/localeStorage';
-import { useGetAllPairs } from '../sdk/pairs';
 import { useContract } from 'hooks/useContract';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useMemo } from 'react';
@@ -43,7 +42,6 @@ export const useExistingTokensQuery = () => {
 export const useMissingTokensQuery = (
   existingTokens: UseQueryResult<Token[], Error>,
 ) => {
-  const pairs = useGetAllPairs();
   const { Token } = useContract();
 
   return useQuery({
@@ -72,12 +70,6 @@ export const useMissingTokensQuery = (
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
 
-      // SDK: all tokens from current strategies (require for Tenderly)
-      for (const [base, quote] of pairs.data || []) {
-        fillMissing(base);
-        fillMissing(quote);
-      }
-
       // Config: Mainly for testnet on new chains
       for (const base of config.popularTokens) {
         fillMissing(base);
@@ -92,7 +84,7 @@ export const useMissingTokensQuery = (
       return tokens;
     },
     initialData: () => lsService.getItem('importedTokens'),
-    enabled: !!existingTokens.data && !pairs.isPending,
+    enabled: !!existingTokens.data,
     retry: false,
     refetchOnWindowFocus: false,
   });

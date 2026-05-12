@@ -401,6 +401,9 @@ dialog.modal.closing.side {
   animation-name: modal-side-leave;
   animation-fill-mode: forwards;
 }
+html[data-e2e="true"] dialog {
+  animation: none;
+}
 @variant max-sm {
   dialog.modal.center {
     animation-timing-function: var(--ease-in-out);

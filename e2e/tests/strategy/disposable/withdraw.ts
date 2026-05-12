@@ -8,7 +8,6 @@ import {
   MyStrategyDriver,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
-import { waitForTenderlyRpc } from '../../../utils/tenderly';
 
 export const withdraw = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -32,7 +31,6 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
     await page.waitForURL('/portfolio/strategies', { timeout: 20_000 });
     const myStrategies = new MyStrategyDriver(page);
     await myStrategies.waitForUpdates();
-    await waitForTenderlyRpc(page);
 
     await expect(strategy.budget(direction)).toHaveText(output);
   });

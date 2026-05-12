@@ -35,6 +35,7 @@ jobs:
           TENDERLY_ACCOUNT: bancor
           TENDERLY_PROJECT: carbon-test-forks
           TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
+          BACKEND_TENDERLY_API: ${{ secrets.BACKEND_TENDERLY_API }}
           VITE_CI: true
           DRAFT: ${{ github.event.pull_request.draft || github.base_ref != 'main' }}
 

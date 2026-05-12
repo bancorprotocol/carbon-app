@@ -7,7 +7,6 @@ import {
   MyStrategyDriver,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
-import { waitForTenderlyRpc } from '../../../utils/tenderly';
 
 export const editPrice = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -28,7 +27,6 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
     const myStrategies = new MyStrategyDriver(page);
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     await myStrategies.waitForUpdates();
-    await waitForTenderlyRpc(page);
 
     const tooltip = await strategy.priceTooltip(direction);
     if (setting === 'limit') {

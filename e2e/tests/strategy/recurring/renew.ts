@@ -7,7 +7,6 @@ import {
   getRecurringSettings,
   MyStrategyDriver,
 } from '../../../utils/strategy';
-import { waitForTenderlyRpc } from '../../../utils/tenderly';
 
 export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
@@ -23,7 +22,6 @@ export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
     await page.waitForURL('/portfolio/strategies', { timeout: 10_000 });
     const myStrategies = new MyStrategyDriver(page);
     await myStrategies.waitForUpdates();
-    await waitForTenderlyRpc(page);
     const strategyEdited = await myStrategies.getStrategy(1);
 
     await expect(strategy.status()).toHaveText('Active');

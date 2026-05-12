@@ -155,7 +155,7 @@ export const PositionDialog: FC<Props> = (props) => {
         source_amm: p.dex,
       });
       const keys = [
-        QueryKey.strategiesByUser(user),
+        QueryKey.strategyAll(),
         QueryKey.balance(user, p.base.address),
         QueryKey.balance(user, p.quote.address),
         QueryKey.dexMigration(p.dex, user),

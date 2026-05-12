@@ -76,15 +76,16 @@ export const useCreateStrategy = (props: Props) => {
               strategy_type: getStrategyType({ buy, sell }),
             });
             await tx.wait();
-            cache.invalidateQueries({
-              queryKey: QueryKey.strategiesByUser(user),
-            });
-            cache.invalidateQueries({
-              queryKey: QueryKey.balance(user, base.address),
-            });
-            cache.invalidateQueries({
-              queryKey: QueryKey.balance(user, quote.address),
-            });
+            setTimeout(() => {
+              const keys = [
+                QueryKey.strategyAll(),
+                QueryKey.balance(user, base.address),
+                QueryKey.balance(user, quote.address),
+              ];
+              for (const queryKey of keys) {
+                cache.refetchQueries({ queryKey });
+              }
+            }, 3000);
             resolve(tx.hash);
           },
           onError: (e: any) => {

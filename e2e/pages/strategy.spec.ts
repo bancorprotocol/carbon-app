@@ -1,11 +1,6 @@
 import { test } from '@playwright/test';
 import { mockApi } from '../utils/mock-api';
-import {
-  DebugDriver,
-  removeFork,
-  setupVirtualNetwork,
-  setupLocalStorage,
-} from '../utils/DebugDriver';
+import { DebugDriver, setupLocalStorage } from '../utils/DebugDriver';
 import {
   CreateStrategyTestCase,
   fromLimitOrder,
@@ -654,21 +649,18 @@ const testDescription = (testCase: CreateStrategyTestCase) => {
 };
 
 test.describe('Strategies', () => {
-  test.beforeEach(async ({ page }, testInfo) => {
+  test.beforeEach(async ({ page }) => {
     await mockApi(page);
-    const vNet = await setupVirtualNetwork(testInfo);
-    const rpc = vNet.rpcs.find(({ name }) => name === 'Admin RPC')!.url;
-    await setupLocalStorage(page, rpc);
+    await setupLocalStorage(page);
     const debug = new DebugDriver(page);
     await debug.visit();
-    // await page.getByTestId('close-walkthrough').click();
     await debug.setupImposter();
     await page.getByText('Get money').click();
   });
   // Need an empty object else the tests don't run
   // eslint-disable-next-line no-empty-pattern
   test.afterEach(async ({}, testInfo) => {
-    await removeFork(testInfo);
+    // TODO: delete created strategies
   });
 
   const testStrategies = {
