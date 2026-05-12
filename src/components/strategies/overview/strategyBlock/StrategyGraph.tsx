@@ -827,11 +827,12 @@ interface GradientTimeProps {
   strategy: BaseStrategy<GradientOrder>;
 }
 const timeFormatter = new Intl.DateTimeFormat('en', {
-  year: '2-digit',
-  month: '2-digit',
-  day: '2-digit',
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
   hour: '2-digit',
   minute: '2-digit',
+  hour12: false,
 });
 const GradientTime: FC<GradientTimeProps> = ({ strategy }) => {
   const { base, quote, buy, sell } = strategy;
@@ -873,10 +874,10 @@ const GradientTime: FC<GradientTimeProps> = ({ strategy }) => {
               className="fill-main-0/60"
             />
           </FloatTooltipTrigger>
-          <FloatTooltipContent className="max-w-330 p-16 text-12 text-main-0/60">
+          <FloatTooltipContent className="grid gap-8 max-w-330 p-16 text-12 text-main-0/60">
             <h3 className="text-14 text-buy">Future Auction</h3>
             <p>
-              Buy order will begin at {buyStart} at the price of {buyStartPrice}
+              Buy order will begin on {buyStart} at the price of {buyStartPrice}
               .
             </p>
             <a
@@ -909,10 +910,10 @@ const GradientTime: FC<GradientTimeProps> = ({ strategy }) => {
               className="fill-main-0/60"
             />
           </FloatTooltipTrigger>
-          <FloatTooltipContent className="max-w-330 p-16 text-12 text-main-0/60">
+          <FloatTooltipContent className="grid gap-8 max-w-330 p-16 text-12 text-main-0/60">
             <h3 className="text-14 text-sell">Future Auction</h3>
             <p>
-              Sell order will begin at {sellStart} at the price of{' '}
+              Sell order will begin on {sellStart} at the price of{' '}
               {sellStartPrice}.
             </p>
             <a
