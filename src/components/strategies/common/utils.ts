@@ -179,14 +179,23 @@ export const isNoBudget = (strategy: OrdersInput) => {
   return !Number(strategy.buy.budget) && !Number(strategy.sell.budget);
 };
 
+export const isOrderInPast = (order: FormGradientOrder) => {
+  if (isEmptyGradientOrder(order)) return false;
+  return fromUnixUTC(order.endDate) < new Date();
+};
+export const isOrderInFuture = (order: FormGradientOrder) => {
+  if (isEmptyGradientOrder(order)) return false;
+  return fromUnixUTC(order.startDate) > new Date();
+};
+export const isActiveOrder = (order: FormGradientOrder) => {
+  return !isOrderInFuture(order) && !isOrderInPast(order);
+};
 export const isInPast = (strategy: BuySellOrders<FormGradientOrder>) => {
-  if (!isEmptyGradientOrder(strategy.buy)) {
-    if (fromUnixUTC(strategy.buy.endDate) < new Date()) return true;
-  }
-  if (!isEmptyGradientOrder(strategy.sell)) {
-    if (fromUnixUTC(strategy.sell.endDate) < new Date()) return true;
-  }
-  return false;
+  return isOrderInPast(strategy.buy) || isOrderInPast(strategy.sell);
+};
+
+export const isInFuture = (strategy: BuySellOrders<FormGradientOrder>) => {
+  return isOrderInFuture(strategy.buy) || isOrderInFuture(strategy.sell);
 };
 
 export const getStrategyStatus = (orders: OrdersInput) => {

@@ -12,7 +12,7 @@ import { addDays, endOfDay, getUnixTime, isToday, startOfDay } from 'date-fns';
 import { SafeDecimal } from 'libs/safedecimal';
 import { StrategyDirection } from 'libs/routing';
 import { Token } from 'libs/tokens';
-import { isEmptyGradientOrder } from '../utils';
+import { isEmptyGradientOrder, isOrderInPast } from '../utils';
 import config from 'config';
 
 export const gradientMarginalPrice = (
@@ -20,6 +20,7 @@ export const gradientMarginalPrice = (
   date = new Date(),
 ) => {
   if (isEmptyGradientOrder(order)) return '0';
+  if (isOrderInPast(order)) return '0';
   const { startPrice, endPrice } = order;
   const startDate = toUnixUTC(orderStartDate(order.startDate));
   const endDate = toUnixUTC(orderEndDate(order.endDate));

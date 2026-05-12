@@ -1,5 +1,5 @@
 import { FC, useId, useMemo } from 'react';
-import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
+import { cn, prettifyNumber, sanitizeNumber, tokenAmount } from 'utils/helpers';
 import {
   FloatTooltip,
   FloatTooltipContent,
@@ -13,6 +13,9 @@ import {
   isGradientStrategy,
   isZero,
   isFullRangeStrategy,
+  isOrderInPast,
+  isOrderInFuture,
+  isEmptyGradientOrder,
 } from 'components/strategies/common/utils';
 import { isOverlappingStrategy } from 'components/strategies/common/utils';
 import { getRoundedSpread } from 'components/strategies/overlapping/utils';
@@ -88,6 +91,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
   const buyOrder = toMinMax(strategy.buy);
   const sellOrder = toMinMax(strategy.sell);
   const staticStrategy = { ...strategy, buy: buyOrder, sell: sellOrder };
+  const isGradient = isGradientStrategy(strategy);
 
   const buy = {
     from: Number(sanitizeNumber(buyOrder.min)),
@@ -215,7 +219,13 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
             />
           </rect>
         </clipPath>
+        <g id="svg-time-icon">
+          <path d="M2.9987 0c-.0484.001-.0967.0056-.1446.0137H1.0142C.8817.0118.7501.0363.6272.0857.5042.1351.3923.2085.298.3015.2035.3946.1286.5054.0775.6277.0263.7499 0 .8812 0 1.0137s.0263.2637.0775.386c.0512.1222.1261.2331.2205.3262s.2063.1664.3293.2159c.1229.0494.2545.0739.387.072h1V3.3575c0 1.3255.5262 2.5978 1.4648 3.5351L5.6002 9.0137 3.4791 11.1348c-.9386.9374-1.4648 2.2096-1.4648 3.5351v1.3438h-1c-.1325-.002-.2641.0226-.387.072-.123.0493-.2349.1228-.3293.2158-.0944.093-.1693.2039-.2205.3261-.0512.1222-.0775.2535-.0775.3861 0 .1325.0263.2637.0775.386s.1261.2331.2205.3261c.0944.0932.2063.1665.3293.2158.1229.0495.2545.0739.387.072h1.832c.108.0179.2182.0179.3262 0h7.6739c.108.0179.2182.0179.3262 0h1.8418c.1325.002.2641-.0225.3871-.072.1229-.0494.2349-.1227.3293-.2158.0943-.093.1693-.2038.2204-.3261.0511-.1222.0775-.2535.0775-.386 0-.1326-.0263-.2638-.0775-.3861-.0511-.1223-.1261-.2331-.2204-.3261-.0944-.093-.2063-.1665-.3293-.2158-.123-.0494-.2546-.074-.3871-.072h-1V14.6699c0-1.3254-.5275-2.5978-1.4648-3.5351L8.4283 9.0137l2.1212-2.1211c.938-.938 1.4648-2.2096 1.4648-3.5351V2.0137h1c.1325.0019.2641-.0226.3871-.072.1229-.0494.2349-.1228.3293-.2159.0943-.093.1693-.2039.2204-.3262s.0775-.2534.0775-.386-.0263-.2638-.0775-.386-.1261-.2331-.2204-.3262c-.0944-.093-.2063-.1663-.3293-.2158-.123-.0494-.2546-.074-.3871-.0721h-1.832c-.108-.0179-.2182-.0179-.3262 0H3.1685C3.1124.0043 3.0556-.0003 2.9987 0ZM4.0142 2.0137h6V3.3575c0 .7964-.3149 1.5572-.8789 2.1211L7.0142 7.5996 4.8932 5.4766c-.5634-.5627-.8789-1.3227-.8789-2.1191V2.0137Zm3 8.4141 2.1211 2.1211c.5627.5626.8789 1.3265.8789 2.1211v1.3438h-6V14.6699c0-.7964.3155-1.5565.8789-2.1191l2.1211-2.123Z" />
+          <rect x="0" y="0" width="13" height="22" fill="transparent" />
+        </g>
       </defs>
+
+      {isGradient && <GradientTime strategy={strategy} />}
 
       <g className={style.axes} stroke="var(--color-main-600)">
         <line x1="0" y1={baseline} x2={width} y2={baseline} />
@@ -302,7 +312,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
               </g>
             </FloatTooltipTrigger>
             <FloatTooltipContent>
-              {isGradientStrategy(strategy) ? (
+              {isGradient ? (
                 <GradientOrderTooltip strategy={strategy} isBuy />
               ) : (
                 <StaticOrderTooltip strategy={strategy} isBuy />
@@ -810,5 +820,113 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
         <OpenInNewIcon className="inline size-24" />
       </a>
     </article>
+  );
+};
+
+interface GradientTimeProps {
+  strategy: BaseStrategy<GradientOrder>;
+}
+const timeFormatter = new Intl.DateTimeFormat('en', {
+  year: '2-digit',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+const GradientTime: FC<GradientTimeProps> = ({ strategy }) => {
+  const { base, quote, buy, sell } = strategy;
+  const buyExist = !isEmptyGradientOrder(buy) && !isOrderInPast(buy);
+  const sellExist = !isEmptyGradientOrder(sell) && !isOrderInPast(sell);
+  const buyIsFuture = isOrderInFuture(buy);
+  const sellIsFuture = isOrderInFuture(sell);
+  const buyStart = useMemo(() => {
+    const date = fromUnixUTC(buy.startDate);
+    return timeFormatter.format(date);
+  }, [buy.startDate]);
+  const sellStart = useMemo(() => {
+    const date = fromUnixUTC(sell.startDate);
+    return timeFormatter.format(date);
+  }, [sell.startDate]);
+  const buyStartPrice = useMemo(() => {
+    return `${tokenAmount(buy.startPrice, quote)} per 1 ${base.symbol}`;
+  }, [base.symbol, buy.startPrice, quote]);
+  const sellStartPrice = useMemo(() => {
+    return `${tokenAmount(sell.startPrice, quote)} per 1 ${base.symbol}`;
+  }, [base.symbol, sell.startPrice, quote]);
+  return (
+    <>
+      {buyExist && !buyIsFuture && (
+        <use
+          href="#svg-time-icon"
+          x={17}
+          y={baseline - 30}
+          className="fill-buy"
+        />
+      )}
+      {buyExist && buyIsFuture && (
+        <FloatTooltip>
+          <FloatTooltipTrigger>
+            <use
+              href="#svg-time-icon"
+              x={17}
+              y={baseline - 30}
+              className="fill-main-0/60"
+            />
+          </FloatTooltipTrigger>
+          <FloatTooltipContent className="max-w-330 p-16 text-12 text-main-0/60">
+            <h3 className="text-14 text-buy">Future Auction</h3>
+            <p>
+              Buy order will begin at {buyStart} at the price of {buyStartPrice}
+              .
+            </p>
+            <a
+              href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-primary inline-flex items-center gap-4"
+            >
+              <span>Learn more about marginal price</span>
+              <OpenInNewIcon className="inline size-24" />
+            </a>
+          </FloatTooltipContent>
+        </FloatTooltip>
+      )}
+      {sellExist && !sellIsFuture && (
+        <use
+          href="#svg-time-icon"
+          x={width - 30}
+          y={baseline - 30}
+          className="fill-sell"
+        />
+      )}
+      {sellExist && sellIsFuture && (
+        <FloatTooltip>
+          <FloatTooltipTrigger>
+            <use
+              href="#svg-time-icon"
+              x={width - 30}
+              y={baseline - 30}
+              className="fill-main-0/60"
+            />
+          </FloatTooltipTrigger>
+          <FloatTooltipContent className="max-w-330 p-16 text-12 text-main-0/60">
+            <h3 className="text-14 text-sell">Future Auction</h3>
+            <p>
+              Sell order will begin at {sellStart} at the price of{' '}
+              {sellStartPrice}.
+            </p>
+            <a
+              href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-primary inline-flex items-center gap-4"
+            >
+              <span>Learn more about marginal price</span>
+              <OpenInNewIcon className="inline size-24" />
+            </a>
+          </FloatTooltipContent>
+        </FloatTooltip>
+      )}
+    </>
   );
 };

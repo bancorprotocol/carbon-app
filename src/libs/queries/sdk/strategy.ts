@@ -26,7 +26,7 @@ import {
   Strategy,
 } from 'components/strategies/common/types';
 import { getStrategyStatus } from 'components/strategies/common/utils';
-import { SDKGradientStrategy } from './gradient-mock';
+import { mockGradientStrategies, SDKGradientStrategy } from './gradient-mock';
 import { useCarbonInit } from 'libs/sdk/context';
 import { isZero } from 'components/strategies/common/utils';
 import { useMemo } from 'react';
@@ -111,6 +111,7 @@ const buildStrategiesHelper = async (
       return strategy;
     }
   });
+  console.log(result);
   return result.filter((s) => !!s);
 };
 
@@ -131,9 +132,15 @@ export const useGetUserStrategies = ({ user }: Props) => {
   return useQuery({
     queryKey: QueryKey.strategiesByUser(address),
     queryFn: async () => {
-      if (!address || !isValidAddress || isZeroAddress) return [];
-      const strategies = await carbonSDK.getUserStrategies(address);
-      return buildStrategiesHelper(strategies, getTokenById);
+      try {
+        if (!address || !isValidAddress || isZeroAddress) return [];
+        const strategies = await carbonSDK.getUserStrategies(address);
+        const all = [...strategies, ...mockGradientStrategies];
+        const result = await buildStrategiesHelper(all, getTokenById);
+        return result;
+      } catch (err) {
+        console.error(err);
+      }
     },
     enabled: !!user && !isPending && ensAddress.isFetched && isInitialized,
     staleTime: ONE_DAY_IN_MS,
