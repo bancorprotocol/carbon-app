@@ -162,8 +162,6 @@ const sdkExposed = {
       overrides,
     ),
   getCacheDump: () => sdkCache.serialize(),
-  getMaxSourceAmountByPair: (source: string, target: string) =>
-    carbonSDK.getMaxSourceAmountByPair(source, target),
   // Gradient
   createGradientStrategy: (
     ...args: Parameters<(typeof carbonSDK)['createBuySellGradientStrategy']>

@@ -4,7 +4,6 @@ import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
 import { SafeDecimal } from 'libs/safedecimal';
-import config from 'config';
 import { useTokens } from 'hooks/useTokens';
 import { EncodedStrategyBNStr, StrategyUpdate } from '@bancor/carbon-sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
@@ -15,6 +14,7 @@ import {
   AnyStrategy,
   EditOrders,
   FormStaticOrder,
+  GradientOrder,
   StaticOrder,
   Strategy,
 } from 'components/strategies/common/types';
@@ -23,51 +23,91 @@ import {
   isGradientStrategy,
   isZero,
 } from 'components/strategies/common/utils';
-import { StrategyAPI, StrategyOrderAPI } from 'libs/queries/extApi/strategy';
+import {
+  StaticOrderAPI,
+  AnyStrategyAPI,
+  GradientOrderAPI,
+  isGradientStrategyAPI,
+} from 'libs/queries/extApi/strategy';
 import { carbonApi } from 'services/carbonApi';
 import { useMemo } from 'react';
 import { isGradientStrategyId } from '@bancor/carbon-sdk/utils';
+import { getGradientMocks } from './gradient-mock';
+import config from 'config';
 
 const buildStrategyFromAPI = (
-  s: StrategyAPI,
+  s: AnyStrategyAPI,
   getTokenById: (id: string) => Token | undefined,
-): Strategy | undefined => {
+): AnyStrategy | undefined => {
   const base = getTokenById(s.base);
   const quote = getTokenById(s.quote);
   if (!base || !quote) return;
-  const toOrder = (order: StrategyOrderAPI): StaticOrder => ({
-    budget: order.budget,
-    min: order.min,
-    max: order.max,
-    marginalPrice: order.marginal,
-  });
-  const buy = toOrder(s.buy);
-  const sell = toOrder(s.sell);
+  // Static
+  if (isGradientStrategyAPI(s)) {
+    const toOrder = (order: GradientOrderAPI): GradientOrder => ({
+      marginalPrice: order.marginal,
+      budget: order.budget,
+      startDate: order.startDate,
+      endDate: order.endDate,
+      startPrice: order.startPrice,
+      endPrice: order.endPrice,
+    });
+    const buy = toOrder(s.buy);
+    const sell = toOrder(s.sell);
 
-  return {
-    type: 'static',
-    id: s.id,
-    idDisplay: getLowestBits(s.id),
-    base,
-    quote,
-    buy,
-    sell,
-    owner: s.owner,
-    status: getStrategyStatus({ buy, sell }),
-    encoded: {
+    return {
+      type: 'gradient',
       id: s.id,
-      token0: s.base,
-      token1: s.quote,
-      order0: s.encoded.order0,
-      order1: s.encoded.order1,
-    },
-  };
+      idDisplay: getLowestBits(s.id),
+      base,
+      quote,
+      buy,
+      sell,
+      owner: s.owner,
+      status: getStrategyStatus({ buy, sell }),
+      encoded: {
+        id: s.id,
+        token0: s.base,
+        token1: s.quote,
+        order0: s.encoded.order0,
+        order1: s.encoded.order1,
+      },
+    };
+  } else {
+    const toOrder = (order: StaticOrderAPI): StaticOrder => ({
+      budget: order.budget,
+      min: order.min,
+      max: order.max,
+      marginalPrice: order.marginal,
+    });
+    const buy = toOrder(s.buy);
+    const sell = toOrder(s.sell);
+
+    return {
+      type: 'static',
+      id: s.id,
+      idDisplay: getLowestBits(s.id),
+      base,
+      quote,
+      buy,
+      sell,
+      owner: s.owner,
+      status: getStrategyStatus({ buy, sell }),
+      encoded: {
+        id: s.id,
+        token0: s.base,
+        token1: s.quote,
+        order0: s.encoded.order0,
+        order1: s.encoded.order1,
+      },
+    };
+  }
 };
 
 // READ
 
 const buildAPIStrategiesHelper = (
-  strategies: StrategyAPI[],
+  strategies: AnyStrategyAPI[],
   getTokenById: (id: string) => Token | undefined,
 ) => {
   return strategies
@@ -75,20 +115,21 @@ const buildAPIStrategiesHelper = (
     .filter((strategy): strategy is Strategy => !!strategy);
 };
 
-const fetchAllStrategiesFromApi = async (
-  getTokenById: (id: string) => Token | undefined,
-) => {
-  const response = await carbonApi.getStrategies({ pageSize: 0 });
-  return buildAPIStrategiesHelper(response.strategies, getTokenById);
-};
-
 /** We need to add options to disable because we want to use different hooks for explorer  */
 export const useGetAllStrategies = (options: { enabled: boolean }) => {
   const { isPending, getTokenById } = useTokens();
 
+  // @todo(gradient) remove mocks
+  const { user } = useWagmi();
+
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategyAll(),
-    queryFn: () => fetchAllStrategiesFromApi(getTokenById),
+    queryFn: async () => {
+      const response = await carbonApi.getStrategies({ pageSize: 0 });
+      const mocks = getGradientMocks(user);
+      const all = [...response.strategies, ...mocks];
+      return buildAPIStrategiesHelper(all, getTokenById);
+    },
     enabled: options?.enabled && !isPending,
     retry: false,
   });
@@ -110,11 +151,10 @@ export const useGetUserStrategies = ({ user }: { user?: string }) => {
   const address: string = ensAddress || user || '';
   return useMemo(() => {
     if (!address) return { ...query, data: [] };
-    const data = query.data?.filter((s) => s.owner === owner) ?? [];
     const owner = getAddress(address);
     return {
       ...query,
-      data: [...data, ...mockGradientStrategies],
+      data: query.data?.filter((s) => s.owner === owner),
     };
   }, [query, address]);
 };

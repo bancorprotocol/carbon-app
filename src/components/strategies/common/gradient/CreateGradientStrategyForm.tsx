@@ -115,15 +115,14 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
     const tx = await sendTransaction(unsignedTx);
     dispatchNotification('createStrategy', { txHash: tx.hash });
     await tx.wait();
-    cache.invalidateQueries({
-      queryKey: QueryKey.strategiesByUser(user),
-    });
-    cache.invalidateQueries({
-      queryKey: QueryKey.balance(user, base.address),
-    });
-    cache.invalidateQueries({
-      queryKey: QueryKey.balance(user, quote.address),
-    });
+    const keys = [
+      QueryKey.strategyAll(),
+      QueryKey.balance(user, base.address),
+      QueryKey.balance(user, quote.address),
+    ];
+    for (const queryKey of keys) {
+      cache.invalidateQueries({ queryKey });
+    }
   };
 
   return (

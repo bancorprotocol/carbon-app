@@ -1,158 +1,202 @@
 // @todo(gradient): remove this file when SDK is ready
 
-export interface SDKGradientStrategy {
-  id: string;
-  baseToken: string;
-  quoteToken: string;
-  buyStartPrice: string;
-  buyEndPrice: string;
-  buyPriceMarginal: string;
-  buyStartDate: string;
-  buyEndDate: string;
-  buyBudget: string;
-  sellStartPrice: string;
-  sellEndPrice: string;
-  sellPriceMarginal: string;
-  sellStartDate: string;
-  sellEndDate: string;
-  sellBudget: string;
-  encoded?: any;
-}
-// Get current Unix timestamp in seconds
-const nowUnixSeconds = Math.floor(Date.now() / 1000);
-const ONE_DAY = 86400; // Seconds in a day
+import { GradientOrderAPI, StrategyAPI } from '../extApi/strategy';
 
-// Dynamic date strings
-const pastStart = (nowUnixSeconds - 7 * ONE_DAY).toString();
-const pastEnd = (nowUnixSeconds - 1 * ONE_DAY).toString();
-const futureStart = (nowUnixSeconds + 1 * ONE_DAY).toString();
-const futureEnd = (nowUnixSeconds + 7 * ONE_DAY).toString();
+const emptyEncodedOrder = {
+  liquidity: '',
+  initialPrice: '',
+  tradingStartTime: '',
+  expiry: '',
+  multiFactor: '',
+  gradientType: '',
+};
+const emptyEncoded = {
+  order0: { ...emptyEncodedOrder },
+  order1: { ...emptyEncodedOrder },
+};
 
-export const mockGradientStrategies: SDKGradientStrategy[] = [
-  {
-    // Strategy 1: Buy & Sell dates are AFTER today (Future Strategy)
-    id: '1234',
-    baseToken: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
-    quoteToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
-    buyStartPrice: '3000',
-    buyEndPrice: '2000',
-    buyPriceMarginal: '2500',
-    buyStartDate: futureStart,
-    buyEndDate: futureEnd,
-    buyBudget: '50000',
-    sellStartPrice: '3500',
-    sellEndPrice: '4500',
-    sellPriceMarginal: '4000',
-    sellStartDate: futureStart,
-    sellEndDate: futureEnd,
-    sellBudget: '15.5',
-  },
-  {
-    // Strategy 2: ONLY Buy dates are AFTER today (Buy Future, Sell Past)
-    id: '1235',
-    baseToken: '0x514910771AF9Ca656af840dff83E8264EcF986CA', // LINK
-    quoteToken: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
-    buyStartPrice: '0.005',
-    buyEndPrice: '0.004',
-    buyPriceMarginal: '0.0045',
-    buyStartDate: futureStart,
-    buyEndDate: futureEnd,
-    buyBudget: '2.5',
-    sellStartPrice: '0.006',
-    sellEndPrice: '0.008',
-    sellPriceMarginal: '0.007',
-    sellStartDate: pastStart,
-    sellEndDate: futureEnd,
-    sellBudget: '1000.0',
-  },
-  {
-    // Strategy 3: ONLY Sell dates are AFTER today (Buy Past, Sell Future)
-    id: '1236',
-    baseToken: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', // UNI
-    quoteToken: '0xdAC17F958D2ee523a2206206994597C13D831ec7', // USDT
-    buyStartPrice: '8.50',
-    buyEndPrice: '0',
-    buyPriceMarginal: '7.25',
-    buyStartDate: pastStart,
-    buyEndDate: futureEnd,
-    buyBudget: '15000.50',
-    sellStartPrice: '10',
-    sellEndPrice: '10',
-    sellPriceMarginal: '12.50',
-    sellStartDate: futureStart,
-    sellEndDate: futureEnd,
-    sellBudget: '2500.75',
-  },
-  {
-    // Strategy 4: Buy & Sell dates are BEFORE today (Past Strategy)
-    id: '1237',
-    baseToken: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', // WBTC
-    quoteToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
-    buyStartPrice: '65000',
-    buyEndPrice: '55000',
-    buyPriceMarginal: '60000',
-    buyStartDate: pastStart,
-    buyEndDate: pastEnd,
-    buyBudget: '200000',
-    sellStartPrice: '70000',
-    sellEndPrice: '80000',
-    sellPriceMarginal: '75000',
-    sellStartDate: pastStart,
-    sellEndDate: pastEnd,
-    sellBudget: '2.5',
-  },
-  {
-    // Strategy : 5 buy is empty & sell is in the future
-    id: '1238',
-    baseToken: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', // WBTC
-    quoteToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
-    buyStartPrice: '0',
-    buyEndPrice: '0',
-    buyPriceMarginal: '60000',
-    buyStartDate: futureStart,
-    buyEndDate: futureEnd,
-    buyBudget: '200000',
-    sellStartPrice: '70000',
-    sellEndPrice: '80000',
-    sellPriceMarginal: '75000',
-    sellStartDate: futureStart,
-    sellEndDate: futureEnd,
-    sellBudget: '2.5',
-  },
-  {
-    // Strategy : 5 sell is empty & buy is in the future
-    id: '1239',
-    baseToken: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', // WBTC
-    quoteToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
-    buyStartPrice: '50000',
-    buyEndPrice: '80000',
-    buyPriceMarginal: '60000',
-    buyStartDate: futureStart,
-    buyEndDate: futureEnd,
-    buyBudget: '200000',
-    sellStartPrice: '0',
-    sellEndPrice: '0',
-    sellPriceMarginal: '75000',
-    sellStartDate: futureStart,
-    sellEndDate: futureEnd,
-    sellBudget: '2.5',
-  },
-  {
-    // Strategy : 5 sell is empty & buy is in the future
-    id: '1240',
-    baseToken: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', // WBTC
-    quoteToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
-    buyStartPrice: '65000',
-    buyEndPrice: '55000',
-    buyPriceMarginal: '60000',
-    buyStartDate: pastStart,
-    buyEndDate: futureEnd,
-    buyBudget: '200000',
-    sellStartPrice: '70000',
-    sellEndPrice: '80000',
-    sellPriceMarginal: '75000',
-    sellStartDate: pastStart,
-    sellEndDate: futureEnd,
-    sellBudget: '2.5',
-  },
-];
+const defaultAddress = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
+export const getGradientMocks = (
+  user: string = defaultAddress,
+): StrategyAPI<GradientOrderAPI>[] => {
+  // Get current Unix timestamp in seconds
+  const nowUnixSeconds = Math.floor(Date.now() / 1000);
+  const ONE_DAY = 86400; // Seconds in a day
+
+  // Dynamic date strings
+  const pastStart = (nowUnixSeconds - 7 * ONE_DAY).toString();
+  const pastEnd = (nowUnixSeconds - 1 * ONE_DAY).toString();
+  const futureStart = (nowUnixSeconds + 1 * ONE_DAY).toString();
+  const futureEnd = (nowUnixSeconds + 7 * ONE_DAY).toString();
+
+  return [
+    {
+      // Strategy 1234: Buy & Sell dates are AFTER today (Future Strategy)
+      id: '1234',
+      owner: user,
+      base: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+      quote: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
+      buy: {
+        startPrice: '3000.00',
+        endPrice: '2000.00',
+        marginal: '2500.00',
+        startDate: futureStart,
+        endDate: futureEnd,
+        budget: '50000.00', // 50,000 USDC
+      },
+      sell: {
+        startPrice: '3500.00',
+        endPrice: '4500.00',
+        marginal: '4000.00',
+        startDate: futureStart,
+        endDate: futureEnd,
+        budget: '15.5', // 15.5 WETH
+      },
+      encoded: emptyEncoded,
+    },
+    {
+      // Strategy 1235: ONLY Buy dates are AFTER today (Buy Future, Sell Past)
+      id: '1235',
+      owner: user,
+      base: '0x514910771AF9Ca656af840dff83E8264EcF986CA', // LINK
+      quote: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+      buy: {
+        startPrice: '0.005',
+        endPrice: '0.004',
+        marginal: '0.0045',
+        startDate: futureStart,
+        endDate: futureEnd,
+        budget: '2.5',
+      },
+      sell: {
+        startPrice: '0.006',
+        endPrice: '0.008',
+        marginal: '0.007',
+        startDate: pastStart,
+        endDate: pastEnd,
+        budget: '1000.0',
+      },
+      encoded: emptyEncoded,
+    },
+    {
+      // Strategy 1236: ONLY Sell dates are AFTER today (Buy Past, Sell Future)
+      id: '1236',
+      owner: user,
+      base: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', // UNI
+      quote: '0xdAC17F958D2ee523a2206206994597C13D831ec7', // USDT
+      buy: {
+        startPrice: '8.50',
+        endPrice: '6.00',
+        marginal: '7.25',
+        startDate: pastStart,
+        endDate: pastEnd,
+        budget: '15000.50',
+      },
+      sell: {
+        startPrice: '10.00',
+        endPrice: '15.00',
+        marginal: '12.50',
+        startDate: futureStart,
+        endDate: futureEnd,
+        budget: '2500.75',
+      },
+      encoded: emptyEncoded,
+    },
+    {
+      // Strategy 1237: Buy & Sell dates are BEFORE today (Past Strategy)
+      id: '1237',
+      owner: user,
+      base: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', // WBTC
+      quote: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
+      buy: {
+        startPrice: '65000.00',
+        endPrice: '55000.00',
+        marginal: '60000.00',
+        startDate: pastStart,
+        endDate: pastEnd,
+        budget: '200000.00',
+      },
+      sell: {
+        startPrice: '70000.00',
+        endPrice: '80000.00',
+        marginal: '75000.00',
+        startDate: pastStart,
+        endDate: pastEnd,
+        budget: '2.5',
+      },
+      encoded: emptyEncoded,
+    },
+    {
+      // Strategy 1238: ONLY Buy is Active (Buy is currently running, Sell starts in the future)
+      id: '1238',
+      owner: user,
+      base: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+      quote: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
+      buy: {
+        startPrice: '3200.00',
+        endPrice: '2800.00',
+        marginal: '3000.00',
+        startDate: pastStart, // Past
+        endDate: futureEnd, // Future
+        budget: '10000.00',
+      },
+      sell: {
+        startPrice: '3500.00',
+        endPrice: '4000.00',
+        marginal: '3800.00',
+        startDate: futureStart, // Future
+        endDate: futureEnd, // Future
+        budget: '5.0',
+      },
+      encoded: emptyEncoded,
+    },
+    {
+      // Strategy 1239: ONLY Sell is Active (Buy already ended, Sell is currently running)
+      id: '1239',
+      owner: user,
+      base: '0x514910771AF9Ca656af840dff83E8264EcF986CA', // LINK
+      quote: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+      buy: {
+        startPrice: '0.005',
+        endPrice: '0.004',
+        marginal: '0.0045',
+        startDate: pastStart, // Past
+        endDate: pastEnd, // Past (Before today)
+        budget: '1.5',
+      },
+      sell: {
+        startPrice: '0.006',
+        endPrice: '0.008',
+        marginal: '0.007',
+        startDate: pastStart, // Past
+        endDate: futureEnd, // Future
+        budget: '500.0',
+      },
+      encoded: emptyEncoded,
+    },
+    {
+      // Strategy 1240: BOTH are Active (Both Buy and Sell are currently running)
+      id: '1240',
+      owner: user,
+      base: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', // UNI
+      quote: '0xdAC17F958D2ee523a2206206994597C13D831ec7', // USDT
+      buy: {
+        startPrice: '9.00',
+        endPrice: '7.00',
+        marginal: '8.00',
+        startDate: pastStart, // Past
+        endDate: futureEnd, // Future
+        budget: '5000.00',
+      },
+      sell: {
+        startPrice: '10.00',
+        endPrice: '12.00',
+        marginal: '11.00',
+        startDate: pastStart, // Past
+        endDate: futureEnd, // Future
+        budget: '1000.00',
+      },
+      encoded: emptyEncoded,
+    },
+  ];
+};
