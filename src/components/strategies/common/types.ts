@@ -116,6 +116,10 @@ export interface BaseStrategy<T extends Order = StaticOrder>
 export type StaticBaseStrategy = BaseStrategy<StaticOrder>;
 export type GradientBaseStrategy = BaseStrategy<GradientOrder>;
 
+export type AnyEncodedStrategy =
+  | EncodedStrategyBNStr
+  | GradientEncodedStrategyBNStr;
+
 export interface Strategy<T extends Order = StaticOrder>
   extends BaseStrategy<T> {
   type: T extends StaticOrder ? 'static' : 'gradient';

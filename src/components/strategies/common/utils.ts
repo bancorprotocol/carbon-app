@@ -9,6 +9,7 @@ import {
   FormOrder,
   FormGradientOrder,
   BuySellOrders,
+  AnyEncodedStrategy,
 } from './types';
 import { fromUnixUTC } from 'components/simulator/utils';
 import { startOfDay, sub } from 'date-fns';
@@ -16,6 +17,7 @@ import { toUnixUTC } from 'components/simulator/utils';
 import { ChartPrices } from './d3Chart';
 import { getMinMaxPricesByDecimals } from '@bancor/carbon-sdk/strategy-management';
 import { geoMean } from 'utils/fullOutcome';
+import { EncodedStrategyBNStr } from '@bancor/carbon-sdk';
 
 export interface StrategyInput {
   buy: { min: string; max: string };
@@ -25,6 +27,12 @@ export interface StrategyInput {
 export type OrdersInput =
   | BuySellOrders<FormGradientOrder>
   | BuySellOrders<FormStaticOrder>;
+
+export const isStaticEncoded = (
+  encoded?: AnyEncodedStrategy,
+): encoded is EncodedStrategyBNStr => {
+  return !!encoded && 'y' in encoded.order0;
+};
 
 export const isGradientStrategy = (
   strategy: OrdersInput,

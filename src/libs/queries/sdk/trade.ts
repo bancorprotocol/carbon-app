@@ -14,6 +14,7 @@ import { useGetApprovalTokens } from 'hooks/useApproval';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import config from 'config';
 import { useCarbonController } from 'hooks/useContract';
+import { isStaticEncoded } from 'components/strategies/common/utils';
 
 interface GetTradeDataResult {
   tradeActions: TradeActionBNStr[];
@@ -256,8 +257,8 @@ export const useSDKTradeData = ({
       );
       return carbonSDK.getTradeData({
         amount: input,
-        strategies: strategies!.map((s) => s.encoded).filter((e) => !!e),
-        tradeByTargetAmount: !isTradeBySource,
+        strategies: strategies!.map((s) => s.encoded).filter(isStaticEncoded),
+        isTradeByTarget: !isTradeBySource,
         sourceToken: sourceToken.address,
         sourceDecimals: sourceToken.decimals,
         targetToken: targetToken.address,
