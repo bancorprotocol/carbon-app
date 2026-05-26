@@ -28,6 +28,11 @@ export type OrdersInput =
   | BuySellOrders<FormGradientOrder>
   | BuySellOrders<FormStaticOrder>;
 
+const GRADIENT_STRATEGY_TYPE_MASK = 1n << 255n;
+export function isGradientStrategyId(id: bigint) {
+  return (id & GRADIENT_STRATEGY_TYPE_MASK) !== 0n;
+}
+
 export const isStaticEncoded = (
   encoded?: AnyEncodedStrategy,
 ): encoded is EncodedStrategyBNStr => {

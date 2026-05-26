@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@bancor/carbon-sdk": "0.0.131-DEV",
     "@cloudflare/workers-types": "4.20230717.0",
     "@eslint/js": "^9.39.2",
     "@floating-ui/core": "^1.7.3",
@@ -42,6 +41,7 @@
     "@vitest/coverage-v8": "1.6.0",
     "@wagmi/core": "2.14.6",
     "buffer": "6.0.3",
+    "@bancor/carbon-sdk": "0.0.133-DEV",
     "class-variance-authority": "0.2.4",
     "clsx": "1.2.1",
     "comlink": "4.4.1",

@@ -4,13 +4,16 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  carbon-sdk: link:../../../Users/franc/AppData/Local/pnpm/global/5/node_modules/@bancor/carbon-sdk
+
 importers:
 
   .:
     dependencies:
       '@bancor/carbon-sdk':
-        specifier: 0.0.131-DEV
-        version: 0.0.131-DEV(ethers@6.14.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))
+        specifier: 0.0.133-DEV
+        version: 0.0.133-DEV(ethers@6.14.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       '@cloudflare/workers-types':
         specifier: 4.20230717.0
         version: 4.20230717.0
@@ -493,9 +496,9 @@ packages:
     resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
 
-  '@bancor/carbon-sdk@0.0.131-DEV':
-    resolution: {integrity: sha512-ilDfLlEhk2RmCJX2fLfcweVeoLRegQhLWfdBHjBT+JR3OzyXvOXPdlWT7KT+e8ZMw8eNtNW60fHJM18MX0PO3Q==}
-    engines: {node: '>=20'}
+  '@bancor/carbon-sdk@0.0.133-DEV':
+    resolution: {integrity: sha512-3d25SSF6xP1cx/v2vl5qN7s55oZYxhh9QkpjPHopOudyFAWNuEUD58jhWjbhUz8RGLgMnuqYj3jrCgYghYNG/w==}
+    engines: {node: '>=18'}
     peerDependencies:
       ethers: ^6.15.0
 
@@ -7261,7 +7264,7 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@bancor/carbon-sdk@0.0.131-DEV(ethers@6.14.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
+  '@bancor/carbon-sdk@0.0.133-DEV(ethers@6.14.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
     dependencies:
       decimal.js: 10.6.0
       ethers: 6.14.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)

@@ -101,7 +101,7 @@ export const commonConfig: AppConfig = {
       batcher: '0x0199f3A6C4B192B9f9C3eBE31FBC535CdD4B7D4e',
       vault: '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4',
       // @todo(gradient): reset these addresses
-      // gradientController: '0x5BDdF8EdeEaE66Cc8477c9282b8c0462CD7132aa',
+      gradientController: '0xD5CB9B01D6c7562cEFC75d555D6866579f812473', // '0x5BDdF8EdeEaE66Cc8477c9282b8c0462CD7132aa',
       // gradientVoucher: '0x4973fa43c4c4b0Bbe4071eB3e7c900810Df143E8',
     },
   },

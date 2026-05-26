@@ -14,25 +14,18 @@ import {
   AnyStrategy,
   EditOrders,
   FormStaticOrder,
-  GradientOrder,
   StaticOrder,
   Strategy,
 } from 'components/strategies/common/types';
 import {
   getStrategyStatus,
   isGradientStrategy,
+  isGradientStrategyId,
   isZero,
 } from 'components/strategies/common/utils';
-import {
-  StaticOrderAPI,
-  AnyStrategyAPI,
-  GradientOrderAPI,
-  isGradientStrategyAPI,
-} from 'libs/queries/extApi/strategy';
+import { StaticOrderAPI, AnyStrategyAPI } from 'libs/queries/extApi/strategy';
 import { carbonApi } from 'services/carbonApi';
 import { useMemo } from 'react';
-import { isGradientStrategyId } from '@bancor/carbon-sdk/utils';
-import { getGradientMocks } from './gradient-mock';
 import config from 'config';
 
 const buildStrategyFromAPI = (
@@ -42,18 +35,10 @@ const buildStrategyFromAPI = (
   const base = getTokenById(s.base);
   const quote = getTokenById(s.quote);
   if (!base || !quote) return;
-  // Static
-  if (isGradientStrategyAPI(s)) {
-    const toOrder = (order: GradientOrderAPI): GradientOrder => ({
-      marginalPrice: order.marginal,
-      budget: order.budget,
-      startDate: order.startDate,
-      endDate: order.endDate,
-      startPrice: order.startPrice,
-      endPrice: order.endPrice,
-    });
-    const buy = toOrder(s.buy);
-    const sell = toOrder(s.sell);
+  // Gradient
+  if (s.type === 'gradient') {
+    const buy = s.buy;
+    const sell = s.sell;
 
     return {
       type: 'gradient',
@@ -69,8 +54,8 @@ const buildStrategyFromAPI = (
         id: s.id,
         token0: s.base,
         token1: s.quote,
-        order0: s.encoded.order0,
-        order1: s.encoded.order1,
+        order0: s.encoded?.order0,
+        order1: s.encoded?.order1,
       },
     };
   } else {
@@ -119,16 +104,11 @@ const buildAPIStrategiesHelper = (
 export const useGetAllStrategies = (options: { enabled: boolean }) => {
   const { isPending, getTokenById } = useTokens();
 
-  // @todo(gradient) remove mocks
-  const { user } = useWagmi();
-
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategyAll(),
     queryFn: async () => {
       const response = await carbonApi.getStrategies({ pageSize: 0 });
-      const mocks = getGradientMocks(user);
-      const all = [...response.strategies, ...mocks];
-      return buildAPIStrategiesHelper(all, getTokenById);
+      return buildAPIStrategiesHelper(response.strategies, getTokenById);
     },
     enabled: options?.enabled && !isPending,
     retry: false,

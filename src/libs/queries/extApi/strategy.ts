@@ -1,4 +1,4 @@
-import { GradientEncodedOrderBNStr } from '@bancor/carbon-sdk';
+import { GradientEncodedOrderBNStr } from 'components/strategies/common/types';
 
 export interface StrategiesSearchParams {
   page?: number;
@@ -17,7 +17,7 @@ export interface GradientOrderAPI {
   endDate: string;
   startPrice: string;
   endPrice: string;
-  marginal: string;
+  marginalPrice: string;
 }
 
 interface EncodedOrderStr {
@@ -31,6 +31,7 @@ type EncodedOrder<Order extends GradientOrderAPI | StaticOrderAPI> =
   Order extends StaticOrderAPI ? EncodedOrderStr : GradientEncodedOrderBNStr;
 
 export interface StrategyAPI<Order extends GradientOrderAPI | StaticOrderAPI> {
+  type: Order extends GradientOrderAPI ? 'gradient' : 'regular';
   id: string;
   owner: string;
   base: string;
@@ -63,5 +64,5 @@ export interface StrategyAPIResult {
 export const isGradientStrategyAPI = (
   s: AnyStrategyAPI,
 ): s is StrategyAPI<GradientOrderAPI> => {
-  return 'startDate' in s.buy;
+  return s.type === 'gradient';
 };

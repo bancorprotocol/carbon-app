@@ -76,8 +76,8 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
     if (isDisabled(e.currentTarget)) return;
     const getType = (order: FormGradientOrder) => {
       return new SafeDecimal(order.startPrice).gt(order.endPrice)
-        ? GradientType.LinearDecrease
-        : GradientType.LinearDecrease;
+        ? GradientType.LINEAR_DECREASE
+        : GradientType.LINEAR_INCREASE;
     };
 
     const unsignedTx = await carbonSDK.createGradientStrategy(
@@ -85,33 +85,34 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
       quote.address,
       buy.startPrice,
       buy.endPrice,
-      buy.budget || '0',
-      getType(buy),
+      buy.budget,
       Number(buy.startDate),
-      Number(buy.endDate) || 1_000_000_000,
+      Number(buy.endDate),
+      getType(buy),
       sell.startPrice,
       sell.endPrice,
-      sell.budget || '0',
-      getType(sell),
+      sell.budget,
       Number(sell.startDate),
-      Number(sell.endDate) || 1_000_000_000,
+      Number(sell.endDate),
+      getType(sell),
     );
     const getRawAmount = (token: Token, amount: string) => {
       return parseUnits(amount, token.decimals).toString();
     };
     unsignedTx.customData = {
-      spender: config.addresses.carbon.carbonController,
+      spender: config.addresses.carbon.gradientController,
       assets: [
         {
-          address: base,
+          address: base.address,
           rawAmount: getRawAmount(base, sell.budget),
         },
         {
-          address: quote,
+          address: quote.address,
           rawAmount: getRawAmount(quote, buy.budget),
         },
       ],
     };
+    console.log(unsignedTx);
     const tx = await sendTransaction(unsignedTx);
     dispatchNotification('createStrategy', { txHash: tx.hash });
     await tx.wait();

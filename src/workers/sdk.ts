@@ -164,23 +164,23 @@ const sdkExposed = {
   getCacheDump: () => sdkCache.serialize(),
   // Gradient
   createGradientStrategy: (
-    ...args: Parameters<(typeof carbonSDK)['createBuySellGradientStrategy']>
-  ) => carbonSDK.createBuySellGradientStrategy(...args),
-  updateGradientStrategy: (
-    ...args: Parameters<(typeof carbonSDK)['updateGradientStrategy']>
-  ) => carbonSDK.updateGradientStrategy(...args),
+    ...args: Parameters<(typeof carbonSDK)['createGradientBuySellStrategy']>
+  ) => carbonSDK.createGradientBuySellStrategy(...args),
   deleteGradientStrategy: (
     ...args: Parameters<(typeof carbonSDK)['deleteGradientStrategy']>
   ) => carbonSDK.deleteGradientStrategy(...args),
-  getGradientStrategyById: (
-    ...args: Parameters<(typeof carbonSDK)['getGradientStrategyById']>
-  ) => carbonSDK.getGradientStrategyById(...args),
-  getGradientStrategiesByPair: (
-    ...args: Parameters<(typeof carbonSDK)['getGradientStrategiesByPair']>
-  ) => carbonSDK.getGradientStrategiesByPair(...args),
-  getGradientStrategyByUsre: (
-    ...args: Parameters<(typeof carbonSDK)['getUserGradientStrategies']>
-  ) => carbonSDK.getUserGradientStrategies(...args),
+  updateGradientStrategy: (...args: any) => {
+    throw new Error('updateGradientStrategy is not implemented yet');
+  },
+  getGradientStrategyById: (...args: any) => {
+    throw new Error('getGradientStrategyById is not implemented yet');
+  },
+  getGradientStrategiesByPair: (...args: any) => {
+    throw new Error('getGradientStrategiesByPair is not implemented yet');
+  },
+  getGradientStrategyByUser: (...args: any) => {
+    throw new Error('getGradientStrategyByUser is not implemented yet');
+  },
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;

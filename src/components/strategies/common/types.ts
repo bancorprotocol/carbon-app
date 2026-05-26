@@ -2,7 +2,8 @@ import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import {
   EncodedStrategyBNStr,
-  GradientEncodedStrategyBNStr,
+  EncodedGradientOrder,
+  RetypeProps,
 } from '@bancor/carbon-sdk';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
@@ -116,9 +117,22 @@ export interface BaseStrategy<T extends Order = StaticOrder>
 export type StaticBaseStrategy = BaseStrategy<StaticOrder>;
 export type GradientBaseStrategy = BaseStrategy<GradientOrder>;
 
+export type GradientEncodedOrderBNStr = RetypeProps<
+  EncodedGradientOrder,
+  bigint,
+  string
+>;
+export interface EncodedGradientStrategyBnStr {
+  id: string;
+  token0: string;
+  token1: string;
+  order0: GradientEncodedOrderBNStr;
+  order1: GradientEncodedOrderBNStr;
+}
+
 export type AnyEncodedStrategy =
   | EncodedStrategyBNStr
-  | GradientEncodedStrategyBNStr;
+  | EncodedGradientStrategyBnStr;
 
 export interface Strategy<T extends Order = StaticOrder>
   extends BaseStrategy<T> {
@@ -129,7 +143,7 @@ export interface Strategy<T extends Order = StaticOrder>
   owner?: string;
   encoded?: T extends StaticOrder
     ? EncodedStrategyBNStr
-    : GradientEncodedStrategyBNStr;
+    : EncodedGradientStrategyBnStr;
 }
 
 export interface StrategyWithFiat<T extends Order = StaticOrder>
