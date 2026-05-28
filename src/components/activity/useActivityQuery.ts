@@ -41,7 +41,6 @@ export const toActivities = (
         `Quote "${strategy.quote}" not found for activity with txhash "${activity.txHash}"`,
       );
     }
-    const type = 'startPrice' in strategy.buy ? 'gradient' : 'static';
     const buy = toOrder(strategy.buy);
     const sell = toOrder(strategy.sell);
     const status =
@@ -57,7 +56,6 @@ export const toActivities = (
         status,
         base,
         quote,
-        type,
       },
     } as Activity; // needed to force type because it was too difficult to deal with deep types
   });

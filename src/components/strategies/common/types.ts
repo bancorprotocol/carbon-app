@@ -136,7 +136,7 @@ export type AnyEncodedStrategy =
 
 export interface Strategy<T extends Order = StaticOrder>
   extends BaseStrategy<T> {
-  type: T extends StaticOrder ? 'static' : 'gradient';
+  type: T extends StaticOrder ? 'regular' : 'gradient';
   id: string;
   idDisplay: string;
   status: StrategyStatus;

@@ -169,18 +169,9 @@ const sdkExposed = {
   deleteGradientStrategy: (
     ...args: Parameters<(typeof carbonSDK)['deleteGradientStrategy']>
   ) => carbonSDK.deleteGradientStrategy(...args),
-  updateGradientStrategy: (...args: any) => {
-    throw new Error('updateGradientStrategy is not implemented yet');
-  },
-  getGradientStrategyById: (...args: any) => {
-    throw new Error('getGradientStrategyById is not implemented yet');
-  },
-  getGradientStrategiesByPair: (...args: any) => {
-    throw new Error('getGradientStrategiesByPair is not implemented yet');
-  },
-  getGradientStrategyByUser: (...args: any) => {
-    throw new Error('getGradientStrategyByUser is not implemented yet');
-  },
+  updateGradientStrategy: (
+    ...args: Parameters<(typeof carbonSDK)['updateGradientStrategy']>
+  ) => carbonSDK.updateGradientStrategy(...args),
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;

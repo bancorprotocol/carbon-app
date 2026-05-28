@@ -93,7 +93,7 @@ export const StrategyContent: FC<Props> = ({ url }) => {
       if (filter.type === 'gradient' && !isGradientStrategy(strategy)) {
         return false;
       }
-      if (filter.type === 'static' && isGradientStrategy(strategy)) {
+      if (filter.type === 'regular' && isGradientStrategy(strategy)) {
         return false;
       }
       return true;

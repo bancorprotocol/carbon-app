@@ -146,7 +146,7 @@ export interface MockStrategyParams {
 }
 
 export const mockStrategy = (params: MockStrategyParams): Strategy => ({
-  type: 'static',
+  type: 'regular',
   id: '1',
   idDisplay: '1',
   base: tokenList[params.base],

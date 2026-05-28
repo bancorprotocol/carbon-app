@@ -10,13 +10,21 @@ import config from 'config';
 import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { FormGradientOrder } from '../types';
 import { carbonSDK } from 'libs/sdk';
-import { GradientType } from '@bancor/carbon-sdk';
 import { Token } from 'libs/tokens';
 import { parseUnits } from 'ethers';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useNotifications } from 'hooks/useNotifications';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
+
+const enum GradientType {
+  LINEAR_INCREASE,
+  LINEAR_DECREASE,
+  LINEAR_INV_INCREASE,
+  LINEAR_INV_DECREASE,
+  EXPONENTIAL_INCREASE,
+  EXPONENTIAL_DECREASE,
+}
 
 interface FormProps {
   buy: FormGradientOrder;
@@ -80,6 +88,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
         : GradientType.LINEAR_INCREASE;
     };
 
+    console.log({ buy, sell });
     const unsignedTx = await carbonSDK.createGradientStrategy(
       base.address,
       quote.address,
@@ -88,13 +97,13 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
       buy.budget,
       Number(buy.startDate),
       Number(buy.endDate),
-      getType(buy),
+      getType(buy) as any,
       sell.startPrice,
       sell.endPrice,
       sell.budget,
       Number(sell.startDate),
       Number(sell.endDate),
-      getType(sell),
+      getType(sell) as any,
     );
     const getRawAmount = (token: Token, amount: string) => {
       return parseUnits(amount, token.decimals).toString();
@@ -112,7 +121,6 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
         },
       ],
     };
-    console.log(unsignedTx);
     const tx = await sendTransaction(unsignedTx);
     dispatchNotification('createStrategy', { txHash: tx.hash });
     await tx.wait();
@@ -124,6 +132,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
     for (const queryKey of keys) {
       cache.invalidateQueries({ queryKey });
     }
+    nav({ to: '/portfolio/strategies' });
   };
 
   return (

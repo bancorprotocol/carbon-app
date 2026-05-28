@@ -28,6 +28,7 @@ interface BaseActivityStrategy<Order extends RawActivityOrder> {
   owner: string;
   buy: Order;
   sell: Order;
+  type: 'regular' | 'gradient';
 }
 export type ActivityAction =
   | 'create'

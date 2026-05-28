@@ -75,7 +75,7 @@ export const validStrategyFilterStatus = v.optional(
   v.picklist(['all', 'active', 'inactive']),
 );
 export const validStrategyFilterType = v.optional(
-  v.picklist(['all', 'gradient', 'static']),
+  v.picklist(['all', 'gradient', 'regular']),
 );
 export const validStrategySort = v.optional(
   v.picklist([

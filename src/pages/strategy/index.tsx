@@ -57,6 +57,7 @@ export const StrategyPage = () => {
 
   const baseStrategy = useMemo(() => {
     if (isPending) return;
+    console.log(activityQuery.data);
     if (strategyQuery.data) return strategyQuery.data;
     if (activityQuery.data?.[0]) {
       return activityQuery.data?.[0].strategy;

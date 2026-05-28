@@ -54,8 +54,14 @@ const buildStrategyFromAPI = (
         id: s.id,
         token0: s.base,
         token1: s.quote,
-        order0: s.encoded?.order0,
-        order1: s.encoded?.order1,
+        order0: {
+          ...s.encoded.order0,
+          gradientType: Number(s.encoded.order0.gradientType),
+        },
+        order1: {
+          ...s.encoded.order1,
+          gradientType: Number(s.encoded.order1.gradientType),
+        },
       },
     };
   } else {
@@ -69,7 +75,7 @@ const buildStrategyFromAPI = (
     const sell = toOrder(s.sell);
 
     return {
-      type: 'static',
+      type: 'regular',
       id: s.id,
       idDisplay: getLowestBits(s.id),
       base,
@@ -163,25 +169,43 @@ const reverseStrategy = (strategy: AnyStrategy): AnyStrategy => {
     if (isZero(value)) return '0';
     return new SafeDecimal(1).div(value).toString();
   };
-  // @todo(gradient): implement reverse for gradient strategies
-  if (isGradientStrategy(strategy)) return strategy;
-  return {
-    ...strategy,
-    base: strategy.quote,
-    quote: strategy.base,
-    buy: {
-      min: invert(strategy.sell.max),
-      max: invert(strategy.sell.min),
-      marginalPrice: invert(strategy.sell.marginalPrice),
-      budget: strategy.sell.budget,
-    },
-    sell: {
-      min: invert(strategy.buy.max),
-      max: invert(strategy.buy.min),
-      marginalPrice: invert(strategy.buy.marginalPrice),
-      budget: strategy.buy.budget,
-    },
-  };
+  if (isGradientStrategy(strategy)) {
+    return {
+      ...strategy,
+      base: strategy.quote,
+      quote: strategy.base,
+      buy: {
+        ...strategy.sell,
+        startPrice: invert(strategy.sell.startPrice),
+        endPrice: invert(strategy.sell.endPrice),
+        marginalPrice: invert(strategy.sell.marginalPrice),
+      },
+      sell: {
+        ...strategy.buy,
+        startPrice: invert(strategy.buy.startPrice),
+        endPrice: invert(strategy.buy.endPrice),
+        marginalPrice: invert(strategy.buy.marginalPrice),
+      },
+    };
+  } else {
+    return {
+      ...strategy,
+      base: strategy.quote,
+      quote: strategy.base,
+      buy: {
+        min: invert(strategy.sell.max),
+        max: invert(strategy.sell.min),
+        marginalPrice: invert(strategy.sell.marginalPrice),
+        budget: strategy.sell.budget,
+      },
+      sell: {
+        min: invert(strategy.buy.max),
+        max: invert(strategy.buy.min),
+        marginalPrice: invert(strategy.buy.marginalPrice),
+        budget: strategy.buy.budget,
+      },
+    };
+  }
 };
 const normalizeStrategy = (
   base: string,
@@ -359,7 +383,7 @@ export const usePauseStrategyQuery = () => {
       if (!strategy.encoded) {
         throw new Error('No encoded found on the strategy');
       }
-      if (strategy.type === 'static') {
+      if (strategy.type === 'regular') {
         const unsignedTx = await carbonSDK.updateStrategy(
           strategy.id,
           strategy.encoded,
@@ -372,14 +396,15 @@ export const usePauseStrategyQuery = () => {
         );
         return sendTransaction(unsignedTx);
       } else {
+        console.log(strategy.encoded);
         const unsignedTx = await carbonSDK.updateGradientStrategy(
           strategy.id,
           strategy.encoded,
           {
-            buyPriceStart: '0',
-            buyPriceEnd: '0',
-            sellPriceStart: '0',
-            sellPriceEnd: '0',
+            buyInitialPrice: '0',
+            buyFinalPrice: '0',
+            sellInitialPrice: '0',
+            sellFinalPrice: '0',
           },
         );
         return sendTransaction(unsignedTx);

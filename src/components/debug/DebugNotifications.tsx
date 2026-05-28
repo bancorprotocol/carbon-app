@@ -65,7 +65,7 @@ export const DebugNotifications = () => {
             activity: {
               action: 'create',
               strategy: {
-                type: 'static',
+                type: 'regular',
                 id: '10000',
                 idDisplay: '100',
                 status: 'active',

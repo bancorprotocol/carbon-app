@@ -27,7 +27,6 @@ import { ActivityListProps } from './ActivityList';
 import { NotFound } from 'components/common/NotFound';
 import { useActivity, useActivityPagination } from './context';
 import { StrategyTypeIcon } from 'components/strategies/overview/StrategyTypeIcon';
-import { isGradientStrategy } from 'components/strategies/common/utils';
 import style from './ActivityTable.module.css';
 
 export const ActivityTable: FC<ActivityListProps> = (props) => {
@@ -103,7 +102,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
         <td rowSpan={2} className="px-8 py-12 first:pl-24">
           <StrategyTypeIcon
             className="place-self-center"
-            isGradient={isGradientStrategy(strategy)}
+            isGradient={strategy.type === 'gradient'}
           />
         </td>
         <td rowSpan={2} className="py-12 pl-8 first:pl-24">

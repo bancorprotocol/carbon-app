@@ -12,7 +12,7 @@ export const strategyFilter = {
   },
   type: {
     all: 'All',
-    static: 'Static',
+    regular: 'Static',
     gradient: 'Gradient',
   },
 };

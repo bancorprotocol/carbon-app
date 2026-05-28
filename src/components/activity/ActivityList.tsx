@@ -14,6 +14,7 @@ import {
 } from './ActivityTable';
 import { shortenString, tokenAmount } from 'utils/helpers';
 import { useActivity, useActivityPagination } from './context';
+import { StrategyTypeIcon } from 'components/strategies/overview/StrategyTypeIcon';
 
 export interface ActivityListProps {
   activities: Activity[];
@@ -67,9 +68,10 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
   };
   return (
     <li className="grid gap-16 rounded-2xl surface">
-      <header className="grid grid-flow-col px-16 pt-16 items-center justify-items-start">
+      <header className="flex gap-16 px-16 pt-16 items-center">
+        <StrategyTypeIcon isGradient={strategy.type === 'gradient'} />
         {!hideIds && <ActivityId activity={activity} size={16} />}
-        <div className="grid text-12 justify-self-end align-center">
+        <div className="grid text-12 justify-items-end align-center flex-1">
           <p className="text-main-0/80">
             {activityDateFormatter.format(activity.date)}
           </p>

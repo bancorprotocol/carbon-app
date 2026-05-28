@@ -5,7 +5,7 @@ import { deepCopy, getUndercutStrategy } from './utils';
 type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
 const baseStrategy = {
-  type: 'static' as const,
+  type: 'regular' as const,
   id: '',
   idDisplay: '',
   base: {
