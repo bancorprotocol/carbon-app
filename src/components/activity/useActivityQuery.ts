@@ -5,7 +5,6 @@ import { QueryKey } from 'libs/queries';
 import {
   Activity,
   ActivityMeta,
-  RawActivityOrder,
   QueryActivityParams,
   ServerActivity,
   ServerActivityMeta,
@@ -16,12 +15,6 @@ import { THIRTY_SEC_IN_MS } from 'utils/time';
 import { fromUnixUTC } from 'components/simulator/utils';
 import { getLowestBits } from 'utils/helpers';
 import { getStrategyStatus } from 'components/strategies/common/utils';
-import { Order } from 'components/strategies/common/types';
-
-const toOrder = (order: RawActivityOrder): Order => ({
-  ...order,
-  marginalPrice: order.marginal,
-});
 
 export const toActivities = (
   data: ServerActivity[],
@@ -41,8 +34,6 @@ export const toActivities = (
         `Quote "${strategy.quote}" not found for activity with txhash "${activity.txHash}"`,
       );
     }
-    const buy = toOrder(strategy.buy);
-    const sell = toOrder(strategy.sell);
     const status =
       activity.action === 'delete' ? 'deleted' : getStrategyStatus(strategy);
     return {
@@ -50,8 +41,6 @@ export const toActivities = (
       date: fromUnixUTC(activity.timestamp),
       strategy: {
         ...strategy,
-        buy,
-        sell,
         idDisplay: getLowestBits(strategy.id),
         status,
         base,

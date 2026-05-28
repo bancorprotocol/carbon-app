@@ -9,7 +9,7 @@ export interface StaticOrderAPI {
   budget: string;
   min: string;
   max: string;
-  marginal: string;
+  marginalPrice: string;
 }
 export interface GradientOrderAPI {
   budget: string;

@@ -23,7 +23,7 @@ import {
   isGradientStrategyId,
   isZero,
 } from 'components/strategies/common/utils';
-import { StaticOrderAPI, AnyStrategyAPI } from 'libs/queries/extApi/strategy';
+import { AnyStrategyAPI } from 'libs/queries/extApi/strategy';
 import { carbonApi } from 'services/carbonApi';
 import { useMemo } from 'react';
 import config from 'config';
@@ -54,26 +54,12 @@ const buildStrategyFromAPI = (
         id: s.id,
         token0: s.base,
         token1: s.quote,
-        order0: {
-          ...s.encoded.order0,
-          gradientType: Number(s.encoded.order0.gradientType),
-        },
-        order1: {
-          ...s.encoded.order1,
-          gradientType: Number(s.encoded.order1.gradientType),
-        },
+        order0: s.encoded.order0,
+        order1: s.encoded.order1,
       },
     };
   } else {
-    const toOrder = (order: StaticOrderAPI): StaticOrder => ({
-      budget: order.budget,
-      min: order.min,
-      max: order.max,
-      marginalPrice: order.marginal,
-    });
-    const buy = toOrder(s.buy);
-    const sell = toOrder(s.sell);
-
+    const { buy, sell } = s;
     return {
       type: 'regular',
       id: s.id,

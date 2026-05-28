@@ -4,7 +4,7 @@ import { Token } from 'libs/tokens';
 export interface ActivityStaticOrder {
   min: string;
   max: string;
-  marginal: string;
+  marginalPrice: string;
   budget: string;
 }
 export interface ActivityGradientOrder {
@@ -12,7 +12,7 @@ export interface ActivityGradientOrder {
   endDate: string;
   startPrice: string;
   endPrice: string;
-  marginal: string;
+  marginalPrice: string;
   budget: string;
 }
 
