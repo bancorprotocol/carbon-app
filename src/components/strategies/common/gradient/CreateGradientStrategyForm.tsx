@@ -1,5 +1,5 @@
 import { FC, FormEvent, MouseEvent, ReactNode, useState } from 'react';
-import { useNavigate } from 'libs/routing';
+import { StrategyDirection, useNavigate } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { useWagmi } from 'libs/wagmi';
 import {
@@ -82,31 +82,35 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
     e.preventDefault();
     if (!user) return;
     if (isDisabled(e.currentTarget)) return;
-    const getType = (order: FormGradientOrder) => {
-      return new SafeDecimal(order.startPrice).gt(order.endPrice)
-        ? GradientType.LINEAR_DECREASE
-        : GradientType.LINEAR_INCREASE;
+    const getType = (
+      order: FormGradientOrder,
+      direction: StrategyDirection,
+    ) => {
+      const goUp = new SafeDecimal(order.startPrice).lt(order.endPrice);
+      const increase = direction === 'buy' ? goUp : !goUp;
+      return increase
+        ? GradientType.LINEAR_INCREASE
+        : GradientType.LINEAR_DECREASE;
     };
 
-    console.log({ buy, sell });
     const unsignedTx = await carbonSDK.createGradientStrategy(
       base.address,
       quote.address,
-      buy.startPrice,
-      buy.endPrice,
-      buy.budget,
+      buy.startPrice || '0',
+      buy.endPrice || '0',
+      buy.budget || '0',
       Number(buy.startDate),
       Number(buy.endDate),
-      getType(buy) as any,
-      sell.startPrice,
-      sell.endPrice,
-      sell.budget,
+      getType(buy, 'buy') as any,
+      sell.startPrice || '0',
+      sell.endPrice || '0',
+      sell.budget || '0',
       Number(sell.startDate),
       Number(sell.endDate),
-      getType(sell) as any,
+      getType(sell, 'sell') as any,
     );
     const getRawAmount = (token: Token, amount: string) => {
-      return parseUnits(amount, token.decimals).toString();
+      return parseUnits(amount || '0', token.decimals).toString();
     };
     unsignedTx.customData = {
       spender: config.addresses.carbon.gradientController,
