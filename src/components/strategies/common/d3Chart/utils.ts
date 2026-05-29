@@ -3,6 +3,9 @@ import { ChartPrices } from 'components/strategies/common/d3Chart/D3ChartCandles
 import { CandlestickData } from 'libs/d3/types';
 import { useEffect, useState } from 'react';
 
+const ONE_DAY = 24 * 60 * 60;
+const MIN_EXTENDED_RANGE = 365;
+
 export const handleDms = {
   width: 64,
   height: 16,
@@ -105,6 +108,43 @@ export const scaleBandInvert = (scale: ScaleBand<string>) => {
     const index = Math.floor((value - paddingOuter) / eachBand);
     return domain[Math.max(0, Math.min(index, domain.length - 1))];
   };
+};
+
+export const getExtendedRangeSize = (datasize: number) => {
+  return Math.max(datasize, MIN_EXTENDED_RANGE);
+};
+
+const getRangeStep = (range: number[]) => {
+  const first = range[0];
+  const second = range[1];
+  const step = second - first;
+  if (!Number.isFinite(step) || step <= 0) return ONE_DAY;
+  return step;
+};
+
+export const getExtendedRange = (range: number[]) => {
+  const validRange = Array.from(new Set(range.filter(Number.isFinite))).sort(
+    (a, b) => a - b,
+  );
+  if (!validRange.length) return [];
+
+  const points: string[] = [];
+  const size = getExtendedRangeSize(validRange.length);
+  const step =
+    validRange.length >= MIN_EXTENDED_RANGE
+      ? getRangeStep(validRange)
+      : ONE_DAY;
+  const last = validRange.at(-1)!;
+  const first =
+    validRange.length >= MIN_EXTENDED_RANGE
+      ? validRange[0]
+      : last - (size - 1) * step;
+  const start = Math.floor(-0.5 * size);
+  const end = Math.ceil(size * 2);
+  for (let i = start; i < end; i++) {
+    points.push((first + i * step).toString());
+  }
+  return points;
 };
 
 export const isEmptyHistory = (data?: CandlestickData[]) => {
