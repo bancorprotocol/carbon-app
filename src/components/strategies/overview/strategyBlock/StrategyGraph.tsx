@@ -751,10 +751,10 @@ const GradientOrderTooltip: FC<OrderTooltipProps<GradientOrder>> = ({
   const endPrice = useMemo(() => {
     return prettifyNumber(order.endPrice, priceOption);
   }, [order.endPrice, priceOption]);
-  const marginalPrice = useMemo(
-    () => prettifyNumber(order.marginalPrice, priceOption),
-    [order.marginalPrice, priceOption],
-  );
+  const marginalPrice = useMemo(() => {
+    const price = gradientMarginalPrice(order);
+    return prettifyNumber(price, priceOption);
+  }, [order, priceOption]);
   const { quote, base } = strategy;
   const color = isBuy ? 'text-buy' : 'text-sell';
   const startDateText =
@@ -856,14 +856,6 @@ const GradientTime: FC<GradientTimeProps> = ({ strategy }) => {
   }, [base.symbol, sell.startPrice, quote]);
   return (
     <>
-      {buyExist && !buyIsFuture && (
-        <use
-          href="#svg-time-icon"
-          x={17}
-          y={baseline - 30}
-          className="fill-buy"
-        />
-      )}
       {buyExist && buyIsFuture && (
         <FloatTooltip>
           <FloatTooltipTrigger>
@@ -871,7 +863,7 @@ const GradientTime: FC<GradientTimeProps> = ({ strategy }) => {
               href="#svg-time-icon"
               x={17}
               y={baseline - 30}
-              className="fill-main-0/60"
+              className="fill-buy"
             />
           </FloatTooltipTrigger>
           <FloatTooltipContent className="grid gap-8 max-w-330 p-16 text-12 text-main-0/60">
@@ -892,14 +884,6 @@ const GradientTime: FC<GradientTimeProps> = ({ strategy }) => {
           </FloatTooltipContent>
         </FloatTooltip>
       )}
-      {sellExist && !sellIsFuture && (
-        <use
-          href="#svg-time-icon"
-          x={width - 30}
-          y={baseline - 30}
-          className="fill-sell"
-        />
-      )}
       {sellExist && sellIsFuture && (
         <FloatTooltip>
           <FloatTooltipTrigger>
@@ -907,7 +891,7 @@ const GradientTime: FC<GradientTimeProps> = ({ strategy }) => {
               href="#svg-time-icon"
               x={width - 30}
               y={baseline - 30}
-              className="fill-main-0/60"
+              className="fill-sell"
             />
           </FloatTooltipTrigger>
           <FloatTooltipContent className="grid gap-8 max-w-330 p-16 text-12 text-main-0/60">

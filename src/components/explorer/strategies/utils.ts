@@ -13,7 +13,7 @@ export const strategyFilter = {
   type: {
     all: 'All',
     regular: 'Static',
-    gradient: 'Gradient',
+    gradient: 'Time Based',
   },
 };
 export type FilterStatus = keyof (typeof strategyFilter)['status'];

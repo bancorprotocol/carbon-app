@@ -54,7 +54,7 @@ export const TradeChannel = () => {
 
   const priceError = useMemo(() => {
     if (isReverseGradientOrders(buy, sell)) {
-      return 'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid loss of funds.';
+      return 'Sell and Buy auction prices cannot cross. This configuration may result in loss of funds.';
     }
   }, [buy, sell]);
 

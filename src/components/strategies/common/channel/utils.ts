@@ -244,7 +244,7 @@ export const useQuickGradientChannelOrder = (
       startPrice: search.sellStartPrice ?? price.mul(multi).toString(),
       endPrice: search.sellEndPrice ?? price.mul(multi).toString(),
       budget: search.sellBudget ?? '',
-      deltaTime: search.deltaTime ?? '30',
+      deltaTime: search.sellDeltaTime ?? '30',
     };
     const baseSell: QuickGradientOrderBlock = {
       ...baseSellOrder,
@@ -255,7 +255,7 @@ export const useQuickGradientChannelOrder = (
       startPrice: fromDelta(deltaType, baseDelta, baseSell.startPrice),
       endPrice: fromDelta(deltaType, baseDelta, baseSell.endPrice),
       budget: search.buyBudget || '',
-      deltaTime: search.deltaTime ?? '30',
+      deltaTime: search.sellDeltaTime ?? '30',
     };
     const baseBuy: QuickGradientOrderBlock = {
       ...baseBuyOrder,
@@ -268,7 +268,7 @@ export const useQuickGradientChannelOrder = (
     marketPrice,
     multi,
     search.buyBudget,
-    search.deltaTime,
+    search.sellDeltaTime,
     search.sellBudget,
     search.sellEndPrice,
     search.sellStartPrice,
@@ -334,7 +334,7 @@ export const useQuickGradientChannelOrder = (
           deltaPrice: deltaPrice,
           sellStartPrice: sellStart.y.toString(),
           sellEndPrice: sellEnd.y.toString(),
-          deltaTime: sellEnd.x,
+          sellDeltaTime: sellEnd.x,
         });
       }, 200);
       setDelta(deltaPrice);

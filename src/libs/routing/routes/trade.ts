@@ -279,13 +279,13 @@ const quickChannelPage = createRoute({
   path: '/quick-channel',
   component: TradeQuickChannel,
   validateSearch: searchValidator({
-    deltaTime: v.optional(validInputNumber),
     deltaPrice: v.optional(validInputNumber),
     deltaType: v.optional(v.picklist(['percent', 'token'])),
     buyBudget: v.optional(validInputNumber),
     sellStartPrice: v.optional(validInputNumber),
     sellEndPrice: v.optional(validInputNumber),
     sellBudget: v.optional(validInputNumber),
+    sellDeltaTime: v.optional(validInputNumber),
   }),
 });
 const quickTrianglePage = createRoute({
