@@ -208,3 +208,16 @@ export const gradientDateError = (order: FormGradientOrder) => {
     return 'Your order is set in the past and will never be active.';
   }
 };
+
+export const gradientDateFormatter = new Intl.DateTimeFormat(undefined, {
+  month: '2-digit',
+  day: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
+export const formatGradientDate = (timestamp: number | string) => {
+  const date = fromUnixUTC(timestamp);
+  return gradientDateFormatter.format(date);
+};

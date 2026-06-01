@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { StrategyBlockTradeCount } from 'components/strategies/overview/strategyBlock/StrategyBlockTradeCount';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
-import { cn } from 'utils/helpers';
 import { Order, StrategyWithFiat } from 'components/strategies/common/types';
 
 interface Props {
@@ -11,9 +10,8 @@ interface Props {
 export const StrategyBlockInfo: FC<Props> = ({ strategy }) => {
   return (
     <div
-      className={cn('flex gap-16', {
-        'opacity-50': strategy.status !== 'active',
-      })}
+      aria-disabled={strategy.status !== 'active'}
+      className="flex gap-16 aria-disabled:opacity-50"
     >
       <StrategyBlockTradeCount strategy={strategy} />
       <StrategyBlockBudget strategy={strategy} />

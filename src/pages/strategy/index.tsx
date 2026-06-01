@@ -37,6 +37,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { PairChartHistory } from 'components/strategies/common/PairChartHistory';
 import { useMemo } from 'react';
 import { D3ChartToday } from 'components/strategies/common/d3Chart/D3ChartToday';
+import { StrategyBlockDates } from 'components/strategies/overview/strategyBlock/StrategyBlockDates';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
@@ -129,7 +130,7 @@ export const StrategyPage = () => {
         />
       </header>
       <section className="flex justify-center gap-16">
-        <article className="@container/strategy surface grid gap-16 rounded-2xl p-24 min-w-330 sm:min-w-350 w-1/4 aspect-[410/425]">
+        <article className="@container/strategy surface grid gap-16 rounded-2xl p-24 min-w-330 sm:min-w-450 w-1/4 aspect-[410/425]">
           <StrategyBlockInfo strategy={strategy} />
           <div
             className={cn(
@@ -137,12 +138,15 @@ export const StrategyPage = () => {
               strategy.status === 'active' ? '' : 'opacity-50',
             )}
           >
+            <StrategyBlockBuySell strategy={strategy} isBuy>
+              <StrategyBlockDates order={strategy.buy} isBuy />
+            </StrategyBlockBuySell>
             <StrategyBlockBuySell
               strategy={strategy}
-              isBuy
-              className="border-main-800 border-r-2"
-            />
-            <StrategyBlockBuySell strategy={strategy} />
+              className="border-main-800 border-l-2"
+            >
+              <StrategyBlockDates order={strategy.sell} />
+            </StrategyBlockBuySell>
             <div className="border-main-800 col-start-1 col-end-3 border-t-2">
               <StrategyGraph strategy={strategy} />
             </div>
