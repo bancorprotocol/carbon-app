@@ -18,6 +18,7 @@ import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import { TransactionRequest, parseUnits } from 'ethers';
 import config from 'config';
+import { createGradientStrategyParams } from 'components/strategies/common/gradient/utils.sdk';
 
 const batcher = config.addresses.carbon.batcher;
 const getApproveTokens = (strategies: AnyCartStrategy[]) => {
@@ -100,34 +101,47 @@ export const CartPage = () => {
         const txs: TransactionRequest[] = [];
         if (canBatch) {
           for (const strategy of strategies) {
-            if (isGradientStrategy(strategy)) continue;
-            const { base, quote, buy, sell } = strategy;
-            const unsignedTx = await carbonSDK.createBuySellStrategy(
-              base.address,
-              quote.address,
-              buy.min,
-              buy.marginalPrice || buy.max,
-              buy.max,
-              buy.budget,
-              sell.min,
-              sell.marginalPrice || sell.min,
-              sell.max,
-              sell.budget,
-            );
-            unsignedTx.customData = {
-              spender: config.addresses.carbon.carbonController,
-              assets: [
-                {
-                  address: base.address,
-                  rawAmount: getRawAmount(base, sell.budget),
-                },
-                {
-                  address: quote.address,
-                  rawAmount: getRawAmount(quote, buy.budget),
-                },
-              ],
-            };
-            txs.push(unsignedTx);
+            const { base, quote } = strategy;
+            const assets = [
+              {
+                address: base.address,
+                rawAmount: getRawAmount(base, strategy.sell.budget),
+              },
+              {
+                address: quote.address,
+                rawAmount: getRawAmount(quote, strategy.buy.budget),
+              },
+            ];
+            if (isGradientStrategy(strategy)) {
+              const params = createGradientStrategyParams(strategy);
+              const unsignedTx = await carbonSDK.createGradientStrategy(
+                ...params,
+              );
+              unsignedTx.customData = {
+                spender: config.addresses.carbon.carbonController,
+                assets: assets,
+              };
+              txs.push(unsignedTx);
+            } else {
+              const { base, quote, buy, sell } = strategy;
+              const unsignedTx = await carbonSDK.createBuySellStrategy(
+                base.address,
+                quote.address,
+                buy.min,
+                buy.marginalPrice || buy.max,
+                buy.max,
+                buy.budget,
+                sell.min,
+                sell.marginalPrice || sell.min,
+                sell.max,
+                sell.budget,
+              );
+              unsignedTx.customData = {
+                spender: config.addresses.carbon.carbonController,
+                assets: assets,
+              };
+              txs.push(unsignedTx);
+            }
             tokens.add(base.address);
             tokens.add(quote.address);
           }

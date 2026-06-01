@@ -41,7 +41,7 @@
     "@vitest/coverage-v8": "1.6.0",
     "@wagmi/core": "2.14.6",
     "buffer": "6.0.3",
-    "@bancor/carbon-sdk": "0.0.137-DEV",
+    "@bancor/carbon-sdk": "0.0.138-DEV",
     "class-variance-authority": "0.2.4",
     "clsx": "1.2.1",
     "comlink": "4.4.1",

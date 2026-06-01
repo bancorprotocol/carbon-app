@@ -25,7 +25,6 @@ export interface ChannelDelta {
 }
 
 const toDelta = (type: DeltaType, buyPrice: string, sellPrice: string) => {
-  console.log({ type });
   if (type === 'percent') {
     const percent = new SafeDecimal(buyPrice).div(sellPrice);
     const multiplier = new SafeDecimal(1).minus(percent);

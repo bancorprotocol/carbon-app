@@ -1,5 +1,5 @@
 import { FC, FormEvent, MouseEvent, ReactNode, useState } from 'react';
-import { StrategyDirection, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { useWagmi } from 'libs/wagmi';
 import {
@@ -12,19 +12,11 @@ import { FormGradientOrder } from '../types';
 import { carbonSDK } from 'libs/sdk';
 import { Token } from 'libs/tokens';
 import { parseUnits } from 'ethers';
-import { SafeDecimal } from 'libs/safedecimal';
 import { useNotifications } from 'hooks/useNotifications';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
-
-const enum GradientType {
-  LINEAR_INCREASE,
-  LINEAR_DECREASE,
-  LINEAR_INV_INCREASE,
-  LINEAR_INV_DECREASE,
-  EXPONENTIAL_INCREASE,
-  EXPONENTIAL_DECREASE,
-}
+import { createGradientStrategyParams } from './utils.sdk';
+import { useCanBatchTransactions } from 'libs/queries/chain/canBatch';
 
 interface FormProps {
   buy: FormGradientOrder;
@@ -39,6 +31,8 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
   const nav = useNavigate();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
+
+  const canBatch = useCanBatchTransactions();
 
   const [animating, setAnimating] = useState(false);
   const [loadingText, setLoadingText] = useState('');
@@ -82,33 +76,10 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
     e.preventDefault();
     if (!user) return;
     if (isDisabled(e.currentTarget)) return;
-    const getType = (
-      order: FormGradientOrder,
-      direction: StrategyDirection,
-    ) => {
-      const goUp = new SafeDecimal(order.startPrice).lt(order.endPrice);
-      const increase = direction === 'buy' ? goUp : !goUp;
-      return increase
-        ? GradientType.LINEAR_INCREASE
-        : GradientType.LINEAR_DECREASE;
-    };
 
-    const unsignedTx = await carbonSDK.createGradientStrategy(
-      base.address,
-      quote.address,
-      buy.startPrice || '0',
-      buy.endPrice || '0',
-      buy.budget || '0',
-      Number(buy.startDate),
-      Number(buy.endDate),
-      getType(buy, 'buy') as any,
-      sell.startPrice || '0',
-      sell.endPrice || '0',
-      sell.budget || '0',
-      Number(sell.startDate),
-      Number(sell.endDate),
-      getType(sell, 'sell') as any,
-    );
+    const strategy = { base, quote, buy, sell };
+    const params = createGradientStrategyParams(strategy);
+    const unsignedTx = await carbonSDK.createGradientStrategy(...params);
     const getRawAmount = (token: Token, amount: string) => {
       return parseUnits(amount || '0', token.decimals).toString();
     };
@@ -164,7 +135,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
 
       {user && (
         <>
-          {config.ui.showCart && (
+          {config.ui.showCart && !!canBatch.data && (
             <Button
               className="add-cart btn-on-background shrink-0"
               type="button"
