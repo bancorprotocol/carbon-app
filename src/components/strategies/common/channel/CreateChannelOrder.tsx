@@ -6,11 +6,8 @@ import { useGetTokenBalance } from 'libs/queries';
 import { InputBudget } from '../InputBudget';
 import { GradientFullOutcome } from '../gradient/GradientFullOutcome';
 import { SafeDecimal } from 'libs/safedecimal';
-import { DropdownMenu } from 'components/common/dropdownMenu';
-import { Token } from 'libs/tokens';
 import { OrderTitle } from '../OrderTitle';
-import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
-import { ChannelDelta, DeltaType, deltaTypes, toDelta } from './utils';
+import { ChannelDelta, DeltaType } from './utils';
 
 interface Props {
   delta: string;
@@ -21,13 +18,8 @@ interface Props {
   setBuy: (order: Partial<GradientOrderBlock>) => any;
 }
 
-const getType = (deltaType: DeltaType, quote: Token) => {
-  if (deltaType === 'percent') return '%';
-  return quote.symbol;
-};
-
 export const ChannelOrder: FC<Props> = (props) => {
-  const { delta, type, sell, buy, setBuy, setDelta } = props;
+  const { delta, buy, setBuy, setDelta } = props;
   const { base, quote } = useStrategyFormCtx();
   const budgetToken = buy.direction === 'buy' ? quote : base;
 
@@ -41,11 +33,6 @@ export const ChannelOrder: FC<Props> = (props) => {
     if (new SafeDecimal(balance.data).gte(buy.budget || '0')) return;
     return 'Insufficient balance';
   })();
-
-  const setDeltaType = (deltaType: DeltaType) => {
-    const delta = toDelta(deltaType, buy.startPrice, sell.startPrice);
-    setDelta({ deltaPrice: delta, deltaType });
-  };
 
   return (
     <article className="grid gap-16" aria-labelledby={titleId}>
@@ -62,34 +49,8 @@ export const ChannelOrder: FC<Props> = (props) => {
           </p>
         </hgroup>
         <div className="input-container flex items-center gap-8 rounded-2xl p-0">
-          <DropdownMenu
-            className="grid gap-8 min-w-[150px] p-8"
-            button={(attr) => (
-              <button
-                className="flex items-center gap-8 px-16 py-8 rounded-s-2xl hover:bg-main-900/40"
-                type="button"
-                {...attr}
-              >
-                {getType(type, quote)}
-                <KeyboardArrowDownIcon className="size-24" />
-              </button>
-            )}
-          >
-            {deltaTypes.map((deltaType) => (
-              <button
-                key={deltaType}
-                className="rounded-sm py-8 px-16 hover:bg-main-900/40 aria-checked:bg-main-900/60"
-                role="menuitem"
-                aria-checked={deltaType === type}
-                onClick={() => setDeltaType(deltaType)}
-              >
-                {getType(deltaType, quote)}
-              </button>
-            ))}
-          </DropdownMenu>
-          <hr className="w-1 h-full border border-main-500/80" />
           <label
-            className="text-12 text-main-0/60 font-weight-500"
+            className="text-12 text-main-0/60 font-weight-500 px-16 py-8"
             htmlFor={deltaId}
           >
             Delta

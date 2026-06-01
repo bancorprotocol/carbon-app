@@ -24,31 +24,14 @@ export interface ChannelDelta {
   deltaPrice?: string;
 }
 
-export const toDelta = (
-  type: DeltaType,
-  buyPrice: string,
-  sellPrice: string,
-) => {
+const toDelta = (type: DeltaType, buyPrice: string, sellPrice: string) => {
+  console.log({ type });
   if (type === 'percent') {
     const percent = new SafeDecimal(buyPrice).div(sellPrice);
     const multiplier = new SafeDecimal(1).minus(percent);
     return multiplier.mul(100).toFixed(2);
   } else {
     return new SafeDecimal(sellPrice).minus(buyPrice).toString();
-  }
-};
-export const fromDelta = (
-  type: DeltaType,
-  delta: string,
-  otherPrice: string,
-) => {
-  const price = new SafeDecimal(otherPrice);
-  if (type === 'percent') {
-    const percent = new SafeDecimal(delta).div(100);
-    const multiplier = new SafeDecimal(1).minus(percent);
-    return price.mul(multiplier).toString();
-  } else {
-    return price.minus(delta).toString();
   }
 };
 
@@ -84,11 +67,25 @@ export const useGradientChannelOrder = (
   const multi =
     isStable(search.base!) && isStable(search.quote!) ? 1.001 : 1.01;
 
-  const deltaType = search.deltaType ?? 'percent';
-  const baseDelta =
-    search.deltaPrice ?? new SafeDecimal(multi).sub(1).mul(200).toString();
+  const deltaType = search.deltaType ?? 'token';
 
   const { baseBuy, baseSell } = useMemo(() => {
+    const fromDelta = (otherPrice: string) => {
+      const price = new SafeDecimal(otherPrice);
+      if (!search.deltaPrice) {
+        const delta = new SafeDecimal(multi).sub(1).mul(200).toString();
+        const percent = new SafeDecimal(delta).div(100);
+        const multiplier = new SafeDecimal(1).minus(percent);
+        return price.mul(multiplier).toString();
+      }
+      if (deltaType === 'percent') {
+        const percent = new SafeDecimal(search.deltaPrice).div(100);
+        const multiplier = new SafeDecimal(1).minus(percent);
+        return price.mul(multiplier).toString();
+      } else {
+        return price.minus(search.deltaPrice).toString();
+      }
+    };
     const price = new SafeDecimal(marketPrice ?? 0);
     const baseSellOrder = {
       direction: 'sell' as const,
@@ -104,8 +101,8 @@ export const useGradientChannelOrder = (
     };
     const baseBuyOrder = {
       direction: 'buy' as const,
-      startPrice: fromDelta(deltaType, baseDelta, baseSell.startPrice),
-      endPrice: fromDelta(deltaType, baseDelta, baseSell.endPrice),
+      startPrice: fromDelta(baseSell.startPrice),
+      endPrice: fromDelta(baseSell.endPrice),
       startDate: baseSell.startDate,
       endDate: baseSell.endDate,
       budget: search.buyBudget || '',
@@ -116,11 +113,11 @@ export const useGradientChannelOrder = (
     };
     return { baseBuy, baseSell };
   }, [
-    baseDelta,
     deltaType,
     marketPrice,
     multi,
     search.buyBudget,
+    search.deltaPrice,
     search.sellBudget,
     search.sellEndDate,
     search.sellEndPrice,
@@ -130,11 +127,16 @@ export const useGradientChannelOrder = (
 
   const [sell, setSell] = useState(baseBuy);
   const [buy, setBuy] = useState(baseSell);
-  const [deltaPrice, setDeltaPrice] = useState(search.deltaPrice ?? '2');
+  const [deltaPrice, setDeltaPrice] = useState(
+    toDelta(deltaType, baseBuy.startPrice, baseSell.startPrice),
+  );
 
   useEffect(() => setSell(baseSell), [baseSell]);
   useEffect(() => setBuy(baseBuy), [baseBuy]);
-  useEffect(() => setDeltaPrice(baseDelta), [baseDelta]);
+  useEffect(() => {
+    const delta = toDelta(deltaType, baseBuy.startPrice, baseSell.startPrice);
+    setDeltaPrice(delta);
+  }, [baseBuy.startPrice, baseSell.startPrice, deltaType]);
 
   const drawing = useMemo<Drawing>(
     () => ({
@@ -233,11 +235,25 @@ export const useQuickGradientChannelOrder = (
   const multi =
     isStable(search.base!) && isStable(search.quote!) ? 1.001 : 1.01;
 
-  const deltaType = search.deltaType ?? 'percent';
-  const baseDelta =
-    search.deltaPrice ?? new SafeDecimal(multi).sub(1).mul(200).toString();
+  const deltaType = search.deltaType ?? 'token';
 
   const { baseBuy, baseSell } = useMemo(() => {
+    const fromDelta = (otherPrice: string) => {
+      const price = new SafeDecimal(otherPrice);
+      if (!search.deltaPrice) {
+        const delta = new SafeDecimal(multi).sub(1).mul(200).toString();
+        const percent = new SafeDecimal(delta).div(100);
+        const multiplier = new SafeDecimal(1).minus(percent);
+        return price.mul(multiplier).toString();
+      }
+      if (deltaType === 'percent') {
+        const percent = new SafeDecimal(search.deltaPrice).div(100);
+        const multiplier = new SafeDecimal(1).minus(percent);
+        return price.mul(multiplier).toString();
+      } else {
+        return price.minus(search.deltaPrice).toString();
+      }
+    };
     const price = new SafeDecimal(marketPrice ?? 0);
     const baseSellOrder = {
       direction: 'sell' as const,
@@ -252,8 +268,8 @@ export const useQuickGradientChannelOrder = (
     };
     const baseBuyOrder = {
       direction: 'buy' as const,
-      startPrice: fromDelta(deltaType, baseDelta, baseSell.startPrice),
-      endPrice: fromDelta(deltaType, baseDelta, baseSell.endPrice),
+      startPrice: fromDelta(baseSell.startPrice),
+      endPrice: fromDelta(baseSell.endPrice),
       budget: search.buyBudget || '',
       deltaTime: search.sellDeltaTime ?? '30',
     };
@@ -263,24 +279,29 @@ export const useQuickGradientChannelOrder = (
     };
     return { baseBuy, baseSell };
   }, [
-    baseDelta,
-    deltaType,
     marketPrice,
-    multi,
-    search.buyBudget,
-    search.sellDeltaTime,
-    search.sellBudget,
-    search.sellEndPrice,
     search.sellStartPrice,
+    search.sellEndPrice,
+    search.sellBudget,
+    search.sellDeltaTime,
+    search.buyBudget,
+    search.deltaPrice,
+    multi,
+    deltaType,
   ]);
 
   const [sell, setSell] = useState(baseBuy);
   const [buy, setBuy] = useState(baseSell);
-  const [deltaPrice, setDelta] = useState(search.deltaPrice ?? '2');
+  const [deltaPrice, setDelta] = useState(
+    toDelta(deltaType, baseBuy.startPrice, baseSell.startPrice),
+  );
 
   useEffect(() => setSell(baseSell), [baseSell]);
   useEffect(() => setBuy(baseBuy), [baseBuy]);
-  useEffect(() => setDelta(baseDelta), [baseDelta]);
+  useEffect(() => {
+    const delta = toDelta(deltaType, baseBuy.startPrice, baseSell.startPrice);
+    setDelta(delta);
+  }, [baseBuy.startPrice, baseSell.startPrice, deltaType]);
 
   const drawing = useMemo<Drawing>(
     () => ({
