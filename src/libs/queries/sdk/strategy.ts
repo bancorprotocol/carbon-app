@@ -23,7 +23,7 @@ import {
   isGradientStrategyId,
   isZero,
 } from 'components/strategies/common/utils';
-import { AnyStrategyAPI } from 'libs/queries/extApi/strategy';
+import { AnyStrategyAPI, StaticOrderAPI } from 'libs/queries/extApi/strategy';
 import { carbonApi } from 'services/carbonApi';
 import { useMemo } from 'react';
 import config from 'config';
@@ -59,6 +59,12 @@ const buildStrategyFromAPI = (
       },
     };
   } else {
+    // TODO: remove after gradient is merged
+    const toOrder = (order: StaticOrderAPI): StaticOrderAPI => ({
+      ...order,
+      marginalPrice:
+        'marginal' in order ? (order.marginal as string) : order.marginalPrice,
+    });
     const { buy, sell } = s;
     return {
       type: 'regular',
@@ -66,8 +72,8 @@ const buildStrategyFromAPI = (
       idDisplay: getLowestBits(s.id),
       base,
       quote,
-      buy,
-      sell,
+      buy: toOrder(buy),
+      sell: toOrder(sell),
       owner: s.owner,
       status: getStrategyStatus({ buy, sell }),
       encoded: {
