@@ -16,6 +16,7 @@ export const strategyFilter = {
     gradient: 'Time Based',
   },
 };
+
 export type FilterStatus = keyof (typeof strategyFilter)['status'];
 export type FilterType = keyof (typeof strategyFilter)['type'];
 export type AllFilter = FilterStatus | FilterType;

@@ -12,6 +12,9 @@ import {
   strategySort,
   StrategySort,
 } from './utils';
+import config from 'config';
+
+const hasGradient = !!config.addresses.carbon.gradientController;
 
 const sortItems = Object.entries(strategySort)
   .filter(([, title]) => !!title)
@@ -136,18 +139,20 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
           />
         ))}
       </fieldset>
-      <fieldset onChange={onFilterTypeChange}>
-        <legend className="text-14 px-16 py-8 text-main-0/60">Type</legend>
-        {Object.entries(strategyFilter.type).map(([key, label]) => (
-          <FilterSortItem
-            name="filter-type"
-            key={key}
-            item={key as FilterType}
-            title={label}
-            selectedItem={filter.type}
-          />
-        ))}
-      </fieldset>
+      {hasGradient && (
+        <fieldset onChange={onFilterTypeChange}>
+          <legend className="text-14 px-16 py-8 text-main-0/60">Type</legend>
+          {Object.entries(strategyFilter.type).map(([key, label]) => (
+            <FilterSortItem
+              name="filter-type"
+              key={key}
+              item={key as FilterType}
+              title={label}
+              selectedItem={filter.type}
+            />
+          ))}
+        </fieldset>
+      )}
     </DropdownMenu>
   );
 };

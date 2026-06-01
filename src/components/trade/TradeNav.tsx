@@ -13,6 +13,7 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { FC, Fragment, useMemo } from 'react';
 import { useMenuCtx } from 'components/common/dropdownMenu/utils';
 import { cn } from 'utils/helpers';
+import config from 'config';
 import style from './TradeNav.module.css';
 
 type StrategyLink =
@@ -22,12 +23,15 @@ type ActivePage = {
   strategy: string;
 };
 
+const hasGradient = !!config.addresses.carbon.gradientController;
+
 const types = [
   {
     id: 'essentials',
     title: 'Essentials',
     groups: [
       {
+        type: 'regular' as const,
         label: '',
         strategies: [
           {
@@ -63,6 +67,7 @@ const types = [
     title: 'Intermediate',
     groups: [
       {
+        type: 'regular' as const,
         label: 'Price based strategies',
         strategies: [
           {
@@ -92,6 +97,7 @@ const types = [
         ],
       },
       {
+        type: 'gradient' as const,
         label: 'Time based strategies',
         strategies: [
           {
@@ -127,6 +133,7 @@ const types = [
     title: 'Advanced',
     groups: [
       {
+        type: 'regular' as const,
         label: 'Price based strategies',
         strategies: [
           {
@@ -156,6 +163,7 @@ const types = [
         ],
       },
       {
+        type: 'gradient' as const,
         label: 'Time based strategies',
         strategies: [
           {
@@ -246,7 +254,8 @@ export const TradeNav = () => {
               <span className="text-14 sm:text-18 2xl:justify-self-start self-center">
                 {title}
               </span>
-              {groups.map(({ strategies }) => {
+              {groups.map(({ type, strategies }) => {
+                if (type === 'gradient' && !hasGradient) return;
                 return strategies.map(({ id, name, icon }) => (
                   <p
                     key={name}
@@ -262,20 +271,23 @@ export const TradeNav = () => {
             </button>
           )}
         >
-          {groups.map(({ label, strategies }) => (
-            <Fragment key={label}>
-              {label && (
-                <h4 className="text-12 text-main-0/60 px-8">{label}</h4>
-              )}
-              {strategies.map((strategy) => (
-                <StrategyLink
-                  key={strategy.name}
-                  strategy={strategy}
-                  selected={active?.strategy === strategy.id}
-                />
-              ))}
-            </Fragment>
-          ))}
+          {groups.map(({ type, label, strategies }) => {
+            if (type === 'gradient' && !hasGradient) return;
+            return (
+              <Fragment key={label}>
+                {label && (
+                  <h4 className="text-12 text-main-0/60 px-8">{label}</h4>
+                )}
+                {strategies.map((strategy) => (
+                  <StrategyLink
+                    key={strategy.name}
+                    strategy={strategy}
+                    selected={active?.strategy === strategy.id}
+                  />
+                ))}
+              </Fragment>
+            );
+          })}
         </DropdownMenu>
       ))}
     </div>
