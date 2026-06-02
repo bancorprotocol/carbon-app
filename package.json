@@ -10,7 +10,7 @@
     "@floating-ui/dom": "^1.7.4",
     "@floating-ui/react": "0.27.16",
     "@oddbird/popover-polyfill": "0.6.1",
-    "@playwright/test": "1.52.0",
+    "@playwright/test": "1.60.0",
     "@sentry/react": "8.17.0",
     "@sentry/vite-plugin": "2.21.1",
     "@tailwindcss/vite": "^4.1.11",

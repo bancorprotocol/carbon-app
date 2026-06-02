@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { waitModalOpen } from './../../../utils/modal';
-import { Page } from 'playwright-core';
+import { Page } from '@playwright/test';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import {
   CreateStrategyTestCase,
@@ -10,7 +10,7 @@ import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const pauseStrategy = async (
   page: Page,
-  testCase: CreateStrategyTestCase
+  testCase: CreateStrategyTestCase,
 ) => {
   const manage = new ManageStrategyDriver(page);
   const tokenApproval = new TokenApprovalDriver(page);

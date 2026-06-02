@@ -4,7 +4,7 @@ import {
 } from './../../utils/DebugDriver';
 import { navigateTo } from './../../utils/operators';
 import { MyStrategyDriver } from './../../utils/strategy/MyStrategyDriver';
-import { Page } from 'playwright-core';
+import { Page } from '@playwright/test';
 import { CreateStrategyTestCase } from './types';
 import { PortfolioDriver } from './PortfolioDriver';
 

@@ -1,4 +1,4 @@
-import { Page } from 'playwright-core';
+import { Page } from '@playwright/test';
 import { CreateStrategyTestCase, SimulatorChartTypes } from './types';
 import { Direction } from '../types';
 import { screenshot, waitFor } from '../operators';
@@ -6,7 +6,10 @@ import { screenshotPath } from './utils';
 import { MainMenuDriver } from '../MainMenuDriver';
 
 export class SimulationResultDriver {
-  constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
+  constructor(
+    private page: Page,
+    private testCase: CreateStrategyTestCase,
+  ) {}
 
   waitForChartElement() {
     return waitFor(this.page, 'chart-tab-animation');
@@ -28,7 +31,7 @@ export class SimulationResultDriver {
     await mainMenu.hide();
     await screenshot(
       animationChart,
-      screenshotPath(this.testCase, 'simulator-results-animation')
+      screenshotPath(this.testCase, 'simulator-results-animation'),
     );
     await mainMenu.show();
   }
@@ -41,7 +44,7 @@ export class SimulationResultDriver {
     await mainMenu.hide();
     await screenshot(
       summaryChart,
-      screenshotPath(this.testCase, 'simulator-results-summary')
+      screenshotPath(this.testCase, 'simulator-results-summary'),
     );
     await mainMenu.show();
   }

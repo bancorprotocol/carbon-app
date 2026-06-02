@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { Page } from 'playwright-core';
+import { Page } from '@playwright/test';
 import { MainMenuDriver } from '../MainMenuDriver';
 import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
 import { CreateStrategyTestCase, StrategyType } from './types';
@@ -15,7 +15,10 @@ import { waitTooltipsClose } from '../modal';
 type EditType = 'deposit' | 'withdraw' | 'renew' | 'editPrices';
 
 export class EditStrategyDriver {
-  constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
+  constructor(
+    private page: Page,
+    private testCase: CreateStrategyTestCase,
+  ) {}
 
   async waitForPage(strategyType: StrategyType, editType: EditType) {
     const options = { timeout: 10_000 };
@@ -34,7 +37,7 @@ export class EditStrategyDriver {
   async waitForLoading() {
     const loadings = await this.page.locator('.loading-message').all();
     return Promise.all(
-      loadings.map((loading) => loading.waitFor({ state: 'detached' }))
+      loadings.map((loading) => loading.waitFor({ state: 'detached' })),
     );
   }
 
@@ -113,7 +116,7 @@ export class EditStrategyDriver {
     direction: Direction,
     setting: Setting,
     order: MinMax,
-    type: EditType
+    type: EditType,
   ) {
     const form = this.getPriceSection(direction);
     await form.setting(setting).click();

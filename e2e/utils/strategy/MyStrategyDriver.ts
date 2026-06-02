@@ -1,5 +1,5 @@
 import { waitFor } from './../../utils/operators';
-import { Page } from 'playwright-core';
+import { Page } from '@playwright/test';
 import { Direction } from '../types';
 import { MainMenuDriver } from '../MainMenuDriver';
 

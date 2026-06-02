@@ -1,4 +1,4 @@
-import { Page } from 'playwright-core';
+import { Page } from '@playwright/test';
 import marketRate from '../mocks/market-rates.json' with { type: 'json' };
 import roi from '../mocks/roi.json' with { type: 'json' };
 import historyPrices from '../mocks/history-prices.json' with { type: 'json' };

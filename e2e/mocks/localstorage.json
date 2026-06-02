@@ -6,6 +6,6 @@
     "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
     "0x2730d6FdC86C95a74253BefFaA8306B40feDecbb"
   ],
-  "tenderlyRpc": "https://virtual.mainnet.eu.rpc.tenderly.co/4c55c851-ae20-4726-a572-21e291d6bd57",
-  "carbonApi": "https://carbon-multi-endpoint-staging-152368584642.europe-west2.run.app/v1/proxy/d0852fd4-e587-4826-8765-9c80348cec8d/"
+  "tenderlyRpc": "https://virtual.mainnet.eu.rpc.tenderly.co/59b5cba7-408d-4ae7-94ad-a5972a5c3fee",
+  "carbonApi": ""
 }
