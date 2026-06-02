@@ -224,7 +224,7 @@ export const ConnectedLandingPage = () => {
             hidden={active !== id}
             aria-labelledby={`tab-${id}`}
           >
-            <ul className="place-self-center flex gap-24 flex-wrap justify-center">
+            <ul className="place-self-center flex gap-24 flex-wrap justify-center max-w-1200">
               {items.map((item) => (
                 <li
                   key={item.title}
