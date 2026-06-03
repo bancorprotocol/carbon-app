@@ -8,7 +8,7 @@ import {
   QuickGradientOrderBlock,
   GradientOrderBlock,
 } from '../types';
-import { addDays, endOfDay, getUnixTime, isToday, startOfDay } from 'date-fns';
+import { addDays, endOfDay, isToday, startOfDay } from 'date-fns';
 import { SafeDecimal } from 'libs/safedecimal';
 import { StrategyDirection } from 'libs/routing';
 import { Token } from 'libs/tokens';
@@ -21,19 +21,28 @@ export const gradientMarginalPrice = (
 ) => {
   if (isEmptyGradientOrder(order)) return '0';
   if (isOrderInPast(order)) return '0';
-  const { startPrice, endPrice } = order;
-  const startDate = toUnixUTC(orderStartDate(order.startDate));
-  const endDate = toUnixUTC(orderEndDate(order.endDate));
-  // k = (endPrice - startPrice) / (startPrice * (endDate - startDate))
-  const numerator = new SafeDecimal(endPrice).minus(startPrice);
-  const denominator = new SafeDecimal(endDate).minus(startDate).mul(startPrice);
-  const k = numerator.div(denominator);
-  const deltaTime = new SafeDecimal(getUnixTime(date)).minus(startDate);
-  // marginal = startPrice * (k * (now - startDate) + 1)
-  const marginalPrice = new SafeDecimal(startPrice).mul(
-    k.mul(deltaTime).add(1),
-  );
-  return marginalPrice.toString();
+  const now = toUnixUTC(date);
+  const { startPrice, endPrice, startDate, endDate } = order;
+  const totalDuration = new SafeDecimal(endDate).minus(startDate);
+  const elapsed = new SafeDecimal(now).minus(startDate);
+  const t = elapsed.div(totalDuration);
+  const delta = new SafeDecimal(endPrice).minus(startPrice);
+  // startPrice + t*delta
+  const marginal = new SafeDecimal(startPrice).add(t.mul(delta));
+  return marginal.toString();
+
+  // const startDate = toUnixUTC(orderStartDate(order.startDate));
+  // const endDate = toUnixUTC(orderEndDate(order.endDate));
+  // // k = (endPrice - startPrice) / (startPrice * (endDate - startDate))
+  // const numerator = new SafeDecimal(endPrice).minus(startPrice);
+  // const denominator = new SafeDecimal(endDate).minus(startDate).mul(startPrice);
+  // const k = numerator.div(denominator);
+  // const deltaTime = new SafeDecimal(getUnixTime(date)).minus(startDate);
+  // // marginal = startPrice * (k * (now - startDate) + 1)
+  // const marginalPrice = new SafeDecimal(startPrice).mul(
+  //   k.mul(deltaTime).add(1),
+  // );
+  // return marginalPrice.toString();
 };
 
 const today = new Date();
