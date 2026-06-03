@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { StrategyBlockTradeCount } from 'components/strategies/overview/strategyBlock/StrategyBlockTradeCount';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
-import { Order, StrategyWithFiat } from 'components/strategies/common/types';
+import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import { StrategyCountDown } from './StrategyCountDown';
 
 interface Props {
-  strategy: StrategyWithFiat<Order>;
+  strategy: AnyStrategyWithFiat;
 }
 
 export const StrategyBlockInfo: FC<Props> = ({ strategy }) => {
@@ -21,7 +21,6 @@ export const StrategyBlockInfo: FC<Props> = ({ strategy }) => {
       ) : (
         <StrategyBlockTradeCount strategy={strategy} />
       )}
-
       <StrategyBlockBudget strategy={strategy} />
     </div>
   );
