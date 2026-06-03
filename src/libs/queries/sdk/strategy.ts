@@ -108,6 +108,7 @@ export const useGetAllStrategies = (options: { enabled: boolean }) => {
       const response = await carbonApi.getStrategies({ pageSize: 0 });
       return buildAPIStrategiesHelper(response.strategies, getTokenById);
     },
+    refetchInterval: 30_000,
     enabled: options?.enabled && !isPending,
     retry: false,
   });

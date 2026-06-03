@@ -25,24 +25,12 @@ export const gradientMarginalPrice = (
   const { startPrice, endPrice, startDate, endDate } = order;
   const totalDuration = new SafeDecimal(endDate).minus(startDate);
   const elapsed = new SafeDecimal(now).minus(startDate);
-  const t = elapsed.div(totalDuration);
+  const tRaw = elapsed.div(totalDuration);
+  const t = SafeDecimal.clamp(tRaw, 0, 1);
   const delta = new SafeDecimal(endPrice).minus(startPrice);
   // startPrice + t*delta
   const marginal = new SafeDecimal(startPrice).add(t.mul(delta));
   return marginal.toString();
-
-  // const startDate = toUnixUTC(orderStartDate(order.startDate));
-  // const endDate = toUnixUTC(orderEndDate(order.endDate));
-  // // k = (endPrice - startPrice) / (startPrice * (endDate - startDate))
-  // const numerator = new SafeDecimal(endPrice).minus(startPrice);
-  // const denominator = new SafeDecimal(endDate).minus(startDate).mul(startPrice);
-  // const k = numerator.div(denominator);
-  // const deltaTime = new SafeDecimal(getUnixTime(date)).minus(startDate);
-  // // marginal = startPrice * (k * (now - startDate) + 1)
-  // const marginalPrice = new SafeDecimal(startPrice).mul(
-  //   k.mul(deltaTime).add(1),
-  // );
-  // return marginalPrice.toString();
 };
 
 const today = new Date();
