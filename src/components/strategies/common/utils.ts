@@ -169,12 +169,10 @@ export const getStrategyType = (strategy: OrdersInput) => {
 
 export const isPaused = (strategy: OrdersInput) => {
   if (isGradientStrategy(strategy)) {
+    if (isInPast(strategy)) return true;
+    if (isInFuture(strategy)) return true;
     return (
-      (isZero(strategy.buy.startPrice) &&
-        isZero(strategy.buy.endPrice) &&
-        isZero(strategy.sell.startPrice) &&
-        isZero(strategy.sell.endPrice)) ||
-      isInPast(strategy)
+      isEmptyGradientOrder(strategy.buy) && isEmptyGradientOrder(strategy.sell)
     );
   } else {
     return (

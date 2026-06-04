@@ -82,18 +82,8 @@ const CountDown: FC<CountDownProps> = ({ remaining, container }) => {
   const belowTen = useMemo(() => minutes < 10, [minutes]);
 
   useEffect(() => {
-    const colons = container.current?.querySelectorAll('.colon') ?? [];
-    for (const colon of colons) {
-      colon.animate([{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }], {
-        duration: 1000,
-        iterations: Infinity,
-        easing: 'steps(2, end)',
-      });
-    }
-    return () => colons.forEach(cancelAnimations);
-  }, [container]);
-
-  useEffect(() => {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduce.matches) return;
     if (belowTen) {
       const p = container.current;
       p?.animate([{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }], {
@@ -102,6 +92,16 @@ const CountDown: FC<CountDownProps> = ({ remaining, container }) => {
         easing: 'steps(2, end)',
       });
       return () => cancelAnimations(p);
+    } else {
+      const colons = container.current?.querySelectorAll('.colon') ?? [];
+      for (const colon of colons) {
+        colon.animate([{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }], {
+          duration: 1000,
+          iterations: Infinity,
+          easing: 'steps(2, end)',
+        });
+      }
+      return () => colons.forEach(cancelAnimations);
     }
   }, [container, belowTen]);
 

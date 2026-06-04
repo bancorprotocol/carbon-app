@@ -99,14 +99,16 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
     const tx = await sendTransaction(unsignedTx);
     dispatchNotification('createStrategy', { txHash: tx.hash });
     await tx.wait();
-    const keys = [
-      QueryKey.strategyAll(),
-      QueryKey.balance(user, base.address),
-      QueryKey.balance(user, quote.address),
-    ];
-    for (const queryKey of keys) {
-      cache.invalidateQueries({ queryKey });
-    }
+    setTimeout(() => {
+      const keys = [
+        QueryKey.strategyAll(),
+        QueryKey.balance(user, base.address),
+        QueryKey.balance(user, quote.address),
+      ];
+      for (const queryKey of keys) {
+        cache.invalidateQueries({ queryKey });
+      }
+    }, 3000);
     nav({ to: '/portfolio/strategies' });
   };
 
