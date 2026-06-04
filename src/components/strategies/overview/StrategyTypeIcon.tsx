@@ -8,6 +8,6 @@ interface Props {
 }
 
 export const StrategyTypeIcon = ({ isGradient, className }: Props) => {
-  if (isGradient) return <HourglassIcon className={cn('size-20', className)} />;
-  return <AllInclusiveIcon className={cn('size-20', className)} />;
+  if (isGradient) return <HourglassIcon className={cn('size-16', className)} />;
+  return <AllInclusiveIcon className={cn('size-16', className)} />;
 };
