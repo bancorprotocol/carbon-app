@@ -20,8 +20,21 @@ import { QueryKey } from 'libs/queries';
 import CloseIcon from 'assets/icons/close.svg?react';
 import { MigrationCard } from './MigrationCard';
 import { DotPulse } from 'components/common/DotPulse/DotPulse';
-import config from 'config';
 import { carbonEvents } from 'services/events';
+import { Token } from 'libs/tokens';
+import config, { network } from 'config';
+
+/**
+ * Transform token address from uniswap if needed
+ * - In celo: transform ERC20 Celo into native Celo
+ */
+const transformAddress = (token: Token) => {
+  if (network === 'celo') {
+    const { CELO_ERC20, CELO } = config.addresses.tokens;
+    if (token.address === CELO_ERC20) return CELO;
+  }
+  return token.address;
+};
 
 interface Props {
   position: MigratedPosition;
@@ -98,8 +111,8 @@ export const PositionDialog: FC<Props> = (props) => {
     }
 
     const unsignedTx = await carbonSDK.createBuySellStrategy(
-      base.address,
-      quote.address,
+      transformAddress(base),
+      transformAddress(quote),
       buy.min,
       buy.marginalPrice,
       buy.max,
