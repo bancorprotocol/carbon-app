@@ -1,7 +1,7 @@
 import { toUnixUTC } from 'components/simulator/utils';
 import { GradientOrder, Strategy } from 'components/strategies/common/types';
 import { isEmptyGradientOrder } from 'components/strategies/common/utils';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, RefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 interface Props {
   strategy: Strategy<GradientOrder>;
@@ -11,28 +11,10 @@ const M = 60;
 const H = 60 * M;
 const D = 24 * H;
 
-const getRemaining = (min: number, max: number) => {
-  const now = Number(toUnixUTC(new Date()));
-  console.log({
-    min: new Date(min * 1000),
-    max: new Date(max * 1000),
-    now: new Date(now * 1000),
-  });
+const getRemaining = (min: number, max: number, now: number) => {
   if (now < min) return 0;
   if (now > max) return 0;
   return max - now;
-};
-
-const formatCountDown = (remaining: number) => {
-  const days = Math.floor(remaining / D);
-  const hours = Math.floor((remaining % D) / H);
-  const minutes = Math.floor((remaining % H) / M);
-  const seconds = remaining % M;
-  if (days) {
-    return `${days}d ${hours}h ${minutes}m`;
-  } else {
-    return `${hours}h ${minutes}m ${seconds}s`;
-  }
 };
 
 export const StrategyCountDown: FC<Props> = ({ strategy }) => {
@@ -47,28 +29,109 @@ export const StrategyCountDown: FC<Props> = ({ strategy }) => {
       max: Math.max(...ends),
     };
   }, [strategy.buy, strategy.sell]);
-  const now = Number(toUnixUTC(new Date()));
-
-  const [remaining, setRemaining] = useState(() => getRemaining(min, max));
+  const containerRef = useRef<HTMLParagraphElement | null>(null);
+  const [now, setNow] = useState(() => Number(toUnixUTC(new Date())));
+  const [remaining, setRemaining] = useState(() => getRemaining(min, max, now));
+  const hasCountdown = remaining > 0;
 
   useEffect(() => {
-    setRemaining(getRemaining(min, max));
-    const interval = setInterval(() => {
-      setRemaining(getRemaining(min, max));
-    }, 1000);
+    const update = () => {
+      const now = Number(toUnixUTC(new Date()));
+      const remaining = getRemaining(min, max, now);
+      setNow(now);
+      setRemaining(remaining);
+    };
+    update();
+    const interval = setInterval(() => update(), 1000);
     return () => clearInterval(interval);
   }, [min, max]);
+
+  const textClassName =
+    'flex items-center gap-4 text-18 font-medium truncate @xs/strategy:text-24';
 
   return (
     <article className="grid bg-main-900/40 rounded-md border-main-800 border p-16 w-3/5">
       <h4 className="text-12 flex items-center gap-4 text-main-0/60 self-start">
         Countdown
       </h4>
-      <p className="grid items-center text-18 font-medium truncate @xs/strategy:text-24">
+      <p ref={containerRef} className={textClassName}>
         {now < min && <span className="text-primary">Starting Soon</span>}
         {now > max && <span className="text-warning">Expired</span>}
-        {!!remaining && formatCountDown(remaining)}
+        {hasCountdown && (
+          <CountDown container={containerRef} remaining={remaining} />
+        )}
       </p>
     </article>
   );
+};
+
+const pad = (value: number) => value.toString().padStart(2, '0');
+const cancelAnimations = (el: Element | null) => {
+  el?.getAnimations().forEach((a) => a.cancel());
+};
+
+interface CountDownProps {
+  remaining: number;
+  container: RefObject<HTMLParagraphElement | null>;
+}
+const CountDown: FC<CountDownProps> = ({ remaining, container }) => {
+  const days = Math.floor(remaining / D);
+  const hours = Math.floor((remaining % D) / H);
+  const minutes = Math.floor((remaining % H) / M);
+  const seconds = remaining % M;
+  const belowTen = useMemo(() => minutes < 10, [minutes]);
+
+  useEffect(() => {
+    const colons = container.current?.querySelectorAll('.colon') ?? [];
+    for (const colon of colons) {
+      colon.animate([{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }], {
+        duration: 1000,
+        iterations: Infinity,
+        easing: 'steps(2, end)',
+      });
+    }
+    return () => colons.forEach(cancelAnimations);
+  }, [container]);
+
+  useEffect(() => {
+    if (belowTen) {
+      const p = container.current;
+      p?.animate([{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }], {
+        duration: 1000,
+        iterations: Infinity,
+        easing: 'steps(2, end)',
+      });
+      return () => cancelAnimations(p);
+    }
+  }, [container, belowTen]);
+
+  if (days) {
+    return (
+      <>
+        <span>{pad(days)}d</span>
+        <span className="colon" aria-hidden>
+          :
+        </span>
+        <span>{pad(hours)}h</span>
+        <span className="colon" aria-hidden>
+          :
+        </span>
+        <span>{minutes}m</span>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <span>{pad(hours)}h</span>
+        <span className="colon" aria-hidden>
+          :
+        </span>
+        <span>{pad(minutes)}m</span>
+        <span className="colon" aria-hidden>
+          :
+        </span>
+        <span>{pad(seconds)}s</span>
+      </>
+    );
+  }
 };
