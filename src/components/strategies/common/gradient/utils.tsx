@@ -12,7 +12,7 @@ import { addDays, endOfDay, isToday, startOfDay } from 'date-fns';
 import { SafeDecimal } from 'libs/safedecimal';
 import { StrategyDirection } from 'libs/routing';
 import { Token } from 'libs/tokens';
-import { isEmptyGradientOrder, isOrderInPast } from '../utils';
+import { isEmptyGradientOrder, isOrderInFuture, isOrderInPast } from '../utils';
 import config from 'config';
 
 export const gradientMarginalPrice = (
@@ -20,7 +20,9 @@ export const gradientMarginalPrice = (
   date = new Date(),
 ) => {
   if (isEmptyGradientOrder(order)) return '0';
+  // Set the marginal price to 0 to hide the line in the graph
   if (isOrderInPast(order)) return '0';
+  if (isOrderInFuture(order)) return '0';
   const now = toUnixUTC(date);
   const { startPrice, endPrice, startDate, endDate } = order;
   const totalDuration = new SafeDecimal(endDate).minus(startDate);

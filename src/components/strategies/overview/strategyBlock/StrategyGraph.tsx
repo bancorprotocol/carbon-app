@@ -109,7 +109,6 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
   const sellOrderExists = sell.from !== 0 && sell.to !== 0;
   const buyOrderIsLimit = buy.from === buy.to;
   const sellOrderIsLimit = sell.from === sell.to;
-
   const max = Math.max(buy.to, sell.to);
   const min =
     buy.from && sell.from
@@ -170,6 +169,13 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
       ]);
     }
   };
+  const buyArea = () => {
+    const { marginalPrice, from, to } = buy;
+    const buyTo =
+      marginalPrice >= from && marginalPrice < to ? marginalPrice : to;
+    const points = getBuyPoints(buy.from, buyTo);
+    return [...points].join(' ');
+  };
 
   const getSellPoints = (sellFrom: number, sellTo: number) => {
     if (buyOrderExists) {
@@ -199,6 +205,14 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
         `${x(sellTo)},${baseline}`,
       ]);
     }
+  };
+
+  const sellArea = () => {
+    const { marginalPrice, from, to } = sell;
+    const sellFrom =
+      marginalPrice > from && marginalPrice <= to ? marginalPrice : from;
+    const points = getSellPoints(sellFrom, sell.to);
+    return [...points].join(' ');
   };
 
   return (
@@ -250,15 +264,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                         className={style.buyArea}
                         fill="url(#svg-buy-gradient)"
                         fillOpacity="0.5"
-                        points={Array.from(
-                          getBuyPoints(
-                            buy.from,
-                            buy.marginalPrice >= buy.from &&
-                              buy.marginalPrice < buy.to
-                              ? buy.marginalPrice
-                              : buy.to,
-                          ),
-                        ).join(' ')}
+                        points={buyArea()}
                       />
                       {buy.marginalPrice < buy.to &&
                         buy.marginalPrice >= buy.from && (
@@ -332,15 +338,7 @@ export const StrategyGraph: FC<Props> = ({ strategy, className }) => {
                         className={style.sellArea}
                         fill="url(#svg-sell-gradient)"
                         fillOpacity="0.5"
-                        points={Array.from(
-                          getSellPoints(
-                            sell.marginalPrice > sell.from &&
-                              sell.marginalPrice <= sell.to
-                              ? sell.marginalPrice
-                              : sell.from,
-                            sell.to,
-                          ),
-                        ).join(' ')}
+                        points={sellArea()}
                       />
                       {sell.marginalPrice <= sell.to &&
                         sell.marginalPrice > sell.from && (
