@@ -11,12 +11,14 @@ interface Props {
 const M = 60;
 const H = 60 * M;
 const D = 24 * H;
+const SECOND = 1000;
 
 const getRemaining = (min: number, max: number, now: number) => {
   if (now < min) return 0;
   if (now > max) return 0;
   return max - now;
 };
+const getNow = () => Number(toUnixUTC(new Date()));
 
 export const StrategyCountDown: FC<Props> = ({ strategy }) => {
   const cache = useQueryClient();
@@ -32,8 +34,8 @@ export const StrategyCountDown: FC<Props> = ({ strategy }) => {
     };
   }, [strategy.buy, strategy.sell]);
   const containerRef = useRef<HTMLParagraphElement | null>(null);
-  const [now, setNow] = useState(() => Number(toUnixUTC(new Date())));
-  const [remaining, setRemaining] = useState(() => getRemaining(min, max, now));
+  const [now, setNow] = useState(getNow);
+  const remaining = useMemo(() => getRemaining(min, max, now), [max, min, now]);
   const hasCountdown = remaining > 0;
   const wasActive = useRef(hasCountdown);
 
@@ -48,16 +50,19 @@ export const StrategyCountDown: FC<Props> = ({ strategy }) => {
   }, [cache, hasCountdown]);
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
     const update = () => {
-      const now = Number(toUnixUTC(new Date()));
-      const remaining = getRemaining(min, max, now);
-      setNow(now);
-      setRemaining(remaining);
+      setNow(getNow());
+      const delay = SECOND - (Date.now() % SECOND || SECOND);
+      timeoutId = setTimeout(update, delay);
     };
+
     update();
-    const interval = setInterval(() => update(), 1000);
-    return () => clearInterval(interval);
-  }, [min, max]);
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
 
   const textClassName =
     'flex items-center gap-4 text-18 font-medium truncate @xs/strategy:text-24';
@@ -97,21 +102,27 @@ const CountDown: FC<CountDownProps> = ({ remaining, container }) => {
   useEffect(() => {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)');
     if (reduce.matches) return;
+    const syncOptions: KeyframeAnimationOptions = {
+      duration: SECOND,
+      iterations: Infinity,
+      easing: 'steps(2, end)',
+      delay: -(Date.now() % SECOND),
+    };
+
     if (belowTen) {
       const p = container.current;
+      cancelAnimations(p);
       p?.animate([{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }], {
-        duration: 1000,
-        iterations: Infinity,
-        easing: 'steps(2, end)',
+        ...syncOptions,
       });
       return () => cancelAnimations(p);
     } else {
+      cancelAnimations(container.current);
       const colons = container.current?.querySelectorAll('.colon') ?? [];
       for (const colon of colons) {
+        cancelAnimations(colon);
         colon.animate([{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }], {
-          duration: 1000,
-          iterations: Infinity,
-          easing: 'steps(2, end)',
+          ...syncOptions,
         });
       }
       return () => colons.forEach(cancelAnimations);
