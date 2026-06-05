@@ -1,6 +1,7 @@
 import { toUnixUTC } from 'components/simulator/utils';
 import { GradientOrder, Strategy } from 'components/strategies/common/types';
 import { isEmptyGradientOrder } from 'components/strategies/common/utils';
+import { QueryKey, useQueryClient } from 'libs/queries';
 import { FC, RefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 interface Props {
@@ -18,6 +19,7 @@ const getRemaining = (min: number, max: number, now: number) => {
 };
 
 export const StrategyCountDown: FC<Props> = ({ strategy }) => {
+  const cache = useQueryClient();
   const { min, max } = useMemo(() => {
     const buy = strategy.buy;
     const sell = strategy.sell;
@@ -33,6 +35,17 @@ export const StrategyCountDown: FC<Props> = ({ strategy }) => {
   const [now, setNow] = useState(() => Number(toUnixUTC(new Date())));
   const [remaining, setRemaining] = useState(() => getRemaining(min, max, now));
   const hasCountdown = remaining > 0;
+  const wasActive = useRef(hasCountdown);
+
+  // Refresh query when a strategy expires
+  useEffect(() => {
+    if (wasActive.current && !hasCountdown) {
+      wasActive.current = false;
+      cache.invalidateQueries({
+        queryKey: QueryKey.strategyAll(),
+      });
+    }
+  }, [cache, hasCountdown]);
 
   useEffect(() => {
     const update = () => {

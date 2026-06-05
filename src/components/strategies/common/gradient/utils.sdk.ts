@@ -12,7 +12,7 @@ export function isGradientStrategyId(id: bigint) {
   return (id & GRADIENT_STRATEGY_TYPE_MASK) !== 0n;
 }
 
-const getGradientType = (
+export const getGradientType = (
   order: FormGradientOrder,
   direction: StrategyDirection,
 ) => {
@@ -32,16 +32,30 @@ export const createGradientStrategyParams = (strategy: GradientStrategyEdit) =>
   [
     strategy.base.address,
     strategy.quote.address,
-    strategy.buy.startPrice || '0',
-    strategy.buy.endPrice || '0',
-    strategy.buy.budget || '0',
-    Number(strategy.buy.startDate),
-    Number(strategy.buy.endDate),
-    getGradientType(strategy.buy, 'buy') as any,
-    strategy.sell.startPrice || '0',
-    strategy.sell.endPrice || '0',
-    strategy.sell.budget || '0',
-    Number(strategy.sell.startDate),
-    Number(strategy.sell.endDate),
-    getGradientType(strategy.sell, 'sell') as any,
+    ...createGradientOrderParams(strategy.buy, 'buy'),
+    ...createGradientOrderParams(strategy.sell, 'sell'),
   ] as const;
+
+const createGradientOrderParams = (
+  order: FormGradientOrder,
+  direction: StrategyDirection,
+) => {
+  const empty = !order.startPrice && !order.endPrice;
+  if (empty)
+    return [
+      '0',
+      '0',
+      order.budget,
+      0,
+      0,
+      GradientType.LINEAR_INCREASE,
+    ] as const;
+  return [
+    order.startPrice || '0',
+    order.endPrice || '0',
+    order.budget || '0',
+    Number(order.startDate),
+    Number(order.endDate),
+    getGradientType(order, direction),
+  ] as const;
+};

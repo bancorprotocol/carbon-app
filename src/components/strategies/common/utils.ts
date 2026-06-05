@@ -169,11 +169,12 @@ export const getStrategyType = (strategy: OrdersInput) => {
 
 export const isPaused = (strategy: OrdersInput) => {
   if (isGradientStrategy(strategy)) {
-    if (isInPast(strategy)) return true;
-    if (isInFuture(strategy)) return true;
-    return (
-      isEmptyGradientOrder(strategy.buy) && isEmptyGradientOrder(strategy.sell)
-    );
+    const { buy, sell } = strategy;
+    const orders = [buy, sell].filter((o) => !isEmptyGradientOrder(o));
+    if (!orders.length) return true;
+    if (orders.every(isOrderInPast)) return true;
+    if (orders.every(isOrderInFuture)) return true;
+    return false;
   } else {
     return (
       isZero(strategy.buy.min) &&
@@ -200,13 +201,6 @@ export const isOrderInFuture = (order: FormGradientOrder) => {
 };
 export const isActiveOrder = (order: FormGradientOrder) => {
   return !isOrderInFuture(order) && !isOrderInPast(order);
-};
-export const isInPast = (strategy: BuySellOrders<FormGradientOrder>) => {
-  return isOrderInPast(strategy.buy) || isOrderInPast(strategy.sell);
-};
-
-export const isInFuture = (strategy: BuySellOrders<FormGradientOrder>) => {
-  return isOrderInFuture(strategy.buy) || isOrderInFuture(strategy.sell);
 };
 
 export const getStrategyStatus = (orders: OrdersInput) => {
