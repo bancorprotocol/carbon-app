@@ -102,6 +102,7 @@ const CountDown: FC<CountDownProps> = ({ remaining, container }) => {
   useEffect(() => {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)');
     if (reduce.matches) return;
+    const keyframes = [{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }];
     const syncOptions: KeyframeAnimationOptions = {
       duration: SECOND,
       iterations: Infinity,
@@ -112,18 +113,14 @@ const CountDown: FC<CountDownProps> = ({ remaining, container }) => {
     if (belowTen) {
       const p = container.current;
       cancelAnimations(p);
-      p?.animate([{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }], {
-        ...syncOptions,
-      });
+      p?.animate(keyframes, syncOptions);
       return () => cancelAnimations(p);
     } else {
       cancelAnimations(container.current);
       const colons = container.current?.querySelectorAll('.colon') ?? [];
       for (const colon of colons) {
         cancelAnimations(colon);
-        colon.animate([{ opacity: 1 }, { opacity: 0.2 }, { opacity: 1 }], {
-          ...syncOptions,
-        });
+        colon.animate(keyframes, syncOptions);
       }
       return () => colons.forEach(cancelAnimations);
     }
