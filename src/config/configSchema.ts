@@ -83,6 +83,7 @@ export const AppConfigSchema = v.object({
       gradientController: v.optional(v.string()),
       gradientVoucher: v.optional(v.string()),
       aggregator: v.optional(v.string()),
+      router: v.optional(v.string()),
     }),
     tac: v.optional(
       v.object({

@@ -112,6 +112,8 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
     nav({ to: '/portfolio/strategies' });
   };
 
+  const canBatchGradient = !!canBatch.data || !!config.addresses.carbon.router;
+
   return (
     <form
       onSubmit={create}
@@ -137,7 +139,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
 
       {user && (
         <>
-          {config.ui.showCart && !!canBatch.data && (
+          {config.ui.showCart && canBatchGradient && (
             <Button
               className="add-cart btn-on-background shrink-0"
               type="button"

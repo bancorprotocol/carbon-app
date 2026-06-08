@@ -172,6 +172,9 @@ const sdkExposed = {
   updateGradientStrategy: (
     ...args: Parameters<(typeof carbonSDK)['updateGradientStrategy']>
   ) => carbonSDK.updateGradientStrategy(...args),
+  routerCreateStrategies: (
+    ...args: Parameters<(typeof carbonSDK)['routerCreateStrategies']>
+  ) => carbonSDK.routerCreateStrategies(...args),
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;

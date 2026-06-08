@@ -3,6 +3,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { FormGradientOrder } from '../types';
 import { StrategyDirection } from 'libs/routing';
 import { Token } from 'libs/tokens';
+import { isZero } from '../utils';
 
 export const STRATEGY_TYPE_SHIFT = 248n;
 export const GRADIENT_STRATEGY_TYPE_MASK = 1n << 255n;
@@ -40,7 +41,7 @@ const createGradientOrderParams = (
   order: FormGradientOrder,
   direction: StrategyDirection,
 ) => {
-  const empty = !order.startPrice && !order.endPrice;
+  const empty = isZero(order.startPrice) && isZero(order.endPrice);
   if (empty)
     return [
       '0',

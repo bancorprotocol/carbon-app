@@ -102,6 +102,7 @@ export const commonConfig: AppConfig = {
       vault: '0x60917e542aDdd13bfd1a7f81cD654758052dAdC4',
       gradientController: '0x37A65Dda75A4C32959834C9b391a24dCa17eeC10',
       gradientVoucher: '0x63e353AE90f95C72bf1E78e45456fb78B0c97525',
+      router: '0x654a1a16f10d73567920ad803c54e03b0f4c6c81',
     },
   },
   utils: {
