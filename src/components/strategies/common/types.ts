@@ -139,6 +139,7 @@ export interface Strategy<T extends Order = StaticOrder>
   type: T extends StaticOrder ? 'regular' : 'gradient';
   id: string;
   idDisplay: string;
+  createdAt: number;
   status: StrategyStatus;
   owner?: string;
   encoded?: T extends StaticOrder

@@ -38,6 +38,7 @@ export interface StrategyAPI<Order extends GradientOrderAPI | StaticOrderAPI> {
   quote: string;
   buy: Order;
   sell: Order;
+  createdAt: number;
   encoded: {
     order0: EncodedOrder<Order>;
     order1: EncodedOrder<Order>;

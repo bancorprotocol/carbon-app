@@ -8,6 +8,7 @@ const baseStrategy = {
   type: 'regular' as const,
   id: '',
   idDisplay: '',
+  createdAt: Date.now() / 1000,
   base: {
     address: '',
     decimals: 18,

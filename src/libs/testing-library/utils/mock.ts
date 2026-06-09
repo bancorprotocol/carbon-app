@@ -149,6 +149,7 @@ export const mockStrategy = (params: MockStrategyParams): Strategy => ({
   type: 'regular',
   id: '1',
   idDisplay: '1',
+  createdAt: Date.now() / 1000,
   base: tokenList[params.base],
   quote: tokenList[params.quote],
   status: 'active',
