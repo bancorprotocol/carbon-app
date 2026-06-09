@@ -10,15 +10,12 @@ import {
   AnyCartStrategyStorage,
   FormGradientOrder,
   FormStaticOrder,
+  GradientOrder,
 } from 'components/strategies/common/types';
 import { Token } from 'libs/tokens';
 import { isGradientStrategy } from 'components/strategies/common/utils';
-import {
-  gradientMarginalPrice,
-  orderEndDate,
-  orderStartDate,
-} from 'components/strategies/common/gradient/utils';
-import { toUnixUTC } from 'components/simulator/utils';
+import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
+import { addMilliseconds, differenceInMilliseconds, isToday } from 'date-fns';
 
 export type Cart = AnyCartStrategyStorage[];
 
@@ -62,6 +59,20 @@ export const toGradientCartStorage = (
     marginalPrice: sell.marginalPrice ?? '',
   },
 });
+
+const fromGradientCartStorage = (order: GradientOrder) => {
+  const startDate = fromUnixUTC(order.startDate);
+  const endDate = fromUnixUTC(order.endDate);
+  const copy = { ...order };
+  if (isToday(startDate) && isToday(endDate)) {
+    const delta = differenceInMilliseconds(endDate, startDate);
+    copy.startDate = toUnixUTC(new Date());
+    copy.endDate = toUnixUTC(addMilliseconds(new Date(), delta));
+  } else if (isToday(startDate)) {
+    copy.startDate = toUnixUTC(new Date());
+  }
+  return copy;
+};
 
 export const useStrategyCart = () => {
   const [cart, setCart] = useState<Cart>([]);
@@ -109,13 +120,8 @@ export const useStrategyCart = () => {
 
       // update strategy with today value
       if (isGradientStrategy(cartStrategy)) {
-        const { buy, sell } = cartStrategy;
-        cartStrategy.buy.startDate = toUnixUTC(orderStartDate(buy.startDate));
-        cartStrategy.buy.endDate = toUnixUTC(orderEndDate(buy.endDate));
-        cartStrategy.buy.marginalPrice = gradientMarginalPrice(buy);
-        cartStrategy.sell.startDate = toUnixUTC(orderStartDate(sell.startDate));
-        cartStrategy.sell.endDate = toUnixUTC(orderEndDate(sell.endDate));
-        cartStrategy.sell.marginalPrice = gradientMarginalPrice(sell);
+        cartStrategy.buy = fromGradientCartStorage(cartStrategy.buy);
+        cartStrategy.sell = fromGradientCartStorage(cartStrategy.sell);
       }
       return cartStrategy;
     });
