@@ -97,7 +97,7 @@ const CountDown: FC<CountDownProps> = ({ remaining, container }) => {
   const hours = Math.floor((remaining % D) / H);
   const minutes = Math.floor((remaining % H) / M);
   const seconds = remaining % M;
-  const belowTen = useMemo(() => minutes < 10, [minutes]);
+  const belowTwo = useMemo(() => minutes < 2, [minutes]);
 
   useEffect(() => {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)');
@@ -110,7 +110,7 @@ const CountDown: FC<CountDownProps> = ({ remaining, container }) => {
       delay: -(Date.now() % SECOND),
     };
 
-    if (belowTen) {
+    if (belowTwo) {
       const p = container.current;
       cancelAnimations(p);
       p?.animate(keyframes, syncOptions);
@@ -124,7 +124,7 @@ const CountDown: FC<CountDownProps> = ({ remaining, container }) => {
       }
       return () => colons.forEach(cancelAnimations);
     }
-  }, [container, belowTen]);
+  }, [container, belowTwo]);
 
   if (days) {
     return (
