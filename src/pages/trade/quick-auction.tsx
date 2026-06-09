@@ -71,15 +71,14 @@ export const TradeQuickAuction = () => {
 
   const setDirection = useCallback(
     (direction: StrategyDirection) => {
-      const next = defaultQuickGradientOrder(
-        { direction, budget: order.budget },
-        multi,
-        marketPrice,
-      );
-      delete next.marginalPrice;
-      setOrder(next);
+      saveOrder({
+        direction,
+        startPrice: undefined,
+        endPrice: undefined,
+        budget: undefined,
+      });
     },
-    [marketPrice, multi, order.budget, setOrder],
+    [saveOrder],
   );
 
   return (

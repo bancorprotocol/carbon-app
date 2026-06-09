@@ -249,7 +249,6 @@ export const CartPage = () => {
           };
           txs.push(unsignedTx);
         }
-        console.log(txs);
         const tx = await sendTransaction(txs);
         setConfirmation(false);
         setProcessing(true);

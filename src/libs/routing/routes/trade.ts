@@ -1,4 +1,4 @@
-import { createRoute, redirect } from '@tanstack/react-router';
+import { AnyRoute, createRoute, redirect } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   searchValidator,
@@ -64,6 +64,8 @@ export interface TradeRecurringSearch extends TradeSearch {
   sellSettings?: StrategySettings;
 }
 
+type GetSearchParams<T extends AnyRoute> = T['types']['searchSchema'];
+
 // TRADE OVERLAPPING
 export type TradeOverlappingSearch = Partial<
   (typeof overlappingPage)['types']['searchSchema']
@@ -78,14 +80,7 @@ export interface TradeMarketSearch extends TradeSearch {
 }
 
 // TRADE AUCTION
-export interface TradeAuctionSearch extends TradeSearch {
-  direction?: StrategyDirection;
-  start?: string;
-  end?: string;
-  min?: string;
-  max?: string;
-  budget?: string;
-}
+export type TradeAuctionSearch = GetSearchParams<typeof auctionPage>;
 
 // ROUTES
 export interface TradeSearch {
