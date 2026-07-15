@@ -205,7 +205,7 @@ export const commonConfig: AppConfig = {
     showCart: true,
     // rewardUrl: 'https://app.merkl.xyz/?chain=1&protocol=carbon',
     // walkthroughId: 'i2ok96zcpzqw',
-    useDexAggregator: false, // !navigator.webdriver, // use sdk in E2E
+    useDexAggregator: true, // !navigator.webdriver, // use sdk in E2E
     useEIP7702: true,
     useSeedData: true,
     useMigration: true,
