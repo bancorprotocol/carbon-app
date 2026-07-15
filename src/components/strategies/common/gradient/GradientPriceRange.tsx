@@ -12,7 +12,7 @@ import { Token } from 'libs/tokens';
 import { formatNumber, roundSearchParam, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { Presets } from 'components/common/preset/Preset';
-import { buyPresets, sellPresets } from '../price-presets';
+import { limitPreset } from '../price-presets';
 import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication/MarketPriceIndication';
@@ -26,6 +26,7 @@ interface Props {
   end: string;
   setEnd: (value: string) => void;
   direction: StrategyDirection;
+  disabled?: boolean;
 }
 
 export const GradientPriceRange: FC<Props> = (props) => {
@@ -41,12 +42,12 @@ export const GradientPriceRange: FC<Props> = (props) => {
 
   const startPercent = useMemo(() => {
     if (!marketPrice) return '';
-    return new SafeDecimal(start).div(marketPrice).sub(1).mul(100).toString();
+    return new SafeDecimal(start).div(marketPrice).sub(1).abs().toString();
   }, [marketPrice, start]);
 
   const endPercent = useMemo(() => {
     if (!marketPrice) return '';
-    return new SafeDecimal(end).div(marketPrice).sub(1).mul(100).toString();
+    return new SafeDecimal(end).div(marketPrice).sub(1).abs().toString();
   }, [marketPrice, end]);
 
   useEffect(() => {
@@ -63,7 +64,10 @@ export const GradientPriceRange: FC<Props> = (props) => {
 
   const setStartPreset = (preset: string) => {
     if (!marketPrice) return;
-    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
+    const percent =
+      direction === 'buy'
+        ? new SafeDecimal(1).sub(new SafeDecimal(preset))
+        : new SafeDecimal(1).add(new SafeDecimal(preset));
     const next = new SafeDecimal(marketPrice).mul(percent).toString();
     setLocalStart(roundSearchParam(next));
     setStart(next);
@@ -117,7 +121,10 @@ export const GradientPriceRange: FC<Props> = (props) => {
 
   const setEndPreset = (preset: string) => {
     if (!marketPrice) return;
-    const percent = new SafeDecimal(1).add(new SafeDecimal(preset).div(100));
+    const percent =
+      direction === 'buy'
+        ? new SafeDecimal(1).sub(new SafeDecimal(preset))
+        : new SafeDecimal(1).add(new SafeDecimal(preset));
     const next = new SafeDecimal(marketPrice).mul(percent).toString();
     setLocalEnd(roundSearchParam(next));
     setEnd(next);
@@ -127,7 +134,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
     <>
       <div className="grid grid-cols-2 gap-6">
         <div
-          className="rounded-s-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-main-0/50"
+          className="input-container rounded-s-2xl grid w-full cursor-text gap-8 p-16"
           onClick={() => document.getElementById(inputStartId)?.focus()}
         >
           <header className="flex items-center justify-between">
@@ -135,9 +142,9 @@ export const GradientPriceRange: FC<Props> = (props) => {
               htmlFor={inputStartId}
               className="text-12 flex justify-between text-main-0/60"
             >
-              _S P_
+              Start Price
             </label>
-            {!!marketPrice && (
+            {!!marketPrice && !props.disabled && (
               <button
                 className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                 type="button"
@@ -155,11 +162,12 @@ export const GradientPriceRange: FC<Props> = (props) => {
             inputMode="decimal"
             value={localStart}
             placeholder="Enter Price"
-            className="text-18 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
+            className="text-24 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
             onChange={(e) => onStartChange(e.target.value)}
             onFocus={onStartFocus}
             onBlur={onStartBlur}
             required
+            disabled={props.disabled}
           />
           <MarketPriceIndication
             base={base}
@@ -170,7 +178,7 @@ export const GradientPriceRange: FC<Props> = (props) => {
           />
         </div>
         <div
-          className="rounded-e-2xl grid w-full cursor-text gap-8 border border-black bg-main-900 p-16 focus-within:border-main-0/50"
+          className="input-container rounded-e-2xl grid w-full cursor-text gap-8"
           onClick={() => document.getElementById(inputEndId)?.focus()}
         >
           <header className="flex items-center justify-between">
@@ -178,9 +186,9 @@ export const GradientPriceRange: FC<Props> = (props) => {
               htmlFor={inputEndId}
               className="text-12 flex justify-between text-main-0/60"
             >
-              _E P_
+              End Price
             </label>
-            {!!marketPrice && (
+            {!!marketPrice && !props.disabled && (
               <button
                 className="text-12 font-medium text-gradient hover:text-secondary focus:text-secondary active:text-secondary"
                 type="button"
@@ -198,11 +206,12 @@ export const GradientPriceRange: FC<Props> = (props) => {
             inputMode="decimal"
             value={localEnd}
             placeholder="Enter Price"
-            className="text-18 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
+            className="text-24 font-medium w-full text-ellipsis bg-transparent focus:outline-hidden"
             onChange={(e) => onEndChange(e.target.value)}
             onFocus={onEndFocus}
             onBlur={onEndBlur}
             required
+            disabled={props.disabled}
           />
           <MarketPriceIndication
             base={base}
@@ -212,16 +221,16 @@ export const GradientPriceRange: FC<Props> = (props) => {
             ignoreMarketPriceWarning
           />
         </div>
-        {!!marketPrice && (
+        {!!marketPrice && !props.disabled && (
           <>
             <Presets
               value={startPercent}
-              presets={direction === 'buy' ? buyPresets : sellPresets}
+              presets={limitPreset(direction === 'buy')}
               onChange={setStartPreset}
             />
             <Presets
               value={endPercent}
-              presets={direction === 'buy' ? buyPresets : sellPresets}
+              presets={limitPreset(direction === 'buy')}
               onChange={setEndPreset}
             />
           </>

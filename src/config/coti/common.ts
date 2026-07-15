@@ -53,6 +53,7 @@ export const commonConfig: AppConfig = {
   defaultTokenPair: [addresses.COTI, addresses.GCOTI],
   popularPairs: [[addresses.COTI, addresses.GCOTI]],
   popularTokens: popularTokens,
+  stableTokens: [addresses.USDT, addresses['USDC.e']],
   addresses: {
     tokens: addresses,
     carbon: {

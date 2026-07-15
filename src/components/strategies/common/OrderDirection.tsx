@@ -12,7 +12,7 @@ export const OrderDirection: FC<Props> = (props) => {
     direction === 'buy' ? 'var(--buy-gradient)' : 'var(--sell-gradient)';
 
   return (
-    <div className="p-24">
+    <div className="p-24 pb-16">
       <RadioGroup
         className="grid grid-flow-col text-center text-16 p-0"
         style={{ ['--tab-background' as any]: color }}

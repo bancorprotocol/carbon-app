@@ -52,6 +52,7 @@ export const AppConfigSchema = v.object({
   defaultTokenPair: v.tuple([v.string(), v.string()]),
   popularPairs: v.array(v.tuple([v.string(), v.string()])),
   popularTokens: v.array(v.string()),
+  stableTokens: v.array(v.string()),
   tokenListOverride: v.array(
     v.object({
       name: v.string(),
@@ -79,7 +80,10 @@ export const AppConfigSchema = v.object({
       voucher: v.string(),
       batcher: v.optional(v.string()),
       vault: v.string(),
+      gradientController: v.optional(v.string()),
+      gradientVoucher: v.optional(v.string()),
       aggregator: v.optional(v.string()),
+      router: v.optional(v.string()),
     }),
     tac: v.optional(
       v.object({

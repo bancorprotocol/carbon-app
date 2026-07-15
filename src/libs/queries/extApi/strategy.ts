@@ -1,13 +1,23 @@
+import { GradientEncodedOrderBNStr } from 'components/strategies/common/types';
+
 export interface StrategiesSearchParams {
   page?: number;
   pageSize?: number;
 }
 
-export interface StrategyOrderAPI {
+export interface StaticOrderAPI {
   budget: string;
   min: string;
   max: string;
-  marginal: string;
+  marginalPrice: string;
+}
+export interface GradientOrderAPI {
+  budget: string;
+  startDate: string;
+  endDate: string;
+  startPrice: string;
+  endPrice: string;
+  marginalPrice: string;
 }
 
 interface EncodedOrderStr {
@@ -17,18 +27,27 @@ interface EncodedOrderStr {
   B: string;
 }
 
-export interface StrategyAPI {
+type EncodedOrder<Order extends GradientOrderAPI | StaticOrderAPI> =
+  Order extends StaticOrderAPI ? EncodedOrderStr : GradientEncodedOrderBNStr;
+
+export interface StrategyAPI<Order extends GradientOrderAPI | StaticOrderAPI> {
+  type: Order extends GradientOrderAPI ? 'gradient' : 'regular';
   id: string;
   owner: string;
   base: string;
   quote: string;
-  buy: StrategyOrderAPI;
-  sell: StrategyOrderAPI;
+  buy: Order;
+  sell: Order;
+  createdAt: number;
   encoded: {
-    order0: EncodedOrderStr;
-    order1: EncodedOrderStr;
+    order0: EncodedOrder<Order>;
+    order1: EncodedOrder<Order>;
   };
 }
+
+export type AnyStrategyAPI =
+  | StrategyAPI<GradientOrderAPI>
+  | StrategyAPI<StaticOrderAPI>;
 
 export interface StrategyPagination {
   page: number;
@@ -39,6 +58,12 @@ export interface StrategyPagination {
 }
 
 export interface StrategyAPIResult {
-  strategies: StrategyAPI[];
+  strategies: AnyStrategyAPI[];
   pagination: StrategyPagination;
 }
+
+export const isGradientStrategyAPI = (
+  s: AnyStrategyAPI,
+): s is StrategyAPI<GradientOrderAPI> => {
+  return s.type === 'gradient';
+};

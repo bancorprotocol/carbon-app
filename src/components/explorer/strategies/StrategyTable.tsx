@@ -12,11 +12,10 @@ import {
 } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { FiatPrice } from 'components/common/FiatPrice';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { useEditToDisposableSell } from 'components/strategies/edit/utils';
-import { isDisposableStrategy } from 'components/strategies/common/utils';
-import { useIsStrategyOwner } from 'hooks/useIsStrategyOwner';
+import { isGradientStrategy } from 'components/strategies/common/utils';
 import { Paginator } from 'components/common/table/Paginator';
 import { clamp } from 'utils/helpers/operators';
+import { StrategyTypeIcon } from 'components/strategies/overview/StrategyTypeIcon';
 
 interface Props {
   className?: string;
@@ -36,8 +35,7 @@ export const StrategyTable: FC<Props> = ({ strategies, className }) => {
         <tr>
           <th>ID</th>
           <th>Token Pair</th>
-          {/* @todo(gradient) */}
-          {/* <th>Type</th> */}
+          <th>Type</th>
           <th>Status</th>
           <th>Trades</th>
           <th>Total Budget</th>
@@ -69,12 +67,8 @@ interface RowProps {
 const StrategyRow: FC<RowProps> = ({ strategy }) => {
   const id = useId();
   const { base, quote, status, buy, sell } = strategy;
-  const toDisposableSell = useEditToDisposableSell(strategy);
-  const isOwn = useIsStrategyOwner(strategy.id);
   const isExplorer = !!useMatch({ from: '/explore', shouldThrow: false });
   const totalBalance = strategy.fiatBudget.total;
-  const disableEdit =
-    !isOwn || isDisposableStrategy(strategy) || strategy.status !== 'active';
 
   return (
     <tr key={id} id={id} className="h-[85px]">
@@ -84,10 +78,9 @@ const StrategyRow: FC<RowProps> = ({ strategy }) => {
           <PairLogoName pair={{ baseToken: base, quoteToken: quote }} />
         </p>
       </td>
-      {/* @todo(gradient) */}
-      {/* <td>
+      <td>
         <StrategyTypeIcon isGradient={isGradientStrategy(strategy)} />
-      </td> */}
+      </td>
       <td>
         <StrategyStatusTag status={status} isExplorer={isExplorer} />
       </td>

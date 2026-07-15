@@ -4,15 +4,15 @@ import { Token } from 'libs/tokens';
 export interface ActivityStaticOrder {
   min: string;
   max: string;
-  marginal: string;
+  marginalPrice: string;
   budget: string;
 }
 export interface ActivityGradientOrder {
-  _sD_: string;
-  _eD_: string;
-  _sP_: string;
-  _eP_: string;
-  marginal: string;
+  startDate: string;
+  endDate: string;
+  startPrice: string;
+  endPrice: string;
+  marginalPrice: string;
   budget: string;
 }
 
@@ -28,6 +28,7 @@ interface BaseActivityStrategy<Order extends RawActivityOrder> {
   owner: string;
   buy: Order;
   sell: Order;
+  type: 'regular' | 'gradient';
 }
 export type ActivityAction =
   | 'create'

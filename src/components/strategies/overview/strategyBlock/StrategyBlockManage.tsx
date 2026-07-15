@@ -203,9 +203,11 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     }
 
     // separator
-    items.push(1);
+    if (items.length) {
+      items.push(1);
+    }
 
-    if (strategy.status === 'active') {
+    if (strategy.status === 'active' && !isGradient) {
       items.push({
         id: 'pauseStrategy',
         name: 'Pause strategy',

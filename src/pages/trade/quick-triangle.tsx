@@ -1,0 +1,167 @@
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { StrategyChartSection } from 'components/strategies/common/StrategyChartSection';
+import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { StrategyDirection } from 'libs/routing/routes/trade';
+import { useCallback, useEffect, useMemo } from 'react';
+import { D3DrawingRanges } from 'components/strategies/common/d3Chart/drawing/D3DrawingRanges';
+import { useQuickGradientOrder } from 'components/strategies/common/gradient/useGradientOrder';
+import { CreateGradientStrategyForm } from 'components/strategies/common/gradient/CreateGradientStrategyForm';
+import { GradientOrderBlock } from 'components/strategies/common/types';
+import { toOrderSearch } from 'components/strategies/common/useSetOrder';
+import {
+  defaultGradientMultipliers,
+  isReverseGradientOrders,
+} from 'components/strategies/common/gradient/utils';
+import { cn } from 'utils/helpers';
+import { Warning } from 'components/common/WarningMessageWithIcon';
+import { EditMarketPrice } from 'components/strategies/common/InitMarketPrice';
+import { CreateLayout } from 'components/strategies/create/CreateLayout';
+import { defaultQuickGradientOrder } from 'components/strategies/common/quick/utils';
+import { QuickGradientChart } from 'components/strategies/common/quick/QuickGradientChart';
+import { CreateQuickGradientOrder } from 'components/strategies/common/quick/CreateQuickGradientOrder';
+import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawLine';
+import style from 'components/strategies/common/order.module.css';
+
+const url = '/trade/quick-triangle';
+export const TradeQuickTriangle = () => {
+  const { base, quote } = useStrategyFormCtx();
+  const { marketPrice, isPending: pendingMarketPrice } = useMarketPrice({
+    base,
+    quote,
+  });
+  const search = useSearch({ from: url });
+  const navigate = useNavigate({ from: url });
+
+  const saveOrder = useCallback(
+    (next: Partial<GradientOrderBlock>, direction: StrategyDirection) => {
+      const params = toOrderSearch(next, direction);
+      navigate({
+        params: (params) => params,
+        search: (previous) => ({ ...previous, ...params }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [navigate],
+  );
+
+  const baseSell = useMemo(() => {
+    return defaultQuickGradientOrder(
+      {
+        direction: 'sell',
+        startPrice: search.sellStartPrice,
+        endPrice: search.sellEndPrice,
+        deltaTime: search.sellDeltaTime,
+        budget: search.sellBudget,
+      },
+      defaultGradientMultipliers(base.address, quote.address, 'sell'),
+      marketPrice,
+    );
+  }, [
+    search.sellStartPrice,
+    search.sellEndPrice,
+    search.sellDeltaTime,
+    search.sellBudget,
+    base.address,
+    quote.address,
+    marketPrice,
+  ]);
+
+  const baseBuy = useMemo(() => {
+    return defaultQuickGradientOrder(
+      {
+        direction: 'buy',
+        startPrice: search.buyStartPrice,
+        endPrice: search.buyEndPrice,
+        deltaTime: search.buyDeltaTime,
+        budget: search.buyBudget,
+      },
+      defaultGradientMultipliers(base.address, quote.address, 'buy'),
+      marketPrice,
+    );
+  }, [
+    search.buyStartPrice,
+    search.buyEndPrice,
+    search.buyDeltaTime,
+    search.buyBudget,
+    base.address,
+    quote.address,
+    marketPrice,
+  ]);
+
+  const sell = useQuickGradientOrder(baseSell, (next) =>
+    saveOrder(next, 'sell'),
+  );
+  const buy = useQuickGradientOrder(baseBuy, (next) => saveOrder(next, 'buy'));
+
+  useEffect(() => {
+    if (pendingMarketPrice) return;
+    buy.setOrder(baseBuy);
+    sell.setOrder(baseSell);
+    // Only run this once the marketprice is ready
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingMarketPrice]);
+
+  const priceError = useMemo(() => {
+    if (isReverseGradientOrders(buy.gradientOrder, sell.gradientOrder)) {
+      return 'Sell and Buy auction prices cannot cross. This configuration may result in loss of funds.';
+    }
+  }, [buy.gradientOrder, sell.gradientOrder]);
+
+  return (
+    <>
+      <StrategyChartSection
+        editMarketPrice={<EditMarketPrice base={base} quote={quote} />}
+      >
+        <QuickGradientChart orders={[buy.order, sell.order]}>
+          <D3EditLine
+            color="sell"
+            drawing={sell.drawing}
+            onChange={sell.onDrawingUpdate}
+          />
+          <D3EditLine
+            color="buy"
+            drawing={buy.drawing}
+            onChange={buy.onDrawingUpdate}
+          />
+          <D3DrawingRanges color="sell" drawing={sell.drawing} />
+          <D3DrawingRanges color="buy" drawing={buy.drawing} />
+        </QuickGradientChart>
+      </StrategyChartSection>
+      <CreateLayout url={url}>
+        <CreateGradientStrategyForm
+          buy={buy.gradientOrder}
+          sell={sell.gradientOrder}
+        >
+          <div className="surface grid rounded-2xl overflow-clip">
+            <div
+              className={cn(style.order, 'relative grid gap-16 p-16')}
+              data-direction="sell"
+            >
+              <CreateQuickGradientOrder
+                order={sell.order}
+                setOrder={sell.setOrder}
+                priceWarning={
+                  priceError && <Warning message={priceError} isError />
+                }
+              />
+            </div>
+            <div
+              className={cn(style.order, 'relative grid gap-16 p-16')}
+              data-direction="buy"
+            >
+              <CreateQuickGradientOrder
+                order={buy.order}
+                setOrder={buy.setOrder}
+                priceWarning={
+                  priceError && <Warning message={priceError} isError />
+                }
+              />
+            </div>
+          </div>
+        </CreateGradientStrategyForm>
+      </CreateLayout>
+    </>
+  );
+};

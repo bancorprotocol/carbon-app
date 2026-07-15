@@ -1,4 +1,4 @@
-import { FC, FormEvent, useId } from 'react';
+import { FC, FormEvent, useId, useMemo } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import KeyboardArrowDownIcon from 'assets/icons/keyboard_arrow_down.svg?react';
 import IconCheck from 'assets/icons/check.svg?react';
@@ -6,11 +6,15 @@ import { cn } from 'utils/helpers';
 import {
   AllFilter,
   FilterStatus,
+  FilterType,
   strategyFilter,
   StrategyFilter,
   strategySort,
   StrategySort,
 } from './utils';
+import config from 'config';
+
+const hasGradient = !!config.addresses.carbon.gradientController;
 
 const sortItems = Object.entries(strategySort)
   .filter(([, title]) => !!title)
@@ -86,23 +90,21 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
       setFilter({ ...filter, status });
     }
   };
-  // const onFilterTypeChange = (event: FormEvent<HTMLFieldSetElement>) => {
-  //   if (event.target instanceof HTMLInputElement) {
-  //     const type = event.target.value as FilterType;
-  //     setFilter((filter) => ({ ...filter, type }));
-  //   }
-  // };
+  const onFilterTypeChange = (event: FormEvent<HTMLFieldSetElement>) => {
+    if (event.target instanceof HTMLInputElement) {
+      const type = event.target.value as FilterType;
+      setFilter({ ...filter, type });
+    }
+  };
 
-  // @todo(gradient)
-  const displayFilter = strategyFilter.status[filter.status];
-  // const displayFilter = useMemo(() => {
-  //   if (filter.status === 'all' && filter.type === 'all') return 'All';
-  //   const typeLabel = strategyFilter.type[filter.type];
-  //   const statusLabel = strategyFilter.status[filter.status];
-  //   if (filter.status === 'all') return typeLabel;
-  //   if (filter.type === 'all') return statusLabel;
-  //   return `${typeLabel}, ${statusLabel}`;
-  // }, [filter.status, filter.type]);
+  const displayFilter = useMemo(() => {
+    if (filter.status === 'all' && filter.type === 'all') return 'All';
+    const typeLabel = strategyFilter.type[filter.type];
+    const statusLabel = strategyFilter.status[filter.status];
+    if (filter.status === 'all') return typeLabel;
+    if (filter.type === 'all') return statusLabel;
+    return `${typeLabel}, ${statusLabel}`;
+  }, [filter.status, filter.type]);
 
   return (
     <DropdownMenu
@@ -129,7 +131,7 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
         <legend className="text-14 px-16 py-8 text-main-0/60">Status</legend>
         {Object.entries(strategyFilter.status).map(([key, label]) => (
           <FilterSortItem
-            name="filter"
+            name="filter-status"
             key={key}
             item={key as FilterStatus}
             title={label}
@@ -137,18 +139,20 @@ export const StrategyFilterDropdown: FC<FilterProps> = (props) => {
           />
         ))}
       </fieldset>
-      {/* <fieldset onChange={onFilterTypeChange}>
-        <legend className="text-14 px-16 py-8 text-main-0/60">Type</legend>
-        {Object.entries(filterItems.type).map(([key, label]) => (
-          <FilterSortItem
-            name="filter"
-            key={key}
-            item={key as FilterType}
-            title={label}
-            selectedItem={filter.type}
-          />
-        ))}
-      </fieldset> */}
+      {hasGradient && (
+        <fieldset onChange={onFilterTypeChange}>
+          <legend className="text-14 px-16 py-8 text-main-0/60">Type</legend>
+          {Object.entries(strategyFilter.type).map(([key, label]) => (
+            <FilterSortItem
+              name="filter-type"
+              key={key}
+              item={key as FilterType}
+              title={label}
+              selectedItem={filter.type}
+            />
+          ))}
+        </fieldset>
+      )}
     </DropdownMenu>
   );
 };

@@ -7,12 +7,13 @@ import {
   useState,
 } from 'react';
 import { GradientOrderBlock, QuickGradientOrderBlock } from '../types';
-import { defaultGradientOrder } from './utils';
+import { defaultGradientMultipliers, defaultGradientOrder } from './utils';
 import {
   defaultQuickGradientOrder,
   quickToGradientOrder,
 } from '../quick/utils';
 import { ChartPoint, Drawing } from '../d3Chart/D3ChartContext';
+import { useStrategyFormCtx } from '../StrategyFormContext';
 
 export const useGradientOrder = (
   initOrder: GradientOrderBlock,
@@ -20,15 +21,25 @@ export const useGradientOrder = (
 ) => {
   const id = useId();
   const timeout = useRef<number>(null);
+  const { base, quote } = useStrategyFormCtx();
+
+  const direction = initOrder.direction;
+
+  const multi = useMemo(() => {
+    return defaultGradientMultipliers(base.address, quote.address, direction);
+  }, [base.address, quote.address, direction]);
+
   const [order, setOrder] = useState(initOrder);
 
   const set = useCallback(
     (next: Partial<GradientOrderBlock>) => {
-      setOrder((current) => defaultGradientOrder({ ...current, ...next }));
+      setOrder((current) =>
+        defaultGradientOrder({ ...current, ...next }, multi),
+      );
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => saveOrder(next), 200);
     },
-    [saveOrder],
+    [multi, saveOrder],
   );
 
   useEffect(() => {
@@ -41,16 +52,16 @@ export const useGradientOrder = (
       mode: 'line',
       points: [
         {
-          x: order._sD_,
-          y: Number(order._sP_),
+          x: order.startDate,
+          y: Number(order.startPrice),
         },
         {
-          x: order._eD_,
-          y: Number(order._eP_),
+          x: order.endDate,
+          y: Number(order.endPrice),
         },
       ],
     }),
-    [id, order._eD_, order._eP_, order._sD_, order._sP_],
+    [id, order.endDate, order.endPrice, order.startDate, order.startPrice],
   );
 
   const onDrawingUpdate = useCallback(
@@ -59,10 +70,10 @@ export const useGradientOrder = (
       const copy = structuredClone(points);
       const [start, end] = copy.sort((a, b) => Number(a.x) - Number(b.x));
       set({
-        _sP_: start.y.toString(),
-        _eP_: end.y.toString(),
-        _sD_: start.x,
-        _eD_: end.x,
+        startPrice: start.y.toString(),
+        endPrice: end.y.toString(),
+        startDate: start.x,
+        endDate: end.x,
       });
     },
     [set],
@@ -82,15 +93,23 @@ export const useQuickGradientOrder = (
 ) => {
   const id = useId();
   const timeout = useRef<number>(null);
+  const { base, quote } = useStrategyFormCtx();
   const [order, setOrder] = useState(initOrder);
+
+  const direction = initOrder.direction;
+  const multi = useMemo(() => {
+    return defaultGradientMultipliers(base.address, quote.address, direction);
+  }, [base.address, quote.address, direction]);
 
   const set = useCallback(
     (next: Partial<QuickGradientOrderBlock>) => {
-      setOrder((current) => defaultQuickGradientOrder({ ...current, ...next }));
+      setOrder((current) => {
+        return defaultQuickGradientOrder({ ...current, ...next }, multi);
+      });
       if (timeout.current) clearTimeout(timeout.current);
       timeout.current = setTimeout(() => saveOrder(next), 200);
     },
-    [saveOrder],
+    [multi, saveOrder],
   );
 
   useEffect(() => {
@@ -104,15 +123,15 @@ export const useQuickGradientOrder = (
       points: [
         {
           x: '0',
-          y: Number(order._sP_),
+          y: Number(order.startPrice),
         },
         {
           x: order.deltaTime,
-          y: Number(order._eP_),
+          y: Number(order.endPrice),
         },
       ],
     }),
-    [id, order._sP_, order.deltaTime, order._eP_],
+    [id, order.startPrice, order.deltaTime, order.endPrice],
   );
 
   const onDrawingUpdate = useCallback(
@@ -121,8 +140,8 @@ export const useQuickGradientOrder = (
       const copy = structuredClone(points);
       const [start, end] = copy.sort((a, b) => Number(a.x) - Number(b.x));
       set({
-        _sP_: start.y.toString(),
-        _eP_: end.y.toString(),
+        startPrice: start.y.toString(),
+        endPrice: end.y.toString(),
         deltaTime: end.x,
       });
     },

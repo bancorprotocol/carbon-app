@@ -1,0 +1,2 @@
+overrides:
+  carbon-sdk: link:../../../Users/franc/AppData/Local/pnpm/global/5/node_modules/@bancor/carbon-sdk

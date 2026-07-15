@@ -1,4 +1,4 @@
-import { createRoute, redirect } from '@tanstack/react-router';
+import { AnyRoute, createRoute, redirect } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
   searchValidator,
@@ -17,7 +17,15 @@ import { TradeRecurring } from 'pages/trade/recurring';
 import { TradeOverlapping } from 'pages/trade/overlapping';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { defaultSpread } from 'components/strategies/overlapping/utils';
+import { TradeAuction } from 'pages/trade/auction';
+import { TradeQuickAuction } from 'pages/trade/quick-auction';
+import { addMonths, startOfDay, subWeeks } from 'date-fns';
+import { toUnixUTC } from 'components/simulator/utils';
+import { TradeChannel } from 'pages/trade/channel';
+import { TradeQuickChannel } from 'pages/trade/quick-channel';
 import * as v from 'valibot';
+import { TradeTriangle } from 'pages/trade/triangle';
+import { TradeQuickTriangle } from 'pages/trade/quick-triangle';
 
 // TRADE TYPE
 export type StrategyType =
@@ -56,6 +64,8 @@ export interface TradeRecurringSearch extends TradeSearch {
   sellSettings?: StrategySettings;
 }
 
+type GetSearchParams<T extends AnyRoute> = T['types']['searchSchema'];
+
 // TRADE OVERLAPPING
 export type TradeOverlappingSearch = Partial<
   (typeof overlappingPage)['types']['searchSchema']
@@ -70,14 +80,7 @@ export interface TradeMarketSearch extends TradeSearch {
 }
 
 // TRADE AUCTION
-export interface TradeAuctionSearch extends TradeSearch {
-  direction?: StrategyDirection;
-  start?: string;
-  end?: string;
-  min?: string;
-  max?: string;
-  budget?: string;
-}
+export type TradeAuctionSearch = GetSearchParams<typeof auctionPage>;
 
 // ROUTES
 export interface TradeSearch {
@@ -178,39 +181,75 @@ const overlappingPage = createRoute({
   }),
 });
 
+const setGradientChartDates = (search: {
+  chartStart?: string;
+  chartEnd?: string;
+}) => {
+  if (!search.chartStart) {
+    const date = startOfDay(subWeeks(new Date(), 7));
+    search.chartStart = toUnixUTC(date).toString();
+  }
+  if (!search.chartEnd) {
+    const date = startOfDay(addMonths(new Date(), 2));
+    search.chartEnd = toUnixUTC(date).toString();
+  }
+};
+
 const auctionPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/auction',
-  // @todo(gradient)
-  component: () => null,
-  // component: TradeAuction,
+  component: TradeAuction,
+  beforeLoad: ({ search }) => {
+    setGradientChartDates(search);
+  },
   validateSearch: searchValidator({
     direction: v.optional(validDirection),
-    _sP_: v.optional(validInputNumber),
-    _eP_: v.optional(validInputNumber),
-    _sD_: v.optional(validNumber),
-    _eD_: v.optional(validNumber),
+    startPrice: v.optional(validInputNumber),
+    endPrice: v.optional(validInputNumber),
+    startDate: v.optional(validNumber),
+    endDate: v.optional(validNumber),
     budget: v.optional(validInputNumber),
   }),
 });
 
-const customPage = createRoute({
+export type ChannelSearch = (typeof channelPage)['types']['searchSchema'] &
+  TradeSearch;
+const channelPage = createRoute({
   getParentRoute: () => tradePage,
-  path: '/custom',
-  // @todo(gradient)
-  component: () => null,
-  // component: TradeCustom,
+  path: '/channel',
+  component: TradeChannel,
+  beforeLoad: ({ search }) => {
+    setGradientChartDates(search);
+  },
   validateSearch: searchValidator({
-    directions: v.optional(v.array(validDirection)),
-    buy_SP_: v.optional(validInputNumber),
-    buy_EP_: v.optional(validInputNumber),
-    buy_SD_: v.optional(validNumber),
-    buy_ED_: v.optional(validNumber),
+    deltaPrice: v.optional(validInputNumber),
+    deltaType: v.optional(v.picklist(['percent', 'token'])),
     buyBudget: v.optional(validInputNumber),
-    sell_SP_: v.optional(validInputNumber),
-    sell_EP_: v.optional(validInputNumber),
-    sell_SD_: v.optional(validNumber),
-    sell_ED_: v.optional(validNumber),
+    sellStartPrice: v.optional(validInputNumber),
+    sellEndPrice: v.optional(validInputNumber),
+    sellStartDate: v.optional(validNumber),
+    sellEndDate: v.optional(validNumber),
+    sellBudget: v.optional(validInputNumber),
+  }),
+});
+
+const trianglePage = createRoute({
+  getParentRoute: () => tradePage,
+  path: '/triangle',
+  component: TradeTriangle,
+  beforeLoad: ({ search }) => {
+    setGradientChartDates(search);
+  },
+  validateSearch: searchValidator({
+    buyStartPrice: v.optional(validInputNumber),
+    buyEndPrice: v.optional(validInputNumber),
+    buyStartDate: v.optional(validNumber),
+    buyEndDate: v.optional(validNumber),
+    buyBudget: v.optional(validInputNumber),
+    sellStartPrice: v.optional(validInputNumber),
+    sellEndPrice: v.optional(validInputNumber),
+    sellStartDate: v.optional(validNumber),
+    sellEndDate: v.optional(validNumber),
     sellBudget: v.optional(validInputNumber),
   }),
 });
@@ -218,32 +257,43 @@ const customPage = createRoute({
 const quickAuctionPage = createRoute({
   getParentRoute: () => tradePage,
   path: '/quick-auction',
-  // @todo(gradient)
-  component: () => null,
-  // component: TradeQuickAuction,
+  component: TradeQuickAuction,
   validateSearch: searchValidator({
     direction: v.optional(validDirection),
-    _sP_: v.optional(validInputNumber),
-    _eP_: v.optional(validInputNumber),
+    startPrice: v.optional(validInputNumber),
+    endPrice: v.optional(validInputNumber),
     deltaTime: v.optional(validInputNumber),
     budget: v.optional(validInputNumber),
   }),
 });
 
-const quickCustomPage = createRoute({
+export type QuickChannelSearch =
+  (typeof quickChannelPage)['types']['searchSchema'] & TradeSearch;
+const quickChannelPage = createRoute({
   getParentRoute: () => tradePage,
-  path: '/quick-custom',
-  // @todo(gradient)
-  component: () => null,
-  // component: TradeQuickCustom,
+  path: '/quick-channel',
+  component: TradeQuickChannel,
   validateSearch: searchValidator({
-    directions: v.optional(v.array(validDirection)),
-    buy_SP_: v.optional(validInputNumber),
-    buy_EP_: v.optional(validInputNumber),
+    deltaPrice: v.optional(validInputNumber),
+    deltaType: v.optional(v.picklist(['percent', 'token'])),
+    buyBudget: v.optional(validInputNumber),
+    sellStartPrice: v.optional(validInputNumber),
+    sellEndPrice: v.optional(validInputNumber),
+    sellBudget: v.optional(validInputNumber),
+    sellDeltaTime: v.optional(validInputNumber),
+  }),
+});
+const quickTrianglePage = createRoute({
+  getParentRoute: () => tradePage,
+  path: '/quick-triangle',
+  component: TradeQuickTriangle,
+  validateSearch: searchValidator({
+    buyStartPrice: v.optional(validInputNumber),
+    buyEndPrice: v.optional(validInputNumber),
     buyDeltaTime: v.optional(validNumber),
     buyBudget: v.optional(validInputNumber),
-    sell_SP_: v.optional(validInputNumber),
-    sell_EP_: v.optional(validInputNumber),
+    sellStartPrice: v.optional(validInputNumber),
+    sellEndPrice: v.optional(validInputNumber),
     sellDeltaTime: v.optional(validNumber),
     sellBudget: v.optional(validInputNumber),
   }),
@@ -255,7 +305,9 @@ export default tradePage.addChildren([
   recurringPage,
   overlappingPage,
   auctionPage,
-  customPage,
+  channelPage,
+  trianglePage,
   quickAuctionPage,
-  quickCustomPage,
+  quickChannelPage,
+  quickTrianglePage,
 ]);

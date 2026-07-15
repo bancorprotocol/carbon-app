@@ -1,6 +1,10 @@
 import { StrategyDirection, StrategySettings } from 'libs/routing';
 import { Token } from 'libs/tokens';
-import { EncodedStrategyBNStr } from '@bancor/carbon-sdk';
+import {
+  EncodedStrategyBNStr,
+  EncodedGradientOrder,
+  RetypeProps,
+} from '@bancor/carbon-sdk';
 import { SafeDecimal } from 'libs/safedecimal';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
@@ -39,10 +43,13 @@ export interface FormStaticOrder {
   marginalPrice?: string | MarginalPriceOptions;
 }
 
-export interface EditOrders {
-  buy: FormStaticOrder;
-  sell: FormStaticOrder;
+export interface EditOrders<T extends FormStaticOrder | FormGradientOrder> {
+  buy: T;
+  sell: T;
 }
+export type AnyEditOrders =
+  | EditOrders<FormStaticOrder>
+  | EditOrders<FormGradientOrder>;
 
 export interface OrderBlock extends FormStaticOrder {
   settings: StrategySettings;
@@ -60,19 +67,19 @@ export interface CreateOverlappingOrder extends FormStaticOrder {
 }
 
 export interface GradientOrder {
-  _sP_: string;
-  _eP_: string;
-  _sD_: string;
-  _eD_: string;
+  startPrice: string;
+  endPrice: string;
+  startDate: string;
+  endDate: string;
   budget: string;
   marginalPrice: string;
 }
 
 export interface FormGradientOrder {
-  _sP_: string;
-  _eP_: string;
-  _sD_: string;
-  _eD_: string;
+  startPrice: string;
+  endPrice: string;
+  startDate: string;
+  endDate: string;
   budget: string;
   marginalPrice?: string;
 }
@@ -82,8 +89,8 @@ export interface GradientOrderBlock extends FormGradientOrder {
 }
 
 export interface QuickGradientOrderBlock {
-  _sP_: string;
-  _eP_: string;
+  startPrice: string;
+  endPrice: string;
   deltaTime: string;
   budget: string;
   marginalPrice?: string;
@@ -110,14 +117,34 @@ export interface BaseStrategy<T extends Order = StaticOrder>
 export type StaticBaseStrategy = BaseStrategy<StaticOrder>;
 export type GradientBaseStrategy = BaseStrategy<GradientOrder>;
 
+export type GradientEncodedOrderBNStr = RetypeProps<
+  EncodedGradientOrder,
+  bigint,
+  string
+>;
+export interface EncodedGradientStrategyBnStr {
+  id: string;
+  token0: string;
+  token1: string;
+  order0: GradientEncodedOrderBNStr;
+  order1: GradientEncodedOrderBNStr;
+}
+
+export type AnyEncodedStrategy =
+  | EncodedStrategyBNStr
+  | EncodedGradientStrategyBnStr;
+
 export interface Strategy<T extends Order = StaticOrder>
   extends BaseStrategy<T> {
-  type: T extends StaticOrder ? 'static' : 'gradient';
+  type: T extends StaticOrder ? 'regular' : 'gradient';
   id: string;
   idDisplay: string;
+  createdAt: number;
   status: StrategyStatus;
-  encoded?: EncodedStrategyBNStr;
   owner?: string;
+  encoded?: T extends StaticOrder
+    ? EncodedStrategyBNStr
+    : EncodedGradientStrategyBnStr;
 }
 
 export interface StrategyWithFiat<T extends Order = StaticOrder>

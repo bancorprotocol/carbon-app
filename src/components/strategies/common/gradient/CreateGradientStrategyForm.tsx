@@ -9,6 +9,14 @@ import {
 import config from 'config';
 import { useStrategyFormCtx } from 'components/strategies/common/StrategyFormContext';
 import { FormGradientOrder } from '../types';
+import { carbonSDK } from 'libs/sdk';
+import { Token } from 'libs/tokens';
+import { parseUnits } from 'ethers';
+import { useNotifications } from 'hooks/useNotifications';
+import { useQueryClient } from '@tanstack/react-query';
+import { QueryKey } from 'libs/queries';
+import { createGradientStrategyParams } from './utils.sdk';
+import { useCanBatchTransactions } from 'libs/queries/chain/canBatch';
 
 interface FormProps {
   buy: FormGradientOrder;
@@ -19,8 +27,12 @@ interface FormProps {
 export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
   const { base, quote } = useStrategyFormCtx();
   const { children, buy, sell } = props;
-  const { user, openConnect } = useWagmi();
+  const { user, openConnect, sendTransaction } = useWagmi();
   const nav = useNavigate();
+  const { dispatchNotification } = useNotifications();
+  const cache = useQueryClient();
+
+  const canBatch = useCanBatchTransactions();
 
   const [animating, setAnimating] = useState(false);
   const [loadingText, setLoadingText] = useState('');
@@ -62,11 +74,45 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
 
   const create = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!user) return;
     if (isDisabled(e.currentTarget)) return;
-    // await createStrategy({
-    //   onSuccess: () => nav({ to: '/', search: {}, params: {} }),
-    // });
+
+    const strategy = { base, quote, buy, sell };
+    const params = createGradientStrategyParams(strategy);
+    const unsignedTx = await carbonSDK.createGradientStrategy(...params);
+    const getRawAmount = (token: Token, amount: string) => {
+      return parseUnits(amount || '0', token.decimals).toString();
+    };
+    unsignedTx.customData = {
+      spender: config.addresses.carbon.gradientController,
+      assets: [
+        {
+          address: base.address,
+          rawAmount: getRawAmount(base, sell.budget),
+        },
+        {
+          address: quote.address,
+          rawAmount: getRawAmount(quote, buy.budget),
+        },
+      ],
+    };
+    const tx = await sendTransaction(unsignedTx);
+    dispatchNotification('createStrategy', { txHash: tx.hash });
+    await tx.wait();
+    setTimeout(() => {
+      const keys = [
+        QueryKey.strategyAll(),
+        QueryKey.balance(user, base.address),
+        QueryKey.balance(user, quote.address),
+      ];
+      for (const queryKey of keys) {
+        cache.invalidateQueries({ queryKey });
+      }
+    }, 3000);
+    nav({ to: '/portfolio/strategies' });
   };
+
+  const canBatchGradient = !!canBatch.data || !!config.addresses.carbon.router;
 
   return (
     <form
@@ -75,10 +121,7 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
       data-testid="create-strategy-form"
     >
       {children}
-      <div className="approve-warnings rounded-lg bg-main-900/60 text-14 grid gap-16 p-20 text-main-0/60">
-        <p className="warning-message text-12 text-main-0/60">
-          Please confirm before proceeding.
-        </p>
+      <div className="surface approve-warnings rounded-lg bg-main-900/60 text-14 grid gap-16 p-20 text-main-0/60">
         <label
           htmlFor="approve-warnings"
           className="font-medium flex items-center gap-8"
@@ -86,16 +129,17 @@ export const CreateGradientStrategyForm: FC<FormProps> = (props) => {
           <input
             id="approve-warnings"
             type="checkbox"
-            className="size-18"
+            className="size-18 shrink-0"
             data-testid="approve-warnings"
           />
-          I've reviewed all strategy parameters.
+          I accept any applicable warning(s) and understand fee on transfer
+          (tax) or rebasing tokens are not supported
         </label>
       </div>
 
       {user && (
         <>
-          {config.ui.showCart && (
+          {config.ui.showCart && canBatchGradient && (
             <Button
               className="add-cart btn-on-background shrink-0"
               type="button"

@@ -11,7 +11,10 @@ import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawL
 import { D3DrawingRanges } from 'components/strategies/common/d3Chart/drawing/D3DrawingRanges';
 import { useGradientOrder } from 'components/strategies/common/gradient/useGradientOrder';
 import { CreateGradientOrder } from 'components/strategies/common/gradient/CreateGradientOrder';
-import { defaultGradientOrder } from 'components/strategies/common/gradient/utils';
+import {
+  defaultGradientMultipliers,
+  defaultGradientOrder,
+} from 'components/strategies/common/gradient/utils';
 import { CreateGradientStrategyForm } from 'components/strategies/common/gradient/CreateGradientStrategyForm';
 import { OrderDirection } from 'components/strategies/common/OrderDirection';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
@@ -40,14 +43,20 @@ export const TradeAuction = () => {
     [navigate],
   );
 
-  const baseOrder = useMemo(() => {
-    return defaultGradientOrder(search, marketPrice);
-  }, [search, marketPrice]);
+  const direction = search.direction ?? 'sell';
+  const multi = useMemo(() => {
+    return defaultGradientMultipliers(base.address, quote.address, direction);
+  }, [base.address, quote.address, direction]);
+
+  const initOrder = useMemo(() => {
+    return defaultGradientOrder(search, multi, marketPrice);
+  }, [search, multi, marketPrice]);
+
   const { order, setOrder, drawing, onDrawingUpdate } = useGradientOrder(
-    baseOrder,
+    initOrder,
     saveOrder,
   );
-  const direction = order.direction;
+
   const orders = {
     buy: direction === 'buy' ? order : emptyGradientOrder(),
     sell: direction === 'sell' ? order : emptyGradientOrder(),
@@ -55,14 +64,14 @@ export const TradeAuction = () => {
 
   const setDirection = useCallback(
     (direction: StrategyDirection) => {
-      const next = defaultGradientOrder(
-        { direction, budget: order.budget },
-        marketPrice,
-      );
-      delete next.marginalPrice;
-      setOrder(next);
+      saveOrder({
+        direction,
+        startPrice: undefined,
+        endPrice: undefined,
+        budget: undefined,
+      });
     },
-    [marketPrice, order.budget, setOrder],
+    [saveOrder],
   );
 
   return (
@@ -83,7 +92,7 @@ export const TradeAuction = () => {
       </StrategyChartSection>
       <CreateLayout url={url}>
         <CreateGradientStrategyForm buy={orders.buy} sell={orders.sell}>
-          <article className="bg-main-900 grid rounded-b-2xl">
+          <div className="surface grid rounded-2xl overflow-clip">
             <OrderDirection direction={direction} setDirection={setDirection} />
             <div
               className={cn(style.order, 'grid gap-16 p-16')}
@@ -92,7 +101,7 @@ export const TradeAuction = () => {
             >
               <CreateGradientOrder order={order} setOrder={setOrder} />
             </div>
-          </article>
+          </div>
         </CreateGradientStrategyForm>
       </CreateLayout>
     </>

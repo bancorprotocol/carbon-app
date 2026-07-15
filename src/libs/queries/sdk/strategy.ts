@@ -4,7 +4,6 @@ import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
 import { SafeDecimal } from 'libs/safedecimal';
-import config from 'config';
 import { useTokens } from 'hooks/useTokens';
 import { EncodedStrategyBNStr, StrategyUpdate } from '@bancor/carbon-sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
@@ -14,73 +13,91 @@ import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 import {
   AnyStrategy,
   EditOrders,
+  FormStaticOrder,
   StaticOrder,
   Strategy,
 } from 'components/strategies/common/types';
 import {
   getStrategyStatus,
   isGradientStrategy,
+  isGradientStrategyId,
   isZero,
 } from 'components/strategies/common/utils';
-import { StrategyAPI, StrategyOrderAPI } from 'libs/queries/extApi/strategy';
+import { AnyStrategyAPI, StaticOrderAPI } from 'libs/queries/extApi/strategy';
 import { carbonApi } from 'services/carbonApi';
 import { useMemo } from 'react';
+import config from 'config';
 
 const buildStrategyFromAPI = (
-  s: StrategyAPI,
+  s: AnyStrategyAPI,
   getTokenById: (id: string) => Token | undefined,
-): Strategy | undefined => {
+): AnyStrategy | undefined => {
   const base = getTokenById(s.base);
   const quote = getTokenById(s.quote);
   if (!base || !quote) return;
-  const toOrder = (order: StrategyOrderAPI): StaticOrder => ({
-    budget: order.budget,
-    min: order.min,
-    max: order.max,
-    marginalPrice:
-      'marginalPrice' in order
-        ? (order.marginalPrice as string)
-        : order.marginal,
-  });
-  const buy = toOrder(s.buy);
-  const sell = toOrder(s.sell);
+  // Gradient
+  if (s.type === 'gradient') {
+    const buy = s.buy;
+    const sell = s.sell;
 
-  return {
-    type: 'static',
-    id: s.id,
-    idDisplay: getLowestBits(s.id),
-    base,
-    quote,
-    buy,
-    sell,
-    owner: s.owner,
-    status: getStrategyStatus({ buy, sell }),
-    encoded: {
+    return {
+      type: 'gradient',
       id: s.id,
-      token0: s.base,
-      token1: s.quote,
-      order0: s.encoded.order0,
-      order1: s.encoded.order1,
-    },
-  };
+      idDisplay: getLowestBits(s.id),
+      createdAt: s.createdAt,
+      base,
+      quote,
+      buy,
+      sell,
+      owner: s.owner,
+      status: getStrategyStatus({ buy, sell }),
+      encoded: {
+        id: s.id,
+        token0: s.base,
+        token1: s.quote,
+        order0: s.encoded.order0,
+        order1: s.encoded.order1,
+      },
+    };
+  } else {
+    // TODO: remove after gradient is merged
+    const toOrder = (order: StaticOrderAPI): StaticOrderAPI => ({
+      ...order,
+      marginalPrice:
+        'marginal' in order ? (order.marginal as string) : order.marginalPrice,
+    });
+    const { buy, sell } = s;
+    return {
+      type: 'regular',
+      id: s.id,
+      idDisplay: getLowestBits(s.id),
+      createdAt: s.createdAt,
+      base,
+      quote,
+      buy: toOrder(buy),
+      sell: toOrder(sell),
+      owner: s.owner,
+      status: getStrategyStatus({ buy, sell }),
+      encoded: {
+        id: s.id,
+        token0: s.base,
+        token1: s.quote,
+        order0: s.encoded.order0,
+        order1: s.encoded.order1,
+      },
+    };
+  }
 };
 
 // READ
 
 const buildAPIStrategiesHelper = (
-  strategies: StrategyAPI[],
+  strategies: AnyStrategyAPI[],
   getTokenById: (id: string) => Token | undefined,
 ) => {
   return strategies
     .map((strategy) => buildStrategyFromAPI(strategy, getTokenById))
     .filter((strategy): strategy is Strategy => !!strategy);
-};
-
-const fetchAllStrategiesFromApi = async (
-  getTokenById: (id: string) => Token | undefined,
-) => {
-  const response = await carbonApi.getStrategies({ pageSize: 0 });
-  return buildAPIStrategiesHelper(response.strategies, getTokenById);
 };
 
 /** We need to add options to disable because we want to use different hooks for explorer  */
@@ -89,7 +106,11 @@ export const useGetAllStrategies = (options: { enabled: boolean }) => {
 
   return useQuery<AnyStrategy[]>({
     queryKey: QueryKey.strategyAll(),
-    queryFn: () => fetchAllStrategiesFromApi(getTokenById),
+    queryFn: async () => {
+      const response = await carbonApi.getStrategies({ pageSize: 0 });
+      return buildAPIStrategiesHelper(response.strategies, getTokenById);
+    },
+    refetchInterval: 30_000,
     enabled: options?.enabled && !isPending,
     retry: false,
   });
@@ -143,25 +164,43 @@ const reverseStrategy = (strategy: AnyStrategy): AnyStrategy => {
     if (isZero(value)) return '0';
     return new SafeDecimal(1).div(value).toString();
   };
-  // @todo(gradient): implement reverse for gradient strategies
-  if (isGradientStrategy(strategy)) return strategy;
-  return {
-    ...strategy,
-    base: strategy.quote,
-    quote: strategy.base,
-    buy: {
-      min: invert(strategy.sell.max),
-      max: invert(strategy.sell.min),
-      marginalPrice: invert(strategy.sell.marginalPrice),
-      budget: strategy.sell.budget,
-    },
-    sell: {
-      min: invert(strategy.buy.max),
-      max: invert(strategy.buy.min),
-      marginalPrice: invert(strategy.buy.marginalPrice),
-      budget: strategy.buy.budget,
-    },
-  };
+  if (isGradientStrategy(strategy)) {
+    return {
+      ...strategy,
+      base: strategy.quote,
+      quote: strategy.base,
+      buy: {
+        ...strategy.sell,
+        startPrice: invert(strategy.sell.startPrice),
+        endPrice: invert(strategy.sell.endPrice),
+        marginalPrice: invert(strategy.sell.marginalPrice),
+      },
+      sell: {
+        ...strategy.buy,
+        startPrice: invert(strategy.buy.startPrice),
+        endPrice: invert(strategy.buy.endPrice),
+        marginalPrice: invert(strategy.buy.marginalPrice),
+      },
+    };
+  } else {
+    return {
+      ...strategy,
+      base: strategy.quote,
+      quote: strategy.base,
+      buy: {
+        min: invert(strategy.sell.max),
+        max: invert(strategy.sell.min),
+        marginalPrice: invert(strategy.sell.marginalPrice),
+        budget: strategy.sell.budget,
+      },
+      sell: {
+        min: invert(strategy.buy.max),
+        max: invert(strategy.buy.min),
+        marginalPrice: invert(strategy.buy.marginalPrice),
+        budget: strategy.buy.budget,
+      },
+    };
+  }
 };
 const normalizeStrategy = (
   base: string,
@@ -209,22 +248,6 @@ export const useTokenStrategies = (token?: string) => {
 };
 
 // WRITE
-
-const getFieldsToUpdate = (orders: EditOrders, strategy: AnyStrategy) => {
-  const { buy, sell } = orders;
-  const fields: Partial<StrategyUpdate> = {};
-  if (isGradientStrategy(strategy)) {
-    // @todo(gradient) implement edit fields for gradient
-  } else {
-    if (buy.min !== strategy.buy.min) fields.buyPriceLow = buy.min;
-    if (buy.max !== strategy.buy.max) fields.buyPriceHigh = buy.max;
-    if (sell.min !== strategy.sell.min) fields.sellPriceLow = sell.min;
-    if (sell.max !== strategy.sell.max) fields.sellPriceHigh = sell.max;
-  }
-  if (buy.budget !== strategy.buy.budget) fields.buyBudget = buy.budget;
-  if (sell.budget !== strategy.sell.budget) fields.sellBudget = sell.budget;
-  return fields as StrategyUpdate;
-};
 
 export interface CreateStrategyParams {
   base: string;
@@ -291,15 +314,27 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
   const { sendTransaction } = useWagmi();
 
   return useMutation({
-    mutationFn: async (orders: EditOrders) => {
-      const updates = getFieldsToUpdate(orders, strategy);
+    mutationFn: async (orders: EditOrders<FormStaticOrder>) => {
       if (!strategy.encoded) {
         throw new Error('No encoded found on the strategy');
       }
+      if (strategy.type === 'gradient') {
+        throw new Error('Strategy is gradient, use dedicated function for it');
+      }
+      const { buy, sell } = orders;
+      const fields: Partial<StrategyUpdate> = {};
+
+      if (buy.min !== strategy.buy.min) fields.buyPriceLow = buy.min;
+      if (buy.max !== strategy.buy.max) fields.buyPriceHigh = buy.max;
+      if (sell.min !== strategy.sell.min) fields.sellPriceLow = sell.min;
+      if (sell.max !== strategy.sell.max) fields.sellPriceHigh = sell.max;
+      if (buy.budget !== strategy.buy.budget) fields.buyBudget = buy.budget;
+      if (sell.budget !== strategy.sell.budget) fields.sellBudget = sell.budget;
+
       const unsignedTx = await carbonSDK.updateStrategy(
         strategy.id,
         strategy.encoded,
-        updates,
+        fields as StrategyUpdate,
         orders.buy.marginalPrice,
         orders.sell.marginalPrice,
       );
@@ -316,7 +351,7 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
             rawAmount: getRawAmount(
               strategy.base,
               strategy.sell.budget,
-              updates.sellBudget,
+              fields.sellBudget,
             ),
           },
           {
@@ -324,7 +359,7 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
             rawAmount: getRawAmount(
               strategy.quote,
               strategy.buy.budget,
-              updates.buyBudget,
+              fields.buyBudget,
             ),
           },
         ],
@@ -340,20 +375,35 @@ export const usePauseStrategyQuery = () => {
 
   return useMutation({
     mutationFn: async (strategy: AnyStrategy) => {
-      if (!strategy.encoded)
+      if (!strategy.encoded) {
         throw new Error('No encoded found on the strategy');
-      const unsignedTx = await carbonSDK.updateStrategy(
-        strategy.id,
-        strategy.encoded,
-        {
-          buyPriceLow: '0',
-          buyPriceHigh: '0',
-          sellPriceLow: '0',
-          sellPriceHigh: '0',
-        },
-      );
-
-      return sendTransaction(unsignedTx);
+      }
+      if (strategy.type === 'regular') {
+        const unsignedTx = await carbonSDK.updateStrategy(
+          strategy.id,
+          strategy.encoded,
+          {
+            buyPriceLow: '0',
+            buyPriceHigh: '0',
+            sellPriceLow: '0',
+            sellPriceHigh: '0',
+          },
+        );
+        return sendTransaction(unsignedTx);
+      } else {
+        console.log(strategy.encoded);
+        const unsignedTx = await carbonSDK.updateGradientStrategy(
+          strategy.id,
+          strategy.encoded,
+          {
+            buyInitialPrice: '0',
+            buyFinalPrice: '0',
+            sellInitialPrice: '0',
+            sellFinalPrice: '0',
+          },
+        );
+        return sendTransaction(unsignedTx);
+      }
     },
   });
 };
@@ -363,7 +413,9 @@ export const useDeleteStrategyQuery = () => {
 
   return useMutation({
     mutationFn: async ({ id }: DeleteStrategyParams) => {
-      const unsignedTx = await carbonSDK.deleteStrategy(id);
+      const unsignedTx = isGradientStrategyId(BigInt(id))
+        ? await carbonSDK.deleteGradientStrategy(id)
+        : await carbonSDK.deleteStrategy(id);
 
       return sendTransaction(unsignedTx);
     },

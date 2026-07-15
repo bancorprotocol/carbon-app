@@ -72,7 +72,7 @@ export const useCreateStrategy = (props: Props) => {
               token_pair: `${base.symbol}/${quote.symbol}`,
               strategy_base_token: base.symbol,
               strategy_quote_token: quote.symbol,
-              strategy_category: 'static',
+              strategy_category: 'regular',
               strategy_type: getStrategyType({ buy, sell }),
             });
             await tx.wait();

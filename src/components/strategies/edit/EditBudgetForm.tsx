@@ -13,10 +13,10 @@ import { useWagmi } from 'libs/wagmi';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useDeleteStrategy } from '../useDeleteStrategy';
 import { hasNoBudget } from '../overlapping/utils';
-import { EditOrders } from '../common/types';
+import { EditOrders, FormStaticOrder } from '../common/types';
 
 interface Props {
-  orders: EditOrders;
+  orders: EditOrders<FormStaticOrder>;
   editType: EditTypes;
   hasChanged: boolean;
   children: ReactNode;
