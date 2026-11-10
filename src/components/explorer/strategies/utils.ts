@@ -10,19 +10,19 @@ export const strategyFilter = {
     active: 'Active',
     inactive: 'Inactive',
   },
-  // @todo(gradient)
-  // type: {
-  //   all: 'All',
-  //   static: 'Static',
-  //   gradient: 'Gradient',
-  // },
+  type: {
+    all: 'All',
+    regular: 'Static',
+    gradient: 'Time Based',
+  },
 };
+
 export type FilterStatus = keyof (typeof strategyFilter)['status'];
-// export type FilterType = keyof (typeof strategyFilter)['type'];
-export type AllFilter = FilterStatus; // | FilterType;
+export type FilterType = keyof (typeof strategyFilter)['type'];
+export type AllFilter = FilterStatus | FilterType;
 export type StrategyFilter = {
   status: FilterStatus;
-  // type: FilterType;
+  type: FilterType;
 };
 
 export const strategySort = {
@@ -47,11 +47,11 @@ type SortFn = (a: AnyStrategyWithFiat, b: AnyStrategyWithFiat) => number;
 export const sortStrategyFn: Record<StrategySort, SortFn> = {
   recent: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
-    return new SafeDecimal(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
+    return new SafeDecimal(a.createdAt).minus(b.createdAt).times(-1).toNumber();
   },
   old: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
-    return new SafeDecimal(a.idDisplay).minus(b.idDisplay).toNumber();
+    return new SafeDecimal(a.createdAt).minus(b.createdAt).toNumber();
   },
   pairAsc: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;

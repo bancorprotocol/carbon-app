@@ -8,7 +8,12 @@ import {
   useState,
 } from 'react';
 import { scaleBandInvert } from '../utils';
-import { ChartPoint, Drawing, useD3ChartCtx } from '../D3ChartContext';
+import {
+  ChartPoint,
+  Drawing,
+  DrawingColor,
+  useD3ChartCtx,
+} from '../D3ChartContext';
 import { getAreaBox, getDelta, getEdges, getInitialPoints } from './utils';
 
 interface Props {
@@ -85,7 +90,7 @@ export const D3DrawLine: FC<Props> = ({ xScale, yScale, onChange }) => {
 
 interface D3ShapeProps {
   drawing: Drawing;
-  color?: 'primary' | 'seconary' | 'sell' | 'buy';
+  color?: DrawingColor;
   onChange: (points: ChartPoint[]) => any;
 }
 

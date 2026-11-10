@@ -5,12 +5,21 @@ import { TokenLogo } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import WarningIcon from 'assets/icons/warning.svg?react';
 import { cn, getUsdPrice, prettifyNumber } from 'utils/helpers';
+import { ReactNode } from '@tanstack/react-router';
 
-export const StrategyBlockBuySell: FC<{
+interface Props {
   strategy: CartStrategy<Order>;
   isBuy?: boolean;
   className?: string;
-}> = ({ strategy, isBuy = false, className }) => {
+  children?: ReactNode;
+}
+
+export const StrategyBlockBuySell: FC<Props> = ({
+  strategy,
+  isBuy = false,
+  className,
+  children,
+}) => {
   const token = isBuy ? strategy.base : strategy.quote;
   const otherToken = isBuy ? strategy.quote : strategy.base;
   const order = isBuy ? strategy.buy : strategy.sell;
@@ -88,6 +97,7 @@ export const StrategyBlockBuySell: FC<{
       >
         {hasFiatValue ? fiatBudgetValue : '...'}
       </p>
+      {children}
     </article>
   );
 };

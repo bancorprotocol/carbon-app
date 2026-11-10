@@ -18,8 +18,14 @@ import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 import { useBatchTransaction } from 'libs/wagmi/batch-transaction';
 import { TransactionRequest, parseUnits } from 'ethers';
 import config from 'config';
+import { createGradientStrategyParams } from 'components/strategies/common/gradient/utils.sdk';
+import {
+  BatchCreateBuySellStrategy,
+  BatchCreateGradientStrategy,
+} from '@bancor/carbon-sdk/strategy-management';
 
 const batcher = config.addresses.carbon.batcher;
+const router = config.addresses.carbon.router;
 const getApproveTokens = (strategies: AnyCartStrategy[]) => {
   if (!batcher) throw new Error('Batcher address not provided');
   const tokens: Record<string, Token> = {};
@@ -96,50 +102,130 @@ export const CartPage = () => {
         const getRawAmount = (token: Token, amount: string) => {
           return parseUnits(amount, token.decimals).toString();
         };
+        const totalAssets = () => {
+          const amounts: Record<string, bigint> = {};
+          for (const strategy of strategies) {
+            const { base, quote, buy, sell } = strategy;
+            const baseToken = strategy.base.address;
+            const quoteToken = strategy.quote.address;
+
+            amounts[baseToken] ||= BigInt(0);
+            const sellAmount = parseUnits(sell.budget, base.decimals);
+            amounts[baseToken] = amounts[baseToken] + sellAmount;
+
+            amounts[quoteToken] ||= BigInt(0);
+            const buyAmount = parseUnits(buy.budget, quote.decimals);
+            amounts[quoteToken] = amounts[quoteToken] + buyAmount;
+          }
+          return Object.entries(amounts).map(([address, amount]) => ({
+            address,
+            rawAmount: amount.toString(),
+          }));
+        };
         const tokens = new Set<string>();
         const txs: TransactionRequest[] = [];
         if (canBatch) {
           for (const strategy of strategies) {
-            if (isGradientStrategy(strategy)) continue;
-            const { base, quote, buy, sell } = strategy;
-            const unsignedTx = await carbonSDK.createBuySellStrategy(
-              base.address,
-              quote.address,
-              buy.min,
-              buy.marginalPrice || buy.max,
-              buy.max,
-              buy.budget,
-              sell.min,
-              sell.marginalPrice || sell.min,
-              sell.max,
-              sell.budget,
-            );
-            unsignedTx.customData = {
-              spender: config.addresses.carbon.carbonController,
-              assets: [
-                {
-                  address: base.address,
-                  rawAmount: getRawAmount(base, sell.budget),
-                },
-                {
-                  address: quote.address,
-                  rawAmount: getRawAmount(quote, buy.budget),
-                },
-              ],
-            };
-            txs.push(unsignedTx);
+            const { base, quote } = strategy;
+            const assets = [
+              {
+                address: base.address,
+                rawAmount: getRawAmount(base, strategy.sell.budget),
+              },
+              {
+                address: quote.address,
+                rawAmount: getRawAmount(quote, strategy.buy.budget),
+              },
+            ];
+            if (isGradientStrategy(strategy)) {
+              const params = createGradientStrategyParams(strategy);
+              const unsignedTx = await carbonSDK.createGradientStrategy(
+                ...params,
+              );
+              unsignedTx.customData = {
+                spender: config.addresses.carbon.carbonController,
+                assets: assets,
+              };
+              txs.push(unsignedTx);
+            } else {
+              const { base, quote, buy, sell } = strategy;
+              const unsignedTx = await carbonSDK.createBuySellStrategy(
+                base.address,
+                quote.address,
+                buy.min,
+                buy.marginalPrice || buy.max,
+                buy.max,
+                buy.budget,
+                sell.min,
+                sell.marginalPrice || sell.min,
+                sell.max,
+                sell.budget,
+              );
+              unsignedTx.customData = {
+                spender: config.addresses.carbon.carbonController,
+                assets: assets,
+              };
+              txs.push(unsignedTx);
+            }
             tokens.add(base.address);
             tokens.add(quote.address);
           }
+        } else if (router) {
+          const regular: BatchCreateBuySellStrategy[] = [];
+          const gradient: BatchCreateGradientStrategy[] = [];
+          for (const strategy of strategies) {
+            if (isGradientStrategy(strategy)) {
+              const params = createGradientStrategyParams(strategy);
+              gradient.push({
+                baseToken: params[0],
+                quoteToken: params[1],
+                buyInitialPrice: params[2],
+                buyFinalPrice: params[3],
+                buyBudget: params[4],
+                buyTradingStartTime: params[5],
+                buyTradingEndTime: params[6],
+                buyGradientType: params[7],
+                sellInitialPrice: params[8],
+                sellFinalPrice: params[9],
+                sellBudget: params[10],
+                sellTradingStartTime: params[11],
+                sellTradingEndTime: params[12],
+                sellGradientType: params[13],
+              });
+            } else {
+              const { base, quote, buy, sell } = strategy;
+              regular.push({
+                baseToken: base.address,
+                quoteToken: quote.address,
+                buyPriceLow: buy.min,
+                buyPriceMarginal: buy.marginalPrice || buy.max,
+                buyPriceHigh: buy.max,
+                buyBudget: buy.budget,
+                sellPriceLow: sell.min,
+                sellPriceMarginal: sell.marginalPrice || sell.min,
+                sellPriceHigh: sell.max,
+                sellBudget: sell.budget,
+              });
+            }
+            tokens.add(strategy.base.address);
+            tokens.add(strategy.quote.address);
+          }
+          const unsignedTx = await carbonSDK.routerCreateStrategies(
+            regular,
+            gradient,
+            { gasLimit: 10000000000000n },
+          );
+          unsignedTx.customData = {
+            spender: router,
+            assets: totalAssets(),
+          };
+          txs.push(unsignedTx);
         } else {
-          // TODO: support gradient
-          const params: Parameters<
-            typeof carbonSDK.batchCreateBuySellStrategies
-          >[0] = [];
+          const regular: BatchCreateBuySellStrategy[] = [];
           for (const strategy of strategies) {
             if (isGradientStrategy(strategy)) continue;
             const { base, quote, buy, sell } = strategy;
-            params.push({
+            regular.push({
               baseToken: base.address,
               quoteToken: quote.address,
               buyPriceLow: buy.min,
@@ -155,36 +241,14 @@ export const CartPage = () => {
             tokens.add(quote.address);
           }
           const unsignedTx =
-            await carbonSDK.batchCreateBuySellStrategies(params);
+            await carbonSDK.batchCreateBuySellStrategies(regular);
 
-          const amounts: Record<string, bigint> = {};
-          for (const strategy of strategies) {
-            const base = strategy.base.address;
-            const quote = strategy.quote.address;
-            amounts[base] ||= BigInt(0);
-            const sellAmount = parseUnits(
-              strategy.sell.budget,
-              strategy.base.decimals,
-            );
-            amounts[base] = amounts[base] + sellAmount;
-
-            amounts[quote] ||= BigInt(0);
-            const buyAmount = parseUnits(
-              strategy.buy.budget,
-              strategy.quote.decimals,
-            );
-            amounts[quote] = amounts[quote] + buyAmount;
-          }
           unsignedTx.customData = {
             spender: batcher,
-            assets: Object.entries(amounts).map(([address, amount]) => ({
-              address,
-              rawAmount: amount.toString(),
-            })),
+            assets: totalAssets(),
           };
           txs.push(unsignedTx);
         }
-
         const tx = await sendTransaction(txs);
         setConfirmation(false);
         setProcessing(true);
@@ -194,15 +258,17 @@ export const CartPage = () => {
         setProcessing(false);
         clearCart(user!);
         nav({ to: '/portfolio/strategies' });
-        cache.invalidateQueries({
-          queryKey: QueryKey.strategyAll(),
-        });
-
-        for (const token of tokens) {
+        setTimeout(() => {
           cache.invalidateQueries({
-            queryKey: QueryKey.balance(user!, token),
+            queryKey: QueryKey.strategyAll(),
           });
-        }
+
+          for (const token of tokens) {
+            cache.invalidateQueries({
+              queryKey: QueryKey.balance(user!, token),
+            });
+          }
+        }, 3000);
       } catch (err) {
         console.error(err);
       } finally {

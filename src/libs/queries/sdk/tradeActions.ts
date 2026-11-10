@@ -28,7 +28,7 @@ export const useGetTradeActionsQuery = (props: Props) => {
         target.address,
       );
       return carbonSDK.getTradeDataFromActions({
-        tradeByTargetAmount: !isTradeBySource,
+        isTradeByTarget: !isTradeBySource,
         actionsWei,
         sourceDecimals: source.decimals,
         targetDecimals: target.decimals,

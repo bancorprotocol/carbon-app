@@ -5,6 +5,8 @@ import IconRecurring from 'assets/icons/recurring.svg?react';
 import IconOverlapping from 'assets/icons/overlapping.svg?react';
 import IconMarket from 'assets/icons/market.svg?react';
 import IconRange from 'assets/icons/range.svg?react';
+import IconAuction from 'assets/icons/auction.svg?react';
+import IconChannel from 'assets/icons/channel.svg?react';
 import { OverlappingPreview } from 'components/trade/preview/all/overlapping';
 import { FullRangePreview } from 'components/trade/preview/all/full-range';
 import { LimitSellPreview } from 'components/trade/preview/all/limit-sell';
@@ -16,8 +18,12 @@ import { ExplorerHeader } from 'components/explorer/ExplorerHeader';
 import { PreviewCommonStrategyType } from 'components/trade/preview/common';
 import { RangeBuyPreview } from 'components/trade/preview/all/range-buy';
 import { SwapPreview } from 'components/trade/preview/all/swap';
-import config from 'config';
 import { RewardBanner } from 'components/rewards/banner';
+import { AuctionBuyPreview } from 'components/trade/preview/all/auction-buy';
+import { AuctionSellPreview } from 'components/trade/preview/all/auction-sell';
+import { TrianglePreview } from 'components/trade/preview/all/triangle';
+import config from 'config';
+import { ChannelPreview } from 'components/trade/preview/all/channel';
 
 const tabs = [
   {
@@ -95,6 +101,30 @@ const tabs = [
         ),
         unique: true,
       },
+      {
+        to: '/trade/auction',
+        search: {
+          direction: 'buy' as const,
+        },
+        icon: <IconAuction className="size-24" />,
+        title: 'Auction Buy',
+        description:
+          'Buy tokens over time using a reverse Dutch auction with a continuously time changing price.',
+        preview: <AuctionBuyPreview className="bg-main-800 rounded-2xl" />,
+        unique: true,
+      },
+      {
+        to: '/trade/auction',
+        search: {
+          direction: 'sell' as const,
+        },
+        icon: <IconAuction className="size-24" />,
+        title: 'Auction Sell',
+        description:
+          'Sell tokens over time using a Dutch auction. The price moves dynamically to find demand and optimize execution.',
+        preview: <AuctionSellPreview className="bg-main-800 rounded-2xl" />,
+        unique: true,
+      },
     ],
   },
 
@@ -137,6 +167,26 @@ const tabs = [
         ),
         unique: true,
       },
+      {
+        to: '/trade/channel',
+        search: {},
+        icon: <IconChannel className="size-24" />,
+        title: 'Recurring Timed Channel',
+        description:
+          'A paired Dutch / reverse Dutch auction forming a dynamic trading channel over time.',
+        preview: <ChannelPreview className="bg-main-800 rounded-2xl" />,
+        unique: true,
+      },
+      {
+        to: '/trade/triangle',
+        search: {},
+        icon: <IconChannel className="size-24" />,
+        title: 'Recurring Timed Triangle',
+        description:
+          'An advanced multi-leg auction setup combining dynamic pricing curves for custom strategies.',
+        preview: <TrianglePreview className="bg-main-800 rounded-2xl" />,
+        unique: true,
+      },
     ],
   },
 ];
@@ -174,7 +224,7 @@ export const ConnectedLandingPage = () => {
             hidden={active !== id}
             aria-labelledby={`tab-${id}`}
           >
-            <ul className="place-self-center flex gap-24 flex-wrap justify-center">
+            <ul className="place-self-center flex gap-24 flex-wrap justify-center max-w-1200">
               {items.map((item) => (
                 <li
                   key={item.title}

@@ -162,6 +162,19 @@ const sdkExposed = {
       overrides,
     ),
   getCacheDump: () => sdkCache.serialize(),
+  // Gradient
+  createGradientStrategy: (
+    ...args: Parameters<(typeof carbonSDK)['createGradientBuySellStrategy']>
+  ) => carbonSDK.createGradientBuySellStrategy(...args),
+  deleteGradientStrategy: (
+    ...args: Parameters<(typeof carbonSDK)['deleteGradientStrategy']>
+  ) => carbonSDK.deleteGradientStrategy(...args),
+  updateGradientStrategy: (
+    ...args: Parameters<(typeof carbonSDK)['updateGradientStrategy']>
+  ) => carbonSDK.updateGradientStrategy(...args),
+  routerCreateStrategies: (
+    ...args: Parameters<(typeof carbonSDK)['routerCreateStrategies']>
+  ) => carbonSDK.routerCreateStrategies(...args),
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;

@@ -163,7 +163,7 @@ export const PositionDialog: FC<Props> = (props) => {
         token_pair: `${p.base.symbol}/${p.quote.symbol}`,
         strategy_base_token: p.base.symbol,
         strategy_quote_token: p.quote.symbol,
-        strategy_category: 'static',
+        strategy_category: 'regular',
         strategy_type: 'overlapping',
         source_amm: p.dex,
       });

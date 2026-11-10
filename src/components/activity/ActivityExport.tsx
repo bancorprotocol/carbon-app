@@ -35,16 +35,16 @@ const getActivityCSV = (activities: Activity[]) => {
     'Block Number',
     'Transaction Hash',
     'Date',
-    // @todo(gradient)
-    // 'Strategy Type',
-    // 'Buy _S P_',
-    // 'Buy _E P_',
-    // 'Buy _S D_',
-    // 'Buy _E D_',
-    // 'Sell _S P_',
-    // 'Sell _E P_',
-    // 'Sell _S D_',
-    // 'Sell _E D_',
+    // Gradient
+    'Strategy Type',
+    'Buy Start Price',
+    'Buy End Price',
+    'Buy Start Date',
+    'Buy End Date',
+    'Sell Start Price',
+    'Sell End Price',
+    'Sell Start Date',
+    'Sell End Date',
   ].join(',');
 
   const body = activities.map((activity) => {
@@ -53,19 +53,19 @@ const getActivityCSV = (activities: Activity[]) => {
     const date = new Date(activity.date).toLocaleDateString();
     const min = (order: Order) => {
       if ('min' in order) return order.min;
-      return SafeDecimal.min(order._sP_, order._eP_).toString();
+      return SafeDecimal.min(order.startPrice, order.endPrice).toString();
     };
     const max = (order: Order) => {
       if ('max' in order) return order.max;
-      return SafeDecimal.max(order._sP_, order._eP_).toString();
+      return SafeDecimal.max(order.startPrice, order.endPrice).toString();
     };
     const gradientPrices = (order: Order) => {
       if ('min' in order) return ['', '', '', ''];
       return [
-        order._sP_,
-        order._eP_,
-        fromUnixUTC(order._sD_).toLocaleDateString(),
-        fromUnixUTC(order._eD_).toLocaleDateString(),
+        order.startPrice,
+        order.endPrice,
+        fromUnixUTC(order.startDate).toLocaleDateString(),
+        fromUnixUTC(order.endDate).toLocaleDateString(),
       ];
     };
     return [
@@ -89,10 +89,9 @@ const getActivityCSV = (activities: Activity[]) => {
       blockNumber,
       txHash,
       date,
-      // @todo(gradient)
-      // strategy.type === 'gradient' ? 'Gradient' : 'Static',
-      // ...gradientPrices(strategy.buy),
-      // ...gradientPrices(strategy.sell),
+      strategy.type === 'gradient' ? 'Gradient' : 'Static',
+      ...gradientPrices(strategy.buy),
+      ...gradientPrices(strategy.sell),
     ]
       .map((v) => `"${v}"`) // Ignore inner comma
       .join(',');

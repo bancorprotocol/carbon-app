@@ -4,7 +4,6 @@ import { useWagmi } from 'libs/wagmi';
 import { useState } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { AnyStrategy } from './common/types';
-import { isGradientStrategy } from './common/utils';
 
 export const usePauseStrategy = () => {
   const { user } = useWagmi();
@@ -22,11 +21,6 @@ export const usePauseStrategy = () => {
 
     if (!base || !quote || !user) {
       throw new Error('error in update strategy: missing data ');
-    }
-
-    // TODO: support gradient
-    if (isGradientStrategy(strategy)) {
-      throw new Error('Cannot pause gradient strategy for now');
     }
 
     updateMutation.mutate(strategy, {

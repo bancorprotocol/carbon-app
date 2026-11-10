@@ -66,6 +66,7 @@ export const commonConfig: AppConfig = {
       vault: '0xBBAFF3Bf6eC4C15992c0Fb37F12491Fd62C5B496',
     },
   },
+  stableTokens: [addresses.USDT],
   utils: {
     multicall3: {
       address: '0xcA11bde05977b3631167028862bE2a173976CA11',

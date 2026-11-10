@@ -23,6 +23,7 @@ import { D3EditLine } from 'components/strategies/common/d3Chart/drawing/D3DrawL
 import { D3DrawingRanges } from 'components/strategies/common/d3Chart/drawing/D3DrawingRanges';
 import { cn } from 'utils/helpers';
 import style from 'components/strategies/common/order.module.css';
+import { defaultGradientMultipliers } from 'components/strategies/common/gradient/utils';
 
 const url = '/trade/quick-auction';
 export const TradeQuickAuction = () => {
@@ -46,13 +47,17 @@ export const TradeQuickAuction = () => {
     [navigate],
   );
 
+  const direction = search.direction ?? 'sell';
+  const multi = useMemo(() => {
+    return defaultGradientMultipliers(base.address, quote.address, direction);
+  }, [base.address, quote.address, direction]);
+
   const baseOrder = useMemo(() => {
-    return defaultQuickGradientOrder(search, marketPrice);
-  }, [search, marketPrice]);
+    return defaultQuickGradientOrder(search, multi, marketPrice);
+  }, [search, multi, marketPrice]);
   const { order, setOrder, drawing, onDrawingUpdate, gradientOrder } =
     useQuickGradientOrder(baseOrder, saveOrder);
 
-  const direction = order.direction;
   const orders = {
     buy: direction === 'buy' ? gradientOrder : emptyGradientOrder(),
     sell: direction === 'sell' ? gradientOrder : emptyGradientOrder(),
@@ -66,14 +71,14 @@ export const TradeQuickAuction = () => {
 
   const setDirection = useCallback(
     (direction: StrategyDirection) => {
-      const next = defaultQuickGradientOrder(
-        { direction, budget: order.budget },
-        marketPrice,
-      );
-      delete next.marginalPrice;
-      setOrder(next);
+      saveOrder({
+        direction,
+        startPrice: undefined,
+        endPrice: undefined,
+        budget: undefined,
+      });
     },
-    [marketPrice, order.budget, setOrder],
+    [saveOrder],
   );
 
   return (
@@ -90,13 +95,13 @@ export const TradeQuickAuction = () => {
           <D3DrawingRanges
             drawing={drawing}
             color={direction}
-            formatX={(x) => formatQuickTime(x)}
+            formatX={formatQuickTime}
           />
         </QuickGradientChart>
       </StrategyChartSection>
       <CreateLayout url={url}>
         <CreateGradientStrategyForm buy={orders.buy} sell={orders.sell}>
-          <article className="bg-main-900 rounded-b-2xl grid">
+          <div className="surface rounded-2xl grid overflow-clip">
             <OrderDirection direction={direction} setDirection={setDirection} />
             <div
               className={cn(style.order, 'grid gap-16 p-16')}
@@ -105,7 +110,7 @@ export const TradeQuickAuction = () => {
             >
               <CreateQuickGradientOrder order={order} setOrder={setOrder} />
             </div>
-          </article>
+          </div>
         </CreateGradientStrategyForm>
       </CreateLayout>
     </>

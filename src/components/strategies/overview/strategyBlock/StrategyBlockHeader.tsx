@@ -14,6 +14,7 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { PairName } from 'components/common/DisplayPair';
 import { isGradientStrategy } from 'components/strategies/common/utils';
 import { Link } from '@tanstack/react-router';
+import { StrategyTypeIcon } from '../StrategyTypeIcon';
 
 interface Props {
   strategy: AnyStrategy;
@@ -65,18 +66,17 @@ interface StrategySubtitleProps {
   isExplorer?: boolean;
 }
 export const StrategySubtitle: FC<StrategySubtitleProps> = (props) => {
-  const { id, status, isExplorer } = props;
+  const { id, status, isExplorer, isGradient } = props;
   return (
     <p className="text-12 flex items-center gap-8 text-main-0/60">
       {id}
       <svg width="4" height="4" role="separator">
         <circle cx="2" cy="2" r="2" fill="currentcolor" />
       </svg>
-      {/* @todo(gradient) */}
-      {/* <StrategyTypeIcon isGradient={isGradient} />
+      <StrategyTypeIcon isGradient={isGradient} />
       <svg width="4" height="4" role="separator">
         <circle cx="2" cy="2" r="2" fill="currentcolor" />
-      </svg> */}
+      </svg>
       <StrategyStatusTag status={status} isExplorer={isExplorer} />
     </p>
   );

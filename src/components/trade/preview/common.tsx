@@ -103,6 +103,53 @@ export const PreviewCommonStrategyType = () => {
             <use href="#buy-indicator" />
           </g>
         </g>
+        <g id="svg-buy-auction">
+          <line
+            x1="100"
+            x2="950"
+            y1="150"
+            y2="0"
+            strokeWidth="5"
+            stroke="var(--color-buy)"
+          />
+          <circle cx="100" cy="150" r="10" fill="var(--color-buy)" />
+          <circle cx="950" cy="0" r="10" fill="var(--color-buy)" />
+        </g>
+        <g id="svg-sell-auction">
+          <line
+            x1="100"
+            x2="950"
+            y1="-150"
+            y2="0"
+            strokeWidth="5"
+            stroke="var(--color-sell)"
+          />
+          <circle cx="100" cy="-150" r="10" fill="var(--color-sell)" />
+          <circle cx="950" cy="0" r="10" fill="var(--color-sell)" />
+        </g>
+
+        <g id="svg-sell-channel">
+          <line
+            x1="100"
+            x2="950"
+            y1="150"
+            y2="-150"
+            strokeWidth="5"
+            stroke="var(--color-sell)"
+          />
+          <circle cx="100" cy="150" r="10" fill="var(--color-sell)" />
+          <circle cx="950" cy="-150" r="10" fill="var(--color-sell)" />
+          <line
+            x1="100"
+            x2="950"
+            y1="300"
+            y2="0"
+            strokeWidth="5"
+            stroke="var(--color-buy)"
+          />
+          <circle cx="100" cy="300" r="10" fill="var(--color-buy)" />
+          <circle cx="950" cy="0" r="10" fill="var(--color-buy)" />
+        </g>
 
         <g id="buy-range">
           <polyline

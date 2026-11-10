@@ -7,6 +7,8 @@ import IconRange from 'assets/icons/range.svg?react';
 import ArrowCircleRightIcon from 'assets/icons/arrow_circle_right.svg?react';
 import IconShield from 'assets/icons/shield.svg?react';
 import TargetIcon from 'assets/icons/target.svg?react';
+import AuctionIcon from 'assets/icons/auction.svg?react';
+import ChannelIcon from 'assets/icons/channel.svg?react';
 import { useTrending } from 'libs/queries/extApi/tradeCount';
 import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
@@ -27,7 +29,13 @@ const types = [
         icon: <IconMarket className="size-24" />,
       },
       {
-        name: 'Liquidity position',
+        name: 'Full Range Liquidity',
+        to: '/trade/overlapping' as const,
+        search: { preset: 'Infinity' } as const,
+        icon: <IconOverlapping className="size-24" />,
+      },
+      {
+        name: 'Concentrated Liquidity',
         to: '/trade/overlapping' as const,
         search: {},
         icon: <IconOverlapping className="size-24" />,
@@ -52,6 +60,12 @@ const types = [
         search: { buySettings: 'limit', sellSettings: 'limit' } as const,
         icon: <IconRecurring className="size-24" />,
       },
+      {
+        name: 'Timed Auction',
+        to: '/trade/auction' as const,
+        search: { direction: 'buy' } as const,
+        icon: <AuctionIcon className="size-24" />,
+      },
     ],
     targets: ['Advanced', 'Experts'],
   },
@@ -70,6 +84,12 @@ const types = [
         name: 'Recurring range orders',
         to: '/trade/recurring' as const,
         icon: <IconRecurring className="size-24" />,
+      },
+      {
+        name: 'Recurring Timed Auction',
+        to: '/trade/triangle' as const,
+        search: {} as const,
+        icon: <ChannelIcon className="size-24" />,
       },
     ],
     targets: ['Professional', 'Quants'],

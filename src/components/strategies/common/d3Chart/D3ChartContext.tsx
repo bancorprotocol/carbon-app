@@ -10,6 +10,8 @@ import {
 } from 'react';
 import { ZoomTransform } from 'd3';
 
+export type DrawingColor = 'primary' | 'seconary' | 'sell' | 'buy';
+
 export interface ChartPoint {
   x: string;
   y: number;

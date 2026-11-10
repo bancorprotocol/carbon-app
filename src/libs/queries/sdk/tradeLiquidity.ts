@@ -2,8 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKey, useGetAllStrategies } from 'libs/queries';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { carbonSDK } from 'libs/sdk';
-import config from 'config';
 import { Token } from 'libs/tokens';
+import { isStaticEncoded } from 'components/strategies/common/utils';
+import config from 'config';
 
 export const useGetTradeLiquidity = (source: Token, target: Token) => {
   const { data: strategies } = useGetAllStrategies({
@@ -16,7 +17,7 @@ export const useGetTradeLiquidity = (source: Token, target: Token) => {
         sourceToken: source.address,
         targetToken: target.address,
         targetDecimals: target.decimals,
-        strategies: strategies!.map((s) => s.encoded).filter((e) => !!e),
+        strategies: strategies!.map((s) => s.encoded).filter(isStaticEncoded),
       });
     },
     enabled: !!strategies && !config.ui.useDexAggregator,

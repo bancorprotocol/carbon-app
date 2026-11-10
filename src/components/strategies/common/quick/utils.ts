@@ -1,24 +1,28 @@
 import { hourFormatter, toUnixUTC } from 'components/simulator/utils';
 import { GradientOrderBlock, QuickGradientOrderBlock } from '../types';
 import { addMinutes } from 'date-fns';
+import { GradientMultipliers } from '../gradient/utils';
 
 export const defaultQuickGradientOrder = (
   baseOrder: Partial<QuickGradientOrderBlock>,
+  multiplier: GradientMultipliers,
   marketPrice: number = 0,
 ): QuickGradientOrderBlock => {
   const direction = baseOrder.direction ?? 'sell';
-  const startMultiplier = direction === 'buy' ? 0.95 : 1.05;
-  const endMultiplier = direction === 'buy' ? 0.99 : 1.01;
+  const startMultiplier = multiplier.start;
+  const endMultiplier = multiplier.end;
+  const defaultStartPrice = (marketPrice * startMultiplier).toString();
+  const defaultEndPrice = (marketPrice * endMultiplier).toString();
   const order: QuickGradientOrderBlock = {
-    _sP_: baseOrder._sP_ ?? (marketPrice * startMultiplier).toString(),
-    _eP_: baseOrder._eP_ ?? (marketPrice * endMultiplier).toString(),
+    startPrice: baseOrder.startPrice ?? defaultStartPrice,
+    endPrice: baseOrder.endPrice ?? defaultEndPrice,
     deltaTime: baseOrder.deltaTime ?? '30',
     budget: baseOrder.budget ?? '',
     direction: direction,
   };
   return {
     ...order,
-    marginalPrice: order._sP_,
+    marginalPrice: order.startPrice,
   };
 };
 
@@ -29,8 +33,8 @@ export const quickToGradientOrder = (
   const today = new Date();
   return {
     ...baseOrder,
-    _sD_: toUnixUTC(today),
-    _eD_: toUnixUTC(addMinutes(today, Number(deltaTime))),
+    startDate: toUnixUTC(today),
+    endDate: toUnixUTC(addMinutes(today, Number(deltaTime))),
   };
 };
 

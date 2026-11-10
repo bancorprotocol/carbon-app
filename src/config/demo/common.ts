@@ -45,6 +45,7 @@ export const commonConfig: AppConfig = {
       vault: '',
     },
   },
+  stableTokens: [],
   utils: {
     multicall3: {
       address: '0x...',

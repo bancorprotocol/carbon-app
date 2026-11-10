@@ -22,7 +22,7 @@ interface StrategyProps {
     token_pair: string;
     strategy_base_token: string;
     strategy_quote_token: string;
-    strategy_category: 'static' | 'gradient';
+    strategy_category: 'regular' | 'gradient';
     strategy_type: StrategyType;
   };
 }
@@ -103,7 +103,7 @@ interface MigrateProps {
     token_pair: string;
     strategy_base_token: string;
     strategy_quote_token: string;
-    strategy_category: 'static' | 'gradient';
+    strategy_category: 'regular' | 'gradient';
     strategy_type: StrategyType;
     source_amm: string;
   };

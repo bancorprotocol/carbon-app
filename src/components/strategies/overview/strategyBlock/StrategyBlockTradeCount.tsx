@@ -1,9 +1,9 @@
-import { Order, StrategyWithFiat } from 'components/strategies/common/types';
+import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { FC } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 
 interface Props {
-  strategy: StrategyWithFiat<Order>;
+  strategy: AnyStrategyWithFiat;
 }
 
 export const StrategyBlockTradeCount: FC<Props> = ({ strategy }) => {

@@ -22,6 +22,8 @@ const contractsConfig: ContractsConfig = {
   voucherAddress: config.addresses.carbon.voucher,
   carbonBatcherAddress: config.addresses.carbon.batcher,
   multiCallAddress: config.utils?.multicall3?.address,
+  gradientControllerAddress: config.addresses.carbon.gradientController,
+  carbonRouterAddress: config.addresses.carbon.router,
 };
 
 const defaultCacheTTL = config.sdk.cacheTTL ?? ONE_HOUR_IN_MS;

@@ -16,7 +16,10 @@ import { StrategyChartLegend } from 'components/strategies/common/StrategyChartL
 import { D3ChartRecurring } from 'components/strategies/common/d3Chart/recurring/D3ChartRecurring';
 import { TradeChartContent } from 'components/strategies/common/d3Chart/TradeChartContent';
 import { D3PricesAxis } from 'components/strategies/common/d3Chart/D3PriceAxis';
-import { EditOrders } from 'components/strategies/common/types';
+import {
+  EditOrders,
+  FormStaticOrder,
+} from 'components/strategies/common/types';
 
 export interface EditBudgetRecurringStrategySearch {
   chartStart?: string;
@@ -50,7 +53,7 @@ export const EditBudgetRecurringPage = () => {
     search.sellBudget,
   );
 
-  const orders: EditOrders = {
+  const orders: EditOrders<FormStaticOrder> = {
     buy: {
       min: buy.min,
       max: buy.max,

@@ -11,10 +11,12 @@ interface Props {
     | '/trade/disposable'
     | '/trade/recurring'
     | '/trade/overlapping'
-    | '/trade/custom'
+    | '/trade/channel'
     | '/trade/auction'
+    | '/trade/triangle'
     | '/trade/quick-auction'
-    | '/trade/quick-custom';
+    | '/trade/quick-channel'
+    | '/trade/quick-triangle';
   children: ReactNode;
 }
 

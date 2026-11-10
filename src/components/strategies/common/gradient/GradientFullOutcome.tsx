@@ -14,10 +14,10 @@ interface Props {
 
 export const GradientFullOutcome: FC<Props> = (props) => {
   const { base, quote, order } = props;
-  const { _sP_, _eP_, budget, marginalPrice, direction } = order;
+  const { startPrice, endPrice, budget, marginalPrice, direction } = order;
   if (!marginalPrice || isZero(budget)) return;
-  const min = SafeDecimal.min(_sP_, _eP_, marginalPrice).mul(budget);
-  const max = SafeDecimal.max(_sP_, _eP_, marginalPrice).mul(budget);
+  const min = SafeDecimal.min(startPrice, endPrice, marginalPrice).mul(budget);
+  const max = SafeDecimal.max(startPrice, endPrice, marginalPrice).mul(budget);
   const token = direction === 'buy' ? base : quote;
 
   return (

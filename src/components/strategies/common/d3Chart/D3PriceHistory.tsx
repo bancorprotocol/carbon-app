@@ -24,10 +24,21 @@ import {
   zoomIdentity,
   ZoomTransform,
 } from 'd3';
-import { getDomain, isEmptyHistory, scaleBandInvert } from './utils';
+import {
+  getDomain,
+  getExtendedRange,
+  getExtendedRangeSize,
+  isEmptyHistory,
+  scaleBandInvert,
+} from './utils';
 import { cn } from 'utils/helpers';
 import { DateRangePicker } from 'components/common/datePicker/DateRangePicker';
-import { defaultEnd, default_ED_, defaultStart, default_SD_ } from '../utils';
+import {
+  defaultEnd,
+  defaultEndDate,
+  defaultStart,
+  defaultStartDate,
+} from '../utils';
 import {
   differenceInDays,
   Duration,
@@ -89,7 +100,9 @@ const useZoom = (
 
   const zoomHandler = useMemo(() => {
     let k = 0;
-    const extent = getExtentConfig(behavior, data.length, dms.width);
+    const datasize =
+      behavior === 'extended' ? getExtendedRangeSize(data.length) : data.length;
+    const extent = getExtentConfig(behavior, datasize, dms.width);
     const chartArea = select<SVGSVGElement, unknown>('.chart-area');
     const handler = zoom<SVGSVGElement, unknown>()
       .scaleExtent(extent.zoom)
@@ -131,7 +144,11 @@ const useZoom = (
       })();
 
       const selection = select<SVGSVGElement, unknown>('#interactive-chart');
-      const scale = data.length / (days + 0.5); // border to border scale
+      const datasize =
+        behavior === 'extended'
+          ? getExtendedRangeSize(data.length)
+          : data.length;
+      const scale = datasize / (days + 0.5); // border to border scale
       const translateX = baseXScale(from)!;
       const transition = selection.transition().duration(duration);
       const transform = zoomIdentity.scale(scale).translate(-1 * translateX, 0);
@@ -142,19 +159,6 @@ const useZoom = (
   );
 
   return { transform, zoomRange, zoomHandler };
-};
-
-const getExtendedRange = (range: number[]) => {
-  if (!range.length) return [];
-  const points: string[] = [];
-  const first = range[0];
-  const step = range[1] - first;
-  const start = Math.floor(-0.5 * range.length);
-  const end = Math.ceil(range.length * 2);
-  for (let i = start; i < end; i++) {
-    points.push((first + i * step).toString());
-  }
-  return points;
 };
 
 const durationToDays = (lastTimestamp: number, duration: Duration) => {
@@ -268,7 +272,7 @@ export const D3PriceHistory: FC<Props> = (props) => {
 
   const rangeInDays = useMemo(() => {
     if (!start || !end) {
-      return differenceInDays(new Date(), default_SD_());
+      return differenceInDays(new Date(), defaultStartDate());
     }
     // Compare two dates at the same local hour
     const startDate = startOfDay(Number(start) * 1000);
@@ -399,9 +403,9 @@ export const D3PriceHistory: FC<Props> = (props) => {
             <DateRangePicker
               className="rounded-md hover:bg-main-900/40"
               defaultStart={fromUnixUTC(defaultHistoryStart)}
-              defaultEnd={default_ED_()}
+              defaultEnd={defaultEndDate()}
               start={fromUnixUTC(props.start || defaultHistoryStart)}
-              end={fromUnixUTC(props.end) || default_ED_()}
+              end={fromUnixUTC(props.end) || defaultEndDate()}
               onConfirm={zoomFromTo}
               options={{
                 disabled: disabledDates,

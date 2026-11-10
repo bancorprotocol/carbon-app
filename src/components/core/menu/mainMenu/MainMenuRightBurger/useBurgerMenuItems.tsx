@@ -82,7 +82,7 @@ export const useBurgerMenuItems = () => {
       );
     }
 
-    mainItems.push(<ThemePicker />);
+    mainItems.push(<ThemePicker key="theme" />);
 
     mainItems.push(
       <footer

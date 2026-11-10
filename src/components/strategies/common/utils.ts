@@ -9,6 +9,7 @@ import {
   FormOrder,
   FormGradientOrder,
   BuySellOrders,
+  AnyEncodedStrategy,
 } from './types';
 import { fromUnixUTC } from 'components/simulator/utils';
 import { startOfDay, sub } from 'date-fns';
@@ -16,6 +17,7 @@ import { toUnixUTC } from 'components/simulator/utils';
 import { ChartPrices } from './d3Chart';
 import { getMinMaxPricesByDecimals } from '@bancor/carbon-sdk/strategy-management';
 import { geoMean } from 'utils/fullOutcome';
+import { EncodedStrategyBNStr } from '@bancor/carbon-sdk';
 
 export interface StrategyInput {
   buy: { min: string; max: string };
@@ -26,10 +28,21 @@ export type OrdersInput =
   | BuySellOrders<FormGradientOrder>
   | BuySellOrders<FormStaticOrder>;
 
+const GRADIENT_STRATEGY_TYPE_MASK = 1n << 255n;
+export function isGradientStrategyId(id: bigint) {
+  return (id & GRADIENT_STRATEGY_TYPE_MASK) !== 0n;
+}
+
+export const isStaticEncoded = (
+  encoded?: AnyEncodedStrategy,
+): encoded is EncodedStrategyBNStr => {
+  return !!encoded && 'y' in encoded.order0;
+};
+
 export const isGradientStrategy = (
   strategy: OrdersInput,
 ): strategy is BuySellOrders<FormGradientOrder> => {
-  return '_sD_' in strategy.buy;
+  return 'startDate' in strategy.buy;
 };
 
 export const isAuctionStrategy = (strategy: BaseStrategy<GradientOrder>) => {
@@ -156,13 +169,12 @@ export const getStrategyType = (strategy: OrdersInput) => {
 
 export const isPaused = (strategy: OrdersInput) => {
   if (isGradientStrategy(strategy)) {
-    return (
-      (isZero(strategy.buy._sP_) &&
-        isZero(strategy.buy._eP_) &&
-        isZero(strategy.sell._sP_) &&
-        isZero(strategy.sell._eP_)) ||
-      isInPast(strategy)
-    );
+    const { buy, sell } = strategy;
+    const orders = [buy, sell].filter((o) => !isEmptyGradientOrder(o));
+    if (!orders.length) return true;
+    if (orders.every(isOrderInPast)) return true;
+    if (orders.every(isOrderInFuture)) return true;
+    return false;
   } else {
     return (
       isZero(strategy.buy.min) &&
@@ -179,14 +191,16 @@ export const isNoBudget = (strategy: OrdersInput) => {
   return !Number(strategy.buy.budget) && !Number(strategy.sell.budget);
 };
 
-export const isInPast = (strategy: BuySellOrders<FormGradientOrder>) => {
-  if (!isEmptyGradientOrder(strategy.buy)) {
-    if (fromUnixUTC(strategy.buy._eD_) < new Date()) return true;
-  }
-  if (!isEmptyGradientOrder(strategy.sell)) {
-    if (fromUnixUTC(strategy.sell._eD_) < new Date()) return true;
-  }
-  return false;
+export const isOrderInPast = (order: FormGradientOrder) => {
+  if (isEmptyGradientOrder(order)) return false;
+  return fromUnixUTC(order.endDate) < new Date();
+};
+export const isOrderInFuture = (order: FormGradientOrder) => {
+  if (isEmptyGradientOrder(order)) return false;
+  return fromUnixUTC(order.startDate) > new Date();
+};
+export const isActiveOrder = (order: FormGradientOrder) => {
+  return !isOrderInFuture(order) && !isOrderInPast(order);
 };
 
 export const getStrategyStatus = (orders: OrdersInput) => {
@@ -204,7 +218,7 @@ export const isStaticOrder = (order: FormOrder): order is FormStaticOrder => {
 export const isGradientOrder = (
   order: FormOrder,
 ): order is FormGradientOrder => {
-  return '_sD_' in order;
+  return 'startDate' in order;
 };
 export const emptyOrder = (): FormStaticOrder => ({
   min: '0',
@@ -212,17 +226,17 @@ export const emptyOrder = (): FormStaticOrder => ({
   budget: '0',
 });
 export const emptyGradientOrder = () => ({
-  _sP_: '0',
-  _eP_: '0',
-  _sD_: '0',
-  _eD_: '0',
+  startPrice: '0',
+  endPrice: '0',
+  startDate: '0',
+  endDate: '0',
   budget: '0',
 });
 export const isEmptyOrder = (order: FormStaticOrder) => {
   return !Number(order.min) && !Number(order.max);
 };
 export const isEmptyGradientOrder = (order: FormGradientOrder) => {
-  return !Number(order._sP_) && !Number(order._eP_);
+  return !Number(order.startPrice) && !Number(order.endPrice);
 };
 export const isLimitOrder = (order: StaticOrder) => {
   return order.min === order.max;
@@ -271,11 +285,11 @@ export const resetPrice = (price?: string) => {
   return isZero(price) ? '' : price;
 };
 
-export const default_SD_ = (now = new Date()) =>
+export const defaultStartDate = (now = new Date()) =>
   startOfDay(sub(now, { months: 3 }));
-export const default_ED_ = (now = new Date()) => startOfDay(now);
-export const defaultStart = (now?: Date) => toUnixUTC(default_SD_(now));
-export const defaultEnd = (now?: Date) => toUnixUTC(default_ED_(now));
+export const defaultEndDate = (now = new Date()) => startOfDay(now);
+export const defaultStart = (now?: Date) => toUnixUTC(defaultStartDate(now));
+export const defaultEnd = (now?: Date) => toUnixUTC(defaultEndDate(now));
 export const oneYearAgo = (now = new Date()) => {
   // Add extra days because last day is sometime today sometime yesterday
   return toUnixUTC(startOfDay(sub(now, { years: 1, days: 2 })));
@@ -292,8 +306,8 @@ export const getBounds = (
     if (!order) return;
     if (!isGradientOrder(order)) return order;
     return {
-      min: SafeDecimal.min(order._sP_, order._eP_).toString(),
-      max: SafeDecimal.max(order._sP_, order._eP_).toString(),
+      min: SafeDecimal.min(order.startPrice, order.endPrice).toString(),
+      max: SafeDecimal.max(order.startPrice, order.endPrice).toString(),
     };
   };
   const buy = getMinMax(buyOrder);

@@ -1,4 +1,8 @@
-import { fromUnixUTC, toUnixUTCDay } from 'components/simulator/utils';
+import {
+  fromUnixUTC,
+  toUnixUTC,
+  toUnixUTCDay,
+} from 'components/simulator/utils';
 import {
   FormGradientOrder,
   QuickGradientOrderBlock,
@@ -8,27 +12,69 @@ import { addDays, endOfDay, isToday, startOfDay } from 'date-fns';
 import { SafeDecimal } from 'libs/safedecimal';
 import { StrategyDirection } from 'libs/routing';
 import { Token } from 'libs/tokens';
-import { isEmptyGradientOrder } from '../utils';
+import { isEmptyGradientOrder, isOrderInFuture, isOrderInPast } from '../utils';
+import config from 'config';
 
-export const gradientMarginalPrice = (order: FormGradientOrder) => {
+export const gradientMarginalPrice = (
+  order: FormGradientOrder,
+  date = new Date(),
+) => {
   if (isEmptyGradientOrder(order)) return '0';
-  return '0'; // @todo(gradient) we should use the sdk if possible
+  // Set the marginal price to 0 to hide the line in the graph
+  if (isOrderInPast(order)) return '0';
+  if (isOrderInFuture(order)) return '0';
+  const now = toUnixUTC(date);
+  const { startPrice, endPrice, startDate, endDate } = order;
+  const totalDuration = new SafeDecimal(endDate).minus(startDate);
+  const elapsed = new SafeDecimal(now).minus(startDate);
+  const tRaw = elapsed.div(totalDuration);
+  const t = SafeDecimal.clamp(tRaw, 0, 1);
+  const delta = new SafeDecimal(endPrice).minus(startPrice);
+  // startPrice + t*delta
+  const marginal = new SafeDecimal(startPrice).add(t.mul(delta));
+  return marginal.toString();
+};
+
+const today = new Date();
+export const defaultGradientStartDate = toUnixUTCDay(addDays(today, 5));
+export const defaultGradientEndDate = toUnixUTCDay(addDays(today, 50));
+
+export interface GradientMultipliers {
+  start: number;
+  end: number;
+}
+export const defaultGradientMultipliers = (
+  base: string,
+  quote: string,
+  direction: StrategyDirection = 'sell',
+): GradientMultipliers => {
+  const isStable = (token: string) => config.stableTokens.includes(token);
+  const stablePair = isStable(base) && isStable(quote);
+  if (stablePair) {
+    return {
+      start: direction === 'buy' ? 0.8 : 1.2,
+      end: direction === 'buy' ? 0.98 : 1.02,
+    };
+  } else {
+    return {
+      start: direction === 'buy' ? 0.9 : 1.1,
+      end: direction === 'buy' ? 0.99 : 1.01,
+    };
+  }
 };
 
 export const defaultGradientOrder = (
   baseOrder: Partial<GradientOrderBlock>,
+  multipliers: GradientMultipliers,
   marketPrice: number = 0,
 ): GradientOrderBlock => {
   const direction = baseOrder.direction ?? 'sell';
-  const today = new Date();
-  const startMultiplier = direction === 'buy' ? 0.9 : 1.1;
-  const endMultiplier = direction === 'buy' ? 0.99 : 1.01;
   const price = new SafeDecimal(marketPrice);
   const order = {
-    _sP_: baseOrder._sP_ ?? price.mul(startMultiplier).toString(),
-    _eP_: baseOrder._eP_ ?? price.mul(endMultiplier).toString(),
-    _sD_: baseOrder._sD_ ?? toUnixUTCDay(addDays(today, 1)),
-    _eD_: baseOrder._eD_ ?? toUnixUTCDay(addDays(today, 21)),
+    startPrice: baseOrder.startPrice ?? price.mul(multipliers.start).toString(),
+    endPrice: baseOrder.endPrice ?? price.mul(multipliers.end).toString(),
+    startDate: baseOrder.startDate ?? defaultGradientStartDate,
+    endDate: baseOrder.endDate ?? defaultGradientEndDate,
     budget: baseOrder.budget ?? '',
     direction: direction,
   };
@@ -38,34 +84,85 @@ export const defaultGradientOrder = (
   };
 };
 
-export const order_SD_ = (timestamp: string) => {
+export const orderStartDate = (timestamp: string) => {
   const date = fromUnixUTC(timestamp);
   return isToday(date) ? new Date() : startOfDay(date);
 };
-export const order_ED_ = (timestamp: string) => {
+export const orderEndDate = (timestamp: string) => {
   return endOfDay(fromUnixUTC(timestamp));
 };
 
-type Line = Pick<GradientOrderBlock, '_sD_' | '_eD_' | '_sP_' | '_eP_'>;
+type Line = Pick<
+  GradientOrderBlock,
+  'startDate' | 'endDate' | 'startPrice' | 'endPrice'
+>;
 
 /** Checks if the buy and sell lines overlap, and if the buy line is above the sell line at any point within the overlapping range */
 export const isReverseGradientOrders = (buy: Line, sell: Line): boolean => {
-  // @todo(gradient)
+  const startX = SafeDecimal.max(buy.startDate, sell.startDate);
+  const endX = SafeDecimal.min(buy.endDate, sell.endDate);
+
+  if (startX.gt(endX)) return false; // No overlap
+
+  const buystartDate = new SafeDecimal(buy.startDate);
+  const buyendDate = new SafeDecimal(buy.endDate);
+  const buyStartPrice = new SafeDecimal(buy.startPrice);
+  const buyEndPrice = new SafeDecimal(buy.endPrice);
+
+  const sellstartDate = new SafeDecimal(sell.startDate);
+  const sellendDate = new SafeDecimal(sell.endDate);
+  const sellStartPrice = new SafeDecimal(sell.startPrice);
+  const sellEndPrice = new SafeDecimal(sell.endPrice);
+
+  const startXDecimal = new SafeDecimal(startX);
+  const endXDecimal = new SafeDecimal(endX);
+
+  const buyYStart = buyStartPrice.add(
+    startXDecimal
+      .sub(buystartDate)
+      .mul(buyEndPrice.sub(buyStartPrice))
+      .div(buyendDate.sub(buystartDate)),
+  );
+  const sellYStart = sellStartPrice.add(
+    startXDecimal
+      .sub(sellstartDate)
+      .mul(sellEndPrice.sub(sellStartPrice))
+      .div(sellendDate.sub(sellstartDate)),
+  );
+  const buyYEnd = buyStartPrice.add(
+    endXDecimal
+      .sub(buystartDate)
+      .mul(buyEndPrice.sub(buyStartPrice))
+      .div(buyendDate.sub(buystartDate)),
+  );
+  const sellYEnd = sellStartPrice.add(
+    endXDecimal
+      .sub(sellstartDate)
+      .mul(sellEndPrice.sub(sellStartPrice))
+      .div(sellendDate.sub(sellstartDate)),
+  );
+
+  if (buyYStart.greaterThan(sellYStart) || buyYEnd.greaterThan(sellYEnd)) {
+    return true;
+  }
+
+  if (buyYStart.sub(sellYStart).mul(buyYEnd.sub(sellYEnd)).lessThan(0)) {
+    return true;
+  }
+
   return false;
 };
 
 export const gradientDateWarning = (order: FormGradientOrder) => {
-  const _sD_ = order_SD_(order._sD_);
-  const _eD_ = order_ED_(order._eD_);
-  if (_eD_ < new Date()) return;
-  if (_sD_ >= new Date()) return;
-  if (new SafeDecimal(order._sP_).gt(order._eP_)) {
-    // @todo(gradient)
-    return '';
+  const startDate = orderStartDate(order.startDate);
+  const endDate = orderEndDate(order.endDate);
+  if (endDate < new Date()) return;
+  if (startDate >= new Date()) return;
+  if (new SafeDecimal(order.startPrice).gt(order.endPrice)) {
+    return 'Your strategy is set to begin in the past, so the actual starting price will be lower than the specified starting price.';
   }
-  if (new SafeDecimal(order._sP_).lt(order._eP_)) {
-    // @todo(gradient)
-    return '';
+  if (new SafeDecimal(order.startPrice).lt(order.endPrice)) {
+    return 'Your strategy is set to begin in the past, so the actual starting price will be higher than the specified starting price';
   }
 };
 export const gradientPriceWarning = (
@@ -74,8 +171,18 @@ export const gradientPriceWarning = (
   base: Token,
   marketPrice?: number,
 ) => {
-  // @todo(gradient)
-  return '';
+  const startDate = fromUnixUTC(order.startDate);
+  if (startDate > new Date()) return '';
+  if (!marketPrice || !order.marginalPrice) return '';
+  if (direction === 'buy') {
+    if (new SafeDecimal(order.marginalPrice).gt(marketPrice)) {
+      return `Notice: you offer to buy ${base.symbol} above current market price`;
+    }
+  } else {
+    if (new SafeDecimal(order.marginalPrice).lt(marketPrice)) {
+      return `Notice: you offer to sell ${base.symbol} below current market price`;
+    }
+  }
 };
 export const quickGradientPriceWarning = (
   direction: StrategyDirection,
@@ -96,8 +203,20 @@ export const quickGradientPriceWarning = (
 };
 
 export const gradientDateError = (order: FormGradientOrder) => {
-  if (new Date() > order_ED_(order._eD_)) {
-    // @todo(gradient)
-    return '';
+  if (new Date() > orderEndDate(order.endDate)) {
+    return 'Your order is set in the past and will never be active.';
   }
+};
+
+export const gradientDateFormatter = new Intl.DateTimeFormat(undefined, {
+  month: '2-digit',
+  day: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
+export const formatGradientDate = (timestamp: number | string) => {
+  const date = fromUnixUTC(timestamp);
+  return gradientDateFormatter.format(date);
 };
